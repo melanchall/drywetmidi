@@ -39,7 +39,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// </code>
         /// </para>
         /// <para>
-        /// where <c>▼</c> and <c>▲</c> mean Note On and Note Off events correspondingly (notes are highlighted
+        /// where <c>A</c> and <c>B</c> mean Note On and Note Off events correspondingly (notes are highlighted
         /// for convenience). So we have the file with two track chunks here containing some notes.
         /// </para>
         /// <para>

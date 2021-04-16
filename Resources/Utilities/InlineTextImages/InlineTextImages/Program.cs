@@ -117,6 +117,7 @@ namespace InlineTextImages
                             !DrawOuterBlock(s, graphics, symbolSize, x, y) &&
                             !DrawSolidBlock(s, graphics, symbolSize, x, y) &&
                             !DrawBaseLines(s, graphics, symbolSize, x, y) &&
+                            !DrawSpecialSymbols(s, graphics, symbolSize, x, y) &&
                             !CharsToIgnore.Contains(s))
                         {
                             var symbolMeasure = graphics.MeasureString(s.ToString(), font);
@@ -283,6 +284,48 @@ namespace InlineTextImages
             return false;
         }
 
+        private static bool DrawSpecialSymbols(char s, Graphics graphics, int symbolSize, int x, int y)
+        {
+            var pen = new Pen(new SolidBrush(FontColor), 1);
+
+            const int padding = 5;
+
+            switch (s)
+            {
+                case '◊':
+                    graphics.DrawPolygon(
+                        pen,
+                        new[]
+                        {
+                            new PointF(x * symbolSize + padding, y * symbolSize + symbolSize / 2.0f),
+                            new PointF(x * symbolSize + symbolSize / 2.0f, y * symbolSize + padding),
+                            new PointF(x * symbolSize + symbolSize - padding, y * symbolSize + symbolSize / 2.0f),
+                            new PointF(x * symbolSize + symbolSize / 2.0f, y * symbolSize + symbolSize - padding),
+                        });
+                    return true;
+
+                case '○':
+                    graphics.DrawEllipse(
+                        pen,
+                        x * symbolSize + padding,
+                        y * symbolSize + padding,
+                        symbolSize - 2 * padding,
+                        symbolSize - 2 * padding);
+                    return true;
+
+                case '□':
+                    graphics.DrawRectangle(
+                        pen,
+                        x * symbolSize + padding,
+                        y * symbolSize + padding,
+                        symbolSize - 2 * padding,
+                        symbolSize - 2 * padding);
+                    return true;
+            }
+
+            return false;
+        }
+
         private static bool DrawInnerBlock(char s, Graphics graphics, int symbolSize, CellPoints cellPoints)
         {
             var pen = new Pen(new SolidBrush(InnerBlockBorderColor), 1);
@@ -377,6 +420,20 @@ namespace InlineTextImages
                     {
                         cellPoints.TopCenter,
                         cellPoints.CenterRight,
+                        cellPoints.BottomCenter,
+                    });
+                    return true;
+
+                case '←':
+                    graphics.DrawLines(pen, new[]
+                    {
+                        cellPoints.CenterLeft,
+                        cellPoints.CenterRight,
+                    });
+                    graphics.DrawLines(pen, new[]
+                    {
+                        cellPoints.TopCenter,
+                        cellPoints.CenterLeft,
                         cellPoints.BottomCenter,
                     });
                     return true;

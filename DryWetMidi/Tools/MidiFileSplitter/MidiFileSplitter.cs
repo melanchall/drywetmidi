@@ -25,6 +25,43 @@ namespace Melanchall.DryWetMidi.Tools
         /// <returns>Collection of <see cref="MidiFile"/> where each file contains single chunk from
         /// the original file.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is <c>null</c>.</exception>
+        /// <example>
+        /// <para>
+        /// For example, we have a MIDI file with two chunks:
+        /// </para>
+        /// <para>
+        /// <code language="image">
+        /// +-------------------+
+        /// |┌─────────────────┐|
+        /// |│                 │|
+        /// |└─────────────────┘|
+        /// |┌─────────────────┐|
+        /// |│                 │|
+        /// |└─────────────────┘|
+        /// +-------------------+
+        /// </code>
+        /// </para>
+        /// <para>
+        /// So the file will be split into two new files:
+        /// </para>
+        /// <para>
+        /// <code language="image">
+        /// +-------------------+
+        /// |┌─────────────────┐|
+        /// |│                 │|
+        /// |└─────────────────┘|
+        /// +-------------------+
+        /// +-------------------+
+        /// |┌─────────────────┐|
+        /// |│                 │|
+        /// |└─────────────────┘|
+        /// +-------------------+
+        /// </code>
+        /// </para>
+        /// <para>
+        /// Each new file will have the same time division (<see cref="MidiFile.TimeDivision"/>) as the original one.
+        /// </para>
+        /// </example>
         public static IEnumerable<MidiFile> SplitByChunks(this MidiFile midiFile, SplitFileByChunksSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
@@ -43,11 +80,63 @@ namespace Melanchall.DryWetMidi.Tools
         /// <summary>
         /// Splits <see cref="MidiFile"/> by channel.
         /// </summary>
+        /// <remarks>
+        /// All channel events (<see cref="ChannelEvent"/>) will be grouped by channel and then events for each
+        /// channel will be placed to separate files. So each new file will contain channel events for single channel.
+        /// If <see cref="SplitFileByChannelSettings.CopyNonChannelEventsToEachFile"/> of <paramref name="settings"/>
+        /// set to <c>true</c> (default value), each new file will also contain all non-channel events from the original file.
+        /// If an input file doesn't contain channel events, result file will be just a copy of the input one.
+        /// </remarks>
         /// <param name="settings">Settings accoridng to which MIDI file should be split.</param>
         /// <param name="midiFile"><see cref="MidiFile"/> to split.</param>
         /// <returns>Collection of <see cref="MidiFile"/> where each file contains events for single channel
         /// and meta and sysex ones as defined by <paramref name="settings"/>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is <c>null</c>.</exception>
+        /// <example>
+        /// <para>
+        /// Given a MIDI file:
+        /// </para>
+        /// <code language="image">
+        /// +-------------------+
+        /// |┌─────────────────┐|
+        /// |│. ◊ .  ○.◊ .□□  .│|
+        /// |└─────────────────┘|
+        /// |┌─────────────────┐|
+        /// |│ .□. .◊   . ○ ○. │|
+        /// |└─────────────────┘|
+        /// +-------------------+
+        /// </code>
+        /// <para>
+        /// where <c>◊</c>, <c>○</c> and <c>□</c> mean channel MIDI events on channel 0, 1 and 2 correspondingly;
+        /// <c>.</c> is any non-channel event.
+        /// </para>
+        /// <para>
+        /// So the file will be split in following way (<see cref="SplitFileByChannelSettings.CopyNonChannelEventsToEachFile"/>
+        /// of <paramref name="settings"/> set to <c>true</c>):
+        /// </para>
+        /// <code language="image">
+        /// +-------------------+
+        /// |┌─────────────────┐|
+        /// |│..◊...◊ .◊..   ..│|
+        /// |└─────────────────┘|
+        /// +-------------------+
+        /// +-------------------+
+        /// |┌─────────────────┐|
+        /// |│.. ... ○. ..○ ○..│|
+        /// |└─────────────────┘|
+        /// +-------------------+
+        /// +-------------------+
+        /// |┌─────────────────┐|
+        /// |│..□...  . ..□□ ..│|
+        /// |└─────────────────┘|
+        /// +-------------------+
+        /// </code>
+        /// <para>
+        /// So each new file consist of single track chunk containing channel events of one channel and
+        /// all non-channel events. New files will have the same time division (<see cref="MidiFile.TimeDivision"/>) as
+        /// the original one.
+        /// </para>
+        /// </example>
         public static IEnumerable<MidiFile> SplitByChannel(this MidiFile midiFile, SplitFileByChannelSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
@@ -106,11 +195,56 @@ namespace Melanchall.DryWetMidi.Tools
         /// <summary>
         /// Splits <see cref="MidiFile"/> by notes.
         /// </summary>
+        /// <remarks>
+        /// The method produces new files where each one contains Note On and Note Off events for single
+        /// note number and channel (if it's not ignored according to <see cref="SplitFileByNotesSettings.IgnoreChannel"/>
+        /// of <paramref name="settings"/>). Also files can contain all non-note events as defined by
+        /// <see cref="SplitFileByNotesSettings.CopyNonNoteEventsToEachFile"/> of <paramref name="settings"/>. If
+        /// an input file doesn't contain note events, result file will be just a copy of the input one.
+        /// </remarks>
         /// <param name="midiFile"><see cref="MidiFile"/> to split.</param>
         /// <param name="settings">Settings accoridng to which notes should be detected and built.</param>
         /// <returns>Collection of <see cref="MidiFile"/> where each file contains events for single note and
         /// other events as defined by <paramref name="settings"/>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is <c>null</c>.</exception>
+        /// <example>
+        /// <para>
+        /// For example, a MIDI file contains following notes:
+        /// </para>
+        /// <code language="image">
+        /// +-----------------------+
+        /// |┌─────────────────────┐|
+        /// |│. [ A ]  [   B   ]. .│|
+        /// |└─────────────────────┘|
+        /// |┌─────────────────────┐|
+        /// |│ .  [ B ]  [  A  ] . │|
+        /// |└─────────────────────┘|
+        /// +-----------------------+
+        /// </code>
+        /// <para>
+        /// where <c>A</c> and <c>B</c> mean different notes; <c>.</c> is any non-note event.
+        /// </para>
+        /// <para>
+        /// After split we'll get following two new files:
+        /// </para>
+        /// <code language="image">
+        /// +-----------------------+
+        /// |┌─────────────────────┐|
+        /// |│..[ A ]    [  A  ]...│|
+        /// |└─────────────────────┘|
+        /// +-----------------------+
+        /// +-----------------------+
+        /// |┌─────────────────────┐|
+        /// |│..  [ B ][   B   ]...│|
+        /// |└─────────────────────┘|
+        /// +-----------------------+
+        /// </code>
+        /// <para>
+        /// So each new file contains one track chunk with notes of the same note number and channel, and
+        /// also all non-note events. New files will have the same time division (<see cref="MidiFile.TimeDivision"/>)
+        /// as the original one.
+        /// </para>
+        /// </example>
         public static IEnumerable<MidiFile> SplitByNotes(this MidiFile midiFile, SplitFileByNotesSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
@@ -143,6 +277,45 @@ namespace Melanchall.DryWetMidi.Tools
         /// </item>
         /// </list>
         /// </exception>
+        /// <example>
+        /// <para>
+        /// Given the MIDI file (vertical lines show the grid the file should be split by):
+        /// </para>
+        /// <code language="image">
+        /// +-----║-------║-----------+
+        /// |┌────║───────║──────────┐|
+        /// |│  A ║  B    ║     C    │|
+        /// |└──⁞─║──⁞────║─────⁞────┘|
+        /// |┌──⁞─║──⁞────║─────⁞────┐|
+        /// |│  ⁞ ║  ⁞ D  ║  E  ⁞    │|
+        /// |└──⁞─║──⁞─⁞──║──⁞──⁞────┘|
+        /// +---⁞-║--⁞-⁞--║--⁞--⁞-----+
+        /// </code>
+        /// <para>
+        /// where <c>A</c>, <c>B</c>, <c>C</c>, <c>D</c> and <c>E</c> are some MIDI events.
+        /// </para>
+        /// <para>
+        /// We'll get three new files as the result of the split:
+        /// </para>
+        /// <code language="image">
+        /// +---⁞--+ ⁞ ⁞ +---⁞--⁞-----+
+        /// |┌──⁞─┐| ⁞ ⁞ |┌──⁞──⁞────┐|
+        /// |│  A │| ⁞ ⁞ |│  ⁞  C    │|
+        /// |└────┘| ⁞ ⁞ |└──⁞───────┘|
+        /// |┌────┐| ⁞ ⁞ |┌──⁞───────┐|
+        /// |│    │| ⁞ ⁞ |│  E       │|
+        /// |└────┘| ⁞ ⁞ |└──────────┘|
+        /// +------+ ⁞ ⁞ +------------+
+        ///      +---⁞-⁞---+
+        ///      |┌──⁞─⁞──┐|
+        ///      |│  B ⁞  │|
+        ///      |└────⁞──┘|
+        ///      |┌────⁞──┐|
+        ///      |│    D  │|
+        ///      |└───────┘|
+        ///      +---------+
+        /// </code>
+        /// </example>
         public static IEnumerable<MidiFile> SplitByGrid(this MidiFile midiFile, IGrid grid, SliceMidiFileSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
@@ -194,6 +367,39 @@ namespace Melanchall.DryWetMidi.Tools
         /// </item>
         /// </list>
         /// </exception>
+        /// <example>
+        /// <para>
+        /// Given the MIDI file (vertical line shows where the file will be split):
+        /// </para>
+        /// <code language="image">
+        ///  │←─── L ────→│
+        /// +-------------║-----------+
+        /// |┌────────────║──────────┐|
+        /// |│  A    B    ║     C    │|
+        /// |└────────────║─────⁞────┘|
+        /// |┌────────────║─────⁞────┐|
+        /// |│         D  ║  E  ⁞    │|
+        /// |└────────────║──⁞──⁞────┘|
+        /// +-------------║--⁞--⁞-----+
+        /// </code>
+        /// <para>
+        /// where <c>A</c>, <c>B</c>, <c>C</c>, <c>D</c> and <c>E</c> are some MIDI events;
+        /// <c>L</c> is <paramref name="partLength"/>.
+        /// </para>
+        /// <para>
+        /// Skipping the part we'll get following file:
+        /// </para>
+        /// <code language="image">
+        ///              +---⁞--⁞-----+
+        ///              |┌──⁞──⁞────┐|
+        ///              |│  ⁞  C    │|
+        ///              |└──⁞───────┘|
+        ///              |┌──⁞───────┐|
+        ///              |│  E       │|
+        ///              |└──────────┘|
+        ///              +------------+
+        /// </code>
+        /// </example>
         public static MidiFile SkipPart(this MidiFile midiFile, ITimeSpan partLength, SliceMidiFileSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
@@ -234,6 +440,39 @@ namespace Melanchall.DryWetMidi.Tools
         /// </item>
         /// </list>
         /// </exception>
+        /// <example>
+        /// <para>
+        /// Given the MIDI file (vertical line shows where the file will be split):
+        /// </para>
+        /// <code language="image">
+        ///  │←─── L ────→│
+        /// +-------------║-----------+
+        /// |┌────────────║──────────┐|
+        /// |│  A    B    ║     C    │|
+        /// |└──⁞────⁞────║──────────┘|
+        /// |┌──⁞────⁞────║──────────┐|
+        /// |│  ⁞    ⁞ D  ║  E       │|
+        /// |└──⁞────⁞─⁞──║──────────┘|
+        /// +---⁞----⁞-⁞--║-----------+
+        /// </code>
+        /// <para>
+        /// where <c>A</c>, <c>B</c>, <c>C</c>, <c>D</c> and <c>E</c> are some MIDI events;
+        /// <c>L</c> is <paramref name="partLength"/>.
+        /// </para>
+        /// <para>
+        /// Taking the part we'll get following file:
+        /// </para>
+        /// <code language="image">
+        /// +---⁞----⁞-⁞---+
+        /// |┌──⁞────⁞─⁞──┐|
+        /// |│  A    B ⁞  │|
+        /// |└─────────⁞──┘|
+        /// |┌─────────⁞──┐|
+        /// |│         D  │|
+        /// |└────────────┘|
+        /// +--------------+
+        /// </code>
+        /// </example>
         public static MidiFile TakePart(this MidiFile midiFile, ITimeSpan partLength, SliceMidiFileSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
@@ -277,6 +516,39 @@ namespace Melanchall.DryWetMidi.Tools
         /// </item>
         /// </list>
         /// </exception>
+        /// <example>
+        /// <para>
+        /// Given the MIDI file (vertical line shows where the file will be split):
+        /// </para>
+        /// <code language="image">
+        ///  │← S →│←─── L ───→│
+        /// +------║-----------║-------+
+        /// |┌─────║───────────║──────┐|
+        /// |│  A  ║  B        ║ C    │|
+        /// |└─────║──⁞────────║──────┘|
+        /// |┌─────║──⁞────────║──────┐|
+        /// |│     ║  ⁞ D    E ║      │|
+        /// |└─────║──⁞─⁞────⁞─║──────┘|
+        /// +------║--⁞-⁞----⁞-║-------+
+        /// </code>
+        /// <para>
+        /// where <c>A</c>, <c>B</c>, <c>C</c>, <c>D</c> and <c>E</c> are some MIDI events;
+        /// <c>S</c> is <paramref name="partStart"/> and <c>L</c> is <paramref name="partLength"/>.
+        /// </para>
+        /// <para>
+        /// Taking the part we'll get following file:
+        /// </para>
+        /// <code language="image">
+        ///       +---⁞-⁞----⁞--+
+        ///       |┌──⁞─⁞────⁞─┐|
+        ///       |│  B ⁞    ⁞ │|
+        ///       |└────⁞────⁞─┘|
+        ///       |┌────⁞────⁞─┐|
+        ///       |│    D    E │|
+        ///       |└───────────┘|
+        ///       +-------------+
+        /// </code>
+        /// </example>
         public static MidiFile TakePart(this MidiFile midiFile, ITimeSpan partStart, ITimeSpan partLength, SliceMidiFileSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
