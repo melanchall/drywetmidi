@@ -314,11 +314,13 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <returns>Copy of the note.</returns>
         public Note Clone()
         {
-            return new Note(GetTimedNoteOnEvent(), GetTimedNoteOffEvent())
-            {
-                Time = Time,
-                Length = Length
-            };
+            var newTimedNoteOnEvent = GetTimedNoteOnEvent();
+            newTimedNoteOnEvent._time = TimedNoteOnEvent.Time;
+
+            var newTimedNoteOffEvent = GetTimedNoteOffEvent();
+            newTimedNoteOffEvent._time = TimedNoteOffEvent.Time;
+
+            return new Note(newTimedNoteOnEvent, newTimedNoteOffEvent);
         }
 
         /// <summary>

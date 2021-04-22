@@ -20,7 +20,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
         #region Fields
 
-        private long _time;
+        internal long _time;
 
         #endregion
 
