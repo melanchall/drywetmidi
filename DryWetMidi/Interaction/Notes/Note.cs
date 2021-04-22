@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Diagnostics;
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.MusicTheory;
 using Melanchall.DryWetMidi.Core;
@@ -147,8 +146,6 @@ namespace Melanchall.DryWetMidi.Interaction
             TimedNoteOnEvent = timedNoteOnEvent;
             TimedNoteOffEvent = timedNoteOffEvent;
 
-            UnderlyingNote = MusicTheory.Note.Get(noteOnEvent.NoteNumber);
-
             Velocity = noteOnEvent.Velocity;
             OffVelocity = noteOffEvent.Velocity;
             Channel = noteOnEvent.Channel;
@@ -206,10 +203,9 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         public SevenBitNumber NoteNumber
         {
-            get { return UnderlyingNote.NoteNumber; }
+            get { return ((NoteOnEvent)TimedNoteOnEvent.Event).NoteNumber; }
             set
             {
-                UnderlyingNote = MusicTheory.Note.Get(value);
                 ((NoteOnEvent)TimedNoteOnEvent.Event).NoteNumber = value;
                 ((NoteOffEvent)TimedNoteOffEvent.Event).NoteNumber = value;
             }
@@ -249,12 +245,12 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <summary>
         /// Gets name of the note.
         /// </summary>
-        public NoteName NoteName => UnderlyingNote.NoteName;
+        public NoteName NoteName => ((NoteOnEvent)TimedNoteOnEvent.Event).GetNoteName();
 
         /// <summary>
         /// Gets octave of the note.
         /// </summary>
-        public int Octave => UnderlyingNote.Octave;
+        public int Octave => ((NoteOnEvent)TimedNoteOnEvent.Event).GetNoteOctave();
 
         /// <summary>
         /// Gets Note On timed event of the note.
@@ -266,7 +262,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         internal TimedEvent TimedNoteOffEvent { get; } = new TimedEvent(new NoteOffEvent());
 
-        internal MusicTheory.Note UnderlyingNote { get; private set; }
+        internal MusicTheory.Note UnderlyingNote => MusicTheory.Note.Get(NoteNumber);
 
         #endregion
 
