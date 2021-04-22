@@ -10,9 +10,87 @@ namespace Melanchall.DryWetMidi.Tools
     /// <summary>
     /// Provides methods to split a MIDI file.
     /// </summary>
-    /// <remarks>
-    /// See <see href="xref:a_file_splitter">MidiFileSplitter</see> article to learn more.
-    /// </remarks>
+    /// <example>
+    /// <para>
+    /// Methods that split a MIDI file at time(s) also transfer some events that can affect following ones
+    /// to a next part. List of such methods:
+    /// </para>
+    /// <para>
+    /// <list type="bullet">
+    /// <item><description><see cref="SplitByGrid(MidiFile, IGrid, SliceMidiFileSettings)"/></description></item>
+    /// <item><description><see cref="SkipPart(MidiFile, ITimeSpan, SliceMidiFileSettings)"/></description></item>
+    /// <item><description><see cref="TakePart(MidiFile, ITimeSpan, ITimeSpan, SliceMidiFileSettings)"/></description></item>
+    /// <item><description><see cref="TakePart(MidiFile, ITimeSpan, SliceMidiFileSettings)"/></description></item>
+    /// <item><description><see cref="CutPart(MidiFile, ITimeSpan, ITimeSpan, SliceMidiFileSettings)"/></description></item>
+    /// </list>
+    /// </para>
+    /// <para>
+    /// And the list of events that will be transferred to a next part:
+    /// </para>
+    /// <para>
+    /// <list type="bullet">
+    /// <item><description><see cref="ChannelAftertouchEvent"/></description></item>
+    /// <item><description><see cref="ControlChangeEvent"/></description></item>
+    /// <item><description><see cref="NoteAftertouchEvent"/></description></item>
+    /// <item><description><see cref="PitchBendEvent"/></description></item>
+    /// <item><description><see cref="ProgramChangeEvent"/></description></item>
+    /// <item><description><see cref="CopyrightNoticeEvent"/></description></item>
+    /// <item><description><see cref="InstrumentNameEvent"/></description></item>
+    /// <item><description><see cref="ProgramNameEvent"/></description></item>
+    /// <item><description><see cref="SequenceTrackNameEvent"/></description></item>
+    /// <item><description><see cref="DeviceNameEvent"/></description></item>
+    /// <item><description><see cref="PortPrefixEvent"/></description></item>
+    /// <item><description><see cref="SetTempoEvent"/></description></item>
+    /// <item><description><see cref="ChannelPrefixEvent"/></description></item>
+    /// <item><description><see cref="SequenceNumberEvent"/></description></item>
+    /// <item><description><see cref="KeySignatureEvent"/></description></item>
+    /// <item><description><see cref="SmpteOffsetEvent"/></description></item>
+    /// <item><description><see cref="TimeSignatureEvent"/></description></item>
+    /// </list>
+    /// </para>
+    /// <para>
+    /// To illustrate how events are transferred, look at the following image showing
+    /// a MIDI file that will be split at the time defined by the vertical line:
+    /// </para>
+    /// <code language="image">
+    /// +-------------║-----------+
+    /// |┌────────────║──────────┐|
+    /// |│  A    +    ║     B    │|
+    /// |└────────────║──────────┘|
+    /// |┌────────────║──────────┐|
+    /// |│   +     C  ║  D       │|
+    /// |└────────────║──────────┘|
+    /// +-------------║-----------+
+    /// </code>
+    /// <para>
+    /// where <c>A</c>, <c>B</c>, <c>C</c> and <c>D</c> are some MIDI events not from the list above;
+    /// <c>+</c> is a MIDI event from the list of events that should be transferred.
+    /// </para>
+    /// <para>
+    /// After split we'll get following two new files:
+    /// </para>
+    /// <code language="image">
+    /// +--------------+
+    /// |┌────────────┐|
+    /// |│  A    +    │|
+    /// |└────────────┘|
+    /// |┌────────────┐|
+    /// |│   +     C  │|
+    /// |└────────────┘|
+    /// +--------------+
+    ///              +------------+
+    ///              |┌──────────┐|
+    ///              |+     B    │|
+    ///              |└──────────┘|
+    ///              |┌──────────┐|
+    ///              |+  D       │|
+    ///              |└──────────┘|
+    ///              +------------+
+    /// </code>
+    /// <para>
+    /// So as you can see <c>+</c> events are put at the start of the second file.
+    /// </para>
+    /// </example>
     public static class MidiFileSplitter
     {
         #region Methods
