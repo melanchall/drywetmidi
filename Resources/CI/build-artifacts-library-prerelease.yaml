@@ -1,0 +1,63 @@
+trigger: none
+
+pr: none
+
+pool:
+  vmImage: 'windows-latest'
+
+variables:
+  solution: '**/*.sln'
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+  version: '5.2.1'
+  prereleaseLabel: $[counter('-prerelease', 1)]
+
+name: $(TeamProject)_$(SourceBranchName)_BuildLibraryPreRelease_$(version)$(Rev:.r)
+
+steps:
+- task: PowerShell@2
+  displayName: Write prerelease version
+  inputs:
+    targetType: 'inline'
+    script: |
+      $filePath = Resolve-Path "DryWetMidi\Melanchall.DryWetMidi.csproj"
+      $xml = New-Object xml
+      $xml.PreserveWhitespace = $true
+      $xml.Load($filePath)
+      $version = $xml.Project.PropertyGroup[1].Version
+      Write-Host "Current version is $version"
+      Write-Host "Prerelease label is $(prereleaseLabel)"
+      $newVersion = $version + "-prerelease" + $(prereleaseLabel)
+      Write-Host "New version is $newVersion"
+      $xml.Project.PropertyGroup[1].Version = $newVersion
+      $xml.Save($filePath)
+
+- task: PowerShell@2
+  displayName: Generate obsolete API hints
+  inputs:
+    targetType: filePath
+    filePath: '$(Build.SourcesDirectory)/Resources/Scripts/Generate obsolete API hints.ps1'
+
+- task: DotNetCoreCLI@2
+  displayName: Build solution
+  inputs:
+    command: 'build'
+    projects: |
+      DryWetMidi/Melanchall.DryWetMidi.csproj
+    arguments: '--configuration $(buildConfiguration)'
+
+- task: DotNetCoreCLI@2
+  displayName: Create NuGet package
+  inputs: 
+    command: 'pack'
+    projects: 'DryWetMidi/Melanchall.DryWetMidi.csproj'
+    outputDir: '$(Build.ArtifactStagingDirectory)\NuGetPackage'
+    packagesToPack: 'DryWetMidi/Melanchall.DryWetMidi.csproj'
+    nobuild: true
+    buildProperties: 'RepositoryBranch="$(Build.SourceBranchName)'
+
+- task: PublishPipelineArtifact@1
+  displayName: Publish 'NuGetPackage' artifact
+  inputs:
+    targetPath: '$(Build.ArtifactStagingDirectory)\NuGetPackage'
+    artifact: NuGetPackage
