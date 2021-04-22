@@ -70,7 +70,7 @@ namespace Melanchall.DryWetMidi.Interaction
             {
                 ThrowIfTimeArgument.IsNegative(nameof(value), value);
 
-                var oldTime = Time;
+                var oldTime = _time;
                 if (value == oldTime)
                     return;
 
@@ -90,7 +90,10 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <returns>Copy of the timed event.</returns>
         public TimedEvent Clone()
         {
-            return new TimedEvent(Event.Clone(), Time);
+            return new TimedEvent(Event.Clone())
+            {
+                _time = _time
+            };
         }
 
         #endregion

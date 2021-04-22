@@ -141,14 +141,6 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="timedNoteOffEvent">Wrapped <see cref="NoteOffEvent"/>.</param>
         internal Note(TimedEvent timedNoteOnEvent, TimedEvent timedNoteOffEvent)
         {
-            Debug.Assert(timedNoteOnEvent != null);
-            Debug.Assert(timedNoteOnEvent.Event is NoteOnEvent, "Timed event doesn't wrap a Note On event.");
-
-            Debug.Assert(timedNoteOffEvent != null);
-            Debug.Assert(timedNoteOffEvent.Event is NoteOffEvent, "Timed event doesn't wrap a Note Off event.");
-
-            //
-
             var noteOnEvent = (NoteOnEvent)timedNoteOnEvent.Event;
             var noteOffEvent = (NoteOffEvent)timedNoteOffEvent.Event;
 
