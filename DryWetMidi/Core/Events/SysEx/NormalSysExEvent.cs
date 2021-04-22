@@ -41,7 +41,8 @@ namespace Melanchall.DryWetMidi.Core
                 nameof(data),
                 data,
                 EventStatusBytes.Global.NormalSysEx,
-                $"First data byte mustn't be {EventStatusBytes.Global.NormalSysEx} ({EventStatusBytes.Global.NormalSysEx:X2}) since it will be used automatically.");
+                "First data byte mustn't be {0} ({0:X2}) since it will be used automatically.",
+                EventStatusBytes.Global.NormalSysEx);
 
             Data = data;
         }

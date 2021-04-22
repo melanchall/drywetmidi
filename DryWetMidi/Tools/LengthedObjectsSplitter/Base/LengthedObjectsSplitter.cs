@@ -327,7 +327,9 @@ namespace Melanchall.DryWetMidi.Tools
                                          ratio,
                                          ZeroRatio,
                                          FullLengthRatio,
-                                         $"Ratio is out of [{ZeroRatio}; {FullLengthRatio}] range.");
+                                         "Ratio is out of [{0}; {1}] range.",
+                                         ZeroRatio,
+                                         FullLengthRatio);
             ThrowIfArgument.IsInvalidEnumValue(nameof(lengthType), lengthType);
             ThrowIfArgument.IsInvalidEnumValue(nameof(from), from);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);

@@ -87,7 +87,9 @@ namespace Melanchall.DryWetMidi.Interaction
                     value,
                     MinHalfSteps,
                     MaxHalfSteps,
-                    $"Half-steps number is out of [{MinHalfSteps}; {MaxHalfSteps}] range.");
+                    "Half-steps number is out of [{0}; {1}] range.",
+                    MinHalfSteps,
+                    MaxHalfSteps);
 
                 _halfSteps = value;
             }

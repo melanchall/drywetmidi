@@ -107,7 +107,9 @@ namespace Melanchall.DryWetMidi.Core
                     value,
                     MinKey,
                     MaxKey,
-                    $"Key is out of [{MinKey}; {MaxKey}] range.");
+                    "Key is out of [{0}; {1}] range.",
+                    MinKey,
+                    MaxKey);
 
                 _key = value;
             }
@@ -128,7 +130,9 @@ namespace Melanchall.DryWetMidi.Core
                     value,
                     MinScale,
                     MaxScale,
-                    $"Scale is out of {MinScale}-{MaxScale} range.");
+                    "Scale is out of {0}-{1} range.",
+                    MinScale,
+                    MaxScale);
 
                 _scale = value;
             }

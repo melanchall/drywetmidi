@@ -63,7 +63,9 @@ namespace Melanchall.DryWetMidi.Devices
                                          interval,
                                          MinInterval,
                                          MaxInterval,
-                                         $"Interval is out of [{MinInterval}, {MaxInterval}] range.");
+                                         "Interval is out of [{0}, {1}] range.",
+                                         MinInterval,
+                                         MaxInterval);
 
             var intervalInMilliseconds = (uint)interval.TotalMilliseconds;
 

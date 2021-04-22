@@ -183,7 +183,7 @@ namespace Melanchall.DryWetMidi.Interaction
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
             ThrowIfArgument.IsEmptyCollection(nameof(eventsCollections),
                                               eventsCollections,
-                                              $"Collection of {nameof(EventsCollection)} is empty.");
+                                              $"Collection of events collections is empty.");
 
             using (var tempoMapManager = eventsCollections.ManageTempoMap(tempoMap.TimeDivision))
             {
@@ -216,7 +216,7 @@ namespace Melanchall.DryWetMidi.Interaction
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
             ThrowIfArgument.IsEmptyCollection(nameof(trackChunks),
                                               trackChunks,
-                                              $"Collection of {nameof(TrackChunk)} is empty.");
+                                              $"Collection of track chunks is empty.");
 
             trackChunks.Select(c => c.Events).ReplaceTempoMap(tempoMap);
         }
@@ -246,7 +246,7 @@ namespace Melanchall.DryWetMidi.Interaction
             var trackChunks = file.GetTrackChunks();
             ThrowIfArgument.IsEmptyCollection(nameof(trackChunks),
                                               trackChunks,
-                                              $"Collection of {nameof(TrackChunk)} of the file is empty.");
+                                              $"Collection of track chunks of the file is empty.");
 
             trackChunks.ReplaceTempoMap(tempoMap);
 

@@ -57,7 +57,8 @@ namespace Melanchall.DryWetMidi.Core
             ThrowIfArgument.IsGreaterThan(nameof(componentValue),
                                           componentValue,
                                           maximumComponentValue,
-                                          $"Component's value is greater than maximum valid one which is {maximumComponentValue}.");
+                                          "Component's value is greater than maximum valid one which is {0}.",
+                                          maximumComponentValue);
 
             Component = component;
             ComponentValue = componentValue;

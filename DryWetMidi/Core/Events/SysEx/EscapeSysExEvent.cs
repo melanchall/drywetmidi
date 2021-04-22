@@ -43,7 +43,8 @@ namespace Melanchall.DryWetMidi.Core
                 nameof(data),
                 data,
                 EventStatusBytes.Global.EscapeSysEx,
-                $"First data byte mustn't be {EventStatusBytes.Global.EscapeSysEx} ({EventStatusBytes.Global.EscapeSysEx:X2}) since it will be used automatically.");
+                "First data byte mustn't be {0} ({0:X2}) since it will be used automatically.",
+                EventStatusBytes.Global.EscapeSysEx);
 
             Data = data;
         }

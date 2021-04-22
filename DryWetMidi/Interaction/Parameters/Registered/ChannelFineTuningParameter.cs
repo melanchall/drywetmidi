@@ -89,7 +89,9 @@ namespace Melanchall.DryWetMidi.Interaction
                     value,
                     MinCents,
                     MaxCents,
-                    $"Cents number is out of [{MinCents}; {MaxCents}] range.");
+                    "Cents number is out of [{0}; {1}] range.",
+                    MinCents,
+                    MaxCents);
 
                 _cents = value;
             }

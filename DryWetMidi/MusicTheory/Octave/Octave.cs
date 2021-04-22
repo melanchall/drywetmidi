@@ -182,7 +182,9 @@ namespace Melanchall.DryWetMidi.MusicTheory
                                          octaveNumber,
                                          MinOctaveNumber,
                                          MaxOctaveNumber,
-                                         $"Octave number is out of [{MinOctaveNumber}, {MaxOctaveNumber}] range.");
+                                         "Octave number is out of [{0}, {1}] range.",
+                                         MinOctaveNumber,
+                                         MaxOctaveNumber);
 
             Octave octave;
             if (!Cache.TryGetValue(octaveNumber, out octave))
