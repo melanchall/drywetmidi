@@ -212,7 +212,11 @@ namespace Melanchall.DryWetMidi.Core
         /// <returns>Copy of the event.</returns>
         protected override MidiEvent CloneEvent()
         {
-            return new KeySignatureEvent(Key, Scale);
+            return new KeySignatureEvent
+            {
+                _key = _key,
+                _scale = _scale
+            };
         }
 
         /// <summary>

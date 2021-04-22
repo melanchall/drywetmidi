@@ -128,7 +128,10 @@ namespace Melanchall.DryWetMidi.Core
         /// <returns>Copy of the event.</returns>
         protected override MidiEvent CloneEvent()
         {
-            return new SetTempoEvent(MicrosecondsPerQuarterNote);
+            return new SetTempoEvent
+            {
+                _microsecondsPerBeat = _microsecondsPerBeat
+            };
         }
 
         /// <summary>

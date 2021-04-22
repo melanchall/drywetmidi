@@ -83,8 +83,10 @@ namespace Melanchall.DryWetMidi.Core
         /// <returns>Copy of the event.</returns>
         protected override MidiEvent CloneEvent()
         {
-            return new ControlChangeEvent(ControlNumber, ControlValue)
+            return new ControlChangeEvent
             {
+                _dataByte1 = _dataByte1,
+                _dataByte2 = _dataByte2,
                 Channel = Channel
             };
         }

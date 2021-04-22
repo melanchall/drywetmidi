@@ -174,7 +174,13 @@ namespace Melanchall.DryWetMidi.Core
         /// <returns>Copy of the event.</returns>
         protected override MidiEvent CloneEvent()
         {
-            return new TimeSignatureEvent(Numerator, Denominator, ClocksPerClick, ThirtySecondNotesPerBeat);
+            return new TimeSignatureEvent
+            {
+                Numerator = Numerator,
+                _denominator = _denominator,
+                ClocksPerClick = ClocksPerClick,
+                ThirtySecondNotesPerBeat = ThirtySecondNotesPerBeat
+            };
         }
 
         /// <summary>

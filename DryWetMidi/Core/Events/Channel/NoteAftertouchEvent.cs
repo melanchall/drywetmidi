@@ -82,8 +82,10 @@ namespace Melanchall.DryWetMidi.Core
         /// <returns>Copy of the event.</returns>
         protected override MidiEvent CloneEvent()
         {
-            return new NoteAftertouchEvent(NoteNumber, AftertouchValue)
+            return new NoteAftertouchEvent
             {
+                _dataByte1 = _dataByte1,
+                _dataByte2 = _dataByte2,
                 Channel = Channel
             };
         }
