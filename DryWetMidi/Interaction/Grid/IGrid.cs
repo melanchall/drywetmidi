@@ -8,10 +8,10 @@ namespace Melanchall.DryWetMidi.Interaction
     public interface IGrid
     {
         /// <summary>
-        /// Gets points in time of the current grid.
+        /// Gets times produced by the current grid.
         /// </summary>
         /// <param name="tempoMap">Tempo map used to get grid's times.</param>
-        /// <returns>Collection of points in time of the current grid.</returns>
+        /// <returns>Collection of times (in MIDI ticks) of the current grid.</returns>
         IEnumerable<long> GetTimes(TempoMap tempoMap);
     }
 }
