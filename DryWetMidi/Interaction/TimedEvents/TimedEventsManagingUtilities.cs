@@ -911,7 +911,11 @@ namespace Melanchall.DryWetMidi.Interaction
                     continue;
 
                 time += midiEvent.DeltaTime;
-                yield return new TimedEvent(cloneEvent ? midiEvent.Clone() : midiEvent, time);
+
+                var timedEvent = new TimedEvent(cloneEvent ? midiEvent.Clone() : midiEvent);
+                timedEvent._time = time;
+
+                yield return timedEvent;
             }
         }
 

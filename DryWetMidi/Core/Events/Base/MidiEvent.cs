@@ -110,7 +110,7 @@ namespace Melanchall.DryWetMidi.Core
         public MidiEvent Clone()
         {
             var midiEvent = CloneEvent();
-            midiEvent.DeltaTime = DeltaTime;
+            midiEvent._deltaTime = _deltaTime;
             return midiEvent;
         }
 
