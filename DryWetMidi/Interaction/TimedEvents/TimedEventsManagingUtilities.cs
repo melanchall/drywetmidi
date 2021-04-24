@@ -894,7 +894,10 @@ namespace Melanchall.DryWetMidi.Interaction
                 }
 
                 var midiEvent = eventsCollections[eventsCollectionIndex][eventsCollectionIndices[eventsCollectionIndex]];
-                yield return Tuple.Create(new TimedEvent(cloneEvent ? midiEvent.Clone() : midiEvent, minTime), eventsCollectionIndex);
+                var timedEvent = new TimedEvent(cloneEvent ? midiEvent.Clone() : midiEvent);
+                timedEvent._time = minTime;
+
+                yield return Tuple.Create(timedEvent, eventsCollectionIndex);
 
                 eventsCollectionTimes[eventsCollectionIndex] = minTime;
                 eventsCollectionIndices[eventsCollectionIndex]++;
