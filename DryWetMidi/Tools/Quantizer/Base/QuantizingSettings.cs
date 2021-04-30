@@ -58,9 +58,7 @@ namespace Melanchall.DryWetMidi.Tools
                                              value,
                                              NoQuantizingLevel,
                                              FullQuantizingLevel,
-                                             "Value is out of [{0}; {1}] range.",
-                                             NoQuantizingLevel,
-                                             FullQuantizingLevel);
+                                             $"Value is out of [{NoQuantizingLevel}; {FullQuantizingLevel}] range.");
 
                 _quantizingLevel = value;
             }

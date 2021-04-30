@@ -79,7 +79,7 @@ namespace Melanchall.DryWetMidi.Interaction
             ThrowIfArgument.IsNull(nameof(eventsCollections), eventsCollections);
             ThrowIfArgument.IsEmptyCollection(nameof(eventsCollections),
                                               eventsCollections,
-                                              $"Collection of events collections is empty.");
+                                              $"Collection of {nameof(EventsCollection)} is empty.");
 
             _timedEventsManagers = eventsCollections.Where(events => events != null)
                                                     .Select(events => events.ManageTimedEvents())

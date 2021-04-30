@@ -79,9 +79,7 @@ namespace Melanchall.DryWetMidi.Core
                     value,
                     MinMicrosecondsPerQuarterNote,
                     MaxMicrosecondsPerQuarterNote,
-                    "Number of microseconds per quarter note is out of [{0}; {1}] range.",
-                    MinMicrosecondsPerQuarterNote,
-                    MaxMicrosecondsPerQuarterNote);
+                    $"Number of microseconds per quarter note is out of [{MinMicrosecondsPerQuarterNote}; {MaxMicrosecondsPerQuarterNote}] range.");
 
                 _microsecondsPerBeat = value;
             }

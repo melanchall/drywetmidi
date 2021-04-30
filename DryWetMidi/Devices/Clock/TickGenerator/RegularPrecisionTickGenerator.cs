@@ -44,9 +44,7 @@ namespace Melanchall.DryWetMidi.Devices
                                          interval,
                                          MinInterval,
                                          MaxInterval,
-                                         "Interval is out of [{0}, {1}] range.",
-                                         MinInterval,
-                                         MaxInterval);
+                                         $"Interval is out of [{MinInterval}, {MaxInterval}] range.");
 
             _timer = new Timer(interval.TotalMilliseconds);
             _timer.Elapsed += OnElapsed;

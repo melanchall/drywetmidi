@@ -442,9 +442,7 @@ namespace Melanchall.DryWetMidi.Tools
                                          ratio,
                                          LengthedObjectsSplitter<Chord>.ZeroRatio,
                                          LengthedObjectsSplitter<Chord>.FullLengthRatio,
-                                         "Ratio is out of [{0}; {1}] range.",
-                                         LengthedObjectsSplitter<Chord>.ZeroRatio,
-                                         LengthedObjectsSplitter<Chord>.FullLengthRatio);
+                                         $"Ratio is out of [{LengthedObjectsSplitter<Chord>.ZeroRatio}; {LengthedObjectsSplitter<Chord>.FullLengthRatio}] range.");
             ThrowIfArgument.IsInvalidEnumValue(nameof(lengthType), lengthType);
             ThrowIfArgument.IsInvalidEnumValue(nameof(from), from);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
@@ -493,9 +491,7 @@ namespace Melanchall.DryWetMidi.Tools
                                          ratio,
                                          LengthedObjectsSplitter<Chord>.ZeroRatio,
                                          LengthedObjectsSplitter<Chord>.FullLengthRatio,
-                                         "Ratio is out of [{0}; {1}] range.",
-                                         LengthedObjectsSplitter<Chord>.ZeroRatio,
-                                         LengthedObjectsSplitter<Chord>.FullLengthRatio);
+                                         $"Ratio is out of [{LengthedObjectsSplitter<Chord>.ZeroRatio}; {LengthedObjectsSplitter<Chord>.FullLengthRatio}] range.");
             ThrowIfArgument.IsInvalidEnumValue(nameof(lengthType), lengthType);
             ThrowIfArgument.IsInvalidEnumValue(nameof(from), from);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
@@ -536,9 +532,7 @@ namespace Melanchall.DryWetMidi.Tools
                                          ratio,
                                          LengthedObjectsSplitter<Chord>.ZeroRatio,
                                          LengthedObjectsSplitter<Chord>.FullLengthRatio,
-                                         "Ratio is out of [{0}; {1}] range.",
-                                         LengthedObjectsSplitter<Chord>.ZeroRatio,
-                                         LengthedObjectsSplitter<Chord>.FullLengthRatio);
+                                         $"Ratio is out of [{LengthedObjectsSplitter<Chord>.ZeroRatio}; {LengthedObjectsSplitter<Chord>.FullLengthRatio}] range.");
             ThrowIfArgument.IsInvalidEnumValue(nameof(lengthType), lengthType);
             ThrowIfArgument.IsInvalidEnumValue(nameof(from), from);
 

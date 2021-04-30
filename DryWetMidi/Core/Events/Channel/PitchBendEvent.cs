@@ -71,9 +71,7 @@ namespace Melanchall.DryWetMidi.Core
                     value,
                     MinPitchValue,
                     MaxPitchValue,
-                    "Pitch value is out of [{0}; {1}] range.",
-                    MinPitchValue,
-                    MaxPitchValue);
+                    $"Pitch value is out of [{MinPitchValue}; {MaxPitchValue}] range.");
 
                 _dataByte1 = value.GetTail();
                 _dataByte2 = value.GetHead();

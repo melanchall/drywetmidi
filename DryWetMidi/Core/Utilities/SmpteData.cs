@@ -83,7 +83,7 @@ namespace Melanchall.DryWetMidi.Core
             get { return _hours; }
             set
             {
-                ThrowIfArgument.IsGreaterThan(nameof(value), value, MaxHours, "Hours number is out of valid range (0-{0}).", MaxHours);
+                ThrowIfArgument.IsGreaterThan(nameof(value), value, MaxHours, $"Hours number is out of valid range (0-{MaxHours}).");
 
                 _hours = value;
             }
@@ -94,7 +94,7 @@ namespace Melanchall.DryWetMidi.Core
             get { return _minutes; }
             set
             {
-                ThrowIfArgument.IsGreaterThan(nameof(value), value, MaxMinutes, "Minutes number is out of valid range (0-{0}).", MaxMinutes);
+                ThrowIfArgument.IsGreaterThan(nameof(value), value, MaxMinutes, $"Minutes number is out of valid range (0-{MaxMinutes}).");
 
                 _minutes = value;
             }
@@ -105,7 +105,7 @@ namespace Melanchall.DryWetMidi.Core
             get { return _seconds; }
             set
             {
-                ThrowIfArgument.IsGreaterThan(nameof(value), value, MaxSeconds, "Seconds number is out of valid range (0-{0}).", MaxSeconds);
+                ThrowIfArgument.IsGreaterThan(nameof(value), value, MaxSeconds, $"Seconds number is out of valid range (0-{MaxSeconds}).");
 
                 _seconds = value;
             }
@@ -117,7 +117,7 @@ namespace Melanchall.DryWetMidi.Core
             set
             {
                 var maxFrames = MaxFrames[Format];
-                ThrowIfArgument.IsGreaterThan(nameof(value), value, maxFrames, "Frames number is out of valid range (0-{0}).", maxFrames);
+                ThrowIfArgument.IsGreaterThan(nameof(value), value, maxFrames, $"Frames number is out of valid range (0-{maxFrames}).");
 
                 _frames = value;
             }
@@ -128,7 +128,7 @@ namespace Melanchall.DryWetMidi.Core
             get { return _subFrames; }
             set
             {
-                ThrowIfArgument.IsGreaterThan(nameof(value), value, MaxSubFrames, "Sub-frames number is out of valid range (0-{0}).", MaxSubFrames);
+                ThrowIfArgument.IsGreaterThan(nameof(value), value, MaxSubFrames, $"Sub-frames number is out of valid range (0-{MaxSubFrames}).");
 
                 _subFrames = value;
             }
