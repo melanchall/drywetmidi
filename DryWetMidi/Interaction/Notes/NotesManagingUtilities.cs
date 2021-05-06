@@ -304,13 +304,12 @@ namespace Melanchall.DryWetMidi.Interaction
         {
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
 
-            var result = new List<Note>(eventsCollection.Count / 2);
+            var result = new List<Note>();
+            var notesBuilder = new NotesBuilder(settings);
 
-            foreach (var note in GetNotesAndTimedEventsLazy(eventsCollection.GetTimedEventsLazy(), settings ?? new NoteDetectionSettings()).OfType<Note>())
-            {
-                result.Add(note);
-            }
-
+            var notes = notesBuilder.GetNotesLazy(eventsCollection.GetTimedEventsLazy());
+            
+            result.AddRange(notes);
             return result;
         }
 
@@ -340,15 +339,20 @@ namespace Melanchall.DryWetMidi.Interaction
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
 
             var eventsCollections = trackChunks.Select(c => c.Events).ToArray();
-            var eventsCount = eventsCollections.Sum(e => e.Count);
 
-            var result = new List<Note>(eventsCount / 3);
-
-            foreach (var note in GetNotesAndTimedEventsLazy(eventsCollections.GetTimedEventsLazy(eventsCount), settings ?? new NoteDetectionSettings()).Select(tuple => tuple.Item1).OfType<Note>())
+            switch (eventsCollections.Length)
             {
-                result.Add(note);
+                case 0: return new Note[0];
+                case 1: return eventsCollections[0].GetNotes(settings);
             }
 
+            var eventsCount = eventsCollections.Sum(e => e.Count);
+            var result = new List<Note>(eventsCount / 3);
+            var notesBuilder = new NotesBuilder(settings);
+
+            var notes = notesBuilder.GetNotesLazy(eventsCollections.GetTimedEventsLazy(eventsCount));
+
+            result.AddRange(notes);
             return result;
         }
 
@@ -889,40 +893,29 @@ namespace Melanchall.DryWetMidi.Interaction
 
             var iMatched = 0;
 
-            var timesChanged = false;
-            var lengthsChanged = false;
-            var timedEvents = canTimeOrLengthBeChanged ? new List<Tuple<TimedEvent, int>>(eventsCount) : null;
+            var timeOrLengthChanged = false;
+            var collectedTimedEvents = canTimeOrLengthBeChanged ? new List<Tuple<TimedEvent, int>>(eventsCount) : null;
 
-            foreach (var timedObjectTuple in eventsCollections.GetTimedEventsLazy(eventsCount, false).GetNotesAndTimedEventsLazy(noteDetectionSettings ?? new NoteDetectionSettings()))
+            var notesBuilder = new NotesBuilder(noteDetectionSettings);
+            var notes = notesBuilder.GetNotesLazy(eventsCollections.GetTimedEventsLazy(eventsCount, false), canTimeOrLengthBeChanged, collectedTimedEvents);
+
+            foreach (var note in notes)
             {
-                var note = timedObjectTuple.Item1 as Note;
-                if (note != null && match(note))
+                if (match(note))
                 {
-                    var time = note.Time;
-                    var length = note.Length;
+                    var startTime = note.TimedNoteOnEvent.Time;
+                    var endTime = note.TimedNoteOffEvent.Time;
 
                     action(note);
 
-                    timesChanged |= note.Time != time;
-                    lengthsChanged |= note.Length != length;
+                    timeOrLengthChanged |= note.TimedNoteOnEvent.Time != startTime || note.TimedNoteOffEvent.Time != endTime;
 
                     iMatched++;
                 }
-
-                if (canTimeOrLengthBeChanged)
-                {
-                    if (note != null)
-                    {
-                        timedEvents.Add(Tuple.Create(note.TimedNoteOnEvent, timedObjectTuple.Item2));
-                        timedEvents.Add(Tuple.Create(note.TimedNoteOffEvent, timedObjectTuple.Item3));
-                    }
-                    else
-                        timedEvents.Add(Tuple.Create((TimedEvent)timedObjectTuple.Item1, timedObjectTuple.Item2));
-                }
             }
 
-            if (timesChanged || lengthsChanged)
-                eventsCollections.SortAndUpdateEvents(timedEvents);
+            if (timeOrLengthChanged)
+                eventsCollections.SortAndUpdateEvents(collectedTimedEvents);
 
             return iMatched;
         }
@@ -936,40 +929,29 @@ namespace Melanchall.DryWetMidi.Interaction
         {
             var iMatched = 0;
 
-            var timesChanged = false;
-            var lengthsChanged = false;
-            var timedEvents = canTimeOrLengthBeChanged ? new List<TimedEvent>(eventsCollection.Count) : null;
+            var timeOrLengthChanged = false;
+            var collectedTimedEvents = canTimeOrLengthBeChanged ? new List<TimedEvent>(eventsCollection.Count) : null;
 
-            foreach (var timedObject in eventsCollection.GetTimedEventsLazy(false).GetNotesAndTimedEventsLazy(noteDetectionSettings ?? new NoteDetectionSettings()))
+            var notesBuilder = new NotesBuilder(noteDetectionSettings);
+            var notes = notesBuilder.GetNotesLazy(eventsCollection.GetTimedEventsLazy(false), canTimeOrLengthBeChanged, collectedTimedEvents);
+
+            foreach (var note in notes)
             {
-                var note = timedObject as Note;
-                if (note != null && match(note))
+                if (match(note))
                 {
-                    var time = note.Time;
-                    var length = note.Length;
+                    var startTime = note.TimedNoteOnEvent.Time;
+                    var endTime = note.TimedNoteOffEvent.Time;
 
                     action(note);
 
-                    timesChanged |= note.Time != time;
-                    lengthsChanged |= note.Length != length;
+                    timeOrLengthChanged |= note.TimedNoteOnEvent.Time != startTime || note.TimedNoteOffEvent.Time != endTime;
 
                     iMatched++;
                 }
-
-                if (canTimeOrLengthBeChanged)
-                {
-                    if (note != null)
-                    {
-                        timedEvents.Add(note.TimedNoteOnEvent);
-                        timedEvents.Add(note.TimedNoteOffEvent);
-                    }
-                    else
-                        timedEvents.Add((TimedEvent)timedObject);
-                }
             }
 
-            if (timesChanged || lengthsChanged)
-                eventsCollection.SortAndUpdateEvents(timedEvents);
+            if (timeOrLengthChanged)
+                eventsCollection.SortAndUpdateEvents(collectedTimedEvents);
 
             return iMatched;
         }

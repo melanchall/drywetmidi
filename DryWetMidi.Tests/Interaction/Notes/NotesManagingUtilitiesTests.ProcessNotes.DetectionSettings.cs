@@ -241,8 +241,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             expectedMidiEvents: new MidiEvent[]
             {
                 new NoteOnEvent { DeltaTime = 20 },
-                new NoteOffEvent { DeltaTime = 100 },
-                new NoteOnEvent(),
+                new NoteOnEvent { DeltaTime = 100 },
+                new NoteOffEvent(),
                 new NoteOffEvent(),
             });
 
@@ -1413,8 +1413,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 new MidiEvent[]
                 {
                     new NoteOnEvent { DeltaTime = 20 },
-                    new NoteOffEvent(),
                     new NoteOnEvent(),
+                    new NoteOffEvent(),
                 },
                 new MidiEvent[]
                 {
@@ -1447,8 +1447,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 new MidiEvent[]
                 {
                     new NoteOnEvent { DeltaTime = 20 },
-                    new NoteOffEvent { DeltaTime = 100 },
-                    new NoteOnEvent(),
+                    new NoteOnEvent { DeltaTime = 100 },
+                    new NoteOffEvent(),
                     new NoteOffEvent(),
                 },
                 new MidiEvent[]
@@ -1960,8 +1960,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 },
                 new MidiEvent[]
                 {
-                    new NoteOffEvent { DeltaTime = 120 },
-                    new NoteOnEvent(),
+                    new NoteOnEvent { DeltaTime = 120 },
+                    new NoteOffEvent(),
                     new NoteOffEvent(),
                 }
             });
