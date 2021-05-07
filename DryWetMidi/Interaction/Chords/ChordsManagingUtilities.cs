@@ -242,13 +242,12 @@ namespace Melanchall.DryWetMidi.Interaction
         {
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
 
-            var result = new List<Chord>(eventsCollection.Count / 2);
+            var result = new List<Chord>();
+            var chordsBuilder = new ChordsBuilder(settings);
 
-            foreach (var chord in GetChordsAndNotesAndTimedEventsLazy(eventsCollection.GetTimedEventsLazy(), settings).OfType<Chord>())
-            {
-                result.Add(chord);
-            }
+            var chords = chordsBuilder.GetChordsLazy(eventsCollection.GetTimedEventsLazy());
 
+            result.AddRange(chords);
             return result;
         }
 
@@ -278,15 +277,20 @@ namespace Melanchall.DryWetMidi.Interaction
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
 
             var eventsCollections = trackChunks.Select(c => c.Events).ToArray();
-            var eventsCount = eventsCollections.Sum(e => e.Count);
 
-            var result = new List<Chord>(eventsCount / 2);
-
-            foreach (var chord in GetChordsAndNotesAndTimedEventsLazy(eventsCollections.GetTimedEventsLazy(eventsCount), settings).Select(o => o.Item1).OfType<Chord>())
+            switch (eventsCollections.Length)
             {
-                result.Add(chord);
+                case 0: return new Chord[0];
+                case 1: return eventsCollections[0].GetChords(settings);
             }
 
+            var eventsCount = eventsCollections.Sum(e => e.Count);
+            var result = new List<Chord>(eventsCount / 3);
+            var chordsBuilder = new ChordsBuilder(settings);
+
+            var chords = chordsBuilder.GetChordsLazy(eventsCollections.GetTimedEventsLazy(eventsCount));
+
+            result.AddRange(chords);
             return result;
         }
 
@@ -1001,52 +1005,29 @@ namespace Melanchall.DryWetMidi.Interaction
 
             var iMatched = 0;
 
-            var timesChanged = false;
-            var lengthsChanged = false;
-            var timedEvents = canTimeOrLengthBeChanged ? new List<TimedEvent>(eventsCollection.Count) : null;
+            var timeOrLengthChanged = false;
+            var collectedTimedEvents = canTimeOrLengthBeChanged ? new List<TimedEvent>(eventsCollection.Count) : null;
 
-            foreach (var timedObject in eventsCollection.GetTimedEventsLazy(false).GetChordsAndNotesAndTimedEventsLazy(settings))
+            var chordsBuilder = new ChordsBuilder(settings);
+            var chords = chordsBuilder.GetChordsLazy(eventsCollection.GetTimedEventsLazy(false), canTimeOrLengthBeChanged, collectedTimedEvents);
+
+            foreach (var chord in chords)
             {
-                var chord = timedObject as Chord;
-                if (chord != null && match(chord))
+                if (match(chord))
                 {
                     var time = chord.Time;
                     var length = chord.Length;
 
                     action(chord);
 
-                    timesChanged |= chord.Time != time;
-                    lengthsChanged |= chord.Length != length;
+                    timeOrLengthChanged |= chord.Time != time || chord.Length != length;
 
                     iMatched++;
                 }
-
-                if (canTimeOrLengthBeChanged)
-                {
-                    if (chord != null)
-                    {
-                        foreach (var note in chord.Notes)
-                        {
-                            timedEvents.Add(note.TimedNoteOnEvent);
-                            timedEvents.Add(note.TimedNoteOffEvent);
-                        }
-                    }
-                    else
-                    {
-                        var note = timedObject as Note;
-                        if (note != null)
-                        {
-                            timedEvents.Add(note.TimedNoteOnEvent);
-                            timedEvents.Add(note.TimedNoteOffEvent);
-                        }
-                        else
-                            timedEvents.Add((TimedEvent)timedObject);
-                    }
-                }
             }
 
-            if (timesChanged || lengthsChanged)
-                eventsCollection.SortAndUpdateEvents(timedEvents);
+            if (timeOrLengthChanged)
+                eventsCollection.SortAndUpdateEvents(collectedTimedEvents);
 
             return iMatched;
         }
@@ -1060,56 +1041,29 @@ namespace Melanchall.DryWetMidi.Interaction
 
             var iMatched = 0;
 
-            var timesChanged = false;
-            var lengthsChanged = false;
-            var timedEvents = canTimeOrLengthBeChanged ? new List<Tuple<TimedEvent, int>>(eventsCount) : null;
+            var timeOrLengthChanged = false;
+            var collectedTimedEvents = canTimeOrLengthBeChanged ? new List<Tuple<TimedEvent, int>>(eventsCount) : null;
 
-            foreach (var timedObjectTuple in eventsCollections.GetTimedEventsLazy(eventsCount, false).GetChordsAndNotesAndTimedEventsLazy(settings))
+            var chordsBuilder = new ChordsBuilder(settings);
+            var chords = chordsBuilder.GetChordsLazy(eventsCollections.GetTimedEventsLazy(eventsCount, false), canTimeOrLengthBeChanged, collectedTimedEvents);
+
+            foreach (var chord in chords)
             {
-                var chord = timedObjectTuple.Item1 as Chord;
-                if (chord != null && match(chord))
+                if (match(chord))
                 {
                     var time = chord.Time;
                     var length = chord.Length;
 
                     action(chord);
 
-                    timesChanged |= chord.Time != time;
-                    lengthsChanged |= chord.Length != length;
+                    timeOrLengthChanged |= chord.Time != time || chord.Length != length;
 
                     iMatched++;
                 }
-
-                if (canTimeOrLengthBeChanged)
-                {
-                    if (chord != null)
-                    {
-                        var i = 0;
-
-                        foreach (var note in chord.Notes)
-                        {
-                            timedEvents.Add(Tuple.Create(note.TimedNoteOnEvent, timedObjectTuple.Item2[i * 2]));
-                            timedEvents.Add(Tuple.Create(note.TimedNoteOffEvent, timedObjectTuple.Item2[i * 2 + 1]));
-
-                            i++;
-                        }
-                    }
-                    else
-                    {
-                        var note = timedObjectTuple.Item1 as Note;
-                        if (note != null)
-                        {
-                            timedEvents.Add(Tuple.Create(note.TimedNoteOnEvent, timedObjectTuple.Item2[0]));
-                            timedEvents.Add(Tuple.Create(note.TimedNoteOffEvent, timedObjectTuple.Item2[1]));
-                        }
-                        else
-                            timedEvents.Add(Tuple.Create((TimedEvent)timedObjectTuple.Item1, timedObjectTuple.Item2[0]));
-                    }
-                }
             }
 
-            if (timesChanged || lengthsChanged)
-                eventsCollections.SortAndUpdateEvents(timedEvents);
+            if (timeOrLengthChanged)
+                eventsCollections.SortAndUpdateEvents(collectedTimedEvents);
 
             return iMatched;
         }

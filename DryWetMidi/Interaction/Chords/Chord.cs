@@ -193,13 +193,13 @@ namespace Melanchall.DryWetMidi.Interaction
                 foreach (var note in Notes)
                 {
                     if (channel != null && note.Channel != channel)
-                        throw new InvalidOperationException($"Chord's notes have different channels.");
+                        throw new InvalidOperationException("Chord's notes have different channels.");
 
                     channel = note.Channel;
                 }
 
                 if (channel == null)
-                    throw new InvalidOperationException($"Chord is empty.");
+                    throw new InvalidOperationException("Chord is empty.");
 
                 return (_channel = channel).Value;
             }
@@ -240,13 +240,13 @@ namespace Melanchall.DryWetMidi.Interaction
                 foreach (var note in Notes)
                 {
                     if (velocity != null && note.Velocity != velocity)
-                        throw new InvalidOperationException($"Chord's notes have different velocities.");
+                        throw new InvalidOperationException("Chord's notes have different velocities.");
 
                     velocity = note.Velocity;
                 }
 
                 if (velocity == null)
-                    throw new InvalidOperationException($"Chord is empty.");
+                    throw new InvalidOperationException("Chord is empty.");
 
                 return (_velocity = velocity).Value;
             }
@@ -287,13 +287,13 @@ namespace Melanchall.DryWetMidi.Interaction
                 foreach (var note in Notes)
                 {
                     if (offVelocity != null && note.OffVelocity != offVelocity)
-                        throw new InvalidOperationException($"Chord's notes have different off-velocities.");
+                        throw new InvalidOperationException("Chord's notes have different off-velocities.");
 
                     offVelocity = note.OffVelocity;
                 }
 
                 if (offVelocity == null)
-                    throw new InvalidOperationException($"Chord is empty.");
+                    throw new InvalidOperationException("Chord is empty.");
 
                 return (_offVelocity = offVelocity).Value;
             }

@@ -284,12 +284,11 @@ namespace Melanchall.DryWetMidi.Interaction
             ThrowIfArgument.IsNull(nameof(midiEvents), midiEvents);
 
             var result = new List<Note>();
+            var notesBuilder = new NotesBuilder(settings);
 
-            foreach (var note in GetNotesAndTimedEventsLazy(midiEvents.GetTimedEventsLazy(), settings ?? new NoteDetectionSettings()).OfType<Note>())
-            {
-                result.Add(note);
-            }
+            var notes = notesBuilder.GetNotesLazy(midiEvents.GetTimedEventsLazy());
 
+            result.AddRange(notes);
             return result;
         }
 

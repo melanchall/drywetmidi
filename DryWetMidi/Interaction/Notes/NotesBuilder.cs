@@ -27,24 +27,40 @@ namespace Melanchall.DryWetMidi.Interaction
             }
         }
 
-        private sealed class NoteOnsHolder
+        private sealed class IndexedNoteDescriptor : NoteDescriptor
+        {
+            public IndexedNoteDescriptor(TimedEvent noteOnTimedEvent, int eventsCollectionIndex)
+                : base(noteOnTimedEvent)
+            {
+                EventsCollectionIndex = eventsCollectionIndex;
+            }
+
+            public int EventsCollectionIndex { get; }
+
+            public Tuple<Note, int> GetIndexedNote()
+            {
+                return IsCompleted ? Tuple.Create(new Note(NoteOnTimedEvent, NoteOffTimedEvent), EventsCollectionIndex) : null;
+            }
+        }
+
+        private abstract class NoteOnsHolderBase<TDescriptor> where TDescriptor : NoteDescriptor
         {
             private const int DefaultCapacity = 2;
 
             private readonly NoteStartDetectionPolicy _noteStartDetectionPolicy;
 
-            private readonly Stack<LinkedListNode<NoteDescriptor>> _nodesStack;
-            private readonly Queue<LinkedListNode<NoteDescriptor>> _nodesQueue;
+            private readonly Stack<LinkedListNode<TDescriptor>> _nodesStack;
+            private readonly Queue<LinkedListNode<TDescriptor>> _nodesQueue;
 
-            public NoteOnsHolder(NoteStartDetectionPolicy noteStartDetectionPolicy)
+            public NoteOnsHolderBase(NoteStartDetectionPolicy noteStartDetectionPolicy)
             {
                 switch (noteStartDetectionPolicy)
                 {
                     case NoteStartDetectionPolicy.LastNoteOn:
-                        _nodesStack = new Stack<LinkedListNode<NoteDescriptor>>(DefaultCapacity);
+                        _nodesStack = new Stack<LinkedListNode<TDescriptor>>(DefaultCapacity);
                         break;
                     case NoteStartDetectionPolicy.FirstNoteOn:
-                        _nodesQueue = new Queue<LinkedListNode<NoteDescriptor>>(DefaultCapacity);
+                        _nodesQueue = new Queue<LinkedListNode<TDescriptor>>(DefaultCapacity);
                         break;
                 }
 
@@ -67,7 +83,7 @@ namespace Melanchall.DryWetMidi.Interaction
                 }
             }
 
-            public void Add(LinkedListNode<NoteDescriptor> noteOnNode)
+            public void Add(LinkedListNode<TDescriptor> noteOnNode)
             {
                 switch (_noteStartDetectionPolicy)
                 {
@@ -80,7 +96,7 @@ namespace Melanchall.DryWetMidi.Interaction
                 }
             }
 
-            public LinkedListNode<NoteDescriptor> GetNext()
+            public LinkedListNode<TDescriptor> GetNext()
             {
                 switch (_noteStartDetectionPolicy)
                 {
@@ -91,6 +107,22 @@ namespace Melanchall.DryWetMidi.Interaction
                 }
 
                 return null;
+            }
+        }
+
+        private sealed class NoteOnsHolder : NoteOnsHolderBase<NoteDescriptor>
+        {
+            public NoteOnsHolder(NoteStartDetectionPolicy noteStartDetectionPolicy)
+                : base(noteStartDetectionPolicy)
+            {
+            }
+        }
+
+        private sealed class IndexedNoteOnsHolder : NoteOnsHolderBase<IndexedNoteDescriptor>
+        {
+            public IndexedNoteOnsHolder(NoteStartDetectionPolicy noteStartDetectionPolicy)
+                : base(noteStartDetectionPolicy)
+            {
             }
         }
 
@@ -115,7 +147,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
         public IEnumerable<Note> GetNotesLazy(IEnumerable<TimedEvent> timedEvents, bool collectTimedEvents = false, List<TimedEvent> collectedTimedEvents = null)
         {
-            var objectsDescriptors = new LinkedList<NoteDescriptor>();
+            var notesDescriptors = new LinkedList<NoteDescriptor>();
             var notesDescriptorsNodes = new Dictionary<int, NoteOnsHolder>();
 
             foreach (var timedEvent in timedEvents)
@@ -128,7 +160,7 @@ namespace Melanchall.DryWetMidi.Interaction
                     case MidiEventType.NoteOn:
                         {
                             var noteId = GetNoteEventId((NoteOnEvent)timedEvent.Event);
-                            var node = objectsDescriptors.AddLast(new NoteDescriptor(timedEvent));
+                            var node = notesDescriptors.AddLast(new NoteDescriptor(timedEvent));
 
                             NoteOnsHolder noteOnsHolder;
                             if (!notesDescriptorsNodes.TryGetValue(noteId, out noteOnsHolder))
@@ -162,7 +194,7 @@ namespace Melanchall.DryWetMidi.Interaction
                                 yield return n.Value.GetNote();
 
                                 var next = n.Next;
-                                objectsDescriptors.Remove(n);
+                                notesDescriptors.Remove(n);
                                 n = next;
                             }
                         }
@@ -170,9 +202,9 @@ namespace Melanchall.DryWetMidi.Interaction
                 }
             }
 
-            foreach (var objectDescriptor in objectsDescriptors)
+            foreach (var noteDescriptor in notesDescriptors)
             {
-                var note = objectDescriptor.GetNote();
+                var note = noteDescriptor.GetNote();
                 if (note != null)
                     yield return note;
             }
@@ -183,7 +215,7 @@ namespace Melanchall.DryWetMidi.Interaction
             bool collectTimedEvents = false,
             List<Tuple<TimedEvent, int>> collectedTimedEvents = null)
         {
-            var objectsDescriptors = new LinkedList<NoteDescriptor>();
+            var notesDescriptors = new LinkedList<NoteDescriptor>();
             var notesDescriptorsNodes = new Dictionary<Tuple<int, int>, NoteOnsHolder>();
 
             var respectEventsCollectionIndex = _noteDetectionSettings.NoteSearchContext == NoteSearchContext.SingleEventsCollection;
@@ -200,7 +232,7 @@ namespace Melanchall.DryWetMidi.Interaction
                         {
                             var noteId = GetNoteEventId((NoteOnEvent)timedEvent.Event);
                             var noteFullId = Tuple.Create(noteId, respectEventsCollectionIndex ? timedEventTuple.Item2 : -1);
-                            var node = objectsDescriptors.AddLast(new NoteDescriptor(timedEvent));
+                            var node = notesDescriptors.AddLast(new NoteDescriptor(timedEvent));
 
                             NoteOnsHolder noteOnsHolder;
                             if (!notesDescriptorsNodes.TryGetValue(noteFullId, out noteOnsHolder))
@@ -234,7 +266,7 @@ namespace Melanchall.DryWetMidi.Interaction
                                 yield return n.Value.GetNote();
 
                                 var next = n.Next;
-                                objectsDescriptors.Remove(n);
+                                notesDescriptors.Remove(n);
                                 n = next;
                             }
                         }
@@ -242,9 +274,81 @@ namespace Melanchall.DryWetMidi.Interaction
                 }
             }
 
-            foreach (var objectDescriptor in objectsDescriptors)
+            foreach (var noteDescriptor in notesDescriptors)
             {
-                var note = objectDescriptor.GetNote();
+                var note = noteDescriptor.GetNote();
+                if (note != null)
+                    yield return note;
+            }
+        }
+
+        public IEnumerable<Tuple<Note, int>> GetIndexedNotesLazy(
+            IEnumerable<Tuple<TimedEvent, int>> timedEvents,
+            bool collectTimedEvents = false,
+            List<Tuple<TimedEvent, int>> collectedTimedEvents = null)
+        {
+            var notesDescriptors = new LinkedList<IndexedNoteDescriptor>();
+            var notesDescriptorsNodes = new Dictionary<Tuple<int, int>, IndexedNoteOnsHolder>();
+
+            var respectEventsCollectionIndex = _noteDetectionSettings.NoteSearchContext == NoteSearchContext.SingleEventsCollection;
+
+            foreach (var timedEventTuple in timedEvents)
+            {
+                if (collectTimedEvents)
+                    collectedTimedEvents.Add(timedEventTuple);
+
+                var timedEvent = timedEventTuple.Item1;
+                switch (timedEvent.Event.EventType)
+                {
+                    case MidiEventType.NoteOn:
+                        {
+                            var noteId = GetNoteEventId((NoteOnEvent)timedEvent.Event);
+                            var noteFullId = Tuple.Create(noteId, respectEventsCollectionIndex ? timedEventTuple.Item2 : -1);
+                            var node = notesDescriptors.AddLast(new IndexedNoteDescriptor(timedEvent, timedEventTuple.Item2));
+
+                            IndexedNoteOnsHolder noteOnsHolder;
+                            if (!notesDescriptorsNodes.TryGetValue(noteFullId, out noteOnsHolder))
+                                notesDescriptorsNodes.Add(noteFullId, noteOnsHolder = new IndexedNoteOnsHolder(_noteDetectionSettings.NoteStartDetectionPolicy));
+
+                            noteOnsHolder.Add(node);
+                        }
+                        break;
+                    case MidiEventType.NoteOff:
+                        {
+                            var noteId = GetNoteEventId((NoteOffEvent)timedEvent.Event);
+                            var noteFullId = Tuple.Create(noteId, respectEventsCollectionIndex ? timedEventTuple.Item2 : -1);
+
+                            IndexedNoteOnsHolder noteOnsHolder;
+                            LinkedListNode<IndexedNoteDescriptor> node;
+
+                            if (!notesDescriptorsNodes.TryGetValue(noteFullId, out noteOnsHolder) || noteOnsHolder.Count == 0 || (node = noteOnsHolder.GetNext()).List == null)
+                                continue;
+
+                            node.Value.NoteOffTimedEvent = timedEvent;
+
+                            var previousNode = node.Previous;
+                            if (previousNode != null)
+                                continue;
+
+                            for (var n = node; n != null;)
+                            {
+                                if (!n.Value.IsCompleted)
+                                    break;
+
+                                yield return n.Value.GetIndexedNote();
+
+                                var next = n.Next;
+                                notesDescriptors.Remove(n);
+                                n = next;
+                            }
+                        }
+                        break;
+                }
+            }
+
+            foreach (var noteDescriptor in notesDescriptors)
+            {
+                var note = noteDescriptor.GetIndexedNote();
                 if (note != null)
                     yield return note;
             }

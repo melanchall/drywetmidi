@@ -32,7 +32,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// Gets or sets a minimum count of notes a chord can contain. So if count of simultaneously sounding
         /// notes is less than this value, they won't make up a chord. The default value is <c>1</c>.
         /// </summary>
-        /// <remarks>
+        /// <example>
         /// <para>Let's take a look at the example:</para>
         /// <para>
         /// <code>
@@ -84,7 +84,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// First possible chord will contain two notes and second chord will contain one note. In both cases
         /// count of notes is less than the specified minimum count.
         /// </para>
-        /// </remarks>
+        /// </example>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="value"/> is zero or negative.</exception>
         public int NotesMinCount
         {
@@ -101,7 +101,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// Gets or sets maximum distance of notes from the start of the first note of a chord.
         /// Notes within this tolerance will be included in a chord. The default value is <c>0</c>.
         /// </summary>
-        /// <remarks>
+        /// <example>
         /// <para>Let's take a look at the example:</para>
         /// <para>
         /// <code>
@@ -160,7 +160,7 @@ namespace Melanchall.DryWetMidi.Interaction
         ///       +-------+
         /// </code>
         /// </para>
-        /// </remarks>
+        /// </example>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="value"/> is negative.</exception>
         public long NotesTolerance
         {
