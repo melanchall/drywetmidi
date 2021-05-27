@@ -33,6 +33,27 @@ namespace Melanchall.DryWetMidi.Tests.Devices
             public List<TimeSpan> ExpectedTimes { get; } = new List<TimeSpan>();
         }
 
+        private sealed class OutputDeviceWithExceptionOnSendEvent : IOutputDevice
+        {
+            public event EventHandler<MidiEventSentEventArgs> EventSent;
+
+            private readonly Func<Exception> _createException;
+
+            public OutputDeviceWithExceptionOnSendEvent(Func<Exception> createException)
+            {
+                _createException = createException;
+            }
+
+            public void PrepareForEventsSending()
+            {
+            }
+
+            public void SendEvent(MidiEvent midiEvent)
+            {
+                throw _createException();
+            }
+        }
+
         #endregion
 
         #region Delegates
@@ -58,6 +79,28 @@ namespace Melanchall.DryWetMidi.Tests.Devices
         #endregion
 
         #region Test methods
+
+        [Retry(RetriesNumber)]
+        [Test]
+        public void CheckPlaybackEvents_DeviceErrorOccurred()
+        {
+            var exceptionMessage = "AAA";
+            var outputDevice = new OutputDeviceWithExceptionOnSendEvent(() => new Exception(exceptionMessage));
+
+            using (var playback = new Playback(new[] { new NoteOffEvent() }, TempoMap.Default, outputDevice))
+            {
+                Exception exception = null;
+
+                playback.DeviceErrorOccurred += (_, e) => exception = e.Exception;
+
+                playback.Start();
+
+                var exceptionThrown = SpinWait.SpinUntil(() => exception != null, SendReceiveUtilities.MaximumEventSendReceiveDelay);
+                Assert.IsTrue(exceptionThrown, "Exception was not thrown.");
+
+                Assert.AreEqual(exceptionMessage, exception.Message, "Exception message is invalid.");
+            }
+        }
 
         [Retry(RetriesNumber)]
         [Test]

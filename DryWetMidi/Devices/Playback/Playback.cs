@@ -64,6 +64,8 @@ namespace Melanchall.DryWetMidi.Devices
         /// </summary>
         public event EventHandler<MidiEventPlayedEventArgs> EventPlayed;
 
+        public event EventHandler<ErrorOccurredEventArgs> DeviceErrorOccurred;
+
         #endregion
 
         #region Fields
@@ -918,6 +920,11 @@ namespace Melanchall.DryWetMidi.Devices
             EventPlayed?.Invoke(this, new MidiEventPlayedEventArgs(midiEvent));
         }
 
+        private void OnDeviceErrorOccurred(Exception exception)
+        {
+            DeviceErrorOccurred?.Invoke(this, new ErrorOccurredEventArgs(exception));
+        }
+
         private void OnClockTicked(object sender, EventArgs e)
         {
             do
@@ -1002,8 +1009,15 @@ namespace Melanchall.DryWetMidi.Devices
         {
             _playbackDataTracker.UpdateCurrentData(midiEvent);
 
-            OutputDevice?.SendEvent(midiEvent);
-            OnEventPlayed(midiEvent);
+            try
+            {
+                OutputDevice?.SendEvent(midiEvent);
+                OnEventPlayed(midiEvent);
+            }
+            catch (Exception e)
+            {
+                OnDeviceErrorOccurred(e);
+            }
         }
 
         private bool TryPlayNoteEvent(NotePlaybackEventMetadata noteMetadata, bool isNoteOnEvent, TimeSpan time, out Note note)
