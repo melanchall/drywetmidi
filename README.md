@@ -85,7 +85,8 @@ midiFile.Write(
     MidiFileFormat.SingleTrack,
     new WritingSettings
     {
-        CompressionPolicy = CompressionPolicy.Default
+        UseRunningStatus = true,
+        NoteOffAsSilentNoteOn = true
     });
 ```
 
