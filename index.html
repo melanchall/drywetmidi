@@ -159,7 +159,8 @@ Using Rustissimo you can create a concert with your friends and play instruments
     MidiFileFormat.SingleTrack,
     new WritingSettings
     {
-        CompressionPolicy = CompressionPolicy.Default
+        UseRunningStatus = true,
+        NoteOffAsSilentNoteOn = true
     });
 </code></pre>
 <p>Of course you can create a MIDI file from scratch by creating an instance of the <code>MidiFile</code> and writing it:</p>
