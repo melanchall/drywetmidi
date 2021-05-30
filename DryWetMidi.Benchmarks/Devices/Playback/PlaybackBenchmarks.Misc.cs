@@ -27,9 +27,9 @@ namespace Melanchall.DryWetMidi.Benchmarks.Devices
                     .SelectMany(_ => new MidiEvent[] { new NoteOnEvent { DeltaTime = 1 }, new NoteOffEvent { DeltaTime = 1 } })
                     .ToList();
 
-                _playback = new Playback(midiEvents, TempoMap.Default);
+                _playback = midiEvents.GetPlayback(TempoMap.Default);
 
-                _playbackWithNoteCallback = new Playback(midiEvents, TempoMap.Default);
+                _playbackWithNoteCallback = midiEvents.GetPlayback(TempoMap.Default);
                 _playbackWithNoteCallback.NoteCallback = (d, rt, rl, t) => new NotePlaybackData(d.NoteNumber, d.Velocity, d.OffVelocity, d.Channel);
             }
 

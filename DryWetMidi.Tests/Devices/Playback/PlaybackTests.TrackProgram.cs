@@ -272,7 +272,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 SendReceiveUtilities.WarmUpDevice(outputDevice);
                 outputDevice.EventSent += (_, e) => sentEvents.Add(new SentEvent(e.Event, stopwatch.Elapsed));
 
-                using (var playback = new Playback(eventsForPlayback, tempoMap, outputDevice))
+                using (var playback = eventsForPlayback.GetPlayback(tempoMap, outputDevice))
                 {
                     playback.TrackProgram = true;
 
@@ -323,7 +323,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
             var eventsForPlayback = GetEventsForPlayback(eventsToSend, tempoMap);
             var notes = eventsForPlayback.GetNotes().ToArray();
 
-            using (var playback = new Playback(eventsForPlayback, tempoMap))
+            using (var playback = eventsForPlayback.GetPlayback(tempoMap))
             {
                 playback.TrackProgram = true;
                 playback.EventPlayed += (_, e) =>

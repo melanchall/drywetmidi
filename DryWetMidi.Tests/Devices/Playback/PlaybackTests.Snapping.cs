@@ -897,7 +897,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
 
             var eventsForPlayback = GetEventsForPlayback(eventsToSend, tempoMap);
 
-            return new Playback(eventsForPlayback, tempoMap);
+            return eventsForPlayback.GetPlayback(tempoMap);
         }
 
         #endregion

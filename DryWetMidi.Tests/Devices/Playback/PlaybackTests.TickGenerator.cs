@@ -83,7 +83,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
         {
             var processId = Process.GetCurrentProcess().Id;
 
-            using (var playback = new Playback(new MidiEvent[] { new NoteOnEvent(), new NoteOffEvent { DeltaTime = 100000 } }, TempoMap.Default))
+            using (var playback = new MidiEvent[] { new NoteOnEvent(), new NoteOffEvent { DeltaTime = 100000 } }.GetPlayback(TempoMap.Default))
             {
                 Assert.IsFalse(IsProcessIdInPowerCfgReport(processId), "Process ID is in PowerCfg report before playback started.");
 

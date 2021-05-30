@@ -52,7 +52,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
             var times = new List<ITimeSpan>();
             var expectedTimes = Enumerable.Range(0, (int)(waitingTime.TotalMilliseconds / PlaybackCurrentTimeWatcher.Instance.PollingInterval.TotalMilliseconds) + 1).Select(i => new MetricTimeSpan()).ToArray();
 
-            using (var playback = new Playback(events, TempoMap.Default))
+            using (var playback = events.GetPlayback(TempoMap.Default))
             {
                 PlaybackCurrentTimeWatcher.Instance.AddPlayback(playback, TimeSpanType.Metric);
                 PlaybackCurrentTimeWatcher.Instance.CurrentTimeChanged += (_, e) => times.Add(e.Times.First().Time);
@@ -83,7 +83,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 new NoteOffEvent { DeltaTime = lastTime }
             };
 
-            var playback = new Playback(events, TempoMap.Default);
+            var playback = events.GetPlayback(TempoMap.Default);
 
             PlaybackCurrentTimeWatcher.Instance.AddPlayback(playback, TimeSpanType.Midi);
 
@@ -114,8 +114,8 @@ namespace Melanchall.DryWetMidi.Tests.Devices
         {
             var tempoMap = TempoMap.Default;
 
-            var playback1 = new Playback(new MidiEvent[] { new NoteOnEvent(), new NoteOffEvent { DeltaTime = 400 } }, tempoMap);
-            var playback2 = new Playback(new MidiEvent[] { new NoteOnEvent(), new NoteOffEvent { DeltaTime = 200 } }, tempoMap);
+            var playback1 = new MidiEvent[] { new NoteOnEvent(), new NoteOffEvent { DeltaTime = 400 } }.GetPlayback(tempoMap);
+            var playback2 = new MidiEvent[] { new NoteOnEvent(), new NoteOffEvent { DeltaTime = 200 } }.GetPlayback(tempoMap);
 
             var times = new Dictionary<Playback, List<ITimeSpan>>
             {
@@ -182,8 +182,8 @@ namespace Melanchall.DryWetMidi.Tests.Devices
         {
             var tempoMap = TempoMap.Default;
 
-            var playback1 = new Playback(new MidiEvent[] { new NoteOnEvent(), new NoteOffEvent { DeltaTime = 400 } }, tempoMap);
-            var playback2 = new Playback(new MidiEvent[] { new NoteOnEvent(), new NoteOffEvent { DeltaTime = 500 } }, tempoMap);
+            var playback1 = new MidiEvent[] { new NoteOnEvent(), new NoteOffEvent { DeltaTime = 400 } }.GetPlayback(tempoMap);
+            var playback2 = new MidiEvent[] { new NoteOnEvent(), new NoteOffEvent { DeltaTime = 500 } }.GetPlayback(tempoMap);
 
             var times = new Dictionary<Playback, List<ITimeSpan>>
             {
@@ -338,7 +338,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
 
             var times = new List<ITimeSpan>();
 
-            using (var playback = new Playback(events, tempoMap))
+            using (var playback = events.GetPlayback(tempoMap))
             {
                 PlaybackCurrentTimeWatcher.Instance.PollingInterval = TimeConverter.ConvertTo<MetricTimeSpan>(pollingInterval, tempoMap);
                 PlaybackCurrentTimeWatcher.Instance.AddPlayback(playback, timeType);

@@ -96,108 +96,6 @@ namespace Melanchall.DryWetMidi.Devices
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Playback"/> with the specified
-        /// collection of MIDI events and tempo map.
-        /// </summary>
-        /// <param name="events">Collection of MIDI events to play.</param>
-        /// <param name="tempoMap">Tempo map used to calculate events times.</param>
-        /// <param name="clockSettings">Settings of the internal playback's clock.</param>
-        /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
-        /// <list type="bullet">
-        /// <item>
-        /// <description><paramref name="events"/> is <c>null</c>.</description>
-        /// </item>
-        /// <item>
-        /// <description><paramref name="tempoMap"/> is <c>null</c>.</description>
-        /// </item>
-        /// </list>
-        /// </exception>
-        public Playback(IEnumerable<MidiEvent> events, TempoMap tempoMap, MidiClockSettings clockSettings = null)
-            : this(new[] { events }, tempoMap, clockSettings)
-        {
-            ThrowIfArgument.IsNull(nameof(events), events);
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Playback"/> with the specified
-        /// collection of MIDI events, tempo map and output MIDI device to play events through.
-        /// </summary>
-        /// <param name="events">Collection of MIDI events to play.</param>
-        /// <param name="tempoMap">Tempo map used to calculate events times.</param>
-        /// <param name="outputDevice">Output MIDI device to play <paramref name="events"/> through.</param>
-        /// <param name="clockSettings">Settings of the internal playback's clock.</param>
-        /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
-        /// <list type="bullet">
-        /// <item>
-        /// <description><paramref name="events"/> is <c>null</c>.</description>
-        /// </item>
-        /// <item>
-        /// <description><paramref name="tempoMap"/> is <c>null</c>.</description>
-        /// </item>
-        /// <item>
-        /// <description><paramref name="outputDevice"/> is <c>null</c>.</description>
-        /// </item>
-        /// </list>
-        /// </exception>
-        public Playback(IEnumerable<MidiEvent> events, TempoMap tempoMap, IOutputDevice outputDevice, MidiClockSettings clockSettings = null)
-            : this(new[] { events }, tempoMap, outputDevice, clockSettings)
-        {
-            ThrowIfArgument.IsNull(nameof(events), events);
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Playback"/> with the specified
-        /// collection of MIDI events collections and tempo map.
-        /// </summary>
-        /// <param name="events">Collection of MIDI events collections to play.</param>
-        /// <param name="tempoMap">Tempo map used to calculate events times.</param>
-        /// <param name="clockSettings">Settings of the internal playback's clock.</param>
-        /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
-        /// <list type="bullet">
-        /// <item>
-        /// <description><paramref name="events"/> is <c>null</c>.</description>
-        /// </item>
-        /// <item>
-        /// <description><paramref name="tempoMap"/> is <c>null</c>.</description>
-        /// </item>
-        /// </list>
-        /// </exception>
-        public Playback(IEnumerable<IEnumerable<MidiEvent>> events, TempoMap tempoMap, MidiClockSettings clockSettings = null)
-            : this(GetTimedObjects(events), tempoMap, clockSettings)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Playback"/> with the specified
-        /// collection of MIDI events collections, tempo map and output MIDI device to play events through.
-        /// </summary>
-        /// <param name="events">Collection of MIDI events collections to play.</param>
-        /// <param name="tempoMap">Tempo map used to calculate events times.</param>
-        /// <param name="outputDevice">Output MIDI device to play <paramref name="events"/> through.</param>
-        /// <param name="clockSettings">Settings of the internal playback's clock.</param>
-        /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
-        /// <list type="bullet">
-        /// <item>
-        /// <description><paramref name="events"/> is <c>null</c>.</description>
-        /// </item>
-        /// <item>
-        /// <description><paramref name="tempoMap"/> is <c>null</c>.</description>
-        /// </item>
-        /// <item>
-        /// <description><paramref name="outputDevice"/> is <c>null</c>.</description>
-        /// </item>
-        /// </list>
-        /// </exception>
-        public Playback(IEnumerable<IEnumerable<MidiEvent>> events, TempoMap tempoMap, IOutputDevice outputDevice, MidiClockSettings clockSettings = null)
-            : this(GetTimedObjects(events), tempoMap, outputDevice, clockSettings)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Playback"/> with the specified
         /// collection of timed objects and tempo map.
         /// </summary>
         /// <param name="timedObjects">Collection of timed objects to play.</param>
@@ -219,7 +117,8 @@ namespace Melanchall.DryWetMidi.Devices
             ThrowIfArgument.IsNull(nameof(timedObjects), timedObjects);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
-            var playbackEvents = GetPlaybackEvents(timedObjects, tempoMap);
+            // TODO: note detection settings -> playback settings
+            var playbackEvents = GetPlaybackEvents(timedObjects.GetNotesAndTimedEventsLazy(new NoteDetectionSettings(), true), tempoMap);
             _eventsEnumerator = playbackEvents.GetEnumerator();
             _eventsEnumerator.MoveNext();
 
@@ -1149,14 +1048,6 @@ namespace Melanchall.DryWetMidi.Devices
             var playbackEvent = new PlaybackEvent(timedEvent.Event, timedEvent.TimeAs<MetricTimeSpan>(tempoMap), timedEvent.Time);
             playbackEvent.Metadata.Note = noteMetadata;
             return playbackEvent;
-        }
-
-        private static IEnumerable<ITimedObject> GetTimedObjects(IEnumerable<IEnumerable<MidiEvent>> events)
-        {
-            // TODO: note detection settings -> playback settings
-            return events
-                .Where(e => e != null)
-                .SelectMany(e =>  e.Where(midiEvent => midiEvent != null).GetTimedEventsLazy().GetNotesAndTimedEventsLazy(new NoteDetectionSettings()));
         }
 
         #endregion

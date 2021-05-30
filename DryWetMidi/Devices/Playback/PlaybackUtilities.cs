@@ -18,6 +18,33 @@ namespace Melanchall.DryWetMidi.Devices
     {
         #region Methods
 
+        public static Playback GetPlayback(this IEnumerable<MidiEvent> events, TempoMap tempoMap, IOutputDevice outputDevice, MidiClockSettings clockSettings = null)
+        {
+            ThrowIfArgument.IsNull(nameof(events), events);
+            ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
+            ThrowIfArgument.IsNull(nameof(outputDevice), outputDevice);
+
+            // TODO: note detection settings -> playback settings
+            var timedObjects = events
+                .GetTimedEventsLazy()
+                .GetNotesAndTimedEventsLazy(new NoteDetectionSettings());
+
+            return new Playback(timedObjects, tempoMap, outputDevice, clockSettings);
+        }
+
+        public static Playback GetPlayback(this IEnumerable<MidiEvent> events, TempoMap tempoMap, MidiClockSettings clockSettings = null)
+        {
+            ThrowIfArgument.IsNull(nameof(events), events);
+            ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
+
+            // TODO: note detection settings -> playback settings
+            var timedObjects = events
+                .GetTimedEventsLazy()
+                .GetNotesAndTimedEventsLazy(new NoteDetectionSettings());
+
+            return new Playback(timedObjects, tempoMap, clockSettings);
+        }
+
         /// <summary>
         /// Retrieves an instance of the <see cref="Playback"/> for playing MIDI events contained in
         /// the specified <see cref="TrackChunk"/>.
@@ -48,7 +75,13 @@ namespace Melanchall.DryWetMidi.Devices
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
             ThrowIfArgument.IsNull(nameof(outputDevice), outputDevice);
 
-            return new Playback(trackChunk.Events, tempoMap, outputDevice, clockSettings);
+            // TODO: note detection settings -> playback settings
+            var timedObjects = trackChunk
+                .Events
+                .GetTimedEventsLazy()
+                .GetNotesAndTimedEventsLazy(new NoteDetectionSettings());
+
+            return new Playback(timedObjects, tempoMap, outputDevice, clockSettings);
         }
 
         /// <summary>
@@ -76,7 +109,13 @@ namespace Melanchall.DryWetMidi.Devices
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
-            return new Playback(trackChunk.Events, tempoMap, clockSettings);
+            // TODO: note detection settings -> playback settings
+            var timedObjects = trackChunk
+                .Events
+                .GetTimedEventsLazy()
+                .GetNotesAndTimedEventsLazy(new NoteDetectionSettings());
+
+            return new Playback(timedObjects, tempoMap, clockSettings);
         }
 
         /// <summary>
@@ -109,7 +148,13 @@ namespace Melanchall.DryWetMidi.Devices
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
             ThrowIfArgument.IsNull(nameof(outputDevice), outputDevice);
 
-            return new Playback(trackChunks.Select(c => c.Events), tempoMap, outputDevice, clockSettings);
+            // TODO: note detection settings -> playback settings
+            var timedObjects = trackChunks
+                .GetTimedEventsLazy()
+                .GetNotesAndTimedEventsLazy(new NoteDetectionSettings())
+                .Select(o => o.Item1);
+
+            return new Playback(timedObjects, tempoMap, outputDevice, clockSettings);
         }
 
         /// <summary>
@@ -137,7 +182,13 @@ namespace Melanchall.DryWetMidi.Devices
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
-            return new Playback(trackChunks.Select(c => c.Events), tempoMap, clockSettings);
+            // TODO: note detection settings -> playback settings
+            var timedObjects = trackChunks
+                .GetTimedEventsLazy()
+                .GetNotesAndTimedEventsLazy(new NoteDetectionSettings())
+                .Select(o => o.Item1);
+
+            return new Playback(timedObjects, tempoMap, clockSettings);
         }
 
         /// <summary>

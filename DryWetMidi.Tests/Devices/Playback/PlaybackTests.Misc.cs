@@ -87,7 +87,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
             var exceptionMessage = "AAA";
             var outputDevice = new OutputDeviceWithExceptionOnSendEvent(() => new Exception(exceptionMessage));
 
-            using (var playback = new Playback(new[] { new NoteOffEvent() }, TempoMap.Default, outputDevice))
+            using (var playback = new[] { new NoteOffEvent() }.GetPlayback(TempoMap.Default, outputDevice))
             {
                 Exception exception = null;
 
@@ -942,7 +942,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
             var eventsForPlayback = GetEventsForPlayback(eventsToSend, tempoMap);
 
             using (var outputDevice = OutputDevice.GetByName(SendReceiveUtilities.DeviceToTestOnName))
-            using (var playback = new Playback(eventsForPlayback, tempoMap, outputDevice))
+            using (var playback = eventsForPlayback.GetPlayback(tempoMap, outputDevice))
             {
                 var duration = playback.GetDuration<MetricTimeSpan>();
                 Assert.IsTrue(
@@ -994,7 +994,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                             inputDeviceB.StartEventsListening();
                             inputDeviceB.EventReceived += (_, e) => receivedEventsB.Add(new ReceivedEvent(e.Event, stopwatch.Elapsed));
 
-                            using (var playback = new Playback(eventsForPlayback, tempoMap))
+                            using (var playback = eventsForPlayback.GetPlayback(tempoMap))
                             {
                                 Assert.IsNull(playback.OutputDevice, "Output device is not null on playback created.");
 

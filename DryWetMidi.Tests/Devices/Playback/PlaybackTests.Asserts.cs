@@ -43,7 +43,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 SendReceiveUtilities.WarmUpDevice(outputDevice);
                 outputDevice.EventSent += (_, e) => sentEvents.Add(new SentEvent(e.Event, stopwatch.Elapsed));
 
-                using (var playback = new Playback(eventsForPlayback, tempoMap, outputDevice))
+                using (var playback = eventsForPlayback.GetPlayback(tempoMap, outputDevice))
                 {
                     playback.NotesPlaybackStarted += (_, e) => notesStarted.AddRange(e.Notes);
                     playback.NotesPlaybackFinished += (_, e) => notesFinished.AddRange(e.Notes);
@@ -103,7 +103,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 SendReceiveUtilities.WarmUpDevice(outputDevice);
                 outputDevice.EventSent += (_, e) => sentEvents.Add(new SentEvent(e.Event, stopwatch.Elapsed));
 
-                using (var playback = new Playback(eventsForPlayback, tempoMap, outputDevice))
+                using (var playback = eventsForPlayback.GetPlayback(tempoMap, outputDevice))
                 {
                     playback.NotesPlaybackStarted += (_, e) => notesStarted.AddRange(e.Notes);
                     playback.NotesPlaybackFinished += (_, e) => notesFinished.AddRange(e.Notes);
@@ -161,7 +161,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 SendReceiveUtilities.WarmUpDevice(outputDevice);
                 outputDevice.EventSent += (_, e) => sentEvents.Add(new SentEvent(e.Event, stopwatch.Elapsed));
 
-                using (var playback = new Playback(eventsForPlayback, tempoMap, outputDevice))
+                using (var playback = eventsForPlayback.GetPlayback(tempoMap, outputDevice))
                 {
                     playback.EventPlayed += (_, e) =>
                     {
@@ -228,7 +228,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 SendReceiveUtilities.WarmUpDevice(outputDevice);
                 outputDevice.EventSent += (_, e) => sentEvents.Add(new SentEvent(e.Event, stopwatch.Elapsed));
 
-                using (var playback = new Playback(eventsForPlayback, tempoMap, outputDevice))
+                using (var playback = eventsForPlayback.GetPlayback(tempoMap, outputDevice))
                 {
                     playback.TrackNotes = true;
                     playback.NotesPlaybackStarted += (_, e) => notesStarted.AddRange(e.Notes);
@@ -287,7 +287,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
             var notesStarted = new List<Note>();
             var notesFinished = new List<Note>();
 
-            using (var playback = new Playback(eventsForPlayback, tempoMap))
+            using (var playback = eventsForPlayback.GetPlayback(tempoMap))
             {
                 playback.TrackNotes = true;
                 playback.NotesPlaybackStarted += (_, e) => notesStarted.AddRange(e.Notes);
@@ -335,7 +335,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
             };
 
             using (var outputDevice = OutputDevice.GetByName(SendReceiveUtilities.DeviceToTestOnName))
-            using (var playback = new Playback(playbackEvents, TempoMap.Default, outputDevice))
+            using (var playback = playbackEvents.GetPlayback(TempoMap.Default, outputDevice))
             {
                 setupPlayback(null, playback);
 
@@ -409,7 +409,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                     ? new MidiClockSettings { CreateTickGeneratorCallback = createTickGeneratorCallback }
                     : null;
 
-                using (var playback = createPlayback?.Invoke(outputDevice, clockSettings) ?? new Playback(eventsForPlayback, tempoMap, outputDevice, clockSettings))
+                using (var playback = createPlayback?.Invoke(outputDevice, clockSettings) ?? eventsForPlayback.GetPlayback(tempoMap, outputDevice, clockSettings))
                 {
                     playback.Speed = speed;
                     beforePlaybackStarted(playbackContext, playback);
@@ -485,7 +485,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 SendReceiveUtilities.WarmUpDevice(outputDevice);
                 outputDevice.EventSent += (_, e) => sentEvents.Add(new SentEvent(e.Event, stopwatch.Elapsed));
 
-                using (var playback = new Playback(eventsForPlayback, tempoMap, outputDevice))
+                using (var playback = eventsForPlayback.GetPlayback(tempoMap, outputDevice))
                 {
                     playback.Speed = speed;
                     setupPlayback(playbackContext, playback);
