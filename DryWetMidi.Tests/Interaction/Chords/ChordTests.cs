@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Reflection;
 using Melanchall.DryWetMidi.Common;
@@ -177,6 +178,29 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             }
         }
 
+        private sealed class TaggedChord : Chord
+        {
+            public TaggedChord(IEnumerable<Note> notes, object tag)
+                : base(notes)
+            {
+                Tag = tag;
+            }
+
+            public object Tag { get; }
+
+            public override Chord Clone()
+            {
+                return new TaggedChord(Notes, Tag)
+                {
+                    Time = Time,
+                    Length = Length,
+                    Channel = Channel,
+                    Velocity = Velocity,
+                    OffVelocity = OffVelocity
+                };
+            }
+        }
+
         #endregion
 
         #region Constants
@@ -285,6 +309,20 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             var chord = GetChord_NonzeroTime();
 
             MidiAsserts.AreEqual(chord, chord.Clone(), "Clone of a chord doesn't equal to the original one.");
+        }
+
+        [Test]
+        public void CloneCustomChord()
+        {
+            const string tag = "Tag";
+
+            var notes = new[] { new Note((SevenBitNumber)70) };
+            var taggedChord = new TaggedChord(notes, tag);
+
+            var clone = (TaggedChord)taggedChord.Clone();
+
+            MidiAsserts.AreEqual(notes, clone.Notes, "Notes are invalid.");
+            Assert.AreEqual(tag, clone.Tag, "Tag is invalid.");
         }
 
         #endregion

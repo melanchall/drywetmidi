@@ -233,6 +233,18 @@ namespace Melanchall.DryWetMidi.Tests.Utilities
             Assert.IsFalse(areEqual, $"{message} {filesComparingMessage}");
         }
 
+        public static void AreEqual(MidiEvent midiEvent1, MidiEvent midiEvent2, bool compareDeltaTimes, string message = null)
+        {
+            string eventsComparingMessage;
+            var areEqual = MidiEvent.Equals(
+                midiEvent1,
+                midiEvent2,
+                new MidiEventEqualityCheckSettings { CompareDeltaTimes = compareDeltaTimes },
+                out eventsComparingMessage);
+
+            Assert.IsTrue(areEqual, $"{message} {eventsComparingMessage}");
+        }
+
         #endregion
     }
 }

@@ -7,7 +7,7 @@ namespace Melanchall.DryWetMidi.Interaction
     /// <summary>
     /// Represents wrapper for the <see cref="MidiEvent"/> that provides absolute time of an event.
     /// </summary>
-    public sealed class TimedEvent : ITimedObject, INotifyTimeChanged
+    public class TimedEvent : ITimedObject, INotifyTimeChanged
     {
         #region Events
 
@@ -88,7 +88,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// Clones timed event by creating a copy of it.
         /// </summary>
         /// <returns>Copy of the timed event.</returns>
-        public TimedEvent Clone()
+        public virtual TimedEvent Clone()
         {
             return new TimedEvent(Event.Clone())
             {

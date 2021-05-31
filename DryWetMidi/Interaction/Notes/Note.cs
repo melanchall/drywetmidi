@@ -9,7 +9,7 @@ namespace Melanchall.DryWetMidi.Interaction
     /// <summary>
     /// Represents a musical note.
     /// </summary>
-    public sealed class Note : ILengthedObject, IMusicalObject, INotifyTimeChanged, INotifyLengthChanged
+    public class Note : ILengthedObject, IMusicalObject, INotifyTimeChanged, INotifyLengthChanged
     {
         #region Constants
 
@@ -308,7 +308,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// Clones note by creating a copy of it.
         /// </summary>
         /// <returns>Copy of the note.</returns>
-        public Note Clone()
+        public virtual Note Clone()
         {
             var newTimedNoteOnEvent = GetTimedNoteOnEvent();
             newTimedNoteOnEvent._time = TimedNoteOnEvent.Time;

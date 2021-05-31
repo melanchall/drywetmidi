@@ -9,6 +9,29 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
     [TestFixture]
     public sealed class TimedEventTests
     {
+        #region Nested classes
+
+        private sealed class TaggedTimedEvent : TimedEvent
+        {
+            public TaggedTimedEvent(MidiEvent midiEvent, object tag)
+                : base(midiEvent)
+            {
+                Tag = tag;
+            }
+
+            public object Tag { get; }
+
+            public override TimedEvent Clone()
+            {
+                return new TaggedTimedEvent(Event, Tag)
+                {
+                    Time = Time
+                };
+            }
+        }
+
+        #endregion
+
         #region Test methods
 
         [Test]
@@ -41,6 +64,20 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         public void CheckTimeChangedEvent_NonZeroTime_Changed()
         {
             CheckTimeChangedEvent_Changed(GetTimedEvent_NonzeroTime());
+        }
+
+        [Test]
+        public void CloneCustomTimedEvent()
+        {
+            const string tag = "Tag";
+
+            var midiEvent = new NoteOnEvent();
+            var taggedTimedEvent = new TaggedTimedEvent(midiEvent, tag);
+
+            var clone = (TaggedTimedEvent)taggedTimedEvent.Clone();
+
+            MidiAsserts.AreEqual(midiEvent, clone.Event, true, "Event is invalid.");
+            Assert.AreEqual(tag, clone.Tag, "Tag is invalid.");
         }
 
         #endregion

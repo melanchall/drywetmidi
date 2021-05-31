@@ -10,6 +10,33 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
     [TestFixture]
     public sealed class NoteTests
     {
+        #region Nested classes
+
+        private sealed class TaggedNote : Note
+        {
+            public TaggedNote(SevenBitNumber sevenBitNumber, object tag)
+                : base(sevenBitNumber)
+            {
+                Tag = tag;
+            }
+
+            public object Tag { get; }
+
+            public override Note Clone()
+            {
+                return new TaggedNote(NoteNumber, Tag)
+                {
+                    Time = Time,
+                    Length = Length,
+                    Channel = Channel,
+                    Velocity = Velocity,
+                    OffVelocity = OffVelocity
+                };
+            }
+        }
+
+        #endregion
+
         #region Test methods
 
         #region Clone
@@ -26,6 +53,20 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             };
 
             MidiAsserts.AreEqual(note, note.Clone(), "Clone of a note doesn't equal to the original one.");
+        }
+
+        [Test]
+        public void CloneCustomNote()
+        {
+            const string tag = "Tag";
+            
+            var noteNumber = (SevenBitNumber)70;
+            var taggedNote = new TaggedNote(noteNumber, tag);
+
+            var clone = (TaggedNote)taggedNote.Clone();
+
+            Assert.AreEqual(noteNumber, clone.NoteNumber, "Note number is invalid.");
+            Assert.AreEqual(tag, clone.Tag, "Tag is invalid.");
         }
 
         #endregion

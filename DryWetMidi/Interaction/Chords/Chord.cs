@@ -9,7 +9,7 @@ namespace Melanchall.DryWetMidi.Interaction
     /// <summary>
     /// Represents a musical chord.
     /// </summary>
-    public sealed class Chord : ILengthedObject, IMusicalObject, INotifyTimeChanged, INotifyLengthChanged
+    public class Chord : ILengthedObject, IMusicalObject, INotifyTimeChanged, INotifyLengthChanged
     {
         #region Events
 
@@ -316,7 +316,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// Clones chord by creating a copy of it.
         /// </summary>
         /// <returns>Copy of the chord.</returns>
-        public Chord Clone()
+        public virtual Chord Clone()
         {
             return new Chord(Notes.Select(note => note.Clone()));
         }
