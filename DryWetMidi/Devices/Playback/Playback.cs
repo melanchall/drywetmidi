@@ -13,7 +13,7 @@ namespace Melanchall.DryWetMidi.Devices
     /// <summary>
     /// Provides a way to play MIDI data through the specified output MIDI device.
     /// </summary>
-    public sealed class Playback : IDisposable, IClockDrivenObject
+    public class Playback : IDisposable, IClockDrivenObject
     {
         #region Constants
 
@@ -140,7 +140,7 @@ namespace Melanchall.DryWetMidi.Devices
             _playbackDataTracker = new PlaybackDataTracker(TempoMap);
             foreach (var playbackEvent in playbackEvents)
             {
-                _playbackDataTracker.InitializeData(playbackEvent.Event, playbackEvent.RawTime);
+                _playbackDataTracker.InitializeData(playbackEvent.Event, playbackEvent.RawTime, playbackEvent.Metadata.TimedEvent.Metadata);
             }
         }
 
@@ -731,6 +731,11 @@ namespace Melanchall.DryWetMidi.Devices
                 : currentTime.Subtract(step, TimeSpanMode.TimeLength));
         }
 
+        protected virtual void SendEventToDevice(MidiEvent midiEvent, object metadata)
+        {
+            OutputDevice?.SendEvent(midiEvent);
+        }
+
         private bool TryToMoveToSnapPoint(SnapPoint snapPoint)
         {
             if (snapPoint != null)
@@ -741,9 +746,9 @@ namespace Melanchall.DryWetMidi.Devices
 
         private void SendTrackedData()
         {
-            foreach (var midiEvent in _playbackDataTracker.GetEventsAtTime(_clock.CurrentTime))
+            foreach (var eventWithMetadata in _playbackDataTracker.GetEventsAtTime(_clock.CurrentTime))
             {
-                SendEvent(midiEvent);
+                SendEvent(eventWithMetadata.Event, eventWithMetadata.Metadata);
             }
         }
 
@@ -867,7 +872,7 @@ namespace Melanchall.DryWetMidi.Devices
                 if (midiEvent == null)
                     continue;
 
-                SendEvent(midiEvent);
+                SendEvent(midiEvent, playbackEvent.Metadata.TimedEvent.Metadata);
             }
             while (_eventsEnumerator.MoveNext());
 
@@ -904,13 +909,13 @@ namespace Melanchall.DryWetMidi.Devices
             while (_eventsEnumerator.Current != null && _eventsEnumerator.Current.Time < convertedTime);
         }
 
-        private void SendEvent(MidiEvent midiEvent)
+        private void SendEvent(MidiEvent midiEvent, object metadata)
         {
-            _playbackDataTracker.UpdateCurrentData(midiEvent);
+            _playbackDataTracker.UpdateCurrentData(midiEvent, metadata);
 
             try
             {
-                OutputDevice?.SendEvent(midiEvent);
+                SendEventToDevice(midiEvent, metadata);
                 OnEventPlayed(midiEvent);
             }
             catch (Exception e)
@@ -966,7 +971,8 @@ namespace Melanchall.DryWetMidi.Devices
 
             if (midiEvent != null)
             {
-                SendEvent(midiEvent);
+                var timedObjectWithMetadata = isNoteOnEvent ? noteMetadata.RawNote.TimedNoteOnEvent : noteMetadata.RawNote.TimedNoteOffEvent;
+                SendEvent(midiEvent, (timedObjectWithMetadata as IMetadata)?.Metadata);
 
                 if (midiEvent is NoteOnEvent)
                     _activeNotesMetadata.TryAdd(noteMetadata, 0);
@@ -1019,7 +1025,9 @@ namespace Melanchall.DryWetMidi.Devices
 
         private static PlaybackEvent GetPlaybackEvent(TimedEvent timedEvent, TempoMap tempoMap)
         {
-            return new PlaybackEvent(timedEvent.Event, timedEvent.TimeAs<MetricTimeSpan>(tempoMap), timedEvent.Time);
+            var playbackEvent = new PlaybackEvent(timedEvent.Event, timedEvent.TimeAs<MetricTimeSpan>(tempoMap), timedEvent.Time);
+            playbackEvent.Metadata.TimedEvent = new TimedEventPlaybackEventMetadata((timedEvent as IMetadata)?.Metadata);
+            return playbackEvent;
         }
 
         private static IEnumerable<PlaybackEvent> GetPlaybackEvents(Chord chord, TempoMap tempoMap)
@@ -1047,6 +1055,7 @@ namespace Melanchall.DryWetMidi.Devices
         {
             var playbackEvent = new PlaybackEvent(timedEvent.Event, timedEvent.TimeAs<MetricTimeSpan>(tempoMap), timedEvent.Time);
             playbackEvent.Metadata.Note = noteMetadata;
+            playbackEvent.Metadata.TimedEvent = new TimedEventPlaybackEventMetadata((timedEvent as IMetadata)?.Metadata);
             return playbackEvent;
         }
 
