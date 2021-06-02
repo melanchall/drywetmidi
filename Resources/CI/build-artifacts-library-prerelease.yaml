@@ -10,7 +10,7 @@ variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   version: '5.2.1'
-  prereleaseLabel: $[counter('-prerelease', 1)]
+  prereleaseNumber: $[counter(variables['version'], 1)]
 
 name: $(TeamProject)_$(SourceBranchName)_BuildLibraryPreRelease_$(version)$(Rev:.r)
 
@@ -26,8 +26,8 @@ steps:
       $xml.Load($filePath)
       $version = $xml.Project.PropertyGroup[1].Version
       Write-Host "Current version is $version"
-      Write-Host "Prerelease label is $(prereleaseLabel)"
-      $newVersion = $version + "-prerelease" + $(prereleaseLabel)
+      Write-Host "Prerelease number is $(prereleaseNumber)"
+      $newVersion = $version + "-prerelease" + $(prereleaseNumber)
       Write-Host "New version is $newVersion"
       $xml.Project.PropertyGroup[1].Version = $newVersion
       $xml.Save($filePath)
