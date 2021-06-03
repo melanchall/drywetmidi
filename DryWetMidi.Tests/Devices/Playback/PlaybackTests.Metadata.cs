@@ -30,9 +30,10 @@ namespace Melanchall.DryWetMidi.Tests.Devices
             {
             }
 
-            public void SendEventWithMetadata(MidiEvent midiEvent, object metadata)
+            public bool SendEventWithMetadata(MidiEvent midiEvent, object metadata)
             {
                 Metadata.Add((midiEvent, metadata));
+                return true;
             }
         }
 
@@ -47,9 +48,9 @@ namespace Melanchall.DryWetMidi.Tests.Devices
             {
             }
 
-            protected override void SendEventToDevice(MidiEvent midiEvent, object metadata)
+            protected override bool TryPlayEvent(MidiEvent midiEvent, object metadata)
             {
-                ((OutputDeviceWithMetadataRegistration)OutputDevice).SendEventWithMetadata(midiEvent, metadata);
+                return ((OutputDeviceWithMetadataRegistration)OutputDevice).SendEventWithMetadata(midiEvent, metadata);
             }
         }
 

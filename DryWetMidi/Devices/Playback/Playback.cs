@@ -731,9 +731,10 @@ namespace Melanchall.DryWetMidi.Devices
                 : currentTime.Subtract(step, TimeSpanMode.TimeLength));
         }
 
-        protected virtual void SendEventToDevice(MidiEvent midiEvent, object metadata)
+        protected virtual bool TryPlayEvent(MidiEvent midiEvent, object metadata)
         {
             OutputDevice?.SendEvent(midiEvent);
+            return true;
         }
 
         private bool TryToMoveToSnapPoint(SnapPoint snapPoint)
@@ -748,7 +749,7 @@ namespace Melanchall.DryWetMidi.Devices
         {
             foreach (var eventWithMetadata in _playbackDataTracker.GetEventsAtTime(_clock.CurrentTime))
             {
-                SendEvent(eventWithMetadata.Event, eventWithMetadata.Metadata);
+                PlayEvent(eventWithMetadata.Event, eventWithMetadata.Metadata);
             }
         }
 
@@ -872,7 +873,7 @@ namespace Melanchall.DryWetMidi.Devices
                 if (midiEvent == null)
                     continue;
 
-                SendEvent(midiEvent, playbackEvent.Metadata.TimedEvent.Metadata);
+                PlayEvent(midiEvent, playbackEvent.Metadata.TimedEvent.Metadata);
             }
             while (_eventsEnumerator.MoveNext());
 
@@ -909,14 +910,14 @@ namespace Melanchall.DryWetMidi.Devices
             while (_eventsEnumerator.Current != null && _eventsEnumerator.Current.Time < convertedTime);
         }
 
-        private void SendEvent(MidiEvent midiEvent, object metadata)
+        private void PlayEvent(MidiEvent midiEvent, object metadata)
         {
             _playbackDataTracker.UpdateCurrentData(midiEvent, metadata);
 
             try
             {
-                SendEventToDevice(midiEvent, metadata);
-                OnEventPlayed(midiEvent);
+                if (TryPlayEvent(midiEvent, metadata))
+                    OnEventPlayed(midiEvent);
             }
             catch (Exception e)
             {
@@ -972,7 +973,7 @@ namespace Melanchall.DryWetMidi.Devices
             if (midiEvent != null)
             {
                 var timedObjectWithMetadata = isNoteOnEvent ? noteMetadata.RawNote.TimedNoteOnEvent : noteMetadata.RawNote.TimedNoteOffEvent;
-                SendEvent(midiEvent, (timedObjectWithMetadata as IMetadata)?.Metadata);
+                PlayEvent(midiEvent, (timedObjectWithMetadata as IMetadata)?.Metadata);
 
                 if (midiEvent is NoteOnEvent)
                     _activeNotesMetadata.TryAdd(noteMetadata, 0);
