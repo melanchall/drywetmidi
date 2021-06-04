@@ -10,9 +10,10 @@ namespace Melanchall.DryWetMidi.Devices
     {
         #region Constructor
 
-        internal MidiEventPlayedEventArgs(MidiEvent midiEvent)
+        internal MidiEventPlayedEventArgs(MidiEvent midiEvent, object metadata)
         {
             Event = midiEvent;
+            Metadata = metadata;
         }
 
         #endregion
@@ -23,6 +24,8 @@ namespace Melanchall.DryWetMidi.Devices
         /// Gets a MIDI event played.
         /// </summary>
         public MidiEvent Event { get; }
+
+        public object Metadata { get; }
 
         #endregion
     }

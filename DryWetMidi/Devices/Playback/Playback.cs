@@ -820,9 +820,9 @@ namespace Melanchall.DryWetMidi.Devices
             NotesPlaybackFinished?.Invoke(this, new NotesEventArgs(notes));
         }
 
-        private void OnEventPlayed(MidiEvent midiEvent)
+        private void OnEventPlayed(MidiEvent midiEvent, object metadata)
         {
-            EventPlayed?.Invoke(this, new MidiEventPlayedEventArgs(midiEvent));
+            EventPlayed?.Invoke(this, new MidiEventPlayedEventArgs(midiEvent, metadata));
         }
 
         private void OnDeviceErrorOccurred(Exception exception)
@@ -917,7 +917,7 @@ namespace Melanchall.DryWetMidi.Devices
             try
             {
                 if (TryPlayEvent(midiEvent, metadata))
-                    OnEventPlayed(midiEvent);
+                    OnEventPlayed(midiEvent, metadata);
             }
             catch (Exception e)
             {

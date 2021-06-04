@@ -71,6 +71,44 @@ namespace Melanchall.DryWetMidi.Tests.Devices
 
         [Retry(RetriesNumber)]
         [Test]
+        public void CheckPlaybackMetadata_EventPlayed()
+        {
+            var midiFile = new MidiFile(
+                new TrackChunk(
+                    new NoteOnEvent(),
+                    new NoteOffEvent { DeltaTime = 50 },
+                    new NoteOnEvent { DeltaTime = 50 },
+                    new NoteOffEvent { DeltaTime = 50 }),
+                new TrackChunk(
+                    new NoteOnEvent { DeltaTime = 25 },
+                    new NoteOffEvent { DeltaTime = 50 },
+                    new NoteOnEvent { DeltaTime = 50 },
+                    new NoteOffEvent { DeltaTime = 50 }));
+
+            var timedEvents = GetTimedEvents(midiFile);
+            var outputDevice = new OutputDeviceWithMetadataRegistration();
+
+            var trachChunkIndices = new List<int>();
+
+            using (var playback = new PlaybackWithMetadataRegistration(timedEvents, midiFile.GetTempoMap(), outputDevice))
+            {
+                playback.EventPlayed += (_, e) => trachChunkIndices.Add((int)e.Metadata);
+
+                playback.Start();
+
+                var timeout = (TimeSpan)midiFile.GetDuration<MetricTimeSpan>() + SendReceiveUtilities.MaximumEventSendReceiveDelay;
+                var playbackFinished = SpinWait.SpinUntil(() => !playback.IsRunning, timeout);
+                Assert.IsTrue(playbackFinished, "Playback not finished.");
+            }
+
+            CollectionAssert.AreEqual(
+                new[] { 0, 1, 0, 1, 0, 1, 0, 1 },
+                trachChunkIndices,
+                "Invalid track chunk indicies registered.");
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
         public void CheckPlaybackMetadata_NormalPlayback()
         {
             var midiFile = new MidiFile(
@@ -85,11 +123,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                     new NoteOnEvent { DeltaTime = 50 },
                     new NoteOffEvent { DeltaTime = 50 }));
 
-            var timedEvents = midiFile
-                .GetTrackChunks()
-                .SelectMany((c, i) => c.GetTimedEvents().Select(e => new TimedEventWithTrackChunkIndex(e.Event, e.Time, i)))
-                .OrderBy(e => e.Time);
-
+            var timedEvents = GetTimedEvents(midiFile);
             var outputDevice = new OutputDeviceWithMetadataRegistration();
 
             using (var playback = new PlaybackWithMetadataRegistration(timedEvents, midiFile.GetTempoMap(), outputDevice))
