@@ -44,7 +44,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 .GetAllEventTypes()
                 .Select(type => type == typeof(UnknownMetaEvent)
                     ? new UnknownMetaEvent(0)
-                    : (MidiEvent)Activator.CreateInstance(type))
+                    : (MidiEvent)Activator.CreateInstance(type, true))
                 .Select(midiEvent => new EventToSend(midiEvent, TimeSpan.FromMilliseconds(delay)))
                 .ToArray();
 

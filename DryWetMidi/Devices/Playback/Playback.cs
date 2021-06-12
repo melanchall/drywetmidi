@@ -737,6 +737,11 @@ namespace Melanchall.DryWetMidi.Devices
             return true;
         }
 
+        protected virtual IEnumerable<TimedEvent> GetTimedEvents(ITimedObject timedObject)
+        {
+            return Enumerable.Empty<TimedEvent>();
+        }
+
         private bool TryToMoveToSnapPoint(SnapPoint snapPoint)
         {
             if (snapPoint != null)
@@ -995,6 +1000,16 @@ namespace Melanchall.DryWetMidi.Devices
 
             foreach (var timedObject in timedObjects)
             {
+                var customObjectProcessed = false;
+                foreach (var e in GetTimedEvents(timedObject))
+                {
+                    playbackEvents.Add(GetPlaybackEvent(e, tempoMap));
+                    customObjectProcessed = true;
+                }
+
+                if (customObjectProcessed)
+                    continue;
+
                 var chord = timedObject as Chord;
                 if (chord != null)
                 {
@@ -1018,7 +1033,10 @@ namespace Melanchall.DryWetMidi.Devices
 
                 var registeredParameter = timedObject as RegisteredParameter;
                 if (registeredParameter != null)
+                {
                     playbackEvents.AddRange(registeredParameter.GetTimedEvents().Select(e => GetPlaybackEvent(e, tempoMap)));
+                    continue;
+                }
             }
 
             return playbackEvents.OrderBy(e => e, new PlaybackEventsComparer()).ToList();

@@ -127,20 +127,20 @@ namespace Melanchall.DryWetMidi.Interaction
             }
         }
 
-        private class CompleteNoteDescriptor : IObjectDescriptor
+        private class CompleteObjectDescriptor : IObjectDescriptor
         {
-            private readonly Note _note;
+            private readonly ITimedObject _timedObject;
 
-            public CompleteNoteDescriptor(Note note)
+            public CompleteObjectDescriptor(ITimedObject timedObject)
             {
-                _note = note;
+                _timedObject = timedObject;
             }
 
             public bool IsCompleted { get; } = true;
 
             public ITimedObject GetObject()
             {
-                return _note;
+                return _timedObject;
             }
         }
 
@@ -1044,7 +1044,7 @@ namespace Melanchall.DryWetMidi.Interaction
         internal static IEnumerable<ITimedObject> GetNotesAndTimedEventsLazy(
             this IEnumerable<ITimedObject> timedObjects,
             NoteDetectionSettings settings,
-            bool notesAllowed)
+            bool completeObjectsAllowed)
         {
             settings = settings ?? new NoteDetectionSettings();
 
@@ -1053,18 +1053,14 @@ namespace Melanchall.DryWetMidi.Interaction
 
             foreach (var timedObject in timedObjects)
             {
-                if (notesAllowed)
+                if (completeObjectsAllowed && !(timedObject is TimedEvent))
                 {
-                    var note = timedObject as Note;
-                    if (note != null)
-                    {
-                        if (objectsDescriptors.Count == 0)
-                            yield return note;
-                        else
-                            objectsDescriptors.AddLast(new CompleteNoteDescriptor(note));
+                    if (objectsDescriptors.Count == 0)
+                        yield return timedObject;
+                    else
+                        objectsDescriptors.AddLast(new CompleteObjectDescriptor(timedObject));
 
-                        continue;
-                    }
+                    continue;
                 }
 
                 var timedEvent = (TimedEvent)timedObject;
