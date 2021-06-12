@@ -1,10 +1,10 @@
 ﻿namespace Melanchall.DryWetMidi.Core
 {
-    internal sealed class EndOfTrackEvent : MetaEvent
+    public sealed class EndOfTrackEvent : MetaEvent
     {
         #region Constructor
 
-        public EndOfTrackEvent()
+        internal EndOfTrackEvent()
             : base(MidiEventType.EndOfTrack)
         {
         }

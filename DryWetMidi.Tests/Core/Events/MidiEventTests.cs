@@ -126,7 +126,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
             {
                 var instance = type == typeof(UnknownMetaEvent)
                     ? new UnknownMetaEvent(0)
-                    : (MidiEvent)Activator.CreateInstance(type);
+                    : (MidiEvent)Activator.CreateInstance(type, true);
                 var eventType = instance.EventType;
                 Assert.IsTrue(
                     type.Name.StartsWith(eventType.ToString()),
@@ -139,7 +139,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
         {
             foreach (var type in TypesProvider.GetAllEventTypes())
             {
-                if (type == typeof(UnknownMetaEvent))
+                if (type == typeof(UnknownMetaEvent) || type == typeof(EndOfTrackEvent))
                     continue;
 
                 Assert.IsNotNull(
@@ -157,7 +157,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
             {
                 var midiEvent = type == typeof(UnknownMetaEvent)
                     ? new UnknownMetaEvent(1)
-                    : (MidiEvent)Activator.CreateInstance(type);
+                    : (MidiEvent)Activator.CreateInstance(type, true);
 
                 if (midiEvent is ChannelEvent channelEvent)
                     channelEvent.Channel = (FourBitNumber)(random.Next(5) + 5);

@@ -1005,7 +1005,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
                     Assert.Throws<InvalidOperationException>(() => { var format = midiFile.OriginalFormat; }, "Exception not thrown on get original format.");
                     
                     var programChangeEvent = midiFile.GetEvents().SingleOrDefault() as ProgramChangeEvent;
-                    MidiAsserts.AreEventsEqual(new ProgramChangeEvent(), programChangeEvent, true, "Program Change evnt is invalid.");
+                    MidiAsserts.AreEventsEqual(new ProgramChangeEvent(), programChangeEvent, true, "Program Change event is invalid.");
                 },
                 bytes => bytes.Skip(14).ToArray());
         }
@@ -1045,7 +1045,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 midiFile =>
                 {
                     var programChangeEvent = midiFile.GetEvents().SingleOrDefault() as ProgramChangeEvent;
-                    MidiAsserts.AreEventsEqual(new ProgramChangeEvent(), programChangeEvent, true, "Program Change evnt is invalid.");
+                    MidiAsserts.AreEventsEqual(new ProgramChangeEvent(), programChangeEvent, true, "Program Change event is invalid.");
                 },
                 bytes => bytes.Take(bytes.Length - 1).ToArray());
         }
@@ -1106,6 +1106,40 @@ namespace Melanchall.DryWetMidi.Tests.Core
                     var exception = Assert.Throws<UnknownFileFormatException>(() => { var format = midiFile.OriginalFormat; }, "Exception not thrown on get original format.");
                     Assert.AreEqual(formatLastByte, exception.FileFormat, "File format is invalid.");
                 });
+        }
+
+        [Test]
+        public void Read_EndOfTrackStoringPolicy_Omit()
+        {
+            var originalMidiFile = new MidiFile(new TrackChunk(new TextEvent("A")));
+            var midiFile = MidiFileTestUtilities.Read(
+                midiFile: originalMidiFile,
+                writingSettings: new WritingSettings(),
+                readingSettings: new ReadingSettings
+                {
+                    EndOfTrackStoringPolicy = EndOfTrackStoringPolicy.Omit
+                });
+
+            MidiAsserts.AreEqual(originalMidiFile, midiFile, false, "Files are invalid.");
+        }
+
+        [Test]
+        public void Read_EndOfTrackStoringPolicy_Store()
+        {
+            var originalMidiFile = new MidiFile(new TrackChunk(new TextEvent("A")));
+            var midiFile = MidiFileTestUtilities.Read(
+                midiFile: originalMidiFile,
+                writingSettings: new WritingSettings(),
+                readingSettings: new ReadingSettings
+                {
+                    EndOfTrackStoringPolicy = EndOfTrackStoringPolicy.Store
+                });
+
+            MidiAsserts.AreEqual(
+                new MidiFile(new TrackChunk(new TextEvent("A"), new EndOfTrackEvent())),
+                midiFile,
+                false,
+                "Files are invalid.");
         }
 
         [Test]

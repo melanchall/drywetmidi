@@ -25,6 +25,7 @@ namespace Melanchall.DryWetMidi.Core
         private NotEnoughBytesPolicy _notEnoughBytesPolicy = NotEnoughBytesPolicy.Abort;
         private NoHeaderChunkPolicy _noHeaderChunkPolicy = NoHeaderChunkPolicy.Abort;
         private ZeroLengthDataPolicy _zeroLengthDataPolicy = ZeroLengthDataPolicy.ReadAsEmptyObject;
+        private EndOfTrackStoringPolicy _endOfTrackStoringPolicy = EndOfTrackStoringPolicy.Omit;
 
         #endregion
 
@@ -360,6 +361,17 @@ namespace Melanchall.DryWetMidi.Core
                 ThrowIfArgument.IsInvalidEnumValue(nameof(value), value);
 
                 _zeroLengthDataPolicy = value;
+            }
+        }
+
+        public EndOfTrackStoringPolicy EndOfTrackStoringPolicy
+        {
+            get { return _endOfTrackStoringPolicy; }
+            set
+            {
+                ThrowIfArgument.IsInvalidEnumValue(nameof(value), value);
+
+                _endOfTrackStoringPolicy = value;
             }
         }
 
