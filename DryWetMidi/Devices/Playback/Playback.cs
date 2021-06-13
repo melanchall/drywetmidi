@@ -257,11 +257,31 @@ namespace Melanchall.DryWetMidi.Devices
         }
 
         /// <summary>
-        /// Gets or sets the speed of events playing. 1 means normal speed. For example, to play
-        /// events twice slower this property should be set to 0.5.
+        /// Gets or sets the speed of events playing. <c>1</c> means normal speed. For example, to play
+        /// events twice slower this property should be set to <c>0.5</c>. Value of <c>2</c> will make playback
+        /// twice faster.
         /// </summary>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="value"/> is zero or negative.</exception>
         /// <exception cref="ObjectDisposedException">The current <see cref="Playback"/> is disposed.</exception>
+        /// <example>
+        /// <para>
+        /// Example below shows how you can use <c>Speed</c> property to set new BPM (if original data doesn't
+        /// have tempo changes):
+        /// </para>
+        /// <code language="csharp">
+        /// var tempoMap = midiFile.GetTempoMap();
+        /// var originalBpm = tempoMap.GetTempoAtTime((MidiTimeSpan)0).BeatsPerMinute;
+        /// 
+        /// var newBpm = 240;
+        /// playback.Speed = newBpm / originalBpm;
+        /// </code>
+        /// <para>
+        /// We want to have BPM of <c>240</c> here so we just divide it by original BPM value. If
+        /// original BPM was <c>120</c>, we'll get <c>2</c> which is exactly what we want - double the speed.
+        /// If original value is <c>480</c>, we'll get <c>0.5</c> which means speed will be slowed down
+        /// by two times.
+        /// </para>
+        /// </example>
         public double Speed
         {
             get { return _clock.Speed; }
@@ -283,7 +303,9 @@ namespace Melanchall.DryWetMidi.Devices
         /// Gets or sets callback used to process note to be played.
         /// </summary>
         /// <example>
-        /// In the following example every note to be played will be transposed by 10 half-steps up:
+        /// <para>
+        /// In the following example every note to be played will be transposed by <c>10</c> half-steps up:
+        /// </para>
         /// <code language="csharp">
         /// var playback = midiFile.GetPlayback(outputDevice);
         /// playback.NoteCallback = (rawNoteData, rawTime, rawLength, playbackTime) =>
@@ -295,7 +317,9 @@ namespace Melanchall.DryWetMidi.Devices
         /// 
         /// playback.Start();
         /// </code>
-        /// Next example shows how you can filter out notes with velocity below 100:
+        /// <para>
+        /// Next example shows how you can filter out notes with velocity below <c>100</c>:
+        /// </para>
         /// <code language="csharp">
         /// playback.NoteCallback = (rawNoteData, rawTime, rawLength, playbackTime) =>
         ///     rawNoteData.Velocity &lt; 100
@@ -309,14 +333,18 @@ namespace Melanchall.DryWetMidi.Devices
         /// Gets or sets callback used to process MIDI event to be played.
         /// </summary>
         /// <example>
+        /// <para>
         /// The following example filters out all Program Change events:
+        /// </para>
         /// <code language="csharp">
         /// playback.EventCallback = (midiEvent, rawTime, playbackTime) =>
         ///     midiEvent.EventType == MidiEventType.ProgramChange
         ///         ? null
         ///         : midiEvent;
         /// </code>
-        /// Next example shows how to replace program 1 in all Program Change events to program 2:
+        /// <para>
+        /// Next example shows how to replace program <c>1</c> in all Program Change events to program <c>2</c>:
+        /// </para>
         /// <code language="csharp">
         /// playback.EventCallback = (midiEvent, rawTime, playbackTime) =>
         ///     ((midiEvent is ProgramChangeEvent programChangeEvent) &amp;&amp; programChangeEvent.ProgramNumber == 1)

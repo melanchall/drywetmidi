@@ -1,0 +1,31 @@
+DOCUMENTATION GUIDELINES
+========================
+
+In-code documentation
+------------------------
+
+General example:
+
+/// <summary>
+/// Gets or sets callback used to process MIDI event to be played.
+/// </summary>
+/// <example>
+/// <para>
+/// The following example filters out all Program Change events:
+/// </para>
+/// <code language="csharp">
+/// playback.EventCallback = (midiEvent, rawTime, playbackTime) =>
+///     midiEvent.EventType == MidiEventType.ProgramChange
+///         ? null
+///         : midiEvent;
+/// </code>
+/// <para>
+/// Next example shows how to replace program <c>1</c> in all Program Change events to program <c>2</c>:
+/// </para>
+/// <code language="csharp">
+/// playback.EventCallback = (midiEvent, rawTime, playbackTime) =>
+///     ((midiEvent is ProgramChangeEvent programChangeEvent) &amp;&amp; programChangeEvent.ProgramNumber == 1)
+///         ? new ProgramChangeEvent((SevenBitNumber)2) { Channel = programChangeEvent.Channel }
+///         : midiEvent;
+/// </code>
+/// </example>
