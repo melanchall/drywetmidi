@@ -13,6 +13,10 @@ namespace Melanchall.DryWetMidi.Devices
     /// <summary>
     /// Provides a way to play MIDI data through the specified output MIDI device.
     /// </summary>
+    /// <remarks>
+    /// You can subclass from the <see cref="Playback"/> to create your own playback logic.
+    /// Please see <see href="xref:a_playback_custom">Custom playback</see> article to learn more.
+    /// </remarks>
     public class Playback : IDisposable, IClockDrivenObject
     {
         #region Constants

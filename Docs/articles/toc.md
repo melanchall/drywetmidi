@@ -54,6 +54,7 @@
 ## [Tick generator](playback/Tick-generator.md)
 ## [Current time watching](playback/Current-time-watching.md)
 ## [Data tracking](playback/Data-tracking.md)
+## [Custom playback](playback/Custom-playback.md)
 ## [Common problems](playback/Common-problems.md)
 
 # Recording
