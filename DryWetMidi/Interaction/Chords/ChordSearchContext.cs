@@ -6,9 +6,10 @@ namespace Melanchall.DryWetMidi.Interaction
     /// Defines a context to search chords within.
     /// </summary>
     /// <example>
-    /// <para>To understand what context means let's take a look at following events sequence
-    /// within two track chunks:</para>
     /// <para>
+    /// To understand what context means let's take a look at following events sequence
+    /// within two track chunks:
+    /// </para>
     /// <code language="image">
     /// ┌───────────────┐
     /// │.A...B...X...Y.│
@@ -17,7 +18,6 @@ namespace Melanchall.DryWetMidi.Interaction
     /// │.C...Z.........│
     /// └───────────────┘
     /// </code>
-    /// </para>
     /// <para>
     /// <para>
     /// where <c>A</c>, <c>B</c> and <c>C</c> mean Note On events (see <see cref="NoteOnEvent"/>), and
@@ -29,7 +29,6 @@ namespace Melanchall.DryWetMidi.Interaction
     /// If we use <see cref="SingleEventsCollection"/> as the context, chords will be constructed in
     /// following way:
     /// </para>
-    /// <para>
     /// <code language="image">
     /// ┌ ┌───┬───┬───┐ ┐
     /// │.A...B...X...Y.│
@@ -38,23 +37,12 @@ namespace Melanchall.DryWetMidi.Interaction
     /// │.C...Z.........│
     /// └ └───┘ ────────┘
     /// </code>
-    /// </para>
-    /// <para>
-    /// or, if highlight all chords:
-    /// </para>
-    /// <para>
-    /// <code language="image">
-    ///  [             ]
-    ///  [     ]
-    /// </code>
-    /// </para>
     /// <para>
     /// So chords will be constructed only from notes within the same events collection (track chunk).
     /// </para>
     /// <para>
     /// But if we use <see cref="AllEventsCollections"/> as the context, we'll get a single chord:
     /// </para>
-    /// <para>
     /// <code language="image">
     /// ┌ ┌───┬───┬───┐ ┐
     /// │.A...B...X...Y.│
@@ -63,7 +51,6 @@ namespace Melanchall.DryWetMidi.Interaction
     /// │.C...Z.........│
     /// └───────────────┘
     /// </code>
-    /// </para>
     /// <para>
     /// So a chord can be constructed from notes within different events collections.
     /// </para>

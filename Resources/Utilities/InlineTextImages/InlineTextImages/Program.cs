@@ -34,22 +34,35 @@ namespace InlineTextImages
 
         static void Main(string[] args)
         {
-            var imagesPath = args[0];
+            var filesPath = args[0];
             var symbolSize = int.Parse(args[1]);
 
-            Console.WriteLine("Cleaning images folder up...");
+            const string imagesDirectoryName = "images";
 
-            var directoryInfo = new DirectoryInfo(imagesPath);
-            if (directoryInfo.Exists)
-                directoryInfo.Delete(true);
+            Console.WriteLine("Cleaning up images folders...");
 
-            directoryInfo.Create();
+            var htmlFiles = Directory.GetFiles(filesPath, "*.html", SearchOption.AllDirectories);
+            var directories = htmlFiles
+                .Select(filePath => new FileInfo(filePath).Directory.FullName)
+                .Distinct()
+                .ToArray();
+
+            foreach (var directoryPath in directories)
+            {
+                var directoryInfo = new DirectoryInfo(Path.Combine(directoryPath, imagesDirectoryName));
+                if (directoryInfo.Exists)
+                    directoryInfo.Delete(true);
+
+                directoryInfo.Create();
+            }
 
             Console.WriteLine("Processing files...");
 
-            foreach (var filePath in Directory.GetFiles(directoryInfo.Parent.FullName, "*.html", SearchOption.AllDirectories))
+            foreach (var filePath in htmlFiles)
             {
                 Console.Write($"{filePath}...");
+
+                var directoryInfo = new FileInfo(filePath).Directory;
 
                 var text = File.ReadAllText(filePath);
                 var processed = false;
@@ -63,12 +76,12 @@ namespace InlineTextImages
                         var image = CreateImage(imageText, symbolSize);
 
                         var imageFileName = $"{Path.GetFileNameWithoutExtension(filePath)}-{m.Index}.png";
-                        var path = Path.Combine(directoryInfo.FullName, imageFileName);
+                        var path = Path.Combine(directoryInfo.FullName, imagesDirectoryName, imageFileName);
                         image.Save(path);
 
                         processed = true;
 
-                        return $"<img src=\"images/{imageFileName}\" class=\"text-image\" />";
+                        return $"<img src=\"{imagesDirectoryName}/{imageFileName}\" class=\"text-image\" />";
                     },
                     RegexOptions.Singleline);
 
@@ -92,6 +105,7 @@ namespace InlineTextImages
             var height = lines.Length;
             
             var bitmap = new Bitmap(width * symbolSize, height * symbolSize, PixelFormat.Format32bppArgb);
+            var realWidth = 0;
             
             using (var graphics = Graphics.FromImage(bitmap))
             {
@@ -106,6 +120,7 @@ namespace InlineTextImages
                 for (var y = 0; y < height; y++)
                 {
                     var line = lines[y];
+                    realWidth = Math.Max(realWidth, line.Length);
                     
                     for (var x = 0; x < width && x < line.Length; x++)
                     {
@@ -141,7 +156,14 @@ namespace InlineTextImages
                 }
             }
 
-            return bitmap;
+            var result = new Bitmap(realWidth * symbolSize, height * symbolSize, PixelFormat.Format32bppArgb);
+
+            using (var graphics = Graphics.FromImage(result))
+            {
+                graphics.DrawImageUnscaled(bitmap, new Point(0, 0));
+            }
+
+            return result;
         }
 
         private static CellPoints GetCellPoints(int x, int y, int symbolSize) => new CellPoints(
@@ -162,6 +184,7 @@ namespace InlineTextImages
             for (var y = 0; y < lines.Length; y++)
             {
                 var i = 0;
+                var indicesToRemove = new List<int>();
 
                 do
                 {
@@ -172,14 +195,24 @@ namespace InlineTextImages
                     var b = lines[y].IndexOf(']', a + 1);
 
                     graphics.FillRectangle(brush, new RectangleF(
-                        (a + 1) * symbolSize + symbolSize / 2.0f,
+                        a * symbolSize + symbolSize / 2.0f,
                         y * symbolSize + 1,
                         (b - a - 1) * symbolSize - symbolSize,
                         symbolSize - 2));
 
                     i = b + 1;
+
+                    indicesToRemove.Add(a);
+                    indicesToRemove.Add(b);
                 }
                 while (i >= 0 && i < lines[y].Length);
+
+                var removedCharsCount = 0;
+                foreach (var j in indicesToRemove)
+                {
+                    lines[y] = lines[y].Remove(j - removedCharsCount, 1);
+                    removedCharsCount++;
+                }
             }
         }
 
@@ -435,6 +468,20 @@ namespace InlineTextImages
                         cellPoints.TopCenter,
                         cellPoints.CenterLeft,
                         cellPoints.BottomCenter,
+                    });
+                    return true;
+
+                case '↑':
+                    graphics.DrawLines(pen, new[]
+                    {
+                        cellPoints.BottomCenter,
+                        cellPoints.TopCenter,
+                    });
+                    graphics.DrawLines(pen, new[]
+                    {
+                        cellPoints.CenterLeft,
+                        cellPoints.TopCenter,
+                        cellPoints.CenterRight,
                     });
                     return true;
 

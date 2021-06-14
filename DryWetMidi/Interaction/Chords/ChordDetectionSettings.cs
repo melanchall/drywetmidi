@@ -33,54 +33,49 @@ namespace Melanchall.DryWetMidi.Interaction
         /// notes is less than this value, they won't make up a chord. The default value is <c>1</c>.
         /// </summary>
         /// <example>
-        /// <para>Let's take a look at the example:</para>
         /// <para>
-        /// <code>
-        /// ...###...
-        /// ...#####.
-        /// .....###.
-        /// </code>
+        /// Let's take a look at the example:
         /// </para>
-        /// <para>
-        /// So we have three notes (represented by <c>#</c> symbol). For simplicity we'll assume that
-        /// <see cref="NotesTolerance"/> is <c>0</c> (default value) and every character occupies 1 unit
-        /// of time. If we set notes min count to <c>1</c> (which is default value), we'll get two different
-        /// instances of <see cref="Chord"/>:
-        /// <code>
-        ///      A
-        ///      |
-        /// ...[###]...
-        /// ...[#####].
-        /// .....(###).
-        ///        |
-        ///        B
+        /// <code language="image">
+        /// ...[   ]...
+        /// ...[     ].
+        /// .....[   ].
         /// </code>
-        /// <c>[...]</c> and <c>(...)</c> denote two different chords (A and B).
+        /// <para>
+        /// So we have three notes. For simplicity we'll assume that <see cref="NotesTolerance"/> is <c>0</c>
+        /// (default value) and every character occupies 1 unit of time. If we set notes min count to <c>1</c>
+        /// (which is default value), we'll get two different instances of <see cref="Chord"/>:
+        /// </para>
+        /// <code language="image">
+        /// ...[111]...
+        /// ...[11111].
+        /// .....[222].
+        /// </code>
+        /// <para>
+        /// <c>11..</c> and <c>22..</c> denote two different chords.
         /// </para>
         /// <para>
         /// If we set notes min count to <c>2</c>, we'll get only one chord:
-        /// <code>
-        ///           A
-        ///           |
-        ///       +---+---+
-        ///       |       |
-        /// ...[###]...   |
-        /// ...[#####].   |
-        ///       |       |
-        ///       +-------+
+        /// </para>
+        /// <code language="image">
+        /// ...[111]...
+        /// ...[11111].
         ///        
-        /// .....###...
+        /// .....[   ]...
         /// </code>
+        /// <para>
         /// Last note will not be turned into a chord because count of notes for a chord will be <c>1</c>
         /// which is less than the specified minimum count.
         /// </para>
         /// <para>
         /// With minimum count of notes of <c>3</c> we'll get no chords:
-        /// <code>
-        /// ...###...
-        /// ...#####.
-        /// .....###.
+        /// </para>
+        /// <code language="image">
+        /// ...[   ]...
+        /// ...[     ].
+        /// .....[   ].
         /// </code>
+        /// <para>
         /// First possible chord will contain two notes and second chord will contain one note. In both cases
         /// count of notes is less than the specified minimum count.
         /// </para>
@@ -102,64 +97,42 @@ namespace Melanchall.DryWetMidi.Interaction
         /// Notes within this tolerance will be included in a chord. The default value is <c>0</c>.
         /// </summary>
         /// <example>
-        /// <para>Let's take a look at the example:</para>
         /// <para>
-        /// <code>
-        /// ...###...
-        /// ....#####
-        /// .....###.
-        /// </code>
+        /// Let's take a look at the example:
         /// </para>
-        /// <para>
-        /// So we have three notes (represented by <c>#</c> symbol). Every character occupies 1 unit of time.
-        /// If we set notes tolerance to <c>0</c> (which is default value), we'll get three different instances of
-        /// <see cref="Chord"/>:
-        /// <code>
-        ///      A
-        ///      |
-        /// ...[###]...
-        ///        B
-        ///        |
-        /// ....(#####)
-        /// .....{###}.
-        ///        |
-        ///        C
+        /// <code language="image">
+        /// ...[   ]...
+        /// ....[     ]
+        /// .....[   ].
         /// </code>
-        /// <c>[...]</c>, <c>(...)</c> and <c>{...}</c> denote three different chords (A, B and C).
+        /// <para>
+        /// So we have three notes. Every character occupies 1 unit of time. If we set notes tolerance to
+        /// <c>0</c> (which is default value), we'll get three different instances of <see cref="Chord"/>:
+        /// </para>
+        /// <code language="image">
+        /// ...[111]...
+        /// ....[22222]
+        /// .....[333].
+        /// </code>
+        /// <para>
+        /// <c>11..</c>, <c>22..</c> and <c>33..</c> denote three different chords.
         /// </para>
         /// <para>
         /// If we set notes tolerance to <c>1</c>, we'll get two chords:
-        /// <code>
-        ///           A
-        ///           |
-        ///       +---+---+
-        ///       |       |
-        /// ...[###]...   |
-        /// ....[#####]   |
-        ///       |       |
-        ///       +-------+
-        ///        
-        /// .....{###}.
-        ///        |
-        ///        B
-        /// </code>
         /// </para>
+        /// <code language="image">
+        /// ...[111]...
+        /// ....[11111]
+        /// .....[222].
+        /// </code>
         /// <para>
         /// With tolerance of <c>2</c> we'll finally get a single chord:
-        /// <code>
-        ///           A
-        ///           |
-        ///       +---+---+
-        ///       |       |
-        /// ...[###]...   |
-        ///       |       |
-        /// ....[#####]   |
-        ///       |       |
-        /// .....[###].   |
-        ///       |       |
-        ///       +-------+
-        /// </code>
         /// </para>
+        /// <code language="image">
+        /// ...[111]...
+        /// ....[11111]
+        /// .....[111].
+        /// </code>
         /// </example>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="value"/> is negative.</exception>
         public long NotesTolerance

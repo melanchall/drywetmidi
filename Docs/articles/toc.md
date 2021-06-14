@@ -53,6 +53,7 @@
 ## [Overview](playback/Overview.md)
 ## [Tick generator](playback/Tick-generator.md)
 ## [Current time watching](playback/Current-time-watching.md)
+## [Data tracking](playback/Data-tracking.md)
 ## [Common problems](playback/Common-problems.md)
 
 # Recording

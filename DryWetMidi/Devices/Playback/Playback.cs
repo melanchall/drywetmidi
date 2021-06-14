@@ -221,6 +221,9 @@ namespace Melanchall.DryWetMidi.Devices
         /// Gets or sets a value indicating whether notes must be tracked or not. If <c>false</c>, notes
         /// will be treated as just Note On/Note Off events. The default value is <c>false</c>.
         /// </summary>
+        /// <remarks>
+        /// See <see href="xref:a_playback_datatrack">Data tracking</see> article to learn more.
+        /// </remarks>
         public bool TrackNotes { get; set; }
 
         /// <summary>
@@ -228,6 +231,9 @@ namespace Melanchall.DryWetMidi.Devices
         /// in time will force playback send <see cref="ProgramChangeEvent"/> corresponding to the program at new time,
         /// if needed. The default value is <c>false</c>.
         /// </summary>
+        /// <remarks>
+        /// See <see href="xref:a_playback_datatrack">Data tracking</see> article to learn more.
+        /// </remarks>
         public bool TrackProgram
         {
             get { return _playbackDataTracker.TrackProgram; }
@@ -239,6 +245,9 @@ namespace Melanchall.DryWetMidi.Devices
         /// in time will force playback send <see cref="PitchBendEvent"/> corresponding to the pitch value at new time,
         /// if needed. The default value is <c>false</c>.
         /// </summary>
+        /// <remarks>
+        /// See <see href="xref:a_playback_datatrack">Data tracking</see> article to learn more.
+        /// </remarks>
         public bool TrackPitchValue
         {
             get { return _playbackDataTracker.TrackPitchValue; }
@@ -250,6 +259,9 @@ namespace Melanchall.DryWetMidi.Devices
         /// in time will force playback send <see cref="ControlChangeEvent"/> corresponding to the controller value at new time,
         /// if needed. The default value is <c>false</c>.
         /// </summary>
+        /// <remarks>
+        /// See <see href="xref:a_playback_datatrack">Data tracking</see> article to learn more.
+        /// </remarks>
         public bool TrackControlValue
         {
             get { return _playbackDataTracker.TrackControlValue; }

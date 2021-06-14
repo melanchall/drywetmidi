@@ -8,11 +8,9 @@
     /// <para>
     /// To understand how this policy works let's take a look at following events sequence:
     /// </para>
-    /// <para>
     /// <code language="image">
-    ///  A...B...X...Y
+    /// A...B...X...Y
     /// </code>
-    /// </para>
     /// <para>
     /// where <c>A</c> and <c>B</c> mean Note On events, and <c>X</c> and <c>Y</c> mean
     /// Note Off ones with the same note number and channel; <c>.</c> is any other event. So we
@@ -22,22 +20,18 @@
     /// If we use <see cref="FirstNoteOn"/> for the policy, notes will be constructed in
     /// following way:
     /// </para>
-    /// <para>
     /// <code language="image">
-    ///  ┌───────┐
-    ///  A...B...X...Y
-    ///      └───────┘
+    /// ┌───────┐
+    /// A...B...X...Y
+    ///     └───────┘
     /// </code>
-    /// </para>
     /// <para>
     /// or, if highlight notes:
     /// </para>
-    /// <para>
     /// <code language="image">
     /// [         ]
     ///     [         ]
     /// </code>
-    /// </para>
     /// <para>
     /// So every Note Off event will be combined with first free Note On event into a note.
     /// </para>
@@ -45,22 +39,18 @@
     /// But if we use <see cref="LastNoteOn"/> value, notes will be constructed in
     /// a new way:
     /// </para>
-    /// <para>
     /// <code language="image">
-    ///  ┌───────────┐
-    ///  A...B...X...Y
+    /// ┌───────────┐
+    /// A...B...X...Y
     ///      └───┘
     /// </code>
-    /// </para>
     /// <para>
     /// or, if highlight notes:
     /// </para>
-    /// <para>
     /// <code language="image">
     /// [             ]
     ///     [     ]
     /// </code>
-    /// </para>
     /// <para>
     /// So Note Off events will be combined with last free Note On event into a note.
     /// </para>

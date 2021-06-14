@@ -69,7 +69,7 @@ steps:
   displayName: Inline API images
   inputs:
     command: 'run'
-    arguments: '--configuration $(buildConfiguration) -- $(Build.SourcesDirectory)\Docs\_site\api\images 20'
+    arguments: '--configuration $(buildConfiguration) -- $(Build.SourcesDirectory)\Docs\_site 20'
     projects: 'Resources/Utilities/InlineTextImages/InlineTextImages/InlineTextImages.csproj'
 
 - task: PublishPipelineArtifact@1
