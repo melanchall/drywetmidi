@@ -243,116 +243,14 @@ namespace Melanchall.DryWetMidi.Tests.Devices
             ICollection<EventToSend> eventsWillBeSent,
             TimeSpan moveFrom,
             TimeSpan moveTo,
-            bool useOutputDevice)
-        {
-            if (useOutputDevice)
-                CheckTrackProgramWithOutputDevice(eventsToSend, eventsWillBeSent, moveFrom, moveTo);
-            else
-                CheckTrackProgramWithoutOutputDevice(eventsToSend, eventsWillBeSent, moveFrom, moveTo);
-        }
-
-        private void CheckTrackProgramWithOutputDevice(
-            ICollection<EventToSend> eventsToSend,
-            ICollection<EventToSend> eventsWillBeSent,
-            TimeSpan moveFrom,
-            TimeSpan moveTo)
-        {
-            var playbackContext = new PlaybackContext();
-
-            var receivedEvents = playbackContext.ReceivedEvents;
-            var sentEvents = playbackContext.SentEvents;
-            var stopwatch = playbackContext.Stopwatch;
-            var tempoMap = playbackContext.TempoMap;
-
-            var eventsForPlayback = GetEventsForPlayback(eventsToSend, tempoMap);
-            var notes = eventsForPlayback.GetNotes().ToArray();
-
-            using (var outputDevice = OutputDevice.GetByName(SendReceiveUtilities.DeviceToTestOnName))
-            {
-                SendReceiveUtilities.WarmUpDevice(outputDevice);
-                outputDevice.EventSent += (_, e) => sentEvents.Add(new SentEvent(e.Event, stopwatch.Elapsed));
-
-                using (var playback = eventsForPlayback.GetPlayback(tempoMap, outputDevice))
-                {
-                    playback.TrackProgram = true;
-
-                    using (var inputDevice = InputDevice.GetByName(SendReceiveUtilities.DeviceToTestOnName))
-                    {
-                        inputDevice.EventReceived += (_, e) =>
-                        {
-                            lock (playbackContext.ReceivedEventsLockObject)
-                            {
-                                receivedEvents.Add(new ReceivedEvent(e.Event, stopwatch.Elapsed));
-                            }
-                        };
-                        inputDevice.StartEventsListening();
-                        stopwatch.Start();
-                        playback.Start();
-
-                        SpinWait.SpinUntil(() => stopwatch.Elapsed >= moveFrom);
-                        playback.MoveToTime((MetricTimeSpan)moveTo);
-
-                        var timeout = TimeSpan.FromTicks(eventsWillBeSent.Sum(e => e.Delay.Ticks)) + SendReceiveUtilities.MaximumEventSendReceiveDelay;
-                        var areEventsReceived = SpinWait.SpinUntil(() => receivedEvents.Count == eventsWillBeSent.Count, timeout);
-                        Assert.IsTrue(areEventsReceived, $"Events are not received for timeout {timeout}.");
-
-                        stopwatch.Stop();
-
-                        var playbackStopped = SpinWait.SpinUntil(() => !playback.IsRunning, SendReceiveUtilities.MaximumEventSendReceiveDelay);
-                        Assert.IsTrue(playbackStopped, "Playback is running after completed.");
-                    }
-                }
-            }
-
-            CompareSentReceivedEvents(sentEvents, receivedEvents, eventsWillBeSent.ToList());
-        }
-
-        private void CheckTrackProgramWithoutOutputDevice(
-            ICollection<EventToSend> eventsToSend,
-            ICollection<EventToSend> eventsWillBeSent,
-            TimeSpan moveFrom,
-            TimeSpan moveTo)
-        {
-            var playbackContext = new PlaybackContext();
-
-            var receivedEvents = playbackContext.ReceivedEvents;
-            var sentEvents = playbackContext.SentEvents;
-            var stopwatch = playbackContext.Stopwatch;
-            var tempoMap = playbackContext.TempoMap;
-
-            var eventsForPlayback = GetEventsForPlayback(eventsToSend, tempoMap);
-            var notes = eventsForPlayback.GetNotes().ToArray();
-
-            using (var playback = eventsForPlayback.GetPlayback(tempoMap))
-            {
-                playback.TrackProgram = true;
-                playback.EventPlayed += (_, e) =>
-                {
-                    lock (playbackContext.ReceivedEventsLockObject)
-                    {
-                        receivedEvents.Add(new ReceivedEvent(e.Event, stopwatch.Elapsed));
-                        sentEvents.Add(new SentEvent(e.Event, stopwatch.Elapsed));
-                    }
-                };
-
-                stopwatch.Start();
-                playback.Start();
-
-                SpinWait.SpinUntil(() => stopwatch.Elapsed >= moveFrom);
-                playback.MoveToTime((MetricTimeSpan)moveTo);
-
-                var timeout = TimeSpan.FromTicks(eventsWillBeSent.Sum(e => e.Delay.Ticks)) + SendReceiveUtilities.MaximumEventSendReceiveDelay;
-                var areEventsReceived = SpinWait.SpinUntil(() => receivedEvents.Count == eventsWillBeSent.Count, timeout);
-                Assert.IsTrue(areEventsReceived, $"Events are not received for timeout {timeout}.");
-
-                stopwatch.Stop();
-
-                var playbackStopped = SpinWait.SpinUntil(() => !playback.IsRunning, SendReceiveUtilities.MaximumEventSendReceiveDelay);
-                Assert.IsTrue(playbackStopped, "Playback is running after completed.");
-            }
-
-            CompareSentReceivedEvents(sentEvents, receivedEvents, eventsWillBeSent.ToList());
-        }
+            bool useOutputDevice) =>
+            CheckDataTracking(
+                p => p.TrackProgram = true,
+                eventsToSend,
+                eventsWillBeSent,
+                moveFrom,
+                moveTo,
+                useOutputDevice);
 
         #endregion
     }
