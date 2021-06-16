@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
-using Melanchall.DryWetMidi.Devices;
-using Melanchall.DryWetMidi.Interaction;
 using NUnit.Framework;
 
 namespace Melanchall.DryWetMidi.Tests.Devices
@@ -369,6 +365,73 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 useOutputDevice: useOutputDevice);
         }
 
+        [Retry(RetriesNumber)]
+        [TestCase(true)]
+        [TestCase(false)]
+        public void TrackControlValue_EnableInMiddle_FromBeforeControlChange_ToAfterControlChange(bool useOutputDevice)
+        {
+            var controlChangeTime = TimeSpan.FromMilliseconds(800);
+            var programChangeTime = TimeSpan.FromSeconds(1);
+            var noteOffTime = TimeSpan.FromSeconds(2);
+            var controlNumber = (SevenBitNumber)100;
+            var controlValue = (SevenBitNumber)10;
+            var programNumber = (SevenBitNumber)100;
+
+            var moveFrom = TimeSpan.FromMilliseconds(500);
+            var moveTo = TimeSpan.FromMilliseconds(1200);
+            var enableAfter = TimeSpan.FromMilliseconds(500);
+
+            CheckTrackControlValueEnabledInMiddle(
+                eventsToSend: new[]
+                {
+                    new EventToSend(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, controlChangeTime),
+                    new EventToSend(new ProgramChangeEvent(programNumber), programChangeTime - controlChangeTime),
+                    new EventToSend(new NoteOffEvent(), noteOffTime - programChangeTime)
+                },
+                eventsWillBeSent: new[]
+                {
+                    new EventToSend(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, moveFrom + enableAfter),
+                    new EventToSend(new NoteOffEvent(), noteOffTime - (moveTo + enableAfter))
+                },
+                moveFrom: moveFrom,
+                moveTo: moveTo,
+                useOutputDevice: useOutputDevice,
+                enableAfter: enableAfter);
+        }
+
+        [Retry(RetriesNumber)]
+        [TestCase(true)]
+        [TestCase(false)]
+        public void TrackControlValue_EnableInMiddle_FromAfterControlChange_ToBeforeControlChange(bool useOutputDevice)
+        {
+            var controlChangeTime = TimeSpan.FromMilliseconds(800);
+            var noteOffTime = TimeSpan.FromSeconds(2);
+            var controlNumber = (SevenBitNumber)100;
+            var controlValue = (SevenBitNumber)50;
+
+            var moveFrom = TimeSpan.FromMilliseconds(1000);
+            var moveTo = TimeSpan.FromMilliseconds(500);
+            var enableAfter = TimeSpan.FromMilliseconds(150);
+
+            CheckTrackControlValueEnabledInMiddle(
+                eventsToSend: new[]
+                {
+                    new EventToSend(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, controlChangeTime),
+                    new EventToSend(new NoteOffEvent(), noteOffTime - controlChangeTime)
+                },
+                eventsWillBeSent: new[]
+                {
+                    new EventToSend(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, controlChangeTime),
+                    new EventToSend(new ControlChangeEvent(controlNumber, SevenBitNumber.MinValue) { Channel = (FourBitNumber)4 }, moveFrom - controlChangeTime + enableAfter),
+                    new EventToSend(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, controlChangeTime - (moveTo + enableAfter)),
+                    new EventToSend(new NoteOffEvent(), noteOffTime - controlChangeTime)
+                },
+                moveFrom: moveFrom,
+                moveTo: moveTo,
+                useOutputDevice: useOutputDevice,
+                enableAfter: enableAfter);
+        }
+
         #endregion
 
         #region Private methods
@@ -386,6 +449,23 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 moveFrom,
                 moveTo,
                 useOutputDevice);
+
+        private void CheckTrackControlValueEnabledInMiddle(
+            ICollection<EventToSend> eventsToSend,
+            ICollection<EventToSend> eventsWillBeSent,
+            TimeSpan moveFrom,
+            TimeSpan moveTo,
+            bool useOutputDevice,
+            TimeSpan enableAfter) =>
+            CheckDataTracking(
+                p => p.TrackControlValue = false,
+                eventsToSend,
+                eventsWillBeSent,
+                moveFrom,
+                moveTo,
+                useOutputDevice,
+                enableAfter,
+                p => p.TrackControlValue = true);
 
         #endregion
     }

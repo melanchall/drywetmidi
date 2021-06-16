@@ -241,7 +241,16 @@ namespace Melanchall.DryWetMidi.Devices
         public bool TrackProgram
         {
             get { return _playbackDataTracker.TrackProgram; }
-            set { _playbackDataTracker.TrackProgram = value; }
+            set
+            {
+                if (_playbackDataTracker.TrackProgram == value)
+                    return;
+
+                _playbackDataTracker.TrackProgram = value;
+
+                if (value)
+                    SendTrackedData(PlaybackDataTracker.TrackedParameterType.Program);
+            }
         }
 
         /// <summary>
@@ -255,7 +264,16 @@ namespace Melanchall.DryWetMidi.Devices
         public bool TrackPitchValue
         {
             get { return _playbackDataTracker.TrackPitchValue; }
-            set { _playbackDataTracker.TrackPitchValue = value; }
+            set
+            {
+                if (_playbackDataTracker.TrackPitchValue == value)
+                    return;
+
+                _playbackDataTracker.TrackPitchValue = value;
+
+                if (value)
+                    SendTrackedData(PlaybackDataTracker.TrackedParameterType.PitchValue);
+            }
         }
 
         /// <summary>
@@ -269,7 +287,16 @@ namespace Melanchall.DryWetMidi.Devices
         public bool TrackControlValue
         {
             get { return _playbackDataTracker.TrackControlValue; }
-            set { _playbackDataTracker.TrackControlValue = value; }
+            set
+            {
+                if (_playbackDataTracker.TrackControlValue == value)
+                    return;
+
+                _playbackDataTracker.TrackControlValue = value;
+
+                if (value)
+                    SendTrackedData(PlaybackDataTracker.TrackedParameterType.ControlValue);
+            }
         }
 
         /// <summary>
@@ -794,9 +821,9 @@ namespace Melanchall.DryWetMidi.Devices
             return snapPoint != null;
         }
 
-        private void SendTrackedData()
+        private void SendTrackedData(PlaybackDataTracker.TrackedParameterType trackedParameterType = PlaybackDataTracker.TrackedParameterType.All)
         {
-            foreach (var eventWithMetadata in _playbackDataTracker.GetEventsAtTime(_clock.CurrentTime))
+            foreach (var eventWithMetadata in _playbackDataTracker.GetEventsAtTime(_clock.CurrentTime, trackedParameterType))
             {
                 PlayEvent(eventWithMetadata.Event, eventWithMetadata.Metadata);
             }

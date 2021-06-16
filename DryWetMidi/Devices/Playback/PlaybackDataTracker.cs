@@ -9,6 +9,20 @@ namespace Melanchall.DryWetMidi.Devices
 {
     internal sealed class PlaybackDataTracker
     {
+        #region Nested enums
+
+        [Flags]
+        public enum TrackedParameterType
+        {
+            Program = 1 << 0,
+            PitchValue = 1 << 1,
+            ControlValue = 1 << 2,
+
+            All = Program | PitchValue | ControlValue
+        }
+
+        #endregion
+
         #region Nested classes
 
         public sealed class EventWithMetadata
@@ -112,6 +126,7 @@ namespace Melanchall.DryWetMidi.Devices
             .ToArray();
 
         private readonly TempoMap _tempoMap;
+        private readonly Dictionary<TrackedParameterType, Func<long, IEnumerable<EventWithMetadata>>> _getParameterEventsAtTime;
 
         #endregion
 
@@ -120,6 +135,13 @@ namespace Melanchall.DryWetMidi.Devices
         public PlaybackDataTracker(TempoMap tempoMap)
         {
             _tempoMap = tempoMap;
+
+            _getParameterEventsAtTime = new Dictionary<TrackedParameterType, Func<long, IEnumerable<EventWithMetadata>>>
+            {
+                [TrackedParameterType.Program] = time => GetProgramChangeEventsAtTime(time),
+                [TrackedParameterType.PitchValue] = time => GetPitchBendEventsAtTime(time),
+                [TrackedParameterType.ControlValue] = time => GetControlChangeEventsAtTime(time)
+            };
         }
 
         #endregion
@@ -150,12 +172,20 @@ namespace Melanchall.DryWetMidi.Devices
             UpdateCurrentControlData(midiEvent as ControlChangeEvent, metadata);
         }
 
-        public IEnumerable<EventWithMetadata> GetEventsAtTime(TimeSpan time)
+        public IEnumerable<EventWithMetadata> GetEventsAtTime(TimeSpan time, TrackedParameterType trackedParameterType)
         {
             var convertedTime = TimeConverter.ConvertFrom((MetricTimeSpan)time, _tempoMap);
-            return GetControlChangeEventsAtTime(convertedTime)
-                .Concat(GetProgramChangeEventsAtTime(convertedTime))
-                .Concat(GetPitchBendEventsAtTime(convertedTime));
+
+            foreach (var getEvents in _getParameterEventsAtTime)
+            {
+                if (trackedParameterType.HasFlag(getEvents.Key))
+                {
+                    foreach (var e in getEvents.Value(convertedTime))
+                    {
+                        yield return e;
+                    }
+                }
+            }
         }
 
         private void UpdateCurrentProgramChangeData(ProgramChangeEvent programChangeEvent, object metadata)
