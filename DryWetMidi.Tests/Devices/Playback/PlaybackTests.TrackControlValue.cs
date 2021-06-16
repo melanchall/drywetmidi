@@ -242,7 +242,8 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 },
                 eventsWillBeSent: new[]
                 {
-                    new EventToSend(new NoteOffEvent(), noteOffTime - (moveTo - moveFrom))
+                    new EventToSend(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, moveFrom),
+                    new EventToSend(new NoteOffEvent(), noteOffTime - moveTo)
                 },
                 moveFrom: moveFrom,
                 moveTo: moveTo,
@@ -302,6 +303,65 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                     new EventToSend(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, controlChangeTime),
                     new EventToSend(new ControlChangeEvent(controlNumber, SevenBitNumber.MinValue) { Channel = (FourBitNumber)4 }, moveFrom - controlChangeTime),
                     new EventToSend(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, controlChangeTime - moveTo),
+                    new EventToSend(new NoteOffEvent(), noteOffTime - controlChangeTime)
+                },
+                moveFrom: moveFrom,
+                moveTo: moveTo,
+                useOutputDevice: useOutputDevice);
+        }
+
+        [Retry(RetriesNumber)]
+        [TestCase(true)]
+        [TestCase(false)]
+        public void TrackControlValue_Default_FromBeforeControlChange_ToControlChange(bool useOutputDevice)
+        {
+            var controlChangeTime = TimeSpan.FromMilliseconds(800);
+            var noteOffTime = TimeSpan.FromSeconds(2);
+            var controlNumber = (SevenBitNumber)100;
+            var controlValue = (SevenBitNumber)0;
+
+            var moveFrom = TimeSpan.FromMilliseconds(500);
+            var moveTo = TimeSpan.FromMilliseconds(800);
+
+            CheckTrackControlValue(
+                eventsToSend: new[]
+                {
+                    new EventToSend(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, controlChangeTime),
+                    new EventToSend(new NoteOffEvent(), noteOffTime - controlChangeTime)
+                },
+                eventsWillBeSent: new[]
+                {
+                    new EventToSend(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, moveFrom),
+                    new EventToSend(new NoteOffEvent(), noteOffTime - moveTo)
+                },
+                moveFrom: moveFrom,
+                moveTo: moveTo,
+                useOutputDevice: useOutputDevice);
+        }
+
+        [Retry(RetriesNumber)]
+        [TestCase(true)]
+        [TestCase(false)]
+        public void TrackControlValue_FromAfterControlChange_ToControlChange(bool useOutputDevice)
+        {
+            var controlChangeTime = TimeSpan.FromMilliseconds(800);
+            var noteOffTime = TimeSpan.FromSeconds(2);
+            var controlNumber = (SevenBitNumber)100;
+            var controlValue = (SevenBitNumber)50;
+
+            var moveFrom = TimeSpan.FromMilliseconds(1000);
+            var moveTo = TimeSpan.FromMilliseconds(800);
+
+            CheckTrackControlValue(
+                eventsToSend: new[]
+                {
+                    new EventToSend(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, controlChangeTime),
+                    new EventToSend(new NoteOffEvent(), noteOffTime - controlChangeTime)
+                },
+                eventsWillBeSent: new[]
+                {
+                    new EventToSend(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, controlChangeTime),
+                    new EventToSend(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, moveFrom - controlChangeTime),
                     new EventToSend(new NoteOffEvent(), noteOffTime - controlChangeTime)
                 },
                 moveFrom: moveFrom,

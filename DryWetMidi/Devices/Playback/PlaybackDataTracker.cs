@@ -32,15 +32,28 @@ namespace Melanchall.DryWetMidi.Devices
                 Metadata = metadata;
             }
 
+            public DataChange(TData data, object metadata, bool isDefault)
+                : this(data, metadata)
+            {
+                IsDefault = isDefault;
+            }
+
             public TData Data { get; }
 
             public object Metadata { get; set; }
+
+            public bool IsDefault { get; set; }
         }
 
         private sealed class ProgramChange : DataChange<SevenBitNumber>
         {
             public ProgramChange(SevenBitNumber programNumber, object metadata)
                 : base(programNumber, metadata)
+            {
+            }
+
+            public ProgramChange(SevenBitNumber programNumber, object metadata, bool isDefault)
+                : base(programNumber, metadata, isDefault)
             {
             }
         }
@@ -51,6 +64,11 @@ namespace Melanchall.DryWetMidi.Devices
                 : base(pitchValue, metadata)
             {
             }
+
+            public PitchValueChange(ushort pitchValue, object metadata, bool isDefault)
+                : base(pitchValue, metadata, isDefault)
+            {
+            }
         }
 
         private sealed class ControlValueChange : DataChange<SevenBitNumber>
@@ -59,24 +77,37 @@ namespace Melanchall.DryWetMidi.Devices
                 : base(controlValue, metadata)
             {
             }
+
+            public ControlValueChange(SevenBitNumber controlValue, object metadata, bool isDefault)
+                : base(controlValue, metadata, isDefault)
+            {
+            }
         }
+
+        #endregion
+
+        #region Constants
+
+        private static readonly ProgramChange DefaultProgramChange = new ProgramChange(SevenBitNumber.MinValue, null, true);
+        private static readonly PitchValueChange DefaultPitchValueChange = new PitchValueChange(ushort.MinValue, null, true);
+        private static readonly ControlValueChange DefaultControlValueChange = new ControlValueChange(SevenBitNumber.MinValue, null, true);
 
         #endregion
 
         #region Fields
 
-        private readonly ProgramChange[] _currentProgramNumbers = new ProgramChange[FourBitNumber.MaxValue + 1];
-        private readonly ValueLine<ProgramChange>[] _programLines = FourBitNumber.Values
-            .Select(n => new ValueLine<ProgramChange>(new ProgramChange(SevenBitNumber.MinValue, null)))
+        private readonly ProgramChange[] _currentProgramChanges = new ProgramChange[FourBitNumber.MaxValue + 1];
+        private readonly ValueLine<ProgramChange>[] _programsChangesLinesByChannels = FourBitNumber.Values
+            .Select(n => new ValueLine<ProgramChange>(DefaultProgramChange))
             .ToArray();
 
         private readonly PitchValueChange[] _currentPitchValues = new PitchValueChange[FourBitNumber.MaxValue + 1];
-        private readonly ValueLine<PitchValueChange>[] _pitchValueLines = FourBitNumber.Values
-            .Select(n => new ValueLine<PitchValueChange>(new PitchValueChange(ushort.MinValue, null)))
+        private readonly ValueLine<PitchValueChange>[] _pitchValuesLinesByChannel = FourBitNumber.Values
+            .Select(n => new ValueLine<PitchValueChange>(DefaultPitchValueChange))
             .ToArray();
 
-        private readonly Dictionary<SevenBitNumber, ControlValueChange>[] _currentControlsValues = new Dictionary<SevenBitNumber, ControlValueChange>[FourBitNumber.MaxValue + 1];
-        private readonly Dictionary<SevenBitNumber, ValueLine<ControlValueChange>>[] _controlsLines = FourBitNumber.Values
+        private readonly Dictionary<SevenBitNumber, ControlValueChange>[] _currentControlsValuesChangesByChannel = new Dictionary<SevenBitNumber, ControlValueChange>[FourBitNumber.MaxValue + 1];
+        private readonly Dictionary<SevenBitNumber, ValueLine<ControlValueChange>>[] _controlsValuesChangesLinesByChannel = FourBitNumber.Values
             .Select(n => new Dictionary<SevenBitNumber, ValueLine<ControlValueChange>>())
             .ToArray();
 
@@ -132,7 +163,7 @@ namespace Melanchall.DryWetMidi.Devices
             if (programChangeEvent == null)
                 return;
 
-            _currentProgramNumbers[programChangeEvent.Channel] = new ProgramChange(programChangeEvent.ProgramNumber, metadata);
+            _currentProgramChanges[programChangeEvent.Channel] = new ProgramChange(programChangeEvent.ProgramNumber, metadata);
         }
 
         private void InitializeProgramChangeData(ProgramChangeEvent programChangeEvent, long time, object metadata)
@@ -140,7 +171,7 @@ namespace Melanchall.DryWetMidi.Devices
             if (programChangeEvent == null)
                 return;
 
-            _programLines[programChangeEvent.Channel].SetValue(time, new ProgramChange(programChangeEvent.ProgramNumber, metadata));
+            _programsChangesLinesByChannels[programChangeEvent.Channel].SetValue(time, new ProgramChange(programChangeEvent.ProgramNumber, metadata));
         }
 
         private IEnumerable<EventWithMetadata> GetProgramChangeEventsAtTime(long time)
@@ -150,17 +181,19 @@ namespace Melanchall.DryWetMidi.Devices
 
             foreach (var channel in FourBitNumber.Values)
             {
-                var programChangeAtTime = _programLines[channel].GetValueAtTime(time);
-                var currentProgramNumber = _currentProgramNumbers[channel];
-                if (currentProgramNumber == null || !programChangeAtTime.Data.Equals(currentProgramNumber.Data))
-                {
-                    if (currentProgramNumber != null)
-                        yield return new EventWithMetadata(
-                            new ProgramChangeEvent(programChangeAtTime.Data) { Channel = channel },
-                            programChangeAtTime.Metadata);
-                    else
-                        _currentProgramNumbers[channel] = programChangeAtTime;
-                }
+                var valueChange = _programsChangesLinesByChannels[channel].GetValueChangeAtTime(time);
+                if (valueChange?.Time == time)
+                    continue;
+
+                var programChangeAtTime = valueChange != null
+                    ? valueChange.Value
+                    : DefaultProgramChange;
+
+                var currentProgramChange = _currentProgramChanges[channel];
+                if (programChangeAtTime.Data != currentProgramChange?.Data && (currentProgramChange != null || !programChangeAtTime.IsDefault))
+                    yield return new EventWithMetadata(
+                        new ProgramChangeEvent(programChangeAtTime.Data) { Channel = channel },
+                        programChangeAtTime.Metadata);
             }
         }
 
@@ -177,7 +210,7 @@ namespace Melanchall.DryWetMidi.Devices
             if (pitchBendEvent == null)
                 return;
 
-            _pitchValueLines[pitchBendEvent.Channel].SetValue(time, new PitchValueChange(pitchBendEvent.PitchValue, metadata));
+            _pitchValuesLinesByChannel[pitchBendEvent.Channel].SetValue(time, new PitchValueChange(pitchBendEvent.PitchValue, metadata));
         }
 
         private IEnumerable<EventWithMetadata> GetPitchBendEventsAtTime(long time)
@@ -187,17 +220,19 @@ namespace Melanchall.DryWetMidi.Devices
 
             foreach (var channel in FourBitNumber.Values)
             {
-                var pitchValueChangeAtTime = _pitchValueLines[channel].GetValueAtTime(time);
-                var currentPitchValue = _currentPitchValues[channel];
-                if (currentPitchValue == null || !pitchValueChangeAtTime.Data.Equals(currentPitchValue.Data))
-                {
-                    if (currentPitchValue != null)
-                        yield return new EventWithMetadata(
-                            new PitchBendEvent(pitchValueChangeAtTime.Data) { Channel = channel },
-                            pitchValueChangeAtTime.Metadata);
-                    else
-                        _currentPitchValues[channel] = pitchValueChangeAtTime;
-                }
+                var valueChange = _pitchValuesLinesByChannel[channel].GetValueChangeAtTime(time);
+                if (valueChange?.Time == time)
+                    continue;
+
+                var pitchValueChangeAtTime = valueChange != null
+                    ? valueChange.Value
+                    : DefaultPitchValueChange;
+
+                var currentPitchValueChange = _currentPitchValues[channel];
+                if (pitchValueChangeAtTime.Data != currentPitchValueChange?.Data && (currentPitchValueChange != null || !pitchValueChangeAtTime.IsDefault))
+                    yield return new EventWithMetadata(
+                        new PitchBendEvent(pitchValueChangeAtTime.Data) { Channel = channel },
+                        pitchValueChangeAtTime.Metadata);
             }
         }
 
@@ -206,9 +241,9 @@ namespace Melanchall.DryWetMidi.Devices
             if (controlChangeEvent == null)
                 return;
 
-            var controlsCurrentValues = _currentControlsValues[controlChangeEvent.Channel];
+            var controlsCurrentValues = _currentControlsValuesChangesByChannel[controlChangeEvent.Channel];
             if (controlsCurrentValues == null)
-                controlsCurrentValues = _currentControlsValues[controlChangeEvent.Channel] = new Dictionary<SevenBitNumber, ControlValueChange>();
+                controlsCurrentValues = _currentControlsValuesChangesByChannel[controlChangeEvent.Channel] = new Dictionary<SevenBitNumber, ControlValueChange>();
 
             controlsCurrentValues[controlChangeEvent.ControlNumber] = new ControlValueChange(controlChangeEvent.ControlValue, metadata);
         }
@@ -218,11 +253,11 @@ namespace Melanchall.DryWetMidi.Devices
             if (controlChangeEvent == null)
                 return;
 
-            var controlsLines = _controlsLines[controlChangeEvent.Channel];
+            var controlsLines = _controlsValuesChangesLinesByChannel[controlChangeEvent.Channel];
 
             ValueLine<ControlValueChange> controlValueLine;
             if (!controlsLines.TryGetValue(controlChangeEvent.ControlNumber, out controlValueLine))
-                controlsLines.Add(controlChangeEvent.ControlNumber, controlValueLine = new ValueLine<ControlValueChange>(new ControlValueChange(SevenBitNumber.MinValue, null)));
+                controlsLines.Add(controlChangeEvent.ControlNumber, controlValueLine = new ValueLine<ControlValueChange>(DefaultControlValueChange));
 
             controlValueLine.SetValue(time, new ControlValueChange(controlChangeEvent.ControlValue, metadata));
         }
@@ -234,35 +269,31 @@ namespace Melanchall.DryWetMidi.Devices
 
             foreach (var channel in FourBitNumber.Values)
             {
-                var controlsLines = _controlsLines[channel];
-                var controlsValues = _currentControlsValues[channel];
+                var controlsValuesChangesLinesByControlNumber = _controlsValuesChangesLinesByChannel[channel];
+                var currentControlsValuesChangesByControlNumber = _currentControlsValuesChangesByChannel[channel];
 
                 foreach (var controlNumber in SevenBitNumber.Values)
                 {
                     ValueLine<ControlValueChange> controlValueLine;
-                    if (!controlsLines.TryGetValue(controlNumber, out controlValueLine))
+                    if (!controlsValuesChangesLinesByControlNumber.TryGetValue(controlNumber, out controlValueLine))
                         continue;
 
-                    var controlValueAtTime = controlValueLine.GetValueAtTime(time);
+                    var valueChange = controlValueLine.GetValueChangeAtTime(time);
+                    if (valueChange?.Time == time)
+                        continue;
 
-                    ControlValueChange currentControlValue = null;
-                    if (controlsValues != null)
-                        controlsValues.TryGetValue(controlNumber, out currentControlValue);
+                    var controlValueChangeAtTime = valueChange != null
+                        ? valueChange.Value
+                        : DefaultControlValueChange;
 
-                    if (currentControlValue == null || !controlValueAtTime.Data.Equals(currentControlValue.Data))
-                    {
-                        if (currentControlValue != null)
-                            yield return new EventWithMetadata(
-                                new ControlChangeEvent(controlNumber, controlValueAtTime.Data) { Channel = channel },
-                                controlValueAtTime.Metadata);
-                        else
-                        {
-                            if (controlsValues == null)
-                                controlsValues = _currentControlsValues[channel] = new Dictionary<SevenBitNumber, ControlValueChange>();
+                    ControlValueChange currentControlValueChange = null;
+                    if (currentControlsValuesChangesByControlNumber != null)
+                        currentControlsValuesChangesByControlNumber.TryGetValue(controlNumber, out currentControlValueChange);
 
-                            controlsValues[controlNumber] = controlValueAtTime;
-                        }
-                    }
+                    if (controlValueChangeAtTime.Data != currentControlValueChange?.Data && (currentControlValueChange != null || !controlValueChangeAtTime.IsDefault))
+                        yield return new EventWithMetadata(
+                            new ControlChangeEvent(controlNumber, controlValueChangeAtTime.Data) { Channel = channel },
+                            controlValueChangeAtTime.Metadata);
                 }
             }
         }

@@ -234,6 +234,63 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 useOutputDevice: useOutputDevice);
         }
 
+        [Retry(RetriesNumber)]
+        [TestCase(true)]
+        [TestCase(false)]
+        public void TrackProgram_FromBeforeProgramChange_ToProgramChange(bool useOutputDevice)
+        {
+            var programChangeTime = TimeSpan.FromMilliseconds(800);
+            var noteOffTime = TimeSpan.FromSeconds(2);
+            var programNumber = (SevenBitNumber)100;
+
+            var moveFrom = TimeSpan.FromMilliseconds(500);
+            var moveTo = TimeSpan.FromMilliseconds(800);
+
+            CheckTrackProgram(
+                eventsToSend: new[]
+                {
+                    new EventToSend(new ProgramChangeEvent(programNumber) { Channel = (FourBitNumber)4 }, programChangeTime),
+                    new EventToSend(new NoteOffEvent(), noteOffTime - programChangeTime)
+                },
+                eventsWillBeSent: new[]
+                {
+                    new EventToSend(new ProgramChangeEvent(programNumber) { Channel = (FourBitNumber)4 }, moveFrom),
+                    new EventToSend(new NoteOffEvent(), noteOffTime - (moveTo - moveFrom) - moveFrom)
+                },
+                moveFrom: moveFrom,
+                moveTo: moveTo,
+                useOutputDevice: useOutputDevice);
+        }
+
+        [Retry(RetriesNumber)]
+        [TestCase(true)]
+        [TestCase(false)]
+        public void TrackProgram_FromAfterProgramChange_ToProgramChange(bool useOutputDevice)
+        {
+            var programChangeTime = TimeSpan.FromMilliseconds(800);
+            var noteOffTime = TimeSpan.FromSeconds(2);
+            var programNumber = (SevenBitNumber)100;
+
+            var moveFrom = TimeSpan.FromMilliseconds(1000);
+            var moveTo = TimeSpan.FromMilliseconds(800);
+
+            CheckTrackProgram(
+                eventsToSend: new[]
+                {
+                    new EventToSend(new ProgramChangeEvent(programNumber) { Channel = (FourBitNumber)4 }, programChangeTime),
+                    new EventToSend(new NoteOffEvent(), noteOffTime - programChangeTime)
+                },
+                eventsWillBeSent: new[]
+                {
+                    new EventToSend(new ProgramChangeEvent(programNumber) { Channel = (FourBitNumber)4 }, programChangeTime),
+                    new EventToSend(new ProgramChangeEvent(programNumber) { Channel = (FourBitNumber)4 }, moveFrom - programChangeTime),
+                    new EventToSend(new NoteOffEvent(), noteOffTime - programChangeTime)
+                },
+                moveFrom: moveFrom,
+                moveTo: moveTo,
+                useOutputDevice: useOutputDevice);
+        }
+
         #endregion
 
         #region Private methods

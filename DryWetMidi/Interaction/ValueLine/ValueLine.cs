@@ -57,9 +57,15 @@ namespace Melanchall.DryWetMidi.Interaction
 
         internal TValue GetValueAtTime(long time)
         {
+            var valueChange = GetValueChangeAtTime(time);
+            return valueChange != null ? valueChange.Value : _defaultValue;
+        }
+
+        internal ValueChange<TValue> GetValueChangeAtTime(long time)
+        {
             SortValueChanges();
 
-            var lastValue = _defaultValue;
+            var result = default(ValueChange<TValue>);
             var valuesChangesCount = _valueChanges.Count;
 
             for (var i = 0; i < valuesChangesCount; i++)
@@ -68,17 +74,14 @@ namespace Melanchall.DryWetMidi.Interaction
                 if (valueChange.Time > time)
                     break;
 
-                lastValue = valueChange.Value;
+                result = valueChange;
             }
 
-            return lastValue;
+            return result;
         }
 
         internal void SetValue(long time, TValue value)
         {
-            ThrowIfTimeArgument.IsNegative(nameof(time), time);
-            ThrowIfArgument.IsNull(nameof(value), value);
-
             var currentValue = GetValueAtTime(time);
             if (currentValue.Equals(value))
                 return;
@@ -113,9 +116,6 @@ namespace Melanchall.DryWetMidi.Interaction
 
         internal void DeleteValues(long startTime, long endTime)
         {
-            ThrowIfTimeArgument.StartIsNegative(nameof(startTime), startTime);
-            ThrowIfTimeArgument.EndIsNegative(nameof(endTime), endTime);
-
             _valueChanges.RemoveAll(v => v.Time >= startTime && v.Time <= endTime);
 
             OnValuesChanged();

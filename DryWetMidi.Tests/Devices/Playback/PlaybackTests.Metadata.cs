@@ -408,6 +408,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 moveTo: moveTo,
                 expectedMetadata: new (MidiEvent, object)[]
                 {
+                    (new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, 0),
                     (new NoteOffEvent(), 1)
                 });
         }

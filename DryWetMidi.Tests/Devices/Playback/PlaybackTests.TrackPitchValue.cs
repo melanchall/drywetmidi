@@ -234,6 +234,63 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 useOutputDevice: useOutputDevice);
         }
 
+        [Retry(RetriesNumber)]
+        [TestCase(true)]
+        [TestCase(false)]
+        public void TrackPitchValue_FromBeforePitchBend_ToPitchBend(bool useOutputDevice)
+        {
+            var pitchBendTime = TimeSpan.FromMilliseconds(800);
+            var noteOffTime = TimeSpan.FromSeconds(2);
+            var pitchValue = (ushort)234;
+
+            var moveFrom = TimeSpan.FromMilliseconds(500);
+            var moveTo = TimeSpan.FromMilliseconds(800);
+
+            CheckTrackPitchValue(
+                eventsToSend: new[]
+                {
+                    new EventToSend(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, pitchBendTime),
+                    new EventToSend(new NoteOffEvent(), noteOffTime - pitchBendTime)
+                },
+                eventsWillBeSent: new[]
+                {
+                    new EventToSend(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, moveFrom),
+                    new EventToSend(new NoteOffEvent(), noteOffTime - (moveTo - moveFrom) - moveFrom)
+                },
+                moveFrom: moveFrom,
+                moveTo: moveTo,
+                useOutputDevice: useOutputDevice);
+        }
+
+        [Retry(RetriesNumber)]
+        [TestCase(true)]
+        [TestCase(false)]
+        public void TrackPitchValue_FromAfterPitchBend_ToPitchBend(bool useOutputDevice)
+        {
+            var pitchBendTime = TimeSpan.FromMilliseconds(800);
+            var noteOffTime = TimeSpan.FromSeconds(2);
+            var pitchValue = (ushort)234;
+
+            var moveFrom = TimeSpan.FromMilliseconds(1000);
+            var moveTo = TimeSpan.FromMilliseconds(800);
+
+            CheckTrackPitchValue(
+                eventsToSend: new[]
+                {
+                    new EventToSend(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, pitchBendTime),
+                    new EventToSend(new NoteOffEvent(), noteOffTime - pitchBendTime)
+                },
+                eventsWillBeSent: new[]
+                {
+                    new EventToSend(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, pitchBendTime),
+                    new EventToSend(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, moveFrom - pitchBendTime),
+                    new EventToSend(new NoteOffEvent(), noteOffTime - pitchBendTime)
+                },
+                moveFrom: moveFrom,
+                moveTo: moveTo,
+                useOutputDevice: useOutputDevice);
+        }
+
         #endregion
 
         #region Private methods
