@@ -24,10 +24,9 @@ namespace Melanchall.DryWetMidi.Devices
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
             ThrowIfArgument.IsNull(nameof(outputDevice), outputDevice);
 
-            // TODO: note detection settings -> playback settings
             var timedObjects = events
                 .GetTimedEventsLazy()
-                .GetNotesAndTimedEventsLazy(new NoteDetectionSettings());
+                .GetNotesAndTimedEventsLazy(playbackSettings?.NoteDetectionSettings ?? new NoteDetectionSettings());
 
             return new Playback(timedObjects, tempoMap, outputDevice, playbackSettings);
         }
@@ -37,10 +36,9 @@ namespace Melanchall.DryWetMidi.Devices
             ThrowIfArgument.IsNull(nameof(events), events);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
-            // TODO: note detection settings -> playback settings
             var timedObjects = events
                 .GetTimedEventsLazy()
-                .GetNotesAndTimedEventsLazy(new NoteDetectionSettings());
+                .GetNotesAndTimedEventsLazy(playbackSettings?.NoteDetectionSettings ?? new NoteDetectionSettings());
 
             return new Playback(timedObjects, tempoMap, playbackSettings);
         }
@@ -75,11 +73,10 @@ namespace Melanchall.DryWetMidi.Devices
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
             ThrowIfArgument.IsNull(nameof(outputDevice), outputDevice);
 
-            // TODO: note detection settings -> playback settings
             var timedObjects = trackChunk
                 .Events
                 .GetTimedEventsLazy()
-                .GetNotesAndTimedEventsLazy(new NoteDetectionSettings());
+                .GetNotesAndTimedEventsLazy(playbackSettings?.NoteDetectionSettings ?? new NoteDetectionSettings());
 
             return new Playback(timedObjects, tempoMap, outputDevice, playbackSettings);
         }
@@ -109,11 +106,10 @@ namespace Melanchall.DryWetMidi.Devices
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
-            // TODO: note detection settings -> playback settings
             var timedObjects = trackChunk
                 .Events
                 .GetTimedEventsLazy()
-                .GetNotesAndTimedEventsLazy(new NoteDetectionSettings());
+                .GetNotesAndTimedEventsLazy(playbackSettings?.NoteDetectionSettings ?? new NoteDetectionSettings());
 
             return new Playback(timedObjects, tempoMap, playbackSettings);
         }
@@ -148,10 +144,9 @@ namespace Melanchall.DryWetMidi.Devices
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
             ThrowIfArgument.IsNull(nameof(outputDevice), outputDevice);
 
-            // TODO: note detection settings -> playback settings
             var timedObjects = trackChunks
                 .GetTimedEventsLazy()
-                .GetNotesAndTimedEventsLazy(new NoteDetectionSettings())
+                .GetNotesAndTimedEventsLazy(playbackSettings?.NoteDetectionSettings ?? new NoteDetectionSettings())
                 .Select(o => o.Item1);
 
             return new Playback(timedObjects, tempoMap, outputDevice, playbackSettings);
@@ -182,10 +177,9 @@ namespace Melanchall.DryWetMidi.Devices
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
-            // TODO: note detection settings -> playback settings
             var timedObjects = trackChunks
                 .GetTimedEventsLazy()
-                .GetNotesAndTimedEventsLazy(new NoteDetectionSettings())
+                .GetNotesAndTimedEventsLazy(playbackSettings?.NoteDetectionSettings ?? new NoteDetectionSettings())
                 .Select(o => o.Item1);
 
             return new Playback(timedObjects, tempoMap, playbackSettings);

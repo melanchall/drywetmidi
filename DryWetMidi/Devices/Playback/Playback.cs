@@ -121,8 +121,10 @@ namespace Melanchall.DryWetMidi.Devices
             ThrowIfArgument.IsNull(nameof(timedObjects), timedObjects);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
-            // TODO: note detection settings -> playback settings
-            var playbackEvents = GetPlaybackEvents(timedObjects.GetNotesAndTimedEventsLazy(new NoteDetectionSettings(), true), tempoMap);
+            playbackSettings = playbackSettings ?? new PlaybackSettings();
+
+            var noteDetectionSettings = playbackSettings.NoteDetectionSettings ?? new NoteDetectionSettings();
+            var playbackEvents = GetPlaybackEvents(timedObjects.GetNotesAndTimedEventsLazy(noteDetectionSettings, true), tempoMap);
             _eventsEnumerator = playbackEvents.GetEnumerator();
             _eventsEnumerator.MoveNext();
 
@@ -135,7 +137,6 @@ namespace Melanchall.DryWetMidi.Devices
 
             TempoMap = tempoMap;
 
-            playbackSettings = playbackSettings ?? new PlaybackSettings();
             var clockSettings = playbackSettings.ClockSettings ?? new MidiClockSettings();
             _clock = new MidiClock(false, clockSettings.CreateTickGeneratorCallback(), ClockInterval);
             _clock.Ticked += OnClockTicked;
