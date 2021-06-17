@@ -43,8 +43,8 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 IEnumerable<ITimedObject> timedObjects,
                 TempoMap tempoMap,
                 IOutputDevice outputDevice,
-                MidiClockSettings clockSettings = null)
-                : base(timedObjects, tempoMap, outputDevice, clockSettings)
+                PlaybackSettings playbackSettings = null)
+                : base(timedObjects, tempoMap, outputDevice, playbackSettings)
             {
             }
 

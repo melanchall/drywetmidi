@@ -367,7 +367,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
             PlaybackAction waiting,
             PlaybackAction finalChecks,
             Func<TickGenerator> createTickGeneratorCallback = null,
-            Func<OutputDevice, MidiClockSettings, Playback> createPlayback = null,
+            Func<OutputDevice, PlaybackSettings, Playback> createPlayback = null,
             List<TimeSpan> expectedEventsTimes = null)
         {
             var playbackContext = new PlaybackContext();
@@ -405,11 +405,11 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 SendReceiveUtilities.WarmUpDevice(outputDevice);
                 outputDevice.EventSent += (_, e) => sentEvents.Add(new SentEvent(e.Event, stopwatch.Elapsed));
 
-                var clockSettings = createTickGeneratorCallback != null
-                    ? new MidiClockSettings { CreateTickGeneratorCallback = createTickGeneratorCallback }
+                var playbackSettings = createTickGeneratorCallback != null
+                    ? new PlaybackSettings { ClockSettings = new MidiClockSettings { CreateTickGeneratorCallback = createTickGeneratorCallback } }
                     : null;
 
-                using (var playback = createPlayback?.Invoke(outputDevice, clockSettings) ?? eventsForPlayback.GetPlayback(tempoMap, outputDevice, clockSettings))
+                using (var playback = createPlayback?.Invoke(outputDevice, playbackSettings) ?? eventsForPlayback.GetPlayback(tempoMap, outputDevice, playbackSettings))
                 {
                     playback.Speed = speed;
                     beforePlaybackStarted(playbackContext, playback);

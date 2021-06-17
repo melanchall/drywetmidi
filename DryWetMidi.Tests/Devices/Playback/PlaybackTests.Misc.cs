@@ -386,7 +386,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                     var playbackStopped = SpinWait.SpinUntil(() => !playback.IsRunning, SendReceiveUtilities.MaximumEventSendReceiveDelay);
                     Assert.IsTrue(playbackStopped, "Playback is running after completed.");
                 },
-                createPlayback: (outputDevice, clockSettings) => recordedFile.GetPlayback(outputDevice, clockSettings));
+                createPlayback: (outputDevice, playbackSettings) => recordedFile.GetPlayback(outputDevice, playbackSettings));
         }
 
         [Retry(RetriesNumber)]

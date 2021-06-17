@@ -116,7 +116,7 @@ namespace Melanchall.DryWetMidi.Devices
         /// </item>
         /// </list>
         /// </exception>
-        public Playback(IEnumerable<ITimedObject> timedObjects, TempoMap tempoMap, MidiClockSettings clockSettings = null)
+        public Playback(IEnumerable<ITimedObject> timedObjects, TempoMap tempoMap, PlaybackSettings playbackSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(timedObjects), timedObjects);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
@@ -135,7 +135,8 @@ namespace Melanchall.DryWetMidi.Devices
 
             TempoMap = tempoMap;
 
-            clockSettings = clockSettings ?? new MidiClockSettings();
+            playbackSettings = playbackSettings ?? new PlaybackSettings();
+            var clockSettings = playbackSettings.ClockSettings ?? new MidiClockSettings();
             _clock = new MidiClock(false, clockSettings.CreateTickGeneratorCallback(), ClockInterval);
             _clock.Ticked += OnClockTicked;
 
@@ -170,8 +171,8 @@ namespace Melanchall.DryWetMidi.Devices
         /// </item>
         /// </list>
         /// </exception>
-        public Playback(IEnumerable<ITimedObject> timedObjects, TempoMap tempoMap, IOutputDevice outputDevice, MidiClockSettings clockSettings = null)
-            : this(timedObjects, tempoMap, clockSettings)
+        public Playback(IEnumerable<ITimedObject> timedObjects, TempoMap tempoMap, IOutputDevice outputDevice, PlaybackSettings playbackSettings = null)
+            : this(timedObjects, tempoMap, playbackSettings)
         {
             ThrowIfArgument.IsNull(nameof(outputDevice), outputDevice);
 
