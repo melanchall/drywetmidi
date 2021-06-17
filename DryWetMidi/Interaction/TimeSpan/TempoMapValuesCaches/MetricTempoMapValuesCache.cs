@@ -38,7 +38,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
         #region Properties
 
-        public IEnumerable<AccumulatedMicroseconds> Microseconds { get; private set; }
+        public AccumulatedMicroseconds[] Microseconds { get; private set; }
 
         public double DefaultMicrosecondsPerTick { get; private set; }
 
@@ -81,7 +81,7 @@ namespace Melanchall.DryWetMidi.Interaction
                 microseconds.Add(new AccumulatedMicroseconds(tempoChangeTime, accumulatedMicroseconds, lastTempo.MicrosecondsPerQuarterNote / (double)ticksPerQuarterNote));
             }
 
-            Microseconds = microseconds;
+            Microseconds = microseconds.ToArray();
             DefaultMicrosecondsPerTick = Tempo.Default.MicrosecondsPerQuarterNote / (double)ticksPerQuarterNote;
             DefaultTicksPerMicrosecond = 1.0 / DefaultMicrosecondsPerTick;
         }

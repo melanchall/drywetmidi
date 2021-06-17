@@ -7,6 +7,28 @@ namespace Melanchall.DryWetMidi.Common
     {
         #region Methods
 
+        public static T GetLastElementBelowThreshold<T>(T[] elements, long keyThreshold, Func<T, long> keySelector)
+        {
+            var firstIndex = 0;
+            var lastIndex = elements.Length - 1;
+
+            while (firstIndex <= lastIndex)
+            {
+                var middleIndex = (firstIndex + lastIndex) / 2;
+                var middle = elements[middleIndex];
+
+                var key = keySelector(middle);
+                if (key > keyThreshold)
+                    lastIndex = middleIndex - 1;
+                else if (key < keyThreshold)
+                    firstIndex = middleIndex + 1;
+                else
+                    return middleIndex > 0 ? elements[middleIndex - 1] : default(T);
+            }
+
+            return firstIndex > 0 ? elements[firstIndex - 1] : default(T);
+        }
+
         public static int EnsureInBounds(int value, int min, int max)
         {
             if (value < min)

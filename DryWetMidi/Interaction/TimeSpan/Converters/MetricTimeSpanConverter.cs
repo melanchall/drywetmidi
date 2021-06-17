@@ -50,7 +50,7 @@ namespace Melanchall.DryWetMidi.Interaction
                 return new MetricTimeSpan();
 
             var valuesCache = tempoMap.GetValuesCache<MetricTempoMapValuesCache>();
-            var accumulatedMicroseconds = valuesCache.Microseconds.TakeWhile(m => m.Time < timeSpan).LastOrDefault();
+            var accumulatedMicroseconds = MathUtilities.GetLastElementBelowThreshold(valuesCache.Microseconds, timeSpan, m => m.Time);
 
             var lastAccumulatedMicroseconds = accumulatedMicroseconds?.Microseconds ?? 0;
             var lastTime = accumulatedMicroseconds?.Time ?? 0;
