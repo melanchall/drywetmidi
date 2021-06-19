@@ -25,6 +25,9 @@ namespace Melanchall.DryWetMidi.Devices
         /// </summary>
         public MidiEvent Event { get; }
 
+        /// <summary>
+        /// Gets a metadata associated with the <see cref="Event"/>.
+        /// </summary>
         public object Metadata { get; }
 
         #endregion

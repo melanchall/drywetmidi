@@ -68,6 +68,9 @@ namespace Melanchall.DryWetMidi.Devices
         /// </summary>
         public event EventHandler<MidiEventPlayedEventArgs> EventPlayed;
 
+        /// <summary>
+        /// Occurs when an error got from output device.
+        /// </summary>
         public event EventHandler<ErrorOccurredEventArgs> DeviceErrorOccurred;
 
         #endregion
@@ -104,7 +107,7 @@ namespace Melanchall.DryWetMidi.Devices
         /// </summary>
         /// <param name="timedObjects">Collection of timed objects to play.</param>
         /// <param name="tempoMap">Tempo map used to calculate events times.</param>
-        /// <param name="clockSettings">Settings of the internal playback's clock.</param>
+        /// <param name="playbackSettings">Settings according to which a playback should be created.</param>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
@@ -157,7 +160,7 @@ namespace Melanchall.DryWetMidi.Devices
         /// <param name="timedObjects">Collection of timed objects to play.</param>
         /// <param name="tempoMap">Tempo map used to calculate events times.</param>
         /// <param name="outputDevice">Output MIDI device to play <paramref name="timedObjects"/> through.</param>
-        /// <param name="clockSettings">Settings of the internal playback's clock.</param>
+        /// <param name="playbackSettings">Settings according to which a playback should be created.</param>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
@@ -804,12 +807,32 @@ namespace Melanchall.DryWetMidi.Devices
                 : currentTime.Subtract(step, TimeSpanMode.TimeLength));
         }
 
+        /// <summary>
+        /// Tries to play the specified MIDI event. By default just sends the event to output device
+        /// returning <c>true</c>.
+        /// </summary>
+        /// <remarks>
+        /// Please see <see href="xref:a_playback_custom">Custom playback</see> article to learn more
+        /// about how to use <paramref name="metadata"/> parameter.
+        /// </remarks>
+        /// <param name="midiEvent">MIDI event to try to play.</param>
+        /// <param name="metadata">Metadata attached to <paramref name="midiEvent"/>.</param>
+        /// <returns><c>true</c> if <paramref name="midiEvent"/> was played; otherwise, <c>false</c>.</returns>
         protected virtual bool TryPlayEvent(MidiEvent midiEvent, object metadata)
         {
             OutputDevice?.SendEvent(midiEvent);
             return true;
         }
 
+        /// <summary>
+        /// Returns collection of <see cref="TimedEvent"/> representing the specified timed object.
+        /// </summary>
+        /// <remarks>
+        /// The method can be useful in case of <see href="xref:a_playback_custom">custom playback</see> and
+        /// custom input object.
+        /// </remarks>
+        /// <param name="timedObject">Timed object to get collection of <see cref="TimedEvent"/> from.</param>
+        /// <returns>Collection of <see cref="TimedEvent"/> representing the <paramref name="timedObject"/>.</returns>
         protected virtual IEnumerable<TimedEvent> GetTimedEvents(ITimedObject timedObject)
         {
             return Enumerable.Empty<TimedEvent>();

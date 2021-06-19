@@ -88,6 +88,11 @@ namespace Melanchall.DryWetMidi.Devices
         /// </summary>
         public bool AreDevicesConnected { get; private set; }
 
+        /// <summary>
+        /// Gets or sets a callback to process events coming from <see cref="InputDevice"/> before
+        /// they will be sent to <see cref="OutputDevices"/>. The default value is <c>null</c> which
+        /// means no processing will be applied.
+        /// </summary>
         public DevicesConnectorEventCallback EventCallback { get; set; }
 
         #endregion

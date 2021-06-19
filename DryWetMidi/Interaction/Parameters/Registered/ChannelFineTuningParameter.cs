@@ -21,7 +21,8 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         public const float MaxCents = 100f;
 
-        private const float CentResolution = 16383 / 200f;
+        private const int CentsRangeSize = 16383;
+        private const float CentResolution = CentsRangeSize / 200f;
 
         #endregion
 
@@ -101,8 +102,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
         private int GetSteps()
         {
-            // TODO: const
-            return MathUtilities.EnsureInBounds((int)Math.Round((Cents + 100) * CentResolution), 0, 16383);
+            return MathUtilities.EnsureInBounds((int)Math.Round((Cents + MaxCents) * CentResolution), 0, CentsRangeSize);
         }
 
         #endregion

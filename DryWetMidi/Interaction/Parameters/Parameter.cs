@@ -6,7 +6,6 @@ using Melanchall.DryWetMidi.Core;
 
 namespace Melanchall.DryWetMidi.Interaction
 {
-    // TODO: override Equals, GetHashCode, == and so on (see TimedEvent for ref)
     /// <summary>
     /// Represents parameter (RPN or NRPN) encoded as series of Control Change events.
     /// </summary>

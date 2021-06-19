@@ -364,6 +364,11 @@ namespace Melanchall.DryWetMidi.Core
             }
         }
 
+        /// <summary>
+        /// Gets or sets reaction of the reading engine on End Of Track event encountered.
+        /// The default is <see cref="EndOfTrackStoringPolicy.Omit"/>.
+        /// </summary>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="value"/> specified an invalid value.</exception>
         public EndOfTrackStoringPolicy EndOfTrackStoringPolicy
         {
             get { return _endOfTrackStoringPolicy; }

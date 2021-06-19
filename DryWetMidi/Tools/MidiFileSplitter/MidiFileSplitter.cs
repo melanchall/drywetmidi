@@ -571,7 +571,7 @@ namespace Melanchall.DryWetMidi.Tools
         }
 
         /// <summary>
-        /// Takes part of the specified length of a MIDI file (starting at the specified time within the file)
+        /// Takes a part of the specified length of a MIDI file (starting at the specified time within the file)
         /// and returns it as an instance of <see cref="MidiFile"/>.
         /// </summary>
         /// <param name="midiFile"><see cref="MidiFile"/> to take part of.</param>
@@ -596,7 +596,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// </exception>
         /// <example>
         /// <para>
-        /// Given the MIDI file (vertical line shows where the file will be split):
+        /// Given the MIDI file (vertical lines shows where the file will be split):
         /// </para>
         /// <code language="image">
         ///  │← S →│←─── L ───→│
@@ -648,6 +648,67 @@ namespace Melanchall.DryWetMidi.Tools
             }
         }
 
+        /// <summary>
+        /// Cuts a part of the specified length from a MIDI file (starting at the specified time within the file)
+        /// and returns a new instance of <see cref="MidiFile"/> which is the original one without the part.
+        /// </summary>
+        /// <param name="midiFile"><see cref="MidiFile"/> to cut part from.</param>
+        /// <param name="partStart">The start time of part to cut.</param>
+        /// <param name="partLength">The length of part to cut.</param>
+        /// <param name="settings">Settings according to which <paramref name="midiFile"/>
+        /// should be split.</param>
+        /// <returns><see cref="MidiFile"/> which is the <paramref name="midiFile"/> without a part defined by
+        /// <paramref name="partStart"/> and <paramref name="partLength"/>.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="midiFile"/> is <c>null</c>.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="partStart"/> is <c>null</c>.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="partLength"/> is <c>null</c>.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
+        /// <example>
+        /// <para>
+        /// Given the MIDI file (vertical lines shows where the file will be split):
+        /// </para>
+        /// <code language="image">
+        ///  │← S →│←─── L ───→│
+        /// +------║-----------║-------+
+        /// |┌─────║───────────║──────┐|
+        /// |│  A  ║   B       ║ D    │|
+        /// |└─────║───────────║──────┘|
+        /// |┌─────║───────────║──────┐|
+        /// |│     ║      C    ║    E │|
+        /// |└─────║───────────║──────┘|
+        /// +------║-----------║-------+
+        /// </code>
+        /// <para>
+        /// where <c>A</c>, <c>B</c>, <c>C</c>, <c>D</c> and <c>E</c> are some MIDI events;
+        /// <c>S</c> is <paramref name="partStart"/> and <c>L</c> is <paramref name="partLength"/>.
+        /// </para>
+        /// <para>
+        /// Cutting the part we'll get following file:
+        /// </para>
+        /// <code language="image">
+        /// +------⁞-------+
+        /// |┌─────⁞──────┐|
+        /// |│  A  ⁞ D    │|
+        /// |└─────⁞──────┘|
+        /// |┌─────⁞──────┐|
+        /// |│     ⁞    E │|
+        /// |└─────⁞──────┘|
+        /// +------⁞-------+
+        /// </code>
+        /// <para>
+        /// Dashed line shows where the part was cut from the input file.
+        /// </para>
+        /// </example>
         public static MidiFile CutPart(this MidiFile midiFile, ITimeSpan partStart, ITimeSpan partLength, SliceMidiFileSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);

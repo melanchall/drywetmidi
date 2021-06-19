@@ -14,7 +14,6 @@ namespace Melanchall.DryWetMidi.Tools
     {
         #region Methods
 
-        // TODO: Filter to settings
         /// <summary>
         /// Merges nearby notes in the specified <see cref="TrackChunk"/>.
         /// </summary>

@@ -1,5 +1,11 @@
 ﻿namespace Melanchall.DryWetMidi.Core
 {
+    /// <summary>
+    /// Represents an End Of Track meta event.
+    /// </summary>
+    /// <remarks>
+    /// The MIDI end of track meta message denotes the end of a MIDI track.
+    /// </remarks>
     public sealed class EndOfTrackEvent : MetaEvent
     {
         #region Constructor

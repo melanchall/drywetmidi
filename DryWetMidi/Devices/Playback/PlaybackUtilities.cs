@@ -18,6 +18,29 @@ namespace Melanchall.DryWetMidi.Devices
     {
         #region Methods
 
+        /// <summary>
+        /// Retrieves an instance of the <see cref="Playback"/> for playing MIDI events collection.
+        /// Events will be sheduled for playback according to their delta-times.
+        /// </summary>
+        /// <param name="events">MIDI events to play.</param>
+        /// <param name="tempoMap">Tempo map used to calculate events times.</param>
+        /// <param name="outputDevice">Output MIDI device to play events through.</param>
+        /// <param name="playbackSettings">Settings according to which a playback should be created.</param>
+        /// <returns>An instance of the <see cref="Playback"/> for playing <paramref name="events"/>.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="events"/> is <c>null</c>.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="tempoMap"/> is <c>null</c>.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="outputDevice"/> is <c>null</c>.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static Playback GetPlayback(this IEnumerable<MidiEvent> events, TempoMap tempoMap, IOutputDevice outputDevice, PlaybackSettings playbackSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(events), events);
@@ -31,6 +54,25 @@ namespace Melanchall.DryWetMidi.Devices
             return new Playback(timedObjects, tempoMap, outputDevice, playbackSettings);
         }
 
+        /// <summary>
+        /// Retrieves an instance of the <see cref="Playback"/> for playing MIDI events collection.
+        /// Events will be sheduled for playback according to their delta-times.
+        /// </summary>
+        /// <param name="events">MIDI events to play.</param>
+        /// <param name="tempoMap">Tempo map used to calculate events times.</param>
+        /// <param name="playbackSettings">Settings according to which a playback should be created.</param>
+        /// <returns>An instance of the <see cref="Playback"/> for playing <paramref name="events"/>.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="events"/> is <c>null</c>.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="tempoMap"/> is <c>null</c>.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static Playback GetPlayback(this IEnumerable<MidiEvent> events, TempoMap tempoMap, PlaybackSettings playbackSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(events), events);

@@ -63,6 +63,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="trackChunks">Collection of <see cref="TrackChunk"/> to split notes in.</param>
         /// <param name="step">Step to split notes by.</param>
         /// <param name="tempoMap">Tempo map used to calculate times to split by.</param>
+        /// <param name="noteDetectionSettings">Settings accoridng to which notes should be detected and built.</param>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
@@ -100,6 +101,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// </remarks>
         /// <param name="midiFile"><see cref="MidiFile"/> to split notes in.</param>
         /// <param name="step">Step to split notes by.</param>
+        /// <param name="noteDetectionSettings">Settings accoridng to which notes should be detected and built.</param>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
@@ -167,6 +169,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="partsNumber">The number of parts to split notes into.</param>
         /// <param name="lengthType">Type of a part's length.</param>
         /// <param name="tempoMap">Tempo map used to calculate times to split by.</param>
+        /// <param name="noteDetectionSettings">Settings accoridng to which notes should be detected and built.</param>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
@@ -203,6 +206,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="midiFile"><see cref="MidiFile"/> to split notes in.</param>
         /// <param name="partsNumber">The number of parts to split notes into.</param>
         /// <param name="lengthType">Type of a part's length.</param>
+        /// <param name="noteDetectionSettings">Settings accoridng to which notes should be detected and built.</param>
         /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="partsNumber"/> is zero or negative.</exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="lengthType"/> specified an invalid value.</exception>
@@ -254,6 +258,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="trackChunks">Collection of <see cref="TrackChunk"/> to split notes in.</param>
         /// <param name="grid">Grid to split notes by.</param>
         /// <param name="tempoMap">Tempo map used to calculate times to split by.</param>
+        /// <param name="noteDetectionSettings">Settings accoridng to which notes should be detected and built.</param>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
@@ -285,6 +290,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// </summary>
         /// <param name="midiFile"><see cref="MidiFile"/> to split notes in.</param>
         /// <param name="grid">Grid to split notes by.</param>
+        /// <param name="noteDetectionSettings">Settings accoridng to which notes should be detected and built.</param>
         /// <exception cref="ArgumentNullException"><paramref name="grid"/> is <c>null</c>.</exception>
         public static void SplitNotesByGrid(this MidiFile midiFile, IGrid grid, NoteDetectionSettings noteDetectionSettings = null)
         {
@@ -337,6 +343,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="trackChunks">Collection of <see cref="TrackChunk"/> to split notes in.</param>
         /// <param name="distance">Distance to split notes at.</param>
         /// <param name="from">Point of a note <paramref name="distance"/> should be measured from.</param>
+        /// <param name="noteDetectionSettings">Settings accoridng to which notes should be detected and built.</param>
         /// <param name="tempoMap">Tempo map used for distances calculations.</param>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occured:</para>
@@ -373,6 +380,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="midiFile"><see cref="MidiFile"/> to split notes in.</param>
         /// <param name="distance">Distance to split notes at.</param>
         /// <param name="from">Point of a note <paramref name="distance"/> should be measured from.</param>
+        /// <param name="noteDetectionSettings">Settings accoridng to which notes should be detected and built.</param>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
@@ -455,6 +463,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="lengthType">The type a note's length should be processed according to.</param>
         /// <param name="from">Point of a note distance should be measured from.</param>
         /// <param name="tempoMap">Tempo map used for distances calculations.</param>
+        /// <param name="noteDetectionSettings">Settings accoridng to which notes should be detected and built.</param>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occured:</para>
         /// <list type="bullet">
@@ -505,6 +514,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="ratio">Ratio of a note's length to split by. Valid values are from 0 to 1.</param>
         /// <param name="lengthType">The type a note's length should be processed according to.</param>
         /// <param name="from">Point of a note distance should be measured from.</param>
+        /// <param name="noteDetectionSettings">Settings accoridng to which notes should be detected and built.</param>
         /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="ratio"/> is out of valid range.</exception>
         /// <exception cref="InvalidEnumArgumentException">

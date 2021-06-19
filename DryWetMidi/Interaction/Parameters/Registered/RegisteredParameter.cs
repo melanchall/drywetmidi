@@ -27,7 +27,6 @@ namespace Melanchall.DryWetMidi.Interaction
 
         #region Properties
 
-        // TODO: test that each value used for single type
         /// <summary>
         /// Gets the type of the current parameter.
         /// </summary>
