@@ -1016,18 +1016,14 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
             //
 
-            // TODO: Support events collection indicies in GetObjects
-            if (settings.NoteSearchContext == NoteSearchContext.AllEventsCollections)
-            {
-                IEnumerable<ITimedObject> timedObjects;
+            IEnumerable<ITimedObject> timedObjects;
 
-                if (wrapToFile)
-                    timedObjects = new MidiFile(trackChunks).GetObjects(ObjectType.Note, new ObjectDetectionSettings { NoteDetectionSettings = settings });
-                else
-                    timedObjects = trackChunks.GetObjects(ObjectType.Note, new ObjectDetectionSettings { NoteDetectionSettings = settings });
+            if (wrapToFile)
+                timedObjects = new MidiFile(trackChunks).GetObjects(ObjectType.Note, new ObjectDetectionSettings { NoteDetectionSettings = settings });
+            else
+                timedObjects = trackChunks.GetObjects(ObjectType.Note, new ObjectDetectionSettings { NoteDetectionSettings = settings });
 
-                MidiAsserts.AreEqual(expectedNotes, timedObjects, "Notes are invalid from GetObjects.");
-            }
+            MidiAsserts.AreEqual(expectedNotes, timedObjects, "Notes are invalid from GetObjects.");
         }
 
         #endregion

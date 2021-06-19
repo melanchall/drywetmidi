@@ -680,18 +680,14 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
             //
 
-            // TODO: Support events collection indicies in GetObjects
-            if (settings.ChordSearchContext == ChordSearchContext.AllEventsCollections)
-            {
-                IEnumerable<ITimedObject> timedObjects;
+            IEnumerable<ITimedObject> timedObjects;
 
-                if (wrapToFile)
-                    timedObjects = new MidiFile(trackChunks).GetObjects(ObjectType.Chord, new ObjectDetectionSettings { ChordDetectionSettings = settings });
-                else
-                    timedObjects = trackChunks.GetObjects(ObjectType.Chord, new ObjectDetectionSettings { ChordDetectionSettings = settings });
+            if (wrapToFile)
+                timedObjects = new MidiFile(trackChunks).GetObjects(ObjectType.Chord, new ObjectDetectionSettings { ChordDetectionSettings = settings });
+            else
+                timedObjects = trackChunks.GetObjects(ObjectType.Chord, new ObjectDetectionSettings { ChordDetectionSettings = settings });
 
-                MidiAsserts.AreEqual(expectedChords, timedObjects, "Chords are invalid from GetObjects.");
-            }
+            MidiAsserts.AreEqual(expectedChords, timedObjects, "Chords are invalid from GetObjects.");
         }
 
         #endregion

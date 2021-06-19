@@ -126,10 +126,17 @@ namespace Melanchall.DryWetMidi.Interaction
             var eventsCollections = trackChunks.Where(c => c != null).Select(c => c.Events).ToArray();
             var eventsCount = eventsCollections.Sum(c => c.Count);
 
-            return eventsCollections
-                .GetTimedEventsLazy(eventsCount)
-                .Select(e => e.Item1)
-                .GetObjectsFromSortedTimedObjects(eventsCount / 2, objectType, settings);
+            var timedEvents = eventsCollections.GetTimedEventsLazy(eventsCount);
+            var timedObjects = (IEnumerable<ITimedObject>)timedEvents.Select(o => o.Item1);
+
+            if (objectType.HasFlag(ObjectType.Chord) || objectType.HasFlag(ObjectType.Note) || objectType.HasFlag(ObjectType.Rest))
+            {
+                timedObjects = !objectType.HasFlag(ObjectType.Chord)
+                    ? timedEvents.GetNotesAndTimedEventsLazy(settings?.NoteDetectionSettings ?? new NoteDetectionSettings()).Select(o => o.Item1)
+                    : timedEvents.GetChordsAndNotesAndTimedEventsLazy(settings?.ChordDetectionSettings ?? new ChordDetectionSettings()).Select(o => o.Item1);
+            }
+
+            return timedObjects.GetObjectsFromSortedTimedObjects(eventsCount / 2, objectType, settings, false);
         }
 
         /// <summary>
@@ -241,7 +248,8 @@ namespace Melanchall.DryWetMidi.Interaction
             this IEnumerable<ITimedObject> processedTimedObjects,
             int resultCollectionSize,
             ObjectType objectType,
-            ObjectDetectionSettings settings)
+            ObjectDetectionSettings settings,
+            bool createNotes = true)
         {
             var getChords = objectType.HasFlag(ObjectType.Chord);
             var getNotes = objectType.HasFlag(ObjectType.Note);
@@ -255,7 +263,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
             var timedObjects = processedTimedObjects;
 
-            if (getChords || getNotes || getRests)
+            if (createNotes && (getChords || getNotes || getRests))
             {
                 var notesAndTimedEvents = processedTimedObjects.GetNotesAndTimedEventsLazy(noteDetectionSettings, true);
 
