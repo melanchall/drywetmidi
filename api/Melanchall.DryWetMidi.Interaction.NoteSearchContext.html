@@ -99,7 +99,7 @@ Defines a context to search notes within.
 To understand what context means let&apos;s take a look at following events sequence
 within two track chunks:
 </p>
-<img src="images/Melanchall.DryWetMidi.Interaction.NoteSearchContext-4351.png" class="text-image" />
+<img src="images/dwmgen_Melanchall.DryWetMidi.Interaction.NoteSearchContext-4351.png" class="text-image" />
 <p>
 where <code>A</code> and <code>B</code> mean Note On events (see <a class="xref" href="Melanchall.DryWetMidi.Core.NoteOnEvent.html">NoteOnEvent</a>), and <code>X</code>
 and <code>Y</code> mean Note Off ones (see <a class="xref" href="Melanchall.DryWetMidi.Core.NoteOffEvent.html">NoteOffEvent</a>) with the same note number and channel;
@@ -110,7 +110,7 @@ and <code>Y</code> mean Note Off ones (see <a class="xref" href="Melanchall.DryW
 If we use <a class="xref" href="Melanchall.DryWetMidi.Interaction.NoteSearchContext.html#Melanchall_DryWetMidi_Interaction_NoteSearchContext_SingleEventsCollection">SingleEventsCollection</a> as the context, notes will be constructed in
 following way:
 </p>
-<img src="images/Melanchall.DryWetMidi.Interaction.NoteSearchContext-5430.png" class="text-image" />
+<img src="images/dwmgen_Melanchall.DryWetMidi.Interaction.NoteSearchContext-5430.png" class="text-image" />
 <p>
 or, if highlight all notes:
 </p>
@@ -121,7 +121,7 @@ So every Note On event will be combined with Note Off one within the same events
 But if we use <a class="xref" href="Melanchall.DryWetMidi.Interaction.NoteSearchContext.html#Melanchall_DryWetMidi_Interaction_NoteSearchContext_AllEventsCollections">AllEventsCollections</a> as the context, notes will be constructed in
 a new way:
 </p>
-<img src="images/Melanchall.DryWetMidi.Interaction.NoteSearchContext-5995.png" class="text-image" />
+<img src="images/dwmgen_Melanchall.DryWetMidi.Interaction.NoteSearchContext-5995.png" class="text-image" />
 <p>
 So Note On event can be combined with Note Off one within another events collection, i.e.
 ends of a note can be placed in different events collections.

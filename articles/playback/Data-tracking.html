@@ -86,31 +86,31 @@
 </ul>
 <h2 id="notes-tracking">Notes tracking</h2>
 <p>Let's take a look at the following events sequence to play:</p>
-<img src="images/Data-tracking-3960.png" class="text-image" />
+<img src="images/dwmgen_Data-tracking-3960.png" class="text-image" />
 <p>where <code>A</code> and <code>B</code> means <em>Note On</em> and <em>Note Off</em> events correspondingly. <code>.</code> means any other MIDI event.</p>
 <p><code>Playback</code> class has <a class="xref" href="../../api/Melanchall.DryWetMidi.Devices.Playback.html#Melanchall_DryWetMidi_Devices_Playback_TrackNotes">TrackNotes</a> property. If its value is <code>true</code>, playback will internally construct notes based on input objects to play. So in our example one note will be constructed:</p>
-<img src="images/Data-tracking-4524.png" class="text-image" />
+<img src="images/dwmgen_Data-tracking-4524.png" class="text-image" />
 <p>Now let's imagine a playback's time is at some point and we want to jump to a new one (with <a class="xref" href="../../api/Melanchall.DryWetMidi.Devices.Playback.html#Melanchall_DryWetMidi_Devices_Playback_MoveToTime_Melanchall_DryWetMidi_Interaction_ITimeSpan_">MoveToTime</a> for example):</p>
-<img src="images/Data-tracking-4884.png" class="text-image" />
+<img src="images/dwmgen_Data-tracking-4884.png" class="text-image" />
 <p>First vertical line shows the current time of playback. If we now jump to a new time that falls in the middle of second note (second vertical line), behavior of the playback will be different depending on <code>TrackNotes</code> property value. In case of the property value is <code>false</code> nothing special will happen, just the current time of the playback will be changed. But if we set <code>TrackNotes</code> to <code>true</code>, new <em>Note On</em> event will be generated and played when we jump to the new time.</p>
 <p>The same situation with opposite case:</p>
-<img src="images/Data-tracking-5540.png" class="text-image" />
+<img src="images/dwmgen_Data-tracking-5540.png" class="text-image" />
 <p>So we want here to jump from the middle of a note to the time after the note. As in previous example if <code>TrackNotes</code> is <code>false</code>, just the current time of the playback will be changed. But if in case of <code>true</code>, new <em>Note Off</em> event will be generated and played when we jump to the new time.</p>
 <p>So <code>TrackNotes = true</code> tells playback to track time jumps when the current time pointer of the playback either leaves a note or enters one to finish or start the note correspondingly.</p>
 <p>Of course in cases like this:</p>
-<img src="images/Data-tracking-6202.png" class="text-image" />
+<img src="images/dwmgen_Data-tracking-6202.png" class="text-image" />
 <p>playback will play both <em>Note Off</em> event (since we're leaving the first note) and <em>Note On</em> one (since we're entering the second note).</p>
 <h2 id="midi-parameters-values-tracking">MIDI parameters values tracking</h2>
 <p>Let's imagine we have the following events sequence to play:</p>
-<img src="images/Data-tracking-6613.png" class="text-image" />
+<img src="images/dwmgen_Data-tracking-6613.png" class="text-image" />
 <p>where <code>P</code> and <code>Q</code> means <em>Program Change</em> events, <code>A</code> means <em>Note On</em> event and <code>.</code> means any other MIDI event.</p>
 <p>And now we want to jump from the current time of a playback to a new time (with <a class="xref" href="../../api/Melanchall.DryWetMidi.Devices.Playback.html#Melanchall_DryWetMidi_Devices_Playback_MoveToTime_Melanchall_DryWetMidi_Interaction_ITimeSpan_">MoveToTime</a> for example):</p>
-<img src="images/Data-tracking-7137.png" class="text-image" />
+<img src="images/dwmgen_Data-tracking-7137.png" class="text-image" />
 <p>So by the current time <code>P</code> event is played and the current program corresponds to <code>P</code>. If the playback just change the current time, <code>A</code> will be played using program <code>P</code> which is wrong since <code>Q</code> should be used.</p>
 <p>To track a program <code>Playback</code> class has <a class="xref" href="../../api/Melanchall.DryWetMidi.Devices.Playback.html#Melanchall_DryWetMidi_Devices_Playback_TrackProgram">TrackProgram</a> property. If it's set to <code>false</code>, nothing will happen except changing the current time. All following notes can sound incorrectly due to possibly skipped program changes.</p>
 <p>But if we set <code>TrackProgram</code> to <code>true</code>, playback will play required <em>Program Change</em> event immediately after time changed. So in our example <code>Q</code> will be played and then playback continues from new time.</p>
 <p>Program tracking works in opposite direction too of course:</p>
-<img src="images/Data-tracking-8195.png" class="text-image" />
+<img src="images/dwmgen_Data-tracking-8195.png" class="text-image" />
 <p>We have program <code>Q</code> active at the current time. But when we jump to a new time (before <code>Q</code> but after <code>P</code>), <code>P</code> event will be played.</p>
 <p><code>Playback</code> can track at now three MIDI parameters:</p>
 <ul>
@@ -118,7 +118,7 @@
 <li>pitch bend (see <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.PitchBendEvent.html">PitchBendEvent</a>)</li>
 <li>control value (see <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.ControlChangeEvent.html">ControlChangeEvent</a>)</li>
 </ul>
-<p>We have discussed tracking program above. But tracking the remaining two parameters is absolutely the same. To track pitch bend value there is <a class="xref" href="../../api/Melanchall.DryWetMidi.Devices.Playback.html#Melanchall_DryWetMidi_Devices_Playback_TrackPitchValue">TrackPitchValue</a> property. To track control value there is <a href="Melanchall.DryWetMidi.Devices.Playback.TrackControlValue">TrackControlValue</a> property.</p>
+<p>We have discussed tracking program above. But tracking the remaining two parameters is absolutely the same. To track pitch bend value there is <a class="xref" href="../../api/Melanchall.DryWetMidi.Devices.Playback.html#Melanchall_DryWetMidi_Devices_Playback_TrackPitchValue">TrackPitchValue</a> property. To track control value there is <a class="xref" href="../../api/Melanchall.DryWetMidi.Devices.Playback.html#Melanchall_DryWetMidi_Devices_Playback_TrackControlValue">TrackControlValue</a> property.</p>
 <p>Of course all these parameters are tracked separately for each MIDI channel and in addition to this control value tracked separately for each control number.</p>
 </article>
           </div>

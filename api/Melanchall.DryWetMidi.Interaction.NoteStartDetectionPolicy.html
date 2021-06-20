@@ -99,7 +99,7 @@ the same note number and channel. The default value is <a class="xref" href="Mel
 <p>
 To understand how this policy works let&apos;s take a look at following events sequence:
 </p>
-<img src="images/Melanchall.DryWetMidi.Interaction.NoteStartDetectionPolicy-4665.png" class="text-image" />
+<img src="images/dwmgen_Melanchall.DryWetMidi.Interaction.NoteStartDetectionPolicy-4665.png" class="text-image" />
 <p>
 where <code>A</code> and <code>B</code> mean Note On events, and <code>X</code> and <code>Y</code> mean
 Note Off ones with the same note number and channel; <code>.</code> is any other event. So we
@@ -109,11 +109,11 @@ have two overlapped notes here.
 If we use <a class="xref" href="Melanchall.DryWetMidi.Interaction.NoteStartDetectionPolicy.html#Melanchall_DryWetMidi_Interaction_NoteStartDetectionPolicy_FirstNoteOn">FirstNoteOn</a> for the policy, notes will be constructed in
 following way:
 </p>
-<img src="images/Melanchall.DryWetMidi.Interaction.NoteStartDetectionPolicy-5214.png" class="text-image" />
+<img src="images/dwmgen_Melanchall.DryWetMidi.Interaction.NoteStartDetectionPolicy-5214.png" class="text-image" />
 <p>
 or, if highlight notes:
 </p>
-<img src="images/Melanchall.DryWetMidi.Interaction.NoteStartDetectionPolicy-5328.png" class="text-image" />
+<img src="images/dwmgen_Melanchall.DryWetMidi.Interaction.NoteStartDetectionPolicy-5328.png" class="text-image" />
 <p>
 So every Note Off event will be combined with first free Note On event into a note.
 </p>
@@ -121,11 +121,11 @@ So every Note Off event will be combined with first free Note On event into a no
 But if we use <a class="xref" href="Melanchall.DryWetMidi.Interaction.NoteStartDetectionPolicy.html#Melanchall_DryWetMidi_Interaction_NoteStartDetectionPolicy_LastNoteOn">LastNoteOn</a> value, notes will be constructed in
 a new way:
 </p>
-<img src="images/Melanchall.DryWetMidi.Interaction.NoteStartDetectionPolicy-5734.png" class="text-image" />
+<img src="images/dwmgen_Melanchall.DryWetMidi.Interaction.NoteStartDetectionPolicy-5734.png" class="text-image" />
 <p>
 or, if highlight notes:
 </p>
-<img src="images/Melanchall.DryWetMidi.Interaction.NoteStartDetectionPolicy-5849.png" class="text-image" />
+<img src="images/dwmgen_Melanchall.DryWetMidi.Interaction.NoteStartDetectionPolicy-5849.png" class="text-image" />
 <p>
 So Note Off events will be combined with last free Note On event into a note.
 </p>

@@ -86,7 +86,7 @@
 </ul>
 <p>Let's see what each method needed for.</p>
 <h2 id="tryplayevent">TryPlayEvent</h2>
-<p><code>TryPlayEvent</code> method called by playback each time an event should be played. Result value of the method tells playback whether the event was played or not. Default implementation of the method just sends a MIDI event to <a href="Melanchall.DryWetMidi.Devices.Playback.OutputDevice">output device</a> and returns <code>true</code>.</p>
+<p><code>TryPlayEvent</code> method called by playback each time an event should be played. Result value of the method tells playback whether the event was played or not. Default implementation of the method just sends a MIDI event to <a class="xref" href="../../api/Melanchall.DryWetMidi.Devices.Playback.html#Melanchall_DryWetMidi_Devices_Playback_OutputDevice">output device</a> and returns <code>true</code>.</p>
 <p>So you can implement your own logic of playing a MIDI event. Please pay attention to the second parameter of the method - <code>metadata</code>. If input objects of playback implement <a class="xref" href="../../api/Melanchall.DryWetMidi.Common.IMetadata.html">IMetadata</a> interface, metadata will be passed via that parameter. For example, you can subclass from <code>TimedEvent</code> and implement <code>IMetadata</code> on a new class, and then create your own playback on instances of that class.</p>
 <p>Sample code below shows how to play a MIDI file filtering out events within first track chunk:</p>
 <pre><code class="lang-csharp">private sealed class TimedEventWithTrackChunkIndex : TimedEvent, IMetadata

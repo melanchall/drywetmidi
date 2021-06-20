@@ -439,30 +439,24 @@
       "version": ""
     },
     {
-      "log_codes": [
-        "InvalidFileLink"
-      ],
       "type": "Conceptual",
       "source_relative_path": "articles/playback/Custom-playback.md",
       "output": {
         ".html": {
           "relative_path": "articles/playback/Custom-playback.html",
-          "hash": "FUzEWM1O+PjSJ8lxNqCi/7yutLLbR/nLpiTqF1J3oG4="
+          "hash": "FnEBNbkh3knmH86hzt/K9v65Y9Dqe4ljk0762mwTe9M="
         }
       },
       "is_incremental": false,
       "version": ""
     },
     {
-      "log_codes": [
-        "InvalidFileLink"
-      ],
       "type": "Conceptual",
       "source_relative_path": "articles/playback/Data-tracking.md",
       "output": {
         ".html": {
           "relative_path": "articles/playback/Data-tracking.html",
-          "hash": "+h5/ccp8CWJa8Q7CLvP6pHoVBR4RoZtP+BgSi2J8ejA="
+          "hash": "18UWOnX1eP+Ncl018wMytUDL3CZwJR8yxaG/Ep2i9vw="
         }
       },
       "is_incremental": false,
@@ -869,7 +863,7 @@
       "output": {
         ".html": {
           "relative_path": "latest-release-notes.html",
-          "hash": "dALOweA6xAt+t+ubKxIW0u5Zoua2r+xSsjfPG60Hswk="
+          "hash": "78pIiIPKtSNZmWylE5cBE1m7BHjsJLUTjlw6Hdc+Bug="
         }
       },
       "is_incremental": false,
