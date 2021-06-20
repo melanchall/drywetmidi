@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Class SplitFileByChannelSettings
    | DryWetMIDI ">
-    <meta name="generator" content="docfx 2.56.2.0">
+    <meta name="generator" content="docfx 2.58.0.0">
     
     <link rel="shortcut icon" href="../images/favicon.png">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
@@ -61,11 +61,11 @@
       <div class="container body-content">
         
         <div id="search-results">
-          <div class="search-list"></div>
+          <div class="search-list">Search Results for <span></span></div>
           <div class="sr-items">
             <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
           </div>
-          <ul id="pagination"></ul>
+          <ul id="pagination" data-first="First" data-prev="Previous" data-next="Next" data-last="Last"></ul>
         </div>
       </div>
       <div role="main" class="container body-content hide-when-search">
@@ -156,7 +156,7 @@ to all the new files or throw them away. The default value is <code>true</code>>
 <p>
 Given a MIDI file with two track chunks:
 </p>
-<img src="images/Melanchall.DryWetMidi.Tools.SplitFileByChannelSettings-7491.png" class="text-image" />
+<img src="images/Melanchall.DryWetMidi.Tools.SplitFileByChannelSettings-7597.png" class="text-image" />
 <p>
 where <code>○</code> and <code>□</code> mean channel MIDI events on channel 0 and 1 correspondingly;
 <code>.</code> is any non-channel event.
@@ -165,12 +165,12 @@ where <code>○</code> and <code>□</code> mean channel MIDI events on channel 
 If <a class="xref" href="Melanchall.DryWetMidi.Tools.SplitFileByChannelSettings.html#Melanchall_DryWetMidi_Tools_SplitFileByChannelSettings_CopyNonChannelEventsToEachFile">CopyNonChannelEventsToEachFile</a> set to <code>true</code> (which is the default
 value), we&apos;ll get following two new files:
 </p>
-<img src="images/Melanchall.DryWetMidi.Tools.SplitFileByChannelSettings-8172.png" class="text-image" />
+<img src="images/Melanchall.DryWetMidi.Tools.SplitFileByChannelSettings-8278.png" class="text-image" />
 <p>
 But if <a class="xref" href="Melanchall.DryWetMidi.Tools.SplitFileByChannelSettings.html#Melanchall_DryWetMidi_Tools_SplitFileByChannelSettings_CopyNonChannelEventsToEachFile">CopyNonChannelEventsToEachFile</a> set to <code>false</code>, new files will
 contain only channel events:
 </p>
-<img src="images/Melanchall.DryWetMidi.Tools.SplitFileByChannelSettings-8726.png" class="text-image" />
+<img src="images/Melanchall.DryWetMidi.Tools.SplitFileByChannelSettings-8832.png" class="text-image" />
 
   <a id="Melanchall_DryWetMidi_Tools_SplitFileByChannelSettings_Filter_" data-uid="Melanchall.DryWetMidi.Tools.SplitFileByChannelSettings.Filter*"></a>
   <h4 id="Melanchall_DryWetMidi_Tools_SplitFileByChannelSettings_Filter" data-uid="Melanchall.DryWetMidi.Tools.SplitFileByChannelSettings.Filter">Filter</h4>
@@ -209,7 +209,8 @@ an event will be processed; if <code>false</code> - it won&apos;t. If the proper
           <div class="hidden-sm col-md-2" role="complementary">
             <div class="sideaffix">
               <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
-              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+                <h5>In This Article</h5>
+                <div></div>
               </nav>
             </div>
           </div>

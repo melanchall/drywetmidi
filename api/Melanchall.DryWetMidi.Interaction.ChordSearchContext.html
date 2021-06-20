@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Enum ChordSearchContext
    | DryWetMIDI ">
-    <meta name="generator" content="docfx 2.56.2.0">
+    <meta name="generator" content="docfx 2.58.0.0">
     
     <link rel="shortcut icon" href="../images/favicon.png">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
@@ -61,11 +61,11 @@
       <div class="container body-content">
         
         <div id="search-results">
-          <div class="search-list"></div>
+          <div class="search-list">Search Results for <span></span></div>
           <div class="sr-items">
             <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
           </div>
-          <ul id="pagination"></ul>
+          <ul id="pagination" data-first="First" data-prev="Previous" data-next="Next" data-last="Last"></ul>
         </div>
       </div>
       <div role="main" class="container body-content hide-when-search">
@@ -95,11 +95,11 @@ Defines a context to search chords within.
   </div>
   <h5 id="Melanchall_DryWetMidi_Interaction_ChordSearchContext_examples"><strong>Examples</strong></h5>
   
-<p>To understand what context means let&apos;s take a look at following events sequence
-within two track chunks:</p>
 <p>
-<img src="images/Melanchall.DryWetMidi.Interaction.ChordSearchContext-4257.png" class="text-image" />
+To understand what context means let&apos;s take a look at following events sequence
+within two track chunks:
 </p>
+<img src="images/Melanchall.DryWetMidi.Interaction.ChordSearchContext-4361.png" class="text-image" />
 <p>
 <p>
 where <code>A</code>, <code>B</code> and <code>C</code> mean Note On events (see <a class="xref" href="Melanchall.DryWetMidi.Core.NoteOnEvent.html">NoteOnEvent</a>), and
@@ -111,24 +111,14 @@ note number and channel for simplicity; <code>.</code> is any other event.
 If we use <a class="xref" href="Melanchall.DryWetMidi.Interaction.ChordSearchContext.html#Melanchall_DryWetMidi_Interaction_ChordSearchContext_SingleEventsCollection">SingleEventsCollection</a> as the context, chords will be constructed in
 following way:
 </p>
-<p>
-<img src="images/Melanchall.DryWetMidi.Interaction.ChordSearchContext-5119.png" class="text-image" />
-</p>
-<p>
-or, if highlight all chords:
-</p>
-<p>
-<img src="images/Melanchall.DryWetMidi.Interaction.ChordSearchContext-5317.png" class="text-image" />
-</p>
+<img src="images/Melanchall.DryWetMidi.Interaction.ChordSearchContext-5214.png" class="text-image" />
 <p>
 So chords will be constructed only from notes within the same events collection (track chunk).
 </p>
 <p>
 But if we use <a class="xref" href="Melanchall.DryWetMidi.Interaction.ChordSearchContext.html#Melanchall_DryWetMidi_Interaction_ChordSearchContext_AllEventsCollections">AllEventsCollections</a> as the context, we&apos;ll get a single chord:
 </p>
-<p>
-<img src="images/Melanchall.DryWetMidi.Interaction.ChordSearchContext-5749.png" class="text-image" />
-</p>
+<img src="images/Melanchall.DryWetMidi.Interaction.ChordSearchContext-5719.png" class="text-image" />
 <p>
 So a chord can be constructed from notes within different events collections.
 </p>
@@ -172,7 +162,8 @@ in one events collection.
           <div class="hidden-sm col-md-2" role="complementary">
             <div class="sideaffix">
               <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
-              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+                <h5>In This Article</h5>
+                <div></div>
               </nav>
             </div>
           </div>

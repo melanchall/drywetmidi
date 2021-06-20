@@ -70,6 +70,12 @@ references:
 - uid: a_playback_curtime
   name: Current time watching
   href: articles/playback/Current-time-watching.html
+- uid: a_playback_custom
+  name: Custom playback
+  href: articles/playback/Custom-playback.html
+- uid: a_playback_datatrack
+  name: Playback data tracking
+  href: articles/playback/Data-tracking.html
 - uid: a_playback_overview
   name: Playback - Overview
   href: articles/playback/Overview.html
@@ -1078,6 +1084,25 @@ references:
   commentId: F:Melanchall.DryWetMidi.Common.FourBitNumber.Values
   fullName: Melanchall.DryWetMidi.Common.FourBitNumber.Values
   nameWithType: FourBitNumber.Values
+- uid: Melanchall.DryWetMidi.Common.IMetadata
+  name: IMetadata
+  href: api/Melanchall.DryWetMidi.Common.IMetadata.html
+  commentId: T:Melanchall.DryWetMidi.Common.IMetadata
+  fullName: Melanchall.DryWetMidi.Common.IMetadata
+  nameWithType: IMetadata
+- uid: Melanchall.DryWetMidi.Common.IMetadata.Metadata
+  name: Metadata
+  href: api/Melanchall.DryWetMidi.Common.IMetadata.html#Melanchall_DryWetMidi_Common_IMetadata_Metadata
+  commentId: P:Melanchall.DryWetMidi.Common.IMetadata.Metadata
+  fullName: Melanchall.DryWetMidi.Common.IMetadata.Metadata
+  nameWithType: IMetadata.Metadata
+- uid: Melanchall.DryWetMidi.Common.IMetadata.Metadata*
+  name: Metadata
+  href: api/Melanchall.DryWetMidi.Common.IMetadata.html#Melanchall_DryWetMidi_Common_IMetadata_Metadata_
+  commentId: Overload:Melanchall.DryWetMidi.Common.IMetadata.Metadata
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Common.IMetadata.Metadata
+  nameWithType: IMetadata.Metadata
 - uid: Melanchall.DryWetMidi.Common.SevenBitNumber
   name: SevenBitNumber
   href: api/Melanchall.DryWetMidi.Common.SevenBitNumber.html
@@ -3981,6 +4006,95 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Core.DeviceNameEvent.ToString
   nameWithType: DeviceNameEvent.ToString
+- uid: Melanchall.DryWetMidi.Core.EndOfTrackEvent
+  name: EndOfTrackEvent
+  href: api/Melanchall.DryWetMidi.Core.EndOfTrackEvent.html
+  commentId: T:Melanchall.DryWetMidi.Core.EndOfTrackEvent
+  fullName: Melanchall.DryWetMidi.Core.EndOfTrackEvent
+  nameWithType: EndOfTrackEvent
+- uid: Melanchall.DryWetMidi.Core.EndOfTrackEvent.CloneEvent
+  name: CloneEvent()
+  href: api/Melanchall.DryWetMidi.Core.EndOfTrackEvent.html#Melanchall_DryWetMidi_Core_EndOfTrackEvent_CloneEvent
+  commentId: M:Melanchall.DryWetMidi.Core.EndOfTrackEvent.CloneEvent
+  fullName: Melanchall.DryWetMidi.Core.EndOfTrackEvent.CloneEvent()
+  nameWithType: EndOfTrackEvent.CloneEvent()
+- uid: Melanchall.DryWetMidi.Core.EndOfTrackEvent.CloneEvent*
+  name: CloneEvent
+  href: api/Melanchall.DryWetMidi.Core.EndOfTrackEvent.html#Melanchall_DryWetMidi_Core_EndOfTrackEvent_CloneEvent_
+  commentId: Overload:Melanchall.DryWetMidi.Core.EndOfTrackEvent.CloneEvent
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Core.EndOfTrackEvent.CloneEvent
+  nameWithType: EndOfTrackEvent.CloneEvent
+- uid: Melanchall.DryWetMidi.Core.EndOfTrackEvent.GetContentSize(Melanchall.DryWetMidi.Core.WritingSettings)
+  name: GetContentSize(WritingSettings)
+  href: api/Melanchall.DryWetMidi.Core.EndOfTrackEvent.html#Melanchall_DryWetMidi_Core_EndOfTrackEvent_GetContentSize_Melanchall_DryWetMidi_Core_WritingSettings_
+  commentId: M:Melanchall.DryWetMidi.Core.EndOfTrackEvent.GetContentSize(Melanchall.DryWetMidi.Core.WritingSettings)
+  fullName: Melanchall.DryWetMidi.Core.EndOfTrackEvent.GetContentSize(Melanchall.DryWetMidi.Core.WritingSettings)
+  nameWithType: EndOfTrackEvent.GetContentSize(WritingSettings)
+- uid: Melanchall.DryWetMidi.Core.EndOfTrackEvent.GetContentSize*
+  name: GetContentSize
+  href: api/Melanchall.DryWetMidi.Core.EndOfTrackEvent.html#Melanchall_DryWetMidi_Core_EndOfTrackEvent_GetContentSize_
+  commentId: Overload:Melanchall.DryWetMidi.Core.EndOfTrackEvent.GetContentSize
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Core.EndOfTrackEvent.GetContentSize
+  nameWithType: EndOfTrackEvent.GetContentSize
+- uid: Melanchall.DryWetMidi.Core.EndOfTrackEvent.ReadContent(Melanchall.DryWetMidi.Core.MidiReader,Melanchall.DryWetMidi.Core.ReadingSettings,System.Int32)
+  name: ReadContent(MidiReader, ReadingSettings, Int32)
+  href: api/Melanchall.DryWetMidi.Core.EndOfTrackEvent.html#Melanchall_DryWetMidi_Core_EndOfTrackEvent_ReadContent_Melanchall_DryWetMidi_Core_MidiReader_Melanchall_DryWetMidi_Core_ReadingSettings_System_Int32_
+  commentId: M:Melanchall.DryWetMidi.Core.EndOfTrackEvent.ReadContent(Melanchall.DryWetMidi.Core.MidiReader,Melanchall.DryWetMidi.Core.ReadingSettings,System.Int32)
+  fullName: Melanchall.DryWetMidi.Core.EndOfTrackEvent.ReadContent(Melanchall.DryWetMidi.Core.MidiReader, Melanchall.DryWetMidi.Core.ReadingSettings, System.Int32)
+  nameWithType: EndOfTrackEvent.ReadContent(MidiReader, ReadingSettings, Int32)
+- uid: Melanchall.DryWetMidi.Core.EndOfTrackEvent.ReadContent*
+  name: ReadContent
+  href: api/Melanchall.DryWetMidi.Core.EndOfTrackEvent.html#Melanchall_DryWetMidi_Core_EndOfTrackEvent_ReadContent_
+  commentId: Overload:Melanchall.DryWetMidi.Core.EndOfTrackEvent.ReadContent
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Core.EndOfTrackEvent.ReadContent
+  nameWithType: EndOfTrackEvent.ReadContent
+- uid: Melanchall.DryWetMidi.Core.EndOfTrackEvent.ToString
+  name: ToString()
+  href: api/Melanchall.DryWetMidi.Core.EndOfTrackEvent.html#Melanchall_DryWetMidi_Core_EndOfTrackEvent_ToString
+  commentId: M:Melanchall.DryWetMidi.Core.EndOfTrackEvent.ToString
+  fullName: Melanchall.DryWetMidi.Core.EndOfTrackEvent.ToString()
+  nameWithType: EndOfTrackEvent.ToString()
+- uid: Melanchall.DryWetMidi.Core.EndOfTrackEvent.ToString*
+  name: ToString
+  href: api/Melanchall.DryWetMidi.Core.EndOfTrackEvent.html#Melanchall_DryWetMidi_Core_EndOfTrackEvent_ToString_
+  commentId: Overload:Melanchall.DryWetMidi.Core.EndOfTrackEvent.ToString
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Core.EndOfTrackEvent.ToString
+  nameWithType: EndOfTrackEvent.ToString
+- uid: Melanchall.DryWetMidi.Core.EndOfTrackEvent.WriteContent(Melanchall.DryWetMidi.Core.MidiWriter,Melanchall.DryWetMidi.Core.WritingSettings)
+  name: WriteContent(MidiWriter, WritingSettings)
+  href: api/Melanchall.DryWetMidi.Core.EndOfTrackEvent.html#Melanchall_DryWetMidi_Core_EndOfTrackEvent_WriteContent_Melanchall_DryWetMidi_Core_MidiWriter_Melanchall_DryWetMidi_Core_WritingSettings_
+  commentId: M:Melanchall.DryWetMidi.Core.EndOfTrackEvent.WriteContent(Melanchall.DryWetMidi.Core.MidiWriter,Melanchall.DryWetMidi.Core.WritingSettings)
+  fullName: Melanchall.DryWetMidi.Core.EndOfTrackEvent.WriteContent(Melanchall.DryWetMidi.Core.MidiWriter, Melanchall.DryWetMidi.Core.WritingSettings)
+  nameWithType: EndOfTrackEvent.WriteContent(MidiWriter, WritingSettings)
+- uid: Melanchall.DryWetMidi.Core.EndOfTrackEvent.WriteContent*
+  name: WriteContent
+  href: api/Melanchall.DryWetMidi.Core.EndOfTrackEvent.html#Melanchall_DryWetMidi_Core_EndOfTrackEvent_WriteContent_
+  commentId: Overload:Melanchall.DryWetMidi.Core.EndOfTrackEvent.WriteContent
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Core.EndOfTrackEvent.WriteContent
+  nameWithType: EndOfTrackEvent.WriteContent
+- uid: Melanchall.DryWetMidi.Core.EndOfTrackStoringPolicy
+  name: EndOfTrackStoringPolicy
+  href: api/Melanchall.DryWetMidi.Core.EndOfTrackStoringPolicy.html
+  commentId: T:Melanchall.DryWetMidi.Core.EndOfTrackStoringPolicy
+  fullName: Melanchall.DryWetMidi.Core.EndOfTrackStoringPolicy
+  nameWithType: EndOfTrackStoringPolicy
+- uid: Melanchall.DryWetMidi.Core.EndOfTrackStoringPolicy.Omit
+  name: Omit
+  href: api/Melanchall.DryWetMidi.Core.EndOfTrackStoringPolicy.html#Melanchall_DryWetMidi_Core_EndOfTrackStoringPolicy_Omit
+  commentId: F:Melanchall.DryWetMidi.Core.EndOfTrackStoringPolicy.Omit
+  fullName: Melanchall.DryWetMidi.Core.EndOfTrackStoringPolicy.Omit
+  nameWithType: EndOfTrackStoringPolicy.Omit
+- uid: Melanchall.DryWetMidi.Core.EndOfTrackStoringPolicy.Store
+  name: Store
+  href: api/Melanchall.DryWetMidi.Core.EndOfTrackStoringPolicy.html#Melanchall_DryWetMidi_Core_EndOfTrackStoringPolicy_Store
+  commentId: F:Melanchall.DryWetMidi.Core.EndOfTrackStoringPolicy.Store
+  fullName: Melanchall.DryWetMidi.Core.EndOfTrackStoringPolicy.Store
+  nameWithType: EndOfTrackStoringPolicy.Store
 - uid: Melanchall.DryWetMidi.Core.EscapeSysExEvent
   name: EscapeSysExEvent
   href: api/Melanchall.DryWetMidi.Core.EscapeSysExEvent.html
@@ -7308,6 +7422,19 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Core.ReadingSettings.DecodeTextCallback
   nameWithType: ReadingSettings.DecodeTextCallback
+- uid: Melanchall.DryWetMidi.Core.ReadingSettings.EndOfTrackStoringPolicy
+  name: EndOfTrackStoringPolicy
+  href: api/Melanchall.DryWetMidi.Core.ReadingSettings.html#Melanchall_DryWetMidi_Core_ReadingSettings_EndOfTrackStoringPolicy
+  commentId: P:Melanchall.DryWetMidi.Core.ReadingSettings.EndOfTrackStoringPolicy
+  fullName: Melanchall.DryWetMidi.Core.ReadingSettings.EndOfTrackStoringPolicy
+  nameWithType: ReadingSettings.EndOfTrackStoringPolicy
+- uid: Melanchall.DryWetMidi.Core.ReadingSettings.EndOfTrackStoringPolicy*
+  name: EndOfTrackStoringPolicy
+  href: api/Melanchall.DryWetMidi.Core.ReadingSettings.html#Melanchall_DryWetMidi_Core_ReadingSettings_EndOfTrackStoringPolicy_
+  commentId: Overload:Melanchall.DryWetMidi.Core.ReadingSettings.EndOfTrackStoringPolicy
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Core.ReadingSettings.EndOfTrackStoringPolicy
+  nameWithType: ReadingSettings.EndOfTrackStoringPolicy
 - uid: Melanchall.DryWetMidi.Core.ReadingSettings.ExtraTrackChunkPolicy
   name: ExtraTrackChunkPolicy
   href: api/Melanchall.DryWetMidi.Core.ReadingSettings.html#Melanchall_DryWetMidi_Core_ReadingSettings_ExtraTrackChunkPolicy
@@ -11432,6 +11559,19 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Devices.MidiEventPlayedEventArgs.Event
   nameWithType: MidiEventPlayedEventArgs.Event
+- uid: Melanchall.DryWetMidi.Devices.MidiEventPlayedEventArgs.Metadata
+  name: Metadata
+  href: api/Melanchall.DryWetMidi.Devices.MidiEventPlayedEventArgs.html#Melanchall_DryWetMidi_Devices_MidiEventPlayedEventArgs_Metadata
+  commentId: P:Melanchall.DryWetMidi.Devices.MidiEventPlayedEventArgs.Metadata
+  fullName: Melanchall.DryWetMidi.Devices.MidiEventPlayedEventArgs.Metadata
+  nameWithType: MidiEventPlayedEventArgs.Metadata
+- uid: Melanchall.DryWetMidi.Devices.MidiEventPlayedEventArgs.Metadata*
+  name: Metadata
+  href: api/Melanchall.DryWetMidi.Devices.MidiEventPlayedEventArgs.html#Melanchall_DryWetMidi_Devices_MidiEventPlayedEventArgs_Metadata_
+  commentId: Overload:Melanchall.DryWetMidi.Devices.MidiEventPlayedEventArgs.Metadata
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Devices.MidiEventPlayedEventArgs.Metadata
+  nameWithType: MidiEventPlayedEventArgs.Metadata
 - uid: Melanchall.DryWetMidi.Devices.MidiEventReceivedEventArgs
   name: MidiEventReceivedEventArgs
   href: api/Melanchall.DryWetMidi.Devices.MidiEventReceivedEventArgs.html
@@ -11969,60 +12109,24 @@ references:
   commentId: T:Melanchall.DryWetMidi.Devices.Playback
   fullName: Melanchall.DryWetMidi.Devices.Playback
   nameWithType: Playback
-- uid: Melanchall.DryWetMidi.Devices.Playback.#ctor(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.MidiEvent},Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.IOutputDevice,Melanchall.DryWetMidi.Devices.MidiClockSettings)
-  name: Playback(IEnumerable<MidiEvent>, TempoMap, IOutputDevice, MidiClockSettings)
-  href: api/Melanchall.DryWetMidi.Devices.Playback.html#Melanchall_DryWetMidi_Devices_Playback__ctor_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_MidiEvent__Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Devices_IOutputDevice_Melanchall_DryWetMidi_Devices_MidiClockSettings_
-  commentId: M:Melanchall.DryWetMidi.Devices.Playback.#ctor(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.MidiEvent},Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.IOutputDevice,Melanchall.DryWetMidi.Devices.MidiClockSettings)
-  name.vb: Playback(IEnumerable(Of MidiEvent), TempoMap, IOutputDevice, MidiClockSettings)
-  fullName: Melanchall.DryWetMidi.Devices.Playback.Playback(System.Collections.Generic.IEnumerable<Melanchall.DryWetMidi.Core.MidiEvent>, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Devices.IOutputDevice, Melanchall.DryWetMidi.Devices.MidiClockSettings)
-  fullName.vb: Melanchall.DryWetMidi.Devices.Playback.Playback(System.Collections.Generic.IEnumerable(Of Melanchall.DryWetMidi.Core.MidiEvent), Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Devices.IOutputDevice, Melanchall.DryWetMidi.Devices.MidiClockSettings)
-  nameWithType: Playback.Playback(IEnumerable<MidiEvent>, TempoMap, IOutputDevice, MidiClockSettings)
-  nameWithType.vb: Playback.Playback(IEnumerable(Of MidiEvent), TempoMap, IOutputDevice, MidiClockSettings)
-- uid: Melanchall.DryWetMidi.Devices.Playback.#ctor(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.MidiEvent},Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.MidiClockSettings)
-  name: Playback(IEnumerable<MidiEvent>, TempoMap, MidiClockSettings)
-  href: api/Melanchall.DryWetMidi.Devices.Playback.html#Melanchall_DryWetMidi_Devices_Playback__ctor_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_MidiEvent__Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Devices_MidiClockSettings_
-  commentId: M:Melanchall.DryWetMidi.Devices.Playback.#ctor(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.MidiEvent},Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.MidiClockSettings)
-  name.vb: Playback(IEnumerable(Of MidiEvent), TempoMap, MidiClockSettings)
-  fullName: Melanchall.DryWetMidi.Devices.Playback.Playback(System.Collections.Generic.IEnumerable<Melanchall.DryWetMidi.Core.MidiEvent>, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Devices.MidiClockSettings)
-  fullName.vb: Melanchall.DryWetMidi.Devices.Playback.Playback(System.Collections.Generic.IEnumerable(Of Melanchall.DryWetMidi.Core.MidiEvent), Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Devices.MidiClockSettings)
-  nameWithType: Playback.Playback(IEnumerable<MidiEvent>, TempoMap, MidiClockSettings)
-  nameWithType.vb: Playback.Playback(IEnumerable(Of MidiEvent), TempoMap, MidiClockSettings)
-- uid: Melanchall.DryWetMidi.Devices.Playback.#ctor(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Interaction.ITimedObject},Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.IOutputDevice,Melanchall.DryWetMidi.Devices.MidiClockSettings)
-  name: Playback(IEnumerable<ITimedObject>, TempoMap, IOutputDevice, MidiClockSettings)
-  href: api/Melanchall.DryWetMidi.Devices.Playback.html#Melanchall_DryWetMidi_Devices_Playback__ctor_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_ITimedObject__Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Devices_IOutputDevice_Melanchall_DryWetMidi_Devices_MidiClockSettings_
-  commentId: M:Melanchall.DryWetMidi.Devices.Playback.#ctor(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Interaction.ITimedObject},Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.IOutputDevice,Melanchall.DryWetMidi.Devices.MidiClockSettings)
-  name.vb: Playback(IEnumerable(Of ITimedObject), TempoMap, IOutputDevice, MidiClockSettings)
-  fullName: Melanchall.DryWetMidi.Devices.Playback.Playback(System.Collections.Generic.IEnumerable<Melanchall.DryWetMidi.Interaction.ITimedObject>, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Devices.IOutputDevice, Melanchall.DryWetMidi.Devices.MidiClockSettings)
-  fullName.vb: Melanchall.DryWetMidi.Devices.Playback.Playback(System.Collections.Generic.IEnumerable(Of Melanchall.DryWetMidi.Interaction.ITimedObject), Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Devices.IOutputDevice, Melanchall.DryWetMidi.Devices.MidiClockSettings)
-  nameWithType: Playback.Playback(IEnumerable<ITimedObject>, TempoMap, IOutputDevice, MidiClockSettings)
-  nameWithType.vb: Playback.Playback(IEnumerable(Of ITimedObject), TempoMap, IOutputDevice, MidiClockSettings)
-- uid: Melanchall.DryWetMidi.Devices.Playback.#ctor(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Interaction.ITimedObject},Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.MidiClockSettings)
-  name: Playback(IEnumerable<ITimedObject>, TempoMap, MidiClockSettings)
-  href: api/Melanchall.DryWetMidi.Devices.Playback.html#Melanchall_DryWetMidi_Devices_Playback__ctor_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_ITimedObject__Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Devices_MidiClockSettings_
-  commentId: M:Melanchall.DryWetMidi.Devices.Playback.#ctor(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Interaction.ITimedObject},Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.MidiClockSettings)
-  name.vb: Playback(IEnumerable(Of ITimedObject), TempoMap, MidiClockSettings)
-  fullName: Melanchall.DryWetMidi.Devices.Playback.Playback(System.Collections.Generic.IEnumerable<Melanchall.DryWetMidi.Interaction.ITimedObject>, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Devices.MidiClockSettings)
-  fullName.vb: Melanchall.DryWetMidi.Devices.Playback.Playback(System.Collections.Generic.IEnumerable(Of Melanchall.DryWetMidi.Interaction.ITimedObject), Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Devices.MidiClockSettings)
-  nameWithType: Playback.Playback(IEnumerable<ITimedObject>, TempoMap, MidiClockSettings)
-  nameWithType.vb: Playback.Playback(IEnumerable(Of ITimedObject), TempoMap, MidiClockSettings)
-- uid: Melanchall.DryWetMidi.Devices.Playback.#ctor(System.Collections.Generic.IEnumerable{System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.MidiEvent}},Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.IOutputDevice,Melanchall.DryWetMidi.Devices.MidiClockSettings)
-  name: Playback(IEnumerable<IEnumerable<MidiEvent>>, TempoMap, IOutputDevice, MidiClockSettings)
-  href: api/Melanchall.DryWetMidi.Devices.Playback.html#Melanchall_DryWetMidi_Devices_Playback__ctor_System_Collections_Generic_IEnumerable_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_MidiEvent___Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Devices_IOutputDevice_Melanchall_DryWetMidi_Devices_MidiClockSettings_
-  commentId: M:Melanchall.DryWetMidi.Devices.Playback.#ctor(System.Collections.Generic.IEnumerable{System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.MidiEvent}},Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.IOutputDevice,Melanchall.DryWetMidi.Devices.MidiClockSettings)
-  name.vb: Playback(IEnumerable(Of IEnumerable(Of MidiEvent)), TempoMap, IOutputDevice, MidiClockSettings)
-  fullName: Melanchall.DryWetMidi.Devices.Playback.Playback(System.Collections.Generic.IEnumerable<System.Collections.Generic.IEnumerable<Melanchall.DryWetMidi.Core.MidiEvent>>, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Devices.IOutputDevice, Melanchall.DryWetMidi.Devices.MidiClockSettings)
-  fullName.vb: Melanchall.DryWetMidi.Devices.Playback.Playback(System.Collections.Generic.IEnumerable(Of System.Collections.Generic.IEnumerable(Of Melanchall.DryWetMidi.Core.MidiEvent)), Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Devices.IOutputDevice, Melanchall.DryWetMidi.Devices.MidiClockSettings)
-  nameWithType: Playback.Playback(IEnumerable<IEnumerable<MidiEvent>>, TempoMap, IOutputDevice, MidiClockSettings)
-  nameWithType.vb: Playback.Playback(IEnumerable(Of IEnumerable(Of MidiEvent)), TempoMap, IOutputDevice, MidiClockSettings)
-- uid: Melanchall.DryWetMidi.Devices.Playback.#ctor(System.Collections.Generic.IEnumerable{System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.MidiEvent}},Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.MidiClockSettings)
-  name: Playback(IEnumerable<IEnumerable<MidiEvent>>, TempoMap, MidiClockSettings)
-  href: api/Melanchall.DryWetMidi.Devices.Playback.html#Melanchall_DryWetMidi_Devices_Playback__ctor_System_Collections_Generic_IEnumerable_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_MidiEvent___Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Devices_MidiClockSettings_
-  commentId: M:Melanchall.DryWetMidi.Devices.Playback.#ctor(System.Collections.Generic.IEnumerable{System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.MidiEvent}},Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.MidiClockSettings)
-  name.vb: Playback(IEnumerable(Of IEnumerable(Of MidiEvent)), TempoMap, MidiClockSettings)
-  fullName: Melanchall.DryWetMidi.Devices.Playback.Playback(System.Collections.Generic.IEnumerable<System.Collections.Generic.IEnumerable<Melanchall.DryWetMidi.Core.MidiEvent>>, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Devices.MidiClockSettings)
-  fullName.vb: Melanchall.DryWetMidi.Devices.Playback.Playback(System.Collections.Generic.IEnumerable(Of System.Collections.Generic.IEnumerable(Of Melanchall.DryWetMidi.Core.MidiEvent)), Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Devices.MidiClockSettings)
-  nameWithType: Playback.Playback(IEnumerable<IEnumerable<MidiEvent>>, TempoMap, MidiClockSettings)
-  nameWithType.vb: Playback.Playback(IEnumerable(Of IEnumerable(Of MidiEvent)), TempoMap, MidiClockSettings)
+- uid: Melanchall.DryWetMidi.Devices.Playback.#ctor(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Interaction.ITimedObject},Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.IOutputDevice,Melanchall.DryWetMidi.Devices.PlaybackSettings)
+  name: Playback(IEnumerable<ITimedObject>, TempoMap, IOutputDevice, PlaybackSettings)
+  href: api/Melanchall.DryWetMidi.Devices.Playback.html#Melanchall_DryWetMidi_Devices_Playback__ctor_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_ITimedObject__Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Devices_IOutputDevice_Melanchall_DryWetMidi_Devices_PlaybackSettings_
+  commentId: M:Melanchall.DryWetMidi.Devices.Playback.#ctor(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Interaction.ITimedObject},Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.IOutputDevice,Melanchall.DryWetMidi.Devices.PlaybackSettings)
+  name.vb: Playback(IEnumerable(Of ITimedObject), TempoMap, IOutputDevice, PlaybackSettings)
+  fullName: Melanchall.DryWetMidi.Devices.Playback.Playback(System.Collections.Generic.IEnumerable<Melanchall.DryWetMidi.Interaction.ITimedObject>, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Devices.IOutputDevice, Melanchall.DryWetMidi.Devices.PlaybackSettings)
+  fullName.vb: Melanchall.DryWetMidi.Devices.Playback.Playback(System.Collections.Generic.IEnumerable(Of Melanchall.DryWetMidi.Interaction.ITimedObject), Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Devices.IOutputDevice, Melanchall.DryWetMidi.Devices.PlaybackSettings)
+  nameWithType: Playback.Playback(IEnumerable<ITimedObject>, TempoMap, IOutputDevice, PlaybackSettings)
+  nameWithType.vb: Playback.Playback(IEnumerable(Of ITimedObject), TempoMap, IOutputDevice, PlaybackSettings)
+- uid: Melanchall.DryWetMidi.Devices.Playback.#ctor(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Interaction.ITimedObject},Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.PlaybackSettings)
+  name: Playback(IEnumerable<ITimedObject>, TempoMap, PlaybackSettings)
+  href: api/Melanchall.DryWetMidi.Devices.Playback.html#Melanchall_DryWetMidi_Devices_Playback__ctor_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_ITimedObject__Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Devices_PlaybackSettings_
+  commentId: M:Melanchall.DryWetMidi.Devices.Playback.#ctor(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Interaction.ITimedObject},Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.PlaybackSettings)
+  name.vb: Playback(IEnumerable(Of ITimedObject), TempoMap, PlaybackSettings)
+  fullName: Melanchall.DryWetMidi.Devices.Playback.Playback(System.Collections.Generic.IEnumerable<Melanchall.DryWetMidi.Interaction.ITimedObject>, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Devices.PlaybackSettings)
+  fullName.vb: Melanchall.DryWetMidi.Devices.Playback.Playback(System.Collections.Generic.IEnumerable(Of Melanchall.DryWetMidi.Interaction.ITimedObject), Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Devices.PlaybackSettings)
+  nameWithType: Playback.Playback(IEnumerable<ITimedObject>, TempoMap, PlaybackSettings)
+  nameWithType.vb: Playback.Playback(IEnumerable(Of ITimedObject), TempoMap, PlaybackSettings)
 - uid: Melanchall.DryWetMidi.Devices.Playback.#ctor*
   name: Playback
   href: api/Melanchall.DryWetMidi.Devices.Playback.html#Melanchall_DryWetMidi_Devices_Playback__ctor_
@@ -12030,6 +12134,12 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Devices.Playback.Playback
   nameWithType: Playback.Playback
+- uid: Melanchall.DryWetMidi.Devices.Playback.DeviceErrorOccurred
+  name: DeviceErrorOccurred
+  href: api/Melanchall.DryWetMidi.Devices.Playback.html#Melanchall_DryWetMidi_Devices_Playback_DeviceErrorOccurred
+  commentId: E:Melanchall.DryWetMidi.Devices.Playback.DeviceErrorOccurred
+  fullName: Melanchall.DryWetMidi.Devices.Playback.DeviceErrorOccurred
+  nameWithType: Playback.DeviceErrorOccurred
 - uid: Melanchall.DryWetMidi.Devices.Playback.Dispose
   name: Dispose()
   href: api/Melanchall.DryWetMidi.Devices.Playback.html#Melanchall_DryWetMidi_Devices_Playback_Dispose
@@ -12125,6 +12235,19 @@ references:
   fullName.vb: Melanchall.DryWetMidi.Devices.Playback.GetDuration(Of TTimeSpan)()
   nameWithType: Playback.GetDuration<TTimeSpan>()
   nameWithType.vb: Playback.GetDuration(Of TTimeSpan)()
+- uid: Melanchall.DryWetMidi.Devices.Playback.GetTimedEvents(Melanchall.DryWetMidi.Interaction.ITimedObject)
+  name: GetTimedEvents(ITimedObject)
+  href: api/Melanchall.DryWetMidi.Devices.Playback.html#Melanchall_DryWetMidi_Devices_Playback_GetTimedEvents_Melanchall_DryWetMidi_Interaction_ITimedObject_
+  commentId: M:Melanchall.DryWetMidi.Devices.Playback.GetTimedEvents(Melanchall.DryWetMidi.Interaction.ITimedObject)
+  fullName: Melanchall.DryWetMidi.Devices.Playback.GetTimedEvents(Melanchall.DryWetMidi.Interaction.ITimedObject)
+  nameWithType: Playback.GetTimedEvents(ITimedObject)
+- uid: Melanchall.DryWetMidi.Devices.Playback.GetTimedEvents*
+  name: GetTimedEvents
+  href: api/Melanchall.DryWetMidi.Devices.Playback.html#Melanchall_DryWetMidi_Devices_Playback_GetTimedEvents_
+  commentId: Overload:Melanchall.DryWetMidi.Devices.Playback.GetTimedEvents
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Devices.Playback.GetTimedEvents
+  nameWithType: Playback.GetTimedEvents
 - uid: Melanchall.DryWetMidi.Devices.Playback.InterruptNotesOnStop
   name: InterruptNotesOnStop
   href: api/Melanchall.DryWetMidi.Devices.Playback.html#Melanchall_DryWetMidi_Devices_Playback_InterruptNotesOnStop
@@ -12532,6 +12655,19 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Devices.Playback.TrackProgram
   nameWithType: Playback.TrackProgram
+- uid: Melanchall.DryWetMidi.Devices.Playback.TryPlayEvent(Melanchall.DryWetMidi.Core.MidiEvent,System.Object)
+  name: TryPlayEvent(MidiEvent, Object)
+  href: api/Melanchall.DryWetMidi.Devices.Playback.html#Melanchall_DryWetMidi_Devices_Playback_TryPlayEvent_Melanchall_DryWetMidi_Core_MidiEvent_System_Object_
+  commentId: M:Melanchall.DryWetMidi.Devices.Playback.TryPlayEvent(Melanchall.DryWetMidi.Core.MidiEvent,System.Object)
+  fullName: Melanchall.DryWetMidi.Devices.Playback.TryPlayEvent(Melanchall.DryWetMidi.Core.MidiEvent, System.Object)
+  nameWithType: Playback.TryPlayEvent(MidiEvent, Object)
+- uid: Melanchall.DryWetMidi.Devices.Playback.TryPlayEvent*
+  name: TryPlayEvent
+  href: api/Melanchall.DryWetMidi.Devices.Playback.html#Melanchall_DryWetMidi_Devices_Playback_TryPlayEvent_
+  commentId: Overload:Melanchall.DryWetMidi.Devices.Playback.TryPlayEvent
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Devices.Playback.TryPlayEvent
+  nameWithType: Playback.TryPlayEvent
 - uid: Melanchall.DryWetMidi.Devices.PlaybackCurrentTime
   name: PlaybackCurrentTime
   href: api/Melanchall.DryWetMidi.Devices.PlaybackCurrentTime.html
@@ -12744,6 +12880,38 @@ references:
   commentId: T:Melanchall.DryWetMidi.Devices.PlaybackEventCallback
   fullName: Melanchall.DryWetMidi.Devices.PlaybackEventCallback
   nameWithType: PlaybackEventCallback
+- uid: Melanchall.DryWetMidi.Devices.PlaybackSettings
+  name: PlaybackSettings
+  href: api/Melanchall.DryWetMidi.Devices.PlaybackSettings.html
+  commentId: T:Melanchall.DryWetMidi.Devices.PlaybackSettings
+  fullName: Melanchall.DryWetMidi.Devices.PlaybackSettings
+  nameWithType: PlaybackSettings
+- uid: Melanchall.DryWetMidi.Devices.PlaybackSettings.ClockSettings
+  name: ClockSettings
+  href: api/Melanchall.DryWetMidi.Devices.PlaybackSettings.html#Melanchall_DryWetMidi_Devices_PlaybackSettings_ClockSettings
+  commentId: P:Melanchall.DryWetMidi.Devices.PlaybackSettings.ClockSettings
+  fullName: Melanchall.DryWetMidi.Devices.PlaybackSettings.ClockSettings
+  nameWithType: PlaybackSettings.ClockSettings
+- uid: Melanchall.DryWetMidi.Devices.PlaybackSettings.ClockSettings*
+  name: ClockSettings
+  href: api/Melanchall.DryWetMidi.Devices.PlaybackSettings.html#Melanchall_DryWetMidi_Devices_PlaybackSettings_ClockSettings_
+  commentId: Overload:Melanchall.DryWetMidi.Devices.PlaybackSettings.ClockSettings
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Devices.PlaybackSettings.ClockSettings
+  nameWithType: PlaybackSettings.ClockSettings
+- uid: Melanchall.DryWetMidi.Devices.PlaybackSettings.NoteDetectionSettings
+  name: NoteDetectionSettings
+  href: api/Melanchall.DryWetMidi.Devices.PlaybackSettings.html#Melanchall_DryWetMidi_Devices_PlaybackSettings_NoteDetectionSettings
+  commentId: P:Melanchall.DryWetMidi.Devices.PlaybackSettings.NoteDetectionSettings
+  fullName: Melanchall.DryWetMidi.Devices.PlaybackSettings.NoteDetectionSettings
+  nameWithType: PlaybackSettings.NoteDetectionSettings
+- uid: Melanchall.DryWetMidi.Devices.PlaybackSettings.NoteDetectionSettings*
+  name: NoteDetectionSettings
+  href: api/Melanchall.DryWetMidi.Devices.PlaybackSettings.html#Melanchall_DryWetMidi_Devices_PlaybackSettings_NoteDetectionSettings_
+  commentId: Overload:Melanchall.DryWetMidi.Devices.PlaybackSettings.NoteDetectionSettings
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Devices.PlaybackSettings.NoteDetectionSettings
+  nameWithType: PlaybackSettings.NoteDetectionSettings
 - uid: Melanchall.DryWetMidi.Devices.PlaybackSnapping
   name: PlaybackSnapping
   href: api/Melanchall.DryWetMidi.Devices.PlaybackSnapping.html
@@ -12888,60 +13056,78 @@ references:
   commentId: T:Melanchall.DryWetMidi.Devices.PlaybackUtilities
   fullName: Melanchall.DryWetMidi.Devices.PlaybackUtilities
   nameWithType: PlaybackUtilities
-- uid: Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback(Melanchall.DryWetMidi.Composing.Pattern,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Common.FourBitNumber,Melanchall.DryWetMidi.Devices.IOutputDevice,Melanchall.DryWetMidi.Devices.MidiClockSettings)
-  name: GetPlayback(Pattern, TempoMap, FourBitNumber, IOutputDevice, MidiClockSettings)
-  href: api/Melanchall.DryWetMidi.Devices.PlaybackUtilities.html#Melanchall_DryWetMidi_Devices_PlaybackUtilities_GetPlayback_Melanchall_DryWetMidi_Composing_Pattern_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Common_FourBitNumber_Melanchall_DryWetMidi_Devices_IOutputDevice_Melanchall_DryWetMidi_Devices_MidiClockSettings_
-  commentId: M:Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback(Melanchall.DryWetMidi.Composing.Pattern,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Common.FourBitNumber,Melanchall.DryWetMidi.Devices.IOutputDevice,Melanchall.DryWetMidi.Devices.MidiClockSettings)
-  fullName: Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback(Melanchall.DryWetMidi.Composing.Pattern, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Common.FourBitNumber, Melanchall.DryWetMidi.Devices.IOutputDevice, Melanchall.DryWetMidi.Devices.MidiClockSettings)
-  nameWithType: PlaybackUtilities.GetPlayback(Pattern, TempoMap, FourBitNumber, IOutputDevice, MidiClockSettings)
-- uid: Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback(Melanchall.DryWetMidi.Composing.Pattern,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Common.FourBitNumber,Melanchall.DryWetMidi.Devices.MidiClockSettings)
-  name: GetPlayback(Pattern, TempoMap, FourBitNumber, MidiClockSettings)
-  href: api/Melanchall.DryWetMidi.Devices.PlaybackUtilities.html#Melanchall_DryWetMidi_Devices_PlaybackUtilities_GetPlayback_Melanchall_DryWetMidi_Composing_Pattern_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Common_FourBitNumber_Melanchall_DryWetMidi_Devices_MidiClockSettings_
-  commentId: M:Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback(Melanchall.DryWetMidi.Composing.Pattern,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Common.FourBitNumber,Melanchall.DryWetMidi.Devices.MidiClockSettings)
-  fullName: Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback(Melanchall.DryWetMidi.Composing.Pattern, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Common.FourBitNumber, Melanchall.DryWetMidi.Devices.MidiClockSettings)
-  nameWithType: PlaybackUtilities.GetPlayback(Pattern, TempoMap, FourBitNumber, MidiClockSettings)
-- uid: Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback(Melanchall.DryWetMidi.Core.MidiFile,Melanchall.DryWetMidi.Devices.IOutputDevice,Melanchall.DryWetMidi.Devices.MidiClockSettings)
-  name: GetPlayback(MidiFile, IOutputDevice, MidiClockSettings)
-  href: api/Melanchall.DryWetMidi.Devices.PlaybackUtilities.html#Melanchall_DryWetMidi_Devices_PlaybackUtilities_GetPlayback_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Devices_IOutputDevice_Melanchall_DryWetMidi_Devices_MidiClockSettings_
-  commentId: M:Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback(Melanchall.DryWetMidi.Core.MidiFile,Melanchall.DryWetMidi.Devices.IOutputDevice,Melanchall.DryWetMidi.Devices.MidiClockSettings)
-  fullName: Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback(Melanchall.DryWetMidi.Core.MidiFile, Melanchall.DryWetMidi.Devices.IOutputDevice, Melanchall.DryWetMidi.Devices.MidiClockSettings)
-  nameWithType: PlaybackUtilities.GetPlayback(MidiFile, IOutputDevice, MidiClockSettings)
-- uid: Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback(Melanchall.DryWetMidi.Core.MidiFile,Melanchall.DryWetMidi.Devices.MidiClockSettings)
-  name: GetPlayback(MidiFile, MidiClockSettings)
-  href: api/Melanchall.DryWetMidi.Devices.PlaybackUtilities.html#Melanchall_DryWetMidi_Devices_PlaybackUtilities_GetPlayback_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Devices_MidiClockSettings_
-  commentId: M:Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback(Melanchall.DryWetMidi.Core.MidiFile,Melanchall.DryWetMidi.Devices.MidiClockSettings)
-  fullName: Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback(Melanchall.DryWetMidi.Core.MidiFile, Melanchall.DryWetMidi.Devices.MidiClockSettings)
-  nameWithType: PlaybackUtilities.GetPlayback(MidiFile, MidiClockSettings)
-- uid: Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback(Melanchall.DryWetMidi.Core.TrackChunk,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.IOutputDevice,Melanchall.DryWetMidi.Devices.MidiClockSettings)
-  name: GetPlayback(TrackChunk, TempoMap, IOutputDevice, MidiClockSettings)
-  href: api/Melanchall.DryWetMidi.Devices.PlaybackUtilities.html#Melanchall_DryWetMidi_Devices_PlaybackUtilities_GetPlayback_Melanchall_DryWetMidi_Core_TrackChunk_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Devices_IOutputDevice_Melanchall_DryWetMidi_Devices_MidiClockSettings_
-  commentId: M:Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback(Melanchall.DryWetMidi.Core.TrackChunk,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.IOutputDevice,Melanchall.DryWetMidi.Devices.MidiClockSettings)
-  fullName: Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback(Melanchall.DryWetMidi.Core.TrackChunk, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Devices.IOutputDevice, Melanchall.DryWetMidi.Devices.MidiClockSettings)
-  nameWithType: PlaybackUtilities.GetPlayback(TrackChunk, TempoMap, IOutputDevice, MidiClockSettings)
-- uid: Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback(Melanchall.DryWetMidi.Core.TrackChunk,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.MidiClockSettings)
-  name: GetPlayback(TrackChunk, TempoMap, MidiClockSettings)
-  href: api/Melanchall.DryWetMidi.Devices.PlaybackUtilities.html#Melanchall_DryWetMidi_Devices_PlaybackUtilities_GetPlayback_Melanchall_DryWetMidi_Core_TrackChunk_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Devices_MidiClockSettings_
-  commentId: M:Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback(Melanchall.DryWetMidi.Core.TrackChunk,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.MidiClockSettings)
-  fullName: Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback(Melanchall.DryWetMidi.Core.TrackChunk, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Devices.MidiClockSettings)
-  nameWithType: PlaybackUtilities.GetPlayback(TrackChunk, TempoMap, MidiClockSettings)
-- uid: Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk},Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.IOutputDevice,Melanchall.DryWetMidi.Devices.MidiClockSettings)
-  name: GetPlayback(IEnumerable<TrackChunk>, TempoMap, IOutputDevice, MidiClockSettings)
-  href: api/Melanchall.DryWetMidi.Devices.PlaybackUtilities.html#Melanchall_DryWetMidi_Devices_PlaybackUtilities_GetPlayback_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Devices_IOutputDevice_Melanchall_DryWetMidi_Devices_MidiClockSettings_
-  commentId: M:Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk},Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.IOutputDevice,Melanchall.DryWetMidi.Devices.MidiClockSettings)
-  name.vb: GetPlayback(IEnumerable(Of TrackChunk), TempoMap, IOutputDevice, MidiClockSettings)
-  fullName: Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback(System.Collections.Generic.IEnumerable<Melanchall.DryWetMidi.Core.TrackChunk>, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Devices.IOutputDevice, Melanchall.DryWetMidi.Devices.MidiClockSettings)
-  fullName.vb: Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback(System.Collections.Generic.IEnumerable(Of Melanchall.DryWetMidi.Core.TrackChunk), Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Devices.IOutputDevice, Melanchall.DryWetMidi.Devices.MidiClockSettings)
-  nameWithType: PlaybackUtilities.GetPlayback(IEnumerable<TrackChunk>, TempoMap, IOutputDevice, MidiClockSettings)
-  nameWithType.vb: PlaybackUtilities.GetPlayback(IEnumerable(Of TrackChunk), TempoMap, IOutputDevice, MidiClockSettings)
-- uid: Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk},Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.MidiClockSettings)
-  name: GetPlayback(IEnumerable<TrackChunk>, TempoMap, MidiClockSettings)
-  href: api/Melanchall.DryWetMidi.Devices.PlaybackUtilities.html#Melanchall_DryWetMidi_Devices_PlaybackUtilities_GetPlayback_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Devices_MidiClockSettings_
-  commentId: M:Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk},Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.MidiClockSettings)
-  name.vb: GetPlayback(IEnumerable(Of TrackChunk), TempoMap, MidiClockSettings)
-  fullName: Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback(System.Collections.Generic.IEnumerable<Melanchall.DryWetMidi.Core.TrackChunk>, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Devices.MidiClockSettings)
-  fullName.vb: Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback(System.Collections.Generic.IEnumerable(Of Melanchall.DryWetMidi.Core.TrackChunk), Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Devices.MidiClockSettings)
-  nameWithType: PlaybackUtilities.GetPlayback(IEnumerable<TrackChunk>, TempoMap, MidiClockSettings)
-  nameWithType.vb: PlaybackUtilities.GetPlayback(IEnumerable(Of TrackChunk), TempoMap, MidiClockSettings)
+- uid: Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback(Melanchall.DryWetMidi.Composing.Pattern,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Common.FourBitNumber,Melanchall.DryWetMidi.Devices.IOutputDevice,Melanchall.DryWetMidi.Devices.PlaybackSettings)
+  name: GetPlayback(Pattern, TempoMap, FourBitNumber, IOutputDevice, PlaybackSettings)
+  href: api/Melanchall.DryWetMidi.Devices.PlaybackUtilities.html#Melanchall_DryWetMidi_Devices_PlaybackUtilities_GetPlayback_Melanchall_DryWetMidi_Composing_Pattern_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Common_FourBitNumber_Melanchall_DryWetMidi_Devices_IOutputDevice_Melanchall_DryWetMidi_Devices_PlaybackSettings_
+  commentId: M:Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback(Melanchall.DryWetMidi.Composing.Pattern,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Common.FourBitNumber,Melanchall.DryWetMidi.Devices.IOutputDevice,Melanchall.DryWetMidi.Devices.PlaybackSettings)
+  fullName: Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback(Melanchall.DryWetMidi.Composing.Pattern, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Common.FourBitNumber, Melanchall.DryWetMidi.Devices.IOutputDevice, Melanchall.DryWetMidi.Devices.PlaybackSettings)
+  nameWithType: PlaybackUtilities.GetPlayback(Pattern, TempoMap, FourBitNumber, IOutputDevice, PlaybackSettings)
+- uid: Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback(Melanchall.DryWetMidi.Composing.Pattern,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Common.FourBitNumber,Melanchall.DryWetMidi.Devices.PlaybackSettings)
+  name: GetPlayback(Pattern, TempoMap, FourBitNumber, PlaybackSettings)
+  href: api/Melanchall.DryWetMidi.Devices.PlaybackUtilities.html#Melanchall_DryWetMidi_Devices_PlaybackUtilities_GetPlayback_Melanchall_DryWetMidi_Composing_Pattern_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Common_FourBitNumber_Melanchall_DryWetMidi_Devices_PlaybackSettings_
+  commentId: M:Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback(Melanchall.DryWetMidi.Composing.Pattern,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Common.FourBitNumber,Melanchall.DryWetMidi.Devices.PlaybackSettings)
+  fullName: Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback(Melanchall.DryWetMidi.Composing.Pattern, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Common.FourBitNumber, Melanchall.DryWetMidi.Devices.PlaybackSettings)
+  nameWithType: PlaybackUtilities.GetPlayback(Pattern, TempoMap, FourBitNumber, PlaybackSettings)
+- uid: Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback(Melanchall.DryWetMidi.Core.MidiFile,Melanchall.DryWetMidi.Devices.IOutputDevice,Melanchall.DryWetMidi.Devices.PlaybackSettings)
+  name: GetPlayback(MidiFile, IOutputDevice, PlaybackSettings)
+  href: api/Melanchall.DryWetMidi.Devices.PlaybackUtilities.html#Melanchall_DryWetMidi_Devices_PlaybackUtilities_GetPlayback_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Devices_IOutputDevice_Melanchall_DryWetMidi_Devices_PlaybackSettings_
+  commentId: M:Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback(Melanchall.DryWetMidi.Core.MidiFile,Melanchall.DryWetMidi.Devices.IOutputDevice,Melanchall.DryWetMidi.Devices.PlaybackSettings)
+  fullName: Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback(Melanchall.DryWetMidi.Core.MidiFile, Melanchall.DryWetMidi.Devices.IOutputDevice, Melanchall.DryWetMidi.Devices.PlaybackSettings)
+  nameWithType: PlaybackUtilities.GetPlayback(MidiFile, IOutputDevice, PlaybackSettings)
+- uid: Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback(Melanchall.DryWetMidi.Core.MidiFile,Melanchall.DryWetMidi.Devices.PlaybackSettings)
+  name: GetPlayback(MidiFile, PlaybackSettings)
+  href: api/Melanchall.DryWetMidi.Devices.PlaybackUtilities.html#Melanchall_DryWetMidi_Devices_PlaybackUtilities_GetPlayback_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Devices_PlaybackSettings_
+  commentId: M:Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback(Melanchall.DryWetMidi.Core.MidiFile,Melanchall.DryWetMidi.Devices.PlaybackSettings)
+  fullName: Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback(Melanchall.DryWetMidi.Core.MidiFile, Melanchall.DryWetMidi.Devices.PlaybackSettings)
+  nameWithType: PlaybackUtilities.GetPlayback(MidiFile, PlaybackSettings)
+- uid: Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback(Melanchall.DryWetMidi.Core.TrackChunk,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.IOutputDevice,Melanchall.DryWetMidi.Devices.PlaybackSettings)
+  name: GetPlayback(TrackChunk, TempoMap, IOutputDevice, PlaybackSettings)
+  href: api/Melanchall.DryWetMidi.Devices.PlaybackUtilities.html#Melanchall_DryWetMidi_Devices_PlaybackUtilities_GetPlayback_Melanchall_DryWetMidi_Core_TrackChunk_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Devices_IOutputDevice_Melanchall_DryWetMidi_Devices_PlaybackSettings_
+  commentId: M:Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback(Melanchall.DryWetMidi.Core.TrackChunk,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.IOutputDevice,Melanchall.DryWetMidi.Devices.PlaybackSettings)
+  fullName: Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback(Melanchall.DryWetMidi.Core.TrackChunk, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Devices.IOutputDevice, Melanchall.DryWetMidi.Devices.PlaybackSettings)
+  nameWithType: PlaybackUtilities.GetPlayback(TrackChunk, TempoMap, IOutputDevice, PlaybackSettings)
+- uid: Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback(Melanchall.DryWetMidi.Core.TrackChunk,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.PlaybackSettings)
+  name: GetPlayback(TrackChunk, TempoMap, PlaybackSettings)
+  href: api/Melanchall.DryWetMidi.Devices.PlaybackUtilities.html#Melanchall_DryWetMidi_Devices_PlaybackUtilities_GetPlayback_Melanchall_DryWetMidi_Core_TrackChunk_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Devices_PlaybackSettings_
+  commentId: M:Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback(Melanchall.DryWetMidi.Core.TrackChunk,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.PlaybackSettings)
+  fullName: Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback(Melanchall.DryWetMidi.Core.TrackChunk, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Devices.PlaybackSettings)
+  nameWithType: PlaybackUtilities.GetPlayback(TrackChunk, TempoMap, PlaybackSettings)
+- uid: Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.MidiEvent},Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.IOutputDevice,Melanchall.DryWetMidi.Devices.PlaybackSettings)
+  name: GetPlayback(IEnumerable<MidiEvent>, TempoMap, IOutputDevice, PlaybackSettings)
+  href: api/Melanchall.DryWetMidi.Devices.PlaybackUtilities.html#Melanchall_DryWetMidi_Devices_PlaybackUtilities_GetPlayback_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_MidiEvent__Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Devices_IOutputDevice_Melanchall_DryWetMidi_Devices_PlaybackSettings_
+  commentId: M:Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.MidiEvent},Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.IOutputDevice,Melanchall.DryWetMidi.Devices.PlaybackSettings)
+  name.vb: GetPlayback(IEnumerable(Of MidiEvent), TempoMap, IOutputDevice, PlaybackSettings)
+  fullName: Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback(System.Collections.Generic.IEnumerable<Melanchall.DryWetMidi.Core.MidiEvent>, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Devices.IOutputDevice, Melanchall.DryWetMidi.Devices.PlaybackSettings)
+  fullName.vb: Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback(System.Collections.Generic.IEnumerable(Of Melanchall.DryWetMidi.Core.MidiEvent), Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Devices.IOutputDevice, Melanchall.DryWetMidi.Devices.PlaybackSettings)
+  nameWithType: PlaybackUtilities.GetPlayback(IEnumerable<MidiEvent>, TempoMap, IOutputDevice, PlaybackSettings)
+  nameWithType.vb: PlaybackUtilities.GetPlayback(IEnumerable(Of MidiEvent), TempoMap, IOutputDevice, PlaybackSettings)
+- uid: Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.MidiEvent},Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.PlaybackSettings)
+  name: GetPlayback(IEnumerable<MidiEvent>, TempoMap, PlaybackSettings)
+  href: api/Melanchall.DryWetMidi.Devices.PlaybackUtilities.html#Melanchall_DryWetMidi_Devices_PlaybackUtilities_GetPlayback_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_MidiEvent__Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Devices_PlaybackSettings_
+  commentId: M:Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.MidiEvent},Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.PlaybackSettings)
+  name.vb: GetPlayback(IEnumerable(Of MidiEvent), TempoMap, PlaybackSettings)
+  fullName: Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback(System.Collections.Generic.IEnumerable<Melanchall.DryWetMidi.Core.MidiEvent>, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Devices.PlaybackSettings)
+  fullName.vb: Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback(System.Collections.Generic.IEnumerable(Of Melanchall.DryWetMidi.Core.MidiEvent), Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Devices.PlaybackSettings)
+  nameWithType: PlaybackUtilities.GetPlayback(IEnumerable<MidiEvent>, TempoMap, PlaybackSettings)
+  nameWithType.vb: PlaybackUtilities.GetPlayback(IEnumerable(Of MidiEvent), TempoMap, PlaybackSettings)
+- uid: Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk},Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.IOutputDevice,Melanchall.DryWetMidi.Devices.PlaybackSettings)
+  name: GetPlayback(IEnumerable<TrackChunk>, TempoMap, IOutputDevice, PlaybackSettings)
+  href: api/Melanchall.DryWetMidi.Devices.PlaybackUtilities.html#Melanchall_DryWetMidi_Devices_PlaybackUtilities_GetPlayback_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Devices_IOutputDevice_Melanchall_DryWetMidi_Devices_PlaybackSettings_
+  commentId: M:Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk},Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.IOutputDevice,Melanchall.DryWetMidi.Devices.PlaybackSettings)
+  name.vb: GetPlayback(IEnumerable(Of TrackChunk), TempoMap, IOutputDevice, PlaybackSettings)
+  fullName: Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback(System.Collections.Generic.IEnumerable<Melanchall.DryWetMidi.Core.TrackChunk>, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Devices.IOutputDevice, Melanchall.DryWetMidi.Devices.PlaybackSettings)
+  fullName.vb: Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback(System.Collections.Generic.IEnumerable(Of Melanchall.DryWetMidi.Core.TrackChunk), Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Devices.IOutputDevice, Melanchall.DryWetMidi.Devices.PlaybackSettings)
+  nameWithType: PlaybackUtilities.GetPlayback(IEnumerable<TrackChunk>, TempoMap, IOutputDevice, PlaybackSettings)
+  nameWithType.vb: PlaybackUtilities.GetPlayback(IEnumerable(Of TrackChunk), TempoMap, IOutputDevice, PlaybackSettings)
+- uid: Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk},Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.PlaybackSettings)
+  name: GetPlayback(IEnumerable<TrackChunk>, TempoMap, PlaybackSettings)
+  href: api/Melanchall.DryWetMidi.Devices.PlaybackUtilities.html#Melanchall_DryWetMidi_Devices_PlaybackUtilities_GetPlayback_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Devices_PlaybackSettings_
+  commentId: M:Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk},Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.PlaybackSettings)
+  name.vb: GetPlayback(IEnumerable(Of TrackChunk), TempoMap, PlaybackSettings)
+  fullName: Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback(System.Collections.Generic.IEnumerable<Melanchall.DryWetMidi.Core.TrackChunk>, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Devices.PlaybackSettings)
+  fullName.vb: Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback(System.Collections.Generic.IEnumerable(Of Melanchall.DryWetMidi.Core.TrackChunk), Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Devices.PlaybackSettings)
+  nameWithType: PlaybackUtilities.GetPlayback(IEnumerable<TrackChunk>, TempoMap, PlaybackSettings)
+  nameWithType.vb: PlaybackUtilities.GetPlayback(IEnumerable(Of TrackChunk), TempoMap, PlaybackSettings)
 - uid: Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback*
   name: GetPlayback
   href: api/Melanchall.DryWetMidi.Devices.PlaybackUtilities.html#Melanchall_DryWetMidi_Devices_PlaybackUtilities_GetPlayback_
@@ -12949,60 +13135,60 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback
   nameWithType: PlaybackUtilities.GetPlayback
-- uid: Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback``1(System.Collections.Generic.IEnumerable{``0},Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.IOutputDevice,Melanchall.DryWetMidi.Common.SevenBitNumber,Melanchall.DryWetMidi.Devices.MidiClockSettings)
-  name: GetPlayback<TObject>(IEnumerable<TObject>, TempoMap, IOutputDevice, SevenBitNumber, MidiClockSettings)
-  href: api/Melanchall.DryWetMidi.Devices.PlaybackUtilities.html#Melanchall_DryWetMidi_Devices_PlaybackUtilities_GetPlayback__1_System_Collections_Generic_IEnumerable___0__Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Devices_IOutputDevice_Melanchall_DryWetMidi_Common_SevenBitNumber_Melanchall_DryWetMidi_Devices_MidiClockSettings_
-  commentId: M:Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback``1(System.Collections.Generic.IEnumerable{``0},Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.IOutputDevice,Melanchall.DryWetMidi.Common.SevenBitNumber,Melanchall.DryWetMidi.Devices.MidiClockSettings)
-  name.vb: GetPlayback(Of TObject)(IEnumerable(Of TObject), TempoMap, IOutputDevice, SevenBitNumber, MidiClockSettings)
-  fullName: Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback<TObject>(System.Collections.Generic.IEnumerable<TObject>, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Devices.IOutputDevice, Melanchall.DryWetMidi.Common.SevenBitNumber, Melanchall.DryWetMidi.Devices.MidiClockSettings)
-  fullName.vb: Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback(Of TObject)(System.Collections.Generic.IEnumerable(Of TObject), Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Devices.IOutputDevice, Melanchall.DryWetMidi.Common.SevenBitNumber, Melanchall.DryWetMidi.Devices.MidiClockSettings)
-  nameWithType: PlaybackUtilities.GetPlayback<TObject>(IEnumerable<TObject>, TempoMap, IOutputDevice, SevenBitNumber, MidiClockSettings)
-  nameWithType.vb: PlaybackUtilities.GetPlayback(Of TObject)(IEnumerable(Of TObject), TempoMap, IOutputDevice, SevenBitNumber, MidiClockSettings)
-- uid: Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback``1(System.Collections.Generic.IEnumerable{``0},Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.IOutputDevice,Melanchall.DryWetMidi.Standards.GeneralMidi2Program,Melanchall.DryWetMidi.Devices.MidiClockSettings)
-  name: GetPlayback<TObject>(IEnumerable<TObject>, TempoMap, IOutputDevice, GeneralMidi2Program, MidiClockSettings)
-  href: api/Melanchall.DryWetMidi.Devices.PlaybackUtilities.html#Melanchall_DryWetMidi_Devices_PlaybackUtilities_GetPlayback__1_System_Collections_Generic_IEnumerable___0__Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Devices_IOutputDevice_Melanchall_DryWetMidi_Standards_GeneralMidi2Program_Melanchall_DryWetMidi_Devices_MidiClockSettings_
-  commentId: M:Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback``1(System.Collections.Generic.IEnumerable{``0},Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.IOutputDevice,Melanchall.DryWetMidi.Standards.GeneralMidi2Program,Melanchall.DryWetMidi.Devices.MidiClockSettings)
-  name.vb: GetPlayback(Of TObject)(IEnumerable(Of TObject), TempoMap, IOutputDevice, GeneralMidi2Program, MidiClockSettings)
-  fullName: Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback<TObject>(System.Collections.Generic.IEnumerable<TObject>, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Devices.IOutputDevice, Melanchall.DryWetMidi.Standards.GeneralMidi2Program, Melanchall.DryWetMidi.Devices.MidiClockSettings)
-  fullName.vb: Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback(Of TObject)(System.Collections.Generic.IEnumerable(Of TObject), Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Devices.IOutputDevice, Melanchall.DryWetMidi.Standards.GeneralMidi2Program, Melanchall.DryWetMidi.Devices.MidiClockSettings)
-  nameWithType: PlaybackUtilities.GetPlayback<TObject>(IEnumerable<TObject>, TempoMap, IOutputDevice, GeneralMidi2Program, MidiClockSettings)
-  nameWithType.vb: PlaybackUtilities.GetPlayback(Of TObject)(IEnumerable(Of TObject), TempoMap, IOutputDevice, GeneralMidi2Program, MidiClockSettings)
-- uid: Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback``1(System.Collections.Generic.IEnumerable{``0},Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.IOutputDevice,Melanchall.DryWetMidi.Standards.GeneralMidiProgram,Melanchall.DryWetMidi.Devices.MidiClockSettings)
-  name: GetPlayback<TObject>(IEnumerable<TObject>, TempoMap, IOutputDevice, GeneralMidiProgram, MidiClockSettings)
-  href: api/Melanchall.DryWetMidi.Devices.PlaybackUtilities.html#Melanchall_DryWetMidi_Devices_PlaybackUtilities_GetPlayback__1_System_Collections_Generic_IEnumerable___0__Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Devices_IOutputDevice_Melanchall_DryWetMidi_Standards_GeneralMidiProgram_Melanchall_DryWetMidi_Devices_MidiClockSettings_
-  commentId: M:Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback``1(System.Collections.Generic.IEnumerable{``0},Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.IOutputDevice,Melanchall.DryWetMidi.Standards.GeneralMidiProgram,Melanchall.DryWetMidi.Devices.MidiClockSettings)
-  name.vb: GetPlayback(Of TObject)(IEnumerable(Of TObject), TempoMap, IOutputDevice, GeneralMidiProgram, MidiClockSettings)
-  fullName: Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback<TObject>(System.Collections.Generic.IEnumerable<TObject>, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Devices.IOutputDevice, Melanchall.DryWetMidi.Standards.GeneralMidiProgram, Melanchall.DryWetMidi.Devices.MidiClockSettings)
-  fullName.vb: Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback(Of TObject)(System.Collections.Generic.IEnumerable(Of TObject), Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Devices.IOutputDevice, Melanchall.DryWetMidi.Standards.GeneralMidiProgram, Melanchall.DryWetMidi.Devices.MidiClockSettings)
-  nameWithType: PlaybackUtilities.GetPlayback<TObject>(IEnumerable<TObject>, TempoMap, IOutputDevice, GeneralMidiProgram, MidiClockSettings)
-  nameWithType.vb: PlaybackUtilities.GetPlayback(Of TObject)(IEnumerable(Of TObject), TempoMap, IOutputDevice, GeneralMidiProgram, MidiClockSettings)
-- uid: Melanchall.DryWetMidi.Devices.PlaybackUtilities.Play(Melanchall.DryWetMidi.Composing.Pattern,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Common.FourBitNumber,Melanchall.DryWetMidi.Devices.IOutputDevice,Melanchall.DryWetMidi.Devices.MidiClockSettings)
-  name: Play(Pattern, TempoMap, FourBitNumber, IOutputDevice, MidiClockSettings)
-  href: api/Melanchall.DryWetMidi.Devices.PlaybackUtilities.html#Melanchall_DryWetMidi_Devices_PlaybackUtilities_Play_Melanchall_DryWetMidi_Composing_Pattern_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Common_FourBitNumber_Melanchall_DryWetMidi_Devices_IOutputDevice_Melanchall_DryWetMidi_Devices_MidiClockSettings_
-  commentId: M:Melanchall.DryWetMidi.Devices.PlaybackUtilities.Play(Melanchall.DryWetMidi.Composing.Pattern,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Common.FourBitNumber,Melanchall.DryWetMidi.Devices.IOutputDevice,Melanchall.DryWetMidi.Devices.MidiClockSettings)
-  fullName: Melanchall.DryWetMidi.Devices.PlaybackUtilities.Play(Melanchall.DryWetMidi.Composing.Pattern, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Common.FourBitNumber, Melanchall.DryWetMidi.Devices.IOutputDevice, Melanchall.DryWetMidi.Devices.MidiClockSettings)
-  nameWithType: PlaybackUtilities.Play(Pattern, TempoMap, FourBitNumber, IOutputDevice, MidiClockSettings)
-- uid: Melanchall.DryWetMidi.Devices.PlaybackUtilities.Play(Melanchall.DryWetMidi.Core.MidiFile,Melanchall.DryWetMidi.Devices.IOutputDevice,Melanchall.DryWetMidi.Devices.MidiClockSettings)
-  name: Play(MidiFile, IOutputDevice, MidiClockSettings)
-  href: api/Melanchall.DryWetMidi.Devices.PlaybackUtilities.html#Melanchall_DryWetMidi_Devices_PlaybackUtilities_Play_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Devices_IOutputDevice_Melanchall_DryWetMidi_Devices_MidiClockSettings_
-  commentId: M:Melanchall.DryWetMidi.Devices.PlaybackUtilities.Play(Melanchall.DryWetMidi.Core.MidiFile,Melanchall.DryWetMidi.Devices.IOutputDevice,Melanchall.DryWetMidi.Devices.MidiClockSettings)
-  fullName: Melanchall.DryWetMidi.Devices.PlaybackUtilities.Play(Melanchall.DryWetMidi.Core.MidiFile, Melanchall.DryWetMidi.Devices.IOutputDevice, Melanchall.DryWetMidi.Devices.MidiClockSettings)
-  nameWithType: PlaybackUtilities.Play(MidiFile, IOutputDevice, MidiClockSettings)
-- uid: Melanchall.DryWetMidi.Devices.PlaybackUtilities.Play(Melanchall.DryWetMidi.Core.TrackChunk,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.IOutputDevice,Melanchall.DryWetMidi.Devices.MidiClockSettings)
-  name: Play(TrackChunk, TempoMap, IOutputDevice, MidiClockSettings)
-  href: api/Melanchall.DryWetMidi.Devices.PlaybackUtilities.html#Melanchall_DryWetMidi_Devices_PlaybackUtilities_Play_Melanchall_DryWetMidi_Core_TrackChunk_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Devices_IOutputDevice_Melanchall_DryWetMidi_Devices_MidiClockSettings_
-  commentId: M:Melanchall.DryWetMidi.Devices.PlaybackUtilities.Play(Melanchall.DryWetMidi.Core.TrackChunk,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.IOutputDevice,Melanchall.DryWetMidi.Devices.MidiClockSettings)
-  fullName: Melanchall.DryWetMidi.Devices.PlaybackUtilities.Play(Melanchall.DryWetMidi.Core.TrackChunk, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Devices.IOutputDevice, Melanchall.DryWetMidi.Devices.MidiClockSettings)
-  nameWithType: PlaybackUtilities.Play(TrackChunk, TempoMap, IOutputDevice, MidiClockSettings)
-- uid: Melanchall.DryWetMidi.Devices.PlaybackUtilities.Play(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk},Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.IOutputDevice,Melanchall.DryWetMidi.Devices.MidiClockSettings)
-  name: Play(IEnumerable<TrackChunk>, TempoMap, IOutputDevice, MidiClockSettings)
-  href: api/Melanchall.DryWetMidi.Devices.PlaybackUtilities.html#Melanchall_DryWetMidi_Devices_PlaybackUtilities_Play_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Devices_IOutputDevice_Melanchall_DryWetMidi_Devices_MidiClockSettings_
-  commentId: M:Melanchall.DryWetMidi.Devices.PlaybackUtilities.Play(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk},Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.IOutputDevice,Melanchall.DryWetMidi.Devices.MidiClockSettings)
-  name.vb: Play(IEnumerable(Of TrackChunk), TempoMap, IOutputDevice, MidiClockSettings)
-  fullName: Melanchall.DryWetMidi.Devices.PlaybackUtilities.Play(System.Collections.Generic.IEnumerable<Melanchall.DryWetMidi.Core.TrackChunk>, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Devices.IOutputDevice, Melanchall.DryWetMidi.Devices.MidiClockSettings)
-  fullName.vb: Melanchall.DryWetMidi.Devices.PlaybackUtilities.Play(System.Collections.Generic.IEnumerable(Of Melanchall.DryWetMidi.Core.TrackChunk), Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Devices.IOutputDevice, Melanchall.DryWetMidi.Devices.MidiClockSettings)
-  nameWithType: PlaybackUtilities.Play(IEnumerable<TrackChunk>, TempoMap, IOutputDevice, MidiClockSettings)
-  nameWithType.vb: PlaybackUtilities.Play(IEnumerable(Of TrackChunk), TempoMap, IOutputDevice, MidiClockSettings)
+- uid: Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback``1(System.Collections.Generic.IEnumerable{``0},Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.IOutputDevice,Melanchall.DryWetMidi.Common.SevenBitNumber,Melanchall.DryWetMidi.Devices.PlaybackSettings)
+  name: GetPlayback<TObject>(IEnumerable<TObject>, TempoMap, IOutputDevice, SevenBitNumber, PlaybackSettings)
+  href: api/Melanchall.DryWetMidi.Devices.PlaybackUtilities.html#Melanchall_DryWetMidi_Devices_PlaybackUtilities_GetPlayback__1_System_Collections_Generic_IEnumerable___0__Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Devices_IOutputDevice_Melanchall_DryWetMidi_Common_SevenBitNumber_Melanchall_DryWetMidi_Devices_PlaybackSettings_
+  commentId: M:Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback``1(System.Collections.Generic.IEnumerable{``0},Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.IOutputDevice,Melanchall.DryWetMidi.Common.SevenBitNumber,Melanchall.DryWetMidi.Devices.PlaybackSettings)
+  name.vb: GetPlayback(Of TObject)(IEnumerable(Of TObject), TempoMap, IOutputDevice, SevenBitNumber, PlaybackSettings)
+  fullName: Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback<TObject>(System.Collections.Generic.IEnumerable<TObject>, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Devices.IOutputDevice, Melanchall.DryWetMidi.Common.SevenBitNumber, Melanchall.DryWetMidi.Devices.PlaybackSettings)
+  fullName.vb: Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback(Of TObject)(System.Collections.Generic.IEnumerable(Of TObject), Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Devices.IOutputDevice, Melanchall.DryWetMidi.Common.SevenBitNumber, Melanchall.DryWetMidi.Devices.PlaybackSettings)
+  nameWithType: PlaybackUtilities.GetPlayback<TObject>(IEnumerable<TObject>, TempoMap, IOutputDevice, SevenBitNumber, PlaybackSettings)
+  nameWithType.vb: PlaybackUtilities.GetPlayback(Of TObject)(IEnumerable(Of TObject), TempoMap, IOutputDevice, SevenBitNumber, PlaybackSettings)
+- uid: Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback``1(System.Collections.Generic.IEnumerable{``0},Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.IOutputDevice,Melanchall.DryWetMidi.Standards.GeneralMidi2Program,Melanchall.DryWetMidi.Devices.PlaybackSettings)
+  name: GetPlayback<TObject>(IEnumerable<TObject>, TempoMap, IOutputDevice, GeneralMidi2Program, PlaybackSettings)
+  href: api/Melanchall.DryWetMidi.Devices.PlaybackUtilities.html#Melanchall_DryWetMidi_Devices_PlaybackUtilities_GetPlayback__1_System_Collections_Generic_IEnumerable___0__Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Devices_IOutputDevice_Melanchall_DryWetMidi_Standards_GeneralMidi2Program_Melanchall_DryWetMidi_Devices_PlaybackSettings_
+  commentId: M:Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback``1(System.Collections.Generic.IEnumerable{``0},Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.IOutputDevice,Melanchall.DryWetMidi.Standards.GeneralMidi2Program,Melanchall.DryWetMidi.Devices.PlaybackSettings)
+  name.vb: GetPlayback(Of TObject)(IEnumerable(Of TObject), TempoMap, IOutputDevice, GeneralMidi2Program, PlaybackSettings)
+  fullName: Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback<TObject>(System.Collections.Generic.IEnumerable<TObject>, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Devices.IOutputDevice, Melanchall.DryWetMidi.Standards.GeneralMidi2Program, Melanchall.DryWetMidi.Devices.PlaybackSettings)
+  fullName.vb: Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback(Of TObject)(System.Collections.Generic.IEnumerable(Of TObject), Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Devices.IOutputDevice, Melanchall.DryWetMidi.Standards.GeneralMidi2Program, Melanchall.DryWetMidi.Devices.PlaybackSettings)
+  nameWithType: PlaybackUtilities.GetPlayback<TObject>(IEnumerable<TObject>, TempoMap, IOutputDevice, GeneralMidi2Program, PlaybackSettings)
+  nameWithType.vb: PlaybackUtilities.GetPlayback(Of TObject)(IEnumerable(Of TObject), TempoMap, IOutputDevice, GeneralMidi2Program, PlaybackSettings)
+- uid: Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback``1(System.Collections.Generic.IEnumerable{``0},Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.IOutputDevice,Melanchall.DryWetMidi.Standards.GeneralMidiProgram,Melanchall.DryWetMidi.Devices.PlaybackSettings)
+  name: GetPlayback<TObject>(IEnumerable<TObject>, TempoMap, IOutputDevice, GeneralMidiProgram, PlaybackSettings)
+  href: api/Melanchall.DryWetMidi.Devices.PlaybackUtilities.html#Melanchall_DryWetMidi_Devices_PlaybackUtilities_GetPlayback__1_System_Collections_Generic_IEnumerable___0__Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Devices_IOutputDevice_Melanchall_DryWetMidi_Standards_GeneralMidiProgram_Melanchall_DryWetMidi_Devices_PlaybackSettings_
+  commentId: M:Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback``1(System.Collections.Generic.IEnumerable{``0},Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.IOutputDevice,Melanchall.DryWetMidi.Standards.GeneralMidiProgram,Melanchall.DryWetMidi.Devices.PlaybackSettings)
+  name.vb: GetPlayback(Of TObject)(IEnumerable(Of TObject), TempoMap, IOutputDevice, GeneralMidiProgram, PlaybackSettings)
+  fullName: Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback<TObject>(System.Collections.Generic.IEnumerable<TObject>, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Devices.IOutputDevice, Melanchall.DryWetMidi.Standards.GeneralMidiProgram, Melanchall.DryWetMidi.Devices.PlaybackSettings)
+  fullName.vb: Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback(Of TObject)(System.Collections.Generic.IEnumerable(Of TObject), Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Devices.IOutputDevice, Melanchall.DryWetMidi.Standards.GeneralMidiProgram, Melanchall.DryWetMidi.Devices.PlaybackSettings)
+  nameWithType: PlaybackUtilities.GetPlayback<TObject>(IEnumerable<TObject>, TempoMap, IOutputDevice, GeneralMidiProgram, PlaybackSettings)
+  nameWithType.vb: PlaybackUtilities.GetPlayback(Of TObject)(IEnumerable(Of TObject), TempoMap, IOutputDevice, GeneralMidiProgram, PlaybackSettings)
+- uid: Melanchall.DryWetMidi.Devices.PlaybackUtilities.Play(Melanchall.DryWetMidi.Composing.Pattern,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Common.FourBitNumber,Melanchall.DryWetMidi.Devices.IOutputDevice,Melanchall.DryWetMidi.Devices.PlaybackSettings)
+  name: Play(Pattern, TempoMap, FourBitNumber, IOutputDevice, PlaybackSettings)
+  href: api/Melanchall.DryWetMidi.Devices.PlaybackUtilities.html#Melanchall_DryWetMidi_Devices_PlaybackUtilities_Play_Melanchall_DryWetMidi_Composing_Pattern_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Common_FourBitNumber_Melanchall_DryWetMidi_Devices_IOutputDevice_Melanchall_DryWetMidi_Devices_PlaybackSettings_
+  commentId: M:Melanchall.DryWetMidi.Devices.PlaybackUtilities.Play(Melanchall.DryWetMidi.Composing.Pattern,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Common.FourBitNumber,Melanchall.DryWetMidi.Devices.IOutputDevice,Melanchall.DryWetMidi.Devices.PlaybackSettings)
+  fullName: Melanchall.DryWetMidi.Devices.PlaybackUtilities.Play(Melanchall.DryWetMidi.Composing.Pattern, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Common.FourBitNumber, Melanchall.DryWetMidi.Devices.IOutputDevice, Melanchall.DryWetMidi.Devices.PlaybackSettings)
+  nameWithType: PlaybackUtilities.Play(Pattern, TempoMap, FourBitNumber, IOutputDevice, PlaybackSettings)
+- uid: Melanchall.DryWetMidi.Devices.PlaybackUtilities.Play(Melanchall.DryWetMidi.Core.MidiFile,Melanchall.DryWetMidi.Devices.IOutputDevice,Melanchall.DryWetMidi.Devices.PlaybackSettings)
+  name: Play(MidiFile, IOutputDevice, PlaybackSettings)
+  href: api/Melanchall.DryWetMidi.Devices.PlaybackUtilities.html#Melanchall_DryWetMidi_Devices_PlaybackUtilities_Play_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Devices_IOutputDevice_Melanchall_DryWetMidi_Devices_PlaybackSettings_
+  commentId: M:Melanchall.DryWetMidi.Devices.PlaybackUtilities.Play(Melanchall.DryWetMidi.Core.MidiFile,Melanchall.DryWetMidi.Devices.IOutputDevice,Melanchall.DryWetMidi.Devices.PlaybackSettings)
+  fullName: Melanchall.DryWetMidi.Devices.PlaybackUtilities.Play(Melanchall.DryWetMidi.Core.MidiFile, Melanchall.DryWetMidi.Devices.IOutputDevice, Melanchall.DryWetMidi.Devices.PlaybackSettings)
+  nameWithType: PlaybackUtilities.Play(MidiFile, IOutputDevice, PlaybackSettings)
+- uid: Melanchall.DryWetMidi.Devices.PlaybackUtilities.Play(Melanchall.DryWetMidi.Core.TrackChunk,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.IOutputDevice,Melanchall.DryWetMidi.Devices.PlaybackSettings)
+  name: Play(TrackChunk, TempoMap, IOutputDevice, PlaybackSettings)
+  href: api/Melanchall.DryWetMidi.Devices.PlaybackUtilities.html#Melanchall_DryWetMidi_Devices_PlaybackUtilities_Play_Melanchall_DryWetMidi_Core_TrackChunk_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Devices_IOutputDevice_Melanchall_DryWetMidi_Devices_PlaybackSettings_
+  commentId: M:Melanchall.DryWetMidi.Devices.PlaybackUtilities.Play(Melanchall.DryWetMidi.Core.TrackChunk,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.IOutputDevice,Melanchall.DryWetMidi.Devices.PlaybackSettings)
+  fullName: Melanchall.DryWetMidi.Devices.PlaybackUtilities.Play(Melanchall.DryWetMidi.Core.TrackChunk, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Devices.IOutputDevice, Melanchall.DryWetMidi.Devices.PlaybackSettings)
+  nameWithType: PlaybackUtilities.Play(TrackChunk, TempoMap, IOutputDevice, PlaybackSettings)
+- uid: Melanchall.DryWetMidi.Devices.PlaybackUtilities.Play(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk},Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.IOutputDevice,Melanchall.DryWetMidi.Devices.PlaybackSettings)
+  name: Play(IEnumerable<TrackChunk>, TempoMap, IOutputDevice, PlaybackSettings)
+  href: api/Melanchall.DryWetMidi.Devices.PlaybackUtilities.html#Melanchall_DryWetMidi_Devices_PlaybackUtilities_Play_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Devices_IOutputDevice_Melanchall_DryWetMidi_Devices_PlaybackSettings_
+  commentId: M:Melanchall.DryWetMidi.Devices.PlaybackUtilities.Play(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk},Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.IOutputDevice,Melanchall.DryWetMidi.Devices.PlaybackSettings)
+  name.vb: Play(IEnumerable(Of TrackChunk), TempoMap, IOutputDevice, PlaybackSettings)
+  fullName: Melanchall.DryWetMidi.Devices.PlaybackUtilities.Play(System.Collections.Generic.IEnumerable<Melanchall.DryWetMidi.Core.TrackChunk>, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Devices.IOutputDevice, Melanchall.DryWetMidi.Devices.PlaybackSettings)
+  fullName.vb: Melanchall.DryWetMidi.Devices.PlaybackUtilities.Play(System.Collections.Generic.IEnumerable(Of Melanchall.DryWetMidi.Core.TrackChunk), Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Devices.IOutputDevice, Melanchall.DryWetMidi.Devices.PlaybackSettings)
+  nameWithType: PlaybackUtilities.Play(IEnumerable<TrackChunk>, TempoMap, IOutputDevice, PlaybackSettings)
+  nameWithType.vb: PlaybackUtilities.Play(IEnumerable(Of TrackChunk), TempoMap, IOutputDevice, PlaybackSettings)
 - uid: Melanchall.DryWetMidi.Devices.PlaybackUtilities.Play*
   name: Play
   href: api/Melanchall.DryWetMidi.Devices.PlaybackUtilities.html#Melanchall_DryWetMidi_Devices_PlaybackUtilities_Play_
@@ -13010,33 +13196,33 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Devices.PlaybackUtilities.Play
   nameWithType: PlaybackUtilities.Play
-- uid: Melanchall.DryWetMidi.Devices.PlaybackUtilities.Play``1(System.Collections.Generic.IEnumerable{``0},Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.IOutputDevice,Melanchall.DryWetMidi.Common.SevenBitNumber,Melanchall.DryWetMidi.Devices.MidiClockSettings)
-  name: Play<TObject>(IEnumerable<TObject>, TempoMap, IOutputDevice, SevenBitNumber, MidiClockSettings)
-  href: api/Melanchall.DryWetMidi.Devices.PlaybackUtilities.html#Melanchall_DryWetMidi_Devices_PlaybackUtilities_Play__1_System_Collections_Generic_IEnumerable___0__Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Devices_IOutputDevice_Melanchall_DryWetMidi_Common_SevenBitNumber_Melanchall_DryWetMidi_Devices_MidiClockSettings_
-  commentId: M:Melanchall.DryWetMidi.Devices.PlaybackUtilities.Play``1(System.Collections.Generic.IEnumerable{``0},Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.IOutputDevice,Melanchall.DryWetMidi.Common.SevenBitNumber,Melanchall.DryWetMidi.Devices.MidiClockSettings)
-  name.vb: Play(Of TObject)(IEnumerable(Of TObject), TempoMap, IOutputDevice, SevenBitNumber, MidiClockSettings)
-  fullName: Melanchall.DryWetMidi.Devices.PlaybackUtilities.Play<TObject>(System.Collections.Generic.IEnumerable<TObject>, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Devices.IOutputDevice, Melanchall.DryWetMidi.Common.SevenBitNumber, Melanchall.DryWetMidi.Devices.MidiClockSettings)
-  fullName.vb: Melanchall.DryWetMidi.Devices.PlaybackUtilities.Play(Of TObject)(System.Collections.Generic.IEnumerable(Of TObject), Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Devices.IOutputDevice, Melanchall.DryWetMidi.Common.SevenBitNumber, Melanchall.DryWetMidi.Devices.MidiClockSettings)
-  nameWithType: PlaybackUtilities.Play<TObject>(IEnumerable<TObject>, TempoMap, IOutputDevice, SevenBitNumber, MidiClockSettings)
-  nameWithType.vb: PlaybackUtilities.Play(Of TObject)(IEnumerable(Of TObject), TempoMap, IOutputDevice, SevenBitNumber, MidiClockSettings)
-- uid: Melanchall.DryWetMidi.Devices.PlaybackUtilities.Play``1(System.Collections.Generic.IEnumerable{``0},Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.IOutputDevice,Melanchall.DryWetMidi.Standards.GeneralMidi2Program,Melanchall.DryWetMidi.Devices.MidiClockSettings)
-  name: Play<TObject>(IEnumerable<TObject>, TempoMap, IOutputDevice, GeneralMidi2Program, MidiClockSettings)
-  href: api/Melanchall.DryWetMidi.Devices.PlaybackUtilities.html#Melanchall_DryWetMidi_Devices_PlaybackUtilities_Play__1_System_Collections_Generic_IEnumerable___0__Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Devices_IOutputDevice_Melanchall_DryWetMidi_Standards_GeneralMidi2Program_Melanchall_DryWetMidi_Devices_MidiClockSettings_
-  commentId: M:Melanchall.DryWetMidi.Devices.PlaybackUtilities.Play``1(System.Collections.Generic.IEnumerable{``0},Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.IOutputDevice,Melanchall.DryWetMidi.Standards.GeneralMidi2Program,Melanchall.DryWetMidi.Devices.MidiClockSettings)
-  name.vb: Play(Of TObject)(IEnumerable(Of TObject), TempoMap, IOutputDevice, GeneralMidi2Program, MidiClockSettings)
-  fullName: Melanchall.DryWetMidi.Devices.PlaybackUtilities.Play<TObject>(System.Collections.Generic.IEnumerable<TObject>, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Devices.IOutputDevice, Melanchall.DryWetMidi.Standards.GeneralMidi2Program, Melanchall.DryWetMidi.Devices.MidiClockSettings)
-  fullName.vb: Melanchall.DryWetMidi.Devices.PlaybackUtilities.Play(Of TObject)(System.Collections.Generic.IEnumerable(Of TObject), Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Devices.IOutputDevice, Melanchall.DryWetMidi.Standards.GeneralMidi2Program, Melanchall.DryWetMidi.Devices.MidiClockSettings)
-  nameWithType: PlaybackUtilities.Play<TObject>(IEnumerable<TObject>, TempoMap, IOutputDevice, GeneralMidi2Program, MidiClockSettings)
-  nameWithType.vb: PlaybackUtilities.Play(Of TObject)(IEnumerable(Of TObject), TempoMap, IOutputDevice, GeneralMidi2Program, MidiClockSettings)
-- uid: Melanchall.DryWetMidi.Devices.PlaybackUtilities.Play``1(System.Collections.Generic.IEnumerable{``0},Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.IOutputDevice,Melanchall.DryWetMidi.Standards.GeneralMidiProgram,Melanchall.DryWetMidi.Devices.MidiClockSettings)
-  name: Play<TObject>(IEnumerable<TObject>, TempoMap, IOutputDevice, GeneralMidiProgram, MidiClockSettings)
-  href: api/Melanchall.DryWetMidi.Devices.PlaybackUtilities.html#Melanchall_DryWetMidi_Devices_PlaybackUtilities_Play__1_System_Collections_Generic_IEnumerable___0__Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Devices_IOutputDevice_Melanchall_DryWetMidi_Standards_GeneralMidiProgram_Melanchall_DryWetMidi_Devices_MidiClockSettings_
-  commentId: M:Melanchall.DryWetMidi.Devices.PlaybackUtilities.Play``1(System.Collections.Generic.IEnumerable{``0},Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.IOutputDevice,Melanchall.DryWetMidi.Standards.GeneralMidiProgram,Melanchall.DryWetMidi.Devices.MidiClockSettings)
-  name.vb: Play(Of TObject)(IEnumerable(Of TObject), TempoMap, IOutputDevice, GeneralMidiProgram, MidiClockSettings)
-  fullName: Melanchall.DryWetMidi.Devices.PlaybackUtilities.Play<TObject>(System.Collections.Generic.IEnumerable<TObject>, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Devices.IOutputDevice, Melanchall.DryWetMidi.Standards.GeneralMidiProgram, Melanchall.DryWetMidi.Devices.MidiClockSettings)
-  fullName.vb: Melanchall.DryWetMidi.Devices.PlaybackUtilities.Play(Of TObject)(System.Collections.Generic.IEnumerable(Of TObject), Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Devices.IOutputDevice, Melanchall.DryWetMidi.Standards.GeneralMidiProgram, Melanchall.DryWetMidi.Devices.MidiClockSettings)
-  nameWithType: PlaybackUtilities.Play<TObject>(IEnumerable<TObject>, TempoMap, IOutputDevice, GeneralMidiProgram, MidiClockSettings)
-  nameWithType.vb: PlaybackUtilities.Play(Of TObject)(IEnumerable(Of TObject), TempoMap, IOutputDevice, GeneralMidiProgram, MidiClockSettings)
+- uid: Melanchall.DryWetMidi.Devices.PlaybackUtilities.Play``1(System.Collections.Generic.IEnumerable{``0},Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.IOutputDevice,Melanchall.DryWetMidi.Common.SevenBitNumber,Melanchall.DryWetMidi.Devices.PlaybackSettings)
+  name: Play<TObject>(IEnumerable<TObject>, TempoMap, IOutputDevice, SevenBitNumber, PlaybackSettings)
+  href: api/Melanchall.DryWetMidi.Devices.PlaybackUtilities.html#Melanchall_DryWetMidi_Devices_PlaybackUtilities_Play__1_System_Collections_Generic_IEnumerable___0__Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Devices_IOutputDevice_Melanchall_DryWetMidi_Common_SevenBitNumber_Melanchall_DryWetMidi_Devices_PlaybackSettings_
+  commentId: M:Melanchall.DryWetMidi.Devices.PlaybackUtilities.Play``1(System.Collections.Generic.IEnumerable{``0},Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.IOutputDevice,Melanchall.DryWetMidi.Common.SevenBitNumber,Melanchall.DryWetMidi.Devices.PlaybackSettings)
+  name.vb: Play(Of TObject)(IEnumerable(Of TObject), TempoMap, IOutputDevice, SevenBitNumber, PlaybackSettings)
+  fullName: Melanchall.DryWetMidi.Devices.PlaybackUtilities.Play<TObject>(System.Collections.Generic.IEnumerable<TObject>, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Devices.IOutputDevice, Melanchall.DryWetMidi.Common.SevenBitNumber, Melanchall.DryWetMidi.Devices.PlaybackSettings)
+  fullName.vb: Melanchall.DryWetMidi.Devices.PlaybackUtilities.Play(Of TObject)(System.Collections.Generic.IEnumerable(Of TObject), Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Devices.IOutputDevice, Melanchall.DryWetMidi.Common.SevenBitNumber, Melanchall.DryWetMidi.Devices.PlaybackSettings)
+  nameWithType: PlaybackUtilities.Play<TObject>(IEnumerable<TObject>, TempoMap, IOutputDevice, SevenBitNumber, PlaybackSettings)
+  nameWithType.vb: PlaybackUtilities.Play(Of TObject)(IEnumerable(Of TObject), TempoMap, IOutputDevice, SevenBitNumber, PlaybackSettings)
+- uid: Melanchall.DryWetMidi.Devices.PlaybackUtilities.Play``1(System.Collections.Generic.IEnumerable{``0},Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.IOutputDevice,Melanchall.DryWetMidi.Standards.GeneralMidi2Program,Melanchall.DryWetMidi.Devices.PlaybackSettings)
+  name: Play<TObject>(IEnumerable<TObject>, TempoMap, IOutputDevice, GeneralMidi2Program, PlaybackSettings)
+  href: api/Melanchall.DryWetMidi.Devices.PlaybackUtilities.html#Melanchall_DryWetMidi_Devices_PlaybackUtilities_Play__1_System_Collections_Generic_IEnumerable___0__Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Devices_IOutputDevice_Melanchall_DryWetMidi_Standards_GeneralMidi2Program_Melanchall_DryWetMidi_Devices_PlaybackSettings_
+  commentId: M:Melanchall.DryWetMidi.Devices.PlaybackUtilities.Play``1(System.Collections.Generic.IEnumerable{``0},Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.IOutputDevice,Melanchall.DryWetMidi.Standards.GeneralMidi2Program,Melanchall.DryWetMidi.Devices.PlaybackSettings)
+  name.vb: Play(Of TObject)(IEnumerable(Of TObject), TempoMap, IOutputDevice, GeneralMidi2Program, PlaybackSettings)
+  fullName: Melanchall.DryWetMidi.Devices.PlaybackUtilities.Play<TObject>(System.Collections.Generic.IEnumerable<TObject>, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Devices.IOutputDevice, Melanchall.DryWetMidi.Standards.GeneralMidi2Program, Melanchall.DryWetMidi.Devices.PlaybackSettings)
+  fullName.vb: Melanchall.DryWetMidi.Devices.PlaybackUtilities.Play(Of TObject)(System.Collections.Generic.IEnumerable(Of TObject), Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Devices.IOutputDevice, Melanchall.DryWetMidi.Standards.GeneralMidi2Program, Melanchall.DryWetMidi.Devices.PlaybackSettings)
+  nameWithType: PlaybackUtilities.Play<TObject>(IEnumerable<TObject>, TempoMap, IOutputDevice, GeneralMidi2Program, PlaybackSettings)
+  nameWithType.vb: PlaybackUtilities.Play(Of TObject)(IEnumerable(Of TObject), TempoMap, IOutputDevice, GeneralMidi2Program, PlaybackSettings)
+- uid: Melanchall.DryWetMidi.Devices.PlaybackUtilities.Play``1(System.Collections.Generic.IEnumerable{``0},Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.IOutputDevice,Melanchall.DryWetMidi.Standards.GeneralMidiProgram,Melanchall.DryWetMidi.Devices.PlaybackSettings)
+  name: Play<TObject>(IEnumerable<TObject>, TempoMap, IOutputDevice, GeneralMidiProgram, PlaybackSettings)
+  href: api/Melanchall.DryWetMidi.Devices.PlaybackUtilities.html#Melanchall_DryWetMidi_Devices_PlaybackUtilities_Play__1_System_Collections_Generic_IEnumerable___0__Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Devices_IOutputDevice_Melanchall_DryWetMidi_Standards_GeneralMidiProgram_Melanchall_DryWetMidi_Devices_PlaybackSettings_
+  commentId: M:Melanchall.DryWetMidi.Devices.PlaybackUtilities.Play``1(System.Collections.Generic.IEnumerable{``0},Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.IOutputDevice,Melanchall.DryWetMidi.Standards.GeneralMidiProgram,Melanchall.DryWetMidi.Devices.PlaybackSettings)
+  name.vb: Play(Of TObject)(IEnumerable(Of TObject), TempoMap, IOutputDevice, GeneralMidiProgram, PlaybackSettings)
+  fullName: Melanchall.DryWetMidi.Devices.PlaybackUtilities.Play<TObject>(System.Collections.Generic.IEnumerable<TObject>, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Devices.IOutputDevice, Melanchall.DryWetMidi.Standards.GeneralMidiProgram, Melanchall.DryWetMidi.Devices.PlaybackSettings)
+  fullName.vb: Melanchall.DryWetMidi.Devices.PlaybackUtilities.Play(Of TObject)(System.Collections.Generic.IEnumerable(Of TObject), Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Devices.IOutputDevice, Melanchall.DryWetMidi.Standards.GeneralMidiProgram, Melanchall.DryWetMidi.Devices.PlaybackSettings)
+  nameWithType: PlaybackUtilities.Play<TObject>(IEnumerable<TObject>, TempoMap, IOutputDevice, GeneralMidiProgram, PlaybackSettings)
+  nameWithType.vb: PlaybackUtilities.Play(Of TObject)(IEnumerable(Of TObject), TempoMap, IOutputDevice, GeneralMidiProgram, PlaybackSettings)
 - uid: Melanchall.DryWetMidi.Devices.Recording
   name: Recording
   href: api/Melanchall.DryWetMidi.Devices.Recording.html

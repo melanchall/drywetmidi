@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Class SplitFileByNotesSettings
    | DryWetMIDI ">
-    <meta name="generator" content="docfx 2.56.2.0">
+    <meta name="generator" content="docfx 2.58.0.0">
     
     <link rel="shortcut icon" href="../images/favicon.png">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
@@ -61,11 +61,11 @@
       <div class="container body-content">
         
         <div id="search-results">
-          <div class="search-list"></div>
+          <div class="search-list">Search Results for <span></span></div>
           <div class="sr-items">
             <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
           </div>
-          <ul id="pagination"></ul>
+          <ul id="pagination" data-first="First" data-prev="Previous" data-next="Next" data-last="Last"></ul>
         </div>
       </div>
       <div role="main" class="container body-content hide-when-search">
@@ -156,7 +156,7 @@ to all the new files or throw them away. The default value is <code>true</code>>
 <p>
 For example, a MIDI file contains following notes:
 </p>
-<img src="images/Melanchall.DryWetMidi.Tools.SplitFileByNotesSettings-7425.png" class="text-image" />
+<img src="images/Melanchall.DryWetMidi.Tools.SplitFileByNotesSettings-7531.png" class="text-image" />
 <p>
 where <code>A</code> and <code>B</code> mean different notes; <code>.</code> is any non-note event.
 </p>
@@ -164,12 +164,12 @@ where <code>A</code> and <code>B</code> mean different notes; <code>.</code> is 
 If <a class="xref" href="Melanchall.DryWetMidi.Tools.SplitFileByNotesSettings.html#Melanchall_DryWetMidi_Tools_SplitFileByNotesSettings_CopyNonNoteEventsToEachFile">CopyNonNoteEventsToEachFile</a> set to <code>true</code> (default value), we&apos;ll get following
 two new files:
 </p>
-<img src="images/Melanchall.DryWetMidi.Tools.SplitFileByNotesSettings-8073.png" class="text-image" />
+<img src="images/Melanchall.DryWetMidi.Tools.SplitFileByNotesSettings-8177.png" class="text-image" />
 <p>
 But if <a class="xref" href="Melanchall.DryWetMidi.Tools.SplitFileByNotesSettings.html#Melanchall_DryWetMidi_Tools_SplitFileByNotesSettings_CopyNonNoteEventsToEachFile">CopyNonNoteEventsToEachFile</a> set to <code>false</code>, each new file will contain
 only note events:
 </p>
-<img src="images/Melanchall.DryWetMidi.Tools.SplitFileByNotesSettings-8658.png" class="text-image" />
+<img src="images/Melanchall.DryWetMidi.Tools.SplitFileByNotesSettings-8758.png" class="text-image" />
 
   <a id="Melanchall_DryWetMidi_Tools_SplitFileByNotesSettings_Filter_" data-uid="Melanchall.DryWetMidi.Tools.SplitFileByNotesSettings.Filter*"></a>
   <h4 id="Melanchall_DryWetMidi_Tools_SplitFileByNotesSettings_Filter" data-uid="Melanchall.DryWetMidi.Tools.SplitFileByNotesSettings.Filter">Filter</h4>
@@ -230,7 +230,7 @@ treated as same ones. The default value is <code>false</code>.
 <p>
 For example, a MIDI file contains following notes:
 </p>
-<img src="images/Melanchall.DryWetMidi.Tools.SplitFileByNotesSettings-11767.png" class="text-image" />
+<img src="images/Melanchall.DryWetMidi.Tools.SplitFileByNotesSettings-11863.png" class="text-image" />
 <p>
 where <code>AN</code> and <code>BN</code> mean different notes on channel <code>N</code>.
 </p>
@@ -238,11 +238,11 @@ where <code>AN</code> and <code>BN</code> mean different notes on channel <code>
 If <a class="xref" href="Melanchall.DryWetMidi.Tools.SplitFileByNotesSettings.html#Melanchall_DryWetMidi_Tools_SplitFileByNotesSettings_IgnoreChannel">IgnoreChannel</a> set to <code>false</code> (which is the default value),
 we&apos;ll get four new files (since different channel means different note):
 </p>
-<img src="images/Melanchall.DryWetMidi.Tools.SplitFileByNotesSettings-12517.png" class="text-image" />
+<img src="images/Melanchall.DryWetMidi.Tools.SplitFileByNotesSettings-12621.png" class="text-image" />
 <p>
 But if <a class="xref" href="Melanchall.DryWetMidi.Tools.SplitFileByNotesSettings.html#Melanchall_DryWetMidi_Tools_SplitFileByNotesSettings_IgnoreChannel">IgnoreChannel</a> set to <code>true</code>, we&apos;ll get two files:
 </p>
-<img src="images/Melanchall.DryWetMidi.Tools.SplitFileByNotesSettings-13534.png" class="text-image" />
+<img src="images/Melanchall.DryWetMidi.Tools.SplitFileByNotesSettings-13644.png" class="text-image" />
 
   <h3 id="seealso">See Also</h3>
   <div class="seealso">
@@ -254,7 +254,8 @@ But if <a class="xref" href="Melanchall.DryWetMidi.Tools.SplitFileByNotesSetting
           <div class="hidden-sm col-md-2" role="complementary">
             <div class="sideaffix">
               <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
-              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+                <h5>In This Article</h5>
+                <div></div>
               </nav>
             </div>
           </div>

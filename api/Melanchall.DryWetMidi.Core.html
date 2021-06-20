@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Namespace Melanchall.DryWetMidi.Core
    | DryWetMIDI ">
-    <meta name="generator" content="docfx 2.56.2.0">
+    <meta name="generator" content="docfx 2.58.0.0">
     
     <link rel="shortcut icon" href="../images/favicon.png">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
@@ -61,11 +61,11 @@
       <div class="container body-content">
         
         <div id="search-results">
-          <div class="search-list"></div>
+          <div class="search-list">Search Results for <span></span></div>
           <div class="sr-items">
             <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
           </div>
-          <ul id="pagination"></ul>
+          <ul id="pagination" data-first="First" data-prev="Previous" data-next="Next" data-last="Last"></ul>
         </div>
       </div>
       <div role="main" class="container body-content hide-when-search">
@@ -146,6 +146,10 @@ Represents a Cue Point meta event.
       <h4><a class="xref" href="Melanchall.DryWetMidi.Core.DeviceNameEvent.html">DeviceNameEvent</a></h4>
       <section>
 Represents a Device Name meta event.
+</section>
+      <h4><a class="xref" href="Melanchall.DryWetMidi.Core.EndOfTrackEvent.html">EndOfTrackEvent</a></h4>
+      <section>
+Represents an End Of Track meta event.
 </section>
       <h4><a class="xref" href="Melanchall.DryWetMidi.Core.EscapeSysExEvent.html">EscapeSysExEvent</a></h4>
       <section>
@@ -473,6 +477,11 @@ The default is <a class="xref" href="Melanchall.DryWetMidi.Core.BufferingPolicy.
       <section>
 Specifies how writing engine should compress MIDI data. The default is <a class="xref" href="Melanchall.DryWetMidi.Core.CompressionPolicy.html#Melanchall_DryWetMidi_Core_CompressionPolicy_NoCompression">NoCompression</a>.
 </section>
+      <h4><a class="xref" href="Melanchall.DryWetMidi.Core.EndOfTrackStoringPolicy.html">EndOfTrackStoringPolicy</a></h4>
+      <section>
+Specifies how reading engine should react on End Of Track event encountered.
+The default is <a class="xref" href="Melanchall.DryWetMidi.Core.EndOfTrackStoringPolicy.html#Melanchall_DryWetMidi_Core_EndOfTrackStoringPolicy_Omit">Omit</a>.
+</section>
       <h4><a class="xref" href="Melanchall.DryWetMidi.Core.ExtraTrackChunkPolicy.html">ExtraTrackChunkPolicy</a></h4>
       <section>
 Specifies how reading engine should react on new track chunk if already read chunks
@@ -585,7 +594,8 @@ set to <a class="xref" href="Melanchall.DryWetMidi.Core.UnknownChannelEventPolic
           <div class="hidden-sm col-md-2" role="complementary">
             <div class="sideaffix">
               <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
-              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+                <h5>In This Article</h5>
+                <div></div>
               </nav>
             </div>
           </div>

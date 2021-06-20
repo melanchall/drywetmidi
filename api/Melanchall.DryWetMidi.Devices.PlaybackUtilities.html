@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Class PlaybackUtilities
    | DryWetMIDI ">
-    <meta name="generator" content="docfx 2.56.2.0">
+    <meta name="generator" content="docfx 2.58.0.0">
     
     <link rel="shortcut icon" href="../images/favicon.png">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
@@ -61,11 +61,11 @@
       <div class="container body-content">
         
         <div id="search-results">
-          <div class="search-list"></div>
+          <div class="search-list">Search Results for <span></span></div>
           <div class="sr-items">
             <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
           </div>
-          <ul id="pagination"></ul>
+          <ul id="pagination" data-first="First" data-prev="Previous" data-next="Next" data-last="Last"></ul>
         </div>
       </div>
       <div role="main" class="container body-content hide-when-search">
@@ -126,7 +126,7 @@ which provides advanced features for MIDI data playing.
   <h3 id="methods">Methods
   </h3>
   <a id="Melanchall_DryWetMidi_Devices_PlaybackUtilities_GetPlayback_" data-uid="Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback*"></a>
-  <h4 id="Melanchall_DryWetMidi_Devices_PlaybackUtilities_GetPlayback_Melanchall_DryWetMidi_Composing_Pattern_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Common_FourBitNumber_Melanchall_DryWetMidi_Devices_IOutputDevice_Melanchall_DryWetMidi_Devices_MidiClockSettings_" data-uid="Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback(Melanchall.DryWetMidi.Composing.Pattern,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Common.FourBitNumber,Melanchall.DryWetMidi.Devices.IOutputDevice,Melanchall.DryWetMidi.Devices.MidiClockSettings)">GetPlayback(Pattern, TempoMap, FourBitNumber, IOutputDevice, MidiClockSettings)</h4>
+  <h4 id="Melanchall_DryWetMidi_Devices_PlaybackUtilities_GetPlayback_Melanchall_DryWetMidi_Composing_Pattern_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Common_FourBitNumber_Melanchall_DryWetMidi_Devices_IOutputDevice_Melanchall_DryWetMidi_Devices_PlaybackSettings_" data-uid="Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback(Melanchall.DryWetMidi.Composing.Pattern,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Common.FourBitNumber,Melanchall.DryWetMidi.Devices.IOutputDevice,Melanchall.DryWetMidi.Devices.PlaybackSettings)">GetPlayback(Pattern, TempoMap, FourBitNumber, IOutputDevice, PlaybackSettings)</h4>
   <div class="markdown level1 summary">
 Retrieves an instance of the <a class="xref" href="Melanchall.DryWetMidi.Devices.Playback.html">Playback</a> for playing MIDI events that will be
 produced by specified <a class="xref" href="Melanchall.DryWetMidi.Composing.Pattern.html">Pattern</a>.
@@ -134,7 +134,7 @@ produced by specified <a class="xref" href="Melanchall.DryWetMidi.Composing.Patt
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static Playback GetPlayback(this Pattern pattern, TempoMap tempoMap, FourBitNumber channel, IOutputDevice outputDevice, MidiClockSettings clockSettings = null)</code></pre>
+    <pre><code class="lang-csharp hljs">public static Playback GetPlayback(this Pattern pattern, TempoMap tempoMap, FourBitNumber channel, IOutputDevice outputDevice, PlaybackSettings playbackSettings = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -167,9 +167,9 @@ produced by specified <a class="xref" href="Melanchall.DryWetMidi.Composing.Patt
         <td>Output MIDI device to play events through.</td>
       </tr>
       <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Devices.MidiClockSettings.html">MidiClockSettings</a></td>
-        <td><span class="parametername">clockSettings</span></td>
-        <td>Settings of the internal playback&apos;s clock.</td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Devices.PlaybackSettings.html">PlaybackSettings</a></td>
+        <td><span class="parametername">playbackSettings</span></td>
+        <td>Settings according to which a playback should be created.</td>
       </tr>
     </tbody>
   </table>
@@ -208,7 +208,7 @@ produced by the <code data-dev-comment-type="paramref" class="paramref">pattern<
     </tbody>
   </table>
   <a id="Melanchall_DryWetMidi_Devices_PlaybackUtilities_GetPlayback_" data-uid="Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback*"></a>
-  <h4 id="Melanchall_DryWetMidi_Devices_PlaybackUtilities_GetPlayback_Melanchall_DryWetMidi_Composing_Pattern_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Common_FourBitNumber_Melanchall_DryWetMidi_Devices_MidiClockSettings_" data-uid="Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback(Melanchall.DryWetMidi.Composing.Pattern,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Common.FourBitNumber,Melanchall.DryWetMidi.Devices.MidiClockSettings)">GetPlayback(Pattern, TempoMap, FourBitNumber, MidiClockSettings)</h4>
+  <h4 id="Melanchall_DryWetMidi_Devices_PlaybackUtilities_GetPlayback_Melanchall_DryWetMidi_Composing_Pattern_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Common_FourBitNumber_Melanchall_DryWetMidi_Devices_PlaybackSettings_" data-uid="Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback(Melanchall.DryWetMidi.Composing.Pattern,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Common.FourBitNumber,Melanchall.DryWetMidi.Devices.PlaybackSettings)">GetPlayback(Pattern, TempoMap, FourBitNumber, PlaybackSettings)</h4>
   <div class="markdown level1 summary">
 Retrieves an instance of the <a class="xref" href="Melanchall.DryWetMidi.Devices.Playback.html">Playback</a> for playing MIDI events that will be
 produced by specified <a class="xref" href="Melanchall.DryWetMidi.Composing.Pattern.html">Pattern</a>.
@@ -216,7 +216,7 @@ produced by specified <a class="xref" href="Melanchall.DryWetMidi.Composing.Patt
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static Playback GetPlayback(this Pattern pattern, TempoMap tempoMap, FourBitNumber channel, MidiClockSettings clockSettings = null)</code></pre>
+    <pre><code class="lang-csharp hljs">public static Playback GetPlayback(this Pattern pattern, TempoMap tempoMap, FourBitNumber channel, PlaybackSettings playbackSettings = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -244,9 +244,9 @@ produced by specified <a class="xref" href="Melanchall.DryWetMidi.Composing.Patt
         <td>MIDI channel to play channel events on.</td>
       </tr>
       <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Devices.MidiClockSettings.html">MidiClockSettings</a></td>
-        <td><span class="parametername">clockSettings</span></td>
-        <td>Settings of the internal playback&apos;s clock.</td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Devices.PlaybackSettings.html">PlaybackSettings</a></td>
+        <td><span class="parametername">playbackSettings</span></td>
+        <td>Settings according to which a playback should be created.</td>
       </tr>
     </tbody>
   </table>
@@ -285,7 +285,7 @@ produced by the <code data-dev-comment-type="paramref" class="paramref">pattern<
     </tbody>
   </table>
   <a id="Melanchall_DryWetMidi_Devices_PlaybackUtilities_GetPlayback_" data-uid="Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback*"></a>
-  <h4 id="Melanchall_DryWetMidi_Devices_PlaybackUtilities_GetPlayback_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Devices_IOutputDevice_Melanchall_DryWetMidi_Devices_MidiClockSettings_" data-uid="Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback(Melanchall.DryWetMidi.Core.MidiFile,Melanchall.DryWetMidi.Devices.IOutputDevice,Melanchall.DryWetMidi.Devices.MidiClockSettings)">GetPlayback(MidiFile, IOutputDevice, MidiClockSettings)</h4>
+  <h4 id="Melanchall_DryWetMidi_Devices_PlaybackUtilities_GetPlayback_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Devices_IOutputDevice_Melanchall_DryWetMidi_Devices_PlaybackSettings_" data-uid="Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback(Melanchall.DryWetMidi.Core.MidiFile,Melanchall.DryWetMidi.Devices.IOutputDevice,Melanchall.DryWetMidi.Devices.PlaybackSettings)">GetPlayback(MidiFile, IOutputDevice, PlaybackSettings)</h4>
   <div class="markdown level1 summary">
 Retrieves an instance of the <a class="xref" href="Melanchall.DryWetMidi.Devices.Playback.html">Playback</a> for playing MIDI events contained in
 the specified <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a>.
@@ -293,7 +293,7 @@ the specified <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">Mi
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static Playback GetPlayback(this MidiFile midiFile, IOutputDevice outputDevice, MidiClockSettings clockSettings = null)</code></pre>
+    <pre><code class="lang-csharp hljs">public static Playback GetPlayback(this MidiFile midiFile, IOutputDevice outputDevice, PlaybackSettings playbackSettings = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -316,9 +316,9 @@ the specified <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">Mi
         <td>Output MIDI device to play events through.</td>
       </tr>
       <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Devices.MidiClockSettings.html">MidiClockSettings</a></td>
-        <td><span class="parametername">clockSettings</span></td>
-        <td>Settings of the internal playback&apos;s clock.</td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Devices.PlaybackSettings.html">PlaybackSettings</a></td>
+        <td><span class="parametername">playbackSettings</span></td>
+        <td>Settings according to which a playback should be created.</td>
       </tr>
     </tbody>
   </table>
@@ -357,7 +357,7 @@ the <code data-dev-comment-type="paramref" class="paramref">midiFile</code>.</td
     </tbody>
   </table>
   <a id="Melanchall_DryWetMidi_Devices_PlaybackUtilities_GetPlayback_" data-uid="Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback*"></a>
-  <h4 id="Melanchall_DryWetMidi_Devices_PlaybackUtilities_GetPlayback_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Devices_MidiClockSettings_" data-uid="Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback(Melanchall.DryWetMidi.Core.MidiFile,Melanchall.DryWetMidi.Devices.MidiClockSettings)">GetPlayback(MidiFile, MidiClockSettings)</h4>
+  <h4 id="Melanchall_DryWetMidi_Devices_PlaybackUtilities_GetPlayback_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Devices_PlaybackSettings_" data-uid="Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback(Melanchall.DryWetMidi.Core.MidiFile,Melanchall.DryWetMidi.Devices.PlaybackSettings)">GetPlayback(MidiFile, PlaybackSettings)</h4>
   <div class="markdown level1 summary">
 Retrieves an instance of the <a class="xref" href="Melanchall.DryWetMidi.Devices.Playback.html">Playback</a> for playing MIDI events contained in
 the specified <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a>.
@@ -365,7 +365,7 @@ the specified <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">Mi
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static Playback GetPlayback(this MidiFile midiFile, MidiClockSettings clockSettings = null)</code></pre>
+    <pre><code class="lang-csharp hljs">public static Playback GetPlayback(this MidiFile midiFile, PlaybackSettings playbackSettings = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -383,9 +383,9 @@ the specified <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">Mi
         <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a> containing events to play.</td>
       </tr>
       <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Devices.MidiClockSettings.html">MidiClockSettings</a></td>
-        <td><span class="parametername">clockSettings</span></td>
-        <td>Settings of the internal playback&apos;s clock.</td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Devices.PlaybackSettings.html">PlaybackSettings</a></td>
+        <td><span class="parametername">playbackSettings</span></td>
+        <td>Settings according to which a playback should be created.</td>
       </tr>
     </tbody>
   </table>
@@ -421,7 +421,7 @@ the <code data-dev-comment-type="paramref" class="paramref">midiFile</code>.</td
     </tbody>
   </table>
   <a id="Melanchall_DryWetMidi_Devices_PlaybackUtilities_GetPlayback_" data-uid="Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback*"></a>
-  <h4 id="Melanchall_DryWetMidi_Devices_PlaybackUtilities_GetPlayback_Melanchall_DryWetMidi_Core_TrackChunk_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Devices_IOutputDevice_Melanchall_DryWetMidi_Devices_MidiClockSettings_" data-uid="Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback(Melanchall.DryWetMidi.Core.TrackChunk,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.IOutputDevice,Melanchall.DryWetMidi.Devices.MidiClockSettings)">GetPlayback(TrackChunk, TempoMap, IOutputDevice, MidiClockSettings)</h4>
+  <h4 id="Melanchall_DryWetMidi_Devices_PlaybackUtilities_GetPlayback_Melanchall_DryWetMidi_Core_TrackChunk_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Devices_IOutputDevice_Melanchall_DryWetMidi_Devices_PlaybackSettings_" data-uid="Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback(Melanchall.DryWetMidi.Core.TrackChunk,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.IOutputDevice,Melanchall.DryWetMidi.Devices.PlaybackSettings)">GetPlayback(TrackChunk, TempoMap, IOutputDevice, PlaybackSettings)</h4>
   <div class="markdown level1 summary">
 Retrieves an instance of the <a class="xref" href="Melanchall.DryWetMidi.Devices.Playback.html">Playback</a> for playing MIDI events contained in
 the specified <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a>.
@@ -429,7 +429,7 @@ the specified <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static Playback GetPlayback(this TrackChunk trackChunk, TempoMap tempoMap, IOutputDevice outputDevice, MidiClockSettings clockSettings = null)</code></pre>
+    <pre><code class="lang-csharp hljs">public static Playback GetPlayback(this TrackChunk trackChunk, TempoMap tempoMap, IOutputDevice outputDevice, PlaybackSettings playbackSettings = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -457,9 +457,9 @@ the specified <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">
         <td>Output MIDI device to play events through.</td>
       </tr>
       <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Devices.MidiClockSettings.html">MidiClockSettings</a></td>
-        <td><span class="parametername">clockSettings</span></td>
-        <td>Settings of the internal playback&apos;s clock.</td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Devices.PlaybackSettings.html">PlaybackSettings</a></td>
+        <td><span class="parametername">playbackSettings</span></td>
+        <td>Settings according to which a playback should be created.</td>
       </tr>
     </tbody>
   </table>
@@ -498,7 +498,7 @@ the <code data-dev-comment-type="paramref" class="paramref">trackChunk</code>.</
     </tbody>
   </table>
   <a id="Melanchall_DryWetMidi_Devices_PlaybackUtilities_GetPlayback_" data-uid="Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback*"></a>
-  <h4 id="Melanchall_DryWetMidi_Devices_PlaybackUtilities_GetPlayback_Melanchall_DryWetMidi_Core_TrackChunk_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Devices_MidiClockSettings_" data-uid="Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback(Melanchall.DryWetMidi.Core.TrackChunk,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.MidiClockSettings)">GetPlayback(TrackChunk, TempoMap, MidiClockSettings)</h4>
+  <h4 id="Melanchall_DryWetMidi_Devices_PlaybackUtilities_GetPlayback_Melanchall_DryWetMidi_Core_TrackChunk_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Devices_PlaybackSettings_" data-uid="Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback(Melanchall.DryWetMidi.Core.TrackChunk,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.PlaybackSettings)">GetPlayback(TrackChunk, TempoMap, PlaybackSettings)</h4>
   <div class="markdown level1 summary">
 Retrieves an instance of the <a class="xref" href="Melanchall.DryWetMidi.Devices.Playback.html">Playback</a> for playing MIDI events contained in
 the specified <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a>.
@@ -506,7 +506,7 @@ the specified <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static Playback GetPlayback(this TrackChunk trackChunk, TempoMap tempoMap, MidiClockSettings clockSettings = null)</code></pre>
+    <pre><code class="lang-csharp hljs">public static Playback GetPlayback(this TrackChunk trackChunk, TempoMap tempoMap, PlaybackSettings playbackSettings = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -529,9 +529,9 @@ the specified <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">
         <td>Tempo map used to calculate events times.</td>
       </tr>
       <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Devices.MidiClockSettings.html">MidiClockSettings</a></td>
-        <td><span class="parametername">clockSettings</span></td>
-        <td>Settings of the internal playback&apos;s clock.</td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Devices.PlaybackSettings.html">PlaybackSettings</a></td>
+        <td><span class="parametername">playbackSettings</span></td>
+        <td>Settings according to which a playback should be created.</td>
       </tr>
     </tbody>
   </table>
@@ -570,7 +570,154 @@ the <code data-dev-comment-type="paramref" class="paramref">trackChunk</code>.</
     </tbody>
   </table>
   <a id="Melanchall_DryWetMidi_Devices_PlaybackUtilities_GetPlayback_" data-uid="Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback*"></a>
-  <h4 id="Melanchall_DryWetMidi_Devices_PlaybackUtilities_GetPlayback_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Devices_IOutputDevice_Melanchall_DryWetMidi_Devices_MidiClockSettings_" data-uid="Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk},Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.IOutputDevice,Melanchall.DryWetMidi.Devices.MidiClockSettings)">GetPlayback(IEnumerable&lt;TrackChunk&gt;, TempoMap, IOutputDevice, MidiClockSettings)</h4>
+  <h4 id="Melanchall_DryWetMidi_Devices_PlaybackUtilities_GetPlayback_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_MidiEvent__Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Devices_IOutputDevice_Melanchall_DryWetMidi_Devices_PlaybackSettings_" data-uid="Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.MidiEvent},Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.IOutputDevice,Melanchall.DryWetMidi.Devices.PlaybackSettings)">GetPlayback(IEnumerable&lt;MidiEvent&gt;, TempoMap, IOutputDevice, PlaybackSettings)</h4>
+  <div class="markdown level1 summary">
+Retrieves an instance of the <a class="xref" href="Melanchall.DryWetMidi.Devices.Playback.html">Playback</a> for playing MIDI events collection.
+Events will be sheduled for playback according to their delta-times.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static Playback GetPlayback(this IEnumerable&lt;MidiEvent&gt; events, TempoMap tempoMap, IOutputDevice outputDevice, PlaybackSettings playbackSettings = null)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html">MidiEvent</a>&gt;</td>
+        <td><span class="parametername">events</span></td>
+        <td>MIDI events to play.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TempoMap.html">TempoMap</a></td>
+        <td><span class="parametername">tempoMap</span></td>
+        <td>Tempo map used to calculate events times.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Devices.IOutputDevice.html">IOutputDevice</a></td>
+        <td><span class="parametername">outputDevice</span></td>
+        <td>Output MIDI device to play events through.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Devices.PlaybackSettings.html">PlaybackSettings</a></td>
+        <td><span class="parametername">playbackSettings</span></td>
+        <td>Settings according to which a playback should be created.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Devices.Playback.html">Playback</a></td>
+        <td>An instance of the <a class="xref" href="Melanchall.DryWetMidi.Devices.Playback.html">Playback</a> for playing <code data-dev-comment-type="paramref" class="paramref">events</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td>
+<p>One of the following errors occured:</p>
+<ul><li><code data-dev-comment-type="paramref" class="paramref">events</code> is <code>null</code>.</li><li><code data-dev-comment-type="paramref" class="paramref">tempoMap</code> is <code>null</code>.</li><li><code data-dev-comment-type="paramref" class="paramref">outputDevice</code> is <code>null</code>.</li></ul>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Devices_PlaybackUtilities_GetPlayback_" data-uid="Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback*"></a>
+  <h4 id="Melanchall_DryWetMidi_Devices_PlaybackUtilities_GetPlayback_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_MidiEvent__Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Devices_PlaybackSettings_" data-uid="Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.MidiEvent},Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.PlaybackSettings)">GetPlayback(IEnumerable&lt;MidiEvent&gt;, TempoMap, PlaybackSettings)</h4>
+  <div class="markdown level1 summary">
+Retrieves an instance of the <a class="xref" href="Melanchall.DryWetMidi.Devices.Playback.html">Playback</a> for playing MIDI events collection.
+Events will be sheduled for playback according to their delta-times.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static Playback GetPlayback(this IEnumerable&lt;MidiEvent&gt; events, TempoMap tempoMap, PlaybackSettings playbackSettings = null)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html">MidiEvent</a>&gt;</td>
+        <td><span class="parametername">events</span></td>
+        <td>MIDI events to play.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TempoMap.html">TempoMap</a></td>
+        <td><span class="parametername">tempoMap</span></td>
+        <td>Tempo map used to calculate events times.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Devices.PlaybackSettings.html">PlaybackSettings</a></td>
+        <td><span class="parametername">playbackSettings</span></td>
+        <td>Settings according to which a playback should be created.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Devices.Playback.html">Playback</a></td>
+        <td>An instance of the <a class="xref" href="Melanchall.DryWetMidi.Devices.Playback.html">Playback</a> for playing <code data-dev-comment-type="paramref" class="paramref">events</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td>
+<p>One of the following errors occured:</p>
+<ul><li><code data-dev-comment-type="paramref" class="paramref">events</code> is <code>null</code>.</li><li><code data-dev-comment-type="paramref" class="paramref">tempoMap</code> is <code>null</code>.</li></ul>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Devices_PlaybackUtilities_GetPlayback_" data-uid="Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback*"></a>
+  <h4 id="Melanchall_DryWetMidi_Devices_PlaybackUtilities_GetPlayback_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Devices_IOutputDevice_Melanchall_DryWetMidi_Devices_PlaybackSettings_" data-uid="Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk},Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.IOutputDevice,Melanchall.DryWetMidi.Devices.PlaybackSettings)">GetPlayback(IEnumerable&lt;TrackChunk&gt;, TempoMap, IOutputDevice, PlaybackSettings)</h4>
   <div class="markdown level1 summary">
 Retrieves an instance of the <a class="xref" href="Melanchall.DryWetMidi.Devices.Playback.html">Playback</a> for playing MIDI events contained in
 the specified collection of <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a>.
@@ -578,7 +725,7 @@ the specified collection of <a class="xref" href="Melanchall.DryWetMidi.Core.Tra
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static Playback GetPlayback(this IEnumerable&lt;TrackChunk&gt; trackChunks, TempoMap tempoMap, IOutputDevice outputDevice, MidiClockSettings clockSettings = null)</code></pre>
+    <pre><code class="lang-csharp hljs">public static Playback GetPlayback(this IEnumerable&lt;TrackChunk&gt; trackChunks, TempoMap tempoMap, IOutputDevice outputDevice, PlaybackSettings playbackSettings = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -606,9 +753,9 @@ the specified collection of <a class="xref" href="Melanchall.DryWetMidi.Core.Tra
         <td>Output MIDI device to play events through.</td>
       </tr>
       <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Devices.MidiClockSettings.html">MidiClockSettings</a></td>
-        <td><span class="parametername">clockSettings</span></td>
-        <td>Settings of the internal playback&apos;s clock.</td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Devices.PlaybackSettings.html">PlaybackSettings</a></td>
+        <td><span class="parametername">playbackSettings</span></td>
+        <td>Settings according to which a playback should be created.</td>
       </tr>
     </tbody>
   </table>
@@ -647,7 +794,7 @@ the <code data-dev-comment-type="paramref" class="paramref">trackChunks</code>.<
     </tbody>
   </table>
   <a id="Melanchall_DryWetMidi_Devices_PlaybackUtilities_GetPlayback_" data-uid="Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback*"></a>
-  <h4 id="Melanchall_DryWetMidi_Devices_PlaybackUtilities_GetPlayback_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Devices_MidiClockSettings_" data-uid="Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk},Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.MidiClockSettings)">GetPlayback(IEnumerable&lt;TrackChunk&gt;, TempoMap, MidiClockSettings)</h4>
+  <h4 id="Melanchall_DryWetMidi_Devices_PlaybackUtilities_GetPlayback_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Devices_PlaybackSettings_" data-uid="Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk},Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.PlaybackSettings)">GetPlayback(IEnumerable&lt;TrackChunk&gt;, TempoMap, PlaybackSettings)</h4>
   <div class="markdown level1 summary">
 Retrieves an instance of the <a class="xref" href="Melanchall.DryWetMidi.Devices.Playback.html">Playback</a> for playing MIDI events contained in
 the specified collection of <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a>.
@@ -655,7 +802,7 @@ the specified collection of <a class="xref" href="Melanchall.DryWetMidi.Core.Tra
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static Playback GetPlayback(this IEnumerable&lt;TrackChunk&gt; trackChunks, TempoMap tempoMap, MidiClockSettings clockSettings = null)</code></pre>
+    <pre><code class="lang-csharp hljs">public static Playback GetPlayback(this IEnumerable&lt;TrackChunk&gt; trackChunks, TempoMap tempoMap, PlaybackSettings playbackSettings = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -678,9 +825,9 @@ the specified collection of <a class="xref" href="Melanchall.DryWetMidi.Core.Tra
         <td>Tempo map used to calculate events times.</td>
       </tr>
       <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Devices.MidiClockSettings.html">MidiClockSettings</a></td>
-        <td><span class="parametername">clockSettings</span></td>
-        <td>Settings of the internal playback&apos;s clock.</td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Devices.PlaybackSettings.html">PlaybackSettings</a></td>
+        <td><span class="parametername">playbackSettings</span></td>
+        <td>Settings according to which a playback should be created.</td>
       </tr>
     </tbody>
   </table>
@@ -719,7 +866,7 @@ the <code data-dev-comment-type="paramref" class="paramref">trackChunks</code>.<
     </tbody>
   </table>
   <a id="Melanchall_DryWetMidi_Devices_PlaybackUtilities_GetPlayback_" data-uid="Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback*"></a>
-  <h4 id="Melanchall_DryWetMidi_Devices_PlaybackUtilities_GetPlayback__1_System_Collections_Generic_IEnumerable___0__Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Devices_IOutputDevice_Melanchall_DryWetMidi_Common_SevenBitNumber_Melanchall_DryWetMidi_Devices_MidiClockSettings_" data-uid="Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback``1(System.Collections.Generic.IEnumerable{``0},Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.IOutputDevice,Melanchall.DryWetMidi.Common.SevenBitNumber,Melanchall.DryWetMidi.Devices.MidiClockSettings)">GetPlayback&lt;TObject&gt;(IEnumerable&lt;TObject&gt;, TempoMap, IOutputDevice, SevenBitNumber, MidiClockSettings)</h4>
+  <h4 id="Melanchall_DryWetMidi_Devices_PlaybackUtilities_GetPlayback__1_System_Collections_Generic_IEnumerable___0__Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Devices_IOutputDevice_Melanchall_DryWetMidi_Common_SevenBitNumber_Melanchall_DryWetMidi_Devices_PlaybackSettings_" data-uid="Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback``1(System.Collections.Generic.IEnumerable{``0},Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.IOutputDevice,Melanchall.DryWetMidi.Common.SevenBitNumber,Melanchall.DryWetMidi.Devices.PlaybackSettings)">GetPlayback&lt;TObject&gt;(IEnumerable&lt;TObject&gt;, TempoMap, IOutputDevice, SevenBitNumber, PlaybackSettings)</h4>
   <div class="markdown level1 summary">
 Retrieves an instance of the <a class="xref" href="Melanchall.DryWetMidi.Devices.Playback.html">Playback</a> for playing musical objects using
 the specified program.
@@ -727,7 +874,7 @@ the specified program.
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static Playback GetPlayback&lt;TObject&gt;(this IEnumerable&lt;TObject&gt; objects, TempoMap tempoMap, IOutputDevice outputDevice, SevenBitNumber programNumber, MidiClockSettings clockSettings = null)
+    <pre><code class="lang-csharp hljs">public static Playback GetPlayback&lt;TObject&gt;(this IEnumerable&lt;TObject&gt; objects, TempoMap tempoMap, IOutputDevice outputDevice, SevenBitNumber programNumber, PlaybackSettings playbackSettings = null)
     where TObject : IMusicalObject, ITimedObject</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
@@ -761,9 +908,9 @@ the specified program.
         <td>Program that should be used to play <code data-dev-comment-type="paramref" class="paramref">objects</code>.</td>
       </tr>
       <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Devices.MidiClockSettings.html">MidiClockSettings</a></td>
-        <td><span class="parametername">clockSettings</span></td>
-        <td>Settings of the internal playback&apos;s clock.</td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Devices.PlaybackSettings.html">PlaybackSettings</a></td>
+        <td><span class="parametername">playbackSettings</span></td>
+        <td>Settings according to which a playback should be created.</td>
       </tr>
     </tbody>
   </table>
@@ -816,7 +963,7 @@ the specified program.
     </tbody>
   </table>
   <a id="Melanchall_DryWetMidi_Devices_PlaybackUtilities_GetPlayback_" data-uid="Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback*"></a>
-  <h4 id="Melanchall_DryWetMidi_Devices_PlaybackUtilities_GetPlayback__1_System_Collections_Generic_IEnumerable___0__Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Devices_IOutputDevice_Melanchall_DryWetMidi_Standards_GeneralMidi2Program_Melanchall_DryWetMidi_Devices_MidiClockSettings_" data-uid="Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback``1(System.Collections.Generic.IEnumerable{``0},Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.IOutputDevice,Melanchall.DryWetMidi.Standards.GeneralMidi2Program,Melanchall.DryWetMidi.Devices.MidiClockSettings)">GetPlayback&lt;TObject&gt;(IEnumerable&lt;TObject&gt;, TempoMap, IOutputDevice, GeneralMidi2Program, MidiClockSettings)</h4>
+  <h4 id="Melanchall_DryWetMidi_Devices_PlaybackUtilities_GetPlayback__1_System_Collections_Generic_IEnumerable___0__Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Devices_IOutputDevice_Melanchall_DryWetMidi_Standards_GeneralMidi2Program_Melanchall_DryWetMidi_Devices_PlaybackSettings_" data-uid="Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback``1(System.Collections.Generic.IEnumerable{``0},Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.IOutputDevice,Melanchall.DryWetMidi.Standards.GeneralMidi2Program,Melanchall.DryWetMidi.Devices.PlaybackSettings)">GetPlayback&lt;TObject&gt;(IEnumerable&lt;TObject&gt;, TempoMap, IOutputDevice, GeneralMidi2Program, PlaybackSettings)</h4>
   <div class="markdown level1 summary">
 Retrieves an instance of the <a class="xref" href="Melanchall.DryWetMidi.Devices.Playback.html">Playback</a> for playing musical objects using
 the specified General MIDI 2 program.
@@ -824,7 +971,7 @@ the specified General MIDI 2 program.
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static Playback GetPlayback&lt;TObject&gt;(this IEnumerable&lt;TObject&gt; objects, TempoMap tempoMap, IOutputDevice outputDevice, GeneralMidi2Program generalMidi2Program, MidiClockSettings clockSettings = null)
+    <pre><code class="lang-csharp hljs">public static Playback GetPlayback&lt;TObject&gt;(this IEnumerable&lt;TObject&gt; objects, TempoMap tempoMap, IOutputDevice outputDevice, GeneralMidi2Program generalMidi2Program, PlaybackSettings playbackSettings = null)
     where TObject : IMusicalObject, ITimedObject</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
@@ -858,9 +1005,9 @@ the specified General MIDI 2 program.
         <td>Program that should be used to play <code data-dev-comment-type="paramref" class="paramref">objects</code>.</td>
       </tr>
       <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Devices.MidiClockSettings.html">MidiClockSettings</a></td>
-        <td><span class="parametername">clockSettings</span></td>
-        <td>Settings of the internal playback&apos;s clock.</td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Devices.PlaybackSettings.html">PlaybackSettings</a></td>
+        <td><span class="parametername">playbackSettings</span></td>
+        <td>Settings according to which a playback should be created.</td>
       </tr>
     </tbody>
   </table>
@@ -917,7 +1064,7 @@ the specified General MIDI 2 program.
     </tbody>
   </table>
   <a id="Melanchall_DryWetMidi_Devices_PlaybackUtilities_GetPlayback_" data-uid="Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback*"></a>
-  <h4 id="Melanchall_DryWetMidi_Devices_PlaybackUtilities_GetPlayback__1_System_Collections_Generic_IEnumerable___0__Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Devices_IOutputDevice_Melanchall_DryWetMidi_Standards_GeneralMidiProgram_Melanchall_DryWetMidi_Devices_MidiClockSettings_" data-uid="Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback``1(System.Collections.Generic.IEnumerable{``0},Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.IOutputDevice,Melanchall.DryWetMidi.Standards.GeneralMidiProgram,Melanchall.DryWetMidi.Devices.MidiClockSettings)">GetPlayback&lt;TObject&gt;(IEnumerable&lt;TObject&gt;, TempoMap, IOutputDevice, GeneralMidiProgram, MidiClockSettings)</h4>
+  <h4 id="Melanchall_DryWetMidi_Devices_PlaybackUtilities_GetPlayback__1_System_Collections_Generic_IEnumerable___0__Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Devices_IOutputDevice_Melanchall_DryWetMidi_Standards_GeneralMidiProgram_Melanchall_DryWetMidi_Devices_PlaybackSettings_" data-uid="Melanchall.DryWetMidi.Devices.PlaybackUtilities.GetPlayback``1(System.Collections.Generic.IEnumerable{``0},Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.IOutputDevice,Melanchall.DryWetMidi.Standards.GeneralMidiProgram,Melanchall.DryWetMidi.Devices.PlaybackSettings)">GetPlayback&lt;TObject&gt;(IEnumerable&lt;TObject&gt;, TempoMap, IOutputDevice, GeneralMidiProgram, PlaybackSettings)</h4>
   <div class="markdown level1 summary">
 Retrieves an instance of the <a class="xref" href="Melanchall.DryWetMidi.Devices.Playback.html">Playback</a> for playing musical objects using
 the specified General MIDI 1 program.
@@ -925,7 +1072,7 @@ the specified General MIDI 1 program.
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static Playback GetPlayback&lt;TObject&gt;(this IEnumerable&lt;TObject&gt; objects, TempoMap tempoMap, IOutputDevice outputDevice, GeneralMidiProgram generalMidiProgram, MidiClockSettings clockSettings = null)
+    <pre><code class="lang-csharp hljs">public static Playback GetPlayback&lt;TObject&gt;(this IEnumerable&lt;TObject&gt; objects, TempoMap tempoMap, IOutputDevice outputDevice, GeneralMidiProgram generalMidiProgram, PlaybackSettings playbackSettings = null)
     where TObject : IMusicalObject, ITimedObject</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
@@ -959,9 +1106,9 @@ the specified General MIDI 1 program.
         <td>Program that should be used to play <code data-dev-comment-type="paramref" class="paramref">objects</code>.</td>
       </tr>
       <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Devices.MidiClockSettings.html">MidiClockSettings</a></td>
-        <td><span class="parametername">clockSettings</span></td>
-        <td>Settings of the internal playback&apos;s clock.</td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Devices.PlaybackSettings.html">PlaybackSettings</a></td>
+        <td><span class="parametername">playbackSettings</span></td>
+        <td>Settings according to which a playback should be created.</td>
       </tr>
     </tbody>
   </table>
@@ -1018,14 +1165,14 @@ the specified General MIDI 1 program.
     </tbody>
   </table>
   <a id="Melanchall_DryWetMidi_Devices_PlaybackUtilities_Play_" data-uid="Melanchall.DryWetMidi.Devices.PlaybackUtilities.Play*"></a>
-  <h4 id="Melanchall_DryWetMidi_Devices_PlaybackUtilities_Play_Melanchall_DryWetMidi_Composing_Pattern_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Common_FourBitNumber_Melanchall_DryWetMidi_Devices_IOutputDevice_Melanchall_DryWetMidi_Devices_MidiClockSettings_" data-uid="Melanchall.DryWetMidi.Devices.PlaybackUtilities.Play(Melanchall.DryWetMidi.Composing.Pattern,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Common.FourBitNumber,Melanchall.DryWetMidi.Devices.IOutputDevice,Melanchall.DryWetMidi.Devices.MidiClockSettings)">Play(Pattern, TempoMap, FourBitNumber, IOutputDevice, MidiClockSettings)</h4>
+  <h4 id="Melanchall_DryWetMidi_Devices_PlaybackUtilities_Play_Melanchall_DryWetMidi_Composing_Pattern_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Common_FourBitNumber_Melanchall_DryWetMidi_Devices_IOutputDevice_Melanchall_DryWetMidi_Devices_PlaybackSettings_" data-uid="Melanchall.DryWetMidi.Devices.PlaybackUtilities.Play(Melanchall.DryWetMidi.Composing.Pattern,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Common.FourBitNumber,Melanchall.DryWetMidi.Devices.IOutputDevice,Melanchall.DryWetMidi.Devices.PlaybackSettings)">Play(Pattern, TempoMap, FourBitNumber, IOutputDevice, PlaybackSettings)</h4>
   <div class="markdown level1 summary">
 Plays MIDI events that will be produced by specified <a class="xref" href="Melanchall.DryWetMidi.Composing.Pattern.html">Pattern</a>.
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void Play(this Pattern pattern, TempoMap tempoMap, FourBitNumber channel, IOutputDevice outputDevice, MidiClockSettings clockSettings = null)</code></pre>
+    <pre><code class="lang-csharp hljs">public static void Play(this Pattern pattern, TempoMap tempoMap, FourBitNumber channel, IOutputDevice outputDevice, PlaybackSettings playbackSettings = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -1058,9 +1205,9 @@ Plays MIDI events that will be produced by specified <a class="xref" href="Melan
         <td>Output MIDI device to play events through.</td>
       </tr>
       <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Devices.MidiClockSettings.html">MidiClockSettings</a></td>
-        <td><span class="parametername">clockSettings</span></td>
-        <td>Settings of the internal playback&apos;s clock.</td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Devices.PlaybackSettings.html">PlaybackSettings</a></td>
+        <td><span class="parametername">playbackSettings</span></td>
+        <td>Settings according to which a playback should be created.</td>
       </tr>
     </tbody>
   </table>
@@ -1083,14 +1230,14 @@ Plays MIDI events that will be produced by specified <a class="xref" href="Melan
     </tbody>
   </table>
   <a id="Melanchall_DryWetMidi_Devices_PlaybackUtilities_Play_" data-uid="Melanchall.DryWetMidi.Devices.PlaybackUtilities.Play*"></a>
-  <h4 id="Melanchall_DryWetMidi_Devices_PlaybackUtilities_Play_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Devices_IOutputDevice_Melanchall_DryWetMidi_Devices_MidiClockSettings_" data-uid="Melanchall.DryWetMidi.Devices.PlaybackUtilities.Play(Melanchall.DryWetMidi.Core.MidiFile,Melanchall.DryWetMidi.Devices.IOutputDevice,Melanchall.DryWetMidi.Devices.MidiClockSettings)">Play(MidiFile, IOutputDevice, MidiClockSettings)</h4>
+  <h4 id="Melanchall_DryWetMidi_Devices_PlaybackUtilities_Play_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Devices_IOutputDevice_Melanchall_DryWetMidi_Devices_PlaybackSettings_" data-uid="Melanchall.DryWetMidi.Devices.PlaybackUtilities.Play(Melanchall.DryWetMidi.Core.MidiFile,Melanchall.DryWetMidi.Devices.IOutputDevice,Melanchall.DryWetMidi.Devices.PlaybackSettings)">Play(MidiFile, IOutputDevice, PlaybackSettings)</h4>
   <div class="markdown level1 summary">
 Plays MIDI events contained in the specified <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a>.
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void Play(this MidiFile midiFile, IOutputDevice outputDevice, MidiClockSettings clockSettings = null)</code></pre>
+    <pre><code class="lang-csharp hljs">public static void Play(this MidiFile midiFile, IOutputDevice outputDevice, PlaybackSettings playbackSettings = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -1113,9 +1260,9 @@ Plays MIDI events contained in the specified <a class="xref" href="Melanchall.Dr
         <td>Output MIDI device to play events through.</td>
       </tr>
       <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Devices.MidiClockSettings.html">MidiClockSettings</a></td>
-        <td><span class="parametername">clockSettings</span></td>
-        <td>Settings of the internal playback&apos;s clock.</td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Devices.PlaybackSettings.html">PlaybackSettings</a></td>
+        <td><span class="parametername">playbackSettings</span></td>
+        <td>Settings according to which a playback should be created.</td>
       </tr>
     </tbody>
   </table>
@@ -1138,14 +1285,14 @@ Plays MIDI events contained in the specified <a class="xref" href="Melanchall.Dr
     </tbody>
   </table>
   <a id="Melanchall_DryWetMidi_Devices_PlaybackUtilities_Play_" data-uid="Melanchall.DryWetMidi.Devices.PlaybackUtilities.Play*"></a>
-  <h4 id="Melanchall_DryWetMidi_Devices_PlaybackUtilities_Play_Melanchall_DryWetMidi_Core_TrackChunk_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Devices_IOutputDevice_Melanchall_DryWetMidi_Devices_MidiClockSettings_" data-uid="Melanchall.DryWetMidi.Devices.PlaybackUtilities.Play(Melanchall.DryWetMidi.Core.TrackChunk,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.IOutputDevice,Melanchall.DryWetMidi.Devices.MidiClockSettings)">Play(TrackChunk, TempoMap, IOutputDevice, MidiClockSettings)</h4>
+  <h4 id="Melanchall_DryWetMidi_Devices_PlaybackUtilities_Play_Melanchall_DryWetMidi_Core_TrackChunk_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Devices_IOutputDevice_Melanchall_DryWetMidi_Devices_PlaybackSettings_" data-uid="Melanchall.DryWetMidi.Devices.PlaybackUtilities.Play(Melanchall.DryWetMidi.Core.TrackChunk,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.IOutputDevice,Melanchall.DryWetMidi.Devices.PlaybackSettings)">Play(TrackChunk, TempoMap, IOutputDevice, PlaybackSettings)</h4>
   <div class="markdown level1 summary">
 Plays MIDI events contained in the specified <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a>.
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void Play(this TrackChunk trackChunk, TempoMap tempoMap, IOutputDevice outputDevice, MidiClockSettings clockSettings = null)</code></pre>
+    <pre><code class="lang-csharp hljs">public static void Play(this TrackChunk trackChunk, TempoMap tempoMap, IOutputDevice outputDevice, PlaybackSettings playbackSettings = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -1173,9 +1320,9 @@ Plays MIDI events contained in the specified <a class="xref" href="Melanchall.Dr
         <td>Output MIDI device to play events through.</td>
       </tr>
       <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Devices.MidiClockSettings.html">MidiClockSettings</a></td>
-        <td><span class="parametername">clockSettings</span></td>
-        <td>Settings of the internal playback&apos;s clock.</td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Devices.PlaybackSettings.html">PlaybackSettings</a></td>
+        <td><span class="parametername">playbackSettings</span></td>
+        <td>Settings according to which a playback should be created.</td>
       </tr>
     </tbody>
   </table>
@@ -1198,14 +1345,14 @@ Plays MIDI events contained in the specified <a class="xref" href="Melanchall.Dr
     </tbody>
   </table>
   <a id="Melanchall_DryWetMidi_Devices_PlaybackUtilities_Play_" data-uid="Melanchall.DryWetMidi.Devices.PlaybackUtilities.Play*"></a>
-  <h4 id="Melanchall_DryWetMidi_Devices_PlaybackUtilities_Play_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Devices_IOutputDevice_Melanchall_DryWetMidi_Devices_MidiClockSettings_" data-uid="Melanchall.DryWetMidi.Devices.PlaybackUtilities.Play(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk},Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.IOutputDevice,Melanchall.DryWetMidi.Devices.MidiClockSettings)">Play(IEnumerable&lt;TrackChunk&gt;, TempoMap, IOutputDevice, MidiClockSettings)</h4>
+  <h4 id="Melanchall_DryWetMidi_Devices_PlaybackUtilities_Play_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Devices_IOutputDevice_Melanchall_DryWetMidi_Devices_PlaybackSettings_" data-uid="Melanchall.DryWetMidi.Devices.PlaybackUtilities.Play(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk},Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.IOutputDevice,Melanchall.DryWetMidi.Devices.PlaybackSettings)">Play(IEnumerable&lt;TrackChunk&gt;, TempoMap, IOutputDevice, PlaybackSettings)</h4>
   <div class="markdown level1 summary">
 Plays MIDI events contained in the specified collection of <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a>.
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void Play(this IEnumerable&lt;TrackChunk&gt; trackChunks, TempoMap tempoMap, IOutputDevice outputDevice, MidiClockSettings clockSettings = null)</code></pre>
+    <pre><code class="lang-csharp hljs">public static void Play(this IEnumerable&lt;TrackChunk&gt; trackChunks, TempoMap tempoMap, IOutputDevice outputDevice, PlaybackSettings playbackSettings = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -1233,9 +1380,9 @@ Plays MIDI events contained in the specified collection of <a class="xref" href=
         <td>Output MIDI device to play events through.</td>
       </tr>
       <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Devices.MidiClockSettings.html">MidiClockSettings</a></td>
-        <td><span class="parametername">clockSettings</span></td>
-        <td>Settings of the internal playback&apos;s clock.</td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Devices.PlaybackSettings.html">PlaybackSettings</a></td>
+        <td><span class="parametername">playbackSettings</span></td>
+        <td>Settings according to which a playback should be created.</td>
       </tr>
     </tbody>
   </table>
@@ -1258,14 +1405,14 @@ Plays MIDI events contained in the specified collection of <a class="xref" href=
     </tbody>
   </table>
   <a id="Melanchall_DryWetMidi_Devices_PlaybackUtilities_Play_" data-uid="Melanchall.DryWetMidi.Devices.PlaybackUtilities.Play*"></a>
-  <h4 id="Melanchall_DryWetMidi_Devices_PlaybackUtilities_Play__1_System_Collections_Generic_IEnumerable___0__Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Devices_IOutputDevice_Melanchall_DryWetMidi_Common_SevenBitNumber_Melanchall_DryWetMidi_Devices_MidiClockSettings_" data-uid="Melanchall.DryWetMidi.Devices.PlaybackUtilities.Play``1(System.Collections.Generic.IEnumerable{``0},Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.IOutputDevice,Melanchall.DryWetMidi.Common.SevenBitNumber,Melanchall.DryWetMidi.Devices.MidiClockSettings)">Play&lt;TObject&gt;(IEnumerable&lt;TObject&gt;, TempoMap, IOutputDevice, SevenBitNumber, MidiClockSettings)</h4>
+  <h4 id="Melanchall_DryWetMidi_Devices_PlaybackUtilities_Play__1_System_Collections_Generic_IEnumerable___0__Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Devices_IOutputDevice_Melanchall_DryWetMidi_Common_SevenBitNumber_Melanchall_DryWetMidi_Devices_PlaybackSettings_" data-uid="Melanchall.DryWetMidi.Devices.PlaybackUtilities.Play``1(System.Collections.Generic.IEnumerable{``0},Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.IOutputDevice,Melanchall.DryWetMidi.Common.SevenBitNumber,Melanchall.DryWetMidi.Devices.PlaybackSettings)">Play&lt;TObject&gt;(IEnumerable&lt;TObject&gt;, TempoMap, IOutputDevice, SevenBitNumber, PlaybackSettings)</h4>
   <div class="markdown level1 summary">
 Plays musical objects using the specified program.
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void Play&lt;TObject&gt;(this IEnumerable&lt;TObject&gt; objects, TempoMap tempoMap, IOutputDevice outputDevice, SevenBitNumber programNumber, MidiClockSettings clockSettings = null)
+    <pre><code class="lang-csharp hljs">public static void Play&lt;TObject&gt;(this IEnumerable&lt;TObject&gt; objects, TempoMap tempoMap, IOutputDevice outputDevice, SevenBitNumber programNumber, PlaybackSettings playbackSettings = null)
     where TObject : IMusicalObject, ITimedObject</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
@@ -1299,9 +1446,9 @@ Plays musical objects using the specified program.
         <td>Program that should be used to play <code data-dev-comment-type="paramref" class="paramref">objects</code>.</td>
       </tr>
       <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Devices.MidiClockSettings.html">MidiClockSettings</a></td>
-        <td><span class="parametername">clockSettings</span></td>
-        <td>Settings of the internal playback&apos;s clock.</td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Devices.PlaybackSettings.html">PlaybackSettings</a></td>
+        <td><span class="parametername">playbackSettings</span></td>
+        <td>Settings according to which a playback should be created.</td>
       </tr>
     </tbody>
   </table>
@@ -1339,14 +1486,14 @@ Plays musical objects using the specified program.
     </tbody>
   </table>
   <a id="Melanchall_DryWetMidi_Devices_PlaybackUtilities_Play_" data-uid="Melanchall.DryWetMidi.Devices.PlaybackUtilities.Play*"></a>
-  <h4 id="Melanchall_DryWetMidi_Devices_PlaybackUtilities_Play__1_System_Collections_Generic_IEnumerable___0__Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Devices_IOutputDevice_Melanchall_DryWetMidi_Standards_GeneralMidi2Program_Melanchall_DryWetMidi_Devices_MidiClockSettings_" data-uid="Melanchall.DryWetMidi.Devices.PlaybackUtilities.Play``1(System.Collections.Generic.IEnumerable{``0},Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.IOutputDevice,Melanchall.DryWetMidi.Standards.GeneralMidi2Program,Melanchall.DryWetMidi.Devices.MidiClockSettings)">Play&lt;TObject&gt;(IEnumerable&lt;TObject&gt;, TempoMap, IOutputDevice, GeneralMidi2Program, MidiClockSettings)</h4>
+  <h4 id="Melanchall_DryWetMidi_Devices_PlaybackUtilities_Play__1_System_Collections_Generic_IEnumerable___0__Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Devices_IOutputDevice_Melanchall_DryWetMidi_Standards_GeneralMidi2Program_Melanchall_DryWetMidi_Devices_PlaybackSettings_" data-uid="Melanchall.DryWetMidi.Devices.PlaybackUtilities.Play``1(System.Collections.Generic.IEnumerable{``0},Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.IOutputDevice,Melanchall.DryWetMidi.Standards.GeneralMidi2Program,Melanchall.DryWetMidi.Devices.PlaybackSettings)">Play&lt;TObject&gt;(IEnumerable&lt;TObject&gt;, TempoMap, IOutputDevice, GeneralMidi2Program, PlaybackSettings)</h4>
   <div class="markdown level1 summary">
 Plays musical objects using the specified General MIDI 2 program.
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void Play&lt;TObject&gt;(this IEnumerable&lt;TObject&gt; objects, TempoMap tempoMap, IOutputDevice outputDevice, GeneralMidi2Program generalMidi2Program, MidiClockSettings clockSettings = null)
+    <pre><code class="lang-csharp hljs">public static void Play&lt;TObject&gt;(this IEnumerable&lt;TObject&gt; objects, TempoMap tempoMap, IOutputDevice outputDevice, GeneralMidi2Program generalMidi2Program, PlaybackSettings playbackSettings = null)
     where TObject : IMusicalObject, ITimedObject</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
@@ -1380,9 +1527,9 @@ Plays musical objects using the specified General MIDI 2 program.
         <td>Program that should be used to play <code data-dev-comment-type="paramref" class="paramref">objects</code>.</td>
       </tr>
       <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Devices.MidiClockSettings.html">MidiClockSettings</a></td>
-        <td><span class="parametername">clockSettings</span></td>
-        <td>Settings of the internal playback&apos;s clock.</td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Devices.PlaybackSettings.html">PlaybackSettings</a></td>
+        <td><span class="parametername">playbackSettings</span></td>
+        <td>Settings according to which a playback should be created.</td>
       </tr>
     </tbody>
   </table>
@@ -1424,14 +1571,14 @@ Plays musical objects using the specified General MIDI 2 program.
     </tbody>
   </table>
   <a id="Melanchall_DryWetMidi_Devices_PlaybackUtilities_Play_" data-uid="Melanchall.DryWetMidi.Devices.PlaybackUtilities.Play*"></a>
-  <h4 id="Melanchall_DryWetMidi_Devices_PlaybackUtilities_Play__1_System_Collections_Generic_IEnumerable___0__Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Devices_IOutputDevice_Melanchall_DryWetMidi_Standards_GeneralMidiProgram_Melanchall_DryWetMidi_Devices_MidiClockSettings_" data-uid="Melanchall.DryWetMidi.Devices.PlaybackUtilities.Play``1(System.Collections.Generic.IEnumerable{``0},Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.IOutputDevice,Melanchall.DryWetMidi.Standards.GeneralMidiProgram,Melanchall.DryWetMidi.Devices.MidiClockSettings)">Play&lt;TObject&gt;(IEnumerable&lt;TObject&gt;, TempoMap, IOutputDevice, GeneralMidiProgram, MidiClockSettings)</h4>
+  <h4 id="Melanchall_DryWetMidi_Devices_PlaybackUtilities_Play__1_System_Collections_Generic_IEnumerable___0__Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Devices_IOutputDevice_Melanchall_DryWetMidi_Standards_GeneralMidiProgram_Melanchall_DryWetMidi_Devices_PlaybackSettings_" data-uid="Melanchall.DryWetMidi.Devices.PlaybackUtilities.Play``1(System.Collections.Generic.IEnumerable{``0},Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Devices.IOutputDevice,Melanchall.DryWetMidi.Standards.GeneralMidiProgram,Melanchall.DryWetMidi.Devices.PlaybackSettings)">Play&lt;TObject&gt;(IEnumerable&lt;TObject&gt;, TempoMap, IOutputDevice, GeneralMidiProgram, PlaybackSettings)</h4>
   <div class="markdown level1 summary">
 Plays musical objects using the specified General MIDI 1 program.
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void Play&lt;TObject&gt;(this IEnumerable&lt;TObject&gt; objects, TempoMap tempoMap, IOutputDevice outputDevice, GeneralMidiProgram generalMidiProgram, MidiClockSettings clockSettings = null)
+    <pre><code class="lang-csharp hljs">public static void Play&lt;TObject&gt;(this IEnumerable&lt;TObject&gt; objects, TempoMap tempoMap, IOutputDevice outputDevice, GeneralMidiProgram generalMidiProgram, PlaybackSettings playbackSettings = null)
     where TObject : IMusicalObject, ITimedObject</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
@@ -1465,9 +1612,9 @@ Plays musical objects using the specified General MIDI 1 program.
         <td>Program that should be used to play <code data-dev-comment-type="paramref" class="paramref">objects</code>.</td>
       </tr>
       <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Devices.MidiClockSettings.html">MidiClockSettings</a></td>
-        <td><span class="parametername">clockSettings</span></td>
-        <td>Settings of the internal playback&apos;s clock.</td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Devices.PlaybackSettings.html">PlaybackSettings</a></td>
+        <td><span class="parametername">playbackSettings</span></td>
+        <td>Settings according to which a playback should be created.</td>
       </tr>
     </tbody>
   </table>
@@ -1514,7 +1661,8 @@ Plays musical objects using the specified General MIDI 1 program.
           <div class="hidden-sm col-md-2" role="complementary">
             <div class="sideaffix">
               <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
-              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+                <h5>In This Article</h5>
+                <div></div>
               </nav>
             </div>
           </div>
