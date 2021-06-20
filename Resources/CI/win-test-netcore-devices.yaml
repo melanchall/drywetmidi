@@ -30,19 +30,22 @@ pool:
   vmImage: 'windows-latest'
 
 variables:
-  solution: '**/*.sln'
-  buildPlatform: 'Any CPU'
-  buildConfiguration: 'Release'
-  version: '5.2.1'
+- group: DryWetMIDI-Common-Variables
+- name: solution
+  value: '**/*.sln'
+- name: buildPlatform
+  value: 'Any CPU'
+- name: buildConfiguration
+  value: 'Release'
 
-name: Windows_Test_NetCore_Devices_$(version)$(Rev:.r)
+name: Windows_Test_NetCore_Devices_$(LibraryVersion)$(Rev:.r)
 
 steps:
 - task: UseDotNet@2
   displayName: 'Use .NET Core 2.1'
   inputs:
     packageType: sdk
-    version: 2.1.804
+    version: '2.1.804'
     installationPath: $(Agent.ToolsDirectory)/dotnet
 
 - task: DotNetCoreCLI@2

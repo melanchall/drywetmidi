@@ -6,13 +6,17 @@ pool:
   vmImage: 'windows-latest'
 
 variables:
-  solution: '**/*.sln'
-  buildPlatform: 'Any CPU'
-  buildConfiguration: 'Release'
-  version: '5.2.1'
-  prereleaseNumber: $[counter(variables['version'], 1)]
+- group: DryWetMIDI-Common-Variables
+- name: solution
+  value: '**/*.sln'
+- name: buildPlatform
+  value: 'Any CPU'
+- name: buildConfiguration
+  value: 'Release'
+- name: prereleaseNumber
+  value: $[counter($[variables.LibraryVersion], 1)]
 
-name: $(TeamProject)_$(SourceBranchName)_BuildLibraryPreRelease_$(version)$(Rev:.r)
+name: $(TeamProject)_$(SourceBranchName)_BuildLibraryPreRelease_$(LibraryVersion)$(Rev:.r)
 
 steps:
 - task: PowerShell@2
