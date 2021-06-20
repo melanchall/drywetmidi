@@ -14,7 +14,7 @@ variables:
 - name: buildConfiguration
   value: 'Release'
 - name: prereleaseNumber
-  value: $[counter($[variables.LibraryVersion], 1)]
+  value: $[counter(variables['LibraryVersion'], 1)]
 
 name: $(TeamProject)_$(SourceBranchName)_BuildLibraryPreRelease_$(LibraryVersion)$(Rev:.r)
 
