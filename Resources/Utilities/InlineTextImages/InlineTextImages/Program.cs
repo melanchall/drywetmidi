@@ -38,8 +38,10 @@ namespace InlineTextImages
             var symbolSize = int.Parse(args[1]);
 
             const string imagesDirectoryName = "images";
+            const string generatedImagePrefix = "dwmgen_";
 
             Console.WriteLine("Cleaning up images folders...");
+            Console.WriteLine("--------------------------------");
 
             var htmlFiles = Directory.GetFiles(filesPath, "*.html", SearchOption.AllDirectories);
             var directories = htmlFiles
@@ -50,13 +52,33 @@ namespace InlineTextImages
             foreach (var directoryPath in directories)
             {
                 var directoryInfo = new DirectoryInfo(Path.Combine(directoryPath, imagesDirectoryName));
-                if (directoryInfo.Exists)
-                    directoryInfo.Delete(true);
+                Console.WriteLine($"{directoryInfo.FullName}...");
 
-                directoryInfo.Create();
+                if (directoryInfo.Exists)
+                {
+                    var generatedImagesFiles = directoryInfo.GetFiles($"{generatedImagePrefix}*.png", SearchOption.AllDirectories);
+
+                    foreach (var fileInfo in generatedImagesFiles)
+                    {
+                        Console.Write($"{fileInfo.FullName}...");
+
+                        try
+                        {
+                            fileInfo.Delete();
+                            Console.WriteLine("DELETED");
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine($"FAILED TO DELETE ({ex.Message})");
+                        }
+                    }
+                }
+                else
+                    directoryInfo.Create();
             }
 
             Console.WriteLine("Processing files...");
+            Console.WriteLine("--------------------------------");
 
             foreach (var filePath in htmlFiles)
             {
@@ -75,7 +97,7 @@ namespace InlineTextImages
                         var imageText = m.Groups[1].Value;
                         var image = CreateImage(imageText, symbolSize);
 
-                        var imageFileName = $"{Path.GetFileNameWithoutExtension(filePath)}-{m.Index}.png";
+                        var imageFileName = $"{generatedImagePrefix}{Path.GetFileNameWithoutExtension(filePath)}-{m.Index}.png";
                         var path = Path.Combine(directoryInfo.FullName, imagesDirectoryName, imageFileName);
                         image.Save(path);
 

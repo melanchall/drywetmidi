@@ -97,6 +97,6 @@ We have program `Q` active at the current time. But when we jump to a new time (
 * pitch bend (see [PitchBendEvent](xref:Melanchall.DryWetMidi.Core.PitchBendEvent))
 * control value (see [ControlChangeEvent](xref:Melanchall.DryWetMidi.Core.ControlChangeEvent))
 
-We have discussed tracking program above. But tracking the remaining two parameters is absolutely the same. To track pitch bend value there is [TrackPitchValue](xref:Melanchall.DryWetMidi.Devices.Playback.TrackPitchValue) property. To track control value there is [TrackControlValue](Melanchall.DryWetMidi.Devices.Playback.TrackControlValue) property.
+We have discussed tracking program above. But tracking the remaining two parameters is absolutely the same. To track pitch bend value there is [TrackPitchValue](xref:Melanchall.DryWetMidi.Devices.Playback.TrackPitchValue) property. To track control value there is [TrackControlValue](xref:Melanchall.DryWetMidi.Devices.Playback.TrackControlValue) property.
 
 Of course all these parameters are tracked separately for each MIDI channel and in addition to this control value tracked separately for each control number.
