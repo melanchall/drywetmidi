@@ -35,6 +35,13 @@ steps:
     targetType: filePath
     filePath: '$(Build.SourcesDirectory)/Resources/Scripts/Generate obsolete API hints.ps1'
 
+- task: DotNetCoreCLI@2
+  displayName: Build project
+  inputs:
+    command: 'build'
+    arguments: '--configuration $(buildConfiguration)'
+    projects: 'DryWetMidi/Melanchall.DryWetMidi.csproj'
+
 - task: PowerShell@2
   displayName: Setup docs pages
   inputs:
