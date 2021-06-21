@@ -1,0 +1,93 @@
+stages:
+- stage: BuildNativeLibs
+  displayName: Build native libraries
+  jobs:
+  - job: BuildDll64
+    displayName: 'Build 64-bit dll'
+    pool:
+      vmImage: 'windows-latest'
+    steps:
+    - task: PowerShell@2
+      displayName: 'Build dll'
+      inputs:
+        targetType: 'inline'
+        script: |
+          cd Resources\Native
+          gcc -c NativeApi-Windows.c
+          gcc -shared -o Melanchall.DryWetMidi.Native64.dll NativeApi-Windows.o
+    - task: PublishPipelineArtifact@1
+      displayName: 'Publish dll artifact'
+      inputs:
+        targetPath: 'Resources\Native\Melanchall.DryWetMidi.Native64.dll'
+        artifactName: 'Melanchall.DryWetMidi.Native64.dll'
+        artifactType: pipeline
+  - job: BuildDylib64
+    displayName: 'Build 64-bit dylib'
+    pool:
+      vmImage: 'macos-latest'
+    steps:
+    - task: PowerShell@2
+      displayName: 'Build dylib'
+      inputs:
+        targetType: 'inline'
+        script: |
+          cd Resources/Native
+          gcc -c NativeApi-macOS.c
+          gcc -shared -o Melanchall.DryWetMidi.Native64.dylib NativeApi-macOS.o
+    - task: PublishPipelineArtifact@1
+      displayName: 'Publish dylib artifact'
+      inputs:
+        targetPath: 'Resources/Native/Melanchall.DryWetMidi.Native64.dylib'
+        artifactName: 'Melanchall.DryWetMidi.Native64.dylib'
+        artifactType: pipeline
+  - job: BuildDll32
+    displayName: 'Build 32-bit dll'
+    pool:
+      vmImage: 'windows-latest'
+    steps:
+    - task: PowerShell@2
+      displayName: 'Build dll'
+      inputs:
+        targetType: 'inline'
+        script: |
+          Write-Host "Downloading winlibs..."
+          $ProgressPreference = 'SilentlyContinue'
+          Invoke-WebRequest -Uri "https://github.com/brechtsanders/winlibs_mingw/releases/download/11.1.0-12.0.0-9.0.0-r1/winlibs-i686-posix-dwarf-gcc-11.1.0-mingw-w64-9.0.0-r1.zip" -OutFile "winlibs.zip"
+          Write-Host "Downloaded."
+          
+          Write-Host "Extracting winlibs..."
+          Expand-Archive -LiteralPath 'winlibs.zip' -DestinationPath "winlibs"
+          Write-Host "Extracted."
+          
+          Write-Host "Building DLL..."
+          $gccPath = Get-ChildItem -Path "winlibs" -File -Filter "i686-w64-mingw32-gcc.exe" -Recurse
+          
+          cd Resources\Native
+          & $gccPath.FullName -c NativeApi-Windows.c -m32
+          & $gccPath.FullName -shared -o Melanchall.DryWetMidi.Native32.dll NativeApi-Windows.o -m32
+          Write-Host "Built."
+    - task: PublishPipelineArtifact@1
+      displayName: 'Publish dll artifact'
+      inputs:
+        targetPath: 'Resources\Native\Melanchall.DryWetMidi.Native32.dll'
+        artifactName: 'Melanchall.DryWetMidi.Native32.dll'
+        artifactType: pipeline
+  - job: BuildDylib32
+    displayName: 'Build 32-bit dylib'
+    pool:
+      vmImage: 'macos-latest'
+    steps:
+    - task: PowerShell@2
+      displayName: 'Build dylib'
+      inputs:
+        targetType: 'inline'
+        script: |
+          cd Resources/Native
+          gcc -c NativeApi-macOS.c -m32
+          gcc -shared -o Melanchall.DryWetMidi.Native32.dylib NativeApi-macOS.o -m32
+    - task: PublishPipelineArtifact@1
+      displayName: 'Publish dylib artifact'
+      inputs:
+        targetPath: 'Resources/Native/Melanchall.DryWetMidi.Native32.dylib'
+        artifactName: 'Melanchall.DryWetMidi.Native32.dylib'
+        artifactType: pipeline

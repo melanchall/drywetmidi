@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)Melanchall.DryWetMidi.Native32.dll">
+      <Link>Melanchall.DryWetMidi.Native32.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+	<None Include="$(MSBuildThisFileDirectory)Melanchall.DryWetMidi.Native64.dll">
+      <Link>Melanchall.DryWetMidi.Native64.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+	<None Include="$(MSBuildThisFileDirectory)Melanchall.DryWetMidi.Native32.dylib">
+      <Link>Melanchall.DryWetMidi.Native32.dylib</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+	<None Include="$(MSBuildThisFileDirectory)Melanchall.DryWetMidi.Native64.dylib">
+      <Link>Melanchall.DryWetMidi.Native64.dylib</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+</Project>

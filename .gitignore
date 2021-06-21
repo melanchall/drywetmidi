@@ -261,3 +261,9 @@ paket-files/
 # Python Tools for Visual Studio (PTVS)
 __pycache__/
 *.pyc
+
+# Native libraries
+Melanchall.DryWetMidi.Native32.dll
+Melanchall.DryWetMidi.Native64.dll
+Melanchall.DryWetMidi.Native32.dylib
+Melanchall.DryWetMidi.Native64.dylib

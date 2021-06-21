@@ -49,6 +49,29 @@ DryWetMIDI is the .NET library to work with MIDI files and MIDI devices. It allo
   </PropertyGroup>
   
   <ItemGroup>
+    <None Include="Melanchall.DryWetMidi.Native32.dll">
+      <PackagePath>build\</PackagePath>
+      <Pack>true</Pack>
+    </None>
+	<None Include="Melanchall.DryWetMidi.Native64.dll">
+      <PackagePath>build\</PackagePath>
+      <Pack>true</Pack>
+    </None>
+	<None Include="Melanchall.DryWetMidi.Native32.dylib">
+      <PackagePath>build\</PackagePath>
+      <Pack>true</Pack>
+    </None>
+	<None Include="Melanchall.DryWetMidi.Native64.dylib">
+      <PackagePath>build\</PackagePath>
+      <Pack>true</Pack>
+    </None>
+    <None Include="Melanchall.DryWetMidi.targets">
+      <PackagePath>build\</PackagePath>
+      <Pack>true</Pack>
+    </None>
+  </ItemGroup>
+  
+  <ItemGroup>
     <Folder Include="Properties\" />
     <None Include="..\Resources\NuGet\icon.png" Pack="true" PackagePath="\" />
   </ItemGroup>

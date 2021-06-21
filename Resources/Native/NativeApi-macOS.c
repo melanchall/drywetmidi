@@ -1,0 +1,1 @@
+int Foo() { return 456; }
