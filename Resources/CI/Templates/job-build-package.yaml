@@ -1,0 +1,57 @@
+parameters:
+- name: buildConfiguration
+  displayName: 'Build configuration'
+  type: string
+- name: buildPlatform
+  displayName: 'Build platform'
+  type: string
+
+jobs:
+- job: BuildPackage
+  displayName: Build package
+  pool:
+    vmImage: 'windows-latest'
+  steps:
+  - task: DownloadPipelineArtifact@2
+    displayName: Download native libraries
+    inputs:
+      source: 'current'
+      path: '$(Pipeline.Workspace)\NativeLibraries'
+  
+  - task: PowerShell@2
+    displayName: Generate obsolete API hints
+    inputs:
+      targetType: filePath
+      filePath: '$(Build.SourcesDirectory)/Resources/Scripts/Generate obsolete API hints.ps1'
+      
+  - task: PowerShell@2
+    displayName: Copy native files near csproj
+    inputs:
+      targetType: 'inline'
+      script: |
+        Copy-Item -Path "$(Pipeline.Workspace)\NativeLibraries\**\*.dll" -Destination "DryWetMidi"
+        Copy-Item -Path "$(Pipeline.Workspace)\NativeLibraries\**\*.dylib" -Destination "DryWetMidi"
+  
+  - task: DotNetCoreCLI@2
+    displayName: Build project
+    inputs:
+      command: 'build'
+      projects: |
+        DryWetMidi/Melanchall.DryWetMidi.csproj
+      arguments: '--configuration ${{ parameters.buildConfiguration }}'
+  
+  - task: DotNetCoreCLI@2
+    displayName: Create NuGet package
+    inputs: 
+      command: 'pack'
+      projects: 'DryWetMidi/Melanchall.DryWetMidi.csproj'
+      outputDir: '$(Build.ArtifactStagingDirectory)\NuGetPackage'
+      packagesToPack: 'DryWetMidi/Melanchall.DryWetMidi.csproj'
+      nobuild: true
+      buildProperties: 'RepositoryBranch="$(Build.SourceBranchName)'
+  
+  - task: PublishPipelineArtifact@1
+    displayName: Publish 'NuGetPackage' artifact
+    inputs:
+      targetPath: '$(Build.ArtifactStagingDirectory)\NuGetPackage'
+      artifact: NuGetPackage

@@ -1,0 +1,128 @@
+trigger:
+  batch: true
+  branches:
+    include:
+    - master
+    - develop
+  paths:
+    include:
+    - 'DryWetMidi/*'
+    - 'Resources/CI/build-artifacts-library.yaml'
+    - 'Resources/CI/Templates/stage-build-native-libs.yaml'
+
+pr: none
+
+variables:
+- group: DryWetMIDI-Common-Variables
+- name: solution
+  value: '**/*.sln'
+- name: buildPlatform
+  value: 'Any CPU'
+- name: buildConfiguration
+  value: 'Release'
+
+name: $(TeamProject)_$(SourceBranchName)_TestPackageIntegration_NetFramework_$(LibraryVersion)$(Rev:.r)
+
+stages:
+- template: Templates/stage-build-native-libs.yaml
+
+- stage: BuildPackage
+  displayName: Build package
+  pool:
+    vmImage: 'windows-latest'
+  jobs:
+  - template: Templates/job-build-package.yaml
+    parameters:
+      buildConfiguration: $(buildConfiguration)
+      buildPlatform: $(buildPlatform)
+
+- stage: TestPackageIntegration
+  displayName: Test package integration
+  pool:
+    vmImage: 'windows-latest'
+  jobs:
+  - job: TestPackageIntegration
+    displayName: Test package integration
+    strategy:
+      matrix:
+        32Bit:
+          prefer32Bit: 'true'
+        64Bit:
+          prefer32Bit: 'false'
+    steps:
+    - task: DownloadPipelineArtifact@2
+      displayName: Download NuGet package
+      inputs:
+        source: 'current'
+        path: '$(Pipeline.Workspace)\NuGetPackage'
+        artifact: NuGetPackage
+        
+    - task: PowerShell@2
+      displayName: Setup MIDI ports for devices API tests
+      inputs:
+        targetType: filePath
+        filePath: '$(Build.SourcesDirectory)/Resources/Scripts/Setup MIDI ports.ps1'
+    
+    - task: PowerShell@2
+      displayName: Set package version
+      inputs:
+        targetType: 'inline'
+        script: |
+          [xml]$xml = Get-Content -Path 'Resources\PackageIntegrationTestUtilities\DwmNetFrameworkConsoleApp\DwmNetFrameworkConsoleApp\DwmNetFrameworkConsoleApp.csproj'
+          $include = $xml.Project.ItemGroup[0].Reference[0].Include
+          $xml.Project.ItemGroup[0].Reference[0].Include = $include -replace 'Version=\d+\.\d+\.\d+\.0','Version=$(LibraryVersion).0'
+          $hintPath = $xml.Project.ItemGroup[0].Reference[0].HintPath
+          $xml.Project.ItemGroup[0].Reference[0].HintPath = $hintPath -replace 'Melanchall\.DryWetMidi\.\d+\.\d+\.\d+','Melanchall.DryWetMidi.$(LibraryVersion)'
+
+          $path = Resolve-Path 'Resources\PackageIntegrationTestUtilities\DwmNetFrameworkConsoleApp\DwmNetFrameworkConsoleApp\DwmNetFrameworkConsoleApp.csproj'
+          $xml.Save($path)
+
+          [xml]$xml = Get-Content -Path 'Resources\PackageIntegrationTestUtilities\DwmNetFrameworkConsoleApp\DwmNetFrameworkConsoleApp\packages.config'
+          $xml.packages.package.version = '$(LibraryVersion)'
+
+          $path = Resolve-Path 'Resources\PackageIntegrationTestUtilities\DwmNetFrameworkConsoleApp\DwmNetFrameworkConsoleApp\packages.config'
+          $xml.Save($path)
+          
+    - task: PowerShell@2
+      displayName: Set csproj elements
+      inputs:
+        targetType: 'inline'
+        script: |
+          Write-Host "Parsing csproj..."
+          [xml]$xml = Get-Content -Path 'Resources\PackageIntegrationTestUtilities\DwmNetFrameworkConsoleApp\DwmNetFrameworkConsoleApp\DwmNetFrameworkConsoleApp.csproj'
+          
+          Write-Host "Setting 'Prefer 32-bit to' $(prefer32Bit)..."
+          $xml.Project.PropertyGroup[1].Prefer32Bit = '$(prefer32Bit)'
+          $xml.Project.PropertyGroup[2].Prefer32Bit = '$(prefer32Bit)'
+          
+          Write-Host "Saving csproj..."
+          $path = Resolve-Path 'Resources\PackageIntegrationTestUtilities\DwmNetFrameworkConsoleApp\DwmNetFrameworkConsoleApp\DwmNetFrameworkConsoleApp.csproj'
+          $xml.Save($path)
+          
+          Write-Host "Displaying csproj content..."
+          $content = Get-Content -Path 'Resources\PackageIntegrationTestUtilities\DwmNetFrameworkConsoleApp\DwmNetFrameworkConsoleApp\DwmNetFrameworkConsoleApp.csproj'
+          Write-Host $content
+
+    - task: PowerShell@2
+      displayName: Restore packages
+      inputs:
+        targetType: 'inline'
+        script: |
+          nuget sources Add -Name NuGetPackages -Source "$(Pipeline.Workspace)\NuGetPackage"
+          $path = Resolve-Path 'Resources\PackageIntegrationTestUtilities\DwmNetFrameworkConsoleApp\DwmNetFrameworkConsoleApp\DwmNetFrameworkConsoleApp.csproj'
+          nuget restore "$path" -Source NuGetPackages -SolutionDirectory "Resources\PackageIntegrationTestUtilities\DwmNetFrameworkConsoleApp"
+
+    - task: VSBuild@1
+      displayName: Build test program
+      inputs:
+        solution: 'Resources\PackageIntegrationTestUtilities\DwmNetFrameworkConsoleApp\DwmNetFrameworkConsoleApp.sln'
+        platform: $(buildPlatform)
+        configuration: $(buildConfiguration)
+    
+    - task: PowerShell@2
+      displayName: Run test program
+      inputs:
+        targetType: 'inline'
+        script: |
+          $exePath = Get-ChildItem -Path "Resources\PackageIntegrationTestUtilities\DwmNetFrameworkConsoleApp\DwmNetFrameworkConsoleApp\bin\$(buildConfiguration)" -File -Filter "DwmNetFrameworkConsoleApp.exe" -Recurse
+          & $exePath.FullName

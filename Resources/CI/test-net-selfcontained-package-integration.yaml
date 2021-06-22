@@ -1,0 +1,129 @@
+trigger:
+  batch: true
+  branches:
+    include:
+    - master
+    - develop
+  paths:
+    include:
+    - 'DryWetMidi/*'
+    - 'Resources/CI/build-artifacts-library.yaml'
+    - 'Resources/CI/Templates/stage-build-native-libs.yaml'
+
+pr: none
+
+variables:
+- group: DryWetMIDI-Common-Variables
+- name: solution
+  value: '**/*.sln'
+- name: buildPlatform
+  value: 'Any CPU'
+- name: buildConfiguration
+  value: 'Release'
+
+name: $(TeamProject)_$(SourceBranchName)_TestPackageIntegration_NetSelfContained_$(LibraryVersion)$(Rev:.r)
+
+stages:
+- template: Templates/stage-build-native-libs.yaml
+
+- stage: BuildPackage
+  displayName: Build package
+  pool:
+    vmImage: 'windows-latest'
+  jobs:
+  - template: Templates/job-build-package.yaml
+    parameters:
+      buildConfiguration: $(buildConfiguration)
+      buildPlatform: $(buildPlatform)
+
+- stage: TestPackageIntegration
+  displayName: Test package integration
+  jobs:
+  - job: TestPackageIntegration
+    displayName: Test package integration
+    strategy:
+      matrix:
+        Windows_Net5_IncludeAll:
+          vmImage: 'windows-latest'
+          rid: 'win-x64'
+          includeAll: 'true'
+        macOS_Net5_IncludeAll:
+          vmImage: 'macOS-latest'
+          rid: 'osx-x64'
+          includeAll: 'true'
+        Windows_Net5_DontIncludeAll:
+          vmImage: 'windows-latest'
+          rid: 'win-x64'
+          includeAll: 'false'
+        macOS_Net5_DontIncludeAll:
+          vmImage: 'macOS-latest'
+          rid: 'osx-x64'
+          includeAll: 'false'
+    pool:
+      vmImage: $(vmImage)
+    steps:
+    - task: DownloadPipelineArtifact@2
+      displayName: Download NuGet package
+      inputs:
+        source: 'current'
+        path: '$(Pipeline.Workspace)\NuGetPackage'
+        artifact: NuGetPackage
+        
+    - task: PowerShell@2
+      displayName: Setup MIDI ports for devices API tests for Windows
+      condition: eq(variables.vmImage, 'windows-latest')
+      inputs:
+        targetType: filePath
+        filePath: '$(Build.SourcesDirectory)/Resources/Scripts/Setup MIDI ports.ps1'
+    
+    - task: PowerShell@2
+      displayName: Add package to the project
+      inputs:
+        targetType: 'inline'
+        script: |
+          $path = Resolve-Path 'Resources\PackageIntegrationTestUtilities\DwmNetSelfContainedConsoleApp\DwmNetSelfContainedConsoleApp\DwmNetSelfContainedConsoleApp.csproj'
+          dotnet add "$path" package Melanchall.DryWetMidi -v $(LibraryVersion) -s "$(Pipeline.Workspace)\NuGetPackage"
+          
+    - task: PowerShell@2
+      displayName: Set csproj elements
+      inputs:
+        targetType: 'inline'
+        script: |
+          Write-Host "Parsing csproj..."
+          [xml]$xml = Get-Content -Path 'Resources\PackageIntegrationTestUtilities\DwmNetSelfContainedConsoleApp\DwmNetSelfContainedConsoleApp\DwmNetSelfContainedConsoleApp.csproj'
+          
+          Write-Host "Setting IncludeAllContentForSelfExtract to $(includeAll)..."
+          $xml.Project.PropertyGroup.IncludeAllContentForSelfExtract = '$(includeAll)'
+          
+          Write-Host "Saving csproj..."
+          $path = Resolve-Path 'Resources\PackageIntegrationTestUtilities\DwmNetSelfContainedConsoleApp\DwmNetSelfContainedConsoleApp\DwmNetSelfContainedConsoleApp.csproj'
+          $xml.Save($path)
+          
+          Write-Host "Displaying csproj content..."
+          $content = Get-Content -Path 'Resources\PackageIntegrationTestUtilities\DwmNetSelfContainedConsoleApp\DwmNetSelfContainedConsoleApp\DwmNetSelfContainedConsoleApp.csproj'
+          Write-Host $content
+
+    - task: PowerShell@2
+      displayName: Restore packages
+      inputs:
+        targetType: 'inline'
+        script: |
+          $path = Resolve-Path 'Resources\PackageIntegrationTestUtilities\DwmNetSelfContainedConsoleApp\DwmNetSelfContainedConsoleApp\DwmNetSelfContainedConsoleApp.csproj'
+          dotnet restore "$path" -s "$(Pipeline.Workspace)\NuGetPackage"
+
+    - task: PowerShell@2
+      displayName: Publish test program executable
+      inputs:
+        targetType: 'inline'
+        script: |
+          $path = Resolve-Path 'Resources\PackageIntegrationTestUtilities\DwmNetSelfContainedConsoleApp\DwmNetSelfContainedConsoleApp\DwmNetSelfContainedConsoleApp.csproj'
+          dotnet publish "$path" -c Release -r $(rid) -o "$(Pipeline.Workspace)\App"
+          
+    - task: PowerShell@2
+      displayName: Run test program on Windows
+      condition: eq(variables.vmImage, 'windows-latest')
+      inputs:
+        targetType: 'inline'
+        script: |
+          $exePath = Get-ChildItem -Path "$(Pipeline.Workspace)\App" -File -Filter "DwmNetSelfContainedConsoleApp.exe" -Recurse
+          & $exePath.FullName

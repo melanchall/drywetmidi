@@ -1,0 +1,133 @@
+trigger:
+  batch: true
+  branches:
+    include:
+    - master
+    - develop
+  paths:
+    include:
+    - 'DryWetMidi/*'
+    - 'Resources/CI/build-artifacts-library.yaml'
+    - 'Resources/CI/Templates/stage-build-native-libs.yaml'
+
+pr: none
+
+variables:
+- group: DryWetMIDI-Common-Variables
+- name: solution
+  value: '**/*.sln'
+- name: buildPlatform
+  value: 'Any CPU'
+- name: buildConfiguration
+  value: 'Release'
+
+name: $(TeamProject)_$(SourceBranchName)_TestPackageIntegration_Net_$(LibraryVersion)$(Rev:.r)
+
+stages:
+- template: Templates/stage-build-native-libs.yaml
+
+- stage: BuildPackage
+  displayName: Build package
+  pool:
+    vmImage: 'windows-latest'
+  jobs:
+  - template: Templates/job-build-package.yaml
+    parameters:
+      buildConfiguration: $(buildConfiguration)
+      buildPlatform: $(buildPlatform)
+
+- stage: TestPackageIntegration
+  displayName: Test package integration
+  jobs:
+  - job: TestPackageIntegration
+    displayName: Test package integration
+    strategy:
+      matrix:
+        Windows_Net5:
+          vmImage: 'windows-latest'
+          tfm: 'net5.0'
+        macOS_Net5:
+          vmImage: 'macOS-latest'
+          tfm: 'net5.0'
+        Windows_NetCore31:
+          vmImage: 'windows-latest'
+          tfm: 'netcoreapp3.1'
+        macOS_NetCore31:
+          vmImage: 'macOS-latest'
+          tfm: 'netcoreapp3.1'
+    pool:
+      vmImage: $(vmImage)
+    steps:
+    - task: DownloadPipelineArtifact@2
+      displayName: Download NuGet package
+      inputs:
+        source: 'current'
+        path: '$(Pipeline.Workspace)\NuGetPackage'
+        artifact: NuGetPackage
+        
+    - task: PowerShell@2
+      displayName: Setup MIDI ports for devices API tests for Windows
+      condition: eq(variables.vmImage, 'windows-latest')
+      inputs:
+        targetType: filePath
+        filePath: '$(Build.SourcesDirectory)/Resources/Scripts/Setup MIDI ports.ps1'
+    
+    - task: UseDotNet@2
+      displayName: 'Use .NET 5'
+      condition: eq(variables.tfm, 'net5.0')
+      inputs:
+        packageType: sdk
+        version: '5.0.301'
+        installationPath: $(Agent.ToolsDirectory)/dotnet
+
+    - task: UseDotNet@2
+      displayName: 'Use .NET Core 3.1'
+      condition: eq(variables.tfm, 'netcoreapp3.1')
+      inputs:
+        packageType: sdk
+        version: '3.1.410'
+        installationPath: $(Agent.ToolsDirectory)/dotnet
+    
+    - task: PowerShell@2
+      displayName: Add package to the project
+      inputs:
+        targetType: 'inline'
+        script: |
+          $path = Resolve-Path 'Resources\PackageIntegrationTestUtilities\DwmNetConsoleApp\DwmNetConsoleApp\DwmNetConsoleApp.csproj'
+          dotnet add "$path" package Melanchall.DryWetMidi -v $(LibraryVersion) -s "$(Pipeline.Workspace)\NuGetPackage"
+          
+    - task: PowerShell@2
+      displayName: Set csproj elements
+      inputs:
+        targetType: 'inline'
+        script: |
+          Write-Host "Parsing csproj..."
+          [xml]$xml = Get-Content -Path 'Resources\PackageIntegrationTestUtilities\DwmNetConsoleApp\DwmNetConsoleApp\DwmNetConsoleApp.csproj'
+          
+          Write-Host "Setting TFM $(tfm)..."
+          $xml.Project.PropertyGroup.TargetFramework = '$(tfm)'
+          
+          Write-Host "Saving csproj..."
+          $path = Resolve-Path 'Resources\PackageIntegrationTestUtilities\DwmNetConsoleApp\DwmNetConsoleApp\DwmNetConsoleApp.csproj'
+          $xml.Save($path)
+          
+          Write-Host "Displaying csproj content..."
+          $content = Get-Content -Path 'Resources\PackageIntegrationTestUtilities\DwmNetConsoleApp\DwmNetConsoleApp\DwmNetConsoleApp.csproj'
+          Write-Host $content
+
+    - task: PowerShell@2
+      displayName: Restore packages
+      inputs:
+        targetType: 'inline'
+        script: |
+          $path = Resolve-Path 'Resources\PackageIntegrationTestUtilities\DwmNetConsoleApp\DwmNetConsoleApp\DwmNetConsoleApp.csproj'
+          dotnet restore "$path" -s "$(Pipeline.Workspace)\NuGetPackage"
+
+    - task: PowerShell@2
+      displayName: Run test program
+      condition: eq(variables.vmImage, 'windows-latest')
+      inputs:
+        targetType: 'inline'
+        script: |
+          $path = Resolve-Path 'Resources\PackageIntegrationTestUtilities\DwmNetConsoleApp\DwmNetConsoleApp\DwmNetConsoleApp.csproj'
+          dotnet run --project "$path" --no-restore

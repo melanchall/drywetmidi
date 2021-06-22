@@ -30,30 +30,18 @@ stages:
   pool:
     vmImage: 'windows-latest'
   jobs:
-  - job: BuildPackage
-    displayName: 'Build package'  
+  - template: Templates/job-build-package.yaml
+    parameters:
+      buildConfiguration: $(buildConfiguration)
+      buildPlatform: $(buildPlatform)
+  - job: BuildBinaries
+    displayName: Build binaries
     steps:
     - task: DownloadPipelineArtifact@2
       displayName: Download native libraries
       inputs:
         source: 'current'
         path: '$(Pipeline.Workspace)\NativeLibraries'
-        
-    - task: PowerShell@2
-      displayName: Put native files to one folder
-      inputs:
-        targetType: 'inline'
-        script: |
-          New-Item -Path "$(Pipeline.Workspace)\NativeLibraries\" -Name "Files" -ItemType "directory"
-          Copy-Item -Path "$(Pipeline.Workspace)\NativeLibraries\**\*.dll" -Destination "$(Pipeline.Workspace)\NativeLibraries\Files"
-          Copy-Item -Path "$(Pipeline.Workspace)\NativeLibraries\**\*.dylib" -Destination "$(Pipeline.Workspace)\NativeLibraries\Files"
-        
-    - task: PublishPipelineArtifact@1
-      displayName: Publish 'NativeLibraries' artifact
-      inputs:
-        targetPath: '$(Pipeline.Workspace)\NativeLibraries\Files'
-        artifactName: 'NativeLibraries'
-        artifactType: pipeline
     
     - task: PowerShell@2
       displayName: Generate obsolete API hints
@@ -66,31 +54,16 @@ stages:
       inputs:
         targetType: 'inline'
         script: |
-          Copy-Item -Path "$(Pipeline.Workspace)\NativeLibraries\Files\*" -Destination "DryWetMidi"
+          Copy-Item -Path "$(Pipeline.Workspace)\NativeLibraries\**\*.dll" -Destination "DryWetMidi"
+          Copy-Item -Path "$(Pipeline.Workspace)\NativeLibraries\**\*.dylib" -Destination "DryWetMidi"
     
     - task: DotNetCoreCLI@2
-      displayName: Build solution
+      displayName: Build project
       inputs:
         command: 'build'
         projects: |
           DryWetMidi/Melanchall.DryWetMidi.csproj
         arguments: '--configuration $(buildConfiguration)'
-    
-    - task: DotNetCoreCLI@2
-      displayName: Create NuGet package
-      inputs: 
-        command: 'pack'
-        projects: 'DryWetMidi/Melanchall.DryWetMidi.csproj'
-        outputDir: '$(Build.ArtifactStagingDirectory)\NuGetPackage'
-        packagesToPack: 'DryWetMidi/Melanchall.DryWetMidi.csproj'
-        nobuild: true
-        buildProperties: 'RepositoryBranch="$(Build.SourceBranchName)'
-    
-    - task: PublishPipelineArtifact@1
-      displayName: Publish 'NuGetPackage' artifact
-      inputs:
-        targetPath: '$(Build.ArtifactStagingDirectory)\NuGetPackage'
-        artifact: NuGetPackage
     
     - task: PowerShell@2
       displayName: Delete pdb files
