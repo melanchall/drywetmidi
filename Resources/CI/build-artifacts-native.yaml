@@ -1,0 +1,57 @@
+trigger:
+  batch: true
+  branches:
+    include:
+    - master
+    - develop
+  paths:
+    include:
+    - 'DryWetMidi/*'
+    - 'Resources/CI/build-artifacts-library.yaml'
+    - 'Resources/CI/Templates/stage-build-native-libs.yaml'
+
+pr: none
+
+variables:
+- group: DryWetMIDI-Common-Variables
+- name: solution
+  value: '**/*.sln'
+- name: buildPlatform
+  value: 'Any CPU'
+- name: buildConfiguration
+  value: 'Release'
+
+name: $(TeamProject)_$(SourceBranchName)_BuildNativeLibraries_$(LibraryVersion)$(Rev:.r)
+
+stages:
+- template: Templates/stage-build-native-libs.yaml
+- stage: PublishArtifact
+  displayName: Publish artifact
+  pool:
+    vmImage: 'windows-latest'
+  jobs:
+  - job: PublishArtifact
+    displayName: Publish artifact
+    steps:
+    - checkout: none
+
+    - task: DownloadPipelineArtifact@2
+      displayName: Download native libraries
+      inputs:
+        source: 'current'
+        path: '$(Pipeline.Workspace)\NativeLibraries'
+        
+    - task: PowerShell@2
+      displayName: Copy all native libraries to single directory
+      inputs:
+        targetType: 'inline'
+        script: |
+          New-Item -Path "$(Pipeline.Workspace)\NativeLibraries" -Name "Files" -ItemType "directory"
+          Copy-Item -Path "$(Pipeline.Workspace)\NativeLibraries\**\*.dll" -Destination "$(Pipeline.Workspace)\NativeLibraries\Files"
+          Copy-Item -Path "$(Pipeline.Workspace)\NativeLibraries\**\*.dylib" -Destination "$(Pipeline.Workspace)\NativeLibraries\Files"
+    
+    - task: PublishPipelineArtifact@1
+      displayName: Publish 'NativeLibraries' artifact
+      inputs:
+        targetPath: '$(Pipeline.Workspace)\NativeLibraries\Files'
+        artifact: NativeLibraries

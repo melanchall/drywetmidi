@@ -31,9 +31,8 @@ namespace Melanchall.DryWetMidi.Devices
 
         private bool _disposed = false;
 
-        private uint _resolution;
-        private MidiTimerWinApi.TimeProc _tickCallback;
-        private uint _timerId = NoTimerId;
+        private TickGeneratorApi.TimerCallback _tickCallback;
+        private IntPtr _info;
 
         #endregion
 
@@ -65,21 +64,14 @@ namespace Melanchall.DryWetMidi.Devices
                                          MaxInterval,
                                          $"Interval is out of [{MinInterval}, {MaxInterval}] range.");
 
-            var intervalInMilliseconds = (uint)interval.TotalMilliseconds;
+            var intervalInMilliseconds = (int)interval.TotalMilliseconds;
 
-            var timeCaps = default(MidiTimerWinApi.TIMECAPS);
-            ProcessMmResult(MidiTimerWinApi.timeGetDevCaps(ref timeCaps, (uint)Marshal.SizeOf(timeCaps)));
-
-            _resolution = Math.Min(Math.Max(timeCaps.wPeriodMin, intervalInMilliseconds), timeCaps.wPeriodMax);
             _tickCallback = OnTick;
 
-            ProcessMmResult(MidiTimerWinApi.timeBeginPeriod(_resolution));
-            _timerId = MidiTimerWinApi.timeSetEvent(intervalInMilliseconds, _resolution, _tickCallback, IntPtr.Zero, MidiTimerWinApi.TIME_PERIODIC);
-            if (_timerId == NoTimerId)
-            {
-                var errorCode = Marshal.GetLastWin32Error();
-                throw new MidiDeviceException("Unable to start tick generator.", new Win32Exception(errorCode));
-            }
+            var result = TickGeneratorApiProvider.Api.Api_StartHighPrecisionTickGenerator(
+                intervalInMilliseconds,
+                _tickCallback,
+                out _info);
         }
 
         /// <summary>
@@ -87,30 +79,22 @@ namespace Melanchall.DryWetMidi.Devices
         /// </summary>
         protected override void Stop()
         {
-            MidiTimerWinApi.timeEndPeriod(_resolution);
-            MidiTimerWinApi.timeKillEvent(_timerId);
+            if (_info == IntPtr.Zero)
+                return;
+
+            TickGeneratorApiProvider.Api.Api_StopHighPrecisionTickGenerator(_info);
         }
 
         #endregion
 
         #region Methods
 
-        private void OnTick(uint uID, uint uMsg, uint dwUser, uint dw1, uint dw2)
+        private void OnTick()
         {
             if (!IsRunning || _disposed)
                 return;
 
             GenerateTick();
-        }
-
-        private static void ProcessMmResult(uint mmResult)
-        {
-            switch (mmResult)
-            {
-                case MidiWinApi.MMSYSERR_ERROR:
-                case MidiWinApi.TIMERR_NOCANDO:
-                    throw new MidiDeviceException("Error occurred on high precision MIDI tick generator.");
-            }
         }
 
         #endregion

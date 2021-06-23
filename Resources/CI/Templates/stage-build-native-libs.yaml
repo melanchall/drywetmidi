@@ -13,8 +13,8 @@ stages:
         targetType: 'inline'
         script: |
           cd Resources\Native
-          gcc -c NativeApi-Windows.c
-          gcc -shared -o Melanchall.DryWetMidi.Native64.dll NativeApi-Windows.o
+          gcc -c NativeApi-Windows.c -lwinmm
+          gcc -shared -o Melanchall.DryWetMidi.Native64.dll NativeApi-Windows.o -lwinmm
     - task: PublishPipelineArtifact@1
       displayName: 'Publish dll artifact'
       inputs:
@@ -63,8 +63,8 @@ stages:
           $gccPath = Get-ChildItem -Path "winlibs" -File -Filter "i686-w64-mingw32-gcc.exe" -Recurse
           
           cd Resources\Native
-          & $gccPath.FullName -c NativeApi-Windows.c -m32
-          & $gccPath.FullName -shared -o Melanchall.DryWetMidi.Native32.dll NativeApi-Windows.o -m32
+          & $gccPath.FullName -c NativeApi-Windows.c -m32 -lwinmm
+          & $gccPath.FullName -shared -o Melanchall.DryWetMidi.Native32.dll NativeApi-Windows.o -m32 -lwinmm
           Write-Host "Built."
     - task: PublishPipelineArtifact@1
       displayName: 'Publish dll artifact'

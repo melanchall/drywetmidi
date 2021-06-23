@@ -40,41 +40,64 @@ variables:
 
 name: Windows_Test_NetCore_Devices_$(LibraryVersion)$(Rev:.r)
 
-steps:
-- task: UseDotNet@2
-  displayName: 'Use .NET Core 2.1'
-  inputs:
-    packageType: sdk
-    version: '2.1.804'
-    installationPath: $(Agent.ToolsDirectory)/dotnet
-
-- task: DotNetCoreCLI@2
-  displayName: Build DryWetMidi and DryWetMidi.Tests.Common
-  inputs:
-    command: 'build'
-    arguments: '--configuration $(buildConfiguration) --framework netstandard2.0'
-    projects: |
-      DryWetMidi/Melanchall.DryWetMidi.csproj
-      DryWetMidi.Tests.Common/Melanchall.DryWetMidi.Tests.Common.csproj
-
-- task: DotNetCoreCLI@2
-  displayName: Build DryWetMidi.Tests
-  inputs:
-    command: 'build'
-    arguments: '--configuration $(buildConfiguration) --framework netcoreapp2.1'
-    projects: |
-      DryWetMidi.Tests/Melanchall.DryWetMidi.Tests.csproj
-
-- task: PowerShell@2
-  displayName: Setup MIDI ports for devices API tests
-  inputs:
-    targetType: filePath
-    filePath: '$(Build.SourcesDirectory)/Resources/Scripts/Setup MIDI ports.ps1'
-
-- task: DotNetCoreCLI@2
-  displayName: Run unit tests
-  continueOnError: true
-  inputs:
-    command: 'test'
-    projects: 'DryWetMidi.Tests/Melanchall.DryWetMidi.Tests.csproj'
-    arguments: '--blame --no-build --configuration $(buildConfiguration) --filter (FullyQualifiedName~.Devices) --framework netcoreapp2.1 --verbosity normal'
+stages:
+- template: Templates/stage-build-native-libs.yaml
+- stage: RunTests
+  displayName: Run tests
+  pool:
+    vmImage: 'windows-latest'
+  jobs:
+  - job: RunTests
+    displayName: Run tests
+    steps:
+    - task: DownloadPipelineArtifact@2
+      displayName: Download native libraries
+      inputs:
+        source: 'current'
+        path: '$(Pipeline.Workspace)\NativeLibraries'
+        
+    - task: PowerShell@2
+      displayName: Copy native libraries near csproj
+      inputs:
+        targetType: 'inline'
+        script: |
+          Copy-Item -Path "$(Pipeline.Workspace)\NativeLibraries\**\*.dll" -Destination "DryWetMidi"
+          Copy-Item -Path "$(Pipeline.Workspace)\NativeLibraries\**\*.dylib" -Destination "DryWetMidi"
+    
+    - task: UseDotNet@2
+      displayName: 'Use .NET Core 3.1'
+      inputs:
+        packageType: sdk
+        version: '3.1.410'
+        installationPath: $(Agent.ToolsDirectory)/dotnet
+    
+    - task: DotNetCoreCLI@2
+      displayName: Build DryWetMidi and DryWetMidi.Tests.Common
+      inputs:
+        command: 'build'
+        arguments: '--configuration $(buildConfiguration) --framework netstandard2.0'
+        projects: |
+          DryWetMidi/Melanchall.DryWetMidi.csproj
+          DryWetMidi.Tests.Common/Melanchall.DryWetMidi.Tests.Common.csproj
+    
+    - task: DotNetCoreCLI@2
+      displayName: Build DryWetMidi.Tests
+      inputs:
+        command: 'build'
+        arguments: '--configuration $(buildConfiguration) --framework netcoreapp3.1'
+        projects: |
+          DryWetMidi.Tests/Melanchall.DryWetMidi.Tests.csproj
+    
+    - task: PowerShell@2
+      displayName: Setup MIDI ports for devices API tests
+      inputs:
+        targetType: filePath
+        filePath: '$(Build.SourcesDirectory)/Resources/Scripts/Setup MIDI ports.ps1'
+    
+    - task: DotNetCoreCLI@2
+      displayName: Run unit tests
+      continueOnError: true
+      inputs:
+        command: 'test'
+        projects: 'DryWetMidi.Tests/Melanchall.DryWetMidi.Tests.csproj'
+        arguments: '--blame --no-build --configuration $(buildConfiguration) --filter (FullyQualifiedName~.Devices) --framework netcoreapp3.1 --verbosity normal'

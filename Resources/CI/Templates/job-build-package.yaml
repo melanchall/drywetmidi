@@ -25,7 +25,7 @@ jobs:
       filePath: '$(Build.SourcesDirectory)/Resources/Scripts/Generate obsolete API hints.ps1'
       
   - task: PowerShell@2
-    displayName: Copy native files near csproj
+    displayName: Copy native libraries near csproj
     inputs:
       targetType: 'inline'
       script: |

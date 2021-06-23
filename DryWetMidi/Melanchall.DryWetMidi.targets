@@ -5,15 +5,15 @@
       <Link>Melanchall.DryWetMidi.Native32.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-	<None Include="$(MSBuildThisFileDirectory)Melanchall.DryWetMidi.Native64.dll">
+	  <None Include="$(MSBuildThisFileDirectory)Melanchall.DryWetMidi.Native64.dll">
       <Link>Melanchall.DryWetMidi.Native64.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-	<None Include="$(MSBuildThisFileDirectory)Melanchall.DryWetMidi.Native32.dylib">
+      </None>
+	  <None Include="$(MSBuildThisFileDirectory)Melanchall.DryWetMidi.Native32.dylib">
       <Link>Melanchall.DryWetMidi.Native32.dylib</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-	<None Include="$(MSBuildThisFileDirectory)Melanchall.DryWetMidi.Native64.dylib">
+	  <None Include="$(MSBuildThisFileDirectory)Melanchall.DryWetMidi.Native64.dylib">
       <Link>Melanchall.DryWetMidi.Native64.dylib</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
