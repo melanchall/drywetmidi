@@ -10,6 +10,7 @@ trigger:
     - 'DryWetMidi.Tests/*'
     - 'DryWetMidi.Tests.Common/*'
     - 'Resources/CI/mac-test-netcore-core.yaml'
+    - 'Resources/CI/Templates/stage-build-native-libs.yaml'
     exclude:
     - 'DryWetMidi/Devices/*'
     - 'DryWetMidi.Tests/Devices/*'
@@ -24,6 +25,7 @@ pr:
     - 'DryWetMidi.Tests/*'
     - 'DryWetMidi.Tests.Common/*'
     - 'Resources/CI/mac-test-netcore-core.yaml'
+    - 'Resources/CI/Templates/stage-build-native-libs.yaml'
     exclude:
     - 'DryWetMidi/Devices/*'
     - 'DryWetMidi.Tests/Devices/*'
@@ -42,35 +44,58 @@ variables:
 
 name: macOS_Test_NetCore_Core_$(LibraryVersion)$(Rev:.r)
 
-steps:
-- task: UseDotNet@2
-  displayName: 'Use .NET Core 2.1'
-  inputs:
-    packageType: sdk
-    version: '2.1.804'
-    installationPath: $(Agent.ToolsDirectory)/dotnet
-
-- task: DotNetCoreCLI@2
-  displayName: Build DryWetMidi and DryWetMidi.Tests.Common
-  inputs:
-    command: 'build'
-    arguments: '--configuration $(buildConfiguration) --framework netstandard2.0'
-    projects: |
-      DryWetMidi/Melanchall.DryWetMidi.csproj
-      DryWetMidi.Tests.Common/Melanchall.DryWetMidi.Tests.Common.csproj
-
-- task: DotNetCoreCLI@2
-  displayName: Build DryWetMidi.Tests
-  inputs:
-    command: 'build'
-    arguments: '--configuration $(buildConfiguration) --framework netcoreapp2.1'
-    projects: |
-      DryWetMidi.Tests/Melanchall.DryWetMidi.Tests.csproj
-
-- task: DotNetCoreCLI@2
-  displayName: Run unit tests
-  continueOnError: true
-  inputs:
-    command: 'test'
-    projects: 'DryWetMidi.Tests/Melanchall.DryWetMidi.Tests.csproj'
-    arguments: '--blame --no-build --configuration $(buildConfiguration) --filter ((FullyQualifiedName~Melanchall.DryWetMidi.Tests.Core|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Common|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Composing|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Interaction|FullyQualifiedName~Melanchall.DryWetMidi.Tests.MusicTheory|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Standards|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Tools)&Name!=CheckValidFilesReadingByReferences) --framework netcoreapp2.1 --verbosity normal'
+stages:
+- template: Templates/stage-build-native-libs.yaml
+- stage: RunTests
+  displayName: Run tests
+  pool:
+    vmImage: 'macOS-latest'
+  jobs:
+  - job: RunTests
+    displayName: Run tests
+    steps:
+    - task: DownloadPipelineArtifact@2
+      displayName: Download native libraries
+      inputs:
+        source: 'current'
+        path: '$(Pipeline.Workspace)'
+        
+    - task: PowerShell@2
+      displayName: Copy native libraries near csproj
+      inputs:
+        targetType: 'inline'
+        script: |
+          Copy-Item -Path "$(Pipeline.Workspace)\**\*.dll" -Destination "DryWetMidi"
+          Copy-Item -Path "$(Pipeline.Workspace)\**\*.dylib" -Destination "DryWetMidi"
+    
+    - task: UseDotNet@2
+      displayName: 'Use .NET Core 3.1'
+      inputs:
+        packageType: sdk
+        version: '3.1.410'
+        installationPath: $(Agent.ToolsDirectory)/dotnet
+    
+    - task: DotNetCoreCLI@2
+      displayName: Build DryWetMidi and DryWetMidi.Tests.Common
+      inputs:
+        command: 'build'
+        arguments: '--configuration $(buildConfiguration) --framework netstandard2.0'
+        projects: |
+          DryWetMidi/Melanchall.DryWetMidi.csproj
+          DryWetMidi.Tests.Common/Melanchall.DryWetMidi.Tests.Common.csproj
+    
+    - task: DotNetCoreCLI@2
+      displayName: Build DryWetMidi.Tests
+      inputs:
+        command: 'build'
+        arguments: '--configuration $(buildConfiguration) --framework netcoreapp3.1'
+        projects: |
+          DryWetMidi.Tests/Melanchall.DryWetMidi.Tests.csproj
+    
+    - task: DotNetCoreCLI@2
+      displayName: Run unit tests
+      continueOnError: true
+      inputs:
+        command: 'test'
+        projects: 'DryWetMidi.Tests/Melanchall.DryWetMidi.Tests.csproj'
+        arguments: '--blame --no-build --configuration $(buildConfiguration) --filter ((FullyQualifiedName~Melanchall.DryWetMidi.Tests.Core|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Common|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Composing|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Interaction|FullyQualifiedName~Melanchall.DryWetMidi.Tests.MusicTheory|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Standards|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Tools)&Name!=CheckValidFilesReadingByReferences) --framework netcoreapp3.1 --verbosity normal'

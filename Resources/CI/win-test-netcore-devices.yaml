@@ -10,8 +10,10 @@ trigger:
     - 'DryWetMidi.Tests/*'
     - 'DryWetMidi.Tests.Common/*'
     - 'Resources/CI/win-test-netcore-devices.yaml'
+    - 'Resources/CI/Templates/stage-build-native-libs.yaml'
     - 'Resources/Utilities/CreateLoopbackPort/*'
     - 'Resources/Scripts/Setup MIDI ports.ps1'
+    - 'Resources/Native/*'
 
 pr:
   branches:
@@ -23,8 +25,10 @@ pr:
     - 'DryWetMidi.Tests/*'
     - 'DryWetMidi.Tests.Common/*'
     - 'Resources/CI/win-test-netcore-devices.yaml'
+    - 'Resources/CI/Templates/stage-build-native-libs.yaml'
     - 'Resources/Utilities/CreateLoopbackPort/*'
     - 'Resources/Scripts/Setup MIDI ports.ps1'
+    - 'Resources/Native/*'
 
 pool:
   vmImage: 'windows-latest'
