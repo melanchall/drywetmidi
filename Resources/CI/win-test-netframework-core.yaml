@@ -10,6 +10,7 @@ trigger:
     - 'DryWetMidi.Tests/*'
     - 'DryWetMidi.Tests.Common/*'
     - 'Resources/CI/win-test-netframework-core.yaml'
+    - 'Resources/CI/Templates/stage-build-native-libs.yaml'
     exclude:
     - 'DryWetMidi/Devices/*'
     - 'DryWetMidi.Tests/Devices/*'
@@ -24,6 +25,7 @@ pr:
     - 'DryWetMidi.Tests/*'
     - 'DryWetMidi.Tests.Common/*'
     - 'Resources/CI/win-test-netframework-core.yaml'
+    - 'Resources/CI/Templates/stage-build-native-libs.yaml'
     exclude:
     - 'DryWetMidi/Devices/*'
     - 'DryWetMidi.Tests/Devices/*'
@@ -42,28 +44,58 @@ variables:
 
 name: Windows_Test_NetFramework_Core_$(LibraryVersion)$(Rev:.r)
 
-steps:
-- task: NugetToolInstaller@1
-  displayName: Install latest NuGet tool
-
-- task: DotNetCoreCLI@2
-  displayName: Restore NuGet packages
-  inputs:
-    command: restore
-
-- task: DotNetCoreCLI@2
-  displayName: Build solution
-  inputs:
-    command: 'build'
-    arguments: '--configuration $(buildConfiguration)'
-
-- task: VSTest@2
-  displayName: Run unit tests
-  inputs:
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
-    testSelector: testAssemblies
-    testAssemblyVer2:
-      '**/*.Tests.dll'
-    testFiltercriteria: 'FullyQualifiedName!~.Devices'
-    rerunMaxAttempts: '3'
+stages:
+- template: Templates/stage-build-native-libs.yaml
+- stage: RunTests
+  displayName: Run tests
+  pool:
+    vmImage: 'windows-latest'
+  jobs:
+  - job: RunTests
+    displayName: Run tests
+    steps:
+    - task: DownloadPipelineArtifact@2
+      displayName: Download native libraries
+      inputs:
+        source: 'current'
+        path: '$(Pipeline.Workspace)\NativeLibraries'
+        
+    - task: PowerShell@2
+      displayName: Copy native libraries near csproj
+      inputs:
+        targetType: 'inline'
+        script: |
+          Copy-Item -Path "$(Pipeline.Workspace)\NativeLibraries\**\*.dll" -Destination "DryWetMidi"
+          Copy-Item -Path "$(Pipeline.Workspace)\NativeLibraries\**\*.dylib" -Destination "DryWetMidi"
+    
+    - task: DotNetCoreCLI@2
+      displayName: Build DryWetMidi
+      inputs:
+        command: 'build'
+        arguments: '--configuration $(buildConfiguration) --framework net45'
+        projects: |
+          DryWetMidi/Melanchall.DryWetMidi.csproj
+    
+    - task: DotNetCoreCLI@2
+      displayName: Build DryWetMidi.Tests.Common
+      inputs:
+        command: 'build'
+        arguments: '--configuration $(buildConfiguration) --framework netstandard2.0'
+        projects: |
+          DryWetMidi.Tests.Common/Melanchall.DryWetMidi.Tests.Common.csproj
+    
+    - task: DotNetCoreCLI@2
+      displayName: Build DryWetMidi.Tests
+      inputs:
+        command: 'build'
+        arguments: '--configuration $(buildConfiguration) --framework net48'
+        projects: |
+          DryWetMidi.Tests/Melanchall.DryWetMidi.Tests.csproj
+    
+    - task: DotNetCoreCLI@2
+      displayName: Run unit tests
+      continueOnError: false
+      inputs:
+        command: 'test'
+        projects: 'DryWetMidi.Tests/Melanchall.DryWetMidi.Tests.csproj'
+        arguments: '--blame --no-build --configuration $(buildConfiguration) --filter (FullyQualifiedName~Melanchall.DryWetMidi.Tests.Core|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Common|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Composing|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Interaction|FullyQualifiedName~Melanchall.DryWetMidi.Tests.MusicTheory|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Standards|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Tools) --framework net48 --verbosity normal'
