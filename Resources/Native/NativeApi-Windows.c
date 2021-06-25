@@ -16,15 +16,9 @@ typedef struct
 	UINT timerId;
 } TickGeneratorInfo;
 
-void TimerCallback(UINT uTimerID, UINT uMsg, DWORD_PTR dwUser, DWORD_PTR dw1, DWORD_PTR dw2)
-{
-	void (*callback)(void) = (void (*)(void))dwUser;
-	callback();
-}
-
 TG_STARTRESULT StartHighPrecisionTickGenerator(
 	int interval,
-	void (*callback)(void),
+	LPTIMECALLBACK callback,
 	TickGeneratorInfo** info)
 {
 	TIMECAPS tc;
@@ -37,7 +31,7 @@ TG_STARTRESULT StartHighPrecisionTickGenerator(
 	UINT wTimerRes = min(max(tc.wPeriodMin, interval), tc.wPeriodMax);
 	
 	timeBeginPeriod(wTimerRes);
-	result = timeSetEvent(interval, wTimerRes, TimerCallback, (DWORD_PTR)callback, TIME_PERIODIC);
+	result = timeSetEvent(interval, wTimerRes, callback, 0, TIME_PERIODIC);
 	if (result == 0)
 	{
 		return WINDOWS_TG_STARTRESULT_CANTSETTIMERCALLBACK;
@@ -71,7 +65,7 @@ TG_STOPRESULT StopHighPrecisionTickGenerator(
 	return WINDOWS_TG_STOPRESULT_OK;
 }
 
-/*void TestCallback()
+/*void TestCallback(UINT uTimerID, UINT uMsg, DWORD_PTR dwUser, DWORD_PTR dw1, DWORD_PTR dw2)
 {
 	printf("A");
 }
@@ -85,5 +79,5 @@ void main()
 	Sleep(10000);
 
 	result = StopHighPrecisionTickGenerator(info);
-	printf("[stop = %d]", result);
+	printf("[stop = %d]\n", result);
 }*/

@@ -89,7 +89,7 @@ namespace Melanchall.DryWetMidi.Devices
 
         #region Methods
 
-        private void OnTick()
+        private void OnTick(uint uID, uint uMsg, uint dwUser, uint dw1, uint dw2)
         {
             if (!IsRunning || _disposed)
                 return;

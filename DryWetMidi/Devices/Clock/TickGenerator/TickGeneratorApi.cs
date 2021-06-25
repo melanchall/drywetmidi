@@ -20,7 +20,7 @@ namespace Melanchall.DryWetMidi.Devices
             WINDOWS_TG_STOPRESULT_CANTKILLEVENT = 2
         }
 
-        public delegate void TimerCallback();
+        public delegate void TimerCallback(uint uID, uint uMsg, uint dwUser, uint dw1, uint dw2);
 
         #endregion
 
