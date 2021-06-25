@@ -7,10 +7,10 @@ namespace Melanchall.DryWetMidi.Devices
     {
         #region Extern functions
 
-        [DllImport("Melanchall.DryWetMidi.Native32")]
+        [DllImport("Melanchall_DryWetMidi_Native32")]
         public static extern TG_STARTRESULT StartHighPrecisionTickGenerator(int interval, TimerCallback callback, out IntPtr info);
 
-        [DllImport("Melanchall.DryWetMidi.Native32")]
+        [DllImport("Melanchall_DryWetMidi_Native32")]
         public static extern TG_STOPRESULT StopHighPrecisionTickGenerator(IntPtr info);
 
         #endregion

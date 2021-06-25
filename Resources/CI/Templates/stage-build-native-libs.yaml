@@ -14,12 +14,12 @@ stages:
         script: |
           cd Resources\Native
           gcc -c NativeApi-Windows.c -lwinmm
-          gcc -shared -o Melanchall.DryWetMidi.Native64.dll NativeApi-Windows.o -lwinmm
+          gcc -shared -o Melanchall_DryWetMidi_Native64.dll NativeApi-Windows.o -lwinmm
     - task: PublishPipelineArtifact@1
       displayName: 'Publish dll artifact'
       inputs:
-        targetPath: 'Resources\Native\Melanchall.DryWetMidi.Native64.dll'
-        artifactName: 'Melanchall.DryWetMidi.Native64.dll'
+        targetPath: 'Resources\Native\Melanchall_DryWetMidi_Native64.dll'
+        artifactName: 'Melanchall_DryWetMidi_Native64.dll'
         artifactType: pipeline
   - job: BuildDylib64
     displayName: 'Build 64-bit dylib'
@@ -33,12 +33,12 @@ stages:
         script: |
           cd Resources/Native
           gcc -c NativeApi-macOS.c
-          gcc -shared -o Melanchall.DryWetMidi.Native64.dylib NativeApi-macOS.o
+          gcc -shared -o Melanchall_DryWetMidi_Native64.dylib NativeApi-macOS.o
     - task: PublishPipelineArtifact@1
       displayName: 'Publish dylib artifact'
       inputs:
-        targetPath: 'Resources/Native/Melanchall.DryWetMidi.Native64.dylib'
-        artifactName: 'Melanchall.DryWetMidi.Native64.dylib'
+        targetPath: 'Resources/Native/Melanchall_DryWetMidi_Native64.dylib'
+        artifactName: 'Melanchall_DryWetMidi_Native64.dylib'
         artifactType: pipeline
   - job: BuildDll32
     displayName: 'Build 32-bit dll'
@@ -64,13 +64,13 @@ stages:
           
           cd Resources\Native
           & $gccPath.FullName -c NativeApi-Windows.c -m32 -lwinmm
-          & $gccPath.FullName -shared -o Melanchall.DryWetMidi.Native32.dll NativeApi-Windows.o -m32 -lwinmm
+          & $gccPath.FullName -shared -o Melanchall_DryWetMidi_Native32.dll NativeApi-Windows.o -m32 -lwinmm
           Write-Host "Built."
     - task: PublishPipelineArtifact@1
       displayName: 'Publish dll artifact'
       inputs:
-        targetPath: 'Resources\Native\Melanchall.DryWetMidi.Native32.dll'
-        artifactName: 'Melanchall.DryWetMidi.Native32.dll'
+        targetPath: 'Resources\Native\Melanchall_DryWetMidi_Native32.dll'
+        artifactName: 'Melanchall_DryWetMidi_Native32.dll'
         artifactType: pipeline
   - job: BuildDylib32
     displayName: 'Build 32-bit dylib'
@@ -84,10 +84,10 @@ stages:
         script: |
           cd Resources/Native
           gcc -c NativeApi-macOS.c -m32
-          gcc -shared -o Melanchall.DryWetMidi.Native32.dylib NativeApi-macOS.o -m32
+          gcc -shared -o Melanchall_DryWetMidi_Native32.dylib NativeApi-macOS.o -m32
     - task: PublishPipelineArtifact@1
       displayName: 'Publish dylib artifact'
       inputs:
-        targetPath: 'Resources/Native/Melanchall.DryWetMidi.Native32.dylib'
-        artifactName: 'Melanchall.DryWetMidi.Native32.dylib'
+        targetPath: 'Resources/Native/Melanchall_DryWetMidi_Native32.dylib'
+        artifactName: 'Melanchall_DryWetMidi_Native32.dylib'
         artifactType: pipeline

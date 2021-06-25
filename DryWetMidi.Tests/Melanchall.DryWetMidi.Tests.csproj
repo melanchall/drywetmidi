@@ -24,20 +24,20 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="..\DryWetMidi\Melanchall.DryWetMidi.Native32.dll">
-      <Link>Melanchall.DryWetMidi.Native32.dll</Link>
+    <None Include="..\DryWetMidi\Melanchall_DryWetMidi_Native32.dll">
+      <Link>Melanchall_DryWetMidi_Native32.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\DryWetMidi\Melanchall.DryWetMidi.Native64.dll">
-      <Link>Melanchall.DryWetMidi.Native64.dll</Link>
+    <None Include="..\DryWetMidi\Melanchall_DryWetMidi_Native64.dll">
+      <Link>Melanchall_DryWetMidi_Native64.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\DryWetMidi\Melanchall.DryWetMidi.Native32.dylib">
-      <Link>Melanchall.DryWetMidi.Native32.dylib</Link>
+    <None Include="..\DryWetMidi\Melanchall_DryWetMidi_Native32.dylib">
+      <Link>Melanchall_DryWetMidi_Native32.dylib</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\DryWetMidi\Melanchall.DryWetMidi.Native64.dylib">
-      <Link>Melanchall.DryWetMidi.Native64.dylib</Link>
+    <None Include="..\DryWetMidi\Melanchall_DryWetMidi_Native64.dylib">
+      <Link>Melanchall_DryWetMidi_Native64.dylib</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
