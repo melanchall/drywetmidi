@@ -2,9 +2,14 @@
 
 #include <windows.h>
 #include <mmsystem.h>
-#include <stdio.h>
+/*#include <stdio.h>*/
 
 #include "NativeApi-ReturnCodes.h"
+
+API_TYPE GetApiType()
+{
+    return API_TYPE_WINMM;
+}
 
 /* ================================
    High-precision tick generator
@@ -16,16 +21,13 @@ typedef struct
 	UINT timerId;
 } TickGeneratorInfo;
 
-TG_STARTRESULT StartHighPrecisionTickGenerator(
-	int interval,
-	LPTIMECALLBACK callback,
-	TickGeneratorInfo** info)
+TG_STARTRESULT StartHighPrecisionTickGenerator_Winmm(int interval, LPTIMECALLBACK callback, TickGeneratorInfo** info)
 {
 	TIMECAPS tc;
 	MMRESULT result = timeGetDevCaps(&tc, sizeof(TIMECAPS));
 	if (result != TIMERR_NOERROR)
 	{
-		return WINDOWS_TG_STARTRESULT_CANTGETDEVICECAPABILITIES;
+		return TG_STARTRESULT_CANTGETDEVICECAPABILITIES;
 	}
 
 	UINT wTimerRes = min(max(tc.wPeriodMin, interval), tc.wPeriodMax);
@@ -34,7 +36,7 @@ TG_STARTRESULT StartHighPrecisionTickGenerator(
 	result = timeSetEvent(interval, wTimerRes, callback, 0, TIME_PERIODIC);
 	if (result == 0)
 	{
-		return WINDOWS_TG_STARTRESULT_CANTSETTIMERCALLBACK;
+		return TG_STARTRESULT_CANTSETTIMERCALLBACK;
 	}
 
 	TickGeneratorInfo* tickGeneratorInfo = malloc(sizeof(TickGeneratorInfo));
@@ -42,7 +44,7 @@ TG_STARTRESULT StartHighPrecisionTickGenerator(
 	tickGeneratorInfo->timerId = result;
 	*info = tickGeneratorInfo;
 
-	return WINDOWS_TG_STARTRESULT_OK;
+	return TG_STARTRESULT_OK;
 }
 
 TG_STOPRESULT StopHighPrecisionTickGenerator(
@@ -51,18 +53,18 @@ TG_STOPRESULT StopHighPrecisionTickGenerator(
 	MMRESULT result = timeEndPeriod(info->timerResolution);
 	if (result != TIMERR_NOERROR)
 	{
-		return WINDOWS_TG_STOPRESULT_CANTENDPERIOD;
+		return TG_STOPRESULT_CANTENDPERIOD;
 	}
 
 	result = timeKillEvent(info->timerId);
 	if (result != TIMERR_NOERROR)
 	{
-		return WINDOWS_TG_STOPRESULT_CANTKILLEVENT;
+		return TG_STOPRESULT_CANTKILLEVENT;
 	}
 
 	free(info);
 
-	return WINDOWS_TG_STOPRESULT_OK;
+	return TG_STOPRESULT_OK;
 }
 
 /*void TestCallback(UINT uTimerID, UINT uMsg, DWORD_PTR dwUser, DWORD_PTR dw1, DWORD_PTR dw2)

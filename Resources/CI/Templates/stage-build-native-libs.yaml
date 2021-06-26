@@ -33,7 +33,7 @@ stages:
         script: |
           cd Resources/Native
           gcc -c NativeApi-macOS.c
-          gcc -shared -o Melanchall_DryWetMidi_Native64.dylib NativeApi-macOS.o
+          gcc -shared -framework CoreServices -o Melanchall_DryWetMidi_Native64.dylib NativeApi-macOS.o
     - task: PublishPipelineArtifact@1
       displayName: 'Publish dylib artifact'
       inputs:
@@ -72,22 +72,22 @@ stages:
         targetPath: 'Resources\Native\Melanchall_DryWetMidi_Native32.dll'
         artifactName: 'Melanchall_DryWetMidi_Native32.dll'
         artifactType: pipeline
-  - job: BuildDylib32
-    displayName: 'Build 32-bit dylib'
-    pool:
-      vmImage: 'macos-latest'
-    steps:
-    - task: PowerShell@2
-      displayName: 'Build dylib'
-      inputs:
-        targetType: 'inline'
-        script: |
-          cd Resources/Native
-          gcc -c NativeApi-macOS.c -m32
-          gcc -shared -o Melanchall_DryWetMidi_Native32.dylib NativeApi-macOS.o -m32
-    - task: PublishPipelineArtifact@1
-      displayName: 'Publish dylib artifact'
-      inputs:
-        targetPath: 'Resources/Native/Melanchall_DryWetMidi_Native32.dylib'
-        artifactName: 'Melanchall_DryWetMidi_Native32.dylib'
-        artifactType: pipeline
+#  - job: BuildDylib32
+#    displayName: 'Build 32-bit dylib'
+#    pool:
+#      vmImage: 'macos-latest'
+#    steps:
+#    - task: PowerShell@2
+#      displayName: 'Build dylib'
+#      inputs:
+#        targetType: 'inline'
+#        script: |
+#          cd Resources/Native
+#          gcc -c NativeApi-macOS.c -m32
+#          gcc -shared -framework CoreServices -o Melanchall_DryWetMidi_Native32.dylib NativeApi-macOS.o -m32
+#    - task: PublishPipelineArtifact@1
+#      displayName: 'Publish dylib artifact'
+#      inputs:
+#        targetPath: 'Resources/Native/Melanchall_DryWetMidi_Native32.dylib'
+#        artifactName: 'Melanchall_DryWetMidi_Native32.dylib'
+#        artifactType: pipeline

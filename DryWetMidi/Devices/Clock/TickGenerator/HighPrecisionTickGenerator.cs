@@ -1,6 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
-using System.Runtime.InteropServices;
 using Melanchall.DryWetMidi.Common;
 
 namespace Melanchall.DryWetMidi.Devices
@@ -31,7 +29,8 @@ namespace Melanchall.DryWetMidi.Devices
 
         private bool _disposed = false;
 
-        private TickGeneratorApi.TimerCallback _tickCallback;
+        private TickGeneratorApi.TimerCallback_Winmm _tickCallbackWinmm;
+        private TickGeneratorApi.TimerCallback_Apple _tickCallbackApple;
         private IntPtr _info;
 
         #endregion
@@ -66,12 +65,33 @@ namespace Melanchall.DryWetMidi.Devices
 
             var intervalInMilliseconds = (int)interval.TotalMilliseconds;
 
-            _tickCallback = OnTick;
+            var apiType = TickGeneratorApiProvider.Api.Api_GetApiType();
+            var result = default(TickGeneratorApi.TG_STARTRESULT);
 
-            var result = TickGeneratorApiProvider.Api.Api_StartHighPrecisionTickGenerator(
-                intervalInMilliseconds,
-                _tickCallback,
-                out _info);
+            switch (apiType)
+            {
+                case TickGeneratorApi.API_TYPE.API_TYPE_WINMM:
+                    {
+                        _tickCallbackWinmm = OnTick_Winmm;
+                        result = TickGeneratorApiProvider.Api.Api_StartHighPrecisionTickGenerator_Winmm(
+                            intervalInMilliseconds,
+                            _tickCallbackWinmm,
+                            out _info);
+                    }
+                    break;
+                case TickGeneratorApi.API_TYPE.API_TYPE_APPLE:
+                    {
+                        _tickCallbackApple = OnTick_Apple;
+                        result = TickGeneratorApiProvider.Api.Api_StartHighPrecisionTickGenerator_Apple(
+                            intervalInMilliseconds,
+                            _tickCallbackApple,
+                            out _info);
+                    }
+                    break;
+            }
+
+            if (result != TickGeneratorApi.TG_STARTRESULT.TG_STARTRESULT_OK)
+                throw new InvalidOperationException($"FAILED START: {result}");
         }
 
         /// <summary>
@@ -82,14 +102,26 @@ namespace Melanchall.DryWetMidi.Devices
             if (_info == IntPtr.Zero)
                 return;
 
-            TickGeneratorApiProvider.Api.Api_StopHighPrecisionTickGenerator(_info);
+            var result = TickGeneratorApiProvider.Api.Api_StopHighPrecisionTickGenerator(_info);
+            if (result != TickGeneratorApi.TG_STOPRESULT.TG_STOPRESULT_OK)
+                throw new InvalidOperationException($"FAILED STOP: {result}");
         }
 
         #endregion
 
         #region Methods
 
-        private void OnTick(uint uID, uint uMsg, uint dwUser, uint dw1, uint dw2)
+        private void OnTick_Winmm(uint uID, uint uMsg, uint dwUser, uint dw1, uint dw2)
+        {
+            OnTick();
+        }
+
+        private void OnTick_Apple(IntPtr timer, IntPtr info)
+        {
+            OnTick();
+        }
+
+        private void OnTick()
         {
             if (!IsRunning || _disposed)
                 return;

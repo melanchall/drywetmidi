@@ -32,10 +32,10 @@
       <Link>Melanchall_DryWetMidi_Native64.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\DryWetMidi\Melanchall_DryWetMidi_Native32.dylib">
+    <!--<None Include="..\DryWetMidi\Melanchall_DryWetMidi_Native32.dylib">
       <Link>Melanchall_DryWetMidi_Native32.dylib</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    </None>-->
     <None Include="..\DryWetMidi\Melanchall_DryWetMidi_Native64.dylib">
       <Link>Melanchall_DryWetMidi_Native64.dylib</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

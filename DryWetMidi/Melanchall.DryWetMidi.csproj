@@ -6,7 +6,7 @@
     <LangVersion>6</LangVersion>
     <Configurations>Debug;Release;Coverage</Configurations>
   </PropertyGroup>
-  
+
   <PropertyGroup>
     <PackageId>Melanchall.DryWetMidi</PackageId>
     <Version>6.0.0</Version>
@@ -21,15 +21,15 @@
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Description>
-DryWetMIDI is the .NET library to work with MIDI files and MIDI devices. It allows:
+      DryWetMIDI is the .NET library to work with MIDI files and MIDI devices. It allows:
 
-* Read, write and create Standard MIDI Files (SMF). It is also possible to read RMID files where SMF wrapped to RIFF chunk.
-* Work with MIDI devices: send/receive MIDI data, play back and record MIDI data.
-* Finely adjust process of reading and writing. It allows, for example, to read corrupted files and repair them, or build MIDI file validators.
-* Implement custom meta events and custom chunks that can be write to and read from MIDI files.
-* Manage MIDI data either with low-level objects, like event, or high-level ones, like note.
-* Build musical compositions.
-* Perform complex musical tasks like quantizing, notes splitting or converting MIDI files to CSV.
+      * Read, write and create Standard MIDI Files (SMF). It is also possible to read RMID files where SMF wrapped to RIFF chunk.
+      * Work with MIDI devices: send/receive MIDI data, play back and record MIDI data.
+      * Finely adjust process of reading and writing. It allows, for example, to read corrupted files and repair them, or build MIDI file validators.
+      * Implement custom meta events and custom chunks that can be write to and read from MIDI files.
+      * Manage MIDI data either with low-level objects, like event, or high-level ones, like note.
+      * Build musical compositions.
+      * Perform complex musical tasks like quantizing, notes splitting or converting MIDI files to CSV.
     </Description>
     <Copyright>Copyright © Melanchall 2021</Copyright>
     <PackageTags>midi smf music composing notes chords device playback record</PackageTags>
@@ -39,29 +39,29 @@ DryWetMIDI is the .NET library to work with MIDI files and MIDI devices. It allo
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>strongnamekey.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
-  
+
   <PropertyGroup Condition="'$(Configuration)'=='Coverage'">
     <DefineConstants>COVERAGE</DefineConstants>
   </PropertyGroup>
-  
+
   <PropertyGroup Condition="'$(TF_BUILD)' == 'true'">
     <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
   </PropertyGroup>
-  
+
   <ItemGroup>
     <None Include="Melanchall_DryWetMidi_Native32.dll">
       <PackagePath>build\</PackagePath>
       <Pack>true</Pack>
     </None>
-	<None Include="Melanchall_DryWetMidi_Native64.dll">
+    <None Include="Melanchall_DryWetMidi_Native64.dll">
       <PackagePath>build\</PackagePath>
       <Pack>true</Pack>
     </None>
-	<None Include="Melanchall_DryWetMidi_Native32.dylib">
+    <!--<None Include="Melanchall_DryWetMidi_Native32.dylib">
       <PackagePath>build\</PackagePath>
       <Pack>true</Pack>
-    </None>
-	<None Include="Melanchall_DryWetMidi_Native64.dylib">
+    </None>-->
+    <None Include="Melanchall_DryWetMidi_Native64.dylib">
       <PackagePath>build\</PackagePath>
       <Pack>true</Pack>
     </None>
@@ -70,12 +70,12 @@ DryWetMIDI is the .NET library to work with MIDI files and MIDI devices. It allo
       <Pack>true</Pack>
     </None>
   </ItemGroup>
-  
+
   <ItemGroup>
     <Folder Include="Properties\" />
     <None Include="..\Resources\NuGet\icon.png" Pack="true" PackagePath="\" />
   </ItemGroup>
-  
+
   <ItemGroup>
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0">
       <PrivateAssets>all</PrivateAssets>
