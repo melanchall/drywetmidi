@@ -19,9 +19,7 @@ namespace Melanchall.DryWetMidi.Devices
         /// <summary>
         /// The largest possible interval.
         /// </summary>
-        public static readonly TimeSpan MaxInterval = TimeSpan.FromMilliseconds(uint.MaxValue);
-
-        private const uint NoTimerId = 0;
+        public static readonly TimeSpan MaxInterval = TimeSpan.FromMilliseconds(int.MaxValue);
 
         #endregion
 
@@ -29,9 +27,9 @@ namespace Melanchall.DryWetMidi.Devices
 
         private bool _disposed = false;
 
-        private TickGeneratorApi.TimerCallback_Winmm _tickCallbackWinmm;
-        private TickGeneratorApi.TimerCallback_Apple _tickCallbackApple;
-        private IntPtr _info;
+        private TickGeneratorApi.TimerCallback_Winmm _tickCallback_Winmm;
+        private TickGeneratorApi.TimerCallback_Apple _tickCallback_Apple;
+        private IntPtr _tickGeneratorInfo;
 
         #endregion
 
@@ -71,27 +69,15 @@ namespace Melanchall.DryWetMidi.Devices
             switch (apiType)
             {
                 case TickGeneratorApi.API_TYPE.API_TYPE_WINMM:
-                    {
-                        _tickCallbackWinmm = OnTick_Winmm;
-                        result = TickGeneratorApiProvider.Api.Api_StartHighPrecisionTickGenerator_Winmm(
-                            intervalInMilliseconds,
-                            _tickCallbackWinmm,
-                            out _info);
-                    }
+                    StartHighPrecisionTickGenerator_Winmm(intervalInMilliseconds, out _tickGeneratorInfo);
                     break;
                 case TickGeneratorApi.API_TYPE.API_TYPE_APPLE:
-                    {
-                        _tickCallbackApple = OnTick_Apple;
-                        result = TickGeneratorApiProvider.Api.Api_StartHighPrecisionTickGenerator_Apple(
-                            intervalInMilliseconds,
-                            _tickCallbackApple,
-                            out _info);
-                    }
+                    StartHighPrecisionTickGenerator_Apple(intervalInMilliseconds, out _tickGeneratorInfo);
                     break;
             }
 
             if (result != TickGeneratorApi.TG_STARTRESULT.TG_STARTRESULT_OK)
-                throw new InvalidOperationException($"FAILED START: {result}");
+                throw new TickGeneratorException("Failed to start high-precision tick generator.", (int)result);
         }
 
         /// <summary>
@@ -99,12 +85,9 @@ namespace Melanchall.DryWetMidi.Devices
         /// </summary>
         protected override void Stop()
         {
-            if (_info == IntPtr.Zero)
-                return;
-
-            var result = TickGeneratorApiProvider.Api.Api_StopHighPrecisionTickGenerator(_info);
+            var result = StopInternal();
             if (result != TickGeneratorApi.TG_STOPRESULT.TG_STOPRESULT_OK)
-                throw new InvalidOperationException($"FAILED STOP: {result}");
+                throw new TickGeneratorException("Failed to stop high-precision tick generator.", (int)result);
         }
 
         #endregion
@@ -127,6 +110,34 @@ namespace Melanchall.DryWetMidi.Devices
                 return;
 
             GenerateTick();
+        }
+
+        private TickGeneratorApi.TG_STOPRESULT StopInternal()
+        {
+            if (_tickGeneratorInfo == IntPtr.Zero)
+                return TickGeneratorApi.TG_STOPRESULT.TG_STOPRESULT_OK;
+
+            var result = TickGeneratorApiProvider.Api.Api_StopHighPrecisionTickGenerator(_tickGeneratorInfo);
+            _tickGeneratorInfo = IntPtr.Zero;
+            return result;
+        }
+
+        private TickGeneratorApi.TG_STARTRESULT StartHighPrecisionTickGenerator_Winmm(int intervalInMilliseconds, out IntPtr tickGeneratorInfo)
+        {
+            _tickCallback_Winmm = OnTick_Winmm;
+            return TickGeneratorApiProvider.Api.Api_StartHighPrecisionTickGenerator_Winmm(
+                intervalInMilliseconds,
+                _tickCallback_Winmm,
+                out tickGeneratorInfo);
+        }
+
+        private TickGeneratorApi.TG_STARTRESULT StartHighPrecisionTickGenerator_Apple(int intervalInMilliseconds, out IntPtr tickGeneratorInfo)
+        {
+            _tickCallback_Apple = OnTick_Apple;
+            return TickGeneratorApiProvider.Api.Api_StartHighPrecisionTickGenerator_Apple(
+                intervalInMilliseconds,
+                _tickCallback_Apple,
+                out tickGeneratorInfo);
         }
 
         #endregion
@@ -154,8 +165,7 @@ namespace Melanchall.DryWetMidi.Devices
             {
             }
 
-            if (IsRunning)
-                Stop();
+            StopInternal();
 
             _disposed = true;
         }

@@ -32,6 +32,10 @@ namespace Melanchall.DryWetMidi.Devices
             TG_STOPRESULT_CANTKILLEVENT = 2
         }
 
+        #endregion
+
+        #region Delegates
+
         public delegate void TimerCallback_Winmm(uint uID, uint uMsg, uint dwUser, uint dw1, uint dw2);
 
         public delegate void TimerCallback_Apple(IntPtr timer, IntPtr info);
