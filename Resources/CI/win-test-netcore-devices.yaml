@@ -11,7 +11,7 @@ trigger:
     - 'DryWetMidi.Tests.Common/*'
     - 'Resources/CI/win-test-netcore-devices.yaml'
     - 'Resources/CI/Templates/stage-build-native-libs.yaml'
-    - 'Resources/Utilities/CreateLoopbackPort/*'
+    - 'Resources/Utilities/CreateLoopbackPort_Windows/*'
     - 'Resources/Scripts/Setup MIDI ports.ps1'
     - 'Resources/Native/*'
 
@@ -26,7 +26,7 @@ pr:
     - 'DryWetMidi.Tests.Common/*'
     - 'Resources/CI/win-test-netcore-devices.yaml'
     - 'Resources/CI/Templates/stage-build-native-libs.yaml'
-    - 'Resources/Utilities/CreateLoopbackPort/*'
+    - 'Resources/Utilities/CreateLoopbackPort_Windows/*'
     - 'Resources/Scripts/Setup MIDI ports.ps1'
     - 'Resources/Native/*'
 

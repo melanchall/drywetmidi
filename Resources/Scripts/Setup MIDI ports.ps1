@@ -1,6 +1,7 @@
 $location = Get-Location
 
 Write-Host "Downloading virtualMIDI SDK..."
+$ProgressPreference = 'SilentlyContinue'
 Invoke-WebRequest -Uri "http://www.tobias-erichsen.de/wp-content/uploads/2020/01/teVirtualMIDISDKSetup_1_3_0_43.zip" -OutFile "teVirtualMIDISDKSetup.zip"
 Write-Host "Downloaded."
 
@@ -15,7 +16,7 @@ Start-Process "VirtualMIDISDKSetup/$installer" -NoNewWindow -Wait -ArgumentList 
 Write-Host "Installed."
 
 Write-Host "Building CreateLoopbackPort..."
-dotnet publish "Resources/Utilities/CreateLoopbackPort/CreateLoopbackPort.sln" -c Release -r win10-x64 -o "$location/CreateLoopbackPort"
+dotnet publish "Resources/Utilities/CreateLoopbackPort_Windows/CreateLoopbackPort.sln" -c Release -r win10-x64 -o "$location/CreateLoopbackPort"
 Write-Host "Built."
 
 $ports = "MIDI A", "MIDI B", "MIDI C"

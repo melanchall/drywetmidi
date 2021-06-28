@@ -12,6 +12,7 @@ trigger:
     - 'Resources/CI/mac-test-netcore-devices.yaml'
     - 'Resources/CI/Templates/stage-build-native-libs.yaml'
     - 'Resources/Native/*'
+    - 'Resources/Utilities/CreateLoopbackPort_macOS/*'
 
 pr:
   branches:
@@ -25,6 +26,7 @@ pr:
     - 'Resources/CI/mac-test-netcore-devices.yaml'
     - 'Resources/CI/Templates/stage-build-native-libs.yaml'
     - 'Resources/Native/*'
+    - 'Resources/Utilities/CreateLoopbackPort_macOS/*'
 
 pool:
   vmImage: 'macOS-latest'
@@ -87,6 +89,21 @@ stages:
         arguments: '--configuration $(buildConfiguration) --framework netcoreapp3.1'
         projects: |
           DryWetMidi.Tests/Melanchall.DryWetMidi.Tests.csproj
+    
+    - task: PowerShell@2
+      displayName: Create virtual MIDI ports
+      inputs:
+        targetType: 'inline'
+        script: |
+          Write-Host "Building loopback API..."
+          cd Resources/Utilities/CreateLoopbackPort_macOS/CreateLoopbackPort
+          gcc -c LoopbackAPI.c
+          gcc -shared -framework CoreFoundation -framework CoreMIDI -o LoopbackAPI.dylib LoopbackAPI.o
+          Write-Host "Building utility app..."
+          dotnet publish CreateLoopbackPort.csproj -c Release -r osx-x64
+          $exePath = Get-ChildItem -Path "bin/Release/netcoreapp3.1/osx-x64/publish" -File -Filter "CreateLoopbackPort" -Recurse
+          Write-Host "Running utility app..."
+          Start-Process $exePath.FullName -ArgumentList """MIDI A"" ""MIDI B"" ""MIDI C"""
     
     - task: DotNetCoreCLI@2
       displayName: Run unit tests
