@@ -36,7 +36,7 @@ namespace Melanchall.DryWetMidi.Devices
         private readonly MidiEventToBytesConverter _midiEventToBytesConverter = new MidiEventToBytesConverter(ShortEventBufferSize);
         private readonly BytesToMidiEventConverter _bytesToMidiEventConverter = new BytesToMidiEventConverter();
 
-        private MidiWinApi.MidiMessageCallback _callback;
+        private OutputDeviceApi.Callback_Winmm _callback;
 
         private readonly HashSet<IntPtr> _sysExHeadersPointers = new HashSet<IntPtr>();
 
@@ -44,10 +44,9 @@ namespace Melanchall.DryWetMidi.Devices
 
         #region Constructor
 
-        internal OutputDevice(int id)
-            : base(id)
+        internal OutputDevice(IntPtr info)
+            : base(info)
         {
-            SetDeviceInformation();
         }
 
         #endregion
@@ -60,93 +59,6 @@ namespace Melanchall.DryWetMidi.Devices
         ~OutputDevice()
         {
             Dispose(false);
-        }
-
-        #endregion
-
-        #region Properties
-
-        /// <summary>
-        /// Gets the type of the current <see cref="OutputDevice"/>.
-        /// </summary>
-        public OutputDeviceType DeviceType { get; private set; }
-
-        /// <summary>
-        /// Gets the number of voices supported by an internal synthesizer device. If the device is a port,
-        /// this member is not meaningful and will be 0.
-        /// </summary>
-        public int VoicesNumber { get; private set; }
-
-        /// <summary>
-        /// Gets the maximum number of simultaneous notes that can be played by an internal synthesizer device.
-        /// If the device is a port, this member is not meaningful and will be 0.
-        /// </summary>
-        public int NotesNumber { get; private set; }
-
-        /// <summary>
-        /// Gets the channels that an internal synthesizer device responds to.
-        /// </summary>
-        public IEnumerable<FourBitNumber> Channels { get; private set; }
-
-        /// <summary>
-        /// Gets a value indicating whether device supports patch caching.
-        /// </summary>
-        public bool SupportsPatchCaching { get; private set; }
-
-        /// <summary>
-        /// Gets a value indicating whether device supports separate left and right volume control or not.
-        /// </summary>
-        public bool SupportsLeftRightVolumeControl { get; private set; }
-
-        /// <summary>
-        /// Gets a value indicating whether device supports volume control.
-        /// </summary>
-        public bool SupportsVolumeControl { get; private set; }
-
-        /// <summary>
-        /// Gets or sets the volume of the output MIDI device.
-        /// </summary>
-        /// <exception cref="ObjectDisposedException">The current <see cref="OutputDevice"/> is disposed.</exception>
-        /// <exception cref="InvalidOperationException">Device doesn't support volume control.</exception>
-        /// <exception cref="ArgumentException">Device doesn't support separate volume control for each channel.</exception>
-        /// <exception cref="MidiDeviceException">An error occurred on device.</exception>
-        public Volume Volume
-        {
-            get
-            {
-                EnsureDeviceIsNotDisposed();
-                EnsureHandleIsCreated();
-
-                if (!SupportsVolumeControl)
-                    throw new InvalidOperationException("Device doesn't support volume control.");
-
-                var volume = default(uint);
-                ProcessMmResult(MidiOutWinApi.midiOutGetVolume(_handle, ref volume));
-
-                var leftVolume = volume.GetTail();
-                var rightVolume = volume.GetHead();
-
-                return SupportsLeftRightVolumeControl
-                    ? new Volume(leftVolume, rightVolume)
-                    : new Volume(leftVolume, leftVolume);
-            }
-            set
-            {
-                EnsureDeviceIsNotDisposed();
-                EnsureHandleIsCreated();
-
-                if (!SupportsVolumeControl)
-                    throw new InvalidOperationException("Device doesn't support volume control.");
-
-                var leftVolume = value.LeftVolume;
-                var rightVolume = value.RightVolume;
-
-                if (!SupportsLeftRightVolumeControl && leftVolume != rightVolume)
-                    throw new ArgumentException("Device doesn't support separate volume control for each channel.", nameof(value));
-
-                var volume = DataTypesUtilities.Combine(rightVolume, leftVolume);
-                ProcessMmResult(MidiOutWinApi.midiOutSetVolume(_handle, volume));
-            }
         }
 
         #endregion
@@ -224,7 +136,7 @@ namespace Melanchall.DryWetMidi.Devices
         /// <returns>Number of output MIDI devices presented in the system.</returns>
         public static int GetDevicesCount()
         {
-            return (int)MidiOutWinApi.midiOutGetNumDevs();
+            return OutputDeviceApiProvider.Api.Api_GetDevicesCount();
         }
 
         /// <summary>
@@ -234,9 +146,12 @@ namespace Melanchall.DryWetMidi.Devices
         public static IEnumerable<OutputDevice> GetAll()
         {
             var devicesCount = GetDevicesCount();
-            for (var deviceId = 0; deviceId < devicesCount; deviceId++)
+            for (var i = 0; i < devicesCount; i++)
             {
-                yield return new OutputDevice(deviceId);
+                // TODO: handle result
+                IntPtr info;
+                var result = OutputDeviceApiProvider.Api.Api_GetDeviceInfo(i, out info);
+                yield return new OutputDevice(info);
             }
         }
 
@@ -268,19 +183,6 @@ namespace Melanchall.DryWetMidi.Devices
         }
 
         /// <summary>
-        /// Retrieves output MIDI device with the specified ID.
-        /// </summary>
-        /// <param name="id">Device ID which is number from 0 to <see cref="GetDevicesCount"/> minus 1.</param>
-        /// <returns>Output MIDI device with the specified ID.</returns>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="id"/> is out of valid range.</exception>
-        public static OutputDevice GetById(int id)
-        {
-            ThrowIfArgument.IsOutOfRange(nameof(id), id, 0, GetDevicesCount() - 1, "Device ID is out of range.");
-
-            return new OutputDevice(id);
-        }
-
-        /// <summary>
         /// Gets error description for the specified MMRESULT which is return value of winmm function.
         /// </summary>
         /// <param name="mmrError">MMRESULT which is return value of winmm function.</param>
@@ -292,13 +194,37 @@ namespace Melanchall.DryWetMidi.Devices
             return MidiOutWinApi.midiOutGetErrorText(mmrError, pszText, cchText);
         }
 
+        protected override void SetBasicDeviceInformation()
+        {
+            Name = OutputDeviceApiProvider.Api.Api_GetDeviceName(_info);
+            Manufacturer = OutputDeviceApiProvider.Api.Api_GetDeviceManufacturer(_info);
+            Product = OutputDeviceApiProvider.Api.Api_GetDeviceProduct(_info);
+            DriverVersion = OutputDeviceApiProvider.Api.Api_GetDeviceDriverVersion(_info);
+        }
+
         private void EnsureHandleIsCreated()
         {
-            if (_handle != IntPtr.Zero)
+            if (_windowsHandle != IntPtr.Zero)
                 return;
 
             _callback = OnMessage;
-            ProcessMmResult(MidiOutWinApi.midiOutOpen(out _handle, Id, _callback, IntPtr.Zero, MidiWinApi.CallbackFunction));
+
+            // TODO: handle result
+            var result = OutputDeviceApiProvider.Api.Api_OpenDevice_Winmm(_info, _callback, out _handle);
+            if (result != OutputDeviceApi.OUT_OPENRESULT.OUT_OPENRESULT_OK)
+            {
+                switch (result)
+                {
+                    case OutputDeviceApi.OUT_OPENRESULT.OUT_OPENRESULT_ALLOCATED:
+                        throw new MidiDeviceException("The device is already in use.");
+                    case OutputDeviceApi.OUT_OPENRESULT.OUT_OPENRESULT_NOMEMORY:
+                        throw new MidiDeviceException("There is no memory to allocate the requested resources.");
+                }
+
+                throw new MidiDeviceException($"Unknown error ({result}).");
+            }
+
+            _windowsHandle = OutputDeviceApiProvider.Api.Api_GetHandle(_handle);
         }
 
         private void DestroyHandle()
@@ -306,34 +232,16 @@ namespace Melanchall.DryWetMidi.Devices
             if (_handle == IntPtr.Zero)
                 return;
 
-            MidiOutWinApi.midiOutClose(_handle);
-        }
+            OutputDeviceApiProvider.Api.Api_CloseDevice(_handle);
 
-        private void SetDeviceInformation()
-        {
-            var caps = default(MidiOutWinApi.MIDIOUTCAPS);
-            ProcessMmResult(MidiOutWinApi.midiOutGetDevCaps(new IntPtr(Id), ref caps, (uint)Marshal.SizeOf(caps)));
-
-            SetBasicDeviceInformation(caps.wMid, caps.wPid, caps.vDriverVersion, caps.szPname);
-
-            DeviceType = (OutputDeviceType)caps.wTechnology;
-            VoicesNumber = caps.wVoices;
-            NotesNumber = caps.wNotes;
-            Channels = (from channel in FourBitNumber.Values
-                        let isChannelSupported = (caps.wChannelMask >> channel) & 1
-                        where isChannelSupported == 1
-                        select channel).ToArray();
-
-            var support = (MidiOutWinApi.MIDICAPS)caps.dwSupport;
-            SupportsPatchCaching = support.HasFlag(MidiOutWinApi.MIDICAPS.MIDICAPS_CACHE);
-            SupportsVolumeControl = support.HasFlag(MidiOutWinApi.MIDICAPS.MIDICAPS_VOLUME);
-            SupportsLeftRightVolumeControl = support.HasFlag(MidiOutWinApi.MIDICAPS.MIDICAPS_LRVOLUME);
+            _handle = IntPtr.Zero;
+            _windowsHandle = IntPtr.Zero;
         }
 
         private void SendShortEvent(MidiEvent midiEvent)
         {
             var message = PackShortEvent(midiEvent);
-            ProcessMmResult(MidiOutWinApi.midiOutShortMsg(_handle, (uint)message));
+            ProcessMmResult(MidiOutWinApi.midiOutShortMsg(_windowsHandle, (uint)message));
         }
 
         private void SendSysExEvent(SysExEvent sysExEvent)
@@ -345,7 +253,7 @@ namespace Melanchall.DryWetMidi.Devices
             var headerPointer = PrepareSysExBuffer(data);
             _sysExHeadersPointers.Add(headerPointer);
 
-            ProcessMmResult(MidiOutWinApi.midiOutLongMsg(_handle, headerPointer, MidiWinApi.MidiHeaderSize));
+            ProcessMmResult(MidiOutWinApi.midiOutLongMsg(_windowsHandle, headerPointer, MidiWinApi.MidiHeaderSize));
         }
 
         private int PackShortEvent(MidiEvent midiEvent)
@@ -410,7 +318,7 @@ namespace Melanchall.DryWetMidi.Devices
             var headerPointer = Marshal.AllocHGlobal(MidiWinApi.MidiHeaderSize);
             Marshal.StructureToPtr(header, headerPointer, false);
 
-            ProcessMmResult(MidiOutWinApi.midiOutPrepareHeader(_handle, headerPointer, MidiWinApi.MidiHeaderSize));
+            ProcessMmResult(MidiOutWinApi.midiOutPrepareHeader(_windowsHandle, headerPointer, MidiWinApi.MidiHeaderSize));
 
             return headerPointer;
         }
@@ -420,7 +328,7 @@ namespace Melanchall.DryWetMidi.Devices
             if (headerPointer == IntPtr.Zero)
                 return;
 
-            MidiOutWinApi.midiOutUnprepareHeader(_handle, headerPointer, MidiWinApi.MidiHeaderSize);
+            MidiOutWinApi.midiOutUnprepareHeader(_windowsHandle, headerPointer, MidiWinApi.MidiHeaderSize);
 
             var header = (MidiWinApi.MIDIHDR)Marshal.PtrToStructure(headerPointer, typeof(MidiWinApi.MIDIHDR));
             Marshal.FreeHGlobal(header.lpData);
@@ -461,12 +369,6 @@ namespace Melanchall.DryWetMidi.Devices
             }
 
             _disposed = true;
-        }
-
-        internal override IntPtr GetHandle()
-        {
-            EnsureHandleIsCreated();
-            return _handle;
         }
 
         #endregion

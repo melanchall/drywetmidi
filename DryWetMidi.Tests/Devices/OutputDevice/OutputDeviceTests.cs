@@ -23,26 +23,11 @@ namespace Melanchall.DryWetMidi.Tests.Devices
 
         [TestCase(MidiDevicesNames.DeviceA)]
         [TestCase(MidiDevicesNames.DeviceB)]
-        [TestCase(MidiDevicesNames.MicrosoftGSWavetableSynth)]
         public void FindOutputDevice(string deviceName)
         {
             Assert.IsTrue(
                 OutputDevice.GetAll().Any(d => d.Name == deviceName),
                 $"There is no device '{deviceName}' in the system.");
-        }
-
-        [TestCase(MidiDevicesNames.DeviceA)]
-        [TestCase(MidiDevicesNames.DeviceB)]
-        [TestCase(MidiDevicesNames.MicrosoftGSWavetableSynth)]
-        public void CheckOutputDeviceId(string deviceName)
-        {
-            var device = OutputDevice.GetByName(deviceName);
-            Assert.IsNotNull(device, $"Unable to get device '{deviceName}' by its name.");
-
-            var deviceId = device.Id;
-            device = OutputDevice.GetById(deviceId);
-            Assert.IsNotNull(device, $"Unable to get device '{deviceName}' by its ID.");
-            Assert.AreEqual(deviceName, device.Name, "Device retrieved by ID is not the same as retrieved by its name.");//
         }
 
         [Retry(RetriesNumber)]
@@ -76,29 +61,6 @@ namespace Melanchall.DryWetMidi.Tests.Devices
             SendEvent(new StartEvent());
         }
 
-        // TODO
-        // [Test]
-        public void SetVolume()
-        {
-            using (var outputDevice = OutputDevice.GetByName(MidiDevicesNames.MicrosoftGSWavetableSynth))
-            {
-                var expectedVolume = new Volume(500);
-                outputDevice.Volume = expectedVolume;
-                Assert.AreEqual(expectedVolume, outputDevice.Volume, "Volume is invalid.");
-            }
-        }
-
-        // TODO
-        // [Test]
-        public void GetVolume()
-        {
-            using (var outputDevice = OutputDevice.GetByName(MidiDevicesNames.MicrosoftGSWavetableSynth))
-            {
-                Assert.Greater(outputDevice.Volume.LeftVolume, 0, "Left volume is invalid.");
-                Assert.Greater(outputDevice.Volume.RightVolume, 0, "Right volume is invalid.");
-            }
-        }
-
         [Test]
         public void OutputDeviceIsReleasedByDispose()
         {
@@ -113,12 +75,23 @@ namespace Melanchall.DryWetMidi.Tests.Devices
         [Test]
         public void OutputDeviceIsReleasedByFinalizer()
         {
+            Func<bool> sendEvent = () =>
+            {
+                var outputDevice = OutputDevice.GetByName(MidiDevicesNames.DeviceA);
+                try
+                {
+                    outputDevice.SendEvent(new NoteOnEvent());
+                    return true;
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
+            };
+
             for (var i = 0; i < 10; i++)
             {
-                {
-                    var outputDevice = OutputDevice.GetByName(MidiDevicesNames.DeviceA);
-                    Assert.DoesNotThrow(() => outputDevice.SendEvent(new NoteOnEvent()));
-                }
+                Assert.IsTrue(sendEvent(), $"Can't send event on iteration {i}.");
 
                 GC.Collect();
                 GC.WaitForPendingFinalizers();
@@ -136,7 +109,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 {
                     var exception = Assert.Throws<MidiDeviceException>(() => outputDevice2.SendEvent(new NoteOnEvent()));
                     Assert.AreEqual(
-                        "The specified device is already in use.  Wait until it is free, and then try again.",
+                        "The device is already in use.",
                         exception.Message,
                         "Exception's message is invalid.");
                 }

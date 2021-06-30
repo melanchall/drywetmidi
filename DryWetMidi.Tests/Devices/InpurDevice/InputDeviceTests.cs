@@ -60,19 +60,6 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 $"There is no device '{deviceName}' in the system.");
         }
 
-        [TestCase(MidiDevicesNames.DeviceA)]
-        [TestCase(MidiDevicesNames.DeviceB)]
-        public void CheckInputDeviceId(string deviceName)
-        {
-            var device = InputDevice.GetByName(deviceName);
-            Assert.IsNotNull(device, $"Unable to get device '{deviceName}' by its name.");
-
-            var deviceId = device.Id;
-            device = InputDevice.GetById(deviceId);
-            Assert.IsNotNull(device, $"Unable to get device '{deviceName}' by its ID.");
-            Assert.AreEqual(deviceName, device.Name, "Device retrieved by ID is not the same as retrieved by its name.");
-        }
-
         [Retry(RetriesNumber)]
         [Test]
         public void CheckMidiTimeCodeEventReceiving()
@@ -133,12 +120,23 @@ namespace Melanchall.DryWetMidi.Tests.Devices
         [Test]
         public void InputDeviceIsReleasedByFinalizer()
         {
+            Func<bool> openDevice = () =>
+            {
+                var inputDevice = InputDevice.GetByName(MidiDevicesNames.DeviceA);
+                try
+                {
+                    inputDevice.StartEventsListening();
+                    return true;
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
+            };
+
             for (var i = 0; i < 10; i++)
             {
-                {
-                    var inputDevice = InputDevice.GetByName(MidiDevicesNames.DeviceA);
-                    Assert.DoesNotThrow(() => inputDevice.StartEventsListening());
-                }
+                Assert.IsTrue(openDevice(), $"Can't open device on iteration {i}.");
 
                 GC.Collect();
                 GC.WaitForPendingFinalizers();

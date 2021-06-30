@@ -1,7 +1,7 @@
 #include <CoreFoundation/CoreFoundation.h>
 #include <pthread.h>
 
-#include "NativeApi-ReturnCodes.h"
+#include "NativeApi-Constants.h"
 
 API_TYPE GetApiType()
 {

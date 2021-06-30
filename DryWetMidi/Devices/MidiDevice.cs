@@ -22,6 +22,9 @@ namespace Melanchall.DryWetMidi.Devices
         /// <summary>
         /// Device handle.
         /// </summary>
+        protected IntPtr _windowsHandle = IntPtr.Zero;
+
+        protected IntPtr _info = IntPtr.Zero;
         protected IntPtr _handle = IntPtr.Zero;
 
         /// <summary>
@@ -33,9 +36,10 @@ namespace Melanchall.DryWetMidi.Devices
 
         #region Constructor
 
-        internal MidiDevice(int id)
+        internal MidiDevice(IntPtr info)
         {
-            Id = id;
+            _info = info;
+            SetBasicDeviceInformation();
         }
 
         #endregion
@@ -60,29 +64,25 @@ namespace Melanchall.DryWetMidi.Devices
         public bool IsEnabled { get; set; } = true;
 
         /// <summary>
-        /// Gets the ID of a MIDI device.
-        /// </summary>
-        public int Id { get; }
-
-        /// <summary>
         /// Gets the name of MIDI device.
         /// </summary>
-        public string Name { get; private set; }
+        public string Name { get; protected set; }
 
         /// <summary>
         /// Gets the manufacturer of MIDI device driver.
         /// </summary>
-        public Manufacturer DriverManufacturer { get; private set; }
+        public string Manufacturer { get; protected set; }
 
         /// <summary>
         /// Gets the product identifier of MIDI device.
         /// </summary>
-        public ushort ProductIdentifier { get; private set; }
+        public string Product { get; protected set; }
 
+        // TODO: parse
         /// <summary>
         /// Gets the version of MIDI device driver.
         /// </summary>
-        public Version DriverVersion { get; private set; }
+        public uint DriverVersion { get; protected set; }
 
         #endregion
 
@@ -91,22 +91,7 @@ namespace Melanchall.DryWetMidi.Devices
         /// <summary>
         /// Sets the basic information about MIDI device, such as name and driver details.
         /// </summary>
-        /// <param name="manufacturerIdentifier">Identifier of the manufacturer of MIDI device driver.</param>
-        /// <param name="productIdentifier">Product identifier of MIDI device.</param>
-        /// <param name="driverVersion">Version of MIDI device driver.</param>
-        /// <param name="name">Name of MIDI device</param>
-        protected void SetBasicDeviceInformation(ushort manufacturerIdentifier, ushort productIdentifier, uint driverVersion, string name)
-        {
-            Name = name;
-            DriverManufacturer = Enum.IsDefined(typeof(Manufacturer), manufacturerIdentifier)
-                ? (Manufacturer)manufacturerIdentifier
-                : Manufacturer.Unknown;
-            ProductIdentifier = productIdentifier;
-
-            var majorVersion = driverVersion >> 8;
-            var minorVersion = driverVersion & 0xFF;
-            DriverVersion = new Version((int)majorVersion, (int)minorVersion);
-        }
+        protected abstract void SetBasicDeviceInformation();
 
         /// <summary>
         /// Checks that current instance of MIDI device class is not disposed and throws
@@ -155,8 +140,6 @@ namespace Melanchall.DryWetMidi.Devices
         /// <param name="cchText">Size of <paramref name="pszText"/> buffer.</param>
         /// <returns>Return value of winmm function which gets error description.</returns>
         protected abstract uint GetErrorText(uint mmrError, StringBuilder pszText, uint cchText);
-
-        internal abstract IntPtr GetHandle();
 
         #endregion
 

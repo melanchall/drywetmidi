@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Text;
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
@@ -16,7 +15,7 @@ namespace Melanchall.DryWetMidi.Devices
     {
         #region Constants
 
-        private const int SysExBufferLength = 2048;
+        private const int SysExBufferSize = 2048;
         private const int ChannelParametersBufferSize = 2;
         private static readonly int MidiTimeCodeComponentsCount = Enum.GetValues(typeof(MidiTimeCodeComponent)).Length;
 
@@ -53,9 +52,7 @@ namespace Melanchall.DryWetMidi.Devices
 
         private readonly BytesToMidiEventConverter _bytesToMidiEventConverter = new BytesToMidiEventConverter(ChannelParametersBufferSize);
 
-        private IntPtr _sysExHeaderPointer = IntPtr.Zero;
-
-        private MidiWinApi.MidiMessageCallback _callback;
+        private InputDeviceApi.Callback_Winmm _callback;
 
         private readonly Dictionary<MidiTimeCodeComponent, FourBitNumber> _midiTimeCodeComponents = new Dictionary<MidiTimeCodeComponent, FourBitNumber>();
 
@@ -63,11 +60,10 @@ namespace Melanchall.DryWetMidi.Devices
 
         #region Constructor
 
-        private InputDevice(int id)
-            : base(id)
+        private InputDevice(IntPtr info)
+            : base(info)
         {
             _bytesToMidiEventConverter.ReadingSettings.SilentNoteOnPolicy = SilentNoteOnPolicy.NoteOn;
-            SetDeviceInformation();
         }
 
         #endregion
@@ -127,9 +123,7 @@ namespace Melanchall.DryWetMidi.Devices
             EnsureDeviceIsNotDisposed();
             EnsureHandleIsCreated();
 
-            PrepareSysExBuffer();
-            ProcessMmResult(MidiInWinApi.midiInStart(_handle));
-
+            InputDeviceApiProvider.Api.Api_Connect(_handle);
             IsListeningForEvents = true;
         }
 
@@ -145,23 +139,7 @@ namespace Melanchall.DryWetMidi.Devices
             if (_handle == IntPtr.Zero)
                 return;
 
-            ProcessMmResult(StopEventsListeningSilently());
-        }
-
-        /// <summary>
-        /// Stops listening for incoming MIDI events on the current <see cref="InputDevice"/> and flushes
-        /// all pending data.
-        /// </summary>
-        /// <exception cref="ObjectDisposedException">The current <see cref="InputDevice"/> is disposed.</exception>
-        /// <exception cref="MidiDeviceException">An error occurred on device.</exception>
-        public void Reset()
-        {
-            EnsureDeviceIsNotDisposed();
-
-            if (_handle == IntPtr.Zero)
-                return;
-
-            ProcessMmResult(MidiInWinApi.midiInReset(_handle));
+            var result = StopEventsListeningSilently();
         }
 
         /// <summary>
@@ -170,9 +148,10 @@ namespace Melanchall.DryWetMidi.Devices
         /// <returns>Number of input MIDI devices presented in the system.</returns>
         public static int GetDevicesCount()
         {
-            return (int)MidiInWinApi.midiInGetNumDevs();
+            return InputDeviceApiProvider.Api.Api_GetDevicesCount();
         }
 
+        // TODO: add get by index
         /// <summary>
         /// Retrieves all input MIDI devices presented in the system.
         /// </summary>
@@ -180,9 +159,12 @@ namespace Melanchall.DryWetMidi.Devices
         public static IEnumerable<InputDevice> GetAll()
         {
             var devicesCount = GetDevicesCount();
-            for (var deviceId = 0; deviceId < devicesCount; deviceId++)
+            for (var i = 0; i < devicesCount; i++)
             {
-                yield return new InputDevice(deviceId);
+                // TODO: handle result
+                IntPtr info;
+                var result = InputDeviceApiProvider.Api.Api_GetDeviceInfo(i, out info);
+                yield return new InputDevice(info);
             }
         }
 
@@ -213,19 +195,7 @@ namespace Melanchall.DryWetMidi.Devices
             return device;
         }
 
-        /// <summary>
-        /// Retrieves input MIDI device with the specified ID.
-        /// </summary>
-        /// <param name="id">Device ID which is number from 0 to <see cref="GetDevicesCount"/> minus 1.</param>
-        /// <returns>Input MIDI device with the specified ID.</returns>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="id"/> is out of valid range.</exception>
-        public static InputDevice GetById(int id)
-        {
-            ThrowIfArgument.IsOutOfRange(nameof(id), id, 0, GetDevicesCount() - 1, "Device ID is out of range.");
-
-            return new InputDevice(id);
-        }
-
+        // TODO: remove
         /// <summary>
         /// Gets error description for the specified MMRESULT which is return value of winmm function.
         /// </summary>
@@ -235,7 +205,15 @@ namespace Melanchall.DryWetMidi.Devices
         /// <returns>Return value of winmm function which gets error description.</returns>
         protected override uint GetErrorText(uint mmrError, StringBuilder pszText, uint cchText)
         {
-            return MidiInWinApi.midiInGetErrorText(mmrError, pszText, cchText);
+            return 0;
+        }
+
+        protected override void SetBasicDeviceInformation()
+        {
+            Name = InputDeviceApiProvider.Api.Api_GetDeviceName(_info);
+            Manufacturer = InputDeviceApiProvider.Api.Api_GetDeviceManufacturer(_info);
+            Product = InputDeviceApiProvider.Api.Api_GetDeviceProduct(_info);
+            DriverVersion = InputDeviceApiProvider.Api.Api_GetDeviceDriverVersion(_info);
         }
 
         private void OnEventReceived(MidiEvent midiEvent)
@@ -258,41 +236,27 @@ namespace Melanchall.DryWetMidi.Devices
             InvalidShortEventReceived?.Invoke(this, new InvalidShortEventReceivedEventArgs(statusByte, firstDataByte, secondDataByte));
         }
 
-        private void PrepareSysExBuffer()
-        {
-            var header = new MidiWinApi.MIDIHDR
-            {
-                lpData = Marshal.AllocHGlobal(SysExBufferLength),
-                dwBufferLength = SysExBufferLength,
-                dwBytesRecorded = SysExBufferLength
-            };
-
-            _sysExHeaderPointer = Marshal.AllocHGlobal(MidiWinApi.MidiHeaderSize);
-            Marshal.StructureToPtr(header, _sysExHeaderPointer, false);
-
-            ProcessMmResult(MidiInWinApi.midiInPrepareHeader(_handle, _sysExHeaderPointer, MidiWinApi.MidiHeaderSize));
-            ProcessMmResult(MidiInWinApi.midiInAddBuffer(_handle, _sysExHeaderPointer, MidiWinApi.MidiHeaderSize));
-        }
-
-        private void UnprepareSysExBuffer(IntPtr headerPointer)
-        {
-            if (headerPointer == IntPtr.Zero)
-                return;
-
-            MidiInWinApi.midiInUnprepareHeader(_handle, headerPointer, MidiWinApi.MidiHeaderSize);
-
-            var header = (MidiWinApi.MIDIHDR)Marshal.PtrToStructure(headerPointer, typeof(MidiWinApi.MIDIHDR));
-            Marshal.FreeHGlobal(header.lpData);
-            Marshal.FreeHGlobal(headerPointer);
-        }
-
         private void EnsureHandleIsCreated()
         {
             if (_handle != IntPtr.Zero)
                 return;
 
             _callback = OnMessage;
-            ProcessMmResult(MidiInWinApi.midiInOpen(out _handle, Id, _callback, IntPtr.Zero, MidiWinApi.CallbackFunction));
+
+            // TODO: handle result
+            var result = InputDeviceApiProvider.Api.Api_OpenDevice_Winmm(_info, _callback, SysExBufferSize, out _handle);
+            if (result != InputDeviceApi.IN_OPENRESULT.IN_OPENRESULT_OK)
+            {
+                switch (result)
+                {
+                    case InputDeviceApi.IN_OPENRESULT.IN_OPENRESULT_ALLOCATED:
+                        throw new MidiDeviceException("The device is already in use.");
+                    case InputDeviceApi.IN_OPENRESULT.IN_OPENRESULT_NOMEMORY:
+                        throw new MidiDeviceException("There is no memory to allocate the requested resources.");
+                }
+
+                throw new MidiDeviceException($"Unknown error ({result}).");
+            }
         }
 
         private void DestroyHandle()
@@ -300,16 +264,8 @@ namespace Melanchall.DryWetMidi.Devices
             if (_handle == IntPtr.Zero)
                 return;
 
-            MidiInWinApi.midiInReset(_handle);
-            MidiInWinApi.midiInClose(_handle);
-        }
-
-        private void SetDeviceInformation()
-        {
-            var caps = default(MidiInWinApi.MIDIINCAPS);
-            ProcessMmResult(MidiInWinApi.midiInGetDevCaps(new IntPtr(Id), ref caps, (uint)Marshal.SizeOf(caps)));
-
-            SetBasicDeviceInformation(caps.wMid, caps.wPid, caps.vDriverVersion, caps.szPname);
+            InputDeviceApiProvider.Api.Api_CloseDevice(_handle);
+            _handle = IntPtr.Zero;
         }
 
         private void OnMessage(IntPtr hMidi, MidiMessage wMsg, IntPtr dwInstance, IntPtr dwParam1, IntPtr dwParam2)
@@ -375,8 +331,17 @@ namespace Melanchall.DryWetMidi.Devices
                 var midiEvent = new NormalSysExEvent(data);
                 OnEventReceived(midiEvent);
 
-                UnprepareSysExBuffer(sysExHeaderPointer);
-                PrepareSysExBuffer();
+                //UnprepareSysExBuffer(sysExHeaderPointer);
+                //PrepareSysExBuffer();
+                //var y = InputDeviceApiProvider.Api.Api_UnprepareSysExBuffer(_handle);
+                //if (y != 0)
+                //    throw new Exception($"1 = {y}");
+
+                //var x = InputDeviceApiProvider.Api.Api_PrepareSysExBuffer(_handle, SysExBufferLength);
+                //if (x != 0)
+                //    throw new Exception($"2 = {x}");
+
+                InputDeviceApiProvider.Api.Api_RenewSysExBuffer(_handle, SysExBufferSize);
             }
             catch (Exception ex)
             {
@@ -413,10 +378,10 @@ namespace Melanchall.DryWetMidi.Devices
             _midiTimeCodeComponents.Clear();
         }
 
-        private uint StopEventsListeningSilently()
+        private InputDeviceApi.IN_DISCONNECTRESULT StopEventsListeningSilently()
         {
             IsListeningForEvents = false;
-            return MidiInWinApi.midiInStop(_handle);
+            return InputDeviceApiProvider.Api.Api_Disconnect(_handle);
         }
 
         #endregion
@@ -444,18 +409,14 @@ namespace Melanchall.DryWetMidi.Devices
             if (_handle != IntPtr.Zero)
             {
                 StopEventsListeningSilently();
+                //MidiInWinApi.midiInReset(_windowsHandle);
+                //var y = InputDeviceApiProvider.Api.Api_UnprepareSysExBuffer(_handle);
+                //if (y != 0)
+                //    throw new Exception($"3 = {y}");
                 DestroyHandle();
             }
 
-            UnprepareSysExBuffer(_sysExHeaderPointer);
-
             _disposed = true;
-        }
-
-        internal override IntPtr GetHandle()
-        {
-            EnsureHandleIsCreated();
-            return _handle;
         }
 
         #endregion
