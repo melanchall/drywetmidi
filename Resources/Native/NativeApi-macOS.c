@@ -92,6 +92,20 @@ TG_STOPRESULT StopHighPrecisionTickGenerator(void* info)
  Devices common
  ================================ */
 
+char* GetDevicePropertyValue(MIDIEndpointRef endpointRef, CFStringRef propertyID)
+{
+	CFStringRef stringRef;
+    OSStatus status = MIDIObjectGetStringProperty(endpointRef, propertyID, &stringRef);
+    if (status == noErr)
+	{
+        char* result = malloc(256 * sizeof(char));
+        CFStringGetCString(stringRef, result, 256, kCFStringEncodingUTF8);
+		return result;
+	}
+	
+	return NULL;
+}
+
 /* ================================
  Input device
  ================================ */
@@ -99,6 +113,10 @@ TG_STOPRESULT StopHighPrecisionTickGenerator(void* info)
 typedef struct
 {
     MIDIEndpointRef endpointRef;
+    char* name;
+    char* manufacturer;
+    char* product;
+    int driverVersion;
 } InputDeviceInfo;
 
 typedef struct
@@ -119,6 +137,16 @@ int GetInputDeviceInfo(int deviceIndex, void** info)
     MIDIEndpointRef endpointRef = MIDIGetSource(deviceIndex);
     inputDeviceInfo->endpointRef = endpointRef;
     
+    /*CFStringRef nameRef;
+    OSStatus status = MIDIObjectGetStringProperty(endpointRef, kMIDIPropertyDisplayName, &nameRef);
+    if (status == noErr)
+	{
+        inputDeviceInfo->name = malloc(256 * sizeof(char));
+        CFStringGetCString(nameRef, inputDeviceInfo->name, 256, kCFStringEncodingUTF8);
+	}*/
+	
+	inputDeviceInfo->name = GetDevicePropertyValue(endpointRef, kMIDIPropertyDisplayName);
+    
     *info = inputDeviceInfo;
     
     return 0;
@@ -127,11 +155,7 @@ int GetInputDeviceInfo(int deviceIndex, void** info)
 char* GetInputDeviceName(void* info)
 {
     InputDeviceInfo* inputDeviceInfo = (InputDeviceInfo*)info;
-    
-    CFStringRef nameRef;
-    MIDIObjectGetStringProperty(inputDeviceInfo->endpointRef, kMIDIPropertyDisplayName, &nameRef);
-    
-    return CFStringGetCStringPtr(nameRef, kCFStringEncodingUTF8);
+    return inputDeviceInfo->name;
 }
 
 char* GetInputDeviceManufacturer(void* info)

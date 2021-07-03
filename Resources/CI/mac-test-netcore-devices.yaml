@@ -103,7 +103,9 @@ stages:
           dotnet publish CreateLoopbackPort.csproj -c Release -r osx-x64
           $exePath = Get-ChildItem -Path "bin/Release/netcoreapp3.1/osx-x64/publish" -File -Filter "CreateLoopbackPort" -Recurse
           Write-Host "Running utility app..."
-          Start-Process $exePath.FullName -ArgumentList """MIDI A"" ""MIDI B"" ""MIDI C"""
+          $job = Start-Job { Start-Process $args[0] -ArgumentList $args[1] } -ArgumentList $exePath.FullName, "`"MIDI A`" `"MIDI B`" `"MIDI C`""
+          Start-Sleep -s 5
+          Receive-Job -Job $job
     
     - task: DotNetCoreCLI@2
       displayName: Run unit tests

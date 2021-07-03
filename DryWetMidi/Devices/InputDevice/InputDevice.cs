@@ -192,7 +192,7 @@ namespace Melanchall.DryWetMidi.Devices
 
             var device = GetAll().FirstOrDefault(d => d.Name == name);
             if (device == null)
-                throw new ArgumentException($"There is no MIDI input device '{name}'.", nameof(name));
+                throw new ArgumentException($"There is no MIDI input device '{name}' among {GetDevicesCount()} device(s) ({string.Join(", ", GetAll().Select(d => d.Name))}).", nameof(name));
 
             return device;
         }
