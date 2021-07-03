@@ -245,8 +245,9 @@ namespace Melanchall.DryWetMidi.Devices
 
             _callback = OnMessage;
 
+            var sessionHandle = MidiDevicesSession.GetSessionHandle();
             InputDeviceApi.HandleResult(
-                InputDeviceApiProvider.Api.Api_OpenDevice_Winmm(_info, _callback, SysExBufferSize, out _handle));
+                InputDeviceApiProvider.Api.Api_OpenDevice_Winmm(_info, sessionHandle, _callback, SysExBufferSize, out _handle));
         }
 
         private void DestroyHandle()
@@ -257,6 +258,8 @@ namespace Melanchall.DryWetMidi.Devices
             // TODO: handle result
             InputDeviceApiProvider.Api.Api_CloseDevice(_handle);
             _handle = IntPtr.Zero;
+
+            MidiDevicesSession.ExitSession();
         }
 
         private void OnMessage(IntPtr hMidi, MidiMessage wMsg, IntPtr dwInstance, IntPtr dwParam1, IntPtr dwParam2)

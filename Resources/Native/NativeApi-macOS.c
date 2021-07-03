@@ -1,4 +1,5 @@
 #include <CoreFoundation/CoreFoundation.h>
+#include <CoreMIDI/CoreMIDI.h>
 #include <pthread.h>
 
 #include "NativeApi-Constants.h"
@@ -85,4 +86,152 @@ TG_STOPRESULT StopHighPrecisionTickGenerator(void* info)
     free(info);
     
     return TG_STOPRESULT_OK;
+}
+
+/* ================================
+ Devices common
+ ================================ */
+
+/* ================================
+ Input device
+ ================================ */
+
+typedef struct
+{
+    MIDIEndpointRef endpointRef;
+} InputDeviceInfo;
+
+typedef struct
+{
+    InputDeviceInfo* info;
+    MIDIPortRef portRef;
+} InputDeviceHandle;
+
+int GetInputDevicesCount()
+{
+    return (int)MIDIGetNumberOfSources();
+}
+
+int GetInputDeviceInfo(int deviceIndex, void** info)
+{
+    InputDeviceInfo* inputDeviceInfo = malloc(sizeof(InputDeviceInfo));
+    
+    MIDIEndpointRef endpointRef = MIDIGetSource(deviceIndex);
+    inputDeviceInfo->endpointRef = endpointRef;
+    
+    *info = inputDeviceInfo;
+    
+    return 0;
+}
+
+char* GetInputDeviceName(void* info)
+{
+    InputDeviceInfo* inputDeviceInfo = (InputDeviceInfo*)info;
+    
+    CFStringRef nameRef;
+    MIDIObjectGetStringProperty(inputDeviceInfo->endpointRef, kMIDIPropertyDisplayName, &nameRef);
+    
+    return CFStringGetCStringPtr(nameRef, kCFStringEncodingUTF8);
+}
+
+char* GetInputDeviceManufacturer(void* info)
+{
+    InputDeviceInfo* inputDeviceInfo = (InputDeviceInfo*)info;
+    
+    CFStringRef manufacturerRef;
+    MIDIObjectGetStringProperty(inputDeviceInfo->endpointRef, kMIDIPropertyManufacturer, &manufacturerRef);
+    
+    return CFStringGetCStringPtr(manufacturerRef, kCFStringEncodingUTF8);
+}
+
+char* GetInputDeviceProduct(void* info)
+{
+    InputDeviceInfo* inputDeviceInfo = (InputDeviceInfo*)info;
+    
+    CFStringRef modelRef;
+    MIDIObjectGetStringProperty(inputDeviceInfo->endpointRef, kMIDIPropertyModel, &modelRef);
+    
+    return CFStringGetCStringPtr(modelRef, kCFStringEncodingUTF8);
+}
+
+int GetInputDeviceDriverVersion(void* info)
+{
+    InputDeviceInfo* inputDeviceInfo = (InputDeviceInfo*)info;
+    
+    SInt32 driverVersion;
+    MIDIObjectGetIntegerProperty(inputDeviceInfo->endpointRef, kMIDIPropertyDriverVersion, &driverVersion);
+    
+    return driverVersion;
+}
+
+/* ================================
+ Output device
+ ================================ */
+
+typedef struct
+{
+    MIDIEndpointRef endpointRef;
+} OutputDeviceInfo;
+
+typedef struct
+{
+    OutputDeviceInfo* info;
+    MIDIPortRef portRef;
+} OutputDeviceHandle;
+
+int GetOutputDevicesCount()
+{
+    return (int)MIDIGetNumberOfDestinations();
+}
+
+int GetOutputDeviceInfo(int deviceIndex, void** info)
+{
+    OutputDeviceInfo* outputDeviceInfo = malloc(sizeof(OutputDeviceInfo));
+    
+    MIDIEndpointRef endpointRef = MIDIGetDestination(deviceIndex);
+    outputDeviceInfo->endpointRef = endpointRef;
+    
+    *info = outputDeviceInfo;
+    
+    return 0;
+}
+
+char* GetOutputDeviceName(void* info)
+{
+    OutputDeviceInfo* outputDeviceInfo = (OutputDeviceInfo*)info;
+    
+    CFStringRef nameRef;
+    MIDIObjectGetStringProperty(outputDeviceInfo->endpointRef, kMIDIPropertyDisplayName, &nameRef);
+    
+    return CFStringGetCStringPtr(nameRef, kCFStringEncodingUTF8);
+}
+
+char* GetOutputDeviceManufacturer(void* info)
+{
+    OutputDeviceInfo* outputDeviceInfo = (OutputDeviceInfo*)info;
+    
+    CFStringRef manufacturerRef;
+    MIDIObjectGetStringProperty(outputDeviceInfo->endpointRef, kMIDIPropertyManufacturer, &manufacturerRef);
+    
+    return CFStringGetCStringPtr(manufacturerRef, kCFStringEncodingUTF8);
+}
+
+char* GetOutputDeviceProduct(void* info)
+{
+    OutputDeviceInfo* outputDeviceInfo = (OutputDeviceInfo*)info;
+    
+    CFStringRef modelRef;
+    MIDIObjectGetStringProperty(outputDeviceInfo->endpointRef, kMIDIPropertyModel, &modelRef);
+    
+    return CFStringGetCStringPtr(modelRef, kCFStringEncodingUTF8);
+}
+
+int GetOutputDeviceDriverVersion(void* info)
+{
+    OutputDeviceInfo* outputDeviceInfo = (OutputDeviceInfo*)info;
+    
+    SInt32 driverVersion;
+    MIDIObjectGetIntegerProperty(outputDeviceInfo->endpointRef, kMIDIPropertyDriverVersion, &driverVersion);
+    
+    return driverVersion;
 }

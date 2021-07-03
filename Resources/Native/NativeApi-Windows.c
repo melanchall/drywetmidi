@@ -68,6 +68,28 @@ TG_STOPRESULT StopHighPrecisionTickGenerator(
    Devices common
 ================================ */
 
+typedef struct
+{
+	char* name;
+} SessionHandle;
+
+SESSION_OPENRESULT OpenSession(char* name, void** handle)
+{
+	SessionHandle* sessionHandle = malloc(sizeof(SessionHandle));
+	sessionHandle->name = name;
+
+	*handle = sessionHandle;
+
+	return SESSION_OPENRESULT_OK;
+}
+
+SESSION_CLOSERESULT CloseSession(void* handle)
+{
+	SessionHandle* sessionHandle = (SessionHandle*)handle;
+	free(sessionHandle);
+	return SESSION_CLOSERESULT_OK;
+}
+
 char* GetDeviceManufacturer(WORD manufacturerId)
 {
 	// https://docs.microsoft.com/en-us/windows/win32/multimedia/manufacturer-identifiers
@@ -370,7 +392,7 @@ IN_RENEWSYSEXBUFFERRESULT RenewInputDeviceSysExBuffer(void* handle, int size)
 	return IN_RENEWSYSEXBUFFERRESULT_OK;
 }
 
-IN_OPENRESULT OpenInputDevice_Winmm(void* info, DWORD_PTR callback, int sysExBufferSize, void** handle)
+IN_OPENRESULT OpenInputDevice_Winmm(void* info, void* sessionHandle, DWORD_PTR callback, int sysExBufferSize, void** handle)
 {
 	InputDeviceInfo* inputDeviceInfo = (InputDeviceInfo*)info;
 
@@ -563,7 +585,7 @@ UINT GetOutputDeviceDriverVersion(void* info)
 	return outputDeviceInfo->driverVersion;
 }
 
-OUT_OPENRESULT OpenOutputDevice_Winmm(void* info, DWORD_PTR callback, void** handle)
+OUT_OPENRESULT OpenOutputDevice_Winmm(void* info, void* sessionHandle, DWORD_PTR callback, void** handle)
 {
 	OutputDeviceInfo* outputDeviceInfo = (OutputDeviceInfo*)info;
 

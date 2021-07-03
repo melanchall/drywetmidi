@@ -103,7 +103,7 @@ namespace Melanchall.DryWetMidi.Devices
 
         public abstract uint Api_GetDeviceDriverVersion(IntPtr info);
 
-        public abstract IN_OPENRESULT Api_OpenDevice_Winmm(IntPtr info, Callback_Winmm callback, int sysExBufferSize, out IntPtr handle);
+        public abstract IN_OPENRESULT Api_OpenDevice_Winmm(IntPtr info, IntPtr sessionHandle, Callback_Winmm callback, int sysExBufferSize, out IntPtr handle);
 
         public abstract IN_CLOSERESULT Api_CloseDevice(IntPtr handle);
 

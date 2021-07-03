@@ -209,8 +209,10 @@ namespace Melanchall.DryWetMidi.Devices
 
             _callback = OnMessage;
 
+            var sessionHandle = MidiDevicesSession.GetSessionHandle();
+
             // TODO: handle result
-            var result = OutputDeviceApiProvider.Api.Api_OpenDevice_Winmm(_info, _callback, out _handle);
+            var result = OutputDeviceApiProvider.Api.Api_OpenDevice_Winmm(_info, sessionHandle, _callback, out _handle);
             if (result != OutputDeviceApi.OUT_OPENRESULT.OUT_OPENRESULT_OK)
             {
                 switch (result)

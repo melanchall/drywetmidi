@@ -3,6 +3,14 @@ typedef int API_TYPE;
 #define API_TYPE_WINMM 0
 #define API_TYPE_APPLE 1
 
+typedef int SESSION_OPENRESULT;
+
+#define SESSION_OPENRESULT_OK 0
+
+typedef int SESSION_CLOSERESULT;
+
+#define SESSION_CLOSERESULT_OK 0
+
 /* ================================
    High-precision tick generator
 ================================ */

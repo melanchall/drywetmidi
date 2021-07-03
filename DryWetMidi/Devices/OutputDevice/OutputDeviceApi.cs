@@ -55,7 +55,7 @@ namespace Melanchall.DryWetMidi.Devices
 
         public abstract uint Api_GetDeviceDriverVersion(IntPtr info);
 
-        public abstract OUT_OPENRESULT Api_OpenDevice_Winmm(IntPtr info, Callback_Winmm callback, out IntPtr handle);
+        public abstract OUT_OPENRESULT Api_OpenDevice_Winmm(IntPtr info, IntPtr sessionHandle, Callback_Winmm callback, out IntPtr handle);
 
         // TODO: remove
         public abstract IntPtr Api_GetHandle(IntPtr handle);

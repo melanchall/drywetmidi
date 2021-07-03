@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using System.Threading;
 
 namespace CreateLoopbackPort
 {
@@ -24,7 +25,7 @@ namespace CreateLoopbackPort
             }
 
             Console.WriteLine("Sleeping...");
-            Console.ReadKey();
+			Thread.Sleep(int.MaxValue);
         }
 
         private static void HandleData(IntPtr pktlist, IntPtr readProcRefCon, IntPtr srcConnRefCon)

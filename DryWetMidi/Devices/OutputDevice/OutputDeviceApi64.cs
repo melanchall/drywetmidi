@@ -35,7 +35,7 @@ namespace Melanchall.DryWetMidi.Devices
         private static extern uint GetOutputDeviceDriverVersion(IntPtr info);
 
         [DllImport(LibraryName, ExactSpelling = true)]
-        private static extern OUT_OPENRESULT OpenOutputDevice_Winmm(IntPtr info, Callback_Winmm callback, out IntPtr handle);
+        private static extern OUT_OPENRESULT OpenOutputDevice_Winmm(IntPtr info, IntPtr sessionHandle, Callback_Winmm callback, out IntPtr handle);
 
         [DllImport(LibraryName, ExactSpelling = true)]
         private static extern IntPtr GetOutputDeviceHandle(IntPtr handle);
@@ -85,9 +85,9 @@ namespace Melanchall.DryWetMidi.Devices
             return GetOutputDeviceDriverVersion(info);
         }
 
-        public override OUT_OPENRESULT Api_OpenDevice_Winmm(IntPtr info, Callback_Winmm callback, out IntPtr handle)
+        public override OUT_OPENRESULT Api_OpenDevice_Winmm(IntPtr info, IntPtr sessionHandle, Callback_Winmm callback, out IntPtr handle)
         {
-            return OpenOutputDevice_Winmm(info, callback, out handle);
+            return OpenOutputDevice_Winmm(info, sessionHandle, callback, out handle);
         }
 
         // TODO: remove

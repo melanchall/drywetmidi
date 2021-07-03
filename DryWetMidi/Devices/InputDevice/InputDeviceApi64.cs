@@ -35,7 +35,7 @@ namespace Melanchall.DryWetMidi.Devices
         private static extern uint GetInputDeviceDriverVersion(IntPtr info);
 
         [DllImport(LibraryName, ExactSpelling = true)]
-        private static extern IN_OPENRESULT OpenInputDevice_Winmm(IntPtr info, Callback_Winmm callback, int sysExBufferSize, out IntPtr handle);
+        private static extern IN_OPENRESULT OpenInputDevice_Winmm(IntPtr info, IntPtr sessionHandle, Callback_Winmm callback, int sysExBufferSize, out IntPtr handle);
 
         [DllImport(LibraryName, ExactSpelling = true)]
         private static extern IN_CLOSERESULT CloseInputDevice(IntPtr handle);
@@ -91,9 +91,9 @@ namespace Melanchall.DryWetMidi.Devices
             return GetInputDeviceDriverVersion(info);
         }
 
-        public override IN_OPENRESULT Api_OpenDevice_Winmm(IntPtr info, Callback_Winmm callback, int sysExBufferSize, out IntPtr handle)
+        public override IN_OPENRESULT Api_OpenDevice_Winmm(IntPtr info, IntPtr sessionHandle, Callback_Winmm callback, int sysExBufferSize, out IntPtr handle)
         {
-            return OpenInputDevice_Winmm(info, callback, sysExBufferSize, out handle);
+            return OpenInputDevice_Winmm(info, sessionHandle, callback, sysExBufferSize, out handle);
         }
 
         public override IN_CLOSERESULT Api_CloseDevice(IntPtr handle)
