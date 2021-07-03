@@ -39,6 +39,18 @@ namespace Melanchall.DryWetMidi.Devices
         {
         }
 
+        public MidiDeviceException(string message, int errorCode)
+            : this(message)
+        {
+            ErrorCode = errorCode;
+        }
+
+        #endregion
+
+        #region Properties
+
+        public int ErrorCode { get; }
+
         #endregion
     }
 }

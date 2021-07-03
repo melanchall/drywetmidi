@@ -113,6 +113,106 @@ namespace Melanchall.DryWetMidi.Devices
 
         public abstract IN_DISCONNECTRESULT Api_Disconnect(IntPtr handle);
 
+        public static void HandleResult(IN_GETINFORESULT result)
+        {
+            if (result != IN_GETINFORESULT.IN_GETINFORESULT_OK)
+                throw new MidiDeviceException(GetErrorDescription(result), (int)result);
+        }
+
+        public static void HandleResult(IN_OPENRESULT result)
+        {
+            if (result != IN_OPENRESULT.IN_OPENRESULT_OK)
+                throw new MidiDeviceException(GetErrorDescription(result), (int)result);
+        }
+
+        public static void HandleResult(IN_CLOSERESULT result)
+        {
+            if (result != IN_CLOSERESULT.IN_CLOSERESULT_OK)
+                throw new MidiDeviceException(GetErrorDescription(result), (int)result);
+        }
+
+        public static void HandleResult(IN_RENEWSYSEXBUFFERRESULT result)
+        {
+            if (result != IN_RENEWSYSEXBUFFERRESULT.IN_RENEWSYSEXBUFFERRESULT_OK)
+                throw new MidiDeviceException(GetErrorDescription(result), (int)result);
+        }
+
+        public static void HandleResult(IN_CONNECTRESULT result)
+        {
+            if (result != IN_CONNECTRESULT.IN_CONNECTRESULT_OK)
+                throw new MidiDeviceException(GetErrorDescription(result), (int)result);
+        }
+
+        public static void HandleResult(IN_DISCONNECTRESULT result)
+        {
+            if (result != IN_DISCONNECTRESULT.IN_DISCONNECTRESULT_OK)
+                throw new MidiDeviceException(GetErrorDescription(result), (int)result);
+        }
+
+        private static string GetErrorDescription(IN_GETINFORESULT result)
+        {
+            switch (result)
+            {
+                case IN_GETINFORESULT.IN_GETINFORESULT_NOMEMORY:
+                    return $"There is no memory in the system to get the device information ({result}).";
+            }
+
+            return GetInternalErrorDescription(result);
+        }
+
+        private static string GetErrorDescription(IN_OPENRESULT result)
+        {
+            switch (result)
+            {
+                case IN_OPENRESULT.IN_OPENRESULT_NOMEMORY:
+                case IN_OPENRESULT.IN_OPENRESULT_ADDBUFFER_NOMEMORY:
+                case IN_OPENRESULT.IN_OPENRESULT_PREPAREBUFFER_NOMEMORY:
+                    return $"There is no memory in the system to open the device ({result}).";
+                case IN_OPENRESULT.IN_OPENRESULT_ALLOCATED:
+                    return $"The device is already in use ({result}).";
+            }
+
+            return GetInternalErrorDescription(result);
+        }
+
+        private static string GetErrorDescription(IN_CLOSERESULT result)
+        {
+            switch (result)
+            {
+                case IN_CLOSERESULT.IN_CLOSERESULT_CLOSE_NOMEMORY:
+                    return $"There is no memory in the system to close the device ({result}).";
+            }
+
+            return GetInternalErrorDescription(result);
+        }
+
+        private static string GetErrorDescription(IN_RENEWSYSEXBUFFERRESULT result)
+        {
+            switch (result)
+            {
+                case IN_RENEWSYSEXBUFFERRESULT.IN_RENEWSYSEXBUFFERRESULT_ADDBUFFER_NOMEMORY:
+                case IN_RENEWSYSEXBUFFERRESULT.IN_RENEWSYSEXBUFFERRESULT_PREPAREBUFFER_NOMEMORY:
+                    return $"There is no memory in the system to renew the device sysex data buffer ({result}).";
+            }
+
+            return GetInternalErrorDescription(result);
+        }
+
+        private static string GetErrorDescription(IN_CONNECTRESULT result)
+        {
+            return GetInternalErrorDescription(result);
+        }
+
+        private static string GetErrorDescription(IN_DISCONNECTRESULT result)
+        {
+            return GetInternalErrorDescription(result);
+        }
+
+        private static string GetInternalErrorDescription(object result)
+        {
+            return $"Internal error ({result}).";
+        }
+
         #endregion
     }
 }
