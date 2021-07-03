@@ -177,7 +177,7 @@ namespace Melanchall.DryWetMidi.Devices
 
             var device = GetAll().FirstOrDefault(d => d.Name == name);
             if (device == null)
-                throw new ArgumentException($"There is no output MIDI device '{name}' among {GetDevicesCount()} device(s) ({string.Join(", ", GetAll().Select(d => d.Name))}).", nameof(name));
+                throw new ArgumentException($"There is no output MIDI device '{name}'.", nameof(name));
 
             return device;
         }

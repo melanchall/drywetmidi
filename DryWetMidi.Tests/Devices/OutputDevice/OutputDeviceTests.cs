@@ -99,6 +99,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
         }
 
         [Test]
+        [Platform("Win")]
         public void OutputDeviceIsInUse()
         {
             using (var outputDevice1 = OutputDevice.GetByName(MidiDevicesNames.DeviceA))

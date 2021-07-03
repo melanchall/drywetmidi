@@ -92,6 +92,32 @@ TG_STOPRESULT StopHighPrecisionTickGenerator(void* info)
  Devices common
  ================================ */
 
+typedef struct
+{
+	char* name;
+	MIDIClientRef clientRef;
+} SessionHandle;
+
+SESSION_OPENRESULT OpenSession(char* name, void** handle)
+{
+	SessionHandle* sessionHandle = malloc(sizeof(SessionHandle));
+	sessionHandle->name = name;
+	
+	CFStringRef nameRef = CFStringCreateWithCString(kCFAllocatorDefault, name, kCFStringEncodingUTF8);
+	MIDIClientCreate(nameRef, NULL, NULL, &sessionHandle->clientRef);
+
+	*handle = sessionHandle;
+
+	return SESSION_OPENRESULT_OK;
+}
+
+SESSION_CLOSERESULT CloseSession(void* handle)
+{
+	SessionHandle* sessionHandle = (SessionHandle*)handle;
+	free(sessionHandle);
+	return SESSION_CLOSERESULT_OK;
+}
+
 char* GetDevicePropertyValue(MIDIEndpointRef endpointRef, CFStringRef propertyID)
 {
 	CFStringRef stringRef;
@@ -130,26 +156,20 @@ int GetInputDevicesCount()
     return (int)MIDIGetNumberOfSources();
 }
 
-int GetInputDeviceInfo(int deviceIndex, void** info)
+IN_GETINFORESULT GetInputDeviceInfo(int deviceIndex, void** info)
 {
     InputDeviceInfo* inputDeviceInfo = malloc(sizeof(InputDeviceInfo));
     
     MIDIEndpointRef endpointRef = MIDIGetSource(deviceIndex);
     inputDeviceInfo->endpointRef = endpointRef;
-    
-    /*CFStringRef nameRef;
-    OSStatus status = MIDIObjectGetStringProperty(endpointRef, kMIDIPropertyDisplayName, &nameRef);
-    if (status == noErr)
-	{
-        inputDeviceInfo->name = malloc(256 * sizeof(char));
-        CFStringGetCString(nameRef, inputDeviceInfo->name, 256, kCFStringEncodingUTF8);
-	}*/
 	
 	inputDeviceInfo->name = GetDevicePropertyValue(endpointRef, kMIDIPropertyDisplayName);
+	inputDeviceInfo->manufacturer = GetDevicePropertyValue(endpointRef, kMIDIPropertyManufacturer);
+	inputDeviceInfo->product = GetDevicePropertyValue(endpointRef, kMIDIPropertyModel);
     
     *info = inputDeviceInfo;
     
-    return 0;
+    return IN_GETINFORESULT_OK;
 }
 
 char* GetInputDeviceName(void* info)
@@ -161,21 +181,13 @@ char* GetInputDeviceName(void* info)
 char* GetInputDeviceManufacturer(void* info)
 {
     InputDeviceInfo* inputDeviceInfo = (InputDeviceInfo*)info;
-    
-    CFStringRef manufacturerRef;
-    MIDIObjectGetStringProperty(inputDeviceInfo->endpointRef, kMIDIPropertyManufacturer, &manufacturerRef);
-    
-    return CFStringGetCStringPtr(manufacturerRef, kCFStringEncodingUTF8);
+    return inputDeviceInfo->manufacturer;
 }
 
 char* GetInputDeviceProduct(void* info)
 {
     InputDeviceInfo* inputDeviceInfo = (InputDeviceInfo*)info;
-    
-    CFStringRef modelRef;
-    MIDIObjectGetStringProperty(inputDeviceInfo->endpointRef, kMIDIPropertyModel, &modelRef);
-    
-    return CFStringGetCStringPtr(modelRef, kCFStringEncodingUTF8);
+    return inputDeviceInfo->product;
 }
 
 int GetInputDeviceDriverVersion(void* info)
@@ -188,6 +200,58 @@ int GetInputDeviceDriverVersion(void* info)
     return driverVersion;
 }
 
+IN_OPENRESULT OpenInputDevice_Apple(void* info, void* sessionHandle, MIDIReadProc callback, void** handle)
+{
+	InputDeviceInfo* inputDeviceInfo = (InputDeviceInfo*)info;
+	SessionHandle* pSessionHandle = (SessionHandle*)sessionHandle;
+
+	InputDeviceHandle* inputDeviceHandle = malloc(sizeof(InputDeviceHandle));
+	inputDeviceHandle->info = inputDeviceInfo;
+	
+	*handle = inputDeviceHandle;
+	
+	CFStringRef portNameRef = CFStringCreateWithCString(kCFAllocatorDefault, inputDeviceInfo->name, kCFStringEncodingUTF8);
+	MIDIInputPortCreate(pSessionHandle->clientRef, portNameRef, callback, NULL, &inputDeviceHandle->portRef);
+
+	// ...
+
+	return IN_OPENRESULT_OK;
+}
+
+IN_CLOSERESULT CloseInputDevice(void* handle)
+{
+	InputDeviceHandle* inputDeviceHandle = (InputDeviceHandle*)handle;
+
+	// ...
+
+	free(inputDeviceHandle->info);
+	free(inputDeviceHandle);
+
+	return IN_CLOSERESULT_OK;
+}
+
+IN_CONNECTRESULT ConnectToInputDevice(void* handle)
+{
+	InputDeviceHandle* inputDeviceHandle = (InputDeviceHandle*)handle;
+
+	MIDIPortConnectSource(inputDeviceHandle->portRef, inputDeviceHandle->info->endpointRef, NULL);
+
+	// ...
+
+	return IN_CONNECTRESULT_OK;
+}
+
+IN_DISCONNECTRESULT DisconnectFromInputDevice(void* handle)
+{
+	InputDeviceHandle* inputDeviceHandle = (InputDeviceHandle*)handle;
+
+	MIDIPortDisconnectSource(inputDeviceHandle->portRef, inputDeviceHandle->info->endpointRef);
+
+	// ...
+
+	return IN_DISCONNECTRESULT_OK;
+}
+
 /* ================================
  Output device
  ================================ */
@@ -195,6 +259,10 @@ int GetInputDeviceDriverVersion(void* info)
 typedef struct
 {
     MIDIEndpointRef endpointRef;
+	char* name;
+    char* manufacturer;
+    char* product;
+    int driverVersion;
 } OutputDeviceInfo;
 
 typedef struct
@@ -214,6 +282,10 @@ int GetOutputDeviceInfo(int deviceIndex, void** info)
     
     MIDIEndpointRef endpointRef = MIDIGetDestination(deviceIndex);
     outputDeviceInfo->endpointRef = endpointRef;
+	
+	outputDeviceInfo->name = GetDevicePropertyValue(endpointRef, kMIDIPropertyDisplayName);
+	outputDeviceInfo->manufacturer = GetDevicePropertyValue(endpointRef, kMIDIPropertyManufacturer);
+	outputDeviceInfo->product = GetDevicePropertyValue(endpointRef, kMIDIPropertyModel);
     
     *info = outputDeviceInfo;
     
@@ -223,31 +295,19 @@ int GetOutputDeviceInfo(int deviceIndex, void** info)
 char* GetOutputDeviceName(void* info)
 {
     OutputDeviceInfo* outputDeviceInfo = (OutputDeviceInfo*)info;
-    
-    CFStringRef nameRef;
-    MIDIObjectGetStringProperty(outputDeviceInfo->endpointRef, kMIDIPropertyDisplayName, &nameRef);
-    
-    return CFStringGetCStringPtr(nameRef, kCFStringEncodingUTF8);
+    return outputDeviceInfo->name;
 }
 
 char* GetOutputDeviceManufacturer(void* info)
 {
     OutputDeviceInfo* outputDeviceInfo = (OutputDeviceInfo*)info;
-    
-    CFStringRef manufacturerRef;
-    MIDIObjectGetStringProperty(outputDeviceInfo->endpointRef, kMIDIPropertyManufacturer, &manufacturerRef);
-    
-    return CFStringGetCStringPtr(manufacturerRef, kCFStringEncodingUTF8);
+    return outputDeviceInfo->manufacturer;
 }
 
 char* GetOutputDeviceProduct(void* info)
 {
     OutputDeviceInfo* outputDeviceInfo = (OutputDeviceInfo*)info;
-    
-    CFStringRef modelRef;
-    MIDIObjectGetStringProperty(outputDeviceInfo->endpointRef, kMIDIPropertyModel, &modelRef);
-    
-    return CFStringGetCStringPtr(modelRef, kCFStringEncodingUTF8);
+    return outputDeviceInfo->product;
 }
 
 int GetOutputDeviceDriverVersion(void* info)

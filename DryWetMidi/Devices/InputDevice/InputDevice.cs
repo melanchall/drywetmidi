@@ -52,7 +52,8 @@ namespace Melanchall.DryWetMidi.Devices
 
         private readonly BytesToMidiEventConverter _bytesToMidiEventConverter = new BytesToMidiEventConverter(ChannelParametersBufferSize);
 
-        private InputDeviceApi.Callback_Winmm _callback;
+        private InputDeviceApi.Callback_Winmm _callback_Winmm;
+        private InputDeviceApi.Callback_Apple _callback_Apple;
 
         private readonly Dictionary<MidiTimeCodeComponent, FourBitNumber> _midiTimeCodeComponents = new Dictionary<MidiTimeCodeComponent, FourBitNumber>();
 
@@ -192,7 +193,7 @@ namespace Melanchall.DryWetMidi.Devices
 
             var device = GetAll().FirstOrDefault(d => d.Name == name);
             if (device == null)
-                throw new ArgumentException($"There is no MIDI input device '{name}' among {GetDevicesCount()} device(s) ({string.Join(", ", GetAll().Select(d => d.Name))}).", nameof(name));
+                throw new ArgumentException($"There is no MIDI input device '{name}'.", nameof(name));
 
             return device;
         }
@@ -243,11 +244,26 @@ namespace Melanchall.DryWetMidi.Devices
             if (_handle != IntPtr.Zero)
                 return;
 
-            _callback = OnMessage;
-
             var sessionHandle = MidiDevicesSession.GetSessionHandle();
-            InputDeviceApi.HandleResult(
-                InputDeviceApiProvider.Api.Api_OpenDevice_Winmm(_info, sessionHandle, _callback, SysExBufferSize, out _handle));
+
+            var apiType = InputDeviceApiProvider.Api.Api_GetApiType();
+            switch (apiType)
+            {
+                case InputDeviceApi.API_TYPE.API_TYPE_WINMM:
+                    {
+                        _callback_Winmm = OnMessage_Winmm;
+                        InputDeviceApi.HandleResult(
+                            InputDeviceApiProvider.Api.Api_OpenDevice_Winmm(_info, sessionHandle, _callback_Winmm, SysExBufferSize, out _handle));
+                    }
+                    break;
+                case InputDeviceApi.API_TYPE.API_TYPE_APPLE:
+                    {
+                        _callback_Apple = OnMessage_Apple;
+                        InputDeviceApi.HandleResult(
+                            InputDeviceApiProvider.Api.Api_OpenDevice_Apple(_info, sessionHandle, _callback_Apple, out _handle));
+                    }
+                    break;
+            }
         }
 
         private void DestroyHandle()
@@ -262,7 +278,7 @@ namespace Melanchall.DryWetMidi.Devices
             MidiDevicesSession.ExitSession();
         }
 
-        private void OnMessage(IntPtr hMidi, MidiMessage wMsg, IntPtr dwInstance, IntPtr dwParam1, IntPtr dwParam2)
+        private void OnMessage_Winmm(IntPtr hMidi, MidiMessage wMsg, IntPtr dwInstance, IntPtr dwParam1, IntPtr dwParam2)
         {
             if (!IsListeningForEvents || !IsEnabled)
                 return;
@@ -288,6 +304,14 @@ namespace Melanchall.DryWetMidi.Devices
                     OnInvalidSysExEventReceived(MidiWinApi.UnpackSysExBytes(dwParam1));
                     break;
             }
+        }
+
+        private void OnMessage_Apple(IntPtr pktlist, IntPtr readProcRefCon, IntPtr srcConnRefCon)
+        {
+            if (!IsListeningForEvents || !IsEnabled)
+                return;
+
+            throw new NotImplementedException("Messages parsing not implemented for Apple API.");
         }
 
         private void OnShortMessage(int message)

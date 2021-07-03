@@ -84,6 +84,7 @@ namespace Melanchall.DryWetMidi.Devices
         #region Delegates
 
         public delegate void Callback_Winmm(IntPtr hMidi, MidiMessage wMsg, IntPtr dwInstance, IntPtr dwParam1, IntPtr dwParam2);
+        public delegate void Callback_Apple(IntPtr pktlist, IntPtr readProcRefCon, IntPtr srcConnRefCon);
 
         #endregion
 
@@ -104,6 +105,8 @@ namespace Melanchall.DryWetMidi.Devices
         public abstract uint Api_GetDeviceDriverVersion(IntPtr info);
 
         public abstract IN_OPENRESULT Api_OpenDevice_Winmm(IntPtr info, IntPtr sessionHandle, Callback_Winmm callback, int sysExBufferSize, out IntPtr handle);
+
+        public abstract IN_OPENRESULT Api_OpenDevice_Apple(IntPtr info, IntPtr sessionHandle, Callback_Apple callback, out IntPtr handle);
 
         public abstract IN_CLOSERESULT Api_CloseDevice(IntPtr handle);
 

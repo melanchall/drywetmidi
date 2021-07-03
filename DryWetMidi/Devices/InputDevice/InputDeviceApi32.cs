@@ -38,6 +38,9 @@ namespace Melanchall.DryWetMidi.Devices
         private static extern IN_OPENRESULT OpenInputDevice_Winmm(IntPtr info, IntPtr sessionHandle, Callback_Winmm callback, int sysExBufferSize, out IntPtr handle);
 
         [DllImport(LibraryName, ExactSpelling = true)]
+        private static extern IN_OPENRESULT OpenInputDevice_Apple(IntPtr info, IntPtr sessionHandle, Callback_Apple callback, out IntPtr handle);
+
+        [DllImport(LibraryName, ExactSpelling = true)]
         private static extern IN_CLOSERESULT CloseInputDevice(IntPtr handle);
 
         [DllImport(LibraryName, ExactSpelling = true)]
@@ -94,6 +97,11 @@ namespace Melanchall.DryWetMidi.Devices
         public override IN_OPENRESULT Api_OpenDevice_Winmm(IntPtr info, IntPtr sessionHandle, Callback_Winmm callback, int sysExBufferSize, out IntPtr handle)
         {
             return OpenInputDevice_Winmm(info, sessionHandle, callback, sysExBufferSize, out handle);
+        }
+
+        public override IN_OPENRESULT Api_OpenDevice_Apple(IntPtr info, IntPtr sessionHandle, Callback_Apple callback, out IntPtr handle)
+        {
+            return OpenInputDevice_Apple(info, sessionHandle, callback, out handle);
         }
 
         public override IN_CLOSERESULT Api_CloseDevice(IntPtr handle)
