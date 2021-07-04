@@ -91,7 +91,7 @@ stages:
           DryWetMidi.Tests/Melanchall.DryWetMidi.Tests.csproj
     
     - task: PowerShell@2
-      displayName: Create virtual MIDI ports
+      displayName: Build loopback API
       inputs:
         targetType: 'inline'
         script: |
@@ -99,7 +99,21 @@ stages:
           cd Resources/Utilities/CreateLoopbackPort_macOS/CreateLoopbackPort
           gcc -c LoopbackAPI.c
           gcc -shared -framework CoreFoundation -framework CoreMIDI -o LoopbackAPI.dylib LoopbackAPI.o
+    
+    - task: PublishPipelineArtifact@1
+      displayName: Publish 'LoopbackAPI' artifact
+      inputs:
+        targetPath: 'Resources/Utilities/CreateLoopbackPort_macOS/CreateLoopbackPort/LoopbackAPI.dylib'
+        artifactName: 'LoopbackAPI'
+        artifactType: pipeline
+    
+    - task: PowerShell@2
+      displayName: Create virtual MIDI ports
+      inputs:
+        targetType: 'inline'
+        script: |
           Write-Host "Building utility app..."
+          cd Resources/Utilities/CreateLoopbackPort_macOS/CreateLoopbackPort
           dotnet publish CreateLoopbackPort.csproj -c Release -r osx-x64
           $exePath = Get-ChildItem -Path "bin/Release/netcoreapp3.1/osx-x64/publish" -File -Filter "CreateLoopbackPort" -Recurse
           Write-Host "Running utility app..."
@@ -109,8 +123,16 @@ stages:
     
     - task: DotNetCoreCLI@2
       displayName: Run unit tests
-      continueOnError: false
+      continueOnError: true
       inputs:
         command: 'test'
         projects: 'DryWetMidi.Tests/Melanchall.DryWetMidi.Tests.csproj'
-        arguments: '--blame --no-build --configuration $(buildConfiguration) --filter (FullyQualifiedName~.Devices) --framework netcoreapp3.1 --verbosity normal'
+        arguments: '--blame --no-build --configuration $(buildConfiguration) --filter (FullyQualifiedName~.CheckPlaybackEvents_) --framework netcoreapp3.1 --verbosity normal'
+          
+    - task: PowerShell@2
+      displayName: Print loopback log
+      inputs:
+        targetType: 'inline'
+        script: |
+          $logPath = Get-ChildItem loopback.log -Recurse
+          Get-Content $logPath

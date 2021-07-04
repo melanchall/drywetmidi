@@ -154,7 +154,9 @@ namespace Melanchall.DryWetMidi.Tests.Devices
 
         public void SendEvent(MidiEvent midiEvent)
         {
-            using (var outputDevice = OutputDevice.GetByName(MidiDevicesNames.DeviceA))
+            var deviceName = MidiDevicesNames.DeviceA;
+
+            using (var outputDevice = OutputDevice.GetByName(deviceName))
             {
                 MidiEvent eventSent = null;
                 outputDevice.EventSent += (_, e) => eventSent = e.Event;
@@ -162,7 +164,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 string errorOnSend = null;
                 outputDevice.ErrorOccurred += (_, e) => errorOnSend = e.Exception.Message;
 
-                using (var inputDevice = InputDevice.GetByName(MidiDevicesNames.DeviceA))
+                using (var inputDevice = InputDevice.GetByName(deviceName))
                 {
                     MidiEvent eventReceived = null;
                     inputDevice.EventReceived += (_, e) => eventReceived = e.Event;

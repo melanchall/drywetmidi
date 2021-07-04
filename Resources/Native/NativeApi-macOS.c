@@ -211,7 +211,9 @@ IN_OPENRESULT OpenInputDevice_Apple(void* info, void* sessionHandle, MIDIReadPro
 	*handle = inputDeviceHandle;
 	
 	CFStringRef portNameRef = CFStringCreateWithCString(kCFAllocatorDefault, inputDeviceInfo->name, kCFStringEncodingUTF8);
-	MIDIInputPortCreate(pSessionHandle->clientRef, portNameRef, callback, NULL, &inputDeviceHandle->portRef);
+	OSStatus status = MIDIInputPortCreate(pSessionHandle->clientRef, portNameRef, callback, NULL, &inputDeviceHandle->portRef);
+	if (status != noErr)
+		return IN_OPENRESULT_UNKNOWNERROR;
 
 	// ...
 
@@ -234,7 +236,9 @@ IN_CONNECTRESULT ConnectToInputDevice(void* handle)
 {
 	InputDeviceHandle* inputDeviceHandle = (InputDeviceHandle*)handle;
 
-	MIDIPortConnectSource(inputDeviceHandle->portRef, inputDeviceHandle->info->endpointRef, NULL);
+	OSStatus status = MIDIPortConnectSource(inputDeviceHandle->portRef, inputDeviceHandle->info->endpointRef, NULL);
+	if (status != noErr)
+		return IN_CONNECTRESULT_UNKNOWNERROR;
 
 	// ...
 
@@ -250,6 +254,28 @@ IN_DISCONNECTRESULT DisconnectFromInputDevice(void* handle)
 	// ...
 
 	return IN_DISCONNECTRESULT_OK;
+}
+
+// delete
+int GetEventDataFromInputDevice(MIDIPacketList* packetList, char* data)
+{
+    MIDIPacket packet = packetList->packet[0];
+    
+    for (int i = 0; i < packet.length; i++)
+    {
+        data[i] = packet.data[i];
+    }
+    
+    return 0;
+}
+
+int GetShortEventFromInputDevice(MIDIPacketList* packetList, int* message)
+{
+    MIDIPacket packet = packetList->packet[0];
+	
+	*message = (packet.data[1] << 16) | (packet.data[2] << 8) | packet.data[3];
+    
+    return 0;
 }
 
 /* ================================
@@ -318,4 +344,136 @@ int GetOutputDeviceDriverVersion(void* info)
     MIDIObjectGetIntegerProperty(outputDeviceInfo->endpointRef, kMIDIPropertyDriverVersion, &driverVersion);
     
     return driverVersion;
+}
+
+OUT_OPENRESULT OpenOutputDevice_Apple(void* info, void* sessionHandle, void** handle)
+{
+    OutputDeviceInfo* outputDeviceInfo = (OutputDeviceInfo*)info;
+    SessionHandle* pSessionHandle = (SessionHandle*)sessionHandle;
+    
+    OutputDeviceHandle* outputDeviceHandle = malloc(sizeof(OutputDeviceHandle));
+    outputDeviceHandle->info = outputDeviceInfo;
+    
+    *handle = outputDeviceHandle;
+    
+    CFStringRef portNameRef = CFStringCreateWithCString(kCFAllocatorDefault, outputDeviceInfo->name, kCFStringEncodingUTF8);
+    MIDIOutputPortCreate(pSessionHandle->clientRef, portNameRef, &outputDeviceHandle->portRef);
+    
+    // ...
+    
+    return OUT_OPENRESULT_OK;
+}
+
+void CloseOutputDevice(void* handle)
+{
+	OutputDeviceHandle* outputDeviceHandle = (OutputDeviceHandle*)handle;
+
+	free(outputDeviceHandle->info);
+	free(outputDeviceHandle);
+}
+
+// delete
+int SendEventToOutputDevice(void* handle, char* data, int length)
+{
+    MIDIPacket packet;
+    
+    for (int i = 0; i < length; i++)
+    {
+        packet.data[i] = data[i];
+    }
+    
+    packet.length = length;
+    
+    MIDIPacketList packetList;
+    packetList.numPackets = 1;
+    packetList.packet[0] = packet;
+    
+    OutputDeviceHandle* outputDeviceHandle = (OutputDeviceHandle*)handle;
+    
+    OSStatus res = MIDISend(outputDeviceHandle->portRef, outputDeviceHandle->info->endpointRef, &packetList);
+    if (res != noErr)
+        return 100;
+    
+    return 0;
+}
+
+int SendShortEventToOutputDevice(void* handle, int message)
+{
+    MIDIPacket packet;
+    
+	packet.length = 4;
+    packet.data[0] = 0;
+	packet.data[1] = (Byte)(message >> 16);
+	packet.data[2] = (Byte)((message >> 8) & 0xFF);
+	packet.data[3] = (Byte)(message & 0xFF);
+    
+    MIDIPacketList packetList;
+    packetList.numPackets = 1;
+    packetList.packet[0] = packet;
+    
+    OutputDeviceHandle* outputDeviceHandle = (OutputDeviceHandle*)handle;
+    
+    OSStatus res = MIDISend(outputDeviceHandle->portRef, outputDeviceHandle->info->endpointRef, &packetList);
+    if (res != noErr)
+        return 100;
+    
+    return 0;
+}
+
+/* ================================
+   Loopback device
+================================ */
+
+typedef struct
+{
+    MIDIEndpointRef destRef;
+    MIDIEndpointRef srcRef;
+    MIDIClientRef clientRef;
+} PortInfo;
+
+LPBCREATE_RESULT CreateLoopbackPort(char* portName, MIDIReadProc callback, PortInfo** info)
+{
+    PortInfo* portInfo = malloc(sizeof(PortInfo));
+    
+    CFStringRef nameRef = CFStringCreateWithCString(NULL, portName, kCFStringEncodingUTF8);
+    
+    MIDIClientRef client;
+    OSStatus result = MIDIClientCreate(nameRef, NULL, NULL, &client);
+    if (result != 0)
+    {
+        return LPBCREATE_FAILEDCREATECLIENT;
+    }
+    portInfo->clientRef = client;
+    
+    MIDIEndpointRef srcEndpoint;
+    result = MIDISourceCreate(client, nameRef, &srcEndpoint);
+    if (result != 0)
+    {
+        return LPBCREATE_FAILEDCREATESOURCE;
+    }
+    portInfo->srcRef = srcEndpoint;
+	
+	*info = portInfo;
+    
+    MIDIEndpointRef destEndpoint;
+    result = MIDIDestinationCreate(client, nameRef, callback, *info, &destEndpoint);
+    if (result != 0)
+    {
+        return LPBCREATE_FAILEDCREATEDESTINATION;
+    }
+    portInfo->destRef = destEndpoint;
+    
+    return LPBCREATE_OK;
+}
+
+int SendDataBack(MIDIPacketList *pktlist, void *info)
+{
+    if (info != NULL)
+	{
+        PortInfo* portInfo = (PortInfo*)info;
+		MIDIReceived(portInfo->srcRef, pktlist);
+		return 0;
+	}
+	
+	return 1;
 }

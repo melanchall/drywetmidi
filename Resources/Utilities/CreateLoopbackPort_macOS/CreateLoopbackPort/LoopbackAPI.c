@@ -12,25 +12,35 @@ typedef struct
 {
     MIDIEndpointRef destRef;
     MIDIEndpointRef srcRef;
-    MIDIClientRef clientRef;
 } PortInfo;
 
-LPBCREATE_RESULT CreateLoopbackPort(char* portName, MIDIReadProc callback, PortInfo** info)
+typedef struct
+{
+	char* name;
+	MIDIClientRef clientRef;
+} SessionHandle;
+
+int OpenSession(char* name, void** handle)
+{
+	SessionHandle* sessionHandle = malloc(sizeof(SessionHandle));
+	sessionHandle->name = name;
+	
+	CFStringRef nameRef = CFStringCreateWithCString(kCFAllocatorDefault, name, kCFStringEncodingUTF8);
+	MIDIClientCreate(nameRef, NULL, NULL, &sessionHandle->clientRef);
+
+	*handle = sessionHandle;
+
+	return 0;
+}
+
+LPBCREATE_RESULT CreateLoopbackPort(SessionHandle* sessionHandle, char* portName, MIDIReadProc callback, PortInfo** info)
 {
     PortInfo* portInfo = malloc(sizeof(PortInfo));
     
     CFStringRef nameRef = CFStringCreateWithCString(NULL, portName, kCFStringEncodingUTF8);
     
-    MIDIClientRef client;
-    OSStatus result = MIDIClientCreate(nameRef, NULL, NULL, &client);
-    if (result != 0)
-    {
-        return LPBCREATE_FAILEDCREATECLIENT;
-    }
-    portInfo->clientRef = client;
-    
     MIDIEndpointRef srcEndpoint;
-    result = MIDISourceCreate(client, nameRef, &srcEndpoint);
+    OSStatus result = MIDISourceCreate(sessionHandle->clientRef, nameRef, &srcEndpoint);
     if (result != 0)
     {
         return LPBCREATE_FAILEDCREATESOURCE;
@@ -38,7 +48,7 @@ LPBCREATE_RESULT CreateLoopbackPort(char* portName, MIDIReadProc callback, PortI
     portInfo->srcRef = srcEndpoint;
     
     MIDIEndpointRef destEndpoint;
-    result = MIDIDestinationCreate(client, nameRef, callback, portInfo, &destEndpoint);
+    result = MIDIDestinationCreate(sessionHandle->clientRef, nameRef, callback, portInfo, &destEndpoint);
     if (result != 0)
     {
         return LPBCREATE_FAILEDCREATEDESTINATION;
@@ -49,11 +59,17 @@ LPBCREATE_RESULT CreateLoopbackPort(char* portName, MIDIReadProc callback, PortI
     return LPBCREATE_OK;
 }
 
-void SendDataBack(MIDIPacketList *pktlist, void *info)
+int SendDataBack(MIDIPacketList *pktlist, void *info)
 {
     if (info != NULL)
 	{
         PortInfo* portInfo = (PortInfo*)info;
-		MIDIReceived(portInfo->srcRef, pktlist);
+		OSStatus status = MIDIReceived(portInfo->srcRef, pktlist);
+		if (status != noErr)
+			return 100;
+		
+		return 0;
 	}
+	
+	return 1000;
 }

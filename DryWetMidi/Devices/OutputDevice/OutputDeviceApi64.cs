@@ -38,10 +38,19 @@ namespace Melanchall.DryWetMidi.Devices
         private static extern OUT_OPENRESULT OpenOutputDevice_Winmm(IntPtr info, IntPtr sessionHandle, Callback_Winmm callback, out IntPtr handle);
 
         [DllImport(LibraryName, ExactSpelling = true)]
+        private static extern OUT_OPENRESULT OpenOutputDevice_Apple(IntPtr info, IntPtr sessionHandle, out IntPtr handle);
+
+        [DllImport(LibraryName, ExactSpelling = true)]
         private static extern IntPtr GetOutputDeviceHandle(IntPtr handle);
 
         [DllImport(LibraryName, ExactSpelling = true)]
         private static extern void CloseOutputDevice(IntPtr handle);
+
+        [DllImport(LibraryName, ExactSpelling = true)]
+        private static extern int SendEventToOutputDevice(IntPtr handle, IntPtr data, int length);
+
+        [DllImport(LibraryName, ExactSpelling = true)]
+        private static extern int SendShortEventToOutputDevice(IntPtr handle, int message);
 
         #endregion
 
@@ -90,6 +99,11 @@ namespace Melanchall.DryWetMidi.Devices
             return OpenOutputDevice_Winmm(info, sessionHandle, callback, out handle);
         }
 
+        public override OUT_OPENRESULT Api_OpenDevice_Apple(IntPtr info, IntPtr sessionHandle, out IntPtr handle)
+        {
+            return OpenOutputDevice_Apple(info, sessionHandle, out handle);
+        }
+
         // TODO: remove
         public override IntPtr Api_GetHandle(IntPtr handle)
         {
@@ -99,6 +113,16 @@ namespace Melanchall.DryWetMidi.Devices
         public override void Api_CloseDevice(IntPtr handle)
         {
             CloseOutputDevice(handle);
+        }
+
+        public override int Api_SendEvent(IntPtr handle, IntPtr data, int length)
+        {
+            return SendEventToOutputDevice(handle, data, length);
+        }
+
+        public override int Api_SendShortEvent(IntPtr handle, int message)
+        {
+            return SendShortEventToOutputDevice(handle, message);
         }
 
         #endregion

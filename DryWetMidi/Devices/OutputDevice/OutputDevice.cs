@@ -84,14 +84,28 @@ namespace Melanchall.DryWetMidi.Devices
 
             if (midiEvent is ChannelEvent || midiEvent is SystemCommonEvent || midiEvent is SystemRealTimeEvent)
             {
-                SendShortEvent(midiEvent);
+                if (_windowsHandle != IntPtr.Zero)
+                {
+                    SendShortEvent(midiEvent);
+                }
+                else
+                {
+                    var message = PackShortEvent(midiEvent);
+                    OutputDeviceApiProvider.Api.Api_SendShortEvent(_handle, message);
+                }
+
                 OnEventSent(midiEvent);
             }
             else
             {
-                var sysExEvent = midiEvent as SysExEvent;
-                if (sysExEvent != null)
-                    SendSysExEvent(sysExEvent);
+                if (_windowsHandle != IntPtr.Zero)
+                {
+                    var sysExEvent = midiEvent as SysExEvent;
+                    if (sysExEvent != null)
+                        SendSysExEvent(sysExEvent);
+                }
+                else
+                    throw new NotImplementedException("Sys ex events sending not implemented for Apple API.");
             }
         }
 
@@ -207,26 +221,39 @@ namespace Melanchall.DryWetMidi.Devices
             if (_windowsHandle != IntPtr.Zero)
                 return;
 
-            _callback = OnMessage;
-
             var sessionHandle = MidiDevicesSession.GetSessionHandle();
+            var apiType = OutputDeviceApiProvider.Api.Api_GetApiType();
 
-            // TODO: handle result
-            var result = OutputDeviceApiProvider.Api.Api_OpenDevice_Winmm(_info, sessionHandle, _callback, out _handle);
-            if (result != OutputDeviceApi.OUT_OPENRESULT.OUT_OPENRESULT_OK)
+            switch (apiType)
             {
-                switch (result)
-                {
-                    case OutputDeviceApi.OUT_OPENRESULT.OUT_OPENRESULT_ALLOCATED:
-                        throw new MidiDeviceException("The device is already in use.");
-                    case OutputDeviceApi.OUT_OPENRESULT.OUT_OPENRESULT_NOMEMORY:
-                        throw new MidiDeviceException("There is no memory to allocate the requested resources.");
-                }
+                case OutputDeviceApi.API_TYPE.API_TYPE_WINMM:
+                    {
 
-                throw new MidiDeviceException($"Unknown error ({result}).");
+                        _callback = OnMessage;
+                        // TODO: handle result
+                        var result = OutputDeviceApiProvider.Api.Api_OpenDevice_Winmm(_info, sessionHandle, _callback, out _handle);
+                        if (result != OutputDeviceApi.OUT_OPENRESULT.OUT_OPENRESULT_OK)
+                        {
+                            switch (result)
+                            {
+                                case OutputDeviceApi.OUT_OPENRESULT.OUT_OPENRESULT_ALLOCATED:
+                                    throw new MidiDeviceException("The device is already in use.");
+                                case OutputDeviceApi.OUT_OPENRESULT.OUT_OPENRESULT_NOMEMORY:
+                                    throw new MidiDeviceException("There is no memory to allocate the requested resources.");
+                            }
+
+                            throw new MidiDeviceException($"Unknown error ({result}).");
+                        }
+
+                        _windowsHandle = OutputDeviceApiProvider.Api.Api_GetHandle(_handle);
+                    }
+                    break;
+                case OutputDeviceApi.API_TYPE.API_TYPE_APPLE:
+                    {
+                        OutputDeviceApiProvider.Api.Api_OpenDevice_Apple(_info, sessionHandle, out _handle);
+                    }
+                    break;
             }
-
-            _windowsHandle = OutputDeviceApiProvider.Api.Api_GetHandle(_handle);
         }
 
         private void DestroyHandle()

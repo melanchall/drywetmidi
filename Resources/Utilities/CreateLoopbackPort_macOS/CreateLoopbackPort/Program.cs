@@ -6,31 +6,38 @@ namespace CreateLoopbackPort
 {
     class Program
     {
-        private delegate void Callback(IntPtr pktlist, IntPtr readProcRefCon, IntPtr srcConnRefCon);
-
         [DllImport("LoopbackAPI")]
-        private static extern int CreateLoopbackPort(string portName, Callback callback, out IntPtr info);
+        private static extern int OpenSession(IntPtr name, out IntPtr handle);
 
-        [DllImport("LoopbackAPI")]
-        private static extern void SendDataBack(IntPtr pktlist, IntPtr info);
+        private static LoopbackDevice[] _devices;
 
         static void Main(string[] args)
         {
-            Console.WriteLine("Creating virtual ports...");
+            Logger.Write("Creating session...");
+
+            var clientName = Guid.NewGuid().ToString();
+            var clientNamePointer = Marshal.StringToHGlobalAnsi(clientName);
+            var result = OpenSession(clientNamePointer, out var sessionHandle);
+
+            Logger.WriteLine($"{result}");
+
+            Logger.WriteLine("Creating ports...");
+
+            _devices = new LoopbackDevice[args.Length];
+            var i = 0;
 
             foreach (var portName in args)
             {
-                var result = CreateLoopbackPort(portName, HandleData, out var info);
-                Console.WriteLine($"Port '{portName}' created ({result}).");
+                _devices[i] = new LoopbackDevice(sessionHandle, portName);
+                i++;
             }
 
-            Console.WriteLine("Sleeping...");
-			Thread.Sleep(int.MaxValue);
-        }
+            Logger.WriteLine("Sleeping...");
 
-        private static void HandleData(IntPtr pktlist, IntPtr readProcRefCon, IntPtr srcConnRefCon)
-        {
-            SendDataBack(pktlist, readProcRefCon);
+            while (true)
+			{
+				Thread.Sleep(1);
+			}
         }
     }
 }

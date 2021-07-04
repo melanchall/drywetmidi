@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
@@ -311,7 +312,9 @@ namespace Melanchall.DryWetMidi.Devices
             if (!IsListeningForEvents || !IsEnabled)
                 return;
 
-            throw new NotImplementedException("Messages parsing not implemented for Apple API.");
+            int message;
+            InputDeviceApiProvider.Api.Api_GetShortEvent(pktlist, out message);
+            OnShortMessage(message);
         }
 
         private void OnShortMessage(int message)

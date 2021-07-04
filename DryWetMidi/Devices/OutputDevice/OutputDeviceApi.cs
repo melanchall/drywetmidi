@@ -57,10 +57,17 @@ namespace Melanchall.DryWetMidi.Devices
 
         public abstract OUT_OPENRESULT Api_OpenDevice_Winmm(IntPtr info, IntPtr sessionHandle, Callback_Winmm callback, out IntPtr handle);
 
+        public abstract OUT_OPENRESULT Api_OpenDevice_Apple(IntPtr info, IntPtr sessionHandle, out IntPtr handle);
+
         // TODO: remove
         public abstract IntPtr Api_GetHandle(IntPtr handle);
 
         public abstract void Api_CloseDevice(IntPtr handle);
+
+        // TODO: remove
+        public abstract int Api_SendEvent(IntPtr handle, IntPtr data, int length);
+
+        public abstract int Api_SendShortEvent(IntPtr handle, int message);
 
         #endregion
     }
