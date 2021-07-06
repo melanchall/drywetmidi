@@ -90,36 +90,14 @@ stages:
         projects: |
           DryWetMidi.Tests/Melanchall.DryWetMidi.Tests.csproj
     
-    - task: PowerShell@2
-      displayName: Build loopback API
-      inputs:
-        targetType: 'inline'
-        script: |
-          Write-Host "Building loopback API..."
-          cd Resources/Utilities/CreateLoopbackPort_macOS/CreateLoopbackPort
-          gcc -c LoopbackAPI.c
-          gcc -shared -framework CoreFoundation -framework CoreMIDI -o LoopbackAPI.dylib LoopbackAPI.o
-    
-    - task: PublishPipelineArtifact@1
-      displayName: Publish 'LoopbackAPI' artifact
-      inputs:
-        targetPath: 'Resources/Utilities/CreateLoopbackPort_macOS/CreateLoopbackPort/LoopbackAPI.dylib'
-        artifactName: 'LoopbackAPI'
-        artifactType: pipeline
-    
-    - task: PowerShell@2
+    - task: CmdLine@2
       displayName: Create virtual MIDI ports
       inputs:
-        targetType: 'inline'
         script: |
-          Write-Host "Building utility app..."
-          cd Resources/Utilities/CreateLoopbackPort_macOS/CreateLoopbackPort
-          dotnet publish CreateLoopbackPort.csproj -c Release -r osx-x64
-          $exePath = Get-ChildItem -Path "bin/Release/netcoreapp3.1/osx-x64/publish" -File -Filter "CreateLoopbackPort" -Recurse
-          Write-Host "Running utility app..."
-          $job = Start-Job { Start-Process $args[0] -ArgumentList $args[1] } -ArgumentList $exePath.FullName, "`"MIDI A`" `"MIDI B`" `"MIDI C`""
-          Start-Sleep -s 5
-          Receive-Job -Job $job
+          cd Resources/Utilities/CreateLoopbackPort_macOS
+          gcc -c LoopbackDevice.c
+          gcc -framework CoreServices -framework CoreMIDI -framework CoreFoundation -o LoopbackDevice LoopbackDevice.o
+          ./LoopbackDevice "MIDI A" "MIDI B" "MIDI C" &
     
     - task: DotNetCoreCLI@2
       displayName: Run unit tests
@@ -127,12 +105,22 @@ stages:
       inputs:
         command: 'test'
         projects: 'DryWetMidi.Tests/Melanchall.DryWetMidi.Tests.csproj'
-        arguments: '--blame --no-build --configuration $(buildConfiguration) --filter (FullyQualifiedName~.CheckPlaybackEvents_) --framework netcoreapp3.1 --verbosity normal'
-          
+        arguments: '--blame --no-build --configuration $(buildConfiguration) --filter (FullyQualifiedName~.CheckPlaybackEvents_) --framework netcoreapp3.1 --verbosity normal -d diag.log'
+        
     - task: PowerShell@2
-      displayName: Print loopback log
+      displayName: Collect diagnostic reports
       inputs:
         targetType: 'inline'
         script: |
-          $logPath = Get-ChildItem loopback.log -Recurse
-          Get-Content $logPath
+          while (-Not (Test-Path -Path "$HOME/Library/Logs/DiagnosticReports"))
+          {
+              Start-Sleep -s 2
+          }
+          Copy-Item -Path "$HOME/Library/Logs/DiagnosticReports" -Destination "$(Pipeline.Workspace)" -Recurse
+          
+    - task: PublishPipelineArtifact@1
+      displayName: Publish 'DiagnosticReports' artifact
+      inputs:
+        targetPath: '$(Pipeline.Workspace)/DiagnosticReports'
+        artifactName: 'DiagnosticReports'
+        artifactType: pipeline

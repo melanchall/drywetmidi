@@ -64,9 +64,6 @@ namespace Melanchall.DryWetMidi.Devices
 
         public abstract void Api_CloseDevice(IntPtr handle);
 
-        // TODO: remove
-        public abstract int Api_SendEvent(IntPtr handle, IntPtr data, int length);
-
         public abstract int Api_SendShortEvent(IntPtr handle, int message);
 
         #endregion

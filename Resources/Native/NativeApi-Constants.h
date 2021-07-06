@@ -158,14 +158,3 @@ typedef int OUT_OPENRESULT;
 #define OUT_OPENRESULT_INVALIDFLAG 3
 #define OUT_OPENRESULT_INVALIDSTRUCTURE 4
 #define OUT_OPENRESULT_NOMEMORY 5
-
-/* ================================
-   Loopback device
-================================ */
-
-typedef int LPBCREATE_RESULT;
-
-#define LPBCREATE_OK 0
-#define LPBCREATE_FAILEDCREATECLIENT 1
-#define LPBCREATE_FAILEDCREATESOURCE 2
-#define LPBCREATE_FAILEDCREATEDESTINATION 3

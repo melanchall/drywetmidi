@@ -627,26 +627,3 @@ void CloseOutputDevice(void* handle)
 	free(outputDeviceHandle->info);
 	free(outputDeviceHandle);
 }
-
-/*void TestCallback(UINT uTimerID, UINT uMsg, DWORD_PTR dwUser, DWORD_PTR dw1, DWORD_PTR dw2)
-{
-	printf("A");
-}*/
-
-/*void main()
-{
-	int in = GetInputDevicesCount();
-	printf("in = %d\n", in);
-
-	for (int i = 0; i < in; i++)
-	{
-		InputDeviceInfo* info = NULL;
-		GetInputDeviceInfo(i, &info);
-		printf(">> %s\n", info->name);
-		char* name = GetInputDeviceName(info);
-		printf(">>>> %s\n", name);
-	}
-
-	int out = GetOutputDevicesCount();
-	printf("out = %d\n", out);
-}*/

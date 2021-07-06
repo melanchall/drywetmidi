@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Text;
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
@@ -55,6 +54,8 @@ namespace Melanchall.DryWetMidi.Devices
 
         private InputDeviceApi.Callback_Winmm _callback_Winmm;
         private InputDeviceApi.Callback_Apple _callback_Apple;
+
+        private readonly byte[] _channelParametersBuffer = new byte[ChannelParametersBufferSize];
 
         private readonly Dictionary<MidiTimeCodeComponent, FourBitNumber> _midiTimeCodeComponents = new Dictionary<MidiTimeCodeComponent, FourBitNumber>();
 
@@ -122,6 +123,8 @@ namespace Melanchall.DryWetMidi.Devices
         /// <exception cref="MidiDeviceException">An error occurred on device.</exception>
         public void StartEventsListening()
         {
+            // TODO: check if already listening
+
             EnsureDeviceIsNotDisposed();
             EnsureHandleIsCreated();
 
@@ -321,10 +324,12 @@ namespace Melanchall.DryWetMidi.Devices
         {
             try
             {
-                byte statusByte, firstDataByte, secondDataByte;
-                MidiWinApi.UnpackShortEventBytes(message, out statusByte, out firstDataByte, out secondDataByte);
+                var statusByte = (byte)(message & 0xFF);
 
-                var midiEvent = _bytesToMidiEventConverter.Convert(statusByte, new[] { firstDataByte, secondDataByte });
+                _channelParametersBuffer[0] = (byte)((message >> 8) & 0xFF);
+                _channelParametersBuffer[1] = (byte)((message >> 16) & 0xFF);
+
+                var midiEvent = _bytesToMidiEventConverter.Convert(statusByte, _channelParametersBuffer);
                 OnEventReceived(midiEvent);
 
                 if (RaiseMidiTimeCodeReceived)

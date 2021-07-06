@@ -34,7 +34,7 @@ void* RunLoopThreadRoutine(void* data)
     
     CFRunLoopRun();
     
-    return 0;
+    return NULL;
 }
 
 TG_STARTRESULT StartHighPrecisionTickGenerator_Apple(int interval, CFRunLoopTimerCallBack callback, TickGeneratorInfo** info)
@@ -55,8 +55,10 @@ TG_STARTRESULT StartHighPrecisionTickGenerator_Apple(int interval, CFRunLoopTime
     
     TickGeneratorInfo* tickGeneratorInfo = malloc(sizeof(TickGeneratorInfo));
     tickGeneratorInfo->timerRef = timerRef;
+	
+	*info = tickGeneratorInfo;
     
-    int result = pthread_create(&tickGeneratorInfo->thread, NULL, RunLoopThreadRoutine, tickGeneratorInfo);
+    int result = pthread_create(&tickGeneratorInfo->thread, NULL, RunLoopThreadRoutine, *info);
     if (result != 0)
     {
         if (result == EAGAIN)
@@ -71,8 +73,6 @@ TG_STARTRESULT StartHighPrecisionTickGenerator_Apple(int interval, CFRunLoopTime
         return TG_STARTRESULT_UNKNOWNERROR;
     }
     
-    *info = tickGeneratorInfo;
-    
     return TG_STARTRESULT_OK;
 }
 
@@ -80,8 +80,9 @@ TG_STOPRESULT StopHighPrecisionTickGenerator(void* info)
 {
     TickGeneratorInfo* tickGeneratorInfo = (TickGeneratorInfo*)info;
     
-    CFRunLoopStop(tickGeneratorInfo->runLoopRef);
     CFRunLoopRemoveTimer(tickGeneratorInfo->runLoopRef, tickGeneratorInfo->timerRef, tickGeneratorInfo->runLoopMode);
+	CFRunLoopWakeUp(tickGeneratorInfo->runLoopRef);
+	CFRunLoopStop(tickGeneratorInfo->runLoopRef);
     
     free(info);
     
@@ -210,7 +211,8 @@ IN_OPENRESULT OpenInputDevice_Apple(void* info, void* sessionHandle, MIDIReadPro
 	
 	*handle = inputDeviceHandle;
 	
-	CFStringRef portNameRef = CFStringCreateWithCString(kCFAllocatorDefault, inputDeviceInfo->name, kCFStringEncodingUTF8);
+	//CFStringRef portNameRef = CFStringCreateWithCString(kCFAllocatorDefault, inputDeviceInfo->name, kCFStringEncodingUTF8);
+	CFStringRef portNameRef = CFSTR("IN");
 	OSStatus status = MIDIInputPortCreate(pSessionHandle->clientRef, portNameRef, callback, NULL, &inputDeviceHandle->portRef);
 	if (status != noErr)
 		return IN_OPENRESULT_UNKNOWNERROR;
@@ -356,7 +358,8 @@ OUT_OPENRESULT OpenOutputDevice_Apple(void* info, void* sessionHandle, void** ha
     
     *handle = outputDeviceHandle;
     
-    CFStringRef portNameRef = CFStringCreateWithCString(kCFAllocatorDefault, outputDeviceInfo->name, kCFStringEncodingUTF8);
+    //CFStringRef portNameRef = CFStringCreateWithCString(kCFAllocatorDefault, outputDeviceInfo->name, kCFStringEncodingUTF8);
+	CFStringRef portNameRef = CFSTR("OUT");
     MIDIOutputPortCreate(pSessionHandle->clientRef, portNameRef, &outputDeviceHandle->portRef);
     
     // ...
@@ -418,62 +421,4 @@ int SendShortEventToOutputDevice(void* handle, int message)
         return 100;
     
     return 0;
-}
-
-/* ================================
-   Loopback device
-================================ */
-
-typedef struct
-{
-    MIDIEndpointRef destRef;
-    MIDIEndpointRef srcRef;
-    MIDIClientRef clientRef;
-} PortInfo;
-
-LPBCREATE_RESULT CreateLoopbackPort(char* portName, MIDIReadProc callback, PortInfo** info)
-{
-    PortInfo* portInfo = malloc(sizeof(PortInfo));
-    
-    CFStringRef nameRef = CFStringCreateWithCString(NULL, portName, kCFStringEncodingUTF8);
-    
-    MIDIClientRef client;
-    OSStatus result = MIDIClientCreate(nameRef, NULL, NULL, &client);
-    if (result != 0)
-    {
-        return LPBCREATE_FAILEDCREATECLIENT;
-    }
-    portInfo->clientRef = client;
-    
-    MIDIEndpointRef srcEndpoint;
-    result = MIDISourceCreate(client, nameRef, &srcEndpoint);
-    if (result != 0)
-    {
-        return LPBCREATE_FAILEDCREATESOURCE;
-    }
-    portInfo->srcRef = srcEndpoint;
-	
-	*info = portInfo;
-    
-    MIDIEndpointRef destEndpoint;
-    result = MIDIDestinationCreate(client, nameRef, callback, *info, &destEndpoint);
-    if (result != 0)
-    {
-        return LPBCREATE_FAILEDCREATEDESTINATION;
-    }
-    portInfo->destRef = destEndpoint;
-    
-    return LPBCREATE_OK;
-}
-
-int SendDataBack(MIDIPacketList *pktlist, void *info)
-{
-    if (info != NULL)
-	{
-        PortInfo* portInfo = (PortInfo*)info;
-		MIDIReceived(portInfo->srcRef, pktlist);
-		return 0;
-	}
-	
-	return 1;
 }
