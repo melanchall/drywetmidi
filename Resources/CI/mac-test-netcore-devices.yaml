@@ -105,7 +105,7 @@ stages:
       inputs:
         command: 'test'
         projects: 'DryWetMidi.Tests/Melanchall.DryWetMidi.Tests.csproj'
-        arguments: '--blame --no-build --configuration $(buildConfiguration) --filter (FullyQualifiedName~.CheckPlaybackEvents_) --framework netcoreapp3.1 --verbosity normal -d diag.log'
+        arguments: '--blame --no-build --configuration $(buildConfiguration) --filter (FullyQualifiedName~.Devices) --framework netcoreapp3.1 --verbosity normal -d diag.log'
         
     - task: PowerShell@2
       displayName: Collect diagnostic reports

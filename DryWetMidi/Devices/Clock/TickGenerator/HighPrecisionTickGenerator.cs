@@ -99,7 +99,7 @@ namespace Melanchall.DryWetMidi.Devices
             OnTick();
         }
 
-        private void OnTick_Apple(IntPtr timer, IntPtr info)
+        private void OnTick_Apple()
         {
             OnTick();
         }

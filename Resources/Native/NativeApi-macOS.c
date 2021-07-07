@@ -15,63 +15,36 @@ API_TYPE GetApiType()
 
 typedef struct
 {
-    CFRunLoopTimerRef timerRef;
-    CFRunLoopRef runLoopRef;
-    CFRunLoopMode runLoopMode;
     pthread_t thread;
+    void (*callback)(void);
+    char active;
+    int interval;
 } TickGeneratorInfo;
 
 void* RunLoopThreadRoutine(void* data)
 {
     TickGeneratorInfo* tickGeneratorInfo = (TickGeneratorInfo*)data;
     
-    CFRunLoopRef runLoopRef = CFRunLoopGetCurrent();
-    CFRunLoopMode runLoopMode = kCFRunLoopDefaultMode;
-    CFRunLoopAddTimer(runLoopRef, tickGeneratorInfo->timerRef, runLoopMode);
-    
-    tickGeneratorInfo->runLoopRef = runLoopRef;
-    tickGeneratorInfo->runLoopMode = runLoopMode;
-    
-    CFRunLoopRun();
+    while (tickGeneratorInfo->active == 1)
+    {
+        usleep(tickGeneratorInfo->interval * 1000);
+        tickGeneratorInfo->callback();
+    }
     
     return NULL;
 }
 
-TG_STARTRESULT StartHighPrecisionTickGenerator_Apple(int interval, CFRunLoopTimerCallBack callback, TickGeneratorInfo** info)
+TG_STARTRESULT StartHighPrecisionTickGenerator_Apple(int interval, void (*callback)(void), TickGeneratorInfo** info)
 {
-    double secondsInterval = interval;
-    secondsInterval /= 1000;
-    
-    CFRunLoopTimerContext context = { 0, NULL, NULL, NULL, NULL };
-    CFRunLoopTimerRef timerRef = CFRunLoopTimerCreate(kCFAllocatorDefault,
-                                                      CFAbsoluteTimeGetCurrent() + secondsInterval,
-                                                      secondsInterval,
-                                                      0,
-                                                      0,
-                                                      callback,
-                                                      &context);
-    
-    CFRunLoopTimerSetTolerance(timerRef, secondsInterval / 2);
-    
     TickGeneratorInfo* tickGeneratorInfo = malloc(sizeof(TickGeneratorInfo));
-    tickGeneratorInfo->timerRef = timerRef;
-	
-	*info = tickGeneratorInfo;
     
-    int result = pthread_create(&tickGeneratorInfo->thread, NULL, RunLoopThreadRoutine, *info);
-    if (result != 0)
-    {
-        if (result == EAGAIN)
-        {
-            return TG_STARTRESULT_NORESOURCES;
-        }
-        else if (result == EINVAL)
-        {
-            return TG_STARTRESULT_BADTHREADATTRIBUTE;
-        }
-        
-        return TG_STARTRESULT_UNKNOWNERROR;
-    }
+    tickGeneratorInfo->active = 1;
+    tickGeneratorInfo->interval = interval;
+    tickGeneratorInfo->callback = callback;
+    
+    *info = tickGeneratorInfo;
+    
+    pthread_create(&tickGeneratorInfo->thread, NULL, RunLoopThreadRoutine, tickGeneratorInfo);
     
     return TG_STARTRESULT_OK;
 }
@@ -80,9 +53,9 @@ TG_STOPRESULT StopHighPrecisionTickGenerator(void* info)
 {
     TickGeneratorInfo* tickGeneratorInfo = (TickGeneratorInfo*)info;
     
-    CFRunLoopRemoveTimer(tickGeneratorInfo->runLoopRef, tickGeneratorInfo->timerRef, tickGeneratorInfo->runLoopMode);
-	CFRunLoopWakeUp(tickGeneratorInfo->runLoopRef);
-	CFRunLoopStop(tickGeneratorInfo->runLoopRef);
+    tickGeneratorInfo->active = 0;
+    
+    pthread_join(tickGeneratorInfo->thread, NULL);
     
     free(info);
     

@@ -38,7 +38,7 @@ namespace Melanchall.DryWetMidi.Devices
 
         public delegate void TimerCallback_Winmm(uint uID, uint uMsg, uint dwUser, uint dw1, uint dw2);
 
-        public delegate void TimerCallback_Apple(IntPtr timer, IntPtr info);
+        public delegate void TimerCallback_Apple();
 
         #endregion
 
