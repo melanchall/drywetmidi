@@ -30,6 +30,8 @@ void* RunLoopThreadRoutine(void* data)
         usleep(tickGeneratorInfo->interval * 1000);
         tickGeneratorInfo->callback();
     }
+	
+	free(data);
     
     return NULL;
 }
@@ -55,9 +57,9 @@ TG_STOPRESULT StopHighPrecisionTickGenerator(void* info)
     
     tickGeneratorInfo->active = 0;
     
-    pthread_join(tickGeneratorInfo->thread, NULL);
+    //pthread_join(tickGeneratorInfo->thread, NULL);
     
-    free(info);
+    //free(info);
     
     return TG_STOPRESULT_OK;
 }
