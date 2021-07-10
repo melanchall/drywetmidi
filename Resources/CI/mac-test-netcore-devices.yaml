@@ -107,26 +107,26 @@ stages:
     
     - task: DotNetCoreCLI@2
       displayName: Run unit tests
-      continueOnError: true
+      continueOnError: false
       inputs:
         command: 'test'
         projects: 'DryWetMidi.Tests/Melanchall.DryWetMidi.Tests.csproj'
         arguments: '--blame --no-build --configuration $(buildConfiguration) --filter (FullyQualifiedName~.Devices) --framework netcoreapp3.1 --verbosity normal -d diag.log'
         
-    - task: PowerShell@2
-      displayName: Collect diagnostic reports
-      inputs:
-        targetType: 'inline'
-        script: |
-          while (-Not (Test-Path -Path "$HOME/Library/Logs/DiagnosticReports"))
-          {
-              Start-Sleep -s 2
-          }
-          Copy-Item -Path "$HOME/Library/Logs/DiagnosticReports" -Destination "$(Pipeline.Workspace)" -Recurse
-          
-    - task: PublishPipelineArtifact@1
-      displayName: Publish 'DiagnosticReports' artifact
-      inputs:
-        targetPath: '$(Pipeline.Workspace)/DiagnosticReports'
-        artifactName: 'DiagnosticReports'
-        artifactType: pipeline
+    #- task: PowerShell@2
+    #  displayName: Collect diagnostic reports
+    #  inputs:
+    #    targetType: 'inline'
+    #    script: |
+    #      while (-Not (Test-Path -Path "$HOME/Library/Logs/DiagnosticReports"))
+    #      {
+    #          Start-Sleep -s 2
+    #      }
+    #      Copy-Item -Path "$HOME/Library/Logs/DiagnosticReports" -Destination "$(Pipeline.Workspace)" -Recurse
+    #      
+    #- task: PublishPipelineArtifact@1
+    #  displayName: Publish 'DiagnosticReports' artifact
+    #  inputs:
+    #    targetPath: '$(Pipeline.Workspace)/DiagnosticReports'
+    #    artifactName: 'DiagnosticReports'
+    #    artifactType: pipeline
