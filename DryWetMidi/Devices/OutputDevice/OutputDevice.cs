@@ -84,16 +84,8 @@ namespace Melanchall.DryWetMidi.Devices
 
             if (midiEvent is ChannelEvent || midiEvent is SystemCommonEvent || midiEvent is SystemRealTimeEvent)
             {
-                if (_windowsHandle != IntPtr.Zero)
-                {
-                    SendShortEvent(midiEvent);
-                }
-                else
-                {
-                    var message = PackShortEvent(midiEvent);
-                    OutputDeviceApiProvider.Api.Api_SendShortEvent(_handle, message);
-                }
-
+                var message = PackShortEvent(midiEvent);
+                OutputDeviceApiProvider.Api.Api_SendShortEvent(_handle, message);
                 OnEventSent(midiEvent);
             }
             else
@@ -265,12 +257,6 @@ namespace Melanchall.DryWetMidi.Devices
 
             _handle = IntPtr.Zero;
             _windowsHandle = IntPtr.Zero;
-        }
-
-        private void SendShortEvent(MidiEvent midiEvent)
-        {
-            var message = PackShortEvent(midiEvent);
-            ProcessMmResult(MidiOutWinApi.midiOutShortMsg(_windowsHandle, (uint)message));
         }
 
         private void SendSysExEvent(SysExEvent sysExEvent)

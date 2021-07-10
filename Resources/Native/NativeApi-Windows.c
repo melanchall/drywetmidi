@@ -627,3 +627,12 @@ void CloseOutputDevice(void* handle)
 	free(outputDeviceHandle->info);
 	free(outputDeviceHandle);
 }
+
+int SendShortEventToOutputDevice(void* handle, int message)
+{
+    OutputDeviceHandle* outputDeviceHandle = (OutputDeviceHandle*)handle;
+
+    midiOutShortMsg(outputDeviceHandle->handle, (DWORD)message);
+
+    return 0;
+}

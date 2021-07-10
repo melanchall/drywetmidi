@@ -250,7 +250,7 @@ int GetShortEventFromInputDevice(MIDIPacketList* packetList, int* message)
 {
     MIDIPacket packet = packetList->packet[0];
 	
-	*message = (packet.data[1] << 16) | (packet.data[2] << 8) | packet.data[3];
+	*message = (packet.data[2] << 16) | (packet.data[1] << 8) | packet.data[0];
     
     return 0;
 }
@@ -350,40 +350,14 @@ void CloseOutputDevice(void* handle)
 	free(outputDeviceHandle);
 }
 
-// delete
-int SendEventToOutputDevice(void* handle, char* data, int length)
-{
-    MIDIPacket packet;
-    
-    for (int i = 0; i < length; i++)
-    {
-        packet.data[i] = data[i];
-    }
-    
-    packet.length = length;
-    
-    MIDIPacketList packetList;
-    packetList.numPackets = 1;
-    packetList.packet[0] = packet;
-    
-    OutputDeviceHandle* outputDeviceHandle = (OutputDeviceHandle*)handle;
-    
-    OSStatus res = MIDISend(outputDeviceHandle->portRef, outputDeviceHandle->info->endpointRef, &packetList);
-    if (res != noErr)
-        return 100;
-    
-    return 0;
-}
-
 int SendShortEventToOutputDevice(void* handle, int message)
 {
     MIDIPacket packet;
     
-	packet.length = 4;
-    packet.data[0] = 0;
-	packet.data[1] = (Byte)(message >> 16);
-	packet.data[2] = (Byte)((message >> 8) & 0xFF);
-	packet.data[3] = (Byte)(message & 0xFF);
+	packet.length = 3;
+    packet.data[0] = (Byte)(message & 0xFF);
+	packet.data[1] = (Byte)((message >> 8) & 0xFF);
+	packet.data[2] = (Byte)(message >> 16);
     
     MIDIPacketList packetList;
     packetList.numPackets = 1;
