@@ -161,19 +161,21 @@ namespace Melanchall.DryWetMidi.Tests.Devices
             IReadOnlyList<ReceivedEvent> receivedEvents,
             IReadOnlyList<TimeSpan> expectedTimes)
         {
+            Assert.AreEqual(expectedTimes.Count, receivedEvents.Count, "Received events count is invalid.");
+
             for (var i = 0; i < sentEvents.Count; i++)
             {
                 var sentEvent = sentEvents[i];
                 var receivedEvent = receivedEvents[i];
                 var expectedTime = expectedTimes[i];
 
-                MidiAsserts.AreEventsEqual(sentEvent.Event, receivedEvent.Event, false, $"Received event {receivedEvent.Event} doesn't match sent one {sentEvent.Event}.");
+                MidiAsserts.AreEventsEqual(sentEvent.Event, receivedEvent.Event, false, $"Received event [{receivedEvent.Event}] doesn't match sent one [{sentEvent.Event}].");
 
                 var offsetFromExpectedTime = (sentEvent.Time - expectedTime).Duration();
                 Assert.LessOrEqual(
                     offsetFromExpectedTime,
                     SendReceiveUtilities.MaximumEventSendReceiveDelay,
-                    $"Event was sent at wrong time (at {sentEvent.Time} instead of {expectedTime}).");
+                    $"Event was sent at wrong time ({sentEvent.Time}; expected is {expectedTime}).");
             }
         }
 

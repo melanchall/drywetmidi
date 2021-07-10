@@ -721,14 +721,14 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 var expectedEvent = expectedEvents[i];
                 var expectedTime = (currentTime += expectedEvent.Delay);
 
-                MidiAsserts.AreEventsEqual(sentEvent.Event, expectedEvent.Event, false, $"Sent event {sentEvent.Event} doesn't match expected one {expectedEvent.Event}.");
-                MidiAsserts.AreEventsEqual(sentEvent.Event, receivedEvent.Event, false, $"Received event {receivedEvent.Event} doesn't match sent one {sentEvent.Event}.");
+                MidiAsserts.AreEventsEqual(sentEvent.Event, expectedEvent.Event, false, $"Sent event [{sentEvent.Event}] doesn't match expected one [{expectedEvent.Event}].");
+                MidiAsserts.AreEventsEqual(sentEvent.Event, receivedEvent.Event, false, $"Received event [{receivedEvent.Event}] doesn't match sent one [{sentEvent.Event}].");
 
                 var offsetFromExpectedTime = (sentEvent.Time - expectedTime).Duration();
                 Assert.LessOrEqual(
                     offsetFromExpectedTime,
                     SendReceiveUtilities.MaximumEventSendReceiveDelay,
-                    $"Event was sent at wrong time (at {sentEvent.Time} instead of {expectedTime}).");
+                    $"Event was sent at wrong time ({sentEvent.Time}; expected is {expectedTime}).");
             }
         }
 
@@ -743,13 +743,13 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 var receivedEvent = receivedEvents[i];
                 var expectedTime = expectedTimes[i];
 
-                MidiAsserts.AreEventsEqual(sentEvent.Event, receivedEvent.Event, false, $"Received event {receivedEvent.Event} doesn't match sent one {sentEvent.Event}.");
+                MidiAsserts.AreEventsEqual(sentEvent.Event, receivedEvent.Event, false, $"Received event [{receivedEvent.Event}] doesn't match sent one [{sentEvent.Event}].");
 
                 var offsetFromExpectedTime = (sentEvent.Time - expectedTime).Duration();
                 Assert.LessOrEqual(
                     offsetFromExpectedTime,
                     SendReceiveUtilities.MaximumEventSendReceiveDelay,
-                    $"Event was sent at wrong time (at {sentEvent.Time} instead of {expectedTime}).");
+                    $"Event was sent at wrong time ({sentEvent.Time}; expected is {expectedTime}).");
             }
         }
 
@@ -764,14 +764,14 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 var receivedEvent = receivedEvents[i];
                 var expectedReceivedEvent = expectedReceivedEvents[i];
 
-                MidiAsserts.AreEventsEqual(expectedReceivedEvent.Event, receivedEvent.Event, false, $"Received event {receivedEvent.Event} doesn't match expected one {expectedReceivedEvent.Event}.");
+                MidiAsserts.AreEventsEqual(expectedReceivedEvent.Event, receivedEvent.Event, false, $"Received event [{receivedEvent.Event}] doesn't match expected one [{expectedReceivedEvent.Event}].");
 
                 var expectedTime = expectedReceivedEvent.Time;
                 var offsetFromExpectedTime = (receivedEvent.Time - expectedTime).Duration();
                 Assert.LessOrEqual(
                     offsetFromExpectedTime,
                     SendReceiveUtilities.MaximumEventSendReceiveDelay,
-                    $"Event was received at wrong time (at {receivedEvent.Time} instead of {expectedTime}).");
+                    $"Event was received at wrong time ({receivedEvent.Time}; expected is {expectedTime}).");
             }
         }
 
@@ -780,12 +780,12 @@ namespace Melanchall.DryWetMidi.Tests.Devices
             TimeSpan currentTime = (MetricTimeSpan)playback.GetCurrentTime(TimeSpanType.Metric);
             Assert.IsTrue(
                 AreTimeSpansEqual(currentTime, expectedCurrentTime),
-                $"Current time ({currentTime}) is invalid after playback {afterPlaybackAction} ({expectedCurrentTime}).");
+                $"Current time ({currentTime}) is invalid after playback {afterPlaybackAction} (expected is {expectedCurrentTime}).");
         }
 
         private static bool AreTimeSpansEqual(TimeSpan timeSpan1, TimeSpan timeSpan2)
         {
-            var epsilon = TimeSpan.FromMilliseconds(15);
+            var epsilon = SendReceiveUtilities.MaximumEventSendReceiveDelay;
             var delta = (timeSpan1 - timeSpan2).Duration();
             return delta <= epsilon;
         }

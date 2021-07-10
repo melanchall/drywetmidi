@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading;
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
@@ -36,6 +37,9 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 new EventToSend(new ProgramChangeEvent((SevenBitNumber)50), TimeSpan.FromMilliseconds(500)),
             };
 
+            var waitTimeout = eventsToSend.Aggregate(TimeSpan.Zero, (result, e) => result + e.Delay) +
+                SendReceiveUtilities.MaximumEventSendReceiveDelay;
+
             using (var outputDevice = OutputDevice.GetByName(SendReceiveUtilities.DeviceToTestOnName))
             {
                 SendReceiveUtilities.WarmUpDevice(outputDevice);
@@ -57,7 +61,11 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                         recording.Start();
                         sendingThread.Start();
 
-                        WaitOperations.Wait(() => !sendingThread.IsAlive && receivedEventsNumber == eventsToSend.Length);
+                        var eventsReceived = WaitOperations.Wait(
+                            () => !sendingThread.IsAlive && receivedEventsNumber == eventsToSend.Length,
+                            waitTimeout);
+                        Assert.IsTrue(eventsReceived, $"Events are not received for [{waitTimeout}].");
+
                         recording.Stop();
 
                         var midiFile = recording.ToFile();
