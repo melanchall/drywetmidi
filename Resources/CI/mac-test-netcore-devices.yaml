@@ -91,6 +91,12 @@ stages:
           DryWetMidi.Tests/Melanchall.DryWetMidi.Tests.csproj
     
     - task: CmdLine@2
+      displayName: Disable app nap
+      inputs:
+        script: |
+          defaults write NSGlobalDomain NSAppSleepDisabled -bool YES
+    
+    - task: CmdLine@2
       displayName: Create virtual MIDI ports
       inputs:
         script: |

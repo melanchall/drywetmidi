@@ -33,7 +33,7 @@ namespace Melanchall.DryWetMidi.Benchmarks.Devices
             [IterationSetup]
             public void IterationSetup()
             {
-                Thread.Sleep(250);
+                WaitOperations.Wait(250);
             }
 
             [Benchmark]

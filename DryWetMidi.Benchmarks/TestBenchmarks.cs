@@ -1,5 +1,6 @@
 ﻿using System.Threading;
 using BenchmarkDotNet.Attributes;
+using Melanchall.DryWetMidi.Tests.Common;
 using NUnit.Framework;
 
 namespace Melanchall.DryWetMidi.Benchmarks
@@ -13,7 +14,7 @@ namespace Melanchall.DryWetMidi.Benchmarks
             [Benchmark]
             public void Run()
             {
-                Thread.Sleep(1000);
+                WaitOperations.Wait(1000);
             }
         }
 

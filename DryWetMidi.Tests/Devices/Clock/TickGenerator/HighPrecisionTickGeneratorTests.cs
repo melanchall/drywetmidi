@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
 using Melanchall.DryWetMidi.Devices;
+using Melanchall.DryWetMidi.Tests.Common;
 using NUnit.Framework;
 
 namespace Melanchall.DryWetMidi.Tests.Devices
@@ -26,7 +27,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 tickGenerator.TryStart(TimeSpan.FromMilliseconds(interval));
                 stopwatch.Start();
 
-                SpinWait.SpinUntil(() => elapsedTimes.Count >= 100);
+                WaitOperations.Wait(() => elapsedTimes.Count >= 100);
                 tickGenerator.TryStop();
                 stopwatch.Stop();
 

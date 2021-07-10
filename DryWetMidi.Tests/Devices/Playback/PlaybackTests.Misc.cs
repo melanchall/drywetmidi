@@ -95,7 +95,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
 
                 playback.Start();
 
-                var exceptionThrown = SpinWait.SpinUntil(() => exception != null, SendReceiveUtilities.MaximumEventSendReceiveDelay);
+                var exceptionThrown = WaitOperations.Wait(() => exception != null, SendReceiveUtilities.MaximumEventSendReceiveDelay);
                 Assert.IsTrue(exceptionThrown, "Exception was not thrown.");
 
                 Assert.AreEqual(exceptionMessage, exception.Message, "Exception message is invalid.");
@@ -129,7 +129,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 expectedFinishedRaised: 0,
                 expectedRepeatStartedRaised: 5,
                 setupPlayback: (context, playback) => playback.Loop = true,
-                beforeChecks: (context, playback) => Thread.Sleep(TimeSpan.FromSeconds(5.5)),
+                beforeChecks: (context, playback) => WaitOperations.Wait(TimeSpan.FromSeconds(5.5)),
                 afterChecks: (context, playback) =>
                 {
                     Assert.IsTrue(playback.IsRunning, "Playback is not running after waiting.");
@@ -166,12 +166,12 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 waiting: (context, playback) =>
                 {
                     var timeout = context.ExpectedTimes.Last() + SendReceiveUtilities.MaximumEventSendReceiveDelay;
-                    var areEventsReceived = SpinWait.SpinUntil(() => context.ReceivedEvents.Count == eventsToSend.Length - 1, timeout);
+                    var areEventsReceived = WaitOperations.Wait(() => context.ReceivedEvents.Count == eventsToSend.Length - 1, timeout);
                     Assert.IsTrue(areEventsReceived, $"Events are not received for timeout {timeout}.");
                 },
                 finalChecks: (context, playback) =>
                 {
-                    var playbackStopped = SpinWait.SpinUntil(() => !playback.IsRunning, SendReceiveUtilities.MaximumEventSendReceiveDelay);
+                    var playbackStopped = WaitOperations.Wait(() => !playback.IsRunning, SendReceiveUtilities.MaximumEventSendReceiveDelay);
                     Assert.IsTrue(playbackStopped, "Playback is running after completed.");
                 });
         }
@@ -214,12 +214,12 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 waiting: (context, playback) =>
                 {
                     var timeout = expectedEventsTimes.Last() + SendReceiveUtilities.MaximumEventSendReceiveDelay;
-                    var areEventsReceived = SpinWait.SpinUntil(() => context.ReceivedEvents.Count == expectedEventsTimes.Count, timeout);
+                    var areEventsReceived = WaitOperations.Wait(() => context.ReceivedEvents.Count == expectedEventsTimes.Count, timeout);
                     Assert.IsTrue(areEventsReceived, $"Events are not received for timeout {timeout}.");
                 },
                 finalChecks: (context, playback) =>
                 {
-                    var playbackStopped = SpinWait.SpinUntil(() => !playback.IsRunning, SendReceiveUtilities.MaximumEventSendReceiveDelay);
+                    var playbackStopped = WaitOperations.Wait(() => !playback.IsRunning, SendReceiveUtilities.MaximumEventSendReceiveDelay);
                     Assert.IsTrue(playbackStopped, "Playback is running after completed.");
                 },
                 expectedEventsTimes: expectedEventsTimes);
@@ -261,12 +261,12 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 waiting: (context, playback) =>
                 {
                     var timeout = expectedEventsTimes.Last() + SendReceiveUtilities.MaximumEventSendReceiveDelay;
-                    var areEventsReceived = SpinWait.SpinUntil(() => context.ReceivedEvents.Count == expectedEventsTimes.Count, timeout);
+                    var areEventsReceived = WaitOperations.Wait(() => context.ReceivedEvents.Count == expectedEventsTimes.Count, timeout);
                     Assert.IsTrue(areEventsReceived, $"Events are not received for timeout {timeout}.");
                 },
                 finalChecks: (context, playback) =>
                 {
-                    var playbackStopped = SpinWait.SpinUntil(() => !playback.IsRunning, ApplySpeedToTimeSpan(TimeSpan.FromSeconds(0.5), speed) + SendReceiveUtilities.MaximumEventSendReceiveDelay);
+                    var playbackStopped = WaitOperations.Wait(() => !playback.IsRunning, ApplySpeedToTimeSpan(TimeSpan.FromSeconds(0.5), speed) + SendReceiveUtilities.MaximumEventSendReceiveDelay);
                     Assert.IsTrue(playbackStopped, "Playback is running after completed.");
                 },
                 expectedEventsTimes: expectedEventsTimes);
@@ -314,12 +314,12 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 waiting: (context, playback) =>
                 {
                     var timeout = expectedEventsTimes.Last() + SendReceiveUtilities.MaximumEventSendReceiveDelay;
-                    var areEventsReceived = SpinWait.SpinUntil(() => context.ReceivedEvents.Count == expectedEventsTimes.Count, timeout);
+                    var areEventsReceived = WaitOperations.Wait(() => context.ReceivedEvents.Count == expectedEventsTimes.Count, timeout);
                     Assert.IsTrue(areEventsReceived, $"Events are not received for timeout {timeout}.");
                 },
                 finalChecks: (context, playback) =>
                 {
-                    var playbackStopped = SpinWait.SpinUntil(() => !playback.IsRunning, ApplySpeedToTimeSpan(TimeSpan.FromSeconds(0.5), speed) + SendReceiveUtilities.MaximumEventSendReceiveDelay);
+                    var playbackStopped = WaitOperations.Wait(() => !playback.IsRunning, ApplySpeedToTimeSpan(TimeSpan.FromSeconds(0.5), speed) + SendReceiveUtilities.MaximumEventSendReceiveDelay);
                     Assert.IsTrue(playbackStopped, "Playback is running after completed.");
                 },
                 expectedEventsTimes: expectedEventsTimes);
@@ -361,7 +361,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                         recording.Start();
                         sendingThread.Start();
 
-                        SpinWait.SpinUntil(() => !sendingThread.IsAlive && receivedEventsNumber == eventsToSend.Length);
+                        WaitOperations.Wait(() => !sendingThread.IsAlive && receivedEventsNumber == eventsToSend.Length);
                         recording.Stop();
 
                         recordedFile = recording.ToFile();
@@ -378,12 +378,12 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 waiting: (context, playback) =>
                 {
                     var timeout = context.ExpectedTimes.Last() + SendReceiveUtilities.MaximumEventSendReceiveDelay;
-                    var areEventsReceived = SpinWait.SpinUntil(() => context.ReceivedEvents.Count == eventsToSend.Length, timeout);
+                    var areEventsReceived = WaitOperations.Wait(() => context.ReceivedEvents.Count == eventsToSend.Length, timeout);
                     Assert.IsTrue(areEventsReceived, $"Events are not received for timeout {timeout}.");
                 },
                 finalChecks: (context, playback) =>
                 {
-                    var playbackStopped = SpinWait.SpinUntil(() => !playback.IsRunning, SendReceiveUtilities.MaximumEventSendReceiveDelay);
+                    var playbackStopped = WaitOperations.Wait(() => !playback.IsRunning, SendReceiveUtilities.MaximumEventSendReceiveDelay);
                     Assert.IsTrue(playbackStopped, "Playback is running after completed.");
                 },
                 createPlayback: (outputDevice, playbackSettings) => recordedFile.GetPlayback(outputDevice, playbackSettings));
@@ -416,7 +416,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 },
                 waiting: (context, playback) =>
                 {
-                    var areEventsReceived = SpinWait.SpinUntil(() => context.ReceivedEvents.Count == eventsToSend.Length, SendReceiveUtilities.MaximumEventSendReceiveDelay);
+                    var areEventsReceived = WaitOperations.Wait(() => context.ReceivedEvents.Count == eventsToSend.Length, SendReceiveUtilities.MaximumEventSendReceiveDelay);
                     Assert.IsTrue(areEventsReceived, $"Events are not received.");
                 },
                 finalChecks: NoPlaybackAction);
@@ -458,7 +458,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 },
                 waiting: (context, playback) =>
                 {
-                    var areEventsReceived = SpinWait.SpinUntil(() => context.ReceivedEvents.Count == expectedEventsTimes.Count, SendReceiveUtilities.MaximumEventSendReceiveDelay);
+                    var areEventsReceived = WaitOperations.Wait(() => context.ReceivedEvents.Count == expectedEventsTimes.Count, SendReceiveUtilities.MaximumEventSendReceiveDelay);
                     Assert.IsTrue(areEventsReceived, $"Events are not received.");
                 },
                 finalChecks: NoPlaybackAction,
@@ -499,7 +499,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 },
                 waiting: (context, playback) =>
                 {
-                    var areEventsReceived = SpinWait.SpinUntil(() => context.ReceivedEvents.Count == expectedEventsTimes.Count, SendReceiveUtilities.MaximumEventSendReceiveDelay);
+                    var areEventsReceived = WaitOperations.Wait(() => context.ReceivedEvents.Count == expectedEventsTimes.Count, SendReceiveUtilities.MaximumEventSendReceiveDelay);
                     Assert.IsTrue(areEventsReceived, $"Events are not received.");
                 },
                 finalChecks: NoPlaybackAction,
@@ -546,7 +546,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 },
                 waiting: (context, playback) =>
                 {
-                    var areEventsReceived = SpinWait.SpinUntil(() => context.ReceivedEvents.Count == expectedEventsTimes.Count, SendReceiveUtilities.MaximumEventSendReceiveDelay);
+                    var areEventsReceived = WaitOperations.Wait(() => context.ReceivedEvents.Count == expectedEventsTimes.Count, SendReceiveUtilities.MaximumEventSendReceiveDelay);
                     Assert.IsTrue(areEventsReceived, $"Events are not received.");
                 },
                 finalChecks: NoPlaybackAction,
@@ -593,7 +593,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 waiting: (context, playback) =>
                 {
                     var timeout = context.ExpectedTimes.Last() + SendReceiveUtilities.MaximumEventSendReceiveDelay;
-                    var areEventsReceived = SpinWait.SpinUntil(() => context.ReceivedEvents.Count >= eventsToSend.Length * repetitionsNumber, timeout);
+                    var areEventsReceived = WaitOperations.Wait(() => context.ReceivedEvents.Count >= eventsToSend.Length * repetitionsNumber, timeout);
                     Assert.IsTrue(areEventsReceived, $"Events are not received for timeout {timeout}.");
                 },
                 finalChecks: (context, playback) =>
@@ -660,7 +660,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 waiting: (context, playback) =>
                 {
                     var timeout = expectedEventsTimes.Last() + SendReceiveUtilities.MaximumEventSendReceiveDelay;
-                    var areEventsReceived = SpinWait.SpinUntil(() => context.ReceivedEvents.Count >= originalExpectedTimes.Count * repetitionsNumber, timeout);
+                    var areEventsReceived = WaitOperations.Wait(() => context.ReceivedEvents.Count >= originalExpectedTimes.Count * repetitionsNumber, timeout);
                     Assert.IsTrue(areEventsReceived, $"Events are not received for timeout {timeout}.");
                 },
                 finalChecks: (context, playback) =>
@@ -726,7 +726,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 waiting: (context, playback) =>
                 {
                     var timeout = expectedEventsTimes.Last() + SendReceiveUtilities.MaximumEventSendReceiveDelay;
-                    var areEventsReceived = SpinWait.SpinUntil(() => context.ReceivedEvents.Count >= originalExpectedTimes.Count * repetitionsNumber, timeout);
+                    var areEventsReceived = WaitOperations.Wait(() => context.ReceivedEvents.Count >= originalExpectedTimes.Count * repetitionsNumber, timeout);
                     Assert.IsTrue(areEventsReceived, $"Events are not received for timeout {timeout}.");
                 },
                 finalChecks: (context, playback) =>
@@ -795,7 +795,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 waiting: (context, playback) =>
                 {
                     var timeout = expectedEventsTimes.Last() + SendReceiveUtilities.MaximumEventSendReceiveDelay;
-                    var areEventsReceived = SpinWait.SpinUntil(() => context.ReceivedEvents.Count >= originalExpectedTimes.Count * repetitionsNumber, timeout);
+                    var areEventsReceived = WaitOperations.Wait(() => context.ReceivedEvents.Count >= originalExpectedTimes.Count * repetitionsNumber, timeout);
                     Assert.IsTrue(areEventsReceived, $"Events are not received for timeout {timeout}.");
                 },
                 finalChecks: (context, playback) =>
@@ -1004,12 +1004,12 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                                 playback.Start();
                                 stopwatch.Start();
 
-                                Thread.Sleep(changeDeviceAfter);
+                                WaitOperations.Wait(changeDeviceAfter);
 
                                 playback.OutputDevice = outputDeviceB;
                                 Assert.AreSame(outputDeviceB, playback.OutputDevice, "Output device was not changed to Device B.");
 
-                                var playbackStopped = SpinWait.SpinUntil(
+                                var playbackStopped = WaitOperations.Wait(
                                     () => !playback.IsRunning && (receivedEventsA.Count + receivedEventsB.Count) == eventsToSend.Length,
                                     firstEventDelay + secondEventDelay + SendReceiveUtilities.MaximumEventSendReceiveDelay);
                                 Assert.IsTrue(playbackStopped, "Playback is running after completed.");

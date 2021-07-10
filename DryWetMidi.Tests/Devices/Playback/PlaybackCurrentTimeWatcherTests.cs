@@ -6,6 +6,7 @@ using Melanchall.DryWetMidi.Devices;
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
 using NUnit.Framework;
+using Melanchall.DryWetMidi.Tests.Common;
 
 namespace Melanchall.DryWetMidi.Tests.Devices
 {
@@ -58,7 +59,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 PlaybackCurrentTimeWatcher.Instance.CurrentTimeChanged += (_, e) => times.Add(e.Times.First().Time);
 
                 PlaybackCurrentTimeWatcher.Instance.Start();
-                Thread.Sleep(waitingTime + epsilon);
+                WaitOperations.Wait(waitingTime + epsilon);
                 PlaybackCurrentTimeWatcher.Instance.Stop();
 
                 PlaybackCurrentTimeWatcher.Instance.RemovePlayback(playback);
@@ -91,13 +92,13 @@ namespace Melanchall.DryWetMidi.Tests.Devices
             PlaybackCurrentTimeWatcher.Instance.Start();
 
             var timeout = TimeSpan.FromSeconds(30);
-            var playbackFinished = SpinWait.SpinUntil(() => !playback.IsRunning, timeout);
+            var playbackFinished = WaitOperations.Wait(() => !playback.IsRunning, timeout);
             Assert.IsTrue(playbackFinished, $"Playback is not finished for {timeout}.");
 
             var times = new List<ITimeSpan>();
             PlaybackCurrentTimeWatcher.Instance.CurrentTimeChanged += (_, e) => times.Add(e.Times.First().Time);
 
-            Thread.Sleep(waitingTime + epsilon);
+            WaitOperations.Wait(waitingTime + epsilon);
             PlaybackCurrentTimeWatcher.Instance.Stop();
 
             CheckTimes(
@@ -161,7 +162,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
 
             PlaybackCurrentTimeWatcher.Instance.Start();
 
-            SpinWait.SpinUntil(() => !playback1.IsRunning && !playback2.IsRunning);
+            WaitOperations.Wait(() => !playback1.IsRunning && !playback2.IsRunning);
 
             PlaybackCurrentTimeWatcher.Instance.Stop();
             PlaybackCurrentTimeWatcher.Instance.RemovePlayback(playback1);
@@ -228,10 +229,10 @@ namespace Melanchall.DryWetMidi.Tests.Devices
 
             PlaybackCurrentTimeWatcher.Instance.Start();
 
-            Thread.Sleep(TimeConverter.ConvertTo<MetricTimeSpan>(200, tempoMap));
+            WaitOperations.Wait(TimeConverter.ConvertTo<MetricTimeSpan>(200, tempoMap));
             PlaybackCurrentTimeWatcher.Instance.RemovePlayback(playback1);
 
-            SpinWait.SpinUntil(() => !playback1.IsRunning && !playback2.IsRunning);
+            WaitOperations.Wait(() => !playback1.IsRunning && !playback2.IsRunning);
 
             PlaybackCurrentTimeWatcher.Instance.Stop();
             PlaybackCurrentTimeWatcher.Instance.RemovePlayback(playback2);
@@ -350,7 +351,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 PlaybackCurrentTimeWatcher.Instance.Start();
 
                 var timeout = TimeSpan.FromSeconds(30);
-                var playbackFinished = SpinWait.SpinUntil(() => !playback.IsRunning, timeout);
+                var playbackFinished = WaitOperations.Wait(() => !playback.IsRunning, timeout);
                 Assert.IsTrue(playbackFinished, $"Playback is not finished for {timeout}.");
 
                 WaitExpectedTimes(expectedTimes, times);
@@ -366,7 +367,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
         private static void WaitExpectedTimes(ICollection<ITimeSpan> expectedTimes, ICollection<ITimeSpan> times)
         {
             var timeout = TimeSpan.FromMilliseconds(30);
-            var timesReceived = SpinWait.SpinUntil(() => times.Count >= expectedTimes.Count, timeout);
+            var timesReceived = WaitOperations.Wait(() => times.Count >= expectedTimes.Count, timeout);
             Assert.IsTrue(timesReceived, $"Times are not received for {timeout}.");
         }
 

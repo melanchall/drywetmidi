@@ -129,21 +129,21 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 outputDevice.EventSent += (_, __) => sentEventsCount++;
 
                 outputDevice.SendEvent(new NoteOnEvent());
-                var eventReceived = SpinWait.SpinUntil(() => sentEventsCount == 1, SendReceiveUtilities.MaximumEventSendReceiveDelay);
+                var eventReceived = WaitOperations.Wait(() => sentEventsCount == 1, SendReceiveUtilities.MaximumEventSendReceiveDelay);
                 Assert.IsTrue(eventReceived, "Event is not sent.");
 
                 outputDevice.IsEnabled = false;
                 Assert.IsFalse(outputDevice.IsEnabled, "Device is enabled after disabling.");
 
                 outputDevice.SendEvent(new NoteOnEvent());
-                eventReceived = SpinWait.SpinUntil(() => sentEventsCount > 1, TimeSpan.FromSeconds(5));
+                eventReceived = WaitOperations.Wait(() => sentEventsCount > 1, TimeSpan.FromSeconds(5));
                 Assert.IsFalse(eventReceived, "Event is sent after device disabled.");
 
                 outputDevice.IsEnabled = true;
                 Assert.IsTrue(outputDevice.IsEnabled, "Device is disabled after enabling.");
 
                 outputDevice.SendEvent(new NoteOnEvent());
-                eventReceived = SpinWait.SpinUntil(() => sentEventsCount > 1, SendReceiveUtilities.MaximumEventSendReceiveDelay);
+                eventReceived = WaitOperations.Wait(() => sentEventsCount > 1, SendReceiveUtilities.MaximumEventSendReceiveDelay);
                 Assert.IsTrue(eventReceived, "Event is not sent after enabling again.");
             }
         }
@@ -178,7 +178,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                     outputDevice.SendEvent(midiEvent);
 
                     var timeout = TimeSpan.FromMilliseconds(15);
-                    var isEventSentReceived = SpinWait.SpinUntil(() => eventSent != null && eventReceived != null, timeout);
+                    var isEventSentReceived = WaitOperations.Wait(() => eventSent != null && eventReceived != null, timeout);
 
                     if (!isEventSentReceived)
                     {

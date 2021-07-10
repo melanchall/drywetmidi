@@ -43,7 +43,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                     stopwatch.Stop();
 
                     var timeout = TimeSpan.FromTicks(eventsToSend.Sum(e => e.Delay.Ticks)) + MaximumEventSendReceiveDelay;
-                    var areEventsReceived = SpinWait.SpinUntil(() => receivedEvents.Count == eventsToSend.Count, timeout);
+                    var areEventsReceived = WaitOperations.Wait(() => receivedEvents.Count == eventsToSend.Count, timeout);
                     Assert.IsTrue(areEventsReceived, $"Events are not received for timeout {timeout}.");
 
                     inputDevice.StopEventsListening();
@@ -57,7 +57,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
         {
             foreach (var eventToSend in eventsToSend)
             {
-                Thread.Sleep(eventToSend.Delay);
+                WaitOperations.Wait(eventToSend.Delay);
                 outputDevice.SendEvent(eventToSend.Event);
             }
         }

@@ -159,12 +159,12 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 waiting: (context, playback) =>
                 {
                     var timeout = context.ExpectedTimes.Last() + maximumEventSendReceiveDelay;
-                    var areEventsReceived = SpinWait.SpinUntil(() => context.ReceivedEvents.Count == eventsToSend.Length, timeout);
+                    var areEventsReceived = WaitOperations.Wait(() => context.ReceivedEvents.Count == eventsToSend.Length, timeout);
                     Assert.IsTrue(areEventsReceived, $"Events are not received for timeout {timeout}.");
                 },
                 finalChecks: (context, playback) =>
                 {
-                    var playbackStopped = SpinWait.SpinUntil(() => !playback.IsRunning, maximumEventSendReceiveDelay);
+                    var playbackStopped = WaitOperations.Wait(() => !playback.IsRunning, maximumEventSendReceiveDelay);
                     Assert.IsTrue(playbackStopped, "Playback is running after completed.");
                 },
                 createTickGeneratorCallback: () => null);
@@ -223,12 +223,12 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 waiting: (context, playback) =>
                 {
                     var timeout = context.ExpectedTimes.Last() + maximumEventSendReceiveDelay;
-                    var areEventsReceived = SpinWait.SpinUntil(() => context.ReceivedEvents.Count == eventsToSend.Length, timeout);
+                    var areEventsReceived = WaitOperations.Wait(() => context.ReceivedEvents.Count == eventsToSend.Length, timeout);
                     Assert.IsTrue(areEventsReceived, $"Events are not received for timeout {timeout}.");
                 },
                 finalChecks: (context, playback) =>
                 {
-                    var playbackStopped = SpinWait.SpinUntil(() => !playback.IsRunning, maximumEventSendReceiveDelay);
+                    var playbackStopped = WaitOperations.Wait(() => !playback.IsRunning, maximumEventSendReceiveDelay);
                     Assert.IsTrue(playbackStopped, "Playback is running after completed.");
                 },
                 createTickGeneratorCallback: createTickGeneratorCallback);

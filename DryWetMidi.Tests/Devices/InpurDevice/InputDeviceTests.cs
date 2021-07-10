@@ -93,7 +93,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 SendReceiveUtilities.SendEvents(eventsToSend, outputDevice);
 
                 var timeout = TimeSpan.FromTicks(eventsToSend.Sum(e => e.Delay.Ticks)) + SendReceiveUtilities.MaximumEventSendReceiveDelay;
-                var isMidiTimeCodeReceived = SpinWait.SpinUntil(() => midiTimeCodeReceived != null, timeout);
+                var isMidiTimeCodeReceived = WaitOperations.Wait(() => midiTimeCodeReceived != null, timeout);
                 Assert.IsTrue(isMidiTimeCodeReceived, $"MIDI time code received for timeout {timeout}.");
 
                 inputDevice.StopEventsListening();
@@ -172,21 +172,21 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 inputDevice.EventReceived += (_, __) => receivedEventsCount++;
 
                 outputDevice.SendEvent(new NoteOnEvent());
-                var eventReceived = SpinWait.SpinUntil(() => receivedEventsCount == 1, SendReceiveUtilities.MaximumEventSendReceiveDelay);
+                var eventReceived = WaitOperations.Wait(() => receivedEventsCount == 1, SendReceiveUtilities.MaximumEventSendReceiveDelay);
                 Assert.IsTrue(eventReceived, "Event is not received.");
 
                 inputDevice.IsEnabled = false;
                 Assert.IsFalse(inputDevice.IsEnabled, "Device is enabled after disabling.");
 
                 outputDevice.SendEvent(new NoteOnEvent());
-                eventReceived = SpinWait.SpinUntil(() => receivedEventsCount > 1, TimeSpan.FromSeconds(5));
+                eventReceived = WaitOperations.Wait(() => receivedEventsCount > 1, TimeSpan.FromSeconds(5));
                 Assert.IsFalse(eventReceived, "Event is received after device disabled.");
 
                 inputDevice.IsEnabled = true;
                 Assert.IsTrue(inputDevice.IsEnabled, "Device is disabled after enabling.");
 
                 outputDevice.SendEvent(new NoteOnEvent());
-                eventReceived = SpinWait.SpinUntil(() => receivedEventsCount > 1, SendReceiveUtilities.MaximumEventSendReceiveDelay);
+                eventReceived = WaitOperations.Wait(() => receivedEventsCount > 1, SendReceiveUtilities.MaximumEventSendReceiveDelay);
                 Assert.IsTrue(eventReceived, "Event is not received after enabling again.");
             }
         }

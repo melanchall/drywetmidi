@@ -173,7 +173,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                             stopwatch.Stop();
 
                             var timeout = TimeSpan.FromTicks(eventsToSend.Sum(e => e.Delay.Ticks)) + SendReceiveUtilities.MaximumEventSendReceiveDelay;
-                            var areEventsReceived = SpinWait.SpinUntil(
+                            var areEventsReceived = WaitOperations.Wait(
                                 () => receivedEventsB.Count == eventsToSend.Count && receivedEventsC.Count == eventsToSend.Count,
                                 timeout);
                             Assert.IsTrue(areEventsReceived, $"Events are not received for timeout {timeout}.");
@@ -229,7 +229,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                             stopwatch.Stop();
 
                             var timeout = TimeSpan.FromTicks(eventsToSend.Sum(e => e.Delay.Ticks)) + SendReceiveUtilities.MaximumEventSendReceiveDelay;
-                            var areEventsReceived = SpinWait.SpinUntil(
+                            var areEventsReceived = WaitOperations.Wait(
                                 () => receivedEventsB.Count == expectedReceivedEvents.Count && receivedEventsC.Count == expectedReceivedEvents.Count,
                                 timeout);
                             Assert.IsTrue(areEventsReceived, $"Events are not received for timeout {timeout}.");

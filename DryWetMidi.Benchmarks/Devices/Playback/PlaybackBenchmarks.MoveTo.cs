@@ -3,6 +3,7 @@ using System.Threading;
 using BenchmarkDotNet.Attributes;
 using Melanchall.DryWetMidi.Devices;
 using Melanchall.DryWetMidi.Interaction;
+using Melanchall.DryWetMidi.Tests.Common;
 using NUnit.Framework;
 
 namespace Melanchall.DryWetMidi.Benchmarks.Devices
@@ -158,7 +159,7 @@ namespace Melanchall.DryWetMidi.Benchmarks.Devices
                 _playback.MoveToTime(InitialOffset);
                 _playbackDuration = _playback.GetDuration(TimeSpanType.Metric);
                 _playback.Start();
-                Thread.Sleep(1000);
+                WaitOperations.Wait(1000);
                 _playback.Stop();
             }
 
@@ -197,7 +198,7 @@ namespace Melanchall.DryWetMidi.Benchmarks.Devices
                 _playback = new Playback(TimedObjects, TempoMap.Default);
                 _playback.MoveToTime(_playback.GetDuration(TimeSpanType.Metric).Subtract(InitialOffset, TimeSpanMode.TimeLength));
                 _playback.Start();
-                Thread.Sleep(1000);
+                WaitOperations.Wait(1000);
                 _playback.Stop();
             }
 

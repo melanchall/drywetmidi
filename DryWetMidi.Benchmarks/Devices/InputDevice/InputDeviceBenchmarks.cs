@@ -43,7 +43,7 @@ namespace Melanchall.DryWetMidi.Benchmarks.Devices
             [IterationSetup]
             public void IterationSetup()
             {
-                Thread.Sleep(500);
+                WaitOperations.Wait(500);
                 _manualResetEvent?.Dispose();
                 _manualResetEvent = new ManualResetEvent(false);
             }

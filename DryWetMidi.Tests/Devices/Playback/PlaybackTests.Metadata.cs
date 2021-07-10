@@ -6,6 +6,7 @@ using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Devices;
 using Melanchall.DryWetMidi.Interaction;
+using Melanchall.DryWetMidi.Tests.Common;
 using Melanchall.DryWetMidi.Tests.Utilities;
 using NUnit.Framework;
 
@@ -97,7 +98,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 playback.Start();
 
                 var timeout = (TimeSpan)midiFile.GetDuration<MetricTimeSpan>() + SendReceiveUtilities.MaximumEventSendReceiveDelay;
-                var playbackFinished = SpinWait.SpinUntil(() => !playback.IsRunning, timeout);
+                var playbackFinished = WaitOperations.Wait(() => !playback.IsRunning, timeout);
                 Assert.IsTrue(playbackFinished, "Playback not finished.");
             }
 
@@ -131,7 +132,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 playback.Start();
 
                 var timeout = (TimeSpan)midiFile.GetDuration<MetricTimeSpan>() + SendReceiveUtilities.MaximumEventSendReceiveDelay;
-                var playbackFinished = SpinWait.SpinUntil(() => !playback.IsRunning, timeout);
+                var playbackFinished = WaitOperations.Wait(() => !playback.IsRunning, timeout);
                 Assert.IsTrue(playbackFinished, "Playback not finished.");
             }
 
@@ -1965,13 +1966,13 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 stopwatch.Start();
                 playback.Start();
 
-                SpinWait.SpinUntil(() => stopwatch.Elapsed >= moveFrom);
+                WaitOperations.Wait(() => stopwatch.Elapsed >= moveFrom);
                 playback.MoveToTime((MetricTimeSpan)moveTo);
 
                 stopwatch.Stop();
 
                 var timeout = (TimeSpan)midiFile.GetDuration<MetricTimeSpan>() + SendReceiveUtilities.MaximumEventSendReceiveDelay;
-                var playbackFinished = SpinWait.SpinUntil(() => !playback.IsRunning, timeout);
+                var playbackFinished = WaitOperations.Wait(() => !playback.IsRunning, timeout);
                 Assert.IsTrue(playbackFinished, "Playback not finished.");
             }
 
@@ -2000,13 +2001,13 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 stopwatch.Start();
                 playback.Start();
 
-                SpinWait.SpinUntil(() => stopwatch.Elapsed >= moveFrom);
+                WaitOperations.Wait(() => stopwatch.Elapsed >= moveFrom);
                 playback.MoveToTime((MetricTimeSpan)moveTo);
 
                 stopwatch.Stop();
 
                 var timeout = (TimeSpan)midiFile.GetDuration<MetricTimeSpan>() + SendReceiveUtilities.MaximumEventSendReceiveDelay;
-                var playbackFinished = SpinWait.SpinUntil(() => !playback.IsRunning, timeout);
+                var playbackFinished = WaitOperations.Wait(() => !playback.IsRunning, timeout);
                 Assert.IsTrue(playbackFinished, "Playback not finished.");
             }
 
@@ -2038,16 +2039,16 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 stopwatch.Start();
                 playback.Start();
 
-                SpinWait.SpinUntil(() => stopwatch.Elapsed >= stopAfter);
+                WaitOperations.Wait(() => stopwatch.Elapsed >= stopAfter);
                 playback.Stop();
 
-                Thread.Sleep(stopPeriod);
+                WaitOperations.Wait(stopPeriod);
                 playback.Start();
 
                 stopwatch.Stop();
 
                 var timeout = (TimeSpan)midiFile.GetDuration<MetricTimeSpan>() + SendReceiveUtilities.MaximumEventSendReceiveDelay;
-                var playbackFinished = SpinWait.SpinUntil(() => !playback.IsRunning, timeout);
+                var playbackFinished = WaitOperations.Wait(() => !playback.IsRunning, timeout);
                 Assert.IsTrue(playbackFinished, "Playback not finished.");
             }
 
@@ -2077,11 +2078,11 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 stopwatch.Start();
                 playback.Start();
 
-                SpinWait.SpinUntil(() => stopwatch.Elapsed >= changeCallbackAfter);
+                WaitOperations.Wait(() => stopwatch.Elapsed >= changeCallbackAfter);
                 playback.NoteCallback = secondNoteCallback;
 
                 var timeout = (TimeSpan)midiFile.GetDuration<MetricTimeSpan>() + SendReceiveUtilities.MaximumEventSendReceiveDelay;
-                var playbackFinished = SpinWait.SpinUntil(() => !playback.IsRunning, timeout);
+                var playbackFinished = WaitOperations.Wait(() => !playback.IsRunning, timeout);
                 Assert.IsTrue(playbackFinished, "Playback not finished.");
             }
 
@@ -2117,12 +2118,12 @@ namespace Melanchall.DryWetMidi.Tests.Devices
 
                 afterStart(playbackContext, playback);
 
-                SpinWait.SpinUntil(() => stopwatch.Elapsed >= stopAfter);
+                WaitOperations.Wait(() => stopwatch.Elapsed >= stopAfter);
                 playback.Stop();
 
                 afterStop(playbackContext, playback);
 
-                Thread.Sleep(stopPeriod);
+                WaitOperations.Wait(stopPeriod);
                 playback.Start();
 
                 afterResume(playbackContext, playback);
@@ -2131,13 +2132,13 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 {
                     foreach (var check in runningAfterResume)
                     {
-                        Thread.Sleep(check.Item1);
+                        WaitOperations.Wait(check.Item1);
                         check.Item2(playbackContext, playback);
                     }
                 }
 
                 stopwatch.Stop();
-                SpinWait.SpinUntil(() => !playback.IsRunning);
+                WaitOperations.Wait(() => !playback.IsRunning);
             }
 
             CheckRegisteredMetadata(

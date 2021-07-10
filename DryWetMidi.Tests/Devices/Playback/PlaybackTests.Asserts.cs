@@ -8,6 +8,7 @@ using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
 using Melanchall.DryWetMidi.Tests.Utilities;
 using NUnit.Framework;
+using Melanchall.DryWetMidi.Tests.Common;
 
 namespace Melanchall.DryWetMidi.Tests.Devices
 {
@@ -64,11 +65,11 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                         stopwatch.Start();
                         playback.Start();
 
-                        SpinWait.SpinUntil(() => stopwatch.Elapsed >= changeCallbackAfter);
+                        WaitOperations.Wait(() => stopwatch.Elapsed >= changeCallbackAfter);
                         playback.EventCallback = secondEventCallback;
 
                         var timeout = TimeSpan.FromTicks(eventsToSend.Sum(e => e.Delay.Ticks)) + SendReceiveUtilities.MaximumEventSendReceiveDelay;
-                        var playbackStopped = SpinWait.SpinUntil(() => !playback.IsRunning, timeout);
+                        var playbackStopped = WaitOperations.Wait(() => !playback.IsRunning, timeout);
                         Assert.IsTrue(playbackStopped, "Playback is running after completed.");
                     }
                 }
@@ -124,11 +125,11 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                         stopwatch.Start();
                         playback.Start();
 
-                        SpinWait.SpinUntil(() => stopwatch.Elapsed >= changeCallbackAfter);
+                        WaitOperations.Wait(() => stopwatch.Elapsed >= changeCallbackAfter);
                         playback.NoteCallback = secondNoteCallback;
 
                         var timeout = TimeSpan.FromTicks(eventsToSend.Sum(e => e.Delay.Ticks)) + SendReceiveUtilities.MaximumEventSendReceiveDelay;
-                        var playbackStopped = SpinWait.SpinUntil(() => !playback.IsRunning, timeout);
+                        var playbackStopped = WaitOperations.Wait(() => !playback.IsRunning, timeout);
                         Assert.IsTrue(playbackStopped, "Playback is running after completed.");
                     }
                 }
@@ -178,7 +179,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                         playback.Start();
 
                         var timeout = TimeSpan.FromTicks(eventsToSend.Sum(e => e.Delay.Ticks)) + SendReceiveUtilities.MaximumEventSendReceiveDelay;
-                        var playbackStopped = SpinWait.SpinUntil(() => !playback.IsRunning, timeout);
+                        var playbackStopped = WaitOperations.Wait(() => !playback.IsRunning, timeout);
                         Assert.IsTrue(playbackStopped, "Playback is running after completed.");
                     }
                 }
@@ -247,16 +248,16 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                         stopwatch.Start();
                         playback.Start();
 
-                        SpinWait.SpinUntil(() => stopwatch.Elapsed >= moveFrom);
+                        WaitOperations.Wait(() => stopwatch.Elapsed >= moveFrom);
                         playback.MoveToTime((MetricTimeSpan)moveTo);
 
                         var timeout = TimeSpan.FromTicks(eventsWillBeSent.Sum(e => e.Delay.Ticks)) + SendReceiveUtilities.MaximumEventSendReceiveDelay;
-                        var areEventsReceived = SpinWait.SpinUntil(() => receivedEvents.Count == eventsWillBeSent.Count, timeout);
+                        var areEventsReceived = WaitOperations.Wait(() => receivedEvents.Count == eventsWillBeSent.Count, timeout);
                         Assert.IsTrue(areEventsReceived, $"Events are not received for timeout {timeout}.");
 
                         stopwatch.Stop();
 
-                        var playbackStopped = SpinWait.SpinUntil(() => !playback.IsRunning, SendReceiveUtilities.MaximumEventSendReceiveDelay);
+                        var playbackStopped = WaitOperations.Wait(() => !playback.IsRunning, SendReceiveUtilities.MaximumEventSendReceiveDelay);
                         Assert.IsTrue(playbackStopped, "Playback is running after completed.");
                     }
                 }
@@ -296,14 +297,14 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 stopwatch.Start();
                 playback.Start();
 
-                SpinWait.SpinUntil(() => stopwatch.Elapsed >= moveFrom);
+                WaitOperations.Wait(() => stopwatch.Elapsed >= moveFrom);
                 playback.MoveToTime((MetricTimeSpan)moveTo);
 
-                Thread.Sleep(TimeSpan.FromTicks(eventsWillBeSent.Sum(e => e.Delay.Ticks)) + SendReceiveUtilities.MaximumEventSendReceiveDelay);
+                WaitOperations.Wait(TimeSpan.FromTicks(eventsWillBeSent.Sum(e => e.Delay.Ticks)) + SendReceiveUtilities.MaximumEventSendReceiveDelay);
 
                 stopwatch.Stop();
 
-                var playbackStopped = SpinWait.SpinUntil(() => !playback.IsRunning, SendReceiveUtilities.MaximumEventSendReceiveDelay);
+                var playbackStopped = WaitOperations.Wait(() => !playback.IsRunning, SendReceiveUtilities.MaximumEventSendReceiveDelay);
                 Assert.IsTrue(playbackStopped, "Playback is running after completed.");
             }
 
@@ -351,7 +352,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 beforeChecks(null, playback);
 
                 Assert.IsTrue(
-                    SpinWait.SpinUntil(() => started == expectedStartedRaised && stopped == expectedStoppedRaised && finished == expectedFinishedRaised && repeatStarted == expectedRepeatStartedRaised, TimeSpan.FromSeconds(2)),
+                    WaitOperations.Wait(() => started == expectedStartedRaised && stopped == expectedStoppedRaised && finished == expectedFinishedRaised && repeatStarted == expectedRepeatStartedRaised, TimeSpan.FromSeconds(2)),
                     "Playback events are raised invalid number of times.");
 
                 afterChecks(null, playback);
@@ -508,12 +509,12 @@ namespace Melanchall.DryWetMidi.Tests.Devices
 
                         afterStart(playbackContext, playback);
 
-                        SpinWait.SpinUntil(() => stopwatch.Elapsed >= stopAfter);
+                        WaitOperations.Wait(() => stopwatch.Elapsed >= stopAfter);
                         playback.Stop();
 
                         afterStop(playbackContext, playback);
 
-                        Thread.Sleep(stopPeriod);
+                        WaitOperations.Wait(stopPeriod);
                         playback.Start();
 
                         afterResume(playbackContext, playback);
@@ -522,18 +523,18 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                         {
                             foreach (var check in runningAfterResume)
                             {
-                                Thread.Sleep(check.Item1);
+                                WaitOperations.Wait(check.Item1);
                                 check.Item2(playbackContext, playback);
                             }
                         }
 
                         var timeout = expectedTimes.Last() + SendReceiveUtilities.MaximumEventSendReceiveDelay;
-                        var areEventsReceived = SpinWait.SpinUntil(() => receivedEvents.Count == expectedTimes.Count, timeout);
+                        var areEventsReceived = WaitOperations.Wait(() => receivedEvents.Count == expectedTimes.Count, timeout);
                         Assert.IsTrue(areEventsReceived, $"Events are not received for timeout {timeout}.");
 
                         stopwatch.Stop();
 
-                        var playbackStopped = SpinWait.SpinUntil(() => !playback.IsRunning, SendReceiveUtilities.MaximumEventSendReceiveDelay);
+                        var playbackStopped = WaitOperations.Wait(() => !playback.IsRunning, SendReceiveUtilities.MaximumEventSendReceiveDelay);
                         Assert.IsTrue(playbackStopped, "Playback is running after completed.");
                     }
                 }
@@ -605,24 +606,24 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                         stopwatch.Start();
                         playback.Start();
 
-                        SpinWait.SpinUntil(() => stopwatch.Elapsed >= moveFrom);
+                        WaitOperations.Wait(() => stopwatch.Elapsed >= moveFrom);
                         playback.MoveToTime((MetricTimeSpan)moveTo);
 
                         if (afterMovePause != null)
                         {
                             var currentElapsed = stopwatch.Elapsed;
-                            SpinWait.SpinUntil(() => stopwatch.Elapsed >= currentElapsed + afterMovePause);
+                            WaitOperations.Wait(() => stopwatch.Elapsed >= currentElapsed + afterMovePause);
 
                             afterMovePlaybackAction(playback);
                         }
 
                         var timeout = TimeSpan.FromTicks(eventsWillBeSent.Sum(e => e.Delay.Ticks)) + SendReceiveUtilities.MaximumEventSendReceiveDelay;
-                        var areEventsReceived = SpinWait.SpinUntil(() => receivedEvents.Count == eventsWillBeSent.Count, timeout);
+                        var areEventsReceived = WaitOperations.Wait(() => receivedEvents.Count == eventsWillBeSent.Count, timeout);
                         Assert.IsTrue(areEventsReceived, $"Events are not received for timeout {timeout}.");
 
                         stopwatch.Stop();
 
-                        var playbackStopped = SpinWait.SpinUntil(() => !playback.IsRunning, SendReceiveUtilities.MaximumEventSendReceiveDelay);
+                        var playbackStopped = WaitOperations.Wait(() => !playback.IsRunning, SendReceiveUtilities.MaximumEventSendReceiveDelay);
                         Assert.IsTrue(playbackStopped, "Playback is running after completed.");
                     }
                 }
@@ -666,24 +667,24 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 stopwatch.Start();
                 playback.Start();
 
-                SpinWait.SpinUntil(() => stopwatch.Elapsed >= moveFrom);
+                WaitOperations.Wait(() => stopwatch.Elapsed >= moveFrom);
                 playback.MoveToTime((MetricTimeSpan)moveTo);
 
                 if (afterMovePause != null)
                 {
                     var currentElapsed = stopwatch.Elapsed;
-                    SpinWait.SpinUntil(() => stopwatch.Elapsed >= currentElapsed + afterMovePause);
+                    WaitOperations.Wait(() => stopwatch.Elapsed >= currentElapsed + afterMovePause);
 
                     afterMovePlaybackAction(playback);
                 }
 
                 var timeout = TimeSpan.FromTicks(eventsWillBeSent.Sum(e => e.Delay.Ticks)) + SendReceiveUtilities.MaximumEventSendReceiveDelay;
-                var areEventsReceived = SpinWait.SpinUntil(() => receivedEvents.Count == eventsWillBeSent.Count, timeout);
+                var areEventsReceived = WaitOperations.Wait(() => receivedEvents.Count == eventsWillBeSent.Count, timeout);
                 Assert.IsTrue(areEventsReceived, $"Events are not received for timeout {timeout}.");
 
                 stopwatch.Stop();
 
-                var playbackStopped = SpinWait.SpinUntil(() => !playback.IsRunning, SendReceiveUtilities.MaximumEventSendReceiveDelay);
+                var playbackStopped = WaitOperations.Wait(() => !playback.IsRunning, SendReceiveUtilities.MaximumEventSendReceiveDelay);
                 Assert.IsTrue(playbackStopped, "Playback is running after completed.");
             }
 

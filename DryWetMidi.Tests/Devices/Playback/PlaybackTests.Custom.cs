@@ -5,6 +5,7 @@ using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Devices;
 using Melanchall.DryWetMidi.Interaction;
+using Melanchall.DryWetMidi.Tests.Common;
 using NUnit.Framework;
 
 namespace Melanchall.DryWetMidi.Tests.Devices
@@ -65,7 +66,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 playback.EventPlayed += (_, e) => actualMetadata.Add((e.Event, e.Metadata));
 
                 playback.Start();
-                SpinWait.SpinUntil(() => !playback.IsRunning);
+                WaitOperations.Wait(() => !playback.IsRunning);
 
                 CheckRegisteredMetadata(
                     expectedMetadata: new (MidiEvent, object)[]
