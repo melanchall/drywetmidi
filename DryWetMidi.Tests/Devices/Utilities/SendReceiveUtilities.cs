@@ -22,11 +22,6 @@ namespace Melanchall.DryWetMidi.Tests.Devices
 
         #region Methods
 
-        public static string GetEventsLog()
-        {
-
-        }
-
         public static void CheckEventsReceiving(IReadOnlyList<EventToSend> eventsToSend)
         {
             var receivedEvents = new List<ReceivedEvent>();
