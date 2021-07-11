@@ -31,6 +31,32 @@ namespace Melanchall.DryWetMidi.Devices
             OUT_OPENRESULT_NOMEMORY = 5
         }
 
+        public enum OUT_CLOSERESULT
+        {
+            OUT_CLOSERESULT_OK = 0,
+            OUT_CLOSERESULT_RESET_INVALIDHANDLE = 1,
+            OUT_CLOSERESULT_CLOSE_STILLPLAYING = 2,
+            OUT_CLOSERESULT_CLOSE_INVALIDHANDLE = 3,
+            OUT_CLOSERESULT_CLOSE_NOMEMORY = 4
+        }
+
+        public enum OUT_SENDSHORTRESULT
+        {
+            OUT_SENDSHORTRESULT_OK = 0,
+            OUT_SENDSHORTRESULT_BADOPENMODE = 1,
+            OUT_SENDSHORTRESULT_NOTREADY = 2,
+            OUT_SENDSHORTRESULT_INVALIDHANDLE = 3,
+            OUT_SENDSHORTRESULT_INVALIDCLIENT = 101,
+            OUT_SENDSHORTRESULT_INVALIDPORT = 102,
+            OUT_SENDSHORTRESULT_WRONGENDPOINT = 103,
+            OUT_SENDSHORTRESULT_UNKNOWNENDPOINT = 104,
+            OUT_SENDSHORTRESULT_COMMUNICATIONERROR = 105,
+            OUT_SENDSHORTRESULT_SERVERSTARTERROR = 106,
+            OUT_SENDSHORTRESULT_WRONGTHREAD = 107,
+            OUT_SENDSHORTRESULT_NOTPERMITTED = 108,
+            OUT_SENDSHORTRESULT_UNKNOWNERROR = 109
+        }
+
         #endregion
 
         #region Delegates
@@ -62,9 +88,53 @@ namespace Melanchall.DryWetMidi.Devices
         // TODO: remove
         public abstract IntPtr Api_GetHandle(IntPtr handle);
 
-        public abstract void Api_CloseDevice(IntPtr handle);
+        public abstract OUT_CLOSERESULT Api_CloseDevice(IntPtr handle);
 
-        public abstract int Api_SendShortEvent(IntPtr handle, int message);
+        public abstract OUT_SENDSHORTRESULT Api_SendShortEvent(IntPtr handle, int message);
+
+        public static void HandleResult(OUT_CLOSERESULT result)
+        {
+            if (result != OUT_CLOSERESULT.OUT_CLOSERESULT_OK)
+                throw new MidiDeviceException(GetErrorDescription(result), (int)result);
+        }
+
+        public static void HandleResult(OUT_SENDSHORTRESULT result)
+        {
+            if (result != OUT_SENDSHORTRESULT.OUT_SENDSHORTRESULT_OK)
+                throw new MidiDeviceException(GetErrorDescription(result), (int)result);
+        }
+
+        private static string GetErrorDescription(OUT_CLOSERESULT result)
+        {
+            switch (result)
+            {
+                case OUT_CLOSERESULT.OUT_CLOSERESULT_CLOSE_NOMEMORY:
+                    return $"There is no memory in the system to close the device ({result}).";
+            }
+
+            return GetInternalErrorDescription(result);
+        }
+
+        private static string GetErrorDescription(OUT_SENDSHORTRESULT result)
+        {
+            switch (result)
+            {
+                case OUT_SENDSHORTRESULT.OUT_SENDSHORTRESULT_NOTREADY:
+                    return $"The hardware is busy with other data ({result}).";
+                case OUT_SENDSHORTRESULT.OUT_SENDSHORTRESULT_COMMUNICATIONERROR:
+                case OUT_SENDSHORTRESULT.OUT_SENDSHORTRESULT_SERVERSTARTERROR:
+                    return $"MIDI server error ({result}).";
+                case OUT_SENDSHORTRESULT.OUT_SENDSHORTRESULT_NOTPERMITTED:
+                    return $"The process doesn’t have privileges for the requested operation ({result}).";
+            }
+
+            return GetInternalErrorDescription(result);
+        }
+
+        private static string GetInternalErrorDescription(object result)
+        {
+            return $"Internal error ({result}).";
+        }
 
         #endregion
     }

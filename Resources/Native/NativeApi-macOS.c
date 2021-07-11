@@ -233,19 +233,6 @@ IN_DISCONNECTRESULT DisconnectFromInputDevice(void* handle)
 	return IN_DISCONNECTRESULT_OK;
 }
 
-// delete
-int GetEventDataFromInputDevice(MIDIPacketList* packetList, char* data)
-{
-    MIDIPacket packet = packetList->packet[0];
-    
-    for (int i = 0; i < packet.length; i++)
-    {
-        data[i] = packet.data[i];
-    }
-    
-    return 0;
-}
-
 int GetShortEventFromInputDevice(MIDIPacketList* packetList, int* message)
 {
     MIDIPacket packet = packetList->packet[0];
@@ -279,7 +266,7 @@ int GetOutputDevicesCount()
     return (int)MIDIGetNumberOfDestinations();
 }
 
-int GetOutputDeviceInfo(int deviceIndex, void** info)
+OUT_GETINFORESULT GetOutputDeviceInfo(int deviceIndex, void** info)
 {
     OutputDeviceInfo* outputDeviceInfo = malloc(sizeof(OutputDeviceInfo));
     
@@ -292,7 +279,7 @@ int GetOutputDeviceInfo(int deviceIndex, void** info)
     
     *info = outputDeviceInfo;
     
-    return 0;
+    return OUT_GETINFORESULT_OK;
 }
 
 char* GetOutputDeviceName(void* info)
@@ -337,20 +324,20 @@ OUT_OPENRESULT OpenOutputDevice_Apple(void* info, void* sessionHandle, void** ha
 	CFStringRef portNameRef = CFSTR("OUT");
     MIDIOutputPortCreate(pSessionHandle->clientRef, portNameRef, &outputDeviceHandle->portRef);
     
-    // ...
-    
     return OUT_OPENRESULT_OK;
 }
 
-void CloseOutputDevice(void* handle)
+OUT_CLOSERESULT CloseOutputDevice(void* handle)
 {
 	OutputDeviceHandle* outputDeviceHandle = (OutputDeviceHandle*)handle;
 
 	free(outputDeviceHandle->info);
 	free(outputDeviceHandle);
+	
+	return OUT_CLOSERESULT_OK;
 }
 
-int SendShortEventToOutputDevice(void* handle, int message)
+OUT_SENDSHORTRESULT SendShortEventToOutputDevice(void* handle, int message)
 {
     MIDIPacket packet;
     
@@ -365,9 +352,22 @@ int SendShortEventToOutputDevice(void* handle, int message)
     
     OutputDeviceHandle* outputDeviceHandle = (OutputDeviceHandle*)handle;
     
-    OSStatus res = MIDISend(outputDeviceHandle->portRef, outputDeviceHandle->info->endpointRef, &packetList);
-    if (res != noErr)
-        return 100;
+    OSStatus result = MIDISend(outputDeviceHandle->portRef, outputDeviceHandle->info->endpointRef, &packetList);
+	if (result != noErr)
+	{
+		switch (result)
+	    {
+	        case kMIDIInvalidClient: return OUT_SENDSHORTRESULT_INVALIDCLIENT;
+			case kMIDIInvalidPort: return OUT_SENDSHORTRESULT_INVALIDPORT;
+			case kMIDIWrongEndpointType: return OUT_SENDSHORTRESULT_WRONGENDPOINT;
+			case kMIDIUnknownEndpoint: return OUT_SENDSHORTRESULT_UNKNOWNENDPOINT;
+			case kMIDIMessageSendErr: return OUT_SENDSHORTRESULT_COMMUNICATIONERROR;
+			case kMIDIServerStartErr: return OUT_SENDSHORTRESULT_SERVERSTARTERROR;
+			case kMIDIWrongThread: return OUT_SENDSHORTRESULT_WRONGTHREAD;
+			case kMIDINotPermitted: return OUT_SENDSHORTRESULT_NOTPERMITTED;
+			case kMIDIUnknownError: return OUT_SENDSHORTRESULT_UNKNOWNERROR;
+	    }
+	}
     
-    return 0;
+    return OUT_SENDSHORTRESULT_OK;
 }

@@ -115,9 +115,6 @@ namespace Melanchall.DryWetMidi.Devices
         public abstract IN_CONNECTRESULT Api_Connect(IntPtr handle);
 
         public abstract IN_DISCONNECTRESULT Api_Disconnect(IntPtr handle);
-        
-        // TODO: remove
-        public abstract int Api_GetEventData(IntPtr packetList, IntPtr data);
 
         public abstract int Api_GetShortEvent(IntPtr packetList, out int message);
 

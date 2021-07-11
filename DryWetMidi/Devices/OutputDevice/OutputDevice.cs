@@ -40,6 +40,8 @@ namespace Melanchall.DryWetMidi.Devices
 
         private readonly HashSet<IntPtr> _sysExHeadersPointers = new HashSet<IntPtr>();
 
+        private readonly OutputDeviceApi.API_TYPE _apiType;
+
         #endregion
 
         #region Constructor
@@ -47,6 +49,7 @@ namespace Melanchall.DryWetMidi.Devices
         internal OutputDevice(IntPtr info)
             : base(info)
         {
+            _apiType = OutputDeviceApiProvider.Api.Api_GetApiType();
         }
 
         #endregion
@@ -85,7 +88,8 @@ namespace Melanchall.DryWetMidi.Devices
             if (midiEvent is ChannelEvent || midiEvent is SystemCommonEvent || midiEvent is SystemRealTimeEvent)
             {
                 var message = PackShortEvent(midiEvent);
-                OutputDeviceApiProvider.Api.Api_SendShortEvent(_handle, message);
+                OutputDeviceApi.HandleResult(
+                    OutputDeviceApiProvider.Api.Api_SendShortEvent(_handle, message));
                 OnEventSent(midiEvent);
             }
             else
@@ -214,9 +218,8 @@ namespace Melanchall.DryWetMidi.Devices
                 return;
 
             var sessionHandle = MidiDevicesSession.GetSessionHandle();
-            var apiType = OutputDeviceApiProvider.Api.Api_GetApiType();
 
-            switch (apiType)
+            switch (_apiType)
             {
                 case OutputDeviceApi.API_TYPE.API_TYPE_WINMM:
                     {
@@ -257,6 +260,8 @@ namespace Melanchall.DryWetMidi.Devices
 
             _handle = IntPtr.Zero;
             _windowsHandle = IntPtr.Zero;
+
+            MidiDevicesSession.ExitSession();
         }
 
         private void SendSysExEvent(SysExEvent sysExEvent)

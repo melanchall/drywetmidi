@@ -44,10 +44,10 @@ namespace Melanchall.DryWetMidi.Devices
         private static extern IntPtr GetOutputDeviceHandle(IntPtr handle);
 
         [DllImport(LibraryName, ExactSpelling = true)]
-        private static extern void CloseOutputDevice(IntPtr handle);
+        private static extern OUT_CLOSERESULT CloseOutputDevice(IntPtr handle);
 
         [DllImport(LibraryName, ExactSpelling = true)]
-        private static extern int SendShortEventToOutputDevice(IntPtr handle, int message);
+        private static extern OUT_SENDSHORTRESULT SendShortEventToOutputDevice(IntPtr handle, int message);
 
         #endregion
 
@@ -107,12 +107,12 @@ namespace Melanchall.DryWetMidi.Devices
             return GetOutputDeviceHandle(handle);
         }
 
-        public override void Api_CloseDevice(IntPtr handle)
+        public override OUT_CLOSERESULT Api_CloseDevice(IntPtr handle)
         {
-            CloseOutputDevice(handle);
+            return CloseOutputDevice(handle);
         }
 
-        public override int Api_SendShortEvent(IntPtr handle, int message)
+        public override OUT_SENDSHORTRESULT Api_SendShortEvent(IntPtr handle, int message)
         {
             return SendShortEventToOutputDevice(handle, message);
         }

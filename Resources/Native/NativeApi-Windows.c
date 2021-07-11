@@ -594,13 +594,16 @@ OUT_OPENRESULT OpenOutputDevice_Winmm(void* info, void* sessionHandle, DWORD_PTR
 
 	HMIDIOUT outHandle;
 	MMRESULT result = midiOutOpen(&outHandle, outputDeviceInfo->deviceIndex, callback, 0, CALLBACK_FUNCTION);
-	switch (result)
+	if (result != MMSYSERR_NOERROR)
 	{
-		case MMSYSERR_ALLOCATED: return OUT_OPENRESULT_ALLOCATED;
-		case MMSYSERR_BADDEVICEID: return OUT_OPENRESULT_BADDEVICEID;
-		case MMSYSERR_INVALFLAG: return OUT_OPENRESULT_INVALIDFLAG;
-		case MMSYSERR_INVALPARAM: return OUT_OPENRESULT_INVALIDSTRUCTURE;
-		case MMSYSERR_NOMEM: return OUT_OPENRESULT_NOMEMORY;
+	    switch (result)
+	    {
+	        case MMSYSERR_ALLOCATED: return OUT_OPENRESULT_ALLOCATED;
+	        case MMSYSERR_BADDEVICEID: return OUT_OPENRESULT_BADDEVICEID;
+	        case MMSYSERR_INVALFLAG: return OUT_OPENRESULT_INVALIDFLAG;
+	        case MMSYSERR_INVALPARAM: return OUT_OPENRESULT_INVALIDSTRUCTURE;
+	        case MMSYSERR_NOMEM: return OUT_OPENRESULT_NOMEMORY;
+	    }
 	}
 
 	outputDeviceHandle->handle = outHandle;
@@ -617,22 +620,50 @@ HMIDIOUT GetOutputDeviceHandle(void* handle)
 	return outputDeviceHandle->handle;
 }
 
-void CloseOutputDevice(void* handle)
+OUT_CLOSERESULT CloseOutputDevice(void* handle)
 {
 	OutputDeviceHandle* outputDeviceHandle = (OutputDeviceHandle*)handle;
 
-	midiOutReset(outputDeviceHandle->handle);
-	midiOutClose(outputDeviceHandle->handle);
+	MMRESULT result = midiOutReset(outputDeviceHandle->handle);
+	if (result != MMSYSERR_NOERROR)
+	{
+		switch (result)
+	    {
+	        case MMSYSERR_INVALHANDLE: return OUT_CLOSERESULT_RESET_INVALIDHANDLE;
+	    }
+	}
+	
+	result = midiOutClose(outputDeviceHandle->handle);
+	if (result != MMSYSERR_NOERROR)
+	{
+		switch (result)
+	    {
+	        case MIDIERR_STILLPLAYING: return OUT_CLOSERESULT_CLOSE_STILLPLAYING;
+			case MMSYSERR_INVALHANDLE: return OUT_CLOSERESULT_CLOSE_INVALIDHANDLE;
+			case MMSYSERR_NOMEM: return OUT_CLOSERESULT_CLOSE_NOMEMORY;
+	    }
+	}
 
 	free(outputDeviceHandle->info);
 	free(outputDeviceHandle);
+	
+	return OUT_CLOSERESULT_OK;
 }
 
-int SendShortEventToOutputDevice(void* handle, int message)
+OUT_SENDSHORTRESULT SendShortEventToOutputDevice(void* handle, int message)
 {
     OutputDeviceHandle* outputDeviceHandle = (OutputDeviceHandle*)handle;
 
-    midiOutShortMsg(outputDeviceHandle->handle, (DWORD)message);
+    MMRESULT result = midiOutShortMsg(outputDeviceHandle->handle, (DWORD)message);
+	if (result != MMSYSERR_NOERROR)
+	{
+		switch (result)
+	    {
+	        case MIDIERR_BADOPENMODE: return OUT_SENDSHORTRESULT_BADOPENMODE;
+	        case MIDIERR_NOTREADY: return OUT_SENDSHORTRESULT_NOTREADY;
+	        case MMSYSERR_INVALHANDLE: return OUT_SENDSHORTRESULT_INVALIDHANDLE;
+	    }
+	}
 
-    return 0;
+    return OUT_SENDSHORTRESULT_OK;
 }
