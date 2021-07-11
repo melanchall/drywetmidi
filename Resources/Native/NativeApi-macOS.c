@@ -1,6 +1,7 @@
 #include <CoreFoundation/CoreFoundation.h>
 #include <CoreMIDI/CoreMIDI.h>
 #include <pthread.h>
+#include <mach/mach_time.h>
 
 #include "NativeApi-Constants.h"
 
@@ -21,13 +22,29 @@ typedef struct
     int interval;
 } TickGeneratorInfo;
 
+uint64_t GetTimeInMilliseconds()
+{
+  struct mach_timebase_info convfact;
+  mach_timebase_info(&convfact);
+  uint64_t tick = mach_absolute_time();
+  return (tick * convfact.numer) / (convfact.denom * 1000000);
+}
+
 void* RunLoopThreadRoutine(void* data)
 {
     TickGeneratorInfo* tickGeneratorInfo = (TickGeneratorInfo*)data;
+	
+	uint64_t lastMs = GetTimeInMilliseconds();
     
+	tickGeneratorInfo->active = 1;
+	
     while (tickGeneratorInfo->active == 1)
     {
-        usleep(tickGeneratorInfo->interval * 1000);
+		uint64_t ms = GetTimeInMilliseconds();
+		if (ms - lastMs < tickGeneratorInfo->interval)
+			continue;
+		
+		lastMs = ms;
         tickGeneratorInfo->callback();
     }
 	
@@ -40,13 +57,15 @@ TG_STARTRESULT StartHighPrecisionTickGenerator_Apple(int interval, void (*callba
 {
     TickGeneratorInfo* tickGeneratorInfo = malloc(sizeof(TickGeneratorInfo));
     
-    tickGeneratorInfo->active = 1;
+	tickGeneratorInfo->active = 0;
     tickGeneratorInfo->interval = interval;
     tickGeneratorInfo->callback = callback;
     
     *info = tickGeneratorInfo;
     
     pthread_create(&tickGeneratorInfo->thread, NULL, RunLoopThreadRoutine, tickGeneratorInfo);
+	
+	while (tickGeneratorInfo->active == 0) { }
     
     return TG_STARTRESULT_OK;
 }
@@ -56,10 +75,6 @@ TG_STOPRESULT StopHighPrecisionTickGenerator(void* info)
     TickGeneratorInfo* tickGeneratorInfo = (TickGeneratorInfo*)info;
     
     tickGeneratorInfo->active = 0;
-    
-    //pthread_join(tickGeneratorInfo->thread, NULL);
-    
-    //free(info);
     
     return TG_STOPRESULT_OK;
 }

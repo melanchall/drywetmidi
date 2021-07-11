@@ -354,11 +354,16 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 var playbackFinished = WaitOperations.Wait(() => !playback.IsRunning, timeout);
                 Assert.IsTrue(playbackFinished, $"Playback is not finished for {timeout}.");
 
-                WaitExpectedTimes(expectedTimes, times);
-
-                PlaybackCurrentTimeWatcher.Instance.Stop();
-                PlaybackCurrentTimeWatcher.Instance.CurrentTimeChanged -= currentTimeChangedHandler;
-                PlaybackCurrentTimeWatcher.Instance.RemovePlayback(playback);
+                try
+                {
+                    WaitExpectedTimes(expectedTimes, times);
+                }
+                finally
+                {
+                    PlaybackCurrentTimeWatcher.Instance.Stop();
+                    PlaybackCurrentTimeWatcher.Instance.CurrentTimeChanged -= currentTimeChangedHandler;
+                    PlaybackCurrentTimeWatcher.Instance.RemovePlayback(playback);
+                }
             }
 
             CheckTimes(expectedTimes, times);
@@ -368,7 +373,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
         {
             var timeout = TimeSpan.FromMilliseconds(30);
             var timesReceived = WaitOperations.Wait(() => times.Count >= expectedTimes.Count, timeout);
-            Assert.IsTrue(timesReceived, $"Times are not received for {timeout}.");
+            Assert.IsTrue(timesReceived, $"Times are not received for [{timeout}] (actual count is {times.Count} ({string.Join(", ", times)}); expected is {expectedTimes.Count} ({string.Join(", ", expectedTimes)})).");
         }
 
         private static void CheckTimes(ICollection<ITimeSpan> expectedTimes, ICollection<ITimeSpan> actualTimes, string message = null)
@@ -384,7 +389,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 var actualType = actual.GetType();
                 Assert.AreEqual(expectedType, actualType, "Types are different.");
 
-                Assert.IsTrue(AreTimeSpansEqual(expected, actual), $"Time is invalid. Expected {expected} but received {actual}. {message}");
+                Assert.IsTrue(AreTimeSpansEqual(expected, actual), $"Time is invalid. Expected [{expected}] but received [{actual}]. {message}");
             }
         }
 
