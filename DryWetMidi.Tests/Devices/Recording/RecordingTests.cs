@@ -8,6 +8,7 @@ using Melanchall.DryWetMidi.Interaction;
 using Melanchall.DryWetMidi.Tests.Utilities;
 using NUnit.Framework;
 using Melanchall.DryWetMidi.Tests.Common;
+using System.Linq;
 
 namespace Melanchall.DryWetMidi.Tests.Devices
 {
@@ -114,6 +115,8 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 expectedRecordedTimes.Add(currentTime > stopAfter ? currentTime - stopPeriod : currentTime);
             }
 
+            var timeout = expectedTimes.Last() + SendReceiveUtilities.MaximumEventSendReceiveDelay;
+
             using (var outputDevice = OutputDevice.GetByName(SendReceiveUtilities.DeviceToTestOnName))
             {
                 SendReceiveUtilities.WarmUpDevice(outputDevice);
@@ -141,7 +144,10 @@ namespace Melanchall.DryWetMidi.Tests.Devices
 
                         recording.Start();
 
-                        WaitOperations.Wait(() => !sendingThread.IsAlive);
+                        var areEventsReceived = WaitOperations.Wait(
+                            () => !sendingThread.IsAlive && receivedEvents.Count >= expectedTimes.Count,
+                            timeout);
+                        Assert.IsTrue(areEventsReceived, $"Events are not received for [{timeout}].");
 
                         CompareSentReceivedEvents(sentEvents, receivedEvents, expectedTimes);
 

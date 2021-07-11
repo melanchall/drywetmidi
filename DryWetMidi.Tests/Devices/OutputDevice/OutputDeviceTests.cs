@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Threading;
-using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Devices;
 using Melanchall.DryWetMidi.Tests.Common;
@@ -31,13 +29,16 @@ namespace Melanchall.DryWetMidi.Tests.Devices
         }
 
         [Retry(RetriesNumber)]
-        [Test]
-        public void SendEvent_Channel()
+        [TestCase(MidiEventType.ChannelAftertouch)]
+        [TestCase(MidiEventType.ControlChange)]
+        [TestCase(MidiEventType.NoteAftertouch)]
+        [TestCase(MidiEventType.NoteOff)]
+        [TestCase(MidiEventType.NoteOn)]
+        [TestCase(MidiEventType.PitchBend)]
+        [TestCase(MidiEventType.ProgramChange)]
+        public void SendEvent_Channel(MidiEventType eventType)
         {
-            SendEvent(new NoteOnEvent((SevenBitNumber)45, (SevenBitNumber)89)
-            {
-                Channel = (FourBitNumber)6
-            });
+            SendEvent(eventType, typeof(ChannelEvent));
         }
 
         [Retry(RetriesNumber)]
@@ -48,17 +49,25 @@ namespace Melanchall.DryWetMidi.Tests.Devices
         }
 
         [Retry(RetriesNumber)]
-        [Test]
-        public void SendEvent_SystemCommon()
+        [TestCase(MidiEventType.MidiTimeCode)]
+        [TestCase(MidiEventType.SongPositionPointer)]
+        [TestCase(MidiEventType.SongSelect)]
+        [TestCase(MidiEventType.TuneRequest)]
+        public void SendEvent_SystemCommon(MidiEventType eventType)
         {
-            SendEvent(new TuneRequestEvent());
+            SendEvent(eventType, typeof(SystemCommonEvent));
         }
 
         [Retry(RetriesNumber)]
-        [Test]
-        public void SendEvent_SystemRealTime()
+        [TestCase(MidiEventType.ActiveSensing)]
+        [TestCase(MidiEventType.Continue)]
+        [TestCase(MidiEventType.Reset)]
+        [TestCase(MidiEventType.Start)]
+        [TestCase(MidiEventType.Stop)]
+        [TestCase(MidiEventType.TimingClock)]
+        public void SendEvent_SystemRealTime(MidiEventType eventType)
         {
-            SendEvent(new StartEvent());
+            SendEvent(eventType, typeof(SystemRealTimeEvent));
         }
 
         [Test]
@@ -152,7 +161,17 @@ namespace Melanchall.DryWetMidi.Tests.Devices
 
         #region Private methods
 
-        public void SendEvent(MidiEvent midiEvent)
+        private void SendEvent(MidiEventType eventType, Type baseType)
+        {
+            var midiEvent = TypesProvider.GetAllEventTypes()
+                .Where(t => baseType.IsAssignableFrom(t))
+                .Select(t => (MidiEvent)Activator.CreateInstance(t))
+                .First(e => e.EventType == eventType);
+
+            SendEvent(midiEvent);
+        }
+
+        private void SendEvent(MidiEvent midiEvent)
         {
             var deviceName = MidiDevicesNames.DeviceA;
 
