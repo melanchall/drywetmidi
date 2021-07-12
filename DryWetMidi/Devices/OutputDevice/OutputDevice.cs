@@ -94,14 +94,14 @@ namespace Melanchall.DryWetMidi.Devices
             }
             else
             {
-                if (_windowsHandle != IntPtr.Zero)
+                var sysExEvent = midiEvent as SysExEvent;
+                if (sysExEvent != null)
                 {
-                    var sysExEvent = midiEvent as SysExEvent;
-                    if (sysExEvent != null)
+                    if (_windowsHandle != IntPtr.Zero)
                         SendSysExEvent(sysExEvent);
+                    else
+                        throw new NotImplementedException("Sys ex events sending not implemented for Apple API.");
                 }
-                else
-                    throw new NotImplementedException("Sys ex events sending not implemented for Apple API.");
             }
         }
 

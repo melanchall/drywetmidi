@@ -157,32 +157,22 @@ namespace Melanchall.DryWetMidi.Tests.Devices
             var notesStarted = new List<Note>();
             var notesFinished = new List<Note>();
 
-            using (var outputDevice = OutputDevice.GetByName(SendReceiveUtilities.DeviceToTestOnName))
+            using (var playback = eventsForPlayback.GetPlayback(tempoMap))
             {
-                SendReceiveUtilities.WarmUpDevice(outputDevice);
-                outputDevice.EventSent += (_, e) => sentEvents.Add(new SentEvent(e.Event, stopwatch.Elapsed));
-
-                using (var playback = eventsForPlayback.GetPlayback(tempoMap, outputDevice))
+                playback.EventPlayed += (_, e) =>
                 {
-                    playback.EventPlayed += (_, e) =>
+                    lock (playbackContext.ReceivedEventsLockObject)
                     {
-                        lock (playbackContext.ReceivedEventsLockObject)
-                        {
-                            playedEvents.Add(new ReceivedEvent(e.Event, stopwatch.Elapsed));
-                        }
-                    };
-
-                    using (var inputDevice = InputDevice.GetByName(SendReceiveUtilities.DeviceToTestOnName))
-                    {
-                        inputDevice.StartEventsListening();
-                        stopwatch.Start();
-                        playback.Start();
-
-                        var timeout = TimeSpan.FromTicks(eventsToSend.Sum(e => e.Delay.Ticks)) + SendReceiveUtilities.MaximumEventSendReceiveDelay;
-                        var playbackStopped = WaitOperations.Wait(() => !playback.IsRunning, timeout);
-                        Assert.IsTrue(playbackStopped, "Playback is running after completed.");
+                        playedEvents.Add(new ReceivedEvent(e.Event, stopwatch.Elapsed));
                     }
-                }
+                };
+                    
+                stopwatch.Start();
+                playback.Start();
+
+                var timeout = TimeSpan.FromTicks(eventsToSend.Sum(e => e.Delay.Ticks)) + SendReceiveUtilities.MaximumEventSendReceiveDelay;
+                var playbackStopped = WaitOperations.Wait(() => !playback.IsRunning, timeout);
+                Assert.IsTrue(playbackStopped, "Playback is running after completed.");
             }
 
             CompareReceivedEvents(playedEvents, expectedPlayedEvents.ToList());
@@ -757,7 +747,13 @@ namespace Melanchall.DryWetMidi.Tests.Devices
             IReadOnlyList<ReceivedEvent> receivedEvents,
             IReadOnlyList<ReceivedEvent> expectedReceivedEvents)
         {
-            Assert.AreEqual(expectedReceivedEvents.Count, receivedEvents.Count, "Received events count is invalid.");
+            Assert.AreEqual(
+                expectedReceivedEvents.Count,
+                receivedEvents.Count,
+                $"Received events count is invalid. Actual events:{Environment.NewLine}" +
+                    string.Join(Environment.NewLine, receivedEvents) +
+                    $"{Environment.NewLine}Expected events:{Environment.NewLine}" +
+                    string.Join(Environment.NewLine, expectedReceivedEvents));
 
             for (var i = 0; i < receivedEvents.Count; i++)
             {

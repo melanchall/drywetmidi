@@ -163,14 +163,22 @@ namespace Melanchall.DryWetMidi.Tests.Devices
 
             WaitOperations.Wait(() => !playback1.IsRunning && !playback2.IsRunning);
 
-            PlaybackCurrentTimeWatcher.Instance.Stop();
-            PlaybackCurrentTimeWatcher.Instance.RemovePlayback(playback1);
-            PlaybackCurrentTimeWatcher.Instance.RemovePlayback(playback2);
+            try
+            {
+                WaitExpectedTimes(expectedTimes1, times[playback1]);
+                WaitExpectedTimes(expectedTimes2, times[playback2]);
+            }
+            finally
+            {
+                PlaybackCurrentTimeWatcher.Instance.Stop();
+                PlaybackCurrentTimeWatcher.Instance.RemovePlayback(playback1);
+                PlaybackCurrentTimeWatcher.Instance.RemovePlayback(playback2);
 
-            PlaybackCurrentTimeWatcher.Instance.CurrentTimeChanged -= currentTimeChangedHandler;
+                PlaybackCurrentTimeWatcher.Instance.CurrentTimeChanged -= currentTimeChangedHandler;
 
-            playback1.Dispose();
-            playback2.Dispose();
+                playback1.Dispose();
+                playback2.Dispose();
+            }
 
             CheckTimes(expectedTimes1, times[playback1], "Playback 1.");
             CheckTimes(expectedTimes2, times[playback2], "Playback 2.");
@@ -208,6 +216,8 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 new MidiTimeSpan(500)
             };
 
+            TimeSpan removeAfter = TimeConverter.ConvertTo<MetricTimeSpan>(200, tempoMap);
+
             PlaybackCurrentTimeWatcher.Instance.PollingInterval = TimeConverter.ConvertTo<MetricTimeSpan>(100, tempoMap);
 
             PlaybackCurrentTimeWatcher.Instance.AddPlayback(playback1, TimeSpanType.Midi);
@@ -228,18 +238,27 @@ namespace Melanchall.DryWetMidi.Tests.Devices
 
             PlaybackCurrentTimeWatcher.Instance.Start();
 
-            WaitOperations.Wait(TimeConverter.ConvertTo<MetricTimeSpan>(200, tempoMap));
+            WaitOperations.Wait(removeAfter);
             PlaybackCurrentTimeWatcher.Instance.RemovePlayback(playback1);
 
             WaitOperations.Wait(() => !playback1.IsRunning && !playback2.IsRunning);
 
-            PlaybackCurrentTimeWatcher.Instance.Stop();
-            PlaybackCurrentTimeWatcher.Instance.RemovePlayback(playback2);
+            try
+            {
+                WaitExpectedTimes(expectedTimes1, times[playback1]);
+                WaitExpectedTimes(expectedTimes2, times[playback2]);
+            }
+            finally
+            {
 
-            PlaybackCurrentTimeWatcher.Instance.CurrentTimeChanged -= currentTimeChangedHandler;
+                PlaybackCurrentTimeWatcher.Instance.Stop();
+                PlaybackCurrentTimeWatcher.Instance.RemovePlayback(playback2);
 
-            playback1.Dispose();
-            playback2.Dispose();
+                PlaybackCurrentTimeWatcher.Instance.CurrentTimeChanged -= currentTimeChangedHandler;
+
+                playback1.Dispose();
+                playback2.Dispose();
+            }
 
             CheckTimes(expectedTimes1, times[playback1]);
             CheckTimes(expectedTimes2, times[playback2]);

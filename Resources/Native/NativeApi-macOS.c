@@ -354,20 +354,18 @@ OUT_CLOSERESULT CloseOutputDevice(void* handle)
 
 OUT_SENDSHORTRESULT SendShortEventToOutputDevice(void* handle, int message)
 {
-    MIDIPacket packet;
-    
-	packet.length = 3;
-    packet.data[0] = (Byte)(message & 0xFF);
-	packet.data[1] = (Byte)((message >> 8) & 0xFF);
-	packet.data[2] = (Byte)(message >> 16);
-    
-    MIDIPacketList packetList;
-    packetList.numPackets = 1;
-    packetList.packet[0] = packet;
-    
     OutputDeviceHandle* outputDeviceHandle = (OutputDeviceHandle*)handle;
+	
+	Byte buffer[3 + (sizeof( MIDIPacketList ))];
+    MIDIPacketList *packetList = (MIDIPacketList*)buffer;
+    MIDIPacket *packet = MIDIPacketListInit(packetList);
+	
+	MIDITimeStamp timeStamp = 0;
+	Byte data[3] = { (Byte)(message & 0xFF), (Byte)((message >> 8) & 0xFF), (Byte)(message >> 16) };
+	
+    MIDIPacketListAdd(packetList, sizeof(buffer), packet, timeStamp, 3, &data[0]);
     
-    OSStatus result = MIDISend(outputDeviceHandle->portRef, outputDeviceHandle->info->endpointRef, &packetList);
+    OSStatus result = MIDISend(outputDeviceHandle->portRef, outputDeviceHandle->info->endpointRef, packetList);
 	if (result != noErr)
 	{
 		switch (result)
