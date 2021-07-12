@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using Melanchall.DryWetMidi.Devices;
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
@@ -378,7 +377,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
 
         private static void CheckTimes(ICollection<ITimeSpan> expectedTimes, ICollection<ITimeSpan> actualTimes, string message = null)
         {
-            Assert.AreEqual(expectedTimes.Count, actualTimes.Count, $"Count of times is invalid. {message}");
+            Assert.AreEqual(expectedTimes.Count, actualTimes.Count, $"Count of times is invalid. {message} (actual are {string.Join(", ", actualTimes)}, expected are {string.Join(", ", expectedTimes)})");
 
             foreach (var expectedActual in expectedTimes.Zip(actualTimes, (e, a) => new { Expected = e, Actual = a }))
             {

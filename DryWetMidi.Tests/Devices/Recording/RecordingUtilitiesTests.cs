@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using Melanchall.DryWetMidi.Common;
@@ -37,19 +39,20 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 new EventToSend(new ProgramChangeEvent((SevenBitNumber)50), TimeSpan.FromMilliseconds(500)),
             };
 
+            var receivedEvents = new List<ReceivedEvent>();
+            var stopwatch = new Stopwatch();
+
             var waitTimeout = eventsToSend.Aggregate(TimeSpan.Zero, (result, e) => result + e.Delay) +
                 SendReceiveUtilities.MaximumEventSendReceiveDelay;
 
             using (var outputDevice = OutputDevice.GetByName(SendReceiveUtilities.DeviceToTestOnName))
             {
-                SendReceiveUtilities.WarmUpDevice(outputDevice);
+                //SendReceiveUtilities.WarmUpDevice(outputDevice);
 
                 using (var inputDevice = InputDevice.GetByName(SendReceiveUtilities.DeviceToTestOnName))
                 {
-                    var receivedEventsNumber = 0;
-
                     inputDevice.StartEventsListening();
-                    inputDevice.EventReceived += (_, __) => receivedEventsNumber++;
+                    inputDevice.EventReceived += (_, e) => receivedEvents.Add(new ReceivedEvent(e.Event, stopwatch.Elapsed));
 
                     using (var recording = new Recording(tempoMap, inputDevice))
                     {
@@ -58,13 +61,16 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                             SendReceiveUtilities.SendEvents(eventsToSend, outputDevice);
                         });
 
+                        stopwatch.Start();
                         recording.Start();
                         sendingThread.Start();
 
-                        var eventsReceived = WaitOperations.Wait(
-                            () => !sendingThread.IsAlive && receivedEventsNumber == eventsToSend.Length,
-                            waitTimeout);
-                        Assert.IsTrue(eventsReceived, $"Events are not received for [{waitTimeout}].");
+                        var threadAliveTimeout = waitTimeout + TimeSpan.FromSeconds(30);
+                        var threadExited = WaitOperations.Wait(() => !sendingThread.IsAlive, threadAliveTimeout);
+                        Assert.IsTrue(threadExited, $"Sending thread is alive after [{threadAliveTimeout}].");
+
+                        var eventsReceived = WaitOperations.Wait(() => receivedEvents.Count >= eventsToSend.Length, waitTimeout);
+                        Assert.IsTrue(eventsReceived, $"Events are not received for [{waitTimeout}] (received are: {string.Join(", ", receivedEvents)}).");
 
                         recording.Stop();
 

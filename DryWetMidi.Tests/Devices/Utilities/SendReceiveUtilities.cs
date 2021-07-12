@@ -116,7 +116,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
 
         public static void WarmUpDevice(OutputDevice outputDevice)
         {
-            var eventsToSend = Enumerable.Range(0, 100)
+            var eventsToSend = Enumerable.Range(0, 10)
                                          .SelectMany(_ => new MidiEvent[] { new NoteOnEvent(), new NoteOffEvent() })
                                          .Select(e => new EventToSend(e, TimeSpan.FromMilliseconds(10)))
                                          .ToList();

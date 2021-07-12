@@ -119,7 +119,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
 
             using (var outputDevice = OutputDevice.GetByName(SendReceiveUtilities.DeviceToTestOnName))
             {
-                SendReceiveUtilities.WarmUpDevice(outputDevice);
+                //SendReceiveUtilities.WarmUpDevice(outputDevice);
                 outputDevice.EventSent += (_, e) => sentEvents.Add(new SentEvent(e.Event, stopwatch.Elapsed));
 
                 using (var inputDevice = InputDevice.GetByName(SendReceiveUtilities.DeviceToTestOnName))
@@ -144,10 +144,12 @@ namespace Melanchall.DryWetMidi.Tests.Devices
 
                         recording.Start();
 
-                        var areEventsReceived = WaitOperations.Wait(
-                            () => !sendingThread.IsAlive && receivedEvents.Count >= expectedTimes.Count,
-                            timeout);
-                        Assert.IsTrue(areEventsReceived, $"Events are not received for [{timeout}].");
+                        var threadAliveTimeout = timeout + TimeSpan.FromSeconds(30);
+                        var threadExited = WaitOperations.Wait(() => !sendingThread.IsAlive, threadAliveTimeout);
+                        Assert.IsTrue(threadExited, $"Sending thread is alive after [{threadAliveTimeout}].");
+
+                        var areEventsReceived = WaitOperations.Wait(() => receivedEvents.Count >= expectedTimes.Count, timeout);
+                        Assert.IsTrue(areEventsReceived, $"Events are not received for [{timeout}] (received are: {string.Join(", ", receivedEvents)}).");
 
                         CompareSentReceivedEvents(sentEvents, receivedEvents, expectedTimes);
 
