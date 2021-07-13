@@ -356,14 +356,28 @@ OUT_SENDSHORTRESULT SendShortEventToOutputDevice(void* handle, int message)
 {
     OutputDeviceHandle* outputDeviceHandle = (OutputDeviceHandle*)handle;
 	
-	Byte buffer[3 + (sizeof( MIDIPacketList ))];
+	Byte data[3];
+	Byte statusByte = (Byte)(message & 0xFF);
+	data[0] = statusByte;
+	ByteCount dataSize = 1;
+	
+	if (statusByte < 0xF8 && statusByte != 0xF6)
+	{
+		data[1] = (Byte)((message >> 8) & 0xFF);
+		dataSize++;
+		
+		Byte channelStatus = (Byte)(statusByte >> 4);
+		if (channelStatus == 0x8 || channelStatus == 0x9 || channelStatus == 0xA || channelStatus == 0xB || channelStatus == 0xE || statusByte == 0xF2)
+		{
+			data[2] = (Byte)(message >> 16);
+			dataSize++;
+		}
+	}
+	
+	Byte buffer[dataSize + (sizeof(MIDIPacketList))];
     MIDIPacketList *packetList = (MIDIPacketList*)buffer;
-    MIDIPacket *packet = MIDIPacketListInit(packetList);
-	
-	MIDITimeStamp timeStamp = 0;
-	Byte data[3] = { (Byte)(message & 0xFF), (Byte)((message >> 8) & 0xFF), (Byte)(message >> 16) };
-	
-    MIDIPacketListAdd(packetList, sizeof(buffer), packet, timeStamp, 3, &data[0]);
+    MIDIPacket *packet = MIDIPacketListInit(packetList);	
+    MIDIPacketListAdd(packetList, sizeof(buffer), packet, 0, dataSize, &data[0]);
     
     OSStatus result = MIDISend(outputDeviceHandle->portRef, outputDeviceHandle->info->endpointRef, packetList);
 	if (result != noErr)

@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Devices;
 using Melanchall.DryWetMidi.Tests.Common;
@@ -29,33 +31,10 @@ namespace Melanchall.DryWetMidi.Tests.Devices
         }
 
         [Retry(RetriesNumber)]
-        [TestCase(MidiEventType.ChannelAftertouch)]
-        [TestCase(MidiEventType.ControlChange)]
-        [TestCase(MidiEventType.NoteAftertouch)]
-        [TestCase(MidiEventType.NoteOff)]
-        [TestCase(MidiEventType.NoteOn)]
-        [TestCase(MidiEventType.PitchBend)]
-        [TestCase(MidiEventType.ProgramChange)]
-        public void SendEvent_Channel(MidiEventType eventType)
-        {
-            SendEvent(eventType, typeof(ChannelEvent));
-        }
-
-        [Retry(RetriesNumber)]
         [Test]
         public void SendEvent_SysEx()
         {
             SendEvent(new NormalSysExEvent(new byte[] { 0x5F, 0x40, 0xF7 }));
-        }
-
-        [Retry(RetriesNumber)]
-        [TestCase(MidiEventType.MidiTimeCode)]
-        [TestCase(MidiEventType.SongPositionPointer)]
-        [TestCase(MidiEventType.SongSelect)]
-        [TestCase(MidiEventType.TuneRequest)]
-        public void SendEvent_SystemCommon(MidiEventType eventType)
-        {
-            SendEvent(eventType, typeof(SystemCommonEvent));
         }
 
         [Retry(RetriesNumber)]
@@ -65,9 +44,32 @@ namespace Melanchall.DryWetMidi.Tests.Devices
         [TestCase(MidiEventType.Start)]
         [TestCase(MidiEventType.Stop)]
         [TestCase(MidiEventType.TimingClock)]
-        public void SendEvent_SystemRealTime(MidiEventType eventType)
+        [TestCase(MidiEventType.MidiTimeCode)]
+        [TestCase(MidiEventType.SongPositionPointer)]
+        [TestCase(MidiEventType.SongSelect)]
+        [TestCase(MidiEventType.TuneRequest)]
+        [TestCase(MidiEventType.ChannelAftertouch)]
+        [TestCase(MidiEventType.ControlChange)]
+        [TestCase(MidiEventType.NoteAftertouch)]
+        [TestCase(MidiEventType.NoteOff)]
+        [TestCase(MidiEventType.NoteOn)]
+        [TestCase(MidiEventType.PitchBend)]
+        [TestCase(MidiEventType.ProgramChange)]
+        public void SendEvent_Short_Default(MidiEventType eventType)
         {
-            SendEvent(eventType, typeof(SystemRealTimeEvent));
+            var midiEvent = TypesProvider.GetAllEventTypes()
+                .Where(t => !typeof(SysExEvent).IsAssignableFrom(t) && !typeof(MetaEvent).IsAssignableFrom(t))
+                .Select(t => (MidiEvent)Activator.CreateInstance(t))
+                .First(e => e.EventType == eventType);
+
+            SendEvent(midiEvent);
+        }
+
+        [Retry(RetriesNumber)]
+        [TestCaseSource(nameof(GetNonDefaultShortEvents))]
+        public void SendEvent_Short_NonDefault(MidiEvent midiEvent)
+        {
+            SendEvent(midiEvent);
         }
 
         [Test]
@@ -161,15 +163,19 @@ namespace Melanchall.DryWetMidi.Tests.Devices
 
         #region Private methods
 
-        private void SendEvent(MidiEventType eventType, Type baseType)
+        private static IEnumerable<MidiEvent> GetNonDefaultShortEvents() => new MidiEvent[]
         {
-            var midiEvent = TypesProvider.GetAllEventTypes()
-                .Where(t => baseType.IsAssignableFrom(t))
-                .Select(t => (MidiEvent)Activator.CreateInstance(t))
-                .First(e => e.EventType == eventType);
-
-            SendEvent(midiEvent);
-        }
+            new MidiTimeCodeEvent(MidiTimeCodeComponent.MinutesLsb, (FourBitNumber)10),
+            new SongPositionPointerEvent(1234),
+            new SongSelectEvent((SevenBitNumber)30),
+            new ChannelAftertouchEvent((SevenBitNumber)70) { Channel = (FourBitNumber)7 },
+            new ControlChangeEvent((SevenBitNumber)90, (SevenBitNumber)60) { Channel = (FourBitNumber)1 },
+            new NoteAftertouchEvent((SevenBitNumber)75, (SevenBitNumber)38) { Channel = (FourBitNumber)2 },
+            new NoteOffEvent((SevenBitNumber)127, (SevenBitNumber)21) { Channel = (FourBitNumber)10 },
+            new NoteOnEvent((SevenBitNumber)7, (SevenBitNumber)127) { Channel = (FourBitNumber)15 },
+            new PitchBendEvent(10000) { Channel = (FourBitNumber)8 },
+            new ProgramChangeEvent((SevenBitNumber)127) { Channel = (FourBitNumber)6 },
+        };
 
         private void SendEvent(MidiEvent midiEvent)
         {
