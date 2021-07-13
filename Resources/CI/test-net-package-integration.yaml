@@ -9,6 +9,8 @@ trigger:
     - 'DryWetMidi/*'
     - 'Resources/CI/build-artifacts-library.yaml'
     - 'Resources/CI/Templates/stage-build-native-libs.yaml'
+    - 'Resources/CI/Templates/step-create-ports-macos.yaml'
+    - 'Resources/CI/Templates/step-create-ports-windows.yaml'
 
 pr: none
 
@@ -65,12 +67,13 @@ stages:
         path: '$(Pipeline.Workspace)\NuGetPackage'
         artifact: NuGetPackage
         
-    - task: PowerShell@2
-      displayName: Setup MIDI ports for devices API tests for Windows
-      condition: eq(variables.vmImage, 'windows-latest')
-      inputs:
-        targetType: filePath
-        filePath: '$(Build.SourcesDirectory)/Resources/Scripts/Setup MIDI ports.ps1'
+    - template: Templates/step-create-ports-windows.yaml
+      parameters:
+        enabled: eq(variables.vmImage, 'windows-latest')
+    
+    - template: Templates/step-create-ports-macos.yaml
+      parameters:
+        enabled: eq(variables.vmImage, 'macOS-latest')
     
     - task: UseDotNet@2
       displayName: 'Use .NET 5'
@@ -125,7 +128,6 @@ stages:
 
     - task: PowerShell@2
       displayName: Run test program
-      condition: eq(variables.vmImage, 'windows-latest')
       inputs:
         targetType: 'inline'
         script: |

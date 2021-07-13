@@ -11,6 +11,7 @@ trigger:
     - 'DryWetMidi.Tests.Common/*'
     - 'Resources/CI/mac-test-netcore-devices.yaml'
     - 'Resources/CI/Templates/stage-build-native-libs.yaml'
+    - 'Resources/CI/Templates/step-create-ports-macos.yaml'
     - 'Resources/Native/*'
     - 'Resources/Utilities/CreateLoopbackPort_macOS/*'
 
@@ -25,6 +26,7 @@ pr:
     - 'DryWetMidi.Tests.Common/*'
     - 'Resources/CI/mac-test-netcore-devices.yaml'
     - 'Resources/CI/Templates/stage-build-native-libs.yaml'
+    - 'Resources/CI/Templates/step-create-ports-macos.yaml'
     - 'Resources/Native/*'
     - 'Resources/Utilities/CreateLoopbackPort_macOS/*'
 
@@ -96,14 +98,9 @@ stages:
         script: |
           defaults write NSGlobalDomain NSAppSleepDisabled -bool YES
     
-    - task: CmdLine@2
-      displayName: Create virtual MIDI ports
-      inputs:
-        script: |
-          cd Resources/Utilities/CreateLoopbackPort_macOS
-          gcc -c LoopbackDevice.c
-          gcc -framework CoreServices -framework CoreMIDI -framework CoreFoundation -o LoopbackDevice LoopbackDevice.o
-          ./LoopbackDevice "MIDI A" "MIDI B" "MIDI C" &
+    - template: Templates/step-create-ports-macos.yaml
+      parameters:
+        enabled: 'true'
     
     - task: DotNetCoreCLI@2
       displayName: Run unit tests

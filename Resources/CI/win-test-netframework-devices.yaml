@@ -11,6 +11,7 @@ trigger:
     - 'DryWetMidi.Tests.Common/*'
     - 'Resources/CI/win-test-netframework-devices.yaml'
     - 'Resources/CI/Templates/stage-build-native-libs.yaml'
+    - 'Resources/CI/Templates/step-create-ports-windows.yaml'
     - 'Resources/Utilities/CreateLoopbackPort_Windows/*'
     - 'Resources/Scripts/Setup MIDI ports.ps1'
     - 'Resources/Native/*'
@@ -26,6 +27,7 @@ pr:
     - 'DryWetMidi.Tests.Common/*'
     - 'Resources/CI/win-test-netframework-devices.yaml'
     - 'Resources/CI/Templates/stage-build-native-libs.yaml'
+    - 'Resources/CI/Templates/step-create-ports-windows.yaml'
     - 'Resources/Utilities/CreateLoopbackPort_Windows/*'
     - 'Resources/Scripts/Setup MIDI ports.ps1'
     - 'Resources/Native/*'
@@ -92,11 +94,9 @@ stages:
         projects: |
           DryWetMidi.Tests/Melanchall.DryWetMidi.Tests.csproj
     
-    - task: PowerShell@2
-      displayName: Setup MIDI ports for devices API tests
-      inputs:
-        targetType: filePath
-        filePath: '$(Build.SourcesDirectory)/Resources/Scripts/Setup MIDI ports.ps1'
+    - template: Templates/step-create-ports-windows.yaml
+      parameters:
+        enabled: 'true'
     
     - task: DotNetCoreCLI@2
       displayName: Run unit tests
