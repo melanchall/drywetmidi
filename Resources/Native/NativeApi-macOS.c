@@ -252,7 +252,11 @@ int GetShortEventFromInputDevice(MIDIPacketList* packetList, int* message)
 {
     MIDIPacket packet = packetList->packet[0];
 	
-	*message = (packet.data[2] << 16) | (packet.data[1] << 8) | packet.data[0];
+	*message = packet.data[0];
+	if (packet.length >= 2)
+		*message = *message | (packet.data[1] << 8);
+	if (packet.length == 3)
+		*message = *message | (packet.data[2] << 16);
     
     return 0;
 }
