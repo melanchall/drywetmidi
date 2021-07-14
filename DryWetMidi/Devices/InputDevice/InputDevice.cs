@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
@@ -226,6 +228,13 @@ namespace Melanchall.DryWetMidi.Devices
         private void OnEventReceived(MidiEvent midiEvent)
         {
             EventReceived?.Invoke(this, new MidiEventReceivedEventArgs(midiEvent));
+
+            if (RaiseMidiTimeCodeReceived)
+            {
+                var midiTimeCodeEvent = midiEvent as MidiTimeCodeEvent;
+                if (midiTimeCodeEvent != null)
+                    TryRaiseMidiTimeCodeReceived(midiTimeCodeEvent);
+            }
         }
 
         private void OnMidiTimeCodeReceived(MidiTimeCodeType timeCodeType, int hours, int minutes, int seconds, int frames)
@@ -310,14 +319,61 @@ namespace Melanchall.DryWetMidi.Devices
             }
         }
 
+        public bool Flag { get; set; }
+
+        public byte[] Data { get; set; }
+
         private void OnMessage_Apple(IntPtr pktlist, IntPtr readProcRefCon, IntPtr srcConnRefCon)
         {
             if (!IsListeningForEvents || !IsEnabled)
                 return;
 
-            int message;
-            InputDeviceApiProvider.Api.Api_GetShortEvent(pktlist, out message);
-            OnShortMessage(message);
+            IntPtr dataPtr;
+            int length;
+            InputDeviceApiProvider.Api.Api_GetEventData(pktlist, 0, out dataPtr, out length);
+
+            var data = new byte[length];
+            Marshal.Copy(dataPtr, data, 0, length);
+
+            if (Flag)
+                Data = data;
+
+            try
+            {
+                byte? runningStatusByte = null;
+
+                using (var stream = new MemoryStream(data))
+                using (var midiReader = new MidiReader(stream, new ReaderSettings()))
+                {
+                    midiReader.Position = 0;
+
+                    while (midiReader.Position < length)
+                    {
+                        var statusByte = midiReader.ReadByte();
+                        if (statusByte <= SevenBitNumber.MaxValue)
+                        {
+                            if (runningStatusByte == null)
+                                throw new UnexpectedRunningStatusException();
+
+                            statusByte = runningStatusByte.Value;
+                            midiReader.Position--;
+                        }
+
+                        runningStatusByte = statusByte;
+
+                        var eventReader = EventReaderFactory.GetReader(statusByte, smfOnly: false);
+                        var midiEvent = eventReader.Read(midiReader, _bytesToMidiEventConverter.ReadingSettings, statusByte);
+
+                        OnEventReceived(midiEvent);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                var exception = new MidiDeviceException($"Failed to parse message.", ex);
+                exception.Data.Add("Data", data);
+                OnError(exception);
+            }
         }
 
         private void OnShortMessage(int message)
@@ -331,13 +387,6 @@ namespace Melanchall.DryWetMidi.Devices
 
                 var midiEvent = _bytesToMidiEventConverter.Convert(statusByte, _channelParametersBuffer);
                 OnEventReceived(midiEvent);
-
-                if (RaiseMidiTimeCodeReceived)
-                {
-                    var midiTimeCodeEvent = midiEvent as MidiTimeCodeEvent;
-                    if (midiTimeCodeEvent != null)
-                        TryRaiseMidiTimeCodeReceived(midiTimeCodeEvent);
-                }
             }
             catch (Exception ex)
             {

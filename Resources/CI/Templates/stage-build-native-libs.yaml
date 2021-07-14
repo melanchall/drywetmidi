@@ -33,7 +33,7 @@ stages:
         script: |
           cd Resources/Native
           gcc -c NativeApi-macOS.c
-          gcc -g -shared -framework CoreServices -framework CoreFoundation -framework CoreMIDI -o Melanchall_DryWetMidi_Native64.dylib NativeApi-macOS.o
+          gcc -shared -framework CoreServices -framework CoreFoundation -framework CoreMIDI -o Melanchall_DryWetMidi_Native64.dylib NativeApi-macOS.o
     - task: PublishPipelineArtifact@1
       displayName: 'Publish dylib artifact'
       inputs:

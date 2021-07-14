@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
+using System.Runtime.InteropServices;
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Devices;
 using Melanchall.DryWetMidi.Tests.Common;
+using Melanchall.DryWetMidi.Tests.Utilities;
 using NUnit.Framework;
 
 namespace Melanchall.DryWetMidi.Tests.Devices
@@ -46,6 +48,13 @@ namespace Melanchall.DryWetMidi.Tests.Devices
         #region Constants
 
         private const int RetriesNumber = 3;
+
+        #endregion
+
+        #region Extern functions
+
+        [DllImport("SendTestData", CallingConvention = CallingConvention.Cdecl)]
+        private static extern int SendData(IntPtr portName, byte[] data, int length, int[] indices, int indicesLength);
 
         #endregion
 
@@ -188,6 +197,121 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 outputDevice.SendEvent(new NoteOnEvent());
                 eventReceived = WaitOperations.Wait(() => receivedEventsCount > 1, SendReceiveUtilities.MaximumEventSendReceiveDelay);
                 Assert.IsTrue(eventReceived, "Event is not received after enabling again.");
+            }
+        }
+
+        [Test]
+        [Platform("MacOsX")]
+        public void ReceiveData_SingleEventWithStatusByte() => ReceiveData(
+            data: new byte[] { 0x90, 0x75, 0x56 },
+            indices: new[] { 0 },
+            expectedEvents: new MidiEvent[]
+            {
+                new NoteOnEvent((SevenBitNumber)0x75, (SevenBitNumber)0x56)
+            });
+
+        [Test]
+        [Platform("MacOsX")]
+        public void ReceiveData_MultipleEventsWithStatusBytes() => ReceiveData(
+            data: new byte[] { 0x90, 0x75, 0x56, 0x80, 0x55, 0x65, 0x90, 0x75, 0x56 },
+            indices: new[] { 0, 3, 6 },
+            expectedEvents: new MidiEvent[]
+            {
+                new NoteOnEvent((SevenBitNumber)0x75, (SevenBitNumber)0x56),
+                new NoteOffEvent((SevenBitNumber)0x55, (SevenBitNumber)0x65),
+                new NoteOnEvent((SevenBitNumber)0x75, (SevenBitNumber)0x56),
+            });
+
+        [Test]
+        [Platform("MacOsX")]
+        public void ReceiveData_MultipleEventsWithRunningStatus() => ReceiveData(
+            data: new byte[] { 0x90, 0x15, 0x56, 0x55, 0x65, 0x45, 0x60 },
+            indices: new[] { 0 },
+            expectedEvents: new MidiEvent[]
+            {
+                new NoteOnEvent((SevenBitNumber)0x15, (SevenBitNumber)0x56),
+                new NoteOnEvent((SevenBitNumber)0x55, (SevenBitNumber)0x65),
+                new NoteOnEvent((SevenBitNumber)0x45, (SevenBitNumber)0x60),
+            });
+
+        [Test]
+        [Platform("MacOsX")]
+        public void ReceiveData_LotOfEventsWithStatusBytes()
+        {
+            const int eventsCount = 3333;
+
+            ReceiveData(
+                data: Enumerable
+                    .Range(0, eventsCount)
+                    .SelectMany(i => new byte[] { 0x90, 0x75, 0x56 })
+                    .ToArray(),
+                indices: Enumerable
+                    .Range(0, eventsCount)
+                    .Select(i => i * 3)
+                    .ToArray(),
+                expectedEvents: Enumerable
+                    .Range(0, eventsCount)
+                    .Select(i => new NoteOnEvent((SevenBitNumber)0x75, (SevenBitNumber)0x56))
+                    .ToArray());
+        }
+
+        [Test]
+        [Platform("MacOsX")]
+        public void ReceiveData_UnexpectedRunningStatus()
+        {
+            var deviceName = MidiDevicesNames.DeviceA;
+            var deviceNamePtr = Marshal.StringToHGlobalAnsi(deviceName);
+
+            var data = new byte[] { 0x56, 0x67, 0x45 };
+            var indices = new[] { 0 };
+
+            using (var inputDevice = InputDevice.GetByName(deviceName))
+            {
+                Exception exception = null;
+
+                inputDevice.ErrorOccurred += (_, e) => exception = e.Exception;
+                inputDevice.StartEventsListening();
+
+                SendData(deviceNamePtr, data, data.Length, indices, indices.Length);
+
+                var timeout = SendReceiveUtilities.MaximumEventSendReceiveDelay;
+                var errorOccurred = WaitOperations.Wait(() => exception != null, timeout);
+                Assert.IsTrue(errorOccurred, $"Error was not occurred for [{timeout}].");
+                Assert.IsInstanceOf(typeof(MidiDeviceException), exception, "Exception type is invalid");
+                Assert.IsInstanceOf(typeof(UnexpectedRunningStatusException), exception.InnerException, "Inner exception type is invalid.");
+            }
+        }
+
+        #endregion
+
+        #region Private methods
+
+        private void ReceiveData(byte[] data, int[] indices, ICollection<MidiEvent> expectedEvents)
+        {
+            var deviceName = MidiDevicesNames.DeviceA;
+            var deviceNamePtr = Marshal.StringToHGlobalAnsi(deviceName);
+
+            var receivedEvents = new List<MidiEvent>(expectedEvents.Count);
+
+            using (var inputDevice = InputDevice.GetByName(deviceName))
+            {
+                inputDevice.Flag = true;
+
+                inputDevice.EventReceived += (_, e) => receivedEvents.Add(e.Event);
+                inputDevice.StartEventsListening();
+
+                SendData(deviceNamePtr, data, data.Length, indices, indices.Length);
+
+                var timeout = SendReceiveUtilities.MaximumEventSendReceiveDelay;
+                var areEventReceived = WaitOperations.Wait(() => receivedEvents.Count >= expectedEvents.Count, timeout);
+                Console.WriteLine($"Data = [{string.Join(", ", inputDevice.Data.Select(d => "0x" + Convert.ToString(d, 16)))}]");
+                Assert.IsTrue(areEventReceived, $"Events are not received for [{timeout}] (received are: {string.Join(", ", receivedEvents)}).");
+
+                MidiAsserts.AreEqual(
+                    expectedEvents,
+                    receivedEvents,
+                    false,
+                    "Received events are invalid.");
             }
         }
 

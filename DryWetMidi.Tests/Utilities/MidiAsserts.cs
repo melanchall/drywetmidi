@@ -245,6 +245,22 @@ namespace Melanchall.DryWetMidi.Tests.Utilities
             Assert.IsTrue(areEqual, $"{message} {eventsComparingMessage}");
         }
 
+        public static void AreEqual(ICollection<MidiEvent> expectedEvents, ICollection<MidiEvent> actualEvents, bool compareDeltaTimes, string message = null)
+        {
+            Assert.AreEqual(expectedEvents.Count, actualEvents.Count, "Events count is invalid.");
+
+            var expectedEventsArray = expectedEvents.ToArray();
+            var actualEventsArray = actualEvents.ToArray();
+
+            for (var i = 0; i < expectedEventsArray.Length; i++)
+            {
+                var expectedEvent = expectedEventsArray[i];
+                var actualEvent = actualEventsArray[i];
+
+                AreEqual(expectedEvent, actualEvent, compareDeltaTimes, $"Invalid event {i}.");
+            }
+        }
+
         #endregion
     }
 }

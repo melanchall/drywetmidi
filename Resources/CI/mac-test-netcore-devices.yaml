@@ -68,6 +68,21 @@ stages:
           Copy-Item -Path "$(Pipeline.Workspace)\**\*.dll" -Destination "DryWetMidi"
           Copy-Item -Path "$(Pipeline.Workspace)\**\*.dylib" -Destination "DryWetMidi"
     
+    - task: CmdLine@2
+      displayName: Build test data sending utility
+      inputs:
+        script: |
+          cd DryWetMidi.Tests
+          gcc -c SendTestData.c
+          gcc -shared -framework CoreServices -framework CoreMIDI -framework CoreFoundation -o SendTestData.dylib SendTestData.o
+          
+    - task: PublishPipelineArtifact@1
+      displayName: Publish 'SendTestData' artifact
+      inputs:
+        targetPath: 'DryWetMidi.Tests/SendTestData.dylib'
+        artifactName: 'SendTestData'
+        artifactType: pipeline
+    
     - task: UseDotNet@2
       displayName: 'Use .NET Core 3.1'
       inputs:

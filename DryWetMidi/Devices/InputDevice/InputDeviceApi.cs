@@ -118,6 +118,8 @@ namespace Melanchall.DryWetMidi.Devices
 
         public abstract int Api_GetShortEvent(IntPtr packetList, out int message);
 
+        public abstract int Api_GetEventData(IntPtr packetList, int packetIndex, out IntPtr data, out int length);
+
         public static void HandleResult(IN_GETINFORESULT result)
         {
             if (result != IN_GETINFORESULT.IN_GETINFORESULT_OK)

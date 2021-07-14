@@ -202,7 +202,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                     outputDevice.PrepareForEventsSending();
                     outputDevice.SendEvent(midiEvent);
 
-                    var timeout = TimeSpan.FromMilliseconds(15);
+                    var timeout = SendReceiveUtilities.MaximumEventSendReceiveDelay;
                     var isEventSentReceived = WaitOperations.Wait(() => eventSent != null && eventReceived != null, timeout);
 
                     if (!isEventSentReceived)

@@ -55,6 +55,9 @@ namespace Melanchall.DryWetMidi.Devices
         [DllImport(LibraryName, ExactSpelling = true)]
         private static extern int GetShortEventFromInputDevice(IntPtr packetList, out int message);
 
+        [DllImport(LibraryName, ExactSpelling = true)]
+        private static extern int GetEventData(IntPtr packetList, int packetIndex, out IntPtr data, out int length);
+
         #endregion
 
         #region Methods
@@ -130,6 +133,11 @@ namespace Melanchall.DryWetMidi.Devices
         public override int Api_GetShortEvent(IntPtr packetList, out int message)
         {
             return GetShortEventFromInputDevice(packetList, out message);
+        }
+
+        public override int Api_GetEventData(IntPtr packetList, int packetIndex, out IntPtr data, out int length)
+        {
+            return GetEventData(packetList, packetIndex, out data, out length);
         }
 
         #endregion

@@ -252,7 +252,33 @@ int GetShortEventFromInputDevice(MIDIPacketList* packetList, int* message)
 {
     MIDIPacket packet = packetList->packet[0];
 	
-	*message = (packet.data[2] << 16) | (packet.data[1] << 8) | packet.data[0];
+	*message = packet.data[0];
+	if (packet.length >= 2)
+		*message = *message | (packet.data[1] << 8);
+	if (packet.length == 3)
+		*message = *message | (packet.data[2] << 16);
+    
+    return 0;
+}
+
+int GetEventData(MIDIPacketList* packetList, int packetIndex, Byte** data, int* length)
+{
+	if (packetIndex == 0)
+	{
+		*data = packetList->packet[0].data;
+		*length = packetList->packet[0].length;
+		return 0;
+	}
+	
+	MIDIPacket* packetPtr = &packetList->packet[0];
+	
+	for (int i = 0; i < packetIndex; i++)
+	{
+		packetPtr = MIDIPacketNext(packetPtr);
+	}
+	
+	*data = packetPtr->data;
+	*length = packetPtr->length;
     
     return 0;
 }
