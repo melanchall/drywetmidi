@@ -61,6 +61,8 @@ namespace Melanchall.DryWetMidi.Devices
 
         private readonly Dictionary<MidiTimeCodeComponent, FourBitNumber> _midiTimeCodeComponents = new Dictionary<MidiTimeCodeComponent, FourBitNumber>();
 
+        private readonly InputDeviceApi.API_TYPE _apiType;
+
         #endregion
 
         #region Constructor
@@ -68,6 +70,7 @@ namespace Melanchall.DryWetMidi.Devices
         private InputDevice(IntPtr info)
             : base(info)
         {
+            _apiType = InputDeviceApiProvider.Api.Api_GetApiType();
             _bytesToMidiEventConverter.ReadingSettings.SilentNoteOnPolicy = SilentNoteOnPolicy.NoteOn;
         }
 
@@ -259,8 +262,7 @@ namespace Melanchall.DryWetMidi.Devices
 
             var sessionHandle = MidiDevicesSession.GetSessionHandle();
 
-            var apiType = InputDeviceApiProvider.Api.Api_GetApiType();
-            switch (apiType)
+            switch (_apiType)
             {
                 case InputDeviceApi.API_TYPE.API_TYPE_WINMM:
                     {
@@ -319,27 +321,35 @@ namespace Melanchall.DryWetMidi.Devices
             }
         }
 
-        public bool Flag { get; set; }
-
-        public byte[] Data { get; set; }
-
         private void OnMessage_Apple(IntPtr pktlist, IntPtr readProcRefCon, IntPtr srcConnRefCon)
         {
             if (!IsListeningForEvents || !IsEnabled)
                 return;
 
-            IntPtr dataPtr;
-            int length;
-            InputDeviceApiProvider.Api.Api_GetEventData(pktlist, 0, out dataPtr, out length);
-
-            var data = new byte[length];
-            Marshal.Copy(dataPtr, data, 0, length);
-
-            if (Flag)
-                Data = data;
+            byte[] data = null;
 
             try
             {
+                IntPtr dataPtr;
+                int length;
+
+                InputDeviceApi.HandleResult(
+                    InputDeviceApiProvider.Api.Api_GetEventData(pktlist, 0, out dataPtr, out length));
+
+                data = new byte[length];
+                Marshal.Copy(dataPtr, data, 0, length);
+
+                // TODO: handle escape sysex
+                if (data[0] == EventStatusBytes.Global.NormalSysEx)
+                {
+                    var sysExData = new byte[length - 1];
+                    Buffer.BlockCopy(data, 1, sysExData, 0, sysExData.Length);
+
+                    var midiEvent = new NormalSysExEvent(sysExData);
+                    OnEventReceived(midiEvent);
+                    return;
+                }
+
                 byte? runningStatusByte = null;
 
                 using (var stream = new MemoryStream(data))

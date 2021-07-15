@@ -57,6 +57,20 @@ namespace Melanchall.DryWetMidi.Devices
             OUT_SENDSHORTRESULT_UNKNOWNERROR = 109
         }
 
+        public enum OUT_SENDSYSEXRESULT
+        {
+            OUT_SENDSYSEXRESULT_OK = 0,
+            OUT_SENDSYSEXRESULT_INVALIDCLIENT = 101,
+            OUT_SENDSYSEXRESULT_INVALIDPORT = 102,
+            OUT_SENDSYSEXRESULT_WRONGENDPOINT = 103,
+            OUT_SENDSYSEXRESULT_UNKNOWNENDPOINT = 104,
+            OUT_SENDSYSEXRESULT_COMMUNICATIONERROR = 105,
+            OUT_SENDSYSEXRESULT_SERVERSTARTERROR = 106,
+            OUT_SENDSYSEXRESULT_WRONGTHREAD = 107,
+            OUT_SENDSYSEXRESULT_NOTPERMITTED = 108,
+            OUT_SENDSYSEXRESULT_UNKNOWNERROR = 109
+        }
+
         #endregion
 
         #region Delegates
@@ -92,6 +106,8 @@ namespace Melanchall.DryWetMidi.Devices
 
         public abstract OUT_SENDSHORTRESULT Api_SendShortEvent(IntPtr handle, int message);
 
+        public abstract OUT_SENDSYSEXRESULT Api_SendSysExEvent_Apple(IntPtr handle, byte[] data, ushort dataSize);
+
         public static void HandleResult(OUT_CLOSERESULT result)
         {
             if (result != OUT_CLOSERESULT.OUT_CLOSERESULT_OK)
@@ -101,6 +117,12 @@ namespace Melanchall.DryWetMidi.Devices
         public static void HandleResult(OUT_SENDSHORTRESULT result)
         {
             if (result != OUT_SENDSHORTRESULT.OUT_SENDSHORTRESULT_OK)
+                throw new MidiDeviceException(GetErrorDescription(result), (int)result);
+        }
+
+        public static void HandleResult(OUT_SENDSYSEXRESULT result)
+        {
+            if (result != OUT_SENDSYSEXRESULT.OUT_SENDSYSEXRESULT_OK)
                 throw new MidiDeviceException(GetErrorDescription(result), (int)result);
         }
 
@@ -125,6 +147,20 @@ namespace Melanchall.DryWetMidi.Devices
                 case OUT_SENDSHORTRESULT.OUT_SENDSHORTRESULT_SERVERSTARTERROR:
                     return $"MIDI server error ({result}).";
                 case OUT_SENDSHORTRESULT.OUT_SENDSHORTRESULT_NOTPERMITTED:
+                    return $"The process doesn’t have privileges for the requested operation ({result}).";
+            }
+
+            return GetInternalErrorDescription(result);
+        }
+
+        private static string GetErrorDescription(OUT_SENDSYSEXRESULT result)
+        {
+            switch (result)
+            {
+                case OUT_SENDSYSEXRESULT.OUT_SENDSYSEXRESULT_COMMUNICATIONERROR:
+                case OUT_SENDSYSEXRESULT.OUT_SENDSYSEXRESULT_SERVERSTARTERROR:
+                    return $"MIDI server error ({result}).";
+                case OUT_SENDSYSEXRESULT.OUT_SENDSYSEXRESULT_NOTPERMITTED:
                     return $"The process doesn’t have privileges for the requested operation ({result}).";
             }
 

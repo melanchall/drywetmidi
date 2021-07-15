@@ -3,7 +3,6 @@
 #include <windows.h>
 #include <mmsystem.h>
 #include <mmreg.h>
-/*#include <stdio.h>*/
 
 #include "NativeApi-Constants.h"
 

@@ -79,6 +79,11 @@ namespace Melanchall.DryWetMidi.Devices
             IN_DISCONNECTRESULT_INVALIDHANDLE = 1
         }
 
+        public enum IN_GETEVENTDATARESULT
+        {
+            IN_GETEVENTDATARESULT_OK = 0
+        }
+
         #endregion
 
         #region Delegates
@@ -116,9 +121,7 @@ namespace Melanchall.DryWetMidi.Devices
 
         public abstract IN_DISCONNECTRESULT Api_Disconnect(IntPtr handle);
 
-        public abstract int Api_GetShortEvent(IntPtr packetList, out int message);
-
-        public abstract int Api_GetEventData(IntPtr packetList, int packetIndex, out IntPtr data, out int length);
+        public abstract IN_GETEVENTDATARESULT Api_GetEventData(IntPtr packetList, int packetIndex, out IntPtr data, out int length);
 
         public static void HandleResult(IN_GETINFORESULT result)
         {
@@ -153,6 +156,12 @@ namespace Melanchall.DryWetMidi.Devices
         public static void HandleResult(IN_DISCONNECTRESULT result)
         {
             if (result != IN_DISCONNECTRESULT.IN_DISCONNECTRESULT_OK)
+                throw new MidiDeviceException(GetErrorDescription(result), (int)result);
+        }
+
+        public static void HandleResult(IN_GETEVENTDATARESULT result)
+        {
+            if (result != IN_GETEVENTDATARESULT.IN_GETEVENTDATARESULT_OK)
                 throw new MidiDeviceException(GetErrorDescription(result), (int)result);
         }
 
@@ -211,6 +220,11 @@ namespace Melanchall.DryWetMidi.Devices
         }
 
         private static string GetErrorDescription(IN_DISCONNECTRESULT result)
+        {
+            return GetInternalErrorDescription(result);
+        }
+
+        private static string GetErrorDescription(IN_GETEVENTDATARESULT result)
         {
             return GetInternalErrorDescription(result);
         }

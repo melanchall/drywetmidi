@@ -49,6 +49,9 @@ namespace Melanchall.DryWetMidi.Devices
         [DllImport(LibraryName, ExactSpelling = true)]
         private static extern OUT_SENDSHORTRESULT SendShortEventToOutputDevice(IntPtr handle, int message);
 
+        [DllImport(LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
+        private static extern OUT_SENDSYSEXRESULT SendSysExEventToOutputDevice_Apple(IntPtr handle, byte[] data, ushort dataSize);
+
         #endregion
 
         #region Methods
@@ -115,6 +118,11 @@ namespace Melanchall.DryWetMidi.Devices
         public override OUT_SENDSHORTRESULT Api_SendShortEvent(IntPtr handle, int message)
         {
             return SendShortEventToOutputDevice(handle, message);
+        }
+
+        public override OUT_SENDSYSEXRESULT Api_SendSysExEvent_Apple(IntPtr handle, byte[] data, ushort dataSize)
+        {
+            return SendSysExEventToOutputDevice_Apple(handle, data, dataSize);
         }
 
         #endregion

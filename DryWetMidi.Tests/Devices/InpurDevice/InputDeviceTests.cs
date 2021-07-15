@@ -295,8 +295,6 @@ namespace Melanchall.DryWetMidi.Tests.Devices
 
             using (var inputDevice = InputDevice.GetByName(deviceName))
             {
-                inputDevice.Flag = true;
-
                 inputDevice.EventReceived += (_, e) => receivedEvents.Add(e.Event);
                 inputDevice.StartEventsListening();
 
@@ -304,7 +302,6 @@ namespace Melanchall.DryWetMidi.Tests.Devices
 
                 var timeout = SendReceiveUtilities.MaximumEventSendReceiveDelay;
                 var areEventReceived = WaitOperations.Wait(() => receivedEvents.Count >= expectedEvents.Count, timeout);
-                Console.WriteLine($"Data = [{string.Join(", ", inputDevice.Data.Select(d => "0x" + Convert.ToString(d, 16)))}]");
                 Assert.IsTrue(areEventReceived, $"Events are not received for [{timeout}] (received are: {string.Join(", ", receivedEvents)}).");
 
                 MidiAsserts.AreEqual(

@@ -204,7 +204,6 @@ namespace Melanchall.DryWetMidi.Tests.Devices
 
                     var timeout = SendReceiveUtilities.MaximumEventSendReceiveDelay;
                     var isEventSentReceived = WaitOperations.Wait(() => eventSent != null && eventReceived != null, timeout);
-
                     if (!isEventSentReceived)
                     {
                         if (errorOnSend != null)

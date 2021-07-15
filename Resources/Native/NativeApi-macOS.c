@@ -248,26 +248,13 @@ IN_DISCONNECTRESULT DisconnectFromInputDevice(void* handle)
 	return IN_DISCONNECTRESULT_OK;
 }
 
-int GetShortEventFromInputDevice(MIDIPacketList* packetList, int* message)
-{
-    MIDIPacket packet = packetList->packet[0];
-	
-	*message = packet.data[0];
-	if (packet.length >= 2)
-		*message = *message | (packet.data[1] << 8);
-	if (packet.length == 3)
-		*message = *message | (packet.data[2] << 16);
-    
-    return 0;
-}
-
-int GetEventData(MIDIPacketList* packetList, int packetIndex, Byte** data, int* length)
+IN_GETEVENTDATARESULT GetEventDataFromInputDevice(MIDIPacketList* packetList, int packetIndex, Byte** data, int* length)
 {
 	if (packetIndex == 0)
 	{
 		*data = packetList->packet[0].data;
 		*length = packetList->packet[0].length;
-		return 0;
+		return IN_GETEVENTDATARESULT_OK;
 	}
 	
 	MIDIPacket* packetPtr = &packetList->packet[0];
@@ -280,7 +267,7 @@ int GetEventData(MIDIPacketList* packetList, int packetIndex, Byte** data, int* 
 	*data = packetPtr->data;
 	*length = packetPtr->length;
     
-    return 0;
+    return IN_GETEVENTDATARESULT_OK;
 }
 
 /* ================================
@@ -402,7 +389,7 @@ OUT_SENDSHORTRESULT SendShortEventToOutputDevice(void* handle, int message)
 	
 	Byte buffer[dataSize + (sizeof(MIDIPacketList))];
     MIDIPacketList *packetList = (MIDIPacketList*)buffer;
-    MIDIPacket *packet = MIDIPacketListInit(packetList);	
+    MIDIPacket *packet = MIDIPacketListInit(packetList);
     MIDIPacketListAdd(packetList, sizeof(buffer), packet, 0, dataSize, &data[0]);
     
     OSStatus result = MIDISend(outputDeviceHandle->portRef, outputDeviceHandle->info->endpointRef, packetList);
@@ -423,4 +410,33 @@ OUT_SENDSHORTRESULT SendShortEventToOutputDevice(void* handle, int message)
 	}
     
     return OUT_SENDSHORTRESULT_OK;
+}
+
+OUT_SENDSYSEXRESULT SendSysExEventToOutputDevice_Apple(void* handle, Byte* data, ByteCount dataSize)
+{
+    OutputDeviceHandle* outputDeviceHandle = (OutputDeviceHandle*)handle;
+	
+	Byte buffer[dataSize + (sizeof(MIDIPacketList))];
+    MIDIPacketList *packetList = (MIDIPacketList*)buffer;
+    MIDIPacket *packet = MIDIPacketListInit(packetList);
+    MIDIPacketListAdd(packetList, sizeof(buffer), packet, 0, dataSize, &data[0]);
+    
+    OSStatus result = MIDISend(outputDeviceHandle->portRef, outputDeviceHandle->info->endpointRef, packetList);
+	if (result != noErr)
+	{
+		switch (result)
+	    {
+	        case kMIDIInvalidClient: return OUT_SENDSYSEXRESULT_INVALIDCLIENT;
+			case kMIDIInvalidPort: return OUT_SENDSYSEXRESULT_INVALIDPORT;
+			case kMIDIWrongEndpointType: return OUT_SENDSYSEXRESULT_WRONGENDPOINT;
+			case kMIDIUnknownEndpoint: return OUT_SENDSYSEXRESULT_UNKNOWNENDPOINT;
+			case kMIDIMessageSendErr: return OUT_SENDSYSEXRESULT_COMMUNICATIONERROR;
+			case kMIDIServerStartErr: return OUT_SENDSYSEXRESULT_SERVERSTARTERROR;
+			case kMIDIWrongThread: return OUT_SENDSYSEXRESULT_WRONGTHREAD;
+			case kMIDINotPermitted: return OUT_SENDSYSEXRESULT_NOTPERMITTED;
+			case kMIDIUnknownError: return OUT_SENDSYSEXRESULT_UNKNOWNERROR;
+	    }
+	}
+    
+    return OUT_SENDSYSEXRESULT_OK;
 }

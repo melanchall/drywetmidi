@@ -53,10 +53,7 @@ namespace Melanchall.DryWetMidi.Devices
         private static extern IN_DISCONNECTRESULT DisconnectFromInputDevice(IntPtr handle);
 
         [DllImport(LibraryName, ExactSpelling = true)]
-        private static extern int GetShortEventFromInputDevice(IntPtr packetList, out int message);
-
-        [DllImport(LibraryName, ExactSpelling = true)]
-        private static extern int GetEventData(IntPtr packetList, int packetIndex, out IntPtr data, out int length);
+        private static extern IN_GETEVENTDATARESULT GetEventDataFromInputDevice(IntPtr packetList, int packetIndex, out IntPtr data, out int length);
 
         #endregion
 
@@ -130,14 +127,9 @@ namespace Melanchall.DryWetMidi.Devices
             return DisconnectFromInputDevice(handle);
         }
 
-        public override int Api_GetShortEvent(IntPtr packetList, out int message)
+        public override IN_GETEVENTDATARESULT Api_GetEventData(IntPtr packetList, int packetIndex, out IntPtr data, out int length)
         {
-            return GetShortEventFromInputDevice(packetList, out message);
-        }
-
-        public override int Api_GetEventData(IntPtr packetList, int packetIndex, out IntPtr data, out int length)
-        {
-            return GetEventData(packetList, packetIndex, out data, out length);
+            return GetEventDataFromInputDevice(packetList, packetIndex, out data, out length);
         }
 
         #endregion

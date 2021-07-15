@@ -100,7 +100,14 @@ namespace Melanchall.DryWetMidi.Devices
                     if (_windowsHandle != IntPtr.Zero)
                         SendSysExEvent(sysExEvent);
                     else
-                        throw new NotImplementedException("Sys ex events sending not implemented for Apple API.");
+                    {
+                        var data = new byte[sysExEvent.Data.Length + 1];
+                        data[0] = EventStatusBytes.Global.NormalSysEx;
+                        Buffer.BlockCopy(sysExEvent.Data, 0, data, 1, sysExEvent.Data.Length);
+                        OutputDeviceApi.HandleResult(
+                            OutputDeviceApiProvider.Api.Api_SendSysExEvent_Apple(_handle, data, (ushort)data.Length));
+                        OnEventSent(midiEvent);
+                    }
                 }
             }
         }
