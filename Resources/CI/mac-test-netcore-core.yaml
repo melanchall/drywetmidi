@@ -11,6 +11,8 @@ trigger:
     - 'DryWetMidi.Tests.Common/*'
     - 'Resources/CI/mac-test-netcore-core.yaml'
     - 'Resources/CI/Templates/stage-build-native-libs.yaml'
+    - 'Resources/CI/Templates/step-copy-native-libraries-near-csproj.yaml'
+    - 'Resources/CI/Templates/step-collect-logs.yaml'
     exclude:
     - 'DryWetMidi/Devices/*'
     - 'DryWetMidi.Tests/Devices/*'
@@ -26,6 +28,8 @@ pr:
     - 'DryWetMidi.Tests.Common/*'
     - 'Resources/CI/mac-test-netcore-core.yaml'
     - 'Resources/CI/Templates/stage-build-native-libs.yaml'
+    - 'Resources/CI/Templates/step-copy-native-libraries-near-csproj.yaml'
+    - 'Resources/CI/Templates/step-collect-logs.yaml'
     exclude:
     - 'DryWetMidi/Devices/*'
     - 'DryWetMidi.Tests/Devices/*'
@@ -46,6 +50,7 @@ name: macOS_Test_NetCore_Core_$(LibraryVersion)$(Rev:.r)
 
 stages:
 - template: Templates/stage-build-native-libs.yaml
+
 - stage: RunTests
   displayName: Run tests
   pool:
@@ -54,19 +59,7 @@ stages:
   - job: RunTests
     displayName: Run tests
     steps:
-    - task: DownloadPipelineArtifact@2
-      displayName: Download native libraries
-      inputs:
-        source: 'current'
-        path: '$(Pipeline.Workspace)'
-        
-    - task: PowerShell@2
-      displayName: Copy native libraries near csproj
-      inputs:
-        targetType: 'inline'
-        script: |
-          Copy-Item -Path "$(Pipeline.Workspace)\**\*.dll" -Destination "DryWetMidi"
-          Copy-Item -Path "$(Pipeline.Workspace)\**\*.dylib" -Destination "DryWetMidi"
+    - template: Templates/step-copy-native-libraries-near-csproj.yaml
     
     - task: UseDotNet@2
       displayName: 'Use .NET Core 3.1'
@@ -98,4 +91,6 @@ stages:
       inputs:
         command: 'test'
         projects: 'DryWetMidi.Tests/Melanchall.DryWetMidi.Tests.csproj'
-        arguments: '--blame --no-build --configuration $(buildConfiguration) --filter ((FullyQualifiedName~Melanchall.DryWetMidi.Tests.Core|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Common|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Composing|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Interaction|FullyQualifiedName~Melanchall.DryWetMidi.Tests.MusicTheory|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Standards|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Tools)&Name!=CheckValidFilesReadingByReferences) --framework netcoreapp3.1 --verbosity normal'
+        arguments: '--blame --no-build --configuration $(buildConfiguration) --filter ((FullyQualifiedName~Melanchall.DryWetMidi.Tests.Core|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Common|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Composing|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Interaction|FullyQualifiedName~Melanchall.DryWetMidi.Tests.MusicTheory|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Standards|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Tools)&Name!=CheckValidFilesReadingByReferences) --framework netcoreapp3.1 --verbosity normal -d diagnostic.log'
+        
+    - template: Templates/step-collect-logs.yaml

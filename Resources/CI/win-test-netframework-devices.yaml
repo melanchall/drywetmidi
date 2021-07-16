@@ -12,6 +12,8 @@ trigger:
     - 'Resources/CI/win-test-netframework-devices.yaml'
     - 'Resources/CI/Templates/stage-build-native-libs.yaml'
     - 'Resources/CI/Templates/step-create-ports-windows.yaml'
+    - 'Resources/CI/Templates/step-copy-native-libraries-near-csproj.yaml'
+    - 'Resources/CI/Templates/step-collect-logs.yaml'
     - 'Resources/Utilities/CreateLoopbackPort_Windows/*'
     - 'Resources/Scripts/Setup MIDI ports.ps1'
     - 'Resources/Native/*'
@@ -28,6 +30,8 @@ pr:
     - 'Resources/CI/win-test-netframework-devices.yaml'
     - 'Resources/CI/Templates/stage-build-native-libs.yaml'
     - 'Resources/CI/Templates/step-create-ports-windows.yaml'
+    - 'Resources/CI/Templates/step-copy-native-libraries-near-csproj.yaml'
+    - 'Resources/CI/Templates/step-collect-logs.yaml'
     - 'Resources/Utilities/CreateLoopbackPort_Windows/*'
     - 'Resources/Scripts/Setup MIDI ports.ps1'
     - 'Resources/Native/*'
@@ -48,6 +52,7 @@ name: Windows_Test_NetFramework_Devices_$(LibraryVersion)$(Rev:.r)
 
 stages:
 - template: Templates/stage-build-native-libs.yaml
+    
 - stage: RunTests
   displayName: Run tests
   pool:
@@ -56,19 +61,7 @@ stages:
   - job: RunTests
     displayName: Run tests
     steps:
-    - task: DownloadPipelineArtifact@2
-      displayName: Download native libraries
-      inputs:
-        source: 'current'
-        path: '$(Pipeline.Workspace)\NativeLibraries'
-        
-    - task: PowerShell@2
-      displayName: Copy native libraries near csproj
-      inputs:
-        targetType: 'inline'
-        script: |
-          Copy-Item -Path "$(Pipeline.Workspace)\NativeLibraries\**\*.dll" -Destination "DryWetMidi"
-          Copy-Item -Path "$(Pipeline.Workspace)\NativeLibraries\**\*.dylib" -Destination "DryWetMidi"
+    - template: Templates/step-copy-native-libraries-near-csproj.yaml
     
     - task: DotNetCoreCLI@2
       displayName: Build DryWetMidi
@@ -104,4 +97,6 @@ stages:
       inputs:
         command: 'test'
         projects: 'DryWetMidi.Tests/Melanchall.DryWetMidi.Tests.csproj'
-        arguments: '--blame --no-build --configuration $(buildConfiguration) --filter (FullyQualifiedName~.Devices) --framework net48 --verbosity normal'
+        arguments: '--blame --no-build --configuration $(buildConfiguration) --filter (FullyQualifiedName~.Devices) --framework net48 --verbosity normal -d diagnostic.log'
+        
+    - template: Templates/step-collect-logs.yaml

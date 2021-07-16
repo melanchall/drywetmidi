@@ -1,0 +1,14 @@
+steps:
+- task: DownloadPipelineArtifact@2
+  displayName: Download native libraries
+  inputs:
+    source: 'current'
+    path: '$(Pipeline.Workspace)/NativeLibraries'
+
+- task: PowerShell@2
+  displayName: Copy native libraries near csproj
+  inputs:
+    targetType: 'inline'
+    script: |
+      Copy-Item -Path "$(Pipeline.Workspace)/NativeLibraries/**/*.dll" -Destination "DryWetMidi"
+      Copy-Item -Path "$(Pipeline.Workspace)/NativeLibraries/**/*.dylib" -Destination "DryWetMidi"

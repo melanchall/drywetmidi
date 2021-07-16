@@ -7,7 +7,7 @@ trigger:
   paths:
     include:
     - 'DryWetMidi/*'
-    - 'Resources/CI/build-artifacts-library.yaml'
+    - 'Resources/CI/test-net-package-integration.yaml'
     - 'Resources/CI/Templates/stage-build-native-libs.yaml'
     - 'Resources/CI/Templates/step-create-ports-macos.yaml'
     - 'Resources/CI/Templates/step-create-ports-windows.yaml'

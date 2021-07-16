@@ -44,10 +44,6 @@
       <Link>Melanchall_DryWetMidi_Native64.dylib</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="SendTestData.dylib">
-      <Link>SendTestData.dylib</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
 
 </Project>

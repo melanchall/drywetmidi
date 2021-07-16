@@ -4,7 +4,7 @@ parameters:
 steps:
 - task: CmdLine@2
   displayName: Create virtual MIDI ports (macOS)
-  condition: ${{ parameters.enabled }}
+  condition: and(succeeded(), ${{ parameters.enabled }})
   inputs:
     script: |
       cd Resources/Utilities/CreateLoopbackPort_macOS

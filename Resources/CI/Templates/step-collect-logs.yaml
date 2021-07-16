@@ -1,0 +1,17 @@
+steps:
+- task: PowerShell@2
+  displayName: Collect logs
+  condition: always()
+  inputs:
+    targetType: 'inline'
+    script: |
+      New-Item -Path "$(Pipeline.Workspace)" -Name "Logs" -ItemType "directory"
+      Copy-Item -Path "$(Build.SourcesDirectory)/*.log" -Destination "$(Pipeline.Workspace)/Logs"
+      
+- task: PublishPipelineArtifact@1
+  displayName: Publish 'Logs' artifact
+  condition: always()
+  inputs:
+    targetPath: '$(Pipeline.Workspace)/Logs'
+    artifactName: 'Logs'
+    artifactType: pipeline

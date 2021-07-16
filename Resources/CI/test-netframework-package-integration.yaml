@@ -7,8 +7,9 @@ trigger:
   paths:
     include:
     - 'DryWetMidi/*'
-    - 'Resources/CI/build-artifacts-library.yaml'
+    - 'Resources/CI/test-netframework-package-integration.yaml'
     - 'Resources/CI/Templates/stage-build-native-libs.yaml'
+    - 'Resources/CI/Templates/step-create-ports-windows.yaml'
 
 pr: none
 
@@ -57,11 +58,9 @@ stages:
         path: '$(Pipeline.Workspace)\NuGetPackage'
         artifact: NuGetPackage
         
-    - task: PowerShell@2
-      displayName: Setup MIDI ports for devices API tests
-      inputs:
-        targetType: filePath
-        filePath: '$(Build.SourcesDirectory)/Resources/Scripts/Setup MIDI ports.ps1'
+    - template: Templates/step-create-ports-windows.yaml
+      parameters:
+        enabled: 'true'
     
     - task: PowerShell@2
       displayName: Set package version

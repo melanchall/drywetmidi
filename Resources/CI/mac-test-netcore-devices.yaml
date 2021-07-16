@@ -12,6 +12,8 @@ trigger:
     - 'Resources/CI/mac-test-netcore-devices.yaml'
     - 'Resources/CI/Templates/stage-build-native-libs.yaml'
     - 'Resources/CI/Templates/step-create-ports-macos.yaml'
+    - 'Resources/CI/Templates/step-copy-native-libraries-near-csproj.yaml'
+    - 'Resources/CI/Templates/step-collect-logs.yaml'
     - 'Resources/Native/*'
     - 'Resources/Utilities/CreateLoopbackPort_macOS/*'
 
@@ -27,6 +29,8 @@ pr:
     - 'Resources/CI/mac-test-netcore-devices.yaml'
     - 'Resources/CI/Templates/stage-build-native-libs.yaml'
     - 'Resources/CI/Templates/step-create-ports-macos.yaml'
+    - 'Resources/CI/Templates/step-copy-native-libraries-near-csproj.yaml'
+    - 'Resources/CI/Templates/step-collect-logs.yaml'
     - 'Resources/Native/*'
     - 'Resources/Utilities/CreateLoopbackPort_macOS/*'
 
@@ -46,6 +50,7 @@ name: macOS_Test_NetCore_Devices_$(LibraryVersion)$(Rev:.r)
 
 stages:
 - template: Templates/stage-build-native-libs.yaml
+
 - stage: RunTests
   displayName: Run tests
   pool:
@@ -54,34 +59,7 @@ stages:
   - job: RunTests
     displayName: Run tests
     steps:
-    - task: DownloadPipelineArtifact@2
-      displayName: Download native libraries
-      inputs:
-        source: 'current'
-        path: '$(Pipeline.Workspace)'
-        
-    - task: PowerShell@2
-      displayName: Copy native libraries near csproj
-      inputs:
-        targetType: 'inline'
-        script: |
-          Copy-Item -Path "$(Pipeline.Workspace)\**\*.dll" -Destination "DryWetMidi"
-          Copy-Item -Path "$(Pipeline.Workspace)\**\*.dylib" -Destination "DryWetMidi"
-    
-    - task: CmdLine@2
-      displayName: Build test data sending utility
-      inputs:
-        script: |
-          cd DryWetMidi.Tests
-          gcc -c SendTestData.c
-          gcc -shared -framework CoreServices -framework CoreMIDI -framework CoreFoundation -o SendTestData.dylib SendTestData.o
-          
-    - task: PublishPipelineArtifact@1
-      displayName: Publish 'SendTestData' artifact
-      inputs:
-        targetPath: 'DryWetMidi.Tests/SendTestData.dylib'
-        artifactName: 'SendTestData'
-        artifactType: pipeline
+    - template: Templates/step-copy-native-libraries-near-csproj.yaml
     
     - task: UseDotNet@2
       displayName: 'Use .NET Core 3.1'
@@ -107,11 +85,22 @@ stages:
         projects: |
           DryWetMidi.Tests/Melanchall.DryWetMidi.Tests.csproj
     
-    - task: CmdLine@2
-      displayName: Disable app nap
+    - task: PowerShell@2
+      displayName: Build test data sending utility
       inputs:
+        targetType: 'inline'
         script: |
-          defaults write NSGlobalDomain NSAppSleepDisabled -bool YES
+          cd DryWetMidi.Tests
+          gcc -c SendTestData.c
+          gcc -shared -framework CoreServices -framework CoreMIDI -framework CoreFoundation -o SendTestData.dylib SendTestData.o
+          Copy-Item -Path "SendTestData.dylib" -Destination "bin/$(buildConfiguration)/netcoreapp3.1" -Recurse
+          
+    - task: PublishPipelineArtifact@1
+      displayName: Publish 'SendTestData' artifact
+      inputs:
+        targetPath: 'DryWetMidi.Tests/SendTestData.dylib'
+        artifactName: 'SendTestData'
+        artifactType: pipeline
     
     - template: Templates/step-create-ports-macos.yaml
       parameters:
@@ -123,22 +112,36 @@ stages:
       inputs:
         command: 'test'
         projects: 'DryWetMidi.Tests/Melanchall.DryWetMidi.Tests.csproj'
-        arguments: '--blame --no-build --configuration $(buildConfiguration) --filter (FullyQualifiedName~.Devices) --framework netcoreapp3.1 --verbosity normal -d diag.log'
+        arguments: '--blame --no-build --configuration $(buildConfiguration) --filter (FullyQualifiedName~.Devices) --framework netcoreapp3.1 --verbosity normal -d diagnostic.log'
         
-    #- task: PowerShell@2
-    #  displayName: Collect diagnostic reports
-    #  inputs:
-    #    targetType: 'inline'
-    #    script: |
-    #      while (-Not (Test-Path -Path "$HOME/Library/Logs/DiagnosticReports"))
-    #      {
-    #          Start-Sleep -s 2
-    #      }
-    #      Copy-Item -Path "$HOME/Library/Logs/DiagnosticReports" -Destination "$(Pipeline.Workspace)" -Recurse
-    #      
-    #- task: PublishPipelineArtifact@1
-    #  displayName: Publish 'DiagnosticReports' artifact
-    #  inputs:
-    #    targetPath: '$(Pipeline.Workspace)/DiagnosticReports'
-    #    artifactName: 'DiagnosticReports'
-    #    artifactType: pipeline
+    - task: PowerShell@2
+      displayName: Collect diagnostic reports
+      condition: failed()
+      inputs:
+        targetType: 'inline'
+        script: |
+          Write-Host "Checking if diagnostic reports created..."
+          Start-Sleep -s 5
+          
+          $path = "$HOME/Library/Logs/DiagnosticReports"
+          
+          if (Test-Path -Path "$path")
+          {
+            Copy-Item -Path "$path" -Destination "$(Pipeline.Workspace)" -Recurse
+            Write-Host "##vso[task.setvariable variable=DiagnosticReportsFound;isoutput=true]true"
+          }
+          else
+          {
+            Write-Host "##vso[task.setvariable variable=DiagnosticReportsFound;isoutput=true]false"
+            Write-Host "There are no diagnostic reports found for 5 seconds."
+          }
+          
+    - task: PublishPipelineArtifact@1
+      displayName: Publish 'DiagnosticReports' artifact
+      condition: eq(variables.DiagnosticReportsFound, true)
+      inputs:
+        targetPath: '$(Pipeline.Workspace)/DiagnosticReports'
+        artifactName: 'DiagnosticReports'
+        artifactType: pipeline
+        
+    - template: Templates/step-collect-logs.yaml

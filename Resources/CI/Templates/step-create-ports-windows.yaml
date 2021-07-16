@@ -4,7 +4,7 @@ parameters:
 steps:
 - task: PowerShell@2
   displayName: Create virtual MIDI ports (Windows)
-  condition: ${{ parameters.enabled }}
+  condition: and(succeeded(), ${{ parameters.enabled }})
   inputs:
     targetType: filePath
     filePath: '$(Build.SourcesDirectory)/Resources/Scripts/Setup MIDI ports.ps1'
