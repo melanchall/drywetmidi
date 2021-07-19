@@ -350,7 +350,19 @@ OUT_OPENRESULT OpenOutputDevice_Apple(void* info, void* sessionHandle, void** ha
     
     //CFStringRef portNameRef = CFStringCreateWithCString(kCFAllocatorDefault, outputDeviceInfo->name, kCFStringEncodingUTF8);
 	CFStringRef portNameRef = CFSTR("OUT");
-    MIDIOutputPortCreate(pSessionHandle->clientRef, portNameRef, &outputDeviceHandle->portRef);
+    OSStatus result = MIDIOutputPortCreate(pSessionHandle->clientRef, portNameRef, &outputDeviceHandle->portRef);
+	if (result != noErr)
+	{
+		switch (result)
+	    {
+	        case kMIDIInvalidClient: return OUT_OPENRESULT_INVALIDCLIENT;
+			case kMIDIInvalidPort: return OUT_OPENRESULT_INVALIDPORT;
+			case kMIDIServerStartErr: return OUT_OPENRESULT_SERVERSTARTERROR;
+			case kMIDIWrongThread: return OUT_OPENRESULT_WRONGTHREAD;
+			case kMIDINotPermitted: return OUT_OPENRESULT_NOTPERMITTED;
+			case kMIDIUnknownError: return OUT_OPENRESULT_UNKNOWNERROR;
+	    }
+	}
     
     return OUT_OPENRESULT_OK;
 }

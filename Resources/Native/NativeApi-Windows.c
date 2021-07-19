@@ -612,13 +612,6 @@ OUT_OPENRESULT OpenOutputDevice_Winmm(void* info, void* sessionHandle, DWORD_PTR
 	return OUT_OPENRESULT_OK;
 }
 
-// temporary
-HMIDIOUT GetOutputDeviceHandle(void* handle)
-{
-	OutputDeviceHandle* outputDeviceHandle = (OutputDeviceHandle*)handle;
-	return outputDeviceHandle->handle;
-}
-
 OUT_CLOSERESULT CloseOutputDevice(void* handle)
 {
 	OutputDeviceHandle* outputDeviceHandle = (OutputDeviceHandle*)handle;
@@ -665,4 +658,62 @@ OUT_SENDSHORTRESULT SendShortEventToOutputDevice(void* handle, int message)
 	}
 
     return OUT_SENDSHORTRESULT_OK;
+}
+
+OUT_SENDSYSEXRESULT SendSysExEventToOutputDevice_Winmm(void* handle, LPSTR data, int size)
+{
+	OutputDeviceHandle* outputDeviceHandle = (OutputDeviceHandle*)handle;
+
+	LPMIDIHDR header = malloc(sizeof(MIDIHDR));
+	header->lpData = data;
+	header->dwBufferLength = size;
+	header->dwBytesRecorded = size;
+	header->dwFlags = 0;
+
+	MMRESULT result = midiOutPrepareHeader(outputDeviceHandle->handle, header, sizeof(MIDIHDR));
+	if (result != MMSYSERR_NOERROR)
+	{
+		switch (result)
+		{
+			case MMSYSERR_INVALHANDLE: return OUT_SENDSYSEXRESULT_PREPAREBUFFER_INVALIDHANDLE;
+			case MMSYSERR_INVALPARAM: return OUT_SENDSYSEXRESULT_PREPAREBUFFER_INVALIDADDRESS;
+			case MMSYSERR_NOMEM: return OUT_SENDSYSEXRESULT_PREPAREBUFFER_NOMEMORY;
+		}
+	}
+	
+	result = midiOutLongMsg(outputDeviceHandle->handle, header, sizeof(MIDIHDR));
+	if (result != MMSYSERR_NOERROR)
+	{
+		switch (result)
+		{
+			case MIDIERR_NOTREADY: return OUT_SENDSYSEXRESULT_NOTREADY;
+			case MIDIERR_UNPREPARED: return OUT_SENDSYSEXRESULT_UNPREPARED;
+			case MMSYSERR_INVALHANDLE: return OUT_SENDSYSEXRESULT_INVALIDHANDLE;
+			case MMSYSERR_INVALPARAM: return OUT_SENDSYSEXRESULT_INVALIDSTRUCTURE;
+		}
+	}
+	
+	return OUT_SENDSYSEXRESULT_OK;
+}
+
+OUT_GETSYSEXDATARESULT GetOutputDeviceSysExBufferData(void* handle, LPMIDIHDR header, LPSTR* data, int* size)
+{
+	OutputDeviceHandle* outputDeviceHandle = (OutputDeviceHandle*)handle;
+	
+	MMRESULT result = midiOutUnprepareHeader(outputDeviceHandle->handle, header, sizeof(MIDIHDR));
+	if (result != MMSYSERR_NOERROR)
+	{
+		switch (result)
+		{
+			case MIDIERR_STILLPLAYING: return OUT_GETSYSEXDATARESULT_STILLPLAYING;
+			case MMSYSERR_INVALPARAM: return OUT_GETSYSEXDATARESULT_INVALIDSTRUCTURE;
+			case MMSYSERR_INVALHANDLE: return OUT_GETSYSEXDATARESULT_INVALIDHANDLE;
+		}
+	}
+	
+	*data = header->lpData;
+	*size = header->dwBytesRecorded;
+	
+	free(header);
+	return OUT_GETSYSEXDATARESULT_OK;
 }

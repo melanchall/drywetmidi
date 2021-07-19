@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Text;
 
 namespace Melanchall.DryWetMidi.Devices
 {
@@ -18,11 +17,6 @@ namespace Melanchall.DryWetMidi.Devices
         #endregion
 
         #region Fields
-
-        /// <summary>
-        /// Device handle.
-        /// </summary>
-        protected IntPtr _windowsHandle = IntPtr.Zero;
 
         protected IntPtr _info = IntPtr.Zero;
         protected IntPtr _handle = IntPtr.Zero;
@@ -105,25 +99,6 @@ namespace Melanchall.DryWetMidi.Devices
         }
 
         /// <summary>
-        /// Processes MMRESULT which is return value of winmm functions.
-        /// </summary>
-        /// <param name="mmResult">MMRESULT which is return value of winmm function.</param>
-        /// <exception cref="MidiDeviceException"><paramref name="mmResult"/> represents error code.</exception>
-        protected void ProcessMmResult(uint mmResult)
-        {
-            if (mmResult == MidiWinApi.MMSYSERR_NOERROR)
-                return;
-
-            var stringBuilder = new StringBuilder((int)MidiWinApi.MaxErrorLength);
-            var getErrorTextResult = GetErrorText(mmResult, stringBuilder, MidiWinApi.MaxErrorLength + 1);
-            if (getErrorTextResult != MidiWinApi.MMSYSERR_NOERROR)
-                throw new MidiDeviceException("Error occured during operation on device.");
-
-            var errorText = stringBuilder.ToString();
-            throw new MidiDeviceException(errorText);
-        }
-
-        /// <summary>
         /// Raises <see cref="ErrorOccurred"/> event.
         /// </summary>
         /// <param name="exception">An exception that represents error occurred.</param>
@@ -131,15 +106,6 @@ namespace Melanchall.DryWetMidi.Devices
         {
             ErrorOccurred?.Invoke(this, new ErrorOccurredEventArgs(exception));
         }
-
-        /// <summary>
-        /// Gets error description for the specified MMRESULT which is return value of winmm function.
-        /// </summary>
-        /// <param name="mmrError">MMRESULT which is return value of winmm function.</param>
-        /// <param name="pszText"><see cref="StringBuilder"/> to write error description to.</param>
-        /// <param name="cchText">Size of <paramref name="pszText"/> buffer.</param>
-        /// <returns>Return value of winmm function which gets error description.</returns>
-        protected abstract uint GetErrorText(uint mmrError, StringBuilder pszText, uint cchText);
 
         #endregion
 

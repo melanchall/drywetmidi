@@ -28,7 +28,13 @@ namespace Melanchall.DryWetMidi.Devices
             OUT_OPENRESULT_BADDEVICEID = 2,
             OUT_OPENRESULT_INVALIDFLAG = 3,
             OUT_OPENRESULT_INVALIDSTRUCTURE = 4,
-            OUT_OPENRESULT_NOMEMORY = 5
+            OUT_OPENRESULT_NOMEMORY = 5,
+            OUT_OPENRESULT_INVALIDCLIENT = 101,
+            OUT_OPENRESULT_INVALIDPORT = 102,
+            OUT_OPENRESULT_SERVERSTARTERROR = 103,
+            OUT_OPENRESULT_WRONGTHREAD = 104,
+            OUT_OPENRESULT_NOTPERMITTED = 105,
+            OUT_OPENRESULT_UNKNOWNERROR = 106
         }
 
         public enum OUT_CLOSERESULT
@@ -60,6 +66,13 @@ namespace Melanchall.DryWetMidi.Devices
         public enum OUT_SENDSYSEXRESULT
         {
             OUT_SENDSYSEXRESULT_OK = 0,
+            OUT_SENDSYSEXRESULT_PREPAREBUFFER_INVALIDHANDLE = 1,
+            OUT_SENDSYSEXRESULT_PREPAREBUFFER_INVALIDADDRESS = 2,
+            OUT_SENDSYSEXRESULT_PREPAREBUFFER_NOMEMORY = 3,
+            OUT_SENDSYSEXRESULT_NOTREADY = 4,
+            OUT_SENDSYSEXRESULT_UNPREPARED = 5,
+            OUT_SENDSYSEXRESULT_INVALIDHANDLE = 6,
+            OUT_SENDSYSEXRESULT_INVALIDSTRUCTURE = 7,
             OUT_SENDSYSEXRESULT_INVALIDCLIENT = 101,
             OUT_SENDSYSEXRESULT_INVALIDPORT = 102,
             OUT_SENDSYSEXRESULT_WRONGENDPOINT = 103,
@@ -69,6 +82,14 @@ namespace Melanchall.DryWetMidi.Devices
             OUT_SENDSYSEXRESULT_WRONGTHREAD = 107,
             OUT_SENDSYSEXRESULT_NOTPERMITTED = 108,
             OUT_SENDSYSEXRESULT_UNKNOWNERROR = 109
+        }
+
+        public enum OUT_GETSYSEXDATARESULT
+        {
+            OUT_GETSYSEXDATARESULT_OK = 0,
+            OUT_GETSYSEXDATARESULT_STILLPLAYING = 1,
+            OUT_GETSYSEXDATARESULT_INVALIDSTRUCTURE = 2,
+            OUT_GETSYSEXDATARESULT_INVALIDHANDLE = 3
         }
 
         #endregion
@@ -99,14 +120,27 @@ namespace Melanchall.DryWetMidi.Devices
 
         public abstract OUT_OPENRESULT Api_OpenDevice_Apple(IntPtr info, IntPtr sessionHandle, out IntPtr handle);
 
-        // TODO: remove
-        public abstract IntPtr Api_GetHandle(IntPtr handle);
-
         public abstract OUT_CLOSERESULT Api_CloseDevice(IntPtr handle);
 
         public abstract OUT_SENDSHORTRESULT Api_SendShortEvent(IntPtr handle, int message);
 
         public abstract OUT_SENDSYSEXRESULT Api_SendSysExEvent_Apple(IntPtr handle, byte[] data, ushort dataSize);
+
+        public abstract OUT_SENDSYSEXRESULT Api_SendSysExEvent_Winmm(IntPtr handle, IntPtr data, int size);
+
+        public abstract OUT_GETSYSEXDATARESULT Api_GetSysExBufferData(IntPtr handle, IntPtr header, out IntPtr data, out int size);
+
+        public static void HandleResult(OUT_GETINFORESULT result)
+        {
+            if (result != OUT_GETINFORESULT.OUT_GETINFORESULT_OK)
+                throw new MidiDeviceException(GetErrorDescription(result), (int)result);
+        }
+
+        public static void HandleResult(OUT_OPENRESULT result)
+        {
+            if (result != OUT_OPENRESULT.OUT_OPENRESULT_OK)
+                throw new MidiDeviceException(GetErrorDescription(result), (int)result);
+        }
 
         public static void HandleResult(OUT_CLOSERESULT result)
         {
@@ -124,6 +158,38 @@ namespace Melanchall.DryWetMidi.Devices
         {
             if (result != OUT_SENDSYSEXRESULT.OUT_SENDSYSEXRESULT_OK)
                 throw new MidiDeviceException(GetErrorDescription(result), (int)result);
+        }
+
+        public static void HandleResult(OUT_GETSYSEXDATARESULT result)
+        {
+            if (result != OUT_GETSYSEXDATARESULT.OUT_GETSYSEXDATARESULT_OK)
+                throw new MidiDeviceException(GetErrorDescription(result), (int)result);
+        }
+
+        private static string GetErrorDescription(OUT_GETINFORESULT result)
+        {
+            switch (result)
+            {
+                case OUT_GETINFORESULT.OUT_GETINFORESULT_NOMEMORY:
+                    return $"There is no memory in the system to get the device information ({result}).";
+            }
+
+            return GetInternalErrorDescription(result);
+        }
+
+        private static string GetErrorDescription(OUT_OPENRESULT result)
+        {
+            switch (result)
+            {
+                case OUT_OPENRESULT.OUT_OPENRESULT_ALLOCATED:
+                    return $"The device is already in use ({result}).";
+                case OUT_OPENRESULT.OUT_OPENRESULT_NOMEMORY:
+                    return $"There is no memory in the system to open the device ({result}).";
+                case OUT_OPENRESULT.OUT_OPENRESULT_NOTPERMITTED:
+                    return $"The process doesn’t have privileges for the requested operation ({result}).";
+            }
+
+            return GetInternalErrorDescription(result);
         }
 
         private static string GetErrorDescription(OUT_CLOSERESULT result)
@@ -157,6 +223,10 @@ namespace Melanchall.DryWetMidi.Devices
         {
             switch (result)
             {
+                case OUT_SENDSYSEXRESULT.OUT_SENDSYSEXRESULT_NOTREADY:
+                    return $"The hardware is busy with other data ({result}).";
+                case OUT_SENDSYSEXRESULT.OUT_SENDSYSEXRESULT_PREPAREBUFFER_NOMEMORY:
+                    return $"There is no memory in the system to send sysex data ({result}).";
                 case OUT_SENDSYSEXRESULT.OUT_SENDSYSEXRESULT_COMMUNICATIONERROR:
                 case OUT_SENDSYSEXRESULT.OUT_SENDSYSEXRESULT_SERVERSTARTERROR:
                     return $"MIDI server error ({result}).";
@@ -164,6 +234,11 @@ namespace Melanchall.DryWetMidi.Devices
                     return $"The process doesn’t have privileges for the requested operation ({result}).";
             }
 
+            return GetInternalErrorDescription(result);
+        }
+
+        private static string GetErrorDescription(OUT_GETSYSEXDATARESULT result)
+        {
             return GetInternalErrorDescription(result);
         }
 

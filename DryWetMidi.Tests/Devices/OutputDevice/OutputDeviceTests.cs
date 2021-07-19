@@ -119,11 +119,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
 
                 using (var outputDevice2 = OutputDevice.GetByName(MidiDevicesNames.DeviceA))
                 {
-                    var exception = Assert.Throws<MidiDeviceException>(() => outputDevice2.SendEvent(new NoteOnEvent()));
-                    Assert.AreEqual(
-                        "The device is already in use.",
-                        exception.Message,
-                        "Exception's message is invalid.");
+                    Assert.Throws<MidiDeviceException>(() => outputDevice2.SendEvent(new NoteOnEvent()));
                 }
             }
         }

@@ -41,9 +41,6 @@ namespace Melanchall.DryWetMidi.Devices
         private static extern OUT_OPENRESULT OpenOutputDevice_Apple(IntPtr info, IntPtr sessionHandle, out IntPtr handle);
 
         [DllImport(LibraryName, ExactSpelling = true)]
-        private static extern IntPtr GetOutputDeviceHandle(IntPtr handle);
-
-        [DllImport(LibraryName, ExactSpelling = true)]
         private static extern OUT_CLOSERESULT CloseOutputDevice(IntPtr handle);
 
         [DllImport(LibraryName, ExactSpelling = true)]
@@ -51,6 +48,12 @@ namespace Melanchall.DryWetMidi.Devices
 
         [DllImport(LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
         private static extern OUT_SENDSYSEXRESULT SendSysExEventToOutputDevice_Apple(IntPtr handle, byte[] data, ushort dataSize);
+
+        [DllImport(LibraryName, ExactSpelling = true)]
+        private static extern OUT_SENDSYSEXRESULT SendSysExEventToOutputDevice_Winmm(IntPtr handle, IntPtr data, int size);
+
+        [DllImport(LibraryName, ExactSpelling = true)]
+        private static extern OUT_GETSYSEXDATARESULT GetOutputDeviceSysExBufferData(IntPtr handle, IntPtr header, out IntPtr data, out int size);
 
         #endregion
 
@@ -104,12 +107,6 @@ namespace Melanchall.DryWetMidi.Devices
             return OpenOutputDevice_Apple(info, sessionHandle, out handle);
         }
 
-        // TODO: remove
-        public override IntPtr Api_GetHandle(IntPtr handle)
-        {
-            return GetOutputDeviceHandle(handle);
-        }
-
         public override OUT_CLOSERESULT Api_CloseDevice(IntPtr handle)
         {
             return CloseOutputDevice(handle);
@@ -123,6 +120,16 @@ namespace Melanchall.DryWetMidi.Devices
         public override OUT_SENDSYSEXRESULT Api_SendSysExEvent_Apple(IntPtr handle, byte[] data, ushort dataSize)
         {
             return SendSysExEventToOutputDevice_Apple(handle, data, dataSize);
+        }
+
+        public override OUT_SENDSYSEXRESULT Api_SendSysExEvent_Winmm(IntPtr handle, IntPtr data, int size)
+        {
+            return SendSysExEventToOutputDevice_Winmm(handle, data, size);
+        }
+
+        public override OUT_GETSYSEXDATARESULT Api_GetSysExBufferData(IntPtr handle, IntPtr header, out IntPtr data, out int size)
+        {
+            return GetOutputDeviceSysExBufferData(handle, header, out data, out size);
         }
 
         #endregion

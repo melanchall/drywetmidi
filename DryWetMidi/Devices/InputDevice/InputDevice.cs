@@ -4,7 +4,6 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
 
@@ -128,7 +127,8 @@ namespace Melanchall.DryWetMidi.Devices
         /// <exception cref="MidiDeviceException">An error occurred on device.</exception>
         public void StartEventsListening()
         {
-            // TODO: check if already listening
+            if (IsListeningForEvents)
+                return;
 
             EnsureDeviceIsNotDisposed();
             EnsureHandleIsCreated();
@@ -145,10 +145,10 @@ namespace Melanchall.DryWetMidi.Devices
         /// <exception cref="MidiDeviceException">An error occurred on device.</exception>
         public void StopEventsListening()
         {
-            EnsureDeviceIsNotDisposed();
-
-            if (_handle == IntPtr.Zero)
+            if (!IsListeningForEvents || _handle == IntPtr.Zero)
                 return;
+
+            EnsureDeviceIsNotDisposed();
 
             InputDeviceApi.HandleResult(
                 StopEventsListeningSilently());
@@ -205,19 +205,6 @@ namespace Melanchall.DryWetMidi.Devices
                 throw new ArgumentException($"There is no MIDI input device '{name}'.", nameof(name));
 
             return device;
-        }
-
-        // TODO: remove
-        /// <summary>
-        /// Gets error description for the specified MMRESULT which is return value of winmm function.
-        /// </summary>
-        /// <param name="mmrError">MMRESULT which is return value of winmm function.</param>
-        /// <param name="pszText"><see cref="StringBuilder"/> to write error description to.</param>
-        /// <param name="cchText">Size of <paramref name="pszText"/> buffer.</param>
-        /// <returns>Return value of winmm function which gets error description.</returns>
-        protected override uint GetErrorText(uint mmrError, StringBuilder pszText, uint cchText)
-        {
-            return 0;
         }
 
         protected override void SetBasicDeviceInformation()
@@ -278,6 +265,8 @@ namespace Melanchall.DryWetMidi.Devices
                             InputDeviceApiProvider.Api.Api_OpenDevice_Apple(_info, sessionHandle, _callback_Apple, out _handle));
                     }
                     break;
+                default:
+                    throw new NotSupportedException($"{_apiType} API is not supported.");
             }
         }
 

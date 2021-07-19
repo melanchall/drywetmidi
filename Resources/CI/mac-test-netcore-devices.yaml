@@ -127,18 +127,19 @@ stages:
           
           if (Test-Path -Path "$path")
           {
+            Write-Host "There are diagnostic reports, copying..."
             Copy-Item -Path "$path" -Destination "$(Pipeline.Workspace)" -Recurse
-            Write-Host "##vso[task.setvariable variable=DiagnosticReportsFound;isoutput=true]true"
+            Write-Host "##vso[task.setvariable variable=DiagnosticReportsFound]true"
           }
           else
           {
-            Write-Host "##vso[task.setvariable variable=DiagnosticReportsFound;isoutput=true]false"
             Write-Host "There are no diagnostic reports found for 5 seconds."
+            Write-Host "##vso[task.setvariable variable=DiagnosticReportsFound;isoutput=true]false"
           }
           
     - task: PublishPipelineArtifact@1
       displayName: Publish 'DiagnosticReports' artifact
-      condition: eq(variables.DiagnosticReportsFound, true)
+      condition: eq(variables['DiagnosticReportsFound'], true)
       inputs:
         targetPath: '$(Pipeline.Workspace)/DiagnosticReports'
         artifactName: 'DiagnosticReports'
