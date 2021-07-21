@@ -231,7 +231,7 @@ namespace Melanchall.DryWetMidi.Devices
 
         private static string GetInternalErrorDescription(object result)
         {
-            return $"Internal error ({result}).";
+            return $"Input device internal error ({result}).";
         }
 
         #endregion

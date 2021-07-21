@@ -95,7 +95,17 @@ SESSION_OPENRESULT OpenSession(char* name, void** handle)
 	sessionHandle->name = name;
 	
 	CFStringRef nameRef = CFStringCreateWithCString(kCFAllocatorDefault, name, kCFStringEncodingUTF8);
-	MIDIClientCreate(nameRef, NULL, NULL, &sessionHandle->clientRef);
+	OSStatus status = MIDIClientCreate(nameRef, NULL, NULL, &sessionHandle->clientRef);
+	if (status != noErr)
+	{
+		switch (status)
+	    {
+			case kMIDIServerStartErr: return SESSION_OPENRESULT_SERVERSTARTERROR;
+			case kMIDIWrongThread: return SESSION_OPENRESULT_WRONGTHREAD;
+			case kMIDINotPermitted: return SESSION_OPENRESULT_NOTPERMITTED;
+			case kMIDIUnknownError: return SESSION_OPENRESULT_UNKNOWNERROR;
+	    }
+	}
 
 	*handle = sessionHandle;
 
