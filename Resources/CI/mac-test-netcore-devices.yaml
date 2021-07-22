@@ -134,7 +134,7 @@ stages:
           else
           {
             Write-Host "There are no diagnostic reports found for 5 seconds."
-            Write-Host "##vso[task.setvariable variable=DiagnosticReportsFound;isoutput=true]false"
+            Write-Host "##vso[task.setvariable variable=DiagnosticReportsFound]false"
           }
           
     - task: PublishPipelineArtifact@1
