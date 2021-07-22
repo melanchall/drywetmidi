@@ -282,30 +282,46 @@ namespace Melanchall.DryWetMidi.Devices
             MidiDevicesSession.ExitSession();
         }
 
-        private void OnMessage_Winmm(IntPtr hMidi, MidiMessage wMsg, IntPtr dwInstance, IntPtr dwParam1, IntPtr dwParam2)
+        private void OnMessage_Winmm(IntPtr hMidi, DeviceApi.MidiMessage wMsg, IntPtr dwInstance, IntPtr dwParam1, IntPtr dwParam2)
         {
             if (!IsListeningForEvents || !IsEnabled)
                 return;
 
             switch (wMsg)
             {
-                case MidiMessage.MIM_DATA:
-                case MidiMessage.MIM_MOREDATA:
+                case DeviceApi.MidiMessage.MIM_DATA:
+                case DeviceApi.MidiMessage.MIM_MOREDATA:
                     OnShortMessage(dwParam1.ToInt32());
                     break;
 
-                case MidiMessage.MIM_LONGDATA:
+                case DeviceApi.MidiMessage.MIM_LONGDATA:
                     OnSysExMessage(dwParam1);
                     break;
-
-                case MidiMessage.MIM_ERROR:
-                    byte statusByte, firstDataByte, secondDataByte;
-                    MidiWinApi.UnpackShortEventBytes(dwParam1.ToInt32(), out statusByte, out firstDataByte, out secondDataByte);
-                    OnInvalidShortEventReceived(statusByte, firstDataByte, secondDataByte);
+                
+                // TODO: get rid of specific errors and use one event
+                case DeviceApi.MidiMessage.MIM_ERROR:
+                    {
+                        var message = dwParam1.ToInt32();
+                        var statusByte = message.GetFourthByte();
+                        var firstDataByte = message.GetThirdByte();
+                        var secondDataByte = message.GetSecondByte();
+                        OnInvalidShortEventReceived(statusByte, firstDataByte, secondDataByte);
+                    }
                     break;
 
-                case MidiMessage.MIM_LONGERROR:
-                    OnInvalidSysExEventReceived(MidiWinApi.UnpackSysExBytes(dwParam1));
+                case DeviceApi.MidiMessage.MIM_LONGERROR:
+                    {
+                        IntPtr dataPointer;
+                        int size;
+
+                        InputDeviceApi.HandleResult(
+                            InputDeviceApiProvider.Api.Api_GetSysExBufferData(dwParam1, out dataPointer, out size));
+
+                        var data = new byte[size];
+                        Marshal.Copy(dataPointer, data, 0, size);
+
+                        OnInvalidSysExEventReceived(data);
+                    }
                     break;
             }
         }
@@ -401,7 +417,15 @@ namespace Melanchall.DryWetMidi.Devices
 
             try
             {
-                data = MidiWinApi.UnpackSysExBytes(sysExHeaderPointer);
+                IntPtr dataPointer;
+                int size;
+
+                InputDeviceApi.HandleResult(
+                    InputDeviceApiProvider.Api.Api_GetSysExBufferData(sysExHeaderPointer, out dataPointer, out size));
+
+                data = new byte[size - 1];
+                Marshal.Copy(IntPtr.Add(dataPointer, 1), data, 0, data.Length);
+
                 var midiEvent = new NormalSysExEvent(data);
                 OnEventReceived(midiEvent);
 

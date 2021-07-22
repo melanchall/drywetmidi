@@ -2,7 +2,7 @@
 
 namespace Melanchall.DryWetMidi.Devices
 {
-    internal abstract class OutputDeviceApi
+    internal abstract class OutputDeviceApi : DeviceApi
     {
         #region Nested enums
 

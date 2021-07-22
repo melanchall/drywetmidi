@@ -2,7 +2,7 @@
 
 namespace Melanchall.DryWetMidi.Devices
 {
-    internal abstract class InputDeviceApi
+    internal abstract class InputDeviceApi : DeviceApi
     {
         #region Nested enums
 
@@ -84,6 +84,11 @@ namespace Melanchall.DryWetMidi.Devices
             IN_GETEVENTDATARESULT_OK = 0
         }
 
+        public enum IN_GETSYSEXDATARESULT
+        {
+            IN_GETSYSEXDATARESULT_OK = 0
+        }
+
         #endregion
 
         #region Delegates
@@ -122,6 +127,8 @@ namespace Melanchall.DryWetMidi.Devices
         public abstract IN_DISCONNECTRESULT Api_Disconnect(IntPtr handle);
 
         public abstract IN_GETEVENTDATARESULT Api_GetEventData(IntPtr packetList, int packetIndex, out IntPtr data, out int length);
+
+        public abstract IN_GETSYSEXDATARESULT Api_GetSysExBufferData(IntPtr header, out IntPtr data, out int size);
 
         public static void HandleResult(IN_GETINFORESULT result)
         {
@@ -162,6 +169,12 @@ namespace Melanchall.DryWetMidi.Devices
         public static void HandleResult(IN_GETEVENTDATARESULT result)
         {
             if (result != IN_GETEVENTDATARESULT.IN_GETEVENTDATARESULT_OK)
+                throw new MidiDeviceException(GetErrorDescription(result), (int)result);
+        }
+
+        public static void HandleResult(IN_GETSYSEXDATARESULT result)
+        {
+            if (result != IN_GETSYSEXDATARESULT.IN_GETSYSEXDATARESULT_OK)
                 throw new MidiDeviceException(GetErrorDescription(result), (int)result);
         }
 
@@ -225,6 +238,11 @@ namespace Melanchall.DryWetMidi.Devices
         }
 
         private static string GetErrorDescription(IN_GETEVENTDATARESULT result)
+        {
+            return GetInternalErrorDescription(result);
+        }
+
+        private static string GetErrorDescription(IN_GETSYSEXDATARESULT result)
         {
             return GetInternalErrorDescription(result);
         }

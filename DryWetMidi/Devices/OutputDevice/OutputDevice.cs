@@ -287,11 +287,11 @@ namespace Melanchall.DryWetMidi.Devices
             return bytes[0] + (bytes[1] << 8) + (bytes[2] << 16);
         }
 
-        private void OnMessage(IntPtr hMidi, MidiMessage wMsg, IntPtr dwInstance, IntPtr dwParam1, IntPtr dwParam2)
+        private void OnMessage(IntPtr hMidi, DeviceApi.MidiMessage wMsg, IntPtr dwInstance, IntPtr dwParam1, IntPtr dwParam2)
         {
             switch (wMsg)
             {
-                case MidiMessage.MOM_DONE:
+                case DeviceApi.MidiMessage.MOM_DONE:
                     OnSysExEventSent(dwParam1);
                     break;
             }

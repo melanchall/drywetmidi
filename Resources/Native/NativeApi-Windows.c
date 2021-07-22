@@ -505,6 +505,14 @@ IN_DISCONNECTRESULT DisconnectFromInputDevice(void* handle)
 	return IN_DISCONNECTRESULT_OK;
 }
 
+IN_GETSYSEXDATARESULT GetInputDeviceSysExBufferData(LPMIDIHDR header, LPSTR* data, int* size)
+{
+	*data = header->lpData;
+	*size = header->dwBytesRecorded;
+	
+	return IN_GETSYSEXDATARESULT_OK;
+}
+
 /* ================================
    Output device
 ================================ */

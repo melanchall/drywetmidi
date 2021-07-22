@@ -55,6 +55,9 @@ namespace Melanchall.DryWetMidi.Devices
         [DllImport(LibraryName, ExactSpelling = true)]
         private static extern IN_GETEVENTDATARESULT GetEventDataFromInputDevice(IntPtr packetList, int packetIndex, out IntPtr data, out int length);
 
+        [DllImport(LibraryName, ExactSpelling = true)]
+        private static extern IN_GETSYSEXDATARESULT GetInputDeviceSysExBufferData(IntPtr header, out IntPtr data, out int size);
+
         #endregion
 
         #region Methods
@@ -130,6 +133,11 @@ namespace Melanchall.DryWetMidi.Devices
         public override IN_GETEVENTDATARESULT Api_GetEventData(IntPtr packetList, int packetIndex, out IntPtr data, out int length)
         {
             return GetEventDataFromInputDevice(packetList, packetIndex, out data, out length);
+        }
+
+        public override IN_GETSYSEXDATARESULT Api_GetSysExBufferData(IntPtr header, out IntPtr data, out int size)
+        {
+            return GetInputDeviceSysExBufferData(header, out data, out size);
         }
 
         #endregion

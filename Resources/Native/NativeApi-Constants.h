@@ -145,6 +145,10 @@ typedef int IN_GETEVENTDATARESULT;
 
 #define IN_GETEVENTDATARESULT_OK 0
 
+typedef int IN_GETSYSEXDATARESULT;
+
+#define IN_GETSYSEXDATARESULT_OK 0
+
 /* ================================
    Output device
 ================================ */
