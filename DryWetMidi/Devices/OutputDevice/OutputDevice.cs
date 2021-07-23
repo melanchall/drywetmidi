@@ -87,7 +87,7 @@ namespace Melanchall.DryWetMidi.Devices
             if (midiEvent is ChannelEvent || midiEvent is SystemCommonEvent || midiEvent is SystemRealTimeEvent)
             {
                 var message = PackShortEvent(midiEvent);
-                OutputDeviceApi.HandleResult(
+                NativeApi.HandleResult(
                     OutputDeviceApiProvider.Api.Api_SendShortEvent(_handle, message));
                 OnEventSent(midiEvent);
             }
@@ -153,7 +153,7 @@ namespace Melanchall.DryWetMidi.Devices
             for (var i = 0; i < devicesCount; i++)
             {
                 IntPtr info;
-                OutputDeviceApi.HandleResult(
+                NativeApi.HandleResult(
                     OutputDeviceApiProvider.Api.Api_GetDeviceInfo(i, out info));
                 yield return new OutputDevice(info);
             }
@@ -206,13 +206,13 @@ namespace Melanchall.DryWetMidi.Devices
                 case OutputDeviceApi.API_TYPE.API_TYPE_WINMM:
                     {
                         _callback = OnMessage;
-                        OutputDeviceApi.HandleResult(
+                        NativeApi.HandleResult(
                             OutputDeviceApiProvider.Api.Api_OpenDevice_Winmm(_info, sessionHandle, _callback, out _handle));
                     }
                     break;
                 case OutputDeviceApi.API_TYPE.API_TYPE_APPLE:
                     {
-                        OutputDeviceApi.HandleResult(
+                        NativeApi.HandleResult(
                             OutputDeviceApiProvider.Api.Api_OpenDevice_Apple(_info, sessionHandle, out _handle));
                     }
                     break;
@@ -259,7 +259,7 @@ namespace Melanchall.DryWetMidi.Devices
             Marshal.WriteByte(bufferPointer, EventStatusBytes.Global.NormalSysEx);
             Marshal.Copy(data, 0, IntPtr.Add(bufferPointer, 1), data.Length);
 
-            OutputDeviceApi.HandleResult(
+            NativeApi.HandleResult(
                 OutputDeviceApiProvider.Api.Api_SendSysExEvent_Winmm(_handle, bufferPointer, bufferLength));
         }
 
@@ -269,7 +269,7 @@ namespace Melanchall.DryWetMidi.Devices
             buffer[0] = EventStatusBytes.Global.NormalSysEx;
             Buffer.BlockCopy(data, 0, buffer, 1, data.Length);
 
-            OutputDeviceApi.HandleResult(
+            NativeApi.HandleResult(
                 OutputDeviceApiProvider.Api.Api_SendSysExEvent_Apple(_handle, buffer, (ushort)buffer.Length));
         }
 
@@ -287,11 +287,11 @@ namespace Melanchall.DryWetMidi.Devices
             return bytes[0] + (bytes[1] << 8) + (bytes[2] << 16);
         }
 
-        private void OnMessage(IntPtr hMidi, DeviceApi.MidiMessage wMsg, IntPtr dwInstance, IntPtr dwParam1, IntPtr dwParam2)
+        private void OnMessage(IntPtr hMidi, NativeApi.MidiMessage wMsg, IntPtr dwInstance, IntPtr dwParam1, IntPtr dwParam2)
         {
             switch (wMsg)
             {
-                case DeviceApi.MidiMessage.MOM_DONE:
+                case NativeApi.MidiMessage.MOM_DONE:
                     OnSysExEventSent(dwParam1);
                     break;
             }
@@ -306,7 +306,7 @@ namespace Melanchall.DryWetMidi.Devices
                 IntPtr dataPointer;
                 int size;
 
-                OutputDeviceApi.HandleResult(
+                NativeApi.HandleResult(
                     OutputDeviceApiProvider.Api.Api_GetSysExBufferData(_handle, sysExHeaderPointer, out dataPointer,  out size));
 
                 data = new byte[size - 1];

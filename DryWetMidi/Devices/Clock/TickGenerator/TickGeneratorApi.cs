@@ -2,7 +2,7 @@
 
 namespace Melanchall.DryWetMidi.Devices
 {
-    internal abstract class TickGeneratorApi
+    internal abstract class TickGeneratorApi : NativeApi
     {
         #region Nested enums
 

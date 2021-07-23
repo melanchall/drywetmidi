@@ -26,7 +26,7 @@ namespace Melanchall.DryWetMidi.Devices
                     var name = Guid.NewGuid().ToString();
                     _name = Marshal.StringToHGlobalAuto(name);
 
-                    MidiDevicesSessionApi.HandleResult(
+                    NativeApi.HandleResult(
                         MidiDevicesSessionApiProvider.Api.Api_OpenSession(_name, out _handle));
                 }
 

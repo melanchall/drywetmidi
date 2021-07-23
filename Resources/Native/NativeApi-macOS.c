@@ -273,13 +273,18 @@ IN_OPENRESULT OpenInputDevice_Apple(void* info, void* sessionHandle, MIDIReadPro
 
     *handle = inputDeviceHandle;
 
-    //CFStringRef portNameRef = CFStringCreateWithCString(kCFAllocatorDefault, inputDeviceInfo->name, kCFStringEncodingUTF8);
     CFStringRef portNameRef = CFSTR("IN");
     OSStatus status = MIDIInputPortCreate(pSessionHandle->clientRef, portNameRef, callback, NULL, &inputDeviceHandle->portRef);
     if (status != noErr)
-        return IN_OPENRESULT_UNKNOWNERROR;
-
-    // ...
+    {
+        switch (status)
+        {
+            case kMIDIInvalidClient: return IN_OPENRESULT_INVALIDCLIENT;
+            case kMIDIWrongThread: return IN_OPENRESULT_WRONGTHREAD;
+            case kMIDINotPermitted: return IN_OPENRESULT_NOTPERMITTED;
+            case kMIDIUnknownError: return IN_OPENRESULT_UNKNOWNERROR;
+        }
+    }
 
     return IN_OPENRESULT_OK;
 }
@@ -287,8 +292,6 @@ IN_OPENRESULT OpenInputDevice_Apple(void* info, void* sessionHandle, MIDIReadPro
 IN_CLOSERESULT CloseInputDevice(void* handle)
 {
     InputDeviceHandle* inputDeviceHandle = (InputDeviceHandle*)handle;
-
-    // ...
 
     free(inputDeviceHandle->info);
     free(inputDeviceHandle);
@@ -302,9 +305,17 @@ IN_CONNECTRESULT ConnectToInputDevice(void* handle)
 
     OSStatus status = MIDIPortConnectSource(inputDeviceHandle->portRef, inputDeviceHandle->info->endpointRef, NULL);
     if (status != noErr)
-        return IN_CONNECTRESULT_UNKNOWNERROR;
-
-    // ...
+    {
+        switch (status)
+        {
+            case kMIDIUnknownError: return IN_CONNECTRESULT_UNKNOWNERROR;
+            case kMIDIInvalidPort: return IN_CONNECTRESULT_INVALIDPORT;
+            case kMIDIWrongThread: return IN_CONNECTRESULT_WRONGTHREAD;
+            case kMIDINotPermitted: return IN_CONNECTRESULT_NOTPERMITTED;
+            case kMIDIUnknownEndpoint: return IN_CONNECTRESULT_UNKNOWNENDPOINT;
+            case kMIDIWrongEndpointType: return IN_CONNECTRESULT_WRONGENDPOINT;
+        }
+    }
 
     return IN_CONNECTRESULT_OK;
 }
@@ -313,9 +324,20 @@ IN_DISCONNECTRESULT DisconnectFromInputDevice(void* handle)
 {
     InputDeviceHandle* inputDeviceHandle = (InputDeviceHandle*)handle;
 
-    MIDIPortDisconnectSource(inputDeviceHandle->portRef, inputDeviceHandle->info->endpointRef);
-
-    // ...
+    OSStatus status = MIDIPortDisconnectSource(inputDeviceHandle->portRef, inputDeviceHandle->info->endpointRef);
+    if (status != noErr)
+    {
+        switch (status)
+        {
+            case kMIDIUnknownError: return IN_DISCONNECTRESULT_UNKNOWNERROR;
+            case kMIDIInvalidPort: return IN_DISCONNECTRESULT_INVALIDPORT;
+            case kMIDIWrongThread: return IN_DISCONNECTRESULT_WRONGTHREAD;
+            case kMIDINotPermitted: return IN_DISCONNECTRESULT_NOTPERMITTED;
+            case kMIDIUnknownEndpoint: return IN_DISCONNECTRESULT_UNKNOWNENDPOINT;
+            case kMIDIWrongEndpointType: return IN_DISCONNECTRESULT_WRONGENDPOINT;
+            case kMIDINoConnection: return IN_DISCONNECTRESULT_NOCONNECTION;
+        }
+    }
 
     return IN_DISCONNECTRESULT_OK;
 }
@@ -467,7 +489,6 @@ OUT_OPENRESULT OpenOutputDevice_Apple(void* info, void* sessionHandle, void** ha
 
     *handle = outputDeviceHandle;
 
-    //CFStringRef portNameRef = CFStringCreateWithCString(kCFAllocatorDefault, outputDeviceInfo->name, kCFStringEncodingUTF8);
     CFStringRef portNameRef = CFSTR("OUT");
     OSStatus result = MIDIOutputPortCreate(pSessionHandle->clientRef, portNameRef, &outputDeviceHandle->portRef);
     if (result != noErr)
@@ -475,8 +496,6 @@ OUT_OPENRESULT OpenOutputDevice_Apple(void* info, void* sessionHandle, void** ha
         switch (result)
         {
             case kMIDIInvalidClient: return OUT_OPENRESULT_INVALIDCLIENT;
-            case kMIDIInvalidPort: return OUT_OPENRESULT_INVALIDPORT;
-            case kMIDIServerStartErr: return OUT_OPENRESULT_SERVERSTARTERROR;
             case kMIDIWrongThread: return OUT_OPENRESULT_WRONGTHREAD;
             case kMIDINotPermitted: return OUT_OPENRESULT_NOTPERMITTED;
             case kMIDIUnknownError: return OUT_OPENRESULT_UNKNOWNERROR;

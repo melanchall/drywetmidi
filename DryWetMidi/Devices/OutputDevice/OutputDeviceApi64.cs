@@ -7,7 +7,7 @@ namespace Melanchall.DryWetMidi.Devices
     {
         #region Constants
 
-        private const string LibraryName = "Melanchall_DryWetMidi_Native64";
+        private const string LibraryName = LibraryName64;
 
         #endregion
 

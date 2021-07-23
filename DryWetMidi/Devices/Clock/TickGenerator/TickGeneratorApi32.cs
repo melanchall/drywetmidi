@@ -5,18 +5,24 @@ namespace Melanchall.DryWetMidi.Devices
 {
     internal sealed class TickGeneratorApi32 : TickGeneratorApi
     {
+        #region Constants
+
+        private const string LibraryName = LibraryName32;
+
+        #endregion
+
         #region Extern functions
 
-        [DllImport("Melanchall_DryWetMidi_Native32", ExactSpelling = true)]
+        [DllImport(LibraryName, ExactSpelling = true)]
         private static extern API_TYPE GetApiType();
 
-        [DllImport("Melanchall_DryWetMidi_Native32", ExactSpelling = true)]
+        [DllImport(LibraryName, ExactSpelling = true)]
         private static extern TG_STARTRESULT StartHighPrecisionTickGenerator_Winmm(int interval, TimerCallback_Winmm callback, out IntPtr info);
 
-        [DllImport("Melanchall_DryWetMidi_Native32", ExactSpelling = true)]
+        [DllImport(LibraryName, ExactSpelling = true)]
         private static extern TG_STARTRESULT StartHighPrecisionTickGenerator_Apple(int interval, TimerCallback_Apple callback, out IntPtr info);
 
-        [DllImport("Melanchall_DryWetMidi_Native32", ExactSpelling = true)]
+        [DllImport(LibraryName, ExactSpelling = true)]
         private static extern TG_STOPRESULT StopHighPrecisionTickGenerator(IntPtr info);
 
         #endregion
