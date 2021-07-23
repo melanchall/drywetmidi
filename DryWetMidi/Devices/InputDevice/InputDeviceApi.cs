@@ -25,7 +25,8 @@ namespace Melanchall.DryWetMidi.Devices
             IN_GETINFORESULT_MANUFACTURER_TOOLONG = 104,
             IN_GETINFORESULT_PRODUCT_UNKNOWNENDPOINT = 105,
             IN_GETINFORESULT_PRODUCT_TOOLONG = 106,
-            IN_GETINFORESULT_UNKNOWNERROR = 107
+            IN_GETINFORESULT_UNKNOWNERROR = 107,
+            IN_GETINFORESULT_DRIVERVERSION_UNKNOWNENDPOINT = 108
         }
 
         public enum IN_OPENRESULT
@@ -119,7 +120,7 @@ namespace Melanchall.DryWetMidi.Devices
 
         public abstract string Api_GetDeviceProduct(IntPtr info);
 
-        public abstract uint Api_GetDeviceDriverVersion(IntPtr info);
+        public abstract int Api_GetDeviceDriverVersion(IntPtr info);
 
         public abstract IN_OPENRESULT Api_OpenDevice_Winmm(IntPtr info, IntPtr sessionHandle, Callback_Winmm callback, int sysExBufferSize, out IntPtr handle);
 

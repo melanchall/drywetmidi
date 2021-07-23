@@ -292,7 +292,7 @@ char* GetInputDeviceProduct(void* info)
     return GetDeviceProduct(inputDeviceInfo->productId);
 }
 
-UINT GetInputDeviceDriverVersion(void* info)
+int GetInputDeviceDriverVersion(void* info)
 {
     InputDeviceInfo* inputDeviceInfo = (InputDeviceInfo*)info;
     return inputDeviceInfo->driverVersion;
@@ -586,7 +586,7 @@ char* GetOutputDeviceProduct(void* info)
     return GetDeviceProduct(outputDeviceInfo->productId);
 }
 
-UINT GetOutputDeviceDriverVersion(void* info)
+int GetOutputDeviceDriverVersion(void* info)
 {
     OutputDeviceInfo* outputDeviceInfo = (OutputDeviceInfo*)info;
     return outputDeviceInfo->driverVersion;

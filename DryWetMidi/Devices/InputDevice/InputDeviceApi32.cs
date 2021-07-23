@@ -32,7 +32,7 @@ namespace Melanchall.DryWetMidi.Devices
         private static extern IntPtr GetInputDeviceProduct(IntPtr info);
 
         [DllImport(LibraryName, ExactSpelling = true)]
-        private static extern uint GetInputDeviceDriverVersion(IntPtr info);
+        private static extern int GetInputDeviceDriverVersion(IntPtr info);
 
         [DllImport(LibraryName, ExactSpelling = true)]
         private static extern IN_OPENRESULT OpenInputDevice_Winmm(IntPtr info, IntPtr sessionHandle, Callback_Winmm callback, int sysExBufferSize, out IntPtr handle);
@@ -95,7 +95,7 @@ namespace Melanchall.DryWetMidi.Devices
             return productPointer != IntPtr.Zero ? Marshal.PtrToStringAnsi(productPointer) : string.Empty;
         }
 
-        public override uint Api_GetDeviceDriverVersion(IntPtr info)
+        public override int Api_GetDeviceDriverVersion(IntPtr info)
         {
             return GetInputDeviceDriverVersion(info);
         }

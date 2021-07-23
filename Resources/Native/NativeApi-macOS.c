@@ -138,6 +138,16 @@ OSStatus GetDevicePropertyValue(MIDIEndpointRef endpointRef, CFStringRef propert
     return status;
 }
 
+OSStatus GetDeviceDriverVersion(MIDIEndpointRef endpointRef, int* value)
+{
+    SInt32 driverVersion;
+    OSStatus status = MIDIObjectGetIntegerProperty(endpointRef, kMIDIPropertyDriverVersion, &driverVersion);
+
+    *value = driverVersion;
+
+    return status;
+}
+
 /* ================================
  Input device
  ================================ */
@@ -211,6 +221,19 @@ IN_GETINFORESULT GetInputDeviceInfo(int deviceIndex, void** info)
         }
     }
 
+    status = GetDeviceDriverVersion(endpointRef, &inputDeviceInfo->driverVersion);
+    if (status != noErr)
+    {
+        switch (status)
+        {
+            case kMIDIUnknownEndpoint: return IN_GETINFORESULT_DRIVERVERSION_UNKNOWNENDPOINT;
+            case kMIDIUnknownProperty:
+                inputDeviceInfo->driverVersion = 0;
+                break;
+            default: return IN_GETINFORESULT_UNKNOWNERROR;
+        }
+    }
+
     *info = inputDeviceInfo;
 
     return IN_GETINFORESULT_OK;
@@ -237,11 +260,7 @@ char* GetInputDeviceProduct(void* info)
 int GetInputDeviceDriverVersion(void* info)
 {
     InputDeviceInfo* inputDeviceInfo = (InputDeviceInfo*)info;
-
-    SInt32 driverVersion;
-    MIDIObjectGetIntegerProperty(inputDeviceInfo->endpointRef, kMIDIPropertyDriverVersion, &driverVersion);
-
-    return driverVersion;
+    return inputDeviceInfo->driverVersion;
 }
 
 IN_OPENRESULT OpenInputDevice_Apple(void* info, void* sessionHandle, MIDIReadProc callback, void** handle)
@@ -396,6 +415,19 @@ OUT_GETINFORESULT GetOutputDeviceInfo(int deviceIndex, void** info)
         }
     }
 
+    status = GetDeviceDriverVersion(endpointRef, &outputDeviceInfo->driverVersion);
+    if (status != noErr)
+    {
+        switch (status)
+        {
+            case kMIDIUnknownEndpoint: return OUT_GETINFORESULT_DRIVERVERSION_UNKNOWNENDPOINT;
+            case kMIDIUnknownProperty:
+                outputDeviceInfo->driverVersion = 0;
+                break;
+            default: return OUT_GETINFORESULT_UNKNOWNERROR;
+        }
+    }
+
     *info = outputDeviceInfo;
 
     return OUT_GETINFORESULT_OK;
@@ -422,11 +454,7 @@ char* GetOutputDeviceProduct(void* info)
 int GetOutputDeviceDriverVersion(void* info)
 {
     OutputDeviceInfo* outputDeviceInfo = (OutputDeviceInfo*)info;
-
-    SInt32 driverVersion;
-    MIDIObjectGetIntegerProperty(outputDeviceInfo->endpointRef, kMIDIPropertyDriverVersion, &driverVersion);
-
-    return driverVersion;
+    return outputDeviceInfo->driverVersion;
 }
 
 OUT_OPENRESULT OpenOutputDevice_Apple(void* info, void* sessionHandle, void** handle)

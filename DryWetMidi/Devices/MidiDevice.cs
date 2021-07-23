@@ -76,7 +76,7 @@ namespace Melanchall.DryWetMidi.Devices
         /// <summary>
         /// Gets the version of MIDI device driver.
         /// </summary>
-        public uint DriverVersion { get; protected set; }
+        public int DriverVersion { get; protected set; }
 
         #endregion
 
