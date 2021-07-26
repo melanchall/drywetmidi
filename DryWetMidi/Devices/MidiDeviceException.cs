@@ -1,11 +1,12 @@
 ﻿using System;
+using Melanchall.DryWetMidi.Common;
 
 namespace Melanchall.DryWetMidi.Devices
 {
     /// <summary>
     /// The exception that is thrown when an error occurred on a MIDI device.
     /// </summary>
-    public sealed class MidiDeviceException : Exception
+    public sealed class MidiDeviceException : MidiException
     {
         #region Constructor
 

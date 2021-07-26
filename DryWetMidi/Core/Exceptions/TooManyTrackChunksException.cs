@@ -1,4 +1,6 @@
-﻿namespace Melanchall.DryWetMidi.Core
+﻿using Melanchall.DryWetMidi.Common;
+
+namespace Melanchall.DryWetMidi.Core
 {
     /// <summary>
     /// The exception that is thrown while writing a MIDI file when the <see cref="MidiFile.Chunks"/>

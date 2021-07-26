@@ -1,4 +1,6 @@
-﻿namespace Melanchall.DryWetMidi.Core
+﻿using Melanchall.DryWetMidi.Common;
+
+namespace Melanchall.DryWetMidi.Core
 {
     /// <summary>
     /// The exception that is thrown when the reading engine encountered unexpected running

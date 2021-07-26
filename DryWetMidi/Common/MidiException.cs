@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Melanchall.DryWetMidi.Core
+namespace Melanchall.DryWetMidi.Common
 {
     /// <summary>
     /// Base MIDI exception class.
