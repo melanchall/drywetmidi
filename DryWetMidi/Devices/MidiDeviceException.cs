@@ -50,7 +50,7 @@ namespace Melanchall.DryWetMidi.Devices
 
         #region Properties
 
-        public int ErrorCode { get; }
+        public int? ErrorCode { get; }
 
         #endregion
     }

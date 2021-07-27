@@ -37,16 +37,6 @@ namespace Melanchall.DryWetMidi.Devices
         /// </remarks>
         public event EventHandler<MidiTimeCodeReceivedEventArgs> MidiTimeCodeReceived;
 
-        /// <summary>
-        /// Occurs when invalid system exclusive event is received.
-        /// </summary>
-        public event EventHandler<InvalidSysExEventReceivedEventArgs> InvalidSysExEventReceived;
-
-        /// <summary>
-        /// Occurs when invalid channel, system common or system real-time event received.
-        /// </summary>
-        public event EventHandler<InvalidShortEventReceivedEventArgs> InvalidShortEventReceived;
-
         #endregion
 
         #region Fields
@@ -240,16 +230,6 @@ namespace Melanchall.DryWetMidi.Devices
             MidiTimeCodeReceived?.Invoke(this, new MidiTimeCodeReceivedEventArgs(timeCodeType, hours, minutes, seconds, frames));
         }
 
-        private void OnInvalidSysExEventReceived(byte[] data)
-        {
-            InvalidSysExEventReceived?.Invoke(this, new InvalidSysExEventReceivedEventArgs(data));
-        }
-
-        private void OnInvalidShortEventReceived(byte statusByte, byte firstDataByte, byte secondDataByte)
-        {
-            InvalidShortEventReceived?.Invoke(this, new InvalidShortEventReceivedEventArgs(statusByte, firstDataByte, secondDataByte));
-        }
-
         private void EnsureHandleIsCreated()
         {
             if (_handle != IntPtr.Zero)
@@ -306,30 +286,12 @@ namespace Melanchall.DryWetMidi.Devices
                     OnSysExMessage(dwParam1);
                     break;
                 
-                // TODO: get rid of specific errors and use one event
                 case NativeApi.MidiMessage.MIM_ERROR:
-                    {
-                        var message = dwParam1.ToInt32();
-                        var statusByte = message.GetFourthByte();
-                        var firstDataByte = message.GetThirdByte();
-                        var secondDataByte = message.GetSecondByte();
-                        OnInvalidShortEventReceived(statusByte, firstDataByte, secondDataByte);
-                    }
+                    OnInvalidShortEvent(dwParam1.ToInt32());
                     break;
 
                 case NativeApi.MidiMessage.MIM_LONGERROR:
-                    {
-                        IntPtr dataPointer;
-                        int size;
-
-                        NativeApi.HandleResult(
-                            InputDeviceApiProvider.Api.Api_GetSysExBufferData(dwParam1, out dataPointer, out size));
-
-                        var data = new byte[size];
-                        Marshal.Copy(dataPointer, data, 0, size);
-
-                        OnInvalidSysExEventReceived(data);
-                    }
+                    OnInvalidSysExEvent(dwParam1);
                     break;
             }
         }
@@ -397,6 +359,32 @@ namespace Melanchall.DryWetMidi.Devices
                 exception.Data.Add("Data", data);
                 OnError(exception);
             }
+        }
+
+        private void OnInvalidShortEvent(int message)
+        {
+            var exception = new MidiDeviceException("Invalid short event received.");
+            exception.Data["StatusByte"] = message.GetFourthByte();
+            exception.Data["FirstDataByte"] = message.GetThirdByte();
+            exception.Data["SecondDataByte"] = message.GetSecondByte();
+
+            OnError(exception);
+        }
+
+        private void OnInvalidSysExEvent(IntPtr headerPointer)
+        {
+            IntPtr dataPointer;
+            int size;
+
+            NativeApi.HandleResult(
+                InputDeviceApiProvider.Api.Api_GetSysExBufferData(headerPointer, out dataPointer, out size));
+
+            var data = new byte[size];
+            Marshal.Copy(dataPointer, data, 0, size);
+
+            var exception = new MidiDeviceException("Invalid system exclusive event received.");
+            exception.Data.Add("Data", data);
+            OnError(exception);
         }
 
         private void OnShortMessage(int message)
