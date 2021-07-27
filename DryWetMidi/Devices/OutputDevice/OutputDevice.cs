@@ -37,8 +37,6 @@ namespace Melanchall.DryWetMidi.Devices
 
         private OutputDeviceApi.Callback_Winmm _callback;
 
-        private readonly HashSet<IntPtr> _sysExHeadersPointers = new HashSet<IntPtr>();
-
         private readonly OutputDeviceApi.API_TYPE _apiType;
 
         #endregion
@@ -46,7 +44,12 @@ namespace Melanchall.DryWetMidi.Devices
         #region Constructor
 
         internal OutputDevice(IntPtr info)
-            : base(info)
+            : this(info, DeviceOwner.User)
+        {
+        }
+
+        internal OutputDevice(IntPtr info, DeviceOwner owner)
+            : base(info, owner)
         {
             _apiType = OutputDeviceApiProvider.Api.Api_GetApiType();
         }
@@ -348,7 +351,7 @@ namespace Melanchall.DryWetMidi.Devices
         /// </summary>
         /// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to
         /// release only unmanaged resources.</param>
-        protected override void Dispose(bool disposing)
+        internal override void Dispose(bool disposing)
         {
             if (_disposed)
                 return;

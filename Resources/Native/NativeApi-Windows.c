@@ -725,3 +725,22 @@ OUT_GETSYSEXDATARESULT GetOutputDeviceSysExBufferData(void* handle, LPMIDIHDR he
     free(header);
     return OUT_GETSYSEXDATARESULT_OK;
 }
+
+/* ================================
+ Virtual device
+ ================================ */
+ 
+typedef struct
+{
+    InputDeviceInfo* inputDeviceInfo;
+	OutputDeviceInfo* outputDeviceInfo;
+} VirtualDeviceHandle;
+
+VIRTUAL_OPENRESULT OpenVirtualDevice_Winmm(char* name, void** handle)
+{
+	VirtualDeviceHandle* virtualDeviceHandle = malloc(sizeof(VirtualDeviceHandle));
+	
+	*handle = virtualDeviceHandle;
+	
+	return VIRTUAL_OPENRESULT_OK;
+}

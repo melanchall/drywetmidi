@@ -56,8 +56,13 @@ namespace Melanchall.DryWetMidi.Devices
 
         #region Constructor
 
-        private InputDevice(IntPtr info)
-            : base(info)
+        internal InputDevice(IntPtr info)
+            : this(info, DeviceOwner.User)
+        {
+        }
+
+        internal InputDevice(IntPtr info, DeviceOwner owner)
+            : base(info, owner)
         {
             _apiType = InputDeviceApiProvider.Api.Api_GetApiType();
             _bytesToMidiEventConverter.ReadingSettings.SilentNoteOnPolicy = SilentNoteOnPolicy.NoteOn;
@@ -479,7 +484,7 @@ namespace Melanchall.DryWetMidi.Devices
         /// </summary>
         /// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to
         /// release only unmanaged resources.</param>
-        protected override void Dispose(bool disposing)
+        internal override void Dispose(bool disposing)
         {
             if (_disposed)
                 return;

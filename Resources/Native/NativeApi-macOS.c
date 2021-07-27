@@ -590,3 +590,133 @@ OUT_SENDSYSEXRESULT SendSysExEventToOutputDevice_Apple(void* handle, Byte* data,
 
     return OUT_SENDSYSEXRESULT_OK;
 }
+
+/* ================================
+ Virtual device
+ ================================ */
+
+typedef struct
+{
+    InputDeviceInfo* inputDeviceInfo;
+	OutputDeviceInfo* outputDeviceInfo;
+	char* name;
+} VirtualDeviceInfo;
+
+VIRTUAL_OPENRESULT OpenVirtualDevice_Apple(char* name, void* sessionHandle, MIDIReadProc callback, void** info)
+{	
+	SessionHandle* pSessionHandle = (SessionHandle*)sessionHandle;
+	
+	VirtualDeviceInfo* virtualDeviceInfo = malloc(sizeof(VirtualDeviceInfo));
+	virtualDeviceInfo->name = name;
+	
+	CFStringRef nameRef = CFStringCreateWithCString(NULL, name, kCFStringEncodingUTF8);
+	
+	MIDIEndpointRef sourceRef;
+	OSStatus status = MIDISourceCreate(pSessionHandle->clientRef, nameRef, &sourceRef);
+	if (status != noErr)
+	{
+		switch (status)
+        {
+            case kMIDIServerStartErr: return VIRTUAL_OPENRESULT_CREATESOURCE_SERVERSTARTERROR;
+            case kMIDIWrongThread: return VIRTUAL_OPENRESULT_CREATESOURCE_WRONGTHREAD;
+            case kMIDINotPermitted: return VIRTUAL_OPENRESULT_CREATESOURCE_NOTPERMITTED;
+            case kMIDIUnknownError: return VIRTUAL_OPENRESULT_CREATESOURCE_UNKNOWNERROR;
+        }
+	}
+	
+	InputDeviceInfo* inputDeviceInfo = malloc(sizeof(InputDeviceInfo));
+	inputDeviceInfo->endpointRef = sourceRef;
+	inputDeviceInfo->name = name;
+	inputDeviceInfo->manufacturer = NULL;
+	inputDeviceInfo->product = NULL;
+	virtualDeviceInfo->inputDeviceInfo = inputDeviceInfo;
+	
+	MIDIEndpointRef destinationRef;
+	status = MIDIDestinationCreate(pSessionHandle->clientRef, nameRef, callback, inputDeviceInfo, &destinationRef);
+	if (status != noErr)
+	{
+		switch (status)
+        {
+            case kMIDIServerStartErr: return VIRTUAL_OPENRESULT_CREATEDESTINATION_SERVERSTARTERROR;
+            case kMIDIWrongThread: return VIRTUAL_OPENRESULT_CREATEDESTINATION_WRONGTHREAD;
+            case kMIDINotPermitted: return VIRTUAL_OPENRESULT_CREATEDESTINATION_NOTPERMITTED;
+            case kMIDIUnknownError: return VIRTUAL_OPENRESULT_CREATEDESTINATION_UNKNOWNERROR;
+        }
+	}
+	
+	OutputDeviceInfo* outputDeviceInfo = malloc(sizeof(OutputDeviceInfo));
+	outputDeviceInfo->endpointRef = destinationRef;
+	outputDeviceInfo->name = name;
+	outputDeviceInfo->manufacturer = NULL;
+	outputDeviceInfo->product = NULL;
+	virtualDeviceInfo->outputDeviceInfo = outputDeviceInfo;
+	
+	*info = virtualDeviceInfo;
+	
+	return VIRTUAL_OPENRESULT_OK;
+}
+
+VIRTUAL_CLOSERESULT CloseVirtualDevice(void* info)
+{
+	VirtualDeviceInfo* virtualDeviceInfo = (VirtualDeviceInfo*)info;
+	
+	OSStatus status = MIDIEndpointDispose(virtualDeviceInfo->inputDeviceInfo->endpointRef);
+	if (status != noErr)
+	{
+		switch (status)
+        {
+			case kMIDIUnknownEndpoint: return VIRTUAL_CLOSERESULT_DISPOSESOURCE_UNKNOWNENDPOINT;
+            case kMIDINotPermitted: return VIRTUAL_CLOSERESULT_DISPOSESOURCE_NOTPERMITTED;
+            case kMIDIUnknownError: return VIRTUAL_CLOSERESULT_DISPOSESOURCE_UNKNOWNERROR;
+        }
+	}
+	
+	status = MIDIEndpointDispose(virtualDeviceInfo->outputDeviceInfo->endpointRef);
+	if (status != noErr)
+	{
+		switch (status)
+        {
+			case kMIDIUnknownEndpoint: return VIRTUAL_CLOSERESULT_DISPOSEDESTINATION_UNKNOWNENDPOINT;
+            case kMIDINotPermitted: return VIRTUAL_CLOSERESULT_DISPOSEDESTINATION_NOTPERMITTED;
+            case kMIDIUnknownError: return VIRTUAL_CLOSERESULT_DISPOSEDESTINATION_UNKNOWNERROR;
+        }
+	}
+	
+	free(virtualDeviceInfo);
+	
+	return VIRTUAL_CLOSERESULT_OK;
+}
+
+VIRTUAL_SENDBACKRESULT SendDataBackFromVirtualDevice(const MIDIPacketList *pktlist, void *readProcRefCon)
+{
+	InputDeviceInfo* inputDeviceInfo = (InputDeviceInfo*)readProcRefCon;
+	
+    OSStatus status = MIDIReceived(inputDeviceInfo->endpointRef, pktlist);
+	if (status != noErr)
+	{
+		switch (status)
+        {
+			case kMIDIUnknownEndpoint: return VIRTUAL_SENDBACKRESULT_UNKNOWNENDPOINT;
+            case kMIDINotPermitted: return VIRTUAL_SENDBACKRESULT_NOTPERMITTED;
+            case kMIDIUnknownError: return VIRTUAL_SENDBACKRESULT_UNKNOWNERROR;
+			case kMIDIWrongEndpointType: return VIRTUAL_SENDBACKRESULT_WRONGENDPOINT;
+			case kMIDIMessageSendErr: return VIRTUAL_SENDBACKRESULT_MESSAGESENDERROR;
+			case kMIDIServerStartErr: return VIRTUAL_SENDBACKRESULT_SERVERSTARTERROR;
+			case kMIDIWrongThread: return VIRTUAL_SENDBACKRESULT_WRONGTHREAD;
+        }
+	}
+	
+	return VIRTUAL_SENDBACKRESULT_OK;
+}
+
+void* GetInputDeviceInfoFromVirtualDevice(void* info)
+{
+	VirtualDeviceInfo* virtualDeviceInfo = (VirtualDeviceInfo*)info;
+	return virtualDeviceInfo->inputDeviceInfo;
+}
+
+void* GetOutputDeviceInfoFromVirtualDevice(void* info)
+{
+	VirtualDeviceInfo* virtualDeviceInfo = (VirtualDeviceInfo*)info;
+	return virtualDeviceInfo->outputDeviceInfo;
+}

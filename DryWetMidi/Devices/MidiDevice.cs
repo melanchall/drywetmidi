@@ -7,6 +7,16 @@ namespace Melanchall.DryWetMidi.Devices
     /// </summary>
     public abstract class MidiDevice : IDisposable
     {
+        #region Nested enums
+
+        internal enum DeviceOwner
+        {
+            User,
+            VirtualDevice
+        }
+
+        #endregion
+
         #region Events
 
         /// <summary>
@@ -30,9 +40,20 @@ namespace Melanchall.DryWetMidi.Devices
 
         #region Constructor
 
+        internal MidiDevice()
+            : this(IntPtr.Zero)
+        {
+        }
+
         internal MidiDevice(IntPtr info)
+            : this(info, DeviceOwner.User)
+        {
+        }
+
+        internal MidiDevice(IntPtr info, DeviceOwner owner)
         {
             _info = info;
+            Owner = owner;
             SetBasicDeviceInformation();
         }
 
@@ -77,6 +98,8 @@ namespace Melanchall.DryWetMidi.Devices
         /// Gets the version of MIDI device driver.
         /// </summary>
         public int DriverVersion { get; protected set; }
+
+        internal DeviceOwner Owner { get; }
 
         #endregion
 
@@ -129,6 +152,9 @@ namespace Melanchall.DryWetMidi.Devices
         /// </summary>
         public void Dispose()
         {
+            if (Owner != DeviceOwner.User)
+                throw new InvalidOperationException($"Disposing of a device owned by {Owner} is prohibited.");
+
             Dispose(true);
             GC.SuppressFinalize(this);
         }
@@ -139,7 +165,7 @@ namespace Melanchall.DryWetMidi.Devices
         /// </summary>
         /// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to
         /// release only unmanaged resources.</param>
-        protected abstract void Dispose(bool disposing);
+        internal abstract void Dispose(bool disposing);
 
         #endregion
     }
