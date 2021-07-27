@@ -62,11 +62,29 @@ namespace Melanchall.DryWetMidi.Tests.Devices
 
         [TestCase(MidiDevicesNames.DeviceA)]
         [TestCase(MidiDevicesNames.DeviceB)]
-        public void FindInputDevice(string deviceName)
+        public void FindInputDeviceByName(string deviceName)
         {
-            Assert.IsTrue(
-                InputDevice.GetAll().Any(d => d.Name == deviceName),
-                $"There is no device '{deviceName}' in the system.");
+            Assert.IsNotNull(InputDevice.GetByName(deviceName), "There is no device.");
+        }
+
+        [Test]
+        public void FindInputDeviceByIndex_Valid()
+        {
+            var devicesCount = InputDevice.GetDevicesCount();
+            Assert.IsNotNull(InputDevice.GetByIndex(devicesCount / 2), "There is no device.");
+        }
+
+        [Test]
+        public void FindInputDeviceByIndex_BelowZero()
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(() => InputDevice.GetByIndex(-1), "Exception is not thrown.");
+        }
+
+        [Test]
+        public void FindInputDeviceByIndex_BeyondDevicesCount()
+        {
+            var devicesCount = InputDevice.GetDevicesCount();
+            Assert.Throws<ArgumentOutOfRangeException>(() => InputDevice.GetByIndex(devicesCount), "Exception is not thrown.");
         }
 
         [Retry(RetriesNumber)]

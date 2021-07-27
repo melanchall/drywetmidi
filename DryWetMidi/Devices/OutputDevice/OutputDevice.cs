@@ -150,13 +150,22 @@ namespace Melanchall.DryWetMidi.Devices
         public static IEnumerable<OutputDevice> GetAll()
         {
             var devicesCount = GetDevicesCount();
+
             for (var i = 0; i < devicesCount; i++)
             {
-                IntPtr info;
-                NativeApi.HandleResult(
-                    OutputDeviceApiProvider.Api.Api_GetDeviceInfo(i, out info));
-                yield return new OutputDevice(info);
+                yield return GetByIndex(i);
             }
+        }
+
+        public static OutputDevice GetByIndex(int index)
+        {
+            var devicesCount = GetDevicesCount();
+            ThrowIfArgument.IsOutOfRange(nameof(index), index, 0, devicesCount - 1, "Index is less than zero or greater than devices count minus 1.");
+
+            IntPtr info;
+            NativeApi.HandleResult(OutputDeviceApiProvider.Api.Api_GetDeviceInfo(index, out info));
+
+            return new OutputDevice(info);
         }
 
         /// <summary>

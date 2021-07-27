@@ -163,7 +163,6 @@ namespace Melanchall.DryWetMidi.Devices
             return InputDeviceApiProvider.Api.Api_GetDevicesCount();
         }
 
-        // TODO: add get by index
         /// <summary>
         /// Retrieves all input MIDI devices presented in the system.
         /// </summary>
@@ -171,13 +170,22 @@ namespace Melanchall.DryWetMidi.Devices
         public static IEnumerable<InputDevice> GetAll()
         {
             var devicesCount = GetDevicesCount();
+
             for (var i = 0; i < devicesCount; i++)
             {
-                IntPtr info;
-                NativeApi.HandleResult(
-                    InputDeviceApiProvider.Api.Api_GetDeviceInfo(i, out info));
-                yield return new InputDevice(info);
+                yield return GetByIndex(i);
             }
+        }
+
+        public static InputDevice GetByIndex(int index)
+        {
+            var devicesCount = GetDevicesCount();
+            ThrowIfArgument.IsOutOfRange(nameof(index), index, 0, devicesCount - 1, "Index is less than zero or greater than devices count minus 1.");
+
+            IntPtr info;
+            NativeApi.HandleResult(InputDeviceApiProvider.Api.Api_GetDeviceInfo(index, out info));
+
+            return new InputDevice(info);
         }
 
         /// <summary>
