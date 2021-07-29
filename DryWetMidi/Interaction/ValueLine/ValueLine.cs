@@ -1,12 +1,11 @@
-﻿using Melanchall.DryWetMidi.Common;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace Melanchall.DryWetMidi.Interaction
 {
-    // Do internal after O3 lifetime
+    // TODO: Do internal after O3 lifetime
     /// <summary>
     /// Represents timeline of a parameter's value.
     /// </summary>
@@ -40,20 +39,6 @@ namespace Melanchall.DryWetMidi.Interaction
         #endregion
 
         #region Methods
-
-        /// <summary>
-        /// Gets value at specified time.
-        /// </summary>
-        /// <param name="time">Time to get a value at.</param>
-        /// <returns>Parameter's value at the <paramref name="time"/>.</returns>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="time"/> is negative.</exception>
-        [Obsolete("OBS3")]
-        public TValue AtTime(long time)
-        {
-            ThrowIfTimeArgument.IsNegative(nameof(time), time);
-
-            return GetValueAtTime(time);
-        }
 
         internal TValue GetValueAtTime(long time)
         {

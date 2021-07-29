@@ -1226,24 +1226,6 @@ namespace Melanchall.DryWetMidi.Tests.Core
             Assert.AreEqual(text, textEvent.Text, "Text decoded incorrectly.");
         }
 
-        [Obsolete("OBS2")]
-        [Test]
-        public void Read_ReadFromMemory()
-        {
-            var settings = new ReadingSettings();
-            Assert.AreEqual(BufferingPolicy.UseFixedSizeBuffer, settings.ReaderSettings.BufferingPolicy, "Initial buffering policy is invalid.");
-
-            settings.ReaderSettings.ReadFromMemory = true;
-            Assert.AreEqual(BufferingPolicy.BufferAllData, settings.ReaderSettings.BufferingPolicy, "Buffering policy is invalid after ReadFromMemory set.");
-
-            foreach (var filePath in TestFilesProvider.GetValidFilesPaths())
-            {
-                var expectedMidiFile = MidiFile.Read(filePath);
-                var midiFile = MidiFile.Read(filePath, settings);
-                MidiAsserts.AreEqual(expectedMidiFile, midiFile, true, $"File '{filePath}' is invalid.");
-            }
-        }
-
         [Test]
         public void Read_BufferAllData()
         {

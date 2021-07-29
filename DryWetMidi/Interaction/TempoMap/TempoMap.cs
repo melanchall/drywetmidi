@@ -58,24 +58,6 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         public TimeDivision TimeDivision { get; internal set; }
 
-        /// <summary>
-        /// Gets an object that holds changes of the time signature through the time.
-        /// </summary>
-        [Obsolete("OBS3")]
-        public ValueLine<TimeSignature> TimeSignature
-        {
-            get { return _timeSignatureLine; }
-        }
-
-        /// <summary>
-        /// Gets an object that holds changes of the tempo through the time.
-        /// </summary>
-        [Obsolete("OBS4")]
-        public ValueLine<Tempo> Tempo
-        {
-            get { return _tempoLine; }
-        }
-
         internal ValueLine<TimeSignature> TimeSignatureLine
         {
             get { return _timeSignatureLine; }
