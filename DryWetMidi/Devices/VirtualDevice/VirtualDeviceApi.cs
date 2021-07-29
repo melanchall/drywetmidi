@@ -43,6 +43,7 @@ namespace Melanchall.DryWetMidi.Devices
         public enum VIRTUAL_SENDBACKRESULT
         {
             VIRTUAL_SENDBACKRESULT_OK = 0,
+            VIRTUAL_SENDBACKRESULT_UNKNOWNERROR_TE = 1,
             VIRTUAL_SENDBACKRESULT_UNKNOWNENDPOINT = 101,
             VIRTUAL_SENDBACKRESULT_WRONGENDPOINT = 102,
             [NativeErrorType(NativeErrorType.NotPermitted)]
@@ -58,6 +59,7 @@ namespace Melanchall.DryWetMidi.Devices
         #region Delegates
 
         public delegate void Callback_Apple(IntPtr pktlist, IntPtr readProcRefCon, IntPtr srcConnRefCon);
+        public delegate void Callback_Te(IntPtr midiPort, IntPtr midiDataBytes, uint length, IntPtr dwCallbackInstance);
 
         #endregion
 
@@ -67,9 +69,13 @@ namespace Melanchall.DryWetMidi.Devices
 
         public abstract VIRTUAL_OPENRESULT Api_OpenDevice_Apple(string name, IntPtr sessionHandle, Callback_Apple callback, out IntPtr info);
 
+        public abstract VIRTUAL_OPENRESULT Api_OpenDevice_Te(string name, IntPtr sessionHandle, Callback_Te callback, out IntPtr info);
+
         public abstract VIRTUAL_CLOSERESULT Api_CloseDevice(IntPtr info);
 
         public abstract VIRTUAL_SENDBACKRESULT Api_SendDataBack(IntPtr pktlist, IntPtr readProcRefCon);
+
+        public abstract VIRTUAL_SENDBACKRESULT Api_SendDataBack_Te(IntPtr midiPort, IntPtr midiDataBytes, uint length);
 
         public abstract IntPtr Api_GetInputDeviceInfo(IntPtr info);
 

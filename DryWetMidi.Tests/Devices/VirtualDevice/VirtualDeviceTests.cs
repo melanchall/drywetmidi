@@ -26,26 +26,37 @@ namespace Melanchall.DryWetMidi.Tests.Devices
         [Platform("MacOsX")]
         public void CantDisposeVirtualDeviceSubdevices()
         {
-            var virtualDevice = VirtualDevice.Create("AAA");
+            using (var virtualDevice = GetVirtualDevice())
+            {
+                WaitOperations.Wait(500);
 
-            Assert.Throws<InvalidOperationException>(() => virtualDevice.InputDevice.Dispose(), "Dispose not failed for input subdevice.");
-            Assert.Throws<InvalidOperationException>(() => virtualDevice.OutputDevice.Dispose(), "Dispose not failed for output subdevice.");
+                Assert.Throws<InvalidOperationException>(() => virtualDevice.InputDevice.Dispose(), "Dispose not failed for input subdevice.");
+                Assert.Throws<InvalidOperationException>(() => virtualDevice.OutputDevice.Dispose(), "Dispose not failed for output subdevice.");
+            }
+
+            WaitOperations.Wait(500);
         }
 
         [Test]
         [Platform("MacOsX")]
         public void CreateVirtualDevice()
         {
-            const string name = "AAA";
-            var virtualDevice = VirtualDevice.Create(name);
+            using (var virtualDevice = GetVirtualDevice())
+            {
+                WaitOperations.Wait(500);
 
-            Assert.AreEqual(name, virtualDevice.Name, "Name is invalid.");
+                var deviceName = virtualDevice.Name;
 
-            Assert.IsNotNull(virtualDevice.InputDevice, "Input device is null.");
-            Assert.IsNotNull(name, virtualDevice.InputDevice.Name, "Input device name is null.");
+                Assert.AreEqual(deviceName, virtualDevice.Name, "Name is invalid.");
 
-            Assert.IsNotNull(virtualDevice.OutputDevice, "Output device is null.");
-            Assert.IsNotNull(name, virtualDevice.OutputDevice.Name, "Output device name is null.");
+                Assert.IsNotNull(virtualDevice.InputDevice, "Input device is null.");
+                Assert.IsNotNull(deviceName, virtualDevice.InputDevice.Name, "Input device name is null.");
+
+                Assert.IsNotNull(virtualDevice.OutputDevice, "Output device is null.");
+                Assert.IsNotNull(deviceName, virtualDevice.OutputDevice.Name, "Output device name is null.");
+            }
+
+            WaitOperations.Wait(500);
         }
 
         [Retry(RetriesNumber)]
@@ -97,19 +108,32 @@ namespace Melanchall.DryWetMidi.Tests.Devices
         [Platform("MacOsX")]
         public void FindVirtualDeviceSubdevices()
         {
-            const string name = "AAA";
-            var virtualDevice = VirtualDevice.Create(name);
+            using (var virtualDevice = GetVirtualDevice())
+            {
+                WaitOperations.Wait(500);
 
-            var inputDevice = InputDevice.GetByName(name);
-            Assert.IsNotNull(inputDevice, "Input subdevice was not found.");
+                var deviceName = virtualDevice.Name;
 
-            var outputDevice = OutputDevice.GetByName(name);
-            Assert.IsNotNull(outputDevice, "Output subdevice was not found.");
+                var timeout = TimeSpan.FromSeconds(5);
+                var subdevicesFound = WaitOperations.Wait(() => InputDevice.GetAll().Any(d => d.Name == deviceName) && OutputDevice.GetAll().Any(d => d.Name == deviceName), timeout);
+
+                Assert.IsTrue(subdevicesFound, "Subdevices were not found.");
+            }
+
+            WaitOperations.Wait(500);
         }
 
         #endregion
 
         #region Private methods
+
+        private string GetVirtualDeviceName() => Guid.NewGuid().ToString().Replace("-", string.Empty).Substring(0, 10);
+
+        private VirtualDevice GetVirtualDevice()
+        {
+            var virtualDevice = VirtualDevice.Create(GetVirtualDeviceName());
+            return virtualDevice;
+        }
 
         private static IEnumerable<MidiEvent> GetNonDefaultShortEvents() => new MidiEvent[]
         {
@@ -127,12 +151,16 @@ namespace Melanchall.DryWetMidi.Tests.Devices
 
         private void SendEvent(MidiEvent midiEvent)
         {
-            using (var virtualDevice = VirtualDevice.Create("Virtual"))
+            using (var virtualDevice = GetVirtualDevice())
             {
+                WaitOperations.Wait(500);
+
                 string errorOnVirtualDevice = null;
                 virtualDevice.ErrorOccurred += (_, e) => errorOnVirtualDevice = e.Exception.Message;
 
                 var outputDevice = virtualDevice.OutputDevice;
+                SendReceiveUtilities.WarmUpDevice(outputDevice);
+
                 var inputDevice = virtualDevice.InputDevice;
 
                 MidiEvent eventSent = null;
@@ -174,6 +202,8 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 MidiAsserts.AreEventsEqual(midiEvent, eventSent, false, "Sent event is invalid.");
                 MidiAsserts.AreEventsEqual(eventSent, eventReceived, false, "Received event is invalid.");
             }
+
+            WaitOperations.Wait(500);
         }
 
         #endregion
