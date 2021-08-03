@@ -15,10 +15,7 @@ namespace Melanchall.DryWetMidi.Devices
         #region Extern functions
 
         [DllImport(LibraryName, ExactSpelling = true)]
-        private static extern API_TYPE GetApiType();
-
-        [DllImport(LibraryName, ExactSpelling = true)]
-        private static extern VIRTUAL_OPENRESULT OpenVirtualDevice_Apple(IntPtr name, IntPtr sessionHandle, Callback_Apple callback, out IntPtr info);
+        private static extern VIRTUAL_OPENRESULT OpenVirtualDevice_Mac(IntPtr name, IntPtr sessionHandle, Callback_Mac callback, out IntPtr info);
 
         [DllImport(LibraryName, ExactSpelling = true)]
         private static extern VIRTUAL_CLOSERESULT CloseVirtualDevice(IntPtr info);
@@ -45,15 +42,10 @@ namespace Melanchall.DryWetMidi.Devices
 
         #region Methods
 
-        public override API_TYPE Api_GetApiType()
-        {
-            return GetApiType();
-        }
-
-        public override VIRTUAL_OPENRESULT Api_OpenDevice_Apple(string name, IntPtr sessionHandle, Callback_Apple callback, out IntPtr info)
+        public override VIRTUAL_OPENRESULT Api_OpenDevice_Mac(string name, IntPtr sessionHandle, Callback_Mac callback, out IntPtr info)
         {
             var namePointer = Marshal.StringToHGlobalAnsi(name);
-            return OpenVirtualDevice_Apple(namePointer, sessionHandle, callback, out info);
+            return OpenVirtualDevice_Mac(namePointer, sessionHandle, callback, out info);
         }
 
         public override VIRTUAL_OPENRESULT Api_OpenDevice_Te(string name, IntPtr sessionHandle, Callback_Te callback, out IntPtr info)
@@ -65,10 +57,10 @@ namespace Melanchall.DryWetMidi.Devices
 
         public override VIRTUAL_CLOSERESULT Api_CloseDevice(IntPtr info)
         {
-            var apiType = Api_GetApiType();
+            var apiType = CommonApiProvider.Api.Api_GetApiType();
             switch (apiType)
             {
-                case API_TYPE.API_TYPE_APPLE:
+                case CommonApi.API_TYPE.API_TYPE_MAC:
                     return CloseVirtualDevice(info);
                 default:
                     virtualMIDIClosePort(info);

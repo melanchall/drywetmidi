@@ -6,12 +6,6 @@ namespace Melanchall.DryWetMidi.Devices
     {
         #region Nested enums
 
-        public enum API_TYPE
-        {
-            API_TYPE_WINMM = 0,
-            API_TYPE_APPLE = 1
-        }
-
         public enum TG_STARTRESULT
         {
             TG_STARTRESULT_OK = 0,
@@ -36,19 +30,17 @@ namespace Melanchall.DryWetMidi.Devices
 
         #region Delegates
 
-        public delegate void TimerCallback_Winmm(uint uID, uint uMsg, uint dwUser, uint dw1, uint dw2);
+        public delegate void TimerCallback_Win(uint uID, uint uMsg, uint dwUser, uint dw1, uint dw2);
 
-        public delegate void TimerCallback_Apple();
+        public delegate void TimerCallback_Mac();
 
         #endregion
 
         #region Methods
 
-        public abstract API_TYPE Api_GetApiType();
+        public abstract TG_STARTRESULT Api_StartHighPrecisionTickGenerator_Win(int interval, TimerCallback_Win callback, out IntPtr info);
 
-        public abstract TG_STARTRESULT Api_StartHighPrecisionTickGenerator_Winmm(int interval, TimerCallback_Winmm callback, out IntPtr info);
-
-        public abstract TG_STARTRESULT Api_StartHighPrecisionTickGenerator_Apple(int interval, TimerCallback_Apple callback, out IntPtr info);
+        public abstract TG_STARTRESULT Api_StartHighPrecisionTickGenerator_Mac(int interval, TimerCallback_Mac callback, out IntPtr info);
 
         public abstract TG_STOPRESULT Api_StopHighPrecisionTickGenerator(IntPtr info);
 

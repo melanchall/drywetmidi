@@ -6,12 +6,6 @@ namespace Melanchall.DryWetMidi.Devices
     {
         #region Nested enums
 
-        public enum API_TYPE
-        {
-            API_TYPE_WINMM = 0,
-            API_TYPE_APPLE = 1
-        }
-
         public enum IN_GETINFORESULT
         {
             IN_GETINFORESULT_OK = 0,
@@ -130,14 +124,12 @@ namespace Melanchall.DryWetMidi.Devices
 
         #region Delegates
 
-        public delegate void Callback_Winmm(IntPtr hMidi, MidiMessage wMsg, IntPtr dwInstance, IntPtr dwParam1, IntPtr dwParam2);
-        public delegate void Callback_Apple(IntPtr pktlist, IntPtr readProcRefCon, IntPtr srcConnRefCon);
+        public delegate void Callback_Win(IntPtr hMidi, MidiMessage wMsg, IntPtr dwInstance, IntPtr dwParam1, IntPtr dwParam2);
+        public delegate void Callback_Mac(IntPtr pktlist, IntPtr readProcRefCon, IntPtr srcConnRefCon);
 
         #endregion
 
         #region Methods
-
-        public abstract API_TYPE Api_GetApiType();
 
         public abstract int Api_GetDevicesCount();
 
@@ -151,9 +143,9 @@ namespace Melanchall.DryWetMidi.Devices
 
         public abstract int Api_GetDeviceDriverVersion(IntPtr info);
 
-        public abstract IN_OPENRESULT Api_OpenDevice_Winmm(IntPtr info, IntPtr sessionHandle, Callback_Winmm callback, int sysExBufferSize, out IntPtr handle);
+        public abstract IN_OPENRESULT Api_OpenDevice_Win(IntPtr info, IntPtr sessionHandle, Callback_Win callback, int sysExBufferSize, out IntPtr handle);
 
-        public abstract IN_OPENRESULT Api_OpenDevice_Apple(IntPtr info, IntPtr sessionHandle, Callback_Apple callback, out IntPtr handle);
+        public abstract IN_OPENRESULT Api_OpenDevice_Mac(IntPtr info, IntPtr sessionHandle, Callback_Mac callback, out IntPtr handle);
 
         public abstract IN_CLOSERESULT Api_CloseDevice(IntPtr handle);
 

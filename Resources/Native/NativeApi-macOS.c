@@ -10,7 +10,7 @@
 
 API_TYPE GetApiType()
 {
-    return API_TYPE_APPLE;
+    return API_TYPE_MAC;
 }
 
 /* ================================
@@ -56,7 +56,7 @@ void* RunLoopThreadRoutine(void* data)
     return NULL;
 }
 
-TG_STARTRESULT StartHighPrecisionTickGenerator_Apple(int interval, void (*callback)(void), TickGeneratorInfo** info)
+TG_STARTRESULT StartHighPrecisionTickGenerator_Mac(int interval, void (*callback)(void), TickGeneratorInfo** info)
 {
     TickGeneratorInfo* tickGeneratorInfo = malloc(sizeof(TickGeneratorInfo));
 
@@ -263,7 +263,7 @@ int GetInputDeviceDriverVersion(void* info)
     return inputDeviceInfo->driverVersion;
 }
 
-IN_OPENRESULT OpenInputDevice_Apple(void* info, void* sessionHandle, MIDIReadProc callback, void** handle)
+IN_OPENRESULT OpenInputDevice_Mac(void* info, void* sessionHandle, MIDIReadProc callback, void** handle)
 {
     InputDeviceInfo* inputDeviceInfo = (InputDeviceInfo*)info;
     SessionHandle* pSessionHandle = (SessionHandle*)sessionHandle;
@@ -479,7 +479,7 @@ int GetOutputDeviceDriverVersion(void* info)
     return outputDeviceInfo->driverVersion;
 }
 
-OUT_OPENRESULT OpenOutputDevice_Apple(void* info, void* sessionHandle, void** handle)
+OUT_OPENRESULT OpenOutputDevice_Mac(void* info, void* sessionHandle, void** handle)
 {
     OutputDeviceInfo* outputDeviceInfo = (OutputDeviceInfo*)info;
     SessionHandle* pSessionHandle = (SessionHandle*)sessionHandle;
@@ -562,7 +562,7 @@ OUT_SENDSHORTRESULT SendShortEventToOutputDevice(void* handle, int message)
     return OUT_SENDSHORTRESULT_OK;
 }
 
-OUT_SENDSYSEXRESULT SendSysExEventToOutputDevice_Apple(void* handle, Byte* data, ByteCount dataSize)
+OUT_SENDSYSEXRESULT SendSysExEventToOutputDevice_Mac(void* handle, Byte* data, ByteCount dataSize)
 {
     OutputDeviceHandle* outputDeviceHandle = (OutputDeviceHandle*)handle;
 
@@ -602,7 +602,7 @@ typedef struct
 	char* name;
 } VirtualDeviceInfo;
 
-VIRTUAL_OPENRESULT OpenVirtualDevice_Apple(char* name, void* sessionHandle, MIDIReadProc callback, void** info)
+VIRTUAL_OPENRESULT OpenVirtualDevice_Mac(char* name, void* sessionHandle, MIDIReadProc callback, void** info)
 {	
 	SessionHandle* pSessionHandle = (SessionHandle*)sessionHandle;
 	

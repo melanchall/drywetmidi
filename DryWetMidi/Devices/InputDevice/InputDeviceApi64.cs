@@ -14,9 +14,6 @@ namespace Melanchall.DryWetMidi.Devices
         #region Extern functions
 
         [DllImport(LibraryName, ExactSpelling = true)]
-        private static extern API_TYPE GetApiType();
-
-        [DllImport(LibraryName, ExactSpelling = true)]
         private static extern int GetInputDevicesCount();
 
         [DllImport(LibraryName, ExactSpelling = true)]
@@ -35,10 +32,10 @@ namespace Melanchall.DryWetMidi.Devices
         private static extern int GetInputDeviceDriverVersion(IntPtr info);
 
         [DllImport(LibraryName, ExactSpelling = true)]
-        private static extern IN_OPENRESULT OpenInputDevice_Winmm(IntPtr info, IntPtr sessionHandle, Callback_Winmm callback, int sysExBufferSize, out IntPtr handle);
+        private static extern IN_OPENRESULT OpenInputDevice_Win(IntPtr info, IntPtr sessionHandle, Callback_Win callback, int sysExBufferSize, out IntPtr handle);
 
         [DllImport(LibraryName, ExactSpelling = true)]
-        private static extern IN_OPENRESULT OpenInputDevice_Apple(IntPtr info, IntPtr sessionHandle, Callback_Apple callback, out IntPtr handle);
+        private static extern IN_OPENRESULT OpenInputDevice_Mac(IntPtr info, IntPtr sessionHandle, Callback_Mac callback, out IntPtr handle);
 
         [DllImport(LibraryName, ExactSpelling = true)]
         private static extern IN_CLOSERESULT CloseInputDevice(IntPtr handle);
@@ -61,11 +58,6 @@ namespace Melanchall.DryWetMidi.Devices
         #endregion
 
         #region Methods
-
-        public override API_TYPE Api_GetApiType()
-        {
-            return GetApiType();
-        }
 
         public override int Api_GetDevicesCount()
         {
@@ -100,14 +92,14 @@ namespace Melanchall.DryWetMidi.Devices
             return GetInputDeviceDriverVersion(info);
         }
 
-        public override IN_OPENRESULT Api_OpenDevice_Winmm(IntPtr info, IntPtr sessionHandle, Callback_Winmm callback, int sysExBufferSize, out IntPtr handle)
+        public override IN_OPENRESULT Api_OpenDevice_Win(IntPtr info, IntPtr sessionHandle, Callback_Win callback, int sysExBufferSize, out IntPtr handle)
         {
-            return OpenInputDevice_Winmm(info, sessionHandle, callback, sysExBufferSize, out handle);
+            return OpenInputDevice_Win(info, sessionHandle, callback, sysExBufferSize, out handle);
         }
 
-        public override IN_OPENRESULT Api_OpenDevice_Apple(IntPtr info, IntPtr sessionHandle, Callback_Apple callback, out IntPtr handle)
+        public override IN_OPENRESULT Api_OpenDevice_Mac(IntPtr info, IntPtr sessionHandle, Callback_Mac callback, out IntPtr handle)
         {
-            return OpenInputDevice_Apple(info, sessionHandle, callback, out handle);
+            return OpenInputDevice_Mac(info, sessionHandle, callback, out handle);
         }
 
         public override IN_CLOSERESULT Api_CloseDevice(IntPtr handle)

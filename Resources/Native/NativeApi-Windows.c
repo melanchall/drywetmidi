@@ -12,7 +12,7 @@
 
 API_TYPE GetApiType()
 {
-    return API_TYPE_WINMM;
+    return API_TYPE_WIN;
 }
 
 /* ================================
@@ -25,7 +25,7 @@ typedef struct
     UINT timerId;
 } TickGeneratorInfo;
 
-TG_STARTRESULT StartHighPrecisionTickGenerator_Winmm(int interval, LPTIMECALLBACK callback, TickGeneratorInfo** info)
+TG_STARTRESULT StartHighPrecisionTickGenerator_Win(int interval, LPTIMECALLBACK callback, TickGeneratorInfo** info)
 {
     TIMECAPS tc;
     MMRESULT result = timeGetDevCaps(&tc, sizeof(TIMECAPS));
@@ -391,7 +391,7 @@ IN_RENEWSYSEXBUFFERRESULT RenewInputDeviceSysExBuffer(void* handle, int size)
     return IN_RENEWSYSEXBUFFERRESULT_OK;
 }
 
-IN_OPENRESULT OpenInputDevice_Winmm(void* info, void* sessionHandle, DWORD_PTR callback, int sysExBufferSize, void** handle)
+IN_OPENRESULT OpenInputDevice_Win(void* info, void* sessionHandle, DWORD_PTR callback, int sysExBufferSize, void** handle)
 {
     InputDeviceInfo* inputDeviceInfo = (InputDeviceInfo*)info;
 
@@ -592,7 +592,7 @@ int GetOutputDeviceDriverVersion(void* info)
     return outputDeviceInfo->driverVersion;
 }
 
-OUT_OPENRESULT OpenOutputDevice_Winmm(void* info, void* sessionHandle, DWORD_PTR callback, void** handle)
+OUT_OPENRESULT OpenOutputDevice_Win(void* info, void* sessionHandle, DWORD_PTR callback, void** handle)
 {
     OutputDeviceInfo* outputDeviceInfo = (OutputDeviceInfo*)info;
 
@@ -668,7 +668,7 @@ OUT_SENDSHORTRESULT SendShortEventToOutputDevice(void* handle, int message)
     return OUT_SENDSHORTRESULT_OK;
 }
 
-OUT_SENDSYSEXRESULT SendSysExEventToOutputDevice_Winmm(void* handle, LPSTR data, int size)
+OUT_SENDSYSEXRESULT SendSysExEventToOutputDevice_Win(void* handle, LPSTR data, int size)
 {
     OutputDeviceHandle* outputDeviceHandle = (OutputDeviceHandle*)handle;
 
@@ -736,7 +736,7 @@ typedef struct
 	OutputDeviceInfo* outputDeviceInfo;
 } VirtualDeviceHandle;
 
-VIRTUAL_OPENRESULT OpenVirtualDevice_Winmm(char* name, void** handle)
+VIRTUAL_OPENRESULT OpenVirtualDevice_Win(char* name, void** handle)
 {
 	VirtualDeviceHandle* virtualDeviceHandle = malloc(sizeof(VirtualDeviceHandle));
 	

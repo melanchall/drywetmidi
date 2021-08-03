@@ -14,9 +14,6 @@ namespace Melanchall.DryWetMidi.Devices
         #region Extern functions
 
         [DllImport(LibraryName, ExactSpelling = true)]
-        private static extern API_TYPE GetApiType();
-
-        [DllImport(LibraryName, ExactSpelling = true)]
         private static extern int GetOutputDevicesCount();
 
         [DllImport(LibraryName, ExactSpelling = true)]
@@ -35,10 +32,10 @@ namespace Melanchall.DryWetMidi.Devices
         private static extern int GetOutputDeviceDriverVersion(IntPtr info);
 
         [DllImport(LibraryName, ExactSpelling = true)]
-        private static extern OUT_OPENRESULT OpenOutputDevice_Winmm(IntPtr info, IntPtr sessionHandle, Callback_Winmm callback, out IntPtr handle);
+        private static extern OUT_OPENRESULT OpenOutputDevice_Win(IntPtr info, IntPtr sessionHandle, Callback_Win callback, out IntPtr handle);
 
         [DllImport(LibraryName, ExactSpelling = true)]
-        private static extern OUT_OPENRESULT OpenOutputDevice_Apple(IntPtr info, IntPtr sessionHandle, out IntPtr handle);
+        private static extern OUT_OPENRESULT OpenOutputDevice_Mac(IntPtr info, IntPtr sessionHandle, out IntPtr handle);
 
         [DllImport(LibraryName, ExactSpelling = true)]
         private static extern OUT_CLOSERESULT CloseOutputDevice(IntPtr handle);
@@ -47,10 +44,10 @@ namespace Melanchall.DryWetMidi.Devices
         private static extern OUT_SENDSHORTRESULT SendShortEventToOutputDevice(IntPtr handle, int message);
 
         [DllImport(LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
-        private static extern OUT_SENDSYSEXRESULT SendSysExEventToOutputDevice_Apple(IntPtr handle, byte[] data, ushort dataSize);
+        private static extern OUT_SENDSYSEXRESULT SendSysExEventToOutputDevice_Mac(IntPtr handle, byte[] data, ushort dataSize);
 
         [DllImport(LibraryName, ExactSpelling = true)]
-        private static extern OUT_SENDSYSEXRESULT SendSysExEventToOutputDevice_Winmm(IntPtr handle, IntPtr data, int size);
+        private static extern OUT_SENDSYSEXRESULT SendSysExEventToOutputDevice_Win(IntPtr handle, IntPtr data, int size);
 
         [DllImport(LibraryName, ExactSpelling = true)]
         private static extern OUT_GETSYSEXDATARESULT GetOutputDeviceSysExBufferData(IntPtr handle, IntPtr header, out IntPtr data, out int size);
@@ -58,11 +55,6 @@ namespace Melanchall.DryWetMidi.Devices
         #endregion
 
         #region Methods
-
-        public override API_TYPE Api_GetApiType()
-        {
-            return GetApiType();
-        }
 
         public override int Api_GetDevicesCount()
         {
@@ -97,14 +89,14 @@ namespace Melanchall.DryWetMidi.Devices
             return GetOutputDeviceDriverVersion(info);
         }
 
-        public override OUT_OPENRESULT Api_OpenDevice_Winmm(IntPtr info, IntPtr sessionHandle, Callback_Winmm callback, out IntPtr handle)
+        public override OUT_OPENRESULT Api_OpenDevice_Win(IntPtr info, IntPtr sessionHandle, Callback_Win callback, out IntPtr handle)
         {
-            return OpenOutputDevice_Winmm(info, sessionHandle, callback, out handle);
+            return OpenOutputDevice_Win(info, sessionHandle, callback, out handle);
         }
 
-        public override OUT_OPENRESULT Api_OpenDevice_Apple(IntPtr info, IntPtr sessionHandle, out IntPtr handle)
+        public override OUT_OPENRESULT Api_OpenDevice_Mac(IntPtr info, IntPtr sessionHandle, out IntPtr handle)
         {
-            return OpenOutputDevice_Apple(info, sessionHandle, out handle);
+            return OpenOutputDevice_Mac(info, sessionHandle, out handle);
         }
 
         public override OUT_CLOSERESULT Api_CloseDevice(IntPtr handle)
@@ -117,14 +109,14 @@ namespace Melanchall.DryWetMidi.Devices
             return SendShortEventToOutputDevice(handle, message);
         }
 
-        public override OUT_SENDSYSEXRESULT Api_SendSysExEvent_Apple(IntPtr handle, byte[] data, ushort dataSize)
+        public override OUT_SENDSYSEXRESULT Api_SendSysExEvent_Mac(IntPtr handle, byte[] data, ushort dataSize)
         {
-            return SendSysExEventToOutputDevice_Apple(handle, data, dataSize);
+            return SendSysExEventToOutputDevice_Mac(handle, data, dataSize);
         }
 
-        public override OUT_SENDSYSEXRESULT Api_SendSysExEvent_Winmm(IntPtr handle, IntPtr data, int size)
+        public override OUT_SENDSYSEXRESULT Api_SendSysExEvent_Win(IntPtr handle, IntPtr data, int size)
         {
-            return SendSysExEventToOutputDevice_Winmm(handle, data, size);
+            return SendSysExEventToOutputDevice_Win(handle, data, size);
         }
 
         public override OUT_GETSYSEXDATARESULT Api_GetSysExBufferData(IntPtr handle, IntPtr header, out IntPtr data, out int size)

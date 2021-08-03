@@ -27,8 +27,8 @@ namespace Melanchall.DryWetMidi.Devices
 
         private bool _disposed = false;
 
-        private TickGeneratorApi.TimerCallback_Winmm _tickCallback_Winmm;
-        private TickGeneratorApi.TimerCallback_Apple _tickCallback_Apple;
+        private TickGeneratorApi.TimerCallback_Win _tickCallback_Win;
+        private TickGeneratorApi.TimerCallback_Mac _tickCallback_Mac;
         private IntPtr _tickGeneratorInfo;
 
         #endregion
@@ -63,16 +63,16 @@ namespace Melanchall.DryWetMidi.Devices
 
             var intervalInMilliseconds = (int)interval.TotalMilliseconds;
 
-            var apiType = TickGeneratorApiProvider.Api.Api_GetApiType();
+            var apiType = CommonApiProvider.Api.Api_GetApiType();
             var result = default(TickGeneratorApi.TG_STARTRESULT);
 
             switch (apiType)
             {
-                case TickGeneratorApi.API_TYPE.API_TYPE_WINMM:
-                    StartHighPrecisionTickGenerator_Winmm(intervalInMilliseconds, out _tickGeneratorInfo);
+                case CommonApi.API_TYPE.API_TYPE_WIN:
+                    StartHighPrecisionTickGenerator_Win(intervalInMilliseconds, out _tickGeneratorInfo);
                     break;
-                case TickGeneratorApi.API_TYPE.API_TYPE_APPLE:
-                    StartHighPrecisionTickGenerator_Apple(intervalInMilliseconds, out _tickGeneratorInfo);
+                case CommonApi.API_TYPE.API_TYPE_MAC:
+                    StartHighPrecisionTickGenerator_Mac(intervalInMilliseconds, out _tickGeneratorInfo);
                     break;
             }
 
@@ -94,12 +94,12 @@ namespace Melanchall.DryWetMidi.Devices
 
         #region Methods
 
-        private void OnTick_Winmm(uint uID, uint uMsg, uint dwUser, uint dw1, uint dw2)
+        private void OnTick_Win(uint uID, uint uMsg, uint dwUser, uint dw1, uint dw2)
         {
             OnTick();
         }
 
-        private void OnTick_Apple()
+        private void OnTick_Mac()
         {
             OnTick();
         }
@@ -122,21 +122,21 @@ namespace Melanchall.DryWetMidi.Devices
             return result;
         }
 
-        private TickGeneratorApi.TG_STARTRESULT StartHighPrecisionTickGenerator_Winmm(int intervalInMilliseconds, out IntPtr tickGeneratorInfo)
+        private TickGeneratorApi.TG_STARTRESULT StartHighPrecisionTickGenerator_Win(int intervalInMilliseconds, out IntPtr tickGeneratorInfo)
         {
-            _tickCallback_Winmm = OnTick_Winmm;
-            return TickGeneratorApiProvider.Api.Api_StartHighPrecisionTickGenerator_Winmm(
+            _tickCallback_Win = OnTick_Win;
+            return TickGeneratorApiProvider.Api.Api_StartHighPrecisionTickGenerator_Win(
                 intervalInMilliseconds,
-                _tickCallback_Winmm,
+                _tickCallback_Win,
                 out tickGeneratorInfo);
         }
 
-        private TickGeneratorApi.TG_STARTRESULT StartHighPrecisionTickGenerator_Apple(int intervalInMilliseconds, out IntPtr tickGeneratorInfo)
+        private TickGeneratorApi.TG_STARTRESULT StartHighPrecisionTickGenerator_Mac(int intervalInMilliseconds, out IntPtr tickGeneratorInfo)
         {
-            _tickCallback_Apple = OnTick_Apple;
-            return TickGeneratorApiProvider.Api.Api_StartHighPrecisionTickGenerator_Apple(
+            _tickCallback_Mac = OnTick_Mac;
+            return TickGeneratorApiProvider.Api.Api_StartHighPrecisionTickGenerator_Mac(
                 intervalInMilliseconds,
-                _tickCallback_Apple,
+                _tickCallback_Mac,
                 out tickGeneratorInfo);
         }
 

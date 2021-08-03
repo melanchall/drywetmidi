@@ -6,12 +6,6 @@ namespace Melanchall.DryWetMidi.Devices
     {
         #region Nested enums
 
-        public enum API_TYPE
-        {
-            API_TYPE_WINMM = 0,
-            API_TYPE_APPLE = 1
-        }
-
         public enum OUT_GETINFORESULT
         {
             OUT_GETINFORESULT_OK = 0,
@@ -113,13 +107,11 @@ namespace Melanchall.DryWetMidi.Devices
 
         #region Delegates
 
-        public delegate void Callback_Winmm(IntPtr hMidi, MidiMessage wMsg, IntPtr dwInstance, IntPtr dwParam1, IntPtr dwParam2);
+        public delegate void Callback_Win(IntPtr hMidi, MidiMessage wMsg, IntPtr dwInstance, IntPtr dwParam1, IntPtr dwParam2);
 
         #endregion
 
         #region Methods
-
-        public abstract API_TYPE Api_GetApiType();
 
         public abstract int Api_GetDevicesCount();
 
@@ -133,17 +125,17 @@ namespace Melanchall.DryWetMidi.Devices
 
         public abstract int Api_GetDeviceDriverVersion(IntPtr info);
 
-        public abstract OUT_OPENRESULT Api_OpenDevice_Winmm(IntPtr info, IntPtr sessionHandle, Callback_Winmm callback, out IntPtr handle);
+        public abstract OUT_OPENRESULT Api_OpenDevice_Win(IntPtr info, IntPtr sessionHandle, Callback_Win callback, out IntPtr handle);
 
-        public abstract OUT_OPENRESULT Api_OpenDevice_Apple(IntPtr info, IntPtr sessionHandle, out IntPtr handle);
+        public abstract OUT_OPENRESULT Api_OpenDevice_Mac(IntPtr info, IntPtr sessionHandle, out IntPtr handle);
 
         public abstract OUT_CLOSERESULT Api_CloseDevice(IntPtr handle);
 
         public abstract OUT_SENDSHORTRESULT Api_SendShortEvent(IntPtr handle, int message);
 
-        public abstract OUT_SENDSYSEXRESULT Api_SendSysExEvent_Apple(IntPtr handle, byte[] data, ushort dataSize);
+        public abstract OUT_SENDSYSEXRESULT Api_SendSysExEvent_Mac(IntPtr handle, byte[] data, ushort dataSize);
 
-        public abstract OUT_SENDSYSEXRESULT Api_SendSysExEvent_Winmm(IntPtr handle, IntPtr data, int size);
+        public abstract OUT_SENDSYSEXRESULT Api_SendSysExEvent_Win(IntPtr handle, IntPtr data, int size);
 
         public abstract OUT_GETSYSEXDATARESULT Api_GetSysExBufferData(IntPtr handle, IntPtr header, out IntPtr data, out int size);
 

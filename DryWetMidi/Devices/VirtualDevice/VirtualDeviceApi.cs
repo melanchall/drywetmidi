@@ -6,12 +6,6 @@ namespace Melanchall.DryWetMidi.Devices
     {
         #region Nested enums
 
-        public enum API_TYPE
-        {
-            API_TYPE_WINMM = 0,
-            API_TYPE_APPLE = 1
-        }
-
         public enum VIRTUAL_OPENRESULT
         {
             VIRTUAL_OPENRESULT_OK = 0,
@@ -58,16 +52,14 @@ namespace Melanchall.DryWetMidi.Devices
 
         #region Delegates
 
-        public delegate void Callback_Apple(IntPtr pktlist, IntPtr readProcRefCon, IntPtr srcConnRefCon);
+        public delegate void Callback_Mac(IntPtr pktlist, IntPtr readProcRefCon, IntPtr srcConnRefCon);
         public delegate void Callback_Te(IntPtr midiPort, IntPtr midiDataBytes, uint length, IntPtr dwCallbackInstance);
 
         #endregion
 
         #region Methods
 
-        public abstract API_TYPE Api_GetApiType();
-
-        public abstract VIRTUAL_OPENRESULT Api_OpenDevice_Apple(string name, IntPtr sessionHandle, Callback_Apple callback, out IntPtr info);
+        public abstract VIRTUAL_OPENRESULT Api_OpenDevice_Mac(string name, IntPtr sessionHandle, Callback_Mac callback, out IntPtr info);
 
         public abstract VIRTUAL_OPENRESULT Api_OpenDevice_Te(string name, IntPtr sessionHandle, Callback_Te callback, out IntPtr info);
 

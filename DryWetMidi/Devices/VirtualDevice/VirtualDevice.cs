@@ -7,7 +7,7 @@ namespace Melanchall.DryWetMidi.Devices
     {
         #region Fields
 
-        private VirtualDeviceApi.Callback_Apple _callback_Apple;
+        private VirtualDeviceApi.Callback_Mac _callback_Mac;
         private VirtualDeviceApi.Callback_Te _callback_Te;
 
         #endregion
@@ -19,13 +19,13 @@ namespace Melanchall.DryWetMidi.Devices
         {
             Name = name;
 
-            var apiType = VirtualDeviceApiProvider.Api.Api_GetApiType();
+            var apiType = CommonApiProvider.Api.Api_GetApiType();
             switch (apiType)
             {
-                case VirtualDeviceApi.API_TYPE.API_TYPE_APPLE:
-                    InitializeDevice_Apple();
+                case CommonApi.API_TYPE.API_TYPE_MAC:
+                    InitializeDevice_Mac();
                     break;
-                case VirtualDeviceApi.API_TYPE.API_TYPE_WINMM:
+                case CommonApi.API_TYPE.API_TYPE_WIN:
                     InitializeDevice_Win();
                     break;
                 default:
@@ -56,7 +56,7 @@ namespace Melanchall.DryWetMidi.Devices
         {
         }
 
-        private void OnMessage_Apple(IntPtr pktlist, IntPtr readProcRefCon, IntPtr srcConnRefCon)
+        private void OnMessage_Mac(IntPtr pktlist, IntPtr readProcRefCon, IntPtr srcConnRefCon)
         {
             var result = VirtualDeviceApiProvider.Api.Api_SendDataBack(pktlist, readProcRefCon);
             if (result != VirtualDeviceApi.VIRTUAL_SENDBACKRESULT.VIRTUAL_SENDBACKRESULT_OK)
@@ -76,13 +76,13 @@ namespace Melanchall.DryWetMidi.Devices
             }
         }
 
-        private void InitializeDevice_Apple()
+        private void InitializeDevice_Mac()
         {
             var sessionHandle = MidiDevicesSession.GetSessionHandle();
 
-            _callback_Apple = OnMessage_Apple;
+            _callback_Mac = OnMessage_Mac;
             NativeApi.HandleResult(
-                VirtualDeviceApiProvider.Api.Api_OpenDevice_Apple(Name, sessionHandle, _callback_Apple, out _info));
+                VirtualDeviceApiProvider.Api.Api_OpenDevice_Mac(Name, sessionHandle, _callback_Mac, out _info));
 
             var inputDeviceInfo = VirtualDeviceApiProvider.Api.Api_GetInputDeviceInfo(_info);
             InputDevice = new InputDevice(inputDeviceInfo, DeviceOwner.VirtualDevice);

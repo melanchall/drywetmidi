@@ -43,14 +43,14 @@ namespace Melanchall.DryWetMidi.Devices
 
         private readonly BytesToMidiEventConverter _bytesToMidiEventConverter = new BytesToMidiEventConverter(ChannelParametersBufferSize);
 
-        private InputDeviceApi.Callback_Winmm _callback_Winmm;
-        private InputDeviceApi.Callback_Apple _callback_Apple;
+        private InputDeviceApi.Callback_Win _callback_Win;
+        private InputDeviceApi.Callback_Mac _callback_Mac;
 
         private readonly byte[] _channelParametersBuffer = new byte[ChannelParametersBufferSize];
 
         private readonly Dictionary<MidiTimeCodeComponent, FourBitNumber> _midiTimeCodeComponents = new Dictionary<MidiTimeCodeComponent, FourBitNumber>();
 
-        private readonly InputDeviceApi.API_TYPE _apiType;
+        private readonly CommonApi.API_TYPE _apiType;
 
         #endregion
 
@@ -64,7 +64,7 @@ namespace Melanchall.DryWetMidi.Devices
         internal InputDevice(IntPtr info, DeviceOwner owner)
             : base(info, owner)
         {
-            _apiType = InputDeviceApiProvider.Api.Api_GetApiType();
+            _apiType = CommonApiProvider.Api.Api_GetApiType();
             _bytesToMidiEventConverter.ReadingSettings.SilentNoteOnPolicy = SilentNoteOnPolicy.NoteOn;
         }
 
@@ -244,18 +244,18 @@ namespace Melanchall.DryWetMidi.Devices
 
             switch (_apiType)
             {
-                case InputDeviceApi.API_TYPE.API_TYPE_WINMM:
+                case CommonApi.API_TYPE.API_TYPE_WIN:
                     {
-                        _callback_Winmm = OnMessage_Winmm;
+                        _callback_Win = OnMessage_Win;
                         NativeApi.HandleResult(
-                            InputDeviceApiProvider.Api.Api_OpenDevice_Winmm(_info, sessionHandle, _callback_Winmm, SysExBufferSize, out _handle));
+                            InputDeviceApiProvider.Api.Api_OpenDevice_Win(_info, sessionHandle, _callback_Win, SysExBufferSize, out _handle));
                     }
                     break;
-                case InputDeviceApi.API_TYPE.API_TYPE_APPLE:
+                case CommonApi.API_TYPE.API_TYPE_MAC:
                     {
-                        _callback_Apple = OnMessage_Apple;
+                        _callback_Mac = OnMessage_Mac;
                         NativeApi.HandleResult(
-                            InputDeviceApiProvider.Api.Api_OpenDevice_Apple(_info, sessionHandle, _callback_Apple, out _handle));
+                            InputDeviceApiProvider.Api.Api_OpenDevice_Mac(_info, sessionHandle, _callback_Mac, out _handle));
                     }
                     break;
                 default:
@@ -275,7 +275,7 @@ namespace Melanchall.DryWetMidi.Devices
             MidiDevicesSession.ExitSession();
         }
 
-        private void OnMessage_Winmm(IntPtr hMidi, NativeApi.MidiMessage wMsg, IntPtr dwInstance, IntPtr dwParam1, IntPtr dwParam2)
+        private void OnMessage_Win(IntPtr hMidi, NativeApi.MidiMessage wMsg, IntPtr dwInstance, IntPtr dwParam1, IntPtr dwParam2)
         {
             if (!IsListeningForEvents || !IsEnabled)
                 return;
@@ -301,7 +301,7 @@ namespace Melanchall.DryWetMidi.Devices
             }
         }
 
-        private void OnMessage_Apple(IntPtr pktlist, IntPtr readProcRefCon, IntPtr srcConnRefCon)
+        private void OnMessage_Mac(IntPtr pktlist, IntPtr readProcRefCon, IntPtr srcConnRefCon)
         {
             if (!IsListeningForEvents || !IsEnabled)
                 return;

@@ -35,9 +35,9 @@ namespace Melanchall.DryWetMidi.Devices
         private readonly MidiEventToBytesConverter _midiEventToBytesConverter = new MidiEventToBytesConverter(ShortEventBufferSize);
         private readonly BytesToMidiEventConverter _bytesToMidiEventConverter = new BytesToMidiEventConverter();
 
-        private OutputDeviceApi.Callback_Winmm _callback;
+        private OutputDeviceApi.Callback_Win _callback;
 
-        private readonly OutputDeviceApi.API_TYPE _apiType;
+        private readonly CommonApi.API_TYPE _apiType;
 
         #endregion
 
@@ -51,7 +51,7 @@ namespace Melanchall.DryWetMidi.Devices
         internal OutputDevice(IntPtr info, DeviceOwner owner)
             : base(info, owner)
         {
-            _apiType = OutputDeviceApiProvider.Api.Api_GetApiType();
+            _apiType = CommonApiProvider.Api.Api_GetApiType();
         }
 
         #endregion
@@ -215,17 +215,17 @@ namespace Melanchall.DryWetMidi.Devices
 
             switch (_apiType)
             {
-                case OutputDeviceApi.API_TYPE.API_TYPE_WINMM:
+                case CommonApi.API_TYPE.API_TYPE_WIN:
                     {
                         _callback = OnMessage;
                         NativeApi.HandleResult(
-                            OutputDeviceApiProvider.Api.Api_OpenDevice_Winmm(_info, sessionHandle, _callback, out _handle));
+                            OutputDeviceApiProvider.Api.Api_OpenDevice_Win(_info, sessionHandle, _callback, out _handle));
                     }
                     break;
-                case OutputDeviceApi.API_TYPE.API_TYPE_APPLE:
+                case CommonApi.API_TYPE.API_TYPE_MAC:
                     {
                         NativeApi.HandleResult(
-                            OutputDeviceApiProvider.Api.Api_OpenDevice_Apple(_info, sessionHandle, out _handle));
+                            OutputDeviceApiProvider.Api.Api_OpenDevice_Mac(_info, sessionHandle, out _handle));
                     }
                     break;
                 default:
@@ -252,11 +252,11 @@ namespace Melanchall.DryWetMidi.Devices
 
             switch (_apiType)
             {
-                case OutputDeviceApi.API_TYPE.API_TYPE_WINMM:
-                    SendSysExEventData_Winmm(data);
+                case CommonApi.API_TYPE.API_TYPE_WIN:
+                    SendSysExEventData_Win(data);
                     break;
-                case OutputDeviceApi.API_TYPE.API_TYPE_APPLE:
-                    SendSysExEventData_Apple(data);
+                case CommonApi.API_TYPE.API_TYPE_MAC:
+                    SendSysExEventData_Mac(data);
                     OnEventSent(sysExEvent);
                     break;
                 default:
@@ -264,7 +264,7 @@ namespace Melanchall.DryWetMidi.Devices
             }
         }
 
-        private void SendSysExEventData_Winmm(byte[] data)
+        private void SendSysExEventData_Win(byte[] data)
         {
             var bufferLength = data.Length + 1;
             var bufferPointer = Marshal.AllocHGlobal(bufferLength);
@@ -272,17 +272,17 @@ namespace Melanchall.DryWetMidi.Devices
             Marshal.Copy(data, 0, IntPtr.Add(bufferPointer, 1), data.Length);
 
             NativeApi.HandleResult(
-                OutputDeviceApiProvider.Api.Api_SendSysExEvent_Winmm(_handle, bufferPointer, bufferLength));
+                OutputDeviceApiProvider.Api.Api_SendSysExEvent_Win(_handle, bufferPointer, bufferLength));
         }
 
-        private void SendSysExEventData_Apple(byte[] data)
+        private void SendSysExEventData_Mac(byte[] data)
         {
             var buffer = new byte[data.Length + 1];
             buffer[0] = EventStatusBytes.Global.NormalSysEx;
             Buffer.BlockCopy(data, 0, buffer, 1, data.Length);
 
             NativeApi.HandleResult(
-                OutputDeviceApiProvider.Api.Api_SendSysExEvent_Apple(_handle, buffer, (ushort)buffer.Length));
+                OutputDeviceApiProvider.Api.Api_SendSysExEvent_Mac(_handle, buffer, (ushort)buffer.Length));
         }
 
         private int PackShortEvent(MidiEvent midiEvent)
