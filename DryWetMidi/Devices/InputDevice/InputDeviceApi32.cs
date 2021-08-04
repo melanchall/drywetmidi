@@ -23,13 +23,13 @@ namespace Melanchall.DryWetMidi.Devices
         private static extern IntPtr GetInputDeviceName(IntPtr info);
 
         [DllImport(LibraryName, ExactSpelling = true)]
-        private static extern IntPtr GetInputDeviceManufacturer(IntPtr info);
+        private static extern IN_GETPROPERTYRESULT GetInputDeviceManufacturer(IntPtr info, out IntPtr value);
 
         [DllImport(LibraryName, ExactSpelling = true)]
-        private static extern IntPtr GetInputDeviceProduct(IntPtr info);
+        private static extern IN_GETPROPERTYRESULT GetInputDeviceProduct(IntPtr info, out IntPtr value);
 
         [DllImport(LibraryName, ExactSpelling = true)]
-        private static extern int GetInputDeviceDriverVersion(IntPtr info);
+        private static extern IN_GETPROPERTYRESULT GetInputDeviceDriverVersion(IntPtr info, out int value);
 
         [DllImport(LibraryName, ExactSpelling = true)]
         private static extern IN_OPENRESULT OpenInputDevice_Win(IntPtr info, IntPtr sessionHandle, Callback_Win callback, int sysExBufferSize, out IntPtr handle);
@@ -55,6 +55,15 @@ namespace Melanchall.DryWetMidi.Devices
         [DllImport(LibraryName, ExactSpelling = true)]
         private static extern IN_GETSYSEXDATARESULT GetInputDeviceSysExBufferData(IntPtr header, out IntPtr data, out int size);
 
+        [DllImport(LibraryName, ExactSpelling = true)]
+        private static extern bool IsInputDevicePropertySupported(InputDeviceProperty property);
+
+        [DllImport(LibraryName, ExactSpelling = true)]
+        private static extern IN_GETPROPERTYRESULT GetInputDeviceUniqueId(IntPtr info, out int value);
+
+        [DllImport(LibraryName, ExactSpelling = true)]
+        private static extern IN_GETPROPERTYRESULT GetInputDeviceDriverOwner(IntPtr info, out IntPtr value);
+
         #endregion
 
         #region Methods
@@ -73,23 +82,6 @@ namespace Melanchall.DryWetMidi.Devices
         {
             var namePointer = GetInputDeviceName(info);
             return namePointer != IntPtr.Zero ? Marshal.PtrToStringAnsi(namePointer) : string.Empty;
-        }
-
-        public override string Api_GetDeviceManufacturer(IntPtr info)
-        {
-            var manufacturerPointer = GetInputDeviceManufacturer(info);
-            return manufacturerPointer != IntPtr.Zero ? Marshal.PtrToStringAnsi(manufacturerPointer) : string.Empty;
-        }
-
-        public override string Api_GetDeviceProduct(IntPtr info)
-        {
-            var productPointer = GetInputDeviceProduct(info);
-            return productPointer != IntPtr.Zero ? Marshal.PtrToStringAnsi(productPointer) : string.Empty;
-        }
-
-        public override int Api_GetDeviceDriverVersion(IntPtr info)
-        {
-            return GetInputDeviceDriverVersion(info);
         }
 
         public override IN_OPENRESULT Api_OpenDevice_Win(IntPtr info, IntPtr sessionHandle, Callback_Win callback, int sysExBufferSize, out IntPtr handle)
@@ -130,6 +122,45 @@ namespace Melanchall.DryWetMidi.Devices
         public override IN_GETSYSEXDATARESULT Api_GetSysExBufferData(IntPtr header, out IntPtr data, out int size)
         {
             return GetInputDeviceSysExBufferData(header, out data, out size);
+        }
+
+        public override bool Api_IsPropertySupported(InputDeviceProperty property)
+        {
+            return IsInputDevicePropertySupported(property);
+        }
+
+        public override IN_GETPROPERTYRESULT Api_GetDeviceManufacturer(IntPtr info, out string manufacturer)
+        {
+            IntPtr manufacturerPointer;
+            var result = GetInputDeviceManufacturer(info, out manufacturerPointer);
+            manufacturer = manufacturerPointer != IntPtr.Zero ? Marshal.PtrToStringAnsi(manufacturerPointer) : string.Empty;
+            return result;
+        }
+
+        public override IN_GETPROPERTYRESULT Api_GetDeviceProduct(IntPtr info, out string product)
+        {
+            IntPtr productPointer;
+            var result = GetInputDeviceProduct(info, out productPointer);
+            product = productPointer != IntPtr.Zero ? Marshal.PtrToStringAnsi(productPointer) : string.Empty;
+            return result;
+        }
+
+        public override IN_GETPROPERTYRESULT Api_GetDeviceDriverVersion(IntPtr info, out int driverVersion)
+        {
+            return GetInputDeviceDriverVersion(info, out driverVersion);
+        }
+
+        public override IN_GETPROPERTYRESULT Api_GetDeviceUniqueId(IntPtr info, out int uniqueId)
+        {
+            return GetInputDeviceUniqueId(info, out uniqueId);
+        }
+
+        public override IN_GETPROPERTYRESULT Api_GetDeviceDriverOwner(IntPtr info, out string driverOwner)
+        {
+            IntPtr driverOwnerPointer;
+            var result = GetInputDeviceDriverOwner(info, out driverOwnerPointer);
+            driverOwner = driverOwnerPointer != IntPtr.Zero ? Marshal.PtrToStringAnsi(driverOwnerPointer) : string.Empty;
+            return result;
         }
 
         #endregion

@@ -52,10 +52,6 @@ namespace Melanchall.DryWetMidi.Devices
             return new VirtualDevice(name);
         }
 
-        protected override void SetBasicDeviceInformation()
-        {
-        }
-
         private void OnMessage_Mac(IntPtr pktlist, IntPtr readProcRefCon, IntPtr srcConnRefCon)
         {
             var result = VirtualDeviceApiProvider.Api.Api_SendDataBack(pktlist, readProcRefCon);

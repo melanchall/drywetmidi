@@ -980,7 +980,7 @@ namespace Melanchall.DryWetMidi.Devices
 
             if (!Loop)
             {
-                _clock.Stop();
+                _clock.StopInternally();
                 OnFinished();
                 return;
             }

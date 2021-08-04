@@ -54,7 +54,6 @@ namespace Melanchall.DryWetMidi.Devices
         {
             _info = info;
             Owner = owner;
-            SetBasicDeviceInformation();
         }
 
         #endregion
@@ -104,11 +103,6 @@ namespace Melanchall.DryWetMidi.Devices
         #endregion
 
         #region Methods
-
-        /// <summary>
-        /// Sets the basic information about MIDI device, such as name and driver details.
-        /// </summary>
-        protected abstract void SetBasicDeviceInformation();
 
         /// <summary>
         /// Checks that current instance of MIDI device class is not disposed and throws

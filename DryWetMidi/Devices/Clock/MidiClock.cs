@@ -149,8 +149,7 @@ namespace Melanchall.DryWetMidi.Devices
         {
             EnsureIsNotDisposed();
 
-            _stopwatch.Stop();
-            _tickGenerator?.TryStop();
+            StopInternally();
         }
 
         /// <summary>
@@ -201,6 +200,15 @@ namespace Melanchall.DryWetMidi.Devices
 
             CurrentTime = _startTime + new TimeSpan(MathUtilities.RoundToLong(_stopwatch.Elapsed.Ticks * Speed));
             OnTicked();
+        }
+
+        internal void StopInternally()
+        {
+            if (_disposed)
+                return;
+
+            _stopwatch.Stop();
+            _tickGenerator?.TryStop();
         }
 
         internal void StopShortly()

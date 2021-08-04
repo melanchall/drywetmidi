@@ -155,10 +155,7 @@ OSStatus GetDeviceDriverVersion(MIDIEndpointRef endpointRef, int* value)
 typedef struct
 {
     MIDIEndpointRef endpointRef;
-    char* name;
-    char* manufacturer;
-    char* product;
-    int driverVersion;
+	char* name;
 } InputDeviceInfo;
 
 typedef struct
@@ -193,47 +190,6 @@ IN_GETINFORESULT GetInputDeviceInfo(int deviceIndex, void** info)
         }
     }
 
-    status = GetDevicePropertyValue(endpointRef, kMIDIPropertyManufacturer, &inputDeviceInfo->manufacturer);
-    if (status != noErr)
-    {
-        switch (status)
-        {
-            case kMIDIUnknownEndpoint: return IN_GETINFORESULT_MANUFACTURER_UNKNOWNENDPOINT;
-            case SMALL_BUFFER_ERROR: return IN_GETINFORESULT_MANUFACTURER_TOOLONG;
-            case kMIDIUnknownProperty:
-                inputDeviceInfo->manufacturer = NULL;
-                break;
-            default: return IN_GETINFORESULT_UNKNOWNERROR;
-        }
-    }
-
-    status = GetDevicePropertyValue(endpointRef, kMIDIPropertyModel, &inputDeviceInfo->product);
-    if (status != noErr)
-    {
-        switch (status)
-        {
-            case kMIDIUnknownEndpoint: return IN_GETINFORESULT_PRODUCT_UNKNOWNENDPOINT;
-            case SMALL_BUFFER_ERROR: return IN_GETINFORESULT_PRODUCT_TOOLONG;
-            case kMIDIUnknownProperty:
-                inputDeviceInfo->product = NULL;
-                break;
-            default: return IN_GETINFORESULT_UNKNOWNERROR;
-        }
-    }
-
-    status = GetDeviceDriverVersion(endpointRef, &inputDeviceInfo->driverVersion);
-    if (status != noErr)
-    {
-        switch (status)
-        {
-            case kMIDIUnknownEndpoint: return IN_GETINFORESULT_DRIVERVERSION_UNKNOWNENDPOINT;
-            case kMIDIUnknownProperty:
-                inputDeviceInfo->driverVersion = 0;
-                break;
-            default: return IN_GETINFORESULT_UNKNOWNERROR;
-        }
-    }
-
     *info = inputDeviceInfo;
 
     return IN_GETINFORESULT_OK;
@@ -245,22 +201,67 @@ char* GetInputDeviceName(void* info)
     return inputDeviceInfo->name;
 }
 
-char* GetInputDeviceManufacturer(void* info)
+IN_GETPROPERTYRESULT GetInputDeviceStringPropertyValue(InputDeviceInfo* inputDeviceInfo, CFStringRef propertyID, char** value)
 {
-    InputDeviceInfo* inputDeviceInfo = (InputDeviceInfo*)info;
-    return inputDeviceInfo->manufacturer;
+	OSStatus status = GetDevicePropertyValue(inputDeviceInfo->endpointRef, propertyID, value);
+    if (status != noErr)
+    {
+        switch (status)
+        {
+            case kMIDIUnknownEndpoint: return IN_GETPROPERTYRESULT_UNKNOWNENDPOINT;
+            case SMALL_BUFFER_ERROR: return IN_GETPROPERTYRESULT_TOOLONG;
+            case kMIDIUnknownProperty: return IN_GETPROPERTYRESULT_UNKNOWNPROPERTY;
+            default: return IN_GETPROPERTYRESULT_UNKNOWNERROR;
+        }
+    }
+	
+	return IN_GETPROPERTYRESULT_OK;
 }
 
-char* GetInputDeviceProduct(void* info)
+IN_GETPROPERTYRESULT GetInputDeviceIntPropertyValue(InputDeviceInfo* inputDeviceInfo, CFStringRef propertyID, int* value)
 {
-    InputDeviceInfo* inputDeviceInfo = (InputDeviceInfo*)info;
-    return inputDeviceInfo->product;
+	OSStatus status = MIDIObjectGetIntegerProperty(inputDeviceInfo->endpointRef, propertyID, value);
+    if (status != noErr)
+    {
+        switch (status)
+        {
+            case kMIDIUnknownEndpoint: return IN_GETPROPERTYRESULT_UNKNOWNENDPOINT;
+            case kMIDIUnknownProperty: return IN_GETPROPERTYRESULT_UNKNOWNPROPERTY;
+            default: return IN_GETPROPERTYRESULT_UNKNOWNERROR;
+        }
+    }
+	
+	return IN_GETPROPERTYRESULT_OK;
 }
 
-int GetInputDeviceDriverVersion(void* info)
+IN_GETPROPERTYRESULT GetInputDeviceManufacturer(void* info, char** value)
 {
     InputDeviceInfo* inputDeviceInfo = (InputDeviceInfo*)info;
-    return inputDeviceInfo->driverVersion;
+	return GetInputDeviceStringPropertyValue(inputDeviceInfo, kMIDIPropertyManufacturer, value);
+}
+
+IN_GETPROPERTYRESULT GetInputDeviceProduct(void* info, char** value)
+{
+    InputDeviceInfo* inputDeviceInfo = (InputDeviceInfo*)info;
+    return GetInputDeviceStringPropertyValue(inputDeviceInfo, kMIDIPropertyModel, value);
+}
+
+IN_GETPROPERTYRESULT GetInputDeviceDriverVersion(void* info, int* value)
+{
+    InputDeviceInfo* inputDeviceInfo = (InputDeviceInfo*)info;
+	return GetInputDeviceIntPropertyValue(inputDeviceInfo, kMIDIPropertyDriverVersion, value);
+}
+
+IN_GETPROPERTYRESULT GetInputDeviceUniqueId(void* info, int* value)
+{
+    InputDeviceInfo* inputDeviceInfo = (InputDeviceInfo*)info;
+	return GetInputDeviceIntPropertyValue(inputDeviceInfo, kMIDIPropertyUniqueID, value);
+}
+
+IN_GETPROPERTYRESULT GetInputDeviceDriverOwner(void* info, char** value)
+{
+    InputDeviceInfo* inputDeviceInfo = (InputDeviceInfo*)info;
+	return GetInputDeviceStringPropertyValue(inputDeviceInfo, kMIDIPropertyDriverOwner, value);
 }
 
 IN_OPENRESULT OpenInputDevice_Mac(void* info, void* sessionHandle, MIDIReadProc callback, void** handle)
@@ -364,6 +365,21 @@ IN_GETEVENTDATARESULT GetEventDataFromInputDevice(MIDIPacketList* packetList, in
     return IN_GETEVENTDATARESULT_OK;
 }
 
+char IsInputDevicePropertySupported(IN_PROPERTY property)
+{
+	switch (property)
+	{
+		case IN_PROPERTY_PRODUCT:
+		case IN_PROPERTY_MANUFACTURER:
+		case IN_PROPERTY_DRIVERVERSION:
+		case IN_PROPERTY_UNIQUEID:
+		case IN_PROPERTY_DRIVEROWNER:
+			return 1;
+	}
+	
+	return 0;
+}
+
 /* ================================
  Output device
  ================================ */
@@ -372,9 +388,6 @@ typedef struct
 {
     MIDIEndpointRef endpointRef;
     char* name;
-    char* manufacturer;
-    char* product;
-    int driverVersion;
 } OutputDeviceInfo;
 
 typedef struct
@@ -409,47 +422,6 @@ OUT_GETINFORESULT GetOutputDeviceInfo(int deviceIndex, void** info)
         }
     }
 
-    status = GetDevicePropertyValue(endpointRef, kMIDIPropertyManufacturer, &outputDeviceInfo->manufacturer);
-    if (status != noErr)
-    {
-        switch (status)
-        {
-            case kMIDIUnknownEndpoint: return OUT_GETINFORESULT_MANUFACTURER_UNKNOWNENDPOINT;
-            case SMALL_BUFFER_ERROR: return OUT_GETINFORESULT_MANUFACTURER_TOOLONG;
-            case kMIDIUnknownProperty:
-                outputDeviceInfo->manufacturer = NULL;
-                break;
-            default: return OUT_GETINFORESULT_UNKNOWNERROR;
-        }
-    }
-
-    status = GetDevicePropertyValue(endpointRef, kMIDIPropertyModel, &outputDeviceInfo->product);
-    if (status != noErr)
-    {
-        switch (status)
-        {
-            case kMIDIUnknownEndpoint: return OUT_GETINFORESULT_PRODUCT_UNKNOWNENDPOINT;
-            case SMALL_BUFFER_ERROR: return OUT_GETINFORESULT_PRODUCT_TOOLONG;
-            case kMIDIUnknownProperty:
-                outputDeviceInfo->product = NULL;
-                break;
-            default: return OUT_GETINFORESULT_UNKNOWNERROR;
-        }
-    }
-
-    status = GetDeviceDriverVersion(endpointRef, &outputDeviceInfo->driverVersion);
-    if (status != noErr)
-    {
-        switch (status)
-        {
-            case kMIDIUnknownEndpoint: return OUT_GETINFORESULT_DRIVERVERSION_UNKNOWNENDPOINT;
-            case kMIDIUnknownProperty:
-                outputDeviceInfo->driverVersion = 0;
-                break;
-            default: return OUT_GETINFORESULT_UNKNOWNERROR;
-        }
-    }
-
     *info = outputDeviceInfo;
 
     return OUT_GETINFORESULT_OK;
@@ -461,22 +433,67 @@ char* GetOutputDeviceName(void* info)
     return outputDeviceInfo->name;
 }
 
-char* GetOutputDeviceManufacturer(void* info)
+OUT_GETPROPERTYRESULT GetOutputDeviceStringPropertyValue(OutputDeviceInfo* outputDeviceInfo, CFStringRef propertyID, char** value)
 {
-    OutputDeviceInfo* outputDeviceInfo = (OutputDeviceInfo*)info;
-    return outputDeviceInfo->manufacturer;
+	OSStatus status = GetDevicePropertyValue(outputDeviceInfo->endpointRef, propertyID, value);
+    if (status != noErr)
+    {
+        switch (status)
+        {
+            case kMIDIUnknownEndpoint: return OUT_GETPROPERTYRESULT_UNKNOWNENDPOINT;
+            case SMALL_BUFFER_ERROR: return OUT_GETPROPERTYRESULT_TOOLONG;
+            case kMIDIUnknownProperty: return OUT_GETPROPERTYRESULT_UNKNOWNPROPERTY;
+            default: return OUT_GETPROPERTYRESULT_UNKNOWNERROR;
+        }
+    }
+	
+	return OUT_GETPROPERTYRESULT_OK;
 }
 
-char* GetOutputDeviceProduct(void* info)
+OUT_GETPROPERTYRESULT GetOutputDeviceIntPropertyValue(OutputDeviceInfo* outputDeviceInfo, CFStringRef propertyID, int* value)
 {
-    OutputDeviceInfo* outputDeviceInfo = (OutputDeviceInfo*)info;
-    return outputDeviceInfo->product;
+	OSStatus status = MIDIObjectGetIntegerProperty(outputDeviceInfo->endpointRef, propertyID, value);
+    if (status != noErr)
+    {
+        switch (status)
+        {
+            case kMIDIUnknownEndpoint: return OUT_GETPROPERTYRESULT_UNKNOWNENDPOINT;
+            case kMIDIUnknownProperty: return OUT_GETPROPERTYRESULT_UNKNOWNPROPERTY;
+            default: return OUT_GETPROPERTYRESULT_UNKNOWNERROR;
+        }
+    }
+	
+	return OUT_GETPROPERTYRESULT_OK;
 }
 
-int GetOutputDeviceDriverVersion(void* info)
+OUT_GETPROPERTYRESULT GetOutputDeviceManufacturer(void* info, char** value)
 {
     OutputDeviceInfo* outputDeviceInfo = (OutputDeviceInfo*)info;
-    return outputDeviceInfo->driverVersion;
+	return GetOutputDeviceStringPropertyValue(outputDeviceInfo, kMIDIPropertyManufacturer, value);
+}
+
+OUT_GETPROPERTYRESULT GetOutputDeviceProduct(void* info, char** value)
+{
+    OutputDeviceInfo* outputDeviceInfo = (OutputDeviceInfo*)info;
+	return GetOutputDeviceStringPropertyValue(outputDeviceInfo, kMIDIPropertyModel, value);
+}
+
+OUT_GETPROPERTYRESULT GetOutputDeviceDriverVersion(void* info, int* value)
+{
+    OutputDeviceInfo* outputDeviceInfo = (OutputDeviceInfo*)info;
+	return GetOutputDeviceIntPropertyValue(outputDeviceInfo, kMIDIPropertyDriverVersion, value);
+}
+
+OUT_GETPROPERTYRESULT GetOutputDeviceUniqueId(void* info, int* value)
+{
+    OutputDeviceInfo* outputDeviceInfo = (OutputDeviceInfo*)info;
+	return GetOutputDeviceIntPropertyValue(outputDeviceInfo, kMIDIPropertyUniqueID, value);
+}
+
+OUT_GETPROPERTYRESULT GetOutputDeviceDriverOwner(void* info, char** value)
+{
+    OutputDeviceInfo* outputDeviceInfo = (OutputDeviceInfo*)info;
+	return GetOutputDeviceStringPropertyValue(outputDeviceInfo, kMIDIPropertyDriverOwner, value);
 }
 
 OUT_OPENRESULT OpenOutputDevice_Mac(void* info, void* sessionHandle, void** handle)
@@ -591,6 +608,21 @@ OUT_SENDSYSEXRESULT SendSysExEventToOutputDevice_Mac(void* handle, Byte* data, B
     return OUT_SENDSYSEXRESULT_OK;
 }
 
+char IsOutputDevicePropertySupported(OUT_PROPERTY property)
+{
+	switch (property)
+	{
+		case OUT_PROPERTY_PRODUCT:
+		case OUT_PROPERTY_MANUFACTURER:
+		case OUT_PROPERTY_DRIVERVERSION:
+		case OUT_PROPERTY_UNIQUEID:
+		case OUT_PROPERTY_DRIVEROWNER:
+			return 1;
+	}
+	
+	return 0;
+}
+
 /* ================================
  Virtual device
  ================================ */
@@ -627,8 +659,6 @@ VIRTUAL_OPENRESULT OpenVirtualDevice_Mac(char* name, void* sessionHandle, MIDIRe
 	InputDeviceInfo* inputDeviceInfo = malloc(sizeof(InputDeviceInfo));
 	inputDeviceInfo->endpointRef = sourceRef;
 	inputDeviceInfo->name = name;
-	inputDeviceInfo->manufacturer = NULL;
-	inputDeviceInfo->product = NULL;
 	virtualDeviceInfo->inputDeviceInfo = inputDeviceInfo;
 	
 	MIDIEndpointRef destinationRef;
@@ -647,8 +677,6 @@ VIRTUAL_OPENRESULT OpenVirtualDevice_Mac(char* name, void* sessionHandle, MIDIRe
 	OutputDeviceInfo* outputDeviceInfo = malloc(sizeof(OutputDeviceInfo));
 	outputDeviceInfo->endpointRef = destinationRef;
 	outputDeviceInfo->name = name;
-	outputDeviceInfo->manufacturer = NULL;
-	outputDeviceInfo->product = NULL;
 	virtualDeviceInfo->outputDeviceInfo = outputDeviceInfo;
 	
 	*info = virtualDeviceInfo;

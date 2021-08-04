@@ -41,6 +41,8 @@ namespace Melanchall.DryWetMidi.Devices
 
         #region Fields
 
+        private static InputDeviceProperty[] _supportedProperties;
+
         private readonly BytesToMidiEventConverter _bytesToMidiEventConverter = new BytesToMidiEventConverter(ChannelParametersBufferSize);
 
         private InputDeviceApi.Callback_Win _callback_Win;
@@ -66,6 +68,8 @@ namespace Melanchall.DryWetMidi.Devices
         {
             _apiType = CommonApiProvider.Api.Api_GetApiType();
             _bytesToMidiEventConverter.ReadingSettings.SilentNoteOnPolicy = SilentNoteOnPolicy.NoteOn;
+
+            Name = InputDeviceApiProvider.Api.Api_GetDeviceName(_info);
         }
 
         #endregion
@@ -149,6 +153,64 @@ namespace Melanchall.DryWetMidi.Devices
                 StopEventsListeningSilently());
         }
 
+        public object GetProperty(InputDeviceProperty property)
+        {
+            ThrowIfArgument.IsInvalidEnumValue(nameof(property), property);
+
+            if (!GetSupportedProperties().Contains(property))
+                throw new ArgumentException("Property is not supported by input devices.", nameof(property));
+
+            var api = InputDeviceApiProvider.Api;
+            InputDeviceApi.IN_GETPROPERTYRESULT result;
+
+            switch (property)
+            {
+                case InputDeviceProperty.Product:
+                    {
+                        string product;
+                        NativeApi.HandleResult(api.Api_GetDeviceProduct(_info, out product));
+                        return product;
+                    }
+                case InputDeviceProperty.Manufacturer:
+                    {
+                        string manufacturer;
+                        NativeApi.HandleResult(api.Api_GetDeviceManufacturer(_info, out manufacturer));
+                        return manufacturer;
+                    }
+                case InputDeviceProperty.DriverVersion:
+                    {
+                        int driverVersion;
+                        NativeApi.HandleResult(api.Api_GetDeviceDriverVersion(_info, out driverVersion));
+                        return driverVersion;
+                    }
+                case InputDeviceProperty.UniqueId:
+                    {
+                        int uniqueId;
+                        NativeApi.HandleResult(api.Api_GetDeviceUniqueId(_info, out uniqueId));
+                        return uniqueId;
+                    }
+                case InputDeviceProperty.DriverOwner:
+                    {
+                        string driverOwner;
+                        NativeApi.HandleResult(api.Api_GetDeviceDriverOwner(_info, out driverOwner));
+                        return driverOwner;
+                    }
+                default:
+                    throw new NotSupportedException("Property is not supported.");
+            }
+        }
+
+        public static InputDeviceProperty[] GetSupportedProperties()
+        {
+            if (_supportedProperties != null)
+                return _supportedProperties;
+
+            return _supportedProperties = Enum.GetValues(typeof(InputDeviceProperty))
+                .OfType<InputDeviceProperty>()
+                .Where(p => InputDeviceApiProvider.Api.Api_IsPropertySupported(p))
+                .ToArray();
+        }
+
         /// <summary>
         /// Retrieves the number of input MIDI devices presented in the system.
         /// </summary>
@@ -208,14 +270,6 @@ namespace Melanchall.DryWetMidi.Devices
                 throw new ArgumentException($"There is no MIDI input device '{name}'.", nameof(name));
 
             return device;
-        }
-
-        protected override void SetBasicDeviceInformation()
-        {
-            Name = InputDeviceApiProvider.Api.Api_GetDeviceName(_info);
-            Manufacturer = InputDeviceApiProvider.Api.Api_GetDeviceManufacturer(_info);
-            Product = InputDeviceApiProvider.Api.Api_GetDeviceProduct(_info);
-            DriverVersion = InputDeviceApiProvider.Api.Api_GetDeviceDriverVersion(_info);
         }
 
         private void OnEventReceived(MidiEvent midiEvent)

@@ -32,6 +32,8 @@ namespace Melanchall.DryWetMidi.Devices
 
         #region Fields
 
+        private static OutputDeviceProperty[] _supportedProperties;
+
         private readonly MidiEventToBytesConverter _midiEventToBytesConverter = new MidiEventToBytesConverter(ShortEventBufferSize);
         private readonly BytesToMidiEventConverter _bytesToMidiEventConverter = new BytesToMidiEventConverter();
 
@@ -52,6 +54,8 @@ namespace Melanchall.DryWetMidi.Devices
             : base(info, owner)
         {
             _apiType = CommonApiProvider.Api.Api_GetApiType();
+
+            Name = OutputDeviceApiProvider.Api.Api_GetDeviceName(_info);
         }
 
         #endregion
@@ -146,6 +150,96 @@ namespace Melanchall.DryWetMidi.Devices
             return OutputDeviceApiProvider.Api.Api_GetDevicesCount();
         }
 
+        public object GetProperty(OutputDeviceProperty property)
+        {
+            ThrowIfArgument.IsInvalidEnumValue(nameof(property), property);
+
+            if (!GetSupportedProperties().Contains(property))
+                throw new ArgumentException("Property is not supported by output devices.", nameof(property));
+
+            var api = OutputDeviceApiProvider.Api;
+
+            switch (property)
+            {
+                case OutputDeviceProperty.Product:
+                    {
+                        string product;
+                        NativeApi.HandleResult(api.Api_GetDeviceProduct(_info, out product));
+                        return product;
+                    }
+                case OutputDeviceProperty.Manufacturer:
+                    {
+                        string manufacturer;
+                        NativeApi.HandleResult(api.Api_GetDeviceManufacturer(_info, out manufacturer));
+                        return manufacturer;
+                    }
+                case OutputDeviceProperty.DriverVersion:
+                    {
+                        int driverVersion;
+                        NativeApi.HandleResult(api.Api_GetDeviceDriverVersion(_info, out driverVersion));
+                        return driverVersion;
+                    }
+                case OutputDeviceProperty.Technology:
+                    {
+                        OutputDeviceTechnology technology;
+                        NativeApi.HandleResult(api.Api_GetDeviceTechnology(_info, out technology));
+                        return technology;
+                    }
+                case OutputDeviceProperty.UniqueId:
+                    {
+                        int uniqueId;
+                        NativeApi.HandleResult(api.Api_GetDeviceUniqueId(_info, out uniqueId));
+                        return uniqueId;
+                    }
+                case OutputDeviceProperty.VoicesNumber:
+                    {
+                        int voicesNumber;
+                        NativeApi.HandleResult(api.Api_GetDeviceVoicesNumber(_info, out voicesNumber));
+                        return voicesNumber;
+                    }
+                case OutputDeviceProperty.NotesNumber:
+                    {
+                        int notesNumber;
+                        NativeApi.HandleResult(api.Api_GetDeviceNotesNumber(_info, out notesNumber));
+                        return notesNumber;
+                    }
+                case OutputDeviceProperty.Channels:
+                    {
+                        int channelsMask;
+                        NativeApi.HandleResult(api.Api_GetDeviceChannelsMask(_info, out channelsMask));
+                        return (from channel in FourBitNumber.Values
+                                let isChannelSupported = (channelsMask >> channel) & 1
+                                where isChannelSupported == 1
+                                select channel).ToArray();
+                    }
+                case OutputDeviceProperty.Options:
+                    {
+                        OutputDeviceOption option;
+                        NativeApi.HandleResult(api.Api_GetDeviceOptions(_info, out option));
+                        return option;
+                    }
+                case OutputDeviceProperty.DriverOwner:
+                    {
+                        string driverOwner;
+                        NativeApi.HandleResult(api.Api_GetDeviceDriverOwner(_info, out driverOwner));
+                        return driverOwner;
+                    }
+                default:
+                    throw new NotSupportedException("Property is not supported.");
+            }
+        }
+
+        public static OutputDeviceProperty[] GetSupportedProperties()
+        {
+            if (_supportedProperties != null)
+                return _supportedProperties;
+
+            return _supportedProperties = Enum.GetValues(typeof(OutputDeviceProperty))
+                .OfType<OutputDeviceProperty>()
+                .Where(p => OutputDeviceApiProvider.Api.Api_IsPropertySupported(p))
+                .ToArray();
+        }
+
         /// <summary>
         /// Retrieves all output MIDI devices presented in the system.
         /// </summary>
@@ -196,14 +290,6 @@ namespace Melanchall.DryWetMidi.Devices
                 throw new ArgumentException($"There is no output MIDI device '{name}'.", nameof(name));
 
             return device;
-        }
-
-        protected override void SetBasicDeviceInformation()
-        {
-            Name = OutputDeviceApiProvider.Api.Api_GetDeviceName(_info);
-            Manufacturer = OutputDeviceApiProvider.Api.Api_GetDeviceManufacturer(_info);
-            Product = OutputDeviceApiProvider.Api.Api_GetDeviceProduct(_info);
-            DriverVersion = OutputDeviceApiProvider.Api.Api_GetDeviceDriverVersion(_info);
         }
 
         private void EnsureHandleIsCreated()

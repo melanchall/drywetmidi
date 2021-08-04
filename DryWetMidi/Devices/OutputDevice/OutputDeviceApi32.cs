@@ -23,13 +23,13 @@ namespace Melanchall.DryWetMidi.Devices
         private static extern IntPtr GetOutputDeviceName(IntPtr info);
 
         [DllImport(LibraryName, ExactSpelling = true)]
-        private static extern IntPtr GetOutputDeviceManufacturer(IntPtr info);
+        private static extern OUT_GETPROPERTYRESULT GetOutputDeviceManufacturer(IntPtr info, out IntPtr value);
 
         [DllImport(LibraryName, ExactSpelling = true)]
-        private static extern IntPtr GetOutputDeviceProduct(IntPtr info);
+        private static extern OUT_GETPROPERTYRESULT GetOutputDeviceProduct(IntPtr info, out IntPtr value);
 
         [DllImport(LibraryName, ExactSpelling = true)]
-        private static extern int GetOutputDeviceDriverVersion(IntPtr info);
+        private static extern OUT_GETPROPERTYRESULT GetOutputDeviceDriverVersion(IntPtr info, out int value);
 
         [DllImport(LibraryName, ExactSpelling = true)]
         private static extern OUT_OPENRESULT OpenOutputDevice_Win(IntPtr info, IntPtr sessionHandle, Callback_Win callback, out IntPtr handle);
@@ -52,6 +52,30 @@ namespace Melanchall.DryWetMidi.Devices
         [DllImport(LibraryName, ExactSpelling = true)]
         private static extern OUT_GETSYSEXDATARESULT GetOutputDeviceSysExBufferData(IntPtr handle, IntPtr header, out IntPtr data, out int size);
 
+        [DllImport(LibraryName, ExactSpelling = true)]
+        private static extern bool IsOutputDevicePropertySupported(OutputDeviceProperty property);
+
+        [DllImport(LibraryName, ExactSpelling = true)]
+        private static extern OUT_GETPROPERTYRESULT GetOutputDeviceTechnology(IntPtr info, out OutputDeviceTechnology value);
+
+        [DllImport(LibraryName, ExactSpelling = true)]
+        private static extern OUT_GETPROPERTYRESULT GetOutputDeviceUniqueId(IntPtr info, out int value);
+
+        [DllImport(LibraryName, ExactSpelling = true)]
+        private static extern OUT_GETPROPERTYRESULT GetOutputDeviceVoicesNumber(IntPtr info, out int value);
+
+        [DllImport(LibraryName, ExactSpelling = true)]
+        private static extern OUT_GETPROPERTYRESULT GetOutputDeviceNotesNumber(IntPtr info, out int value);
+
+        [DllImport(LibraryName, ExactSpelling = true)]
+        private static extern OUT_GETPROPERTYRESULT GetOutputDeviceChannelsMask(IntPtr info, out int value);
+
+        [DllImport(LibraryName, ExactSpelling = true)]
+        private static extern OUT_GETPROPERTYRESULT GetOutputDeviceOptions(IntPtr info, out OutputDeviceOption value);
+
+        [DllImport(LibraryName, ExactSpelling = true)]
+        private static extern OUT_GETPROPERTYRESULT GetOutputDeviceDriverOwner(IntPtr info, out IntPtr value);
+
         #endregion
 
         #region Methods
@@ -70,23 +94,6 @@ namespace Melanchall.DryWetMidi.Devices
         {
             var namePointer = GetOutputDeviceName(info);
             return namePointer != IntPtr.Zero ? Marshal.PtrToStringAnsi(namePointer) : string.Empty;
-        }
-
-        public override string Api_GetDeviceManufacturer(IntPtr info)
-        {
-            var manufacturerPointer = GetOutputDeviceManufacturer(info);
-            return manufacturerPointer != IntPtr.Zero ? Marshal.PtrToStringAnsi(manufacturerPointer) : string.Empty;
-        }
-
-        public override string Api_GetDeviceProduct(IntPtr info)
-        {
-            var productPointer = GetOutputDeviceProduct(info);
-            return productPointer != IntPtr.Zero ? Marshal.PtrToStringAnsi(productPointer) : string.Empty;
-        }
-
-        public override int Api_GetDeviceDriverVersion(IntPtr info)
-        {
-            return GetOutputDeviceDriverVersion(info);
         }
 
         public override OUT_OPENRESULT Api_OpenDevice_Win(IntPtr info, IntPtr sessionHandle, Callback_Win callback, out IntPtr handle)
@@ -122,6 +129,70 @@ namespace Melanchall.DryWetMidi.Devices
         public override OUT_GETSYSEXDATARESULT Api_GetSysExBufferData(IntPtr handle, IntPtr header, out IntPtr data, out int size)
         {
             return GetOutputDeviceSysExBufferData(handle, header, out data, out size);
+        }
+
+        public override bool Api_IsPropertySupported(OutputDeviceProperty property)
+        {
+            return IsOutputDevicePropertySupported(property);
+        }
+
+        public override OUT_GETPROPERTYRESULT Api_GetDeviceManufacturer(IntPtr info, out string manufacturer)
+        {
+            IntPtr manufacturerPointer;
+            var result = GetOutputDeviceManufacturer(info, out manufacturerPointer);
+            manufacturer = manufacturerPointer != IntPtr.Zero ? Marshal.PtrToStringAnsi(manufacturerPointer) : string.Empty;
+            return result;
+        }
+
+        public override OUT_GETPROPERTYRESULT Api_GetDeviceProduct(IntPtr info, out string product)
+        {
+            IntPtr productPointer;
+            var result = GetOutputDeviceProduct(info, out productPointer);
+            product = productPointer != IntPtr.Zero ? Marshal.PtrToStringAnsi(productPointer) : string.Empty;
+            return result;
+        }
+
+        public override OUT_GETPROPERTYRESULT Api_GetDeviceDriverVersion(IntPtr info, out int driverVersion)
+        {
+            return GetOutputDeviceDriverVersion(info, out driverVersion);
+        }
+
+        public override OUT_GETPROPERTYRESULT Api_GetDeviceTechnology(IntPtr info, out OutputDeviceTechnology deviceType)
+        {
+            return GetOutputDeviceTechnology(info, out deviceType);
+        }
+
+        public override OUT_GETPROPERTYRESULT Api_GetDeviceUniqueId(IntPtr info, out int uniqueId)
+        {
+            return GetOutputDeviceUniqueId(info, out uniqueId);
+        }
+
+        public override OUT_GETPROPERTYRESULT Api_GetDeviceVoicesNumber(IntPtr info, out int voicesNumber)
+        {
+            return GetOutputDeviceVoicesNumber(info, out voicesNumber);
+        }
+
+        public override OUT_GETPROPERTYRESULT Api_GetDeviceNotesNumber(IntPtr info, out int notesNumber)
+        {
+            return GetOutputDeviceNotesNumber(info, out notesNumber);
+        }
+
+        public override OUT_GETPROPERTYRESULT Api_GetDeviceChannelsMask(IntPtr info, out int channelsMask)
+        {
+            return GetOutputDeviceChannelsMask(info, out channelsMask);
+        }
+
+        public override OUT_GETPROPERTYRESULT Api_GetDeviceOptions(IntPtr info, out OutputDeviceOption option)
+        {
+            return GetOutputDeviceOptions(info, out option);
+        }
+
+        public override OUT_GETPROPERTYRESULT Api_GetDeviceDriverOwner(IntPtr info, out string driverOwner)
+        {
+            IntPtr driverOwnerPointer;
+            var result = GetOutputDeviceDriverOwner(info, out driverOwnerPointer);
+            driverOwner = driverOwnerPointer != IntPtr.Zero ? Marshal.PtrToStringAnsi(driverOwnerPointer) : string.Empty;
+            return result;
         }
 
         #endregion

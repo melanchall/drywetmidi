@@ -16,12 +16,7 @@ namespace Melanchall.DryWetMidi.Devices
             OUT_GETINFORESULT_NOMEMORY = 4,
             OUT_GETINFORESULT_NAME_UNKNOWNENDPOINT = 101,
             OUT_GETINFORESULT_NAME_TOOLONG = 102,
-            OUT_GETINFORESULT_MANUFACTURER_UNKNOWNENDPOINT = 103,
-            OUT_GETINFORESULT_MANUFACTURER_TOOLONG = 104,
-            OUT_GETINFORESULT_PRODUCT_UNKNOWNENDPOINT = 105,
-            OUT_GETINFORESULT_PRODUCT_TOOLONG = 106,
-            OUT_GETINFORESULT_UNKNOWNERROR = 107,
-            OUT_GETINFORESULT_DRIVERVERSION_UNKNOWNENDPOINT = 108
+            OUT_GETINFORESULT_UNKNOWNERROR = 103,
         }
 
         public enum OUT_OPENRESULT
@@ -103,6 +98,15 @@ namespace Melanchall.DryWetMidi.Devices
             OUT_GETSYSEXDATARESULT_INVALIDHANDLE = 3
         }
 
+        public enum OUT_GETPROPERTYRESULT
+        {
+            OUT_GETPROPERTYRESULT_OK = 0,
+            OUT_GETPROPERTYRESULT_UNKNOWNENDPOINT = 101,
+            OUT_GETPROPERTYRESULT_TOOLONG = 102,
+            OUT_GETPROPERTYRESULT_UNKNOWNPROPERTY = 103,
+            OUT_GETPROPERTYRESULT_UNKNOWNERROR = 104
+        }
+
         #endregion
 
         #region Delegates
@@ -119,12 +123,6 @@ namespace Melanchall.DryWetMidi.Devices
 
         public abstract string Api_GetDeviceName(IntPtr info);
 
-        public abstract string Api_GetDeviceManufacturer(IntPtr info);
-
-        public abstract string Api_GetDeviceProduct(IntPtr info);
-
-        public abstract int Api_GetDeviceDriverVersion(IntPtr info);
-
         public abstract OUT_OPENRESULT Api_OpenDevice_Win(IntPtr info, IntPtr sessionHandle, Callback_Win callback, out IntPtr handle);
 
         public abstract OUT_OPENRESULT Api_OpenDevice_Mac(IntPtr info, IntPtr sessionHandle, out IntPtr handle);
@@ -138,6 +136,28 @@ namespace Melanchall.DryWetMidi.Devices
         public abstract OUT_SENDSYSEXRESULT Api_SendSysExEvent_Win(IntPtr handle, IntPtr data, int size);
 
         public abstract OUT_GETSYSEXDATARESULT Api_GetSysExBufferData(IntPtr handle, IntPtr header, out IntPtr data, out int size);
+
+        public abstract bool Api_IsPropertySupported(OutputDeviceProperty property);
+
+        public abstract OUT_GETPROPERTYRESULT Api_GetDeviceManufacturer(IntPtr info, out string manufacturer);
+
+        public abstract OUT_GETPROPERTYRESULT Api_GetDeviceProduct(IntPtr info, out string manufacturer);
+
+        public abstract OUT_GETPROPERTYRESULT Api_GetDeviceDriverVersion(IntPtr info, out int driverVersion);
+
+        public abstract OUT_GETPROPERTYRESULT Api_GetDeviceTechnology(IntPtr info, out OutputDeviceTechnology deviceType);
+
+        public abstract OUT_GETPROPERTYRESULT Api_GetDeviceUniqueId(IntPtr info, out int uniqueId);
+
+        public abstract OUT_GETPROPERTYRESULT Api_GetDeviceVoicesNumber(IntPtr info, out int voicesNumber);
+
+        public abstract OUT_GETPROPERTYRESULT Api_GetDeviceNotesNumber(IntPtr info, out int notesNumber);
+
+        public abstract OUT_GETPROPERTYRESULT Api_GetDeviceChannelsMask(IntPtr info, out int channelsMask);
+
+        public abstract OUT_GETPROPERTYRESULT Api_GetDeviceOptions(IntPtr info, out OutputDeviceOption option);
+
+        public abstract OUT_GETPROPERTYRESULT Api_GetDeviceDriverOwner(IntPtr info, out string driverOwner);
 
         #endregion
     }
