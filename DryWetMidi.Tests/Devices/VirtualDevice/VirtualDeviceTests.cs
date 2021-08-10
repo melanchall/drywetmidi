@@ -12,6 +12,7 @@ using NUnit.Framework;
 namespace Melanchall.DryWetMidi.Tests.Devices
 {
     [TestFixture]
+    [Platform("MacOsX")]
     public sealed class VirtualDeviceTests
     {
         #region Constants
@@ -23,7 +24,6 @@ namespace Melanchall.DryWetMidi.Tests.Devices
         #region Test methods
 
         [Test]
-        [Platform("MacOsX")]
         public void CantDisposeVirtualDeviceSubdevices()
         {
             using (var virtualDevice = GetVirtualDevice())
@@ -38,7 +38,6 @@ namespace Melanchall.DryWetMidi.Tests.Devices
         }
 
         [Test]
-        [Platform("MacOsX")]
         public void CreateVirtualDevice()
         {
             using (var virtualDevice = GetVirtualDevice())
@@ -61,7 +60,6 @@ namespace Melanchall.DryWetMidi.Tests.Devices
 
         [Retry(RetriesNumber)]
         [Test]
-        [Platform("MacOsX")]
         public void SendEventToVirtualDevice_SysEx()
         {
             SendEvent(new NormalSysExEvent(new byte[] { 0x5F, 0x40, 0xF7 }));
@@ -85,7 +83,6 @@ namespace Melanchall.DryWetMidi.Tests.Devices
         [TestCase(MidiEventType.NoteOn)]
         [TestCase(MidiEventType.PitchBend)]
         [TestCase(MidiEventType.ProgramChange)]
-        [Platform("MacOsX")]
         public void SendEventToVirtualDevice_Short_Default(MidiEventType eventType)
         {
             var midiEvent = TypesProvider.GetAllEventTypes()
@@ -98,14 +95,12 @@ namespace Melanchall.DryWetMidi.Tests.Devices
 
         [Retry(RetriesNumber)]
         [TestCaseSource(nameof(GetNonDefaultShortEvents))]
-        [Platform("MacOsX")]
         public void SendEventToVirtualDevice_Short_NonDefault(MidiEvent midiEvent)
         {
             SendEvent(midiEvent);
         }
 
         [Test]
-        [Platform("MacOsX")]
         public void FindVirtualDeviceSubdevices()
         {
             using (var virtualDevice = GetVirtualDevice())

@@ -822,18 +822,3 @@ char IsOutputDevicePropertySupported(OUT_PROPERTY property)
 /* ================================
  Virtual device
  ================================ */
- 
-typedef struct
-{
-    InputDeviceInfo* inputDeviceInfo;
-	OutputDeviceInfo* outputDeviceInfo;
-} VirtualDeviceHandle;
-
-VIRTUAL_OPENRESULT OpenVirtualDevice_Win(char* name, void** handle)
-{
-	VirtualDeviceHandle* virtualDeviceHandle = malloc(sizeof(VirtualDeviceHandle));
-	
-	*handle = virtualDeviceHandle;
-	
-	return VIRTUAL_OPENRESULT_OK;
-}

@@ -53,7 +53,6 @@ namespace Melanchall.DryWetMidi.Devices
         #region Delegates
 
         public delegate void Callback_Mac(IntPtr pktlist, IntPtr readProcRefCon, IntPtr srcConnRefCon);
-        public delegate void Callback_Te(IntPtr midiPort, IntPtr midiDataBytes, uint length, IntPtr dwCallbackInstance);
 
         #endregion
 
@@ -61,13 +60,9 @@ namespace Melanchall.DryWetMidi.Devices
 
         public abstract VIRTUAL_OPENRESULT Api_OpenDevice_Mac(string name, IntPtr sessionHandle, Callback_Mac callback, out IntPtr info);
 
-        public abstract VIRTUAL_OPENRESULT Api_OpenDevice_Te(string name, IntPtr sessionHandle, Callback_Te callback, out IntPtr info);
-
         public abstract VIRTUAL_CLOSERESULT Api_CloseDevice(IntPtr info);
 
         public abstract VIRTUAL_SENDBACKRESULT Api_SendDataBack(IntPtr pktlist, IntPtr readProcRefCon);
-
-        public abstract VIRTUAL_SENDBACKRESULT Api_SendDataBack_Te(IntPtr midiPort, IntPtr midiDataBytes, uint length);
 
         public abstract IntPtr Api_GetInputDeviceInfo(IntPtr info);
 
