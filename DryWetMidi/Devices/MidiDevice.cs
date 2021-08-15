@@ -80,23 +80,7 @@ namespace Melanchall.DryWetMidi.Devices
         /// <summary>
         /// Gets the name of MIDI device.
         /// </summary>
-        public string Name { get; protected set; }
-
-        /// <summary>
-        /// Gets the manufacturer of MIDI device driver.
-        /// </summary>
-        public string Manufacturer { get; protected set; }
-
-        /// <summary>
-        /// Gets the product identifier of MIDI device.
-        /// </summary>
-        public string Product { get; protected set; }
-
-        // TODO: parse
-        /// <summary>
-        /// Gets the version of MIDI device driver.
-        /// </summary>
-        public int DriverVersion { get; protected set; }
+        public abstract string Name { get; }
 
         internal DeviceOwner Owner { get; }
 
@@ -122,6 +106,11 @@ namespace Melanchall.DryWetMidi.Devices
         protected void OnError(Exception exception)
         {
             ErrorOccurred?.Invoke(this, new ErrorOccurredEventArgs(exception));
+        }
+
+        protected static void EnsureSessionIsCreated()
+        {
+            MidiDevicesSession.GetSessionHandle();
         }
 
         #endregion

@@ -121,7 +121,7 @@ stages:
         targetType: 'inline'
         script: |
           Write-Host "Checking if diagnostic reports created..."
-          Start-Sleep -s 5
+          Start-Sleep -s 10
           
           $path = "$HOME/Library/Logs/DiagnosticReports"
           
@@ -133,7 +133,7 @@ stages:
           }
           else
           {
-            Write-Host "There are no diagnostic reports found for 5 seconds."
+            Write-Host "There are no diagnostic reports found."
             Write-Host "##vso[task.setvariable variable=DiagnosticReportsFound]false"
           }
           

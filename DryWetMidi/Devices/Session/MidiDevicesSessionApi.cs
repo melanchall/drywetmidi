@@ -23,9 +23,22 @@ namespace Melanchall.DryWetMidi.Devices
 
         #endregion
 
+        #region Delegates
+
+        public delegate void InputDeviceCallback(IntPtr info, bool operation);
+        public delegate void OutputDeviceCallback(IntPtr info, bool operation);
+
+        #endregion
+
         #region Methods
 
-        public abstract SESSION_OPENRESULT Api_OpenSession(IntPtr name, out IntPtr handle);
+        public abstract SESSION_OPENRESULT Api_OpenSession_Mac(
+            IntPtr name,
+            InputDeviceCallback inputDeviceCallback,
+            OutputDeviceCallback outputDeviceCallback,
+            out IntPtr handle);
+
+        public abstract SESSION_OPENRESULT Api_OpenSession_Win(IntPtr name, out IntPtr handle);
 
         public abstract SESSION_CLOSERESULT Api_CloseSession(IntPtr handle);
 

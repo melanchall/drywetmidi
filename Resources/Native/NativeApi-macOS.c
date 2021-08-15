@@ -2,11 +2,16 @@
 #include <CoreMIDI/CoreMIDI.h>
 #include <pthread.h>
 #include <mach/mach_time.h>
+#include <pthread.h>
 
 #include "NativeApi-Constants.h"
 
 #define PROPERTY_VALUE_BUFFER_SIZE 256
 #define SMALL_BUFFER_ERROR 10000
+
+/* ================================
+   Common
+================================ */
 
 API_TYPE GetApiType()
 {
@@ -14,7 +19,7 @@ API_TYPE GetApiType()
 }
 
 /* ================================
- High-precision tick generator
+   High-precision tick generator
  ================================ */
 
 typedef struct
@@ -83,48 +88,22 @@ TG_STOPRESULT StopHighPrecisionTickGenerator(void* info)
 }
 
 /* ================================
- Devices common
+   Devices common
  ================================ */
 
 typedef struct
 {
-    char* name;
-    MIDIClientRef clientRef;
-} SessionHandle;
+    MIDIEndpointRef endpointRef;
+} InputDeviceInfo;
 
-SESSION_OPENRESULT OpenSession(char* name, void** handle)
+typedef struct
 {
-    SessionHandle* sessionHandle = malloc(sizeof(SessionHandle));
-    sessionHandle->name = name;
-
-    CFStringRef nameRef = CFStringCreateWithCString(kCFAllocatorDefault, name, kCFStringEncodingUTF8);
-    OSStatus status = MIDIClientCreate(nameRef, NULL, NULL, &sessionHandle->clientRef);
-    if (status != noErr)
-    {
-        switch (status)
-        {
-            case kMIDIServerStartErr: return SESSION_OPENRESULT_SERVERSTARTERROR;
-            case kMIDIWrongThread: return SESSION_OPENRESULT_WRONGTHREAD;
-            case kMIDINotPermitted: return SESSION_OPENRESULT_NOTPERMITTED;
-            case kMIDIUnknownError: return SESSION_OPENRESULT_UNKNOWNERROR;
-        }
-    }
-
-    *handle = sessionHandle;
-
-    return SESSION_OPENRESULT_OK;
-}
-
-SESSION_CLOSERESULT CloseSession(void* handle)
-{
-    SessionHandle* sessionHandle = (SessionHandle*)handle;
-    free(sessionHandle);
-    return SESSION_CLOSERESULT_OK;
-}
+    MIDIEndpointRef endpointRef;
+} OutputDeviceInfo;
 
 OSStatus GetDevicePropertyValue(MIDIEndpointRef endpointRef, CFStringRef propertyID, char** value)
 {
-    CFStringRef stringRef;
+    CFStringRef stringRef = NULL;
     OSStatus status = MIDIObjectGetStringProperty(endpointRef, propertyID, &stringRef);
     if (status == noErr)
     {
@@ -149,14 +128,177 @@ OSStatus GetDeviceDriverVersion(MIDIEndpointRef endpointRef, int* value)
 }
 
 /* ================================
- Input device
+   Session
  ================================ */
+
+typedef void (*InputDeviceCallback)(void* info, char operation);
+typedef void (*OutputDeviceCallback)(void* info, char operation);
 
 typedef struct
 {
-    MIDIEndpointRef endpointRef;
-	char* name;
-} InputDeviceInfo;
+    char* name;
+    MIDIClientRef clientRef;
+	pthread_t thread;
+	char clientCreated;
+	OSStatus clientCreationStatus;
+	InputDeviceCallback inputDeviceCallback;
+	OutputDeviceCallback outputDeviceCallback;
+} SessionHandle;
+ 
+void HandleSource(MIDIEndpointRef source, InputDeviceCallback inputDeviceCallback, char operation)
+{
+	InputDeviceInfo* inputDeviceInfo = malloc(sizeof(InputDeviceInfo));
+    inputDeviceInfo->endpointRef = source;
+
+    inputDeviceCallback(inputDeviceInfo, operation);
+}
+
+void HandleDestination(MIDIEndpointRef destination, OutputDeviceCallback outputDeviceCallback, char operation)
+{
+	OutputDeviceInfo* outputDeviceInfo = malloc(sizeof(OutputDeviceInfo));
+    outputDeviceInfo->endpointRef = destination;
+
+    outputDeviceCallback(outputDeviceInfo, operation);
+}
+
+void HandleEntitySources(MIDIEntityRef entity, InputDeviceCallback inputDeviceCallback, char operation)
+{
+    ItemCount _sourcesCount = MIDIEntityGetNumberOfSources(entity);
+    
+    for (int i = 0; i < _sourcesCount; i++)
+    {
+        MIDIEndpointRef source = MIDIEntityGetSource(entity, i);
+        HandleSource(source, inputDeviceCallback, operation);
+    }
+}
+
+void HandleEntityDestinations(MIDIEntityRef entity, OutputDeviceCallback outputDeviceCallback, char operation)
+{
+    ItemCount _destinationsCount = MIDIEntityGetNumberOfDestinations(entity);
+    
+    for (int i = 0; i < _destinationsCount; i++)
+    {
+        MIDIEndpointRef destination = MIDIEntityGetDestination(entity, i);
+        HandleDestination(destination, outputDeviceCallback, operation);
+    }
+}
+
+void HandleEntity(MIDIEntityRef entity, InputDeviceCallback inputDeviceCallback, OutputDeviceCallback outputDeviceCallback, char operation)
+{
+    HandleEntitySources(entity, inputDeviceCallback, operation);
+    HandleEntityDestinations(entity, outputDeviceCallback, operation);
+}
+
+void HandleDevice(MIDIDeviceRef device, InputDeviceCallback inputDeviceCallback, OutputDeviceCallback outputDeviceCallback, char operation)
+{
+    ItemCount entitiesCount = MIDIDeviceGetNumberOfEntities(device);
+    
+    for (int i = 0; i < entitiesCount; i++)
+    {
+        MIDIEntityRef entity = MIDIDeviceGetEntity(device, i);
+        HandleEntity(entity, inputDeviceCallback, outputDeviceCallback, operation);
+    }
+}
+
+void HandleNotification(const MIDINotification* message, SessionHandle* sessionHandle)
+{
+    switch (message->messageID)
+    {
+        case kMIDIMsgObjectAdded:
+        case kMIDIMsgObjectRemoved:
+        {
+            char operation = message->messageID == kMIDIMsgObjectAdded ? 1 : 0;
+            
+            MIDIObjectAddRemoveNotification* n = (MIDIObjectAddRemoveNotification*)message;
+            
+            switch (n->childType)
+            {
+                case kMIDIObjectType_Device:
+                {
+                    HandleDevice(n->child, sessionHandle->inputDeviceCallback, sessionHandle->outputDeviceCallback, operation);
+                    break;
+                }
+                case kMIDIObjectType_Entity:
+                {
+                    HandleEntity(n->child, sessionHandle->inputDeviceCallback, sessionHandle->outputDeviceCallback, operation);
+                    break;
+                }
+                case kMIDIObjectType_Source:
+                {
+                    HandleSource(n->child, sessionHandle->inputDeviceCallback, operation);                    
+                    break;
+                }
+                case kMIDIObjectType_Destination:
+                {
+                    HandleDestination(n->child, sessionHandle->outputDeviceCallback, operation);                    
+                    break;
+                }
+            }
+            
+            break;
+        }
+    }
+}
+
+void NotifyProc(const MIDINotification* message, void* refCon)
+{
+	SessionHandle* sessionHandle = (SessionHandle*)refCon;
+    HandleNotification(message, sessionHandle);
+}
+
+void* ThreadProc(void* data)
+{
+    SessionHandle* sessionHandle = (SessionHandle*)data;
+    
+	CFStringRef nameRef = CFStringCreateWithCString(kCFAllocatorDefault, sessionHandle->name, kCFStringEncodingUTF8);
+    sessionHandle->clientCreationStatus = MIDIClientCreate(nameRef, NotifyProc, data, &sessionHandle->clientRef);
+    sessionHandle->clientCreated = 1;
+    
+    CFRunLoopRun();
+    
+    return NULL;
+}
+
+SESSION_OPENRESULT OpenSession_Mac(char* name, InputDeviceCallback inputDeviceCallback, OutputDeviceCallback outputDeviceCallback, void** handle)
+{
+    SessionHandle* sessionHandle = malloc(sizeof(SessionHandle));
+	
+    sessionHandle->name = name;
+	sessionHandle->inputDeviceCallback = inputDeviceCallback;
+	sessionHandle->outputDeviceCallback = outputDeviceCallback;
+    sessionHandle->clientCreated = 0;
+	sessionHandle->name = name;
+	
+    pthread_create(&sessionHandle->thread, NULL, ThreadProc, sessionHandle);
+    
+    while (sessionHandle->clientCreated == 0) {}
+
+    if (sessionHandle->clientCreationStatus != noErr)
+    {
+        switch (sessionHandle->clientCreationStatus)
+        {
+            case kMIDIServerStartErr: return SESSION_OPENRESULT_SERVERSTARTERROR;
+            case kMIDIWrongThread: return SESSION_OPENRESULT_WRONGTHREAD;
+            case kMIDINotPermitted: return SESSION_OPENRESULT_NOTPERMITTED;
+            case kMIDIUnknownError: return SESSION_OPENRESULT_UNKNOWNERROR;
+        }
+    }
+
+    *handle = sessionHandle;
+
+    return SESSION_OPENRESULT_OK;
+}
+
+SESSION_CLOSERESULT CloseSession(void* handle)
+{
+    SessionHandle* sessionHandle = (SessionHandle*)handle;
+    free(sessionHandle);
+    return SESSION_CLOSERESULT_OK;
+}
+
+/* ================================
+   Input device
+ ================================ */
 
 typedef struct
 {
@@ -176,29 +318,9 @@ IN_GETINFORESULT GetInputDeviceInfo(int deviceIndex, void** info)
     MIDIEndpointRef endpointRef = MIDIGetSource(deviceIndex);
     inputDeviceInfo->endpointRef = endpointRef;
 
-    OSStatus status = GetDevicePropertyValue(endpointRef, kMIDIPropertyDisplayName, &inputDeviceInfo->name);
-    if (status != noErr)
-    {
-        switch (status)
-        {
-            case kMIDIUnknownEndpoint: return IN_GETINFORESULT_NAME_UNKNOWNENDPOINT;
-            case SMALL_BUFFER_ERROR: return IN_GETINFORESULT_NAME_TOOLONG;
-            case kMIDIUnknownProperty:
-                inputDeviceInfo->name = NULL;
-                break;
-            default: return IN_GETINFORESULT_UNKNOWNERROR;
-        }
-    }
-
     *info = inputDeviceInfo;
 
     return IN_GETINFORESULT_OK;
-}
-
-char* GetInputDeviceName(void* info)
-{
-    InputDeviceInfo* inputDeviceInfo = (InputDeviceInfo*)info;
-    return inputDeviceInfo->name;
 }
 
 IN_GETPROPERTYRESULT GetInputDeviceStringPropertyValue(InputDeviceInfo* inputDeviceInfo, CFStringRef propertyID, char** value)
@@ -232,6 +354,12 @@ IN_GETPROPERTYRESULT GetInputDeviceIntPropertyValue(InputDeviceInfo* inputDevice
     }
 	
 	return IN_GETPROPERTYRESULT_OK;
+}
+
+IN_GETPROPERTYRESULT GetInputDeviceName(void* info, char** value)
+{
+    InputDeviceInfo* inputDeviceInfo = (InputDeviceInfo*)info;
+	return GetInputDeviceStringPropertyValue(inputDeviceInfo, kMIDIPropertyDisplayName, value);
 }
 
 IN_GETPROPERTYRESULT GetInputDeviceManufacturer(void* info, char** value)
@@ -381,14 +509,8 @@ char IsInputDevicePropertySupported(IN_PROPERTY property)
 }
 
 /* ================================
- Output device
+   Output device
  ================================ */
-
-typedef struct
-{
-    MIDIEndpointRef endpointRef;
-    char* name;
-} OutputDeviceInfo;
 
 typedef struct
 {
@@ -408,29 +530,9 @@ OUT_GETINFORESULT GetOutputDeviceInfo(int deviceIndex, void** info)
     MIDIEndpointRef endpointRef = MIDIGetDestination(deviceIndex);
     outputDeviceInfo->endpointRef = endpointRef;
 
-    OSStatus status = GetDevicePropertyValue(endpointRef, kMIDIPropertyDisplayName, &outputDeviceInfo->name);
-    if (status != noErr)
-    {
-        switch (status)
-        {
-            case kMIDIUnknownEndpoint: return OUT_GETINFORESULT_NAME_UNKNOWNENDPOINT;
-            case SMALL_BUFFER_ERROR: return OUT_GETINFORESULT_NAME_TOOLONG;
-            case kMIDIUnknownProperty:
-                outputDeviceInfo->name = NULL;
-                break;
-            default: return OUT_GETINFORESULT_UNKNOWNERROR;
-        }
-    }
-
     *info = outputDeviceInfo;
 
     return OUT_GETINFORESULT_OK;
-}
-
-char* GetOutputDeviceName(void* info)
-{
-    OutputDeviceInfo* outputDeviceInfo = (OutputDeviceInfo*)info;
-    return outputDeviceInfo->name;
 }
 
 OUT_GETPROPERTYRESULT GetOutputDeviceStringPropertyValue(OutputDeviceInfo* outputDeviceInfo, CFStringRef propertyID, char** value)
@@ -464,6 +566,12 @@ OUT_GETPROPERTYRESULT GetOutputDeviceIntPropertyValue(OutputDeviceInfo* outputDe
     }
 	
 	return OUT_GETPROPERTYRESULT_OK;
+}
+
+OUT_GETPROPERTYRESULT GetOutputDeviceName(void* info, char** value)
+{
+    OutputDeviceInfo* outputDeviceInfo = (OutputDeviceInfo*)info;
+	return GetOutputDeviceStringPropertyValue(outputDeviceInfo, kMIDIPropertyDisplayName, value);
 }
 
 OUT_GETPROPERTYRESULT GetOutputDeviceManufacturer(void* info, char** value)
@@ -658,7 +766,6 @@ VIRTUAL_OPENRESULT OpenVirtualDevice_Mac(char* name, void* sessionHandle, MIDIRe
 	
 	InputDeviceInfo* inputDeviceInfo = malloc(sizeof(InputDeviceInfo));
 	inputDeviceInfo->endpointRef = sourceRef;
-	inputDeviceInfo->name = name;
 	virtualDeviceInfo->inputDeviceInfo = inputDeviceInfo;
 	
 	MIDIEndpointRef destinationRef;
@@ -676,7 +783,6 @@ VIRTUAL_OPENRESULT OpenVirtualDevice_Mac(char* name, void* sessionHandle, MIDIRe
 	
 	OutputDeviceInfo* outputDeviceInfo = malloc(sizeof(OutputDeviceInfo));
 	outputDeviceInfo->endpointRef = destinationRef;
-	outputDeviceInfo->name = name;
 	virtualDeviceInfo->outputDeviceInfo = outputDeviceInfo;
 	
 	*info = virtualDeviceInfo;

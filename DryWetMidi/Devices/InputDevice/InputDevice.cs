@@ -68,8 +68,6 @@ namespace Melanchall.DryWetMidi.Devices
         {
             _apiType = CommonApiProvider.Api.Api_GetApiType();
             _bytesToMidiEventConverter.ReadingSettings.SilentNoteOnPolicy = SilentNoteOnPolicy.NoteOn;
-
-            Name = InputDeviceApiProvider.Api.Api_GetDeviceName(_info);
         }
 
         #endregion
@@ -87,6 +85,19 @@ namespace Melanchall.DryWetMidi.Devices
         #endregion
 
         #region Properties
+
+        public override string Name
+        {
+            get
+            {
+                EnsureSessionIsCreated();
+
+                string name;
+                NativeApi.HandleResult(InputDeviceApiProvider.Api.Api_GetDeviceName(_info, out name));
+
+                return name;
+            }
+        }
 
         /// <summary>
         /// Gets or sets a value indicating if <see cref="MidiTimeCodeReceived"/> event should be raised or not.
@@ -130,6 +141,7 @@ namespace Melanchall.DryWetMidi.Devices
                 return;
 
             EnsureDeviceIsNotDisposed();
+            EnsureSessionIsCreated();
             EnsureHandleIsCreated();
 
             NativeApi.HandleResult(
@@ -148,6 +160,7 @@ namespace Melanchall.DryWetMidi.Devices
                 return;
 
             EnsureDeviceIsNotDisposed();
+            EnsureSessionIsCreated();
 
             NativeApi.HandleResult(
                 StopEventsListeningSilently());
@@ -156,6 +169,9 @@ namespace Melanchall.DryWetMidi.Devices
         public object GetProperty(InputDeviceProperty property)
         {
             ThrowIfArgument.IsInvalidEnumValue(nameof(property), property);
+
+            EnsureDeviceIsNotDisposed();
+            EnsureSessionIsCreated();
 
             if (!GetSupportedProperties().Contains(property))
                 throw new ArgumentException("Property is not supported by input devices.", nameof(property));
@@ -217,6 +233,8 @@ namespace Melanchall.DryWetMidi.Devices
         /// <returns>Number of input MIDI devices presented in the system.</returns>
         public static int GetDevicesCount()
         {
+            EnsureSessionIsCreated();
+
             return InputDeviceApiProvider.Api.Api_GetDevicesCount();
         }
 
@@ -226,6 +244,8 @@ namespace Melanchall.DryWetMidi.Devices
         /// <returns>All input MIDI devices presented in the system.</returns>
         public static IEnumerable<InputDevice> GetAll()
         {
+            EnsureSessionIsCreated();
+
             var devicesCount = GetDevicesCount();
 
             for (var i = 0; i < devicesCount; i++)
@@ -238,6 +258,8 @@ namespace Melanchall.DryWetMidi.Devices
         {
             var devicesCount = GetDevicesCount();
             ThrowIfArgument.IsOutOfRange(nameof(index), index, 0, devicesCount - 1, "Index is less than zero or greater than devices count minus 1.");
+
+            EnsureSessionIsCreated();
 
             IntPtr info;
             NativeApi.HandleResult(InputDeviceApiProvider.Api.Api_GetDeviceInfo(index, out info));
@@ -264,6 +286,8 @@ namespace Melanchall.DryWetMidi.Devices
         public static InputDevice GetByName(string name)
         {
             ThrowIfArgument.IsNullOrWhiteSpaceString(nameof(name), name, "Device name");
+
+            EnsureSessionIsCreated();
 
             var device = GetAll().FirstOrDefault(d => d.Name == name);
             if (device == null)
@@ -326,7 +350,7 @@ namespace Melanchall.DryWetMidi.Devices
             InputDeviceApiProvider.Api.Api_CloseDevice(_handle);
             _handle = IntPtr.Zero;
 
-            MidiDevicesSession.ExitSession();
+            //MidiDevicesSession.ExitSession();
         }
 
         private void OnMessage_Win(IntPtr hMidi, NativeApi.MidiMessage wMsg, IntPtr dwInstance, IntPtr dwParam1, IntPtr dwParam2)

@@ -14,9 +14,6 @@ namespace Melanchall.DryWetMidi.Devices
             OUT_GETINFORESULT_NODRIVER = 3,
             [NativeErrorType(NativeErrorType.NoMemory)]
             OUT_GETINFORESULT_NOMEMORY = 4,
-            OUT_GETINFORESULT_NAME_UNKNOWNENDPOINT = 101,
-            OUT_GETINFORESULT_NAME_TOOLONG = 102,
-            OUT_GETINFORESULT_UNKNOWNERROR = 103,
         }
 
         public enum OUT_OPENRESULT
@@ -121,8 +118,6 @@ namespace Melanchall.DryWetMidi.Devices
 
         public abstract OUT_GETINFORESULT Api_GetDeviceInfo(int deviceIndex, out IntPtr info);
 
-        public abstract string Api_GetDeviceName(IntPtr info);
-
         public abstract OUT_OPENRESULT Api_OpenDevice_Win(IntPtr info, IntPtr sessionHandle, Callback_Win callback, out IntPtr handle);
 
         public abstract OUT_OPENRESULT Api_OpenDevice_Mac(IntPtr info, IntPtr sessionHandle, out IntPtr handle);
@@ -138,6 +133,8 @@ namespace Melanchall.DryWetMidi.Devices
         public abstract OUT_GETSYSEXDATARESULT Api_GetSysExBufferData(IntPtr handle, IntPtr header, out IntPtr data, out int size);
 
         public abstract bool Api_IsPropertySupported(OutputDeviceProperty property);
+
+        public abstract OUT_GETPROPERTYRESULT Api_GetDeviceName(IntPtr info, out string name);
 
         public abstract OUT_GETPROPERTYRESULT Api_GetDeviceManufacturer(IntPtr info, out string manufacturer);
 

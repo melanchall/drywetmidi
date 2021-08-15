@@ -14,7 +14,10 @@ namespace Melanchall.DryWetMidi.Devices
         #region Extern functions
 
         [DllImport(LibraryName, ExactSpelling = true)]
-        private static extern SESSION_OPENRESULT OpenSession(IntPtr name, out IntPtr handle);
+        private static extern SESSION_OPENRESULT OpenSession_Mac(IntPtr name, InputDeviceCallback inputDeviceCallback, OutputDeviceCallback outputDeviceCallback, out IntPtr handle);
+
+        [DllImport(LibraryName, ExactSpelling = true)]
+        private static extern SESSION_OPENRESULT OpenSession_Win(IntPtr name, out IntPtr handle);
 
         [DllImport(LibraryName, ExactSpelling = true)]
         private static extern SESSION_CLOSERESULT CloseSession(IntPtr handle);
@@ -23,9 +26,18 @@ namespace Melanchall.DryWetMidi.Devices
 
         #region Methods
 
-        public override SESSION_OPENRESULT Api_OpenSession(IntPtr name, out IntPtr handle)
+        public override SESSION_OPENRESULT Api_OpenSession_Mac(
+            IntPtr name,
+            InputDeviceCallback inputDeviceCallback,
+            OutputDeviceCallback outputDeviceCallback,
+            out IntPtr handle)
         {
-            return OpenSession(name, out handle);
+            return OpenSession_Mac(name, inputDeviceCallback, outputDeviceCallback, out handle);
+        }
+
+        public override SESSION_OPENRESULT Api_OpenSession_Win(IntPtr name, out IntPtr handle)
+        {
+            return OpenSession_Win(name, out handle);
         }
 
         public override SESSION_CLOSERESULT Api_CloseSession(IntPtr handle)

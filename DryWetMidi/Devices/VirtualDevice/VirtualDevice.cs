@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Melanchall.DryWetMidi.Common;
 
 namespace Melanchall.DryWetMidi.Devices
@@ -6,6 +7,8 @@ namespace Melanchall.DryWetMidi.Devices
     public sealed class VirtualDevice : MidiDevice
     {
         #region Fields
+
+        private readonly string _name;
 
         private VirtualDeviceApi.Callback_Mac _callback_Mac;
 
@@ -16,7 +19,7 @@ namespace Melanchall.DryWetMidi.Devices
         internal VirtualDevice(string name)
             : base()
         {
-            Name = name;
+            _name = name;
 
             var apiType = CommonApiProvider.Api.Api_GetApiType();
             switch (apiType)
@@ -30,6 +33,11 @@ namespace Melanchall.DryWetMidi.Devices
         #endregion
 
         #region Properties
+
+        public override string Name
+        {
+            get { return _name; }
+        }
 
         public InputDevice InputDevice { get; private set; }
 

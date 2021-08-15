@@ -20,7 +20,7 @@ namespace Melanchall.DryWetMidi.Devices
         private static extern OUT_GETINFORESULT GetOutputDeviceInfo(int deviceIndex, out IntPtr info);
 
         [DllImport(LibraryName, ExactSpelling = true)]
-        private static extern IntPtr GetOutputDeviceName(IntPtr info);
+        private static extern OUT_GETPROPERTYRESULT GetOutputDeviceName(IntPtr info, out IntPtr value);
 
         [DllImport(LibraryName, ExactSpelling = true)]
         private static extern OUT_GETPROPERTYRESULT GetOutputDeviceManufacturer(IntPtr info, out IntPtr value);
@@ -90,12 +90,6 @@ namespace Melanchall.DryWetMidi.Devices
             return GetOutputDeviceInfo(deviceIndex, out info);
         }
 
-        public override string Api_GetDeviceName(IntPtr info)
-        {
-            var namePointer = GetOutputDeviceName(info);
-            return namePointer != IntPtr.Zero ? Marshal.PtrToStringAnsi(namePointer) : string.Empty;
-        }
-
         public override OUT_OPENRESULT Api_OpenDevice_Win(IntPtr info, IntPtr sessionHandle, Callback_Win callback, out IntPtr handle)
         {
             return OpenOutputDevice_Win(info, sessionHandle, callback, out handle);
@@ -134,6 +128,14 @@ namespace Melanchall.DryWetMidi.Devices
         public override bool Api_IsPropertySupported(OutputDeviceProperty property)
         {
             return IsOutputDevicePropertySupported(property);
+        }
+
+        public override OUT_GETPROPERTYRESULT Api_GetDeviceName(IntPtr info, out string name)
+        {
+            IntPtr namePointer;
+            var result = GetOutputDeviceName(info, out namePointer);
+            name = namePointer != IntPtr.Zero ? Marshal.PtrToStringAnsi(namePointer) : string.Empty;
+            return result;
         }
 
         public override OUT_GETPROPERTYRESULT Api_GetDeviceManufacturer(IntPtr info, out string manufacturer)

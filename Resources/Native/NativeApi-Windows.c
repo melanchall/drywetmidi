@@ -69,25 +69,15 @@ TG_STOPRESULT StopHighPrecisionTickGenerator(
 
 typedef struct
 {
-    char* name;
-} SessionHandle;
+    int deviceIndex;
+	LPMIDIINCAPSA caps;
+} InputDeviceInfo;
 
-SESSION_OPENRESULT OpenSession(char* name, void** handle)
+typedef struct
 {
-    SessionHandle* sessionHandle = malloc(sizeof(SessionHandle));
-    sessionHandle->name = name;
-
-    *handle = sessionHandle;
-
-    return SESSION_OPENRESULT_OK;
-}
-
-SESSION_CLOSERESULT CloseSession(void* handle)
-{
-    SessionHandle* sessionHandle = (SessionHandle*)handle;
-    free(sessionHandle);
-    return SESSION_CLOSERESULT_OK;
-}
+    int deviceIndex;
+	LPMIDIOUTCAPSA caps;
+} OutputDeviceInfo;
 
 char* GetDeviceManufacturer(WORD manufacturerId)
 {
@@ -219,14 +209,34 @@ char* GetDeviceProduct(WORD productId)
 }
 
 /* ================================
-   Input device
+   Session
 ================================ */
 
 typedef struct
 {
-    int deviceIndex;
-	LPMIDIINCAPSA caps;
-} InputDeviceInfo;
+    char* name;
+} SessionHandle;
+
+SESSION_OPENRESULT OpenSession_Win(char* name, void** handle)
+{
+    SessionHandle* sessionHandle = malloc(sizeof(SessionHandle));
+    sessionHandle->name = name;
+
+    *handle = sessionHandle;
+
+    return SESSION_OPENRESULT_OK;
+}
+
+SESSION_CLOSERESULT CloseSession(void* handle)
+{
+    SessionHandle* sessionHandle = (SessionHandle*)handle;
+    free(sessionHandle);
+    return SESSION_CLOSERESULT_OK;
+}
+
+/* ================================
+   Input device
+================================ */
 
 typedef struct
 {
@@ -264,10 +274,11 @@ IN_GETINFORESULT GetInputDeviceInfo(int deviceIndex, void** info)
     return IN_GETINFORESULT_OK;
 }
 
-char* GetInputDeviceName(void* info)
+IN_GETPROPERTYRESULT GetInputDeviceName(void* info, char** value)
 {
     InputDeviceInfo* inputDeviceInfo = (InputDeviceInfo*)info;
-    return inputDeviceInfo->caps->szPname;
+    *value = inputDeviceInfo->caps->szPname;
+	return IN_GETPROPERTYRESULT_OK;
 }
 
 IN_GETPROPERTYRESULT GetInputDeviceManufacturer(void* info, char** value)
@@ -525,12 +536,6 @@ char IsInputDevicePropertySupported(IN_PROPERTY property)
 
 typedef struct
 {
-    int deviceIndex;
-	LPMIDIOUTCAPSA caps;
-} OutputDeviceInfo;
-
-typedef struct
-{
     OutputDeviceInfo* info;
     HMIDIOUT handle;
 } OutputDeviceHandle;
@@ -564,10 +569,11 @@ OUT_GETINFORESULT GetOutputDeviceInfo(int deviceIndex, void** info)
     return OUT_GETINFORESULT_OK;
 }
 
-char* GetOutputDeviceName(void* info)
+OUT_GETPROPERTYRESULT GetOutputDeviceName(void* info, char** value)
 {
     OutputDeviceInfo* outputDeviceInfo = (OutputDeviceInfo*)info;
-    return outputDeviceInfo->caps->szPname;
+    *value = outputDeviceInfo->caps->szPname;
+	return OUT_GETPROPERTYRESULT_OK;
 }
 
 OUT_GETPROPERTYRESULT GetOutputDeviceManufacturer(void* info, char** value)
