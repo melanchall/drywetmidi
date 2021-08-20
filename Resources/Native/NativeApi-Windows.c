@@ -15,6 +15,11 @@ API_TYPE GetApiType()
     return API_TYPE_WIN;
 }
 
+char CanCompareDevices()
+{
+	return 0;
+}
+
 /* ================================
    High-precision tick generator
 ================================ */

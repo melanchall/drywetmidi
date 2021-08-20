@@ -15,6 +15,9 @@ namespace Melanchall.DryWetMidi.Devices
         [DllImport(LibraryName, ExactSpelling = true)]
         private static extern API_TYPE GetApiType();
 
+        [DllImport(LibraryName, ExactSpelling = true)]
+        private static extern bool CanCompareDevices();
+
         #endregion
 
         #region Methods
@@ -22,6 +25,11 @@ namespace Melanchall.DryWetMidi.Devices
         public override API_TYPE Api_GetApiType()
         {
             return GetApiType();
+        }
+
+        public override bool Api_CanCompareDevices()
+        {
+            return CanCompareDevices();
         }
 
         #endregion

@@ -28,13 +28,9 @@ namespace Melanchall.DryWetMidi.Tests.Devices
         {
             using (var virtualDevice = GetVirtualDevice())
             {
-                WaitOperations.Wait(500);
-
                 Assert.Throws<InvalidOperationException>(() => virtualDevice.InputDevice.Dispose(), "Dispose not failed for input subdevice.");
                 Assert.Throws<InvalidOperationException>(() => virtualDevice.OutputDevice.Dispose(), "Dispose not failed for output subdevice.");
             }
-
-            WaitOperations.Wait(500);
         }
 
         [Test]
@@ -42,8 +38,6 @@ namespace Melanchall.DryWetMidi.Tests.Devices
         {
             using (var virtualDevice = GetVirtualDevice())
             {
-                WaitOperations.Wait(500);
-
                 var deviceName = virtualDevice.Name;
 
                 Assert.AreEqual(deviceName, virtualDevice.Name, "Name is invalid.");
@@ -54,8 +48,6 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 Assert.IsNotNull(virtualDevice.OutputDevice, "Output device is null.");
                 Assert.IsNotNull(deviceName, virtualDevice.OutputDevice.Name, "Output device name is null.");
             }
-
-            WaitOperations.Wait(500);
         }
 
         [Retry(RetriesNumber)]
@@ -105,8 +97,6 @@ namespace Melanchall.DryWetMidi.Tests.Devices
         {
             using (var virtualDevice = GetVirtualDevice())
             {
-                WaitOperations.Wait(500);
-
                 var deviceName = virtualDevice.Name;
 
                 var timeout = TimeSpan.FromSeconds(5);
@@ -114,8 +104,30 @@ namespace Melanchall.DryWetMidi.Tests.Devices
 
                 Assert.IsTrue(subdevicesFound, "Subdevices were not found.");
             }
+        }
 
-            WaitOperations.Wait(500);
+        [Test]
+        public void CheckVirtualDeviceSubdevicesEquality_SameDevices()
+        {
+            using (var virtualDevice = GetVirtualDevice())
+            using (var inputDevice = InputDevice.GetByName(virtualDevice.Name))
+            using (var outputDevice = OutputDevice.GetByName(virtualDevice.Name))
+            {
+                Assert.AreEqual(virtualDevice.InputDevice, inputDevice, "Input device is not equal to virtual input subdevice.");
+                Assert.AreEqual(virtualDevice.OutputDevice, outputDevice, "Output device is not equal to virtual output subdevice.");
+            }
+        }
+
+        [Test]
+        public void CheckVirtualDeviceSubdevicesEquality_DifferentDevices()
+        {
+            using (var virtualDevice = GetVirtualDevice())
+            using (var inputDevice = InputDevice.GetByName(MidiDevicesNames.DeviceA))
+            using (var outputDevice = OutputDevice.GetByName(MidiDevicesNames.DeviceB))
+            {
+                Assert.AreNotEqual(virtualDevice.InputDevice, inputDevice, "Input device is equal to virtual input subdevice.");
+                Assert.AreNotEqual(virtualDevice.OutputDevice, outputDevice, "Output device is equal to virtual output subdevice.");
+            }
         }
 
         #endregion
@@ -148,8 +160,6 @@ namespace Melanchall.DryWetMidi.Tests.Devices
         {
             using (var virtualDevice = GetVirtualDevice())
             {
-                WaitOperations.Wait(500);
-
                 string errorOnVirtualDevice = null;
                 virtualDevice.ErrorOccurred += (_, e) => errorOnVirtualDevice = e.Exception.Message;
 
@@ -197,8 +207,6 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 MidiAsserts.AreEventsEqual(midiEvent, eventSent, false, "Sent event is invalid.");
                 MidiAsserts.AreEventsEqual(eventSent, eventReceived, false, "Received event is invalid.");
             }
-
-            WaitOperations.Wait(500);
         }
 
         #endregion

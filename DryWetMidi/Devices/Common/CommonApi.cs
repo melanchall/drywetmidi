@@ -16,6 +16,8 @@
 
         public abstract API_TYPE Api_GetApiType();
 
+        public abstract bool Api_CanCompareDevices();
+
         #endregion
     }
 }

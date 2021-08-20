@@ -11,7 +11,7 @@ using NUnit.Framework;
 namespace Melanchall.DryWetMidi.Tests.Devices
 {
     [TestFixture]
-    public sealed class OutputDeviceTests
+    public sealed partial class OutputDeviceTests
     {
         #region Constants
 
@@ -124,21 +124,6 @@ namespace Melanchall.DryWetMidi.Tests.Devices
 
                 GC.Collect();
                 GC.WaitForPendingFinalizers();
-            }
-        }
-
-        [Test]
-        [Platform("Win")]
-        public void OutputDeviceIsInUse()
-        {
-            using (var outputDevice1 = OutputDevice.GetByName(MidiDevicesNames.DeviceA))
-            {
-                outputDevice1.SendEvent(new NoteOnEvent());
-
-                using (var outputDevice2 = OutputDevice.GetByName(MidiDevicesNames.DeviceA))
-                {
-                    Assert.Throws<MidiDeviceException>(() => outputDevice2.SendEvent(new NoteOnEvent()));
-                }
             }
         }
 

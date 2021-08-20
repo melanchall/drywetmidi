@@ -18,6 +18,11 @@ API_TYPE GetApiType()
     return API_TYPE_MAC;
 }
 
+char CanCompareDevices()
+{
+	return 1;
+}
+
 /* ================================
    High-precision tick generator
  ================================ */
@@ -323,6 +328,14 @@ IN_GETINFORESULT GetInputDeviceInfo(int deviceIndex, void** info)
     return IN_GETINFORESULT_OK;
 }
 
+char AreInputDevicesEqual(void* info1, void* info2)
+{
+	InputDeviceInfo* inputDeviceInfo1 = (InputDeviceInfo*)info1;
+	InputDeviceInfo* inputDeviceInfo2 = (InputDeviceInfo*)info2;
+	
+	return (char)(inputDeviceInfo1->endpointRef == inputDeviceInfo2->endpointRef);
+}
+
 IN_GETPROPERTYRESULT GetInputDeviceStringPropertyValue(InputDeviceInfo* inputDeviceInfo, CFStringRef propertyID, char** value)
 {
 	OSStatus status = GetDevicePropertyValue(inputDeviceInfo->endpointRef, propertyID, value);
@@ -533,6 +546,14 @@ OUT_GETINFORESULT GetOutputDeviceInfo(int deviceIndex, void** info)
     *info = outputDeviceInfo;
 
     return OUT_GETINFORESULT_OK;
+}
+
+char AreOutputDevicesEqual(void* info1, void* info2)
+{
+	OutputDeviceInfo* outputDeviceInfo1 = (OutputDeviceInfo*)info1;
+	OutputDeviceInfo* outputDeviceInfo2 = (OutputDeviceInfo*)info2;
+	
+	return (char)(outputDeviceInfo1->endpointRef == outputDeviceInfo2->endpointRef);
 }
 
 OUT_GETPROPERTYRESULT GetOutputDeviceStringPropertyValue(OutputDeviceInfo* outputDeviceInfo, CFStringRef propertyID, char** value)

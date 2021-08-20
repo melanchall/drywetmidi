@@ -554,7 +554,44 @@ namespace Melanchall.DryWetMidi.Devices
 
         #endregion
 
+        #region Operators
+
+        public static bool operator ==(InputDevice inputDevice1, InputDevice inputDevice2)
+        {
+            if (ReferenceEquals(inputDevice1, inputDevice2))
+                return true;
+
+            if (ReferenceEquals(null, inputDevice1) || ReferenceEquals(null, inputDevice2))
+                return false;
+
+            return inputDevice1.Equals(inputDevice2);
+        }
+
+        public static bool operator !=(InputDevice inputDevice1, InputDevice inputDevice2)
+        {
+            return !(inputDevice1 == inputDevice2);
+        }
+
+        #endregion
+
         #region Overrides
+
+        public override bool Equals(object obj)
+        {
+            var inputDevice = obj as InputDevice;
+            if (inputDevice == null)
+                return false;
+
+            var canCompare = CommonApiProvider.Api.Api_CanCompareDevices();
+            return canCompare
+                ? InputDeviceApiProvider.Api.Api_AreDevicesEqual(_info, inputDevice._info)
+                : _info.Equals(inputDevice._info);
+        }
+
+        public override int GetHashCode()
+        {
+            return _info.ToInt32();
+        }
 
         /// <summary>
         /// Releases the unmanaged resources used by the MIDI device class and optionally releases

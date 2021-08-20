@@ -12,7 +12,7 @@ using NUnit.Framework;
 namespace Melanchall.DryWetMidi.Tests.Devices
 {
     [TestFixture]
-    public sealed class InputDeviceTests
+    public sealed partial class InputDeviceTests
     {
         #region Nested classes
 
@@ -171,21 +171,6 @@ namespace Melanchall.DryWetMidi.Tests.Devices
         }
 
         [Test]
-        [Platform("Win")]
-        public void InputDeviceIsInUse()
-        {
-            using (var inputDevice1 = InputDevice.GetByName(MidiDevicesNames.DeviceA))
-            {
-                inputDevice1.StartEventsListening();
-
-                using (var inputDevice2 = InputDevice.GetByName(MidiDevicesNames.DeviceA))
-                {
-                    Assert.Throws<MidiDeviceException>(() => inputDevice2.StartEventsListening());
-                }
-            }
-        }
-
-        [Test]
         public void DisableEnableInputDevice()
         {
             using (var outputDevice = OutputDevice.GetByName(MidiDevicesNames.DeviceA))
@@ -215,88 +200,6 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 outputDevice.SendEvent(new NoteOnEvent());
                 eventReceived = WaitOperations.Wait(() => receivedEventsCount > 1, SendReceiveUtilities.MaximumEventSendReceiveDelay);
                 Assert.IsTrue(eventReceived, "Event is not received after enabling again.");
-            }
-        }
-
-        [Test]
-        [Platform("MacOsX")]
-        public void ReceiveData_SingleEventWithStatusByte() => ReceiveData(
-            data: new byte[] { 0x90, 0x75, 0x56 },
-            indices: new[] { 0 },
-            expectedEvents: new MidiEvent[]
-            {
-                new NoteOnEvent((SevenBitNumber)0x75, (SevenBitNumber)0x56)
-            });
-
-        [Test]
-        [Platform("MacOsX")]
-        public void ReceiveData_MultipleEventsWithStatusBytes() => ReceiveData(
-            data: new byte[] { 0x90, 0x75, 0x56, 0x80, 0x55, 0x65, 0x90, 0x75, 0x56 },
-            indices: new[] { 0, 3, 6 },
-            expectedEvents: new MidiEvent[]
-            {
-                new NoteOnEvent((SevenBitNumber)0x75, (SevenBitNumber)0x56),
-                new NoteOffEvent((SevenBitNumber)0x55, (SevenBitNumber)0x65),
-                new NoteOnEvent((SevenBitNumber)0x75, (SevenBitNumber)0x56),
-            });
-
-        [Test]
-        [Platform("MacOsX")]
-        public void ReceiveData_MultipleEventsWithRunningStatus() => ReceiveData(
-            data: new byte[] { 0x90, 0x15, 0x56, 0x55, 0x65, 0x45, 0x60 },
-            indices: new[] { 0 },
-            expectedEvents: new MidiEvent[]
-            {
-                new NoteOnEvent((SevenBitNumber)0x15, (SevenBitNumber)0x56),
-                new NoteOnEvent((SevenBitNumber)0x55, (SevenBitNumber)0x65),
-                new NoteOnEvent((SevenBitNumber)0x45, (SevenBitNumber)0x60),
-            });
-
-        [Test]
-        [Platform("MacOsX")]
-        public void ReceiveData_LotOfEventsWithStatusBytes()
-        {
-            const int eventsCount = 3333;
-
-            ReceiveData(
-                data: Enumerable
-                    .Range(0, eventsCount)
-                    .SelectMany(i => new byte[] { 0x90, 0x75, 0x56 })
-                    .ToArray(),
-                indices: Enumerable
-                    .Range(0, eventsCount)
-                    .Select(i => i * 3)
-                    .ToArray(),
-                expectedEvents: Enumerable
-                    .Range(0, eventsCount)
-                    .Select(i => new NoteOnEvent((SevenBitNumber)0x75, (SevenBitNumber)0x56))
-                    .ToArray());
-        }
-
-        [Test]
-        [Platform("MacOsX")]
-        public void ReceiveData_UnexpectedRunningStatus()
-        {
-            var deviceName = MidiDevicesNames.DeviceA;
-            var deviceNamePtr = Marshal.StringToHGlobalAnsi(deviceName);
-
-            var data = new byte[] { 0x56, 0x67, 0x45 };
-            var indices = new[] { 0 };
-
-            using (var inputDevice = InputDevice.GetByName(deviceName))
-            {
-                Exception exception = null;
-
-                inputDevice.ErrorOccurred += (_, e) => exception = e.Exception;
-                inputDevice.StartEventsListening();
-
-                SendData(deviceNamePtr, data, data.Length, indices, indices.Length);
-
-                var timeout = SendReceiveUtilities.MaximumEventSendReceiveDelay;
-                var errorOccurred = WaitOperations.Wait(() => exception != null, timeout);
-                Assert.IsTrue(errorOccurred, $"Error was not occurred for [{timeout}].");
-                Assert.IsInstanceOf(typeof(MidiDeviceException), exception, "Exception type is invalid");
-                Assert.IsInstanceOf(typeof(UnexpectedRunningStatusException), exception.InnerException, "Inner exception type is invalid.");
             }
         }
 

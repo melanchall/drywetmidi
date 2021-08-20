@@ -118,6 +118,8 @@ namespace Melanchall.DryWetMidi.Devices
 
         public abstract OUT_GETINFORESULT Api_GetDeviceInfo(int deviceIndex, out IntPtr info);
 
+        public abstract bool Api_AreDevicesEqual(IntPtr info1, IntPtr info2);
+
         public abstract OUT_OPENRESULT Api_OpenDevice_Win(IntPtr info, IntPtr sessionHandle, Callback_Win callback, out IntPtr handle);
 
         public abstract OUT_OPENRESULT Api_OpenDevice_Mac(IntPtr info, IntPtr sessionHandle, out IntPtr handle);
