@@ -1,4 +1,5 @@
 ﻿using System;
+using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Devices;
 using Melanchall.DryWetMidi.Tests.Common;
 using NUnit.Framework;
@@ -147,6 +148,117 @@ namespace Melanchall.DryWetMidi.Tests.Devices
 
             Assert.IsFalse(outputDevice1 == outputDevice2, "Devices are equal via equality.");
             Assert.IsTrue(outputDevice1 != outputDevice2, "Devices are equal via inequality.");
+        }
+
+        [Test]
+        [Platform("MacOsX")]
+        public void CheckRemovedOutputDeviceAccess_Name()
+        {
+            var outputDevice = GetRemovedOutputDevice();
+            Assert.Throws<InvalidOperationException>(
+                () => { var name = outputDevice.Name; },
+                "Can get name of removed device.");
+        }
+
+        [Test]
+        [Platform("MacOsX")]
+        public void CheckRemovedOutputDeviceAccess_Property()
+        {
+            var outputDevice = GetRemovedOutputDevice();
+            Assert.Throws<InvalidOperationException>(
+                () => { var name = outputDevice.GetProperty(OutputDeviceProperty.Product); },
+                "Can get property value of removed device.");
+        }
+
+        [Test]
+        [Platform("MacOsX")]
+        public void CheckRemovedOutputDeviceAccess_SendEvent()
+        {
+            var outputDevice = GetRemovedOutputDevice();
+            Assert.Throws<InvalidOperationException>(
+                () => outputDevice.SendEvent(new NoteOnEvent()),
+                "Can send event via removed device.");
+        }
+
+        [Test]
+        [Platform("MacOsX")]
+        public void OutputDeviceToString_AddedDevice()
+        {
+            var outputDevice = GetAddedOutputDevice();
+            Assert.AreEqual("Output device (from 'Device added' notification)", outputDevice.ToString(), "Device string representation is invalid.");
+        }
+
+        [Test]
+        [Platform("MacOsX")]
+        public void OutputDeviceToString_RemovedDevice()
+        {
+            var outputDevice = GetRemovedOutputDevice();
+            Assert.AreEqual("Output device (from 'Device removed' notification)", outputDevice.ToString(), "Device string representation is invalid.");
+        }
+
+        [Test]
+        [Platform("MacOsX")]
+        public void OutputDeviceToString_VirtualDevice()
+        {
+            var outputDevice = GetVirtualDeviceOutputDevice();
+            Assert.AreEqual("Output device (subdevice of a virtual device)", outputDevice.ToString(), "Device string representation is invalid.");
+        }
+
+        #endregion
+
+        #region Private methods
+
+        private static OutputDevice GetRemovedOutputDevice()
+        {
+            OutputDevice outputDevice = null;
+
+            EventHandler<DeviceAddedRemovedEventArgs> handler = (_, e) => outputDevice = outputDevice ?? (e.Device as OutputDevice);
+            MidiDevicesWatcher.Instance.DeviceRemoved += handler;
+
+            using (var virtualDevice = VirtualDevice.Create("VD6")) { }
+
+            var timeout = TimeSpan.FromSeconds(5);
+            var removed = WaitOperations.Wait(() => outputDevice != null, timeout);
+            Assert.IsTrue(removed, $"Device wasn't removed for [{timeout}].");
+
+            MidiDevicesWatcher.Instance.DeviceRemoved -= handler;
+            WaitOperations.Wait(1000);
+
+            return outputDevice;
+        }
+
+        private static OutputDevice GetAddedOutputDevice()
+        {
+            OutputDevice outputDevice = null;
+
+            EventHandler<DeviceAddedRemovedEventArgs> handler = (_, e) => outputDevice = outputDevice ?? (e.Device as OutputDevice);
+            MidiDevicesWatcher.Instance.DeviceAdded += handler;
+
+            using (var virtualDevice = VirtualDevice.Create("VD5"))
+            {
+                var timeout = TimeSpan.FromSeconds(5);
+                var added = WaitOperations.Wait(() => outputDevice != null, timeout);
+                Assert.IsTrue(added, $"Device wasn't added for [{timeout}].");
+            }
+
+            MidiDevicesWatcher.Instance.DeviceAdded -= handler;
+            WaitOperations.Wait(1000);
+
+            return outputDevice;
+        }
+
+        private static OutputDevice GetVirtualDeviceOutputDevice()
+        {
+            var result = default(OutputDevice);
+
+            using (var virtualDevice = VirtualDevice.Create("VD4"))
+            {
+                result = virtualDevice.OutputDevice;
+            }
+
+            WaitOperations.Wait(1000);
+
+            return result;
         }
 
         #endregion

@@ -58,12 +58,7 @@ namespace Melanchall.DryWetMidi.Devices
 
         #region Constructor
 
-        internal InputDevice(IntPtr info)
-            : this(info, DeviceOwner.User)
-        {
-        }
-
-        internal InputDevice(IntPtr info, DeviceOwner owner)
+        internal InputDevice(IntPtr info, CreationContext owner)
             : base(info, owner)
         {
             _apiType = CommonApiProvider.Api.Api_GetApiType();
@@ -91,6 +86,7 @@ namespace Melanchall.DryWetMidi.Devices
             get
             {
                 EnsureSessionIsCreated();
+                EnsureDeviceIsNotRemoved();
 
                 string name;
                 NativeApi.HandleResult(InputDeviceApiProvider.Api.Api_GetDeviceName(_info, out name));
@@ -141,6 +137,7 @@ namespace Melanchall.DryWetMidi.Devices
                 return;
 
             EnsureDeviceIsNotDisposed();
+            EnsureDeviceIsNotRemoved();
             EnsureSessionIsCreated();
             EnsureHandleIsCreated();
 
@@ -160,6 +157,7 @@ namespace Melanchall.DryWetMidi.Devices
                 return;
 
             EnsureDeviceIsNotDisposed();
+            EnsureDeviceIsNotRemoved();
             EnsureSessionIsCreated();
 
             NativeApi.HandleResult(
@@ -171,6 +169,7 @@ namespace Melanchall.DryWetMidi.Devices
             ThrowIfArgument.IsInvalidEnumValue(nameof(property), property);
 
             EnsureDeviceIsNotDisposed();
+            EnsureDeviceIsNotRemoved();
             EnsureSessionIsCreated();
 
             if (!GetSupportedProperties().Contains(property))
@@ -264,7 +263,7 @@ namespace Melanchall.DryWetMidi.Devices
             IntPtr info;
             NativeApi.HandleResult(InputDeviceApiProvider.Api.Api_GetDeviceInfo(index, out info));
 
-            return new InputDevice(info);
+            return new InputDevice(info, CreationContext.User);
         }
 
         /// <summary>
@@ -591,6 +590,12 @@ namespace Melanchall.DryWetMidi.Devices
         public override int GetHashCode()
         {
             return _info.ToInt32();
+        }
+
+        public override string ToString()
+        {
+            var baseDescription = base.ToString();
+            return $"Input device{(string.IsNullOrWhiteSpace(baseDescription) ? string.Empty : $" ({baseDescription})")}";
         }
 
         /// <summary>

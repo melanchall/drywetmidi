@@ -19,10 +19,13 @@ namespace Melanchall.DryWetMidi.Tests.Devices
             var addedDevices = new List<MidiDevice>();
             var removedDevices = new List<MidiDevice>();
 
-            MidiDevicesWatcher.Instance.DeviceAdded += (_, e) => addedDevices.Add(e.Device);
-            MidiDevicesWatcher.Instance.DeviceRemoved += (_, e) => removedDevices.Add(e.Device);
+            EventHandler<DeviceAddedRemovedEventArgs> addedHandler = (_, e) => addedDevices.Add(e.Device);
+            MidiDevicesWatcher.Instance.DeviceAdded += addedHandler;
 
-            var deviceName = "AAA";
+            EventHandler<DeviceAddedRemovedEventArgs> removedHandler = (_, e) => removedDevices.Add(e.Device);
+            MidiDevicesWatcher.Instance.DeviceRemoved += removedHandler;
+
+            var deviceName = "VD7";
             var timeout = TimeSpan.FromSeconds(5);
 
             using (var virtualDevice = VirtualDevice.Create(deviceName))
@@ -30,7 +33,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 var added = WaitOperations.Wait(() => addedDevices.Count >= 2, timeout);
                 Assert.IsTrue(added, $"Devices weren't added for [{timeout}].");
 
-                Assert.AreEqual(2, addedDevices.Count, "Invalid count of added devices.");
+                Assert.AreEqual(2, addedDevices.Count, $"Invalid count of added devices ({string.Join(", ", addedDevices.Select(d => $"{d.Context}"))}).");
 
                 var firstAddedDevice = addedDevices.First();
                 Assert.IsInstanceOf<InputDevice>(firstAddedDevice, "Invalid type of the first added device.");
@@ -51,6 +54,9 @@ namespace Melanchall.DryWetMidi.Tests.Devices
 
             var lastRemovedDevice = removedDevices.Last();
             Assert.IsInstanceOf<OutputDevice>(lastRemovedDevice, "Invalid type of the last removed device.");
+
+            MidiDevicesWatcher.Instance.DeviceAdded -= addedHandler;
+            MidiDevicesWatcher.Instance.DeviceRemoved -= removedHandler;
         }
 
         #endregion

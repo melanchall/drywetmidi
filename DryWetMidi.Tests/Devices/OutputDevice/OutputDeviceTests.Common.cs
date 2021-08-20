@@ -158,9 +158,21 @@ namespace Melanchall.DryWetMidi.Tests.Devices
             }
         }
 
+        [Test]
+        public void OutputDeviceToString_User()
+        {
+            var outputDevice = GetUserOutputDevice();
+            Assert.AreEqual("Output device", outputDevice.ToString(), "Device string representation is invalid.");
+        }
+
         #endregion
 
         #region Private methods
+
+        private static OutputDevice GetUserOutputDevice()
+        {
+            return OutputDevice.GetByName(MidiDevicesNames.DeviceA);
+        }
 
         private static IEnumerable<MidiEvent> GetNonDefaultShortEvents() => new MidiEvent[]
         {

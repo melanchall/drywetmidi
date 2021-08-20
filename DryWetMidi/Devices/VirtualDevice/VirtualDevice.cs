@@ -17,7 +17,7 @@ namespace Melanchall.DryWetMidi.Devices
         #region Constructor
 
         internal VirtualDevice(string name)
-            : base()
+            : base(IntPtr.Zero, CreationContext.User)
         {
             _name = name;
 
@@ -77,15 +77,20 @@ namespace Melanchall.DryWetMidi.Devices
                 VirtualDeviceApiProvider.Api.Api_OpenDevice_Mac(Name, sessionHandle, _callback_Mac, out _info));
 
             var inputDeviceInfo = VirtualDeviceApiProvider.Api.Api_GetInputDeviceInfo(_info);
-            InputDevice = new InputDevice(inputDeviceInfo, DeviceOwner.VirtualDevice);
+            InputDevice = new InputDevice(inputDeviceInfo, CreationContext.VirtualDevice);
 
             var outputDeviceInfo = VirtualDeviceApiProvider.Api.Api_GetOutputDeviceInfo(_info);
-            OutputDevice = new OutputDevice(outputDeviceInfo, DeviceOwner.VirtualDevice);
+            OutputDevice = new OutputDevice(outputDeviceInfo, CreationContext.VirtualDevice);
         }
 
         #endregion
 
         #region Overrides
+
+        public override string ToString()
+        {
+            return "Virtual device";
+        }
 
         /// <summary>
         /// Releases the unmanaged resources used by the MIDI device class and optionally releases

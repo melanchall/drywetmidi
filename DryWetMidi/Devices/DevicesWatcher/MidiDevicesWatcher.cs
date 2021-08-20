@@ -61,22 +61,22 @@ namespace Melanchall.DryWetMidi.Devices
 
         private void OnInputDeviceAdded(object sender, IntPtr info)
         {
-            DeviceAdded?.Invoke(this, new DeviceAddedRemovedEventArgs(new InputDevice(info)));
+            DeviceAdded?.Invoke(this, new DeviceAddedRemovedEventArgs(new InputDevice(info, MidiDevice.CreationContext.AddedDevice)));
         }
 
         private void OnInputDeviceRemoved(object sender, IntPtr info)
         {
-            DeviceRemoved?.Invoke(this, new DeviceAddedRemovedEventArgs(new InputDevice(info)));
+            DeviceRemoved?.Invoke(this, new DeviceAddedRemovedEventArgs(new InputDevice(info, MidiDevice.CreationContext.RemovedDevice)));
         }
 
         private void OnOutputDeviceAdded(object sender, IntPtr info)
         {
-            DeviceAdded?.Invoke(this, new DeviceAddedRemovedEventArgs(new OutputDevice(info)));
+            DeviceAdded?.Invoke(this, new DeviceAddedRemovedEventArgs(new OutputDevice(info, MidiDevice.CreationContext.AddedDevice)));
         }
 
         private void OnOutputDeviceRemoved(object sender, IntPtr info)
         {
-            DeviceRemoved?.Invoke(this, new DeviceAddedRemovedEventArgs(new OutputDevice(info)));
+            DeviceRemoved?.Invoke(this, new DeviceAddedRemovedEventArgs(new OutputDevice(info, MidiDevice.CreationContext.RemovedDevice)));
         }
 
         #endregion

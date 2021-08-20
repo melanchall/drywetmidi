@@ -195,6 +195,117 @@ namespace Melanchall.DryWetMidi.Tests.Devices
             Assert.IsTrue(inputDevice1 != inputDevice2, "Devices are equal via inequality.");
         }
 
+        [Test]
+        [Platform("MacOsX")]
+        public void CheckRemovedInputDeviceAccess_Name()
+        {
+            var inputDevice = GetRemovedInputDevice();
+            Assert.Throws<InvalidOperationException>(
+                () => { var name = inputDevice.Name; },
+                "Can get name of removed device.");
+        }
+
+        [Test]
+        [Platform("MacOsX")]
+        public void CheckRemovedInputDeviceAccess_Property()
+        {
+            var inputDevice = GetRemovedInputDevice();
+            Assert.Throws<InvalidOperationException>(
+                () => { var name = inputDevice.GetProperty(InputDeviceProperty.Product); },
+                "Can get property value of removed device.");
+        }
+
+        [Test]
+        [Platform("MacOsX")]
+        public void CheckRemovedInputDeviceAccess_StartEventsListening()
+        {
+            var inputDevice = GetRemovedInputDevice();
+            Assert.Throws<InvalidOperationException>(
+                () => inputDevice.StartEventsListening(),
+                "Can start events listening on removed device.");
+        }
+
+        [Test]
+        [Platform("MacOsX")]
+        public void InputDeviceToString_AddedDevice()
+        {
+            var inputDevice = GetAddedInputDevice();
+            Assert.AreEqual("Input device (from 'Device added' notification)", inputDevice.ToString(), "Device string representation is invalid.");
+        }
+
+        [Test]
+        [Platform("MacOsX")]
+        public void InputDeviceToString_RemovedDevice()
+        {
+            var inputDevice = GetRemovedInputDevice();
+            Assert.AreEqual("Input device (from 'Device removed' notification)", inputDevice.ToString(), "Device string representation is invalid.");
+        }
+
+        [Test]
+        [Platform("MacOsX")]
+        public void InputDeviceToString_VirtualDevice()
+        {
+            var inputDevice = GetVirtualDeviceInputDevice();
+            Assert.AreEqual("Input device (subdevice of a virtual device)", inputDevice.ToString(), "Device string representation is invalid.");
+        }
+
+        #endregion
+
+        #region Private methods
+
+        private static InputDevice GetRemovedInputDevice()
+        {
+            InputDevice inputDevice = null;
+
+            EventHandler<DeviceAddedRemovedEventArgs> handler = (_, e) => inputDevice = inputDevice ?? (e.Device as InputDevice);
+            MidiDevicesWatcher.Instance.DeviceRemoved += handler;
+
+            using (var virtualDevice = VirtualDevice.Create("VD3")) { }
+
+            var timeout = TimeSpan.FromSeconds(5);
+            var removed = WaitOperations.Wait(() => inputDevice != null, timeout);
+            Assert.IsTrue(removed, $"Device wasn't removed for [{timeout}].");
+
+            MidiDevicesWatcher.Instance.DeviceRemoved -= handler;
+            WaitOperations.Wait(1000);
+
+            return inputDevice;
+        }
+
+        private static InputDevice GetAddedInputDevice()
+        {
+            InputDevice inputDevice = null;
+
+            EventHandler<DeviceAddedRemovedEventArgs> handler = (_, e) => inputDevice = inputDevice ?? (e.Device as InputDevice);
+            MidiDevicesWatcher.Instance.DeviceAdded += handler;
+
+            using (var virtualDevice = VirtualDevice.Create("VD2"))
+            {
+                var timeout = TimeSpan.FromSeconds(5);
+                var added = WaitOperations.Wait(() => inputDevice != null, timeout);
+                Assert.IsTrue(added, $"Device wasn't added for [{timeout}].");
+            }
+
+            MidiDevicesWatcher.Instance.DeviceAdded -= handler;
+            WaitOperations.Wait(1000);
+
+            return inputDevice;
+        }
+
+        private static InputDevice GetVirtualDeviceInputDevice()
+        {
+            var result = default(InputDevice);
+
+            using (var virtualDevice = VirtualDevice.Create("VD1"))
+            {
+                result = virtualDevice.InputDevice;
+            }
+
+            WaitOperations.Wait(1000);
+
+            return result;
+        }
+
         #endregion
     }
 }

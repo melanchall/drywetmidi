@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Melanchall.DryWetMidi.Devices
 {
@@ -9,10 +10,12 @@ namespace Melanchall.DryWetMidi.Devices
     {
         #region Nested enums
 
-        internal enum DeviceOwner
+        internal enum CreationContext
         {
             User,
-            VirtualDevice
+            VirtualDevice,
+            RemovedDevice,
+            AddedDevice
         }
 
         #endregion
@@ -23,6 +26,18 @@ namespace Melanchall.DryWetMidi.Devices
         /// Occurs when an error occurred on device (for example, during MIDI events parsing).
         /// </summary>
         public event EventHandler<ErrorOccurredEventArgs> ErrorOccurred;
+
+        #endregion
+
+        #region Constants
+
+        private static readonly Dictionary<CreationContext, string> ContextsDescriptions = new Dictionary<CreationContext, string>
+        {
+            [CreationContext.User] = string.Empty,
+            [CreationContext.VirtualDevice] = "subdevice of a virtual device",
+            [CreationContext.AddedDevice] = "from 'Device added' notification",
+            [CreationContext.RemovedDevice] = "from 'Device removed' notification",
+        };
 
         #endregion
 
@@ -40,20 +55,10 @@ namespace Melanchall.DryWetMidi.Devices
 
         #region Constructor
 
-        internal MidiDevice()
-            : this(IntPtr.Zero)
-        {
-        }
-
-        internal MidiDevice(IntPtr info)
-            : this(info, DeviceOwner.User)
-        {
-        }
-
-        internal MidiDevice(IntPtr info, DeviceOwner owner)
+        internal MidiDevice(IntPtr info, CreationContext creationContext)
         {
             _info = info;
-            Owner = owner;
+            Context = creationContext;
         }
 
         #endregion
@@ -82,7 +87,7 @@ namespace Melanchall.DryWetMidi.Devices
         /// </summary>
         public abstract string Name { get; }
 
-        internal DeviceOwner Owner { get; }
+        internal CreationContext Context { get; }
 
         #endregion
 
@@ -97,6 +102,12 @@ namespace Melanchall.DryWetMidi.Devices
         {
             if (_disposed)
                 throw new ObjectDisposedException("Device is disposed.");
+        }
+
+        protected void EnsureDeviceIsNotRemoved()
+        {
+            if (Context == CreationContext.RemovedDevice)
+                throw new InvalidOperationException("Operation can't be performed on removed device.");
         }
 
         /// <summary>
@@ -123,7 +134,7 @@ namespace Melanchall.DryWetMidi.Devices
         /// <returns>A string that represents the current object.</returns>
         public override string ToString()
         {
-            return Name;
+            return ContextsDescriptions[Context];
         }
 
         #endregion
@@ -135,8 +146,8 @@ namespace Melanchall.DryWetMidi.Devices
         /// </summary>
         public void Dispose()
         {
-            if (Owner != DeviceOwner.User)
-                throw new InvalidOperationException($"Disposing of a device owned by {Owner} is prohibited.");
+            if (Context == CreationContext.VirtualDevice)
+                throw new InvalidOperationException($"Disposing of a subdevice of a virtual device is prohibited.");
 
             Dispose(true);
             GC.SuppressFinalize(this);
