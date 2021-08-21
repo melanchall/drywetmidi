@@ -69,10 +69,10 @@ namespace Melanchall.DryWetMidi.Devices
             switch (apiType)
             {
                 case CommonApi.API_TYPE.API_TYPE_WIN:
-                    StartHighPrecisionTickGenerator_Win(intervalInMilliseconds, out _tickGeneratorInfo);
+                    result = StartHighPrecisionTickGenerator_Win(intervalInMilliseconds, out _tickGeneratorInfo);
                     break;
                 case CommonApi.API_TYPE.API_TYPE_MAC:
-                    StartHighPrecisionTickGenerator_Mac(intervalInMilliseconds, out _tickGeneratorInfo);
+                    result = StartHighPrecisionTickGenerator_Mac(intervalInMilliseconds, out _tickGeneratorInfo);
                     break;
             }
 

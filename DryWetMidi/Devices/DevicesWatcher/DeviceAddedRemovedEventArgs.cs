@@ -2,11 +2,15 @@
 
 namespace Melanchall.DryWetMidi.Devices
 {
+    /// <summary>
+    /// Provides data for <see cref="DevicesWatcher.DeviceAdded"/> and
+    /// <see cref="DevicesWatcher.DeviceRemoved"/> events.
+    /// </summary>
     public sealed class DeviceAddedRemovedEventArgs : EventArgs
     {
         #region Constructor
 
-        public DeviceAddedRemovedEventArgs(MidiDevice device)
+        internal DeviceAddedRemovedEventArgs(MidiDevice device)
         {
             Device = device;
         }
@@ -15,6 +19,9 @@ namespace Melanchall.DryWetMidi.Devices
 
         #region Properties
 
+        /// <summary>
+        /// Gets a device that has been added or removed.
+        /// </summary>
         public MidiDevice Device { get; }
 
         #endregion

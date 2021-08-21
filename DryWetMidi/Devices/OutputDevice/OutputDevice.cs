@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Runtime.InteropServices;
 using Melanchall.DryWetMidi.Common;
@@ -67,6 +68,9 @@ namespace Melanchall.DryWetMidi.Devices
 
         #region Properties
 
+        /// <summary>
+        /// Gets the name of the current MIDI device.
+        /// </summary>
         public override string Name
         {
             get
@@ -168,6 +172,76 @@ namespace Melanchall.DryWetMidi.Devices
             return OutputDeviceApiProvider.Api.Api_GetDevicesCount();
         }
 
+        /// <summary>
+        /// Returns current value of the specified property attached to the current output device.
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// To get the list of properties applicable to output devices on the current operating system use
+        /// <see cref="GetSupportedProperties"/> method.
+        /// </para>
+        /// <para>
+        /// Following table shows the type of value returned by the method for each property:
+        /// </para>
+        /// <para>
+        /// <list type="table">
+        /// <listheader>
+        /// <term>Property</term>
+        /// <term>Type</term>
+        /// </listheader>
+        /// <item>
+        /// <term><see cref="OutputDeviceProperty.Product"/></term>
+        /// <term><see cref="string"/></term>
+        /// </item>
+        /// <item>
+        /// <term><see cref="OutputDeviceProperty.Manufacturer"/></term>
+        /// <term><see cref="string"/></term>
+        /// </item>
+        /// <item>
+        /// <term><see cref="OutputDeviceProperty.DriverVersion"/></term>
+        /// <term><see cref="int"/></term>
+        /// </item>
+        /// <item>
+        /// <term><see cref="OutputDeviceProperty.UniqueId"/></term>
+        /// <term><see cref="int"/></term>
+        /// </item>
+        /// <item>
+        /// <term><see cref="OutputDeviceProperty.DriverOwner"/></term>
+        /// <term><see cref="string"/></term>
+        /// </item>
+        /// <item>
+        /// <term><see cref="OutputDeviceProperty.Technology"/></term>
+        /// <term><see cref="OutputDeviceTechnology"/></term>
+        /// </item>
+        /// <item>
+        /// <term><see cref="OutputDeviceProperty.VoicesNumber"/></term>
+        /// <term><see cref="int"/></term>
+        /// </item>
+        /// <item>
+        /// <term><see cref="OutputDeviceProperty.NotesNumber"/></term>
+        /// <term><see cref="int"/></term>
+        /// </item>
+        /// <item>
+        /// <term><see cref="OutputDeviceProperty.Channels"/></term>
+        /// <term><see cref="FourBitNumber"/>[]</term>
+        /// </item>
+        /// <item>
+        /// <term><see cref="OutputDeviceProperty.Options"/></term>
+        /// <term><see cref="OutputDeviceOption"/></term>
+        /// </item>
+        /// </list>
+        /// </para>
+        /// </remarks>
+        /// <param name="property">The property to get value of.</param>
+        /// <returns>The current value of the <paramref name="property"/>.</returns>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="property"/> specified an invalid value.</exception>
+        /// <exception cref="ArgumentException"><paramref name="property"/> is not in the list of the properties
+        /// supported for the current operating system.</exception>
+        /// <exception cref="ObjectDisposedException">The current <see cref="InputDevice"/> is disposed.</exception>
+        /// <exception cref="MidiDeviceException">An error occurred on the device. One of the cases when this exception can be thrown
+        /// is device is not in the system anymore (for example, unplugged).</exception>
+        /// <exception cref="InvalidOperationException">The current <see cref="InputDevice"/> instance is created by
+        /// <see cref="DevicesWatcher.DeviceRemoved"/> event and thus considered as removed so you cannot interact with it.</exception>
         public object GetProperty(OutputDeviceProperty property)
         {
             ThrowIfArgument.IsInvalidEnumValue(nameof(property), property);
@@ -177,7 +251,7 @@ namespace Melanchall.DryWetMidi.Devices
             EnsureSessionIsCreated();
 
             if (!GetSupportedProperties().Contains(property))
-                throw new ArgumentException("Property is not supported by output devices.", nameof(property));
+                throw new ArgumentException("Property is not supported.", nameof(property));
 
             var api = OutputDeviceApiProvider.Api;
 
@@ -251,6 +325,12 @@ namespace Melanchall.DryWetMidi.Devices
             }
         }
 
+        /// <summary>
+        /// Returns the list of the properties supported by output devices on the current
+        /// operating system.
+        /// </summary>
+        /// <returns>The list of the properties supported by output devices on the current
+        /// operating system.</returns>
         public static OutputDeviceProperty[] GetSupportedProperties()
         {
             if (_supportedProperties != null)
@@ -278,6 +358,13 @@ namespace Melanchall.DryWetMidi.Devices
             }
         }
 
+        /// <summary>
+        /// Retrieves an output MIDI device by the specified index.
+        /// </summary>
+        /// <param name="index">Index of an output device to retrieve.</param>
+        /// <returns>Output MIDI device at the specified index.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">Index is less than zero or greater than devices count minus 1.</exception>
+        /// <exception cref="MidiDeviceException">An error occurred on the device.</exception>
         public static OutputDevice GetByIndex(int index)
         {
             var devicesCount = GetDevicesCount();
@@ -307,6 +394,7 @@ namespace Melanchall.DryWetMidi.Devices
         /// </item>
         /// </list>
         /// </exception>
+        /// <exception cref="MidiDeviceException">An error occurred on the device.</exception>
         public static OutputDevice GetByName(string name)
         {
             ThrowIfArgument.IsNullOrWhiteSpaceString(nameof(name), name, "Device name");
@@ -354,8 +442,6 @@ namespace Melanchall.DryWetMidi.Devices
 
             OutputDeviceApiProvider.Api.Api_CloseDevice(_handle);
             _handle = IntPtr.Zero;
-
-            //MidiDevicesSession.ExitSession();
         }
 
         private void SendSysExEvent(SysExEvent sysExEvent)
@@ -459,6 +545,12 @@ namespace Melanchall.DryWetMidi.Devices
 
         #region Operators
 
+        /// <summary>
+        /// Determines if two <see cref="OutputDevice"/> objects are equal.
+        /// </summary>
+        /// <param name="outputDevice1">The first <see cref="OutputDevice"/> to compare.</param>
+        /// <param name="outputDevice2">The second <see cref="OutputDevice"/> to compare.</param>
+        /// <returns><c>true</c> if the devices are equal, <c>false</c> otherwise.</returns>
         public static bool operator ==(OutputDevice outputDevice1, OutputDevice outputDevice2)
         {
             if (ReferenceEquals(outputDevice1, outputDevice2))
@@ -470,6 +562,12 @@ namespace Melanchall.DryWetMidi.Devices
             return outputDevice1.Equals(outputDevice2);
         }
 
+        /// <summary>
+        /// Determines if two <see cref="OutputDevice"/> objects are not equal.
+        /// </summary>
+        /// <param name="outputDevice1">The first <see cref="OutputDevice"/> to compare.</param>
+        /// <param name="outputDevice2">The second <see cref="OutputDevice"/> to compare.</param>
+        /// <returns><c>false</c> if the devices are equal, <c>true</c> otherwise.</returns>
         public static bool operator !=(OutputDevice outputDevice1, OutputDevice outputDevice2)
         {
             return !(outputDevice1 == outputDevice2);
@@ -479,6 +577,11 @@ namespace Melanchall.DryWetMidi.Devices
 
         #region Overrides
 
+        /// <summary>
+        /// Determines whether the specified object is equal to the current object.
+        /// </summary>
+        /// <param name="obj">The object to compare with the current object.</param>
+        /// <returns><c>true</c> if the specified object is equal to the current object; otherwise, <c>false</c>.</returns>
         public override bool Equals(object obj)
         {
             var outputDevice = obj as OutputDevice;
@@ -491,11 +594,19 @@ namespace Melanchall.DryWetMidi.Devices
                 : _info.Equals(outputDevice._info);
         }
 
+        /// <summary>
+        /// Serves as the default hash function.
+        /// </summary>
+        /// <returns>A hash code for the current object.</returns>
         public override int GetHashCode()
         {
             return _info.ToInt32();
         }
 
+        /// <summary>
+        /// Returns a string that represents the current object.
+        /// </summary>
+        /// <returns>A string that represents the current object.</returns>
         public override string ToString()
         {
             var baseDescription = base.ToString();

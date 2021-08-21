@@ -138,7 +138,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
 
                 foreach (var definitionIntervals in nameDefinition.Intervals)
                 {
-                    var processdIntervals = intervals;
+                    var processedIntervals = intervals;
 
                     if (definitionIntervals[0] != 0)
                     {
@@ -147,26 +147,26 @@ namespace Melanchall.DryWetMidi.MusicTheory
                     }
                     else
                     {
-                        processdIntervals = new[] { 0 }.Concat(intervals).ToArray();
+                        processedIntervals = new[] { 0 }.Concat(intervals).ToArray();
                     }
 
-                    var subMatched = processdIntervals.Length >= definitionIntervals.Length;
+                    var subMatched = processedIntervals.Length >= definitionIntervals.Length;
                     var j = 0;
 
-                    for (int i = 0; i < definitionIntervals.Length && i < processdIntervals.Length && subMatched; i++, j++)
+                    for (int i = 0; i < definitionIntervals.Length && i < processedIntervals.Length && subMatched; i++, j++)
                     {
                         var interval = definitionIntervals[i];
-                        if (processdIntervals[i] != interval && !processdIntervals.Contains(interval - 12) && !processdIntervals.Contains(interval - 24))
+                        if (processedIntervals[i] != interval && !processedIntervals.Contains(interval - 12) && !processedIntervals.Contains(interval - 24))
                             subMatched = false;
                     }
 
-                    for (; j < processdIntervals.Length && subMatched; j++)
+                    for (; j < processedIntervals.Length && subMatched; j++)
                     {
-                        if (!processdIntervals.Contains(processdIntervals[j] - 12) && !processdIntervals.Contains(processdIntervals[j] - 24))
+                        if (!processedIntervals.Contains(processedIntervals[j] - 12) && !processedIntervals.Contains(processedIntervals[j] - 24))
                             subMatched = false;
                     }
 
-                    matched |= subMatched && j >= processdIntervals.Length;
+                    matched |= subMatched && j >= processedIntervals.Length;
                     if (matched)
                         break;
                 }

@@ -112,7 +112,6 @@ namespace Melanchall.DryWetMidi.Interaction
             var notesBuilder = new NotesBuilder(_chordDetectionSettings.NoteDetectionSettings);
             var notes = notesBuilder.GetIndexedNotesLazy(timedEvents, collectTimedEvents, collectedTimedEvents);
 
-            var notesTolerance = _chordDetectionSettings.NotesTolerance;
             var eventsCollectionShouldMatch = _chordDetectionSettings.ChordSearchContext == ChordSearchContext.SingleEventsCollection;
 
             foreach (var noteTuple in notes)

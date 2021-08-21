@@ -45,8 +45,8 @@ namespace Melanchall.DryWetMidi.Interaction
             ThrowIfArgument.IsNull(nameof(timeDivision), timeDivision);
 
             TimeDivision = timeDivision;
-            TempoLine = new ValueLine<Tempo>(Interaction.Tempo.Default);
-            TimeSignatureLine = new ValueLine<TimeSignature>(Interaction.TimeSignature.Default);
+            TempoLine = new ValueLine<Tempo>(Tempo.Default);
+            TimeSignatureLine = new ValueLine<TimeSignature>(TimeSignature.Default);
         }
 
         #endregion

@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-
-namespace Melanchall.DryWetMidi.Core
+﻿namespace Melanchall.DryWetMidi.Core
 {
     internal sealed class SysExEventReader : IEventReader
     {
@@ -23,9 +21,6 @@ namespace Melanchall.DryWetMidi.Core
                     sysExEvent = new EscapeSysExEvent();
                     break;
             }
-
-            if (sysExEvent == null)
-                Debug.Fail("Unknown SysEx event.");
 
             //
 

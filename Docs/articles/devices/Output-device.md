@@ -6,7 +6,7 @@ uid: a_dev_output
 
 In DryWetMIDI an output MIDI device is represented by [IOutputDevice](xref:Melanchall.DryWetMidi.Devices.IOutputDevice) interface. It allows to send events to a MIDI device. To understand what an output MIDI device is in DryWetMIDI, please read [Overview](Overview.md) article.
 
-The library provides built-in implementation of `IOutputDevice`: [OutputDevice](xref:Melanchall.DryWetMidi.Devices.OutputDevice). To get an instance of `OutputDevice` you can use either [GetByName](xref:Melanchall.DryWetMidi.Devices.OutputDevice.GetByName(System.String)) or [GetById](xref:Melanchall.DryWetMidi.Devices.OutputDevice.GetById(System.Int32)) static methods. ID of a MIDI device is a number from `0` to _devices count minus one_. To retrieve count of output MIDI devices presented in the system there is the [GetDevicesCount](xref:Melanchall.DryWetMidi.Devices.OutputDevice.GetDevicesCount) method. You can get all output MIDI devices with [GetAll](xref:Melanchall.DryWetMidi.Devices.OutputDevice.GetAll) method:
+The library provides built-in implementation of `IOutputDevice`: [OutputDevice](xref:Melanchall.DryWetMidi.Devices.OutputDevice). To get an instance of `OutputDevice` you can use either [GetByName](xref:Melanchall.DryWetMidi.Devices.OutputDevice.GetByName(System.String)) or [GetByIndex](xref:Melanchall.DryWetMidi.Devices.OutputDevice.GetByIndex(System.Int32)) static methods. To retrieve count of output MIDI devices presented in the system there is the [GetDevicesCount](xref:Melanchall.DryWetMidi.Devices.OutputDevice.GetDevicesCount) method. You can get all output MIDI devices with [GetAll](xref:Melanchall.DryWetMidi.Devices.OutputDevice.GetAll) method:
 
 ```csharp
 using System;

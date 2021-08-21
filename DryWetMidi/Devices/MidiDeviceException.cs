@@ -40,6 +40,12 @@ namespace Melanchall.DryWetMidi.Devices
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MidiDeviceException"/> class with the
+        /// specified error message and an error code.
+        /// </summary>
+        /// <param name="message">The error message that explains the reason for the exception.</param>
+        /// <param name="errorCode">The error code.</param>
         public MidiDeviceException(string message, int errorCode)
             : this(message)
         {
@@ -50,6 +56,9 @@ namespace Melanchall.DryWetMidi.Devices
 
         #region Properties
 
+        /// <summary>
+        /// Gets the code of an error represented by the current <see cref="MidiDeviceException"/>.
+        /// </summary>
         public int? ErrorCode { get; }
 
         #endregion

@@ -790,70 +790,73 @@ namespace Melanchall.DryWetMidi.Tools
                     endPart.ProcessTimedEvents(e => e.Time -= partLengthInTicks);
                 }
 
-                var startPartTrackChunksEnumerator = startPart.GetTrackChunks().GetEnumerator();
-                var endPartTrackChunksEnumerator = endPart.GetTrackChunks().GetEnumerator();
-                var notesToSplitDescriptorsEnumerator = notesToSplitDescriptors.GetEnumerator();
-
-                while (startPartTrackChunksEnumerator.MoveNext() && endPartTrackChunksEnumerator.MoveNext() && notesToSplitDescriptorsEnumerator.MoveNext())
+                using (var startPartTrackChunksEnumerator = startPart.GetTrackChunks().GetEnumerator())
+                using (var endPartTrackChunksEnumerator = endPart.GetTrackChunks().GetEnumerator())
+                using (var notesToSplitDescriptorsEnumerator = notesToSplitDescriptors.GetEnumerator())
                 {
-                    var newTrackChunk = new TrackChunk();
-                    var eventsCollection = newTrackChunk.Events;
-                    eventsCollection.AddRange(startPartTrackChunksEnumerator.Current.Events);
-                    eventsCollection.AddRange(endPartTrackChunksEnumerator.Current.Events);
-
-                    eventsCollection.RemoveTimedEvents(e =>
+                    while (startPartTrackChunksEnumerator.MoveNext() &&
+                           endPartTrackChunksEnumerator.MoveNext() &&
+                           notesToSplitDescriptorsEnumerator.MoveNext())
                     {
-                        var markerEvent = e.Event as MarkerEvent;
-                        if (markerEvent == null)
-                            return false;
+                        var newTrackChunk = new TrackChunk();
+                        var eventsCollection = newTrackChunk.Events;
+                        eventsCollection.AddRange(startPartTrackChunksEnumerator.Current.Events);
+                        eventsCollection.AddRange(endPartTrackChunksEnumerator.Current.Events);
 
-                        return markerEvent.Text == partsStartId || markerEvent.Text == partEndId;
-                    });
-
-                    if (settings.SplitNotes && notesToSplitDescriptorsEnumerator.Current.Any())
-                    {
-                        var timedEvents = eventsCollection
-                            .GetTimedEventsLazy(false)
-                            .SkipWhile(e => e.Time < times[0])
-                            .TakeWhile(e => e.Time == times[0])
-                            .ToList();
-
-                        var eventsToRemove = new List<MidiEvent>();
-
-                        foreach (var notesDescriptor in notesToSplitDescriptorsEnumerator.Current)
+                        eventsCollection.RemoveTimedEvents(e =>
                         {
-                            var timedEventsToRemove = timedEvents
-                                .Where(e =>
-                                {
-                                    var noteEvent = e.Event as NoteEvent;
-                                    if (noteEvent == null)
-                                        return false;
+                            var markerEvent = e.Event as MarkerEvent;
+                            if (markerEvent == null)
+                                return false;
 
-                                    if (!noteEvent.GetNoteId().Equals(notesDescriptor.Item1))
-                                        return false;
+                            return markerEvent.Text == partsStartId || markerEvent.Text == partEndId;
+                        });
 
-                                    var noteOnEvent = noteEvent as NoteOnEvent;
-                                    if (noteOnEvent != null)
-                                        return noteOnEvent.Velocity == notesDescriptor.Item2;
+                        if (settings.SplitNotes && notesToSplitDescriptorsEnumerator.Current.Any())
+                        {
+                            var timedEvents = eventsCollection
+                                .GetTimedEventsLazy(false)
+                                .SkipWhile(e => e.Time < times[0])
+                                .TakeWhile(e => e.Time == times[0])
+                                .ToList();
 
-                                    return ((NoteOffEvent)noteEvent).Velocity == notesDescriptor.Item3;
-                                })
-                                .ToArray();
+                            var eventsToRemove = new List<MidiEvent>();
 
-                            foreach (var timedEvent in timedEventsToRemove)
+                            foreach (var notesDescriptor in notesToSplitDescriptorsEnumerator.Current)
                             {
-                                timedEvents.Remove(timedEvent);
-                                eventsToRemove.Add(timedEvent.Event);
+                                var timedEventsToRemove = timedEvents
+                                    .Where(e =>
+                                    {
+                                        var noteEvent = e.Event as NoteEvent;
+                                        if (noteEvent == null)
+                                            return false;
+
+                                        if (!noteEvent.GetNoteId().Equals(notesDescriptor.Item1))
+                                            return false;
+
+                                        var noteOnEvent = noteEvent as NoteOnEvent;
+                                        if (noteOnEvent != null)
+                                            return noteOnEvent.Velocity == notesDescriptor.Item2;
+
+                                        return ((NoteOffEvent) noteEvent).Velocity == notesDescriptor.Item3;
+                                    })
+                                    .ToArray();
+
+                                foreach (var timedEvent in timedEventsToRemove)
+                                {
+                                    timedEvents.Remove(timedEvent);
+                                    eventsToRemove.Add(timedEvent.Event);
+                                }
                             }
+
+                            eventsCollection.RemoveTimedEvents(e => eventsToRemove.Contains(e.Event));
                         }
 
-                        eventsCollection.RemoveTimedEvents(e => eventsToRemove.Contains(e.Event));
+                        if (!settings.PreserveTrackChunks && !eventsCollection.Any())
+                            continue;
+
+                        result.Chunks.Add(newTrackChunk);
                     }
-
-                    if (!settings.PreserveTrackChunks && !eventsCollection.Any())
-                        continue;
-
-                    result.Chunks.Add(newTrackChunk);
                 }
             }
 

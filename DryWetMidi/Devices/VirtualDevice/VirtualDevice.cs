@@ -3,6 +3,14 @@ using Melanchall.DryWetMidi.Common;
 
 namespace Melanchall.DryWetMidi.Devices
 {
+    /// <summary>
+    /// Represents a virtual loopback MIDI device (MIDI cable).
+    /// </summary>
+    /// <remarks>
+    /// Virtual MIDI device (cable) has two endpoints: <see cref="InputDevice"/> and <see cref="OutputDevice"/>.
+    /// All MIDI data sent to <see cref="OutputDevice"/> can be received from the cable via <see cref="InputDevice"/>,
+    /// so it's a loopback device.
+    /// </remarks>
     public sealed class VirtualDevice : MidiDevice
     {
         #region Fields
@@ -33,26 +41,43 @@ namespace Melanchall.DryWetMidi.Devices
 
         #region Properties
 
+        /// <summary>
+        /// Gets the name of the current MIDI device.
+        /// </summary>
         public override string Name
         {
             get { return _name; }
         }
 
+        /// <summary>
+        /// Gets the input subdevice of the current <see cref="VirtualDevice"/>.
+        /// </summary>
         public InputDevice InputDevice { get; private set; }
 
+        /// <summary>
+        /// Gets the output subdevice of the current <see cref="VirtualDevice"/>.
+        /// </summary>
         public OutputDevice OutputDevice { get; private set; }
 
         #endregion
 
         #region Methods
 
+        /// <summary>
+        /// Creates an instance of the <see cref="VirtualDevice"/> with the specified name.
+        /// </summary>
+        /// <param name="name">The name of a virtual device to create.</param>
+        /// <returns>An instance of the <see cref="VirtualDevice"/> with name of <paramref name="name"/>.</returns>
+        /// <exception cref="ArgumentException"><paramref name="name"/> is <c>null</c> or contains white-spaces only.</exception>
+        /// <exception cref="NotSupportedException">Virtual device creation is not supported on the current operating system.</exception>
+        /// <exception cref="MidiDeviceException">An error occurred on device creation.</exception>
         public static VirtualDevice Create(string name)
         {
             ThrowIfArgument.IsNullOrWhiteSpaceString(nameof(name), name, "Device name");
 
             var apiType = CommonApiProvider.Api.Api_GetApiType();
             if (apiType != CommonApi.API_TYPE.API_TYPE_MAC)
-                throw new NotSupportedException($"Virtual device creation is not supported for the {apiType} API.");
+                throw new NotSupportedException("Virtual device creation is not supported on the current operating system.");
 
             return new VirtualDevice(name);
         }
@@ -86,6 +111,10 @@ namespace Melanchall.DryWetMidi.Devices
 
         #region Overrides
 
+        /// <summary>
+        /// Returns a string that represents the current object.
+        /// </summary>
+        /// <returns>A string that represents the current object.</returns>
         public override string ToString()
         {
             return "Virtual device";

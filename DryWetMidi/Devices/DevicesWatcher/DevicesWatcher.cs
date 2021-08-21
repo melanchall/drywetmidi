@@ -2,19 +2,28 @@
 
 namespace Melanchall.DryWetMidi.Devices
 {
+    /// <summary>
+    /// Provides a way to watch devices adding/removing in the system.
+    /// </summary>
     public sealed class DevicesWatcher
     {
         #region Events
 
+        /// <summary>
+        /// Occurs when a MIDI device has been added to the system.
+        /// </summary>
         public event EventHandler<DeviceAddedRemovedEventArgs> DeviceAdded;
 
+        /// <summary>
+        /// Occurs when a MIDI device has been removed from the system.
+        /// </summary>
         public event EventHandler<DeviceAddedRemovedEventArgs> DeviceRemoved;
 
         #endregion
 
         #region Fields
 
-        private static DevicesWatcher _instance;
+        private static volatile DevicesWatcher _instance;
         private static object _lockObject = new object();
 
         #endregion
@@ -29,6 +38,9 @@ namespace Melanchall.DryWetMidi.Devices
 
         #region Properties
 
+        /// <summary>
+        /// Gets the instance of <see cref="DevicesWatcher"/>.
+        /// </summary>
         public static DevicesWatcher Instance
         {
             get

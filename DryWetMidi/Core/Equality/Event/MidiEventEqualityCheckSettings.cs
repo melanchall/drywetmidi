@@ -24,7 +24,6 @@ namespace Melanchall.DryWetMidi.Core
         /// </summary>
         public bool CompareDeltaTimes { get; set; } = true;
 
-        // TODO: test
         /// <summary>
         /// Gets or sets a value that specifies the rules for the comparison of text data (in meta events).
         ///  The default value is <see cref="StringComparison.CurrentCulture"/>.

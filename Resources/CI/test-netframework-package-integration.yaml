@@ -111,6 +111,11 @@ stages:
           $path = Resolve-Path 'Resources\PackageIntegrationTestUtilities\DwmNetFrameworkConsoleApp\DwmNetFrameworkConsoleApp\DwmNetFrameworkConsoleApp.csproj'
           nuget restore "$path" -Source NuGetPackages -SolutionDirectory "Resources\PackageIntegrationTestUtilities\DwmNetFrameworkConsoleApp"
 
+    - task: NuGetToolInstaller@1
+      displayName: Build test program
+      inputs:
+        versionSpec: '5.11.0'
+
     - task: VSBuild@1
       displayName: Build test program
       inputs:

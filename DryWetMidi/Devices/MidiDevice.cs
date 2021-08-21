@@ -43,7 +43,14 @@ namespace Melanchall.DryWetMidi.Devices
 
         #region Fields
 
+        /// <summary>
+        /// Object holding information about the current device.
+        /// </summary>
         protected IntPtr _info = IntPtr.Zero;
+
+        /// <summary>
+        /// Object holding handle of the current device that allows to interact with it.
+        /// </summary>
         protected IntPtr _handle = IntPtr.Zero;
 
         /// <summary>
@@ -83,7 +90,7 @@ namespace Melanchall.DryWetMidi.Devices
         public bool IsEnabled { get; set; } = true;
 
         /// <summary>
-        /// Gets the name of MIDI device.
+        /// Gets the name of the current MIDI device.
         /// </summary>
         public abstract string Name { get; }
 
@@ -95,7 +102,7 @@ namespace Melanchall.DryWetMidi.Devices
 
         /// <summary>
         /// Checks that current instance of MIDI device class is not disposed and throws
-        /// <see cref="ObjectDisposedException"/> if not.
+        /// <see cref="ObjectDisposedException"/> if it is.
         /// </summary>
         /// <exception cref="ObjectDisposedException">Current instance of MIDI device class is disposed.</exception>
         protected void EnsureDeviceIsNotDisposed()
@@ -104,6 +111,12 @@ namespace Melanchall.DryWetMidi.Devices
                 throw new ObjectDisposedException("Device is disposed.");
         }
 
+        /// <summary>
+        /// Checks that current instance of MIDI device class is not created via 'Device removed' notification
+        /// and throws <see cref="InvalidOperationException"/> if it is.
+        /// </summary>
+        /// <exception cref="InvalidOperationException">Current instance of MIDI device class is created via
+        /// 'Device removed' notification.</exception>
         protected void EnsureDeviceIsNotRemoved()
         {
             if (Context == CreationContext.RemovedDevice)
@@ -119,6 +132,9 @@ namespace Melanchall.DryWetMidi.Devices
             ErrorOccurred?.Invoke(this, new ErrorOccurredEventArgs(exception));
         }
 
+        /// <summary>
+        /// Ensures MIDI devices session is created.
+        /// </summary>
         protected static void EnsureSessionIsCreated()
         {
             MidiDevicesSession.GetSessionHandle();
