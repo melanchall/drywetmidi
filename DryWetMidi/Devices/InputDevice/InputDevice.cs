@@ -58,8 +58,8 @@ namespace Melanchall.DryWetMidi.Devices
 
         #region Constructor
 
-        internal InputDevice(IntPtr info, CreationContext owner)
-            : base(info, owner)
+        internal InputDevice(IntPtr info, CreationContext context)
+            : base(info, context)
         {
             _apiType = CommonApiProvider.Api.Api_GetApiType();
             _bytesToMidiEventConverter.ReadingSettings.SilentNoteOnPolicy = SilentNoteOnPolicy.NoteOn;

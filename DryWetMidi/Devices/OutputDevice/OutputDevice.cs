@@ -45,8 +45,8 @@ namespace Melanchall.DryWetMidi.Devices
 
         #region Constructor
 
-        internal OutputDevice(IntPtr info, CreationContext owner)
-            : base(info, owner)
+        internal OutputDevice(IntPtr info, CreationContext context)
+            : base(info, context)
         {
             _apiType = CommonApiProvider.Api.Api_GetApiType();
         }

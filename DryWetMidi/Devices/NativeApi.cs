@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 
 namespace Melanchall.DryWetMidi.Devices
 {
@@ -65,6 +66,13 @@ namespace Melanchall.DryWetMidi.Devices
         #endregion
 
         #region Methods
+
+        protected string GetStringFromPointer(IntPtr stringPointer)
+        {
+            return stringPointer != IntPtr.Zero
+                ? Marshal.PtrToStringAnsi(stringPointer)
+                : string.Empty;
+        }
 
         public static void HandleResult<T>(T result)
         {

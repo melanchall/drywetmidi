@@ -55,10 +55,10 @@ namespace Melanchall.DryWetMidi.Devices
 
         #region Constructor
 
-        internal MidiDevice(IntPtr info, CreationContext creationContext)
+        internal MidiDevice(IntPtr info, CreationContext context)
         {
             _info = info;
-            Context = creationContext;
+            Context = context;
         }
 
         #endregion

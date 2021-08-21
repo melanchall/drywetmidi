@@ -2,7 +2,7 @@
 
 namespace Melanchall.DryWetMidi.Devices
 {
-    public sealed class MidiDevicesWatcher
+    public sealed class DevicesWatcher
     {
         #region Events
 
@@ -14,14 +14,14 @@ namespace Melanchall.DryWetMidi.Devices
 
         #region Fields
 
-        private static MidiDevicesWatcher _instance;
+        private static DevicesWatcher _instance;
         private static object _lockObject = new object();
 
         #endregion
 
         #region Constructor
 
-        private MidiDevicesWatcher()
+        private DevicesWatcher()
         {
         }
 
@@ -29,7 +29,7 @@ namespace Melanchall.DryWetMidi.Devices
 
         #region Properties
 
-        public static MidiDevicesWatcher Instance
+        public static DevicesWatcher Instance
         {
             get
             {
@@ -41,7 +41,7 @@ namespace Melanchall.DryWetMidi.Devices
                         {
                             MidiDevicesSession.GetSessionHandle();
 
-                            _instance = new MidiDevicesWatcher();
+                            _instance = new DevicesWatcher();
 
                             MidiDevicesSession.InputDeviceAdded += _instance.OnInputDeviceAdded;
                             MidiDevicesSession.InputDeviceRemoved += _instance.OnInputDeviceRemoved;

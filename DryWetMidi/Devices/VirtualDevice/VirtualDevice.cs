@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using Melanchall.DryWetMidi.Common;
 
 namespace Melanchall.DryWetMidi.Devices

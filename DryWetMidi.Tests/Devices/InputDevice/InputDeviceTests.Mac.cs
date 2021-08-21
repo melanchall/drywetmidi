@@ -258,7 +258,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
             InputDevice inputDevice = null;
 
             EventHandler<DeviceAddedRemovedEventArgs> handler = (_, e) => inputDevice = inputDevice ?? (e.Device as InputDevice);
-            MidiDevicesWatcher.Instance.DeviceRemoved += handler;
+            DevicesWatcher.Instance.DeviceRemoved += handler;
 
             using (var virtualDevice = VirtualDevice.Create("VD3")) { }
 
@@ -266,7 +266,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
             var removed = WaitOperations.Wait(() => inputDevice != null, timeout);
             Assert.IsTrue(removed, $"Device wasn't removed for [{timeout}].");
 
-            MidiDevicesWatcher.Instance.DeviceRemoved -= handler;
+            DevicesWatcher.Instance.DeviceRemoved -= handler;
             WaitOperations.Wait(1000);
 
             return inputDevice;
@@ -277,7 +277,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
             InputDevice inputDevice = null;
 
             EventHandler<DeviceAddedRemovedEventArgs> handler = (_, e) => inputDevice = inputDevice ?? (e.Device as InputDevice);
-            MidiDevicesWatcher.Instance.DeviceAdded += handler;
+            DevicesWatcher.Instance.DeviceAdded += handler;
 
             using (var virtualDevice = VirtualDevice.Create("VD2"))
             {
@@ -286,7 +286,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
                 Assert.IsTrue(added, $"Device wasn't added for [{timeout}].");
             }
 
-            MidiDevicesWatcher.Instance.DeviceAdded -= handler;
+            DevicesWatcher.Instance.DeviceAdded -= handler;
             WaitOperations.Wait(1000);
 
             return inputDevice;

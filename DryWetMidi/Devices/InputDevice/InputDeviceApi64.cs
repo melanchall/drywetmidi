@@ -135,7 +135,7 @@ namespace Melanchall.DryWetMidi.Devices
         {
             IntPtr namePointer;
             var result = GetInputDeviceName(info, out namePointer);
-            name = namePointer != IntPtr.Zero ? Marshal.PtrToStringAnsi(namePointer) : string.Empty;
+            name = GetStringFromPointer(namePointer);
             return result;
         }
 
@@ -143,7 +143,7 @@ namespace Melanchall.DryWetMidi.Devices
         {
             IntPtr manufacturerPointer;
             var result = GetInputDeviceManufacturer(info, out manufacturerPointer);
-            manufacturer = manufacturerPointer != IntPtr.Zero ? Marshal.PtrToStringAnsi(manufacturerPointer) : string.Empty;
+            manufacturer = GetStringFromPointer(manufacturerPointer);
             return result;
         }
 
@@ -151,7 +151,7 @@ namespace Melanchall.DryWetMidi.Devices
         {
             IntPtr productPointer;
             var result = GetInputDeviceProduct(info, out productPointer);
-            product = productPointer != IntPtr.Zero ? Marshal.PtrToStringAnsi(productPointer) : string.Empty;
+            product = GetStringFromPointer(productPointer);
             return result;
         }
 
@@ -169,7 +169,7 @@ namespace Melanchall.DryWetMidi.Devices
         {
             IntPtr driverOwnerPointer;
             var result = GetInputDeviceDriverOwner(info, out driverOwnerPointer);
-            driverOwner = driverOwnerPointer != IntPtr.Zero ? Marshal.PtrToStringAnsi(driverOwnerPointer) : string.Empty;
+            driverOwner = GetStringFromPointer(driverOwnerPointer);
             return result;
         }
 

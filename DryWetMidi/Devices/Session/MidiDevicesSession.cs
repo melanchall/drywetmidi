@@ -59,21 +59,6 @@ namespace Melanchall.DryWetMidi.Devices
             }
         }
 
-        //public static void ExitSession()
-        //{
-        //    lock (_lockObject)
-        //    {
-        //        if (_handle == IntPtr.Zero)
-        //            return;
-
-        //        MidiDevicesSessionApiProvider.Api.Api_CloseSession(_handle);
-        //        Marshal.FreeHGlobal(_name);
-
-        //        _name = IntPtr.Zero;
-        //        _handle = IntPtr.Zero;
-        //    }
-        //}
-
         private static void InputDeviceCallback(IntPtr info, bool operation)
         {
             if (operation)

@@ -9,7 +9,7 @@ namespace Melanchall.DryWetMidi.Tests.Devices
 {
     [TestFixture]
     [Platform("MacOsX")]
-    public sealed class MidiDevicesWatcherTests
+    public sealed class DevicesWatcherTests
     {
         #region Test methods
 
@@ -20,10 +20,10 @@ namespace Melanchall.DryWetMidi.Tests.Devices
             var removedDevices = new List<MidiDevice>();
 
             EventHandler<DeviceAddedRemovedEventArgs> addedHandler = (_, e) => addedDevices.Add(e.Device);
-            MidiDevicesWatcher.Instance.DeviceAdded += addedHandler;
+            DevicesWatcher.Instance.DeviceAdded += addedHandler;
 
             EventHandler<DeviceAddedRemovedEventArgs> removedHandler = (_, e) => removedDevices.Add(e.Device);
-            MidiDevicesWatcher.Instance.DeviceRemoved += removedHandler;
+            DevicesWatcher.Instance.DeviceRemoved += removedHandler;
 
             var deviceName = "VD7";
             var timeout = TimeSpan.FromSeconds(5);
@@ -55,8 +55,8 @@ namespace Melanchall.DryWetMidi.Tests.Devices
             var lastRemovedDevice = removedDevices.Last();
             Assert.IsInstanceOf<OutputDevice>(lastRemovedDevice, "Invalid type of the last removed device.");
 
-            MidiDevicesWatcher.Instance.DeviceAdded -= addedHandler;
-            MidiDevicesWatcher.Instance.DeviceRemoved -= removedHandler;
+            DevicesWatcher.Instance.DeviceAdded -= addedHandler;
+            DevicesWatcher.Instance.DeviceRemoved -= removedHandler;
         }
 
         #endregion
