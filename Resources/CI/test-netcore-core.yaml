@@ -1,0 +1,128 @@
+trigger:
+  batch: true
+  branches:
+    include:
+    - master
+    - develop
+  paths:
+    include:
+    - 'DryWetMidi/*'
+    - 'DryWetMidi.Tests/*'
+    - 'DryWetMidi.Tests.Common/*'
+    - 'Resources/CI/test-netcore-core.yaml'
+    - 'Resources/CI/Templates/stage-build-native-libs.yaml'
+    - 'Resources/CI/Templates/step-copy-native-libraries-near-csproj.yaml'
+    - 'Resources/CI/Templates/step-collect-logs.yaml'
+    exclude:
+    - 'DryWetMidi/Devices/*'
+    - 'DryWetMidi.Tests/Devices/*'
+
+pr:
+  branches:
+    include:
+    - develop
+  paths:
+    include:
+    - 'DryWetMidi/*'
+    - 'DryWetMidi.Tests/*'
+    - 'DryWetMidi.Tests.Common/*'
+    - 'Resources/CI/test-netcore-core.yaml'
+    - 'Resources/CI/Templates/stage-build-native-libs.yaml'
+    - 'Resources/CI/Templates/step-copy-native-libraries-near-csproj.yaml'
+    - 'Resources/CI/Templates/step-collect-logs.yaml'
+    exclude:
+    - 'DryWetMidi/Devices/*'
+    - 'DryWetMidi.Tests/Devices/*'
+
+variables:
+- group: DryWetMIDI-Common-Variables
+- name: buildConfiguration
+  value: 'Release'
+
+name: TestCore_$(VmImage)_$(Tfm)_$(LibraryVersion)$(Rev:.r)
+
+stages:
+- template: Templates/stage-build-native-libs.yaml
+    
+- stage: RunTests
+  displayName: Run tests
+  pool:
+    vmImage: '$(VmImage)'
+  jobs:
+  - job: RunTests
+    displayName: Run tests
+    steps:
+    - template: Templates/step-copy-native-libraries-near-csproj.yaml
+    
+    - task: UseDotNet@2
+      displayName: 'Use $(Tfm)'
+      inputs:
+        packageType: sdk
+        version: '$(SdkVersion)'
+        installationPath: $(Agent.ToolsDirectory)/dotnet
+    
+    - task: DotNetCoreCLI@2
+      displayName: Build DryWetMidi and DryWetMidi.Tests.Common
+      inputs:
+        command: 'build'
+        arguments: '--configuration $(buildConfiguration) --framework netstandard2.0'
+        projects: |
+          DryWetMidi/Melanchall.DryWetMidi.csproj
+          DryWetMidi.Tests.Common/Melanchall.DryWetMidi.Tests.Common.csproj
+    
+    - task: DotNetCoreCLI@2
+      displayName: Build DryWetMidi.Tests
+      inputs:
+        command: 'build'
+        arguments: '--configuration $(buildConfiguration) --framework $(Tfm)'
+        projects: |
+          DryWetMidi.Tests/Melanchall.DryWetMidi.Tests.csproj
+    
+    - task: DotNetCoreCLI@2
+      displayName: Run unit tests
+      condition: not(eq(variables.VmImage, 'macos-latest'))
+      inputs:
+        command: 'test'
+        projects: 'DryWetMidi.Tests/Melanchall.DryWetMidi.Tests.csproj'
+        arguments: '--blame --no-build --configuration $(buildConfiguration) --filter (FullyQualifiedName~Melanchall.DryWetMidi.Tests.Core|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Common|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Composing|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Interaction|FullyQualifiedName~Melanchall.DryWetMidi.Tests.MusicTheory|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Standards|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Tools) --framework $(Tfm) --verbosity normal -d diagnostic.log'
+        
+    - task: DotNetCoreCLI@2
+      displayName: Run unit tests
+      condition: eq(variables.VmImage, 'macos-latest')
+      inputs:
+        command: 'test'
+        projects: 'DryWetMidi.Tests/Melanchall.DryWetMidi.Tests.csproj'
+        arguments: '--blame --no-build --configuration $(buildConfiguration) --filter ((FullyQualifiedName~Melanchall.DryWetMidi.Tests.Core|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Common|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Composing|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Interaction|FullyQualifiedName~Melanchall.DryWetMidi.Tests.MusicTheory|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Standards|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Tools)&Name!=CheckValidFilesReadingByReferences) --framework $(Tfm) --verbosity normal -d diagnostic.log'
+        
+    - task: PowerShell@2
+      displayName: Collect diagnostic reports
+      condition: and(failed(), eq(variables.VmImage, 'macos-latest'))
+      inputs:
+        targetType: 'inline'
+        script: |
+          Write-Host "Checking if diagnostic reports created..."
+          Start-Sleep -s 10
+          
+          $path = "$HOME/Library/Logs/DiagnosticReports"
+          
+          if (Test-Path -Path "$path")
+          {
+            Write-Host "There are diagnostic reports, copying..."
+            Copy-Item -Path "$path" -Destination "$(Pipeline.Workspace)" -Recurse
+            Write-Host "##vso[task.setvariable variable=DiagnosticReportsFound]true"
+          }
+          else
+          {
+            Write-Host "There are no diagnostic reports found."
+            Write-Host "##vso[task.setvariable variable=DiagnosticReportsFound]false"
+          }
+          
+    - task: PublishPipelineArtifact@1
+      displayName: Publish 'DiagnosticReports' artifact
+      condition: eq(variables['DiagnosticReportsFound'], true)
+      inputs:
+        targetPath: '$(Pipeline.Workspace)/DiagnosticReports'
+        artifactName: 'DiagnosticReports'
+        artifactType: pipeline
+        
+    - template: Templates/step-collect-logs.yaml
