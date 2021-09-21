@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using Melanchall.DryWetMidi.Common;
 
@@ -9,10 +10,18 @@ namespace Melanchall.DryWetMidi.Core
     /// </summary>
     public sealed class BytesToMidiEventConverter : IDisposable
     {
+        #region Constants
+
+        private static readonly IEventReader MetaEventReader = new MetaEventReader();
+
+        #endregion
+
         #region Fields
 
         private readonly MemoryStream _dataBytesStream;
         private readonly MidiReader _midiReader;
+
+        private FfStatusBytePolicy _ffStatusBytePolicy = FfStatusBytePolicy.ReadAsResetEvent;
 
         private bool _disposed;
 
@@ -51,9 +60,72 @@ namespace Melanchall.DryWetMidi.Core
         /// </summary>
         public ReadingSettings ReadingSettings { get; } = new ReadingSettings();
 
+        public FfStatusBytePolicy FfStatusBytePolicy
+        {
+            get { return _ffStatusBytePolicy; }
+            set
+            {
+                ThrowIfArgument.IsInvalidEnumValue(nameof(value), value);
+                _ffStatusBytePolicy = value;
+            }
+        }
+
         #endregion
 
         #region Methods
+
+        public ICollection<MidiEvent> ConvertMultiple(byte[] bytes, int offset, int length)
+        {
+            ThrowIfArgument.IsNull(nameof(bytes), bytes);
+            ThrowIfArgument.IsEmptyCollection(nameof(bytes), bytes, "Bytes is empty array.");
+            ThrowIfArgument.IsOutOfRange(nameof(offset), offset, 0, bytes.Length - 1, "Offset is out of range.");
+            ThrowIfArgument.IsOutOfRange(nameof(length), length, 0, bytes.Length - offset, "Length is out of range.");
+
+            PrepareStreamWithBytes(bytes, offset, length);
+
+            var result = new List<MidiEvent>();
+            byte? channelEventStatusByte = null;
+
+            try
+            {
+                while (_midiReader.Position < length)
+                {
+                    var statusByte = _midiReader.ReadByte();
+                    if (statusByte <= SevenBitNumber.MaxValue)
+                    {
+                        if (channelEventStatusByte == null)
+                            throw new UnexpectedRunningStatusException();
+
+                        statusByte = channelEventStatusByte.Value;
+                        _midiReader.Position--;
+                    }
+
+                    var midiEvent = ReadEvent(statusByte);
+                    if (midiEvent is ChannelEvent)
+                        channelEventStatusByte = statusByte;
+
+                    result.Add(midiEvent);
+                }
+            }
+            catch (EndOfStreamException ex)
+            {
+                switch (ReadingSettings.NotEnoughBytesPolicy)
+                {
+                    case NotEnoughBytesPolicy.Abort:
+                        throw new NotEnoughBytesException("Not enough bytes to read an event.", ex);
+                }
+            }
+
+            return result;
+        }
+
+        public ICollection<MidiEvent> ConvertMultiple(byte[] bytes)
+        {
+            ThrowIfArgument.IsNull(nameof(bytes), bytes);
+            ThrowIfArgument.IsEmptyCollection(nameof(bytes), bytes, "Bytes is empty array.");
+
+            return ConvertMultiple(bytes, 0, bytes.Length);
+        }
 
         // TODO: improve performance
         /// <summary>
@@ -65,14 +137,8 @@ namespace Melanchall.DryWetMidi.Core
         /// <returns><see cref="MidiEvent"/> read from <paramref name="statusByte"/> and <paramref name="dataBytes"/>.</returns>
         public MidiEvent Convert(byte statusByte, byte[] dataBytes)
         {
-            _dataBytesStream.Seek(0, SeekOrigin.Begin);
-            if (dataBytes != null)
-                _dataBytesStream.Write(dataBytes, 0, dataBytes.Length);
-            
-            _midiReader.Position = 0;
-
-            var eventReader = EventReaderFactory.GetReader(statusByte, smfOnly: false);
-            return eventReader.Read(_midiReader, ReadingSettings, statusByte);
+            PrepareStreamWithBytes(dataBytes, 0, dataBytes?.Length ?? 0);
+            return ReadEvent(statusByte); ;
         }
 
         /// <summary>
@@ -123,6 +189,24 @@ namespace Melanchall.DryWetMidi.Core
             Array.Copy(bytes, offset + 1, dataBytes, 0, dataBytes.Length);
 
             return Convert(bytes[offset], dataBytes);
+        }
+
+        private void PrepareStreamWithBytes(byte[] bytes, int offset, int length)
+        {
+            _dataBytesStream.Seek(0, SeekOrigin.Begin);
+            if (bytes != null)
+                _dataBytesStream.Write(bytes, offset, length);
+
+            _midiReader.Position = 0;
+        }
+
+        private MidiEvent ReadEvent(byte statusByte)
+        {
+            var eventReader = EventReaderFactory.GetReader(statusByte, smfOnly: false);
+            if (statusByte == 0xFF && FfStatusBytePolicy == FfStatusBytePolicy.ReadAsMetaEvent)
+                eventReader = MetaEventReader;
+
+            return eventReader.Read(_midiReader, ReadingSettings, statusByte);
         }
 
         #endregion
