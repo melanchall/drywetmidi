@@ -117,6 +117,43 @@ namespace Melanchall.DryWetMidi.Tests.Core
         }
 
         [Test]
+        public void Convert_ReadDeltaTimes()
+        {
+            using (var bytesToMidiEventConverter = new BytesToMidiEventConverter())
+            {
+                bytesToMidiEventConverter.ReadDeltaTimes = true;
+
+                Convert_Bytes(
+                    bytesToMidiEventConverter,
+                    new byte[] { 0x7A, 0x92, 0x12, 0x00 },
+                    new NoteOffEvent((SevenBitNumber)0x12, (SevenBitNumber)0x00)
+                    {
+                        Channel = (FourBitNumber)0x2,
+                        DeltaTime = 0x7A
+                    });
+            }
+        }
+
+        [Test]
+        public void Convert_ReadDeltaTimes_Settings()
+        {
+            using (var bytesToMidiEventConverter = new BytesToMidiEventConverter())
+            {
+                bytesToMidiEventConverter.ReadDeltaTimes = true;
+                bytesToMidiEventConverter.ReadingSettings.SilentNoteOnPolicy = SilentNoteOnPolicy.NoteOn;
+
+                Convert_Bytes(
+                    bytesToMidiEventConverter,
+                    new byte[] { 0x7A, 0x92, 0x12, 0x00 },
+                    new NoteOnEvent((SevenBitNumber)0x12, (SevenBitNumber)0x00)
+                    {
+                        Channel = (FourBitNumber)0x2,
+                        DeltaTime = 0x7A
+                    });
+            }
+        }
+
+        [Test]
         public void ConvertMultiple_Bytes()
         {
             using (var bytesToMidiEventConverter = new BytesToMidiEventConverter())
@@ -133,6 +170,36 @@ namespace Melanchall.DryWetMidi.Tests.Core
                         new NoteOffEvent((SevenBitNumber)0x12, (SevenBitNumber)0x00)
                         {
                             Channel = (FourBitNumber)0x0
+                        },
+                        new ControlChangeEvent((SevenBitNumber)0x23, (SevenBitNumber)0x7F)
+                        {
+                            Channel = (FourBitNumber)0x3
+                        }
+                    });
+            }
+        }
+
+        [Test]
+        public void ConvertMultiple_Bytes_DeltaTimes()
+        {
+            using (var bytesToMidiEventConverter = new BytesToMidiEventConverter())
+            {
+                bytesToMidiEventConverter.ReadDeltaTimes = true;
+
+                ConvertMultiple_Bytes(
+                    bytesToMidiEventConverter,
+                    new byte[] { 0x30, 0x92, 0x12, 0x56, 0x81, 0x00, 0x90, 0x12, 0x00, 0x00, 0xB3, 0x23, 0x7F },
+                    new MidiEvent[]
+                    {
+                        new NoteOnEvent((SevenBitNumber)0x12, (SevenBitNumber)0x56)
+                        {
+                            Channel = (FourBitNumber)0x2,
+                            DeltaTime = 0x30
+                        },
+                        new NoteOffEvent((SevenBitNumber)0x12, (SevenBitNumber)0x00)
+                        {
+                            Channel = (FourBitNumber)0x0,
+                            DeltaTime = 128
                         },
                         new ControlChangeEvent((SevenBitNumber)0x23, (SevenBitNumber)0x7F)
                         {
@@ -353,7 +420,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
             MidiAsserts.AreEventsEqual(
                 expectedMidiEvent,
                 actualMidiEvent,
-                false,
+                true,
                 "MIDI event read incorrectly.");
         }
 
@@ -362,7 +429,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
             MidiAsserts.AreEqual(
                 expectedMidiEvents,
                 actualMidiEvents,
-                false,
+                true,
                 "MIDI event read incorrectly.");
         }
 

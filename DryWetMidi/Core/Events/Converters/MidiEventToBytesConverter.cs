@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using Melanchall.DryWetMidi.Common;
 
@@ -51,6 +52,8 @@ namespace Melanchall.DryWetMidi.Core
         /// </summary>
         public WritingSettings WritingSettings { get; } = new WritingSettings();
 
+        public bool WriteDeltaTimes { get; set; }
+
         #endregion
 
         #region Methods
@@ -83,17 +86,75 @@ namespace Melanchall.DryWetMidi.Core
             ThrowIfArgument.IsNull(nameof(midiEvent), midiEvent);
             ThrowIfArgument.IsNegative(nameof(minSize), minSize, "Min size is negative.");
 
-            _dataBytesStream.Seek(0, SeekOrigin.Begin);
+            PrepareStream();
+
+            if (WriteDeltaTimes)
+                _midiWriter.WriteVlqNumber(midiEvent.DeltaTime);
 
             var eventWriter = EventWriterFactory.GetWriter(midiEvent);
             eventWriter.Write(midiEvent, _midiWriter, WritingSettings, true);
 
+            return GetBytes(minSize);
+        }
+
+        public byte[] Convert(IEnumerable<MidiEvent> midiEvents)
+        {
+            ThrowIfArgument.IsNull(nameof(midiEvents), midiEvents);
+
+            PrepareStream();
+
+            byte? runningStatus = null;
+
+            foreach (var midiEvent in midiEvents)
+            {
+                var eventToWrite = midiEvent;
+
+                if (WritingSettings.NoteOffAsSilentNoteOn)
+                {
+                    var noteOffEvent = eventToWrite as NoteOffEvent;
+                    if (noteOffEvent != null)
+                        eventToWrite = new NoteOnEvent
+                        {
+                            DeltaTime = noteOffEvent.DeltaTime,
+                            Channel = noteOffEvent.Channel,
+                            NoteNumber = noteOffEvent.NoteNumber
+                        };
+                }
+
+                if (WriteDeltaTimes)
+                    _midiWriter.WriteVlqNumber(midiEvent.DeltaTime);
+
+                var eventWriter = EventWriterFactory.GetWriter(midiEvent);
+
+                var writeStatusByte = true;
+                if (eventToWrite is ChannelEvent)
+                {
+                    var statusByte = eventWriter.GetStatusByte(eventToWrite);
+                    writeStatusByte = runningStatus != statusByte || !WritingSettings.UseRunningStatus;
+                    runningStatus = statusByte;
+                }
+                else
+                    runningStatus = null;
+
+                eventWriter.Write(midiEvent, _midiWriter, WritingSettings, writeStatusByte);
+            }
+
+            return GetBytes(0);
+        }
+
+        private byte[] GetBytes(int minSize)
+        {
             var buffer = _dataBytesStream.GetBuffer();
             var dataSize = _dataBytesStream.Position;
             var result = new byte[Math.Max(dataSize, minSize)];
             Array.Copy(buffer, 0, result, 0, dataSize);
 
             return result;
+        }
+
+        private void PrepareStream()
+        {
+            _dataBytesStream.Seek(0, SeekOrigin.Begin);
         }
 
         #endregion

@@ -60,6 +60,8 @@ namespace Melanchall.DryWetMidi.Core
         /// </summary>
         public ReadingSettings ReadingSettings { get; } = new ReadingSettings();
 
+        public bool ReadDeltaTimes { get; set; }
+
         public FfStatusBytePolicy FfStatusBytePolicy
         {
             get { return _ffStatusBytePolicy; }
@@ -90,6 +92,15 @@ namespace Melanchall.DryWetMidi.Core
             {
                 while (_midiReader.Position < length)
                 {
+                    long deltaTime = 0;
+
+                    if (ReadDeltaTimes)
+                    {
+                        deltaTime = _midiReader.ReadVlqLongNumber();
+                        if (deltaTime < 0)
+                            deltaTime = 0;
+                    }
+
                     var statusByte = _midiReader.ReadByte();
                     if (statusByte <= SevenBitNumber.MaxValue)
                     {
@@ -104,6 +115,7 @@ namespace Melanchall.DryWetMidi.Core
                     if (midiEvent is ChannelEvent)
                         channelEventStatusByte = statusByte;
 
+                    midiEvent.DeltaTime = deltaTime;
                     result.Add(midiEvent);
                 }
             }
@@ -138,7 +150,7 @@ namespace Melanchall.DryWetMidi.Core
         public MidiEvent Convert(byte statusByte, byte[] dataBytes)
         {
             PrepareStreamWithBytes(dataBytes, 0, dataBytes?.Length ?? 0);
-            return ReadEvent(statusByte); ;
+            return ReadEvent(statusByte);
         }
 
         /// <summary>
@@ -185,10 +197,22 @@ namespace Melanchall.DryWetMidi.Core
             ThrowIfArgument.IsOutOfRange(nameof(offset), offset, 0, bytes.Length - 1, "Offset is out of range.");
             ThrowIfArgument.IsOutOfRange(nameof(length), length, 0, bytes.Length - offset, "Length is out of range.");
 
-            var dataBytes = new byte[bytes.Length - 1 - offset];
-            Array.Copy(bytes, offset + 1, dataBytes, 0, dataBytes.Length);
+            PrepareStreamWithBytes(bytes, offset, length);
 
-            return Convert(bytes[offset], dataBytes);
+            long deltaTime = 0;
+
+            if (ReadDeltaTimes)
+            {
+                deltaTime = _midiReader.ReadVlqLongNumber();
+                if (deltaTime < 0)
+                    deltaTime = 0;
+            }
+
+            var statusByte = _midiReader.ReadByte();
+            var midiEvent = ReadEvent(statusByte);
+            midiEvent.DeltaTime = deltaTime;
+
+            return midiEvent;
         }
 
         private void PrepareStreamWithBytes(byte[] bytes, int offset, int length)
