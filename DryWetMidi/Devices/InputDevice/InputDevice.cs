@@ -62,7 +62,7 @@ namespace Melanchall.DryWetMidi.Devices
             : base(info, context)
         {
             _apiType = CommonApiProvider.Api.Api_GetApiType();
-            _bytesToMidiEventConverter.ReadingSettings.SilentNoteOnPolicy = SilentNoteOnPolicy.NoteOn;
+            _bytesToMidiEventConverter.SilentNoteOnPolicy = SilentNoteOnPolicy.NoteOn;
         }
 
         #endregion
@@ -116,12 +116,12 @@ namespace Melanchall.DryWetMidi.Devices
         /// <exception cref="InvalidEnumArgumentException"><paramref name="value"/> specified an invalid value.</exception>
         public SilentNoteOnPolicy SilentNoteOnPolicy
         {
-            get { return _bytesToMidiEventConverter.ReadingSettings.SilentNoteOnPolicy; }
+            get { return _bytesToMidiEventConverter.SilentNoteOnPolicy; }
             set
             {
                 ThrowIfArgument.IsInvalidEnumValue(nameof(value), value);
 
-                _bytesToMidiEventConverter.ReadingSettings.SilentNoteOnPolicy = value;
+                _bytesToMidiEventConverter.SilentNoteOnPolicy = value;
             }
         }
 

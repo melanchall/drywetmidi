@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
+using System.Text;
 using Melanchall.DryWetMidi.Common;
 
 namespace Melanchall.DryWetMidi.Core
@@ -56,9 +58,139 @@ namespace Melanchall.DryWetMidi.Core
         #region Properties
 
         /// <summary>
-        /// Gets settings according to which MIDI data should be read from bytes.
+        /// Gets or sets reaction of the reading engine on <c>Note On</c> events with velocity of zero.
+        /// The default is <see cref="SilentNoteOnPolicy.NoteOff"/>.
         /// </summary>
-        public ReadingSettings ReadingSettings { get; } = new ReadingSettings();
+        /// <remarks>
+        /// <para>Although it is recommended to treat silent <c>Note On</c> event as <c>Note Off</c> you can turn
+        /// this behavior off to get original event.</para>
+        /// </remarks>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="value"/> specified an invalid value.</exception>
+        public SilentNoteOnPolicy SilentNoteOnPolicy
+        {
+            get { return ReadingSettings.SilentNoteOnPolicy; }
+            set { ReadingSettings.SilentNoteOnPolicy = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets reaction of the reading engine on invalid value of a channel event's
+        /// parameter value. The default is <see cref="InvalidChannelEventParameterValuePolicy.Abort"/>.
+        /// </summary>
+        /// <remarks>
+        /// <para>Valid values are 0-127 so, for example, 128 is the invalid one
+        /// and will be processed according with this policy. If <see cref="InvalidChannelEventParameterValuePolicy.Abort"/>
+        /// is used, an instance of the <see cref="InvalidChannelEventParameterValueException"/> will be thrown if
+        /// event's parameter value just read is invalid.</para>
+        /// </remarks>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="value"/> specified an invalid value.</exception>
+        public InvalidChannelEventParameterValuePolicy InvalidChannelEventParameterValuePolicy
+        {
+            get { return ReadingSettings.InvalidChannelEventParameterValuePolicy; }
+            set { ReadingSettings.InvalidChannelEventParameterValuePolicy = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets reaction of the reading engine on invalid value of a meta event's
+        /// parameter value. The default is <see cref="InvalidMetaEventParameterValuePolicy.Abort"/>.
+        /// </summary>
+        /// <remarks>
+        /// <para>For example, 255 is the invalid value for the <see cref="KeySignatureEvent.Scale"/>
+        /// and will be processed according with this policy. If <see cref="InvalidMetaEventParameterValuePolicy.Abort"/>
+        /// is used, an instance of the <see cref="InvalidMetaEventParameterValueException"/> will be thrown if event's
+        /// parameter value just read is invalid.</para>
+        /// </remarks>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="value"/> specified an invalid value.</exception>
+        public InvalidMetaEventParameterValuePolicy InvalidMetaEventParameterValuePolicy
+        {
+            get { return ReadingSettings.InvalidMetaEventParameterValuePolicy; }
+            set { ReadingSettings.InvalidMetaEventParameterValuePolicy = value; }
+        }
+
+        // TODO: test
+        /// <summary>
+        /// Gets or sets reaction of the reading engine on invalid value of a system common event's
+        /// parameter value. The default is <see cref="InvalidSystemCommonEventParameterValuePolicy.Abort"/>.
+        /// </summary>
+        /// <remarks>
+        /// <para>For example, 255 is the invalid value for the <see cref="SongSelectEvent.Number"/>
+        /// and will be processed according with this policy. If <see cref="InvalidSystemCommonEventParameterValuePolicy.Abort"/>
+        /// is used, an instance of the <see cref="InvalidSystemCommonEventParameterValueException"/> will be thrown if event's
+        /// parameter value just read is invalid.</para>
+        /// </remarks>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="value"/> specified an invalid value.</exception>
+        public InvalidSystemCommonEventParameterValuePolicy InvalidSystemCommonEventParameterValuePolicy
+        {
+            get { return ReadingSettings.InvalidSystemCommonEventParameterValuePolicy; }
+            set { ReadingSettings.InvalidSystemCommonEventParameterValuePolicy = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets collection of custom meta events types.
+        /// </summary>
+        /// <remarks>
+        /// <para>Types within this collection must be derived from the <see cref="MetaEvent"/>
+        /// class and have parameterless constructor. No exception will be thrown
+        /// if some types don't meet these requirements.</para>
+        /// </remarks>
+        public EventTypesCollection CustomMetaEventTypes
+        {
+            get { return ReadingSettings.CustomMetaEventTypes; }
+            set { ReadingSettings.CustomMetaEventTypes = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets an <see cref="Encoding"/> that will be used to read the text of a
+        /// text-based meta events. The default is <see cref="Encoding.ASCII"/>.
+        /// </summary>
+        /// <remarks>
+        /// <para>Value of this property will be used only if <see cref="DecodeTextCallback"/> is not set.</para>
+        /// </remarks>
+        public Encoding TextEncoding
+        {
+            get { return ReadingSettings.TextEncoding; }
+            set { ReadingSettings.TextEncoding = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets a callback used to decode a string from the specified bytes during reading a text-based
+        /// meta event's text. The default is <c>null</c>.
+        /// </summary>
+        /// <remarks>
+        /// <para>If callback is not set, <see cref="TextEncoding"/> will be used.</para>
+        /// </remarks>
+        public DecodeTextCallback DecodeTextCallback
+        {
+            get { return ReadingSettings.DecodeTextCallback; }
+            set { ReadingSettings.DecodeTextCallback = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets reaction of the reading engine on zero-length objects such as strings or arrays.
+        /// The default is <see cref="ZeroLengthDataPolicy.ReadAsEmptyObject"/>.
+        /// </summary>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="value"/> specified an invalid value.</exception>
+        public ZeroLengthDataPolicy ZeroLengthDataPolicy
+        {
+            get { return ReadingSettings.ZeroLengthDataPolicy; }
+            set { ReadingSettings.ZeroLengthDataPolicy = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets reaction of the reading engine on lack of bytes in the underlying stream
+        /// that are needed to read MIDI data (for example, DWORD requires 4 bytes available).
+        /// The default is <see cref="NotEnoughBytesPolicy.Abort"/>.
+        /// </summary>
+        /// <remarks>
+        /// <para>If <see cref="NotEnoughBytesPolicy.Abort"/> is used, an instance of the
+        /// <see cref="NotEnoughBytesException"/> will be thrown if the reader's underlying stream doesn't
+        /// have enough bytes to read MIDI data.</para>
+        /// </remarks>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="value"/> specified an invalid value.</exception>
+        public NotEnoughBytesPolicy NotEnoughBytesPolicy
+        {
+            get { return ReadingSettings.NotEnoughBytesPolicy; }
+            set { ReadingSettings.NotEnoughBytesPolicy = value; }
+        }
 
         public bool ReadDeltaTimes { get; set; }
 
@@ -71,6 +203,8 @@ namespace Melanchall.DryWetMidi.Core
                 _ffStatusBytePolicy = value;
             }
         }
+
+        internal ReadingSettings ReadingSettings { get; } = new ReadingSettings();
 
         #endregion
 
@@ -121,7 +255,7 @@ namespace Melanchall.DryWetMidi.Core
             }
             catch (EndOfStreamException ex)
             {
-                switch (ReadingSettings.NotEnoughBytesPolicy)
+                switch (NotEnoughBytesPolicy)
                 {
                     case NotEnoughBytesPolicy.Abort:
                         throw new NotEnoughBytesException("Not enough bytes to read an event.", ex);

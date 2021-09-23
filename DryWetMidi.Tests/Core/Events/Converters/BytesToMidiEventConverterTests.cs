@@ -69,7 +69,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
         {
             using (var bytesToMidiEventConverter = new BytesToMidiEventConverter())
             {
-                bytesToMidiEventConverter.ReadingSettings.SilentNoteOnPolicy = SilentNoteOnPolicy.NoteOn;
+                bytesToMidiEventConverter.SilentNoteOnPolicy = SilentNoteOnPolicy.NoteOn;
 
                 Convert_Bytes(
                     bytesToMidiEventConverter,
@@ -140,7 +140,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
             using (var bytesToMidiEventConverter = new BytesToMidiEventConverter())
             {
                 bytesToMidiEventConverter.ReadDeltaTimes = true;
-                bytesToMidiEventConverter.ReadingSettings.SilentNoteOnPolicy = SilentNoteOnPolicy.NoteOn;
+                bytesToMidiEventConverter.SilentNoteOnPolicy = SilentNoteOnPolicy.NoteOn;
 
                 Convert_Bytes(
                     bytesToMidiEventConverter,
@@ -255,7 +255,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
         {
             using (var bytesToMidiEventConverter = new BytesToMidiEventConverter())
             {
-                bytesToMidiEventConverter.ReadingSettings.NotEnoughBytesPolicy = NotEnoughBytesPolicy.Ignore;
+                bytesToMidiEventConverter.NotEnoughBytesPolicy = NotEnoughBytesPolicy.Ignore;
 
                 ConvertMultiple_Bytes(
                     bytesToMidiEventConverter,
