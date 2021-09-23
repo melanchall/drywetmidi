@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using Melanchall.DryWetMidi.Common;
 
 namespace Melanchall.DryWetMidi.Core
@@ -14,6 +15,8 @@ namespace Melanchall.DryWetMidi.Core
 
         private readonly MemoryStream _dataBytesStream;
         private readonly MidiWriter _midiWriter;
+
+        private readonly WritingSettings _writingSettings = new WritingSettings();
 
         private bool _disposed;
 
@@ -48,9 +51,49 @@ namespace Melanchall.DryWetMidi.Core
         #region Properties
 
         /// <summary>
-        /// Gets settings according to which MIDI data should be write to bytes.
+        /// Gets or sets a value indicating whether 'running status' (to turn off writing of the status
+        /// bytes of consecutive events of the same type) should be used or not. The default value is <c>false</c>.
         /// </summary>
-        public WritingSettings WritingSettings { get; } = new WritingSettings();
+        public bool UseRunningStatus
+        {
+            get { return _writingSettings.UseRunningStatus; }
+            set { _writingSettings.UseRunningStatus = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether Note Off events should be written as Note On ones
+        /// with velocity of zero, or not. In conjunction with <see cref="UseRunningStatus"/> set to <c>true</c>
+        /// can give some compression of MIDI data. The default value is <c>false</c>.
+        /// </summary>
+        public bool NoteOffAsSilentNoteOn
+        {
+            get { return _writingSettings.NoteOffAsSilentNoteOn; }
+            set { _writingSettings.NoteOffAsSilentNoteOn = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets collection of custom meta events types.
+        /// </summary>
+        /// <remarks>
+        /// <para>Types within this collection must be derived from the <see cref="MetaEvent"/>
+        /// class and have parameterless constructor. No exception will be thrown
+        /// while writing a MIDI file if some types don't meet these requirements.</para>
+        /// </remarks>
+        public EventTypesCollection CustomMetaEventTypes
+        {
+            get { return _writingSettings.CustomMetaEventTypes; }
+            set { _writingSettings.CustomMetaEventTypes = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets an <see cref="Encoding"/> that will be used to write the text of a
+        /// text-based meta event. The default is <see cref="Encoding.ASCII"/>.
+        /// </summary>
+        public Encoding TextEncoding
+        {
+            get { return _writingSettings.TextEncoding; }
+            set { _writingSettings.TextEncoding = value; }
+        }
 
         public bool WriteDeltaTimes { get; set; }
 
@@ -92,7 +135,7 @@ namespace Melanchall.DryWetMidi.Core
                 _midiWriter.WriteVlqNumber(midiEvent.DeltaTime);
 
             var eventWriter = EventWriterFactory.GetWriter(midiEvent);
-            eventWriter.Write(midiEvent, _midiWriter, WritingSettings, true);
+            eventWriter.Write(midiEvent, _midiWriter, _writingSettings, true);
 
             return GetBytes(minSize);
         }
@@ -109,7 +152,7 @@ namespace Melanchall.DryWetMidi.Core
             {
                 var eventToWrite = midiEvent;
 
-                if (WritingSettings.NoteOffAsSilentNoteOn)
+                if (NoteOffAsSilentNoteOn)
                 {
                     var noteOffEvent = eventToWrite as NoteOffEvent;
                     if (noteOffEvent != null)
@@ -130,13 +173,13 @@ namespace Melanchall.DryWetMidi.Core
                 if (eventToWrite is ChannelEvent)
                 {
                     var statusByte = eventWriter.GetStatusByte(eventToWrite);
-                    writeStatusByte = runningStatus != statusByte || !WritingSettings.UseRunningStatus;
+                    writeStatusByte = runningStatus != statusByte || !UseRunningStatus;
                     runningStatus = statusByte;
                 }
                 else
                     runningStatus = null;
 
-                eventWriter.Write(midiEvent, _midiWriter, WritingSettings, writeStatusByte);
+                eventWriter.Write(midiEvent, _midiWriter, _writingSettings, writeStatusByte);
             }
 
             return GetBytes(0);

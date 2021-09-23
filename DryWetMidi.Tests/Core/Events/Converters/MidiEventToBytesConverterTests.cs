@@ -62,7 +62,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
         {
             using (var midiEventToBytesConverter = new MidiEventToBytesConverter())
             {
-                midiEventToBytesConverter.WritingSettings.TextEncoding = Encoding.UTF8;
+                midiEventToBytesConverter.TextEncoding = Encoding.UTF8;
 
                 var text = "Test▶▶▶";
                 var bytes = Encoding.UTF8.GetBytes(text);
@@ -163,7 +163,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
         {
             using (var midiEventToBytesConverter = new MidiEventToBytesConverter())
             {
-                midiEventToBytesConverter.WritingSettings.NoteOffAsSilentNoteOn = true;
+                midiEventToBytesConverter.NoteOffAsSilentNoteOn = true;
 
                 Convert(
                     midiEventToBytesConverter,
@@ -188,8 +188,8 @@ namespace Melanchall.DryWetMidi.Tests.Core
         {
             using (var midiEventToBytesConverter = new MidiEventToBytesConverter())
             {
-                midiEventToBytesConverter.WritingSettings.NoteOffAsSilentNoteOn = true;
-                midiEventToBytesConverter.WritingSettings.UseRunningStatus = true;
+                midiEventToBytesConverter.NoteOffAsSilentNoteOn = true;
+                midiEventToBytesConverter.UseRunningStatus = true;
 
                 Convert(
                     midiEventToBytesConverter,
@@ -224,7 +224,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
                     },
                     new byte[] { 0x92, 0x12, 0x56, 0x80, 0x12, 0x00 });
 
-                midiEventToBytesConverter.WritingSettings.TextEncoding = Encoding.UTF8;
+                midiEventToBytesConverter.TextEncoding = Encoding.UTF8;
 
                 var text = "Test▶▶▶";
                 var bytes = Encoding.UTF8.GetBytes(text);
