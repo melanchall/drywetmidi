@@ -10,20 +10,17 @@ trigger:
     - 'Resources/CI/build-artifacts-library.yaml'
     - 'Resources/CI/Templates/stage-build-native-libs.yaml'
     - 'Resources/CI/Templates/step-copy-native-libraries-near-csproj.yaml'
+    - 'Resources/CI/Templates/job-build-package.yaml'
     - 'Resources/Native/*'
 
 pr: none
 
 variables:
 - group: DryWetMIDI-Common-Variables
-- name: solution
-  value: '**/*.sln'
-- name: buildPlatform
-  value: 'Any CPU'
 - name: buildConfiguration
   value: 'Release'
 
-name: $(TeamProject)_$(SourceBranchName)_BuildLibrary_$(LibraryVersion)$(Rev:.r)
+name: BuildLibrary_$(LibraryVersion)$(Rev:.r)
 
 stages:
 - template: Templates/stage-build-native-libs.yaml
@@ -35,7 +32,6 @@ stages:
   - template: Templates/job-build-package.yaml
     parameters:
       buildConfiguration: $(buildConfiguration)
-      buildPlatform: $(buildPlatform)
   - job: BuildBinaries
     displayName: Build binaries
     steps:

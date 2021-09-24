@@ -7,61 +7,21 @@ pool:
 
 variables:
 - group: DryWetMIDI-Common-Variables
-- name: solution
-  value: '**/*.sln'
-- name: buildPlatform
-  value: 'Any CPU'
 - name: buildConfiguration
   value: 'Release'
 - name: prereleaseNumber
   value: $[counter(variables['LibraryVersion'], 1)]
 
-name: $(TeamProject)_$(SourceBranchName)_BuildLibraryPreRelease_$(LibraryVersion)$(Rev:.r)
+name: BuildLibrary_PreRelease_$(LibraryVersion)$(Rev:.r)
 
-steps:
-- task: PowerShell@2
-  displayName: Write prerelease version
-  inputs:
-    targetType: 'inline'
-    script: |
-      $filePath = Resolve-Path "DryWetMidi\Melanchall.DryWetMidi.csproj"
-      $xml = New-Object xml
-      $xml.PreserveWhitespace = $true
-      $xml.Load($filePath)
-      $version = $xml.Project.PropertyGroup[1].Version
-      Write-Host "Current version is $version"
-      Write-Host "Prerelease number is $(prereleaseNumber)"
-      $newVersion = $version + "-prerelease" + $(prereleaseNumber)
-      Write-Host "New version is $newVersion"
-      $xml.Project.PropertyGroup[1].Version = $newVersion
-      $xml.Save($filePath)
-
-- task: PowerShell@2
-  displayName: Generate obsolete API hints
-  inputs:
-    targetType: filePath
-    filePath: '$(Build.SourcesDirectory)/Resources/Scripts/Generate obsolete API hints.ps1'
-
-- task: DotNetCoreCLI@2
-  displayName: Build solution
-  inputs:
-    command: 'build'
-    projects: |
-      DryWetMidi/Melanchall.DryWetMidi.csproj
-    arguments: '--configuration $(buildConfiguration)'
-
-- task: DotNetCoreCLI@2
-  displayName: Create NuGet package
-  inputs: 
-    command: 'pack'
-    projects: 'DryWetMidi/Melanchall.DryWetMidi.csproj'
-    outputDir: '$(Build.ArtifactStagingDirectory)\NuGetPackage'
-    packagesToPack: 'DryWetMidi/Melanchall.DryWetMidi.csproj'
-    nobuild: true
-    buildProperties: 'RepositoryBranch="$(Build.SourceBranchName)'
-
-- task: PublishPipelineArtifact@1
-  displayName: Publish 'NuGetPackage' artifact
-  inputs:
-    targetPath: '$(Build.ArtifactStagingDirectory)\NuGetPackage'
-    artifact: NuGetPackage
+stages:
+- template: Templates/stage-build-native-libs.yaml
+- stage: BuildBinaries
+  displayName: Build binaries
+  pool:
+    vmImage: 'windows-latest'
+  jobs:
+  - template: Templates/job-build-package.yaml
+    parameters:
+      buildConfiguration: $(buildConfiguration)
+      prereleaseNumber: $(prereleaseNumber)

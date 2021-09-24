@@ -2,9 +2,10 @@ parameters:
 - name: buildConfiguration
   displayName: 'Build configuration'
   type: string
-- name: buildPlatform
-  displayName: 'Build platform'
+- name: prereleaseNumber
+  displayName: 'Pre-release number'
   type: string
+  default: ''
 
 jobs:
 - job: BuildPackage
@@ -17,6 +18,24 @@ jobs:
     inputs:
       source: 'current'
       path: '$(Pipeline.Workspace)\NativeLibraries'
+  
+  - ${{ if not(eq(parameters.prereleaseNumber, '')) }}:
+    - task: PowerShell@2
+      displayName: Write prerelease version
+      inputs:
+        targetType: 'inline'
+        script: |
+          $filePath = Resolve-Path "DryWetMidi\Melanchall.DryWetMidi.csproj"
+          $xml = New-Object xml
+          $xml.PreserveWhitespace = $true
+          $xml.Load($filePath)
+          $version = $xml.Project.PropertyGroup[1].Version
+          Write-Host "Current version is $version"
+          Write-Host "Prerelease number is ${{ parameters.prereleaseNumber }}"
+          $newVersion = $version + "-prerelease" + ${{ parameters.prereleaseNumber }}
+          Write-Host "New version is $newVersion"
+          $xml.Project.PropertyGroup[1].Version = $newVersion
+          $xml.Save($filePath)
   
   - task: PowerShell@2
     displayName: Generate obsolete API hints

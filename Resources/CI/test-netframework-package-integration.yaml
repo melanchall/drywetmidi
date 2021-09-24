@@ -10,19 +10,18 @@ trigger:
     - 'Resources/CI/test-netframework-package-integration.yaml'
     - 'Resources/CI/Templates/stage-build-native-libs.yaml'
     - 'Resources/CI/Templates/step-create-ports-windows.yaml'
+    - 'Resources/CI/Templates/job-build-package.yaml'
 
 pr: none
 
 variables:
 - group: DryWetMIDI-Common-Variables
-- name: solution
-  value: '**/*.sln'
-- name: buildPlatform
-  value: 'Any CPU'
 - name: buildConfiguration
   value: 'Release'
+- name: buildPlatform
+  value: 'Any CPU'
 
-name: $(TeamProject)_$(SourceBranchName)_TestPackageIntegration_NetFramework_$(LibraryVersion)$(Rev:.r)
+name: TestPackageIntegration_NetFramework_$(LibraryVersion)$(Rev:.r)
 
 stages:
 - template: Templates/stage-build-native-libs.yaml
@@ -35,7 +34,6 @@ stages:
   - template: Templates/job-build-package.yaml
     parameters:
       buildConfiguration: $(buildConfiguration)
-      buildPlatform: $(buildPlatform)
 
 - stage: TestPackageIntegration
   displayName: Test package integration
