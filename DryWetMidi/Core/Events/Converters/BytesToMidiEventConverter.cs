@@ -192,8 +192,18 @@ namespace Melanchall.DryWetMidi.Core
             set { ReadingSettings.NotEnoughBytesPolicy = value; }
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether incoming bytes array contains delta-times before
+        /// each event data (and thus they must be read) or not. The default value is <c>false</c>.
+        /// </summary>
         public bool ReadDeltaTimes { get; set; }
 
+        /// <summary>
+        /// Gets or sets reaction of the reading engine on 0xFF status byte since it can mean
+        /// either <see cref="ResetEvent"/> or <see cref="MetaEvent"/>.
+        /// The default is <see cref="FfStatusBytePolicy.ReadAsResetEvent"/>.
+        /// </summary>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="value"/> specified an invalid value.</exception>
         public FfStatusBytePolicy FfStatusBytePolicy
         {
             get { return _ffStatusBytePolicy; }
@@ -210,6 +220,36 @@ namespace Melanchall.DryWetMidi.Core
 
         #region Methods
 
+        /// <summary>
+        /// Converts sub-array of the specified bytes to a collection of <see cref="MidiEvent"/>. 
+        /// </summary>
+        /// <param name="bytes">Bytes to take sub-array from.</param>
+        /// <param name="offset">Offset of sub-array to read MIDI events from.</param>
+        /// <param name="length">Length of sub-array to read MIDI events from.</param>
+        /// <returns>Collection of <see cref="MidiEvent"/> read from <paramref name="bytes"/> starting from
+        /// <paramref name="offset"/> and taking <paramref name="length"/> of bytes.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="bytes"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentException"><paramref name="bytes"/> is an empty array.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="offset"/> is out of range.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="length"/> is out of range.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
+        /// <exception cref="InvalidChannelEventParameterValueException">Value of a channel event's parameter
+        /// just read is invalid (is out of [0; 127] range) and that should be treated as error according to the
+        /// <see cref="InvalidChannelEventParameterValuePolicy"/>.</exception>
+        /// <exception cref="InvalidMetaEventParameterValueException">Value of a meta event's parameter
+        /// just read is invalid and that should be treated as error according to the
+        /// <see cref="InvalidMetaEventParameterValuePolicy"/>.</exception>
+        /// <exception cref="NotEnoughBytesException">MIDI events data cannot be read since the sub-array <paramref name="bytes"/>
+        /// doesn't have enough bytes and that should be treated as error according to the <see cref="NotEnoughBytesPolicy"/>.</exception>
+        /// <exception cref="UnexpectedRunningStatusException">Unexpected running status is encountered.</exception>
         public ICollection<MidiEvent> ConvertMultiple(byte[] bytes, int offset, int length)
         {
             ThrowIfArgument.IsNull(nameof(bytes), bytes);
@@ -265,6 +305,22 @@ namespace Melanchall.DryWetMidi.Core
             return result;
         }
 
+        /// <summary>
+        /// Converts the specified bytes to a collection of <see cref="MidiEvent"/>. 
+        /// </summary>
+        /// <param name="bytes">Bytes to convert to collection of <see cref="MidiEvent"/>.</param>
+        /// <returns>Collection of <see cref="MidiEvent"/> read from <paramref name="bytes"/>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="bytes"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentException"><paramref name="bytes"/> is an empty array.</exception>
+        /// <exception cref="InvalidChannelEventParameterValueException">Value of a channel event's parameter
+        /// just read is invalid (is out of [0; 127] range) and that should be treated as error according to the
+        /// <see cref="InvalidChannelEventParameterValuePolicy"/>.</exception>
+        /// <exception cref="InvalidMetaEventParameterValueException">Value of a meta event's parameter
+        /// just read is invalid and that should be treated as error according to the
+        /// <see cref="InvalidMetaEventParameterValuePolicy"/>.</exception>
+        /// <exception cref="NotEnoughBytesException">MIDI events data cannot be read since the sub-array <paramref name="bytes"/>
+        /// doesn't have enough bytes and that should be treated as error according to the <see cref="NotEnoughBytesPolicy"/>.</exception>
+        /// <exception cref="UnexpectedRunningStatusException">Unexpected running status is encountered.</exception>
         public ICollection<MidiEvent> ConvertMultiple(byte[] bytes)
         {
             ThrowIfArgument.IsNull(nameof(bytes), bytes);
@@ -289,8 +345,12 @@ namespace Melanchall.DryWetMidi.Core
 
         /// <summary>
         /// Converts the specified bytes to an instance of the <see cref="MidiEvent"/>. First byte is
-        /// the status byte of MIDI event.
+        /// the status byte of MIDI event. If bytes array contains multiple events, only first one will be read.
         /// </summary>
+        /// <remarks>
+        /// Use <see cref="ConvertMultiple(byte[])"/> or <see cref="ConvertMultiple(byte[], int, int)"/> to read
+        /// multiple events.
+        /// </remarks>
         /// <param name="bytes">Bytes representing a MIDI event.</param>
         /// <returns><see cref="MidiEvent"/> read from <paramref name="bytes"/>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="bytes"/> is <c>null</c>.</exception>
@@ -304,8 +364,14 @@ namespace Melanchall.DryWetMidi.Core
         }
 
         /// <summary>
-        /// Converts sub-array of the specified bytes to an instance of the <see cref="MidiEvent"/>.
+        /// Converts sub-array of the specified bytes to an instance of the <see cref="MidiEvent"/>. First byte
+        /// at the specified offset is the status byte of MIDI event. If sub-array contains multiple events, only
+        /// first one will be read.
         /// </summary>
+        /// <remarks>
+        /// Use <see cref="ConvertMultiple(byte[])"/> or <see cref="ConvertMultiple(byte[], int, int)"/> to read
+        /// multiple events.
+        /// </remarks>
         /// <param name="bytes">Bytes to take sub-array from.</param>
         /// <param name="offset">Offset of sub-array to read MIDI event from.</param>
         /// <param name="length">Length of sub-array to read MIDI event from.</param>

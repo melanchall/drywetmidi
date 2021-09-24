@@ -95,6 +95,10 @@ namespace Melanchall.DryWetMidi.Core
             set { _writingSettings.TextEncoding = value; }
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether delta-times of events must be written to bytes
+        /// array or not. The default value is <c>false</c>.
+        /// </summary>
         public bool WriteDeltaTimes { get; set; }
 
         #endregion
@@ -140,6 +144,12 @@ namespace Melanchall.DryWetMidi.Core
             return GetBytes(minSize);
         }
 
+        /// <summary>
+        /// Converts collection of <see cref="MidiEvent"/> to bytes array.
+        /// </summary>
+        /// <param name="midiEvents">MIDI events to convert.</param>
+        /// <returns>Array of bytes representing <paramref name="midiEvents"/>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="midiEvents"/> is <c>null</c>.</exception>
         public byte[] Convert(IEnumerable<MidiEvent> midiEvents)
         {
             ThrowIfArgument.IsNull(nameof(midiEvents), midiEvents);
