@@ -53,6 +53,7 @@ namespace Melanchall.DryWetMidi.Devices
         private readonly Dictionary<MidiTimeCodeComponent, FourBitNumber> _midiTimeCodeComponents = new Dictionary<MidiTimeCodeComponent, FourBitNumber>();
 
         private readonly CommonApi.API_TYPE _apiType;
+        private readonly int _hashCode;
 
         #endregion
 
@@ -62,6 +63,7 @@ namespace Melanchall.DryWetMidi.Devices
             : base(info, context)
         {
             _apiType = CommonApiProvider.Api.Api_GetApiType();
+            _hashCode = InputDeviceApiProvider.Api.Api_GetDeviceHashCode(info);
             _bytesToMidiEventConverter.SilentNoteOnPolicy = SilentNoteOnPolicy.NoteOn;
         }
 
@@ -677,7 +679,7 @@ namespace Melanchall.DryWetMidi.Devices
         /// <returns>A hash code for the current object.</returns>
         public override int GetHashCode()
         {
-            return _info.ToInt32();
+            return _hashCode;
         }
 
         /// <summary>

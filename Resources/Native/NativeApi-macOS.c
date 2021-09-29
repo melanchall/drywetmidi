@@ -328,6 +328,12 @@ IN_GETINFORESULT GetInputDeviceInfo(int deviceIndex, void** info)
     return IN_GETINFORESULT_OK;
 }
 
+int GetInputDeviceHashCode(void* info)
+{
+    InputDeviceInfo* inputDeviceInfo = (InputDeviceInfo*)info;
+    return inputDeviceInfo->endpointRef;
+}
+
 char AreInputDevicesEqual(void* info1, void* info2)
 {
 	InputDeviceInfo* inputDeviceInfo1 = (InputDeviceInfo*)info1;
@@ -546,6 +552,12 @@ OUT_GETINFORESULT GetOutputDeviceInfo(int deviceIndex, void** info)
     *info = outputDeviceInfo;
 
     return OUT_GETINFORESULT_OK;
+}
+
+int GetOutputDeviceHashCode(void* info)
+{
+    OutputDeviceInfo* outputDeviceInfo = (OutputDeviceInfo*)info;
+    return outputDeviceInfo->endpointRef;
 }
 
 char AreOutputDevicesEqual(void* info1, void* info2)

@@ -165,6 +165,15 @@ namespace Melanchall.DryWetMidi.Tests.Devices
             Assert.AreEqual("Output device", outputDevice.ToString(), "Device string representation is invalid.");
         }
 
+        [Test]
+        public void GetOutputDeviceHashCode()
+        {
+            foreach (var outputDevice in OutputDevice.GetAll())
+            {
+                Assert.DoesNotThrow(() => outputDevice.GetHashCode(), $"Failed to get hash code for [{outputDevice.Name}].");
+            }
+        }
+
         #endregion
 
         #region Private methods

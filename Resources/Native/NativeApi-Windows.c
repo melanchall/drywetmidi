@@ -279,6 +279,11 @@ IN_GETINFORESULT GetInputDeviceInfo(int deviceIndex, void** info)
     return IN_GETINFORESULT_OK;
 }
 
+int GetInputDeviceHashCode(void* info)
+{
+    return 0;
+}
+
 IN_GETPROPERTYRESULT GetInputDeviceName(void* info, char** value)
 {
     InputDeviceInfo* inputDeviceInfo = (InputDeviceInfo*)info;
@@ -572,6 +577,11 @@ OUT_GETINFORESULT GetOutputDeviceInfo(int deviceIndex, void** info)
     *info = outputDeviceInfo;
 
     return OUT_GETINFORESULT_OK;
+}
+
+int GetOutputDeviceHashCode(void* info)
+{
+    return 0;
 }
 
 OUT_GETPROPERTYRESULT GetOutputDeviceName(void* info, char** value)

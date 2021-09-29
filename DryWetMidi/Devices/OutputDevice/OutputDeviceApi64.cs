@@ -20,6 +20,9 @@ namespace Melanchall.DryWetMidi.Devices
         private static extern OUT_GETINFORESULT GetOutputDeviceInfo(int deviceIndex, out IntPtr info);
 
         [DllImport(LibraryName, ExactSpelling = true)]
+        private static extern int GetOutputDeviceHashCode(IntPtr info);
+
+        [DllImport(LibraryName, ExactSpelling = true)]
         private static extern bool AreOutputDevicesEqual(IntPtr info1, IntPtr info2);
 
         [DllImport(LibraryName, ExactSpelling = true)]
@@ -91,6 +94,11 @@ namespace Melanchall.DryWetMidi.Devices
         public override OUT_GETINFORESULT Api_GetDeviceInfo(int deviceIndex, out IntPtr info)
         {
             return GetOutputDeviceInfo(deviceIndex, out info);
+        }
+
+        public override int Api_GetDeviceHashCode(IntPtr info)
+        {
+            return GetOutputDeviceHashCode(info);
         }
 
         public override bool Api_AreDevicesEqual(IntPtr info1, IntPtr info2)

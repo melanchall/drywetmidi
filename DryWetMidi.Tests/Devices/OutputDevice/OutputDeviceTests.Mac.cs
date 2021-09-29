@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Devices;
 using Melanchall.DryWetMidi.Tests.Common;
@@ -202,6 +203,21 @@ namespace Melanchall.DryWetMidi.Tests.Devices
         {
             var outputDevice = GetVirtualDeviceOutputDevice();
             Assert.AreEqual("Output device (subdevice of a virtual device)", outputDevice.ToString(), "Device string representation is invalid.");
+        }
+
+        [Test]
+        [Platform("MacOsX")]
+        public void FindOutputDeviceInDictionary()
+        {
+            var label = "X";
+            var dictionary = new Dictionary<MidiDevice, string>
+            {
+                [OutputDevice.GetByName(MidiDevicesNames.DeviceA)] = label
+            };
+
+            var outputDevice = OutputDevice.GetByName(MidiDevicesNames.DeviceA);
+            Assert.IsTrue(dictionary.TryGetValue(outputDevice, out var value), "Failed to find device in dictionary.");
+            Assert.AreEqual(label, value, "Device label is invalid.");
         }
 
         #endregion
