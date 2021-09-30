@@ -89,7 +89,7 @@ stages:
           cd DryWetMidi.Tests
           gcc -c SendTestData.c
           gcc -shared -framework CoreServices -framework CoreMIDI -framework CoreFoundation -o SendTestData.dylib SendTestData.o
-          Copy-Item -Path "SendTestData.dylib" -Destination "bin/$(buildConfiguration)/netcoreapp3.1" -Recurse
+          Copy-Item -Path "SendTestData.dylib" -Destination "bin/$(buildConfiguration)/$(Tfm)" -Recurse
           
     - task: PublishPipelineArtifact@1
       displayName: Publish 'SendTestData' artifact
