@@ -11,6 +11,7 @@ trigger:
     - 'Resources/CI/Templates/stage-build-native-libs.yaml'
     - 'Resources/CI/Templates/step-create-ports-windows.yaml'
     - 'Resources/CI/Templates/job-build-package.yaml'
+    - 'Resources/PackageIntegrationTestUtilities/DwmNetFrameworkConsoleApp/*'
 
 pr: none
 
@@ -108,11 +109,6 @@ stages:
           nuget sources Add -Name NuGetPackages -Source "$(Pipeline.Workspace)\NuGetPackage"
           $path = Resolve-Path 'Resources\PackageIntegrationTestUtilities\DwmNetFrameworkConsoleApp\DwmNetFrameworkConsoleApp\DwmNetFrameworkConsoleApp.csproj'
           nuget restore "$path" -Source NuGetPackages -SolutionDirectory "Resources\PackageIntegrationTestUtilities\DwmNetFrameworkConsoleApp"
-
-    - task: NuGetToolInstaller@1
-      displayName: Build test program
-      inputs:
-        versionSpec: '5.11.0'
 
     - task: VSBuild@1
       displayName: Build test program

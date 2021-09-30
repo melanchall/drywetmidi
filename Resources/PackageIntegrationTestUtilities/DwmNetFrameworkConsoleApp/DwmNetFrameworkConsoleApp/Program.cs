@@ -9,6 +9,8 @@ namespace DwmNetFrameworkConsoleApp
 {
     class Program
     {
+        private static int _playedEventsCount = 0;
+
         static void Main(string[] args)
         {
             Console.WriteLine($"Is 64-bit operating system: {Environment.Is64BitOperatingSystem}");
@@ -31,7 +33,7 @@ namespace DwmNetFrameworkConsoleApp
                 playback.EventPlayed += OnEventPlayed;
                 playback.Start();
 
-                SpinWait.SpinUntil(() => !playback.IsRunning);
+                SpinWait.SpinUntil(() => !playback.IsRunning && _playedEventsCount == 2);
             }
 
             Console.WriteLine("Played.");
@@ -40,6 +42,7 @@ namespace DwmNetFrameworkConsoleApp
         private static void OnEventPlayed(object sender, MidiEventPlayedEventArgs e)
         {
             Console.WriteLine($"Event played: {e.Event}");
+            _playedEventsCount++;
         }
     }
 }
