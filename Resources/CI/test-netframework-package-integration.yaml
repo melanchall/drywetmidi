@@ -116,6 +116,7 @@ stages:
         solution: 'Resources\PackageIntegrationTestUtilities\DwmNetFrameworkConsoleApp\DwmNetFrameworkConsoleApp.sln'
         platform: $(buildPlatform)
         configuration: $(buildConfiguration)
+        msbuildArgs: '/p:CustomBeforeMicrosoftCSharpTargets="$(Build.SourcesDirectory)\Resources\PackageIntegrationTestUtilities\DwmNetFrameworkConsoleApp\packages\Melanchall.DryWetMidi.$(LibraryVersion)\build\Melanchall.DryWetMidi.targets"'
     
     - task: PowerShell@2
       displayName: Run test program
