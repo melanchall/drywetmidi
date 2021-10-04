@@ -58,6 +58,31 @@ namespace Melanchall.DryWetMidi.Core
         #region Properties
 
         /// <summary>
+        /// Gets or sets reaction of the reading engine on unknown channel event. The default is
+        /// <see cref="UnknownChannelEventPolicy.Abort"/>.
+        /// </summary>
+        /// <remarks>
+        /// <para>If <see cref="UnknownChannelEventPolicy.Abort"/> is used, an instance of the
+        /// <see cref="UnknownChannelEventException"/> will be thrown if channel event has unknown status byte.</para>
+        /// </remarks>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="value"/> specified an invalid value.</exception>
+        public UnknownChannelEventPolicy UnknownChannelEventPolicy
+        {
+            get { return ReadingSettings.UnknownChannelEventPolicy; }
+            set { ReadingSettings.UnknownChannelEventPolicy = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets a callback used to read unknown channel event if <see cref="UnknownChannelEventPolicy"/>
+        /// set to <see cref="UnknownChannelEventPolicy.UseCallback"/>.
+        /// </summary>
+        public UnknownChannelEventCallback UnknownChannelEventCallback
+        {
+            get { return ReadingSettings.UnknownChannelEventCallback; }
+            set { ReadingSettings.UnknownChannelEventCallback = value; }
+        }
+
+        /// <summary>
         /// Gets or sets reaction of the reading engine on <c>Note On</c> events with velocity of zero.
         /// The default is <see cref="SilentNoteOnPolicy.NoteOff"/>.
         /// </summary>
