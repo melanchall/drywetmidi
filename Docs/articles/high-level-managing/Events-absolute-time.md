@@ -1,3 +1,7 @@
+---
+uid: a_events_abs_time
+---
+
 # Events absolute time
 
 [MidiEvent](xref:Melanchall.DryWetMidi.Core.MidiEvent) has the [DeltaTime](xref:Melanchall.DryWetMidi.Core.MidiEvent.DeltaTime) property which provides offset from previous event in units defined by the time division of a MIDI file. But in practice it is more useful to operate by **absolute times** rather than relative ones. Absolute time of a MIDI event is a sum of all delta-times before this event including delta-time of the current one. DryWetMIDI provides a way to manage MIDI events by absolute times:

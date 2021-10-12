@@ -20,6 +20,7 @@
 ### [MusicalTimeSpan](high-level-managing/MusicalTimeSpan.md)
 ### [BarBeatTicksTimeSpan](high-level-managing/BarBeatTicksTimeSpan.md)
 ### [BarBeatFractionTimeSpan](high-level-managing/BarBeatFractionTimeSpan.md)
+## [Getting objects](high-level-managing/Getting-objects.md)
 
 # Tools
 ## [Overview](tools/Overview.md)
@@ -47,6 +48,8 @@
 ## [Input device](devices/Input-device.md)
 ## [Output device](devices/Output-device.md)
 ## [Devices connector](devices/Devices-connector.md)
+## [Virtual device](devices/Virtual-device.md)
+## [Devices watcher](devices/Devices-watcher.md)
 ## [Common problems](devices/Common-problems.md)
 
 # Playback

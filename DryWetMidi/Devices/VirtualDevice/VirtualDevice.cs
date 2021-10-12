@@ -9,7 +9,7 @@ namespace Melanchall.DryWetMidi.Devices
     /// <remarks>
     /// Virtual MIDI device (cable) has two endpoints: <see cref="InputDevice"/> and <see cref="OutputDevice"/>.
     /// All MIDI data sent to <see cref="OutputDevice"/> can be received from the cable via <see cref="InputDevice"/>,
-    /// so it's a loopback device.
+    /// so it's a loopback device. Please see <see href="xref:a_dev_virtual">Virtual device</see> article to learn more.
     /// </remarks>
     public sealed class VirtualDevice : MidiDevice
     {

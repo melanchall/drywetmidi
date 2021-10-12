@@ -6,6 +6,10 @@ namespace Melanchall.DryWetMidi.Interaction
     /// <summary>
     /// Settings which define how rests should be detected and built.
     /// </summary>
+    /// <remarks>
+    /// Please see <see href="xref:a_getting_objects#rests">Getting objects
+    /// (section GetObjects → Rests)</see> article to learn more.
+    /// </remarks>
     public sealed class RestDetectionSettings
     {
         #region Fields

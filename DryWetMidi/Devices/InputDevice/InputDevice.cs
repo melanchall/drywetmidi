@@ -627,6 +627,10 @@ namespace Melanchall.DryWetMidi.Devices
         /// <summary>
         /// Determines if two <see cref="InputDevice"/> objects are equal.
         /// </summary>
+        /// <remarks>
+        /// On Windows the operator will just compare objects references. "True" equality check available
+        /// on macOS only.
+        /// </remarks>
         /// <param name="inputDevice1">The first <see cref="InputDevice"/> to compare.</param>
         /// <param name="inputDevice2">The second <see cref="InputDevice"/> to compare.</param>
         /// <returns><c>true</c> if the devices are equal, <c>false</c> otherwise.</returns>
@@ -644,6 +648,10 @@ namespace Melanchall.DryWetMidi.Devices
         /// <summary>
         /// Determines if two <see cref="InputDevice"/> objects are not equal.
         /// </summary>
+        /// <remarks>
+        /// On Windows the operator will just compare objects references. "True" inequality check available
+        /// on macOS only.
+        /// </remarks>
         /// <param name="inputDevice1">The first <see cref="InputDevice"/> to compare.</param>
         /// <param name="inputDevice2">The second <see cref="InputDevice"/> to compare.</param>
         /// <returns><c>false</c> if the devices are equal, <c>true</c> otherwise.</returns>
@@ -659,6 +667,10 @@ namespace Melanchall.DryWetMidi.Devices
         /// <summary>
         /// Determines whether the specified object is equal to the current object.
         /// </summary>
+        /// <remarks>
+        /// On Windows the method will just compare objects references. "True" equality check available
+        /// on macOS only.
+        /// </remarks>
         /// <param name="obj">The object to compare with the current object.</param>
         /// <returns><c>true</c> if the specified object is equal to the current object; otherwise, <c>false</c>.</returns>
         public override bool Equals(object obj)

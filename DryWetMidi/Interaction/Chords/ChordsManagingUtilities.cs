@@ -1036,11 +1036,6 @@ namespace Melanchall.DryWetMidi.Interaction
                 if (getSealedOnly && !chordDescriptor.IsSealed)
                     break;
 
-                foreach (var noteNode in chordDescriptor.NotesNodes)
-                {
-                    timedObjects.Remove(noteNode);
-                }
-
                 if (chordDescriptor.IsCompleted)
                 {
                     var notesCount = chordDescriptor.NotesNodes.Count;
@@ -1049,6 +1044,9 @@ namespace Melanchall.DryWetMidi.Interaction
 
                     for (var i = 0; i < notesCount; i++)
                     {
+                        var noteNode = chordDescriptor.NotesNodes[i];
+                        timedObjects.Remove(noteNode);
+
                         var objectDescriptor = chordDescriptor.NotesNodes[i].Value;
 
                         notes[i] = (Note)objectDescriptor.TimedObject;
@@ -1059,7 +1057,7 @@ namespace Melanchall.DryWetMidi.Interaction
                     yield return Tuple.Create((ITimedObject)new Chord(notes), indices);
                 }
 
-                for (var node = timedObjects.First; node != null && !node.Value.ChordStart;)
+                for (var node = timedObjects.First; node != null && (!chordDescriptor.IsCompleted || !node.Value.ChordStart);)
                 {
                     var timedObject = node.Value.IndexedTimedObject;
                     yield return Tuple.Create(timedObject.Item1, new[] { timedObject.Item2, timedObject.Item3 });

@@ -1,3 +1,7 @@
+---
+uid: a_notes
+---
+
 # Notes
 
 To effectively manage note events, DryWetMIDI provides the [NotesManager](xref:Melanchall.DryWetMidi.Interaction.NotesManager) class to help with this. Instead of messing with Note On/Off events this manager allows to operate by [Note](xref:Melanchall.DryWetMidi.Interaction.Note) objects.
@@ -45,22 +49,6 @@ IEnumerable<Note> notes = midiFile.GetNotes();
 ## Special utilities
 
 There are several special utility methods that can be useful in real work with notes.
-
-### GetTimedEventsAndNotes
-
-The `GetTimedEventsAndNotes` is an extension method for `IEnumerable<TimedEvent>` placed in [GetTimedEventsAndNotesUtilities](xref:Melanchall.DryWetMidi.Interaction.GetTimedEventsAndNotesUtilities) class. This method iterates through the collection of `TimedEvent` returning [Note](xref:Melanchall.DryWetMidi.Interaction.Note) for Note On / Note Off event pairs and original [TimedEvent](xref:Melanchall.DryWetMidi.Interaction.TimedEvent) for all other events. There are also extension methods for [MidiFile](xref:Melanchall.DryWetMidi.Core.MidiFile) and for [TrackChunk](xref:Melanchall.DryWetMidi.Core.TrackChunk).
-
-The image below illustrates work of this method:
-
-![Get timed events and notes](images/GetTimedEventsAndNotes.png)
-
-### GetNotesAndRests
-
-The `GetNotesAndRests` is an extension method for `IEnumerable<Note>` placed in [GetNotesAndRestsUtilities](xref:Melanchall.DryWetMidi.Interaction.GetNotesAndRestsUtilities) class. This method iterates through the specified collection of `Note` returning instances of [Note](xref:Melanchall.DryWetMidi.Interaction.Note) and [Rest](xref:Melanchall.DryWetMidi.Interaction.Rest) where rests calculated using the specified policy. The policy is specified via `restSeparationPolicy` parameter of [RestSeparationPolicy](xref:Melanchall.DryWetMidi.Interaction.RestSeparationPolicy).
-
-The image below illustrates how different policies affects rests building:
-
-![Get notes and rests](images/GetNotesAndRests.png)
 
 ### ResizeNotes
 

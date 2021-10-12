@@ -55,7 +55,7 @@ When the start time of an object is not fixed, there is a chance that the object
 
 ![Quantize end time moving object beyond zero](images/Quantizer/QuantizeEndBeyondZero.png)
 
-When one side (start or end) of an object is fixed, there is a chance that the object's opposite end will be quantized in a such way that the object will be reversed resulting to negative length. You can handle this situation with [QuantizingBeyondFixedEndPolicy](xref:Melanchall.DryWetMidi.Tools.QuantizingBeyondFixedEndPolicy) proeprty. The image below shows those options when start time is being quantized beyond the end one:
+When one side (start or end) of an object is fixed, there is a chance that the object's opposite end will be quantized in a such way that the object will be reversed resulting to negative length. You can handle this situation with [QuantizingBeyondFixedEndPolicy](xref:Melanchall.DryWetMidi.Tools.QuantizingBeyondFixedEndPolicy) property. The image below shows those options when start time is being quantized beyond the end one:
 
 ![Quantize start time beyond fixed end](images/Quantizer/QuantizeStartBeyondFixedEnd.png)
 

@@ -3,6 +3,10 @@
     /// <summary>
     /// Determines a rule for creating rests. The default value is <see cref="NoSeparation"/>.
     /// </summary>
+    /// <remarks>
+    /// Please see <see href="xref:a_getting_objects#rests">Getting objects
+    /// (section GetObjects → Rests)</see> article to learn more.
+    /// </remarks>
     public enum RestSeparationPolicy
     {
         /// <summary>

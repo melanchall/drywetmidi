@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
+using Melanchall.DryWetMidi.Tests.Utilities;
 using NUnit.Framework;
 
 namespace Melanchall.DryWetMidi.Tests.Interaction
@@ -64,6 +66,53 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 });
         }
 
+        [Test]
+        public void GetObjects_ChordsAndNotesAndTimedEvents_MidiFile()
+        {
+            GetObjects_ChordsAndNotesAndTimedEvents(
+                inputMidiFile: new MidiFile(
+                    new TrackChunk(
+                        new TextEvent("1"),
+                        new NoteOnEvent { DeltaTime = 1 },
+                        new TextEvent("2") { DeltaTime = 1 },
+                        new NoteOffEvent { DeltaTime = 1 },
+                        new TextEvent("3") { DeltaTime = 1 },
+                        new NoteOnEvent { DeltaTime = 1 },
+                        new TextEvent("4") { DeltaTime = 1 },
+                        new NoteOffEvent { DeltaTime = 1 }),
+                    new TrackChunk(
+                        new TextEvent("A"),
+                        new TextEvent("B") { DeltaTime = 1 },
+                        new TextEvent("C") { DeltaTime = 1 },
+                        new TextEvent("D") { DeltaTime = 1 },
+                        new TextEvent("E") { DeltaTime = 1 },
+                        new NoteOnEvent { DeltaTime = 1 },
+                        new TextEvent("F") { DeltaTime = 1 },
+                        new NoteOffEvent { DeltaTime = 1 })),
+                outputObjects: new ITimedObject[]
+                {
+                    new TimedEvent(new TextEvent("1"), 0),
+                    new TimedEvent(new TextEvent("A"), 0),
+                    new Note((SevenBitNumber)0, 2, 1) { Velocity = (SevenBitNumber)0 },
+                    new TimedEvent(new TextEvent("B") { DeltaTime = 1 }, 1),
+                    new TimedEvent(new TextEvent("2") { DeltaTime = 1 }, 2),
+                    new TimedEvent(new TextEvent("C") { DeltaTime = 1 }, 2),
+                    new TimedEvent(new TextEvent("D") { DeltaTime = 1 }, 3),
+                    new TimedEvent(new TextEvent("3") { DeltaTime = 1 }, 4),
+                    new TimedEvent(new TextEvent("E") { DeltaTime = 1 }, 4),
+                    new Chord(
+                        new Note((SevenBitNumber)0, 2, 5) { Velocity = (SevenBitNumber)0 },
+                        new Note((SevenBitNumber)0, 2, 5) { Velocity = (SevenBitNumber)0 }),
+                    new TimedEvent(new TextEvent("4") { DeltaTime = 1 }, 6),
+                    new TimedEvent(new TextEvent("F") { DeltaTime = 1 }, 6),
+                },
+                chordDetectionSettings: new ChordDetectionSettings
+                {
+                    ChordSearchContext = ChordSearchContext.AllEventsCollections,
+                    NotesMinCount = 2
+                });
+        }
+
         #endregion
 
         #region Private methods
@@ -84,6 +133,23 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                         NotesTolerance = notesTolerance
                     }
                 });
+        }
+
+        private void GetObjects_ChordsAndNotesAndTimedEvents(
+            MidiFile inputMidiFile,
+            IEnumerable<ITimedObject> outputObjects,
+            ChordDetectionSettings chordDetectionSettings)
+        {
+            var actualObjects = inputMidiFile
+                .GetObjects(
+                    ObjectType.TimedEvent | ObjectType.Note | ObjectType.Chord,
+                    new ObjectDetectionSettings
+                    {
+                        ChordDetectionSettings = chordDetectionSettings
+                    })
+                .ToList();
+
+            MidiAsserts.AreEqual(outputObjects, actualObjects, true, 0, "Objects are invalid.");
         }
 
         #endregion
