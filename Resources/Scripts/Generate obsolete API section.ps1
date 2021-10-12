@@ -8,18 +8,24 @@ $obsoleteApiSection = ""
 foreach ($idProperty in $idsProperties)
 {
     $id = $idProperty.Name
-    $inLibrary = $idProperty.Value.InLibrary
-    if ($inLibrary -eq $false)
-    {
-        Write-Host "$id skipped due to API is not in library anymore"
-        continue
-    }
-
     $directory = "Docs\obsolete\$id"
 
     Write-Host "Generating info for $id..."
 
     $section = $template -replace '\$ID\$',"$id"
+
+    $inLibrary = $idProperty.Value.InLibrary
+    if ($inLibrary -eq $false)
+    {
+        $removedFromVersion = $idProperty.Value.RemovedFromVersion
+        Write-Host "    removed by $removedFromVersion"
+        $nl = [Environment]::NewLine
+        $section = $section -replace '\$REMOVED\$',"> [!IMPORTANT]$nl> API removed from the library by $removedFromVersion release."
+    }
+    else
+    {
+        $section = $section -replace '\$REMOVED\$',""
+    }
 
     $obsoleteFromVersion = $idProperty.Value.ObsoleteFromVersion
     $section = $section -replace '\$OBSOLETE_FROM_VERSION\$',"$obsoleteFromVersion"

@@ -2,46 +2,55 @@
   "OBS1": {
     "Hint": "Use corresponding properties of WritingSettings.",
     "ObsoleteFromVersion": "5.1.2",
-    "InLibrary": true
+    "InLibrary": false,
+    "RemovedFromVersion": "6.0.0"
   },
   "OBS2": {
     "Hint": "Use ReaderSettings.BufferingPolicy = BufferingPolicy.BufferAllData.",
     "ObsoleteFromVersion": "5.1.2",
-    "InLibrary": true
+    "InLibrary": false,
+    "RemovedFromVersion": "6.0.0"
   },
   "OBS3": {
     "Hint": "Use GetTimeSignatureChanges or GetTimeSignatureAtTime methods of TempoMap.",
     "ObsoleteFromVersion": "5.1.2",
-    "InLibrary": true
+    "InLibrary": false,
+    "RemovedFromVersion": "6.0.0"
   },
   "OBS4": {
     "Hint": "Use GetTempoChanges or GetTempoAtTime methods of TempoMap.",
     "ObsoleteFromVersion": "5.1.2",
-    "InLibrary": true
+    "InLibrary": false,
+    "RemovedFromVersion": "6.0.0"
   },
   "OBS5": {
     "Hint": "Use GetObjects methods from GetObjectsUtilities.",
     "ObsoleteFromVersion": "5.2.0",
-    "InLibrary": true
+    "InLibrary": false,
+    "RemovedFromVersion": "6.0.0"
   },
   "OBS6": {
     "Hint": "Use GetObjects methods from GetObjectsUtilities.",
     "ObsoleteFromVersion": "5.2.0",
-    "InLibrary": true
+    "InLibrary": false,
+    "RemovedFromVersion": "6.0.0"
   },
   "OBS7": {
     "Hint": "Use ToTrackChunk method from TimedObjectUtilities.",
     "ObsoleteFromVersion": "5.2.0",
-    "InLibrary": true
+    "InLibrary": false,
+    "RemovedFromVersion": "6.0.0"
   },
   "OBS8": {
     "Hint": "Use ToFile method from TimedObjectUtilities.",
     "ObsoleteFromVersion": "5.2.0",
-    "InLibrary": true
+    "InLibrary": false,
+    "RemovedFromVersion": "6.0.0"
   },
   "OBS9": {
     "Hint": "Use AddObjects methods from TimedObjectUtilities.",
     "ObsoleteFromVersion": "5.2.0",
-    "InLibrary": true
+    "InLibrary": false,
+    "RemovedFromVersion": "6.0.0"
   }
 }

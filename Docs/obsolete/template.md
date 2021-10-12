@@ -1,5 +1,7 @@
 ### $ID$
 
+$REMOVED$
+
 $DESCRIPTION$
 
 Obsolete from version **$OBSOLETE_FROM_VERSION$**.
