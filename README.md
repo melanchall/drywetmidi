@@ -144,7 +144,7 @@ foreach (var trackChunk in midiFile.Chunks.OfType<TrackChunk>())
 
 Of course this code is simplified. In practice a MIDI file may not contain SetTempo event which means it has the default one (500,000 microseconds per beat).
 
-Instead of modifying a MIDI file you can use [`Playback`](https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Devices.Playback.html) class:
+Instead of modifying a MIDI file you can use [`Playback`](https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Multimedia.Playback.html) class:
 
 ```csharp
 using (var outputDevice = OutputDevice.GetByName("Microsoft GS Wavetable Synth"))
@@ -252,7 +252,7 @@ DryWetMIDI provides [devices API](https://melanchall.github.io/drywetmidi/articl
 
 ```csharp
 using System;
-using Melanchall.DryWetMidi.Devices;
+using Melanchall.DryWetMidi.Multimedia;
 using Melanchall.DryWetMidi.Core;
 
 // ...

@@ -1,7 +1,7 @@
 ﻿using System.Threading;
 using BenchmarkDotNet.Attributes;
 using Melanchall.DryWetMidi.Core;
-using Melanchall.DryWetMidi.Devices;
+using Melanchall.DryWetMidi.Multimedia;
 using Melanchall.DryWetMidi.Tests.Common;
 using NUnit.Framework;
 

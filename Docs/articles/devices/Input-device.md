@@ -4,22 +4,22 @@ uid: a_dev_input
 
 # Input device
 
-In DryWetMIDI an input MIDI device is represented by [IInputDevice](xref:Melanchall.DryWetMidi.Devices.IInputDevice) interface. It allows to receive events from a MIDI device. To understand what an input MIDI device is in DryWetMIDI, please read [Overview](Overview.md) article.
+In DryWetMIDI an input MIDI device is represented by [IInputDevice](xref:Melanchall.DryWetMidi.Multimedia.IInputDevice) interface. It allows to receive events from a MIDI device. To understand what an input MIDI device is in DryWetMIDI, please read [Overview](Overview.md) article.
 
-The library provides built-in implementation of `IInputDevice`: [InputDevice](xref:Melanchall.DryWetMidi.Devices.InputDevice) class. To get an instance of `InputDevice` you can use either [GetByName](xref:Melanchall.DryWetMidi.Devices.InputDevice.GetByName(System.String)) or [GetByIndex](xref:Melanchall.DryWetMidi.Devices.InputDevice.GetByIndex(System.Int32)) static methods. ID of a MIDI device is a number from `0` to _devices count minus one_. To get count of input MIDI devices presented in the system there is the [GetDevicesCount](xref:Melanchall.DryWetMidi.Devices.InputDevice.GetDevicesCount) method. You can get all input MIDI devices with [GetAll](xref:Melanchall.DryWetMidi.Devices.InputDevice.GetAll) method.
+The library provides built-in implementation of `IInputDevice`: [InputDevice](xref:Melanchall.DryWetMidi.Multimedia.InputDevice) class. To get an instance of `InputDevice` you can use either [GetByName](xref:Melanchall.DryWetMidi.Multimedia.InputDevice.GetByName(System.String)) or [GetByIndex](xref:Melanchall.DryWetMidi.Multimedia.InputDevice.GetByIndex(System.Int32)) static methods. ID of a MIDI device is a number from `0` to _devices count minus one_. To get count of input MIDI devices presented in the system there is the [GetDevicesCount](xref:Melanchall.DryWetMidi.Multimedia.InputDevice.GetDevicesCount) method. You can get all input MIDI devices with [GetAll](xref:Melanchall.DryWetMidi.Multimedia.InputDevice.GetAll) method.
 
 > [!IMPORTANT]
 > You can use `InputDevice` built-in implementation of `IInputDevice` on Windows and macOS only. Of course you can create your own implementation of `IInputDevice` as described in [Custom input device](#custom-input-device) section below.
 
-After an instance of `InputDevice` is obtained, call [StartEventsListening](xref:Melanchall.DryWetMidi.Devices.IInputDevice.StartEventsListening) to start listening incoming MIDI events going from an input MIDI device. If you don't need to listen for events anymore, call [StopEventsListening](xref:Melanchall.DryWetMidi.Devices.IInputDevice.StopEventsListening). Also this method will be called automatically on [Dispose](xref:Melanchall.DryWetMidi.Devices.MidiDevice.Dispose). To check whether `InputDevice` is currently listening for events or not use [IsListeningForEvents](xref:Melanchall.DryWetMidi.Devices.IInputDevice.IsListeningForEvents) property.
+After an instance of `InputDevice` is obtained, call [StartEventsListening](xref:Melanchall.DryWetMidi.Multimedia.IInputDevice.StartEventsListening) to start listening incoming MIDI events going from an input MIDI device. If you don't need to listen for events anymore, call [StopEventsListening](xref:Melanchall.DryWetMidi.Multimedia.IInputDevice.StopEventsListening). Also this method will be called automatically on [Dispose](xref:Melanchall.DryWetMidi.Multimedia.MidiDevice.Dispose). To check whether `InputDevice` is currently listening for events or not use [IsListeningForEvents](xref:Melanchall.DryWetMidi.Multimedia.IInputDevice.IsListeningForEvents) property.
 
-If an input device is listening for events, it will fire [EventReceived](xref:Melanchall.DryWetMidi.Devices.IInputDevice.EventReceived) event for each incoming MIDI event. Received MIDI event will be passed to event's handler.
+If an input device is listening for events, it will fire [EventReceived](xref:Melanchall.DryWetMidi.Multimedia.IInputDevice.EventReceived) event for each incoming MIDI event. Received MIDI event will be passed to event's handler.
 
 Small example (console app) that shows receiving MIDI data:
 
 ```csharp
 using System;
-using Melanchall.DryWetMidi.Devices;
+using Melanchall.DryWetMidi.Multimedia;
 
 namespace InputDeviceExample
 {
@@ -51,13 +51,13 @@ namespace InputDeviceExample
 > [!IMPORTANT]
 > You should always take care about disposing an `InputDevice`, so use it inside `using` block or call `Dispose` manually. Without it all resources taken by the device will live until GC collect them via finalizer of the `InputDevice`. It means that sometimes you will not be able to use different instances of the same device across multiple applications or different pieces of a program.
 
-`InputDevice` has [MidiTimeCodeReceived](xref:Melanchall.DryWetMidi.Devices.InputDevice.MidiTimeCodeReceived) event which, by default, will be fired only when **all** MIDI Time Code components (separate [MidiTimeCodeEvent](xref:Melanchall.DryWetMidi.Core.MidiTimeCodeEvent) events) are received forming _hours:minutes:seconds:frames_ timestamp. You can turn this behavior off by setting [RaiseMidiTimeCodeReceived](xref:Melanchall.DryWetMidi.Devices.InputDevice.RaiseMidiTimeCodeReceived) to `false`.
+`InputDevice` has [MidiTimeCodeReceived](xref:Melanchall.DryWetMidi.Multimedia.InputDevice.MidiTimeCodeReceived) event which, by default, will be fired only when **all** MIDI Time Code components (separate [MidiTimeCodeEvent](xref:Melanchall.DryWetMidi.Core.MidiTimeCodeEvent) events) are received forming _hours:minutes:seconds:frames_ timestamp. You can turn this behavior off by setting [RaiseMidiTimeCodeReceived](xref:Melanchall.DryWetMidi.Multimedia.InputDevice.RaiseMidiTimeCodeReceived) to `false`.
 
-If an invalid [channel](xref:Melanchall.DryWetMidi.Core.ChannelEvent), [system common](xref:Melanchall.DryWetMidi.Core.SystemCommonEvent) or [system real-time](xref:Melanchall.DryWetMidi.Core.SystemRealTimeEvent) event received, [InvalidShortEventReceived](xref:Melanchall.DryWetMidi.Devices.InputDevice.InvalidShortEventReceived) event will be fired holding the bytes that form the invalid event. If invalid system exclusive event received, [InvalidSysExEventReceived](xref:Melanchall.DryWetMidi.Devices.InputDevice.InvalidSysExEventReceived) event will be fired holding sysex data.
+If an invalid [channel](xref:Melanchall.DryWetMidi.Core.ChannelEvent), [system common](xref:Melanchall.DryWetMidi.Core.SystemCommonEvent) or [system real-time](xref:Melanchall.DryWetMidi.Core.SystemRealTimeEvent) event received, [InvalidShortEventReceived](xref:Melanchall.DryWetMidi.Multimedia.InputDevice.InvalidShortEventReceived) event will be fired holding the bytes that form the invalid event. If invalid system exclusive event received, [InvalidSysExEventReceived](xref:Melanchall.DryWetMidi.Multimedia.InputDevice.InvalidSysExEventReceived) event will be fired holding sysex data.
 
 ## Custom input device
 
-You can create your own input device implementation and use it in your app. For example, let's create device that will listen for specific keyboard keys and report corresponding note via [EventReceived](xref:Melanchall.DryWetMidi.Devices.IInputDevice.EventReceived) event. Also we will control current octave with _up arrow_ and _down arrow_ increasing or decreasing octave number correspondingly. Following image shows the scheme of our device:
+You can create your own input device implementation and use it in your app. For example, let's create device that will listen for specific keyboard keys and report corresponding note via [EventReceived](xref:Melanchall.DryWetMidi.Multimedia.IInputDevice.EventReceived) event. Also we will control current octave with _up arrow_ and _down arrow_ increasing or decreasing octave number correspondingly. Following image shows the scheme of our device:
 
 ![Custom input device](images/CustomInputDevice.png)
 
@@ -164,7 +164,7 @@ public sealed class KeyboardInputDevice : IInputDevice
 }
 ```
 
-We can then use it for [Recording](xref:Melanchall.DryWetMidi.Devices.Recording) or [redirecting](Devices-connector.md) received notes to real output device to make them sound:
+We can then use it for [Recording](xref:Melanchall.DryWetMidi.Multimedia.Recording) or [redirecting](Devices-connector.md) received notes to real output device to make them sound:
 
 ```csharp
 var outputDevice = OutputDevice.GetByName("Microsoft GS Wavetable Synth");

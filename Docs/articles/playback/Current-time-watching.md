@@ -4,7 +4,7 @@ uid: a_playback_curtime
 
 # Current time watching
 
-To watch current time of a playback you can create a timer and call [GetCurrentTime](xref:Melanchall.DryWetMidi.Devices.Playback.GetCurrentTime(Melanchall.DryWetMidi.Interaction.TimeSpanType)) method on each timer's tick. To simplify this task (especially if you're running multiple playbacks simultaneously) DryWetMIDI provides [PlaybackCurrentTimeWatcher](xref:Melanchall.DryWetMidi.Devices.PlaybackCurrentTimeWatcher) class. This class is singleton in order to prevent too many high resolution tick generators are created (which is not good since it can affect whole system performance). Please read [Tick generator](Tick-generator.md) article to learn how you can ajust internals of the `PlaybackCurrentTimeWatcher`.
+To watch current time of a playback you can create a timer and call [GetCurrentTime](xref:Melanchall.DryWetMidi.Multimedia.Playback.GetCurrentTime(Melanchall.DryWetMidi.Interaction.TimeSpanType)) method on each timer's tick. To simplify this task (especially if you're running multiple playbacks simultaneously) DryWetMIDI provides [PlaybackCurrentTimeWatcher](xref:Melanchall.DryWetMidi.Multimedia.PlaybackCurrentTimeWatcher) class. This class is singleton in order to prevent too many high resolution tick generators are created (which is not good since it can affect whole system performance). Please read [Tick generator](Tick-generator.md) article to learn how you can ajust internals of the `PlaybackCurrentTimeWatcher`.
 
 Small example:
 
@@ -41,7 +41,7 @@ By default polling interval of watcher is `100` ms, but you can alter it:
 PlaybackCurrentTimeWatcher.Instance.PollingInterval = TimeSpan.FromMilliseconds(50);
 ```
 
-Please don't set too small intervals. Polling interval defines how often [CurrentTimeChanged](xref:Melanchall.DryWetMidi.Devices.PlaybackCurrentTimeWatcher.CurrentTimeChanged) event will be fired. If you want to pause firing the event, call [Stop](xref:Melanchall.DryWetMidi.Devices.PlaybackCurrentTimeWatcher.Stop) method.
+Please don't set too small intervals. Polling interval defines how often [CurrentTimeChanged](xref:Melanchall.DryWetMidi.Multimedia.PlaybackCurrentTimeWatcher.CurrentTimeChanged) event will be fired. If you want to pause firing the event, call [Stop](xref:Melanchall.DryWetMidi.Multimedia.PlaybackCurrentTimeWatcher.Stop) method.
 
 When your application is about to close, dispose watcher to kill the internal timer:
 

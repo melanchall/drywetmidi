@@ -7,7 +7,7 @@ uid: a_dev_virtual
 > [!IMPORTANT]
 > Virtual devices API available for macOS only. For Windows you can use products like [virtualMIDI SDK](https://www.tobias-erichsen.de/software/virtualmidi/virtualmidi-sdk.html) or similar to work with virtual MIDI ports programmatically. Be careful with license of these products.
 
-With DryWetMIDI you can programmatically create virtual MIDI devices with the specified name using [VirtualDevice.Create](xref:Melanchall.DryWetMidi.Devices.VirtualDevice.Create(System.String)) method. In fact virtual device is an [input](xref:a_dev_input) and an [output](xref:a_dev_output) devices paired together in a way that any MIDI event sent to the output device will be immediately transfered back from the virtual device and can be received by an application from its input subdevice.
+With DryWetMIDI you can programmatically create virtual MIDI devices with the specified name using [VirtualDevice.Create](xref:Melanchall.DryWetMidi.Multimedia.VirtualDevice.Create(System.String)) method. In fact virtual device is an [input](xref:a_dev_input) and an [output](xref:a_dev_output) devices paired together in a way that any MIDI event sent to the output device will be immediately transfered back from the virtual device and can be received by an application from its input subdevice.
 
 Thus we have [loopback](https://en.wikipedia.org/wiki/Loopback) device here. Loopback device is useful, for example, as intermediate layer between an application and some software synthesizer. In this case:
 
@@ -15,11 +15,11 @@ Thus we have [loopback](https://en.wikipedia.org/wiki/Loopback) device here. Loo
 2. in the application you set _MyDevice_ as an output MIDI port, so the application will send MIDI data to the output subdevice of the virtual device;
 3. in software synthesizer you set _MyDevice_ as an input MIDI port.
 
-So when you create virtual device an input device and an output one are created with the same name as the one specified on virtual device creation. Subdevices of a virtual device are available via [InputDevice](xref:Melanchall.DryWetMidi.Devices.VirtualDevice.InputDevice) and [OutputDevice](xref:Melanchall.DryWetMidi.Devices.VirtualDevice.OutputDevice) properties of the [VirtualDevice](xref:Melanchall.DryWetMidi.Devices.VirtualDevice) class. Of course you can use those device separately as regular input and output devices:
+So when you create virtual device an input device and an output one are created with the same name as the one specified on virtual device creation. Subdevices of a virtual device are available via [InputDevice](xref:Melanchall.DryWetMidi.Multimedia.VirtualDevice.InputDevice) and [OutputDevice](xref:Melanchall.DryWetMidi.Multimedia.VirtualDevice.OutputDevice) properties of the [VirtualDevice](xref:Melanchall.DryWetMidi.Multimedia.VirtualDevice) class. Of course you can use those device separately as regular input and output devices:
 
 ```csharp
 using System;
-using Melanchall.DryWetMidi.Devices;
+using Melanchall.DryWetMidi.Multimedia;
 
 namespace DwmExamples
 {
@@ -60,7 +60,7 @@ You can even combine virtual devices and [DevicesConnector](xref:a_dev_connector
 using System;
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
-using Melanchall.DryWetMidi.Devices;
+using Melanchall.DryWetMidi.Multimedia;
 
 namespace DwmExamples
 {
@@ -111,10 +111,10 @@ Event Note On [5] (70, 60) received on device Leaf1.
 Event Note On [5] (70, 60) received on device Leaf2.
 ```
 
-As with input and output device you should always [dispose](xref:Melanchall.DryWetMidi.Devices.MidiDevice.Dispose) virtual device when you're done with it:
+As with input and output device you should always [dispose](xref:Melanchall.DryWetMidi.Multimedia.MidiDevice.Dispose) virtual device when you're done with it:
 
 ```csharp
 virtualDevice.Dispose();
 ```
 
-You must not explicitly dispose subdevices of a virtual device. More than that calling `Dispose` on `virtualDevice.InputDevice` and `virtualDevice.OutputDevice` will throw an exception. But if you got references to the subdevices by regular methods (for example, by [InputDevice.GetByName](xref:Melanchall.DryWetMidi.Devices.InputDevice.GetByName(System.String))), you can call `Dispose` on that references of course.
+You must not explicitly dispose subdevices of a virtual device. More than that calling `Dispose` on `virtualDevice.InputDevice` and `virtualDevice.OutputDevice` will throw an exception. But if you got references to the subdevices by regular methods (for example, by [InputDevice.GetByName](xref:Melanchall.DryWetMidi.Multimedia.InputDevice.GetByName(System.String))), you can call `Dispose` on that references of course.

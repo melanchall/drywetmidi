@@ -4,7 +4,7 @@ uid: a_playback_datatrack
 
 # Playback data tracking
 
-[Playback](xref:Melanchall.DryWetMidi.Devices.Playback) provides a way to track some MIDI data to correctly handle jumps in time and get properly sounding data. There are two main groups of data to track:
+[Playback](xref:Melanchall.DryWetMidi.Multimedia.Playback) provides a way to track some MIDI data to correctly handle jumps in time and get properly sounding data. There are two main groups of data to track:
 
 * [notes](#notes-tracking)
 * [MIDI parameters](#midi-parameters-values-tracking) (pitch bend, program, control value)
@@ -19,13 +19,13 @@ Let's take a look at the following events sequence to play:
 
 where `A` and `B` means _Note On_ and _Note Off_ events correspondingly. `.` means any other MIDI event.
 
-`Playback` class has [TrackNotes](xref:Melanchall.DryWetMidi.Devices.Playback.TrackNotes) property. If its value is `true`, playback will internally construct notes based on input objects to play. So in our example one note will be constructed:
+`Playback` class has [TrackNotes](xref:Melanchall.DryWetMidi.Multimedia.Playback.TrackNotes) property. If its value is `true`, playback will internally construct notes based on input objects to play. So in our example one note will be constructed:
 
 ```image
 ...[A.....B]...
 ```
 
-Now let's imagine a playback's time is at some point and we want to jump to a new one (with [MoveToTime](xref:Melanchall.DryWetMidi.Devices.Playback.MoveToTime(Melanchall.DryWetMidi.Interaction.ITimeSpan)) for example):
+Now let's imagine a playback's time is at some point and we want to jump to a new one (with [MoveToTime](xref:Melanchall.DryWetMidi.Multimedia.Playback.MoveToTime(Melanchall.DryWetMidi.Interaction.ITimeSpan)) for example):
 
 ```image
 .│.[A..║..B]...
@@ -67,7 +67,7 @@ Let's imagine we have the following events sequence to play:
 
 where `P` and `Q` means _Program Change_ events, `A` means _Note On_ event and `.` means any other MIDI event.
 
-And now we want to jump from the current time of a playback to a new time (with [MoveToTime](xref:Melanchall.DryWetMidi.Devices.Playback.MoveToTime(Melanchall.DryWetMidi.Interaction.ITimeSpan)) for example):
+And now we want to jump from the current time of a playback to a new time (with [MoveToTime](xref:Melanchall.DryWetMidi.Multimedia.Playback.MoveToTime(Melanchall.DryWetMidi.Interaction.ITimeSpan)) for example):
 
 ```image
 ...P.│.Q.║.A...
@@ -77,7 +77,7 @@ And now we want to jump from the current time of a playback to a new time (with 
 
 So by the current time `P` event is played and the current program corresponds to `P`. If the playback just change the current time, `A` will be played using program `P` which is wrong since `Q` should be used.
 
-To track a program `Playback` class has [TrackProgram](xref:Melanchall.DryWetMidi.Devices.Playback.TrackProgram) property. If it's set to `false`, nothing will happen except changing the current time. All following notes can sound incorrectly due to possibly skipped program changes.
+To track a program `Playback` class has [TrackProgram](xref:Melanchall.DryWetMidi.Multimedia.Playback.TrackProgram) property. If it's set to `false`, nothing will happen except changing the current time. All following notes can sound incorrectly due to possibly skipped program changes.
 
 But if we set `TrackProgram` to `true`, playback will play required _Program Change_ event immediately after time changed. So in our example `Q` will be played and then playback continues from new time.
 
@@ -97,6 +97,6 @@ We have program `Q` active at the current time. But when we jump to a new time (
 * pitch bend (see [PitchBendEvent](xref:Melanchall.DryWetMidi.Core.PitchBendEvent))
 * control value (see [ControlChangeEvent](xref:Melanchall.DryWetMidi.Core.ControlChangeEvent))
 
-We have discussed tracking program above. But tracking the remaining two parameters is absolutely the same. To track pitch bend value there is [TrackPitchValue](xref:Melanchall.DryWetMidi.Devices.Playback.TrackPitchValue) property. To track control value there is [TrackControlValue](xref:Melanchall.DryWetMidi.Devices.Playback.TrackControlValue) property.
+We have discussed tracking program above. But tracking the remaining two parameters is absolutely the same. To track pitch bend value there is [TrackPitchValue](xref:Melanchall.DryWetMidi.Multimedia.Playback.TrackPitchValue) property. To track control value there is [TrackControlValue](xref:Melanchall.DryWetMidi.Multimedia.Playback.TrackControlValue) property.
 
 Of course all these parameters are tracked separately for each MIDI channel and in addition to this control value tracked separately for each control number.
