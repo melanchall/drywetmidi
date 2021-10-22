@@ -76,7 +76,7 @@
         </div>
         <div class="article row grid-right">
           <div class="col-md-10">
-            <article class="content wrap" id="_content" data-uid="">
+            <article class="content wrap" id="_content" data-uid="a_events_abs_time">
 <h1 id="events-absolute-time">Events absolute time</h1>
 
 <p><a class="xref" href="../../api/Melanchall.DryWetMidi.Core.MidiEvent.html">MidiEvent</a> has the <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.MidiEvent.html#Melanchall_DryWetMidi_Core_MidiEvent_DeltaTime">DeltaTime</a> property which provides offset from previous event in units defined by the time division of a MIDI file. But in practice it is more useful to operate by <strong>absolute times</strong> rather than relative ones. Absolute time of a MIDI event is a sum of all delta-times before this event including delta-time of the current one. DryWetMIDI provides a way to manage MIDI events by absolute times:</p>

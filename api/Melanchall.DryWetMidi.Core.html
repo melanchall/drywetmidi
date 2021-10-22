@@ -235,10 +235,6 @@ be compared for equality.
       <section>
 Provides methods to convert an instance of the <a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html">MidiEvent</a> to bytes.
 </section>
-      <h4><a class="xref" href="Melanchall.DryWetMidi.Core.MidiException.html">MidiException</a></h4>
-      <section>
-Base MIDI exception class.
-</section>
       <h4><a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a></h4>
       <section>
 Represents a MIDI file.
@@ -473,10 +469,6 @@ Settings according to which MIDI data should be written.
 Specifies how reading engine should buffer incoming MIDI data before reading it.
 The default is <a class="xref" href="Melanchall.DryWetMidi.Core.BufferingPolicy.html#Melanchall_DryWetMidi_Core_BufferingPolicy_UseFixedSizeBuffer">UseFixedSizeBuffer</a>.
 </section>
-      <h4><a class="xref" href="Melanchall.DryWetMidi.Core.CompressionPolicy.html">CompressionPolicy</a></h4>
-      <section>
-Specifies how writing engine should compress MIDI data. The default is <a class="xref" href="Melanchall.DryWetMidi.Core.CompressionPolicy.html#Melanchall_DryWetMidi_Core_CompressionPolicy_NoCompression">NoCompression</a>.
-</section>
       <h4><a class="xref" href="Melanchall.DryWetMidi.Core.EndOfTrackStoringPolicy.html">EndOfTrackStoringPolicy</a></h4>
       <section>
 Specifies how reading engine should react on End Of Track event encountered.
@@ -486,6 +478,12 @@ The default is <a class="xref" href="Melanchall.DryWetMidi.Core.EndOfTrackStorin
       <section>
 Specifies how reading engine should react on new track chunk if already read chunks
 count greater or equals the one declared at the file header. The default is <a class="xref" href="Melanchall.DryWetMidi.Core.ExtraTrackChunkPolicy.html#Melanchall_DryWetMidi_Core_ExtraTrackChunkPolicy_Read">Read</a>.
+</section>
+      <h4><a class="xref" href="Melanchall.DryWetMidi.Core.FfStatusBytePolicy.html">FfStatusBytePolicy</a></h4>
+      <section>
+Specifies how reading engine should react on 0xFF status byte since it can mean
+either <a class="xref" href="Melanchall.DryWetMidi.Core.ResetEvent.html">ResetEvent</a> or <a class="xref" href="Melanchall.DryWetMidi.Core.MetaEvent.html">MetaEvent</a>.
+The default is <a class="xref" href="Melanchall.DryWetMidi.Core.FfStatusBytePolicy.html#Melanchall_DryWetMidi_Core_FfStatusBytePolicy_ReadAsResetEvent">ReadAsResetEvent</a>.
 </section>
       <h4><a class="xref" href="Melanchall.DryWetMidi.Core.InvalidChannelEventParameterValuePolicy.html">InvalidChannelEventParameterValuePolicy</a></h4>
       <section>

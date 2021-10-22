@@ -1,0 +1,516 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class PlaybackCurrentTimeWatcher
+   | DryWetMIDI </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class PlaybackCurrentTimeWatcher
+   | DryWetMIDI ">
+    <meta name="generator" content="docfx 2.58.0.0">
+    
+    <link rel="shortcut icon" href="../images/favicon.png">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    <meta property="docfx:rel" content="../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list">Search Results for <span></span></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination" data-first="First" data-prev="Previous" data-next="Next" data-last="Last"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Melanchall.DryWetMidi.Multimedia.PlaybackCurrentTimeWatcher">
+  
+  
+  <h1 id="Melanchall_DryWetMidi_Multimedia_PlaybackCurrentTimeWatcher" data-uid="Melanchall.DryWetMidi.Multimedia.PlaybackCurrentTimeWatcher" class="text-break">Class PlaybackCurrentTimeWatcher
+  </h1>
+  <div class="markdown level0 summary">
+Provides notifications about playback&apos;s current time changed.
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object">Object</a></div>
+    <div class="level1"><span class="xref">PlaybackCurrentTimeWatcher</span></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.idisposable">IDisposable</a></div>
+    <div><a class="xref" href="Melanchall.DryWetMidi.Multimedia.IClockDrivenObject.html">IClockDrivenObject</a></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#System_Object_Equals_System_Object_">Object.Equals(Object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#System_Object_Equals_System_Object_System_Object_">Object.Equals(Object, Object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gethashcode#System_Object_GetHashCode">Object.GetHashCode()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gettype#System_Object_GetType">Object.GetType()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.memberwiseclone#System_Object_MemberwiseClone">Object.MemberwiseClone()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.referenceequals#System_Object_ReferenceEquals_System_Object_System_Object_">Object.ReferenceEquals(Object, Object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.tostring#System_Object_ToString">Object.ToString()</a>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Melanchall.DryWetMidi.Multimedia.html">Melanchall.DryWetMidi.Multimedia</a></h6>
+  <h6><strong>Assembly</strong>: Melanchall.DryWetMidi.dll</h6>
+  <h5 id="Melanchall_DryWetMidi_Multimedia_PlaybackCurrentTimeWatcher_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public sealed class PlaybackCurrentTimeWatcher : IDisposable, IClockDrivenObject</code></pre>
+  </div>
+  <h3 id="properties">Properties
+  </h3>
+  <a id="Melanchall_DryWetMidi_Multimedia_PlaybackCurrentTimeWatcher_Instance_" data-uid="Melanchall.DryWetMidi.Multimedia.PlaybackCurrentTimeWatcher.Instance*"></a>
+  <h4 id="Melanchall_DryWetMidi_Multimedia_PlaybackCurrentTimeWatcher_Instance" data-uid="Melanchall.DryWetMidi.Multimedia.PlaybackCurrentTimeWatcher.Instance">Instance</h4>
+  <div class="markdown level1 summary">
+Gets the instance of <a class="xref" href="Melanchall.DryWetMidi.Multimedia.PlaybackCurrentTimeWatcher.html">PlaybackCurrentTimeWatcher</a>.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static PlaybackCurrentTimeWatcher Instance { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Multimedia.PlaybackCurrentTimeWatcher.html">PlaybackCurrentTimeWatcher</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Multimedia_PlaybackCurrentTimeWatcher_IsWatching_" data-uid="Melanchall.DryWetMidi.Multimedia.PlaybackCurrentTimeWatcher.IsWatching*"></a>
+  <h4 id="Melanchall_DryWetMidi_Multimedia_PlaybackCurrentTimeWatcher_IsWatching" data-uid="Melanchall.DryWetMidi.Multimedia.PlaybackCurrentTimeWatcher.IsWatching">IsWatching</h4>
+  <div class="markdown level1 summary">
+Gets a value indicating whether the watcher polls playbacks current times or not.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool IsWatching { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Multimedia_PlaybackCurrentTimeWatcher_Playbacks_" data-uid="Melanchall.DryWetMidi.Multimedia.PlaybackCurrentTimeWatcher.Playbacks*"></a>
+  <h4 id="Melanchall_DryWetMidi_Multimedia_PlaybackCurrentTimeWatcher_Playbacks" data-uid="Melanchall.DryWetMidi.Multimedia.PlaybackCurrentTimeWatcher.Playbacks">Playbacks</h4>
+  <div class="markdown level1 summary">
+Gets playbacks the watcher polls current time of.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IEnumerable&lt;Playback&gt; Playbacks { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Multimedia.Playback.html">Playback</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Multimedia_PlaybackCurrentTimeWatcher_PollingInterval_" data-uid="Melanchall.DryWetMidi.Multimedia.PlaybackCurrentTimeWatcher.PollingInterval*"></a>
+  <h4 id="Melanchall_DryWetMidi_Multimedia_PlaybackCurrentTimeWatcher_PollingInterval" data-uid="Melanchall.DryWetMidi.Multimedia.PlaybackCurrentTimeWatcher.PollingInterval">PollingInterval</h4>
+  <div class="markdown level1 summary">
+Gets or sets the interval of playbacks current times polling.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public TimeSpan PollingInterval { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.timespan">TimeSpan</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <a id="Melanchall_DryWetMidi_Multimedia_PlaybackCurrentTimeWatcher_AddPlayback_" data-uid="Melanchall.DryWetMidi.Multimedia.PlaybackCurrentTimeWatcher.AddPlayback*"></a>
+  <h4 id="Melanchall_DryWetMidi_Multimedia_PlaybackCurrentTimeWatcher_AddPlayback_Melanchall_DryWetMidi_Multimedia_Playback_Melanchall_DryWetMidi_Interaction_TimeSpanType_" data-uid="Melanchall.DryWetMidi.Multimedia.PlaybackCurrentTimeWatcher.AddPlayback(Melanchall.DryWetMidi.Multimedia.Playback,Melanchall.DryWetMidi.Interaction.TimeSpanType)">AddPlayback(Playback, TimeSpanType)</h4>
+  <div class="markdown level1 summary">
+Adds a playback to the list of ones to watch current times of.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void AddPlayback(Playback playback, TimeSpanType timeType)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Multimedia.Playback.html">Playback</a></td>
+        <td><span class="parametername">playback</span></td>
+        <td>Playback to watch current time of.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TimeSpanType.html">TimeSpanType</a></td>
+        <td><span class="parametername">timeType</span></td>
+        <td>Type of current time to convert to.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">playback</code> is <code>null</code>.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.componentmodel.invalidenumargumentexception">InvalidEnumArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">timeType</code> specified an invalid value.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.objectdisposedexception">ObjectDisposedException</a></td>
+        <td>The current <a class="xref" href="Melanchall.DryWetMidi.Multimedia.PlaybackCurrentTimeWatcher.html">PlaybackCurrentTimeWatcher</a>
+is disposed.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Multimedia_PlaybackCurrentTimeWatcher_Dispose_" data-uid="Melanchall.DryWetMidi.Multimedia.PlaybackCurrentTimeWatcher.Dispose*"></a>
+  <h4 id="Melanchall_DryWetMidi_Multimedia_PlaybackCurrentTimeWatcher_Dispose" data-uid="Melanchall.DryWetMidi.Multimedia.PlaybackCurrentTimeWatcher.Dispose">Dispose()</h4>
+  <div class="markdown level1 summary">
+Releases all resources used by the current <a class="xref" href="Melanchall.DryWetMidi.Multimedia.PlaybackCurrentTimeWatcher.html">PlaybackCurrentTimeWatcher</a>.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Dispose()</code></pre>
+  </div>
+  <a id="Melanchall_DryWetMidi_Multimedia_PlaybackCurrentTimeWatcher_RemoveAllPlaybacks_" data-uid="Melanchall.DryWetMidi.Multimedia.PlaybackCurrentTimeWatcher.RemoveAllPlaybacks*"></a>
+  <h4 id="Melanchall_DryWetMidi_Multimedia_PlaybackCurrentTimeWatcher_RemoveAllPlaybacks" data-uid="Melanchall.DryWetMidi.Multimedia.PlaybackCurrentTimeWatcher.RemoveAllPlaybacks">RemoveAllPlaybacks()</h4>
+  <div class="markdown level1 summary">
+Removes all playbacks from the list of ones to watch current times of.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void RemoveAllPlaybacks()</code></pre>
+  </div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.objectdisposedexception">ObjectDisposedException</a></td>
+        <td>The current <a class="xref" href="Melanchall.DryWetMidi.Multimedia.PlaybackCurrentTimeWatcher.html">PlaybackCurrentTimeWatcher</a>
+is disposed.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Multimedia_PlaybackCurrentTimeWatcher_RemovePlayback_" data-uid="Melanchall.DryWetMidi.Multimedia.PlaybackCurrentTimeWatcher.RemovePlayback*"></a>
+  <h4 id="Melanchall_DryWetMidi_Multimedia_PlaybackCurrentTimeWatcher_RemovePlayback_Melanchall_DryWetMidi_Multimedia_Playback_" data-uid="Melanchall.DryWetMidi.Multimedia.PlaybackCurrentTimeWatcher.RemovePlayback(Melanchall.DryWetMidi.Multimedia.Playback)">RemovePlayback(Playback)</h4>
+  <div class="markdown level1 summary">
+Removes a playback from the list of ones to watch current times of.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void RemovePlayback(Playback playback)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Multimedia.Playback.html">Playback</a></td>
+        <td><span class="parametername">playback</span></td>
+        <td>Playback to exclude current time watching of.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">playback</code> is <code>null</code>.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.objectdisposedexception">ObjectDisposedException</a></td>
+        <td>The current <a class="xref" href="Melanchall.DryWetMidi.Multimedia.PlaybackCurrentTimeWatcher.html">PlaybackCurrentTimeWatcher</a>
+is disposed.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Multimedia_PlaybackCurrentTimeWatcher_Start_" data-uid="Melanchall.DryWetMidi.Multimedia.PlaybackCurrentTimeWatcher.Start*"></a>
+  <h4 id="Melanchall_DryWetMidi_Multimedia_PlaybackCurrentTimeWatcher_Start" data-uid="Melanchall.DryWetMidi.Multimedia.PlaybackCurrentTimeWatcher.Start">Start()</h4>
+  <div class="markdown level1 summary">
+Starts current times watching.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Start()</code></pre>
+  </div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.objectdisposedexception">ObjectDisposedException</a></td>
+        <td>The current <a class="xref" href="Melanchall.DryWetMidi.Multimedia.PlaybackCurrentTimeWatcher.html">PlaybackCurrentTimeWatcher</a>
+is disposed.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Multimedia_PlaybackCurrentTimeWatcher_Stop_" data-uid="Melanchall.DryWetMidi.Multimedia.PlaybackCurrentTimeWatcher.Stop*"></a>
+  <h4 id="Melanchall_DryWetMidi_Multimedia_PlaybackCurrentTimeWatcher_Stop" data-uid="Melanchall.DryWetMidi.Multimedia.PlaybackCurrentTimeWatcher.Stop">Stop()</h4>
+  <div class="markdown level1 summary">
+Stops current times watching.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Stop()</code></pre>
+  </div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.objectdisposedexception">ObjectDisposedException</a></td>
+        <td>The current <a class="xref" href="Melanchall.DryWetMidi.Multimedia.PlaybackCurrentTimeWatcher.html">PlaybackCurrentTimeWatcher</a>
+is disposed.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Multimedia_PlaybackCurrentTimeWatcher_TickClock_" data-uid="Melanchall.DryWetMidi.Multimedia.PlaybackCurrentTimeWatcher.TickClock*"></a>
+  <h4 id="Melanchall_DryWetMidi_Multimedia_PlaybackCurrentTimeWatcher_TickClock" data-uid="Melanchall.DryWetMidi.Multimedia.PlaybackCurrentTimeWatcher.TickClock">TickClock()</h4>
+  <div class="markdown level1 summary">
+Ticks internal clock.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void TickClock()</code></pre>
+  </div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.objectdisposedexception">ObjectDisposedException</a></td>
+        <td>The current <a class="xref" href="Melanchall.DryWetMidi.Multimedia.PlaybackCurrentTimeWatcher.html">PlaybackCurrentTimeWatcher</a>
+is disposed.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="events">Events
+  </h3>
+  <h4 id="Melanchall_DryWetMidi_Multimedia_PlaybackCurrentTimeWatcher_CurrentTimeChanged" data-uid="Melanchall.DryWetMidi.Multimedia.PlaybackCurrentTimeWatcher.CurrentTimeChanged">CurrentTimeChanged</h4>
+  <div class="markdown level1 summary">
+Occurs when current times of playbacks are changed.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public event EventHandler&lt;PlaybackCurrentTimeChangedEventArgs&gt; CurrentTimeChanged</code></pre>
+  </div>
+  <h5 class="eventType">Event Type</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.eventhandler-1">EventHandler</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Multimedia.PlaybackCurrentTimeChangedEventArgs.html">PlaybackCurrentTimeChangedEventArgs</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.idisposable">System.IDisposable</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Multimedia.IClockDrivenObject.html">IClockDrivenObject</a>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            2021 / Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

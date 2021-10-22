@@ -1,0 +1,213 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Virtual device | DryWetMIDI </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Virtual device | DryWetMIDI ">
+    <meta name="generator" content="docfx 2.58.0.0">
+    
+    <link rel="shortcut icon" href="../../images/favicon.png">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <meta property="docfx:navrel" content="../../toc.html">
+    <meta property="docfx:tocrel" content="../toc.html">
+    
+    <meta property="docfx:rel" content="../../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list">Search Results for <span></span></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination" data-first="First" data-prev="Previous" data-next="Next" data-last="Last"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="a_dev_virtual">
+<h1 id="virtual-device">Virtual device</h1>
+
+<div class="IMPORTANT">
+<h5>Important</h5>
+<p>Virtual devices API available for macOS only. For Windows you can use products like <a href="https://www.tobias-erichsen.de/software/virtualmidi/virtualmidi-sdk.html">virtualMIDI SDK</a> or similar to work with virtual MIDI ports programmatically. Be careful with license of these products.</p>
+</div>
+<p>With DryWetMIDI you can programmatically create virtual MIDI devices with the specified name using <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.VirtualDevice.html#Melanchall_DryWetMidi_Multimedia_VirtualDevice_Create_System_String_">VirtualDevice.Create</a> method. In fact virtual device is an <a class="xref" href="Input-device.html">input</a> and an <a class="xref" href="Output-device.html">output</a> devices paired together in a way that any MIDI event sent to the output device will be immediately transfered back from the virtual device and can be received by an application from its input subdevice.</p>
+<p>Thus we have <a href="https://en.wikipedia.org/wiki/Loopback">loopback</a> device here. Loopback device is useful, for example, as intermediate layer between an application and some software synthesizer. In this case:</p>
+<ol>
+<li>you create virtual device, for example, named as <em>MyDevice</em>;</li>
+<li>in the application you set <em>MyDevice</em> as an output MIDI port, so the application will send MIDI data to the output subdevice of the virtual device;</li>
+<li>in software synthesizer you set <em>MyDevice</em> as an input MIDI port.</li>
+</ol>
+<p>So when you create virtual device an input device and an output one are created with the same name as the one specified on virtual device creation. Subdevices of a virtual device are available via <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.VirtualDevice.html#Melanchall_DryWetMidi_Multimedia_VirtualDevice_InputDevice">InputDevice</a> and <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.VirtualDevice.html#Melanchall_DryWetMidi_Multimedia_VirtualDevice_OutputDevice">OutputDevice</a> properties of the <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.VirtualDevice.html">VirtualDevice</a> class. Of course you can use those device separately as regular input and output devices:</p>
+<pre><code class="lang-csharp">using System;
+using Melanchall.DryWetMidi.Multimedia;
+
+namespace DwmExamples
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            var virtualDevice = VirtualDevice.Create(&quot;MyDevice&quot;);
+            Console.WriteLine($&quot;Virtual device {virtualDevice} created with subdevices:&quot;);
+            Console.WriteLine($&quot;  input = {virtualDevice.InputDevice.Name}&quot;);
+            Console.WriteLine($&quot;  output = {virtualDevice.OutputDevice.Name}&quot;);
+
+            var inputDevice = InputDevice.GetByName(&quot;MyDevice&quot;);
+            Console.WriteLine($&quot;Input device {inputDevice.Name} got as regular input device.&quot;);
+
+            var outputDevice = OutputDevice.GetByName(&quot;MyDevice&quot;);
+            Console.WriteLine($&quot;Output device {outputDevice.Name} got as regular output device.&quot;);
+
+            Console.ReadKey();
+        }
+    }
+}
+</code></pre>
+<p>Output of the program:</p>
+<pre><code>Virtual device Virtual device created with subdevices:
+  input = MyDevice
+  output = MyDevice
+Input device MyDevice got as regular input device.
+Output device MyDevice got as regular output device.
+</code></pre>
+<p>You can even combine virtual devices and <a class="xref" href="Devices-connector.html">DevicesConnector</a> to broadcast MIDI data to several applications (synthesizers, for example) at the same time:</p>
+<pre><code class="lang-csharp">using System;
+using Melanchall.DryWetMidi.Common;
+using Melanchall.DryWetMidi.Core;
+using Melanchall.DryWetMidi.Multimedia;
+
+namespace DwmExamples
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            var rootDevice = VirtualDevice.Create(&quot;Root&quot;);
+            rootDevice.InputDevice.StartEventsListening(); // Important, don't forget!
+
+            var leafDevice1 = VirtualDevice.Create(&quot;Leaf1&quot;);
+            leafDevice1.InputDevice.EventReceived += OnLeafEventReceived;
+
+            var leafDevice2 = VirtualDevice.Create(&quot;Leaf2&quot;);
+            leafDevice2.InputDevice.EventReceived += OnLeafEventReceived;
+
+            var devicesConnector = rootDevice.InputDevice.Connect(
+                leafDevice1.OutputDevice,
+                leafDevice2.OutputDevice);
+            leafDevice1.InputDevice.StartEventsListening();
+            leafDevice2.InputDevice.StartEventsListening();
+
+            var midiEvent = new NoteOnEvent((SevenBitNumber)70, (SevenBitNumber)60)
+            {
+                Channel = (FourBitNumber)5
+            };
+
+            Console.WriteLine($&quot;Sending {midiEvent} event...&quot;);
+            rootDevice.OutputDevice.SendEvent(midiEvent);
+
+            Console.ReadKey();
+        }
+
+        private static void OnLeafEventReceived(object sender, MidiEventReceivedEventArgs e)
+        {
+            var device = (MidiDevice)sender;
+            Console.WriteLine($&quot;Event {e.Event} received on device {device.Name}.&quot;);
+        }
+    }
+}
+</code></pre>
+<p>This program will print following lines:</p>
+<pre><code>Sending Note On [5] (70, 60) event...
+Event Note On [5] (70, 60) received on device Leaf1.
+Event Note On [5] (70, 60) received on device Leaf2.
+</code></pre>
+<p>As with input and output device you should always <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.MidiDevice.html#Melanchall_DryWetMidi_Multimedia_MidiDevice_Dispose">dispose</a> virtual device when you're done with it:</p>
+<pre><code class="lang-csharp">virtualDevice.Dispose();
+</code></pre>
+<p>You must not explicitly dispose subdevices of a virtual device. More than that calling <code>Dispose</code> on <code>virtualDevice.InputDevice</code> and <code>virtualDevice.OutputDevice</code> will throw an exception. But if you got references to the subdevices by regular methods (for example, by <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.InputDevice.html#Melanchall_DryWetMidi_Multimedia_InputDevice_GetByName_System_String_">InputDevice.GetByName</a>), you can call <code>Dispose</code> on that references of course.</p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            2021 / Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>

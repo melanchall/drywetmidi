@@ -1,0 +1,251 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Devices watcher | DryWetMIDI </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Devices watcher | DryWetMIDI ">
+    <meta name="generator" content="docfx 2.58.0.0">
+    
+    <link rel="shortcut icon" href="../../images/favicon.png">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <meta property="docfx:navrel" content="../../toc.html">
+    <meta property="docfx:tocrel" content="../toc.html">
+    
+    <meta property="docfx:rel" content="../../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list">Search Results for <span></span></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination" data-first="First" data-prev="Previous" data-next="Next" data-last="Last"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="a_dev_watcher">
+<h1 id="devices-watcher">Devices watcher</h1>
+
+<div class="IMPORTANT">
+<h5>Important</h5>
+<p>Watching devices available for macOS only.</p>
+</div>
+<p>DryWetMIDI allows to track whether a MIDI device added to or removed from the system. There is <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.DevicesWatcher.html">DevicesWatcher</a> class for that purpose. The class is singleton and you can get the instance with <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.DevicesWatcher.html#Melanchall_DryWetMidi_Multimedia_DevicesWatcher_Instance">Instance</a> property.</p>
+<p><code>DevicesWatcher</code> provides two events: <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.DevicesWatcher.html#Melanchall_DryWetMidi_Multimedia_DevicesWatcher_DeviceAdded">DeviceAdded</a> and <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.DevicesWatcher.html#Melanchall_DryWetMidi_Multimedia_DevicesWatcher_DeviceRemoved">DeviceRemoved</a>. First one will be fired when a MIDI device is added to the system, and second one - when a device removed from it. You can then cast device instance from the events arguments to <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.InputDevice.html">InputDevice</a> or <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.OutputDevice.html">OutputDevice</a>. See following sample program:</p>
+<pre><code class="lang-csharp">using System;
+using System.Threading;
+using Melanchall.DryWetMidi.Multimedia;
+
+namespace DwmExamples
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            DevicesWatcher.Instance.DeviceAdded += OnDeviceAdded;
+            DevicesWatcher.Instance.DeviceRemoved += OnDeviceRemoved;
+
+            Console.WriteLine(&quot;Adding device...&quot;);
+            var virtualDevice = VirtualDevice.Create(&quot;MyDevice&quot;);
+
+            Thread.Sleep(500); // to get system time to see new device
+
+            Console.WriteLine(&quot;Removing device...&quot;);
+            virtualDevice.Dispose();
+
+            Console.ReadKey();
+        }
+
+        private static void OnDeviceRemoved(object sender, DeviceAddedRemovedEventArgs e)
+        {
+            Console.WriteLine($&quot;Device removed: {e.Device.GetType()}&quot;);
+        }
+
+        private static void OnDeviceAdded(object sender, DeviceAddedRemovedEventArgs e)
+        {
+            Console.WriteLine($&quot;Device added: {e.Device.GetType()} ({e.Device.Name})&quot;);
+        }
+    }
+}
+</code></pre>
+<p>Running the program we'll see following output:</p>
+<pre><code>Adding device...
+Device added: Melanchall.DryWetMidi.Multimedia.InputDevice (MyDevice)
+Device added: Melanchall.DryWetMidi.Multimedia.OutputDevice (MyDevice)
+Removing device...
+Device removed: Melanchall.DryWetMidi.Multimedia.InputDevice
+Device removed: Melanchall.DryWetMidi.Multimedia.OutputDevice
+</code></pre>
+<p>When device is added you can immediately interact with it using an instance from the <code>DeviceAdded</code> event's arguments. But an instance from the <code>DeviceRemoved</code> event's arguments is non-interactable, because device is removed and doesn't exist in the system anymore. Any attempt to call methods or properties on that instance will throw an exception:</p>
+<pre><code class="lang-csharp">using System;
+using System.Threading;
+using Melanchall.DryWetMidi.Multimedia;
+
+namespace DwmExamples
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            DevicesWatcher.Instance.DeviceRemoved += OnDeviceRemoved;
+
+            var virtualDevice = VirtualDevice.Create(&quot;MyDevice&quot;);
+            Thread.Sleep(500); // to get system time to see new device
+
+            Console.WriteLine(&quot;Removing device...&quot;);
+            virtualDevice.Dispose();
+
+            Console.ReadKey();
+        }
+
+        private static void OnDeviceRemoved(object sender, DeviceAddedRemovedEventArgs e)
+        {
+            Console.WriteLine($&quot;Device removed. Getting its name...&quot;);
+            var deviceName = e.Device.Name;
+        }
+    }
+}
+</code></pre>
+<p>The progrum will be crashed with:</p>
+<pre><code>Removing device...
+Device removed. Getting its name...
+Unhandled exception. System.InvalidOperationException: Operation can't be performed on removed device.
+</code></pre>
+<p>But you can compare device instances via <code>Equals</code> to know whether two instances of <code>MidiDevice</code> are equal or not. Following example shows how you can get the name of a removed device via info about devices stored at the start of the program:</p>
+<pre><code class="lang-csharp">using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using Melanchall.DryWetMidi.Multimedia;
+
+namespace DwmExamples
+{
+    class Program
+    {
+        private static Dictionary&lt;MidiDevice, string&gt; _devicesNames;
+
+        static void Main(string[] args)
+        {
+            DevicesWatcher.Instance.DeviceRemoved += OnDeviceRemoved;
+
+            var virtualDevice = VirtualDevice.Create(&quot;MyDevice&quot;);
+            Thread.Sleep(500); // to get system time to see new device
+
+            _devicesNames = InputDevice.GetAll()
+                .OfType&lt;MidiDevice&gt;()
+                .Concat(OutputDevice.GetAll())
+                .ToDictionary(d =&gt; d, d =&gt; d.Name);
+
+            Console.WriteLine(&quot;Removing device...&quot;);
+            virtualDevice.Dispose();
+
+            Console.ReadKey();
+        }
+
+        private static void OnDeviceRemoved(object sender, DeviceAddedRemovedEventArgs e)
+        {
+            Console.WriteLine($&quot;Device removed. Getting its name...&quot;);
+            var deviceName = _devicesNames[e.Device];
+            Console.WriteLine($&quot;Name is {deviceName}&quot;);
+        }
+    }
+}
+</code></pre>
+<p>Output is:</p>
+<pre><code>Removing device...
+Device removed. Getting its name...
+Name is MyDevice
+Device removed. Getting its name...
+Name is MyDevice
+</code></pre>
+<p>Device instances comparing can be useful in programs with GUI where you need update the list of available devices. So when a device is added, you just add it to the list. When some device is removed, you find corresponding item in the current list via <code>Equals</code> on device instances and remove that item.</p>
+<div class="IMPORTANT">
+<h5>Important</h5>
+<p>Checking for devices equality supported for macOS only. On Windows any call of <code>Equals</code> will just compare references.</p>
+</div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            2021 / Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>

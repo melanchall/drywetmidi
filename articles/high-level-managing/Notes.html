@@ -76,7 +76,7 @@
         </div>
         <div class="article row grid-right">
           <div class="col-md-10">
-            <article class="content wrap" id="_content" data-uid="">
+            <article class="content wrap" id="_content" data-uid="a_notes">
 <h1 id="notes">Notes</h1>
 
 <p>To effectively manage note events, DryWetMIDI provides the <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.NotesManager.html">NotesManager</a> class to help with this. Instead of messing with Note On/Off events this manager allows to operate by <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.Note.html">Note</a> objects.</p>
@@ -112,14 +112,6 @@ using (var notesManager = midiFile.GetTrackChunks().First().ManageNotes())
 </code></pre>
 <h2 id="special-utilities">Special utilities</h2>
 <p>There are several special utility methods that can be useful in real work with notes.</p>
-<h3 id="gettimedeventsandnotes">GetTimedEventsAndNotes</h3>
-<p>The <code>GetTimedEventsAndNotes</code> is an extension method for <code>IEnumerable&lt;TimedEvent&gt;</code> placed in <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.GetTimedEventsAndNotesUtilities.html">GetTimedEventsAndNotesUtilities</a> class. This method iterates through the collection of <code>TimedEvent</code> returning <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.Note.html">Note</a> for Note On / Note Off event pairs and original <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.TimedEvent.html">TimedEvent</a> for all other events. There are also extension methods for <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a> and for <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a>.</p>
-<p>The image below illustrates work of this method:</p>
-<p><img src="images/GetTimedEventsAndNotes.png" alt="Get timed events and notes"></p>
-<h3 id="getnotesandrests">GetNotesAndRests</h3>
-<p>The <code>GetNotesAndRests</code> is an extension method for <code>IEnumerable&lt;Note&gt;</code> placed in <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.GetNotesAndRestsUtilities.html">GetNotesAndRestsUtilities</a> class. This method iterates through the specified collection of <code>Note</code> returning instances of <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.Note.html">Note</a> and <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.Rest.html">Rest</a> where rests calculated using the specified policy. The policy is specified via <code>restSeparationPolicy</code> parameter of <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.RestSeparationPolicy.html">RestSeparationPolicy</a>.</p>
-<p>The image below illustrates how different policies affects rests building:</p>
-<p><img src="images/GetNotesAndRests.png" alt="Get notes and rests"></p>
 <h3 id="resizenotes">ResizeNotes</h3>
 <p><code>ResizeNotes</code> methods within <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.ResizeNotesUtilities.html">ResizeNotesUtilities</a> resizes group of notes to the specified length or by the specified ratio treating all notes as single object. <code>distanceCalculationType</code> defines the type (and therefore units) of distances calculations.</p>
 <p>The following image shows the process in action:</p>

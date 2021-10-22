@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <!--[if IE]><![endif]-->
 <html>
   
@@ -93,36 +93,11 @@ Defines a context to search chords within.
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public enum ChordSearchContext</code></pre>
   </div>
-  <h5 id="Melanchall_DryWetMidi_Interaction_ChordSearchContext_examples"><strong>Examples</strong></h5>
-  
-<p>
-To understand what context means let&apos;s take a look at following events sequence
-within two track chunks:
-</p>
-<img src="images/dwmgen_Melanchall.DryWetMidi.Interaction.ChordSearchContext-4361.png" class="text-image" />
-<p>
-<p>
-where <code>A</code>, <code>B</code> and <code>C</code> mean Note On events (see <a class="xref" href="Melanchall.DryWetMidi.Core.NoteOnEvent.html">NoteOnEvent</a>), and
-<code>X</code>, <code>Y</code> and <code>Z</code> mean Note Off ones (see <a class="xref" href="Melanchall.DryWetMidi.Core.NoteOffEvent.html">NoteOffEvent</a>) with different
-note number and channel for simplicity; <code>.</code> is any other event.
-</p>
-</p>
-<p>
-If we use <a class="xref" href="Melanchall.DryWetMidi.Interaction.ChordSearchContext.html#Melanchall_DryWetMidi_Interaction_ChordSearchContext_SingleEventsCollection">SingleEventsCollection</a> as the context, chords will be constructed in
-following way:
-</p>
-<img src="images/dwmgen_Melanchall.DryWetMidi.Interaction.ChordSearchContext-5214.png" class="text-image" />
-<p>
-So chords will be constructed only from notes within the same events collection (track chunk).
-</p>
-<p>
-But if we use <a class="xref" href="Melanchall.DryWetMidi.Interaction.ChordSearchContext.html#Melanchall_DryWetMidi_Interaction_ChordSearchContext_AllEventsCollections">AllEventsCollections</a> as the context, we&apos;ll get a single chord:
-</p>
-<img src="images/dwmgen_Melanchall.DryWetMidi.Interaction.ChordSearchContext-5719.png" class="text-image" />
-<p>
-So a chord can be constructed from notes within different events collections.
-</p>
-
+  <h5 id="Melanchall_DryWetMidi_Interaction_ChordSearchContext_remarks"><strong>Remarks</strong></h5>
+  <div class="markdown level0 remarks">
+Please see <a class="xref" href="../articles/high-level-managing/Getting-objects.html#chordsearchcontext">Getting objects
+(section GetChords → Settings → ChordSearchContext)</a> article to learn more.
+</div>
   <h3 id="fields">Fields
   </h3>
   <table class="table table-bordered table-striped table-condensed">

@@ -183,15 +183,15 @@ initial capacity of internal buffer.
   </table>
   <h3 id="properties">Properties
   </h3>
-  <a id="Melanchall_DryWetMidi_Core_MidiEventToBytesConverter_WritingSettings_" data-uid="Melanchall.DryWetMidi.Core.MidiEventToBytesConverter.WritingSettings*"></a>
-  <h4 id="Melanchall_DryWetMidi_Core_MidiEventToBytesConverter_WritingSettings" data-uid="Melanchall.DryWetMidi.Core.MidiEventToBytesConverter.WritingSettings">WritingSettings</h4>
+  <a id="Melanchall_DryWetMidi_Core_MidiEventToBytesConverter_CustomMetaEventTypes_" data-uid="Melanchall.DryWetMidi.Core.MidiEventToBytesConverter.CustomMetaEventTypes*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_MidiEventToBytesConverter_CustomMetaEventTypes" data-uid="Melanchall.DryWetMidi.Core.MidiEventToBytesConverter.CustomMetaEventTypes">CustomMetaEventTypes</h4>
   <div class="markdown level1 summary">
-Gets settings according to which MIDI data should be write to bytes.
+Gets or sets collection of custom meta events types.
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public WritingSettings WritingSettings { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">public EventTypesCollection CustomMetaEventTypes { get; set; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -203,7 +203,118 @@ Gets settings according to which MIDI data should be write to bytes.
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Core.WritingSettings.html">WritingSettings</a></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.EventTypesCollection.html">EventTypesCollection</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Melanchall_DryWetMidi_Core_MidiEventToBytesConverter_CustomMetaEventTypes_remarks">Remarks</h5>
+  <div class="markdown level1 remarks">
+<p>Types within this collection must be derived from the <a class="xref" href="Melanchall.DryWetMidi.Core.MetaEvent.html">MetaEvent</a>
+class and have parameterless constructor. No exception will be thrown
+while writing a MIDI file if some types don&apos;t meet these requirements.</p>
+</div>
+  <a id="Melanchall_DryWetMidi_Core_MidiEventToBytesConverter_NoteOffAsSilentNoteOn_" data-uid="Melanchall.DryWetMidi.Core.MidiEventToBytesConverter.NoteOffAsSilentNoteOn*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_MidiEventToBytesConverter_NoteOffAsSilentNoteOn" data-uid="Melanchall.DryWetMidi.Core.MidiEventToBytesConverter.NoteOffAsSilentNoteOn">NoteOffAsSilentNoteOn</h4>
+  <div class="markdown level1 summary">
+Gets or sets a value indicating whether Note Off events should be written as Note On ones
+with velocity of zero, or not. In conjunction with <a class="xref" href="Melanchall.DryWetMidi.Core.MidiEventToBytesConverter.html#Melanchall_DryWetMidi_Core_MidiEventToBytesConverter_UseRunningStatus">UseRunningStatus</a> set to <code>true</code>
+can give some compression of MIDI data. The default value is <code>false</code>.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool NoteOffAsSilentNoteOn { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Core_MidiEventToBytesConverter_TextEncoding_" data-uid="Melanchall.DryWetMidi.Core.MidiEventToBytesConverter.TextEncoding*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_MidiEventToBytesConverter_TextEncoding" data-uid="Melanchall.DryWetMidi.Core.MidiEventToBytesConverter.TextEncoding">TextEncoding</h4>
+  <div class="markdown level1 summary">
+Gets or sets an <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.text.encoding">Encoding</a> that will be used to write the text of a
+text-based meta event. The default is <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.text.encoding.ascii#System_Text_Encoding_ASCII">ASCII</a>.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Encoding TextEncoding { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.text.encoding">Encoding</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Core_MidiEventToBytesConverter_UseRunningStatus_" data-uid="Melanchall.DryWetMidi.Core.MidiEventToBytesConverter.UseRunningStatus*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_MidiEventToBytesConverter_UseRunningStatus" data-uid="Melanchall.DryWetMidi.Core.MidiEventToBytesConverter.UseRunningStatus">UseRunningStatus</h4>
+  <div class="markdown level1 summary">
+Gets or sets a value indicating whether &apos;running status&apos; (to turn off writing of the status
+bytes of consecutive events of the same type) should be used or not. The default value is <code>false</code>.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool UseRunningStatus { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Core_MidiEventToBytesConverter_WriteDeltaTimes_" data-uid="Melanchall.DryWetMidi.Core.MidiEventToBytesConverter.WriteDeltaTimes*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_MidiEventToBytesConverter_WriteDeltaTimes" data-uid="Melanchall.DryWetMidi.Core.MidiEventToBytesConverter.WriteDeltaTimes">WriteDeltaTimes</h4>
+  <div class="markdown level1 summary">
+Gets or sets a value indicating whether delta-times of events must be written to bytes
+array or not. The default value is <code>false</code>.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool WriteDeltaTimes { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
         <td></td>
       </tr>
     </tbody>
@@ -331,6 +442,63 @@ minimum size of resulting array.
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
         <td><code data-dev-comment-type="paramref" class="paramref">minSize</code> is negative.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Core_MidiEventToBytesConverter_Convert_" data-uid="Melanchall.DryWetMidi.Core.MidiEventToBytesConverter.Convert*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_MidiEventToBytesConverter_Convert_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_MidiEvent__" data-uid="Melanchall.DryWetMidi.Core.MidiEventToBytesConverter.Convert(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.MidiEvent})">Convert(IEnumerable&lt;MidiEvent&gt;)</h4>
+  <div class="markdown level1 summary">
+Converts collection of <a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html">MidiEvent</a> to bytes array.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public byte[] Convert(IEnumerable&lt;MidiEvent&gt; midiEvents)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html">MidiEvent</a>&gt;</td>
+        <td><span class="parametername">midiEvents</span></td>
+        <td>MIDI events to convert.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.byte">Byte</a>[]</td>
+        <td>Array of bytes representing <code data-dev-comment-type="paramref" class="paramref">midiEvents</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">midiEvents</code> is <code>null</code>.</td>
       </tr>
     </tbody>
   </table>

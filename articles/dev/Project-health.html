@@ -1,0 +1,162 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Project health | DryWetMIDI </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Project health | DryWetMIDI ">
+    <meta name="generator" content="docfx 2.58.0.0">
+    
+    <link rel="shortcut icon" href="../../images/favicon.png">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <meta property="docfx:navrel" content="../../toc.html">
+    <meta property="docfx:tocrel" content="../toc.html">
+    
+    <meta property="docfx:rel" content="../../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list">Search Results for <span></span></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination" data-first="First" data-prev="Previous" data-next="Next" data-last="Last"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="a_develop_project_health">
+<h1 id="project-health">Project health</h1>
+
+<p>Here you can see &quot;health&quot; of the project in terms of test pipelines are passed or not. First of all, we need to define two subsets of the library API:</p>
+<ul>
+<li><strong>Core API</strong> - it's all API except Multimedia one; in other words it's the API that is supported by .NET itself, so it can be run on any platform .NET Core / .NET supported.</li>
+<li><strong>Multimedia API</strong> - it's platform-specific API that includes following key classes:
+<ul>
+<li><a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.InputDevice.html">InputDevice</a> (more details in the <a href="zref:a_dev_input">InputDevice</a> article);</li>
+<li><a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.OutputDevice.html">OutputDevice</a> (more details in the <a class="xref" href="../devices/Output-device.html">OutputDevice</a> article);</li>
+<li><a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.VirtualDevice.html">VirtualDevice</a> (more details in the <a class="xref" href="../devices/Virtual-device.html">VirtualDevice</a> article);</li>
+<li><a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.DevicesWatcher.html">DevicesWatcher</a> (more details in the <a class="xref" href="../devices/Devices-watcher.html">DevicesWatcher</a> article);</li>
+<li><a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.HighPrecisionTickGenerator.html">HighPrecisionTickGenerator</a>.</li>
+</ul>
+</li>
+</ul>
+<h2 id="windows">Windows</h2>
+<p><strong>master</strong></p>
+<p><a href="https://dev.azure.com/Melanchall/DryWetMIDI/_build/latest?definitionId=57&amp;branchName=master"><img src="https://dev.azure.com/Melanchall/DryWetMIDI/_apis/build/status/Test/Test%20Core%20API%20-%20Windows%20-%20.NET%20Core%203.1?branchName=master&amp;label=Test%20Core%20API%20-%20Windows%20-%20.NET%20Core%203.1" alt="Test Core API - Windows - .NET Core 3.1"></a><br>
+<a href="https://dev.azure.com/Melanchall/DryWetMIDI/_build/latest?definitionId=59&amp;branchName=master"><img src="https://dev.azure.com/Melanchall/DryWetMIDI/_apis/build/status/Test/Test%20Core%20API%20-%20Windows%20-%20.NET%205?branchName=master&amp;label=Test%20Core%20API%20-%20Windows%20-%20.NET%205" alt="Test Core API - Windows - .NET 5"></a><br>
+<a href="https://dev.azure.com/Melanchall/DryWetMIDI/_build/latest?definitionId=63&amp;branchName=master"><img src="https://dev.azure.com/Melanchall/DryWetMIDI/_apis/build/status/Test/Test%20Multimedia%20API%20-%20Windows%20-%20.NET%20Core%203.1?branchName=master&amp;label=Test%20Multimedia%20API%20-%20Windows%20-%20.NET%20Core%203.1" alt="Test Multimedia API - Windows - .NET Core 3.1"></a><br>
+<a href="https://dev.azure.com/Melanchall/DryWetMIDI/_build/latest?definitionId=64&amp;branchName=master"><img src="https://dev.azure.com/Melanchall/DryWetMIDI/_apis/build/status/Test/Test%20Multimedia%20API%20-%20Windows%20-%20.NET%205?branchName=master&amp;label=Test%20Multimedia%20API%20-%20Windows%20-%20.NET%205" alt="Test Multimedia API - Windows - .NET 5"></a></p>
+<p><strong>develop</strong></p>
+<p><a href="https://dev.azure.com/Melanchall/DryWetMIDI/_build/latest?definitionId=57&amp;branchName=develop"><img src="https://dev.azure.com/Melanchall/DryWetMIDI/_apis/build/status/Test/Test%20Core%20API%20-%20Windows%20-%20.NET%20Core%203.1?branchName=develop&amp;label=Test%20Core%20API%20-%20Windows%20-%20.NET%20Core%203.1" alt="Test Core API - Windows - .NET Core 3.1"></a><br>
+<a href="https://dev.azure.com/Melanchall/DryWetMIDI/_build/latest?definitionId=59&amp;branchName=develop"><img src="https://dev.azure.com/Melanchall/DryWetMIDI/_apis/build/status/Test/Test%20Core%20API%20-%20Windows%20-%20.NET%205?branchName=develop&amp;label=Test%20Core%20API%20-%20Windows%20-%20.NET%205" alt="Test Core API - Windows - .NET 5"></a><br>
+<a href="https://dev.azure.com/Melanchall/DryWetMIDI/_build/latest?definitionId=63&amp;branchName=develop"><img src="https://dev.azure.com/Melanchall/DryWetMIDI/_apis/build/status/Test/Test%20Multimedia%20API%20-%20Windows%20-%20.NET%20Core%203.1?branchName=develop&amp;label=Test%20Multimedia%20API%20-%20Windows%20-%20.NET%20Core%203.1" alt="Test Multimedia API - Windows - .NET Core 3.1"></a><br>
+<a href="https://dev.azure.com/Melanchall/DryWetMIDI/_build/latest?definitionId=64&amp;branchName=develop"><img src="https://dev.azure.com/Melanchall/DryWetMIDI/_apis/build/status/Test/Test%20Multimedia%20API%20-%20Windows%20-%20.NET%205?branchName=develop&amp;label=Test%20Multimedia%20API%20-%20Windows%20-%20.NET%205" alt="Test Multimedia API - Windows - .NET 5"></a></p>
+<h2 id="macos">macOS</h2>
+<p><strong>master</strong></p>
+<p><a href="https://dev.azure.com/Melanchall/DryWetMIDI/_build/latest?definitionId=58&amp;branchName=master"><img src="https://dev.azure.com/Melanchall/DryWetMIDI/_apis/build/status/Test/Test%20Core%20API%20-%20macOS%20-%20.NET%20Core%203.1?branchName=master&amp;label=Test%20Core%20API%20-%20macOS%20-%20.NET%20Core%203.1" alt="Test Core API - macOS - .NET Core 3.1"></a><br>
+<a href="https://dev.azure.com/Melanchall/DryWetMIDI/_build/latest?definitionId=60&amp;branchName=master"><img src="https://dev.azure.com/Melanchall/DryWetMIDI/_apis/build/status/Test/Test%20Core%20API%20-%20macOS%20-%20.NET%205?branchName=master&amp;label=Test%20Core%20API%20-%20macOS%20-%20.NET%205" alt="Test Core API - macOS - .NET 5"></a><br>
+<a href="https://dev.azure.com/Melanchall/DryWetMIDI/_build/latest?definitionId=65&amp;branchName=master"><img src="https://dev.azure.com/Melanchall/DryWetMIDI/_apis/build/status/Test/Test%20Multimedia%20API%20-%20macOS%20-%20.NET%20Core%203.1?branchName=master&amp;label=Test%20Multimedia%20API%20-%20macOS%20-%20.NET%20Core%203.1" alt="Test Multimedia API - macOS - .NET Core 3.1"></a><br>
+<a href="https://dev.azure.com/Melanchall/DryWetMIDI/_build/latest?definitionId=66&amp;branchName=master"><img src="https://dev.azure.com/Melanchall/DryWetMIDI/_apis/build/status/Test/Test%20Multimedia%20API%20-%20macOS%20-%20.NET%205?branchName=master&amp;label=Test%20Multimedia%20API%20-%20macOS%20-%20.NET%205" alt="Test Multimedia API - macOS - .NET 5"></a></p>
+<p><strong>develop</strong></p>
+<p><a href="https://dev.azure.com/Melanchall/DryWetMIDI/_build/latest?definitionId=58&amp;branchName=develop"><img src="https://dev.azure.com/Melanchall/DryWetMIDI/_apis/build/status/Test/Test%20Core%20API%20-%20macOS%20-%20.NET%20Core%203.1?branchName=develop&amp;label=Test%20Core%20API%20-%20macOS%20-%20.NET%20Core%203.1" alt="Test Core API - macOS - .NET Core 3.1"></a><br>
+<a href="https://dev.azure.com/Melanchall/DryWetMIDI/_build/latest?definitionId=60&amp;branchName=develop"><img src="https://dev.azure.com/Melanchall/DryWetMIDI/_apis/build/status/Test/Test%20Core%20API%20-%20macOS%20-%20.NET%205?branchName=develop&amp;label=Test%20Core%20API%20-%20macOS%20-%20.NET%205" alt="Test Core API - macOS - .NET 5"></a><br>
+<a href="https://dev.azure.com/Melanchall/DryWetMIDI/_build/latest?definitionId=65&amp;branchName=develop"><img src="https://dev.azure.com/Melanchall/DryWetMIDI/_apis/build/status/Test/Test%20Multimedia%20API%20-%20macOS%20-%20.NET%20Core%203.1?branchName=develop&amp;label=Test%20Multimedia%20API%20-%20macOS%20-%20.NET%20Core%203.1" alt="Test Multimedia API - macOS - .NET Core 3.1"></a><br>
+<a href="https://dev.azure.com/Melanchall/DryWetMIDI/_build/latest?definitionId=66&amp;branchName=develop"><img src="https://dev.azure.com/Melanchall/DryWetMIDI/_apis/build/status/Test/Test%20Multimedia%20API%20-%20macOS%20-%20.NET%205?branchName=develop&amp;label=Test%20Multimedia%20API%20-%20macOS%20-%20.NET%205" alt="Test Multimedia API - macOS - .NET 5"></a></p>
+<h2 id="linux">Linux</h2>
+<p><em>Multimedia API is not available for Linux</em>.</p>
+<p><strong>master</strong></p>
+<p><a href="https://dev.azure.com/Melanchall/DryWetMIDI/_build/latest?definitionId=61&amp;branchName=master"><img src="https://dev.azure.com/Melanchall/DryWetMIDI/_apis/build/status/Test/Test%20Core%20API%20-%20Ubuntu%20-%20.NET%20Core%203.1?branchName=master&amp;label=Test%20Core%20API%20-%20Ubuntu%20-%20.NET%20Core%203.1" alt="Test Core API - Ubuntu - .NET Core 3.1"></a><br>
+<a href="https://dev.azure.com/Melanchall/DryWetMIDI/_build/latest?definitionId=62&amp;branchName=master"><img src="https://dev.azure.com/Melanchall/DryWetMIDI/_apis/build/status/Test/Test%20Core%20API%20-%20Ubuntu%20-%20.NET%205?branchName=master&amp;label=Test%20Core%20API%20-%20Ubuntu%20-%20.NET%205" alt="Test Core API - Ubuntu - .NET 5"></a></p>
+<p><strong>develop</strong></p>
+<p><a href="https://dev.azure.com/Melanchall/DryWetMIDI/_build/latest?definitionId=61&amp;branchName=develop"><img src="https://dev.azure.com/Melanchall/DryWetMIDI/_apis/build/status/Test/Test%20Core%20API%20-%20Ubuntu%20-%20.NET%20Core%203.1?branchName=develop&amp;label=Test%20Core%20API%20-%20Ubuntu%20-%20.NET%20Core%203.1" alt="Test Core API - Ubuntu - .NET Core 3.1"></a><br>
+<a href="https://dev.azure.com/Melanchall/DryWetMIDI/_build/latest?definitionId=62&amp;branchName=develop"><img src="https://dev.azure.com/Melanchall/DryWetMIDI/_apis/build/status/Test/Test%20Core%20API%20-%20Ubuntu%20-%20.NET%205?branchName=develop&amp;label=Test%20Core%20API%20-%20Ubuntu%20-%20.NET%205" alt="Test Core API - Ubuntu - .NET 5"></a></p>
+<h2 id="package-integration">Package integration</h2>
+<p>Package integration tests check that NuGet package installed in .NET applications of different types works as expected.</p>
+<p><a href="https://dev.azure.com/Melanchall/DryWetMIDI/_build/latest?definitionId=50&amp;branchName=develop"><img src="https://dev.azure.com/Melanchall/DryWetMIDI/_apis/build/status/Package%20integration/Test%20package%20integration%20-%20.NET%20Framework?branchName=develop&amp;label=Test%20package%20integration%20-%20.NET%20Framework" alt="Test package integration - .NET Framework"></a><br>
+<a href="https://dev.azure.com/Melanchall/DryWetMIDI/_build/latest?definitionId=49&amp;branchName=develop"><img src="https://dev.azure.com/Melanchall/DryWetMIDI/_apis/build/status/Package%20integration/Test%20package%20integration%20-%20.NET%20Core%20%26%20.NET%205?branchName=develop&amp;label=Test%20package%20integration%20-%20.NET%20Core%20%26%20.NET%205" alt="Test package integration - .NET Core &amp; .NET 5"></a><br>
+<a href="https://dev.azure.com/Melanchall/DryWetMIDI/_build/latest?definitionId=51&amp;branchName=develop"><img src="https://dev.azure.com/Melanchall/DryWetMIDI/_apis/build/status/Package%20integration/Test%20package%20integration%20-%20Self-contained%20-%20.NET%205?branchName=develop&amp;label=Test%20package%20integration%20-%20Self-contained%20-%20.NET%205" alt="Test package integration - Self-contained - .NET 5"></a></p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            2021 / Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>

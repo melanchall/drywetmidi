@@ -56,8 +56,8 @@ header .navbar-inverse {
 }
 
 .sidetoc {
-    background-color: #3B3A39;
-    border-left: 1px solid #5E5E5D;
+    background-color: transparent;
+    border-left: none;
     border-right: 1px solid #5E5E5D;
 }
 
@@ -102,12 +102,17 @@ form#search input::placeholder {
 }
 
 body .toc {
-    background-color: #3B3A39;
+    background-color: transparent;
+}
+
+.toc ul.level1 > li:last-of-type {
+    border-top: 1px solid #5E5E5D;
+    padding-top: 10px;
 }
 
 .sidefilter {
-    background-color: #3B3A39;
-    border-left: 1px solid #5E5E5D;
+    background-color: transparent;
+    border-left: none;
     border-right: 1px solid #5E5E5D;
 }
 
@@ -425,7 +430,7 @@ h5.decalaration + .codewrapper {
     margin-bottom: 10px;
     background-color: #201F1E;
     padding: 10px;
-    border: 1px solid #5E5E5D;
+    border: none;
 }
 
 article h1 {

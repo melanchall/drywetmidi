@@ -1,0 +1,643 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Getting objects | DryWetMIDI </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Getting objects | DryWetMIDI ">
+    <meta name="generator" content="docfx 2.58.0.0">
+    
+    <link rel="shortcut icon" href="../../images/favicon.png">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <meta property="docfx:navrel" content="../../toc.html">
+    <meta property="docfx:tocrel" content="../toc.html">
+    
+    <meta property="docfx:rel" content="../../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list">Search Results for <span></span></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination" data-first="First" data-prev="Previous" data-next="Next" data-last="Last"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="a_getting_objects">
+<h1 id="getting-objects">Getting objects</h1>
+
+<p>This article describes ways to get different objects (like <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.TimedEvent.html">timed events</a> or <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.Note.html">notes</a>) from MIDI files, track chunks and collections of another objects.</p>
+<h2 id="gettimedevents">GetTimedEvents</h2>
+<p><code>TimedEvent</code> is the basic MIDI object we will describe here. It's just a MIDI event along with its absolute time within a MIDI file or track chunk. You can read more in <a class="xref" href="Events-absolute-time.html">Events absolute time</a> article. To get all timed events in a MIDI file, you can just call <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.html#Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_GetTimedEvents_Melanchall_DryWetMidi_Core_MidiFile_">GetTimedEvents</a> method:</p>
+<pre><code class="lang-csharp">using System;
+using Melanchall.DryWetMidi.Core;
+using Melanchall.DryWetMidi.Interaction;
+
+namespace DwmExamples
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            var midiFile = MidiFile.Read(&quot;My Great Song.mid&quot;);
+            var timedEvents = midiFile.GetTimedEvents();
+
+            Console.WriteLine($&quot;{timedEvents.Count} timed events found.&quot;);
+        }
+    }
+}
+</code></pre>
+<p>Please examine <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.html">TimedEventsManagingUtilities</a> class to see other <code>GetTimedEvents</code> overloads.</p>
+<h2 id="getnotes">GetNotes</h2>
+<p>There is the <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.NotesManagingUtilities.html">NotesManagingUtilities</a> class which provides useful methods <code>GetNotes</code> to get notes from a MIDI file or track chunk. For example, you can get notes a MIDI file contains with this code:</p>
+<pre><code class="lang-csharp">using System;
+using Melanchall.DryWetMidi.Common;
+using Melanchall.DryWetMidi.Core;
+using Melanchall.DryWetMidi.Interaction;
+
+namespace DwmExamples
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            var midiFile = new MidiFile(
+                new TrackChunk(
+                    new NoteOnEvent(),
+                    new NoteOffEvent(),
+                    new NoteOnEvent((SevenBitNumber)70, (SevenBitNumber)50)
+                    {
+                        Channel = (FourBitNumber)5,
+                        DeltaTime = 10
+                    },
+                    new NoteOffEvent((SevenBitNumber)70, (SevenBitNumber)30)
+                    {
+                        Channel = (FourBitNumber)5,
+                        DeltaTime = 70
+                    }));
+
+            Console.WriteLine(&quot;Notes:&quot;);
+
+            foreach (var note in midiFile.GetNotes())
+            {
+                Console.Write($@&quot;
+note {note} (note number = {note.NoteNumber})
+  time = {note.Time}
+  length = {note.Length}
+  velocity = {note.Velocity}
+  off velocity = {note.OffVelocity}&quot;);
+            }
+
+            Console.ReadKey();
+        }
+    }
+}
+</code></pre>
+<p>Running the program, we'll see following output:</p>
+<pre><code class="lang-text">Notes:
+
+note C-1 (note number = 0)
+  time = 0
+  length = 0
+  velocity = 0
+  off velocity = 0
+note A#4 (note number = 70)
+  time = 10
+  length = 70
+  velocity = 50
+  off velocity = 30
+</code></pre>
+<p>Please examine <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.NotesManagingUtilities.html">NotesManagingUtilities</a> class to see other <code>GetNotes</code> overloads.</p>
+<h3 id="settings">Settings</h3>
+<p>All <code>GetNotes</code> overloads can accept <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.NoteDetectionSettings.html">NoteDetectionSettings</a> as last parameter. Via this parameter you can adjust the process of notes building. Let's see each setting in details.</p>
+<h4 id="notestartdetectionpolicy"><code>NoteStartDetectionPolicy</code></h4>
+<p>The <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.NoteDetectionSettings.html#Melanchall_DryWetMidi_Interaction_NoteDetectionSettings_NoteStartDetectionPolicy">NoteStartDetectionPolicy</a> property defines how start event of a note should be found in case of overlapping notes with the same note number and channel. The default value is <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.NoteStartDetectionPolicy.html#Melanchall_DryWetMidi_Interaction_NoteStartDetectionPolicy_FirstNoteOn">NoteStartDetectionPolicy.FirstNoteOn</a>.</p>
+<p>To understand how this policy works let's take a look at the following events sequence:</p>
+<p><img src="images/Getting-objects-NoteStartDetectionPolicy-Initial.png" alt="NoteStartDetectionPolicy-Initial"></p>
+<p>where empty circle and filled one mean <em>Note On</em> and <em>Note Off</em> events correspondingly; cross means any other event. So we have two overlapped notes here (we assume all note events have the same note number and channel).</p>
+<p>If we set <code>NoteStartDetectionPolicy</code> to <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.NoteStartDetectionPolicy.html#Melanchall_DryWetMidi_Interaction_NoteStartDetectionPolicy_FirstNoteOn">NoteStartDetectionPolicy.FirstNoteOn</a>, notes will be constructed in following way:</p>
+<p><img src="images/Getting-objects-NoteStartDetectionPolicy-FirstNoteOn.png" alt="NoteStartDetectionPolicy-FirstNoteOn"></p>
+<p>So every <em>Note Off</em> event will be combined with <strong>first</strong> free <em>Note On</em> event into a note (events are processed one by one consecutively). But if set <code>NoteStartDetectionPolicy</code> to <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.NoteStartDetectionPolicy.html#Melanchall_DryWetMidi_Interaction_NoteStartDetectionPolicy_LastNoteOn">NoteStartDetectionPolicy.LastNoteOn</a>, we'll get another picture:</p>
+<p><img src="images/Getting-objects-NoteStartDetectionPolicy-LastNoteOn.png" alt="NoteStartDetectionPolicy-LastNoteOn"></p>
+<p>So <em>Note Off</em> events will be combined with <strong>last</strong> free <em>Note On</em> event into a note.</p>
+<h4 id="notesearchcontext"><code>NoteSearchContext</code></h4>
+<p>The <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.NoteDetectionSettings.html#Melanchall_DryWetMidi_Interaction_NoteDetectionSettings_NoteSearchContext">NoteSearchContext</a> property defines a context to search notes within. The default value is <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.NoteSearchContext.html#Melanchall_DryWetMidi_Interaction_NoteSearchContext_SingleEventsCollection">NoteSearchContext.SingleEventsCollection</a>. The property is applicable only to <code>GetChords</code> that accepts collection of <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a>s and <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a>.</p>
+<p>To understand how this policy works let's take a look at the following events sequences within two track chunks:</p>
+<p><img src="images/Getting-objects-NoteSearchContext-Initial.png" alt="NoteSearchContext-Initial"></p>
+<p>where empty circle and filled one mean <em>Note On</em> and <em>Note Off</em> events correspondingly; cross means any other event. So we have two overlapped notes here (we assume all note events have the same note number). So we have two overlapped notes here. We assume that <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.NoteStartDetectionPolicy.html#Melanchall_DryWetMidi_Interaction_NoteStartDetectionPolicy_FirstNoteOn">NoteStartDetectionPolicy.FirstNoteOn</a> is used to search a note's start and all note events have the same note number.</p>
+<p>If we use <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.NoteSearchContext.html#Melanchall_DryWetMidi_Interaction_NoteSearchContext_SingleEventsCollection">NoteSearchContext.SingleEventsCollection</a> as the context, notes will be constructed in the following way:</p>
+<p><img src="images/Getting-objects-NoteSearchContext-SingleEventsCollection.png" alt="NoteSearchContext-SingleEventsCollection"></p>
+<p>So every <em>Note On</em> event will be combined with <em>Note Off</em> one within the <strong>same</strong> events collection. But if we use <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.NoteSearchContext.html#Melanchall_DryWetMidi_Interaction_NoteSearchContext_AllEventsCollections">NoteSearchContext.AllEventsCollections</a>, notes will be constructed in a new way:</p>
+<p><img src="images/Getting-objects-NoteSearchContext-AllEventsCollections.png" alt="NoteSearchContext-AllEventsCollections"></p>
+<p>So <em>Note On</em> event can be combined now with <em>Note Off</em> one within <strong>different</strong> events collection, i.e. ends of a note can be placed in difefrent track chunks.</p>
+<h2 id="getchords">GetChords</h2>
+<p>There is the <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.html">ChordsManagingUtilities</a> class which provides useful methods <code>GetChords</code> to get notes from a MIDI file or track chunk. For example, you can get chords a MIDI file contains with this code:</p>
+<pre><code class="lang-csharp">using System;
+using Melanchall.DryWetMidi.Common;
+using Melanchall.DryWetMidi.Core;
+using Melanchall.DryWetMidi.Interaction;
+
+namespace DwmExamples
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            var midiFile = new MidiFile(
+                new TrackChunk(
+                    new NoteOnEvent(),
+                    new NoteOffEvent(),
+                    new NoteOnEvent
+                    {
+                        Channel = (FourBitNumber)5,
+                        DeltaTime = 10
+                    },
+                    new NoteOffEvent
+                    {
+                        Channel = (FourBitNumber)5
+                    },
+                    new NoteOnEvent((SevenBitNumber)70, (SevenBitNumber)50)
+                    {
+                        Channel = (FourBitNumber)5
+                    },
+                    new NoteOffEvent((SevenBitNumber)70, (SevenBitNumber)30)
+                    {
+                        Channel = (FourBitNumber)5,
+                        DeltaTime = 70
+                    }));
+
+            Console.WriteLine(&quot;Chords:&quot;);
+
+            foreach (var chord in midiFile.GetChords())
+            {
+                Console.Write($@&quot;
+chord
+  channel = {chord.Channel}
+  time = {chord.Time}
+  length = {chord.Length}
+  notes:&quot;);
+
+                foreach (var note in chord.Notes)
+                {
+
+                    Console.Write($@&quot;
+  note {note} (note number = {note.NoteNumber})
+    channel = {note.Channel}
+    time = {note.Time}
+    length = {note.Length}
+    velocity = {note.Velocity}
+    off velocity = {note.OffVelocity}&quot;);
+                }
+            }
+
+            Console.ReadKey();
+        }
+    }
+}
+</code></pre>
+<p>Running the program, we'll see following output:</p>
+<pre><code class="lang-text">Chords:
+
+chord
+  channel = 0
+  time = 0
+  length = 0
+  notes:
+  note C-1 (note number = 0)
+    channel = 0
+    time = 0
+    length = 0
+    velocity = 0
+    off velocity = 0
+chord
+  channel = 5
+  time = 10
+  length = 70
+  notes:
+  note C-1 (note number = 0)
+    channel = 5
+    time = 10
+    length = 0
+    velocity = 0
+    off velocity = 0
+  note A#4 (note number = 70)
+    channel = 5
+    time = 10
+    length = 70
+    velocity = 50
+    off velocity = 30
+</code></pre>
+<p>Please examine <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.html">ChordsManagingUtilities</a> class to see other <code>GetChords</code> overloads.</p>
+<h3 id="settings-1">Settings</h3>
+<p>All <code>GetChords</code> overloads can accept <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.ChordDetectionSettings.html">ChordDetectionSettings</a> as last parameter. Via this parameter you can adjust the process of chords building. Let's see each setting in details.</p>
+<h4 id="notedetectionsettings"><code>NoteDetectionSettings</code></h4>
+<p>Chords are built on top of notes. So to build chords we need to build notes. The process of notes building is adjustable via <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.ChordDetectionSettings.html#Melanchall_DryWetMidi_Interaction_ChordDetectionSettings_NoteDetectionSettings">NoteDetectionSettings</a> property. Properties of the <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.NoteDetectionSettings.html">NoteDetectionSettings</a> are described in detail <a href="#settings">above</a>.</p>
+<h4 id="notestolerance"><code>NotesTolerance</code></h4>
+<p>The <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.ChordDetectionSettings.html#Melanchall_DryWetMidi_Interaction_ChordDetectionSettings_NotesTolerance">NotesTolerance</a> property defines the maximum distance of notes from the start of the first note of a chord. Notes within this tolerance will be included in a chord. The default value is <code>0</code>.</p>
+<p>To understand how this property works let's take a look at the following notes (cross means any non-note event):</p>
+<p><img src="images/Getting-objects-NotesTolerance-Initial.png" alt="NotesTolerance-Initial"></p>
+<p>If we set notes tolerance to <code>0</code> (which is default value), we'll get three different chords (each of one note):</p>
+<p><img src="images/Getting-objects-NotesTolerance-0.png" alt="NotesTolerance-0"></p>
+<p>Different colors denotes different chords. If we set notes tolerance to <code>1</code>, we'll get two chords:</p>
+<p><img src="images/Getting-objects-NotesTolerance-1.png" alt="NotesTolerance-1"></p>
+<p>With tolerance of <code>2</code> we'll finally get a single chord:</p>
+<p><img src="images/Getting-objects-NotesTolerance-2.png" alt="NotesTolerance-2"></p>
+<h4 id="notesmincount"><code>NotesMinCount</code></h4>
+<p>The <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.ChordDetectionSettings.html#Melanchall_DryWetMidi_Interaction_ChordDetectionSettings_NotesMinCount">NotesMinCount</a> property defines the minimum count of notes a chord can contain. So if count of simultaneously sounding notes is less than this value, they won't make up a chord. The default value is <code>1</code> which means a single note can be turned to a chord.</p>
+<p>To understand how this property works let's take a look at the following notes (cross means any non-note event):</p>
+<p><img src="images/Getting-objects-NotesMinCount-Initial.png" alt="NotesMinCount-Initial"></p>
+<p>So we have three notes. For simplicity we'll assume that <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.ChordDetectionSettings.html#Melanchall_DryWetMidi_Interaction_ChordDetectionSettings_NotesTolerance">NotesTolerance</a> is <code>0</code> (default value). If we set notes min count to <code>1</code> (which is default value), we'll get two different chords:</p>
+<p><img src="images/Getting-objects-NotesMinCount-1.png" alt="NotesMinCount-1"></p>
+<p>If we set notes min count to <code>2</code>, we'll get only one chord:</p>
+<p><img src="images/Getting-objects-NotesMinCount-2.png" alt="NotesMinCount-2"></p>
+<p>Last note will not be turned into a chord because count of notes for a chord will be <code>1</code> which is less than the specified minimum count. With minimum count of notes of <code>3</code> we'll get no chords:</p>
+<p><img src="images/Getting-objects-NotesMinCount-3.png" alt="NotesMinCount-3"></p>
+<p>First possible chord will contain two notes and second chord will contain one note. In both cases count of notes is less than the specified minimum count.</p>
+<h4 id="chordsearchcontext"><code>ChordSearchContext</code></h4>
+<p>The <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.ChordDetectionSettings.html#Melanchall_DryWetMidi_Interaction_ChordDetectionSettings_ChordSearchContext">ChordSearchContext</a> property defines a context to search chords within. The default value is <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.ChordSearchContext.html#Melanchall_DryWetMidi_Interaction_ChordSearchContext_SingleEventsCollection">ChordSearchContext.SingleEventsCollection</a>. The property is applicable only to <code>GetChords</code> that accepts collection of <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a>s and <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a>.</p>
+<p>To understand how this policy works let's take a look at the following data within two track chunks:</p>
+<p><img src="images/Getting-objects-ChordSearchContext-Initial.png" alt="ChordSearchContext-Initial"></p>
+<p>If we use <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.ChordSearchContext.html#Melanchall_DryWetMidi_Interaction_ChordSearchContext_SingleEventsCollection">ChordSearchContext.SingleEventsCollection</a> as the context, chords will be constructed in the following way:</p>
+<p><img src="images/Getting-objects-ChordSearchContext-SingleEventsCollection.png" alt="ChordSearchContext-SingleEventsCollection"></p>
+<p>So chords will be constructed only from notes within the same events collection (track chunk). But if we use <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.ChordSearchContext.html#Melanchall_DryWetMidi_Interaction_ChordSearchContext_AllEventsCollections">ChordSearchContext.AllEventsCollections</a>, chords will be constructed in a new way:</p>
+<p><img src="images/Getting-objects-ChordSearchContext-AllEventsCollections.png" alt="ChordSearchContext-AllEventsCollections"></p>
+<p>So a chord can be constructed from notes within different events collections.</p>
+<h2 id="getobjects">GetObjects</h2>
+<p>All methods we saw before return collection of objects of the <strong>same type</strong>. So you can get only either notes or chords or timed events. To highlight the problem, let's take a look at the following events sequence:</p>
+<p><img src="images/Getting-objects-GetObjects-Initial.png" alt="GetObjects-Initial"></p>
+<p>where empty circle and filled one mean <em>Note On</em> and <em>Note Off</em> events correspondingly; cross means any other event. We assume all note events have the same note number and channel.</p>
+<p>With <code>GetTimedEvents</code> we'll just get all these events as is. <code>GetNotes</code> will give us only notes:</p>
+<p><img src="images/Getting-objects-GetObjects-GetNotes.png" alt="GetObjects-GetNotes"></p>
+<p><code>GetChords</code> will return only chords (single one in this example):</p>
+<p><img src="images/Getting-objects-GetObjects-GetChords.png" alt="GetObjects-GetChords"></p>
+<p>So if we run following simple program:</p>
+<pre><code class="lang-csharp">using System;
+using System.Collections.Generic;
+using Melanchall.DryWetMidi.Core;
+using Melanchall.DryWetMidi.Interaction;
+
+namespace DwmExamples
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            var midiFile = new MidiFile(
+                new TrackChunk(
+                    new TextEvent(&quot;1&quot;),
+                    new NoteOnEvent { DeltaTime = 1 },
+                    new TextEvent(&quot;2&quot;) { DeltaTime = 1 },
+                    new NoteOffEvent { DeltaTime = 1 },
+                    new TextEvent(&quot;3&quot;) { DeltaTime = 1 },
+                    new NoteOnEvent { DeltaTime = 1 },
+                    new TextEvent(&quot;4&quot;) { DeltaTime = 1 },
+                    new NoteOffEvent { DeltaTime = 1 },
+                    new TextEvent(&quot;5&quot;) { DeltaTime = 1 },
+                    new NoteOnEvent { DeltaTime = 1 },
+                    new TextEvent(&quot;6&quot;)),
+                new TrackChunk(
+                    new TextEvent(&quot;A&quot;),
+                    new TextEvent(&quot;B&quot;) { DeltaTime = 1 },
+                    new TextEvent(&quot;C&quot;) { DeltaTime = 1 },
+                    new TextEvent(&quot;D&quot;) { DeltaTime = 1 },
+                    new TextEvent(&quot;E&quot;) { DeltaTime = 1 },
+                    new NoteOnEvent { DeltaTime = 1 },
+                    new TextEvent(&quot;F&quot;) { DeltaTime = 1 },
+                    new NoteOffEvent { DeltaTime = 1 },
+                    new TextEvent(&quot;G&quot;) { DeltaTime = 1 },
+                    new TextEvent(&quot;H&quot;) { DeltaTime = 1 },
+                    new TextEvent(&quot;I&quot;)));
+
+            Console.WriteLine(&quot;Getting timed events...&quot;);
+            WriteTimedObjects(midiFile.GetTimedEvents());
+            Console.WriteLine(&quot;Getting notes...&quot;);
+            WriteTimedObjects(midiFile.GetNotes());
+            Console.WriteLine(&quot;Getting chords...&quot;);
+            WriteTimedObjects(midiFile.GetChords(new ChordDetectionSettings
+            {
+                ChordSearchContext = ChordSearchContext.AllEventsCollections,
+                NotesMinCount = 2
+            }));
+
+            Console.ReadKey();
+        }
+
+        private static void WriteTimedObjects&lt;TObject&gt;(ICollection&lt;TObject&gt; timedObjects)
+            where TObject : ITimedObject
+        {
+            foreach (var timedObject in timedObjects)
+            {
+                Console.WriteLine($&quot;[{timedObject.GetType().Name}] {timedObject} (time = {timedObject.Time})&quot;);
+            }
+        }
+    }
+}
+</code></pre>
+<p>we'll get this output:</p>
+<pre><code class="lang-text">Getting timed events...
+[TimedEvent] Event at 0: Text (1) (time = 0)
+[TimedEvent] Event at 0: Text (A) (time = 0)
+[TimedEvent] Event at 1: Note On [0] (0, 0) (time = 1)
+[TimedEvent] Event at 1: Text (B) (time = 1)
+[TimedEvent] Event at 2: Text (2) (time = 2)
+[TimedEvent] Event at 2: Text (C) (time = 2)
+[TimedEvent] Event at 3: Note Off [0] (0, 0) (time = 3)
+[TimedEvent] Event at 3: Text (D) (time = 3)
+[TimedEvent] Event at 4: Text (3) (time = 4)
+[TimedEvent] Event at 4: Text (E) (time = 4)
+[TimedEvent] Event at 5: Note On [0] (0, 0) (time = 5)
+[TimedEvent] Event at 5: Note On [0] (0, 0) (time = 5)
+[TimedEvent] Event at 6: Text (4) (time = 6)
+[TimedEvent] Event at 6: Text (F) (time = 6)
+[TimedEvent] Event at 7: Note Off [0] (0, 0) (time = 7)
+[TimedEvent] Event at 7: Note Off [0] (0, 0) (time = 7)
+[TimedEvent] Event at 8: Text (5) (time = 8)
+[TimedEvent] Event at 8: Text (G) (time = 8)
+[TimedEvent] Event at 9: Note On [0] (0, 0) (time = 9)
+[TimedEvent] Event at 9: Text (6) (time = 9)
+[TimedEvent] Event at 9: Text (H) (time = 9)
+[TimedEvent] Event at 9: Text (I) (time = 9)
+Getting notes...
+[Note] C-1 (time = 1)
+[Note] C-1 (time = 5)
+[Note] C-1 (time = 5)
+Getting chords...
+[Chord] C-1 C-1 (time = 5)
+</code></pre>
+<p>As you can see there is &quot;free&quot; <em>Note On</em> event without corresponding <em>Note Off</em> one so we can't build a note for it. What if we want to get all possible notes and all remaining timed events? DryWetMIDI provides <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.GetObjectsUtilities.html">GetObjectsUtilities</a> class which contains <code>GetObjects</code> methods (for the same MIDI structures as previous methods). We can change printing part of the program above to:</p>
+<pre><code class="lang-csharp">Console.WriteLine(&quot;Getting notes and timed events...&quot;);
+WriteTimedObjects(midiFile.GetObjects(ObjectType.Note | ObjectType.TimedEvent));
+</code></pre>
+<p>which will give us following output:</p>
+<pre><code class="lang-text">Getting notes and timed events...
+[TimedEvent] Event at 0: Text (1) (time = 0)
+[TimedEvent] Event at 0: Text (A) (time = 0)
+[Note] C-1 (time = 1)
+[TimedEvent] Event at 1: Text (B) (time = 1)
+[TimedEvent] Event at 2: Text (2) (time = 2)
+[TimedEvent] Event at 2: Text (C) (time = 2)
+[TimedEvent] Event at 3: Text (D) (time = 3)
+[TimedEvent] Event at 4: Text (3) (time = 4)
+[TimedEvent] Event at 4: Text (E) (time = 4)
+[Note] C-1 (time = 5)
+[Note] C-1 (time = 5)
+[TimedEvent] Event at 6: Text (4) (time = 6)
+[TimedEvent] Event at 6: Text (F) (time = 6)
+[TimedEvent] Event at 8: Text (5) (time = 8)
+[TimedEvent] Event at 8: Text (G) (time = 8)
+[TimedEvent] Event at 9: Note On [0] (0, 0) (time = 9)
+[TimedEvent] Event at 9: Text (6) (time = 9)
+[TimedEvent] Event at 9: Text (H) (time = 9)
+[TimedEvent] Event at 9: Text (I) (time = 9)
+</code></pre>
+<p>So all note events that build up a note were turned into instances of <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.Note.html">Note</a>, and all remaining events (including &quot;free&quot; <em>Note On</em> one) were returned as instances of <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.TimedEvent.html">TimedEvent</a>.</p>
+<p>We can go futher and collect all possible chords, notes and timed events:</p>
+<pre><code class="lang-csharp">Console.WriteLine(&quot;Getting chords, notes and timed events...&quot;);
+WriteTimedObjects(midiFile.GetObjects(
+    ObjectType.Chord | ObjectType.Note | ObjectType.TimedEvent,
+    new ObjectDetectionSettings
+    {
+        ChordDetectionSettings = new ChordDetectionSettings
+        {
+            ChordSearchContext = ChordSearchContext.AllEventsCollections,
+            NotesMinCount = 2
+        }
+    }));
+</code></pre>
+<p>which will give us following output:</p>
+<pre><code class="lang-text">Getting chords, notes and timed events...
+[TimedEvent] Event at 0: Text (1) (time = 0)
+[TimedEvent] Event at 0: Text (A) (time = 0)
+[Note] C-1 (time = 1)
+[TimedEvent] Event at 1: Text (B) (time = 1)
+[TimedEvent] Event at 2: Text (2) (time = 2)
+[TimedEvent] Event at 2: Text (C) (time = 2)
+[TimedEvent] Event at 3: Text (D) (time = 3)
+[TimedEvent] Event at 4: Text (3) (time = 4)
+[TimedEvent] Event at 4: Text (E) (time = 4)
+[Chord] C-1 C-1 (time = 5)
+[TimedEvent] Event at 6: Text (4) (time = 6)
+[TimedEvent] Event at 6: Text (F) (time = 6)
+[TimedEvent] Event at 8: Text (5) (time = 8)
+[TimedEvent] Event at 8: Text (G) (time = 8)
+[TimedEvent] Event at 9: Note On [0] (0, 0) (time = 9)
+[TimedEvent] Event at 9: Text (6) (time = 9)
+[TimedEvent] Event at 9: Text (H) (time = 9)
+[TimedEvent] Event at 9: Text (I) (time = 9)
+</code></pre>
+<p>Or in visual representation:</p>
+<p><img src="images/Getting-objects-GetObjects-GetChordsAndNotesAndTimedEvents.png" alt="GetObjects-GetChordsAndNotesAndTimedEvents"></p>
+<p>Currently <code>GetObjects</code> can build objects of the following types:</p>
+<ul>
+<li><a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.TimedEvent.html">TimedEvent</a></li>
+<li><a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.Note.html">Note</a></li>
+<li><a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.Chord.html">Chord</a></li>
+<li><a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.Rest.html">Rest</a></li>
+</ul>
+<h3 id="rests">Rests</h3>
+<p>Let's see on rests building in details, since <code>GetObjects</code> is the only way to get them. First of all, all <code>GetObjects</code> overloads accept settings as an instance of the <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings.html">ObjectDetectionSettings</a> class. Most of its properties are already discussed in previous sections on <a href="#settings">notes building settings</a> and <a href="#settings-1">chords building ones</a>. But there is the <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings.html#Melanchall_DryWetMidi_Interaction_ObjectDetectionSettings_RestDetectionSettings">RestDetectionSettings</a> property which controls how rests should be detected.</p>
+<p>Supposing we have following notes (with two different note numbers on two different channels):</p>
+<p><img src="images/Getting-objects-GetObjects-Rests-Initial.png" alt="GetObjects-Rests-Initial"></p>
+<p><a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.RestDetectionSettings.html">RestDetectionSettings</a> provides <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.RestDetectionSettings.html#Melanchall_DryWetMidi_Interaction_RestDetectionSettings_RestSeparationPolicy">RestSeparationPolicy</a> property which determines a rule for creating rests. Now we'll see how each possible value of the policy affects the result of rests building.</p>
+<p>Using <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.RestSeparationPolicy.html#Melanchall_DryWetMidi_Interaction_RestSeparationPolicy_NoSeparation">NoSeparation</a> (which is the default value) we'll get only one rest:</p>
+<p><img src="images/Getting-objects-GetObjects-Rests-NoSeparation.png" alt="GetObjects-Rests-NoSeparation"></p>
+<p><em>&quot;No separation&quot;</em> means <em>&quot;there is no difference between channels and note numbers&quot;</em> so rests will be constructed only at spaces where there are no notes at all (with any channels and any note numbers).</p>
+<p>With <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.RestSeparationPolicy.html#Melanchall_DryWetMidi_Interaction_RestSeparationPolicy_SeparateByChannel">SeparateByChannel</a> we'll get three rests:</p>
+<p><img src="images/Getting-objects-GetObjects-Rests-SeparateByChannel.png" alt="GetObjects-Rests-SeparateByChannel"></p>
+<p>So rests are separated by channels only. Note number of a note doesn't matter, all numbers are treated as the same one. So rests will be constructed for each channel at spaces where there are no notes (with any note numbers).</p>
+<p>With <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.RestSeparationPolicy.html#Melanchall_DryWetMidi_Interaction_RestSeparationPolicy_SeparateByNoteNumber">SeparateByNoteNumber</a> we'll get following rests:</p>
+<p><img src="images/Getting-objects-GetObjects-Rests-SeparateByNoteNumber.png" alt="GetObjects-Rests-SeparateByNoteNumber"></p>
+<p>As you can see rests now are separated by note number (channel doesn't matter). So rests will be constructed for each note number at spaces where there are no notes (with any channel).</p>
+<p>With <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.RestSeparationPolicy.html#Melanchall_DryWetMidi_Interaction_RestSeparationPolicy_SeparateByChannelAndNoteNumber">SeparateByChannelAndNoteNumber</a> we'll get rests at every &quot;free&quot; space:</p>
+<p><img src="images/Getting-objects-GetObjects-Rests-SeparateByChannelAndNoteNumber.png" alt="GetObjects-Rests-SeparateByChannelAndNoteNumber"></p>
+<p>Let's see all these processes in action with a small program:</p>
+<pre><code class="lang-csharp">using System;
+using System.Collections.Generic;
+using System.Linq;
+using Melanchall.DryWetMidi.Common;
+using Melanchall.DryWetMidi.Interaction;
+using NoteName = Melanchall.DryWetMidi.MusicTheory.NoteName;
+
+namespace DwmExamples
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            var ch0 = (FourBitNumber)0;
+            var a2Ch0Notes = new[]
+            {
+                new Note(NoteName.A, 2, 3, 0) { Channel = ch0 },
+                new Note(NoteName.A, 2, 2, 6) { Channel = ch0 },
+                new Note(NoteName.A, 2, 2, 8) { Channel = ch0 },
+                new Note(NoteName.A, 2, 3, 11) { Channel = ch0 }
+            };
+            var b1Ch0Notes = new[]
+            {
+                new Note(NoteName.B, 1, 3, 1) { Channel = ch0 },
+                new Note(NoteName.B, 1, 4, 4) { Channel = ch0 },
+                new Note(NoteName.B, 1, 1, 13) { Channel = ch0 }
+            };
+
+            var ch1 = (FourBitNumber)1;
+            var a2Ch1Notes = new[]
+            {
+                new Note(NoteName.A, 2, 2, 0) { Channel = ch1 },
+                new Note(NoteName.A, 2, 2, 7) { Channel = ch1 }
+            };
+            var b1Ch1Notes = new[]
+            {
+                new Note(NoteName.B, 1, 3, 1) { Channel = ch1 },
+                new Note(NoteName.B, 1, 3, 5) { Channel = ch1 },
+                new Note(NoteName.B, 1, 2, 12) { Channel = ch1 }
+            };
+
+            var notes = a2Ch0Notes
+                .Concat(b1Ch0Notes)
+                .Concat(a2Ch1Notes)
+                .Concat(b1Ch1Notes)
+                .ToArray();
+
+            WriteRests(notes, RestSeparationPolicy.NoSeparation);
+            WriteRests(notes, RestSeparationPolicy.SeparateByChannel);
+            WriteRests(notes, RestSeparationPolicy.SeparateByNoteNumber);
+            WriteRests(notes, RestSeparationPolicy.SeparateByChannelAndNoteNumber);
+
+            Console.ReadKey();
+        }
+
+        private static void WriteRests(
+            ICollection&lt;Note&gt; notes,
+            RestSeparationPolicy restSeparationPolicy)
+        {
+            var rests = notes
+                .GetObjects(
+                    ObjectType.Rest,
+                    new ObjectDetectionSettings
+                    {
+                        RestDetectionSettings = new RestDetectionSettings
+                        {
+                            RestSeparationPolicy = restSeparationPolicy
+                        }
+                    })
+                .Cast&lt;Rest&gt;()
+                .ToArray();
+
+            Console.WriteLine($&quot;Rests by {restSeparationPolicy} policy:&quot;);
+
+            foreach (var rest in rests)
+            {
+                Console.WriteLine($&quot;[{rest.Length}] at [{rest.Time}] (note number = {rest.NoteNumber}, channel = {rest.Channel})&quot;);
+            }
+        }
+    }
+}
+</code></pre>
+<p>Output is:</p>
+<pre><code class="lang-text">Rests by NoSeparation policy:
+[1] at [10] (note number = , channel = )
+Rests by SeparateByChannel policy:
+[1] at [4] (note number = , channel = 1)
+[3] at [9] (note number = , channel = 1)
+[1] at [10] (note number = , channel = 0)
+Rests by SeparateByNoteNumber policy:
+[1] at [0] (note number = 35, channel = )
+[3] at [3] (note number = 45, channel = )
+[4] at [8] (note number = 35, channel = )
+[1] at [10] (note number = 45, channel = )
+Rests by SeparateByChannelAndNoteNumber policy:
+[1] at [0] (note number = 35, channel = 0)
+[1] at [0] (note number = 35, channel = 1)
+[5] at [2] (note number = 45, channel = 1)
+[3] at [3] (note number = 45, channel = 0)
+[1] at [4] (note number = 35, channel = 1)
+[4] at [8] (note number = 35, channel = 1)
+[5] at [8] (note number = 35, channel = 0)
+[1] at [10] (note number = 45, channel = 0)
+</code></pre>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            2021 / Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>

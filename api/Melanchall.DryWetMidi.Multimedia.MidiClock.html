@@ -1,0 +1,529 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class MidiClock
+   | DryWetMIDI </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class MidiClock
+   | DryWetMIDI ">
+    <meta name="generator" content="docfx 2.58.0.0">
+    
+    <link rel="shortcut icon" href="../images/favicon.png">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    <meta property="docfx:rel" content="../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list">Search Results for <span></span></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination" data-first="First" data-prev="Previous" data-next="Next" data-last="Last"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Melanchall.DryWetMidi.Multimedia.MidiClock">
+  
+  
+  <h1 id="Melanchall_DryWetMidi_Multimedia_MidiClock" data-uid="Melanchall.DryWetMidi.Multimedia.MidiClock" class="text-break">Class MidiClock
+  </h1>
+  <div class="markdown level0 summary">
+MIDI clock used to drive playback or any timer-based object.
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object">Object</a></div>
+    <div class="level1"><span class="xref">MidiClock</span></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.idisposable">IDisposable</a></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#System_Object_Equals_System_Object_">Object.Equals(Object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#System_Object_Equals_System_Object_System_Object_">Object.Equals(Object, Object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gethashcode#System_Object_GetHashCode">Object.GetHashCode()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gettype#System_Object_GetType">Object.GetType()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.memberwiseclone#System_Object_MemberwiseClone">Object.MemberwiseClone()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.referenceequals#System_Object_ReferenceEquals_System_Object_System_Object_">Object.ReferenceEquals(Object, Object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.tostring#System_Object_ToString">Object.ToString()</a>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Melanchall.DryWetMidi.Multimedia.html">Melanchall.DryWetMidi.Multimedia</a></h6>
+  <h6><strong>Assembly</strong>: Melanchall.DryWetMidi.dll</h6>
+  <h5 id="Melanchall_DryWetMidi_Multimedia_MidiClock_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public sealed class MidiClock : IDisposable</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <a id="Melanchall_DryWetMidi_Multimedia_MidiClock__ctor_" data-uid="Melanchall.DryWetMidi.Multimedia.MidiClock.#ctor*"></a>
+  <h4 id="Melanchall_DryWetMidi_Multimedia_MidiClock__ctor_System_Boolean_Melanchall_DryWetMidi_Multimedia_TickGenerator_System_TimeSpan_" data-uid="Melanchall.DryWetMidi.Multimedia.MidiClock.#ctor(System.Boolean,Melanchall.DryWetMidi.Multimedia.TickGenerator,System.TimeSpan)">MidiClock(Boolean, TickGenerator, TimeSpan)</h4>
+  <div class="markdown level1 summary">
+Initializes a new instance of the <a class="xref" href="Melanchall.DryWetMidi.Multimedia.MidiClock.html">MidiClock</a> with the specified
+value indicating whether first tick should be generated immediately after clock started, and
+tick generator.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public MidiClock(bool startImmediately, TickGenerator tickGenerator, TimeSpan interval)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
+        <td><span class="parametername">startImmediately</span></td>
+        <td>A value indicating whether first tick should be generated
+immediately after clock started.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Multimedia.TickGenerator.html">TickGenerator</a></td>
+        <td><span class="parametername">tickGenerator</span></td>
+        <td>Tick generator used as timer firing at the specified interval. Null for
+no tick generator.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.timespan">TimeSpan</a></td>
+        <td><span class="parametername">interval</span></td>
+        <td>Interval of clock&apos;s ticiking.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+  </h3>
+  <a id="Melanchall_DryWetMidi_Multimedia_MidiClock_CurrentTime_" data-uid="Melanchall.DryWetMidi.Multimedia.MidiClock.CurrentTime*"></a>
+  <h4 id="Melanchall_DryWetMidi_Multimedia_MidiClock_CurrentTime" data-uid="Melanchall.DryWetMidi.Multimedia.MidiClock.CurrentTime">CurrentTime</h4>
+  <div class="markdown level1 summary">
+Gets the current time of clock as <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.timespan">TimeSpan</a>.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public TimeSpan CurrentTime { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.timespan">TimeSpan</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Multimedia_MidiClock_Interval_" data-uid="Melanchall.DryWetMidi.Multimedia.MidiClock.Interval*"></a>
+  <h4 id="Melanchall_DryWetMidi_Multimedia_MidiClock_Interval" data-uid="Melanchall.DryWetMidi.Multimedia.MidiClock.Interval">Interval</h4>
+  <div class="markdown level1 summary">
+Gets the interval of the current clock&apos;s ticiking.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public TimeSpan Interval { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.timespan">TimeSpan</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Multimedia_MidiClock_IsRunning_" data-uid="Melanchall.DryWetMidi.Multimedia.MidiClock.IsRunning*"></a>
+  <h4 id="Melanchall_DryWetMidi_Multimedia_MidiClock_IsRunning" data-uid="Melanchall.DryWetMidi.Multimedia.MidiClock.IsRunning">IsRunning</h4>
+  <div class="markdown level1 summary">
+Gets a value indicating whether MIDI clock is currently running or not.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool IsRunning { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Multimedia_MidiClock_Speed_" data-uid="Melanchall.DryWetMidi.Multimedia.MidiClock.Speed*"></a>
+  <h4 id="Melanchall_DryWetMidi_Multimedia_MidiClock_Speed" data-uid="Melanchall.DryWetMidi.Multimedia.MidiClock.Speed">Speed</h4>
+  <div class="markdown level1 summary">
+Gets or sets the speed of clock, i.e. the speed of current time changing.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public double Speed { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.double">Double</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">value</code> is negative.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.objectdisposedexception">ObjectDisposedException</a></td>
+        <td>The current <a class="xref" href="Melanchall.DryWetMidi.Multimedia.MidiClock.html">MidiClock</a> is disposed.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <a id="Melanchall_DryWetMidi_Multimedia_MidiClock_Dispose_" data-uid="Melanchall.DryWetMidi.Multimedia.MidiClock.Dispose*"></a>
+  <h4 id="Melanchall_DryWetMidi_Multimedia_MidiClock_Dispose" data-uid="Melanchall.DryWetMidi.Multimedia.MidiClock.Dispose">Dispose()</h4>
+  <div class="markdown level1 summary">
+Releases all resources used by the current <a class="xref" href="Melanchall.DryWetMidi.Multimedia.MidiClock.html">MidiClock</a>.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Dispose()</code></pre>
+  </div>
+  <a id="Melanchall_DryWetMidi_Multimedia_MidiClock_Finalize_" data-uid="Melanchall.DryWetMidi.Multimedia.MidiClock.Finalize*"></a>
+  <h4 id="Melanchall_DryWetMidi_Multimedia_MidiClock_Finalize" data-uid="Melanchall.DryWetMidi.Multimedia.MidiClock.Finalize">Finalize()</h4>
+  <div class="markdown level1 summary">
+Finalizes the current instance of the <a class="xref" href="Melanchall.DryWetMidi.Multimedia.MidiClock.html">MidiClock</a>.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected void Finalize()</code></pre>
+  </div>
+  <a id="Melanchall_DryWetMidi_Multimedia_MidiClock_ResetCurrentTime_" data-uid="Melanchall.DryWetMidi.Multimedia.MidiClock.ResetCurrentTime*"></a>
+  <h4 id="Melanchall_DryWetMidi_Multimedia_MidiClock_ResetCurrentTime" data-uid="Melanchall.DryWetMidi.Multimedia.MidiClock.ResetCurrentTime">ResetCurrentTime()</h4>
+  <div class="markdown level1 summary">
+Resets the current time of the clock setting it to zero.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void ResetCurrentTime()</code></pre>
+  </div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.objectdisposedexception">ObjectDisposedException</a></td>
+        <td>The current <a class="xref" href="Melanchall.DryWetMidi.Multimedia.MidiClock.html">MidiClock</a> is disposed.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Multimedia_MidiClock_Restart_" data-uid="Melanchall.DryWetMidi.Multimedia.MidiClock.Restart*"></a>
+  <h4 id="Melanchall_DryWetMidi_Multimedia_MidiClock_Restart" data-uid="Melanchall.DryWetMidi.Multimedia.MidiClock.Restart">Restart()</h4>
+  <div class="markdown level1 summary">
+Stops, sets current time to zero and starts the clock.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Restart()</code></pre>
+  </div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.objectdisposedexception">ObjectDisposedException</a></td>
+        <td>The current <a class="xref" href="Melanchall.DryWetMidi.Multimedia.MidiClock.html">MidiClock</a> is disposed.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Multimedia_MidiClock_SetCurrentTime_" data-uid="Melanchall.DryWetMidi.Multimedia.MidiClock.SetCurrentTime*"></a>
+  <h4 id="Melanchall_DryWetMidi_Multimedia_MidiClock_SetCurrentTime_System_TimeSpan_" data-uid="Melanchall.DryWetMidi.Multimedia.MidiClock.SetCurrentTime(System.TimeSpan)">SetCurrentTime(TimeSpan)</h4>
+  <div class="markdown level1 summary">
+Sets the current time of the clock.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void SetCurrentTime(TimeSpan time)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.timespan">TimeSpan</a></td>
+        <td><span class="parametername">time</span></td>
+        <td>New current time of the clock.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.objectdisposedexception">ObjectDisposedException</a></td>
+        <td>The current <a class="xref" href="Melanchall.DryWetMidi.Multimedia.MidiClock.html">MidiClock</a> is disposed.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Multimedia_MidiClock_Start_" data-uid="Melanchall.DryWetMidi.Multimedia.MidiClock.Start*"></a>
+  <h4 id="Melanchall_DryWetMidi_Multimedia_MidiClock_Start" data-uid="Melanchall.DryWetMidi.Multimedia.MidiClock.Start">Start()</h4>
+  <div class="markdown level1 summary">
+Starts/resumes the clock.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Start()</code></pre>
+  </div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.objectdisposedexception">ObjectDisposedException</a></td>
+        <td>The current <a class="xref" href="Melanchall.DryWetMidi.Multimedia.MidiClock.html">MidiClock</a> is disposed.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Multimedia_MidiClock_Stop_" data-uid="Melanchall.DryWetMidi.Multimedia.MidiClock.Stop*"></a>
+  <h4 id="Melanchall_DryWetMidi_Multimedia_MidiClock_Stop" data-uid="Melanchall.DryWetMidi.Multimedia.MidiClock.Stop">Stop()</h4>
+  <div class="markdown level1 summary">
+Stops the clock.Current time will not be changed.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Stop()</code></pre>
+  </div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.objectdisposedexception">ObjectDisposedException</a></td>
+        <td>The current <a class="xref" href="Melanchall.DryWetMidi.Multimedia.MidiClock.html">MidiClock</a> is disposed.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Multimedia_MidiClock_Tick_" data-uid="Melanchall.DryWetMidi.Multimedia.MidiClock.Tick*"></a>
+  <h4 id="Melanchall_DryWetMidi_Multimedia_MidiClock_Tick" data-uid="Melanchall.DryWetMidi.Multimedia.MidiClock.Tick">Tick()</h4>
+  <div class="markdown level1 summary">
+Generates new clock&apos;s tick manually without pulse from tick generator.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Tick()</code></pre>
+  </div>
+  <h3 id="events">Events
+  </h3>
+  <h4 id="Melanchall_DryWetMidi_Multimedia_MidiClock_Ticked" data-uid="Melanchall.DryWetMidi.Multimedia.MidiClock.Ticked">Ticked</h4>
+  <div class="markdown level1 summary">
+Occurs when new tick generated.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public event EventHandler Ticked</code></pre>
+  </div>
+  <h5 class="eventType">Event Type</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.eventhandler">EventHandler</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.idisposable">System.IDisposable</a>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            2021 / Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>
