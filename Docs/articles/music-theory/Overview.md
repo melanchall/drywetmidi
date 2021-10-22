@@ -2,7 +2,7 @@
 uid: a_mt_overview
 ---
 
-# Overview
+# Music Theory - Overview
 
 DryWetMIDI provides types and methods to work with music theory objects like scale or chord progression, and provides ways to use them within MIDI. Following list shows what objects you can work with:
 

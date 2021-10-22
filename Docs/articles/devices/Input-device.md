@@ -53,7 +53,7 @@ namespace InputDeviceExample
 
 `InputDevice` has [MidiTimeCodeReceived](xref:Melanchall.DryWetMidi.Multimedia.InputDevice.MidiTimeCodeReceived) event which, by default, will be fired only when **all** MIDI Time Code components (separate [MidiTimeCodeEvent](xref:Melanchall.DryWetMidi.Core.MidiTimeCodeEvent) events) are received forming _hours:minutes:seconds:frames_ timestamp. You can turn this behavior off by setting [RaiseMidiTimeCodeReceived](xref:Melanchall.DryWetMidi.Multimedia.InputDevice.RaiseMidiTimeCodeReceived) to `false`.
 
-If an invalid [channel](xref:Melanchall.DryWetMidi.Core.ChannelEvent), [system common](xref:Melanchall.DryWetMidi.Core.SystemCommonEvent) or [system real-time](xref:Melanchall.DryWetMidi.Core.SystemRealTimeEvent) event received, [InvalidShortEventReceived](xref:Melanchall.DryWetMidi.Multimedia.InputDevice.InvalidShortEventReceived) event will be fired holding the bytes that form the invalid event. If invalid system exclusive event received, [InvalidSysExEventReceived](xref:Melanchall.DryWetMidi.Multimedia.InputDevice.InvalidSysExEventReceived) event will be fired holding sysex data.
+If an invalid [channel](xref:Melanchall.DryWetMidi.Core.ChannelEvent), [system common](xref:Melanchall.DryWetMidi.Core.SystemCommonEvent) or [system real-time](xref:Melanchall.DryWetMidi.Core.SystemRealTimeEvent) or system exclusive event received, [ErrorOccurred](xref:Melanchall.DryWetMidi.Multimedia.MidiDevice.ErrorOccurred) event will be fired with `Data` property of the exception filled with an information about the error.
 
 ## Custom input device
 

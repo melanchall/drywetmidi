@@ -26,7 +26,7 @@ namespace Melanchall.DryWetMidi.Multimedia
     ///                     ╚══════╝
     /// </code>
     /// <para>
-    /// where <c>IN</c> is an input device (see <see cref="Devices.InputDevice"/>); <c>OUT1</c>, <c>OUT2</c>,
+    /// where <c>IN</c> is an input device (see <see cref="InputDevice"/>); <c>OUT1</c>, <c>OUT2</c>,
     /// <c>OUT3</c> are output devices (see <see cref="OutputDevice"/>); <c>E</c> is a MIDI event
     /// which coming from <c>IN</c> and redirected to all connected output devices.
     /// </para>

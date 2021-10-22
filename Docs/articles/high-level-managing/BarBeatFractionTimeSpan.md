@@ -6,7 +6,7 @@
 
 Following strings can be parsed to `BarBeatFractionTimeSpan`:
 
-`Bars.BeatsIntegerPart.BeatsFractionalPart`
+`Bars_BeatsIntegerPart.BeatsFractionalPart`
 
 where
 
@@ -16,7 +16,7 @@ where
 
 Examples:
 
-`0.0.0` – zero time span  
-`1.0.0` – 1 bar  
-`0.10.5` – 10.5 beats  
-`100.20.2` – 100 bars and 20.2 beats
+`0_0.0` – zero time span  
+`1_0.0` – 1 bar  
+`0_10.5` – 10.5 beats  
+`100_20.2` – 100 bars and 20.2 beats

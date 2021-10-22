@@ -2,31 +2,27 @@
 
 [![NuGet](https://img.shields.io/nuget/v/Melanchall.DryWetMidi.svg)](https://www.nuget.org/packages/Melanchall.DryWetMidi/)
 
-DryWetMIDI is the .NET library to work with MIDI files and MIDI devices. Visit [Documentation](https://melanchall.github.io/drywetmidi) to learn how to use the DryWetMIDI. The library was tested on 113,270 files taken from [here](https://www.reddit.com/r/WeAreTheMusicMakers/comments/3ajwe4/the_largest_midi_collection_on_the_internet/). Thanks *midi-man* for this great collection. You can get the latest version via [NuGet](https://www.nuget.org/packages/Melanchall.DryWetMidi).
+DryWetMIDI is the .NET library to work with MIDI data and MIDI devices. It allows:
 
-## Status
-
-|   |Windows (.NET Framework)|Windows (.NET Core)|macOS (.NET Core)|Linux (.NET Core)|
-|---|---|---|---|---|
-|**Core**|[![Build Status](https://dev.azure.com/Melanchall/DryWetMIDI/_apis/build/status/Windows/%5BWindows%5D%20Test%20core%20part%20on%20.NET%20Framework?branchName=develop)](https://dev.azure.com/Melanchall/DryWetMIDI/_build/latest?definitionId=1&branchName=develop)|[![Build Status](https://dev.azure.com/Melanchall/DryWetMIDI/_apis/build/status/Windows/%5BWindows%5D%20Test%20core%20part%20on%20.NET%20Core?branchName=develop)](https://dev.azure.com/Melanchall/DryWetMIDI/_build/latest?definitionId=13&branchName=develop)|[![Build Status](https://dev.azure.com/Melanchall/DryWetMIDI/_apis/build/status/macOS/%5BmacOS%5D%20Test%20core%20part%20on%20.NET%20Core?branchName=develop)](https://dev.azure.com/Melanchall/DryWetMIDI/_build/latest?definitionId=11&branchName=develop)|[![Build Status](https://dev.azure.com/Melanchall/DryWetMIDI/_apis/build/status/Linux/%5BLinux%5D%20Test%20core%20part%20on%20.NET%20Core?branchName=develop)](https://dev.azure.com/Melanchall/DryWetMIDI/_build/latest?definitionId=12&branchName=develop)|
-|**Devices**|[![Build Status](https://dev.azure.com/Melanchall/DryWetMIDI/_apis/build/status/Windows/%5BWindows%5D%20Test%20devices%20part%20on%20.NET%20Framework?branchName=develop)](https://dev.azure.com/Melanchall/DryWetMIDI/_build/latest?definitionId=10&branchName=develop)|[![Build Status](https://dev.azure.com/Melanchall/DryWetMIDI/_apis/build/status/Windows/%5BWindows%5D%20Test%20devices%20part%20on%20.NET%20Core?branchName=develop)](https://dev.azure.com/Melanchall/DryWetMIDI/_build/latest?definitionId=14&branchName=develop)|Not supported|Not supported|
-
-## Features
-
-With the DryWetMIDI you can:
-
-* Read, write and create [Standard MIDI Files (SMF)](https://www.midi.org/specifications/category/smf-specifications). It is also possible to read [RMID](https://www.loc.gov/preservation/digital/formats/fdd/fdd000120.shtml) files where SMF wrapped to RIFF chunk.
-* [Send](https://melanchall.github.io/drywetmidi/articles/devices/Output-device.html) MIDI events to/[receive](https://melanchall.github.io/drywetmidi/articles/devices/Input-device.html) them from MIDI devices, [play](https://melanchall.github.io/drywetmidi/articles/playback/Overview.html) MIDI data and [record](https://melanchall.github.io/drywetmidi/articles/recording/Overview.html) it.
+* Read, write and create [Standard MIDI Files (SMF)](https://www.midi.org/specifications/category/smf-specifications). It is also possible to read [RMID](https://www.loc.gov/preservation/digital/formats/fdd/fdd000120.shtml) files where SMF wrapped to RIFF chunk. You can easily catch specific error when reading or writing MIDI file since all possible errors in a MIDI file are presented as separate exception classes.
+* [Send](https://melanchall.github.io/drywetmidi/articles/devices/Output-device.html) MIDI events to/[receive](https://melanchall.github.io/drywetmidi/articles/devices/Input-device.html) them from MIDI devices, [play](https://melanchall.github.io/drywetmidi/articles/playback/Overview.html) MIDI data and [record](https://melanchall.github.io/drywetmidi/articles/recording/Overview.html) it. This APIs support Windows and macOS.
 * Finely adjust process of reading and writing. It allows, for example, to read corrupted files and repair them, or build MIDI file validators.
 * Implement [custom meta events](https://melanchall.github.io/drywetmidi/articles/custom-data-structures/Custom-meta-events.html) and [custom chunks](https://melanchall.github.io/drywetmidi/articles/custom-data-structures/Custom-chunks.html) that can be written to and read from MIDI files.
-* Easily catch specific error when reading or writing MIDI file since all possible errors in a MIDI file are presented as separate exception classes.
-* Manage content of a MIDI file either with low-level objects, like event, or high-level ones, like note (read the **High-level data managing** section of the library docs).
-* Build musical compositions (see [Pattern](https://melanchall.github.io/drywetmidi/articles/composing/Pattern.html) page of the library docs).
+* Manage content of a MIDI file either with low-level objects, like event, or high-level ones, like note (read the **High-level data managing** section of the [library docs](https://melanchall.github.io/drywetmidi)).
+* Build musical compositions (see [Pattern](https://melanchall.github.io/drywetmidi/articles/composing/Pattern.html) page of the library docs) and use music theory API (see [Music Theory - Overview](https://melanchall.github.io/drywetmidi/articles/music-theory/Overview.html) article).
 * Perform complex tasks like quantizing, notes splitting or converting MIDI file to CSV representation (see [Tools](https://melanchall.github.io/drywetmidi/articles/tools/Overview.html) page of the library docs).
 
-## Documentation
+Please see [Getting started](#getting-started) section below for quick jump into the library.
 
-Complete documentation including API reference is available on https://melanchall.github.io/drywetmidi.
+## Useful links
+
+* [NuGet](https://www.nuget.org/packages/Melanchall.DryWetMidi)
+* [Documentation](https://melanchall.github.io/drywetmidi)
+* [Project health](https://melanchall.github.io/drywetmidi/articles/dev/Project-health.html)
+* CodeProject articles:
+  * [DryWetMIDI: High-Level Processing of MIDI Files](https://www.codeproject.com/Articles/1200014/DryWetMIDI-High-level-processing-of-MIDI-files)
+  * [DryWetMIDI: Notes Quantization](https://www.codeproject.com/Articles/1204629/DryWetMIDI-Notes-Quantization)
+  * [DryWetMIDI: Working with MIDI Devices](https://www.codeproject.com/Articles/1275475/DryWetMIDI-Working-with-MIDI-Devices)
 
 ## Projects using DryWetMIDI
 
@@ -38,14 +34,11 @@ Here the list of noticeable projects that use DryWetMIDI:
   A collection of virtual musical instruments that features real MIDI output.
 * [Rustissimo](https://store.steampowered.com/app/1222580/Rustissimo)  
   Using Rustissimo you can create a concert with your friends and play instruments with synchronization.
+* Sample applications from [CIRCE-EYES](https://github.com/CIRCE-EYES):
+  * https://github.com/melanchall/drywetmidi/issues/105
+  * https://github.com/melanchall/drywetmidi/issues/139
 
 ## Getting Started
-
-There are several articles that can help you dive into API provided by DryWetMIDI:
-
-* [DryWetMIDI: High-Level Processing of MIDI Files](https://www.codeproject.com/Articles/1200014/DryWetMIDI-High-level-processing-of-MIDI-files)
-* [DryWetMIDI: Notes Quantization](https://www.codeproject.com/Articles/1204629/DryWetMIDI-Notes-Quantization)
-* [DryWetMIDI: Working with MIDI Devices](https://www.codeproject.com/Articles/1275475/DryWetMIDI-Working-with-MIDI-Devices)
 
 Let's see some examples of what you can do with DryWetMIDI.
 
