@@ -45,10 +45,8 @@ steps:
 - task: PowerShell@2
   displayName: Setup docs pages
   inputs:
-    targetType: 'inline'
-    script: |
-      Write-Host "Copying README.md as index.md to Docs folder..."
-      Copy-Item README.md -Destination Docs\index.md
+    targetType: filePath
+    filePath: '$(Build.SourcesDirectory)/Resources/Scripts/Setup docs.ps1'
 
 - task: PowerShell@2
   displayName: Generate obsolete API section

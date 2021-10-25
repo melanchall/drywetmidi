@@ -2,6 +2,8 @@
 
 [![NuGet](https://img.shields.io/nuget/v/Melanchall.DryWetMidi.svg)](https://www.nuget.org/packages/Melanchall.DryWetMidi/)
 
+<!--OVERVIEW-->
+
 DryWetMIDI is the .NET library to work with MIDI data and MIDI devices. It allows:
 
 * Read, write and create [Standard MIDI Files (SMF)](https://www.midi.org/specifications/category/smf-specifications). It is also possible to read [RMID](https://www.loc.gov/preservation/digital/formats/fdd/fdd000120.shtml) files where SMF wrapped to RIFF chunk. You can easily catch specific error when reading or writing MIDI file since all possible errors in a MIDI file are presented as separate exception classes.
