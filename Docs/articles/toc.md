@@ -1,3 +1,7 @@
+# Project
+## [Project health](dev/Project-health.md)
+## [Manual build](dev/Manual-build.md)
+
 # MIDI file reading/writing
 ## [MIDI file reading](file-reading-writing/MIDI-file-reading.md)
 ## [MIDI file writing](file-reading-writing/MIDI-file-writing.md)
@@ -62,6 +66,3 @@
 
 # Recording
 ## [Overview](recording/Overview.md)
-
-# Developing
-## [Project health](dev/Project-health.md)

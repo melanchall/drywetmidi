@@ -110,7 +110,7 @@ stages:
       displayName: Build test program
       inputs:
         solution: 'Resources\PackageIntegrationTestUtilities\DwmNetFrameworkConsoleApp\DwmNetFrameworkConsoleApp.sln'
-        platform: $(buildPlatform)
+        platform: 'Any CPU'
         configuration: $(BuildConfiguration)
         msbuildArgs: '/p:CustomBeforeMicrosoftCSharpTargets="$(Build.SourcesDirectory)\Resources\PackageIntegrationTestUtilities\DwmNetFrameworkConsoleApp\packages\Melanchall.DryWetMidi.$(LibraryVersion)\build\Melanchall.DryWetMidi.targets"'
     
