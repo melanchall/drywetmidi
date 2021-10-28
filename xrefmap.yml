@@ -28,6 +28,9 @@ references:
 - uid: a_dev_watcher
   name: Devices watcher
   href: articles/devices/Devices-watcher.html
+- uid: a_develop_manual_build
+  name: Manual build
+  href: articles/dev/Manual-build.html
 - uid: a_develop_project_health
   name: Project health
   href: articles/dev/Project-health.html

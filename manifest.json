@@ -50,6 +50,18 @@
     },
     {
       "type": "Conceptual",
+      "source_relative_path": "articles/dev/Manual-build.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/dev/Manual-build.html",
+          "hash": "CcZ6m5hrvYH5PPSMFx0pJZy/4aEzDkPDbQrSEJc1VDg="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
       "source_relative_path": "articles/dev/Project-health.md",
       "output": {
         ".html": {
@@ -816,7 +828,7 @@
       "output": {
         ".html": {
           "relative_path": "articles/toc.html",
-          "hash": "n377us8BE6Pv4dPwxXc0XhxUJVR0QbFpoAJKr2PmYrs="
+          "hash": "4dBLX3jEzer4UAnr/lv3dowIA7CmiFy9U0Dn0K9lnys="
         }
       },
       "is_incremental": false,
@@ -5903,7 +5915,7 @@
       "output": {
         ".html": {
           "relative_path": "toc.html",
-          "hash": "muqZpCRk+69Qkg0cl3LUreVkHcJ26EApDJdYkttIJnQ="
+          "hash": "UeXQfAVa+KzL9msusUpcOVQCmP897deiLqz9Eleji18="
         }
       },
       "is_incremental": false,
@@ -5924,7 +5936,7 @@
         "ConceptualDocumentProcessor": {
           "can_incremental": false,
           "incrementalPhase": "build",
-          "total_file_count": 75,
+          "total_file_count": 76,
           "skipped_file_count": 0
         },
         "ManagedReferenceDocumentProcessor": {

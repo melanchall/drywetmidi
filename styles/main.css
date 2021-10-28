@@ -105,9 +105,9 @@ body .toc {
     background-color: transparent;
 }
 
-.toc ul.level1 > li:last-of-type {
-    border-top: 1px solid #5E5E5D;
-    padding-top: 10px;
+.toc ul.level1 > li:first-of-type {
+    border-bottom: 1px solid #5E5E5D;
+    padding-bottom: 10px;
 }
 
 .sidefilter {
