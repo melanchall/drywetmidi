@@ -64,6 +64,14 @@ _Multimedia API is not available for Linux_.
 
 Package integration tests check that NuGet package installed in .NET applications of different types works as expected.
 
+**master**
+
+[![Test package integration - .NET Framework](https://dev.azure.com/Melanchall/DryWetMIDI/_apis/build/status/Package%20integration/Test%20package%20integration%20-%20.NET%20Framework?branchName=master&label=Test%20package%20integration%20-%20.NET%20Framework)](https://dev.azure.com/Melanchall/DryWetMIDI/_build/latest?definitionId=50&branchName=master)  
+[![Test package integration - .NET Core & .NET 5](https://dev.azure.com/Melanchall/DryWetMIDI/_apis/build/status/Package%20integration/Test%20package%20integration%20-%20.NET%20Core%20%26%20.NET%205?branchName=master&label=Test%20package%20integration%20-%20.NET%20Core%20%26%20.NET%205)](https://dev.azure.com/Melanchall/DryWetMIDI/_build/latest?definitionId=49&branchName=master)  
+[![Test package integration - Self-contained - .NET 5](https://dev.azure.com/Melanchall/DryWetMIDI/_apis/build/status/Package%20integration/Test%20package%20integration%20-%20Self-contained%20-%20.NET%205?branchName=master&label=Test%20package%20integration%20-%20Self-contained%20-%20.NET%205)](https://dev.azure.com/Melanchall/DryWetMIDI/_build/latest?definitionId=51&branchName=master)
+
+**develop**
+
 [![Test package integration - .NET Framework](https://dev.azure.com/Melanchall/DryWetMIDI/_apis/build/status/Package%20integration/Test%20package%20integration%20-%20.NET%20Framework?branchName=develop&label=Test%20package%20integration%20-%20.NET%20Framework)](https://dev.azure.com/Melanchall/DryWetMIDI/_build/latest?definitionId=50&branchName=develop)  
 [![Test package integration - .NET Core & .NET 5](https://dev.azure.com/Melanchall/DryWetMIDI/_apis/build/status/Package%20integration/Test%20package%20integration%20-%20.NET%20Core%20%26%20.NET%205?branchName=develop&label=Test%20package%20integration%20-%20.NET%20Core%20%26%20.NET%205)](https://dev.azure.com/Melanchall/DryWetMIDI/_build/latest?definitionId=49&branchName=develop)  
 [![Test package integration - Self-contained - .NET 5](https://dev.azure.com/Melanchall/DryWetMIDI/_apis/build/status/Package%20integration/Test%20package%20integration%20-%20Self-contained%20-%20.NET%205?branchName=develop&label=Test%20package%20integration%20-%20Self-contained%20-%20.NET%205)](https://dev.azure.com/Melanchall/DryWetMIDI/_build/latest?definitionId=51&branchName=develop)
