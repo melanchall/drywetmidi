@@ -17,10 +17,6 @@ pr: none
 
 variables:
 - group: DryWetMIDI-Common-Variables
-- name: buildConfiguration
-  value: 'Release'
-- name: buildPlatform
-  value: 'Any CPU'
 
 name: TestPackageIntegration_NetFramework_$(LibraryVersion)$(Rev:.r)
 
@@ -34,7 +30,7 @@ stages:
   jobs:
   - template: Templates/job-build-package.yaml
     parameters:
-      buildConfiguration: $(buildConfiguration)
+      buildConfiguration: $(BuildConfiguration)
 
 - stage: TestPackageIntegration
   displayName: Test package integration
@@ -115,7 +111,7 @@ stages:
       inputs:
         solution: 'Resources\PackageIntegrationTestUtilities\DwmNetFrameworkConsoleApp\DwmNetFrameworkConsoleApp.sln'
         platform: $(buildPlatform)
-        configuration: $(buildConfiguration)
+        configuration: $(BuildConfiguration)
         msbuildArgs: '/p:CustomBeforeMicrosoftCSharpTargets="$(Build.SourcesDirectory)\Resources\PackageIntegrationTestUtilities\DwmNetFrameworkConsoleApp\packages\Melanchall.DryWetMidi.$(LibraryVersion)\build\Melanchall.DryWetMidi.targets"'
     
     - task: PowerShell@2
@@ -123,5 +119,5 @@ stages:
       inputs:
         targetType: 'inline'
         script: |
-          $exePath = Get-ChildItem -Path "Resources\PackageIntegrationTestUtilities\DwmNetFrameworkConsoleApp\DwmNetFrameworkConsoleApp\bin\$(buildConfiguration)" -File -Filter "DwmNetFrameworkConsoleApp.exe" -Recurse
+          $exePath = Get-ChildItem -Path "Resources\PackageIntegrationTestUtilities\DwmNetFrameworkConsoleApp\DwmNetFrameworkConsoleApp\bin\$(BuildConfiguration)" -File -Filter "DwmNetFrameworkConsoleApp.exe" -Recurse
           & $exePath.FullName

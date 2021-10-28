@@ -18,8 +18,6 @@ pr: none
 
 variables:
 - group: DryWetMIDI-Common-Variables
-- name: buildConfiguration
-  value: 'Release'
 
 name: TestPackageIntegration_NetSelfContained_$(LibraryVersion)$(Rev:.r)
 
@@ -33,7 +31,7 @@ stages:
   jobs:
   - template: Templates/job-build-package.yaml
     parameters:
-      buildConfiguration: $(buildConfiguration)
+      buildConfiguration: $(BuildConfiguration)
 
 - stage: TestPackageIntegration
   displayName: Test package integration

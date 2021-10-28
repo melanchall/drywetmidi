@@ -17,8 +17,6 @@ pr: none
 
 variables:
 - group: DryWetMIDI-Common-Variables
-- name: buildConfiguration
-  value: 'Release'
 
 name: BuildLibrary_$(LibraryVersion)$(Rev:.r)
 
@@ -31,7 +29,7 @@ stages:
   jobs:
   - template: Templates/job-build-package.yaml
     parameters:
-      buildConfiguration: $(buildConfiguration)
+      buildConfiguration: $(BuildConfiguration)
   - job: BuildBinaries
     displayName: Build binaries
     steps:
@@ -49,7 +47,7 @@ stages:
         command: 'build'
         projects: |
           DryWetMidi/Melanchall.DryWetMidi.csproj
-        arguments: '--configuration $(buildConfiguration)'
+        arguments: '--configuration $(BuildConfiguration)'
     
     - task: PowerShell@2
       displayName: Delete pdb files
@@ -61,7 +59,7 @@ stages:
     - task: ArchiveFiles@2
       displayName: Archive .NET Framework binaries
       inputs:
-        rootFolderOrFile: 'DryWetMidi\bin\$(buildConfiguration)\net45'
+        rootFolderOrFile: 'DryWetMidi\bin\$(BuildConfiguration)\net45'
         includeRootFolder: false
         archiveType: 'zip'
         archiveFile: '$(Build.ArtifactStagingDirectory)\Binaries\DryWetMIDI.$(LibraryVersion)-bin-net45.zip'
@@ -69,7 +67,7 @@ stages:
     - task: ArchiveFiles@2
       displayName: Archive .NET Standard binaries
       inputs:
-        rootFolderOrFile: 'DryWetMidi\bin\$(buildConfiguration)\netstandard2.0'
+        rootFolderOrFile: 'DryWetMidi\bin\$(BuildConfiguration)\netstandard2.0'
         includeRootFolder: false
         archiveType: 'zip'
         archiveFile: '$(Build.ArtifactStagingDirectory)\Binaries\DryWetMIDI.$(LibraryVersion)-bin-netstandard20.zip'
