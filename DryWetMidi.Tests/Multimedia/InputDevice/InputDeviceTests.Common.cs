@@ -219,6 +219,47 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             }
         }
 
+        [Test]
+        public void StartStopEventsListening()
+        {
+            var receivedEventsCount = 0;
+            var timeout = SendReceiveUtilities.MaximumEventSendReceiveDelay + SendReceiveUtilities.MaximumEventSendReceiveDelay;
+
+            using (var outputDevice = OutputDevice.GetByName(MidiDevicesNames.DeviceA))
+            using (var inputDevice = InputDevice.GetByName(MidiDevicesNames.DeviceA))
+            {
+                inputDevice.EventReceived += (_, __) => receivedEventsCount++;
+
+                outputDevice.SendEvent(new NoteOnEvent());
+                var success = WaitOperations.Wait(() => receivedEventsCount > 0, timeout);
+                Assert.IsFalse(success, "Event received on just created device.");
+
+                inputDevice.StartEventsListening();
+                outputDevice.SendEvent(new NoteOnEvent());
+                success = WaitOperations.Wait(() => receivedEventsCount > 0, timeout);
+                Assert.IsTrue(success, "Event was not received after first start.");
+                Assert.AreEqual(1, receivedEventsCount, "Received events count is invalid after first start.");
+
+                inputDevice.StopEventsListening();
+                outputDevice.SendEvent(new NoteOnEvent());
+                success = WaitOperations.Wait(() => receivedEventsCount > 1, timeout);
+                Assert.IsFalse(success, "Event received after first stop.");
+                Assert.AreEqual(1, receivedEventsCount, "Received events count is invalid after first stop.");
+
+                inputDevice.StartEventsListening();
+                outputDevice.SendEvent(new NoteOnEvent());
+                success = WaitOperations.Wait(() => receivedEventsCount > 1, timeout);
+                Assert.IsTrue(success, "Event was not received after second start.");
+                Assert.AreEqual(2, receivedEventsCount, "Received events count is invalid after second start.");
+
+                inputDevice.StopEventsListening();
+                outputDevice.SendEvent(new NoteOnEvent());
+                success = WaitOperations.Wait(() => receivedEventsCount > 2, timeout);
+                Assert.IsFalse(success, "Event received after second stop.");
+                Assert.AreEqual(2, receivedEventsCount, "Received events count is invalid after second stop.");
+            }
+        }
+
         #endregion
 
         #region Private methods

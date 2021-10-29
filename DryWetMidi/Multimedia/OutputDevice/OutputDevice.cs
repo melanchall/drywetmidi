@@ -13,6 +13,24 @@ namespace Melanchall.DryWetMidi.Multimedia
     /// </summary>
     public sealed class OutputDevice : MidiDevice, IOutputDevice
     {
+        #region Nested classes
+
+        private sealed class OutputDeviceHandle : MidiDeviceHandle
+        {
+            public OutputDeviceHandle(IntPtr validHandle)
+                : base(validHandle)
+            {
+            }
+
+            protected override bool ReleaseHandle()
+            {
+                OutputDeviceApiProvider.Api.Api_CloseDevice(handle);
+                return true;
+            }
+        }
+
+        #endregion
+
         #region Constants
 
         private const int ShortEventBufferSize = 3;
@@ -43,27 +61,19 @@ namespace Melanchall.DryWetMidi.Multimedia
         private readonly CommonApi.API_TYPE _apiType;
         private readonly int _hashCode;
 
+        private readonly IntPtr _info = IntPtr.Zero;
+        private OutputDeviceHandle _handle = null;
+
         #endregion
 
         #region Constructor
 
         internal OutputDevice(IntPtr info, CreationContext context)
-            : base(info, context)
+            : base(context)
         {
+            _info = info;
             _apiType = CommonApiProvider.Api.Api_GetApiType();
             _hashCode = OutputDeviceApiProvider.Api.Api_GetDeviceHashCode(info);
-        }
-
-        #endregion
-
-        #region Finalizer
-
-        /// <summary>
-        /// Finalizes the current instance of the <see cref="OutputDevice"/>.
-        /// </summary>
-        ~OutputDevice()
-        {
-            Dispose(false);
         }
 
         #endregion
@@ -114,7 +124,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             {
                 var message = PackShortEvent(midiEvent);
                 NativeApi.HandleResult(
-                    OutputDeviceApiProvider.Api.Api_SendShortEvent(_handle, message));
+                    OutputDeviceApiProvider.Api.Api_SendShortEvent(_handle.DeviceHandle, message));
                 OnEventSent(midiEvent);
             }
             else
@@ -412,10 +422,11 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         private void EnsureHandleIsCreated()
         {
-            if (_handle != IntPtr.Zero)
+            if (_handle != null)
                 return;
 
             var sessionHandle = MidiDevicesSession.GetSessionHandle();
+            var deviceHandle = IntPtr.Zero;
 
             switch (_apiType)
             {
@@ -423,27 +434,20 @@ namespace Melanchall.DryWetMidi.Multimedia
                     {
                         _callback = OnMessage;
                         NativeApi.HandleResult(
-                            OutputDeviceApiProvider.Api.Api_OpenDevice_Win(_info, sessionHandle, _callback, out _handle));
+                            OutputDeviceApiProvider.Api.Api_OpenDevice_Win(_info, sessionHandle, _callback, out deviceHandle));
                     }
                     break;
                 case CommonApi.API_TYPE.API_TYPE_MAC:
                     {
                         NativeApi.HandleResult(
-                            OutputDeviceApiProvider.Api.Api_OpenDevice_Mac(_info, sessionHandle, out _handle));
+                            OutputDeviceApiProvider.Api.Api_OpenDevice_Mac(_info, sessionHandle, out deviceHandle));
                     }
                     break;
                 default:
                     throw new NotSupportedException($"{_apiType} API is not supported.");
             }
-        }
 
-        private void DestroyHandle()
-        {
-            if (_handle == IntPtr.Zero)
-                return;
-
-            OutputDeviceApiProvider.Api.Api_CloseDevice(_handle);
-            _handle = IntPtr.Zero;
+            _handle = new OutputDeviceHandle(deviceHandle);
         }
 
         private void SendSysExEvent(SysExEvent sysExEvent)
@@ -474,7 +478,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             Marshal.Copy(data, 0, IntPtr.Add(bufferPointer, 1), data.Length);
 
             NativeApi.HandleResult(
-                OutputDeviceApiProvider.Api.Api_SendSysExEvent_Win(_handle, bufferPointer, bufferLength));
+                OutputDeviceApiProvider.Api.Api_SendSysExEvent_Win(_handle.DeviceHandle, bufferPointer, bufferLength));
         }
 
         private void SendSysExEventData_Mac(byte[] data)
@@ -484,7 +488,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             Buffer.BlockCopy(data, 0, buffer, 1, data.Length);
 
             NativeApi.HandleResult(
-                OutputDeviceApiProvider.Api.Api_SendSysExEvent_Mac(_handle, buffer, (ushort)buffer.Length));
+                OutputDeviceApiProvider.Api.Api_SendSysExEvent_Mac(_handle.DeviceHandle, buffer, (ushort)buffer.Length));
         }
 
         private int PackShortEvent(MidiEvent midiEvent)
@@ -521,7 +525,7 @@ namespace Melanchall.DryWetMidi.Multimedia
                 int size;
 
                 NativeApi.HandleResult(
-                    OutputDeviceApiProvider.Api.Api_GetSysExBufferData(_handle, sysExHeaderPointer, out dataPointer,  out size));
+                    OutputDeviceApiProvider.Api.Api_GetSysExBufferData(_handle.DeviceHandle, sysExHeaderPointer, out dataPointer,  out size));
 
                 data = new byte[size - 1];
                 Marshal.Copy(IntPtr.Add(dataPointer, 1), data, 0, data.Length);
@@ -642,9 +646,8 @@ namespace Melanchall.DryWetMidi.Multimedia
             {
                 _midiEventToBytesConverter.Dispose();
                 _bytesToMidiEventConverter.Dispose();
+                _handle?.Dispose();
             }
-
-            DestroyHandle();
 
             _disposed = true;
         }

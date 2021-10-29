@@ -13,18 +13,38 @@ namespace Melanchall.DryWetMidi.Multimedia
     /// </remarks>
     public sealed class VirtualDevice : MidiDevice
     {
+        #region Nested classes
+
+        private sealed class VirtualDeviceHandle : MidiDeviceHandle
+        {
+            public VirtualDeviceHandle(IntPtr validHandle)
+                : base(validHandle)
+            {
+            }
+
+            protected override bool ReleaseHandle()
+            {
+                VirtualDeviceApiProvider.Api.Api_CloseDevice(handle);
+                return true;
+            }
+        }
+
+        #endregion
+
         #region Fields
 
         private readonly string _name;
 
         private VirtualDeviceApi.Callback_Mac _callback_Mac;
 
+        private VirtualDeviceHandle _handle = null;
+
         #endregion
 
         #region Constructor
 
         internal VirtualDevice(string name)
-            : base(IntPtr.Zero, CreationContext.User)
+            : base(CreationContext.User)
         {
             _name = name;
 
@@ -97,14 +117,18 @@ namespace Melanchall.DryWetMidi.Multimedia
             var sessionHandle = MidiDevicesSession.GetSessionHandle();
 
             _callback_Mac = OnMessage_Mac;
-            NativeApi.HandleResult(
-                VirtualDeviceApiProvider.Api.Api_OpenDevice_Mac(Name, sessionHandle, _callback_Mac, out _info));
 
-            var inputDeviceInfo = VirtualDeviceApiProvider.Api.Api_GetInputDeviceInfo(_info);
+            var deviceInfo = IntPtr.Zero;
+            NativeApi.HandleResult(
+                VirtualDeviceApiProvider.Api.Api_OpenDevice_Mac(Name, sessionHandle, _callback_Mac, out deviceInfo));
+
+            var inputDeviceInfo = VirtualDeviceApiProvider.Api.Api_GetInputDeviceInfo(deviceInfo);
             InputDevice = new InputDevice(inputDeviceInfo, CreationContext.VirtualDevice);
 
-            var outputDeviceInfo = VirtualDeviceApiProvider.Api.Api_GetOutputDeviceInfo(_info);
+            var outputDeviceInfo = VirtualDeviceApiProvider.Api.Api_GetOutputDeviceInfo(deviceInfo);
             OutputDevice = new OutputDevice(outputDeviceInfo, CreationContext.VirtualDevice);
+
+            _handle = new VirtualDeviceHandle(deviceInfo);
         }
 
         #endregion
@@ -131,13 +155,11 @@ namespace Melanchall.DryWetMidi.Multimedia
             if (_disposed)
                 return;
 
-            if (_info != IntPtr.Zero)
+            if (disposing)
             {
-                InputDevice.Dispose(disposing);
-                OutputDevice.Dispose(disposing);
-
-                VirtualDeviceApiProvider.Api.Api_CloseDevice(_info);
-                _info = IntPtr.Zero;
+                InputDevice?.Dispose(disposing);
+                OutputDevice?.Dispose(disposing);
+                _handle?.Dispose();
             }
 
             _disposed = true;

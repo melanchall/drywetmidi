@@ -44,16 +44,6 @@ namespace Melanchall.DryWetMidi.Multimedia
         #region Fields
 
         /// <summary>
-        /// Object holding information about the current device.
-        /// </summary>
-        protected IntPtr _info = IntPtr.Zero;
-
-        /// <summary>
-        /// Object holding handle of the current device that allows to interact with it.
-        /// </summary>
-        protected IntPtr _handle = IntPtr.Zero;
-
-        /// <summary>
         /// Flag to detect redundant disposing.
         /// </summary>
         protected bool _disposed = false;
@@ -62,9 +52,8 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         #region Constructor
 
-        internal MidiDevice(IntPtr info, CreationContext context)
+        internal MidiDevice(CreationContext context)
         {
-            _info = info;
             Context = context;
         }
 

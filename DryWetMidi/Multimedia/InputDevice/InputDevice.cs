@@ -14,6 +14,25 @@ namespace Melanchall.DryWetMidi.Multimedia
     /// </summary>
     public sealed class InputDevice : MidiDevice, IInputDevice
     {
+        #region Nested classes
+
+        private sealed class InputDeviceHandle : MidiDeviceHandle
+        {
+            public InputDeviceHandle(IntPtr validHandle)
+                : base(validHandle)
+            {
+            }
+
+            protected override bool ReleaseHandle()
+            {
+                InputDeviceApiProvider.Api.Api_Disconnect(handle);
+                InputDeviceApiProvider.Api.Api_CloseDevice(handle);
+                return true;
+            }
+        }
+
+        #endregion
+
         #region Constants
 
         private const int SysExBufferSize = 2048;
@@ -55,28 +74,20 @@ namespace Melanchall.DryWetMidi.Multimedia
         private readonly CommonApi.API_TYPE _apiType;
         private readonly int _hashCode;
 
+        private readonly IntPtr _info = IntPtr.Zero;
+        private InputDeviceHandle _handle = null;
+
         #endregion
 
         #region Constructor
 
         internal InputDevice(IntPtr info, CreationContext context)
-            : base(info, context)
+            : base(context)
         {
+            _info = info;
             _apiType = CommonApiProvider.Api.Api_GetApiType();
             _hashCode = InputDeviceApiProvider.Api.Api_GetDeviceHashCode(info);
             _bytesToMidiEventConverter.SilentNoteOnPolicy = SilentNoteOnPolicy.NoteOn;
-        }
-
-        #endregion
-
-        #region Finalizer
-
-        /// <summary>
-        /// Finalizes the current instance of the <see cref="InputDevice"/>.
-        /// </summary>
-        ~InputDevice()
-        {
-            Dispose(false);
         }
 
         #endregion
@@ -149,7 +160,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             EnsureHandleIsCreated();
 
             NativeApi.HandleResult(
-                InputDeviceApiProvider.Api.Api_Connect(_handle));
+                InputDeviceApiProvider.Api.Api_Connect(_handle.DeviceHandle));
             IsListeningForEvents = true;
         }
 
@@ -162,7 +173,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <see cref="DevicesWatcher.DeviceRemoved"/> event and thus considered as removed so you cannot interact with it.</exception>
         public void StopEventsListening()
         {
-            if (!IsListeningForEvents || _handle == IntPtr.Zero)
+            if (!IsListeningForEvents || _handle == null || _handle.IsClosed)
                 return;
 
             EnsureDeviceIsNotDisposed();
@@ -386,10 +397,11 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         private void EnsureHandleIsCreated()
         {
-            if (_handle != IntPtr.Zero)
+            if (_handle != null)
                 return;
 
             var sessionHandle = MidiDevicesSession.GetSessionHandle();
+            var deviceHandle = IntPtr.Zero;
 
             switch (_apiType)
             {
@@ -397,28 +409,21 @@ namespace Melanchall.DryWetMidi.Multimedia
                     {
                         _callback_Win = OnMessage_Win;
                         NativeApi.HandleResult(
-                            InputDeviceApiProvider.Api.Api_OpenDevice_Win(_info, sessionHandle, _callback_Win, SysExBufferSize, out _handle));
+                            InputDeviceApiProvider.Api.Api_OpenDevice_Win(_info, sessionHandle, _callback_Win, SysExBufferSize, out deviceHandle));
                     }
                     break;
                 case CommonApi.API_TYPE.API_TYPE_MAC:
                     {
                         _callback_Mac = OnMessage_Mac;
                         NativeApi.HandleResult(
-                            InputDeviceApiProvider.Api.Api_OpenDevice_Mac(_info, sessionHandle, _callback_Mac, out _handle));
+                            InputDeviceApiProvider.Api.Api_OpenDevice_Mac(_info, sessionHandle, _callback_Mac, out deviceHandle));
                     }
                     break;
                 default:
                     throw new NotSupportedException($"{_apiType} API is not supported.");
             }
-        }
 
-        private void DestroyHandle()
-        {
-            if (_handle == IntPtr.Zero)
-                return;
-
-            InputDeviceApiProvider.Api.Api_CloseDevice(_handle);
-            _handle = IntPtr.Zero;
+            _handle = new InputDeviceHandle(deviceHandle);
         }
 
         private void OnMessage_Win(IntPtr hMidi, NativeApi.MidiMessage wMsg, IntPtr dwInstance, IntPtr dwParam1, IntPtr dwParam2)
@@ -577,7 +582,7 @@ namespace Melanchall.DryWetMidi.Multimedia
                 OnEventReceived(midiEvent);
 
                 NativeApi.HandleResult(
-                    InputDeviceApiProvider.Api.Api_RenewSysExBuffer(_handle, SysExBufferSize));
+                    InputDeviceApiProvider.Api.Api_RenewSysExBuffer(_handle.DeviceHandle, SysExBufferSize));
             }
             catch (Exception ex)
             {
@@ -617,7 +622,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         private InputDeviceApi.IN_DISCONNECTRESULT StopEventsListeningSilently()
         {
             IsListeningForEvents = false;
-            return InputDeviceApiProvider.Api.Api_Disconnect(_handle);
+            return InputDeviceApiProvider.Api.Api_Disconnect(_handle.DeviceHandle);
         }
 
         #endregion
@@ -718,12 +723,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             if (disposing)
             {
                 _bytesToMidiEventConverter.Dispose();
-            }
-
-            if (_handle != IntPtr.Zero)
-            {
-                StopEventsListeningSilently();
-                DestroyHandle();
+                _handle?.Dispose();
             }
 
             _disposed = true;
