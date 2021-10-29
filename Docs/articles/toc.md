@@ -1,6 +1,7 @@
 # Project
 ## [Project health](dev/Project-health.md)
 ## [Manual build](dev/Manual-build.md)
+## [Using in Unity](dev/Using-in-Unity.md)
 
 # MIDI file reading/writing
 ## [MIDI file reading](file-reading-writing/MIDI-file-reading.md)
