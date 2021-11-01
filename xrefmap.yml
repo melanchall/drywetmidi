@@ -34,6 +34,9 @@ references:
 - uid: a_develop_project_health
   name: Project health
   href: articles/dev/Project-health.html
+- uid: a_develop_unity
+  name: Using in Unity
+  href: articles/dev/Using-in-Unity.html
 - uid: a_devices_commonproblems
   name: Common problems
   href: articles/devices/Common-problems.html
@@ -18083,19 +18086,6 @@ references:
   commentId: E:Melanchall.DryWetMidi.Multimedia.InputDevice.EventReceived
   fullName: Melanchall.DryWetMidi.Multimedia.InputDevice.EventReceived
   nameWithType: InputDevice.EventReceived
-- uid: Melanchall.DryWetMidi.Multimedia.InputDevice.Finalize
-  name: Finalize()
-  href: api/Melanchall.DryWetMidi.Multimedia.InputDevice.html#Melanchall_DryWetMidi_Multimedia_InputDevice_Finalize
-  commentId: M:Melanchall.DryWetMidi.Multimedia.InputDevice.Finalize
-  fullName: Melanchall.DryWetMidi.Multimedia.InputDevice.Finalize()
-  nameWithType: InputDevice.Finalize()
-- uid: Melanchall.DryWetMidi.Multimedia.InputDevice.Finalize*
-  name: Finalize
-  href: api/Melanchall.DryWetMidi.Multimedia.InputDevice.html#Melanchall_DryWetMidi_Multimedia_InputDevice_Finalize_
-  commentId: Overload:Melanchall.DryWetMidi.Multimedia.InputDevice.Finalize
-  isSpec: "True"
-  fullName: Melanchall.DryWetMidi.Multimedia.InputDevice.Finalize
-  nameWithType: InputDevice.Finalize
 - uid: Melanchall.DryWetMidi.Multimedia.InputDevice.GetAll
   name: GetAll()
   href: api/Melanchall.DryWetMidi.Multimedia.InputDevice.html#Melanchall_DryWetMidi_Multimedia_InputDevice_GetAll
@@ -18596,18 +18586,6 @@ references:
   commentId: F:Melanchall.DryWetMidi.Multimedia.MidiDevice._disposed
   fullName: Melanchall.DryWetMidi.Multimedia.MidiDevice._disposed
   nameWithType: MidiDevice._disposed
-- uid: Melanchall.DryWetMidi.Multimedia.MidiDevice._handle
-  name: _handle
-  href: api/Melanchall.DryWetMidi.Multimedia.MidiDevice.html#Melanchall_DryWetMidi_Multimedia_MidiDevice__handle
-  commentId: F:Melanchall.DryWetMidi.Multimedia.MidiDevice._handle
-  fullName: Melanchall.DryWetMidi.Multimedia.MidiDevice._handle
-  nameWithType: MidiDevice._handle
-- uid: Melanchall.DryWetMidi.Multimedia.MidiDevice._info
-  name: _info
-  href: api/Melanchall.DryWetMidi.Multimedia.MidiDevice.html#Melanchall_DryWetMidi_Multimedia_MidiDevice__info
-  commentId: F:Melanchall.DryWetMidi.Multimedia.MidiDevice._info
-  fullName: Melanchall.DryWetMidi.Multimedia.MidiDevice._info
-  nameWithType: MidiDevice._info
 - uid: Melanchall.DryWetMidi.Multimedia.MidiDevice.Dispose
   name: Dispose()
   href: api/Melanchall.DryWetMidi.Multimedia.MidiDevice.html#Melanchall_DryWetMidi_Multimedia_MidiDevice_Dispose
@@ -19075,19 +19053,6 @@ references:
   commentId: E:Melanchall.DryWetMidi.Multimedia.OutputDevice.EventSent
   fullName: Melanchall.DryWetMidi.Multimedia.OutputDevice.EventSent
   nameWithType: OutputDevice.EventSent
-- uid: Melanchall.DryWetMidi.Multimedia.OutputDevice.Finalize
-  name: Finalize()
-  href: api/Melanchall.DryWetMidi.Multimedia.OutputDevice.html#Melanchall_DryWetMidi_Multimedia_OutputDevice_Finalize
-  commentId: M:Melanchall.DryWetMidi.Multimedia.OutputDevice.Finalize
-  fullName: Melanchall.DryWetMidi.Multimedia.OutputDevice.Finalize()
-  nameWithType: OutputDevice.Finalize()
-- uid: Melanchall.DryWetMidi.Multimedia.OutputDevice.Finalize*
-  name: Finalize
-  href: api/Melanchall.DryWetMidi.Multimedia.OutputDevice.html#Melanchall_DryWetMidi_Multimedia_OutputDevice_Finalize_
-  commentId: Overload:Melanchall.DryWetMidi.Multimedia.OutputDevice.Finalize
-  isSpec: "True"
-  fullName: Melanchall.DryWetMidi.Multimedia.OutputDevice.Finalize
-  nameWithType: OutputDevice.Finalize
 - uid: Melanchall.DryWetMidi.Multimedia.OutputDevice.GetAll
   name: GetAll()
   href: api/Melanchall.DryWetMidi.Multimedia.OutputDevice.html#Melanchall_DryWetMidi_Multimedia_OutputDevice_GetAll
