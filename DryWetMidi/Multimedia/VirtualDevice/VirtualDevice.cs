@@ -15,8 +15,18 @@ namespace Melanchall.DryWetMidi.Multimedia
     {
         #region Nested classes
 
-        private sealed class VirtualDeviceHandle : MidiDeviceHandle
+        private sealed class VirtualDeviceHandle : NativeHandle
         {
+#if TEST
+            private readonly TestCheckpoints _checkpoints;
+
+            public VirtualDeviceHandle(IntPtr validHandle, TestCheckpoints checkpoints)
+                : this(validHandle)
+            {
+                _checkpoints = checkpoints;
+            }
+#endif
+
             public VirtualDeviceHandle(IntPtr validHandle)
                 : base(validHandle)
             {
@@ -24,7 +34,18 @@ namespace Melanchall.DryWetMidi.Multimedia
 
             protected override bool ReleaseHandle()
             {
-                VirtualDeviceApiProvider.Api.Api_CloseDevice(handle);
+#if TEST
+                _checkpoints?.SetCheckpointReached(VirtualDeviceCheckpointsNames.HandleFinalizerEntered);
+#endif
+
+                var closeResult = VirtualDeviceApiProvider.Api.Api_CloseDevice(handle);
+                if (closeResult != VirtualDeviceApi.VIRTUAL_CLOSERESULT.VIRTUAL_CLOSERESULT_OK)
+                    return false;
+
+#if TEST
+                _checkpoints?.SetCheckpointReached(VirtualDeviceCheckpointsNames.DeviceClosedInHandleFinalizer);
+#endif
+
                 return true;
             }
         }
@@ -128,7 +149,11 @@ namespace Melanchall.DryWetMidi.Multimedia
             var outputDeviceInfo = VirtualDeviceApiProvider.Api.Api_GetOutputDeviceInfo(deviceInfo);
             OutputDevice = new OutputDevice(outputDeviceInfo, CreationContext.VirtualDevice);
 
+#if TEST
+            _handle = new VirtualDeviceHandle(deviceInfo, TestCheckpoints);
+#else
             _handle = new VirtualDeviceHandle(deviceInfo);
+#endif
         }
 
         #endregion

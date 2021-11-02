@@ -104,9 +104,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         public void OutputDeviceIsReleasedByFinalizer()
         {
-            Func<bool> sendEvent = () =>
+            Func<TestCheckpoints, bool> sendEvent = testCheckpoints =>
             {
                 var outputDevice = OutputDevice.GetByName(MidiDevicesNames.DeviceA);
+                outputDevice.TestCheckpoints = testCheckpoints;
+
                 try
                 {
                     outputDevice.SendEvent(new NoteOnEvent());
@@ -120,10 +122,18 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
             for (var i = 0; i < 10; i++)
             {
-                Assert.IsTrue(sendEvent(), $"Can't send event on iteration {i}.");
+                var checkpoints = new TestCheckpoints();
+
+                checkpoints.CheckCheckpointNotReached(OutputDeviceCheckpointsNames.HandleFinalizerEntered);
+                checkpoints.CheckCheckpointNotReached(OutputDeviceCheckpointsNames.DeviceClosedInHandleFinalizer);
+
+                Assert.IsTrue(sendEvent(checkpoints), $"Can't send event on iteration {i}.");
 
                 GC.Collect();
                 GC.WaitForPendingFinalizers();
+
+                checkpoints.CheckCheckpointReached(OutputDeviceCheckpointsNames.HandleFinalizerEntered);
+                checkpoints.CheckCheckpointReached(OutputDeviceCheckpointsNames.DeviceClosedInHandleFinalizer);
             }
         }
 

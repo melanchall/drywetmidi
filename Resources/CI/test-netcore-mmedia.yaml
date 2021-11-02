@@ -65,7 +65,7 @@ stages:
       displayName: Build DryWetMidi and DryWetMidi.Tests.Common
       inputs:
         command: 'build'
-        arguments: '--configuration $(BuildConfiguration) --framework netstandard2.0'
+        arguments: '--configuration $(TestBuildConfiguration) --framework netstandard2.0'
         projects: |
           DryWetMidi/Melanchall.DryWetMidi.csproj
           DryWetMidi.Tests.Common/Melanchall.DryWetMidi.Tests.Common.csproj
@@ -74,7 +74,7 @@ stages:
       displayName: Build DryWetMidi.Tests
       inputs:
         command: 'build'
-        arguments: '--configuration $(BuildConfiguration) --framework $(Tfm)'
+        arguments: '--configuration $(TestBuildConfiguration) --framework $(Tfm)'
         projects: |
           DryWetMidi.Tests/Melanchall.DryWetMidi.Tests.csproj
     
@@ -87,7 +87,7 @@ stages:
           cd DryWetMidi.Tests
           gcc -c SendTestData.c
           gcc -shared -framework CoreServices -framework CoreMIDI -framework CoreFoundation -o SendTestData.dylib SendTestData.o
-          Copy-Item -Path "SendTestData.dylib" -Destination "bin/$(BuildConfiguration)/$(Tfm)" -Recurse
+          Copy-Item -Path "SendTestData.dylib" -Destination "bin/$(TestBuildConfiguration)/$(Tfm)" -Recurse
           
     - task: PublishPipelineArtifact@1
       displayName: Publish 'SendTestData' artifact
@@ -111,7 +111,7 @@ stages:
       inputs:
         command: 'test'
         projects: 'DryWetMidi.Tests/Melanchall.DryWetMidi.Tests.csproj'
-        arguments: '--blame --no-build --configuration $(BuildConfiguration) --filter (FullyQualifiedName~.Multimedia) --framework $(Tfm) --verbosity normal -d diagnostic.log'
+        arguments: '--blame --no-build --configuration $(TestBuildConfiguration) --filter (FullyQualifiedName~.Multimedia) --framework $(Tfm) --verbosity normal -d diagnostic.log'
         
     - task: PowerShell@2
       displayName: Collect diagnostic reports

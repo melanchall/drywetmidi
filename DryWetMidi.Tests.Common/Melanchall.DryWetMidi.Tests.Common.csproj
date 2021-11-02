@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
-    <Configurations>Debug;Release;Coverage</Configurations>
+    <Configurations>Debug;Release;Coverage;DebugTest;ReleaseTest</Configurations>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>strongnamekey.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>

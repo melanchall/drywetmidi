@@ -16,8 +16,18 @@ namespace Melanchall.DryWetMidi.Multimedia
     {
         #region Nested classes
 
-        private sealed class InputDeviceHandle : MidiDeviceHandle
+        private sealed class InputDeviceHandle : NativeHandle
         {
+#if TEST
+            private readonly TestCheckpoints _checkpoints;
+
+            public InputDeviceHandle(IntPtr validHandle, TestCheckpoints checkpoints)
+                : this(validHandle)
+            {
+                _checkpoints = checkpoints;
+            }
+#endif
+
             public InputDeviceHandle(IntPtr validHandle)
                 : base(validHandle)
             {
@@ -25,8 +35,26 @@ namespace Melanchall.DryWetMidi.Multimedia
 
             protected override bool ReleaseHandle()
             {
-                InputDeviceApiProvider.Api.Api_Disconnect(handle);
-                InputDeviceApiProvider.Api.Api_CloseDevice(handle);
+#if TEST
+                _checkpoints?.SetCheckpointReached(InputDeviceCheckpointsNames.HandleFinalizerEntered);
+#endif
+
+                var disconnectResult = InputDeviceApiProvider.Api.Api_Disconnect(handle);
+                if (disconnectResult != InputDeviceApi.IN_DISCONNECTRESULT.IN_DISCONNECTRESULT_OK)
+                    return false;
+
+#if TEST
+                _checkpoints?.SetCheckpointReached(InputDeviceCheckpointsNames.DeviceDisconnectedInHandleFinalizer);
+#endif
+
+                var closeResult = InputDeviceApiProvider.Api.Api_CloseDevice(handle);
+                if (closeResult != InputDeviceApi.IN_CLOSERESULT.IN_CLOSERESULT_OK)
+                    return false;
+
+#if TEST
+                _checkpoints?.SetCheckpointReached(InputDeviceCheckpointsNames.DeviceClosedInHandleFinalizer);
+#endif
+
                 return true;
             }
         }
@@ -423,7 +451,11 @@ namespace Melanchall.DryWetMidi.Multimedia
                     throw new NotSupportedException($"{_apiType} API is not supported.");
             }
 
+#if TEST
+            _handle = new InputDeviceHandle(deviceHandle, TestCheckpoints);
+#else
             _handle = new InputDeviceHandle(deviceHandle);
+#endif
         }
 
         private void OnMessage_Win(IntPtr hMidi, NativeApi.MidiMessage wMsg, IntPtr dwInstance, IntPtr dwParam1, IntPtr dwParam2)
@@ -575,6 +607,9 @@ namespace Melanchall.DryWetMidi.Multimedia
                 NativeApi.HandleResult(
                     InputDeviceApiProvider.Api.Api_GetSysExBufferData(sysExHeaderPointer, out dataPointer, out size));
 
+                if (size <= 0)
+                    return;
+
                 data = new byte[size - 1];
                 Marshal.Copy(IntPtr.Add(dataPointer, 1), data, 0, data.Length);
 
@@ -625,7 +660,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             return InputDeviceApiProvider.Api.Api_Disconnect(_handle.DeviceHandle);
         }
 
-        #endregion
+#endregion
 
         #region Operators
 

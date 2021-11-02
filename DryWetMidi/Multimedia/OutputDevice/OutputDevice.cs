@@ -15,8 +15,18 @@ namespace Melanchall.DryWetMidi.Multimedia
     {
         #region Nested classes
 
-        private sealed class OutputDeviceHandle : MidiDeviceHandle
+        private sealed class OutputDeviceHandle : NativeHandle
         {
+#if TEST
+            private readonly TestCheckpoints _checkpoints;
+
+            public OutputDeviceHandle(IntPtr validHandle, TestCheckpoints checkpoints)
+                : this(validHandle)
+            {
+                _checkpoints = checkpoints;
+            }
+#endif
+
             public OutputDeviceHandle(IntPtr validHandle)
                 : base(validHandle)
             {
@@ -24,7 +34,18 @@ namespace Melanchall.DryWetMidi.Multimedia
 
             protected override bool ReleaseHandle()
             {
-                OutputDeviceApiProvider.Api.Api_CloseDevice(handle);
+#if TEST
+                _checkpoints?.SetCheckpointReached(OutputDeviceCheckpointsNames.HandleFinalizerEntered);
+#endif
+
+                var closeResult = OutputDeviceApiProvider.Api.Api_CloseDevice(handle);
+                if (closeResult != OutputDeviceApi.OUT_CLOSERESULT.OUT_CLOSERESULT_OK)
+                    return false;
+
+#if TEST
+                _checkpoints?.SetCheckpointReached(OutputDeviceCheckpointsNames.DeviceClosedInHandleFinalizer);
+#endif
+
                 return true;
             }
         }
@@ -447,7 +468,11 @@ namespace Melanchall.DryWetMidi.Multimedia
                     throw new NotSupportedException($"{_apiType} API is not supported.");
             }
 
+#if TEST
+            _handle = new OutputDeviceHandle(deviceHandle, TestCheckpoints);
+#else
             _handle = new OutputDeviceHandle(deviceHandle);
+#endif
         }
 
         private void SendSysExEvent(SysExEvent sysExEvent)
@@ -547,7 +572,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             EventSent?.Invoke(this, new MidiEventSentEventArgs(midiEvent));
         }
 
-        #endregion
+#endregion
 
         #region Operators
 

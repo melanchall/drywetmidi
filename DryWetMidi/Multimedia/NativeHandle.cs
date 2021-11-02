@@ -3,11 +3,11 @@ using System.Runtime.InteropServices;
 
 namespace Melanchall.DryWetMidi.Multimedia
 {
-    internal abstract class MidiDeviceHandle : SafeHandle
+    internal abstract class NativeHandle : SafeHandle
     {
         #region Constructor
 
-        public MidiDeviceHandle(IntPtr validHandle)
+        public NativeHandle(IntPtr validHandle)
                 : base(IntPtr.Zero, true)
         {
             SetHandle(validHandle);

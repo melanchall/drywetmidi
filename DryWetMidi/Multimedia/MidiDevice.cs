@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Melanchall.DryWetMidi.Common;
 
 namespace Melanchall.DryWetMidi.Multimedia
 {
@@ -84,6 +85,10 @@ namespace Melanchall.DryWetMidi.Multimedia
         public abstract string Name { get; }
 
         internal CreationContext Context { get; }
+
+#if TEST
+        internal TestCheckpoints TestCheckpoints { get; set; }
+#endif
 
         #endregion
 

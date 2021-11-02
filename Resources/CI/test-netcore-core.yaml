@@ -63,7 +63,7 @@ stages:
       displayName: Build DryWetMidi and DryWetMidi.Tests.Common
       inputs:
         command: 'build'
-        arguments: '--configuration $(BuildConfiguration) --framework netstandard2.0'
+        arguments: '--configuration $(TestBuildConfiguration) --framework netstandard2.0'
         projects: |
           DryWetMidi/Melanchall.DryWetMidi.csproj
           DryWetMidi.Tests.Common/Melanchall.DryWetMidi.Tests.Common.csproj
@@ -72,7 +72,7 @@ stages:
       displayName: Build DryWetMidi.Tests
       inputs:
         command: 'build'
-        arguments: '--configuration $(BuildConfiguration) --framework $(Tfm)'
+        arguments: '--configuration $(TestBuildConfiguration) --framework $(Tfm)'
         projects: |
           DryWetMidi.Tests/Melanchall.DryWetMidi.Tests.csproj
     
@@ -82,7 +82,7 @@ stages:
       inputs:
         command: 'test'
         projects: 'DryWetMidi.Tests/Melanchall.DryWetMidi.Tests.csproj'
-        arguments: '--blame --no-build --configuration $(BuildConfiguration) --filter (FullyQualifiedName~Melanchall.DryWetMidi.Tests.Core|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Common|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Composing|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Interaction|FullyQualifiedName~Melanchall.DryWetMidi.Tests.MusicTheory|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Standards|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Tools) --framework $(Tfm) --verbosity normal -d diagnostic.log'
+        arguments: '--blame --no-build --configuration $(TestBuildConfiguration) --filter (FullyQualifiedName~Melanchall.DryWetMidi.Tests.Core|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Common|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Composing|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Interaction|FullyQualifiedName~Melanchall.DryWetMidi.Tests.MusicTheory|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Standards|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Tools) --framework $(Tfm) --verbosity normal -d diagnostic.log'
         
     - task: DotNetCoreCLI@2
       displayName: Run unit tests
@@ -90,7 +90,7 @@ stages:
       inputs:
         command: 'test'
         projects: 'DryWetMidi.Tests/Melanchall.DryWetMidi.Tests.csproj'
-        arguments: '--blame --no-build --configuration $(BuildConfiguration) --filter ((FullyQualifiedName~Melanchall.DryWetMidi.Tests.Core|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Common|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Composing|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Interaction|FullyQualifiedName~Melanchall.DryWetMidi.Tests.MusicTheory|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Standards|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Tools)&Name!=CheckValidFilesReadingByReferences) --framework $(Tfm) --verbosity normal -d diagnostic.log'
+        arguments: '--blame --no-build --configuration $(TestBuildConfiguration) --filter ((FullyQualifiedName~Melanchall.DryWetMidi.Tests.Core|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Common|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Composing|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Interaction|FullyQualifiedName~Melanchall.DryWetMidi.Tests.MusicTheory|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Standards|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Tools)&Name!=CheckValidFilesReadingByReferences) --framework $(Tfm) --verbosity normal -d diagnostic.log'
         
     - task: PowerShell@2
       displayName: Collect diagnostic reports

@@ -130,6 +130,30 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             }
         }
 
+        // TODO
+        //[Test]
+        public void VirtualDeviceIsReleasedByFinalizer()
+        {
+            Action<TestCheckpoints> createVirtualDevice = testCheckpoints =>
+            {
+                var virtualDevice = GetVirtualDevice();
+                virtualDevice.TestCheckpoints = testCheckpoints;
+            };
+
+            var checkpoints = new TestCheckpoints();
+
+            checkpoints.CheckCheckpointNotReached(VirtualDeviceCheckpointsNames.HandleFinalizerEntered);
+            checkpoints.CheckCheckpointNotReached(VirtualDeviceCheckpointsNames.DeviceClosedInHandleFinalizer);
+
+            createVirtualDevice(checkpoints);
+
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+
+            checkpoints.CheckCheckpointReached(VirtualDeviceCheckpointsNames.HandleFinalizerEntered);
+            checkpoints.CheckCheckpointReached(VirtualDeviceCheckpointsNames.DeviceClosedInHandleFinalizer);
+        }
+
         #endregion
 
         #region Private methods

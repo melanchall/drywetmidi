@@ -59,7 +59,7 @@ stages:
       displayName: Build DryWetMidi
       inputs:
         command: 'build'
-        arguments: '--configuration $(BuildConfiguration) --framework net45'
+        arguments: '--configuration $(TestBuildConfiguration) --framework net45'
         projects: |
           DryWetMidi/Melanchall.DryWetMidi.csproj
     
@@ -67,7 +67,7 @@ stages:
       displayName: Build DryWetMidi.Tests.Common
       inputs:
         command: 'build'
-        arguments: '--configuration $(BuildConfiguration) --framework netstandard2.0'
+        arguments: '--configuration $(TestBuildConfiguration) --framework netstandard2.0'
         projects: |
           DryWetMidi.Tests.Common/Melanchall.DryWetMidi.Tests.Common.csproj
     
@@ -75,7 +75,7 @@ stages:
       displayName: Build DryWetMidi.Tests
       inputs:
         command: 'build'
-        arguments: '--configuration $(BuildConfiguration) --framework net48'
+        arguments: '--configuration $(TestBuildConfiguration) --framework net48'
         projects: |
           DryWetMidi.Tests/Melanchall.DryWetMidi.Tests.csproj
     
@@ -85,6 +85,6 @@ stages:
       inputs:
         command: 'test'
         projects: 'DryWetMidi.Tests/Melanchall.DryWetMidi.Tests.csproj'
-        arguments: '--blame --no-build --configuration $(BuildConfiguration) --filter (FullyQualifiedName~Melanchall.DryWetMidi.Tests.Core|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Common|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Composing|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Interaction|FullyQualifiedName~Melanchall.DryWetMidi.Tests.MusicTheory|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Standards|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Tools) --framework net48 --verbosity normal -d diagnostic.log'
+        arguments: '--blame --no-build --configuration $(TestBuildConfiguration) --filter (FullyQualifiedName~Melanchall.DryWetMidi.Tests.Core|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Common|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Composing|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Interaction|FullyQualifiedName~Melanchall.DryWetMidi.Tests.MusicTheory|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Standards|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Tools) --framework net48 --verbosity normal -d diagnostic.log'
         
     - template: Templates/step-collect-logs.yaml

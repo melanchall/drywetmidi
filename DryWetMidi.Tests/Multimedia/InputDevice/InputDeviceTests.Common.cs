@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using Melanchall.DryWetMidi.Common;
@@ -147,9 +148,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         public void InputDeviceIsReleasedByFinalizer()
         {
-            Func<bool> openDevice = () =>
+            Func<TestCheckpoints, bool> openDevice = testCheckpoints =>
             {
                 var inputDevice = InputDevice.GetByName(MidiDevicesNames.DeviceA);
+                inputDevice.TestCheckpoints = testCheckpoints;
+
                 try
                 {
                     inputDevice.StartEventsListening();
@@ -163,10 +166,20 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
             for (var i = 0; i < 10; i++)
             {
-                Assert.IsTrue(openDevice(), $"Can't open device on iteration {i}.");
+                var checkpoints = new TestCheckpoints();
+
+                checkpoints.CheckCheckpointNotReached(InputDeviceCheckpointsNames.HandleFinalizerEntered);
+                checkpoints.CheckCheckpointNotReached(InputDeviceCheckpointsNames.DeviceDisconnectedInHandleFinalizer);
+                checkpoints.CheckCheckpointNotReached(InputDeviceCheckpointsNames.DeviceClosedInHandleFinalizer);
+
+                Assert.IsTrue(openDevice(checkpoints), $"Can't open device on iteration {i}.");
 
                 GC.Collect();
                 GC.WaitForPendingFinalizers();
+
+                checkpoints.CheckCheckpointReached(InputDeviceCheckpointsNames.HandleFinalizerEntered);
+                checkpoints.CheckCheckpointReached(InputDeviceCheckpointsNames.DeviceDisconnectedInHandleFinalizer);
+                checkpoints.CheckCheckpointReached(InputDeviceCheckpointsNames.DeviceClosedInHandleFinalizer);
             }
         }
 

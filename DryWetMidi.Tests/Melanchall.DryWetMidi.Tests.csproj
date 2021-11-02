@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFrameworks>netcoreapp3.1;net48;net5.0</TargetFrameworks>
     <OutputType>Library</OutputType>
-    <Configurations>Debug;Release;Coverage</Configurations>
+    <Configurations>Debug;Release;Coverage;DebugTest;ReleaseTest</Configurations>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>strongnamekey.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
