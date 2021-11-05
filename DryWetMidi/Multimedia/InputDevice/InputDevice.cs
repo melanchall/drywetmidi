@@ -344,16 +344,11 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// Retrieves all input MIDI devices presented in the system.
         /// </summary>
         /// <returns>All input MIDI devices presented in the system.</returns>
-        public static IEnumerable<InputDevice> GetAll()
+        public static ICollection<InputDevice> GetAll()
         {
             EnsureSessionIsCreated();
 
-            var devicesCount = GetDevicesCount();
-
-            for (var i = 0; i < devicesCount; i++)
-            {
-                yield return GetByIndex(i);
-            }
+            return GetAllLazy().ToArray();
         }
 
         /// <summary>
@@ -399,11 +394,21 @@ namespace Melanchall.DryWetMidi.Multimedia
 
             EnsureSessionIsCreated();
 
-            var device = GetAll().FirstOrDefault(d => d.Name == name);
+            var device = GetAllLazy().FirstOrDefault(d => d.Name == name);
             if (device == null)
                 throw new ArgumentException($"There is no MIDI input device '{name}'.", nameof(name));
 
             return device;
+        }
+
+        private static IEnumerable<InputDevice> GetAllLazy()
+        {
+            var devicesCount = GetDevicesCount();
+
+            for (var i = 0; i < devicesCount; i++)
+            {
+                yield return GetByIndex(i);
+            }
         }
 
         private void OnEventReceived(MidiEvent midiEvent)

@@ -23,29 +23,47 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
         [TestCase(MidiDevicesNames.DeviceA)]
         [TestCase(MidiDevicesNames.DeviceB)]
-        public void FindOutputDeviceByName(string deviceName)
+        public void GetOutputDeviceByName(string deviceName)
         {
             Assert.IsNotNull(OutputDevice.GetByName(deviceName), "There is no device.");
         }
 
         [Test]
-        public void FindOutputDeviceByIndex_Valid()
+        public void GetOutputDeviceByIndex_Valid()
         {
             var devicesCount = OutputDevice.GetDevicesCount();
             Assert.IsNotNull(OutputDevice.GetByIndex(devicesCount / 2), "There is no device.");
         }
 
         [Test]
-        public void FindOutputDeviceByIndex_BelowZero()
+        public void GetOutputDeviceByIndex_BelowZero()
         {
             Assert.Throws<ArgumentOutOfRangeException>(() => OutputDevice.GetByIndex(-1), "Exception is not thrown.");
         }
 
         [Test]
-        public void FindOutputDeviceByIndex_BeyondDevicesCount()
+        public void GetOutputDeviceByIndex_BeyondDevicesCount()
         {
             var devicesCount = OutputDevice.GetDevicesCount();
             Assert.Throws<ArgumentOutOfRangeException>(() => OutputDevice.GetByIndex(devicesCount), "Exception is not thrown.");
+        }
+
+        [Test]
+        public void GetAllOutputDevices()
+        {
+            var outputDevices = OutputDevice.GetAll();
+            var outputDevicesCount = OutputDevice.GetDevicesCount();
+            Assert.AreEqual(outputDevicesCount, outputDevices.Count, "Output devices count is invalid.");
+        }
+
+        [Test]
+        public void GetOutputDevicesCount()
+        {
+            var outputDevicesCount = OutputDevice.GetDevicesCount();
+            Assert.GreaterOrEqual(
+                outputDevicesCount,
+                MidiDevicesNames.GetAllDevicesNames().Length,
+                "Output devices count is invalid.");
         }
 
         [Retry(RetriesNumber)]
