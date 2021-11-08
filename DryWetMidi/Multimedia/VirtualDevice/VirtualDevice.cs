@@ -125,6 +125,9 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         private void OnMessage_Mac(IntPtr pktlist, IntPtr readProcRefCon, IntPtr srcConnRefCon)
         {
+            if (!IsEnabled)
+                return;
+
             var result = VirtualDeviceApiProvider.Api.Api_SendDataBack(pktlist, readProcRefCon);
             if (result != VirtualDeviceApi.VIRTUAL_SENDBACKRESULT.VIRTUAL_SENDBACKRESULT_OK)
             {

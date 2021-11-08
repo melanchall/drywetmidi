@@ -154,16 +154,118 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             checkpoints.CheckCheckpointReached(VirtualDeviceCheckpointsNames.DeviceClosedInHandleFinalizer);
         }
 
+        [Test]
+        public void DisableEnableVirtualDevice()
+        {
+            using (var virtualDevice = GetVirtualDevice())
+            {
+                Assert.IsTrue(virtualDevice.IsEnabled, "Device is not enabled initially.");
+
+                var inputDevice = virtualDevice.InputDevice;
+                var outputDevice = virtualDevice.OutputDevice;
+
+                var receivedEventsCount = 0;
+
+                inputDevice.StartEventsListening();
+                inputDevice.EventReceived += (_, __) => receivedEventsCount++;
+
+                outputDevice.SendEvent(new NoteOnEvent());
+                var eventReceived = WaitOperations.Wait(() => receivedEventsCount == 1, SendReceiveUtilities.MaximumEventSendReceiveDelay);
+                Assert.IsTrue(eventReceived, "Event is not received.");
+
+                virtualDevice.IsEnabled = false;
+                Assert.IsFalse(virtualDevice.IsEnabled, "Device is enabled after disabling.");
+
+                outputDevice.SendEvent(new NoteOnEvent());
+                eventReceived = WaitOperations.Wait(() => receivedEventsCount > 1, TimeSpan.FromSeconds(5));
+                Assert.IsFalse(eventReceived, "Event is received after device disabled.");
+
+                virtualDevice.IsEnabled = true;
+                Assert.IsTrue(virtualDevice.IsEnabled, "Device is disabled after enabling.");
+
+                outputDevice.SendEvent(new NoteOnEvent());
+                eventReceived = WaitOperations.Wait(() => receivedEventsCount > 1, SendReceiveUtilities.MaximumEventSendReceiveDelay);
+                Assert.IsTrue(eventReceived, "Event is not received after enabling again.");
+            }
+        }
+
+        [Test]
+        public void DisableEnableInputDeviceOfVirtualDevice()
+        {
+            using (var virtualDevice = GetVirtualDevice())
+            {
+                var inputDevice = virtualDevice.InputDevice;
+                var outputDevice = virtualDevice.OutputDevice;
+
+                Assert.IsTrue(inputDevice.IsEnabled, "Device is not enabled initially.");
+
+                var receivedEventsCount = 0;
+
+                inputDevice.StartEventsListening();
+                inputDevice.EventReceived += (_, __) => receivedEventsCount++;
+
+                outputDevice.SendEvent(new NoteOnEvent());
+                var eventReceived = WaitOperations.Wait(() => receivedEventsCount == 1, SendReceiveUtilities.MaximumEventSendReceiveDelay);
+                Assert.IsTrue(eventReceived, "Event is not received.");
+
+                inputDevice.IsEnabled = false;
+                Assert.IsFalse(inputDevice.IsEnabled, "Device is enabled after disabling.");
+
+                outputDevice.SendEvent(new NoteOnEvent());
+                eventReceived = WaitOperations.Wait(() => receivedEventsCount > 1, TimeSpan.FromSeconds(5));
+                Assert.IsFalse(eventReceived, "Event is received after device disabled.");
+
+                inputDevice.IsEnabled = true;
+                Assert.IsTrue(inputDevice.IsEnabled, "Device is disabled after enabling.");
+
+                outputDevice.SendEvent(new NoteOnEvent());
+                eventReceived = WaitOperations.Wait(() => receivedEventsCount > 1, SendReceiveUtilities.MaximumEventSendReceiveDelay);
+                Assert.IsTrue(eventReceived, "Event is not received after enabling again.");
+            }
+        }
+
+        [Test]
+        public void DisableEnableOutputDeviceOfVirtualDevice()
+        {
+            using (var virtualDevice = GetVirtualDevice())
+            {
+                var inputDevice = virtualDevice.InputDevice;
+                var outputDevice = virtualDevice.OutputDevice;
+
+                Assert.IsTrue(outputDevice.IsEnabled, "Device is not enabled initially.");
+
+                var sentEventsCount = 0;
+
+                outputDevice.EventSent += (_, __) => sentEventsCount++;
+
+                outputDevice.SendEvent(new NoteOnEvent());
+                var eventReceived = WaitOperations.Wait(() => sentEventsCount == 1, SendReceiveUtilities.MaximumEventSendReceiveDelay);
+                Assert.IsTrue(eventReceived, "Event is not sent.");
+
+                outputDevice.IsEnabled = false;
+                Assert.IsFalse(outputDevice.IsEnabled, "Device is enabled after disabling.");
+
+                outputDevice.SendEvent(new NoteOnEvent());
+                eventReceived = WaitOperations.Wait(() => sentEventsCount > 1, TimeSpan.FromSeconds(5));
+                Assert.IsFalse(eventReceived, "Event is sent after device disabled.");
+
+                outputDevice.IsEnabled = true;
+                Assert.IsTrue(outputDevice.IsEnabled, "Device is disabled after enabling.");
+
+                outputDevice.SendEvent(new NoteOnEvent());
+                eventReceived = WaitOperations.Wait(() => sentEventsCount > 1, SendReceiveUtilities.MaximumEventSendReceiveDelay);
+                Assert.IsTrue(eventReceived, "Event is not sent after enabling again.");
+            }
+        }
+
         #endregion
 
         #region Private methods
 
-        private string GetVirtualDeviceName() => Guid.NewGuid().ToString().Replace("-", string.Empty).Substring(0, 10);
-
         private VirtualDevice GetVirtualDevice()
         {
-            var virtualDevice = VirtualDevice.Create(GetVirtualDeviceName());
-            return virtualDevice;
+            var deviceName = Guid.NewGuid().ToString().Replace("-", string.Empty).Substring(0, 10);
+            return VirtualDevice.Create(deviceName);
         }
 
         private static IEnumerable<MidiEvent> GetNonDefaultShortEvents() => new MidiEvent[]
