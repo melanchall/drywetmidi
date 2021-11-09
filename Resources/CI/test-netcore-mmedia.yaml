@@ -14,6 +14,7 @@ trigger:
     - 'Resources/CI/Templates/step-create-ports-windows.yaml'
     - 'Resources/CI/Templates/step-copy-native-libraries-near-csproj.yaml'
     - 'Resources/CI/Templates/step-collect-logs.yaml'
+    - 'Resources/CI/Templates/step-build-tests.yaml'
     - 'Resources/Utilities/CreateLoopbackPort_Windows/*'
     - 'Resources/Scripts/Setup MIDI ports.ps1'
     - 'Resources/Native/*'
@@ -32,6 +33,7 @@ pr:
     - 'Resources/CI/Templates/step-create-ports-windows.yaml'
     - 'Resources/CI/Templates/step-copy-native-libraries-near-csproj.yaml'
     - 'Resources/CI/Templates/step-collect-logs.yaml'
+    - 'Resources/CI/Templates/step-build-tests.yaml'
     - 'Resources/Utilities/CreateLoopbackPort_Windows/*'
     - 'Resources/Scripts/Setup MIDI ports.ps1'
     - 'Resources/Native/*'
@@ -61,22 +63,9 @@ stages:
         version: '$(SdkVersion)'
         installationPath: $(Agent.ToolsDirectory)/dotnet
     
-    - task: DotNetCoreCLI@2
-      displayName: Build DryWetMidi and DryWetMidi.Tests.Common
-      inputs:
-        command: 'build'
-        arguments: '--configuration $(TestBuildConfiguration) --framework netstandard2.0'
-        projects: |
-          DryWetMidi/Melanchall.DryWetMidi.csproj
-          DryWetMidi.Tests.Common/Melanchall.DryWetMidi.Tests.Common.csproj
-    
-    - task: DotNetCoreCLI@2
-      displayName: Build DryWetMidi.Tests
-      inputs:
-        command: 'build'
-        arguments: '--configuration $(TestBuildConfiguration) --framework $(Tfm)'
-        projects: |
-          DryWetMidi.Tests/Melanchall.DryWetMidi.Tests.csproj
+    - template: Templates/step-build-tests.yaml
+      parameters:
+        tfm: $(Tfm)
     
     - task: PowerShell@2
       displayName: Build test data sending utility
