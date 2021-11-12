@@ -50,6 +50,51 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             }
         }
 
+        [Test]
+        public void DisposeVirtualDevice()
+        {
+            var virtualDevice = GetVirtualDevice();
+
+            var timeout = TimeSpan.FromSeconds(5);
+
+            var inputDeviceFound = WaitOperations.Wait(() => InputDevice.GetAll().Any(d => d.Name == virtualDevice.Name), timeout);
+            Assert.IsTrue(inputDeviceFound, $"Input device is not found for [{timeout}].");
+
+            var outputDeviceFound = WaitOperations.Wait(() => OutputDevice.GetAll().Any(d => d.Name == virtualDevice.Name), timeout);
+            Assert.IsTrue(outputDeviceFound, $"Output device is not found for [{timeout}].");
+
+            virtualDevice.Dispose();
+
+            inputDeviceFound = WaitOperations.Wait(() => InputDevice.GetAll().Any(d => d.Name == virtualDevice.Name), timeout);
+            Assert.IsFalse(inputDeviceFound, $"Input device is found after virtual device disposed after [{timeout}].");
+
+            outputDeviceFound = WaitOperations.Wait(() => OutputDevice.GetAll().Any(d => d.Name == virtualDevice.Name), timeout);
+            Assert.IsFalse(outputDeviceFound, $"Output device is found after virtual device disposed after [{timeout}].");
+        }
+
+        [Test]
+        public void VirtualDeviceIsReleasedByFinalizer()
+        {
+            Func<string> createVirtualDevice = () =>
+            {
+                var virtualDevice = GetVirtualDevice();
+                return virtualDevice.Name;
+            };
+
+            var deviceName = createVirtualDevice();
+
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+
+            var timeout = TimeSpan.FromSeconds(5);
+
+            var inputDeviceFound = WaitOperations.Wait(() => InputDevice.GetAll().Any(d => d.Name == deviceName), timeout);
+            Assert.IsFalse(inputDeviceFound, $"Input device is found after virtual device disposed after [{timeout}].");
+
+            var outputDeviceFound = WaitOperations.Wait(() => OutputDevice.GetAll().Any(d => d.Name == deviceName), timeout);
+            Assert.IsFalse(outputDeviceFound, $"Output device is found after virtual device disposed after [{timeout}].");
+        }
+
         [Retry(RetriesNumber)]
         [Test]
         public void SendEventToVirtualDevice_SysEx()
@@ -128,30 +173,6 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 Assert.AreNotEqual(virtualDevice.InputDevice, inputDevice, "Input device is equal to virtual input subdevice.");
                 Assert.AreNotEqual(virtualDevice.OutputDevice, outputDevice, "Output device is equal to virtual output subdevice.");
             }
-        }
-
-        // TODO
-        //[Test]
-        public void VirtualDeviceIsReleasedByFinalizer()
-        {
-            Action<TestCheckpoints> createVirtualDevice = testCheckpoints =>
-            {
-                var virtualDevice = GetVirtualDevice();
-                virtualDevice.TestCheckpoints = testCheckpoints;
-            };
-
-            var checkpoints = new TestCheckpoints();
-
-            checkpoints.CheckCheckpointNotReached(VirtualDeviceCheckpointsNames.HandleFinalizerEntered);
-            checkpoints.CheckCheckpointNotReached(VirtualDeviceCheckpointsNames.DeviceClosedInHandleFinalizer);
-
-            createVirtualDevice(checkpoints);
-
-            GC.Collect();
-            GC.WaitForPendingFinalizers();
-
-            checkpoints.CheckCheckpointReached(VirtualDeviceCheckpointsNames.HandleFinalizerEntered);
-            checkpoints.CheckCheckpointReached(VirtualDeviceCheckpointsNames.DeviceClosedInHandleFinalizer);
         }
 
         [Test]
