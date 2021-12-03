@@ -14,31 +14,31 @@ namespace Melanchall.DryWetMidi.Multimedia
         #region Extern functions
 
         [DllImport(LibraryName, ExactSpelling = true)]
-        public static extern TG_STARTRESULT StartHighPrecisionTickGenerator_Win(int interval, TimerCallback_Win callback, out IntPtr info);
+        public static extern TG_STARTRESULT StartHighPrecisionTickGenerator_Win(int interval, IntPtr sessionHandle, TimerCallback_Win callback, out IntPtr info);
 
         [DllImport(LibraryName, ExactSpelling = true)]
-        public static extern TG_STARTRESULT StartHighPrecisionTickGenerator_Mac(int interval, TimerCallback_Mac callback, out IntPtr info);
+        public static extern TG_STARTRESULT StartHighPrecisionTickGenerator_Mac(int interval, IntPtr sessionHandle, TimerCallback_Mac callback, out IntPtr info);
 
         [DllImport(LibraryName, ExactSpelling = true)]
-        public static extern TG_STOPRESULT StopHighPrecisionTickGenerator(IntPtr info);
+        public static extern TG_STOPRESULT StopHighPrecisionTickGenerator(IntPtr sessionHandle, IntPtr info);
 
         #endregion
 
         #region Methods
 
-        public override TG_STARTRESULT Api_StartHighPrecisionTickGenerator_Win(int interval, TimerCallback_Win callback, out IntPtr info)
+        public override TG_STARTRESULT Api_StartHighPrecisionTickGenerator_Win(int interval, IntPtr sessionHandle, TimerCallback_Win callback, out IntPtr info)
         {
-            return StartHighPrecisionTickGenerator_Win(interval, callback, out info);
+            return StartHighPrecisionTickGenerator_Win(interval, sessionHandle, callback, out info);
         }
 
-        public override TG_STARTRESULT Api_StartHighPrecisionTickGenerator_Mac(int interval, TimerCallback_Mac callback, out IntPtr info)
+        public override TG_STARTRESULT Api_StartHighPrecisionTickGenerator_Mac(int interval, IntPtr sessionHandle, TimerCallback_Mac callback, out IntPtr info)
         {
-            return StartHighPrecisionTickGenerator_Mac(interval, callback, out info);
+            return StartHighPrecisionTickGenerator_Mac(interval, sessionHandle, callback, out info);
         }
 
-        public override TG_STOPRESULT Api_StopHighPrecisionTickGenerator(IntPtr info)
+        public override TG_STOPRESULT Api_StopHighPrecisionTickGenerator(IntPtr sessionHandle, IntPtr info)
         {
-            return StopHighPrecisionTickGenerator(info);
+            return StopHighPrecisionTickGenerator(sessionHandle, info);
         }
 
         #endregion

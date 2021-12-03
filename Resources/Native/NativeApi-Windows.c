@@ -26,11 +26,25 @@ char CanCompareDevices()
 
 typedef struct
 {
+    char dummy;
+} TickGeneratorSessionHandle;
+
+typedef struct
+{
     UINT timerResolution;
     UINT timerId;
 } TickGeneratorInfo;
 
-TG_STARTRESULT StartHighPrecisionTickGenerator_Win(int interval, LPTIMECALLBACK callback, TickGeneratorInfo** info)
+TGSESSION_OPENRESULT OpenTickGeneratorSession(void** handle)
+{
+	TickGeneratorSessionHandle* sessionHandle = malloc(sizeof(TickGeneratorSessionHandle));
+	
+    *handle = sessionHandle;
+
+	return TGSESSION_OPENRESULT_OK;
+}
+
+TG_STARTRESULT StartHighPrecisionTickGenerator_Win(int interval, void* sessionHandle, LPTIMECALLBACK callback, TickGeneratorInfo** info)
 {
     TIMECAPS tc;
     MMRESULT result = timeGetDevCaps(&tc, sizeof(TIMECAPS));
@@ -52,8 +66,7 @@ TG_STARTRESULT StartHighPrecisionTickGenerator_Win(int interval, LPTIMECALLBACK 
     return TG_STARTRESULT_OK;
 }
 
-TG_STOPRESULT StopHighPrecisionTickGenerator(
-    TickGeneratorInfo* info)
+TG_STOPRESULT StopHighPrecisionTickGenerator(TickGeneratorSessionHandle* sessionHandle, TickGeneratorInfo* info)
 {
     MMRESULT result = timeEndPeriod(info->timerResolution);
     if (result != TIMERR_NOERROR)

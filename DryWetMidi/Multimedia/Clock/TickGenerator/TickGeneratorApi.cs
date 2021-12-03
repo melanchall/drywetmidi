@@ -38,11 +38,11 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         #region Methods
 
-        public abstract TG_STARTRESULT Api_StartHighPrecisionTickGenerator_Win(int interval, TimerCallback_Win callback, out IntPtr info);
+        public abstract TG_STARTRESULT Api_StartHighPrecisionTickGenerator_Win(int interval, IntPtr sessionHandle, TimerCallback_Win callback, out IntPtr info);
 
-        public abstract TG_STARTRESULT Api_StartHighPrecisionTickGenerator_Mac(int interval, TimerCallback_Mac callback, out IntPtr info);
+        public abstract TG_STARTRESULT Api_StartHighPrecisionTickGenerator_Mac(int interval, IntPtr sessionHandle, TimerCallback_Mac callback, out IntPtr info);
 
-        public abstract TG_STOPRESULT Api_StopHighPrecisionTickGenerator(IntPtr info);
+        public abstract TG_STOPRESULT Api_StopHighPrecisionTickGenerator(IntPtr sessionHandle, IntPtr info);
 
         #endregion
     }

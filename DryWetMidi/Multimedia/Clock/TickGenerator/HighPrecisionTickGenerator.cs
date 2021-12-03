@@ -60,10 +60,12 @@ namespace Melanchall.DryWetMidi.Multimedia
                                          MinInterval,
                                          MaxInterval,
                                          $"Interval is out of [{MinInterval}, {MaxInterval}] range.");
+            EnsureSessionIsCreated();
 
             var intervalInMilliseconds = (int)interval.TotalMilliseconds;
 
             var apiType = CommonApiProvider.Api.Api_GetApiType();
+            var sessionHandle = TickGeneratorSession.GetSessionHandle();
             var result = default(TickGeneratorApi.TG_STARTRESULT);
 
             switch (apiType)
@@ -117,7 +119,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             if (_tickGeneratorInfo == IntPtr.Zero)
                 return TickGeneratorApi.TG_STOPRESULT.TG_STOPRESULT_OK;
 
-            var result = TickGeneratorApiProvider.Api.Api_StopHighPrecisionTickGenerator(_tickGeneratorInfo);
+            var result = TickGeneratorApiProvider.Api.Api_StopHighPrecisionTickGenerator(TickGeneratorSession.GetSessionHandle(), _tickGeneratorInfo);
             _tickGeneratorInfo = IntPtr.Zero;
             return result;
         }
@@ -127,6 +129,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             _tickCallback_Win = OnTick_Win;
             return TickGeneratorApiProvider.Api.Api_StartHighPrecisionTickGenerator_Win(
                 intervalInMilliseconds,
+                TickGeneratorSession.GetSessionHandle(),
                 _tickCallback_Win,
                 out tickGeneratorInfo);
         }
@@ -136,8 +139,14 @@ namespace Melanchall.DryWetMidi.Multimedia
             _tickCallback_Mac = OnTick_Mac;
             return TickGeneratorApiProvider.Api.Api_StartHighPrecisionTickGenerator_Mac(
                 intervalInMilliseconds,
+                TickGeneratorSession.GetSessionHandle(),
                 _tickCallback_Mac,
                 out tickGeneratorInfo);
+        }
+
+        private void EnsureSessionIsCreated()
+        {
+            TickGeneratorSession.GetSessionHandle();
         }
 
         #endregion

@@ -2,7 +2,7 @@
 #include <CoreMIDI/CoreMIDI.h>
 #include <pthread.h>
 #include <mach/mach_time.h>
-#include <pthread.h>
+#include <mach/mach.h>
 
 #include "NativeApi-Constants.h"
 
@@ -30,65 +30,124 @@ char CanCompareDevices()
 typedef struct
 {
     pthread_t thread;
-    void (*callback)(void);
     char active;
-    int interval;
+	CFRunLoopRef runLoopRef;
+    TGSESSION_OPENRESULT threadStartResult;
+} TickGeneratorSessionHandle;
+
+typedef struct
+{
+    void (*callback)(void);
+    CFRunLoopTimerRef timerRef;
 } TickGeneratorInfo;
 
-uint64_t GetTimeInMilliseconds()
+void SessionCallback(CFRunLoopTimerRef timer, void *info)
 {
-    struct mach_timebase_info convfact;
-    mach_timebase_info(&convfact);
-    uint64_t tick = mach_absolute_time();
-    return (tick * convfact.numer) / (convfact.denom * 1000000);
 }
 
-void* RunLoopThreadRoutine(void* data)
+void* TickGeneratorSessionThreadRoutine(void* data)
 {
-    TickGeneratorInfo* tickGeneratorInfo = (TickGeneratorInfo*)data;
+    TickGeneratorSessionHandle* sessionHandle = (TickGeneratorSessionHandle*)data;
 
-    uint64_t lastMs = GetTimeInMilliseconds();
+    CFRunLoopTimerContext context = { 0, NULL, NULL, NULL, NULL };
+	CFRunLoopTimerRef timerRef = CFRunLoopTimerCreate(
+	    NULL,
+		CFAbsoluteTimeGetCurrent() + 60,
+		60,
+		0,
+		0,
+		SessionCallback,
+		&context);
 
-    tickGeneratorInfo->active = 1;
+    CFRunLoopRef runLoopRef = CFRunLoopGetCurrent();
+	CFRunLoopAddTimer(runLoopRef, timerRef, kCFRunLoopDefaultMode);
+	
+	// Set realtime priority
+    // (thanks to https://stackoverflow.com/a/44310370/2975589)
 
-    while (tickGeneratorInfo->active == 1)
+    mach_timebase_info_data_t timebase;
+    kern_return_t kr = mach_timebase_info(&timebase);
+    if (kr != KERN_SUCCESS)
+        return sessionHandle->threadStartResult = TGSESSION_OPENRESULT_FAILEDTOGETTIMEBASEINFO;
+
+    struct thread_time_constraint_policy constraintPolicy;
+
+    constraintPolicy.period = 500 * 1000 * timebase.denom / timebase.numer; // Period over which we demand scheduling.
+    constraintPolicy.computation = 100 * 1000 * timebase.denom / timebase.numer; // Minimum time in a period where we must be running.
+    constraintPolicy.constraint = 100 * 1000 * timebase.denom / timebase.numer; // Maximum time between start and end of our computation in the period.
+    constraintPolicy.preemptible = FALSE;
+
+    thread_port_t threadId = pthread_mach_thread_np(pthread_self());
+    kr = thread_policy_set(threadId, THREAD_TIME_CONSTRAINT_POLICY, (thread_policy_t)&constraintPolicy, THREAD_TIME_CONSTRAINT_POLICY_COUNT);
+    if (kr != KERN_SUCCESS)
+        return sessionHandle->threadStartResult = TGSESSION_OPENRESULT_FAILEDTOSETREALTIMEPRIORITY;
+
+    //
+
+    sessionHandle->active = 1;
+	sessionHandle->runLoopRef = runLoopRef;
+
+    CFRunLoopRun();
+
+    return TGSESSION_OPENRESULT_OK;
+}
+
+TGSESSION_OPENRESULT OpenTickGeneratorSession(void** handle)
+{
+	TickGeneratorSessionHandle* sessionHandle = malloc(sizeof(TickGeneratorSessionHandle));
+
+    sessionHandle->threadStartResult = TGSESSION_OPENRESULT_OK;
+	sessionHandle->active = 0;
+
+    pthread_create(&sessionHandle->thread, NULL, TickGeneratorSessionThreadRoutine, sessionHandle);
+    
+    while (sessionHandle->active == 0)
     {
-        uint64_t ms = GetTimeInMilliseconds();
-        if (ms - lastMs < tickGeneratorInfo->interval)
-            continue;
-
-        lastMs = ms;
-        tickGeneratorInfo->callback();
+        if (sessionHandle->threadStartResult != TGSESSION_OPENRESULT_OK)
+            return sessionHandle->threadStartResult;
     }
+	
+    *handle = sessionHandle;
 
-    free(data);
-
-    return NULL;
+	return TGSESSION_OPENRESULT_OK;
 }
 
-TG_STARTRESULT StartHighPrecisionTickGenerator_Mac(int interval, void (*callback)(void), TickGeneratorInfo** info)
+void TimerCallback(CFRunLoopTimerRef timer, void *info)
 {
+	TickGeneratorInfo* tickGeneratorInfo = (TickGeneratorInfo*)info;
+	tickGeneratorInfo->callback();
+}
+
+TG_STARTRESULT StartHighPrecisionTickGenerator_Mac(int interval, void* sessionHandle, void (*callback)(void), TickGeneratorInfo** info)
+{
+    TickGeneratorSessionHandle* pSessionHandle = (TickGeneratorSessionHandle*)sessionHandle;
     TickGeneratorInfo* tickGeneratorInfo = malloc(sizeof(TickGeneratorInfo));
 
-    tickGeneratorInfo->active = 0;
-    tickGeneratorInfo->interval = interval;
     tickGeneratorInfo->callback = callback;
+	
+	double seconds = (double)interval / 1000.0;
+	
+	CFRunLoopTimerContext context = { 0, tickGeneratorInfo, NULL, NULL, NULL };
+	CFRunLoopTimerRef timerRef = CFRunLoopTimerCreate(
+	    NULL,
+		CFAbsoluteTimeGetCurrent() + seconds,
+		seconds,
+		0,
+		0,
+		TimerCallback,
+		&context);
+
+    tickGeneratorInfo->timerRef = timerRef;
+	CFRunLoopAddTimer(pSessionHandle->runLoopRef, timerRef, kCFRunLoopDefaultMode);
 
     *info = tickGeneratorInfo;
-
-    pthread_create(&tickGeneratorInfo->thread, NULL, RunLoopThreadRoutine, tickGeneratorInfo);
-
-    while (tickGeneratorInfo->active == 0) {}
 
     return TG_STARTRESULT_OK;
 }
 
-TG_STOPRESULT StopHighPrecisionTickGenerator(void* info)
+TG_STOPRESULT StopHighPrecisionTickGenerator(TickGeneratorSessionHandle* sessionHandle, TickGeneratorInfo* tickGeneratorInfo)
 {
-    TickGeneratorInfo* tickGeneratorInfo = (TickGeneratorInfo*)info;
-
-    tickGeneratorInfo->active = 0;
-
+    CFRunLoopRemoveTimer(sessionHandle->runLoopRef, tickGeneratorInfo->timerRef, kCFRunLoopDefaultMode);
     return TG_STOPRESULT_OK;
 }
 
