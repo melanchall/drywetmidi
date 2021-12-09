@@ -143,7 +143,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             _callback_Mac = OnMessage_Mac;
 
             var deviceInfo = IntPtr.Zero;
-            NativeApi.HandleResult(
+            NativeApiUtilities.HandleDevicesNativeApiResult(
                 VirtualDeviceApiProvider.Api.Api_OpenDevice_Mac(Name, sessionHandle, _callback_Mac, out deviceInfo));
 
             var inputDeviceInfo = VirtualDeviceApiProvider.Api.Api_GetInputDeviceInfo(deviceInfo);

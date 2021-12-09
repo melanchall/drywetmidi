@@ -74,13 +74,14 @@ namespace Melanchall.DryWetMidi.Multimedia
                 : string.Empty;
         }
 
-        public static void HandleResult<T>(T result)
+        public static void HandleResult<TResult, TException>(TResult result, Func<string, int, TException> createException)
+            where TException : Exception
         {
             var intResult = Convert.ToInt32(result);
             if (intResult == 0)
                 return;
 
-            var attribute = typeof(T)
+            var attribute = typeof(TResult)
                 .GetFields(BindingFlags.Static | BindingFlags.Public)
                 .First(f => f.GetValue(null).Equals(result))
                 .GetCustomAttributes(typeof(NativeErrorTypeAttribute))
@@ -89,7 +90,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             var errorDescription = attribute != null
                 ? ErrorsDescriptions[attribute.ErrorType]
                 : "Internal error";
-            throw new MidiDeviceException($"{errorDescription} ({result}).", intResult);
+            throw createException($"{errorDescription} ({result}).", intResult);
         }
 
         #endregion

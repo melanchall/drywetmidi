@@ -52,7 +52,7 @@ namespace Melanchall.DryWetMidi.Multimedia
                             break;
                     }
 
-                    NativeApi.HandleResult(result);
+                    NativeApiUtilities.HandleDevicesNativeApiResult(result);
                 }
 
                 return _handle;

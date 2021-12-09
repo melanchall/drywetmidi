@@ -66,20 +66,18 @@ namespace Melanchall.DryWetMidi.Multimedia
 
             var apiType = CommonApiProvider.Api.Api_GetApiType();
             var sessionHandle = TickGeneratorSession.GetSessionHandle();
-            var result = default(TickGeneratorApi.TG_STARTRESULT);
 
             switch (apiType)
             {
                 case CommonApi.API_TYPE.API_TYPE_WIN:
-                    result = StartHighPrecisionTickGenerator_Win(intervalInMilliseconds, out _tickGeneratorInfo);
+                    NativeApiUtilities.HandleTickGeneratorNativeApiResult(
+                        StartHighPrecisionTickGenerator_Win(intervalInMilliseconds, out _tickGeneratorInfo));
                     break;
                 case CommonApi.API_TYPE.API_TYPE_MAC:
-                    result = StartHighPrecisionTickGenerator_Mac(intervalInMilliseconds, out _tickGeneratorInfo);
+                    NativeApiUtilities.HandleTickGeneratorNativeApiResult(
+                        StartHighPrecisionTickGenerator_Mac(intervalInMilliseconds, out _tickGeneratorInfo));
                     break;
             }
-
-            if (result != TickGeneratorApi.TG_STARTRESULT.TG_STARTRESULT_OK)
-                throw new TickGeneratorException("Failed to start high-precision tick generator.", (int)result);
         }
 
         /// <summary>
@@ -87,9 +85,8 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// </summary>
         protected override void Stop()
         {
-            var result = StopInternal();
-            if (result != TickGeneratorApi.TG_STOPRESULT.TG_STOPRESULT_OK)
-                throw new TickGeneratorException("Failed to stop high-precision tick generator.", (int)result);
+            NativeApiUtilities.HandleTickGeneratorNativeApiResult(
+                StopInternal());
         }
 
         #endregion
