@@ -311,7 +311,8 @@ namespace Melanchall.DryWetMidi.Tools
                 if (matched)
                 {
                     eventsToCopyToNextPart.RemoveAt(i);
-                    eventsToCopyToNextPart.Insert(i, timedEvent.Clone());
+                    eventsToCopyToNextPart.Add(timedEvent.Clone());
+                    return;
                 }
             }
 

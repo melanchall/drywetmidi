@@ -63,8 +63,8 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 newFiles[1].GetTimedEvents(),
                 new[]
                 {
-                    new TimedEvent(new SetTempoEvent(200000), 0),
                     new TimedEvent(new InstrumentNameEvent("Test instrument"), 0),
+                    new TimedEvent(new SetTempoEvent(200000), 0),
                     new TimedEvent(new NoteOnEvent((SevenBitNumber)20, (SevenBitNumber)100), 50),
                     new TimedEvent(new NoteOffEvent((SevenBitNumber)50, (SevenBitNumber)100), 90),
                     new TimedEvent(new NoteOffEvent((SevenBitNumber)20, (SevenBitNumber)100), 100),
@@ -75,8 +75,8 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 newFiles[2].GetTimedEvents(),
                 new[]
                 {
-                    new TimedEvent(new SetTempoEvent(200000), 0),
                     new TimedEvent(new InstrumentNameEvent("Test instrument"), 0),
+                    new TimedEvent(new SetTempoEvent(200000), 0),
                     new TimedEvent(new TextEvent("Test"), 0)
                 },
                 "Third file contains invalid events.");
@@ -123,8 +123,8 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 newFiles[1].GetTimedEvents(),
                 new[]
                 {
-                    new TimedEvent(new SetTempoEvent(200000), 0),
                     new TimedEvent(new InstrumentNameEvent("Test instrument"), 0),
+                    new TimedEvent(new SetTempoEvent(200000), 0),
                     new TimedEvent(new NoteOnEvent((SevenBitNumber)20, (SevenBitNumber)100), 50),
                     new TimedEvent(new NoteOffEvent((SevenBitNumber)50, (SevenBitNumber)100), 90),
                     new TimedEvent(new NoteOffEvent((SevenBitNumber)20, (SevenBitNumber)100), 100),
@@ -135,9 +135,75 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 newFiles[2].GetTimedEvents(),
                 new[]
                 {
-                    new TimedEvent(new SetTempoEvent(200000), 0),
                     new TimedEvent(new InstrumentNameEvent("Test instrument"), 0),
+                    new TimedEvent(new SetTempoEvent(200000), 0),
                     new TimedEvent(new TextEvent("Test"), 0)
+                },
+                "Third file contains invalid events.");
+        }
+
+        [Test]
+        public void SplitByGrid_ArbitraryGrid_DontSplitNotes_DontPreserveTimes_EventsTransferOrder()
+        {
+            var timedEvents = new[]
+            {
+                new TimedEvent(new ProgramChangeEvent((SevenBitNumber)70), 0),
+                new TimedEvent(new ControlChangeEvent((SevenBitNumber)7, (SevenBitNumber)8), 60),
+                new TimedEvent(new ControlChangeEvent((SevenBitNumber)7, (SevenBitNumber)9), 70),
+                new TimedEvent(new ControlChangeEvent((SevenBitNumber)9, (SevenBitNumber)80), 120),
+                new TimedEvent(new ControlChangeEvent((SevenBitNumber)10, (SevenBitNumber)80), 120),
+                new TimedEvent(new ProgramChangeEvent((SevenBitNumber)80), 120),
+                new TimedEvent(new ControlChangeEvent((SevenBitNumber)7, (SevenBitNumber)80), 130),
+                new TimedEvent(new ControlChangeEvent((SevenBitNumber)9, (SevenBitNumber)90), 220),
+                new TimedEvent(new ControlChangeEvent((SevenBitNumber)10, (SevenBitNumber)90), 220),
+                new TimedEvent(new ProgramChangeEvent((SevenBitNumber)90), 220),
+            };
+
+            var midiFile = timedEvents.ToFile();
+            var grid = new ArbitraryGrid((MidiTimeSpan)100, (MidiTimeSpan)200);
+            var settings = new SliceMidiFileSettings
+            {
+                SplitNotes = false,
+                PreserveTimes = false
+            };
+
+            var newFiles = midiFile.SplitByGrid(grid, settings).ToList();
+            Assert.AreEqual(3, newFiles.Count, "New files count is invalid.");
+
+            CompareTimedEvents(
+                newFiles[0].GetTimedEvents(),
+                new[]
+                {
+                    new TimedEvent(new ProgramChangeEvent((SevenBitNumber)70), 0),
+                    new TimedEvent(new ControlChangeEvent((SevenBitNumber)7, (SevenBitNumber)8), 60),
+                    new TimedEvent(new ControlChangeEvent((SevenBitNumber)7, (SevenBitNumber)9), 70)
+                },
+                "First file contains invalid events.");
+
+            CompareTimedEvents(
+                newFiles[1].GetTimedEvents(),
+                new[]
+                {
+                    new TimedEvent(new ProgramChangeEvent((SevenBitNumber)70), 0),
+                    new TimedEvent(new ControlChangeEvent((SevenBitNumber)7, (SevenBitNumber)9), 0),
+                    new TimedEvent(new ControlChangeEvent((SevenBitNumber)9, (SevenBitNumber)80), 20),
+                    new TimedEvent(new ControlChangeEvent((SevenBitNumber)10, (SevenBitNumber)80), 20),
+                    new TimedEvent(new ProgramChangeEvent((SevenBitNumber)80), 20),
+                    new TimedEvent(new ControlChangeEvent((SevenBitNumber)7, (SevenBitNumber)80), 30)
+                },
+                "Second file contains invalid events.");
+
+            CompareTimedEvents(
+                newFiles[2].GetTimedEvents(),
+                new[]
+                {
+                    new TimedEvent(new ControlChangeEvent((SevenBitNumber)9, (SevenBitNumber)80), 0),
+                    new TimedEvent(new ControlChangeEvent((SevenBitNumber)10, (SevenBitNumber)80), 0),
+                    new TimedEvent(new ProgramChangeEvent((SevenBitNumber)80), 0),
+                    new TimedEvent(new ControlChangeEvent((SevenBitNumber)7, (SevenBitNumber)80), 0),
+                    new TimedEvent(new ControlChangeEvent((SevenBitNumber)9, (SevenBitNumber)90), 20),
+                    new TimedEvent(new ControlChangeEvent((SevenBitNumber)10, (SevenBitNumber)90), 20),
+                    new TimedEvent(new ProgramChangeEvent((SevenBitNumber)90), 20)
                 },
                 "Third file contains invalid events.");
         }

@@ -50,8 +50,8 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 result.GetTimedEvents(),
                 new[]
                 {
-                    new TimedEvent(new SetTempoEvent(200000), 0),
                     new TimedEvent(new InstrumentNameEvent("Test instrument"), 0),
+                    new TimedEvent(new SetTempoEvent(200000), 0),
                     new TimedEvent(new NoteOnEvent((SevenBitNumber)20, (SevenBitNumber)100), 50),
                     new TimedEvent(new NoteOffEvent((SevenBitNumber)50, (SevenBitNumber)100), 90),
                     new TimedEvent(new NoteOffEvent((SevenBitNumber)20, (SevenBitNumber)100), 100),

@@ -230,10 +230,10 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                     },
                     new[] // 200-300
                     {
-                        CreateTimedEvent(10, 50, 0, 200),
-                        CreateTimedEvent(20, 10, 1, 200),
                         CreateTimedEvent(10, 40, 1, 200),
+                        CreateTimedEvent(10, 50, 0, 200),
                         CreateTimedEvent(70, 80, 0, 200),
+                        CreateTimedEvent(20, 10, 1, 200),
                         new TimedEvent(new TextEvent("Y"), 200),
                     }
                 });
@@ -421,8 +421,8 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                     },
                     new[] // 200-300
                     {
-                        CreateTimedEvent(25,  0, 200),
                         CreateTimedEvent(75,  3, 200),
+                        CreateTimedEvent(25,  0, 200),
                         CreateTimedEvent(125, 0, 200),
                         CreateTimedEvent(105, 3, 250),
                     },
