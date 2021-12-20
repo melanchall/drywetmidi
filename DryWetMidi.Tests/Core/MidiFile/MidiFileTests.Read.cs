@@ -1124,23 +1124,76 @@ namespace Melanchall.DryWetMidi.Tests.Core
         }
 
         [Test]
-        public void Read_EndOfTrackStoringPolicy_Store()
-        {
-            var originalMidiFile = new MidiFile(new TrackChunk(new TextEvent("A")));
-            var midiFile = MidiFileTestUtilities.Read(
-                midiFile: originalMidiFile,
-                writingSettings: new WritingSettings(),
-                readingSettings: new ReadingSettings
-                {
-                    EndOfTrackStoringPolicy = EndOfTrackStoringPolicy.Store
-                });
+        public void Read_EndOfTrackStoringPolicy_Store_DontChangeFile() => Read_EndOfTrackStoringPolicy_Store(
+            originalEvents: new[] { new TextEvent("A") },
+            modifyEvents: null,
+            expectedEventsAfterReread: new MidiEvent[]
+            {
+                new TextEvent("A"),
+                new EndOfTrackEvent()
+            });
 
-            MidiAsserts.AreEqual(
-                new MidiFile(new TrackChunk(new TextEvent("A"), new EndOfTrackEvent())),
-                midiFile,
-                false,
-                "Files are invalid.");
-        }
+        [Test]
+        public void Read_EndOfTrackStoringPolicy_Store_AddEventAfter() => Read_EndOfTrackStoringPolicy_Store(
+            originalEvents: new[] { new TextEvent("A") },
+            modifyEvents: events => events.Add(new TextEvent("B")),
+            expectedEventsAfterReread: new MidiEvent[]
+            {
+                new TextEvent("A"),
+                new TextEvent("B"),
+                new EndOfTrackEvent()
+            });
+
+        [Test]
+        public void Read_EndOfTrackStoringPolicy_Store_AddEventBefore() => Read_EndOfTrackStoringPolicy_Store(
+            originalEvents: new[] { new TextEvent("A") },
+            modifyEvents: events => events.Insert(1, new TextEvent("B")),
+            expectedEventsAfterReread: new MidiEvent[]
+            {
+                new TextEvent("A"),
+                new TextEvent("B"),
+                new EndOfTrackEvent()
+            });
+
+        [Test]
+        public void Read_EndOfTrackStoringPolicy_Store_SetEndOfTrackDeltaTime() => Read_EndOfTrackStoringPolicy_Store(
+            originalEvents: new[] { new TextEvent("A") },
+            modifyEvents: events => events.Last().DeltaTime = 100,
+            expectedEventsAfterReread: new MidiEvent[]
+            {
+                new TextEvent("A"),
+                new EndOfTrackEvent { DeltaTime = 100 }
+            });
+
+        [Test]
+        public void Read_EndOfTrackStoringPolicy_Store_SetEndOfTrackDeltaTime_AddEventAfter() => Read_EndOfTrackStoringPolicy_Store(
+            originalEvents: new[] { new TextEvent("A") },
+            modifyEvents: events =>
+            {
+                events.Last().DeltaTime = 100;
+                events.Add(new TextEvent("B"));
+            },
+            expectedEventsAfterReread: new MidiEvent[]
+            {
+                new TextEvent("A"),
+                new TextEvent("B") { DeltaTime = 100 },
+                new EndOfTrackEvent()
+            });
+
+        [Test]
+        public void Read_EndOfTrackStoringPolicy_Store_SetEndOfTrackDeltaTime_AddEventBefore() => Read_EndOfTrackStoringPolicy_Store(
+            originalEvents: new[] { new TextEvent("A") },
+            modifyEvents: events =>
+            {
+                events.Last().DeltaTime = 100;
+                events.Insert(1, new TextEvent("B"));
+            },
+            expectedEventsAfterReread: new MidiEvent[]
+            {
+                new TextEvent("A"),
+                new TextEvent("B"),
+                new EndOfTrackEvent { DeltaTime = 100 }
+            });
 
         [Test]
         public void Read_StreamIsNotDisposed()
@@ -1323,6 +1376,38 @@ namespace Melanchall.DryWetMidi.Tests.Core
         #endregion
 
         #region Private methods
+
+        private void Read_EndOfTrackStoringPolicy_Store(
+            ICollection<MidiEvent> originalEvents,
+            Action<EventsCollection> modifyEvents,
+            ICollection<MidiEvent> expectedEventsAfterReread)
+        {
+            var readingSettings = new ReadingSettings
+            {
+                EndOfTrackStoringPolicy = EndOfTrackStoringPolicy.Store
+            };
+
+            var originalMidiFile = new MidiFile(new TrackChunk(originalEvents));
+            var midiFile = MidiFileTestUtilities.Read(
+                midiFile: originalMidiFile,
+                writingSettings: new WritingSettings(),
+                readingSettings: readingSettings);
+
+            MidiAsserts.AreEqual(
+                new MidiFile(new TrackChunk(originalEvents.Concat(new[] { new EndOfTrackEvent() }))),
+                midiFile,
+                false,
+                "Files are invalid.");
+
+            modifyEvents?.Invoke(midiFile.GetTrackChunks().First().Events);
+            midiFile = MidiFileTestUtilities.Read(midiFile, new WritingSettings(), readingSettings);
+
+            MidiAsserts.AreEqual(
+                new MidiFile(new TrackChunk(expectedEventsAfterReread)),
+                midiFile,
+                false,
+                "Files are invalid after re-read.");
+        }
 
         private void ReadInvalidFileWithException<TException>(
             MidiFile midiFile,
