@@ -1,4 +1,4 @@
-![DryWetMIDI Logo](https://github.com/melanchall/drywetmidi/blob/develop/Resources/Images/dwm-logo.png?raw=true)
+![DryWetMIDI Logo](https://raw.githubusercontent.com/melanchall/drywetmidi/develop/Resources/Images/dwm-logo.png)
 
 [![NuGet](https://img.shields.io/nuget/v/Melanchall.DryWetMidi.svg)](https://www.nuget.org/packages/Melanchall.DryWetMidi/)
 

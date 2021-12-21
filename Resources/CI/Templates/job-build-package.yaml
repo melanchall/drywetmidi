@@ -51,6 +51,13 @@ jobs:
         Copy-Item -Path "$(Pipeline.Workspace)\NativeLibraries\**\*.dll" -Destination "DryWetMidi"
         Copy-Item -Path "$(Pipeline.Workspace)\NativeLibraries\**\*.dylib" -Destination "DryWetMidi"
   
+  - task: UseDotNet@2
+    displayName: 'Use .NET 6.0.x'
+    inputs:
+      packageType: sdk
+      version: '6.0.x'
+      installationPath: $(Agent.ToolsDirectory)/dotnet
+  
   - task: DotNetCoreCLI@2
     displayName: Build project
     inputs:

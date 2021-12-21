@@ -9,7 +9,7 @@
 
   <PropertyGroup>
     <PackageId>Melanchall.DryWetMidi</PackageId>
-    <Version>6.1.0</Version>
+    <Version>6.0.1</Version>
     <Authors>melanchall</Authors>
     <Owners>melanchall</Owners>
     <licenseUrl>https://github.com/melanchall/drywetmidi/blob/master/LICENSE</licenseUrl>
@@ -20,6 +20,8 @@
     <RepositoryType>git</RepositoryType>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageReleaseNotes>https://github.com/melanchall/drywetmidi/releases/tag/v6.0.1</PackageReleaseNotes>
     <Description>
       DryWetMIDI is the .NET library to work with MIDI files and MIDI devices. It allows:
 
@@ -82,6 +84,7 @@
   <ItemGroup>
     <Folder Include="Properties\" />
     <None Include="..\Resources\NuGet\icon.png" Pack="true" PackagePath="\" />
+    <None Include="..\README.md" Pack="true" PackagePath="\" />
   </ItemGroup>
 
   <ItemGroup>
