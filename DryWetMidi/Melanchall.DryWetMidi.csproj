@@ -9,7 +9,7 @@
 
   <PropertyGroup>
     <PackageId>Melanchall.DryWetMidi</PackageId>
-    <Version>6.0.1</Version>
+    <Version>6.1.0</Version>
     <Authors>melanchall</Authors>
     <Owners>melanchall</Owners>
     <licenseUrl>https://github.com/melanchall/drywetmidi/blob/master/LICENSE</licenseUrl>
@@ -21,7 +21,7 @@
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <PackageReleaseNotes>https://github.com/melanchall/drywetmidi/releases/tag/v6.0.1</PackageReleaseNotes>
+    <PackageReleaseNotes>https://github.com/melanchall/drywetmidi/releases/tag/v6.1.0</PackageReleaseNotes>
     <Description>
       DryWetMIDI is the .NET library to work with MIDI files and MIDI devices. It allows:
 
@@ -33,7 +33,7 @@
       * Build musical compositions.
       * Perform complex musical tasks like quantizing, notes splitting or converting MIDI files to CSV.
     </Description>
-    <Copyright>Copyright © Melanchall 2021</Copyright>
+    <Copyright>Copyright © Melanchall 2022</Copyright>
     <PackageTags>midi smf music composing notes chords device playback record</PackageTags>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
