@@ -1,0 +1,20 @@
+parameters:
+- name: framework
+  displayName: 'Framework'
+  type: string
+
+steps:
+- task: PowerShell@2
+  displayName: Setup framework variables
+  inputs:
+    targetType: 'inline'
+    script: |
+      switch ("${{ parameters.framework }}")
+      {
+          'NetFramework' { $tfm = "$(Build.Framework.NetFramework.Tfm)"; $sdkVersion = "$(Build.Framework.NetFramework.SdkVersion)"; Break }
+          'NetCore' { $tfm = "$(Build.Framework.NetCore.Tfm)"; $sdkVersion = "$(Build.Framework.NetCore.SdkVersion)"; Break }
+          'Net' { $tfm = "$(Build.Framework.Net.Tfm)"; $sdkVersion = "$(Build.Framework.Net.SdkVersion)"; Break }
+      }
+      
+      Write-Host "##vso[task.setvariable variable=Tfm]$tfm"
+      Write-Host "##vso[task.setvariable variable=SdkVersion]$sdkVersion"

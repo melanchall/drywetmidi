@@ -9,15 +9,14 @@ trigger:
     - 'DryWetMidi/*'
     - 'DryWetMidi.Tests/*'
     - 'DryWetMidi.Tests.Common/*'
-    - 'Resources/CI/test-netcore-mmedia.yaml'
+    - 'Resources/CI/test-core.yaml'
     - 'Resources/CI/Templates/stage-build-native-libs.yaml'
-    - 'Resources/CI/Templates/step-create-ports-windows.yaml'
     - 'Resources/CI/Templates/step-copy-native-libraries-near-csproj.yaml'
     - 'Resources/CI/Templates/step-collect-logs.yaml'
-    - 'Resources/CI/Templates/step-build-tests.yaml'
-    - 'Resources/Utilities/CreateLoopbackPort_Windows/*'
-    - 'Resources/Scripts/Setup MIDI ports.ps1'
-    - 'Resources/Native/*'
+    - 'Resources/CI/Templates/step-setup-framework-variables.yaml'
+    exclude:
+    - 'DryWetMidi/Devices/*'
+    - 'DryWetMidi.Tests/Devices/*'
 
 pr:
   branches:
@@ -28,24 +27,23 @@ pr:
     - 'DryWetMidi/*'
     - 'DryWetMidi.Tests/*'
     - 'DryWetMidi.Tests.Common/*'
-    - 'Resources/CI/test-netcore-mmedia.yaml'
+    - 'Resources/CI/test-core.yaml'
     - 'Resources/CI/Templates/stage-build-native-libs.yaml'
-    - 'Resources/CI/Templates/step-create-ports-windows.yaml'
     - 'Resources/CI/Templates/step-copy-native-libraries-near-csproj.yaml'
     - 'Resources/CI/Templates/step-collect-logs.yaml'
-    - 'Resources/CI/Templates/step-build-tests.yaml'
-    - 'Resources/Utilities/CreateLoopbackPort_Windows/*'
-    - 'Resources/Scripts/Setup MIDI ports.ps1'
-    - 'Resources/Native/*'
+    - 'Resources/CI/Templates/step-setup-framework-variables.yaml'
+    exclude:
+    - 'DryWetMidi/Multimedia/*'
+    - 'DryWetMidi.Tests/Multimedia/*'
 
 variables:
 - group: DryWetMIDI-Common-Variables
 
-name: TestMultimedia_$(VmImage)_$(Tfm)_$(LibraryVersion)$(Rev:.r)
+name: TestCore_$(Framework)_$(LibraryVersion)$(Rev:.r)
 
 stages:
 - template: Templates/stage-build-native-libs.yaml
-
+    
 - stage: RunTests
   displayName: Run tests
   pool:
@@ -56,51 +54,33 @@ stages:
     steps:
     - template: Templates/step-copy-native-libraries-near-csproj.yaml
     
+    - template: Templates/step-setup-framework-variables.yaml
+      parameters:
+        framework: '$(Framework)'
+    
     - task: UseDotNet@2
-      displayName: 'Use $(Tfm)'
+      displayName: 'Use required framework'
+      condition: not(eq(variables.Framework, 'NetFramework'))
       inputs:
         packageType: sdk
         version: '$(SdkVersion)'
         installationPath: $(Agent.ToolsDirectory)/dotnet
     
-    - template: Templates/step-build-tests.yaml
-      parameters:
-        tfm: $(Tfm)
-    
-    - task: PowerShell@2
-      displayName: Build test data sending utility
-      condition: eq(variables.VmImage, 'macos-latest')
-      inputs:
-        targetType: 'inline'
-        script: |
-          cd DryWetMidi.Tests
-          gcc -c SendTestData.c
-          gcc -shared -framework CoreServices -framework CoreMIDI -framework CoreFoundation -o SendTestData.dylib SendTestData.o
-          Copy-Item -Path "SendTestData.dylib" -Destination "bin/$(TestBuildConfiguration)/$(Tfm)" -Recurse
-          
-    - task: PublishPipelineArtifact@1
-      displayName: Publish 'SendTestData' artifact
-      condition: eq(variables.VmImage, 'macos-latest')
-      inputs:
-        targetPath: 'DryWetMidi.Tests/SendTestData.dylib'
-        artifactName: 'SendTestData'
-        artifactType: pipeline
-    
-    - template: Templates/step-create-ports-windows.yaml
-      parameters:
-        enabled: eq(variables.VmImage, 'windows-latest')
-    
-    - template: Templates/step-create-ports-macos.yaml
-      parameters:
-        enabled: eq(variables.VmImage, 'macos-latest')
-    
     - task: DotNetCoreCLI@2
-      displayName: Run unit tests
-      continueOnError: false
+      displayName: Run unit tests (Windows)
+      condition: not(eq(variables.VmImage, 'macos-latest'))
       inputs:
         command: 'test'
         projects: 'DryWetMidi.Tests/Melanchall.DryWetMidi.Tests.csproj'
-        arguments: '--blame --no-build --configuration $(TestBuildConfiguration) --filter (FullyQualifiedName~.Multimedia) --framework $(Tfm) --verbosity normal -d diagnostic.log'
+        arguments: '--blame --configuration $(TestBuildConfiguration) --filter (FullyQualifiedName~Melanchall.DryWetMidi.Tests.Core|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Common|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Composing|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Interaction|FullyQualifiedName~Melanchall.DryWetMidi.Tests.MusicTheory|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Standards|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Tools) --framework $(Tfm) --verbosity normal -d diagnostic.log'
+        
+    - task: DotNetCoreCLI@2
+      displayName: Run unit tests (non-Windows)
+      condition: eq(variables.VmImage, 'macos-latest')
+      inputs:
+        command: 'test'
+        projects: 'DryWetMidi.Tests/Melanchall.DryWetMidi.Tests.csproj'
+        arguments: '--blame --configuration $(TestBuildConfiguration) --filter ((FullyQualifiedName~Melanchall.DryWetMidi.Tests.Core|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Common|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Composing|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Interaction|FullyQualifiedName~Melanchall.DryWetMidi.Tests.MusicTheory|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Standards|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Tools)&Name!=CheckValidFilesReadingByReferences) --framework $(Tfm) --verbosity normal -d diagnostic.log'
         
     - task: PowerShell@2
       displayName: Collect diagnostic reports
