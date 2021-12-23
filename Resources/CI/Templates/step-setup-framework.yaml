@@ -17,4 +17,14 @@ steps:
       }
       
       Write-Host "##vso[task.setvariable variable=Tfm]$tfm"
+      Write-Host "Tfm set to $tfm"
+      
       Write-Host "##vso[task.setvariable variable=SdkVersion]$sdkVersion"
+      Write-Host "SdkVersion set to $sdkVersion"
+      
+- task: UseDotNet@2
+  displayName: 'Use required framework'
+  inputs:
+    packageType: sdk
+    version: '$(SdkVersion)'
+    installationPath: $(Agent.ToolsDirectory)/dotnet

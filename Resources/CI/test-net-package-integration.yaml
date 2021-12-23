@@ -12,6 +12,7 @@ trigger:
     - 'Resources/CI/Templates/step-create-ports-macos.yaml'
     - 'Resources/CI/Templates/step-create-ports-windows.yaml'
     - 'Resources/CI/Templates/job-build-package.yaml'
+    - 'Resources/CI/Templates/step-setup-framework-variables.yaml'
     - 'Resources/PackageIntegrationTestUtilities/DwmNetConsoleApp/*'
 
 pr: none
@@ -40,18 +41,18 @@ stages:
     displayName: Test package integration
     strategy:
       matrix:
-        Windows_Net5:
+        Windows_Net:
           vmImage: 'windows-latest'
-          tfm: 'net5.0'
-        macOS_Net5:
+          framework: 'Net'
+        macOS_Net:
           vmImage: 'macOS-latest'
-          tfm: 'net5.0'
+          framework: 'Net'
         Windows_NetCore31:
           vmImage: 'windows-latest'
-          tfm: 'netcoreapp3.1'
+          framework: 'NetCore'
         macOS_NetCore31:
           vmImage: 'macOS-latest'
-          tfm: 'netcoreapp3.1'
+          framework: 'NetCore'
     pool:
       vmImage: $(vmImage)
     steps:
@@ -61,7 +62,11 @@ stages:
         source: 'current'
         path: '$(Pipeline.Workspace)\NuGetPackage'
         artifact: NuGetPackage
-        
+    
+    - template: Templates/step-setup-framework.yaml
+      parameters:
+        framework: '$(framework)'
+    
     - template: Templates/step-create-ports-windows.yaml
       parameters:
         enabled: eq(variables.vmImage, 'windows-latest')
@@ -69,22 +74,6 @@ stages:
     - template: Templates/step-create-ports-macos.yaml
       parameters:
         enabled: eq(variables.vmImage, 'macOS-latest')
-    
-    - task: UseDotNet@2
-      displayName: 'Use .NET 5'
-      condition: eq(variables.tfm, 'net5.0')
-      inputs:
-        packageType: sdk
-        version: '5.0.301'
-        installationPath: $(Agent.ToolsDirectory)/dotnet
-
-    - task: UseDotNet@2
-      displayName: 'Use .NET Core 3.1'
-      condition: eq(variables.tfm, 'netcoreapp3.1')
-      inputs:
-        packageType: sdk
-        version: '3.1.410'
-        installationPath: $(Agent.ToolsDirectory)/dotnet
     
     - task: PowerShell@2
       displayName: Add package to the project

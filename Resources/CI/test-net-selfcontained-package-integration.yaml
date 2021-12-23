@@ -12,6 +12,7 @@ trigger:
     - 'Resources/CI/Templates/step-create-ports-macos.yaml'
     - 'Resources/CI/Templates/step-create-ports-windows.yaml'
     - 'Resources/CI/Templates/job-build-package.yaml'
+    - 'Resources/CI/Templates/step-setup-framework-variables.yaml'
     - 'Resources/PackageIntegrationTestUtilities/DwmNetSelfContainedConsoleApp/*'
 
 pr: none
@@ -40,19 +41,19 @@ stages:
     displayName: Test package integration
     strategy:
       matrix:
-        Windows_Net5_IncludeAll:
+        Windows_Net_IncludeAll:
           vmImage: 'windows-latest'
           rid: 'win-x64'
           includeAll: 'true'
-        macOS_Net5_IncludeAll:
+        macOS_Net_IncludeAll:
           vmImage: 'macOS-latest'
           rid: 'osx-x64'
           includeAll: 'true'
-        Windows_Net5_DontIncludeAll:
+        Windows_Net_DontIncludeAll:
           vmImage: 'windows-latest'
           rid: 'win-x64'
           includeAll: 'false'
-        macOS_Net5_DontIncludeAll:
+        macOS_Net_DontIncludeAll:
           vmImage: 'macOS-latest'
           rid: 'osx-x64'
           includeAll: 'false'
@@ -65,7 +66,11 @@ stages:
         source: 'current'
         path: '$(Pipeline.Workspace)\NuGetPackage'
         artifact: NuGetPackage
-        
+    
+    - template: Templates/step-setup-framework.yaml
+      parameters:
+        framework: 'Net'
+    
     - template: Templates/step-create-ports-windows.yaml
       parameters:
         enabled: eq(variables.vmImage, 'windows-latest')

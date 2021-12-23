@@ -60,17 +60,9 @@ stages:
     steps:
     - template: Templates/step-copy-native-libraries-near-csproj.yaml
     
-    - template: Templates/step-setup-framework-variables.yaml
+    - template: Templates/step-setup-framework.yaml
       parameters:
         framework: '$(Framework)'
-    
-    - task: UseDotNet@2
-      displayName: 'Use required framework'
-      condition: not(eq(variables.Framework, 'NetFramework'))
-      inputs:
-        packageType: sdk
-        version: '$(SdkVersion)'
-        installationPath: $(Agent.ToolsDirectory)/dotnet
     
     - template: Templates/step-build-tests.yaml
       parameters:
@@ -109,6 +101,6 @@ stages:
       inputs:
         command: 'test'
         projects: 'DryWetMidi.Tests/Melanchall.DryWetMidi.Tests.csproj'
-        arguments: '--blame --no-build --configuration $(TestBuildConfiguration) --filter (FullyQualifiedName~.Multimedia) --framework $(Tfm) --verbosity normal -d diagnostic.log'
+        arguments: '--blame --no-build --configuration $(TestBuildConfiguration) --filter (FullyQualifiedName~.Multimedia) --framework $(Tfm) --verbosity normal --diag diagnostic.log --logger "console;verbosity=normal"'
         
     - template: Templates/step-collect-logs.yaml
