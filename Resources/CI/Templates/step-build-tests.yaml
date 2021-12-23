@@ -5,18 +5,9 @@ parameters:
 
 steps:
 - task: DotNetCoreCLI@2
-  displayName: Build DryWetMidi and DryWetMidi.Tests.Common
-  inputs:
-    command: 'build'
-    arguments: '--configuration $(TestBuildConfiguration) --framework netstandard2.0'
-    projects: |
-      DryWetMidi/Melanchall.DryWetMidi.csproj
-      DryWetMidi.Tests.Common/Melanchall.DryWetMidi.Tests.Common.csproj
-
-- task: DotNetCoreCLI@2
   displayName: Build DryWetMidi.Tests
   inputs:
     command: 'build'
-    arguments: '--configuration $(TestBuildConfiguration) --framework ${{ parameters.tfm }}'
+    arguments: '--configuration $(TestBuildConfiguration) --framework ${{ parameters.tfm }} -bl:build.binlog'
     projects: |
       DryWetMidi.Tests/Melanchall.DryWetMidi.Tests.csproj
