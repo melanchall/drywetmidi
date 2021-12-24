@@ -66,7 +66,7 @@
       "output": {
         ".html": {
           "relative_path": "articles/dev/Project-health.html",
-          "hash": "7XLy/o/YS05+8+gMt7r3y8VhpymIJQF+wTZmGgl5dcg="
+          "hash": "FIpS1FksLcnodnqgHTp8bbobkRmMfTdlh4w0qGNqJkk="
         }
       },
       "is_incremental": false,
@@ -1187,19 +1187,7 @@
       "output": {
         ".html": {
           "relative_path": "index.html",
-          "hash": "nDLNfc4gSYiXcbPHZO1is2yH6kr8ELrku5RI6uu1D9Y="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "latest-release-notes.md",
-      "output": {
-        ".html": {
-          "relative_path": "latest-release-notes.html",
-          "hash": "1/79Oz92Mo9RAZ4XtL3f3I9bk07BytvSSd0YBZJrm8M="
+          "hash": "OD8oFW6KCwdc1oNTkTkRBZM2CYST38ARukJIk4V4rvs="
         }
       },
       "is_incremental": false,
@@ -3899,7 +3887,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Multimedia.InputDevice.html",
-          "hash": "j2QwuOYDAMQabAXK3mYWjaaindHlpa/qWETLS+g5TjU="
+          "hash": "6NP2MEMmOUtmcxHY6GSYV6HJxESDjXZdISIlke0Wg7Q="
         }
       },
       "is_incremental": false,
@@ -4055,7 +4043,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Multimedia.OutputDevice.html",
-          "hash": "pcGTGyAaT9JajITtFEEZEBgf9Xw1Y6YjNtXhxA9dczA="
+          "hash": "vRamvP9wflm6cRzyYcxnm7KfQVerI0nhnVmR68eT+LA="
         }
       },
       "is_incremental": false,
@@ -5948,7 +5936,7 @@
         "ConceptualDocumentProcessor": {
           "can_incremental": false,
           "incrementalPhase": "build",
-          "total_file_count": 77,
+          "total_file_count": 76,
           "skipped_file_count": 0
         },
         "ManagedReferenceDocumentProcessor": {
