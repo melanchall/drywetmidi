@@ -58,11 +58,16 @@ namespace Melanchall.DryWetMidi.Core
         /// <param name="size">Size of the event's content.</param>
         internal sealed override void Read(MidiReader reader, ReadingSettings settings, int size)
         {
-            ThrowIfArgument.IsNegative(nameof(size),
-                                        size,
-                                        "Non-negative size have to be specified in order to read SysEx event.");
+            ThrowIfArgument.IsNegative(
+                nameof(size),
+                size,
+                "Non-negative size have to be specified in order to read sys ex event.");
 
-            Data = reader.ReadBytes(size);
+            var data = reader.ReadBytes(size);
+            if (data.Length != size && settings.NotEnoughBytesPolicy == NotEnoughBytesPolicy.Abort)
+                throw new NotEnoughBytesException("Not enough bytes in the stream to read the data of a sys ex event.", size, data.Length);
+
+            Data = data;
         }
 
         /// <summary>

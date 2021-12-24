@@ -1011,44 +1011,298 @@ namespace Melanchall.DryWetMidi.Tests.Core
         }
 
         [Test]
-        public void Read_NotEnoughBytes_Abort()
-        {
-            // TODO: test all cases
-            ReadInvalidFileWithException<NotEnoughBytesException>(
-                new MidiFile(new TrackChunk(new ProgramChangeEvent())),
-                MidiFileFormat.SingleTrack,
-                null,
-                new ReadingSettings
-                {
-                    NotEnoughBytesPolicy = NotEnoughBytesPolicy.Abort,
-                    InvalidChunkSizePolicy = InvalidChunkSizePolicy.Ignore
-                },
-                new Dictionary<int, byte>(),
-                exception => { },
-                bytes => bytes.Take(bytes.Length - 1).ToArray());
-        }
+        public void Read_NotEnoughBytes_Abort_EndOfTrack([Values(1, 2, 3)] int trimBytesCount) => Read_NotEnoughBytes_Abort(
+            new MidiFile(new TrackChunk(new ProgramChangeEvent())),
+            bytes => bytes.Take(bytes.Length - trimBytesCount).ToArray());
 
         [Test]
-        public void Read_NotEnoughBytes_Ignore()
-        {
-            // TODO: test all cases
-            ReadInvalidFile(
-                new MidiFile(new TrackChunk(new ProgramChangeEvent())),
-                MidiFileFormat.SingleTrack,
-                null,
-                new ReadingSettings
-                {
-                    NotEnoughBytesPolicy = NotEnoughBytesPolicy.Ignore,
-                    InvalidChunkSizePolicy = InvalidChunkSizePolicy.Ignore
-                },
-                new Dictionary<int, byte>(),
-                midiFile =>
-                {
-                    var programChangeEvent = midiFile.GetEvents().SingleOrDefault() as ProgramChangeEvent;
-                    MidiAsserts.AreEventsEqual(new ProgramChangeEvent(), programChangeEvent, true, "Program Change event is invalid.");
-                },
-                bytes => bytes.Take(bytes.Length - 1).ToArray());
-        }
+        public void Read_NotEnoughBytes_Abort_ChannelPrefix([Values(1, 2, 3, 4)] int trimBytesCount) => Read_NotEnoughBytes_Abort_NonEndOfTrackEvent(
+            new ChannelPrefixEvent(),
+            trimBytesCount);
+
+        [Test]
+        public void Read_NotEnoughBytes_Abort_CopyrightNotice([Values(1, 2, 3, 4, 5)] int trimBytesCount) => Read_NotEnoughBytes_Abort_NonEndOfTrackEvent(
+            new CopyrightNoticeEvent("AB"),
+            trimBytesCount);
+
+        [Test]
+        public void Read_NotEnoughBytes_Abort_CuePoint([Values(1, 2, 3, 4, 5)] int trimBytesCount) => Read_NotEnoughBytes_Abort_NonEndOfTrackEvent(
+            new CuePointEvent("AB"),
+            trimBytesCount);
+
+        [Test]
+        public void Read_NotEnoughBytes_Abort_DeviceName([Values(1, 2, 3, 4, 5)] int trimBytesCount) => Read_NotEnoughBytes_Abort_NonEndOfTrackEvent(
+            new DeviceNameEvent("AB"),
+            trimBytesCount);
+
+        [Test]
+        public void Read_NotEnoughBytes_Abort_InstrumentName([Values(1, 2, 3, 4, 5)] int trimBytesCount) => Read_NotEnoughBytes_Abort_NonEndOfTrackEvent(
+            new InstrumentNameEvent("AB"),
+            trimBytesCount);
+
+        [Test]
+        public void Read_NotEnoughBytes_Abort_KeySignature([Values(1, 2, 3, 4, 5)] int trimBytesCount) => Read_NotEnoughBytes_Abort_NonEndOfTrackEvent(
+            new KeySignatureEvent(),
+            trimBytesCount);
+
+        [Test]
+        public void Read_NotEnoughBytes_Abort_Lyric([Values(1, 2, 3, 4, 5)] int trimBytesCount) => Read_NotEnoughBytes_Abort_NonEndOfTrackEvent(
+            new LyricEvent("AB"),
+            trimBytesCount);
+
+        [Test]
+        public void Read_NotEnoughBytes_Abort_Marker([Values(1, 2, 3, 4, 5)] int trimBytesCount) => Read_NotEnoughBytes_Abort_NonEndOfTrackEvent(
+            new MarkerEvent("AB"),
+            trimBytesCount);
+
+        [Test]
+        public void Read_NotEnoughBytes_Abort_PortPrefix([Values(1, 2, 3, 4)] int trimBytesCount) => Read_NotEnoughBytes_Abort_NonEndOfTrackEvent(
+            new PortPrefixEvent(),
+            trimBytesCount);
+
+        [Test]
+        public void Read_NotEnoughBytes_Abort_ProgramName([Values(1, 2, 3, 4, 5)] int trimBytesCount) => Read_NotEnoughBytes_Abort_NonEndOfTrackEvent(
+            new ProgramNameEvent("AB"),
+            trimBytesCount);
+
+        [Test]
+        public void Read_NotEnoughBytes_Abort_SequenceNumber([Values(1, 2, 3, 4, 5)] int trimBytesCount) => Read_NotEnoughBytes_Abort_NonEndOfTrackEvent(
+            new SequenceNumberEvent(),
+            trimBytesCount);
+
+        [Test]
+        public void Read_NotEnoughBytes_Abort_SequencerSpecific([Values(1, 2, 3, 4, 5)] int trimBytesCount) => Read_NotEnoughBytes_Abort_NonEndOfTrackEvent(
+            new SequencerSpecificEvent(new byte[] { 1, 2 }),
+            trimBytesCount);
+
+        [Test]
+        public void Read_NotEnoughBytes_Abort_SequenceTrackName([Values(1, 2, 3, 4, 5)] int trimBytesCount) => Read_NotEnoughBytes_Abort_NonEndOfTrackEvent(
+            new SequenceTrackNameEvent("AB"),
+            trimBytesCount);
+
+        [Test]
+        public void Read_NotEnoughBytes_Abort_SetTempo([Values(1, 2, 3, 4, 5, 6)] int trimBytesCount) => Read_NotEnoughBytes_Abort_NonEndOfTrackEvent(
+            new SetTempoEvent(),
+            trimBytesCount);
+
+        [Test]
+        public void Read_NotEnoughBytes_Abort_SmpteOffset([Values(1, 2, 3, 4, 5, 6, 7, 8)] int trimBytesCount) => Read_NotEnoughBytes_Abort_NonEndOfTrackEvent(
+            new SmpteOffsetEvent(),
+            trimBytesCount);
+
+        [Test]
+        public void Read_NotEnoughBytes_Abort_Text([Values(1, 2, 3, 4, 5)] int trimBytesCount) => Read_NotEnoughBytes_Abort_NonEndOfTrackEvent(
+            new TextEvent("AB"),
+            trimBytesCount);
+
+        [Test]
+        public void Read_NotEnoughBytes_Abort_TimeSignature([Values(1, 2, 3, 4, 5, 6, 7)] int trimBytesCount) => Read_NotEnoughBytes_Abort_NonEndOfTrackEvent(
+            new TimeSignatureEvent(),
+            trimBytesCount);
+
+        [Test]
+        public void Read_NotEnoughBytes_Abort_UnknownMeta([Values(1, 2, 3, 4, 5)] int trimBytesCount) => Read_NotEnoughBytes_Abort_NonEndOfTrackEvent(
+            new UnknownMetaEvent(0x60, new byte[] { 1, 2 }),
+            trimBytesCount);
+
+        [Test]
+        public void Read_NotEnoughBytes_Abort_ChannelAftertouch([Values(1, 2)] int trimBytesCount) => Read_NotEnoughBytes_Abort_NonEndOfTrackEvent(
+            new ChannelAftertouchEvent(),
+            trimBytesCount);
+
+        [Test]
+        public void Read_NotEnoughBytes_Abort_ControlChange([Values(1, 2, 3)] int trimBytesCount) => Read_NotEnoughBytes_Abort_NonEndOfTrackEvent(
+            new ControlChangeEvent(),
+            trimBytesCount);
+
+        [Test]
+        public void Read_NotEnoughBytes_Abort_NoteAftertouch([Values(1, 2, 3)] int trimBytesCount) => Read_NotEnoughBytes_Abort_NonEndOfTrackEvent(
+            new NoteAftertouchEvent(),
+            trimBytesCount);
+
+        [Test]
+        public void Read_NotEnoughBytes_Abort_NoteOff([Values(1, 2, 3)] int trimBytesCount) => Read_NotEnoughBytes_Abort_NonEndOfTrackEvent(
+            new NoteOffEvent(),
+            trimBytesCount);
+
+        [Test]
+        public void Read_NotEnoughBytes_Abort_NoteOn([Values(1, 2, 3)] int trimBytesCount) => Read_NotEnoughBytes_Abort_NonEndOfTrackEvent(
+            new NoteOnEvent(),
+            trimBytesCount);
+
+        [Test]
+        public void Read_NotEnoughBytes_Abort_PitchBend([Values(1, 2, 3)] int trimBytesCount) => Read_NotEnoughBytes_Abort_NonEndOfTrackEvent(
+            new PitchBendEvent(),
+            trimBytesCount);
+
+        [Test]
+        public void Read_NotEnoughBytes_Abort_ProgramChange([Values(1, 2)] int trimBytesCount) => Read_NotEnoughBytes_Abort_NonEndOfTrackEvent(
+            new ProgramChangeEvent(),
+            trimBytesCount);
+
+        [Test]
+        public void Read_NotEnoughBytes_Abort_NormalSysEx([Values(1, 2, 3, 4)] int trimBytesCount) => Read_NotEnoughBytes_Abort_NonEndOfTrackEvent(
+            new NormalSysExEvent(new byte[] { 1, 0xF7 }),
+            trimBytesCount);
+
+        [Test]
+        public void Read_NotEnoughBytes_Abort_EscapeSysEx([Values(1, 2, 3, 4)] int trimBytesCount) => Read_NotEnoughBytes_Abort_NonEndOfTrackEvent(
+            new EscapeSysExEvent(new byte[] { 1, 0xF7 }),
+            trimBytesCount);
+
+        [Test]
+        public void Read_NotEnoughBytes_Ignore_EndOfTrack([Values(1, 2, 3)] int trimBytesCount) => Read_NotEnoughBytes_Ignore(
+            new MidiFile(new TrackChunk(new ProgramChangeEvent())),
+            bytes => bytes.Take(bytes.Length - trimBytesCount).ToArray(),
+            new ProgramChangeEvent());
+
+        [Test]
+        public void Read_NotEnoughBytes_Ignore_ChannelPrefix([Values(1, 2, 3, 4)] int trimBytesCount) => Read_NotEnoughBytes_Ignore_NonEndOfTrackEvent(
+            new ChannelPrefixEvent(1),
+            trimBytesCount);
+
+        [Test]
+        public void Read_NotEnoughBytes_Ignore_CopyrightNotice([Values(1, 2, 3, 4, 5)] int trimBytesCount) => Read_NotEnoughBytes_Ignore_NonEndOfTrackEvent(
+            new CopyrightNoticeEvent("AB"),
+            trimBytesCount,
+            trimBytesCount > 2 ? null : new[] { new CopyrightNoticeEvent("AB".Substring(0, 2 - trimBytesCount)) });
+
+        [Test]
+        public void Read_NotEnoughBytes_Ignore_CuePoint([Values(1, 2, 3, 4, 5)] int trimBytesCount) => Read_NotEnoughBytes_Ignore_NonEndOfTrackEvent(
+            new CuePointEvent("AB"),
+            trimBytesCount,
+            trimBytesCount > 2 ? null : new[] { new CuePointEvent("AB".Substring(0, 2 - trimBytesCount)) });
+
+        [Test]
+        public void Read_NotEnoughBytes_Ignore_DeviceName([Values(1, 2, 3, 4, 5)] int trimBytesCount) => Read_NotEnoughBytes_Ignore_NonEndOfTrackEvent(
+            new DeviceNameEvent("AB"),
+            trimBytesCount,
+            trimBytesCount > 2 ? null : new[] { new DeviceNameEvent("AB".Substring(0, 2 - trimBytesCount)) });
+
+        [Test]
+        public void Read_NotEnoughBytes_Ignore_InstrumentName([Values(1, 2, 3, 4, 5)] int trimBytesCount) => Read_NotEnoughBytes_Ignore_NonEndOfTrackEvent(
+            new InstrumentNameEvent("AB"),
+            trimBytesCount,
+            trimBytesCount > 2 ? null : new[] { new InstrumentNameEvent("AB".Substring(0, 2 - trimBytesCount)) });
+
+        [Test]
+        public void Read_NotEnoughBytes_Ignore_KeySignature([Values(1, 2, 3, 4, 5)] int trimBytesCount) => Read_NotEnoughBytes_Ignore_NonEndOfTrackEvent(
+            new KeySignatureEvent(),
+            trimBytesCount);
+
+        [Test]
+        public void Read_NotEnoughBytes_Ignore_Lyric([Values(1, 2, 3, 4, 5)] int trimBytesCount) => Read_NotEnoughBytes_Ignore_NonEndOfTrackEvent(
+            new LyricEvent("AB"),
+            trimBytesCount,
+            trimBytesCount > 2 ? null : new[] { new LyricEvent("AB".Substring(0, 2 - trimBytesCount)) });
+
+        [Test]
+        public void Read_NotEnoughBytes_Ignore_Marker([Values(1, 2, 3, 4, 5)] int trimBytesCount) => Read_NotEnoughBytes_Ignore_NonEndOfTrackEvent(
+            new MarkerEvent("AB"),
+            trimBytesCount,
+            trimBytesCount > 2 ? null : new[] { new MarkerEvent("AB".Substring(0, 2 - trimBytesCount)) });
+
+        [Test]
+        public void Read_NotEnoughBytes_Ignore_PortPrefix([Values(1, 2, 3, 4)] int trimBytesCount) => Read_NotEnoughBytes_Ignore_NonEndOfTrackEvent(
+            new PortPrefixEvent(),
+            trimBytesCount);
+
+        [Test]
+        public void Read_NotEnoughBytes_Ignore_ProgramName([Values(1, 2, 3, 4, 5)] int trimBytesCount) => Read_NotEnoughBytes_Ignore_NonEndOfTrackEvent(
+            new ProgramNameEvent("AB"),
+            trimBytesCount,
+            trimBytesCount > 2 ? null : new[] { new ProgramNameEvent("AB".Substring(0, 2 - trimBytesCount)) });
+
+        [Test]
+        public void Read_NotEnoughBytes_Ignore_SequenceNumber([Values(1, 2, 3, 4, 5)] int trimBytesCount) => Read_NotEnoughBytes_Ignore_NonEndOfTrackEvent(
+            new SequenceNumberEvent(),
+            trimBytesCount);
+
+        [Test]
+        public void Read_NotEnoughBytes_Ignore_SequencerSpecific([Values(1, 2, 3, 4, 5)] int trimBytesCount) => Read_NotEnoughBytes_Ignore_NonEndOfTrackEvent(
+            new SequencerSpecificEvent(new byte[] { 1, 2 }),
+            trimBytesCount,
+            trimBytesCount > 2 ? null : new[] { new SequencerSpecificEvent(new byte[] { 1, 2 }.Take(2 - trimBytesCount).ToArray()) });
+
+        [Test]
+        public void Read_NotEnoughBytes_Ignore_SequenceTrackName([Values(1, 2, 3, 4, 5)] int trimBytesCount) => Read_NotEnoughBytes_Ignore_NonEndOfTrackEvent(
+            new SequenceTrackNameEvent("AB"),
+            trimBytesCount,
+            trimBytesCount > 2 ? null : new[] { new SequenceTrackNameEvent("AB".Substring(0, 2 - trimBytesCount)) });
+
+        [Test]
+        public void Read_NotEnoughBytes_Ignore_SetTempo([Values(1, 2, 3, 4, 5, 6)] int trimBytesCount) => Read_NotEnoughBytes_Ignore_NonEndOfTrackEvent(
+            new SetTempoEvent(),
+            trimBytesCount);
+
+        [Test]
+        public void Read_NotEnoughBytes_Ignore_SmpteOffset([Values(1, 2, 3, 4, 5, 6, 7, 8)] int trimBytesCount) => Read_NotEnoughBytes_Ignore_NonEndOfTrackEvent(
+            new SmpteOffsetEvent(),
+            trimBytesCount);
+
+        [Test]
+        public void Read_NotEnoughBytes_Ignore_Text([Values(1, 2, 3, 4, 5)] int trimBytesCount) => Read_NotEnoughBytes_Ignore_NonEndOfTrackEvent(
+            new TextEvent("AB"),
+            trimBytesCount,
+            trimBytesCount > 2 ? null : new[] { new TextEvent("AB".Substring(0, 2 - trimBytesCount)) });
+
+        [Test]
+        public void Read_NotEnoughBytes_Ignore_TimeSignature([Values(1, 2, 3, 4, 5, 6, 7)] int trimBytesCount) => Read_NotEnoughBytes_Ignore_NonEndOfTrackEvent(
+            new TimeSignatureEvent(),
+            trimBytesCount);
+
+        [Test]
+        public void Read_NotEnoughBytes_Ignore_UnknownMeta([Values(1, 2, 3, 4, 5)] int trimBytesCount) => Read_NotEnoughBytes_Ignore_NonEndOfTrackEvent(
+            new UnknownMetaEvent(0x60, new byte[] { 1, 2 }),
+            trimBytesCount,
+            trimBytesCount > 2 ? null : new[] { new UnknownMetaEvent(0x60, new byte[] { 1, 2 }.Take(2 - trimBytesCount).ToArray()) });
+
+        [Test]
+        public void Read_NotEnoughBytes_Ignore_ChannelAftertouch([Values(1, 2)] int trimBytesCount) => Read_NotEnoughBytes_Ignore_NonEndOfTrackEvent(
+            new ChannelAftertouchEvent(),
+            trimBytesCount);
+
+        [Test]
+        public void Read_NotEnoughBytes_Ignore_ControlChange([Values(1, 2, 3)] int trimBytesCount) => Read_NotEnoughBytes_Ignore_NonEndOfTrackEvent(
+            new ControlChangeEvent(),
+            trimBytesCount);
+
+        [Test]
+        public void Read_NotEnoughBytes_Ignore_NoteAftertouch([Values(1, 2, 3)] int trimBytesCount) => Read_NotEnoughBytes_Ignore_NonEndOfTrackEvent(
+            new NoteAftertouchEvent(),
+            trimBytesCount);
+
+        [Test]
+        public void Read_NotEnoughBytes_Ignore_NoteOff([Values(1, 2, 3)] int trimBytesCount) => Read_NotEnoughBytes_Ignore_NonEndOfTrackEvent(
+            new NoteOffEvent(),
+            trimBytesCount);
+
+        [Test]
+        public void Read_NotEnoughBytes_Ignore_NoteOn([Values(1, 2, 3)] int trimBytesCount) => Read_NotEnoughBytes_Ignore_NonEndOfTrackEvent(
+            new NoteOnEvent(),
+            trimBytesCount);
+
+        [Test]
+        public void Read_NotEnoughBytes_Ignore_PitchBend([Values(1, 2, 3)] int trimBytesCount) => Read_NotEnoughBytes_Ignore_NonEndOfTrackEvent(
+            new PitchBendEvent(),
+            trimBytesCount);
+
+        [Test]
+        public void Read_NotEnoughBytes_Ignore_ProgramChange([Values(1, 2)] int trimBytesCount) => Read_NotEnoughBytes_Ignore_NonEndOfTrackEvent(
+            new ProgramChangeEvent(),
+            trimBytesCount);
+
+        [Test]
+        public void Read_NotEnoughBytes_Ignore_NormalSysEx([Values(1, 2, 3, 4)] int trimBytesCount) => Read_NotEnoughBytes_Ignore_NonEndOfTrackEvent(
+            new NormalSysExEvent(new byte[] { 1, 0xF7 }),
+            trimBytesCount,
+            trimBytesCount > 2 ? null : new[] { new NormalSysExEvent(new byte[] { 1, 0xF7 }.Take(2 - trimBytesCount).ToArray()) });
+
+        [Test]
+        public void Read_NotEnoughBytes_Ignore_EscapeSysEx([Values(1, 2, 3, 4)] int trimBytesCount) => Read_NotEnoughBytes_Ignore_NonEndOfTrackEvent(
+            new EscapeSysExEvent(new byte[] { 1, 0xF7 }),
+            trimBytesCount,
+            trimBytesCount > 2 ? null : new[] { new EscapeSysExEvent(new byte[] { 1, 0xF7 }.Take(2 - trimBytesCount).ToArray()) });
 
         [TestCase(0x7, 0x3)]
         public void Read_UnexpectedRunningStatus(byte statusByte, byte channel)
@@ -1376,6 +1630,52 @@ namespace Melanchall.DryWetMidi.Tests.Core
         #endregion
 
         #region Private methods
+
+        public void Read_NotEnoughBytes_Ignore_NonEndOfTrackEvent(
+            MidiEvent midiEvent,
+            int trimBytesCount,
+            params MidiEvent[] expectedEvents) => Read_NotEnoughBytes_Ignore(
+            new MidiFile(new TrackChunk(midiEvent)),
+            bytes => bytes.Take(bytes.Length - 4 /* EOT */ - trimBytesCount).ToArray(),
+            expectedEvents ?? Array.Empty<MidiEvent>());
+
+        public void Read_NotEnoughBytes_Ignore(
+            MidiFile midiFile,
+            Func<byte[], byte[]> transformBytes,
+            params MidiEvent[] expectedEvents) => ReadInvalidFile(
+            midiFile,
+            MidiFileFormat.SingleTrack,
+            null,
+            new ReadingSettings
+            {
+                NotEnoughBytesPolicy = NotEnoughBytesPolicy.Ignore,
+                InvalidChunkSizePolicy = InvalidChunkSizePolicy.Ignore
+            },
+            new Dictionary<int, byte>(),
+            file =>
+            {
+                MidiAsserts.AreEqual(expectedEvents, file.GetEvents().ToArray(), true, "Program Change event is invalid.");
+            },
+            transformBytes);
+
+        public void Read_NotEnoughBytes_Abort_NonEndOfTrackEvent(MidiEvent midiEvent, int trimBytesCount) => Read_NotEnoughBytes_Abort(
+            new MidiFile(new TrackChunk(midiEvent)),
+            bytes => bytes.Take(bytes.Length - 4 /* EOT */ - trimBytesCount).ToArray());
+
+        public void Read_NotEnoughBytes_Abort(
+            MidiFile midiFile,
+            Func<byte[], byte[]> transformBytes) => ReadInvalidFileWithException<NotEnoughBytesException>(
+            midiFile,
+            MidiFileFormat.SingleTrack,
+            null,
+            new ReadingSettings
+            {
+                NotEnoughBytesPolicy = NotEnoughBytesPolicy.Abort,
+                InvalidChunkSizePolicy = InvalidChunkSizePolicy.Ignore
+            },
+            new Dictionary<int, byte>(),
+            exception => { },
+            transformBytes);
 
         private void Read_EndOfTrackStoringPolicy_Store(
             ICollection<MidiEvent> originalEvents,

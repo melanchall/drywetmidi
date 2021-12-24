@@ -166,7 +166,7 @@ namespace Melanchall.DryWetMidi.Common
 
         internal static void StartsWithInvalidValue<T>(string parameterName, IEnumerable<T> collection, T invalidValue, string message)
         {
-            if (collection != null && collection.First().Equals(invalidValue))
+            if (collection != null && collection.Any() && collection.First().Equals(invalidValue))
                 throw new ArgumentException(message, parameterName);
         }
 

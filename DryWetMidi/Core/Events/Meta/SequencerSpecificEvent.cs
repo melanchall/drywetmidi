@@ -76,7 +76,11 @@ namespace Melanchall.DryWetMidi.Core
                 return;
             }
 
-            Data = reader.ReadBytes(size);
+            var data = reader.ReadBytes(size);
+            if (data.Length != size && settings.NotEnoughBytesPolicy == NotEnoughBytesPolicy.Abort)
+                throw new NotEnoughBytesException("Not enough bytes in the stream to read the data of a sequencer specific event.", size, data.Length);
+
+            Data = data;
         }
 
         /// <summary>

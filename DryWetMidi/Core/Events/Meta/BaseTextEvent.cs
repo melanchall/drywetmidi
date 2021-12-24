@@ -79,6 +79,9 @@ namespace Melanchall.DryWetMidi.Core
             }
 
             var bytes = reader.ReadBytes(size);
+            if (bytes.Length != size && settings.NotEnoughBytesPolicy == NotEnoughBytesPolicy.Abort)
+                throw new NotEnoughBytesException("Not enough bytes in the stream to read the text of a text based meta event.", size, bytes.Length);
+
             var encoding = settings.TextEncoding ?? SmfConstants.DefaultTextEncoding;
 
             var decodeTextCallback = settings.DecodeTextCallback;
