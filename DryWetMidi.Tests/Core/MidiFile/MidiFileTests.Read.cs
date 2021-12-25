@@ -1151,10 +1151,60 @@ namespace Melanchall.DryWetMidi.Tests.Core
             trimBytesCount);
 
         [Test]
+        public void Read_NotEnoughBytes_Abort_HeaderChunkId([Values(1, 2, 3)] int takeBytesCount) => Read_NotEnoughBytes_Abort(
+            new MidiFile(),
+            bytes => bytes.Take(takeBytesCount).ToArray());
+
+        [Test]
+        public void Read_NotEnoughBytes_Abort_HeaderChunkSize([Values(1, 2, 3)] int takeBytesCount) => Read_NotEnoughBytes_Abort(
+            new MidiFile(),
+            bytes => bytes.Take(4 /* chunk ID */ + takeBytesCount).ToArray());
+
+        [Test]
+        public void Read_NotEnoughBytes_Abort_HeaderChunkFileFormat() => Read_NotEnoughBytes_Abort(
+            new MidiFile(),
+            bytes => bytes.Take(4 /* chunk ID */ + 4 /* chunk size */ + 1).ToArray());
+
+        [Test]
+        public void Read_NotEnoughBytes_Abort_HeaderChunkTracksNumber() => Read_NotEnoughBytes_Abort(
+            new MidiFile(),
+            bytes => bytes.Take(4 /* chunk ID */ + 4 /* chunk size */ + 2 /* file format */ + 1).ToArray());
+
+        [Test]
+        public void Read_NotEnoughBytes_Abort_HeaderChunkTimeDivision() => Read_NotEnoughBytes_Abort(
+            new MidiFile(),
+            bytes => bytes.Take(4 /* chunk ID */ + 4 /* chunk size */ + 2 /* file format */ + 2 /* tracks numer */ + 1).ToArray());
+
+        [Test]
+        public void Read_NotEnoughBytes_Abort_TrackChunkId([Values(1, 2, 3)] int takeBytesCount) => Read_NotEnoughBytes_Abort(
+            new MidiFile(new TrackChunk(new TextEvent("A"))),
+            bytes => bytes.Take(14 /* header chunk */ + takeBytesCount).ToArray());
+
+        [Test]
+        public void Read_NotEnoughBytes_Abort_TrackChunkSize([Values(1, 2, 3)] int takeBytesCount) => Read_NotEnoughBytes_Abort(
+            new MidiFile(new TrackChunk(new TextEvent("A"))),
+            bytes => bytes.Take(14 /* header chunk */ + 4 /* chunk ID */ + takeBytesCount).ToArray());
+
+        [Test]
+        public void Read_NotEnoughBytes_Abort_UnknownChunkId([Values(1, 2, 3)] int takeBytesCount) => Read_NotEnoughBytes_Abort(
+            new MidiFile(new UnknownChunk("abcd")),
+            bytes => bytes.Take(14 /* header chunk */ + takeBytesCount).ToArray());
+
+        [Test]
+        public void Read_NotEnoughBytes_Abort_UnknownChunkSize([Values(1, 2, 3)] int takeBytesCount) => Read_NotEnoughBytes_Abort(
+            new MidiFile(new UnknownChunk("abcd")),
+            bytes => bytes.Take(14 /* header chunk */ + 4 /* chunk ID */ + takeBytesCount).ToArray());
+
+        [Test]
+        public void Read_NotEnoughBytes_Abort_UnknownChunkData([Values(1, 2, 3)] int takeBytesCount) => Read_NotEnoughBytes_Abort(
+            new MidiFile(new UnknownChunk("abcd") { Data = new byte[] { 1, 2, 3, 4 } }),
+            bytes => bytes.Take(14 /* header chunk */ + 4 /* chunk ID */ + 4 /* chunk size */ + takeBytesCount).ToArray());
+
+        [Test]
         public void Read_NotEnoughBytes_Ignore_EndOfTrack([Values(1, 2, 3)] int trimBytesCount) => Read_NotEnoughBytes_Ignore(
             new MidiFile(new TrackChunk(new ProgramChangeEvent())),
             bytes => bytes.Take(bytes.Length - trimBytesCount).ToArray(),
-            new ProgramChangeEvent());
+            new MidiFile(new TrackChunk(new ProgramChangeEvent())));
 
         [Test]
         public void Read_NotEnoughBytes_Ignore_ChannelPrefix([Values(1, 2, 3, 4)] int trimBytesCount) => Read_NotEnoughBytes_Ignore_NonEndOfTrackEvent(
@@ -1303,6 +1353,66 @@ namespace Melanchall.DryWetMidi.Tests.Core
             new EscapeSysExEvent(new byte[] { 1, 0xF7 }),
             trimBytesCount,
             trimBytesCount > 2 ? null : new[] { new EscapeSysExEvent(new byte[] { 1, 0xF7 }.Take(2 - trimBytesCount).ToArray()) });
+
+        [Test]
+        public void Read_NotEnoughBytes_Ignore_HeaderChunkId([Values(1, 2, 3)] int takeBytesCount) => Read_NotEnoughBytes_Ignore(
+            new MidiFile(new TrackChunk(new TextEvent("A"))) { TimeDivision = new TicksPerQuarterNoteTimeDivision(80) },
+            bytes => bytes.Take(takeBytesCount).ToArray(),
+            new MidiFile());
+
+        [Test]
+        public void Read_NotEnoughBytes_Ignore_HeaderChunkSize([Values(1, 2, 3)] int takeBytesCount) => Read_NotEnoughBytes_Ignore(
+            new MidiFile(new TrackChunk(new TextEvent("A"))) { TimeDivision = new TicksPerQuarterNoteTimeDivision(80) },
+            bytes => bytes.Take(4 /* chunk ID */ + takeBytesCount).ToArray(),
+            new MidiFile());
+
+        [Test]
+        public void Read_NotEnoughBytes_Ignore_HeaderChunkFileFormat() => Read_NotEnoughBytes_Ignore(
+            new MidiFile(new TrackChunk(new TextEvent("A"))) { TimeDivision = new TicksPerQuarterNoteTimeDivision(80) },
+            bytes => bytes.Take(4 /* chunk ID */ + 4 /* chunk size */ + 1).ToArray(),
+            new MidiFile());
+
+        [Test]
+        public void Read_NotEnoughBytes_Ignore_HeaderChunkTracksNumber() => Read_NotEnoughBytes_Ignore(
+            new MidiFile(new TrackChunk(new TextEvent("A"))) { TimeDivision = new TicksPerQuarterNoteTimeDivision(80) },
+            bytes => bytes.Take(4 /* chunk ID */ + 4 /* chunk size */ + 2 /* file format */ + 1).ToArray(),
+            new MidiFile());
+
+        [Test]
+        public void Read_NotEnoughBytes_Ignore_HeaderChunkTimeDivision() => Read_NotEnoughBytes_Ignore(
+            new MidiFile(new TrackChunk(new TextEvent("A"))) { TimeDivision = new TicksPerQuarterNoteTimeDivision(80) },
+            bytes => bytes.Take(4 /* chunk ID */ + 4 /* chunk size */ + 2 /* file format */ + 2 /* tracks numer */ + 1).ToArray(),
+            new MidiFile());
+
+        [Test]
+        public void Read_NotEnoughBytes_Ignore_TrackChunkId([Values(1, 2, 3)] int takeBytesCount) => Read_NotEnoughBytes_Ignore(
+            new MidiFile(new TrackChunk(new TextEvent("A"))),
+            bytes => bytes.Take(14 /* header chunk */ + takeBytesCount).ToArray(),
+            new MidiFile());
+
+        [Test]
+        public void Read_NotEnoughBytes_Ignore_TrackChunkSize([Values(1, 2, 3)] int takeBytesCount) => Read_NotEnoughBytes_Ignore(
+            new MidiFile(new TrackChunk(new TextEvent("A"))),
+            bytes => bytes.Take(14 /* header chunk */ + 4 /* chunk ID */ + takeBytesCount).ToArray(),
+            new MidiFile(new TrackChunk()));
+
+        [Test]
+        public void Read_NotEnoughBytes_Ignore_UnknownChunkId([Values(1, 2, 3)] int takeBytesCount) => Read_NotEnoughBytes_Ignore(
+            new MidiFile(new UnknownChunk("abcd")),
+            bytes => bytes.Take(14 /* header chunk */ + takeBytesCount).ToArray(),
+            new MidiFile());
+
+        [Test]
+        public void Read_NotEnoughBytes_Ignore_UnknownChunkSize([Values(1, 2, 3)] int takeBytesCount) => Read_NotEnoughBytes_Ignore(
+            new MidiFile(new UnknownChunk("abcd") { Data = new byte[] { 1, 2, 3, 4 } }),
+            bytes => bytes.Take(14 /* header chunk */ + 4 /* chunk ID */ + takeBytesCount).ToArray(),
+            new MidiFile(new UnknownChunk("abcd")));
+
+        [Test]
+        public void Read_NotEnoughBytes_Ignore_UnknownChunkData([Values(1, 2, 3)] int takeBytesCount) => Read_NotEnoughBytes_Ignore(
+            new MidiFile(new UnknownChunk("abcd") { Data = new byte[] { 1, 2, 3, 4 } }),
+            bytes => bytes.Take(14 /* header chunk */ + 4 /* chunk ID */ + 4 /* chunk size */ + takeBytesCount).ToArray(),
+            new MidiFile(new UnknownChunk("abcd") { Data = new byte[] { 1, 2, 3, 4 }.Take(takeBytesCount).ToArray() }));
 
         [TestCase(0x7, 0x3)]
         public void Read_UnexpectedRunningStatus(byte statusByte, byte channel)
@@ -1637,24 +1747,25 @@ namespace Melanchall.DryWetMidi.Tests.Core
             params MidiEvent[] expectedEvents) => Read_NotEnoughBytes_Ignore(
             new MidiFile(new TrackChunk(midiEvent)),
             bytes => bytes.Take(bytes.Length - 4 /* EOT */ - trimBytesCount).ToArray(),
-            expectedEvents ?? Array.Empty<MidiEvent>());
+            new MidiFile(new TrackChunk(expectedEvents ?? Array.Empty<MidiEvent>())));
 
         public void Read_NotEnoughBytes_Ignore(
             MidiFile midiFile,
             Func<byte[], byte[]> transformBytes,
-            params MidiEvent[] expectedEvents) => ReadInvalidFile(
+            MidiFile expectedMidiFile) => ReadInvalidFile(
             midiFile,
             MidiFileFormat.SingleTrack,
             null,
             new ReadingSettings
             {
                 NotEnoughBytesPolicy = NotEnoughBytesPolicy.Ignore,
-                InvalidChunkSizePolicy = InvalidChunkSizePolicy.Ignore
+                InvalidChunkSizePolicy = InvalidChunkSizePolicy.Ignore,
+                NoHeaderChunkPolicy = NoHeaderChunkPolicy.Ignore
             },
             new Dictionary<int, byte>(),
             file =>
             {
-                MidiAsserts.AreEqual(expectedEvents, file.GetEvents().ToArray(), true, "Program Change event is invalid.");
+                MidiAsserts.AreEqual(expectedMidiFile, file, false, "File is invalid.");
             },
             transformBytes);
 

@@ -35,7 +35,7 @@ namespace Melanchall.DryWetMidi.Core
         /// <summary>
         /// Gets data contained in the current <see cref="UnknownChunk"/>.
         /// </summary>
-        public byte[] Data { get; private set; }
+        public byte[] Data { get; internal set; }
 
         #endregion
 

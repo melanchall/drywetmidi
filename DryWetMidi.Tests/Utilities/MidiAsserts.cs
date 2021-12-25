@@ -162,24 +162,26 @@ namespace Melanchall.DryWetMidi.Tests.Utilities
             Assert.IsTrue(areEqual, $"{message} {chunksComparingMessage}");
         }
 
-        public static void AreEqual(IEnumerable<TrackChunk> trackChunks1, IEnumerable<TrackChunk> trackChunks2, bool compareDeltaTimes, string message = null)
+        public static void AreEqual(IEnumerable<MidiChunk> chunks1, IEnumerable<MidiChunk> chunks2, bool compareDeltaTimes, string message = null)
         {
-            var trackChunksEnumerator1 = trackChunks1.GetEnumerator();
-            var trackChunksEnumerator2 = trackChunks2.GetEnumerator();
+            var chunksEnumerator1 = chunks1.GetEnumerator();
+            var chunksEnumerator2 = chunks2.GetEnumerator();
 
             var i = 0;
+            var chunksEnumerated1 = false;
+            var chunksEnumerated2 = false;
 
             while (true)
             {
-                var trackChunksEnumerated1 = !trackChunksEnumerator1.MoveNext();
-                var trackChunksEnumerated2 = !trackChunksEnumerator2.MoveNext();
-                if (trackChunksEnumerated1 || trackChunksEnumerated2)
+                chunksEnumerated1 = !chunksEnumerator1.MoveNext();
+                chunksEnumerated2 = !chunksEnumerator2.MoveNext();
+                if (chunksEnumerated1 || chunksEnumerated2)
                     break;
 
                 string chunksComparingMessage;
                 var areEqual = MidiChunkEquality.Equals(
-                    trackChunksEnumerator1.Current,
-                    trackChunksEnumerator2.Current,
+                    chunksEnumerator1.Current,
+                    chunksEnumerator2.Current,
                     new MidiChunkEqualityCheckSettings
                     {
                         EventEqualityCheckSettings = new MidiEventEqualityCheckSettings
@@ -189,12 +191,12 @@ namespace Melanchall.DryWetMidi.Tests.Utilities
                     },
                     out chunksComparingMessage);
 
-                Assert.IsTrue(areEqual, $"{message} Track chunk {i} is invalid. {chunksComparingMessage}");
+                Assert.IsTrue(areEqual, $"{message} Chunk {i} is invalid. {chunksComparingMessage}");
 
                 i++;
             }
 
-            Assert.IsTrue(trackChunksEnumerator1.Current == null && trackChunksEnumerator2.Current == null, $"{message} Chunks collections have different length.");
+            Assert.IsTrue(chunksEnumerated1 && chunksEnumerated2, $"{message} Chunks collections have different length.");
         }
 
         public static void AreEventsEqual(MidiEvent midiEvent1, MidiEvent midiEvent2, bool compareDeltaTimes, string message = null)

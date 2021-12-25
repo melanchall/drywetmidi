@@ -130,7 +130,7 @@ namespace Melanchall.DryWetMidi.Core
 
             //
 
-            return new[] { resultTrackChunk }.Concat(chunks.Where(c => !(c is TrackChunk)));
+            return (resultTrackChunk.Events.Any() ? new[] { resultTrackChunk } : Enumerable.Empty<MidiChunk>()).Concat(chunks.Where(c => !(c is TrackChunk)));
         }
 
         #endregion
