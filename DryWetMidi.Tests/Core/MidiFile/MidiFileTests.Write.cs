@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Melanchall.DryWetMidi.Common;
@@ -360,9 +361,590 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 });
         }
 
+        [Test]
+        public void Write_SingleTrack_EmptyCollection() => CheckWritingWithFormat_SingleTrack(
+            chunks: Enumerable.Empty<MidiChunk>(),
+            expectedChunks: Enumerable.Empty<MidiChunk>());
+
+        [Test]
+        public void Write_SingleTrack_SingleChunk_TrackChunk() => CheckWritingWithFormat_SingleTrack(
+            chunks: new[] { new TrackChunk() },
+            expectedChunks: new[] { new TrackChunk() });
+
+        [Test]
+        public void Write_SingleTrack_SingleChunk_UnknownChunk() => CheckWritingWithFormat_SingleTrack(
+            chunks: new[] { new UnknownChunk("abcd") },
+            expectedChunks: new[] { new UnknownChunk("abcd") },
+            readingSettings: new ReadingSettings
+            {
+                ZeroLengthDataPolicy = ZeroLengthDataPolicy.ReadAsNull
+            });
+
+        [Test]
+        public void Write_SingleTrack_SingleChunk_CustomChunk() => CheckWritingWithFormat_SingleTrack(
+            chunks: new[] { new CustomChunk(1, "A", 2) },
+            expectedChunks: new[] { new CustomChunk(1, "A", 2) },
+            readingSettings: new ReadingSettings
+            {
+                CustomChunkTypes = new ChunkTypesCollection
+                {
+                    { typeof(CustomChunk), CustomChunk.Id }
+                }
+            });
+
+        [Test]
+        public void Write_SingleTrack_MultipleChunks_TrackChunks_FarEventInSecondChunk() => CheckWritingWithFormat_SingleTrack(
+            chunks: new[]
+            {
+                new TrackChunk(new TextEvent("A")),
+                new TrackChunk(new TextEvent("B") { DeltaTime = 100 })
+            },
+            expectedChunks: new[]
+            {
+                new TrackChunk(
+                    new TextEvent("A"),
+                    new TextEvent("B") { DeltaTime = 100 })
+            });
+
+        [Test]
+        public void Write_SingleTrack_MultipleChunks_TrackChunks_FarEventInFirstChunk() => CheckWritingWithFormat_SingleTrack(
+            chunks: new[]
+            {
+                new TrackChunk(new TextEvent("A") { DeltaTime = 100 }),
+                new TrackChunk(new TextEvent("B"))
+            },
+            expectedChunks: new[]
+            {
+                new TrackChunk(
+                    new TextEvent("B"),
+                    new TextEvent("A") { DeltaTime = 100 })
+            });
+
+        [Test]
+        public void Write_SingleTrack_MultipleChunks_TrackChunks_MetaAndChannelEvents() => CheckWritingWithFormat_SingleTrack(
+            chunks: new[]
+            {
+                new TrackChunk(new NoteOnEvent(), new TextEvent("A")),
+                new TrackChunk(new TextEvent("B"), new NoteOffEvent() { DeltaTime = 100 })
+            },
+            expectedChunks: new[]
+            {
+                new TrackChunk(
+                    new TextEvent("A"),
+                    new TextEvent("B"),
+                    new NoteOnEvent(),
+                    new NoteOffEvent() { DeltaTime = 100 })
+            },
+            writingSettings: new WritingSettings
+            {
+                NoteOffAsSilentNoteOn = false
+            },
+            readingSettings: new ReadingSettings
+            {
+                SilentNoteOnPolicy = SilentNoteOnPolicy.NoteOn
+            });
+
+        [Test]
+        public void Write_SingleTrack_MultipleChunks_TrackChunks_ChannelPrefix() => CheckWritingWithFormat_SingleTrack(
+            chunks: new[]
+            {
+                new TrackChunk(new TextEvent("A"), new ChannelPrefixEvent()),
+                new TrackChunk(new TextEvent("B"))
+            },
+            expectedChunks: new[]
+            {
+                new TrackChunk(
+                    new TextEvent("A"),
+                    new ChannelPrefixEvent(),
+                    new TextEvent("B"))
+            });
+
+        [Test]
+        public void Write_SingleTrack_MultipleChunks_TrackChunksAndNonTrackChunks() => CheckWritingWithFormat_SingleTrack(
+            chunks: new MidiChunk[]
+            {
+                new TrackChunk(new TextEvent("A"), new ChannelPrefixEvent(), new NoteOffEvent() { DeltaTime = 50 }),
+                new UnknownChunk("abcd"),
+                new TrackChunk(new NoteOnEvent(), new TextEvent("B")),
+                new CustomChunk(1, "A", 2),
+                new TrackChunk(new NoteOnEvent() { DeltaTime = 25 })
+            },
+            expectedChunks: new MidiChunk[]
+            {
+                new TrackChunk(
+                    new TextEvent("A"),
+                    new ChannelPrefixEvent(),
+                    new TextEvent("B"),
+                    new NoteOnEvent(),
+                    new NoteOnEvent() { DeltaTime = 25 },
+                    new NoteOffEvent() { DeltaTime = 25 }),
+                new UnknownChunk("abcd"),
+                new CustomChunk(1, "A", 2)
+            },
+            writingSettings: new WritingSettings
+            {
+                NoteOffAsSilentNoteOn = false
+            },
+            readingSettings: new ReadingSettings
+            {
+                SilentNoteOnPolicy = SilentNoteOnPolicy.NoteOn,
+                ZeroLengthDataPolicy = ZeroLengthDataPolicy.ReadAsNull,
+                CustomChunkTypes = new ChunkTypesCollection
+                {
+                    { typeof(CustomChunk), CustomChunk.Id }
+                }
+            });
+
+        [Test]
+        public void Write_MultiTrack_EmptyCollection() => CheckWritingWithFormat_MultiTrack(
+            chunks: Enumerable.Empty<MidiChunk>(),
+            expectedChunks: Enumerable.Empty<MidiChunk>());
+
+        [Test]
+        public void Write_MultiTrack_SingleChunk_TrackChunk() => CheckWritingWithFormat_MultiTrack(
+            chunks: new[] { new TrackChunk() },
+            expectedChunks: Enumerable.Empty<MidiChunk>());
+
+        [Test]
+        public void Write_MultiTrack_SingleChunk_TrackChunk_NonChannelOnly() => CheckWritingWithFormat_MultiTrack(
+            chunks: new[]
+            {
+                new TrackChunk(
+                    new TextEvent("A"),
+                    new NormalSysExEvent(new byte[] { 1, 2, 3 }))
+            },
+            expectedChunks: new[]
+            {
+                new TrackChunk(
+                    new TextEvent("A"),
+                    new NormalSysExEvent(new byte[] { 1, 2, 3 }))
+            });
+
+        [Test]
+        public void Write_MultiTrack_SingleChunk_TrackChunk_ChannelOnly_SingleChannel() => CheckWritingWithFormat_MultiTrack(
+            chunks: new[]
+            {
+                new TrackChunk(
+                    new NoteOnEvent(),
+                    new NoteOffEvent())
+            },
+            expectedChunks: new[]
+            {
+                new TrackChunk(
+                    new NoteOnEvent(),
+                    new NoteOffEvent())
+            },
+            writingSettings: new WritingSettings
+            {
+                NoteOffAsSilentNoteOn = false
+            },
+            readingSettings: new ReadingSettings
+            {
+                SilentNoteOnPolicy = SilentNoteOnPolicy.NoteOn
+            });
+
+        [Test]
+        public void Write_MultiTrack_SingleChunk_TrackChunk_ChannelOnly_MultipleChannels() => CheckWritingWithFormat_MultiTrack(
+            chunks: new[]
+            {
+                new TrackChunk(
+                    new NoteOnEvent(),
+                    new NoteOnEvent { DeltaTime = 100, Channel = (FourBitNumber)1 },
+                    new NoteOffEvent(),
+                    new NoteOffEvent { Channel = (FourBitNumber)1 })
+            },
+            expectedChunks: new[]
+            {
+                new TrackChunk(
+                    new NoteOnEvent(),
+                    new NoteOffEvent { DeltaTime = 100 }),
+                new TrackChunk(
+                    new NoteOnEvent { DeltaTime = 100, Channel = (FourBitNumber)1 },
+                    new NoteOffEvent { Channel = (FourBitNumber)1 })
+            },
+            writingSettings: new WritingSettings
+            {
+                NoteOffAsSilentNoteOn = false
+            },
+            readingSettings: new ReadingSettings
+            {
+                SilentNoteOnPolicy = SilentNoteOnPolicy.NoteOn
+            });
+
+        [Test]
+        public void Write_MultiTrack_SingleChunk_TrackChunk_ChannelOnly_AllChannels() => CheckWritingWithFormat_MultiTrack(
+            chunks: new[]
+            {
+                new TrackChunk(
+                    FourBitNumber.Values.SelectMany(channel => new MidiEvent[]
+                    {
+                        new NoteOnEvent { DeltaTime = 10, Channel = channel },
+                        new NoteOffEvent { DeltaTime = 10, Channel = channel }
+                    }))
+            },
+            expectedChunks: FourBitNumber.Values.Select(channel => new TrackChunk(
+                new NoteOnEvent { DeltaTime = (channel * 20) + 10, Channel = channel },
+                new NoteOffEvent { DeltaTime = 10, Channel = channel })),
+            writingSettings: new WritingSettings
+            {
+                NoteOffAsSilentNoteOn = false
+            },
+            readingSettings: new ReadingSettings
+            {
+                SilentNoteOnPolicy = SilentNoteOnPolicy.NoteOn
+            });
+
+        [Test]
+        public void Write_MultiTrack_SingleChunk_TrackChunk_Mixed() => CheckWritingWithFormat_MultiTrack(
+            chunks: new[]
+            {
+                new TrackChunk(
+                    new TextEvent("A"),
+                    new NoteOnEvent(),
+                    new NoteOnEvent { DeltaTime = 100, Channel = (FourBitNumber)1 },
+                    new NoteOffEvent(),
+                    new NoteOffEvent { Channel = (FourBitNumber)1 },
+                    new TextEvent("B"),
+                    new NormalSysExEvent(new byte[] { 1, 2, 3 }))
+            },
+            expectedChunks: new[]
+            {
+                new TrackChunk(
+                    new TextEvent("A"),
+                    new TextEvent("B") { DeltaTime = 100 },
+                    new NormalSysExEvent(new byte[] { 1, 2, 3 })),
+                new TrackChunk(
+                    new NoteOnEvent(),
+                    new NoteOffEvent { DeltaTime = 100 }),
+                new TrackChunk(
+                    new NoteOnEvent { DeltaTime = 100, Channel = (FourBitNumber)1 },
+                    new NoteOffEvent { Channel = (FourBitNumber)1 })
+            },
+            writingSettings: new WritingSettings
+            {
+                NoteOffAsSilentNoteOn = false
+            },
+            readingSettings: new ReadingSettings
+            {
+                SilentNoteOnPolicy = SilentNoteOnPolicy.NoteOn
+            });
+
+        [Test]
+        public void Write_MultiTrack_SingleChunk_TrackChunk_ChannelPrefix() => CheckWritingWithFormat_MultiTrack(
+            chunks: new[]
+            {
+                new TrackChunk(
+                    new ChannelPrefixEvent(1),
+                    new TextEvent("A"),
+                    new NoteOnEvent(),
+                    new NoteOnEvent { DeltaTime = 100, Channel = (FourBitNumber)1 },
+                    new NoteOffEvent(),
+                    new NoteOffEvent { Channel = (FourBitNumber)1 },
+                    new TextEvent("B"),
+                    new NormalSysExEvent(new byte[] { 1, 2, 3 }))
+            },
+            expectedChunks: new[]
+            {
+                new TrackChunk(
+                    new TextEvent("B") { DeltaTime = 100 },
+                    new NormalSysExEvent(new byte[] { 1, 2, 3 })),
+                new TrackChunk(
+                    new NoteOnEvent(),
+                    new NoteOffEvent { DeltaTime = 100 }),
+                new TrackChunk(
+                    new ChannelPrefixEvent(1),
+                    new TextEvent("A"),
+                    new NoteOnEvent { DeltaTime = 100, Channel = (FourBitNumber)1 },
+                    new NoteOffEvent { Channel = (FourBitNumber)1 })
+            },
+            writingSettings: new WritingSettings
+            {
+                NoteOffAsSilentNoteOn = false
+            },
+            readingSettings: new ReadingSettings
+            {
+                SilentNoteOnPolicy = SilentNoteOnPolicy.NoteOn
+            });
+
+        [Test]
+        public void Write_MultiTrack_SingleChunk_UnknownChunk() => CheckWritingWithFormat_MultiTrack(
+            chunks: new[] { new UnknownChunk("abcd") },
+            expectedChunks: new[] { new UnknownChunk("abcd") },
+            readingSettings: new ReadingSettings
+            {
+                ZeroLengthDataPolicy = ZeroLengthDataPolicy.ReadAsNull
+            });
+
+        [Test]
+        public void Write_MultiTrack_MultipleChunks_EmptyTrackChunks() => CheckWritingWithFormat_MultiTrack(
+            chunks: new[]
+            {
+                new TrackChunk(),
+                new TrackChunk()
+            },
+            expectedChunks: new[]
+            {
+                new TrackChunk(),
+                new TrackChunk()
+            });
+
+        [Test]
+        public void Write_MultiTrack_MultipleChunks_Mixed() => CheckWritingWithFormat_MultiTrack(
+            chunks: new MidiChunk[]
+            {
+                new TrackChunk(
+                    new NoteOnEvent(),
+                    new NoteOffEvent(),
+                    new TextEvent("A")),
+                new UnknownChunk("abcd"),
+                new TrackChunk(
+                    new TextEvent("A"))
+            },
+            expectedChunks: new MidiChunk[]
+            {
+                new TrackChunk(
+                    new NoteOnEvent(),
+                    new NoteOffEvent(),
+                    new TextEvent("A")),
+                new UnknownChunk("abcd"),
+                new TrackChunk(
+                    new TextEvent("A"))
+            },
+            writingSettings: new WritingSettings
+            {
+                NoteOffAsSilentNoteOn = false
+            },
+            readingSettings: new ReadingSettings
+            {
+                SilentNoteOnPolicy = SilentNoteOnPolicy.NoteOn,
+                ZeroLengthDataPolicy = ZeroLengthDataPolicy.ReadAsNull
+            });
+
+        [Test]
+        public void Write_MultiSequence_EmptyCollection() => CheckWritingWithFormat_MultiSequence(
+            chunks: Enumerable.Empty<MidiChunk>(),
+            expectedChunks: Enumerable.Empty<MidiChunk>());
+
+        [Test]
+        public void Write_MultiSequence_SingleChunk_TrackChunk() => CheckWritingWithFormat_MultiSequence(
+            chunks: new[] { new TrackChunk() },
+            expectedChunks: new[] { new TrackChunk() });
+
+        [Test]
+        public void Write_MultiSequence_SingleChunk_TrackChunk_NoSequenceNumber() => CheckWritingWithFormat_MultiSequence(
+            chunks: new[]
+            {
+                new TrackChunk(new TextEvent("A"))
+            },
+            expectedChunks: new[]
+            {
+                new TrackChunk(new TextEvent("A"))
+            });
+
+        [Test]
+        public void Write_MultiSequence_SingleChunk_UnknownChunk() => CheckWritingWithFormat_MultiSequence(
+            chunks: new[] { new UnknownChunk("abcd") },
+            expectedChunks: new[] { new UnknownChunk("abcd") },
+            readingSettings: new ReadingSettings
+            {
+                ZeroLengthDataPolicy = ZeroLengthDataPolicy.ReadAsNull
+            });
+
+        [Test]
+        public void Write_MultiSequence_SingleChunk_CustomChunk() => CheckWritingWithFormat_MultiSequence(
+            chunks: new[] { new CustomChunk(1, "A", 2) },
+            expectedChunks: new[] { new CustomChunk(1, "A", 2) },
+            readingSettings: new ReadingSettings
+            {
+                CustomChunkTypes = new ChunkTypesCollection
+                {
+                    { typeof(CustomChunk), CustomChunk.Id }
+                }
+            });
+
+        [Test]
+        public void Write_MultiSequence_MultipleChunks_TrackChunks_FarEventInSecondChunk_NoSequenceNumbers() => CheckWritingWithFormat_MultiSequence(
+            chunks: new[]
+            {
+                new TrackChunk(new TextEvent("A")),
+                new TrackChunk(new TextEvent("B") { DeltaTime = 100 })
+            },
+            expectedChunks: new[]
+            {
+                new TrackChunk(new TextEvent("A")),
+                new TrackChunk(new TextEvent("B") { DeltaTime = 100 })
+            });
+
+        [Test]
+        public void Write_MultiSequence_MultipleChunks_TrackChunks_FarEventInFirstChunk_NoSequenceNumbers() => CheckWritingWithFormat_MultiSequence(
+            chunks: new[]
+            {
+                new TrackChunk(new TextEvent("A") { DeltaTime = 100 }),
+                new TrackChunk(new TextEvent("B"))
+            },
+            expectedChunks: new[]
+            {
+                new TrackChunk(new TextEvent("A") { DeltaTime = 100 }),
+                new TrackChunk(new TextEvent("B"))
+            });
+
+        [Test]
+        public void Write_MultiSequence_MultipleChunks_TrackChunks_MetaAndChannelEvents_NoSequenceNumbers() => CheckWritingWithFormat_MultiSequence(
+            chunks: new[]
+            {
+                new TrackChunk(new NoteOnEvent(), new TextEvent("A")),
+                new TrackChunk(new TextEvent("B"), new NoteOffEvent() { DeltaTime = 100 })
+            },
+            expectedChunks: new[]
+            {
+                new TrackChunk(new NoteOnEvent(), new TextEvent("A")),
+                new TrackChunk(new TextEvent("B"), new NoteOffEvent() { DeltaTime = 100 })
+            },
+            writingSettings: new WritingSettings
+            {
+                NoteOffAsSilentNoteOn = false
+            },
+            readingSettings: new ReadingSettings
+            {
+                SilentNoteOnPolicy = SilentNoteOnPolicy.NoteOn
+            });
+
+        [Test]
+        public void Write_MultiSequence_MultipleChunks_TrackChunks_ChannelPrefix_NoSequenceNumbers() => CheckWritingWithFormat_MultiSequence(
+            chunks: new[]
+            {
+                new TrackChunk(new TextEvent("A"), new ChannelPrefixEvent()),
+                new TrackChunk(new TextEvent("B"))
+            },
+            expectedChunks: new[]
+            {
+                new TrackChunk(new TextEvent("A"), new ChannelPrefixEvent()),
+                new TrackChunk(new TextEvent("B"))
+            });
+
+        [Test]
+        public void Write_MultiSequence_MultipleChunks_TrackChunksAndNonTrackChunks_NoSequenceNumbers() => CheckWritingWithFormat_MultiSequence(
+            chunks: new MidiChunk[]
+            {
+                new TrackChunk(new TextEvent("A"), new ChannelPrefixEvent(), new NoteOffEvent() { DeltaTime = 50 }),
+                new UnknownChunk("abcd"),
+                new TrackChunk(new NoteOnEvent(), new TextEvent("B")),
+                new CustomChunk(1, "A", 2),
+                new TrackChunk(new NoteOnEvent() { DeltaTime = 25 })
+            },
+            expectedChunks: new MidiChunk[]
+            {
+                new TrackChunk(new TextEvent("A"), new ChannelPrefixEvent(), new NoteOffEvent() { DeltaTime = 50 }),
+                new TrackChunk(new NoteOnEvent(), new TextEvent("B")),
+                new TrackChunk(new NoteOnEvent() { DeltaTime = 25 }),
+                new UnknownChunk("abcd"),
+                new CustomChunk(1, "A", 2),
+            },
+            writingSettings: new WritingSettings
+            {
+                NoteOffAsSilentNoteOn = false
+            },
+            readingSettings: new ReadingSettings
+            {
+                SilentNoteOnPolicy = SilentNoteOnPolicy.NoteOn,
+                ZeroLengthDataPolicy = ZeroLengthDataPolicy.ReadAsNull,
+                CustomChunkTypes = new ChunkTypesCollection
+                {
+                    { typeof(CustomChunk), CustomChunk.Id }
+                }
+            });
+
+        [Test]
+        public void Write_MultiSequence_MultipleChunks_Mixed_WithSequenceNumbers() => CheckWritingWithFormat_MultiSequence(
+            chunks: new MidiChunk[]
+            {
+                new TrackChunk(new SequenceNumberEvent(1), new TextEvent("A"), new ChannelPrefixEvent(), new NoteOffEvent() { DeltaTime = 50 }),
+                new UnknownChunk("abcd"),
+                new TrackChunk(new SequenceNumberEvent(1), new NoteOnEvent(), new TextEvent("B")),
+                new CustomChunk(1, "A", 2),
+                new TrackChunk(new NoteOnEvent() { DeltaTime = 25 })
+            },
+            expectedChunks: new MidiChunk[]
+            {
+                new TrackChunk(
+                    new SequenceNumberEvent(1),
+                    new TextEvent("A"),
+                    new ChannelPrefixEvent(),
+                    new SequenceNumberEvent(1),
+                    new TextEvent("B"),
+                    new NoteOnEvent(),
+                    new NoteOffEvent() { DeltaTime = 50 }),
+                new TrackChunk(new NoteOnEvent() { DeltaTime = 25 }),
+                new UnknownChunk("abcd"),
+                new CustomChunk(1, "A", 2),
+            },
+            writingSettings: new WritingSettings
+            {
+                NoteOffAsSilentNoteOn = false
+            },
+            readingSettings: new ReadingSettings
+            {
+                SilentNoteOnPolicy = SilentNoteOnPolicy.NoteOn,
+                ZeroLengthDataPolicy = ZeroLengthDataPolicy.ReadAsNull,
+                CustomChunkTypes = new ChunkTypesCollection
+                {
+                    { typeof(CustomChunk), CustomChunk.Id }
+                }
+            });
+
         #endregion
 
         #region Private methods
+
+        private void CheckWritingWithFormat_MultiSequence(
+            IEnumerable<MidiChunk> chunks,
+            IEnumerable<MidiChunk> expectedChunks,
+            WritingSettings writingSettings = null,
+            ReadingSettings readingSettings = null) => CheckWritingWithFormat(
+            chunks,
+            MidiFileFormat.MultiSequence,
+            expectedChunks,
+            writingSettings,
+            readingSettings);
+
+        private void CheckWritingWithFormat_MultiTrack(
+            IEnumerable<MidiChunk> chunks,
+            IEnumerable<MidiChunk> expectedChunks,
+            WritingSettings writingSettings = null,
+            ReadingSettings readingSettings = null) => CheckWritingWithFormat(
+            chunks,
+            MidiFileFormat.MultiTrack,
+            expectedChunks,
+            writingSettings,
+            readingSettings);
+
+        private void CheckWritingWithFormat_SingleTrack(
+            IEnumerable<MidiChunk> chunks,
+            IEnumerable<MidiChunk> expectedChunks,
+            WritingSettings writingSettings = null,
+            ReadingSettings readingSettings = null) => CheckWritingWithFormat(
+            chunks,
+            MidiFileFormat.SingleTrack,
+            expectedChunks,
+            writingSettings,
+            readingSettings);
+
+        private void CheckWritingWithFormat(
+            IEnumerable<MidiChunk> chunks,
+            MidiFileFormat format,
+            IEnumerable<MidiChunk> expectedChunks,
+            WritingSettings writingSettings,
+            ReadingSettings readingSettings)
+        {
+            var midiFile = MidiFileTestUtilities.Read(
+                new MidiFile(chunks),
+                writingSettings,
+                readingSettings,
+                format);
+
+            Assert.AreEqual(format, midiFile.OriginalFormat, "Invalid original format.");
+            MidiAsserts.AreEqual(expectedChunks, midiFile.Chunks, true, "Chunks are invalid.");
+        }
 
         private void Write(MidiFile midiFile, Action<WritingSettings> setupCompression, Action<FileInfo, FileInfo> fileInfosAction)
         {

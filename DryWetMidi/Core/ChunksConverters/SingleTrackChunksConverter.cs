@@ -13,11 +13,10 @@ namespace Melanchall.DryWetMidi.Core
         {
             #region Constructor
 
-            public EventDescriptor(MidiEvent midiEvent, long absoluteTime, int channel)
+            public EventDescriptor(MidiEvent midiEvent, long absoluteTime)
             {
                 Event = midiEvent;
                 AbsoluteTime = absoluteTime;
-                Channel = channel;
             }
 
             #endregion
@@ -27,8 +26,6 @@ namespace Melanchall.DryWetMidi.Core
             public MidiEvent Event { get; }
 
             public long AbsoluteTime { get; }
-
-            public int Channel { get; }
 
             #endregion
         }
@@ -53,21 +50,6 @@ namespace Melanchall.DryWetMidi.Core
                     return 1;
                 else if (xMetaEvent == null)
                     return 0;
-
-                //
-
-                var channelDifference = x.Channel - y.Channel;
-                if (channelDifference != 0)
-                    return channelDifference;
-
-                //
-
-                var xChannelPrefixEvent = x.Event as ChannelPrefixEvent;
-                var yChannelPrefixEvent = y.Event as ChannelPrefixEvent;
-                if (xChannelPrefixEvent != null && yChannelPrefixEvent == null)
-                    return -1;
-                else if (xChannelPrefixEvent == null && yChannelPrefixEvent != null)
-                    return 1;
 
                 //
 
@@ -97,19 +79,9 @@ namespace Melanchall.DryWetMidi.Core
                 .SelectMany(trackChunk =>
                 {
                     var absoluteTime = 0L;
-                    var channel = -1;
-                    return trackChunk.Events
-                                     .Select(midiEvent =>
-                                     {
-                                         var channelPrefixEvent = midiEvent as ChannelPrefixEvent;
-                                         if (channelPrefixEvent != null)
-                                             channel = channelPrefixEvent.Channel;
-
-                                         if (!(midiEvent is MetaEvent))
-                                             channel = -1;
-
-                                         return new EventDescriptor(midiEvent, (absoluteTime += midiEvent.DeltaTime), channel);
-                                     });
+                    return trackChunk
+                        .Events
+                        .Select(midiEvent => new EventDescriptor(midiEvent, (absoluteTime += midiEvent.DeltaTime)));
                 })
                 .OrderBy(d => d, new EventDescriptorComparer());
 

@@ -144,6 +144,23 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 writer.WriteByte(C);
             }
 
+            public override bool Equals(object obj) => obj is CustomChunk customChunk &&
+                customChunk.A == A &&
+                customChunk.B == B &&
+                customChunk.C == C;
+
+            public override int GetHashCode()
+            {
+                unchecked
+                {
+                    var result = 17;
+                    result = result * 23 + A.GetHashCode();
+                    result = result * 23 + B.GetHashCode();
+                    result = result * 23 + C.GetHashCode();
+                    return result;
+                }
+            }
+
             #endregion
         }
 
