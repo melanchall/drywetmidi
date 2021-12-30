@@ -13,12 +13,15 @@ To make playback smooth and correct, precision of timer should be ~1ms. So tick 
 
 You can also use [RegularPrecisionTickGenerator](xref:Melanchall.DryWetMidi.Multimedia.RegularPrecisionTickGenerator) which uses standard [Timer](xref:System.Timers.Timer) and thus provides precision about 16ms on Windows. But this tick generator is cross-platform.
 
-Tick generator can be specified via `clockSettings` parameter of [Playback](xref:Melanchall.DryWetMidi.Multimedia.Playback)'s constructors or `GetPlayback` extension methods within [PlaybackUtilities](xref:Melanchall.DryWetMidi.Multimedia.PlaybackUtilities):
+Tick generator can be specified via `playbackSettings` parameter of [Playback](xref:Melanchall.DryWetMidi.Multimedia.Playback)'s constructors or `GetPlayback` extension methods within [PlaybackUtilities](xref:Melanchall.DryWetMidi.Multimedia.PlaybackUtilities):
 
 ```csharp
-var playback = midiFile.GetPlayback(new MidiClockSettings
+var playback = midiFile.GetPlayback(new PlaybackSettings
 {
-    CreateTickGeneratorCallback = () => new RegularPrecisionTickGenerator()
+    ClockSettings = new MidiClockSettings
+    {
+        CreateTickGeneratorCallback = () => new RegularPrecisionTickGenerator()
+    }
 });
 ```
 
@@ -80,9 +83,12 @@ private sealed class ThreadTickGenerator : TickGenerator
 And then use it:
 
 ```csharp
-var playback = midiFile.GetPlayback(new MidiClockSettings
+var playback = midiFile.GetPlayback(new PlaybackSettings
 {
-    CreateTickGeneratorCallback = () => new ThreadTickGenerator()
+    ClockSettings = new MidiClockSettings
+    {
+        CreateTickGeneratorCallback = () => new ThreadTickGenerator()
+    }
 });
 ```
 
@@ -95,9 +101,12 @@ Also you can tick playback's internal clock manually without tick generator via 
 To use only manual ticking you should return `null` in [CreateTickGeneratorCallback](xref:Melanchall.DryWetMidi.Multimedia.MidiClockSettings.CreateTickGeneratorCallback):
 
 ```csharp
-var playback = midiFile.GetPlayback(new MidiClockSettings
+var playback = midiFile.GetPlayback(new PlaybackSettings
 {
-    CreateTickGeneratorCallback = () => null
+    ClockSettings = new MidiClockSettings
+    {
+        CreateTickGeneratorCallback = () => null
+    }
 });
 ```
 

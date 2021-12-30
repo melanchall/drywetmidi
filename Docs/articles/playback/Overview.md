@@ -48,7 +48,7 @@ namespace SimplePlaybackApp
 }
 ```
 
-Please read [Tick generator](Tick-generator.md) article and [MidiClockSettings](xref:Melanchall.DryWetMidi.Multimedia.MidiClockSettings) class documentation to learn how you can adjust playback's internals.
+Please read [Tick generator](Tick-generator.md) article and [PlaybackSettings](xref:Melanchall.DryWetMidi.Multimedia.PlaybackSettings) class documentation to learn how you can adjust playback's internals.
 
 ## Playback without device
 
