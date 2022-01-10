@@ -128,24 +128,29 @@ namespace Melanchall.DryWetMidi.Interaction
         public long TotalMicroseconds => _timeSpan.Ticks / TicksInMicrosecond;
 
         /// <summary>
-        /// Gets the value of the current <see cref="MetricTimeSpan"/> expressed in milliseconds.
+        /// Gets the value of the current <see cref="MetricTimeSpan"/> expressed in whole and fractional in milliseconds.
         /// </summary>
-        public long TotalMilliseconds => TotalMicroseconds / 1000;
+        public double TotalMilliseconds => _timeSpan.TotalMilliseconds;
 
         /// <summary>
-        /// Gets the value of the current <see cref="MetricTimeSpan"/> expressed in seconds.
+        /// Gets the value of the current <see cref="MetricTimeSpan"/> expressed in whole and fractional in seconds.
         /// </summary>
-        public long TotalSeconds => TotalMilliseconds / 1000;
+        public double TotalSeconds => _timeSpan.TotalSeconds;
 
         /// <summary>
-        /// Gets the value of the current <see cref="MetricTimeSpan"/> expressed in minutes.
+        /// Gets the value of the current <see cref="MetricTimeSpan"/> expressed in whole and fractional in minutes.
         /// </summary>
-        public long TotalMinutes => TotalSeconds / 60;
+        public double TotalMinutes => _timeSpan.TotalMinutes;
 
         /// <summary>
-        /// Gets the value of the current <see cref="MetricTimeSpan"/> expressed in hours.
+        /// Gets the value of the current <see cref="MetricTimeSpan"/> expressed in whole and fractional in hours.
         /// </summary>
-        public long TotalHours => TotalMinutes / 60;
+        public double TotalHours => _timeSpan.TotalHours;
+        
+        /// <summary>
+        /// Gets the value of the current <see cref="MetricTimeSpan"/> expressed in whole and fractional in hours.
+        /// </summary>
+        public double TotalDays => _timeSpan.TotalDays;
 
         /// <summary>
         /// Gets the hours component of the time represented by the current <see cref="MetricTimeSpan"/>.
