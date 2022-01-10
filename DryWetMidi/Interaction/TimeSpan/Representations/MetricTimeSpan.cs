@@ -128,6 +128,26 @@ namespace Melanchall.DryWetMidi.Interaction
         public long TotalMicroseconds => _timeSpan.Ticks / TicksInMicrosecond;
 
         /// <summary>
+        /// Gets the value of the current <see cref="MetricTimeSpan"/> expressed in milliseconds.
+        /// </summary>
+        public long TotalMilliseconds => TotalMicroseconds / 1000;
+
+        /// <summary>
+        /// Gets the value of the current <see cref="MetricTimeSpan"/> expressed in seconds.
+        /// </summary>
+        public long TotalSeconds => TotalMilliseconds / 1000;
+
+        /// <summary>
+        /// Gets the value of the current <see cref="MetricTimeSpan"/> expressed in minutes.
+        /// </summary>
+        public long TotalMinutes => TotalSeconds / 60;
+
+        /// <summary>
+        /// Gets the value of the current <see cref="MetricTimeSpan"/> expressed in hours.
+        /// </summary>
+        public long TotalHours => TotalMinutes / 60;
+
+        /// <summary>
         /// Gets the hours component of the time represented by the current <see cref="MetricTimeSpan"/>.
         /// </summary>
         public int Hours => _timeSpan.Hours;
