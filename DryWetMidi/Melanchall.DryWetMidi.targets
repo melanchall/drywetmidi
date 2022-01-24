@@ -2,18 +2,17 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory)Melanchall_DryWetMidi_Native32.dll">
+	  <Visible>false</Visible>
       <Link>Melanchall_DryWetMidi_Native32.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-	  <None Include="$(MSBuildThisFileDirectory)Melanchall_DryWetMidi_Native64.dll">
+	<None Include="$(MSBuildThisFileDirectory)Melanchall_DryWetMidi_Native64.dll">
+	  <Visible>false</Visible>
       <Link>Melanchall_DryWetMidi_Native64.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
-	  <!--<None Include="$(MSBuildThisFileDirectory)Melanchall_DryWetMidi_Native32.dylib">
-      <Link>Melanchall_DryWetMidi_Native32.dylib</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>-->
-	  <None Include="$(MSBuildThisFileDirectory)Melanchall_DryWetMidi_Native64.dylib">
+    </None>
+	<None Include="$(MSBuildThisFileDirectory)Melanchall_DryWetMidi_Native64.dylib">
+	  <Visible>false</Visible>
       <Link>Melanchall_DryWetMidi_Native64.dylib</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
