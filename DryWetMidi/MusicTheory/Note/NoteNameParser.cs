@@ -42,7 +42,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
                 return ParsingResult.NotMatched;
 
             var noteLetterGroup = match.Groups[NoteLetterGroupName];
-            var noteBaseNumber = (int)(NoteName)Enum.Parse(typeof(NoteName), noteLetterGroup.Value);
+            var noteBaseNumber = (int)(NoteName)Enum.Parse(typeof(NoteName), noteLetterGroup.Value, true);
 
             var accidentalGroup = match.Groups[AccidentalGroupName];
             if (accidentalGroup.Success)

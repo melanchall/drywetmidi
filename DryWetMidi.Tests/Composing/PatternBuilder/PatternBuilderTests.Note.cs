@@ -113,6 +113,80 @@ namespace Melanchall.DryWetMidi.Tests.Composing
             });
         }
 
+        [Test]
+        public void Note_ByString_NoteOnly()
+        {
+            var noteLength = MusicalTimeSpan.Eighth;
+            var velocity = (SevenBitNumber)90;
+
+            var pattern = new PatternBuilder()
+                .Note("a0")
+                .SetNoteLength(noteLength)
+                .SetVelocity(velocity)
+                .Note("C#5")
+                .Build();
+
+            PatternTestUtilities.TestNotes(pattern, new[]
+            {
+                new NoteInfo(NoteName.A, 0, null, PatternBuilder.DefaultNoteLength, PatternBuilder.DefaultVelocity),
+                new NoteInfo(NoteName.CSharp, 5, PatternBuilder.DefaultNoteLength, noteLength, velocity)
+            });
+        }
+
+        [Test]
+        public void Note_ByString_NoteAndVelocity()
+        {
+            var noteLength = MusicalTimeSpan.Eighth;
+            var velocity = (SevenBitNumber)90;
+
+            var pattern = new PatternBuilder()
+                .Note("a0")
+                .SetNoteLength(noteLength)
+                .Note("C#5", velocity)
+                .Build();
+
+            PatternTestUtilities.TestNotes(pattern, new[]
+            {
+                new NoteInfo(NoteName.A, 0, null, PatternBuilder.DefaultNoteLength, PatternBuilder.DefaultVelocity),
+                new NoteInfo(NoteName.CSharp, 5, PatternBuilder.DefaultNoteLength, noteLength, velocity)
+            });
+        }
+
+        [Test]
+        public void Note_ByString_NoteAndLength()
+        {
+            var noteLength = MusicalTimeSpan.Eighth;
+            var velocity = (SevenBitNumber)90;
+
+            var pattern = new PatternBuilder()
+                .Note("a0")
+                .SetVelocity(velocity)
+                .Note("C#5", noteLength)
+                .Build();
+
+            PatternTestUtilities.TestNotes(pattern, new[]
+            {
+                new NoteInfo(NoteName.A, 0, null, PatternBuilder.DefaultNoteLength, PatternBuilder.DefaultVelocity),
+                new NoteInfo(NoteName.CSharp, 5, PatternBuilder.DefaultNoteLength, noteLength, velocity)
+            });
+        }
+
+        [Test]
+        public void Note_ByString_NoteAndLengthAndVelocity()
+        {
+            var noteLength = MusicalTimeSpan.Eighth;
+            var velocity = (SevenBitNumber)90;
+
+            var pattern = new PatternBuilder()
+                .Note("C#5", noteLength, velocity)
+                .Build();
+
+            PatternTestUtilities.TestNotes(pattern, new[]
+            {
+                new NoteInfo(NoteName.CSharp, 5, null, noteLength, velocity)
+            });
+        }
+
         #endregion
     }
 }

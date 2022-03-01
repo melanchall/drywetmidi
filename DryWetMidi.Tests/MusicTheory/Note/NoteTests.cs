@@ -244,19 +244,26 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
 
         private static void Parse(string input, Note expectedNote)
         {
+            Parse(input, expectedNote, "original");
+            Parse(input.ToLower(), expectedNote, "lower");
+            Parse(input.ToUpper(), expectedNote, "upper");
+        }
+
+        private static void Parse(string input, Note expectedNote, string label)
+        {
             Note.TryParse(input, out var actualNote);
             Assert.AreEqual(expectedNote,
                             actualNote,
-                            "TryParse: incorrect result.");
+                            $"TryParse ({label}): incorrect result.");
 
             actualNote = Note.Parse(input);
             Assert.AreEqual(expectedNote,
                             actualNote,
-                            "Parse: incorrect result.");
+                            $"Parse ({label}): incorrect result.");
 
             Assert.AreEqual(expectedNote,
                             Note.Parse(expectedNote.ToString()),
-                            "Parse: string representation was not parsed to the original note.");
+                            $"Parse ({label}): string representation was not parsed to the original note.");
         }
 
         private static void ParseInvalid<TException>(string input)

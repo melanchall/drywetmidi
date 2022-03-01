@@ -477,7 +477,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// <summary>
         /// Adds a note using specified velocity and length.
         /// </summary>
-        /// <param name="note">The note.</param>
+        /// <param name="note">A note.</param>
         /// <param name="length">The length of the note.</param>
         /// <param name="velocity">The velocity of a note.</param>
         /// <returns>The current <see cref="PatternBuilder"/>.</returns>
@@ -498,6 +498,76 @@ namespace Melanchall.DryWetMidi.Composing
             ThrowIfArgument.IsNull(nameof(length), length);
 
             return AddAction(new AddNoteAction(new NoteDescriptor(note, velocity, length)));
+        }
+
+        /// <summary>
+        /// Adds a note using default length and velocity.
+        /// </summary>
+        /// <param name="note">A note as a string (like A2, for example).</param>
+        /// <returns>The current <see cref="PatternBuilder"/>.</returns>
+        /// <remarks>
+        /// To set default note length use <see cref="SetNoteLength(ITimeSpan)"/> method. By default the length
+        /// is 1/4. To set default velocity use <see cref="SetVelocity(SevenBitNumber)"/> method. By default the
+        /// velocity is 100.
+        /// </remarks>
+        /// <exception cref="ArgumentException"><paramref name="note"/> is <c>null</c> or contains white-spaces only.</exception>
+        /// <exception cref="FormatException"><paramref name="note"/> has invalid format.</exception>
+        public PatternBuilder Note(string note)
+        {
+            return Note(note, NoteLength, Velocity);
+        }
+
+        /// <summary>
+        /// Adds a note using specified length and default velocity.
+        /// </summary>
+        /// <param name="note">A note as a string (like A2, for example).</param>
+        /// <param name="length">The length of a note.</param>
+        /// <returns>The current <see cref="PatternBuilder"/>.</returns>
+        /// <remarks>
+        /// To set default velocity use <see cref="SetVelocity(SevenBitNumber)"/> method. By default the
+        /// velocity is 100.
+        /// </remarks>
+        /// <exception cref="ArgumentNullException"><paramref name="length"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentException"><paramref name="note"/> is <c>null</c> or contains white-spaces only.</exception>
+        /// <exception cref="FormatException"><paramref name="note"/> has invalid format.</exception>
+        public PatternBuilder Note(string note, ITimeSpan length)
+        {
+            return Note(note, length, Velocity);
+        }
+
+        /// <summary>
+        /// Adds a note using specified velocity and default length.
+        /// </summary>
+        /// <param name="note">A note as a string (like A2, for example).</param>
+        /// <param name="velocity">The velocity of a note.</param>
+        /// <returns>The current <see cref="PatternBuilder"/>.</returns>
+        /// <remarks>
+        /// To set default note length use <see cref="SetNoteLength(ITimeSpan)"/> method. By default the length
+        /// is 1/4.
+        /// </remarks>
+        /// <exception cref="ArgumentException"><paramref name="note"/> is <c>null</c> or contains white-spaces only.</exception>
+        /// <exception cref="FormatException"><paramref name="note"/> has invalid format.</exception>
+        public PatternBuilder Note(string note, SevenBitNumber velocity)
+        {
+            return Note(note, NoteLength, velocity);
+        }
+
+        /// <summary>
+        /// Adds a note using specified velocity and length.
+        /// </summary>
+        /// <param name="note">A note as a string (like A2, for example).</param>
+        /// <param name="length">The length of the note.</param>
+        /// <param name="velocity">The velocity of a note.</param>
+        /// <returns>The current <see cref="PatternBuilder"/>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="length"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentException"><paramref name="note"/> is <c>null</c> or contains white-spaces only.</exception>
+        /// <exception cref="FormatException"><paramref name="note"/> has invalid format.</exception>
+        public PatternBuilder Note(string note, ITimeSpan length, SevenBitNumber velocity)
+        {
+            ThrowIfArgument.IsNullOrEmptyString(nameof(note), note, "Note");
+            ThrowIfArgument.IsNull(nameof(length), length);
+
+            return Note(MusicTheory.Note.Parse(note), length, velocity);
         }
 
         #endregion
