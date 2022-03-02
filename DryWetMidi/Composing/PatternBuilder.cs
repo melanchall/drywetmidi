@@ -514,6 +514,8 @@ namespace Melanchall.DryWetMidi.Composing
         /// <exception cref="FormatException"><paramref name="note"/> has invalid format.</exception>
         public PatternBuilder Note(string note)
         {
+            ThrowIfArgument.IsNullOrWhiteSpaceString(nameof(note), note, "Note");
+
             return Note(note, NoteLength, Velocity);
         }
 
@@ -532,6 +534,9 @@ namespace Melanchall.DryWetMidi.Composing
         /// <exception cref="FormatException"><paramref name="note"/> has invalid format.</exception>
         public PatternBuilder Note(string note, ITimeSpan length)
         {
+            ThrowIfArgument.IsNullOrWhiteSpaceString(nameof(note), note, "Note");
+            ThrowIfArgument.IsNull(nameof(length), length);
+
             return Note(note, length, Velocity);
         }
 
@@ -549,6 +554,8 @@ namespace Melanchall.DryWetMidi.Composing
         /// <exception cref="FormatException"><paramref name="note"/> has invalid format.</exception>
         public PatternBuilder Note(string note, SevenBitNumber velocity)
         {
+            ThrowIfArgument.IsNullOrWhiteSpaceString(nameof(note), note, "Note");
+
             return Note(note, NoteLength, velocity);
         }
 
@@ -564,7 +571,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// <exception cref="FormatException"><paramref name="note"/> has invalid format.</exception>
         public PatternBuilder Note(string note, ITimeSpan length, SevenBitNumber velocity)
         {
-            ThrowIfArgument.IsNullOrEmptyString(nameof(note), note, "Note");
+            ThrowIfArgument.IsNullOrWhiteSpaceString(nameof(note), note, "Note");
             ThrowIfArgument.IsNull(nameof(length), length);
 
             return Note(MusicTheory.Note.Parse(note), length, velocity);
@@ -1244,6 +1251,226 @@ namespace Melanchall.DryWetMidi.Composing
             ThrowIfArgument.IsNull(nameof(length), length);
 
             return AddAction(new AddChordAction(new ChordDescriptor(notes, velocity, length)));
+        }
+
+        /// <summary>
+        /// Adds a chord.
+        /// </summary>
+        /// <param name="chord">A chord as a string (like Dmin, for example).</param>
+        /// <returns>The current <see cref="PatternBuilder"/>.</returns>
+        /// <remarks>
+        /// <para>
+        /// Chord's notes will be resolved according to <see cref="Octave"/>.
+        /// To change octave use <see cref="SetOctave"/> method.
+        /// </para>
+        /// <para>
+        /// Chord's notes length will be taken from <see cref="NoteLength"/>.
+        /// To change notes length use <see cref="SetNoteLength(ITimeSpan)"/> method.
+        /// </para>
+        /// <para>
+        /// Chord's notes velocity will be taken from <see cref="Velocity"/>.
+        /// To change velocity use <see cref="SetVelocity(SevenBitNumber)"/> method.
+        /// </para>
+        /// </remarks>
+        /// <exception cref="ArgumentException"><paramref name="chord"/> is <c>null</c> or contains white-spaces only.</exception>
+        /// <exception cref="FormatException"><paramref name="chord"/> has invalid format.</exception>
+        public PatternBuilder Chord(string chord)
+        {
+            ThrowIfArgument.IsNullOrWhiteSpaceString(nameof(chord), chord, "Chord");
+
+            return Chord(chord, Octave, NoteLength, Velocity);
+        }
+
+        /// <summary>
+        /// Adds a chord using the specified octave.
+        /// </summary>
+        /// <param name="chord">A chord as a string (like Dmin, for example).</param>
+        /// <param name="octave">Octave to resolve chord's notes.</param>
+        /// <returns>The current <see cref="PatternBuilder"/>.</returns>
+        /// <remarks>
+        /// <para>
+        /// Chord's notes length will be taken from <see cref="NoteLength"/>.
+        /// To change notes length use <see cref="SetNoteLength(ITimeSpan)"/> method.
+        /// </para>
+        /// <para>
+        /// Chord's notes velocity will be taken from <see cref="Velocity"/>.
+        /// To change velocity use <see cref="SetVelocity(SevenBitNumber)"/> method.
+        /// </para>
+        /// </remarks>
+        /// <exception cref="ArgumentException"><paramref name="chord"/> is <c>null</c> or contains white-spaces only.</exception>
+        /// <exception cref="FormatException"><paramref name="chord"/> has invalid format.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="octave"/> is <c>null</c>.</exception>
+        public PatternBuilder Chord(string chord, Octave octave)
+        {
+            ThrowIfArgument.IsNullOrWhiteSpaceString(nameof(chord), chord, "Chord");
+            ThrowIfArgument.IsNull(nameof(octave), octave);
+
+            return Chord(chord, octave, NoteLength, Velocity);
+        }
+
+        /// <summary>
+        /// Adds a chord with the specified length.
+        /// </summary>
+        /// <param name="chord">A chord as a string (like Dmin, for example).</param>
+        /// <param name="length">Chord's notes length.</param>
+        /// <returns>The current <see cref="PatternBuilder"/>.</returns>
+        /// <remarks>
+        /// <para>
+        /// Chord's notes will be resolved according to <see cref="Octave"/>.
+        /// To change octave use <see cref="SetOctave"/> method.
+        /// </para>
+        /// <para>
+        /// Chord's notes velocity will be taken from <see cref="Velocity"/>.
+        /// To change velocity use <see cref="SetVelocity(SevenBitNumber)"/> method.
+        /// </para>
+        /// </remarks>
+        /// <exception cref="ArgumentException"><paramref name="chord"/> is <c>null</c> or contains white-spaces only.</exception>
+        /// <exception cref="FormatException"><paramref name="chord"/> has invalid format.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="length"/> is <c>null</c>.</exception>
+        public PatternBuilder Chord(string chord, ITimeSpan length)
+        {
+            ThrowIfArgument.IsNullOrWhiteSpaceString(nameof(chord), chord, "Chord");
+            ThrowIfArgument.IsNull(nameof(length), length);
+
+            return Chord(chord, Octave, length, Velocity);
+        }
+
+        /// <summary>
+        /// Adds a chord using the specified octave and notes length.
+        /// </summary>
+        /// <param name="chord">A chord as a string (like Dmin, for example).</param>
+        /// <param name="octave">Octave to resolve chord's notes.</param>
+        /// <param name="length">Chord's notes length.</param>
+        /// <returns>The current <see cref="PatternBuilder"/>.</returns>
+        /// <remarks>
+        /// <para>
+        /// Chord's notes velocity will be taken from <see cref="Velocity"/>.
+        /// To change velocity use <see cref="SetVelocity(SevenBitNumber)"/> method.
+        /// </para>
+        /// </remarks>
+        /// <exception cref="ArgumentException"><paramref name="chord"/> is <c>null</c> or contains white-spaces only.</exception>
+        /// <exception cref="FormatException"><paramref name="chord"/> has invalid format.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="octave"/> is <c>null</c>.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="length"/> is <c>null</c>.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
+        public PatternBuilder Chord(string chord, Octave octave, ITimeSpan length)
+        {
+            ThrowIfArgument.IsNullOrWhiteSpaceString(nameof(chord), chord, "Chord");
+            ThrowIfArgument.IsNull(nameof(octave), octave);
+            ThrowIfArgument.IsNull(nameof(length), length);
+
+            return Chord(chord, octave, length, Velocity);
+        }
+
+        /// <summary>
+        /// Adds a chord with the specified velocity.
+        /// </summary>
+        /// <param name="chord">A chord as a string (like Dmin, for example).</param>
+        /// <param name="velocity">Chord's notes velocity.</param>
+        /// <returns>The current <see cref="PatternBuilder"/>.</returns>
+        /// <remarks>
+        /// <para>
+        /// Chord's notes will be resolved according to <see cref="Octave"/>.
+        /// To change octave use <see cref="SetOctave"/> method.
+        /// </para>
+        /// <para>
+        /// Chord's notes length will be taken from <see cref="NoteLength"/>.
+        /// To change notes length use <see cref="SetNoteLength(ITimeSpan)"/> method.
+        /// </para>
+        /// </remarks>
+        /// <exception cref="ArgumentException"><paramref name="chord"/> is <c>null</c> or contains white-spaces only.</exception>
+        /// <exception cref="FormatException"><paramref name="chord"/> has invalid format.</exception>
+        public PatternBuilder Chord(string chord, SevenBitNumber velocity)
+        {
+            ThrowIfArgument.IsNullOrWhiteSpaceString(nameof(chord), chord, "Chord");
+
+            return Chord(chord, Octave, NoteLength, velocity);
+        }
+
+        /// <summary>
+        /// Adds a chord using the specified octave and velocity.
+        /// </summary>
+        /// <param name="chord">A chord as a string (like Dmin, for example).</param>
+        /// <param name="octave">Octave to resolve chord's notes.</param>
+        /// <param name="velocity">Chord's notes velocity.</param>
+        /// <returns>The current <see cref="PatternBuilder"/>.</returns>
+        /// <remarks>
+        /// <para>
+        /// Chord's notes length will be taken from <see cref="NoteLength"/>.
+        /// To change notes length use <see cref="SetNoteLength(ITimeSpan)"/> method.
+        /// </para>
+        /// </remarks>
+        /// <exception cref="ArgumentException"><paramref name="chord"/> is <c>null</c> or contains white-spaces only.</exception>
+        /// <exception cref="FormatException"><paramref name="chord"/> has invalid format.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="octave"/> is <c>null</c>.</exception>
+        public PatternBuilder Chord(string chord, Octave octave, SevenBitNumber velocity)
+        {
+            ThrowIfArgument.IsNullOrWhiteSpaceString(nameof(chord), chord, "Chord");
+            ThrowIfArgument.IsNull(nameof(octave), octave);
+
+            return Chord(chord, octave, NoteLength, velocity);
+        }
+
+        /// <summary>
+        /// Adds a chord with the specified notes length and velocity.
+        /// </summary>
+        /// <param name="chord">A chord as a string (like Dmin, for example).</param>
+        /// <param name="length">Chord's notes length.</param>
+        /// <param name="velocity">Chord's notes velocity.</param>
+        /// <returns>The current <see cref="PatternBuilder"/>.</returns>
+        /// <remarks>
+        /// <para>
+        /// Chord's notes will be resolved according to <see cref="Octave"/>.
+        /// To change octave use <see cref="SetOctave"/> method.
+        /// </para>
+        /// </remarks>
+        /// <exception cref="ArgumentException"><paramref name="chord"/> is <c>null</c> or contains white-spaces only.</exception>
+        /// <exception cref="FormatException"><paramref name="chord"/> has invalid format.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="length"/> is <c>null</c>.</exception>
+        public PatternBuilder Chord(string chord, ITimeSpan length, SevenBitNumber velocity)
+        {
+            ThrowIfArgument.IsNullOrWhiteSpaceString(nameof(chord), chord, "Chord");
+            ThrowIfArgument.IsNull(nameof(length), length);
+
+            return Chord(chord, Octave, length, velocity);
+        }
+
+        /// <summary>
+        /// Adds a chord using the specified octave, length and velocity.
+        /// </summary>
+        /// <param name="chord">A chord as a string (like Dmin, for example).</param>
+        /// <param name="octave">Octave to resolve chord's notes.</param>
+        /// <param name="length">Chord's notes length.</param>
+        /// <param name="velocity">Chord's notes velocity.</param>
+        /// <returns>The current <see cref="PatternBuilder"/>.</returns>
+        /// <exception cref="ArgumentException"><paramref name="chord"/> is <c>null</c> or contains white-spaces only.</exception>
+        /// <exception cref="FormatException"><paramref name="chord"/> has invalid format.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="octave"/> is <c>null</c>.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="length"/> is <c>null</c>.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
+        public PatternBuilder Chord(string chord, Octave octave, ITimeSpan length, SevenBitNumber velocity)
+        {
+            ThrowIfArgument.IsNullOrWhiteSpaceString(nameof(chord), chord, "Chord");
+            ThrowIfArgument.IsNull(nameof(octave), octave);
+            ThrowIfArgument.IsNull(nameof(length), length);
+
+            return Chord(MusicTheory.Chord.Parse(chord), octave, length, velocity);
         }
 
         #endregion

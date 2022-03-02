@@ -114,7 +114,7 @@ namespace Melanchall.DryWetMidi.Tests.Composing
         }
 
         [Test]
-        public void Note_ByString_NoteOnly()
+        public void Note_ByString()
         {
             var noteLength = MusicalTimeSpan.Eighth;
             var velocity = (SevenBitNumber)90;
@@ -134,7 +134,7 @@ namespace Melanchall.DryWetMidi.Tests.Composing
         }
 
         [Test]
-        public void Note_ByString_NoteAndVelocity()
+        public void Note_ByString_Velocity()
         {
             var noteLength = MusicalTimeSpan.Eighth;
             var velocity = (SevenBitNumber)90;
@@ -153,7 +153,7 @@ namespace Melanchall.DryWetMidi.Tests.Composing
         }
 
         [Test]
-        public void Note_ByString_NoteAndLength()
+        public void Note_ByString_Length()
         {
             var noteLength = MusicalTimeSpan.Eighth;
             var velocity = (SevenBitNumber)90;
@@ -172,7 +172,7 @@ namespace Melanchall.DryWetMidi.Tests.Composing
         }
 
         [Test]
-        public void Note_ByString_NoteAndLengthAndVelocity()
+        public void Note_ByString_Length_Velocity()
         {
             var noteLength = MusicalTimeSpan.Eighth;
             var velocity = (SevenBitNumber)90;

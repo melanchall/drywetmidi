@@ -499,6 +499,170 @@ namespace Melanchall.DryWetMidi.Tests.Composing
             });
         }
 
+        [Test]
+        public void Chord_ByString()
+        {
+            var octave = Octave.Get(5);
+            var velocity = (SevenBitNumber)70;
+            var chordLength = (MidiTimeSpan)300;
+
+            var pattern = new PatternBuilder()
+                .SetOctave(octave)
+                .SetVelocity(velocity)
+                .SetNoteLength(chordLength)
+                .Chord("Cmin")
+                .Build();
+
+            PatternTestUtilities.TestNotes(pattern, new[]
+            {
+                new NoteInfo(NoteName.C, 5, null, chordLength, velocity),
+                new NoteInfo(NoteName.DSharp, 5, null, chordLength, velocity),
+                new NoteInfo(NoteName.G, 5, null, chordLength, velocity)
+            });
+        }
+
+        [Test]
+        public void Chord_ByString_Octave()
+        {
+            var octave = Octave.Get(5);
+            var velocity = (SevenBitNumber)70;
+            var chordLength = (MidiTimeSpan)300;
+
+            var pattern = new PatternBuilder()
+                .SetVelocity(velocity)
+                .SetNoteLength(chordLength)
+                .Chord("Cmin", octave)
+                .Build();
+
+            PatternTestUtilities.TestNotes(pattern, new[]
+            {
+                new NoteInfo(NoteName.C, 5, null, chordLength, velocity),
+                new NoteInfo(NoteName.DSharp, 5, null, chordLength, velocity),
+                new NoteInfo(NoteName.G, 5, null, chordLength, velocity)
+            });
+        }
+
+        [Test]
+        public void Chord_ByString_Length()
+        {
+            var octave = Octave.Get(5);
+            var velocity = (SevenBitNumber)70;
+            var chordLength = (MidiTimeSpan)300;
+
+            var pattern = new PatternBuilder()
+                .SetOctave(octave)
+                .SetVelocity(velocity)
+                .Chord("Cmin", chordLength)
+                .Build();
+
+            PatternTestUtilities.TestNotes(pattern, new[]
+            {
+                new NoteInfo(NoteName.C, 5, null, chordLength, velocity),
+                new NoteInfo(NoteName.DSharp, 5, null, chordLength, velocity),
+                new NoteInfo(NoteName.G, 5, null, chordLength, velocity)
+            });
+        }
+
+        [Test]
+        public void Chord_ByString_Velocity()
+        {
+            var octave = Octave.Get(5);
+            var velocity = (SevenBitNumber)70;
+            var chordLength = (MidiTimeSpan)300;
+
+            var pattern = new PatternBuilder()
+                .SetOctave(octave)
+                .SetNoteLength(chordLength)
+                .Chord("Cmin", velocity)
+                .Build();
+
+            PatternTestUtilities.TestNotes(pattern, new[]
+            {
+                new NoteInfo(NoteName.C, 5, null, chordLength, velocity),
+                new NoteInfo(NoteName.DSharp, 5, null, chordLength, velocity),
+                new NoteInfo(NoteName.G, 5, null, chordLength, velocity)
+            });
+        }
+
+        [Test]
+        public void Chord_ByString_Octave_Length()
+        {
+            var octave = Octave.Get(5);
+            var velocity = (SevenBitNumber)70;
+            var chordLength = (MidiTimeSpan)300;
+
+            var pattern = new PatternBuilder()
+                .SetVelocity(velocity)
+                .Chord("Cmin", octave, chordLength)
+                .Build();
+
+            PatternTestUtilities.TestNotes(pattern, new[]
+            {
+                new NoteInfo(NoteName.C, 5, null, chordLength, velocity),
+                new NoteInfo(NoteName.DSharp, 5, null, chordLength, velocity),
+                new NoteInfo(NoteName.G, 5, null, chordLength, velocity)
+            });
+        }
+
+        [Test]
+        public void Chord_ByString_Octave_Velocity()
+        {
+            var octave = Octave.Get(5);
+            var velocity = (SevenBitNumber)70;
+            var chordLength = (MidiTimeSpan)300;
+
+            var pattern = new PatternBuilder()
+                .SetNoteLength(chordLength)
+                .Chord("Cmin", octave, velocity)
+                .Build();
+
+            PatternTestUtilities.TestNotes(pattern, new[]
+            {
+                new NoteInfo(NoteName.C, 5, null, chordLength, velocity),
+                new NoteInfo(NoteName.DSharp, 5, null, chordLength, velocity),
+                new NoteInfo(NoteName.G, 5, null, chordLength, velocity)
+            });
+        }
+
+        [Test]
+        public void Chord_ByString_Velocity_Length()
+        {
+            var octave = Octave.Get(5);
+            var velocity = (SevenBitNumber)70;
+            var chordLength = (MidiTimeSpan)300;
+
+            var pattern = new PatternBuilder()
+                .SetOctave(octave)
+                .Chord("Cmin", chordLength, velocity)
+                .Build();
+
+            PatternTestUtilities.TestNotes(pattern, new[]
+            {
+                new NoteInfo(NoteName.C, 5, null, chordLength, velocity),
+                new NoteInfo(NoteName.DSharp, 5, null, chordLength, velocity),
+                new NoteInfo(NoteName.G, 5, null, chordLength, velocity)
+            });
+        }
+
+        [Test]
+        public void Chord_ByString_Octave_Length_Velocity()
+        {
+            var octave = Octave.Get(5);
+            var velocity = (SevenBitNumber)70;
+            var chordLength = (MidiTimeSpan)300;
+
+            var pattern = new PatternBuilder()
+                .Chord("Cmin", octave, chordLength, velocity)
+                .Build();
+
+            PatternTestUtilities.TestNotes(pattern, new[]
+            {
+                new NoteInfo(NoteName.C, 5, null, chordLength, velocity),
+                new NoteInfo(NoteName.DSharp, 5, null, chordLength, velocity),
+                new NoteInfo(NoteName.G, 5, null, chordLength, velocity)
+            });
+        }
+
         #endregion
     }
 }
