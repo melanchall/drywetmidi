@@ -8,10 +8,10 @@ namespace Melanchall.DryWetMidi.Tests.Common
     {
         #region Methods
 
-        public static void Wait(TimeSpan waitTime) =>
+        public static long Wait(TimeSpan waitTime) =>
             Wait((long)waitTime.TotalMilliseconds);
 
-        public static void Wait(long waitTime)
+        public static long Wait(long waitTime)
         {
             var stopwatch = Stopwatch.StartNew();
 
@@ -21,6 +21,7 @@ namespace Melanchall.DryWetMidi.Tests.Common
             }
 
             stopwatch.Stop();
+            return stopwatch.ElapsedMilliseconds;
         }
 
         public static bool Wait(Func<bool> exitCondition) =>

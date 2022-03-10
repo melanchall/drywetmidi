@@ -9,6 +9,26 @@ namespace Melanchall.DryWetMidi.Multimedia
     /// </summary>
     public sealed class MidiClock : IDisposable
     {
+        #region Nested classes
+
+        private sealed class CustomStopwatch : Stopwatch
+        {
+            private TimeSpan _startTime;
+
+            public void Reset(TimeSpan startTime)
+            {
+                Reset();
+                _startTime = startTime;
+            }
+
+            public new TimeSpan Elapsed
+            {
+                get { return base.Elapsed + _startTime; }
+            }
+        }
+
+        #endregion
+
         #region Constants
 
         private const double DefaultSpeed = 1.0;
@@ -29,7 +49,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         private bool _disposed = false;
 
         private readonly bool _startImmediately;
-        private readonly Stopwatch _stopwatch = new Stopwatch();
+        private readonly CustomStopwatch _stopwatch = new CustomStopwatch();
         private TimeSpan _startTime = TimeSpan.Zero;
 
         private double _speed = DefaultSpeed;
@@ -111,7 +131,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
                 Stop();
 
-                _startTime = _stopwatch.Elapsed;
+                _startTime = GetCurrentTime();
                 _speed = value;
 
                 if (start)
@@ -185,7 +205,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         {
             EnsureIsNotDisposed();
 
-            _stopwatch.Reset();
+            _stopwatch.Reset(time);
             _startTime = time;
             CurrentTime = time;
         }
@@ -198,7 +218,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             if (!IsRunning || _disposed)
                 return;
 
-            CurrentTime = _startTime + new TimeSpan(MathUtilities.RoundToLong(_stopwatch.Elapsed.Ticks * Speed));
+            CurrentTime = GetCurrentTime();
             OnTicked();
         }
 
@@ -230,6 +250,15 @@ namespace Melanchall.DryWetMidi.Multimedia
         {
             if (_disposed)
                 throw new ObjectDisposedException("MIDI clock is disposed.");
+        }
+
+        private TimeSpan GetCurrentTime()
+        {
+            var ticks = (_stopwatch.Elapsed - _startTime).Ticks;
+            if (ticks < 0)
+                ticks = 0;
+
+            return _startTime + new TimeSpan(MathUtilities.RoundToLong(ticks * Speed));
         }
 
         #endregion

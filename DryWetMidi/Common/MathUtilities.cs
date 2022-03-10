@@ -7,6 +7,11 @@ namespace Melanchall.DryWetMidi.Common
     {
         #region Methods
 
+        public static double AddRelativeMargin(double value, double margin)
+        {
+            return value * margin;
+        }
+
         public static T GetLastElementBelowThreshold<T>(T[] elements, long keyThreshold, Func<T, long> keySelector)
         {
             var firstIndex = 0;
