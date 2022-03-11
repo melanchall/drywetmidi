@@ -42,16 +42,16 @@ stages:
     strategy:
       matrix:
         Windows_Net:
-          vmImage: 'windows-latest'
+          vmImage: 'windows-2019'
           framework: 'Net'
         macOS_Net:
-          vmImage: 'macOS-latest'
+          vmImage: 'macos-latest'
           framework: 'Net'
         Windows_NetCore31:
-          vmImage: 'windows-latest'
+          vmImage: 'windows-2019'
           framework: 'NetCore'
         macOS_NetCore31:
-          vmImage: 'macOS-latest'
+          vmImage: 'macos-latest'
           framework: 'NetCore'
     pool:
       vmImage: $(vmImage)
@@ -69,11 +69,11 @@ stages:
     
     - template: Templates/step-create-ports-windows.yaml
       parameters:
-        enabled: eq(variables.vmImage, 'windows-latest')
+        enabled: contains(variables.vmImage, 'windows')
     
     - template: Templates/step-create-ports-macos.yaml
       parameters:
-        enabled: eq(variables.vmImage, 'macOS-latest')
+        enabled: contains(variables.vmImage, 'macos')
     
     - task: PowerShell@2
       displayName: Add package to the project

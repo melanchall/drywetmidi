@@ -42,19 +42,19 @@ stages:
     strategy:
       matrix:
         Windows_Net_IncludeAll:
-          vmImage: 'windows-latest'
+          vmImage: 'windows-2019'
           rid: 'win-x64'
           includeAll: 'true'
         macOS_Net_IncludeAll:
-          vmImage: 'macOS-latest'
+          vmImage: 'macos-latest'
           rid: 'osx-x64'
           includeAll: 'true'
         Windows_Net_DontIncludeAll:
-          vmImage: 'windows-latest'
+          vmImage: 'windows-2019'
           rid: 'win-x64'
           includeAll: 'false'
         macOS_Net_DontIncludeAll:
-          vmImage: 'macOS-latest'
+          vmImage: 'macos-latest'
           rid: 'osx-x64'
           includeAll: 'false'
     pool:
@@ -73,11 +73,11 @@ stages:
     
     - template: Templates/step-create-ports-windows.yaml
       parameters:
-        enabled: eq(variables.vmImage, 'windows-latest')
+        enabled: contains(variables.vmImage, 'windows')
         
     - template: Templates/step-create-ports-macos.yaml
       parameters:
-        enabled: eq(variables.vmImage, 'macOS-latest')
+        enabled: contains(variables.vmImage, 'macos')
     
     - task: PowerShell@2
       displayName: Add package to the project
@@ -124,7 +124,7 @@ stages:
           
     - task: PowerShell@2
       displayName: Run test program (Windows)
-      condition: eq(variables.vmImage, 'windows-latest')
+      condition: contains(variables.vmImage, 'windows')
       inputs:
         targetType: 'inline'
         script: |
@@ -133,7 +133,7 @@ stages:
           
     - task: PowerShell@2
       displayName: Run test program (macOS)
-      condition: eq(variables.vmImage, 'macOS-latest')
+      condition: contains(variables.vmImage, 'macos')
       inputs:
         targetType: 'inline'
         script: |

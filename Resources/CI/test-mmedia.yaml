@@ -70,7 +70,7 @@ stages:
     
     - task: PowerShell@2
       displayName: Build test data sending utility
-      condition: eq(variables.VmImage, 'macos-latest')
+      condition: contains(variables.VmImage, 'macos')
       inputs:
         targetType: 'inline'
         script: |
@@ -81,7 +81,7 @@ stages:
           
     - task: PublishPipelineArtifact@1
       displayName: Publish 'SendTestData' artifact
-      condition: eq(variables.VmImage, 'macos-latest')
+      condition: contains(variables.VmImage, 'macos')
       inputs:
         targetPath: 'DryWetMidi.Tests/SendTestData.dylib'
         artifactName: 'SendTestData'
@@ -89,11 +89,11 @@ stages:
     
     - template: Templates/step-create-ports-windows.yaml
       parameters:
-        enabled: eq(variables.VmImage, 'windows-latest')
+        enabled: contains(variables.VmImage, 'windows')
     
     - template: Templates/step-create-ports-macos.yaml
       parameters:
-        enabled: eq(variables.VmImage, 'macos-latest')
+        enabled: contains(variables.VmImage, 'macos')
     
     - task: DotNetCoreCLI@2
       displayName: Run unit tests
