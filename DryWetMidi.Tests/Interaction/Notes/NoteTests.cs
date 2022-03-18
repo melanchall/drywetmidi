@@ -22,7 +22,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
             public object Tag { get; }
 
-            public override Note Clone()
+            public override ITimedObject Clone()
             {
                 return new TaggedNote(NoteNumber, Tag)
                 {

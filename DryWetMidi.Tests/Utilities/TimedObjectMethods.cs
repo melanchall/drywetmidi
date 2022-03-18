@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using Melanchall.DryWetMidi.Interaction;
+﻿using Melanchall.DryWetMidi.Interaction;
 
 namespace Melanchall.DryWetMidi.Tests.Utilities
 {
@@ -13,9 +12,12 @@ namespace Melanchall.DryWetMidi.Tests.Utilities
             SetTime(obj, TimeConverter.ConvertFrom(time, tempoMap));
         }
 
-        public abstract void SetTime(TObject obj, long time);
+        public TObject Clone(TObject obj)
+        {
+            return (TObject)obj.Clone();
+        }
 
-        public abstract TObject Clone(TObject obj);
+        public abstract void SetTime(TObject obj, long time);
 
         #endregion
     }

@@ -188,7 +188,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
             public object Tag { get; }
 
-            public override Chord Clone()
+            public override ITimedObject Clone()
             {
                 return new TaggedChord(Notes, Tag)
                 {

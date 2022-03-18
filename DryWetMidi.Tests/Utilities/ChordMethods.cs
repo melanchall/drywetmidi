@@ -34,11 +34,6 @@ namespace Melanchall.DryWetMidi.Tests.Utilities
             return chord;
         }
 
-        public override Chord Clone(Chord obj)
-        {
-            return obj.Clone();
-        }
-
         #endregion
     }
 }

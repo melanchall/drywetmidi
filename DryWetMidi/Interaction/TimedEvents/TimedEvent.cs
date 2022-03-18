@@ -88,7 +88,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// Clones timed event by creating a copy of it.
         /// </summary>
         /// <returns>Copy of the timed event.</returns>
-        public virtual TimedEvent Clone()
+        public virtual ITimedObject Clone()
         {
             return new TimedEvent(Event.Clone())
             {

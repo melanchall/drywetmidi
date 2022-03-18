@@ -43,7 +43,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             if (notePlaybackData == null)
                 return null;
 
-            var note = RawNote.Clone();
+            var note = (Note)RawNote.Clone();
 
             note.NoteNumber = notePlaybackData.NoteNumber;
             note.Velocity = notePlaybackData.Velocity;

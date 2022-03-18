@@ -29,11 +29,6 @@ namespace Melanchall.DryWetMidi.Tests.Utilities
             return new Note((SevenBitNumber)_random.Next(SevenBitNumber.MaxValue), length, time);
         }
 
-        public override Note Clone(Note obj)
-        {
-            return obj.Clone();
-        }
-
         #endregion
     }
 }

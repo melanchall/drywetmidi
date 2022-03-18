@@ -13,5 +13,11 @@
         long Time { get; set; }
 
         #endregion
+
+        #region Methods
+
+        ITimedObject Clone();
+
+        #endregion
     }
 }

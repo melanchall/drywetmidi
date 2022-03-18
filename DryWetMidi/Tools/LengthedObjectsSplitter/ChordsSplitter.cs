@@ -13,16 +13,6 @@ namespace Melanchall.DryWetMidi.Tools
         #region Overrides
 
         /// <summary>
-        /// Clones an object by creating a copy of it.
-        /// </summary>
-        /// <param name="obj">Object to clone.</param>
-        /// <returns>Copy of the <paramref name="obj"/>.</returns>
-        protected override Chord CloneObject(Chord obj)
-        {
-            return obj.Clone();
-        }
-
-        /// <summary>
         /// Splits an object by the specified time.
         /// </summary>
         /// <param name="obj">Object to split.</param>

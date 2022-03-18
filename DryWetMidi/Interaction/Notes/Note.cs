@@ -274,7 +274,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <returns>The 'Note On' timed event of the current note.</returns>
         public TimedEvent GetTimedNoteOnEvent()
         {
-            return TimedNoteOnEvent.Clone();
+            return (TimedEvent)TimedNoteOnEvent.Clone();
         }
 
         /// <summary>
@@ -283,7 +283,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <returns>The 'Note Off' timed event of the current note.</returns>
         public TimedEvent GetTimedNoteOffEvent()
         {
-            return TimedNoteOffEvent.Clone();
+            return (TimedEvent)TimedNoteOffEvent.Clone();
         }
 
         /// <summary>
@@ -308,7 +308,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// Clones note by creating a copy of it.
         /// </summary>
         /// <returns>Copy of the note.</returns>
-        public virtual Note Clone()
+        public virtual ITimedObject Clone()
         {
             var newTimedNoteOnEvent = GetTimedNoteOnEvent();
             newTimedNoteOnEvent._time = TimedNoteOnEvent.Time;
@@ -341,17 +341,17 @@ namespace Melanchall.DryWetMidi.Interaction
             var endTime = startTime + Length;
 
             if (time <= startTime)
-                return new SplitLengthedObject<Note>(null, Clone());
+                return new SplitLengthedObject<Note>(null, (Note)Clone());
 
             if (time >= endTime)
-                return new SplitLengthedObject<Note>(Clone(), null);
+                return new SplitLengthedObject<Note>((Note)Clone(), null);
 
             //
 
-            var leftPart = Clone();
+            var leftPart = (Note)Clone();
             leftPart.Length = time - startTime;
 
-            var rightPart = Clone();
+            var rightPart = (Note)Clone();
             rightPart.Time = time;
             rightPart.Length = endTime - time;
 

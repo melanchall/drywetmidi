@@ -66,7 +66,7 @@ namespace Melanchall.DryWetMidi.Tools
 
                 if (obj.Length == 0)
                 {
-                    yield return CloneObject(obj);
+                    yield return (TObject)obj.Clone();
                     continue;
                 }
 
@@ -74,7 +74,7 @@ namespace Melanchall.DryWetMidi.Tools
                 var endTime = startTime + obj.Length;
 
                 var time = startTime;
-                var tail = CloneObject(obj);
+                var tail = (TObject)obj.Clone();
 
                 while (time < endTime && tail != null)
                 {
@@ -135,7 +135,7 @@ namespace Melanchall.DryWetMidi.Tools
 
                 if (partsNumber == 1)
                 {
-                    yield return CloneObject(obj);
+                    yield return (TObject)obj.Clone();
                     continue;
                 }
 
@@ -143,14 +143,14 @@ namespace Melanchall.DryWetMidi.Tools
                 {
                     foreach (var i in Enumerable.Range(0, partsNumber))
                     {
-                        yield return CloneObject(obj);
+                        yield return (TObject)obj.Clone();
                     }
 
                     continue;
                 }
 
                 var time = obj.Time;
-                var tail = CloneObject(obj);
+                var tail = (TObject)obj.Clone();
 
                 for (int partsRemaining = partsNumber; partsRemaining > 1 && tail != null; partsRemaining--)
                 {
@@ -223,7 +223,7 @@ namespace Melanchall.DryWetMidi.Tools
                 var endTime = startTime + obj.Length;
 
                 var intersectedTimes = times.SkipWhile(t => t <= startTime).TakeWhile(t => t < endTime);
-                var tail = CloneObject(obj);
+                var tail = (TObject)obj.Clone();
 
                 foreach (var time in intersectedTimes)
                 {
@@ -350,13 +350,6 @@ namespace Melanchall.DryWetMidi.Tools
                     yield return parts.RightPart;
             }
         }
-
-        /// <summary>
-        /// Clones an object by creating a copy of it.
-        /// </summary>
-        /// <param name="obj">Object to clone.</param>
-        /// <returns>Copy of the <paramref name="obj"/>.</returns>
-        protected abstract TObject CloneObject(TObject obj);
 
         /// <summary>
         /// Splits an object by the specified time.

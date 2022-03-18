@@ -10,8 +10,8 @@ namespace Melanchall.DryWetMidi.Interaction
     {
         #region Fields
 
-        private readonly long _time;
-        private readonly long _length;
+        private long _time;
+        private long _length;
 
         #endregion
 
@@ -91,6 +91,15 @@ namespace Melanchall.DryWetMidi.Interaction
         public static bool operator !=(Rest rest1, Rest rest2)
         {
             return !(rest1 == rest2);
+        }
+
+        #endregion
+
+        #region Methods
+
+        public ITimedObject Clone()
+        {
+            return new Rest(Time, Length, Channel, NoteNumber);
         }
 
         #endregion

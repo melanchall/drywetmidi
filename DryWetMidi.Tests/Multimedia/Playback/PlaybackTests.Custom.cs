@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Multimedia;
@@ -18,6 +17,14 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         private sealed class CustomTimedObject : ITimedObject
         {
             public long Time { get; set; }
+
+            public ITimedObject Clone()
+            {
+                return new CustomTimedObject
+                {
+                    Time = Time
+                };
+            }
         }
 
         private sealed class CustomTimedEvent : TimedEvent, IMetadata

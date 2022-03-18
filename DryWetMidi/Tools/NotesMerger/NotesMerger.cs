@@ -145,7 +145,7 @@ namespace Melanchall.DryWetMidi.Tools
 
         private static NoteHolder CreateNoteHolder(Note note, NotesMergingSettings settings)
         {
-            return new NoteHolder(note.Clone(),
+            return new NoteHolder((Note)note.Clone(),
                                   VelocityMergers[settings.VelocityMergingPolicy](),
                                   VelocityMergers[settings.OffVelocityMergingPolicy]());
         }

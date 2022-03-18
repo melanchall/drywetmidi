@@ -316,9 +316,9 @@ namespace Melanchall.DryWetMidi.Interaction
         /// Clones chord by creating a copy of it.
         /// </summary>
         /// <returns>Copy of the chord.</returns>
-        public virtual Chord Clone()
+        public virtual ITimedObject Clone()
         {
-            return new Chord(Notes.Select(note => note.Clone()));
+            return new Chord(Notes.Select(note => (Note)note.Clone()));
         }
 
         /// <summary>
@@ -343,10 +343,10 @@ namespace Melanchall.DryWetMidi.Interaction
             var endTime = startTime + Length;
 
             if (time <= startTime)
-                return new SplitLengthedObject<Chord>(null, Clone());
+                return new SplitLengthedObject<Chord>(null, (Chord)Clone());
 
             if (time >= endTime)
-                return new SplitLengthedObject<Chord>(Clone(), null);
+                return new SplitLengthedObject<Chord>((Chord)Clone(), null);
 
             //
 

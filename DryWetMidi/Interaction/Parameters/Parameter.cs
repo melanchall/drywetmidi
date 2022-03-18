@@ -75,6 +75,8 @@ namespace Melanchall.DryWetMidi.Interaction
 
         #region Methods
 
+        public abstract ITimedObject Clone();
+
         /// <summary>
         /// Returns the collection of <see cref="TimedEvent"/> objects that represent the current
         /// parameter. In fact, each <see cref="TimedEvent"/> object will contain <see cref="ControlChangeEvent"/> event.

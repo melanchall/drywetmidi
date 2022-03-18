@@ -109,6 +109,11 @@ namespace Melanchall.DryWetMidi.Interaction
 
         #region Overrides
 
+        public override ITimedObject Clone()
+        {
+            return new ChannelFineTuningParameter(Cents, ValueType);
+        }
+
         /// <inheritdoc/>
         protected override void GetData(out SevenBitNumber msb, out SevenBitNumber? lsb)
         {

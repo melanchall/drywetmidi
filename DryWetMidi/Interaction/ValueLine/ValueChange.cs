@@ -54,6 +54,15 @@ namespace Melanchall.DryWetMidi.Interaction
 
         #endregion
 
+        #region Methods
+
+        public ITimedObject Clone()
+        {
+            return new ValueChange<TValue>(Time, Value);
+        }
+
+        #endregion
+
         #region Operators
 
         /// <summary>

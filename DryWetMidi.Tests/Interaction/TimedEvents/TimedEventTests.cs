@@ -21,7 +21,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
             public object Tag { get; }
 
-            public override TimedEvent Clone()
+            public override ITimedObject Clone()
             {
                 return new TaggedTimedEvent(Event, Tag)
                 {

@@ -311,13 +311,13 @@ namespace Melanchall.DryWetMidi.Tools
                 if (matched)
                 {
                     eventsToCopyToNextPart.RemoveAt(i);
-                    eventsToCopyToNextPart.Add(timedEvent.Clone());
+                    eventsToCopyToNextPart.Add((TimedEvent)timedEvent.Clone());
                     return;
                 }
             }
 
             if (!matched && DefaultUpdatePredicates.ContainsKey(eventType))
-                eventsToCopyToNextPart.Add(timedEvent.Clone());
+                eventsToCopyToNextPart.Add((TimedEvent)timedEvent.Clone());
         }
 
         #endregion
