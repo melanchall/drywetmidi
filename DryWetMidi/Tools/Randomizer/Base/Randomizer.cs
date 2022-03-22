@@ -10,6 +10,7 @@ namespace Melanchall.DryWetMidi.Tools
     /// </summary>
     /// <typeparam name="TObject">The type of objects to quantize.</typeparam>
     /// <typeparam name="TSettings">The type of quantizer's settings.</typeparam>
+    [Obsolete("OBS10")]
     public abstract class Randomizer<TObject, TSettings>
         where TSettings : RandomizingSettings<TObject>, new()
     {

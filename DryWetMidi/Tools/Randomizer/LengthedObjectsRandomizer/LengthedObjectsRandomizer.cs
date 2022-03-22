@@ -10,6 +10,7 @@ namespace Melanchall.DryWetMidi.Tools
     /// </summary>
     /// <typeparam name="TObject">The type of objects to quantize.</typeparam>
     /// <typeparam name="TSettings">The type of quantizer's settings.</typeparam>
+    [Obsolete("OBS10")]
     public abstract class LengthedObjectsRandomizer<TObject, TSettings> : Randomizer<TObject, TSettings>
         where TObject : ILengthedObject
         where TSettings : LengthedObjectsRandomizingSettings<TObject>, new()
@@ -37,6 +38,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// </item>
         /// </list>
         /// </exception>
+        [Obsolete("OBS10")]
         public void Randomize(IEnumerable<TObject> objects, IBounds bounds, TempoMap tempoMap, TSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(objects), objects);

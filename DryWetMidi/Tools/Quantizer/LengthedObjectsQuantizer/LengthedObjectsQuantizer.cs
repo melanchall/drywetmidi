@@ -148,6 +148,23 @@ namespace Melanchall.DryWetMidi.Tools
             return null;
         }
 
+        private TimeProcessingInstruction OnTimeChange(
+            TObject obj,
+            long time,
+            TempoMap tempoMap,
+            TSettings settings)
+        {
+            switch (settings.QuantizingTarget)
+            {
+                case LengthedObjectTarget.Start:
+                    return CorrectObjectOnStartQuantizing(obj, time, tempoMap, settings);
+                case LengthedObjectTarget.End:
+                    return CorrectObjectOnEndQuantizing(obj, time, tempoMap, settings);
+            }
+
+            return new TimeProcessingInstruction(time);
+        }
+
         #endregion
 
         #region Overrides
@@ -216,17 +233,16 @@ namespace Melanchall.DryWetMidi.Tools
             TempoMap tempoMap,
             TSettings settings)
         {
-            var newTime = quantizedTime.NewTime;
+            return OnTimeChange(obj, quantizedTime.NewTime, tempoMap, settings);
+        }
 
-            switch (settings.QuantizingTarget)
-            {
-                case LengthedObjectTarget.Start:
-                    return CorrectObjectOnStartQuantizing(obj, newTime, tempoMap, settings);
-                case LengthedObjectTarget.End:
-                    return CorrectObjectOnEndQuantizing(obj, newTime, tempoMap, settings);
-            }
-
-            return new TimeProcessingInstruction(newTime);
+        protected override TimeProcessingInstruction OnObjectRandomizing(
+            TObject obj,
+            long time,
+            TempoMap tempoMap,
+            TSettings settings)
+        {
+            return OnTimeChange(obj, time, tempoMap, settings);
         }
 
         #endregion

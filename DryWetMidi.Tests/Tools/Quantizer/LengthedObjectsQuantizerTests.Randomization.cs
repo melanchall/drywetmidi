@@ -1,17 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Melanchall.DryWetMidi.Interaction;
-using Melanchall.DryWetMidi.Tests.Utilities;
+﻿using Melanchall.DryWetMidi.Interaction;
 using Melanchall.DryWetMidi.Tools;
 using NUnit.Framework;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Melanchall.DryWetMidi.Tests.Tools
 {
-    [Obsolete("OBS10")]
-    public abstract class LengthedObjectsRandomizerTests<TObject, TSettings> : LengthedObjectsToolTests<TObject>
-        where TObject : ILengthedObject
-        where TSettings : LengthedObjectsRandomizingSettings<TObject>, new()
+    // TODO: randomize end
+    public abstract partial class LengthedObjectsQuantizerTests<TObject, TSettings>
     {
         #region Nested classes
 
@@ -50,22 +47,6 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         #region Constants
 
         private const int RepeatRandomizationCount = 10000;
-
-        #endregion
-
-        #region Constructor
-
-        public LengthedObjectsRandomizerTests(LengthedObjectMethods<TObject> methods, LengthedObjectsRandomizer<TObject, TSettings> randomizer)
-            : base(methods)
-        {
-            Randomizer = randomizer;
-        }
-
-        #endregion
-
-        #region Properties
-
-        protected LengthedObjectsRandomizer<TObject, TSettings> Randomizer { get; }
 
         #endregion
 
@@ -116,7 +97,8 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                     new TimeBounds((MidiTimeSpan)1000, (MidiTimeSpan)1000),
                     new TimeBounds((MidiTimeSpan)0, (MidiTimeSpan)0)
                 },
-                tempoMap);
+                tempoMap,
+                checkUnchangedTimeObjectsPercent: false);
         }
 
         [Test]
@@ -186,36 +168,57 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
         #region Private methods
 
-        private void Randomize_Start(IEnumerable<TObject> actualObjects,
-                                     IBounds bounds,
-                                     IEnumerable<TimeBounds> expectedBounds,
-                                     TempoMap tempoMap,
-                                     Predicate<TObject> filter = null)
+        private void Randomize_Start(
+            IEnumerable<TObject> actualObjects,
+            IBounds bounds,
+            IEnumerable<TimeBounds> expectedBounds,
+            TempoMap tempoMap,
+            Predicate<TObject> filter = null,
+            bool checkUnchangedTimeObjectsPercent = true)
         {
             for (int i = 0; i < RepeatRandomizationCount; i++)
             {
                 var clonedActualObjects = actualObjects.Select(o => o != null ? ObjectMethods.Clone(o) : default(TObject)).ToList();
-                Randomize(LengthedObjectTarget.Start, clonedActualObjects, bounds, expectedBounds, tempoMap, filter);
+                Randomize(
+                    LengthedObjectTarget.Start,
+                    clonedActualObjects,
+                    bounds,
+                    expectedBounds,
+                    tempoMap,
+                    filter,
+                    checkUnchangedTimeObjectsPercent);
             }
         }
 
-        private void Randomize(LengthedObjectTarget target,
-                               IEnumerable<TObject> actualObjects,
-                               IBounds bounds,
-                               IEnumerable<TimeBounds> expectedBounds,
-                               TempoMap tempoMap,
-                               Predicate<TObject> filter = null)
+        private void Randomize(
+            LengthedObjectTarget target,
+            IEnumerable<TObject> actualObjects,
+            IBounds bounds,
+            IEnumerable<TimeBounds> expectedBounds,
+            TempoMap tempoMap,
+            Predicate<TObject> filter = null,
+            bool checkUnchangedTimeObjectsPercent = true)
         {
-            Randomizer.Randomize(actualObjects,
-                                 bounds,
-                                 tempoMap,
-                                 new TSettings
-                                 {
-                                     RandomizingTarget = target,
-                                     Filter = filter
-                                 });
+            var objectsBounds = actualObjects.Zip(expectedBounds, (o, b) => new
+            {
+                Object = o,
+                OldTime = o?.Time ?? 0,
+                Bounds = b
+            }).ToArray();
 
-            var objectsBounds = actualObjects.Zip(expectedBounds, (o, b) => new { Object = o, Bounds = b });
+            Quantizer.Quantize(
+                actualObjects,
+                new ArbitraryGrid(),
+                tempoMap,
+                new TSettings
+                {
+                    QuantizingTarget = target,
+                    Filter = filter,
+                    RandomizingSettings = new RandomizingSettings
+                    {
+                        Bounds = bounds
+                    }
+                });
 
             foreach (var objectBounds in objectsBounds)
             {
@@ -232,8 +235,19 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 var minTime = TimeConverter.ConvertFrom(timeBounds.MinTime, tempoMap);
                 var maxTime = TimeConverter.ConvertFrom(timeBounds.MaxTime, tempoMap);
 
-                Assert.IsTrue(time >= minTime && time <= maxTime,
-                              $"Object's time {time} is not in {timeBounds}/[{minTime}; {maxTime}] range.");
+                Assert.IsTrue(
+                    time >= minTime && time <= maxTime,
+                    $"Object's time {time} is not in {timeBounds} [{minTime}; {maxTime}] range.");
+            }
+
+            if (checkUnchangedTimeObjectsPercent)
+            {
+                var allObjectsCount = objectsBounds.Count(b => b.Object != null);
+                var unchangedTimeObjectsCount = objectsBounds.Count(b => b.Object != null && b.Object.Time == b.OldTime);
+                Assert.Less(
+                    unchangedTimeObjectsCount / (double)allObjectsCount,
+                    1,
+                    "Too high precent of objects with unchanged time.");
             }
         }
 

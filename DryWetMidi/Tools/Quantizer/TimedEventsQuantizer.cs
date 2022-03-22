@@ -52,6 +52,11 @@ namespace Melanchall.DryWetMidi.Tools
             QuantizeInternal(objects, grid, tempoMap, settings);
         }
 
+        private TimeProcessingInstruction OnTimeChange(long time)
+        {
+            return new TimeProcessingInstruction(time);
+        }
+
         #endregion
 
         #region Overrides
@@ -98,7 +103,16 @@ namespace Melanchall.DryWetMidi.Tools
             TempoMap tempoMap,
             TimedEventsQuantizingSettings settings)
         {
-            return new TimeProcessingInstruction(quantizedTime.NewTime);
+            return OnTimeChange(quantizedTime.NewTime);
+        }
+
+        protected override TimeProcessingInstruction OnObjectRandomizing(
+            TimedEvent obj,
+            long time,
+            TempoMap tempoMap,
+            TimedEventsQuantizingSettings settings)
+        {
+            return OnTimeChange(time);
         }
 
         #endregion

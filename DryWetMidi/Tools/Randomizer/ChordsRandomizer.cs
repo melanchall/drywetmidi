@@ -1,10 +1,12 @@
 ﻿using Melanchall.DryWetMidi.Interaction;
+using System;
 
 namespace Melanchall.DryWetMidi.Tools
 {
     /// <summary>
     /// Settings according to which chords should be randomized.
     /// </summary>
+    [Obsolete("OBS10")]
     public sealed class ChordsRandomizingSettings : LengthedObjectsRandomizingSettings<Chord>
     {
         #region Properties
@@ -20,6 +22,7 @@ namespace Melanchall.DryWetMidi.Tools
     /// <summary>
     /// Provides methods to randomize chords time.
     /// </summary>
+    [Obsolete("OBS10")]
     public sealed class ChordsRandomizer : LengthedObjectsRandomizer<Chord, ChordsRandomizingSettings>
     {
     }

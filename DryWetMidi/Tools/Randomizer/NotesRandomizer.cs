@@ -1,10 +1,12 @@
 ﻿using Melanchall.DryWetMidi.Interaction;
+using System;
 
 namespace Melanchall.DryWetMidi.Tools
 {
     /// <summary>
     /// Settings according to which notes should be randomized.
     /// </summary>
+    [Obsolete("OBS10")]
     public sealed class NotesRandomizingSettings : LengthedObjectsRandomizingSettings<Note>
     {
         #region Properties
@@ -20,6 +22,7 @@ namespace Melanchall.DryWetMidi.Tools
     /// <summary>
     /// Provides methods to randomize notes time.
     /// </summary>
+    [Obsolete("OBS10")]
     public sealed class NotesRandomizer : LengthedObjectsRandomizer<Note, NotesRandomizingSettings>
     {
     }

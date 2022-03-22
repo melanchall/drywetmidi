@@ -25,6 +25,8 @@ namespace Melanchall.DryWetMidi.Tools
 
         #region Properties
 
+        public RandomizingSettings RandomizingSettings { get; set; } = new RandomizingSettings();
+
         /// <summary>
         /// Gets or sets the type of distance calculation used to find a time to snap an object to.
         /// The default value is <see cref="TimeSpanType.Midi"/>.

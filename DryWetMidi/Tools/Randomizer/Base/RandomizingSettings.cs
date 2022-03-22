@@ -5,6 +5,7 @@ namespace Melanchall.DryWetMidi.Tools
     /// <summary>
     /// Settings according to which objects should be randomized.
     /// </summary>
+    [Obsolete("OBS10")]
     public abstract class RandomizingSettings<TObject>
     {
         #region Properties

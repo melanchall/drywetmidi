@@ -15,6 +15,12 @@ namespace Melanchall.DryWetMidi.Tools
     {
         #region Methods
 
+        private readonly Random _random = new Random();
+
+        #endregion
+
+        #region Methods
+
         /// <summary>
         /// Quantizes objects time using the specified grid and settings.
         /// </summary>
@@ -37,11 +43,12 @@ namespace Melanchall.DryWetMidi.Tools
             foreach (var obj in objects.Where(filter))
             {
                 var oldTime = GetObjectTime(obj, settings);
-                var quantizedTime = FindNearestTime(times,
-                                                    oldTime,
-                                                    settings.DistanceCalculationType,
-                                                    settings.QuantizingLevel,
-                                                    tempoMap);
+                var quantizedTime = FindNearestTime(
+                    times,
+                    oldTime,
+                    settings.DistanceCalculationType,
+                    settings.QuantizingLevel,
+                    tempoMap);
 
                 var instruction = OnObjectQuantizing(obj, quantizedTime, grid, tempoMap, settings);
 
@@ -52,6 +59,23 @@ namespace Melanchall.DryWetMidi.Tools
                         break;
                     case TimeProcessingAction.Skip:
                         break;
+                }
+
+                var randomizingSettings = settings.RandomizingSettings ?? new RandomizingSettings();
+                if (randomizingSettings.Bounds != null)
+                {
+                    var time = RandomizeTime(GetObjectTime(obj, settings), randomizingSettings.Bounds, _random, tempoMap);
+
+                    instruction = OnObjectRandomizing(obj, time, tempoMap, settings);
+
+                    switch (instruction.Action)
+                    {
+                        case TimeProcessingAction.Apply:
+                            SetObjectTime(obj, instruction.Time, settings);
+                            break;
+                        case TimeProcessingAction.Skip:
+                            break;
+                    }
                 }
             }
         }
@@ -92,9 +116,29 @@ namespace Melanchall.DryWetMidi.Tools
             TempoMap tempoMap,
             TSettings settings);
 
+        protected abstract TimeProcessingInstruction OnObjectRandomizing(
+            TObject obj,
+            long time,
+            TempoMap tempoMap,
+            TSettings settings);
+
+        private static long RandomizeTime(long time, IBounds bounds, Random random, TempoMap tempoMap)
+        {
+            var timeBounds = bounds.GetBounds(time, tempoMap);
+
+            var minTime = Math.Max(0, timeBounds.Item1) - 1;
+            var maxTime = timeBounds.Item2;
+
+            var difference = (int)Math.Abs(maxTime - minTime);
+            return minTime + random.Next(difference) + 1;
+        }
+
         private static IEnumerable<long> GetGridTimes(IGrid grid, long lastTime, TempoMap tempoMap)
         {
             var times = grid.GetTimes(tempoMap);
+            if (!times.Any())
+                yield break;
+
             using (var enumerator = times.GetEnumerator())
             {
                 while (enumerator.MoveNext() && enumerator.Current < lastTime)
@@ -104,12 +148,21 @@ namespace Melanchall.DryWetMidi.Tools
             }
         }
 
-        private static QuantizedTime FindNearestTime(IReadOnlyList<long> grid,
-                                                     long time,
-                                                     TimeSpanType distanceCalculationType,
-                                                     double quantizingLevel,
-                                                     TempoMap tempoMap)
+        private static QuantizedTime FindNearestTime(
+            IReadOnlyList<long> grid,
+            long time,
+            TimeSpanType distanceCalculationType,
+            double quantizingLevel,
+            TempoMap tempoMap)
         {
+            if (grid.Count == 0)
+                return new QuantizedTime(
+                    time,
+                    0,
+                    null,
+                    0,
+                    null);
+
             var distanceToGridTime = -1L;
             var convertedDistanceToGridTime = TimeSpanUtilities.GetMaxTimeSpan(distanceCalculationType);
             var gridTime = -1L;
@@ -141,11 +194,12 @@ namespace Melanchall.DryWetMidi.Tools
 
             //
 
-            return new QuantizedTime(newTime,
-                                     gridTime,
-                                     shift,
-                                     distanceToGridTime,
-                                     convertedDistanceToGridTime);
+            return new QuantizedTime(
+                newTime,
+                gridTime,
+                shift,
+                distanceToGridTime,
+                convertedDistanceToGridTime);
         }
 
         #endregion

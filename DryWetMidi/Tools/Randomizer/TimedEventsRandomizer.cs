@@ -8,6 +8,7 @@ namespace Melanchall.DryWetMidi.Tools
     /// <summary>
     /// Settings according to which timed events should be randomized.
     /// </summary>
+    [Obsolete("OBS10")]
     public sealed class TimedEventsRandomizingSettings : RandomizingSettings<TimedEvent>
     {
     }
@@ -15,6 +16,7 @@ namespace Melanchall.DryWetMidi.Tools
     /// <summary>
     /// Provides methods to randomize timed events time.
     /// </summary>
+    [Obsolete("OBS10")]
     public sealed class TimedEventsRandomizer : Randomizer<TimedEvent, TimedEventsRandomizingSettings>
     {
         #region Methods
@@ -40,6 +42,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// </item>
         /// </list>
         /// </exception>
+        [Obsolete("OBS10")]
         public void Randomize(IEnumerable<TimedEvent> objects, IBounds bounds, TempoMap tempoMap, TimedEventsRandomizingSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(objects), objects);
