@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace Melanchall.DryWetMidi.Tools
 {
-    public class MidiRepeater
+    public class Repeater
     {
         #region Constants
 
@@ -21,13 +21,13 @@ namespace Melanchall.DryWetMidi.Tools
 
         #region Methods
 
-        public MidiFile Repeat(MidiFile midiFile, int repeatsNumber, MidiRepeaterSettings settings = null)
+        public MidiFile Repeat(MidiFile midiFile, int repeatsNumber, RepeatingSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
             ThrowIfArgument.IsNonpositive(nameof(repeatsNumber), repeatsNumber, "Repeats number is zero or negative.");
             CheckSettings(settings);
 
-            settings = settings ?? new MidiRepeaterSettings();
+            settings = settings ?? new RepeatingSettings();
 
             var tempoMap = midiFile.GetTempoMap();
             var trackChunks = Repeat(midiFile.GetTrackChunks(), repeatsNumber, tempoMap, settings);
@@ -38,14 +38,14 @@ namespace Melanchall.DryWetMidi.Tools
             };
         }
 
-        public ICollection<TrackChunk> Repeat(IEnumerable<TrackChunk> trackChunks, int repeatsNumber, TempoMap tempoMap, MidiRepeaterSettings settings = null)
+        public ICollection<TrackChunk> Repeat(IEnumerable<TrackChunk> trackChunks, int repeatsNumber, TempoMap tempoMap, RepeatingSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
             ThrowIfArgument.IsNonpositive(nameof(repeatsNumber), repeatsNumber, "Repeats number is zero or negative.");
             CheckSettings(settings);
 
-            settings = settings ?? new MidiRepeaterSettings();
+            settings = settings ?? new RepeatingSettings();
 
             var timedEventsCollections = trackChunks.Select(trackChunk => trackChunk.GetTimedEvents()).ToArray();
             var maxTime = timedEventsCollections.Max(events => events.LastOrDefault()?.Time ?? 0);
@@ -56,14 +56,14 @@ namespace Melanchall.DryWetMidi.Tools
                 .ToArray();
         }
 
-        public TrackChunk Repeat(TrackChunk trackChunk, int repeatsNumber, TempoMap tempoMap, MidiRepeaterSettings settings = null)
+        public TrackChunk Repeat(TrackChunk trackChunk, int repeatsNumber, TempoMap tempoMap, RepeatingSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
             ThrowIfArgument.IsNonpositive(nameof(repeatsNumber), repeatsNumber, "Repeats number is zero or negative.");
             CheckSettings(settings);
 
-            settings = settings ?? new MidiRepeaterSettings();
+            settings = settings ?? new RepeatingSettings();
 
             var timedObjects = trackChunk.GetTimedEvents();
             var maxTime = timedObjects.LastOrDefault()?.Time ?? 0;
@@ -72,14 +72,14 @@ namespace Melanchall.DryWetMidi.Tools
             return Repeat(timedObjects, shift, repeatsNumber, tempoMap, settings).ToTrackChunk();
         }
 
-        public ICollection<ITimedObject> Repeat(IEnumerable<ITimedObject> timedObjects, int repeatsNumber, TempoMap tempoMap, MidiRepeaterSettings settings = null)
+        public ICollection<ITimedObject> Repeat(IEnumerable<ITimedObject> timedObjects, int repeatsNumber, TempoMap tempoMap, RepeatingSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(timedObjects), timedObjects);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
             ThrowIfArgument.IsNonpositive(nameof(repeatsNumber), repeatsNumber, "Repeats number is zero or negative.");
             CheckSettings(settings);
 
-            settings = settings ?? new MidiRepeaterSettings();
+            settings = settings ?? new RepeatingSettings();
 
             var maxTime = timedObjects.Select(obj => obj.Time).DefaultIfEmpty(0).Max();
             var shift = CalculateShift(maxTime, tempoMap, settings);
@@ -105,7 +105,7 @@ namespace Melanchall.DryWetMidi.Tools
             }
         }
 
-        private void CheckSettings(MidiRepeaterSettings settings)
+        private void CheckSettings(RepeatingSettings settings)
         {
             if (settings == null)
                 return;
@@ -119,9 +119,9 @@ namespace Melanchall.DryWetMidi.Tools
             long shift,
             int repeatsNumber,
             TempoMap tempoMap,
-            MidiRepeaterSettings settings)
+            RepeatingSettings settings)
         {
-            settings = settings ?? new MidiRepeaterSettings();
+            settings = settings ?? new RepeatingSettings();
 
             var result = new List<ITimedObject>();
 
@@ -134,7 +134,7 @@ namespace Melanchall.DryWetMidi.Tools
             return result;
         }
 
-        private ICollection<ITimedObject> GetPart(IEnumerable<ITimedObject> sourceObjects, long shift, int partIndex, TempoMap tempoMap, MidiRepeaterSettings settings)
+        private ICollection<ITimedObject> GetPart(IEnumerable<ITimedObject> sourceObjects, long shift, int partIndex, TempoMap tempoMap, RepeatingSettings settings)
         {
             var result = new List<ITimedObject>(sourceObjects.Where(o => o != null).Select(o => o.Clone()));
 
@@ -152,7 +152,7 @@ namespace Melanchall.DryWetMidi.Tools
             return result;
         }
 
-        private static long CalculateShift(long maxTime, TempoMap tempoMap, MidiRepeaterSettings settings)
+        private static long CalculateShift(long maxTime, TempoMap tempoMap, RepeatingSettings settings)
         {
             var shift = default(ITimeSpan);
 

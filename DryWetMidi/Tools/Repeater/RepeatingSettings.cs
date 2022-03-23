@@ -3,7 +3,7 @@ using Melanchall.DryWetMidi.Interaction;
 
 namespace Melanchall.DryWetMidi.Tools
 {
-    public sealed class MidiRepeaterSettings
+    public sealed class RepeatingSettings
     {
         #region Fields
 

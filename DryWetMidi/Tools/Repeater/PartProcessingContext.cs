@@ -17,7 +17,7 @@ namespace Melanchall.DryWetMidi.Tools
         
         public TempoMap SourceTempoMap { get; internal set; }
         
-        public MidiRepeaterSettings Settings { get; internal set; }
+        public RepeatingSettings Settings { get; internal set; }
 
         #endregion
     }

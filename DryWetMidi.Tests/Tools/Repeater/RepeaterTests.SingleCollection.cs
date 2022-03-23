@@ -12,7 +12,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
     // TODO: division tolerance
     // TODO: argument exceptions
     [TestFixture]
-    public sealed partial class MidiRepeaterTests
+    public sealed partial class RepeaterTests
     {
         #region Constants
 
@@ -179,7 +179,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 new TimedEvent(new TextEvent("A"), eventTime),
             },
             repeatsNumber,
-            new MidiRepeaterSettings
+            new RepeatingSettings
             {
                 ShiftPolicy = ShiftPolicy.None
             },
@@ -195,7 +195,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 new TimedEvent(new TextEvent("A"), eventTime),
             },
             repeatsNumber,
-            new MidiRepeaterSettings
+            new RepeatingSettings
             {
                 ShiftPolicy = ShiftPolicy.ShiftByMaxTime
             },
@@ -211,7 +211,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 new TimedEvent(new TextEvent("A"), eventTime),
             },
             repeatsNumber,
-            new MidiRepeaterSettings
+            new RepeatingSettings
             {
                 ShiftPolicy = ShiftPolicy.ShiftByFixedValue,
                 Shift = (MidiTimeSpan)shift
@@ -239,7 +239,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                     new TimedEvent(new TextEvent("A"), eventTimeTicks),
                 },
                 repeatsNumber,
-                new MidiRepeaterSettings
+                new RepeatingSettings
                 {
                     ShiftPolicy = ShiftPolicy.ShiftByMaxTime,
                     ShiftStep = TimeSpanUtilities.Parse(step)
@@ -271,7 +271,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                     new TimedEvent(new TextEvent("A"), eventTimeTicks),
                 },
                 repeatsNumber,
-                new MidiRepeaterSettings
+                new RepeatingSettings
                 {
                     ShiftPolicy = ShiftPolicy.ShiftByFixedValue,
                     Shift = TimeSpanUtilities.Parse(shift),
@@ -293,7 +293,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 new TimedEvent(new ProgramChangeEvent(), eventTime - 1),
             },
             repeatsNumber,
-            new MidiRepeaterSettings
+            new RepeatingSettings
             {
                 ShiftPolicy = ShiftPolicy.None
             },
@@ -314,7 +314,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 new TimedEvent(new ProgramChangeEvent(), eventTime - 1),
             },
             repeatsNumber,
-            new MidiRepeaterSettings
+            new RepeatingSettings
             {
                 ShiftPolicy = ShiftPolicy.ShiftByMaxTime
             },
@@ -335,7 +335,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 new TimedEvent(new ProgramChangeEvent(), eventTime - 1),
             },
             repeatsNumber,
-            new MidiRepeaterSettings
+            new RepeatingSettings
             {
                 ShiftPolicy = ShiftPolicy.ShiftByFixedValue,
                 Shift = (MidiTimeSpan)shift
@@ -368,7 +368,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                     new TimedEvent(new ProgramChangeEvent(), eventTimeTicks - 1),
                 },
                 repeatsNumber,
-                new MidiRepeaterSettings
+                new RepeatingSettings
                 {
                     ShiftPolicy = ShiftPolicy.ShiftByMaxTime,
                     ShiftStep = TimeSpanUtilities.Parse(step)
@@ -390,7 +390,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         private void CheckRepeat(
             IEnumerable<ITimedObject> inputObjects,
             int repeatsNumber,
-            MidiRepeaterSettings settings,
+            RepeatingSettings settings,
             IEnumerable<ITimedObject> expectedObjects) =>
             CheckRepeat(
                 inputObjects,
@@ -403,7 +403,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             IEnumerable<ITimedObject> inputObjects,
             int repeatsNumber,
             TempoMap tempoMap,
-            MidiRepeaterSettings settings,
+            RepeatingSettings settings,
             IEnumerable<ITimedObject> expectedObjects)
         {
             inputObjects = inputObjects.OrderBy(obj => obj.Time).ToArray();
