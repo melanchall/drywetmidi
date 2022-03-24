@@ -548,7 +548,7 @@ namespace Melanchall.DryWetMidi.Tools
         {
             using (var notesManager = trackChunk.ManageNotes(noteDetectionSettings))
             {
-                var notes = notesManager.Notes;
+                var notes = notesManager.Objects;
 
                 var notesSplitter = new NotesSplitter();
                 var newNotes = splitOperation(notesSplitter, notes).ToList();

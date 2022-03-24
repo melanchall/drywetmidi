@@ -16,7 +16,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <summary>
         /// Occurs when notes collection changes.
         /// </summary>
-        public event NotesCollectionChangedEventHandler NotesCollectionChanged;
+        public event TimedObjectsCollectionChangedEventHandler<Note> NotesCollectionChanged;
 
         /// <summary>
         /// Occurs when the time of an object has been changed.
@@ -58,7 +58,7 @@ namespace Melanchall.DryWetMidi.Interaction
         {
             ThrowIfArgument.IsNull(nameof(notes), notes);
 
-            Notes = new NotesCollection(notes);
+            Notes = new TimedObjectsCollection<Note>(notes);
             Notes.CollectionChanged += OnNotesCollectionChanged;
         }
 
@@ -93,10 +93,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
         #region Properties
 
-        /// <summary>
-        /// Gets a <see cref="NotesCollection"/> that represents notes of this chord.
-        /// </summary>
-        public NotesCollection Notes { get; }
+        public TimedObjectsCollection<Note> Notes { get; }
 
         /// <summary>
         /// Gets or sets absolute time of the chord in units defined by the time division of a MIDI file.
@@ -358,7 +355,7 @@ namespace Melanchall.DryWetMidi.Interaction
             return new SplitLengthedObject<Chord>(leftPart, rightPart);
         }
 
-        private void OnNotesCollectionChanged(NotesCollection collection, NotesCollectionChangedEventArgs args)
+        private void OnNotesCollectionChanged(TimedObjectsCollection<Note> collection, TimedObjectsCollectionChangedEventArgs<Note> args)
         {
             _channel = null;
             _velocity = null;

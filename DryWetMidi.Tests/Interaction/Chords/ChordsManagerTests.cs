@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
@@ -8,6 +9,7 @@ using NUnit.Framework;
 namespace Melanchall.DryWetMidi.Tests.Interaction
 {
     [TestFixture]
+    [Obsolete("OBS11")]
     public sealed class ChordsManagerTests
     {
         #region Test methods
@@ -18,7 +20,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             using (var chordsManager = new TrackChunk().ManageChords())
             {
-                var chords = chordsManager.Chords;
+                var chords = chordsManager.Objects;
 
                 chords.Add(ChordTestUtilities.GetChordByTime(123));
                 chords.Add(ChordTestUtilities.GetChordByTime(1));

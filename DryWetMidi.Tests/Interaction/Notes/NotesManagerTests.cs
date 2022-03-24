@@ -3,10 +3,12 @@ using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
 using Melanchall.DryWetMidi.Tests.Utilities;
 using NUnit.Framework;
+using System;
 
 namespace Melanchall.DryWetMidi.Tests.Interaction
 {
     [TestFixture]
+    [Obsolete("OBS11")]
     public sealed class NotesManagerTests
     {
         #region Test methods
@@ -17,7 +19,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             using (var notesManager = new TrackChunk().ManageNotes())
             {
-                var notes = notesManager.Notes;
+                var notes = notesManager.Objects;
 
                 notes.Add(NoteTestUtilities.GetNoteByTime(123));
                 notes.Add(NoteTestUtilities.GetNoteByTime(1));
@@ -48,7 +50,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
             using (var notesManager = trackChunk.ManageNotes())
             {
-                var notes = notesManager.Notes;
+                var notes = notesManager.Objects;
                 MidiAsserts.AreEqual(expectedNotes, notes, "Notes are invalid.");
             }
         }

@@ -38,7 +38,7 @@ namespace Melanchall.DryWetMidi.Tests.Utilities
         {
             Assert.IsTrue(
                 Math.Abs(expectedTimedEvent.Time - actualTimedEvent.Time) <= timesEpsilon,
-                $"{message} Time is invalid ({expectedTimedEvent.Time}+-0 expected, but was {actualTimedEvent.Time}).");
+                $"{message} Time is invalid ({expectedTimedEvent.Time}+-{timesEpsilon} expected, but was {actualTimedEvent.Time}).");
 
             string eventsEqualityCheckMessage;
             Assert.IsTrue(

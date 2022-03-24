@@ -544,7 +544,7 @@ namespace Melanchall.DryWetMidi.Tools
         {
             using (var chordsManager = trackChunk.ManageChords(chordDetectionSettings))
             {
-                var chords = chordsManager.Chords;
+                var chords = chordsManager.Objects;
 
                 var chordsSplitter = new ChordsSplitter();
                 var newChords = splitOperation(chordsSplitter, chords).ToList();

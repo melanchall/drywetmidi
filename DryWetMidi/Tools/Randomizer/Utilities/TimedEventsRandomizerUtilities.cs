@@ -44,7 +44,7 @@ namespace Melanchall.DryWetMidi.Tools
 
             using (var timedEventsManager = trackChunk.ManageTimedEvents())
             {
-                new TimedEventsRandomizer().Randomize(timedEventsManager.Events, bounds, tempoMap, settings);
+                new TimedEventsRandomizer().Randomize(timedEventsManager.Objects, bounds, tempoMap, settings);
             }
         }
 

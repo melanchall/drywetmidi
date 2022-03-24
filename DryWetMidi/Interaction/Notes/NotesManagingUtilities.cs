@@ -238,34 +238,40 @@ namespace Melanchall.DryWetMidi.Interaction
         }
 
         /// <summary>
-        /// Creates an instance of the <see cref="NotesManager"/> initializing it with the
+        /// Creates an instance of the <see cref="TimedObjectsManager{Note}"/> initializing it with the
         /// specified events collection and comparison delegate for events that have same time.
         /// </summary>
         /// <param name="eventsCollection"><see cref="EventsCollection"/> that holds notes to manage.</param>
         /// <param name="settings">Settings accoridng to which notes should be detected and built.</param>
         /// <param name="sameTimeEventsComparison">Delegate to compare events with the same absolute time.</param>
-        /// <returns>An instance of the <see cref="NotesManager"/> that can be used to manage
+        /// <returns>An instance of the <see cref="TimedObjectsManager{Note}"/> that can be used to manage
         /// notes represented by the <paramref name="eventsCollection"/>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="eventsCollection"/> is <c>null</c>.</exception>
-        public static NotesManager ManageNotes(this EventsCollection eventsCollection, NoteDetectionSettings settings = null, Comparison<MidiEvent> sameTimeEventsComparison = null)
+        public static TimedObjectsManager<Note> ManageNotes(this EventsCollection eventsCollection, NoteDetectionSettings settings = null, Comparison<MidiEvent> sameTimeEventsComparison = null)
         {
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
 
-            return new NotesManager(eventsCollection, settings, sameTimeEventsComparison);
+            return new TimedObjectsManager<Note>(
+                eventsCollection,
+                new ObjectDetectionSettings
+                {
+                    NoteDetectionSettings = settings
+                },
+                sameTimeEventsComparison);
         }
 
         /// <summary>
-        /// Creates an instance of the <see cref="NotesManager"/> initializing it with the
+        /// Creates an instance of the <see cref="TimedObjectsManager{Note}"/> initializing it with the
         /// events collection of the specified track chunk and comparison delegate for events
         /// that have same time.
         /// </summary>
         /// <param name="trackChunk"><see cref="TrackChunk"/> that holds notes to manage.</param>
         /// <param name="settings">Settings accoridng to which notes should be detected and built.</param>
         /// <param name="sameTimeEventsComparison">Delegate to compare events with the same absolute time.</param>
-        /// <returns>An instance of the <see cref="NotesManager"/> that can be used to manage
+        /// <returns>An instance of the <see cref="TimedObjectsManager{Note}"/> that can be used to manage
         /// notes represented by the <paramref name="trackChunk"/>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="trackChunk"/> is <c>null</c>.</exception>
-        public static NotesManager ManageNotes(this TrackChunk trackChunk, NoteDetectionSettings settings = null, Comparison<MidiEvent> sameTimeEventsComparison = null)
+        public static TimedObjectsManager<Note> ManageNotes(this TrackChunk trackChunk, NoteDetectionSettings settings = null, Comparison<MidiEvent> sameTimeEventsComparison = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
 

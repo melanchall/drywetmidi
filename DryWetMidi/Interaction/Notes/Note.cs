@@ -18,6 +18,8 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         public static readonly SevenBitNumber DefaultVelocity = (SevenBitNumber)100;
 
+        public static readonly SevenBitNumber DefaultOffVelocity = (SevenBitNumber)0;
+
         #endregion
 
         #region Events
@@ -260,7 +262,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <summary>
         /// Gets Note Off timed event of the note.
         /// </summary>
-        internal TimedEvent TimedNoteOffEvent { get; } = new TimedEvent(new NoteOffEvent());
+        internal TimedEvent TimedNoteOffEvent { get; } = new TimedEvent(new NoteOffEvent { Velocity = DefaultOffVelocity });
 
         internal MusicTheory.Note UnderlyingNote => MusicTheory.Note.Get(NoteNumber);
 

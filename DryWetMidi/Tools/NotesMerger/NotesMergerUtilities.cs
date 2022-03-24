@@ -40,7 +40,7 @@ namespace Melanchall.DryWetMidi.Tools
 
             using (var notesManager = trackChunk.ManageNotes(settings.NoteDetectionSettings))
             {
-                var notes = notesManager.Notes;
+                var notes = notesManager.Objects;
 
                 var notesMerger = new NotesMerger();
                 var newNotes = notesMerger

@@ -42,7 +42,7 @@ namespace Melanchall.DryWetMidi.Tools
 
             using (var timedEventsManager = trackChunk.ManageTimedEvents())
             {
-                new TimedEventsQuantizer().Quantize(timedEventsManager.Events, grid, tempoMap, settings);
+                new TimedEventsQuantizer().Quantize(timedEventsManager.Objects, grid, tempoMap, settings);
             }
         }
 

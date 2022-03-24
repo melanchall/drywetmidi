@@ -45,32 +45,32 @@ namespace Melanchall.DryWetMidi.Interaction
         }
 
         /// <summary>
-        /// Creates an instance of the <see cref="TimedEventsManager"/> initializing it with the
+        /// Creates an instance of the <see cref="TimedObjectsManager{TimedEvent}"/> initializing it with the
         /// specified events collection and comparison delegate for events that have same time.
         /// </summary>
         /// <param name="eventsCollection"><see cref="EventsCollection"/> that holds events to manage.</param>
         /// <param name="sameTimeEventsComparison">Delegate to compare events with the same absolute time.</param>
-        /// <returns>An instance of the <see cref="TimedEventsManager"/> that can be used to manage
+        /// <returns>An instance of the <see cref="TimedObjectsManager{TimedEvent}"/> that can be used to manage
         /// events represented by the <paramref name="eventsCollection"/>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="eventsCollection"/> is <c>null</c>.</exception>
-        public static TimedEventsManager ManageTimedEvents(this EventsCollection eventsCollection, Comparison<MidiEvent> sameTimeEventsComparison = null)
+        public static TimedObjectsManager<TimedEvent> ManageTimedEvents(this EventsCollection eventsCollection, Comparison<MidiEvent> sameTimeEventsComparison = null)
         {
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
 
-            return new TimedEventsManager(eventsCollection, sameTimeEventsComparison);
+            return new TimedObjectsManager<TimedEvent>(eventsCollection, sameTimeEventsComparison: sameTimeEventsComparison);
         }
 
         /// <summary>
-        /// Creates an instance of the <see cref="TimedEventsManager"/> initializing it with the
+        /// Creates an instance of the <see cref="TimedObjectsManager{TimedEvent}"/> initializing it with the
         /// events collection of the specified track chunk and comparison delegate for events
         /// that have same time.
         /// </summary>
         /// <param name="trackChunk"><see cref="TrackChunk"/> that holds events to manage.</param>
         /// <param name="sameTimeEventsComparison">Delegate to compare events with the same absolute time.</param>
-        /// <returns>An instance of the <see cref="TimedEventsManager"/> that can be used to manage
+        /// <returns>An instance of the <see cref="TimedObjectsManager{TimedEvent}"/> that can be used to manage
         /// events represented by the <paramref name="trackChunk"/>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="trackChunk"/> is <c>null</c>.</exception>
-        public static TimedEventsManager ManageTimedEvents(this TrackChunk trackChunk, Comparison<MidiEvent> sameTimeEventsComparison = null)
+        public static TimedObjectsManager<TimedEvent> ManageTimedEvents(this TrackChunk trackChunk, Comparison<MidiEvent> sameTimeEventsComparison = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
 
@@ -167,7 +167,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="time"/> is negative.</exception>
         /// <exception cref="ArgumentException"><paramref name="midiEvent"/> is either system real-time or
         /// system common one.</exception>
-        public static void AddEvent(this TimedEventsCollection eventsCollection, MidiEvent midiEvent, long time)
+        public static void AddEvent(this TimedObjectsCollection<TimedEvent> eventsCollection, MidiEvent midiEvent, long time)
         {
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
             ThrowIfArgument.IsNull(nameof(midiEvent), midiEvent);
@@ -206,7 +206,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </exception>
         /// <exception cref="ArgumentException"><paramref name="midiEvent"/> is either system real-time or
         /// system common one.</exception>
-        public static void AddEvent(this TimedEventsCollection eventsCollection, MidiEvent midiEvent, ITimeSpan time, TempoMap tempoMap)
+        public static void AddEvent(this TimedObjectsCollection<TimedEvent> eventsCollection, MidiEvent midiEvent, ITimeSpan time, TempoMap tempoMap)
         {
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
             ThrowIfArgument.IsNull(nameof(midiEvent), midiEvent);

@@ -8,6 +8,7 @@ using NUnit.Framework;
 namespace Melanchall.DryWetMidi.Tests.Interaction
 {
     [TestFixture]
+    [Obsolete("OBS11")]
     public sealed class TimedEventsManagerTests
     {
         #region Test methods
@@ -18,7 +19,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             using (var timedEventsManager = new TrackChunk().ManageTimedEvents())
             {
-                var events = timedEventsManager.Events;
+                var events = timedEventsManager.Objects;
 
                 events.AddEvent(new NoteOnEvent(), 123);
                 events.AddEvent(new NoteOnEvent(), 1);
@@ -48,7 +49,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
             using (var timedEventsManager = new TrackChunk().ManageTimedEvents())
             {
-                var events = timedEventsManager.Events;
+                var events = timedEventsManager.Objects;
                 events.Add(originalTimedEvents);
 
                 var sortedEvents = events.ToList();
@@ -71,7 +72,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
             using (var timedEventsManager = new TrackChunk().ManageTimedEvents(sameTimeEventsComparison))
             {
-                var events = timedEventsManager.Events;
+                var events = timedEventsManager.Objects;
                 events.Add(originalTimedEvents);
 
                 var sortedEvents = events.ToList();

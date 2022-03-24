@@ -106,7 +106,7 @@ namespace Melanchall.DryWetMidi.Core
                 ThrowIfArgument.DoesntSatisfyCondition(
                     nameof(value),
                     value,
-                    MathUtilities.IsPowerOfTwo,
+                    v => MathUtilities.IsPowerOfTwo(v),
                     "Denominator is zero or is not a power of two.");
 
                 _denominator = value;

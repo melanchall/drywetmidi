@@ -44,7 +44,7 @@ namespace Melanchall.DryWetMidi.Tools
 
             using (var chordsManager = trackChunk.ManageChords(settings?.ChordDetectionSettings))
             {
-                new ChordsRandomizer().Randomize(chordsManager.Chords, bounds, tempoMap, settings);
+                new ChordsRandomizer().Randomize(chordsManager.Objects, bounds, tempoMap, settings);
             }
         }
 

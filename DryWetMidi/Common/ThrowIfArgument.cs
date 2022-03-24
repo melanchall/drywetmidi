@@ -65,7 +65,7 @@ namespace Melanchall.DryWetMidi.Common
                 throw new ArgumentOutOfRangeException(parameterName, value, message);
         }
 
-        internal static void DoesntSatisfyCondition(string parameterName, int value, Predicate<int> condition, string message)
+        internal static void DoesntSatisfyCondition<TValue>(string parameterName, TValue value, Predicate<TValue> condition, string message)
         {
             if (!condition(value))
                 throw new ArgumentOutOfRangeException(parameterName, value, message);

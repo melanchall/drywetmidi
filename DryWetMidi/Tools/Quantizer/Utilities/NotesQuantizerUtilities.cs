@@ -53,7 +53,7 @@ namespace Melanchall.DryWetMidi.Tools
 
             using (var notesManager = trackChunk.ManageNotes(settings?.NoteDetectionSettings))
             {
-                new NotesQuantizer().Quantize(notesManager.Notes, grid, tempoMap, settings);
+                new NotesQuantizer().Quantize(notesManager.Objects, grid, tempoMap, settings);
             }
         }
 

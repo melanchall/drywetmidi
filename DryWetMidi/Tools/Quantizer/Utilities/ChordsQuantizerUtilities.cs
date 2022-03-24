@@ -53,7 +53,7 @@ namespace Melanchall.DryWetMidi.Tools
 
             using (var chordsManager = trackChunk.ManageChords(settings?.ChordDetectionSettings))
             {
-                new ChordsQuantizer().Quantize(chordsManager.Chords, grid, tempoMap, settings);
+                new ChordsQuantizer().Quantize(chordsManager.Objects, grid, tempoMap, settings);
             }
         }
 

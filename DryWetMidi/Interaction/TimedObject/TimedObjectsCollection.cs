@@ -1,4 +1,5 @@
 ﻿using Melanchall.DryWetMidi.Common;
+using Melanchall.DryWetMidi.Core;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -11,15 +12,19 @@ namespace Melanchall.DryWetMidi.Interaction
     /// Represents a basic collection of the <see cref="ITimedObject"/>.
     /// </summary>
     /// <typeparam name="TObject">The type of elements in the collection.</typeparam>
-    public abstract class TimedObjectsCollection<TObject> : IEnumerable<TObject>
+    public sealed class TimedObjectsCollection<TObject> : IEnumerable<TObject>
         where TObject : ITimedObject
     {
+        #region Events
+
+        public event TimedObjectsCollectionChangedEventHandler<TObject> CollectionChanged;
+
+        #endregion
+
         #region Fields
 
-        /// <summary>
-        /// Internal list of timed objects.
-        /// </summary>
-        protected readonly List<TObject> _objects = new List<TObject>();
+        private readonly List<TObject> _objects = new List<TObject>();
+        private readonly TimedObjectsComparer<TObject> _comparer;
 
         #endregion
 
@@ -34,11 +39,12 @@ namespace Melanchall.DryWetMidi.Interaction
         /// Note that <c>null</c> objects will be automatically filtered out so the collection will not
         /// contain them.
         /// </remarks>
-        internal TimedObjectsCollection(IEnumerable<TObject> objects)
+        internal TimedObjectsCollection(IEnumerable<TObject> objects, Comparison<MidiEvent> sameTimeEventsComparison = null)
         {
             Debug.Assert(objects != null);
 
             _objects.AddRange(objects.Where(o => o != null));
+            _comparer = new TimedObjectsComparer<TObject>(sameTimeEventsComparison);
         }
 
         #endregion
@@ -127,20 +133,19 @@ namespace Melanchall.DryWetMidi.Interaction
             OnObjectsRemoved(removedObjects);
         }
 
-        /// <summary>
-        /// Performs an action when objects are added to the collection.
-        /// </summary>
-        /// <param name="addedObjects">Collection of added objects.</param>
-        protected virtual void OnObjectsAdded(IEnumerable<TObject> addedObjects)
+        private void OnObjectsAdded(IEnumerable<TObject> addedObjects)
         {
+            OnCollectionChanged(addedObjects, null);
         }
 
-        /// <summary>
-        /// Performs an action when objects are removed from the collection.
-        /// </summary>
-        /// <param name="removedObjects">Collection of removed objects.</param>
-        protected virtual void OnObjectsRemoved(IEnumerable<TObject> removedObjects)
+        private void OnObjectsRemoved(IEnumerable<TObject> removedObjects)
         {
+            OnCollectionChanged(null, removedObjects);
+        }
+
+        private void OnCollectionChanged(IEnumerable<TObject> addedObjects, IEnumerable<TObject> removedObjects)
+        {
+            CollectionChanged?.Invoke(this, new TimedObjectsCollectionChangedEventArgs<TObject>(addedObjects, removedObjects));
         }
 
         #endregion
@@ -151,9 +156,9 @@ namespace Melanchall.DryWetMidi.Interaction
         /// Returns an enumerator that iterates through the collection.
         /// </summary>
         /// <returns>An enumerator that can be used to iterate through the collection.</returns>
-        public virtual IEnumerator<TObject> GetEnumerator()
+        public IEnumerator<TObject> GetEnumerator()
         {
-            return _objects.OrderBy(o => o.Time).GetEnumerator();
+            return _objects.OrderBy(obj => obj, _comparer).GetEnumerator();
         }
 
         /// <summary>

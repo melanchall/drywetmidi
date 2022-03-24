@@ -23,7 +23,7 @@ namespace Melanchall.DryWetMidi.Interaction
     {
         #region Fields
 
-        private readonly IEnumerable<TimedEventsManager> _timedEventsManagers;
+        private readonly IEnumerable<TimedObjectsManager<TimedEvent>> _timedEventsManagers;
 
         private bool _disposed;
 
@@ -378,12 +378,12 @@ namespace Melanchall.DryWetMidi.Interaction
 
             // Update existing tempo map
 
-            foreach (var events in _timedEventsManagers.Select(m => m.Events))
+            foreach (var events in _timedEventsManagers.Select(m => m.Objects))
             {
                 events.RemoveAll(IsTempoMapEvent);
             }
 
-            var firstEventsCollection = _timedEventsManagers.First().Events;
+            var firstEventsCollection = _timedEventsManagers.First().Objects;
             firstEventsCollection.Add(TempoMap.TempoLine.Select(GetSetTempoTimedEvent));
             firstEventsCollection.Add(TempoMap.TimeSignatureLine.Select(GetTimeSignatureTimedEvent));
 
@@ -395,7 +395,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
         private IEnumerable<TimedEvent> GetTimedEvents(Func<TimedEvent, bool> predicate)
         {
-            return _timedEventsManagers.SelectMany(m => m.Events).Where(predicate);
+            return _timedEventsManagers.SelectMany(m => m.Objects).Where(predicate);
         }
 
         private void CollectTimeSignatureChanges()

@@ -43,6 +43,35 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
+        public void GetObjects_ChordsAndNotesAndTimedEvents_FromTimedEvents_UncompletedChord()
+        {
+            GetObjects_ChordsAndNotesAndTimedEvents(
+                inputObjects: new ITimedObject[]
+                {
+                    new TimedEvent(new NoteOnEvent(), 0),
+                    new TimedEvent(new NoteOffEvent(), 10),
+                    new TimedEvent(new NoteOnEvent((SevenBitNumber)70, (SevenBitNumber)10), 10),
+                    new TimedEvent(new NoteOffEvent((SevenBitNumber)70, (SevenBitNumber)0), 30),
+                    new TimedEvent(new NoteOnEvent(), 70),
+                    new TimedEvent(new NoteOffEvent(), 80),
+                    new TimedEvent(new ProgramChangeEvent(), 90)
+                },
+                outputObjects: new ITimedObject[]
+                {
+                    new Chord(
+                        new Note((SevenBitNumber)0, 10, 0) { Velocity = (SevenBitNumber)0 },
+                        new Note((SevenBitNumber)70, 20, 10) { Velocity = (SevenBitNumber)10 }),
+                    new Note((SevenBitNumber)0, 10, 70) { Velocity = (SevenBitNumber)0 },
+                    new TimedEvent(new ProgramChangeEvent(), 90)
+                },
+                settings: new ChordDetectionSettings
+                {
+                    NotesTolerance = 20,
+                    NotesMinCount = 2
+                });
+        }
+
+        [Test]
         public void GetObjects_ChordsAndNotesAndTimedEvents_FromTimedEvents_SameTime_AllNotesUncompleted()
         {
             GetObjects_ChordsAndNotesAndTimedEvents(
@@ -106,7 +135,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     new TimedEvent(new TextEvent("4") { DeltaTime = 1 }, 6),
                     new TimedEvent(new TextEvent("F") { DeltaTime = 1 }, 6),
                 },
-                chordDetectionSettings: new ChordDetectionSettings
+                settings: new ChordDetectionSettings
                 {
                     ChordSearchContext = ChordSearchContext.AllEventsCollections,
                     NotesMinCount = 2
@@ -116,6 +145,21 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         #endregion
 
         #region Private methods
+
+        private void GetObjects_ChordsAndNotesAndTimedEvents(
+            IEnumerable<ITimedObject> inputObjects,
+            IEnumerable<ITimedObject> outputObjects,
+            ChordDetectionSettings settings)
+        {
+            GetObjects(
+                inputObjects,
+                outputObjects,
+                ObjectType.TimedEvent | ObjectType.Note | ObjectType.Chord,
+                new ObjectDetectionSettings
+                {
+                    ChordDetectionSettings = settings
+                });
+        }
 
         private void GetObjects_ChordsAndNotesAndTimedEvents(
             IEnumerable<ITimedObject> inputObjects,
@@ -138,14 +182,14 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         private void GetObjects_ChordsAndNotesAndTimedEvents(
             MidiFile inputMidiFile,
             IEnumerable<ITimedObject> outputObjects,
-            ChordDetectionSettings chordDetectionSettings)
+            ChordDetectionSettings settings)
         {
             var actualObjects = inputMidiFile
                 .GetObjects(
                     ObjectType.TimedEvent | ObjectType.Note | ObjectType.Chord,
                     new ObjectDetectionSettings
                     {
-                        ChordDetectionSettings = chordDetectionSettings
+                        ChordDetectionSettings = settings
                     })
                 .ToList();
 

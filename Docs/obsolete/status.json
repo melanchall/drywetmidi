@@ -1,4 +1,9 @@
 {
+  "OBS11": {
+    "Hint": "Use quantizer tools.",
+    "ObsoleteFromVersion": "6.1.0",
+    "InLibrary": true
+  },
   "OBS10": {
     "Hint": "Use quantizer tools.",
     "ObsoleteFromVersion": "6.1.0",

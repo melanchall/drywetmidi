@@ -44,7 +44,7 @@ namespace Melanchall.DryWetMidi.Tools
 
             using (var notesManager = trackChunk.ManageNotes(settings?.NoteDetectionSettings))
             {
-                new NotesRandomizer().Randomize(notesManager.Notes, bounds, tempoMap, settings);
+                new NotesRandomizer().Randomize(notesManager.Objects, bounds, tempoMap, settings);
             }
         }
 

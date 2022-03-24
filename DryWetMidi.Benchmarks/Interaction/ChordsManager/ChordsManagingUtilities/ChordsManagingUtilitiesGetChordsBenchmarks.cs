@@ -44,7 +44,7 @@ namespace Melanchall.DryWetMidi.Benchmarks.Interaction
                             var noteNumber = (SevenBitNumber)(j % SevenBitNumber.MaxValue);
                             var notes = Enumerable.Range(0, notesPerChord).Select(_ => new Note(noteNumber, noteLength));
 
-                            chordsManager.Chords.Add(new Chord(notes, j));
+                            chordsManager.Objects.Add(new Chord(notes, j));
                         }
                     }
 

@@ -38,8 +38,9 @@ namespace Melanchall.DryWetMidi.Benchmarks.Interaction
 
                     using (var notesManager = trackChunk.ManageNotes())
                     {
-                        notesManager.Notes.Add(Enumerable.Range(0, notesPerTrackChunk)
-                                                         .Select(j => new Note((SevenBitNumber)(j % SevenBitNumber.MaxValue), noteLength, j)));
+                        notesManager.Objects.Add(Enumerable
+                            .Range(0, notesPerTrackChunk)
+                            .Select(j => new Note((SevenBitNumber)(j % SevenBitNumber.MaxValue), noteLength, j)));
                     }
 
                     midiFile.Chunks.Add(trackChunk);

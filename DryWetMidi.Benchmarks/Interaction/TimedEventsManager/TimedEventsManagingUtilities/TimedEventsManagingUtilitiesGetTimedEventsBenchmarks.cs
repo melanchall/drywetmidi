@@ -37,7 +37,7 @@ namespace Melanchall.DryWetMidi.Benchmarks.Interaction
                     {
                         for (int j = 0; j < eventsPerTrackChunk; j++)
                         {
-                            timedEventsManager.Events.Add(new TimedEvent(new SetTempoEvent(j + 1), j));
+                            timedEventsManager.Objects.Add(new TimedEvent(new SetTempoEvent(j + 1), j));
                         }
                     }
 
