@@ -380,9 +380,15 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <summary>
         /// Gets or sets callback used to process MIDI event to be played.
         /// </summary>
+        /// <remarks>
+        /// Note that <see cref="NoteOnEvent"/> and <see cref="NoteOffEvent"/> won't be passed
+        /// to <see cref="EventCallback"/>. Since processing of a note requires syncing between pairs
+        /// of corresponding events, such pairs are handled by <see cref="NoteCallback"/> to be sure
+        /// that a note's integrity is not broken.
+        /// </remarks>
         /// <example>
         /// <para>
-        /// The following example filters out all Program Change events:
+        /// The following example filters out all <see cref="ProgramChangeEvent">Program Change</see> events:
         /// </para>
         /// <code language="csharp">
         /// playback.EventCallback = (midiEvent, rawTime, playbackTime) =>

@@ -233,6 +233,9 @@ namespace Melanchall.DryWetMidi.Tools
             TempoMap tempoMap,
             TSettings settings)
         {
+            if (quantizedTime == null)
+                return TimeProcessingInstruction.Skip;
+
             return OnTimeChange(obj, quantizedTime.NewTime, tempoMap, settings);
         }
 

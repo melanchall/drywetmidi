@@ -156,12 +156,7 @@ namespace Melanchall.DryWetMidi.Tools
             TempoMap tempoMap)
         {
             if (grid.Count == 0)
-                return new QuantizedTime(
-                    time,
-                    0,
-                    null,
-                    0,
-                    null);
+                return null;
 
             var distanceToGridTime = -1L;
             var convertedDistanceToGridTime = TimeSpanUtilities.GetMaxTimeSpan(distanceCalculationType);

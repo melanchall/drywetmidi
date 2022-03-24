@@ -31,7 +31,6 @@
 ## [Overview](tools/Overview.md)
 ## [Notes and chords splitter](tools/Notes-and-chords-splitter.md)
 ## [Quantizer](tools/Quantizer.md)
-## [Randomizer](xref:Melanchall.DryWetMidi.Tools.Randomizer`2)
 ## [Notes merger](tools/Notes-merger.md)
 ## [MIDI file splitter](tools/MIDI-file-splitter.md)
 ## [CSV converter](xref:Melanchall.DryWetMidi.Tools.CsvConverter)
