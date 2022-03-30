@@ -2111,6 +2111,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
             using (var playback = new PlaybackWithMetadataRegistration(timedEvents, tempoMap, outputDevice))
             {
+                playback.InterruptNotesOnStop = false;
                 setupPlayback(playbackContext, playback);
 
                 stopwatch.Start();

@@ -478,6 +478,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
                 using (var playback = eventsForPlayback.GetPlayback(tempoMap, outputDevice))
                 {
+                    playback.InterruptNotesOnStop = false;
                     playback.Speed = speed;
                     setupPlayback(playbackContext, playback);
 

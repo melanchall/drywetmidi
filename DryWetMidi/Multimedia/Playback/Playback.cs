@@ -224,7 +224,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// Gets or sets a value indicating whether currently playing notes must be stopped
         /// on playback stop or not.
         /// </summary>
-        public bool InterruptNotesOnStop { get; set; }
+        public bool InterruptNotesOnStop { get; set; } = true;
 
         /// <summary>
         /// Gets or sets a value indicating whether notes must be tracked or not. If <c>false</c>, notes
