@@ -1,6 +1,6 @@
 {
   "OBS11": {
-    "Hint": "Use quantizer tools.",
+    "Hint": "Use TimedObjectsManager class.",
     "ObsoleteFromVersion": "6.1.0",
     "InLibrary": true
   },

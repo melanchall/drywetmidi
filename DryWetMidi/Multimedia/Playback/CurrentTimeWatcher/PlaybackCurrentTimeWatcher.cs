@@ -33,7 +33,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         private readonly Dictionary<Playback, TimeSpanType?> _playbacks = new Dictionary<Playback, TimeSpanType?>();
         private readonly object _playbacksLock = new object();
-        private readonly MidiClockSettings _clockSettings;
+        private readonly PlaybackCurrentTimeWatcherSettings _settings;
 
         private MidiClock _clock;
         private TimeSpan _pollingInterval = DefaultPollingInterval;
@@ -45,10 +45,10 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         #region Constructor
 
-        private PlaybackCurrentTimeWatcher(MidiClockSettings clockSettings = null)
+        public PlaybackCurrentTimeWatcher(PlaybackCurrentTimeWatcherSettings settings = null)
         {
-            _clockSettings = clockSettings ?? new MidiClockSettings();
-            PollingInterval = DefaultPollingInterval;
+            _settings = settings ?? new PlaybackCurrentTimeWatcherSettings();
+            CreateClock(PollingInterval);
         }
 
         #endregion
@@ -213,6 +213,9 @@ namespace Melanchall.DryWetMidi.Multimedia
             {
                 foreach (var playback in _playbacks)
                 {
+                    if (_settings.WatchOnlyRunningPlaybacks && !playback.Key.IsRunning)
+                        continue;
+
                     var currentTime = playback.Key.GetCurrentTime(playback.Value ?? TimeType);
                     times.Add(new PlaybackCurrentTime(playback.Key, currentTime));
                 }
@@ -245,7 +248,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         private void CreateClock(TimeSpan pollingInterval)
         {
-            _clock = new MidiClock(true, _clockSettings.CreateTickGeneratorCallback(), pollingInterval);
+            _clock = new MidiClock(true, (_settings.ClockSettings ?? new MidiClockSettings()).CreateTickGeneratorCallback(), pollingInterval);
             _clock.Ticked += OnTick;
         }
 
@@ -258,6 +261,18 @@ namespace Melanchall.DryWetMidi.Multimedia
 
             if (isWatching)
                 Start();
+        }
+
+        private void DetachAllEventHandlers()
+        {
+            var currentTimeChanged = CurrentTimeChanged;
+            if (currentTimeChanged == null)
+                return;
+
+            foreach (var d in currentTimeChanged.GetInvocationList())
+            {
+                currentTimeChanged -= d as EventHandler<PlaybackCurrentTimeChangedEventArgs>;
+            }
         }
 
         #endregion
@@ -296,6 +311,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             if (disposing)
             {
                 DisposeClock();
+                DetachAllEventHandlers();
             }
 
             _disposed = true;
