@@ -31,12 +31,13 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         private static readonly Lazy<PlaybackCurrentTimeWatcher> _lazyInstance = new Lazy<PlaybackCurrentTimeWatcher>(() => new PlaybackCurrentTimeWatcher());
 
-        private readonly Dictionary<Playback, TimeSpanType> _playbacks = new Dictionary<Playback, TimeSpanType>();
+        private readonly Dictionary<Playback, TimeSpanType?> _playbacks = new Dictionary<Playback, TimeSpanType?>();
         private readonly object _playbacksLock = new object();
         private readonly MidiClockSettings _clockSettings;
 
         private MidiClock _clock;
         private TimeSpan _pollingInterval = DefaultPollingInterval;
+        private TimeSpanType _timeType = TimeSpanType.Midi;
 
         private bool _disposed = false;
 
@@ -92,6 +93,17 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// </summary>
         public bool IsWatching => _clock?.IsRunning ?? false;
 
+        public TimeSpanType TimeType
+        {
+            get { return _timeType; }
+            set
+            {
+                ThrowIfArgument.IsInvalidEnumValue(nameof(value), value);
+
+                _timeType = value;
+            }
+        }
+
         #endregion
 
         #region Methods
@@ -138,6 +150,17 @@ namespace Melanchall.DryWetMidi.Multimedia
             lock (_playbacksLock)
             {
                 _playbacks[playback] = timeType;
+            }
+        }
+
+        public void AddPlayback(Playback playback)
+        {
+            ThrowIfArgument.IsNull(nameof(playback), playback);
+            EnsureIsNotDisposed();
+
+            lock (_playbacksLock)
+            {
+                _playbacks[playback] = null;
             }
         }
 
@@ -190,7 +213,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             {
                 foreach (var playback in _playbacks)
                 {
-                    var currentTime = playback.Key.GetCurrentTime(playback.Value);
+                    var currentTime = playback.Key.GetCurrentTime(playback.Value ?? TimeType);
                     times.Add(new PlaybackCurrentTime(playback.Key, currentTime));
                 }
             }

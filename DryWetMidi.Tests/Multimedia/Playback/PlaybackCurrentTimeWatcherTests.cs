@@ -52,15 +52,19 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var times = new List<ITimeSpan>();
             var expectedTimes = Enumerable.Range(0, (int)(waitingTime.TotalMilliseconds / PlaybackCurrentTimeWatcher.Instance.PollingInterval.TotalMilliseconds) + 1).Select(i => new MetricTimeSpan()).ToArray();
 
+            EventHandler<PlaybackCurrentTimeChangedEventArgs> onCurrentTimeChanged = (_, e) =>
+                times.Add(e.Times.First().Time);
+
             using (var playback = events.GetPlayback(TempoMap.Default))
             {
                 PlaybackCurrentTimeWatcher.Instance.AddPlayback(playback, TimeSpanType.Metric);
-                PlaybackCurrentTimeWatcher.Instance.CurrentTimeChanged += (_, e) => times.Add(e.Times.First().Time);
+                PlaybackCurrentTimeWatcher.Instance.CurrentTimeChanged += onCurrentTimeChanged;
 
                 PlaybackCurrentTimeWatcher.Instance.Start();
                 WaitOperations.Wait(waitingTime + epsilon);
-                PlaybackCurrentTimeWatcher.Instance.Stop();
 
+                PlaybackCurrentTimeWatcher.Instance.Stop();
+                PlaybackCurrentTimeWatcher.Instance.CurrentTimeChanged -= onCurrentTimeChanged;
                 PlaybackCurrentTimeWatcher.Instance.RemovePlayback(playback);
             }
 
@@ -95,10 +99,16 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             Assert.IsTrue(playbackFinished, $"Playback is not finished for {timeout}.");
 
             var times = new List<ITimeSpan>();
-            PlaybackCurrentTimeWatcher.Instance.CurrentTimeChanged += (_, e) => times.Add(e.Times.First().Time);
+
+            EventHandler<PlaybackCurrentTimeChangedEventArgs> onCurrentTimeChanged = (_, e) =>
+                times.Add(e.Times.First().Time);
+
+            PlaybackCurrentTimeWatcher.Instance.CurrentTimeChanged += onCurrentTimeChanged;
 
             WaitOperations.Wait(waitingTime + epsilon);
+
             PlaybackCurrentTimeWatcher.Instance.Stop();
+            PlaybackCurrentTimeWatcher.Instance.CurrentTimeChanged -= onCurrentTimeChanged;
 
             CheckTimes(
                 Enumerable.Range(0, (int)(waitingTime.TotalMilliseconds / PlaybackCurrentTimeWatcher.Instance.PollingInterval.TotalMilliseconds)).Select(i => new MidiTimeSpan(lastTime)).ToArray(),
@@ -106,6 +116,153 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
             PlaybackCurrentTimeWatcher.Instance.RemovePlayback(playback);
             playback.Dispose();
+        }
+
+        [Test]
+        [Retry(RetriesNumber)]
+        public void ChangeTimeType_SinglePlayback()
+        {
+            var changeAfter = TimeSpan.FromMilliseconds(200);
+            var waitAfterChange = TimeSpan.FromMilliseconds(200);
+
+            var oldTimeType = TimeSpanType.BarBeatFraction;
+            var newTimeType = TimeSpanType.Metric;
+
+            var events = new MidiEvent[]
+            {
+                new NoteOnEvent(),
+                new NoteOffEvent()
+            };
+
+            var times = new List<ITimeSpan>();
+
+            EventHandler<PlaybackCurrentTimeChangedEventArgs> onCurrentTimeChanged = (_, e) =>
+                times.Add(e.Times.First().Time);
+
+            using (var playback = events.GetPlayback(TempoMap.Default))
+            {
+                PlaybackCurrentTimeWatcher.Instance.TimeType = oldTimeType;
+
+                PlaybackCurrentTimeWatcher.Instance.AddPlayback(playback);
+                PlaybackCurrentTimeWatcher.Instance.CurrentTimeChanged += onCurrentTimeChanged;
+
+                PlaybackCurrentTimeWatcher.Instance.Start();
+
+                WaitOperations.Wait(changeAfter);
+                PlaybackCurrentTimeWatcher.Instance.TimeType = newTimeType;
+                WaitOperations.Wait(waitAfterChange);
+
+                PlaybackCurrentTimeWatcher.Instance.Stop();
+                PlaybackCurrentTimeWatcher.Instance.CurrentTimeChanged -= onCurrentTimeChanged;
+                PlaybackCurrentTimeWatcher.Instance.RemovePlayback(playback);
+            }
+
+            Assert.IsInstanceOf<BarBeatFractionTimeSpan>(times.First(), "Invalid first time type.");
+            Assert.IsInstanceOf<MetricTimeSpan>(times.Last(), "Invalid last time type.");
+        }
+
+        [Test]
+        [Retry(RetriesNumber)]
+        public void ChangeTimeType_MultiplePlaybacks_AllOnCommonTimeType()
+        {
+            var changeAfter = TimeSpan.FromMilliseconds(200);
+            var waitAfterChange = TimeSpan.FromMilliseconds(200);
+
+            var oldTimeType = TimeSpanType.BarBeatFraction;
+            var newTimeType = TimeSpanType.Metric;
+
+            var events = new MidiEvent[]
+            {
+                new NoteOnEvent(),
+                new NoteOffEvent()
+            };
+
+            var times = new Dictionary<Playback, List<ITimeSpan>>();
+
+            EventHandler<PlaybackCurrentTimeChangedEventArgs> onCurrentTimeChanged = (_, e) =>
+                e.Times.ToList().ForEach(t => times[t.Playback].Add(t.Time));
+
+            using (var playback1 = events.GetPlayback(TempoMap.Default))
+            using (var playback2 = events.GetPlayback(TempoMap.Default))
+            {
+                times[playback1] = new List<ITimeSpan>();
+                times[playback2] = new List<ITimeSpan>();
+
+                PlaybackCurrentTimeWatcher.Instance.TimeType = oldTimeType;
+
+                PlaybackCurrentTimeWatcher.Instance.AddPlayback(playback1);
+                PlaybackCurrentTimeWatcher.Instance.AddPlayback(playback2);
+                PlaybackCurrentTimeWatcher.Instance.CurrentTimeChanged += onCurrentTimeChanged;
+
+                PlaybackCurrentTimeWatcher.Instance.Start();
+
+                WaitOperations.Wait(changeAfter);
+                PlaybackCurrentTimeWatcher.Instance.TimeType = newTimeType;
+                WaitOperations.Wait(waitAfterChange);
+
+                PlaybackCurrentTimeWatcher.Instance.Stop();
+                PlaybackCurrentTimeWatcher.Instance.CurrentTimeChanged -= onCurrentTimeChanged;
+                PlaybackCurrentTimeWatcher.Instance.RemovePlayback(playback1);
+                PlaybackCurrentTimeWatcher.Instance.RemovePlayback(playback2);
+            }
+
+            foreach (var t in times)
+            {
+                Assert.IsInstanceOf<BarBeatFractionTimeSpan>(t.Value.First(), "Invalid first time type.");
+                Assert.IsInstanceOf<MetricTimeSpan>(t.Value.Last(), "Invalid last time type.");
+            }
+        }
+
+        [Test]
+        [Retry(RetriesNumber)]
+        public void ChangeTimeType_MultiplePlaybacks_OneOnCommonTimeType()
+        {
+            var changeAfter = TimeSpan.FromMilliseconds(200);
+            var waitAfterChange = TimeSpan.FromMilliseconds(200);
+
+            var oldTimeType = TimeSpanType.BarBeatFraction;
+            var newTimeType = TimeSpanType.Metric;
+
+            var events = new MidiEvent[]
+            {
+                new NoteOnEvent(),
+                new NoteOffEvent()
+            };
+
+            var times = new Dictionary<Playback, List<ITimeSpan>>();
+
+            EventHandler<PlaybackCurrentTimeChangedEventArgs> onCurrentTimeChanged = (_, e) =>
+                e.Times.ToList().ForEach(t => times[t.Playback].Add(t.Time));
+
+            using (var playback1 = events.GetPlayback(TempoMap.Default))
+            using (var playback2 = events.GetPlayback(TempoMap.Default))
+            {
+                times[playback1] = new List<ITimeSpan>();
+                times[playback2] = new List<ITimeSpan>();
+
+                PlaybackCurrentTimeWatcher.Instance.TimeType = oldTimeType;
+
+                PlaybackCurrentTimeWatcher.Instance.AddPlayback(playback1);
+                PlaybackCurrentTimeWatcher.Instance.AddPlayback(playback2, TimeSpanType.Musical);
+                PlaybackCurrentTimeWatcher.Instance.CurrentTimeChanged += onCurrentTimeChanged;
+
+                PlaybackCurrentTimeWatcher.Instance.Start();
+
+                WaitOperations.Wait(changeAfter);
+                PlaybackCurrentTimeWatcher.Instance.TimeType = newTimeType;
+                WaitOperations.Wait(waitAfterChange);
+
+                PlaybackCurrentTimeWatcher.Instance.Stop();
+                PlaybackCurrentTimeWatcher.Instance.CurrentTimeChanged -= onCurrentTimeChanged;
+                PlaybackCurrentTimeWatcher.Instance.RemovePlayback(playback1);
+                PlaybackCurrentTimeWatcher.Instance.RemovePlayback(playback2);
+            }
+
+            Assert.IsInstanceOf<BarBeatFractionTimeSpan>(times.First().Value.First(), "Invalid first time type on first playback.");
+            Assert.IsInstanceOf<MetricTimeSpan>(times.First().Value.Last(), "Invalid last time type on first playback.");
+
+            var singleTimeType = times.Last().Value.Select(t => t.GetType()).Distinct().Single();
+            Assert.AreEqual(typeof(MusicalTimeSpan), singleTimeType, "Invalid time type on second playback.");
         }
 
         [Test]
@@ -336,6 +493,78 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 expectedTimes: Enumerable.Range(0, 6).Select(i => new MidiTimeSpan(i * 100)).ToArray());
         }
 
+        [Test]
+        [Retry(RetriesNumber)]
+        public void WatchCurrentTimeWithCommonTimeType_Metric()
+        {
+            CheckWatchCurrentTimeWithCommonTimeType(
+                playbackLength: new MetricTimeSpan(0, 0, 1),
+                pollingInterval: new MetricTimeSpan(0, 0, 0, 50),
+                timeType: TimeSpanType.Metric,
+                expectedTimes: Enumerable.Range(0, 21).Select(i => (MetricTimeSpan)TimeSpan.FromMilliseconds(i * 50)).ToArray());
+        }
+
+        [Test]
+        [Retry(RetriesNumber)]
+        public void WatchCurrentTimeWithCommonTimeType_BarBeat()
+        {
+            CheckWatchCurrentTimeWithCommonTimeType(
+                playbackLength: new BarBeatTicksTimeSpan(3, 0, 0),
+                pollingInterval: new BarBeatTicksTimeSpan(1, 0, 0),
+                timeType: TimeSpanType.BarBeatTicks,
+                expectedTimes: new[]
+                {
+                    new BarBeatTicksTimeSpan(0, 0, 0),
+                    new BarBeatTicksTimeSpan(1, 0, 0),
+                    new BarBeatTicksTimeSpan(2, 0, 1),
+                    new BarBeatTicksTimeSpan(3, 0, 1)
+                });
+        }
+
+        [Test]
+        [Retry(RetriesNumber)]
+        public void WatchCurrentTimeWithCommonTimeType_BarBeatFraction()
+        {
+            CheckWatchCurrentTimeWithCommonTimeType(
+                playbackLength: new BarBeatFractionTimeSpan(1, 0.00),
+                pollingInterval: new BarBeatFractionTimeSpan(0, 0.50),
+                timeType: TimeSpanType.BarBeatFraction,
+                expectedTimes: new[]
+                {
+                    new BarBeatFractionTimeSpan(0, 0.0),
+                    new BarBeatFractionTimeSpan(0, 0.50),
+                    new BarBeatFractionTimeSpan(0, 1.0),
+                    new BarBeatFractionTimeSpan(0, 1.50),
+                    new BarBeatFractionTimeSpan(0, 2.0),
+                    new BarBeatFractionTimeSpan(0, 2.50),
+                    new BarBeatFractionTimeSpan(0, 3.0),
+                    new BarBeatFractionTimeSpan(0, 3.50),
+                    new BarBeatFractionTimeSpan(1, 0.0)
+                });
+        }
+
+        [Test]
+        [Retry(RetriesNumber)]
+        public void WatchCurrentTimeWithCommonTimeType_Musical()
+        {
+            CheckWatchCurrentTimeWithCommonTimeType(
+                playbackLength: new MusicalTimeSpan(10, 16),
+                pollingInterval: new MusicalTimeSpan(1, 16),
+                timeType: TimeSpanType.Musical,
+                expectedTimes: Enumerable.Range(0, 11).Select(i => new MusicalTimeSpan(i, 16)).ToArray());
+        }
+
+        [Test]
+        [Retry(RetriesNumber)]
+        public void WatchCurrentTimeWithCommonTimeType_Midi()
+        {
+            CheckWatchCurrentTimeWithCommonTimeType(
+                playbackLength: new MidiTimeSpan(500),
+                pollingInterval: new MidiTimeSpan(100),
+                timeType: TimeSpanType.Midi,
+                expectedTimes: Enumerable.Range(0, 6).Select(i => new MidiTimeSpan(i * 100)).ToArray());
+        }
+
         #endregion
 
         #region Private methods
@@ -344,6 +573,32 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             ITimeSpan playbackLength,
             ITimeSpan pollingInterval,
             TimeSpanType timeType,
+            ICollection<ITimeSpan> expectedTimes) =>
+            CheckWatchCurrentTime(
+                playbackLength,
+                pollingInterval,
+                playback => PlaybackCurrentTimeWatcher.Instance.AddPlayback(playback, timeType),
+                expectedTimes);
+
+        private static void CheckWatchCurrentTimeWithCommonTimeType(
+            ITimeSpan playbackLength,
+            ITimeSpan pollingInterval,
+            TimeSpanType timeType,
+            ICollection<ITimeSpan> expectedTimes) =>
+            CheckWatchCurrentTime(
+                playbackLength,
+                pollingInterval,
+                playback =>
+                {
+                    PlaybackCurrentTimeWatcher.Instance.TimeType = timeType;
+                    PlaybackCurrentTimeWatcher.Instance.AddPlayback(playback);
+                },
+                expectedTimes);
+
+        private static void CheckWatchCurrentTime(
+            ITimeSpan playbackLength,
+            ITimeSpan pollingInterval,
+            Action<Playback> addPlayback,
             ICollection<ITimeSpan> expectedTimes)
         {
             var tempoMap = TempoMap.Default;
@@ -360,7 +615,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             using (var playback = events.GetPlayback(tempoMap))
             {
                 PlaybackCurrentTimeWatcher.Instance.PollingInterval = TimeConverter.ConvertTo<MetricTimeSpan>(pollingInterval, tempoMap);
-                PlaybackCurrentTimeWatcher.Instance.AddPlayback(playback, timeType);
+                addPlayback(playback);
 
                 EventHandler<PlaybackCurrentTimeChangedEventArgs> currentTimeChangedHandler = (_, e) => times.Add(e.Times.First().Time);
                 PlaybackCurrentTimeWatcher.Instance.CurrentTimeChanged += currentTimeChangedHandler;
