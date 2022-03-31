@@ -84,6 +84,47 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             });
 
         [Test]
+        public void GetChords_DetectionSettings_EventsCollection_NotesTolerance_4([Values] ContainerType containerType, [Values(1, 10)] int notesTolerance) => GetChords_DetectionSettings_EventsCollection(
+            containerType,
+            new ChordDetectionSettings { NotesTolerance = 10 },
+            midiEvents: new MidiEvent[]
+            {
+                new TextEvent("A"),
+                new NoteOnEvent(),
+                new TextEvent("B"),
+                new NoteOffEvent(),
+                new TextEvent("C"),
+                new NoteOnEvent((SevenBitNumber)70, SevenBitNumber.MaxValue) { DeltaTime = notesTolerance },
+                new TextEvent("D"),
+                new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue),
+                new TextEvent("E"),
+            },
+            expectedChords: new[]
+            {
+                new Chord(
+                    new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue },
+                    new Note((SevenBitNumber)70) { Velocity = SevenBitNumber.MaxValue, Time = notesTolerance })
+            });
+
+        [Test]
+        public void GetChords_DetectionSettings_EventsCollection_NotesTolerance_5([Values] ContainerType containerType) => GetChords_DetectionSettings_EventsCollection(
+            containerType,
+            new ChordDetectionSettings { NotesTolerance = 10 },
+            midiEvents: new MidiEvent[]
+            {
+                new NoteOnEvent(),
+                new NoteOffEvent { DeltaTime = 10 },
+                new NoteOnEvent((SevenBitNumber)70, (SevenBitNumber)10),
+                new NoteOffEvent((SevenBitNumber)70, (SevenBitNumber)0) { DeltaTime = 20 }
+            },
+            expectedChords: new[]
+            {
+                new Chord(
+                    new Note((SevenBitNumber)0, 10, 0) { Velocity = (SevenBitNumber)0 },
+                    new Note((SevenBitNumber)70, 20, 10) { Velocity = (SevenBitNumber)10 }),
+            });
+
+        [Test]
         public void GetChords_DetectionSettings_EventsCollection_NotesMinCount_1([Values] ContainerType containerType) => GetChords_DetectionSettings_EventsCollection(
             containerType,
             new ChordDetectionSettings { NotesMinCount = 1 },
