@@ -164,6 +164,19 @@ namespace Melanchall.DryWetMidi.Multimedia
             }
         }
 
+        public void SetPlaybackTimeType(Playback playback, TimeSpanType timeType)
+        {
+            ThrowIfArgument.IsNull(nameof(playback), playback);
+            ThrowIfArgument.IsInvalidEnumValue(nameof(timeType), timeType);
+            ThrowIfArgument.DoesntSatisfyCondition(nameof(playback), playback, p => _playbacks.ContainsKey(p), "Playback is not being watched.");
+            EnsureIsNotDisposed();
+
+            lock (_playbacksLock)
+            {
+                _playbacks[playback] = timeType;
+            }
+        }
+
         /// <summary>
         /// Removes a playback from the list of ones to watch current times of.
         /// </summary>
