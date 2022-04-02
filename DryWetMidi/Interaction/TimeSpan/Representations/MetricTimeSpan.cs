@@ -13,6 +13,10 @@ namespace Melanchall.DryWetMidi.Interaction
 
         private const int MicrosecondsInMillisecond = 1000;
         private const long TicksInMicrosecond = TimeSpan.TicksPerMillisecond / MicrosecondsInMillisecond;
+        private const long MaxTotalMicroseconds = long.MaxValue / TicksInMicrosecond;
+
+        private static readonly string TotalMicrosecondsIsOutOfRangeMessage =
+            $"Number of microseconds is out of [{0};{MaxTotalMicroseconds}] range.";
 
         #endregion
 
@@ -40,9 +44,12 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="totalMicroseconds"/> is negative.</exception>
         public MetricTimeSpan(long totalMicroseconds)
         {
-            ThrowIfArgument.IsNegative(nameof(totalMicroseconds),
-                                       totalMicroseconds,
-                                       "Number of microseconds is negative.");
+            ThrowIfArgument.IsOutOfRange(
+                nameof(totalMicroseconds),
+                totalMicroseconds,
+                0,
+                MaxTotalMicroseconds,
+                TotalMicrosecondsIsOutOfRangeMessage);
 
             _timeSpan = new TimeSpan(totalMicroseconds * TicksInMicrosecond);
         }

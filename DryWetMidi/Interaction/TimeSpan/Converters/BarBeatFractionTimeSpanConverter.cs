@@ -115,6 +115,10 @@ namespace Melanchall.DryWetMidi.Interaction
 
             var fractionalBeats = barBeatFractionTimeSpan.Beats;
             var bars = barBeatFractionTimeSpan.Bars;
+
+            if (bars + fractionalBeats > long.MaxValue)
+                throw new InvalidOperationException("Time span is too big.");
+
             var beats = (long)Math.Truncate(fractionalBeats);
             var fraction = fractionalBeats - Math.Truncate(fractionalBeats);
 

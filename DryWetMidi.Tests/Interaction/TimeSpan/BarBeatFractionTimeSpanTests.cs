@@ -194,6 +194,20 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                                                  TimeSpanTestUtilities.DefaultTempoMap);
         }
 
+        [Test]
+        public void Convert_Default_FromMaxTicks()
+        {
+            Assert.DoesNotThrow(() =>
+                TimeConverter.ConvertTo<BarBeatFractionTimeSpan>(long.MaxValue, TimeSpanTestUtilities.DefaultTempoMap));
+        }
+
+        [Test]
+        public void Convert_Default_FromMaxTimeSpan()
+        {
+            Assert.Throws<InvalidOperationException>(() =>
+                TimeConverter.ConvertFrom(new BarBeatFractionTimeSpan(long.MaxValue, double.MaxValue), TimeSpanTestUtilities.DefaultTempoMap));
+        }
+
         #endregion
 
         #region Simple

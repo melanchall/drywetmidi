@@ -56,7 +56,11 @@ namespace Melanchall.DryWetMidi.Interaction
             var lastTime = accumulatedMicroseconds?.Time ?? 0;
             var lastMicrosecondsPerTick = accumulatedMicroseconds?.MicrosecondsPerTick ?? valuesCache.DefaultMicrosecondsPerTick;
 
-            return new MetricTimeSpan(RoundMicroseconds(lastAccumulatedMicroseconds + GetMicroseconds(timeSpan - lastTime, lastMicrosecondsPerTick)));
+            var totalMicroseconds = lastAccumulatedMicroseconds + GetMicroseconds(timeSpan - lastTime, lastMicrosecondsPerTick);
+            if (totalMicroseconds > long.MaxValue)
+                throw new InvalidOperationException("Time span is too big.");
+
+            return new MetricTimeSpan(RoundMicroseconds(totalMicroseconds));
         }
 
         private static long MetricTimeSpanToTicks(MetricTimeSpan timeSpan, TempoMap tempoMap)

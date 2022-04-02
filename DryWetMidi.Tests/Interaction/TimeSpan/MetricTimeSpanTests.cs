@@ -170,6 +170,20 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                                                  TimeSpanTestUtilities.DefaultTempoMap);
         }
 
+        [Test]
+        public void Convert_Default_FromMaxTicks()
+        {
+            Assert.Throws<InvalidOperationException>(() =>
+                TimeConverter.ConvertTo<MetricTimeSpan>(long.MaxValue, TimeSpanTestUtilities.DefaultTempoMap));
+        }
+
+        [Test]
+        public void Convert_Default_FromMaxTimeSpan()
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(() =>
+                TimeConverter.ConvertFrom(new MetricTimeSpan(long.MaxValue), TimeSpanTestUtilities.DefaultTempoMap));
+        }
+
         #endregion
 
         #region Simple

@@ -115,6 +115,9 @@ namespace Melanchall.DryWetMidi.Interaction
             long beats = barBeatTicksTimeSpan.Beats;
             long ticks = barBeatTicksTimeSpan.Ticks;
 
+            if ((double)bars + beats + ticks > long.MaxValue)
+                throw new InvalidOperationException("Time span is too big.");
+
             var startTimeSignature = timeSignatureLine.GetValueAtTime(time);
             var startBarLength = BarBeatUtilities.GetBarLength(startTimeSignature, ticksPerQuarterNote);
             var startBeatLength = BarBeatUtilities.GetBeatLength(startTimeSignature, ticksPerQuarterNote);

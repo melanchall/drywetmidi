@@ -90,6 +90,20 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                                                  tempoMap);
         }
 
+        [Test]
+        public void Convert_Default_FromMaxTicks()
+        {
+            Assert.DoesNotThrow(() =>
+                TimeConverter.ConvertTo<MidiTimeSpan>(long.MaxValue, TimeSpanTestUtilities.DefaultTempoMap));
+        }
+
+        [Test]
+        public void Convert_Default_FromMaxTimeSpan()
+        {
+            Assert.DoesNotThrow(() =>
+                TimeConverter.ConvertFrom(new MidiTimeSpan(long.MaxValue), TimeSpanTestUtilities.DefaultTempoMap));
+        }
+
         #endregion
 
         #region Simple
