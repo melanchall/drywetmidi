@@ -186,6 +186,59 @@ namespace Melanchall.DryWetMidi.Tests.Composing
 
         #endregion
 
+        #region MoveToStart
+
+        [Test]
+        public void MoveToStart_1()
+        {
+            var pattern = new PatternBuilder()
+                .Note(Notes.A0)
+                .MoveToStart()
+                .Note(Notes.B1)
+                .Build();
+
+            PatternTestUtilities.TestNotes(pattern, new[]
+            {
+                new NoteInfo(NoteName.A, 0, (MidiTimeSpan)0, PatternBuilder.DefaultNoteLength),
+                new NoteInfo(NoteName.B, 1, (MidiTimeSpan)0, PatternBuilder.DefaultNoteLength),
+            });
+        }
+
+        [Test]
+        public void MoveToStart_2()
+        {
+            var pattern = new PatternBuilder()
+                .MoveToTime(MusicalTimeSpan.Whole)
+                .MoveToStart()
+                .Note(Notes.B1)
+                .Build();
+
+            PatternTestUtilities.TestNotes(pattern, new[]
+            {
+                new NoteInfo(NoteName.B, 1, (MidiTimeSpan)0, PatternBuilder.DefaultNoteLength),
+            });
+        }
+
+        [Test]
+        public void MoveToStart_3()
+        {
+            var pattern = new PatternBuilder()
+                .Note(Notes.A0)
+                .Note(Notes.B1)
+                .MoveToStart()
+                .Note(Notes.C2)
+                .Build();
+
+            PatternTestUtilities.TestNotes(pattern, new[]
+            {
+                new NoteInfo(NoteName.A, 0, (MidiTimeSpan)0, PatternBuilder.DefaultNoteLength),
+                new NoteInfo(NoteName.B, 1, PatternBuilder.DefaultNoteLength, PatternBuilder.DefaultNoteLength),
+                new NoteInfo(NoteName.C, 2, (MidiTimeSpan)0, PatternBuilder.DefaultNoteLength),
+            });
+        }
+
+        #endregion
+
         #endregion
     }
 }

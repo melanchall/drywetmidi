@@ -1700,6 +1700,11 @@ namespace Melanchall.DryWetMidi.Composing
             return AddAction(new MoveToTimeAction());
         }
 
+        public PatternBuilder MoveToStart()
+        {
+            return AddAction(new MoveToTimeAction((MidiTimeSpan)0));
+        }
+
         #endregion
 
         #region Repeat
