@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Interaction;
 using Melanchall.DryWetMidi.Tests.Utilities;
@@ -8,6 +9,7 @@ using NUnit.Framework;
 namespace Melanchall.DryWetMidi.Tests.Tools
 {
     [TestFixture]
+    [Obsolete("OBS12")]
     public sealed class ChordsSplitterTests : LengthedObjectsSplitterTests<Chord>
     {
         #region Constructor
@@ -42,7 +44,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 };
         }
 
-        protected override SplitLengthedObject<Chord> SplitObject(Chord obj, long time)
+        protected override SplitLengthedObject SplitObject(Chord obj, long time)
         {
             return obj.Split(time);
         }

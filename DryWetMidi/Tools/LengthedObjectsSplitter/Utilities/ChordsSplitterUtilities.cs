@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
@@ -11,6 +10,7 @@ namespace Melanchall.DryWetMidi.Tools
     /// <summary>
     /// Provides methods for splitting chords.
     /// </summary>
+    [Obsolete("OBS12")]
     public static class ChordsSplitterUtilities
     {
         #region Methods
@@ -48,7 +48,14 @@ namespace Melanchall.DryWetMidi.Tools
             ThrowIfArgument.IsNull(nameof(step), step);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
-            SplitTrackChunkChords(trackChunk, chordDetectionSettings, (splitter, chords) => splitter.SplitByStep(chords, step, tempoMap));
+            trackChunk.SplitObjectsByStep(
+                ObjectType.Chord,
+                step,
+                tempoMap,
+                new ObjectDetectionSettings
+                {
+                    ChordDetectionSettings = chordDetectionSettings
+                });
         }
 
         /// <summary>
@@ -84,10 +91,14 @@ namespace Melanchall.DryWetMidi.Tools
             ThrowIfArgument.IsNull(nameof(step), step);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
-            foreach (var trackChunk in trackChunks)
-            {
-                trackChunk.SplitChordsByStep(step, tempoMap, chordDetectionSettings);
-            }
+            trackChunks.SplitObjectsByStep(
+                ObjectType.Chord,
+                step,
+                tempoMap,
+                new ObjectDetectionSettings
+                {
+                    ChordDetectionSettings = chordDetectionSettings
+                });
         }
 
         /// <summary>
@@ -118,8 +129,13 @@ namespace Melanchall.DryWetMidi.Tools
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
             ThrowIfArgument.IsNull(nameof(step), step);
 
-            var tempoMap = midiFile.GetTempoMap();
-            midiFile.GetTrackChunks().SplitChordsByStep(step, tempoMap, chordDetectionSettings);
+            midiFile.SplitObjectsByStep(
+                ObjectType.Chord,
+                step,
+                new ObjectDetectionSettings
+                {
+                    ChordDetectionSettings = chordDetectionSettings
+                });
         }
 
         /// <summary>
@@ -154,7 +170,15 @@ namespace Melanchall.DryWetMidi.Tools
             ThrowIfArgument.IsInvalidEnumValue(nameof(lengthType), lengthType);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
-            SplitTrackChunkChords(trackChunk, chordDetectionSettings, (splitter, chords) => splitter.SplitByPartsNumber(chords, partsNumber, lengthType, tempoMap));
+            trackChunk.SplitObjectsByPartsNumber(
+                ObjectType.Chord,
+                partsNumber,
+                lengthType,
+                tempoMap,
+                new ObjectDetectionSettings
+                {
+                    ChordDetectionSettings = chordDetectionSettings
+                });
         }
 
         /// <summary>
@@ -189,10 +213,15 @@ namespace Melanchall.DryWetMidi.Tools
             ThrowIfArgument.IsInvalidEnumValue(nameof(lengthType), lengthType);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
-            foreach (var trackChunk in trackChunks)
-            {
-                trackChunk.SplitChordsByPartsNumber(partsNumber, lengthType, tempoMap, chordDetectionSettings);
-            }
+            trackChunks.SplitObjectsByPartsNumber(
+                ObjectType.Chord,
+                partsNumber,
+                lengthType,
+                tempoMap,
+                new ObjectDetectionSettings
+                {
+                    ChordDetectionSettings = chordDetectionSettings
+                });
         }
 
         /// <summary>
@@ -215,9 +244,14 @@ namespace Melanchall.DryWetMidi.Tools
             ThrowIfArgument.IsNonpositive(nameof(partsNumber), partsNumber, "Parts number is zero or negative.");
             ThrowIfArgument.IsInvalidEnumValue(nameof(lengthType), lengthType);
 
-            var tempoMap = midiFile.GetTempoMap();
-
-            midiFile.GetTrackChunks().SplitChordsByPartsNumber(partsNumber, lengthType, tempoMap, chordDetectionSettings);
+            midiFile.SplitObjectsByPartsNumber(
+                ObjectType.Chord,
+                partsNumber,
+                lengthType,
+                new ObjectDetectionSettings
+                {
+                    ChordDetectionSettings = chordDetectionSettings
+                });
         }
 
         /// <summary>
@@ -247,7 +281,14 @@ namespace Melanchall.DryWetMidi.Tools
             ThrowIfArgument.IsNull(nameof(grid), grid);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
-            SplitTrackChunkChords(trackChunk, chordDetectionSettings, (splitter, chords) => splitter.SplitByGrid(chords, grid, tempoMap));
+            trackChunk.SplitObjectsByGrid(
+                ObjectType.Chord,
+                grid,
+                tempoMap,
+                new ObjectDetectionSettings
+                {
+                    ChordDetectionSettings = chordDetectionSettings
+                });
         }
 
         /// <summary>
@@ -278,10 +319,14 @@ namespace Melanchall.DryWetMidi.Tools
             ThrowIfArgument.IsNull(nameof(grid), grid);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
-            foreach (var trackChunk in trackChunks)
-            {
-                trackChunk.SplitChordsByGrid(grid, tempoMap, chordDetectionSettings);
-            }
+            trackChunks.SplitObjectsByGrid(
+                ObjectType.Chord,
+                grid,
+                tempoMap,
+                new ObjectDetectionSettings
+                {
+                    ChordDetectionSettings = chordDetectionSettings
+                });
         }
 
         /// <summary>
@@ -296,8 +341,13 @@ namespace Melanchall.DryWetMidi.Tools
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
             ThrowIfArgument.IsNull(nameof(grid), grid);
 
-            var tempoMap = midiFile.GetTempoMap();
-            midiFile.GetTrackChunks().SplitChordsByGrid(grid, tempoMap, settings);
+            midiFile.SplitObjectsByGrid(
+                ObjectType.Chord,
+                grid,
+                new ObjectDetectionSettings
+                {
+                    ChordDetectionSettings = settings
+                });
         }
 
         /// <summary>
@@ -331,7 +381,15 @@ namespace Melanchall.DryWetMidi.Tools
             ThrowIfArgument.IsInvalidEnumValue(nameof(from), from);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
-            SplitTrackChunkChords(trackChunk, chordDetectionSettings, (splitter, chords) => splitter.SplitAtDistance(chords, distance, from, tempoMap));
+            trackChunk.SplitObjectsAtDistance(
+                ObjectType.Chord,
+                distance,
+                from,
+                tempoMap,
+                new ObjectDetectionSettings
+                {
+                    ChordDetectionSettings = chordDetectionSettings
+                });
         }
 
         /// <summary>
@@ -365,10 +423,15 @@ namespace Melanchall.DryWetMidi.Tools
             ThrowIfArgument.IsInvalidEnumValue(nameof(from), from);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
-            foreach (var trackChunk in trackChunks)
-            {
-                trackChunk.SplitChordsAtDistance(distance, from, tempoMap, chordDetectionSettings);
-            }
+            trackChunks.SplitObjectsAtDistance(
+                ObjectType.Chord,
+                distance,
+                from,
+                tempoMap,
+                new ObjectDetectionSettings
+                {
+                    ChordDetectionSettings = chordDetectionSettings
+                });
         }
 
         /// <summary>
@@ -397,8 +460,14 @@ namespace Melanchall.DryWetMidi.Tools
             ThrowIfArgument.IsNull(nameof(distance), distance);
             ThrowIfArgument.IsInvalidEnumValue(nameof(from), from);
 
-            var tempoMap = midiFile.GetTempoMap();
-            midiFile.GetTrackChunks().SplitChordsAtDistance(distance, from, tempoMap, chordDetectionSettings);
+            midiFile.SplitObjectsAtDistance(
+                ObjectType.Chord,
+                distance,
+                from,
+                new ObjectDetectionSettings
+                {
+                    ChordDetectionSettings = chordDetectionSettings
+                });
         }
 
         /// <summary>
@@ -447,7 +516,16 @@ namespace Melanchall.DryWetMidi.Tools
             ThrowIfArgument.IsInvalidEnumValue(nameof(from), from);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
-            SplitTrackChunkChords(trackChunk, chordDetectionSettings, (splitter, chords) => splitter.SplitAtDistance(chords, ratio, lengthType, from, tempoMap));
+            trackChunk.SplitObjectsAtDistance(
+                ObjectType.Chord,
+                ratio,
+                lengthType,
+                from,
+                tempoMap,
+                new ObjectDetectionSettings
+                {
+                    ChordDetectionSettings = chordDetectionSettings
+                });
         }
 
         /// <summary>
@@ -496,10 +574,16 @@ namespace Melanchall.DryWetMidi.Tools
             ThrowIfArgument.IsInvalidEnumValue(nameof(from), from);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
-            foreach (var trackChunk in trackChunks)
-            {
-                trackChunk.SplitChordsAtDistance(ratio, lengthType, from, tempoMap, chordDetectionSettings);
-            }
+            trackChunks.SplitObjectsAtDistance(
+                ObjectType.Chord,
+                ratio,
+                lengthType,
+                from,
+                tempoMap,
+                new ObjectDetectionSettings
+                {
+                    ChordDetectionSettings = chordDetectionSettings
+                });
         }
 
         /// <summary>
@@ -536,22 +620,15 @@ namespace Melanchall.DryWetMidi.Tools
             ThrowIfArgument.IsInvalidEnumValue(nameof(lengthType), lengthType);
             ThrowIfArgument.IsInvalidEnumValue(nameof(from), from);
 
-            var tempoMap = midiFile.GetTempoMap();
-            midiFile.GetTrackChunks().SplitChordsAtDistance(ratio, lengthType, from, tempoMap, chordDetectionSettings);
-        }
-
-        private static void SplitTrackChunkChords(TrackChunk trackChunk, ChordDetectionSettings chordDetectionSettings, Func<ChordsSplitter, IEnumerable<Chord>, IEnumerable<Chord>> splitOperation)
-        {
-            using (var chordsManager = trackChunk.ManageChords(chordDetectionSettings))
-            {
-                var chords = chordsManager.Objects;
-
-                var chordsSplitter = new ChordsSplitter();
-                var newChords = splitOperation(chordsSplitter, chords).ToList();
-
-                chords.Clear();
-                chords.Add(newChords);
-            }
+            midiFile.SplitObjectsAtDistance(
+                ObjectType.Chord,
+                ratio,
+                lengthType,
+                from,
+                new ObjectDetectionSettings
+                {
+                    ChordDetectionSettings = chordDetectionSettings
+                });
         }
 
         #endregion

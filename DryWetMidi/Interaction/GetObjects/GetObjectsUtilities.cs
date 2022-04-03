@@ -289,25 +289,36 @@ namespace Melanchall.DryWetMidi.Interaction
 
             foreach (var timedObject in timedObjects)
             {
+                var processed = false;
+
                 if (getChords)
                 {
                     var chord = timedObject as Chord;
-                    if (chord != null)
+                    if (processed = (chord != null))
                         result.Add(chord);
                 }
 
-                if (getNotes)
+                if (!processed && getNotes)
                 {
                     var note = timedObject as Note;
-                    if (note != null)
+                    if (processed = (note != null))
                         result.Add(note);
                 }
 
-                if (getTimedEvents)
+                if (!processed && getTimedEvents)
                 {
                     var timedEvent = timedObject as TimedEvent;
                     if (timedEvent != null)
                         result.Add(timedEvent);
+                    else
+                    {
+                        var note = timedObject as Note;
+                        if (note != null)
+                        {
+                            result.Add(note.GetTimedNoteOnEvent());
+                            result.Add(note.GetTimedNoteOffEvent());
+                        }
+                    }
                 }
 
                 if (getRests)

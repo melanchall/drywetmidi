@@ -299,28 +299,24 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void GetObjects_ChordsAndTimedEvents_FromTimedEvents_SameTime_AllNotesUncompleted()
-        {
-            GetObjects_ChordsAndTimedEvents(
-                inputObjects: new ITimedObject[]
-                {
-                    new TimedEvent(new NoteOnEvent((SevenBitNumber)50, Note.DefaultVelocity), 0),
-                    new TimedEvent(new TextEvent("A"), 10),
-                    new TimedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), 0),
-                    new TimedEvent(new NoteOnEvent((SevenBitNumber)90, Note.DefaultVelocity), 0),
-                    new TimedEvent(new TextEvent("B"), 0),
-                    new TimedEvent(new TextEvent("C"), 30),
-                },
-                outputObjects: new ITimedObject[]
-                {
-                    new TimedEvent(new NoteOnEvent((SevenBitNumber)50, Note.DefaultVelocity), 0),
-                    new TimedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), 0),
-                    new TimedEvent(new NoteOnEvent((SevenBitNumber)90, Note.DefaultVelocity), 0),
-                    new TimedEvent(new TextEvent("B"), 0),
-                    new TimedEvent(new TextEvent("A"), 10),
-                    new TimedEvent(new TextEvent("C"), 30),
-                });
-        }
+        public void GetObjects_ChordsAndTimedEvents_FromNotesAndChords() => GetObjects_ChordsAndTimedEvents(
+            inputObjects: new ITimedObject[]
+            {
+                new Note((SevenBitNumber)70, 100, 30),
+                new Chord(
+                    new Note((SevenBitNumber)80, 100, 0),
+                    new Note((SevenBitNumber)90, 100, 10))
+            },
+            outputObjects: new ITimedObject[]
+            {
+                new Chord(
+                    new Note((SevenBitNumber)80, 100, 0),
+                    new Note((SevenBitNumber)90, 100, 10)),
+                new TimedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), 30),
+                new TimedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), 130),
+            },
+            notesTolerance: 10,
+            notesMinCount: 2);
 
         #endregion
 
@@ -329,7 +325,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         private void GetObjects_ChordsAndTimedEvents(
             IEnumerable<ITimedObject> inputObjects,
             IEnumerable<ITimedObject> outputObjects,
-            long notesTolerance = 0)
+            long notesTolerance = 0,
+            int notesMinCount = 1)
         {
             GetObjects(
                 inputObjects,
@@ -339,7 +336,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 {
                     ChordDetectionSettings = new ChordDetectionSettings
                     {
-                        NotesTolerance = notesTolerance
+                        NotesTolerance = notesTolerance,
+                        NotesMinCount = notesMinCount
                     }
                 });
         }

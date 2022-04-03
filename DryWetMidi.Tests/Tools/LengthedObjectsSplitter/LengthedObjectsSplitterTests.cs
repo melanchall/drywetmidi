@@ -8,6 +8,7 @@ using NUnit.Framework;
 
 namespace Melanchall.DryWetMidi.Tests.Tools
 {
+    [Obsolete("OBS12")]
     public abstract class LengthedObjectsSplitterTests<TObject> : LengthedObjectsToolTests<TObject>
         where TObject : ILengthedObject
     {
@@ -987,7 +988,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
         protected abstract IEnumerable<TObject> CreateInputObjects(long length);
 
-        protected abstract SplitLengthedObject<TObject> SplitObject(TObject obj, long time);
+        protected abstract SplitLengthedObject SplitObject(TObject obj, long time);
 
         #endregion
 
@@ -1123,9 +1124,9 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             foreach (var time in times.OrderBy(t => t))
             {
                 var parts = SplitObject(tail, time);
-                yield return parts.LeftPart;
+                yield return (TObject)parts.LeftPart;
 
-                tail = parts.RightPart;
+                tail = (TObject)parts.RightPart;
             }
 
             yield return tail;

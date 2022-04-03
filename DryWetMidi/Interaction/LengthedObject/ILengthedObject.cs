@@ -13,5 +13,11 @@
         long Length { get; set; }
 
         #endregion
+
+        #region Methods
+
+        SplitLengthedObject Split(long time);
+
+        #endregion
     }
 }

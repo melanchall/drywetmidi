@@ -6,8 +6,22 @@ namespace Melanchall.DryWetMidi.Interaction
     /// <summary>
     /// Represents a musical rest.
     /// </summary>
-    public sealed class Rest : ILengthedObject
+    public sealed class Rest : ILengthedObject, INotifyTimeChanged, INotifyLengthChanged
     {
+        #region Events
+
+        /// <summary>
+        /// Occurs when the time of an object has been changed.
+        /// </summary>
+        public event EventHandler<TimeChangedEventArgs> TimeChanged;
+
+        /// <summary>
+        /// Occurs when the length of an object has been changed.
+        /// </summary>
+        public event EventHandler<LengthChangedEventArgs> LengthChanged;
+
+        #endregion
+
         #region Fields
 
         private long _time;
@@ -36,7 +50,17 @@ namespace Melanchall.DryWetMidi.Interaction
         public long Time
         {
             get { return _time; }
-            set { throw new InvalidOperationException("Setting time of rest is not allowed."); }
+            set
+            {
+                ThrowIfTimeArgument.IsNegative(nameof(value), value);
+
+                var oldTime = Time;
+                if (value == oldTime)
+                    return;
+
+                _time = value;
+                TimeChanged?.Invoke(this, new TimeChangedEventArgs(oldTime, value));
+            }
         }
 
         /// <summary>
@@ -45,7 +69,17 @@ namespace Melanchall.DryWetMidi.Interaction
         public long Length
         {
             get { return _length; }
-            set { throw new InvalidOperationException("Setting length of rest is not allowed."); }
+            set
+            {
+                ThrowIfLengthArgument.IsNegative(nameof(value), value);
+
+                var oldLength = Length;
+                if (value == oldLength)
+                    return;
+
+                _length = value;
+                LengthChanged?.Invoke(this, new LengthChangedEventArgs(oldLength, value));
+            }
         }
 
         /// <summary>
@@ -105,6 +139,33 @@ namespace Melanchall.DryWetMidi.Interaction
         #endregion
 
         #region Overrides
+
+        public SplitLengthedObject Split(long time)
+        {
+            ThrowIfTimeArgument.IsNegative(nameof(time), time);
+
+            //
+
+            var startTime = Time;
+            var endTime = startTime + Length;
+
+            if (time <= startTime)
+                return new SplitLengthedObject(null, (Rest)Clone());
+
+            if (time >= endTime)
+                return new SplitLengthedObject((Rest)Clone(), null);
+
+            //
+
+            var leftPart = (Rest)Clone();
+            leftPart.Length = time - startTime;
+
+            var rightPart = (Rest)Clone();
+            rightPart.Time = time;
+            rightPart.Length = endTime - time;
+
+            return new SplitLengthedObject(leftPart, rightPart);
+        }
 
         /// <summary>
         /// Returns a string that represents the current object.

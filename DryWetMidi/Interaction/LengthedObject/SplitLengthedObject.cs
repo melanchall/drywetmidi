@@ -3,13 +3,11 @@
     /// <summary>
     /// Container for left and right parts of split lengthed object.
     /// </summary>
-    /// <typeparam name="TObject">The type of split object.</typeparam>
-    public sealed class SplitLengthedObject<TObject>
-        where TObject : ILengthedObject
+    public sealed class SplitLengthedObject
     {
         #region Constructor
 
-        internal SplitLengthedObject(TObject leftPart, TObject rightPart)
+        internal SplitLengthedObject(ILengthedObject leftPart, ILengthedObject rightPart)
         {
             LeftPart = leftPart;
             RightPart = rightPart;
@@ -22,12 +20,12 @@
         /// <summary>
         /// The left part of a split object.
         /// </summary>
-        public TObject LeftPart { get; }
+        public ILengthedObject LeftPart { get; }
 
         /// <summary>
         /// The right part of a split object.
         /// </summary>
-        public TObject RightPart { get; }
+        public ILengthedObject RightPart { get; }
 
         #endregion
     }

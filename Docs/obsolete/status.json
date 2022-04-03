@@ -1,4 +1,9 @@
 {
+  "OBS12": {
+    "Hint": "Use Splitter class.",
+    "ObsoleteFromVersion": "6.1.0",
+    "InLibrary": true
+  },
   "OBS11": {
     "Hint": "Use TimedObjectsManager class.",
     "ObsoleteFromVersion": "6.1.0",

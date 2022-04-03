@@ -11,6 +11,7 @@ namespace Melanchall.DryWetMidi.Tools
     /// Provides methods for splitting lengthed objects.
     /// </summary>
     /// <typeparam name="TObject">The type of objects to split.</typeparam>
+    [Obsolete("OBS12")]
     public abstract class LengthedObjectsSplitter<TObject>
         where TObject : ILengthedObject
     {
@@ -56,40 +57,10 @@ namespace Melanchall.DryWetMidi.Tools
             ThrowIfArgument.IsNull(nameof(step), step);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
-            foreach (var obj in objects)
-            {
-                if (obj == null)
-                {
-                    yield return default(TObject);
-                    continue;
-                }
-
-                if (obj.Length == 0)
-                {
-                    yield return (TObject)obj.Clone();
-                    continue;
-                }
-
-                var startTime = obj.Time;
-                var endTime = startTime + obj.Length;
-
-                var time = startTime;
-                var tail = (TObject)obj.Clone();
-
-                while (time < endTime && tail != null)
-                {
-                    var convertedStep = LengthConverter.ConvertFrom(step, time, tempoMap);
-                    if (convertedStep == 0)
-                        throw new InvalidOperationException("Step is too small.");
-
-                    time += convertedStep;
-
-                    var parts = SplitObject(tail, time);
-                    yield return parts.LeftPart;
-
-                    tail = parts.RightPart;
-                }
-            }
+            return objects
+                .Cast<ILengthedObject>()
+                .SplitObjectsByStep(step, tempoMap)
+                .Cast<TObject>();
         }
 
         /// <summary>
@@ -125,49 +96,10 @@ namespace Melanchall.DryWetMidi.Tools
             ThrowIfArgument.IsInvalidEnumValue(nameof(lengthType), lengthType);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
-            foreach (var obj in objects)
-            {
-                if (obj == null)
-                {
-                    yield return default(TObject);
-                    continue;
-                }
-
-                if (partsNumber == 1)
-                {
-                    yield return (TObject)obj.Clone();
-                    continue;
-                }
-
-                if (obj.Length == 0)
-                {
-                    foreach (var i in Enumerable.Range(0, partsNumber))
-                    {
-                        yield return (TObject)obj.Clone();
-                    }
-
-                    continue;
-                }
-
-                var time = obj.Time;
-                var tail = (TObject)obj.Clone();
-
-                for (int partsRemaining = partsNumber; partsRemaining > 1 && tail != null; partsRemaining--)
-                {
-                    var length = tail.LengthAs(lengthType, tempoMap);
-                    var partLength = length.Divide(partsRemaining);
-
-                    time += LengthConverter.ConvertFrom(partLength, time, tempoMap);
-
-                    var parts = SplitObject(tail, time);
-                    yield return parts.LeftPart;
-
-                    tail = parts.RightPart;
-                }
-
-                if (tail != null)
-                    yield return tail;
-            }
+            return objects
+                .Cast<ILengthedObject>()
+                .SplitObjectsByPartsNumber(partsNumber, lengthType, tempoMap)
+                .Cast<TObject>();
         }
 
         /// <summary>
@@ -201,40 +133,10 @@ namespace Melanchall.DryWetMidi.Tools
             ThrowIfArgument.IsNull(nameof(grid), grid);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
-            var lastObjectEndTime = objects.Where(o => o != null)
-                                           .Select(o => o.Time + o.Length)
-                                           .DefaultIfEmpty()
-                                           .Max();
-            var times = grid.GetTimes(tempoMap)
-                            .TakeWhile(t => t < lastObjectEndTime)
-                            .Distinct()
-                            .ToList();
-            times.Sort();
-
-            foreach (var obj in objects)
-            {
-                if (obj == null)
-                {
-                    yield return default(TObject);
-                    continue;
-                }
-
-                var startTime = obj.Time;
-                var endTime = startTime + obj.Length;
-
-                var intersectedTimes = times.SkipWhile(t => t <= startTime).TakeWhile(t => t < endTime);
-                var tail = (TObject)obj.Clone();
-
-                foreach (var time in intersectedTimes)
-                {
-                    var parts = SplitObject(tail, time);
-                    yield return parts.LeftPart;
-
-                    tail = parts.RightPart;
-                }
-
-                yield return tail;
-            }
+            return objects
+                .Cast<ILengthedObject>()
+                .SplitObjectsByGrid(grid, tempoMap)
+                .Cast<TObject>();
         }
 
         /// <summary>
@@ -268,22 +170,10 @@ namespace Melanchall.DryWetMidi.Tools
             ThrowIfArgument.IsInvalidEnumValue(nameof(from), from);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
-            foreach (var obj in objects)
-            {
-                if (obj == null)
-                {
-                    yield return default(TObject);
-                    continue;
-                }
-
-                var parts = SplitObjectAtDistance(obj, distance, from, tempoMap);
-
-                if (parts.LeftPart != null)
-                    yield return parts.LeftPart;
-
-                if (parts.RightPart != null)
-                    yield return parts.RightPart;
-            }
+            return objects
+                .Cast<ILengthedObject>()
+                .SplitObjectsAtDistance(distance, from, tempoMap)
+                .Cast<TObject>();
         }
 
         /// <summary>
@@ -332,40 +222,10 @@ namespace Melanchall.DryWetMidi.Tools
             ThrowIfArgument.IsInvalidEnumValue(nameof(from), from);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
-            foreach (var obj in objects)
-            {
-                if (obj == null)
-                {
-                    yield return default(TObject);
-                    continue;
-                }
-
-                var distance = obj.LengthAs(lengthType, tempoMap).Multiply(ratio);
-                var parts = SplitObjectAtDistance(obj, distance, from, tempoMap);
-
-                if (parts.LeftPart != null)
-                    yield return parts.LeftPart;
-
-                if (parts.RightPart != null)
-                    yield return parts.RightPart;
-            }
-        }
-
-        /// <summary>
-        /// Splits an object by the specified time.
-        /// </summary>
-        /// <param name="obj">Object to split.</param>
-        /// <param name="time">Time to split <paramref name="obj"/> by.</param>
-        /// <returns>An object containing left and right parts of the split object.</returns>
-        protected abstract SplitLengthedObject<TObject> SplitObject(TObject obj, long time);
-
-        private SplitLengthedObject<TObject> SplitObjectAtDistance(TObject obj, ITimeSpan distance, LengthedObjectTarget from, TempoMap tempoMap)
-        {
-            var time = from == LengthedObjectTarget.Start
-                ? ((MidiTimeSpan)obj.Time).Add(distance, TimeSpanMode.TimeLength)
-                : ((MidiTimeSpan)(obj.Time + obj.Length)).Subtract(distance, TimeSpanMode.TimeLength);
-
-            return SplitObject(obj, TimeConverter.ConvertFrom(time, tempoMap));
+            return objects
+                .Cast<ILengthedObject>()
+                .SplitObjectsAtDistance(ratio, lengthType, from, tempoMap)
+                .Cast<TObject>();
         }
 
         #endregion
