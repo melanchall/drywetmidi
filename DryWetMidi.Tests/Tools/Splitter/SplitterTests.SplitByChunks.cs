@@ -1,14 +1,15 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Melanchall.DryWetMidi.Core;
+﻿using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Tests.Utilities;
 using Melanchall.DryWetMidi.Tools;
 using NUnit.Framework;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Melanchall.DryWetMidi.Tests.Tools
 {
     [TestFixture]
-    public sealed partial class MidiFileSplitterTests
+    public sealed partial class SplitterTests
     {
         #region Nested classes
 
@@ -26,17 +27,17 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
             protected override uint GetContentSize(WritingSettings settings)
             {
-                throw new System.NotImplementedException();
+                throw new NotImplementedException();
             }
 
             protected override void ReadContent(MidiReader reader, ReadingSettings settings, uint size)
             {
-                throw new System.NotImplementedException();
+                throw new NotImplementedException();
             }
 
             protected override void WriteContent(MidiWriter writer, WritingSettings settings)
             {
-                throw new System.NotImplementedException();
+                throw new NotImplementedException();
             }
 
             public override bool Equals(object obj)
