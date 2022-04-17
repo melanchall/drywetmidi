@@ -1,0 +1,7 @@
+root = true
+[*]
+
+resharper_inconsistent_naming_highlighting=none
+resharper_check_namespace_highlighting=none
+resharper_unused_member_global_highlighting=none
+resharper_unused_auto_property_accessor_global_highlighting=none

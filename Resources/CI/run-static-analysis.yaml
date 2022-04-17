@@ -1,0 +1,49 @@
+trigger:
+  batch: true
+  branches:
+    include:
+    - master
+    - develop
+  paths:
+    include:
+    - 'DryWetMidi/*'
+    - 'Resources/CI/run-static-analysis.yaml'
+
+pr: none
+
+variables:
+- group: DryWetMIDI-Common-Variables
+
+pool:
+  vmImage: 'windows-latest'
+  
+name: RunStaticAnalysis_$(LibraryVersion)$(Rev:.r)
+
+jobs:
+- job: RunReSharper
+  displayName: Run ReSharper analysis
+  steps:  
+  - task: CmdLine@2
+    displayName: Install tool
+    inputs:
+      script: 'dotnet tool install -g JetBrains.ReSharper.GlobalTools'
+  
+  - task: CmdLine@2
+    displayName: Run analysis
+    inputs:
+      script: 'jb inspectcode DryWetMidi/Melanchall.DryWetMidi.csproj --properties:Configuration=Release -o=ReSharperReport.xml'
+      
+  - task: PowerShell@2
+    displayName: Format analysis report
+    inputs:
+      targetType: 'inline'
+      script: |
+        $xslt = New-Object System.Xml.Xsl.XslCompiledTransform;
+        $xslt.Load("Resources\Analysis\ReSharperXmlToHtml.xslt");
+        $xslt.Transform("ReSharperReport.xml", "ReSharperReport.html");
+  
+  - task: PublishPipelineArtifact@1
+    displayName: Publish 'ReSharperReport' artifact
+    inputs:
+      targetPath: ReSharperReport.html
+      artifact: ReSharperReport
