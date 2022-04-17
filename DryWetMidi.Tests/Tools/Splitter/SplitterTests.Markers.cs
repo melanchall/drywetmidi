@@ -8,7 +8,7 @@ using NUnit.Framework;
 namespace Melanchall.DryWetMidi.Tests.Tools
 {
     [TestFixture]
-    public sealed partial class MidiFileSplitterTests
+    public sealed partial class SplitterTests
     {
         #region Test methods
 

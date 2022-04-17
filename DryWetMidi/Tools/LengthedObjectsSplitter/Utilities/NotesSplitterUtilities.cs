@@ -42,6 +42,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// </item>
         /// </list>
         /// </exception>
+        [Obsolete("OBS12")]
         public static void SplitNotesByStep(this TrackChunk trackChunk, ITimeSpan step, TempoMap tempoMap, NoteDetectionSettings noteDetectionSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
@@ -85,6 +86,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// </item>
         /// </list>
         /// </exception>
+        [Obsolete("OBS12")]
         public static void SplitNotesByStep(this IEnumerable<TrackChunk> trackChunks, ITimeSpan step, TempoMap tempoMap, NoteDetectionSettings noteDetectionSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
@@ -124,6 +126,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// </item>
         /// </list>
         /// </exception>
+        [Obsolete("OBS12")]
         public static void SplitNotesByStep(this MidiFile midiFile, ITimeSpan step, NoteDetectionSettings noteDetectionSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
@@ -163,6 +166,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// </exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="partsNumber"/> is zero or negative.</exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="lengthType"/> specified an invalid value.</exception>
+        [Obsolete("OBS12")]
         public static void SplitNotesByPartsNumber(this TrackChunk trackChunk, int partsNumber, TimeSpanType lengthType, TempoMap tempoMap, NoteDetectionSettings noteDetectionSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
@@ -206,6 +210,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// </exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="partsNumber"/> is zero or negative.</exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="lengthType"/> specified an invalid value.</exception>
+        [Obsolete("OBS12")]
         public static void SplitNotesByPartsNumber(this IEnumerable<TrackChunk> trackChunks, int partsNumber, TimeSpanType lengthType, TempoMap tempoMap, NoteDetectionSettings noteDetectionSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
@@ -238,6 +243,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="partsNumber"/> is zero or negative.</exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="lengthType"/> specified an invalid value.</exception>
+        [Obsolete("OBS12")]
         public static void SplitNotesByPartsNumber(this MidiFile midiFile, int partsNumber, TimeSpanType lengthType, NoteDetectionSettings noteDetectionSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
@@ -275,6 +281,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// </item>
         /// </list>
         /// </exception>
+        [Obsolete("OBS12")]
         public static void SplitNotesByGrid(this TrackChunk trackChunk, IGrid grid, TempoMap tempoMap, NoteDetectionSettings noteDetectionSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
@@ -313,6 +320,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// </item>
         /// </list>
         /// </exception>
+        [Obsolete("OBS12")]
         public static void SplitNotesByGrid(this IEnumerable<TrackChunk> trackChunks, IGrid grid, TempoMap tempoMap, NoteDetectionSettings noteDetectionSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
@@ -336,6 +344,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="grid">Grid to split notes by.</param>
         /// <param name="noteDetectionSettings">Settings accoridng to which notes should be detected and built.</param>
         /// <exception cref="ArgumentNullException"><paramref name="grid"/> is <c>null</c>.</exception>
+        [Obsolete("OBS12")]
         public static void SplitNotesByGrid(this MidiFile midiFile, IGrid grid, NoteDetectionSettings noteDetectionSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
@@ -374,6 +383,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// </list>
         /// </exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="from"/> specified an invalid value.</exception>
+        [Obsolete("OBS12")]
         public static void SplitNotesAtDistance(this TrackChunk trackChunk, ITimeSpan distance, LengthedObjectTarget from, TempoMap tempoMap, NoteDetectionSettings noteDetectionSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
@@ -416,6 +426,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// </list>
         /// </exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="from"/> specified an invalid value.</exception>
+        [Obsolete("OBS12")]
         public static void SplitNotesAtDistance(this IEnumerable<TrackChunk> trackChunks, ITimeSpan distance, LengthedObjectTarget from, TempoMap tempoMap, NoteDetectionSettings noteDetectionSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
@@ -454,6 +465,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// </list>
         /// </exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="from"/> specified an invalid value.</exception>
+        [Obsolete("OBS12")]
         public static void SplitNotesAtDistance(this MidiFile midiFile, ITimeSpan distance, LengthedObjectTarget from, NoteDetectionSettings noteDetectionSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
@@ -504,6 +516,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// </item>
         /// </list>
         /// </exception>
+        [Obsolete("OBS12")]
         public static void SplitNotesAtDistance(this TrackChunk trackChunk, double ratio, TimeSpanType lengthType, LengthedObjectTarget from, TempoMap tempoMap, NoteDetectionSettings noteDetectionSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
@@ -562,6 +575,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// </item>
         /// </list>
         /// </exception>
+        [Obsolete("OBS12")]
         public static void SplitNotesAtDistance(this IEnumerable<TrackChunk> trackChunks, double ratio, TimeSpanType lengthType, LengthedObjectTarget from, TempoMap tempoMap, NoteDetectionSettings noteDetectionSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
@@ -609,6 +623,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// </item>
         /// </list>
         /// </exception>
+        [Obsolete("OBS12")]
         public static void SplitNotesAtDistance(this MidiFile midiFile, double ratio, TimeSpanType lengthType, LengthedObjectTarget from, NoteDetectionSettings noteDetectionSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
