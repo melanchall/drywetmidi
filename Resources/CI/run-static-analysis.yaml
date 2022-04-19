@@ -19,31 +19,36 @@ pool:
   
 name: RunStaticAnalysis_$(LibraryVersion)$(Rev:.r)
 
-jobs:
-- job: RunReSharper
-  displayName: Run ReSharper analysis
-  steps:  
-  - task: CmdLine@2
-    displayName: Install tool
-    inputs:
-      script: 'dotnet tool install -g JetBrains.ReSharper.GlobalTools'
+stages:
+- template: Templates/stage-build-native-libs.yaml
+    
+- stage: RunAnalyze
+  displayName: Run analyze
+  jobs:
+  - job: RunReSharper
+    displayName: Run ReSharper analysis
+    steps:
+    - template: Templates/step-copy-native-libraries-near-csproj.yaml
   
-  - task: CmdLine@2
-    displayName: Run analysis
-    inputs:
-      script: 'jb inspectcode DryWetMidi/Melanchall.DryWetMidi.csproj --properties:Configuration=Release -o=ReSharperReport.xml'
-      
-  - task: PowerShell@2
-    displayName: Format analysis report
-    inputs:
-      targetType: 'inline'
-      script: |
-        $xslt = New-Object System.Xml.Xsl.XslCompiledTransform;
-        $xslt.Load("Resources\Analysis\ReSharperXmlToHtml.xslt");
-        $xslt.Transform("ReSharperReport.xml", "ReSharperReport.html");
+    - task: CmdLine@2
+      displayName: Install tool
+      inputs:
+        script: 'dotnet tool install -g JetBrains.ReSharper.GlobalTools'
   
-  - task: PublishPipelineArtifact@1
-    displayName: Publish 'ReSharperReport' artifact
-    inputs:
-      targetPath: ReSharperReport.html
-      artifact: ReSharperReport
+    - task: CmdLine@2
+      displayName: Run analysis
+      inputs:
+        script: 'jb inspectcode Melanchall.DryWetMidi.sln --properties:Configuration=DebugTest --exclude="DryWetMidi.Benchmarks\**.*" -o=ReSharperReport.xml'
+    
+    - task: DotNetCoreCLI@2
+      displayName: Convert report to HTML
+      inputs:
+        command: 'run'
+        projects: 'Resources/Utilities/ConvertReSharperReportToHtml/ConvertReSharperReportToHtml/ConvertReSharperReportToHtml.csproj'
+        arguments: '-c Release -- ReSharperReport.xml ReSharperReport.html $(Build.SourceBranchName)'
+    
+    - task: PublishPipelineArtifact@1
+      displayName: Publish 'ReSharperReport' artifact
+      inputs:
+        targetPath: ReSharperReport.html
+        artifact: ReSharperReport

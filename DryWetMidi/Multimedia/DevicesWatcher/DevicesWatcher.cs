@@ -27,7 +27,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         #region Fields
 
         private static volatile DevicesWatcher _instance;
-        private static object _lockObject = new object();
+        private static readonly object _lockObject = new object();
 
         #endregion
 
