@@ -1,10 +1,12 @@
 ﻿using Melanchall.DryWetMidi.Interaction;
+using System;
 
 namespace Melanchall.DryWetMidi.Tools
 {
     /// <summary>
     /// Settings according to which notes should be quantized.
     /// </summary>
+    [Obsolete("OBS13")]
     public class NotesQuantizingSettings : LengthedObjectsQuantizingSettings<Note>
     {
         #region Properties
@@ -15,15 +17,5 @@ namespace Melanchall.DryWetMidi.Tools
         public NoteDetectionSettings NoteDetectionSettings { get; set; } = new NoteDetectionSettings();
 
         #endregion
-    }
-
-    /// <summary>
-    /// Provides methods to quantize notes time.
-    /// </summary>
-    /// <remarks>
-    /// See <see href="xref:a_quantizer">Quantizer</see> article to learn more.
-    /// </remarks>
-    public class NotesQuantizer : LengthedObjectsQuantizer<Note, NotesQuantizingSettings>
-    {
     }
 }

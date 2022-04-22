@@ -1,10 +1,12 @@
 ﻿using Melanchall.DryWetMidi.Interaction;
+using System;
 
 namespace Melanchall.DryWetMidi.Tools
 {
     /// <summary>
     /// Settings according to which chords should be quantized.
     /// </summary>
+    [Obsolete("OBS13")]
     public class ChordsQuantizingSettings : LengthedObjectsQuantizingSettings<Chord>
     {
         #region Properties
@@ -15,15 +17,5 @@ namespace Melanchall.DryWetMidi.Tools
         public ChordDetectionSettings ChordDetectionSettings { get; set; } = new ChordDetectionSettings();
 
         #endregion
-    }
-
-    /// <summary>
-    /// Provides methods to quantize chords time.
-    /// </summary>
-    /// <remarks>
-    /// See <see href="xref:a_quantizer">Quantizer</see> article to learn more.
-    /// </remarks>
-    public class ChordsQuantizer : LengthedObjectsQuantizer<Chord, ChordsQuantizingSettings>
-    {
     }
 }

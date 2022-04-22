@@ -7,6 +7,7 @@ namespace Melanchall.DryWetMidi.Tools
     /// <summary>
     /// Settings according to which quantizing should be performed.
     /// </summary>
+    [Obsolete("OBS13")]
     public abstract class QuantizingSettings<TObject>
     {
         #region Constants

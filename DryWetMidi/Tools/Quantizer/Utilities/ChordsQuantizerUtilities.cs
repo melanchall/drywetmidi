@@ -9,6 +9,7 @@ namespace Melanchall.DryWetMidi.Tools
     /// <summary>
     /// Provides methods to quantize chords time.
     /// </summary>
+    [Obsolete("OBS13")]
     public static class ChordsQuantizerUtilities
     {
         #region Methods
@@ -45,16 +46,22 @@ namespace Melanchall.DryWetMidi.Tools
         /// </item>
         /// </list>
         /// </exception>
+        [Obsolete("OBS13")]
         public static void QuantizeChords(this TrackChunk trackChunk, IGrid grid, TempoMap tempoMap, ChordsQuantizingSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
             ThrowIfArgument.IsNull(nameof(grid), grid);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
-            using (var chordsManager = trackChunk.ManageChords(settings?.ChordDetectionSettings))
-            {
-                new ChordsQuantizer().Quantize(chordsManager.Objects, grid, tempoMap, settings);
-            }
+            trackChunk.QuantizeObjects(
+                ObjectType.Chord,
+                grid,
+                tempoMap,
+                GetSettings(settings),
+                new ObjectDetectionSettings
+                {
+                    ChordDetectionSettings = settings.ChordDetectionSettings
+                });
         }
 
         /// <summary>
@@ -89,6 +96,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// </item>
         /// </list>
         /// </exception>
+        [Obsolete("OBS13")]
         public static void QuantizeChords(this IEnumerable<TrackChunk> trackChunks, IGrid grid, TempoMap tempoMap, ChordsQuantizingSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
@@ -129,6 +137,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// </item>
         /// </list>
         /// </exception>
+        [Obsolete("OBS13")]
         public static void QuantizeChords(this MidiFile midiFile, IGrid grid, ChordsQuantizingSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
@@ -138,6 +147,19 @@ namespace Melanchall.DryWetMidi.Tools
 
             midiFile.GetTrackChunks().QuantizeChords(grid, tempoMap, settings);
         }
+
+        private static QuantizerSettings GetSettings(ChordsQuantizingSettings settings) => new QuantizerSettings
+        {
+            RandomizingSettings = settings.RandomizingSettings,
+            DistanceCalculationType = settings.DistanceCalculationType,
+            QuantizingLevel = settings.QuantizingLevel,
+            Filter = obj => settings.Filter((Chord)obj),
+            LengthType = settings.LengthType,
+            Target = settings.QuantizingTarget == LengthedObjectTarget.Start ? QuantizerTarget.Start : QuantizerTarget.End,
+            QuantizingBeyondZeroPolicy = settings.QuantizingBeyondZeroPolicy,
+            QuantizingBeyondFixedEndPolicy = settings.QuantizingBeyondFixedEndPolicy,
+            FixOppositeEnd = settings.FixOppositeEnd
+        };
 
         #endregion
     }

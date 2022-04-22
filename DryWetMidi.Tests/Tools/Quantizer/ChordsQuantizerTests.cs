@@ -2,24 +2,27 @@
 using Melanchall.DryWetMidi.Tests.Utilities;
 using Melanchall.DryWetMidi.Tools;
 using NUnit.Framework;
+using System;
 
 namespace Melanchall.DryWetMidi.Tests.Tools
 {
+    [Obsolete("OBS13")]
     [TestFixture]
-    public sealed class ChordsQuantizerTests : LengthedObjectsQuantizerTests<Chord, ChordsQuantizingSettings>
+    public sealed class ChordsQuantizerTests : LengthedObjectsQuantizerTests<Chord>
     {
         #region Nested classes
 
-        private sealed class SkipChordsQuantizer : ChordsQuantizer
+        private sealed class SkipChordsQuantizer : Quantizer
         {
             #region Overrides
 
             protected override TimeProcessingInstruction OnObjectQuantizing(
-                Chord obj,
+                ITimedObject obj,
                 QuantizedTime quantizedTime,
                 IGrid grid,
+                LengthedObjectTarget target,
                 TempoMap tempoMap,
-                ChordsQuantizingSettings settings)
+                QuantizerSettings settings)
             {
                 return TimeProcessingInstruction.Skip;
             }
@@ -27,7 +30,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             #endregion
         }
 
-        private sealed class FixedTimeChordsQuantizer : ChordsQuantizer
+        private sealed class FixedTimeChordsQuantizer : Quantizer
         {
             #region Fields
 
@@ -47,11 +50,12 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             #region Overrides
 
             protected override TimeProcessingInstruction OnObjectQuantizing(
-                Chord obj,
+                ITimedObject obj,
                 QuantizedTime quantizedTime,
                 IGrid grid,
+                LengthedObjectTarget target,
                 TempoMap tempoMap,
-                ChordsQuantizingSettings settings)
+                QuantizerSettings settings)
             {
                 return new TimeProcessingInstruction(_time);
             }
@@ -65,7 +69,6 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
         public ChordsQuantizerTests()
             : base(new ChordMethods(),
-                   new ChordsQuantizer(),
                    new SkipChordsQuantizer(),
                    time => new FixedTimeChordsQuantizer(time))
         {

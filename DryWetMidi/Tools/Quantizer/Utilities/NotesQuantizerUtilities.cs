@@ -45,16 +45,22 @@ namespace Melanchall.DryWetMidi.Tools
         /// </item>
         /// </list>
         /// </exception>
+        [Obsolete("OBS13")]
         public static void QuantizeNotes(this TrackChunk trackChunk, IGrid grid, TempoMap tempoMap, NotesQuantizingSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
             ThrowIfArgument.IsNull(nameof(grid), grid);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
-            using (var notesManager = trackChunk.ManageNotes(settings?.NoteDetectionSettings))
-            {
-                new NotesQuantizer().Quantize(notesManager.Objects, grid, tempoMap, settings);
-            }
+            trackChunk.QuantizeObjects(
+                ObjectType.Note,
+                grid,
+                tempoMap,
+                GetSettings(settings),
+                new ObjectDetectionSettings
+                {
+                    NoteDetectionSettings = settings.NoteDetectionSettings
+                });
         }
 
         /// <summary>
@@ -89,6 +95,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// </item>
         /// </list>
         /// </exception>
+        [Obsolete("OBS13")]
         public static void QuantizeNotes(this IEnumerable<TrackChunk> trackChunks, IGrid grid, TempoMap tempoMap, NotesQuantizingSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
@@ -129,6 +136,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// </item>
         /// </list>
         /// </exception>
+        [Obsolete("OBS13")]
         public static void QuantizeNotes(this MidiFile midiFile, IGrid grid, NotesQuantizingSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
@@ -138,6 +146,19 @@ namespace Melanchall.DryWetMidi.Tools
 
             midiFile.GetTrackChunks().QuantizeNotes(grid, tempoMap, settings);
         }
+
+        private static QuantizerSettings GetSettings(NotesQuantizingSettings settings) => new QuantizerSettings
+        {
+            RandomizingSettings = settings.RandomizingSettings,
+            DistanceCalculationType = settings.DistanceCalculationType,
+            QuantizingLevel = settings.QuantizingLevel,
+            Filter = obj => settings.Filter((Note)obj),
+            LengthType = settings.LengthType,
+            Target = settings.QuantizingTarget == LengthedObjectTarget.Start ? QuantizerTarget.Start : QuantizerTarget.End,
+            QuantizingBeyondZeroPolicy = settings.QuantizingBeyondZeroPolicy,
+            QuantizingBeyondFixedEndPolicy = settings.QuantizingBeyondFixedEndPolicy,
+            FixOppositeEnd = settings.FixOppositeEnd
+        };
 
         #endregion
     }

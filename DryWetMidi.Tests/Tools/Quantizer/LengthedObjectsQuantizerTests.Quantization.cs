@@ -8,7 +8,7 @@ using NUnit.Framework;
 
 namespace Melanchall.DryWetMidi.Tests.Tools
 {
-    public abstract partial class LengthedObjectsQuantizerTests<TObject, TSettings>
+    public abstract partial class LengthedObjectsQuantizerTests<TObject>
     {
         #region Test methods
 
@@ -1214,7 +1214,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                            filter);
         }
 
-        private void Quantize_Start(LengthedObjectsQuantizer<TObject, TSettings> quantizer,
+        private void Quantize_Start(Quantizer quantizer,
                                     IEnumerable<TObject> actualObjects,
                                     IGrid grid,
                                     IEnumerable<TimeAndLength> expectedTimesAndLengths,
@@ -1228,18 +1228,18 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         {
             var expectedObjects = GetExpectedObjects(actualObjects, expectedTimesAndLengths, tempoMap);
 
-            var settings = new TSettings
+            var settings = new QuantizerSettings
             {
-                QuantizingTarget = LengthedObjectTarget.Start,
+                Target = QuantizerTarget.Start,
                 FixOppositeEnd = fixEnd,
                 QuantizingBeyondFixedEndPolicy = policy,
                 DistanceCalculationType = distanceType,
                 LengthType = lengthType,
                 QuantizingLevel = quantizingLevel,
-                Filter = filter
+                Filter = filter != null ? obj => filter((TObject)obj) : (Predicate<ITimedObject>)null
             };
 
-            quantizer.Quantize(actualObjects, grid, tempoMap, settings);
+            quantizer.Quantize(actualObjects.OfType<ITimedObject>(), grid, tempoMap, settings);
 
             MidiAsserts.AreEqual(
                 expectedObjects.OfType<ITimedObject>(),
@@ -1275,7 +1275,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                          filter);
         }
 
-        private void Quantize_End(LengthedObjectsQuantizer<TObject, TSettings> quantizer,
+        private void Quantize_End(Quantizer quantizer,
                                   IEnumerable<TObject> actualObjects,
                                   IGrid grid,
                                   IEnumerable<TimeAndLength> expectedTimesAndLengths,
@@ -1290,19 +1290,19 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         {
             var expectedObjects = GetExpectedObjects(actualObjects, expectedTimesAndLengths, tempoMap);
 
-            var settings = new TSettings
+            var settings = new QuantizerSettings
             {
-                QuantizingTarget = LengthedObjectTarget.End,
+                Target = QuantizerTarget.End,
                 FixOppositeEnd = fixStart,
                 QuantizingBeyondZeroPolicy = quantizingBeyondZeroPolicy,
                 QuantizingBeyondFixedEndPolicy = quantizingBeyondFixedEndPolicy,
                 DistanceCalculationType = distanceType,
                 LengthType = lengthType,
                 QuantizingLevel = quantizingLevel,
-                Filter = filter
+                Filter = filter != null ? obj => filter((TObject)obj) : (Predicate<ITimedObject>)null
             };
 
-            quantizer.Quantize(actualObjects, grid, tempoMap, settings);
+            quantizer.Quantize(actualObjects.OfType<ITimedObject>(), grid, tempoMap, settings);
 
             MidiAsserts.AreEqual(
                 expectedObjects.OfType<ITimedObject>(),

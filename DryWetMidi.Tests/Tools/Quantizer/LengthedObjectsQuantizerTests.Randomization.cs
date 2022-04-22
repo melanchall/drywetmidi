@@ -8,7 +8,7 @@ using System.Linq;
 namespace Melanchall.DryWetMidi.Tests.Tools
 {
     // TODO: randomize end
-    public abstract partial class LengthedObjectsQuantizerTests<TObject, TSettings>
+    public abstract partial class LengthedObjectsQuantizerTests<TObject>
     {
         #region Nested classes
 
@@ -207,13 +207,13 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             }).ToArray();
 
             Quantizer.Quantize(
-                actualObjects,
+                actualObjects.OfType<ITimedObject>(),
                 new ArbitraryGrid(),
                 tempoMap,
-                new TSettings
+                new QuantizerSettings
                 {
-                    QuantizingTarget = target,
-                    Filter = filter,
+                    Target = target == LengthedObjectTarget.Start ? QuantizerTarget.Start : QuantizerTarget.End,
+                    Filter = filter != null ? obj => filter((TObject)obj) : (Predicate<ITimedObject>)null,
                     RandomizingSettings = new RandomizingSettings
                     {
                         Bounds = bounds

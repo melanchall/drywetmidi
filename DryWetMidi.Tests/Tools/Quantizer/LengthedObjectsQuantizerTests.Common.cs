@@ -5,20 +5,18 @@ using System;
 
 namespace Melanchall.DryWetMidi.Tests.Tools
 {
-    public abstract partial class LengthedObjectsQuantizerTests<TObject, TSettings> : LengthedObjectsToolTests<TObject>
+    [Obsolete("OBS13")]
+    public abstract partial class LengthedObjectsQuantizerTests<TObject> : LengthedObjectsToolTests<TObject>
         where TObject : ILengthedObject
-        where TSettings : LengthedObjectsQuantizingSettings<TObject>, new()
     {
         #region Constructor
 
         public LengthedObjectsQuantizerTests(
             LengthedObjectMethods<TObject> methods,
-            LengthedObjectsQuantizer<TObject, TSettings> quantizer,
-            LengthedObjectsQuantizer<TObject, TSettings> skipQuantizer,
-            Func<long, LengthedObjectsQuantizer<TObject, TSettings>> fixedTimeQuantizerGetter)
+            Quantizer skipQuantizer,
+            Func<long, Quantizer> fixedTimeQuantizerGetter)
             : base(methods)
         {
-            Quantizer = quantizer;
             SkipQuantizer = skipQuantizer;
             FixedTimeQuantizerGetter = fixedTimeQuantizerGetter;
         }
@@ -27,11 +25,11 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
         #region Properties
 
-        protected LengthedObjectsQuantizer<TObject, TSettings> Quantizer { get; }
+        protected Quantizer Quantizer { get; } = new Quantizer();
 
-        protected LengthedObjectsQuantizer<TObject, TSettings> SkipQuantizer { get; }
+        protected Quantizer SkipQuantizer { get; }
 
-        protected Func<long, LengthedObjectsQuantizer<TObject, TSettings>> FixedTimeQuantizerGetter { get; }
+        protected Func<long, Quantizer> FixedTimeQuantizerGetter { get; }
 
         #endregion
     }

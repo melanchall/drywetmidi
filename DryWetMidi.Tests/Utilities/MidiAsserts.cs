@@ -11,41 +11,6 @@ namespace Melanchall.DryWetMidi.Tests.Utilities
     {
         #region Methods
 
-        private static void AreEqual(Note expectedNote, Note actualNote, string message)
-        {
-            Assert.AreEqual(expectedNote.NoteNumber, actualNote.NoteNumber, $"{message} Note number is invalid.");
-            Assert.AreEqual(expectedNote.Channel, actualNote.Channel, $"{message} Channel is invalid.");
-            Assert.AreEqual(expectedNote.Velocity, actualNote.Velocity, $"{message} Velocity is invalid.");
-            Assert.AreEqual(expectedNote.OffVelocity, actualNote.OffVelocity, $"{message} Off velocity is invalid.");
-            Assert.AreEqual(expectedNote.Time, actualNote.Time, $"{message} Time is invalid.");
-            Assert.AreEqual(expectedNote.Length, actualNote.Length, $"{message} Length is invalid.");
-        }
-
-        private static void AreEqual(Rest expectedRest, Rest actualRest, string message)
-        {
-            Assert.AreEqual(expectedRest.NoteNumber, actualRest.NoteNumber, $"{message} Note number is invalid.");
-            Assert.AreEqual(expectedRest.Channel, actualRest.Channel, $"{message} Channel is invalid.");
-            Assert.AreEqual(expectedRest.Time, actualRest.Time, $"{message} Time is invalid.");
-            Assert.AreEqual(expectedRest.Length, actualRest.Length, $"{message} Length is invalid.");
-        }
-
-        private static void AreEqual(Chord expectedChord, Chord actualChord, string message)
-        {
-            AreEqual(expectedChord.Notes, actualChord.Notes, $"{message} Notes are invalid.");
-        }
-
-        private static void AreEqual(TimedEvent expectedTimedEvent, TimedEvent actualTimedEvent, bool compareDeltaTimes, long timesEpsilon, string message)
-        {
-            Assert.IsTrue(
-                Math.Abs(expectedTimedEvent.Time - actualTimedEvent.Time) <= timesEpsilon,
-                $"{message} Time is invalid ({expectedTimedEvent.Time}+-{timesEpsilon} expected, but was {actualTimedEvent.Time}).");
-
-            string eventsEqualityCheckMessage;
-            Assert.IsTrue(
-                MidiEvent.Equals(expectedTimedEvent.Event, actualTimedEvent.Event, new MidiEventEqualityCheckSettings { CompareDeltaTimes = compareDeltaTimes }, out eventsEqualityCheckMessage),
-                $"{message} {eventsEqualityCheckMessage}");
-        }
-
         public static void AreEqual(
             IEnumerable<ITimedObject> expectedTimedObjects,
             IEnumerable<ITimedObject> actualTimedObjects,
@@ -261,6 +226,41 @@ namespace Melanchall.DryWetMidi.Tests.Utilities
 
                 AreEqual(expectedEvent, actualEvent, compareDeltaTimes, $"Invalid event {i}.");
             }
+        }
+
+        private static void AreEqual(Note expectedNote, Note actualNote, string message)
+        {
+            Assert.AreEqual(expectedNote.NoteNumber, actualNote.NoteNumber, $"{message} Note number is invalid.");
+            Assert.AreEqual(expectedNote.Channel, actualNote.Channel, $"{message} Channel is invalid.");
+            Assert.AreEqual(expectedNote.Velocity, actualNote.Velocity, $"{message} Velocity is invalid.");
+            Assert.AreEqual(expectedNote.OffVelocity, actualNote.OffVelocity, $"{message} Off velocity is invalid.");
+            Assert.AreEqual(expectedNote.Time, actualNote.Time, $"{message} Time is invalid.");
+            Assert.AreEqual(expectedNote.Length, actualNote.Length, $"{message} Length is invalid.");
+        }
+
+        private static void AreEqual(Rest expectedRest, Rest actualRest, string message)
+        {
+            Assert.AreEqual(expectedRest.NoteNumber, actualRest.NoteNumber, $"{message} Note number is invalid.");
+            Assert.AreEqual(expectedRest.Channel, actualRest.Channel, $"{message} Channel is invalid.");
+            Assert.AreEqual(expectedRest.Time, actualRest.Time, $"{message} Time is invalid.");
+            Assert.AreEqual(expectedRest.Length, actualRest.Length, $"{message} Length is invalid.");
+        }
+
+        private static void AreEqual(Chord expectedChord, Chord actualChord, string message)
+        {
+            AreEqual(expectedChord.Notes, actualChord.Notes, $"{message} Notes are invalid.");
+        }
+
+        private static void AreEqual(TimedEvent expectedTimedEvent, TimedEvent actualTimedEvent, bool compareDeltaTimes, long timesEpsilon, string message)
+        {
+            Assert.IsTrue(
+                Math.Abs(expectedTimedEvent.Time - actualTimedEvent.Time) <= timesEpsilon,
+                $"{message} Time is invalid ({expectedTimedEvent.Time}+-{timesEpsilon} expected, but was {actualTimedEvent.Time}).");
+
+            string eventsEqualityCheckMessage;
+            Assert.IsTrue(
+                MidiEvent.Equals(expectedTimedEvent.Event, actualTimedEvent.Event, new MidiEventEqualityCheckSettings { CompareDeltaTimes = compareDeltaTimes }, out eventsEqualityCheckMessage),
+                $"{message} {eventsEqualityCheckMessage}");
         }
 
         #endregion

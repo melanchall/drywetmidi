@@ -9,6 +9,7 @@ namespace Melanchall.DryWetMidi.Tools
     /// <summary>
     /// Provides methods to quantize timed events time.
     /// </summary>
+    [Obsolete("OBS13")]
     public static class TimedEventsQuantizerUtilities
     {
         #region Methods
@@ -34,16 +35,18 @@ namespace Melanchall.DryWetMidi.Tools
         /// </item>
         /// </list>
         /// </exception>
+        [Obsolete("OBS13")]
         public static void QuantizeTimedEvents(this TrackChunk trackChunk, IGrid grid, TempoMap tempoMap, TimedEventsQuantizingSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
             ThrowIfArgument.IsNull(nameof(grid), grid);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
-            using (var timedEventsManager = trackChunk.ManageTimedEvents())
-            {
-                new TimedEventsQuantizer().Quantize(timedEventsManager.Objects, grid, tempoMap, settings);
-            }
+            trackChunk.QuantizeObjects(
+                ObjectType.TimedEvent,
+                grid,
+                tempoMap,
+                GetSettings(settings));
         }
 
         /// <summary>
@@ -67,6 +70,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// </item>
         /// </list>
         /// </exception>
+        [Obsolete("OBS13")]
         public static void QuantizeTimedEvents(this IEnumerable<TrackChunk> trackChunks, IGrid grid, TempoMap tempoMap, TimedEventsQuantizingSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
@@ -96,6 +100,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// </item>
         /// </list>
         /// </exception>
+        [Obsolete("OBS13")]
         public static void QuantizeTimedEvents(this MidiFile midiFile, IGrid grid, TimedEventsQuantizingSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
@@ -105,6 +110,14 @@ namespace Melanchall.DryWetMidi.Tools
 
             midiFile.GetTrackChunks().QuantizeTimedEvents(grid, tempoMap, settings);
         }
+
+        private static QuantizerSettings GetSettings(TimedEventsQuantizingSettings settings) => new QuantizerSettings
+        {
+            RandomizingSettings = settings.RandomizingSettings,
+            DistanceCalculationType = settings.DistanceCalculationType,
+            QuantizingLevel = settings.QuantizingLevel,
+            Filter = obj => settings.Filter((TimedEvent)obj),
+        };
 
         #endregion
     }

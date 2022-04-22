@@ -1,27 +1,79 @@
-﻿using System;
-using System.ComponentModel;
-using Melanchall.DryWetMidi.Common;
+﻿using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Interaction;
+using System;
+using System.ComponentModel;
 
 namespace Melanchall.DryWetMidi.Tools
 {
-    /// <summary>
-    /// Settings according to which lengthed objects should be quantized.
-    /// </summary>
-    [Obsolete("OBS13")]
-    public abstract class LengthedObjectsQuantizingSettings<TObject> : QuantizingSettings<TObject>
-        where TObject : ILengthedObject
+    public sealed class QuantizerSettings
     {
+        #region Constants
+
+        private const double NoQuantizingLevel = 0.0;
+        private const double FullQuantizingLevel = 1.0;
+
+        #endregion
+
         #region Fields
 
+        private TimeSpanType _distanceCalculationType = TimeSpanType.Midi;
+        private double _quantizingLevel = 1.0;
         private TimeSpanType _lengthType = TimeSpanType.Midi;
-        private LengthedObjectTarget _quantizingTarget = LengthedObjectTarget.Start;
+        private QuantizerTarget _quantizerTarget = QuantizerTarget.Start;
         private QuantizingBeyondZeroPolicy _quantizingBeyondZeroPolicy = QuantizingBeyondZeroPolicy.FixAtZero;
         private QuantizingBeyondFixedEndPolicy _quantizingBeyondFixedEndPolicy = QuantizingBeyondFixedEndPolicy.CollapseAndFix;
 
         #endregion
 
         #region Properties
+
+        public RandomizingSettings RandomizingSettings { get; set; } = new RandomizingSettings();
+
+        /// <summary>
+        /// Gets or sets the type of distance calculation used to find a time to snap an object to.
+        /// The default value is <see cref="TimeSpanType.Midi"/>.
+        /// </summary>
+        public TimeSpanType DistanceCalculationType
+        {
+            get { return _distanceCalculationType; }
+            set
+            {
+                ThrowIfArgument.IsInvalidEnumValue(nameof(value), value);
+
+                _distanceCalculationType = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the level of quantizing from 0.0 (no quantizing) to 1.0 (full quantizng).
+        /// </summary>
+        /// <remarks>
+        /// This setting specifies how close an object should be moved to nearest grid time. For example,
+        /// 0.5 will lead to an object will be moved half the distance between its time and the nearest
+        /// grid time.
+        /// </remarks>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="value"/> is out of valid range.</exception>
+        public double QuantizingLevel
+        {
+            get { return _quantizingLevel; }
+            set
+            {
+                ThrowIfArgument.IsOutOfRange(
+                    nameof(value),
+                    value,
+                    NoQuantizingLevel,
+                    FullQuantizingLevel,
+                    $"Value is out of [{NoQuantizingLevel}; {FullQuantizingLevel}] range.");
+
+                _quantizingLevel = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a predicate to filter objects that should be quantized. Use <c>null</c> if
+        /// all objects should be processed.
+        /// </summary>
+        public Predicate<ITimedObject> Filter { get; set; }
 
         /// <summary>
         /// Gets or sets the type of an object's length that should be kept in case the opposite
@@ -41,23 +93,18 @@ namespace Melanchall.DryWetMidi.Tools
 
         /// <summary>
         /// Gets or sets the side of an object that should be quantized.
-        /// The default value is <see cref="LengthedObjectTarget.Start"/>.
+        /// The default value is <see cref="QuantizerTarget.Start"/>.
         /// </summary>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="value"/> specified an invalid value.</exception>
-        public LengthedObjectTarget QuantizingTarget
+        public QuantizerTarget Target
         {
-            get { return _quantizingTarget; }
-            set
-            {
-                ThrowIfArgument.IsInvalidEnumValue(nameof(value), value);
-
-                _quantizingTarget = value;
-            }
+            get { return _quantizerTarget; }
+            set { _quantizerTarget = value; }
         }
 
         /// <summary>
         /// Gets or sets policy according to which a quantizer should act in case of an object is going
-        /// to be moved beyond zero. The default value is <see cref="Tools.QuantizingBeyondZeroPolicy.FixAtZero"/>.
+        /// to be moved beyond zero. The default value is <see cref="QuantizingBeyondZeroPolicy.FixAtZero"/>.
         /// </summary>
         /// <remarks>
         /// When the start time of an object is not fixed, there is a chance that the object's end time
@@ -80,7 +127,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <summary>
         /// Gets or sets policy according to which a quantizer should act in case of object's side
         /// is going to be moved beyond an opposite one that is fixed. The default value is
-        /// <see cref="Tools.QuantizingBeyondFixedEndPolicy.CollapseAndFix"/>.
+        /// <see cref="QuantizingBeyondFixedEndPolicy.CollapseAndFix"/>.
         /// </summary>
         /// <remarks>
         /// When one end of an object is fixed, there is a chance that the object's opposite end
