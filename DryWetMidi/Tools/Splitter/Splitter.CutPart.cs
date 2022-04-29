@@ -109,7 +109,7 @@ namespace Melanchall.DryWetMidi.Tools
                     .Select(c =>
                     {
                         var notes = c.Events
-                            .GetTimedEventsLazy()
+                            .GetTimedEventsLazy(null)
                             .GetNotesAndTimedEventsLazy(settings.NoteDetectionSettings)
                             .OfType<Note>();
 
@@ -178,7 +178,7 @@ namespace Melanchall.DryWetMidi.Tools
                         if (settings.SplitNotes && notesToSplitDescriptorsEnumerator.Current.Any())
                         {
                             var timedEvents = eventsCollection
-                                .GetTimedEventsLazy(false)
+                                .GetTimedEventsLazy(null, false)
                                 .SkipWhile(e => e.Time < times[0])
                                 .TakeWhile(e => e.Time == times[0])
                                 .ToList();

@@ -67,7 +67,7 @@ namespace Melanchall.DryWetMidi.Interaction
             ThrowIfArgument.IsNull(nameof(midiEvents), midiEvents);
 
             return midiEvents
-                .GetTimedEventsLazy()
+                .GetTimedEventsLazy(settings?.TimedEventDetectionSettings)
                 .GetObjectsFromSortedTimedObjects(0, objectType, settings);
         }
 
@@ -88,7 +88,7 @@ namespace Melanchall.DryWetMidi.Interaction
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
 
             return eventsCollection
-                .GetTimedEventsLazy()
+                .GetTimedEventsLazy(settings?.TimedEventDetectionSettings)
                 .GetObjectsFromSortedTimedObjects(eventsCollection.Count / 2, objectType, settings);
         }
 
@@ -130,7 +130,7 @@ namespace Melanchall.DryWetMidi.Interaction
             var eventsCollections = trackChunks.Where(c => c != null).Select(c => c.Events).ToArray();
             var eventsCount = eventsCollections.Sum(c => c.Count);
 
-            var timedEvents = eventsCollections.GetTimedEventsLazy(eventsCount);
+            var timedEvents = eventsCollections.GetTimedEventsLazy(eventsCount, settings?.TimedEventDetectionSettings);
             var timedObjects = (IEnumerable<ITimedObject>)timedEvents.Select(o => o.Item1);
 
             if (objectType.HasFlag(ObjectType.Chord) || objectType.HasFlag(ObjectType.Note) || objectType.HasFlag(ObjectType.Rest))

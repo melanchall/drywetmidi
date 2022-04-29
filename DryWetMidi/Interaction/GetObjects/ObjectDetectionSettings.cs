@@ -7,6 +7,8 @@
     {
         #region Properties
 
+        public TimedEventDetectionSettings TimedEventDetectionSettings { get; set; } = new TimedEventDetectionSettings();
+
         /// <summary>
         /// Gets or sets settings which define how notes should be detected and built.
         /// </summary>

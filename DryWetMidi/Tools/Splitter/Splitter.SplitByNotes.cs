@@ -84,7 +84,7 @@ namespace Melanchall.DryWetMidi.Tools
             var timedEventsByIds = new Dictionary<TNoteId, List<TimedEvent>>();
             var nonNoteEvents = new List<TimedEvent>();
 
-            var timedEvents = midiFile.GetTrackChunks().GetTimedEventsLazy();
+            var timedEvents = midiFile.GetTrackChunks().GetTimedEventsLazy(null);
             if (filter != null)
                 timedEvents = timedEvents.Where(e => filter(e.Item1));
 

@@ -202,7 +202,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
             var newEventsCount = eventsCollection.Count + eventsCollectionToAdd.Count;
             var allTimedEvents = new[] { eventsCollection, eventsCollectionToAdd }
-                .GetTimedEventsLazy(newEventsCount, false)
+                .GetTimedEventsLazy(newEventsCount, null, false)
                 .Select(e => e.Item1)
                 .ToArray();
 

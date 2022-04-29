@@ -68,6 +68,8 @@ namespace Melanchall.DryWetMidi.Tests.Utilities
             if (ReferenceEquals(null, expectedTimedObject) || ReferenceEquals(null, actualTimedObject))
                 Assert.Fail($"{message} One of objects is null.");
 
+            Assert.AreEqual(expectedTimedObject.GetType(), actualTimedObject.GetType(), $"{message} Different types.");
+
             var timedEvent = expectedTimedObject as TimedEvent;
             if (timedEvent != null)
             {
@@ -261,6 +263,9 @@ namespace Melanchall.DryWetMidi.Tests.Utilities
             Assert.IsTrue(
                 MidiEvent.Equals(expectedTimedEvent.Event, actualTimedEvent.Event, new MidiEventEqualityCheckSettings { CompareDeltaTimes = compareDeltaTimes }, out eventsEqualityCheckMessage),
                 $"{message} {eventsEqualityCheckMessage}");
+
+            if (expectedTimedEvent.GetType() != typeof(TimedEvent))
+                Assert.IsTrue(expectedTimedEvent.Equals(actualTimedEvent), $"{message} Custom comparison failed.");
         }
 
         #endregion

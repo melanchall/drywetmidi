@@ -18,6 +18,8 @@ namespace Melanchall.DryWetMidi.Interaction
 
         #region Properties
 
+        public TimedEventDetectionSettings TimedEventDetectionSettings { get; set; } = new TimedEventDetectionSettings();
+
         /// <summary>
         /// Gets or sets how start event of a note should be found in case of overlapping notes with
         /// the same note number and channel. The default value is <see cref="NoteStartDetectionPolicy.FirstNoteOn"/>.

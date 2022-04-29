@@ -244,7 +244,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
             var result = new List<Chord>();
 
-            foreach (var chord in GetChordsAndNotesAndTimedEventsLazy(midiEvents.GetTimedEventsLazy(), settings).OfType<Chord>())
+            foreach (var chord in GetChordsAndNotesAndTimedEventsLazy(midiEvents.GetTimedEventsLazy(settings?.NoteDetectionSettings?.TimedEventDetectionSettings), settings).OfType<Chord>())
             {
                 result.Add(chord);
             }
@@ -266,7 +266,7 @@ namespace Melanchall.DryWetMidi.Interaction
             var result = new List<Chord>();
             var chordsBuilder = new ChordsBuilder(settings);
 
-            var chords = chordsBuilder.GetChordsLazy(eventsCollection.GetTimedEventsLazy());
+            var chords = chordsBuilder.GetChordsLazy(eventsCollection.GetTimedEventsLazy(settings?.NoteDetectionSettings?.TimedEventDetectionSettings));
 
             result.AddRange(chords);
             return result;
@@ -309,7 +309,7 @@ namespace Melanchall.DryWetMidi.Interaction
             var result = new List<Chord>(eventsCount / 3);
             var chordsBuilder = new ChordsBuilder(settings);
 
-            var chords = chordsBuilder.GetChordsLazy(eventsCollections.GetTimedEventsLazy(eventsCount));
+            var chords = chordsBuilder.GetChordsLazy(eventsCollections.GetTimedEventsLazy(eventsCount, settings?.NoteDetectionSettings?.TimedEventDetectionSettings));
 
             result.AddRange(chords);
             return result;
@@ -949,7 +949,7 @@ namespace Melanchall.DryWetMidi.Interaction
             var collectedTimedEvents = canTimeOrLengthBeChanged ? new List<TimedEvent>(eventsCollection.Count) : null;
 
             var chordsBuilder = new ChordsBuilder(settings);
-            var chords = chordsBuilder.GetChordsLazy(eventsCollection.GetTimedEventsLazy(false), canTimeOrLengthBeChanged, collectedTimedEvents);
+            var chords = chordsBuilder.GetChordsLazy(eventsCollection.GetTimedEventsLazy(settings?.NoteDetectionSettings?.TimedEventDetectionSettings, false), canTimeOrLengthBeChanged, collectedTimedEvents);
 
             foreach (var chord in chords)
             {
@@ -985,7 +985,7 @@ namespace Melanchall.DryWetMidi.Interaction
             var collectedTimedEvents = canTimeOrLengthBeChanged ? new List<Tuple<TimedEvent, int>>(eventsCount) : null;
 
             var chordsBuilder = new ChordsBuilder(settings);
-            var chords = chordsBuilder.GetChordsLazy(eventsCollections.GetTimedEventsLazy(eventsCount, false), canTimeOrLengthBeChanged, collectedTimedEvents);
+            var chords = chordsBuilder.GetChordsLazy(eventsCollections.GetTimedEventsLazy(eventsCount, settings?.NoteDetectionSettings?.TimedEventDetectionSettings, false), canTimeOrLengthBeChanged, collectedTimedEvents);
 
             foreach (var chord in chords)
             {

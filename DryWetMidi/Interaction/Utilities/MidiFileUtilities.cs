@@ -31,7 +31,7 @@ namespace Melanchall.DryWetMidi.Interaction
             var tempoMap = midiFile.GetTempoMap();
             return midiFile
                 .GetTrackChunks()
-                .GetTimedEventsLazy(false)
+                .GetTimedEventsLazy(null, false)
                 .Select(e => e.Item1)
                 .LastOrDefault()?.TimeAs<TTimeSpan>(tempoMap) ?? TimeSpanUtilities.GetZeroTimeSpan<TTimeSpan>();
         }
@@ -54,7 +54,7 @@ namespace Melanchall.DryWetMidi.Interaction
             var tempoMap = midiFile.GetTempoMap();
             return midiFile
                 .GetTrackChunks()
-                .GetTimedEventsLazy(false)
+                .GetTimedEventsLazy(null, false)
                 .Select(e => e.Item1)
                 .LastOrDefault()?.TimeAs(durationType, tempoMap) ?? TimeSpanUtilities.GetZeroTimeSpan(durationType);
         }

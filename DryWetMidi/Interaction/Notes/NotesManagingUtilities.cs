@@ -292,7 +292,7 @@ namespace Melanchall.DryWetMidi.Interaction
             var result = new List<Note>();
             var notesBuilder = new NotesBuilder(settings);
 
-            var notes = notesBuilder.GetNotesLazy(midiEvents.GetTimedEventsLazy());
+            var notes = notesBuilder.GetNotesLazy(midiEvents.GetTimedEventsLazy(settings?.TimedEventDetectionSettings));
 
             result.AddRange(notes);
             return result;
@@ -312,7 +312,7 @@ namespace Melanchall.DryWetMidi.Interaction
             var result = new List<Note>();
             var notesBuilder = new NotesBuilder(settings);
 
-            var notes = notesBuilder.GetNotesLazy(eventsCollection.GetTimedEventsLazy());
+            var notes = notesBuilder.GetNotesLazy(eventsCollection.GetTimedEventsLazy(settings?.TimedEventDetectionSettings));
             
             result.AddRange(notes);
             return result;
@@ -355,7 +355,7 @@ namespace Melanchall.DryWetMidi.Interaction
             var result = new List<Note>(eventsCount / 3);
             var notesBuilder = new NotesBuilder(settings);
 
-            var notes = notesBuilder.GetNotesLazy(eventsCollections.GetTimedEventsLazy(eventsCount));
+            var notes = notesBuilder.GetNotesLazy(eventsCollections.GetTimedEventsLazy(eventsCount, settings?.TimedEventDetectionSettings));
 
             result.AddRange(notes);
             return result;
@@ -821,7 +821,7 @@ namespace Melanchall.DryWetMidi.Interaction
             var collectedTimedEvents = canTimeOrLengthBeChanged ? new List<Tuple<TimedEvent, int>>(eventsCount) : null;
 
             var notesBuilder = new NotesBuilder(noteDetectionSettings);
-            var notes = notesBuilder.GetNotesLazy(eventsCollections.GetTimedEventsLazy(eventsCount, false), canTimeOrLengthBeChanged, collectedTimedEvents);
+            var notes = notesBuilder.GetNotesLazy(eventsCollections.GetTimedEventsLazy(eventsCount, noteDetectionSettings?.TimedEventDetectionSettings, false), canTimeOrLengthBeChanged, collectedTimedEvents);
 
             foreach (var note in notes)
             {
@@ -857,7 +857,7 @@ namespace Melanchall.DryWetMidi.Interaction
             var collectedTimedEvents = canTimeOrLengthBeChanged ? new List<TimedEvent>(eventsCollection.Count) : null;
 
             var notesBuilder = new NotesBuilder(noteDetectionSettings);
-            var notes = notesBuilder.GetNotesLazy(eventsCollection.GetTimedEventsLazy(false), canTimeOrLengthBeChanged, collectedTimedEvents);
+            var notes = notesBuilder.GetNotesLazy(eventsCollection.GetTimedEventsLazy(noteDetectionSettings?.TimedEventDetectionSettings, false), canTimeOrLengthBeChanged, collectedTimedEvents);
 
             foreach (var note in notes)
             {

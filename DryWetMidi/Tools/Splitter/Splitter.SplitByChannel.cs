@@ -83,7 +83,7 @@ namespace Melanchall.DryWetMidi.Tools
                 channel => channel,
                 channel => new List<TimedEvent>());
 
-            var timedEvents = midiFile.GetTrackChunks().GetTimedEventsLazy();
+            var timedEvents = midiFile.GetTrackChunks().GetTimedEventsLazy(null);
 
             var filter = settings.Filter;
             if (filter != null)
