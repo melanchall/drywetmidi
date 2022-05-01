@@ -7,22 +7,22 @@
     {
         #region Properties
 
-        public TimedEventDetectionSettings TimedEventDetectionSettings { get; set; } = new TimedEventDetectionSettings();
+        public TimedEventDetectionSettings TimedEventDetectionSettings { get; set; }
 
         /// <summary>
         /// Gets or sets settings which define how notes should be detected and built.
         /// </summary>
-        public NoteDetectionSettings NoteDetectionSettings { get; set; } = new NoteDetectionSettings();
+        public NoteDetectionSettings NoteDetectionSettings { get; set; }
 
         /// <summary>
         /// Gets or sets settings which define how chords should be detected and built.
         /// </summary>
-        public ChordDetectionSettings ChordDetectionSettings { get; set; } = new ChordDetectionSettings();
+        public ChordDetectionSettings ChordDetectionSettings { get; set; }
 
         /// <summary>
         /// Gets or sets settings which define how rests should be detected and built.
         /// </summary>
-        public RestDetectionSettings RestDetectionSettings { get; set; } = new RestDetectionSettings();
+        public RestDetectionSettings RestDetectionSettings { get; set; }
 
         #endregion
     }

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using Melanchall.DryWetMidi.Common;
 
 namespace Melanchall.DryWetMidi.Interaction
@@ -19,6 +20,8 @@ namespace Melanchall.DryWetMidi.Interaction
         #region Properties
 
         public TimedEventDetectionSettings TimedEventDetectionSettings { get; set; } = new TimedEventDetectionSettings();
+
+        public Func<NoteData, Note> Constructor { get; set; }
 
         /// <summary>
         /// Gets or sets how start event of a note should be found in case of overlapping notes with

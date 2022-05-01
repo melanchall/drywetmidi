@@ -14,6 +14,7 @@ namespace Melanchall.DryWetMidi.Interaction
     {
         #region Methods
 
+        // TODO: obsolete
         /// <summary>
         /// Sets time of the specified timed event.
         /// </summary>
@@ -152,6 +153,7 @@ namespace Melanchall.DryWetMidi.Interaction
             return file.GetTrackChunks().GetTimedEvents(settings);
         }
 
+        // TODO: obsolete
         /// <summary>
         /// Adds a <see cref="MidiEvent"/> into a <see cref="TimedEventsCollection"/> with the specified
         /// absolute time.
@@ -184,6 +186,7 @@ namespace Melanchall.DryWetMidi.Interaction
             eventsCollection.Add(new TimedEvent(midiEvent, time));
         }
 
+        // TODO: obsolete
         /// <summary>
         /// Adds a <see cref="MidiEvent"/> into a <see cref="TimedEventsCollection"/> with the specified
         /// absolute time.

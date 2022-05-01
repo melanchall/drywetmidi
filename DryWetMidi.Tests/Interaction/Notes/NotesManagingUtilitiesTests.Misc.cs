@@ -7,12 +7,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
     [TestFixture]
     public sealed partial class NotesManagingUtilitiesTests
     {
-        #region Constants
-
-        private static readonly NoteMethods NoteMethods = new NoteMethods();
-
-        #endregion
-
         #region Test methods
 
         #region SetTimeAndLength

@@ -100,12 +100,12 @@ namespace Melanchall.DryWetMidi.Interaction
         {
             bool IsCompleted { get; }
 
-            ITimedObject GetObject();
+            ITimedObject GetObject(Func<NoteData, Note> constructor);
         }
 
         private interface IObjectDescriptorIndexed : IObjectDescriptor
         {
-            Tuple<ITimedObject, int, int> GetIndexedObject();
+            Tuple<ITimedObject, int, int> GetIndexedObject(Func<NoteData, Note> constructor);
         }
 
         private class NoteDescriptor : IObjectDescriptor
@@ -121,9 +121,13 @@ namespace Melanchall.DryWetMidi.Interaction
 
             public bool IsCompleted => NoteOffTimedEvent != null;
 
-            public ITimedObject GetObject()
+            public ITimedObject GetObject(Func<NoteData, Note> constructor)
             {
-                return IsCompleted ? new Note(NoteOnTimedEvent, NoteOffTimedEvent) : (ITimedObject)NoteOnTimedEvent;
+                return IsCompleted
+                    ? (constructor == null
+                        ? new Note(NoteOnTimedEvent, NoteOffTimedEvent)
+                        : constructor(new NoteData(NoteOnTimedEvent, NoteOffTimedEvent)))
+                    : (ITimedObject)NoteOnTimedEvent;
             }
         }
 
@@ -138,7 +142,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
             public bool IsCompleted { get; } = true;
 
-            public ITimedObject GetObject()
+            public ITimedObject GetObject(Func<NoteData, Note> constructor)
             {
                 return _timedObject;
             }
@@ -157,9 +161,9 @@ namespace Melanchall.DryWetMidi.Interaction
 
             public int NoteOffIndex { get; set; }
 
-            public Tuple<ITimedObject, int, int> GetIndexedObject()
+            public Tuple<ITimedObject, int, int> GetIndexedObject(Func<NoteData, Note> constructor)
             {
-                return Tuple.Create(GetObject(), _noteOnIndex, NoteOffIndex);
+                return Tuple.Create(GetObject(constructor), _noteOnIndex, NoteOffIndex);
             }
         }
 
@@ -174,7 +178,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
             public bool IsCompleted { get; } = true;
 
-            public ITimedObject GetObject()
+            public ITimedObject GetObject(Func<NoteData, Note> constructor)
             {
                 return TimedEvent;
             }
@@ -190,9 +194,9 @@ namespace Melanchall.DryWetMidi.Interaction
                 _index = index;
             }
 
-            public Tuple<ITimedObject, int, int> GetIndexedObject()
+            public Tuple<ITimedObject, int, int> GetIndexedObject(Func<NoteData, Note> constructor)
             {
-                return Tuple.Create(GetObject(), _index, _index);
+                return Tuple.Create(GetObject(constructor), _index, _index);
             }
         }
 
@@ -888,6 +892,7 @@ namespace Melanchall.DryWetMidi.Interaction
             var notesDescriptorsNodes = new Dictionary<Tuple<int, int>, NoteOnsHolderIndexed>();
 
             var respectEventsCollectionIndex = settings.NoteSearchContext == NoteSearchContext.SingleEventsCollection;
+            var constructor = settings?.Constructor;
 
             foreach (var timedEventTuple in timedEvents)
             {
@@ -934,7 +939,7 @@ namespace Melanchall.DryWetMidi.Interaction
                                 if (!n.Value.IsCompleted)
                                     break;
 
-                                yield return n.Value.GetIndexedObject();
+                                yield return n.Value.GetIndexedObject(constructor);
 
                                 var next = n.Next;
                                 objectsDescriptors.Remove(n);
@@ -955,7 +960,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
             foreach (var objectDescriptor in objectsDescriptors)
             {
-                yield return objectDescriptor.GetIndexedObject();
+                yield return objectDescriptor.GetIndexedObject(constructor);
             }
         }
 
@@ -972,6 +977,7 @@ namespace Melanchall.DryWetMidi.Interaction
             bool completeObjectsAllowed)
         {
             settings = settings ?? new NoteDetectionSettings();
+            var constructor = settings?.Constructor;
 
             var objectsDescriptors = new LinkedList<IObjectDescriptor>();
             var notesDescriptorsNodes = new Dictionary<int, NoteOnsHolder>();
@@ -1028,7 +1034,7 @@ namespace Melanchall.DryWetMidi.Interaction
                                 if (!n.Value.IsCompleted)
                                     break;
 
-                                yield return n.Value.GetObject();
+                                yield return n.Value.GetObject(constructor);
 
                                 var next = n.Next;
                                 objectsDescriptors.Remove(n);
@@ -1049,7 +1055,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
             foreach (var objectDescriptor in objectsDescriptors)
             {
-                yield return objectDescriptor.GetObject();
+                yield return objectDescriptor.GetObject(constructor);
             }
         }
 

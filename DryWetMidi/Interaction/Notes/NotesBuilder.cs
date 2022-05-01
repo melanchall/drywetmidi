@@ -21,9 +21,13 @@ namespace Melanchall.DryWetMidi.Interaction
 
             public bool IsCompleted => NoteOffTimedEvent != null;
 
-            public Note GetNote()
+            public Note GetNote(Func<NoteData, Note> constructor)
             {
-                return IsCompleted ? new Note(NoteOnTimedEvent, NoteOffTimedEvent) : null;
+                return IsCompleted
+                    ? (constructor == null
+                        ? new Note(NoteOnTimedEvent, NoteOffTimedEvent)
+                        : constructor(new NoteData(NoteOnTimedEvent, NoteOffTimedEvent)))
+                    : null;
             }
         }
 
@@ -37,9 +41,15 @@ namespace Melanchall.DryWetMidi.Interaction
 
             public int EventsCollectionIndex { get; }
 
-            public Tuple<Note, int> GetIndexedNote()
+            public Tuple<Note, int> GetIndexedNote(Func<NoteData, Note> constructor)
             {
-                return IsCompleted ? Tuple.Create(new Note(NoteOnTimedEvent, NoteOffTimedEvent), EventsCollectionIndex) : null;
+                return IsCompleted
+                    ? Tuple.Create(
+                        (constructor == null
+                            ? new Note(NoteOnTimedEvent, NoteOffTimedEvent)
+                            : constructor(new NoteData(NoteOnTimedEvent, NoteOffTimedEvent))),
+                        EventsCollectionIndex)
+                    : null;
             }
         }
 
@@ -191,7 +201,7 @@ namespace Melanchall.DryWetMidi.Interaction
                                 if (!n.Value.IsCompleted)
                                     break;
 
-                                yield return n.Value.GetNote();
+                                yield return n.Value.GetNote(_noteDetectionSettings.Constructor);
 
                                 var next = n.Next;
                                 notesDescriptors.Remove(n);
@@ -204,7 +214,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
             foreach (var noteDescriptor in notesDescriptors)
             {
-                var note = noteDescriptor.GetNote();
+                var note = noteDescriptor.GetNote(_noteDetectionSettings.Constructor);
                 if (note != null)
                     yield return note;
             }
@@ -263,7 +273,7 @@ namespace Melanchall.DryWetMidi.Interaction
                                 if (!n.Value.IsCompleted)
                                     break;
 
-                                yield return n.Value.GetNote();
+                                yield return n.Value.GetNote(_noteDetectionSettings.Constructor);
 
                                 var next = n.Next;
                                 notesDescriptors.Remove(n);
@@ -276,7 +286,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
             foreach (var noteDescriptor in notesDescriptors)
             {
-                var note = noteDescriptor.GetNote();
+                var note = noteDescriptor.GetNote(_noteDetectionSettings.Constructor);
                 if (note != null)
                     yield return note;
             }
@@ -335,7 +345,7 @@ namespace Melanchall.DryWetMidi.Interaction
                                 if (!n.Value.IsCompleted)
                                     break;
 
-                                yield return n.Value.GetIndexedNote();
+                                yield return n.Value.GetIndexedNote(_noteDetectionSettings.Constructor);
 
                                 var next = n.Next;
                                 notesDescriptors.Remove(n);
@@ -348,7 +358,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
             foreach (var noteDescriptor in notesDescriptors)
             {
-                var note = noteDescriptor.GetIndexedNote();
+                var note = noteDescriptor.GetIndexedNote(_noteDetectionSettings.Constructor);
                 if (note != null)
                     yield return note;
             }

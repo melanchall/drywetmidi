@@ -31,6 +31,49 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             expectedRemovedCount: 2);
 
         [Test]
+        public void RemoveNotes_DetectionSettings_EventsCollection_WithPredicate_FirstNoteOn_1_Custom_1([Values] ContainerType containerType) => RemoveNotes_DetectionSettings_EventsCollection_WithPredicate(
+            containerType,
+            new NoteDetectionSettings
+            {
+                NoteStartDetectionPolicy = NoteStartDetectionPolicy.FirstNoteOn,
+                Constructor = CustomNoteConstructor
+            },
+            midiEvents: new MidiEvent[]
+            {
+                new NoteOnEvent(),
+                new NoteOnEvent(),
+                new NoteOffEvent(),
+                new NoteOffEvent(),
+            },
+            match: n => ((CustomNote)n).EventsCollectionIndex == null,
+            expectedMidiEvents: new MidiEvent[]
+            {
+            },
+            expectedRemovedCount: 2);
+
+        [Test]
+        public void RemoveNotes_DetectionSettings_EventsCollection_WithPredicate_FirstNoteOn_1_Custom_2([Values] ContainerType containerType) => RemoveNotes_DetectionSettings_EventsCollection_WithPredicate(
+            containerType,
+            new NoteDetectionSettings
+            {
+                NoteStartDetectionPolicy = NoteStartDetectionPolicy.FirstNoteOn,
+                Constructor = CustomNoteConstructor,
+                TimedEventDetectionSettings = CustomEventSettings
+            },
+            midiEvents: new MidiEvent[]
+            {
+                new NoteOnEvent(),
+                new NoteOnEvent(),
+                new NoteOffEvent(),
+                new NoteOffEvent(),
+            },
+            match: n => ((CustomTimedEvent)((CustomNote)n).GetTimedNoteOnEvent()).EventIndex >= 0,
+            expectedMidiEvents: new MidiEvent[]
+            {
+            },
+            expectedRemovedCount: 2);
+
+        [Test]
         public void RemoveNotes_DetectionSettings_EventsCollection_WithPredicate_FirstNoteOn_2([Values] ContainerType containerType) => RemoveNotes_DetectionSettings_EventsCollection_WithPredicate(
             containerType,
             new NoteDetectionSettings { NoteStartDetectionPolicy = NoteStartDetectionPolicy.FirstNoteOn },
@@ -233,6 +276,77 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 }
             },
             match: n => true,
+            expectedMidiEvents: new[]
+            {
+                new MidiEvent[]
+                {
+                },
+                new MidiEvent[]
+                {
+                }
+            },
+            expectedRemovedCount: 3);
+
+        [Test]
+        public void RemoveNotes_DetectionSettings_TrackChunks_WithPredicate_FirstNoteOn_1_Custom_1([Values] bool wrapToFile) => RemoveNotes_DetectionSettings_TrackChunks_WithPredicate(
+            wrapToFile,
+            new NoteDetectionSettings
+            {
+                NoteStartDetectionPolicy = NoteStartDetectionPolicy.FirstNoteOn,
+                Constructor = CustomNoteConstructor
+            },
+            midiEvents: new[]
+            {
+                new MidiEvent[]
+                {
+                    new NoteOnEvent(),
+                    new NoteOnEvent(),
+                    new NoteOffEvent(),
+                    new NoteOffEvent(),
+                },
+                new MidiEvent[]
+                {
+                    new NoteOnEvent(),
+                    new NoteOffEvent(),
+                }
+            },
+            match: n => ((CustomNote)n).EventsCollectionIndex == null,
+            expectedMidiEvents: new[]
+            {
+                new MidiEvent[]
+                {
+                },
+                new MidiEvent[]
+                {
+                }
+            },
+            expectedRemovedCount: 3);
+
+        [Test]
+        public void RemoveNotes_DetectionSettings_TrackChunks_WithPredicate_FirstNoteOn_1_Custom_2([Values] bool wrapToFile) => RemoveNotes_DetectionSettings_TrackChunks_WithPredicate(
+            wrapToFile,
+            new NoteDetectionSettings
+            {
+                NoteStartDetectionPolicy = NoteStartDetectionPolicy.FirstNoteOn,
+                Constructor = CustomNoteConstructor,
+                TimedEventDetectionSettings = CustomEventSettings
+            },
+            midiEvents: new[]
+            {
+                new MidiEvent[]
+                {
+                    new NoteOnEvent(),
+                    new NoteOnEvent(),
+                    new NoteOffEvent(),
+                    new NoteOffEvent(),
+                },
+                new MidiEvent[]
+                {
+                    new NoteOnEvent(),
+                    new NoteOffEvent(),
+                }
+            },
+            match: n => ((CustomTimedEvent)((CustomNote)n).GetTimedNoteOffEvent()).EventIndex >= 0,
             expectedMidiEvents: new[]
             {
                 new MidiEvent[]

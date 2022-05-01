@@ -37,6 +37,86 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             expectedProcessedCount: 2);
 
         [Test]
+        public void ProcessNotes_DetectionSettings_EventsCollection_WithPredicate_FirstNoteOn_1_Custom_1([Values] ContainerType containerType) => ProcessNotes_DetectionSettings_EventsCollection_WithPredicate(
+            containerType,
+            new NoteDetectionSettings
+            {
+                NoteStartDetectionPolicy = NoteStartDetectionPolicy.FirstNoteOn,
+                Constructor = CustomNoteConstructor
+            },
+            midiEvents: new MidiEvent[]
+            {
+                new NoteOnEvent(),
+                new NoteOnEvent(),
+                new NoteOffEvent(),
+                new NoteOffEvent(),
+            },
+            action: n => ((CustomNote)n).Velocity = (SevenBitNumber)70,
+            match: n => true,
+            expectedMidiEvents: new MidiEvent[]
+            {
+                new NoteOnEvent { Velocity = (SevenBitNumber)70 },
+                new NoteOnEvent { Velocity = (SevenBitNumber)70 },
+                new NoteOffEvent(),
+                new NoteOffEvent(),
+            },
+            expectedProcessedCount: 2);
+
+        [Test]
+        public void ProcessNotes_DetectionSettings_EventsCollection_WithPredicate_FirstNoteOn_1_Custom_2([Values] ContainerType containerType) => ProcessNotes_DetectionSettings_EventsCollection_WithPredicate(
+            containerType,
+            new NoteDetectionSettings
+            {
+                NoteStartDetectionPolicy = NoteStartDetectionPolicy.FirstNoteOn,
+                Constructor = CustomNoteConstructor,
+                TimedEventDetectionSettings = CustomEventSettings
+            },
+            midiEvents: new MidiEvent[]
+            {
+                new NoteOnEvent(),
+                new NoteOnEvent(),
+                new NoteOffEvent(),
+                new NoteOffEvent(),
+            },
+            action: n => ((CustomNote)n).Velocity = (SevenBitNumber)70,
+            match: n => ((CustomTimedEvent)n.GetTimedNoteOnEvent()).EventIndex >= 0,
+            expectedMidiEvents: new MidiEvent[]
+            {
+                new NoteOnEvent { Velocity = (SevenBitNumber)70 },
+                new NoteOnEvent { Velocity = (SevenBitNumber)70 },
+                new NoteOffEvent(),
+                new NoteOffEvent(),
+            },
+            expectedProcessedCount: 2);
+
+        [Test]
+        public void ProcessNotes_DetectionSettings_EventsCollection_WithPredicate_FirstNoteOn_1_Custom_3([Values] ContainerType containerType) => ProcessNotes_DetectionSettings_EventsCollection_WithPredicate(
+            containerType,
+            new NoteDetectionSettings
+            {
+                NoteStartDetectionPolicy = NoteStartDetectionPolicy.FirstNoteOn,
+                Constructor = CustomNoteConstructor,
+                TimedEventDetectionSettings = CustomEventSettings
+            },
+            midiEvents: new MidiEvent[]
+            {
+                new NoteOnEvent(),
+                new NoteOnEvent(),
+                new NoteOffEvent(),
+                new NoteOffEvent(),
+            },
+            action: n => ((CustomNote)n).Velocity = (SevenBitNumber)70,
+            match: n => ((CustomNote)n).EventsCollectionIndex >= 0,
+            expectedMidiEvents: new MidiEvent[]
+            {
+                new NoteOnEvent { Velocity = (SevenBitNumber)70 },
+                new NoteOnEvent { Velocity = (SevenBitNumber)70 },
+                new NoteOffEvent(),
+                new NoteOffEvent(),
+            },
+            expectedProcessedCount: 2);
+
+        [Test]
         public void ProcessNotes_DetectionSettings_EventsCollection_WithPredicate_FirstNoteOn_2([Values] ContainerType containerType) => ProcessNotes_DetectionSettings_EventsCollection_WithPredicate(
             containerType,
             new NoteDetectionSettings { NoteStartDetectionPolicy = NoteStartDetectionPolicy.FirstNoteOn },
@@ -287,6 +367,91 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             },
             action: n => n.Velocity = (SevenBitNumber)70,
             match: n => true,
+            expectedMidiEvents: new[]
+            {
+                new MidiEvent[]
+                {
+                    new NoteOnEvent { Velocity = (SevenBitNumber)70 },
+                    new NoteOnEvent { Velocity = (SevenBitNumber)70 },
+                    new NoteOffEvent(),
+                    new NoteOffEvent(),
+                },
+                new MidiEvent[]
+                {
+                    new NoteOnEvent { Velocity = (SevenBitNumber)70 },
+                    new NoteOffEvent(),
+                }
+            },
+            expectedProcessedCount: 3);
+
+        [Test]
+        public void ProcessNotes_DetectionSettings_TrackChunks_WithPredicate_FirstNoteOn_1_Custom_1([Values] bool wrapToFile) => ProcessNotes_DetectionSettings_TrackChunks_WithPredicate(
+            wrapToFile,
+            new NoteDetectionSettings
+            {
+                NoteStartDetectionPolicy = NoteStartDetectionPolicy.FirstNoteOn,
+                Constructor = CustomNoteConstructor
+            },
+            midiEvents: new[]
+            {
+                new MidiEvent[]
+                {
+                    new NoteOnEvent(),
+                    new NoteOnEvent(),
+                    new NoteOffEvent(),
+                    new NoteOffEvent(),
+                },
+                new MidiEvent[]
+                {
+                    new NoteOnEvent(),
+                    new NoteOffEvent(),
+                }
+            },
+            action: n => ((CustomNote)n).Velocity = (SevenBitNumber)70,
+            match: n => true,
+            expectedMidiEvents: new[]
+            {
+                new MidiEvent[]
+                {
+                    new NoteOnEvent { Velocity = (SevenBitNumber)70 },
+                    new NoteOnEvent { Velocity = (SevenBitNumber)70 },
+                    new NoteOffEvent(),
+                    new NoteOffEvent(),
+                },
+                new MidiEvent[]
+                {
+                    new NoteOnEvent { Velocity = (SevenBitNumber)70 },
+                    new NoteOffEvent(),
+                }
+            },
+            expectedProcessedCount: 3);
+
+        [Test]
+        public void ProcessNotes_DetectionSettings_TrackChunks_WithPredicate_FirstNoteOn_1_Custom_2([Values] bool wrapToFile) => ProcessNotes_DetectionSettings_TrackChunks_WithPredicate(
+            wrapToFile,
+            new NoteDetectionSettings
+            {
+                NoteStartDetectionPolicy = NoteStartDetectionPolicy.FirstNoteOn,
+                Constructor = CustomNoteConstructor,
+                TimedEventDetectionSettings = CustomEventSettings
+            },
+            midiEvents: new[]
+            {
+                new MidiEvent[]
+                {
+                    new NoteOnEvent(),
+                    new NoteOnEvent(),
+                    new NoteOffEvent(),
+                    new NoteOffEvent(),
+                },
+                new MidiEvent[]
+                {
+                    new NoteOnEvent(),
+                    new NoteOffEvent(),
+                }
+            },
+            action: n => ((CustomNote)n).Velocity = (SevenBitNumber)70,
+            match: n => ((CustomTimedEvent)n.GetTimedNoteOffEvent()).EventIndex >= 0,
             expectedMidiEvents: new[]
             {
                 new MidiEvent[]

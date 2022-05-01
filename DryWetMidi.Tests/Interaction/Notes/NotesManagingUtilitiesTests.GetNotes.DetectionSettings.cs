@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
@@ -28,6 +29,65 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             {
                 new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue },
                 new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue },
+            });
+
+        [Test]
+        public void GetNotes_DetectionSettings_EventsCollection_FirstNoteOn_1_Custom_1([Values] ContainerType containerType) => GetNotes_DetectionSettings_EventsCollection(
+            containerType,
+            new NoteDetectionSettings
+            {
+                NoteStartDetectionPolicy = NoteStartDetectionPolicy.FirstNoteOn,
+                Constructor = CustomNoteConstructor
+            },
+            midiEvents: new MidiEvent[]
+            {
+                new NoteOnEvent(),
+                new NoteOnEvent(),
+                new NoteOffEvent(),
+                new NoteOffEvent(),
+            },
+            new[]
+            {
+                new CustomNote(SevenBitNumber.MinValue, null) { Velocity = SevenBitNumber.MinValue },
+                new CustomNote(SevenBitNumber.MinValue, null) { Velocity = SevenBitNumber.MinValue },
+            },
+            additionalChecks: notes =>
+            {
+                foreach (var n in notes)
+                {
+                    Assert.IsNotInstanceOf<CustomTimedEvent>(n.GetTimedNoteOnEvent(), "Invalid Note On timed event type.");
+                    Assert.IsNotInstanceOf<CustomTimedEvent>(n.GetTimedNoteOffEvent(), "Invalid Note Off timed event type.");
+                }
+            });
+
+        [Test]
+        public void GetNotes_DetectionSettings_EventsCollection_FirstNoteOn_1_Custom_2([Values] ContainerType containerType) => GetNotes_DetectionSettings_EventsCollection(
+            containerType,
+            new NoteDetectionSettings
+            {
+                NoteStartDetectionPolicy = NoteStartDetectionPolicy.FirstNoteOn,
+                Constructor = CustomNoteConstructor,
+                TimedEventDetectionSettings = CustomEventSettings
+            },
+            midiEvents: new MidiEvent[]
+            {
+                new NoteOnEvent(),
+                new NoteOnEvent(),
+                new NoteOffEvent(),
+                new NoteOffEvent(),
+            },
+            new[]
+            {
+                new CustomNote(SevenBitNumber.MinValue, 0) { Velocity = SevenBitNumber.MinValue },
+                new CustomNote(SevenBitNumber.MinValue, 0) { Velocity = SevenBitNumber.MinValue },
+            },
+            additionalChecks: notes =>
+            {
+                foreach (var n in notes)
+                {
+                    Assert.IsInstanceOf<CustomTimedEvent>(n.GetTimedNoteOnEvent(), "Invalid Note On timed event type.");
+                    Assert.IsInstanceOf<CustomTimedEvent>(n.GetTimedNoteOffEvent(), "Invalid Note Off timed event type.");
+                }
             });
 
         [Test]
@@ -136,6 +196,79 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             {
                 new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue },
                 new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue },
+            });
+
+        [Test]
+        public void GetNotes_DetectionSettings_TrackChunks_FirstNoteOn_1_Custom_1([Values] bool wrapToFile) => GetNotes_DetectionSettings_TrackChunks(
+            wrapToFile,
+            new NoteDetectionSettings
+            {
+                NoteStartDetectionPolicy = NoteStartDetectionPolicy.FirstNoteOn,
+                Constructor = CustomNoteConstructor
+            },
+            midiEvents: new[]
+            {
+                new MidiEvent[]
+                {
+                    new NoteOnEvent(),
+                    new NoteOffEvent(),
+                },
+                new MidiEvent[]
+                {
+                    new NoteOnEvent(),
+                    new NoteOffEvent(),
+                }
+            },
+            new[]
+            {
+                new CustomNote(SevenBitNumber.MinValue, null) { Velocity = SevenBitNumber.MinValue },
+                new CustomNote(SevenBitNumber.MinValue, null) { Velocity = SevenBitNumber.MinValue },
+            },
+            additionalChecks: notes =>
+            {
+                foreach (var n in notes)
+                {
+                    Assert.IsNotInstanceOf<CustomTimedEvent>(n.GetTimedNoteOnEvent(), "Invalid Note On timed event type.");
+                    Assert.IsNotInstanceOf<CustomTimedEvent>(n.GetTimedNoteOffEvent(), "Invalid Note Off timed event type.");
+                }
+            });
+
+        [Test]
+        public void GetNotes_DetectionSettings_TrackChunks_FirstNoteOn_1_Custom_2([Values] bool wrapToFile) => GetNotes_DetectionSettings_TrackChunks(
+            wrapToFile,
+            new NoteDetectionSettings
+            {
+                NoteStartDetectionPolicy = NoteStartDetectionPolicy.FirstNoteOn,
+                Constructor = CustomNoteConstructor,
+                TimedEventDetectionSettings = CustomEventSettings
+            },
+            midiEvents: new[]
+            {
+                new MidiEvent[]
+                {
+                    new NoteOnEvent(),
+                    new NoteOffEvent(),
+                },
+                new MidiEvent[]
+                {
+                    new NoteOnEvent(),
+                    new NoteOffEvent(),
+                }
+            },
+            new[]
+            {
+                new CustomNote(SevenBitNumber.MinValue, 0) { Velocity = SevenBitNumber.MinValue },
+                new CustomNote(SevenBitNumber.MinValue, 1) { Velocity = SevenBitNumber.MinValue },
+            },
+            additionalChecks: notes =>
+            {
+                foreach (var n in notes)
+                {
+                    Assert.IsInstanceOf<CustomTimedEvent>(n.GetTimedNoteOnEvent(), "Invalid Note On timed event type.");
+                    Assert.AreEqual(0, ((CustomTimedEvent)n.GetTimedNoteOnEvent()).EventIndex, "Invalid index of Note On event.");
+                    Assert.IsInstanceOf<CustomTimedEvent>(n.GetTimedNoteOffEvent(), "Invalid Note Off timed event type.");
+                    Assert.AreEqual(1, ((CustomTimedEvent)n.GetTimedNoteOffEvent()).EventIndex, "Invalid index of Note Off event.");
+                }
             });
 
         [Test]
@@ -957,7 +1090,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             ContainerType containerType,
             NoteDetectionSettings settings,
             ICollection<MidiEvent> midiEvents,
-            ICollection<Note> expectedNotes)
+            ICollection<Note> expectedNotes,
+            Action<ICollection<Note>> additionalChecks = null)
         {
             switch (containerType)
             {
@@ -968,9 +1102,11 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                         
                         var notes = eventsCollection.GetNotes(settings);
                         MidiAsserts.AreEqual(expectedNotes, notes, "Notes are invalid.");
+                        additionalChecks?.Invoke(notes);
 
                         var timedObjects = eventsCollection.GetObjects(ObjectType.Note, new ObjectDetectionSettings { NoteDetectionSettings = settings });
                         MidiAsserts.AreEqual(expectedNotes, timedObjects, "Notes are invalid from GetObjects.");
+                        additionalChecks?.Invoke(timedObjects.Cast<Note>().ToArray());
                     }
                     break;
                 case ContainerType.TrackChunk:
@@ -979,9 +1115,11 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
                         var notes = trackChunk.GetNotes(settings);
                         MidiAsserts.AreEqual(expectedNotes, notes, "Notes are invalid.");
+                        additionalChecks?.Invoke(notes);
 
                         var timedObjects = trackChunk.GetObjects(ObjectType.Note, new ObjectDetectionSettings { NoteDetectionSettings = settings });
                         MidiAsserts.AreEqual(expectedNotes, timedObjects, "Notes are invalid from GetObjects.");
+                        additionalChecks?.Invoke(timedObjects.Cast<Note>().ToArray());
                     }
                     break;
                 case ContainerType.TrackChunks:
@@ -991,7 +1129,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                             containerType == ContainerType.File,
                             settings,
                             new[] { midiEvents },
-                            expectedNotes);
+                            expectedNotes,
+                            additionalChecks);
                     }
                     break;
             }
@@ -1001,9 +1140,10 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             bool wrapToFile,
             NoteDetectionSettings settings,
             ICollection<ICollection<MidiEvent>> midiEvents,
-            IEnumerable<Note> expectedNotes)
+            IEnumerable<Note> expectedNotes,
+            Action<ICollection<Note>> additionalChecks = null)
         {
-            IEnumerable<Note> notes;
+            ICollection<Note> notes;
 
             var trackChunks = midiEvents.Select(e => new TrackChunk(e)).ToArray();
 
@@ -1013,6 +1153,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 notes = trackChunks.GetNotes(settings);
 
             MidiAsserts.AreEqual(expectedNotes, notes, "Notes are invalid.");
+            additionalChecks?.Invoke(notes);
 
             //
 
@@ -1024,6 +1165,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 timedObjects = trackChunks.GetObjects(ObjectType.Note, new ObjectDetectionSettings { NoteDetectionSettings = settings });
 
             MidiAsserts.AreEqual(expectedNotes, timedObjects, "Notes are invalid from GetObjects.");
+            additionalChecks?.Invoke(timedObjects.Cast<Note>().ToArray());
         }
 
         #endregion

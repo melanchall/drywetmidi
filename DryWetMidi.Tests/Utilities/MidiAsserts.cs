@@ -238,6 +238,9 @@ namespace Melanchall.DryWetMidi.Tests.Utilities
             Assert.AreEqual(expectedNote.OffVelocity, actualNote.OffVelocity, $"{message} Off velocity is invalid.");
             Assert.AreEqual(expectedNote.Time, actualNote.Time, $"{message} Time is invalid.");
             Assert.AreEqual(expectedNote.Length, actualNote.Length, $"{message} Length is invalid.");
+
+            if (expectedNote.GetType() != typeof(Note))
+                Assert.IsTrue(expectedNote.Equals(actualNote), $"{message} Custom comparison failed.");
         }
 
         private static void AreEqual(Rest expectedRest, Rest actualRest, string message)
