@@ -1,5 +1,4 @@
 ﻿using Melanchall.DryWetMidi.Common;
-using Melanchall.DryWetMidi.Core;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -24,7 +23,7 @@ namespace Melanchall.DryWetMidi.Interaction
         #region Fields
 
         private readonly List<TObject> _objects = new List<TObject>();
-        private readonly TimedObjectsComparer<TObject> _comparer;
+        private readonly TimedObjectsComparer _comparer;
 
         #endregion
 
@@ -39,12 +38,12 @@ namespace Melanchall.DryWetMidi.Interaction
         /// Note that <c>null</c> objects will be automatically filtered out so the collection will not
         /// contain them.
         /// </remarks>
-        internal TimedObjectsCollection(IEnumerable<TObject> objects, Comparison<MidiEvent> sameTimeEventsComparison = null)
+        internal TimedObjectsCollection(IEnumerable<TObject> objects, TimedObjectsComparer comparer)
         {
             Debug.Assert(objects != null);
 
             _objects.AddRange(objects.Where(o => o != null));
-            _comparer = new TimedObjectsComparer<TObject>(sameTimeEventsComparison);
+            _comparer = comparer ?? new TimedObjectsComparer();
         }
 
         #endregion

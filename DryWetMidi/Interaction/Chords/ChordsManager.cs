@@ -22,7 +22,7 @@ namespace Melanchall.DryWetMidi.Interaction
                   {
                       ChordDetectionSettings = chordDetectionSettings
                   },
-                  sameTimeEventsComparison)
+                  new TimedObjectsComparerOnSameEventTime(sameTimeEventsComparison))
         {
         }
 

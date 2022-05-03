@@ -14,8 +14,8 @@ namespace Melanchall.DryWetMidi.Interaction
             EventsCollection eventsCollection,
             ObjectType objectType,
             ObjectDetectionSettings objectDetectionSettings = null,
-            Comparison<MidiEvent> sameTimeEventsComparison = null)
-            : base(eventsCollection, objectType, objectDetectionSettings, sameTimeEventsComparison)
+            TimedObjectsComparer comparer = null)
+            : base(eventsCollection, objectType, objectDetectionSettings, comparer)
         {
         }
 
@@ -29,10 +29,9 @@ namespace Melanchall.DryWetMidi.Interaction
         #region Fields
 
         private EventsCollection _eventsCollection;
-        private TimedObjectsComparer<ITimedObject> _comparer;
 
-        private readonly TimedObjectsCollection<ITimedObject> _backgroundObjects =
-            new TimedObjectsCollection<ITimedObject>(Enumerable.Empty<ITimedObject>());
+        private TimedObjectsCollection<ITimedObject> _backgroundObjects;
+        private TimedObjectsComparer _comparer;
 
         private bool _disposed;
 
@@ -43,7 +42,7 @@ namespace Melanchall.DryWetMidi.Interaction
         public TimedObjectsManager(
             EventsCollection eventsCollection,
             ObjectDetectionSettings objectDetectionSettings = null,
-            Comparison<MidiEvent> sameTimeEventsComparison = null)
+            TimedObjectsComparer comparer = null)
         {
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
 
@@ -51,20 +50,20 @@ namespace Melanchall.DryWetMidi.Interaction
                 eventsCollection,
                 GetObjectType(),
                 objectDetectionSettings,
-                sameTimeEventsComparison);
+                comparer);
         }
 
         internal TimedObjectsManager(
             EventsCollection eventsCollection,
             ObjectType objectType,
             ObjectDetectionSettings objectDetectionSettings = null,
-            Comparison<MidiEvent> sameTimeEventsComparison = null)
+            TimedObjectsComparer comparer = null)
         {
             Initialize(
                 eventsCollection,
                 objectType,
                 objectDetectionSettings,
-                sameTimeEventsComparison);
+                comparer);
         }
 
         #endregion
@@ -116,13 +115,14 @@ namespace Melanchall.DryWetMidi.Interaction
             EventsCollection eventsCollection,
             ObjectType objectType,
             ObjectDetectionSettings objectDetectionSettings,
-            Comparison<MidiEvent> sameTimeEventsComparison)
+            TimedObjectsComparer comparer)
         {
             _eventsCollection = eventsCollection;
-            _comparer = new TimedObjectsComparer<ITimedObject>(sameTimeEventsComparison);
+            _comparer = comparer ?? new TimedObjectsComparer();
+            _backgroundObjects = new TimedObjectsCollection<ITimedObject>(Enumerable.Empty<ITimedObject>(), _comparer);
 
             var allObjects = eventsCollection.GetObjects(objectType | ObjectType.TimedEvent, objectDetectionSettings);
-            var objects = new TimedObjectsCollection<TObject>(Enumerable.Empty<TObject>(), sameTimeEventsComparison);
+            var objects = new TimedObjectsCollection<TObject>(Enumerable.Empty<TObject>(), _comparer);
 
             foreach (var obj in allObjects)
             {

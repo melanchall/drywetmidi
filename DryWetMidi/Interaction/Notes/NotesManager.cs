@@ -22,7 +22,7 @@ namespace Melanchall.DryWetMidi.Interaction
                   {
                       NoteDetectionSettings = noteDetectionSettings
                   },
-                  sameTimeEventsComparison)
+                  new TimedObjectsComparerOnSameEventTime(sameTimeEventsComparison))
         {
         }
 

@@ -70,7 +70,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 return 0;
             };
 
-            using (var timedEventsManager = new TrackChunk().ManageTimedEvents(sameTimeEventsComparison))
+            using (var timedEventsManager = new TrackChunk().ManageTimedEvents(comparer: new TimedObjectsComparerOnSameEventTime(sameTimeEventsComparison)))
             {
                 var events = timedEventsManager.Objects;
                 events.Add(originalTimedEvents);

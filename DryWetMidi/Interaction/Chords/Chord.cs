@@ -58,7 +58,7 @@ namespace Melanchall.DryWetMidi.Interaction
         {
             ThrowIfArgument.IsNull(nameof(notes), notes);
 
-            Notes = new TimedObjectsCollection<Note>(notes);
+            Notes = new TimedObjectsCollection<Note>(notes, null);
             Notes.CollectionChanged += OnNotesCollectionChanged;
         }
 

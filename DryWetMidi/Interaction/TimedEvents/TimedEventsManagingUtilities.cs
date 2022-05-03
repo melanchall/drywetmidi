@@ -55,7 +55,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <returns>An instance of the <see cref="TimedObjectsManager{TimedEvent}"/> that can be used to manage
         /// events represented by the <paramref name="eventsCollection"/>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="eventsCollection"/> is <c>null</c>.</exception>
-        public static TimedObjectsManager<TimedEvent> ManageTimedEvents(this EventsCollection eventsCollection, Comparison<MidiEvent> sameTimeEventsComparison = null, TimedEventDetectionSettings settings = null)
+        public static TimedObjectsManager<TimedEvent> ManageTimedEvents(this EventsCollection eventsCollection, TimedEventDetectionSettings settings = null, TimedObjectsComparer comparer = null)
         {
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
 
@@ -65,7 +65,7 @@ namespace Melanchall.DryWetMidi.Interaction
                 {
                     TimedEventDetectionSettings = settings
                 },
-                sameTimeEventsComparison: sameTimeEventsComparison);
+                comparer);
         }
 
         /// <summary>
@@ -78,11 +78,11 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <returns>An instance of the <see cref="TimedObjectsManager{TimedEvent}"/> that can be used to manage
         /// events represented by the <paramref name="trackChunk"/>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="trackChunk"/> is <c>null</c>.</exception>
-        public static TimedObjectsManager<TimedEvent> ManageTimedEvents(this TrackChunk trackChunk, Comparison<MidiEvent> sameTimeEventsComparison = null, TimedEventDetectionSettings settings = null)
+        public static TimedObjectsManager<TimedEvent> ManageTimedEvents(this TrackChunk trackChunk, TimedEventDetectionSettings settings = null, TimedObjectsComparer comparer = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
 
-            return trackChunk.Events.ManageTimedEvents(sameTimeEventsComparison, settings);
+            return trackChunk.Events.ManageTimedEvents(settings, comparer);
         }
 
         /// <summary>

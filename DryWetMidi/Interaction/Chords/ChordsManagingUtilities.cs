@@ -200,7 +200,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <returns>An instance of the <see cref="TimedObjectsManager{Chord}"/> that can be used to manage chords
         /// represented by the <paramref name="eventsCollection"/>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="eventsCollection"/> is <c>null</c>.</exception>
-        public static TimedObjectsManager<Chord> ManageChords(this EventsCollection eventsCollection, ChordDetectionSettings settings = null, Comparison<MidiEvent> sameTimeEventsComparison = null)
+        public static TimedObjectsManager<Chord> ManageChords(this EventsCollection eventsCollection, ChordDetectionSettings settings = null, TimedObjectsComparer comparer = null)
         {
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
 
@@ -210,7 +210,7 @@ namespace Melanchall.DryWetMidi.Interaction
                 {
                     ChordDetectionSettings = settings
                 },
-                sameTimeEventsComparison);
+                comparer);
         }
 
         /// <summary>
@@ -224,11 +224,11 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <returns>An instance of the <see cref="TimedObjectsManager{Chord}"/> that can be used to manage
         /// chords represented by the <paramref name="trackChunk"/>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="trackChunk"/> is <c>null</c>.</exception>
-        public static TimedObjectsManager<Chord> ManageChords(this TrackChunk trackChunk, ChordDetectionSettings settings = null, Comparison<MidiEvent> sameTimeEventsComparison = null)
+        public static TimedObjectsManager<Chord> ManageChords(this TrackChunk trackChunk, ChordDetectionSettings settings = null, TimedObjectsComparer comparer = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
 
-            return trackChunk.Events.ManageChords(settings, sameTimeEventsComparison);
+            return trackChunk.Events.ManageChords(settings, comparer);
         }
 
         /// <summary>

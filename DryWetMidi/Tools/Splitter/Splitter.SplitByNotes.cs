@@ -7,6 +7,7 @@ using System.Linq;
 
 namespace Melanchall.DryWetMidi.Tools
 {
+    // TODO: use NoteDetectionSettings
     public static partial class Splitter
     {
         #region Methods

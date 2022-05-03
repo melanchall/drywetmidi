@@ -22,7 +22,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             Comparison<MidiEvent> sameTimeEventComparison = null)
             where TObject : ITimedObject
         {
-            using (var manager = new TimedObjectsManager<TObject>(eventsCollection, settings, sameTimeEventComparison))
+            using (var manager = new TimedObjectsManager<TObject>(eventsCollection, settings, new TimedObjectsComparerOnSameEventTime(sameTimeEventComparison)))
             {
                 manageObjects(manager.Objects);
                 MidiAsserts.AreEqual(
@@ -50,7 +50,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             ObjectDetectionSettings settings = null,
             Comparison<MidiEvent> sameTimeEventComparison = null)
         {
-            using (var manager = new TimedObjectsManager(eventsCollection, objectType, settings, sameTimeEventComparison))
+            using (var manager = new TimedObjectsManager(eventsCollection, objectType, settings, new TimedObjectsComparerOnSameEventTime(sameTimeEventComparison)))
             {
                 manageObjects(manager.Objects);
                 MidiAsserts.AreEqual(

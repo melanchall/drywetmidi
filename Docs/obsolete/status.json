@@ -1,4 +1,9 @@
 {
+  "OBS13": {
+    "Hint": "Use TimedObjectsComparer and its subclasses.",
+    "ObsoleteFromVersion": "6.1.0",
+    "InLibrary": true
+  },
   "OBS12": {
     "Hint": "Use Splitter class.",
     "ObsoleteFromVersion": "6.1.0",

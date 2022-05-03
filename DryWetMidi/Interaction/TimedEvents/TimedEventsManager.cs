@@ -18,7 +18,7 @@ namespace Melanchall.DryWetMidi.Interaction
                   eventsCollection,
                   ObjectType.TimedEvent,
                   null,
-                  sameTimeEventsComparison)
+                  new TimedObjectsComparerOnSameEventTime(sameTimeEventsComparison))
         {
         }
 

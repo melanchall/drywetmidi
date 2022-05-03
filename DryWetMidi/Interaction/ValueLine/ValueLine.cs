@@ -5,12 +5,7 @@ using System.Linq;
 
 namespace Melanchall.DryWetMidi.Interaction
 {
-    // TODO: Do internal after O3 lifetime
-    /// <summary>
-    /// Represents timeline of a parameter's value.
-    /// </summary>
-    /// <typeparam name="TValue">Type of values.</typeparam>
-    public sealed class ValueLine<TValue> : IEnumerable<ValueChange<TValue>>
+    internal sealed class ValueLine<TValue> : IEnumerable<ValueChange<TValue>>
     {
         #region Events
 
@@ -20,7 +15,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
         #region Fields
 
-        private readonly TimedObjectsComparer<ValueChange<TValue>> _comparer = new TimedObjectsComparer<ValueChange<TValue>>();
+        private readonly TimedObjectsComparer _comparer = new TimedObjectsComparer();
         private readonly List<ValueChange<TValue>> _valueChanges = new List<ValueChange<TValue>>();
         private readonly TValue _defaultValue;
 
@@ -31,7 +26,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
         #region Constructor
 
-        internal ValueLine(TValue defaultValue)
+        public ValueLine(TValue defaultValue)
         {
             _defaultValue = defaultValue;
         }
@@ -40,13 +35,13 @@ namespace Melanchall.DryWetMidi.Interaction
 
         #region Methods
 
-        internal TValue GetValueAtTime(long time)
+        public TValue GetValueAtTime(long time)
         {
             var valueChange = GetValueChangeAtTime(time);
             return valueChange != null ? valueChange.Value : _defaultValue;
         }
 
-        internal ValueChange<TValue> GetValueChangeAtTime(long time)
+        public ValueChange<TValue> GetValueChangeAtTime(long time)
         {
             SortValueChanges();
 
@@ -65,7 +60,7 @@ namespace Melanchall.DryWetMidi.Interaction
             return result;
         }
 
-        internal void SetValue(long time, TValue value)
+        public void SetValue(long time, TValue value)
         {
             var currentValue = GetValueAtTime(time);
             if (currentValue.Equals(value))
@@ -94,26 +89,26 @@ namespace Melanchall.DryWetMidi.Interaction
             OnValuesChanged(forceSort);
         }
 
-        internal void DeleteValues(long startTime)
+        public void DeleteValues(long startTime)
         {
             DeleteValues(startTime, long.MaxValue);
         }
 
-        internal void DeleteValues(long startTime, long endTime)
+        public void DeleteValues(long startTime, long endTime)
         {
             _valueChanges.RemoveAll(v => v.Time >= startTime && v.Time <= endTime);
 
             OnValuesChanged();
         }
 
-        internal void Clear()
+        public void Clear()
         {
             _valueChanges.Clear();
 
             OnValuesChanged();
         }
 
-        internal void ReplaceValues(ValueLine<TValue> valueLine)
+        public void ReplaceValues(ValueLine<TValue> valueLine)
         {
             _valueChanges.Clear();
             _valueChanges.AddRange(valueLine._valueChanges);
@@ -121,7 +116,7 @@ namespace Melanchall.DryWetMidi.Interaction
             OnValuesChanged();
         }
 
-        internal ValueLine<TValue> Reverse(long centerTime)
+        public ValueLine<TValue> Reverse(long centerTime)
         {
             var maxTime = 2 * centerTime;
             var changes = this.TakeWhile(c => c.Time <= maxTime);
