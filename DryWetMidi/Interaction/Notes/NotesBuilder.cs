@@ -25,7 +25,7 @@ namespace Melanchall.DryWetMidi.Interaction
             {
                 return IsCompleted
                     ? (constructor == null
-                        ? new Note(NoteOnTimedEvent, NoteOffTimedEvent)
+                        ? new Note(NoteOnTimedEvent, NoteOffTimedEvent, false)
                         : constructor(new NoteData(NoteOnTimedEvent, NoteOffTimedEvent)))
                     : null;
             }
@@ -46,7 +46,7 @@ namespace Melanchall.DryWetMidi.Interaction
                 return IsCompleted
                     ? Tuple.Create(
                         (constructor == null
-                            ? new Note(NoteOnTimedEvent, NoteOffTimedEvent)
+                            ? new Note(NoteOnTimedEvent, NoteOffTimedEvent, false)
                             : constructor(new NoteData(NoteOnTimedEvent, NoteOffTimedEvent))),
                         EventsCollectionIndex)
                     : null;

@@ -41,7 +41,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         private sealed class CustomNote : Note
         {
             public CustomNote(TimedEvent noteOnTimedEvent, TimedEvent noteOffTimedEvent, int? eventsCollectionIndex)
-                : base(noteOnTimedEvent, noteOffTimedEvent)
+                : base(noteOnTimedEvent, noteOffTimedEvent, false)
             {
                 EventsCollectionIndex = eventsCollectionIndex;
             }

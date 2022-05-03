@@ -134,14 +134,38 @@ namespace Melanchall.DryWetMidi.Interaction
             Time = time;
         }
 
+        public Note(TimedEvent timedNoteOnEvent, TimedEvent timedNoteOffEvent)
+            : this(timedNoteOnEvent, timedNoteOffEvent, true)
+        {
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Note"/> with the specified
         /// Note On and Note Off timed events.
         /// </summary>
         /// <param name="timedNoteOnEvent">Wrapped <see cref="NoteOnEvent"/>.</param>
         /// <param name="timedNoteOffEvent">Wrapped <see cref="NoteOffEvent"/>.</param>
-        internal Note(TimedEvent timedNoteOnEvent, TimedEvent timedNoteOffEvent)
+        internal Note(TimedEvent timedNoteOnEvent, TimedEvent timedNoteOffEvent, bool checkArguments)
         {
+            if (checkArguments)
+            {
+                ThrowIfArgument.DoesntSatisfyCondition(
+                    nameof(timedNoteOnEvent),
+                    timedNoteOnEvent.Event.EventType,
+                    eventType => eventType == MidiEventType.NoteOn,
+                    "Underlying event is not Note On one.");
+                ThrowIfArgument.DoesntSatisfyCondition(
+                    nameof(timedNoteOffEvent),
+                    timedNoteOffEvent.Event.EventType,
+                    eventType => eventType == MidiEventType.NoteOff,
+                    "Underlying event is not Note Off one.");
+                ThrowIfArgument.DoesntSatisfyCondition(
+                    nameof(timedNoteOffEvent),
+                    timedNoteOffEvent.Time,
+                    time => time >= timedNoteOnEvent.Time,
+                    "Note Off event goes before Note On one.");
+            }
+
             var noteOnEvent = (NoteOnEvent)timedNoteOnEvent.Event;
             var noteOffEvent = (NoteOffEvent)timedNoteOffEvent.Event;
 
@@ -318,7 +342,7 @@ namespace Melanchall.DryWetMidi.Interaction
             var newTimedNoteOffEvent = GetTimedNoteOffEvent();
             newTimedNoteOffEvent._time = TimedNoteOffEvent.Time;
 
-            return new Note(newTimedNoteOnEvent, newTimedNoteOffEvent);
+            return new Note(newTimedNoteOnEvent, newTimedNoteOffEvent, false);
         }
 
         /// <summary>
