@@ -39,6 +39,49 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
         #region Test methods
 
+        #region Constructor
+
+        [Test]
+        public void CreateNote_ByTimedEvents()
+        {
+            var note = new Note(
+                new TimedEvent(new NoteOnEvent((SevenBitNumber)70, (SevenBitNumber)20) { Channel = (FourBitNumber)5 }, 10),
+                new TimedEvent(new NoteOffEvent((SevenBitNumber)70, (SevenBitNumber)10) { Channel = (FourBitNumber)5 }, 100));
+
+            Assert.AreEqual((SevenBitNumber)70, note.NoteNumber, "Invalid note number.");
+            Assert.AreEqual((SevenBitNumber)20, note.Velocity, "Invalid velocity.");
+            Assert.AreEqual((SevenBitNumber)10, note.OffVelocity, "Invalid off velocity.");
+            Assert.AreEqual((FourBitNumber)5, note.Channel, "Invalid channel.");
+            Assert.AreEqual(10, note.Time, "Invalid time.");
+            Assert.AreEqual(90, note.Length, "Invalid length.");
+        }
+
+        [Test]
+        public void CreateNote_ByTimedEvents_NotNoteOn()
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(() => new Note(
+                new TimedEvent(new TextEvent("A"), 10),
+                new TimedEvent(new NoteOffEvent((SevenBitNumber)70, (SevenBitNumber)10) { Channel = (FourBitNumber)5 }, 100)));
+        }
+
+        [Test]
+        public void CreateNote_ByTimedEvents_NotNoteOff()
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(() => new Note(
+                new TimedEvent(new NoteOnEvent(), 10),
+                new TimedEvent(new TextEvent("A"), 100)));
+        }
+
+        [Test]
+        public void CreateNote_ByTimedEvents_NoteOffBeforeNoteOn()
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(() => new Note(
+                new TimedEvent(new NoteOnEvent(), 10),
+                new TimedEvent(new NoteOffEvent(), 5)));
+        }
+
+        #endregion
+
         #region Clone
 
         [Test]

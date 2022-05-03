@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
@@ -36,6 +37,132 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 new Chord(
                     new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue },
                     new Note((SevenBitNumber)70) { Velocity = SevenBitNumber.MaxValue })
+            });
+
+        [Test]
+        public void GetChords_DetectionSettings_EventsCollection_NotesTolerance_1_Custom_1([Values] ContainerType containerType) => GetChords_DetectionSettings_EventsCollection(
+            containerType,
+            new ChordDetectionSettings
+            {
+                NotesTolerance = 0,
+                Constructor = CustomChordConstructor
+            },
+            midiEvents: new MidiEvent[]
+            {
+                new NoteOnEvent(),
+                new NoteOffEvent(),
+                new NoteOnEvent((SevenBitNumber)70, SevenBitNumber.MaxValue),
+                new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue),
+            },
+            expectedChords: new[]
+            {
+                new CustomChord(
+                    new[]
+                    {
+                        new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue },
+                        new Note((SevenBitNumber)70) { Velocity = SevenBitNumber.MaxValue }
+                    },
+                    null)
+            },
+            additionalChecks: chords =>
+            {
+                foreach (var c in chords)
+                {
+                    foreach (var n in c.Notes)
+                    {
+                        Assert.IsNotInstanceOf<CustomNote>(n, "Invalid note type.");
+
+                        Assert.IsNotInstanceOf<CustomTimedEvent>(n.GetTimedNoteOnEvent(), "Invalid Note On timed event type.");
+                        Assert.IsNotInstanceOf<CustomTimedEvent>(n.GetTimedNoteOffEvent(), "Invalid Note Off timed event type.");
+                    }
+                }
+            });
+
+        [Test]
+        public void GetChords_DetectionSettings_EventsCollection_NotesTolerance_1_Custom_2([Values] ContainerType containerType) => GetChords_DetectionSettings_EventsCollection(
+            containerType,
+            new ChordDetectionSettings
+            {
+                NotesTolerance = 0,
+                Constructor = CustomChordConstructor,
+                NoteDetectionSettings = new NoteDetectionSettings
+                {
+                    Constructor = CustomNoteConstructor
+                }
+            },
+            midiEvents: new MidiEvent[]
+            {
+                new NoteOnEvent(),
+                new NoteOffEvent(),
+                new NoteOnEvent((SevenBitNumber)70, SevenBitNumber.MaxValue),
+                new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue),
+            },
+            expectedChords: new[]
+            {
+                new CustomChord(
+                    new[]
+                    {
+                        new CustomNote(SevenBitNumber.MinValue, null) { Velocity = SevenBitNumber.MinValue },
+                        new CustomNote((SevenBitNumber)70, null) { Velocity = SevenBitNumber.MaxValue }
+                    },
+                    null)
+            },
+            additionalChecks: chords =>
+            {
+                foreach (var c in chords)
+                {
+                    foreach (var n in c.Notes)
+                    {
+                        Assert.IsInstanceOf<CustomNote>(n, "Invalid note type.");
+
+                        Assert.IsNotInstanceOf<CustomTimedEvent>(n.GetTimedNoteOnEvent(), "Invalid Note On timed event type.");
+                        Assert.IsNotInstanceOf<CustomTimedEvent>(n.GetTimedNoteOffEvent(), "Invalid Note Off timed event type.");
+                    }
+                }
+            });
+
+        [Test]
+        public void GetChords_DetectionSettings_EventsCollection_NotesTolerance_1_Custom_3([Values] ContainerType containerType) => GetChords_DetectionSettings_EventsCollection(
+            containerType,
+            new ChordDetectionSettings
+            {
+                NotesTolerance = 0,
+                Constructor = CustomChordConstructor,
+                NoteDetectionSettings = new NoteDetectionSettings
+                {
+                    Constructor = CustomNoteConstructor,
+                    TimedEventDetectionSettings = CustomEventSettings
+                }
+            },
+            midiEvents: new MidiEvent[]
+            {
+                new NoteOnEvent(),
+                new NoteOffEvent(),
+                new NoteOnEvent((SevenBitNumber)70, SevenBitNumber.MaxValue),
+                new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue),
+            },
+            expectedChords: new[]
+            {
+                new CustomChord(
+                    new[]
+                    {
+                        new CustomNote(SevenBitNumber.MinValue, 0) { Velocity = SevenBitNumber.MinValue },
+                        new CustomNote((SevenBitNumber)70, 0) { Velocity = SevenBitNumber.MaxValue }
+                    },
+                    0)
+            },
+            additionalChecks: chords =>
+            {
+                foreach (var c in chords)
+                {
+                    foreach (var n in c.Notes)
+                    {
+                        Assert.IsInstanceOf<CustomNote>(n, "Invalid note type.");
+
+                        Assert.IsInstanceOf<CustomTimedEvent>(n.GetTimedNoteOnEvent(), "Invalid Note On timed event type.");
+                        Assert.IsInstanceOf<CustomTimedEvent>(n.GetTimedNoteOffEvent(), "Invalid Note Off timed event type.");
+                    }
+                }
             });
 
         [Test]
@@ -281,6 +408,183 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 new Chord(
                     new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue },
                     new Note((SevenBitNumber)70) { Velocity = SevenBitNumber.MaxValue }) { Time = 100 }
+            });
+
+        [Test]
+        public void GetChords_DetectionSettings_TrackChunks_NotesTolerance_1_Custom_1([Values] bool wrapToFile) => GetChords_DetectionSettings_TrackChunks(
+            wrapToFile,
+            new ChordDetectionSettings
+            {
+                NotesTolerance = 0,
+                Constructor = CustomChordConstructor
+            },
+            midiEvents: new[]
+            {
+                new MidiEvent[]
+                {
+                    new NoteOnEvent(),
+                    new NoteOffEvent(),
+                    new NoteOnEvent((SevenBitNumber)70, SevenBitNumber.MaxValue),
+                    new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue),
+                },
+                new MidiEvent[]
+                {
+                    new NoteOnEvent { DeltaTime = 100 },
+                    new NoteOffEvent(),
+                    new NoteOnEvent((SevenBitNumber)70, SevenBitNumber.MaxValue),
+                    new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue),
+                }
+            },
+            expectedChords: new[]
+            {
+                new CustomChord(
+                    new[]
+                    {
+                        new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue },
+                        new Note((SevenBitNumber)70) { Velocity = SevenBitNumber.MaxValue }
+                    },
+                    null),
+                new CustomChord(
+                    new[]
+                    {
+                        new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue },
+                        new Note((SevenBitNumber)70) { Velocity = SevenBitNumber.MaxValue }
+                    },
+                    null) { Time = 100 }
+            },
+            additionalChecks: chords =>
+            {
+                foreach (var c in chords)
+                {
+                    foreach (var n in c.Notes)
+                    {
+                        Assert.IsNotInstanceOf<CustomNote>(n, "Invalid note type.");
+
+                        Assert.IsNotInstanceOf<CustomTimedEvent>(n.GetTimedNoteOnEvent(), "Invalid Note On timed event type.");
+                        Assert.IsNotInstanceOf<CustomTimedEvent>(n.GetTimedNoteOffEvent(), "Invalid Note Off timed event type.");
+                    }
+                }
+            });
+
+        [Test]
+        public void GetChords_DetectionSettings_TrackChunks_NotesTolerance_1_Custom_2([Values] bool wrapToFile) => GetChords_DetectionSettings_TrackChunks(
+            wrapToFile,
+            new ChordDetectionSettings
+            {
+                NotesTolerance = 0,
+                Constructor = CustomChordConstructor,
+                NoteDetectionSettings = new NoteDetectionSettings
+                {
+                    Constructor = CustomNoteConstructor
+                }
+            },
+            midiEvents: new[]
+            {
+                new MidiEvent[]
+                {
+                    new NoteOnEvent(),
+                    new NoteOffEvent(),
+                    new NoteOnEvent((SevenBitNumber)70, SevenBitNumber.MaxValue),
+                    new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue),
+                },
+                new MidiEvent[]
+                {
+                    new NoteOnEvent { DeltaTime = 100 },
+                    new NoteOffEvent(),
+                    new NoteOnEvent((SevenBitNumber)70, SevenBitNumber.MaxValue),
+                    new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue),
+                }
+            },
+            expectedChords: new[]
+            {
+                new CustomChord(
+                    new[]
+                    {
+                        new CustomNote(SevenBitNumber.MinValue, null) { Velocity = SevenBitNumber.MinValue },
+                        new CustomNote((SevenBitNumber)70, null) { Velocity = SevenBitNumber.MaxValue }
+                    },
+                    null),
+                new CustomChord(
+                    new[]
+                    {
+                        new CustomNote(SevenBitNumber.MinValue, null) { Velocity = SevenBitNumber.MinValue },
+                        new CustomNote((SevenBitNumber)70, null) { Velocity = SevenBitNumber.MaxValue }
+                    },
+                    null) { Time = 100 }
+            },
+            additionalChecks: chords =>
+            {
+                foreach (var c in chords)
+                {
+                    foreach (var n in c.Notes)
+                    {
+                        Assert.IsInstanceOf<CustomNote>(n, "Invalid note type.");
+
+                        Assert.IsNotInstanceOf<CustomTimedEvent>(n.GetTimedNoteOnEvent(), "Invalid Note On timed event type.");
+                        Assert.IsNotInstanceOf<CustomTimedEvent>(n.GetTimedNoteOffEvent(), "Invalid Note Off timed event type.");
+                    }
+                }
+            });
+
+        [Test]
+        public void GetChords_DetectionSettings_TrackChunks_NotesTolerance_1_Custom_3([Values] bool wrapToFile) => GetChords_DetectionSettings_TrackChunks(
+            wrapToFile,
+            new ChordDetectionSettings
+            {
+                NotesTolerance = 0,
+                Constructor = CustomChordConstructor,
+                NoteDetectionSettings = new NoteDetectionSettings
+                {
+                    Constructor = CustomNoteConstructor,
+                    TimedEventDetectionSettings = CustomEventSettings
+                }
+            },
+            midiEvents: new[]
+            {
+                new MidiEvent[]
+                {
+                    new NoteOnEvent(),
+                    new NoteOffEvent(),
+                    new NoteOnEvent((SevenBitNumber)70, SevenBitNumber.MaxValue),
+                    new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue),
+                },
+                new MidiEvent[]
+                {
+                    new NoteOnEvent { DeltaTime = 100 },
+                    new NoteOffEvent(),
+                    new NoteOnEvent((SevenBitNumber)70, SevenBitNumber.MaxValue),
+                    new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue),
+                }
+            },
+            expectedChords: new[]
+            {
+                new CustomChord(
+                    new[]
+                    {
+                        new CustomNote(SevenBitNumber.MinValue, 0) { Velocity = SevenBitNumber.MinValue },
+                        new CustomNote((SevenBitNumber)70, 0) { Velocity = SevenBitNumber.MaxValue }
+                    },
+                    0),
+                new CustomChord(
+                    new[]
+                    {
+                        new CustomNote(SevenBitNumber.MinValue, 1) { Velocity = SevenBitNumber.MinValue },
+                        new CustomNote((SevenBitNumber)70, 1) { Velocity = SevenBitNumber.MaxValue }
+                    },
+                    1) { Time = 100 }
+            },
+            additionalChecks: chords =>
+            {
+                foreach (var c in chords)
+                {
+                    foreach (var n in c.Notes)
+                    {
+                        Assert.IsInstanceOf<CustomNote>(n, "Invalid note type.");
+
+                        Assert.IsInstanceOf<CustomTimedEvent>(n.GetTimedNoteOnEvent(), "Invalid Note On timed event type.");
+                        Assert.IsInstanceOf<CustomTimedEvent>(n.GetTimedNoteOffEvent(), "Invalid Note Off timed event type.");
+                    }
+                }
             });
 
         [Test]
@@ -662,7 +966,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             ContainerType containerType,
             ChordDetectionSettings settings,
             ICollection<MidiEvent> midiEvents,
-            ICollection<Chord> expectedChords)
+            ICollection<Chord> expectedChords,
+            Action<ICollection<Chord>> additionalChecks = null)
         {
             switch (containerType)
             {
@@ -673,9 +978,11 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                         
                         var chords = eventsCollection.GetChords(settings);
                         MidiAsserts.AreEqual(expectedChords, chords, "Chords are invalid.");
+                        additionalChecks?.Invoke(chords);
 
-                        var timedObjets = eventsCollection.GetObjects(ObjectType.Chord, new ObjectDetectionSettings { ChordDetectionSettings = settings });
-                        MidiAsserts.AreEqual(expectedChords, timedObjets, "Chords are invalid from GetObjects.");
+                        var timedObjects = eventsCollection.GetObjects(ObjectType.Chord, new ObjectDetectionSettings { ChordDetectionSettings = settings });
+                        MidiAsserts.AreEqual(expectedChords, timedObjects, "Chords are invalid from GetObjects.");
+                        additionalChecks?.Invoke(timedObjects.Cast<Chord>().ToArray());
                     }
                     break;
                 case ContainerType.TrackChunk:
@@ -684,9 +991,11 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                         
                         var chords = trackChunk.GetChords(settings);
                         MidiAsserts.AreEqual(expectedChords, chords, "Chords are invalid.");
+                        additionalChecks?.Invoke(chords);
 
-                        var timedObjets = trackChunk.GetObjects(ObjectType.Chord, new ObjectDetectionSettings { ChordDetectionSettings = settings });
-                        MidiAsserts.AreEqual(expectedChords, timedObjets, "Chords are invalid from GetObjects.");
+                        var timedObjects = trackChunk.GetObjects(ObjectType.Chord, new ObjectDetectionSettings { ChordDetectionSettings = settings });
+                        MidiAsserts.AreEqual(expectedChords, timedObjects, "Chords are invalid from GetObjects.");
+                        additionalChecks?.Invoke(timedObjects.Cast<Chord>().ToArray());
                     }
                     break;
                 case ContainerType.TrackChunks:
@@ -696,7 +1005,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                             containerType == ContainerType.File,
                             settings,
                             new[] { midiEvents },
-                            expectedChords);
+                            expectedChords,
+                            additionalChecks);
                     }
                     break;
             }
@@ -706,9 +1016,10 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             bool wrapToFile,
             ChordDetectionSettings settings,
             ICollection<ICollection<MidiEvent>> midiEvents,
-            IEnumerable<Chord> expectedChords)
+            IEnumerable<Chord> expectedChords,
+            Action<ICollection<Chord>> additionalChecks = null)
         {
-            IEnumerable<Chord> chords;
+            ICollection<Chord> chords;
 
             var trackChunks = midiEvents.Select(e => new TrackChunk(e)).ToArray();
 
@@ -718,6 +1029,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 chords = trackChunks.GetChords(settings);
 
             MidiAsserts.AreEqual(expectedChords, chords, "Chords are invalid.");
+            additionalChecks?.Invoke(chords);
 
             //
 
@@ -729,6 +1041,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 timedObjects = trackChunks.GetObjects(ObjectType.Chord, new ObjectDetectionSettings { ChordDetectionSettings = settings });
 
             MidiAsserts.AreEqual(expectedChords, timedObjects, "Chords are invalid from GetObjects.");
+            additionalChecks?.Invoke(timedObjects.Cast<Chord>().ToArray());
         }
 
         #endregion

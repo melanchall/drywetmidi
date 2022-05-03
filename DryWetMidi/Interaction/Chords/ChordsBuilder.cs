@@ -44,6 +44,7 @@ namespace Melanchall.DryWetMidi.Interaction
         #region Fields
 
         private readonly ChordDetectionSettings _chordDetectionSettings;
+        private readonly bool _useCustomConstructor;
 
         #endregion
 
@@ -52,6 +53,7 @@ namespace Melanchall.DryWetMidi.Interaction
         public ChordsBuilder(ChordDetectionSettings chordDetectionSettings)
         {
             _chordDetectionSettings = chordDetectionSettings ?? new ChordDetectionSettings();
+            _useCustomConstructor = _chordDetectionSettings.Constructor != null;
         }
 
         #endregion
@@ -166,7 +168,9 @@ namespace Melanchall.DryWetMidi.Interaction
                     break;
 
                 if (chordDescriptor.IsCompleted)
-                    yield return new Chord(chordDescriptor.Notes);
+                    yield return _useCustomConstructor
+                        ? _chordDetectionSettings.Constructor(new ChordData(chordDescriptor.Notes))
+                        : new Chord(chordDescriptor.Notes);
 
                 var nextChordDescriptorNode = chordDescriptorNode.Next;
                 chordsDescriptors.Remove(chordDescriptorNode);

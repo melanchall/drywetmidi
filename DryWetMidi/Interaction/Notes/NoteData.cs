@@ -4,7 +4,7 @@
     {
         #region Constructor
 
-        public NoteData(TimedEvent timedNoteOnEvent, TimedEvent timedNoteOffEvent)
+        internal NoteData(TimedEvent timedNoteOnEvent, TimedEvent timedNoteOffEvent)
         {
             TimedNoteOnEvent = timedNoteOnEvent;
             TimedNoteOffEvent = timedNoteOffEvent;

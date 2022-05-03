@@ -28,6 +28,8 @@ namespace Melanchall.DryWetMidi.Interaction
 
         #region Properties
 
+        public Func<ChordData, Chord> Constructor { get; set; }
+
         /// <summary>
         /// Gets or sets a minimum count of notes a chord can contain. So if count of simultaneously sounding
         /// notes is less than this value, they won't make up a chord. The default value is <c>1</c>.

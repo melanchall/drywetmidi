@@ -7,12 +7,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
     [TestFixture]
     public sealed partial class ChordsManagingUtilitiesTests
     {
-        #region Constants
-
-        private static readonly ChordMethods ChordMethods = new ChordMethods();
-
-        #endregion
-
         #region Test methods
 
         #region SetTimeAndLength

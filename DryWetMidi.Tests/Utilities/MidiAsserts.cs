@@ -254,6 +254,9 @@ namespace Melanchall.DryWetMidi.Tests.Utilities
         private static void AreEqual(Chord expectedChord, Chord actualChord, string message)
         {
             AreEqual(expectedChord.Notes, actualChord.Notes, $"{message} Notes are invalid.");
+
+            if (expectedChord.GetType() != typeof(Chord))
+                Assert.IsTrue(expectedChord.Equals(actualChord), $"{message} Custom comparison failed.");
         }
 
         private static void AreEqual(TimedEvent expectedTimedEvent, TimedEvent actualTimedEvent, bool compareDeltaTimes, long timesEpsilon, string message)

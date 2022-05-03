@@ -9,6 +9,7 @@ using NUnit.Framework;
 
 namespace Melanchall.DryWetMidi.Tests.Interaction
 {
+    // TODO: tests on multiple track chunks/file
     [TestFixture]
     public sealed partial class ChordsManagingUtilitiesTests
     {
@@ -50,6 +51,72 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 new NoteOffEvent(),
             },
             match: c => true,
+            expectedMidiEvents: new MidiEvent[]
+            {
+            },
+            expectedRemovedCount: 1);
+
+        [Test]
+        public void RemoveChords_DetectionSettings_EventsCollection_WithPredicate_NotesTolerance_2_Custom_1([Values] ContainerType containerType) => RemoveChords_DetectionSettings_EventsCollection_WithPredicate(
+            containerType,
+            new ChordDetectionSettings
+            {
+                NotesTolerance = 10,
+                Constructor = CustomChordConstructor
+            },
+            midiEvents: new MidiEvent[]
+            {
+                new NoteOnEvent(),
+                new NoteOffEvent(),
+            },
+            match: c => c is CustomChord,
+            expectedMidiEvents: new MidiEvent[]
+            {
+            },
+            expectedRemovedCount: 1);
+
+        [Test]
+        public void RemoveChords_DetectionSettings_EventsCollection_WithPredicate_NotesTolerance_2_Custom_2([Values] ContainerType containerType) => RemoveChords_DetectionSettings_EventsCollection_WithPredicate(
+            containerType,
+            new ChordDetectionSettings
+            {
+                NotesTolerance = 10,
+                Constructor = CustomChordConstructor,
+                NoteDetectionSettings = new NoteDetectionSettings
+                {
+                    Constructor = CustomNoteConstructor
+                }
+            },
+            midiEvents: new MidiEvent[]
+            {
+                new NoteOnEvent(),
+                new NoteOffEvent(),
+            },
+            match: c => ((CustomNote)((CustomChord)c).Notes.First()).EventsCollectionIndex == null,
+            expectedMidiEvents: new MidiEvent[]
+            {
+            },
+            expectedRemovedCount: 1);
+
+        [Test]
+        public void RemoveChords_DetectionSettings_EventsCollection_WithPredicate_NotesTolerance_2_Custom_3([Values] ContainerType containerType) => RemoveChords_DetectionSettings_EventsCollection_WithPredicate(
+            containerType,
+            new ChordDetectionSettings
+            {
+                NotesTolerance = 10,
+                Constructor = CustomChordConstructor,
+                NoteDetectionSettings = new NoteDetectionSettings
+                {
+                    Constructor = CustomNoteConstructor,
+                    TimedEventDetectionSettings = CustomEventSettings
+                }
+            },
+            midiEvents: new MidiEvent[]
+            {
+                new NoteOnEvent(),
+                new NoteOffEvent(),
+            },
+            match: c => ((CustomTimedEvent)c.Notes.First().GetTimedNoteOnEvent()).EventsCollectionIndex == 0 && ((CustomChord)c).EventsCollectionIndex == 0,
             expectedMidiEvents: new MidiEvent[]
             {
             },

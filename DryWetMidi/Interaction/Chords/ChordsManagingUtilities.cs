@@ -791,6 +791,7 @@ namespace Melanchall.DryWetMidi.Interaction
             ChordDetectionSettings settings)
         {
             settings = settings ?? new ChordDetectionSettings();
+            var constructor = settings.Constructor;
 
             var timedObjects = new LinkedList<IObjectDescriptorIndexed>();
             var chordsDescriptors = new LinkedList<ChordDescriptorIndexed>();
@@ -835,7 +836,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
                         if (chordDescriptorNode.Previous == null)
                         {
-                            foreach (var timedObjectX in GetTimedObjects(chordDescriptorNode, chordsDescriptors, timedObjects, true))
+                            foreach (var timedObjectX in GetTimedObjects(chordDescriptorNode, chordsDescriptors, timedObjects, true, constructor))
                             {
                                 yield return timedObjectX;
                             }
@@ -846,7 +847,7 @@ namespace Melanchall.DryWetMidi.Interaction
                 }
             }
 
-            foreach (var timedObject in GetTimedObjects(chordsDescriptors.First, chordsDescriptors, timedObjects, false))
+            foreach (var timedObject in GetTimedObjects(chordsDescriptors.First, chordsDescriptors, timedObjects, false, constructor))
             {
                 yield return timedObject;
             }
@@ -869,6 +870,7 @@ namespace Melanchall.DryWetMidi.Interaction
         internal static IEnumerable<ITimedObject> GetChordsAndNotesAndTimedEventsLazy(this IEnumerable<ITimedObject> notesAndTimedEvents, ChordDetectionSettings settings, bool chordsAllowed)
         {
             settings = settings ?? new ChordDetectionSettings();
+            var constructor = settings.Constructor;
 
             var timedObjects = new LinkedList<IObjectDescriptor>();
             var chordsDescriptors = new LinkedList<ChordDescriptor>();
@@ -922,7 +924,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
                         if (chordDescriptorNode.Previous == null)
                         {
-                            foreach (var timedObjectX in GetTimedObjects(chordDescriptorNode, chordsDescriptors, timedObjects, true))
+                            foreach (var timedObjectX in GetTimedObjects(chordDescriptorNode, chordsDescriptors, timedObjects, true, constructor))
                             {
                                 yield return timedObjectX;
                             }
@@ -933,7 +935,7 @@ namespace Melanchall.DryWetMidi.Interaction
                 }
             }
 
-            foreach (var timedObject in GetTimedObjects(chordsDescriptors.First, chordsDescriptors, timedObjects, false))
+            foreach (var timedObject in GetTimedObjects(chordsDescriptors.First, chordsDescriptors, timedObjects, false, constructor))
             {
                 yield return timedObject;
             }
@@ -1012,7 +1014,8 @@ namespace Melanchall.DryWetMidi.Interaction
             LinkedListNode<ChordDescriptor> startChordDescriptorNode,
             LinkedList<ChordDescriptor> chordsDescriptors,
             LinkedList<IObjectDescriptor> timedObjects,
-            bool getSealedOnly)
+            bool getSealedOnly,
+            Func<ChordData, Chord> constructor)
         {
             for (var chordDescriptorNode = startChordDescriptorNode; chordDescriptorNode != null;)
             {
@@ -1027,7 +1030,10 @@ namespace Melanchall.DryWetMidi.Interaction
                         timedObjects.Remove(noteNode);
                     }
 
-                    yield return new Chord(chordDescriptor.NotesNodes.Select(n => (Note)((NoteDescriptor)n.Value).TimedObject));
+                    var notes = chordDescriptor.NotesNodes.Select(n => (Note)((NoteDescriptor)n.Value).TimedObject);
+                    yield return constructor == null
+                        ? new Chord(notes)
+                        : constructor(new ChordData(notes.ToArray()));
                 }
 
                 for (var node = timedObjects.First; node != null && (!node.Value.ChordStart || node.Value.ChordDescriptor?.IsCompleted == false);)
@@ -1049,7 +1055,8 @@ namespace Melanchall.DryWetMidi.Interaction
             LinkedListNode<ChordDescriptorIndexed> startChordDescriptorNode,
             LinkedList<ChordDescriptorIndexed> chordsDescriptors,
             LinkedList<IObjectDescriptorIndexed> timedObjects,
-            bool getSealedOnly)
+            bool getSealedOnly,
+            Func<ChordData, Chord> constructor)
         {
             for (var chordDescriptorNode = startChordDescriptorNode; chordDescriptorNode != null;)
             {
@@ -1075,7 +1082,9 @@ namespace Melanchall.DryWetMidi.Interaction
                         indices[i * 2 + 1] = objectDescriptor.IndexedTimedObject.Item3;
                     }
 
-                    yield return Tuple.Create((ITimedObject)new Chord(notes), indices);
+                    yield return Tuple.Create(
+                        (ITimedObject)(constructor == null ? new Chord(notes) : constructor(new ChordData(notes))),
+                        indices);
                 }
 
                 for (var node = timedObjects.First; node != null && (!chordDescriptor.IsCompleted || !node.Value.ChordStart);)
