@@ -81,7 +81,7 @@ namespace Melanchall.DryWetMidi.Tools
 
             settings = settings ?? new RepeatingSettings();
 
-            var maxTime = timedObjects.Select(obj => obj.Time).DefaultIfEmpty(0).Max();
+            var maxTime = timedObjects.Select(obj => (obj?.Time ?? 0) + ((obj as ILengthedObject)?.Length ?? 0)).DefaultIfEmpty(0).Max();
             var shift = CalculateShift(maxTime, tempoMap, settings);
 
             return Repeat(timedObjects, shift, repeatsNumber, tempoMap, settings);
@@ -91,12 +91,10 @@ namespace Melanchall.DryWetMidi.Tools
         {
             if (context.Settings.SaveTempoMap)
             {
-                foreach (var tempoMapEventsCreator in TempoMapEventsCreators)
-                {
-                    var firstEvent = context.SourceObjects.OfType<TimedEvent>().FirstOrDefault(e => e.Event.EventType == tempoMapEventsCreator.Key);
-                    if (firstEvent != null && firstEvent.Time > 0)
-                        context.PartObjects.Insert(0, new TimedEvent(tempoMapEventsCreator.Value(), 0));
-                }
+                if (context.SourceFirstSetTempoEvent?.Time > 0)
+                    context.PartObjects.Insert(0, new TimedEvent(new SetTempoEvent(), 0));
+                if (context.SourceFirstTimeSignatureEvent?.Time > 0)
+                    context.PartObjects.Insert(0, new TimedEvent(new TimeSignatureEvent(), 0));
             }
 
             foreach (var obj in context.PartObjects)
@@ -123,11 +121,12 @@ namespace Melanchall.DryWetMidi.Tools
         {
             settings = settings ?? new RepeatingSettings();
 
-            var result = new List<ITimedObject>();
+            var source = timedObjects.Where(obj => obj != null).Select(obj => obj.Clone()).ToArray();
+            var result = new List<ITimedObject>(source);
 
-            for (var i = 0; i < repeatsNumber; i++)
+            for (var i = 1; i <= repeatsNumber; i++)
             {
-                var part = GetPart(timedObjects, shift, i, tempoMap, settings);
+                var part = GetPart(source, shift, i, tempoMap, settings);
                 result.AddRange(part);
             }
 
@@ -138,6 +137,21 @@ namespace Melanchall.DryWetMidi.Tools
         {
             var result = new List<ITimedObject>(sourceObjects.Where(o => o != null).Select(o => o.Clone()));
 
+            TimedEvent firstSetTempoEvent = null;
+            TimedEvent firstTimeSignatureEvent = null;
+
+            foreach (var timedEvent in sourceObjects.OfType<TimedEvent>())
+            {
+                if (firstSetTempoEvent != null && firstTimeSignatureEvent != null)
+                    break;
+
+                var eventType = timedEvent.Event.EventType;
+                if (firstSetTempoEvent == null && eventType == MidiEventType.SetTempo)
+                    firstSetTempoEvent = timedEvent;
+                else if (firstTimeSignatureEvent == null && eventType == MidiEventType.TimeSignature)
+                    firstTimeSignatureEvent = timedEvent;
+            }
+
             var context = new PartProcessingContext
             {
                 SourceObjects = sourceObjects,
@@ -145,7 +159,9 @@ namespace Melanchall.DryWetMidi.Tools
                 PartIndex = partIndex,
                 Shift = shift,
                 SourceTempoMap = tempoMap,
-                Settings = settings
+                Settings = settings,
+                SourceFirstSetTempoEvent = firstSetTempoEvent,
+                SourceFirstTimeSignatureEvent = firstTimeSignatureEvent
             };
 
             ProcessPart(context);

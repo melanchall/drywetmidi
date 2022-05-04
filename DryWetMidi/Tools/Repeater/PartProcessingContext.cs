@@ -19,6 +19,10 @@ namespace Melanchall.DryWetMidi.Tools
         
         public RepeatingSettings Settings { get; internal set; }
 
+        internal TimedEvent SourceFirstSetTempoEvent { get; set; }
+
+        internal TimedEvent SourceFirstTimeSignatureEvent { get; set; }
+
         #endregion
     }
 }

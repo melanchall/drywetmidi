@@ -26,6 +26,7 @@ namespace Melanchall.DryWetMidi.Tools
 
         public ITimeSpan Shift { get; set; }
 
+        // TODO: provide an option to round to floor and not to ceiling only
         public ITimeSpan ShiftStep { get; set; }
 
         public bool SaveTempoMap { get; set; } = true;
