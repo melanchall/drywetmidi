@@ -14,7 +14,6 @@ namespace Melanchall.DryWetMidi.Interaction
     {
         #region Methods
 
-        // TODO: obsolete
         /// <summary>
         /// Sets time of the specified timed event.
         /// </summary>
@@ -36,14 +35,14 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </item>
         /// </list>
         /// </exception>
+        [Obsolete("OBS14")]
         public static TimedEvent SetTime(this TimedEvent timedEvent, ITimeSpan time, TempoMap tempoMap)
         {
             ThrowIfArgument.IsNull(nameof(timedEvent), timedEvent);
             ThrowIfArgument.IsNull(nameof(time), time);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
-            timedEvent.Time = TimeConverter.ConvertFrom(time, tempoMap);
-            return timedEvent;
+            return TimedObjectUtilities.SetTime(timedEvent, time, tempoMap);
         }
 
         /// <summary>

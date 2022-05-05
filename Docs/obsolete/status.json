@@ -1,4 +1,9 @@
 {
+  "OBS14": {
+    "Hint": "Use SetTime method from TimedObjectUtilities.",
+    "ObsoleteFromVersion": "6.1.0",
+    "InLibrary": true
+  },
   "OBS13": {
     "Hint": "Use TimedObjectsComparer and its subclasses.",
     "ObsoleteFromVersion": "6.1.0",
