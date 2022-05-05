@@ -65,7 +65,7 @@ namespace Melanchall.DryWetMidi.Tools
             midiFile.GetTrackChunks().SplitObjectsByPartsNumber(objectType, partsNumber, lengthType, tempoMap, objectDetectionSettings);
         }
 
-        public static IEnumerable<ILengthedObject> SplitObjectsByPartsNumber(this IEnumerable<ILengthedObject> objects, int partsNumber, TimeSpanType lengthType, TempoMap tempoMap)
+        public static IEnumerable<ITimedObject> SplitObjectsByPartsNumber(this IEnumerable<ITimedObject> objects, int partsNumber, TimeSpanType lengthType, TempoMap tempoMap)
         {
             ThrowIfArgument.IsNull(nameof(objects), objects);
             ThrowIfArgument.IsNonpositive(nameof(partsNumber), partsNumber, "Parts number is zero or negative.");
@@ -80,13 +80,20 @@ namespace Melanchall.DryWetMidi.Tools
                     continue;
                 }
 
+                var lengthedObject = obj as ILengthedObject;
+                if (lengthedObject == null)
+                {
+                    yield return obj;
+                    continue;
+                }
+
                 if (partsNumber == 1)
                 {
                     yield return (ILengthedObject)obj.Clone();
                     continue;
                 }
 
-                if (obj.Length == 0)
+                if (lengthedObject.Length == 0)
                 {
                     foreach (var i in Enumerable.Range(0, partsNumber))
                     {
@@ -123,7 +130,7 @@ namespace Melanchall.DryWetMidi.Tools
                 var unyieldedPartsCount = partsNumber - partsYielded;
                 if (unyieldedPartsCount > 0)
                 {
-                    var part = GetZeroLengthObjectAtEnd(obj, obj.Time + obj.Length);
+                    var part = GetZeroLengthObjectAtEnd(lengthedObject, obj.Time + lengthedObject.Length);
 
                     for (var i = 0; i < unyieldedPartsCount; i++)
                     {

@@ -1,4 +1,9 @@
 {
+  "OBS16": {
+    "Hint": "Use TimedEvent constructor and add an object manually.",
+    "ObsoleteFromVersion": "6.1.0",
+    "InLibrary": true
+  },
   "OBS15": {
     "Hint": "Use SetTime/SetLength methods from TimedObjectUtilities/LengthedObjectUtilities.",
     "ObsoleteFromVersion": "6.1.0",

@@ -8,7 +8,6 @@ using NUnit.Framework;
 namespace Melanchall.DryWetMidi.Tests.Interaction
 {
     // TODO: get rid of duplicated MidiAsserts.AreEqual
-    // TODO: get rid of non-materialized things
     [TestFixture]
     public sealed partial class TimedEventsManagingUtilitiesTests
     {
@@ -77,7 +76,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void GetTimedEvents_EventsCollection_MultipleEvents_Custom([Values(0, 100)] long deltaTime1, [Values(0, 100)] long deltaTime2)
+        public void GetTimedEvents_EventsCollection_MultipleEvents_Custom_1([Values(0, 100)] long deltaTime1, [Values(0, 100)] long deltaTime2)
         {
             var eventsCollection = new EventsCollection
             {
@@ -99,7 +98,29 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void GetTimedEvents_TrackChunk_FromMaterialized_Empty()
+        public void GetTimedEvents_EventsCollection_MultipleEvents_Custom_2([Values(0, 100)] long deltaTime1, [Values(0, 100)] long deltaTime2)
+        {
+            var eventsCollection = new EventsCollection
+            {
+                new NoteOnEvent { DeltaTime = deltaTime1 },
+                new NoteOffEvent { DeltaTime = deltaTime2 },
+            };
+
+            var timedEvents = eventsCollection.GetTimedEvents(CustomEventSettings2);
+            MidiAsserts.AreEqual(
+                new[]
+                {
+                    new CustomTimedEvent2(new NoteOnEvent(), deltaTime1, 0, 0),
+                    new CustomTimedEvent2(new NoteOffEvent(), deltaTime1 + deltaTime2, 0, 1)
+                },
+                timedEvents,
+                false,
+                0,
+                "Timed events are invalid.");
+        }
+
+        [Test]
+        public void GetTimedEvents_TrackChunk_Empty()
         {
             var timedEvents = new TrackChunk(Enumerable.Empty<MidiEvent>()).GetTimedEvents();
             CollectionAssert.IsEmpty(timedEvents, "Timed events collection is not empty.");
@@ -108,7 +129,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         [TestCase(0)]
         [TestCase(100)]
         [TestCase(100000)]
-        public void GetTimedEvents_TrackChunk_FromMaterialized_OneEvent(long deltaTime)
+        public void GetTimedEvents_TrackChunk_OneEvent(long deltaTime)
         {
             var trackChunk = new TrackChunk(new MidiEvent[]
             {
@@ -120,7 +141,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void GetTimedEvents_TrackChunk_FromMaterialized_OneEvent_Custom([Values(0, 100, 100000)] long deltaTime)
+        public void GetTimedEvents_TrackChunk_OneEvent_Custom([Values(0, 100, 100000)] long deltaTime)
         {
             var trackChunk = new TrackChunk(new MidiEvent[]
             {
@@ -143,7 +164,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         [TestCase(0, 100)]
         [TestCase(100, 0)]
         [TestCase(100, 100)]
-        public void GetTimedEvents_TrackChunk_FromMaterialized_MultipleEvents(long deltaTime1, long deltaTime2)
+        public void GetTimedEvents_TrackChunk_MultipleEvents(long deltaTime1, long deltaTime2)
         {
             var trackChunk = new TrackChunk(new MidiEvent[]
             {
@@ -161,7 +182,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void GetTimedEvents_TrackChunk_FromMaterialized_MultipleEvents_Custom([Values(0, 100)] long deltaTime1, [Values(0, 100)] long deltaTime2)
+        public void GetTimedEvents_TrackChunk_MultipleEvents_Custom([Values(0, 100)] long deltaTime1, [Values(0, 100)] long deltaTime2)
         {
             var trackChunk = new TrackChunk(new MidiEvent[]
             {
@@ -183,47 +204,14 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void GetTimedEvents_TrackChunk_FromNonMaterialized_Empty()
-        {
-            var timedEvents = new TrackChunk(GetNonMaterializedEmptyMidiEventsCollection()).GetTimedEvents();
-            CollectionAssert.IsEmpty(timedEvents, "Timed events collection is not empty.");
-        }
-
-        [TestCase(0)]
-        [TestCase(100)]
-        [TestCase(100000)]
-        public void GetTimedEvents_TrackChunk_FromNonMaterialized_OneEvent(long deltaTime)
-        {
-            var trackChunk = new TrackChunk(GetNonMaterializedSingleMidiEventsCollection(deltaTime));
-            var timedEvents = trackChunk.GetTimedEvents();
-            MidiAsserts.AreEqual(new[] { new TimedEvent(new NoteOnEvent(), deltaTime) }, timedEvents, false, 0, "Timed events are invalid.");
-        }
-
-        [TestCase(0, 0)]
-        [TestCase(0, 100)]
-        [TestCase(100, 0)]
-        [TestCase(100, 100)]
-        public void GetTimedEvents_TrackChunk_FromNonMaterialized_MultipleEvents(long deltaTime1, long deltaTime2)
-        {
-            var trackChunk = new TrackChunk(GetNonMaterializedMultipleMidiEventsCollection(deltaTime1, deltaTime2));
-            var timedEvents = trackChunk.GetTimedEvents();
-            MidiAsserts.AreEqual(
-                new[] { new TimedEvent(new NoteOnEvent(), deltaTime1), new TimedEvent(new NoteOffEvent(), deltaTime1 + deltaTime2) },
-                timedEvents,
-                false,
-                0,
-                "Timed events are invalid.");
-        }
-
-        [Test]
-        public void GetTimedEvents_TrackChunksCollection_Materialized_Empty()
+        public void GetTimedEvents_TrackChunksCollection_Empty()
         {
             var timedEvents = Enumerable.Empty<TrackChunk>().GetTimedEvents();
             CollectionAssert.IsEmpty(timedEvents, "Timed events collection is not empty.");
         }
 
         [Test]
-        public void GetTimedEvents_TrackChunksCollection_Materialized_OneTrackChunk_Empty()
+        public void GetTimedEvents_TrackChunksCollection_OneTrackChunk_Empty()
         {
             var timedEvents = new[] { new TrackChunk() }.GetTimedEvents();
             CollectionAssert.IsEmpty(timedEvents, "Timed events collection is not empty.");
@@ -232,7 +220,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         [TestCase(0)]
         [TestCase(100)]
         [TestCase(100000)]
-        public void GetTimedEvents_TrackChunksCollection_Materialized_OneTrackChunk_OneEvent(long deltaTime)
+        public void GetTimedEvents_TrackChunksCollection_OneTrackChunk_OneEvent(long deltaTime)
         {
             var trackChunk = new TrackChunk(new MidiEvent[]
             {
@@ -244,7 +232,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void GetTimedEvents_TrackChunksCollection_Materialized_OneTrackChunk_OneEvent_Custom([Values(0, 100, 100000)] long deltaTime)
+        public void GetTimedEvents_TrackChunksCollection_OneTrackChunk_OneEvent_Custom([Values(0, 100, 100000)] long deltaTime)
         {
             var trackChunk = new TrackChunk(new MidiEvent[]
             {
@@ -267,7 +255,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         [TestCase(0, 100)]
         [TestCase(100, 0)]
         [TestCase(100, 100)]
-        public void GetTimedEvents_TrackChunksCollection_Materialized_OneTrackChunk_MultipleEvents(long deltaTime1, long deltaTime2)
+        public void GetTimedEvents_TrackChunksCollection_OneTrackChunk_MultipleEvents(long deltaTime1, long deltaTime2)
         {
             var trackChunk = new TrackChunk(new MidiEvent[]
             {
@@ -285,7 +273,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void GetTimedEvents_TrackChunksCollection_Materialized_OneTrackChunk_MultipleEvents_Custom(
+        public void GetTimedEvents_TrackChunksCollection_OneTrackChunk_MultipleEvents_Custom(
             [Values(0, 100)] long deltaTime1,
             [Values(0, 100)] long deltaTime2)
         {
@@ -309,7 +297,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void GetTimedEvents_TrackChunksCollection_Materialized_OneTrackChunk_MultipleEvents_Custom_Fail(
+        public void GetTimedEvents_TrackChunksCollection_OneTrackChunk_MultipleEvents_Custom_Fail(
             [Values(0, 100)] long deltaTime1,
             [Values(0, 100)] long deltaTime2)
         {
@@ -333,7 +321,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_Empty_Empty()
+        public void GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_Empty_Empty()
         {
             var timedEvents = new[] { new TrackChunk(), new TrackChunk() }.GetTimedEvents();
             CollectionAssert.IsEmpty(timedEvents, "Timed events collection is not empty.");
@@ -342,7 +330,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         [TestCase(0)]
         [TestCase(100)]
         [TestCase(100000)]
-        public void GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_OneEvent_Empty(long deltaTime)
+        public void GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_OneEvent_Empty(long deltaTime)
         {
             var trackChunk = new TrackChunk(new MidiEvent[]
             {
@@ -357,7 +345,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         [TestCase(0, 100)]
         [TestCase(100, 0)]
         [TestCase(100, 100)]
-        public void GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_MultipleEvents_Empty(long deltaTime1, long deltaTime2)
+        public void GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_MultipleEvents_Empty(long deltaTime1, long deltaTime2)
         {
             var trackChunk = new TrackChunk(new MidiEvent[]
             {
@@ -375,8 +363,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_MultipleEvents_OneEvent_1() =>
-            GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_MultipleEvents_OneEvent(
+        public void GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_MultipleEvents_OneEvent_1() =>
+            GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_MultipleEvents_OneEvent(
                 0,
                 0,
                 0,
@@ -388,8 +376,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 });
 
         [Test]
-        public void GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_MultipleEvents_OneEvent_1_Custom() =>
-            GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_MultipleEvents_OneEvent(
+        public void GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_MultipleEvents_OneEvent_1_Custom() =>
+            GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_MultipleEvents_OneEvent(
                 0,
                 0,
                 0,
@@ -402,9 +390,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 CustomEventSettings);
 
         [Test]
-        public void GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_MultipleEvents_OneEvent_2()
+        public void GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_MultipleEvents_OneEvent_2()
         {
-            GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_MultipleEvents_OneEvent(
+            GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_MultipleEvents_OneEvent(
                 0,
                 0,
                 100,
@@ -417,8 +405,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_MultipleEvents_OneEvent_2_Custom() =>
-            GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_MultipleEvents_OneEvent(
+        public void GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_MultipleEvents_OneEvent_2_Custom() =>
+            GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_MultipleEvents_OneEvent(
                 0,
                 0,
                 100,
@@ -431,9 +419,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 CustomEventSettings);
 
         [Test]
-        public void GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_MultipleEvents_OneEvent_3()
+        public void GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_MultipleEvents_OneEvent_3()
         {
-            GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_MultipleEvents_OneEvent(
+            GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_MultipleEvents_OneEvent(
                 0,
                 100,
                 0,
@@ -446,8 +434,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_MultipleEvents_OneEvent_3_Custom() =>
-            GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_MultipleEvents_OneEvent(
+        public void GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_MultipleEvents_OneEvent_3_Custom() =>
+            GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_MultipleEvents_OneEvent(
                 0,
                 100,
                 0,
@@ -460,9 +448,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 CustomEventSettings);
 
         [Test]
-        public void GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_MultipleEvents_OneEvent_4()
+        public void GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_MultipleEvents_OneEvent_4()
         {
-            GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_MultipleEvents_OneEvent(
+            GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_MultipleEvents_OneEvent(
                 0,
                 100,
                 100,
@@ -475,8 +463,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_MultipleEvents_OneEvent_4_Custom() =>
-            GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_MultipleEvents_OneEvent(
+        public void GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_MultipleEvents_OneEvent_4_Custom() =>
+            GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_MultipleEvents_OneEvent(
                 0,
                 100,
                 100,
@@ -489,9 +477,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 CustomEventSettings);
 
         [Test]
-        public void GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_MultipleEvents_OneEvent_5()
+        public void GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_MultipleEvents_OneEvent_5()
         {
-            GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_MultipleEvents_OneEvent(
+            GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_MultipleEvents_OneEvent(
                 100,
                 0,
                 0,
@@ -504,8 +492,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_MultipleEvents_OneEvent_5_Custom() =>
-            GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_MultipleEvents_OneEvent(
+        public void GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_MultipleEvents_OneEvent_5_Custom() =>
+            GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_MultipleEvents_OneEvent(
                 100,
                 0,
                 0,
@@ -518,9 +506,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 CustomEventSettings);
 
         [Test]
-        public void GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_MultipleEvents_OneEvent_6()
+        public void GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_MultipleEvents_OneEvent_6()
         {
-            GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_MultipleEvents_OneEvent(
+            GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_MultipleEvents_OneEvent(
                 100,
                 0,
                 100,
@@ -533,8 +521,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_MultipleEvents_OneEvent_6_Custom() =>
-            GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_MultipleEvents_OneEvent(
+        public void GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_MultipleEvents_OneEvent_6_Custom() =>
+            GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_MultipleEvents_OneEvent(
                 100,
                 0,
                 100,
@@ -547,9 +535,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 CustomEventSettings);
 
         [Test]
-        public void GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_MultipleEvents_OneEvent_7()
+        public void GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_MultipleEvents_OneEvent_7()
         {
-            GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_MultipleEvents_OneEvent(
+            GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_MultipleEvents_OneEvent(
                 100,
                 100,
                 0,
@@ -562,8 +550,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_MultipleEvents_OneEvent_7_Custom() =>
-            GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_MultipleEvents_OneEvent(
+        public void GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_MultipleEvents_OneEvent_7_Custom() =>
+            GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_MultipleEvents_OneEvent(
                 100,
                 100,
                 0,
@@ -576,9 +564,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 CustomEventSettings);
 
         [Test]
-        public void GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_MultipleEvents_OneEvent_8()
+        public void GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_MultipleEvents_OneEvent_8()
         {
-            GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_MultipleEvents_OneEvent(
+            GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_MultipleEvents_OneEvent(
                 100,
                 100,
                 100,
@@ -591,9 +579,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_MultipleEvents_OneEvent_9()
+        public void GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_MultipleEvents_OneEvent_9()
         {
-            GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_MultipleEvents_OneEvent(
+            GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_MultipleEvents_OneEvent(
                 100,
                 100,
                 50,
@@ -606,9 +594,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_MultipleEvents_OneEvent_10()
+        public void GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_MultipleEvents_OneEvent_10()
         {
-            GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_MultipleEvents_OneEvent(
+            GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_MultipleEvents_OneEvent(
                 100,
                 100,
                 150,
@@ -621,9 +609,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_MultipleEvents_OneEvent_11()
+        public void GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_MultipleEvents_OneEvent_11()
         {
-            GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_MultipleEvents_OneEvent(
+            GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_MultipleEvents_OneEvent(
                 100,
                 100,
                 250,
@@ -636,9 +624,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_OneEvent_MultipleEvents_1()
+        public void GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_OneEvent_MultipleEvents_1()
         {
-            GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_OneEvent_MultipleEvents(
+            GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_OneEvent_MultipleEvents(
                 0,
                 0,
                 0,
@@ -651,8 +639,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_OneEvent_MultipleEvents_1_Custom() =>
-            GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_OneEvent_MultipleEvents(
+        public void GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_OneEvent_MultipleEvents_1_Custom() =>
+            GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_OneEvent_MultipleEvents(
                 0,
                 0,
                 0,
@@ -665,9 +653,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 CustomEventSettings);
 
         [Test]
-        public void GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_OneEvent_MultipleEvents_2()
+        public void GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_OneEvent_MultipleEvents_2()
         {
-            GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_OneEvent_MultipleEvents(
+            GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_OneEvent_MultipleEvents(
                 0,
                 0,
                 100,
@@ -680,9 +668,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_OneEvent_MultipleEvents_3()
+        public void GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_OneEvent_MultipleEvents_3()
         {
-            GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_OneEvent_MultipleEvents(
+            GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_OneEvent_MultipleEvents(
                 0,
                 100,
                 0,
@@ -695,9 +683,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_OneEvent_MultipleEvents_4()
+        public void GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_OneEvent_MultipleEvents_4()
         {
-            GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_OneEvent_MultipleEvents(
+            GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_OneEvent_MultipleEvents(
                 0,
                 100,
                 100,
@@ -710,9 +698,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_OneEvent_MultipleEvents_5()
+        public void GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_OneEvent_MultipleEvents_5()
         {
-            GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_OneEvent_MultipleEvents(
+            GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_OneEvent_MultipleEvents(
                 100,
                 0,
                 0,
@@ -725,8 +713,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_OneEvent_MultipleEvents_5_Custom() =>
-            GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_OneEvent_MultipleEvents(
+        public void GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_OneEvent_MultipleEvents_5_Custom() =>
+            GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_OneEvent_MultipleEvents(
                 100,
                 0,
                 0,
@@ -739,9 +727,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 CustomEventSettings);
 
         [Test]
-        public void GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_OneEvent_MultipleEvents_6()
+        public void GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_OneEvent_MultipleEvents_6()
         {
-            GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_OneEvent_MultipleEvents(
+            GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_OneEvent_MultipleEvents(
                 100,
                 0,
                 100,
@@ -754,8 +742,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_OneEvent_MultipleEvents_6_Custom() =>
-            GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_OneEvent_MultipleEvents(
+        public void GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_OneEvent_MultipleEvents_6_Custom() =>
+            GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_OneEvent_MultipleEvents(
                 100,
                 0,
                 100,
@@ -768,9 +756,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 CustomEventSettings);
 
         [Test]
-        public void GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_OneEvent_MultipleEvents_7()
+        public void GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_OneEvent_MultipleEvents_7()
         {
-            GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_OneEvent_MultipleEvents(
+            GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_OneEvent_MultipleEvents(
                 100,
                 100,
                 0,
@@ -783,9 +771,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_OneEvent_MultipleEvents_8()
+        public void GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_OneEvent_MultipleEvents_8()
         {
-            GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_OneEvent_MultipleEvents(
+            GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_OneEvent_MultipleEvents(
                 100,
                 100,
                 100,
@@ -798,9 +786,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_OneEvent_MultipleEvents_9()
+        public void GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_OneEvent_MultipleEvents_9()
         {
-            GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_OneEvent_MultipleEvents(
+            GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_OneEvent_MultipleEvents(
                 50,
                 100,
                 100,
@@ -813,9 +801,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_OneEvent_MultipleEvents_10()
+        public void GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_OneEvent_MultipleEvents_10()
         {
-            GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_OneEvent_MultipleEvents(
+            GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_OneEvent_MultipleEvents(
                 150,
                 100,
                 100,
@@ -828,9 +816,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_OneEvent_MultipleEvents_11()
+        public void GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_OneEvent_MultipleEvents_11()
         {
-            GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_OneEvent_MultipleEvents(
+            GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_OneEvent_MultipleEvents(
                 250,
                 100,
                 100,
@@ -843,9 +831,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_MultipleEvents_MultipleEvents_1()
+        public void GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_MultipleEvents_MultipleEvents_1()
         {
-            GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_MultipleEvents_MultipleEvents(
+            GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_MultipleEvents_MultipleEvents(
                 0,
                 0,
                 0,
@@ -860,8 +848,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_MultipleEvents_MultipleEvents_1_Custom() =>
-            GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_MultipleEvents_MultipleEvents(
+        public void GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_MultipleEvents_MultipleEvents_1_Custom_1() =>
+            GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_MultipleEvents_MultipleEvents(
                 0,
                 0,
                 0,
@@ -876,9 +864,25 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 CustomEventSettings);
 
         [Test]
-        public void GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_MultipleEvents_MultipleEvents_2()
+        public void GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_MultipleEvents_MultipleEvents_1_Custom_2() =>
+            GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_MultipleEvents_MultipleEvents(
+                0,
+                0,
+                0,
+                0,
+                new[]
+                {
+                    new CustomTimedEvent2(new NoteOnEvent(), 0, 0, 0),
+                    new CustomTimedEvent2(new NoteOffEvent(), 0, 0, 1),
+                    new CustomTimedEvent2(new ProgramChangeEvent(), 0, 1, 0),
+                    new CustomTimedEvent2(new ControlChangeEvent(), 0, 1, 1),
+                },
+                CustomEventSettings2);
+
+        [Test]
+        public void GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_MultipleEvents_MultipleEvents_2()
         {
-            GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_MultipleEvents_MultipleEvents(
+            GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_MultipleEvents_MultipleEvents(
                 0,
                 0,
                 0,
@@ -893,9 +897,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_MultipleEvents_MultipleEvents_3()
+        public void GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_MultipleEvents_MultipleEvents_3()
         {
-            GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_MultipleEvents_MultipleEvents(
+            GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_MultipleEvents_MultipleEvents(
                 0,
                 0,
                 100,
@@ -910,9 +914,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_MultipleEvents_MultipleEvents_4()
+        public void GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_MultipleEvents_MultipleEvents_4()
         {
-            GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_MultipleEvents_MultipleEvents(
+            GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_MultipleEvents_MultipleEvents(
                 0,
                 0,
                 100,
@@ -927,9 +931,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_MultipleEvents_MultipleEvents_5()
+        public void GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_MultipleEvents_MultipleEvents_5()
         {
-            GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_MultipleEvents_MultipleEvents(
+            GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_MultipleEvents_MultipleEvents(
                 0,
                 100,
                 0,
@@ -944,9 +948,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_MultipleEvents_MultipleEvents_6()
+        public void GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_MultipleEvents_MultipleEvents_6()
         {
-            GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_MultipleEvents_MultipleEvents(
+            GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_MultipleEvents_MultipleEvents(
                 0,
                 100,
                 0,
@@ -961,8 +965,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_MultipleEvents_MultipleEvents_6_Custom() =>
-            GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_MultipleEvents_MultipleEvents(
+        public void GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_MultipleEvents_MultipleEvents_6_Custom() =>
+            GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_MultipleEvents_MultipleEvents(
                 0,
                 100,
                 0,
@@ -977,9 +981,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 CustomEventSettings);
 
         [Test]
-        public void GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_MultipleEvents_MultipleEvents_7()
+        public void GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_MultipleEvents_MultipleEvents_7()
         {
-            GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_MultipleEvents_MultipleEvents(
+            GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_MultipleEvents_MultipleEvents(
                 0,
                 100,
                 100,
@@ -994,9 +998,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_MultipleEvents_MultipleEvents_8()
+        public void GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_MultipleEvents_MultipleEvents_8()
         {
-            GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_MultipleEvents_MultipleEvents(
+            GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_MultipleEvents_MultipleEvents(
                 0,
                 100,
                 100,
@@ -1011,9 +1015,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_MultipleEvents_MultipleEvents_9()
+        public void GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_MultipleEvents_MultipleEvents_9()
         {
-            GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_MultipleEvents_MultipleEvents(
+            GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_MultipleEvents_MultipleEvents(
                 100,
                 0,
                 0,
@@ -1028,8 +1032,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_MultipleEvents_MultipleEvents_9_Custom() =>
-            GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_MultipleEvents_MultipleEvents(
+        public void GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_MultipleEvents_MultipleEvents_9_Custom() =>
+            GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_MultipleEvents_MultipleEvents(
                 100,
                 0,
                 0,
@@ -1044,9 +1048,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 CustomEventSettings);
 
         [Test]
-        public void GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_MultipleEvents_MultipleEvents_10()
+        public void GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_MultipleEvents_MultipleEvents_10()
         {
-            GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_MultipleEvents_MultipleEvents(
+            GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_MultipleEvents_MultipleEvents(
                 100,
                 0,
                 0,
@@ -1061,9 +1065,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_MultipleEvents_MultipleEvents_11()
+        public void GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_MultipleEvents_MultipleEvents_11()
         {
-            GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_MultipleEvents_MultipleEvents(
+            GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_MultipleEvents_MultipleEvents(
                 100,
                 0,
                 100,
@@ -1078,9 +1082,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_MultipleEvents_MultipleEvents_12()
+        public void GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_MultipleEvents_MultipleEvents_12()
         {
-            GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_MultipleEvents_MultipleEvents(
+            GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_MultipleEvents_MultipleEvents(
                 100,
                 0,
                 100,
@@ -1095,9 +1099,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_MultipleEvents_MultipleEvents_13()
+        public void GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_MultipleEvents_MultipleEvents_13()
         {
-            GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_MultipleEvents_MultipleEvents(
+            GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_MultipleEvents_MultipleEvents(
                 100,
                 100,
                 0,
@@ -1112,9 +1116,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_MultipleEvents_MultipleEvents_14()
+        public void GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_MultipleEvents_MultipleEvents_14()
         {
-            GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_MultipleEvents_MultipleEvents(
+            GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_MultipleEvents_MultipleEvents(
                 100,
                 100,
                 0,
@@ -1129,9 +1133,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_MultipleEvents_MultipleEvents_15()
+        public void GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_MultipleEvents_MultipleEvents_15()
         {
-            GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_MultipleEvents_MultipleEvents(
+            GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_MultipleEvents_MultipleEvents(
                 100,
                 100,
                 100,
@@ -1146,9 +1150,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_MultipleEvents_MultipleEvents_16()
+        public void GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_MultipleEvents_MultipleEvents_16()
         {
-            GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_MultipleEvents_MultipleEvents(
+            GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_MultipleEvents_MultipleEvents(
                 100,
                 100,
                 100,
@@ -1163,9 +1167,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_MultipleEvents_MultipleEvents_17()
+        public void GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_MultipleEvents_MultipleEvents_17()
         {
-            GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_MultipleEvents_MultipleEvents(
+            GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_MultipleEvents_MultipleEvents(
                 50,
                 100,
                 100,
@@ -1180,9 +1184,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_MultipleEvents_MultipleEvents_18()
+        public void GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_MultipleEvents_MultipleEvents_18()
         {
-            GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_MultipleEvents_MultipleEvents(
+            GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_MultipleEvents_MultipleEvents(
                 100,
                 50,
                 100,
@@ -1197,9 +1201,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_MultipleEvents_MultipleEvents_19()
+        public void GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_MultipleEvents_MultipleEvents_19()
         {
-            GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_MultipleEvents_MultipleEvents(
+            GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_MultipleEvents_MultipleEvents(
                 100,
                 100,
                 50,
@@ -1214,748 +1218,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_MultipleEvents_MultipleEvents_20()
+        public void GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_MultipleEvents_MultipleEvents_20()
         {
-            GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_MultipleEvents_MultipleEvents(
-                100,
-                100,
-                100,
-                50,
-                new[]
-                {
-                    new TimedEvent(new NoteOnEvent(), 100),
-                    new TimedEvent(new ProgramChangeEvent(), 100),
-                    new TimedEvent(new ControlChangeEvent(), 150),
-                    new TimedEvent(new NoteOffEvent(), 200),
-                });
-        }
-
-        [Test]
-        public void GetTimedEvents_TrackChunksCollection_NonMaterialized_Empty()
-        {
-            var timedEvents = GetNonMaterializedEmptyTrackChunksCollection().GetTimedEvents();
-            CollectionAssert.IsEmpty(timedEvents, "Timed events collection is not empty.");
-        }
-
-        [Test]
-        public void GetTimedEvents_TrackChunksCollection_NonMaterialized_OneTrackChunk_Empty()
-        {
-            var timedEvents = GetNonMaterializedSingleEmptyTrackChunksCollection().GetTimedEvents();
-            CollectionAssert.IsEmpty(timedEvents, "Timed events collection is not empty.");
-        }
-
-        [TestCase(0)]
-        [TestCase(100)]
-        [TestCase(100000)]
-        public void GetTimedEvents_TrackChunksCollection_NonMaterialized_OneTrackChunk_OneEvent(long deltaTime)
-        {
-            var timedEvents = GetNonMaterializedSingleMidiEventSingleTrackChunksCollection(deltaTime).GetTimedEvents();
-            MidiAsserts.AreEqual(new[] { new TimedEvent(new NoteOnEvent(), deltaTime) }, timedEvents, false, 0, "Timed events are invalid.");
-        }
-
-        [TestCase(0, 0)]
-        [TestCase(0, 100)]
-        [TestCase(100, 0)]
-        [TestCase(100, 100)]
-        public void GetTimedEvents_TrackChunksCollection_NonMaterialized_OneTrackChunk_MultipleEvents(long deltaTime1, long deltaTime2)
-        {
-            var timedEvents = GetNonMaterializedMultipleMidiEventsSingleTrackChunksCollection(deltaTime1, deltaTime2).GetTimedEvents();
-            MidiAsserts.AreEqual(
-                new[] { new TimedEvent(new NoteOnEvent(), deltaTime1), new TimedEvent(new NoteOffEvent(), deltaTime1 + deltaTime2) },
-                timedEvents,
-                false,
-                0,
-                "Timed events are invalid.");
-        }
-
-        [Test]
-        public void GetTimedEvents_TrackChunksCollection_NonMaterialized_MultipleTrackChunks_Empty_Empty()
-        {
-            var timedEvents = GetNonMaterializedMultipleEmptyTrackChunksCollection().GetTimedEvents();
-            CollectionAssert.IsEmpty(timedEvents, "Timed events collection is not empty.");
-        }
-
-        [TestCase(0)]
-        [TestCase(100)]
-        [TestCase(100000)]
-        public void GetTimedEvents_TrackChunksCollection_NonMaterialized_MultipleTrackChunks_OneEvent_Empty(long deltaTime)
-        {
-            var timedEvents = GetNonMaterializedMultipleTrackChunksCollection_FirstWithOneEvent(deltaTime).GetTimedEvents();
-            MidiAsserts.AreEqual(new[] { new TimedEvent(new NoteOnEvent(), deltaTime) }, timedEvents, false, 0, "Timed events are invalid.");
-        }
-
-        [TestCase(0, 0)]
-        [TestCase(0, 100)]
-        [TestCase(100, 0)]
-        [TestCase(100, 100)]
-        public void GetTimedEvents_TrackChunksCollection_NonMaterialized_MultipleTrackChunks_MultipleEvents_Empty(long deltaTime1, long deltaTime2)
-        {
-            var timedEvents = GetNonMaterializedMultipleTrackChunksCollection_FirstWithMultipleEvents(deltaTime1, deltaTime2).GetTimedEvents();
-            MidiAsserts.AreEqual(
-                new[] { new TimedEvent(new NoteOnEvent(), deltaTime1), new TimedEvent(new NoteOffEvent(), deltaTime1 + deltaTime2) },
-                timedEvents,
-                false,
-                0,
-                "Timed events are invalid.");
-        }
-
-        [Test]
-        public void GetTimedEvents_TrackChunksCollection_NonMaterialized_MultipleTrackChunks_MultipleEvents_OneEvent_1()
-        {
-            GetTimedEvents_TrackChunksCollection_NonMaterialized_MultipleTrackChunks_MultipleEvents_OneEvent(
-                0,
-                0,
-                0,
-                new[]
-                {
-                    new TimedEvent(new NoteOnEvent(), 0),
-                    new TimedEvent(new NoteOffEvent(), 0),
-                    new TimedEvent(new ProgramChangeEvent(), 0),
-                });
-        }
-
-        [Test]
-        public void GetTimedEvents_TrackChunksCollection_NonMaterialized_MultipleTrackChunks_MultipleEvents_OneEvent_2()
-        {
-            GetTimedEvents_TrackChunksCollection_NonMaterialized_MultipleTrackChunks_MultipleEvents_OneEvent(
-                0,
-                0,
-                100,
-                new[]
-                {
-                    new TimedEvent(new NoteOnEvent(), 0),
-                    new TimedEvent(new NoteOffEvent(), 0),
-                    new TimedEvent(new ProgramChangeEvent(), 100),
-                });
-        }
-
-        [Test]
-        public void GetTimedEvents_TrackChunksCollection_NonMaterialized_MultipleTrackChunks_MultipleEvents_OneEvent_3()
-        {
-            GetTimedEvents_TrackChunksCollection_NonMaterialized_MultipleTrackChunks_MultipleEvents_OneEvent(
-                0,
-                100,
-                0,
-                new[]
-                {
-                    new TimedEvent(new NoteOnEvent(), 0),
-                    new TimedEvent(new ProgramChangeEvent(), 0),
-                    new TimedEvent(new NoteOffEvent(), 100),
-                });
-        }
-
-        [Test]
-        public void GetTimedEvents_TrackChunksCollection_NonMaterialized_MultipleTrackChunks_MultipleEvents_OneEvent_4()
-        {
-            GetTimedEvents_TrackChunksCollection_NonMaterialized_MultipleTrackChunks_MultipleEvents_OneEvent(
-                0,
-                100,
-                100,
-                new[]
-                {
-                    new TimedEvent(new NoteOnEvent(), 0),
-                    new TimedEvent(new NoteOffEvent(), 100),
-                    new TimedEvent(new ProgramChangeEvent(), 100),
-                });
-        }
-
-        [Test]
-        public void GetTimedEvents_TrackChunksCollection_NonMaterialized_MultipleTrackChunks_MultipleEvents_OneEvent_5()
-        {
-            GetTimedEvents_TrackChunksCollection_NonMaterialized_MultipleTrackChunks_MultipleEvents_OneEvent(
-                100,
-                0,
-                0,
-                new[]
-                {
-                    new TimedEvent(new ProgramChangeEvent(), 0),
-                    new TimedEvent(new NoteOnEvent(), 100),
-                    new TimedEvent(new NoteOffEvent(), 100),
-                });
-        }
-
-        [Test]
-        public void GetTimedEvents_TrackChunksCollection_NonMaterialized_MultipleTrackChunks_MultipleEvents_OneEvent_6()
-        {
-            GetTimedEvents_TrackChunksCollection_NonMaterialized_MultipleTrackChunks_MultipleEvents_OneEvent(
-                100,
-                0,
-                100,
-                new[]
-                {
-                    new TimedEvent(new NoteOnEvent(), 100),
-                    new TimedEvent(new NoteOffEvent(), 100),
-                    new TimedEvent(new ProgramChangeEvent(), 100),
-                });
-        }
-
-        [Test]
-        public void GetTimedEvents_TrackChunksCollection_NonMaterialized_MultipleTrackChunks_MultipleEvents_OneEvent_7()
-        {
-            GetTimedEvents_TrackChunksCollection_NonMaterialized_MultipleTrackChunks_MultipleEvents_OneEvent(
-                100,
-                100,
-                0,
-                new[]
-                {
-                    new TimedEvent(new ProgramChangeEvent(), 0),
-                    new TimedEvent(new NoteOnEvent(), 100),
-                    new TimedEvent(new NoteOffEvent(), 200),
-                });
-        }
-
-        [Test]
-        public void GetTimedEvents_TrackChunksCollection_NonMaterialized_MultipleTrackChunks_MultipleEvents_OneEvent_8()
-        {
-            GetTimedEvents_TrackChunksCollection_NonMaterialized_MultipleTrackChunks_MultipleEvents_OneEvent(
-                100,
-                100,
-                100,
-                new[]
-                {
-                    new TimedEvent(new NoteOnEvent(), 100),
-                    new TimedEvent(new ProgramChangeEvent(), 100),
-                    new TimedEvent(new NoteOffEvent(), 200),
-                });
-        }
-
-        [Test]
-        public void GetTimedEvents_TrackChunksCollection_NonMaterialized_MultipleTrackChunks_MultipleEvents_OneEvent_9()
-        {
-            GetTimedEvents_TrackChunksCollection_NonMaterialized_MultipleTrackChunks_MultipleEvents_OneEvent(
-                100,
-                100,
-                50,
-                new[]
-                {
-                    new TimedEvent(new ProgramChangeEvent(), 50),
-                    new TimedEvent(new NoteOnEvent(), 100),
-                    new TimedEvent(new NoteOffEvent(), 200),
-                });
-        }
-
-        [Test]
-        public void GetTimedEvents_TrackChunksCollection_NonMaterialized_MultipleTrackChunks_MultipleEvents_OneEvent_10()
-        {
-            GetTimedEvents_TrackChunksCollection_NonMaterialized_MultipleTrackChunks_MultipleEvents_OneEvent(
-                100,
-                100,
-                150,
-                new[]
-                {
-                    new TimedEvent(new NoteOnEvent(), 100),
-                    new TimedEvent(new ProgramChangeEvent(), 150),
-                    new TimedEvent(new NoteOffEvent(), 200),
-                });
-        }
-
-        [Test]
-        public void GetTimedEvents_TrackChunksCollection_NonMaterialized_MultipleTrackChunks_MultipleEvents_OneEvent_11()
-        {
-            GetTimedEvents_TrackChunksCollection_NonMaterialized_MultipleTrackChunks_MultipleEvents_OneEvent(
-                100,
-                100,
-                250,
-                new[]
-                {
-                    new TimedEvent(new NoteOnEvent(), 100),
-                    new TimedEvent(new NoteOffEvent(), 200),
-                    new TimedEvent(new ProgramChangeEvent(), 250),
-                });
-        }
-
-        [Test]
-        public void GetTimedEvents_TrackChunksCollection_NonMaterialized_MultipleTrackChunks_OneEvent_MultipleEvents_1()
-        {
-            GetTimedEvents_TrackChunksCollection_NonMaterialized_MultipleTrackChunks_OneEvent_MultipleEvents(
-                0,
-                0,
-                0,
-                new[]
-                {
-                    new TimedEvent(new ProgramChangeEvent(), 0),
-                    new TimedEvent(new NoteOnEvent(), 0),
-                    new TimedEvent(new NoteOffEvent(), 0),
-                });
-        }
-
-        [Test]
-        public void GetTimedEvents_TrackChunksCollection_NonMaterialized_MultipleTrackChunks_OneEvent_MultipleEvents_2()
-        {
-            GetTimedEvents_TrackChunksCollection_NonMaterialized_MultipleTrackChunks_OneEvent_MultipleEvents(
-                0,
-                0,
-                100,
-                new[]
-                {
-                    new TimedEvent(new ProgramChangeEvent(), 0),
-                    new TimedEvent(new NoteOnEvent(), 0),
-                    new TimedEvent(new NoteOffEvent(), 100),
-                });
-        }
-
-        [Test]
-        public void GetTimedEvents_TrackChunksCollection_NonMaterialized_MultipleTrackChunks_OneEvent_MultipleEvents_3()
-        {
-            GetTimedEvents_TrackChunksCollection_NonMaterialized_MultipleTrackChunks_OneEvent_MultipleEvents(
-                0,
-                100,
-                0,
-                new[]
-                {
-                    new TimedEvent(new ProgramChangeEvent(), 0),
-                    new TimedEvent(new NoteOnEvent(), 100),
-                    new TimedEvent(new NoteOffEvent(), 100),
-                });
-        }
-
-        [Test]
-        public void GetTimedEvents_TrackChunksCollection_NonMaterialized_MultipleTrackChunks_OneEvent_MultipleEvents_4()
-        {
-            GetTimedEvents_TrackChunksCollection_NonMaterialized_MultipleTrackChunks_OneEvent_MultipleEvents(
-                0,
-                100,
-                100,
-                new[]
-                {
-                    new TimedEvent(new ProgramChangeEvent(), 0),
-                    new TimedEvent(new NoteOnEvent(), 100),
-                    new TimedEvent(new NoteOffEvent(), 200),
-                });
-        }
-
-        [Test]
-        public void GetTimedEvents_TrackChunksCollection_NonMaterialized_MultipleTrackChunks_OneEvent_MultipleEvents_5()
-        {
-            GetTimedEvents_TrackChunksCollection_NonMaterialized_MultipleTrackChunks_OneEvent_MultipleEvents(
-                100,
-                0,
-                0,
-                new[]
-                {
-                    new TimedEvent(new NoteOnEvent(), 0),
-                    new TimedEvent(new NoteOffEvent(), 0),
-                    new TimedEvent(new ProgramChangeEvent(), 100),
-                });
-        }
-
-        [Test]
-        public void GetTimedEvents_TrackChunksCollection_NonMaterialized_MultipleTrackChunks_OneEvent_MultipleEvents_6()
-        {
-            GetTimedEvents_TrackChunksCollection_NonMaterialized_MultipleTrackChunks_OneEvent_MultipleEvents(
-                100,
-                0,
-                100,
-                new[]
-                {
-                    new TimedEvent(new NoteOnEvent(), 0),
-                    new TimedEvent(new ProgramChangeEvent(), 100),
-                    new TimedEvent(new NoteOffEvent(), 100),
-                });
-        }
-
-        [Test]
-        public void GetTimedEvents_TrackChunksCollection_NonMaterialized_MultipleTrackChunks_OneEvent_MultipleEvents_7()
-        {
-            GetTimedEvents_TrackChunksCollection_NonMaterialized_MultipleTrackChunks_OneEvent_MultipleEvents(
-                100,
-                100,
-                0,
-                new[]
-                {
-                    new TimedEvent(new ProgramChangeEvent(), 100),
-                    new TimedEvent(new NoteOnEvent(), 100),
-                    new TimedEvent(new NoteOffEvent(), 100),
-                });
-        }
-
-        [Test]
-        public void GetTimedEvents_TrackChunksCollection_NonMaterialized_MultipleTrackChunks_OneEvent_MultipleEvents_8()
-        {
-            GetTimedEvents_TrackChunksCollection_NonMaterialized_MultipleTrackChunks_OneEvent_MultipleEvents(
-                100,
-                100,
-                100,
-                new[]
-                {
-                    new TimedEvent(new ProgramChangeEvent(), 100),
-                    new TimedEvent(new NoteOnEvent(), 100),
-                    new TimedEvent(new NoteOffEvent(), 200),
-                });
-        }
-
-        [Test]
-        public void GetTimedEvents_TrackChunksCollection_NonMaterialized_MultipleTrackChunks_OneEvent_MultipleEvents_9()
-        {
-            GetTimedEvents_TrackChunksCollection_NonMaterialized_MultipleTrackChunks_OneEvent_MultipleEvents(
-                50,
-                100,
-                100,
-                new[]
-                {
-                    new TimedEvent(new ProgramChangeEvent(), 50),
-                    new TimedEvent(new NoteOnEvent(), 100),
-                    new TimedEvent(new NoteOffEvent(), 200),
-                });
-        }
-
-        [Test]
-        public void GetTimedEvents_TrackChunksCollection_NonMaterialized_MultipleTrackChunks_OneEvent_MultipleEvents_10()
-        {
-            GetTimedEvents_TrackChunksCollection_NonMaterialized_MultipleTrackChunks_OneEvent_MultipleEvents(
-                150,
-                100,
-                100,
-                new[]
-                {
-                    new TimedEvent(new NoteOnEvent(), 100),
-                    new TimedEvent(new ProgramChangeEvent(), 150),
-                    new TimedEvent(new NoteOffEvent(), 200),
-                });
-        }
-
-        [Test]
-        public void GetTimedEvents_TrackChunksCollection_NonMaterialized_MultipleTrackChunks_OneEvent_MultipleEvents_11()
-        {
-            GetTimedEvents_TrackChunksCollection_NonMaterialized_MultipleTrackChunks_OneEvent_MultipleEvents(
-                250,
-                100,
-                100,
-                new[]
-                {
-                    new TimedEvent(new NoteOnEvent(), 100),
-                    new TimedEvent(new NoteOffEvent(), 200),
-                    new TimedEvent(new ProgramChangeEvent(), 250),
-                });
-        }
-
-        [Test]
-        public void GetTimedEvents_TrackChunksCollection_NonMaterialized_MultipleTrackChunks_MultipleEvents_MultipleEvents_1()
-        {
-            GetTimedEvents_TrackChunksCollection_NonMaterialized_MultipleTrackChunks_MultipleEvents_MultipleEvents(
-                0,
-                0,
-                0,
-                0,
-                new[]
-                {
-                    new TimedEvent(new NoteOnEvent(), 0),
-                    new TimedEvent(new NoteOffEvent(), 0),
-                    new TimedEvent(new ProgramChangeEvent(), 0),
-                    new TimedEvent(new ControlChangeEvent(), 0),
-                });
-        }
-
-        [Test]
-        public void GetTimedEvents_TrackChunksCollection_NonMaterialized_MultipleTrackChunks_MultipleEvents_MultipleEvents_2()
-        {
-            GetTimedEvents_TrackChunksCollection_NonMaterialized_MultipleTrackChunks_MultipleEvents_MultipleEvents(
-                0,
-                0,
-                0,
-                100,
-                new[]
-                {
-                    new TimedEvent(new NoteOnEvent(), 0),
-                    new TimedEvent(new NoteOffEvent(), 0),
-                    new TimedEvent(new ProgramChangeEvent(), 0),
-                    new TimedEvent(new ControlChangeEvent(), 100),
-                });
-        }
-
-        [Test]
-        public void GetTimedEvents_TrackChunksCollection_NonMaterialized_MultipleTrackChunks_MultipleEvents_MultipleEvents_3()
-        {
-            GetTimedEvents_TrackChunksCollection_NonMaterialized_MultipleTrackChunks_MultipleEvents_MultipleEvents(
-                0,
-                0,
-                100,
-                0,
-                new[]
-                {
-                    new TimedEvent(new NoteOnEvent(), 0),
-                    new TimedEvent(new NoteOffEvent(), 0),
-                    new TimedEvent(new ProgramChangeEvent(), 100),
-                    new TimedEvent(new ControlChangeEvent(), 100),
-                });
-        }
-
-        [Test]
-        public void GetTimedEvents_TrackChunksCollection_NonMaterialized_MultipleTrackChunks_MultipleEvents_MultipleEvents_4()
-        {
-            GetTimedEvents_TrackChunksCollection_NonMaterialized_MultipleTrackChunks_MultipleEvents_MultipleEvents(
-                0,
-                0,
-                100,
-                100,
-                new[]
-                {
-                    new TimedEvent(new NoteOnEvent(), 0),
-                    new TimedEvent(new NoteOffEvent(), 0),
-                    new TimedEvent(new ProgramChangeEvent(), 100),
-                    new TimedEvent(new ControlChangeEvent(), 200),
-                });
-        }
-
-        [Test]
-        public void GetTimedEvents_TrackChunksCollection_NonMaterialized_MultipleTrackChunks_MultipleEvents_MultipleEvents_5()
-        {
-            GetTimedEvents_TrackChunksCollection_NonMaterialized_MultipleTrackChunks_MultipleEvents_MultipleEvents(
-                0,
-                100,
-                0,
-                0,
-                new[]
-                {
-                    new TimedEvent(new NoteOnEvent(), 0),
-                    new TimedEvent(new ProgramChangeEvent(), 0),
-                    new TimedEvent(new ControlChangeEvent(), 0),
-                    new TimedEvent(new NoteOffEvent(), 100),
-                });
-        }
-
-        [Test]
-        public void GetTimedEvents_TrackChunksCollection_NonMaterialized_MultipleTrackChunks_MultipleEvents_MultipleEvents_6()
-        {
-            GetTimedEvents_TrackChunksCollection_NonMaterialized_MultipleTrackChunks_MultipleEvents_MultipleEvents(
-                0,
-                100,
-                0,
-                100,
-                new[]
-                {
-                    new TimedEvent(new NoteOnEvent(), 0),
-                    new TimedEvent(new ProgramChangeEvent(), 0),
-                    new TimedEvent(new NoteOffEvent(), 100),
-                    new TimedEvent(new ControlChangeEvent(), 100),
-                });
-        }
-
-        [Test]
-        public void GetTimedEvents_TrackChunksCollection_NonMaterialized_MultipleTrackChunks_MultipleEvents_MultipleEvents_7()
-        {
-            GetTimedEvents_TrackChunksCollection_NonMaterialized_MultipleTrackChunks_MultipleEvents_MultipleEvents(
-                0,
-                100,
-                100,
-                0,
-                new[]
-                {
-                    new TimedEvent(new NoteOnEvent(), 0),
-                    new TimedEvent(new NoteOffEvent(), 100),
-                    new TimedEvent(new ProgramChangeEvent(), 100),
-                    new TimedEvent(new ControlChangeEvent(), 100),
-                });
-        }
-
-        [Test]
-        public void GetTimedEvents_TrackChunksCollection_NonMaterialized_MultipleTrackChunks_MultipleEvents_MultipleEvents_8()
-        {
-            GetTimedEvents_TrackChunksCollection_NonMaterialized_MultipleTrackChunks_MultipleEvents_MultipleEvents(
-                0,
-                100,
-                100,
-                100,
-                new[]
-                {
-                    new TimedEvent(new NoteOnEvent(), 0),
-                    new TimedEvent(new NoteOffEvent(), 100),
-                    new TimedEvent(new ProgramChangeEvent(), 100),
-                    new TimedEvent(new ControlChangeEvent(), 200),
-                });
-        }
-
-        [Test]
-        public void GetTimedEvents_TrackChunksCollection_NonMaterialized_MultipleTrackChunks_MultipleEvents_MultipleEvents_9()
-        {
-            GetTimedEvents_TrackChunksCollection_NonMaterialized_MultipleTrackChunks_MultipleEvents_MultipleEvents(
-                100,
-                0,
-                0,
-                0,
-                new[]
-                {
-                    new TimedEvent(new ProgramChangeEvent(), 0),
-                    new TimedEvent(new ControlChangeEvent(), 0),
-                    new TimedEvent(new NoteOnEvent(), 100),
-                    new TimedEvent(new NoteOffEvent(), 100),
-                });
-        }
-
-        [Test]
-        public void GetTimedEvents_TrackChunksCollection_NonMaterialized_MultipleTrackChunks_MultipleEvents_MultipleEvents_10()
-        {
-            GetTimedEvents_TrackChunksCollection_NonMaterialized_MultipleTrackChunks_MultipleEvents_MultipleEvents(
-                100,
-                0,
-                0,
-                100,
-                new[]
-                {
-                    new TimedEvent(new ProgramChangeEvent(), 0),
-                    new TimedEvent(new NoteOnEvent(), 100),
-                    new TimedEvent(new NoteOffEvent(), 100),
-                    new TimedEvent(new ControlChangeEvent(), 100),
-                });
-        }
-
-        [Test]
-        public void GetTimedEvents_TrackChunksCollection_NonMaterialized_MultipleTrackChunks_MultipleEvents_MultipleEvents_11()
-        {
-            GetTimedEvents_TrackChunksCollection_NonMaterialized_MultipleTrackChunks_MultipleEvents_MultipleEvents(
-                100,
-                0,
-                100,
-                0,
-                new[]
-                {
-                    new TimedEvent(new NoteOnEvent(), 100),
-                    new TimedEvent(new NoteOffEvent(), 100),
-                    new TimedEvent(new ProgramChangeEvent(), 100),
-                    new TimedEvent(new ControlChangeEvent(), 100),
-                });
-        }
-
-        [Test]
-        public void GetTimedEvents_TrackChunksCollection_NonMaterialized_MultipleTrackChunks_MultipleEvents_MultipleEvents_12()
-        {
-            GetTimedEvents_TrackChunksCollection_NonMaterialized_MultipleTrackChunks_MultipleEvents_MultipleEvents(
-                100,
-                0,
-                100,
-                100,
-                new[]
-                {
-                    new TimedEvent(new NoteOnEvent(), 100),
-                    new TimedEvent(new NoteOffEvent(), 100),
-                    new TimedEvent(new ProgramChangeEvent(), 100),
-                    new TimedEvent(new ControlChangeEvent(), 200),
-                });
-        }
-
-        [Test]
-        public void GetTimedEvents_TrackChunksCollection_NonMaterialized_MultipleTrackChunks_MultipleEvents_MultipleEvents_13()
-        {
-            GetTimedEvents_TrackChunksCollection_NonMaterialized_MultipleTrackChunks_MultipleEvents_MultipleEvents(
-                100,
-                100,
-                0,
-                0,
-                new[]
-                {
-                    new TimedEvent(new ProgramChangeEvent(), 0),
-                    new TimedEvent(new ControlChangeEvent(), 0),
-                    new TimedEvent(new NoteOnEvent(), 100),
-                    new TimedEvent(new NoteOffEvent(), 200),
-                });
-        }
-
-        [Test]
-        public void GetTimedEvents_TrackChunksCollection_NonMaterialized_MultipleTrackChunks_MultipleEvents_MultipleEvents_14()
-        {
-            GetTimedEvents_TrackChunksCollection_NonMaterialized_MultipleTrackChunks_MultipleEvents_MultipleEvents(
-                100,
-                100,
-                0,
-                100,
-                new[]
-                {
-                    new TimedEvent(new ProgramChangeEvent(), 0),
-                    new TimedEvent(new NoteOnEvent(), 100),
-                    new TimedEvent(new ControlChangeEvent(), 100),
-                    new TimedEvent(new NoteOffEvent(), 200),
-                });
-        }
-
-        [Test]
-        public void GetTimedEvents_TrackChunksCollection_NonMaterialized_MultipleTrackChunks_MultipleEvents_MultipleEvents_15()
-        {
-            GetTimedEvents_TrackChunksCollection_NonMaterialized_MultipleTrackChunks_MultipleEvents_MultipleEvents(
-                100,
-                100,
-                100,
-                0,
-                new[]
-                {
-                    new TimedEvent(new NoteOnEvent(), 100),
-                    new TimedEvent(new ProgramChangeEvent(), 100),
-                    new TimedEvent(new ControlChangeEvent(), 100),
-                    new TimedEvent(new NoteOffEvent(), 200),
-                });
-        }
-
-        [Test]
-        public void GetTimedEvents_TrackChunksCollection_NonMaterialized_MultipleTrackChunks_MultipleEvents_MultipleEvents_16()
-        {
-            GetTimedEvents_TrackChunksCollection_NonMaterialized_MultipleTrackChunks_MultipleEvents_MultipleEvents(
-                100,
-                100,
-                100,
-                100,
-                new[]
-                {
-                    new TimedEvent(new NoteOnEvent(), 100),
-                    new TimedEvent(new ProgramChangeEvent(), 100),
-                    new TimedEvent(new NoteOffEvent(), 200),
-                    new TimedEvent(new ControlChangeEvent(), 200),
-                });
-        }
-
-        [Test]
-        public void GetTimedEvents_TrackChunksCollection_NonMaterialized_MultipleTrackChunks_MultipleEvents_MultipleEvents_17()
-        {
-            GetTimedEvents_TrackChunksCollection_NonMaterialized_MultipleTrackChunks_MultipleEvents_MultipleEvents(
-                50,
-                100,
-                100,
-                100,
-                new[]
-                {
-                    new TimedEvent(new NoteOnEvent(), 50),
-                    new TimedEvent(new ProgramChangeEvent(), 100),
-                    new TimedEvent(new NoteOffEvent(), 150),
-                    new TimedEvent(new ControlChangeEvent(), 200),
-                });
-        }
-
-        [Test]
-        public void GetTimedEvents_TrackChunksCollection_NonMaterialized_MultipleTrackChunks_MultipleEvents_MultipleEvents_18()
-        {
-            GetTimedEvents_TrackChunksCollection_NonMaterialized_MultipleTrackChunks_MultipleEvents_MultipleEvents(
-                100,
-                50,
-                100,
-                100,
-                new[]
-                {
-                    new TimedEvent(new NoteOnEvent(), 100),
-                    new TimedEvent(new ProgramChangeEvent(), 100),
-                    new TimedEvent(new NoteOffEvent(), 150),
-                    new TimedEvent(new ControlChangeEvent(), 200),
-                });
-        }
-
-        [Test]
-        public void GetTimedEvents_TrackChunksCollection_NonMaterialized_MultipleTrackChunks_MultipleEvents_MultipleEvents_19()
-        {
-            GetTimedEvents_TrackChunksCollection_NonMaterialized_MultipleTrackChunks_MultipleEvents_MultipleEvents(
-                100,
-                100,
-                50,
-                100,
-                new[]
-                {
-                    new TimedEvent(new ProgramChangeEvent(), 50),
-                    new TimedEvent(new NoteOnEvent(), 100),
-                    new TimedEvent(new ControlChangeEvent(), 150),
-                    new TimedEvent(new NoteOffEvent(), 200),
-                });
-        }
-
-        [Test]
-        public void GetTimedEvents_TrackChunksCollection_NonMaterialized_MultipleTrackChunks_MultipleEvents_MultipleEvents_20()
-        {
-            GetTimedEvents_TrackChunksCollection_NonMaterialized_MultipleTrackChunks_MultipleEvents_MultipleEvents(
+            GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_MultipleEvents_MultipleEvents(
                 100,
                 100,
                 100,
@@ -2880,7 +2145,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
         #region Private methods
 
-        private void GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_MultipleEvents_MultipleEvents(
+        private void GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_MultipleEvents_MultipleEvents(
             long aDeltaTime1,
             long aDeltaTime2,
             long bDeltaTime1,
@@ -2952,45 +2217,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 "There are original events references from GetObjects.");
         }
 
-        private void GetTimedEvents_TrackChunksCollection_NonMaterialized_MultipleTrackChunks_MultipleEvents_MultipleEvents(
-            long aDeltaTime1,
-            long aDeltaTime2,
-            long bDeltaTime1,
-            long bDeltaTime2,
-            ICollection<TimedEvent> expectedTimedEvents,
-            TimedEventDetectionSettings settings = null)
-        {
-            IEnumerable<TrackChunk> GetTrackChunks()
-            {
-                yield return new TrackChunk(new MidiEvent[]
-                {
-                    new NoteOnEvent { DeltaTime = aDeltaTime1 },
-                    new NoteOffEvent { DeltaTime = aDeltaTime2 },
-                });
-                yield return new TrackChunk(new MidiEvent[]
-                {
-                    new ProgramChangeEvent { DeltaTime = bDeltaTime1 },
-                    new ControlChangeEvent { DeltaTime = bDeltaTime2 },
-                });
-            }
-
-            var timedEvents = GetTrackChunks().GetTimedEvents(settings);
-            MidiAsserts.AreEqual(expectedTimedEvents, timedEvents, false, 0, "Timed events are invalid.");
-            Assert.IsFalse(
-                GetTrackChunks().SelectMany(c => c.Events).Any(e => timedEvents.Any(te => object.ReferenceEquals(te.Event, e))),
-                "There are original events references.");
-
-            var timedObjects = GetTrackChunks().GetObjects(ObjectType.TimedEvent, new ObjectDetectionSettings
-            {
-                TimedEventDetectionSettings = settings
-            });
-            MidiAsserts.AreEqual(expectedTimedEvents, timedObjects, false, 0, "Timed events are invalid from GetObjects.");
-            Assert.IsFalse(
-                GetTrackChunks().SelectMany(c => c.Events).Any(e => timedObjects.Any(te => object.ReferenceEquals(((TimedEvent)te).Event, e))),
-                "There are original events references from GetObjects.");
-        }
-
-        private void GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_MultipleEvents_OneEvent(
+        private void GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_MultipleEvents_OneEvent(
             long aDeltaTime1,
             long aDeltaTime2,
             long bDeltaTime,
@@ -3058,43 +2285,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 "There are original events references from GetObjects.");
         }
 
-        private void GetTimedEvents_TrackChunksCollection_NonMaterialized_MultipleTrackChunks_MultipleEvents_OneEvent(
-            long aDeltaTime1,
-            long aDeltaTime2,
-            long bDeltaTime,
-            ICollection<TimedEvent> expectedTimedEvents,
-            TimedEventDetectionSettings settings = null)
-        {
-            IEnumerable<TrackChunk> GetTrackChunks()
-            {
-                yield return new TrackChunk(new MidiEvent[]
-                {
-                    new NoteOnEvent { DeltaTime = aDeltaTime1 },
-                    new NoteOffEvent { DeltaTime = aDeltaTime2 },
-                });
-                yield return new TrackChunk(new MidiEvent[]
-                {
-                    new ProgramChangeEvent { DeltaTime = bDeltaTime },
-                });
-            }
-
-            var timedEvents = GetTrackChunks().GetTimedEvents(settings);
-            MidiAsserts.AreEqual(expectedTimedEvents, timedEvents, false, 0, "Timed events are invalid.");
-            Assert.IsFalse(
-                GetTrackChunks().SelectMany(c => c.Events).Any(e => timedEvents.Any(te => object.ReferenceEquals(te.Event, e))),
-                "There are original events references.");
-
-            var timedObjects = GetTrackChunks().GetObjects(ObjectType.TimedEvent, new ObjectDetectionSettings
-            {
-                TimedEventDetectionSettings = settings
-            });
-            MidiAsserts.AreEqual(expectedTimedEvents, timedObjects, false, 0, "Timed events are invalid from GetObjects.");
-            Assert.IsFalse(
-                GetTrackChunks().SelectMany(c => c.Events).Any(e => timedObjects.Any(te => object.ReferenceEquals(((TimedEvent)te).Event, e))),
-                "There are original events references from GetObjects.");
-        }
-
-        private void GetTimedEvents_TrackChunksCollection_Materialized_MultipleTrackChunks_OneEvent_MultipleEvents(
+        private void GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_OneEvent_MultipleEvents(
             long aDeltaTime,
             long bDeltaTime1,
             long bDeltaTime2,
@@ -3160,96 +2351,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             Assert.IsFalse(
                 aTrackChunk.Events.Concat(bTrackChunk.Events).Any(e => timedObjects.Any(te => object.ReferenceEquals(((TimedEvent)te).Event, e))),
                 "There are original events references from GetObjects.");
-        }
-
-        private void GetTimedEvents_TrackChunksCollection_NonMaterialized_MultipleTrackChunks_OneEvent_MultipleEvents(
-            long aDeltaTime,
-            long bDeltaTime1,
-            long bDeltaTime2,
-            ICollection<TimedEvent> expectedTimedEvents,
-            TimedEventDetectionSettings settings = null)
-        {
-            IEnumerable<TrackChunk> GetTrackChunks()
-            {
-                yield return new TrackChunk(new MidiEvent[]
-                {
-                    new ProgramChangeEvent { DeltaTime = aDeltaTime },
-                });
-                yield return new TrackChunk(new MidiEvent[]
-                {
-                    new NoteOnEvent { DeltaTime = bDeltaTime1 },
-                    new NoteOffEvent { DeltaTime = bDeltaTime2 },
-                });
-            }
-
-            var timedEvents = GetTrackChunks().GetTimedEvents(settings);
-            MidiAsserts.AreEqual(expectedTimedEvents, timedEvents, false, 0, "Timed events are invalid.");
-            Assert.IsFalse(
-                GetTrackChunks().SelectMany(c => c.Events).Any(e => timedEvents.Any(te => object.ReferenceEquals(te.Event, e))),
-                "There are original events references.");
-
-            var timedObjects = GetTrackChunks().GetObjects(ObjectType.TimedEvent, new ObjectDetectionSettings
-            {
-                TimedEventDetectionSettings = settings
-            });
-            MidiAsserts.AreEqual(expectedTimedEvents, timedObjects, false, 0, "Timed events are invalid from GetObjects.");
-            Assert.IsFalse(
-                GetTrackChunks().SelectMany(c => c.Events).Any(e => timedObjects.Any(te => object.ReferenceEquals(((TimedEvent)te).Event, e))),
-                "There are original events references from GetObjects.");
-        }
-
-        private IEnumerable<MidiEvent> GetNonMaterializedEmptyMidiEventsCollection()
-        {
-            yield break;
-        }
-
-        private IEnumerable<MidiEvent> GetNonMaterializedSingleMidiEventsCollection(long deltaTime)
-        {
-            yield return new NoteOnEvent { DeltaTime = deltaTime };
-        }
-
-        private IEnumerable<MidiEvent> GetNonMaterializedMultipleMidiEventsCollection(long deltaTime1, long deltaTime2)
-        {
-            yield return new NoteOnEvent { DeltaTime = deltaTime1 };
-            yield return new NoteOffEvent { DeltaTime = deltaTime2 };
-        }
-
-        private IEnumerable<TrackChunk> GetNonMaterializedEmptyTrackChunksCollection()
-        {
-            yield break;
-        }
-
-        private IEnumerable<TrackChunk> GetNonMaterializedSingleEmptyTrackChunksCollection()
-        {
-            yield return new TrackChunk();
-        }
-
-        private IEnumerable<TrackChunk> GetNonMaterializedSingleMidiEventSingleTrackChunksCollection(long deltaTime)
-        {
-            yield return new TrackChunk(new NoteOnEvent { DeltaTime = deltaTime });
-        }
-
-        private IEnumerable<TrackChunk> GetNonMaterializedMultipleMidiEventsSingleTrackChunksCollection(long deltaTime1, long deltaTime2)
-        {
-            yield return new TrackChunk(new NoteOnEvent { DeltaTime = deltaTime1 }, new NoteOffEvent { DeltaTime = deltaTime2 });
-        }
-
-        private IEnumerable<TrackChunk> GetNonMaterializedMultipleEmptyTrackChunksCollection()
-        {
-            yield return new TrackChunk();
-            yield return new TrackChunk();
-        }
-
-        private IEnumerable<TrackChunk> GetNonMaterializedMultipleTrackChunksCollection_FirstWithOneEvent(long deltaTime)
-        {
-            yield return new TrackChunk(new NoteOnEvent { DeltaTime = deltaTime });
-            yield return new TrackChunk();
-        }
-
-        private IEnumerable<TrackChunk> GetNonMaterializedMultipleTrackChunksCollection_FirstWithMultipleEvents(long deltaTime1, long deltaTime2)
-        {
-            yield return new TrackChunk(new NoteOnEvent { DeltaTime = deltaTime1 }, new NoteOffEvent { DeltaTime = deltaTime2 });
-            yield return new TrackChunk();
         }
 
         #endregion

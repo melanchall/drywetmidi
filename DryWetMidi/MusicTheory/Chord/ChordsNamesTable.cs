@@ -61,8 +61,10 @@ namespace Melanchall.DryWetMidi.MusicTheory
                 new NameDefinition(new[] { new[] { 0, 3, 7, 11, 14 }, new[] { 0, 3, 11, 14 }, new[] { 3, 11, 14 }, new[] { 3, 7, 11, 14 } }, "minMaj7(9)", "mM7(9)"),
                 new NameDefinition(new[] { new[] { 0, 7 } }, "5"),
                 new NameDefinition(new[] { new[] { 0, 4, 6, 10 } }, "7b5", "dom7dim5", "7dim5"),
+                new NameDefinition(new[] { new[] { 0, 4, 7, 10, 13 } }, "7b9"),
                 new NameDefinition(new[] { new[] { 0, 3, 6, 10 } }, "ø", "ø7", "m7b5", "min7dim5", "m7dim5", "min7b5", "m7b5"),
-                new NameDefinition(new[] { new[] { 0, 4, 8, 10 } }, "aug7"),
+                new NameDefinition(new[] { new[] { 0, 4, 8, 10 } }, "aug7", "7#5", "7+5"),
+                new NameDefinition(new[] { new[] { 0, 4, 7, 10, 15 } }, "7#9", "7+9"),
                 new NameDefinition(new[] { new[] { 0, 3, 6, 9 } }, "dim7"),
                 new NameDefinition(new[] { new[] { 0, 4, 7, 14 } }, "add9"),
                 new NameDefinition(new[] { new[] { 0, 3, 7, 14 } }, "minAdd9", "mAdd9"),
@@ -71,7 +73,9 @@ namespace Melanchall.DryWetMidi.MusicTheory
                 new NameDefinition(new[] { new[] { 0, 4, 7, 10, 14 } }, "9"),
                 new NameDefinition(new[] { new[] { 0, 2, 7, 10, 14 } }, "9sus2"),
                 new NameDefinition(new[] { new[] { 0, 5, 7, 10, 14 } }, "9sus4"),
-                new NameDefinition(new[] { new[] { 0, 4, 7, 10, 14, 17 } }, "11")
+                new NameDefinition(new[] { new[] { 0, 4, 7, 10, 14, 17 } }, "11"),
+                new NameDefinition(new[] { new[] { 0, 4, 7, 17 } }, "add11"),
+                new NameDefinition(new[] { new[] { 0, 4, 7, 10, 18 } }, "7#11", "7+11", "7(#11)", "7aug11"),
             }
             .OrderByDescending(d => d.Intervals.First().Length)
             .ToArray();

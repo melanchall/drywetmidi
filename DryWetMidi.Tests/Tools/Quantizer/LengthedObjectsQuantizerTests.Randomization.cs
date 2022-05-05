@@ -7,7 +7,6 @@ using System.Linq;
 
 namespace Melanchall.DryWetMidi.Tests.Tools
 {
-    // TODO: randomize end
     public abstract partial class LengthedObjectsQuantizerTests<TObject>
     {
         #region Nested classes

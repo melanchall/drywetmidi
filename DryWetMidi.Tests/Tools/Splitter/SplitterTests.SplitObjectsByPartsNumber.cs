@@ -1,8 +1,10 @@
 ﻿using Melanchall.DryWetMidi.Common;
+using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
 using Melanchall.DryWetMidi.Tests.Utilities;
 using Melanchall.DryWetMidi.Tools;
 using NUnit.Framework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -16,29 +18,29 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
         [Test]
         public void SplitObjectsByPartsNumber_EmptyCollection([Values] TimeSpanType lengthType) => CheckSplitObjectsByPartsNumber(
-            inputObjects: Enumerable.Empty<ILengthedObject>(),
+            inputObjects: Array.Empty<ITimedObject>(),
             partsNumber: 10,
             lengthType: lengthType,
-            expectedObjects: Enumerable.Empty<ILengthedObject>());
+            expectedObjects: Array.Empty<ITimedObject>());
 
         [Test]
         public void SplitObjectsByPartsNumber_Nulls([Values] TimeSpanType lengthType) => CheckSplitObjectsByPartsNumber(
             inputObjects: new[]
             {
-                default(ILengthedObject),
-                default(ILengthedObject)
+                default(ITimedObject),
+                default(ITimedObject)
             },
             partsNumber: 10,
             lengthType: lengthType,
             expectedObjects: new[]
             {
-                default(ILengthedObject),
-                default(ILengthedObject)
+                default(ITimedObject),
+                default(ITimedObject)
             });
 
         [Test]
         public void SplitObjectsByPartsNumber_OnePart([Values] TimeSpanType lengthType) => CheckSplitObjectsByPartsNumber(
-            inputObjects: new ILengthedObject[]
+            inputObjects: new ITimedObject[]
             {
                 new Note((SevenBitNumber)70, 100, 20),
                 new Chord(
@@ -47,7 +49,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             },
             partsNumber: 1,
             lengthType: lengthType,
-            expectedObjects: new ILengthedObject[]
+            expectedObjects: new ITimedObject[]
             {
                 new Note((SevenBitNumber)70, 100, 20),
                 new Chord(
@@ -57,7 +59,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
         [Test]
         public void SplitObjectsByPartsNumber_ZeroLength([Values] TimeSpanType lengthType) => CheckSplitObjectsByPartsNumber(
-            inputObjects: new ILengthedObject[]
+            inputObjects: new ITimedObject[]
             {
                 new Note((SevenBitNumber)70, 0, 20),
                 new Chord(
@@ -66,7 +68,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             },
             partsNumber: 2,
             lengthType: lengthType,
-            expectedObjects: new ILengthedObject[]
+            expectedObjects: new ITimedObject[]
             {
                 new Note((SevenBitNumber)70, 0, 20),
                 new Note((SevenBitNumber)70, 0, 20),
@@ -80,13 +82,13 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
         [Test]
         public void SplitObjectsByPartsNumber_EqualDivision_SingleNote_Midi() => CheckSplitObjectsByPartsNumber(
-            inputObjects: new ILengthedObject[]
+            inputObjects: new ITimedObject[]
             {
                 new Note((SevenBitNumber)70, 30, 20),
             },
             partsNumber: 5,
             lengthType: TimeSpanType.Midi,
-            expectedObjects: new ILengthedObject[]
+            expectedObjects: new ITimedObject[]
             {
                 new Note((SevenBitNumber)70, 6, 20),
                 new Note((SevenBitNumber)70, 6, 26),
@@ -97,7 +99,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
         [Test]
         public void SplitObjectsByPartsNumber_EqualDivision_Midi() => CheckSplitObjectsByPartsNumber(
-            inputObjects: new ILengthedObject[]
+            inputObjects: new ITimedObject[]
             {
                 new Note((SevenBitNumber)70, 30, 20),
                 new Chord(
@@ -106,7 +108,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             },
             partsNumber: 2,
             lengthType: TimeSpanType.Midi,
-            expectedObjects: new ILengthedObject[]
+            expectedObjects: new ITimedObject[]
             {
                 new Note((SevenBitNumber)70, 15, 20),
                 new Note((SevenBitNumber)70, 15, 35),
@@ -123,7 +125,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         {
             var oneAndHalfBeatLength = LengthConverter.ConvertFrom(new BarBeatFractionTimeSpan(0, 1.5), 0, TempoMap.Default);
             CheckSplitObjectsByPartsNumber(
-                inputObjects: new ILengthedObject[]
+                inputObjects: new ITimedObject[]
                 {
                     new Note(
                         (SevenBitNumber)70,
@@ -132,7 +134,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 },
                 partsNumber: 2,
                 lengthType: TimeSpanType.BarBeatFraction,
-                expectedObjects: new ILengthedObject[]
+                expectedObjects: new ITimedObject[]
                 {
                     new Note(
                         (SevenBitNumber)70,
@@ -147,13 +149,13 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
         [Test]
         public void SplitObjectsByPartsNumber_UnequalDivision_SingleNote_Midi() => CheckSplitObjectsByPartsNumber(
-            inputObjects: new ILengthedObject[]
+            inputObjects: new ITimedObject[]
             {
                 new Note((SevenBitNumber)70, 30, 20),
             },
             partsNumber: 8,
             lengthType: TimeSpanType.Midi,
-            expectedObjects: new ILengthedObject[]
+            expectedObjects: new ITimedObject[]
             {
                 new Note((SevenBitNumber)70, 4, 20),
                 new Note((SevenBitNumber)70, 4, 24),
@@ -167,13 +169,13 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
         [Test]
         public void SplitObjectsByPartsNumber_UnequalDivision_SingleNote_Midi_SmallLength() => CheckSplitObjectsByPartsNumber(
-            inputObjects: new ILengthedObject[]
+            inputObjects: new ITimedObject[]
             {
                 new Note((SevenBitNumber)70, 5, 0),
             },
             partsNumber: 8,
             lengthType: TimeSpanType.Midi,
-            expectedObjects: new ILengthedObject[]
+            expectedObjects: new ITimedObject[]
             {
                 new Note((SevenBitNumber)70, 1, 0),
                 new Note((SevenBitNumber)70, 1, 1),
@@ -187,7 +189,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
         [Test]
         public void SplitObjectsByPartsNumber_UnequalDivision_SingleChord_Midi_SmallLength_1() => CheckSplitObjectsByPartsNumber(
-            inputObjects: new ILengthedObject[]
+            inputObjects: new ITimedObject[]
             {
                 new Chord(
                     new Note((SevenBitNumber)70, 3, 0),
@@ -195,7 +197,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             },
             partsNumber: 5,
             lengthType: TimeSpanType.Midi,
-            expectedObjects: new ILengthedObject[]
+            expectedObjects: new ITimedObject[]
             {
                 new Chord(
                     new Note((SevenBitNumber)70, 1, 0),
@@ -216,7 +218,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
         [Test]
         public void SplitObjectsByPartsNumber_UnequalDivision_SingleChord_Midi_SmallLength_2() => CheckSplitObjectsByPartsNumber(
-            inputObjects: new ILengthedObject[]
+            inputObjects: new ITimedObject[]
             {
                 new Chord(
                     new Note((SevenBitNumber)70, 3, 0),
@@ -224,7 +226,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             },
             partsNumber: 5,
             lengthType: TimeSpanType.Midi,
-            expectedObjects: new ILengthedObject[]
+            expectedObjects: new ITimedObject[]
             {
                 new Chord(
                     new Note((SevenBitNumber)70, 1, 0)),
@@ -240,15 +242,263 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                     new Note((SevenBitNumber)80, 0, 4)),
             });
 
+        [Test]
+        public void SplitObjectsByPartsNumber_TimedEventsAndNotes() => CheckSplitObjectsByPartsNumber(
+            inputObjects: new ITimedObject[]
+            {
+                new TimedEvent(new TextEvent("A"), 0),
+                new Note((SevenBitNumber)70, 30, 20),
+                new Note((SevenBitNumber)50, 20, 70),
+                new TimedEvent(new TextEvent("B"), 100),
+                new TimedEvent(new TextEvent("C"), 200),
+            },
+            partsNumber: 2,
+            lengthType: TimeSpanType.Midi,
+            expectedObjects: new ITimedObject[]
+            {
+                new TimedEvent(new TextEvent("A"), 0),
+                new Note((SevenBitNumber)70, 15, 20),
+                new Note((SevenBitNumber)70, 15, 35),
+                new Note((SevenBitNumber)50, 10, 70),
+                new Note((SevenBitNumber)50, 10, 80),
+                new TimedEvent(new TextEvent("B"), 100),
+                new TimedEvent(new TextEvent("C"), 200),
+            });
+
+        [Test]
+        public void CheckSplitObjectsByPartsNumber_TrackChunk_Simple() => CheckSplitObjectsByPartsNumber_TrackChunk(
+            inputObjects: new ITimedObject[]
+            {
+                new TimedEvent(new TextEvent("A"), 0),
+                new Note((SevenBitNumber)70, 30, 20),
+                new Note((SevenBitNumber)50, 20, 70),
+                new TimedEvent(new TextEvent("B"), 100),
+                new TimedEvent(new TextEvent("C"), 200),
+            },
+            objectType: ObjectType.Note,
+            partsNumber: 2,
+            lengthType: TimeSpanType.Midi,
+            expectedObjects: new ITimedObject[]
+            {
+                new TimedEvent(new TextEvent("A"), 0),
+                new Note((SevenBitNumber)70, 15, 20),
+                new Note((SevenBitNumber)70, 15, 35),
+                new Note((SevenBitNumber)50, 10, 70),
+                new Note((SevenBitNumber)50, 10, 80),
+                new TimedEvent(new TextEvent("B"), 100),
+                new TimedEvent(new TextEvent("C"), 200),
+            });
+
+        [Test]
+        public void CheckSplitObjectsByPartsNumber_TrackChunk_Settings_1() => CheckSplitObjectsByPartsNumber_TrackChunk(
+            inputObjects: new ITimedObject[]
+            {
+                new TimedEvent(new TextEvent("A"), 0),
+                new Note((SevenBitNumber)70, 30, 20),
+                new Note((SevenBitNumber)50, 20, 70),
+                new TimedEvent(new TextEvent("B"), 100),
+                new TimedEvent(new TextEvent("C"), 200),
+            },
+            objectType: ObjectType.Chord,
+            partsNumber: 2,
+            lengthType: TimeSpanType.Midi,
+            expectedObjects: new ITimedObject[]
+            {
+                new TimedEvent(new TextEvent("A"), 0),
+                new Chord(new Note((SevenBitNumber)70, 15, 20)),
+                new Chord(new Note((SevenBitNumber)70, 15, 35)),
+                new Chord(new Note((SevenBitNumber)50, 10, 70)),
+                new Chord(new Note((SevenBitNumber)50, 10, 80)),
+                new TimedEvent(new TextEvent("B"), 100),
+                new TimedEvent(new TextEvent("C"), 200),
+            },
+            settings: new ObjectDetectionSettings
+            {
+                ChordDetectionSettings = new ChordDetectionSettings
+                {
+                    NotesMinCount = 1
+                }
+            });
+
+        [Test]
+        public void CheckSplitObjectsByPartsNumber_TrackChunk_Settings_2() => CheckSplitObjectsByPartsNumber_TrackChunk(
+            inputObjects: new ITimedObject[]
+            {
+                new TimedEvent(new TextEvent("A"), 0),
+                new Note((SevenBitNumber)70, 30, 20),
+                new Note((SevenBitNumber)50, 20, 70),
+                new TimedEvent(new TextEvent("B"), 100),
+                new TimedEvent(new TextEvent("C"), 200),
+            },
+            objectType: ObjectType.Chord,
+            partsNumber: 2,
+            lengthType: TimeSpanType.Midi,
+            expectedObjects: new ITimedObject[]
+            {
+                new TimedEvent(new TextEvent("A"), 0),
+                new Chord(new Note((SevenBitNumber)70, 30, 20)),
+                new Chord(new Note((SevenBitNumber)50, 20, 70)),
+                new TimedEvent(new TextEvent("B"), 100),
+                new TimedEvent(new TextEvent("C"), 200),
+            },
+            settings: new ObjectDetectionSettings
+            {
+                ChordDetectionSettings = new ChordDetectionSettings
+                {
+                    NotesMinCount = 1,
+                    NotesTolerance = 100
+                }
+            });
+
+        [Test]
+        public void CheckSplitObjectsByPartsNumber_TrackChunks_Simple() => CheckSplitObjectsByPartsNumber_TrackChunks(
+            inputObjects: new[]
+            {
+                new ITimedObject[]
+                {
+                    new TimedEvent(new TextEvent("A"), 0),
+                    new Note((SevenBitNumber)70, 30, 20),
+                },
+                new ITimedObject[]
+                {
+                    new Note((SevenBitNumber)50, 20, 70),
+                    new TimedEvent(new TextEvent("B"), 100),
+                    new TimedEvent(new TextEvent("C"), 200),
+                }
+            },
+            objectType: ObjectType.Note,
+            partsNumber: 2,
+            lengthType: TimeSpanType.Midi,
+            expectedObjects: new[]
+            {
+                new ITimedObject[]
+                {
+                    new TimedEvent(new TextEvent("A"), 0),
+                    new Note((SevenBitNumber)70, 15, 20),
+                    new Note((SevenBitNumber)70, 15, 35),
+                },
+                new ITimedObject[]
+                {
+                    new Note((SevenBitNumber)50, 10, 70),
+                    new Note((SevenBitNumber)50, 10, 80),
+                    new TimedEvent(new TextEvent("B"), 100),
+                    new TimedEvent(new TextEvent("C"), 200),
+                }
+            });
+
+        [Test]
+        public void CheckSplitObjectsByPartsNumber_TrackChunks_Simple_Settings_1() => CheckSplitObjectsByPartsNumber_TrackChunks(
+            inputObjects: new[]
+            {
+                new ITimedObject[]
+                {
+                    new TimedEvent(new TextEvent("A"), 0),
+                    new Note((SevenBitNumber)70, 30, 20),
+                },
+                new ITimedObject[]
+                {
+                    new TimedEvent(new NoteOnEvent(), 70),
+                    new TimedEvent(new NoteOnEvent(), 76),
+                    new TimedEvent(new NoteOffEvent(), 80),
+                    new TimedEvent(new NoteOffEvent(), 86),
+                    new TimedEvent(new TextEvent("B"), 100),
+                    new TimedEvent(new TextEvent("C"), 200),
+                }
+            },
+            objectType: ObjectType.Note,
+            partsNumber: 2,
+            lengthType: TimeSpanType.Midi,
+            expectedObjects: new[]
+            {
+                new ITimedObject[]
+                {
+                    new TimedEvent(new TextEvent("A"), 0),
+                    new Note((SevenBitNumber)70, 15, 20),
+                    new Note((SevenBitNumber)70, 15, 35),
+                },
+                new ITimedObject[]
+                {
+                    new TimedEvent(new NoteOnEvent(), 70),
+                    new TimedEvent(new NoteOffEvent(), 75),
+                    new TimedEvent(new NoteOnEvent(), 75),
+                    new TimedEvent(new NoteOnEvent(), 76),
+                    new TimedEvent(new NoteOffEvent(), 80),
+                    new TimedEvent(new NoteOffEvent(), 81),
+                    new TimedEvent(new NoteOnEvent(), 81),
+                    new TimedEvent(new NoteOffEvent(), 86),
+                    new TimedEvent(new TextEvent("B"), 100),
+                    new TimedEvent(new TextEvent("C"), 200),
+                }
+            },
+            settings: new ObjectDetectionSettings
+            {
+                NoteDetectionSettings = new NoteDetectionSettings
+                {
+                    NoteStartDetectionPolicy = NoteStartDetectionPolicy.FirstNoteOn
+                }
+            });
+
+        [Test]
+        public void CheckSplitObjectsByPartsNumber_TrackChunks_Simple_Settings_2() => CheckSplitObjectsByPartsNumber_TrackChunks(
+            inputObjects: new[]
+            {
+                new ITimedObject[]
+                {
+                    new TimedEvent(new TextEvent("A"), 0),
+                    new Note((SevenBitNumber)70, 30, 20),
+                },
+                new ITimedObject[]
+                {
+                    new TimedEvent(new NoteOnEvent(), 70),
+                    new TimedEvent(new NoteOnEvent(), 76),
+                    new TimedEvent(new NoteOffEvent(), 80),
+                    new TimedEvent(new NoteOffEvent(), 86),
+                    new TimedEvent(new TextEvent("B"), 100),
+                    new TimedEvent(new TextEvent("C"), 200),
+                }
+            },
+            objectType: ObjectType.Note,
+            partsNumber: 2,
+            lengthType: TimeSpanType.Midi,
+            expectedObjects: new[]
+            {
+                new ITimedObject[]
+                {
+                    new TimedEvent(new TextEvent("A"), 0),
+                    new Note((SevenBitNumber)70, 15, 20),
+                    new Note((SevenBitNumber)70, 15, 35),
+                },
+                new ITimedObject[]
+                {
+                    new TimedEvent(new NoteOnEvent(), 70),
+                    new TimedEvent(new NoteOnEvent(), 76),
+                    new TimedEvent(new NoteOffEvent(), 78),
+                    new TimedEvent(new NoteOffEvent(), 78),
+                    new TimedEvent(new NoteOnEvent(), 78),
+                    new TimedEvent(new NoteOnEvent(), 78),
+                    new TimedEvent(new NoteOffEvent(), 80),
+                    new TimedEvent(new NoteOffEvent(), 86),
+                    new TimedEvent(new TextEvent("B"), 100),
+                    new TimedEvent(new TextEvent("C"), 200),
+                }
+            },
+            settings: new ObjectDetectionSettings
+            {
+                NoteDetectionSettings = new NoteDetectionSettings
+                {
+                    NoteStartDetectionPolicy = NoteStartDetectionPolicy.LastNoteOn
+                }
+            });
+
         #endregion
 
         #region Private methods
 
         private void CheckSplitObjectsByPartsNumber(
-            IEnumerable<ILengthedObject> inputObjects,
+            ICollection<ITimedObject> inputObjects,
             int partsNumber,
             TimeSpanType lengthType,
-            IEnumerable<ILengthedObject> expectedObjects)
+            ICollection<ITimedObject> expectedObjects)
         {
             var actualObjects = inputObjects.SplitObjectsByPartsNumber(partsNumber, lengthType, TempoMap.Default).ToArray();
             MidiAsserts.AreEqual(
@@ -259,19 +509,18 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 "Invalid result objects.");
         }
 
-        // TODO: tests
         private void CheckSplitObjectsByPartsNumber_TrackChunk(
-            IEnumerable<ILengthedObject> inputObjects,
+            ICollection<ITimedObject> inputObjects,
             ObjectType objectType,
             int partsNumber,
             TimeSpanType lengthType,
-            IEnumerable<TimedEvent> expectedEvents,
+            ICollection<ITimedObject> expectedObjects,
             ObjectDetectionSettings settings = null)
         {
             var trackChunk = inputObjects.ToTrackChunk();
             trackChunk.SplitObjectsByPartsNumber(objectType, partsNumber, lengthType, TempoMap.Default, settings);
             MidiAsserts.AreEqual(
-                expectedEvents.ToTrackChunk(),
+                expectedObjects.ToTrackChunk(),
                 trackChunk,
                 true,
                 "Invalid result track chunk.");
@@ -279,7 +528,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             var trackChunks = new[] { inputObjects.ToTrackChunk() };
             trackChunks.SplitObjectsByPartsNumber(objectType, partsNumber, lengthType, TempoMap.Default, settings);
             MidiAsserts.AreEqual(
-                new[] { expectedEvents.ToTrackChunk() },
+                new[] { expectedObjects.ToTrackChunk() },
                 trackChunks,
                 true,
                 "Invalid result track chunks.");
@@ -287,7 +536,32 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             var midiFile = inputObjects.ToFile();
             midiFile.SplitObjectsByPartsNumber(objectType, partsNumber, lengthType, settings);
             MidiAsserts.AreEqual(
-                expectedEvents.ToFile(),
+                expectedObjects.ToFile(),
+                midiFile,
+                true,
+                "Invalid result track file.");
+        }
+
+        private void CheckSplitObjectsByPartsNumber_TrackChunks(
+            ICollection<ICollection<ITimedObject>> inputObjects,
+            ObjectType objectType,
+            int partsNumber,
+            TimeSpanType lengthType,
+            ICollection<ICollection<ITimedObject>> expectedObjects,
+            ObjectDetectionSettings settings = null)
+        {
+            var trackChunks = inputObjects.Select(obj => obj.ToTrackChunk()).ToArray();
+            trackChunks.SplitObjectsByPartsNumber(objectType, partsNumber, lengthType, TempoMap.Default, settings);
+            MidiAsserts.AreEqual(
+                expectedObjects.Select(e => e.ToTrackChunk()).ToArray(),
+                trackChunks,
+                true,
+                "Invalid result track chunks.");
+
+            var midiFile = new MidiFile(inputObjects.Select(obj => obj.ToTrackChunk()).ToArray());
+            midiFile.SplitObjectsByPartsNumber(objectType, partsNumber, lengthType, settings);
+            MidiAsserts.AreEqual(
+                new MidiFile(expectedObjects.Select(e => e.ToTrackChunk()).ToArray()),
                 midiFile,
                 true,
                 "Invalid result track file.");

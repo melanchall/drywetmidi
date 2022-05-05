@@ -26,12 +26,12 @@ namespace Melanchall.DryWetMidi.Tools
             TrackChunk trackChunk,
             ObjectType objectType,
             ObjectDetectionSettings objectDetectionSettings,
-            Func<IEnumerable<ILengthedObject>, IEnumerable<ILengthedObject>> splitOperation)
+            Func<IEnumerable<ITimedObject>, IEnumerable<ITimedObject>> splitOperation)
         {
             using (var objectsManager = new TimedObjectsManager(trackChunk.Events, objectType, objectDetectionSettings))
             {
                 var objects = objectsManager.Objects;
-                var newObjects = splitOperation(objects.Cast<ILengthedObject>()).ToList();
+                var newObjects = splitOperation(objects).ToList();
 
                 objects.Clear();
                 objects.Add(newObjects);

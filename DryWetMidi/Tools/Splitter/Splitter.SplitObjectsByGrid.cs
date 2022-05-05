@@ -59,14 +59,14 @@ namespace Melanchall.DryWetMidi.Tools
             midiFile.GetTrackChunks().SplitObjectsByGrid(objectType, grid, tempoMap, objectDetectionSettings);
         }
 
-        public static IEnumerable<ILengthedObject> SplitObjectsByGrid(this IEnumerable<ILengthedObject> objects, IGrid grid, TempoMap tempoMap)
+        public static IEnumerable<ITimedObject> SplitObjectsByGrid(this IEnumerable<ITimedObject> objects, IGrid grid, TempoMap tempoMap)
         {
             ThrowIfArgument.IsNull(nameof(objects), objects);
             ThrowIfArgument.IsNull(nameof(grid), grid);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
             var lastObjectEndTime = objects.Where(o => o != null)
-                                           .Select(o => o.Time + o.Length)
+                                           .Select(o => o.Time + ((o as ILengthedObject)?.Length ?? 0))
                                            .DefaultIfEmpty()
                                            .Max();
             var times = grid.GetTimes(tempoMap)
@@ -83,8 +83,15 @@ namespace Melanchall.DryWetMidi.Tools
                     continue;
                 }
 
+                var lengthedObject = obj as ILengthedObject;
+                if (lengthedObject == null)
+                {
+                    yield return obj;
+                    continue;
+                }
+
                 var startTime = obj.Time;
-                var endTime = startTime + obj.Length;
+                var endTime = startTime + lengthedObject.Length;
 
                 var intersectedTimes = times.SkipWhile(t => t <= startTime).TakeWhile(t => t < endTime);
                 var tail = (ILengthedObject)obj.Clone();

@@ -6,7 +6,6 @@ using Melanchall.DryWetMidi.Core;
 
 namespace Melanchall.DryWetMidi.Interaction
 {
-    // TODO: test custom constructor event index passing
     /// <summary>
     /// Extension methods for managing MIDI events by their absolute time.
     /// </summary>
@@ -152,7 +151,6 @@ namespace Melanchall.DryWetMidi.Interaction
             return file.GetTrackChunks().GetTimedEvents(settings);
         }
 
-        // TODO: obsolete
         /// <summary>
         /// Adds a <see cref="MidiEvent"/> into a <see cref="TimedEventsCollection"/> with the specified
         /// absolute time.
@@ -175,6 +173,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="time"/> is negative.</exception>
         /// <exception cref="ArgumentException"><paramref name="midiEvent"/> is either system real-time or
         /// system common one.</exception>
+        [Obsolete("OBS16")]
         public static void AddEvent(this TimedObjectsCollection<TimedEvent> eventsCollection, MidiEvent midiEvent, long time)
         {
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
@@ -185,7 +184,6 @@ namespace Melanchall.DryWetMidi.Interaction
             eventsCollection.Add(new TimedEvent(midiEvent, time));
         }
 
-        // TODO: obsolete
         /// <summary>
         /// Adds a <see cref="MidiEvent"/> into a <see cref="TimedEventsCollection"/> with the specified
         /// absolute time.
@@ -215,6 +213,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </exception>
         /// <exception cref="ArgumentException"><paramref name="midiEvent"/> is either system real-time or
         /// system common one.</exception>
+        [Obsolete("OBS16")]
         public static void AddEvent(this TimedObjectsCollection<TimedEvent> eventsCollection, MidiEvent midiEvent, ITimeSpan time, TempoMap tempoMap)
         {
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);

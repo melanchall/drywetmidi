@@ -203,7 +203,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 0,
                 "Objects are invalid.");
 
-            return new SplitData(inputObjects, expectedObjects, actualObjects);
+            return new SplitData(inputObjects, expectedObjects, actualObjects.Cast<ILengthedObject>());
         }
 
         private IEnumerable<ILengthedObject> Split(ILengthedObject obj, IEnumerable<long> times)

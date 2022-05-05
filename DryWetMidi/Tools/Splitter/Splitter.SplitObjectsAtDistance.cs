@@ -133,9 +133,9 @@ namespace Melanchall.DryWetMidi.Tools
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
             ThrowIfArgument.IsOutOfRange(nameof(ratio),
                                          ratio,
-                                         LengthedObjectsSplitter<Note>.ZeroRatio,
-                                         LengthedObjectsSplitter<Note>.FullLengthRatio,
-                                         $"Ratio is out of [{LengthedObjectsSplitter<Note>.ZeroRatio}; {LengthedObjectsSplitter<Note>.FullLengthRatio}] range.");
+                                         ZeroRatio,
+                                         FullLengthRatio,
+                                         $"Ratio is out of [{ZeroRatio}; {FullLengthRatio}] range.");
             ThrowIfArgument.IsInvalidEnumValue(nameof(lengthType), lengthType);
             ThrowIfArgument.IsInvalidEnumValue(nameof(from), from);
 
@@ -144,7 +144,7 @@ namespace Melanchall.DryWetMidi.Tools
             midiFile.GetTrackChunks().SplitObjectsAtDistance(objectType, ratio, lengthType, from, tempoMap, objectDetectionSettings);
         }
 
-        public static IEnumerable<ILengthedObject> SplitObjectsAtDistance(this IEnumerable<ILengthedObject> objects, ITimeSpan distance, LengthedObjectTarget from, TempoMap tempoMap)
+        public static IEnumerable<ITimedObject> SplitObjectsAtDistance(this IEnumerable<ITimedObject> objects, ITimeSpan distance, LengthedObjectTarget from, TempoMap tempoMap)
         {
             ThrowIfArgument.IsNull(nameof(objects), objects);
             ThrowIfArgument.IsNull(nameof(distance), distance);
@@ -159,7 +159,14 @@ namespace Melanchall.DryWetMidi.Tools
                     continue;
                 }
 
-                var parts = SplitObjectAtDistance(obj, distance, from, tempoMap);
+                var lengthedObject = obj as ILengthedObject;
+                if (lengthedObject == null)
+                {
+                    yield return obj;
+                    continue;
+                }
+
+                var parts = SplitObjectAtDistance(lengthedObject, distance, from, tempoMap);
 
                 if (parts.LeftPart != null)
                     yield return parts.LeftPart;
@@ -169,7 +176,7 @@ namespace Melanchall.DryWetMidi.Tools
             }
         }
 
-        public static IEnumerable<ILengthedObject> SplitObjectsAtDistance(this IEnumerable<ILengthedObject> objects, double ratio, TimeSpanType lengthType, LengthedObjectTarget from, TempoMap tempoMap)
+        public static IEnumerable<ITimedObject> SplitObjectsAtDistance(this IEnumerable<ITimedObject> objects, double ratio, TimeSpanType lengthType, LengthedObjectTarget from, TempoMap tempoMap)
         {
             ThrowIfArgument.IsNull(nameof(objects), objects);
             ThrowIfArgument.IsOutOfRange(nameof(ratio),
@@ -189,8 +196,15 @@ namespace Melanchall.DryWetMidi.Tools
                     continue;
                 }
 
-                var distance = obj.LengthAs(lengthType, tempoMap).Multiply(ratio);
-                var parts = SplitObjectAtDistance(obj, distance, from, tempoMap);
+                var lengthedObject = obj as ILengthedObject;
+                if (lengthedObject == null)
+                {
+                    yield return obj;
+                    continue;
+                }
+
+                var distance = lengthedObject.LengthAs(lengthType, tempoMap).Multiply(ratio);
+                var parts = SplitObjectAtDistance(lengthedObject, distance, from, tempoMap);
 
                 if (parts.LeftPart != null)
                     yield return parts.LeftPart;

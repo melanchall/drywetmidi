@@ -59,7 +59,7 @@ namespace Melanchall.DryWetMidi.Tools
             midiFile.GetTrackChunks().SplitObjectsByStep(objectType, step, tempoMap, objectDetectionSettings);
         }
 
-        public static IEnumerable<ILengthedObject> SplitObjectsByStep(this IEnumerable<ILengthedObject> objects, ITimeSpan step, TempoMap tempoMap)
+        public static IEnumerable<ITimedObject> SplitObjectsByStep(this IEnumerable<ITimedObject> objects, ITimeSpan step, TempoMap tempoMap)
         {
             ThrowIfArgument.IsNull(nameof(objects), objects);
             ThrowIfArgument.IsNull(nameof(step), step);
@@ -73,14 +73,21 @@ namespace Melanchall.DryWetMidi.Tools
                     continue;
                 }
 
-                if (obj.Length == 0)
+                var lengthedObject = obj as ILengthedObject;
+                if (lengthedObject == null)
+                {
+                    yield return obj;
+                    continue;
+                }
+
+                if (lengthedObject.Length == 0)
                 {
                     yield return (ILengthedObject)obj.Clone();
                     continue;
                 }
 
                 var startTime = obj.Time;
-                var endTime = startTime + obj.Length;
+                var endTime = startTime + lengthedObject.Length;
 
                 var time = startTime;
                 var tail = (ILengthedObject)obj.Clone();

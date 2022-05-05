@@ -5,7 +5,6 @@ using System.Linq;
 
 namespace Melanchall.DryWetMidi.Interaction
 {
-    // TODO: prevent Rest
     public class TimedObjectsManager : TimedObjectsManager<ITimedObject>
     {
         #region Constructor
@@ -22,7 +21,6 @@ namespace Melanchall.DryWetMidi.Interaction
         #endregion
     }
 
-    // TODO: prevent Rest
     public class TimedObjectsManager<TObject> : IDisposable
         where TObject : ITimedObject
     {
