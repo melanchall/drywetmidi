@@ -234,15 +234,15 @@ namespace Melanchall.DryWetMidi.Interaction
             trackChunk.Events.AddObjects(timedObjects);
         }
 
-        public static TObject SetTime<TObject>(this TObject timedObject, ITimeSpan time, TempoMap tempoMap)
+        public static TObject SetTime<TObject>(this TObject obj, ITimeSpan time, TempoMap tempoMap)
             where TObject : ITimedObject
         {
-            ThrowIfArgument.IsNull(nameof(timedObject), timedObject);
+            ThrowIfArgument.IsNull(nameof(obj), obj);
             ThrowIfArgument.IsNull(nameof(time), time);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
-            timedObject.Time = TimeConverter.ConvertFrom(time, tempoMap);
-            return timedObject;
+            obj.Time = TimeConverter.ConvertFrom(time, tempoMap);
+            return obj;
         }
 
         private static void AddTimedEventsToEventsCollection(EventsCollection eventsCollection, IEnumerable<ITimedObject> timedObjects)

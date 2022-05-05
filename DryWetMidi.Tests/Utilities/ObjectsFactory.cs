@@ -17,7 +17,6 @@ namespace Melanchall.DryWetMidi.Tests
 
         #region Fields
 
-        private readonly TempoMap _tempoMap;
         private readonly Random _random = new Random();
 
         #endregion
@@ -26,8 +25,14 @@ namespace Melanchall.DryWetMidi.Tests
 
         public ObjectsFactory(TempoMap tempoMap)
         {
-            _tempoMap = tempoMap;
+            TempoMap = tempoMap;
         }
+
+        #endregion
+
+        #region Properties
+
+        public TempoMap TempoMap { get; }
 
         #endregion
 
@@ -101,9 +106,9 @@ namespace Melanchall.DryWetMidi.Tests
             new TextEvent(_random.Next(100).ToString()),
             GetTime(TimeSpanUtilities.Parse(time)));
 
-        private long GetTime(ITimeSpan time) => TimeConverter.ConvertFrom(time, _tempoMap);
+        private long GetTime(ITimeSpan time) => TimeConverter.ConvertFrom(time, TempoMap);
 
-        private long GetLength(ITimeSpan length, ITimeSpan time) => LengthConverter.ConvertFrom(length, time, _tempoMap);
+        private long GetLength(ITimeSpan length, ITimeSpan time) => LengthConverter.ConvertFrom(length, time, TempoMap);
 
         #endregion
     }

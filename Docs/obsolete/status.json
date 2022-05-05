@@ -1,4 +1,9 @@
 {
+  "OBS15": {
+    "Hint": "Use SetTime/SetLength methods from TimedObjectUtilities/LengthedObjectUtilities.",
+    "ObsoleteFromVersion": "6.1.0",
+    "InLibrary": true
+  },
   "OBS14": {
     "Hint": "Use SetTime method from TimedObjectUtilities.",
     "ObsoleteFromVersion": "6.1.0",

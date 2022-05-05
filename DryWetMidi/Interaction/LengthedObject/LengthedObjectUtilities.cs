@@ -343,6 +343,17 @@ namespace Melanchall.DryWetMidi.Interaction
             return AtTime(objects, convertedTime, matchBy);
         }
 
+        public static TObject SetLength<TObject>(this TObject obj, ITimeSpan length, TempoMap tempoMap)
+            where TObject : ILengthedObject
+        {
+            ThrowIfArgument.IsNull(nameof(obj), obj);
+            ThrowIfArgument.IsNull(nameof(length), length);
+            ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
+
+            obj.Length = LengthConverter.ConvertFrom(length, obj.Time, tempoMap);
+            return obj;
+        }
+
         /// <summary>
         /// Checks if an <see cref="ILengthedObject"/> is at the specified time.
         /// </summary>

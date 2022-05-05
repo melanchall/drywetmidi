@@ -229,6 +229,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </item>
         /// </list>
         /// </exception>
+        [Obsolete("OBS15")]
         public static Note SetTimeAndLength(this Note note, ITimeSpan time, ITimeSpan length, TempoMap tempoMap)
         {
             ThrowIfArgument.IsNull(nameof(note), note);
@@ -236,9 +237,7 @@ namespace Melanchall.DryWetMidi.Interaction
             ThrowIfArgument.IsNull(nameof(length), length);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
-            note.Time = TimeConverter.ConvertFrom(time, tempoMap);
-            note.Length = LengthConverter.ConvertFrom(length, note.Time, tempoMap);
-            return note;
+            return note.SetTime(time, tempoMap).SetLength(length, tempoMap);
         }
 
         /// <summary>

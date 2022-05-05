@@ -178,6 +178,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </item>
         /// </list>
         /// </exception>
+        [Obsolete("OBS15")]
         public static Chord SetTimeAndLength(this Chord chord, ITimeSpan time, ITimeSpan length, TempoMap tempoMap)
         {
             ThrowIfArgument.IsNull(nameof(chord), chord);
@@ -185,9 +186,7 @@ namespace Melanchall.DryWetMidi.Interaction
             ThrowIfArgument.IsNull(nameof(length), length);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
-            chord.Time = TimeConverter.ConvertFrom(time, tempoMap);
-            chord.Length = LengthConverter.ConvertFrom(length, chord.Time, tempoMap);
-            return chord;
+            return chord.SetTime(time, tempoMap).SetLength(length, tempoMap);
         }
 
         /// <summary>
