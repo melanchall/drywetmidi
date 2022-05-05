@@ -16,6 +16,9 @@ namespace Melanchall.DryWetMidi.Interaction
     {
         #region Events
 
+        /// <summary>
+        /// Occurs when objects collection changes (an object added or removed).
+        /// </summary>
         public event TimedObjectsCollectionChangedEventHandler<TObject> CollectionChanged;
 
         #endregion
@@ -29,15 +32,6 @@ namespace Melanchall.DryWetMidi.Interaction
 
         #region Constructor
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TimedObjectsCollection{TObject}"/> with
-        /// the specified timed objects.
-        /// </summary>
-        /// <param name="objects">Collection of timed objects to populate the <see cref="TimedObjectsCollection{TObject}"/>.</param>
-        /// <remarks>
-        /// Note that <c>null</c> objects will be automatically filtered out so the collection will not
-        /// contain them.
-        /// </remarks>
         internal TimedObjectsCollection(IEnumerable<TObject> objects, TimedObjectsComparer comparer)
         {
             Debug.Assert(objects != null);

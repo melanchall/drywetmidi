@@ -32,45 +32,6 @@ namespace Melanchall.DryWetMidi.Tools
         /// </item>
         /// </list>
         /// </exception>
-        /// <example>
-        /// <para>
-        /// Given the MIDI file (vertical lines show the grid the file should be split by):
-        /// </para>
-        /// <code language="image">
-        /// +-----║-------║-----------+
-        /// |┌────║───────║──────────┐|
-        /// |│  A ║  B    ║     C    │|
-        /// |└──⁞─║──⁞────║─────⁞────┘|
-        /// |┌──⁞─║──⁞────║─────⁞────┐|
-        /// |│  ⁞ ║  ⁞ D  ║  E  ⁞    │|
-        /// |└──⁞─║──⁞─⁞──║──⁞──⁞────┘|
-        /// +---⁞-║--⁞-⁞--║--⁞--⁞-----+
-        /// </code>
-        /// <para>
-        /// where <c>A</c>, <c>B</c>, <c>C</c>, <c>D</c> and <c>E</c> are some MIDI events.
-        /// </para>
-        /// <para>
-        /// We'll get three new files as the result of the split:
-        /// </para>
-        /// <code language="image">
-        /// +---⁞--+ ⁞ ⁞ +---⁞--⁞-----+
-        /// |┌──⁞─┐| ⁞ ⁞ |┌──⁞──⁞────┐|
-        /// |│  A │| ⁞ ⁞ |│  ⁞  C    │|
-        /// |└────┘| ⁞ ⁞ |└──⁞───────┘|
-        /// |┌────┐| ⁞ ⁞ |┌──⁞───────┐|
-        /// |│    │| ⁞ ⁞ |│  E       │|
-        /// |└────┘| ⁞ ⁞ |└──────────┘|
-        /// +------+ ⁞ ⁞ +------------+
-        ///      +---⁞-⁞---+
-        ///      |┌──⁞─⁞──┐|
-        ///      |│  B ⁞  │|
-        ///      |└────⁞──┘|
-        ///      |┌────⁞──┐|
-        ///      |│    D  │|
-        ///      |└───────┘|
-        ///      +---------+
-        /// </code>
-        /// </example>
         public static IEnumerable<MidiFile> SplitByGrid(this MidiFile midiFile, IGrid grid, SliceMidiFileSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);

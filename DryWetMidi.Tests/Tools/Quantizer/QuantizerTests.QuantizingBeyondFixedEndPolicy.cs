@@ -25,7 +25,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 timedObjects: objects,
                 grid: new SteppedGrid((MidiTimeSpan)20),
                 tempoMap: TempoMap.Default,
-                settings: new QuantizerSettings
+                settings: new QuantizingSettings
                 {
                     QuantizingBeyondFixedEndPolicy = QuantizingBeyondFixedEndPolicy.CollapseAndFix,
                     Target = QuantizerTarget.Start,
@@ -51,7 +51,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 timedObjects: objects,
                 grid: new SteppedGrid((MidiTimeSpan)20),
                 tempoMap: TempoMap.Default,
-                settings: new QuantizerSettings
+                settings: new QuantizingSettings
                 {
                     QuantizingBeyondFixedEndPolicy = QuantizingBeyondFixedEndPolicy.CollapseAndMove,
                     Target = QuantizerTarget.Start,
@@ -77,7 +77,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 timedObjects: objects,
                 grid: new SteppedGrid((MidiTimeSpan)20),
                 tempoMap: TempoMap.Default,
-                settings: new QuantizerSettings
+                settings: new QuantizingSettings
                 {
                     QuantizingBeyondFixedEndPolicy = QuantizingBeyondFixedEndPolicy.SwapEnds,
                     Target = QuantizerTarget.Start,
@@ -104,7 +104,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 timedObjects: objects,
                 grid: new SteppedGrid((MidiTimeSpan)20),
                 tempoMap: TempoMap.Default,
-                settings: new QuantizerSettings
+                settings: new QuantizingSettings
                 {
                     QuantizingBeyondFixedEndPolicy = QuantizingBeyondFixedEndPolicy.Skip,
                     Target = QuantizerTarget.Start,
@@ -131,7 +131,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 timedObjects: objects,
                 grid: new SteppedGrid((MidiTimeSpan)20),
                 tempoMap: TempoMap.Default,
-                settings: new QuantizerSettings
+                settings: new QuantizingSettings
                 {
                     QuantizingBeyondFixedEndPolicy = QuantizingBeyondFixedEndPolicy.Abort,
                     Target = QuantizerTarget.Start,
@@ -157,7 +157,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 timedObjects: objects,
                 grid: new SteppedGrid((MidiTimeSpan)15),
                 tempoMap: TempoMap.Default,
-                settings: new QuantizerSettings
+                settings: new QuantizingSettings
                 {
                     QuantizingBeyondFixedEndPolicy = QuantizingBeyondFixedEndPolicy.CollapseAndFix,
                     Target = QuantizerTarget.End,
@@ -183,7 +183,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 timedObjects: objects,
                 grid: new SteppedGrid((MidiTimeSpan)15),
                 tempoMap: TempoMap.Default,
-                settings: new QuantizerSettings
+                settings: new QuantizingSettings
                 {
                     QuantizingBeyondFixedEndPolicy = QuantizingBeyondFixedEndPolicy.CollapseAndMove,
                     Target = QuantizerTarget.End,
@@ -209,7 +209,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 timedObjects: objects,
                 grid: new SteppedGrid((MidiTimeSpan)15),
                 tempoMap: TempoMap.Default,
-                settings: new QuantizerSettings
+                settings: new QuantizingSettings
                 {
                     QuantizingBeyondFixedEndPolicy = QuantizingBeyondFixedEndPolicy.SwapEnds,
                     Target = QuantizerTarget.End,
@@ -236,7 +236,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 timedObjects: objects,
                 grid: new SteppedGrid((MidiTimeSpan)15),
                 tempoMap: TempoMap.Default,
-                settings: new QuantizerSettings
+                settings: new QuantizingSettings
                 {
                     QuantizingBeyondFixedEndPolicy = QuantizingBeyondFixedEndPolicy.Skip,
                     Target = QuantizerTarget.End,
@@ -263,7 +263,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 timedObjects: objects,
                 grid: new SteppedGrid((MidiTimeSpan)15),
                 tempoMap: TempoMap.Default,
-                settings: new QuantizerSettings
+                settings: new QuantizingSettings
                 {
                     QuantizingBeyondFixedEndPolicy = QuantizingBeyondFixedEndPolicy.Abort,
                     Target = QuantizerTarget.End,

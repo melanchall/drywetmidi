@@ -1,7 +1,9 @@
 ﻿using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 
 namespace Melanchall.DryWetMidi.Tools
@@ -10,6 +12,33 @@ namespace Melanchall.DryWetMidi.Tools
     {
         #region Methods
 
+        /// <summary>
+        /// Splits objects within a <see cref="TrackChunk"/> into the specified number of parts of the equal length.
+        /// </summary>
+        /// <remarks>
+        /// Nulls will not be split and will be returned as <c>null</c>s. If an object has zero length,
+        /// it will be split into the specified number of parts of zero length.
+        /// </remarks>
+        /// <param name="trackChunk"><see cref="TrackChunk"/> to split objects within.</param>
+        /// <param name="objectType">The type of objects to split.</param>
+        /// <param name="partsNumber">The number of parts to split objects into.</param>
+        /// <param name="lengthType">Type of a part's length.</param>
+        /// <param name="tempoMap">Tempo map used to calculate times to split by.</param>
+        /// <param name="objectDetectionSettings">Settings according to which objects should be
+        /// detected and built.</param>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="trackChunk"/> is <c>null</c>.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="tempoMap"/> is <c>null</c>.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="partsNumber"/> is zero or negative.</exception>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="lengthType"/> specified an invalid value.</exception>
         public static void SplitObjectsByPartsNumber(
             this TrackChunk trackChunk,
             ObjectType objectType,
@@ -30,6 +59,34 @@ namespace Melanchall.DryWetMidi.Tools
                 objects => SplitObjectsByPartsNumber(objects, partsNumber, lengthType, tempoMap));
         }
 
+        /// <summary>
+        /// Splits objects within a collection of <see cref="TrackChunk"/> into the specified number of parts of
+        /// the equal length.
+        /// </summary>
+        /// <remarks>
+        /// Nulls will not be split and will be returned as <c>null</c>s. If an object has zero length,
+        /// it will be split into the specified number of parts of zero length.
+        /// </remarks>
+        /// <param name="trackChunks">A collection of <see cref="TrackChunk"/> to split objects within.</param>
+        /// <param name="objectType">The type of objects to split.</param>
+        /// <param name="partsNumber">The number of parts to split objects into.</param>
+        /// <param name="lengthType">Type of a part's length.</param>
+        /// <param name="tempoMap">Tempo map used to calculate times to split by.</param>
+        /// <param name="objectDetectionSettings">Settings according to which objects should be
+        /// detected and built.</param>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="trackChunks"/> is <c>null</c>.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="tempoMap"/> is <c>null</c>.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="partsNumber"/> is zero or negative.</exception>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="lengthType"/> specified an invalid value.</exception>
         public static void SplitObjectsByPartsNumber(
             this IEnumerable<TrackChunk> trackChunks,
             ObjectType objectType,
@@ -49,6 +106,22 @@ namespace Melanchall.DryWetMidi.Tools
             }
         }
 
+        /// <summary>
+        /// Splits objects within a <see cref="MidiFile"/> into the specified number of parts of the equal length.
+        /// </summary>
+        /// <remarks>
+        /// Nulls will not be split and will be returned as <c>null</c>s. If an object has zero length,
+        /// it will be split into the specified number of parts of zero length.
+        /// </remarks>
+        /// <param name="midiFile"><see cref="MidiFile"/> to split objects within.</param>
+        /// <param name="objectType">The type of objects to split.</param>
+        /// <param name="partsNumber">The number of parts to split objects into.</param>
+        /// <param name="lengthType">Type of a part's length.</param>
+        /// <param name="objectDetectionSettings">Settings according to which objects should be
+        /// detected and built.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="partsNumber"/> is zero or negative.</exception>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="lengthType"/> specified an invalid value.</exception>
         public static void SplitObjectsByPartsNumber(
             this MidiFile midiFile,
             ObjectType objectType,
@@ -61,10 +134,37 @@ namespace Melanchall.DryWetMidi.Tools
             ThrowIfArgument.IsInvalidEnumValue(nameof(lengthType), lengthType);
 
             var tempoMap = midiFile.GetTempoMap();
-
-            midiFile.GetTrackChunks().SplitObjectsByPartsNumber(objectType, partsNumber, lengthType, tempoMap, objectDetectionSettings);
+            midiFile
+                .GetTrackChunks()
+                .SplitObjectsByPartsNumber(objectType, partsNumber, lengthType, tempoMap, objectDetectionSettings);
         }
 
+        /// <summary>
+        /// Splits objects into the specified number of parts of the equal length.
+        /// </summary>
+        /// <remarks>
+        /// Nulls will not be split and will be returned as <c>null</c>s. If an object has zero length,
+        /// it will be split into the specified number of parts of zero length.
+        /// </remarks>
+        /// <param name="objects">Objects to split.</param>
+        /// <param name="partsNumber">The number of parts to split objects into.</param>
+        /// <param name="lengthType">Type of a part's length.</param>
+        /// <param name="tempoMap">Tempo map used to calculate times to split by.</param>
+        /// <returns>Objects that are result of splitting <paramref name="objects"/> going in the same
+        /// order as elements of <paramref name="objects"/>.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="objects"/> is <c>null</c>.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="tempoMap"/> is <c>null</c>.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="partsNumber"/> is zero or negative.</exception>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="lengthType"/> specified an invalid value.</exception>
         public static IEnumerable<ITimedObject> SplitObjectsByPartsNumber(this IEnumerable<ITimedObject> objects, int partsNumber, TimeSpanType lengthType, TempoMap tempoMap)
         {
             ThrowIfArgument.IsNull(nameof(objects), objects);

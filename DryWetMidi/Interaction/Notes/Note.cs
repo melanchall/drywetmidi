@@ -14,10 +14,13 @@ namespace Melanchall.DryWetMidi.Interaction
         #region Constants
 
         /// <summary>
-        /// Default velocity.
+        /// Default velocity (velocity of underlying <see cref="NoteOnEvent"/> event).
         /// </summary>
         public static readonly SevenBitNumber DefaultVelocity = (SevenBitNumber)100;
 
+        /// <summary>
+        /// Default off velocity (velocity of underlying <see cref="NoteOffEvent"/> event).
+        /// </summary>
         public static readonly SevenBitNumber DefaultOffVelocity = (SevenBitNumber)0;
 
         #endregion
@@ -134,17 +137,31 @@ namespace Melanchall.DryWetMidi.Interaction
             Time = time;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Note"/> with the specified pair of
+        /// timed events holding corresponding <see cref="NoteOnEvent"/> and <see cref="NoteOffEvent"/> events.
+        /// </summary>
+        /// <param name="timedNoteOnEvent"><see cref="TimedEvent"/> holding <see cref="NoteOnEvent"/> event of a note.</param>
+        /// <param name="timedNoteOffEvent"><see cref="TimedEvent"/> holding <see cref="NoteOffEvent"/> event of a note.</param>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description>Underlying event of the <paramref name="timedNoteOnEvent"/> is not <see cref="NoteOnEvent"/>.</description>
+        /// </item>
+        /// <item>
+        /// <description>Underlying event of the <paramref name="timedNoteOffEvent"/> is not <see cref="NoteOffEvent"/>.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="timedNoteOffEvent"/> goes before <paramref name="timedNoteOnEvent"/>.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public Note(TimedEvent timedNoteOnEvent, TimedEvent timedNoteOffEvent)
             : this(timedNoteOnEvent, timedNoteOffEvent, true)
         {
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Note"/> with the specified
-        /// Note On and Note Off timed events.
-        /// </summary>
-        /// <param name="timedNoteOnEvent">Wrapped <see cref="NoteOnEvent"/>.</param>
-        /// <param name="timedNoteOffEvent">Wrapped <see cref="NoteOffEvent"/>.</param>
         internal Note(TimedEvent timedNoteOnEvent, TimedEvent timedNoteOffEvent, bool checkArguments)
         {
             if (checkArguments)
@@ -331,9 +348,9 @@ namespace Melanchall.DryWetMidi.Interaction
         }
 
         /// <summary>
-        /// Clones note by creating a copy of it.
+        /// Clones object by creating a copy of it.
         /// </summary>
-        /// <returns>Copy of the note.</returns>
+        /// <returns>Copy of the object.</returns>
         public virtual ITimedObject Clone()
         {
             var newTimedNoteOnEvent = GetTimedNoteOnEvent();
@@ -346,16 +363,16 @@ namespace Melanchall.DryWetMidi.Interaction
         }
 
         /// <summary>
-        /// Splits the current <see cref="Note"/> by the specified time.
+        /// Splits the current object by the specified time.
         /// </summary>
         /// <remarks>
-        /// If <paramref name="time"/> is less than time of the note, the left part will be <c>null</c>.
-        /// If <paramref name="time"/> is greater than end time of the note, the right part
+        /// If <paramref name="time"/> is less than time of the object, the left part will be <c>null</c>.
+        /// If <paramref name="time"/> is greater than end time of the object, the right part
         /// will be <c>null</c>.
         /// </remarks>
-        /// <param name="time">Time to split the note by.</param>
-        /// <returns>An object containing left and right parts of the split <see cref="Note"/>.
-        /// Both parts are instances of <see cref="Note"/> too.</returns>
+        /// <param name="time">Time to split the object by.</param>
+        /// <returns>An object containing left and right parts of the split object.
+        /// Both parts have the same type as the original object.</returns>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="time"/> is negative.</exception>
         public SplitLengthedObject Split(long time)
         {

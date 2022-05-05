@@ -111,9 +111,8 @@ namespace Melanchall.DryWetMidi.Tools
             midiFile.GetTrackChunks().QuantizeTimedEvents(grid, tempoMap, settings);
         }
 
-        private static QuantizerSettings GetSettings(TimedEventsQuantizingSettings settings) => new QuantizerSettings
+        private static QuantizingSettings GetSettings(TimedEventsQuantizingSettings settings) => new QuantizingSettings
         {
-            RandomizingSettings = settings.RandomizingSettings,
             DistanceCalculationType = settings.DistanceCalculationType,
             QuantizingLevel = settings.QuantizingLevel,
             Filter = obj => settings.Filter((TimedEvent)obj),

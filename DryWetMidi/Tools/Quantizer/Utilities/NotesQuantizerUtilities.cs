@@ -147,9 +147,8 @@ namespace Melanchall.DryWetMidi.Tools
             midiFile.GetTrackChunks().QuantizeNotes(grid, tempoMap, settings);
         }
 
-        private static QuantizerSettings GetSettings(NotesQuantizingSettings settings) => new QuantizerSettings
+        private static QuantizingSettings GetSettings(NotesQuantizingSettings settings) => new QuantizingSettings
         {
-            RandomizingSettings = settings.RandomizingSettings,
             DistanceCalculationType = settings.DistanceCalculationType,
             QuantizingLevel = settings.QuantizingLevel,
             Filter = obj => settings.Filter((Note)obj),

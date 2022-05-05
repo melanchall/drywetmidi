@@ -343,6 +343,31 @@ namespace Melanchall.DryWetMidi.Interaction
             return AtTime(objects, convertedTime, matchBy);
         }
 
+        /// <summary>
+        /// Sets length of the specified object in terms of <see cref="ITimeSpan"/>.
+        /// </summary>
+        /// <typeparam name="TObject">The type of the <paramref name="obj"/>.</typeparam>
+        /// <param name="obj">Object to set length of.</param>
+        /// <param name="length">New length of the <paramref name="obj"/>.</param>
+        /// <param name="tempoMap"><see cref="TempoMap"/> used to calculate new length in ticks.</param>
+        /// <returns>The same object the method was called on.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="obj"/> is <c>null</c>.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="length"/> is <c>null</c>.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="tempoMap"/> is <c>null</c>.</description>
+        /// </item>
+        /// <item>
+        /// <description>One of the objects is <c>null</c>.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static TObject SetLength<TObject>(this TObject obj, ITimeSpan length, TempoMap tempoMap)
             where TObject : ILengthedObject
         {

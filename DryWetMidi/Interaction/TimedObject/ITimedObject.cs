@@ -16,6 +16,10 @@
 
         #region Methods
 
+        /// <summary>
+        /// Clones object by creating a copy of it.
+        /// </summary>
+        /// <returns>Copy of the object.</returns>
         ITimedObject Clone();
 
         #endregion

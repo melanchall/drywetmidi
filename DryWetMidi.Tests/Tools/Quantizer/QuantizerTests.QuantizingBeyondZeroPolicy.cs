@@ -25,7 +25,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 timedObjects: objects,
                 grid: new SteppedGrid((MidiTimeSpan)20),
                 tempoMap: TempoMap.Default,
-                settings: new QuantizerSettings
+                settings: new QuantizingSettings
                 {
                     QuantizingBeyondZeroPolicy = QuantizingBeyondZeroPolicy.FixAtZero,
                     Target = QuantizerTarget.End
@@ -50,7 +50,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 timedObjects: objects,
                 grid: new SteppedGrid(new MetricTimeSpan(0, 0, 20)),
                 tempoMap: TempoMap.Default,
-                settings: new QuantizerSettings
+                settings: new QuantizingSettings
                 {
                     QuantizingBeyondZeroPolicy = QuantizingBeyondZeroPolicy.FixAtZero,
                     Target = QuantizerTarget.End,
@@ -76,7 +76,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 timedObjects: objects,
                 grid: new SteppedGrid(new BarBeatTicksTimeSpan(20)),
                 tempoMap: TempoMap.Default,
-                settings: new QuantizerSettings
+                settings: new QuantizingSettings
                 {
                     QuantizingBeyondZeroPolicy = QuantizingBeyondZeroPolicy.FixAtZero,
                     Target = QuantizerTarget.End,
@@ -103,7 +103,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 timedObjects: objects,
                 grid: new SteppedGrid((MidiTimeSpan)20),
                 tempoMap: TempoMap.Default,
-                settings: new QuantizerSettings
+                settings: new QuantizingSettings
                 {
                     QuantizingBeyondZeroPolicy = QuantizingBeyondZeroPolicy.Skip,
                     Target = QuantizerTarget.End
@@ -129,7 +129,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 timedObjects: objects,
                 grid: new SteppedGrid((MidiTimeSpan)20),
                 tempoMap: TempoMap.Default,
-                settings: new QuantizerSettings
+                settings: new QuantizingSettings
                 {
                     QuantizingBeyondZeroPolicy = QuantizingBeyondZeroPolicy.Abort,
                     Target = QuantizerTarget.End

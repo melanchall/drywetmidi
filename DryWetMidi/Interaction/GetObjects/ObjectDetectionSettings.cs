@@ -7,6 +7,9 @@
     {
         #region Properties
 
+        /// <summary>
+        /// Gets or sets settings which define how timed events should be detected and built.
+        /// </summary>
         public TimedEventDetectionSettings TimedEventDetectionSettings { get; set; }
 
         /// <summary>

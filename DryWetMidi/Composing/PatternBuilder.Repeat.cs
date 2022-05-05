@@ -14,7 +14,8 @@ namespace Melanchall.DryWetMidi.Composing
         /// Repeats the specified number of previous actions.
         /// </summary>
         /// <param name="actionsCount">Number of previous actions to repeat.</param>
-        /// <param name="repetitionsCount">Count of repetitions.</param>
+        /// <param name="repeatsNumber">Count of repetitions.</param>
+        /// <param name="settings">Settings according to which actions should be repeated.</param>
         /// <returns>The current <see cref="PatternBuilder"/>.</returns>
         /// <remarks>
         /// Note that <see cref="SetNoteLength(ITimeSpan)"/>, <see cref="SetOctave"/>,
@@ -31,11 +32,11 @@ namespace Melanchall.DryWetMidi.Composing
         /// <description><paramref name="actionsCount"/> is greater than count of existing actions.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="repetitionsCount"/> is negative.</description>
+        /// <description><paramref name="repeatsNumber"/> is negative.</description>
         /// </item>
         /// </list>
         /// </exception>
-        public PatternBuilder Repeat(int actionsCount, int repetitionsCount, RepeatSettings settings = null)
+        public PatternBuilder Repeat(int actionsCount, int repeatsNumber, RepeatSettings settings = null)
         {
             ThrowIfArgument.IsNegative(nameof(actionsCount), actionsCount, "Actions count is negative.");
             ThrowIfArgument.IsGreaterThan(
@@ -43,36 +44,38 @@ namespace Melanchall.DryWetMidi.Composing
                 actionsCount,
                 _actions.Count,
                 "Actions count is greater than existing actions count.");
-            ThrowIfArgument.IsNegative(nameof(repetitionsCount), repetitionsCount, "Repetitions count is negative.");
+            ThrowIfArgument.IsNegative(nameof(repeatsNumber), repeatsNumber, "Repetitions count is negative.");
 
-            return RepeatActions(actionsCount, repetitionsCount, settings);
+            return RepeatActions(actionsCount, repeatsNumber, settings);
         }
 
         /// <summary>
         /// Repeats the previous action the specified number of times.
         /// </summary>
-        /// <param name="repetitionsCount">Count of repetitions.</param>
+        /// <param name="repeatsNumber">Count of repetitions.</param>
+        /// <param name="settings">Settings according to which actions should be repeated.</param>
         /// <returns>The current <see cref="PatternBuilder"/>.</returns>
         /// <remarks>
         /// Note that <see cref="SetNoteLength(ITimeSpan)"/>, <see cref="SetOctave"/>,
         /// <see cref="SetStep(ITimeSpan)"/> and <see cref="SetVelocity(SevenBitNumber)"/> are not
         /// actions and will not be repeated since default values applies immediately on next actions.
         /// </remarks>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="repetitionsCount"/> is negative.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="repeatsNumber"/> is negative.</exception>
         /// <exception cref="InvalidOperationException">There are no actions to repeat.</exception>
-        public PatternBuilder Repeat(int repetitionsCount, RepeatSettings settings = null)
+        public PatternBuilder Repeat(int repeatsNumber, RepeatSettings settings = null)
         {
-            ThrowIfArgument.IsNegative(nameof(repetitionsCount), repetitionsCount, "Repetitions count is negative.");
+            ThrowIfArgument.IsNegative(nameof(repeatsNumber), repeatsNumber, "Repetitions count is negative.");
 
             if (!_actions.Any())
                 throw new InvalidOperationException("There is no action to repeat.");
 
-            return RepeatActions(1, repetitionsCount, settings);
+            return RepeatActions(1, repeatsNumber, settings);
         }
 
         /// <summary>
         /// Repeats the previous action one time.
         /// </summary>
+        /// <param name="settings">Settings according to which actions should be repeated.</param>
         /// <returns>The current <see cref="PatternBuilder"/>.</returns>
         /// <remarks>
         /// Note that <see cref="SetNoteLength(ITimeSpan)"/>, <see cref="SetOctave"/>,
@@ -88,12 +91,12 @@ namespace Melanchall.DryWetMidi.Composing
             return RepeatActions(1, 1, settings);
         }
 
-        private PatternBuilder RepeatActions(int actionsCount, int repetitionsCount, RepeatSettings settings)
+        private PatternBuilder RepeatActions(int actionsCount, int repeatsNumber, RepeatSettings settings)
         {
             settings = settings ?? new RepeatSettings();
 
             var actionsToRepeat = _actions.Skip(_actions.Count - actionsCount).ToList();
-            var newActions = Enumerable.Range(0, repetitionsCount).SelectMany(i => actionsToRepeat);
+            var newActions = Enumerable.Range(0, repeatsNumber).SelectMany(i => actionsToRepeat);
 
             foreach (var action in ProcessActions(newActions, settings))
             {

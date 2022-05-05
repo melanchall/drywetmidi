@@ -84,6 +84,10 @@ namespace Melanchall.DryWetMidi.Composing
             return AddAction(new MoveToTimeAction());
         }
 
+        /// <summary>
+        /// Moves the current time to the start (zero time) of a pattern.
+        /// </summary>
+        /// <returns>The current <see cref="PatternBuilder"/>.</returns>
         public PatternBuilder MoveToStart()
         {
             return AddAction(new MoveToTimeAction((MidiTimeSpan)0));

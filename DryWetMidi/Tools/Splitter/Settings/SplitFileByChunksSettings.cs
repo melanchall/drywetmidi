@@ -5,9 +5,9 @@ namespace Melanchall.DryWetMidi.Tools
 {
     /// <summary>
     /// Defines how a MIDI file should be split by chunks using
-    /// <see cref="MidiFileSplitter.SplitByChunks(MidiFile, SplitFileByChunksSettings)"/> method.
+    /// <see cref="Splitter.SplitByChunks(MidiFile, SplitFileByChunksSettings)"/> method.
     /// </summary>
-    /// <seealso cref="MidiFileSplitter"/>
+    /// <seealso cref="Splitter"/>
     public sealed class SplitFileByChunksSettings
     {
         #region Properties

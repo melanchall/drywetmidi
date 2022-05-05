@@ -18,8 +18,8 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
         private static readonly int[] RepeatsNumbers = { 1, 10 };
 
-        private static readonly object[] StepData_ShiftByMaxTime =
-            GetStepData_ShiftByMaxTime(RepeatsNumbers, new Dictionary<string, (string EventTime, string ExpectedShift)[]>
+        private static readonly object[] RoundUpStepData_ShiftByMaxTime =
+            GetRoundUpStepData_ShiftByMaxTime(RepeatsNumbers, new Dictionary<string, (string EventTime, string ExpectedShift)[]>
             {
                 // Midi
 
@@ -131,8 +131,8 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 }
             });
 
-        private static readonly object[] StepData_ShiftByFixedValue =
-            GetStepData_ShiftByFixedValue(RepeatsNumbers, new Dictionary<(string Shift, string ShiftStep), (string EventTime, string ExpectedShift)[]>
+        private static readonly object[] RoundUpStepData_ShiftByFixedValue =
+            GetRoundUpStepData_ShiftByFixedValue(RepeatsNumbers, new Dictionary<(string Shift, string ShiftStep), (string EventTime, string ExpectedShift)[]>
             {
                 // Midi
 
@@ -221,7 +221,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 .Select(i => new TimedEvent(new TextEvent("A"), eventTime + shift * i))
                 .ToArray());
 
-        [TestCaseSource(nameof(StepData_ShiftByMaxTime))]
+        [TestCaseSource(nameof(RoundUpStepData_ShiftByMaxTime))]
         public void CheckRepeat_SingleCollection_SingleTimedEvent_ShiftByMaxTime_Step(
             string eventTime,
             int repeatsNumber,
@@ -242,7 +242,8 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 settings: new RepeatingSettings
                 {
                     ShiftPolicy = ShiftPolicy.ShiftByMaxTime,
-                    ShiftStep = TimeSpanUtilities.Parse(step)
+                    ShiftRoundingPolicy = TimeSpanRoundingPolicy.RoundUp,
+                    ShiftRoundingStep = TimeSpanUtilities.Parse(step)
                 },
                 expectedObjects: Enumerable
                     .Range(0, repeatsNumber + 1)
@@ -252,7 +253,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                     .ToArray());
         }
 
-        [TestCaseSource(nameof(StepData_ShiftByFixedValue))]
+        [TestCaseSource(nameof(RoundUpStepData_ShiftByFixedValue))]
         public void CheckRepeat_SingleCollection_SingleTimedEvent_ShiftByFixedValue_Step(
             string eventTime,
             int repeatsNumber,
@@ -275,7 +276,8 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 {
                     ShiftPolicy = ShiftPolicy.ShiftByFixedValue,
                     Shift = TimeSpanUtilities.Parse(shift),
-                    ShiftStep = TimeSpanUtilities.Parse(step)
+                    ShiftRoundingStep = TimeSpanUtilities.Parse(step),
+                    ShiftRoundingPolicy = TimeSpanRoundingPolicy.RoundUp
                 },
                 expectedObjects: Enumerable
                     .Range(0, repeatsNumber + 1)
@@ -349,7 +351,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 })
                 .ToArray());
 
-        [TestCaseSource(nameof(StepData_ShiftByMaxTime))]
+        [TestCaseSource(nameof(RoundUpStepData_ShiftByMaxTime))]
         public void CheckRepeat_SingleCollection_MultipleTimedEvents_ShiftByMaxTime_Step(
             string eventTime,
             int repeatsNumber,
@@ -371,7 +373,8 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 settings: new RepeatingSettings
                 {
                     ShiftPolicy = ShiftPolicy.ShiftByMaxTime,
-                    ShiftStep = TimeSpanUtilities.Parse(step)
+                    ShiftRoundingPolicy = TimeSpanRoundingPolicy.RoundUp,
+                    ShiftRoundingStep = TimeSpanUtilities.Parse(step)
                 },
                 expectedObjects: Enumerable
                     .Range(0, repeatsNumber + 1)
@@ -637,7 +640,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             Assert.AreNotSame(inputFile, actualFile, "Result file refers to the input one.");
         }
 
-        private static object[] GetStepData_ShiftByMaxTime(
+        private static object[] GetRoundUpStepData_ShiftByMaxTime(
             int[] repeatsNumbers,
             Dictionary<string, (string EventTime, string ExpectedShift)[]> shifts) =>
             repeatsNumbers
@@ -650,7 +653,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 })))
                 .ToArray();
 
-        private static object[] GetStepData_ShiftByFixedValue(
+        private static object[] GetRoundUpStepData_ShiftByFixedValue(
             int[] repeatsNumbers,
             Dictionary<(string Shift, string ShiftStep), (string EventTime, string ExpectedShift)[]> shifts) =>
             repeatsNumbers

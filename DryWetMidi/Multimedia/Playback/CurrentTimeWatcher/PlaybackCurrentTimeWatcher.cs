@@ -45,6 +45,10 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         #region Constructor
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PlaybackCurrentTimeWatcher"/>.
+        /// </summary>
+        /// <param name="settings">Settings for playbacks watching.</param>
         public PlaybackCurrentTimeWatcher(PlaybackCurrentTimeWatcherSettings settings = null)
         {
             _settings = settings ?? new PlaybackCurrentTimeWatcherSettings();
@@ -56,7 +60,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         #region Properties
 
         /// <summary>
-        /// Gets the instance of <see cref="PlaybackCurrentTimeWatcher"/>.
+        /// Gets the default instance of <see cref="PlaybackCurrentTimeWatcher"/>.
         /// </summary>
         public static PlaybackCurrentTimeWatcher Instance { get { return _lazyInstance.Value; } }
 
@@ -93,6 +97,18 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// </summary>
         public bool IsWatching => _clock?.IsRunning ?? false;
 
+        /// <summary>
+        /// Gets or sets the type of a playback's time to convert to in case of playback
+        /// was added in the watcher via <see cref="AddPlayback(Playback)"/> method (without
+        /// specifying desired time type). The default value is <see cref="TimeSpanType.Midi"/>.
+        /// </summary>
+        /// <remarks>
+        /// The current time of a playback will be converted to this time type only if the playback
+        /// was added in the watcher via <see cref="AddPlayback(Playback)"/> method. If
+        /// <see cref="AddPlayback(Playback, TimeSpanType)"/> method was used, its second parameter
+        /// overrides the global type defined by the <see cref="TimeType"/> property.
+        /// </remarks>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="value"/> specified an invalid value.</exception>
         public TimeSpanType TimeType
         {
             get { return _timeType; }
@@ -133,7 +149,8 @@ namespace Melanchall.DryWetMidi.Multimedia
         }
 
         /// <summary>
-        /// Adds a playback to the list of ones to watch current times of.
+        /// Adds a playback to the list of ones to watch current times of. The time will be reported
+        /// in the specified type.
         /// </summary>
         /// <param name="playback">Playback to watch current time of.</param>
         /// <param name="timeType">Type of current time to convert to.</param>
@@ -153,6 +170,14 @@ namespace Melanchall.DryWetMidi.Multimedia
             }
         }
 
+        /// <summary>
+        /// Adds a playback to the list of ones to watch current times of. The time will be reported
+        /// in the type defined by <see cref="TimeType"/> property.
+        /// </summary>
+        /// <param name="playback">Playback to watch current time of.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="playback"/> is <c>null</c>.</exception>
+        /// <exception cref="ObjectDisposedException">The current <see cref="PlaybackCurrentTimeWatcher"/>
+        /// is disposed.</exception>
         public void AddPlayback(Playback playback)
         {
             ThrowIfArgument.IsNull(nameof(playback), playback);
@@ -164,6 +189,16 @@ namespace Melanchall.DryWetMidi.Multimedia
             }
         }
 
+        /// <summary>
+        /// Sets the type the current time of the specified playback should be converted to.
+        /// </summary>
+        /// <param name="playback">Playback to set timetype for.</param>
+        /// <param name="timeType">Type to convert current time of the <paramref name="playback"/> to.</param>
+        /// /// <exception cref="ArgumentNullException"><paramref name="playback"/> is <c>null</c>.</exception>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="timeType"/> specified an invalid value.</exception>
+        /// <exception cref="ObjectDisposedException">The current <see cref="PlaybackCurrentTimeWatcher"/>
+        /// is disposed.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="playback"/> is not added to the current watcher.</exception>
         public void SetPlaybackTimeType(Playback playback, TimeSpanType timeType)
         {
             ThrowIfArgument.IsNull(nameof(playback), playback);

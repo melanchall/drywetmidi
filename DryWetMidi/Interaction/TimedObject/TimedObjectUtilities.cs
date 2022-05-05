@@ -234,6 +234,31 @@ namespace Melanchall.DryWetMidi.Interaction
             trackChunk.Events.AddObjects(timedObjects);
         }
 
+        /// <summary>
+        /// Sets time of the specified object in terms of <see cref="ITimeSpan"/>.
+        /// </summary>
+        /// <typeparam name="TObject">The type of the <paramref name="obj"/>.</typeparam>
+        /// <param name="obj">Object to set time of.</param>
+        /// <param name="time">New time of the <paramref name="obj"/>.</param>
+        /// <param name="tempoMap"><see cref="TempoMap"/> used to calculate new time in ticks.</param>
+        /// <returns>The same object the method was called on.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="obj"/> is <c>null</c>.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="time"/> is <c>null</c>.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="tempoMap"/> is <c>null</c>.</description>
+        /// </item>
+        /// <item>
+        /// <description>One of the objects is <c>null</c>.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static TObject SetTime<TObject>(this TObject obj, ITimeSpan time, TempoMap tempoMap)
             where TObject : ITimedObject
         {

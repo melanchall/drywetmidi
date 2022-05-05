@@ -64,7 +64,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 timedObjects: objects,
                 grid: new SteppedGrid((MidiTimeSpan)15),
                 tempoMap: TempoMap.Default,
-                settings: new QuantizerSettings
+                settings: new QuantizingSettings
                 {
                     Target = QuantizerTarget.End
                 },
@@ -90,7 +90,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 timedObjects: objects,
                 grid: new SteppedGrid((MidiTimeSpan)15),
                 tempoMap: TempoMap.Default,
-                settings: new QuantizerSettings
+                settings: new QuantizingSettings
                 {
                     Target = QuantizerTarget.End
                 },
@@ -116,7 +116,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 timedObjects: objects,
                 grid: new SteppedGrid((MidiTimeSpan)15),
                 tempoMap: TempoMap.Default,
-                settings: new QuantizerSettings
+                settings: new QuantizingSettings
                 {
                     Target = QuantizerTarget.Start | QuantizerTarget.End
                 },
@@ -183,7 +183,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 timedObjects: objects,
                 grid: new SteppedGrid((MidiTimeSpan)10, (MidiTimeSpan)15),
                 tempoMap: TempoMap.Default,
-                settings: new QuantizerSettings
+                settings: new QuantizingSettings
                 {
                     Target = QuantizerTarget.End
                 },
@@ -208,7 +208,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 timedObjects: objects,
                 grid: new SteppedGrid((MidiTimeSpan)10, (MidiTimeSpan)15),
                 tempoMap: TempoMap.Default,
-                settings: new QuantizerSettings
+                settings: new QuantizingSettings
                 {
                     Target = QuantizerTarget.Start | QuantizerTarget.End
                 },
@@ -284,7 +284,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                     (MidiTimeSpan)18,
                     (MidiTimeSpan)24),
                 tempoMap: TempoMap.Default,
-                settings: new QuantizerSettings
+                settings: new QuantizingSettings
                 {
                     Target = QuantizerTarget.End
                 },
@@ -314,7 +314,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                     (MidiTimeSpan)18,
                     (MidiTimeSpan)24),
                 tempoMap: TempoMap.Default,
-                settings: new QuantizerSettings
+                settings: new QuantizingSettings
                 {
                     Target = QuantizerTarget.Start | QuantizerTarget.End
                 },

@@ -60,13 +60,6 @@ steps:
     targetType: 'inline'
     script: docfx Docs/docfx.json
 
-- task: DotNetCoreCLI@2
-  displayName: Inline API images
-  inputs:
-    command: 'run'
-    arguments: '--configuration $(BuildConfiguration) -- $(Build.SourcesDirectory)\Docs\_site 20'
-    projects: 'Resources/Utilities/InlineTextImages/InlineTextImages/InlineTextImages.csproj'
-
 - task: PublishPipelineArtifact@1
   displayName: Publish 'Docs' artifact
   inputs:

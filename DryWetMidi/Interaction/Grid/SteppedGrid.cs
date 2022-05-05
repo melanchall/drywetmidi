@@ -20,22 +20,6 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <param name="step">Distance between adjacent times.</param>
         /// <exception cref="ArgumentNullException"><paramref name="step"/> is <c>null</c>.</exception>
-        /// <example>
-        /// <para>
-        /// For example, following code:
-        /// </para>
-        /// <code language="csharp">
-        /// var grid = new SteppedGrid(MusicalTimeSpan.Quarter);
-        /// </code>
-        /// <para>
-        /// will create this grid:
-        /// </para>
-        /// <code language="image">
-        /// ║    ║    ║    ║ 
-        /// ║    ║    ║    ║ ...
-        /// 0   1/4  1/2  3/4
-        /// </code>
-        /// </example>
         public SteppedGrid(ITimeSpan step)
             : this((MidiTimeSpan)0, step)
         {
@@ -59,22 +43,6 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </item>
         /// </list>
         /// </exception>
-        /// <example>
-        /// <para>
-        /// For example, following code:
-        /// </para>
-        /// <code language="csharp">
-        /// var grid = new SteppedGrid(MusicalTimeSpan.Eighth, MusicalTimeSpan.Quarter);
-        /// </code>
-        /// <para>
-        /// will create this grid:
-        /// </para>
-        /// <code language="image">
-        /// ⁞  ║    ║    ║    ║ 
-        /// ⁞  ║    ║    ║    ║ ...
-        /// 0 1/8  3/8  5/8  7/8
-        /// </code>
-        /// </example>
         public SteppedGrid(ITimeSpan start, ITimeSpan step)
         {
             ThrowIfArgument.IsNull(nameof(start), start);
@@ -96,22 +64,6 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="steps">Collection of grid's steps.</param>
         /// <exception cref="ArgumentNullException"><paramref name="steps"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException"><paramref name="steps"/> contains <c>null</c>.</exception>
-        /// <example>
-        /// <para>
-        /// For example, following code:
-        /// </para>
-        /// <code language="csharp">
-        /// var grid = new SteppedGrid(new[] { MusicalTimeSpan.Eighth, MusicalTimeSpan.Quarter });
-        /// </code>
-        /// <para>
-        /// will create this grid:
-        /// </para>
-        /// <code language="image">
-        /// ║    ║        ║    ║        ║ 
-        /// ║    ║        ║    ║        ║ ...
-        /// 0   1/8      3/8  1/2      3/4
-        /// </code>
-        /// </example>
         public SteppedGrid(IEnumerable<ITimeSpan> steps)
             : this((MidiTimeSpan)0, steps)
         {
@@ -140,22 +92,6 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </list>
         /// </exception>
         /// <exception cref="ArgumentException"><paramref name="steps"/> contains <c>null</c>.</exception>
-        /// <example>
-        /// <para>
-        /// For example, following code:
-        /// </para>
-        /// <code language="csharp">
-        /// var grid = new SteppedGrid(MusicalTimeSpan.Eighth, new[] { MusicalTimeSpan.Eighth, MusicalTimeSpan.Quarter });
-        /// </code>
-        /// <para>
-        /// will create this grid:
-        /// </para>
-        /// <code language="image">
-        /// ⁞    ║    ║        ║    ║        ║ 
-        /// ⁞    ║    ║        ║    ║        ║ ...
-        /// 0   1/8  1/4      1/2  5/8      7/8
-        /// </code>
-        /// </example>
         public SteppedGrid(ITimeSpan start, IEnumerable<ITimeSpan> steps)
         {
             ThrowIfArgument.IsNull(nameof(start), start);

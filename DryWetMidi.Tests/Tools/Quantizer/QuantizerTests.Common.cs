@@ -57,7 +57,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 timedObjects: objects,
                 grid: new SteppedGrid((MidiTimeSpan)15),
                 tempoMap: TempoMap.Default,
-                settings: new QuantizerSettings
+                settings: new QuantizingSettings
                 {
                     Filter = obj => obj.Time != 10
                 },
@@ -99,7 +99,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             ICollection<ITimedObject> timedObjects,
             IGrid grid,
             TempoMap tempoMap,
-            QuantizerSettings settings,
+            QuantizingSettings settings,
             ICollection<ITimedObject> expectedObjects)
         {
             new Quantizer().Quantize(timedObjects, grid, tempoMap, settings);

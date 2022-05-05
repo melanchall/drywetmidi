@@ -5,7 +5,10 @@ using System.ComponentModel;
 
 namespace Melanchall.DryWetMidi.Tools
 {
-    public sealed class QuantizerSettings
+    /// <summary>
+    /// Settings according to which quantizing should be performed by the <see cref="Quantizer"/>.
+    /// </summary>
+    public sealed class QuantizingSettings
     {
         #region Constants
 
@@ -27,6 +30,9 @@ namespace Melanchall.DryWetMidi.Tools
 
         #region Properties
 
+        /// <summary>
+        /// Gets or sets settings according to which randomizing should be performed.
+        /// </summary>
         public RandomizingSettings RandomizingSettings { get; set; } = new RandomizingSettings();
 
         /// <summary>

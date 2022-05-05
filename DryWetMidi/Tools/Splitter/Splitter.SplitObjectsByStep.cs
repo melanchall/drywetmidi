@@ -6,10 +6,41 @@ using System.Collections.Generic;
 
 namespace Melanchall.DryWetMidi.Tools
 {
+    /// <summary>
+    /// Provides methods to split MIDI data in many different ways.
+    /// </summary>
     public static partial class Splitter
     {
         #region Methods
 
+        /// <summary>
+        /// Splits objects within a <see cref="TrackChunk"/> by the specified step so every object will be split
+        /// at points equally distanced from each other starting from the object's start time.
+        /// </summary>
+        /// <remarks>
+        /// Nulls, objects with zero length and objects with length smaller than <paramref name="step"/>
+        /// will not be split and will be returned as clones of the input objects.
+        /// </remarks>
+        /// <param name="trackChunk"><see cref="TrackChunk"/> to split objects within.</param>
+        /// <param name="objectType">The type of objects to split.</param>
+        /// <param name="step">Step to split objects by.</param>
+        /// <param name="tempoMap">Tempo map used to calculate times to split by.</param>
+        /// <param name="objectDetectionSettings">Settings according to which objects should be
+        /// detected and built.</param>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occurred:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="trackChunk"/> is <c>null</c>.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="step"/> is <c>null</c>.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="tempoMap"/> is <c>null</c>.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static void SplitObjectsByStep(
             this TrackChunk trackChunk,
             ObjectType objectType,
@@ -28,6 +59,34 @@ namespace Melanchall.DryWetMidi.Tools
                 objects => SplitObjectsByStep(objects, step, tempoMap));
         }
 
+        /// <summary>
+        /// Splits objects within a collection of <see cref="TrackChunk"/> by the specified step so every object
+        /// will be split at points equally distanced from each other starting from the object's start time.
+        /// </summary>
+        /// <remarks>
+        /// Nulls, objects with zero length and objects with length smaller than <paramref name="step"/>
+        /// will not be split and will be returned as clones of the input objects.
+        /// </remarks>
+        /// <param name="trackChunks">A collection of <see cref="TrackChunk"/> to split objects within.</param>
+        /// <param name="objectType">The type of objects to split.</param>
+        /// <param name="step">Step to split objects by.</param>
+        /// <param name="tempoMap">Tempo map used to calculate times to split by.</param>
+        /// <param name="objectDetectionSettings">Settings according to which objects should be
+        /// detected and built.</param>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occurred:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="trackChunks"/> is <c>null</c>.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="step"/> is <c>null</c>.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="tempoMap"/> is <c>null</c>.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static void SplitObjectsByStep(
             this IEnumerable<TrackChunk> trackChunks,
             ObjectType objectType,
@@ -45,6 +104,30 @@ namespace Melanchall.DryWetMidi.Tools
             }
         }
 
+        /// <summary>
+        /// Splits objects within a <see cref="MidiFile"/> by the specified step so every object will be split
+        /// at points equally distanced from each other starting from the object's start time.
+        /// </summary>
+        /// <remarks>
+        /// Nulls, objects with zero length and objects with length smaller than <paramref name="step"/>
+        /// will not be split and will be returned as clones of the input objects.
+        /// </remarks>
+        /// <param name="midiFile"><see cref="MidiFile"/> to split objects within.</param>
+        /// <param name="objectType">The type of objects to split.</param>
+        /// <param name="step">Step to split objects by.</param>
+        /// <param name="objectDetectionSettings">Settings according to which objects should be
+        /// detected and built.</param>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occurred:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="midiFile"/> is <c>null</c>.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="step"/> is <c>null</c>.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static void SplitObjectsByStep(
             this MidiFile midiFile,
             ObjectType objectType,
@@ -55,10 +138,38 @@ namespace Melanchall.DryWetMidi.Tools
             ThrowIfArgument.IsNull(nameof(step), step);
 
             var tempoMap = midiFile.GetTempoMap();
-
-            midiFile.GetTrackChunks().SplitObjectsByStep(objectType, step, tempoMap, objectDetectionSettings);
+            midiFile
+                .GetTrackChunks()
+                .SplitObjectsByStep(objectType, step, tempoMap, objectDetectionSettings);
         }
 
+        /// <summary>
+        /// Splits objects by the specified step so every object will be split at points
+        /// equally distanced from each other starting from the object's start time.
+        /// </summary>
+        /// <remarks>
+        /// Nulls, objects with zero length and objects with length smaller than <paramref name="step"/>
+        /// will not be split and will be returned as clones of the input objects.
+        /// </remarks>
+        /// <param name="objects">Objects to split.</param>
+        /// <param name="step">Step to split objects by.</param>
+        /// <param name="tempoMap">Tempo map used to calculate times to split by.</param>
+        /// <returns>Objects that are result of splitting <paramref name="objects"/> going in the same
+        /// order as elements of <paramref name="objects"/>.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occurred:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="objects"/> is <c>null</c>.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="step"/> is <c>null</c>.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="tempoMap"/> is <c>null</c>.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static IEnumerable<ITimedObject> SplitObjectsByStep(this IEnumerable<ITimedObject> objects, ITimeSpan step, TempoMap tempoMap)
         {
             ThrowIfArgument.IsNull(nameof(objects), objects);

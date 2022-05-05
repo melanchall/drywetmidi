@@ -14,6 +14,10 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// </summary>
         public MidiClockSettings ClockSettings { get; set; }
 
+        /// <summary>
+        /// Gets or sets settings which define how timed events should be detected and built internally
+        /// by the <see cref="Playback"/>.
+        /// </summary>
         public TimedEventDetectionSettings TimedEventDetectionSettings { get; set; }
 
         /// <summary>

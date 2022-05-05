@@ -1,10 +1,19 @@
-﻿using Melanchall.DryWetMidi.Interaction;
+﻿using Melanchall.DryWetMidi.Common;
+using Melanchall.DryWetMidi.Interaction;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace Melanchall.DryWetMidi.Tools
 {
+    /// <summary>
+    /// Performs quantizing of objects. The process can be adjusted in many ways by <see cref="QuantizingSettings"/>.
+    /// </summary>
+    /// <remarks>
+    /// You can also derive from <see cref="Quantizer"/> to implement custom logic. Please see
+    /// <see cref="OnObjectQuantizing(ITimedObject, QuantizedTime, IGrid, LengthedObjectTarget, TempoMap, QuantizingSettings)"/> and
+    /// <see cref="OnObjectRandomizing(ITimedObject, long, LengthedObjectTarget, TempoMap, QuantizingSettings)"/> methods.
+    /// </remarks>
     public class Quantizer
     {
         #region Fields
@@ -15,9 +24,34 @@ namespace Melanchall.DryWetMidi.Tools
 
         #region Methods
 
-        public void Quantize(IEnumerable<ITimedObject> objects, IGrid grid, TempoMap tempoMap, QuantizerSettings settings = null)
+        /// <summary>
+        /// Quantizes objects using the specified grid.
+        /// </summary>
+        /// <param name="objects">Objects to quantize.</param>
+        /// <param name="grid">Grid to use for quantizing.</param>
+        /// <param name="tempoMap">Tempo map used to perform time and length conversions.</param>
+        /// <param name="settings">Settings according to which <paramref name="objects"/> should be quantized.</param>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="objects"/> is <c>null</c>.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="grid"/> is <c>null</c>.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="tempoMap"/> is <c>null</c>.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
+        public void Quantize(IEnumerable<ITimedObject> objects, IGrid grid, TempoMap tempoMap, QuantizingSettings settings = null)
         {
-            settings = settings ?? new QuantizerSettings();
+            ThrowIfArgument.IsNull(nameof(objects), objects);
+            ThrowIfArgument.IsNull(nameof(grid), grid);
+            ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
+
+            settings = settings ?? new QuantizingSettings();
             settings.RandomizingSettings = settings.RandomizingSettings ?? new RandomizingSettings();
 
             Func<ITimedObject, bool> filter = obj =>
@@ -31,13 +65,25 @@ namespace Melanchall.DryWetMidi.Tools
             }
         }
 
+        /// <summary>
+        /// Performs additional actions before the new time will be set to an object after search for
+        /// nearest grid time.
+        /// </summary>
+        /// <param name="obj">Object to set new time for.</param>
+        /// <param name="quantizedTime">Holds information about new time for <paramref name="obj"/>.</param>
+        /// <param name="grid">Grid to quantize <paramref name="obj"/> by.</param>
+        /// <param name="target">Target time (start or end) to update.</param>
+        /// <param name="tempoMap">Tempo map used to quantize <paramref name="obj"/>.</param>
+        /// <param name="settings">Settings according to which quantizing performed.</param>
+        /// <returns>An object indicating whether the new time should be set to the object
+        /// or not. Also returned object contains that new time.</returns>
         protected virtual TimeProcessingInstruction OnObjectQuantizing(
             ITimedObject obj,
             QuantizedTime quantizedTime,
             IGrid grid,
             LengthedObjectTarget target,
             TempoMap tempoMap,
-            QuantizerSettings settings)
+            QuantizingSettings settings)
         {
             if (quantizedTime == null)
                 return TimeProcessingInstruction.Skip;
@@ -47,12 +93,23 @@ namespace Melanchall.DryWetMidi.Tools
                 ?? new TimeProcessingInstruction(time);
         }
 
+        /// <summary>
+        /// Performs additional actions before the new time will be set to an object after search for
+        /// random time within bounds defined by <see cref="RandomizingSettings.Bounds"/>.
+        /// </summary>
+        /// <param name="obj">Object to set new time for.</param>
+        /// <param name="time">New time for <paramref name="obj"/>.</param>
+        /// <param name="target">Target time (start or end) to update.</param>
+        /// <param name="tempoMap">Tempo map used to quantize <paramref name="obj"/>.</param>
+        /// <param name="settings">Settings according to which quantizing performed.</param>
+        /// <returns>An object indicating whether the new time should be set to the object
+        /// or not. Also returned object contains that new time.</returns>
         protected virtual TimeProcessingInstruction OnObjectRandomizing(
             ITimedObject obj,
             long time,
             LengthedObjectTarget target,
             TempoMap tempoMap,
-            QuantizerSettings settings)
+            QuantizingSettings settings)
         {
             return TrySetLengthedObjectTime(obj as ILengthedObject, time, target, tempoMap, settings)
                 ?? new TimeProcessingInstruction(time);
@@ -63,7 +120,7 @@ namespace Melanchall.DryWetMidi.Tools
             long time,
             LengthedObjectTarget target,
             TempoMap tempoMap,
-            QuantizerSettings settings)
+            QuantizingSettings settings)
         {
             if (obj == null)
                 return null;
@@ -84,7 +141,7 @@ namespace Melanchall.DryWetMidi.Tools
             IGrid grid,
             ICollection<long> times,
             TempoMap tempoMap,
-            QuantizerSettings settings)
+            QuantizingSettings settings)
         {
             var target = settings.Target;
 
@@ -107,7 +164,7 @@ namespace Melanchall.DryWetMidi.Tools
             IGrid grid,
             ICollection<long> times,
             TempoMap tempoMap,
-            QuantizerSettings settings)
+            QuantizingSettings settings)
         {
             var oldStartTime = GetObjectTime(obj, LengthedObjectTarget.Start);
             var quantizedStartTime = FindNearestTime(
@@ -146,7 +203,7 @@ namespace Melanchall.DryWetMidi.Tools
             ICollection<long> times,
             LengthedObjectTarget target,
             TempoMap tempoMap,
-            QuantizerSettings settings)
+            QuantizingSettings settings)
         {
             var oldTime = GetObjectTime(obj, target);
             var quantizedTime = FindNearestTime(
@@ -166,7 +223,7 @@ namespace Melanchall.DryWetMidi.Tools
             IGrid grid,
             LengthedObjectTarget target,
             TempoMap tempoMap,
-            QuantizerSettings settings)
+            QuantizingSettings settings)
         {
             var instruction = OnObjectQuantizing(obj, quantizedTime, grid, target, tempoMap, settings);
             switch (instruction.Action)
@@ -184,7 +241,7 @@ namespace Melanchall.DryWetMidi.Tools
             IGrid grid,
             LengthedObjectTarget target,
             TempoMap tempoMap,
-            QuantizerSettings settings)
+            QuantizingSettings settings)
         {
             var randomizingSettings = settings.RandomizingSettings;
             if (randomizingSettings.Filter?.Invoke(obj) == false)
@@ -332,7 +389,7 @@ namespace Melanchall.DryWetMidi.Tools
             ILengthedObject obj,
             long time,
             TempoMap tempoMap,
-            QuantizerSettings settings)
+            QuantizingSettings settings)
         {
             if (settings.FixOppositeEnd || (settings.Target.HasFlag(QuantizerTarget.Start) && settings.Target.HasFlag(QuantizerTarget.End)))
             {
@@ -364,7 +421,7 @@ namespace Melanchall.DryWetMidi.Tools
             ILengthedObject obj,
             long time,
             TempoMap tempoMap,
-            QuantizerSettings settings)
+            QuantizingSettings settings)
         {
             if (settings.FixOppositeEnd || (settings.Target.HasFlag(QuantizerTarget.Start) && settings.Target.HasFlag(QuantizerTarget.End)))
             {

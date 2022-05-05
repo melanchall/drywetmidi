@@ -30,39 +30,6 @@ namespace Melanchall.DryWetMidi.Tools
         /// </item>
         /// </list>
         /// </exception>
-        /// <example>
-        /// <para>
-        /// Given the MIDI file (vertical line shows where the file will be split):
-        /// </para>
-        /// <code language="image">
-        ///  │←─── L ────→│
-        /// +-------------║-----------+
-        /// |┌────────────║──────────┐|
-        /// |│  A    B    ║     C    │|
-        /// |└──⁞────⁞────║──────────┘|
-        /// |┌──⁞────⁞────║──────────┐|
-        /// |│  ⁞    ⁞ D  ║  E       │|
-        /// |└──⁞────⁞─⁞──║──────────┘|
-        /// +---⁞----⁞-⁞--║-----------+
-        /// </code>
-        /// <para>
-        /// where <c>A</c>, <c>B</c>, <c>C</c>, <c>D</c> and <c>E</c> are some MIDI events;
-        /// <c>L</c> is <paramref name="partLength"/>.
-        /// </para>
-        /// <para>
-        /// Taking the part we'll get following file:
-        /// </para>
-        /// <code language="image">
-        /// +---⁞----⁞-⁞---+
-        /// |┌──⁞────⁞─⁞──┐|
-        /// |│  A    B ⁞  │|
-        /// |└─────────⁞──┘|
-        /// |┌─────────⁞──┐|
-        /// |│         D  │|
-        /// |└────────────┘|
-        /// +--------------+
-        /// </code>
-        /// </example>
         public static MidiFile TakePart(this MidiFile midiFile, ITimeSpan partLength, SliceMidiFileSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);

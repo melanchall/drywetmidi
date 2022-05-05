@@ -16,7 +16,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// the specified MIDI event.
         /// </summary>
         /// <param name="midiEvent">MIDI event sent by <see cref="IOutputDevice"/>.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="midiEvent"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="midiEvent"/> is <c>null</c>.</exception>
         public MidiEventSentEventArgs(MidiEvent midiEvent)
         {
             ThrowIfArgument.IsNull(nameof(midiEvent), midiEvent);

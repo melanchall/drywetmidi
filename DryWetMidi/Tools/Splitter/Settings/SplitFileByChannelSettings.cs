@@ -1,13 +1,14 @@
 ﻿using System;
+using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
 
 namespace Melanchall.DryWetMidi.Tools
 {
     /// <summary>
     /// Defines how a MIDI file should be split by channel using
-    /// <see cref="MidiFileSplitter.SplitByChannel(Core.MidiFile, SplitFileByChannelSettings)"/> method.
+    /// <see cref="Splitter.SplitByChannel(MidiFile, SplitFileByChannelSettings)"/> method.
     /// </summary>
-    /// <seealso cref="MidiFileSplitter"/>
+    /// <seealso cref="Splitter"/>
     public sealed class SplitFileByChannelSettings
     {
         #region Properties
@@ -16,57 +17,6 @@ namespace Melanchall.DryWetMidi.Tools
         /// Gets or sets a value indicating whether to copy all meta and system exclusive events
         /// to all the new files or throw them away. The default value is <c>true</c>>.
         /// </summary>
-        /// <example>
-        /// <para>
-        /// Given a MIDI file with two track chunks:
-        /// </para>
-        /// <code language="image">
-        /// +-------------------+
-        /// |┌─────────────────┐|
-        /// |│. □ .  ○ .  □□  .│|
-        /// |└─────────────────┘|
-        /// |┌─────────────────┐|
-        /// |│ . . .○ . .○  □. │|
-        /// |└─────────────────┘|
-        /// +-------------------+
-        /// </code>
-        /// <para>
-        /// where <c>○</c> and <c>□</c> mean channel MIDI events on channel 0 and 1 correspondingly;
-        /// <c>.</c> is any non-channel event.
-        /// </para>
-        /// <para>
-        /// If <see cref="CopyNonChannelEventsToEachFile"/> set to <c>true</c> (which is the default
-        /// value), we'll get following two new files:
-        /// </para>
-        /// <code language="image">
-        /// +-------------------+
-        /// |┌─────────────────┐|
-        /// |│..□...  ... □□□..│|
-        /// |└─────────────────┘|
-        /// +-------------------+
-        /// +-------------------+
-        /// |┌─────────────────┐|
-        /// |│.. ...○○...○   ..│|
-        /// |└─────────────────┘|
-        /// +-------------------+
-        /// </code>
-        /// <para>
-        /// But if <see cref="CopyNonChannelEventsToEachFile"/> set to <c>false</c>, new files will
-        /// contain only channel events:
-        /// </para>
-        /// <code language="image">
-        /// +-------------------+
-        /// |┌─────────────────┐|
-        /// |│  □         □□□  │|
-        /// |└─────────────────┘|
-        /// +-------------------+
-        /// +-------------------+
-        /// |┌─────────────────┐|
-        /// |│      ○○   ○     │|
-        /// |└─────────────────┘|
-        /// +-------------------+
-        /// </code>
-        /// </example>
         public bool CopyNonChannelEventsToEachFile { get; set; } = true;
 
         /// <summary>

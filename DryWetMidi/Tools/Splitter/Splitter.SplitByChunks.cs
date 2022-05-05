@@ -18,43 +18,6 @@ namespace Melanchall.DryWetMidi.Tools
         /// <returns>Collection of <see cref="MidiFile"/> where each file contains single chunk from
         /// the original file.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is <c>null</c>.</exception>
-        /// <example>
-        /// <para>
-        /// For example, we have a MIDI file with two chunks:
-        /// </para>
-        /// <para>
-        /// <code language="image">
-        /// +-------------------+
-        /// |┌─────────────────┐|
-        /// |│                 │|
-        /// |└─────────────────┘|
-        /// |┌─────────────────┐|
-        /// |│                 │|
-        /// |└─────────────────┘|
-        /// +-------------------+
-        /// </code>
-        /// </para>
-        /// <para>
-        /// So the file will be split into two new files:
-        /// </para>
-        /// <para>
-        /// <code language="image">
-        /// +-------------------+
-        /// |┌─────────────────┐|
-        /// |│                 │|
-        /// |└─────────────────┘|
-        /// +-------------------+
-        /// +-------------------+
-        /// |┌─────────────────┐|
-        /// |│                 │|
-        /// |└─────────────────┘|
-        /// +-------------------+
-        /// </code>
-        /// </para>
-        /// <para>
-        /// Each new file will have the same time division (<see cref="MidiFile.TimeDivision"/>) as the original one.
-        /// </para>
-        /// </example>
         public static IEnumerable<MidiFile> SplitByChunks(this MidiFile midiFile, SplitFileByChunksSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);

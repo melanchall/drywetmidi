@@ -2,6 +2,7 @@
 using Melanchall.DryWetMidi.Interaction;
 using Melanchall.DryWetMidi.MusicTheory;
 using System;
+using System.ComponentModel;
 
 namespace Melanchall.DryWetMidi.Composing
 {

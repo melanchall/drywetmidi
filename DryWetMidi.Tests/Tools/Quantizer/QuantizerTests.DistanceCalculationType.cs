@@ -25,7 +25,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 timedObjects: objects,
                 grid: new SteppedGrid(new MetricTimeSpan(0, 0, 10)),
                 tempoMap: tempoMap,
-                settings: new QuantizerSettings
+                settings: new QuantizingSettings
                 {
                     DistanceCalculationType = TimeSpanType.Metric
                 },
@@ -72,7 +72,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 timedObjects: objects,
                 grid: new SteppedGrid(new BarBeatTicksTimeSpan(7, 0, 0)),
                 tempoMap: tempoMap,
-                settings: new QuantizerSettings
+                settings: new QuantizingSettings
                 {
                     DistanceCalculationType = TimeSpanType.BarBeatTicks
                 },

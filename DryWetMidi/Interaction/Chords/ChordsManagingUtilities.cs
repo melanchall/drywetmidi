@@ -191,11 +191,13 @@ namespace Melanchall.DryWetMidi.Interaction
 
         /// <summary>
         /// Creates an instance of the <see cref="TimedObjectsManager{Chord}"/> initializing it with the
-        /// specified events collection, notes tolerance and comparison delegate for events that have same time.
+        /// specified events collection.
         /// </summary>
         /// <param name="eventsCollection"><see cref="EventsCollection"/> that holds chords to manage.</param>
         /// <param name="settings">Settings accoridng to which chords should be detected and built.</param>
-        /// <param name="sameTimeEventsComparison">Delegate to compare events with the same absolute time.</param>
+        /// <param name="comparer">Comparer that will be used to order objects on enumerating and saving objects
+        /// back to the <paramref name="eventsCollection"/> via <see cref="TimedObjectsManager{TObject}.SaveChanges"/>
+        /// or <see cref="TimedObjectsManager{TObject}.Dispose()"/>.</param>
         /// <returns>An instance of the <see cref="TimedObjectsManager{Chord}"/> that can be used to manage chords
         /// represented by the <paramref name="eventsCollection"/>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="eventsCollection"/> is <c>null</c>.</exception>
@@ -214,12 +216,13 @@ namespace Melanchall.DryWetMidi.Interaction
 
         /// <summary>
         /// Creates an instance of the <see cref="TimedObjectsManager{Chord}"/> initializing it with the
-        /// events collection of the specified track chunk, notes tolerance and comparison delegate for events
-        /// that have same time.
+        /// events collection of the specified track chunk.
         /// </summary>
         /// <param name="trackChunk"><see cref="TrackChunk"/> that holds chords to manage.</param>
         /// <param name="settings">Settings accoridng to which chords should be detected and built.</param>
-        /// <param name="sameTimeEventsComparison">Delegate to compare events with the same absolute time.</param>
+        /// <param name="comparer">Comparer that will be used to order objects on enumerating and saving objects
+        /// back to the <paramref name="trackChunk"/> via <see cref="TimedObjectsManager{TObject}.SaveChanges"/>
+        /// or <see cref="TimedObjectsManager{TObject}.Dispose()"/>.</param>
         /// <returns>An instance of the <see cref="TimedObjectsManager{Chord}"/> that can be used to manage
         /// chords represented by the <paramref name="trackChunk"/>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="trackChunk"/> is <c>null</c>.</exception>

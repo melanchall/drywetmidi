@@ -1228,7 +1228,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         {
             var expectedObjects = GetExpectedObjects(actualObjects, expectedTimesAndLengths, tempoMap);
 
-            var settings = new QuantizerSettings
+            var settings = new QuantizingSettings
             {
                 Target = QuantizerTarget.Start,
                 FixOppositeEnd = fixEnd,
@@ -1290,7 +1290,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         {
             var expectedObjects = GetExpectedObjects(actualObjects, expectedTimesAndLengths, tempoMap);
 
-            var settings = new QuantizerSettings
+            var settings = new QuantizingSettings
             {
                 Target = QuantizerTarget.End,
                 FixOppositeEnd = fixStart,

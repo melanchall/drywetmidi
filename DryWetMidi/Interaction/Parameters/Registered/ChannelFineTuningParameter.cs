@@ -109,6 +109,10 @@ namespace Melanchall.DryWetMidi.Interaction
 
         #region Overrides
 
+        /// <summary>
+        /// Clones object by creating a copy of it.
+        /// </summary>
+        /// <returns>Copy of the object.</returns>
         public override ITimedObject Clone()
         {
             return new ChannelFineTuningParameter(Cents, ValueType);

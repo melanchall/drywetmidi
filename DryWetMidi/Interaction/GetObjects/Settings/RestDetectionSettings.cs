@@ -10,6 +10,7 @@ namespace Melanchall.DryWetMidi.Interaction
     /// Please see <see href="xref:a_getting_objects#rests">Getting objects
     /// (section GetObjects → Rests)</see> article to learn more.
     /// </remarks>
+    /// <seealso cref="GetObjectsUtilities"/>
     public sealed class RestDetectionSettings
     {
         #region Fields

@@ -93,6 +93,9 @@ namespace Melanchall.DryWetMidi.Interaction
 
         #region Properties
 
+        /// <summary>
+        /// Gets a <see cref="TimedObjectsCollection{TObject}"/> that contains notes of this chord.
+        /// </summary>
         public TimedObjectsCollection<Note> Notes { get; }
 
         /// <summary>
@@ -310,25 +313,25 @@ namespace Melanchall.DryWetMidi.Interaction
         #region Methods
 
         /// <summary>
-        /// Clones chord by creating a copy of it.
+        /// Clones object by creating a copy of it.
         /// </summary>
-        /// <returns>Copy of the chord.</returns>
+        /// <returns>Copy of the object.</returns>
         public virtual ITimedObject Clone()
         {
             return new Chord(Notes.Select(note => (Note)note.Clone()));
         }
 
         /// <summary>
-        /// Splits the current <see cref="Chord"/> by the specified time.
+        /// Splits the current object by the specified time.
         /// </summary>
         /// <remarks>
-        /// If <paramref name="time"/> is less than time of the chord, the left part will be <c>null</c>.
-        /// If <paramref name="time"/> is greater than end time of the chord, the right part
+        /// If <paramref name="time"/> is less than time of the object, the left part will be <c>null</c>.
+        /// If <paramref name="time"/> is greater than end time of the object, the right part
         /// will be <c>null</c>.
         /// </remarks>
-        /// <param name="time">Time to split the chord by.</param>
-        /// <returns>An object containing left and right parts of the split <see cref="Chord"/>.
-        /// Both parts are instances of <see cref="Chord"/> too.</returns>
+        /// <param name="time">Time to split the object by.</param>
+        /// <returns>An object containing left and right parts of the split object.
+        /// Both parts have the same type as the original object.</returns>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="time"/> is negative.</exception>
         public SplitLengthedObject Split(long time)
         {

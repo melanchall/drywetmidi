@@ -32,7 +32,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 timedObjects: objects,
                 grid: new SteppedGrid(MusicalTimeSpan.Eighth),
                 tempoMap: TempoMap.Default,
-                settings: new QuantizerSettings
+                settings: new QuantizingSettings
                 {
                     QuantizingLevel = 0
                 },
@@ -59,7 +59,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 timedObjects: objects,
                 grid: new SteppedGrid(MusicalTimeSpan.Eighth),
                 tempoMap: TempoMap.Default,
-                settings: new QuantizerSettings
+                settings: new QuantizingSettings
                 {
                     QuantizingLevel = 1
                 },
@@ -124,7 +124,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 timedObjects: objects,
                 grid: new SteppedGrid(MusicalTimeSpan.Eighth),
                 tempoMap: TempoMap.Default,
-                settings: new QuantizerSettings
+                settings: new QuantizingSettings
                 {
                     QuantizingLevel = 0.5
                 },
@@ -157,7 +157,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 timedObjects: objects,
                 grid: new SteppedGrid(MusicalTimeSpan.Quarter),
                 tempoMap: TempoMap.Default,
-                settings: new QuantizerSettings
+                settings: new QuantizingSettings
                 {
                     QuantizingLevel = 0,
                     Target = QuantizerTarget.End
@@ -184,7 +184,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 timedObjects: objects,
                 grid: new SteppedGrid(MusicalTimeSpan.Quarter),
                 tempoMap: TempoMap.Default,
-                settings: new QuantizerSettings
+                settings: new QuantizingSettings
                 {
                     QuantizingLevel = 1,
                     Target = QuantizerTarget.End
@@ -217,7 +217,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 timedObjects: objects,
                 grid: new SteppedGrid(MusicalTimeSpan.Quarter),
                 tempoMap: TempoMap.Default,
-                settings: new QuantizerSettings
+                settings: new QuantizingSettings
                 {
                     Target = QuantizerTarget.End
                 },
@@ -249,7 +249,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 timedObjects: objects,
                 grid: new SteppedGrid(MusicalTimeSpan.Quarter),
                 tempoMap: TempoMap.Default,
-                settings: new QuantizerSettings
+                settings: new QuantizingSettings
                 {
                     QuantizingLevel = 0.5,
                     Target = QuantizerTarget.End
@@ -282,7 +282,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 timedObjects: objects,
                 grid: new SteppedGrid(MusicalTimeSpan.Quarter),
                 tempoMap: TempoMap.Default,
-                settings: new QuantizerSettings
+                settings: new QuantizingSettings
                 {
                     QuantizingLevel = 0,
                     Target = QuantizerTarget.Start | QuantizerTarget.End
@@ -309,7 +309,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 timedObjects: objects,
                 grid: new SteppedGrid(MusicalTimeSpan.Quarter),
                 tempoMap: TempoMap.Default,
-                settings: new QuantizerSettings
+                settings: new QuantizingSettings
                 {
                     QuantizingLevel = 1,
                     Target = QuantizerTarget.Start | QuantizerTarget.End
@@ -342,7 +342,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 timedObjects: objects,
                 grid: new SteppedGrid(MusicalTimeSpan.Quarter),
                 tempoMap: TempoMap.Default,
-                settings: new QuantizerSettings
+                settings: new QuantizingSettings
                 {
                     Target = QuantizerTarget.Start | QuantizerTarget.End
                 },
@@ -374,7 +374,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 timedObjects: objects,
                 grid: new SteppedGrid(MusicalTimeSpan.Quarter),
                 tempoMap: TempoMap.Default,
-                settings: new QuantizerSettings
+                settings: new QuantizingSettings
                 {
                     QuantizingLevel = 0.5,
                     Target = QuantizerTarget.Start | QuantizerTarget.End

@@ -8,6 +8,7 @@ namespace Melanchall.DryWetMidi.Interaction
     /// Settings which define how chords should be detected and built.
     /// </summary>
     /// <seealso cref="ChordsManagingUtilities"/>
+    /// <seealso cref="GetObjectsUtilities"/>
     public sealed class ChordDetectionSettings
     {
         #region Constants
@@ -28,6 +29,10 @@ namespace Melanchall.DryWetMidi.Interaction
 
         #region Properties
 
+        /// <summary>
+        /// Gets or sets custom construction method for <see cref="Chord"/>. If <c>null</c>,
+        /// default method will be used (via one of the <see cref="Chord"/>'s constructors).
+        /// </summary>
         public Func<ChordData, Chord> Constructor { get; set; }
 
         /// <summary>

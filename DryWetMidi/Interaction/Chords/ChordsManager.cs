@@ -11,6 +11,14 @@ namespace Melanchall.DryWetMidi.Interaction
     {
         #region Constructor
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ChordsManager"/> with the specified events
+        /// collection, notes tolerance and comparison delegate for events that have same time.
+        /// </summary>
+        /// <param name="eventsCollection"><see cref="EventsCollection"/> that holds chord events to manage.</param>
+        /// <param name="chordDetectionSettings">Settings accoridng to which chords should be detected and built.</param>
+        /// <param name="sameTimeEventsComparison">Delegate to compare events with the same absolute time.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="eventsCollection"/> is <c>null</c>.</exception>
         public ChordsManager(
             EventsCollection eventsCollection,
             ChordDetectionSettings chordDetectionSettings = null,
@@ -30,6 +38,10 @@ namespace Melanchall.DryWetMidi.Interaction
 
         #region Properties
 
+        /// <summary>
+        /// Gets the <see cref="TimedObjectsCollection{TObject}"/> with all chords managed by the current
+        /// <see cref="ChordsManager"/>.
+        /// </summary>
         public TimedObjectsCollection<Chord> Chords => Objects;
 
         #endregion

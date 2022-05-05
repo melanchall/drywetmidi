@@ -27,44 +27,6 @@ namespace Melanchall.DryWetMidi.Tools
         /// <returns>Collection of <see cref="MidiFile"/> where each file contains events for single note and
         /// other events as defined by <paramref name="settings"/>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is <c>null</c>.</exception>
-        /// <example>
-        /// <para>
-        /// For example, a MIDI file contains following notes:
-        /// </para>
-        /// <code language="image">
-        /// +---------------------+
-        /// |┌───────────────────┐|
-        /// |│. [ A ]  [     B ]  . .│
-        /// |└───────────────────┘|
-        /// |┌───────────────────┐|
-        /// |│ .  [ B ]  [    A]   . │
-        /// |└───────────────────┘|
-        /// +---------------------+
-        /// </code>
-        /// <para>
-        /// where <c>A</c> and <c>B</c> mean different notes; <c>.</c> is any non-note event.
-        /// </para>
-        /// <para>
-        /// After split we'll get following two new files:
-        /// </para>
-        /// <code language="image">
-        /// +---------------------+
-        /// |┌───────────────────┐|
-        /// |│..[ A ]    [    A]  ...│
-        /// |└───────────────────┘|
-        /// +---------------------+
-        /// +---------------------+
-        /// |┌───────────────────┐|
-        /// |│..  [ B ][     B ]  ...│
-        /// |└───────────────────┘|
-        /// +---------------------+
-        /// </code>
-        /// <para>
-        /// So each new file contains one track chunk with notes of the same note number and channel, and
-        /// also all non-note events. New files will have the same time division (<see cref="MidiFile.TimeDivision"/>)
-        /// as the original one.
-        /// </para>
-        /// </example>
         public static IEnumerable<MidiFile> SplitByNotes(this MidiFile midiFile, SplitFileByNotesSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);

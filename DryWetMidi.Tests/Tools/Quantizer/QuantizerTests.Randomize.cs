@@ -32,7 +32,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 timedObjects: objects,
                 grid: new SteppedGrid((MidiTimeSpan)15),
                 tempoMap: TempoMap.Default,
-                settings: new QuantizerSettings
+                settings: new QuantizingSettings
                 {
                     RandomizingSettings = new RandomizingSettings
                     {
@@ -65,7 +65,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 timedObjects: objects,
                 grid: new SteppedGrid((MidiTimeSpan)15),
                 tempoMap: TempoMap.Default,
-                settings: new QuantizerSettings
+                settings: new QuantizingSettings
                 {
                     RandomizingSettings = new RandomizingSettings
                     {
@@ -99,7 +99,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 timedObjects: objects,
                 grid: new SteppedGrid((MidiTimeSpan)15),
                 tempoMap: TempoMap.Default,
-                settings: new QuantizerSettings
+                settings: new QuantizingSettings
                 {
                     RandomizingSettings = new RandomizingSettings
                     {
@@ -133,7 +133,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 timedObjects: objects,
                 grid: new SteppedGrid((MidiTimeSpan)15),
                 tempoMap: TempoMap.Default,
-                settings: new QuantizerSettings
+                settings: new QuantizingSettings
                 {
                     RandomizingSettings = new RandomizingSettings
                     {
@@ -167,7 +167,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 timedObjects: objects,
                 grid: new SteppedGrid((MidiTimeSpan)15),
                 tempoMap: TempoMap.Default,
-                settings: new QuantizerSettings
+                settings: new QuantizingSettings
                 {
                     RandomizingSettings = new RandomizingSettings
                     {
@@ -202,7 +202,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 timedObjects: objects,
                 grid: new SteppedGrid((MidiTimeSpan)15),
                 tempoMap: TempoMap.Default,
-                settings: new QuantizerSettings
+                settings: new QuantizingSettings
                 {
                     RandomizingSettings = new RandomizingSettings
                     {
@@ -229,7 +229,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             ICollection<ITimedObject> timedObjects,
             IGrid grid,
             TempoMap tempoMap,
-            QuantizerSettings settings,
+            QuantizingSettings settings,
             (long Min, long Max)[] expectedTimeRanges,
             double unchangedMaxPercent = 0.5)
         {

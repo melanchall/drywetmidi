@@ -8,6 +8,7 @@ namespace Melanchall.DryWetMidi.Interaction
     /// Settings which define how notes should be detected and built.
     /// </summary>
     /// <seealso cref="NotesManagingUtilities"/>
+    /// <seealso cref="GetObjectsUtilities"/>
     public sealed class NoteDetectionSettings
     {
         #region Fields
@@ -19,8 +20,15 @@ namespace Melanchall.DryWetMidi.Interaction
 
         #region Properties
 
+        /// <summary>
+        /// Gets or sets settings which define how timed events should be detected and built.
+        /// </summary>
         public TimedEventDetectionSettings TimedEventDetectionSettings { get; set; } = new TimedEventDetectionSettings();
 
+        /// <summary>
+        /// Gets or sets custom construction method for <see cref="Note"/>. If <c>null</c>,
+        /// default method will be used (via one of the <see cref="Note"/>'s constructors).
+        /// </summary>
         public Func<NoteData, Note> Constructor { get; set; }
 
         /// <summary>

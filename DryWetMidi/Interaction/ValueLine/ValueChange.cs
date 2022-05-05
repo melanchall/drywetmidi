@@ -56,6 +56,10 @@ namespace Melanchall.DryWetMidi.Interaction
 
         #region Methods
 
+        /// <summary>
+        /// Clones object by creating a copy of it.
+        /// </summary>
+        /// <returns>Copy of the object.</returns>
         public ITimedObject Clone()
         {
             return new ValueChange<TValue>(Time, Value);

@@ -36,42 +36,6 @@ namespace Melanchall.DryWetMidi.Tools
         /// </item>
         /// </list>
         /// </exception>
-        /// <example>
-        /// <para>
-        /// Given the MIDI file (vertical lines shows where the file will be split):
-        /// </para>
-        /// <code language="image">
-        ///  │← S →│←─── L ───→│
-        /// +------║-----------║-------+
-        /// |┌─────║───────────║──────┐|
-        /// |│  A  ║   B       ║ D    │|
-        /// |└─────║───────────║──────┘|
-        /// |┌─────║───────────║──────┐|
-        /// |│     ║      C    ║    E │|
-        /// |└─────║───────────║──────┘|
-        /// +------║-----------║-------+
-        /// </code>
-        /// <para>
-        /// where <c>A</c>, <c>B</c>, <c>C</c>, <c>D</c> and <c>E</c> are some MIDI events;
-        /// <c>S</c> is <paramref name="partStart"/> and <c>L</c> is <paramref name="partLength"/>.
-        /// </para>
-        /// <para>
-        /// Cutting the part we'll get following file:
-        /// </para>
-        /// <code language="image">
-        /// +------⁞-------+
-        /// |┌─────⁞──────┐|
-        /// |│  A  ⁞ D    │|
-        /// |└─────⁞──────┘|
-        /// |┌─────⁞──────┐|
-        /// |│     ⁞    E │|
-        /// |└─────⁞──────┘|
-        /// +------⁞-------+
-        /// </code>
-        /// <para>
-        /// Dashed line shows where the part was cut from the input file.
-        /// </para>
-        /// </example>
         public static MidiFile CutPart(this MidiFile midiFile, ITimeSpan partStart, ITimeSpan partLength, SliceMidiFileSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);

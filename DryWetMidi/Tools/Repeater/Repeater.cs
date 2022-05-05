@@ -7,20 +7,29 @@ using System.Linq;
 
 namespace Melanchall.DryWetMidi.Tools
 {
+    /// <summary>
+    /// Provides a way to repeat MIDI data using different options.
+    /// </summary>
+    /// <remarks>
+    /// You can also derive from the class to customize the tool's behavior.
+    /// Please see <see cref="ProcessPart(PartProcessingContext)"/> method.
+    /// </remarks>
     public class Repeater
     {
-        #region Constants
-
-        private static readonly Dictionary<MidiEventType, Func<MidiEvent>> TempoMapEventsCreators = new Dictionary<MidiEventType, Func<MidiEvent>>
-        {
-            [MidiEventType.SetTempo] = () => new SetTempoEvent(),
-            [MidiEventType.TimeSignature] = () => new TimeSignatureEvent(),
-        };
-
-        #endregion
-
         #region Methods
 
+        /// <summary>
+        /// Repeats a MIDI file specified number of times.
+        /// </summary>
+        /// <param name="midiFile">The file to repeat.</param>
+        /// <param name="repeatsNumber">Number of times the <paramref name="midiFile"/> should be repeated.</param>
+        /// <param name="settings">Settings according to which the operation should be done.</param>
+        /// <returns>A new instance of the <see cref="MidiFile"/> which is the <paramref name="midiFile"/>
+        /// repeated <paramref name="repeatsNumber"/> times using <paramref name="settings"/>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="repeatsNumber"/> is zero or negative.</exception>
+        /// <exception cref="ArgumentException"><see cref="RepeatingSettings.Shift"/> of the <paramref name="settings"/>
+        /// is <c>null</c> for fixed-value shift.</exception>
         public MidiFile Repeat(MidiFile midiFile, int repeatsNumber, RepeatingSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
@@ -38,6 +47,29 @@ namespace Melanchall.DryWetMidi.Tools
             };
         }
 
+        /// <summary>
+        /// Repeats a collection of <see cref="TrackChunk"/> specified number of times.
+        /// </summary>
+        /// <param name="trackChunks">The collection of <see cref="TrackChunk"/> to repeat.</param>
+        /// <param name="repeatsNumber">Number of times the <paramref name="trackChunks"/> should be repeated.</param>
+        /// <param name="tempoMap">Tempo map used to perform time spans calculations.</param>
+        /// <param name="settings">Settings according to which the operation should be done.</param>
+        /// <returns>A collection of new <see cref="TrackChunk"/> instances which are the <paramref name="trackChunks"/>
+        /// repeated <paramref name="repeatsNumber"/> times using <paramref name="settings"/>.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="trackChunks"/> is <c>null</c>.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="tempoMap"/> is <c>null</c>.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="repeatsNumber"/> is zero or negative.</exception>
+        /// <exception cref="ArgumentException"><see cref="RepeatingSettings.Shift"/> of the <paramref name="settings"/>
+        /// is <c>null</c> for fixed-value shift.</exception>
         public ICollection<TrackChunk> Repeat(IEnumerable<TrackChunk> trackChunks, int repeatsNumber, TempoMap tempoMap, RepeatingSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
@@ -56,6 +88,29 @@ namespace Melanchall.DryWetMidi.Tools
                 .ToArray();
         }
 
+        /// <summary>
+        /// Repeats a <see cref="TrackChunk"/> specified number of times.
+        /// </summary>
+        /// <param name="trackChunk">The <see cref="TrackChunk"/> to repeat.</param>
+        /// <param name="repeatsNumber">Number of times the <paramref name="trackChunk"/> should be repeated.</param>
+        /// <param name="tempoMap">Tempo map used to perform time spans calculations.</param>
+        /// <param name="settings">Settings according to which the operation should be done.</param>
+        /// <returns>A new instance of the <see cref="TrackChunk"/> which is the <paramref name="trackChunk"/>
+        /// repeated <paramref name="repeatsNumber"/> times using <paramref name="settings"/>.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="trackChunk"/> is <c>null</c>.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="tempoMap"/> is <c>null</c>.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="repeatsNumber"/> is zero or negative.</exception>
+        /// <exception cref="ArgumentException"><see cref="RepeatingSettings.Shift"/> of the <paramref name="settings"/>
+        /// is <c>null</c> for fixed-value shift.</exception>
         public TrackChunk Repeat(TrackChunk trackChunk, int repeatsNumber, TempoMap tempoMap, RepeatingSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
@@ -72,6 +127,29 @@ namespace Melanchall.DryWetMidi.Tools
             return Repeat(timedObjects, shift, repeatsNumber, tempoMap, settings).ToTrackChunk();
         }
 
+        /// <summary>
+        /// Repeats a collection of timed objects specified number of times.
+        /// </summary>
+        /// <param name="timedObjects">The collection of timed objects to repeat.</param>
+        /// <param name="repeatsNumber">Number of times the <paramref name="timedObjects"/> should be repeated.</param>
+        /// <param name="tempoMap">Tempo map used to perform time spans calculations.</param>
+        /// <param name="settings">Settings according to which the operation should be done.</param>
+        /// <returns>A collection of new <see cref="TrackChunk"/> instances which are the <paramref name="timedObjects"/>
+        /// repeated <paramref name="repeatsNumber"/> times using <paramref name="settings"/>.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="timedObjects"/> is <c>null</c>.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="tempoMap"/> is <c>null</c>.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="repeatsNumber"/> is zero or negative.</exception>
+        /// <exception cref="ArgumentException"><see cref="RepeatingSettings.Shift"/> of the <paramref name="settings"/>
+        /// is <c>null</c> for fixed-value shift.</exception>
         public ICollection<ITimedObject> Repeat(IEnumerable<ITimedObject> timedObjects, int repeatsNumber, TempoMap tempoMap, RepeatingSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(timedObjects), timedObjects);
@@ -87,6 +165,14 @@ namespace Melanchall.DryWetMidi.Tools
             return Repeat(timedObjects, shift, repeatsNumber, tempoMap, settings);
         }
 
+        /// <summary>
+        /// Processes a new part that will be appended to the previous ones.
+        /// </summary>
+        /// <param name="context">An object holding all the required data to process a part.</param>
+        /// <remarks>
+        /// By default the method shifts the data and inserts tempo map events if <see cref="RepeatingSettings.SaveTempoMap"/>
+        /// set to <c>true</c> in settings used for the processing.
+        /// </remarks>
         protected virtual void ProcessPart(PartProcessingContext context)
         {
             if (context.Settings.SaveTempoMap)
@@ -99,7 +185,7 @@ namespace Melanchall.DryWetMidi.Tools
 
             foreach (var obj in context.PartObjects)
             {
-                obj.Time += context.PartIndex * context.Shift;
+                obj.Time += (context.PartIndex + 1) * context.Shift;
             }
         }
 
@@ -109,7 +195,7 @@ namespace Melanchall.DryWetMidi.Tools
                 return;
 
             if (settings.ShiftPolicy == ShiftPolicy.ShiftByFixedValue && settings.Shift == null)
-                throw new InvalidOperationException("Shift value is null for fixed-value shift.");
+                throw new ArgumentException("Shift value is null for fixed-value shift.", nameof(settings));
         }
 
         private ICollection<ITimedObject> Repeat(
@@ -126,7 +212,7 @@ namespace Melanchall.DryWetMidi.Tools
 
             for (var i = 1; i <= repeatsNumber; i++)
             {
-                var part = GetPart(source, shift, i, tempoMap, settings);
+                var part = GetPart(source, shift, i - 1, tempoMap, settings);
                 result.AddRange(part);
             }
 
@@ -184,15 +270,23 @@ namespace Melanchall.DryWetMidi.Tools
                     break;
             }
 
-            var shiftStep = settings.ShiftStep;
-            if (shiftStep != null)
-                shift = RoundShift(shift, shiftStep, tempoMap);
+            var roundingPolicy = settings.ShiftRoundingPolicy;
+            if (roundingPolicy != TimeSpanRoundingPolicy.NoRounding)
+            {
+                var shiftStep = settings.ShiftRoundingStep;
+                if (shiftStep != null)
+                    shift = RoundShift(shift, shiftStep, tempoMap, roundingPolicy);
+            }
 
             return TimeConverter.ConvertFrom(shift, tempoMap);
         }
 
-        private static ITimeSpan RoundShift(ITimeSpan shift, ITimeSpan shiftStep, TempoMap tempoMap)
+        private static ITimeSpan RoundShift(ITimeSpan shift, ITimeSpan shiftStep, TempoMap tempoMap, TimeSpanRoundingPolicy roundingPolicy)
         {
+            var gridShift = roundingPolicy == TimeSpanRoundingPolicy.RoundUp
+                ? 1
+                : 0;
+
             var metricStep = shiftStep as MetricTimeSpan;
             if (metricStep != null)
             {
@@ -204,7 +298,7 @@ namespace Melanchall.DryWetMidi.Tools
                     shift,
                     metricShift.TotalMicroseconds,
                     metricStep.TotalMicroseconds,
-                    quotient => new MetricTimeSpan((quotient + 1) * metricStep.TotalMicroseconds));
+                    quotient => new MetricTimeSpan((quotient + gridShift) * metricStep.TotalMicroseconds));
             }
 
             var midiStep = TimeConverter.ConvertTo<MidiTimeSpan>(shiftStep, tempoMap);
@@ -216,7 +310,7 @@ namespace Melanchall.DryWetMidi.Tools
                 shift,
                 midiShift.TimeSpan,
                 midiStep.TimeSpan,
-                quotient => new MidiTimeSpan((quotient + 1) * midiStep.TimeSpan));
+                quotient => new MidiTimeSpan((quotient + gridShift) * midiStep.TimeSpan));
         }
 
         private static ITimeSpan RoundShift<TTimeSpan>(

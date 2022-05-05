@@ -209,7 +209,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 actualObjects.OfType<ITimedObject>(),
                 new ArbitraryGrid(),
                 tempoMap,
-                new QuantizerSettings
+                new QuantizingSettings
                 {
                     Target = target == LengthedObjectTarget.Start ? QuantizerTarget.Start : QuantizerTarget.End,
                     Filter = filter != null ? obj => filter((TObject)obj) : (Predicate<ITimedObject>)null,

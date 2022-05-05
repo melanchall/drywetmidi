@@ -15,7 +15,13 @@ namespace Melanchall.DryWetMidi.Tools
             if (settings.SplitNotes)
             {
                 midiFile = midiFile.Clone();
-                midiFile.SplitNotesByGrid(grid, settings.NoteDetectionSettings);
+                midiFile.SplitObjectsByGrid(
+                    ObjectType.Note,
+                    grid,
+                    new ObjectDetectionSettings
+                    {
+                        NoteDetectionSettings = settings.NoteDetectionSettings
+                    });
             }
 
             return midiFile;

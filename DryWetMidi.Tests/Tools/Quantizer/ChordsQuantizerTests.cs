@@ -22,7 +22,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 IGrid grid,
                 LengthedObjectTarget target,
                 TempoMap tempoMap,
-                QuantizerSettings settings)
+                QuantizingSettings settings)
             {
                 return TimeProcessingInstruction.Skip;
             }
@@ -55,7 +55,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 IGrid grid,
                 LengthedObjectTarget target,
                 TempoMap tempoMap,
-                QuantizerSettings settings)
+                QuantizingSettings settings)
             {
                 return new TimeProcessingInstruction(_time);
             }

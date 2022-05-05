@@ -5,10 +5,39 @@ using System.Linq;
 
 namespace Melanchall.DryWetMidi.Interaction
 {
-    public class TimedObjectsManager : TimedObjectsManager<ITimedObject>
+    /// <summary>
+    /// Provides a way to manage timed objects of different types within an <see cref="EventsCollection"/>
+    /// (which can be obtained via <see cref="TrackChunk.Events"/> for example).
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// To start manage objects you need to get an instance of the <see cref="TimedObjectsManager"/>.
+    /// </para>
+    /// <para>
+    /// To finish managing you need to call the <see cref="TimedObjectsManager{TObject}.SaveChanges"/> or
+    /// <see cref="TimedObjectsManager{TObject}.Dispose()"/> method.
+    /// </para>
+    /// <para>
+    /// Since the manager implements <see cref="IDisposable"/> it is recommended to manage objects within
+    /// the <c>using</c> block.
+    /// </para>
+    /// </remarks>
+    public sealed class TimedObjectsManager : TimedObjectsManager<ITimedObject>
     {
         #region Constructor
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TimedObjectsManager"/> with the specified
+        /// events collection and object type. Optionally object detection settings and comparer can be provided.
+        /// </summary>
+        /// <param name="eventsCollection"><see cref="EventsCollection"/> to manage objects within.</param>
+        /// <param name="objectType">The type of objects to manage.</param>
+        /// <param name="objectDetectionSettings">Settings according to which objects should be
+        /// detected and built.</param>
+        /// <param name="comparer">Comparer that will be used to order objects on enumerating
+        /// <see cref="TimedObjectsManager{TObject}.Objects"/> or saving objects back to the <paramref name="eventsCollection"/>
+        /// via <see cref="TimedObjectsManager{TObject}.SaveChanges"/> or <see cref="TimedObjectsManager{TObject}.Dispose()"/>.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="eventsCollection"/> is <c>null</c>.</exception>
         public TimedObjectsManager(
             EventsCollection eventsCollection,
             ObjectType objectType,
@@ -21,6 +50,28 @@ namespace Melanchall.DryWetMidi.Interaction
         #endregion
     }
 
+    /// <summary>
+    /// Provides a way to manage timed objects of the specified type within an <see cref="EventsCollection"/>
+    /// (which can be obtained via <see cref="TrackChunk.Events"/> for example).
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// To start manage objects you need to get an instance of the <see cref="TimedObjectsManager{TObject}"/>.
+    /// Also <c>ManageX</c> methods within specific object type utilities class (for example,
+    /// <see cref="NotesManagingUtilities.ManageNotes(TrackChunk, NoteDetectionSettings, TimedObjectsComparer)"/>)
+    /// can be used.
+    /// </para>
+    /// <para>
+    /// To finish managing you need to call the <see cref="SaveChanges"/> or <see cref="Dispose()"/> method.
+    /// </para>
+    /// <para>
+    /// Since the manager implements <see cref="IDisposable"/> it is recommended to manage objects within
+    /// the <c>using</c> block.
+    /// </para>
+    /// </remarks>
+    /// <seealso cref="TimedEventsManagingUtilities"/>
+    /// <seealso cref="NotesManagingUtilities"/>
+    /// <seealso cref="ChordsManagingUtilities"/>
     public class TimedObjectsManager<TObject> : IDisposable
         where TObject : ITimedObject
     {
@@ -37,6 +88,17 @@ namespace Melanchall.DryWetMidi.Interaction
 
         #region Constructor
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TimedObjectsManager{TObject}"/> with the specified
+        /// events collection. Optionally object detection settings and comparer can be provided.
+        /// </summary>
+        /// <param name="eventsCollection"><see cref="EventsCollection"/> to manage objects within.</param>
+        /// <param name="objectDetectionSettings">Settings according to which objects should be
+        /// detected and built.</param>
+        /// <param name="comparer">Comparer that will be used to order objects on enumerating
+        /// <see cref="Objects"/> or saving objects back to the <paramref name="eventsCollection"/>
+        /// via <see cref="SaveChanges"/> or <see cref="Dispose()"/>.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="eventsCollection"/> is <c>null</c>.</exception>
         public TimedObjectsManager(
             EventsCollection eventsCollection,
             ObjectDetectionSettings objectDetectionSettings = null,
@@ -68,12 +130,24 @@ namespace Melanchall.DryWetMidi.Interaction
 
         #region Properties
 
+        /// <summary>
+        /// Gets the <see cref="TimedObjectsCollection{TObject}"/> with all objects managed by the current
+        /// <see cref="TimedObjectsManager{TObject}"/>.
+        /// </summary>
         public TimedObjectsCollection<TObject> Objects { get; private set; }
 
         #endregion
 
         #region Methods
 
+        /// <summary>
+        /// Saves all objects that were managed with the current <see cref="TimedObjectsManager{TObject}"/>
+        /// updating underlying events collection.
+        /// </summary>
+        /// <remarks>
+        /// This method will rewrite content of the events collection was used to construct the current
+        /// <see cref="TimedObjectsManager{TObject}"/> with events were managed by this manager.
+        /// </remarks>
         public void SaveChanges()
         {
             _eventsCollection.Clear();

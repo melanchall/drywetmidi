@@ -27,51 +27,6 @@ namespace Melanchall.DryWetMidi.Tools
         /// <returns>Collection of <see cref="MidiFile"/> where each file contains events for single channel
         /// and meta and sysex ones as defined by <paramref name="settings"/>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is <c>null</c>.</exception>
-        /// <example>
-        /// <para>
-        /// Given a MIDI file:
-        /// </para>
-        /// <code language="image">
-        /// +-------------------+
-        /// |┌─────────────────┐|
-        /// |│. ◊ .  ○.◊ .□□  .│|
-        /// |└─────────────────┘|
-        /// |┌─────────────────┐|
-        /// |│ .□. .◊   . ○ ○. │|
-        /// |└─────────────────┘|
-        /// +-------------------+
-        /// </code>
-        /// <para>
-        /// where <c>◊</c>, <c>○</c> and <c>□</c> mean channel MIDI events on channel 0, 1 and 2 correspondingly;
-        /// <c>.</c> is any non-channel event.
-        /// </para>
-        /// <para>
-        /// So the file will be split in following way (<see cref="SplitFileByChannelSettings.CopyNonChannelEventsToEachFile"/>
-        /// of <paramref name="settings"/> set to <c>true</c>):
-        /// </para>
-        /// <code language="image">
-        /// +-------------------+
-        /// |┌─────────────────┐|
-        /// |│..◊...◊ .◊..   ..│|
-        /// |└─────────────────┘|
-        /// +-------------------+
-        /// +-------------------+
-        /// |┌─────────────────┐|
-        /// |│.. ... ○. ..○ ○..│|
-        /// |└─────────────────┘|
-        /// +-------------------+
-        /// +-------------------+
-        /// |┌─────────────────┐|
-        /// |│..□...  . ..□□ ..│|
-        /// |└─────────────────┘|
-        /// +-------------------+
-        /// </code>
-        /// <para>
-        /// So each new file consist of single track chunk containing channel events of one channel and
-        /// all non-channel events. New files will have the same time division (<see cref="MidiFile.TimeDivision"/>) as
-        /// the original one.
-        /// </para>
-        /// </example>
         public static IEnumerable<MidiFile> SplitByChannel(this MidiFile midiFile, SplitFileByChannelSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);

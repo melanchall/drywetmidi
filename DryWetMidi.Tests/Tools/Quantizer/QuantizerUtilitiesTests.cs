@@ -85,7 +85,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             objectType: ObjectType.TimedEvent,
             grid: new SteppedGrid((MidiTimeSpan)15),
             tempoMap: TempoMap.Default,
-            settings: new QuantizerSettings
+            settings: new QuantizingSettings
             {
                 Filter = obj => obj is TimedEvent timedEvent && !(timedEvent.Event is NoteEvent)
             },
@@ -271,7 +271,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             objectType: ObjectType.TimedEvent,
             grid: new SteppedGrid((MidiTimeSpan)15),
             tempoMap: TempoMap.Default,
-            settings: new QuantizerSettings
+            settings: new QuantizingSettings
             {
                 Filter = obj => obj is TimedEvent timedEvent && !(timedEvent.Event is NoteEvent)
             },
@@ -371,7 +371,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             ObjectType objectType,
             IGrid grid,
             TempoMap tempoMap,
-            QuantizerSettings settings,
+            QuantizingSettings settings,
             ObjectDetectionSettings objectDetectionSettings,
             ICollection<TimedEvent> expectedEvents)
         {
@@ -397,7 +397,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             ObjectType objectType,
             IGrid grid,
             TempoMap tempoMap,
-            QuantizerSettings settings,
+            QuantizingSettings settings,
             ObjectDetectionSettings objectDetectionSettings,
             ICollection<ICollection<TimedEvent>> expectedEvents)
         {
