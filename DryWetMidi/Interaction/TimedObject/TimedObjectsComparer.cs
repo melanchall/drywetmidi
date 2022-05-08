@@ -56,7 +56,7 @@ namespace Melanchall.DryWetMidi.Interaction
     }
 
     // TODO: search for all Comparison on OBS removing
-    [Obsolete("OBS13")]
+    [Obsolete("OBS11")]
     internal sealed class TimedObjectsComparerOnSameEventTime : TimedObjectsComparer
     {
         #region Fields

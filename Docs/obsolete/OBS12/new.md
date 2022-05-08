@@ -1,2 +1,5 @@
-* [RandomizingSettings](xref:Melanchall.DryWetMidi.Tools.RandomizingSettings)
-* [QuantizingSettings.RandomizingSettings](xref:Melanchall.DryWetMidi.Tools.QuantizingSettings`1.RandomizingSettings)
+* [Splitter](xref:Melanchall.DryWetMidi.Tools.Splitter)
+* [Splitter.SplitObjectsByStep](xref:Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByStep*)
+* [Splitter.SplitObjectsByGrid](xref:Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByGrid*)
+* [Splitter.SplitObjectsAtDistance](xref:Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsAtDistance*)
+* [Splitter.SplitObjectsByPartsNumber](xref:Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByPartsNumber*)

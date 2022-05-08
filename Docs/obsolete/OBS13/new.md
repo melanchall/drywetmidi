@@ -1,2 +1,3 @@
-* [RandomizingSettings](xref:Melanchall.DryWetMidi.Tools.RandomizingSettings)
-* [QuantizingSettings.RandomizingSettings](xref:Melanchall.DryWetMidi.Tools.QuantizingSettings`1.RandomizingSettings)
+* [Quantizer](xref:Melanchall.DryWetMidi.Tools.Quantizer)
+* [QuantizingSettings](xref:Melanchall.DryWetMidi.Tools.QuantizingSettings)
+* [QuantizerUtilities](xref:Melanchall.DryWetMidi.Tools.QuantizerUtilities)

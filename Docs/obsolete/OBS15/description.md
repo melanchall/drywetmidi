@@ -1,13 +1,7 @@
-Randomization is now moved to quantizer so you can quantize and randomize MIDI data at the same time. Small example of how to perform only randomization:
+`SetTimeAndLength` separate methods for [notes](xref:Melanchall.DryWetMidi.Interaction.Note) and [chords](xref:Melanchall.DryWetMidi.Interaction.Chord) have been replaced with generic [SetLength](xref:Melanchall.DryWetMidi.Interaction.LengthedObjectUtilities.SetLength*). Since [SetTime](xref:Melanchall.DryWetMidi.Interaction.TimedObjectUtilities.SetTime*) method also exists, the new way to set time and length with one instruction is:
 
 ```csharp
-midiFile.QuantizeNotes(
-    new ArbitraryGrid(),
-    new NotesQuantizingSettings
-    {
-        RandomizingSettings = new RandomizingSettings
-        {
-            Bounds = bounds
-        }
-    });
+note
+    .SetTime(new MetricTimeSpan(0, 0, 0, 500), tempoMap)
+    .SetLength(new MetricTimeSpan(0, 0, 10), tempoMap);
 ```

@@ -1,13 +1,16 @@
-Randomization is now moved to quantizer so you can quantize and randomize MIDI data at the same time. Small example of how to perform only randomization:
+`Randomizer` tool is obsolete now. Randomization feature has been moved to [Quantizer](xref:Melanchall.DryWetMidi.Tools.Quantizer) so you can quantize and randomize MIDI data at the same time.
+
+Following small example shows how to randomize [timed events](xref:Melanchall.DryWetMidi.Interaction.TimedEvent) and start times of [notes](xref:Melanchall.DryWetMidi.Interaction.Note) in range from `-100` to `+100` ticks:
 
 ```csharp
-midiFile.QuantizeNotes(
+midiFile.QuantizeObjects(
+    ObjectType.Note | ObjectType.TimedEvent,
     new ArbitraryGrid(),
-    new NotesQuantizingSettings
+    new QuantizingSettings
     {
         RandomizingSettings = new RandomizingSettings
         {
-            Bounds = bounds
+            Bounds = new ConstantBounds((MidiTimeSpan)100)
         }
     });
 ```

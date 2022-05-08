@@ -1,13 +1,5 @@
-Randomization is now moved to quantizer so you can quantize and randomize MIDI data at the same time. Small example of how to perform only randomization:
+`TimedEventsManagingUtilities.AddEvent` methods are now obsolete since they are nothing more than just calling [TimedEvent](xref:Melanchall.DryWetMidi.Interaction.TimedEvent) constructor and adding a new instance to a collection:
 
 ```csharp
-midiFile.QuantizeNotes(
-    new ArbitraryGrid(),
-    new NotesQuantizingSettings
-    {
-        RandomizingSettings = new RandomizingSettings
-        {
-            Bounds = bounds
-        }
-    });
+eventsCollection.Add(new TimedEvent(midiEvent, time));
 ```
