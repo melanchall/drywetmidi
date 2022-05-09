@@ -6,16 +6,14 @@ using System.Collections.Generic;
 
 namespace Melanchall.DryWetMidi.Tools
 {
-    /// <summary>
-    /// Provides methods to split MIDI data in many different ways.
-    /// </summary>
     public static partial class Splitter
     {
         #region Methods
 
         /// <summary>
         /// Splits objects within a <see cref="TrackChunk"/> by the specified step so every object will be split
-        /// at points equally distanced from each other starting from the object's start time.
+        /// at points equally distanced from each other starting from the object's start time. More info in the
+        /// <see href="xref:a_obj_splitting#splitobjectsbystep">Objects splitting: SplitObjectsByStep</see> article.
         /// </summary>
         /// <remarks>
         /// Nulls, objects with zero length and objects with length smaller than <paramref name="step"/>
@@ -61,7 +59,8 @@ namespace Melanchall.DryWetMidi.Tools
 
         /// <summary>
         /// Splits objects within a collection of <see cref="TrackChunk"/> by the specified step so every object
-        /// will be split at points equally distanced from each other starting from the object's start time.
+        /// will be split at points equally distanced from each other starting from the object's start time. More info
+        /// in the <see href="xref:a_obj_splitting#splitobjectsbystep">Objects splitting: SplitObjectsByStep</see> article.
         /// </summary>
         /// <remarks>
         /// Nulls, objects with zero length and objects with length smaller than <paramref name="step"/>
@@ -106,7 +105,8 @@ namespace Melanchall.DryWetMidi.Tools
 
         /// <summary>
         /// Splits objects within a <see cref="MidiFile"/> by the specified step so every object will be split
-        /// at points equally distanced from each other starting from the object's start time.
+        /// at points equally distanced from each other starting from the object's start time. More info in the
+        /// <see href="xref:a_obj_splitting#splitobjectsbystep">Objects splitting: SplitObjectsByStep</see> article.
         /// </summary>
         /// <remarks>
         /// Nulls, objects with zero length and objects with length smaller than <paramref name="step"/>
@@ -145,7 +145,8 @@ namespace Melanchall.DryWetMidi.Tools
 
         /// <summary>
         /// Splits objects by the specified step so every object will be split at points
-        /// equally distanced from each other starting from the object's start time.
+        /// equally distanced from each other starting from the object's start time. More info in the
+        /// <see href="xref:a_obj_splitting#splitobjectsbystep">Objects splitting: SplitObjectsByStep</see> article.
         /// </summary>
         /// <remarks>
         /// Nulls, objects with zero length and objects with length smaller than <paramref name="step"/>

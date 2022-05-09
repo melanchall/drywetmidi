@@ -8,7 +8,7 @@ This article describes ways to get different objects (like [timed events](xref:M
 
 ## GetTimedEvents
 
-`TimedEvent` is the basic MIDI object we will describe here. It's just a MIDI event along with its absolute time within a MIDI file or track chunk. You can read more in [Events absolute time](xref:a_events_abs_time) article. To get all timed events in a MIDI file, you can just call [GetTimedEvents](xref:Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.GetTimedEvents(Melanchall.DryWetMidi.Core.MidiFile)) method:
+`TimedEvent` is the basic MIDI object we will describe here. It's just a MIDI event along with its absolute time within a MIDI file or track chunk. You can read more in [Events absolute time](xref:a_events_abs_time) article. To get all timed events in a MIDI file, you can just call [GetTimedEvents](xref:Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.GetTimedEvents*) method:
 
 ```csharp
 using System;

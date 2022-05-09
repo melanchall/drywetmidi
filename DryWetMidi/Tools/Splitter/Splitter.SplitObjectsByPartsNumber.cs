@@ -14,6 +14,8 @@ namespace Melanchall.DryWetMidi.Tools
 
         /// <summary>
         /// Splits objects within a <see cref="TrackChunk"/> into the specified number of parts of the equal length.
+        /// More info in the <see href="xref:a_obj_splitting#splitobjectsbypartsnumber">Objects splitting: SplitObjectsByPartsNumber</see>
+        /// article.
         /// </summary>
         /// <remarks>
         /// Nulls will not be split and will be returned as <c>null</c>s. If an object has zero length,
@@ -61,7 +63,9 @@ namespace Melanchall.DryWetMidi.Tools
 
         /// <summary>
         /// Splits objects within a collection of <see cref="TrackChunk"/> into the specified number of parts of
-        /// the equal length.
+        /// the equal length. More info in the
+        /// <see href="xref:a_obj_splitting#splitobjectsbypartsnumber">Objects splitting: SplitObjectsByPartsNumber</see>
+        /// article.
         /// </summary>
         /// <remarks>
         /// Nulls will not be split and will be returned as <c>null</c>s. If an object has zero length,
@@ -108,6 +112,8 @@ namespace Melanchall.DryWetMidi.Tools
 
         /// <summary>
         /// Splits objects within a <see cref="MidiFile"/> into the specified number of parts of the equal length.
+        /// More info in the <see href="xref:a_obj_splitting#splitobjectsbypartsnumber">Objects splitting: SplitObjectsByPartsNumber</see>
+        /// article.
         /// </summary>
         /// <remarks>
         /// Nulls will not be split and will be returned as <c>null</c>s. If an object has zero length,
@@ -140,7 +146,9 @@ namespace Melanchall.DryWetMidi.Tools
         }
 
         /// <summary>
-        /// Splits objects into the specified number of parts of the equal length.
+        /// Splits objects into the specified number of parts of the equal length. More info in the
+        /// <see href="xref:a_obj_splitting#splitobjectsbypartsnumber">Objects splitting: SplitObjectsByPartsNumber</see>
+        /// article.
         /// </summary>
         /// <remarks>
         /// Nulls will not be split and will be returned as <c>null</c>s. If an object has zero length,

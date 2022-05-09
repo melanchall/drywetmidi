@@ -259,6 +259,14 @@ button:hover, button:focus, a:hover, a:focus {
     color: #F8F8F8;
 }
 
+.affix ul > li > a:before {
+    content: "|";
+	color: #F8F8F8;
+    top: -1px;
+    left: 5px;
+	font-size: 16px;
+}
+
 h5.decalaration {
     display: none;
 }
@@ -424,7 +432,6 @@ h5.decalaration + .codewrapper {
     margin-top: 10px;
     margin-bottom: 10px;
     background-color: #201F1E;
-    padding: 10px;
     border: none;
 }
 

@@ -170,12 +170,12 @@ namespace Melanchall.DryWetMidi.Tools
         /// </summary>
         /// <param name="context">An object holding all the required data to process a part.</param>
         /// <remarks>
-        /// By default the method shifts the data and inserts tempo map events if <see cref="RepeatingSettings.SaveTempoMap"/>
+        /// By default the method shifts the data and inserts tempo map events if <see cref="RepeatingSettings.PreserveTempoMap"/>
         /// set to <c>true</c> in settings used for the processing.
         /// </remarks>
         protected virtual void ProcessPart(PartProcessingContext context)
         {
-            if (context.Settings.SaveTempoMap)
+            if (context.Settings.PreserveTempoMap)
             {
                 if (context.SourceFirstSetTempoEvent?.Time > 0)
                     context.PartObjects.Insert(0, new TimedEvent(new SetTempoEvent(), 0));

@@ -387,7 +387,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         }
 
         [Test]
-        public void CheckRepeat_SingleCollection_SaveTempoMap_1() => CheckRepeat(
+        public void CheckRepeat_SingleCollection_PreserveTempoMap_1() => CheckRepeat(
             inputObjects: new[]
             {
                 new TimedEvent(new TextEvent("A"), 10),
@@ -398,7 +398,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             repeatsNumber: 1,
             settings: new RepeatingSettings
             {
-                SaveTempoMap = true
+                PreserveTempoMap = true
             },
             expectedObjects: new[]
             {
@@ -416,7 +416,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             });
 
         [Test]
-        public void CheckRepeat_SingleCollection_SaveTempoMap_2() => CheckRepeat(
+        public void CheckRepeat_SingleCollection_PreserveTempoMap_2() => CheckRepeat(
             inputObjects: new[]
             {
                 new TimedEvent(new TextEvent("A"), 10),
@@ -427,7 +427,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             repeatsNumber: 2,
             settings: new RepeatingSettings
             {
-                SaveTempoMap = true
+                PreserveTempoMap = true
             },
             expectedObjects: new[]
             {
@@ -452,7 +452,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             });
 
         [Test]
-        public void CheckRepeat_SingleCollection_DontSaveTempoMap() => CheckRepeat(
+        public void CheckRepeat_SingleCollection_DontPreserveTempoMap() => CheckRepeat(
             inputObjects: new[]
             {
                 new TimedEvent(new TextEvent("A"), 10),
@@ -463,7 +463,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             repeatsNumber: 1,
             settings: new RepeatingSettings
             {
-                SaveTempoMap = false
+                PreserveTempoMap = false
             },
             expectedObjects: new[]
             {

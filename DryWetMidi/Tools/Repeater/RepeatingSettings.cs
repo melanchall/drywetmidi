@@ -67,7 +67,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// Gets or sets a value indicating whether original tempo map should be preserved or not.
         /// The default value is <c>true</c>.
         /// </summary>
-        public bool SaveTempoMap { get; set; } = true;
+        public bool PreserveTempoMap { get; set; } = true;
 
         #endregion
     }

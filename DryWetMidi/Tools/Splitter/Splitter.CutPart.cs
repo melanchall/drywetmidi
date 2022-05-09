@@ -13,7 +13,8 @@ namespace Melanchall.DryWetMidi.Tools
 
         /// <summary>
         /// Cuts a part of the specified length from a MIDI file (starting at the specified time within the file)
-        /// and returns a new instance of <see cref="MidiFile"/> which is the original one without the part.
+        /// and returns a new instance of <see cref="MidiFile"/> which is the original one without the part. More info
+        /// in the <see href="xref:a_file_splitting#cutpart">MIDI file splitting: CutPart</see> article.
         /// </summary>
         /// <param name="midiFile"><see cref="MidiFile"/> to cut part from.</param>
         /// <param name="partStart">The start time of part to cut.</param>

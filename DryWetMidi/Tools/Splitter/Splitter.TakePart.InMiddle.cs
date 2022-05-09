@@ -12,7 +12,8 @@ namespace Melanchall.DryWetMidi.Tools
 
         /// <summary>
         /// Takes a part of the specified length of a MIDI file (starting at the specified time within the file)
-        /// and returns it as an instance of <see cref="MidiFile"/>.
+        /// and returns it as an instance of <see cref="MidiFile"/>. More info in the
+        /// <see href="xref:a_file_splitting#takepart">MIDI file splitting: TakePart</see> article.
         /// </summary>
         /// <param name="midiFile"><see cref="MidiFile"/> to take part of.</param>
         /// <param name="partStart">The start time of part to take.</param>

@@ -6,6 +6,10 @@ using System.Linq;
 
 namespace Melanchall.DryWetMidi.Tools
 {
+    /// <summary>
+    /// Provides methods to split MIDI data in many different ways. More info in the
+    /// <see href="xref:a_splitter">Splitter</see> article.
+    /// </summary>
     public static partial class Splitter
     {
         #region Methods

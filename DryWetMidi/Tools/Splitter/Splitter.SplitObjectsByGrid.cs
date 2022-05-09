@@ -12,7 +12,8 @@ namespace Melanchall.DryWetMidi.Tools
         #region Methods
 
         /// <summary>
-        /// Splits objects within a <see cref="TrackChunk"/> by the specified grid.
+        /// Splits objects within a <see cref="TrackChunk"/> by the specified grid. More info in the
+        /// <see href="xref:a_obj_splitting#splitobjectsbygrid">Objects splitting: SplitObjectsByGrid</see> article.
         /// </summary>
         /// <remarks>
         /// Nulls will not be split and will be returned as <c>null</c>s.
@@ -56,7 +57,8 @@ namespace Melanchall.DryWetMidi.Tools
         }
 
         /// <summary>
-        /// Splits objects within a collection of <see cref="TrackChunk"/> by the specified grid.
+        /// Splits objects within a collection of <see cref="TrackChunk"/> by the specified grid. More info in the
+        /// <see href="xref:a_obj_splitting#splitobjectsbygrid">Objects splitting: SplitObjectsByGrid</see> article.
         /// </summary>
         /// <remarks>
         /// Nulls will not be split and will be returned as <c>null</c>s.
@@ -99,7 +101,8 @@ namespace Melanchall.DryWetMidi.Tools
         }
 
         /// <summary>
-        /// Splits objects within a <see cref="MidiFile"/> by the specified grid.
+        /// Splits objects within a <see cref="MidiFile"/> by the specified grid. More info in the
+        /// <see href="xref:a_obj_splitting#splitobjectsbygrid">Objects splitting: SplitObjectsByGrid</see> article.
         /// </summary>
         /// <remarks>
         /// Nulls will not be split and will be returned as <c>null</c>s.
@@ -135,7 +138,8 @@ namespace Melanchall.DryWetMidi.Tools
         }
 
         /// <summary>
-        /// Splits objects by the specified grid.
+        /// Splits objects by the specified grid. More info in the
+        /// <see href="xref:a_obj_splitting#splitobjectsbygrid">Objects splitting: SplitObjectsByGrid</see> article.
         /// </summary>
         /// <remarks>
         /// Nulls will not be split and will be returned as <c>null</c>s.

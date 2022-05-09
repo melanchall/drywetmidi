@@ -13,7 +13,8 @@ namespace Melanchall.DryWetMidi.Tools
         #region Methods
 
         /// <summary>
-        /// Splits <see cref="MidiFile"/> by channel.
+        /// Splits <see cref="MidiFile"/> by channel. More info in the
+        /// <see href="xref:a_file_splitting#splitbychannel">MIDI file splitting: SplitByChannel</see> article.
         /// </summary>
         /// <remarks>
         /// All channel events (<see cref="ChannelEvent"/>) will be grouped by channel and then events for each

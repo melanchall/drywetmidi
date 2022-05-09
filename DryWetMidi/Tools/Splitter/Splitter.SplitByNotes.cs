@@ -13,7 +13,8 @@ namespace Melanchall.DryWetMidi.Tools
         #region Methods
 
         /// <summary>
-        /// Splits <see cref="MidiFile"/> by notes.
+        /// Splits <see cref="MidiFile"/> by notes. More info in the
+        /// <see href="xref:a_file_splitting#splitbynotes">MIDI file splitting: SplitByNotes</see> article.
         /// </summary>
         /// <remarks>
         /// The method produces new files where each one contains Note On and Note Off events for single

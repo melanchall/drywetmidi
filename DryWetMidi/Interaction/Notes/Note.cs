@@ -362,18 +362,7 @@ namespace Melanchall.DryWetMidi.Interaction
             return new Note(newTimedNoteOnEvent, newTimedNoteOffEvent, false);
         }
 
-        /// <summary>
-        /// Splits the current object by the specified time.
-        /// </summary>
-        /// <remarks>
-        /// If <paramref name="time"/> is less than time of the object, the left part will be <c>null</c>.
-        /// If <paramref name="time"/> is greater than end time of the object, the right part
-        /// will be <c>null</c>.
-        /// </remarks>
-        /// <param name="time">Time to split the object by.</param>
-        /// <returns>An object containing left and right parts of the split object.
-        /// Both parts have the same type as the original object.</returns>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="time"/> is negative.</exception>
+        /// <inheritdoc/>
         public SplitLengthedObject Split(long time)
         {
             ThrowIfTimeArgument.IsNegative(nameof(time), time);

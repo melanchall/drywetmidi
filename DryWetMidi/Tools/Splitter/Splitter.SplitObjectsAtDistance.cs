@@ -20,6 +20,8 @@ namespace Melanchall.DryWetMidi.Tools
 
         /// <summary>
         /// Splits objects within a <see cref="TrackChunk"/> at the specified distance from an object's start or end.
+        /// More info in the <see href="xref:a_obj_splitting#splitobjectsatdistance">Objects splitting: SplitObjectsAtDistance</see>
+        /// article.
         /// </summary>
         /// <param name="trackChunk"><see cref="TrackChunk"/> to split objects within.</param>
         /// <param name="objectType">The type of objects to split.</param>
@@ -65,7 +67,9 @@ namespace Melanchall.DryWetMidi.Tools
 
         /// <summary>
         /// Splits objects within a collection of <see cref="TrackChunk"/> at the specified distance from an
-        /// object's start or end.
+        /// object's start or end. More info in the
+        /// <see href="xref:a_obj_splitting#splitobjectsatdistance">Objects splitting: SplitObjectsAtDistance</see>
+        /// article.
         /// </summary>
         /// <param name="trackChunks">A collection of <see cref="TrackChunk"/> to split objects within.</param>
         /// <param name="objectType">The type of objects to split.</param>
@@ -110,6 +114,8 @@ namespace Melanchall.DryWetMidi.Tools
 
         /// <summary>
         /// Splits objects within a <see cref="MidiFile"/> at the specified distance from an object's start or end.
+        /// More info in the <see href="xref:a_obj_splitting#splitobjectsatdistance">Objects splitting: SplitObjectsAtDistance</see>
+        /// article.
         /// </summary>
         /// <param name="midiFile"><see cref="MidiFile"/> to split objects within.</param>
         /// <param name="objectType">The type of objects to split.</param>
@@ -147,7 +153,9 @@ namespace Melanchall.DryWetMidi.Tools
 
         /// <summary>
         /// Splits objects within a <see cref="TrackChunk"/> by the specified ratio of an object's length measuring
-        /// it from the object's start or end. For example, 0.5 means splitting at the center of an object.
+        /// it from the object's start or end. For example, 0.5 means splitting at the center of an object. More info
+        /// in the <see href="xref:a_obj_splitting#splitobjectsatdistance">Objects splitting: SplitObjectsAtDistance</see>
+        /// article.
         /// </summary>
         /// <param name="trackChunk"><see cref="TrackChunk"/> to split objects within.</param>
         /// <param name="objectType">The type of objects to split.</param>
@@ -209,6 +217,8 @@ namespace Melanchall.DryWetMidi.Tools
         /// <summary>
         /// Splits objects within a collection of <see cref="TrackChunk"/> by the specified ratio of an object's
         /// length measuring it from the object's start or end. For example, 0.5 means splitting at the center of an object.
+        /// More info in the <see href="xref:a_obj_splitting#splitobjectsatdistance">Objects splitting: SplitObjectsAtDistance</see>
+        /// article.
         /// </summary>
         /// <param name="trackChunks">A collection of <see cref="TrackChunk"/> to split objects within.</param>
         /// <param name="objectType">The type of objects to split.</param>
@@ -268,7 +278,9 @@ namespace Melanchall.DryWetMidi.Tools
 
         /// <summary>
         /// Splits objects within a <see cref="MidiFile"/> by the specified ratio of an object's length measuring
-        /// it from the object's start or end. For example, 0.5 means splitting at the center of an object.
+        /// it from the object's start or end. For example, 0.5 means splitting at the center of an object. More info
+        /// in the <see href="xref:a_obj_splitting#splitobjectsatdistance">Objects splitting: SplitObjectsAtDistance</see>
+        /// article.
         /// </summary>
         /// <param name="midiFile"><see cref="MidiFile"/> to split objects within.</param>
         /// <param name="objectType">The type of objects to split.</param>
@@ -313,7 +325,9 @@ namespace Melanchall.DryWetMidi.Tools
         }
 
         /// <summary>
-        /// Splits objects at the specified distance from an object's start or end.
+        /// Splits objects at the specified distance from an object's start or end. More info in the
+        /// <see href="xref:a_obj_splitting#splitobjectsatdistance">Objects splitting: SplitObjectsAtDistance</see>
+        /// article.
         /// </summary>
         /// <param name="objects">Objects to split.</param>
         /// <param name="distance">Distance to split objects at.</param>
@@ -370,7 +384,9 @@ namespace Melanchall.DryWetMidi.Tools
 
         /// <summary>
         /// Splits objects by the specified ratio of an object's length measuring it from
-        /// the object's start or end. For example, 0.5 means splitting at the center of an object.
+        /// the object's start or end. For example, 0.5 means splitting at the center of an object. More info in the
+        /// <see href="xref:a_obj_splitting#splitobjectsatdistance">Objects splitting: SplitObjectsAtDistance</see>
+        /// article.
         /// </summary>
         /// <param name="objects">Objects to split.</param>
         /// <param name="ratio">Ratio of an object's length to split by. Valid values are from 0 to 1.</param>

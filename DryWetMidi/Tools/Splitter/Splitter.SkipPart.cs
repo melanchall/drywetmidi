@@ -10,7 +10,8 @@ namespace Melanchall.DryWetMidi.Tools
     {
         /// <summary>
         /// Skips part of the specified length of MIDI file and returns remaining part as
-        /// an instance of <see cref="MidiFile"/>.
+        /// an instance of <see cref="MidiFile"/>. More info in the
+        /// <see href="xref:a_file_splitting#skippart">MIDI file splitting: SkipPart</see> article.
         /// </summary>
         /// <param name="midiFile"><see cref="MidiFile"/> to skip part of.</param>
         /// <param name="partLength">The length of part to skip.</param>

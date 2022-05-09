@@ -12,7 +12,8 @@ namespace Melanchall.DryWetMidi.Tools
         #region Methods
 
         /// <summary>
-        /// Splits <see cref="MidiFile"/> by the specified grid.
+        /// Splits <see cref="MidiFile"/> by the specified grid. More info in the
+        /// <see href="xref:a_file_splitting#splitbygrid">MIDI file splitting: SplitByGrid</see> article.
         /// </summary>
         /// <remarks>
         /// Non-track chunks will not be copied to any of the new files.

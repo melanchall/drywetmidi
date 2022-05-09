@@ -4,23 +4,24 @@ using Melanchall.DryWetMidi.Interaction;
 namespace Melanchall.DryWetMidi.Tools
 {
     /// <summary>
-    /// Settings according to which a <see cref="MidiFile"/> should be split by vertical
-    /// split methods (for example, <see cref="Splitter.TakePart(MidiFile, ITimeSpan, SliceMidiFileSettings)"/>).
+    /// Settings according to which a <see cref="MidiFile"/> should be split by vertical split methods.
     /// </summary>
     /// <seealso cref="Splitter"/>
-    public class SliceMidiFileSettings
+    public sealed class SliceMidiFileSettings
     {
         #region Properties
 
         /// <summary>
         /// Gets or sets a value indicating whether notes should be split in points of
-        /// grid intersection or not. The default value is <c>true</c>.
+        /// grid intersection or not. The default value is <c>true</c>. More info in the
+        /// <see href="xref:a_file_splitting#splitnotes">MIDI file splitting: SplitNotes</see> article.
         /// </summary>
         public bool SplitNotes { get; set; } = true;
 
         /// <summary>
         /// Gets or sets a value indicating whether original times of events should be saved or not.
-        /// The default value is <c>false</c>.
+        /// The default value is <c>false</c>. More info in the
+        /// <see href="xref:a_file_splitting#preservetimes">MIDI file splitting: PreserveTimes</see> article.
         /// </summary>
         public bool PreserveTimes { get; set; } = false;
 
