@@ -11,6 +11,7 @@ trigger:
     - 'Resources/CI/Templates/stage-build-native-libs.yaml'
     - 'Resources/CI/Templates/step-copy-native-libraries-near-csproj.yaml'
     - 'Resources/CI/Templates/job-build-package.yaml'
+    - 'Resources/CI/Templates/step-build-docs.yaml'
     - 'Resources/Native/*'
 
 pr: none
@@ -33,6 +34,21 @@ stages:
   - job: BuildBinaries
     displayName: Build binaries
     steps:
+    - task: DotNetCoreCLI@2
+      displayName: Build project for docs
+      inputs:
+        command: 'build'
+        projects: 'DryWetMidi/Melanchall.DryWetMidi.csproj'
+        arguments: '--configuration $(BuildConfiguration)'
+    
+    - template: Templates/step-build-docs.yaml
+    
+    - task: PowerShell@2
+      displayName: Generate doc links
+      inputs:
+        targetType: filePath
+        filePath: '$(Build.SourcesDirectory)/Resources/Scripts/Generate doc links.ps1'
+    
     - template: Templates/step-copy-native-libraries-near-csproj.yaml
     
     - task: PowerShell@2
@@ -45,8 +61,7 @@ stages:
       displayName: Build project
       inputs:
         command: 'build'
-        projects: |
-          DryWetMidi/Melanchall.DryWetMidi.csproj
+        projects: 'DryWetMidi/Melanchall.DryWetMidi.csproj'
         arguments: '--configuration $(BuildConfiguration)'
     
     - task: PowerShell@2

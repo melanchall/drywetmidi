@@ -9,7 +9,7 @@ trigger:
     - 'DryWetMidi/*'
     - 'Docs/*'
     - 'Resources/CI/build-artifacts-docs.yaml'
-    - 'Resources/Utilities/InlineTextImages/*'
+    - 'Resources/CI/Templates/step-build-docs.yaml'
     - 'README.md'
 
 pr: none
@@ -48,17 +48,7 @@ steps:
     targetType: filePath
     filePath: '$(Build.SourcesDirectory)/Resources/Scripts/Generate obsolete API section.ps1'
 
-- task: PowerShell@2
-  displayName: Install docfx
-  inputs:
-    targetType: 'inline'
-    script: choco install docfx -y --version $(DocFxVersion)
-      
-- task: PowerShell@2
-  displayName: Build docs
-  inputs:
-    targetType: 'inline'
-    script: docfx Docs/docfx.json
+- template: Templates/step-build-docs.yaml
 
 - task: PublishPipelineArtifact@1
   displayName: Publish 'Docs' artifact

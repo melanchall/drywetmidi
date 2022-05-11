@@ -1,0 +1,12 @@
+steps:
+- task: PowerShell@2
+  displayName: Install docfx
+  inputs:
+    targetType: 'inline'
+    script: choco install docfx -y --version $(DocFxVersion)
+      
+- task: PowerShell@2
+  displayName: Build docs
+  inputs:
+    targetType: 'inline'
+    script: docfx Docs/docfx.json
