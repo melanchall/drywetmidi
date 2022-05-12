@@ -7,6 +7,7 @@ namespace Melanchall.DryWetMidi.Tools
 {
     /// <summary>
     /// Settings according to which quantizing should be performed by the <see cref="Quantizer"/>.
+    /// More info in the <see href="xref:a_quantizer">Quantizer</see> article.
     /// </summary>
     public sealed class QuantizingSettings
     {

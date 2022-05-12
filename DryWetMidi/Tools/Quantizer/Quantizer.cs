@@ -8,12 +8,8 @@ namespace Melanchall.DryWetMidi.Tools
 {
     /// <summary>
     /// Performs quantizing of objects. The process can be adjusted in many ways by <see cref="QuantizingSettings"/>.
+    /// More info in the <see href="xref:a_quantizer">Quantizer</see> article.
     /// </summary>
-    /// <remarks>
-    /// You can also derive from <see cref="Quantizer"/> to implement custom logic. Please see
-    /// <see cref="OnObjectQuantizing(ITimedObject, QuantizedTime, IGrid, LengthedObjectTarget, TempoMap, QuantizingSettings)"/> and
-    /// <see cref="OnObjectRandomizing(ITimedObject, long, LengthedObjectTarget, TempoMap, QuantizingSettings)"/> methods.
-    /// </remarks>
     public class Quantizer
     {
         #region Fields
