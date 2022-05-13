@@ -12,12 +12,7 @@
 ## [Custom meta events](custom-data-structures/Custom-meta-events.md)
 
 # High-level data managing
-## Events managers
-### [Overview](high-level-managing/Events-managers-overview.md)
-### [Events absolute time](high-level-managing/Events-absolute-time.md)
-### [Notes](high-level-managing/Notes.md)
-### [Chords](high-level-managing/Chords.md)
-### [Tempo map](high-level-managing/Tempo-map.md)
+## [Objects managers](high-level-managing/Objects-managers.md)
 ## Time and length
 ### [Overview](high-level-managing/Time-and-length-overview.md)
 ### [MidiTimeSpan](high-level-managing/MidiTimeSpan.md)

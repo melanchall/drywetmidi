@@ -3,12 +3,10 @@
 namespace Melanchall.DryWetMidi.Interaction
 {
     /// <summary>
-    /// Defines a context to search chords within.
+    /// Defines a context to search chords within. More info in the
+    /// <see href="xref:a_getting_objects#chordsearchcontext">Getting objects: GetChords: Settings: ChordSearchContext</see>
+    /// article.
     /// </summary>
-    /// <remarks>
-    /// Please see <see href="xref:a_getting_objects#chordsearchcontext">Getting objects
-    /// (section GetChords → Settings → ChordSearchContext)</see> article to learn more.
-    /// </remarks>
     /// <seealso cref="ChordDetectionSettings"/>
     /// <seealso cref="ChordsManagingUtilities"/>
     public enum ChordSearchContext

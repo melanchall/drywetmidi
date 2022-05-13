@@ -7,7 +7,8 @@ namespace Melanchall.DryWetMidi.Interaction
 {
     /// <summary>
     /// Provides a way to manage timed objects of different types within an <see cref="EventsCollection"/>
-    /// (which can be obtained via <see cref="TrackChunk.Events"/> for example).
+    /// (which can be obtained via <see cref="TrackChunk.Events"/> for example). More info in the
+    /// <see href="xref:a_managers">Objects managers</see> article.
     /// </summary>
     /// <remarks>
     /// <para>
@@ -52,7 +53,8 @@ namespace Melanchall.DryWetMidi.Interaction
 
     /// <summary>
     /// Provides a way to manage timed objects of the specified type within an <see cref="EventsCollection"/>
-    /// (which can be obtained via <see cref="TrackChunk.Events"/> for example).
+    /// (which can be obtained via <see cref="TrackChunk.Events"/> for example). More info in the
+    /// <see href="xref:a_managers">Objects managers</see> article.
     /// </summary>
     /// <remarks>
     /// <para>

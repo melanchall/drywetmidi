@@ -118,19 +118,14 @@ class Program
         Console.WriteLine("Notes before quantizing:");
         PrintNotes(midiFile);
 
-        var quantizer = new SoftQuantizer();
-            
-        using (var manager = midiFile.GetTrackChunks().First().ManageNotes())
-        {
-            quantizer.Quantize(
-                manager.Objects,
-                new SteppedGrid(MusicalTimeSpan.Whole),
-                tempoMap,
-                new QuantizingSettings
-                {
-                    DistanceCalculationType = TimeSpanType.Musical
-                });
-        }
+        midiFile.QuantizeObjects(
+            new SoftQuantizer(),
+            ObjectType.Note,
+            new SteppedGrid(MusicalTimeSpan.Whole),
+            new QuantizingSettings
+            {
+                DistanceCalculationType = TimeSpanType.Musical
+            });
 
         Console.WriteLine("Notes after quantizing:");
         PrintNotes(midiFile);

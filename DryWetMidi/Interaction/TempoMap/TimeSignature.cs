@@ -7,6 +7,7 @@ namespace Melanchall.DryWetMidi.Interaction
     /// <summary>
     /// Represents time signature which is number of beats of specified length.
     /// </summary>
+    /// <seealso cref="TempoMap"/>
     public sealed class TimeSignature
     {
         #region Constants

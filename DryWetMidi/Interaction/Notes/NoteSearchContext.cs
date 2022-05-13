@@ -4,11 +4,10 @@ namespace Melanchall.DryWetMidi.Interaction
 {
     /// <summary>
     /// Defines a context to search notes within. The default value is <see cref="SingleEventsCollection"/>.
+    /// More info in the
+    /// <see href="xref:a_getting_objects#notesearchcontext">Getting objects: GetNotes: Settings: NoteSearchContext</see>
+    /// article.
     /// </summary>
-    /// <remarks>
-    /// Please see <see href="xref:a_getting_objects#notesearchcontext">Getting objects
-    /// (section GetNotes → Settings → NoteSearchContext)</see> article to learn more.
-    /// </remarks>
     /// <seealso cref="NoteDetectionSettings"/>
     /// <seealso cref="NotesManagingUtilities"/>
     public enum NoteSearchContext

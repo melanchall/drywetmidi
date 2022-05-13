@@ -4,7 +4,8 @@ using Melanchall.DryWetMidi.Common;
 namespace Melanchall.DryWetMidi.Interaction
 {
     /// <summary>
-    /// Represents a musical rest.
+    /// Represents a musical rest. More info in the
+    /// <see href="xref:a_getting_objects#rests">Getting objects: GetObjects: Rests</see> article.
     /// </summary>
     public sealed class Rest : ILengthedObject, INotifyTimeChanged, INotifyLengthChanged
     {

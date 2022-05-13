@@ -7,12 +7,9 @@ using Melanchall.DryWetMidi.Core;
 namespace Melanchall.DryWetMidi.Interaction
 {
     /// <summary>
-    /// Provides utilities to extract objects of different types at once.
+    /// Provides utilities to extract objects of different types at once. More info in the
+    /// <see href="xref:a_getting_objects#getobjects">Getting objects: GetObjects</see> article.
     /// </summary>
-    /// <remarks>
-    /// Please see <see href="xref:a_getting_objects#getobjects">Getting objects
-    /// (section GetObjects)</see> article to learn more.
-    /// </remarks>
     public static class GetObjectsUtilities
     {
         #region Constants

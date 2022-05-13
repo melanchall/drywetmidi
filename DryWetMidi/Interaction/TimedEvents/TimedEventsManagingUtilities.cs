@@ -46,7 +46,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
         /// <summary>
         /// Creates an instance of the <see cref="TimedObjectsManager{TimedEvent}"/> initializing it with the
-        /// specified events collection.
+        /// specified events collection. More info in the <see href="xref:a_managers">Objects managers</see> article.
         /// </summary>
         /// <param name="eventsCollection"><see cref="EventsCollection"/> that holds events to manage.</param>
         /// <param name="settings">Settings accoridng to which timed events should be detected and built.</param>
@@ -71,7 +71,8 @@ namespace Melanchall.DryWetMidi.Interaction
 
         /// <summary>
         /// Creates an instance of the <see cref="TimedObjectsManager{TimedEvent}"/> initializing it with the
-        /// events collection of the specified track chunk.
+        /// events collection of the specified track chunk. More info in the
+        /// <see href="xref:a_managers">Objects managers</see> article.
         /// </summary>
         /// <param name="trackChunk"><see cref="TrackChunk"/> that holds events to manage.</param>
         /// <param name="settings">Settings accoridng to which timed events should be detected and built.</param>
@@ -89,12 +90,18 @@ namespace Melanchall.DryWetMidi.Interaction
         }
 
         /// <summary>
-        /// Gets timed events contained in the specified <see cref="EventsCollection"/>.
+        /// Gets timed events contained in the specified <see cref="EventsCollection"/>. More info in the
+        /// <see href="xref:a_getting_objects#gettimedevents">Getting objects: GetTimedEvents</see> article.
         /// </summary>
         /// <param name="eventsCollection"><see cref="EventsCollection"/> to search for events.</param>
         /// <param name="settings">Settings accoridng to which timed events should be detected and built.</param>
         /// <returns>Collection of timed events contained in <paramref name="eventsCollection"/> ordered by time.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="eventsCollection"/> is <c>null</c>.</exception>
+        /// <seealso cref="ProcessTimedEvents(EventsCollection, Action{TimedEvent}, Predicate{TimedEvent}, TimedEventDetectionSettings)"/>
+        /// <seealso cref="ProcessTimedEvents(EventsCollection, Action{TimedEvent}, TimedEventDetectionSettings)"/>
+        /// <seealso cref="RemoveTimedEvents(EventsCollection)"/>
+        /// <seealso cref="RemoveTimedEvents(EventsCollection, Predicate{TimedEvent}, TimedEventDetectionSettings)"/>
+        /// <seealso cref="GetObjectsUtilities"/>
         public static ICollection<TimedEvent> GetTimedEvents(this EventsCollection eventsCollection, TimedEventDetectionSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
@@ -110,12 +117,18 @@ namespace Melanchall.DryWetMidi.Interaction
         }
 
         /// <summary>
-        /// Gets timed events contained in the specified <see cref="TrackChunk"/>.
+        /// Gets timed events contained in the specified <see cref="TrackChunk"/>. More info in the
+        /// <see href="xref:a_getting_objects#gettimedevents">Getting objects: GetTimedEvents</see> article.
         /// </summary>
         /// <param name="trackChunk"><see cref="TrackChunk"/> to search for events.</param>
         /// <param name="settings">Settings accoridng to which timed events should be detected and built.</param>
         /// <returns>Collection of timed events contained in <paramref name="trackChunk"/> ordered by time.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="trackChunk"/> is <c>null</c>.</exception>
+        /// <seealso cref="ProcessTimedEvents(TrackChunk, Action{TimedEvent}, Predicate{TimedEvent}, TimedEventDetectionSettings)"/>
+        /// <seealso cref="ProcessTimedEvents(TrackChunk, Action{TimedEvent}, TimedEventDetectionSettings)"/>
+        /// <seealso cref="RemoveTimedEvents(TrackChunk)"/>
+        /// <seealso cref="RemoveTimedEvents(TrackChunk, Predicate{TimedEvent}, TimedEventDetectionSettings)"/>
+        /// <seealso cref="GetObjectsUtilities"/>
         public static ICollection<TimedEvent> GetTimedEvents(this TrackChunk trackChunk, TimedEventDetectionSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
@@ -124,12 +137,18 @@ namespace Melanchall.DryWetMidi.Interaction
         }
 
         /// <summary>
-        /// Gets timed events contained in the specified collection of <see cref="TrackChunk"/>.
+        /// Gets timed events contained in the specified collection of <see cref="TrackChunk"/>. More info in the
+        /// <see href="xref:a_getting_objects#gettimedevents">Getting objects: GetTimedEvents</see> article.
         /// </summary>
         /// <param name="trackChunks">Track chunks to search for events.</param>
         /// <param name="settings">Settings accoridng to which timed events should be detected and built.</param>
         /// <returns>Collection of timed events contained in <paramref name="trackChunks"/> ordered by time.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="trackChunks"/> is <c>null</c>.</exception>
+        /// <seealso cref="ProcessTimedEvents(IEnumerable{TrackChunk}, Action{TimedEvent}, Predicate{TimedEvent}, TimedEventDetectionSettings)"/>
+        /// <seealso cref="ProcessTimedEvents(IEnumerable{TrackChunk}, Action{TimedEvent}, TimedEventDetectionSettings)"/>
+        /// <seealso cref="RemoveTimedEvents(IEnumerable{TrackChunk})"/>
+        /// <seealso cref="RemoveTimedEvents(IEnumerable{TrackChunk}, Predicate{TimedEvent}, TimedEventDetectionSettings)"/>
+        /// <seealso cref="GetObjectsUtilities"/>
         public static ICollection<TimedEvent> GetTimedEvents(this IEnumerable<TrackChunk> trackChunks, TimedEventDetectionSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
@@ -147,12 +166,18 @@ namespace Melanchall.DryWetMidi.Interaction
         }
 
         /// <summary>
-        /// Gets timed events contained in the specified <see cref="MidiFile"/>.
+        /// Gets timed events contained in the specified <see cref="MidiFile"/>. More info in the
+        /// <see href="xref:a_getting_objects#gettimedevents">Getting objects: GetTimedEvents</see> article.
         /// </summary>
         /// <param name="file"><see cref="MidiFile"/> to search for events.</param>
         /// <param name="settings">Settings accoridng to which timed events should be detected and built.</param>
         /// <returns>Collection of timed events contained in <paramref name="file"/> ordered by time.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="file"/> is <c>null</c>.</exception>
+        /// <seealso cref="ProcessTimedEvents(MidiFile, Action{TimedEvent}, Predicate{TimedEvent}, TimedEventDetectionSettings)"/>
+        /// <seealso cref="ProcessTimedEvents(MidiFile, Action{TimedEvent}, TimedEventDetectionSettings)"/>
+        /// <seealso cref="RemoveTimedEvents(MidiFile)"/>
+        /// <seealso cref="RemoveTimedEvents(MidiFile, Predicate{TimedEvent}, TimedEventDetectionSettings)"/>
+        /// <seealso cref="GetObjectsUtilities"/>
         public static ICollection<TimedEvent> GetTimedEvents(this MidiFile file, TimedEventDetectionSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(file), file);

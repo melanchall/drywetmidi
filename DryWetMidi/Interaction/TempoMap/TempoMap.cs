@@ -7,7 +7,8 @@ using System.Linq;
 namespace Melanchall.DryWetMidi.Interaction
 {
     /// <summary>
-    /// Represents a tempo map of a MIDI file.
+    /// Represents a tempo map of a MIDI file. More info in the
+    /// <see href="xref:a_managers#tempo-map">Objects managers: Tempo map</see> article.
     /// </summary>
     public sealed class TempoMap
     {

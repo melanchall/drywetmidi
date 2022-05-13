@@ -191,7 +191,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
         /// <summary>
         /// Creates an instance of the <see cref="TimedObjectsManager{Chord}"/> initializing it with the
-        /// specified events collection.
+        /// specified events collection. More info in the <see href="xref:a_managers">Objects managers</see> article.
         /// </summary>
         /// <param name="eventsCollection"><see cref="EventsCollection"/> that holds chords to manage.</param>
         /// <param name="settings">Settings accoridng to which chords should be detected and built.</param>
@@ -216,7 +216,8 @@ namespace Melanchall.DryWetMidi.Interaction
 
         /// <summary>
         /// Creates an instance of the <see cref="TimedObjectsManager{Chord}"/> initializing it with the
-        /// events collection of the specified track chunk.
+        /// events collection of the specified track chunk.  More info in the
+        /// <see href="xref:a_managers">Objects managers</see> article.
         /// </summary>
         /// <param name="trackChunk"><see cref="TrackChunk"/> that holds chords to manage.</param>
         /// <param name="settings">Settings accoridng to which chords should be detected and built.</param>
@@ -234,7 +235,8 @@ namespace Melanchall.DryWetMidi.Interaction
         }
 
         /// <summary>
-        /// Gets chords contained in the specified collection of <see cref="MidiEvent"/>.
+        /// Gets chords contained in the specified collection of <see cref="MidiEvent"/>. More info in the
+        /// <see href="xref:a_getting_objects#getchords">Getting objects: GetChords</see> article.
         /// </summary>
         /// <param name="midiEvents">Collection of<see cref="MidiFile"/> to search for chords.</param>
         /// <param name="settings">Settings accoridng to which chords should be detected and built.</param>
@@ -255,12 +257,18 @@ namespace Melanchall.DryWetMidi.Interaction
         }
 
         /// <summary>
-        /// Gets chords contained in the specified <see cref="EventsCollection"/>.
+        /// Gets chords contained in the specified <see cref="EventsCollection"/>. More info in the
+        /// <see href="xref:a_getting_objects#getchords">Getting objects: GetChords</see> article.
         /// </summary>
         /// <param name="eventsCollection"><see cref="EventsCollection"/> to search for chords.</param>
         /// <param name="settings">Settings accoridng to which chords should be detected and built.</param>
         /// <returns>Collection of chords contained in <paramref name="eventsCollection"/> ordered by time.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="eventsCollection"/> is <c>null</c>.</exception>
+        /// <seealso cref="ProcessChords(EventsCollection, Action{Chord}, Predicate{Chord}, ChordDetectionSettings)"/>
+        /// <seealso cref="ProcessChords(EventsCollection, Action{Chord}, ChordDetectionSettings)"/>
+        /// <seealso cref="RemoveChords(EventsCollection, ChordDetectionSettings)"/>
+        /// <seealso cref="RemoveChords(EventsCollection, Predicate{Chord}, ChordDetectionSettings)"/>
+        /// <seealso cref="GetObjectsUtilities"/>
         public static ICollection<Chord> GetChords(this EventsCollection eventsCollection, ChordDetectionSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
@@ -275,12 +283,18 @@ namespace Melanchall.DryWetMidi.Interaction
         }
 
         /// <summary>
-        /// Gets chords contained in the specified <see cref="TrackChunk"/>.
+        /// Gets chords contained in the specified <see cref="TrackChunk"/>. More info in the
+        /// <see href="xref:a_getting_objects#getchords">Getting objects: GetChords</see> article.
         /// </summary>
         /// <param name="trackChunk"><see cref="TrackChunk"/> to search for chords.</param>
         /// <param name="settings">Settings accoridng to which chords should be detected and built.</param>
         /// <returns>Collection of chords contained in <paramref name="trackChunk"/> ordered by time.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="trackChunk"/> is <c>null</c>.</exception>
+        /// <seealso cref="ProcessChords(TrackChunk, Action{Chord}, Predicate{Chord}, ChordDetectionSettings)"/>
+        /// <seealso cref="ProcessChords(TrackChunk, Action{Chord}, ChordDetectionSettings)"/>
+        /// <seealso cref="RemoveChords(TrackChunk, ChordDetectionSettings)"/>
+        /// <seealso cref="RemoveChords(TrackChunk, Predicate{Chord}, ChordDetectionSettings)"/>
+        /// <seealso cref="GetObjectsUtilities"/>
         public static ICollection<Chord> GetChords(this TrackChunk trackChunk, ChordDetectionSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
@@ -289,12 +303,18 @@ namespace Melanchall.DryWetMidi.Interaction
         }
 
         /// <summary>
-        /// Gets chords contained in the specified collection of <see cref="TrackChunk"/>.
+        /// Gets chords contained in the specified collection of <see cref="TrackChunk"/>. More info in the
+        /// <see href="xref:a_getting_objects#getchords">Getting objects: GetChords</see> article.
         /// </summary>
         /// <param name="trackChunks">Track chunks to search for chords.</param>
         /// <param name="settings">Settings accoridng to which chords should be detected and built.</param>
         /// <returns>Collection of chords contained in <paramref name="trackChunks"/> ordered by time.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="trackChunks"/> is <c>null</c>.</exception>
+        /// <seealso cref="ProcessChords(IEnumerable{TrackChunk}, Action{Chord}, Predicate{Chord}, ChordDetectionSettings)"/>
+        /// <seealso cref="ProcessChords(IEnumerable{TrackChunk}, Action{Chord}, ChordDetectionSettings)"/>
+        /// <seealso cref="RemoveChords(IEnumerable{TrackChunk}, ChordDetectionSettings)"/>
+        /// <seealso cref="RemoveChords(IEnumerable{TrackChunk}, Predicate{Chord}, ChordDetectionSettings)"/>
+        /// <seealso cref="GetObjectsUtilities"/>
         public static ICollection<Chord> GetChords(this IEnumerable<TrackChunk> trackChunks, ChordDetectionSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
@@ -318,12 +338,18 @@ namespace Melanchall.DryWetMidi.Interaction
         }
 
         /// <summary>
-        /// Gets chords contained in the specified <see cref="MidiFile"/>.
+        /// Gets chords contained in the specified <see cref="MidiFile"/>. More info in the
+        /// <see href="xref:a_getting_objects#getchords">Getting objects: GetChords</see> article.
         /// </summary>
         /// <param name="file"><see cref="MidiFile"/> to search for chords.</param>
         /// <param name="settings">Settings accoridng to which chords should be detected and built.</param>
         /// <returns>Collection of chords contained in <paramref name="file"/> ordered by time.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="file"/> is <c>null</c>.</exception>
+        /// <seealso cref="ProcessChords(MidiFile, Action{Chord}, Predicate{Chord}, ChordDetectionSettings)"/>
+        /// <seealso cref="ProcessChords(MidiFile, Action{Chord}, ChordDetectionSettings)"/>
+        /// <seealso cref="RemoveChords(MidiFile, ChordDetectionSettings)"/>
+        /// <seealso cref="RemoveChords(MidiFile, Predicate{Chord}, ChordDetectionSettings)"/>
+        /// <seealso cref="GetObjectsUtilities"/>
         public static ICollection<Chord> GetChords(this MidiFile file, ChordDetectionSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(file), file);

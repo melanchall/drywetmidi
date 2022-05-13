@@ -8,7 +8,8 @@ using System.Linq;
 namespace Melanchall.DryWetMidi.Interaction
 {
     /// <summary>
-    /// Provides a way to manage tempo map of a MIDI file.
+    /// Provides a way to manage tempo map of a MIDI file. More info in the
+    /// <see href="xref:a_managers#tempo-map">Objects managers: Tempo map</see> article.
     /// </summary>
     /// <remarks>
     /// This manager is wrapper for the <see cref="TimedEventsManager"/> that provides easy manipulation
@@ -19,6 +20,7 @@ namespace Melanchall.DryWetMidi.Interaction
     /// or <see cref="Dispose()"/> method. Since the manager implements <see cref="IDisposable"/> it is
     /// recommended to manage tempo map within using block.
     /// </remarks>
+    /// <seealso cref="Interaction.TempoMap"/>
     public sealed class TempoMapManager : IDisposable
     {
         #region Fields

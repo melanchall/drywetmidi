@@ -16,7 +16,7 @@ namespace Melanchall.DryWetMidi.Tools
         #region Methods
 
         /// <summary>
-        /// Quantizes objects within a <see cref="TrackChunk"/> using the specified grid.
+        /// Quantizes objects within a <see cref="TrackChunk"/> using the specified grid and default quantizer.
         /// </summary>
         /// <param name="trackChunk"><see cref="TrackChunk"/> to quantize objects within.</param>
         /// <param name="objectType">The type of objects to quantize.</param>
@@ -61,7 +61,8 @@ namespace Melanchall.DryWetMidi.Tools
         }
 
         /// <summary>
-        /// Quantizes objects within a <see cref="TrackChunk"/> using the specified grid.
+        /// Quantizes objects within a <see cref="TrackChunk"/> using the specified grid and custom quantizer
+        /// (see <see href="xref:a_quantizer#custom-quantizing">Quantizer: Custom quantizing</see> article).
         /// </summary>
         /// <param name="trackChunk"><see cref="TrackChunk"/> to quantize objects within.</param>
         /// <param name="quantizer">Quantizer to quantize objects with.</param>
@@ -109,7 +110,7 @@ namespace Melanchall.DryWetMidi.Tools
         }
 
         /// <summary>
-        /// Quantizes objects within a collection of <see cref="TrackChunk"/> using the specified grid.
+        /// Quantizes objects within a collection of <see cref="TrackChunk"/> using the specified grid and default quantizer.
         /// </summary>
         /// <param name="trackChunks">Collection of <see cref="TrackChunk"/> to quantize objects within.</param>
         /// <param name="objectType">The type of objects to quantize.</param>
@@ -154,7 +155,8 @@ namespace Melanchall.DryWetMidi.Tools
         }
 
         /// <summary>
-        /// Quantizes objects within a collection of <see cref="TrackChunk"/> using the specified grid.
+        /// Quantizes objects within a collection of <see cref="TrackChunk"/> using the specified grid and custom quantizer
+        /// (see <see href="xref:a_quantizer#custom-quantizing">Quantizer: Custom quantizing</see> article).
         /// </summary>
         /// <param name="trackChunks">Collection of <see cref="TrackChunk"/> to quantize objects within.</param>
         /// <param name="quantizer">Quantizer to quantize objects with.</param>
@@ -202,7 +204,7 @@ namespace Melanchall.DryWetMidi.Tools
         }
 
         /// <summary>
-        /// Quantizes objects within a <see cref="MidiFile"/> using the specified grid.
+        /// Quantizes objects within a <see cref="MidiFile"/> using the specified grid and default quantizer.
         /// </summary>
         /// <param name="midiFile"><see cref="MidiFile"/> to quantize objects within.</param>
         /// <param name="objectType">The type of objects to quantize.</param>
@@ -240,7 +242,8 @@ namespace Melanchall.DryWetMidi.Tools
         }
 
         /// <summary>
-        /// Quantizes objects within a <see cref="MidiFile"/> using the specified grid.
+        /// Quantizes objects within a <see cref="MidiFile"/> using the specified grid and custom quantizer
+        /// (see <see href="xref:a_quantizer#custom-quantizing">Quantizer: Custom quantizing</see> article).
         /// </summary>
         /// <param name="midiFile"><see cref="MidiFile"/> to quantize objects within.</param>
         /// <param name="quantizer">Quantizer to quantize objects with.</param>

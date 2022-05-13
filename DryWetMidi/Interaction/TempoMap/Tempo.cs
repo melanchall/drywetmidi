@@ -7,6 +7,7 @@ namespace Melanchall.DryWetMidi.Interaction
     /// <summary>
     /// Represents tempo expressed in microseconds per quarter note or beats per minute.
     /// </summary>
+    /// <seealso cref="TempoMap"/>
     public sealed class Tempo
     {
         #region Constants

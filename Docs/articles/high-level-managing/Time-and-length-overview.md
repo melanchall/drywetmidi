@@ -10,7 +10,7 @@ All times and lengths in a MIDI file are presented as some long values in units 
 
 All time span classes implement [ITimeSpan](xref:Melanchall.DryWetMidi.Interaction.ITimeSpan) interface.
 
-To convert time span between different representations you should use [TimeConverter](xref:Melanchall.DryWetMidi.Interaction.TimeConverter) or [LengthConverter](xref:Melanchall.DryWetMidi.Interaction.LengthConverter) classes (these conversions require [tempo map](Tempo-map.md) of a MIDI file). (You can use `LengthConverter` for time conversions too but with the `TimeConverter` you don't need to specify time where time span starts since it is always zero.)
+To convert time span between different representations you should use [TimeConverter](xref:Melanchall.DryWetMidi.Interaction.TimeConverter) or [LengthConverter](xref:Melanchall.DryWetMidi.Interaction.LengthConverter) classes (these conversions require [tempo map](xref:Melanchall.DryWetMidi.Interaction.TempoMap) of a MIDI file). (You can use `LengthConverter` for time conversions too but with the `TimeConverter` you don't need to specify time where time span starts since it is always zero.)
 
 Examples of time conversions:
 

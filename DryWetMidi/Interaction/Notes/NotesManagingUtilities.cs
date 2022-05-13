@@ -242,7 +242,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
         /// <summary>
         /// Creates an instance of the <see cref="TimedObjectsManager{Note}"/> initializing it with the
-        /// specified events collection.
+        /// specified events collection. More info in the <see href="xref:a_managers">Objects managers</see> article.
         /// </summary>
         /// <param name="eventsCollection"><see cref="EventsCollection"/> that holds notes to manage.</param>
         /// <param name="settings">Settings accoridng to which notes should be detected and built.</param>
@@ -267,7 +267,8 @@ namespace Melanchall.DryWetMidi.Interaction
 
         /// <summary>
         /// Creates an instance of the <see cref="TimedObjectsManager{Note}"/> initializing it with the
-        /// events collection of the specified track chunk.
+        /// events collection of the specified track chunk. More info in the
+        /// <see href="xref:a_managers">Objects managers</see> article.
         /// </summary>
         /// <param name="trackChunk"><see cref="TrackChunk"/> that holds notes to manage.</param>
         /// <param name="settings">Settings accoridng to which notes should be detected and built.</param>
@@ -285,7 +286,8 @@ namespace Melanchall.DryWetMidi.Interaction
         }
 
         /// <summary>
-        /// Gets notes contained in the specified collection of <see cref="MidiEvent"/>.
+        /// Gets notes contained in the specified collection of <see cref="MidiEvent"/>. More info in the
+        /// <see href="xref:a_getting_objects#getnotes">Getting objects: GetNotes</see> article.
         /// </summary>
         /// <param name="midiEvents">Collection of <see cref="MidiEvent"/> to search for notes.</param>
         /// <param name="settings">Settings accoridng to which notes should be detected and built.</param>
@@ -305,12 +307,18 @@ namespace Melanchall.DryWetMidi.Interaction
         }
 
         /// <summary>
-        /// Gets notes contained in the specified <see cref="EventsCollection"/>.
+        /// Gets notes contained in the specified <see cref="EventsCollection"/>. More info in the
+        /// <see href="xref:a_getting_objects#getnotes">Getting objects: GetNotes</see> article.
         /// </summary>
         /// <param name="eventsCollection"><see cref="EventsCollection"/> to search for notes.</param>
         /// <param name="settings">Settings accoridng to which notes should be detected and built.</param>
         /// <returns>Collection of notes contained in <paramref name="eventsCollection"/> ordered by time.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="eventsCollection"/> is <c>null</c>.</exception>
+        /// <seealso cref="ProcessNotes(EventsCollection, Action{Note}, Predicate{Note}, NoteDetectionSettings)"/>
+        /// <seealso cref="ProcessNotes(EventsCollection, Action{Note}, NoteDetectionSettings)"/>
+        /// <seealso cref="RemoveNotes(EventsCollection, NoteDetectionSettings)"/>
+        /// <seealso cref="RemoveNotes(EventsCollection, Predicate{Note}, NoteDetectionSettings)"/>
+        /// <seealso cref="GetObjectsUtilities"/>
         public static ICollection<Note> GetNotes(this EventsCollection eventsCollection, NoteDetectionSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
@@ -325,12 +333,18 @@ namespace Melanchall.DryWetMidi.Interaction
         }
 
         /// <summary>
-        /// Gets notes contained in the specified <see cref="TrackChunk"/>.
+        /// Gets notes contained in the specified <see cref="TrackChunk"/>. More info in the
+        /// <see href="xref:a_getting_objects#getnotes">Getting objects: GetNotes</see> article.
         /// </summary>
         /// <param name="trackChunk"><see cref="TrackChunk"/> to search for notes.</param>
         /// <param name="settings">Settings accoridng to which notes should be detected and built.</param>
         /// <returns>Collection of notes contained in <paramref name="trackChunk"/> ordered by time.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="trackChunk"/> is <c>null</c>.</exception>
+        /// <seealso cref="ProcessNotes(TrackChunk, Action{Note}, Predicate{Note}, NoteDetectionSettings)"/>
+        /// <seealso cref="ProcessNotes(TrackChunk, Action{Note}, NoteDetectionSettings)"/>
+        /// <seealso cref="RemoveNotes(TrackChunk, NoteDetectionSettings)"/>
+        /// <seealso cref="RemoveNotes(TrackChunk, Predicate{Note}, NoteDetectionSettings)"/>
+        /// <seealso cref="GetObjectsUtilities"/>
         public static ICollection<Note> GetNotes(this TrackChunk trackChunk, NoteDetectionSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
@@ -339,12 +353,18 @@ namespace Melanchall.DryWetMidi.Interaction
         }
 
         /// <summary>
-        /// Gets notes contained in the specified collection of <see cref="TrackChunk"/>.
+        /// Gets notes contained in the specified collection of <see cref="TrackChunk"/>. More info in the
+        /// <see href="xref:a_getting_objects#getnotes">Getting objects: GetNotes</see> article.
         /// </summary>
         /// <param name="trackChunks">Track chunks to search for notes.</param>
         /// <param name="settings">Settings accoridng to which notes should be detected and built.</param>
         /// <returns>Collection of notes contained in <paramref name="trackChunks"/> ordered by time.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="trackChunks"/> is <c>null</c>.</exception>
+        /// <seealso cref="ProcessNotes(IEnumerable{TrackChunk}, Action{Note}, Predicate{Note}, NoteDetectionSettings)"/>
+        /// <seealso cref="ProcessNotes(IEnumerable{TrackChunk}, Action{Note}, NoteDetectionSettings)"/>
+        /// <seealso cref="RemoveNotes(IEnumerable{TrackChunk}, NoteDetectionSettings)"/>
+        /// <seealso cref="RemoveNotes(IEnumerable{TrackChunk}, Predicate{Note}, NoteDetectionSettings)"/>
+        /// <seealso cref="GetObjectsUtilities"/>
         public static ICollection<Note> GetNotes(this IEnumerable<TrackChunk> trackChunks, NoteDetectionSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
@@ -368,12 +388,18 @@ namespace Melanchall.DryWetMidi.Interaction
         }
 
         /// <summary>
-        /// Gets notes contained in the specified <see cref="MidiFile"/>.
+        /// Gets notes contained in the specified <see cref="MidiFile"/>. More info in the
+        /// <see href="xref:a_getting_objects#getnotes">Getting objects: GetNotes</see> article.
         /// </summary>
         /// <param name="file"><see cref="MidiFile"/> to search for notes.</param>
         /// <param name="settings">Settings accoridng to which notes should be detected and built.</param>
         /// <returns>Collection of notes contained in <paramref name="file"/> ordered by time.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="file"/> is <c>null</c>.</exception>
+        /// <seealso cref="ProcessNotes(MidiFile, Action{Note}, Predicate{Note}, NoteDetectionSettings)"/>
+        /// <seealso cref="ProcessNotes(MidiFile, Action{Note}, NoteDetectionSettings)"/>
+        /// <seealso cref="RemoveNotes(MidiFile, NoteDetectionSettings)"/>
+        /// <seealso cref="RemoveNotes(MidiFile, Predicate{Note}, NoteDetectionSettings)"/>
+        /// <seealso cref="GetObjectsUtilities"/>
         public static ICollection<Note> GetNotes(this MidiFile file, NoteDetectionSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(file), file);
