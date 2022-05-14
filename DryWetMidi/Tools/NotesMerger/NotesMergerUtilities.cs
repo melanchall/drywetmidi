@@ -8,7 +8,8 @@ using Melanchall.DryWetMidi.Interaction;
 namespace Melanchall.DryWetMidi.Tools
 {
     /// <summary>
-    /// Provides methods to merge nearby notes.
+    /// Provides methods to merge nearby notes. More info in the
+    /// <see href="xref:a_notes_merger">Notes merge</see> article.
     /// </summary>
     public static class NotesMergerUtilities
     {

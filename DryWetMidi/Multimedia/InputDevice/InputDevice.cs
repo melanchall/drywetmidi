@@ -10,7 +10,9 @@ using Melanchall.DryWetMidi.Core;
 namespace Melanchall.DryWetMidi.Multimedia
 {
     /// <summary>
-    /// Represents an input MIDI device.
+    /// Represents an input MIDI device. More info in the
+    /// <see href="xref:a_dev_overview">Devices</see> and
+    /// <see href="xref:a_dev_input">Input device</see> articles.
     /// </summary>
     public sealed class InputDevice : MidiDevice, IInputDevice
     {

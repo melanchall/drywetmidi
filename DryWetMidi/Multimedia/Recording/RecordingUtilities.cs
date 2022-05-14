@@ -6,8 +6,10 @@ using Melanchall.DryWetMidi.Interaction;
 namespace Melanchall.DryWetMidi.Multimedia
 {
     /// <summary>
-    /// Contains methods to manipulate by recording of MIDI data.
+    /// Contains methods to manipulate by recording of MIDI data. More info in the
+    /// <see href="xref:a_recording_overview">Recording</see> article.
     /// </summary>
+    /// <seealso cref="Recording"/>
     public static class RecordingUtilities
     {
         #region Methods

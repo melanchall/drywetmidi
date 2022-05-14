@@ -6,7 +6,8 @@ namespace Melanchall.DryWetMidi.Multimedia
 {
     /// <summary>
     /// Provides a way to connect an input MIDI device to an output MIDI devices to redirect all
-    /// incoming events from the input device to the output ones.
+    /// incoming events from the input device to the output ones. More info in the
+    /// <see href="xref:a_dev_connector">Devices connector</see> article.
     /// </summary>
     public sealed class DevicesConnector
     {

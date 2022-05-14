@@ -3,11 +3,9 @@
 namespace Melanchall.DryWetMidi.Multimedia
 {
     /// <summary>
-    /// Provides a way to watch devices adding/removing in the system.
+    /// Provides a way to watch devices adding/removing in the system. More info in the
+    /// <see href="xref:a_dev_watcher">Devices watcher</see> article.
     /// </summary>
-	/// <remarks>
-    /// Please see <see href="xref:a_dev_watcher">Devices watcher</see> article to learn more.
-    /// </remarks>
     public sealed class DevicesWatcher
     {
         #region Events

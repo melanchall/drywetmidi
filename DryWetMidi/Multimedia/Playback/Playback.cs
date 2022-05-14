@@ -11,10 +11,11 @@ using Melanchall.DryWetMidi.Interaction;
 namespace Melanchall.DryWetMidi.Multimedia
 {
     /// <summary>
-    /// Provides a way to play MIDI data through the specified output MIDI device.
+    /// Provides a way to play MIDI data through the specified output MIDI device. More info in the
+    /// <see href="xref:a_playback_overview">Playback</see> article.
     /// </summary>
     /// <remarks>
-    /// You can subclass from the <see cref="Playback"/> to create your own playback logic.
+    /// You can derive from the <see cref="Playback"/> class to create your own playback logic.
     /// Please see <see href="xref:a_playback_custom">Custom playback</see> article to learn more.
     /// </remarks>
     public class Playback : IDisposable, IClockDrivenObject
@@ -228,21 +229,18 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         /// <summary>
         /// Gets or sets a value indicating whether notes must be tracked or not. If <c>false</c>, notes
-        /// will be treated as just Note On/Note Off events. The default value is <c>false</c>.
+        /// will be treated as just Note On/Note Off events. The default value is <c>false</c>. More info in the
+        /// <see href="xref:a_playback_datatrack#notes-tracking">Data tracking: Notes tracking</see> article.
         /// </summary>
-        /// <remarks>
-        /// See <see href="xref:a_playback_datatrack">Data tracking</see> article to learn more.
-        /// </remarks>
         public bool TrackNotes { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether program must be tracked or not. If <c>true</c>, any jump
         /// in time will force playback send <see cref="ProgramChangeEvent"/> corresponding to the program at new time,
-        /// if needed. The default value is <c>false</c>.
+        /// if needed. The default value is <c>false</c>. More info in the
+        /// <see href="xref:a_playback_datatrack#midi-parameters-values-tracking">Data tracking: MIDI parameters values tracking</see>
+        /// article.
         /// </summary>
-        /// <remarks>
-        /// See <see href="xref:a_playback_datatrack">Data tracking</see> article to learn more.
-        /// </remarks>
         public bool TrackProgram
         {
             get { return _playbackDataTracker.TrackProgram; }
@@ -261,11 +259,10 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <summary>
         /// Gets or sets a value indicating whether pitch value must be tracked or not. If <c>true</c>, any jump
         /// in time will force playback send <see cref="PitchBendEvent"/> corresponding to the pitch value at new time,
-        /// if needed. The default value is <c>false</c>.
+        /// if needed. The default value is <c>false</c>. More info in the
+        /// <see href="xref:a_playback_datatrack#midi-parameters-values-tracking">Data tracking: MIDI parameters values tracking</see>
+        /// article.
         /// </summary>
-        /// <remarks>
-        /// See <see href="xref:a_playback_datatrack">Data tracking</see> article to learn more.
-        /// </remarks>
         public bool TrackPitchValue
         {
             get { return _playbackDataTracker.TrackPitchValue; }
@@ -284,11 +281,10 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <summary>
         /// Gets or sets a value indicating whether controller values must be tracked or not. If <c>true</c>, any jump
         /// in time will force playback send <see cref="ControlChangeEvent"/> corresponding to the controller value at new time,
-        /// if needed. The default value is <c>false</c>.
+        /// if needed. The default value is <c>false</c>. More info in the
+        /// <see href="xref:a_playback_datatrack#midi-parameters-values-tracking">Data tracking: MIDI parameters values tracking</see>
+        /// article.
         /// </summary>
-        /// <remarks>
-        /// See <see href="xref:a_playback_datatrack">Data tracking</see> article to learn more.
-        /// </remarks>
         public bool TrackControlValue
         {
             get { return _playbackDataTracker.TrackControlValue; }

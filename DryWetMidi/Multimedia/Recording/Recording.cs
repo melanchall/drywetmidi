@@ -9,7 +9,8 @@ using Melanchall.DryWetMidi.Interaction;
 namespace Melanchall.DryWetMidi.Multimedia
 {
     /// <summary>
-    /// Provides a way to record MIDI data received by an input MIDI device.
+    /// Provides a way to record MIDI data received by an input MIDI device. More info in the
+    /// <see href="xref:a_recording_overview">Recording</see> article.
     /// </summary>
     public sealed class Recording : IDisposable
     {

@@ -88,7 +88,7 @@ Please note that some interval sets start from number greater than zero. Current
 |`5`|`0 7`|
 |`7b5`<br/>`dom7dim5`<br/>`7dim5`|`0 4 6 10`|
 |`ø`<br/>`ø7`<br/>`m7b5`<br/>`min7dim5`<br/>`m7dim5`<br/>`min7b5`<br/>`m7b5`|`0 3 6 10`|
-|`aug7`|`0 4 8 10`|
+|`aug7`<br/>`7#5`<br/>`7+5`|`0 4 8 10`|
 |`dim7`|`0 3 6 9`|
 |`add9`|`0 4 7 14`|
 |`minAdd9`<br/>`mAdd9`|`0 3 7 14`|
@@ -98,3 +98,6 @@ Please note that some interval sets start from number greater than zero. Current
 |`9sus2`|`0 2 7 10 14`|
 |`9sus4`|`0 5 7 10 14`|
 |`11`|`0 4 7 10 14 17`|
+|`7b9`|`0 4 7 10 13`|
+|`add11`|`0 4 7 17`|
+|`7#11`<br/>`7+11`<br/>`7(#11)`<br/>`7aug11`|`0 4 7 10 18`|

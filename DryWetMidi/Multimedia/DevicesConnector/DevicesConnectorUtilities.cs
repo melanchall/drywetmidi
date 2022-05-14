@@ -4,7 +4,8 @@ using Melanchall.DryWetMidi.Common;
 namespace Melanchall.DryWetMidi.Multimedia
 {
     /// <summary>
-    /// Provides methods to connect MIDI devices.
+    /// Provides methods to connect MIDI devices. More info in the
+    /// <see href="xref:a_dev_connector">Devices connector</see> article.
     /// </summary>
     public static class DevicesConnectorUtilities
     {

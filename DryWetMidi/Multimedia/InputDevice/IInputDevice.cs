@@ -3,8 +3,11 @@
 namespace Melanchall.DryWetMidi.Multimedia
 {
     /// <summary>
-    /// Represents an abstract input MIDI device.
+    /// Represents an abstract input MIDI device. More info in the
+    /// <see href="xref:a_dev_overview">Devices</see> and
+    /// <see href="xref:a_dev_input">Input device</see> articles.
     /// </summary>
+    /// <seealso cref="InputDevice"/>
     public interface IInputDevice
     {
         /// <summary>

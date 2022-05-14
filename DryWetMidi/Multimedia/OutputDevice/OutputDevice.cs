@@ -9,7 +9,9 @@ using Melanchall.DryWetMidi.Core;
 namespace Melanchall.DryWetMidi.Multimedia
 {
     /// <summary>
-    /// Represents an output MIDI device.
+    /// Represents an output MIDI device. More info in the
+    /// <see href="xref:a_dev_overview">Devices</see> and
+    /// <see href="xref:a_dev_output">Output device</see> articles.
     /// </summary>
     public sealed class OutputDevice : MidiDevice, IOutputDevice
     {

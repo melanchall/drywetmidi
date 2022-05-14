@@ -12,7 +12,8 @@ namespace Melanchall.DryWetMidi.Multimedia
 {
     /// <summary>
     /// Contains methods to play MIDI data and retrieving an instance of the <see cref="Playback"/>
-    /// which provides advanced features for MIDI data playing.
+    /// which provides advanced features for MIDI data playing. More info in the
+    /// <see href="xref:a_playback_overview">Playback</see> article.
     /// </summary>
     public static class PlaybackUtilities
     {

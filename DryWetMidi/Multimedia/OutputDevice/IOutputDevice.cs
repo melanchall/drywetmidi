@@ -4,8 +4,11 @@ using System;
 namespace Melanchall.DryWetMidi.Multimedia
 {
     /// <summary>
-    /// Represents an abstract output MIDI device.
+    /// Represents an abstract output MIDI device. More info in the
+    /// <see href="xref:a_dev_overview">Devices</see> and
+    /// <see href="xref:a_dev_output">Output device</see> articles.
     /// </summary>
+    /// <seealso cref="OutputDevice"/>
     public interface IOutputDevice
     {
         /// <summary>

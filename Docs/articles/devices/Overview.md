@@ -19,7 +19,7 @@ All classes that interact with devices work with interfaces mentioned above, so 
 
 MIDI devices API classes are placed in the [Melanchall.DryWetMidi.Multimedia](xref:Melanchall.DryWetMidi.Multimedia) namespace.
 
-To understand what is input and output device in DryWetMIDI take a look at following image:
+To understand what is an input and an output device in DryWetMIDI take a look at the following image:
 
 ![Devices](images/Devices.png)
 

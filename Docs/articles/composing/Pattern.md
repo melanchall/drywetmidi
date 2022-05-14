@@ -50,54 +50,66 @@ var pattern = new PatternBuilder()
     // The length of all main theme's notes within four first bars is
     // triplet eight so set it which will free us from necessity to specify
     // the length of each note explicitly
+
     .SetNoteLength(MusicalTimeSpan.Eighth.Triplet())
     
     // Anchor current time (start of the pattern) to jump to it
     // when we'll start to program bass part
+
     .Anchor()
     
     // We will add notes relative to G#3.
     // Instead of Octave.Get(3).GSharp it is possible to use Note.Get(NoteName.GSharp, 3)
+
     .SetRootNote(Octave.Get(3).GSharp)
     
     // Add first three notes and repeat them seven times which will
     // give us two bars of the main theme
-                            // G#3
-    .Note(Interval.Zero)  // +0  (G#3)
-    .Note(Interval.Five)  // +5  (C#4)
-    .Note(Interval.Eight) // +8  (E4)
-    .Repeat(3, 7)         // repeat three previous notes seven times
+
+                           // G#3
+    .Note(Interval.Zero)   // +0  (G#3)
+    .Note(Interval.Five)   // +5  (C#4)
+    .Note(Interval.Eight)  // +8  (E4)
+
+    .Repeat(3, 7)          // repeat three previous notes seven times
     
     // Add notes of the next two bars
-                            // G#3
-    .Note(Interval.One)   // +1  (A3)
-    .Note(Interval.Five)  // +5  (C#4)
-    .Note(Interval.Eight) // +8  (E4)
-    .Repeat(3, 1)         // repeat three previous notes
-    .Note(Interval.One)   // +1  (A3)
-    .Note(Interval.Six)   // +6  (D4)
-    .Note(Interval.Ten)   // +10 (F#4)
-    .Repeat(3, 1)         // repeat three previous notes
-                            // reaching the end of third bar
-    .Note(Interval.Zero)  // +0  (G#3)
-    .Note(Interval.Four)  // +4  (C4)
-    .Note(Interval.Ten)   // +10 (F#4)
-    .Note(Interval.Zero)  // +0  (G#3)
-    .Note(Interval.Five)  // +5  (C#4)
-    .Note(Interval.Eight) // +8  (E4)
-    .Note(Interval.Zero)  // +0  (G#3)
-    .Note(Interval.Five)  // +5  (C#4)
+
+                           // G#3
+    .Note(Interval.One)    // +1  (A3)
+    .Note(Interval.Five)   // +5  (C#4)
+    .Note(Interval.Eight)  // +8  (E4)
+
+    .Repeat(3, 1)          // repeat three previous notes
+
+    .Note(Interval.One)    // +1  (A3)
+    .Note(Interval.Six)    // +6  (D4)
+    .Note(Interval.Ten)    // +10 (F#4)
+
+    .Repeat(3, 1)          // repeat three previous notes
+                           // reaching the end of third bar
+
+    .Note(Interval.Zero)   // +0  (G#3)
+    .Note(Interval.Four)   // +4  (C4)
+    .Note(Interval.Ten)    // +10 (F#4)
+    .Note(Interval.Zero)   // +0  (G#3)
+    .Note(Interval.Five)   // +5  (C#4)
+    .Note(Interval.Eight)  // +8  (E4)
+    .Note(Interval.Zero)   // +0  (G#3)
+    .Note(Interval.Five)   // +5  (C#4)
     .Note(Intervaln.Seven) // +7  (D#4)
-    .Note(-Interval.Two)  // -2  (F#3)
-    .Note(Interval.Four)  // +4  (C4)
-    .Note(Interval.Seven) // +7  (D#4)
+    .Note(-Interval.Two)   // -2  (F#3)
+    .Note(Interval.Four)   // +4  (C4)
+    .Note(Interval.Seven)  // +7  (D#4)
     
     // Now we will program bass part. To start adding notes from the
     // beginning of the pattern we need to move to the anchor we set
     // above
+
     .MoveToFirstAnchor()
     
     // First two chords have whole length
+
     .SetNoteLength(MusicalTimeSpan.Whole)
     
                                             // insert a chord relative to
@@ -105,17 +117,22 @@ var pattern = new PatternBuilder()
     .Chord(bassChord, Octave.Get(1).B)      // B1  (B1, B2)
     
     // Remaining four chords has half length
+
     .SetNoteLength(MusicalTimeSpan.Half)
     
     .Chord(bassChord, Octave.Get(1).A)      // A1  (A1, A2)
     .Chord(bassChord, Octave.Get(1).FSharp) // F#1 (F#1, F#2)
     .Chord(bassChord, Octave.Get(1).GSharp) // G#1 (G#1, G#2)
+
     .Repeat()                               // repeat the previous chord
     
     // Build a pattern that can be then saved to a MIDI file
+
     .Build();
 ```
 
 [Build](xref:Melanchall.DryWetMidi.Composing.PatternBuilder.Build) method returns an instance of [Pattern](xref:Melanchall.DryWetMidi.Composing.Pattern). Pattern can be transformed or altered by methods in [PatternUtilities](xref:Melanchall.DryWetMidi.Composing.PatternUtilities).
 
-Also see [Extension methods](xref:Melanchall.DryWetMidi.Composing.Pattern#extensionmethods) section of the [Pattern](xref:Melanchall.DryWetMidi.Composing.Pattern) API.
+Pattern can be then saved to [MidiFile](xref:Melanchall.DryWetMidi.Core.MidiFile) (via [ToFile](xref:Melanchall.DryWetMidi.Composing.Pattern.ToFile*) method) or [TrackChunk](xref:Melanchall.DryWetMidi.Core.TrackChunk) (via [ToTrackChunk](xref:Melanchall.DryWetMidi.Composing.Pattern.ToTrackChunk*) method). You need to provide a [tempo map](xref:Melanchall.DryWetMidi.Interaction.TempoMap). Also you can optionally specify the channel that should be set to events. The default channel is `0`.
+
+Also please see [Extension methods](xref:Melanchall.DryWetMidi.Composing.Pattern#extensionmethods) section of the [Pattern](xref:Melanchall.DryWetMidi.Composing.Pattern) API.
