@@ -87,10 +87,6 @@
   <div class="markdown level0 remarks"></div>
     <h3 id="classes">Classes
   </h3>
-      <h4><a class="xref" href="Melanchall.DryWetMidi.Tools.ChordsQuantizer.html">ChordsQuantizer</a></h4>
-      <section>
-Provides methods to quantize chords time.
-</section>
       <h4><a class="xref" href="Melanchall.DryWetMidi.Tools.ChordsQuantizerUtilities.html">ChordsQuantizerUtilities</a></h4>
       <section>
 Provides methods to quantize chords time.
@@ -131,10 +127,6 @@ Provides methods to convert MIDI objects to CSV representation and vice versa.
       <section>
 Common CSV reading/writing settings.
 </section>
-      <h4><a class="xref" href="Melanchall.DryWetMidi.Tools.LengthedObjectsQuantizer-2.html">LengthedObjectsQuantizer&lt;TObject, TSettings&gt;</a></h4>
-      <section>
-Provides methods to quantize lengthed objects time.
-</section>
       <h4><a class="xref" href="Melanchall.DryWetMidi.Tools.LengthedObjectsQuantizingSettings-1.html">LengthedObjectsQuantizingSettings&lt;TObject&gt;</a></h4>
       <section>
 Settings according to which lengthed objects should be quantized.
@@ -156,10 +148,6 @@ Provides methods for splitting lengthed objects.
 Settings according to which <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a> must be read from or written to
 CSV representation.
 </section>
-      <h4><a class="xref" href="Melanchall.DryWetMidi.Tools.MidiFileSplitter.html">MidiFileSplitter</a></h4>
-      <section>
-Provides methods to split a MIDI file.
-</section>
       <h4><a class="xref" href="Melanchall.DryWetMidi.Tools.NoteCsvConversionSettings.html">NoteCsvConversionSettings</a></h4>
       <section>
 Settings according to which instances of the <a class="xref" href="Melanchall.DryWetMidi.Interaction.Note.html">Note</a> must be read from or written to
@@ -167,19 +155,17 @@ CSV representation.
 </section>
       <h4><a class="xref" href="Melanchall.DryWetMidi.Tools.NotesMerger.html">NotesMerger</a></h4>
       <section>
-Provides methods to merge nearby notes.
+Provides methods to merge nearby notes. More info in the
+<a class="xref" href="../articles/tools/Notes-merger.html">Notes merge</a> article.
 </section>
       <h4><a class="xref" href="Melanchall.DryWetMidi.Tools.NotesMergerUtilities.html">NotesMergerUtilities</a></h4>
       <section>
-Provides methods to merge nearby notes.
+Provides methods to merge nearby notes. More info in the
+<a class="xref" href="../articles/tools/Notes-merger.html">Notes merge</a> article.
 </section>
       <h4><a class="xref" href="Melanchall.DryWetMidi.Tools.NotesMergingSettings.html">NotesMergingSettings</a></h4>
       <section>
 Settings according to which nearby notes should be merged.
-</section>
-      <h4><a class="xref" href="Melanchall.DryWetMidi.Tools.NotesQuantizer.html">NotesQuantizer</a></h4>
-      <section>
-Provides methods to quantize notes time.
 </section>
       <h4><a class="xref" href="Melanchall.DryWetMidi.Tools.NotesQuantizerUtilities.html">NotesQuantizerUtilities</a></h4>
       <section>
@@ -209,13 +195,28 @@ Provides methods for splitting notes.
       <section>
 Provides methods for splitting notes.
 </section>
+      <h4><a class="xref" href="Melanchall.DryWetMidi.Tools.PartProcessingContext.html">PartProcessingContext</a></h4>
+      <section>
+Holds all the required data to process a part by the <a class="xref" href="Melanchall.DryWetMidi.Tools.Repeater.html">Repeater</a>.
+</section>
       <h4><a class="xref" href="Melanchall.DryWetMidi.Tools.QuantizedTime.html">QuantizedTime</a></h4>
       <section>
 Holds information about new time for an object that was calculated during quantizing.
 </section>
-      <h4><a class="xref" href="Melanchall.DryWetMidi.Tools.Quantizer-2.html">Quantizer&lt;TObject, TSettings&gt;</a></h4>
+      <h4><a class="xref" href="Melanchall.DryWetMidi.Tools.Quantizer.html">Quantizer</a></h4>
       <section>
-Provides methods to quantize objects time.
+Performs quantizing of objects. The process can be adjusted in many ways by <a class="xref" href="Melanchall.DryWetMidi.Tools.QuantizingSettings.html">QuantizingSettings</a>.
+More info in the <a class="xref" href="../articles/tools/Quantizer.html">Quantizer</a> article.
+</section>
+      <h4><a class="xref" href="Melanchall.DryWetMidi.Tools.QuantizerUtilities.html">QuantizerUtilities</a></h4>
+      <section>
+Provides utilities to quantize objects of different types. More info in the
+<a class="xref" href="../articles/tools/Quantizer.html">Quantizer</a> article.
+</section>
+      <h4><a class="xref" href="Melanchall.DryWetMidi.Tools.QuantizingSettings.html">QuantizingSettings</a></h4>
+      <section>
+Settings according to which quantizing should be performed by the <a class="xref" href="Melanchall.DryWetMidi.Tools.Quantizer.html">Quantizer</a>.
+More info in the <a class="xref" href="../articles/tools/Quantizer.html">Quantizer</a> article.
 </section>
       <h4><a class="xref" href="Melanchall.DryWetMidi.Tools.QuantizingSettings-1.html">QuantizingSettings&lt;TObject&gt;</a></h4>
       <section>
@@ -225,9 +226,25 @@ Settings according to which quantizing should be performed.
       <section>
 Provides methods to randomize objects time.
 </section>
+      <h4><a class="xref" href="Melanchall.DryWetMidi.Tools.RandomizingSettings.html">RandomizingSettings</a></h4>
+      <section>
+Settings according to which randomizing should be performed by the <a class="xref" href="Melanchall.DryWetMidi.Tools.Quantizer.html">Quantizer</a>.
+</section>
       <h4><a class="xref" href="Melanchall.DryWetMidi.Tools.RandomizingSettings-1.html">RandomizingSettings&lt;TObject&gt;</a></h4>
       <section>
 Settings according to which objects should be randomized.
+</section>
+      <h4><a class="xref" href="Melanchall.DryWetMidi.Tools.Repeater.html">Repeater</a></h4>
+      <section>
+Provides a way to repeat MIDI data using different options.
+</section>
+      <h4><a class="xref" href="Melanchall.DryWetMidi.Tools.RepeaterUtilities.html">RepeaterUtilities</a></h4>
+      <section>
+Provides methods to repeat MIDI data using different options.
+</section>
+      <h4><a class="xref" href="Melanchall.DryWetMidi.Tools.RepeatingSettings.html">RepeatingSettings</a></h4>
+      <section>
+Provides settings for <a class="xref" href="Melanchall.DryWetMidi.Tools.Repeater.html">Repeater</a> tool.
 </section>
       <h4><a class="xref" href="Melanchall.DryWetMidi.Tools.SliceMidiFileMarkers.html">SliceMidiFileMarkers</a></h4>
       <section>
@@ -235,26 +252,27 @@ Provides factory methods to create events to mark parts of split file.
 </section>
       <h4><a class="xref" href="Melanchall.DryWetMidi.Tools.SliceMidiFileSettings.html">SliceMidiFileSettings</a></h4>
       <section>
-Settings according to which a <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a> should be split.
+Settings according to which a <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a> should be split by vertical split methods.
 </section>
       <h4><a class="xref" href="Melanchall.DryWetMidi.Tools.SplitFileByChannelSettings.html">SplitFileByChannelSettings</a></h4>
       <section>
 Defines how a MIDI file should be split by channel using
-<a class="xref" href="Melanchall.DryWetMidi.Tools.MidiFileSplitter.html#Melanchall_DryWetMidi_Tools_MidiFileSplitter_SplitByChannel_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Tools_SplitFileByChannelSettings_">SplitByChannel(MidiFile, SplitFileByChannelSettings)</a> method.
+<a class="xref" href="Melanchall.DryWetMidi.Tools.Splitter.html#Melanchall_DryWetMidi_Tools_Splitter_SplitByChannel_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Tools_SplitFileByChannelSettings_">SplitByChannel(MidiFile, SplitFileByChannelSettings)</a> method.
 </section>
       <h4><a class="xref" href="Melanchall.DryWetMidi.Tools.SplitFileByChunksSettings.html">SplitFileByChunksSettings</a></h4>
       <section>
 Defines how a MIDI file should be split by chunks using
-<a class="xref" href="Melanchall.DryWetMidi.Tools.MidiFileSplitter.html#Melanchall_DryWetMidi_Tools_MidiFileSplitter_SplitByChunks_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Tools_SplitFileByChunksSettings_">SplitByChunks(MidiFile, SplitFileByChunksSettings)</a> method.
+<a class="xref" href="Melanchall.DryWetMidi.Tools.Splitter.html#Melanchall_DryWetMidi_Tools_Splitter_SplitByChunks_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Tools_SplitFileByChunksSettings_">SplitByChunks(MidiFile, SplitFileByChunksSettings)</a> method.
 </section>
       <h4><a class="xref" href="Melanchall.DryWetMidi.Tools.SplitFileByNotesSettings.html">SplitFileByNotesSettings</a></h4>
       <section>
 Defines how a MIDI file should be split by notes using
-<a class="xref" href="Melanchall.DryWetMidi.Tools.MidiFileSplitter.html#Melanchall_DryWetMidi_Tools_MidiFileSplitter_SplitByNotes_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Tools_SplitFileByNotesSettings_">SplitByNotes(MidiFile, SplitFileByNotesSettings)</a> method.
+<a class="xref" href="Melanchall.DryWetMidi.Tools.Splitter.html#Melanchall_DryWetMidi_Tools_Splitter_SplitByNotes_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Tools_SplitFileByNotesSettings_">SplitByNotes(MidiFile, SplitFileByNotesSettings)</a> method.
 </section>
-      <h4><a class="xref" href="Melanchall.DryWetMidi.Tools.TimedEventsQuantizer.html">TimedEventsQuantizer</a></h4>
+      <h4><a class="xref" href="Melanchall.DryWetMidi.Tools.Splitter.html">Splitter</a></h4>
       <section>
-Provides methods to quantize timed events time.
+Provides methods to split MIDI data in many different ways. More info in the
+<a class="xref" href="../articles/tools/Splitter.html">Splitter</a> article.
 </section>
       <h4><a class="xref" href="Melanchall.DryWetMidi.Tools.TimedEventsQuantizerUtilities.html">TimedEventsQuantizerUtilities</a></h4>
       <section>
@@ -306,6 +324,10 @@ The format which should be used to write notes to or read them from CSV.
 Defines how a note&apos;s number is presented in CSV representation: either a number or
 a letter (for example, A#5).
 </section>
+      <h4><a class="xref" href="Melanchall.DryWetMidi.Tools.QuantizerTarget.html">QuantizerTarget</a></h4>
+      <section>
+An object&apos;s target (start, end, both ends) to quantize.
+</section>
       <h4><a class="xref" href="Melanchall.DryWetMidi.Tools.QuantizingBeyondFixedEndPolicy.html">QuantizingBeyondFixedEndPolicy</a></h4>
       <section>
 Policy which defines how a quantizer should act in case of object&apos;s side
@@ -317,10 +339,18 @@ is going to be moved beyond an opposite one that is fixed. The default value is
 Policy which defines how a quantizer should act in case of an object is going
 to be moved beyond zero. The default value is <a class="xref" href="Melanchall.DryWetMidi.Tools.QuantizingBeyondZeroPolicy.html#Melanchall_DryWetMidi_Tools_QuantizingBeyondZeroPolicy_FixAtZero">FixAtZero</a>.
 </section>
+      <h4><a class="xref" href="Melanchall.DryWetMidi.Tools.ShiftPolicy.html">ShiftPolicy</a></h4>
+      <section>
+Specifies how shift for <a class="xref" href="Melanchall.DryWetMidi.Tools.Repeater.html">Repeater</a> should be calculated.
+</section>
       <h4><a class="xref" href="Melanchall.DryWetMidi.Tools.TimeProcessingAction.html">TimeProcessingAction</a></h4>
       <section>
 Indicates whether an object is being processed should be skipped or not.
 The default value is <a class="xref" href="Melanchall.DryWetMidi.Tools.TimeProcessingAction.html#Melanchall_DryWetMidi_Tools_TimeProcessingAction_Apply">Apply</a>.
+</section>
+      <h4><a class="xref" href="Melanchall.DryWetMidi.Tools.TimeSpanRoundingPolicy.html">TimeSpanRoundingPolicy</a></h4>
+      <section>
+Specifies how a time span should be round.
 </section>
       <h4><a class="xref" href="Melanchall.DryWetMidi.Tools.VelocityMergingPolicy.html">VelocityMergingPolicy</a></h4>
       <section>
@@ -347,7 +377,7 @@ Determines how velocities should be merged during notes merging. The default val
             <span class="pull-right">
               <a href="#top">Back to top</a>
             </span>
-            2021 / Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
+            2022 / Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
             
           </div>
         </div>

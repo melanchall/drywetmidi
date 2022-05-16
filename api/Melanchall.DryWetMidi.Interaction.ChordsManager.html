@@ -90,7 +90,8 @@ Provides a way to manage chords of a MIDI file.
   <div class="inheritance">
     <h5>Inheritance</h5>
     <div class="level0"><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object">Object</a></div>
-    <div class="level1"><span class="xref">ChordsManager</span></div>
+    <div class="level1"><a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedObjectsManager-1.html">TimedObjectsManager</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.Chord.html">Chord</a>&gt;</div>
+    <div class="level2"><span class="xref">ChordsManager</span></div>
   </div>
   <div classs="implements">
     <h5>Implements</h5>
@@ -99,42 +100,43 @@ Provides a way to manage chords of a MIDI file.
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
     <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#System_Object_Equals_System_Object_">Object.Equals(Object)</a>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedObjectsManager-1.html#Melanchall_DryWetMidi_Interaction_TimedObjectsManager_1_Objects">TimedObjectsManager&lt;Chord&gt;.Objects</a>
     </div>
     <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#System_Object_Equals_System_Object_System_Object_">Object.Equals(Object, Object)</a>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedObjectsManager-1.html#Melanchall_DryWetMidi_Interaction_TimedObjectsManager_1_SaveChanges">TimedObjectsManager&lt;Chord&gt;.SaveChanges()</a>
     </div>
     <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gethashcode#System_Object_GetHashCode">Object.GetHashCode()</a>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedObjectsManager-1.html#Melanchall_DryWetMidi_Interaction_TimedObjectsManager_1_Dispose">TimedObjectsManager&lt;Chord&gt;.Dispose()</a>
     </div>
     <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gettype#System_Object_GetType">Object.GetType()</a>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)">Object.Equals(Object)</a>
     </div>
     <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.memberwiseclone#System_Object_MemberwiseClone">Object.MemberwiseClone()</a>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)">Object.Equals(Object, Object)</a>
     </div>
     <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.referenceequals#System_Object_ReferenceEquals_System_Object_System_Object_">Object.ReferenceEquals(Object, Object)</a>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gethashcode#system-object-gethashcode">Object.GetHashCode()</a>
     </div>
     <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.tostring#System_Object_ToString">Object.ToString()</a>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gettype#system-object-gettype">Object.GetType()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.memberwiseclone#system-object-memberwiseclone">Object.MemberwiseClone()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.referenceequals#system-object-referenceequals(system-object-system-object)">Object.ReferenceEquals(Object, Object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.tostring#system-object-tostring">Object.ToString()</a>
     </div>
   </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="Melanchall.DryWetMidi.Interaction.html">Melanchall.DryWetMidi.Interaction</a></h6>
   <h6><strong>Assembly</strong>: Melanchall.DryWetMidi.dll</h6>
   <h5 id="Melanchall_DryWetMidi_Interaction_ChordsManager_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public sealed class ChordsManager : IDisposable</code></pre>
+    <pre><code class="lang-csharp hljs">[Obsolete(&quot;OBS11: Use TimedObjectsManager class. More info: https://melanchall.github.io/drywetmidi/obsolete/obsolete.html#obs11.&quot;)]
+public sealed class ChordsManager : TimedObjectsManager&lt;Chord&gt;, IDisposable</code></pre>
   </div>
-  <h5 id="Melanchall_DryWetMidi_Interaction_ChordsManager_remarks"><strong>Remarks</strong></h5>
-  <div class="markdown level0 remarks">
-This manager is wrapper for the <a class="xref" href="Melanchall.DryWetMidi.Interaction.NotesManager.html">NotesManager</a> that provides easy manipulation
-of sets of <a class="xref" href="Melanchall.DryWetMidi.Core.NoteOnEvent.html">NoteOnEvent</a> and <a class="xref" href="Melanchall.DryWetMidi.Core.NoteOffEvent.html">NoteOffEvent</a> events through the <a class="xref" href="Melanchall.DryWetMidi.Interaction.Chord.html">Chord</a>
-objects. To start manage chords you need to get an instance of the <a class="xref" href="Melanchall.DryWetMidi.Interaction.ChordsManager.html">ChordsManager</a>. To
-finish managing you need to call the <a class="xref" href="Melanchall.DryWetMidi.Interaction.ChordsManager.html#Melanchall_DryWetMidi_Interaction_ChordsManager_SaveChanges">SaveChanges()</a> or <a class="xref" href="Melanchall.DryWetMidi.Interaction.ChordsManager.html#Melanchall_DryWetMidi_Interaction_ChordsManager_Dispose">Dispose()</a> method.
-Since the manager implements <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.idisposable">IDisposable</a> it is recommended to manage chords within
-using block.
-</div>
   <h3 id="constructors">Constructors
   </h3>
   <a id="Melanchall_DryWetMidi_Interaction_ChordsManager__ctor_" data-uid="Melanchall.DryWetMidi.Interaction.ChordsManager.#ctor*"></a>
@@ -146,7 +148,7 @@ collection, notes tolerance and comparison delegate for events that have same ti
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public ChordsManager(EventsCollection eventsCollection, ChordDetectionSettings settings = null, Comparison&lt;MidiEvent&gt; sameTimeEventsComparison = null)</code></pre>
+    <pre><code class="lang-csharp hljs">public ChordsManager(EventsCollection eventsCollection, ChordDetectionSettings chordDetectionSettings = null, Comparison&lt;MidiEvent&gt; sameTimeEventsComparison = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -165,7 +167,7 @@ collection, notes tolerance and comparison delegate for events that have same ti
       </tr>
       <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ChordDetectionSettings.html">ChordDetectionSettings</a></td>
-        <td><span class="parametername">settings</span></td>
+        <td><span class="parametername">chordDetectionSettings</span></td>
         <td>Settings accoridng to which chords should be detected and built.</td>
       </tr>
       <tr>
@@ -195,12 +197,13 @@ collection, notes tolerance and comparison delegate for events that have same ti
   <a id="Melanchall_DryWetMidi_Interaction_ChordsManager_Chords_" data-uid="Melanchall.DryWetMidi.Interaction.ChordsManager.Chords*"></a>
   <h4 id="Melanchall_DryWetMidi_Interaction_ChordsManager_Chords" data-uid="Melanchall.DryWetMidi.Interaction.ChordsManager.Chords">Chords</h4>
   <div class="markdown level1 summary">
-Gets the <a class="xref" href="Melanchall.DryWetMidi.Interaction.ChordsCollection.html">ChordsCollection</a> with all chords managed by the current <a class="xref" href="Melanchall.DryWetMidi.Interaction.ChordsManager.html">ChordsManager</a>.
+Gets the <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedObjectsCollection-1.html">TimedObjectsCollection&lt;TObject&gt;</a> with all chords managed by the current
+<a class="xref" href="Melanchall.DryWetMidi.Interaction.ChordsManager.html">ChordsManager</a>.
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public ChordsCollection Chords { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">public TimedObjectsCollection&lt;Chord&gt; Chords { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -212,42 +215,11 @@ Gets the <a class="xref" href="Melanchall.DryWetMidi.Interaction.ChordsCollectio
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ChordsCollection.html">ChordsCollection</a></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedObjectsCollection-1.html">TimedObjectsCollection</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.Chord.html">Chord</a>&gt;</td>
         <td></td>
       </tr>
     </tbody>
   </table>
-  <h3 id="methods">Methods
-  </h3>
-  <a id="Melanchall_DryWetMidi_Interaction_ChordsManager_Dispose_" data-uid="Melanchall.DryWetMidi.Interaction.ChordsManager.Dispose*"></a>
-  <h4 id="Melanchall_DryWetMidi_Interaction_ChordsManager_Dispose" data-uid="Melanchall.DryWetMidi.Interaction.ChordsManager.Dispose">Dispose()</h4>
-  <div class="markdown level1 summary">
-Performs application-defined tasks associated with freeing, releasing, or resetting
-unmanaged resources.
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void Dispose()</code></pre>
-  </div>
-  <a id="Melanchall_DryWetMidi_Interaction_ChordsManager_SaveChanges_" data-uid="Melanchall.DryWetMidi.Interaction.ChordsManager.SaveChanges*"></a>
-  <h4 id="Melanchall_DryWetMidi_Interaction_ChordsManager_SaveChanges" data-uid="Melanchall.DryWetMidi.Interaction.ChordsManager.SaveChanges">SaveChanges()</h4>
-  <div class="markdown level1 summary">
-Saves all chords that were managed with the current <a class="xref" href="Melanchall.DryWetMidi.Interaction.ChordsManager.html">ChordsManager</a> updating
-underlying events collection.
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void SaveChanges()</code></pre>
-  </div>
-  <h5 id="Melanchall_DryWetMidi_Interaction_ChordsManager_SaveChanges_remarks">Remarks</h5>
-  <div class="markdown level1 remarks">
-This method will rewrite content of the events collection was used to construct the current
-<a class="xref" href="Melanchall.DryWetMidi.Interaction.ChordsManager.html">ChordsManager</a> with events were managed by this manager. Also all delta-times
-of wrapped events will be recalculated according to the <a class="xref" href="Melanchall.DryWetMidi.Interaction.Note.html#Melanchall_DryWetMidi_Interaction_Note_Time">Time</a> and
-<a class="xref" href="Melanchall.DryWetMidi.Interaction.Note.html#Melanchall_DryWetMidi_Interaction_Note_Length">Length</a> of chords notes.
-</div>
   <h3 id="implements">Implements</h3>
   <div>
       <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.idisposable">System.IDisposable</a>
@@ -273,7 +245,7 @@ of wrapped events will be recalculated according to the <a class="xref" href="Me
             <span class="pull-right">
               <a href="#top">Back to top</a>
             </span>
-            2021 / Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
+            2022 / Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
             
           </div>
         </div>

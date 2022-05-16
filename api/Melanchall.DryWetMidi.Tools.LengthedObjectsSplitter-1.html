@@ -97,32 +97,33 @@ Provides methods for splitting lengthed objects.
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
     <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#System_Object_Equals_System_Object_">Object.Equals(Object)</a>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)">Object.Equals(Object)</a>
     </div>
     <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#System_Object_Equals_System_Object_System_Object_">Object.Equals(Object, Object)</a>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)">Object.Equals(Object, Object)</a>
     </div>
     <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gethashcode#System_Object_GetHashCode">Object.GetHashCode()</a>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gethashcode#system-object-gethashcode">Object.GetHashCode()</a>
     </div>
     <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gettype#System_Object_GetType">Object.GetType()</a>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gettype#system-object-gettype">Object.GetType()</a>
     </div>
     <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.memberwiseclone#System_Object_MemberwiseClone">Object.MemberwiseClone()</a>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.memberwiseclone#system-object-memberwiseclone">Object.MemberwiseClone()</a>
     </div>
     <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.referenceequals#System_Object_ReferenceEquals_System_Object_System_Object_">Object.ReferenceEquals(Object, Object)</a>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.referenceequals#system-object-referenceequals(system-object-system-object)">Object.ReferenceEquals(Object, Object)</a>
     </div>
     <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.tostring#System_Object_ToString">Object.ToString()</a>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.tostring#system-object-tostring">Object.ToString()</a>
     </div>
   </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="Melanchall.DryWetMidi.Tools.html">Melanchall.DryWetMidi.Tools</a></h6>
   <h6><strong>Assembly</strong>: Melanchall.DryWetMidi.dll</h6>
   <h5 id="Melanchall_DryWetMidi_Tools_LengthedObjectsSplitter_1_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public abstract class LengthedObjectsSplitter&lt;TObject&gt;
+    <pre><code class="lang-csharp hljs">[Obsolete(&quot;OBS12: Use Splitter class. More info: https://melanchall.github.io/drywetmidi/obsolete/obsolete.html#obs12.&quot;)]
+public abstract class LengthedObjectsSplitter&lt;TObject&gt;
     where TObject : ILengthedObject</code></pre>
   </div>
   <h5 class="typeParameters">Type Parameters</h5>
@@ -142,48 +143,6 @@ Provides methods for splitting lengthed objects.
   </table>
   <h3 id="methods">Methods
   </h3>
-  <a id="Melanchall_DryWetMidi_Tools_LengthedObjectsSplitter_1_CloneObject_" data-uid="Melanchall.DryWetMidi.Tools.LengthedObjectsSplitter`1.CloneObject*"></a>
-  <h4 id="Melanchall_DryWetMidi_Tools_LengthedObjectsSplitter_1_CloneObject__0_" data-uid="Melanchall.DryWetMidi.Tools.LengthedObjectsSplitter`1.CloneObject(`0)">CloneObject(TObject)</h4>
-  <div class="markdown level1 summary">
-Clones an object by creating a copy of it.
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected abstract TObject CloneObject(TObject obj)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">TObject</span></td>
-        <td><span class="parametername">obj</span></td>
-        <td>Object to clone.</td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">TObject</span></td>
-        <td>Copy of the <code data-dev-comment-type="paramref" class="paramref">obj</code>.</td>
-      </tr>
-    </tbody>
-  </table>
   <a id="Melanchall_DryWetMidi_Tools_LengthedObjectsSplitter_1_SplitAtDistance_" data-uid="Melanchall.DryWetMidi.Tools.LengthedObjectsSplitter`1.SplitAtDistance*"></a>
   <h4 id="Melanchall_DryWetMidi_Tools_LengthedObjectsSplitter_1_SplitAtDistance_System_Collections_Generic_IEnumerable__0__Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Tools_LengthedObjectTarget_Melanchall_DryWetMidi_Interaction_TempoMap_" data-uid="Melanchall.DryWetMidi.Tools.LengthedObjectsSplitter`1.SplitAtDistance(System.Collections.Generic.IEnumerable{`0},Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Tools.LengthedObjectTarget,Melanchall.DryWetMidi.Interaction.TempoMap)">SplitAtDistance(IEnumerable&lt;TObject&gt;, ITimeSpan, LengthedObjectTarget, TempoMap)</h4>
   <div class="markdown level1 summary">
@@ -192,7 +151,8 @@ Splits objects at the specified distance from an object&apos;s start or end.
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public IEnumerable&lt;TObject&gt; SplitAtDistance(IEnumerable&lt;TObject&gt; objects, ITimeSpan distance, LengthedObjectTarget from, TempoMap tempoMap)</code></pre>
+    <pre><code class="lang-csharp hljs">[Obsolete(&quot;OBS12: Use Splitter class. More info: https://melanchall.github.io/drywetmidi/obsolete/obsolete.html#obs12.&quot;)]
+public IEnumerable&lt;TObject&gt; SplitAtDistance(IEnumerable&lt;TObject&gt; objects, ITimeSpan distance, LengthedObjectTarget from, TempoMap tempoMap)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -273,7 +233,8 @@ the object&apos;s start or end. For example, 0.5 means splitting at the center o
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public IEnumerable&lt;TObject&gt; SplitAtDistance(IEnumerable&lt;TObject&gt; objects, double ratio, TimeSpanType lengthType, LengthedObjectTarget from, TempoMap tempoMap)</code></pre>
+    <pre><code class="lang-csharp hljs">[Obsolete(&quot;OBS12: Use Splitter class. More info: https://melanchall.github.io/drywetmidi/obsolete/obsolete.html#obs12.&quot;)]
+public IEnumerable&lt;TObject&gt; SplitAtDistance(IEnumerable&lt;TObject&gt; objects, double ratio, TimeSpanType lengthType, LengthedObjectTarget from, TempoMap tempoMap)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -365,7 +326,8 @@ Splits objects by the specified grid.
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public IEnumerable&lt;TObject&gt; SplitByGrid(IEnumerable&lt;TObject&gt; objects, IGrid grid, TempoMap tempoMap)</code></pre>
+    <pre><code class="lang-csharp hljs">[Obsolete(&quot;OBS12: Use Splitter class. More info: https://melanchall.github.io/drywetmidi/obsolete/obsolete.html#obs12.&quot;)]
+public IEnumerable&lt;TObject&gt; SplitByGrid(IEnumerable&lt;TObject&gt; objects, IGrid grid, TempoMap tempoMap)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -440,7 +402,8 @@ Splits objects into the specified number of parts of the equal length.
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public IEnumerable&lt;TObject&gt; SplitByPartsNumber(IEnumerable&lt;TObject&gt; objects, int partsNumber, TimeSpanType lengthType, TempoMap tempoMap)</code></pre>
+    <pre><code class="lang-csharp hljs">[Obsolete(&quot;OBS12: Use Splitter class. More info: https://melanchall.github.io/drywetmidi/obsolete/obsolete.html#obs12.&quot;)]
+public IEnumerable&lt;TObject&gt; SplitByPartsNumber(IEnumerable&lt;TObject&gt; objects, int partsNumber, TimeSpanType lengthType, TempoMap tempoMap)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -530,7 +493,8 @@ equally distanced from each other starting from the object&apos;s start time.
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public IEnumerable&lt;TObject&gt; SplitByStep(IEnumerable&lt;TObject&gt; objects, ITimeSpan step, TempoMap tempoMap)</code></pre>
+    <pre><code class="lang-csharp hljs">[Obsolete(&quot;OBS12: Use Splitter class. More info: https://melanchall.github.io/drywetmidi/obsolete/obsolete.html#obs12.&quot;)]
+public IEnumerable&lt;TObject&gt; SplitByStep(IEnumerable&lt;TObject&gt; objects, ITimeSpan step, TempoMap tempoMap)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -598,53 +562,6 @@ will not be split and will be returned as clones of the input objects.
       </tr>
     </tbody>
   </table>
-  <a id="Melanchall_DryWetMidi_Tools_LengthedObjectsSplitter_1_SplitObject_" data-uid="Melanchall.DryWetMidi.Tools.LengthedObjectsSplitter`1.SplitObject*"></a>
-  <h4 id="Melanchall_DryWetMidi_Tools_LengthedObjectsSplitter_1_SplitObject__0_System_Int64_" data-uid="Melanchall.DryWetMidi.Tools.LengthedObjectsSplitter`1.SplitObject(`0,System.Int64)">SplitObject(TObject, Int64)</h4>
-  <div class="markdown level1 summary">
-Splits an object by the specified time.
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected abstract SplitLengthedObject&lt;TObject&gt; SplitObject(TObject obj, long time)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">TObject</span></td>
-        <td><span class="parametername">obj</span></td>
-        <td>Object to split.</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int64">Int64</a></td>
-        <td><span class="parametername">time</span></td>
-        <td>Time to split <code data-dev-comment-type="paramref" class="paramref">obj</code> by.</td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.SplitLengthedObject-1.html">SplitLengthedObject</a>&lt;TObject&gt;</td>
-        <td>An object containing left and right parts of the split object.</td>
-      </tr>
-    </tbody>
-  </table>
 </article>
           </div>
           
@@ -666,7 +583,7 @@ Splits an object by the specified time.
             <span class="pull-right">
               <a href="#top">Back to top</a>
             </span>
-            2021 / Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
+            2022 / Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
             
           </div>
         </div>

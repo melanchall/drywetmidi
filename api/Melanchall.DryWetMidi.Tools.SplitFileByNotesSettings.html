@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <!--[if IE]><![endif]-->
 <html>
   
@@ -85,7 +85,7 @@
   </h1>
   <div class="markdown level0 summary">
 Defines how a MIDI file should be split by notes using
-<a class="xref" href="Melanchall.DryWetMidi.Tools.MidiFileSplitter.html#Melanchall_DryWetMidi_Tools_MidiFileSplitter_SplitByNotes_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Tools_SplitFileByNotesSettings_">SplitByNotes(MidiFile, SplitFileByNotesSettings)</a> method.
+<a class="xref" href="Melanchall.DryWetMidi.Tools.Splitter.html#Melanchall_DryWetMidi_Tools_Splitter_SplitByNotes_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Tools_SplitFileByNotesSettings_">SplitByNotes(MidiFile, SplitFileByNotesSettings)</a> method.
 </div>
   <div class="markdown level0 conceptual"></div>
   <div class="inheritance">
@@ -96,25 +96,25 @@ Defines how a MIDI file should be split by notes using
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
     <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#System_Object_Equals_System_Object_">Object.Equals(Object)</a>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)">Object.Equals(Object)</a>
     </div>
     <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#System_Object_Equals_System_Object_System_Object_">Object.Equals(Object, Object)</a>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)">Object.Equals(Object, Object)</a>
     </div>
     <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gethashcode#System_Object_GetHashCode">Object.GetHashCode()</a>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gethashcode#system-object-gethashcode">Object.GetHashCode()</a>
     </div>
     <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gettype#System_Object_GetType">Object.GetType()</a>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gettype#system-object-gettype">Object.GetType()</a>
     </div>
     <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.memberwiseclone#System_Object_MemberwiseClone">Object.MemberwiseClone()</a>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.memberwiseclone#system-object-memberwiseclone">Object.MemberwiseClone()</a>
     </div>
     <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.referenceequals#System_Object_ReferenceEquals_System_Object_System_Object_">Object.ReferenceEquals(Object, Object)</a>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.referenceequals#system-object-referenceequals(system-object-system-object)">Object.ReferenceEquals(Object, Object)</a>
     </div>
     <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.tostring#System_Object_ToString">Object.ToString()</a>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.tostring#system-object-tostring">Object.ToString()</a>
     </div>
   </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="Melanchall.DryWetMidi.Tools.html">Melanchall.DryWetMidi.Tools</a></h6>
@@ -151,26 +151,6 @@ to all the new files or throw them away. The default value is <code>true</code>>
       </tr>
     </tbody>
   </table>
-  <h5 id="Melanchall_DryWetMidi_Tools_SplitFileByNotesSettings_CopyNonNoteEventsToEachFile_examples">Examples</h5>
-  
-<p>
-For example, a MIDI file contains following notes:
-</p>
-<img src="images/dwmgen_Melanchall.DryWetMidi.Tools.SplitFileByNotesSettings-7531.png" class="text-image" />
-<p>
-where <code>A</code> and <code>B</code> mean different notes; <code>.</code> is any non-note event.
-</p>
-<p>
-If <a class="xref" href="Melanchall.DryWetMidi.Tools.SplitFileByNotesSettings.html#Melanchall_DryWetMidi_Tools_SplitFileByNotesSettings_CopyNonNoteEventsToEachFile">CopyNonNoteEventsToEachFile</a> set to <code>true</code> (default value), we&apos;ll get following
-two new files:
-</p>
-<img src="images/dwmgen_Melanchall.DryWetMidi.Tools.SplitFileByNotesSettings-8177.png" class="text-image" />
-<p>
-But if <a class="xref" href="Melanchall.DryWetMidi.Tools.SplitFileByNotesSettings.html#Melanchall_DryWetMidi_Tools_SplitFileByNotesSettings_CopyNonNoteEventsToEachFile">CopyNonNoteEventsToEachFile</a> set to <code>false</code>, each new file will contain
-only note events:
-</p>
-<img src="images/dwmgen_Melanchall.DryWetMidi.Tools.SplitFileByNotesSettings-8758.png" class="text-image" />
-
   <a id="Melanchall_DryWetMidi_Tools_SplitFileByNotesSettings_Filter_" data-uid="Melanchall.DryWetMidi.Tools.SplitFileByNotesSettings.Filter*"></a>
   <h4 id="Melanchall_DryWetMidi_Tools_SplitFileByNotesSettings_Filter" data-uid="Melanchall.DryWetMidi.Tools.SplitFileByNotesSettings.Filter">Filter</h4>
   <div class="markdown level1 summary">
@@ -225,28 +205,9 @@ treated as same ones. The default value is <code>false</code>.
       </tr>
     </tbody>
   </table>
-  <h5 id="Melanchall_DryWetMidi_Tools_SplitFileByNotesSettings_IgnoreChannel_examples">Examples</h5>
-  
-<p>
-For example, a MIDI file contains following notes:
-</p>
-<img src="images/dwmgen_Melanchall.DryWetMidi.Tools.SplitFileByNotesSettings-11863.png" class="text-image" />
-<p>
-where <code>AN</code> and <code>BN</code> mean different notes on channel <code>N</code>.
-</p>
-<p>
-If <a class="xref" href="Melanchall.DryWetMidi.Tools.SplitFileByNotesSettings.html#Melanchall_DryWetMidi_Tools_SplitFileByNotesSettings_IgnoreChannel">IgnoreChannel</a> set to <code>false</code> (which is the default value),
-we&apos;ll get four new files (since different channel means different note):
-</p>
-<img src="images/dwmgen_Melanchall.DryWetMidi.Tools.SplitFileByNotesSettings-12621.png" class="text-image" />
-<p>
-But if <a class="xref" href="Melanchall.DryWetMidi.Tools.SplitFileByNotesSettings.html#Melanchall_DryWetMidi_Tools_SplitFileByNotesSettings_IgnoreChannel">IgnoreChannel</a> set to <code>true</code>, we&apos;ll get two files:
-</p>
-<img src="images/dwmgen_Melanchall.DryWetMidi.Tools.SplitFileByNotesSettings-13644.png" class="text-image" />
-
   <h3 id="seealso">See Also</h3>
   <div class="seealso">
-      <div><a class="xref" href="Melanchall.DryWetMidi.Tools.MidiFileSplitter.html">MidiFileSplitter</a></div>
+      <div><a class="xref" href="Melanchall.DryWetMidi.Tools.Splitter.html">Splitter</a></div>
   </div>
 </article>
           </div>
@@ -269,7 +230,7 @@ But if <a class="xref" href="Melanchall.DryWetMidi.Tools.SplitFileByNotesSetting
             <span class="pull-right">
               <a href="#top">Back to top</a>
             </span>
-            2021 / Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
+            2022 / Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
             
           </div>
         </div>

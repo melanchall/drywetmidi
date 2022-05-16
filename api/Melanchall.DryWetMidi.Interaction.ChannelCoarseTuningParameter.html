@@ -120,22 +120,22 @@ Channel Coarse Tuning registered parameter.
       <a class="xref" href="Melanchall.DryWetMidi.Interaction.Parameter.html#Melanchall_DryWetMidi_Interaction_Parameter_Time">Parameter.Time</a>
     </div>
     <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#System_Object_Equals_System_Object_">Object.Equals(Object)</a>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)">Object.Equals(Object)</a>
     </div>
     <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#System_Object_Equals_System_Object_System_Object_">Object.Equals(Object, Object)</a>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)">Object.Equals(Object, Object)</a>
     </div>
     <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gethashcode#System_Object_GetHashCode">Object.GetHashCode()</a>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gethashcode#system-object-gethashcode">Object.GetHashCode()</a>
     </div>
     <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gettype#System_Object_GetType">Object.GetType()</a>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gettype#system-object-gettype">Object.GetType()</a>
     </div>
     <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.memberwiseclone#System_Object_MemberwiseClone">Object.MemberwiseClone()</a>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.memberwiseclone#system-object-memberwiseclone">Object.MemberwiseClone()</a>
     </div>
     <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.referenceequals#System_Object_ReferenceEquals_System_Object_System_Object_">Object.ReferenceEquals(Object, Object)</a>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.referenceequals#system-object-referenceequals(system-object-system-object)">Object.ReferenceEquals(Object, Object)</a>
     </div>
   </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="Melanchall.DryWetMidi.Interaction.html">Melanchall.DryWetMidi.Interaction</a></h6>
@@ -349,6 +349,33 @@ Gets or sets the number of half-steps to tune by.
   </table>
   <h3 id="methods">Methods
   </h3>
+  <a id="Melanchall_DryWetMidi_Interaction_ChannelCoarseTuningParameter_Clone_" data-uid="Melanchall.DryWetMidi.Interaction.ChannelCoarseTuningParameter.Clone*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_ChannelCoarseTuningParameter_Clone" data-uid="Melanchall.DryWetMidi.Interaction.ChannelCoarseTuningParameter.Clone">Clone()</h4>
+  <div class="markdown level1 summary">
+Clones object by creating a copy of it.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override ITimedObject Clone()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimedObject.html">ITimedObject</a></td>
+        <td>Copy of the object.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Melanchall.DryWetMidi.Interaction.Parameter.html#Melanchall_DryWetMidi_Interaction_Parameter_Clone">Parameter.Clone()</a></div>
   <a id="Melanchall_DryWetMidi_Interaction_ChannelCoarseTuningParameter_GetData_" data-uid="Melanchall.DryWetMidi.Interaction.ChannelCoarseTuningParameter.GetData*"></a>
   <h4 id="Melanchall_DryWetMidi_Interaction_ChannelCoarseTuningParameter_GetData_Melanchall_DryWetMidi_Common_SevenBitNumber__System_Nullable_Melanchall_DryWetMidi_Common_SevenBitNumber___" data-uid="Melanchall.DryWetMidi.Interaction.ChannelCoarseTuningParameter.GetData(Melanchall.DryWetMidi.Common.SevenBitNumber@,System.Nullable{Melanchall.DryWetMidi.Common.SevenBitNumber}@)">GetData(out SevenBitNumber, out Nullable&lt;SevenBitNumber&gt;)</h4>
   <div class="markdown level1 summary">
@@ -453,6 +480,9 @@ Returns a string that represents the current object.
   <div>
       <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedObjectUtilities.html#Melanchall_DryWetMidi_Interaction_TimedObjectUtilities_TimeAs_Melanchall_DryWetMidi_Interaction_ITimedObject_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Interaction_TempoMap_">TimedObjectUtilities.TimeAs(ITimedObject, TimeSpanType, TempoMap)</a>
   </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedObjectUtilities.html#Melanchall_DryWetMidi_Interaction_TimedObjectUtilities_SetTime__1___0_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_TempoMap_">TimedObjectUtilities.SetTime&lt;TObject&gt;(TObject, ITimeSpan, TempoMap)</a>
+  </div>
 </article>
           </div>
           
@@ -474,7 +504,7 @@ Returns a string that represents the current object.
             <span class="pull-right">
               <a href="#top">Back to top</a>
             </span>
-            2021 / Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
+            2022 / Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
             
           </div>
         </div>

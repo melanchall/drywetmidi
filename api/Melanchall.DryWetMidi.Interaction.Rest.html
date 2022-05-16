@@ -84,7 +84,8 @@
   <h1 id="Melanchall_DryWetMidi_Interaction_Rest" data-uid="Melanchall.DryWetMidi.Interaction.Rest" class="text-break">Class Rest
   </h1>
   <div class="markdown level0 summary">
-Represents a musical rest.
+Represents a musical rest. More info in the
+<a class="xref" href="../articles/high-level-managing/Getting-objects.html#rests">Getting objects: GetObjects: Rests</a> article.
 </div>
   <div class="markdown level0 conceptual"></div>
   <div class="inheritance">
@@ -96,27 +97,29 @@ Represents a musical rest.
     <h5>Implements</h5>
     <div><a class="xref" href="Melanchall.DryWetMidi.Interaction.ILengthedObject.html">ILengthedObject</a></div>
     <div><a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimedObject.html">ITimedObject</a></div>
+    <div><a class="xref" href="Melanchall.DryWetMidi.Interaction.INotifyTimeChanged.html">INotifyTimeChanged</a></div>
+    <div><a class="xref" href="Melanchall.DryWetMidi.Interaction.INotifyLengthChanged.html">INotifyLengthChanged</a></div>
   </div>
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
     <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#System_Object_Equals_System_Object_System_Object_">Object.Equals(Object, Object)</a>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)">Object.Equals(Object, Object)</a>
     </div>
     <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gettype#System_Object_GetType">Object.GetType()</a>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gettype#system-object-gettype">Object.GetType()</a>
     </div>
     <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.memberwiseclone#System_Object_MemberwiseClone">Object.MemberwiseClone()</a>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.memberwiseclone#system-object-memberwiseclone">Object.MemberwiseClone()</a>
     </div>
     <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.referenceequals#System_Object_ReferenceEquals_System_Object_System_Object_">Object.ReferenceEquals(Object, Object)</a>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.referenceequals#system-object-referenceequals(system-object-system-object)">Object.ReferenceEquals(Object, Object)</a>
     </div>
   </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="Melanchall.DryWetMidi.Interaction.html">Melanchall.DryWetMidi.Interaction</a></h6>
   <h6><strong>Assembly</strong>: Melanchall.DryWetMidi.dll</h6>
   <h5 id="Melanchall_DryWetMidi_Interaction_Rest_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public sealed class Rest : ILengthedObject, ITimedObject</code></pre>
+    <pre><code class="lang-csharp hljs">public sealed class Rest : ILengthedObject, ITimedObject, INotifyTimeChanged, INotifyLengthChanged</code></pre>
   </div>
   <h3 id="properties">Properties
   </h3>
@@ -222,6 +225,31 @@ Gets start time of an object.
   </table>
   <h3 id="methods">Methods
   </h3>
+  <a id="Melanchall_DryWetMidi_Interaction_Rest_Clone_" data-uid="Melanchall.DryWetMidi.Interaction.Rest.Clone*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_Rest_Clone" data-uid="Melanchall.DryWetMidi.Interaction.Rest.Clone">Clone()</h4>
+  <div class="markdown level1 summary">
+Clones object by creating a copy of it.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ITimedObject Clone()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimedObject.html">ITimedObject</a></td>
+        <td>Copy of the object.</td>
+      </tr>
+    </tbody>
+  </table>
   <a id="Melanchall_DryWetMidi_Interaction_Rest_Equals_" data-uid="Melanchall.DryWetMidi.Interaction.Rest.Equals*"></a>
   <h4 id="Melanchall_DryWetMidi_Interaction_Rest_Equals_System_Object_" data-uid="Melanchall.DryWetMidi.Interaction.Rest.Equals(System.Object)">Equals(Object)</h4>
   <div class="markdown level1 summary">
@@ -265,7 +293,7 @@ Determines whether the specified object is equal to the current object.
     </tbody>
   </table>
   <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#System_Object_Equals_System_Object_">Object.Equals(Object)</a></div>
+  <div><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)">Object.Equals(Object)</a></div>
   <a id="Melanchall_DryWetMidi_Interaction_Rest_GetHashCode_" data-uid="Melanchall.DryWetMidi.Interaction.Rest.GetHashCode*"></a>
   <h4 id="Melanchall_DryWetMidi_Interaction_Rest_GetHashCode" data-uid="Melanchall.DryWetMidi.Interaction.Rest.GetHashCode">GetHashCode()</h4>
   <div class="markdown level1 summary">
@@ -292,7 +320,83 @@ Serves as the default hash function.
     </tbody>
   </table>
   <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gethashcode#System_Object_GetHashCode">Object.GetHashCode()</a></div>
+  <div><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gethashcode#system-object-gethashcode">Object.GetHashCode()</a></div>
+  <a id="Melanchall_DryWetMidi_Interaction_Rest_Split_" data-uid="Melanchall.DryWetMidi.Interaction.Rest.Split*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_Rest_Split_System_Int64_" data-uid="Melanchall.DryWetMidi.Interaction.Rest.Split(System.Int64)">Split(Int64)</h4>
+  <div class="markdown level1 summary">
+Splits the current object by the specified time.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public SplitLengthedObject Split(long time)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int64">Int64</a></td>
+        <td><span class="parametername">time</span></td>
+        <td>Time to split the object at.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.SplitLengthedObject.html">SplitLengthedObject</a></td>
+        <td>An object containing left and right parts of the split object.
+Both parts have the same type as the original object.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Melanchall_DryWetMidi_Interaction_Rest_Split_System_Int64__remarks">Remarks</h5>
+  <div class="markdown level1 remarks">
+<p>
+If <code data-dev-comment-type="paramref" class="paramref">time</code> is less than or equal to time of the object, the left part will
+be <code>null</code>. If <code data-dev-comment-type="paramref" class="paramref">time</code> is greater than or equal to end time of the object,
+the right part will be <code>null</code>.
+</p>
+<p>
+Let&apos;s see a simple example. Suppose we have an object with time of <code>10</code> and length of <code>50</code>.
+The table below shows what left and right parts will be in case of different values of
+<code data-dev-comment-type="paramref" class="paramref">time</code>:
+</p>
+<table><thead><tr><th>Time to split at</th><th>Left part</th><th>Right part</th></tr></thead><tbody><tr><td><code>5</code></td><td><code>null</code></td><td>Copy of the object</td></tr><tr><td><code>10</code></td><td><code>null</code></td><td>Copy of the object</td></tr><tr><td><code>30</code></td><td>Copy of the object with time of <code>10</code> and length of <code>20</code></td><td>Copy of the object with time of <code>30</code> and length of <code>30</code></td></tr><tr><td><code>60</code></td><td>Copy of the object</td><td><code>null</code></td></tr><tr><td><code>70</code></td><td>Copy of the object</td><td><code>null</code></td></tr></tbody></table>
+<p>
+To learn about other ways to split an object please read <a class="xref" href="../articles/tools/Objects-splitting.html">
+Objects splitting</a> article.
+</p>
+</div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">time</code> is negative.</td>
+      </tr>
+    </tbody>
+  </table>
   <a id="Melanchall_DryWetMidi_Interaction_Rest_ToString_" data-uid="Melanchall.DryWetMidi.Interaction.Rest.ToString*"></a>
   <h4 id="Melanchall_DryWetMidi_Interaction_Rest_ToString" data-uid="Melanchall.DryWetMidi.Interaction.Rest.ToString">ToString()</h4>
   <div class="markdown level1 summary">
@@ -319,7 +423,57 @@ Returns a string that represents the current object.
     </tbody>
   </table>
   <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.tostring#System_Object_ToString">Object.ToString()</a></div>
+  <div><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.tostring#system-object-tostring">Object.ToString()</a></div>
+  <h3 id="events">Events
+  </h3>
+  <h4 id="Melanchall_DryWetMidi_Interaction_Rest_LengthChanged" data-uid="Melanchall.DryWetMidi.Interaction.Rest.LengthChanged">LengthChanged</h4>
+  <div class="markdown level1 summary">
+Occurs when the length of an object has been changed.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public event EventHandler&lt;LengthChangedEventArgs&gt; LengthChanged</code></pre>
+  </div>
+  <h5 class="eventType">Event Type</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.eventhandler-1">EventHandler</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.LengthChangedEventArgs.html">LengthChangedEventArgs</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h4 id="Melanchall_DryWetMidi_Interaction_Rest_TimeChanged" data-uid="Melanchall.DryWetMidi.Interaction.Rest.TimeChanged">TimeChanged</h4>
+  <div class="markdown level1 summary">
+Occurs when the time of an object has been changed.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public event EventHandler&lt;TimeChangedEventArgs&gt; TimeChanged</code></pre>
+  </div>
+  <h5 class="eventType">Event Type</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.eventhandler-1">EventHandler</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.TimeChangedEventArgs.html">TimeChangedEventArgs</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
   <h3 id="operators">Operators
   </h3>
   <a id="Melanchall_DryWetMidi_Interaction_Rest_op_Equality_" data-uid="Melanchall.DryWetMidi.Interaction.Rest.op_Equality*"></a>
@@ -423,6 +577,12 @@ Determines if two <a class="xref" href="Melanchall.DryWetMidi.Interaction.Rest.h
   <div>
       <a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimedObject.html">ITimedObject</a>
   </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.INotifyTimeChanged.html">INotifyTimeChanged</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.INotifyLengthChanged.html">INotifyLengthChanged</a>
+  </div>
   <h3 id="extensionmethods">Extension Methods</h3>
   <div>
       <a class="xref" href="Melanchall.DryWetMidi.Interaction.LengthedObjectUtilities.html#Melanchall_DryWetMidi_Interaction_LengthedObjectUtilities_LengthAs__1_Melanchall_DryWetMidi_Interaction_ILengthedObject_Melanchall_DryWetMidi_Interaction_TempoMap_">LengthedObjectUtilities.LengthAs&lt;TLength&gt;(ILengthedObject, TempoMap)</a>
@@ -437,10 +597,16 @@ Determines if two <a class="xref" href="Melanchall.DryWetMidi.Interaction.Rest.h
       <a class="xref" href="Melanchall.DryWetMidi.Interaction.LengthedObjectUtilities.html#Melanchall_DryWetMidi_Interaction_LengthedObjectUtilities_EndTimeAs_Melanchall_DryWetMidi_Interaction_ILengthedObject_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Interaction_TempoMap_">LengthedObjectUtilities.EndTimeAs(ILengthedObject, TimeSpanType, TempoMap)</a>
   </div>
   <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.LengthedObjectUtilities.html#Melanchall_DryWetMidi_Interaction_LengthedObjectUtilities_SetLength__1___0_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_TempoMap_">LengthedObjectUtilities.SetLength&lt;TObject&gt;(TObject, ITimeSpan, TempoMap)</a>
+  </div>
+  <div>
       <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedObjectUtilities.html#Melanchall_DryWetMidi_Interaction_TimedObjectUtilities_TimeAs__1_Melanchall_DryWetMidi_Interaction_ITimedObject_Melanchall_DryWetMidi_Interaction_TempoMap_">TimedObjectUtilities.TimeAs&lt;TTime&gt;(ITimedObject, TempoMap)</a>
   </div>
   <div>
       <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedObjectUtilities.html#Melanchall_DryWetMidi_Interaction_TimedObjectUtilities_TimeAs_Melanchall_DryWetMidi_Interaction_ITimedObject_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Interaction_TempoMap_">TimedObjectUtilities.TimeAs(ITimedObject, TimeSpanType, TempoMap)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedObjectUtilities.html#Melanchall_DryWetMidi_Interaction_TimedObjectUtilities_SetTime__1___0_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_TempoMap_">TimedObjectUtilities.SetTime&lt;TObject&gt;(TObject, ITimeSpan, TempoMap)</a>
   </div>
 </article>
           </div>
@@ -463,7 +629,7 @@ Determines if two <a class="xref" href="Melanchall.DryWetMidi.Interaction.Rest.h
             <span class="pull-right">
               <a href="#top">Back to top</a>
             </span>
-            2021 / Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
+            2022 / Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
             
           </div>
         </div>

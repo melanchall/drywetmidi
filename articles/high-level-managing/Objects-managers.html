@@ -1,0 +1,199 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Objects managers | DryWetMIDI </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Objects managers | DryWetMIDI ">
+    <meta name="generator" content="docfx 2.58.0.0">
+    
+    <link rel="shortcut icon" href="../../images/favicon.png">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <meta property="docfx:navrel" content="../../toc.html">
+    <meta property="docfx:tocrel" content="../toc.html">
+    
+    <meta property="docfx:rel" content="../../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list">Search Results for <span></span></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination" data-first="First" data-prev="Previous" data-next="Next" data-last="Last"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="a_managers">
+<h1 id="objects-managers">Objects managers</h1>
+
+<p>Working with low-level objects (like MIDI event) sometimes is not convenient. In this cases it's much more handy to manage MIDI data via concepts of <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.TimedEvent.html">timed events</a>, <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.Note.html">notes</a> or <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.Chord.html">chords</a>.</p>
+<p>DryWetMIDI provides a way to work with such high-level objects - <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.TimedObjectsManager.html">TimedObjectsManager</a>. This class allows to work with objects of different types within an events collection (see <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.TrackChunk.html#Melanchall_DryWetMidi_Core_TrackChunk_Events">TrackChunk.Events</a>):</p>
+<pre><code class="lang-csharp">using (var manager = new TimedObjectsManager(trackChunk.Events, ObjectType.Note | ObjectType.TimedEvent))
+{
+    foreach (var obj in manager.Objects)
+    {
+        if (obj is Note note)
+            note.Length -= 10;
+        else if (obj is TimedEvent timedEvent &amp;&amp; timedEvent.Event is BaseTextEvent textEvent)
+            textEvent.Text = &quot;Hello&quot;;
+    }
+
+    manager.Objects.RemoveAll(obj =&gt; obj is Note note &amp;&amp; note.Channel == 9);
+
+    manager.Objects.Add(new TimedEvent(new ProgramChangeEvent((SevenBitNumber)7), 100));
+}
+</code></pre>
+<p>All changes made with a manager will not be saved until <code>SaveChanges</code> or <code>Dispose</code> method will be called. So the recommended practice to work with managers is</p>
+<pre><code class="lang-csharp">using (var notesManager = trackChunk.ManageNotes())
+{
+    // ...
+}
+</code></pre>
+<p>or if managing is happen in different parts of  a program</p>
+<pre><code class="lang-csharp">var notesManager = new TimedObjectsManager&lt;Note&gt;(trackChunk.Events);
+// ...
+notesManager.SaveChanges();
+</code></pre>
+<p>Objects will be placed in the underlying events collection in chronological order of course. Also as you can see there is the generic constructor that allows to manage objects of the single type. <code>Objects</code> property will return in this case objects of this type, no need to cast them to the type.</p>
+<h2 id="simultaneous-editing-of-events-collection">Simultaneous editing of events collection</h2>
+<p>On saving the manager will rewrite all content of the underlying events collection. So you shouldn't modify the collection while working with the manager since all unsaved changes will be lost on manager's <code>SaveChanges</code> or <code>Dispose</code>.</p>
+<p>For example, this code</p>
+<pre><code class="lang-csharp">using (var timedEventsManager = new TimedObjectsManager&lt;TimedEvent&gt;(trackChunk.Events))
+using (var notesManager = new TimedObjectsManager&lt;Note&gt;(trackChunk.Events))
+{
+    // All changes made with the notesManager will be lost
+}
+</code></pre>
+<p>or</p>
+<pre><code class="lang-csharp">var timedEventsManager = new TimedObjectsManager&lt;TimedEvent&gt;(trackChunk.Events);
+
+var notesManager = new TimedObjectsManager&lt;Note&gt;(trackChunk.Events);
+
+// All changes made with the notesManager will be lost
+
+timedEventsManager.SaveChanges();
+</code></pre>
+<p>will cause changes made with the <code>notesManager</code> will be lost because <code>SaveChanges</code> (or <code>Dispose</code> in first code snippet) of <code>timedEventsManager</code> executed after <code>SaveChanges</code> of <code>notesManager</code>, and thus rewrites underlying events collection. You need to save changes made with a previous manager before managing objects with next one.</p>
+<h2 id="tempo-map">Tempo map</h2>
+<p>Tempo map is a set of changes of time signature and tempo. You need to have a tempo map to convert <a href="Time-and-length-overview.html">time and length</a> between different representations. Instead of messing with <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.TimeSignatureEvent.html">Time Signature</a> and <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.SetTempoEvent.html">Set Tempo</a> events DryWetMIDI provides <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.TempoMapManager.html">TempoMapManager</a> which helps to manage tempo map of a MIDI file:</p>
+<pre><code class="lang-csharp">using (var tempoMapManager = new TempoMapManager(midiFile.TimeDivision,
+                                        midiFile.GetTrackChunks()
+                                                .Select(c =&gt; c.Events)))
+{
+    TempoMap tempoMap = tempoMapManager.TempoMap;
+
+    Tempo tempoAt123 = tempoMap.GetTempoAtTime((MidiTimeSpan)123);
+
+    // Change tempo to 400000 microseconds per quarter note at 20 seconds from
+    // MIDI file start
+    tempoMapManager.SetTempo(new MetricTimeSpan(0, 0, 20), new Tempo(400000));
+
+    tempoMapManager.ClearTimeSignature(456);
+}
+</code></pre>
+<p>To get tempo map being managed by the current <code>TempoMapManager</code> you need to use <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.TempoMapManager.html#Melanchall_DryWetMidi_Interaction_TempoMapManager_TempoMap">TempoMap</a> property which returns an instance of the <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.TempoMap.html">TempoMap</a> class.</p>
+<p>Once you've got an instance of <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.TempoMap.html">TempoMap</a> you can use <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.TempoMap.html#Melanchall_DryWetMidi_Interaction_TempoMap_GetTempoChanges">GetTempoChanges</a> method to get all tempo changes. Use <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.TempoMap.html#Melanchall_DryWetMidi_Interaction_TempoMap_GetTimeSignatureChanges">GetTimeSignatureChanges</a> method to get time signature changes. <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.TempoMap.html#Melanchall_DryWetMidi_Interaction_TempoMap_GetTempoAtTime_Melanchall_DryWetMidi_Interaction_ITimeSpan_">GetTempoAtTime</a> and <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.TempoMap.html#Melanchall_DryWetMidi_Interaction_TempoMap_GetTimeSignatureAtTime_Melanchall_DryWetMidi_Interaction_ITimeSpan_">GetTimeSignatureAtTime</a> methods allow to get tempo and time signature at the specified time.</p>
+<p>You can also create new tempo map with <code>TempoMapManager</code>:</p>
+<pre><code class="lang-csharp">using (var tempoMapManager = new TempoMapManager())
+{
+    // ...
+}
+</code></pre>
+<p>There is another way to get an instance of the <code>TempoMapManager</code> � through the <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.TempoMapManagingUtilities.html#Melanchall_DryWetMidi_Interaction_TempoMapManagingUtilities_ManageTempoMap_">ManageTempoMap</a> extension method:</p>
+<pre><code class="lang-csharp">using (var tempoMapManager = midiFile.ManageTempoMap())
+{
+    // ...
+}
+</code></pre>
+<p>This method and another useful ones are placed in <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.TempoMapManagingUtilities.html">TempoMapManagingUtilities</a>. For example, to get tempo map of a MIDI file you can write:</p>
+<pre><code class="lang-csharp">TempoMap tempoMap = midiFile.GetTempoMap();
+</code></pre>
+<p>Also you can replace the entire tempo map of a MIDI file using <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.TempoMapManagingUtilities.html#Melanchall_DryWetMidi_Interaction_TempoMapManagingUtilities_ReplaceTempoMap_">ReplaceTempoMap</a> method:</p>
+<pre><code class="lang-csharp">midiFile.ReplaceTempoMap(TempoMap.Create(Tempo.FromBeatsPerMinute(140)));
+</code></pre>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            2022 / Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>

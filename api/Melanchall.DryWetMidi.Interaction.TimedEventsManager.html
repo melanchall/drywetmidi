@@ -90,7 +90,8 @@ Provides a way to manage events of a MIDI file by their absolute time.
   <div class="inheritance">
     <h5>Inheritance</h5>
     <div class="level0"><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object">Object</a></div>
-    <div class="level1"><span class="xref">TimedEventsManager</span></div>
+    <div class="level1"><a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedObjectsManager-1.html">TimedObjectsManager</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEvent.html">TimedEvent</a>&gt;</div>
+    <div class="level2"><span class="xref">TimedEventsManager</span></div>
   </div>
   <div classs="implements">
     <h5>Implements</h5>
@@ -99,44 +100,47 @@ Provides a way to manage events of a MIDI file by their absolute time.
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
     <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#System_Object_Equals_System_Object_">Object.Equals(Object)</a>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedObjectsManager-1.html#Melanchall_DryWetMidi_Interaction_TimedObjectsManager_1_Objects">TimedObjectsManager&lt;TimedEvent&gt;.Objects</a>
     </div>
     <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#System_Object_Equals_System_Object_System_Object_">Object.Equals(Object, Object)</a>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedObjectsManager-1.html#Melanchall_DryWetMidi_Interaction_TimedObjectsManager_1_SaveChanges">TimedObjectsManager&lt;TimedEvent&gt;.SaveChanges()</a>
     </div>
     <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gethashcode#System_Object_GetHashCode">Object.GetHashCode()</a>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedObjectsManager-1.html#Melanchall_DryWetMidi_Interaction_TimedObjectsManager_1_Dispose">TimedObjectsManager&lt;TimedEvent&gt;.Dispose()</a>
     </div>
     <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gettype#System_Object_GetType">Object.GetType()</a>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)">Object.Equals(Object)</a>
     </div>
     <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.memberwiseclone#System_Object_MemberwiseClone">Object.MemberwiseClone()</a>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)">Object.Equals(Object, Object)</a>
     </div>
     <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.referenceequals#System_Object_ReferenceEquals_System_Object_System_Object_">Object.ReferenceEquals(Object, Object)</a>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gethashcode#system-object-gethashcode">Object.GetHashCode()</a>
     </div>
     <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.tostring#System_Object_ToString">Object.ToString()</a>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gettype#system-object-gettype">Object.GetType()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.memberwiseclone#system-object-memberwiseclone">Object.MemberwiseClone()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.referenceequals#system-object-referenceequals(system-object-system-object)">Object.ReferenceEquals(Object, Object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.tostring#system-object-tostring">Object.ToString()</a>
     </div>
   </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="Melanchall.DryWetMidi.Interaction.html">Melanchall.DryWetMidi.Interaction</a></h6>
   <h6><strong>Assembly</strong>: Melanchall.DryWetMidi.dll</h6>
   <h5 id="Melanchall_DryWetMidi_Interaction_TimedEventsManager_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public sealed class TimedEventsManager : IDisposable</code></pre>
+    <pre><code class="lang-csharp hljs">[Obsolete(&quot;OBS11: Use TimedObjectsManager class. More info: https://melanchall.github.io/drywetmidi/obsolete/obsolete.html#obs11.&quot;)]
+public sealed class TimedEventsManager : TimedObjectsManager&lt;TimedEvent&gt;, IDisposable</code></pre>
   </div>
-  <h5 id="Melanchall_DryWetMidi_Interaction_TimedEventsManager_remarks"><strong>Remarks</strong></h5>
-  <div class="markdown level0 remarks">
-To start manage events you need to get an instance of the <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEventsManager.html">TimedEventsManager</a>. To
-finish managing you need to call the <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEventsManager.html#Melanchall_DryWetMidi_Interaction_TimedEventsManager_SaveChanges">SaveChanges()</a> or <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEventsManager.html#Melanchall_DryWetMidi_Interaction_TimedEventsManager_Dispose">Dispose()</a> method.
-Since the manager implements <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.idisposable">IDisposable</a> it is recommended to manage events within
-using block.
-</div>
   <h3 id="constructors">Constructors
   </h3>
   <a id="Melanchall_DryWetMidi_Interaction_TimedEventsManager__ctor_" data-uid="Melanchall.DryWetMidi.Interaction.TimedEventsManager.#ctor*"></a>
-  <h4 id="Melanchall_DryWetMidi_Interaction_TimedEventsManager__ctor_Melanchall_DryWetMidi_Core_EventsCollection_System_Comparison_Melanchall_DryWetMidi_Core_MidiEvent__" data-uid="Melanchall.DryWetMidi.Interaction.TimedEventsManager.#ctor(Melanchall.DryWetMidi.Core.EventsCollection,System.Comparison{Melanchall.DryWetMidi.Core.MidiEvent})">TimedEventsManager(EventsCollection, Comparison&lt;MidiEvent&gt;)</h4>
+  <h4 id="Melanchall_DryWetMidi_Interaction_TimedEventsManager__ctor_Melanchall_DryWetMidi_Core_EventsCollection_Melanchall_DryWetMidi_Interaction_TimedEventDetectionSettings_System_Comparison_Melanchall_DryWetMidi_Core_MidiEvent__" data-uid="Melanchall.DryWetMidi.Interaction.TimedEventsManager.#ctor(Melanchall.DryWetMidi.Core.EventsCollection,Melanchall.DryWetMidi.Interaction.TimedEventDetectionSettings,System.Comparison{Melanchall.DryWetMidi.Core.MidiEvent})">TimedEventsManager(EventsCollection, TimedEventDetectionSettings, Comparison&lt;MidiEvent&gt;)</h4>
   <div class="markdown level1 summary">
 Initializes a new instance of the <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEventsManager.html">TimedEventsManager</a> with the specified events
 collection and comparison delegate for events that have same time.
@@ -144,7 +148,7 @@ collection and comparison delegate for events that have same time.
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public TimedEventsManager(EventsCollection eventsCollection, Comparison&lt;MidiEvent&gt; sameTimeEventsComparison = null)</code></pre>
+    <pre><code class="lang-csharp hljs">public TimedEventsManager(EventsCollection eventsCollection, TimedEventDetectionSettings timedEventDetectionSettings = null, Comparison&lt;MidiEvent&gt; sameTimeEventsComparison = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -162,13 +166,19 @@ collection and comparison delegate for events that have same time.
         <td><a class="xref" href="Melanchall.DryWetMidi.Core.EventsCollection.html">EventsCollection</a> that holds events to manage.</td>
       </tr>
       <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEventDetectionSettings.html">TimedEventDetectionSettings</a></td>
+        <td><span class="parametername">timedEventDetectionSettings</span></td>
+        <td>Settings accoridng to which timed events should be detected
+and built.</td>
+      </tr>
+      <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.comparison-1">Comparison</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html">MidiEvent</a>&gt;</td>
         <td><span class="parametername">sameTimeEventsComparison</span></td>
         <td>Delegate to compare events with the same absolute time.</td>
       </tr>
     </tbody>
   </table>
-  <h5 id="Melanchall_DryWetMidi_Interaction_TimedEventsManager__ctor_Melanchall_DryWetMidi_Core_EventsCollection_System_Comparison_Melanchall_DryWetMidi_Core_MidiEvent___remarks">Remarks</h5>
+  <h5 id="Melanchall_DryWetMidi_Interaction_TimedEventsManager__ctor_Melanchall_DryWetMidi_Core_EventsCollection_Melanchall_DryWetMidi_Interaction_TimedEventDetectionSettings_System_Comparison_Melanchall_DryWetMidi_Core_MidiEvent___remarks">Remarks</h5>
   <div class="markdown level1 remarks">
 If the <code data-dev-comment-type="paramref" class="paramref">sameTimeEventsComparison</code> is not specified events with the same time
 will be placed into the underlying events collection in order of adding them through the manager.
@@ -194,13 +204,13 @@ If you want to specify custom order of such events you need to specify appropria
   <a id="Melanchall_DryWetMidi_Interaction_TimedEventsManager_Events_" data-uid="Melanchall.DryWetMidi.Interaction.TimedEventsManager.Events*"></a>
   <h4 id="Melanchall_DryWetMidi_Interaction_TimedEventsManager_Events" data-uid="Melanchall.DryWetMidi.Interaction.TimedEventsManager.Events">Events</h4>
   <div class="markdown level1 summary">
-Gets current collection of timed events reflecting all changes made by the current
+Gets the <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedObjectsCollection-1.html">TimedObjectsCollection&lt;TObject&gt;</a> with all timed events managed by the current
 <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEventsManager.html">TimedEventsManager</a>.
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public TimedEventsCollection Events { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">public TimedObjectsCollection&lt;TimedEvent&gt; Events { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -212,42 +222,11 @@ Gets current collection of timed events reflecting all changes made by the curre
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEventsCollection.html">TimedEventsCollection</a></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedObjectsCollection-1.html">TimedObjectsCollection</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEvent.html">TimedEvent</a>&gt;</td>
         <td></td>
       </tr>
     </tbody>
   </table>
-  <h3 id="methods">Methods
-  </h3>
-  <a id="Melanchall_DryWetMidi_Interaction_TimedEventsManager_Dispose_" data-uid="Melanchall.DryWetMidi.Interaction.TimedEventsManager.Dispose*"></a>
-  <h4 id="Melanchall_DryWetMidi_Interaction_TimedEventsManager_Dispose" data-uid="Melanchall.DryWetMidi.Interaction.TimedEventsManager.Dispose">Dispose()</h4>
-  <div class="markdown level1 summary">
-Performs application-defined tasks associated with freeing, releasing, or resetting
-unmanaged resources.
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void Dispose()</code></pre>
-  </div>
-  <a id="Melanchall_DryWetMidi_Interaction_TimedEventsManager_SaveChanges_" data-uid="Melanchall.DryWetMidi.Interaction.TimedEventsManager.SaveChanges*"></a>
-  <h4 id="Melanchall_DryWetMidi_Interaction_TimedEventsManager_SaveChanges" data-uid="Melanchall.DryWetMidi.Interaction.TimedEventsManager.SaveChanges">SaveChanges()</h4>
-  <div class="markdown level1 summary">
-Saves all events that were managed with the current <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEventsManager.html">TimedEventsManager</a> updating
-underlying events collection.
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void SaveChanges()</code></pre>
-  </div>
-  <h5 id="Melanchall_DryWetMidi_Interaction_TimedEventsManager_SaveChanges_remarks">Remarks</h5>
-  <div class="markdown level1 remarks">
-This method will rewrite content of the events collection was used to construct the current
-<a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEventsManager.html">TimedEventsManager</a> with events were managed by this manager. Also all delta-times
-of wrapped events will be recalculated according to the <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEvent.html#Melanchall_DryWetMidi_Interaction_TimedEvent_Time">Time</a> of
-event wrappers.
-</div>
   <h3 id="implements">Implements</h3>
   <div>
       <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.idisposable">System.IDisposable</a>
@@ -273,7 +252,7 @@ event wrappers.
             <span class="pull-right">
               <a href="#top">Back to top</a>
             </span>
-            2021 / Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
+            2022 / Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
             
           </div>
         </div>

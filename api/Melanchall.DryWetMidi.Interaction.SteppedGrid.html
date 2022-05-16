@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <!--[if IE]><![endif]-->
 <html>
   
@@ -100,25 +100,25 @@ collection of steps.
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
     <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#System_Object_Equals_System_Object_">Object.Equals(Object)</a>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)">Object.Equals(Object)</a>
     </div>
     <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#System_Object_Equals_System_Object_System_Object_">Object.Equals(Object, Object)</a>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)">Object.Equals(Object, Object)</a>
     </div>
     <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gethashcode#System_Object_GetHashCode">Object.GetHashCode()</a>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gethashcode#system-object-gethashcode">Object.GetHashCode()</a>
     </div>
     <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gettype#System_Object_GetType">Object.GetType()</a>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gettype#system-object-gettype">Object.GetType()</a>
     </div>
     <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.memberwiseclone#System_Object_MemberwiseClone">Object.MemberwiseClone()</a>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.memberwiseclone#system-object-memberwiseclone">Object.MemberwiseClone()</a>
     </div>
     <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.referenceequals#System_Object_ReferenceEquals_System_Object_System_Object_">Object.ReferenceEquals(Object, Object)</a>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.referenceequals#system-object-referenceequals(system-object-system-object)">Object.ReferenceEquals(Object, Object)</a>
     </div>
     <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.tostring#System_Object_ToString">Object.ToString()</a>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.tostring#system-object-tostring">Object.ToString()</a>
     </div>
   </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="Melanchall.DryWetMidi.Interaction.html">Melanchall.DryWetMidi.Interaction</a></h6>
@@ -158,17 +158,6 @@ starting from zero.
       </tr>
     </tbody>
   </table>
-  <h5 id="Melanchall_DryWetMidi_Interaction_SteppedGrid__ctor_Melanchall_DryWetMidi_Interaction_ITimeSpan__examples">Examples</h5>
-  
-<p>
-For example, following code:
-</p>
-<pre><code class="lang-csharp">var grid = new SteppedGrid(MusicalTimeSpan.Quarter);</code></pre>
-<p>
-will create this grid:
-</p>
-<img src="images/dwmgen_Melanchall.DryWetMidi.Interaction.SteppedGrid-7655.png" class="text-image" />
-
   <h5 class="exceptions">Exceptions</h5>
   <table class="table table-bordered table-striped table-condensed">
     <thead>
@@ -218,17 +207,6 @@ between adjacent ones starting from the specified start time.
       </tr>
     </tbody>
   </table>
-  <h5 id="Melanchall_DryWetMidi_Interaction_SteppedGrid__ctor_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_ITimeSpan__examples">Examples</h5>
-  
-<p>
-For example, following code:
-</p>
-<pre><code class="lang-csharp">var grid = new SteppedGrid(MusicalTimeSpan.Eighth, MusicalTimeSpan.Quarter);</code></pre>
-<p>
-will create this grid:
-</p>
-<img src="images/dwmgen_Melanchall.DryWetMidi.Interaction.SteppedGrid-10450.png" class="text-image" />
-
   <h5 class="exceptions">Exceptions</h5>
   <table class="table table-bordered table-striped table-condensed">
     <thead>
@@ -286,17 +264,6 @@ Grid&apos;s times will be distributed according to provided steps. So distance b
 adjacent times will be equal to first step, distance between second adjacent times will
 be equal to second step and so on. When last step reached steps will go from the first one.
 </div>
-  <h5 id="Melanchall_DryWetMidi_Interaction_SteppedGrid__ctor_Melanchall_DryWetMidi_Interaction_ITimeSpan_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_ITimeSpan___examples">Examples</h5>
-  
-<p>
-For example, following code:
-</p>
-<pre><code class="lang-csharp">var grid = new SteppedGrid(MusicalTimeSpan.Eighth, new[] { MusicalTimeSpan.Eighth, MusicalTimeSpan.Quarter });</code></pre>
-<p>
-will create this grid:
-</p>
-<img src="images/dwmgen_Melanchall.DryWetMidi.Interaction.SteppedGrid-14212.png" class="text-image" />
-
   <h5 class="exceptions">Exceptions</h5>
   <table class="table table-bordered table-striped table-condensed">
     <thead>
@@ -353,17 +320,6 @@ Grid&apos;s times will be distributed according to provided steps. So distance b
 adjacent times will be equal to first step, distance between second adjacent times will
 be equal to second step and so on. When last step reached, steps will go from the first one.
 </div>
-  <h5 id="Melanchall_DryWetMidi_Interaction_SteppedGrid__ctor_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_ITimeSpan___examples">Examples</h5>
-  
-<p>
-For example, following code:
-</p>
-<pre><code class="lang-csharp">var grid = new SteppedGrid(new[] { MusicalTimeSpan.Eighth, MusicalTimeSpan.Quarter });</code></pre>
-<p>
-will create this grid:
-</p>
-<img src="images/dwmgen_Melanchall.DryWetMidi.Interaction.SteppedGrid-17814.png" class="text-image" />
-
   <h5 class="exceptions">Exceptions</h5>
   <table class="table table-bordered table-striped table-condensed">
     <thead>
@@ -519,7 +475,7 @@ Gets points in time of the current grid.
             <span class="pull-right">
               <a href="#top">Back to top</a>
             </span>
-            2021 / Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
+            2022 / Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
             
           </div>
         </div>

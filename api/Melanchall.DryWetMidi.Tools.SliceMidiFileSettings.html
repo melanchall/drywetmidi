@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <!--[if IE]><![endif]-->
 <html>
   
@@ -84,7 +84,7 @@
   <h1 id="Melanchall_DryWetMidi_Tools_SliceMidiFileSettings" data-uid="Melanchall.DryWetMidi.Tools.SliceMidiFileSettings" class="text-break">Class SliceMidiFileSettings
   </h1>
   <div class="markdown level0 summary">
-Settings according to which a <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a> should be split.
+Settings according to which a <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a> should be split by vertical split methods.
 </div>
   <div class="markdown level0 conceptual"></div>
   <div class="inheritance">
@@ -95,32 +95,32 @@ Settings according to which a <a class="xref" href="Melanchall.DryWetMidi.Core.M
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
     <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#System_Object_Equals_System_Object_">Object.Equals(Object)</a>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)">Object.Equals(Object)</a>
     </div>
     <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#System_Object_Equals_System_Object_System_Object_">Object.Equals(Object, Object)</a>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)">Object.Equals(Object, Object)</a>
     </div>
     <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gethashcode#System_Object_GetHashCode">Object.GetHashCode()</a>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gethashcode#system-object-gethashcode">Object.GetHashCode()</a>
     </div>
     <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gettype#System_Object_GetType">Object.GetType()</a>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gettype#system-object-gettype">Object.GetType()</a>
     </div>
     <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.memberwiseclone#System_Object_MemberwiseClone">Object.MemberwiseClone()</a>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.memberwiseclone#system-object-memberwiseclone">Object.MemberwiseClone()</a>
     </div>
     <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.referenceequals#System_Object_ReferenceEquals_System_Object_System_Object_">Object.ReferenceEquals(Object, Object)</a>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.referenceequals#system-object-referenceequals(system-object-system-object)">Object.ReferenceEquals(Object, Object)</a>
     </div>
     <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.tostring#System_Object_ToString">Object.ToString()</a>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.tostring#system-object-tostring">Object.ToString()</a>
     </div>
   </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="Melanchall.DryWetMidi.Tools.html">Melanchall.DryWetMidi.Tools</a></h6>
   <h6><strong>Assembly</strong>: Melanchall.DryWetMidi.dll</h6>
   <h5 id="Melanchall_DryWetMidi_Tools_SliceMidiFileSettings_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public class SliceMidiFileSettings</code></pre>
+    <pre><code class="lang-csharp hljs">public sealed class SliceMidiFileSettings</code></pre>
   </div>
   <h3 id="properties">Properties
   </h3>
@@ -180,7 +180,8 @@ Gets or sets settings which define how notes should be detected and built. You c
   <h4 id="Melanchall_DryWetMidi_Tools_SliceMidiFileSettings_PreserveTimes" data-uid="Melanchall.DryWetMidi.Tools.SliceMidiFileSettings.PreserveTimes">PreserveTimes</h4>
   <div class="markdown level1 summary">
 Gets or sets a value indicating whether original times of events should be saved or not.
-The default value is <code>false</code>.
+The default value is <code>false</code>. More info in the
+<a class="xref" href="../articles/tools/MIDI-file-splitting.html#preservetimes">MIDI file splitting: PreserveTimes</a> article.
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -202,41 +203,6 @@ The default value is <code>false</code>.
       </tr>
     </tbody>
   </table>
-  <h5 id="Melanchall_DryWetMidi_Tools_SliceMidiFileSettings_PreserveTimes_remarks">Remarks</h5>
-  <div class="markdown level1 remarks">
-If <code>false</code> used, events will be moved to the start of a new file. If <code>true</code> used, events
-will be placed in new files at the same absolute times as in the input file.
-</div>
-  <h5 id="Melanchall_DryWetMidi_Tools_SliceMidiFileSettings_PreserveTimes_examples">Examples</h5>
-  
-<p>
-Take a look at the following file with two track chunks which should be split at the time
-defined by the vertical line:
-</p>
-<p>
-<img src="images/dwmgen_Melanchall.DryWetMidi.Tools.SliceMidiFileSettings-9994.png" class="text-image" />
-<p>
-where each <code>E</code> symbol represents a MIDI event.
-</p>
-</p>
-<p>
-If <a class="xref" href="Melanchall.DryWetMidi.Tools.SliceMidiFileSettings.html#Melanchall_DryWetMidi_Tools_SliceMidiFileSettings_PreserveTimes">PreserveTimes</a> set to <code>false</code> (which is the default value),
-we&apos;ll get following two new files:
-</p>
-<p>
-<img src="images/dwmgen_Melanchall.DryWetMidi.Tools.SliceMidiFileSettings-10605.png" class="text-image" />
-</p>
-<p>
-But if <a class="xref" href="Melanchall.DryWetMidi.Tools.SliceMidiFileSettings.html#Melanchall_DryWetMidi_Tools_SliceMidiFileSettings_PreserveTimes">PreserveTimes</a> set to <code>true</code>, we&apos;ll get following new files:
-</p>
-<p>
-<img src="images/dwmgen_Melanchall.DryWetMidi.Tools.SliceMidiFileSettings-11311.png" class="text-image" />
-</p>
-<p>
-So events will not be shifted to the start of a file and will keep their original
-absolute times.
-</p>
-
   <a id="Melanchall_DryWetMidi_Tools_SliceMidiFileSettings_PreserveTrackChunks_" data-uid="Melanchall.DryWetMidi.Tools.SliceMidiFileSettings.PreserveTrackChunks*"></a>
   <h4 id="Melanchall_DryWetMidi_Tools_SliceMidiFileSettings_PreserveTrackChunks" data-uid="Melanchall.DryWetMidi.Tools.SliceMidiFileSettings.PreserveTrackChunks">PreserveTrackChunks</h4>
   <div class="markdown level1 summary">
@@ -264,46 +230,12 @@ The default value is <code>false</code>.
       </tr>
     </tbody>
   </table>
-  <h5 id="Melanchall_DryWetMidi_Tools_SliceMidiFileSettings_PreserveTrackChunks_remarks">Remarks</h5>
-  <div class="markdown level1 remarks">
-<p>
-If <code>false</code> used, track chunks without events will be removed from the result.
-</p>
-</div>
-  <h5 id="Melanchall_DryWetMidi_Tools_SliceMidiFileSettings_PreserveTrackChunks_examples">Examples</h5>
-  
-<p>
-Take a look at the following file with two track chunks which should be split at the times
-defined by the vertical lines:
-</p>
-<p>
-<img src="images/dwmgen_Melanchall.DryWetMidi.Tools.SliceMidiFileSettings-13641.png" class="text-image" />
-</p>
-<p>
-where each <code>E</code> symbol represents a MIDI event.
-</p>
-<p>
-If <a class="xref" href="Melanchall.DryWetMidi.Tools.SliceMidiFileSettings.html#Melanchall_DryWetMidi_Tools_SliceMidiFileSettings_PreserveTrackChunks">PreserveTrackChunks</a> set to <code>false</code> (which is the default value),
-we&apos;ll get following three new files:
-</p>
-<p>
-<img src="images/dwmgen_Melanchall.DryWetMidi.Tools.SliceMidiFileSettings-14266.png" class="text-image" />
-</p>
-<p>
-But if <a class="xref" href="Melanchall.DryWetMidi.Tools.SliceMidiFileSettings.html#Melanchall_DryWetMidi_Tools_SliceMidiFileSettings_PreserveTrackChunks">PreserveTrackChunks</a> set to <code>true</code>, we&apos;ll get following new files:
-</p>
-<p>
-<img src="images/dwmgen_Melanchall.DryWetMidi.Tools.SliceMidiFileSettings-14908.png" class="text-image" />
-</p>
-<p>
-So empty track chunks still present in new files because they&apos;re present in the original ones.
-</p>
-
   <a id="Melanchall_DryWetMidi_Tools_SliceMidiFileSettings_SplitNotes_" data-uid="Melanchall.DryWetMidi.Tools.SliceMidiFileSettings.SplitNotes*"></a>
   <h4 id="Melanchall_DryWetMidi_Tools_SliceMidiFileSettings_SplitNotes" data-uid="Melanchall.DryWetMidi.Tools.SliceMidiFileSettings.SplitNotes">SplitNotes</h4>
   <div class="markdown level1 summary">
 Gets or sets a value indicating whether notes should be split in points of
-grid intersection or not. The default value is <code>true</code>.
+grid intersection or not. The default value is <code>true</code>. More info in the
+<a class="xref" href="../articles/tools/MIDI-file-splitting.html#splitnotes">MIDI file splitting: SplitNotes</a> article.
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -325,47 +257,9 @@ grid intersection or not. The default value is <code>true</code>.
       </tr>
     </tbody>
   </table>
-  <h5 id="Melanchall_DryWetMidi_Tools_SliceMidiFileSettings_SplitNotes_remarks">Remarks</h5>
-  <div class="markdown level1 remarks">
-<p>
-<code>false</code> means notes treated as just Note On / Note Off events rather than note objects
-for <code>true</code>. Splitting notes produces new Note On / Note Off events at points of grid
-intersecting notes.
-</p>
-</div>
-  <h5 id="Melanchall_DryWetMidi_Tools_SliceMidiFileSettings_SplitNotes_examples">Examples</h5>
-  
-<p>
-Take a look at the following file which should be split at the time defined by the vertical line:
-</p>
-<p>
-<img src="images/dwmgen_Melanchall.DryWetMidi.Tools.SliceMidiFileSettings-17182.png" class="text-image" />
-</p>
-<p>
-where <code>A</code> and <code>B</code> mean Note On and Note Off events correspondingly (notes are highlighted
-for convenience). So we have the file with two track chunks here containing some notes.
-</p>
-<p>
-If <a class="xref" href="Melanchall.DryWetMidi.Tools.SliceMidiFileSettings.html#Melanchall_DryWetMidi_Tools_SliceMidiFileSettings_SplitNotes">SplitNotes</a> set to <code>false</code>, we&apos;ll get following two new files:
-</p>
-<p>
-<img src="images/dwmgen_Melanchall.DryWetMidi.Tools.SliceMidiFileSettings-17912.png" class="text-image" />
-</p>
-<p>
-So the not within first track chunk just exploded into its Note On and Note Off events placed in
-different files after split. But if <a class="xref" href="Melanchall.DryWetMidi.Tools.SliceMidiFileSettings.html#Melanchall_DryWetMidi_Tools_SliceMidiFileSettings_SplitNotes">SplitNotes</a> set to <code>true</code> (which is the default value),
-we&apos;ll get following new files:
-</p>
-<p>
-<img src="images/dwmgen_Melanchall.DryWetMidi.Tools.SliceMidiFileSettings-18786.png" class="text-image" />
-</p>
-<p>
-So we have new Note On / Note Off events at points of split which gives us new notes.
-</p>
-
   <h3 id="seealso">See Also</h3>
   <div class="seealso">
-      <div><a class="xref" href="Melanchall.DryWetMidi.Tools.MidiFileSplitter.html">MidiFileSplitter</a></div>
+      <div><a class="xref" href="Melanchall.DryWetMidi.Tools.Splitter.html">Splitter</a></div>
   </div>
 </article>
           </div>
@@ -388,7 +282,7 @@ So we have new Note On / Note Off events at points of split which gives us new n
             <span class="pull-right">
               <a href="#top">Back to top</a>
             </span>
-            2021 / Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
+            2022 / Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
             
           </div>
         </div>

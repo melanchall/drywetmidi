@@ -92,6 +92,9 @@ Represents an object that has length.
     <div>
       <a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimedObject.html#Melanchall_DryWetMidi_Interaction_ITimedObject_Time">ITimedObject.Time</a>
     </div>
+    <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimedObject.html#Melanchall_DryWetMidi_Interaction_ITimedObject_Clone">ITimedObject.Clone()</a>
+    </div>
   </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="Melanchall.DryWetMidi.Interaction.html">Melanchall.DryWetMidi.Interaction</a></h6>
   <h6><strong>Assembly</strong>: Melanchall.DryWetMidi.dll</h6>
@@ -126,6 +129,84 @@ Gets or sets the length of an object.
       </tr>
     </tbody>
   </table>
+  <h3 id="methods">Methods
+  </h3>
+  <a id="Melanchall_DryWetMidi_Interaction_ILengthedObject_Split_" data-uid="Melanchall.DryWetMidi.Interaction.ILengthedObject.Split*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_ILengthedObject_Split_System_Int64_" data-uid="Melanchall.DryWetMidi.Interaction.ILengthedObject.Split(System.Int64)">Split(Int64)</h4>
+  <div class="markdown level1 summary">
+Splits the current object by the specified time.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">SplitLengthedObject Split(long time)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int64">Int64</a></td>
+        <td><span class="parametername">time</span></td>
+        <td>Time to split the object at.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.SplitLengthedObject.html">SplitLengthedObject</a></td>
+        <td>An object containing left and right parts of the split object.
+Both parts have the same type as the original object.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Melanchall_DryWetMidi_Interaction_ILengthedObject_Split_System_Int64__remarks">Remarks</h5>
+  <div class="markdown level1 remarks">
+<p>
+If <code data-dev-comment-type="paramref" class="paramref">time</code> is less than or equal to time of the object, the left part will
+be <code>null</code>. If <code data-dev-comment-type="paramref" class="paramref">time</code> is greater than or equal to end time of the object,
+the right part will be <code>null</code>.
+</p>
+<p>
+Let&apos;s see a simple example. Suppose we have an object with time of <code>10</code> and length of <code>50</code>.
+The table below shows what left and right parts will be in case of different values of
+<code data-dev-comment-type="paramref" class="paramref">time</code>:
+</p>
+<table><thead><tr><th>Time to split at</th><th>Left part</th><th>Right part</th></tr></thead><tbody><tr><td><code>5</code></td><td><code>null</code></td><td>Copy of the object</td></tr><tr><td><code>10</code></td><td><code>null</code></td><td>Copy of the object</td></tr><tr><td><code>30</code></td><td>Copy of the object with time of <code>10</code> and length of <code>20</code></td><td>Copy of the object with time of <code>30</code> and length of <code>30</code></td></tr><tr><td><code>60</code></td><td>Copy of the object</td><td><code>null</code></td></tr><tr><td><code>70</code></td><td>Copy of the object</td><td><code>null</code></td></tr></tbody></table>
+<p>
+To learn about other ways to split an object please read <a class="xref" href="../articles/tools/Objects-splitting.html">
+Objects splitting</a> article.
+</p>
+</div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">time</code> is negative.</td>
+      </tr>
+    </tbody>
+  </table>
   <h3 id="extensionmethods">Extension Methods</h3>
   <div>
       <a class="xref" href="Melanchall.DryWetMidi.Interaction.LengthedObjectUtilities.html#Melanchall_DryWetMidi_Interaction_LengthedObjectUtilities_LengthAs__1_Melanchall_DryWetMidi_Interaction_ILengthedObject_Melanchall_DryWetMidi_Interaction_TempoMap_">LengthedObjectUtilities.LengthAs&lt;TLength&gt;(ILengthedObject, TempoMap)</a>
@@ -140,10 +221,16 @@ Gets or sets the length of an object.
       <a class="xref" href="Melanchall.DryWetMidi.Interaction.LengthedObjectUtilities.html#Melanchall_DryWetMidi_Interaction_LengthedObjectUtilities_EndTimeAs_Melanchall_DryWetMidi_Interaction_ILengthedObject_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Interaction_TempoMap_">LengthedObjectUtilities.EndTimeAs(ILengthedObject, TimeSpanType, TempoMap)</a>
   </div>
   <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.LengthedObjectUtilities.html#Melanchall_DryWetMidi_Interaction_LengthedObjectUtilities_SetLength__1___0_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_TempoMap_">LengthedObjectUtilities.SetLength&lt;TObject&gt;(TObject, ITimeSpan, TempoMap)</a>
+  </div>
+  <div>
       <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedObjectUtilities.html#Melanchall_DryWetMidi_Interaction_TimedObjectUtilities_TimeAs__1_Melanchall_DryWetMidi_Interaction_ITimedObject_Melanchall_DryWetMidi_Interaction_TempoMap_">TimedObjectUtilities.TimeAs&lt;TTime&gt;(ITimedObject, TempoMap)</a>
   </div>
   <div>
       <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedObjectUtilities.html#Melanchall_DryWetMidi_Interaction_TimedObjectUtilities_TimeAs_Melanchall_DryWetMidi_Interaction_ITimedObject_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Interaction_TempoMap_">TimedObjectUtilities.TimeAs(ITimedObject, TimeSpanType, TempoMap)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedObjectUtilities.html#Melanchall_DryWetMidi_Interaction_TimedObjectUtilities_SetTime__1___0_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_TempoMap_">TimedObjectUtilities.SetTime&lt;TObject&gt;(TObject, ITimeSpan, TempoMap)</a>
   </div>
 </article>
           </div>
@@ -166,7 +253,7 @@ Gets or sets the length of an object.
             <span class="pull-right">
               <a href="#top">Back to top</a>
             </span>
-            2021 / Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
+            2022 / Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
             
           </div>
         </div>

@@ -91,9 +91,6 @@ Represents a basic collection of the <a class="xref" href="Melanchall.DryWetMidi
     <h5>Inheritance</h5>
     <div class="level0"><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object">Object</a></div>
     <div class="level1"><span class="xref">TimedObjectsCollection&lt;TObject&gt;</span></div>
-      <div class="level2"><a class="xref" href="Melanchall.DryWetMidi.Interaction.ChordsCollection.html">ChordsCollection</a></div>
-      <div class="level2"><a class="xref" href="Melanchall.DryWetMidi.Interaction.NotesCollection.html">NotesCollection</a></div>
-      <div class="level2"><a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEventsCollection.html">TimedEventsCollection</a></div>
   </div>
   <div classs="implements">
     <h5>Implements</h5>
@@ -103,32 +100,32 @@ Represents a basic collection of the <a class="xref" href="Melanchall.DryWetMidi
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
     <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#System_Object_Equals_System_Object_">Object.Equals(Object)</a>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)">Object.Equals(Object)</a>
     </div>
     <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#System_Object_Equals_System_Object_System_Object_">Object.Equals(Object, Object)</a>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)">Object.Equals(Object, Object)</a>
     </div>
     <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gethashcode#System_Object_GetHashCode">Object.GetHashCode()</a>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gethashcode#system-object-gethashcode">Object.GetHashCode()</a>
     </div>
     <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gettype#System_Object_GetType">Object.GetType()</a>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gettype#system-object-gettype">Object.GetType()</a>
     </div>
     <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.memberwiseclone#System_Object_MemberwiseClone">Object.MemberwiseClone()</a>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.memberwiseclone#system-object-memberwiseclone">Object.MemberwiseClone()</a>
     </div>
     <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.referenceequals#System_Object_ReferenceEquals_System_Object_System_Object_">Object.ReferenceEquals(Object, Object)</a>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.referenceequals#system-object-referenceequals(system-object-system-object)">Object.ReferenceEquals(Object, Object)</a>
     </div>
     <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.tostring#System_Object_ToString">Object.ToString()</a>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.tostring#system-object-tostring">Object.ToString()</a>
     </div>
   </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="Melanchall.DryWetMidi.Interaction.html">Melanchall.DryWetMidi.Interaction</a></h6>
   <h6><strong>Assembly</strong>: Melanchall.DryWetMidi.dll</h6>
   <h5 id="Melanchall_DryWetMidi_Interaction_TimedObjectsCollection_1_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public abstract class TimedObjectsCollection&lt;TObject&gt; : IEnumerable&lt;TObject&gt;, IEnumerable where TObject : ITimedObject</code></pre>
+    <pre><code class="lang-csharp hljs">public sealed class TimedObjectsCollection&lt;TObject&gt; : IEnumerable&lt;TObject&gt;, IEnumerable where TObject : ITimedObject</code></pre>
   </div>
   <h5 class="typeParameters">Type Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -142,32 +139,6 @@ Represents a basic collection of the <a class="xref" href="Melanchall.DryWetMidi
       <tr>
         <td><span class="parametername">TObject</span></td>
         <td>The type of elements in the collection.</td>
-      </tr>
-    </tbody>
-  </table>
-  <h3 id="fields">Fields
-  </h3>
-  <h4 id="Melanchall_DryWetMidi_Interaction_TimedObjectsCollection_1__objects" data-uid="Melanchall.DryWetMidi.Interaction.TimedObjectsCollection`1._objects">_objects</h4>
-  <div class="markdown level1 summary">
-Internal list of timed objects.
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected readonly List&lt;TObject&gt; _objects</code></pre>
-  </div>
-  <h5 class="fieldValue">Field Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.list-1">List</a>&lt;TObject&gt;</td>
-        <td></td>
       </tr>
     </tbody>
   </table>
@@ -275,7 +246,7 @@ Returns an enumerator that iterates through the collection.
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public virtual IEnumerator&lt;TObject&gt; GetEnumerator()</code></pre>
+    <pre><code class="lang-csharp hljs">public IEnumerator&lt;TObject&gt; GetEnumerator()</code></pre>
   </div>
   <h5 class="returns">Returns</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -289,60 +260,6 @@ Returns an enumerator that iterates through the collection.
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerator-1">IEnumerator</a>&lt;TObject&gt;</td>
         <td>An enumerator that can be used to iterate through the collection.</td>
-      </tr>
-    </tbody>
-  </table>
-  <a id="Melanchall_DryWetMidi_Interaction_TimedObjectsCollection_1_OnObjectsAdded_" data-uid="Melanchall.DryWetMidi.Interaction.TimedObjectsCollection`1.OnObjectsAdded*"></a>
-  <h4 id="Melanchall_DryWetMidi_Interaction_TimedObjectsCollection_1_OnObjectsAdded_System_Collections_Generic_IEnumerable__0__" data-uid="Melanchall.DryWetMidi.Interaction.TimedObjectsCollection`1.OnObjectsAdded(System.Collections.Generic.IEnumerable{`0})">OnObjectsAdded(IEnumerable&lt;TObject&gt;)</h4>
-  <div class="markdown level1 summary">
-Performs an action when objects are added to the collection.
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected virtual void OnObjectsAdded(IEnumerable&lt;TObject&gt; addedObjects)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;TObject&gt;</td>
-        <td><span class="parametername">addedObjects</span></td>
-        <td>Collection of added objects.</td>
-      </tr>
-    </tbody>
-  </table>
-  <a id="Melanchall_DryWetMidi_Interaction_TimedObjectsCollection_1_OnObjectsRemoved_" data-uid="Melanchall.DryWetMidi.Interaction.TimedObjectsCollection`1.OnObjectsRemoved*"></a>
-  <h4 id="Melanchall_DryWetMidi_Interaction_TimedObjectsCollection_1_OnObjectsRemoved_System_Collections_Generic_IEnumerable__0__" data-uid="Melanchall.DryWetMidi.Interaction.TimedObjectsCollection`1.OnObjectsRemoved(System.Collections.Generic.IEnumerable{`0})">OnObjectsRemoved(IEnumerable&lt;TObject&gt;)</h4>
-  <div class="markdown level1 summary">
-Performs an action when objects are removed from the collection.
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected virtual void OnObjectsRemoved(IEnumerable&lt;TObject&gt; removedObjects)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;TObject&gt;</td>
-        <td><span class="parametername">removedObjects</span></td>
-        <td>Collection of removed objects.</td>
       </tr>
     </tbody>
   </table>
@@ -473,6 +390,32 @@ the objects to remove.</td>
       </tr>
     </tbody>
   </table>
+  <h3 id="events">Events
+  </h3>
+  <h4 id="Melanchall_DryWetMidi_Interaction_TimedObjectsCollection_1_CollectionChanged" data-uid="Melanchall.DryWetMidi.Interaction.TimedObjectsCollection`1.CollectionChanged">CollectionChanged</h4>
+  <div class="markdown level1 summary">
+Occurs when objects collection changes (an object added or removed).
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public event TimedObjectsCollectionChangedEventHandler&lt;TObject&gt; CollectionChanged</code></pre>
+  </div>
+  <h5 class="eventType">Event Type</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedObjectsCollectionChangedEventHandler-1.html">TimedObjectsCollectionChangedEventHandler</a>&lt;TObject&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
   <h3 id="eii">Explicit Interface Implementations
   </h3>
   <a id="Melanchall_DryWetMidi_Interaction_TimedObjectsCollection_1_System_Collections_IEnumerable_GetEnumerator_" data-uid="Melanchall.DryWetMidi.Interaction.TimedObjectsCollection`1.System#Collections#IEnumerable#GetEnumerator*"></a>
@@ -535,7 +478,7 @@ Returns an enumerator that iterates through the collection.
             <span class="pull-right">
               <a href="#top">Back to top</a>
             </span>
-            2021 / Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
+            2022 / Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
             
           </div>
         </div>

@@ -84,7 +84,8 @@
   <h1 id="Melanchall_DryWetMidi_Multimedia_Playback" data-uid="Melanchall.DryWetMidi.Multimedia.Playback" class="text-break">Class Playback
   </h1>
   <div class="markdown level0 summary">
-Provides a way to play MIDI data through the specified output MIDI device.
+Provides a way to play MIDI data through the specified output MIDI device. More info in the
+<a class="xref" href="../articles/playback/Overview.html">Playback</a> article.
 </div>
   <div class="markdown level0 conceptual"></div>
   <div class="inheritance">
@@ -100,25 +101,25 @@ Provides a way to play MIDI data through the specified output MIDI device.
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
     <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#System_Object_Equals_System_Object_">Object.Equals(Object)</a>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)">Object.Equals(Object)</a>
     </div>
     <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#System_Object_Equals_System_Object_System_Object_">Object.Equals(Object, Object)</a>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)">Object.Equals(Object, Object)</a>
     </div>
     <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gethashcode#System_Object_GetHashCode">Object.GetHashCode()</a>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gethashcode#system-object-gethashcode">Object.GetHashCode()</a>
     </div>
     <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gettype#System_Object_GetType">Object.GetType()</a>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gettype#system-object-gettype">Object.GetType()</a>
     </div>
     <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.memberwiseclone#System_Object_MemberwiseClone">Object.MemberwiseClone()</a>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.memberwiseclone#system-object-memberwiseclone">Object.MemberwiseClone()</a>
     </div>
     <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.referenceequals#System_Object_ReferenceEquals_System_Object_System_Object_">Object.ReferenceEquals(Object, Object)</a>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.referenceequals#system-object-referenceequals(system-object-system-object)">Object.ReferenceEquals(Object, Object)</a>
     </div>
     <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.tostring#System_Object_ToString">Object.ToString()</a>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.tostring#system-object-tostring">Object.ToString()</a>
     </div>
   </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="Melanchall.DryWetMidi.Multimedia.html">Melanchall.DryWetMidi.Multimedia</a></h6>
@@ -129,7 +130,7 @@ Provides a way to play MIDI data through the specified output MIDI device.
   </div>
   <h5 id="Melanchall_DryWetMidi_Multimedia_Playback_remarks"><strong>Remarks</strong></h5>
   <div class="markdown level0 remarks">
-You can subclass from the <a class="xref" href="Melanchall.DryWetMidi.Multimedia.Playback.html">Playback</a> to create your own playback logic.
+You can derive from the <a class="xref" href="Melanchall.DryWetMidi.Multimedia.Playback.html">Playback</a> class to create your own playback logic.
 Please see <a class="xref" href="../articles/playback/Custom-playback.html">Custom playback</a> article to learn more.
 </div>
   <h3 id="constructors">Constructors
@@ -278,10 +279,17 @@ Gets or sets callback used to process MIDI event to be played.
       </tr>
     </tbody>
   </table>
+  <h5 id="Melanchall_DryWetMidi_Multimedia_Playback_EventCallback_remarks">Remarks</h5>
+  <div class="markdown level1 remarks">
+Note that <a class="xref" href="Melanchall.DryWetMidi.Core.NoteOnEvent.html">NoteOnEvent</a> and <a class="xref" href="Melanchall.DryWetMidi.Core.NoteOffEvent.html">NoteOffEvent</a> won&apos;t be passed
+to <a class="xref" href="Melanchall.DryWetMidi.Multimedia.Playback.html#Melanchall_DryWetMidi_Multimedia_Playback_EventCallback">EventCallback</a>. Since processing of a note requires syncing between pairs
+of corresponding events, such pairs are handled by <a class="xref" href="Melanchall.DryWetMidi.Multimedia.Playback.html#Melanchall_DryWetMidi_Multimedia_Playback_NoteCallback">NoteCallback</a> to be sure
+that a note&apos;s integrity is not broken.
+</div>
   <h5 id="Melanchall_DryWetMidi_Multimedia_Playback_EventCallback_examples">Examples</h5>
   
 <p>
-The following example filters out all Program Change events:
+The following example filters out all <a class="xref" href="Melanchall.DryWetMidi.Core.ProgramChangeEvent.html">ProgramChangeEvent</a> events:
 </p>
 <pre><code class="lang-csharp">playback.EventCallback = (midiEvent, rawTime, playbackTime) =>
     midiEvent.EventType == MidiEventType.ProgramChange
@@ -627,7 +635,9 @@ Gets the tempo map used to calculate events times.
   <div class="markdown level1 summary">
 Gets or sets a value indicating whether controller values must be tracked or not. If <code>true</code>, any jump
 in time will force playback send <a class="xref" href="Melanchall.DryWetMidi.Core.ControlChangeEvent.html">ControlChangeEvent</a> corresponding to the controller value at new time,
-if needed. The default value is <code>false</code>.
+if needed. The default value is <code>false</code>. More info in the
+<a class="xref" href="../articles/playback/Data-tracking.html#midi-parameters-values-tracking">Data tracking: MIDI parameters values tracking</a>
+article.
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -649,15 +659,12 @@ if needed. The default value is <code>false</code>.
       </tr>
     </tbody>
   </table>
-  <h5 id="Melanchall_DryWetMidi_Multimedia_Playback_TrackControlValue_remarks">Remarks</h5>
-  <div class="markdown level1 remarks">
-See <a class="xref" href="../articles/playback/Data-tracking.html">Data tracking</a> article to learn more.
-</div>
   <a id="Melanchall_DryWetMidi_Multimedia_Playback_TrackNotes_" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.TrackNotes*"></a>
   <h4 id="Melanchall_DryWetMidi_Multimedia_Playback_TrackNotes" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.TrackNotes">TrackNotes</h4>
   <div class="markdown level1 summary">
 Gets or sets a value indicating whether notes must be tracked or not. If <code>false</code>, notes
-will be treated as just Note On/Note Off events. The default value is <code>false</code>.
+will be treated as just Note On/Note Off events. The default value is <code>false</code>. More info in the
+<a class="xref" href="../articles/playback/Data-tracking.html#notes-tracking">Data tracking: Notes tracking</a> article.
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -679,16 +686,14 @@ will be treated as just Note On/Note Off events. The default value is <code>fals
       </tr>
     </tbody>
   </table>
-  <h5 id="Melanchall_DryWetMidi_Multimedia_Playback_TrackNotes_remarks">Remarks</h5>
-  <div class="markdown level1 remarks">
-See <a class="xref" href="../articles/playback/Data-tracking.html">Data tracking</a> article to learn more.
-</div>
   <a id="Melanchall_DryWetMidi_Multimedia_Playback_TrackPitchValue_" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.TrackPitchValue*"></a>
   <h4 id="Melanchall_DryWetMidi_Multimedia_Playback_TrackPitchValue" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.TrackPitchValue">TrackPitchValue</h4>
   <div class="markdown level1 summary">
 Gets or sets a value indicating whether pitch value must be tracked or not. If <code>true</code>, any jump
 in time will force playback send <a class="xref" href="Melanchall.DryWetMidi.Core.PitchBendEvent.html">PitchBendEvent</a> corresponding to the pitch value at new time,
-if needed. The default value is <code>false</code>.
+if needed. The default value is <code>false</code>. More info in the
+<a class="xref" href="../articles/playback/Data-tracking.html#midi-parameters-values-tracking">Data tracking: MIDI parameters values tracking</a>
+article.
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -710,16 +715,14 @@ if needed. The default value is <code>false</code>.
       </tr>
     </tbody>
   </table>
-  <h5 id="Melanchall_DryWetMidi_Multimedia_Playback_TrackPitchValue_remarks">Remarks</h5>
-  <div class="markdown level1 remarks">
-See <a class="xref" href="../articles/playback/Data-tracking.html">Data tracking</a> article to learn more.
-</div>
   <a id="Melanchall_DryWetMidi_Multimedia_Playback_TrackProgram_" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.TrackProgram*"></a>
   <h4 id="Melanchall_DryWetMidi_Multimedia_Playback_TrackProgram" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.TrackProgram">TrackProgram</h4>
   <div class="markdown level1 summary">
 Gets or sets a value indicating whether program must be tracked or not. If <code>true</code>, any jump
 in time will force playback send <a class="xref" href="Melanchall.DryWetMidi.Core.ProgramChangeEvent.html">ProgramChangeEvent</a> corresponding to the program at new time,
-if needed. The default value is <code>false</code>.
+if needed. The default value is <code>false</code>. More info in the
+<a class="xref" href="../articles/playback/Data-tracking.html#midi-parameters-values-tracking">Data tracking: MIDI parameters values tracking</a>
+article.
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -741,10 +744,6 @@ if needed. The default value is <code>false</code>.
       </tr>
     </tbody>
   </table>
-  <h5 id="Melanchall_DryWetMidi_Multimedia_Playback_TrackProgram_remarks">Remarks</h5>
-  <div class="markdown level1 remarks">
-See <a class="xref" href="../articles/playback/Data-tracking.html">Data tracking</a> article to learn more.
-</div>
   <h3 id="methods">Methods
   </h3>
   <a id="Melanchall_DryWetMidi_Multimedia_Playback_Dispose_" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.Dispose*"></a>
@@ -2162,7 +2161,7 @@ Occurs when playback stopped via <a class="xref" href="Melanchall.DryWetMidi.Mul
             <span class="pull-right">
               <a href="#top">Back to top</a>
             </span>
-            2021 / Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
+            2022 / Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
             
           </div>
         </div>

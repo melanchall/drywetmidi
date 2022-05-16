@@ -95,25 +95,25 @@ Provides a fluent API to build an instance of the <a class="xref" href="Melancha
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
     <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#System_Object_Equals_System_Object_">Object.Equals(Object)</a>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)">Object.Equals(Object)</a>
     </div>
     <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#System_Object_Equals_System_Object_System_Object_">Object.Equals(Object, Object)</a>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)">Object.Equals(Object, Object)</a>
     </div>
     <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gethashcode#System_Object_GetHashCode">Object.GetHashCode()</a>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gethashcode#system-object-gethashcode">Object.GetHashCode()</a>
     </div>
     <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gettype#System_Object_GetType">Object.GetType()</a>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gettype#system-object-gettype">Object.GetType()</a>
     </div>
     <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.memberwiseclone#System_Object_MemberwiseClone">Object.MemberwiseClone()</a>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.memberwiseclone#system-object-memberwiseclone">Object.MemberwiseClone()</a>
     </div>
     <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.referenceequals#System_Object_ReferenceEquals_System_Object_System_Object_">Object.ReferenceEquals(Object, Object)</a>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.referenceequals#system-object-referenceequals(system-object-system-object)">Object.ReferenceEquals(Object, Object)</a>
     </div>
     <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.tostring#System_Object_ToString">Object.ToString()</a>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.tostring#system-object-tostring">Object.ToString()</a>
     </div>
   </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="Melanchall.DryWetMidi.Composing.html">Melanchall.DryWetMidi.Composing</a></h6>
@@ -2466,6 +2466,653 @@ To set default octave use <a class="xref" href="Melanchall.DryWetMidi.Composing.
       </tr>
     </tbody>
   </table>
+  <a id="Melanchall_DryWetMidi_Composing_PatternBuilder_Chord_" data-uid="Melanchall.DryWetMidi.Composing.PatternBuilder.Chord*"></a>
+  <h4 id="Melanchall_DryWetMidi_Composing_PatternBuilder_Chord_System_String_" data-uid="Melanchall.DryWetMidi.Composing.PatternBuilder.Chord(System.String)">Chord(String)</h4>
+  <div class="markdown level1 summary">
+Adds a chord.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public PatternBuilder Chord(string chord)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.string">String</a></td>
+        <td><span class="parametername">chord</span></td>
+        <td>A chord as a string (like Dmin, for example).</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Composing.PatternBuilder.html">PatternBuilder</a></td>
+        <td>The current <a class="xref" href="Melanchall.DryWetMidi.Composing.PatternBuilder.html">PatternBuilder</a>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Melanchall_DryWetMidi_Composing_PatternBuilder_Chord_System_String__remarks">Remarks</h5>
+  <div class="markdown level1 remarks">
+<p>
+Chord&apos;s notes will be resolved according to <a class="xref" href="Melanchall.DryWetMidi.Composing.PatternBuilder.html#Melanchall_DryWetMidi_Composing_PatternBuilder_Octave">Octave</a>.
+To change octave use <a class="xref" href="Melanchall.DryWetMidi.Composing.PatternBuilder.html#Melanchall_DryWetMidi_Composing_PatternBuilder_SetOctave_Melanchall_DryWetMidi_MusicTheory_Octave_">SetOctave(Octave)</a> method.
+</p>
+<p>
+Chord&apos;s notes length will be taken from <a class="xref" href="Melanchall.DryWetMidi.Composing.PatternBuilder.html#Melanchall_DryWetMidi_Composing_PatternBuilder_NoteLength">NoteLength</a>.
+To change notes length use <a class="xref" href="Melanchall.DryWetMidi.Composing.PatternBuilder.html#Melanchall_DryWetMidi_Composing_PatternBuilder_SetNoteLength_Melanchall_DryWetMidi_Interaction_ITimeSpan_">SetNoteLength(ITimeSpan)</a> method.
+</p>
+<p>
+Chord&apos;s notes velocity will be taken from <a class="xref" href="Melanchall.DryWetMidi.Composing.PatternBuilder.html#Melanchall_DryWetMidi_Composing_PatternBuilder_Velocity">Velocity</a>.
+To change velocity use <a class="xref" href="Melanchall.DryWetMidi.Composing.PatternBuilder.html#Melanchall_DryWetMidi_Composing_PatternBuilder_SetVelocity_Melanchall_DryWetMidi_Common_SevenBitNumber_">SetVelocity(SevenBitNumber)</a> method.
+</p>
+</div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentexception">ArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">chord</code> is <code>null</code> or contains white-spaces only.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.formatexception">FormatException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">chord</code> has invalid format.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Composing_PatternBuilder_Chord_" data-uid="Melanchall.DryWetMidi.Composing.PatternBuilder.Chord*"></a>
+  <h4 id="Melanchall_DryWetMidi_Composing_PatternBuilder_Chord_System_String_Melanchall_DryWetMidi_Common_SevenBitNumber_" data-uid="Melanchall.DryWetMidi.Composing.PatternBuilder.Chord(System.String,Melanchall.DryWetMidi.Common.SevenBitNumber)">Chord(String, SevenBitNumber)</h4>
+  <div class="markdown level1 summary">
+Adds a chord with the specified velocity.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public PatternBuilder Chord(string chord, SevenBitNumber velocity)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.string">String</a></td>
+        <td><span class="parametername">chord</span></td>
+        <td>A chord as a string (like Dmin, for example).</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Common.SevenBitNumber.html">SevenBitNumber</a></td>
+        <td><span class="parametername">velocity</span></td>
+        <td>Chord&apos;s notes velocity.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Composing.PatternBuilder.html">PatternBuilder</a></td>
+        <td>The current <a class="xref" href="Melanchall.DryWetMidi.Composing.PatternBuilder.html">PatternBuilder</a>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Melanchall_DryWetMidi_Composing_PatternBuilder_Chord_System_String_Melanchall_DryWetMidi_Common_SevenBitNumber__remarks">Remarks</h5>
+  <div class="markdown level1 remarks">
+<p>
+Chord&apos;s notes will be resolved according to <a class="xref" href="Melanchall.DryWetMidi.Composing.PatternBuilder.html#Melanchall_DryWetMidi_Composing_PatternBuilder_Octave">Octave</a>.
+To change octave use <a class="xref" href="Melanchall.DryWetMidi.Composing.PatternBuilder.html#Melanchall_DryWetMidi_Composing_PatternBuilder_SetOctave_Melanchall_DryWetMidi_MusicTheory_Octave_">SetOctave(Octave)</a> method.
+</p>
+<p>
+Chord&apos;s notes length will be taken from <a class="xref" href="Melanchall.DryWetMidi.Composing.PatternBuilder.html#Melanchall_DryWetMidi_Composing_PatternBuilder_NoteLength">NoteLength</a>.
+To change notes length use <a class="xref" href="Melanchall.DryWetMidi.Composing.PatternBuilder.html#Melanchall_DryWetMidi_Composing_PatternBuilder_SetNoteLength_Melanchall_DryWetMidi_Interaction_ITimeSpan_">SetNoteLength(ITimeSpan)</a> method.
+</p>
+</div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentexception">ArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">chord</code> is <code>null</code> or contains white-spaces only.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.formatexception">FormatException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">chord</code> has invalid format.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Composing_PatternBuilder_Chord_" data-uid="Melanchall.DryWetMidi.Composing.PatternBuilder.Chord*"></a>
+  <h4 id="Melanchall_DryWetMidi_Composing_PatternBuilder_Chord_System_String_Melanchall_DryWetMidi_Interaction_ITimeSpan_" data-uid="Melanchall.DryWetMidi.Composing.PatternBuilder.Chord(System.String,Melanchall.DryWetMidi.Interaction.ITimeSpan)">Chord(String, ITimeSpan)</h4>
+  <div class="markdown level1 summary">
+Adds a chord with the specified length.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public PatternBuilder Chord(string chord, ITimeSpan length)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.string">String</a></td>
+        <td><span class="parametername">chord</span></td>
+        <td>A chord as a string (like Dmin, for example).</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a></td>
+        <td><span class="parametername">length</span></td>
+        <td>Chord&apos;s notes length.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Composing.PatternBuilder.html">PatternBuilder</a></td>
+        <td>The current <a class="xref" href="Melanchall.DryWetMidi.Composing.PatternBuilder.html">PatternBuilder</a>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Melanchall_DryWetMidi_Composing_PatternBuilder_Chord_System_String_Melanchall_DryWetMidi_Interaction_ITimeSpan__remarks">Remarks</h5>
+  <div class="markdown level1 remarks">
+<p>
+Chord&apos;s notes will be resolved according to <a class="xref" href="Melanchall.DryWetMidi.Composing.PatternBuilder.html#Melanchall_DryWetMidi_Composing_PatternBuilder_Octave">Octave</a>.
+To change octave use <a class="xref" href="Melanchall.DryWetMidi.Composing.PatternBuilder.html#Melanchall_DryWetMidi_Composing_PatternBuilder_SetOctave_Melanchall_DryWetMidi_MusicTheory_Octave_">SetOctave(Octave)</a> method.
+</p>
+<p>
+Chord&apos;s notes velocity will be taken from <a class="xref" href="Melanchall.DryWetMidi.Composing.PatternBuilder.html#Melanchall_DryWetMidi_Composing_PatternBuilder_Velocity">Velocity</a>.
+To change velocity use <a class="xref" href="Melanchall.DryWetMidi.Composing.PatternBuilder.html#Melanchall_DryWetMidi_Composing_PatternBuilder_SetVelocity_Melanchall_DryWetMidi_Common_SevenBitNumber_">SetVelocity(SevenBitNumber)</a> method.
+</p>
+</div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentexception">ArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">chord</code> is <code>null</code> or contains white-spaces only.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.formatexception">FormatException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">chord</code> has invalid format.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">length</code> is <code>null</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Composing_PatternBuilder_Chord_" data-uid="Melanchall.DryWetMidi.Composing.PatternBuilder.Chord*"></a>
+  <h4 id="Melanchall_DryWetMidi_Composing_PatternBuilder_Chord_System_String_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Common_SevenBitNumber_" data-uid="Melanchall.DryWetMidi.Composing.PatternBuilder.Chord(System.String,Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Common.SevenBitNumber)">Chord(String, ITimeSpan, SevenBitNumber)</h4>
+  <div class="markdown level1 summary">
+Adds a chord with the specified notes length and velocity.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public PatternBuilder Chord(string chord, ITimeSpan length, SevenBitNumber velocity)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.string">String</a></td>
+        <td><span class="parametername">chord</span></td>
+        <td>A chord as a string (like Dmin, for example).</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a></td>
+        <td><span class="parametername">length</span></td>
+        <td>Chord&apos;s notes length.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Common.SevenBitNumber.html">SevenBitNumber</a></td>
+        <td><span class="parametername">velocity</span></td>
+        <td>Chord&apos;s notes velocity.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Composing.PatternBuilder.html">PatternBuilder</a></td>
+        <td>The current <a class="xref" href="Melanchall.DryWetMidi.Composing.PatternBuilder.html">PatternBuilder</a>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Melanchall_DryWetMidi_Composing_PatternBuilder_Chord_System_String_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Common_SevenBitNumber__remarks">Remarks</h5>
+  <div class="markdown level1 remarks">
+<p>
+Chord&apos;s notes will be resolved according to <a class="xref" href="Melanchall.DryWetMidi.Composing.PatternBuilder.html#Melanchall_DryWetMidi_Composing_PatternBuilder_Octave">Octave</a>.
+To change octave use <a class="xref" href="Melanchall.DryWetMidi.Composing.PatternBuilder.html#Melanchall_DryWetMidi_Composing_PatternBuilder_SetOctave_Melanchall_DryWetMidi_MusicTheory_Octave_">SetOctave(Octave)</a> method.
+</p>
+</div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentexception">ArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">chord</code> is <code>null</code> or contains white-spaces only.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.formatexception">FormatException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">chord</code> has invalid format.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">length</code> is <code>null</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Composing_PatternBuilder_Chord_" data-uid="Melanchall.DryWetMidi.Composing.PatternBuilder.Chord*"></a>
+  <h4 id="Melanchall_DryWetMidi_Composing_PatternBuilder_Chord_System_String_Melanchall_DryWetMidi_MusicTheory_Octave_" data-uid="Melanchall.DryWetMidi.Composing.PatternBuilder.Chord(System.String,Melanchall.DryWetMidi.MusicTheory.Octave)">Chord(String, Octave)</h4>
+  <div class="markdown level1 summary">
+Adds a chord using the specified octave.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public PatternBuilder Chord(string chord, Octave octave)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.string">String</a></td>
+        <td><span class="parametername">chord</span></td>
+        <td>A chord as a string (like Dmin, for example).</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.MusicTheory.Octave.html">Octave</a></td>
+        <td><span class="parametername">octave</span></td>
+        <td>Octave to resolve chord&apos;s notes.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Composing.PatternBuilder.html">PatternBuilder</a></td>
+        <td>The current <a class="xref" href="Melanchall.DryWetMidi.Composing.PatternBuilder.html">PatternBuilder</a>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Melanchall_DryWetMidi_Composing_PatternBuilder_Chord_System_String_Melanchall_DryWetMidi_MusicTheory_Octave__remarks">Remarks</h5>
+  <div class="markdown level1 remarks">
+<p>
+Chord&apos;s notes length will be taken from <a class="xref" href="Melanchall.DryWetMidi.Composing.PatternBuilder.html#Melanchall_DryWetMidi_Composing_PatternBuilder_NoteLength">NoteLength</a>.
+To change notes length use <a class="xref" href="Melanchall.DryWetMidi.Composing.PatternBuilder.html#Melanchall_DryWetMidi_Composing_PatternBuilder_SetNoteLength_Melanchall_DryWetMidi_Interaction_ITimeSpan_">SetNoteLength(ITimeSpan)</a> method.
+</p>
+<p>
+Chord&apos;s notes velocity will be taken from <a class="xref" href="Melanchall.DryWetMidi.Composing.PatternBuilder.html#Melanchall_DryWetMidi_Composing_PatternBuilder_Velocity">Velocity</a>.
+To change velocity use <a class="xref" href="Melanchall.DryWetMidi.Composing.PatternBuilder.html#Melanchall_DryWetMidi_Composing_PatternBuilder_SetVelocity_Melanchall_DryWetMidi_Common_SevenBitNumber_">SetVelocity(SevenBitNumber)</a> method.
+</p>
+</div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentexception">ArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">chord</code> is <code>null</code> or contains white-spaces only.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.formatexception">FormatException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">chord</code> has invalid format.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">octave</code> is <code>null</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Composing_PatternBuilder_Chord_" data-uid="Melanchall.DryWetMidi.Composing.PatternBuilder.Chord*"></a>
+  <h4 id="Melanchall_DryWetMidi_Composing_PatternBuilder_Chord_System_String_Melanchall_DryWetMidi_MusicTheory_Octave_Melanchall_DryWetMidi_Common_SevenBitNumber_" data-uid="Melanchall.DryWetMidi.Composing.PatternBuilder.Chord(System.String,Melanchall.DryWetMidi.MusicTheory.Octave,Melanchall.DryWetMidi.Common.SevenBitNumber)">Chord(String, Octave, SevenBitNumber)</h4>
+  <div class="markdown level1 summary">
+Adds a chord using the specified octave and velocity.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public PatternBuilder Chord(string chord, Octave octave, SevenBitNumber velocity)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.string">String</a></td>
+        <td><span class="parametername">chord</span></td>
+        <td>A chord as a string (like Dmin, for example).</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.MusicTheory.Octave.html">Octave</a></td>
+        <td><span class="parametername">octave</span></td>
+        <td>Octave to resolve chord&apos;s notes.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Common.SevenBitNumber.html">SevenBitNumber</a></td>
+        <td><span class="parametername">velocity</span></td>
+        <td>Chord&apos;s notes velocity.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Composing.PatternBuilder.html">PatternBuilder</a></td>
+        <td>The current <a class="xref" href="Melanchall.DryWetMidi.Composing.PatternBuilder.html">PatternBuilder</a>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Melanchall_DryWetMidi_Composing_PatternBuilder_Chord_System_String_Melanchall_DryWetMidi_MusicTheory_Octave_Melanchall_DryWetMidi_Common_SevenBitNumber__remarks">Remarks</h5>
+  <div class="markdown level1 remarks">
+<p>
+Chord&apos;s notes length will be taken from <a class="xref" href="Melanchall.DryWetMidi.Composing.PatternBuilder.html#Melanchall_DryWetMidi_Composing_PatternBuilder_NoteLength">NoteLength</a>.
+To change notes length use <a class="xref" href="Melanchall.DryWetMidi.Composing.PatternBuilder.html#Melanchall_DryWetMidi_Composing_PatternBuilder_SetNoteLength_Melanchall_DryWetMidi_Interaction_ITimeSpan_">SetNoteLength(ITimeSpan)</a> method.
+</p>
+</div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentexception">ArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">chord</code> is <code>null</code> or contains white-spaces only.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.formatexception">FormatException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">chord</code> has invalid format.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">octave</code> is <code>null</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Composing_PatternBuilder_Chord_" data-uid="Melanchall.DryWetMidi.Composing.PatternBuilder.Chord*"></a>
+  <h4 id="Melanchall_DryWetMidi_Composing_PatternBuilder_Chord_System_String_Melanchall_DryWetMidi_MusicTheory_Octave_Melanchall_DryWetMidi_Interaction_ITimeSpan_" data-uid="Melanchall.DryWetMidi.Composing.PatternBuilder.Chord(System.String,Melanchall.DryWetMidi.MusicTheory.Octave,Melanchall.DryWetMidi.Interaction.ITimeSpan)">Chord(String, Octave, ITimeSpan)</h4>
+  <div class="markdown level1 summary">
+Adds a chord using the specified octave and notes length.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public PatternBuilder Chord(string chord, Octave octave, ITimeSpan length)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.string">String</a></td>
+        <td><span class="parametername">chord</span></td>
+        <td>A chord as a string (like Dmin, for example).</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.MusicTheory.Octave.html">Octave</a></td>
+        <td><span class="parametername">octave</span></td>
+        <td>Octave to resolve chord&apos;s notes.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a></td>
+        <td><span class="parametername">length</span></td>
+        <td>Chord&apos;s notes length.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Composing.PatternBuilder.html">PatternBuilder</a></td>
+        <td>The current <a class="xref" href="Melanchall.DryWetMidi.Composing.PatternBuilder.html">PatternBuilder</a>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Melanchall_DryWetMidi_Composing_PatternBuilder_Chord_System_String_Melanchall_DryWetMidi_MusicTheory_Octave_Melanchall_DryWetMidi_Interaction_ITimeSpan__remarks">Remarks</h5>
+  <div class="markdown level1 remarks">
+<p>
+Chord&apos;s notes velocity will be taken from <a class="xref" href="Melanchall.DryWetMidi.Composing.PatternBuilder.html#Melanchall_DryWetMidi_Composing_PatternBuilder_Velocity">Velocity</a>.
+To change velocity use <a class="xref" href="Melanchall.DryWetMidi.Composing.PatternBuilder.html#Melanchall_DryWetMidi_Composing_PatternBuilder_SetVelocity_Melanchall_DryWetMidi_Common_SevenBitNumber_">SetVelocity(SevenBitNumber)</a> method.
+</p>
+</div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentexception">ArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">chord</code> is <code>null</code> or contains white-spaces only.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.formatexception">FormatException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">chord</code> has invalid format.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td>
+<p>One of the following errors occured:</p>
+<ul><li><code data-dev-comment-type="paramref" class="paramref">octave</code> is <code>null</code>.</li><li><code data-dev-comment-type="paramref" class="paramref">length</code> is <code>null</code>.</li></ul>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Composing_PatternBuilder_Chord_" data-uid="Melanchall.DryWetMidi.Composing.PatternBuilder.Chord*"></a>
+  <h4 id="Melanchall_DryWetMidi_Composing_PatternBuilder_Chord_System_String_Melanchall_DryWetMidi_MusicTheory_Octave_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Common_SevenBitNumber_" data-uid="Melanchall.DryWetMidi.Composing.PatternBuilder.Chord(System.String,Melanchall.DryWetMidi.MusicTheory.Octave,Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Common.SevenBitNumber)">Chord(String, Octave, ITimeSpan, SevenBitNumber)</h4>
+  <div class="markdown level1 summary">
+Adds a chord using the specified octave, length and velocity.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public PatternBuilder Chord(string chord, Octave octave, ITimeSpan length, SevenBitNumber velocity)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.string">String</a></td>
+        <td><span class="parametername">chord</span></td>
+        <td>A chord as a string (like Dmin, for example).</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.MusicTheory.Octave.html">Octave</a></td>
+        <td><span class="parametername">octave</span></td>
+        <td>Octave to resolve chord&apos;s notes.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a></td>
+        <td><span class="parametername">length</span></td>
+        <td>Chord&apos;s notes length.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Common.SevenBitNumber.html">SevenBitNumber</a></td>
+        <td><span class="parametername">velocity</span></td>
+        <td>Chord&apos;s notes velocity.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Composing.PatternBuilder.html">PatternBuilder</a></td>
+        <td>The current <a class="xref" href="Melanchall.DryWetMidi.Composing.PatternBuilder.html">PatternBuilder</a>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentexception">ArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">chord</code> is <code>null</code> or contains white-spaces only.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.formatexception">FormatException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">chord</code> has invalid format.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td>
+<p>One of the following errors occured:</p>
+<ul><li><code data-dev-comment-type="paramref" class="paramref">octave</code> is <code>null</code>.</li><li><code data-dev-comment-type="paramref" class="paramref">length</code> is <code>null</code>.</li></ul>
+</td>
+      </tr>
+    </tbody>
+  </table>
   <a id="Melanchall_DryWetMidi_Composing_PatternBuilder_Lyrics_" data-uid="Melanchall.DryWetMidi.Composing.PatternBuilder.Lyrics*"></a>
   <h4 id="Melanchall_DryWetMidi_Composing_PatternBuilder_Lyrics_System_String_" data-uid="Melanchall.DryWetMidi.Composing.PatternBuilder.Lyrics(System.String)">Lyrics(String)</h4>
   <div class="markdown level1 summary">
@@ -2935,6 +3582,31 @@ Moves the current time to the previous one.
 On every action current time is stored in the time history. To return to the last saved time
 you can call the <a class="xref" href="Melanchall.DryWetMidi.Composing.PatternBuilder.html#Melanchall_DryWetMidi_Composing_PatternBuilder_MoveToPreviousTime">MoveToPreviousTime()</a>.
 </div>
+  <a id="Melanchall_DryWetMidi_Composing_PatternBuilder_MoveToStart_" data-uid="Melanchall.DryWetMidi.Composing.PatternBuilder.MoveToStart*"></a>
+  <h4 id="Melanchall_DryWetMidi_Composing_PatternBuilder_MoveToStart" data-uid="Melanchall.DryWetMidi.Composing.PatternBuilder.MoveToStart">MoveToStart()</h4>
+  <div class="markdown level1 summary">
+Moves the current time to the start (zero time) of a pattern.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public PatternBuilder MoveToStart()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Composing.PatternBuilder.html">PatternBuilder</a></td>
+        <td>The current <a class="xref" href="Melanchall.DryWetMidi.Composing.PatternBuilder.html">PatternBuilder</a>.</td>
+      </tr>
+    </tbody>
+  </table>
   <a id="Melanchall_DryWetMidi_Composing_PatternBuilder_MoveToTime_" data-uid="Melanchall.DryWetMidi.Composing.PatternBuilder.MoveToTime*"></a>
   <h4 id="Melanchall_DryWetMidi_Composing_PatternBuilder_MoveToTime_Melanchall_DryWetMidi_Interaction_ITimeSpan_" data-uid="Melanchall.DryWetMidi.Composing.PatternBuilder.MoveToTime(Melanchall.DryWetMidi.Interaction.ITimeSpan)">MoveToTime(ITimeSpan)</h4>
   <div class="markdown level1 summary">
@@ -3516,7 +4188,7 @@ Adds a note using specified velocity and length.
       <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.MusicTheory.Note.html">Note</a></td>
         <td><span class="parametername">note</span></td>
-        <td>The note.</td>
+        <td>A note.</td>
       </tr>
       <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a></td>
@@ -3842,6 +4514,294 @@ To set default octave use <a class="xref" href="Melanchall.DryWetMidi.Composing.
       </tr>
     </tbody>
   </table>
+  <a id="Melanchall_DryWetMidi_Composing_PatternBuilder_Note_" data-uid="Melanchall.DryWetMidi.Composing.PatternBuilder.Note*"></a>
+  <h4 id="Melanchall_DryWetMidi_Composing_PatternBuilder_Note_System_String_" data-uid="Melanchall.DryWetMidi.Composing.PatternBuilder.Note(System.String)">Note(String)</h4>
+  <div class="markdown level1 summary">
+Adds a note using default length and velocity.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public PatternBuilder Note(string note)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.string">String</a></td>
+        <td><span class="parametername">note</span></td>
+        <td>A note as a string (like A2, for example).</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Composing.PatternBuilder.html">PatternBuilder</a></td>
+        <td>The current <a class="xref" href="Melanchall.DryWetMidi.Composing.PatternBuilder.html">PatternBuilder</a>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Melanchall_DryWetMidi_Composing_PatternBuilder_Note_System_String__remarks">Remarks</h5>
+  <div class="markdown level1 remarks">
+To set default note length use <a class="xref" href="Melanchall.DryWetMidi.Composing.PatternBuilder.html#Melanchall_DryWetMidi_Composing_PatternBuilder_SetNoteLength_Melanchall_DryWetMidi_Interaction_ITimeSpan_">SetNoteLength(ITimeSpan)</a> method. By default the length
+is 1/4. To set default velocity use <a class="xref" href="Melanchall.DryWetMidi.Composing.PatternBuilder.html#Melanchall_DryWetMidi_Composing_PatternBuilder_SetVelocity_Melanchall_DryWetMidi_Common_SevenBitNumber_">SetVelocity(SevenBitNumber)</a> method. By default the
+velocity is 100.
+</div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentexception">ArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">note</code> is <code>null</code> or contains white-spaces only.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.formatexception">FormatException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">note</code> has invalid format.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Composing_PatternBuilder_Note_" data-uid="Melanchall.DryWetMidi.Composing.PatternBuilder.Note*"></a>
+  <h4 id="Melanchall_DryWetMidi_Composing_PatternBuilder_Note_System_String_Melanchall_DryWetMidi_Common_SevenBitNumber_" data-uid="Melanchall.DryWetMidi.Composing.PatternBuilder.Note(System.String,Melanchall.DryWetMidi.Common.SevenBitNumber)">Note(String, SevenBitNumber)</h4>
+  <div class="markdown level1 summary">
+Adds a note using specified velocity and default length.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public PatternBuilder Note(string note, SevenBitNumber velocity)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.string">String</a></td>
+        <td><span class="parametername">note</span></td>
+        <td>A note as a string (like A2, for example).</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Common.SevenBitNumber.html">SevenBitNumber</a></td>
+        <td><span class="parametername">velocity</span></td>
+        <td>The velocity of a note.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Composing.PatternBuilder.html">PatternBuilder</a></td>
+        <td>The current <a class="xref" href="Melanchall.DryWetMidi.Composing.PatternBuilder.html">PatternBuilder</a>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Melanchall_DryWetMidi_Composing_PatternBuilder_Note_System_String_Melanchall_DryWetMidi_Common_SevenBitNumber__remarks">Remarks</h5>
+  <div class="markdown level1 remarks">
+To set default note length use <a class="xref" href="Melanchall.DryWetMidi.Composing.PatternBuilder.html#Melanchall_DryWetMidi_Composing_PatternBuilder_SetNoteLength_Melanchall_DryWetMidi_Interaction_ITimeSpan_">SetNoteLength(ITimeSpan)</a> method. By default the length
+is 1/4.
+</div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentexception">ArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">note</code> is <code>null</code> or contains white-spaces only.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.formatexception">FormatException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">note</code> has invalid format.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Composing_PatternBuilder_Note_" data-uid="Melanchall.DryWetMidi.Composing.PatternBuilder.Note*"></a>
+  <h4 id="Melanchall_DryWetMidi_Composing_PatternBuilder_Note_System_String_Melanchall_DryWetMidi_Interaction_ITimeSpan_" data-uid="Melanchall.DryWetMidi.Composing.PatternBuilder.Note(System.String,Melanchall.DryWetMidi.Interaction.ITimeSpan)">Note(String, ITimeSpan)</h4>
+  <div class="markdown level1 summary">
+Adds a note using specified length and default velocity.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public PatternBuilder Note(string note, ITimeSpan length)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.string">String</a></td>
+        <td><span class="parametername">note</span></td>
+        <td>A note as a string (like A2, for example).</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a></td>
+        <td><span class="parametername">length</span></td>
+        <td>The length of a note.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Composing.PatternBuilder.html">PatternBuilder</a></td>
+        <td>The current <a class="xref" href="Melanchall.DryWetMidi.Composing.PatternBuilder.html">PatternBuilder</a>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Melanchall_DryWetMidi_Composing_PatternBuilder_Note_System_String_Melanchall_DryWetMidi_Interaction_ITimeSpan__remarks">Remarks</h5>
+  <div class="markdown level1 remarks">
+To set default velocity use <a class="xref" href="Melanchall.DryWetMidi.Composing.PatternBuilder.html#Melanchall_DryWetMidi_Composing_PatternBuilder_SetVelocity_Melanchall_DryWetMidi_Common_SevenBitNumber_">SetVelocity(SevenBitNumber)</a> method. By default the
+velocity is 100.
+</div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">length</code> is <code>null</code>.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentexception">ArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">note</code> is <code>null</code> or contains white-spaces only.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.formatexception">FormatException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">note</code> has invalid format.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Composing_PatternBuilder_Note_" data-uid="Melanchall.DryWetMidi.Composing.PatternBuilder.Note*"></a>
+  <h4 id="Melanchall_DryWetMidi_Composing_PatternBuilder_Note_System_String_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Common_SevenBitNumber_" data-uid="Melanchall.DryWetMidi.Composing.PatternBuilder.Note(System.String,Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Common.SevenBitNumber)">Note(String, ITimeSpan, SevenBitNumber)</h4>
+  <div class="markdown level1 summary">
+Adds a note using specified velocity and length.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public PatternBuilder Note(string note, ITimeSpan length, SevenBitNumber velocity)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.string">String</a></td>
+        <td><span class="parametername">note</span></td>
+        <td>A note as a string (like A2, for example).</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a></td>
+        <td><span class="parametername">length</span></td>
+        <td>The length of the note.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Common.SevenBitNumber.html">SevenBitNumber</a></td>
+        <td><span class="parametername">velocity</span></td>
+        <td>The velocity of a note.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Composing.PatternBuilder.html">PatternBuilder</a></td>
+        <td>The current <a class="xref" href="Melanchall.DryWetMidi.Composing.PatternBuilder.html">PatternBuilder</a>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">length</code> is <code>null</code>.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentexception">ArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">note</code> is <code>null</code> or contains white-spaces only.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.formatexception">FormatException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">note</code> has invalid format.</td>
+      </tr>
+    </tbody>
+  </table>
   <a id="Melanchall_DryWetMidi_Composing_PatternBuilder_Pattern_" data-uid="Melanchall.DryWetMidi.Composing.PatternBuilder.Pattern*"></a>
   <h4 id="Melanchall_DryWetMidi_Composing_PatternBuilder_Pattern_Melanchall_DryWetMidi_Composing_Pattern_" data-uid="Melanchall.DryWetMidi.Composing.PatternBuilder.Pattern(Melanchall.DryWetMidi.Composing.Pattern)">Pattern(Pattern)</h4>
   <div class="markdown level1 summary">
@@ -4056,15 +5016,32 @@ Inserts <a class="xref" href="Melanchall.DryWetMidi.Core.ProgramChangeEvent.html
     </tbody>
   </table>
   <a id="Melanchall_DryWetMidi_Composing_PatternBuilder_Repeat_" data-uid="Melanchall.DryWetMidi.Composing.PatternBuilder.Repeat*"></a>
-  <h4 id="Melanchall_DryWetMidi_Composing_PatternBuilder_Repeat" data-uid="Melanchall.DryWetMidi.Composing.PatternBuilder.Repeat">Repeat()</h4>
+  <h4 id="Melanchall_DryWetMidi_Composing_PatternBuilder_Repeat_Melanchall_DryWetMidi_Composing_RepeatSettings_" data-uid="Melanchall.DryWetMidi.Composing.PatternBuilder.Repeat(Melanchall.DryWetMidi.Composing.RepeatSettings)">Repeat(RepeatSettings)</h4>
   <div class="markdown level1 summary">
 Repeats the previous action one time.
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public PatternBuilder Repeat()</code></pre>
+    <pre><code class="lang-csharp hljs">public PatternBuilder Repeat(RepeatSettings settings = null)</code></pre>
   </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Composing.RepeatSettings.html">RepeatSettings</a></td>
+        <td><span class="parametername">settings</span></td>
+        <td>Settings according to which actions should be repeated.</td>
+      </tr>
+    </tbody>
+  </table>
   <h5 class="returns">Returns</h5>
   <table class="table table-bordered table-striped table-condensed">
     <thead>
@@ -4080,7 +5057,7 @@ Repeats the previous action one time.
       </tr>
     </tbody>
   </table>
-  <h5 id="Melanchall_DryWetMidi_Composing_PatternBuilder_Repeat_remarks">Remarks</h5>
+  <h5 id="Melanchall_DryWetMidi_Composing_PatternBuilder_Repeat_Melanchall_DryWetMidi_Composing_RepeatSettings__remarks">Remarks</h5>
   <div class="markdown level1 remarks">
 Note that <a class="xref" href="Melanchall.DryWetMidi.Composing.PatternBuilder.html#Melanchall_DryWetMidi_Composing_PatternBuilder_SetNoteLength_Melanchall_DryWetMidi_Interaction_ITimeSpan_">SetNoteLength(ITimeSpan)</a>, <a class="xref" href="Melanchall.DryWetMidi.Composing.PatternBuilder.html#Melanchall_DryWetMidi_Composing_PatternBuilder_SetOctave_Melanchall_DryWetMidi_MusicTheory_Octave_">SetOctave(Octave)</a>,
 <a class="xref" href="Melanchall.DryWetMidi.Composing.PatternBuilder.html#Melanchall_DryWetMidi_Composing_PatternBuilder_SetStep_Melanchall_DryWetMidi_Interaction_ITimeSpan_">SetStep(ITimeSpan)</a> and <a class="xref" href="Melanchall.DryWetMidi.Composing.PatternBuilder.html#Melanchall_DryWetMidi_Composing_PatternBuilder_SetVelocity_Melanchall_DryWetMidi_Common_SevenBitNumber_">SetVelocity(SevenBitNumber)</a> are not
@@ -4102,14 +5079,14 @@ actions and will not be repeated since default values applies immediately on nex
     </tbody>
   </table>
   <a id="Melanchall_DryWetMidi_Composing_PatternBuilder_Repeat_" data-uid="Melanchall.DryWetMidi.Composing.PatternBuilder.Repeat*"></a>
-  <h4 id="Melanchall_DryWetMidi_Composing_PatternBuilder_Repeat_System_Int32_" data-uid="Melanchall.DryWetMidi.Composing.PatternBuilder.Repeat(System.Int32)">Repeat(Int32)</h4>
+  <h4 id="Melanchall_DryWetMidi_Composing_PatternBuilder_Repeat_System_Int32_Melanchall_DryWetMidi_Composing_RepeatSettings_" data-uid="Melanchall.DryWetMidi.Composing.PatternBuilder.Repeat(System.Int32,Melanchall.DryWetMidi.Composing.RepeatSettings)">Repeat(Int32, RepeatSettings)</h4>
   <div class="markdown level1 summary">
 Repeats the previous action the specified number of times.
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public PatternBuilder Repeat(int repetitionsCount)</code></pre>
+    <pre><code class="lang-csharp hljs">public PatternBuilder Repeat(int repeatsNumber, RepeatSettings settings = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -4123,8 +5100,13 @@ Repeats the previous action the specified number of times.
     <tbody>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int32">Int32</a></td>
-        <td><span class="parametername">repetitionsCount</span></td>
+        <td><span class="parametername">repeatsNumber</span></td>
         <td>Count of repetitions.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Composing.RepeatSettings.html">RepeatSettings</a></td>
+        <td><span class="parametername">settings</span></td>
+        <td>Settings according to which actions should be repeated.</td>
       </tr>
     </tbody>
   </table>
@@ -4143,7 +5125,7 @@ Repeats the previous action the specified number of times.
       </tr>
     </tbody>
   </table>
-  <h5 id="Melanchall_DryWetMidi_Composing_PatternBuilder_Repeat_System_Int32__remarks">Remarks</h5>
+  <h5 id="Melanchall_DryWetMidi_Composing_PatternBuilder_Repeat_System_Int32_Melanchall_DryWetMidi_Composing_RepeatSettings__remarks">Remarks</h5>
   <div class="markdown level1 remarks">
 Note that <a class="xref" href="Melanchall.DryWetMidi.Composing.PatternBuilder.html#Melanchall_DryWetMidi_Composing_PatternBuilder_SetNoteLength_Melanchall_DryWetMidi_Interaction_ITimeSpan_">SetNoteLength(ITimeSpan)</a>, <a class="xref" href="Melanchall.DryWetMidi.Composing.PatternBuilder.html#Melanchall_DryWetMidi_Composing_PatternBuilder_SetOctave_Melanchall_DryWetMidi_MusicTheory_Octave_">SetOctave(Octave)</a>,
 <a class="xref" href="Melanchall.DryWetMidi.Composing.PatternBuilder.html#Melanchall_DryWetMidi_Composing_PatternBuilder_SetStep_Melanchall_DryWetMidi_Interaction_ITimeSpan_">SetStep(ITimeSpan)</a> and <a class="xref" href="Melanchall.DryWetMidi.Composing.PatternBuilder.html#Melanchall_DryWetMidi_Composing_PatternBuilder_SetVelocity_Melanchall_DryWetMidi_Common_SevenBitNumber_">SetVelocity(SevenBitNumber)</a> are not
@@ -4160,7 +5142,7 @@ actions and will not be repeated since default values applies immediately on nex
     <tbody>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">repetitionsCount</code> is negative.</td>
+        <td><code data-dev-comment-type="paramref" class="paramref">repeatsNumber</code> is negative.</td>
       </tr>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.invalidoperationexception">InvalidOperationException</a></td>
@@ -4169,14 +5151,14 @@ actions and will not be repeated since default values applies immediately on nex
     </tbody>
   </table>
   <a id="Melanchall_DryWetMidi_Composing_PatternBuilder_Repeat_" data-uid="Melanchall.DryWetMidi.Composing.PatternBuilder.Repeat*"></a>
-  <h4 id="Melanchall_DryWetMidi_Composing_PatternBuilder_Repeat_System_Int32_System_Int32_" data-uid="Melanchall.DryWetMidi.Composing.PatternBuilder.Repeat(System.Int32,System.Int32)">Repeat(Int32, Int32)</h4>
+  <h4 id="Melanchall_DryWetMidi_Composing_PatternBuilder_Repeat_System_Int32_System_Int32_Melanchall_DryWetMidi_Composing_RepeatSettings_" data-uid="Melanchall.DryWetMidi.Composing.PatternBuilder.Repeat(System.Int32,System.Int32,Melanchall.DryWetMidi.Composing.RepeatSettings)">Repeat(Int32, Int32, RepeatSettings)</h4>
   <div class="markdown level1 summary">
 Repeats the specified number of previous actions.
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public PatternBuilder Repeat(int actionsCount, int repetitionsCount)</code></pre>
+    <pre><code class="lang-csharp hljs">public PatternBuilder Repeat(int actionsCount, int repeatsNumber, RepeatSettings settings = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -4195,8 +5177,13 @@ Repeats the specified number of previous actions.
       </tr>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int32">Int32</a></td>
-        <td><span class="parametername">repetitionsCount</span></td>
+        <td><span class="parametername">repeatsNumber</span></td>
         <td>Count of repetitions.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Composing.RepeatSettings.html">RepeatSettings</a></td>
+        <td><span class="parametername">settings</span></td>
+        <td>Settings according to which actions should be repeated.</td>
       </tr>
     </tbody>
   </table>
@@ -4215,7 +5202,7 @@ Repeats the specified number of previous actions.
       </tr>
     </tbody>
   </table>
-  <h5 id="Melanchall_DryWetMidi_Composing_PatternBuilder_Repeat_System_Int32_System_Int32__remarks">Remarks</h5>
+  <h5 id="Melanchall_DryWetMidi_Composing_PatternBuilder_Repeat_System_Int32_System_Int32_Melanchall_DryWetMidi_Composing_RepeatSettings__remarks">Remarks</h5>
   <div class="markdown level1 remarks">
 Note that <a class="xref" href="Melanchall.DryWetMidi.Composing.PatternBuilder.html#Melanchall_DryWetMidi_Composing_PatternBuilder_SetNoteLength_Melanchall_DryWetMidi_Interaction_ITimeSpan_">SetNoteLength(ITimeSpan)</a>, <a class="xref" href="Melanchall.DryWetMidi.Composing.PatternBuilder.html#Melanchall_DryWetMidi_Composing_PatternBuilder_SetOctave_Melanchall_DryWetMidi_MusicTheory_Octave_">SetOctave(Octave)</a>,
 <a class="xref" href="Melanchall.DryWetMidi.Composing.PatternBuilder.html#Melanchall_DryWetMidi_Composing_PatternBuilder_SetStep_Melanchall_DryWetMidi_Interaction_ITimeSpan_">SetStep(ITimeSpan)</a> and <a class="xref" href="Melanchall.DryWetMidi.Composing.PatternBuilder.html#Melanchall_DryWetMidi_Composing_PatternBuilder_SetVelocity_Melanchall_DryWetMidi_Common_SevenBitNumber_">SetVelocity(SevenBitNumber)</a> are not
@@ -4234,7 +5221,7 @@ actions and will not be repeated since default values applies immediately on nex
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
         <td>
 <p>One of the following errors occured:</p>
-<ul><li><code data-dev-comment-type="paramref" class="paramref">actionsCount</code> is negative.</li><li><code data-dev-comment-type="paramref" class="paramref">actionsCount</code> is greater than count of existing actions.</li><li><code data-dev-comment-type="paramref" class="paramref">repetitionsCount</code> is negative.</li></ul>
+<ul><li><code data-dev-comment-type="paramref" class="paramref">actionsCount</code> is negative.</li><li><code data-dev-comment-type="paramref" class="paramref">actionsCount</code> is greater than count of existing actions.</li><li><code data-dev-comment-type="paramref" class="paramref">repeatsNumber</code> is negative.</li></ul>
 </td>
       </tr>
     </tbody>
@@ -4789,7 +5776,7 @@ Moves the current time by the specified step forward.
             <span class="pull-right">
               <a href="#top">Back to top</a>
             </span>
-            2021 / Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
+            2022 / Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
             
           </div>
         </div>
