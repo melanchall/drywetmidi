@@ -19,72 +19,126 @@ This article describes how to use DryWetMIDI within a Unity project. All you nee
 
 Now you can use DryWetMIDI API in your Unity scripts.
 
-Following script will listen all [input devices](xref:a_dev_input) for incoming MIDI events and print them to `Debug.Log`:
+Following script will create a MIDI file containing all possible notes with length of 1/8 and will play the file via `Microsoft GS Wavetable Synth` output device:
 
 ```csharp
-using System.Collections.Generic;
+using System;
 using System.Linq;
+using System.Text;
+using Melanchall.DryWetMidi.Common;
+using Melanchall.DryWetMidi.Composing;
+using Melanchall.DryWetMidi.Core;
+using Melanchall.DryWetMidi.Interaction;
 using Melanchall.DryWetMidi.Multimedia;
+using Melanchall.DryWetMidi.Standards;
 using UnityEngine;
 
-public class TestScript : MonoBehaviour
+public class DemoScript : MonoBehaviour
 {
-    private InputDevice[] _inputDevices;
+    private const string OutputDeviceName = "Microsoft GS Wavetable Synth";
+
+    private OutputDevice _outputDevice;
+    private Playback _playback;
 
     private void Start()
     {
-        Debug.Log("Start MIDI events listening on all input device...");
-
-        _inputDevices = InputDevice.GetAll().ToArray();
-
-        foreach (var inputDevice in _inputDevices)
-        {
-            inputDevice.EventReceived += OnEventReceived;
-            inputDevice.StartEventsListening();
-        }
-
-        Debug.Log("MIDI events listening started.");
+        InitializeOutputDevice();
+        var midiFile = CreateTestFile();
+        InitializeFilePlayback(midiFile);
+        StartPlayback();
     }
 
-    private void OnDestroy()
+    private void OnApplicationQuit()
     {
-        Debug.Log("Releasing devices resources...");
+        Debug.Log("Releasing playback and device...");
 
-        foreach (var inputDevice in _inputDevices)
+        if (_playback != null)
         {
-            inputDevice.EventReceived -= OnEventReceived;
-            inputDevice.Dispose();
+            _playback.NotesPlaybackStarted -= OnNotesPlaybackStarted;
+            _playback.NotesPlaybackFinished -= OnNotesPlaybackFinished;
+            _playback.Dispose();
         }
 
-        Debug.Log("Devices resources released.");
+        if (_outputDevice != null)
+            _outputDevice.Dispose();
+
+        Debug.Log("Playback and device released.");
     }
 
-    private void OnEventReceived(object sender, MidiEventReceivedEventArgs e)
+    private void InitializeOutputDevice()
     {
-        Debug.Log($"Event received on '{((MidiDevice)sender).Name}': {e.Event}");
+        Debug.Log($"Initializing output device [{OutputDeviceName}]...");
+
+        var allOutputDevices = OutputDevice.GetAll();
+        if (!allOutputDevices.Any(d => d.Name == OutputDeviceName))
+        {
+            var allDevicesList = string.Join(Environment.NewLine, allOutputDevices.Select(d => $"  {d.Name}"));
+            Debug.Log($"There is no [{OutputDeviceName}] device presented in the system. Here the list of all device:{Environment.NewLine}{allDevicesList}");
+            return;
+        }
+
+        _outputDevice = OutputDevice.GetByName(OutputDeviceName);
+        Debug.Log($"Output device [{OutputDeviceName}] initialized.");
+    }
+
+    private MidiFile CreateTestFile()
+    {
+        Debug.Log("Creating test MIDI file...");
+
+        var patternBuilder = new PatternBuilder()
+            .SetNoteLength(MusicalTimeSpan.Eighth)
+            .SetVelocity(SevenBitNumber.MaxValue)
+            .ProgramChange(GeneralMidiProgram.Harpsichord);
+
+        foreach (var noteNumber in SevenBitNumber.Values)
+        {
+            patternBuilder.Note(Melanchall.DryWetMidi.MusicTheory.Note.Get(noteNumber));
+        }
+
+        var midiFile = patternBuilder.Build().ToFile(TempoMap.Default);
+        Debug.Log("Test MIDI file created.");
+
+        return midiFile;
+    }
+
+    private void InitializeFilePlayback(MidiFile midiFile)
+    {
+        Debug.Log("Initializing playback...");
+
+        _playback = midiFile.GetPlayback(_outputDevice);
+        _playback.Loop = true;
+        _playback.NotesPlaybackStarted += OnNotesPlaybackStarted;
+        _playback.NotesPlaybackFinished += OnNotesPlaybackFinished;
+       
+        Debug.Log($"Output device [{OutputDeviceName}] initialized.");
+    }
+
+    private void StartPlayback()
+    {
+        Debug.Log("Starting playback...");
+        _playback.Start();
+    }
+
+    private void OnNotesPlaybackFinished(object sender, NotesEventArgs e)
+    {
+        LogNotes("Notes finished:", e);
+    }
+
+    private void OnNotesPlaybackStarted(object sender, NotesEventArgs e)
+    {
+        LogNotes("Notes started:", e);
+    }
+
+    private void LogNotes(string title, NotesEventArgs e)
+    {
+        var message = new StringBuilder()
+            .AppendLine(title)
+            .AppendLine(string.Join(Environment.NewLine, e.Notes.Select(n => $"  {n}")))
+            .ToString();
+        Debug.Log(message.Trim());
     }
 }
 ```
 
 > [!IMPORTANT]
-> Pay attention to `OnDestroy` method. You should always take care about disposing MIDI devices. Without it all resources taken by the device will live until GC collect them. In case of Unity it means Unity may need be reopened to be able to use the same devices again (for example, on Windows).
-
-Log will contain records like these:
-
-```text
-Start MIDI events listening on all input device...
-MIDI events listening started.
-
-Event received on 'MIDI B': Note On [0] (38, 82)
-Event received on 'MIDI B': Note Off [0] (38, 0)
-Event received on 'MIDI B': Control Change [0] (123, 0)
-Event received on 'MIDI B': Control Change [0] (121, 0)
-Event received on 'MIDI B': Control Change [1] (123, 0)
-Event received on 'MIDI B': Control Change [1] (121, 0)
-Event received on 'MIDI B': Control Change [2] (123, 0)
-Event received on 'MIDI A': Note On [0] (67, 93)
-Event received on 'MIDI A': Note Off [0] (67, 0)
-
-Releasing devices resources...
-Devices resources released.
-```
+> Pay attention to `OnApplicationQuit` method. You should always take care about disposing MIDI devices. Without it all resources taken by the device will live until GC collect them. In case of Unity it means Unity may need be reopened to be able to use the same devices again (for example, on Windows).
