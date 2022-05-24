@@ -1,10 +1,13 @@
 ﻿using Melanchall.DryWetMidi.Common;
+using System;
+using System.Runtime.Serialization;
 
 namespace Melanchall.DryWetMidi.Multimedia
 {
     /// <summary>
     /// The exception that is thrown when an error occurred on <see cref="TickGenerator"/>.
     /// </summary>
+    [Serializable]
     public sealed class TickGeneratorException : MidiException
     {
         #region Constructor
@@ -21,6 +24,12 @@ namespace Melanchall.DryWetMidi.Multimedia
             ErrorCode = errorCode;
         }
 
+        private TickGeneratorException(SerializationInfo info, StreamingContext context)
+            : base(info, context)
+        {
+            ErrorCode = info.GetInt32(nameof(ErrorCode));
+        }
+
         #endregion
 
         #region Properties
@@ -29,6 +38,17 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// Gets the code of an error represented by the current <see cref="MidiDeviceException"/>.
         /// </summary>
         public int ErrorCode { get; }
+
+        #endregion
+
+        #region Overrides
+
+        public override void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            base.GetObjectData(info, context);
+
+            info.AddValue(nameof(ErrorCode), ErrorCode);
+        }
 
         #endregion
     }

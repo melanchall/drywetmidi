@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.Serialization;
 
 namespace Melanchall.DryWetMidi.Common
 {
@@ -36,6 +37,11 @@ namespace Melanchall.DryWetMidi.Common
         /// or a <c>null</c> reference if no inner exception is specified.</param>
         internal MidiException(string message, Exception innerException)
             : base(message, innerException)
+        {
+        }
+
+        protected MidiException(SerializationInfo info, StreamingContext context)
+            : base(info, context)
         {
         }
 

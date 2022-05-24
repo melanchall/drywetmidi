@@ -1,4 +1,6 @@
 ﻿using Melanchall.DryWetMidi.Common;
+using System;
+using System.Runtime.Serialization;
 
 namespace Melanchall.DryWetMidi.Core
 {
@@ -10,6 +12,7 @@ namespace Melanchall.DryWetMidi.Core
     /// is set to <see cref="UnknownChunkIdPolicy.Abort"/> for the <see cref="ReadingSettings"/>
     /// used for reading a MIDI file.</para>
     /// </remarks>
+    [Serializable]
     public sealed class UnknownChunkException : MidiException
     {
         #region Constructors
@@ -20,6 +23,12 @@ namespace Melanchall.DryWetMidi.Core
             ChunkId = chunkId;
         }
 
+        private UnknownChunkException(SerializationInfo info, StreamingContext context)
+            : base(info, context)
+        {
+            ChunkId = info.GetString(nameof(ChunkId));
+        }
+
         #endregion
 
         #region Properties
@@ -28,6 +37,17 @@ namespace Melanchall.DryWetMidi.Core
         /// Gets the ID of an unknown chunk.
         /// </summary>
         public string ChunkId { get; }
+
+        #endregion
+
+        #region Overrides
+
+        public override void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            base.GetObjectData(info, context);
+
+            info.AddValue(nameof(ChunkId), ChunkId);
+        }
 
         #endregion
     }

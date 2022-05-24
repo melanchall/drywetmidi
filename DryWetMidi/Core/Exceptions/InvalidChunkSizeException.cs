@@ -1,4 +1,6 @@
 ﻿using Melanchall.DryWetMidi.Common;
+using System;
+using System.Runtime.Serialization;
 
 namespace Melanchall.DryWetMidi.Core
 {
@@ -11,6 +13,7 @@ namespace Melanchall.DryWetMidi.Core
     /// is set to <see cref="InvalidChunkSizePolicy.Abort"/> for the <see cref="ReadingSettings"/>
     /// used for reading a MIDI file.</para>
     /// </remarks>
+    [Serializable]
     public sealed class InvalidChunkSizeException : MidiException
     {
         #region Constructors
@@ -21,6 +24,14 @@ namespace Melanchall.DryWetMidi.Core
             ChunkId = chunkId;
             ExpectedSize = expectedSize;
             ActualSize = actualSize;
+        }
+
+        private InvalidChunkSizeException(SerializationInfo info, StreamingContext context)
+            : base(info, context)
+        {
+            ChunkId = info.GetString(nameof(ChunkId));
+            ExpectedSize = info.GetInt64(nameof(ExpectedSize));
+            ActualSize = info.GetInt64(nameof(ActualSize));
         }
 
         #endregion
@@ -41,6 +52,19 @@ namespace Melanchall.DryWetMidi.Core
         /// Gets the actual size of a chunk.
         /// </summary>
         public long ActualSize { get; }
+
+        #endregion
+
+        #region Overrides
+
+        public override void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            base.GetObjectData(info, context);
+
+            info.AddValue(nameof(ChunkId), ChunkId);
+            info.AddValue(nameof(ExpectedSize), ExpectedSize);
+            info.AddValue(nameof(ActualSize), ActualSize);
+        }
 
         #endregion
     }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.Serialization;
 using Melanchall.DryWetMidi.Common;
 
 namespace Melanchall.DryWetMidi.Core
@@ -12,6 +13,7 @@ namespace Melanchall.DryWetMidi.Core
     /// is set to <see cref="NotEnoughBytesPolicy.Abort"/> for the <see cref="ReadingSettings"/>
     /// used for reading a MIDI file.</para>
     /// </remarks>
+    [Serializable]
     public sealed class NotEnoughBytesException : MidiException
     {
         #region Constructors
@@ -28,6 +30,13 @@ namespace Melanchall.DryWetMidi.Core
             ActualCount = actualCount;
         }
 
+        private NotEnoughBytesException(SerializationInfo info, StreamingContext context)
+            : base(info, context)
+        {
+            ExpectedCount = info.GetInt64(nameof(ExpectedCount));
+            ActualCount = info.GetInt64(nameof(ActualCount));
+        }
+
         #endregion
 
         #region Properties
@@ -41,6 +50,18 @@ namespace Melanchall.DryWetMidi.Core
         /// Gets the actual count of bytes available in the reader's underlying stream.
         /// </summary>
         public long ActualCount { get; }
+
+        #endregion
+
+        #region Overrides
+
+        public override void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            base.GetObjectData(info, context);
+
+            info.AddValue(nameof(ExpectedCount), ExpectedCount);
+            info.AddValue(nameof(ActualCount), ActualCount);
+        }
 
         #endregion
     }

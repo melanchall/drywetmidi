@@ -1,4 +1,6 @@
 ﻿using Melanchall.DryWetMidi.Common;
+using System;
+using System.Runtime.Serialization;
 
 namespace Melanchall.DryWetMidi.Core
 {
@@ -10,6 +12,7 @@ namespace Melanchall.DryWetMidi.Core
     /// is set to <see cref="UnknownFileFormatPolicy.Abort"/> for the <see cref="ReadingSettings"/>
     /// used for reading a MIDI file.</para>
     /// </remarks>
+    [Serializable]
     public sealed class UnknownFileFormatException : MidiException
     {
         #region Constructors
@@ -20,6 +23,12 @@ namespace Melanchall.DryWetMidi.Core
             FileFormat = fileFormat;
         }
 
+        private UnknownFileFormatException(SerializationInfo info, StreamingContext context)
+            : base(info, context)
+        {
+            FileFormat = info.GetUInt16(nameof(FileFormat));
+        }
+
         #endregion
 
         #region Properties
@@ -28,6 +37,17 @@ namespace Melanchall.DryWetMidi.Core
         /// Gets the number that represents format of a MIDI file.
         /// </summary>
         public ushort FileFormat { get; }
+
+        #endregion
+
+        #region Overrides
+
+        public override void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            base.GetObjectData(info, context);
+
+            info.AddValue(nameof(FileFormat), FileFormat);
+        }
 
         #endregion
     }

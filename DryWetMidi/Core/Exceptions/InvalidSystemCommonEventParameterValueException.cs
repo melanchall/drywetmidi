@@ -1,4 +1,6 @@
 ﻿using Melanchall.DryWetMidi.Common;
+using System;
+using System.Runtime.Serialization;
 
 namespace Melanchall.DryWetMidi.Core
 {
@@ -11,6 +13,7 @@ namespace Melanchall.DryWetMidi.Core
     /// is set to <see cref="InvalidSystemCommonEventParameterValuePolicy.Abort"/> for the <see cref="ReadingSettings"/>
     /// used for reading a MIDI file.</para>
     /// </remarks>
+    [Serializable]
     public sealed class InvalidSystemCommonEventParameterValueException : MidiException
     {
         #region Constructors
@@ -21,6 +24,14 @@ namespace Melanchall.DryWetMidi.Core
             EventType = eventType;
             ComponentName = componentName;
             ComponentValue = componentValue;
+        }
+
+        private InvalidSystemCommonEventParameterValueException(SerializationInfo info, StreamingContext context)
+            : base(info, context)
+        {
+            EventType = (MidiEventType)info.GetValue(nameof(EventType), typeof(MidiEventType));
+            ComponentName = info.GetString(nameof(ComponentName));
+            ComponentValue = info.GetInt32(nameof(ComponentValue));
         }
 
         #endregion
@@ -41,6 +52,19 @@ namespace Melanchall.DryWetMidi.Core
         /// Gets the value of the system common event's parameter that caused this exception.
         /// </summary>
         public int ComponentValue { get; }
+
+        #endregion
+
+        #region Overrides
+
+        public override void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            base.GetObjectData(info, context);
+
+            info.AddValue(nameof(EventType), EventType);
+            info.AddValue(nameof(ComponentName), ComponentName);
+            info.AddValue(nameof(ComponentValue), ComponentValue);
+        }
 
         #endregion
     }

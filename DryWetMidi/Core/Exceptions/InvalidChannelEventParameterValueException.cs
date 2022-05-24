@@ -1,4 +1,6 @@
 ﻿using Melanchall.DryWetMidi.Common;
+using System;
+using System.Runtime.Serialization;
 
 namespace Melanchall.DryWetMidi.Core
 {
@@ -11,6 +13,7 @@ namespace Melanchall.DryWetMidi.Core
     /// is set to <see cref="InvalidChannelEventParameterValuePolicy.Abort"/> for the <see cref="ReadingSettings"/>
     /// used for reading a MIDI file.</para>
     /// </remarks>
+    [Serializable]
     public sealed class InvalidChannelEventParameterValueException : MidiException
     {
         #region Constructors
@@ -20,6 +23,13 @@ namespace Melanchall.DryWetMidi.Core
         {
             EventType = eventType;
             Value = value;
+        }
+
+        private InvalidChannelEventParameterValueException(SerializationInfo info, StreamingContext context)
+            : base(info, context)
+        {
+            EventType = (MidiEventType)info.GetValue(nameof(EventType), typeof(MidiEventType));
+            Value = info.GetByte(nameof(Value));
         }
 
         #endregion
@@ -35,6 +45,18 @@ namespace Melanchall.DryWetMidi.Core
         /// Gets the value of the channel event's parameter that caused this exception.
         /// </summary>
         public byte Value { get; }
+
+        #endregion
+
+        #region Overrides
+
+        public override void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            base.GetObjectData(info, context);
+
+            info.AddValue(nameof(EventType), EventType);
+            info.AddValue(nameof(Value), Value);
+        }
 
         #endregion
     }

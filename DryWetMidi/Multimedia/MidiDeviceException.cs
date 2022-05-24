@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.Serialization;
 using Melanchall.DryWetMidi.Common;
 
 namespace Melanchall.DryWetMidi.Multimedia
@@ -6,6 +7,7 @@ namespace Melanchall.DryWetMidi.Multimedia
     /// <summary>
     /// The exception that is thrown when an error occurred on a MIDI device.
     /// </summary>
+    [Serializable]
     public sealed class MidiDeviceException : MidiException
     {
         #region Constructor
@@ -52,6 +54,12 @@ namespace Melanchall.DryWetMidi.Multimedia
             ErrorCode = errorCode;
         }
 
+        private MidiDeviceException(SerializationInfo info, StreamingContext context)
+            : base(info, context)
+        {
+            ErrorCode = (int?)info.GetValue(nameof(ErrorCode), typeof(int?));
+        }
+
         #endregion
 
         #region Properties
@@ -60,6 +68,17 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// Gets the code of an error represented by the current <see cref="MidiDeviceException"/>.
         /// </summary>
         public int? ErrorCode { get; }
+
+        #endregion
+
+        #region Overrides
+
+        public override void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            base.GetObjectData(info, context);
+
+            info.AddValue(nameof(ErrorCode), ErrorCode);
+        }
 
         #endregion
     }

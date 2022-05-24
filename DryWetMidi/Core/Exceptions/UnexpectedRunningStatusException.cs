@@ -1,4 +1,5 @@
 ﻿using Melanchall.DryWetMidi.Common;
+using System;
 
 namespace Melanchall.DryWetMidi.Core
 {
@@ -6,6 +7,7 @@ namespace Melanchall.DryWetMidi.Core
     /// The exception that is thrown when the reading engine encountered unexpected running
     /// status.
     /// </summary>
+    [Serializable]
     public sealed class UnexpectedRunningStatusException : MidiException
     {
         #region Constructors
