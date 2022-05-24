@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Melanchall.DryWetMidi.Tools
+namespace Melanchall.DryWetMidi.Interaction
 {
     /// <summary>
     /// Specifies how a time span should be round.

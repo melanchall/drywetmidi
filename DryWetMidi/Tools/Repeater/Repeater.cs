@@ -275,56 +275,10 @@ namespace Melanchall.DryWetMidi.Tools
             {
                 var shiftStep = settings.ShiftRoundingStep;
                 if (shiftStep != null)
-                    shift = RoundShift(shift, shiftStep, tempoMap, roundingPolicy);
+                    shift = shift.Round(roundingPolicy, 0, shiftStep, tempoMap);
             }
 
             return TimeConverter.ConvertFrom(shift, tempoMap);
-        }
-
-        private static ITimeSpan RoundShift(ITimeSpan shift, ITimeSpan shiftStep, TempoMap tempoMap, TimeSpanRoundingPolicy roundingPolicy)
-        {
-            var gridShift = roundingPolicy == TimeSpanRoundingPolicy.RoundUp
-                ? 1
-                : 0;
-
-            var metricStep = shiftStep as MetricTimeSpan;
-            if (metricStep != null)
-            {
-                if (metricStep.TotalMicroseconds == 0)
-                    return shift;
-
-                var metricShift = TimeConverter.ConvertTo<MetricTimeSpan>(shift, tempoMap);
-                return RoundShift(
-                    shift,
-                    metricShift.TotalMicroseconds,
-                    metricStep.TotalMicroseconds,
-                    quotient => new MetricTimeSpan((quotient + gridShift) * metricStep.TotalMicroseconds));
-            }
-
-            var midiStep = TimeConverter.ConvertTo<MidiTimeSpan>(shiftStep, tempoMap);
-            if (midiStep.TimeSpan == 0)
-                return shift;
-
-            var midiShift = TimeConverter.ConvertTo<MidiTimeSpan>(shift, tempoMap);
-            return RoundShift(
-                shift,
-                midiShift.TimeSpan,
-                midiStep.TimeSpan,
-                quotient => new MidiTimeSpan((quotient + gridShift) * midiStep.TimeSpan));
-        }
-
-        private static ITimeSpan RoundShift<TTimeSpan>(
-            ITimeSpan shift,
-            long x,
-            long y,
-            Func<long, TTimeSpan> createTimeSpan)
-            where TTimeSpan : ITimeSpan
-        {
-            long reminder;
-            var quotient = Math.DivRem(x, y, out reminder);
-            return reminder == 0
-                ? shift
-                : createTimeSpan(quotient);
         }
 
         #endregion
