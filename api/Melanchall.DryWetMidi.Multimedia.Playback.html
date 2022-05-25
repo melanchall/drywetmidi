@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Class Playback
    | DryWetMIDI ">
-    <meta name="generator" content="docfx 2.58.0.0">
+    <meta name="generator" content="docfx 2.59.2.0">
     
     <link rel="shortcut icon" href="../images/favicon.png">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
@@ -289,7 +289,7 @@ that a note&apos;s integrity is not broken.
   <h5 id="Melanchall_DryWetMidi_Multimedia_Playback_EventCallback_examples">Examples</h5>
   
 <p>
-The following example filters out all <a class="xref" href="Melanchall.DryWetMidi.Core.ProgramChangeEvent.html">ProgramChangeEvent</a> events:
+The following example filters out all <a class="xref" href="Melanchall.DryWetMidi.Core.ProgramChangeEvent.html">Program Change</a> events:
 </p>
 <pre><code class="lang-csharp">playback.EventCallback = (midiEvent, rawTime, playbackTime) =>
     midiEvent.EventType == MidiEventType.ProgramChange

@@ -8,7 +8,7 @@
     <title>Using in Unity | DryWetMIDI </title>
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Using in Unity | DryWetMIDI ">
-    <meta name="generator" content="docfx 2.58.0.0">
+    <meta name="generator" content="docfx 2.59.2.0">
     
     <link rel="shortcut icon" href="../../images/favicon.png">
     <link rel="stylesheet" href="../../styles/docfx.vendor.css">
@@ -79,7 +79,16 @@
             <article class="content wrap" id="_content" data-uid="a_develop_unity">
 <h1 id="using-in-unity">Using in Unity</h1>
 
-<p>This article describes how to use DryWetMIDI within a Unity project. All you need is:</p>
+<p>This article describes how to integrate DryWetMIDI in a Unity project. You have two main ways:</p>
+<ul>
+<li>import the <a href="https://assetstore.unity.com/packages/tools/audio/drywetmidi-222171">DryWetMIDI asset</a> from the Asset Store;</li>
+<li>install the library manually.</li>
+</ul>
+<p>There are also ways to import a NuGet package via 3d party tools (for example, <a href="https://github.com/GlitchEnzo/NuGetForUnity">NuGetForUnity</a>).</p>
+<h2 id="unity-asset">Unity asset</h2>
+<p>It's the simplest way. Just use built-in ways to import the official <a href="https://assetstore.unity.com/packages/tools/audio/drywetmidi-222171">DryWetMIDI asset</a> into your Unity project from the Asset Store.</p>
+<h2 id="manual-installation">Manual installation</h2>
+<p>All you need to install the library manually is:</p>
 <ol>
 <li><p>Create <em>DryWetMIDI</em> folder in project's <em>Assets</em> folder.</p>
 </li>
@@ -99,8 +108,9 @@
 <li><p>Extract those two archives into project's <em>Assets</em> → <em>DryWetMIDI</em> folder.</p>
 </li>
 </ol>
+<h2 id="example">Example</h2>
 <p>Now you can use DryWetMIDI API in your Unity scripts.</p>
-<p>Following script will create a MIDI file containing all possible notes with length of 1/8 and will play the file via <code>Microsoft GS Wavetable Synth</code> output device:</p>
+<p>Following sample script (included in demo scene within the <a href="https://assetstore.unity.com/packages/tools/audio/drywetmidi-222171">DryWetMIDI asset</a> package) will create a MIDI file containing all possible notes with length of 1/8 and will play the file via <code>Microsoft GS Wavetable Synth</code> output device:</p>
 <pre><code class="lang-csharp">using System;
 using System.Linq;
 using System.Text;
