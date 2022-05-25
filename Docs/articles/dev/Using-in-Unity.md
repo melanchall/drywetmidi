@@ -4,7 +4,20 @@ uid: a_develop_unity
 
 # Using in Unity
 
-This article describes how to use DryWetMIDI within a Unity project. All you need is:
+This article describes how to integrate DryWetMIDI in a Unity project. You have two main ways:
+
+* import the [DryWetMIDI asset](https://assetstore.unity.com/packages/tools/audio/drywetmidi-222171) from the Asset Store;
+* install the library manually.
+
+There are also ways to import a NuGet package via 3d party tools (for example, [NuGetForUnity](https://github.com/GlitchEnzo/NuGetForUnity)).
+
+## Unity asset
+
+It's the simplest way. Just use built-in ways to import the official [DryWetMIDI asset](https://assetstore.unity.com/packages/tools/audio/drywetmidi-222171) into your Unity project from the Asset Store.
+
+## Manual installation
+
+All you need to install the library manually is:
 
 1. Create _DryWetMIDI_ folder in project's _Assets_ folder.
 2. Download the library main binary:
@@ -17,9 +30,11 @@ This article describes how to use DryWetMIDI within a Unity project. All you nee
     (_master_ branch contains code that the library releases built on. _develop_ one is for current development so if you need the latest API, use this branch)
 4. Extract those two archives into project's _Assets_ → _DryWetMIDI_ folder.
 
+## Example
+
 Now you can use DryWetMIDI API in your Unity scripts.
 
-Following script will create a MIDI file containing all possible notes with length of 1/8 and will play the file via `Microsoft GS Wavetable Synth` output device:
+Following sample script (included in demo scene within the [DryWetMIDI asset](https://assetstore.unity.com/packages/tools/audio/drywetmidi-222171) package) will create a MIDI file containing all possible notes with length of 1/8 and will play the file via `Microsoft GS Wavetable Synth` output device:
 
 ```csharp
 using System;
