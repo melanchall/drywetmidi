@@ -19,6 +19,8 @@ namespace Melanchall.DryWetMidi.Tools
         /// </summary>
         public Predicate<MidiChunk> Filter { get; set; }
 
+        public bool PreserveTempoMap { get; set; } = true;
+
         #endregion
     }
 }

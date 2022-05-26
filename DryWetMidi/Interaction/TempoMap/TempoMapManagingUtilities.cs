@@ -179,14 +179,13 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </item>
         /// </list>
         /// </exception>
-        /// <exception cref="ArgumentException"><paramref name="eventsCollections"/> is empty.</exception>
         public static void ReplaceTempoMap(this IEnumerable<EventsCollection> eventsCollections, TempoMap tempoMap)
         {
             ThrowIfArgument.IsNull(nameof(eventsCollections), eventsCollections);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
-            ThrowIfArgument.IsEmptyCollection(nameof(eventsCollections),
-                                              eventsCollections,
-                                              $"Collection of {nameof(EventsCollection)} is empty.");
+
+            if (!eventsCollections.Any())
+                return;
 
             using (var tempoMapManager = eventsCollections.ManageTempoMap(tempoMap.TimeDivision))
             {
@@ -212,18 +211,15 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </item>
         /// </list>
         /// </exception>
-        /// <exception cref="ArgumentException"><paramref name="trackChunks"/> is empty.</exception>
         public static void ReplaceTempoMap(this IEnumerable<TrackChunk> trackChunks, TempoMap tempoMap)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
-            ThrowIfArgument.IsEmptyCollection(nameof(trackChunks),
-                                              trackChunks,
-                                              $"Collection of {nameof(TrackChunk)} is empty.");
 
             trackChunks.Select(c => c.Events).ReplaceTempoMap(tempoMap);
         }
 
+        // TODO: test on empty
         /// <summary>
         /// Replaces tempo map contained in the specified <see cref="MidiFile"/> with another one.
         /// </summary>
@@ -240,17 +236,15 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </item>
         /// </list>
         /// </exception>
-        /// <exception cref="ArgumentException"><paramref name="file"/> is empty.</exception>
         public static void ReplaceTempoMap(this MidiFile file, TempoMap tempoMap)
         {
             ThrowIfArgument.IsNull(nameof(file), file);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
-            var trackChunks = file.GetTrackChunks();
-            ThrowIfArgument.IsEmptyCollection(nameof(trackChunks),
-                                              trackChunks,
-                                              $"Collection of {nameof(TrackChunk)} of the file is empty.");
+            if (!file.GetTrackChunks().Any() && (tempoMap.GetTempoChanges().Any() || tempoMap.GetTimeSignatureChanges().Any()))
+                file.Chunks.Add(new TrackChunk());
 
+            var trackChunks = file.GetTrackChunks();
             trackChunks.ReplaceTempoMap(tempoMap);
 
             file.TimeDivision = tempoMap.TimeDivision.Clone();

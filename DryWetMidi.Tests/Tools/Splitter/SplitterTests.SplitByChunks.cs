@@ -58,23 +58,55 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         [Test]
         public void SplitByChunks_NoChunks() => SplitByChunks(
             chunks: new MidiChunk[0],
-            expectedFilesCount: 0);
+            expectedFiles: new MidiFile[0]);
 
         [Test]
         public void SplitByChunks_OneChunk_TrackChunk() => SplitByChunks(
             chunks: new[] { new TrackChunk(new NoteOnEvent(), new NoteOffEvent()) },
-            expectedFilesCount: 1);
+            expectedFiles: new[]
+            {
+                new MidiFile(
+                    new TrackChunk(new NoteOnEvent(), new NoteOffEvent()))
+            });
+
+        [Test]
+        public void SplitByChunks_OneChunk_TrackChunk_TempoMap() => SplitByChunks(
+            chunks: new[]
+            {
+                new TrackChunk(
+                    new NoteOnEvent(),
+                    new SetTempoEvent(100000) { DeltaTime = 10 },
+                    new NoteOffEvent { DeltaTime = 100 },
+                    new TimeSignatureEvent(2, 4))
+            },
+            expectedFiles: new[]
+            {
+                new MidiFile(
+                    new TrackChunk(
+                        new NoteOnEvent(),
+                        new SetTempoEvent(100000) { DeltaTime = 10 },
+                        new NoteOffEvent { DeltaTime = 100 },
+                        new TimeSignatureEvent(2, 4)))
+            });
 
         [Test]
         public void SplitByChunks_OneChunk_TrackChunk_TimeDivision() => SplitByChunks(
             chunks: new[] { new TrackChunk(new NoteOnEvent(), new NoteOffEvent()) },
-            expectedFilesCount: 1,
+            expectedFiles: new[]
+            {
+                new MidiFile(
+                    new TrackChunk(new NoteOnEvent(), new NoteOffEvent()))
+            },
             timeDivision: new SmpteTimeDivision(DryWetMidi.Common.SmpteFormat.ThirtyDrop, 100));
 
         [Test]
         public void SplitByChunks_OneChunk_CustomChunk() => SplitByChunks(
             chunks: new[] { new CustomChunk() },
-            expectedFilesCount: 1);
+            expectedFiles: new[]
+            {
+                new MidiFile(
+                    new CustomChunk())
+            });
 
         [Test]
         public void SplitByChunks_MultipleChunks_1() => SplitByChunks(
@@ -85,7 +117,17 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 new TrackChunk(new TextEvent("B")),
                 new TrackChunk(new TextEvent("C")),
             },
-            expectedFilesCount: 4);
+            expectedFiles: new[]
+            {
+                new MidiFile(
+                    new TrackChunk(new TextEvent("A"))),
+                new MidiFile(
+                    new CustomChunk()),
+                new MidiFile(
+                    new TrackChunk(new TextEvent("B"))),
+                new MidiFile(
+                    new TrackChunk(new TextEvent("C"))),
+            });
 
         [Test]
         public void SplitByChunks_MultipleChunks_2() => SplitByChunks(
@@ -95,59 +137,156 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 new UnknownChunk("1111"),
                 new UnknownChunk("2222"),
             },
-            expectedFilesCount: 3);
+            expectedFiles: new[]
+            {
+                new MidiFile(
+                    new CustomChunk()),
+                new MidiFile(
+                    new UnknownChunk("1111")),
+                new MidiFile(
+                    new UnknownChunk("2222")),
+            });
 
         [Test]
-        public void SplitByChunks_Filter_NoChunks() => SplitByChunks_WithSettings(
+        public void SplitByChunks_MultipleChunks_3() => SplitByChunks(
+            chunks: new MidiChunk[]
+            {
+                new TrackChunk(
+                    new SetTempoEvent(100000),
+                    new TextEvent("A") { DeltaTime = 10 },
+                    new TimeSignatureEvent(2, 4) { DeltaTime = 100 }),
+                new CustomChunk(),
+                new TrackChunk(new TextEvent("B") { DeltaTime = 10 }),
+                new TrackChunk(new TextEvent("C") { DeltaTime = 10 }),
+            },
+            expectedFiles: new[]
+            {
+                new MidiFile(
+                    new TrackChunk(
+                        new SetTempoEvent(100000),
+                        new TextEvent("A") { DeltaTime = 10 },
+                        new TimeSignatureEvent(2, 4) { DeltaTime = 100 })),
+                new MidiFile(
+                    new CustomChunk(),
+                    new TrackChunk(
+                        new SetTempoEvent(100000),
+                        new TimeSignatureEvent(2, 4) { DeltaTime = 110 })),
+                new MidiFile(
+                    new TrackChunk(
+                        new SetTempoEvent(100000),
+                        new TextEvent("B") { DeltaTime = 10 },
+                        new TimeSignatureEvent(2, 4) { DeltaTime = 100 })),
+                new MidiFile(
+                    new TrackChunk(
+                        new SetTempoEvent(100000),
+                        new TextEvent("C") { DeltaTime = 10 },
+                        new TimeSignatureEvent(2, 4) { DeltaTime = 100 })),
+            });
+
+        [Test]
+        public void SplitByChunks_Filter_NoChunks() => SplitByChunks(
             chunks: new MidiChunk[0],
-            expectedChunks: new MidiChunk[0],
+            expectedFiles: new MidiFile[0],
             settings: new SplitFileByChunksSettings { Filter = null });
 
         [Test]
-        public void SplitByChunks_Filter_OneChunk_TrackChunk_1() => SplitByChunks_WithSettings(
+        public void SplitByChunks_MultipleChunks_DontPreserveTempoMap() => SplitByChunks(
+            chunks: new MidiChunk[]
+            {
+                new TrackChunk(
+                    new SetTempoEvent(100000),
+                    new TextEvent("A") { DeltaTime = 10 },
+                    new TimeSignatureEvent(2, 4) { DeltaTime = 100 }),
+                new CustomChunk(),
+                new TrackChunk(new TextEvent("B") { DeltaTime = 10 }),
+                new TrackChunk(new TextEvent("C") { DeltaTime = 10 }),
+            },
+            expectedFiles: new[]
+            {
+                new MidiFile(
+                    new TrackChunk(
+                        new SetTempoEvent(100000),
+                        new TextEvent("A") { DeltaTime = 10 },
+                        new TimeSignatureEvent(2, 4) { DeltaTime = 100 })),
+                new MidiFile(
+                    new CustomChunk()),
+                new MidiFile(
+                    new TrackChunk(
+                        new TextEvent("B") { DeltaTime = 10 })),
+                new MidiFile(
+                    new TrackChunk(
+                        new TextEvent("C") { DeltaTime = 10 })),
+            },
+            settings: new SplitFileByChunksSettings
+            {
+                PreserveTempoMap = false
+            });
+
+        [Test]
+        public void SplitByChunks_Filter_OneChunk_TrackChunk_1() => SplitByChunks(
             chunks: new[] { new TrackChunk(new NoteOnEvent(), new NoteOffEvent()) },
-            expectedChunks: new[] { new TrackChunk(new NoteOnEvent(), new NoteOffEvent()) },
+            expectedFiles: new[]
+            {
+                new MidiFile(
+                    new TrackChunk(new NoteOnEvent(), new NoteOffEvent()))
+            },
             settings: new SplitFileByChunksSettings { Filter = null });
 
         [Test]
-        public void SplitByChunks_Filter_OneChunk_TrackChunk_2() => SplitByChunks_WithSettings(
+        public void SplitByChunks_Filter_OneChunk_TrackChunk_2() => SplitByChunks(
             chunks: new[] { new TrackChunk(new NoteOnEvent(), new NoteOffEvent()) },
-            expectedChunks: new[] { new TrackChunk(new NoteOnEvent(), new NoteOffEvent()) },
+            expectedFiles: new[]
+            {
+                new MidiFile(
+                    new TrackChunk(new NoteOnEvent(), new NoteOffEvent()))
+            },
             settings: new SplitFileByChunksSettings { Filter = c => c is TrackChunk });
 
         [Test]
-        public void SplitByChunks_Filter_OneChunk_TrackChunk_3() => SplitByChunks_WithSettings(
+        public void SplitByChunks_Filter_OneChunk_TrackChunk_3() => SplitByChunks(
             chunks: new[] { new TrackChunk(new NoteOnEvent(), new NoteOffEvent()) },
-            expectedChunks: new MidiChunk[0],
+            expectedFiles: new MidiFile[0],
             settings: new SplitFileByChunksSettings { Filter = c => !(c is TrackChunk) });
 
         [Test]
-        public void SplitByChunks_Filter_OneChunk_TrackChunk_TimeDivision() => SplitByChunks_WithSettings(
+        public void SplitByChunks_Filter_OneChunk_TrackChunk_TimeDivision() => SplitByChunks(
             chunks: new[] { new TrackChunk(new NoteOnEvent(), new NoteOffEvent()) },
-            expectedChunks: new[] { new TrackChunk(new NoteOnEvent(), new NoteOffEvent()) },
+            expectedFiles: new[]
+            {
+                new MidiFile(
+                    new TrackChunk(new NoteOnEvent(), new NoteOffEvent()))
+            },
             settings: new SplitFileByChunksSettings { Filter = c => true },
             timeDivision: new SmpteTimeDivision(DryWetMidi.Common.SmpteFormat.ThirtyDrop, 100));
 
         [Test]
-        public void SplitByChunks_Filter_OneChunk_CustomChunk_1() => SplitByChunks_WithSettings(
+        public void SplitByChunks_Filter_OneChunk_CustomChunk_1() => SplitByChunks(
             chunks: new[] { new CustomChunk() },
-            expectedChunks: new[] { new CustomChunk() },
+            expectedFiles: new[]
+            {
+                new MidiFile(
+                    new CustomChunk())
+            },
             settings: new SplitFileByChunksSettings { Filter = null });
 
         [Test]
-        public void SplitByChunks_Filter_OneChunk_CustomChunk_2() => SplitByChunks_WithSettings(
+        public void SplitByChunks_Filter_OneChunk_CustomChunk_2() => SplitByChunks(
             chunks: new[] { new CustomChunk() },
-            expectedChunks: new MidiChunk[0],
+            expectedFiles: new MidiFile[0],
             settings: new SplitFileByChunksSettings { Filter = c => c is TrackChunk });
 
         [Test]
-        public void SplitByChunks_Filter_OneChunk_CustomChunk_3() => SplitByChunks_WithSettings(
+        public void SplitByChunks_Filter_OneChunk_CustomChunk_3() => SplitByChunks(
             chunks: new[] { new CustomChunk() },
-            expectedChunks: new[] { new CustomChunk() },
+            expectedFiles: new[]
+            {
+                new MidiFile(
+                    new CustomChunk())
+            },
             settings: new SplitFileByChunksSettings { Filter = c => c is CustomChunk });
 
         [Test]
-        public void SplitByChunks_Filter_MultipleChunks_1() => SplitByChunks_WithSettings(
+        public void SplitByChunks_Filter_MultipleChunks_1() => SplitByChunks(
             chunks: new MidiChunk[]
             {
                 new TrackChunk(new TextEvent("A")),
@@ -155,26 +294,31 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 new TrackChunk(new TextEvent("B")),
                 new TrackChunk(new TextEvent("C")),
             },
-            expectedChunks: new MidiChunk[]
+            expectedFiles: new[]
             {
-                new TrackChunk(new TextEvent("A")),
-                new TrackChunk(new TextEvent("B")),
-                new TrackChunk(new TextEvent("C")),
+                new MidiFile(
+                    new TrackChunk(new TextEvent("A"))),
+                new MidiFile(
+                    new TrackChunk(new TextEvent("B"))),
+                new MidiFile(
+                    new TrackChunk(new TextEvent("C")))
             },
             settings: new SplitFileByChunksSettings { Filter = c => c is TrackChunk });
 
         [Test]
-        public void SplitByChunks_Filter_MultipleChunks_2() => SplitByChunks_WithSettings(
+        public void SplitByChunks_Filter_MultipleChunks_2() => SplitByChunks(
             chunks: new MidiChunk[]
             {
                 new CustomChunk(),
                 new UnknownChunk("1111"),
                 new UnknownChunk("2222"),
             },
-            expectedChunks: new MidiChunk[]
+            expectedFiles: new[]
             {
-                new UnknownChunk("1111"),
-                new UnknownChunk("2222"),
+                new MidiFile(
+                    new UnknownChunk("1111")),
+                new MidiFile(
+                    new UnknownChunk("2222"))
             },
             settings: new SplitFileByChunksSettings { Filter = c => !(c is CustomChunk) });
 
@@ -184,35 +328,8 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
         private void SplitByChunks(
             ICollection<MidiChunk> chunks,
-            int expectedFilesCount,
-            TimeDivision timeDivision = null)
-        {
-            var midiFile = new MidiFile(chunks);
-            if (timeDivision != null)
-                midiFile.TimeDivision = timeDivision;
-
-            var midiFilesByChunks = midiFile.SplitByChunks().ToList();
-
-            Assert.AreEqual(expectedFilesCount, midiFilesByChunks.Count, "Invalid count of new files.");
-
-            var i = 0;
-
-            foreach (var chunk in chunks)
-            {
-                MidiAsserts.AreEqual(
-                    new MidiFile(chunk) { TimeDivision = midiFile.TimeDivision },
-                    midiFilesByChunks[i],
-                    false,
-                    $"File {i} is invalid.");
-
-                i++;
-            }
-        }
-
-        private void SplitByChunks_WithSettings(
-            ICollection<MidiChunk> chunks,
-            ICollection<MidiChunk> expectedChunks,
-            SplitFileByChunksSettings settings,
+            ICollection<MidiFile> expectedFiles,
+            SplitFileByChunksSettings settings = null,
             TimeDivision timeDivision = null)
         {
             var midiFile = new MidiFile(chunks);
@@ -221,14 +338,14 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
             var midiFilesByChunks = midiFile.SplitByChunks(settings).ToList();
 
-            Assert.AreEqual(expectedChunks.Count, midiFilesByChunks.Count, "Invalid count of new files.");
+            Assert.AreEqual(expectedFiles.Count, midiFilesByChunks.Count, "Invalid count of new files.");
 
             var i = 0;
 
-            foreach (var chunk in expectedChunks)
+            foreach (var file in expectedFiles)
             {
                 MidiAsserts.AreEqual(
-                    new MidiFile(chunk) { TimeDivision = midiFile.TimeDivision },
+                    file,
                     midiFilesByChunks[i],
                     false,
                     $"File {i} is invalid.");

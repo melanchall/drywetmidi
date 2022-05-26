@@ -1,5 +1,6 @@
 ﻿using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
+using Melanchall.DryWetMidi.Interaction;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,13 +24,22 @@ namespace Melanchall.DryWetMidi.Tools
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
 
             settings = settings ?? new SplitFileByChunksSettings();
+            
+            var tempoMap = settings.PreserveTempoMap
+                ? midiFile.GetTempoMap()
+                : null;
 
             foreach (var midiChunk in midiFile.Chunks.Where(c => settings.Filter?.Invoke(c) != false))
             {
-                yield return new MidiFile(midiChunk.Clone())
+                var newFile = new MidiFile(midiChunk.Clone())
                 {
                     TimeDivision = midiFile.TimeDivision.Clone()
                 };
+
+                if (settings.PreserveTempoMap)
+                    newFile.ReplaceTempoMap(tempoMap);
+
+                yield return newFile;
             }
         }
 
