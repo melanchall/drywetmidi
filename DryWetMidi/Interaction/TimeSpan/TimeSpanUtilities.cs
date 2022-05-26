@@ -261,12 +261,14 @@ namespace Melanchall.DryWetMidi.Interaction
             return (TTimeSpan)ZeroTimeSpans.Values.FirstOrDefault(timeSpan => timeSpan is TTimeSpan);
         }
 
-        // TODO: test
         public static bool IsZeroTimeSpan(this ITimeSpan timeSpan)
         {
             ThrowIfArgument.IsNull(nameof(timeSpan), timeSpan);
 
-            return ZeroTimeSpans.Values.Contains(timeSpan);
+            var mathTimeSpan = timeSpan as MathTimeSpan;
+            return mathTimeSpan == null
+                ? ZeroTimeSpans.Values.Contains(timeSpan)
+                : (mathTimeSpan.TimeSpan1.IsZeroTimeSpan() && mathTimeSpan.TimeSpan2.IsZeroTimeSpan());
         }
 
         internal static double Divide(ITimeSpan timeSpan1, ITimeSpan timeSpan2)
