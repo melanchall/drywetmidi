@@ -11,7 +11,7 @@ namespace Melanchall.DryWetMidi.Interaction
     /// Represents a basic collection of the <see cref="ITimedObject"/>.
     /// </summary>
     /// <typeparam name="TObject">The type of elements in the collection.</typeparam>
-    public sealed class TimedObjectsCollection<TObject> : IEnumerable<TObject>
+    public sealed class TimedObjectsCollection<TObject> : ICollection<TObject>
         where TObject : ITimedObject
     {
         #region Events
@@ -39,6 +39,25 @@ namespace Melanchall.DryWetMidi.Interaction
             _objects.AddRange(objects.Where(o => o != null));
             _comparer = comparer ?? new TimedObjectsComparer();
         }
+
+        #endregion
+
+        #region Properties
+
+        public TObject this[int index]
+        {
+            get { return _objects[index]; }
+            set
+            {
+                ThrowIfArgument.IsNull(nameof(value), value);
+
+                _objects[index] = value;
+            }
+        }
+
+        public int Count => _objects.Count;
+
+        public bool IsReadOnly => false;
 
         #endregion
 
@@ -74,8 +93,10 @@ namespace Melanchall.DryWetMidi.Interaction
         /// Removes objects from this collection.
         /// </summary>
         /// <param name="objects">Objects to remove from the collection.</param>
+        /// <returns><c>true</c> if objects were successfully removed from the collection;
+        /// otherwise, <c>false</c>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="objects"/> is <c>null</c>.</exception>
-        public void Remove(IEnumerable<TObject> objects)
+        public bool Remove(IEnumerable<TObject> objects)
         {
             ThrowIfArgument.IsNull(nameof(objects), objects);
 
@@ -87,18 +108,21 @@ namespace Melanchall.DryWetMidi.Interaction
             }
 
             OnObjectsRemoved(removedObjects);
+            return removedObjects.Any();
         }
 
         /// <summary>
         /// Removes objects from this collection.
         /// </summary>
         /// <param name="objects">Objects to remove from the collection.</param>
+        /// <returns><c>true</c> if objects were successfully removed from the collection;
+        /// otherwise, <c>false</c>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="objects"/> is <c>null</c>.</exception>
-        public void Remove(params TObject[] objects)
+        public bool Remove(params TObject[] objects)
         {
             ThrowIfArgument.IsNull(nameof(objects), objects);
 
-            Remove((IEnumerable<TObject>)objects);
+            return Remove((IEnumerable<TObject>)objects);
         }
 
         /// <summary>
@@ -143,7 +167,27 @@ namespace Melanchall.DryWetMidi.Interaction
 
         #endregion
 
-        #region IEnumerable<TObject>
+        #region ICollection<TObject>
+
+        public void Add(TObject obj)
+        {
+            Add(new[] { obj });
+        }
+
+        public bool Contains(TObject obj)
+        {
+            return _objects.Contains(obj);
+        }
+
+        public void CopyTo(TObject[] array, int arrayIndex)
+        {
+            _objects.CopyTo(array, arrayIndex);
+        }
+
+        public bool Remove(TObject obj)
+        {
+            return Remove(new[] { obj });
+        }
 
         /// <summary>
         /// Returns an enumerator that iterates through the collection.

@@ -8,6 +8,7 @@ namespace Melanchall.DryWetMidi.Tools
     /// <summary>
     /// Settings according to which nearby notes should be merged.
     /// </summary>
+    [Obsolete("OBS17")]
     public sealed class NotesMergingSettings
     {
         #region Fields

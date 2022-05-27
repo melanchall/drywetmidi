@@ -10,6 +10,7 @@ namespace Melanchall.DryWetMidi.Tools
     /// Provides methods to merge nearby notes. More info in the
     /// <see href="xref:a_notes_merger">Notes merge</see> article.
     /// </summary>
+    [Obsolete("OBS17")]
     public sealed class NotesMerger
     {
         #region Nested classes

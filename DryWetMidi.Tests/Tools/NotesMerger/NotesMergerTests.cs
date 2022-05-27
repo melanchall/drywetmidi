@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Interaction;
@@ -8,6 +9,7 @@ using NUnit.Framework;
 
 namespace Melanchall.DryWetMidi.Tests.Tools
 {
+    [Obsolete("OBS17")]
     [TestFixture]
     public sealed class NotesMergerTests : LengthedObjectsToolTests<Note>
     {

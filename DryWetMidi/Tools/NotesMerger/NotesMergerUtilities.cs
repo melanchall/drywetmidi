@@ -11,6 +11,7 @@ namespace Melanchall.DryWetMidi.Tools
     /// Provides methods to merge nearby notes. More info in the
     /// <see href="xref:a_notes_merger">Notes merge</see> article.
     /// </summary>
+    [Obsolete("OBS17")]
     public static class NotesMergerUtilities
     {
         #region Methods
@@ -32,6 +33,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// </item>
         /// </list>
         /// </exception>
+        [Obsolete("OBS17")]
         public static void MergeNotes(this TrackChunk trackChunk, TempoMap tempoMap, NotesMergingSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
@@ -70,6 +72,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// </item>
         /// </list>
         /// </exception>
+        [Obsolete("OBS17")]
         public static void MergeNotes(this IEnumerable<TrackChunk> trackChunks, TempoMap tempoMap, NotesMergingSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
@@ -87,6 +90,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="midiFile"><see cref="MidiFile"/> to merge nearby notes in.</param>
         /// <param name="settings">Settings according to which notes should be merged.</param>
         /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is <c>null</c>.</exception>
+        [Obsolete("OBS17")]
         public static void MergeNotes(this MidiFile midiFile, NotesMergingSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);

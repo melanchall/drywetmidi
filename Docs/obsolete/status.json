@@ -1,4 +1,9 @@
 {
+  "OBS17": {
+    "Hint": "Use Merger class.",
+    "ObsoleteFromVersion": "6.1.1",
+    "InLibrary": true
+  },
   "OBS16": {
     "Hint": "Use TimedEvent constructor and add an object manually.",
     "ObsoleteFromVersion": "6.1.0",
