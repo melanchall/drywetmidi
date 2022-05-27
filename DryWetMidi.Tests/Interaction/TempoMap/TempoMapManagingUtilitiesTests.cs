@@ -1,223 +1,524 @@
-﻿using System.Linq;
-using Melanchall.DryWetMidi.Core;
+﻿using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
+using Melanchall.DryWetMidi.Tests.Utilities;
 using NUnit.Framework;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Melanchall.DryWetMidi.Tests.Interaction
 {
     [TestFixture]
-    public sealed class TempoMapManagingUtilitiesTests
+    public sealed partial class TempoMapManagingUtilitiesTests
     {
+        #region Nested classes
+
+        private sealed class CustomChunk : MidiChunk
+        {
+            public CustomChunk()
+                : base("Cstm")
+            {
+            }
+
+            public override MidiChunk Clone()
+            {
+                throw new NotImplementedException();
+            }
+
+            protected override uint GetContentSize(WritingSettings settings)
+            {
+                throw new NotImplementedException();
+            }
+
+            protected override void ReadContent(MidiReader reader, ReadingSettings settings, uint size)
+            {
+                throw new NotImplementedException();
+            }
+
+            protected override void WriteContent(MidiWriter writer, WritingSettings settings)
+            {
+                throw new NotImplementedException();
+            }
+
+            public override bool Equals(object obj)
+            {
+                return obj is CustomChunk;
+            }
+        }
+
+        #endregion
+
         #region Test methods
 
         [Test]
-        public void GetTempoMap_EmptyFile()
-        {
-            GetTempoMap_Default(new MidiFile());
-        }
+        public void ReplaceTempoMap_EventsCollections_Empty() => ReplaceTempoMap(
+            events: Array.Empty<ICollection<MidiEvent>>(),
+            tempoMap: GetNewTempoMap(null, null),
+            expectedEvents: Array.Empty<ICollection<MidiEvent>>());
 
         [Test]
-        public void GetTempoMap_NoTempoAndTimeSignatureChanges_OneTrackChunk()
-        {
-            GetTempoMap_Default(new MidiFile(new TrackChunk(Enumerable.Range(0, 1000).Select(i => new NoteOnEvent { DeltaTime = 10 }))));
-        }
+        public void ReplaceTempoMap_EventsCollections_SingleCollection_Empty_DefaultTempoMap() => ReplaceTempoMap(
+            events: new[]
+            {
+                Array.Empty<MidiEvent>(),
+            },
+            tempoMap: TempoMap.Default,
+            expectedEvents: new[]
+            {
+                Array.Empty<MidiEvent>(),
+            });
 
         [Test]
-        public void GetTempoMap_NoTempoAndTimeSignatureChanges_MultipleTrackChunks()
-        {
-            GetTempoMap_Default(new MidiFile(Enumerable.Range(0, 10).Select(i => new TrackChunk(Enumerable.Range(0, 1000).Select(j => new NoteOnEvent { DeltaTime = 10 })))));
-        }
-
-        [Test]
-        public void GetTempoMap_OnlySetTempo_OneTrackChunk()
-        {
-            var midiFile = new MidiFile(new TrackChunk(new SetTempoEvent(10) { DeltaTime = 2 }, new SetTempoEvent(20) { DeltaTime = 2 }, new SetTempoEvent(10) { DeltaTime = 2 }));
-            var tempoMap = midiFile.GetTempoMap();
-            CollectionAssert.AreEqual(
-                new[]
+        public void ReplaceTempoMap_EventsCollections_SingleCollection_Empty_CustomTempoMap() => ReplaceTempoMap(
+            events: new[]
+            {
+                Array.Empty<MidiEvent>(),
+            },
+            tempoMap: GetNewTempoMap(
+                new[] { (50L, new Tempo(100000)) },
+                new[] { (70L, new TimeSignature(3, 8)) }),
+            expectedEvents: new[]
+            {
+                new MidiEvent[]
                 {
-                    new ValueChange<Tempo>(2, new Tempo(10)),
-                    new ValueChange<Tempo>(4, new Tempo(20)),
-                    new ValueChange<Tempo>(6, new Tempo(10)),
-                },
-                tempoMap.GetTempoChanges(),
-                "Tempo changes are invalid.");
-            CollectionAssert.IsEmpty(tempoMap.GetTimeSignatureChanges(), "There are time signature changes.");
-            Assert.AreEqual(midiFile.TimeDivision, tempoMap.TimeDivision, "Time division is invalid.");
-        }
+                    new SetTempoEvent(100000) { DeltaTime = 50 },
+                    new TimeSignatureEvent(3, 8) { DeltaTime = 20 },
+                }
+            });
 
         [Test]
-        public void GetTempoMap_OnlySetTempo_MultipleTrackChunks()
-        {
-            var midiFile = new MidiFile(Enumerable.Range(0, 2).Select(i => new TrackChunk(Enumerable.Range(0, 3).Select(j => new SetTempoEvent((i + 1) * 10) { DeltaTime = (i * 2) + 2 }))));
-            var tempoMap = midiFile.GetTempoMap();
-            CollectionAssert.AreEqual(
-                new[]
+        public void ReplaceTempoMap_EventsCollections_SingleCollection_NoTempoMapEvents_DefaultTempoMap() => ReplaceTempoMap(
+            events: new[]
+            {
+                new MidiEvent[]
                 {
-                    new ValueChange<Tempo>(2, new Tempo(10)),
-                    new ValueChange<Tempo>(4, new Tempo(20)),
-                    new ValueChange<Tempo>(6, new Tempo(10)),
-                    new ValueChange<Tempo>(8, new Tempo(20)),
-                },
-                tempoMap.GetTempoChanges(),
-                "Tempo changes are invalid.");
-            CollectionAssert.IsEmpty(tempoMap.GetTimeSignatureChanges(), "There are time signature changes.");
-            Assert.AreEqual(midiFile.TimeDivision, tempoMap.TimeDivision, "Time division is invalid.");
-        }
+                    new NoteOnEvent { DeltaTime = 10 },
+                    new NoteOffEvent { DeltaTime = 100 },
+                }
+            },
+            tempoMap: TempoMap.Default,
+            expectedEvents: new[]
+            {
+                new MidiEvent[]
+                {
+                    new NoteOnEvent { DeltaTime = 10 },
+                    new NoteOffEvent { DeltaTime = 100 },
+                }
+            });
 
         [Test]
-        public void GetTempoMap_OnlyTimeSignature_OneTrackChunk()
-        {
-            var midiFile = new MidiFile(new TrackChunk(new TimeSignatureEvent(2, 8) { DeltaTime = 2 }, new TimeSignatureEvent(3, 16) { DeltaTime = 2 }, new TimeSignatureEvent(2, 8) { DeltaTime = 2 }));
-            var tempoMap = midiFile.GetTempoMap();
-            CollectionAssert.AreEqual(
-                new[]
+        public void ReplaceTempoMap_EventsCollections_SingleCollection_NoTempoMapEvents_CustomTempoMap() => ReplaceTempoMap(
+            events: new[]
+            {
+                new MidiEvent[]
                 {
-                    new ValueChange<TimeSignature>(2, new TimeSignature(2, 8)),
-                    new ValueChange<TimeSignature>(4, new TimeSignature(3, 16)),
-                    new ValueChange<TimeSignature>(6, new TimeSignature(2, 8)),
-                },
-                tempoMap.GetTimeSignatureChanges(),
-                "Time signature changes are invalid.");
-            CollectionAssert.IsEmpty(tempoMap.GetTempoChanges(), "There are tempo changes.");
-            Assert.AreEqual(midiFile.TimeDivision, tempoMap.TimeDivision, "Time division is invalid.");
-        }
+                    new NoteOnEvent { DeltaTime = 10 },
+                    new NoteOffEvent { DeltaTime = 100 },
+                }
+            },
+            tempoMap: GetNewTempoMap(
+                new[] { (50L, new Tempo(100000)) },
+                new[] { (70L, new TimeSignature(3, 8)) }),
+            expectedEvents: new[]
+            {
+                new MidiEvent[]
+                {
+                    new NoteOnEvent { DeltaTime = 10 },
+                    new SetTempoEvent(100000) { DeltaTime = 40 },
+                    new TimeSignatureEvent(3, 8) { DeltaTime = 20 },
+                    new NoteOffEvent { DeltaTime = 40 },
+                }
+            });
 
         [Test]
-        public void GetTempoMap_OnlyTimeSignature_MultipleTrackChunks()
-        {
-            var midiFile = new MidiFile(Enumerable.Range(0, 2).Select(i => new TrackChunk(Enumerable.Range(0, 3).Select(j => new TimeSignatureEvent((byte)((i + 1) * 10), 8) { DeltaTime = (i * 2) + 2 }))));
-            var tempoMap = midiFile.GetTempoMap();
-            CollectionAssert.AreEqual(
-                new[]
+        public void ReplaceTempoMap_EventsCollections_SingleCollection_TempoMapEvents_DefaultTempoMap() => ReplaceTempoMap(
+            events: new[]
+            {
+                new MidiEvent[]
                 {
-                    new ValueChange<TimeSignature>(2, new TimeSignature(10, 8)),
-                    new ValueChange<TimeSignature>(4, new TimeSignature(20, 8)),
-                    new ValueChange<TimeSignature>(6, new TimeSignature(10, 8)),
-                    new ValueChange<TimeSignature>(8, new TimeSignature(20, 8)),
-                },
-                tempoMap.GetTimeSignatureChanges(),
-                "Time signature changes are invalid.");
-            CollectionAssert.IsEmpty(tempoMap.GetTempoChanges(), "There are tempo changes.");
-            Assert.AreEqual(midiFile.TimeDivision, tempoMap.TimeDivision, "Time division is invalid.");
-        }
+                    new NoteOnEvent { DeltaTime = 10 },
+                    new SetTempoEvent(100000) { DeltaTime = 30 },
+                    new NoteOffEvent { DeltaTime = 100 },
+                    new TimeSignatureEvent(5, 16) { DeltaTime = 1000 }
+                }
+            },
+            tempoMap: TempoMap.Default,
+            expectedEvents: new[]
+            {
+                new MidiEvent[]
+                {
+                    new NoteOnEvent { DeltaTime = 10 },
+                    new NoteOffEvent { DeltaTime = 130 },
+                }
+            });
 
         [Test]
-        public void GetTempoMap_OneTrackChunk()
-        {
-            var midiFile = new MidiFile(new TrackChunk(
-                new TimeSignatureEvent(2, 8) { DeltaTime = 2 },
-                new SetTempoEvent(10) { DeltaTime = 3 },
-                new TimeSignatureEvent(3, 16) { DeltaTime = 2 },
-                new SetTempoEvent(20) { DeltaTime = 3 },
-                new TimeSignatureEvent(2, 8) { DeltaTime = 2 },
-                new SetTempoEvent(10) { DeltaTime = 3 }));
-            
-            var tempoMap = midiFile.GetTempoMap();
-            CollectionAssert.AreEqual(
-                new[]
+        public void ReplaceTempoMap_EventsCollections_SingleCollection_TempoMapEvents_CustomTempoMap_New() => ReplaceTempoMap(
+            events: new[]
+            {
+                new MidiEvent[]
                 {
-                    new ValueChange<TimeSignature>(2, new TimeSignature(2, 8)),
-                    new ValueChange<TimeSignature>(7, new TimeSignature(3, 16)),
-                    new ValueChange<TimeSignature>(12, new TimeSignature(2, 8)),
-                },
-                tempoMap.GetTimeSignatureChanges(),
-                "Time signature changes are invalid.");
-            CollectionAssert.AreEqual(
-                new[]
+                    new NoteOnEvent { DeltaTime = 10 },
+                    new SetTempoEvent(100000) { DeltaTime = 30 },
+                    new NoteOffEvent { DeltaTime = 100 },
+                    new TimeSignatureEvent(5, 16) { DeltaTime = 1000 }
+                }
+            },
+            tempoMap: GetNewTempoMap(
+                new[] { (50L, new Tempo(200000)) },
+                null),
+            expectedEvents: new[]
+            {
+                new MidiEvent[]
                 {
-                    new ValueChange<Tempo>(5, new Tempo(10)),
-                    new ValueChange<Tempo>(10, new Tempo(20)),
-                    new ValueChange<Tempo>(15, new Tempo(10)),
-                },
-                tempoMap.GetTempoChanges(),
-                "Tempo changes are invalid.");
-            Assert.AreEqual(midiFile.TimeDivision, tempoMap.TimeDivision, "Time division is invalid.");
-        }
+                    new NoteOnEvent { DeltaTime = 10 },
+                    new SetTempoEvent(200000) { DeltaTime = 40 },
+                    new NoteOffEvent { DeltaTime = 90 },
+                }
+            });
 
         [Test]
-        public void GetTempoMap_MultipleTrackChunks_TempoAndTimeSignatureChangesOnSeparateTrackChunks()
-        {
-            var midiFile = new MidiFile(
+        public void ReplaceTempoMap_EventsCollections_SingleCollection_TempoMapEvents_CustomTempoMap_Replace() => ReplaceTempoMap(
+            events: new[]
+            {
+                new MidiEvent[]
+                {
+                    new NoteOnEvent { DeltaTime = 10 },
+                    new SetTempoEvent(100000) { DeltaTime = 30 },
+                    new NoteOffEvent { DeltaTime = 100 },
+                    new TimeSignatureEvent(5, 16) { DeltaTime = 1000 }
+                }
+            },
+            tempoMap: GetNewTempoMap(
+                new[] { (40L, new Tempo(300000)), (50L, new Tempo(200000)) },
+                new[] { (1140L, new TimeSignature(3, 4)) }),
+            expectedEvents: new[]
+            {
+                new MidiEvent[]
+                {
+                    new NoteOnEvent { DeltaTime = 10 },
+                    new SetTempoEvent(300000) { DeltaTime = 30 },
+                    new SetTempoEvent(200000) { DeltaTime = 10 },
+                    new NoteOffEvent { DeltaTime = 90 },
+                    new TimeSignatureEvent(3, 4) { DeltaTime = 1000 }
+                }
+            });
+
+        [Test]
+        public void ReplaceTempoMap_EventsCollections_MultipleCollections_Empty_DefaultTempoMap() => ReplaceTempoMap(
+            events: new[]
+            {
+                Array.Empty<MidiEvent>(),
+                Array.Empty<MidiEvent>(),
+            },
+            tempoMap: TempoMap.Default,
+            expectedEvents: new[]
+            {
+                Array.Empty<MidiEvent>(),
+                Array.Empty<MidiEvent>(),
+            });
+
+        [Test]
+        public void ReplaceTempoMap_EventsCollections_MultipleCollections_Empty_CustomTempoMap() => ReplaceTempoMap(
+            events: new[]
+            {
+                Array.Empty<MidiEvent>(),
+                Array.Empty<MidiEvent>(),
+            },
+            tempoMap: GetNewTempoMap(
+                new[] { (50L, new Tempo(100000)) },
+                new[] { (70L, new TimeSignature(3, 8)) }),
+            expectedEvents: new[]
+            {
+                new MidiEvent[]
+                {
+                    new SetTempoEvent(100000) { DeltaTime = 50 },
+                    new TimeSignatureEvent(3, 8) { DeltaTime = 20 },
+                },
+                Array.Empty<MidiEvent>(),
+            });
+
+        [Test]
+        public void ReplaceTempoMap_EventsCollections_MultipleCollections_NoTempoMapEvents_DefaultTempoMap() => ReplaceTempoMap(
+            events: new[]
+            {
+                new MidiEvent[]
+                {
+                    new NoteOnEvent { DeltaTime = 10 },
+                    new NoteOffEvent { DeltaTime = 100 },
+                },
+                new MidiEvent[]
+                {
+                    new TextEvent("A"),
+                }
+            },
+            tempoMap: TempoMap.Default,
+            expectedEvents: new[]
+            {
+                new MidiEvent[]
+                {
+                    new NoteOnEvent { DeltaTime = 10 },
+                    new NoteOffEvent { DeltaTime = 100 },
+                },
+                new MidiEvent[]
+                {
+                    new TextEvent("A"),
+                }
+            });
+
+        [Test]
+        public void ReplaceTempoMap_EventsCollections_MultipleCollections_NoTempoMapEvents_CustomTempoMap() => ReplaceTempoMap(
+            events: new[]
+            {
+                new MidiEvent[]
+                {
+                    new NoteOnEvent { DeltaTime = 10 },
+                    new NoteOffEvent { DeltaTime = 100 },
+                },
+                new MidiEvent[]
+                {
+                    new TextEvent("A"),
+                }
+            },
+            tempoMap: GetNewTempoMap(
+                new[] { (50L, new Tempo(100000)) },
+                new[] { (70L, new TimeSignature(3, 8)) }),
+            expectedEvents: new[]
+            {
+                new MidiEvent[]
+                {
+                    new NoteOnEvent { DeltaTime = 10 },
+                    new SetTempoEvent(100000) { DeltaTime = 40 },
+                    new TimeSignatureEvent(3, 8) { DeltaTime = 20 },
+                    new NoteOffEvent { DeltaTime = 40 },
+                },
+                new MidiEvent[]
+                {
+                    new TextEvent("A"),
+                }
+            });
+
+        [Test]
+        public void ReplaceTempoMap_EventsCollections_MultipleCollections_TempoMapEvents_DefaultTempoMap() => ReplaceTempoMap(
+            events: new[]
+            {
+                new MidiEvent[]
+                {
+                    new NoteOnEvent { DeltaTime = 10 },
+                    new SetTempoEvent(100000) { DeltaTime = 30 },
+                    new NoteOffEvent { DeltaTime = 100 },
+                },
+                new MidiEvent[]
+                {
+                    new TextEvent("A"),
+                    new TimeSignatureEvent(3, 8) { DeltaTime = 30 },
+                }
+            },
+            tempoMap: TempoMap.Default,
+            expectedEvents: new[]
+            {
+                new MidiEvent[]
+                {
+                    new NoteOnEvent { DeltaTime = 10 },
+                    new NoteOffEvent { DeltaTime = 130 },
+                },
+                new MidiEvent[]
+                {
+                    new TextEvent("A"),
+                }
+            });
+
+        [Test]
+        public void ReplaceTempoMap_EventsCollections_MultipleCollections_TempoMapEvents_CustomTempoMap_New() => ReplaceTempoMap(
+            events: new[]
+            {
+                new MidiEvent[]
+                {
+                    new NoteOnEvent { DeltaTime = 10 },
+                    new SetTempoEvent(100000) { DeltaTime = 30 },
+                    new NoteOffEvent { DeltaTime = 100 },
+                },
+                new MidiEvent[]
+                {
+                    new TextEvent("A"),
+                    new TimeSignatureEvent(3, 8) { DeltaTime = 30 },
+                }
+            },
+            tempoMap: GetNewTempoMap(
+                new[] { (50L, new Tempo(200000)) },
+                new[] { (20L, new TimeSignature(7, 32)) }),
+            expectedEvents: new[]
+            {
+                new MidiEvent[]
+                {
+                    new NoteOnEvent { DeltaTime = 10 },
+                    new TimeSignatureEvent(7, 32) { DeltaTime = 10 },
+                    new SetTempoEvent(200000) { DeltaTime = 30 },
+                    new NoteOffEvent { DeltaTime = 90 },
+                },
+                new MidiEvent[]
+                {
+                    new TextEvent("A"),
+                }
+            });
+
+        [Test]
+        public void ReplaceTempoMap_EventsCollections_MultipleCollections_TempoMapEvents_CustomTempoMap_Replace() => ReplaceTempoMap(
+            events: new[]
+            {
+                new MidiEvent[]
+                {
+                    new NoteOnEvent { DeltaTime = 10 },
+                    new SetTempoEvent(100000) { DeltaTime = 40 },
+                    new NoteOffEvent { DeltaTime = 90 },
+                },
+                new MidiEvent[]
+                {
+                    new TextEvent("A"),
+                    new TimeSignatureEvent(3, 8) { DeltaTime = 30 },
+                }
+            },
+            tempoMap: GetNewTempoMap(
+                new[] { (50L, new Tempo(200000)) },
+                new[] { (30L, new TimeSignature(7, 32)) }),
+            expectedEvents: new[]
+            {
+                new MidiEvent[]
+                {
+                    new NoteOnEvent { DeltaTime = 10 },
+                    new TimeSignatureEvent(7, 32) { DeltaTime = 20 },
+                    new SetTempoEvent(200000) { DeltaTime = 20 },
+                    new NoteOffEvent { DeltaTime = 90 },
+                },
+                new MidiEvent[]
+                {
+                    new TextEvent("A"),
+                }
+            });
+
+        [Test]
+        public void ReplaceTempoMap_File_Empty_DefaultTempoMap() => ReplaceTempoMap(
+            midiFile: new MidiFile(),
+            tempoMap: TempoMap.Default,
+            expectedFile: new MidiFile());
+
+        [Test]
+        public void ReplaceTempoMap_File_CustomChunk_DefaultTempoMap() => ReplaceTempoMap(
+            midiFile: new MidiFile(new CustomChunk()),
+            tempoMap: TempoMap.Default,
+            expectedFile: new MidiFile(new CustomChunk()));
+
+        [Test]
+        public void ReplaceTempoMap_File_Empty_CustomTempoMap() => ReplaceTempoMap(
+            midiFile: new MidiFile(),
+            tempoMap: GetNewTempoMap(
+                new[] { (20L, new Tempo(100000)) },
+                null,
+                500),
+            expectedFile: new MidiFile(
                 new TrackChunk(
-                    new TimeSignatureEvent(2, 8) { DeltaTime = 2 },
-                    new TimeSignatureEvent(3, 16) { DeltaTime = 2 },
-                    new TimeSignatureEvent(2, 8) { DeltaTime = 2 }),
-                new TrackChunk(
-                    new SetTempoEvent(10) { DeltaTime = 3 },
-                    new SetTempoEvent(20) { DeltaTime = 3 },
-                    new SetTempoEvent(10) { DeltaTime = 3 }));
-
-            var tempoMap = midiFile.GetTempoMap();
-            CollectionAssert.AreEqual(
-                new[]
-                {
-                    new ValueChange<TimeSignature>(2, new TimeSignature(2, 8)),
-                    new ValueChange<TimeSignature>(4, new TimeSignature(3, 16)),
-                    new ValueChange<TimeSignature>(6, new TimeSignature(2, 8)),
-                },
-                tempoMap.GetTimeSignatureChanges(),
-                "Time signature changes are invalid.");
-            CollectionAssert.AreEqual(
-                new[]
-                {
-                    new ValueChange<Tempo>(3, new Tempo(10)),
-                    new ValueChange<Tempo>(6, new Tempo(20)),
-                    new ValueChange<Tempo>(9, new Tempo(10)),
-                },
-                tempoMap.GetTempoChanges(),
-                "Tempo changes are invalid.");
-            Assert.AreEqual(midiFile.TimeDivision, tempoMap.TimeDivision, "Time division is invalid.");
-        }
+                    new SetTempoEvent(100000) { DeltaTime = 20 }))
+            {
+                TimeDivision = new TicksPerQuarterNoteTimeDivision(500)
+            });
 
         [Test]
-        public void GetTempoMap_MultipleTrackChunks_TempoAndTimeSignatureChangesAreMixed()
-        {
-            var midiFile = new MidiFile(
+        public void ReplaceTempoMap_File_CustomChunk_CustomTempoMap() => ReplaceTempoMap(
+            midiFile: new MidiFile(new CustomChunk()),
+            tempoMap: GetNewTempoMap(
+                new[] { (20L, new Tempo(100000)) },
+                null,
+                500),
+            expectedFile: new MidiFile(
+                new CustomChunk(),
                 new TrackChunk(
-                    new TimeSignatureEvent(2, 8) { DeltaTime = 2 },
-                    new SetTempoEvent(10) { DeltaTime = 3 },
-                    new TimeSignatureEvent(3, 16) { DeltaTime = 2 }),
-                new TrackChunk(
-                    new SetTempoEvent(20) { DeltaTime = 3 },
-                    new TimeSignatureEvent(2, 8) { DeltaTime = 2 },
-                    new SetTempoEvent(10) { DeltaTime = 3 }));
-
-            var tempoMap = midiFile.GetTempoMap();
-            CollectionAssert.AreEqual(
-                new[]
-                {
-                    new ValueChange<TimeSignature>(2, new TimeSignature(2, 8)),
-                    new ValueChange<TimeSignature>(7, new TimeSignature(3, 16)),
-                },
-                tempoMap.GetTimeSignatureChanges(),
-                "Time signature changes are invalid.");
-            CollectionAssert.AreEqual(
-                new[]
-                {
-                    new ValueChange<Tempo>(3, new Tempo(20)),
-                    new ValueChange<Tempo>(5, new Tempo(10)),
-                },
-                tempoMap.GetTempoChanges(),
-                "Tempo changes are invalid.");
-            Assert.AreEqual(midiFile.TimeDivision, tempoMap.TimeDivision, "Time division is invalid.");
-        }
+                    new SetTempoEvent(100000) { DeltaTime = 20 }))
+            {
+                TimeDivision = new TicksPerQuarterNoteTimeDivision(500)
+            });
 
         #endregion
 
         #region Private methods
 
-        private void GetTempoMap_Default(MidiFile midiFile)
+        private TempoMap GetNewTempoMap(
+            (long Time, Tempo Tempo)[] tempoChanges,
+            (long Time, TimeSignature TimeSignature)[] timeSignatureChanges,
+            short ticksPerQuarterNote = TicksPerQuarterNoteTimeDivision.DefaultTicksPerQuarterNote)
         {
-            var tempoMap = midiFile.GetTempoMap();
+            using (var tempoMapManager = new TempoMapManager(new TicksPerQuarterNoteTimeDivision(ticksPerQuarterNote)))
+            {
+                foreach (var tempoChange in tempoChanges ?? Array.Empty<(long, Tempo)>())
+                {
+                    tempoMapManager.SetTempo(tempoChange.Time, tempoChange.Tempo);
+                }
 
-            CollectionAssert.IsEmpty(tempoMap.GetTempoChanges(), "There are tempo changes.");
-            Assert.AreEqual(Tempo.Default, tempoMap.GetTempoAtTime(new MidiTimeSpan()), "Tempo at the start is invalid.");
-            Assert.AreEqual(Tempo.Default, tempoMap.GetTempoAtTime(new MidiTimeSpan(1000)), "Tempo at the middle is invalid.");
+                foreach (var timeSignatureChange in timeSignatureChanges ?? Array.Empty<(long, TimeSignature)>())
+                {
+                    tempoMapManager.SetTimeSignature(timeSignatureChange.Time, timeSignatureChange.TimeSignature);
+                }
 
-            CollectionAssert.IsEmpty(tempoMap.GetTimeSignatureChanges(), "There are time signature changes.");
-            Assert.AreEqual(TimeSignature.Default, tempoMap.GetTimeSignatureAtTime(new MidiTimeSpan()), "Time signature at the start is invalid.");
-            Assert.AreEqual(TimeSignature.Default, tempoMap.GetTimeSignatureAtTime(new MidiTimeSpan(1000)), "Time signature at the middle is invalid.");
+                return tempoMapManager.TempoMap;
+            }
+        }
+
+        private void ReplaceTempoMap(
+            ICollection<ICollection<MidiEvent>> events,
+            TempoMap tempoMap,
+            ICollection<ICollection<MidiEvent>> expectedEvents)
+        {
+            var expectedTrackChunks = expectedEvents
+                .Select(e => new TrackChunk(e))
+                .ToArray();
+
+            //
+
+            var eventsCollections = events
+                .Select(e =>
+                {
+                    var result = new EventsCollection();
+                    result.AddRange(e.Select(ee => ee.Clone()));
+                    return result;
+                })
+                .ToArray();
+            eventsCollections.ReplaceTempoMap(tempoMap);
+            MidiAsserts.AreEqual(
+                expectedTrackChunks,
+                eventsCollections.Select(e => new TrackChunk(e)),
+                true,
+                "Invalid events collections.");
+
+            //
+
+            var trackChunks = events
+                .Select(e => new TrackChunk(e.Select(ee => ee.Clone())))
+                .ToArray();
+            trackChunks.ReplaceTempoMap(tempoMap);
+            MidiAsserts.AreEqual(
+                expectedTrackChunks,
+                trackChunks,
+                true,
+                "Invalid track chunks.");
+
+            //
+
+            var midiFile = new MidiFile(events
+                .Select(e => new TrackChunk(e.Select(ee => ee.Clone()))));
+            midiFile.ReplaceTempoMap(tempoMap);
+            MidiAsserts.AreEqual(
+                new MidiFile(expectedTrackChunks),
+                midiFile,
+                false,
+                "Invalid file.");
+        }
+
+        private void ReplaceTempoMap(
+            MidiFile midiFile,
+            TempoMap tempoMap,
+            MidiFile expectedFile)
+        {
+            midiFile.ReplaceTempoMap(tempoMap);
+            MidiAsserts.AreEqual(expectedFile, midiFile, false, "Invalid file.");
         }
 
         #endregion
