@@ -11,7 +11,7 @@ namespace Melanchall.DryWetMidi.Interaction
     /// Represents a basic collection of the <see cref="ITimedObject"/>.
     /// </summary>
     /// <typeparam name="TObject">The type of elements in the collection.</typeparam>
-    public sealed class TimedObjectsCollection<TObject> : ICollection<TObject>
+    public sealed class TimedObjectsCollection<TObject> : IEnumerable<TObject>
         where TObject : ITimedObject
     {
         #region Events
@@ -44,20 +44,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
         #region Properties
 
-        public TObject this[int index]
-        {
-            get { return _objects[index]; }
-            set
-            {
-                ThrowIfArgument.IsNull(nameof(value), value);
-
-                _objects[index] = value;
-            }
-        }
-
         public int Count => _objects.Count;
-
-        public bool IsReadOnly => false;
 
         #endregion
 
@@ -167,27 +154,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
         #endregion
 
-        #region ICollection<TObject>
-
-        public void Add(TObject obj)
-        {
-            Add(new[] { obj });
-        }
-
-        public bool Contains(TObject obj)
-        {
-            return _objects.Contains(obj);
-        }
-
-        public void CopyTo(TObject[] array, int arrayIndex)
-        {
-            _objects.CopyTo(array, arrayIndex);
-        }
-
-        public bool Remove(TObject obj)
-        {
-            return Remove(new[] { obj });
-        }
+        #region IEnumerable<TObject>
 
         /// <summary>
         /// Returns an enumerator that iterates through the collection.

@@ -98,7 +98,7 @@ namespace Melanchall.DryWetMidi.Tools
 
             return new Chord(Enumerable
                 .Range(0, notesCount)
-                .Select(i => MergeNotes(_objects.Select(o => ((Chord)o).Notes[i]), settings)));
+                .Select(i => MergeNotes(_objects.Select(o => ((Chord)o).Notes.ElementAt(i)), settings)));
         }
 
         private static Note MergeNotes(IEnumerable<Note> notes, ObjectsMergingSettings settings)
