@@ -83,6 +83,8 @@ namespace Melanchall.DryWetMidi.Interaction
             }
         }
 
+        public long EndTime => Time + Length;
+
         /// <summary>
         /// Gets a channel the rest was constructed for.
         /// </summary>

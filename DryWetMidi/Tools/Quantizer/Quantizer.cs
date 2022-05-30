@@ -309,7 +309,7 @@ namespace Melanchall.DryWetMidi.Tools
                 {
                     var lengthedObject = obj as ILengthedObject;
                     return lengthedObject != null
-                        ? lengthedObject.Time + lengthedObject.Length
+                        ? lengthedObject.EndTime
                         : obj.Time;
                 })
                 .DefaultIfEmpty()
@@ -389,7 +389,7 @@ namespace Melanchall.DryWetMidi.Tools
         {
             if (settings.FixOppositeEnd || (settings.Target.HasFlag(QuantizerTarget.Start) && settings.Target.HasFlag(QuantizerTarget.End)))
             {
-                var endTime = obj.Time + obj.Length;
+                var endTime = obj.EndTime;
 
                 if (time > endTime)
                 {

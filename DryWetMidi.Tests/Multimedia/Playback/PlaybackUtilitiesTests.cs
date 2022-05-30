@@ -121,8 +121,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var expectedReceivedNotesStarted = notes.OrderBy(n => n.Time)
                                                     .Select(n => new ReceivedNote(n, n.TimeAs<MetricTimeSpan>(tempoMap)))
                                                     .ToList();
-            var expectedReceivedNotesFinished = notes.OrderBy(n => n.Time + n.Length)
-                                                     .Select(n => new ReceivedNote(n, n.TimeAs<MetricTimeSpan>(tempoMap) + n.LengthAs<MetricTimeSpan>(tempoMap)))
+            var expectedReceivedNotesFinished = notes.OrderBy(n => n.EndTime)
+                                                     .Select(n => new ReceivedNote(n, n.EndTimeAs<MetricTimeSpan>(tempoMap)))
                                                      .ToList();
 
             var sentEvents = new List<SentEvent>();

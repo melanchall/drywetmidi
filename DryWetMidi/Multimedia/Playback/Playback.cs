@@ -1161,7 +1161,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         private static IEnumerable<PlaybackEvent> GetPlaybackEvents(Note note, TempoMap tempoMap)
         {
             TimeSpan noteStartTime = note.TimeAs<MetricTimeSpan>(tempoMap);
-            TimeSpan noteEndTime = TimeConverter.ConvertTo<MetricTimeSpan>(note.Time + note.Length, tempoMap);
+            TimeSpan noteEndTime = TimeConverter.ConvertTo<MetricTimeSpan>(note.EndTime, tempoMap);
             var noteMetadata = new NotePlaybackEventMetadata(note, noteStartTime, noteEndTime);
 
             yield return GetPlaybackEventWithNoteMetadata(note.TimedNoteOnEvent, tempoMap, noteMetadata);

@@ -68,7 +68,7 @@ namespace Melanchall.DryWetMidi.Tools
         {
             var chord = baseObject as Chord;
             if (chord != null)
-                return new Chord(chord.Notes.Where(n => n.Time + n.Length == time).Select(n =>
+                return new Chord(chord.Notes.Where(n => n.EndTime == time).Select(n =>
                 {
                     var note = (Note)n.Clone();
                     note.Time = time;

@@ -67,7 +67,7 @@ namespace Melanchall.DryWetMidi.Tools
                 case LengthedObjectTarget.Start:
                     return obj.Time;
                 case LengthedObjectTarget.End:
-                    return obj.Time + obj.Length;
+                    return obj.EndTime;
                 default:
                     throw new NotSupportedException($"{target} randomization target is not supported to get time.");
             }
@@ -116,7 +116,7 @@ namespace Melanchall.DryWetMidi.Tools
             {
                 case LengthedObjectTarget.Start:
                     if (settings.FixOppositeEnd)
-                        obj.Length = obj.Time + obj.Length - time;
+                        obj.Length = obj.EndTime - time;
                     break;
                 case LengthedObjectTarget.End:
                     if (settings.FixOppositeEnd)

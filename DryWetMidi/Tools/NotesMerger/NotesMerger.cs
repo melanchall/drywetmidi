@@ -38,7 +38,7 @@ namespace Melanchall.DryWetMidi.Tools
                 _velocityMerger.Initialize(note.Velocity);
                 _offVelocityMerger.Initialize(note.OffVelocity);
 
-                EndTime = _note.Time + _note.Length;
+                EndTime = _note.EndTime;
             }
 
             #endregion
@@ -125,7 +125,7 @@ namespace Melanchall.DryWetMidi.Tools
 
                 if (convertedDistance.CompareTo(settings.Tolerance) <= 0)
                 {
-                    var endTime = Math.Max(note.Time + note.Length, currentEndTime);
+                    var endTime = Math.Max(note.EndTime, currentEndTime);
                     currentNoteHolder.EndTime = endTime;
                     currentNoteHolder.MergeVelocities(note);
                 }

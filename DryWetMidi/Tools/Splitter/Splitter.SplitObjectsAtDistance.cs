@@ -460,7 +460,7 @@ namespace Melanchall.DryWetMidi.Tools
         {
             var time = from == LengthedObjectTarget.Start
                 ? ((MidiTimeSpan)obj.Time).Add(distance, TimeSpanMode.TimeLength)
-                : ((MidiTimeSpan)(obj.Time + obj.Length)).Subtract(distance, TimeSpanMode.TimeLength);
+                : ((MidiTimeSpan)obj.EndTime).Subtract(distance, TimeSpanMode.TimeLength);
 
             return obj.Split(TimeConverter.ConvertFrom(time, tempoMap));
         }

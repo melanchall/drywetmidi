@@ -238,7 +238,7 @@ namespace Melanchall.DryWetMidi.Tools
                 var unyieldedPartsCount = partsNumber - partsYielded;
                 if (unyieldedPartsCount > 0)
                 {
-                    var part = GetZeroLengthObjectAtEnd(lengthedObject, obj.Time + lengthedObject.Length);
+                    var part = GetZeroLengthObjectAtEnd(lengthedObject, lengthedObject.EndTime);
 
                     for (var i = 0; i < unyieldedPartsCount; i++)
                     {

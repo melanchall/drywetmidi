@@ -82,13 +82,13 @@ namespace Melanchall.DryWetMidi.Tools
 
                         foreach (var note in notes)
                         {
-                            if (note.Time + note.Length <= times[0])
+                            if (note.EndTime <= times[0])
                                 continue;
 
                             if (note.Time >= times[1])
                                 break;
 
-                            if (note.Time < times[0] && note.Time + note.Length > times[1])
+                            if (note.Time < times[0] && note.EndTime > times[1])
                                 descriptors.Add(Tuple.Create(note.GetNoteId(), note.Velocity, note.OffVelocity));
                         }
 

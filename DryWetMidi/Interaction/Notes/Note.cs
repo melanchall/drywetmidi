@@ -241,6 +241,8 @@ namespace Melanchall.DryWetMidi.Interaction
             }
         }
 
+        public long EndTime => Time + Length;
+
         /// <summary>
         /// Gets or sets number of the note (60 is middle C).
         /// </summary>

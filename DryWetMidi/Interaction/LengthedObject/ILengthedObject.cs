@@ -14,6 +14,8 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         long Length { get; set; }
 
+        long EndTime { get; }
+
         #endregion
 
         #region Methods

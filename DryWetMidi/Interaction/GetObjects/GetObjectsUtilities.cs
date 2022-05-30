@@ -365,7 +365,7 @@ namespace Melanchall.DryWetMidi.Interaction
                                 result.Add(rest);
                         }
 
-                        notesLastEndTimes[noteDescriptor] = Math.Max(lastEndTime, note.Time + note.Length);
+                        notesLastEndTimes[noteDescriptor] = Math.Max(lastEndTime, note.EndTime);
                     }
                 }
             }

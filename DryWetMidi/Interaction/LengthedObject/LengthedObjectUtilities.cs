@@ -98,7 +98,7 @@ namespace Melanchall.DryWetMidi.Interaction
             ThrowIfArgument.IsNull(nameof(obj), obj);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
-            return TimeConverter.ConvertTo<TTime>(obj.Time + obj.Length, tempoMap);
+            return TimeConverter.ConvertTo<TTime>(obj.EndTime, tempoMap);
         }
 
         /// <summary>
@@ -128,7 +128,7 @@ namespace Melanchall.DryWetMidi.Interaction
             ThrowIfArgument.IsInvalidEnumValue(nameof(timeType), timeType);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
-            return TimeConverter.ConvertTo(obj.Time + obj.Length, timeType, tempoMap);
+            return TimeConverter.ConvertTo(obj.EndTime, timeType, tempoMap);
         }
 
         /// <summary>

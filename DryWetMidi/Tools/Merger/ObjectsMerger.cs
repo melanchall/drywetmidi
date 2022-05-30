@@ -27,14 +27,7 @@ namespace Melanchall.DryWetMidi.Tools
 
         #region Properties
 
-        public long EndTime
-        {
-            get
-            {
-                var lastObject = _objects.LastOrDefault();
-                return (lastObject?.Time ?? 0) + (lastObject?.Length ?? 0);
-            }
-        }
+        public long EndTime => _objects.LastOrDefault()?.EndTime ?? 0;
 
         #endregion
 
@@ -87,7 +80,7 @@ namespace Melanchall.DryWetMidi.Tools
             var result = (Rest)_objects.First().Clone();
             var lastRest = _objects.Last();
             
-            result.Length = lastRest.Time + lastRest.Length - result.Time;
+            result.Length = lastRest.EndTime - result.Time;
             return result;
         }
 
@@ -106,7 +99,7 @@ namespace Melanchall.DryWetMidi.Tools
             var result = (Note)notes.First().Clone();
             var lastNote = notes.Last();
 
-            result.Length = lastNote.Time + lastNote.Length - result.Time;
+            result.Length = lastNote.EndTime - result.Time;
             result.Velocity = MergeVelocities(notes.Select(n => n.Velocity), settings.VelocityMergingPolicy);
             result.OffVelocity = MergeVelocities(notes.Select(n => n.OffVelocity), settings.OffVelocityMergingPolicy);
 

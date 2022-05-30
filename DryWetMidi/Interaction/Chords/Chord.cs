@@ -167,6 +167,8 @@ namespace Melanchall.DryWetMidi.Interaction
             }
         }
 
+        public long EndTime => Time + Length;
+
         /// <summary>
         /// Gets or sets channel to play the chord on.
         /// </summary>

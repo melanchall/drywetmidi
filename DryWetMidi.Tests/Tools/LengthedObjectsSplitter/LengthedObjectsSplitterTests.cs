@@ -857,7 +857,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
             var inputObjects = CreateInputObjects(1000);
             var distance = (MidiTimeSpan)10;
-            var expectedObjects = inputObjects.SelectMany(o => Split(o, new[] { o.Time + o.Length - distance }));
+            var expectedObjects = inputObjects.SelectMany(o => Split(o, new[] { o.EndTime - distance }));
             var actualObjects = Splitter.SplitAtDistance(inputObjects, distance, LengthedObjectTarget.End, tempoMap);
 
             MidiAsserts.AreEqual(
@@ -969,7 +969,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
             var inputObjects = CreateInputObjects(1000);
             var ratio = 0.1;
-            var expectedObjects = inputObjects.SelectMany(o => Split(o, new[] { o.Time + o.Length - 100 }));
+            var expectedObjects = inputObjects.SelectMany(o => Split(o, new[] { o.EndTime - 100 }));
             var actualObjects = Splitter.SplitAtDistance(inputObjects, ratio, TimeSpanType.Midi, LengthedObjectTarget.End, tempoMap);
 
             MidiAsserts.AreEqual(
