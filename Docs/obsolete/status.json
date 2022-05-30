@@ -1,4 +1,9 @@
 {
+  "OBS18": {
+    "Hint": "Use Resizer class.",
+    "ObsoleteFromVersion": "6.1.1",
+    "InLibrary": true
+  },
   "OBS17": {
     "Hint": "Use Merger class.",
     "ObsoleteFromVersion": "6.1.1",

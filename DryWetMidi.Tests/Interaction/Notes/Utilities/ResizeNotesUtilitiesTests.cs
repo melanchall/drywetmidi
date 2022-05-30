@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Melanchall.DryWetMidi.Interaction;
 using Melanchall.DryWetMidi.Tests.Utilities;
@@ -6,6 +7,7 @@ using NUnit.Framework;
 
 namespace Melanchall.DryWetMidi.Tests.Interaction
 {
+    [Obsolete("OBS18")]
     [TestFixture]
     public sealed class ResizeNotesUtilitiesTests
     {
