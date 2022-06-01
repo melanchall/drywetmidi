@@ -1,4 +1,9 @@
 {
+  "OBS19": {
+    "Hint": "Use Splitter.SplitByObjects method.",
+    "ObsoleteFromVersion": "6.1.1",
+    "InLibrary": true
+  },
   "OBS18": {
     "Hint": "Use Resizer class.",
     "ObsoleteFromVersion": "6.1.1",

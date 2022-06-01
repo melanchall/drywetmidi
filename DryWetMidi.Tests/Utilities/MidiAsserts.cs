@@ -190,6 +190,37 @@ namespace Melanchall.DryWetMidi.Tests.Utilities
             Assert.IsTrue(areEqual, $"{message} {filesComparingMessage}");
         }
 
+        public static void AreEqual(IEnumerable<MidiFile> expectedFiles, IEnumerable<MidiFile> actualFiles, bool compareOriginalFormat, string message = null)
+        {
+            var expectedFilesEnumerator = expectedFiles.GetEnumerator();
+            var actualFilesEnumerator = actualFiles.GetEnumerator();
+
+            var i = 0;
+            var expectedFilesEnumerated = false;
+            var actualFilesEnumerated = false;
+
+            while (true)
+            {
+                expectedFilesEnumerated = !expectedFilesEnumerator.MoveNext();
+                actualFilesEnumerated = !actualFilesEnumerator.MoveNext();
+                if (expectedFilesEnumerated || actualFilesEnumerated)
+                    break;
+
+                string filesComparingMessage;
+                var areEqual = MidiFile.Equals(
+                    expectedFilesEnumerator.Current,
+                    actualFilesEnumerator.Current,
+                    new MidiFileEqualityCheckSettings { CompareOriginalFormat = compareOriginalFormat },
+                    out filesComparingMessage);
+
+                Assert.IsTrue(areEqual, $"{message} File {i} is invalid. {filesComparingMessage}");
+
+                i++;
+            }
+
+            Assert.IsTrue(expectedFilesEnumerated && actualFilesEnumerated, $"{message} Files collections have different length.");
+        }
+
         public static void AreNotEqual(MidiFile midiFile1, MidiFile midiFile2, bool compareOriginalFormat, string message = null)
         {
             string filesComparingMessage;

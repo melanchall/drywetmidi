@@ -28,6 +28,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <returns>Collection of <see cref="MidiFile"/> where each file contains events for single note and
         /// other events as defined by <paramref name="settings"/>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is <c>null</c>.</exception>
+        [Obsolete("OBS19")]
         public static IEnumerable<MidiFile> SplitByNotes(this MidiFile midiFile, SplitFileByNotesSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);

@@ -17,6 +17,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         #region Test methods
 
         [Test]
+        [Obsolete("OBS19")]
         public void SplitByNotes_ValidFiles()
         {
             foreach (var filePath in TestFilesProvider.GetValidFilesPaths())
