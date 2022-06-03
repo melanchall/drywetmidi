@@ -146,62 +146,6 @@ namespace Melanchall.DryWetMidi.Interaction
             midiFile.GetTrackChunks().ShiftEvents(distance, midiFile.GetTempoMap());
         }
 
-        /// <summary>
-        /// Resizes <see cref="MidiFile"/> to the specified length.
-        /// </summary>
-        /// <param name="midiFile"><see cref="MidiFile"/> to resize.</param>
-        /// <param name="length">New length of the <paramref name="midiFile"/>.</param>
-        /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
-        /// <list type="bullet">
-        /// <item>
-        /// <description><paramref name="midiFile"/> is <c>null</c>.</description>
-        /// </item>
-        /// <item>
-        /// <description><paramref name="length"/> is <c>null</c>.</description>
-        /// </item>
-        /// </list>
-        /// </exception>
-        public static void Resize(this MidiFile midiFile, ITimeSpan length)
-        {
-            ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
-            ThrowIfArgument.IsNull(nameof(length), length);
-
-            if (midiFile.IsEmpty())
-                return;
-
-            var tempoMap = midiFile.GetTempoMap();
-            var duration = midiFile.GetDuration<MidiTimeSpan>();
-
-            var oldLength = TimeConverter.ConvertTo(duration, length.GetType(), tempoMap);
-            var ratio = TimeSpanUtilities.Divide(length, oldLength);
-
-            ResizeByRatio(midiFile, ratio);
-        }
-
-        /// <summary>
-        /// Resizes <see cref="MidiFile"/> by the specified ratio.
-        /// </summary>
-        /// <param name="midiFile"><see cref="MidiFile"/> to resize.</param>
-        /// <param name="ratio">Ratio to resize <paramref name="midiFile"/> by.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="ratio"/> is negative.</exception>
-        public static void Resize(this MidiFile midiFile, double ratio)
-        {
-            ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
-            ThrowIfArgument.IsNegative(nameof(ratio), ratio, "Ratio is negative");
-
-            ResizeByRatio(midiFile, ratio);
-        }
-
-        private static void ResizeByRatio(MidiFile midiFile, double ratio)
-        {
-            foreach (var trackChunk in midiFile.GetTrackChunks())
-            {
-                trackChunk.ProcessTimedEvents(timedEvent => timedEvent.Time = MathUtilities.RoundToLong(timedEvent.Time * ratio));
-            }
-        }
-
         #endregion
     }
 }
