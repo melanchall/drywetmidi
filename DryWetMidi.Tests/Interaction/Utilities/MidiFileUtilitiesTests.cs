@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Composing;
 using Melanchall.DryWetMidi.Core;
@@ -48,6 +49,120 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
             var duration = midiFile.GetDuration(TimeSpanType.Midi);
             Assert.AreEqual(new MidiTimeSpan(1000), duration, "Duration of MIDI file is invalid.");
+        }
+
+        [Test]
+        public void GetDuration_TrackChunk_Empty()
+        {
+            var trackChunk = new TrackChunk();
+            var duration = trackChunk.GetDuration<MetricTimeSpan>(TempoMap.Default);
+            Assert.AreEqual(new MetricTimeSpan(), duration, "Invalid duration.");
+        }
+
+        [Test]
+        public void GetDuration_TrackChunk_OneEvent_Midi_1([Values(0, 100)] long deltaTime)
+        {
+            var trackChunk = new TrackChunk(new TextEvent("A") { DeltaTime = deltaTime });
+            var duration = trackChunk.GetDuration<MidiTimeSpan>(TempoMap.Default);
+            Assert.AreEqual(new MidiTimeSpan(deltaTime), duration, "Invalid duration.");
+        }
+
+        [Test]
+        public void GetDuration_TrackChunk_OneEvent_Midi_2([Values(0, 100)] long deltaTime)
+        {
+            var trackChunk = new TrackChunk(new TextEvent("A") { DeltaTime = deltaTime });
+            var duration = trackChunk.GetDuration(TimeSpanType.Midi, TempoMap.Default);
+            Assert.AreEqual(new MidiTimeSpan(deltaTime), duration, "Invalid duration.");
+        }
+
+        [Test]
+        public void GetDuration_TrackChunk_OneEvent_Metric_1([Values(0, 100)] long deltaTime)
+        {
+            var trackChunk = new TrackChunk(new TextEvent("A") { DeltaTime = deltaTime });
+            var duration = trackChunk.GetDuration<MetricTimeSpan>(TempoMap.Default);
+            Assert.AreEqual(TimeConverter.ConvertTo<MetricTimeSpan>(deltaTime, TempoMap.Default), duration, "Invalid duration.");
+        }
+
+        [Test]
+        public void GetDuration_TrackChunk_OneEvent_Metric_2([Values(0, 100)] long deltaTime)
+        {
+            var trackChunk = new TrackChunk(new TextEvent("A") { DeltaTime = deltaTime });
+            var duration = trackChunk.GetDuration(TimeSpanType.Metric, TempoMap.Default);
+            Assert.AreEqual(TimeConverter.ConvertTo<MetricTimeSpan>(deltaTime, TempoMap.Default), duration, "Invalid duration.");
+        }
+
+        [Test]
+        public void GetDuration_TrackChunk_MultipleEvents_Midi([Values(0, 100)] long deltaTime1, [Values(0, 50)] long deltaTime2)
+        {
+            var trackChunk = new TrackChunk(
+                new TextEvent("A") { DeltaTime = deltaTime1 },
+                new TextEvent("B") { DeltaTime = deltaTime2 });
+            var duration = trackChunk.GetDuration<MidiTimeSpan>(TempoMap.Default);
+            Assert.AreEqual(new MidiTimeSpan(deltaTime1 + deltaTime2), duration, "Invalid duration.");
+        }
+
+        [Test]
+        public void GetDuration_TrackChunks_EmptyCollection()
+        {
+            var trackChunks = Array.Empty<TrackChunk>();
+            var duration = trackChunks.GetDuration<MetricTimeSpan>(TempoMap.Default);
+            Assert.AreEqual(new MetricTimeSpan(), duration, "Invalid duration.");
+        }
+
+        [Test]
+        public void GetDuration_TrackChunks_Empty()
+        {
+            var trackChunks = new[] { new TrackChunk(), new TrackChunk() };
+            var duration = trackChunks.GetDuration<MetricTimeSpan>(TempoMap.Default);
+            Assert.AreEqual(new MetricTimeSpan(), duration, "Invalid duration.");
+        }
+
+        [Test]
+        public void GetDuration_TrackChunks_OneEvent_1([Values(0, 100)] long deltaTime)
+        {
+            var trackChunks = new[]
+            {
+                new TrackChunk(new TextEvent("A") { DeltaTime = deltaTime }),
+                new TrackChunk()
+            };
+            var duration = trackChunks.GetDuration<MidiTimeSpan>(TempoMap.Default);
+            Assert.AreEqual(new MidiTimeSpan(deltaTime), duration, "Invalid duration.");
+        }
+
+        [Test]
+        public void GetDuration_TrackChunks_OneEvent_2([Values(0, 100)] long deltaTime)
+        {
+            var trackChunks = new[]
+            {
+                new TrackChunk(),
+                new TrackChunk(new TextEvent("A") { DeltaTime = deltaTime }),
+            };
+            var duration = trackChunks.GetDuration<MidiTimeSpan>(TempoMap.Default);
+            Assert.AreEqual(new MidiTimeSpan(deltaTime), duration, "Invalid duration.");
+        }
+
+        [Test]
+        public void GetDuration_TrackChunks_OneEvent_3([Values(0, 100)] long deltaTime)
+        {
+            var trackChunks = new[]
+            {
+                new TrackChunk(),
+                new TrackChunk(new TextEvent("A") { DeltaTime = deltaTime }),
+            };
+            var duration = trackChunks.GetDuration<MetricTimeSpan>(TempoMap.Default);
+            Assert.AreEqual(TimeConverter.ConvertTo<MetricTimeSpan>(deltaTime, TempoMap.Default), duration, "Invalid duration.");
+        }
+
+        [Test]
+        public void GetDuration_TrackChunks_OneEventInEachChunk_1([Values(0, 50, 100)] long deltaTime1, [Values(0, 50, 100)] long deltaTime2)
+        {
+            var trackChunks = new[]
+            {
+                new TrackChunk(new TextEvent("A") { DeltaTime = deltaTime1 }),
+                new TrackChunk(new TextEvent("B") { DeltaTime = deltaTime2 })
+            };
+            var duration = trackChunks.GetDuration<MidiTimeSpan>(TempoMap.Default);
+            Assert.AreEqual(new MidiTimeSpan(Math.Max(deltaTime1, deltaTime2)), duration, "Invalid duration.");
         }
 
         #endregion

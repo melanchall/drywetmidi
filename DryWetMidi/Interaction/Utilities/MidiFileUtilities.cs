@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using Melanchall.DryWetMidi.Common;
@@ -12,6 +13,58 @@ namespace Melanchall.DryWetMidi.Interaction
     public static class MidiFileUtilities
     {
         #region Methods
+
+        public static TTimeSpan GetDuration<TTimeSpan>(this TrackChunk trackChunk, TempoMap tempoMap)
+            where TTimeSpan : class, ITimeSpan
+        {
+            ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
+            ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
+
+            return trackChunk
+                .Events
+                .GetTimedEventsLazy(null, false)
+                .LastOrDefault()
+                ?.TimeAs<TTimeSpan>(tempoMap) ?? TimeSpanUtilities.GetZeroTimeSpan<TTimeSpan>();
+        }
+
+        public static ITimeSpan GetDuration(this TrackChunk trackChunk, TimeSpanType durationType, TempoMap tempoMap)
+        {
+            ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
+            ThrowIfArgument.IsInvalidEnumValue(nameof(durationType), durationType);
+            ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
+
+            return trackChunk
+                .Events
+                .GetTimedEventsLazy(null, false)
+                .LastOrDefault()
+                ?.TimeAs(durationType, tempoMap) ?? TimeSpanUtilities.GetZeroTimeSpan(durationType);
+        }
+
+        public static TTimeSpan GetDuration<TTimeSpan>(this IEnumerable<TrackChunk> trackChunks, TempoMap tempoMap)
+            where TTimeSpan : class, ITimeSpan
+        {
+            ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
+            ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
+
+            return trackChunks
+                .GetTimedEventsLazy(null, false)
+                .Select(e => e.Item1)
+                .LastOrDefault()
+                ?.TimeAs<TTimeSpan>(tempoMap) ?? TimeSpanUtilities.GetZeroTimeSpan<TTimeSpan>();
+        }
+
+        public static ITimeSpan GetDuration(this IEnumerable<TrackChunk> trackChunks, TimeSpanType durationType, TempoMap tempoMap)
+        {
+            ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
+            ThrowIfArgument.IsInvalidEnumValue(nameof(durationType), durationType);
+            ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
+
+            return trackChunks
+                .GetTimedEventsLazy(null, false)
+                .Select(e => e.Item1)
+                .LastOrDefault()
+                ?.TimeAs(durationType, tempoMap) ?? TimeSpanUtilities.GetZeroTimeSpan(durationType);
+        }
 
         /// <summary>
         /// Gets the duration of the specified <see cref="MidiFile"/>. Duration is
@@ -31,9 +84,7 @@ namespace Melanchall.DryWetMidi.Interaction
             var tempoMap = midiFile.GetTempoMap();
             return midiFile
                 .GetTrackChunks()
-                .GetTimedEventsLazy(null, false)
-                .Select(e => e.Item1)
-                .LastOrDefault()?.TimeAs<TTimeSpan>(tempoMap) ?? TimeSpanUtilities.GetZeroTimeSpan<TTimeSpan>();
+                .GetDuration<TTimeSpan>(tempoMap);
         }
 
         /// <summary>
@@ -54,9 +105,7 @@ namespace Melanchall.DryWetMidi.Interaction
             var tempoMap = midiFile.GetTempoMap();
             return midiFile
                 .GetTrackChunks()
-                .GetTimedEventsLazy(null, false)
-                .Select(e => e.Item1)
-                .LastOrDefault()?.TimeAs(durationType, tempoMap) ?? TimeSpanUtilities.GetZeroTimeSpan(durationType);
+                .GetDuration(durationType, tempoMap);
         }
 
         /// <summary>
