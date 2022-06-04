@@ -45,6 +45,31 @@ namespace Melanchall.DryWetMidi.Interaction
 
         #region Methods
 
+        /// <summary>
+        /// Rounds a time span using the specified step and rounding policy.
+        /// </summary>
+        /// <param name="timeSpan">Time span to round.</param>
+        /// <param name="roundingPolicy">Policy according to which the <paramref name="timeSpan"/> should be rounded.</param>
+        /// <param name="time">Time os the <paramref name="timeSpan"/>.</param>
+        /// <param name="step">Step to round the <paramref name="timeSpan"/> by.</param>
+        /// <param name="tempoMap">Tempo map used to calculate new time span.</param>
+        /// <returns>A new time span which is the <paramref name="timeSpan"/> rounded using the passed parameters.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="timeSpan"/> is <c>null</c>.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="step"/> is <c>null</c>.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="tempoMap"/> is <c>null</c>.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="roundingPolicy"/> specified an invalid value.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="time"/> is negative.</exception>
         public static ITimeSpan Round(
             this ITimeSpan timeSpan,
             TimeSpanRoundingPolicy roundingPolicy,
@@ -261,6 +286,13 @@ namespace Melanchall.DryWetMidi.Interaction
             return (TTimeSpan)ZeroTimeSpans.Values.FirstOrDefault(timeSpan => timeSpan is TTimeSpan);
         }
 
+        /// <summary>
+        /// Gets a value indicating whether the specified time span is zero or not.
+        /// </summary>
+        /// <param name="timeSpan">Time span to check.</param>
+        /// <returns><c>true</c> if the <paramref name="timeSpan"/> represents zero time span;
+        /// otherwise, <c>false</c>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="timeSpan"/> is <c>null</c>.</exception>
         public static bool IsZeroTimeSpan(this ITimeSpan timeSpan)
         {
             ThrowIfArgument.IsNull(nameof(timeSpan), timeSpan);

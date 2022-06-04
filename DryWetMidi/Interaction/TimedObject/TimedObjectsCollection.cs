@@ -44,6 +44,9 @@ namespace Melanchall.DryWetMidi.Interaction
 
         #region Properties
 
+        /// <summary>
+        /// Gets the number of objects contained in the <see cref="TimedObjectsCollection{TObject}"/>.
+        /// </summary>
         public int Count => _objects.Count;
 
         #endregion

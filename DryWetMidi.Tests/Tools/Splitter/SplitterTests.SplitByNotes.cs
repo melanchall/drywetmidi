@@ -40,7 +40,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                                                 .SelectMany(c => c.Events)
                                                 .OfType<NoteEvent>()
                                                 .ToList();
-                    var notesIds = new HashSet<NoteId>(noteEvents.Select(n => n.GetNoteId()));
+                    var notesIds = new HashSet<NoteId>(noteEvents.Select(n => new NoteId(n.Channel, n.NoteNumber)));
 
                     allNoteEventsCount += noteEvents.Count;
                     foreach (var noteId in notesIds)
@@ -54,7 +54,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 }
 
                 var originalNoteEventsCount = originalNoteEvents.Count();
-                var originalNotesIds = new HashSet<NoteId>(originalNoteEvents.Select(e => e.GetNoteId()));
+                var originalNotesIds = new HashSet<NoteId>(originalNoteEvents.Select(e => new NoteId(e.Channel, e.NoteNumber)));
 
                 Assert.AreEqual(originalNoteEventsCount,
                                 allNoteEventsCount,

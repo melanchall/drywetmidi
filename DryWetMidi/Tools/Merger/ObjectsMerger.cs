@@ -6,17 +6,31 @@ using System.Linq;
 
 namespace Melanchall.DryWetMidi.Tools
 {
+    /// <summary>
+    /// Provides merging logic for group of objects.
+    /// </summary>
     public class ObjectsMerger
     {
         #region Fields
 
+        /// <summary>
+        /// Collection of objects that should be merged.
+        /// </summary>
         protected readonly List<ILengthedObject> _objects = new List<ILengthedObject>();
+        
+        /// <summary>
+        /// The type of objects in the current group.
+        /// </summary>
         protected readonly ObjectType _objectsType;
 
         #endregion
 
         #region Constructor
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ObjectsMerger"/> with the specified first object.
+        /// </summary>
+        /// <param name="obj">First object of the current group of objects that should be merged.</param>
         public ObjectsMerger(ILengthedObject obj)
         {
             _objects.Add(obj);
@@ -27,17 +41,33 @@ namespace Melanchall.DryWetMidi.Tools
 
         #region Properties
 
+        /// <summary>
+        /// Gets the end time of the last object in the current group.
+        /// </summary>
         public long EndTime => _objects.LastOrDefault()?.EndTime ?? 0;
 
         #endregion
 
         #region Methods
 
+        /// <summary>
+        /// Adds the specified object to the current group.
+        /// </summary>
+        /// <param name="obj">Object to add to the current group</param>
         public void AddObject(ILengthedObject obj)
         {
             _objects.Add(obj);
         }
 
+        /// <summary>
+        /// Returns a value indicating whether the specified object can be added to the current group or not.
+        /// In other words, the method determines if the object should be merged with the group.
+        /// </summary>
+        /// <param name="obj">Object to check.</param>
+        /// <param name="tempoMap">Tempo map used for merging.</param>
+        /// <param name="settings">Settings according to which merging process should be done.</param>
+        /// <returns><c>true</c> if the <paramref name="obj"/> should be added to the current group;
+        /// otherwise, <c>false</c>.</returns>
         public virtual bool CanAddObject(ILengthedObject obj, TempoMap tempoMap, ObjectsMergingSettings settings)
         {
             var currentEndTime = EndTime;
@@ -52,6 +82,11 @@ namespace Melanchall.DryWetMidi.Tools
             return convertedDistance.CompareTo(settings.Tolerance) <= 0;
         }
 
+        /// <summary>
+        /// Merges objects within the current group into single object.
+        /// </summary>
+        /// <param name="settings">Settings according to which merging process should be done.</param>
+        /// <returns>A new object that is result of merging objects within the current group.</returns>
         public virtual ILengthedObject MergeObjects(ObjectsMergingSettings settings)
         {
             if (_objects.Count == 1)

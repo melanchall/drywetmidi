@@ -19,6 +19,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// </summary>
         public Predicate<MidiChunk> Filter { get; set; }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether a tempo map shuold be preserved or not in new files.
+        /// The default value is <c>true</c>.
+        /// </summary>
         public bool PreserveTempoMap { get; set; } = true;
 
         #endregion

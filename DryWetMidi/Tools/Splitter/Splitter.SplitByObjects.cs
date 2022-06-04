@@ -11,24 +11,33 @@ namespace Melanchall.DryWetMidi.Tools
     {
         #region Methods
 
-        public static IEnumerable<MidiFile> SplitByObjects<TKey>(
+        /// <summary>
+        /// Splits <see cref="MidiFile"/> by objects.
+        /// </summary>
+        /// <param name="midiFile"><see cref="MidiFile"/> to split.</param>
+        /// <param name="objectType">Combination of desired types of objects to split by.</param>
+        /// <param name="settings">Settings accoridng to which notes should be detected and built.</param>
+        /// <param name="objectDetectionSettings">Settings according to which objects should be detected and built.</param>
+        /// <returns>Collection of <see cref="MidiFile"/> where each file contains objects as defined by
+        /// <paramref name="settings"/>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is <c>null</c>.</exception>
+        public static IEnumerable<MidiFile> SplitByObjects(
             this MidiFile midiFile,
             ObjectType objectType,
-            Func<ITimedObject, TKey> keySelector,
-            Predicate<ITimedObject> writeToAllFilesPredicate,
             SplitByObjectsSettings settings = null,
             ObjectDetectionSettings objectDetectionSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
-            ThrowIfArgument.IsNull(nameof(keySelector), keySelector);
-            ThrowIfArgument.IsNull(nameof(writeToAllFilesPredicate), writeToAllFilesPredicate);
 
             settings = settings ?? new SplitByObjectsSettings();
+
+            var keySelector = settings.KeySelector ?? (obj => obj.GetObjectId());
+            var writeToAllFilesPredicate = settings.WriteToAllFilesPredicate ?? (obj => false);
 
             var tempoMap = midiFile.GetTempoMap();
             var objects = midiFile.GetObjects(objectType, objectDetectionSettings);
 
-            var objectsByKeys = new Dictionary<TKey, List<ITimedObject>>();
+            var objectsByKeys = new Dictionary<IObjectId, List<ITimedObject>>();
             var allFilesObjects = new List<ITimedObject>();
 
             List<ITimedObject> nullKeyObjects = null;

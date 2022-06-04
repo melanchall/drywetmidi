@@ -14,6 +14,27 @@ namespace Melanchall.DryWetMidi.Interaction
     {
         #region Methods
 
+        /// <summary>
+        /// Gets the duration of the specified <see cref="TrackChunk"/>. Duration is
+        /// defined by the time of last MIDI event of the track chunk.
+        /// </summary>
+        /// <typeparam name="TTimeSpan">The type of time span representing the duration of <paramref name="trackChunk"/>.</typeparam>
+        /// <param name="trackChunk"><see cref="TrackChunk"/> to get duration of.</param>
+        /// <param name="tempoMap">Tempo map to calculate duration.</param>
+        /// <returns>An instance of <typeparamref name="TTimeSpan"/> representing
+        /// duration of <paramref name="trackChunk"/>.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="trackChunk"/> is <c>null</c>.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="tempoMap"/> is <c>null</c>.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
+        /// <exception cref="NotSupportedException"><typeparamref name="TTimeSpan"/> is not supported.</exception>
         public static TTimeSpan GetDuration<TTimeSpan>(this TrackChunk trackChunk, TempoMap tempoMap)
             where TTimeSpan : class, ITimeSpan
         {
@@ -27,6 +48,27 @@ namespace Melanchall.DryWetMidi.Interaction
                 ?.TimeAs<TTimeSpan>(tempoMap) ?? TimeSpanUtilities.GetZeroTimeSpan<TTimeSpan>();
         }
 
+        /// <summary>
+        /// Gets the duration of the specified <see cref="TrackChunk"/>. Duration is
+        /// defined by the time of last MIDI event of the track chunk.
+        /// </summary>
+        /// <param name="trackChunk"><see cref="TrackChunk"/> to get duration of.</param>
+        /// <param name="durationType">The type of time span representing the duration of <paramref name="trackChunk"/>.</param>
+        /// <param name="tempoMap">Tempo map to calculate duration.</param>
+        /// <returns>An implementation of <see cref="ITimeSpan"/> representing
+        /// duration of <paramref name="trackChunk"/>.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="trackChunk"/> is <c>null</c>.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="tempoMap"/> is <c>null</c>.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="durationType"/> specified an invalid value.</exception>
         public static ITimeSpan GetDuration(this TrackChunk trackChunk, TimeSpanType durationType, TempoMap tempoMap)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
@@ -40,6 +82,27 @@ namespace Melanchall.DryWetMidi.Interaction
                 ?.TimeAs(durationType, tempoMap) ?? TimeSpanUtilities.GetZeroTimeSpan(durationType);
         }
 
+        /// <summary>
+        /// Gets the duration of the specified collection of <see cref="TrackChunk"/>. Duration is
+        /// defined by the time of last MIDI event of the track chunks.
+        /// </summary>
+        /// <typeparam name="TTimeSpan">The type of time span representing the duration of <paramref name="trackChunks"/>.</typeparam>
+        /// <param name="trackChunks">Collection of <see cref="TrackChunk"/> to get duration of.</param>
+        /// <param name="tempoMap">Tempo map to calculate duration.</param>
+        /// <returns>An instance of <typeparamref name="TTimeSpan"/> representing
+        /// duration of <paramref name="trackChunks"/>.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="trackChunks"/> is <c>null</c>.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="tempoMap"/> is <c>null</c>.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
+        /// <exception cref="NotSupportedException"><typeparamref name="TTimeSpan"/> is not supported.</exception>
         public static TTimeSpan GetDuration<TTimeSpan>(this IEnumerable<TrackChunk> trackChunks, TempoMap tempoMap)
             where TTimeSpan : class, ITimeSpan
         {
@@ -53,6 +116,27 @@ namespace Melanchall.DryWetMidi.Interaction
                 ?.TimeAs<TTimeSpan>(tempoMap) ?? TimeSpanUtilities.GetZeroTimeSpan<TTimeSpan>();
         }
 
+        /// <summary>
+        /// Gets the duration of the specified collection of <see cref="TrackChunk"/>. Duration is
+        /// defined by the time of last MIDI event of the track chunks.
+        /// </summary>
+        /// <param name="trackChunks">Collection <see cref="TrackChunk"/> to get duration of.</param>
+        /// <param name="durationType">The type of time span representing the duration of <paramref name="trackChunks"/>.</param>
+        /// <param name="tempoMap">Tempo map to calculate duration.</param>
+        /// <returns>An implementation of <see cref="ITimeSpan"/> representing
+        /// duration of <paramref name="trackChunks"/>.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="trackChunks"/> is <c>null</c>.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="tempoMap"/> is <c>null</c>.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="durationType"/> specified an invalid value.</exception>
         public static ITimeSpan GetDuration(this IEnumerable<TrackChunk> trackChunks, TimeSpanType durationType, TempoMap tempoMap)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);

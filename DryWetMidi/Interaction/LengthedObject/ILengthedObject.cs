@@ -14,6 +14,9 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         long Length { get; set; }
 
+        /// <summary>
+        /// Gets the end time of an object.
+        /// </summary>
         long EndTime { get; }
 
         #endregion

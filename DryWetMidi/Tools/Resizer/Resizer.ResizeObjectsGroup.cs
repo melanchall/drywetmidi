@@ -10,6 +10,30 @@ namespace Melanchall.DryWetMidi.Tools
     {
         #region Methods
 
+        /// <summary>
+        /// Resizes group of objects to the specified length treating all objects as a single one.
+        /// </summary>
+        /// <param name="objects">Objects to resize.</param>
+        /// <param name="length">New length of the objects collection.</param>
+        /// <param name="tempoMap">Tempo map used to calculate length.</param>
+        /// <param name="settings">Settings according to which objects should be resized.</param>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="objects"/> is <c>null</c>.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="length"/> is <c>null</c>.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="tempoMap"/> is <c>null</c>.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
+        /// <exception cref="ArgumentException"><see cref="TimeSpanType.BarBeatTicks"/> or <see cref="TimeSpanType.BarBeatFraction"/>
+        /// is used for <see cref="ObjectsGroupResizingSettings.DistanceCalculationType"/> of the <paramref name="settings"/>
+        /// which is unsupported.</exception>
         public static void ResizeObjectsGroup(
             this IEnumerable<ITimedObject> objects,
             ITimeSpan length,
@@ -24,7 +48,7 @@ namespace Melanchall.DryWetMidi.Tools
 
             var distanceCalculationType = settings.DistanceCalculationType;
             if (distanceCalculationType == TimeSpanType.BarBeatTicks || distanceCalculationType == TimeSpanType.BarBeatFraction)
-                throw new ArgumentException("Bar/beat distance calculation type is not supported.", nameof(distanceCalculationType));
+                throw new ArgumentException("Bar/beat distance calculation type is not supported.", nameof(settings));
 
             var notNullObjects = objects.Where(obj => obj != null);
             if (!notNullObjects.Any())
@@ -63,6 +87,29 @@ namespace Melanchall.DryWetMidi.Tools
             ResizeObjectsGroupByRatio(notNullObjects, ratio, distanceCalculationType, tempoMap, startTime);
         }
 
+        /// <summary>
+        /// Resizes group of objects by the specified ratio treating all objects as a single object. For example,
+        /// resizing by ratio of 0.5 shrinks group of objects by two times.
+        /// </summary>
+        /// <param name="objects">Objects to resize.</param>
+        /// <param name="ratio">Ratio to resize objects by.</param>
+        /// <param name="tempoMap">Tempo map used to calculate length.</param>
+        /// <param name="settings">Settings according to which objects should be resized.</param>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="objects"/> is <c>null</c>.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="tempoMap"/> is <c>null</c>.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="ratio"/> is negative.</exception>
+        /// <exception cref="ArgumentException"><see cref="TimeSpanType.BarBeatTicks"/> or <see cref="TimeSpanType.BarBeatFraction"/>
+        /// is used for <see cref="ObjectsGroupResizingSettings.DistanceCalculationType"/> of the <paramref name="settings"/>
+        /// which is unsupported.</exception>
         public static void ResizeObjectsGroup(
             this IEnumerable<ITimedObject> objects,
             double ratio,

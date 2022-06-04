@@ -107,7 +107,7 @@ namespace Melanchall.DryWetMidi.Tools
 
             foreach (var note in notes.Where(n => n != null).OrderBy(n => n.Time))
             {
-                var noteId = note.GetNoteId();
+                var noteId = (NoteId)note.GetObjectId();
 
                 NoteHolder currentNoteHolder;
                 if (!currentNotes.TryGetValue(noteId, out currentNoteHolder))

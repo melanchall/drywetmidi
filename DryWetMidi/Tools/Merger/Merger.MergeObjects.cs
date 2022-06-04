@@ -7,103 +7,12 @@ using System.Linq;
 
 namespace Melanchall.DryWetMidi.Tools
 {
+    /// <summary>
+    /// Provides methods to merge nearby objects.
+    /// </summary>
     public static partial class Merger
     {
         #region Nested classes
-
-        private interface IObjectId
-        {
-        }
-
-        private sealed class NoteId : IObjectId
-        {
-            public NoteId(FourBitNumber channel, SevenBitNumber noteNumber)
-            {
-                Channel = channel;
-                NoteNumber = noteNumber;
-            }
-
-            public FourBitNumber Channel { get; }
-
-            public SevenBitNumber NoteNumber { get; }
-
-            public override bool Equals(object obj)
-            {
-                if (ReferenceEquals(obj, this))
-                    return true;
-
-                var noteId = obj as NoteId;
-                if (ReferenceEquals(noteId, null))
-                    return false;
-
-                return Channel == noteId.Channel &&
-                       NoteNumber == noteId.NoteNumber;
-            }
-
-            public override int GetHashCode()
-            {
-                return Channel * 1000 + NoteNumber;
-            }
-        }
-
-        private sealed class RestId : IObjectId
-        {
-            public RestId(FourBitNumber? channel, SevenBitNumber? noteNumber)
-            {
-                Channel = channel;
-                NoteNumber = noteNumber;
-            }
-
-            public FourBitNumber? Channel { get; }
-
-            public SevenBitNumber? NoteNumber { get; }
-
-            public override bool Equals(object obj)
-            {
-                if (ReferenceEquals(obj, this))
-                    return true;
-
-                var restId = obj as RestId;
-                if (ReferenceEquals(restId, null))
-                    return false;
-
-                return Channel == restId.Channel &&
-                       NoteNumber == restId.NoteNumber;
-            }
-
-            public override int GetHashCode()
-            {
-                return (Channel ?? 20) * 1000 + (NoteNumber ?? 200);
-            }
-        }
-
-        private sealed class ChordId : IObjectId
-        {
-            public ChordId(ICollection<NoteId> notesIds)
-            {
-                NotesIds = notesIds;
-            }
-
-            public ICollection<NoteId> NotesIds { get; }
-
-            public override bool Equals(object obj)
-            {
-                if (ReferenceEquals(obj, this))
-                    return true;
-
-                var chordId = obj as ChordId;
-                if (ReferenceEquals(chordId, null))
-                    return false;
-
-                // TODO: ignore order
-                return NotesIds.SequenceEqual(chordId.NotesIds);
-            }
-
-            public override int GetHashCode()
-            {
-                return NotesIds.Sum(id => id.GetHashCode());
-            }
-        }
 
         private interface IObjectDescriptor
         {
@@ -131,8 +40,6 @@ namespace Melanchall.DryWetMidi.Tools
 
         private sealed class ObjectsMergerDescriptor : IObjectDescriptor
         {
-            private readonly ObjectsMerger _objectsMerger;
-
             public ObjectsMergerDescriptor(ObjectsMerger objectsMerger)
             {
                 ObjectsMerger = objectsMerger;
@@ -152,6 +59,25 @@ namespace Melanchall.DryWetMidi.Tools
 
         #region Methods
 
+        /// <summary>
+        /// Merges nearby objects within the specified <see cref="TrackChunk"/>.
+        /// </summary>
+        /// <param name="trackChunk"><see cref="TrackChunk"/> to merge objects within.</param>
+        /// <param name="objectType">Combination of desired types of objects to merge.</param>
+        /// <param name="tempoMap">Tempo map used to calculate distances between objects.</param>
+        /// <param name="settings">Settings according to which merging process should be done.</param>
+        /// <param name="objectDetectionSettings">Settings according to which objects should be detected and built.</param>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="trackChunk"/> is <c>null</c>.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="tempoMap"/> is <c>null</c>.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static void MergeObjects(
             this TrackChunk trackChunk,
             ObjectType objectType,
@@ -172,6 +98,25 @@ namespace Melanchall.DryWetMidi.Tools
             }
         }
 
+        /// <summary>
+        /// Merges nearby objects within the specified collection of <see cref="TrackChunk"/>.
+        /// </summary>
+        /// <param name="trackChunks">Collection of <see cref="TrackChunk"/> to merge objects within.</param>
+        /// <param name="objectType">Combination of desired types of objects to merge.</param>
+        /// <param name="tempoMap">Tempo map used to calculate distances between objects.</param>
+        /// <param name="settings">Settings according to which merging process should be done.</param>
+        /// <param name="objectDetectionSettings">Settings according to which objects should be detected and built.</param>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="trackChunks"/> is <c>null</c>.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="tempoMap"/> is <c>null</c>.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static void MergeObjects(
             this IEnumerable<TrackChunk> trackChunks,
             ObjectType objectType,
@@ -188,6 +133,14 @@ namespace Melanchall.DryWetMidi.Tools
             }
         }
 
+        /// <summary>
+        /// Merges nearby objects within the specified <see cref="MidiFile"/>.
+        /// </summary>
+        /// <param name="midiFile"><see cref="MidiFile"/> to merge objects within.</param>
+        /// <param name="objectType">Combination of desired types of objects to merge.</param>
+        /// <param name="settings">Settings according to which merging process should be done.</param>
+        /// <param name="objectDetectionSettings">Settings according to which objects should be detected and built.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is <c>null</c>.</exception>
         public static void MergeObjects(
             this MidiFile midiFile,
             ObjectType objectType,
@@ -201,6 +154,24 @@ namespace Melanchall.DryWetMidi.Tools
             midiFile.GetTrackChunks().MergeObjects(objectType, tempoMap, settings, objectDetectionSettings);
         }
 
+        /// <summary>
+        /// Merges nearby objects.
+        /// </summary>
+        /// <param name="objects">Objects that should be merged.</param>
+        /// <param name="tempoMap">Tempo map used to calculate distances between objects.</param>
+        /// <param name="settings">Settings according to which merging process should be done.</param>
+        /// <returns>Collection of new objects that are result of merging of <paramref name="objects"/>.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occured:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="objects"/> is <c>null</c>.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="tempoMap"/> is <c>null</c>.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static IEnumerable<ITimedObject> MergeObjects(
             this IEnumerable<ITimedObject> objects,
             TempoMap tempoMap,
@@ -242,7 +213,7 @@ namespace Melanchall.DryWetMidi.Tools
                     continue;
                 }
 
-                var objectId = GetObjectId(lengthedObject);
+                var objectId = lengthedObject.GetObjectId();
 
                 LinkedListNode<IObjectDescriptor> node;
                 if (!objectsMergersNodes.TryGetValue(objectId, out node))
@@ -294,28 +265,6 @@ namespace Melanchall.DryWetMidi.Tools
             Func<ILengthedObject, ObjectsMerger> objectsMergerFactory)
         {
             objectsMergers[objectId] = objectsDescriptors.AddLast(new ObjectsMergerDescriptor(objectsMergerFactory(lengthedObject)));
-        }
-
-        private static IObjectId GetObjectId(ILengthedObject obj)
-        {
-            var note = obj as Note;
-            if (note != null)
-                return GetNoteId(note);
-
-            var chord = obj as Chord;
-            if (chord != null)
-                return new ChordId(chord.Notes.Select(GetNoteId).ToArray());
-
-            var rest = obj as Rest;
-            if (rest != null)
-                return new RestId(rest.Channel, rest.NoteNumber);
-
-            throw new NotImplementedException($"Getting of ID for {obj} is not implemented.");
-        }
-
-        private static NoteId GetNoteId(Note note)
-        {
-            return new NoteId(note.Channel, note.NoteNumber);
         }
 
         #endregion

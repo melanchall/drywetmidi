@@ -37,7 +37,7 @@ namespace Melanchall.DryWetMidi.Tools
 
             return settings.IgnoreChannel
                 ? midiFile.SplitByNotes(noteEvent => noteEvent.NoteNumber, settings.Filter, settings.CopyNonNoteEventsToEachFile)
-                : midiFile.SplitByNotes(noteEvent => noteEvent.GetNoteId(), settings.Filter, settings.CopyNonNoteEventsToEachFile);
+                : midiFile.SplitByNotes(noteEvent => new NoteId(noteEvent.Channel, noteEvent.NoteNumber), settings.Filter, settings.CopyNonNoteEventsToEachFile);
         }
 
         private static IEnumerable<MidiFile> SplitByNotes<TNoteId>(

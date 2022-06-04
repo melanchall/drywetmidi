@@ -167,6 +167,9 @@ namespace Melanchall.DryWetMidi.Interaction
             }
         }
 
+        /// <summary>
+        /// Gets the end time of an object.
+        /// </summary>
         public long EndTime => Time + Length;
 
         /// <summary>

@@ -22,7 +22,7 @@ namespace Melanchall.DryWetMidi.Interaction
                 [RestSeparationPolicy.NoSeparation] = n => NoSeparationNoteDescriptor,
                 [RestSeparationPolicy.SeparateByChannel] = n => n.Channel,
                 [RestSeparationPolicy.SeparateByNoteNumber] = n => n.NoteNumber,
-                [RestSeparationPolicy.SeparateByChannelAndNoteNumber] = n => n.GetNoteId()
+                [RestSeparationPolicy.SeparateByChannelAndNoteNumber] = n => n.GetObjectId()
             };
 
         private static readonly Dictionary<RestSeparationPolicy, bool> SetRestChannel =

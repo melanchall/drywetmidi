@@ -89,7 +89,7 @@ namespace Melanchall.DryWetMidi.Tools
                                 break;
 
                             if (note.Time < times[0] && note.EndTime > times[1])
-                                descriptors.Add(Tuple.Create(note.GetNoteId(), note.Velocity, note.OffVelocity));
+                                descriptors.Add(Tuple.Create((NoteId)note.GetObjectId(), note.Velocity, note.OffVelocity));
                         }
 
                         return descriptors;
@@ -159,7 +159,7 @@ namespace Melanchall.DryWetMidi.Tools
                                         if (noteEvent == null)
                                             return false;
 
-                                        if (!noteEvent.GetNoteId().Equals(notesDescriptor.Item1))
+                                        if (!new NoteId(noteEvent.Channel, noteEvent.NoteNumber).Equals(notesDescriptor.Item1))
                                             return false;
 
                                         var noteOnEvent = noteEvent as NoteOnEvent;
