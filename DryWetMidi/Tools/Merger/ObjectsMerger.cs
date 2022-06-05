@@ -7,7 +7,7 @@ using System.Linq;
 namespace Melanchall.DryWetMidi.Tools
 {
     /// <summary>
-    /// Provides merging logic for group of objects.
+    /// Provides merging logic for group of objects. More info in the <see href="xref:a_merger">Merger</see> article.
     /// </summary>
     public class ObjectsMerger
     {

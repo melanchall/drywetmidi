@@ -7,7 +7,9 @@ namespace Melanchall.DryWetMidi.Tools
 {
     /// <summary>
     /// Settings according to which merging should be performed by the <see cref="Merger"/>.
+    /// More info in the <see href="xref:a_merger">Merger</see> article.
     /// </summary>
+    /// <seealso cref="Merger"/>
     public class ObjectsMergingSettings
     {
         #region Fields
@@ -72,7 +74,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <summary>
         /// Gets or sets a predicate to filter objects out. If predicate returns <c>true</c>,
         /// an object will be processed; if <c>false</c> - it won't. If the property set to <c>null</c>,
-        /// all objects will be processed.
+        /// (default value) all objects will be processed.
         /// </summary>
         public Predicate<ITimedObject> Filter { get; set; }
 

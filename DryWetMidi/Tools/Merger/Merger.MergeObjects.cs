@@ -8,7 +8,7 @@ using System.Linq;
 namespace Melanchall.DryWetMidi.Tools
 {
     /// <summary>
-    /// Provides methods to merge nearby objects.
+    /// Provides methods to merge nearby objects. More info in the <see href="xref:a_merger">Merger</see> article.
     /// </summary>
     public static partial class Merger
     {
