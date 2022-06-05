@@ -12,11 +12,83 @@ You can split a MIDI file in different ways using extension methods from the [Sp
 
 ![Split MIDI file by channel](images/Splitter/SplitByChannel.png)
 
-## SplitByNotes
+## SplitByObjects
 
-[SplitByNotes](xref:Melanchall.DryWetMidi.Tools.Splitter.SplitByNotes*) method splits MIDI file by notes. Note events will be separated by note number and copied to corresponding new files. All other channel events, meta and system exclusive ones will be copied to all the new files (that's default behavior that can be turned off). The image below illustrates splitting by notes:
+[SplitByObjects](xref:Melanchall.DryWetMidi.Tools.Splitter.SplitByObjects*) method splits a MIDI file by objects. The process can be adjusted via [SplitByObjectsSettings](xref:Melanchall.DryWetMidi.Tools.SplitByObjectsSettings) passed to the second parameter of the method.
 
-![Split MIDI file by notes](images/Splitter/SplitByNotes.png)
+For example, to split a file by notes copying all MIDI events to each new file:
+
+```csharp
+var newFiles = midiFile.SplitByObjects(
+    ObjectType.Note | ObjectType.TimedEvent,
+    new SplitByObjectsSettings
+    {
+        WriteToAllFilesPredicate = obj => obj is TimedEvent
+    });
+```
+
+Here we specify that we need to split the file by notes and timed events, but every timed event must be written to all result files. So in fact we're splitting the file by notes having all non-notes timed events presented in each new file. The image below illustrates the process:
+
+![Split MIDI file by objects](images/Splitter/SplitByObjects.png)
+
+To split a file by objects the tool needs to determine the key of each object. Objects with the same key will be outputted in a separate file. In the example above default logic of key calculation is used. The following table shows what a default key is for each type of an object:
+
+|Object type|Key|
+|-----------|---|
+|[TimedEvent](xref:Melanchall.DryWetMidi.Interaction.ObjectType.TimedEvent)|The type of the underlying event ([EventType](xref:Melanchall.DryWetMidi.Core.MidiEvent.EventType) of [TimedEvent.Event](xref:Melanchall.DryWetMidi.Interaction.TimedEvent.Event)).|
+|[Note](xref:Melanchall.DryWetMidi.Interaction.ObjectType.Note)|Pair of the [channel](xref:Melanchall.DryWetMidi.Interaction.Note.Channel) and [note number](xref:Melanchall.DryWetMidi.Interaction.Note.NoteNumber) of a note.|
+|[Chord](xref:Melanchall.DryWetMidi.Interaction.ObjectType.Chord)|Collection of keys of the underlying [notes](xref:Melanchall.DryWetMidi.Interaction.Chord.Notes).|
+|[Rest](xref:Melanchall.DryWetMidi.Interaction.ObjectType.Rest)|Pair of the [channel](xref:Melanchall.DryWetMidi.Interaction.Rest.Channel) and [note number](xref:Melanchall.DryWetMidi.Interaction.Rest.NoteNumber) of a rest.|
+
+You can alter key calculation logic providing custom key selector. For example, to separate notes by only note number ignoring a note's channel:
+
+```csharp
+var newFiles = midiFile.SplitByObjects(
+    ObjectType.Note | ObjectType.TimedEvent,
+    new SplitByObjectsSettings
+    {
+        KeySelector = obj => obj is Note note
+            ? ObjectIdUtilities.GetObjectId(note.NoteNumber)
+            : obj.GetObjectId(),
+        WriteToAllFilesPredicate = obj => obj is TimedEvent
+    });
+```
+
+[ObjectIdUtilities.GetObjectId(value)](xref:Melanchall.DryWetMidi.Interaction.ObjectIdUtilities.GetObjectId``1(``0)) returns an implementation of [IObjectId](xref:Melanchall.DryWetMidi.Interaction.IObjectId) which simply holds the provided value. [ObjectIdUtilities.GetObjectId(object)](xref:Melanchall.DryWetMidi.Interaction.ObjectIdUtilities.GetObjectId(Melanchall.DryWetMidi.Interaction.ITimedObject)) returns the default ID (key) for an object. So if an object is a note, we use its note number as the key; and default key for any other object types.
+
+If custom logic of key selection is complex, you may decide to implement the [IObjectId](xref:Melanchall.DryWetMidi.Interaction.IObjectId) interface and return that implementation. Just for example, let's create an ID class that identifies a chord by its shortest name:
+
+```csharp
+private sealed class ChordNameId : IObjectId
+{
+    private readonly string _name;
+    
+    public ChordNameId(Chord chord)
+    {
+        _name = chord.GetMusicTheoryChord().GetNames().FirstOrDefault();
+    }
+
+    public override bool Equals(object obj) =>
+        obj is ChordNameId chordNameId &&
+        chordNameId._name == _name;
+
+    public override int GetHashCode() =>
+        _name.GetHashCode();
+}
+```
+
+And now we can use it to split a file by chords of the same name:
+
+```csharp
+var newFiles = midiFile.SplitByObjects(
+    ObjectType.Chord,
+    new SplitByObjectsSettings
+    {
+        KeySelector = obj => new ChordNameId((Chord)obj)
+    });
+```
+
+Please see documentation on [SplitByObjectsSettings](xref:Melanchall.DryWetMidi.Tools.SplitByObjectsSettings) to learn more about how you can adjust the process of splitting.
 
 ## SplitByGrid
 

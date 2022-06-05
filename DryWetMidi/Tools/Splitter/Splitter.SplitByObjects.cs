@@ -12,7 +12,8 @@ namespace Melanchall.DryWetMidi.Tools
         #region Methods
 
         /// <summary>
-        /// Splits <see cref="MidiFile"/> by objects.
+        /// Splits <see cref="MidiFile"/> by objects. More info in the
+        /// <see href="xref:a_file_splitting#splitbyobjects">MIDI file splitting: SplitByObjects</see> article.
         /// </summary>
         /// <param name="midiFile"><see cref="MidiFile"/> to split.</param>
         /// <param name="objectType">Combination of desired types of objects to split by.</param>

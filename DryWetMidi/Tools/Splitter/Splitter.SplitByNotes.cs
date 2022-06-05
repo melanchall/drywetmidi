@@ -7,14 +7,12 @@ using System.Linq;
 
 namespace Melanchall.DryWetMidi.Tools
 {
-    // TODO: use NoteDetectionSettings
     public static partial class Splitter
     {
         #region Methods
 
         /// <summary>
-        /// Splits <see cref="MidiFile"/> by notes. More info in the
-        /// <see href="xref:a_file_splitting#splitbynotes">MIDI file splitting: SplitByNotes</see> article.
+        /// Splits <see cref="MidiFile"/> by notes.
         /// </summary>
         /// <remarks>
         /// The method produces new files where each one contains Note On and Note Off events for single

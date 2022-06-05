@@ -6,6 +6,8 @@ namespace Melanchall.DryWetMidi.Tools
     /// <summary>
     /// Defines how a MIDI file should be split by objects using
     /// <see cref="Splitter.SplitByObjects(Core.MidiFile, ObjectType, SplitByObjectsSettings, ObjectDetectionSettings)"/> method.
+    /// More info in the
+    /// <see href="xref:a_file_splitting#splitbyobjects">MIDI file splitting: SplitByObjects</see> article.
     /// </summary>
     /// <seealso cref="Splitter"/>
     public sealed class SplitByObjectsSettings
