@@ -1,1 +1,3 @@
-* `TimedEventsManagingUtilities.AddEvent`
+* `NotesMerger`
+* `NotesMergerUtilities`
+* `NotesMergingSettings`

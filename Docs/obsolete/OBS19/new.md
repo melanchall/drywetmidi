@@ -1,1 +1,1 @@
-* no
+* [Splitter.SplitByObjects](xref:Melanchall.DryWetMidi.Tools.Splitter.SplitByObjects*)

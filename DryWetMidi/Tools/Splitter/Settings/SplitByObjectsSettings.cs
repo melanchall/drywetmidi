@@ -14,7 +14,8 @@ namespace Melanchall.DryWetMidi.Tools
 
         /// <summary>
         /// Gets or sets a method to get the ID (key) of an object. The default value
-        /// is <c>null</c> which means the default key selector will be used.
+        /// is <c>null</c> which means the default key selector will be used. You can use
+        /// the property to implement custom key selection (please see <see cref="ObjectIdUtilities"/>).
         /// </summary>
         public Func<ITimedObject, IObjectId> KeySelector { get; set; }
 

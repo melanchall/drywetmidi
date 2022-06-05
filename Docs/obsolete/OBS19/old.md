@@ -1,1 +1,1 @@
-* `TimedEventsManagingUtilities.AddEvent`
+* `Splitter.SplitByNotes`

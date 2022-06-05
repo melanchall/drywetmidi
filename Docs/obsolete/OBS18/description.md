@@ -1,5 +1,13 @@
-`TimedEventsManagingUtilities.AddEvent` methods are now obsolete since they are nothing more than just calling [TimedEvent](xref:Melanchall.DryWetMidi.Interaction.TimedEvent) constructor and adding a new instance to a collection:
+`ResizeNotesUtilities` class and its methods have been generalized by the [Resizer](xref:Melanchall.DryWetMidi.Tools.Resizer) class which can resize groups of objects of different types simultaneously.
+
+Quick example of how to resize objects group using the new tool:
 
 ```csharp
-eventsCollection.Add(new TimedEvent(midiEvent, time));
+objects.ResizeObjectsGroup(
+    new MetricTimeSpan(0, 1, 0),
+    TempoMap.Default,
+    new ObjectsGroupResizingSettings
+    {
+        DistanceCalculationType = TimeSpanType.Metric
+    });
 ```
