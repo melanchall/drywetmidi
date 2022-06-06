@@ -11,7 +11,8 @@ namespace Melanchall.DryWetMidi.Tools
         #region Methods
 
         /// <summary>
-        /// Resizes group of objects to the specified length treating all objects as a single one.
+        /// Resizes group of objects to the specified length treating all objects as a single one. More info in the
+        /// <see href="xref:a_resizer">Resizer</see> article.
         /// </summary>
         /// <param name="objects">Objects to resize.</param>
         /// <param name="length">New length of the objects collection.</param>
@@ -88,8 +89,8 @@ namespace Melanchall.DryWetMidi.Tools
         }
 
         /// <summary>
-        /// Resizes group of objects by the specified ratio treating all objects as a single object. For example,
-        /// resizing by ratio of 0.5 shrinks group of objects by two times.
+        /// Resizes group of objects by the specified ratio treating all objects as a single object. More info in the
+        /// <see href="xref:a_resizer">Resizer</see> article.
         /// </summary>
         /// <param name="objects">Objects to resize.</param>
         /// <param name="ratio">Ratio to resize objects by.</param>

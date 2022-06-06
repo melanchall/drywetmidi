@@ -5,7 +5,8 @@ using System.ComponentModel;
 namespace Melanchall.DryWetMidi.Tools
 {
     /// <summary>
-    /// Defines how an objects group should be resized.
+    /// Defines how an objects group should be resized. More info in the
+    /// <see href="xref:a_resizer">Resizer</see> article.
     /// </summary>
     /// <seealso cref="Resizer"/>
     public sealed class ObjectsGroupResizingSettings

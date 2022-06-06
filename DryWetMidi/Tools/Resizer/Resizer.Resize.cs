@@ -8,14 +8,16 @@ using System.Linq;
 namespace Melanchall.DryWetMidi.Tools
 {
     /// <summary>
-    /// Provides methods to resize MIDI data in many different ways.
+    /// Provides methods to resize MIDI data in many different ways. More info in the
+    /// <see href="xref:a_resizer">Resizer</see> article.
     /// </summary>
     public static partial class Resizer
     {
         #region Methods
 
         /// <summary>
-        /// Resizes <see cref="TrackChunk"/> to the specified length.
+        /// Resizes <see cref="TrackChunk"/> to the specified length. More info in the
+        /// <see href="xref:a_resizer">Resizer</see> article.
         /// </summary>
         /// <param name="trackChunk"><see cref="TrackChunk"/> to resize.</param>
         /// <param name="length">New length of the <paramref name="trackChunk"/>.</param>
@@ -53,7 +55,8 @@ namespace Melanchall.DryWetMidi.Tools
         }
 
         /// <summary>
-        /// Resizes <see cref="TrackChunk"/> by the specified ratio.
+        /// Resizes <see cref="TrackChunk"/> by the specified ratio. More info in the
+        /// <see href="xref:a_resizer">Resizer</see> article.
         /// </summary>
         /// <param name="trackChunk"><see cref="TrackChunk"/> to resize.</param>
         /// <param name="ratio">Ratio to resize <paramref name="trackChunk"/> by.</param>
@@ -68,7 +71,8 @@ namespace Melanchall.DryWetMidi.Tools
         }
 
         /// <summary>
-        /// Resizes collection of <see cref="TrackChunk"/> to the specified length.
+        /// Resizes collection of <see cref="TrackChunk"/> to the specified length. More info in the
+        /// <see href="xref:a_resizer">Resizer</see> article.
         /// </summary>
         /// <param name="trackChunks">Collection of <see cref="TrackChunk"/> to resize.</param>
         /// <param name="length">New length of the <paramref name="trackChunks"/>.</param>
@@ -106,7 +110,8 @@ namespace Melanchall.DryWetMidi.Tools
         }
 
         /// <summary>
-        /// Resizes collection of <see cref="TrackChunk"/> by the specified ratio.
+        /// Resizes collection of <see cref="TrackChunk"/> by the specified ratio. More info in the
+        /// <see href="xref:a_resizer">Resizer</see> article.
         /// </summary>
         /// <param name="trackChunks">Collection of <see cref="TrackChunk"/> to resize.</param>
         /// <param name="ratio">Ratio to resize <paramref name="trackChunks"/> by.</param>
@@ -124,7 +129,8 @@ namespace Melanchall.DryWetMidi.Tools
         }
 
         /// <summary>
-        /// Resizes <see cref="MidiFile"/> to the specified length.
+        /// Resizes <see cref="MidiFile"/> to the specified length. More info in the
+        /// <see href="xref:a_resizer">Resizer</see> article.
         /// </summary>
         /// <param name="midiFile"><see cref="MidiFile"/> to resize.</param>
         /// <param name="length">New length of the <paramref name="midiFile"/>.</param>
@@ -149,7 +155,8 @@ namespace Melanchall.DryWetMidi.Tools
         }
 
         /// <summary>
-        /// Resizes <see cref="MidiFile"/> by the specified ratio.
+        /// Resizes <see cref="MidiFile"/> by the specified ratio. More info in the
+        /// <see href="xref:a_resizer">Resizer</see> article.
         /// </summary>
         /// <param name="midiFile"><see cref="MidiFile"/> to resize.</param>
         /// <param name="ratio">Ratio to resize <paramref name="midiFile"/> by.</param>

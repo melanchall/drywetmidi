@@ -1,3 +1,7 @@
+---
+uid: a_ts_metric
+---
+
 # MetricTimeSpan
 
 [MetricTimeSpan](xref:Melanchall.DryWetMidi.Interaction.MetricTimeSpan) represents time span as a number of microseconds.

@@ -29,6 +29,7 @@
 ### [MIDI file splitting](tools/MIDI-file-splitting.md)
 ## [Quantizer](tools/Quantizer.md)
 ## [Merger](tools/Merger.md)
+## [Resizer](tools/Resizer.md)
 ## [CSV converter](xref:Melanchall.DryWetMidi.Tools.CsvConverter)
 
 # Composing
