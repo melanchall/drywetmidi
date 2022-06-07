@@ -12,6 +12,37 @@ namespace Melanchall.DryWetMidi.Tests.Tools
     [TestFixture]
     public sealed partial class RepeaterTests
     {
+        #region Nested classes
+
+        private sealed class CustomRepeater : Repeater
+        {
+            protected override void ProcessPart(PartProcessingContext context)
+            {
+                base.ProcessPart(context);
+
+                var newObjects = context
+                    .PartObjects
+                    .Where(obj => ((TimedEvent)obj).Event is NoteEvent)
+                    .ToArray();
+
+                context.PartObjects.Clear();
+
+                foreach (var obj in newObjects)
+                {
+                    ((NoteEvent)((TimedEvent)obj).Event).NoteNumber += (SevenBitNumber)((context.PartIndex + 1) * 3);
+
+                    var originalTime = obj.TimeAs<MusicalTimeSpan>(context.SourceTempoMap);
+                    obj.SetTime(
+                        originalTime.Add(MusicalTimeSpan.Quarter * (context.PartIndex + 1), TimeSpanMode.TimeLength),
+                        context.SourceTempoMap);
+
+                    context.PartObjects.Add(obj);
+                }
+            }
+        }
+
+        #endregion
+
         #region Test methods
 
         [Test]
@@ -90,6 +121,32 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 }
             });
 
+        [Test]
+        public void CheckRepeat_MultipleCollections_Custom() => CheckRepeat_Custom<CustomRepeater>(
+            inputObjects: new[]
+            {
+                new ITimedObject[]
+                {
+                    new TimedEvent(new TextEvent("A"), 0),
+                    new Note((SevenBitNumber)70, 100, 5),
+                }
+            },
+            repeatsNumber: 1,
+            tempoMap: TempoMap.Default,
+            settings: new RepeatingSettings
+            {
+                ShiftPolicy = ShiftPolicy.None
+            },
+            expectedObjects: new[]
+            {
+                new ITimedObject[]
+                {
+                    new TimedEvent(new TextEvent("A"), 0),
+                    new Note((SevenBitNumber)70, 100, 5),
+                    new Note((SevenBitNumber)73, 100, TimeConverter.ConvertFrom(new MidiTimeSpan(5).Add(MusicalTimeSpan.Quarter, TimeSpanMode.TimeLength), TempoMap.Default)),
+                }
+            });
+
         #endregion
 
         #region Private methods
@@ -121,6 +178,29 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
             var inputFile = new MidiFile(inputObjects.Select(obj => obj.ToTrackChunk()));
             var actualFile = inputFile.Repeat(repeatsNumber, settings);
+            MidiAsserts.AreEqual(new MidiFile(expectedObjects.Select(obj => obj.ToTrackChunk())), actualFile, true, "Invalid result file.");
+        }
+
+        private void CheckRepeat_Custom<TRepeater>(
+            ICollection<ICollection<ITimedObject>> inputObjects,
+            int repeatsNumber,
+            TempoMap tempoMap,
+            RepeatingSettings settings,
+            ICollection<ICollection<ITimedObject>> expectedObjects)
+            where TRepeater : Repeater, new()
+        {
+            var repeater = new TRepeater();
+
+            //
+
+            var inputTrackChunks = inputObjects.Select(obj => obj.ToTrackChunk()).ToArray();
+            var actualTrackChunks = repeater.Repeat(inputTrackChunks, repeatsNumber, tempoMap, settings);
+            MidiAsserts.AreEqual(expectedObjects.Select(obj => obj.ToTrackChunk()).ToArray(), actualTrackChunks, true, "Invalid result track chunks.");
+
+            //
+
+            var inputFile = new MidiFile(inputObjects.Select(obj => obj.ToTrackChunk()));
+            var actualFile = repeater.Repeat(inputFile, repeatsNumber, settings);
             MidiAsserts.AreEqual(new MidiFile(expectedObjects.Select(obj => obj.ToTrackChunk())), actualFile, true, "Invalid result file.");
         }
 

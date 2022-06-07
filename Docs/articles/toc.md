@@ -30,6 +30,7 @@
 ## [Quantizer](tools/Quantizer.md)
 ## [Merger](tools/Merger.md)
 ## [Resizer](tools/Resizer.md)
+## [Repeater](tools/Repeater.md)
 ## [CSV converter](xref:Melanchall.DryWetMidi.Tools.CsvConverter)
 
 # Composing

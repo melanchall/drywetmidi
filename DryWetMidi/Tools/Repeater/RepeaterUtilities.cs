@@ -7,14 +7,16 @@ using System.Collections.Generic;
 namespace Melanchall.DryWetMidi.Tools
 {
     /// <summary>
-    /// Provides methods to repeat MIDI data using different options.
+    /// Provides methods to repeat MIDI data using different options. More info in the
+    /// <see href="xref:a_repeater">Repeater</see> article.
     /// </summary>
     public static class RepeaterUtilities
     {
         #region Methods
 
         /// <summary>
-        /// Repeats a MIDI file specified number of times.
+        /// Repeats a MIDI file specified number of times. More info in the
+        /// <see href="xref:a_repeater">Repeater</see> article.
         /// </summary>
         /// <param name="midiFile">The file to repeat.</param>
         /// <param name="repeatsNumber">Number of times the <paramref name="midiFile"/> should be repeated.</param>
@@ -34,7 +36,8 @@ namespace Melanchall.DryWetMidi.Tools
         }
 
         /// <summary>
-        /// Repeats a <see cref="TrackChunk"/> specified number of times.
+        /// Repeats a <see cref="TrackChunk"/> specified number of times. More info in the
+        /// <see href="xref:a_repeater">Repeater</see> article.
         /// </summary>
         /// <param name="trackChunk">The <see cref="TrackChunk"/> to repeat.</param>
         /// <param name="repeatsNumber">Number of times the <paramref name="trackChunk"/> should be repeated.</param>
@@ -66,7 +69,8 @@ namespace Melanchall.DryWetMidi.Tools
         }
 
         /// <summary>
-        /// Repeats a collection of <see cref="TrackChunk"/> specified number of times.
+        /// Repeats a collection of <see cref="TrackChunk"/> specified number of times. More info in the
+        /// <see href="xref:a_repeater">Repeater</see> article.
         /// </summary>
         /// <param name="trackChunks">The collection of <see cref="TrackChunk"/> to repeat.</param>
         /// <param name="repeatsNumber">Number of times the <paramref name="trackChunks"/> should be repeated.</param>
@@ -98,7 +102,8 @@ namespace Melanchall.DryWetMidi.Tools
         }
 
         /// <summary>
-        /// Repeats a collection of timed objects specified number of times.
+        /// Repeats a collection of timed objects specified number of times. More info in the
+        /// <see href="xref:a_repeater">Repeater</see> article.
         /// </summary>
         /// <param name="timedObjects">The collection of timed objects to repeat.</param>
         /// <param name="repeatsNumber">Number of times the <paramref name="timedObjects"/> should be repeated.</param>

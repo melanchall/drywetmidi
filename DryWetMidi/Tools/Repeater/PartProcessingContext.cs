@@ -4,7 +4,8 @@ using System.Collections.Generic;
 namespace Melanchall.DryWetMidi.Tools
 {
     /// <summary>
-    /// Holds all the required data to process a part by the <see cref="Repeater"/>.
+    /// Holds all the required data to process a part by the <see cref="Repeater"/>. More info in the
+    /// <see href="xref:a_repeater#custom-repeater">Repeater: Custom repeater</see> article.
     /// </summary>
     public sealed class PartProcessingContext
     {

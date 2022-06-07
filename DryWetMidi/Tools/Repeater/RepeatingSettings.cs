@@ -5,7 +5,8 @@ using System.ComponentModel;
 namespace Melanchall.DryWetMidi.Tools
 {
     /// <summary>
-    /// Provides settings for <see cref="Repeater"/> tool.
+    /// Provides settings for <see cref="Repeater"/> tool. More info in the
+    /// <see href="xref:a_repeater">Repeater</see> article.
     /// </summary>
     public sealed class RepeatingSettings
     {

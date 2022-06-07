@@ -1,7 +1,8 @@
 ﻿namespace Melanchall.DryWetMidi.Tools
 {
     /// <summary>
-    /// Specifies how shift for <see cref="Repeater"/> should be calculated.
+    /// Specifies how shift for <see cref="Repeater"/> should be calculated. More info in the
+    /// <see href="xref:a_repeater">Repeater</see> article.
     /// </summary>
     public enum ShiftPolicy
     {

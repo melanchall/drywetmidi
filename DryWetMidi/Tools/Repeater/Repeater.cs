@@ -8,12 +8,9 @@ using System.Linq;
 namespace Melanchall.DryWetMidi.Tools
 {
     /// <summary>
-    /// Provides a way to repeat MIDI data using different options.
+    /// Provides a way to repeat MIDI data using different options. More info in the
+    /// <see href="xref:a_repeater">Repeater</see> article.
     /// </summary>
-    /// <remarks>
-    /// You can also derive from the class to customize the tool's behavior.
-    /// Please see <see cref="ProcessPart(PartProcessingContext)"/> method.
-    /// </remarks>
     public class Repeater
     {
         #region Methods
