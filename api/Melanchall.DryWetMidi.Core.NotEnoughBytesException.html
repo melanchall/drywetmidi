@@ -222,7 +222,9 @@ Gets the expected count of bytes.
   </h3>
   <a id="Melanchall_DryWetMidi_Core_NotEnoughBytesException_GetObjectData_" data-uid="Melanchall.DryWetMidi.Core.NotEnoughBytesException.GetObjectData*"></a>
   <h4 id="Melanchall_DryWetMidi_Core_NotEnoughBytesException_GetObjectData_System_Runtime_Serialization_SerializationInfo_System_Runtime_Serialization_StreamingContext_" data-uid="Melanchall.DryWetMidi.Core.NotEnoughBytesException.GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">GetObjectData(SerializationInfo, StreamingContext)</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary">
+Sets the <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.runtime.serialization.serializationinfo">SerializationInfo</a> with information about the exception.
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -241,17 +243,34 @@ Gets the expected count of bytes.
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.runtime.serialization.serializationinfo">SerializationInfo</a></td>
         <td><span class="parametername">info</span></td>
-        <td></td>
+        <td>The <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.runtime.serialization.serializationinfo">SerializationInfo</a> that holds the serialized object data
+about the exception being thrown.</td>
       </tr>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.runtime.serialization.streamingcontext">StreamingContext</a></td>
         <td><span class="parametername">context</span></td>
-        <td></td>
+        <td>The <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.runtime.serialization.streamingcontext">StreamingContext</a> that contains contextual information
+about the source or destination.</td>
       </tr>
     </tbody>
   </table>
   <h5 class="overrides">Overrides</h5>
   <div><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.exception.getobjectdata#system-exception-getobjectdata(system-runtime-serialization-serializationinfo-system-runtime-serialization-streamingcontext)">Exception.GetObjectData(SerializationInfo, StreamingContext)</a></div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">info</code> is <code>null</code>.</td>
+      </tr>
+    </tbody>
+  </table>
   <h3 id="implements">Implements</h3>
   <div>
       <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.runtime.serialization.iserializable">System.Runtime.Serialization.ISerializable</a>

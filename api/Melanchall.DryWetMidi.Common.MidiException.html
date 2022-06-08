@@ -180,7 +180,9 @@ Base MIDI exception class.
   </h3>
   <a id="Melanchall_DryWetMidi_Common_MidiException__ctor_" data-uid="Melanchall.DryWetMidi.Common.MidiException.#ctor*"></a>
   <h4 id="Melanchall_DryWetMidi_Common_MidiException__ctor_System_Runtime_Serialization_SerializationInfo_System_Runtime_Serialization_StreamingContext_" data-uid="Melanchall.DryWetMidi.Common.MidiException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">MidiException(SerializationInfo, StreamingContext)</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary">
+Initializes a new instance of the <a class="xref" href="Melanchall.DryWetMidi.Common.MidiException.html">MidiException</a> class with serialized data.
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -199,12 +201,29 @@ Base MIDI exception class.
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.runtime.serialization.serializationinfo">SerializationInfo</a></td>
         <td><span class="parametername">info</span></td>
-        <td></td>
+        <td>The <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.runtime.serialization.serializationinfo">SerializationInfo</a> that holds the serialized object data
+about the exception being thrown.</td>
       </tr>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.runtime.serialization.streamingcontext">StreamingContext</a></td>
         <td><span class="parametername">context</span></td>
-        <td></td>
+        <td>The <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.runtime.serialization.streamingcontext">StreamingContext</a> that contains contextual information
+about the source or destination.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">info</code> is <code>null</code>.</td>
       </tr>
     </tbody>
   </table>

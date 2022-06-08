@@ -5,9 +5,9 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Notes merger | DryWetMIDI </title>
+    <title> | DryWetMIDI </title>
     <meta name="viewport" content="width=device-width">
-    <meta name="title" content="Notes merger | DryWetMIDI ">
+    <meta name="title" content=" | DryWetMIDI ">
     <meta name="generator" content="docfx 2.59.2.0">
     
     <link rel="shortcut icon" href="../../images/favicon.png">
@@ -15,7 +15,7 @@
     <link rel="stylesheet" href="../../styles/docfx.css">
     <link rel="stylesheet" href="../../styles/main.css">
     <meta property="docfx:navrel" content="../../toc.html">
-    <meta property="docfx:tocrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="../../toc.html">
     
     <meta property="docfx:rel" content="../../">
     
@@ -67,41 +67,14 @@
         </div>
       </div>
       <div role="main" class="container body-content hide-when-search">
-        
-        <div class="sidenav hide-when-search">
-          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
-          <div class="sidetoggle collapse" id="sidetoggle">
-            <div id="sidetoc"></div>
-          </div>
-        </div>
-        <div class="article row grid-right">
+        <div class="article row grid">
           <div class="col-md-10">
-            <article class="content wrap" id="_content" data-uid="a_notes_merger">
-<h1 id="notes-merger">Notes merger</h1>
+            <article class="content wrap" id="_content" data-uid="">
 
-<p>To merge nearby notes into one DryWetMIDI provides <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.NotesMerger.html">NotesMerger</a> class. Example of usage:</p>
-<pre><code class="lang-csharp">var notes = midiFile.GetNotes().Where(n =&gt; n.NoteName == NoteName.CSharp);
-var tempoMap = midiFile.GetTempoMap();
-
-var notesMerger = new NotesMerger();
-var mergedNotes = notesMerger.Merge(
-    notes,
-    tempoMap,
-    new NotesMergingSettings
-    {
-        Tolerance = new MetricTimeSpan(0, 0, 1)
-    });
-</code></pre>
-<p>Note that notes obtained via <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.NotesManagingUtilities.html#Melanchall_DryWetMidi_Interaction_NotesManagingUtilities_GetNotes_">GetNotes</a> are detached from the file so if you call <code>GetNotes</code> on the file again, you will get original unmerged notes. To update notes in the file or specific track chunk you should use <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.NotesManager.html">NotesManager</a>.</p>
-<p>Also there are useful methods inside <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.NotesMergerUtilities.html">NotesMergerUtilities</a> class that allows quickly merge nearby notes inside <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a> or <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a> without messing with updating notes via <code>NotesManager</code>. Example above can be rewritten to the following code:</p>
-<pre><code class="lang-csharp">midiFile.MergeNotes(new NotesMergingSettings
-                    {
-                        Tolerance = new MetricTimeSpan(0, 0, 1)
-                    },
-                    n =&gt; n.NoteName == NoteName.CSharp);
-</code></pre>
-<p>Process of merging can be adjusted via <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.NotesMergingSettings.html">NotesMergingSettings</a> which contains important property (along with other ones) - <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.NotesMergingSettings.html#Melanchall_DryWetMidi_Tools_NotesMergingSettings_Tolerance">Tolerance</a>. Tolerance is maximum distance between two notes to consider them as nearby. The default value is time span of zero length, so two notes should have no gap between them to me merged. The image below shows how tolerance (T) affects merging:</p>
-<p><img src="images/NotesMerger/NotesMergerTolerance.png" alt="Notes merger tolerance"></p>
+<ul>
+<li><a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.Resizer.html">Resizer</a></li>
+<li><a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.Resizer.html#Melanchall_DryWetMidi_Tools_Resizer_ResizeObjectsGroup_">Resizer.ResizeObjectsGroup</a></li>
+</ul>
 </article>
           </div>
           

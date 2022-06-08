@@ -142,6 +142,33 @@ Represents a basic collection of the <a class="xref" href="Melanchall.DryWetMidi
       </tr>
     </tbody>
   </table>
+  <h3 id="properties">Properties
+  </h3>
+  <a id="Melanchall_DryWetMidi_Interaction_TimedObjectsCollection_1_Count_" data-uid="Melanchall.DryWetMidi.Interaction.TimedObjectsCollection`1.Count*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_TimedObjectsCollection_1_Count" data-uid="Melanchall.DryWetMidi.Interaction.TimedObjectsCollection`1.Count">Count</h4>
+  <div class="markdown level1 summary">
+Gets the number of objects contained in the <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedObjectsCollection-1.html">TimedObjectsCollection&lt;TObject&gt;</a>.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int Count { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int32">Int32</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
   <h3 id="methods">Methods
   </h3>
   <a id="Melanchall_DryWetMidi_Interaction_TimedObjectsCollection_1_Add_" data-uid="Melanchall.DryWetMidi.Interaction.TimedObjectsCollection`1.Add*"></a>
@@ -271,7 +298,7 @@ Removes objects from this collection.
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void Remove(params TObject[] objects)</code></pre>
+    <pre><code class="lang-csharp hljs">public bool Remove(params TObject[] objects)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -287,6 +314,22 @@ Removes objects from this collection.
         <td>TObject[]</td>
         <td><span class="parametername">objects</span></td>
         <td>Objects to remove from the collection.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
+        <td><code>true</code> if objects were successfully removed from the collection;
+    otherwise, <code>false</code>.</td>
       </tr>
     </tbody>
   </table>
@@ -313,7 +356,7 @@ Removes objects from this collection.
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void Remove(IEnumerable&lt;TObject&gt; objects)</code></pre>
+    <pre><code class="lang-csharp hljs">public bool Remove(IEnumerable&lt;TObject&gt; objects)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -329,6 +372,22 @@ Removes objects from this collection.
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;TObject&gt;</td>
         <td><span class="parametername">objects</span></td>
         <td>Objects to remove from the collection.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
+        <td><code>true</code> if objects were successfully removed from the collection;
+    otherwise, <code>false</code>.</td>
       </tr>
     </tbody>
   </table>

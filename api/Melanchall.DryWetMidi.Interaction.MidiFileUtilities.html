@@ -193,6 +193,158 @@ duration of <code data-dev-comment-type="paramref" class="paramref">midiFile</co
     </tbody>
   </table>
   <a id="Melanchall_DryWetMidi_Interaction_MidiFileUtilities_GetDuration_" data-uid="Melanchall.DryWetMidi.Interaction.MidiFileUtilities.GetDuration*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_MidiFileUtilities_GetDuration_Melanchall_DryWetMidi_Core_TrackChunk_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Interaction_TempoMap_" data-uid="Melanchall.DryWetMidi.Interaction.MidiFileUtilities.GetDuration(Melanchall.DryWetMidi.Core.TrackChunk,Melanchall.DryWetMidi.Interaction.TimeSpanType,Melanchall.DryWetMidi.Interaction.TempoMap)">GetDuration(TrackChunk, TimeSpanType, TempoMap)</h4>
+  <div class="markdown level1 summary">
+Gets the duration of the specified <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a>. Duration is
+defined by the time of last MIDI event of the track chunk.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static ITimeSpan GetDuration(this TrackChunk trackChunk, TimeSpanType durationType, TempoMap tempoMap)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a></td>
+        <td><span class="parametername">trackChunk</span></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a> to get duration of.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TimeSpanType.html">TimeSpanType</a></td>
+        <td><span class="parametername">durationType</span></td>
+        <td>The type of time span representing the duration of <code data-dev-comment-type="paramref" class="paramref">trackChunk</code>.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TempoMap.html">TempoMap</a></td>
+        <td><span class="parametername">tempoMap</span></td>
+        <td>Tempo map to calculate duration.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a></td>
+        <td>An implementation of <a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a> representing
+duration of <code data-dev-comment-type="paramref" class="paramref">trackChunk</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td>
+<p>One of the following errors occured:</p>
+<ul><li><code data-dev-comment-type="paramref" class="paramref">trackChunk</code> is <code>null</code>.</li><li><code data-dev-comment-type="paramref" class="paramref">tempoMap</code> is <code>null</code>.</li></ul>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.componentmodel.invalidenumargumentexception">InvalidEnumArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">durationType</code> specified an invalid value.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Interaction_MidiFileUtilities_GetDuration_" data-uid="Melanchall.DryWetMidi.Interaction.MidiFileUtilities.GetDuration*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_MidiFileUtilities_GetDuration_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Interaction_TempoMap_" data-uid="Melanchall.DryWetMidi.Interaction.MidiFileUtilities.GetDuration(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk},Melanchall.DryWetMidi.Interaction.TimeSpanType,Melanchall.DryWetMidi.Interaction.TempoMap)">GetDuration(IEnumerable&lt;TrackChunk&gt;, TimeSpanType, TempoMap)</h4>
+  <div class="markdown level1 summary">
+Gets the duration of the specified collection of <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a>. Duration is
+defined by the time of last MIDI event of the track chunks.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static ITimeSpan GetDuration(this IEnumerable&lt;TrackChunk&gt; trackChunks, TimeSpanType durationType, TempoMap tempoMap)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a>&gt;</td>
+        <td><span class="parametername">trackChunks</span></td>
+        <td>Collection <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a> to get duration of.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TimeSpanType.html">TimeSpanType</a></td>
+        <td><span class="parametername">durationType</span></td>
+        <td>The type of time span representing the duration of <code data-dev-comment-type="paramref" class="paramref">trackChunks</code>.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TempoMap.html">TempoMap</a></td>
+        <td><span class="parametername">tempoMap</span></td>
+        <td>Tempo map to calculate duration.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a></td>
+        <td>An implementation of <a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a> representing
+duration of <code data-dev-comment-type="paramref" class="paramref">trackChunks</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td>
+<p>One of the following errors occured:</p>
+<ul><li><code data-dev-comment-type="paramref" class="paramref">trackChunks</code> is <code>null</code>.</li><li><code data-dev-comment-type="paramref" class="paramref">tempoMap</code> is <code>null</code>.</li></ul>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.componentmodel.invalidenumargumentexception">InvalidEnumArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">durationType</code> specified an invalid value.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Interaction_MidiFileUtilities_GetDuration_" data-uid="Melanchall.DryWetMidi.Interaction.MidiFileUtilities.GetDuration*"></a>
   <h4 id="Melanchall_DryWetMidi_Interaction_MidiFileUtilities_GetDuration__1_Melanchall_DryWetMidi_Core_MidiFile_" data-uid="Melanchall.DryWetMidi.Interaction.MidiFileUtilities.GetDuration``1(Melanchall.DryWetMidi.Core.MidiFile)">GetDuration&lt;TTimeSpan&gt;(MidiFile)</h4>
   <div class="markdown level1 summary">
 Gets the duration of the specified <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a>. Duration is
@@ -271,6 +423,180 @@ duration of <code data-dev-comment-type="paramref" class="paramref">midiFile</co
       </tr>
     </tbody>
   </table>
+  <a id="Melanchall_DryWetMidi_Interaction_MidiFileUtilities_GetDuration_" data-uid="Melanchall.DryWetMidi.Interaction.MidiFileUtilities.GetDuration*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_MidiFileUtilities_GetDuration__1_Melanchall_DryWetMidi_Core_TrackChunk_Melanchall_DryWetMidi_Interaction_TempoMap_" data-uid="Melanchall.DryWetMidi.Interaction.MidiFileUtilities.GetDuration``1(Melanchall.DryWetMidi.Core.TrackChunk,Melanchall.DryWetMidi.Interaction.TempoMap)">GetDuration&lt;TTimeSpan&gt;(TrackChunk, TempoMap)</h4>
+  <div class="markdown level1 summary">
+Gets the duration of the specified <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a>. Duration is
+defined by the time of last MIDI event of the track chunk.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static TTimeSpan GetDuration&lt;TTimeSpan&gt;(this TrackChunk trackChunk, TempoMap tempoMap)
+    where TTimeSpan : class, ITimeSpan</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a></td>
+        <td><span class="parametername">trackChunk</span></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a> to get duration of.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TempoMap.html">TempoMap</a></td>
+        <td><span class="parametername">tempoMap</span></td>
+        <td>Tempo map to calculate duration.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">TTimeSpan</span></td>
+        <td>An instance of <code data-dev-comment-type="typeparamref" class="typeparamref">TTimeSpan</code> representing
+duration of <code data-dev-comment-type="paramref" class="paramref">trackChunk</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">TTimeSpan</span></td>
+        <td>The type of time span representing the duration of <code data-dev-comment-type="paramref" class="paramref">trackChunk</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td>
+<p>One of the following errors occured:</p>
+<ul><li><code data-dev-comment-type="paramref" class="paramref">trackChunk</code> is <code>null</code>.</li><li><code data-dev-comment-type="paramref" class="paramref">tempoMap</code> is <code>null</code>.</li></ul>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.notsupportedexception">NotSupportedException</a></td>
+        <td><code data-dev-comment-type="typeparamref" class="typeparamref">TTimeSpan</code> is not supported.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Interaction_MidiFileUtilities_GetDuration_" data-uid="Melanchall.DryWetMidi.Interaction.MidiFileUtilities.GetDuration*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_MidiFileUtilities_GetDuration__1_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__Melanchall_DryWetMidi_Interaction_TempoMap_" data-uid="Melanchall.DryWetMidi.Interaction.MidiFileUtilities.GetDuration``1(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk},Melanchall.DryWetMidi.Interaction.TempoMap)">GetDuration&lt;TTimeSpan&gt;(IEnumerable&lt;TrackChunk&gt;, TempoMap)</h4>
+  <div class="markdown level1 summary">
+Gets the duration of the specified collection of <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a>. Duration is
+defined by the time of last MIDI event of the track chunks.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static TTimeSpan GetDuration&lt;TTimeSpan&gt;(this IEnumerable&lt;TrackChunk&gt; trackChunks, TempoMap tempoMap)
+    where TTimeSpan : class, ITimeSpan</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a>&gt;</td>
+        <td><span class="parametername">trackChunks</span></td>
+        <td>Collection of <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a> to get duration of.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TempoMap.html">TempoMap</a></td>
+        <td><span class="parametername">tempoMap</span></td>
+        <td>Tempo map to calculate duration.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">TTimeSpan</span></td>
+        <td>An instance of <code data-dev-comment-type="typeparamref" class="typeparamref">TTimeSpan</code> representing
+duration of <code data-dev-comment-type="paramref" class="paramref">trackChunks</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">TTimeSpan</span></td>
+        <td>The type of time span representing the duration of <code data-dev-comment-type="paramref" class="paramref">trackChunks</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td>
+<p>One of the following errors occured:</p>
+<ul><li><code data-dev-comment-type="paramref" class="paramref">trackChunks</code> is <code>null</code>.</li><li><code data-dev-comment-type="paramref" class="paramref">tempoMap</code> is <code>null</code>.</li></ul>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.notsupportedexception">NotSupportedException</a></td>
+        <td><code data-dev-comment-type="typeparamref" class="typeparamref">TTimeSpan</code> is not supported.</td>
+      </tr>
+    </tbody>
+  </table>
   <a id="Melanchall_DryWetMidi_Interaction_MidiFileUtilities_IsEmpty_" data-uid="Melanchall.DryWetMidi.Interaction.MidiFileUtilities.IsEmpty*"></a>
   <h4 id="Melanchall_DryWetMidi_Interaction_MidiFileUtilities_IsEmpty_Melanchall_DryWetMidi_Core_MidiFile_" data-uid="Melanchall.DryWetMidi.Interaction.MidiFileUtilities.IsEmpty(Melanchall.DryWetMidi.Core.MidiFile)">IsEmpty(MidiFile)</h4>
   <div class="markdown level1 summary">
@@ -326,107 +652,6 @@ is empty when it doesn&apos;t contain MIDI events.
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
         <td><code data-dev-comment-type="paramref" class="paramref">midiFile</code> is <code>null</code>.</td>
-      </tr>
-    </tbody>
-  </table>
-  <a id="Melanchall_DryWetMidi_Interaction_MidiFileUtilities_Resize_" data-uid="Melanchall.DryWetMidi.Interaction.MidiFileUtilities.Resize*"></a>
-  <h4 id="Melanchall_DryWetMidi_Interaction_MidiFileUtilities_Resize_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Interaction_ITimeSpan_" data-uid="Melanchall.DryWetMidi.Interaction.MidiFileUtilities.Resize(Melanchall.DryWetMidi.Core.MidiFile,Melanchall.DryWetMidi.Interaction.ITimeSpan)">Resize(MidiFile, ITimeSpan)</h4>
-  <div class="markdown level1 summary">
-Resizes <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a> to the specified length.
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void Resize(this MidiFile midiFile, ITimeSpan length)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a></td>
-        <td><span class="parametername">midiFile</span></td>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a> to resize.</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a></td>
-        <td><span class="parametername">length</span></td>
-        <td>New length of the <code data-dev-comment-type="paramref" class="paramref">midiFile</code>.</td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
-        <td>
-<p>One of the following errors occured:</p>
-<ul><li><code data-dev-comment-type="paramref" class="paramref">midiFile</code> is <code>null</code>.</li><li><code data-dev-comment-type="paramref" class="paramref">length</code> is <code>null</code>.</li></ul>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <a id="Melanchall_DryWetMidi_Interaction_MidiFileUtilities_Resize_" data-uid="Melanchall.DryWetMidi.Interaction.MidiFileUtilities.Resize*"></a>
-  <h4 id="Melanchall_DryWetMidi_Interaction_MidiFileUtilities_Resize_Melanchall_DryWetMidi_Core_MidiFile_System_Double_" data-uid="Melanchall.DryWetMidi.Interaction.MidiFileUtilities.Resize(Melanchall.DryWetMidi.Core.MidiFile,System.Double)">Resize(MidiFile, Double)</h4>
-  <div class="markdown level1 summary">
-Resizes <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a> by the specified ratio.
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void Resize(this MidiFile midiFile, double ratio)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a></td>
-        <td><span class="parametername">midiFile</span></td>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a> to resize.</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.double">Double</a></td>
-        <td><span class="parametername">ratio</span></td>
-        <td>Ratio to resize <code data-dev-comment-type="paramref" class="paramref">midiFile</code> by.</td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">midiFile</code> is <code>null</code>.</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">ratio</code> is negative.</td>
       </tr>
     </tbody>
   </table>

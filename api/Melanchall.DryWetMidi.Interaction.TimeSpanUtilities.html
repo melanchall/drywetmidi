@@ -286,7 +286,9 @@ time span type.
   </table>
   <a id="Melanchall_DryWetMidi_Interaction_TimeSpanUtilities_IsZeroTimeSpan_" data-uid="Melanchall.DryWetMidi.Interaction.TimeSpanUtilities.IsZeroTimeSpan*"></a>
   <h4 id="Melanchall_DryWetMidi_Interaction_TimeSpanUtilities_IsZeroTimeSpan_Melanchall_DryWetMidi_Interaction_ITimeSpan_" data-uid="Melanchall.DryWetMidi.Interaction.TimeSpanUtilities.IsZeroTimeSpan(Melanchall.DryWetMidi.Interaction.ITimeSpan)">IsZeroTimeSpan(ITimeSpan)</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary">
+Gets a value indicating whether the specified time span is zero or not.
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -305,7 +307,7 @@ time span type.
       <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a></td>
         <td><span class="parametername">timeSpan</span></td>
-        <td></td>
+        <td>Time span to check.</td>
       </tr>
     </tbody>
   </table>
@@ -320,7 +322,23 @@ time span type.
     <tbody>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
-        <td></td>
+        <td><code>true</code> if the <code data-dev-comment-type="paramref" class="paramref">timeSpan</code> represents zero time span;
+    otherwise, <code>false</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">timeSpan</code> is <code>null</code>.</td>
       </tr>
     </tbody>
   </table>
@@ -387,7 +405,9 @@ Converts the string representation of a time span to its <a class="xref" href="M
   </table>
   <a id="Melanchall_DryWetMidi_Interaction_TimeSpanUtilities_Round_" data-uid="Melanchall.DryWetMidi.Interaction.TimeSpanUtilities.Round*"></a>
   <h4 id="Melanchall_DryWetMidi_Interaction_TimeSpanUtilities_Round_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_TimeSpanRoundingPolicy_System_Int64_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_TempoMap_" data-uid="Melanchall.DryWetMidi.Interaction.TimeSpanUtilities.Round(Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Interaction.TimeSpanRoundingPolicy,System.Int64,Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Interaction.TempoMap)">Round(ITimeSpan, TimeSpanRoundingPolicy, Int64, ITimeSpan, TempoMap)</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary">
+Rounds a time span using the specified step and rounding policy.
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -406,27 +426,27 @@ Converts the string representation of a time span to its <a class="xref" href="M
       <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a></td>
         <td><span class="parametername">timeSpan</span></td>
-        <td></td>
+        <td>Time span to round.</td>
       </tr>
       <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TimeSpanRoundingPolicy.html">TimeSpanRoundingPolicy</a></td>
         <td><span class="parametername">roundingPolicy</span></td>
-        <td></td>
+        <td>Policy according to which the <code data-dev-comment-type="paramref" class="paramref">timeSpan</code> should be rounded.</td>
       </tr>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int64">Int64</a></td>
         <td><span class="parametername">time</span></td>
-        <td></td>
+        <td>Time os the <code data-dev-comment-type="paramref" class="paramref">timeSpan</code>.</td>
       </tr>
       <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a></td>
         <td><span class="parametername">step</span></td>
-        <td></td>
+        <td>Step to round the <code data-dev-comment-type="paramref" class="paramref">timeSpan</code> by.</td>
       </tr>
       <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TempoMap.html">TempoMap</a></td>
         <td><span class="parametername">tempoMap</span></td>
-        <td></td>
+        <td>Tempo map used to calculate new time span.</td>
       </tr>
     </tbody>
   </table>
@@ -441,7 +461,33 @@ Converts the string representation of a time span to its <a class="xref" href="M
     <tbody>
       <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a></td>
-        <td></td>
+        <td>A new time span which is the <code data-dev-comment-type="paramref" class="paramref">timeSpan</code> rounded using the passed parameters.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td>
+<p>One of the following errors occured:</p>
+<ul><li><code data-dev-comment-type="paramref" class="paramref">timeSpan</code> is <code>null</code>.</li><li><code data-dev-comment-type="paramref" class="paramref">step</code> is <code>null</code>.</li><li><code data-dev-comment-type="paramref" class="paramref">tempoMap</code> is <code>null</code>.</li></ul>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.componentmodel.invalidenumargumentexception">InvalidEnumArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">roundingPolicy</code> specified an invalid value.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">time</code> is negative.</td>
       </tr>
     </tbody>
   </table>

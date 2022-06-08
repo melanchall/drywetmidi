@@ -83,9 +83,84 @@
 <h2 id="splitbychannel">SplitByChannel</h2>
 <p><a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.Splitter.html#Melanchall_DryWetMidi_Tools_Splitter_SplitByChannel_">SplitByChannel</a> method splits a MIDI file by channel so all <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.ChannelEvent.html">channel events</a> will be separated by channel and copied to corresponding new files. All meta and system exclusive events will be copied to all the new files (that's default behavior that can be turned off). Thus each new file will contain all meta and sysex events and channel ones for a single channel. The image below illustrates this process:</p>
 <p><img src="images/Splitter/SplitByChannel.png" alt="Split MIDI file by channel"></p>
-<h2 id="splitbynotes">SplitByNotes</h2>
-<p><a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.Splitter.html#Melanchall_DryWetMidi_Tools_Splitter_SplitByNotes_">SplitByNotes</a> method splits MIDI file by notes. Note events will be separated by note number and copied to corresponding new files. All other channel events, meta and system exclusive ones will be copied to all the new files (that's default behavior that can be turned off). The image below illustrates splitting by notes:</p>
-<p><img src="images/Splitter/SplitByNotes.png" alt="Split MIDI file by notes"></p>
+<h2 id="splitbyobjects">SplitByObjects</h2>
+<p><a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.Splitter.html#Melanchall_DryWetMidi_Tools_Splitter_SplitByObjects_">SplitByObjects</a> method splits a MIDI file by objects. The process can be adjusted via <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.SplitByObjectsSettings.html">SplitByObjectsSettings</a> passed to the second parameter of the method.</p>
+<p>For example, to split a file by notes copying all MIDI events to each new file:</p>
+<pre><code class="lang-csharp">var newFiles = midiFile.SplitByObjects(
+    ObjectType.Note | ObjectType.TimedEvent,
+    new SplitByObjectsSettings
+    {
+        WriteToAllFilesPredicate = obj =&gt; obj is TimedEvent
+    });
+</code></pre>
+<p>Here we specify that we need to split the file by notes and timed events, but every timed event must be written to all result files. So in fact we're splitting the file by notes having all non-notes timed events presented in each new file. The image below illustrates the process:</p>
+<p><img src="images/Splitter/SplitByObjects.png" alt="Split MIDI file by objects"></p>
+<p>To split a file by objects the tool needs to determine the key of each object. Objects with the same key will be outputted in a separate file. In the example above default logic of key calculation is used. The following table shows what a default key is for each type of an object:</p>
+<table>
+<thead>
+<tr>
+<th>Object type</th>
+<th>Key</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.ObjectType.html#Melanchall_DryWetMidi_Interaction_ObjectType_TimedEvent">TimedEvent</a></td>
+<td>The type of the underlying event (<a class="xref" href="../../api/Melanchall.DryWetMidi.Core.MidiEvent.html#Melanchall_DryWetMidi_Core_MidiEvent_EventType">EventType</a> of <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.TimedEvent.html#Melanchall_DryWetMidi_Interaction_TimedEvent_Event">TimedEvent.Event</a>).</td>
+</tr>
+<tr>
+<td><a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.ObjectType.html#Melanchall_DryWetMidi_Interaction_ObjectType_Note">Note</a></td>
+<td>Pair of the <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.Note.html#Melanchall_DryWetMidi_Interaction_Note_Channel">channel</a> and <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.Note.html#Melanchall_DryWetMidi_Interaction_Note_NoteNumber">note number</a> of a note.</td>
+</tr>
+<tr>
+<td><a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.ObjectType.html#Melanchall_DryWetMidi_Interaction_ObjectType_Chord">Chord</a></td>
+<td>Collection of keys of the underlying <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.Chord.html#Melanchall_DryWetMidi_Interaction_Chord_Notes">notes</a>.</td>
+</tr>
+<tr>
+<td><a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.ObjectType.html#Melanchall_DryWetMidi_Interaction_ObjectType_Rest">Rest</a></td>
+<td>Pair of the <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.Rest.html#Melanchall_DryWetMidi_Interaction_Rest_Channel">channel</a> and <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.Rest.html#Melanchall_DryWetMidi_Interaction_Rest_NoteNumber">note number</a> of a rest.</td>
+</tr>
+</tbody>
+</table>
+<p>You can alter key calculation logic providing custom key selector. For example, to separate notes by only note number ignoring a note's channel:</p>
+<pre><code class="lang-csharp">var newFiles = midiFile.SplitByObjects(
+    ObjectType.Note | ObjectType.TimedEvent,
+    new SplitByObjectsSettings
+    {
+        KeySelector = obj =&gt; obj is Note note
+            ? ObjectIdUtilities.GetObjectId(note.NoteNumber)
+            : obj.GetObjectId(),
+        WriteToAllFilesPredicate = obj =&gt; obj is TimedEvent
+    });
+</code></pre>
+<p><a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.ObjectIdUtilities.html#Melanchall_DryWetMidi_Interaction_ObjectIdUtilities_GetObjectId__1___0_">ObjectIdUtilities.GetObjectId(value)</a> returns an implementation of <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.IObjectId.html">IObjectId</a> which simply holds the provided value. <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.ObjectIdUtilities.html#Melanchall_DryWetMidi_Interaction_ObjectIdUtilities_GetObjectId_Melanchall_DryWetMidi_Interaction_ITimedObject_">ObjectIdUtilities.GetObjectId(object)</a> returns the default ID (key) for an object. So if an object is a note, we use its note number as the key; and default key for any other object types.</p>
+<p>If custom logic of key selection is complex, you may decide to implement the <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.IObjectId.html">IObjectId</a> interface and return that implementation. Just for example, let's create an ID class that identifies a chord by its shortest name:</p>
+<pre><code class="lang-csharp">private sealed class ChordNameId : IObjectId
+{
+    private readonly string _name;
+    
+    public ChordNameId(Chord chord)
+    {
+        _name = chord.GetMusicTheoryChord().GetNames().FirstOrDefault();
+    }
+
+    public override bool Equals(object obj) =&gt;
+        obj is ChordNameId chordNameId &amp;&amp;
+        chordNameId._name == _name;
+
+    public override int GetHashCode() =&gt;
+        _name.GetHashCode();
+}
+</code></pre>
+<p>And now we can use it to split a file by chords of the same name:</p>
+<pre><code class="lang-csharp">var newFiles = midiFile.SplitByObjects(
+    ObjectType.Chord,
+    new SplitByObjectsSettings
+    {
+        KeySelector = obj =&gt; new ChordNameId((Chord)obj)
+    });
+</code></pre>
+<p>Please see documentation on <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.SplitByObjectsSettings.html">SplitByObjectsSettings</a> to learn more about how you can adjust the process of splitting.</p>
 <h2 id="splitbygrid">SplitByGrid</h2>
 <p><a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.Splitter.html#Melanchall_DryWetMidi_Tools_Splitter_SplitByGrid_">SplitByGrid</a> method splits MIDI file by the specified grid. Each file will preserve original tempo map and all parameters changes (like a control value or program changes). The image below shows general case of splitting a MIDI file by grid:</p>
 <p><img src="images/Splitter/SplitFileByGrid.png" alt="Split MIDI file by grid"></p>

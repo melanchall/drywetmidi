@@ -267,7 +267,7 @@
       "output": {
         ".html": {
           "relative_path": "articles/high-level-managing/MetricTimeSpan.html",
-          "hash": "FqN/94QqCnys+PuebL04vIsmQ2syGpRwUWOp+qCYPfs="
+          "hash": "Vm5PyQVr12t4mWsj3TWzo/VszKI7EV3BxMGWsfEVz44="
         }
       },
       "is_incremental": false,
@@ -913,7 +913,7 @@
       "output": {
         ".html": {
           "relative_path": "articles/toc.html",
-          "hash": "Yklyj6AU3MY47eXxK5Z7D99UKECsZClo2Xl7Vd4Dhz0="
+          "hash": "gh4NxOa9Njr68zvVMEKn9Z1ZF3EmGYCgoNTADbUxuYM="
         }
       },
       "is_incremental": false,
@@ -925,7 +925,7 @@
       "output": {
         ".html": {
           "relative_path": "articles/tools/MIDI-file-splitting.html",
-          "hash": "nMEMWWCDgKg3ikK9UdZ/M/FwXnJHugiYVQGYQ0Mvg7M="
+          "hash": "VnFn4TkPNHBRVsTQGBk8LH0c8JMUJy8wa8rtwAT5GpI="
         }
       },
       "is_incremental": false,
@@ -933,11 +933,11 @@
     },
     {
       "type": "Conceptual",
-      "source_relative_path": "articles/tools/Notes-merger.md",
+      "source_relative_path": "articles/tools/Merger.md",
       "output": {
         ".html": {
-          "relative_path": "articles/tools/Notes-merger.html",
-          "hash": "PkOG8zXWh8fWuuiVBPND5SisUoqHyzg0ut3rG97N5EY="
+          "relative_path": "articles/tools/Merger.html",
+          "hash": "o2ecmfpc215pUvAmN2fbu27LFE7DUmDkhoiQJxeyQco="
         }
       },
       "is_incremental": false,
@@ -961,7 +961,7 @@
       "output": {
         ".html": {
           "relative_path": "articles/tools/Overview.html",
-          "hash": "suxVyZxqBb+jttXABqtoTIauxg3pciQQILPzTByX2qU="
+          "hash": "hhizqlrxMgQXyDN2ex6rrtNDOaVWnMEPe0vwaB1QouE="
         }
       },
       "is_incremental": false,
@@ -981,6 +981,30 @@
     },
     {
       "type": "Conceptual",
+      "source_relative_path": "articles/tools/Repeater.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/tools/Repeater.html",
+          "hash": "APIoORaq5wiFdrTam1EcXCnoiqfuUjcdOi+xpJP1l9U="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/tools/Resizer.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/tools/Resizer.html",
+          "hash": "BuMldLKOr1LbS3QvnjvJqrq2H1uxLHJwcubDRU5bQkA="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
       "source_relative_path": "articles/tools/Splitter.md",
       "output": {
         ".html": {
@@ -993,10 +1017,43 @@
     },
     {
       "type": "Resource",
-      "source_relative_path": "articles/tools/images/NotesMerger/NotesMergerTolerance.png",
+      "source_relative_path": "articles/tools/images/Merger/MergeObjects-Chords-Custom.png",
       "output": {
         "resource": {
-          "relative_path": "articles/tools/images/NotesMerger/NotesMergerTolerance.png"
+          "relative_path": "articles/tools/images/Merger/MergeObjects-Chords-Custom.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tools/images/Merger/MergeObjects-Chords.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tools/images/Merger/MergeObjects-Chords.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tools/images/Merger/MergeObjects-Tolerance.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tools/images/Merger/MergeObjects-Tolerance.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tools/images/Merger/MergeObjects.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tools/images/Merger/MergeObjects.png"
         }
       },
       "is_incremental": false,
@@ -1063,6 +1120,72 @@
       "output": {
         "resource": {
           "relative_path": "articles/tools/images/Quantizer/QuantizingLevel.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tools/images/Repeater/CustomRepeater.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tools/images/Repeater/CustomRepeater.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tools/images/Repeater/Repeat.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tools/images/Repeater/Repeat.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tools/images/Repeater/RoundingUp.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tools/images/Repeater/RoundingUp.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tools/images/Repeater/ShiftByFixedValue.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tools/images/Repeater/ShiftByFixedValue.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tools/images/Resizer/ResizeObjectsGroup-Details.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tools/images/Resizer/ResizeObjectsGroup-Details.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tools/images/Resizer/ResizeObjectsGroup.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tools/images/Resizer/ResizeObjectsGroup.png"
         }
       },
       "is_incremental": false,
@@ -1158,10 +1281,10 @@
     },
     {
       "type": "Resource",
-      "source_relative_path": "articles/tools/images/Splitter/SplitByNotes.png",
+      "source_relative_path": "articles/tools/images/Splitter/SplitByObjects.png",
       "output": {
         "resource": {
-          "relative_path": "articles/tools/images/Splitter/SplitByNotes.png"
+          "relative_path": "articles/tools/images/Splitter/SplitByObjects.png"
         }
       },
       "is_incremental": false,
@@ -1298,7 +1421,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Common.MidiException.html",
-          "hash": "sgnXuLtQBrwP6FdAIr9D5HHF4SiJsnDe0dyotn58Ak8="
+          "hash": "6w2R7B+Ai78s3GZ9FIQn4oJRW3zUgPrquaJlZUhWIVw="
         }
       },
       "is_incremental": false,
@@ -1802,7 +1925,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Core.InvalidChannelEventParameterValueException.html",
-          "hash": "zTgSrFPXhP6VAJxdwXWE5Ma4AD1E6KSaQH4JYkcY4qA="
+          "hash": "3bL+zKt8oW0veumFFVn9x2BUnd56FpruehWiIK9Y2fw="
         }
       },
       "is_incremental": false,
@@ -1826,7 +1949,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Core.InvalidChunkSizeException.html",
-          "hash": "gF/IJD+C25OrWLfHGbsrZZScEJFEU+BMkmOyvf6p/FQ="
+          "hash": "a1fLbJlirKC1cbFTnQ27hrZwxQOdawURyDaFb4v1Njk="
         }
       },
       "is_incremental": false,
@@ -1850,7 +1973,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Core.InvalidMetaEventParameterValueException.html",
-          "hash": "Oz1j85jxfzX7mhhKvzBMzP3uknQhlQb7IlGxlxTrKGw="
+          "hash": "B5zqkGc2X7pUEC3yOshBU7Qw2MS+e8H2N3tkvPGqtfo="
         }
       },
       "is_incremental": false,
@@ -1874,7 +1997,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Core.InvalidMidiTimeCodeComponentException.html",
-          "hash": "regDK6KKHz7+30zuV0gFC+wcJ98WFBT5Xth0RZZspE8="
+          "hash": "zLXkfk7vnaMiK3gX5PuA0jpXUpHeDbhlrHh7bIivzlI="
         }
       },
       "is_incremental": false,
@@ -1886,7 +2009,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Core.InvalidSystemCommonEventParameterValueException.html",
-          "hash": "NVtK4Yb0/dqCMzbGTBrQr0hxjgH46TcRY4ProYLV2ds="
+          "hash": "UMYeIehzv464DV8w8wUrzrva3gGrcXZwgyABB7hkHEo="
         }
       },
       "is_incremental": false,
@@ -2030,7 +2153,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Core.MidiFile.html",
-          "hash": "N6MmyRetJ3r8q1fE+U8vEJfDu/4R1POJ6xLsD5oqpV4="
+          "hash": "dwXu8rEOjcjV0o0y7vGrn5nTUxEGxfATCE3WhtlpZfg="
         }
       },
       "is_incremental": false,
@@ -2198,7 +2321,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Core.NotEnoughBytesException.html",
-          "hash": "yFwy67qqdb69fCssGA+goTS9WDlh+2y/dOUkZ97TVfE="
+          "hash": "LCon6K+MjZTeEglhGKghF8ETUh4rpgoIVpIkZBtJk+g="
         }
       },
       "is_incremental": false,
@@ -2234,7 +2357,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Core.NoteEvent.html",
-          "hash": "4OLYfJMkeT+QWlKtEYcwLuEc/vgEFcdYlQq6JIVEp1s="
+          "hash": "GCLz7gczQK3xoRk9NKobHbCZBEnQX0X8FKCHhKqNLuA="
         }
       },
       "is_incremental": false,
@@ -2258,7 +2381,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Core.NoteOffEvent.html",
-          "hash": "2jDnn8v5f37kkBexGJPfRlSzP3E3b5QQFHJMXlPcuyw="
+          "hash": "0Wt7xwd7xNdTJgfy6dPuDUjd+GQNjZX+zCCf0mTiziU="
         }
       },
       "is_incremental": false,
@@ -2270,7 +2393,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Core.NoteOnEvent.html",
-          "hash": "mY1jPOy4J9+2v4YUeN1P1j7K33CythV44J+kGIuUXzY="
+          "hash": "NVdyC9BM4aiRSWwjZKvN0608FFXCN8OGM8OOskhkzf0="
         }
       },
       "is_incremental": false,
@@ -2606,7 +2729,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Core.TooManyTrackChunksException.html",
-          "hash": "53By7o9NaPSqoPLzE6ySsEKcJZfliepIA+DO/ie399s="
+          "hash": "mZHeQc5SN20yFeifGMNvi7jCzymLC5ohQEKD0OKM8iE="
         }
       },
       "is_incremental": false,
@@ -2618,7 +2741,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Core.TrackChunk.html",
-          "hash": "r1xltRYQ5W948itTO+Y0LLf/iDUd+sLgF/3Rpdhor4I="
+          "hash": "tpSq7SnZlJT0rzZB/MT6ePUYTY2dNM0H1HJ+OG/PhMo="
         }
       },
       "is_incremental": false,
@@ -2666,7 +2789,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Core.UnexpectedTrackChunksCountException.html",
-          "hash": "v/zUTXxUJQsJQuebmj33p0XLftArHzzc2WTfgSZPemk="
+          "hash": "c7xNnISIopMFWg8eu2gRqEKwchQKSUB8NpJZFbGYnDI="
         }
       },
       "is_incremental": false,
@@ -2714,7 +2837,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Core.UnknownChannelEventException.html",
-          "hash": "eJqbXL4A12MVKGHVkT7C0Z1oTW0EdNx6xv18J+2E2BM="
+          "hash": "WPC0jz3c62+WNitWSw2paJG6ooEKRJ7ZwtSbazKXdpg="
         }
       },
       "is_incremental": false,
@@ -2762,7 +2885,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Core.UnknownChunkException.html",
-          "hash": "G7unhTG4Ay3JJHi6TWdgzRi+kR7GGkC8O89nxGU+4Xg="
+          "hash": "SyZBBzA+dFNT4RuK9R5kwSMn2m8J8DGTRvn7pk11UlQ="
         }
       },
       "is_incremental": false,
@@ -2786,7 +2909,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Core.UnknownFileFormatException.html",
-          "hash": "wKYfHOmr9ZTyVmSC/Ho+dNhO6mRDg3rzC/KTGysrHmg="
+          "hash": "REJMq9VLBnB7HYkEvlEM2wFgx1pi0UUplWV8nS66Dng="
         }
       },
       "is_incremental": false,
@@ -2918,7 +3041,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Interaction.ChannelCoarseTuningParameter.html",
-          "hash": "LnzhjqJ51wsTxPPlqAz68Oh85WDNvJ0y2HjassgQRco="
+          "hash": "elgIRBCyr1LC6TjuLjIDP2Bv/cb8S/230xFb9Q+883o="
         }
       },
       "is_incremental": false,
@@ -2930,7 +3053,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Interaction.ChannelFineTuningParameter.html",
-          "hash": "3TFCnnt0uZgOEgfCiyZKZ7hFtE9D4F+dYQGkMHbk45Y="
+          "hash": "apGpWk3AAHewNLoF4uJUgHVRJbyeKsH/BtUFdiKTCVo="
         }
       },
       "is_incremental": false,
@@ -2942,7 +3065,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Interaction.Chord.html",
-          "hash": "6/A0lU2R/CYUIArtf7013IwWzNKzILYoprb0CWLQMVE="
+          "hash": "xMxPSUviu2+n7S3i5NKJdEwrXaoy53R2G5BQsJFBZj0="
         }
       },
       "is_incremental": false,
@@ -3038,7 +3161,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Interaction.ILengthedObject.html",
-          "hash": "uKRsM1bdHHtZMk+MD+B5WrjeL3/AqDOyZg/8w5ehbxQ="
+          "hash": "3TeU7+eA9luGNEXrMKRtGs7ETQgZgKowspksh+BRUC8="
         }
       },
       "is_incremental": false,
@@ -3082,6 +3205,18 @@
     },
     {
       "type": "ManagedReference",
+      "source_relative_path": "obj/api/Melanchall.DryWetMidi.Interaction.IObjectId.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Melanchall.DryWetMidi.Interaction.IObjectId.html",
+          "hash": "qyRmVGnBQEdR3TB/zJaGeAQlWWyoBeVtVfQPdT934cs="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
       "source_relative_path": "obj/api/Melanchall.DryWetMidi.Interaction.ITimeSpan.yml",
       "output": {
         ".html": {
@@ -3098,7 +3233,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Interaction.ITimedObject.html",
-          "hash": "v96zMFaWtQ0a2UkyszdYxPiuFY4nGvzL270+FAmF2dc="
+          "hash": "CpF/QzgqdgAkfNLwIkRRzGeen1oW9Q3CRVyVaz5OMiw="
         }
       },
       "is_incremental": false,
@@ -3194,7 +3329,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Interaction.MidiFileUtilities.html",
-          "hash": "uOoIr+ucAnajVwPy8B3Nv/zX8Pdgib6uetQXtFWH+3s="
+          "hash": "we8ae6xNDXmNsl2+mXwEjzKKHZnKFzqzz7gtSKgG0FA="
         }
       },
       "is_incremental": false,
@@ -3218,7 +3353,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Interaction.ModulationDepthRangeParameter.html",
-          "hash": "iIyNYUu+WSCvY3U++UkGotlHFMeKArnWKPu8P3zKKgw="
+          "hash": "oszSl7vt3mEoA8iUd0d3KVIe9uQ98ZiTUzuxrxI8CXo="
         }
       },
       "is_incremental": false,
@@ -3242,7 +3377,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Interaction.Note.html",
-          "hash": "bq1HVPT4gdUGB1FR29N6WRfgBgWgQYbUAnRfgiQbGUQ="
+          "hash": "8dPQizWlwkILyvXn1pUf12CIvDp4KUkKKUiDs8j6wIw="
         }
       },
       "is_incremental": false,
@@ -3267,30 +3402,6 @@
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Interaction.NoteDetectionSettings.html",
           "hash": "FGnxCd5GK6gGdx4hmdyEGTrjE/6TT1QcMNnXxeg6dxg="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "obj/api/Melanchall.DryWetMidi.Interaction.NoteId.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Melanchall.DryWetMidi.Interaction.NoteId.html",
-          "hash": "EQrUPY02L8RdrvRIJylUa9RrN4ACvyE1hf1KzbKFvU8="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "obj/api/Melanchall.DryWetMidi.Interaction.NoteIdUtilities.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Melanchall.DryWetMidi.Interaction.NoteIdUtilities.html",
-          "hash": "YBlTj6WQaBEMYXaV6b9l2jBVHBVfHm7Q/BcCzzohxe0="
         }
       },
       "is_incremental": false,
@@ -3358,6 +3469,18 @@
     },
     {
       "type": "ManagedReference",
+      "source_relative_path": "obj/api/Melanchall.DryWetMidi.Interaction.ObjectIdUtilities.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Melanchall.DryWetMidi.Interaction.ObjectIdUtilities.html",
+          "hash": "lAeigQnr9EzDpcEpQvzZpsUUvO1/Jx1UxJ0O3p4p0sw="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
       "source_relative_path": "obj/api/Melanchall.DryWetMidi.Interaction.ObjectType.yml",
       "output": {
         ".html": {
@@ -3374,7 +3497,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Interaction.Parameter.html",
-          "hash": "QhKmCoHtzh34P3EdJBAPHKdxUGbwYw38mpLASaihK18="
+          "hash": "KCxRopBFedBf6ScANZwMv+KxIkHCd6K/lO0kbJxg6Vw="
         }
       },
       "is_incremental": false,
@@ -3398,7 +3521,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Interaction.PitchBendSensitivityParameter.html",
-          "hash": "Hy+ervjN7slgoYsAbcPZwxeKx7/XhYyB1+boqvR1Ubs="
+          "hash": "1VHyjdc4ziasgOPdC28iEEz+QVcPZvc8zTC62P5lNU4="
         }
       },
       "is_incremental": false,
@@ -3410,7 +3533,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Interaction.RegisteredParameter.html",
-          "hash": "TZr1SchXsYJr4dQvMLr93+992azEZrUUIxcJi0KwqL8="
+          "hash": "JW3lY6DPxNCCSzkT9fSSjMkNZS55MVxG5yq0sbVl/AE="
         }
       },
       "is_incremental": false,
@@ -3434,7 +3557,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Interaction.ResizeNotesUtilities.html",
-          "hash": "uvX//stPg6xIcfXlMUL01+m5pkUGxszHPWFgTUHx3rk="
+          "hash": "92j/x2EZ879IY1rov7n2fZgQKI7K7tGGMnSmgZKAvPM="
         }
       },
       "is_incremental": false,
@@ -3446,7 +3569,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Interaction.Rest.html",
-          "hash": "lbF3IpmVzWEZrQNIMluxYIYSPt0/0wpRvaqe7MEP5kA="
+          "hash": "oL2EjS/G6Lknw1SqSiI4mZXjItkfeo6TZCcOCDFxH9o="
         }
       },
       "is_incremental": false,
@@ -3542,7 +3665,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Interaction.TempoMapManagingUtilities.html",
-          "hash": "pLdfLH7vno3ntX2pPc+Je2ADc6gNNZl4MK6yfwWdtnY="
+          "hash": "C0K2AZxxCR7KUOkQ6Tzl079HT8X3E/c2HX5/o7rxY3M="
         }
       },
       "is_incremental": false,
@@ -3614,7 +3737,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Interaction.TimeSpanRoundingPolicy.html",
-          "hash": "vRaJN0L2IdfG/G9aFn0/Hd6vYBp/F0tzIkADny8qjzU="
+          "hash": "MZ7BY6pN9LD+t6Xa7B2dcbDXaDrksO9K+MiFi6epzKM="
         }
       },
       "is_incremental": false,
@@ -3638,7 +3761,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Interaction.TimeSpanUtilities.html",
-          "hash": "ACw3UTO/AdyFEmOF/3cl95zx1I+54l1Zw0Rapq/ReWc="
+          "hash": "77+Q6rgpdOMXCDTlfltYtqvQyyIsKNr6xBnKu2Oqg2k="
         }
       },
       "is_incremental": false,
@@ -3650,7 +3773,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Interaction.TimedEvent.html",
-          "hash": "zq/QUEwAhPVaeHcG9rjVxeiwbl9/kHmrf0FwffTsCuA="
+          "hash": "HKhoZZQphBWryXg5isFz0T2H8ON1qIHGzX/NWSMfgYA="
         }
       },
       "is_incremental": false,
@@ -3722,7 +3845,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Interaction.TimedObjectsCollection-1.html",
-          "hash": "Xf8QLTEC90d6vxtC7NSiYHr1keaL/eG5tJMibb8iSlw="
+          "hash": "wcYI+E/e7Umbm50iocog2F5VEm1pmxJ3Xmn3eN8Ix7M="
         }
       },
       "is_incremental": false,
@@ -3806,7 +3929,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Interaction.TuningBankSelectParameter.html",
-          "hash": "3EF3A/0rIwRjkcW0cdj3rIcIMeeDdplmNUpGSD9uAQc="
+          "hash": "kZwqaK+SZR+RwomXF5RMHdw7wa3GXENvgK8PMeOKeLY="
         }
       },
       "is_incremental": false,
@@ -3818,7 +3941,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Interaction.TuningProgramChangeParameter.html",
-          "hash": "uX9GPNEJOBXc6TlH+96yTX8uWvgiJpOwtrB9LQ9risg="
+          "hash": "xFGHcbicGgw5tiXY3QUx5hq94gPVrjdbqXxKsBjh5xE="
         }
       },
       "is_incremental": false,
@@ -3830,7 +3953,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Interaction.ValueChange-1.html",
-          "hash": "edSthLMDhzIvjgd67rlktPEPAKe374ob6+fCV2hmvLY="
+          "hash": "zPI6jINZGkKr2sqvujDeDXKSQIEO3p0olt/ddqPz428="
         }
       },
       "is_incremental": false,
@@ -3842,7 +3965,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Interaction.html",
-          "hash": "PDUMt5IlxhFhoVeYtD7+PQjGaT3YCzAZ0ts78S4hE5U="
+          "hash": "b3umdQh7H8BreRss2OWiMK4J1YkEifqQ1WF8a1q4UZ8="
         }
       },
       "is_incremental": false,
@@ -4046,7 +4169,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Multimedia.MidiDeviceException.html",
-          "hash": "nMtBR1pP9IiIEwyVvA6DZDhZywqApLSg/8ni39yeCgk="
+          "hash": "QoeMEG1fbAofxGfz7F0b672zBn/GvjJxaVMLTlUx9XE="
         }
       },
       "is_incremental": false,
@@ -4382,7 +4505,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Multimedia.TickGeneratorException.html",
-          "hash": "wDVWZrc+PXy/MDQHJ7gayP2aQbVrc4voEbESwxwngwc="
+          "hash": "gaNkyiw7+4sO2jNGdyJTpMyCnWSWnpAhvWLFssunbWI="
         }
       },
       "is_incremental": false,
@@ -5170,6 +5293,18 @@
     },
     {
       "type": "ManagedReference",
+      "source_relative_path": "obj/api/Melanchall.DryWetMidi.Tools.Merger.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Melanchall.DryWetMidi.Tools.Merger.html",
+          "hash": "QSPmEk0UkNRNb3Md3WGSy+mUiaEOxMdYRCppgwSvlNY="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
       "source_relative_path": "obj/api/Melanchall.DryWetMidi.Tools.MidiFileCsvConversionSettings.yml",
       "output": {
         ".html": {
@@ -5234,7 +5369,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Tools.NotesMerger.html",
-          "hash": "eAmMdfiULcfoQgLtLneseAnteL7nKWS/ESHHCaIVqq0="
+          "hash": "ll0ozSamN8saUrQmdPlQGBtZs9uXfz9c9JIvzWgtixg="
         }
       },
       "is_incremental": false,
@@ -5246,7 +5381,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Tools.NotesMergerUtilities.html",
-          "hash": "RQ1fmULWKNWKgBZ8Pxx6YFsBtZYUphMawddpUXBXq2o="
+          "hash": "wRQRNMJ5OnTHMSD8dsdAs9kJIr4IZnjVemPugHsOsm8="
         }
       },
       "is_incremental": false,
@@ -5258,7 +5393,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Tools.NotesMergingSettings.html",
-          "hash": "P9BgL/85eWNbaXfLWwbyimx0rpN/S5AZZvB+wNxiv4Q="
+          "hash": "YFAE+WlhNtO+MIsDSNDf379jX+rT87IhsxvkIIIgJTc="
         }
       },
       "is_incremental": false,
@@ -5350,11 +5485,47 @@
     },
     {
       "type": "ManagedReference",
+      "source_relative_path": "obj/api/Melanchall.DryWetMidi.Tools.ObjectsGroupResizingSettings.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Melanchall.DryWetMidi.Tools.ObjectsGroupResizingSettings.html",
+          "hash": "8ZuZgPaKUHOqe2eH91s11EZkia68r9e2ahCeFg/v1Ts="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/Melanchall.DryWetMidi.Tools.ObjectsMerger.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Melanchall.DryWetMidi.Tools.ObjectsMerger.html",
+          "hash": "krm9y09WIlaIjJXuM7AISCacdiMHhb/Q0ltDqLC9wa4="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/Melanchall.DryWetMidi.Tools.ObjectsMergingSettings.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Melanchall.DryWetMidi.Tools.ObjectsMergingSettings.html",
+          "hash": "/36GM1cohtJbnjeaLjYDCAQar9GqsaxFxwrj4i79RTs="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
       "source_relative_path": "obj/api/Melanchall.DryWetMidi.Tools.PartProcessingContext.yml",
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Tools.PartProcessingContext.html",
-          "hash": "Hn6WV9r7Ji9BMt3eQprpgafs0BqxGzG1/GwSofUAoAU="
+          "hash": "2v8WOKDuLr0copo6vHamzpfMJfEVWZ0aK2LISRqTrWw="
         }
       },
       "is_incremental": false,
@@ -5498,7 +5669,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Tools.Repeater.html",
-          "hash": "EHFkzhrsz4xcpPpLxH4i9JCAY8qSgXoluJgi0GfNyls="
+          "hash": "qCJx5pUocpkjQ76NfM2Q1VZgUNRGJ6HXQFbhWhpE5YA="
         }
       },
       "is_incremental": false,
@@ -5510,7 +5681,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Tools.RepeaterUtilities.html",
-          "hash": "eNh/BBKGsVAYLcnZE1Sp+LksD0XGSsGANWBfRfngkII="
+          "hash": "JmV0016ub1x8UQVPQeWR9AJwMZcm3DHvXxsl3+4xfbU="
         }
       },
       "is_incremental": false,
@@ -5522,7 +5693,19 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Tools.RepeatingSettings.html",
-          "hash": "8xpWJg611WPyJOFcjOL6dhBzPdGOZj5MwjtQBQbW9fo="
+          "hash": "v/aThAJyq6w7HUFkShEB/CQUGSpmNIlz8YU195O8XFI="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/Melanchall.DryWetMidi.Tools.Resizer.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Melanchall.DryWetMidi.Tools.Resizer.html",
+          "hash": "FLx7U3PLTvWmChm14q/y5CaX+JorZCgpr/MWyh/hOEg="
         }
       },
       "is_incremental": false,
@@ -5534,7 +5717,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Tools.ShiftPolicy.html",
-          "hash": "CZ+75UsnDENrib3j8gGYzbECMC9iY+DTHM8Jh5ShTaY="
+          "hash": "NkMQa1rLZogBCFNEnBAJQ7kvgNqbw+spl/5BwcI7zWs="
         }
       },
       "is_incremental": false,
@@ -5566,6 +5749,18 @@
     },
     {
       "type": "ManagedReference",
+      "source_relative_path": "obj/api/Melanchall.DryWetMidi.Tools.SplitByObjectsSettings.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Melanchall.DryWetMidi.Tools.SplitByObjectsSettings.html",
+          "hash": "+gYP/OFA424u7wLgaaqtsMKgsXOSmEJ60O+gGQUtG8k="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
       "source_relative_path": "obj/api/Melanchall.DryWetMidi.Tools.SplitFileByChannelSettings.yml",
       "output": {
         ".html": {
@@ -5582,7 +5777,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Tools.SplitFileByChunksSettings.html",
-          "hash": "2WS/o/BBliIhKoPYZ6JOq/V/CS3mYmiiNQTRD+/GTh0="
+          "hash": "XfjMN7EGFDp5y30pHSh8T99cCgYbYZjDl5vhrga7yik="
         }
       },
       "is_incremental": false,
@@ -5606,7 +5801,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Tools.Splitter.html",
-          "hash": "cIKjejC2SDAkQ4Wzfk/gRHhaQildgAflebLnaDQejj4="
+          "hash": "bGSVnuoybbhsHDxYf5XvO4vrFn3sKVymWA9Uw1y0BoE="
         }
       },
       "is_incremental": false,
@@ -5714,7 +5909,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Tools.html",
-          "hash": "txwzCQXV1VhneErYn2W80hWLLNilkrvGpz2cZNHB5eA="
+          "hash": "thOPU1sj5eY6s8ujd+m3FxZXpwUMNjIN5SaUAq+zzkY="
         }
       },
       "is_incremental": false,
@@ -5726,7 +5921,7 @@
       "output": {
         ".html": {
           "relative_path": "api/toc.html",
-          "hash": "nWYUHbkyTb8t/o1wTnAhaQ5UDJqA4XV7RH7/lrtj5UU="
+          "hash": "dwgnhDFJ9TIl4bmLYrGiUC4FAe6Kicm1zjMytK+/6tI="
         }
       },
       "is_incremental": false,
@@ -6015,6 +6210,114 @@
         ".html": {
           "relative_path": "obsolete/OBS16/old.html",
           "hash": "03PTLJzuZ56GOeRwhRDH8iA3YnxsOLE1v8KULq7lUZQ="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "obsolete/OBS17/description.md",
+      "output": {
+        ".html": {
+          "relative_path": "obsolete/OBS17/description.html",
+          "hash": "KhoNPtg0lNjbafuj2LKAmjwTpWgOU30O9bEAy4mBi6g="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "obsolete/OBS17/new.md",
+      "output": {
+        ".html": {
+          "relative_path": "obsolete/OBS17/new.html",
+          "hash": "DOZA1c6XvJB1V3WItSqeJwuRZN0OU0tQyvNf1yc9+IM="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "obsolete/OBS17/old.md",
+      "output": {
+        ".html": {
+          "relative_path": "obsolete/OBS17/old.html",
+          "hash": "JE35LIXC0kA78JzLhYy8XqixM7VVIurLkg2lDc5c0MM="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "obsolete/OBS18/description.md",
+      "output": {
+        ".html": {
+          "relative_path": "obsolete/OBS18/description.html",
+          "hash": "tUC+bo3IzMGDlNydrjlaG7wqX4ydiwPV2H078BFQ9bA="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "obsolete/OBS18/new.md",
+      "output": {
+        ".html": {
+          "relative_path": "obsolete/OBS18/new.html",
+          "hash": "901WHAdBpMxtoYW+85teE6XKfzBQqC2qmCclW3dGgzI="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "obsolete/OBS18/old.md",
+      "output": {
+        ".html": {
+          "relative_path": "obsolete/OBS18/old.html",
+          "hash": "teoT7kTa42/Mkzd35Eo/Tabn8WtFb3+zhRiuCH4QS0g="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "obsolete/OBS19/description.md",
+      "output": {
+        ".html": {
+          "relative_path": "obsolete/OBS19/description.html",
+          "hash": "IXPJGmAEMJHmuI/v2h9CUH0Tif6JXE0ini4tKIDjqLc="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "obsolete/OBS19/new.md",
+      "output": {
+        ".html": {
+          "relative_path": "obsolete/OBS19/new.html",
+          "hash": "jJwAzuoMoIY89wgn1qxv8+WuHfFIu4IgFW6ovowrL7k="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "obsolete/OBS19/old.md",
+      "output": {
+        ".html": {
+          "relative_path": "obsolete/OBS19/old.html",
+          "hash": "KMnEWYieTQsd2zhObr/3POA/tY5ip1hzE5H6inQaCuk="
         }
       },
       "is_incremental": false,
@@ -6314,7 +6617,7 @@
       "output": {
         ".html": {
           "relative_path": "obsolete/obsolete.html",
-          "hash": "7p0j/7U9xipBRXXlskf8+/d2/FD8gRJzbrkYfWR0G9U="
+          "hash": "1rvAFVMMEe15qXZvLHyZb7SF3GANC3a3k/VVRd8gfyY="
         }
       },
       "is_incremental": false,
@@ -6359,13 +6662,13 @@
         "ConceptualDocumentProcessor": {
           "can_incremental": false,
           "incrementalPhase": "build",
-          "total_file_count": 94,
+          "total_file_count": 105,
           "skipped_file_count": 0
         },
         "ManagedReferenceDocumentProcessor": {
           "can_incremental": false,
           "incrementalPhase": "build",
-          "total_file_count": 372,
+          "total_file_count": 378,
           "skipped_file_count": 0
         },
         "ResourceDocumentProcessor": {

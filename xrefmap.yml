@@ -55,6 +55,9 @@ references:
 - uid: a_managers
   name: Objects managers
   href: articles/high-level-managing/Objects-managers.html
+- uid: a_merger
+  name: Merger
+  href: articles/tools/Merger.html
 - uid: a_mt_chord
   name: Chord
   href: articles/music-theory/Chord.html
@@ -76,9 +79,6 @@ references:
 - uid: a_mt_scale
   name: Scale
   href: articles/music-theory/Scale.html
-- uid: a_notes_merger
-  name: Notes merger
-  href: articles/tools/Notes-merger.html
 - uid: a_obj_splitting
   name: Objects splitting
   href: articles/tools/Objects-splitting.html
@@ -106,12 +106,21 @@ references:
 - uid: a_recording_overview
   name: Recording - Overview
   href: articles/recording/Overview.html
+- uid: a_repeater
+  name: Repeater
+  href: articles/tools/Repeater.html
+- uid: a_resizer
+  name: Resizer
+  href: articles/tools/Resizer.html
 - uid: a_splitter
   name: Splitter
   href: articles/tools/Splitter.html
 - uid: a_tools_overview
   name: Overview
   href: articles/tools/Overview.html
+- uid: a_ts_metric
+  name: MetricTimeSpan
+  href: articles/high-level-managing/MetricTimeSpan.html
 - uid: Melanchall.DryWetMidi.Common
   name: Melanchall.DryWetMidi.Common
   href: api/Melanchall.DryWetMidi.Common.html
@@ -11567,6 +11576,19 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Interaction.Chord.Clone
   nameWithType: Chord.Clone
+- uid: Melanchall.DryWetMidi.Interaction.Chord.EndTime
+  name: EndTime
+  href: api/Melanchall.DryWetMidi.Interaction.Chord.html#Melanchall_DryWetMidi_Interaction_Chord_EndTime
+  commentId: P:Melanchall.DryWetMidi.Interaction.Chord.EndTime
+  fullName: Melanchall.DryWetMidi.Interaction.Chord.EndTime
+  nameWithType: Chord.EndTime
+- uid: Melanchall.DryWetMidi.Interaction.Chord.EndTime*
+  name: EndTime
+  href: api/Melanchall.DryWetMidi.Interaction.Chord.html#Melanchall_DryWetMidi_Interaction_Chord_EndTime_
+  commentId: Overload:Melanchall.DryWetMidi.Interaction.Chord.EndTime
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Interaction.Chord.EndTime
+  nameWithType: Chord.EndTime
 - uid: Melanchall.DryWetMidi.Interaction.Chord.Length
   name: Length
   href: api/Melanchall.DryWetMidi.Interaction.Chord.html#Melanchall_DryWetMidi_Interaction_Chord_Length
@@ -12154,6 +12176,19 @@ references:
   commentId: T:Melanchall.DryWetMidi.Interaction.ILengthedObject
   fullName: Melanchall.DryWetMidi.Interaction.ILengthedObject
   nameWithType: ILengthedObject
+- uid: Melanchall.DryWetMidi.Interaction.ILengthedObject.EndTime
+  name: EndTime
+  href: api/Melanchall.DryWetMidi.Interaction.ILengthedObject.html#Melanchall_DryWetMidi_Interaction_ILengthedObject_EndTime
+  commentId: P:Melanchall.DryWetMidi.Interaction.ILengthedObject.EndTime
+  fullName: Melanchall.DryWetMidi.Interaction.ILengthedObject.EndTime
+  nameWithType: ILengthedObject.EndTime
+- uid: Melanchall.DryWetMidi.Interaction.ILengthedObject.EndTime*
+  name: EndTime
+  href: api/Melanchall.DryWetMidi.Interaction.ILengthedObject.html#Melanchall_DryWetMidi_Interaction_ILengthedObject_EndTime_
+  commentId: Overload:Melanchall.DryWetMidi.Interaction.ILengthedObject.EndTime
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Interaction.ILengthedObject.EndTime
+  nameWithType: ILengthedObject.EndTime
 - uid: Melanchall.DryWetMidi.Interaction.ILengthedObject.Length
   name: Length
   href: api/Melanchall.DryWetMidi.Interaction.ILengthedObject.html#Melanchall_DryWetMidi_Interaction_ILengthedObject_Length
@@ -12223,6 +12258,12 @@ references:
   commentId: E:Melanchall.DryWetMidi.Interaction.INotifyTimeChanged.TimeChanged
   fullName: Melanchall.DryWetMidi.Interaction.INotifyTimeChanged.TimeChanged
   nameWithType: INotifyTimeChanged.TimeChanged
+- uid: Melanchall.DryWetMidi.Interaction.IObjectId
+  name: IObjectId
+  href: api/Melanchall.DryWetMidi.Interaction.IObjectId.html
+  commentId: T:Melanchall.DryWetMidi.Interaction.IObjectId
+  fullName: Melanchall.DryWetMidi.Interaction.IObjectId
+  nameWithType: IObjectId
 - uid: Melanchall.DryWetMidi.Interaction.ITimedObject
   name: ITimedObject
   href: api/Melanchall.DryWetMidi.Interaction.ITimedObject.html
@@ -13327,6 +13368,21 @@ references:
   commentId: M:Melanchall.DryWetMidi.Interaction.MidiFileUtilities.GetDuration(Melanchall.DryWetMidi.Core.MidiFile,Melanchall.DryWetMidi.Interaction.TimeSpanType)
   fullName: Melanchall.DryWetMidi.Interaction.MidiFileUtilities.GetDuration(Melanchall.DryWetMidi.Core.MidiFile, Melanchall.DryWetMidi.Interaction.TimeSpanType)
   nameWithType: MidiFileUtilities.GetDuration(MidiFile, TimeSpanType)
+- uid: Melanchall.DryWetMidi.Interaction.MidiFileUtilities.GetDuration(Melanchall.DryWetMidi.Core.TrackChunk,Melanchall.DryWetMidi.Interaction.TimeSpanType,Melanchall.DryWetMidi.Interaction.TempoMap)
+  name: GetDuration(TrackChunk, TimeSpanType, TempoMap)
+  href: api/Melanchall.DryWetMidi.Interaction.MidiFileUtilities.html#Melanchall_DryWetMidi_Interaction_MidiFileUtilities_GetDuration_Melanchall_DryWetMidi_Core_TrackChunk_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Interaction_TempoMap_
+  commentId: M:Melanchall.DryWetMidi.Interaction.MidiFileUtilities.GetDuration(Melanchall.DryWetMidi.Core.TrackChunk,Melanchall.DryWetMidi.Interaction.TimeSpanType,Melanchall.DryWetMidi.Interaction.TempoMap)
+  fullName: Melanchall.DryWetMidi.Interaction.MidiFileUtilities.GetDuration(Melanchall.DryWetMidi.Core.TrackChunk, Melanchall.DryWetMidi.Interaction.TimeSpanType, Melanchall.DryWetMidi.Interaction.TempoMap)
+  nameWithType: MidiFileUtilities.GetDuration(TrackChunk, TimeSpanType, TempoMap)
+- uid: Melanchall.DryWetMidi.Interaction.MidiFileUtilities.GetDuration(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk},Melanchall.DryWetMidi.Interaction.TimeSpanType,Melanchall.DryWetMidi.Interaction.TempoMap)
+  name: GetDuration(IEnumerable<TrackChunk>, TimeSpanType, TempoMap)
+  href: api/Melanchall.DryWetMidi.Interaction.MidiFileUtilities.html#Melanchall_DryWetMidi_Interaction_MidiFileUtilities_GetDuration_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Interaction_TempoMap_
+  commentId: M:Melanchall.DryWetMidi.Interaction.MidiFileUtilities.GetDuration(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk},Melanchall.DryWetMidi.Interaction.TimeSpanType,Melanchall.DryWetMidi.Interaction.TempoMap)
+  name.vb: GetDuration(IEnumerable(Of TrackChunk), TimeSpanType, TempoMap)
+  fullName: Melanchall.DryWetMidi.Interaction.MidiFileUtilities.GetDuration(System.Collections.Generic.IEnumerable<Melanchall.DryWetMidi.Core.TrackChunk>, Melanchall.DryWetMidi.Interaction.TimeSpanType, Melanchall.DryWetMidi.Interaction.TempoMap)
+  fullName.vb: Melanchall.DryWetMidi.Interaction.MidiFileUtilities.GetDuration(System.Collections.Generic.IEnumerable(Of Melanchall.DryWetMidi.Core.TrackChunk), Melanchall.DryWetMidi.Interaction.TimeSpanType, Melanchall.DryWetMidi.Interaction.TempoMap)
+  nameWithType: MidiFileUtilities.GetDuration(IEnumerable<TrackChunk>, TimeSpanType, TempoMap)
+  nameWithType.vb: MidiFileUtilities.GetDuration(IEnumerable(Of TrackChunk), TimeSpanType, TempoMap)
 - uid: Melanchall.DryWetMidi.Interaction.MidiFileUtilities.GetDuration*
   name: GetDuration
   href: api/Melanchall.DryWetMidi.Interaction.MidiFileUtilities.html#Melanchall_DryWetMidi_Interaction_MidiFileUtilities_GetDuration_
@@ -13343,6 +13399,24 @@ references:
   fullName.vb: Melanchall.DryWetMidi.Interaction.MidiFileUtilities.GetDuration(Of TTimeSpan)(Melanchall.DryWetMidi.Core.MidiFile)
   nameWithType: MidiFileUtilities.GetDuration<TTimeSpan>(MidiFile)
   nameWithType.vb: MidiFileUtilities.GetDuration(Of TTimeSpan)(MidiFile)
+- uid: Melanchall.DryWetMidi.Interaction.MidiFileUtilities.GetDuration``1(Melanchall.DryWetMidi.Core.TrackChunk,Melanchall.DryWetMidi.Interaction.TempoMap)
+  name: GetDuration<TTimeSpan>(TrackChunk, TempoMap)
+  href: api/Melanchall.DryWetMidi.Interaction.MidiFileUtilities.html#Melanchall_DryWetMidi_Interaction_MidiFileUtilities_GetDuration__1_Melanchall_DryWetMidi_Core_TrackChunk_Melanchall_DryWetMidi_Interaction_TempoMap_
+  commentId: M:Melanchall.DryWetMidi.Interaction.MidiFileUtilities.GetDuration``1(Melanchall.DryWetMidi.Core.TrackChunk,Melanchall.DryWetMidi.Interaction.TempoMap)
+  name.vb: GetDuration(Of TTimeSpan)(TrackChunk, TempoMap)
+  fullName: Melanchall.DryWetMidi.Interaction.MidiFileUtilities.GetDuration<TTimeSpan>(Melanchall.DryWetMidi.Core.TrackChunk, Melanchall.DryWetMidi.Interaction.TempoMap)
+  fullName.vb: Melanchall.DryWetMidi.Interaction.MidiFileUtilities.GetDuration(Of TTimeSpan)(Melanchall.DryWetMidi.Core.TrackChunk, Melanchall.DryWetMidi.Interaction.TempoMap)
+  nameWithType: MidiFileUtilities.GetDuration<TTimeSpan>(TrackChunk, TempoMap)
+  nameWithType.vb: MidiFileUtilities.GetDuration(Of TTimeSpan)(TrackChunk, TempoMap)
+- uid: Melanchall.DryWetMidi.Interaction.MidiFileUtilities.GetDuration``1(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk},Melanchall.DryWetMidi.Interaction.TempoMap)
+  name: GetDuration<TTimeSpan>(IEnumerable<TrackChunk>, TempoMap)
+  href: api/Melanchall.DryWetMidi.Interaction.MidiFileUtilities.html#Melanchall_DryWetMidi_Interaction_MidiFileUtilities_GetDuration__1_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__Melanchall_DryWetMidi_Interaction_TempoMap_
+  commentId: M:Melanchall.DryWetMidi.Interaction.MidiFileUtilities.GetDuration``1(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk},Melanchall.DryWetMidi.Interaction.TempoMap)
+  name.vb: GetDuration(Of TTimeSpan)(IEnumerable(Of TrackChunk), TempoMap)
+  fullName: Melanchall.DryWetMidi.Interaction.MidiFileUtilities.GetDuration<TTimeSpan>(System.Collections.Generic.IEnumerable<Melanchall.DryWetMidi.Core.TrackChunk>, Melanchall.DryWetMidi.Interaction.TempoMap)
+  fullName.vb: Melanchall.DryWetMidi.Interaction.MidiFileUtilities.GetDuration(Of TTimeSpan)(System.Collections.Generic.IEnumerable(Of Melanchall.DryWetMidi.Core.TrackChunk), Melanchall.DryWetMidi.Interaction.TempoMap)
+  nameWithType: MidiFileUtilities.GetDuration<TTimeSpan>(IEnumerable<TrackChunk>, TempoMap)
+  nameWithType.vb: MidiFileUtilities.GetDuration(Of TTimeSpan)(IEnumerable(Of TrackChunk), TempoMap)
 - uid: Melanchall.DryWetMidi.Interaction.MidiFileUtilities.IsEmpty(Melanchall.DryWetMidi.Core.MidiFile)
   name: IsEmpty(MidiFile)
   href: api/Melanchall.DryWetMidi.Interaction.MidiFileUtilities.html#Melanchall_DryWetMidi_Interaction_MidiFileUtilities_IsEmpty_Melanchall_DryWetMidi_Core_MidiFile_
@@ -13356,25 +13430,6 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Interaction.MidiFileUtilities.IsEmpty
   nameWithType: MidiFileUtilities.IsEmpty
-- uid: Melanchall.DryWetMidi.Interaction.MidiFileUtilities.Resize(Melanchall.DryWetMidi.Core.MidiFile,Melanchall.DryWetMidi.Interaction.ITimeSpan)
-  name: Resize(MidiFile, ITimeSpan)
-  href: api/Melanchall.DryWetMidi.Interaction.MidiFileUtilities.html#Melanchall_DryWetMidi_Interaction_MidiFileUtilities_Resize_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Interaction_ITimeSpan_
-  commentId: M:Melanchall.DryWetMidi.Interaction.MidiFileUtilities.Resize(Melanchall.DryWetMidi.Core.MidiFile,Melanchall.DryWetMidi.Interaction.ITimeSpan)
-  fullName: Melanchall.DryWetMidi.Interaction.MidiFileUtilities.Resize(Melanchall.DryWetMidi.Core.MidiFile, Melanchall.DryWetMidi.Interaction.ITimeSpan)
-  nameWithType: MidiFileUtilities.Resize(MidiFile, ITimeSpan)
-- uid: Melanchall.DryWetMidi.Interaction.MidiFileUtilities.Resize(Melanchall.DryWetMidi.Core.MidiFile,System.Double)
-  name: Resize(MidiFile, Double)
-  href: api/Melanchall.DryWetMidi.Interaction.MidiFileUtilities.html#Melanchall_DryWetMidi_Interaction_MidiFileUtilities_Resize_Melanchall_DryWetMidi_Core_MidiFile_System_Double_
-  commentId: M:Melanchall.DryWetMidi.Interaction.MidiFileUtilities.Resize(Melanchall.DryWetMidi.Core.MidiFile,System.Double)
-  fullName: Melanchall.DryWetMidi.Interaction.MidiFileUtilities.Resize(Melanchall.DryWetMidi.Core.MidiFile, System.Double)
-  nameWithType: MidiFileUtilities.Resize(MidiFile, Double)
-- uid: Melanchall.DryWetMidi.Interaction.MidiFileUtilities.Resize*
-  name: Resize
-  href: api/Melanchall.DryWetMidi.Interaction.MidiFileUtilities.html#Melanchall_DryWetMidi_Interaction_MidiFileUtilities_Resize_
-  commentId: Overload:Melanchall.DryWetMidi.Interaction.MidiFileUtilities.Resize
-  isSpec: "True"
-  fullName: Melanchall.DryWetMidi.Interaction.MidiFileUtilities.Resize
-  nameWithType: MidiFileUtilities.Resize
 - uid: Melanchall.DryWetMidi.Interaction.MidiFileUtilities.ShiftEvents(Melanchall.DryWetMidi.Core.MidiFile,Melanchall.DryWetMidi.Interaction.ITimeSpan)
   name: ShiftEvents(MidiFile, ITimeSpan)
   href: api/Melanchall.DryWetMidi.Interaction.MidiFileUtilities.html#Melanchall_DryWetMidi_Interaction_MidiFileUtilities_ShiftEvents_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Interaction_ITimeSpan_
@@ -14451,6 +14506,19 @@ references:
   commentId: F:Melanchall.DryWetMidi.Interaction.Note.DefaultVelocity
   fullName: Melanchall.DryWetMidi.Interaction.Note.DefaultVelocity
   nameWithType: Note.DefaultVelocity
+- uid: Melanchall.DryWetMidi.Interaction.Note.EndTime
+  name: EndTime
+  href: api/Melanchall.DryWetMidi.Interaction.Note.html#Melanchall_DryWetMidi_Interaction_Note_EndTime
+  commentId: P:Melanchall.DryWetMidi.Interaction.Note.EndTime
+  fullName: Melanchall.DryWetMidi.Interaction.Note.EndTime
+  nameWithType: Note.EndTime
+- uid: Melanchall.DryWetMidi.Interaction.Note.EndTime*
+  name: EndTime
+  href: api/Melanchall.DryWetMidi.Interaction.Note.html#Melanchall_DryWetMidi_Interaction_Note_EndTime_
+  commentId: Overload:Melanchall.DryWetMidi.Interaction.Note.EndTime
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Interaction.Note.EndTime
+  nameWithType: Note.EndTime
 - uid: Melanchall.DryWetMidi.Interaction.Note.GetTimedNoteOffEvent
   name: GetTimedNoteOffEvent()
   href: api/Melanchall.DryWetMidi.Interaction.Note.html#Melanchall_DryWetMidi_Interaction_Note_GetTimedNoteOffEvent
@@ -14709,102 +14777,6 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Interaction.NoteDetectionSettings.TimedEventDetectionSettings
   nameWithType: NoteDetectionSettings.TimedEventDetectionSettings
-- uid: Melanchall.DryWetMidi.Interaction.NoteId
-  name: NoteId
-  href: api/Melanchall.DryWetMidi.Interaction.NoteId.html
-  commentId: T:Melanchall.DryWetMidi.Interaction.NoteId
-  fullName: Melanchall.DryWetMidi.Interaction.NoteId
-  nameWithType: NoteId
-- uid: Melanchall.DryWetMidi.Interaction.NoteId.#ctor(Melanchall.DryWetMidi.Common.FourBitNumber,Melanchall.DryWetMidi.Common.SevenBitNumber)
-  name: NoteId(FourBitNumber, SevenBitNumber)
-  href: api/Melanchall.DryWetMidi.Interaction.NoteId.html#Melanchall_DryWetMidi_Interaction_NoteId__ctor_Melanchall_DryWetMidi_Common_FourBitNumber_Melanchall_DryWetMidi_Common_SevenBitNumber_
-  commentId: M:Melanchall.DryWetMidi.Interaction.NoteId.#ctor(Melanchall.DryWetMidi.Common.FourBitNumber,Melanchall.DryWetMidi.Common.SevenBitNumber)
-  fullName: Melanchall.DryWetMidi.Interaction.NoteId.NoteId(Melanchall.DryWetMidi.Common.FourBitNumber, Melanchall.DryWetMidi.Common.SevenBitNumber)
-  nameWithType: NoteId.NoteId(FourBitNumber, SevenBitNumber)
-- uid: Melanchall.DryWetMidi.Interaction.NoteId.#ctor*
-  name: NoteId
-  href: api/Melanchall.DryWetMidi.Interaction.NoteId.html#Melanchall_DryWetMidi_Interaction_NoteId__ctor_
-  commentId: Overload:Melanchall.DryWetMidi.Interaction.NoteId.#ctor
-  isSpec: "True"
-  fullName: Melanchall.DryWetMidi.Interaction.NoteId.NoteId
-  nameWithType: NoteId.NoteId
-- uid: Melanchall.DryWetMidi.Interaction.NoteId.Channel
-  name: Channel
-  href: api/Melanchall.DryWetMidi.Interaction.NoteId.html#Melanchall_DryWetMidi_Interaction_NoteId_Channel
-  commentId: P:Melanchall.DryWetMidi.Interaction.NoteId.Channel
-  fullName: Melanchall.DryWetMidi.Interaction.NoteId.Channel
-  nameWithType: NoteId.Channel
-- uid: Melanchall.DryWetMidi.Interaction.NoteId.Channel*
-  name: Channel
-  href: api/Melanchall.DryWetMidi.Interaction.NoteId.html#Melanchall_DryWetMidi_Interaction_NoteId_Channel_
-  commentId: Overload:Melanchall.DryWetMidi.Interaction.NoteId.Channel
-  isSpec: "True"
-  fullName: Melanchall.DryWetMidi.Interaction.NoteId.Channel
-  nameWithType: NoteId.Channel
-- uid: Melanchall.DryWetMidi.Interaction.NoteId.Equals(System.Object)
-  name: Equals(Object)
-  href: api/Melanchall.DryWetMidi.Interaction.NoteId.html#Melanchall_DryWetMidi_Interaction_NoteId_Equals_System_Object_
-  commentId: M:Melanchall.DryWetMidi.Interaction.NoteId.Equals(System.Object)
-  fullName: Melanchall.DryWetMidi.Interaction.NoteId.Equals(System.Object)
-  nameWithType: NoteId.Equals(Object)
-- uid: Melanchall.DryWetMidi.Interaction.NoteId.Equals*
-  name: Equals
-  href: api/Melanchall.DryWetMidi.Interaction.NoteId.html#Melanchall_DryWetMidi_Interaction_NoteId_Equals_
-  commentId: Overload:Melanchall.DryWetMidi.Interaction.NoteId.Equals
-  isSpec: "True"
-  fullName: Melanchall.DryWetMidi.Interaction.NoteId.Equals
-  nameWithType: NoteId.Equals
-- uid: Melanchall.DryWetMidi.Interaction.NoteId.GetHashCode
-  name: GetHashCode()
-  href: api/Melanchall.DryWetMidi.Interaction.NoteId.html#Melanchall_DryWetMidi_Interaction_NoteId_GetHashCode
-  commentId: M:Melanchall.DryWetMidi.Interaction.NoteId.GetHashCode
-  fullName: Melanchall.DryWetMidi.Interaction.NoteId.GetHashCode()
-  nameWithType: NoteId.GetHashCode()
-- uid: Melanchall.DryWetMidi.Interaction.NoteId.GetHashCode*
-  name: GetHashCode
-  href: api/Melanchall.DryWetMidi.Interaction.NoteId.html#Melanchall_DryWetMidi_Interaction_NoteId_GetHashCode_
-  commentId: Overload:Melanchall.DryWetMidi.Interaction.NoteId.GetHashCode
-  isSpec: "True"
-  fullName: Melanchall.DryWetMidi.Interaction.NoteId.GetHashCode
-  nameWithType: NoteId.GetHashCode
-- uid: Melanchall.DryWetMidi.Interaction.NoteId.NoteNumber
-  name: NoteNumber
-  href: api/Melanchall.DryWetMidi.Interaction.NoteId.html#Melanchall_DryWetMidi_Interaction_NoteId_NoteNumber
-  commentId: P:Melanchall.DryWetMidi.Interaction.NoteId.NoteNumber
-  fullName: Melanchall.DryWetMidi.Interaction.NoteId.NoteNumber
-  nameWithType: NoteId.NoteNumber
-- uid: Melanchall.DryWetMidi.Interaction.NoteId.NoteNumber*
-  name: NoteNumber
-  href: api/Melanchall.DryWetMidi.Interaction.NoteId.html#Melanchall_DryWetMidi_Interaction_NoteId_NoteNumber_
-  commentId: Overload:Melanchall.DryWetMidi.Interaction.NoteId.NoteNumber
-  isSpec: "True"
-  fullName: Melanchall.DryWetMidi.Interaction.NoteId.NoteNumber
-  nameWithType: NoteId.NoteNumber
-- uid: Melanchall.DryWetMidi.Interaction.NoteIdUtilities
-  name: NoteIdUtilities
-  href: api/Melanchall.DryWetMidi.Interaction.NoteIdUtilities.html
-  commentId: T:Melanchall.DryWetMidi.Interaction.NoteIdUtilities
-  fullName: Melanchall.DryWetMidi.Interaction.NoteIdUtilities
-  nameWithType: NoteIdUtilities
-- uid: Melanchall.DryWetMidi.Interaction.NoteIdUtilities.GetNoteId(Melanchall.DryWetMidi.Core.NoteEvent)
-  name: GetNoteId(NoteEvent)
-  href: api/Melanchall.DryWetMidi.Interaction.NoteIdUtilities.html#Melanchall_DryWetMidi_Interaction_NoteIdUtilities_GetNoteId_Melanchall_DryWetMidi_Core_NoteEvent_
-  commentId: M:Melanchall.DryWetMidi.Interaction.NoteIdUtilities.GetNoteId(Melanchall.DryWetMidi.Core.NoteEvent)
-  fullName: Melanchall.DryWetMidi.Interaction.NoteIdUtilities.GetNoteId(Melanchall.DryWetMidi.Core.NoteEvent)
-  nameWithType: NoteIdUtilities.GetNoteId(NoteEvent)
-- uid: Melanchall.DryWetMidi.Interaction.NoteIdUtilities.GetNoteId(Melanchall.DryWetMidi.Interaction.Note)
-  name: GetNoteId(Note)
-  href: api/Melanchall.DryWetMidi.Interaction.NoteIdUtilities.html#Melanchall_DryWetMidi_Interaction_NoteIdUtilities_GetNoteId_Melanchall_DryWetMidi_Interaction_Note_
-  commentId: M:Melanchall.DryWetMidi.Interaction.NoteIdUtilities.GetNoteId(Melanchall.DryWetMidi.Interaction.Note)
-  fullName: Melanchall.DryWetMidi.Interaction.NoteIdUtilities.GetNoteId(Melanchall.DryWetMidi.Interaction.Note)
-  nameWithType: NoteIdUtilities.GetNoteId(Note)
-- uid: Melanchall.DryWetMidi.Interaction.NoteIdUtilities.GetNoteId*
-  name: GetNoteId
-  href: api/Melanchall.DryWetMidi.Interaction.NoteIdUtilities.html#Melanchall_DryWetMidi_Interaction_NoteIdUtilities_GetNoteId_
-  commentId: Overload:Melanchall.DryWetMidi.Interaction.NoteIdUtilities.GetNoteId
-  isSpec: "True"
-  fullName: Melanchall.DryWetMidi.Interaction.NoteIdUtilities.GetNoteId
-  nameWithType: NoteIdUtilities.GetNoteId
 - uid: Melanchall.DryWetMidi.Interaction.NoteSearchContext
   name: NoteSearchContext
   href: api/Melanchall.DryWetMidi.Interaction.NoteSearchContext.html
@@ -15177,6 +15149,34 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings.TimedEventDetectionSettings
   nameWithType: ObjectDetectionSettings.TimedEventDetectionSettings
+- uid: Melanchall.DryWetMidi.Interaction.ObjectIdUtilities
+  name: ObjectIdUtilities
+  href: api/Melanchall.DryWetMidi.Interaction.ObjectIdUtilities.html
+  commentId: T:Melanchall.DryWetMidi.Interaction.ObjectIdUtilities
+  fullName: Melanchall.DryWetMidi.Interaction.ObjectIdUtilities
+  nameWithType: ObjectIdUtilities
+- uid: Melanchall.DryWetMidi.Interaction.ObjectIdUtilities.GetObjectId(Melanchall.DryWetMidi.Interaction.ITimedObject)
+  name: GetObjectId(ITimedObject)
+  href: api/Melanchall.DryWetMidi.Interaction.ObjectIdUtilities.html#Melanchall_DryWetMidi_Interaction_ObjectIdUtilities_GetObjectId_Melanchall_DryWetMidi_Interaction_ITimedObject_
+  commentId: M:Melanchall.DryWetMidi.Interaction.ObjectIdUtilities.GetObjectId(Melanchall.DryWetMidi.Interaction.ITimedObject)
+  fullName: Melanchall.DryWetMidi.Interaction.ObjectIdUtilities.GetObjectId(Melanchall.DryWetMidi.Interaction.ITimedObject)
+  nameWithType: ObjectIdUtilities.GetObjectId(ITimedObject)
+- uid: Melanchall.DryWetMidi.Interaction.ObjectIdUtilities.GetObjectId*
+  name: GetObjectId
+  href: api/Melanchall.DryWetMidi.Interaction.ObjectIdUtilities.html#Melanchall_DryWetMidi_Interaction_ObjectIdUtilities_GetObjectId_
+  commentId: Overload:Melanchall.DryWetMidi.Interaction.ObjectIdUtilities.GetObjectId
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Interaction.ObjectIdUtilities.GetObjectId
+  nameWithType: ObjectIdUtilities.GetObjectId
+- uid: Melanchall.DryWetMidi.Interaction.ObjectIdUtilities.GetObjectId``1(``0)
+  name: GetObjectId<TId>(TId)
+  href: api/Melanchall.DryWetMidi.Interaction.ObjectIdUtilities.html#Melanchall_DryWetMidi_Interaction_ObjectIdUtilities_GetObjectId__1___0_
+  commentId: M:Melanchall.DryWetMidi.Interaction.ObjectIdUtilities.GetObjectId``1(``0)
+  name.vb: GetObjectId(Of TId)(TId)
+  fullName: Melanchall.DryWetMidi.Interaction.ObjectIdUtilities.GetObjectId<TId>(TId)
+  fullName.vb: Melanchall.DryWetMidi.Interaction.ObjectIdUtilities.GetObjectId(Of TId)(TId)
+  nameWithType: ObjectIdUtilities.GetObjectId<TId>(TId)
+  nameWithType.vb: ObjectIdUtilities.GetObjectId(Of TId)(TId)
 - uid: Melanchall.DryWetMidi.Interaction.ObjectType
   name: ObjectType
   href: api/Melanchall.DryWetMidi.Interaction.ObjectType.html
@@ -15624,6 +15624,19 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Interaction.Rest.Clone
   nameWithType: Rest.Clone
+- uid: Melanchall.DryWetMidi.Interaction.Rest.EndTime
+  name: EndTime
+  href: api/Melanchall.DryWetMidi.Interaction.Rest.html#Melanchall_DryWetMidi_Interaction_Rest_EndTime
+  commentId: P:Melanchall.DryWetMidi.Interaction.Rest.EndTime
+  fullName: Melanchall.DryWetMidi.Interaction.Rest.EndTime
+  nameWithType: Rest.EndTime
+- uid: Melanchall.DryWetMidi.Interaction.Rest.EndTime*
+  name: EndTime
+  href: api/Melanchall.DryWetMidi.Interaction.Rest.html#Melanchall_DryWetMidi_Interaction_Rest_EndTime_
+  commentId: Overload:Melanchall.DryWetMidi.Interaction.Rest.EndTime
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Interaction.Rest.EndTime
+  nameWithType: Rest.EndTime
 - uid: Melanchall.DryWetMidi.Interaction.Rest.Equals(System.Object)
   name: Equals(Object)
   href: api/Melanchall.DryWetMidi.Interaction.Rest.html#Melanchall_DryWetMidi_Interaction_Rest_Equals_System_Object_
@@ -17134,6 +17147,23 @@ references:
   fullName.vb: Melanchall.DryWetMidi.Interaction.TimedObjectsCollection(Of TObject).CollectionChanged
   nameWithType: TimedObjectsCollection<TObject>.CollectionChanged
   nameWithType.vb: TimedObjectsCollection(Of TObject).CollectionChanged
+- uid: Melanchall.DryWetMidi.Interaction.TimedObjectsCollection`1.Count
+  name: Count
+  href: api/Melanchall.DryWetMidi.Interaction.TimedObjectsCollection-1.html#Melanchall_DryWetMidi_Interaction_TimedObjectsCollection_1_Count
+  commentId: P:Melanchall.DryWetMidi.Interaction.TimedObjectsCollection`1.Count
+  fullName: Melanchall.DryWetMidi.Interaction.TimedObjectsCollection<TObject>.Count
+  fullName.vb: Melanchall.DryWetMidi.Interaction.TimedObjectsCollection(Of TObject).Count
+  nameWithType: TimedObjectsCollection<TObject>.Count
+  nameWithType.vb: TimedObjectsCollection(Of TObject).Count
+- uid: Melanchall.DryWetMidi.Interaction.TimedObjectsCollection`1.Count*
+  name: Count
+  href: api/Melanchall.DryWetMidi.Interaction.TimedObjectsCollection-1.html#Melanchall_DryWetMidi_Interaction_TimedObjectsCollection_1_Count_
+  commentId: Overload:Melanchall.DryWetMidi.Interaction.TimedObjectsCollection`1.Count
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Interaction.TimedObjectsCollection<TObject>.Count
+  fullName.vb: Melanchall.DryWetMidi.Interaction.TimedObjectsCollection(Of TObject).Count
+  nameWithType: TimedObjectsCollection<TObject>.Count
+  nameWithType.vb: TimedObjectsCollection(Of TObject).Count
 - uid: Melanchall.DryWetMidi.Interaction.TimedObjectsCollection`1.GetEnumerator
   name: GetEnumerator()
   href: api/Melanchall.DryWetMidi.Interaction.TimedObjectsCollection-1.html#Melanchall_DryWetMidi_Interaction_TimedObjectsCollection_1_GetEnumerator
@@ -36201,6 +36231,49 @@ references:
   commentId: F:Melanchall.DryWetMidi.Tools.LengthedObjectTarget.Start
   fullName: Melanchall.DryWetMidi.Tools.LengthedObjectTarget.Start
   nameWithType: LengthedObjectTarget.Start
+- uid: Melanchall.DryWetMidi.Tools.Merger
+  name: Merger
+  href: api/Melanchall.DryWetMidi.Tools.Merger.html
+  commentId: T:Melanchall.DryWetMidi.Tools.Merger
+  fullName: Melanchall.DryWetMidi.Tools.Merger
+  nameWithType: Merger
+- uid: Melanchall.DryWetMidi.Tools.Merger.MergeObjects(Melanchall.DryWetMidi.Core.MidiFile,Melanchall.DryWetMidi.Interaction.ObjectType,Melanchall.DryWetMidi.Tools.ObjectsMergingSettings,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings)
+  name: MergeObjects(MidiFile, ObjectType, ObjectsMergingSettings, ObjectDetectionSettings)
+  href: api/Melanchall.DryWetMidi.Tools.Merger.html#Melanchall_DryWetMidi_Tools_Merger_MergeObjects_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Interaction_ObjectType_Melanchall_DryWetMidi_Tools_ObjectsMergingSettings_Melanchall_DryWetMidi_Interaction_ObjectDetectionSettings_
+  commentId: M:Melanchall.DryWetMidi.Tools.Merger.MergeObjects(Melanchall.DryWetMidi.Core.MidiFile,Melanchall.DryWetMidi.Interaction.ObjectType,Melanchall.DryWetMidi.Tools.ObjectsMergingSettings,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings)
+  fullName: Melanchall.DryWetMidi.Tools.Merger.MergeObjects(Melanchall.DryWetMidi.Core.MidiFile, Melanchall.DryWetMidi.Interaction.ObjectType, Melanchall.DryWetMidi.Tools.ObjectsMergingSettings, Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings)
+  nameWithType: Merger.MergeObjects(MidiFile, ObjectType, ObjectsMergingSettings, ObjectDetectionSettings)
+- uid: Melanchall.DryWetMidi.Tools.Merger.MergeObjects(Melanchall.DryWetMidi.Core.TrackChunk,Melanchall.DryWetMidi.Interaction.ObjectType,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Tools.ObjectsMergingSettings,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings)
+  name: MergeObjects(TrackChunk, ObjectType, TempoMap, ObjectsMergingSettings, ObjectDetectionSettings)
+  href: api/Melanchall.DryWetMidi.Tools.Merger.html#Melanchall_DryWetMidi_Tools_Merger_MergeObjects_Melanchall_DryWetMidi_Core_TrackChunk_Melanchall_DryWetMidi_Interaction_ObjectType_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Tools_ObjectsMergingSettings_Melanchall_DryWetMidi_Interaction_ObjectDetectionSettings_
+  commentId: M:Melanchall.DryWetMidi.Tools.Merger.MergeObjects(Melanchall.DryWetMidi.Core.TrackChunk,Melanchall.DryWetMidi.Interaction.ObjectType,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Tools.ObjectsMergingSettings,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings)
+  fullName: Melanchall.DryWetMidi.Tools.Merger.MergeObjects(Melanchall.DryWetMidi.Core.TrackChunk, Melanchall.DryWetMidi.Interaction.ObjectType, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Tools.ObjectsMergingSettings, Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings)
+  nameWithType: Merger.MergeObjects(TrackChunk, ObjectType, TempoMap, ObjectsMergingSettings, ObjectDetectionSettings)
+- uid: Melanchall.DryWetMidi.Tools.Merger.MergeObjects(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk},Melanchall.DryWetMidi.Interaction.ObjectType,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Tools.ObjectsMergingSettings,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings)
+  name: MergeObjects(IEnumerable<TrackChunk>, ObjectType, TempoMap, ObjectsMergingSettings, ObjectDetectionSettings)
+  href: api/Melanchall.DryWetMidi.Tools.Merger.html#Melanchall_DryWetMidi_Tools_Merger_MergeObjects_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__Melanchall_DryWetMidi_Interaction_ObjectType_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Tools_ObjectsMergingSettings_Melanchall_DryWetMidi_Interaction_ObjectDetectionSettings_
+  commentId: M:Melanchall.DryWetMidi.Tools.Merger.MergeObjects(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk},Melanchall.DryWetMidi.Interaction.ObjectType,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Tools.ObjectsMergingSettings,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings)
+  name.vb: MergeObjects(IEnumerable(Of TrackChunk), ObjectType, TempoMap, ObjectsMergingSettings, ObjectDetectionSettings)
+  fullName: Melanchall.DryWetMidi.Tools.Merger.MergeObjects(System.Collections.Generic.IEnumerable<Melanchall.DryWetMidi.Core.TrackChunk>, Melanchall.DryWetMidi.Interaction.ObjectType, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Tools.ObjectsMergingSettings, Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings)
+  fullName.vb: Melanchall.DryWetMidi.Tools.Merger.MergeObjects(System.Collections.Generic.IEnumerable(Of Melanchall.DryWetMidi.Core.TrackChunk), Melanchall.DryWetMidi.Interaction.ObjectType, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Tools.ObjectsMergingSettings, Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings)
+  nameWithType: Merger.MergeObjects(IEnumerable<TrackChunk>, ObjectType, TempoMap, ObjectsMergingSettings, ObjectDetectionSettings)
+  nameWithType.vb: Merger.MergeObjects(IEnumerable(Of TrackChunk), ObjectType, TempoMap, ObjectsMergingSettings, ObjectDetectionSettings)
+- uid: Melanchall.DryWetMidi.Tools.Merger.MergeObjects(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Interaction.ITimedObject},Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Tools.ObjectsMergingSettings)
+  name: MergeObjects(IEnumerable<ITimedObject>, TempoMap, ObjectsMergingSettings)
+  href: api/Melanchall.DryWetMidi.Tools.Merger.html#Melanchall_DryWetMidi_Tools_Merger_MergeObjects_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_ITimedObject__Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Tools_ObjectsMergingSettings_
+  commentId: M:Melanchall.DryWetMidi.Tools.Merger.MergeObjects(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Interaction.ITimedObject},Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Tools.ObjectsMergingSettings)
+  name.vb: MergeObjects(IEnumerable(Of ITimedObject), TempoMap, ObjectsMergingSettings)
+  fullName: Melanchall.DryWetMidi.Tools.Merger.MergeObjects(System.Collections.Generic.IEnumerable<Melanchall.DryWetMidi.Interaction.ITimedObject>, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Tools.ObjectsMergingSettings)
+  fullName.vb: Melanchall.DryWetMidi.Tools.Merger.MergeObjects(System.Collections.Generic.IEnumerable(Of Melanchall.DryWetMidi.Interaction.ITimedObject), Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Tools.ObjectsMergingSettings)
+  nameWithType: Merger.MergeObjects(IEnumerable<ITimedObject>, TempoMap, ObjectsMergingSettings)
+  nameWithType.vb: Merger.MergeObjects(IEnumerable(Of ITimedObject), TempoMap, ObjectsMergingSettings)
+- uid: Melanchall.DryWetMidi.Tools.Merger.MergeObjects*
+  name: MergeObjects
+  href: api/Melanchall.DryWetMidi.Tools.Merger.html#Melanchall_DryWetMidi_Tools_Merger_MergeObjects_
+  commentId: Overload:Melanchall.DryWetMidi.Tools.Merger.MergeObjects
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Tools.Merger.MergeObjects
+  nameWithType: Merger.MergeObjects
 - uid: Melanchall.DryWetMidi.Tools.MidiFileCsvConversionSettings
   name: MidiFileCsvConversionSettings
   href: api/Melanchall.DryWetMidi.Tools.MidiFileCsvConversionSettings.html
@@ -36781,6 +36854,179 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Tools.NotesSplitterUtilities.SplitNotesByStep
   nameWithType: NotesSplitterUtilities.SplitNotesByStep
+- uid: Melanchall.DryWetMidi.Tools.ObjectsGroupResizingSettings
+  name: ObjectsGroupResizingSettings
+  href: api/Melanchall.DryWetMidi.Tools.ObjectsGroupResizingSettings.html
+  commentId: T:Melanchall.DryWetMidi.Tools.ObjectsGroupResizingSettings
+  fullName: Melanchall.DryWetMidi.Tools.ObjectsGroupResizingSettings
+  nameWithType: ObjectsGroupResizingSettings
+- uid: Melanchall.DryWetMidi.Tools.ObjectsGroupResizingSettings.DistanceCalculationType
+  name: DistanceCalculationType
+  href: api/Melanchall.DryWetMidi.Tools.ObjectsGroupResizingSettings.html#Melanchall_DryWetMidi_Tools_ObjectsGroupResizingSettings_DistanceCalculationType
+  commentId: P:Melanchall.DryWetMidi.Tools.ObjectsGroupResizingSettings.DistanceCalculationType
+  fullName: Melanchall.DryWetMidi.Tools.ObjectsGroupResizingSettings.DistanceCalculationType
+  nameWithType: ObjectsGroupResizingSettings.DistanceCalculationType
+- uid: Melanchall.DryWetMidi.Tools.ObjectsGroupResizingSettings.DistanceCalculationType*
+  name: DistanceCalculationType
+  href: api/Melanchall.DryWetMidi.Tools.ObjectsGroupResizingSettings.html#Melanchall_DryWetMidi_Tools_ObjectsGroupResizingSettings_DistanceCalculationType_
+  commentId: Overload:Melanchall.DryWetMidi.Tools.ObjectsGroupResizingSettings.DistanceCalculationType
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Tools.ObjectsGroupResizingSettings.DistanceCalculationType
+  nameWithType: ObjectsGroupResizingSettings.DistanceCalculationType
+- uid: Melanchall.DryWetMidi.Tools.ObjectsMerger
+  name: ObjectsMerger
+  href: api/Melanchall.DryWetMidi.Tools.ObjectsMerger.html
+  commentId: T:Melanchall.DryWetMidi.Tools.ObjectsMerger
+  fullName: Melanchall.DryWetMidi.Tools.ObjectsMerger
+  nameWithType: ObjectsMerger
+- uid: Melanchall.DryWetMidi.Tools.ObjectsMerger.#ctor(Melanchall.DryWetMidi.Interaction.ILengthedObject)
+  name: ObjectsMerger(ILengthedObject)
+  href: api/Melanchall.DryWetMidi.Tools.ObjectsMerger.html#Melanchall_DryWetMidi_Tools_ObjectsMerger__ctor_Melanchall_DryWetMidi_Interaction_ILengthedObject_
+  commentId: M:Melanchall.DryWetMidi.Tools.ObjectsMerger.#ctor(Melanchall.DryWetMidi.Interaction.ILengthedObject)
+  fullName: Melanchall.DryWetMidi.Tools.ObjectsMerger.ObjectsMerger(Melanchall.DryWetMidi.Interaction.ILengthedObject)
+  nameWithType: ObjectsMerger.ObjectsMerger(ILengthedObject)
+- uid: Melanchall.DryWetMidi.Tools.ObjectsMerger.#ctor*
+  name: ObjectsMerger
+  href: api/Melanchall.DryWetMidi.Tools.ObjectsMerger.html#Melanchall_DryWetMidi_Tools_ObjectsMerger__ctor_
+  commentId: Overload:Melanchall.DryWetMidi.Tools.ObjectsMerger.#ctor
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Tools.ObjectsMerger.ObjectsMerger
+  nameWithType: ObjectsMerger.ObjectsMerger
+- uid: Melanchall.DryWetMidi.Tools.ObjectsMerger._objects
+  name: _objects
+  href: api/Melanchall.DryWetMidi.Tools.ObjectsMerger.html#Melanchall_DryWetMidi_Tools_ObjectsMerger__objects
+  commentId: F:Melanchall.DryWetMidi.Tools.ObjectsMerger._objects
+  fullName: Melanchall.DryWetMidi.Tools.ObjectsMerger._objects
+  nameWithType: ObjectsMerger._objects
+- uid: Melanchall.DryWetMidi.Tools.ObjectsMerger._objectsType
+  name: _objectsType
+  href: api/Melanchall.DryWetMidi.Tools.ObjectsMerger.html#Melanchall_DryWetMidi_Tools_ObjectsMerger__objectsType
+  commentId: F:Melanchall.DryWetMidi.Tools.ObjectsMerger._objectsType
+  fullName: Melanchall.DryWetMidi.Tools.ObjectsMerger._objectsType
+  nameWithType: ObjectsMerger._objectsType
+- uid: Melanchall.DryWetMidi.Tools.ObjectsMerger.AddObject(Melanchall.DryWetMidi.Interaction.ILengthedObject)
+  name: AddObject(ILengthedObject)
+  href: api/Melanchall.DryWetMidi.Tools.ObjectsMerger.html#Melanchall_DryWetMidi_Tools_ObjectsMerger_AddObject_Melanchall_DryWetMidi_Interaction_ILengthedObject_
+  commentId: M:Melanchall.DryWetMidi.Tools.ObjectsMerger.AddObject(Melanchall.DryWetMidi.Interaction.ILengthedObject)
+  fullName: Melanchall.DryWetMidi.Tools.ObjectsMerger.AddObject(Melanchall.DryWetMidi.Interaction.ILengthedObject)
+  nameWithType: ObjectsMerger.AddObject(ILengthedObject)
+- uid: Melanchall.DryWetMidi.Tools.ObjectsMerger.AddObject*
+  name: AddObject
+  href: api/Melanchall.DryWetMidi.Tools.ObjectsMerger.html#Melanchall_DryWetMidi_Tools_ObjectsMerger_AddObject_
+  commentId: Overload:Melanchall.DryWetMidi.Tools.ObjectsMerger.AddObject
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Tools.ObjectsMerger.AddObject
+  nameWithType: ObjectsMerger.AddObject
+- uid: Melanchall.DryWetMidi.Tools.ObjectsMerger.CanAddObject(Melanchall.DryWetMidi.Interaction.ILengthedObject,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Tools.ObjectsMergingSettings)
+  name: CanAddObject(ILengthedObject, TempoMap, ObjectsMergingSettings)
+  href: api/Melanchall.DryWetMidi.Tools.ObjectsMerger.html#Melanchall_DryWetMidi_Tools_ObjectsMerger_CanAddObject_Melanchall_DryWetMidi_Interaction_ILengthedObject_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Tools_ObjectsMergingSettings_
+  commentId: M:Melanchall.DryWetMidi.Tools.ObjectsMerger.CanAddObject(Melanchall.DryWetMidi.Interaction.ILengthedObject,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Tools.ObjectsMergingSettings)
+  fullName: Melanchall.DryWetMidi.Tools.ObjectsMerger.CanAddObject(Melanchall.DryWetMidi.Interaction.ILengthedObject, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Tools.ObjectsMergingSettings)
+  nameWithType: ObjectsMerger.CanAddObject(ILengthedObject, TempoMap, ObjectsMergingSettings)
+- uid: Melanchall.DryWetMidi.Tools.ObjectsMerger.CanAddObject*
+  name: CanAddObject
+  href: api/Melanchall.DryWetMidi.Tools.ObjectsMerger.html#Melanchall_DryWetMidi_Tools_ObjectsMerger_CanAddObject_
+  commentId: Overload:Melanchall.DryWetMidi.Tools.ObjectsMerger.CanAddObject
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Tools.ObjectsMerger.CanAddObject
+  nameWithType: ObjectsMerger.CanAddObject
+- uid: Melanchall.DryWetMidi.Tools.ObjectsMerger.EndTime
+  name: EndTime
+  href: api/Melanchall.DryWetMidi.Tools.ObjectsMerger.html#Melanchall_DryWetMidi_Tools_ObjectsMerger_EndTime
+  commentId: P:Melanchall.DryWetMidi.Tools.ObjectsMerger.EndTime
+  fullName: Melanchall.DryWetMidi.Tools.ObjectsMerger.EndTime
+  nameWithType: ObjectsMerger.EndTime
+- uid: Melanchall.DryWetMidi.Tools.ObjectsMerger.EndTime*
+  name: EndTime
+  href: api/Melanchall.DryWetMidi.Tools.ObjectsMerger.html#Melanchall_DryWetMidi_Tools_ObjectsMerger_EndTime_
+  commentId: Overload:Melanchall.DryWetMidi.Tools.ObjectsMerger.EndTime
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Tools.ObjectsMerger.EndTime
+  nameWithType: ObjectsMerger.EndTime
+- uid: Melanchall.DryWetMidi.Tools.ObjectsMerger.MergeObjects(Melanchall.DryWetMidi.Tools.ObjectsMergingSettings)
+  name: MergeObjects(ObjectsMergingSettings)
+  href: api/Melanchall.DryWetMidi.Tools.ObjectsMerger.html#Melanchall_DryWetMidi_Tools_ObjectsMerger_MergeObjects_Melanchall_DryWetMidi_Tools_ObjectsMergingSettings_
+  commentId: M:Melanchall.DryWetMidi.Tools.ObjectsMerger.MergeObjects(Melanchall.DryWetMidi.Tools.ObjectsMergingSettings)
+  fullName: Melanchall.DryWetMidi.Tools.ObjectsMerger.MergeObjects(Melanchall.DryWetMidi.Tools.ObjectsMergingSettings)
+  nameWithType: ObjectsMerger.MergeObjects(ObjectsMergingSettings)
+- uid: Melanchall.DryWetMidi.Tools.ObjectsMerger.MergeObjects*
+  name: MergeObjects
+  href: api/Melanchall.DryWetMidi.Tools.ObjectsMerger.html#Melanchall_DryWetMidi_Tools_ObjectsMerger_MergeObjects_
+  commentId: Overload:Melanchall.DryWetMidi.Tools.ObjectsMerger.MergeObjects
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Tools.ObjectsMerger.MergeObjects
+  nameWithType: ObjectsMerger.MergeObjects
+- uid: Melanchall.DryWetMidi.Tools.ObjectsMergingSettings
+  name: ObjectsMergingSettings
+  href: api/Melanchall.DryWetMidi.Tools.ObjectsMergingSettings.html
+  commentId: T:Melanchall.DryWetMidi.Tools.ObjectsMergingSettings
+  fullName: Melanchall.DryWetMidi.Tools.ObjectsMergingSettings
+  nameWithType: ObjectsMergingSettings
+- uid: Melanchall.DryWetMidi.Tools.ObjectsMergingSettings.Filter
+  name: Filter
+  href: api/Melanchall.DryWetMidi.Tools.ObjectsMergingSettings.html#Melanchall_DryWetMidi_Tools_ObjectsMergingSettings_Filter
+  commentId: P:Melanchall.DryWetMidi.Tools.ObjectsMergingSettings.Filter
+  fullName: Melanchall.DryWetMidi.Tools.ObjectsMergingSettings.Filter
+  nameWithType: ObjectsMergingSettings.Filter
+- uid: Melanchall.DryWetMidi.Tools.ObjectsMergingSettings.Filter*
+  name: Filter
+  href: api/Melanchall.DryWetMidi.Tools.ObjectsMergingSettings.html#Melanchall_DryWetMidi_Tools_ObjectsMergingSettings_Filter_
+  commentId: Overload:Melanchall.DryWetMidi.Tools.ObjectsMergingSettings.Filter
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Tools.ObjectsMergingSettings.Filter
+  nameWithType: ObjectsMergingSettings.Filter
+- uid: Melanchall.DryWetMidi.Tools.ObjectsMergingSettings.ObjectsMergerFactory
+  name: ObjectsMergerFactory
+  href: api/Melanchall.DryWetMidi.Tools.ObjectsMergingSettings.html#Melanchall_DryWetMidi_Tools_ObjectsMergingSettings_ObjectsMergerFactory
+  commentId: P:Melanchall.DryWetMidi.Tools.ObjectsMergingSettings.ObjectsMergerFactory
+  fullName: Melanchall.DryWetMidi.Tools.ObjectsMergingSettings.ObjectsMergerFactory
+  nameWithType: ObjectsMergingSettings.ObjectsMergerFactory
+- uid: Melanchall.DryWetMidi.Tools.ObjectsMergingSettings.ObjectsMergerFactory*
+  name: ObjectsMergerFactory
+  href: api/Melanchall.DryWetMidi.Tools.ObjectsMergingSettings.html#Melanchall_DryWetMidi_Tools_ObjectsMergingSettings_ObjectsMergerFactory_
+  commentId: Overload:Melanchall.DryWetMidi.Tools.ObjectsMergingSettings.ObjectsMergerFactory
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Tools.ObjectsMergingSettings.ObjectsMergerFactory
+  nameWithType: ObjectsMergingSettings.ObjectsMergerFactory
+- uid: Melanchall.DryWetMidi.Tools.ObjectsMergingSettings.OffVelocityMergingPolicy
+  name: OffVelocityMergingPolicy
+  href: api/Melanchall.DryWetMidi.Tools.ObjectsMergingSettings.html#Melanchall_DryWetMidi_Tools_ObjectsMergingSettings_OffVelocityMergingPolicy
+  commentId: P:Melanchall.DryWetMidi.Tools.ObjectsMergingSettings.OffVelocityMergingPolicy
+  fullName: Melanchall.DryWetMidi.Tools.ObjectsMergingSettings.OffVelocityMergingPolicy
+  nameWithType: ObjectsMergingSettings.OffVelocityMergingPolicy
+- uid: Melanchall.DryWetMidi.Tools.ObjectsMergingSettings.OffVelocityMergingPolicy*
+  name: OffVelocityMergingPolicy
+  href: api/Melanchall.DryWetMidi.Tools.ObjectsMergingSettings.html#Melanchall_DryWetMidi_Tools_ObjectsMergingSettings_OffVelocityMergingPolicy_
+  commentId: Overload:Melanchall.DryWetMidi.Tools.ObjectsMergingSettings.OffVelocityMergingPolicy
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Tools.ObjectsMergingSettings.OffVelocityMergingPolicy
+  nameWithType: ObjectsMergingSettings.OffVelocityMergingPolicy
+- uid: Melanchall.DryWetMidi.Tools.ObjectsMergingSettings.Tolerance
+  name: Tolerance
+  href: api/Melanchall.DryWetMidi.Tools.ObjectsMergingSettings.html#Melanchall_DryWetMidi_Tools_ObjectsMergingSettings_Tolerance
+  commentId: P:Melanchall.DryWetMidi.Tools.ObjectsMergingSettings.Tolerance
+  fullName: Melanchall.DryWetMidi.Tools.ObjectsMergingSettings.Tolerance
+  nameWithType: ObjectsMergingSettings.Tolerance
+- uid: Melanchall.DryWetMidi.Tools.ObjectsMergingSettings.Tolerance*
+  name: Tolerance
+  href: api/Melanchall.DryWetMidi.Tools.ObjectsMergingSettings.html#Melanchall_DryWetMidi_Tools_ObjectsMergingSettings_Tolerance_
+  commentId: Overload:Melanchall.DryWetMidi.Tools.ObjectsMergingSettings.Tolerance
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Tools.ObjectsMergingSettings.Tolerance
+  nameWithType: ObjectsMergingSettings.Tolerance
+- uid: Melanchall.DryWetMidi.Tools.ObjectsMergingSettings.VelocityMergingPolicy
+  name: VelocityMergingPolicy
+  href: api/Melanchall.DryWetMidi.Tools.ObjectsMergingSettings.html#Melanchall_DryWetMidi_Tools_ObjectsMergingSettings_VelocityMergingPolicy
+  commentId: P:Melanchall.DryWetMidi.Tools.ObjectsMergingSettings.VelocityMergingPolicy
+  fullName: Melanchall.DryWetMidi.Tools.ObjectsMergingSettings.VelocityMergingPolicy
+  nameWithType: ObjectsMergingSettings.VelocityMergingPolicy
+- uid: Melanchall.DryWetMidi.Tools.ObjectsMergingSettings.VelocityMergingPolicy*
+  name: VelocityMergingPolicy
+  href: api/Melanchall.DryWetMidi.Tools.ObjectsMergingSettings.html#Melanchall_DryWetMidi_Tools_ObjectsMergingSettings_VelocityMergingPolicy_
+  commentId: Overload:Melanchall.DryWetMidi.Tools.ObjectsMergingSettings.VelocityMergingPolicy
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Tools.ObjectsMergingSettings.VelocityMergingPolicy
+  nameWithType: ObjectsMergingSettings.VelocityMergingPolicy
 - uid: Melanchall.DryWetMidi.Tools.PartProcessingContext
   name: PartProcessingContext
   href: api/Melanchall.DryWetMidi.Tools.PartProcessingContext.html
@@ -37606,6 +37852,86 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Tools.RepeatingSettings.ShiftRoundingStep
   nameWithType: RepeatingSettings.ShiftRoundingStep
+- uid: Melanchall.DryWetMidi.Tools.Resizer
+  name: Resizer
+  href: api/Melanchall.DryWetMidi.Tools.Resizer.html
+  commentId: T:Melanchall.DryWetMidi.Tools.Resizer
+  fullName: Melanchall.DryWetMidi.Tools.Resizer
+  nameWithType: Resizer
+- uid: Melanchall.DryWetMidi.Tools.Resizer.Resize(Melanchall.DryWetMidi.Core.MidiFile,Melanchall.DryWetMidi.Interaction.ITimeSpan)
+  name: Resize(MidiFile, ITimeSpan)
+  href: api/Melanchall.DryWetMidi.Tools.Resizer.html#Melanchall_DryWetMidi_Tools_Resizer_Resize_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Interaction_ITimeSpan_
+  commentId: M:Melanchall.DryWetMidi.Tools.Resizer.Resize(Melanchall.DryWetMidi.Core.MidiFile,Melanchall.DryWetMidi.Interaction.ITimeSpan)
+  fullName: Melanchall.DryWetMidi.Tools.Resizer.Resize(Melanchall.DryWetMidi.Core.MidiFile, Melanchall.DryWetMidi.Interaction.ITimeSpan)
+  nameWithType: Resizer.Resize(MidiFile, ITimeSpan)
+- uid: Melanchall.DryWetMidi.Tools.Resizer.Resize(Melanchall.DryWetMidi.Core.MidiFile,System.Double)
+  name: Resize(MidiFile, Double)
+  href: api/Melanchall.DryWetMidi.Tools.Resizer.html#Melanchall_DryWetMidi_Tools_Resizer_Resize_Melanchall_DryWetMidi_Core_MidiFile_System_Double_
+  commentId: M:Melanchall.DryWetMidi.Tools.Resizer.Resize(Melanchall.DryWetMidi.Core.MidiFile,System.Double)
+  fullName: Melanchall.DryWetMidi.Tools.Resizer.Resize(Melanchall.DryWetMidi.Core.MidiFile, System.Double)
+  nameWithType: Resizer.Resize(MidiFile, Double)
+- uid: Melanchall.DryWetMidi.Tools.Resizer.Resize(Melanchall.DryWetMidi.Core.TrackChunk,Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Interaction.TempoMap)
+  name: Resize(TrackChunk, ITimeSpan, TempoMap)
+  href: api/Melanchall.DryWetMidi.Tools.Resizer.html#Melanchall_DryWetMidi_Tools_Resizer_Resize_Melanchall_DryWetMidi_Core_TrackChunk_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_TempoMap_
+  commentId: M:Melanchall.DryWetMidi.Tools.Resizer.Resize(Melanchall.DryWetMidi.Core.TrackChunk,Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Interaction.TempoMap)
+  fullName: Melanchall.DryWetMidi.Tools.Resizer.Resize(Melanchall.DryWetMidi.Core.TrackChunk, Melanchall.DryWetMidi.Interaction.ITimeSpan, Melanchall.DryWetMidi.Interaction.TempoMap)
+  nameWithType: Resizer.Resize(TrackChunk, ITimeSpan, TempoMap)
+- uid: Melanchall.DryWetMidi.Tools.Resizer.Resize(Melanchall.DryWetMidi.Core.TrackChunk,System.Double)
+  name: Resize(TrackChunk, Double)
+  href: api/Melanchall.DryWetMidi.Tools.Resizer.html#Melanchall_DryWetMidi_Tools_Resizer_Resize_Melanchall_DryWetMidi_Core_TrackChunk_System_Double_
+  commentId: M:Melanchall.DryWetMidi.Tools.Resizer.Resize(Melanchall.DryWetMidi.Core.TrackChunk,System.Double)
+  fullName: Melanchall.DryWetMidi.Tools.Resizer.Resize(Melanchall.DryWetMidi.Core.TrackChunk, System.Double)
+  nameWithType: Resizer.Resize(TrackChunk, Double)
+- uid: Melanchall.DryWetMidi.Tools.Resizer.Resize(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk},Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Interaction.TempoMap)
+  name: Resize(IEnumerable<TrackChunk>, ITimeSpan, TempoMap)
+  href: api/Melanchall.DryWetMidi.Tools.Resizer.html#Melanchall_DryWetMidi_Tools_Resizer_Resize_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_TempoMap_
+  commentId: M:Melanchall.DryWetMidi.Tools.Resizer.Resize(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk},Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Interaction.TempoMap)
+  name.vb: Resize(IEnumerable(Of TrackChunk), ITimeSpan, TempoMap)
+  fullName: Melanchall.DryWetMidi.Tools.Resizer.Resize(System.Collections.Generic.IEnumerable<Melanchall.DryWetMidi.Core.TrackChunk>, Melanchall.DryWetMidi.Interaction.ITimeSpan, Melanchall.DryWetMidi.Interaction.TempoMap)
+  fullName.vb: Melanchall.DryWetMidi.Tools.Resizer.Resize(System.Collections.Generic.IEnumerable(Of Melanchall.DryWetMidi.Core.TrackChunk), Melanchall.DryWetMidi.Interaction.ITimeSpan, Melanchall.DryWetMidi.Interaction.TempoMap)
+  nameWithType: Resizer.Resize(IEnumerable<TrackChunk>, ITimeSpan, TempoMap)
+  nameWithType.vb: Resizer.Resize(IEnumerable(Of TrackChunk), ITimeSpan, TempoMap)
+- uid: Melanchall.DryWetMidi.Tools.Resizer.Resize(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk},System.Double)
+  name: Resize(IEnumerable<TrackChunk>, Double)
+  href: api/Melanchall.DryWetMidi.Tools.Resizer.html#Melanchall_DryWetMidi_Tools_Resizer_Resize_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__System_Double_
+  commentId: M:Melanchall.DryWetMidi.Tools.Resizer.Resize(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk},System.Double)
+  name.vb: Resize(IEnumerable(Of TrackChunk), Double)
+  fullName: Melanchall.DryWetMidi.Tools.Resizer.Resize(System.Collections.Generic.IEnumerable<Melanchall.DryWetMidi.Core.TrackChunk>, System.Double)
+  fullName.vb: Melanchall.DryWetMidi.Tools.Resizer.Resize(System.Collections.Generic.IEnumerable(Of Melanchall.DryWetMidi.Core.TrackChunk), System.Double)
+  nameWithType: Resizer.Resize(IEnumerable<TrackChunk>, Double)
+  nameWithType.vb: Resizer.Resize(IEnumerable(Of TrackChunk), Double)
+- uid: Melanchall.DryWetMidi.Tools.Resizer.Resize*
+  name: Resize
+  href: api/Melanchall.DryWetMidi.Tools.Resizer.html#Melanchall_DryWetMidi_Tools_Resizer_Resize_
+  commentId: Overload:Melanchall.DryWetMidi.Tools.Resizer.Resize
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Tools.Resizer.Resize
+  nameWithType: Resizer.Resize
+- uid: Melanchall.DryWetMidi.Tools.Resizer.ResizeObjectsGroup(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Interaction.ITimedObject},Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Tools.ObjectsGroupResizingSettings)
+  name: ResizeObjectsGroup(IEnumerable<ITimedObject>, ITimeSpan, TempoMap, ObjectsGroupResizingSettings)
+  href: api/Melanchall.DryWetMidi.Tools.Resizer.html#Melanchall_DryWetMidi_Tools_Resizer_ResizeObjectsGroup_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_ITimedObject__Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Tools_ObjectsGroupResizingSettings_
+  commentId: M:Melanchall.DryWetMidi.Tools.Resizer.ResizeObjectsGroup(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Interaction.ITimedObject},Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Tools.ObjectsGroupResizingSettings)
+  name.vb: ResizeObjectsGroup(IEnumerable(Of ITimedObject), ITimeSpan, TempoMap, ObjectsGroupResizingSettings)
+  fullName: Melanchall.DryWetMidi.Tools.Resizer.ResizeObjectsGroup(System.Collections.Generic.IEnumerable<Melanchall.DryWetMidi.Interaction.ITimedObject>, Melanchall.DryWetMidi.Interaction.ITimeSpan, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Tools.ObjectsGroupResizingSettings)
+  fullName.vb: Melanchall.DryWetMidi.Tools.Resizer.ResizeObjectsGroup(System.Collections.Generic.IEnumerable(Of Melanchall.DryWetMidi.Interaction.ITimedObject), Melanchall.DryWetMidi.Interaction.ITimeSpan, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Tools.ObjectsGroupResizingSettings)
+  nameWithType: Resizer.ResizeObjectsGroup(IEnumerable<ITimedObject>, ITimeSpan, TempoMap, ObjectsGroupResizingSettings)
+  nameWithType.vb: Resizer.ResizeObjectsGroup(IEnumerable(Of ITimedObject), ITimeSpan, TempoMap, ObjectsGroupResizingSettings)
+- uid: Melanchall.DryWetMidi.Tools.Resizer.ResizeObjectsGroup(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Interaction.ITimedObject},System.Double,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Tools.ObjectsGroupResizingSettings)
+  name: ResizeObjectsGroup(IEnumerable<ITimedObject>, Double, TempoMap, ObjectsGroupResizingSettings)
+  href: api/Melanchall.DryWetMidi.Tools.Resizer.html#Melanchall_DryWetMidi_Tools_Resizer_ResizeObjectsGroup_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_ITimedObject__System_Double_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Tools_ObjectsGroupResizingSettings_
+  commentId: M:Melanchall.DryWetMidi.Tools.Resizer.ResizeObjectsGroup(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Interaction.ITimedObject},System.Double,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Tools.ObjectsGroupResizingSettings)
+  name.vb: ResizeObjectsGroup(IEnumerable(Of ITimedObject), Double, TempoMap, ObjectsGroupResizingSettings)
+  fullName: Melanchall.DryWetMidi.Tools.Resizer.ResizeObjectsGroup(System.Collections.Generic.IEnumerable<Melanchall.DryWetMidi.Interaction.ITimedObject>, System.Double, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Tools.ObjectsGroupResizingSettings)
+  fullName.vb: Melanchall.DryWetMidi.Tools.Resizer.ResizeObjectsGroup(System.Collections.Generic.IEnumerable(Of Melanchall.DryWetMidi.Interaction.ITimedObject), System.Double, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Tools.ObjectsGroupResizingSettings)
+  nameWithType: Resizer.ResizeObjectsGroup(IEnumerable<ITimedObject>, Double, TempoMap, ObjectsGroupResizingSettings)
+  nameWithType.vb: Resizer.ResizeObjectsGroup(IEnumerable(Of ITimedObject), Double, TempoMap, ObjectsGroupResizingSettings)
+- uid: Melanchall.DryWetMidi.Tools.Resizer.ResizeObjectsGroup*
+  name: ResizeObjectsGroup
+  href: api/Melanchall.DryWetMidi.Tools.Resizer.html#Melanchall_DryWetMidi_Tools_Resizer_ResizeObjectsGroup_
+  commentId: Overload:Melanchall.DryWetMidi.Tools.Resizer.ResizeObjectsGroup
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Tools.Resizer.ResizeObjectsGroup
+  nameWithType: Resizer.ResizeObjectsGroup
 - uid: Melanchall.DryWetMidi.Tools.ShiftPolicy
   name: ShiftPolicy
   href: api/Melanchall.DryWetMidi.Tools.ShiftPolicy.html
@@ -37746,6 +38072,64 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Tools.SliceMidiFileSettings.SplitNotes
   nameWithType: SliceMidiFileSettings.SplitNotes
+- uid: Melanchall.DryWetMidi.Tools.SplitByObjectsSettings
+  name: SplitByObjectsSettings
+  href: api/Melanchall.DryWetMidi.Tools.SplitByObjectsSettings.html
+  commentId: T:Melanchall.DryWetMidi.Tools.SplitByObjectsSettings
+  fullName: Melanchall.DryWetMidi.Tools.SplitByObjectsSettings
+  nameWithType: SplitByObjectsSettings
+- uid: Melanchall.DryWetMidi.Tools.SplitByObjectsSettings.AllFilesObjectsFilter
+  name: AllFilesObjectsFilter
+  href: api/Melanchall.DryWetMidi.Tools.SplitByObjectsSettings.html#Melanchall_DryWetMidi_Tools_SplitByObjectsSettings_AllFilesObjectsFilter
+  commentId: P:Melanchall.DryWetMidi.Tools.SplitByObjectsSettings.AllFilesObjectsFilter
+  fullName: Melanchall.DryWetMidi.Tools.SplitByObjectsSettings.AllFilesObjectsFilter
+  nameWithType: SplitByObjectsSettings.AllFilesObjectsFilter
+- uid: Melanchall.DryWetMidi.Tools.SplitByObjectsSettings.AllFilesObjectsFilter*
+  name: AllFilesObjectsFilter
+  href: api/Melanchall.DryWetMidi.Tools.SplitByObjectsSettings.html#Melanchall_DryWetMidi_Tools_SplitByObjectsSettings_AllFilesObjectsFilter_
+  commentId: Overload:Melanchall.DryWetMidi.Tools.SplitByObjectsSettings.AllFilesObjectsFilter
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Tools.SplitByObjectsSettings.AllFilesObjectsFilter
+  nameWithType: SplitByObjectsSettings.AllFilesObjectsFilter
+- uid: Melanchall.DryWetMidi.Tools.SplitByObjectsSettings.Filter
+  name: Filter
+  href: api/Melanchall.DryWetMidi.Tools.SplitByObjectsSettings.html#Melanchall_DryWetMidi_Tools_SplitByObjectsSettings_Filter
+  commentId: P:Melanchall.DryWetMidi.Tools.SplitByObjectsSettings.Filter
+  fullName: Melanchall.DryWetMidi.Tools.SplitByObjectsSettings.Filter
+  nameWithType: SplitByObjectsSettings.Filter
+- uid: Melanchall.DryWetMidi.Tools.SplitByObjectsSettings.Filter*
+  name: Filter
+  href: api/Melanchall.DryWetMidi.Tools.SplitByObjectsSettings.html#Melanchall_DryWetMidi_Tools_SplitByObjectsSettings_Filter_
+  commentId: Overload:Melanchall.DryWetMidi.Tools.SplitByObjectsSettings.Filter
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Tools.SplitByObjectsSettings.Filter
+  nameWithType: SplitByObjectsSettings.Filter
+- uid: Melanchall.DryWetMidi.Tools.SplitByObjectsSettings.KeySelector
+  name: KeySelector
+  href: api/Melanchall.DryWetMidi.Tools.SplitByObjectsSettings.html#Melanchall_DryWetMidi_Tools_SplitByObjectsSettings_KeySelector
+  commentId: P:Melanchall.DryWetMidi.Tools.SplitByObjectsSettings.KeySelector
+  fullName: Melanchall.DryWetMidi.Tools.SplitByObjectsSettings.KeySelector
+  nameWithType: SplitByObjectsSettings.KeySelector
+- uid: Melanchall.DryWetMidi.Tools.SplitByObjectsSettings.KeySelector*
+  name: KeySelector
+  href: api/Melanchall.DryWetMidi.Tools.SplitByObjectsSettings.html#Melanchall_DryWetMidi_Tools_SplitByObjectsSettings_KeySelector_
+  commentId: Overload:Melanchall.DryWetMidi.Tools.SplitByObjectsSettings.KeySelector
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Tools.SplitByObjectsSettings.KeySelector
+  nameWithType: SplitByObjectsSettings.KeySelector
+- uid: Melanchall.DryWetMidi.Tools.SplitByObjectsSettings.WriteToAllFilesPredicate
+  name: WriteToAllFilesPredicate
+  href: api/Melanchall.DryWetMidi.Tools.SplitByObjectsSettings.html#Melanchall_DryWetMidi_Tools_SplitByObjectsSettings_WriteToAllFilesPredicate
+  commentId: P:Melanchall.DryWetMidi.Tools.SplitByObjectsSettings.WriteToAllFilesPredicate
+  fullName: Melanchall.DryWetMidi.Tools.SplitByObjectsSettings.WriteToAllFilesPredicate
+  nameWithType: SplitByObjectsSettings.WriteToAllFilesPredicate
+- uid: Melanchall.DryWetMidi.Tools.SplitByObjectsSettings.WriteToAllFilesPredicate*
+  name: WriteToAllFilesPredicate
+  href: api/Melanchall.DryWetMidi.Tools.SplitByObjectsSettings.html#Melanchall_DryWetMidi_Tools_SplitByObjectsSettings_WriteToAllFilesPredicate_
+  commentId: Overload:Melanchall.DryWetMidi.Tools.SplitByObjectsSettings.WriteToAllFilesPredicate
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Tools.SplitByObjectsSettings.WriteToAllFilesPredicate
+  nameWithType: SplitByObjectsSettings.WriteToAllFilesPredicate
 - uid: Melanchall.DryWetMidi.Tools.SplitFileByChannelSettings
   name: SplitFileByChannelSettings
   href: api/Melanchall.DryWetMidi.Tools.SplitFileByChannelSettings.html
@@ -37797,6 +38181,19 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Tools.SplitFileByChunksSettings.Filter
   nameWithType: SplitFileByChunksSettings.Filter
+- uid: Melanchall.DryWetMidi.Tools.SplitFileByChunksSettings.PreserveTempoMap
+  name: PreserveTempoMap
+  href: api/Melanchall.DryWetMidi.Tools.SplitFileByChunksSettings.html#Melanchall_DryWetMidi_Tools_SplitFileByChunksSettings_PreserveTempoMap
+  commentId: P:Melanchall.DryWetMidi.Tools.SplitFileByChunksSettings.PreserveTempoMap
+  fullName: Melanchall.DryWetMidi.Tools.SplitFileByChunksSettings.PreserveTempoMap
+  nameWithType: SplitFileByChunksSettings.PreserveTempoMap
+- uid: Melanchall.DryWetMidi.Tools.SplitFileByChunksSettings.PreserveTempoMap*
+  name: PreserveTempoMap
+  href: api/Melanchall.DryWetMidi.Tools.SplitFileByChunksSettings.html#Melanchall_DryWetMidi_Tools_SplitFileByChunksSettings_PreserveTempoMap_
+  commentId: Overload:Melanchall.DryWetMidi.Tools.SplitFileByChunksSettings.PreserveTempoMap
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Tools.SplitFileByChunksSettings.PreserveTempoMap
+  nameWithType: SplitFileByChunksSettings.PreserveTempoMap
 - uid: Melanchall.DryWetMidi.Tools.SplitFileByNotesSettings
   name: SplitFileByNotesSettings
   href: api/Melanchall.DryWetMidi.Tools.SplitFileByNotesSettings.html
@@ -37926,6 +38323,19 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Tools.Splitter.SplitByNotes
   nameWithType: Splitter.SplitByNotes
+- uid: Melanchall.DryWetMidi.Tools.Splitter.SplitByObjects(Melanchall.DryWetMidi.Core.MidiFile,Melanchall.DryWetMidi.Interaction.ObjectType,Melanchall.DryWetMidi.Tools.SplitByObjectsSettings,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings)
+  name: SplitByObjects(MidiFile, ObjectType, SplitByObjectsSettings, ObjectDetectionSettings)
+  href: api/Melanchall.DryWetMidi.Tools.Splitter.html#Melanchall_DryWetMidi_Tools_Splitter_SplitByObjects_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Interaction_ObjectType_Melanchall_DryWetMidi_Tools_SplitByObjectsSettings_Melanchall_DryWetMidi_Interaction_ObjectDetectionSettings_
+  commentId: M:Melanchall.DryWetMidi.Tools.Splitter.SplitByObjects(Melanchall.DryWetMidi.Core.MidiFile,Melanchall.DryWetMidi.Interaction.ObjectType,Melanchall.DryWetMidi.Tools.SplitByObjectsSettings,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings)
+  fullName: Melanchall.DryWetMidi.Tools.Splitter.SplitByObjects(Melanchall.DryWetMidi.Core.MidiFile, Melanchall.DryWetMidi.Interaction.ObjectType, Melanchall.DryWetMidi.Tools.SplitByObjectsSettings, Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings)
+  nameWithType: Splitter.SplitByObjects(MidiFile, ObjectType, SplitByObjectsSettings, ObjectDetectionSettings)
+- uid: Melanchall.DryWetMidi.Tools.Splitter.SplitByObjects*
+  name: SplitByObjects
+  href: api/Melanchall.DryWetMidi.Tools.Splitter.html#Melanchall_DryWetMidi_Tools_Splitter_SplitByObjects_
+  commentId: Overload:Melanchall.DryWetMidi.Tools.Splitter.SplitByObjects
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Tools.Splitter.SplitByObjects
+  nameWithType: Splitter.SplitByObjects
 - uid: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsAtDistance(Melanchall.DryWetMidi.Core.MidiFile,Melanchall.DryWetMidi.Interaction.ObjectType,Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Tools.LengthedObjectTarget,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings)
   name: SplitObjectsAtDistance(MidiFile, ObjectType, ITimeSpan, LengthedObjectTarget, ObjectDetectionSettings)
   href: api/Melanchall.DryWetMidi.Tools.Splitter.html#Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsAtDistance_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Interaction_ObjectType_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Tools_LengthedObjectTarget_Melanchall_DryWetMidi_Interaction_ObjectDetectionSettings_

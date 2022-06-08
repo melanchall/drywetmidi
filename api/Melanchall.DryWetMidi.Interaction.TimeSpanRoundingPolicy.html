@@ -84,7 +84,7 @@
   <h1 id="Melanchall_DryWetMidi_Interaction_TimeSpanRoundingPolicy" data-uid="Melanchall.DryWetMidi.Interaction.TimeSpanRoundingPolicy" class="text-break">Enum TimeSpanRoundingPolicy
   </h1>
   <div class="markdown level0 summary">
-Specifies how a time span should be round.
+Specifies how a time span should be rounded.
 </div>
   <div class="markdown level0 conceptual"></div>
   <h6><strong>Namespace</strong>: <a class="xref" href="Melanchall.DryWetMidi.Interaction.html">Melanchall.DryWetMidi.Interaction</a></h6>
@@ -93,6 +93,30 @@ Specifies how a time span should be round.
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public enum TimeSpanRoundingPolicy</code></pre>
   </div>
+  <h5 id="Melanchall_DryWetMidi_Interaction_TimeSpanRoundingPolicy_remarks"><strong>Remarks</strong></h5>
+  <div class="markdown level0 remarks">
+<p>
+The default value of the enum is <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimeSpanRoundingPolicy.html#Melanchall_DryWetMidi_Interaction_TimeSpanRoundingPolicy_NoRounding">NoRounding</a>. Let&apos;s see how remaining options work.
+Please note that rounding step should be specified (see
+<a class="xref" href="Melanchall.DryWetMidi.Interaction.TimeSpanUtilities.html#Melanchall_DryWetMidi_Interaction_TimeSpanUtilities_Round_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_TimeSpanRoundingPolicy_System_Int64_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_TempoMap_">Round(ITimeSpan, TimeSpanRoundingPolicy, Int64, ITimeSpan, TempoMap)</a>).
+</p>
+<p>
+<a class="xref" href="Melanchall.DryWetMidi.Interaction.TimeSpanRoundingPolicy.html#Melanchall_DryWetMidi_Interaction_TimeSpanRoundingPolicy_RoundUp">RoundUp</a> used to round a time span to the smallest one that is greater than or equal
+to the time span. Following table shows how time span <a class="xref" href="../articles/high-level-managing/MetricTimeSpan.html">0:0:10</a> will be
+rounded using different steps:
+</p>
+<p>
+<table><thead><tr><th>Step</th><th>Result</th></tr></thead><tbody><tr><td>0:0:15</td><td>0:0:15</td></tr><tr><td>0:0:10</td><td>0:0:10</td></tr><tr><td>0:0:3</td><td>0:0:12</td></tr></tbody></table>
+</p>
+<p>
+<a class="xref" href="Melanchall.DryWetMidi.Interaction.TimeSpanRoundingPolicy.html#Melanchall_DryWetMidi_Interaction_TimeSpanRoundingPolicy_RoundDown">RoundDown</a> used to round a time span to the largest one that is less than or equal
+to the time span. Following table shows how time span <a class="xref" href="../articles/high-level-managing/MetricTimeSpan.html">0:0:10</a> will be
+rounded using different steps:
+</p>
+<p>
+<table><thead><tr><th>Step</th><th>Result</th></tr></thead><tbody><tr><td>0:0:3</td><td>0:0:9</td></tr><tr><td>0:0:10</td><td>0:0:10</td></tr><tr><td>0:0:6</td><td>0:0:6</td></tr><tr><td>0:0:15</td><td>0:0:0</td></tr></tbody></table>
+</p>
+</div>
   <h3 id="fields">Fields
   </h3>
   <table class="table table-bordered table-striped table-condensed">

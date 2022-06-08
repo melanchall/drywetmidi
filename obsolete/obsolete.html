@@ -73,6 +73,89 @@
 <h1 id="obsolete-api">Obsolete API</h1>
 
 <p>Here the table of API that is obsolete and thus either will be removed from the library by a next release or already removed from the DryWetMIDI. Title of each obsolete API is just ID, please see description to see an old API and new replacement.</p>
+<h3 id="obs19">OBS19</h3>
+<p><code>Splitter.SplitByNotes</code> method is now obsolere since it has been replaced by <a class="xref" href="../api/Melanchall.DryWetMidi.Tools.Splitter.html#Melanchall_DryWetMidi_Tools_Splitter_SplitByObjects_">Splitter.SplitByObjects</a> one which can split a MIDI file by objects of difefrent types and with more flexibility.</p>
+<p>Simple example of how to split a file by notes with the new tool:</p>
+<pre><code class="lang-csharp">var newFiles = midiFile.SplitByObjects(ObjectType.Note);
+</code></pre>
+<p>To split ignoring a note's channel:</p>
+<pre><code class="lang-csharp">var newFiles = midiFile.SplitByObjects(
+    ObjectType.Note,
+    new SplitByObjectsSettings
+    {
+        KeySelector = obj =&gt; ObjectIdUtilities.GetObjectId(((Note)obj).NoteNumber)
+    });
+</code></pre>
+<p>To split by notes with all other events transferred to each new file:</p>
+<pre><code class="lang-csharp">var newFiles = midiFile.SplitByObjects(
+    ObjectType.Note | ObjectType.TimedEvent,
+    new SplitByObjectsSettings
+    {
+        KeySelector = obj =&gt; ObjectIdUtilities.GetObjectId(((Note)obj).NoteNumber),
+        WriteToAllFilesPredicate = obj =&gt; obj is TimedEvent
+    });
+</code></pre>
+<p>Obsolete from version <strong>6.1.1</strong>.</p>
+<p><strong>Old API</strong></p>
+<ul>
+<li><code>Splitter.SplitByNotes</code></li>
+</ul>
+<p><strong>New API</strong></p>
+<ul>
+<li><a class="xref" href="../api/Melanchall.DryWetMidi.Tools.Splitter.html#Melanchall_DryWetMidi_Tools_Splitter_SplitByObjects_">Splitter.SplitByObjects</a></li>
+</ul>
+<h3 id="obs18">OBS18</h3>
+<p><code>ResizeNotesUtilities</code> class and its methods have been generalized by the <a class="xref" href="../api/Melanchall.DryWetMidi.Tools.Resizer.html">Resizer</a> class which can resize groups of objects of different types simultaneously.</p>
+<p>Quick example of how to resize objects group using the new tool:</p>
+<pre><code class="lang-csharp">objects.ResizeObjectsGroup(
+    new MetricTimeSpan(0, 1, 0),
+    TempoMap.Default,
+    new ObjectsGroupResizingSettings
+    {
+        DistanceCalculationType = TimeSpanType.Metric
+    });
+</code></pre>
+<p>Obsolete from version <strong>6.1.1</strong>.</p>
+<p><strong>Old API</strong></p>
+<ul>
+<li><code>ResizeNotesUtilities</code></li>
+</ul>
+<p><strong>New API</strong></p>
+<ul>
+<li><a class="xref" href="../api/Melanchall.DryWetMidi.Tools.Resizer.html">Resizer</a></li>
+<li><a class="xref" href="../api/Melanchall.DryWetMidi.Tools.Resizer.html#Melanchall_DryWetMidi_Tools_Resizer_ResizeObjectsGroup_">Resizer.ResizeObjectsGroup</a></li>
+</ul>
+<h3 id="obs17">OBS17</h3>
+<p><code>NotesMerger</code> class has been generalized by the <a class="xref" href="../api/Melanchall.DryWetMidi.Tools.Merger.html">Merger</a> class which can merge objects of different types simultaneously.</p>
+<p>To merge objects within a collection of <a class="xref" href="../api/Melanchall.DryWetMidi.Interaction.ITimedObject.html">timed objects</a>:</p>
+<pre><code class="lang-csharp">var newObjects = objects.MergeObjects(
+    TempoMap.Default,
+    new ObjectsMergingSettings
+    {
+        Tolerance = new MetricTimeSpan(0, 0, 1)
+    });
+</code></pre>
+<p>Quick example of how to merge notes within a MIDI file with the new tool:</p>
+<pre><code class="lang-csharp">midiFile.MergeObjects(
+    ObjectType.Note,
+    new ObjectsMergingSettings
+    {
+        VelocityMergingPolicy = VelocityMergingPolicy.Max,
+        Tolerance = (MidiTimeSpan)0
+    });
+</code></pre>
+<p>Obsolete from version <strong>6.1.1</strong>.</p>
+<p><strong>Old API</strong></p>
+<ul>
+<li><code>NotesMerger</code></li>
+<li><code>NotesMergerUtilities</code></li>
+<li><code>NotesMergingSettings</code></li>
+</ul>
+<p><strong>New API</strong></p>
+<ul>
+<li><a class="xref" href="../api/Melanchall.DryWetMidi.Tools.Merger.html">Merger</a></li>
+<li><a class="xref" href="../api/Melanchall.DryWetMidi.Tools.Merger.html#Melanchall_DryWetMidi_Tools_Merger_MergeObjects_">Merger.MergeObjects</a></li>
+</ul>
 <h3 id="obs16">OBS16</h3>
 <p><code>TimedEventsManagingUtilities.AddEvent</code> methods are now obsolete since they are nothing more than just calling <a class="xref" href="../api/Melanchall.DryWetMidi.Interaction.TimedEvent.html">TimedEvent</a> constructor and adding a new instance to a collection:</p>
 <pre><code class="lang-csharp">eventsCollection.Add(new TimedEvent(midiEvent, time));
