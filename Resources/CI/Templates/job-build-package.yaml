@@ -37,6 +37,8 @@ jobs:
           $xml.Project.PropertyGroup[1].Version = $newVersion
           $xml.Save($filePath)
   
+  - template: step-generate-doc-links.yaml
+  
   - task: PowerShell@2
     displayName: Generate obsolete API hints
     inputs:

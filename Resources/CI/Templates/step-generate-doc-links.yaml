@@ -1,0 +1,15 @@
+steps:
+- task: DotNetCoreCLI@2
+  displayName: Build project for docs
+  inputs:
+    command: 'build'
+    projects: 'DryWetMidi/Melanchall.DryWetMidi.csproj'
+    arguments: '--configuration $(BuildConfiguration)'
+
+- template: step-build-docs.yaml
+
+- task: PowerShell@2
+  displayName: Generate doc links
+  inputs:
+    targetType: filePath
+    filePath: '$(Build.SourcesDirectory)/Resources/Scripts/Generate doc links.ps1'
