@@ -113,7 +113,6 @@ ITimeSpan result = timeSpan1.Subtract(timeSpan2, TimeSpanMode.TimeTime);
 ```
 
 If operands of the same type, result time span will be of this type too. But if you sum or subtract time spans of different types, the type of a result time span will be [MathTimeSpan](xref:Melanchall.DryWetMidi.Interaction.MathTimeSpan) which holds operands along with operation (addition or subtraction) and mode.
-```
 
 To stretch or shrink a time span use `Multiply` or `Divide` methods:
 
