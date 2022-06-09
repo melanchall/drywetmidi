@@ -163,11 +163,8 @@ var timeSpan2 = new MusicalTimeSpan(3, 8);
 ITimeSpan result = timeSpan1.Subtract(timeSpan2, TimeSpanMode.TimeTime);
 </code></pre>
 <p>If operands of the same type, result time span will be of this type too. But if you sum or subtract time spans of different types, the type of a result time span will be <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.MathTimeSpan.html">MathTimeSpan</a> which holds operands along with operation (addition or subtraction) and mode.</p>
-<pre><code>
-To stretch or shrink a time span use `Multiply` or `Divide` methods:
-
-```csharp
-ITimeSpan stretchedTimeSpan = new MetricTimeSpan(0, 0, 10).Multiply(2.5);
+<p>To stretch or shrink a time span use <code>Multiply</code> or <code>Divide</code> methods:</p>
+<pre><code class="lang-csharp">ITimeSpan stretchedTimeSpan = new MetricTimeSpan(0, 0, 10).Multiply(2.5);
 ITimeSpan shrinkedTimeSpan = new BarBeatTicksTimeSpan(0, 2).Divide(2);
 </code></pre>
 <p>There are some useful methods in the <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.TimeSpanUtilities.html">TimeSpanUtilities</a> class. These methods include <code>Parse</code> and <code>TryParse</code> ones that allows to parse a string to appropriate time span. Please read article corresponding to desired time span type to learn formats of strings that can be parsed to this type (use links at the start of this article).</p>
