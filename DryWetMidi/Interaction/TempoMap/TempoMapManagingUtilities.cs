@@ -7,7 +7,7 @@ using Melanchall.DryWetMidi.Core;
 namespace Melanchall.DryWetMidi.Interaction
 {
     /// <summary>
-    /// Extension methods for managing tempo map.
+    /// Extension methods for managing tempo map. More info in the <see href="xref:a_tempo_map">Tempo map</see> article.
     /// </summary>
     public static class TempoMapManagingUtilities
     {
@@ -15,8 +15,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
         /// <summary>
         /// Creates an instance of the <see cref="TempoMapManager"/> initializing it with the
-        /// specified events collections and time division. More info in the
-        /// <see href="xref:a_managers#tempo-map">Objects managers: Tempo map</see> article.
+        /// specified events collections and time division. More info in the <see href="xref:a_tempo_map">Tempo map</see> article.
         /// </summary>
         /// <param name="eventsCollections">Collection of <see cref="EventsCollection"/> which hold events
         /// that represent tempo map of a MIDI file.</param>
@@ -46,7 +45,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <summary>
         /// Creates an instance of the <see cref="TempoMapManager"/> initializing it with the
         /// specified time division and events collections of the specified track chunks. More info in the
-        /// <see href="xref:a_managers#tempo-map">Objects managers: Tempo map</see> article.
+        /// <see href="xref:a_tempo_map">Tempo map</see> article.
         /// </summary>
         /// <param name="trackChunks">Collection of <see cref="TrackChunk"/> which hold events
         /// that represent tempo map of a MIDI file.</param>
@@ -75,8 +74,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
         /// <summary>
         /// Creates an instance of the <see cref="TempoMapManager"/> initializing it with the
-        /// events collections of the specified MIDI file. More info in the
-        /// <see href="xref:a_managers#tempo-map">Objects managers: Tempo map</see> article.
+        /// events collections of the specified MIDI file. More info in the <see href="xref:a_tempo_map">Tempo map</see> article.
         /// </summary>
         /// <param name="file">MIDI file to manage tempo map of.</param>
         /// <returns>An instance of the <see cref="TempoMapManager"/> that can be used to manage

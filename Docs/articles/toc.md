@@ -13,6 +13,7 @@
 
 # High-level data managing
 ## [Objects managers](high-level-managing/Objects-managers.md)
+## [Tempo map](high-level-managing/Tempo-map.md)
 ## [Time and length](high-level-managing/Time-and-length.md)
 ## [Getting objects](high-level-managing/Getting-objects.md)
 
