@@ -5,7 +5,8 @@ using System.ComponentModel;
 namespace Melanchall.DryWetMidi.Interaction
 {
     /// <summary>
-    /// Represents a time span as a fraction of the whole note's length.
+    /// Represents a time span as a fraction of the whole note's length. More info in the
+    /// <see href="xref:a_time_length#musical">Time and length: Representations: Musical</see> article.
     /// </summary>
     public sealed class MusicalTimeSpan : ITimeSpan, IComparable<MusicalTimeSpan>, IEquatable<MusicalTimeSpan>
     {

@@ -6,6 +6,7 @@ namespace Melanchall.DryWetMidi.Interaction
 {
     /// <summary>
     /// Provides a way to convert the time of an object from one representation to another.
+    /// More info in the <see href="xref:a_time_length">Time and length</see> article.
     /// </summary>
     public static class TimeConverter
     {

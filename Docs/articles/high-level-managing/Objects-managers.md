@@ -74,7 +74,7 @@ will cause changes made with the `notesManager` will be lost because `SaveChange
 
 ## Tempo map
 
-Tempo map is a set of changes of time signature and tempo. You need to have a tempo map to convert [time and length](Time-and-length-overview.md) between different representations. Instead of messing with [Time Signature](xref:Melanchall.DryWetMidi.Core.TimeSignatureEvent) and [Set Tempo](xref:Melanchall.DryWetMidi.Core.SetTempoEvent) events DryWetMIDI provides [TempoMapManager](xref:Melanchall.DryWetMidi.Interaction.TempoMapManager) which helps to manage tempo map of a MIDI file:
+Tempo map is a set of changes of time signature and tempo. You need to have a tempo map to convert [time and length](Time-and-length.md) between different representations. Instead of messing with [Time Signature](xref:Melanchall.DryWetMidi.Core.TimeSignatureEvent) and [Set Tempo](xref:Melanchall.DryWetMidi.Core.SetTempoEvent) events DryWetMIDI provides [TempoMapManager](xref:Melanchall.DryWetMidi.Interaction.TempoMapManager) which helps to manage tempo map of a MIDI file:
 
 ```csharp
 using (var tempoMapManager = new TempoMapManager(midiFile.TimeDivision,

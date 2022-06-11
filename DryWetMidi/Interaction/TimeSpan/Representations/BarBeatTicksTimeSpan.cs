@@ -5,7 +5,8 @@ using System.ComponentModel;
 namespace Melanchall.DryWetMidi.Interaction
 {
     /// <summary>
-    /// Represents bar/beat time span which represents bars, beats and ticks.
+    /// Represents bar/beat time span which represents bars, beats and ticks. More info in the
+    /// <see href="xref:a_time_length#bars-beats-and-ticks">Time and length: Representations: Bars, beats and ticks</see> article.
     /// </summary>
     public sealed class BarBeatTicksTimeSpan : ITimeSpan, IComparable<BarBeatTicksTimeSpan>, IEquatable<BarBeatTicksTimeSpan>
     {

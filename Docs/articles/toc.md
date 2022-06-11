@@ -13,13 +13,7 @@
 
 # High-level data managing
 ## [Objects managers](high-level-managing/Objects-managers.md)
-## Time and length
-### [Overview](high-level-managing/Time-and-length-overview.md)
-### [MidiTimeSpan](high-level-managing/MidiTimeSpan.md)
-### [MetricTimeSpan](high-level-managing/MetricTimeSpan.md)
-### [MusicalTimeSpan](high-level-managing/MusicalTimeSpan.md)
-### [BarBeatTicksTimeSpan](high-level-managing/BarBeatTicksTimeSpan.md)
-### [BarBeatFractionTimeSpan](high-level-managing/BarBeatFractionTimeSpan.md)
+## [Time and length](high-level-managing/Time-and-length.md)
 ## [Getting objects](high-level-managing/Getting-objects.md)
 
 # Tools

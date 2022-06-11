@@ -6,7 +6,8 @@ namespace Melanchall.DryWetMidi.Interaction
 {
     /// <summary>
     /// Represents a time span as an amount of time measured in units of the time division
-    /// of a MIDI file.
+    /// of a MIDI file. More info in the
+    /// <see href="xref:a_time_length#midi">Time and length: Representations: MIDI</see> article.
     /// </summary>
     public sealed class MidiTimeSpan : ITimeSpan, IComparable<MidiTimeSpan>, IEquatable<MidiTimeSpan>
     {

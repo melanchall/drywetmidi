@@ -1,12 +1,16 @@
-# Time and length - Overview
+---
+uid: a_time_length
+---
+
+# Time and length
 
 All times and lengths in a MIDI file are presented as some long values in units defined by the time division of a MIDI file. In practice it is much more convenient to operate by "human understandable" representations like seconds or bars/beats. In fact there is no difference between time and length since time within a MIDI file is just a length that always starts at zero, so the _time span_ term will be used to describe both time and length. DryWetMIDI provides the following classes to represent time span:
 
-* [MetricTimeSpan](MetricTimeSpan.md) for time span in terms of microseconds;
-* [BarBeatTicksTimeSpan](BarBeatTicksTimeSpan.md) for time span in terms of number of bars, beats and ticks;
-* [BarBeatFractionTimeSpan](BarBeatFractionTimeSpan.md) for time span in terms of number of bars and fractional beats (for example, `0.5` beats);
-* [MusicalTimeSpan](MusicalTimeSpan.md) for time span in terms of a fraction of the whole note length;
-* [MidiTimeSpan](MidiTimeSpan.md) exists for unification purposes and simply holds long value in units defined by the time division of a file.
+* [MetricTimeSpan](#metric) for time span in terms of microseconds;
+* [BarBeatTicksTimeSpan](#bars-beats-and-ticks) for time span in terms of number of bars, beats and ticks;
+* [BarBeatFractionTimeSpan](#bars-beats-and-fraction) for time span in terms of number of bars and fractional beats (for example, `0.5` beats);
+* [MusicalTimeSpan](#musical) for time span in terms of a fraction of the whole note length;
+* [MidiTimeSpan](#midi) exists for unification purposes and simply holds long value in units defined by the time division of a file.
 
 All time span classes implement [ITimeSpan](xref:Melanchall.DryWetMidi.Interaction.ITimeSpan) interface.
 
@@ -122,3 +126,147 @@ ITimeSpan shrinkedTimeSpan = new BarBeatTicksTimeSpan(0, 2).Divide(2);
 ```
 
 There are some useful methods in the [TimeSpanUtilities](xref:Melanchall.DryWetMidi.Interaction.TimeSpanUtilities) class. These methods include `Parse` and `TryParse` ones that allows to parse a string to appropriate time span. Please read article corresponding to desired time span type to learn formats of strings that can be parsed to this type (use links at the start of this article).
+
+## Representations
+
+DryWetMIDI provides several representations of time spans.
+
+### Metric
+
+[MetricTimeSpan](xref:Melanchall.DryWetMidi.Interaction.MetricTimeSpan) represents time span as a number of microseconds.
+
+Following strings can be parsed to `MetricTimeSpan`:
+
+`Hours : Minutes : Seconds : Milliseconds`  
+`HoursGroup : Minutes : Seconds`  
+`Minutes : Seconds`  
+`Hours h Minutes m Seconds s Milliseconds ms`  
+`Hours h Minutes m Seconds s`  
+`Hours h Minutes m Milliseconds ms`  
+`Hours h Seconds s Milliseconds ms`  
+`Minutes m Seconds s Milliseconds ms`  
+`Hours h Minutes m`  
+`Hours h Seconds s`  
+`Hours h Milliseconds ms`  
+`Minutes m Seconds s`  
+`Hours h Milliseconds ms`  
+`Seconds s Milliseconds ms`  
+`Hours h`  
+`Minutes m`  
+`Seconds s`  
+`Milliseconds ms`
+
+where
+
+* **Hours** is a number of hours.
+* **Minutes** is a number of minutes.
+* **Seconds** is a number of seconds.
+* **Milliseconds** is a number of milliseconds.
+
+Examples:
+
+`0:0:0:0` – zero time span  
+`0:0:0:156` – 156 milliseconds  
+`2:0:156` – 2 hours and 156 seconds  
+`1:156` – 1 minute and 156 seconds  
+`1h2m3s4ms` – 1 hour 2 minutes 3 seconds 4 milliseconds  
+`1h 2m3s` – 1 hour 2 minutes 3 seconds  
+`1h2M 4ms` – 1 hour 2 minutes 4 milliseconds  
+`1 h3s4ms` – 1 hour 3 seconds 4 milliseconds  
+`2M3 S 4 MS` – 2 minutes 3 seconds 4 milliseconds  
+`1h2m` – 1 hour 2 minutes  
+`1h 3s` – 1 hour 3 seconds  
+`1h4MS` – 1 hour 4 milliseconds  
+`2M3s` – 2 minutes 3 seconds  
+`2 m 4 Ms` – 2 minutes 4 milliseconds  
+`3 s 4 mS` – 2 seconds 4 milliseconds
+
+### Bars, beats and ticks
+
+[BarBeatTicksTimeSpan](xref:Melanchall.DryWetMidi.Interaction.BarBeatTicksTimeSpan) represents a time span as a number of bars, beats and MIDI ticks.
+
+Following strings can be parsed to `BarBeatTicksTimeSpan`:
+
+`Bars.Beats.Ticks`
+
+where
+
+* **Bars** is a number of bars.
+* **Beats** is a number of beats.
+* **Ticks** is a number of MIDI ticks.
+
+Examples:
+
+`0.0.0` – zero time span  
+`1.0.0` – 1 bar  
+`0.10.5` – 10 beats and 5 ticks  
+`100.20.0` – 100 bars and 20 ticks
+
+### Bars, beats and fraction
+
+[BarBeatFractionTimeSpan](xref:Melanchall.DryWetMidi.Interaction.BarBeatFractionTimeSpan) represents a time span as a number of bars and fractional beats (for example, `0.5` beats).
+
+Following strings can be parsed to `BarBeatFractionTimeSpan`:
+
+`Bars_BeatsIntegerPart.BeatsFractionalPart`
+
+where
+
+* **Bars** is a number of bars.
+* **BeatsIntegerPart** is an integer part of fractional beats number.
+* **BeatsFractionalPart** is a fractional part of fractional beats number.
+
+Examples:
+
+`0_0.0` – zero time span  
+`1_0.0` – 1 bar  
+`0_10.5` – 10.5 beats  
+`100_20.2` – 100 bars and 20.2 beats
+
+### Musical
+
+[MusicalTimeSpan](xref:Melanchall.DryWetMidi.Interaction.MusicalTimeSpan) represents a time span as a fraction of the whole note, for example, 1/4 (quarter note length).
+
+Following strings can be parsed to `MusicalTimeSpan`:
+
+`Fraction Tuplet Dots`
+
+where
+
+* **Fraction** defines note length which is one of the following terms:  
+  * `Numerator/Denominator` where **Numerator** and **Denominator** are nonnegative integer numbers; **Numerator** can be omitted assuming it's `1`;
+  * `w`, `h`, `q`, `e` or `s` which mean whole, half, quarter, eighth or sixteenth note length respectively.  
+* **Tuplet** represents tuplet definition which is one of the following terms:  
+  * `[NotesCount : SpaceSize]` where **NotesCount** is positive integer count of notes with length defined by **Fraction** part; **SpaceSize** is the count of notes of normal length.
+  * `t` or `d` which mean triplet and duplet respectively.
+* **Dots** is any number of dots.
+
+`Tuplet` and `Dots` parts can be omitted.
+
+Examples:
+
+`0/1` – zero time span  
+`q` – quarter note length  
+`1/4.` – dotted quarter note length  
+`/8..` – double dotted eighth note length  
+`wt.` – dotted whole triplet note length  
+`w[3:10]` – length of 3 whole notes in space of 10 notes of normal length  
+`s[3:10]...` – length of 3 sixteenth triple dotted notes in space of 10 notes of normal length
+
+### MIDI
+
+[MidiTimeSpan](xref:Melanchall.DryWetMidi.Interaction.MidiTimeSpan) exists for unification purposes and simply holds long value in units defined by the time division of a MIDI file.
+
+Following strings can be parsed to `MidiTimeSpan`:
+
+`Value`
+
+where
+
+* **Value** is a number of MIDI ticks.
+
+Examples:
+
+`0` – zero time span  
+`100` – 100 ticks  
+`123456` – 123456 ticks

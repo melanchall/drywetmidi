@@ -13,7 +13,7 @@ namespace Melanchall.DryWetMidi.Interaction
     /// </para>
     /// <para>
     /// <see cref="RoundUp"/> used to round a time span to the smallest one that is greater than or equal
-    /// to the time span. Following table shows how time span <see href="xref:a_ts_metric">0:0:10</see> will be
+    /// to the time span. Following table shows how time span <see href="xref:a_time_length#metric">0:0:10</see> will be
     /// rounded using different steps:
     /// </para>
     /// <para>
@@ -38,7 +38,7 @@ namespace Melanchall.DryWetMidi.Interaction
     /// </para>
     /// <para>
     /// <see cref="RoundDown"/> used to round a time span to the largest one that is less than or equal
-    /// to the time span. Following table shows how time span <see href="xref:a_ts_metric">0:0:10</see> will be
+    /// to the time span. Following table shows how time span <see href="xref:a_time_length#metric">0:0:10</see> will be
     /// rounded using different steps:
     /// </para>
     /// <para>

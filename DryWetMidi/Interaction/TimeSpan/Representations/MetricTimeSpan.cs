@@ -5,7 +5,8 @@ using System.ComponentModel;
 namespace Melanchall.DryWetMidi.Interaction
 {
     /// <summary>
-    /// Represents metric time span which represents hours, minutes and seconds.
+    /// Represents metric time span which represents hours, minutes and seconds. More info in the
+    /// <see href="xref:a_time_length#metric">Time and length: Representations: Metric</see> article.
     /// </summary>
     public sealed class MetricTimeSpan : ITimeSpan, IComparable<MetricTimeSpan>, IEquatable<MetricTimeSpan>
     {

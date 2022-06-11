@@ -6,7 +6,8 @@ using Melanchall.DryWetMidi.Common;
 namespace Melanchall.DryWetMidi.Interaction
 {
     /// <summary>
-    /// Represents bar/beat time span which represents bars and fractional beats.
+    /// Represents bar/beat time span which represents bars and fractional beats. More info in the
+    /// <see href="xref:a_time_length#bars-beats-and-fraction">Time and length: Representations: Bars, beats and fraction</see> article.
     /// </summary>
     public sealed class BarBeatFractionTimeSpan : ITimeSpan, IComparable<BarBeatFractionTimeSpan>, IEquatable<BarBeatFractionTimeSpan>
     {
