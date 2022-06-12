@@ -115,12 +115,15 @@ references:
 - uid: a_splitter
   name: Splitter
   href: articles/tools/Splitter.html
+- uid: a_tempo_map
+  name: Tempo map
+  href: articles/high-level-managing/Tempo-map.html
+- uid: a_time_length
+  name: Time and length
+  href: articles/high-level-managing/Time-and-length.html
 - uid: a_tools_overview
   name: Overview
   href: articles/tools/Overview.html
-- uid: a_ts_metric
-  name: MetricTimeSpan
-  href: articles/high-level-managing/MetricTimeSpan.html
 - uid: Melanchall.DryWetMidi.Common
   name: Melanchall.DryWetMidi.Common
   href: api/Melanchall.DryWetMidi.Common.html

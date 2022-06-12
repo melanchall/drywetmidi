@@ -127,43 +127,6 @@ var notesManager = new TimedObjectsManager&lt;Note&gt;(trackChunk.Events);
 timedEventsManager.SaveChanges();
 </code></pre>
 <p>will cause changes made with the <code>notesManager</code> will be lost because <code>SaveChanges</code> (or <code>Dispose</code> in first code snippet) of <code>timedEventsManager</code> executed after <code>SaveChanges</code> of <code>notesManager</code>, and thus rewrites underlying events collection. You need to save changes made with a previous manager before managing objects with next one.</p>
-<h2 id="tempo-map">Tempo map</h2>
-<p>Tempo map is a set of changes of time signature and tempo. You need to have a tempo map to convert <a href="Time-and-length-overview.html">time and length</a> between different representations. Instead of messing with <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.TimeSignatureEvent.html">Time Signature</a> and <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.SetTempoEvent.html">Set Tempo</a> events DryWetMIDI provides <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.TempoMapManager.html">TempoMapManager</a> which helps to manage tempo map of a MIDI file:</p>
-<pre><code class="lang-csharp">using (var tempoMapManager = new TempoMapManager(midiFile.TimeDivision,
-                                        midiFile.GetTrackChunks()
-                                                .Select(c =&gt; c.Events)))
-{
-    TempoMap tempoMap = tempoMapManager.TempoMap;
-
-    Tempo tempoAt123 = tempoMap.GetTempoAtTime((MidiTimeSpan)123);
-
-    // Change tempo to 400000 microseconds per quarter note at 20 seconds from
-    // MIDI file start
-    tempoMapManager.SetTempo(new MetricTimeSpan(0, 0, 20), new Tempo(400000));
-
-    tempoMapManager.ClearTimeSignature(456);
-}
-</code></pre>
-<p>To get tempo map being managed by the current <code>TempoMapManager</code> you need to use <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.TempoMapManager.html#Melanchall_DryWetMidi_Interaction_TempoMapManager_TempoMap">TempoMap</a> property which returns an instance of the <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.TempoMap.html">TempoMap</a> class.</p>
-<p>Once you've got an instance of <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.TempoMap.html">TempoMap</a> you can use <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.TempoMap.html#Melanchall_DryWetMidi_Interaction_TempoMap_GetTempoChanges">GetTempoChanges</a> method to get all tempo changes. Use <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.TempoMap.html#Melanchall_DryWetMidi_Interaction_TempoMap_GetTimeSignatureChanges">GetTimeSignatureChanges</a> method to get time signature changes. <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.TempoMap.html#Melanchall_DryWetMidi_Interaction_TempoMap_GetTempoAtTime_Melanchall_DryWetMidi_Interaction_ITimeSpan_">GetTempoAtTime</a> and <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.TempoMap.html#Melanchall_DryWetMidi_Interaction_TempoMap_GetTimeSignatureAtTime_Melanchall_DryWetMidi_Interaction_ITimeSpan_">GetTimeSignatureAtTime</a> methods allow to get tempo and time signature at the specified time.</p>
-<p>You can also create new tempo map with <code>TempoMapManager</code>:</p>
-<pre><code class="lang-csharp">using (var tempoMapManager = new TempoMapManager())
-{
-    // ...
-}
-</code></pre>
-<p>There is another way to get an instance of the <code>TempoMapManager</code> � through the <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.TempoMapManagingUtilities.html#Melanchall_DryWetMidi_Interaction_TempoMapManagingUtilities_ManageTempoMap_">ManageTempoMap</a> extension method:</p>
-<pre><code class="lang-csharp">using (var tempoMapManager = midiFile.ManageTempoMap())
-{
-    // ...
-}
-</code></pre>
-<p>This method and another useful ones are placed in <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.TempoMapManagingUtilities.html">TempoMapManagingUtilities</a>. For example, to get tempo map of a MIDI file you can write:</p>
-<pre><code class="lang-csharp">TempoMap tempoMap = midiFile.GetTempoMap();
-</code></pre>
-<p>Also you can replace the entire tempo map of a MIDI file using <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.TempoMapManagingUtilities.html#Melanchall_DryWetMidi_Interaction_TempoMapManagingUtilities_ReplaceTempoMap_">ReplaceTempoMap</a> method:</p>
-<pre><code class="lang-csharp">midiFile.ReplaceTempoMap(TempoMap.Create(Tempo.FromBeatsPerMinute(140)));
-</code></pre>
 </article>
           </div>
           

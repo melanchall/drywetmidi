@@ -227,30 +227,6 @@
     },
     {
       "type": "Conceptual",
-      "source_relative_path": "articles/high-level-managing/BarBeatFractionTimeSpan.md",
-      "output": {
-        ".html": {
-          "relative_path": "articles/high-level-managing/BarBeatFractionTimeSpan.html",
-          "hash": "272wexo/1fVOsPrjnUwjpg3T40/P2B2LrwBvM1iK8/g="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "articles/high-level-managing/BarBeatTicksTimeSpan.md",
-      "output": {
-        ".html": {
-          "relative_path": "articles/high-level-managing/BarBeatTicksTimeSpan.html",
-          "hash": "IB9QNpO3HrWaC/NNbj2QXjHMXWFVC8/J7skj2G+9HS4="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
       "source_relative_path": "articles/high-level-managing/Getting-objects.md",
       "output": {
         ".html": {
@@ -263,47 +239,11 @@
     },
     {
       "type": "Conceptual",
-      "source_relative_path": "articles/high-level-managing/MetricTimeSpan.md",
-      "output": {
-        ".html": {
-          "relative_path": "articles/high-level-managing/MetricTimeSpan.html",
-          "hash": "Vm5PyQVr12t4mWsj3TWzo/VszKI7EV3BxMGWsfEVz44="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "articles/high-level-managing/MidiTimeSpan.md",
-      "output": {
-        ".html": {
-          "relative_path": "articles/high-level-managing/MidiTimeSpan.html",
-          "hash": "XrOTBikygaQmmz7V+NuDKT3ZN+KBG32Nadr+VN2F5ds="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "articles/high-level-managing/MusicalTimeSpan.md",
-      "output": {
-        ".html": {
-          "relative_path": "articles/high-level-managing/MusicalTimeSpan.html",
-          "hash": "W7CLXzbXPjHy4SvqJ06lsAeHgvdI79aIVoqvaZK6BTU="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
       "source_relative_path": "articles/high-level-managing/Objects-managers.md",
       "output": {
         ".html": {
           "relative_path": "articles/high-level-managing/Objects-managers.html",
-          "hash": "wQjjCgYJmKs2sd4FrD67oWc5hEBELSzdWrdVz8vQh2w="
+          "hash": "3vDHiifa5qK+pig0mjBk7vl/wWTXGYmftJr+wF7yryY="
         }
       },
       "is_incremental": false,
@@ -311,11 +251,23 @@
     },
     {
       "type": "Conceptual",
-      "source_relative_path": "articles/high-level-managing/Time-and-length-overview.md",
+      "source_relative_path": "articles/high-level-managing/Tempo-map.md",
       "output": {
         ".html": {
-          "relative_path": "articles/high-level-managing/Time-and-length-overview.html",
-          "hash": "LF+7vFeig49yPaI+EKhUV4Kg6X72H2TuVfrbxHCvtxc="
+          "relative_path": "articles/high-level-managing/Tempo-map.html",
+          "hash": "+km2XUhWBPdp7KV/facvA33vm184sI78CQq2rzhEPGQ="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/high-level-managing/Time-and-length.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/high-level-managing/Time-and-length.html",
+          "hash": "NX4L3CH5CF4hZVBsbo/qJLhic/hX/GEWJZ61W1gDLjI="
         }
       },
       "is_incremental": false,
@@ -609,10 +561,10 @@
     },
     {
       "type": "Resource",
-      "source_relative_path": "articles/high-level-managing/images/ResizeNotes.png",
+      "source_relative_path": "articles/high-level-managing/images/TempoMap.png",
       "output": {
         "resource": {
-          "relative_path": "articles/high-level-managing/images/ResizeNotes.png"
+          "relative_path": "articles/high-level-managing/images/TempoMap.png"
         }
       },
       "is_incremental": false,
@@ -913,7 +865,7 @@
       "output": {
         ".html": {
           "relative_path": "articles/toc.html",
-          "hash": "gh4NxOa9Njr68zvVMEKn9Z1ZF3EmGYCgoNTADbUxuYM="
+          "hash": "DjpXe/DGjtxhpGQP49L4bIVSuwKRJhHjgEgcVXEqgQ8="
         }
       },
       "is_incremental": false,
@@ -997,7 +949,7 @@
       "output": {
         ".html": {
           "relative_path": "articles/tools/Resizer.html",
-          "hash": "BuMldLKOr1LbS3QvnjvJqrq2H1uxLHJwcubDRU5bQkA="
+          "hash": "6/U+HXWnyTnzaBlktNenZaXQtVhO3GnvMfx7do+y3Io="
         }
       },
       "is_incremental": false,
@@ -3005,7 +2957,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Interaction.BarBeatFractionTimeSpan.html",
-          "hash": "U5jdp3xSrfVgGnFrWO02WFhGdMvOOyyLP0PGYiibV+w="
+          "hash": "RmKDs9A6as379iyjthEEvNgXKlrw5DhwyFS9VQU7iqE="
         }
       },
       "is_incremental": false,
@@ -3017,7 +2969,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Interaction.BarBeatTicksTimeSpan.html",
-          "hash": "77g4DbXZPabrcJjvrJF4oIUPzMZe9natI4v4KkilTug="
+          "hash": "eNkkj3fZMkIFEQGUU2bdj1ObW8pCA/qvyV4MJWrLWy0="
         }
       },
       "is_incremental": false,
@@ -3257,7 +3209,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Interaction.LengthConverter.html",
-          "hash": "15SFv/2RQdwUvghtVe+GGMkjTzThRcapcDSP5tZy9qg="
+          "hash": "z4hY+2grFMk7ZTJtJFcSy44vR1iaB2XuV5eUwl8Raj0="
         }
       },
       "is_incremental": false,
@@ -3317,7 +3269,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Interaction.MetricTimeSpan.html",
-          "hash": "3Re37OJQ/EscKnqYwURssHXJ5YyTDZ3Isy1p4P63taM="
+          "hash": "HWkMhoAlhcym0EJTjhc6wCz2qHkEJJVHZbrOqTk6YG0="
         }
       },
       "is_incremental": false,
@@ -3341,7 +3293,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Interaction.MidiTimeSpan.html",
-          "hash": "5O/94DfKh1lV0GtSj/NfN1aVpFlQdoqRYlIP6i1xUXE="
+          "hash": "pfgPOBr0ReRhRRcE553i+aaqfLo03PHD63gw8kGc0fU="
         }
       },
       "is_incremental": false,
@@ -3365,7 +3317,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Interaction.MusicalTimeSpan.html",
-          "hash": "CgMOz+lkKsrg8B2G3/bkkEWtNl+Ac0TrMTtEhY4JMFY="
+          "hash": "B9IUh0mSmQaSvfBeKO2FHOHmtrrFYwDTiMTffNK2XJ0="
         }
       },
       "is_incremental": false,
@@ -3641,7 +3593,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Interaction.TempoMap.html",
-          "hash": "Z5PMDWTLjQfTgpy/uQx/Ierli22VNdeA5fbTs/4r4kE="
+          "hash": "/lSM8qxT0vzLuiz7hIK1KMgsWgi+BFKjv1GEr0G6h1g="
         }
       },
       "is_incremental": false,
@@ -3653,7 +3605,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Interaction.TempoMapManager.html",
-          "hash": "DlvYaMj4nJ9R2TkUmgZOpTINvoWT1Ppn8JPPNH/z23k="
+          "hash": "mJpMGhmXrq7+dO//PvljeYpLbTBcsAF0OSsH1M09Udg="
         }
       },
       "is_incremental": false,
@@ -3665,7 +3617,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Interaction.TempoMapManagingUtilities.html",
-          "hash": "C0K2AZxxCR7KUOkQ6Tzl079HT8X3E/c2HX5/o7rxY3M="
+          "hash": "YtsPCXHAArU5Od06hIAIjVsNj6fWNLpTrh/4gXafiKk="
         }
       },
       "is_incremental": false,
@@ -3689,7 +3641,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Interaction.TimeConverter.html",
-          "hash": "6r5+nWrbDc7AXn7b30ZJkeaN/+PKwsYSMGI8CKkOTYY="
+          "hash": "zLayf+/Fg53s2yFd2z8bQAb97NeWgGgW1u5NM5SIFrI="
         }
       },
       "is_incremental": false,
@@ -3737,7 +3689,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Interaction.TimeSpanRoundingPolicy.html",
-          "hash": "MZ7BY6pN9LD+t6Xa7B2dcbDXaDrksO9K+MiFi6epzKM="
+          "hash": "Da4+LVI0Bf6GrXJNtfDZ0cedM+cC8ZGjAO5JD4ERxkc="
         }
       },
       "is_incremental": false,
@@ -3749,7 +3701,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Interaction.TimeSpanType.html",
-          "hash": "P2iqgdvGH3/WF31NuIhZWMmtwL9sMJEPbPS59Xq5Pco="
+          "hash": "smrQ2FdnIbtc7wNxzuqrDSy8J2FdRDekfs8YJHAwPAg="
         }
       },
       "is_incremental": false,
@@ -3965,7 +3917,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Interaction.html",
-          "hash": "b3umdQh7H8BreRss2OWiMK4J1YkEifqQ1WF8a1q4UZ8="
+          "hash": "0SGQpXgPMUapcCmLmFU7JX7CaBSeHsBveCJd7FhSPwo="
         }
       },
       "is_incremental": false,
@@ -6662,7 +6614,7 @@
         "ConceptualDocumentProcessor": {
           "can_incremental": false,
           "incrementalPhase": "build",
-          "total_file_count": 105,
+          "total_file_count": 101,
           "skipped_file_count": 0
         },
         "ManagedReferenceDocumentProcessor": {

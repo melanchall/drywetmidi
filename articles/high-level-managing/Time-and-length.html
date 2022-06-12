@@ -5,9 +5,9 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Time and length - Overview | DryWetMIDI </title>
+    <title>Time and length | DryWetMIDI </title>
     <meta name="viewport" content="width=device-width">
-    <meta name="title" content="Time and length - Overview | DryWetMIDI ">
+    <meta name="title" content="Time and length | DryWetMIDI ">
     <meta name="generator" content="docfx 2.59.2.0">
     
     <link rel="shortcut icon" href="../../images/favicon.png">
@@ -76,16 +76,16 @@
         </div>
         <div class="article row grid-right">
           <div class="col-md-10">
-            <article class="content wrap" id="_content" data-uid="">
-<h1 id="time-and-length---overview">Time and length - Overview</h1>
+            <article class="content wrap" id="_content" data-uid="a_time_length">
+<h1 id="time-and-length">Time and length</h1>
 
 <p>All times and lengths in a MIDI file are presented as some long values in units defined by the time division of a MIDI file. In practice it is much more convenient to operate by &quot;human understandable&quot; representations like seconds or bars/beats. In fact there is no difference between time and length since time within a MIDI file is just a length that always starts at zero, so the <em>time span</em> term will be used to describe both time and length. DryWetMIDI provides the following classes to represent time span:</p>
 <ul>
-<li><a href="MetricTimeSpan.html">MetricTimeSpan</a> for time span in terms of microseconds;</li>
-<li><a href="BarBeatTicksTimeSpan.html">BarBeatTicksTimeSpan</a> for time span in terms of number of bars, beats and ticks;</li>
-<li><a href="BarBeatFractionTimeSpan.html">BarBeatFractionTimeSpan</a> for time span in terms of number of bars and fractional beats (for example, <code>0.5</code> beats);</li>
-<li><a href="MusicalTimeSpan.html">MusicalTimeSpan</a> for time span in terms of a fraction of the whole note length;</li>
-<li><a href="MidiTimeSpan.html">MidiTimeSpan</a> exists for unification purposes and simply holds long value in units defined by the time division of a file.</li>
+<li><a href="#metric">MetricTimeSpan</a> for time span in terms of microseconds;</li>
+<li><a href="#bars-beats-and-ticks">BarBeatTicksTimeSpan</a> for time span in terms of number of bars, beats and ticks;</li>
+<li><a href="#bars-beats-and-fraction">BarBeatFractionTimeSpan</a> for time span in terms of number of bars and fractional beats (for example, <code>0.5</code> beats);</li>
+<li><a href="#musical">MusicalTimeSpan</a> for time span in terms of a fraction of the whole note length;</li>
+<li><a href="#midi">MidiTimeSpan</a> exists for unification purposes and simply holds long value in units defined by the time division of a file.</li>
 </ul>
 <p>All time span classes implement <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a> interface.</p>
 <p>To convert time span between different representations you should use <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.TimeConverter.html">TimeConverter</a> or <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.LengthConverter.html">LengthConverter</a> classes (these conversions require <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.TempoMap.html">tempo map</a> of a MIDI file). (You can use <code>LengthConverter</code> for time conversions too but with the <code>TimeConverter</code> you don't need to specify time where time span starts since it is always zero.)</p>
@@ -168,6 +168,123 @@ ITimeSpan result = timeSpan1.Subtract(timeSpan2, TimeSpanMode.TimeTime);
 ITimeSpan shrinkedTimeSpan = new BarBeatTicksTimeSpan(0, 2).Divide(2);
 </code></pre>
 <p>There are some useful methods in the <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.TimeSpanUtilities.html">TimeSpanUtilities</a> class. These methods include <code>Parse</code> and <code>TryParse</code> ones that allows to parse a string to appropriate time span. Please read article corresponding to desired time span type to learn formats of strings that can be parsed to this type (use links at the start of this article).</p>
+<h2 id="representations">Representations</h2>
+<p>DryWetMIDI provides several representations of time spans.</p>
+<h3 id="metric">Metric</h3>
+<p><a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.MetricTimeSpan.html">MetricTimeSpan</a> represents time span as a number of microseconds.</p>
+<p>Following strings can be parsed to <code>MetricTimeSpan</code>:</p>
+<p><code>Hours : Minutes : Seconds : Milliseconds</code><br>
+<code>HoursGroup : Minutes : Seconds</code><br>
+<code>Minutes : Seconds</code><br>
+<code>Hours h Minutes m Seconds s Milliseconds ms</code><br>
+<code>Hours h Minutes m Seconds s</code><br>
+<code>Hours h Minutes m Milliseconds ms</code><br>
+<code>Hours h Seconds s Milliseconds ms</code><br>
+<code>Minutes m Seconds s Milliseconds ms</code><br>
+<code>Hours h Minutes m</code><br>
+<code>Hours h Seconds s</code><br>
+<code>Hours h Milliseconds ms</code><br>
+<code>Minutes m Seconds s</code><br>
+<code>Hours h Milliseconds ms</code><br>
+<code>Seconds s Milliseconds ms</code><br>
+<code>Hours h</code><br>
+<code>Minutes m</code><br>
+<code>Seconds s</code><br>
+<code>Milliseconds ms</code></p>
+<p>where</p>
+<ul>
+<li><strong>Hours</strong> is a number of hours.</li>
+<li><strong>Minutes</strong> is a number of minutes.</li>
+<li><strong>Seconds</strong> is a number of seconds.</li>
+<li><strong>Milliseconds</strong> is a number of milliseconds.</li>
+</ul>
+<p>Examples:</p>
+<p><code>0:0:0:0</code> – zero time span<br>
+<code>0:0:0:156</code> – 156 milliseconds<br>
+<code>2:0:156</code> – 2 hours and 156 seconds<br>
+<code>1:156</code> – 1 minute and 156 seconds<br>
+<code>1h2m3s4ms</code> – 1 hour 2 minutes 3 seconds 4 milliseconds<br>
+<code>1h 2m3s</code> – 1 hour 2 minutes 3 seconds<br>
+<code>1h2M 4ms</code> – 1 hour 2 minutes 4 milliseconds<br>
+<code>1 h3s4ms</code> – 1 hour 3 seconds 4 milliseconds<br>
+<code>2M3 S 4 MS</code> – 2 minutes 3 seconds 4 milliseconds<br>
+<code>1h2m</code> – 1 hour 2 minutes<br>
+<code>1h 3s</code> – 1 hour 3 seconds<br>
+<code>1h4MS</code> – 1 hour 4 milliseconds<br>
+<code>2M3s</code> – 2 minutes 3 seconds<br>
+<code>2 m 4 Ms</code> – 2 minutes 4 milliseconds<br>
+<code>3 s 4 mS</code> – 2 seconds 4 milliseconds</p>
+<h3 id="bars-beats-and-ticks">Bars, beats and ticks</h3>
+<p><a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.BarBeatTicksTimeSpan.html">BarBeatTicksTimeSpan</a> represents a time span as a number of bars, beats and MIDI ticks.</p>
+<p>Following strings can be parsed to <code>BarBeatTicksTimeSpan</code>:</p>
+<p><code>Bars.Beats.Ticks</code></p>
+<p>where</p>
+<ul>
+<li><strong>Bars</strong> is a number of bars.</li>
+<li><strong>Beats</strong> is a number of beats.</li>
+<li><strong>Ticks</strong> is a number of MIDI ticks.</li>
+</ul>
+<p>Examples:</p>
+<p><code>0.0.0</code> – zero time span<br>
+<code>1.0.0</code> – 1 bar<br>
+<code>0.10.5</code> – 10 beats and 5 ticks<br>
+<code>100.20.0</code> – 100 bars and 20 ticks</p>
+<h3 id="bars-beats-and-fraction">Bars, beats and fraction</h3>
+<p><a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.BarBeatFractionTimeSpan.html">BarBeatFractionTimeSpan</a> represents a time span as a number of bars and fractional beats (for example, <code>0.5</code> beats).</p>
+<p>Following strings can be parsed to <code>BarBeatFractionTimeSpan</code>:</p>
+<p><code>Bars_BeatsIntegerPart.BeatsFractionalPart</code></p>
+<p>where</p>
+<ul>
+<li><strong>Bars</strong> is a number of bars.</li>
+<li><strong>BeatsIntegerPart</strong> is an integer part of fractional beats number.</li>
+<li><strong>BeatsFractionalPart</strong> is a fractional part of fractional beats number.</li>
+</ul>
+<p>Examples:</p>
+<p><code>0_0.0</code> – zero time span<br>
+<code>1_0.0</code> – 1 bar<br>
+<code>0_10.5</code> – 10.5 beats<br>
+<code>100_20.2</code> – 100 bars and 20.2 beats</p>
+<h3 id="musical">Musical</h3>
+<p><a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.MusicalTimeSpan.html">MusicalTimeSpan</a> represents a time span as a fraction of the whole note, for example, 1/4 (quarter note length).</p>
+<p>Following strings can be parsed to <code>MusicalTimeSpan</code>:</p>
+<p><code>Fraction Tuplet Dots</code></p>
+<p>where</p>
+<ul>
+<li><strong>Fraction</strong> defines note length which is one of the following terms:
+<ul>
+<li><code>Numerator/Denominator</code> where <strong>Numerator</strong> and <strong>Denominator</strong> are nonnegative integer numbers; <strong>Numerator</strong> can be omitted assuming it's <code>1</code>;</li>
+<li><code>w</code>, <code>h</code>, <code>q</code>, <code>e</code> or <code>s</code> which mean whole, half, quarter, eighth or sixteenth note length respectively.</li>
+</ul>
+</li>
+<li><strong>Tuplet</strong> represents tuplet definition which is one of the following terms:
+<ul>
+<li><code>[NotesCount : SpaceSize]</code> where <strong>NotesCount</strong> is positive integer count of notes with length defined by <strong>Fraction</strong> part; <strong>SpaceSize</strong> is the count of notes of normal length.</li>
+<li><code>t</code> or <code>d</code> which mean triplet and duplet respectively.</li>
+</ul>
+</li>
+<li><strong>Dots</strong> is any number of dots.</li>
+</ul>
+<p><code>Tuplet</code> and <code>Dots</code> parts can be omitted.</p>
+<p>Examples:</p>
+<p><code>0/1</code> – zero time span<br>
+<code>q</code> – quarter note length<br>
+<code>1/4.</code> – dotted quarter note length<br>
+<code>/8..</code> – double dotted eighth note length<br>
+<code>wt.</code> – dotted whole triplet note length<br>
+<code>w[3:10]</code> – length of 3 whole notes in space of 10 notes of normal length<br>
+<code>s[3:10]...</code> – length of 3 sixteenth triple dotted notes in space of 10 notes of normal length</p>
+<h3 id="midi">MIDI</h3>
+<p><a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.MidiTimeSpan.html">MidiTimeSpan</a> exists for unification purposes and simply holds long value in units defined by the time division of a MIDI file.</p>
+<p>Following strings can be parsed to <code>MidiTimeSpan</code>:</p>
+<p><code>Value</code></p>
+<p>where</p>
+<ul>
+<li><strong>Value</strong> is a number of MIDI ticks.</li>
+</ul>
+<p>Examples:</p>
+<p><code>0</code> – zero time span<br>
+<code>100</code> – 100 ticks<br>
+<code>123456</code> – 123456 ticks</p>
 </article>
           </div>
           

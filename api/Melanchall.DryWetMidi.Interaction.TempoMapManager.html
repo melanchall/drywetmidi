@@ -84,8 +84,7 @@
   <h1 id="Melanchall_DryWetMidi_Interaction_TempoMapManager" data-uid="Melanchall.DryWetMidi.Interaction.TempoMapManager" class="text-break">Class TempoMapManager
   </h1>
   <div class="markdown level0 summary">
-Provides a way to manage tempo map of a MIDI file. More info in the
-<a class="xref" href="../articles/high-level-managing/Objects-managers.html#tempo-map">Objects managers: Tempo map</a> article.
+Provides a way to manage tempo map of a MIDI file. More info in the <a class="xref" href="../articles/high-level-managing/Tempo-map.html">Tempo map</a> article.
 </div>
   <div class="markdown level0 conceptual"></div>
   <div class="inheritance">
@@ -127,16 +126,6 @@ Provides a way to manage tempo map of a MIDI file. More info in the
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public sealed class TempoMapManager : IDisposable</code></pre>
   </div>
-  <h5 id="Melanchall_DryWetMidi_Interaction_TempoMapManager_remarks"><strong>Remarks</strong></h5>
-  <div class="markdown level0 remarks">
-This manager is wrapper for the <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEventsManager.html">TimedEventsManager</a> that provides easy manipulation
-of specific MIDI events: <a class="xref" href="Melanchall.DryWetMidi.Core.SetTempoEvent.html">SetTempoEvent</a> and <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimeSignature.html">TimeSignature</a>. Also it
-provides <a class="xref" href="Melanchall.DryWetMidi.Interaction.TempoMapManager.html#Melanchall_DryWetMidi_Interaction_TempoMapManager_TempoMap">TempoMap</a> that can be used to calculate custom representations of time
-and length of an object. To start manage tempo map you need to get an instance of the
-<a class="xref" href="Melanchall.DryWetMidi.Interaction.TempoMapManager.html">TempoMapManager</a>. To finish managing you need to call the <a class="xref" href="Melanchall.DryWetMidi.Interaction.TempoMapManager.html#Melanchall_DryWetMidi_Interaction_TempoMapManager_SaveChanges">SaveChanges()</a>
-or <a class="xref" href="Melanchall.DryWetMidi.Interaction.TempoMapManager.html#Melanchall_DryWetMidi_Interaction_TempoMapManager_Dispose">Dispose()</a> method. Since the manager implements <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.idisposable">IDisposable</a> it is
-recommended to manage tempo map within using block.
-</div>
   <h3 id="constructors">Constructors
   </h3>
   <a id="Melanchall_DryWetMidi_Interaction_TempoMapManager__ctor_" data-uid="Melanchall.DryWetMidi.Interaction.TempoMapManager.#ctor*"></a>
