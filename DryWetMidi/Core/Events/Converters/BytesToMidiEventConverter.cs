@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
+using System.Linq;
 using System.Text;
 using Melanchall.DryWetMidi.Common;
 
@@ -21,9 +22,9 @@ namespace Melanchall.DryWetMidi.Core
         #region Fields
 
         private readonly MemoryStream _dataBytesStream;
-        private readonly MidiReader _midiReader;
+        private MidiReader _midiReader;
 
-        private FfStatusBytePolicy _ffStatusBytePolicy = FfStatusBytePolicy.ReadAsResetEvent;
+        private BytesFormat _bytesFormat = BytesFormat.File;
 
         private bool _disposed;
 
@@ -42,7 +43,6 @@ namespace Melanchall.DryWetMidi.Core
             ThrowIfArgument.IsNegative(nameof(capacity), capacity, "Capacity is negative.");
 
             _dataBytesStream = new MemoryStream(capacity);
-            _midiReader = new MidiReader(_dataBytesStream, new ReaderSettings());
         }
 
         /// <summary>
@@ -223,19 +223,13 @@ namespace Melanchall.DryWetMidi.Core
         /// </summary>
         public bool ReadDeltaTimes { get; set; }
 
-        /// <summary>
-        /// Gets or sets reaction of the reading engine on 0xFF status byte since it can mean
-        /// either <see cref="ResetEvent"/> or <see cref="MetaEvent"/>.
-        /// The default is <see cref="FfStatusBytePolicy.ReadAsResetEvent"/>.
-        /// </summary>
-        /// <exception cref="InvalidEnumArgumentException"><paramref name="value"/> specified an invalid value.</exception>
-        public FfStatusBytePolicy FfStatusBytePolicy
+        public BytesFormat BytesFormat
         {
-            get { return _ffStatusBytePolicy; }
+            get { return _bytesFormat; }
             set
             {
                 ThrowIfArgument.IsInvalidEnumValue(nameof(value), value);
-                _ffStatusBytePolicy = value;
+                _bytesFormat = value;
             }
         }
 
@@ -446,16 +440,54 @@ namespace Melanchall.DryWetMidi.Core
             if (bytes != null)
                 _dataBytesStream.Write(bytes, offset, length);
 
+            _midiReader?.Dispose();
+            _midiReader = new MidiReader(_dataBytesStream, new ReaderSettings());
             _midiReader.Position = 0;
         }
 
         private MidiEvent ReadEvent(byte statusByte)
         {
+            if (BytesFormat == BytesFormat.Device && statusByte == EventStatusBytes.Global.NormalSysEx)
+            {
+                var data = ReadDeviceSysExBytes();
+                return new NormalSysExEvent(data);
+            }
+
             var eventReader = EventReaderFactory.GetReader(statusByte, smfOnly: false);
-            if (statusByte == 0xFF && FfStatusBytePolicy == FfStatusBytePolicy.ReadAsMetaEvent)
+            if (BytesFormat == BytesFormat.File && statusByte == EventStatusBytes.Global.Meta)
                 eventReader = MetaEventReader;
 
             return eventReader.Read(_midiReader, ReadingSettings, statusByte);
+        }
+
+        private byte[] ReadDeviceSysExBytes()
+        {
+            const int bufferSize = 100;
+
+            // TODO: improve
+            var result = new List<byte[]>();
+            var position = _midiReader.Position;
+
+            while (!_midiReader.EndReached)
+            {
+                var size = (int)Math.Min(bufferSize, _midiReader.Length - _midiReader.Position);
+                var buffer = _midiReader.ReadBytes(size);
+                var endIndex = Array.IndexOf(buffer, SysExEvent.EndOfEventByte);
+                if (endIndex >= 0)
+                {
+                    var newBuffer = new byte[endIndex + 1];
+                    Array.Copy(buffer, newBuffer, newBuffer.Length);
+                    result.Add(newBuffer);
+                    break;
+                }
+
+                result.Add(buffer);
+            }
+
+            var bytes = result.SelectMany(b => b).ToArray();
+
+            _midiReader.Position = position + bytes.Length;
+            return bytes;
         }
 
         #endregion
@@ -478,7 +510,7 @@ namespace Melanchall.DryWetMidi.Core
             if (disposing)
             {
                 _dataBytesStream.Dispose();
-                _midiReader.Dispose();
+                _midiReader?.Dispose();
             }
 
             _disposed = true;

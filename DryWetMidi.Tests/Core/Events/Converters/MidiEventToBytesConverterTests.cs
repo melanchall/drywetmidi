@@ -13,7 +13,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
         #region Test methods
 
         [Test]
-        public void Write()
+        public void Convert()
         {
             using (var midiEventToBytesConverter = new MidiEventToBytesConverter())
             {
@@ -38,6 +38,56 @@ namespace Melanchall.DryWetMidi.Tests.Core
                         Channel = (FourBitNumber)0x3
                     },
                     new byte[] { 0xB3, 0x23, 0x7F });
+            }
+        }
+
+        [Test]
+        public void Convert_BytesFormat_Device()
+        {
+            using (var midiEventToBytesConverter = new MidiEventToBytesConverter())
+            {
+                midiEventToBytesConverter.BytesFormat = BytesFormat.Device;
+
+                Convert(
+                    midiEventToBytesConverter,
+                    new NoteOnEvent((SevenBitNumber)0x12, (SevenBitNumber)0x56)
+                    {
+                        Channel = (FourBitNumber)0x2
+                    },
+                    new byte[] { 0x92, 0x12, 0x56 });
+                Convert(
+                    midiEventToBytesConverter,
+                    new NormalSysExEvent(Enumerable.Range(0, 40).Select(_ => (byte)0xA7).Concat(new byte[] { 0xF7 }).ToArray()),
+                    new byte[] { 0xF0 }.Concat(Enumerable.Range(0, 40).Select(_ => (byte)0xA7)).Concat(new byte[] { 0xF7 }).ToArray());
+                Convert(
+                    midiEventToBytesConverter,
+                    new NormalSysExEvent(Enumerable.Range(0, 120).Select(_ => (byte)0xA7).Concat(new byte[] { 0xF7 }).ToArray()),
+                    new byte[] { 0xF0 }.Concat(Enumerable.Range(0, 120).Select(_ => (byte)0xA7)).Concat(new byte[] { 0xF7 }).ToArray());
+            }
+        }
+
+        [Test]
+        public void Convert_BytesFormat_File()
+        {
+            using (var midiEventToBytesConverter = new MidiEventToBytesConverter())
+            {
+                midiEventToBytesConverter.BytesFormat = BytesFormat.File;
+
+                Convert(
+                    midiEventToBytesConverter,
+                    new NoteOnEvent((SevenBitNumber)0x12, (SevenBitNumber)0x56)
+                    {
+                        Channel = (FourBitNumber)0x2
+                    },
+                    new byte[] { 0x92, 0x12, 0x56 });
+                Convert(
+                    midiEventToBytesConverter,
+                    new NormalSysExEvent(Enumerable.Range(0, 40).Select(_ => (byte)0xA7).Concat(new byte[] { 0xF7 }).ToArray()),
+                    new byte[] { 0xF0, 0x29 }.Concat(Enumerable.Range(0, 40).Select(_ => (byte)0xA7)).Concat(new byte[] { 0xF7 }).ToArray());
+                Convert(
+                    midiEventToBytesConverter,
+                    new NormalSysExEvent(Enumerable.Range(0, 120).Select(_ => (byte)0xA7).Concat(new byte[] { 0xF7 }).ToArray()),
+                    new byte[] { 0xF0, 0x79 }.Concat(Enumerable.Range(0, 120).Select(_ => (byte)0xA7)).Concat(new byte[] { 0xF7 }).ToArray());
             }
         }
 
@@ -129,6 +179,64 @@ namespace Melanchall.DryWetMidi.Tests.Core
                         }
                     },
                     new byte[] { 0x92, 0x12, 0x56, 0x80, 0x12, 0x00 });
+            }
+        }
+
+        [Test]
+        public void Convert_Multiple_BytesFormat_Device()
+        {
+            using (var midiEventToBytesConverter = new MidiEventToBytesConverter())
+            {
+                midiEventToBytesConverter.BytesFormat = BytesFormat.Device;
+
+                Convert(
+                    midiEventToBytesConverter,
+                    new MidiEvent[]
+                    {
+                        new NoteOnEvent((SevenBitNumber)0x12, (SevenBitNumber)0x56)
+                        {
+                            Channel = (FourBitNumber)0x2
+                        },
+                        new NormalSysExEvent(Enumerable.Range(0, 40).Select(_ => (byte)0xA7).Concat(new byte[] { 0xF7 }).ToArray()),
+                        new NormalSysExEvent(Enumerable.Range(0, 120).Select(_ => (byte)0xA7).Concat(new byte[] { 0xF7 }).ToArray()),
+                    },
+                    new byte[] { 0x92, 0x12, 0x56 }
+                        .Concat(new byte[] { 0xF0 })
+                        .Concat(Enumerable.Range(0, 40).Select(_ => (byte)0xA7))
+                        .Concat(new byte[] { 0xF7 })
+                        .Concat(new byte[] { 0xF0 })
+                        .Concat(Enumerable.Range(0, 120).Select(_ => (byte)0xA7))
+                        .Concat(new byte[] { 0xF7 })
+                        .ToArray());
+            }
+        }
+
+        [Test]
+        public void Convert_Multiple_BytesFormat_File()
+        {
+            using (var midiEventToBytesConverter = new MidiEventToBytesConverter())
+            {
+                midiEventToBytesConverter.BytesFormat = BytesFormat.File;
+
+                Convert(
+                    midiEventToBytesConverter,
+                    new MidiEvent[]
+                    {
+                        new NoteOnEvent((SevenBitNumber)0x12, (SevenBitNumber)0x56)
+                        {
+                            Channel = (FourBitNumber)0x2
+                        },
+                        new NormalSysExEvent(Enumerable.Range(0, 40).Select(_ => (byte)0xA7).Concat(new byte[] { 0xF7 }).ToArray()),
+                        new NormalSysExEvent(Enumerable.Range(0, 120).Select(_ => (byte)0xA7).Concat(new byte[] { 0xF7 }).ToArray()),
+                    },
+                    new byte[] { 0x92, 0x12, 0x56 }
+                        .Concat(new byte[] { 0xF0, 0x29 })
+                        .Concat(Enumerable.Range(0, 40).Select(_ => (byte)0xA7))
+                        .Concat(new byte[] { 0xF7 })
+                        .Concat(new byte[] { 0xF0, 0x79 })
+                        .Concat(Enumerable.Range(0, 120).Select(_ => (byte)0xA7))
+                        .Concat(new byte[] { 0xF7 })
+                        .ToArray());
             }
         }
 

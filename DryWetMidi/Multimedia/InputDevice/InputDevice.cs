@@ -92,7 +92,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         private static InputDeviceProperty[] _supportedProperties;
 
-        private readonly BytesToMidiEventConverter _bytesToMidiEventConverter = new BytesToMidiEventConverter(ChannelParametersBufferSize);
+        private readonly BytesToMidiEventConverter _bytesToMidiEventConverter = new BytesToMidiEventConverter(ChannelParametersBufferSize) { BytesFormat = BytesFormat.Device };
 
         private InputDeviceApi.Callback_Win _callback_Win;
         private InputDeviceApi.Callback_Mac _callback_Mac;

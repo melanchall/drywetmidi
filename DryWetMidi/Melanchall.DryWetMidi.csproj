@@ -21,7 +21,7 @@
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <PackageReleaseNotes>https://github.com/melanchall/drywetmidi/releases/tag/v6.1.0</PackageReleaseNotes>
+    <PackageReleaseNotes>https://github.com/melanchall/drywetmidi/releases/tag/v6.1.2</PackageReleaseNotes>
     <Description>
       DryWetMIDI is the .NET library to work with MIDI files and MIDI devices. It allows:
 

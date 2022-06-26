@@ -18,6 +18,8 @@ namespace Melanchall.DryWetMidi.Core
 
         private readonly WritingSettings _writingSettings = new WritingSettings();
 
+        private BytesFormat _bytesFormat = BytesFormat.File;
+
         private bool _disposed;
 
         #endregion
@@ -101,6 +103,16 @@ namespace Melanchall.DryWetMidi.Core
         /// </summary>
         public bool WriteDeltaTimes { get; set; }
 
+        public BytesFormat BytesFormat
+        {
+            get { return _bytesFormat; }
+            set
+            {
+                ThrowIfArgument.IsInvalidEnumValue(nameof(value), value);
+                _bytesFormat = value;
+            }
+        }
+
         #endregion
 
         #region Methods
@@ -138,8 +150,16 @@ namespace Melanchall.DryWetMidi.Core
             if (WriteDeltaTimes)
                 _midiWriter.WriteVlqNumber(midiEvent.DeltaTime);
 
-            var eventWriter = EventWriterFactory.GetWriter(midiEvent);
-            eventWriter.Write(midiEvent, _midiWriter, _writingSettings, true);
+            if (midiEvent is NormalSysExEvent && BytesFormat == BytesFormat.Device)
+            {
+                _midiWriter.WriteByte(EventStatusBytes.Global.NormalSysEx);
+                _midiWriter.WriteBytes(((NormalSysExEvent)midiEvent).Data);
+            }
+            else
+            {
+                var eventWriter = EventWriterFactory.GetWriter(midiEvent);
+                eventWriter.Write(midiEvent, _midiWriter, _writingSettings, true);
+            }
 
             return GetBytes(minSize);
         }
@@ -178,6 +198,13 @@ namespace Melanchall.DryWetMidi.Core
                     _midiWriter.WriteVlqNumber(midiEvent.DeltaTime);
 
                 var eventWriter = EventWriterFactory.GetWriter(midiEvent);
+
+                if (eventToWrite is NormalSysExEvent && BytesFormat == BytesFormat.Device)
+                {
+                    _midiWriter.WriteByte(EventStatusBytes.Global.NormalSysEx);
+                    _midiWriter.WriteBytes(((NormalSysExEvent)eventToWrite).Data);
+                    continue;
+                }
 
                 var writeStatusByte = true;
                 if (eventToWrite is ChannelEvent)
