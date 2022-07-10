@@ -2,6 +2,7 @@
 ## [Project health](dev/Project-health.md)
 ## [Manual build](dev/Manual-build.md)
 ## [Using in Unity](dev/Using-in-Unity.md)
+## [Nativeless package](dev/Nativeless-package.md)
 
 # MIDI file reading/writing
 ## [MIDI file reading](file-reading-writing/MIDI-file-reading.md)

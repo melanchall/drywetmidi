@@ -7,7 +7,7 @@
     <Configurations>Debug;Release;Coverage;DebugTest;ReleaseTest</Configurations>
   </PropertyGroup>
 
-  <PropertyGroup>
+  <PropertyGroup Label="Package">
     <PackageId>Melanchall.DryWetMidi</PackageId>
     <Version>6.1.2</Version>
     <Authors>melanchall</Authors>
@@ -58,7 +58,7 @@
     <DefineConstants>TRACE;TEST</DefineConstants>
   </PropertyGroup>
 
-  <ItemGroup>
+  <ItemGroup Label="Native">
     <None Include="Melanchall_DryWetMidi_Native32.dll">
       <PackagePath>build\</PackagePath>
       <Pack>true</Pack>
@@ -81,7 +81,7 @@
     </None>
   </ItemGroup>
 
-  <ItemGroup>
+  <ItemGroup Label="Resources">
     <Folder Include="Properties\" />
     <None Include="..\Resources\NuGet\icon.png" Pack="true" PackagePath="\" />
     <None Include="..\README.md" Pack="true" PackagePath="\" />

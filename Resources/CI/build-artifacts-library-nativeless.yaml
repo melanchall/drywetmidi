@@ -1,0 +1,79 @@
+trigger:
+  batch: true
+  branches:
+    include:
+    - master
+    - develop
+  paths:
+    include:
+    - 'DryWetMidi/*'
+    - 'Resources/CI/build-artifacts-library.yaml'
+    - 'Resources/CI/Templates/job-build-package-nativeless.yaml'
+    - 'Resources/CI/Templates/step-build-docs.yaml'
+    - 'Resources/CI/Templates/step-generate-doc-links.yaml'
+    - 'Resources/CI/Templates/step-setup-nativeless-project.yaml'
+
+pr: none
+
+variables:
+- group: DryWetMIDI-Common-Variables
+
+name: BuildLibrary_Nativeless_$(LibraryVersion)$(Rev:.r)
+
+stages:
+- stage: BuildBinaries
+  displayName: Build binaries
+  pool:
+    vmImage: 'windows-latest'
+  jobs:
+  - template: Templates/job-build-package-nativeless.yaml
+    parameters:
+      buildConfiguration: $(BuildConfiguration)
+  - job: BuildBinaries
+    displayName: Build binaries
+    steps:
+    - template: Templates/step-generate-doc-links.yaml
+    
+    - task: PowerShell@2
+      displayName: Generate obsolete API hints
+      inputs:
+        targetType: filePath
+        filePath: '$(Build.SourcesDirectory)/Resources/Scripts/Generate obsolete API hints.ps1'
+        
+    - template: Templates/step-setup-nativeless-project.yaml
+    
+    - task: DotNetCoreCLI@2
+      displayName: Build project
+      inputs:
+        command: 'build'
+        projects: 'DryWetMidi/Melanchall.DryWetMidi.csproj'
+        arguments: '--configuration $(BuildConfiguration)'
+    
+    - task: PowerShell@2
+      displayName: Delete pdb files
+      inputs:
+        targetType: 'inline'
+        script: |
+          Get-ChildItem $(Build.SourcesDirectory) -Include *.pdb -Recurse | Remove-Item -Force
+    
+    - task: ArchiveFiles@2
+      displayName: Archive .NET Framework binaries
+      inputs:
+        rootFolderOrFile: 'DryWetMidi\bin\$(BuildConfiguration)\net45'
+        includeRootFolder: false
+        archiveType: 'zip'
+        archiveFile: '$(Build.ArtifactStagingDirectory)\Binaries\DryWetMIDI.$(LibraryVersion)-bin-net45-nativeless.zip'
+    
+    - task: ArchiveFiles@2
+      displayName: Archive .NET Standard binaries
+      inputs:
+        rootFolderOrFile: 'DryWetMidi\bin\$(BuildConfiguration)\netstandard2.0'
+        includeRootFolder: false
+        archiveType: 'zip'
+        archiveFile: '$(Build.ArtifactStagingDirectory)\Binaries\DryWetMIDI.$(LibraryVersion)-bin-netstandard20-nativeless.zip'
+    
+    - task: PublishPipelineArtifact@1
+      displayName: Publish 'Binaries' artifact
+      inputs:
+        targetPath: $(Build.ArtifactStagingDirectory)\Binaries
+        artifact: Binaries

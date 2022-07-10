@@ -3,7 +3,7 @@
 namespace Melanchall.DryWetMidi.Multimedia
 {
     /// <summary>
-    /// Provides data for the <see cref="MidiDevice.ErrorOccurred"/> event.
+    /// Provides data for an event indicating an error occurred on a device.
     /// </summary>
     public sealed class ErrorOccurredEventArgs : EventArgs
     {

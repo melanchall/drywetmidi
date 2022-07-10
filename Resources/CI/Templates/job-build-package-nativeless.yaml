@@ -1,0 +1,73 @@
+parameters:
+- name: buildConfiguration
+  displayName: 'Build configuration'
+  type: string
+- name: prereleaseNumber
+  displayName: 'Pre-release number'
+  type: string
+  default: ''
+
+jobs:
+- job: BuildPackage
+  displayName: Build package
+  pool:
+    vmImage: 'windows-latest'
+  steps:  
+  - ${{ if not(eq(parameters.prereleaseNumber, '')) }}:
+    - task: PowerShell@2
+      displayName: Write prerelease version
+      inputs:
+        targetType: 'inline'
+        script: |
+          $filePath = Resolve-Path "DryWetMidi\Melanchall.DryWetMidi.csproj"
+          $xml = New-Object xml
+          $xml.PreserveWhitespace = $true
+          $xml.Load($filePath)
+          $version = $xml.Project.PropertyGroup[1].Version
+          Write-Host "Current version is $version"
+          Write-Host "Prerelease number is ${{ parameters.prereleaseNumber }}"
+          $newVersion = $version + "-prerelease" + ${{ parameters.prereleaseNumber }}
+          Write-Host "New version is $newVersion"
+          $xml.Project.PropertyGroup[1].Version = $newVersion
+          $xml.Save($filePath)
+  
+  - template: step-generate-doc-links.yaml
+  
+  - task: PowerShell@2
+    displayName: Generate obsolete API hints
+    inputs:
+      targetType: filePath
+      filePath: '$(Build.SourcesDirectory)/Resources/Scripts/Generate obsolete API hints.ps1'
+      
+  - template: step-setup-nativeless-project.yaml
+  
+  - task: UseDotNet@2
+    displayName: 'Use .NET 6.0.x'
+    inputs:
+      packageType: sdk
+      version: '6.0.x'
+      installationPath: $(Agent.ToolsDirectory)/dotnet
+  
+  - task: DotNetCoreCLI@2
+    displayName: Build project
+    inputs:
+      command: 'build'
+      projects: |
+        DryWetMidi/Melanchall.DryWetMidi.csproj
+      arguments: '--configuration ${{ parameters.buildConfiguration }}'
+  
+  - task: DotNetCoreCLI@2
+    displayName: Create NuGet package
+    inputs: 
+      command: 'pack'
+      projects: 'DryWetMidi/Melanchall.DryWetMidi.csproj'
+      outputDir: '$(Build.ArtifactStagingDirectory)\NuGetPackage'
+      packagesToPack: 'DryWetMidi/Melanchall.DryWetMidi.csproj'
+      nobuild: true
+      buildProperties: 'RepositoryBranch="$(Build.SourceBranchName)'
+  
+  - task: PublishPipelineArtifact@1
+    displayName: Publish 'NuGetPackage' artifact
+    inputs:
+      targetPath: '$(Build.ArtifactStagingDirectory)\NuGetPackage'
+      artifact: NuGetPackage

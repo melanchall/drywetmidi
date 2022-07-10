@@ -7,7 +7,6 @@ namespace Melanchall.DryWetMidi.Multimedia
     /// <see href="xref:a_dev_overview">Devices</see> and
     /// <see href="xref:a_dev_input">Input device</see> articles.
     /// </summary>
-    /// <seealso cref="InputDevice"/>
     public interface IInputDevice
     {
         /// <summary>
