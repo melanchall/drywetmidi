@@ -183,6 +183,29 @@ initial capacity of internal buffer.
   </table>
   <h3 id="properties">Properties
   </h3>
+  <a id="Melanchall_DryWetMidi_Core_BytesToMidiEventConverter_BytesFormat_" data-uid="Melanchall.DryWetMidi.Core.BytesToMidiEventConverter.BytesFormat*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_BytesToMidiEventConverter_BytesFormat" data-uid="Melanchall.DryWetMidi.Core.BytesToMidiEventConverter.BytesFormat">BytesFormat</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public BytesFormat BytesFormat { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.BytesFormat.html">BytesFormat</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
   <a id="Melanchall_DryWetMidi_Core_BytesToMidiEventConverter_CustomMetaEventTypes_" data-uid="Melanchall.DryWetMidi.Core.BytesToMidiEventConverter.CustomMetaEventTypes*"></a>
   <h4 id="Melanchall_DryWetMidi_Core_BytesToMidiEventConverter_CustomMetaEventTypes" data-uid="Melanchall.DryWetMidi.Core.BytesToMidiEventConverter.CustomMetaEventTypes">CustomMetaEventTypes</h4>
   <div class="markdown level1 summary">
@@ -244,48 +267,6 @@ meta event&apos;s text. The default is <code>null</code>.
   <div class="markdown level1 remarks">
 <p>If callback is not set, <a class="xref" href="Melanchall.DryWetMidi.Core.BytesToMidiEventConverter.html#Melanchall_DryWetMidi_Core_BytesToMidiEventConverter_TextEncoding">TextEncoding</a> will be used.</p>
 </div>
-  <a id="Melanchall_DryWetMidi_Core_BytesToMidiEventConverter_FfStatusBytePolicy_" data-uid="Melanchall.DryWetMidi.Core.BytesToMidiEventConverter.FfStatusBytePolicy*"></a>
-  <h4 id="Melanchall_DryWetMidi_Core_BytesToMidiEventConverter_FfStatusBytePolicy" data-uid="Melanchall.DryWetMidi.Core.BytesToMidiEventConverter.FfStatusBytePolicy">FfStatusBytePolicy</h4>
-  <div class="markdown level1 summary">
-Gets or sets reaction of the reading engine on 0xFF status byte since it can mean
-either <a class="xref" href="Melanchall.DryWetMidi.Core.ResetEvent.html">ResetEvent</a> or <a class="xref" href="Melanchall.DryWetMidi.Core.MetaEvent.html">MetaEvent</a>.
-The default is <a class="xref" href="Melanchall.DryWetMidi.Core.FfStatusBytePolicy.html#Melanchall_DryWetMidi_Core_FfStatusBytePolicy_ReadAsResetEvent">ReadAsResetEvent</a>.
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public FfStatusBytePolicy FfStatusBytePolicy { get; set; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Core.FfStatusBytePolicy.html">FfStatusBytePolicy</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.componentmodel.invalidenumargumentexception">InvalidEnumArgumentException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">value</code> specified an invalid value.</td>
-      </tr>
-    </tbody>
-  </table>
   <a id="Melanchall_DryWetMidi_Core_BytesToMidiEventConverter_InvalidChannelEventParameterValuePolicy_" data-uid="Melanchall.DryWetMidi.Core.BytesToMidiEventConverter.InvalidChannelEventParameterValuePolicy*"></a>
   <h4 id="Melanchall_DryWetMidi_Core_BytesToMidiEventConverter_InvalidChannelEventParameterValuePolicy" data-uid="Melanchall.DryWetMidi.Core.BytesToMidiEventConverter.InvalidChannelEventParameterValuePolicy">InvalidChannelEventParameterValuePolicy</h4>
   <div class="markdown level1 summary">

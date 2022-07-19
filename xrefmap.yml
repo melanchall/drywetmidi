@@ -31,6 +31,9 @@ references:
 - uid: a_develop_manual_build
   name: Manual build
   href: articles/dev/Manual-build.html
+- uid: a_develop_nativeless
+  name: Nativeless package
+  href: articles/dev/Nativeless-package.html
 - uid: a_develop_project_health
   name: Project health
   href: articles/dev/Project-health.html
@@ -3133,6 +3136,24 @@ references:
   commentId: F:Melanchall.DryWetMidi.Core.BufferingPolicy.UseFixedSizeBuffer
   fullName: Melanchall.DryWetMidi.Core.BufferingPolicy.UseFixedSizeBuffer
   nameWithType: BufferingPolicy.UseFixedSizeBuffer
+- uid: Melanchall.DryWetMidi.Core.BytesFormat
+  name: BytesFormat
+  href: api/Melanchall.DryWetMidi.Core.BytesFormat.html
+  commentId: T:Melanchall.DryWetMidi.Core.BytesFormat
+  fullName: Melanchall.DryWetMidi.Core.BytesFormat
+  nameWithType: BytesFormat
+- uid: Melanchall.DryWetMidi.Core.BytesFormat.Device
+  name: Device
+  href: api/Melanchall.DryWetMidi.Core.BytesFormat.html#Melanchall_DryWetMidi_Core_BytesFormat_Device
+  commentId: F:Melanchall.DryWetMidi.Core.BytesFormat.Device
+  fullName: Melanchall.DryWetMidi.Core.BytesFormat.Device
+  nameWithType: BytesFormat.Device
+- uid: Melanchall.DryWetMidi.Core.BytesFormat.File
+  name: File
+  href: api/Melanchall.DryWetMidi.Core.BytesFormat.html#Melanchall_DryWetMidi_Core_BytesFormat_File
+  commentId: F:Melanchall.DryWetMidi.Core.BytesFormat.File
+  fullName: Melanchall.DryWetMidi.Core.BytesFormat.File
+  nameWithType: BytesFormat.File
 - uid: Melanchall.DryWetMidi.Core.BytesToMidiEventConverter
   name: BytesToMidiEventConverter
   href: api/Melanchall.DryWetMidi.Core.BytesToMidiEventConverter.html
@@ -3158,6 +3179,19 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Core.BytesToMidiEventConverter.BytesToMidiEventConverter
   nameWithType: BytesToMidiEventConverter.BytesToMidiEventConverter
+- uid: Melanchall.DryWetMidi.Core.BytesToMidiEventConverter.BytesFormat
+  name: BytesFormat
+  href: api/Melanchall.DryWetMidi.Core.BytesToMidiEventConverter.html#Melanchall_DryWetMidi_Core_BytesToMidiEventConverter_BytesFormat
+  commentId: P:Melanchall.DryWetMidi.Core.BytesToMidiEventConverter.BytesFormat
+  fullName: Melanchall.DryWetMidi.Core.BytesToMidiEventConverter.BytesFormat
+  nameWithType: BytesToMidiEventConverter.BytesFormat
+- uid: Melanchall.DryWetMidi.Core.BytesToMidiEventConverter.BytesFormat*
+  name: BytesFormat
+  href: api/Melanchall.DryWetMidi.Core.BytesToMidiEventConverter.html#Melanchall_DryWetMidi_Core_BytesToMidiEventConverter_BytesFormat_
+  commentId: Overload:Melanchall.DryWetMidi.Core.BytesToMidiEventConverter.BytesFormat
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Core.BytesToMidiEventConverter.BytesFormat
+  nameWithType: BytesToMidiEventConverter.BytesFormat
 - uid: Melanchall.DryWetMidi.Core.BytesToMidiEventConverter.Convert(System.Byte,System.Byte[])
   name: Convert(Byte, Byte[])
   href: api/Melanchall.DryWetMidi.Core.BytesToMidiEventConverter.html#Melanchall_DryWetMidi_Core_BytesToMidiEventConverter_Convert_System_Byte_System_Byte___
@@ -3256,19 +3290,6 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Core.BytesToMidiEventConverter.Dispose
   nameWithType: BytesToMidiEventConverter.Dispose
-- uid: Melanchall.DryWetMidi.Core.BytesToMidiEventConverter.FfStatusBytePolicy
-  name: FfStatusBytePolicy
-  href: api/Melanchall.DryWetMidi.Core.BytesToMidiEventConverter.html#Melanchall_DryWetMidi_Core_BytesToMidiEventConverter_FfStatusBytePolicy
-  commentId: P:Melanchall.DryWetMidi.Core.BytesToMidiEventConverter.FfStatusBytePolicy
-  fullName: Melanchall.DryWetMidi.Core.BytesToMidiEventConverter.FfStatusBytePolicy
-  nameWithType: BytesToMidiEventConverter.FfStatusBytePolicy
-- uid: Melanchall.DryWetMidi.Core.BytesToMidiEventConverter.FfStatusBytePolicy*
-  name: FfStatusBytePolicy
-  href: api/Melanchall.DryWetMidi.Core.BytesToMidiEventConverter.html#Melanchall_DryWetMidi_Core_BytesToMidiEventConverter_FfStatusBytePolicy_
-  commentId: Overload:Melanchall.DryWetMidi.Core.BytesToMidiEventConverter.FfStatusBytePolicy
-  isSpec: "True"
-  fullName: Melanchall.DryWetMidi.Core.BytesToMidiEventConverter.FfStatusBytePolicy
-  nameWithType: BytesToMidiEventConverter.FfStatusBytePolicy
 - uid: Melanchall.DryWetMidi.Core.BytesToMidiEventConverter.InvalidChannelEventParameterValuePolicy
   name: InvalidChannelEventParameterValuePolicy
   href: api/Melanchall.DryWetMidi.Core.BytesToMidiEventConverter.html#Melanchall_DryWetMidi_Core_BytesToMidiEventConverter_InvalidChannelEventParameterValuePolicy
@@ -4816,24 +4837,6 @@ references:
   commentId: F:Melanchall.DryWetMidi.Core.ExtraTrackChunkPolicy.Skip
   fullName: Melanchall.DryWetMidi.Core.ExtraTrackChunkPolicy.Skip
   nameWithType: ExtraTrackChunkPolicy.Skip
-- uid: Melanchall.DryWetMidi.Core.FfStatusBytePolicy
-  name: FfStatusBytePolicy
-  href: api/Melanchall.DryWetMidi.Core.FfStatusBytePolicy.html
-  commentId: T:Melanchall.DryWetMidi.Core.FfStatusBytePolicy
-  fullName: Melanchall.DryWetMidi.Core.FfStatusBytePolicy
-  nameWithType: FfStatusBytePolicy
-- uid: Melanchall.DryWetMidi.Core.FfStatusBytePolicy.ReadAsMetaEvent
-  name: ReadAsMetaEvent
-  href: api/Melanchall.DryWetMidi.Core.FfStatusBytePolicy.html#Melanchall_DryWetMidi_Core_FfStatusBytePolicy_ReadAsMetaEvent
-  commentId: F:Melanchall.DryWetMidi.Core.FfStatusBytePolicy.ReadAsMetaEvent
-  fullName: Melanchall.DryWetMidi.Core.FfStatusBytePolicy.ReadAsMetaEvent
-  nameWithType: FfStatusBytePolicy.ReadAsMetaEvent
-- uid: Melanchall.DryWetMidi.Core.FfStatusBytePolicy.ReadAsResetEvent
-  name: ReadAsResetEvent
-  href: api/Melanchall.DryWetMidi.Core.FfStatusBytePolicy.html#Melanchall_DryWetMidi_Core_FfStatusBytePolicy_ReadAsResetEvent
-  commentId: F:Melanchall.DryWetMidi.Core.FfStatusBytePolicy.ReadAsResetEvent
-  fullName: Melanchall.DryWetMidi.Core.FfStatusBytePolicy.ReadAsResetEvent
-  nameWithType: FfStatusBytePolicy.ReadAsResetEvent
 - uid: Melanchall.DryWetMidi.Core.InstrumentNameEvent
   name: InstrumentNameEvent
   href: api/Melanchall.DryWetMidi.Core.InstrumentNameEvent.html
@@ -5869,6 +5872,19 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Core.MidiEventToBytesConverter.MidiEventToBytesConverter
   nameWithType: MidiEventToBytesConverter.MidiEventToBytesConverter
+- uid: Melanchall.DryWetMidi.Core.MidiEventToBytesConverter.BytesFormat
+  name: BytesFormat
+  href: api/Melanchall.DryWetMidi.Core.MidiEventToBytesConverter.html#Melanchall_DryWetMidi_Core_MidiEventToBytesConverter_BytesFormat
+  commentId: P:Melanchall.DryWetMidi.Core.MidiEventToBytesConverter.BytesFormat
+  fullName: Melanchall.DryWetMidi.Core.MidiEventToBytesConverter.BytesFormat
+  nameWithType: MidiEventToBytesConverter.BytesFormat
+- uid: Melanchall.DryWetMidi.Core.MidiEventToBytesConverter.BytesFormat*
+  name: BytesFormat
+  href: api/Melanchall.DryWetMidi.Core.MidiEventToBytesConverter.html#Melanchall_DryWetMidi_Core_MidiEventToBytesConverter_BytesFormat_
+  commentId: Overload:Melanchall.DryWetMidi.Core.MidiEventToBytesConverter.BytesFormat
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Core.MidiEventToBytesConverter.BytesFormat
+  nameWithType: MidiEventToBytesConverter.BytesFormat
 - uid: Melanchall.DryWetMidi.Core.MidiEventToBytesConverter.Convert(Melanchall.DryWetMidi.Core.MidiEvent)
   name: Convert(MidiEvent)
   href: api/Melanchall.DryWetMidi.Core.MidiEventToBytesConverter.html#Melanchall_DryWetMidi_Core_MidiEventToBytesConverter_Convert_Melanchall_DryWetMidi_Core_MidiEvent_
