@@ -17,6 +17,7 @@ trigger:
     - 'Resources/CI/Templates/step-build-tests.yaml'
     - 'Resources/CI/Templates/step-setup-framework-variables.yaml'
     - 'Resources/CI/Templates/step-build-tests.yaml'
+    - 'Resources/CI/Templates/step-build-test-data-sending-utility'
     - 'Resources/Utilities/CreateLoopbackPort_Windows/*'
     - 'Resources/Scripts/Setup MIDI ports.ps1'
     - 'Resources/Native/*'
@@ -38,6 +39,7 @@ pr:
     - 'Resources/CI/Templates/step-build-tests.yaml'
     - 'Resources/CI/Templates/step-setup-framework-variables.yaml'
     - 'Resources/CI/Templates/step-build-tests.yaml'
+    - 'Resources/CI/Templates/step-build-test-data-sending-utility'
     - 'Resources/Utilities/CreateLoopbackPort_Windows/*'
     - 'Resources/Scripts/Setup MIDI ports.ps1'
     - 'Resources/Native/*'
@@ -68,24 +70,7 @@ stages:
       parameters:
         tfm: '$(Tfm)'
     
-    - task: PowerShell@2
-      displayName: Build test data sending utility
-      condition: contains(variables.VmImage, 'macos')
-      inputs:
-        targetType: 'inline'
-        script: |
-          cd DryWetMidi.Tests
-          gcc -c SendTestData.c
-          gcc -shared -framework CoreServices -framework CoreMIDI -framework CoreFoundation -o SendTestData.dylib SendTestData.o
-          Copy-Item -Path "SendTestData.dylib" -Destination "bin/$(TestBuildConfiguration)/$(Tfm)" -Recurse
-          
-    - task: PublishPipelineArtifact@1
-      displayName: Publish 'SendTestData' artifact
-      condition: contains(variables.VmImage, 'macos')
-      inputs:
-        targetPath: 'DryWetMidi.Tests/SendTestData.dylib'
-        artifactName: 'SendTestData'
-        artifactType: pipeline
+    - template: Templates/step-build-test-data-sending-utility.yaml
     
     - template: Templates/step-create-ports-windows.yaml
       parameters:

@@ -22,7 +22,7 @@ stages:
         artifactName: 'Melanchall_DryWetMidi_Native64.dll'
         artifactType: pipeline
   - job: BuildDylib64
-    displayName: 'Build 64-bit dylib'
+    displayName: 'Build dylib'
     pool:
       vmImage: 'macos-latest'
     steps:
@@ -32,8 +32,12 @@ stages:
         targetType: 'inline'
         script: |
           cd Resources/Native
-          gcc -c NativeApi-macOS.c
-          gcc -shared -framework CoreServices -framework CoreFoundation -framework CoreMIDI -o Melanchall_DryWetMidi_Native64.dylib NativeApi-macOS.o
+          Write-Host "Building arm64 dylib..."
+          clang -shared -undefined dynamic_lookup -o Melanchall_DryWetMidi_Native64_arm64.dylib NativeApi-macOS.c -framework CoreServices -framework CoreFoundation -framework CoreMIDI -arch arm64
+          Write-Host "Building x86_64 dylib..."
+          clang -shared -undefined dynamic_lookup -o Melanchall_DryWetMidi_Native64_x86_64.dylib NativeApi-macOS.c -framework CoreServices -framework CoreFoundation -framework CoreMIDI -arch x86_64
+          Write-Host "Merging dylibs into single unversal one..."
+          lipo Melanchall_DryWetMidi_Native64_x86_64.dylib Melanchall_DryWetMidi_Native64_arm64.dylib -output Melanchall_DryWetMidi_Native64.dylib -create
     - task: PublishPipelineArtifact@1
       displayName: 'Publish dylib artifact'
       inputs:
@@ -72,22 +76,3 @@ stages:
         targetPath: 'Resources\Native\Melanchall_DryWetMidi_Native32.dll'
         artifactName: 'Melanchall_DryWetMidi_Native32.dll'
         artifactType: pipeline
-#  - job: BuildDylib32
-#    displayName: 'Build 32-bit dylib'
-#    pool:
-#      vmImage: 'macos-latest'
-#    steps:
-#    - task: PowerShell@2
-#      displayName: 'Build dylib'
-#      inputs:
-#        targetType: 'inline'
-#        script: |
-#          cd Resources/Native
-#          gcc -c NativeApi-macOS.c -m32
-#          gcc -shared -framework CoreServices -o Melanchall_DryWetMidi_Native32.dylib NativeApi-macOS.o -m32
-#    - task: PublishPipelineArtifact@1
-#      displayName: 'Publish dylib artifact'
-#      inputs:
-#        targetPath: 'Resources/Native/Melanchall_DryWetMidi_Native32.dylib'
-#        artifactName: 'Melanchall_DryWetMidi_Native32.dylib'
-#        artifactType: pipeline

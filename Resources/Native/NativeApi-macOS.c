@@ -68,7 +68,10 @@ void* TickGeneratorSessionThreadRoutine(void* data)
     mach_timebase_info_data_t timebase;
     kern_return_t kr = mach_timebase_info(&timebase);
     if (kr != KERN_SUCCESS)
-        return sessionHandle->threadStartResult = TGSESSION_OPENRESULT_FAILEDTOGETTIMEBASEINFO;
+    {
+        sessionHandle->threadStartResult = TGSESSION_OPENRESULT_FAILEDTOGETTIMEBASEINFO;
+        return NULL;
+    }
 
     struct thread_time_constraint_policy constraintPolicy;
 
@@ -80,7 +83,10 @@ void* TickGeneratorSessionThreadRoutine(void* data)
     thread_port_t threadId = pthread_mach_thread_np(pthread_self());
     kr = thread_policy_set(threadId, THREAD_TIME_CONSTRAINT_POLICY, (thread_policy_t)&constraintPolicy, THREAD_TIME_CONSTRAINT_POLICY_COUNT);
     if (kr != KERN_SUCCESS)
-        return sessionHandle->threadStartResult = TGSESSION_OPENRESULT_FAILEDTOSETREALTIMEPRIORITY;
+    {
+        sessionHandle->threadStartResult = TGSESSION_OPENRESULT_FAILEDTOSETREALTIMEPRIORITY;
+        return NULL;
+    }
 
     //
 
@@ -89,7 +95,7 @@ void* TickGeneratorSessionThreadRoutine(void* data)
 
     CFRunLoopRun();
 
-    return TGSESSION_OPENRESULT_OK;
+    return NULL;
 }
 
 TGSESSION_OPENRESULT OpenTickGeneratorSession(void** handle)

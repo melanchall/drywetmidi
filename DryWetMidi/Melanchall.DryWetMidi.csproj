@@ -67,10 +67,6 @@
       <PackagePath>build\</PackagePath>
       <Pack>true</Pack>
     </None>
-    <!--<None Include="Melanchall_DryWetMidi_Native32.dylib">
-      <PackagePath>build\</PackagePath>
-      <Pack>true</Pack>
-    </None>-->
     <None Include="Melanchall_DryWetMidi_Native64.dylib">
       <PackagePath>build\</PackagePath>
       <Pack>true</Pack>
