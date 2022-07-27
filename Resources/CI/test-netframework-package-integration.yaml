@@ -12,6 +12,7 @@ trigger:
     - 'Resources/CI/Templates/step-create-ports-windows.yaml'
     - 'Resources/CI/Templates/job-build-package.yaml'
     - 'Resources/PackageIntegrationTestUtilities/DwmNetFrameworkConsoleApp/*'
+    - 'Resources/Native/*'
 
 pr: none
 

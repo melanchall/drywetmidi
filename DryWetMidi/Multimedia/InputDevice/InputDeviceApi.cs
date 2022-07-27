@@ -41,7 +41,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             IN_OPENRESULT_WRONGTHREAD = 103,
             [NativeErrorType(NativeErrorType.NotPermitted)]
             IN_OPENRESULT_NOTPERMITTED = 104,
-            IN_OPENRESULT_UNKNOWNERROR = 105
+            IN_OPENRESULT_UNKNOWNERROR = 1000
         }
 
         public enum IN_CLOSERESULT

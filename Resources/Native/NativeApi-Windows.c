@@ -17,7 +17,7 @@ API_TYPE GetApiType()
 
 char CanCompareDevices()
 {
-	return 0;
+    return 0;
 }
 
 /* ================================
@@ -37,11 +37,11 @@ typedef struct
 
 TGSESSION_OPENRESULT OpenTickGeneratorSession(void** handle)
 {
-	TickGeneratorSessionHandle* sessionHandle = malloc(sizeof(TickGeneratorSessionHandle));
-	
+    TickGeneratorSessionHandle* sessionHandle = malloc(sizeof(TickGeneratorSessionHandle));
+    
     *handle = sessionHandle;
 
-	return TGSESSION_OPENRESULT_OK;
+    return TGSESSION_OPENRESULT_OK;
 }
 
 TG_STARTRESULT StartHighPrecisionTickGenerator_Win(int interval, void* sessionHandle, LPTIMECALLBACK callback, TickGeneratorInfo** info)
@@ -88,13 +88,13 @@ TG_STOPRESULT StopHighPrecisionTickGenerator(TickGeneratorSessionHandle* session
 typedef struct
 {
     int deviceIndex;
-	LPMIDIINCAPSA caps;
+    LPMIDIINCAPSA caps;
 } InputDeviceInfo;
 
 typedef struct
 {
     int deviceIndex;
-	LPMIDIOUTCAPSA caps;
+    LPMIDIOUTCAPSA caps;
 } OutputDeviceInfo;
 
 char* GetDeviceManufacturer(WORD manufacturerId)
@@ -273,7 +273,7 @@ IN_GETINFORESULT GetInputDeviceInfo(int deviceIndex, void** info)
     InputDeviceInfo* inputDeviceInfo = malloc(sizeof(InputDeviceInfo));
 
     inputDeviceInfo->deviceIndex = deviceIndex;
-	inputDeviceInfo->caps = malloc(sizeof(MIDIINCAPSA));
+    inputDeviceInfo->caps = malloc(sizeof(MIDIINCAPSA));
 
     MMRESULT result = midiInGetDevCapsA(deviceIndex, inputDeviceInfo->caps, sizeof(MIDIINCAPSA));
     if (result != MMSYSERR_NOERROR)
@@ -301,28 +301,28 @@ IN_GETPROPERTYRESULT GetInputDeviceName(void* info, char** value)
 {
     InputDeviceInfo* inputDeviceInfo = (InputDeviceInfo*)info;
     *value = inputDeviceInfo->caps->szPname;
-	return IN_GETPROPERTYRESULT_OK;
+    return IN_GETPROPERTYRESULT_OK;
 }
 
 IN_GETPROPERTYRESULT GetInputDeviceManufacturer(void* info, char** value)
 {
     InputDeviceInfo* inputDeviceInfo = (InputDeviceInfo*)info;
     *value = GetDeviceManufacturer(inputDeviceInfo->caps->wMid);
-	return IN_GETPROPERTYRESULT_OK;
+    return IN_GETPROPERTYRESULT_OK;
 }
 
 IN_GETPROPERTYRESULT GetInputDeviceProduct(void* info, char** value)
 {
     InputDeviceInfo* inputDeviceInfo = (InputDeviceInfo*)info;
     *value = GetDeviceProduct(inputDeviceInfo->caps->wPid);
-	return IN_GETPROPERTYRESULT_OK;
+    return IN_GETPROPERTYRESULT_OK;
 }
 
 IN_GETPROPERTYRESULT GetInputDeviceDriverVersion(void* info, int* value)
 {
     InputDeviceInfo* inputDeviceInfo = (InputDeviceInfo*)info;
     *value = inputDeviceInfo->caps->vDriverVersion;
-	return IN_GETPROPERTYRESULT_OK;
+    return IN_GETPROPERTYRESULT_OK;
 }
 
 IN_PREPARESYSEXBUFFERRESULT PrepareInputDeviceSysExBuffer(void* handle, int size)
@@ -427,20 +427,22 @@ IN_OPENRESULT OpenInputDevice_Win(void* info, void* sessionHandle, DWORD_PTR cal
 
     HMIDIIN inHandle;
     MMRESULT result = midiInOpen(&inHandle, inputDeviceInfo->deviceIndex, callback, 0, CALLBACK_FUNCTION);
-    switch (result)
+    if (result != MMSYSERR_NOERROR)
     {
-        case MMSYSERR_ALLOCATED: return IN_OPENRESULT_ALLOCATED;
-        case MMSYSERR_BADDEVICEID: return IN_OPENRESULT_BADDEVICEID;
-        case MMSYSERR_INVALFLAG: return IN_OPENRESULT_INVALIDFLAG;
-        case MMSYSERR_INVALPARAM: return IN_OPENRESULT_INVALIDSTRUCTURE;
-        case MMSYSERR_NOMEM: return IN_OPENRESULT_NOMEMORY;
+        switch (result)
+        {
+            case MMSYSERR_ALLOCATED: return IN_OPENRESULT_ALLOCATED;
+            case MMSYSERR_BADDEVICEID: return IN_OPENRESULT_BADDEVICEID;
+            case MMSYSERR_INVALFLAG: return IN_OPENRESULT_INVALIDFLAG;
+            case MMSYSERR_INVALPARAM: return IN_OPENRESULT_INVALIDSTRUCTURE;
+            case MMSYSERR_NOMEM: return IN_OPENRESULT_NOMEMORY;
+            default: return IN_OPENRESULT_UNKNOWNERROR;
+        }
     }
 
     inputDeviceHandle->handle = inHandle;
 
-    *handle = inputDeviceHandle;
-
-    IN_PREPARESYSEXBUFFERRESULT prepareBufferResult = PrepareInputDeviceSysExBuffer(*handle, sysExBufferSize);
+    IN_PREPARESYSEXBUFFERRESULT prepareBufferResult = PrepareInputDeviceSysExBuffer(inputDeviceHandle, sysExBufferSize);
     if (prepareBufferResult != IN_PREPARESYSEXBUFFERRESULT_OK)
     {
         switch (prepareBufferResult)
@@ -456,6 +458,7 @@ IN_OPENRESULT OpenInputDevice_Win(void* info, void* sessionHandle, DWORD_PTR cal
         }
     }
 
+    *handle = inputDeviceHandle;
     return IN_OPENRESULT_OK;
 }
 
@@ -542,15 +545,15 @@ IN_GETSYSEXDATARESULT GetInputDeviceSysExBufferData(LPMIDIHDR header, LPSTR* dat
 
 char IsInputDevicePropertySupported(IN_PROPERTY property)
 {
-	switch (property)
-	{
-		case IN_PROPERTY_PRODUCT:
-		case IN_PROPERTY_MANUFACTURER:
-		case IN_PROPERTY_DRIVERVERSION:
-			return 1;
-	}
-	
-	return 0;
+    switch (property)
+    {
+        case IN_PROPERTY_PRODUCT:
+        case IN_PROPERTY_MANUFACTURER:
+        case IN_PROPERTY_DRIVERVERSION:
+            return 1;
+    }
+    
+    return 0;
 }
 
 /* ================================
@@ -573,7 +576,7 @@ OUT_GETINFORESULT GetOutputDeviceInfo(int deviceIndex, void** info)
     OutputDeviceInfo* outputDeviceInfo = malloc(sizeof(OutputDeviceInfo));
 
     outputDeviceInfo->deviceIndex = deviceIndex;
-	outputDeviceInfo->caps = malloc(sizeof(MIDIOUTCAPSA));
+    outputDeviceInfo->caps = malloc(sizeof(MIDIOUTCAPSA));
 
     MMRESULT result = midiOutGetDevCapsA(deviceIndex, outputDeviceInfo->caps, sizeof(MIDIOUTCAPSA));
     if (result != MMSYSERR_NOERROR)
@@ -601,104 +604,104 @@ OUT_GETPROPERTYRESULT GetOutputDeviceName(void* info, char** value)
 {
     OutputDeviceInfo* outputDeviceInfo = (OutputDeviceInfo*)info;
     *value = outputDeviceInfo->caps->szPname;
-	return OUT_GETPROPERTYRESULT_OK;
+    return OUT_GETPROPERTYRESULT_OK;
 }
 
 OUT_GETPROPERTYRESULT GetOutputDeviceManufacturer(void* info, char** value)
 {
     OutputDeviceInfo* outputDeviceInfo = (OutputDeviceInfo*)info;
     *value = GetDeviceManufacturer(outputDeviceInfo->caps->wMid);
-	return OUT_GETPROPERTYRESULT_OK;
+    return OUT_GETPROPERTYRESULT_OK;
 }
 
 OUT_GETPROPERTYRESULT GetOutputDeviceProduct(void* info, char** value)
 {
     OutputDeviceInfo* outputDeviceInfo = (OutputDeviceInfo*)info;
     *value = GetDeviceProduct(outputDeviceInfo->caps->wPid);
-	return OUT_GETPROPERTYRESULT_OK;
+    return OUT_GETPROPERTYRESULT_OK;
 }
 
 OUT_GETPROPERTYRESULT GetOutputDeviceDriverVersion(void* info, int* value)
 {
     OutputDeviceInfo* outputDeviceInfo = (OutputDeviceInfo*)info;
     *value = outputDeviceInfo->caps->vDriverVersion;
-	return OUT_GETPROPERTYRESULT_OK;
+    return OUT_GETPROPERTYRESULT_OK;
 }
 
 OUT_GETPROPERTYRESULT GetOutputDeviceTechnology(void* info, OUT_TECHNOLOGY* value)
 {
     OutputDeviceInfo* outputDeviceInfo = (OutputDeviceInfo*)info;
     
-	*value = OUT_TECHNOLOGY_UNKNOWN;
-	
-	switch (outputDeviceInfo->caps->wTechnology)
-	{
-		case MOD_MIDIPORT:
-		    *value = OUT_TECHNOLOGY_MIDIPORT;
-			break;
+    *value = OUT_TECHNOLOGY_UNKNOWN;
+    
+    switch (outputDeviceInfo->caps->wTechnology)
+    {
+        case MOD_MIDIPORT:
+            *value = OUT_TECHNOLOGY_MIDIPORT;
+            break;
         case MOD_SYNTH:
-		    *value = OUT_TECHNOLOGY_SYNTH;
-			break;
+            *value = OUT_TECHNOLOGY_SYNTH;
+            break;
         case MOD_SQSYNTH:
-		    *value = OUT_TECHNOLOGY_SQSYNTH;
-			break;
+            *value = OUT_TECHNOLOGY_SQSYNTH;
+            break;
         case MOD_FMSYNTH:
-		    *value = OUT_TECHNOLOGY_FMSYNTH;
-			break;
+            *value = OUT_TECHNOLOGY_FMSYNTH;
+            break;
         case MOD_MAPPER:
-		    *value = OUT_TECHNOLOGY_MAPPER;
-			break;
+            *value = OUT_TECHNOLOGY_MAPPER;
+            break;
         case MOD_WAVETABLE:
-		    *value = OUT_TECHNOLOGY_WAVETABLE;
-			break;
+            *value = OUT_TECHNOLOGY_WAVETABLE;
+            break;
         case MOD_SWSYNTH:
-		    *value = OUT_TECHNOLOGY_SWSYNTH;
-			break;
-	}
-	
-	return OUT_GETPROPERTYRESULT_OK;
+            *value = OUT_TECHNOLOGY_SWSYNTH;
+            break;
+    }
+    
+    return OUT_GETPROPERTYRESULT_OK;
 }
 
 OUT_GETPROPERTYRESULT GetOutputDeviceVoicesNumber(void* info, int* value)
 {
     OutputDeviceInfo* outputDeviceInfo = (OutputDeviceInfo*)info;
     *value = outputDeviceInfo->caps->wVoices;
-	return OUT_GETPROPERTYRESULT_OK;
+    return OUT_GETPROPERTYRESULT_OK;
 }
 
 OUT_GETPROPERTYRESULT GetOutputDeviceNotesNumber(void* info, int* value)
 {
     OutputDeviceInfo* outputDeviceInfo = (OutputDeviceInfo*)info;
     *value = outputDeviceInfo->caps->wNotes;
-	return OUT_GETPROPERTYRESULT_OK;
+    return OUT_GETPROPERTYRESULT_OK;
 }
 
 OUT_GETPROPERTYRESULT GetOutputDeviceChannelsMask(void* info, int* value)
 {
     OutputDeviceInfo* outputDeviceInfo = (OutputDeviceInfo*)info;
     *value = outputDeviceInfo->caps->wChannelMask;
-	return OUT_GETPROPERTYRESULT_OK;
+    return OUT_GETPROPERTYRESULT_OK;
 }
 
 OUT_GETPROPERTYRESULT GetOutputDeviceOptions(void* info, OUT_OPTION* value)
 {
     OutputDeviceInfo* outputDeviceInfo = (OutputDeviceInfo*)info;
-	
-	int result = OUT_OPTION_UNKNOWN;
-	
-	DWORD support = outputDeviceInfo->caps->dwSupport;
-	if ((support & MIDICAPS_CACHE) != 0)
-		result = result | OUT_OPTION_CACHE;
-	if ((support & MIDICAPS_LRVOLUME) != 0)
-		result = result | OUT_OPTION_LRVOLUME;
-	if ((support & MIDICAPS_STREAM) != 0)
-		result = result | OUT_OPTION_STREAM;
-	if ((support & MIDICAPS_VOLUME) != 0)
-		result = result | OUT_OPTION_VOLUME;
-	
-	*value = result;
-	
-	return OUT_GETPROPERTYRESULT_OK;
+    
+    int result = OUT_OPTION_UNKNOWN;
+    
+    DWORD support = outputDeviceInfo->caps->dwSupport;
+    if ((support & MIDICAPS_CACHE) != 0)
+        result = result | OUT_OPTION_CACHE;
+    if ((support & MIDICAPS_LRVOLUME) != 0)
+        result = result | OUT_OPTION_LRVOLUME;
+    if ((support & MIDICAPS_STREAM) != 0)
+        result = result | OUT_OPTION_STREAM;
+    if ((support & MIDICAPS_VOLUME) != 0)
+        result = result | OUT_OPTION_VOLUME;
+    
+    *value = result;
+    
+    return OUT_GETPROPERTYRESULT_OK;
 }
 
 OUT_OPENRESULT OpenOutputDevice_Win(void* info, void* sessionHandle, DWORD_PTR callback, void** handle)
@@ -837,20 +840,20 @@ OUT_GETSYSEXDATARESULT GetOutputDeviceSysExBufferData(void* handle, LPMIDIHDR he
 
 char IsOutputDevicePropertySupported(OUT_PROPERTY property)
 {
-	switch (property)
-	{
-		case OUT_PROPERTY_PRODUCT:
-		case OUT_PROPERTY_MANUFACTURER:
-		case OUT_PROPERTY_DRIVERVERSION:
-		case OUT_PROPERTY_TECHNOLOGY:
-		case OUT_PROPERTY_VOICESNUMBER:
-		case OUT_PROPERTY_NOTESNUMBER:
-		case OUT_PROPERTY_CHANNELS:
-		case OUT_PROPERTY_OPTIONS:
-			return 1;
-	}
-	
-	return 0;
+    switch (property)
+    {
+        case OUT_PROPERTY_PRODUCT:
+        case OUT_PROPERTY_MANUFACTURER:
+        case OUT_PROPERTY_DRIVERVERSION:
+        case OUT_PROPERTY_TECHNOLOGY:
+        case OUT_PROPERTY_VOICESNUMBER:
+        case OUT_PROPERTY_NOTESNUMBER:
+        case OUT_PROPERTY_CHANNELS:
+        case OUT_PROPERTY_OPTIONS:
+            return 1;
+    }
+    
+    return 0;
 }
 
 /* ================================

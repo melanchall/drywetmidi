@@ -38,27 +38,27 @@ int main(int argc, char *argv[])
         PortInfo *portInfo = malloc(sizeof(PortInfo));
         CFStringRef nameRef = CFStringCreateWithCString(NULL, argv[i], kCFStringEncodingUTF8);
         
-		printf("    creating source...\n");
-		
+        printf("    creating source...\n");
+        
         result = MIDISourceCreate(clientRef, nameRef, &portInfo->srcRef);
         if (result != noErr)
             return LPBCREATE_FAILEDCREATESOURCE;
-		
-		MIDIObjectSetStringProperty(portInfo->srcRef, kMIDIPropertyModel, CFSTR("InputProduct"));
-		MIDIObjectSetStringProperty(portInfo->srcRef, kMIDIPropertyManufacturer, CFSTR("InputManufacturer"));
-		MIDIObjectSetIntegerProperty(portInfo->srcRef, kMIDIPropertyDriverVersion, 100);
-		MIDIObjectSetStringProperty(portInfo->srcRef, kMIDIPropertyDriverOwner, CFSTR("InputDriverOwner"));
+        
+        MIDIObjectSetStringProperty(portInfo->srcRef, kMIDIPropertyModel, CFSTR("InputProduct"));
+        MIDIObjectSetStringProperty(portInfo->srcRef, kMIDIPropertyManufacturer, CFSTR("InputManufacturer"));
+        MIDIObjectSetIntegerProperty(portInfo->srcRef, kMIDIPropertyDriverVersion, 100);
+        MIDIObjectSetStringProperty(portInfo->srcRef, kMIDIPropertyDriverOwner, CFSTR("InputDriverOwner"));
     
-		printf("    creating destination...\n");
-	
+        printf("    creating destination...\n");
+    
         result = MIDIDestinationCreate(clientRef, nameRef, ReadProc, portInfo, &portInfo->destRef);
         if (result != noErr)
             return LPBCREATE_FAILEDCREATEDESTINATION;
-		
-		MIDIObjectSetStringProperty(portInfo->destRef, kMIDIPropertyModel, CFSTR("OutputProduct"));
-		MIDIObjectSetStringProperty(portInfo->destRef, kMIDIPropertyManufacturer, CFSTR("OutputManufacturer"));
-		MIDIObjectSetIntegerProperty(portInfo->destRef, kMIDIPropertyDriverVersion, 200);
-		MIDIObjectSetStringProperty(portInfo->destRef, kMIDIPropertyDriverOwner, CFSTR("OutputDriverOwner"));
+        
+        MIDIObjectSetStringProperty(portInfo->destRef, kMIDIPropertyModel, CFSTR("OutputProduct"));
+        MIDIObjectSetStringProperty(portInfo->destRef, kMIDIPropertyManufacturer, CFSTR("OutputManufacturer"));
+        MIDIObjectSetIntegerProperty(portInfo->destRef, kMIDIPropertyDriverVersion, 200);
+        MIDIObjectSetStringProperty(portInfo->destRef, kMIDIPropertyDriverOwner, CFSTR("OutputDriverOwner"));
         
         printf("OK\n");
     }

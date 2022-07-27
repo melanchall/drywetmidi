@@ -2,10 +2,11 @@ parameters:
   enabled: 'false'
 
 steps:
-- task: CmdLine@2
+- task: PowerShell@2
   displayName: Build 'LoopbackDevice' app (macOS)
   condition: and(succeeded(), ${{ parameters.enabled }})
   inputs:
+    targetType: 'inline'
     script: |
       cd Resources/Utilities/CreateLoopbackPort_macOS
       Write-Host "Building arm64 app..."
@@ -14,6 +15,7 @@ steps:
       clang -undefined dynamic_lookup -o LoopbackDevice_x86_64 LoopbackDevice.c -framework CoreServices -framework CoreFoundation -framework CoreMIDI -arch x86_64
       Write-Host "Merging apps into single unversal one..."
       lipo LoopbackDevice_x86_64 LoopbackDevice_arm64 -output LoopbackDevice -create
+      lipo -info LoopbackDevice
 - task: PublishPipelineArtifact@1
   displayName: Publish 'LoopbackDevice' artifact
   condition: contains(variables.VmImage, 'macos')

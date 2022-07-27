@@ -12,6 +12,7 @@ steps:
       clang -shared -undefined dynamic_lookup -o SendTestData_x86_64.dylib SendTestData.c -framework CoreServices -framework CoreFoundation -framework CoreMIDI -arch x86_64
       Write-Host "Merging dylibs into single unversal one..."
       lipo SendTestData_x86_64.dylib SendTestData_arm64.dylib -output SendTestData.dylib -create
+      lipo -info SendTestData.dylib
       Copy-Item -Path "SendTestData.dylib" -Destination "bin/$(TestBuildConfiguration)/$(Tfm)" -Recurse
       
 - task: PublishPipelineArtifact@1
