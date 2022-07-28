@@ -7,7 +7,7 @@ namespace Melanchall.DryWetMidi.Multimedia
     /// <see href="xref:a_dev_overview">Devices</see> and
     /// <see href="xref:a_dev_input">Input device</see> articles.
     /// </summary>
-    public interface IInputDevice
+    public interface IInputDevice : IDisposable
     {
         /// <summary>
         /// Occurs when a MIDI event is received.

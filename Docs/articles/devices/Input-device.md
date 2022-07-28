@@ -111,6 +111,10 @@ public sealed class KeyboardInputDevice : IInputDevice
         IsListeningForEvents = false;
     }
 
+    public void Dispose()
+    {
+    }
+
     private void ListenEvents()
     {
         while (IsListeningForEvents)

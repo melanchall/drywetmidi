@@ -231,7 +231,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             TempoMap tempoMap,
             QuantizingSettings settings,
             (long Min, long Max)[] expectedTimeRanges,
-            double unchangedMaxPercent = 0.5)
+            double unchangedMaxPercent = 0.7)
         {
             var originalTimedEvents = timedObjects.GetObjects(ObjectType.TimedEvent).Select(obj => obj.Clone()).ToArray();
 

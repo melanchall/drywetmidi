@@ -36,6 +36,10 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 Metadata.Add((midiEvent, metadata));
                 return true;
             }
+
+            public void Dispose()
+            {
+            }
         }
 
         private sealed class PlaybackWithMetadataRegistration : Playback

@@ -52,6 +52,10 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             {
                 throw _createException();
             }
+
+            public void Dispose()
+            {
+            }
         }
 
         #endregion

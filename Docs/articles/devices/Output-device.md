@@ -75,6 +75,10 @@ private sealed class ConsoleOutputDevice : IOutputDevice
     {
         Console.WriteLine(midiEvent);
     }
+
+    public void Dispose()
+    {
+    }
 }
 ```
 
