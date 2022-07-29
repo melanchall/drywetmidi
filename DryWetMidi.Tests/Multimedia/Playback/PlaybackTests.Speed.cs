@@ -40,7 +40,6 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new NoteOffEvent { DeltaTime = 1000000 }));
 
             var stopwatch = new Stopwatch();
-            var random = new Random();
 
             using (var playback = midiFile.GetPlayback())
             {
@@ -52,8 +51,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
                 for (var i = 0; i < 1000; i++)
                 {
-                    playback.Speed = 0.1 * (random.Next(100) + 1);
-                    WaitOperations.Wait(random.Next(100) + 1);
+                    playback.Speed = 0.1 * (DryWetMidi.Common.Random.Instance.Next(100) + 1);
+                    WaitOperations.Wait(DryWetMidi.Common.Random.Instance.Next(100) + 1);
                 }
             }
         }

@@ -14,12 +14,6 @@ namespace Melanchall.DryWetMidi.Tools
     public abstract class Randomizer<TObject, TSettings>
         where TSettings : RandomizingSettings<TObject>, new()
     {
-        #region Fields
-
-        private readonly Random _random = new Random();
-
-        #endregion
-
         #region Methods
 
         /// <summary>
@@ -39,7 +33,7 @@ namespace Melanchall.DryWetMidi.Tools
             {
                 var time = GetObjectTime(obj, settings);
 
-                time = RandomizeTime(time, bounds, _random, tempoMap);
+                time = RandomizeTime(time, bounds, tempoMap);
 
                 var instruction = OnObjectRandomizing(obj, time, settings);
 
@@ -87,7 +81,7 @@ namespace Melanchall.DryWetMidi.Tools
             long time,
             TSettings settings);
 
-        private static long RandomizeTime(long time, IBounds bounds, Random random, TempoMap tempoMap)
+        private static long RandomizeTime(long time, IBounds bounds, TempoMap tempoMap)
         {
             var timeBounds = bounds.GetBounds(time, tempoMap);
 
@@ -95,7 +89,7 @@ namespace Melanchall.DryWetMidi.Tools
             var maxTime = timeBounds.Item2;
 
             var difference = (int)Math.Abs(maxTime - minTime);
-            return minTime + random.Next(difference) + 1;
+            return minTime + Common.Random.Instance.Next(difference) + 1;
         }
 
         #endregion

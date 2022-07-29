@@ -10,8 +10,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
     {
         #region Constants
 
-        private static readonly Random Random = new Random();
-
         private static readonly object[] ZeroMathTimeSpansData = new[]
         {
             new ITimeSpan[] { new MidiTimeSpan(), new MidiTimeSpan() },
@@ -143,8 +141,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             return new MathTimeSpan(
                 timeSpan1,
                 timeSpan2,
-                operations[Random.Next(operations.Length)],
-                modes[Random.Next(modes.Length)]);
+                operations[DryWetMidi.Common.Random.Instance.Next(operations.Length)],
+                modes[DryWetMidi.Common.Random.Instance.Next(modes.Length)]);
         }
 
         #endregion

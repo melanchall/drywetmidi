@@ -12,12 +12,6 @@ namespace Melanchall.DryWetMidi.Tools
     /// </summary>
     public class Quantizer
     {
-        #region Fields
-
-        private readonly Random _random = new Random();
-
-        #endregion
-
         #region Methods
 
         /// <summary>
@@ -245,7 +239,7 @@ namespace Melanchall.DryWetMidi.Tools
 
             if (randomizingSettings.Bounds != null)
             {
-                var time = RandomizeTime(GetObjectTime(obj, target), randomizingSettings.Bounds, _random, tempoMap);
+                var time = RandomizeTime(GetObjectTime(obj, target), randomizingSettings.Bounds, tempoMap);
                 var instruction = OnObjectRandomizing(obj, time, target, tempoMap, settings);
 
                 switch (instruction.Action)
@@ -286,7 +280,7 @@ namespace Melanchall.DryWetMidi.Tools
             }
         }
 
-        private static long RandomizeTime(long time, IBounds bounds, Random random, TempoMap tempoMap)
+        private static long RandomizeTime(long time, IBounds bounds, TempoMap tempoMap)
         {
             var timeBounds = bounds.GetBounds(time, tempoMap);
 
@@ -294,7 +288,7 @@ namespace Melanchall.DryWetMidi.Tools
             var maxTime = timeBounds.Item2;
 
             var difference = (int)Math.Abs(maxTime - minTime);
-            return minTime + random.Next(difference) + 1;
+            return minTime + Common.Random.Instance.Next(difference) + 1;
         }
 
         private static ICollection<long> GetGridTimes(
