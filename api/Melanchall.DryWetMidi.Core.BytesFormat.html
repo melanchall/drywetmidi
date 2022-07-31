@@ -83,7 +83,10 @@
   
   <h1 id="Melanchall_DryWetMidi_Core_BytesFormat" data-uid="Melanchall.DryWetMidi.Core.BytesFormat" class="text-break">Enum BytesFormat
   </h1>
-  <div class="markdown level0 summary"></div>
+  <div class="markdown level0 summary">
+Defines format of a MIDI data bytes. Depending on this format the specific
+MIDI data reading/writing rules can be applied.
+</div>
   <div class="markdown level0 conceptual"></div>
   <h6><strong>Namespace</strong>: <a class="xref" href="Melanchall.DryWetMidi.Core.html">Melanchall.DryWetMidi.Core</a></h6>
   <h6><strong>Assembly</strong>: Melanchall.DryWetMidi.dll</h6>
@@ -91,6 +94,19 @@
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public enum BytesFormat</code></pre>
   </div>
+  <h5 id="Melanchall_DryWetMidi_Core_BytesFormat_remarks"><strong>Remarks</strong></h5>
+  <div class="markdown level0 remarks">
+<p>
+If <a class="xref" href="Melanchall.DryWetMidi.Core.BytesFormat.html#Melanchall_DryWetMidi_Core_BytesFormat_File">File</a> format specified, a system exclusive  bytes layout is
+<code>F0 &lt;length> &lt;bytes to be transmitted after F0></code>, and <code>0xFF</code>
+status byte means a meta event.
+</p>
+<p>
+If <a class="xref" href="Melanchall.DryWetMidi.Core.BytesFormat.html#Melanchall_DryWetMidi_Core_BytesFormat_Device">Device</a> format specified, a system exclusive  bytes layout is
+<code>F0 &lt;bytes to be transmitted after F0></code>, and <code>0xFF</code>
+status byte means Reset system real-time event.
+</p>
+</div>
   <h3 id="fields">Fields
   </h3>
   <table class="table table-bordered table-striped table-condensed">
@@ -103,11 +119,15 @@
     <tbody>
       <tr>
         <td id="Melanchall_DryWetMidi_Core_BytesFormat_Device">Device</td>
-        <td></td>
+        <td>
+Format used in communication with MIDI devices.
+</td>
       </tr>
       <tr>
         <td id="Melanchall_DryWetMidi_Core_BytesFormat_File">File</td>
-        <td></td>
+        <td>
+Format used by MIDI files.
+</td>
       </tr>
     </tbody>
   </thead></thead></table>

@@ -139,6 +139,10 @@ private void OnEventSent(object sender, MidiEventSentEventArgs e)
     {
         Console.WriteLine(midiEvent);
     }
+
+    public void Dispose()
+    {
+    }
 }
 </code></pre>
 <p>You can then use this device, for example, for debug in <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.Playback.html">Playback</a>.</p>
