@@ -223,6 +223,10 @@ namespace Melanchall.DryWetMidi.Core
         /// </summary>
         public bool ReadDeltaTimes { get; set; }
 
+        /// <summary>
+        /// Gets or sets the format of source bytes layout. The default is <see cref="BytesFormat.File"/>.
+        /// </summary>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="value"/> specified an invalid value.</exception>
         public BytesFormat BytesFormat
         {
             get { return _bytesFormat; }

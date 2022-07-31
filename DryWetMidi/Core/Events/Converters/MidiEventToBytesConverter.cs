@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Text;
 using Melanchall.DryWetMidi.Common;
@@ -103,6 +104,10 @@ namespace Melanchall.DryWetMidi.Core
         /// </summary>
         public bool WriteDeltaTimes { get; set; }
 
+        /// <summary>
+        /// Gets or sets the format of target bytes layout. The default is <see cref="BytesFormat.File"/>.
+        /// </summary>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="value"/> specified an invalid value.</exception>
         public BytesFormat BytesFormat
         {
             get { return _bytesFormat; }
