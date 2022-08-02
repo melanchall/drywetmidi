@@ -1,6 +1,6 @@
 ![DryWetMIDI Logo](https://raw.githubusercontent.com/melanchall/drywetmidi/develop/Resources/Images/dwm-logo.png)
 
-[![NuGet](https://img.shields.io/nuget/v/Melanchall.DryWetMidi.svg?label=NuGet&color=5295D0)](https://www.nuget.org/packages/Melanchall.DryWetMidi/) [![Unity Asset Store](https://img.shields.io/static/v1?label=Unity%20Asset%20Store&message=v6.1.1&color=5295D0)](https://assetstore.unity.com/packages/tools/audio/drywetmidi-222171)
+[![NuGet (full)](https://img.shields.io/nuget/v/Melanchall.DryWetMidi.svg?label=NuGet%20(full)&color=5295D0)](https://www.nuget.org/packages/Melanchall.DryWetMidi/) [![NuGet (nativeless)](https://img.shields.io/nuget/v/Melanchall.DryWetMidi.Nativeless.svg?label=NuGet%20(nativeless)&color=5295D0)](https://www.nuget.org/packages/Melanchall.DryWetMidi.Nativeless/) [![Unity asset (full)](https://img.shields.io/static/v1?label=Unity%20Asset%20(full)&message=v6.1.1&color=5295D0)](https://assetstore.unity.com/packages/tools/audio/drywetmidi-222171)
 
 <!--OVERVIEW-->
 
