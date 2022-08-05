@@ -9,13 +9,19 @@ namespace Melanchall.DryWetMidi.Tests.Utilities
     {
         #region Methods
 
-        public static IEnumerable<Type> GetAllEventTypes()
+        public static IEnumerable<Type> GetAllEventTypes() =>
+            GetAllTypes<MidiEvent>();
+
+        public static IEnumerable<Type> GetAllTokensTypes() =>
+            GetAllTypes<MidiToken>();
+
+        private static IEnumerable<Type> GetAllTypes<TBase>()
         {
-            var midiEventType = typeof(MidiEvent);
-            return midiEventType
+            var baseType = typeof(TBase);
+            return baseType
                 .Assembly
                 .GetTypes()
-                .Where(t => !t.IsAbstract && t.IsSubclassOf(midiEventType))
+                .Where(t => !t.IsAbstract && t.IsSubclassOf(baseType))
                 .ToList();
         }
 

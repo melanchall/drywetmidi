@@ -42,13 +42,6 @@ namespace Melanchall.DryWetMidi.Core
     /// <seealso cref="Interaction"/>
     public sealed class MidiFile
     {
-        #region Constants
-
-        private const string RiffChunkId = "RIFF";
-        private const int RmidPreambleSize = 12; // RMID_size (4) + 'RMID' (4) + 'data' (4)
-
-        #endregion
-
         #region Fields
 
         internal ushort? _originalFormat;
@@ -238,6 +231,12 @@ namespace Melanchall.DryWetMidi.Core
             }
         }
 
+        public static MidiTokensReader ReadLazy(string filePath, ReadingSettings settings = null)
+        {
+            var fileStream = FileUtilities.OpenFileForRead(filePath);
+            return ReadLazy(fileStream, true, settings);
+        }
+
         /// <summary>
         /// Writes the MIDI file to location specified by full path.
         /// </summary>
@@ -385,21 +384,10 @@ namespace Melanchall.DryWetMidi.Core
                     if (reader.EndReached)
                         throw new ArgumentException("Stream is already read.", nameof(stream));
 
-                    // LOGREAD: f a
-
                     // Read RIFF header
 
                     long? smfEndPosition = null;
-
-                    var chunkId = reader.ReadString(RiffChunkId.Length);
-                    if (chunkId == RiffChunkId)
-                    {
-                        reader.Position += RmidPreambleSize;
-                        var smfSize = reader.ReadDword();
-                        smfEndPosition = reader.Position + smfSize;
-                    }
-                    else
-                        reader.Position -= chunkId.Length;
+                    MidiFileReadingUtilities.ReadRmidPreamble(reader, out smfEndPosition);
 
                     // Read SMF
 
@@ -437,9 +425,6 @@ namespace Melanchall.DryWetMidi.Core
                         file.Chunks.Add(chunk);
                     }
 
-                    // LOGREAD: f e
-                    // LOGREADEND
-
                     if (expectedTrackChunksCount != null && actualTrackChunksCount != expectedTrackChunksCount)
                         ReactOnUnexpectedTrackChunksCount(settings.UnexpectedTrackChunksCountPolicy, actualTrackChunksCount, expectedTrackChunksCount.Value);
                 }
@@ -464,6 +449,12 @@ namespace Melanchall.DryWetMidi.Core
             }
 
             return file;
+        }
+
+        public static MidiTokensReader ReadLazy(Stream stream, ReadingSettings settings = null)
+        {
+            ThrowIfArgument.IsNull(nameof(stream), stream);
+            return ReadLazy(stream, false, settings);
         }
 
         /// <summary>
@@ -602,14 +593,18 @@ namespace Melanchall.DryWetMidi.Core
             return MidiFileEquality.Equals(midiFile1, midiFile2, settings ?? new MidiFileEqualityCheckSettings(), out message);
         }
 
+        private static MidiTokensReader ReadLazy(Stream stream, bool disposeStream, ReadingSettings settings = null)
+        {
+            ThrowIfArgument.IsNull(nameof(stream), stream);
+            return new MidiTokensReader(stream, settings, disposeStream);
+        }
+
         private static MidiChunk ReadChunk(MidiReader reader, ReadingSettings settings, int actualTrackChunksCount, int? expectedTrackChunksCount)
         {
             MidiChunk chunk = null;
 
             try
             {
-                // LOGREAD: c id a
-
                 var chunkId = reader.ReadString(MidiChunk.IdLength);
                 if (chunkId.Length < MidiChunk.IdLength)
                 {
@@ -624,8 +619,6 @@ namespace Melanchall.DryWetMidi.Core
                     }
                 }
 
-                // LOGREAD: c id z <{chunkId}>
-
                 switch (chunkId)
                 {
                     case HeaderChunk.Id:
@@ -635,7 +628,7 @@ namespace Melanchall.DryWetMidi.Core
                         chunk = new TrackChunk();
                         break;
                     default:
-                        chunk = TryCreateChunk(chunkId, settings.CustomChunkTypes);
+                        chunk = MidiFileReadingUtilities.TryCreateChunk(chunkId, settings.CustomChunkTypes);
                         break;
                 }
 
@@ -705,21 +698,6 @@ namespace Melanchall.DryWetMidi.Core
         {
             if (policy == NotEnoughBytesPolicy.Abort)
                 throw new NotEnoughBytesException("MIDI file cannot be read since the reader's underlying stream doesn't have enough bytes.", exception);
-        }
-
-        private static MidiChunk TryCreateChunk(string chunkId, ChunkTypesCollection chunksTypes)
-        {
-            Type type = null;
-            return chunksTypes?.TryGetType(chunkId, out type) == true && IsChunkType(type)
-                ? (MidiChunk)Activator.CreateInstance(type)
-                : null;
-        }
-
-        private static bool IsChunkType(Type type)
-        {
-            return type != null &&
-                   type.IsSubclassOf(typeof(MidiChunk)) &&
-                   type.GetConstructor(Type.EmptyTypes) != null;
         }
 
         #endregion

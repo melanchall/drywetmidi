@@ -18,6 +18,8 @@ namespace Melanchall.DryWetMidi.Core
         private int _bufferSize = 4096;
         private BufferingPolicy _bufferingPolicy = BufferingPolicy.UseFixedSizeBuffer;
 
+        private int _bytesPacketMaxLength = 4096;
+
         #endregion
 
         #region Properties
@@ -120,6 +122,17 @@ namespace Melanchall.DryWetMidi.Core
         /// <see cref="BufferingPolicy.UseCustomBuffer"/> policy used for <see cref="BufferingPolicy"/>.
         /// </summary>
         public byte[] Buffer { get; set; }
+
+        public int BytesPacketMaxLength
+        {
+            get { return _bytesPacketMaxLength; }
+            set
+            {
+                ThrowIfArgument.IsNonpositive(nameof(value), value, "Value is zero or negative.");
+
+                _bytesPacketMaxLength = value;
+            }
+        }
 
         #endregion
     }

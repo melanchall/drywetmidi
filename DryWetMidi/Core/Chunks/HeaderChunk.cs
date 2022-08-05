@@ -28,53 +28,35 @@ namespace Melanchall.DryWetMidi.Core
 
         #region Properties
 
-        /// <summary>
-        /// Gets or sets format of a file where current instance of the <see cref="HeaderChunk"/>
-        /// is written or will be written.
-        /// </summary>
-        /// <remarks>
-        /// MIDI file can be stored in one of the three possible formats:
-        /// <see cref="MidiFileFormat.SingleTrack"/> - the file contains a single multi-channel track;
-        /// <see cref="MidiFileFormat.MultiTrack"/> - the file contains one or more simultaneous tracks
-        /// (or MIDI outputs) of a sequence;
-        /// <see cref="MidiFileFormat.MultiSequence"/> - the file contains one or more sequentially independent
-        /// single-track patterns.
-        /// </remarks>
         public ushort FileFormat { get; set; }
 
-        /// <summary>
-        /// Gets or sets time division used in a file where current instance of the <see cref="HeaderChunk"/>
-        /// is written or will be written.
-        /// </summary>
-        /// <remarks>
-        /// Time division specifies the meaning of the delta-times of events. There are two types of
-        /// the time division: ticks per quarter note and SMPTE. Time division of the first type has bit 15 set
-        /// to 0. In this case bits 14 thru 0 represent the number of ticks which make up a quarter-note.
-        /// Division of the second type has bit 15 set to 1. In this case bits 14 thru 8 contain one of the four
-        /// values: -24, -25, -29, or -30, corresponding to the four standard SMPTE and MIDI Time Code formats
-        /// (-29 corresponds to 30 drop frame), and represents the number of frames per second. Bits 7 thru 0
-        /// (which represent a byte stored positive) is the resolution within a frame: typical values may be 4
-        /// (MIDI Time Code resolution), 8, 10, 80 (bit resolution), or 100.
-        /// </remarks>
         public TimeDivision TimeDivision { get; set; }
 
-        /// <summary>
-        /// Gets or sets the number of track chunks that are stored or will be stored in a file
-        /// follow the header chunk.
-        /// </summary>
-        /// <remarks>
-        /// Number of tracks should be 1 for a file stored in <see cref="MidiFileFormat.SingleTrack"/> format.
-        /// </remarks>
         public ushort TracksNumber { get; set; }
+
+        #endregion
+
+        #region Methods
+
+        internal static void ReadData(
+            MidiReader reader,
+            ReadingSettings settings,
+            out ushort fileFormat,
+            out TimeDivision timeDivision,
+            out ushort tracksNumber)
+        {
+            fileFormat = reader.ReadWord();
+            if (settings.UnknownFileFormatPolicy == UnknownFileFormatPolicy.Abort && !Enum.IsDefined(typeof(MidiFileFormat), fileFormat))
+                throw new UnknownFileFormatException(fileFormat);
+
+            tracksNumber = reader.ReadWord();
+            timeDivision = TimeDivisionFactory.GetTimeDivision(reader.ReadInt16());
+        }
 
         #endregion
 
         #region Overrides
 
-        /// <summary>
-        /// Clones chunk by creating a copy of it.
-        /// </summary>
-        /// <returns>Copy of the chunk.</returns>
         public override MidiChunk Clone()
         {
             throw new NotSupportedException("Cloning of a header chunk isnot supported.");
@@ -101,17 +83,14 @@ namespace Melanchall.DryWetMidi.Core
         /// <see cref="UnknownFileFormatPolicy.Abort"/>.</exception>
         protected override void ReadContent(MidiReader reader, ReadingSettings settings, uint size)
         {
-            // LOGREAD: hc c a
-
-            var fileFormat = reader.ReadWord();
-            if (settings.UnknownFileFormatPolicy == UnknownFileFormatPolicy.Abort && !Enum.IsDefined(typeof(MidiFileFormat), fileFormat))
-                throw new UnknownFileFormatException(fileFormat);
+            ushort fileFormat;
+            ushort tracksNumber;
+            TimeDivision timeDivision;
+            ReadData(reader, settings, out fileFormat, out timeDivision, out tracksNumber);
 
             FileFormat = fileFormat;
-            TracksNumber = reader.ReadWord();
-            TimeDivision = TimeDivisionFactory.GetTimeDivision(reader.ReadInt16());
-
-            // LOGREAD: hc c z
+            TimeDivision = timeDivision;
+            TracksNumber = tracksNumber;
         }
 
         /// <summary>

@@ -114,8 +114,6 @@ namespace Melanchall.DryWetMidi.Core
         /// <exception cref="MissedEndOfTrackEventException">Track chunk doesn't end with End Of Track event.</exception>
         protected override void ReadContent(MidiReader reader, ReadingSettings settings, uint size)
         {
-            // LOGREAD: tc c a
-
             var endReaderPosition = reader.Position + size;
             var endOfTrackPresented = false;
 
@@ -125,9 +123,7 @@ namespace Melanchall.DryWetMidi.Core
 
             while (reader.Position < endReaderPosition && !reader.EndReached)
             {
-                long deltaTime;
-
-                var midiEvent = ReadEvent(reader, settings, ref currentChannelEventStatusByte, out deltaTime);
+                var midiEvent = ReadEvent(reader, settings, ref currentChannelEventStatusByte);
                 if (midiEvent == null)
                     continue;
 
@@ -148,8 +144,6 @@ namespace Melanchall.DryWetMidi.Core
 
             if (settings.MissedEndOfTrackPolicy == MissedEndOfTrackPolicy.Abort && !endOfTrackPresented)
                 throw new MissedEndOfTrackEventException();
-
-            // LOGREAD: tc c z
         }
 
         /// <summary>
@@ -203,17 +197,11 @@ namespace Melanchall.DryWetMidi.Core
 
         #region Methods
 
-        private MidiEvent ReadEvent(MidiReader reader, ReadingSettings settings, ref byte? channelEventStatusByte, out long deltaTime)
+        internal static MidiEvent ReadEvent(MidiReader reader, ReadingSettings settings, ref byte? channelEventStatusByte)
         {
-            // LOGREAD: e a
-            // LOGREAD: dt a
-
-            deltaTime = reader.ReadVlqLongNumber();
+            var deltaTime = reader.ReadVlqLongNumber();
             if (deltaTime < 0)
                 deltaTime = 0;
-
-            // LOGREAD: dt z <{deltaTime}>
-            // LOGREAD: m a
 
             var statusByte = reader.ReadByte();
             if (statusByte <= SevenBitNumber.MaxValue)
@@ -239,9 +227,6 @@ namespace Melanchall.DryWetMidi.Core
 
             if (midiEvent != null)
                 midiEvent._deltaTime = deltaTime;
-
-            // LOGREAD: m z
-            // LOGREAD: e z <{midiEvent}>
 
             return midiEvent;
         }
