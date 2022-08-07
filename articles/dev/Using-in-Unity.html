@@ -81,20 +81,20 @@
 
 <p>This article describes how to integrate DryWetMIDI in a Unity project. You have two main ways:</p>
 <ul>
-<li>import the <a href="https://assetstore.unity.com/packages/tools/audio/drywetmidi-222171">DryWetMIDI asset</a> from the Asset Store;</li>
+<li>import the <a href="https://assetstore.unity.com/packages/tools/audio/drywetmidi-222171">DryWetMIDI asset</a> from the Unity Asset Store;</li>
 <li>install the library manually.</li>
 </ul>
 <p>There are also ways to import a NuGet package via 3d party tools (for example, <a href="https://github.com/GlitchEnzo/NuGetForUnity">NuGetForUnity</a>).</p>
 <h2 id="unity-asset">Unity asset</h2>
 <p>It's the simplest way. Just use built-in ways to import the official <a href="https://assetstore.unity.com/packages/tools/audio/drywetmidi-222171">DryWetMIDI asset</a> into your Unity project from the Asset Store.</p>
 <h2 id="manual-installation">Manual installation</h2>
-<p>All you need to install the library manually is:</p>
+<p>Instruction below shows how to integrate full version of the DryWetMIDI into your Unity project manually. If you want to use <a class="xref" href="Nativeless-package.html">nativeless version</a>, just take archive with <em>-nativeless</em> suffix on the first step and skip third one.</p>
 <ol>
-<li><p>Create <em>DryWetMIDI</em> folder in project's <em>Assets</em> folder.</p>
+<li><p>Create <em>Melanchall</em> folder in project's <em>Assets</em> folder and <em>DryWetMIDI</em> subfolder within the <em>Melanchall</em> one.</p>
 </li>
 <li><p>Download the library main binary:</p>
 <ul>
-<li>for <em>master</em> branch take <em>DryWetMIDI.&lt;release_number&gt;-bin-netstandard20.zip</em> archive from <a href="https://github.com/melanchall/drywetmidi/releases">Releases</a> (&lt;release_number&gt; is the number of the library release you want to take binaries of);</li>
+<li>for <em>master</em> branch take <em>DryWetMIDI.&lt;release_number&gt;-bin-netstandard20.zip</em> archive from <a href="https://github.com/melanchall/drywetmidi/releases">Releases</a> (<em>&lt;release_number&gt;</em> is the number of the library release you want to take binaries of);</li>
 <li>for <em>develop</em> branch go to <a href="https://dev.azure.com/Melanchall/DryWetMIDI/_build/latest?definitionId=6&amp;branchName=develop">https://dev.azure.com/Melanchall/DryWetMIDI/_build/latest?definitionId=6&amp;branchName=develop</a> and download <em>DryWetMIDI.&lt;release_number&gt;-bin-netstandard20.zip</em> from <code>Artifacts</code> → <code>Binaries</code>.</li>
 </ul>
 </li>
@@ -105,12 +105,12 @@
 </ul>
 <p>(<em>master</em> branch contains code that the library releases built on. <em>develop</em> one is for current development so if you need the latest API, use this branch)</p>
 </li>
-<li><p>Extract those two archives into project's <em>Assets</em> → <em>DryWetMIDI</em> folder.</p>
+<li><p>Extract archives into project's <em>Assets</em> → <em>Melanchall</em> → <em>DryWetMIDI</em> folder.</p>
 </li>
 </ol>
 <h2 id="example">Example</h2>
 <p>Now you can use DryWetMIDI API in your Unity scripts.</p>
-<p>Following sample script (included in demo scene within the <a href="https://assetstore.unity.com/packages/tools/audio/drywetmidi-222171">DryWetMIDI asset</a> package) will create a MIDI file containing all possible notes with length of 1/8 and will play the file via <code>Microsoft GS Wavetable Synth</code> output device:</p>
+<p>Following sample script (included in demo scene within the <a href="https://assetstore.unity.com/packages/tools/audio/drywetmidi-222171">full DryWetMIDI package</a>) will create a MIDI file containing all possible notes with length of <code>1/8</code> and will play the file via <code>Microsoft GS Wavetable Synth</code> output device:</p>
 <pre><code class="lang-csharp">using System;
 using System.Linq;
 using System.Text;

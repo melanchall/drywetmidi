@@ -3154,6 +3154,38 @@ references:
   commentId: F:Melanchall.DryWetMidi.Core.BytesFormat.File
   fullName: Melanchall.DryWetMidi.Core.BytesFormat.File
   nameWithType: BytesFormat.File
+- uid: Melanchall.DryWetMidi.Core.BytesPacketToken
+  name: BytesPacketToken
+  href: api/Melanchall.DryWetMidi.Core.BytesPacketToken.html
+  commentId: T:Melanchall.DryWetMidi.Core.BytesPacketToken
+  fullName: Melanchall.DryWetMidi.Core.BytesPacketToken
+  nameWithType: BytesPacketToken
+- uid: Melanchall.DryWetMidi.Core.BytesPacketToken.Data
+  name: Data
+  href: api/Melanchall.DryWetMidi.Core.BytesPacketToken.html#Melanchall_DryWetMidi_Core_BytesPacketToken_Data
+  commentId: P:Melanchall.DryWetMidi.Core.BytesPacketToken.Data
+  fullName: Melanchall.DryWetMidi.Core.BytesPacketToken.Data
+  nameWithType: BytesPacketToken.Data
+- uid: Melanchall.DryWetMidi.Core.BytesPacketToken.Data*
+  name: Data
+  href: api/Melanchall.DryWetMidi.Core.BytesPacketToken.html#Melanchall_DryWetMidi_Core_BytesPacketToken_Data_
+  commentId: Overload:Melanchall.DryWetMidi.Core.BytesPacketToken.Data
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Core.BytesPacketToken.Data
+  nameWithType: BytesPacketToken.Data
+- uid: Melanchall.DryWetMidi.Core.BytesPacketToken.ToString
+  name: ToString()
+  href: api/Melanchall.DryWetMidi.Core.BytesPacketToken.html#Melanchall_DryWetMidi_Core_BytesPacketToken_ToString
+  commentId: M:Melanchall.DryWetMidi.Core.BytesPacketToken.ToString
+  fullName: Melanchall.DryWetMidi.Core.BytesPacketToken.ToString()
+  nameWithType: BytesPacketToken.ToString()
+- uid: Melanchall.DryWetMidi.Core.BytesPacketToken.ToString*
+  name: ToString
+  href: api/Melanchall.DryWetMidi.Core.BytesPacketToken.html#Melanchall_DryWetMidi_Core_BytesPacketToken_ToString_
+  commentId: Overload:Melanchall.DryWetMidi.Core.BytesPacketToken.ToString
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Core.BytesPacketToken.ToString
+  nameWithType: BytesPacketToken.ToString
 - uid: Melanchall.DryWetMidi.Core.BytesToMidiEventConverter
   name: BytesToMidiEventConverter
   href: api/Melanchall.DryWetMidi.Core.BytesToMidiEventConverter.html
@@ -3632,6 +3664,51 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Core.ChannelPrefixEvent.WriteContent
   nameWithType: ChannelPrefixEvent.WriteContent
+- uid: Melanchall.DryWetMidi.Core.ChunkHeaderToken
+  name: ChunkHeaderToken
+  href: api/Melanchall.DryWetMidi.Core.ChunkHeaderToken.html
+  commentId: T:Melanchall.DryWetMidi.Core.ChunkHeaderToken
+  fullName: Melanchall.DryWetMidi.Core.ChunkHeaderToken
+  nameWithType: ChunkHeaderToken
+- uid: Melanchall.DryWetMidi.Core.ChunkHeaderToken.ChunkContentSize
+  name: ChunkContentSize
+  href: api/Melanchall.DryWetMidi.Core.ChunkHeaderToken.html#Melanchall_DryWetMidi_Core_ChunkHeaderToken_ChunkContentSize
+  commentId: P:Melanchall.DryWetMidi.Core.ChunkHeaderToken.ChunkContentSize
+  fullName: Melanchall.DryWetMidi.Core.ChunkHeaderToken.ChunkContentSize
+  nameWithType: ChunkHeaderToken.ChunkContentSize
+- uid: Melanchall.DryWetMidi.Core.ChunkHeaderToken.ChunkContentSize*
+  name: ChunkContentSize
+  href: api/Melanchall.DryWetMidi.Core.ChunkHeaderToken.html#Melanchall_DryWetMidi_Core_ChunkHeaderToken_ChunkContentSize_
+  commentId: Overload:Melanchall.DryWetMidi.Core.ChunkHeaderToken.ChunkContentSize
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Core.ChunkHeaderToken.ChunkContentSize
+  nameWithType: ChunkHeaderToken.ChunkContentSize
+- uid: Melanchall.DryWetMidi.Core.ChunkHeaderToken.ChunkId
+  name: ChunkId
+  href: api/Melanchall.DryWetMidi.Core.ChunkHeaderToken.html#Melanchall_DryWetMidi_Core_ChunkHeaderToken_ChunkId
+  commentId: P:Melanchall.DryWetMidi.Core.ChunkHeaderToken.ChunkId
+  fullName: Melanchall.DryWetMidi.Core.ChunkHeaderToken.ChunkId
+  nameWithType: ChunkHeaderToken.ChunkId
+- uid: Melanchall.DryWetMidi.Core.ChunkHeaderToken.ChunkId*
+  name: ChunkId
+  href: api/Melanchall.DryWetMidi.Core.ChunkHeaderToken.html#Melanchall_DryWetMidi_Core_ChunkHeaderToken_ChunkId_
+  commentId: Overload:Melanchall.DryWetMidi.Core.ChunkHeaderToken.ChunkId
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Core.ChunkHeaderToken.ChunkId
+  nameWithType: ChunkHeaderToken.ChunkId
+- uid: Melanchall.DryWetMidi.Core.ChunkHeaderToken.ToString
+  name: ToString()
+  href: api/Melanchall.DryWetMidi.Core.ChunkHeaderToken.html#Melanchall_DryWetMidi_Core_ChunkHeaderToken_ToString
+  commentId: M:Melanchall.DryWetMidi.Core.ChunkHeaderToken.ToString
+  fullName: Melanchall.DryWetMidi.Core.ChunkHeaderToken.ToString()
+  nameWithType: ChunkHeaderToken.ToString()
+- uid: Melanchall.DryWetMidi.Core.ChunkHeaderToken.ToString*
+  name: ToString
+  href: api/Melanchall.DryWetMidi.Core.ChunkHeaderToken.html#Melanchall_DryWetMidi_Core_ChunkHeaderToken_ToString_
+  commentId: Overload:Melanchall.DryWetMidi.Core.ChunkHeaderToken.ToString
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Core.ChunkHeaderToken.ToString
+  nameWithType: ChunkHeaderToken.ToString
 - uid: Melanchall.DryWetMidi.Core.ChunksCollection
   name: ChunksCollection
   href: api/Melanchall.DryWetMidi.Core.ChunksCollection.html
@@ -4837,6 +4914,64 @@ references:
   commentId: F:Melanchall.DryWetMidi.Core.ExtraTrackChunkPolicy.Skip
   fullName: Melanchall.DryWetMidi.Core.ExtraTrackChunkPolicy.Skip
   nameWithType: ExtraTrackChunkPolicy.Skip
+- uid: Melanchall.DryWetMidi.Core.FileHeaderToken
+  name: FileHeaderToken
+  href: api/Melanchall.DryWetMidi.Core.FileHeaderToken.html
+  commentId: T:Melanchall.DryWetMidi.Core.FileHeaderToken
+  fullName: Melanchall.DryWetMidi.Core.FileHeaderToken
+  nameWithType: FileHeaderToken
+- uid: Melanchall.DryWetMidi.Core.FileHeaderToken.FileFormat
+  name: FileFormat
+  href: api/Melanchall.DryWetMidi.Core.FileHeaderToken.html#Melanchall_DryWetMidi_Core_FileHeaderToken_FileFormat
+  commentId: P:Melanchall.DryWetMidi.Core.FileHeaderToken.FileFormat
+  fullName: Melanchall.DryWetMidi.Core.FileHeaderToken.FileFormat
+  nameWithType: FileHeaderToken.FileFormat
+- uid: Melanchall.DryWetMidi.Core.FileHeaderToken.FileFormat*
+  name: FileFormat
+  href: api/Melanchall.DryWetMidi.Core.FileHeaderToken.html#Melanchall_DryWetMidi_Core_FileHeaderToken_FileFormat_
+  commentId: Overload:Melanchall.DryWetMidi.Core.FileHeaderToken.FileFormat
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Core.FileHeaderToken.FileFormat
+  nameWithType: FileHeaderToken.FileFormat
+- uid: Melanchall.DryWetMidi.Core.FileHeaderToken.TimeDivision
+  name: TimeDivision
+  href: api/Melanchall.DryWetMidi.Core.FileHeaderToken.html#Melanchall_DryWetMidi_Core_FileHeaderToken_TimeDivision
+  commentId: P:Melanchall.DryWetMidi.Core.FileHeaderToken.TimeDivision
+  fullName: Melanchall.DryWetMidi.Core.FileHeaderToken.TimeDivision
+  nameWithType: FileHeaderToken.TimeDivision
+- uid: Melanchall.DryWetMidi.Core.FileHeaderToken.TimeDivision*
+  name: TimeDivision
+  href: api/Melanchall.DryWetMidi.Core.FileHeaderToken.html#Melanchall_DryWetMidi_Core_FileHeaderToken_TimeDivision_
+  commentId: Overload:Melanchall.DryWetMidi.Core.FileHeaderToken.TimeDivision
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Core.FileHeaderToken.TimeDivision
+  nameWithType: FileHeaderToken.TimeDivision
+- uid: Melanchall.DryWetMidi.Core.FileHeaderToken.ToString
+  name: ToString()
+  href: api/Melanchall.DryWetMidi.Core.FileHeaderToken.html#Melanchall_DryWetMidi_Core_FileHeaderToken_ToString
+  commentId: M:Melanchall.DryWetMidi.Core.FileHeaderToken.ToString
+  fullName: Melanchall.DryWetMidi.Core.FileHeaderToken.ToString()
+  nameWithType: FileHeaderToken.ToString()
+- uid: Melanchall.DryWetMidi.Core.FileHeaderToken.ToString*
+  name: ToString
+  href: api/Melanchall.DryWetMidi.Core.FileHeaderToken.html#Melanchall_DryWetMidi_Core_FileHeaderToken_ToString_
+  commentId: Overload:Melanchall.DryWetMidi.Core.FileHeaderToken.ToString
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Core.FileHeaderToken.ToString
+  nameWithType: FileHeaderToken.ToString
+- uid: Melanchall.DryWetMidi.Core.FileHeaderToken.TracksNumber
+  name: TracksNumber
+  href: api/Melanchall.DryWetMidi.Core.FileHeaderToken.html#Melanchall_DryWetMidi_Core_FileHeaderToken_TracksNumber
+  commentId: P:Melanchall.DryWetMidi.Core.FileHeaderToken.TracksNumber
+  fullName: Melanchall.DryWetMidi.Core.FileHeaderToken.TracksNumber
+  nameWithType: FileHeaderToken.TracksNumber
+- uid: Melanchall.DryWetMidi.Core.FileHeaderToken.TracksNumber*
+  name: TracksNumber
+  href: api/Melanchall.DryWetMidi.Core.FileHeaderToken.html#Melanchall_DryWetMidi_Core_FileHeaderToken_TracksNumber_
+  commentId: Overload:Melanchall.DryWetMidi.Core.FileHeaderToken.TracksNumber
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Core.FileHeaderToken.TracksNumber
+  nameWithType: FileHeaderToken.TracksNumber
 - uid: Melanchall.DryWetMidi.Core.InstrumentNameEvent
   name: InstrumentNameEvent
   href: api/Melanchall.DryWetMidi.Core.InstrumentNameEvent.html
@@ -5991,6 +6126,38 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Core.MidiEventToBytesConverter.WriteDeltaTimes
   nameWithType: MidiEventToBytesConverter.WriteDeltaTimes
+- uid: Melanchall.DryWetMidi.Core.MidiEventToken
+  name: MidiEventToken
+  href: api/Melanchall.DryWetMidi.Core.MidiEventToken.html
+  commentId: T:Melanchall.DryWetMidi.Core.MidiEventToken
+  fullName: Melanchall.DryWetMidi.Core.MidiEventToken
+  nameWithType: MidiEventToken
+- uid: Melanchall.DryWetMidi.Core.MidiEventToken.Event
+  name: Event
+  href: api/Melanchall.DryWetMidi.Core.MidiEventToken.html#Melanchall_DryWetMidi_Core_MidiEventToken_Event
+  commentId: P:Melanchall.DryWetMidi.Core.MidiEventToken.Event
+  fullName: Melanchall.DryWetMidi.Core.MidiEventToken.Event
+  nameWithType: MidiEventToken.Event
+- uid: Melanchall.DryWetMidi.Core.MidiEventToken.Event*
+  name: Event
+  href: api/Melanchall.DryWetMidi.Core.MidiEventToken.html#Melanchall_DryWetMidi_Core_MidiEventToken_Event_
+  commentId: Overload:Melanchall.DryWetMidi.Core.MidiEventToken.Event
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Core.MidiEventToken.Event
+  nameWithType: MidiEventToken.Event
+- uid: Melanchall.DryWetMidi.Core.MidiEventToken.ToString
+  name: ToString()
+  href: api/Melanchall.DryWetMidi.Core.MidiEventToken.html#Melanchall_DryWetMidi_Core_MidiEventToken_ToString
+  commentId: M:Melanchall.DryWetMidi.Core.MidiEventToken.ToString
+  fullName: Melanchall.DryWetMidi.Core.MidiEventToken.ToString()
+  nameWithType: MidiEventToken.ToString()
+- uid: Melanchall.DryWetMidi.Core.MidiEventToken.ToString*
+  name: ToString
+  href: api/Melanchall.DryWetMidi.Core.MidiEventToken.html#Melanchall_DryWetMidi_Core_MidiEventToken_ToString_
+  commentId: Overload:Melanchall.DryWetMidi.Core.MidiEventToken.ToString
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Core.MidiEventToken.ToString
+  nameWithType: MidiEventToken.ToString
 - uid: Melanchall.DryWetMidi.Core.MidiEventType
   name: MidiEventType
   href: api/Melanchall.DryWetMidi.Core.MidiEventType.html
@@ -6363,6 +6530,25 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Core.MidiFile.Read
   nameWithType: MidiFile.Read
+- uid: Melanchall.DryWetMidi.Core.MidiFile.ReadLazy(System.IO.Stream,Melanchall.DryWetMidi.Core.ReadingSettings)
+  name: ReadLazy(Stream, ReadingSettings)
+  href: api/Melanchall.DryWetMidi.Core.MidiFile.html#Melanchall_DryWetMidi_Core_MidiFile_ReadLazy_System_IO_Stream_Melanchall_DryWetMidi_Core_ReadingSettings_
+  commentId: M:Melanchall.DryWetMidi.Core.MidiFile.ReadLazy(System.IO.Stream,Melanchall.DryWetMidi.Core.ReadingSettings)
+  fullName: Melanchall.DryWetMidi.Core.MidiFile.ReadLazy(System.IO.Stream, Melanchall.DryWetMidi.Core.ReadingSettings)
+  nameWithType: MidiFile.ReadLazy(Stream, ReadingSettings)
+- uid: Melanchall.DryWetMidi.Core.MidiFile.ReadLazy(System.String,Melanchall.DryWetMidi.Core.ReadingSettings)
+  name: ReadLazy(String, ReadingSettings)
+  href: api/Melanchall.DryWetMidi.Core.MidiFile.html#Melanchall_DryWetMidi_Core_MidiFile_ReadLazy_System_String_Melanchall_DryWetMidi_Core_ReadingSettings_
+  commentId: M:Melanchall.DryWetMidi.Core.MidiFile.ReadLazy(System.String,Melanchall.DryWetMidi.Core.ReadingSettings)
+  fullName: Melanchall.DryWetMidi.Core.MidiFile.ReadLazy(System.String, Melanchall.DryWetMidi.Core.ReadingSettings)
+  nameWithType: MidiFile.ReadLazy(String, ReadingSettings)
+- uid: Melanchall.DryWetMidi.Core.MidiFile.ReadLazy*
+  name: ReadLazy
+  href: api/Melanchall.DryWetMidi.Core.MidiFile.html#Melanchall_DryWetMidi_Core_MidiFile_ReadLazy_
+  commentId: Overload:Melanchall.DryWetMidi.Core.MidiFile.ReadLazy
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Core.MidiFile.ReadLazy
+  nameWithType: MidiFile.ReadLazy
 - uid: Melanchall.DryWetMidi.Core.MidiFile.TimeDivision
   name: TimeDivision
   href: api/Melanchall.DryWetMidi.Core.MidiFile.html#Melanchall_DryWetMidi_Core_MidiFile_TimeDivision
@@ -6832,6 +7018,132 @@ references:
   commentId: F:Melanchall.DryWetMidi.Core.MidiTimeCodeType.TwentyFour
   fullName: Melanchall.DryWetMidi.Core.MidiTimeCodeType.TwentyFour
   nameWithType: MidiTimeCodeType.TwentyFour
+- uid: Melanchall.DryWetMidi.Core.MidiToken
+  name: MidiToken
+  href: api/Melanchall.DryWetMidi.Core.MidiToken.html
+  commentId: T:Melanchall.DryWetMidi.Core.MidiToken
+  fullName: Melanchall.DryWetMidi.Core.MidiToken
+  nameWithType: MidiToken
+- uid: Melanchall.DryWetMidi.Core.MidiToken.#ctor(Melanchall.DryWetMidi.Core.MidiTokenType)
+  name: MidiToken(MidiTokenType)
+  href: api/Melanchall.DryWetMidi.Core.MidiToken.html#Melanchall_DryWetMidi_Core_MidiToken__ctor_Melanchall_DryWetMidi_Core_MidiTokenType_
+  commentId: M:Melanchall.DryWetMidi.Core.MidiToken.#ctor(Melanchall.DryWetMidi.Core.MidiTokenType)
+  fullName: Melanchall.DryWetMidi.Core.MidiToken.MidiToken(Melanchall.DryWetMidi.Core.MidiTokenType)
+  nameWithType: MidiToken.MidiToken(MidiTokenType)
+- uid: Melanchall.DryWetMidi.Core.MidiToken.#ctor*
+  name: MidiToken
+  href: api/Melanchall.DryWetMidi.Core.MidiToken.html#Melanchall_DryWetMidi_Core_MidiToken__ctor_
+  commentId: Overload:Melanchall.DryWetMidi.Core.MidiToken.#ctor
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Core.MidiToken.MidiToken
+  nameWithType: MidiToken.MidiToken
+- uid: Melanchall.DryWetMidi.Core.MidiToken.TokenType
+  name: TokenType
+  href: api/Melanchall.DryWetMidi.Core.MidiToken.html#Melanchall_DryWetMidi_Core_MidiToken_TokenType
+  commentId: P:Melanchall.DryWetMidi.Core.MidiToken.TokenType
+  fullName: Melanchall.DryWetMidi.Core.MidiToken.TokenType
+  nameWithType: MidiToken.TokenType
+- uid: Melanchall.DryWetMidi.Core.MidiToken.TokenType*
+  name: TokenType
+  href: api/Melanchall.DryWetMidi.Core.MidiToken.html#Melanchall_DryWetMidi_Core_MidiToken_TokenType_
+  commentId: Overload:Melanchall.DryWetMidi.Core.MidiToken.TokenType
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Core.MidiToken.TokenType
+  nameWithType: MidiToken.TokenType
+- uid: Melanchall.DryWetMidi.Core.MidiTokensReader
+  name: MidiTokensReader
+  href: api/Melanchall.DryWetMidi.Core.MidiTokensReader.html
+  commentId: T:Melanchall.DryWetMidi.Core.MidiTokensReader
+  fullName: Melanchall.DryWetMidi.Core.MidiTokensReader
+  nameWithType: MidiTokensReader
+- uid: Melanchall.DryWetMidi.Core.MidiTokensReader.Dispose
+  name: Dispose()
+  href: api/Melanchall.DryWetMidi.Core.MidiTokensReader.html#Melanchall_DryWetMidi_Core_MidiTokensReader_Dispose
+  commentId: M:Melanchall.DryWetMidi.Core.MidiTokensReader.Dispose
+  fullName: Melanchall.DryWetMidi.Core.MidiTokensReader.Dispose()
+  nameWithType: MidiTokensReader.Dispose()
+- uid: Melanchall.DryWetMidi.Core.MidiTokensReader.Dispose*
+  name: Dispose
+  href: api/Melanchall.DryWetMidi.Core.MidiTokensReader.html#Melanchall_DryWetMidi_Core_MidiTokensReader_Dispose_
+  commentId: Overload:Melanchall.DryWetMidi.Core.MidiTokensReader.Dispose
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Core.MidiTokensReader.Dispose
+  nameWithType: MidiTokensReader.Dispose
+- uid: Melanchall.DryWetMidi.Core.MidiTokensReader.ReadToken
+  name: ReadToken()
+  href: api/Melanchall.DryWetMidi.Core.MidiTokensReader.html#Melanchall_DryWetMidi_Core_MidiTokensReader_ReadToken
+  commentId: M:Melanchall.DryWetMidi.Core.MidiTokensReader.ReadToken
+  fullName: Melanchall.DryWetMidi.Core.MidiTokensReader.ReadToken()
+  nameWithType: MidiTokensReader.ReadToken()
+- uid: Melanchall.DryWetMidi.Core.MidiTokensReader.ReadToken*
+  name: ReadToken
+  href: api/Melanchall.DryWetMidi.Core.MidiTokensReader.html#Melanchall_DryWetMidi_Core_MidiTokensReader_ReadToken_
+  commentId: Overload:Melanchall.DryWetMidi.Core.MidiTokensReader.ReadToken
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Core.MidiTokensReader.ReadToken
+  nameWithType: MidiTokensReader.ReadToken
+- uid: Melanchall.DryWetMidi.Core.MidiTokensReaderUtilities
+  name: MidiTokensReaderUtilities
+  href: api/Melanchall.DryWetMidi.Core.MidiTokensReaderUtilities.html
+  commentId: T:Melanchall.DryWetMidi.Core.MidiTokensReaderUtilities
+  fullName: Melanchall.DryWetMidi.Core.MidiTokensReaderUtilities
+  nameWithType: MidiTokensReaderUtilities
+- uid: Melanchall.DryWetMidi.Core.MidiTokensReaderUtilities.EnumerateEvents(Melanchall.DryWetMidi.Core.MidiTokensReader)
+  name: EnumerateEvents(MidiTokensReader)
+  href: api/Melanchall.DryWetMidi.Core.MidiTokensReaderUtilities.html#Melanchall_DryWetMidi_Core_MidiTokensReaderUtilities_EnumerateEvents_Melanchall_DryWetMidi_Core_MidiTokensReader_
+  commentId: M:Melanchall.DryWetMidi.Core.MidiTokensReaderUtilities.EnumerateEvents(Melanchall.DryWetMidi.Core.MidiTokensReader)
+  fullName: Melanchall.DryWetMidi.Core.MidiTokensReaderUtilities.EnumerateEvents(Melanchall.DryWetMidi.Core.MidiTokensReader)
+  nameWithType: MidiTokensReaderUtilities.EnumerateEvents(MidiTokensReader)
+- uid: Melanchall.DryWetMidi.Core.MidiTokensReaderUtilities.EnumerateEvents*
+  name: EnumerateEvents
+  href: api/Melanchall.DryWetMidi.Core.MidiTokensReaderUtilities.html#Melanchall_DryWetMidi_Core_MidiTokensReaderUtilities_EnumerateEvents_
+  commentId: Overload:Melanchall.DryWetMidi.Core.MidiTokensReaderUtilities.EnumerateEvents
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Core.MidiTokensReaderUtilities.EnumerateEvents
+  nameWithType: MidiTokensReaderUtilities.EnumerateEvents
+- uid: Melanchall.DryWetMidi.Core.MidiTokensReaderUtilities.EnumerateTokens(Melanchall.DryWetMidi.Core.MidiTokensReader)
+  name: EnumerateTokens(MidiTokensReader)
+  href: api/Melanchall.DryWetMidi.Core.MidiTokensReaderUtilities.html#Melanchall_DryWetMidi_Core_MidiTokensReaderUtilities_EnumerateTokens_Melanchall_DryWetMidi_Core_MidiTokensReader_
+  commentId: M:Melanchall.DryWetMidi.Core.MidiTokensReaderUtilities.EnumerateTokens(Melanchall.DryWetMidi.Core.MidiTokensReader)
+  fullName: Melanchall.DryWetMidi.Core.MidiTokensReaderUtilities.EnumerateTokens(Melanchall.DryWetMidi.Core.MidiTokensReader)
+  nameWithType: MidiTokensReaderUtilities.EnumerateTokens(MidiTokensReader)
+- uid: Melanchall.DryWetMidi.Core.MidiTokensReaderUtilities.EnumerateTokens*
+  name: EnumerateTokens
+  href: api/Melanchall.DryWetMidi.Core.MidiTokensReaderUtilities.html#Melanchall_DryWetMidi_Core_MidiTokensReaderUtilities_EnumerateTokens_
+  commentId: Overload:Melanchall.DryWetMidi.Core.MidiTokensReaderUtilities.EnumerateTokens
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Core.MidiTokensReaderUtilities.EnumerateTokens
+  nameWithType: MidiTokensReaderUtilities.EnumerateTokens
+- uid: Melanchall.DryWetMidi.Core.MidiTokenType
+  name: MidiTokenType
+  href: api/Melanchall.DryWetMidi.Core.MidiTokenType.html
+  commentId: T:Melanchall.DryWetMidi.Core.MidiTokenType
+  fullName: Melanchall.DryWetMidi.Core.MidiTokenType
+  nameWithType: MidiTokenType
+- uid: Melanchall.DryWetMidi.Core.MidiTokenType.BytesPacket
+  name: BytesPacket
+  href: api/Melanchall.DryWetMidi.Core.MidiTokenType.html#Melanchall_DryWetMidi_Core_MidiTokenType_BytesPacket
+  commentId: F:Melanchall.DryWetMidi.Core.MidiTokenType.BytesPacket
+  fullName: Melanchall.DryWetMidi.Core.MidiTokenType.BytesPacket
+  nameWithType: MidiTokenType.BytesPacket
+- uid: Melanchall.DryWetMidi.Core.MidiTokenType.ChunkHeader
+  name: ChunkHeader
+  href: api/Melanchall.DryWetMidi.Core.MidiTokenType.html#Melanchall_DryWetMidi_Core_MidiTokenType_ChunkHeader
+  commentId: F:Melanchall.DryWetMidi.Core.MidiTokenType.ChunkHeader
+  fullName: Melanchall.DryWetMidi.Core.MidiTokenType.ChunkHeader
+  nameWithType: MidiTokenType.ChunkHeader
+- uid: Melanchall.DryWetMidi.Core.MidiTokenType.HeaderChunkData
+  name: HeaderChunkData
+  href: api/Melanchall.DryWetMidi.Core.MidiTokenType.html#Melanchall_DryWetMidi_Core_MidiTokenType_HeaderChunkData
+  commentId: F:Melanchall.DryWetMidi.Core.MidiTokenType.HeaderChunkData
+  fullName: Melanchall.DryWetMidi.Core.MidiTokenType.HeaderChunkData
+  nameWithType: MidiTokenType.HeaderChunkData
+- uid: Melanchall.DryWetMidi.Core.MidiTokenType.MidiEvent
+  name: MidiEvent
+  href: api/Melanchall.DryWetMidi.Core.MidiTokenType.html#Melanchall_DryWetMidi_Core_MidiTokenType_MidiEvent
+  commentId: F:Melanchall.DryWetMidi.Core.MidiTokenType.MidiEvent
+  fullName: Melanchall.DryWetMidi.Core.MidiTokenType.MidiEvent
+  nameWithType: MidiTokenType.MidiEvent
 - uid: Melanchall.DryWetMidi.Core.MidiWriter
   name: MidiWriter
   href: api/Melanchall.DryWetMidi.Core.MidiWriter.html
@@ -7782,6 +8094,19 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Core.ReaderSettings.BufferSize
   nameWithType: ReaderSettings.BufferSize
+- uid: Melanchall.DryWetMidi.Core.ReaderSettings.BytesPacketMaxLength
+  name: BytesPacketMaxLength
+  href: api/Melanchall.DryWetMidi.Core.ReaderSettings.html#Melanchall_DryWetMidi_Core_ReaderSettings_BytesPacketMaxLength
+  commentId: P:Melanchall.DryWetMidi.Core.ReaderSettings.BytesPacketMaxLength
+  fullName: Melanchall.DryWetMidi.Core.ReaderSettings.BytesPacketMaxLength
+  nameWithType: ReaderSettings.BytesPacketMaxLength
+- uid: Melanchall.DryWetMidi.Core.ReaderSettings.BytesPacketMaxLength*
+  name: BytesPacketMaxLength
+  href: api/Melanchall.DryWetMidi.Core.ReaderSettings.html#Melanchall_DryWetMidi_Core_ReaderSettings_BytesPacketMaxLength_
+  commentId: Overload:Melanchall.DryWetMidi.Core.ReaderSettings.BytesPacketMaxLength
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Core.ReaderSettings.BytesPacketMaxLength
+  nameWithType: ReaderSettings.BytesPacketMaxLength
 - uid: Melanchall.DryWetMidi.Core.ReaderSettings.NonSeekableStreamBufferSize
   name: NonSeekableStreamBufferSize
   href: api/Melanchall.DryWetMidi.Core.ReaderSettings.html#Melanchall_DryWetMidi_Core_ReaderSettings_NonSeekableStreamBufferSize
