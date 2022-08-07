@@ -1,0 +1,35 @@
+trigger:
+  batch: true
+  branches:
+    include:
+    - master
+    - develop
+  paths:
+    include:
+    - 'DryWetMidi/*'
+    - 'Utilities/*'
+    - 'Resources/CI/build-utility.yaml'
+    - 'Resources/CI/Templates/stage-build-native-libs.yaml'
+    - 'Resources/CI/Templates/step-copy-native-libraries-near-csproj.yaml'
+    - 'Resources/CI/Templates/job-build-utility.yaml'
+
+pr: none
+
+variables:
+- group: DryWetMIDI-Common-Variables
+
+name: BuildUtility_$(ProjectName)_$(LibraryVersion)$(Rev:.r)
+
+stages:
+- template: Templates/stage-build-native-libs.yaml
+- stage: BuildUtilities
+  displayName: Build utilities
+  pool:
+    vmImage: 'windows-latest'
+  jobs:
+  - template: Templates/job-build-utility.yaml
+    parameters:
+      projectName: '$(ProjectName)'
+      rids:
+      - 'win-x64'
+      - 'osx-x64'

@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+    <PublishSingleFile>true</PublishSingleFile>
+    <PublishTrimmed>true</PublishTrimmed>
+    <RuntimeIdentifiers>win-x64;osx-x64</RuntimeIdentifiers>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\DryWetMidi\Melanchall.DryWetMidi.csproj" />
+    <ProjectReference Include="..\Common\Melanchall.Common.csproj" />
+  </ItemGroup>
+
+  <ItemGroup Label="Native">
+    <None Include="..\..\DryWetMidi\Melanchall_DryWetMidi_Native32.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\DryWetMidi\Melanchall_DryWetMidi_Native64.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\DryWetMidi\Melanchall_DryWetMidi_Native64.dylib">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

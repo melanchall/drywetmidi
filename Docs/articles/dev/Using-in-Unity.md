@@ -17,7 +17,7 @@ It's the simplest way. Just use built-in ways to import the official [DryWetMIDI
 
 ## Manual installation
 
-Instruction below shows how to integrate full version of the DryWetMIDI into your Unity project manually. If you want to use [nativeless version](xref:a_develop_nativeless), just take archive with _-nativeless_ suffix on the first step and skip third one.
+Instruction below shows how to integrate full version of the DryWetMIDI into your Unity project manually. If you want to use [nativeless version](xref:a_develop_nativeless), just take archive with _-nativeless_ suffix on the second step and skip third one.
 
 1. Create _Melanchall_ folder in project's _Assets_ folder and _DryWetMIDI_ subfolder within the _Melanchall_ one.
 2. Download the library main binary:

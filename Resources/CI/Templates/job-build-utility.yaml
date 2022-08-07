@@ -1,0 +1,50 @@
+parameters:
+- name: projectName
+  displayName: 'Project name'
+  type: string
+- name: rids
+  type: object
+
+jobs:
+- ${{ each rid in parameters.rids }}:
+  - job: Build_${{ replace(rid, '-', '_') }}
+    displayName: 'Build utility (${{ rid }})'
+    steps:
+    - template: step-copy-native-libraries-near-csproj.yaml
+    
+    - task: DotNetCoreCLI@2
+      displayName: Publish project
+      inputs:
+        command: 'publish'
+        projects: 'Utilities/${{ parameters.projectName }}/Melanchall.${{ parameters.projectName }}.csproj'
+        arguments: '--configuration $(BuildConfiguration) -r ${{ rid }} --self-contained'
+        zipAfterPublish: false
+        publishWebProjects: false
+    
+    - task: PowerShell@2
+      displayName: Delete pdb files
+      inputs:
+        targetType: 'inline'
+        script: |
+          Get-ChildItem $(Build.SourcesDirectory) -Include *.pdb -Recurse | Remove-Item -Force
+          
+    - task: PowerShell@2
+      displayName: Delete xml files
+      inputs:
+        targetType: 'inline'
+        script: |
+          Get-ChildItem $(Build.SourcesDirectory) -Include *.xml -Recurse | Remove-Item -Force
+    
+    - task: ArchiveFiles@2
+      displayName: Archive utility
+      inputs:
+        rootFolderOrFile: 'Utilities\${{ parameters.projectName }}\bin\$(BuildConfiguration)\net6.0\${{ rid }}\publish'
+        includeRootFolder: false
+        archiveType: 'zip'
+        archiveFile: '$(Build.ArtifactStagingDirectory)\Utility\Melanchall.${{ parameters.projectName }}.$(LibraryVersion)-${{ rid }}.zip'
+    
+    - task: PublishPipelineArtifact@1
+      displayName: Publish 'Utility-${{ rid }}' artifact
+      inputs:
+        targetPath: $(Build.ArtifactStagingDirectory)\Utility
+        artifact: Utility-${{ rid }}
