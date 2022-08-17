@@ -79,8 +79,8 @@
             <article class="content wrap" id="_content" data-uid="a_managers">
 <h1 id="objects-managers">Objects managers</h1>
 
-<p>Working with low-level objects (like MIDI event) sometimes is not convenient. In this cases it's much more handy to manage MIDI data via concepts of <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.TimedEvent.html">timed events</a>, <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.Note.html">notes</a> or <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.Chord.html">chords</a>.</p>
-<p>DryWetMIDI provides a way to work with such high-level objects - <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.TimedObjectsManager.html">TimedObjectsManager</a>. This class allows to work with objects of different types within an events collection (see <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.TrackChunk.html#Melanchall_DryWetMidi_Core_TrackChunk_Events">TrackChunk.Events</a>):</p>
+<p>Working with low-level objects (like MIDI event) sometimes is not convenient. In this cases it's much more handy to manage MIDI data via concepts of <a href="xref:Melanchall.DryWetMidi.Interaction.TimedEvent">timed events</a>, <a href="xref:Melanchall.DryWetMidi.Interaction.Note">notes</a> or <a href="xref:Melanchall.DryWetMidi.Interaction.Chord">chords</a>.</p>
+<p>DryWetMIDI provides a way to work with such high-level objects - <a href="xref:Melanchall.DryWetMidi.Interaction.TimedObjectsManager">TimedObjectsManager</a>. This class allows to work with objects of different types within an events collection (see <a href="xref:Melanchall.DryWetMidi.Core.TrackChunk.Events">TrackChunk.Events</a>):</p>
 <pre><code class="lang-csharp">using (var manager = new TimedObjectsManager(trackChunk.Events, ObjectType.Note | ObjectType.TimedEvent))
 {
     foreach (var obj in manager.Objects)

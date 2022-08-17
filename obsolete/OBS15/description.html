@@ -71,7 +71,7 @@
           <div class="col-md-10">
             <article class="content wrap" id="_content" data-uid="">
 
-<p><code>SetTimeAndLength</code> separate methods for <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.Note.html">notes</a> and <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.Chord.html">chords</a> have been replaced with generic <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.LengthedObjectUtilities.html#Melanchall_DryWetMidi_Interaction_LengthedObjectUtilities_SetLength_">SetLength</a>. Since <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.TimedObjectUtilities.html#Melanchall_DryWetMidi_Interaction_TimedObjectUtilities_SetTime_">SetTime</a> method also exists, the new way to set time and length with one instruction is:</p>
+<p><code>SetTimeAndLength</code> separate methods for <a href="xref:Melanchall.DryWetMidi.Interaction.Note">notes</a> and <a href="xref:Melanchall.DryWetMidi.Interaction.Chord">chords</a> have been replaced with generic <a href="xref:Melanchall.DryWetMidi.Interaction.LengthedObjectUtilities.SetLength*">SetLength</a>. Since <a href="xref:Melanchall.DryWetMidi.Interaction.TimedObjectUtilities.SetTime*">SetTime</a> method also exists, the new way to set time and length with one instruction is:</p>
 <pre><code class="lang-csharp">note
     .SetTime(new MetricTimeSpan(0, 0, 0, 500), tempoMap)
     .SetLength(new MetricTimeSpan(0, 0, 10), tempoMap);

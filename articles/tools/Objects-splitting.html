@@ -79,29 +79,29 @@
             <article class="content wrap" id="_content" data-uid="a_obj_splitting">
 <h1 id="objects-splitting">Objects splitting</h1>
 
-<p>With DryWetMIDI you can use methods of the <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.Splitter.html">Splitter</a> class to split objects:</p>
+<p>With DryWetMIDI you can use methods of the <a href="xref:Melanchall.DryWetMidi.Tools.Splitter">Splitter</a> class to split objects:</p>
 <ul>
-<li><a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.Splitter.html#Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsByStep_">SplitObjectsByStep</a></li>
-<li><a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.Splitter.html#Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsByPartsNumber_">SplitObjectsByPartsNumber</a></li>
-<li><a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.Splitter.html#Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsByGrid_">SplitObjectsByGrid</a></li>
-<li><a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.Splitter.html#Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsAtDistance_">SplitObjectsAtDistance</a></li>
+<li><a href="xref:Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByStep*">SplitObjectsByStep</a></li>
+<li><a href="xref:Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByPartsNumber*">SplitObjectsByPartsNumber</a></li>
+<li><a href="xref:Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByGrid*">SplitObjectsByGrid</a></li>
+<li><a href="xref:Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsAtDistance*">SplitObjectsAtDistance</a></li>
 </ul>
-<p>Each method takes collection of <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.ITimedObject.html">timed objects</a> or MIDI containers (like <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.MidiFile.html">file</a> or <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.TrackChunk.html">track chunk</a>) and splits objects within by the specified strategy. These methods are discussed in details below.</p>
-<p>Also please note that every class that implements <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.ILengthedObject.html">ILengthedObject</a> has <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.ILengthedObject.html#Melanchall_DryWetMidi_Interaction_ILengthedObject_Split_">Split</a> method allowing to split an object at the specified time.</p>
+<p>Each method takes collection of <a href="xref:Melanchall.DryWetMidi.Interaction.ITimedObject">timed objects</a> or MIDI containers (like <a href="xref:Melanchall.DryWetMidi.Core.MidiFile">file</a> or <a href="xref:Melanchall.DryWetMidi.Core.TrackChunk">track chunk</a>) and splits objects within by the specified strategy. These methods are discussed in details below.</p>
+<p>Also please note that every class that implements <a href="xref:Melanchall.DryWetMidi.Interaction.ILengthedObject">ILengthedObject</a> has <a href="xref:Melanchall.DryWetMidi.Interaction.ILengthedObject.Split*">Split</a> method allowing to split an object at the specified time.</p>
 <h2 id="splitobjectsbystep">SplitObjectsByStep</h2>
-<p><a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.Splitter.html#Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsByStep_">SplitObjectsByStep</a> methods split each object by the specified step starting at the start of an object. For example, if step is <code>1</code> second, an object will be split at <code>1</code> second from its start, at <code>1</code> second from previous point of splitting (<code>2</code> seconds from the object's start), at <code>1</code> second from previous point of splitting (<code>3</code> seconds from the object's start) and so on. If an object's length is less than the specified step, the object will not be split and copy of it will be returned.</p>
+<p><a href="xref:Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByStep*">SplitObjectsByStep</a> methods split each object by the specified step starting at the start of an object. For example, if step is <code>1</code> second, an object will be split at <code>1</code> second from its start, at <code>1</code> second from previous point of splitting (<code>2</code> seconds from the object's start), at <code>1</code> second from previous point of splitting (<code>3</code> seconds from the object's start) and so on. If an object's length is less than the specified step, the object will not be split and copy of it will be returned.</p>
 <p>The image below illustrates splitting notes and chord by the same step:</p>
 <p><img src="images/Splitter/SplitByStep.png" alt="Split by step"></p>
 <h2 id="splitobjectsbypartsnumber">SplitObjectsByPartsNumber</h2>
-<p><a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.Splitter.html#Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsByPartsNumber_">SplitObjectsByPartsNumber</a> methods split each object into the specified number of parts of equal length. It is necessary to specify the <code>lengthType</code> argument to meet your expectations. For example, with metric type each part of an input object will last the same number of microseconds, while with musical type each part's length will represent the same fraction of the whole note's length. But the length of parts can be different in terms of MIDI ticks using different length type depending on tempo map passed to the method.</p>
+<p><a href="xref:Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByPartsNumber*">SplitObjectsByPartsNumber</a> methods split each object into the specified number of parts of equal length. It is necessary to specify the <code>lengthType</code> argument to meet your expectations. For example, with metric type each part of an input object will last the same number of microseconds, while with musical type each part's length will represent the same fraction of the whole note's length. But the length of parts can be different in terms of MIDI ticks using different length type depending on tempo map passed to the method.</p>
 <p>The image below illustrates splitting notes and chord into <code>4</code> parts:</p>
 <p><img src="images/Splitter/SplitByPartsNumber.png" alt="Split by parts number"></p>
 <h2 id="splitobjectsbygrid">SplitObjectsByGrid</h2>
-<p><a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.Splitter.html#Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsByGrid_">SplitObjectsByGrid</a> methods split each object by the specified grid. Objects will be split at points of crossing the grid.</p>
+<p><a href="xref:Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByGrid*">SplitObjectsByGrid</a> methods split each object by the specified grid. Objects will be split at points of crossing the grid.</p>
 <p>The image below illustrates splitting notes and chord by the same grid:</p>
 <p><img src="images/Splitter/SplitByGrid.png" alt="Split by grid"></p>
 <h2 id="splitobjectsatdistance">SplitObjectsAtDistance</h2>
-<p><a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.Splitter.html#Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsAtDistance_">SplitObjectsAtDistance</a> methods split each object at the specified distance or by the specified ratio from start or end of an object (which is defined by <code>from</code> parameter). It is necessary to specify the <code>lengthType</code> argument for splitting by ratio to meet your expectations.</p>
+<p><a href="xref:Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsAtDistance*">SplitObjectsAtDistance</a> methods split each object at the specified distance or by the specified ratio from start or end of an object (which is defined by <code>from</code> parameter). It is necessary to specify the <code>lengthType</code> argument for splitting by ratio to meet your expectations.</p>
 <p>The image below illustrates splitting notes and chord at the same distance from the start of an object:</p>
 <p><img src="images/Splitter/SplitAtDistanceByStepFromStart.png" alt="Split at distance by step from start"></p>
 <p>Next image illustrates splitting notes and chord by the ration of <code>0.25</code> from the end of an object:</p>

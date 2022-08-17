@@ -79,15 +79,15 @@
             <article class="content wrap" id="_content" data-uid="a_playback_custom">
 <h1 id="custom-playback">Custom playback</h1>
 
-<p>You can subclass from <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.Playback.html">Playback</a> to make your own playback by overriding some <code>protected virtual</code> methods:</p>
+<p>You can subclass from <a href="xref:Melanchall.DryWetMidi.Multimedia.Playback">Playback</a> to make your own playback by overriding some <code>protected virtual</code> methods:</p>
 <ul>
-<li><a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.Playback.html#Melanchall_DryWetMidi_Multimedia_Playback_TryPlayEvent_Melanchall_DryWetMidi_Core_MidiEvent_System_Object_">bool TryPlayEvent(MidiEvent midiEvent, object metadata)</a></li>
-<li><a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.Playback.html#Melanchall_DryWetMidi_Multimedia_Playback_GetTimedEvents_Melanchall_DryWetMidi_Interaction_ITimedObject_">IEnumerable<timedevent> GetTimedEvents(ITimedObject timedObject)</timedevent></a></li>
+<li><a href="xref:Melanchall.DryWetMidi.Multimedia.Playback.TryPlayEvent(Melanchall.DryWetMidi.Core.MidiEvent,System.Object)">bool TryPlayEvent(MidiEvent midiEvent, object metadata)</a></li>
+<li><a href="xref:Melanchall.DryWetMidi.Multimedia.Playback.GetTimedEvents(Melanchall.DryWetMidi.Interaction.ITimedObject)">IEnumerable<timedevent> GetTimedEvents(ITimedObject timedObject)</timedevent></a></li>
 </ul>
 <p>Let's see what each method needed for.</p>
 <h2 id="tryplayevent">TryPlayEvent</h2>
-<p><code>TryPlayEvent</code> method called by playback each time an event should be played. Result value of the method tells playback whether the event was played or not. Default implementation of the method just sends a MIDI event to <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.Playback.html#Melanchall_DryWetMidi_Multimedia_Playback_OutputDevice">output device</a> and returns <code>true</code>.</p>
-<p>So you can implement your own logic of playing a MIDI event. Please pay attention to the second parameter of the method - <code>metadata</code>. If input objects of playback implement <a class="xref" href="../../api/Melanchall.DryWetMidi.Common.IMetadata.html">IMetadata</a> interface, metadata will be passed via that parameter. For example, you can subclass from <code>TimedEvent</code> and implement <code>IMetadata</code> on a new class, and then create your own playback on instances of that class.</p>
+<p><code>TryPlayEvent</code> method called by playback each time an event should be played. Result value of the method tells playback whether the event was played or not. Default implementation of the method just sends a MIDI event to <a href="xref:Melanchall.DryWetMidi.Multimedia.Playback.OutputDevice">output device</a> and returns <code>true</code>.</p>
+<p>So you can implement your own logic of playing a MIDI event. Please pay attention to the second parameter of the method - <code>metadata</code>. If input objects of playback implement <a href="xref:Melanchall.DryWetMidi.Common.IMetadata">IMetadata</a> interface, metadata will be passed via that parameter. For example, you can subclass from <code>TimedEvent</code> and implement <code>IMetadata</code> on a new class, and then create your own playback on instances of that class.</p>
 <p>Sample code below shows how to play a MIDI file filtering out events within first track chunk:</p>
 <pre><code class="lang-csharp">private sealed class TimedEventWithTrackChunkIndex : TimedEvent, IMetadata
 {
@@ -128,7 +128,7 @@ var tempoMap = midiFile.GetTempoMap();
 var playback = new MyPlayback(timedEvents, tempoMap);
 </code></pre>
 <h2 id="gettimedevents">GetTimedEvents</h2>
-<p><code>Playback</code> internally transforms all input objects to instances of <code>TimedEvent</code>. So if some input objects implement <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.ITimedObject.html">ITimedObject</a> but their type is unknown for DryWetMIDI, we need to override <code>GetTimedEvents</code> method to provide transformation of our custom timed object to collection of timed events. Of course those timed events can be subclasses of <code>TimedEvent</code> and implement <code>IMetadata</code> (see previous section) so metadata will correctly go between a playback's internals. By default the method returns empty collection.</p>
+<p><code>Playback</code> internally transforms all input objects to instances of <code>TimedEvent</code>. So if some input objects implement <a href="xref:Melanchall.DryWetMidi.Interaction.ITimedObject">ITimedObject</a> but their type is unknown for DryWetMIDI, we need to override <code>GetTimedEvents</code> method to provide transformation of our custom timed object to collection of timed events. Of course those timed events can be subclasses of <code>TimedEvent</code> and implement <code>IMetadata</code> (see previous section) so metadata will correctly go between a playback's internals. By default the method returns empty collection.</p>
 </article>
           </div>
           
