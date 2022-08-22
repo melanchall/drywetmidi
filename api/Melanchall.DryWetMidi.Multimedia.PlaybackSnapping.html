@@ -1,0 +1,580 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class PlaybackSnapping
+   | DryWetMIDI </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class PlaybackSnapping
+   | DryWetMIDI ">
+    <meta name="generator" content="docfx 2.59.2.0">
+    
+    <link rel="shortcut icon" href="../images/favicon.png">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    <meta property="docfx:rel" content="../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list">Search Results for <span></span></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination" data-first="First" data-prev="Previous" data-next="Next" data-last="Last"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Melanchall.DryWetMidi.Multimedia.PlaybackSnapping">
+  
+  
+  <h1 id="Melanchall_DryWetMidi_Multimedia_PlaybackSnapping" data-uid="Melanchall.DryWetMidi.Multimedia.PlaybackSnapping" class="text-break">Class PlaybackSnapping
+  </h1>
+  <div class="markdown level0 summary">
+Provides a way to manage snap points for <a class="xref" href="Melanchall.DryWetMidi.Multimedia.Playback.html">Playback</a>.
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object">Object</a></div>
+    <div class="level1"><span class="xref">PlaybackSnapping</span></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)">Object.Equals(Object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)">Object.Equals(Object, Object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gethashcode#system-object-gethashcode">Object.GetHashCode()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gettype#system-object-gettype">Object.GetType()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.memberwiseclone#system-object-memberwiseclone">Object.MemberwiseClone()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.referenceequals#system-object-referenceequals(system-object-system-object)">Object.ReferenceEquals(Object, Object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.tostring#system-object-tostring">Object.ToString()</a>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Melanchall.DryWetMidi.Multimedia.html">Melanchall.DryWetMidi.Multimedia</a></h6>
+  <h6><strong>Assembly</strong>: Melanchall.DryWetMidi.dll</h6>
+  <h5 id="Melanchall_DryWetMidi_Multimedia_PlaybackSnapping_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public sealed class PlaybackSnapping</code></pre>
+  </div>
+  <h3 id="properties">Properties
+  </h3>
+  <a id="Melanchall_DryWetMidi_Multimedia_PlaybackSnapping_IsEnabled_" data-uid="Melanchall.DryWetMidi.Multimedia.PlaybackSnapping.IsEnabled*"></a>
+  <h4 id="Melanchall_DryWetMidi_Multimedia_PlaybackSnapping_IsEnabled" data-uid="Melanchall.DryWetMidi.Multimedia.PlaybackSnapping.IsEnabled">IsEnabled</h4>
+  <div class="markdown level1 summary">
+Gets or sets a value indicating whether playback snapping is enabled or not. The property
+lets turn on or off all snap points at once.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool IsEnabled { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Multimedia_PlaybackSnapping_SnapPoints_" data-uid="Melanchall.DryWetMidi.Multimedia.PlaybackSnapping.SnapPoints*"></a>
+  <h4 id="Melanchall_DryWetMidi_Multimedia_PlaybackSnapping_SnapPoints" data-uid="Melanchall.DryWetMidi.Multimedia.PlaybackSnapping.SnapPoints">SnapPoints</h4>
+  <div class="markdown level1 summary">
+Gets all snap points.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IEnumerable&lt;SnapPoint&gt; SnapPoints { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Multimedia.SnapPoint.html">SnapPoint</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <a id="Melanchall_DryWetMidi_Multimedia_PlaybackSnapping_AddSnapPoint_" data-uid="Melanchall.DryWetMidi.Multimedia.PlaybackSnapping.AddSnapPoint*"></a>
+  <h4 id="Melanchall_DryWetMidi_Multimedia_PlaybackSnapping_AddSnapPoint_Melanchall_DryWetMidi_Interaction_ITimeSpan_" data-uid="Melanchall.DryWetMidi.Multimedia.PlaybackSnapping.AddSnapPoint(Melanchall.DryWetMidi.Interaction.ITimeSpan)">AddSnapPoint(ITimeSpan)</h4>
+  <div class="markdown level1 summary">
+Adds a snap point at the specified time.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public SnapPoint&lt;Guid&gt; AddSnapPoint(ITimeSpan time)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a></td>
+        <td><span class="parametername">time</span></td>
+        <td>Time to add snap point at.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Multimedia.SnapPoint-1.html">SnapPoint</a>&lt;<a class="xref" href="https://docs.microsoft.com/dotnet/api/system.guid">Guid</a>&gt;</td>
+        <td>An instance of the <a class="xref" href="Melanchall.DryWetMidi.Multimedia.SnapPoint-1.html">SnapPoint&lt;TData&gt;</a> representing a snap point
+at <code data-dev-comment-type="paramref" class="paramref">time</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">time</code> is <code>null</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Multimedia_PlaybackSnapping_AddSnapPoint_" data-uid="Melanchall.DryWetMidi.Multimedia.PlaybackSnapping.AddSnapPoint*"></a>
+  <h4 id="Melanchall_DryWetMidi_Multimedia_PlaybackSnapping_AddSnapPoint__1_Melanchall_DryWetMidi_Interaction_ITimeSpan___0_" data-uid="Melanchall.DryWetMidi.Multimedia.PlaybackSnapping.AddSnapPoint``1(Melanchall.DryWetMidi.Interaction.ITimeSpan,``0)">AddSnapPoint&lt;TData&gt;(ITimeSpan, TData)</h4>
+  <div class="markdown level1 summary">
+Adds a snap point with the specified data at given time.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public SnapPoint&lt;TData&gt; AddSnapPoint&lt;TData&gt;(ITimeSpan time, TData data)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a></td>
+        <td><span class="parametername">time</span></td>
+        <td>Time to add snap point at.</td>
+      </tr>
+      <tr>
+        <td><span class="xref">TData</span></td>
+        <td><span class="parametername">data</span></td>
+        <td>Data to attach to snap point.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Multimedia.SnapPoint-1.html">SnapPoint</a>&lt;TData&gt;</td>
+        <td>An instance of the <a class="xref" href="Melanchall.DryWetMidi.Multimedia.SnapPoint-1.html">SnapPoint&lt;TData&gt;</a> representing a snap point
+with <code data-dev-comment-type="paramref" class="paramref">data</code> at <code data-dev-comment-type="paramref" class="paramref">time</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">TData</span></td>
+        <td>Type of data that will be attached to a snap point.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">time</code> is <code>null</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Multimedia_PlaybackSnapping_Clear_" data-uid="Melanchall.DryWetMidi.Multimedia.PlaybackSnapping.Clear*"></a>
+  <h4 id="Melanchall_DryWetMidi_Multimedia_PlaybackSnapping_Clear" data-uid="Melanchall.DryWetMidi.Multimedia.PlaybackSnapping.Clear">Clear()</h4>
+  <div class="markdown level1 summary">
+Removes all snap points.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Clear()</code></pre>
+  </div>
+  <a id="Melanchall_DryWetMidi_Multimedia_PlaybackSnapping_RemoveSnapPoint_" data-uid="Melanchall.DryWetMidi.Multimedia.PlaybackSnapping.RemoveSnapPoint*"></a>
+  <h4 id="Melanchall_DryWetMidi_Multimedia_PlaybackSnapping_RemoveSnapPoint__1_Melanchall_DryWetMidi_Multimedia_SnapPoint___0__" data-uid="Melanchall.DryWetMidi.Multimedia.PlaybackSnapping.RemoveSnapPoint``1(Melanchall.DryWetMidi.Multimedia.SnapPoint{``0})">RemoveSnapPoint&lt;TData&gt;(SnapPoint&lt;TData&gt;)</h4>
+  <div class="markdown level1 summary">
+Removes a snap point.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void RemoveSnapPoint&lt;TData&gt;(SnapPoint&lt;TData&gt; snapPoint)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Multimedia.SnapPoint-1.html">SnapPoint</a>&lt;TData&gt;</td>
+        <td><span class="parametername">snapPoint</span></td>
+        <td>Snap point to remove.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">TData</span></td>
+        <td>Type of data attached to <code data-dev-comment-type="paramref" class="paramref">snapPoint</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">snapPoint</code> is <code>null</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Multimedia_PlaybackSnapping_RemoveSnapPointsByData_" data-uid="Melanchall.DryWetMidi.Multimedia.PlaybackSnapping.RemoveSnapPointsByData*"></a>
+  <h4 id="Melanchall_DryWetMidi_Multimedia_PlaybackSnapping_RemoveSnapPointsByData__1_System_Predicate___0__" data-uid="Melanchall.DryWetMidi.Multimedia.PlaybackSnapping.RemoveSnapPointsByData``1(System.Predicate{``0})">RemoveSnapPointsByData&lt;TData&gt;(Predicate&lt;TData&gt;)</h4>
+  <div class="markdown level1 summary">
+Removes all snap points that match the conditions defined by the specified predicate.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void RemoveSnapPointsByData&lt;TData&gt;(Predicate&lt;TData&gt; predicate)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.predicate-1">Predicate</a>&lt;TData&gt;</td>
+        <td><span class="parametername">predicate</span></td>
+        <td>The <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.predicate-1">Predicate&lt;T&gt;</a> delegate that defines the conditions
+of snap points to remove.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">TData</span></td>
+        <td>Type of data attached to snap points to remove.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">predicate</code> is <code>null</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Multimedia_PlaybackSnapping_SnapToGrid_" data-uid="Melanchall.DryWetMidi.Multimedia.PlaybackSnapping.SnapToGrid*"></a>
+  <h4 id="Melanchall_DryWetMidi_Multimedia_PlaybackSnapping_SnapToGrid_Melanchall_DryWetMidi_Interaction_IGrid_" data-uid="Melanchall.DryWetMidi.Multimedia.PlaybackSnapping.SnapToGrid(Melanchall.DryWetMidi.Interaction.IGrid)">SnapToGrid(IGrid)</h4>
+  <div class="markdown level1 summary">
+Adds snap points at times defined by the specified grid.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public SnapPointsGroup SnapToGrid(IGrid grid)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.IGrid.html">IGrid</a></td>
+        <td><span class="parametername">grid</span></td>
+        <td>The grid that defines times to add snap points to.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Multimedia.SnapPointsGroup.html">SnapPointsGroup</a></td>
+        <td>An instance of the <a class="xref" href="Melanchall.DryWetMidi.Multimedia.SnapPointsGroup.html">SnapPointsGroup</a> added snap points belong to.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">grid</code> is <code>null</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Multimedia_PlaybackSnapping_SnapToNotesEnds_" data-uid="Melanchall.DryWetMidi.Multimedia.PlaybackSnapping.SnapToNotesEnds*"></a>
+  <h4 id="Melanchall_DryWetMidi_Multimedia_PlaybackSnapping_SnapToNotesEnds" data-uid="Melanchall.DryWetMidi.Multimedia.PlaybackSnapping.SnapToNotesEnds">SnapToNotesEnds()</h4>
+  <div class="markdown level1 summary">
+Adds snap points at end times of notes.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public SnapPointsGroup SnapToNotesEnds()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Multimedia.SnapPointsGroup.html">SnapPointsGroup</a></td>
+        <td>An instance of the <a class="xref" href="Melanchall.DryWetMidi.Multimedia.SnapPointsGroup.html">SnapPointsGroup</a> added snap points belong to.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Multimedia_PlaybackSnapping_SnapToNotesStarts_" data-uid="Melanchall.DryWetMidi.Multimedia.PlaybackSnapping.SnapToNotesStarts*"></a>
+  <h4 id="Melanchall_DryWetMidi_Multimedia_PlaybackSnapping_SnapToNotesStarts" data-uid="Melanchall.DryWetMidi.Multimedia.PlaybackSnapping.SnapToNotesStarts">SnapToNotesStarts()</h4>
+  <div class="markdown level1 summary">
+Adds snap points at start times of notes.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public SnapPointsGroup SnapToNotesStarts()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Multimedia.SnapPointsGroup.html">SnapPointsGroup</a></td>
+        <td>An instance of the <a class="xref" href="Melanchall.DryWetMidi.Multimedia.SnapPointsGroup.html">SnapPointsGroup</a> added snap points belong to.</td>
+      </tr>
+    </tbody>
+  </table>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            2022 / Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

@@ -79,7 +79,7 @@
             <article class="content wrap" id="_content" data-uid="a_recording_overview">
 <h1 id="recording---overview">Recording - Overview</h1>
 
-<p>To capture MIDI data from an input MIDI device (see <a class="xref" href="../devices/Input-device.html">Input device</a> article) you can use <a href="xref:Melanchall.DryWetMidi.Multimedia.Recording">Recording</a> class which will collect incoming MIDI events. To start recording you need create an instance of the <code>Recording</code> class passing <a href="xref:Melanchall.DryWetMidi.Interaction.TempoMap">tempo map</a> and input device to its constructor:</p>
+<p>To capture MIDI data from an input MIDI device (see <a class="xref" href="../devices/Input-device.html">Input device</a> article) you can use <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.Recording.html">Recording</a> class which will collect incoming MIDI events. To start recording you need create an instance of the <code>Recording</code> class passing <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.TempoMap.html">tempo map</a> and input device to its constructor:</p>
 <pre><code class="lang-csharp">using Melanchall.DryWetMidi.Multimedia;
 using Melanchall.DryWetMidi.Interaction;
 
@@ -92,9 +92,9 @@ using (var inputDevice = InputDevice.GetByName(&quot;Input MIDI device&quot;))
     // ...
 }
 </code></pre>
-<p>Don't forget to call <a href="xref:Melanchall.DryWetMidi.Multimedia.IInputDevice.StartEventsListening">StartEventsListening</a> on <a href="xref:Melanchall.DryWetMidi.Multimedia.IInputDevice">IInputDevice</a> before you start recording since <code>Recording</code> do nothing with the device you've specified.</p>
-<p>To start recording call <a href="xref:Melanchall.DryWetMidi.Multimedia.Recording.Start">Start</a> method. To stop it call <a href="xref:Melanchall.DryWetMidi.Multimedia.Recording.Stop">Stop</a> method. You can resume recording after it has been stopped by calling <code>Start</code> again. To check whether recording is currently running or not, get a value of the <a href="xref:Melanchall.DryWetMidi.Multimedia.Recording.IsRunning">IsRunning</a> property. <code>Start</code> and <code>Stop</code> methods fire <a href="xref:Melanchall.DryWetMidi.Multimedia.Recording.Started">Started</a> and <a href="xref:Melanchall.DryWetMidi.Multimedia.Recording.Stopped">Stopped</a> events respectively.</p>
-<p>You can get recorded events as with <a href="xref:Melanchall.DryWetMidi.Multimedia.Recording.GetEvents">GetEvents</a> method.</p>
+<p>Don't forget to call <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.IInputDevice.html#Melanchall_DryWetMidi_Multimedia_IInputDevice_StartEventsListening">StartEventsListening</a> on <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.IInputDevice.html">IInputDevice</a> before you start recording since <code>Recording</code> do nothing with the device you've specified.</p>
+<p>To start recording call <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.Recording.html#Melanchall_DryWetMidi_Multimedia_Recording_Start">Start</a> method. To stop it call <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.Recording.html#Melanchall_DryWetMidi_Multimedia_Recording_Stop">Stop</a> method. You can resume recording after it has been stopped by calling <code>Start</code> again. To check whether recording is currently running or not, get a value of the <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.Recording.html#Melanchall_DryWetMidi_Multimedia_Recording_IsRunning">IsRunning</a> property. <code>Start</code> and <code>Stop</code> methods fire <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.Recording.html#Melanchall_DryWetMidi_Multimedia_Recording_Started">Started</a> and <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.Recording.html#Melanchall_DryWetMidi_Multimedia_Recording_Stopped">Stopped</a> events respectively.</p>
+<p>You can get recorded events as with <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.Recording.html#Melanchall_DryWetMidi_Multimedia_Recording_GetEvents">GetEvents</a> method.</p>
 <p>Take a look at small example of MIDI data recording:</p>
 <pre><code class="lang-csharp">using (var inputDevice = InputDevice.GetByName(&quot;Input MIDI device&quot;))
 {

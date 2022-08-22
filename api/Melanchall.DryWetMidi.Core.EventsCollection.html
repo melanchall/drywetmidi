@@ -1,0 +1,963 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class EventsCollection
+   | DryWetMIDI </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class EventsCollection
+   | DryWetMIDI ">
+    <meta name="generator" content="docfx 2.59.2.0">
+    
+    <link rel="shortcut icon" href="../images/favicon.png">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    <meta property="docfx:rel" content="../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list">Search Results for <span></span></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination" data-first="First" data-prev="Previous" data-next="Next" data-last="Last"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Melanchall.DryWetMidi.Core.EventsCollection">
+  
+  
+  <h1 id="Melanchall_DryWetMidi_Core_EventsCollection" data-uid="Melanchall.DryWetMidi.Core.EventsCollection" class="text-break">Class EventsCollection
+  </h1>
+  <div class="markdown level0 summary">
+Collection of <a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html">MidiEvent</a> objects.
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object">Object</a></div>
+    <div class="level1"><span class="xref">EventsCollection</span></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.icollection-1">ICollection</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html">MidiEvent</a>&gt;</div>
+    <div><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html">MidiEvent</a>&gt;</div>
+    <div><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.ienumerable">IEnumerable</a></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)">Object.Equals(Object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)">Object.Equals(Object, Object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gethashcode#system-object-gethashcode">Object.GetHashCode()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gettype#system-object-gettype">Object.GetType()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.memberwiseclone#system-object-memberwiseclone">Object.MemberwiseClone()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.referenceequals#system-object-referenceequals(system-object-system-object)">Object.ReferenceEquals(Object, Object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.tostring#system-object-tostring">Object.ToString()</a>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Melanchall.DryWetMidi.Core.html">Melanchall.DryWetMidi.Core</a></h6>
+  <h6><strong>Assembly</strong>: Melanchall.DryWetMidi.dll</h6>
+  <h5 id="Melanchall_DryWetMidi_Core_EventsCollection_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public sealed class EventsCollection : ICollection&lt;MidiEvent&gt;, IEnumerable&lt;MidiEvent&gt;, IEnumerable</code></pre>
+  </div>
+  <h3 id="properties">Properties
+  </h3>
+  <a id="Melanchall_DryWetMidi_Core_EventsCollection_Count_" data-uid="Melanchall.DryWetMidi.Core.EventsCollection.Count*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_EventsCollection_Count" data-uid="Melanchall.DryWetMidi.Core.EventsCollection.Count">Count</h4>
+  <div class="markdown level1 summary">
+Gets the number of events contained in the collection.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int Count { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int32">Int32</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Core_EventsCollection_IsReadOnly_" data-uid="Melanchall.DryWetMidi.Core.EventsCollection.IsReadOnly*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_EventsCollection_IsReadOnly" data-uid="Melanchall.DryWetMidi.Core.EventsCollection.IsReadOnly">IsReadOnly</h4>
+  <div class="markdown level1 summary">
+Gets a value indicating whether the <a class="xref" href="Melanchall.DryWetMidi.Core.EventsCollection.html">EventsCollection</a> is read-only.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool IsReadOnly { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Core_EventsCollection_Item_" data-uid="Melanchall.DryWetMidi.Core.EventsCollection.Item*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_EventsCollection_Item_System_Int32_" data-uid="Melanchall.DryWetMidi.Core.EventsCollection.Item(System.Int32)">Item[Int32]</h4>
+  <div class="markdown level1 summary">
+Gets or sets the event at the specified index.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public MidiEvent this[int index] { get; set; }</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int32">Int32</a></td>
+        <td><span class="parametername">index</span></td>
+        <td>The zero-based index of the event to get or set.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html">MidiEvent</a></td>
+        <td>The event at the specified index.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">index</code> is less than 0;
+   or <code data-dev-comment-type="paramref" class="paramref">index</code> is equal to or greater than <a class="xref" href="Melanchall.DryWetMidi.Core.EventsCollection.html#Melanchall_DryWetMidi_Core_EventsCollection_Count">Count</a>.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td>value is <code>null</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <a id="Melanchall_DryWetMidi_Core_EventsCollection_Add_" data-uid="Melanchall.DryWetMidi.Core.EventsCollection.Add*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_EventsCollection_Add_Melanchall_DryWetMidi_Core_MidiEvent_" data-uid="Melanchall.DryWetMidi.Core.EventsCollection.Add(Melanchall.DryWetMidi.Core.MidiEvent)">Add(MidiEvent)</h4>
+  <div class="markdown level1 summary">
+Adds an event to the end of collection.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Add(MidiEvent midiEvent)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html">MidiEvent</a></td>
+        <td><span class="parametername">midiEvent</span></td>
+        <td>The event to be added to the end of the collection.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Melanchall_DryWetMidi_Core_EventsCollection_Add_Melanchall_DryWetMidi_Core_MidiEvent__remarks">Remarks</h5>
+  <div class="markdown level1 remarks">
+Note that End Of Track events cannot be added into the collection since it may cause inconsistence in a
+track chunk structure. End Of Track event will be written to the track chunk automatically on
+<a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html#Melanchall_DryWetMidi_Core_MidiFile_Write_System_String_System_Boolean_Melanchall_DryWetMidi_Core_MidiFileFormat_Melanchall_DryWetMidi_Core_WritingSettings_">Write(String, Boolean, MidiFileFormat, WritingSettings)</a>.
+</div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">midiEvent</code> is <code>null</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Core_EventsCollection_AddRange_" data-uid="Melanchall.DryWetMidi.Core.EventsCollection.AddRange*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_EventsCollection_AddRange_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_MidiEvent__" data-uid="Melanchall.DryWetMidi.Core.EventsCollection.AddRange(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.MidiEvent})">AddRange(IEnumerable&lt;MidiEvent&gt;)</h4>
+  <div class="markdown level1 summary">
+Adds events to the end of collection.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void AddRange(IEnumerable&lt;MidiEvent&gt; events)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html">MidiEvent</a>&gt;</td>
+        <td><span class="parametername">events</span></td>
+        <td>Events to be added to the end of the collection.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Melanchall_DryWetMidi_Core_EventsCollection_AddRange_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_MidiEvent___remarks">Remarks</h5>
+  <div class="markdown level1 remarks">
+Note that End Of Track events cannot be added into the collection since it may cause inconsistence in a
+track chunk structure. End Of Track event will be written to the track chunk automatically on
+<a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html#Melanchall_DryWetMidi_Core_MidiFile_Write_System_String_System_Boolean_Melanchall_DryWetMidi_Core_MidiFileFormat_Melanchall_DryWetMidi_Core_WritingSettings_">Write(String, Boolean, MidiFileFormat, WritingSettings)</a>.
+</div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">events</code> is <code>null</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Core_EventsCollection_Clear_" data-uid="Melanchall.DryWetMidi.Core.EventsCollection.Clear*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_EventsCollection_Clear" data-uid="Melanchall.DryWetMidi.Core.EventsCollection.Clear">Clear()</h4>
+  <div class="markdown level1 summary">
+Removes all events from the <a class="xref" href="Melanchall.DryWetMidi.Core.EventsCollection.html">EventsCollection</a>.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Clear()</code></pre>
+  </div>
+  <a id="Melanchall_DryWetMidi_Core_EventsCollection_Contains_" data-uid="Melanchall.DryWetMidi.Core.EventsCollection.Contains*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_EventsCollection_Contains_Melanchall_DryWetMidi_Core_MidiEvent_" data-uid="Melanchall.DryWetMidi.Core.EventsCollection.Contains(Melanchall.DryWetMidi.Core.MidiEvent)">Contains(MidiEvent)</h4>
+  <div class="markdown level1 summary">
+Determines whether the <a class="xref" href="Melanchall.DryWetMidi.Core.EventsCollection.html">EventsCollection</a> contains a specific event.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool Contains(MidiEvent item)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html">MidiEvent</a></td>
+        <td><span class="parametername">item</span></td>
+        <td>The event to locate in the <a class="xref" href="Melanchall.DryWetMidi.Core.EventsCollection.html">EventsCollection</a>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
+        <td><code>true</code> if event is found in the <a class="xref" href="Melanchall.DryWetMidi.Core.EventsCollection.html">EventsCollection</a>; otherwise, <code>false</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Core_EventsCollection_CopyTo_" data-uid="Melanchall.DryWetMidi.Core.EventsCollection.CopyTo*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_EventsCollection_CopyTo_Melanchall_DryWetMidi_Core_MidiEvent___System_Int32_" data-uid="Melanchall.DryWetMidi.Core.EventsCollection.CopyTo(Melanchall.DryWetMidi.Core.MidiEvent[],System.Int32)">CopyTo(MidiEvent[], Int32)</h4>
+  <div class="markdown level1 summary">
+Copies the elements of the <a class="xref" href="Melanchall.DryWetMidi.Core.EventsCollection.html">EventsCollection</a> to an <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.array">Array</a>,
+starting at a particular index.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void CopyTo(MidiEvent[] array, int arrayIndex)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html">MidiEvent</a>[]</td>
+        <td><span class="parametername">array</span></td>
+        <td>The one-dimensional <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.array">Array</a> that is the destination of
+the elements copied from <a class="xref" href="Melanchall.DryWetMidi.Core.EventsCollection.html">EventsCollection</a>. The array must have zero-based
+indexing.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int32">Int32</a></td>
+        <td><span class="parametername">arrayIndex</span></td>
+        <td>The zero-based index in array at which copying begins.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">array</code> is <code>null</code>.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">arrayIndex</code> is less than 0.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentexception">ArgumentException</a></td>
+        <td>The number of elements in the source <a class="xref" href="Melanchall.DryWetMidi.Core.EventsCollection.html">EventsCollection</a>
+is greater than the available space from <code data-dev-comment-type="paramref" class="paramref">arrayIndex</code> to the end of the destination
+array.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Core_EventsCollection_GetEnumerator_" data-uid="Melanchall.DryWetMidi.Core.EventsCollection.GetEnumerator*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_EventsCollection_GetEnumerator" data-uid="Melanchall.DryWetMidi.Core.EventsCollection.GetEnumerator">GetEnumerator()</h4>
+  <div class="markdown level1 summary">
+Returns an enumerator that iterates through the <a class="xref" href="Melanchall.DryWetMidi.Core.EventsCollection.html">EventsCollection</a>.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IEnumerator&lt;MidiEvent&gt; GetEnumerator()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerator-1">IEnumerator</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html">MidiEvent</a>&gt;</td>
+        <td>An enumerator for the <a class="xref" href="Melanchall.DryWetMidi.Core.EventsCollection.html">EventsCollection</a>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Core_EventsCollection_IndexOf_" data-uid="Melanchall.DryWetMidi.Core.EventsCollection.IndexOf*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_EventsCollection_IndexOf_Melanchall_DryWetMidi_Core_MidiEvent_" data-uid="Melanchall.DryWetMidi.Core.EventsCollection.IndexOf(Melanchall.DryWetMidi.Core.MidiEvent)">IndexOf(MidiEvent)</h4>
+  <div class="markdown level1 summary">
+Searches for the specified event and returns the zero-based index of the first
+occurrence within the entire <a class="xref" href="Melanchall.DryWetMidi.Core.EventsCollection.html">EventsCollection</a>.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int IndexOf(MidiEvent midiEvent)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html">MidiEvent</a></td>
+        <td><span class="parametername">midiEvent</span></td>
+        <td>The event to locate in the <a class="xref" href="Melanchall.DryWetMidi.Core.EventsCollection.html">EventsCollection</a>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int32">Int32</a></td>
+        <td>The zero-based index of the first occurrence of event within the entire
+<a class="xref" href="Melanchall.DryWetMidi.Core.EventsCollection.html">EventsCollection</a>, if found; otherwise, –1.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">midiEvent</code> is <code>null</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Core_EventsCollection_Insert_" data-uid="Melanchall.DryWetMidi.Core.EventsCollection.Insert*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_EventsCollection_Insert_System_Int32_Melanchall_DryWetMidi_Core_MidiEvent_" data-uid="Melanchall.DryWetMidi.Core.EventsCollection.Insert(System.Int32,Melanchall.DryWetMidi.Core.MidiEvent)">Insert(Int32, MidiEvent)</h4>
+  <div class="markdown level1 summary">
+Inserts an event into the collection at the specified index.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Insert(int index, MidiEvent midiEvent)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int32">Int32</a></td>
+        <td><span class="parametername">index</span></td>
+        <td>The zero-based index at which the event should be inserted.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html">MidiEvent</a></td>
+        <td><span class="parametername">midiEvent</span></td>
+        <td>The event to insert.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Melanchall_DryWetMidi_Core_EventsCollection_Insert_System_Int32_Melanchall_DryWetMidi_Core_MidiEvent__remarks">Remarks</h5>
+  <div class="markdown level1 remarks">
+Note that End Of Track events cannot be added into the collection since it may cause inconsistence in a
+track chunk structure. End Of Track event will be written to the track chunk automatically on
+a MIDI file writing.
+</div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">midiEvent</code> is <code>null</code>.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
+        <td>
+<p>One of the following errors occured:</p>
+<ul><li><code data-dev-comment-type="paramref" class="paramref">index</code> is less than 0.</li><li><code data-dev-comment-type="paramref" class="paramref">index</code> is greater than <a class="xref" href="Melanchall.DryWetMidi.Core.EventsCollection.html#Melanchall_DryWetMidi_Core_EventsCollection_Count">Count</a>.</li></ul>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Core_EventsCollection_InsertRange_" data-uid="Melanchall.DryWetMidi.Core.EventsCollection.InsertRange*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_EventsCollection_InsertRange_System_Int32_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_MidiEvent__" data-uid="Melanchall.DryWetMidi.Core.EventsCollection.InsertRange(System.Int32,System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.MidiEvent})">InsertRange(Int32, IEnumerable&lt;MidiEvent&gt;)</h4>
+  <div class="markdown level1 summary">
+Inserts a set of events into the collection at the specified index.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void InsertRange(int index, IEnumerable&lt;MidiEvent&gt; midiEvents)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int32">Int32</a></td>
+        <td><span class="parametername">index</span></td>
+        <td>The zero-based index at which the events should be inserted.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html">MidiEvent</a>&gt;</td>
+        <td><span class="parametername">midiEvents</span></td>
+        <td>The events to insert.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Melanchall_DryWetMidi_Core_EventsCollection_InsertRange_System_Int32_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_MidiEvent___remarks">Remarks</h5>
+  <div class="markdown level1 remarks">
+Note that End Of Track events cannot be added into the collection since it may cause inconsistence in a
+track chunk structure. End Of Track event will be written to the track chunk automatically on
+a MIDI file writing.
+</div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">midiEvents</code> is <code>null</code>.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
+        <td>
+<p>One of the following errors occured:</p>
+<ul><li><code data-dev-comment-type="paramref" class="paramref">index</code> is less than 0.</li><li><code data-dev-comment-type="paramref" class="paramref">index</code> is greater than <a class="xref" href="Melanchall.DryWetMidi.Core.EventsCollection.html#Melanchall_DryWetMidi_Core_EventsCollection_Count">Count</a>.</li></ul>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Core_EventsCollection_Remove_" data-uid="Melanchall.DryWetMidi.Core.EventsCollection.Remove*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_EventsCollection_Remove_Melanchall_DryWetMidi_Core_MidiEvent_" data-uid="Melanchall.DryWetMidi.Core.EventsCollection.Remove(Melanchall.DryWetMidi.Core.MidiEvent)">Remove(MidiEvent)</h4>
+  <div class="markdown level1 summary">
+Removes the first occurrence of a specific event from the collection.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool Remove(MidiEvent midiEvent)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html">MidiEvent</a></td>
+        <td><span class="parametername">midiEvent</span></td>
+        <td>The event to remove from the collection. The value cannot be <code>null</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
+        <td><code>true</code> if event is successfully removed; otherwise, <code>false</code>. This method also returns
+<code>false</code> if event was not found in the collection.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">midiEvent</code> is <code>null</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Core_EventsCollection_RemoveAll_" data-uid="Melanchall.DryWetMidi.Core.EventsCollection.RemoveAll*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_EventsCollection_RemoveAll_System_Predicate_Melanchall_DryWetMidi_Core_MidiEvent__" data-uid="Melanchall.DryWetMidi.Core.EventsCollection.RemoveAll(System.Predicate{Melanchall.DryWetMidi.Core.MidiEvent})">RemoveAll(Predicate&lt;MidiEvent&gt;)</h4>
+  <div class="markdown level1 summary">
+Removes all the events that match the conditions defined by the specified predicate.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int RemoveAll(Predicate&lt;MidiEvent&gt; match)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.predicate-1">Predicate</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html">MidiEvent</a>&gt;</td>
+        <td><span class="parametername">match</span></td>
+        <td>The <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.predicate-1">Predicate&lt;T&gt;</a> delegate that defines the conditions
+of the events to remove.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int32">Int32</a></td>
+        <td>The number of events removed from the <a class="xref" href="Melanchall.DryWetMidi.Core.EventsCollection.html">EventsCollection</a>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">match</code> is <code>null</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Core_EventsCollection_RemoveAt_" data-uid="Melanchall.DryWetMidi.Core.EventsCollection.RemoveAt*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_EventsCollection_RemoveAt_System_Int32_" data-uid="Melanchall.DryWetMidi.Core.EventsCollection.RemoveAt(System.Int32)">RemoveAt(Int32)</h4>
+  <div class="markdown level1 summary">
+Removes the event at the specified index of the collection.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void RemoveAt(int index)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int32">Int32</a></td>
+        <td><span class="parametername">index</span></td>
+        <td>The zero-based index of the event to remove.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">index</code> is less than 0; or <code data-dev-comment-type="paramref" class="paramref">index</code>
+    is equal to or greater than <a class="xref" href="Melanchall.DryWetMidi.Core.EventsCollection.html#Melanchall_DryWetMidi_Core_EventsCollection_Count">Count</a>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="eii">Explicit Interface Implementations
+  </h3>
+  <a id="Melanchall_DryWetMidi_Core_EventsCollection_System_Collections_IEnumerable_GetEnumerator_" data-uid="Melanchall.DryWetMidi.Core.EventsCollection.System#Collections#IEnumerable#GetEnumerator*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_EventsCollection_System_Collections_IEnumerable_GetEnumerator" data-uid="Melanchall.DryWetMidi.Core.EventsCollection.System#Collections#IEnumerable#GetEnumerator">IEnumerable.GetEnumerator()</h4>
+  <div class="markdown level1 summary">
+Returns an enumerator that iterates through the <a class="xref" href="Melanchall.DryWetMidi.Core.EventsCollection.html">EventsCollection</a>.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">IEnumerator IEnumerable.GetEnumerator()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.ienumerator">IEnumerator</a></td>
+        <td>An enumerator for the <a class="xref" href="Melanchall.DryWetMidi.Core.EventsCollection.html">EventsCollection</a>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.icollection-1">System.Collections.Generic.ICollection&lt;T&gt;</a>
+  </div>
+  <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">System.Collections.Generic.IEnumerable&lt;T&gt;</a>
+  </div>
+  <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.ienumerable">System.Collections.IEnumerable</a>
+  </div>
+  <h3 id="extensionmethods">Extension Methods</h3>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.html#Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_ManageChords_Melanchall_DryWetMidi_Core_EventsCollection_Melanchall_DryWetMidi_Interaction_ChordDetectionSettings_Melanchall_DryWetMidi_Interaction_TimedObjectsComparer_">ChordsManagingUtilities.ManageChords(EventsCollection, ChordDetectionSettings, TimedObjectsComparer)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.html#Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_GetChords_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_MidiEvent__Melanchall_DryWetMidi_Interaction_ChordDetectionSettings_">ChordsManagingUtilities.GetChords(IEnumerable&lt;MidiEvent&gt;, ChordDetectionSettings)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.html#Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_GetChords_Melanchall_DryWetMidi_Core_EventsCollection_Melanchall_DryWetMidi_Interaction_ChordDetectionSettings_">ChordsManagingUtilities.GetChords(EventsCollection, ChordDetectionSettings)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.html#Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_ProcessChords_Melanchall_DryWetMidi_Core_EventsCollection_System_Action_Melanchall_DryWetMidi_Interaction_Chord__Melanchall_DryWetMidi_Interaction_ChordDetectionSettings_">ChordsManagingUtilities.ProcessChords(EventsCollection, Action&lt;Chord&gt;, ChordDetectionSettings)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.html#Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_ProcessChords_Melanchall_DryWetMidi_Core_EventsCollection_System_Action_Melanchall_DryWetMidi_Interaction_Chord__System_Predicate_Melanchall_DryWetMidi_Interaction_Chord__Melanchall_DryWetMidi_Interaction_ChordDetectionSettings_">ChordsManagingUtilities.ProcessChords(EventsCollection, Action&lt;Chord&gt;, Predicate&lt;Chord&gt;, ChordDetectionSettings)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.html#Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_RemoveChords_Melanchall_DryWetMidi_Core_EventsCollection_Melanchall_DryWetMidi_Interaction_ChordDetectionSettings_">ChordsManagingUtilities.RemoveChords(EventsCollection, ChordDetectionSettings)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.html#Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_RemoveChords_Melanchall_DryWetMidi_Core_EventsCollection_System_Predicate_Melanchall_DryWetMidi_Interaction_Chord__Melanchall_DryWetMidi_Interaction_ChordDetectionSettings_">ChordsManagingUtilities.RemoveChords(EventsCollection, Predicate&lt;Chord&gt;, ChordDetectionSettings)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.GetObjectsUtilities.html#Melanchall_DryWetMidi_Interaction_GetObjectsUtilities_GetObjects_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_MidiEvent__Melanchall_DryWetMidi_Interaction_ObjectType_Melanchall_DryWetMidi_Interaction_ObjectDetectionSettings_">GetObjectsUtilities.GetObjects(IEnumerable&lt;MidiEvent&gt;, ObjectType, ObjectDetectionSettings)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.GetObjectsUtilities.html#Melanchall_DryWetMidi_Interaction_GetObjectsUtilities_GetObjects_Melanchall_DryWetMidi_Core_EventsCollection_Melanchall_DryWetMidi_Interaction_ObjectType_Melanchall_DryWetMidi_Interaction_ObjectDetectionSettings_">GetObjectsUtilities.GetObjects(EventsCollection, ObjectType, ObjectDetectionSettings)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.NotesManagingUtilities.html#Melanchall_DryWetMidi_Interaction_NotesManagingUtilities_ManageNotes_Melanchall_DryWetMidi_Core_EventsCollection_Melanchall_DryWetMidi_Interaction_NoteDetectionSettings_Melanchall_DryWetMidi_Interaction_TimedObjectsComparer_">NotesManagingUtilities.ManageNotes(EventsCollection, NoteDetectionSettings, TimedObjectsComparer)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.NotesManagingUtilities.html#Melanchall_DryWetMidi_Interaction_NotesManagingUtilities_GetNotes_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_MidiEvent__Melanchall_DryWetMidi_Interaction_NoteDetectionSettings_">NotesManagingUtilities.GetNotes(IEnumerable&lt;MidiEvent&gt;, NoteDetectionSettings)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.NotesManagingUtilities.html#Melanchall_DryWetMidi_Interaction_NotesManagingUtilities_GetNotes_Melanchall_DryWetMidi_Core_EventsCollection_Melanchall_DryWetMidi_Interaction_NoteDetectionSettings_">NotesManagingUtilities.GetNotes(EventsCollection, NoteDetectionSettings)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.NotesManagingUtilities.html#Melanchall_DryWetMidi_Interaction_NotesManagingUtilities_ProcessNotes_Melanchall_DryWetMidi_Core_EventsCollection_System_Action_Melanchall_DryWetMidi_Interaction_Note__Melanchall_DryWetMidi_Interaction_NoteDetectionSettings_">NotesManagingUtilities.ProcessNotes(EventsCollection, Action&lt;Note&gt;, NoteDetectionSettings)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.NotesManagingUtilities.html#Melanchall_DryWetMidi_Interaction_NotesManagingUtilities_ProcessNotes_Melanchall_DryWetMidi_Core_EventsCollection_System_Action_Melanchall_DryWetMidi_Interaction_Note__System_Predicate_Melanchall_DryWetMidi_Interaction_Note__Melanchall_DryWetMidi_Interaction_NoteDetectionSettings_">NotesManagingUtilities.ProcessNotes(EventsCollection, Action&lt;Note&gt;, Predicate&lt;Note&gt;, NoteDetectionSettings)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.NotesManagingUtilities.html#Melanchall_DryWetMidi_Interaction_NotesManagingUtilities_RemoveNotes_Melanchall_DryWetMidi_Core_EventsCollection_Melanchall_DryWetMidi_Interaction_NoteDetectionSettings_">NotesManagingUtilities.RemoveNotes(EventsCollection, NoteDetectionSettings)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.NotesManagingUtilities.html#Melanchall_DryWetMidi_Interaction_NotesManagingUtilities_RemoveNotes_Melanchall_DryWetMidi_Core_EventsCollection_System_Predicate_Melanchall_DryWetMidi_Interaction_Note__Melanchall_DryWetMidi_Interaction_NoteDetectionSettings_">NotesManagingUtilities.RemoveNotes(EventsCollection, Predicate&lt;Note&gt;, NoteDetectionSettings)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.html#Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_ManageTimedEvents_Melanchall_DryWetMidi_Core_EventsCollection_Melanchall_DryWetMidi_Interaction_TimedEventDetectionSettings_Melanchall_DryWetMidi_Interaction_TimedObjectsComparer_">TimedEventsManagingUtilities.ManageTimedEvents(EventsCollection, TimedEventDetectionSettings, TimedObjectsComparer)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.html#Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_GetTimedEvents_Melanchall_DryWetMidi_Core_EventsCollection_Melanchall_DryWetMidi_Interaction_TimedEventDetectionSettings_">TimedEventsManagingUtilities.GetTimedEvents(EventsCollection, TimedEventDetectionSettings)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.html#Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_ProcessTimedEvents_Melanchall_DryWetMidi_Core_EventsCollection_System_Action_Melanchall_DryWetMidi_Interaction_TimedEvent__Melanchall_DryWetMidi_Interaction_TimedEventDetectionSettings_">TimedEventsManagingUtilities.ProcessTimedEvents(EventsCollection, Action&lt;TimedEvent&gt;, TimedEventDetectionSettings)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.html#Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_ProcessTimedEvents_Melanchall_DryWetMidi_Core_EventsCollection_System_Action_Melanchall_DryWetMidi_Interaction_TimedEvent__System_Predicate_Melanchall_DryWetMidi_Interaction_TimedEvent__Melanchall_DryWetMidi_Interaction_TimedEventDetectionSettings_">TimedEventsManagingUtilities.ProcessTimedEvents(EventsCollection, Action&lt;TimedEvent&gt;, Predicate&lt;TimedEvent&gt;, TimedEventDetectionSettings)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.html#Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_RemoveTimedEvents_Melanchall_DryWetMidi_Core_EventsCollection_">TimedEventsManagingUtilities.RemoveTimedEvents(EventsCollection)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.html#Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_RemoveTimedEvents_Melanchall_DryWetMidi_Core_EventsCollection_System_Predicate_Melanchall_DryWetMidi_Interaction_TimedEvent__Melanchall_DryWetMidi_Interaction_TimedEventDetectionSettings_">TimedEventsManagingUtilities.RemoveTimedEvents(EventsCollection, Predicate&lt;TimedEvent&gt;, TimedEventDetectionSettings)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedObjectUtilities.html#Melanchall_DryWetMidi_Interaction_TimedObjectUtilities_AddObjects_Melanchall_DryWetMidi_Core_EventsCollection_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_ITimedObject__">TimedObjectUtilities.AddObjects(EventsCollection, IEnumerable&lt;ITimedObject&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Multimedia.PlaybackUtilities.html#Melanchall_DryWetMidi_Multimedia_PlaybackUtilities_GetPlayback_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_MidiEvent__Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Multimedia_IOutputDevice_Melanchall_DryWetMidi_Multimedia_PlaybackSettings_">PlaybackUtilities.GetPlayback(IEnumerable&lt;MidiEvent&gt;, TempoMap, IOutputDevice, PlaybackSettings)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Multimedia.PlaybackUtilities.html#Melanchall_DryWetMidi_Multimedia_PlaybackUtilities_GetPlayback_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_MidiEvent__Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Multimedia_PlaybackSettings_">PlaybackUtilities.GetPlayback(IEnumerable&lt;MidiEvent&gt;, TempoMap, PlaybackSettings)</a>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            2022 / Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

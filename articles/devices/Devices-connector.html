@@ -79,9 +79,9 @@
             <article class="content wrap" id="_content" data-uid="a_dev_connector">
 <h1 id="devices-connector">Devices connector</h1>
 
-<p>You can redirect MIDI events from <a href="Input-device.html">input device</a> to <a href="Output-device.html">output device(s)</a> using <a href="xref:Melanchall.DryWetMidi.Multimedia.DevicesConnector">DevicesConnector</a> class. To understand what input and output MIDI device is in DryWetMIDI, please read <a href="Overview.html">Overview</a> article.</p>
-<p>Device connector connects an instance of the <a href="xref:Melanchall.DryWetMidi.Multimedia.IInputDevice">IInputDevice</a> to one or multiple instances of the <a href="xref:Melanchall.DryWetMidi.Multimedia.IOutputDevice">IOutputDevice</a>. To get an instance of <code>DevicesConnector</code> class you can use either its constructor or <code>Connect</code> extension method on <code>IInputDevice</code>. In first case you need to call <a href="xref:Melanchall.DryWetMidi.Multimedia.DevicesConnector.Connect">Connect</a> method after you get <code>DevicesConnector</code> instance. In second case the method will be called automatically.</p>
-<p>Also you can call <a href="xref:Melanchall.DryWetMidi.Multimedia.DevicesConnector.Disconnect">Disconnect</a> at any time to disable connection between devices.</p>
+<p>You can redirect MIDI events from <a href="Input-device.html">input device</a> to <a href="Output-device.html">output device(s)</a> using <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.DevicesConnector.html">DevicesConnector</a> class. To understand what input and output MIDI device is in DryWetMIDI, please read <a href="Overview.html">Overview</a> article.</p>
+<p>Device connector connects an instance of the <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.IInputDevice.html">IInputDevice</a> to one or multiple instances of the <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.IOutputDevice.html">IOutputDevice</a>. To get an instance of <code>DevicesConnector</code> class you can use either its constructor or <code>Connect</code> extension method on <code>IInputDevice</code>. In first case you need to call <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.DevicesConnector.html#Melanchall_DryWetMidi_Multimedia_DevicesConnector_Connect">Connect</a> method after you get <code>DevicesConnector</code> instance. In second case the method will be called automatically.</p>
+<p>Also you can call <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.DevicesConnector.html#Melanchall_DryWetMidi_Multimedia_DevicesConnector_Disconnect">Disconnect</a> at any time to disable connection between devices.</p>
 <p>The image below shows how devices will be connected in DryWetMIDI:</p>
 <p><img src="images/DevicesConnector.png" alt="Devices connector"></p>
 <p>Following small example shows basic usage of <code>DevicesConnector</code>:</p>
@@ -98,7 +98,7 @@ using (var outputDevice2 = OutputDevice.GetByName(&quot;MIDI Out 2&quot;))
 }
 </code></pre>
 <p>So if a MIDI event will be received by <em>MIDI In</em> device, the event will be sent to both <em>MIDI Out 1</em> and <em>MIDI Out 2</em>.</p>
-<p>Don't forget to call <a href="xref:Melanchall.DryWetMidi.Multimedia.IInputDevice.StartEventsListening">StartEventsListening</a> on input device to make sure <a href="xref:Melanchall.DryWetMidi.Multimedia.IInputDevice.EventReceived">EventReceived</a> will be fired and MIDI event redirected to output devices. Read more in <a href="Input-device.html">Input device</a> article.</p>
+<p>Don't forget to call <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.IInputDevice.html#Melanchall_DryWetMidi_Multimedia_IInputDevice_StartEventsListening">StartEventsListening</a> on input device to make sure <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.IInputDevice.html#Melanchall_DryWetMidi_Multimedia_IInputDevice_EventReceived">EventReceived</a> will be fired and MIDI event redirected to output devices. Read more in <a href="Input-device.html">Input device</a> article.</p>
 </article>
           </div>
           

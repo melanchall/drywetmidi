@@ -94,14 +94,14 @@
     public string Comment { get; }
 }
 </code></pre>
-<p>Now we are going to implement a custom chunk. Custom chunk class must be derived from the <a href="xref:Melanchall.DryWetMidi.Core.MidiChunk">MidiChunk</a> and must implement four abstract methods:</p>
+<p>Now we are going to implement a custom chunk. Custom chunk class must be derived from the <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.MidiChunk.html">MidiChunk</a> and must implement four abstract methods:</p>
 <ul>
-<li><a href="xref:Melanchall.DryWetMidi.Core.MidiChunk.ReadContent(Melanchall.DryWetMidi.Core.MidiReader,Melanchall.DryWetMidi.Core.ReadingSettings,System.UInt32)">ReadContent</a>;</li>
-<li><a href="xref:Melanchall.DryWetMidi.Core.MidiChunk.WriteContent(Melanchall.DryWetMidi.Core.MidiWriter,Melanchall.DryWetMidi.Core.WritingSettings)">WriteContent</a>;</li>
-<li><a href="xref:Melanchall.DryWetMidi.Core.MidiChunk.GetContentSize(Melanchall.DryWetMidi.Core.WritingSettings)">GetContentSize</a>;</li>
-<li><a href="xref:Melanchall.DryWetMidi.Core.MidiChunk.Clone">Clone</a>.</li>
+<li><a class="xref" href="../../api/Melanchall.DryWetMidi.Core.MidiChunk.html#Melanchall_DryWetMidi_Core_MidiChunk_ReadContent_Melanchall_DryWetMidi_Core_MidiReader_Melanchall_DryWetMidi_Core_ReadingSettings_System_UInt32_">ReadContent</a>;</li>
+<li><a class="xref" href="../../api/Melanchall.DryWetMidi.Core.MidiChunk.html#Melanchall_DryWetMidi_Core_MidiChunk_WriteContent_Melanchall_DryWetMidi_Core_MidiWriter_Melanchall_DryWetMidi_Core_WritingSettings_">WriteContent</a>;</li>
+<li><a class="xref" href="../../api/Melanchall.DryWetMidi.Core.MidiChunk.html#Melanchall_DryWetMidi_Core_MidiChunk_GetContentSize_Melanchall_DryWetMidi_Core_WritingSettings_">GetContentSize</a>;</li>
+<li><a class="xref" href="../../api/Melanchall.DryWetMidi.Core.MidiChunk.html#Melanchall_DryWetMidi_Core_MidiChunk_Clone">Clone</a>.</li>
 </ul>
-<p>Also the class must have parameterless constructor which calls constructor of the base class (<a href="xref:Melanchall.DryWetMidi.Core.MidiChunk">MidiChunk</a>) passing chunk's ID to it. ID is a 4-character string which will be <strong>Hstr</strong> for our chunk. ID of custom chunk should not be the same as one of standard chunks IDs. To get IDs of standard chunks you can call <a href="xref:Melanchall.DryWetMidi.Core.MidiChunk.GetStandardChunkIds">MidiChunk.GetStandardChunkIds</a>.</p>
+<p>Also the class must have parameterless constructor which calls constructor of the base class (<a class="xref" href="../../api/Melanchall.DryWetMidi.Core.MidiChunk.html">MidiChunk</a>) passing chunk's ID to it. ID is a 4-character string which will be <strong>Hstr</strong> for our chunk. ID of custom chunk should not be the same as one of standard chunks IDs. To get IDs of standard chunks you can call <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.MidiChunk.html#Melanchall_DryWetMidi_Core_MidiChunk_GetStandardChunkIds">MidiChunk.GetStandardChunkIds</a>.</p>
 <p>The class will look like this:</p>
 <pre><code class="lang-csharp">public sealed class HistoryChunk : MidiChunk
 {
@@ -262,7 +262,7 @@ var fileWithHistoryChunk = MidiFile.Read(
 
 var historyChunks = fileWithHistoryChunk.Chunks.OfType&lt;HistoryChunk&gt;();
 </code></pre>
-<p>If you don't provide information about your custom chunk in <code>ReadingSettings</code>, the chunks will be read as <a href="xref:Melanchall.DryWetMidi.Core.UnknownChunk">UnknownChunk</a>.</p>
+<p>If you don't provide information about your custom chunk in <code>ReadingSettings</code>, the chunks will be read as <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.UnknownChunk.html">UnknownChunk</a>.</p>
 </article>
           </div>
           
