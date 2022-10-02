@@ -22,6 +22,9 @@ schedules:
 pool:
   vmImage: 'windows-latest'
 
+variables:
+- group: DryWetMIDI-InfluxDB-Variables
+
 name: $(TeamProject)_ExportGitHubStat_$(Rev:r)
 
 steps:
@@ -36,11 +39,11 @@ steps:
       Write-Host "Built."
       
       Write-Host "Exporting GitHub repo info..."
-      $url = "$(InfluxCloudUrl)"
-      $token = "$(InfluxCloudToken)"
-      $organization = "$(InfluxCloudOrganization)"
-      $bucket = "$(InfluxCloudBucket)"
-      $measurement = "$(InfluxCloudMeasurement)"
+      $url = "$(InfluxDB.Url)"
+      $token = "$(InfluxDB.WriteToken)"
+      $organization = "$(InfluxDB.Organization)"
+      $bucket = "$(InfluxDB.Bucket)"
+      $measurement = "$(InfluxDB.Measurement.GitHub)"
       $gitHubPat = "$(GitHubPat)"
       Start-Process "ExportGitHubStatistics/ExportGitHubStatistics.exe" -ArgumentList """$url"" ""$token"" ""$organization"" ""$bucket"" ""$measurement"" ""$gitHubPat""" -Wait -NoNewWindow
       Write-Host "Exported."
