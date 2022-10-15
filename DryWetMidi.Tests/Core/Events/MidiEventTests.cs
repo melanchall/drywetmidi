@@ -166,7 +166,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 midiEvent.DeltaTime = DryWetMidi.Common.Random.Instance.Next(1000) + 1;
 
                 var midiEventClone = midiEvent.Clone();
-                MidiAsserts.AreEventsEqual(midiEvent, midiEventClone, true, $"Clone of {type} is invalid.");
+                MidiAsserts.AreEqual(midiEvent, midiEventClone, true, $"Clone of {type} is invalid.");
             }
         }
 
@@ -234,7 +234,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 var expectedEvent = events[i];
                 var actualEvent = readEvents[i];
 
-                MidiAsserts.AreEventsEqual(expectedEvent, actualEvent, true, $"Event {i} is invalid.");
+                MidiAsserts.AreEqual(expectedEvent, actualEvent, true, $"Event {i} is invalid.");
             }
         }
 

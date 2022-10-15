@@ -20,6 +20,7 @@ namespace Melanchall.DryWetMidi.Core
         private readonly bool _useBuffering;
         private byte[] _buffer;
         private int _bufferPosition;
+        private long _length;
 
         private bool _disposed;
 
@@ -61,6 +62,15 @@ namespace Melanchall.DryWetMidi.Core
 
         #endregion
 
+        #region Properties
+
+        public long Length
+        {
+            get { return _length; }
+        }
+
+        #endregion
+
         #region Methods
 
         /// <summary>
@@ -82,6 +92,8 @@ namespace Melanchall.DryWetMidi.Core
             }
             else
                 _stream.WriteByte(value);
+
+            _length++;
         }
 
         /// <summary>
@@ -237,6 +249,8 @@ namespace Melanchall.DryWetMidi.Core
                 WriteBytesWithBuffering(bytes, offset, length);
             else
                 _stream.Write(bytes, offset, length);
+
+            _length += length;
         }
 
         private void FlushBuffer()

@@ -262,8 +262,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                             Assert.Fail("Event either not sent ot not received.");
                     }
 
-                    MidiAsserts.AreEventsEqual(midiEvent, eventSent, false, "Sent event is invalid.");
-                    MidiAsserts.AreEventsEqual(eventSent, eventReceived, false, "Received event is invalid.");
+                    MidiAsserts.AreEqual(midiEvent, eventSent, false, "Sent event is invalid.");
+                    MidiAsserts.AreEqual(eventSent, eventReceived, false, "Received event is invalid.");
                 }
             }
         }

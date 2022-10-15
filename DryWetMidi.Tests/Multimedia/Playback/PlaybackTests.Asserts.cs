@@ -712,8 +712,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 var expectedEvent = expectedEvents[i];
                 var expectedTime = (currentTime += expectedEvent.Delay);
 
-                MidiAsserts.AreEventsEqual(sentEvent.Event, expectedEvent.Event, false, $"Sent event [{sentEvent.Event}] doesn't match expected one [{expectedEvent.Event}].");
-                MidiAsserts.AreEventsEqual(sentEvent.Event, receivedEvent.Event, false, $"Received event [{receivedEvent.Event}] doesn't match sent one [{sentEvent.Event}].");
+                MidiAsserts.AreEqual(sentEvent.Event, expectedEvent.Event, false, $"Sent event [{sentEvent.Event}] doesn't match expected one [{expectedEvent.Event}].");
+                MidiAsserts.AreEqual(sentEvent.Event, receivedEvent.Event, false, $"Received event [{receivedEvent.Event}] doesn't match sent one [{sentEvent.Event}].");
 
                 var offsetFromExpectedTime = (sentEvent.Time - expectedTime).Duration();
                 Assert.LessOrEqual(
@@ -734,7 +734,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 var receivedEvent = receivedEvents[i];
                 var expectedTime = expectedTimes[i];
 
-                MidiAsserts.AreEventsEqual(sentEvent.Event, receivedEvent.Event, false, $"Received event [{receivedEvent.Event}] doesn't match sent one [{sentEvent.Event}].");
+                MidiAsserts.AreEqual(sentEvent.Event, receivedEvent.Event, false, $"Received event [{receivedEvent.Event}] doesn't match sent one [{sentEvent.Event}].");
 
                 var offsetFromExpectedTime = (sentEvent.Time - expectedTime).Duration();
                 Assert.LessOrEqual(
@@ -761,7 +761,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 var receivedEvent = receivedEvents[i];
                 var expectedReceivedEvent = expectedReceivedEvents[i];
 
-                MidiAsserts.AreEventsEqual(expectedReceivedEvent.Event, receivedEvent.Event, false, $"Received event [{receivedEvent.Event}] doesn't match expected one [{expectedReceivedEvent.Event}].");
+                MidiAsserts.AreEqual(expectedReceivedEvent.Event, receivedEvent.Event, false, $"Received event [{receivedEvent.Event}] doesn't match expected one [{expectedReceivedEvent.Event}].");
 
                 var expectedTime = expectedReceivedEvent.Time;
                 var offsetFromExpectedTime = (receivedEvent.Time - expectedTime).Duration();

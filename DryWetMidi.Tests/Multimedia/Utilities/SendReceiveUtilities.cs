@@ -79,8 +79,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 var sentEvent = sentEvents[i];
                 var receivedEvent = receivedEvents[i];
 
-                MidiAsserts.AreEventsEqual(sentEvent.Event, eventToSend.Event, false, $"Sent event ({sentEvent.Event}) doesn't match the one that should be sent ({eventToSend.Event}).");
-                MidiAsserts.AreEventsEqual(sentEvent.Event, receivedEvent.Event, false, $"Received event ({receivedEvent.Event}) doesn't match the sent one ({sentEvent.Event}).");
+                MidiAsserts.AreEqual(sentEvent.Event, eventToSend.Event, false, $"Sent event ({sentEvent.Event}) doesn't match the one that should be sent ({eventToSend.Event}).");
+                MidiAsserts.AreEqual(sentEvent.Event, receivedEvent.Event, false, $"Received event ({receivedEvent.Event}) doesn't match the sent one ({sentEvent.Event}).");
 
                 var delay = (receivedEvent.Time - sentEvent.Time).Duration();
                 Assert.LessOrEqual(
@@ -100,7 +100,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 var receivedEvent = receivedEvents[i];
                 var expectedReceivedEvent = expectedReceivedEvents[i];
 
-                MidiAsserts.AreEventsEqual(
+                MidiAsserts.AreEqual(
                     expectedReceivedEvent.Event,
                     receivedEvent.Event,
                     false,

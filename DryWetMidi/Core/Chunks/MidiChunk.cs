@@ -203,11 +203,8 @@ namespace Melanchall.DryWetMidi.Core
         /// </exception>
         internal void Write(MidiWriter writer, WritingSettings settings)
         {
-            writer.WriteString(ChunkId);
-
             var size = GetContentSize(settings);
-            writer.WriteDword(size);
-
+            WriteHeader(ChunkId, size, writer, settings);
             WriteContent(writer, settings);
         }
 
@@ -216,6 +213,12 @@ namespace Melanchall.DryWetMidi.Core
             var size = reader.ReadDword();
             readerPosition = reader.Position;
             return size;
+        }
+
+        internal static void WriteHeader(string chunkId, uint size, MidiWriter writer, WritingSettings settings)
+        {
+            writer.WriteString(chunkId);
+            writer.WriteDword(size);
         }
 
         /// <summary>

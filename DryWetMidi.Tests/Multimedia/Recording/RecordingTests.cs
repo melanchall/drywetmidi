@@ -177,7 +177,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 var receivedEvent = receivedEvents[i];
                 var expectedTime = expectedTimes[i];
 
-                MidiAsserts.AreEventsEqual(sentEvent.Event, receivedEvent.Event, false, $"Received event [{receivedEvent.Event}] doesn't match sent one [{sentEvent.Event}].");
+                MidiAsserts.AreEqual(sentEvent.Event, receivedEvent.Event, false, $"Received event [{receivedEvent.Event}] doesn't match sent one [{sentEvent.Event}].");
 
                 var offsetFromExpectedTime = (sentEvent.Time - expectedTime).Duration();
                 Assert.LessOrEqual(

@@ -120,7 +120,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
                         keySignatureEvents.Length,
                         "Invalid count of Key Signature events in new file.");
 
-                    MidiAsserts.AreEventsEqual(keySignatureEvents[0], nonDefaultKeySignatureEvent, false, "Invalid Key Signature event.");
+                    MidiAsserts.AreEqual(keySignatureEvents[0], nonDefaultKeySignatureEvent, false, "Invalid Key Signature event.");
                 });
         }
 
@@ -155,7 +155,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
                         setTempoEvents.Length,
                         "Invalid count of Set Tempo events in new file.");
 
-                    MidiAsserts.AreEventsEqual(setTempoEvents[0], nonDefaultSetTempoEvent, false, "Invalid Set Tempo event.");
+                    MidiAsserts.AreEqual(setTempoEvents[0], nonDefaultSetTempoEvent, false, "Invalid Set Tempo event.");
                 });
         }
 
@@ -200,7 +200,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
                         keySignatureEvents.Length,
                         "Invalid count of Key Signature events in new file.");
 
-                    MidiAsserts.AreEventsEqual(keySignatureEvents[0], nonDefaultKeySignatureEvent, false, "Invalid Key Signature event.");
+                    MidiAsserts.AreEqual(keySignatureEvents[0], nonDefaultKeySignatureEvent, false, "Invalid Key Signature event.");
 
                     //
 
@@ -215,7 +215,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
                         setTempoEvents.Length,
                         "Invalid count of Set Tempo events in new file.");
 
-                    MidiAsserts.AreEventsEqual(setTempoEvents[0], nonDefaultSetTempoEvent, false, "Invalid Set Tempo event.");
+                    MidiAsserts.AreEqual(setTempoEvents[0], nonDefaultSetTempoEvent, false, "Invalid Set Tempo event.");
                 });
         }
 
@@ -250,7 +250,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
                         timeSignatureEvents.Length,
                         "Invalid count of Time Signature events in new file.");
 
-                    MidiAsserts.AreEventsEqual(timeSignatureEvents[0], nonDefaultTimeSignatureEvent, false, "Invalid Time Signature event.");
+                    MidiAsserts.AreEqual(timeSignatureEvents[0], nonDefaultTimeSignatureEvent, false, "Invalid Time Signature event.");
                 });
         }
 
@@ -313,6 +313,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 (fileInfo1, fileInfo2) =>
                 {
                     var originalMidiFile = MidiFile.Read(fileInfo1.FullName);
+                    originalMidiFile.TimeDivision = null;
 
                     Assert.Throws<NoHeaderChunkException>(() => MidiFile.Read(fileInfo2.FullName));
                     var newMidiFile = MidiFile.Read(fileInfo2.FullName, new ReadingSettings

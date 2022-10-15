@@ -166,18 +166,6 @@ namespace Melanchall.DryWetMidi.Tests.Utilities
             Assert.IsTrue(chunksEnumerated1 && chunksEnumerated2, $"{message} Chunks collections have different length.");
         }
 
-        public static void AreEventsEqual(MidiEvent midiEvent1, MidiEvent midiEvent2, bool compareDeltaTimes, string message = null)
-        {
-            string eventsComparingMessage;
-            var areEqual = MidiEvent.Equals(
-                midiEvent1,
-                midiEvent2,
-                new MidiEventEqualityCheckSettings { CompareDeltaTimes = compareDeltaTimes },
-                out eventsComparingMessage);
-
-            Assert.IsTrue(areEqual, $"{message} {eventsComparingMessage}");
-        }
-
         public static void AreEqual(MidiFile midiFile1, MidiFile midiFile2, bool compareOriginalFormat, string message = null)
         {
             string filesComparingMessage;

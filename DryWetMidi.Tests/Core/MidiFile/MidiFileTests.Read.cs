@@ -342,7 +342,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 {
                     var controlChangeEvent = midiFile.GetEvents().SingleOrDefault() as ControlChangeEvent;
                     Assert.IsNotNull(controlChangeEvent, "There is no Control Change event in the file.");
-                    MidiAsserts.AreEventsEqual(new ControlChangeEvent { DeltaTime = (((statusByte << 4) + channel) & ((1 << 7) - 1)) << 7 }, controlChangeEvent, true, "Event is invalid.");
+                    MidiAsserts.AreEqual(new ControlChangeEvent { DeltaTime = (((statusByte << 4) + channel) & ((1 << 7) - 1)) << 7 }, controlChangeEvent, true, "Event is invalid.");
                 });
         }
 
@@ -365,7 +365,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 {
                     var controlChangeEvent = midiFile.GetEvents().SingleOrDefault() as ControlChangeEvent;
                     Assert.IsNotNull(controlChangeEvent, "There is no Control Change event in the file.");
-                    MidiAsserts.AreEventsEqual(new ControlChangeEvent(), controlChangeEvent, true, "Event is invalid.");
+                    MidiAsserts.AreEqual(new ControlChangeEvent(), controlChangeEvent, true, "Event is invalid.");
                 });
         }
 
@@ -388,7 +388,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 {
                     var controlChangeEvent = midiFile.GetEvents().SingleOrDefault() as ControlChangeEvent;
                     Assert.IsNotNull(controlChangeEvent, "There is no Control Change event in the file.");
-                    MidiAsserts.AreEventsEqual(new ControlChangeEvent(), controlChangeEvent, true, "Event is invalid.");
+                    MidiAsserts.AreEqual(new ControlChangeEvent(), controlChangeEvent, true, "Event is invalid.");
                 });
         }
 
@@ -454,7 +454,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 {
                     var controlChangeEvent = midiFile.GetEvents().SingleOrDefault() as ControlChangeEvent;
                     Assert.IsNotNull(controlChangeEvent, "There is no Control Change event in the file.");
-                    MidiAsserts.AreEventsEqual(new ControlChangeEvent { DeltaTime = (((statusByte << 4) + channel) & ((1 << 7) - 1)) << 7 }, controlChangeEvent, true, "Event is invalid.");
+                    MidiAsserts.AreEqual(new ControlChangeEvent { DeltaTime = (((statusByte << 4) + channel) & ((1 << 7) - 1)) << 7 }, controlChangeEvent, true, "Event is invalid.");
                 });
         }
 
@@ -967,8 +967,8 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 {
                     var midiEvents = midiFile.GetEvents().ToArray();
                     Assert.AreEqual(2, midiEvents.Length, "Events count is invalid.");
-                    MidiAsserts.AreEventsEqual(new ProgramChangeEvent(), midiEvents[0], true, "First MIDI event is invalid.");
-                    MidiAsserts.AreEventsEqual(new NoteOnEvent(), midiEvents[1], true, "Second MIDI event is invalid.");
+                    MidiAsserts.AreEqual(new ProgramChangeEvent(), midiEvents[0], true, "First MIDI event is invalid.");
+                    MidiAsserts.AreEqual(new NoteOnEvent(), midiEvents[1], true, "Second MIDI event is invalid.");
                 });
         }
 
@@ -1005,7 +1005,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
                     Assert.Throws<InvalidOperationException>(() => { var format = midiFile.OriginalFormat; }, "Exception not thrown on get original format.");
                     
                     var programChangeEvent = midiFile.GetEvents().SingleOrDefault() as ProgramChangeEvent;
-                    MidiAsserts.AreEventsEqual(new ProgramChangeEvent(), programChangeEvent, true, "Program Change event is invalid.");
+                    MidiAsserts.AreEqual(new ProgramChangeEvent(), programChangeEvent, true, "Program Change event is invalid.");
                 },
                 bytes => bytes.Skip(14).ToArray());
         }
@@ -1358,31 +1358,31 @@ namespace Melanchall.DryWetMidi.Tests.Core
         public void Read_NotEnoughBytes_Ignore_HeaderChunkId([Values(1, 2, 3)] int takeBytesCount) => Read_NotEnoughBytes_Ignore(
             new MidiFile(new TrackChunk(new TextEvent("A"))) { TimeDivision = new TicksPerQuarterNoteTimeDivision(80) },
             bytes => bytes.Take(takeBytesCount).ToArray(),
-            new MidiFile());
+            new MidiFile { TimeDivision = null });
 
         [Test]
         public void Read_NotEnoughBytes_Ignore_HeaderChunkSize([Values(1, 2, 3)] int takeBytesCount) => Read_NotEnoughBytes_Ignore(
             new MidiFile(new TrackChunk(new TextEvent("A"))) { TimeDivision = new TicksPerQuarterNoteTimeDivision(80) },
             bytes => bytes.Take(4 /* chunk ID */ + takeBytesCount).ToArray(),
-            new MidiFile());
+            new MidiFile { TimeDivision = null });
 
         [Test]
         public void Read_NotEnoughBytes_Ignore_HeaderChunkFileFormat() => Read_NotEnoughBytes_Ignore(
             new MidiFile(new TrackChunk(new TextEvent("A"))) { TimeDivision = new TicksPerQuarterNoteTimeDivision(80) },
             bytes => bytes.Take(4 /* chunk ID */ + 4 /* chunk size */ + 1).ToArray(),
-            new MidiFile());
+            new MidiFile { TimeDivision = null });
 
         [Test]
         public void Read_NotEnoughBytes_Ignore_HeaderChunkTracksNumber() => Read_NotEnoughBytes_Ignore(
             new MidiFile(new TrackChunk(new TextEvent("A"))) { TimeDivision = new TicksPerQuarterNoteTimeDivision(80) },
             bytes => bytes.Take(4 /* chunk ID */ + 4 /* chunk size */ + 2 /* file format */ + 1).ToArray(),
-            new MidiFile());
+            new MidiFile { TimeDivision = null });
 
         [Test]
         public void Read_NotEnoughBytes_Ignore_HeaderChunkTimeDivision() => Read_NotEnoughBytes_Ignore(
             new MidiFile(new TrackChunk(new TextEvent("A"))) { TimeDivision = new TicksPerQuarterNoteTimeDivision(80) },
-            bytes => bytes.Take(4 /* chunk ID */ + 4 /* chunk size */ + 2 /* file format */ + 2 /* tracks numer */ + 1).ToArray(),
-            new MidiFile());
+            bytes => bytes.Take(4 /* chunk ID */ + 4 /* chunk size */ + 2 /* file format */ + 2 /* tracks number */ + 1).ToArray(),
+            new MidiFile { TimeDivision = null });
 
         [Test]
         public void Read_NotEnoughBytes_Ignore_TrackChunkId([Values(1, 2, 3)] int takeBytesCount) => Read_NotEnoughBytes_Ignore(
@@ -1830,7 +1830,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
             Func<byte[], byte[]> transformBytes = null)
             where TException : Exception
         {
-            var filePath = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
+            var filePath = FileOperations.GetTempFilePath();
 
             try
             {
@@ -1880,7 +1880,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
             Action<MidiFile> checkFile,
             Func<byte[], byte[]> transformBytes = null)
         {
-            var filePath = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
+            var filePath = FileOperations.GetTempFilePath();
 
             try
             {

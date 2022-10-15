@@ -285,6 +285,19 @@ namespace Melanchall.DryWetMidi.Core
             }
         }
 
+        public static MidiTokensWriter WriteLazy(
+            string filePath,
+            bool overwriteFile = false,
+            MidiFileFormat format = MidiFileFormat.MultiTrack,
+            WritingSettings settings = null,
+            TimeDivision timeDivision = null)
+        {
+            ThrowIfArgument.IsInvalidEnumValue(nameof(format), format);
+
+            var fileStream = FileUtilities.OpenFileForWrite(filePath, overwriteFile);
+            return WriteLazy(fileStream, true, settings, format, timeDivision);
+        }
+
         /// <summary>
         /// Reads a MIDI file from the stream.
         /// </summary>
@@ -521,6 +534,16 @@ namespace Melanchall.DryWetMidi.Core
             }
         }
 
+        public static MidiTokensWriter WriteLazy(
+            Stream stream,
+            WritingSettings settings = null,
+            MidiFileFormat format = MidiFileFormat.MultiTrack,
+            TimeDivision timeDivision = null)
+        {
+            ThrowIfArgument.IsNull(nameof(stream), stream);
+            return WriteLazy(stream, false, settings, format, timeDivision);
+        }
+
         /// <summary>
         /// Clones the current <see cref="MidiFile"/> creating a copy of it.
         /// </summary>
@@ -593,10 +616,26 @@ namespace Melanchall.DryWetMidi.Core
             return MidiFileEquality.Equals(midiFile1, midiFile2, settings ?? new MidiFileEqualityCheckSettings(), out message);
         }
 
-        private static MidiTokensReader ReadLazy(Stream stream, bool disposeStream, ReadingSettings settings = null)
+        private static MidiTokensReader ReadLazy(Stream stream, bool disposeStream, ReadingSettings settings)
         {
             ThrowIfArgument.IsNull(nameof(stream), stream);
             return new MidiTokensReader(stream, settings, disposeStream);
+        }
+
+        private static MidiTokensWriter WriteLazy(
+            Stream stream,
+            bool disposeStream,
+            WritingSettings settings,
+            MidiFileFormat format,
+            TimeDivision timeDivision)
+        {
+            ThrowIfArgument.IsNull(nameof(stream), stream);
+            return new MidiTokensWriter(
+                stream,
+                settings,
+                disposeStream,
+                format,
+                timeDivision ?? new TicksPerQuarterNoteTimeDivision());
         }
 
         private static MidiChunk ReadChunk(MidiReader reader, ReadingSettings settings, int actualTrackChunksCount, int? expectedTrackChunksCount)

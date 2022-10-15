@@ -224,7 +224,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
             ReadingSettings readingSettings,
             MidiToken[] expectedTokens)
         {
-            var filePath = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
+            var filePath = FileOperations.GetTempFilePath();
 
             try
             {

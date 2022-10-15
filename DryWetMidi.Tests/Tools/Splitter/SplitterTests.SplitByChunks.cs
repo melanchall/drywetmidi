@@ -96,6 +96,9 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             {
                 new MidiFile(
                     new TrackChunk(new NoteOnEvent(), new NoteOffEvent()))
+                {
+                    TimeDivision = new SmpteTimeDivision(DryWetMidi.Common.SmpteFormat.ThirtyDrop, 100)
+                }
             },
             timeDivision: new SmpteTimeDivision(DryWetMidi.Common.SmpteFormat.ThirtyDrop, 100));
 
@@ -255,6 +258,9 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             {
                 new MidiFile(
                     new TrackChunk(new NoteOnEvent(), new NoteOffEvent()))
+                {
+                    TimeDivision = new SmpteTimeDivision(DryWetMidi.Common.SmpteFormat.ThirtyDrop, 100)
+                }
             },
             settings: new SplitFileByChunksSettings { Filter = c => true },
             timeDivision: new SmpteTimeDivision(DryWetMidi.Common.SmpteFormat.ThirtyDrop, 100));

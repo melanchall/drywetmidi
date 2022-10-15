@@ -544,7 +544,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
 
         private static void CompareEvents(MidiEvent expectedMidiEvent, MidiEvent actualMidiEvent)
         {
-            MidiAsserts.AreEventsEqual(
+            MidiAsserts.AreEqual(
                 expectedMidiEvent,
                 actualMidiEvent,
                 true,

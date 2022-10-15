@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using Melanchall.DryWetMidi.Core;
 
 namespace Melanchall.DryWetMidi.Tests.Common
@@ -10,7 +9,7 @@ namespace Melanchall.DryWetMidi.Tests.Common
 
         public static MidiFile Read(MidiFile midiFile, WritingSettings writingSettings, ReadingSettings readingSettings, MidiFileFormat? format = null)
         {
-            var filePath = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
+            var filePath = FileOperations.GetTempFilePath();
 
             try
             {
@@ -35,7 +34,7 @@ namespace Melanchall.DryWetMidi.Tests.Common
 
         public static void Write(MidiFile midiFile, Action<string> action, WritingSettings settings = null, MidiFileFormat? format = null)
         {
-            var filePath = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
+            var filePath = FileOperations.GetTempFilePath();
 
             try
             {

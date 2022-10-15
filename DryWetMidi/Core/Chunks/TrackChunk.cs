@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime;
 
 namespace Melanchall.DryWetMidi.Core
 {
@@ -231,6 +232,83 @@ namespace Melanchall.DryWetMidi.Core
             return midiEvent;
         }
 
+        internal static void ProcessEvent(
+            MidiEvent midiEvent,
+            WritingSettings settings,
+            Action<IEventWriter, MidiEvent, bool> eventHandler,
+            ref bool lastEventIsEndOfTrack,
+            ref long additionalDeltaTime,
+            ref byte? runningStatus,
+            ref bool skipSetTempo,
+            ref bool skipKeySignature,
+            ref bool skipTimeSignature)
+        {
+            if (midiEvent.EventType == MidiEventType.EndOfTrack)
+            {
+                lastEventIsEndOfTrack = true;
+                additionalDeltaTime += midiEvent.DeltaTime;
+                return;
+            }
+
+            lastEventIsEndOfTrack = false;
+
+            var eventToWrite = midiEvent;
+            if (eventToWrite is SystemCommonEvent || eventToWrite is SystemRealTimeEvent)
+                return;
+
+            if (eventToWrite.EventType == MidiEventType.UnknownMeta && settings.DeleteUnknownMetaEvents)
+                return;
+
+            //
+
+            if (settings.NoteOffAsSilentNoteOn)
+            {
+                var noteOffEvent = eventToWrite as NoteOffEvent;
+                if (noteOffEvent != null)
+                    eventToWrite = new NoteOnEvent
+                    {
+                        DeltaTime = noteOffEvent.DeltaTime,
+                        Channel = noteOffEvent.Channel,
+                        NoteNumber = noteOffEvent.NoteNumber
+                    };
+            }
+
+            //
+
+            if (settings.DeleteDefaultSetTempo && TrySkipDefaultSetTempo(eventToWrite, ref skipSetTempo))
+                return;
+
+            if (settings.DeleteDefaultKeySignature && TrySkipDefaultKeySignature(eventToWrite, ref skipKeySignature))
+                return;
+
+            if (settings.DeleteDefaultTimeSignature && TrySkipDefaultTimeSignature(eventToWrite, ref skipTimeSignature))
+                return;
+
+            //
+
+            IEventWriter eventWriter = EventWriterFactory.GetWriter(eventToWrite);
+
+            var writeStatusByte = true;
+            if (eventToWrite is ChannelEvent)
+            {
+                var statusByte = eventWriter.GetStatusByte(eventToWrite);
+                writeStatusByte = runningStatus != statusByte || !settings.UseRunningStatus;
+                runningStatus = statusByte;
+            }
+            else
+                runningStatus = null;
+
+            //
+
+            if (additionalDeltaTime > 0)
+            {
+                eventToWrite = eventToWrite.Clone();
+                eventToWrite.DeltaTime += additionalDeltaTime;
+            }
+
+            eventHandler(eventWriter, eventToWrite, writeStatusByte);
+        }
+
         private void ProcessEvents(WritingSettings settings, Action<IEventWriter, MidiEvent, bool> eventHandler)
         {
             byte? runningStatus = null;
@@ -238,78 +316,21 @@ namespace Melanchall.DryWetMidi.Core
             var skipSetTempo = true;
             var skipKeySignature = true;
             var skipTimeSignature = true;
-
-            var lastEventType = default(MidiEventType);
             var additionalDeltaTime = 0L;
             var lastEventIsEndOfTrack = false;
 
             foreach (var midiEvent in Events)
             {
-                lastEventType = midiEvent.EventType;
-                if (lastEventType == MidiEventType.EndOfTrack)
-                {
-                    lastEventIsEndOfTrack = true;
-                    additionalDeltaTime += midiEvent.DeltaTime;
-                    continue;
-                }
-
-                lastEventIsEndOfTrack = false;
-
-                var eventToWrite = midiEvent;
-                if (eventToWrite is SystemCommonEvent || eventToWrite is SystemRealTimeEvent)
-                    continue;
-
-                if (eventToWrite.EventType == MidiEventType.UnknownMeta && settings.DeleteUnknownMetaEvents)
-                    continue;
-
-                //
-
-                if (settings.NoteOffAsSilentNoteOn)
-                {
-                    var noteOffEvent = eventToWrite as NoteOffEvent;
-                    if (noteOffEvent != null)
-                        eventToWrite = new NoteOnEvent
-                        {
-                            DeltaTime = noteOffEvent.DeltaTime,
-                            Channel = noteOffEvent.Channel,
-                            NoteNumber = noteOffEvent.NoteNumber
-                        };
-                }
-
-                //
-
-                if (settings.DeleteDefaultSetTempo && TrySkipDefaultSetTempo(eventToWrite, ref skipSetTempo))
-                    continue;
-
-                if (settings.DeleteDefaultKeySignature && TrySkipDefaultKeySignature(eventToWrite, ref skipKeySignature))
-                    continue;
-
-                if (settings.DeleteDefaultTimeSignature && TrySkipDefaultTimeSignature(eventToWrite, ref skipTimeSignature))
-                    continue;
-
-                //
-
-                IEventWriter eventWriter = EventWriterFactory.GetWriter(eventToWrite);
-
-                var writeStatusByte = true;
-                if (eventToWrite is ChannelEvent)
-                {
-                    var statusByte = eventWriter.GetStatusByte(eventToWrite);
-                    writeStatusByte = runningStatus != statusByte || !settings.UseRunningStatus;
-                    runningStatus = statusByte;
-                }
-                else
-                    runningStatus = null;
-
-                //
-
-                if (additionalDeltaTime > 0)
-                {
-                    eventToWrite = eventToWrite.Clone();
-                    eventToWrite.DeltaTime += additionalDeltaTime;
-                }
-
-                eventHandler(eventWriter, eventToWrite, writeStatusByte);
+                ProcessEvent(
+                    midiEvent,
+                    settings,
+                    eventHandler,
+                    ref lastEventIsEndOfTrack,
+                    ref additionalDeltaTime,
+                    ref runningStatus,
+                    ref skipSetTempo,
+                    ref skipKeySignature,
+                    ref skipTimeSignature);
             }
 
             var endOfTrackEvent = new EndOfTrackEvent
