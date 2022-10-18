@@ -30,6 +30,8 @@ Please see [Getting started](#getting-started) section below for quick jump into
 
 Here the list of noticeable projects that use DryWetMIDI:
 
+* [CoyoteMIDI](https://coyotemidi.com)  
+  CoyoteMIDI extends the functionality of your MIDI devices to include keyboard and mouse input, including complex key combinations and multi-step macros.
 * [Clone Hero](https://clonehero.net)  
   Free rhythm game, which can be played with any 5 or 6 button guitar controller, game controllers, or just your standard computer keyboard. The game is a clone of Guitar Hero.
 * [Electrophonics](https://kaiclavier.itch.io/electrophonics)  
