@@ -53,6 +53,8 @@ namespace Melanchall.DryWetMidi.Core
             _stream = stream;
             if (!_stream.CanWrite)
                 throw new ArgumentException("Stream doesn't support writing.", nameof(stream));
+            if (!_stream.CanSeek)
+                throw new ArgumentException("Stream doesn't support seeking.", nameof(stream));
 
             _settings = settings;
             if (_settings == null)
@@ -69,10 +71,21 @@ namespace Melanchall.DryWetMidi.Core
 
         #endregion
 
+        #region Properties
+
+        internal long CurrentTime { get; private set; }
+
+        internal Action BeforeEndTrackChunk { get; set; }
+
+        #endregion
+
         #region Methods
 
         public void StartTrackChunk()
         {
+            if (_state == State.Event)
+                EndTrackChunk();
+
             _trackChunkPosition = _writer.Length;
             MidiChunk.WriteHeader(TrackChunk.Id, 0, _writer, _settings);
 
@@ -83,11 +96,15 @@ namespace Melanchall.DryWetMidi.Core
             _additionalDeltaTime = 0L;
             _lastEventIsEndOfTrack = false;
 
+            CurrentTime = 0;
+
             _state = State.Event;
         }
 
         public void EndTrackChunk()
         {
+            BeforeEndTrackChunk?.Invoke();
+
             var endOfTrackEvent = new EndOfTrackEvent
             {
                 DeltaTime = _lastEventIsEndOfTrack ? _additionalDeltaTime : 0
@@ -129,6 +146,8 @@ namespace Melanchall.DryWetMidi.Core
                 ref _skipSetTempo,
                 ref _skipKeySignature,
                 ref _skipTimeSignature);
+
+            CurrentTime += midiEvent.DeltaTime;
         }
 
         public void WriteChunk(MidiChunk chunk)
@@ -191,7 +210,11 @@ namespace Melanchall.DryWetMidi.Core
 
             if (disposing)
             {
+                if (_state == State.Event)
+                    EndTrackChunk();
+
                 _writer.Dispose();
+
                 UpdateChunkSizes();
 
                 if (_disposeStream)
