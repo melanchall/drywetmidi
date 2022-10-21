@@ -232,19 +232,19 @@ namespace Melanchall.DryWetMidi.Tools
                     node.Value.IsCompleted = true;
 
                     var previousNode = node.Previous;
-                    if (previousNode != null)
-                        break;
-
-                    for (var n = node; n != null;)
+                    if (previousNode == null)
                     {
-                        if (!n.Value.IsCompleted)
-                            break;
+                        for (var n = node; n != null;)
+                        {
+                            if (!n.Value.IsCompleted)
+                                break;
 
-                        yield return n.Value.GetObject(settings);
+                            yield return n.Value.GetObject(settings);
 
-                        var next = n.Next;
-                        objectsDescriptors.Remove(n);
-                        n = next;
+                            var next = n.Next;
+                            objectsDescriptors.Remove(n);
+                            n = next;
+                        }
                     }
 
                     CreateObjectsMerger(objectId, lengthedObject, objectsDescriptors, objectsMergersNodes, objectsMergerFactory);

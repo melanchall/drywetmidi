@@ -720,6 +720,38 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 }
             });
 
+        [Test]
+        public void MergeObjects_Notes() => MergeObjects_TrackChunkOrFile(
+            timedObjects: new ITimedObject[]
+            {
+                new Note((SevenBitNumber)63, 96, 0),
+                new Note((SevenBitNumber)51, 96, 0),
+                new Note((SevenBitNumber)63, 96, 96),
+                new Note((SevenBitNumber)51, 96, 96),
+                new Note((SevenBitNumber)65, 96, 192),
+                new Note((SevenBitNumber)58, 96, 192),
+                new Note((SevenBitNumber)65, 96, 288),
+                new Note((SevenBitNumber)58, 96, 288),
+                new Note((SevenBitNumber)51, 96, 384),
+                new Note((SevenBitNumber)66, 96, 384),
+                new Note((SevenBitNumber)51, 96, 480),
+                new Note((SevenBitNumber)66, 96, 480),
+            },
+            objectType: ObjectType.Note,
+            settings: new ObjectsMergingSettings
+            {
+                Tolerance = new MetricTimeSpan(0, 0, 0, 10)
+            },
+            expectedObjects: new ITimedObject[]
+            {
+                new Note((SevenBitNumber)63, 192, 0),
+                new Note((SevenBitNumber)51, 192, 0),
+                new Note((SevenBitNumber)65, 192, 192),
+                new Note((SevenBitNumber)58, 192, 192),
+                new Note((SevenBitNumber)51, 192, 384),
+                new Note((SevenBitNumber)66, 192, 384),
+            });
+
         #endregion
 
         #region Private methods
