@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
 using Melanchall.DryWetMidi.Tests.Utilities;
 using NUnit.Framework;
@@ -39,6 +40,19 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 .ToList();
 
             MidiAsserts.AreEqual(outputObjects, actualObjects, true, 0, "Objects are invalid.");
+        }
+
+        private void EnumerateObjects(
+            IEnumerable<MidiEvent> inputEvents,
+            IEnumerable<ITimedObject> outputObjects,
+            ObjectType objectType,
+            ObjectDetectionSettings settings)
+        {
+            var actualObjects = inputEvents
+                .EnumerateObjects(objectType, settings)
+                .ToArray();
+
+            MidiAsserts.AreEqual(outputObjects, actualObjects, false, 0, "Objects are invalid.");
         }
 
         #endregion

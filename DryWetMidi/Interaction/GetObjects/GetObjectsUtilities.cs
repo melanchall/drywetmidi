@@ -70,6 +70,25 @@ namespace Melanchall.DryWetMidi.Interaction
                 .GetObjectsFromSortedTimedObjects(0, objectType, settings);
         }
 
+        public static IEnumerable<ITimedObject> EnumerateObjects(
+            this IEnumerable<MidiEvent> midiEvents,
+            ObjectType objectType,
+            ObjectDetectionSettings settings = null)
+        {
+            ThrowIfArgument.IsNull(nameof(midiEvents), midiEvents);
+            ThrowIfArgument.DoesntSatisfyCondition(
+                nameof(objectType),
+                objectType,
+                t => !t.HasFlag(ObjectType.Rest),
+                "Rest object type specified.");
+
+            return midiEvents
+                .GetTimedEventsLazy(settings?.TimedEventDetectionSettings
+                    ?? (objectType.HasFlag(ObjectType.Note) ? settings?.NoteDetectionSettings?.TimedEventDetectionSettings : null)
+                    ?? (objectType.HasFlag(ObjectType.Chord) ? settings?.ChordDetectionSettings?.NoteDetectionSettings?.TimedEventDetectionSettings : null))
+                .EnumerateObjectsFromSortedTimedObjects(objectType, settings);
+        }
+
         /// <summary>
         /// Extracts objects of the specified types from a <see cref="EventsCollection"/>.
         /// </summary>
@@ -372,6 +391,78 @@ namespace Melanchall.DryWetMidi.Interaction
 
             result.TrimExcess();
             return result;
+        }
+
+        private static IEnumerable<ITimedObject> EnumerateObjectsFromSortedTimedObjects(
+            this IEnumerable<ITimedObject> processedTimedObjects,
+            ObjectType objectType,
+            ObjectDetectionSettings settings,
+            bool createNotes = true)
+        {
+            var getChords = objectType.HasFlag(ObjectType.Chord);
+            var getNotes = objectType.HasFlag(ObjectType.Note);
+            var getRests = objectType.HasFlag(ObjectType.Rest);
+            var getTimedEvents = objectType.HasFlag(ObjectType.TimedEvent);
+
+            settings = settings ?? new ObjectDetectionSettings();
+            var noteDetectionSettings = settings.NoteDetectionSettings
+                ?? (getChords ? settings.ChordDetectionSettings?.NoteDetectionSettings : null)
+                ?? new NoteDetectionSettings();
+            var chordDetectionSettings = settings.ChordDetectionSettings ?? new ChordDetectionSettings();
+            var restDetectionSettings = settings.RestDetectionSettings ?? new RestDetectionSettings();
+
+            var timedObjects = processedTimedObjects;
+
+            if (createNotes && (getChords || getNotes || getRests))
+            {
+                var notesAndTimedEvents = processedTimedObjects.GetNotesAndTimedEventsLazy(noteDetectionSettings, true);
+
+                timedObjects = getChords
+                    ? notesAndTimedEvents.GetChordsAndNotesAndTimedEventsLazy(chordDetectionSettings, true)
+                    : notesAndTimedEvents;
+            }
+
+            //
+
+            var notesLastEndTimes = new Dictionary<object, long>();
+            var noteDescriptorProvider = NoteDescriptorProviders[restDetectionSettings.RestSeparationPolicy];
+            var setRestChannel = SetRestChannel[restDetectionSettings.RestSeparationPolicy];
+            var setRestNoteNumber = SetRestNoteNumber[restDetectionSettings.RestSeparationPolicy];
+
+            foreach (var timedObject in timedObjects)
+            {
+                var processed = false;
+
+                if (getChords)
+                {
+                    var chord = timedObject as Chord;
+                    if (processed = (chord != null))
+                        yield return chord;
+                }
+
+                if (!processed && getNotes)
+                {
+                    var note = timedObject as Note;
+                    if (processed = (note != null))
+                        yield return note;
+                }
+
+                if (!processed && getTimedEvents)
+                {
+                    var timedEvent = timedObject as TimedEvent;
+                    if (timedEvent != null)
+                        yield return timedEvent;
+                    else
+                    {
+                        var note = timedObject as Note;
+                        if (note != null)
+                        {
+                            yield return note.GetTimedNoteOnEvent();
+                            yield return note.GetTimedNoteOffEvent();
+                        }
+                    }
+                }
+            }
         }
 
         #endregion
