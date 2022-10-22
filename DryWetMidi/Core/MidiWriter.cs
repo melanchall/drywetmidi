@@ -64,6 +64,9 @@ namespace Melanchall.DryWetMidi.Core
 
         #region Properties
 
+        /// <summary>
+        /// Gets the current count of written bytes.
+        /// </summary>
         public long Length
         {
             get { return _length; }

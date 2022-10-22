@@ -250,21 +250,8 @@ namespace Melanchall.DryWetMidi.Tests.Core
             }
         }
 
-        private MidiToken[] ReadAllTokens(MidiTokensReader reader)
-        {
-            var tokens = new List<MidiToken>();
-
-            while (true)
-            {
-                var token = reader.ReadToken();
-                if (token == null)
-                    break;
-
-                tokens.Add(token);
-            }
-
-            return tokens.ToArray();
-        }
+        private MidiToken[] ReadAllTokens(MidiTokensReader reader) =>
+            reader.EnumerateTokens().ToArray();
 
         private bool AreTokensEqual(MidiToken expectedToken, MidiToken actualToken)
         {

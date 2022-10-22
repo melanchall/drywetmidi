@@ -5,6 +5,11 @@ using System.IO;
 
 namespace Melanchall.DryWetMidi.Core
 {
+    /// <summary>
+    /// Provides a way to write data to a MIDI file sequentially token by token keeping
+    /// low memory consumption.
+    /// </summary>
+    /// <seealso cref="MidiTokensReader"/>
     public sealed class MidiTokensWriter : IDisposable
     {
         #region Enums
@@ -36,6 +41,9 @@ namespace Melanchall.DryWetMidi.Core
         private long _trackChunkPosition;
 
         private readonly Dictionary<long, uint> _positionsToChunkSizes = new Dictionary<long, uint>();
+
+        private long _tracksNumberPosition;
+        private ushort _tracksNumber;
 
         private bool _disposed;
 
@@ -81,6 +89,15 @@ namespace Melanchall.DryWetMidi.Core
 
         #region Methods
 
+        /// <summary>
+        /// Starts a new track chunk writing the chunk's header.
+        /// </summary>
+        /// <remarks>
+        /// If the current track chunk is not ended properly via <see cref="EndTrackChunk"/>,
+        /// the <see cref="EndTrackChunk"/> method will be called automatically on <see cref="StartTrackChunk"/>
+        /// called.
+        /// </remarks>
+        /// <exception cref="IOException">An I/O error occurred while writing the file.</exception>
         public void StartTrackChunk()
         {
             if (_state == State.Event)
@@ -101,6 +118,10 @@ namespace Melanchall.DryWetMidi.Core
             _state = State.Event;
         }
 
+        /// <summary>
+        /// Ends the current track chunk.
+        /// </summary>
+        /// <exception cref="IOException">An I/O error occurred while writing the file.</exception>
         public void EndTrackChunk()
         {
             BeforeEndTrackChunk?.Invoke();
@@ -119,9 +140,30 @@ namespace Melanchall.DryWetMidi.Core
                 _trackChunkPosition + MidiChunk.IdLength,
                 (uint)(_writer.Length - (_trackChunkPosition + MidiChunk.IdLength + 4)));
 
+            _tracksNumber++;
+
             _state = State.Chunk;
         }
 
+        /// <summary>
+        /// Writes the specified MIDI event.
+        /// </summary>
+        /// <param name="midiEvent"></param>
+        /// <exception cref="ArgumentNullException"><paramref name="midiEvent"/> is <c>null</c>.</exception>
+        /// <exception cref="IOException">An I/O error occurred while writing the file.</exception>
+        /// <exception cref="InvalidOperationException">
+        /// One of the following errors occured:
+        /// <list type="bullet">
+        /// <item>
+        /// <description>A track chunk is not started (see <see cref="StartTrackChunk"/>).</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="midiEvent"/> is of <see cref="EndOfTrackEvent"/> type but
+        /// previously written event is of the same type, writing of two End of Track events
+        /// is prohibited.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public void WriteEvent(MidiEvent midiEvent)
         {
             ThrowIfArgument.IsNull(nameof(midiEvent), midiEvent);
@@ -150,6 +192,13 @@ namespace Melanchall.DryWetMidi.Core
             CurrentTime += midiEvent.DeltaTime;
         }
 
+        /// <summary>
+        /// Writes the specified chunk.
+        /// </summary>
+        /// <param name="chunk">A chunk to write.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="chunk"/> is <c>null</c>.</exception>
+        /// <exception cref="IOException">An I/O error occurred while writing the file.</exception>
+        /// <exception cref="InvalidOperationException">Another chunk is being written, end it first.</exception>
         public void WriteChunk(MidiChunk chunk)
         {
             ThrowIfArgument.IsNull(nameof(chunk), chunk);
@@ -166,10 +215,11 @@ namespace Melanchall.DryWetMidi.Core
             {
                 FileFormat = (ushort)format,
                 TimeDivision = timeDivision,
-                // TODO
-                //TracksNumber = (ushort)trackChunksCount
+                TracksNumber = 0
             };
             headerChunk.Write(_writer, _settings);
+
+            _tracksNumberPosition = _writer.Length - 4;
 
             _state = State.Chunk;
         }
@@ -193,10 +243,26 @@ namespace Melanchall.DryWetMidi.Core
             _stream.Flush();
         }
 
+        private void UpdateTracksNumber()
+        {
+            var buffer = new byte[2];
+
+            buffer[0] = (byte)((_tracksNumber >> 8) & 0xFF);
+            buffer[1] = (byte)(_tracksNumber & 0xFF);
+
+            _stream.Position = _tracksNumberPosition;
+            _stream.Write(buffer, 0, 2);
+            _stream.Flush();
+        }
+
         #endregion
 
         #region IDisposable
 
+        /// <summary>
+        /// Releases all resources used by the current <see cref="MidiTokensWriter"/>
+        /// and also flushes all remaining data to the underlying stream.
+        /// </summary>
         public void Dispose()
         {
             Dispose(true);
@@ -215,6 +281,7 @@ namespace Melanchall.DryWetMidi.Core
 
                 _writer.Dispose();
 
+                UpdateTracksNumber();
                 UpdateChunkSizes();
 
                 if (_disposeStream)

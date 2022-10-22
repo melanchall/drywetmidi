@@ -123,6 +123,10 @@ namespace Melanchall.DryWetMidi.Core
         /// </summary>
         public byte[] Buffer { get; set; }
 
+        /// <summary>
+        /// Gets or sets the maximum length of a bytes packet that will be used by <see cref="MidiTokensReader"/>.
+        /// </summary>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="value"/> is zero or negative.</exception>
         public int BytesPacketMaxLength
         {
             get { return _bytesPacketMaxLength; }

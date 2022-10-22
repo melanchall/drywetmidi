@@ -96,7 +96,7 @@ namespace Melanchall.DryWetMidi.Core
         #region Properties
 
         /// <summary>
-        /// Gets or sets a time division of a MIDI file.
+        /// Gets or sets the time division of a MIDI file.
         /// </summary>
         /// <remarks>
         /// <para>Time division specifies the meaning of the delta-times of MIDI events within <see cref="TrackChunk"/>.
@@ -231,6 +231,39 @@ namespace Melanchall.DryWetMidi.Core
             }
         }
 
+        /// <summary>
+        /// Creates an instance of the <see cref="MidiTokensReader"/> allowing to read a MIDI file sequentially
+        /// token by token keeping low memory consumption.
+        /// </summary>
+        /// <param name="filePath">Path to the file to read.</param>
+        /// <param name="settings">Settings according to which the file must be read. Specify <c>null</c> to use
+        /// default settings.</param>
+        /// <returns>An instance of the <see cref="MidiTokensReader"/> wrapped around the specified file.</returns>
+        /// <exception cref="ArgumentException"><paramref name="filePath"/> is a zero-length string,
+        /// contains only white space, or contains one or more invalid characters as defined by
+        /// <see cref="Path.InvalidPathChars"/>.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="filePath"/> is <c>null</c>.</exception>
+        /// <exception cref="PathTooLongException">The specified path, file name, or both exceed the system-defined
+        /// maximum length. For example, on Windows-based platforms, paths must be less than 248 characters,
+        /// and file names must be less than 260 characters.</exception>
+        /// <exception cref="DirectoryNotFoundException">The specified path is invalid (for example,
+        /// it is on an unmapped drive).</exception>
+        /// <exception cref="IOException">An I/O error occurred while reading the file.</exception>
+        /// <exception cref="NotSupportedException"><paramref name="filePath"/> is in an invalid format.</exception>
+        /// <exception cref="UnauthorizedAccessException">
+        /// One of the following errors occured:
+        /// <list type="bullet">
+        /// <item>
+        /// <description>This operation is not supported on the current platform.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="filePath"/> specified a directory.</description>
+        /// </item>
+        /// <item>
+        /// <description>The caller does not have the required permission.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static MidiTokensReader ReadLazy(string filePath, ReadingSettings settings = null)
         {
             var fileStream = FileUtilities.OpenFileForRead(filePath);
@@ -243,7 +276,7 @@ namespace Melanchall.DryWetMidi.Core
         /// <param name="filePath">Full path of the file to write to.</param>
         /// <param name="overwriteFile">If <c>true</c> and file specified by <paramref name="filePath"/> already
         /// exists it will be overwritten; if <c>false</c> and the file exists exception will be thrown.</param>
-        /// <param name="format">MIDI file format to write in.</param>
+        /// <param name="format">Format of a MIDI file.</param>
         /// <param name="settings">Settings according to which the file must be written. Specify <c>null</c> to use
         /// default settings.</param>
         /// <exception cref="ArgumentException"><paramref name="filePath"/> is a zero-length string,
@@ -285,6 +318,49 @@ namespace Melanchall.DryWetMidi.Core
             }
         }
 
+        /// <summary>
+        /// Creates an instance of the <see cref="MidiTokensWriter"/> allowing to write data to a
+        /// MIDI file sequentially token by token keeping low memory consumption.
+        /// </summary>
+        /// <param name="filePath">Full path of the file to write to.</param>
+        /// <param name="overwriteFile">If <c>true</c> and file specified by <paramref name="filePath"/> already
+        /// exists it will be overwritten; if <c>false</c> and the file exists exception will be thrown.</param>
+        /// <param name="format">Format of a MIDI file (default value is <see cref="MidiFileFormat.MultiTrack"/>).</param>
+        /// <param name="settings">Settings according to which the file must be written. Specify <c>null</c>
+        /// (default value) to use default settings.</param>
+        /// <param name="timeDivision">The time division to write to a file. Specify <c>null</c>
+        /// (default value) to use the default one - <see cref="TicksPerQuarterNoteTimeDivision.DefaultTicksPerQuarterNote"/>
+        /// ticks per quarter note.</param>
+        /// <returns>An instance of the <see cref="MidiTokensWriter"/> wrapped around the specified file.</returns>
+        /// <exception cref="ArgumentException"><paramref name="filePath"/> is a zero-length string,
+        /// contains only white space, or contains one or more invalid characters as defined by
+        /// <see cref="Path.InvalidPathChars"/>.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="filePath"/> is <c>null</c>.</exception>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="format"/> specified an invalid value.</exception>
+        /// <exception cref="PathTooLongException">The specified path, file name, or both exceed the system-defined
+        /// maximum length. For example, on Windows-based platforms, paths must be less than 248 characters,
+        /// and file names must be less than 260 characters.</exception>
+        /// <exception cref="DirectoryNotFoundException">The specified path is invalid (for example,
+        /// it is on an unmapped drive).</exception>
+        /// <exception cref="IOException">An I/O error occurred while writing the file.</exception>
+        /// <exception cref="NotSupportedException"><paramref name="filePath"/> is in an invalid format.</exception>
+        /// <exception cref="UnauthorizedAccessException">
+        /// One of the following errors occured:
+        /// <list type="bullet">
+        /// <item>
+        /// <description>This operation is not supported on the current platform.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="filePath"/> specified a directory.</description>
+        /// </item>
+        /// <item>
+        /// <description>The caller does not have the required permission.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
+        /// <exception cref="InvalidOperationException">Time division is <c>null</c>.</exception>
+        /// <exception cref="TooManyTrackChunksException">Count of track chunks presented in the file
+        /// exceeds maximum value allowed for MIDI file.</exception>
         public static MidiTokensWriter WriteLazy(
             string filePath,
             bool overwriteFile = false,
@@ -299,7 +375,7 @@ namespace Melanchall.DryWetMidi.Core
         }
 
         /// <summary>
-        /// Reads a MIDI file from the stream.
+        /// Reads a MIDI file from the specified stream.
         /// </summary>
         /// <param name="stream">Stream to read file from.</param>
         /// <param name="settings">Settings according to which the file must be read. Specify <c>null</c> to use
@@ -464,6 +540,43 @@ namespace Melanchall.DryWetMidi.Core
             return file;
         }
 
+        /// <summary>
+        /// Creates an instance of the <see cref="MidiTokensReader"/> allowing to read a MIDI file
+        /// from the specified stream sequentially token by token keeping low memory consumption.
+        /// </summary>
+        /// <param name="stream">Stream to read file from.</param>
+        /// <param name="settings">Settings according to which the file must be read. Specify <c>null</c> to use
+        /// default settings.</param>
+        /// <returns>An instance of the <see cref="MidiTokensReader"/> wrapped around the <paramref name="stream"/>.</returns>
+        /// <remarks>
+        /// Stream must be readable, seekable and be able to provide its position and length via <see cref="Stream.Position"/>
+        /// and <see cref="Stream.Length"/> properties.
+        /// </remarks>
+        /// <exception cref="ArgumentNullException"><paramref name="stream"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentException">
+        /// One of the following errors occured:
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="stream"/> doesn't support reading.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="stream"/> is already read.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
+        /// <exception cref="IOException">An I/O error occurred while reading the file.</exception>
+        /// <exception cref="ObjectDisposedException"><paramref name="stream"/> is disposed.</exception>
+        /// <exception cref="UnauthorizedAccessException">
+        /// One of the following errors occured:
+        /// <list type="bullet">
+        /// <item>
+        /// <description>This operation is not supported on the current platform.</description>
+        /// </item>
+        /// <item>
+        /// <description>The caller does not have the required permission.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static MidiTokensReader ReadLazy(Stream stream, ReadingSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(stream), stream);
@@ -534,6 +647,36 @@ namespace Melanchall.DryWetMidi.Core
             }
         }
 
+        /// <summary>
+        /// Creates an instance of the <see cref="MidiTokensWriter"/> allowing to write data to the
+        /// specified stream sequentially token by token keeping low memory consumption.
+        /// </summary>
+        /// <param name="stream">Stream to write file's data to.</param>
+        /// <param name="format">Format of the file to be written.</param>
+        /// <param name="settings">Settings according to which the file must be written. Specify <c>null</c> to use
+        /// default settings.</param>
+        /// <param name="timeDivision">The time division to write to a file. Specify <c>null</c>
+        /// (default value) to use the default one - <see cref="TicksPerQuarterNoteTimeDivision.DefaultTicksPerQuarterNote"/>
+        /// ticks per quarter note.</param>
+        /// <returns>An instance of the <see cref="MidiTokensWriter"/> wrapped around the <paramref name="stream"/>.</returns>
+        /// <exception cref="ArgumentException"><paramref name="stream"/> doesn't support writing.</exception>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="format"/> specified an invalid value.</exception>
+        /// <exception cref="InvalidOperationException">Time division is <c>null</c>.</exception>
+        /// <exception cref="IOException">An I/O error occurred while writing to the stream.</exception>
+        /// <exception cref="ObjectDisposedException"><paramref name="stream"/> is disposed.</exception>
+        /// <exception cref="TooManyTrackChunksException">Count of track chunks presented in the file
+        /// exceeds maximum value allowed for MIDI file.</exception>
+        /// <exception cref="UnauthorizedAccessException">
+        /// One of the following errors occured:
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="stream"/> doesn't support writing (<see cref="Stream.CanWrite"/> is <c>false</c>).</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="stream"/> doesn't support seeking (<see cref="Stream.CanSeek"/> is <c>false</c>).</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static MidiTokensWriter WriteLazy(
             Stream stream,
             WritingSettings settings = null,

@@ -70,6 +70,17 @@ namespace Melanchall.DryWetMidi.Interaction
                 .GetObjectsFromSortedTimedObjects(0, objectType, settings);
         }
 
+        /// <summary>
+        /// Extracts objects of the specified types from a collection of <see cref="MidiEvent"/>
+        /// returning them as a lazy collection.
+        /// </summary>
+        /// <param name="midiEvents">Collection of <see cref="MidiEvent"/> to extract objects from.</param>
+        /// <param name="objectType">Combination of desired objects types.</param>
+        /// <param name="settings">Settings according to which objects should be detected and built.</param>
+        /// <returns>A lazy collection of objects built on top of <paramref name="midiEvents"/>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="midiEvents"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="objectType"/> contains the
+        /// <see cref="ObjectType.Rest"/> which is not supported by the method.</exception>
         public static IEnumerable<ITimedObject> EnumerateObjects(
             this IEnumerable<MidiEvent> midiEvents,
             ObjectType objectType,

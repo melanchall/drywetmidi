@@ -4,6 +4,11 @@ using System.IO;
 
 namespace Melanchall.DryWetMidi.Core
 {
+    /// <summary>
+    /// Provides a way to read a MIDI file sequentially token by token keeping
+    /// low memory consumption.
+    /// </summary>
+    /// <seealso cref="MidiTokensWriter"/>
     public sealed class MidiTokensReader : IDisposable
     {
         #region Enums
@@ -103,6 +108,44 @@ namespace Melanchall.DryWetMidi.Core
 
         #region Methods
 
+        /// <summary>
+        /// Reads a next MIDI token from the underlying stream.
+        /// </summary>
+        /// <returns>An instance of the <see cref="MidiToken"/>.</returns>
+        /// <exception cref="IOException">An I/O error occurred while reading the file.</exception>
+        /// <exception cref="NoHeaderChunkException">There is no header chunk in a file and that should be treated as error
+        /// according to the <see cref="ReadingSettings.NoHeaderChunkPolicy"/> of the used settings.</exception>
+        /// <exception cref="InvalidChunkSizeException">Actual header or track chunk's size differs from the one declared
+        /// in its header and that should be treated as error according to the <see cref="ReadingSettings.InvalidChunkSizePolicy"/>
+        /// of the used settings.</exception>
+        /// <exception cref="UnknownChunkException">Chunk to be read has unknown ID and that
+        /// should be treated as error accordng to the <see cref="ReadingSettings.UnknownChunkIdPolicy"/> of the
+        /// used settings.</exception>
+        /// <exception cref="UnexpectedTrackChunksCountException">Actual track chunks
+        /// count differs from the expected one (declared in the file header) and that should be treated as error according to
+        /// the <see cref="ReadingSettings.UnexpectedTrackChunksCountPolicy"/> of the used settings.</exception>
+        /// <exception cref="UnknownFileFormatException">The header chunk of the file specifies unknown file format and
+        /// that should be treated as error according to the <see cref="ReadingSettings.UnknownFileFormatPolicy"/> of
+        /// the used settings.</exception>
+        /// <exception cref="InvalidChannelEventParameterValueException">Value of a channel event's parameter
+        /// just read is invalid (is out of [0; 127] range) and that should be treated as error according to the
+        /// <see cref="ReadingSettings.InvalidChannelEventParameterValuePolicy"/> of the used settings.</exception>
+        /// <exception cref="InvalidMetaEventParameterValueException">Value of a meta event's parameter
+        /// just read is invalid and that should be treated as error according to the
+        /// <see cref="ReadingSettings.InvalidMetaEventParameterValuePolicy"/> of the used settings.</exception>
+        /// <exception cref="UnknownChannelEventException">Reader has encountered an unknown channel event and that
+        /// should be treated as error according to the <see cref="ReadingSettings.UnknownChannelEventPolicy"/> of
+        /// the used settings.</exception>
+        /// <exception cref="NotEnoughBytesException">MIDI file data cannot be read since the reader's underlying stream doesn't
+        /// have enough bytes and that should be treated as error according to the <see cref="ReadingSettings.NotEnoughBytesPolicy"/>
+        /// of the used settings.</exception>
+        /// <exception cref="UnexpectedRunningStatusException">Unexpected running status is encountered.</exception>
+        /// <exception cref="MissedEndOfTrackEventException">Track chunk doesn't end with <c>End Of Track</c> event and that
+        /// should be treated as error accordng to the <see cref="ReadingSettings.MissedEndOfTrackPolicy"/> of
+        /// the used settings.</exception>
+        /// <exception cref="InvalidOperationException"><see cref="ReaderSettings.Buffer"/> of the used settings
+        /// is <c>null</c> in case of <see cref="ReaderSettings.BufferingPolicy"/> set to
+        /// <see cref="BufferingPolicy.UseCustomBuffer"/>.</exception>
         public MidiToken ReadToken()
         {
             Instruction instruction = null;
@@ -239,6 +282,9 @@ namespace Melanchall.DryWetMidi.Core
 
         #region IDisposable
 
+        /// <summary>
+        /// Releases all resources used by the current <see cref="MidiTokensReader"/>.
+        /// </summary>
         public void Dispose()
         {
             Dispose(true);

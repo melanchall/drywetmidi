@@ -2,10 +2,15 @@
 using Melanchall.DryWetMidi.Core;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace Melanchall.DryWetMidi.Interaction
 {
+    /// <summary>
+    /// Provides a wrapper around <see cref="MidiTokensWriter"/> to write objects to it keeping
+    /// low memory consumption.
+    /// </summary>
     public sealed class TimedObjectsWriter : IDisposable
     {
         #region Fields
@@ -19,6 +24,12 @@ namespace Melanchall.DryWetMidi.Interaction
 
         #region Constructor
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TimedObjectsWriter"/> with the specified
+        /// instance of <see cref="MidiTokensWriter"/>.
+        /// </summary>
+        /// <param name="tokensWriter"><see cref="MidiTokensWriter"/> that will be used to write objects.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="tokensWriter"/> is <c>null</c>.</exception>
         public TimedObjectsWriter(MidiTokensWriter tokensWriter)
         {
             ThrowIfArgument.IsNull(nameof(tokensWriter), tokensWriter);
@@ -31,6 +42,19 @@ namespace Melanchall.DryWetMidi.Interaction
 
         #region Methods
 
+        /// <summary>
+        /// Writes the specified object with the underlying <see cref="MidiTokensWriter"/>.
+        /// </summary>
+        /// <remarks>
+        /// Objects passed to each next call of the method must be ordered in non-descending
+        /// order by their times.
+        /// </remarks>
+        /// <param name="timedObject">Object to write.</param>
+        /// <exception cref="InvalidOperationException">Object's time is less than the current
+        /// time of the underlying writer.</exception>
+        /// <exception cref="IOException">An I/O error occurred while writing the object.</exception>
+        /// <exception cref="InvalidOperationException">A track chunk is not started
+        /// (see <see cref="MidiTokensWriter.StartTrackChunk"/>).</exception>
         public void WriteObject(ITimedObject timedObject)
         {
             ThrowIfArgument.IsNull(nameof(timedObject), timedObject);
@@ -51,6 +75,19 @@ namespace Melanchall.DryWetMidi.Interaction
             SaveTimedEvents(objectTimedEvents, remainingEventsStartIndex);
         }
 
+        /// <summary>
+        /// Writes the specified objects with the underlying <see cref="MidiTokensWriter"/>.
+        /// </summary>
+        /// <remarks>
+        /// Objects passed to each next call of the method must be ordered in non-descending
+        /// order by their times.
+        /// </remarks>
+        /// <param name="timedObjects">Objects to write.</param>
+        /// <exception cref="InvalidOperationException">An object's time is less than the current
+        /// time of the underlying writer.</exception>
+        /// <exception cref="IOException">An I/O error occurred while writing the object.</exception>
+        /// <exception cref="InvalidOperationException">A track chunk is not started
+        /// (see <see cref="MidiTokensWriter.StartTrackChunk"/>).</exception>
         public void WriteObjects(IEnumerable<ITimedObject> timedObjects)
         {
             ThrowIfArgument.IsNull(nameof(timedObjects), timedObjects);
@@ -169,6 +206,10 @@ namespace Melanchall.DryWetMidi.Interaction
 
         #region IDisposable
 
+        /// <summary>
+        /// Releases all resources used by the current <see cref="TimedObjectsWriter"/>
+        /// and also flushes all remaining data to the underlying stream.
+        /// </summary>
         public void Dispose()
         {
             Dispose(true);
