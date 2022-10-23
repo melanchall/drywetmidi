@@ -1,0 +1,889 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class ChunksCollection
+   | DryWetMIDI </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class ChunksCollection
+   | DryWetMIDI ">
+    <meta name="generator" content="docfx 2.59.2.0">
+    
+    <link rel="shortcut icon" href="../images/favicon.png">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    <meta property="docfx:rel" content="../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list">Search Results for <span></span></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination" data-first="First" data-prev="Previous" data-next="Next" data-last="Last"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Melanchall.DryWetMidi.Core.ChunksCollection">
+  
+  
+  <h1 id="Melanchall_DryWetMidi_Core_ChunksCollection" data-uid="Melanchall.DryWetMidi.Core.ChunksCollection" class="text-break">Class ChunksCollection
+  </h1>
+  <div class="markdown level0 summary">
+Collection of <a class="xref" href="Melanchall.DryWetMidi.Core.MidiChunk.html">MidiChunk</a> objects.
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object">Object</a></div>
+    <div class="level1"><span class="xref">ChunksCollection</span></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.icollection-1">ICollection</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Core.MidiChunk.html">MidiChunk</a>&gt;</div>
+    <div><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Core.MidiChunk.html">MidiChunk</a>&gt;</div>
+    <div><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.ienumerable">IEnumerable</a></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)">Object.Equals(Object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)">Object.Equals(Object, Object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gethashcode#system-object-gethashcode">Object.GetHashCode()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gettype#system-object-gettype">Object.GetType()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.memberwiseclone#system-object-memberwiseclone">Object.MemberwiseClone()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.referenceequals#system-object-referenceequals(system-object-system-object)">Object.ReferenceEquals(Object, Object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.tostring#system-object-tostring">Object.ToString()</a>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Melanchall.DryWetMidi.Core.html">Melanchall.DryWetMidi.Core</a></h6>
+  <h6><strong>Assembly</strong>: Melanchall.DryWetMidi.dll</h6>
+  <h5 id="Melanchall_DryWetMidi_Core_ChunksCollection_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public sealed class ChunksCollection : ICollection&lt;MidiChunk&gt;, IEnumerable&lt;MidiChunk&gt;, IEnumerable</code></pre>
+  </div>
+  <h3 id="properties">Properties
+  </h3>
+  <a id="Melanchall_DryWetMidi_Core_ChunksCollection_Count_" data-uid="Melanchall.DryWetMidi.Core.ChunksCollection.Count*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_ChunksCollection_Count" data-uid="Melanchall.DryWetMidi.Core.ChunksCollection.Count">Count</h4>
+  <div class="markdown level1 summary">
+Gets the number of chunks contained in the collection.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int Count { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int32">Int32</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Core_ChunksCollection_IsReadOnly_" data-uid="Melanchall.DryWetMidi.Core.ChunksCollection.IsReadOnly*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_ChunksCollection_IsReadOnly" data-uid="Melanchall.DryWetMidi.Core.ChunksCollection.IsReadOnly">IsReadOnly</h4>
+  <div class="markdown level1 summary">
+Gets a value indicating whether the <a class="xref" href="Melanchall.DryWetMidi.Core.ChunksCollection.html">ChunksCollection</a> is read-only.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool IsReadOnly { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Core_ChunksCollection_Item_" data-uid="Melanchall.DryWetMidi.Core.ChunksCollection.Item*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_ChunksCollection_Item_System_Int32_" data-uid="Melanchall.DryWetMidi.Core.ChunksCollection.Item(System.Int32)">Item[Int32]</h4>
+  <div class="markdown level1 summary">
+Gets or sets the chunk at the specified index.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public MidiChunk this[int index] { get; set; }</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int32">Int32</a></td>
+        <td><span class="parametername">index</span></td>
+        <td>The zero-based index of the chunk to get or set.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiChunk.html">MidiChunk</a></td>
+        <td>The chunk at the specified index.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
+        <td>
+<code data-dev-comment-type="paramref" class="paramref">index</code> is less than 0; or <code data-dev-comment-type="paramref" class="paramref">index</code> is equal to or greater than
+<a class="xref" href="Melanchall.DryWetMidi.Core.ChunksCollection.html#Melanchall_DryWetMidi_Core_ChunksCollection_Count">Count</a>.
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td>value is <code>null</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <a id="Melanchall_DryWetMidi_Core_ChunksCollection_Add_" data-uid="Melanchall.DryWetMidi.Core.ChunksCollection.Add*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_ChunksCollection_Add_Melanchall_DryWetMidi_Core_MidiChunk_" data-uid="Melanchall.DryWetMidi.Core.ChunksCollection.Add(Melanchall.DryWetMidi.Core.MidiChunk)">Add(MidiChunk)</h4>
+  <div class="markdown level1 summary">
+Adds a chunk to the end of the collection.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Add(MidiChunk chunk)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiChunk.html">MidiChunk</a></td>
+        <td><span class="parametername">chunk</span></td>
+        <td>The chunk to be added to the end of the collection.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Melanchall_DryWetMidi_Core_ChunksCollection_Add_Melanchall_DryWetMidi_Core_MidiChunk__remarks">Remarks</h5>
+  <div class="markdown level1 remarks">
+Note that header chunks cannot be added into the collection since it may cause inconsistence in the file structure.
+Header chunk with appropriate information will be written to a file automatically on
+<a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html#Melanchall_DryWetMidi_Core_MidiFile_Write_System_String_System_Boolean_Melanchall_DryWetMidi_Core_MidiFileFormat_Melanchall_DryWetMidi_Core_WritingSettings_">Write(String, Boolean, MidiFileFormat, WritingSettings)</a>.
+</div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">chunk</code> is <code>null</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Core_ChunksCollection_AddRange_" data-uid="Melanchall.DryWetMidi.Core.ChunksCollection.AddRange*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_ChunksCollection_AddRange_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_MidiChunk__" data-uid="Melanchall.DryWetMidi.Core.ChunksCollection.AddRange(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.MidiChunk})">AddRange(IEnumerable&lt;MidiChunk&gt;)</h4>
+  <div class="markdown level1 summary">
+Adds chunks the end of the collection.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void AddRange(IEnumerable&lt;MidiChunk&gt; chunks)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Core.MidiChunk.html">MidiChunk</a>&gt;</td>
+        <td><span class="parametername">chunks</span></td>
+        <td>Chunks to add to the collection.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Melanchall_DryWetMidi_Core_ChunksCollection_AddRange_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_MidiChunk___remarks">Remarks</h5>
+  <div class="markdown level1 remarks">
+Note that header chunks cannot be added into the collection since it may cause inconsistence in the file structure.
+Header chunk with appropriate information will be written to a file automatically on
+<a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html#Melanchall_DryWetMidi_Core_MidiFile_Write_System_String_System_Boolean_Melanchall_DryWetMidi_Core_MidiFileFormat_Melanchall_DryWetMidi_Core_WritingSettings_">Write(String, Boolean, MidiFileFormat, WritingSettings)</a>.
+</div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">chunks</code> is <code>null</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Core_ChunksCollection_Clear_" data-uid="Melanchall.DryWetMidi.Core.ChunksCollection.Clear*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_ChunksCollection_Clear" data-uid="Melanchall.DryWetMidi.Core.ChunksCollection.Clear">Clear()</h4>
+  <div class="markdown level1 summary">
+Removes all chunks from the <a class="xref" href="Melanchall.DryWetMidi.Core.ChunksCollection.html">ChunksCollection</a>.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Clear()</code></pre>
+  </div>
+  <a id="Melanchall_DryWetMidi_Core_ChunksCollection_Contains_" data-uid="Melanchall.DryWetMidi.Core.ChunksCollection.Contains*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_ChunksCollection_Contains_Melanchall_DryWetMidi_Core_MidiChunk_" data-uid="Melanchall.DryWetMidi.Core.ChunksCollection.Contains(Melanchall.DryWetMidi.Core.MidiChunk)">Contains(MidiChunk)</h4>
+  <div class="markdown level1 summary">
+Determines whether the <a class="xref" href="Melanchall.DryWetMidi.Core.ChunksCollection.html">ChunksCollection</a> contains a specific chunk.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool Contains(MidiChunk item)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiChunk.html">MidiChunk</a></td>
+        <td><span class="parametername">item</span></td>
+        <td>The chunk to locate in the <a class="xref" href="Melanchall.DryWetMidi.Core.ChunksCollection.html">ChunksCollection</a>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
+        <td><code>true</code> if chunk is found in the <a class="xref" href="Melanchall.DryWetMidi.Core.ChunksCollection.html">ChunksCollection</a>; otherwise, <code>false</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Core_ChunksCollection_CopyTo_" data-uid="Melanchall.DryWetMidi.Core.ChunksCollection.CopyTo*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_ChunksCollection_CopyTo_Melanchall_DryWetMidi_Core_MidiChunk___System_Int32_" data-uid="Melanchall.DryWetMidi.Core.ChunksCollection.CopyTo(Melanchall.DryWetMidi.Core.MidiChunk[],System.Int32)">CopyTo(MidiChunk[], Int32)</h4>
+  <div class="markdown level1 summary">
+Copies the elements of the <a class="xref" href="Melanchall.DryWetMidi.Core.ChunksCollection.html">ChunksCollection</a> to an <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.array">Array</a>,
+starting at a particular index.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void CopyTo(MidiChunk[] array, int arrayIndex)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiChunk.html">MidiChunk</a>[]</td>
+        <td><span class="parametername">array</span></td>
+        <td>The one-dimensional <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.array">Array</a> that is the destination of
+the elements copied from <a class="xref" href="Melanchall.DryWetMidi.Core.ChunksCollection.html">ChunksCollection</a>. The array must have zero-based
+indexing.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int32">Int32</a></td>
+        <td><span class="parametername">arrayIndex</span></td>
+        <td>The zero-based index in array at which copying begins.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">array</code> is <code>null</code>.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">arrayIndex</code> is less than 0.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentexception">ArgumentException</a></td>
+        <td>The number of elements in the source <a class="xref" href="Melanchall.DryWetMidi.Core.ChunksCollection.html">ChunksCollection</a>
+is greater than the available space from <code data-dev-comment-type="paramref" class="paramref">arrayIndex</code> to the end of the destination
+array.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Core_ChunksCollection_GetEnumerator_" data-uid="Melanchall.DryWetMidi.Core.ChunksCollection.GetEnumerator*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_ChunksCollection_GetEnumerator" data-uid="Melanchall.DryWetMidi.Core.ChunksCollection.GetEnumerator">GetEnumerator()</h4>
+  <div class="markdown level1 summary">
+Returns an enumerator that iterates through the <a class="xref" href="Melanchall.DryWetMidi.Core.ChunksCollection.html">ChunksCollection</a>.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IEnumerator&lt;MidiChunk&gt; GetEnumerator()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerator-1">IEnumerator</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Core.MidiChunk.html">MidiChunk</a>&gt;</td>
+        <td>An enumerator for the <a class="xref" href="Melanchall.DryWetMidi.Core.ChunksCollection.html">ChunksCollection</a>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Core_ChunksCollection_IndexOf_" data-uid="Melanchall.DryWetMidi.Core.ChunksCollection.IndexOf*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_ChunksCollection_IndexOf_Melanchall_DryWetMidi_Core_MidiChunk_" data-uid="Melanchall.DryWetMidi.Core.ChunksCollection.IndexOf(Melanchall.DryWetMidi.Core.MidiChunk)">IndexOf(MidiChunk)</h4>
+  <div class="markdown level1 summary">
+Searches for the specified chunk and returns the zero-based index of the first
+occurrence within the entire <a class="xref" href="Melanchall.DryWetMidi.Core.ChunksCollection.html">ChunksCollection</a>.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int IndexOf(MidiChunk chunk)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiChunk.html">MidiChunk</a></td>
+        <td><span class="parametername">chunk</span></td>
+        <td>The chunk to locate in the <a class="xref" href="Melanchall.DryWetMidi.Core.ChunksCollection.html">ChunksCollection</a>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int32">Int32</a></td>
+        <td>The zero-based index of the first occurrence of chunk within the entire
+<a class="xref" href="Melanchall.DryWetMidi.Core.ChunksCollection.html">ChunksCollection</a>, if found; otherwise, –1.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">chunk</code> is <code>null</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Core_ChunksCollection_Insert_" data-uid="Melanchall.DryWetMidi.Core.ChunksCollection.Insert*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_ChunksCollection_Insert_System_Int32_Melanchall_DryWetMidi_Core_MidiChunk_" data-uid="Melanchall.DryWetMidi.Core.ChunksCollection.Insert(System.Int32,Melanchall.DryWetMidi.Core.MidiChunk)">Insert(Int32, MidiChunk)</h4>
+  <div class="markdown level1 summary">
+Inserts a chunk into the collection at the specified index.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Insert(int index, MidiChunk chunk)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int32">Int32</a></td>
+        <td><span class="parametername">index</span></td>
+        <td>The zero-based index at which the chunk should be inserted.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiChunk.html">MidiChunk</a></td>
+        <td><span class="parametername">chunk</span></td>
+        <td>The chunk to insert.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Melanchall_DryWetMidi_Core_ChunksCollection_Insert_System_Int32_Melanchall_DryWetMidi_Core_MidiChunk__remarks">Remarks</h5>
+  <div class="markdown level1 remarks">
+Note that header chunks cannot be inserted into the collection since it may cause inconsistence in the file structure.
+Header chunk with appropriate information will be written to a file automatically on
+<a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html#Melanchall_DryWetMidi_Core_MidiFile_Write_System_String_System_Boolean_Melanchall_DryWetMidi_Core_MidiFileFormat_Melanchall_DryWetMidi_Core_WritingSettings_">Write(String, Boolean, MidiFileFormat, WritingSettings)</a>.
+</div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">chunk</code> is <code>null</code>.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
+        <td>
+<p>One of the following errors occured:</p>
+<ul><li><code data-dev-comment-type="paramref" class="paramref">index</code> is less than 0.</li><li><code data-dev-comment-type="paramref" class="paramref">index</code> is greater than <a class="xref" href="Melanchall.DryWetMidi.Core.ChunksCollection.html#Melanchall_DryWetMidi_Core_ChunksCollection_Count">Count</a>.</li></ul>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Core_ChunksCollection_InsertRange_" data-uid="Melanchall.DryWetMidi.Core.ChunksCollection.InsertRange*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_ChunksCollection_InsertRange_System_Int32_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_MidiChunk__" data-uid="Melanchall.DryWetMidi.Core.ChunksCollection.InsertRange(System.Int32,System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.MidiChunk})">InsertRange(Int32, IEnumerable&lt;MidiChunk&gt;)</h4>
+  <div class="markdown level1 summary">
+Inserts a set of chunks into the collection at the specified index.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void InsertRange(int index, IEnumerable&lt;MidiChunk&gt; chunks)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int32">Int32</a></td>
+        <td><span class="parametername">index</span></td>
+        <td>The zero-based index at which the chunk should be inserted.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Core.MidiChunk.html">MidiChunk</a>&gt;</td>
+        <td><span class="parametername">chunks</span></td>
+        <td>The chunk to insert.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Melanchall_DryWetMidi_Core_ChunksCollection_InsertRange_System_Int32_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_MidiChunk___remarks">Remarks</h5>
+  <div class="markdown level1 remarks">
+Note that header chunks cannot be inserted into the collection since it may cause inconsistence in the file structure.
+Header chunk with appropriate information will be written to a file automatically on
+<a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html#Melanchall_DryWetMidi_Core_MidiFile_Write_System_String_System_Boolean_Melanchall_DryWetMidi_Core_MidiFileFormat_Melanchall_DryWetMidi_Core_WritingSettings_">Write(String, Boolean, MidiFileFormat, WritingSettings)</a>.
+</div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">chunks</code> is <code>null</code>.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
+        <td>
+<p>One of the following errors occured:</p>
+<ul><li><code data-dev-comment-type="paramref" class="paramref">index</code> is less than 0.</li><li><code data-dev-comment-type="paramref" class="paramref">index</code> is greater than <a class="xref" href="Melanchall.DryWetMidi.Core.ChunksCollection.html#Melanchall_DryWetMidi_Core_ChunksCollection_Count">Count</a>.</li></ul>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Core_ChunksCollection_Remove_" data-uid="Melanchall.DryWetMidi.Core.ChunksCollection.Remove*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_ChunksCollection_Remove_Melanchall_DryWetMidi_Core_MidiChunk_" data-uid="Melanchall.DryWetMidi.Core.ChunksCollection.Remove(Melanchall.DryWetMidi.Core.MidiChunk)">Remove(MidiChunk)</h4>
+  <div class="markdown level1 summary">
+Removes the first occurrence of a specific chunk from the collection.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool Remove(MidiChunk chunk)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiChunk.html">MidiChunk</a></td>
+        <td><span class="parametername">chunk</span></td>
+        <td>The chunk to remove from the collection. The value cannot be <code>null</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
+        <td><code>true</code> if chunk is successfully removed; otherwise, <code>false</code>. This method also returns
+<code>false</code> if chunk was not found in the collection.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">chunk</code> is <code>null</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Core_ChunksCollection_RemoveAll_" data-uid="Melanchall.DryWetMidi.Core.ChunksCollection.RemoveAll*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_ChunksCollection_RemoveAll_System_Predicate_Melanchall_DryWetMidi_Core_MidiChunk__" data-uid="Melanchall.DryWetMidi.Core.ChunksCollection.RemoveAll(System.Predicate{Melanchall.DryWetMidi.Core.MidiChunk})">RemoveAll(Predicate&lt;MidiChunk&gt;)</h4>
+  <div class="markdown level1 summary">
+Removes all the chunks that match the conditions defined by the specified predicate.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int RemoveAll(Predicate&lt;MidiChunk&gt; match)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.predicate-1">Predicate</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Core.MidiChunk.html">MidiChunk</a>&gt;</td>
+        <td><span class="parametername">match</span></td>
+        <td>The <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.predicate-1">Predicate&lt;T&gt;</a> delegate that defines the conditions
+of the chunks to remove.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int32">Int32</a></td>
+        <td>The number of chunks removed from the <a class="xref" href="Melanchall.DryWetMidi.Core.ChunksCollection.html">ChunksCollection</a>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">match</code> is <code>null</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Core_ChunksCollection_RemoveAt_" data-uid="Melanchall.DryWetMidi.Core.ChunksCollection.RemoveAt*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_ChunksCollection_RemoveAt_System_Int32_" data-uid="Melanchall.DryWetMidi.Core.ChunksCollection.RemoveAt(System.Int32)">RemoveAt(Int32)</h4>
+  <div class="markdown level1 summary">
+Removes the chunk at the specified index of the collection.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void RemoveAt(int index)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int32">Int32</a></td>
+        <td><span class="parametername">index</span></td>
+        <td>The zero-based index of the chunk to remove.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">index</code> is less than 0; or <code data-dev-comment-type="paramref" class="paramref">index</code>
+    is equal to or greater than <a class="xref" href="Melanchall.DryWetMidi.Core.ChunksCollection.html#Melanchall_DryWetMidi_Core_ChunksCollection_Count">Count</a>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="eii">Explicit Interface Implementations
+  </h3>
+  <a id="Melanchall_DryWetMidi_Core_ChunksCollection_System_Collections_IEnumerable_GetEnumerator_" data-uid="Melanchall.DryWetMidi.Core.ChunksCollection.System#Collections#IEnumerable#GetEnumerator*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_ChunksCollection_System_Collections_IEnumerable_GetEnumerator" data-uid="Melanchall.DryWetMidi.Core.ChunksCollection.System#Collections#IEnumerable#GetEnumerator">IEnumerable.GetEnumerator()</h4>
+  <div class="markdown level1 summary">
+Returns an enumerator that iterates through the <a class="xref" href="Melanchall.DryWetMidi.Core.ChunksCollection.html">ChunksCollection</a>.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">IEnumerator IEnumerable.GetEnumerator()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.ienumerator">IEnumerator</a></td>
+        <td>An enumerator for the <a class="xref" href="Melanchall.DryWetMidi.Core.ChunksCollection.html">ChunksCollection</a>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.icollection-1">System.Collections.Generic.ICollection&lt;T&gt;</a>
+  </div>
+  <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">System.Collections.Generic.IEnumerable&lt;T&gt;</a>
+  </div>
+  <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.ienumerable">System.Collections.IEnumerable</a>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            2022 / Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

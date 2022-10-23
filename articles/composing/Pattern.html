@@ -79,7 +79,7 @@
             <article class="content wrap" id="_content" data-uid="a_composing_pattern">
 <h1 id="pattern">Pattern</h1>
 
-<p>DryWetMIDI provides a way to create a MIDI file in more &quot;musical&quot; manner. The key class here is the <a href="xref:Melanchall.DryWetMidi.Composing.PatternBuilder">PatternBuilder</a> which allows to build a musical composition. <code>PatternBuilder</code> provides a fluent interface to program the music. For example, you can insert a note like this:</p>
+<p>DryWetMIDI provides a way to create a MIDI file in more &quot;musical&quot; manner. The key class here is the <a class="xref" href="../../api/Melanchall.DryWetMidi.Composing.PatternBuilder.html">PatternBuilder</a> which allows to build a musical composition. <code>PatternBuilder</code> provides a fluent interface to program the music. For example, you can insert a note like this:</p>
 <pre><code class="lang-csharp">using Melanchall.DryWetMidi.Composing;
 
 var patternBuilder = new PatternBuilder()
@@ -105,7 +105,7 @@ var patternBuilder = new PatternBuilder()
     // All the following notes will have quarter length
     .Note(Octave.Get(2).A);
 </code></pre>
-<p>Please take a look at entire API provided by <a href="xref:Melanchall.DryWetMidi.Composing.PatternBuilder">PatternBuilder</a>.</p>
+<p>Please take a look at entire API provided by <a class="xref" href="../../api/Melanchall.DryWetMidi.Composing.PatternBuilder.html">PatternBuilder</a>.</p>
 <p>Following example shows how to create first four bars of Beethoven's 'Moonlight Sonata':</p>
 <pre><code class="lang-csharp">// Define a chord for bass part which is just an octave
 var bassChord = new[] { Interval.Twelve };
@@ -163,7 +163,7 @@ var pattern = new PatternBuilder()
     .Note(Interval.Eight)  // +8  (E4)
     .Note(Interval.Zero)   // +0  (G#3)
     .Note(Interval.Five)   // +5  (C#4)
-    .Note(Interval.Seven) // +7  (D#4)
+    .Note(Intervaln.Seven) // +7  (D#4)
     .Note(-Interval.Two)   // -2  (F#3)
     .Note(Interval.Four)   // +4  (C4)
     .Note(Interval.Seven)  // +7  (D#4)
@@ -196,9 +196,9 @@ var pattern = new PatternBuilder()
 
     .Build();
 </code></pre>
-<p><a href="xref:Melanchall.DryWetMidi.Composing.PatternBuilder.Build">Build</a> method returns an instance of <a href="xref:Melanchall.DryWetMidi.Composing.Pattern">Pattern</a>. Pattern can be transformed or altered by methods in <a href="xref:Melanchall.DryWetMidi.Composing.PatternUtilities">PatternUtilities</a>.</p>
-<p>Pattern can be then saved to <a href="xref:Melanchall.DryWetMidi.Core.MidiFile">MidiFile</a> (via <a href="xref:Melanchall.DryWetMidi.Composing.Pattern.ToFile*">ToFile</a> method) or <a href="xref:Melanchall.DryWetMidi.Core.TrackChunk">TrackChunk</a> (via <a href="xref:Melanchall.DryWetMidi.Composing.Pattern.ToTrackChunk*">ToTrackChunk</a> method). You need to provide a <a href="xref:Melanchall.DryWetMidi.Interaction.TempoMap">tempo map</a>. Also you can optionally specify the channel that should be set to events. The default channel is <code>0</code>.</p>
-<p>Also please see <a href="xref:Melanchall.DryWetMidi.Composing.Pattern#extensionmethods">Extension methods</a> section of the <a href="xref:Melanchall.DryWetMidi.Composing.Pattern">Pattern</a> API.</p>
+<p><a class="xref" href="../../api/Melanchall.DryWetMidi.Composing.PatternBuilder.html#Melanchall_DryWetMidi_Composing_PatternBuilder_Build">Build</a> method returns an instance of <a class="xref" href="../../api/Melanchall.DryWetMidi.Composing.Pattern.html">Pattern</a>. Pattern can be transformed or altered by methods in <a class="xref" href="../../api/Melanchall.DryWetMidi.Composing.PatternUtilities.html">PatternUtilities</a>.</p>
+<p>Pattern can be then saved to <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a> (via <a class="xref" href="../../api/Melanchall.DryWetMidi.Composing.Pattern.html#Melanchall_DryWetMidi_Composing_Pattern_ToFile_">ToFile</a> method) or <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a> (via <a class="xref" href="../../api/Melanchall.DryWetMidi.Composing.Pattern.html#Melanchall_DryWetMidi_Composing_Pattern_ToTrackChunk_">ToTrackChunk</a> method). You need to provide a <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.TempoMap.html">tempo map</a>. Also you can optionally specify the channel that should be set to events. The default channel is <code>0</code>.</p>
+<p>Also please see <a class="xref" href="../../api/Melanchall.DryWetMidi.Composing.Pattern.html#extensionmethods">Extension methods</a> section of the <a class="xref" href="../../api/Melanchall.DryWetMidi.Composing.Pattern.html">Pattern</a> API.</p>
 </article>
           </div>
           

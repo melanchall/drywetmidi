@@ -79,13 +79,13 @@
             <article class="content wrap" id="_content" data-uid="a_custom_meta_event">
 <h1 id="custom-meta-events">Custom meta events</h1>
 
-<p>Meta events specify non-MIDI information useful to specific application. As with <a class="xref" href="Custom-chunks.html">custom chunks</a>, future or custom meta events may be designed. Format of meta events allows to programs which don't know about these new events to skip them without reading process failure. DryWetMIDI allows you to implement custom meta events which can be written to a MIDI file <a href="xref:Melanchall.DryWetMidi.Core.TrackChunk">track chunk</a> and be read from it.</p>
-<p>For example, let's create an event which will hold an image. Custom meta event must be derived from the <a href="xref:Melanchall.DryWetMidi.Core.MetaEvent">MetaEvent</a> and must implement four abstract methods:</p>
+<p>Meta events specify non-MIDI information useful to specific application. As with <a class="xref" href="Custom-chunks.html">custom chunks</a>, future or custom meta events may be designed. Format of meta events allows to programs which don't know about these new events to skip them without reading process failure. DryWetMIDI allows you to implement custom meta events which can be written to a MIDI file <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.TrackChunk.html">track chunk</a> and be read from it.</p>
+<p>For example, let's create an event which will hold an image. Custom meta event must be derived from the <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.MetaEvent.html">MetaEvent</a> and must implement four abstract methods:</p>
 <ul>
-<li><a href="xref:Melanchall.DryWetMidi.Core.MetaEvent.ReadContent(Melanchall.DryWetMidi.Core.MidiReader,Melanchall.DryWetMidi.Core.ReadingSettings,System.Int32)">ReadContent</a>;</li>
-<li><a href="xref:Melanchall.DryWetMidi.Core.MetaEvent.WriteContent(Melanchall.DryWetMidi.Core.MidiWriter,Melanchall.DryWetMidi.Core.WritingSettings)">WriteContent</a>;</li>
-<li><a href="xref:Melanchall.DryWetMidi.Core.MetaEvent.GetContentSize(Melanchall.DryWetMidi.Core.WritingSettings)">GetContentSize</a>;</li>
-<li><a href="xref:Melanchall.DryWetMidi.Core.MidiEvent.CloneEvent">CloneEvent</a>.</li>
+<li><a class="xref" href="../../api/Melanchall.DryWetMidi.Core.MetaEvent.html#Melanchall_DryWetMidi_Core_MetaEvent_ReadContent_Melanchall_DryWetMidi_Core_MidiReader_Melanchall_DryWetMidi_Core_ReadingSettings_System_Int32_">ReadContent</a>;</li>
+<li><a class="xref" href="../../api/Melanchall.DryWetMidi.Core.MetaEvent.html#Melanchall_DryWetMidi_Core_MetaEvent_WriteContent_Melanchall_DryWetMidi_Core_MidiWriter_Melanchall_DryWetMidi_Core_WritingSettings_">WriteContent</a>;</li>
+<li><a class="xref" href="../../api/Melanchall.DryWetMidi.Core.MetaEvent.html#Melanchall_DryWetMidi_Core_MetaEvent_GetContentSize_Melanchall_DryWetMidi_Core_WritingSettings_">GetContentSize</a>;</li>
+<li><a class="xref" href="../../api/Melanchall.DryWetMidi.Core.MidiEvent.html#Melanchall_DryWetMidi_Core_MidiEvent_CloneEvent">CloneEvent</a>.</li>
 </ul>
 <p>Also a class must have parameterless constructor.</p>
 <pre><code class="lang-csharp">public sealed class ImageEvent : MetaEvent
@@ -168,7 +168,7 @@
     return new ImageEvent(Image?.Clone() as Image);
 }
 </code></pre>
-<p>Custom meta event is completely implemented. In order to read and write it we must assign status byte to the event. You have to pick value from the <strong>[0x5F; 0x7E]</strong> range which will be the status byte of your event type. You can get status bytes of standard meta events via <a href="xref:Melanchall.DryWetMidi.Core.MetaEvent.GetStandardMetaEventStatusBytes">MetaEvent.GetStandardMetaEventStatusBytes</a>. See code sample below to know how to read and write custom meta event:</p>
+<p>Custom meta event is completely implemented. In order to read and write it we must assign status byte to the event. You have to pick value from the <strong>[0x5F; 0x7E]</strong> range which will be the status byte of your event type. You can get status bytes of standard meta events via <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.MetaEvent.html#Melanchall_DryWetMidi_Core_MetaEvent_GetStandardMetaEventStatusBytes">MetaEvent.GetStandardMetaEventStatusBytes</a>. See code sample below to know how to read and write custom meta event:</p>
 <pre><code class="lang-csharp">// Define collection of custom meta event types along with
 // corresponding status bytes.
 

@@ -71,10 +71,10 @@
           <div class="col-md-10">
             <article class="content wrap" id="_content" data-uid="">
 
-<p>Methods from <code>GetNotesAndRestsUtilities</code> are now obsolete and you should use <code>GetObjects</code> methods from <a href="xref:Melanchall.DryWetMidi.Interaction.GetObjectsUtilities">GetObjectsUtilities</a>. Example how you can get notes and rests:</p>
+<p>Methods from <code>GetNotesAndRestsUtilities</code> are now obsolete and you should use <code>GetObjects</code> methods from <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.GetObjectsUtilities.html">GetObjectsUtilities</a>. Example how you can get notes and rests:</p>
 <pre><code class="lang-csharp">var notesAndRests = midiFile.GetObjects(ObjectType.Note | ObjectType.Rest);
 </code></pre>
-<p><a href="xref:Melanchall.DryWetMidi.Interaction.RestSeparationPolicy">RestSeparationPolicy</a> can be specified via <a href="xref:Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings">ObjectDetectionSettings</a>:</p>
+<p><a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.RestSeparationPolicy.html">RestSeparationPolicy</a> can be specified via <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings.html">ObjectDetectionSettings</a>:</p>
 <pre><code class="lang-csharp">var notesAndRests = midiFile.GetObjects(
     ObjectType.Note | ObjectType.Rest,
     new ObjectDetectionSettings

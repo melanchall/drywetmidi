@@ -79,12 +79,12 @@
             <article class="content wrap" id="_content" data-uid="a_file_splitting">
 <h1 id="midi-file-splitting">MIDI file splitting</h1>
 
-<p>You can split a MIDI file in different ways using extension methods from the <a href="xref:Melanchall.DryWetMidi.Tools.Splitter">Splitter</a> class. Available methods are described below. Please note that the article doesn't cover all possible methods and their settings. Please read API documentation on <a href="xref:Melanchall.DryWetMidi.Tools.Splitter">Splitter</a> to get complete information.</p>
+<p>You can split a MIDI file in different ways using extension methods from the <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.Splitter.html">Splitter</a> class. Available methods are described below. Please note that the article doesn't cover all possible methods and their settings. Please read API documentation on <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.Splitter.html">Splitter</a> to get complete information.</p>
 <h2 id="splitbychannel">SplitByChannel</h2>
-<p><a href="xref:Melanchall.DryWetMidi.Tools.Splitter.SplitByChannel*">SplitByChannel</a> method splits a MIDI file by channel so all <a href="xref:Melanchall.DryWetMidi.Core.ChannelEvent">channel events</a> will be separated by channel and copied to corresponding new files. All meta and system exclusive events will be copied to all the new files (that's default behavior that can be turned off). Thus each new file will contain all meta and sysex events and channel ones for a single channel. The image below illustrates this process:</p>
+<p><a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.Splitter.html#Melanchall_DryWetMidi_Tools_Splitter_SplitByChannel_">SplitByChannel</a> method splits a MIDI file by channel so all <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.ChannelEvent.html">channel events</a> will be separated by channel and copied to corresponding new files. All meta and system exclusive events will be copied to all the new files (that's default behavior that can be turned off). Thus each new file will contain all meta and sysex events and channel ones for a single channel. The image below illustrates this process:</p>
 <p><img src="images/Splitter/SplitByChannel.png" alt="Split MIDI file by channel"></p>
 <h2 id="splitbyobjects">SplitByObjects</h2>
-<p><a href="xref:Melanchall.DryWetMidi.Tools.Splitter.SplitByObjects*">SplitByObjects</a> method splits a MIDI file by objects. The process can be adjusted via <a href="xref:Melanchall.DryWetMidi.Tools.SplitByObjectsSettings">SplitByObjectsSettings</a> passed to the second parameter of the method.</p>
+<p><a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.Splitter.html#Melanchall_DryWetMidi_Tools_Splitter_SplitByObjects_">SplitByObjects</a> method splits a MIDI file by objects. The process can be adjusted via <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.SplitByObjectsSettings.html">SplitByObjectsSettings</a> passed to the second parameter of the method.</p>
 <p>For example, to split a file by notes copying all MIDI events to each new file:</p>
 <pre><code class="lang-csharp">var newFiles = midiFile.SplitByObjects(
     ObjectType.Note | ObjectType.TimedEvent,
@@ -105,20 +105,20 @@
 </thead>
 <tbody>
 <tr>
-<td><a href="xref:Melanchall.DryWetMidi.Interaction.ObjectType.TimedEvent">TimedEvent</a></td>
-<td>The type of the underlying event (<a href="xref:Melanchall.DryWetMidi.Core.MidiEvent.EventType">EventType</a> of <a href="xref:Melanchall.DryWetMidi.Interaction.TimedEvent.Event">TimedEvent.Event</a>).</td>
+<td><a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.ObjectType.html#Melanchall_DryWetMidi_Interaction_ObjectType_TimedEvent">TimedEvent</a></td>
+<td>The type of the underlying event (<a class="xref" href="../../api/Melanchall.DryWetMidi.Core.MidiEvent.html#Melanchall_DryWetMidi_Core_MidiEvent_EventType">EventType</a> of <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.TimedEvent.html#Melanchall_DryWetMidi_Interaction_TimedEvent_Event">TimedEvent.Event</a>).</td>
 </tr>
 <tr>
-<td><a href="xref:Melanchall.DryWetMidi.Interaction.ObjectType.Note">Note</a></td>
-<td>Pair of the <a href="xref:Melanchall.DryWetMidi.Interaction.Note.Channel">channel</a> and <a href="xref:Melanchall.DryWetMidi.Interaction.Note.NoteNumber">note number</a> of a note.</td>
+<td><a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.ObjectType.html#Melanchall_DryWetMidi_Interaction_ObjectType_Note">Note</a></td>
+<td>Pair of the <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.Note.html#Melanchall_DryWetMidi_Interaction_Note_Channel">channel</a> and <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.Note.html#Melanchall_DryWetMidi_Interaction_Note_NoteNumber">note number</a> of a note.</td>
 </tr>
 <tr>
-<td><a href="xref:Melanchall.DryWetMidi.Interaction.ObjectType.Chord">Chord</a></td>
-<td>Collection of keys of the underlying <a href="xref:Melanchall.DryWetMidi.Interaction.Chord.Notes">notes</a>.</td>
+<td><a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.ObjectType.html#Melanchall_DryWetMidi_Interaction_ObjectType_Chord">Chord</a></td>
+<td>Collection of keys of the underlying <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.Chord.html#Melanchall_DryWetMidi_Interaction_Chord_Notes">notes</a>.</td>
 </tr>
 <tr>
-<td><a href="xref:Melanchall.DryWetMidi.Interaction.ObjectType.Rest">Rest</a></td>
-<td>Pair of the <a href="xref:Melanchall.DryWetMidi.Interaction.Rest.Channel">channel</a> and <a href="xref:Melanchall.DryWetMidi.Interaction.Rest.NoteNumber">note number</a> of a rest.</td>
+<td><a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.ObjectType.html#Melanchall_DryWetMidi_Interaction_ObjectType_Rest">Rest</a></td>
+<td>Pair of the <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.Rest.html#Melanchall_DryWetMidi_Interaction_Rest_Channel">channel</a> and <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.Rest.html#Melanchall_DryWetMidi_Interaction_Rest_NoteNumber">note number</a> of a rest.</td>
 </tr>
 </tbody>
 </table>
@@ -133,8 +133,8 @@
         WriteToAllFilesPredicate = obj =&gt; obj is TimedEvent
     });
 </code></pre>
-<p><a href="xref:Melanchall.DryWetMidi.Interaction.ObjectIdUtilities.GetObjectId%60%601(%60%600)">ObjectIdUtilities.GetObjectId(value)</a> returns an implementation of <a href="xref:Melanchall.DryWetMidi.Interaction.IObjectId">IObjectId</a> which simply holds the provided value. <a href="xref:Melanchall.DryWetMidi.Interaction.ObjectIdUtilities.GetObjectId(Melanchall.DryWetMidi.Interaction.ITimedObject)">ObjectIdUtilities.GetObjectId(object)</a> returns the default ID (key) for an object. So if an object is a note, we use its note number as the key; and default key for any other object types.</p>
-<p>If custom logic of key selection is complex, you may decide to implement the <a href="xref:Melanchall.DryWetMidi.Interaction.IObjectId">IObjectId</a> interface and return that implementation. Just for example, let's create an ID class that identifies a chord by its shortest name:</p>
+<p><a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.ObjectIdUtilities.html#Melanchall_DryWetMidi_Interaction_ObjectIdUtilities_GetObjectId__1___0_">ObjectIdUtilities.GetObjectId(value)</a> returns an implementation of <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.IObjectId.html">IObjectId</a> which simply holds the provided value. <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.ObjectIdUtilities.html#Melanchall_DryWetMidi_Interaction_ObjectIdUtilities_GetObjectId_Melanchall_DryWetMidi_Interaction_ITimedObject_">ObjectIdUtilities.GetObjectId(object)</a> returns the default ID (key) for an object. So if an object is a note, we use its note number as the key; and default key for any other object types.</p>
+<p>If custom logic of key selection is complex, you may decide to implement the <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.IObjectId.html">IObjectId</a> interface and return that implementation. Just for example, let's create an ID class that identifies a chord by its shortest name:</p>
 <pre><code class="lang-csharp">private sealed class ChordNameId : IObjectId
 {
     private readonly string _name;
@@ -160,26 +160,26 @@
         KeySelector = obj =&gt; new ChordNameId((Chord)obj)
     });
 </code></pre>
-<p>Please see documentation on <a href="xref:Melanchall.DryWetMidi.Tools.SplitByObjectsSettings">SplitByObjectsSettings</a> to learn more about how you can adjust the process of splitting.</p>
+<p>Please see documentation on <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.SplitByObjectsSettings.html">SplitByObjectsSettings</a> to learn more about how you can adjust the process of splitting.</p>
 <h2 id="splitbygrid">SplitByGrid</h2>
-<p><a href="xref:Melanchall.DryWetMidi.Tools.Splitter.SplitByGrid*">SplitByGrid</a> method splits MIDI file by the specified grid. Each file will preserve original tempo map and all parameters changes (like a control value or program changes). The image below shows general case of splitting a MIDI file by grid:</p>
+<p><a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.Splitter.html#Melanchall_DryWetMidi_Tools_Splitter_SplitByGrid_">SplitByGrid</a> method splits MIDI file by the specified grid. Each file will preserve original tempo map and all parameters changes (like a control value or program changes). The image below shows general case of splitting a MIDI file by grid:</p>
 <p><img src="images/Splitter/SplitFileByGrid.png" alt="Split MIDI file by grid"></p>
-<p>Splitting can be adjusted via <code>settings</code> parameter of the <a href="xref:Melanchall.DryWetMidi.Tools.SliceMidiFileSettings">SliceMidiFileSettings</a> type. <a href="xref:Melanchall.DryWetMidi.Tools.SliceMidiFileSettings.SplitNotes">SplitNotes</a> and <a href="xref:Melanchall.DryWetMidi.Tools.SliceMidiFileSettings.PreserveTimes">PreserveTimes</a> properties described below. Please see all available properties in documentation for <a href="xref:Melanchall.DryWetMidi.Tools.SliceMidiFileSettings">SliceMidiFileSettings</a>.</p>
+<p>Splitting can be adjusted via <code>settings</code> parameter of the <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.SliceMidiFileSettings.html">SliceMidiFileSettings</a> type. <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.SliceMidiFileSettings.html#Melanchall_DryWetMidi_Tools_SliceMidiFileSettings_SplitNotes">SplitNotes</a> and <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.SliceMidiFileSettings.html#Melanchall_DryWetMidi_Tools_SliceMidiFileSettings_PreserveTimes">PreserveTimes</a> properties described below. Please see all available properties in documentation for <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.SliceMidiFileSettings.html">SliceMidiFileSettings</a>.</p>
 <h3 id="splitnotes">SplitNotes</h3>
-<p><a href="xref:Melanchall.DryWetMidi.Tools.SliceMidiFileSettings.SplitNotes">SplitNotes</a> indicates whether notes should be split at points of grid intersection or not. The default value is <code>true</code>. If <code>false</code> used, notes treated as just Note On / Note Off events rather than note objects. Splitting notes produces new Note On / Note Off events at points where grid intersects notes if the property set to <code>true</code>. The following image shows splitting by grid if <code>SplitNotes</code> set to <code>false</code>:</p>
+<p><a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.SliceMidiFileSettings.html#Melanchall_DryWetMidi_Tools_SliceMidiFileSettings_SplitNotes">SplitNotes</a> indicates whether notes should be split at points of grid intersection or not. The default value is <code>true</code>. If <code>false</code> used, notes treated as just Note On / Note Off events rather than note objects. Splitting notes produces new Note On / Note Off events at points where grid intersects notes if the property set to <code>true</code>. The following image shows splitting by grid if <code>SplitNotes</code> set to <code>false</code>:</p>
 <p><img src="images/Splitter/SplitByGridDontSplitNotes.png" alt="Split MIDI file by grid without splitting notes"></p>
 <h3 id="preservetimes">PreserveTimes</h3>
-<p><a href="xref:Melanchall.DryWetMidi.Tools.SliceMidiFileSettings.PreserveTimes">PreserveTimes</a> indicates whether original times of events should be preserved or not. The default value is <code>false</code>. If <code>false</code> used, events will be moved to the start of a new file. If <code>true</code> used, events will be placed in new files at the same times as in the input file. The following image shows splitting in case of <code>PreserveTimes</code> set to <code>true</code>:</p>
+<p><a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.SliceMidiFileSettings.html#Melanchall_DryWetMidi_Tools_SliceMidiFileSettings_PreserveTimes">PreserveTimes</a> indicates whether original times of events should be preserved or not. The default value is <code>false</code>. If <code>false</code> used, events will be moved to the start of a new file. If <code>true</code> used, events will be placed in new files at the same times as in the input file. The following image shows splitting in case of <code>PreserveTimes</code> set to <code>true</code>:</p>
 <p><img src="images/Splitter/SplitByGridPreserveTimes.png" alt="Split MIDI file by grid preserving times"></p>
 <h2 id="skippart">SkipPart</h2>
-<p><a href="xref:Melanchall.DryWetMidi.Tools.Splitter.SkipPart*">SkipPart</a> method skips part of the specified length of a MIDI file and returns remaining part as an instance of <a href="xref:Melanchall.DryWetMidi.Core.MidiFile">MidiFile</a>. The image below shows general case of skipping a part of a MIDI file:</p>
+<p><a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.Splitter.html#Melanchall_DryWetMidi_Tools_Splitter_SkipPart_">SkipPart</a> method skips part of the specified length of a MIDI file and returns remaining part as an instance of <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a>. The image below shows general case of skipping a part of a MIDI file:</p>
 <p><img src="images/Splitter/SkipPart.png" alt="Skip part of a MIDI file"></p>
 <h2 id="takepart">TakePart</h2>
-<p><a href="xref:Melanchall.DryWetMidi.Tools.Splitter.TakePart*">TakePart</a> methods take part of the specified length of a MIDI file (starting at the start or at the specified time within the file) and return it as an instance of <a href="xref:Melanchall.DryWetMidi.Core.MidiFile">MidiFile</a>. The image below shows both cases of taking a part of a MIDI file:</p>
+<p><a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.Splitter.html#Melanchall_DryWetMidi_Tools_Splitter_TakePart_">TakePart</a> methods take part of the specified length of a MIDI file (starting at the start or at the specified time within the file) and return it as an instance of <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a>. The image below shows both cases of taking a part of a MIDI file:</p>
 <p><img src="images/Splitter/TakePartAtStart.png" alt="Take part of a MIDI file at the start of the file"></p>
 <p><img src="images/Splitter/TakePartAtMiddle.png" alt="Take part of a MIDI file at the middle of the file"></p>
 <h2 id="cutpart">CutPart</h2>
-<p><a href="xref:Melanchall.DryWetMidi.Tools.Splitter.CutPart*">CutPart</a> method cuts a part of the specified length from a MIDI file (starting at the specified time within the file) and returns a new instance of <a href="xref:Melanchall.DryWetMidi.Core.MidiFile">MidiFile</a> which is the original file without the part. The image below shows how the method works:</p>
+<p><a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.Splitter.html#Melanchall_DryWetMidi_Tools_Splitter_CutPart_">CutPart</a> method cuts a part of the specified length from a MIDI file (starting at the specified time within the file) and returns a new instance of <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a> which is the original file without the part. The image below shows how the method works:</p>
 <p><img src="images/Splitter/CutPart.png" alt="Cut part from a MIDI file"></p>
 </article>
           </div>

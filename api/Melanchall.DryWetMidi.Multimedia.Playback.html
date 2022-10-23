@@ -1,0 +1,2175 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class Playback
+   | DryWetMIDI </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class Playback
+   | DryWetMIDI ">
+    <meta name="generator" content="docfx 2.59.2.0">
+    
+    <link rel="shortcut icon" href="../images/favicon.png">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    <meta property="docfx:rel" content="../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list">Search Results for <span></span></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination" data-first="First" data-prev="Previous" data-next="Next" data-last="Last"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Melanchall.DryWetMidi.Multimedia.Playback">
+  
+  
+  <h1 id="Melanchall_DryWetMidi_Multimedia_Playback" data-uid="Melanchall.DryWetMidi.Multimedia.Playback" class="text-break">Class Playback
+  </h1>
+  <div class="markdown level0 summary">
+Provides a way to play MIDI data through the specified output MIDI device. More info in the
+<a class="xref" href="../articles/playback/Overview.html">Playback</a> article.
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object">Object</a></div>
+    <div class="level1"><span class="xref">Playback</span></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.idisposable">IDisposable</a></div>
+    <div><a class="xref" href="Melanchall.DryWetMidi.Multimedia.IClockDrivenObject.html">IClockDrivenObject</a></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)">Object.Equals(Object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)">Object.Equals(Object, Object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gethashcode#system-object-gethashcode">Object.GetHashCode()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gettype#system-object-gettype">Object.GetType()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.memberwiseclone#system-object-memberwiseclone">Object.MemberwiseClone()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.referenceequals#system-object-referenceequals(system-object-system-object)">Object.ReferenceEquals(Object, Object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.tostring#system-object-tostring">Object.ToString()</a>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Melanchall.DryWetMidi.Multimedia.html">Melanchall.DryWetMidi.Multimedia</a></h6>
+  <h6><strong>Assembly</strong>: Melanchall.DryWetMidi.dll</h6>
+  <h5 id="Melanchall_DryWetMidi_Multimedia_Playback_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class Playback : IDisposable, IClockDrivenObject</code></pre>
+  </div>
+  <h5 id="Melanchall_DryWetMidi_Multimedia_Playback_remarks"><strong>Remarks</strong></h5>
+  <div class="markdown level0 remarks">
+You can derive from the <a class="xref" href="Melanchall.DryWetMidi.Multimedia.Playback.html">Playback</a> class to create your own playback logic.
+Please see <a class="xref" href="../articles/playback/Custom-playback.html">Custom playback</a> article to learn more.
+</div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <a id="Melanchall_DryWetMidi_Multimedia_Playback__ctor_" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.#ctor*"></a>
+  <h4 id="Melanchall_DryWetMidi_Multimedia_Playback__ctor_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_ITimedObject__Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Multimedia_IOutputDevice_Melanchall_DryWetMidi_Multimedia_PlaybackSettings_" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.#ctor(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Interaction.ITimedObject},Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Multimedia.IOutputDevice,Melanchall.DryWetMidi.Multimedia.PlaybackSettings)">Playback(IEnumerable&lt;ITimedObject&gt;, TempoMap, IOutputDevice, PlaybackSettings)</h4>
+  <div class="markdown level1 summary">
+Initializes a new instance of the <a class="xref" href="Melanchall.DryWetMidi.Multimedia.Playback.html">Playback</a> with the specified
+collection of timed objects, tempo map and output MIDI device to play events through.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Playback(IEnumerable&lt;ITimedObject&gt; timedObjects, TempoMap tempoMap, IOutputDevice outputDevice, PlaybackSettings playbackSettings = null)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimedObject.html">ITimedObject</a>&gt;</td>
+        <td><span class="parametername">timedObjects</span></td>
+        <td>Collection of timed objects to play.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TempoMap.html">TempoMap</a></td>
+        <td><span class="parametername">tempoMap</span></td>
+        <td>Tempo map used to calculate events times.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Multimedia.IOutputDevice.html">IOutputDevice</a></td>
+        <td><span class="parametername">outputDevice</span></td>
+        <td>Output MIDI device to play <code data-dev-comment-type="paramref" class="paramref">timedObjects</code> through.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Multimedia.PlaybackSettings.html">PlaybackSettings</a></td>
+        <td><span class="parametername">playbackSettings</span></td>
+        <td>Settings according to which a playback should be created.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td>
+<p>One of the following errors occured:</p>
+<ul><li><code data-dev-comment-type="paramref" class="paramref">timedObjects</code> is <code>null</code>.</li><li><code data-dev-comment-type="paramref" class="paramref">tempoMap</code> is <code>null</code>.</li><li><code data-dev-comment-type="paramref" class="paramref">outputDevice</code> is <code>null</code>.</li></ul>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Multimedia_Playback__ctor_" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.#ctor*"></a>
+  <h4 id="Melanchall_DryWetMidi_Multimedia_Playback__ctor_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_ITimedObject__Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Multimedia_PlaybackSettings_" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.#ctor(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Interaction.ITimedObject},Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Multimedia.PlaybackSettings)">Playback(IEnumerable&lt;ITimedObject&gt;, TempoMap, PlaybackSettings)</h4>
+  <div class="markdown level1 summary">
+Initializes a new instance of the <a class="xref" href="Melanchall.DryWetMidi.Multimedia.Playback.html">Playback</a> with the specified
+collection of timed objects and tempo map.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Playback(IEnumerable&lt;ITimedObject&gt; timedObjects, TempoMap tempoMap, PlaybackSettings playbackSettings = null)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimedObject.html">ITimedObject</a>&gt;</td>
+        <td><span class="parametername">timedObjects</span></td>
+        <td>Collection of timed objects to play.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TempoMap.html">TempoMap</a></td>
+        <td><span class="parametername">tempoMap</span></td>
+        <td>Tempo map used to calculate events times.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Multimedia.PlaybackSettings.html">PlaybackSettings</a></td>
+        <td><span class="parametername">playbackSettings</span></td>
+        <td>Settings according to which a playback should be created.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td>
+<p>One of the following errors occured:</p>
+<ul><li><code data-dev-comment-type="paramref" class="paramref">timedObjects</code> is <code>null</code>.</li><li><code data-dev-comment-type="paramref" class="paramref">tempoMap</code> is <code>null</code>.</li></ul>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+  </h3>
+  <a id="Melanchall_DryWetMidi_Multimedia_Playback_EventCallback_" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.EventCallback*"></a>
+  <h4 id="Melanchall_DryWetMidi_Multimedia_Playback_EventCallback" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.EventCallback">EventCallback</h4>
+  <div class="markdown level1 summary">
+Gets or sets callback used to process MIDI event to be played.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public EventCallback EventCallback { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Multimedia.EventCallback.html">EventCallback</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Melanchall_DryWetMidi_Multimedia_Playback_EventCallback_remarks">Remarks</h5>
+  <div class="markdown level1 remarks">
+Note that <a class="xref" href="Melanchall.DryWetMidi.Core.NoteOnEvent.html">NoteOnEvent</a> and <a class="xref" href="Melanchall.DryWetMidi.Core.NoteOffEvent.html">NoteOffEvent</a> won&apos;t be passed
+to <a class="xref" href="Melanchall.DryWetMidi.Multimedia.Playback.html#Melanchall_DryWetMidi_Multimedia_Playback_EventCallback">EventCallback</a>. Since processing of a note requires syncing between pairs
+of corresponding events, such pairs are handled by <a class="xref" href="Melanchall.DryWetMidi.Multimedia.Playback.html#Melanchall_DryWetMidi_Multimedia_Playback_NoteCallback">NoteCallback</a> to be sure
+that a note&apos;s integrity is not broken.
+</div>
+  <h5 id="Melanchall_DryWetMidi_Multimedia_Playback_EventCallback_examples">Examples</h5>
+  
+<p>
+The following example filters out all <a class="xref" href="Melanchall.DryWetMidi.Core.ProgramChangeEvent.html">Program Change</a> events:
+</p>
+<pre><code class="lang-csharp">playback.EventCallback = (midiEvent, rawTime, playbackTime) =>
+    midiEvent.EventType == MidiEventType.ProgramChange
+        ? null
+        : midiEvent;</code></pre>
+<p>
+Next example shows how to replace program <code>1</code> in all Program Change events to program <code>2</code>:
+</p>
+<pre><code class="lang-csharp">playback.EventCallback = (midiEvent, rawTime, playbackTime) =>
+    ((midiEvent is ProgramChangeEvent programChangeEvent) &amp;&amp; programChangeEvent.ProgramNumber == 1)
+        ? new ProgramChangeEvent((SevenBitNumber)2) { Channel = programChangeEvent.Channel }
+        : midiEvent;</code></pre>
+
+  <a id="Melanchall_DryWetMidi_Multimedia_Playback_InterruptNotesOnStop_" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.InterruptNotesOnStop*"></a>
+  <h4 id="Melanchall_DryWetMidi_Multimedia_Playback_InterruptNotesOnStop" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.InterruptNotesOnStop">InterruptNotesOnStop</h4>
+  <div class="markdown level1 summary">
+Gets or sets a value indicating whether currently playing notes must be stopped
+on playback stop or not.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool InterruptNotesOnStop { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Multimedia_Playback_IsRunning_" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.IsRunning*"></a>
+  <h4 id="Melanchall_DryWetMidi_Multimedia_Playback_IsRunning" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.IsRunning">IsRunning</h4>
+  <div class="markdown level1 summary">
+Gets a value indicating whether playing is currently running or not.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool IsRunning { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Multimedia_Playback_Loop_" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.Loop*"></a>
+  <h4 id="Melanchall_DryWetMidi_Multimedia_Playback_Loop" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.Loop">Loop</h4>
+  <div class="markdown level1 summary">
+Gets or sets a value indicating whether playing should automatically start
+from the first event after the last one played.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool Loop { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Multimedia_Playback_NoteCallback_" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.NoteCallback*"></a>
+  <h4 id="Melanchall_DryWetMidi_Multimedia_Playback_NoteCallback" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.NoteCallback">NoteCallback</h4>
+  <div class="markdown level1 summary">
+Gets or sets callback used to process note to be played.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public NoteCallback NoteCallback { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Multimedia.NoteCallback.html">NoteCallback</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Melanchall_DryWetMidi_Multimedia_Playback_NoteCallback_examples">Examples</h5>
+  
+<p>
+In the following example every note to be played will be transposed by <code>10</code> half-steps up:
+</p>
+<pre><code class="lang-csharp">var playback = midiFile.GetPlayback(outputDevice);
+playback.NoteCallback = (rawNoteData, rawTime, rawLength, playbackTime) =>
+    new NotePlaybackData(
+        (SevenBitNumber)(rawNoteData.NoteNumber + 10),
+        rawNoteData.Velocity,     // leave velocity as is
+        rawNoteData.OffVelocity,  // leave off velocity as is
+        rawNoteData.Channel);     // leave channel as is
+
+playback.Start();</code></pre>
+<p>
+Next example shows how you can filter out notes with velocity below <code>100</code>:
+</p>
+<pre><code class="lang-csharp">playback.NoteCallback = (rawNoteData, rawTime, rawLength, playbackTime) =>
+    rawNoteData.Velocity &lt; 100
+        ? null
+        : rawNoteData;</code></pre>
+
+  <a id="Melanchall_DryWetMidi_Multimedia_Playback_OutputDevice_" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.OutputDevice*"></a>
+  <h4 id="Melanchall_DryWetMidi_Multimedia_Playback_OutputDevice" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.OutputDevice">OutputDevice</h4>
+  <div class="markdown level1 summary">
+Gets or sets the output MIDI device to play MIDI data through.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IOutputDevice OutputDevice { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Multimedia.IOutputDevice.html">IOutputDevice</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Multimedia_Playback_PlaybackEnd_" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.PlaybackEnd*"></a>
+  <h4 id="Melanchall_DryWetMidi_Multimedia_Playback_PlaybackEnd" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.PlaybackEnd">PlaybackEnd</h4>
+  <div class="markdown level1 summary">
+Gets or sets the end time of the current playback. It defines end time of
+the region to play back.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ITimeSpan PlaybackEnd { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Melanchall_DryWetMidi_Multimedia_Playback_PlaybackEnd_remarks">Remarks</h5>
+  <div class="markdown level1 remarks">
+In conjunction with <a class="xref" href="Melanchall.DryWetMidi.Multimedia.Playback.html#Melanchall_DryWetMidi_Multimedia_Playback_PlaybackStart">PlaybackStart</a> you can define a region within the
+current playback which will be played. If you set the property to <code>null</code> the
+end of playback will be used.
+</div>
+  <a id="Melanchall_DryWetMidi_Multimedia_Playback_PlaybackStart_" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.PlaybackStart*"></a>
+  <h4 id="Melanchall_DryWetMidi_Multimedia_Playback_PlaybackStart" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.PlaybackStart">PlaybackStart</h4>
+  <div class="markdown level1 summary">
+Gets or sets the start time of the current playback. It defines start time of
+the region to play back.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ITimeSpan PlaybackStart { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Melanchall_DryWetMidi_Multimedia_Playback_PlaybackStart_remarks">Remarks</h5>
+  <div class="markdown level1 remarks">
+In conjunction with <a class="xref" href="Melanchall.DryWetMidi.Multimedia.Playback.html#Melanchall_DryWetMidi_Multimedia_Playback_PlaybackEnd">PlaybackEnd</a> you can define a region within the
+current playback which will be played. If you set the property to <code>null</code> the
+start of playback (zero) will be used.
+</div>
+  <a id="Melanchall_DryWetMidi_Multimedia_Playback_Snapping_" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.Snapping*"></a>
+  <h4 id="Melanchall_DryWetMidi_Multimedia_Playback_Snapping" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.Snapping">Snapping</h4>
+  <div class="markdown level1 summary">
+Gets an object to manage playback&apos;s snap points.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public PlaybackSnapping Snapping { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Multimedia.PlaybackSnapping.html">PlaybackSnapping</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Multimedia_Playback_Speed_" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.Speed*"></a>
+  <h4 id="Melanchall_DryWetMidi_Multimedia_Playback_Speed" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.Speed">Speed</h4>
+  <div class="markdown level1 summary">
+Gets or sets the speed of events playing. <code>1</code> means normal speed. For example, to play
+events twice slower this property should be set to <code>0.5</code>. Value of <code>2</code> will make playback
+twice faster.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public double Speed { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.double">Double</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Melanchall_DryWetMidi_Multimedia_Playback_Speed_examples">Examples</h5>
+  
+<p>
+Example below shows how you can use <code>Speed</code> property to set new BPM (if original data doesn&apos;t
+have tempo changes):
+</p>
+<pre><code class="lang-csharp">var tempoMap = midiFile.GetTempoMap();
+var originalBpm = tempoMap.GetTempoAtTime((MidiTimeSpan)0).BeatsPerMinute;
+
+var newBpm = 240;
+playback.Speed = newBpm / originalBpm;</code></pre>
+<p>
+We want to have BPM of <code>240</code> here so we just divide it by original BPM value. If
+original BPM was <code>120</code>, we&apos;ll get <code>2</code> which is exactly what we want - double the speed.
+If original value is <code>480</code>, we&apos;ll get <code>0.5</code> which means speed will be slowed down
+by two times.
+</p>
+
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">value</code> is zero or negative.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.objectdisposedexception">ObjectDisposedException</a></td>
+        <td>The current <a class="xref" href="Melanchall.DryWetMidi.Multimedia.Playback.html">Playback</a> is disposed.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Multimedia_Playback_TempoMap_" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.TempoMap*"></a>
+  <h4 id="Melanchall_DryWetMidi_Multimedia_Playback_TempoMap" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.TempoMap">TempoMap</h4>
+  <div class="markdown level1 summary">
+Gets the tempo map used to calculate events times.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public TempoMap TempoMap { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TempoMap.html">TempoMap</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Multimedia_Playback_TrackControlValue_" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.TrackControlValue*"></a>
+  <h4 id="Melanchall_DryWetMidi_Multimedia_Playback_TrackControlValue" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.TrackControlValue">TrackControlValue</h4>
+  <div class="markdown level1 summary">
+Gets or sets a value indicating whether controller values must be tracked or not. If <code>true</code>, any jump
+in time will force playback send <a class="xref" href="Melanchall.DryWetMidi.Core.ControlChangeEvent.html">ControlChangeEvent</a> corresponding to the controller value at new time,
+if needed. The default value is <code>false</code>. More info in the
+<a class="xref" href="../articles/playback/Data-tracking.html#midi-parameters-values-tracking">Data tracking: MIDI parameters values tracking</a>
+article.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool TrackControlValue { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Multimedia_Playback_TrackNotes_" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.TrackNotes*"></a>
+  <h4 id="Melanchall_DryWetMidi_Multimedia_Playback_TrackNotes" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.TrackNotes">TrackNotes</h4>
+  <div class="markdown level1 summary">
+Gets or sets a value indicating whether notes must be tracked or not. If <code>false</code>, notes
+will be treated as just Note On/Note Off events. The default value is <code>false</code>. More info in the
+<a class="xref" href="../articles/playback/Data-tracking.html#notes-tracking">Data tracking: Notes tracking</a> article.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool TrackNotes { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Multimedia_Playback_TrackPitchValue_" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.TrackPitchValue*"></a>
+  <h4 id="Melanchall_DryWetMidi_Multimedia_Playback_TrackPitchValue" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.TrackPitchValue">TrackPitchValue</h4>
+  <div class="markdown level1 summary">
+Gets or sets a value indicating whether pitch value must be tracked or not. If <code>true</code>, any jump
+in time will force playback send <a class="xref" href="Melanchall.DryWetMidi.Core.PitchBendEvent.html">PitchBendEvent</a> corresponding to the pitch value at new time,
+if needed. The default value is <code>false</code>. More info in the
+<a class="xref" href="../articles/playback/Data-tracking.html#midi-parameters-values-tracking">Data tracking: MIDI parameters values tracking</a>
+article.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool TrackPitchValue { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Multimedia_Playback_TrackProgram_" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.TrackProgram*"></a>
+  <h4 id="Melanchall_DryWetMidi_Multimedia_Playback_TrackProgram" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.TrackProgram">TrackProgram</h4>
+  <div class="markdown level1 summary">
+Gets or sets a value indicating whether program must be tracked or not. If <code>true</code>, any jump
+in time will force playback send <a class="xref" href="Melanchall.DryWetMidi.Core.ProgramChangeEvent.html">ProgramChangeEvent</a> corresponding to the program at new time,
+if needed. The default value is <code>false</code>. More info in the
+<a class="xref" href="../articles/playback/Data-tracking.html#midi-parameters-values-tracking">Data tracking: MIDI parameters values tracking</a>
+article.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool TrackProgram { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <a id="Melanchall_DryWetMidi_Multimedia_Playback_Dispose_" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.Dispose*"></a>
+  <h4 id="Melanchall_DryWetMidi_Multimedia_Playback_Dispose" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.Dispose">Dispose()</h4>
+  <div class="markdown level1 summary">
+Releases all resources used by the current <a class="xref" href="Melanchall.DryWetMidi.Multimedia.Playback.html">Playback</a>.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Dispose()</code></pre>
+  </div>
+  <a id="Melanchall_DryWetMidi_Multimedia_Playback_Finalize_" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.Finalize*"></a>
+  <h4 id="Melanchall_DryWetMidi_Multimedia_Playback_Finalize" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.Finalize">Finalize()</h4>
+  <div class="markdown level1 summary">
+Finalizes the current instance of the <a class="xref" href="Melanchall.DryWetMidi.Multimedia.Playback.html">Playback</a>.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected void Finalize()</code></pre>
+  </div>
+  <a id="Melanchall_DryWetMidi_Multimedia_Playback_GetCurrentTime_" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.GetCurrentTime*"></a>
+  <h4 id="Melanchall_DryWetMidi_Multimedia_Playback_GetCurrentTime_Melanchall_DryWetMidi_Interaction_TimeSpanType_" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.GetCurrentTime(Melanchall.DryWetMidi.Interaction.TimeSpanType)">GetCurrentTime(TimeSpanType)</h4>
+  <div class="markdown level1 summary">
+Retrieves the current time of the playback in the specified format.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ITimeSpan GetCurrentTime(TimeSpanType timeType)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TimeSpanType.html">TimeSpanType</a></td>
+        <td><span class="parametername">timeType</span></td>
+        <td>Type that will represent the current time.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a></td>
+        <td>The current time of the playback as an instance of time span defined by
+<code data-dev-comment-type="paramref" class="paramref">timeType</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.componentmodel.invalidenumargumentexception">InvalidEnumArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">timeType</code> specified an invalid value.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Multimedia_Playback_GetCurrentTime_" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.GetCurrentTime*"></a>
+  <h4 id="Melanchall_DryWetMidi_Multimedia_Playback_GetCurrentTime__1" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.GetCurrentTime``1">GetCurrentTime&lt;TTimeSpan&gt;()</h4>
+  <div class="markdown level1 summary">
+Retrieves the current time of the playback in the specified format.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public TTimeSpan GetCurrentTime&lt;TTimeSpan&gt;()
+    where TTimeSpan : ITimeSpan</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">TTimeSpan</span></td>
+        <td>The current time of the playback as an instance of
+<code data-dev-comment-type="typeparamref" class="typeparamref">TTimeSpan</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">TTimeSpan</span></td>
+        <td>Type that will represent the current time.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Multimedia_Playback_GetDuration_" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.GetDuration*"></a>
+  <h4 id="Melanchall_DryWetMidi_Multimedia_Playback_GetDuration_Melanchall_DryWetMidi_Interaction_TimeSpanType_" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.GetDuration(Melanchall.DryWetMidi.Interaction.TimeSpanType)">GetDuration(TimeSpanType)</h4>
+  <div class="markdown level1 summary">
+Retrieves the duration of the playback in the specified format.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ITimeSpan GetDuration(TimeSpanType durationType)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TimeSpanType.html">TimeSpanType</a></td>
+        <td><span class="parametername">durationType</span></td>
+        <td>Type that will represent the duration.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a></td>
+        <td>The duration of the playback as an instance of time span defined by
+<code data-dev-comment-type="paramref" class="paramref">durationType</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.componentmodel.invalidenumargumentexception">InvalidEnumArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">durationType</code>
+    specified an invalid value.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Multimedia_Playback_GetDuration_" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.GetDuration*"></a>
+  <h4 id="Melanchall_DryWetMidi_Multimedia_Playback_GetDuration__1" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.GetDuration``1">GetDuration&lt;TTimeSpan&gt;()</h4>
+  <div class="markdown level1 summary">
+Retrieves the duration of the playback in the specified format.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public TTimeSpan GetDuration&lt;TTimeSpan&gt;()
+    where TTimeSpan : ITimeSpan</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">TTimeSpan</span></td>
+        <td>The duration of the playback as an instance of
+<code data-dev-comment-type="typeparamref" class="typeparamref">TTimeSpan</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">TTimeSpan</span></td>
+        <td>Type that will represent the duration.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Multimedia_Playback_GetTimedEvents_" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.GetTimedEvents*"></a>
+  <h4 id="Melanchall_DryWetMidi_Multimedia_Playback_GetTimedEvents_Melanchall_DryWetMidi_Interaction_ITimedObject_" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.GetTimedEvents(Melanchall.DryWetMidi.Interaction.ITimedObject)">GetTimedEvents(ITimedObject)</h4>
+  <div class="markdown level1 summary">
+Returns collection of <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEvent.html">TimedEvent</a> representing the specified timed object.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected virtual IEnumerable&lt;TimedEvent&gt; GetTimedEvents(ITimedObject timedObject)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimedObject.html">ITimedObject</a></td>
+        <td><span class="parametername">timedObject</span></td>
+        <td>Timed object to get collection of <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEvent.html">TimedEvent</a> from.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEvent.html">TimedEvent</a>&gt;</td>
+        <td>Collection of <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEvent.html">TimedEvent</a> representing the <code data-dev-comment-type="paramref" class="paramref">timedObject</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Melanchall_DryWetMidi_Multimedia_Playback_GetTimedEvents_Melanchall_DryWetMidi_Interaction_ITimedObject__remarks">Remarks</h5>
+  <div class="markdown level1 remarks">
+The method can be useful in case of <a class="xref" href="../articles/playback/Custom-playback.html">custom playback</a> and
+custom input object.
+</div>
+  <a id="Melanchall_DryWetMidi_Multimedia_Playback_MoveBack_" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.MoveBack*"></a>
+  <h4 id="Melanchall_DryWetMidi_Multimedia_Playback_MoveBack_Melanchall_DryWetMidi_Interaction_ITimeSpan_" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.MoveBack(Melanchall.DryWetMidi.Interaction.ITimeSpan)">MoveBack(ITimeSpan)</h4>
+  <div class="markdown level1 summary">
+Shifts playback position back by the specified step.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void MoveBack(ITimeSpan step)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a></td>
+        <td><span class="parametername">step</span></td>
+        <td>Amount of time to shift playback position by.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">step</code> is <code>null</code>.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.objectdisposedexception">ObjectDisposedException</a></td>
+        <td>The current <a class="xref" href="Melanchall.DryWetMidi.Multimedia.Playback.html">Playback</a> is disposed.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Multimedia.MidiDeviceException.html">MidiDeviceException</a></td>
+        <td>An error occurred on device.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Multimedia_Playback_MoveForward_" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.MoveForward*"></a>
+  <h4 id="Melanchall_DryWetMidi_Multimedia_Playback_MoveForward_Melanchall_DryWetMidi_Interaction_ITimeSpan_" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.MoveForward(Melanchall.DryWetMidi.Interaction.ITimeSpan)">MoveForward(ITimeSpan)</h4>
+  <div class="markdown level1 summary">
+Shifts playback position forward by the specified step.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void MoveForward(ITimeSpan step)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a></td>
+        <td><span class="parametername">step</span></td>
+        <td>Amount of time to shift playback position by.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">step</code> is <code>null</code>.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.objectdisposedexception">ObjectDisposedException</a></td>
+        <td>The current <a class="xref" href="Melanchall.DryWetMidi.Multimedia.Playback.html">Playback</a> is disposed.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Multimedia.MidiDeviceException.html">MidiDeviceException</a></td>
+        <td>An error occurred on device.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Multimedia_Playback_MoveToFirstSnapPoint_" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.MoveToFirstSnapPoint*"></a>
+  <h4 id="Melanchall_DryWetMidi_Multimedia_Playback_MoveToFirstSnapPoint" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.MoveToFirstSnapPoint">MoveToFirstSnapPoint()</h4>
+  <div class="markdown level1 summary">
+Sets playback position to the time of first snap point.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool MoveToFirstSnapPoint()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
+        <td><code>true</code> if playback position successfully changed to the time of first snap point;
+    otherwise, <code>false</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.objectdisposedexception">ObjectDisposedException</a></td>
+        <td>The current <a class="xref" href="Melanchall.DryWetMidi.Multimedia.Playback.html">Playback</a> is disposed.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Multimedia.MidiDeviceException.html">MidiDeviceException</a></td>
+        <td>An error occurred on device.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Multimedia_Playback_MoveToFirstSnapPoint_" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.MoveToFirstSnapPoint*"></a>
+  <h4 id="Melanchall_DryWetMidi_Multimedia_Playback_MoveToFirstSnapPoint__1___0_" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.MoveToFirstSnapPoint``1(``0)">MoveToFirstSnapPoint&lt;TData&gt;(TData)</h4>
+  <div class="markdown level1 summary">
+Sets playback position to the time of first snap point holding the specified data.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool MoveToFirstSnapPoint&lt;TData&gt;(TData data)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">TData</span></td>
+        <td><span class="parametername">data</span></td>
+        <td>Data of a snap point to move to.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
+        <td><code>true</code> if playback position successfully changed to the time of first snap point
+    with the specified data; otherwise, <code>false</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">TData</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.objectdisposedexception">ObjectDisposedException</a></td>
+        <td>The current <a class="xref" href="Melanchall.DryWetMidi.Multimedia.Playback.html">Playback</a> is disposed.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Multimedia.MidiDeviceException.html">MidiDeviceException</a></td>
+        <td>An error occurred on device.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Multimedia_Playback_MoveToNextSnapPoint_" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.MoveToNextSnapPoint*"></a>
+  <h4 id="Melanchall_DryWetMidi_Multimedia_Playback_MoveToNextSnapPoint" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.MoveToNextSnapPoint">MoveToNextSnapPoint()</h4>
+  <div class="markdown level1 summary">
+Sets playback position to the time of next snap point (relative to the current
+time of playback).
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool MoveToNextSnapPoint()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
+        <td><code>true</code> if playback position successfully changed to the time of a next snap point;
+    otherwise, <code>false</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.objectdisposedexception">ObjectDisposedException</a></td>
+        <td>The current <a class="xref" href="Melanchall.DryWetMidi.Multimedia.Playback.html">Playback</a> is disposed.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Multimedia.MidiDeviceException.html">MidiDeviceException</a></td>
+        <td>An error occurred on device.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Multimedia_Playback_MoveToNextSnapPoint_" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.MoveToNextSnapPoint*"></a>
+  <h4 id="Melanchall_DryWetMidi_Multimedia_Playback_MoveToNextSnapPoint_Melanchall_DryWetMidi_Multimedia_SnapPointsGroup_" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.MoveToNextSnapPoint(Melanchall.DryWetMidi.Multimedia.SnapPointsGroup)">MoveToNextSnapPoint(SnapPointsGroup)</h4>
+  <div class="markdown level1 summary">
+Sets playback position to the time of next snap point (relative to the current
+time of playback) that belongs to the specified <a class="xref" href="Melanchall.DryWetMidi.Multimedia.SnapPointsGroup.html">SnapPointsGroup</a>.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool MoveToNextSnapPoint(SnapPointsGroup snapPointsGroup)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Multimedia.SnapPointsGroup.html">SnapPointsGroup</a></td>
+        <td><span class="parametername">snapPointsGroup</span></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Multimedia.SnapPointsGroup.html">SnapPointsGroup</a> that defines snap points to
+    select the one from.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
+        <td><code>true</code> if playback position successfully changed to the time of a next snap point
+    within <code data-dev-comment-type="paramref" class="paramref">snapPointsGroup</code>; otherwise, <code>false</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">snapPointsGroup</code> is <code>null</code>.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.objectdisposedexception">ObjectDisposedException</a></td>
+        <td>The current <a class="xref" href="Melanchall.DryWetMidi.Multimedia.Playback.html">Playback</a> is disposed.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Multimedia.MidiDeviceException.html">MidiDeviceException</a></td>
+        <td>An error occurred on device.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Multimedia_Playback_MoveToNextSnapPoint_" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.MoveToNextSnapPoint*"></a>
+  <h4 id="Melanchall_DryWetMidi_Multimedia_Playback_MoveToNextSnapPoint__1___0_" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.MoveToNextSnapPoint``1(``0)">MoveToNextSnapPoint&lt;TData&gt;(TData)</h4>
+  <div class="markdown level1 summary">
+Sets playback position to the time of next snap point (relative to the current
+time of playback) holding the specified data.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool MoveToNextSnapPoint&lt;TData&gt;(TData data)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">TData</span></td>
+        <td><span class="parametername">data</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
+        <td><code>true</code> if playback position successfully changed to the time of a next snap point
+    with the specified data; otherwise, <code>false</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">TData</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.objectdisposedexception">ObjectDisposedException</a></td>
+        <td>The current <a class="xref" href="Melanchall.DryWetMidi.Multimedia.Playback.html">Playback</a> is disposed.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Multimedia.MidiDeviceException.html">MidiDeviceException</a></td>
+        <td>An error occurred on device.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Multimedia_Playback_MoveToPreviousSnapPoint_" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.MoveToPreviousSnapPoint*"></a>
+  <h4 id="Melanchall_DryWetMidi_Multimedia_Playback_MoveToPreviousSnapPoint" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.MoveToPreviousSnapPoint">MoveToPreviousSnapPoint()</h4>
+  <div class="markdown level1 summary">
+Sets playback position to the time of previous snap point (relative to the current
+time of playback).
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool MoveToPreviousSnapPoint()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
+        <td><code>true</code> if playback position successfully changed to the time of a previous snap point;
+    otherwise, <code>false</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.objectdisposedexception">ObjectDisposedException</a></td>
+        <td>The current <a class="xref" href="Melanchall.DryWetMidi.Multimedia.Playback.html">Playback</a> is disposed.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Multimedia.MidiDeviceException.html">MidiDeviceException</a></td>
+        <td>An error occurred on device.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Multimedia_Playback_MoveToPreviousSnapPoint_" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.MoveToPreviousSnapPoint*"></a>
+  <h4 id="Melanchall_DryWetMidi_Multimedia_Playback_MoveToPreviousSnapPoint_Melanchall_DryWetMidi_Multimedia_SnapPointsGroup_" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.MoveToPreviousSnapPoint(Melanchall.DryWetMidi.Multimedia.SnapPointsGroup)">MoveToPreviousSnapPoint(SnapPointsGroup)</h4>
+  <div class="markdown level1 summary">
+Sets playback position to the time of the previous snap point (relative to the current
+time of playback) that belongs to the specified <a class="xref" href="Melanchall.DryWetMidi.Multimedia.SnapPointsGroup.html">SnapPointsGroup</a>.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool MoveToPreviousSnapPoint(SnapPointsGroup snapPointsGroup)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Multimedia.SnapPointsGroup.html">SnapPointsGroup</a></td>
+        <td><span class="parametername">snapPointsGroup</span></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Multimedia.SnapPointsGroup.html">SnapPointsGroup</a> that defines snap points to
+    select the one from.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
+        <td><code>true</code> if playback position successfully changed to the time of a previous snap point
+    within <code data-dev-comment-type="paramref" class="paramref">snapPointsGroup</code>; otherwise, <code>false</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">snapPointsGroup</code> is <code>null</code>.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.objectdisposedexception">ObjectDisposedException</a></td>
+        <td>The current <a class="xref" href="Melanchall.DryWetMidi.Multimedia.Playback.html">Playback</a> is disposed.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Multimedia.MidiDeviceException.html">MidiDeviceException</a></td>
+        <td>An error occurred on device.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Multimedia_Playback_MoveToPreviousSnapPoint_" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.MoveToPreviousSnapPoint*"></a>
+  <h4 id="Melanchall_DryWetMidi_Multimedia_Playback_MoveToPreviousSnapPoint__1___0_" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.MoveToPreviousSnapPoint``1(``0)">MoveToPreviousSnapPoint&lt;TData&gt;(TData)</h4>
+  <div class="markdown level1 summary">
+Sets playback position to the time of previous snap point (relative to the current
+time of playback) holding the specified data.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool MoveToPreviousSnapPoint&lt;TData&gt;(TData data)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">TData</span></td>
+        <td><span class="parametername">data</span></td>
+        <td>Data of a snap point to move to.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
+        <td><code>true</code> if playback position successfully changed to the time of a previous snap point
+    with the specified data; otherwise, <code>false</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">TData</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.objectdisposedexception">ObjectDisposedException</a></td>
+        <td>The current <a class="xref" href="Melanchall.DryWetMidi.Multimedia.Playback.html">Playback</a> is disposed.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Multimedia.MidiDeviceException.html">MidiDeviceException</a></td>
+        <td>An error occurred on device.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Multimedia_Playback_MoveToSnapPoint_" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.MoveToSnapPoint*"></a>
+  <h4 id="Melanchall_DryWetMidi_Multimedia_Playback_MoveToSnapPoint_Melanchall_DryWetMidi_Multimedia_SnapPoint_" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.MoveToSnapPoint(Melanchall.DryWetMidi.Multimedia.SnapPoint)">MoveToSnapPoint(SnapPoint)</h4>
+  <div class="markdown level1 summary">
+Sets playback position to the time of the specified snap point.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool MoveToSnapPoint(SnapPoint snapPoint)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Multimedia.SnapPoint.html">SnapPoint</a></td>
+        <td><span class="parametername">snapPoint</span></td>
+        <td>Snap point to move to.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
+        <td><code>true</code> if playback position successfully changed to the time of <code data-dev-comment-type="paramref" class="paramref">snapPoint</code>;
+    otherwise, <code>false</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">snapPoint</code> is <code>null</code>.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.objectdisposedexception">ObjectDisposedException</a></td>
+        <td>The current <a class="xref" href="Melanchall.DryWetMidi.Multimedia.Playback.html">Playback</a> is disposed.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Multimedia.MidiDeviceException.html">MidiDeviceException</a></td>
+        <td>An error occurred on device.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Multimedia_Playback_MoveToStart_" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.MoveToStart*"></a>
+  <h4 id="Melanchall_DryWetMidi_Multimedia_Playback_MoveToStart" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.MoveToStart">MoveToStart()</h4>
+  <div class="markdown level1 summary">
+Sets playback position to the beginning of the MIDI data.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void MoveToStart()</code></pre>
+  </div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.objectdisposedexception">ObjectDisposedException</a></td>
+        <td>The current <a class="xref" href="Melanchall.DryWetMidi.Multimedia.Playback.html">Playback</a> is disposed.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Multimedia.MidiDeviceException.html">MidiDeviceException</a></td>
+        <td>An error occurred on device.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Multimedia_Playback_MoveToTime_" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.MoveToTime*"></a>
+  <h4 id="Melanchall_DryWetMidi_Multimedia_Playback_MoveToTime_Melanchall_DryWetMidi_Interaction_ITimeSpan_" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.MoveToTime(Melanchall.DryWetMidi.Interaction.ITimeSpan)">MoveToTime(ITimeSpan)</h4>
+  <div class="markdown level1 summary">
+Sets playback position to the specified time from the beginning of the MIDI data.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void MoveToTime(ITimeSpan time)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a></td>
+        <td><span class="parametername">time</span></td>
+        <td>Time from the beginning of the MIDI data to set playback position to.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">time</code> is <code>null</code>.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.objectdisposedexception">ObjectDisposedException</a></td>
+        <td>The current <a class="xref" href="Melanchall.DryWetMidi.Multimedia.Playback.html">Playback</a> is disposed.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Multimedia.MidiDeviceException.html">MidiDeviceException</a></td>
+        <td>An error occurred on device.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Multimedia_Playback_Play_" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.Play*"></a>
+  <h4 id="Melanchall_DryWetMidi_Multimedia_Playback_Play" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.Play">Play()</h4>
+  <div class="markdown level1 summary">
+Starts playing of the MIDI data. This method will block execution of a program until all
+MIDI data is played.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Play()</code></pre>
+  </div>
+  <h5 id="Melanchall_DryWetMidi_Multimedia_Playback_Play_remarks">Remarks</h5>
+  <div class="markdown level1 remarks">
+If <a class="xref" href="Melanchall.DryWetMidi.Multimedia.Playback.html#Melanchall_DryWetMidi_Multimedia_Playback_Loop">Loop</a> is set to <code>true</code>, this method will execute forever.
+</div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.objectdisposedexception">ObjectDisposedException</a></td>
+        <td>The current <a class="xref" href="Melanchall.DryWetMidi.Multimedia.Playback.html">Playback</a> is disposed.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Multimedia.MidiDeviceException.html">MidiDeviceException</a></td>
+        <td>An error occurred on device.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Multimedia_Playback_Start_" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.Start*"></a>
+  <h4 id="Melanchall_DryWetMidi_Multimedia_Playback_Start" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.Start">Start()</h4>
+  <div class="markdown level1 summary">
+Starts playing of the MIDI data. This method is non-blocking.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Start()</code></pre>
+  </div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.objectdisposedexception">ObjectDisposedException</a></td>
+        <td>The current <a class="xref" href="Melanchall.DryWetMidi.Multimedia.Playback.html">Playback</a> is disposed.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Multimedia.MidiDeviceException.html">MidiDeviceException</a></td>
+        <td>An error occurred on device.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Multimedia_Playback_Stop_" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.Stop*"></a>
+  <h4 id="Melanchall_DryWetMidi_Multimedia_Playback_Stop" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.Stop">Stop()</h4>
+  <div class="markdown level1 summary">
+Stops playing of the MIDI data. Note that this method doesn&apos;t reset playback position. If you
+call <a class="xref" href="Melanchall.DryWetMidi.Multimedia.Playback.html#Melanchall_DryWetMidi_Multimedia_Playback_Start">Start()</a>, playing will be resumed from the point where <a class="xref" href="Melanchall.DryWetMidi.Multimedia.Playback.html#Melanchall_DryWetMidi_Multimedia_Playback_Stop">Stop()</a> was called.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Stop()</code></pre>
+  </div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.objectdisposedexception">ObjectDisposedException</a></td>
+        <td>The current <a class="xref" href="Melanchall.DryWetMidi.Multimedia.Playback.html">Playback</a> is disposed.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Multimedia.MidiDeviceException.html">MidiDeviceException</a></td>
+        <td>An error occurred on device.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Multimedia_Playback_TickClock_" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.TickClock*"></a>
+  <h4 id="Melanchall_DryWetMidi_Multimedia_Playback_TickClock" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.TickClock">TickClock()</h4>
+  <div class="markdown level1 summary">
+Ticks internal clock.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void TickClock()</code></pre>
+  </div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.objectdisposedexception">ObjectDisposedException</a></td>
+        <td>The current <a class="xref" href="Melanchall.DryWetMidi.Multimedia.Playback.html">Playback</a> is disposed.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Multimedia_Playback_TryPlayEvent_" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.TryPlayEvent*"></a>
+  <h4 id="Melanchall_DryWetMidi_Multimedia_Playback_TryPlayEvent_Melanchall_DryWetMidi_Core_MidiEvent_System_Object_" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.TryPlayEvent(Melanchall.DryWetMidi.Core.MidiEvent,System.Object)">TryPlayEvent(MidiEvent, Object)</h4>
+  <div class="markdown level1 summary">
+Tries to play the specified MIDI event. By default just sends the event to output device
+returning <code>true</code>.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected virtual bool TryPlayEvent(MidiEvent midiEvent, object metadata)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html">MidiEvent</a></td>
+        <td><span class="parametername">midiEvent</span></td>
+        <td>MIDI event to try to play.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object">Object</a></td>
+        <td><span class="parametername">metadata</span></td>
+        <td>Metadata attached to <code data-dev-comment-type="paramref" class="paramref">midiEvent</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
+        <td><code>true</code> if <code data-dev-comment-type="paramref" class="paramref">midiEvent</code> was played; otherwise, <code>false</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Melanchall_DryWetMidi_Multimedia_Playback_TryPlayEvent_Melanchall_DryWetMidi_Core_MidiEvent_System_Object__remarks">Remarks</h5>
+  <div class="markdown level1 remarks">
+Please see <a class="xref" href="../articles/playback/Custom-playback.html">Custom playback</a> article to learn more
+about how to use <code data-dev-comment-type="paramref" class="paramref">metadata</code> parameter.
+</div>
+  <h3 id="events">Events
+  </h3>
+  <h4 id="Melanchall_DryWetMidi_Multimedia_Playback_DeviceErrorOccurred" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.DeviceErrorOccurred">DeviceErrorOccurred</h4>
+  <div class="markdown level1 summary">
+Occurs when an error got from output device.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public event EventHandler&lt;ErrorOccurredEventArgs&gt; DeviceErrorOccurred</code></pre>
+  </div>
+  <h5 class="eventType">Event Type</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.eventhandler-1">EventHandler</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Multimedia.ErrorOccurredEventArgs.html">ErrorOccurredEventArgs</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h4 id="Melanchall_DryWetMidi_Multimedia_Playback_EventPlayed" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.EventPlayed">EventPlayed</h4>
+  <div class="markdown level1 summary">
+Occurs when MIDI event played.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public event EventHandler&lt;MidiEventPlayedEventArgs&gt; EventPlayed</code></pre>
+  </div>
+  <h5 class="eventType">Event Type</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.eventhandler-1">EventHandler</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Multimedia.MidiEventPlayedEventArgs.html">MidiEventPlayedEventArgs</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h4 id="Melanchall_DryWetMidi_Multimedia_Playback_Finished" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.Finished">Finished</h4>
+  <div class="markdown level1 summary">
+Occurs when playback finished, i.e. last event has been played and no
+need to restart playback due to value of the <a class="xref" href="Melanchall.DryWetMidi.Multimedia.Playback.html#Melanchall_DryWetMidi_Multimedia_Playback_Loop">Loop</a>.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public event EventHandler Finished</code></pre>
+  </div>
+  <h5 class="eventType">Event Type</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.eventhandler">EventHandler</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h4 id="Melanchall_DryWetMidi_Multimedia_Playback_NotesPlaybackFinished" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.NotesPlaybackFinished">NotesPlaybackFinished</h4>
+  <div class="markdown level1 summary">
+Occurs when notes finished to play. It will raised if playback&apos;s cursor
+gets out from notes.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public event EventHandler&lt;NotesEventArgs&gt; NotesPlaybackFinished</code></pre>
+  </div>
+  <h5 class="eventType">Event Type</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.eventhandler-1">EventHandler</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Multimedia.NotesEventArgs.html">NotesEventArgs</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h4 id="Melanchall_DryWetMidi_Multimedia_Playback_NotesPlaybackStarted" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.NotesPlaybackStarted">NotesPlaybackStarted</h4>
+  <div class="markdown level1 summary">
+Occurs when notes started to play. It will raised if playback&apos;s cursor
+gets in to notes.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public event EventHandler&lt;NotesEventArgs&gt; NotesPlaybackStarted</code></pre>
+  </div>
+  <h5 class="eventType">Event Type</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.eventhandler-1">EventHandler</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Multimedia.NotesEventArgs.html">NotesEventArgs</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h4 id="Melanchall_DryWetMidi_Multimedia_Playback_RepeatStarted" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.RepeatStarted">RepeatStarted</h4>
+  <div class="markdown level1 summary">
+Occurs when playback started new cycle of the data playing in case of <a class="xref" href="Melanchall.DryWetMidi.Multimedia.Playback.html#Melanchall_DryWetMidi_Multimedia_Playback_Loop">Loop</a> set to <code>true</code>.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public event EventHandler RepeatStarted</code></pre>
+  </div>
+  <h5 class="eventType">Event Type</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.eventhandler">EventHandler</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h4 id="Melanchall_DryWetMidi_Multimedia_Playback_Started" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.Started">Started</h4>
+  <div class="markdown level1 summary">
+Occurs when playback started via <a class="xref" href="Melanchall.DryWetMidi.Multimedia.Playback.html#Melanchall_DryWetMidi_Multimedia_Playback_Start">Start()</a> or <a class="xref" href="Melanchall.DryWetMidi.Multimedia.Playback.html#Melanchall_DryWetMidi_Multimedia_Playback_Play">Play()</a> methods.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public event EventHandler Started</code></pre>
+  </div>
+  <h5 class="eventType">Event Type</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.eventhandler">EventHandler</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h4 id="Melanchall_DryWetMidi_Multimedia_Playback_Stopped" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.Stopped">Stopped</h4>
+  <div class="markdown level1 summary">
+Occurs when playback stopped via <a class="xref" href="Melanchall.DryWetMidi.Multimedia.Playback.html#Melanchall_DryWetMidi_Multimedia_Playback_Stop">Stop()</a> method.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public event EventHandler Stopped</code></pre>
+  </div>
+  <h5 class="eventType">Event Type</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.eventhandler">EventHandler</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.idisposable">System.IDisposable</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Multimedia.IClockDrivenObject.html">IClockDrivenObject</a>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            2022 / Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

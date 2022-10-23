@@ -82,8 +82,8 @@
 <p>The simplest code for MIDI file reading is:</p>
 <pre><code class="lang-csharp">var file = MidiFile.Read(&quot;Some great song.mid&quot;);
 </code></pre>
-<p>After that you have instance of the <a href="xref:Melanchall.DryWetMidi.Core.MidiFile">MidiFile</a>. Its <a href="xref:Melanchall.DryWetMidi.Core.MidiFile.Chunks">Chunks</a> property returns collection of chunks within the MIDI file read. Using this collection you can manage chunks (add new, delete existing one and so on).</p>
-<p>MIDI file reading process can be finely adjusted via <a href="xref:Melanchall.DryWetMidi.Core.ReadingSettings">ReadingSettings</a>. For example, if we want to abort reading on unknown chunk (about reading custom chunks see <a class="xref" href="../custom-data-structures/Custom-chunks.html">Custom chunks</a> article), you can set corresponding policy:</p>
+<p>After that you have instance of the <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a>. Its <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.MidiFile.html#Melanchall_DryWetMidi_Core_MidiFile_Chunks">Chunks</a> property returns collection of chunks within the MIDI file read. Using this collection you can manage chunks (add new, delete existing one and so on).</p>
+<p>MIDI file reading process can be finely adjusted via <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.ReadingSettings.html">ReadingSettings</a>. For example, if we want to abort reading on unknown chunk (about reading custom chunks see <a class="xref" href="../custom-data-structures/Custom-chunks.html">Custom chunks</a> article), you can set corresponding policy:</p>
 <pre><code class="lang-csharp">var file = MidiFile.Read(&quot;Some great song.mid&quot;, new ReadingSettings
 {
     UnknownChunkIdPolicy = UnknownChunkIdPolicy.Abort
@@ -106,7 +106,7 @@
     UnknownFileFormatPolicy = UnknownFileFormatPolicy.Ignore,
 });
 </code></pre>
-<p>Please read more about these properties in the API section to learn about what options are available to handle each error. If some policies set to <code>Abort</code>, an instance of corresponding exception will be thrown. All such exceptions types are derived from <a href="xref:Melanchall.DryWetMidi.Common.MidiException">MidiException</a> and listed in <em>Exceptions</em> section of <code>Read</code> methods (<a href="xref:Melanchall.DryWetMidi.Core.MidiFile.Read(System.String,Melanchall.DryWetMidi.Core.ReadingSettings)">by file path</a> or <a href="xref:Melanchall.DryWetMidi.Core.MidiFile.Read(System.IO.Stream,Melanchall.DryWetMidi.Core.ReadingSettings)">by stream</a>) on API documentation.</p>
+<p>Please read more about these properties in the API section to learn about what options are available to handle each error. If some policies set to <code>Abort</code>, an instance of corresponding exception will be thrown. All such exceptions types are derived from <a class="xref" href="../../api/Melanchall.DryWetMidi.Common.MidiException.html">MidiException</a> and listed in <em>Exceptions</em> section of <code>Read</code> methods (<a class="xref" href="../../api/Melanchall.DryWetMidi.Core.MidiFile.html#Melanchall_DryWetMidi_Core_MidiFile_Read_System_String_Melanchall_DryWetMidi_Core_ReadingSettings_">by file path</a> or <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.MidiFile.html#Melanchall_DryWetMidi_Core_MidiFile_Read_System_IO_Stream_Melanchall_DryWetMidi_Core_ReadingSettings_">by stream</a>) on API documentation.</p>
 </article>
           </div>
           

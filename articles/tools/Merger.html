@@ -79,9 +79,9 @@
             <article class="content wrap" id="_content" data-uid="a_merger">
 <h1 id="merger">Merger</h1>
 
-<p>To merge nearby objects into one DryWetMIDI provides <a href="xref:Melanchall.DryWetMidi.Tools.Merger">Merger</a> class. Quick example of merging in action:</p>
+<p>To merge nearby objects into one DryWetMIDI provides <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.Merger.html">Merger</a> class. Quick example of merging in action:</p>
 <p><img src="images/Merger/MergeObjects.png" alt="Objects merging"></p>
-<p>Process of merging can be adjusted via <a href="xref:Melanchall.DryWetMidi.Tools.ObjectsMergingSettings">ObjectsMergingSettings</a>. By default two objects should have no gap between them to be merged. But you can specify any desired tolerance via settings:</p>
+<p>Process of merging can be adjusted via <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.ObjectsMergingSettings.html">ObjectsMergingSettings</a>. By default two objects should have no gap between them to be merged. But you can specify any desired tolerance via settings:</p>
 <pre><code class="lang-csharp">var newObjects = objects.MergeObjects(
     TempoMap.Default,
     new ObjectsMergingSettings
@@ -91,7 +91,7 @@
 </code></pre>
 <p>Now objects will be merged if the distance between them from <code>0</code> to <code>1</code> second. So tolerance is maximum distance between two objects to consider them as nearby. Please take a look at how tolerance (<code>T</code>) affects process of merging:</p>
 <p><img src="images/Merger/MergeObjects-Tolerance.png" alt="Objects merging tolerance"></p>
-<p>Of course merging available not for objects collections only. You can use also <a href="xref:Melanchall.DryWetMidi.Tools.Merger.MergeObjects*">MergeObjects</a> methods on <a href="xref:Melanchall.DryWetMidi.Core.MidiFile">MidiFile</a> and <a href="xref:Melanchall.DryWetMidi.Core.TrackChunk">TrackChunk</a>:</p>
+<p>Of course merging available not for objects collections only. You can use also <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.Merger.html#Melanchall_DryWetMidi_Tools_Merger_MergeObjects_">MergeObjects</a> methods on <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a> and <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a>:</p>
 <pre><code class="lang-csharp">midiFile.MergeObjects(
     ObjectType.Note | ObjectType.Chord,
     new ObjectsMergingSettings
@@ -111,7 +111,7 @@
 <p><img src="images/Merger/MergeObjects-Chords.png" alt="Chords merging using default logic"></p>
 <p>Now let's change the logic: chords can be merged only if there are notes in them without gap. Also notes in result chord need to start at the same time and have the same length. Following image shows how chords will be merged:</p>
 <p><img src="images/Merger/MergeObjects-Chords-Custom.png" alt="Chords merging using custom logic"></p>
-<p>We need to derive from the <a href="xref:Melanchall.DryWetMidi.Tools.ObjectsMerger">ObjectsMerger</a> class to implement these rules:</p>
+<p>We need to derive from the <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.ObjectsMerger.html">ObjectsMerger</a> class to implement these rules:</p>
 <pre><code class="lang-csharp">private sealed class ChordsMerger : ObjectsMerger
 {
     public ChordsMerger(ILengthedObject obj)

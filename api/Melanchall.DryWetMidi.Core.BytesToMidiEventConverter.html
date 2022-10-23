@@ -1,0 +1,1125 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class BytesToMidiEventConverter
+   | DryWetMIDI </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class BytesToMidiEventConverter
+   | DryWetMIDI ">
+    <meta name="generator" content="docfx 2.59.2.0">
+    
+    <link rel="shortcut icon" href="../images/favicon.png">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    <meta property="docfx:rel" content="../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list">Search Results for <span></span></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination" data-first="First" data-prev="Previous" data-next="Next" data-last="Last"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Melanchall.DryWetMidi.Core.BytesToMidiEventConverter">
+  
+  
+  <h1 id="Melanchall_DryWetMidi_Core_BytesToMidiEventConverter" data-uid="Melanchall.DryWetMidi.Core.BytesToMidiEventConverter" class="text-break">Class BytesToMidiEventConverter
+  </h1>
+  <div class="markdown level0 summary">
+Provides methods to convert bytes to an instance of the <a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html">MidiEvent</a>.
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object">Object</a></div>
+    <div class="level1"><span class="xref">BytesToMidiEventConverter</span></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.idisposable">IDisposable</a></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)">Object.Equals(Object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)">Object.Equals(Object, Object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gethashcode#system-object-gethashcode">Object.GetHashCode()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gettype#system-object-gettype">Object.GetType()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.memberwiseclone#system-object-memberwiseclone">Object.MemberwiseClone()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.referenceequals#system-object-referenceequals(system-object-system-object)">Object.ReferenceEquals(Object, Object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.tostring#system-object-tostring">Object.ToString()</a>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Melanchall.DryWetMidi.Core.html">Melanchall.DryWetMidi.Core</a></h6>
+  <h6><strong>Assembly</strong>: Melanchall.DryWetMidi.dll</h6>
+  <h5 id="Melanchall_DryWetMidi_Core_BytesToMidiEventConverter_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public sealed class BytesToMidiEventConverter : IDisposable</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <a id="Melanchall_DryWetMidi_Core_BytesToMidiEventConverter__ctor_" data-uid="Melanchall.DryWetMidi.Core.BytesToMidiEventConverter.#ctor*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_BytesToMidiEventConverter__ctor" data-uid="Melanchall.DryWetMidi.Core.BytesToMidiEventConverter.#ctor">BytesToMidiEventConverter()</h4>
+  <div class="markdown level1 summary">
+Initializes a new instance of the <a class="xref" href="Melanchall.DryWetMidi.Core.BytesToMidiEventConverter.html">BytesToMidiEventConverter</a>.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public BytesToMidiEventConverter()</code></pre>
+  </div>
+  <a id="Melanchall_DryWetMidi_Core_BytesToMidiEventConverter__ctor_" data-uid="Melanchall.DryWetMidi.Core.BytesToMidiEventConverter.#ctor*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_BytesToMidiEventConverter__ctor_System_Int32_" data-uid="Melanchall.DryWetMidi.Core.BytesToMidiEventConverter.#ctor(System.Int32)">BytesToMidiEventConverter(Int32)</h4>
+  <div class="markdown level1 summary">
+Initializes a new instance of the <a class="xref" href="Melanchall.DryWetMidi.Core.BytesToMidiEventConverter.html">BytesToMidiEventConverter</a> with the specified
+initial capacity of internal buffer.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public BytesToMidiEventConverter(int capacity)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int32">Int32</a></td>
+        <td><span class="parametername">capacity</span></td>
+        <td>Initial capacity of the internal buffer.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">capacity</code> is negative.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+  </h3>
+  <a id="Melanchall_DryWetMidi_Core_BytesToMidiEventConverter_BytesFormat_" data-uid="Melanchall.DryWetMidi.Core.BytesToMidiEventConverter.BytesFormat*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_BytesToMidiEventConverter_BytesFormat" data-uid="Melanchall.DryWetMidi.Core.BytesToMidiEventConverter.BytesFormat">BytesFormat</h4>
+  <div class="markdown level1 summary">
+Gets or sets the format of source bytes layout. The default is <a class="xref" href="Melanchall.DryWetMidi.Core.BytesFormat.html#Melanchall_DryWetMidi_Core_BytesFormat_File">File</a>.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public BytesFormat BytesFormat { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.BytesFormat.html">BytesFormat</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.componentmodel.invalidenumargumentexception">InvalidEnumArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">value</code> specified an invalid value.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Core_BytesToMidiEventConverter_CustomMetaEventTypes_" data-uid="Melanchall.DryWetMidi.Core.BytesToMidiEventConverter.CustomMetaEventTypes*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_BytesToMidiEventConverter_CustomMetaEventTypes" data-uid="Melanchall.DryWetMidi.Core.BytesToMidiEventConverter.CustomMetaEventTypes">CustomMetaEventTypes</h4>
+  <div class="markdown level1 summary">
+Gets or sets collection of custom meta events types.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public EventTypesCollection CustomMetaEventTypes { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.EventTypesCollection.html">EventTypesCollection</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Melanchall_DryWetMidi_Core_BytesToMidiEventConverter_CustomMetaEventTypes_remarks">Remarks</h5>
+  <div class="markdown level1 remarks">
+<p>Types within this collection must be derived from the <a class="xref" href="Melanchall.DryWetMidi.Core.MetaEvent.html">MetaEvent</a>
+class and have parameterless constructor. No exception will be thrown
+if some types don&apos;t meet these requirements.</p>
+</div>
+  <a id="Melanchall_DryWetMidi_Core_BytesToMidiEventConverter_DecodeTextCallback_" data-uid="Melanchall.DryWetMidi.Core.BytesToMidiEventConverter.DecodeTextCallback*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_BytesToMidiEventConverter_DecodeTextCallback" data-uid="Melanchall.DryWetMidi.Core.BytesToMidiEventConverter.DecodeTextCallback">DecodeTextCallback</h4>
+  <div class="markdown level1 summary">
+Gets or sets a callback used to decode a string from the specified bytes during reading a text-based
+meta event&apos;s text. The default is <code>null</code>.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public DecodeTextCallback DecodeTextCallback { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.DecodeTextCallback.html">DecodeTextCallback</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Melanchall_DryWetMidi_Core_BytesToMidiEventConverter_DecodeTextCallback_remarks">Remarks</h5>
+  <div class="markdown level1 remarks">
+<p>If callback is not set, <a class="xref" href="Melanchall.DryWetMidi.Core.BytesToMidiEventConverter.html#Melanchall_DryWetMidi_Core_BytesToMidiEventConverter_TextEncoding">TextEncoding</a> will be used.</p>
+</div>
+  <a id="Melanchall_DryWetMidi_Core_BytesToMidiEventConverter_InvalidChannelEventParameterValuePolicy_" data-uid="Melanchall.DryWetMidi.Core.BytesToMidiEventConverter.InvalidChannelEventParameterValuePolicy*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_BytesToMidiEventConverter_InvalidChannelEventParameterValuePolicy" data-uid="Melanchall.DryWetMidi.Core.BytesToMidiEventConverter.InvalidChannelEventParameterValuePolicy">InvalidChannelEventParameterValuePolicy</h4>
+  <div class="markdown level1 summary">
+Gets or sets reaction of the reading engine on invalid value of a channel event&apos;s
+parameter value. The default is <a class="xref" href="Melanchall.DryWetMidi.Core.InvalidChannelEventParameterValuePolicy.html#Melanchall_DryWetMidi_Core_InvalidChannelEventParameterValuePolicy_Abort">Abort</a>.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public InvalidChannelEventParameterValuePolicy InvalidChannelEventParameterValuePolicy { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.InvalidChannelEventParameterValuePolicy.html">InvalidChannelEventParameterValuePolicy</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Melanchall_DryWetMidi_Core_BytesToMidiEventConverter_InvalidChannelEventParameterValuePolicy_remarks">Remarks</h5>
+  <div class="markdown level1 remarks">
+<p>Valid values are 0-127 so, for example, 128 is the invalid one
+and will be processed according with this policy. If <a class="xref" href="Melanchall.DryWetMidi.Core.InvalidChannelEventParameterValuePolicy.html#Melanchall_DryWetMidi_Core_InvalidChannelEventParameterValuePolicy_Abort">Abort</a>
+is used, an instance of the <a class="xref" href="Melanchall.DryWetMidi.Core.InvalidChannelEventParameterValueException.html">InvalidChannelEventParameterValueException</a> will be thrown if
+event&apos;s parameter value just read is invalid.</p>
+</div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.componentmodel.invalidenumargumentexception">InvalidEnumArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">value</code> specified an invalid value.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Core_BytesToMidiEventConverter_InvalidMetaEventParameterValuePolicy_" data-uid="Melanchall.DryWetMidi.Core.BytesToMidiEventConverter.InvalidMetaEventParameterValuePolicy*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_BytesToMidiEventConverter_InvalidMetaEventParameterValuePolicy" data-uid="Melanchall.DryWetMidi.Core.BytesToMidiEventConverter.InvalidMetaEventParameterValuePolicy">InvalidMetaEventParameterValuePolicy</h4>
+  <div class="markdown level1 summary">
+Gets or sets reaction of the reading engine on invalid value of a meta event&apos;s
+parameter value. The default is <a class="xref" href="Melanchall.DryWetMidi.Core.InvalidMetaEventParameterValuePolicy.html#Melanchall_DryWetMidi_Core_InvalidMetaEventParameterValuePolicy_Abort">Abort</a>.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public InvalidMetaEventParameterValuePolicy InvalidMetaEventParameterValuePolicy { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.InvalidMetaEventParameterValuePolicy.html">InvalidMetaEventParameterValuePolicy</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Melanchall_DryWetMidi_Core_BytesToMidiEventConverter_InvalidMetaEventParameterValuePolicy_remarks">Remarks</h5>
+  <div class="markdown level1 remarks">
+<p>For example, 255 is the invalid value for the <a class="xref" href="Melanchall.DryWetMidi.Core.KeySignatureEvent.html#Melanchall_DryWetMidi_Core_KeySignatureEvent_Scale">Scale</a>
+and will be processed according with this policy. If <a class="xref" href="Melanchall.DryWetMidi.Core.InvalidMetaEventParameterValuePolicy.html#Melanchall_DryWetMidi_Core_InvalidMetaEventParameterValuePolicy_Abort">Abort</a>
+is used, an instance of the <a class="xref" href="Melanchall.DryWetMidi.Core.InvalidMetaEventParameterValueException.html">InvalidMetaEventParameterValueException</a> will be thrown if event&apos;s
+parameter value just read is invalid.</p>
+</div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.componentmodel.invalidenumargumentexception">InvalidEnumArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">value</code> specified an invalid value.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Core_BytesToMidiEventConverter_InvalidSystemCommonEventParameterValuePolicy_" data-uid="Melanchall.DryWetMidi.Core.BytesToMidiEventConverter.InvalidSystemCommonEventParameterValuePolicy*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_BytesToMidiEventConverter_InvalidSystemCommonEventParameterValuePolicy" data-uid="Melanchall.DryWetMidi.Core.BytesToMidiEventConverter.InvalidSystemCommonEventParameterValuePolicy">InvalidSystemCommonEventParameterValuePolicy</h4>
+  <div class="markdown level1 summary">
+Gets or sets reaction of the reading engine on invalid value of a system common event&apos;s
+parameter value. The default is <a class="xref" href="Melanchall.DryWetMidi.Core.InvalidSystemCommonEventParameterValuePolicy.html#Melanchall_DryWetMidi_Core_InvalidSystemCommonEventParameterValuePolicy_Abort">Abort</a>.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public InvalidSystemCommonEventParameterValuePolicy InvalidSystemCommonEventParameterValuePolicy { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.InvalidSystemCommonEventParameterValuePolicy.html">InvalidSystemCommonEventParameterValuePolicy</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Melanchall_DryWetMidi_Core_BytesToMidiEventConverter_InvalidSystemCommonEventParameterValuePolicy_remarks">Remarks</h5>
+  <div class="markdown level1 remarks">
+<p>For example, 255 is the invalid value for the <a class="xref" href="Melanchall.DryWetMidi.Core.SongSelectEvent.html#Melanchall_DryWetMidi_Core_SongSelectEvent_Number">Number</a>
+and will be processed according with this policy. If <a class="xref" href="Melanchall.DryWetMidi.Core.InvalidSystemCommonEventParameterValuePolicy.html#Melanchall_DryWetMidi_Core_InvalidSystemCommonEventParameterValuePolicy_Abort">Abort</a>
+is used, an instance of the <a class="xref" href="Melanchall.DryWetMidi.Core.InvalidSystemCommonEventParameterValueException.html">InvalidSystemCommonEventParameterValueException</a> will be thrown if event&apos;s
+parameter value just read is invalid.</p>
+</div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.componentmodel.invalidenumargumentexception">InvalidEnumArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">value</code> specified an invalid value.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Core_BytesToMidiEventConverter_NotEnoughBytesPolicy_" data-uid="Melanchall.DryWetMidi.Core.BytesToMidiEventConverter.NotEnoughBytesPolicy*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_BytesToMidiEventConverter_NotEnoughBytesPolicy" data-uid="Melanchall.DryWetMidi.Core.BytesToMidiEventConverter.NotEnoughBytesPolicy">NotEnoughBytesPolicy</h4>
+  <div class="markdown level1 summary">
+Gets or sets reaction of the reading engine on lack of bytes in the underlying stream
+that are needed to read MIDI data (for example, DWORD requires 4 bytes available).
+The default is <a class="xref" href="Melanchall.DryWetMidi.Core.NotEnoughBytesPolicy.html#Melanchall_DryWetMidi_Core_NotEnoughBytesPolicy_Abort">Abort</a>.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public NotEnoughBytesPolicy NotEnoughBytesPolicy { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.NotEnoughBytesPolicy.html">NotEnoughBytesPolicy</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Melanchall_DryWetMidi_Core_BytesToMidiEventConverter_NotEnoughBytesPolicy_remarks">Remarks</h5>
+  <div class="markdown level1 remarks">
+<p>If <a class="xref" href="Melanchall.DryWetMidi.Core.NotEnoughBytesPolicy.html#Melanchall_DryWetMidi_Core_NotEnoughBytesPolicy_Abort">Abort</a> is used, an instance of the
+<a class="xref" href="Melanchall.DryWetMidi.Core.NotEnoughBytesException.html">NotEnoughBytesException</a> will be thrown if the reader&apos;s underlying stream doesn&apos;t
+have enough bytes to read MIDI data.</p>
+</div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.componentmodel.invalidenumargumentexception">InvalidEnumArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">value</code> specified an invalid value.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Core_BytesToMidiEventConverter_ReadDeltaTimes_" data-uid="Melanchall.DryWetMidi.Core.BytesToMidiEventConverter.ReadDeltaTimes*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_BytesToMidiEventConverter_ReadDeltaTimes" data-uid="Melanchall.DryWetMidi.Core.BytesToMidiEventConverter.ReadDeltaTimes">ReadDeltaTimes</h4>
+  <div class="markdown level1 summary">
+Gets or sets a value indicating whether incoming bytes array contains delta-times before
+each event data (and thus they must be read) or not. The default value is <code>false</code>.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool ReadDeltaTimes { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Core_BytesToMidiEventConverter_SilentNoteOnPolicy_" data-uid="Melanchall.DryWetMidi.Core.BytesToMidiEventConverter.SilentNoteOnPolicy*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_BytesToMidiEventConverter_SilentNoteOnPolicy" data-uid="Melanchall.DryWetMidi.Core.BytesToMidiEventConverter.SilentNoteOnPolicy">SilentNoteOnPolicy</h4>
+  <div class="markdown level1 summary">
+Gets or sets reaction of the reading engine on <code>Note On</code> events with velocity of zero.
+The default is <a class="xref" href="Melanchall.DryWetMidi.Core.SilentNoteOnPolicy.html#Melanchall_DryWetMidi_Core_SilentNoteOnPolicy_NoteOff">NoteOff</a>.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public SilentNoteOnPolicy SilentNoteOnPolicy { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.SilentNoteOnPolicy.html">SilentNoteOnPolicy</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Melanchall_DryWetMidi_Core_BytesToMidiEventConverter_SilentNoteOnPolicy_remarks">Remarks</h5>
+  <div class="markdown level1 remarks">
+<p>Although it is recommended to treat silent <code>Note On</code> event as <code>Note Off</code> you can turn
+this behavior off to get original event.</p>
+</div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.componentmodel.invalidenumargumentexception">InvalidEnumArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">value</code> specified an invalid value.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Core_BytesToMidiEventConverter_TextEncoding_" data-uid="Melanchall.DryWetMidi.Core.BytesToMidiEventConverter.TextEncoding*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_BytesToMidiEventConverter_TextEncoding" data-uid="Melanchall.DryWetMidi.Core.BytesToMidiEventConverter.TextEncoding">TextEncoding</h4>
+  <div class="markdown level1 summary">
+Gets or sets an <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.text.encoding">Encoding</a> that will be used to read the text of a
+text-based meta events. The default is <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.text.encoding.ascii#system-text-encoding-ascii">ASCII</a>.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Encoding TextEncoding { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.text.encoding">Encoding</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Melanchall_DryWetMidi_Core_BytesToMidiEventConverter_TextEncoding_remarks">Remarks</h5>
+  <div class="markdown level1 remarks">
+<p>Value of this property will be used only if <a class="xref" href="Melanchall.DryWetMidi.Core.BytesToMidiEventConverter.html#Melanchall_DryWetMidi_Core_BytesToMidiEventConverter_DecodeTextCallback">DecodeTextCallback</a> is not set.</p>
+</div>
+  <a id="Melanchall_DryWetMidi_Core_BytesToMidiEventConverter_UnknownChannelEventCallback_" data-uid="Melanchall.DryWetMidi.Core.BytesToMidiEventConverter.UnknownChannelEventCallback*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_BytesToMidiEventConverter_UnknownChannelEventCallback" data-uid="Melanchall.DryWetMidi.Core.BytesToMidiEventConverter.UnknownChannelEventCallback">UnknownChannelEventCallback</h4>
+  <div class="markdown level1 summary">
+Gets or sets a callback used to read unknown channel event if <a class="xref" href="Melanchall.DryWetMidi.Core.BytesToMidiEventConverter.html#Melanchall_DryWetMidi_Core_BytesToMidiEventConverter_UnknownChannelEventPolicy">UnknownChannelEventPolicy</a>
+set to <a class="xref" href="Melanchall.DryWetMidi.Core.UnknownChannelEventPolicy.html#Melanchall_DryWetMidi_Core_UnknownChannelEventPolicy_UseCallback">UseCallback</a>.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public UnknownChannelEventCallback UnknownChannelEventCallback { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.UnknownChannelEventCallback.html">UnknownChannelEventCallback</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Core_BytesToMidiEventConverter_UnknownChannelEventPolicy_" data-uid="Melanchall.DryWetMidi.Core.BytesToMidiEventConverter.UnknownChannelEventPolicy*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_BytesToMidiEventConverter_UnknownChannelEventPolicy" data-uid="Melanchall.DryWetMidi.Core.BytesToMidiEventConverter.UnknownChannelEventPolicy">UnknownChannelEventPolicy</h4>
+  <div class="markdown level1 summary">
+Gets or sets reaction of the reading engine on unknown channel event. The default is
+<a class="xref" href="Melanchall.DryWetMidi.Core.UnknownChannelEventPolicy.html#Melanchall_DryWetMidi_Core_UnknownChannelEventPolicy_Abort">Abort</a>.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public UnknownChannelEventPolicy UnknownChannelEventPolicy { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.UnknownChannelEventPolicy.html">UnknownChannelEventPolicy</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Melanchall_DryWetMidi_Core_BytesToMidiEventConverter_UnknownChannelEventPolicy_remarks">Remarks</h5>
+  <div class="markdown level1 remarks">
+<p>If <a class="xref" href="Melanchall.DryWetMidi.Core.UnknownChannelEventPolicy.html#Melanchall_DryWetMidi_Core_UnknownChannelEventPolicy_Abort">Abort</a> is used, an instance of the
+<a class="xref" href="Melanchall.DryWetMidi.Core.UnknownChannelEventException.html">UnknownChannelEventException</a> will be thrown if channel event has unknown status byte.</p>
+</div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.componentmodel.invalidenumargumentexception">InvalidEnumArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">value</code> specified an invalid value.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Core_BytesToMidiEventConverter_ZeroLengthDataPolicy_" data-uid="Melanchall.DryWetMidi.Core.BytesToMidiEventConverter.ZeroLengthDataPolicy*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_BytesToMidiEventConverter_ZeroLengthDataPolicy" data-uid="Melanchall.DryWetMidi.Core.BytesToMidiEventConverter.ZeroLengthDataPolicy">ZeroLengthDataPolicy</h4>
+  <div class="markdown level1 summary">
+Gets or sets reaction of the reading engine on zero-length objects such as strings or arrays.
+The default is <a class="xref" href="Melanchall.DryWetMidi.Core.ZeroLengthDataPolicy.html#Melanchall_DryWetMidi_Core_ZeroLengthDataPolicy_ReadAsEmptyObject">ReadAsEmptyObject</a>.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ZeroLengthDataPolicy ZeroLengthDataPolicy { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.ZeroLengthDataPolicy.html">ZeroLengthDataPolicy</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.componentmodel.invalidenumargumentexception">InvalidEnumArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">value</code> specified an invalid value.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <a id="Melanchall_DryWetMidi_Core_BytesToMidiEventConverter_Convert_" data-uid="Melanchall.DryWetMidi.Core.BytesToMidiEventConverter.Convert*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_BytesToMidiEventConverter_Convert_System_Byte_System_Byte___" data-uid="Melanchall.DryWetMidi.Core.BytesToMidiEventConverter.Convert(System.Byte,System.Byte[])">Convert(Byte, Byte[])</h4>
+  <div class="markdown level1 summary">
+Converts the specified status byte and data bytes to an instance of the <a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html">MidiEvent</a>.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public MidiEvent Convert(byte statusByte, byte[] dataBytes)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.byte">Byte</a></td>
+        <td><span class="parametername">statusByte</span></td>
+        <td>The status byte of MIDI event.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.byte">Byte</a>[]</td>
+        <td><span class="parametername">dataBytes</span></td>
+        <td>Data bytes of MIDI event (bytes except status byte). Can be <code>null</code>
+if MIDI event has no data bytes.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html">MidiEvent</a></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html">MidiEvent</a> read from <code data-dev-comment-type="paramref" class="paramref">statusByte</code> and <code data-dev-comment-type="paramref" class="paramref">dataBytes</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Core_BytesToMidiEventConverter_Convert_" data-uid="Melanchall.DryWetMidi.Core.BytesToMidiEventConverter.Convert*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_BytesToMidiEventConverter_Convert_System_Byte___" data-uid="Melanchall.DryWetMidi.Core.BytesToMidiEventConverter.Convert(System.Byte[])">Convert(Byte[])</h4>
+  <div class="markdown level1 summary">
+Converts the specified bytes to an instance of the <a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html">MidiEvent</a>. First byte is
+the status byte of MIDI event. If bytes array contains multiple events, only first one will be read.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public MidiEvent Convert(byte[] bytes)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.byte">Byte</a>[]</td>
+        <td><span class="parametername">bytes</span></td>
+        <td>Bytes representing a MIDI event.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html">MidiEvent</a></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html">MidiEvent</a> read from <code data-dev-comment-type="paramref" class="paramref">bytes</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Melanchall_DryWetMidi_Core_BytesToMidiEventConverter_Convert_System_Byte____remarks">Remarks</h5>
+  <div class="markdown level1 remarks">
+Use <a class="xref" href="Melanchall.DryWetMidi.Core.BytesToMidiEventConverter.html#Melanchall_DryWetMidi_Core_BytesToMidiEventConverter_ConvertMultiple_System_Byte___">ConvertMultiple(Byte[])</a> or <a class="xref" href="Melanchall.DryWetMidi.Core.BytesToMidiEventConverter.html#Melanchall_DryWetMidi_Core_BytesToMidiEventConverter_ConvertMultiple_System_Byte___System_Int32_System_Int32_">ConvertMultiple(Byte[], Int32, Int32)</a> to read
+multiple events.
+</div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">bytes</code> is <code>null</code>.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentexception">ArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">bytes</code> is an empty array.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Core_BytesToMidiEventConverter_Convert_" data-uid="Melanchall.DryWetMidi.Core.BytesToMidiEventConverter.Convert*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_BytesToMidiEventConverter_Convert_System_Byte___System_Int32_System_Int32_" data-uid="Melanchall.DryWetMidi.Core.BytesToMidiEventConverter.Convert(System.Byte[],System.Int32,System.Int32)">Convert(Byte[], Int32, Int32)</h4>
+  <div class="markdown level1 summary">
+Converts sub-array of the specified bytes to an instance of the <a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html">MidiEvent</a>. First byte
+at the specified offset is the status byte of MIDI event. If sub-array contains multiple events, only
+first one will be read.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public MidiEvent Convert(byte[] bytes, int offset, int length)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.byte">Byte</a>[]</td>
+        <td><span class="parametername">bytes</span></td>
+        <td>Bytes to take sub-array from.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int32">Int32</a></td>
+        <td><span class="parametername">offset</span></td>
+        <td>Offset of sub-array to read MIDI event from.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int32">Int32</a></td>
+        <td><span class="parametername">length</span></td>
+        <td>Length of sub-array to read MIDI event from.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html">MidiEvent</a></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html">MidiEvent</a> read from <code data-dev-comment-type="paramref" class="paramref">bytes</code> starting from
+<code data-dev-comment-type="paramref" class="paramref">offset</code> and taking <code data-dev-comment-type="paramref" class="paramref">length</code> of bytes.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Melanchall_DryWetMidi_Core_BytesToMidiEventConverter_Convert_System_Byte___System_Int32_System_Int32__remarks">Remarks</h5>
+  <div class="markdown level1 remarks">
+Use <a class="xref" href="Melanchall.DryWetMidi.Core.BytesToMidiEventConverter.html#Melanchall_DryWetMidi_Core_BytesToMidiEventConverter_ConvertMultiple_System_Byte___">ConvertMultiple(Byte[])</a> or <a class="xref" href="Melanchall.DryWetMidi.Core.BytesToMidiEventConverter.html#Melanchall_DryWetMidi_Core_BytesToMidiEventConverter_ConvertMultiple_System_Byte___System_Int32_System_Int32_">ConvertMultiple(Byte[], Int32, Int32)</a> to read
+multiple events.
+</div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">bytes</code> is <code>null</code>.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentexception">ArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">bytes</code> is an empty array.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
+        <td>
+<p>One of the following errors occured:</p>
+<ul><li><code data-dev-comment-type="paramref" class="paramref">offset</code> is out of range.</li><li><code data-dev-comment-type="paramref" class="paramref">length</code> is out of range.</li></ul>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Core_BytesToMidiEventConverter_ConvertMultiple_" data-uid="Melanchall.DryWetMidi.Core.BytesToMidiEventConverter.ConvertMultiple*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_BytesToMidiEventConverter_ConvertMultiple_System_Byte___" data-uid="Melanchall.DryWetMidi.Core.BytesToMidiEventConverter.ConvertMultiple(System.Byte[])">ConvertMultiple(Byte[])</h4>
+  <div class="markdown level1 summary">
+Converts the specified bytes to a collection of <a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html">MidiEvent</a>. 
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ICollection&lt;MidiEvent&gt; ConvertMultiple(byte[] bytes)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.byte">Byte</a>[]</td>
+        <td><span class="parametername">bytes</span></td>
+        <td>Bytes to convert to collection of <a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html">MidiEvent</a>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.icollection-1">ICollection</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html">MidiEvent</a>&gt;</td>
+        <td>Collection of <a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html">MidiEvent</a> read from <code data-dev-comment-type="paramref" class="paramref">bytes</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">bytes</code> is <code>null</code>.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentexception">ArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">bytes</code> is an empty array.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.InvalidChannelEventParameterValueException.html">InvalidChannelEventParameterValueException</a></td>
+        <td>Value of a channel event&apos;s parameter
+just read is invalid (is out of [0; 127] range) and that should be treated as error according to the
+<a class="xref" href="Melanchall.DryWetMidi.Core.BytesToMidiEventConverter.html#Melanchall_DryWetMidi_Core_BytesToMidiEventConverter_InvalidChannelEventParameterValuePolicy">InvalidChannelEventParameterValuePolicy</a>.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.InvalidMetaEventParameterValueException.html">InvalidMetaEventParameterValueException</a></td>
+        <td>Value of a meta event&apos;s parameter
+just read is invalid and that should be treated as error according to the
+<a class="xref" href="Melanchall.DryWetMidi.Core.BytesToMidiEventConverter.html#Melanchall_DryWetMidi_Core_BytesToMidiEventConverter_InvalidMetaEventParameterValuePolicy">InvalidMetaEventParameterValuePolicy</a>.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.NotEnoughBytesException.html">NotEnoughBytesException</a></td>
+        <td>MIDI events data cannot be read since the sub-array <code data-dev-comment-type="paramref" class="paramref">bytes</code>
+doesn&apos;t have enough bytes and that should be treated as error according to the <a class="xref" href="Melanchall.DryWetMidi.Core.BytesToMidiEventConverter.html#Melanchall_DryWetMidi_Core_BytesToMidiEventConverter_NotEnoughBytesPolicy">NotEnoughBytesPolicy</a>.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.UnexpectedRunningStatusException.html">UnexpectedRunningStatusException</a></td>
+        <td>Unexpected running status is encountered.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Core_BytesToMidiEventConverter_ConvertMultiple_" data-uid="Melanchall.DryWetMidi.Core.BytesToMidiEventConverter.ConvertMultiple*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_BytesToMidiEventConverter_ConvertMultiple_System_Byte___System_Int32_System_Int32_" data-uid="Melanchall.DryWetMidi.Core.BytesToMidiEventConverter.ConvertMultiple(System.Byte[],System.Int32,System.Int32)">ConvertMultiple(Byte[], Int32, Int32)</h4>
+  <div class="markdown level1 summary">
+Converts sub-array of the specified bytes to a collection of <a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html">MidiEvent</a>. 
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ICollection&lt;MidiEvent&gt; ConvertMultiple(byte[] bytes, int offset, int length)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.byte">Byte</a>[]</td>
+        <td><span class="parametername">bytes</span></td>
+        <td>Bytes to take sub-array from.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int32">Int32</a></td>
+        <td><span class="parametername">offset</span></td>
+        <td>Offset of sub-array to read MIDI events from.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int32">Int32</a></td>
+        <td><span class="parametername">length</span></td>
+        <td>Length of sub-array to read MIDI events from.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.icollection-1">ICollection</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html">MidiEvent</a>&gt;</td>
+        <td>Collection of <a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html">MidiEvent</a> read from <code data-dev-comment-type="paramref" class="paramref">bytes</code> starting from
+<code data-dev-comment-type="paramref" class="paramref">offset</code> and taking <code data-dev-comment-type="paramref" class="paramref">length</code> of bytes.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">bytes</code> is <code>null</code>.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentexception">ArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">bytes</code> is an empty array.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
+        <td>
+<p>One of the following errors occured:</p>
+<ul><li><code data-dev-comment-type="paramref" class="paramref">offset</code> is out of range.</li><li><code data-dev-comment-type="paramref" class="paramref">length</code> is out of range.</li></ul>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.InvalidChannelEventParameterValueException.html">InvalidChannelEventParameterValueException</a></td>
+        <td>Value of a channel event&apos;s parameter
+just read is invalid (is out of [0; 127] range) and that should be treated as error according to the
+<a class="xref" href="Melanchall.DryWetMidi.Core.BytesToMidiEventConverter.html#Melanchall_DryWetMidi_Core_BytesToMidiEventConverter_InvalidChannelEventParameterValuePolicy">InvalidChannelEventParameterValuePolicy</a>.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.InvalidMetaEventParameterValueException.html">InvalidMetaEventParameterValueException</a></td>
+        <td>Value of a meta event&apos;s parameter
+just read is invalid and that should be treated as error according to the
+<a class="xref" href="Melanchall.DryWetMidi.Core.BytesToMidiEventConverter.html#Melanchall_DryWetMidi_Core_BytesToMidiEventConverter_InvalidMetaEventParameterValuePolicy">InvalidMetaEventParameterValuePolicy</a>.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.NotEnoughBytesException.html">NotEnoughBytesException</a></td>
+        <td>MIDI events data cannot be read since the sub-array <code data-dev-comment-type="paramref" class="paramref">bytes</code>
+doesn&apos;t have enough bytes and that should be treated as error according to the <a class="xref" href="Melanchall.DryWetMidi.Core.BytesToMidiEventConverter.html#Melanchall_DryWetMidi_Core_BytesToMidiEventConverter_NotEnoughBytesPolicy">NotEnoughBytesPolicy</a>.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.UnexpectedRunningStatusException.html">UnexpectedRunningStatusException</a></td>
+        <td>Unexpected running status is encountered.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Core_BytesToMidiEventConverter_Dispose_" data-uid="Melanchall.DryWetMidi.Core.BytesToMidiEventConverter.Dispose*"></a>
+  <h4 id="Melanchall_DryWetMidi_Core_BytesToMidiEventConverter_Dispose" data-uid="Melanchall.DryWetMidi.Core.BytesToMidiEventConverter.Dispose">Dispose()</h4>
+  <div class="markdown level1 summary">
+Releases all resources used by the current instance of the <a class="xref" href="Melanchall.DryWetMidi.Core.BytesToMidiEventConverter.html">BytesToMidiEventConverter</a> class.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Dispose()</code></pre>
+  </div>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.idisposable">System.IDisposable</a>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            2022 / Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>
