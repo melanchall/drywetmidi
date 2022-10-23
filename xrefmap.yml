@@ -43,6 +43,9 @@ references:
 - uid: a_devices_commonproblems
   name: Common problems
   href: articles/devices/Common-problems.html
+- uid: a_file_lazy_reading_writing
+  name: Lazy reading/writing
+  href: articles/file-reading-writing/Lazy-reading-writing.html
 - uid: a_file_reading
   name: MIDI file reading
   href: articles/file-reading-writing/MIDI-file-reading.html

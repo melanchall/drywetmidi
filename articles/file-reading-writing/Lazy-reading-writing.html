@@ -1,0 +1,222 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Lazy reading/writing | DryWetMIDI </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Lazy reading/writing | DryWetMIDI ">
+    <meta name="generator" content="docfx 2.59.4.0">
+    
+    <link rel="shortcut icon" href="../../images/favicon.png">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <meta property="docfx:navrel" content="../../toc.html">
+    <meta property="docfx:tocrel" content="../toc.html">
+    
+    <meta property="docfx:rel" content="../../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list">Search Results for <span></span></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination" data-first="First" data-prev="Previous" data-next="Next" data-last="Last"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="a_file_lazy_reading_writing">
+<h1 id="lazy-readingwriting">Lazy reading/writing</h1>
+
+<h2 id="reading">Reading</h2>
+<p>When you call <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.MidiFile.html#Melanchall_DryWetMidi_Core_MidiFile_Read_">MidiFile.Read</a> method, the entire structure of a MIDI file will be put to memory as an object of the <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a> type. It means that more or less big MIDI file will span significant amount of bytes in the memory. Although it's much easy to work with such fully initialized object, memory consumption can be a critical parameter for your application.</p>
+<p>To solve the problem DryWetMIDI provides <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.MidiFile.html#Melanchall_DryWetMidi_Core_MidiFile_ReadLazy_">MidiFile.ReadLazy</a> methods which return an instance of the <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.MidiTokensReader.html">MidiTokensReader</a> class that can read a MIDI file sequentially token by token:</p>
+<pre><code class="lang-csharp">using (var tokensReader = MidiFile.ReadLazy(&quot;test.mid&quot;))
+{
+    for (MidiToken token; (token = tokensReader.ReadToken()) != null;)
+    {
+        switch (token)
+        {
+            case FileHeaderToken fileHeaderToken:
+                Console.WriteLine($&quot;File header: {fileHeaderToken}&quot;);
+                break;
+            case ChunkHeaderToken chunkHeaderToken:
+                Console.WriteLine($&quot;Chunk {chunkHeaderToken.ChunkId}&quot;);
+                break;
+            case MidiEventToken midiEventToken:
+                Console.WriteLine($&quot;Event {midiEventToken.Event}&quot;);
+                break;
+            case BytesPacketToken bytesPacketToken:
+                Console.WriteLine($&quot;Part of chunk with length {bytesPacketToken.Data.Length}&quot;);
+                break;
+        }
+    }
+}
+</code></pre>
+<p>With this approach each call of <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.MidiTokensReader.html#Melanchall_DryWetMidi_Core_MidiTokensReader_ReadToken">ReadToken</a> method will read next portion of data from a MIDI file (in fact, the internal reader in DryWetMIDI uses the buffer of <code>4096</code> bytes by default, the size of this buffer can be adjusted via <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.ReaderSettings.html#Melanchall_DryWetMidi_Core_ReaderSettings_BufferSize">BufferSize</a> property of <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.ReadingSettings.html#Melanchall_DryWetMidi_Core_ReadingSettings_ReaderSettings">ReadingSettings.ReaderSettings</a>). So the memory consumption will be almost always constant (despite a MIDI file size) and low. But of course there's the price – slower reading and much more difficult implementation of some logic and algorithms needed for your application. Also many high level tools provided by DryWetMIDI will be unavailable.</p>
+<p>Some useful methods can be found in the <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.MidiTokensReaderUtilities.html">MidiTokensReaderUtilities</a> class. Following example shows how you can calculate count of all <em>A#</em> notes for each track chunk (<a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.GetObjectsUtilities.html#Melanchall_DryWetMidi_Interaction_GetObjectsUtilities_EnumerateObjects_">EnumerateObjects</a> method also used):</p>
+<pre><code class="lang-csharp">bool IsTrackChunkHeaderToken(MidiToken token) =&gt;
+    token is ChunkHeaderToken chunkHeaderToken &amp;&amp;
+    chunkHeaderToken.ChunkId == TrackChunk.Id;
+
+bool ReadUntilTrackChunk(MidiTokensReader reader, MidiToken currentToken)
+{
+    if (IsTrackChunkHeaderToken(currentToken))
+        return true;
+
+    foreach (var token in reader.EnumerateTokens())
+    {
+        if (IsTrackChunkHeaderToken(token))
+            return true;
+    }
+
+    return false;
+}
+
+using (var tokensReader = MidiFile.ReadLazy(&quot;test.mid&quot;))
+{
+    MidiToken currentToken = null;
+    var i = 0;
+
+    while (true)
+    {
+        if (!ReadUntilTrackChunk(tokensReader, currentToken))
+            break;
+
+        var result = tokensReader.EnumerateEvents();
+        var notes = result.Events.EnumerateObjects(ObjectType.Note).OfType&lt;Note&gt;();
+        var aSharpCount = notes.Count(n =&gt; n.NoteName == Melanchall.DryWetMidi.MusicTheory.NoteName.ASharp);
+        Console.WriteLine($&quot;Track chunk {i}: {aSharpCount} A# notes&quot;);
+
+        currentToken = result.NextToken;
+        i++;
+    }
+}
+</code></pre>
+<p>In comparison, standard approach takes much less lines of code (but takes much more memory of course):</p>
+<pre><code class="lang-csharp">var midiFile = MidiFile.Read(&quot;test.mid&quot;);
+var i = 0;
+
+foreach (var trackChunk in midiFile.GetTrackChunks())
+{
+    var notes = trackChunk.GetNotes();
+    var aSharpCount = notes.Count(n =&gt; n.NoteName == Melanchall.DryWetMidi.MusicTheory.NoteName.ASharp);
+    Console.WriteLine($&quot;Track chunk {i}: {aSharpCount} A# notes&quot;);
+
+    i++;
+}
+</code></pre>
+<h2 id="writing">Writing</h2>
+<p>The same applied to the process of writing a MIDI file. <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.MidiFile.html#Melanchall_DryWetMidi_Core_MidiFile_Write_">MidiFile.Write</a> requires an instance of the <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a> obviously which can occupy a lot of memory for big files.</p>
+<p>Here an example of how to write MIDI data in a lazy way using <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.MidiTokensWriter.html">MidiTokensWriter</a>:</p>
+<pre><code class="lang-csharp">using (var tokensWriter = MidiFile.WriteLazy(&quot;test.mid&quot;, true))
+{
+    tokensWriter.StartTrackChunk();
+    tokensWriter.WriteEvent(
+        new NoteOnEvent((SevenBitNumber)70, SevenBitNumber.MaxValue));
+    tokensWriter.WriteEvent(
+        new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue));
+    tokensWriter.EndTrackChunk();
+
+    tokensWriter.StartTrackChunk();
+    tokensWriter.WriteEvent(
+        new TextEvent(&quot;A&quot;));
+    tokensWriter.EndTrackChunk();
+}
+</code></pre>
+<p>DryWetMIDI also provides the <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.TimedObjectsWriter.html">TimedObjectsWriter</a> class which simplifies writing of complex objects with <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.MidiTokensWriter.html">MidiTokensWriter</a>:</p>
+<pre><code class="lang-csharp">IEnumerable&lt;ITimedObject&gt; GetObjects() =&gt; Enumerable
+    .Range(0, 1_000_000)
+    .Select((_, i) =&gt; new Note((SevenBitNumber)(i % SevenBitNumber.MaxValue), 2 * i, i));
+
+using (var tokensWriter = MidiFile.WriteLazy(&quot;test.mid&quot;, true))
+using (var objectsWriter = new TimedObjectsWriter(tokensWriter))
+{
+    objectsWriter.WriteObjects(GetObjects());
+}
+</code></pre>
+<p>The code above writes one million notes to a MIDI file. Of course you can combine <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.MidiTokensReader.html">MidiTokensReader</a>, <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.GetObjectsUtilities.html#Melanchall_DryWetMidi_Interaction_GetObjectsUtilities_EnumerateObjects_">EnumerateObjects</a>, <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.MidiTokensWriter.html">MidiTokensWriter</a> and <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.TimedObjectsWriter.html">TimedObjectsWriter</a> to process MIDI objects transforming a MIDI file into another one.</p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            2022 / Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>
