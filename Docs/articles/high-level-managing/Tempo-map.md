@@ -1,4 +1,4 @@
----
+﻿---
 uid: a_tempo_map
 ---
 
@@ -44,7 +44,7 @@ using (var tempoMapManager = new TempoMapManager())
 
 If you want to create a simple tempo map with some fixed tempo or/and time signature without changes, use [Create](xref:Melanchall.DryWetMidi.Interaction.TempoMap.Create*) static methods of the `TempoMap` class.
 
-There is another way to get an instance of the `TempoMapManager` � through the [ManageTempoMap](xref:Melanchall.DryWetMidi.Interaction.TempoMapManagingUtilities.ManageTempoMap*) extension method:
+There is another way to get an instance of the `TempoMapManager` – through the [ManageTempoMap](xref:Melanchall.DryWetMidi.Interaction.TempoMapManagingUtilities.ManageTempoMap*) extension method:
 
 ```csharp
 using (var tempoMapManager = midiFile.ManageTempoMap())
