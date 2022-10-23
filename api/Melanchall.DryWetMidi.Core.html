@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Namespace Melanchall.DryWetMidi.Core
    | DryWetMIDI ">
-    <meta name="generator" content="docfx 2.59.2.0">
+    <meta name="generator" content="docfx 2.59.4.0">
     
     <link rel="shortcut icon" href="../images/favicon.png">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
@@ -96,7 +96,9 @@ Represents Active Sensing event.
 Represents a text meta event.
 </section>
       <h4><a class="xref" href="Melanchall.DryWetMidi.Core.BytesPacketToken.html">BytesPacketToken</a></h4>
-      <section></section>
+      <section>
+Represents a bytes packet.
+</section>
       <h4><a class="xref" href="Melanchall.DryWetMidi.Core.BytesToMidiEventConverter.html">BytesToMidiEventConverter</a></h4>
       <section>
 Provides methods to convert bytes to an instance of the <a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html">MidiEvent</a>.
@@ -114,7 +116,9 @@ Represents a MIDI file channel event.
 Represents a MIDI Channel Prefix meta event.
 </section>
       <h4><a class="xref" href="Melanchall.DryWetMidi.Core.ChunkHeaderToken.html">ChunkHeaderToken</a></h4>
-      <section></section>
+      <section>
+Represents a chunk&apos;s header.
+</section>
       <h4><a class="xref" href="Melanchall.DryWetMidi.Core.ChunksCollection.html">ChunksCollection</a></h4>
       <section>
 Collection of <a class="xref" href="Melanchall.DryWetMidi.Core.MidiChunk.html">MidiChunk</a> objects.
@@ -172,7 +176,9 @@ Represents an event&apos;s identity described by its type and corresponding stat
 Collection of <a class="xref" href="Melanchall.DryWetMidi.Core.EventType.html">EventType</a> objects which provide identity information of an event.
 </section>
       <h4><a class="xref" href="Melanchall.DryWetMidi.Core.FileHeaderToken.html">FileHeaderToken</a></h4>
-      <section></section>
+      <section>
+Represents the data of a header chunk of a MIDI file.
+</section>
       <h4><a class="xref" href="Melanchall.DryWetMidi.Core.InstrumentNameEvent.html">InstrumentNameEvent</a></h4>
       <section>
 Represents an Instrument Name meta event.
@@ -242,7 +248,9 @@ be compared for equality.
 Provides methods to convert an instance of the <a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html">MidiEvent</a> to bytes.
 </section>
       <h4><a class="xref" href="Melanchall.DryWetMidi.Core.MidiEventToken.html">MidiEventToken</a></h4>
-      <section></section>
+      <section>
+Represents a MIDI event.
+</section>
       <h4><a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a></h4>
       <section>
 Represents a MIDI file.
@@ -265,11 +273,23 @@ Reader of the MIDI data types.
 Represents MIDI Time Code (MIDI Quarter Frame) event.
 </section>
       <h4><a class="xref" href="Melanchall.DryWetMidi.Core.MidiToken.html">MidiToken</a></h4>
-      <section></section>
+      <section>
+Represents a single MIDI token from a MIDI file.
+</section>
       <h4><a class="xref" href="Melanchall.DryWetMidi.Core.MidiTokensReader.html">MidiTokensReader</a></h4>
-      <section></section>
+      <section>
+Provides a way to read a MIDI file sequentially token by token keeping
+low memory consumption.
+</section>
       <h4><a class="xref" href="Melanchall.DryWetMidi.Core.MidiTokensReaderUtilities.html">MidiTokensReaderUtilities</a></h4>
-      <section></section>
+      <section>
+Provides useful utility methods for <a class="xref" href="Melanchall.DryWetMidi.Core.MidiTokensReader.html">MidiTokensReader</a>.
+</section>
+      <h4><a class="xref" href="Melanchall.DryWetMidi.Core.MidiTokensWriter.html">MidiTokensWriter</a></h4>
+      <section>
+Provides a way to write data to a MIDI file sequentially token by token keeping
+low memory consumption.
+</section>
       <h4><a class="xref" href="Melanchall.DryWetMidi.Core.MidiWriter.html">MidiWriter</a></h4>
       <section>
 Writer of the MIDI data types.
@@ -419,7 +439,7 @@ Represents Timing Clock event.
       <h4><a class="xref" href="Melanchall.DryWetMidi.Core.TooManyTrackChunksException.html">TooManyTrackChunksException</a></h4>
       <section>
 The exception that is thrown while writing a MIDI file when the <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html#Melanchall_DryWetMidi_Core_MidiFile_Chunks">Chunks</a>
-contains more than <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.uint16.maxvalue">MaxValue</a> track chunks which is the maximum allowed count for
+contains more than <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint16.maxvalue">MaxValue</a> track chunks which is the maximum allowed count for
 chunks of this type.
 </section>
       <h4><a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a></h4>
@@ -538,7 +558,9 @@ MIDI time code component.
 MIDI time code type (frames per second).
 </section>
       <h4><a class="xref" href="Melanchall.DryWetMidi.Core.MidiTokenType.html">MidiTokenType</a></h4>
-      <section></section>
+      <section>
+The type of a MIDI token.
+</section>
       <h4><a class="xref" href="Melanchall.DryWetMidi.Core.MissedEndOfTrackPolicy.html">MissedEndOfTrackPolicy</a></h4>
       <section>
 Specifies how reading engine should react on missed <code>End Of Track</code> event.

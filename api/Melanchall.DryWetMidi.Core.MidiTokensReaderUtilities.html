@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Class MidiTokensReaderUtilities
    | DryWetMIDI ">
-    <meta name="generator" content="docfx 2.59.2.0">
+    <meta name="generator" content="docfx 2.59.4.0">
     
     <link rel="shortcut icon" href="../images/favicon.png">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
@@ -83,35 +83,37 @@
   
   <h1 id="Melanchall_DryWetMidi_Core_MidiTokensReaderUtilities" data-uid="Melanchall.DryWetMidi.Core.MidiTokensReaderUtilities" class="text-break">Class MidiTokensReaderUtilities
   </h1>
-  <div class="markdown level0 summary"></div>
+  <div class="markdown level0 summary">
+Provides useful utility methods for <a class="xref" href="Melanchall.DryWetMidi.Core.MidiTokensReader.html">MidiTokensReader</a>.
+</div>
   <div class="markdown level0 conceptual"></div>
   <div class="inheritance">
     <h5>Inheritance</h5>
-    <div class="level0"><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object">Object</a></div>
+    <div class="level0"><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">Object</a></div>
     <div class="level1"><span class="xref">MidiTokensReaderUtilities</span></div>
   </div>
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
     <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)">Object.Equals(Object)</a>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)">Object.Equals(Object)</a>
     </div>
     <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)">Object.Equals(Object, Object)</a>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)">Object.Equals(Object, Object)</a>
     </div>
     <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gethashcode#system-object-gethashcode">Object.GetHashCode()</a>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gethashcode#system-object-gethashcode">Object.GetHashCode()</a>
     </div>
     <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gettype#system-object-gettype">Object.GetType()</a>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gettype#system-object-gettype">Object.GetType()</a>
     </div>
     <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.memberwiseclone#system-object-memberwiseclone">Object.MemberwiseClone()</a>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone#system-object-memberwiseclone">Object.MemberwiseClone()</a>
     </div>
     <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.referenceequals#system-object-referenceequals(system-object-system-object)">Object.ReferenceEquals(Object, Object)</a>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.referenceequals#system-object-referenceequals(system-object-system-object)">Object.ReferenceEquals(Object, Object)</a>
     </div>
     <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.tostring#system-object-tostring">Object.ToString()</a>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.tostring#system-object-tostring">Object.ToString()</a>
     </div>
   </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="Melanchall.DryWetMidi.Core.html">Melanchall.DryWetMidi.Core</a></h6>
@@ -124,11 +126,14 @@
   </h3>
   <a id="Melanchall_DryWetMidi_Core_MidiTokensReaderUtilities_EnumerateEvents_" data-uid="Melanchall.DryWetMidi.Core.MidiTokensReaderUtilities.EnumerateEvents*"></a>
   <h4 id="Melanchall_DryWetMidi_Core_MidiTokensReaderUtilities_EnumerateEvents_Melanchall_DryWetMidi_Core_MidiTokensReader_" data-uid="Melanchall.DryWetMidi.Core.MidiTokensReaderUtilities.EnumerateEvents(Melanchall.DryWetMidi.Core.MidiTokensReader)">EnumerateEvents(MidiTokensReader)</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary">
+Returns all consecutive MIDI events read with the specified <a class="xref" href="Melanchall.DryWetMidi.Core.MidiTokensReader.html">MidiTokensReader</a>
+as a lazy collection.
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static IEnumerable&lt;MidiEvent&gt; EnumerateEvents(this MidiTokensReader reader)</code></pre>
+    <pre><code class="lang-csharp hljs">public static EnumerateEventsResult EnumerateEvents(this MidiTokensReader reader)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -143,7 +148,7 @@
       <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiTokensReader.html">MidiTokensReader</a></td>
         <td><span class="parametername">reader</span></td>
-        <td></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiTokensReader.html">MidiTokensReader</a> to read MIDI events with.</td>
       </tr>
     </tbody>
   </table>
@@ -157,14 +162,45 @@
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html">MidiEvent</a>&gt;</td>
-        <td></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.Lazy.EnumerateEventsResult.html">EnumerateEventsResult</a></td>
+        <td>An instance of the <a class="xref" href="Melanchall.DryWetMidi.Core.Lazy.EnumerateEventsResult.html">EnumerateEventsResult</a> containing a lazy collection of consecutive
+MIDI events read with the <code data-dev-comment-type="paramref" class="paramref">reader</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Melanchall_DryWetMidi_Core_MidiTokensReaderUtilities_EnumerateEvents_Melanchall_DryWetMidi_Core_MidiTokensReader__remarks">Remarks</h5>
+  <div class="markdown level1 remarks">
+<p>
+A collection contained in the returned object will iterate over MIDI tokens with the <code data-dev-comment-type="paramref" class="paramref">reader</code>
+until a file&apos;s end or start of a next chunk occurred.
+</p>
+<p>
+For example, the reader is now at the first MIDI events of a track chunk that contains 10 events.
+The method will return an object that contains a lazy collection that will iterate over those 10 events
+only, because a next MIDI token in the file is not a MIDI event.
+</p>
+</div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">reader</code> is <code>null</code>.</td>
       </tr>
     </tbody>
   </table>
   <a id="Melanchall_DryWetMidi_Core_MidiTokensReaderUtilities_EnumerateTokens_" data-uid="Melanchall.DryWetMidi.Core.MidiTokensReaderUtilities.EnumerateTokens*"></a>
   <h4 id="Melanchall_DryWetMidi_Core_MidiTokensReaderUtilities_EnumerateTokens_Melanchall_DryWetMidi_Core_MidiTokensReader_" data-uid="Melanchall.DryWetMidi.Core.MidiTokensReaderUtilities.EnumerateTokens(Melanchall.DryWetMidi.Core.MidiTokensReader)">EnumerateTokens(MidiTokensReader)</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary">
+Returns all MIDI tokens read with the specified <a class="xref" href="Melanchall.DryWetMidi.Core.MidiTokensReader.html">MidiTokensReader</a>
+as a lazy collection.
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -183,7 +219,7 @@
       <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiTokensReader.html">MidiTokensReader</a></td>
         <td><span class="parametername">reader</span></td>
-        <td></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiTokensReader.html">MidiTokensReader</a> to read MIDI tokens with.</td>
       </tr>
     </tbody>
   </table>
@@ -197,8 +233,23 @@
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Core.MidiToken.html">MidiToken</a>&gt;</td>
-        <td></td>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Core.MidiToken.html">MidiToken</a>&gt;</td>
+        <td>Lazy collection of MIDI tokens read with the <code data-dev-comment-type="paramref" class="paramref">reader</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">reader</code> is <code>null</code>.</td>
       </tr>
     </tbody>
   </table>

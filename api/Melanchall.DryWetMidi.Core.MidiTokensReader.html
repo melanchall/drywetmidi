@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Class MidiTokensReader
    | DryWetMIDI ">
-    <meta name="generator" content="docfx 2.59.2.0">
+    <meta name="generator" content="docfx 2.59.4.0">
     
     <link rel="shortcut icon" href="../images/favicon.png">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
@@ -83,39 +83,42 @@
   
   <h1 id="Melanchall_DryWetMidi_Core_MidiTokensReader" data-uid="Melanchall.DryWetMidi.Core.MidiTokensReader" class="text-break">Class MidiTokensReader
   </h1>
-  <div class="markdown level0 summary"></div>
+  <div class="markdown level0 summary">
+Provides a way to read a MIDI file sequentially token by token keeping
+low memory consumption.
+</div>
   <div class="markdown level0 conceptual"></div>
   <div class="inheritance">
     <h5>Inheritance</h5>
-    <div class="level0"><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object">Object</a></div>
+    <div class="level0"><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">Object</a></div>
     <div class="level1"><span class="xref">MidiTokensReader</span></div>
   </div>
-  <div classs="implements">
+  <div class="implements">
     <h5>Implements</h5>
-    <div><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.idisposable">IDisposable</a></div>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.idisposable">IDisposable</a></div>
   </div>
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
     <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)">Object.Equals(Object)</a>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)">Object.Equals(Object)</a>
     </div>
     <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)">Object.Equals(Object, Object)</a>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)">Object.Equals(Object, Object)</a>
     </div>
     <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gethashcode#system-object-gethashcode">Object.GetHashCode()</a>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gethashcode#system-object-gethashcode">Object.GetHashCode()</a>
     </div>
     <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gettype#system-object-gettype">Object.GetType()</a>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gettype#system-object-gettype">Object.GetType()</a>
     </div>
     <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.memberwiseclone#system-object-memberwiseclone">Object.MemberwiseClone()</a>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone#system-object-memberwiseclone">Object.MemberwiseClone()</a>
     </div>
     <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.referenceequals#system-object-referenceequals(system-object-system-object)">Object.ReferenceEquals(Object, Object)</a>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.referenceequals#system-object-referenceequals(system-object-system-object)">Object.ReferenceEquals(Object, Object)</a>
     </div>
     <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.tostring#system-object-tostring">Object.ToString()</a>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.tostring#system-object-tostring">Object.ToString()</a>
     </div>
   </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="Melanchall.DryWetMidi.Core.html">Melanchall.DryWetMidi.Core</a></h6>
@@ -128,7 +131,9 @@
   </h3>
   <a id="Melanchall_DryWetMidi_Core_MidiTokensReader_Dispose_" data-uid="Melanchall.DryWetMidi.Core.MidiTokensReader.Dispose*"></a>
   <h4 id="Melanchall_DryWetMidi_Core_MidiTokensReader_Dispose" data-uid="Melanchall.DryWetMidi.Core.MidiTokensReader.Dispose">Dispose()</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary">
+Releases all resources used by the current <a class="xref" href="Melanchall.DryWetMidi.Core.MidiTokensReader.html">MidiTokensReader</a>.
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -136,7 +141,9 @@
   </div>
   <a id="Melanchall_DryWetMidi_Core_MidiTokensReader_ReadToken_" data-uid="Melanchall.DryWetMidi.Core.MidiTokensReader.ReadToken*"></a>
   <h4 id="Melanchall_DryWetMidi_Core_MidiTokensReader_ReadToken" data-uid="Melanchall.DryWetMidi.Core.MidiTokensReader.ReadToken">ReadToken()</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary">
+Reads a next MIDI token from the underlying stream.
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -153,13 +160,97 @@
     <tbody>
       <tr>
         <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiToken.html">MidiToken</a></td>
-        <td></td>
+        <td>An instance of the <a class="xref" href="Melanchall.DryWetMidi.Core.MidiToken.html">MidiToken</a>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.io.ioexception">IOException</a></td>
+        <td>An I/O error occurred while reading the file.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.NoHeaderChunkException.html">NoHeaderChunkException</a></td>
+        <td>There is no header chunk in a file and that should be treated as error
+according to the <a class="xref" href="Melanchall.DryWetMidi.Core.ReadingSettings.html#Melanchall_DryWetMidi_Core_ReadingSettings_NoHeaderChunkPolicy">NoHeaderChunkPolicy</a> of the used settings.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.InvalidChunkSizeException.html">InvalidChunkSizeException</a></td>
+        <td>Actual header or track chunk&apos;s size differs from the one declared
+in its header and that should be treated as error according to the <a class="xref" href="Melanchall.DryWetMidi.Core.ReadingSettings.html#Melanchall_DryWetMidi_Core_ReadingSettings_InvalidChunkSizePolicy">InvalidChunkSizePolicy</a>
+of the used settings.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.UnknownChunkException.html">UnknownChunkException</a></td>
+        <td>Chunk to be read has unknown ID and that
+should be treated as error accordng to the <a class="xref" href="Melanchall.DryWetMidi.Core.ReadingSettings.html#Melanchall_DryWetMidi_Core_ReadingSettings_UnknownChunkIdPolicy">UnknownChunkIdPolicy</a> of the
+used settings.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.UnexpectedTrackChunksCountException.html">UnexpectedTrackChunksCountException</a></td>
+        <td>Actual track chunks
+count differs from the expected one (declared in the file header) and that should be treated as error according to
+the <a class="xref" href="Melanchall.DryWetMidi.Core.ReadingSettings.html#Melanchall_DryWetMidi_Core_ReadingSettings_UnexpectedTrackChunksCountPolicy">UnexpectedTrackChunksCountPolicy</a> of the used settings.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.UnknownFileFormatException.html">UnknownFileFormatException</a></td>
+        <td>The header chunk of the file specifies unknown file format and
+that should be treated as error according to the <a class="xref" href="Melanchall.DryWetMidi.Core.ReadingSettings.html#Melanchall_DryWetMidi_Core_ReadingSettings_UnknownFileFormatPolicy">UnknownFileFormatPolicy</a> of
+the used settings.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.InvalidChannelEventParameterValueException.html">InvalidChannelEventParameterValueException</a></td>
+        <td>Value of a channel event&apos;s parameter
+just read is invalid (is out of [0; 127] range) and that should be treated as error according to the
+<a class="xref" href="Melanchall.DryWetMidi.Core.ReadingSettings.html#Melanchall_DryWetMidi_Core_ReadingSettings_InvalidChannelEventParameterValuePolicy">InvalidChannelEventParameterValuePolicy</a> of the used settings.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.InvalidMetaEventParameterValueException.html">InvalidMetaEventParameterValueException</a></td>
+        <td>Value of a meta event&apos;s parameter
+just read is invalid and that should be treated as error according to the
+<a class="xref" href="Melanchall.DryWetMidi.Core.ReadingSettings.html#Melanchall_DryWetMidi_Core_ReadingSettings_InvalidMetaEventParameterValuePolicy">InvalidMetaEventParameterValuePolicy</a> of the used settings.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.UnknownChannelEventException.html">UnknownChannelEventException</a></td>
+        <td>Reader has encountered an unknown channel event and that
+should be treated as error according to the <a class="xref" href="Melanchall.DryWetMidi.Core.ReadingSettings.html#Melanchall_DryWetMidi_Core_ReadingSettings_UnknownChannelEventPolicy">UnknownChannelEventPolicy</a> of
+the used settings.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.NotEnoughBytesException.html">NotEnoughBytesException</a></td>
+        <td>MIDI file data cannot be read since the reader&apos;s underlying stream doesn&apos;t
+have enough bytes and that should be treated as error according to the <a class="xref" href="Melanchall.DryWetMidi.Core.ReadingSettings.html#Melanchall_DryWetMidi_Core_ReadingSettings_NotEnoughBytesPolicy">NotEnoughBytesPolicy</a>
+of the used settings.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.UnexpectedRunningStatusException.html">UnexpectedRunningStatusException</a></td>
+        <td>Unexpected running status is encountered.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.MissedEndOfTrackEventException.html">MissedEndOfTrackEventException</a></td>
+        <td>Track chunk doesn&apos;t end with <code>End Of Track</code> event and that
+should be treated as error accordng to the <a class="xref" href="Melanchall.DryWetMidi.Core.ReadingSettings.html#Melanchall_DryWetMidi_Core_ReadingSettings_MissedEndOfTrackPolicy">MissedEndOfTrackPolicy</a> of
+the used settings.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.invalidoperationexception">InvalidOperationException</a></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.ReaderSettings.html#Melanchall_DryWetMidi_Core_ReaderSettings_Buffer">Buffer</a> of the used settings
+    is <code>null</code> in case of <a class="xref" href="Melanchall.DryWetMidi.Core.ReaderSettings.html#Melanchall_DryWetMidi_Core_ReaderSettings_BufferingPolicy">BufferingPolicy</a> set to
+<a class="xref" href="Melanchall.DryWetMidi.Core.BufferingPolicy.html#Melanchall_DryWetMidi_Core_BufferingPolicy_UseCustomBuffer">UseCustomBuffer</a>.</td>
       </tr>
     </tbody>
   </table>
   <h3 id="implements">Implements</h3>
   <div>
-      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.idisposable">System.IDisposable</a>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.idisposable">System.IDisposable</a>
   </div>
   <h3 id="extensionmethods">Extension Methods</h3>
   <div>
@@ -167,6 +258,10 @@
   </div>
   <div>
       <a class="xref" href="Melanchall.DryWetMidi.Core.MidiTokensReaderUtilities.html#Melanchall_DryWetMidi_Core_MidiTokensReaderUtilities_EnumerateEvents_Melanchall_DryWetMidi_Core_MidiTokensReader_">MidiTokensReaderUtilities.EnumerateEvents(MidiTokensReader)</a>
+  </div>
+  <h3 id="seealso">See Also</h3>
+  <div class="seealso">
+      <div><a class="xref" href="Melanchall.DryWetMidi.Core.MidiTokensWriter.html">MidiTokensWriter</a></div>
   </div>
 </article>
           </div>

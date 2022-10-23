@@ -5504,6 +5504,44 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Core.KeySignatureEvent.WriteContent
   nameWithType: KeySignatureEvent.WriteContent
+- uid: Melanchall.DryWetMidi.Core.Lazy
+  name: Melanchall.DryWetMidi.Core.Lazy
+  href: api/Melanchall.DryWetMidi.Core.Lazy.html
+  commentId: N:Melanchall.DryWetMidi.Core.Lazy
+  fullName: Melanchall.DryWetMidi.Core.Lazy
+  nameWithType: Melanchall.DryWetMidi.Core.Lazy
+- uid: Melanchall.DryWetMidi.Core.Lazy.EnumerateEventsResult
+  name: EnumerateEventsResult
+  href: api/Melanchall.DryWetMidi.Core.Lazy.EnumerateEventsResult.html
+  commentId: T:Melanchall.DryWetMidi.Core.Lazy.EnumerateEventsResult
+  fullName: Melanchall.DryWetMidi.Core.Lazy.EnumerateEventsResult
+  nameWithType: EnumerateEventsResult
+- uid: Melanchall.DryWetMidi.Core.Lazy.EnumerateEventsResult.Events
+  name: Events
+  href: api/Melanchall.DryWetMidi.Core.Lazy.EnumerateEventsResult.html#Melanchall_DryWetMidi_Core_Lazy_EnumerateEventsResult_Events
+  commentId: P:Melanchall.DryWetMidi.Core.Lazy.EnumerateEventsResult.Events
+  fullName: Melanchall.DryWetMidi.Core.Lazy.EnumerateEventsResult.Events
+  nameWithType: EnumerateEventsResult.Events
+- uid: Melanchall.DryWetMidi.Core.Lazy.EnumerateEventsResult.Events*
+  name: Events
+  href: api/Melanchall.DryWetMidi.Core.Lazy.EnumerateEventsResult.html#Melanchall_DryWetMidi_Core_Lazy_EnumerateEventsResult_Events_
+  commentId: Overload:Melanchall.DryWetMidi.Core.Lazy.EnumerateEventsResult.Events
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Core.Lazy.EnumerateEventsResult.Events
+  nameWithType: EnumerateEventsResult.Events
+- uid: Melanchall.DryWetMidi.Core.Lazy.EnumerateEventsResult.NextToken
+  name: NextToken
+  href: api/Melanchall.DryWetMidi.Core.Lazy.EnumerateEventsResult.html#Melanchall_DryWetMidi_Core_Lazy_EnumerateEventsResult_NextToken
+  commentId: P:Melanchall.DryWetMidi.Core.Lazy.EnumerateEventsResult.NextToken
+  fullName: Melanchall.DryWetMidi.Core.Lazy.EnumerateEventsResult.NextToken
+  nameWithType: EnumerateEventsResult.NextToken
+- uid: Melanchall.DryWetMidi.Core.Lazy.EnumerateEventsResult.NextToken*
+  name: NextToken
+  href: api/Melanchall.DryWetMidi.Core.Lazy.EnumerateEventsResult.html#Melanchall_DryWetMidi_Core_Lazy_EnumerateEventsResult_NextToken_
+  commentId: Overload:Melanchall.DryWetMidi.Core.Lazy.EnumerateEventsResult.NextToken
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Core.Lazy.EnumerateEventsResult.NextToken
+  nameWithType: EnumerateEventsResult.NextToken
 - uid: Melanchall.DryWetMidi.Core.LyricEvent
   name: LyricEvent
   href: api/Melanchall.DryWetMidi.Core.LyricEvent.html
@@ -6581,6 +6619,25 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Core.MidiFile.Write
   nameWithType: MidiFile.Write
+- uid: Melanchall.DryWetMidi.Core.MidiFile.WriteLazy(System.IO.Stream,Melanchall.DryWetMidi.Core.WritingSettings,Melanchall.DryWetMidi.Core.MidiFileFormat,Melanchall.DryWetMidi.Core.TimeDivision)
+  name: WriteLazy(Stream, WritingSettings, MidiFileFormat, TimeDivision)
+  href: api/Melanchall.DryWetMidi.Core.MidiFile.html#Melanchall_DryWetMidi_Core_MidiFile_WriteLazy_System_IO_Stream_Melanchall_DryWetMidi_Core_WritingSettings_Melanchall_DryWetMidi_Core_MidiFileFormat_Melanchall_DryWetMidi_Core_TimeDivision_
+  commentId: M:Melanchall.DryWetMidi.Core.MidiFile.WriteLazy(System.IO.Stream,Melanchall.DryWetMidi.Core.WritingSettings,Melanchall.DryWetMidi.Core.MidiFileFormat,Melanchall.DryWetMidi.Core.TimeDivision)
+  fullName: Melanchall.DryWetMidi.Core.MidiFile.WriteLazy(System.IO.Stream, Melanchall.DryWetMidi.Core.WritingSettings, Melanchall.DryWetMidi.Core.MidiFileFormat, Melanchall.DryWetMidi.Core.TimeDivision)
+  nameWithType: MidiFile.WriteLazy(Stream, WritingSettings, MidiFileFormat, TimeDivision)
+- uid: Melanchall.DryWetMidi.Core.MidiFile.WriteLazy(System.String,System.Boolean,Melanchall.DryWetMidi.Core.MidiFileFormat,Melanchall.DryWetMidi.Core.WritingSettings,Melanchall.DryWetMidi.Core.TimeDivision)
+  name: WriteLazy(String, Boolean, MidiFileFormat, WritingSettings, TimeDivision)
+  href: api/Melanchall.DryWetMidi.Core.MidiFile.html#Melanchall_DryWetMidi_Core_MidiFile_WriteLazy_System_String_System_Boolean_Melanchall_DryWetMidi_Core_MidiFileFormat_Melanchall_DryWetMidi_Core_WritingSettings_Melanchall_DryWetMidi_Core_TimeDivision_
+  commentId: M:Melanchall.DryWetMidi.Core.MidiFile.WriteLazy(System.String,System.Boolean,Melanchall.DryWetMidi.Core.MidiFileFormat,Melanchall.DryWetMidi.Core.WritingSettings,Melanchall.DryWetMidi.Core.TimeDivision)
+  fullName: Melanchall.DryWetMidi.Core.MidiFile.WriteLazy(System.String, System.Boolean, Melanchall.DryWetMidi.Core.MidiFileFormat, Melanchall.DryWetMidi.Core.WritingSettings, Melanchall.DryWetMidi.Core.TimeDivision)
+  nameWithType: MidiFile.WriteLazy(String, Boolean, MidiFileFormat, WritingSettings, TimeDivision)
+- uid: Melanchall.DryWetMidi.Core.MidiFile.WriteLazy*
+  name: WriteLazy
+  href: api/Melanchall.DryWetMidi.Core.MidiFile.html#Melanchall_DryWetMidi_Core_MidiFile_WriteLazy_
+  commentId: Overload:Melanchall.DryWetMidi.Core.MidiFile.WriteLazy
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Core.MidiFile.WriteLazy
+  nameWithType: MidiFile.WriteLazy
 - uid: Melanchall.DryWetMidi.Core.MidiFileEqualityCheckSettings
   name: MidiFileEqualityCheckSettings
   href: api/Melanchall.DryWetMidi.Core.MidiFileEqualityCheckSettings.html
@@ -7114,6 +7171,77 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Core.MidiTokensReaderUtilities.EnumerateTokens
   nameWithType: MidiTokensReaderUtilities.EnumerateTokens
+- uid: Melanchall.DryWetMidi.Core.MidiTokensWriter
+  name: MidiTokensWriter
+  href: api/Melanchall.DryWetMidi.Core.MidiTokensWriter.html
+  commentId: T:Melanchall.DryWetMidi.Core.MidiTokensWriter
+  fullName: Melanchall.DryWetMidi.Core.MidiTokensWriter
+  nameWithType: MidiTokensWriter
+- uid: Melanchall.DryWetMidi.Core.MidiTokensWriter.Dispose
+  name: Dispose()
+  href: api/Melanchall.DryWetMidi.Core.MidiTokensWriter.html#Melanchall_DryWetMidi_Core_MidiTokensWriter_Dispose
+  commentId: M:Melanchall.DryWetMidi.Core.MidiTokensWriter.Dispose
+  fullName: Melanchall.DryWetMidi.Core.MidiTokensWriter.Dispose()
+  nameWithType: MidiTokensWriter.Dispose()
+- uid: Melanchall.DryWetMidi.Core.MidiTokensWriter.Dispose*
+  name: Dispose
+  href: api/Melanchall.DryWetMidi.Core.MidiTokensWriter.html#Melanchall_DryWetMidi_Core_MidiTokensWriter_Dispose_
+  commentId: Overload:Melanchall.DryWetMidi.Core.MidiTokensWriter.Dispose
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Core.MidiTokensWriter.Dispose
+  nameWithType: MidiTokensWriter.Dispose
+- uid: Melanchall.DryWetMidi.Core.MidiTokensWriter.EndTrackChunk
+  name: EndTrackChunk()
+  href: api/Melanchall.DryWetMidi.Core.MidiTokensWriter.html#Melanchall_DryWetMidi_Core_MidiTokensWriter_EndTrackChunk
+  commentId: M:Melanchall.DryWetMidi.Core.MidiTokensWriter.EndTrackChunk
+  fullName: Melanchall.DryWetMidi.Core.MidiTokensWriter.EndTrackChunk()
+  nameWithType: MidiTokensWriter.EndTrackChunk()
+- uid: Melanchall.DryWetMidi.Core.MidiTokensWriter.EndTrackChunk*
+  name: EndTrackChunk
+  href: api/Melanchall.DryWetMidi.Core.MidiTokensWriter.html#Melanchall_DryWetMidi_Core_MidiTokensWriter_EndTrackChunk_
+  commentId: Overload:Melanchall.DryWetMidi.Core.MidiTokensWriter.EndTrackChunk
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Core.MidiTokensWriter.EndTrackChunk
+  nameWithType: MidiTokensWriter.EndTrackChunk
+- uid: Melanchall.DryWetMidi.Core.MidiTokensWriter.StartTrackChunk
+  name: StartTrackChunk()
+  href: api/Melanchall.DryWetMidi.Core.MidiTokensWriter.html#Melanchall_DryWetMidi_Core_MidiTokensWriter_StartTrackChunk
+  commentId: M:Melanchall.DryWetMidi.Core.MidiTokensWriter.StartTrackChunk
+  fullName: Melanchall.DryWetMidi.Core.MidiTokensWriter.StartTrackChunk()
+  nameWithType: MidiTokensWriter.StartTrackChunk()
+- uid: Melanchall.DryWetMidi.Core.MidiTokensWriter.StartTrackChunk*
+  name: StartTrackChunk
+  href: api/Melanchall.DryWetMidi.Core.MidiTokensWriter.html#Melanchall_DryWetMidi_Core_MidiTokensWriter_StartTrackChunk_
+  commentId: Overload:Melanchall.DryWetMidi.Core.MidiTokensWriter.StartTrackChunk
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Core.MidiTokensWriter.StartTrackChunk
+  nameWithType: MidiTokensWriter.StartTrackChunk
+- uid: Melanchall.DryWetMidi.Core.MidiTokensWriter.WriteChunk(Melanchall.DryWetMidi.Core.MidiChunk)
+  name: WriteChunk(MidiChunk)
+  href: api/Melanchall.DryWetMidi.Core.MidiTokensWriter.html#Melanchall_DryWetMidi_Core_MidiTokensWriter_WriteChunk_Melanchall_DryWetMidi_Core_MidiChunk_
+  commentId: M:Melanchall.DryWetMidi.Core.MidiTokensWriter.WriteChunk(Melanchall.DryWetMidi.Core.MidiChunk)
+  fullName: Melanchall.DryWetMidi.Core.MidiTokensWriter.WriteChunk(Melanchall.DryWetMidi.Core.MidiChunk)
+  nameWithType: MidiTokensWriter.WriteChunk(MidiChunk)
+- uid: Melanchall.DryWetMidi.Core.MidiTokensWriter.WriteChunk*
+  name: WriteChunk
+  href: api/Melanchall.DryWetMidi.Core.MidiTokensWriter.html#Melanchall_DryWetMidi_Core_MidiTokensWriter_WriteChunk_
+  commentId: Overload:Melanchall.DryWetMidi.Core.MidiTokensWriter.WriteChunk
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Core.MidiTokensWriter.WriteChunk
+  nameWithType: MidiTokensWriter.WriteChunk
+- uid: Melanchall.DryWetMidi.Core.MidiTokensWriter.WriteEvent(Melanchall.DryWetMidi.Core.MidiEvent)
+  name: WriteEvent(MidiEvent)
+  href: api/Melanchall.DryWetMidi.Core.MidiTokensWriter.html#Melanchall_DryWetMidi_Core_MidiTokensWriter_WriteEvent_Melanchall_DryWetMidi_Core_MidiEvent_
+  commentId: M:Melanchall.DryWetMidi.Core.MidiTokensWriter.WriteEvent(Melanchall.DryWetMidi.Core.MidiEvent)
+  fullName: Melanchall.DryWetMidi.Core.MidiTokensWriter.WriteEvent(Melanchall.DryWetMidi.Core.MidiEvent)
+  nameWithType: MidiTokensWriter.WriteEvent(MidiEvent)
+- uid: Melanchall.DryWetMidi.Core.MidiTokensWriter.WriteEvent*
+  name: WriteEvent
+  href: api/Melanchall.DryWetMidi.Core.MidiTokensWriter.html#Melanchall_DryWetMidi_Core_MidiTokensWriter_WriteEvent_
+  commentId: Overload:Melanchall.DryWetMidi.Core.MidiTokensWriter.WriteEvent
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Core.MidiTokensWriter.WriteEvent
+  nameWithType: MidiTokensWriter.WriteEvent
 - uid: Melanchall.DryWetMidi.Core.MidiTokenType
   name: MidiTokenType
   href: api/Melanchall.DryWetMidi.Core.MidiTokenType.html
@@ -7132,12 +7260,12 @@ references:
   commentId: F:Melanchall.DryWetMidi.Core.MidiTokenType.ChunkHeader
   fullName: Melanchall.DryWetMidi.Core.MidiTokenType.ChunkHeader
   nameWithType: MidiTokenType.ChunkHeader
-- uid: Melanchall.DryWetMidi.Core.MidiTokenType.HeaderChunkData
-  name: HeaderChunkData
-  href: api/Melanchall.DryWetMidi.Core.MidiTokenType.html#Melanchall_DryWetMidi_Core_MidiTokenType_HeaderChunkData
-  commentId: F:Melanchall.DryWetMidi.Core.MidiTokenType.HeaderChunkData
-  fullName: Melanchall.DryWetMidi.Core.MidiTokenType.HeaderChunkData
-  nameWithType: MidiTokenType.HeaderChunkData
+- uid: Melanchall.DryWetMidi.Core.MidiTokenType.FileHeader
+  name: FileHeader
+  href: api/Melanchall.DryWetMidi.Core.MidiTokenType.html#Melanchall_DryWetMidi_Core_MidiTokenType_FileHeader
+  commentId: F:Melanchall.DryWetMidi.Core.MidiTokenType.FileHeader
+  fullName: Melanchall.DryWetMidi.Core.MidiTokenType.FileHeader
+  nameWithType: MidiTokenType.FileHeader
 - uid: Melanchall.DryWetMidi.Core.MidiTokenType.MidiEvent
   name: MidiEvent
   href: api/Melanchall.DryWetMidi.Core.MidiTokenType.html#Melanchall_DryWetMidi_Core_MidiTokenType_MidiEvent
@@ -7176,6 +7304,19 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Core.MidiWriter.Dispose
   nameWithType: MidiWriter.Dispose
+- uid: Melanchall.DryWetMidi.Core.MidiWriter.Length
+  name: Length
+  href: api/Melanchall.DryWetMidi.Core.MidiWriter.html#Melanchall_DryWetMidi_Core_MidiWriter_Length
+  commentId: P:Melanchall.DryWetMidi.Core.MidiWriter.Length
+  fullName: Melanchall.DryWetMidi.Core.MidiWriter.Length
+  nameWithType: MidiWriter.Length
+- uid: Melanchall.DryWetMidi.Core.MidiWriter.Length*
+  name: Length
+  href: api/Melanchall.DryWetMidi.Core.MidiWriter.html#Melanchall_DryWetMidi_Core_MidiWriter_Length_
+  commentId: Overload:Melanchall.DryWetMidi.Core.MidiWriter.Length
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Core.MidiWriter.Length
+  nameWithType: MidiWriter.Length
 - uid: Melanchall.DryWetMidi.Core.MidiWriter.Write3ByteDword(System.UInt32)
   name: Write3ByteDword(UInt32)
   href: api/Melanchall.DryWetMidi.Core.MidiWriter.html#Melanchall_DryWetMidi_Core_MidiWriter_Write3ByteDword_System_UInt32_
@@ -12443,6 +12584,22 @@ references:
   commentId: T:Melanchall.DryWetMidi.Interaction.GetObjectsUtilities
   fullName: Melanchall.DryWetMidi.Interaction.GetObjectsUtilities
   nameWithType: GetObjectsUtilities
+- uid: Melanchall.DryWetMidi.Interaction.GetObjectsUtilities.EnumerateObjects(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.MidiEvent},Melanchall.DryWetMidi.Interaction.ObjectType,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings)
+  name: EnumerateObjects(IEnumerable<MidiEvent>, ObjectType, ObjectDetectionSettings)
+  href: api/Melanchall.DryWetMidi.Interaction.GetObjectsUtilities.html#Melanchall_DryWetMidi_Interaction_GetObjectsUtilities_EnumerateObjects_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_MidiEvent__Melanchall_DryWetMidi_Interaction_ObjectType_Melanchall_DryWetMidi_Interaction_ObjectDetectionSettings_
+  commentId: M:Melanchall.DryWetMidi.Interaction.GetObjectsUtilities.EnumerateObjects(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.MidiEvent},Melanchall.DryWetMidi.Interaction.ObjectType,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings)
+  name.vb: EnumerateObjects(IEnumerable(Of MidiEvent), ObjectType, ObjectDetectionSettings)
+  fullName: Melanchall.DryWetMidi.Interaction.GetObjectsUtilities.EnumerateObjects(System.Collections.Generic.IEnumerable<Melanchall.DryWetMidi.Core.MidiEvent>, Melanchall.DryWetMidi.Interaction.ObjectType, Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings)
+  fullName.vb: Melanchall.DryWetMidi.Interaction.GetObjectsUtilities.EnumerateObjects(System.Collections.Generic.IEnumerable(Of Melanchall.DryWetMidi.Core.MidiEvent), Melanchall.DryWetMidi.Interaction.ObjectType, Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings)
+  nameWithType: GetObjectsUtilities.EnumerateObjects(IEnumerable<MidiEvent>, ObjectType, ObjectDetectionSettings)
+  nameWithType.vb: GetObjectsUtilities.EnumerateObjects(IEnumerable(Of MidiEvent), ObjectType, ObjectDetectionSettings)
+- uid: Melanchall.DryWetMidi.Interaction.GetObjectsUtilities.EnumerateObjects*
+  name: EnumerateObjects
+  href: api/Melanchall.DryWetMidi.Interaction.GetObjectsUtilities.html#Melanchall_DryWetMidi_Interaction_GetObjectsUtilities_EnumerateObjects_
+  commentId: Overload:Melanchall.DryWetMidi.Interaction.GetObjectsUtilities.EnumerateObjects
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Interaction.GetObjectsUtilities.EnumerateObjects
+  nameWithType: GetObjectsUtilities.EnumerateObjects
 - uid: Melanchall.DryWetMidi.Interaction.GetObjectsUtilities.GetObjects(Melanchall.DryWetMidi.Core.EventsCollection,Melanchall.DryWetMidi.Interaction.ObjectType,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings)
   name: GetObjects(EventsCollection, ObjectType, ObjectDetectionSettings)
   href: api/Melanchall.DryWetMidi.Interaction.GetObjectsUtilities.html#Melanchall_DryWetMidi_Interaction_GetObjectsUtilities_GetObjects_Melanchall_DryWetMidi_Core_EventsCollection_Melanchall_DryWetMidi_Interaction_ObjectType_Melanchall_DryWetMidi_Interaction_ObjectDetectionSettings_
@@ -17756,6 +17913,67 @@ references:
   fullName.vb: Melanchall.DryWetMidi.Interaction.TimedObjectsManager(Of TObject).SaveChanges
   nameWithType: TimedObjectsManager<TObject>.SaveChanges
   nameWithType.vb: TimedObjectsManager(Of TObject).SaveChanges
+- uid: Melanchall.DryWetMidi.Interaction.TimedObjectsWriter
+  name: TimedObjectsWriter
+  href: api/Melanchall.DryWetMidi.Interaction.TimedObjectsWriter.html
+  commentId: T:Melanchall.DryWetMidi.Interaction.TimedObjectsWriter
+  fullName: Melanchall.DryWetMidi.Interaction.TimedObjectsWriter
+  nameWithType: TimedObjectsWriter
+- uid: Melanchall.DryWetMidi.Interaction.TimedObjectsWriter.#ctor(Melanchall.DryWetMidi.Core.MidiTokensWriter)
+  name: TimedObjectsWriter(MidiTokensWriter)
+  href: api/Melanchall.DryWetMidi.Interaction.TimedObjectsWriter.html#Melanchall_DryWetMidi_Interaction_TimedObjectsWriter__ctor_Melanchall_DryWetMidi_Core_MidiTokensWriter_
+  commentId: M:Melanchall.DryWetMidi.Interaction.TimedObjectsWriter.#ctor(Melanchall.DryWetMidi.Core.MidiTokensWriter)
+  fullName: Melanchall.DryWetMidi.Interaction.TimedObjectsWriter.TimedObjectsWriter(Melanchall.DryWetMidi.Core.MidiTokensWriter)
+  nameWithType: TimedObjectsWriter.TimedObjectsWriter(MidiTokensWriter)
+- uid: Melanchall.DryWetMidi.Interaction.TimedObjectsWriter.#ctor*
+  name: TimedObjectsWriter
+  href: api/Melanchall.DryWetMidi.Interaction.TimedObjectsWriter.html#Melanchall_DryWetMidi_Interaction_TimedObjectsWriter__ctor_
+  commentId: Overload:Melanchall.DryWetMidi.Interaction.TimedObjectsWriter.#ctor
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Interaction.TimedObjectsWriter.TimedObjectsWriter
+  nameWithType: TimedObjectsWriter.TimedObjectsWriter
+- uid: Melanchall.DryWetMidi.Interaction.TimedObjectsWriter.Dispose
+  name: Dispose()
+  href: api/Melanchall.DryWetMidi.Interaction.TimedObjectsWriter.html#Melanchall_DryWetMidi_Interaction_TimedObjectsWriter_Dispose
+  commentId: M:Melanchall.DryWetMidi.Interaction.TimedObjectsWriter.Dispose
+  fullName: Melanchall.DryWetMidi.Interaction.TimedObjectsWriter.Dispose()
+  nameWithType: TimedObjectsWriter.Dispose()
+- uid: Melanchall.DryWetMidi.Interaction.TimedObjectsWriter.Dispose*
+  name: Dispose
+  href: api/Melanchall.DryWetMidi.Interaction.TimedObjectsWriter.html#Melanchall_DryWetMidi_Interaction_TimedObjectsWriter_Dispose_
+  commentId: Overload:Melanchall.DryWetMidi.Interaction.TimedObjectsWriter.Dispose
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Interaction.TimedObjectsWriter.Dispose
+  nameWithType: TimedObjectsWriter.Dispose
+- uid: Melanchall.DryWetMidi.Interaction.TimedObjectsWriter.WriteObject(Melanchall.DryWetMidi.Interaction.ITimedObject)
+  name: WriteObject(ITimedObject)
+  href: api/Melanchall.DryWetMidi.Interaction.TimedObjectsWriter.html#Melanchall_DryWetMidi_Interaction_TimedObjectsWriter_WriteObject_Melanchall_DryWetMidi_Interaction_ITimedObject_
+  commentId: M:Melanchall.DryWetMidi.Interaction.TimedObjectsWriter.WriteObject(Melanchall.DryWetMidi.Interaction.ITimedObject)
+  fullName: Melanchall.DryWetMidi.Interaction.TimedObjectsWriter.WriteObject(Melanchall.DryWetMidi.Interaction.ITimedObject)
+  nameWithType: TimedObjectsWriter.WriteObject(ITimedObject)
+- uid: Melanchall.DryWetMidi.Interaction.TimedObjectsWriter.WriteObject*
+  name: WriteObject
+  href: api/Melanchall.DryWetMidi.Interaction.TimedObjectsWriter.html#Melanchall_DryWetMidi_Interaction_TimedObjectsWriter_WriteObject_
+  commentId: Overload:Melanchall.DryWetMidi.Interaction.TimedObjectsWriter.WriteObject
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Interaction.TimedObjectsWriter.WriteObject
+  nameWithType: TimedObjectsWriter.WriteObject
+- uid: Melanchall.DryWetMidi.Interaction.TimedObjectsWriter.WriteObjects(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Interaction.ITimedObject})
+  name: WriteObjects(IEnumerable<ITimedObject>)
+  href: api/Melanchall.DryWetMidi.Interaction.TimedObjectsWriter.html#Melanchall_DryWetMidi_Interaction_TimedObjectsWriter_WriteObjects_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_ITimedObject__
+  commentId: M:Melanchall.DryWetMidi.Interaction.TimedObjectsWriter.WriteObjects(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Interaction.ITimedObject})
+  name.vb: WriteObjects(IEnumerable(Of ITimedObject))
+  fullName: Melanchall.DryWetMidi.Interaction.TimedObjectsWriter.WriteObjects(System.Collections.Generic.IEnumerable<Melanchall.DryWetMidi.Interaction.ITimedObject>)
+  fullName.vb: Melanchall.DryWetMidi.Interaction.TimedObjectsWriter.WriteObjects(System.Collections.Generic.IEnumerable(Of Melanchall.DryWetMidi.Interaction.ITimedObject))
+  nameWithType: TimedObjectsWriter.WriteObjects(IEnumerable<ITimedObject>)
+  nameWithType.vb: TimedObjectsWriter.WriteObjects(IEnumerable(Of ITimedObject))
+- uid: Melanchall.DryWetMidi.Interaction.TimedObjectsWriter.WriteObjects*
+  name: WriteObjects
+  href: api/Melanchall.DryWetMidi.Interaction.TimedObjectsWriter.html#Melanchall_DryWetMidi_Interaction_TimedObjectsWriter_WriteObjects_
+  commentId: Overload:Melanchall.DryWetMidi.Interaction.TimedObjectsWriter.WriteObjects
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Interaction.TimedObjectsWriter.WriteObjects
+  nameWithType: TimedObjectsWriter.WriteObjects
 - uid: Melanchall.DryWetMidi.Interaction.TimedObjectUtilities
   name: TimedObjectUtilities
   href: api/Melanchall.DryWetMidi.Interaction.TimedObjectUtilities.html

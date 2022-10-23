@@ -8,7 +8,7 @@
     <title>Tick generator | DryWetMIDI </title>
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Tick generator | DryWetMIDI ">
-    <meta name="generator" content="docfx 2.59.2.0">
+    <meta name="generator" content="docfx 2.59.4.0">
     
     <link rel="shortcut icon" href="../../images/favicon.png">
     <link rel="stylesheet" href="../../styles/docfx.vendor.css">
@@ -85,7 +85,7 @@
 <h5>Important</h5>
 <p><code>HighPrecisionTickGenerator</code> is supported for Windows and macOS only at now.</p>
 </div>
-<p>You can also use <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.RegularPrecisionTickGenerator.html">RegularPrecisionTickGenerator</a> which uses standard <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.timers.timer">Timer</a> and thus provides precision about 16ms on Windows. But this tick generator is cross-platform.</p>
+<p>You can also use <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.RegularPrecisionTickGenerator.html">RegularPrecisionTickGenerator</a> which uses standard <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.timers.timer">Timer</a> and thus provides precision about 16ms on Windows. But this tick generator is cross-platform.</p>
 <p>Tick generator can be specified via <code>playbackSettings</code> parameter of <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.Playback.html">Playback</a>'s constructors or <code>GetPlayback</code> extension methods within <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.PlaybackUtilities.html">PlaybackUtilities</a>:</p>
 <pre><code class="lang-csharp">var playback = midiFile.GetPlayback(new PlaybackSettings
 {
