@@ -6,7 +6,8 @@ using System.Collections.Generic;
 namespace Melanchall.DryWetMidi.Core
 {
     /// <summary>
-    /// Provides useful utility methods for <see cref="MidiTokensReader"/>.
+    /// Provides useful utility methods for <see cref="MidiTokensReader"/>. See
+    /// <see href="xref:a_file_lazy_reading_writing">Lazy reading/writing</see> article to learn more.
     /// </summary>
     public static class MidiTokensReaderUtilities
     {

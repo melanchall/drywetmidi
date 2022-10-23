@@ -6,7 +6,8 @@ namespace Melanchall.DryWetMidi.Core
 {
     /// <summary>
     /// Provides a way to read a MIDI file sequentially token by token keeping
-    /// low memory consumption.
+    /// low memory consumption. See
+    /// <see href="xref:a_file_lazy_reading_writing">Lazy reading/writing</see> article to learn more.
     /// </summary>
     /// <seealso cref="MidiTokensWriter"/>
     public sealed class MidiTokensReader : IDisposable

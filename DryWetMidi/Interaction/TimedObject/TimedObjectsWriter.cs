@@ -9,7 +9,8 @@ namespace Melanchall.DryWetMidi.Interaction
 {
     /// <summary>
     /// Provides a wrapper around <see cref="MidiTokensWriter"/> to write objects to it keeping
-    /// low memory consumption.
+    /// low memory consumption. See
+    /// <see href="xref:a_file_lazy_reading_writing">Lazy reading/writing</see> article to learn more.
     /// </summary>
     public sealed class TimedObjectsWriter : IDisposable
     {

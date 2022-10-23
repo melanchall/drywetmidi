@@ -233,7 +233,8 @@ namespace Melanchall.DryWetMidi.Core
 
         /// <summary>
         /// Creates an instance of the <see cref="MidiTokensReader"/> allowing to read a MIDI file sequentially
-        /// token by token keeping low memory consumption.
+        /// token by token keeping low memory consumption. See
+        /// <see href="xref:a_file_lazy_reading_writing">Lazy reading/writing</see> article to learn more.
         /// </summary>
         /// <param name="filePath">Path to the file to read.</param>
         /// <param name="settings">Settings according to which the file must be read. Specify <c>null</c> to use
@@ -320,7 +321,8 @@ namespace Melanchall.DryWetMidi.Core
 
         /// <summary>
         /// Creates an instance of the <see cref="MidiTokensWriter"/> allowing to write data to a
-        /// MIDI file sequentially token by token keeping low memory consumption.
+        /// MIDI file sequentially token by token keeping low memory consumption. See
+        /// <see href="xref:a_file_lazy_reading_writing">Lazy reading/writing</see> article to learn more.
         /// </summary>
         /// <param name="filePath">Full path of the file to write to.</param>
         /// <param name="overwriteFile">If <c>true</c> and file specified by <paramref name="filePath"/> already
@@ -542,7 +544,8 @@ namespace Melanchall.DryWetMidi.Core
 
         /// <summary>
         /// Creates an instance of the <see cref="MidiTokensReader"/> allowing to read a MIDI file
-        /// from the specified stream sequentially token by token keeping low memory consumption.
+        /// from the specified stream sequentially token by token keeping low memory consumption. See
+        /// <see href="xref:a_file_lazy_reading_writing">Lazy reading/writing</see> article to learn more.
         /// </summary>
         /// <param name="stream">Stream to read file from.</param>
         /// <param name="settings">Settings according to which the file must be read. Specify <c>null</c> to use
@@ -649,7 +652,8 @@ namespace Melanchall.DryWetMidi.Core
 
         /// <summary>
         /// Creates an instance of the <see cref="MidiTokensWriter"/> allowing to write data to the
-        /// specified stream sequentially token by token keeping low memory consumption.
+        /// specified stream sequentially token by token keeping low memory consumption. See
+        /// <see href="xref:a_file_lazy_reading_writing">Lazy reading/writing</see> article to learn more.
         /// </summary>
         /// <param name="stream">Stream to write file's data to.</param>
         /// <param name="format">Format of the file to be written.</param>
