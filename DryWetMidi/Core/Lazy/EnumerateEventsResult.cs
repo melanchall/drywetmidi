@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Melanchall.DryWetMidi.Core.Lazy
+namespace Melanchall.DryWetMidi.Core
 {
     /// <summary>
     /// Represents a result of the <see cref="MidiTokensReaderUtilities.EnumerateEvents(MidiTokensReader)"/>
