@@ -86,14 +86,14 @@
 <pre><code class="lang-csharp">file.Write(&quot;Some great song.mid&quot;, overwriteFile: true);
 </code></pre>
 <h2 id="compression">Compression</h2>
-<p>You can set specific policies via <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.WritingSettings.html">WritingSettings</a> to reduce size of an output file. For example, to use running status and thus don't write status bytes of channel events of the same type, set properties shown in the following code:</p>
+<p>You can set specific policies via <a href="xref:Melanchall.DryWetMidi.Core.WritingSettings">WritingSettings</a> to reduce size of an output file. For example, to use running status and thus don't write status bytes of channel events of the same type, set properties shown in the following code:</p>
 <pre><code class="lang-csharp">file.Write(&quot;Some great song.mid&quot;, settings: new WritingSettings
 {
     UseRunningStatus = true,
     NoteOffAsSilentNoteOn = true
 });
 </code></pre>
-<p>Complete list of available properties is placed in documentation of <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.WritingSettings.html">WritingSettings</a>.</p>
+<p>Complete list of available properties is placed in documentation of <a href="xref:Melanchall.DryWetMidi.Core.WritingSettings">WritingSettings</a>.</p>
 </article>
           </div>
           

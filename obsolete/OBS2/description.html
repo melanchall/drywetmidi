@@ -71,7 +71,7 @@
           <div class="col-md-10">
             <article class="content wrap" id="_content" data-uid="">
 
-<p>Now MIDI file reading uses buffering by default so <code>ReaderSettings.ReadFromMemory</code> property is deprecated. By default buffering policy is <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.BufferingPolicy.html#Melanchall_DryWetMidi_Core_BufferingPolicy_UseFixedSizeBuffer">BufferingPolicy.UseFixedSizeBuffer</a> and <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.ReaderSettings.html#Melanchall_DryWetMidi_Core_ReaderSettings_BufferSize">BufferSize</a> is <code>4096</code> which gives the same reading speed as putting all data in memory. But if you want, you can specify <code>BufferingPolicy = BufferingPolicy.BufferAllData</code> to achieve the same behavior as with <code>ReadFromMemory</code>:</p>
+<p>Now MIDI file reading uses buffering by default so <code>ReaderSettings.ReadFromMemory</code> property is deprecated. By default buffering policy is <a href="xref:Melanchall.DryWetMidi.Core.BufferingPolicy.UseFixedSizeBuffer">BufferingPolicy.UseFixedSizeBuffer</a> and <a href="xref:Melanchall.DryWetMidi.Core.ReaderSettings.BufferSize">BufferSize</a> is <code>4096</code> which gives the same reading speed as putting all data in memory. But if you want, you can specify <code>BufferingPolicy = BufferingPolicy.BufferAllData</code> to achieve the same behavior as with <code>ReadFromMemory</code>:</p>
 <pre><code class="lang-csharp">MidiFile.Read(&quot;Great MIDI file.mid&quot;, new ReadingSettings
 {
     ReaderSettings = new ReaderSettings

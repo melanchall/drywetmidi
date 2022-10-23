@@ -71,8 +71,8 @@
           <div class="col-md-10">
             <article class="content wrap" id="_content" data-uid="">
 
-<p>Separate manager classes for each MIDI object type are replaced with <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.TimedObjectsManager.html">TimedObjectsManager</a> which can manage objects of different types simultaneously.</p>
-<p>For example, to manage just <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.TimedEvent.html">timed events</a>:</p>
+<p>Separate manager classes for each MIDI object type are replaced with <a href="xref:Melanchall.DryWetMidi.Interaction.TimedObjectsManager">TimedObjectsManager</a> which can manage objects of different types simultaneously.</p>
+<p>For example, to manage just <a href="xref:Melanchall.DryWetMidi.Interaction.TimedEvent">timed events</a>:</p>
 <pre><code class="lang-csharp">using (var objectsManager = new TimedObjectsManager(trackChunk.Events, ObjectType.TimedEvent))
 {
     var firstTimedEvent = (TimedEvent)objectsManager.Objects.FirstOrDefault();
@@ -84,7 +84,7 @@
     var firstTimedEvent = objectsManager.Objects.FirstOrDefault();
 }
 </code></pre>
-<p>To manage both <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.TimedEvent.html">timed events</a> and <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.Note.html">notes</a>:</p>
+<p>To manage both <a href="xref:Melanchall.DryWetMidi.Interaction.TimedEvent">timed events</a> and <a href="xref:Melanchall.DryWetMidi.Interaction.Note">notes</a>:</p>
 <pre><code class="lang-csharp">using (var objectsManager = new TimedObjectsManager(trackChunk.Events, ObjectType.TimedEvent | ObjectType.Note))
 {
     var firstObject = objectsManager.Objects.FirstOrDefault();
