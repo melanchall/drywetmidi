@@ -1,6 +1,6 @@
 ---
-name: General issue
-about: General issue template
+name: Issue
+about: Get started to create an issue
 title: ''
 labels: ''
 assignees: ''
