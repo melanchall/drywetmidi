@@ -121,6 +121,9 @@ references:
 - uid: a_splitter
   name: Splitter
   href: articles/tools/Splitter.html
+- uid: a_support
+  name: Support
+  href: articles/dev/Support.html
 - uid: a_tempo_map
   name: Tempo map
   href: articles/high-level-managing/Tempo-map.html
@@ -4486,6 +4489,38 @@ references:
   commentId: F:Melanchall.DryWetMidi.Core.EndOfTrackStoringPolicy.Store
   fullName: Melanchall.DryWetMidi.Core.EndOfTrackStoringPolicy.Store
   nameWithType: EndOfTrackStoringPolicy.Store
+- uid: Melanchall.DryWetMidi.Core.EnumerateEventsResult
+  name: EnumerateEventsResult
+  href: api/Melanchall.DryWetMidi.Core.EnumerateEventsResult.html
+  commentId: T:Melanchall.DryWetMidi.Core.EnumerateEventsResult
+  fullName: Melanchall.DryWetMidi.Core.EnumerateEventsResult
+  nameWithType: EnumerateEventsResult
+- uid: Melanchall.DryWetMidi.Core.EnumerateEventsResult.Events
+  name: Events
+  href: api/Melanchall.DryWetMidi.Core.EnumerateEventsResult.html#Melanchall_DryWetMidi_Core_EnumerateEventsResult_Events
+  commentId: P:Melanchall.DryWetMidi.Core.EnumerateEventsResult.Events
+  fullName: Melanchall.DryWetMidi.Core.EnumerateEventsResult.Events
+  nameWithType: EnumerateEventsResult.Events
+- uid: Melanchall.DryWetMidi.Core.EnumerateEventsResult.Events*
+  name: Events
+  href: api/Melanchall.DryWetMidi.Core.EnumerateEventsResult.html#Melanchall_DryWetMidi_Core_EnumerateEventsResult_Events_
+  commentId: Overload:Melanchall.DryWetMidi.Core.EnumerateEventsResult.Events
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Core.EnumerateEventsResult.Events
+  nameWithType: EnumerateEventsResult.Events
+- uid: Melanchall.DryWetMidi.Core.EnumerateEventsResult.NextToken
+  name: NextToken
+  href: api/Melanchall.DryWetMidi.Core.EnumerateEventsResult.html#Melanchall_DryWetMidi_Core_EnumerateEventsResult_NextToken
+  commentId: P:Melanchall.DryWetMidi.Core.EnumerateEventsResult.NextToken
+  fullName: Melanchall.DryWetMidi.Core.EnumerateEventsResult.NextToken
+  nameWithType: EnumerateEventsResult.NextToken
+- uid: Melanchall.DryWetMidi.Core.EnumerateEventsResult.NextToken*
+  name: NextToken
+  href: api/Melanchall.DryWetMidi.Core.EnumerateEventsResult.html#Melanchall_DryWetMidi_Core_EnumerateEventsResult_NextToken_
+  commentId: Overload:Melanchall.DryWetMidi.Core.EnumerateEventsResult.NextToken
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Core.EnumerateEventsResult.NextToken
+  nameWithType: EnumerateEventsResult.NextToken
 - uid: Melanchall.DryWetMidi.Core.EscapeSysExEvent
   name: EscapeSysExEvent
   href: api/Melanchall.DryWetMidi.Core.EscapeSysExEvent.html
@@ -5507,44 +5542,6 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Core.KeySignatureEvent.WriteContent
   nameWithType: KeySignatureEvent.WriteContent
-- uid: Melanchall.DryWetMidi.Core.Lazy
-  name: Melanchall.DryWetMidi.Core.Lazy
-  href: api/Melanchall.DryWetMidi.Core.Lazy.html
-  commentId: N:Melanchall.DryWetMidi.Core.Lazy
-  fullName: Melanchall.DryWetMidi.Core.Lazy
-  nameWithType: Melanchall.DryWetMidi.Core.Lazy
-- uid: Melanchall.DryWetMidi.Core.Lazy.EnumerateEventsResult
-  name: EnumerateEventsResult
-  href: api/Melanchall.DryWetMidi.Core.Lazy.EnumerateEventsResult.html
-  commentId: T:Melanchall.DryWetMidi.Core.Lazy.EnumerateEventsResult
-  fullName: Melanchall.DryWetMidi.Core.Lazy.EnumerateEventsResult
-  nameWithType: EnumerateEventsResult
-- uid: Melanchall.DryWetMidi.Core.Lazy.EnumerateEventsResult.Events
-  name: Events
-  href: api/Melanchall.DryWetMidi.Core.Lazy.EnumerateEventsResult.html#Melanchall_DryWetMidi_Core_Lazy_EnumerateEventsResult_Events
-  commentId: P:Melanchall.DryWetMidi.Core.Lazy.EnumerateEventsResult.Events
-  fullName: Melanchall.DryWetMidi.Core.Lazy.EnumerateEventsResult.Events
-  nameWithType: EnumerateEventsResult.Events
-- uid: Melanchall.DryWetMidi.Core.Lazy.EnumerateEventsResult.Events*
-  name: Events
-  href: api/Melanchall.DryWetMidi.Core.Lazy.EnumerateEventsResult.html#Melanchall_DryWetMidi_Core_Lazy_EnumerateEventsResult_Events_
-  commentId: Overload:Melanchall.DryWetMidi.Core.Lazy.EnumerateEventsResult.Events
-  isSpec: "True"
-  fullName: Melanchall.DryWetMidi.Core.Lazy.EnumerateEventsResult.Events
-  nameWithType: EnumerateEventsResult.Events
-- uid: Melanchall.DryWetMidi.Core.Lazy.EnumerateEventsResult.NextToken
-  name: NextToken
-  href: api/Melanchall.DryWetMidi.Core.Lazy.EnumerateEventsResult.html#Melanchall_DryWetMidi_Core_Lazy_EnumerateEventsResult_NextToken
-  commentId: P:Melanchall.DryWetMidi.Core.Lazy.EnumerateEventsResult.NextToken
-  fullName: Melanchall.DryWetMidi.Core.Lazy.EnumerateEventsResult.NextToken
-  nameWithType: EnumerateEventsResult.NextToken
-- uid: Melanchall.DryWetMidi.Core.Lazy.EnumerateEventsResult.NextToken*
-  name: NextToken
-  href: api/Melanchall.DryWetMidi.Core.Lazy.EnumerateEventsResult.html#Melanchall_DryWetMidi_Core_Lazy_EnumerateEventsResult_NextToken_
-  commentId: Overload:Melanchall.DryWetMidi.Core.Lazy.EnumerateEventsResult.NextToken
-  isSpec: "True"
-  fullName: Melanchall.DryWetMidi.Core.Lazy.EnumerateEventsResult.NextToken
-  nameWithType: EnumerateEventsResult.NextToken
 - uid: Melanchall.DryWetMidi.Core.LyricEvent
   name: LyricEvent
   href: api/Melanchall.DryWetMidi.Core.LyricEvent.html
