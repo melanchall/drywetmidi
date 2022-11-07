@@ -592,31 +592,30 @@ namespace Melanchall.DryWetMidi.Interaction
             var time = 0L;
             var latestTime = 0L;
 
-            var events = eventsCollection._events;
-
             var constructor = settings?.Constructor;
             var useCustomConstructor = constructor != null;
 
             for (var i = 0; i < eventsCount; i++)
             {
-                time += events[i].DeltaTime;
+                var midiEvent = eventsCollection.GetByIndexInternal(i);
+                time += midiEvent.DeltaTime;
 
                 var timedEvent = useCustomConstructor
-                    ? constructor(new TimedEventData(events[i], time, 0, i))
-                    : new TimedEvent(events[i], time);
+                    ? constructor(new TimedEventData(midiEvent, time, 0, i))
+                    : new TimedEvent(midiEvent, time);
 
                 if (match(timedEvent))
                     removedEventsCount++;
                 else
                 {
-                    events[i].DeltaTime = time - latestTime;
-                    events[i - removedEventsCount] = events[i];
+                    midiEvent.DeltaTime = time - latestTime;
+                    eventsCollection.SetByIndexInternal(i - removedEventsCount, midiEvent);
                     latestTime = time;
                 }
             }
 
             if (removedEventsCount > 0)
-                events.RemoveRange(eventsCount - removedEventsCount, removedEventsCount);
+                eventsCollection.RemoveRangeInternal(eventsCount - removedEventsCount, removedEventsCount);
 
             return removedEventsCount;
         }
@@ -766,7 +765,7 @@ namespace Melanchall.DryWetMidi.Interaction
             {
                 var removedEventsCount = removedEventsCounts[i];
                 if (removedEventsCount > 0)
-                    eventsCollections[i]._events.RemoveRange(eventsCollections[i].Count - removedEventsCount, removedEventsCount);
+                    eventsCollections[i].RemoveRangeInternal(eventsCollections[i].Count - removedEventsCount, removedEventsCount);
             }
 
             return removedEventsCounts.Sum();

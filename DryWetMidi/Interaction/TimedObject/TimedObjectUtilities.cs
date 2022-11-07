@@ -280,7 +280,7 @@ namespace Melanchall.DryWetMidi.Interaction
                 if (midiEvent is ChannelEvent || midiEvent is MetaEvent || midiEvent is SysExEvent)
                 {
                     midiEvent.DeltaTime = timedEvent.Time - time;
-                    eventsCollection._events.Add(midiEvent);
+                    eventsCollection.AddInternal(midiEvent);
 
                     time = timedEvent.Time;
                 }

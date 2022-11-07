@@ -138,13 +138,15 @@ namespace Melanchall.DryWetMidi.Core
                     break;
                 }
 
-                Events.Add(midiEvent);
+                Events.AddInternal(midiEvent);
             }
 
             //
 
             if (settings.MissedEndOfTrackPolicy == MissedEndOfTrackPolicy.Abort && !endOfTrackPresented)
                 throw new MissedEndOfTrackEventException();
+
+            Events.IsInitialState = true;
         }
 
         /// <summary>

@@ -210,6 +210,90 @@ namespace Melanchall.DryWetMidi.Tests.Utilities
                 true,
                 "Files are equal."));
 
+        [Test]
+        public void AreEqual_TempoMap_Equal_1() =>
+            MidiAsserts.AreEqual(
+                TempoMap.Default,
+                TempoMap.Default,
+                "Tempo maps aren't equal.");
+
+        [Test]
+        public void AreEqual_TempoMap_Equal_2() =>
+            MidiAsserts.AreEqual(
+                TempoMap.Create(new Tempo(100000), new TimeSignature(2, 4)),
+                TempoMap.Create(new Tempo(100000), new TimeSignature(2, 4)),
+                "Tempo maps aren't equal.");
+
+        [Test]
+        public void AreEqual_TempoMap_Equal_3() =>
+            MidiAsserts.AreEqual(
+                TempoMap.Create(new TimeSignature(2, 4)),
+                TempoMap.Create(new TimeSignature(2, 4)),
+                "Tempo maps aren't equal.");
+
+        [Test]
+        public void AreEqual_TempoMap_Equal_4() =>
+            MidiAsserts.AreEqual(
+                TempoMap.Create(new Tempo(100000)),
+                TempoMap.Create(new Tempo(100000)),
+                "Tempo maps aren't equal.");
+
+        [Test]
+        public void AreEqual_TempoMap_Equal_5() =>
+            MidiAsserts.AreEqual(
+                TempoMap.Create(new TicksPerQuarterNoteTimeDivision(10), new Tempo(100000)),
+                TempoMap.Create(new TicksPerQuarterNoteTimeDivision(10), new Tempo(100000)),
+                "Tempo maps aren't equal.");
+
+        [Test]
+        public void AreEqual_TempoMap_Equal_6() =>
+            MidiAsserts.AreEqual(
+                TempoMap.Create(new TicksPerQuarterNoteTimeDivision(10), new TimeSignature(3, 4)),
+                TempoMap.Create(new TicksPerQuarterNoteTimeDivision(10), new TimeSignature(3, 4)),
+                "Tempo maps aren't equal.");
+
+        [Test]
+        public void AreEqual_TempoMap_NotEqual_1() => Assert.Throws<AssertionException>(() =>
+            MidiAsserts.AreEqual(
+                TempoMap.Default,
+                TempoMap.Create(new Tempo(100000)),
+                "Tempo maps aren't equal."));
+
+        [Test]
+        public void AreEqual_TempoMap_NotEqual_2() => Assert.Throws<AssertionException>(() =>
+            MidiAsserts.AreEqual(
+                TempoMap.Create(new Tempo(100000), new TimeSignature(2, 4)),
+                TempoMap.Create(new Tempo(50000), new TimeSignature(2, 4)),
+                "Tempo maps aren't equal."));
+
+        [Test]
+        public void AreEqual_TempoMap_NotEqual_3() => Assert.Throws<AssertionException>(() =>
+            MidiAsserts.AreEqual(
+                TempoMap.Create(new TimeSignature(2, 4)),
+                TempoMap.Create(new TimeSignature(2, 8)),
+                "Tempo maps aren't equal."));
+
+        [Test]
+        public void AreEqual_TempoMap_NotEqual_4() => Assert.Throws<AssertionException>(() =>
+            MidiAsserts.AreEqual(
+                TempoMap.Create(new Tempo(100000)),
+                TempoMap.Create(new Tempo(10000)),
+                "Tempo maps aren't equal."));
+
+        [Test]
+        public void AreEqual_TempoMap_NotEqual_5() => Assert.Throws<AssertionException>(() =>
+            MidiAsserts.AreEqual(
+                TempoMap.Create(new TicksPerQuarterNoteTimeDivision(10), new Tempo(100000)),
+                TempoMap.Create(new TicksPerQuarterNoteTimeDivision(50), new Tempo(100000)),
+                "Tempo maps aren't equal."));
+
+        [Test]
+        public void AreEqual_TempoMap_NotEqual_6() => Assert.Throws<AssertionException>(() =>
+            MidiAsserts.AreEqual(
+                TempoMap.Create(new TicksPerQuarterNoteTimeDivision(10), new TimeSignature(3, 4)),
+                TempoMap.Create(new TicksPerQuarterNoteTimeDivision(10), new TimeSignature(2, 4)),
+                "Tempo maps aren't equal."));
+
         #endregion
     }
 }

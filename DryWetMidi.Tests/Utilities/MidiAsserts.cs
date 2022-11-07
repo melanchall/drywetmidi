@@ -249,6 +249,25 @@ namespace Melanchall.DryWetMidi.Tests.Utilities
             }
         }
 
+        public static void AreEqual(TempoMap expectedTempoMap, TempoMap actualTempoMap, string message)
+        {
+            if (ReferenceEquals(expectedTempoMap, actualTempoMap))
+                return;
+
+            if (ReferenceEquals(null, expectedTempoMap) || ReferenceEquals(null, actualTempoMap))
+                Assert.Fail($"{message} One of objects is null.");
+
+            Assert.AreEqual(expectedTempoMap.TimeDivision, actualTempoMap.TimeDivision, $"{message} Invalid time division.");
+            CollectionAssert.AreEqual(
+                expectedTempoMap.GetTempoChanges(),
+                actualTempoMap.GetTempoChanges(),
+                $"{message} Invalid tempo changes.");
+            CollectionAssert.AreEqual(
+                expectedTempoMap.GetTimeSignatureChanges(),
+                actualTempoMap.GetTimeSignatureChanges(),
+                $"{message} Invalid time signature changes.");
+        }
+
         private static void AreEqual(Note expectedNote, Note actualNote, string message)
         {
             Assert.AreEqual(expectedNote.NoteNumber, actualNote.NoteNumber, $"{message} Note number is invalid.");

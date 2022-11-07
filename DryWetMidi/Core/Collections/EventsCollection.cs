@@ -13,7 +13,8 @@ namespace Melanchall.DryWetMidi.Core
     {
         #region Fields
 
-        internal readonly List<MidiEvent> _events = new List<MidiEvent>();
+        private readonly List<MidiEvent> _events = new List<MidiEvent>();
+        private int _tempoMapEventsCount = 0;
 
         #endregion
 
@@ -44,14 +45,16 @@ namespace Melanchall.DryWetMidi.Core
             {
                 ThrowIfArgument.IsInvalidIndex(nameof(index), index, _events.Count);
 
-                return _events[index];
+                return GetByIndexInternal(index);
             }
             set
             {
                 ThrowIfArgument.IsNull(nameof(value), value);
                 ThrowIfArgument.IsInvalidIndex(nameof(index), index, _events.Count);
 
-                _events[index] = value;
+                SetByIndexInternal(index, value);
+
+                IsInitialState = false;
             }
         }
 
@@ -64,6 +67,12 @@ namespace Melanchall.DryWetMidi.Core
         /// Gets a value indicating whether the <see cref="EventsCollection"/> is read-only.
         /// </summary>
         public bool IsReadOnly { get; } = false;
+
+        internal bool HasTempoMapEvents => _tempoMapEventsCount > 0;
+
+        internal bool IsInitialState { get; set; } = true;
+
+        internal int LastTempoMapEventIndex { get; private set; } = -1;
 
         #endregion
 
@@ -83,7 +92,9 @@ namespace Melanchall.DryWetMidi.Core
         {
             ThrowIfArgument.IsNull(nameof(midiEvent), midiEvent);
 
-            _events.Add(midiEvent);
+            AddInternal(midiEvent);
+
+            IsInitialState = false;
         }
 
         /// <summary>
@@ -100,7 +111,16 @@ namespace Melanchall.DryWetMidi.Core
         {
             ThrowIfArgument.IsNull(nameof(events), events);
 
-            _events.AddRange(events.Where(e => e != null));
+            _events.AddRange(events.Where(e =>
+            {
+                var result = e != null;
+                if (result && IsTempoMapEvent(e))
+                    _tempoMapEventsCount++;
+
+                return result;
+            }));
+
+            IsInitialState = false;
         }
 
         /// <summary>
@@ -131,6 +151,11 @@ namespace Melanchall.DryWetMidi.Core
             ThrowIfArgument.IsInvalidIndex(nameof(index), index, _events.Count);
 
             _events.Insert(index, midiEvent);
+
+            if (IsTempoMapEvent(midiEvent))
+                _tempoMapEventsCount++;
+
+            IsInitialState = false;
         }
 
         /// <summary>
@@ -160,7 +185,16 @@ namespace Melanchall.DryWetMidi.Core
             ThrowIfArgument.IsNull(nameof(midiEvents), midiEvents);
             ThrowIfArgument.IsInvalidIndex(nameof(index), index, _events.Count);
 
-            _events.InsertRange(index, midiEvents);
+            _events.InsertRange(index, midiEvents.Where(e =>
+            {
+                var result = e != null;
+                if (result && IsTempoMapEvent(e))
+                    _tempoMapEventsCount++;
+
+                return result;
+            }));
+
+            IsInitialState = false;
         }
 
         /// <summary>
@@ -174,7 +208,14 @@ namespace Melanchall.DryWetMidi.Core
         {
             ThrowIfArgument.IsNull(nameof(midiEvent), midiEvent);
 
-            return _events.Remove(midiEvent);
+            var result = _events.Remove(midiEvent);
+            if (result && IsTempoMapEvent(midiEvent))
+                _tempoMapEventsCount--;
+
+            if (result)
+                IsInitialState = false;
+
+            return result;
         }
 
         /// <summary>
@@ -187,7 +228,13 @@ namespace Melanchall.DryWetMidi.Core
         {
             ThrowIfArgument.IsInvalidIndex(nameof(index), index, _events.Count);
 
+            var midiEvent = _events[index];
+            if (IsTempoMapEvent(midiEvent))
+                _tempoMapEventsCount--;
+
             _events.RemoveAt(index);
+
+            IsInitialState = false;
         }
 
         /// <summary>
@@ -201,7 +248,13 @@ namespace Melanchall.DryWetMidi.Core
         {
             ThrowIfArgument.IsNull(nameof(match), match);
 
-            return _events.RemoveAll(match);
+            _tempoMapEventsCount -= _events.Count(e => match(e) && IsTempoMapEvent(e));
+
+            var result = _events.RemoveAll(match);
+            if (result > 0)
+                IsInitialState = false;
+
+            return result;
         }
 
         /// <summary>
@@ -225,6 +278,55 @@ namespace Melanchall.DryWetMidi.Core
         public void Clear()
         {
             _events.Clear();
+            _tempoMapEventsCount = 0;
+
+            IsInitialState = false;
+        }
+
+        internal void AddInternal(MidiEvent midiEvent)
+        {
+            _events.Add(midiEvent);
+
+            if (IsTempoMapEvent(midiEvent))
+            {
+                _tempoMapEventsCount++;
+                LastTempoMapEventIndex = _events.Count - 1;
+            }
+
+            IsInitialState = false;
+        }
+
+        internal void RemoveRangeInternal(int index, int count)
+        {
+            for (var i = 0; i < count; i++)
+            {
+                var midiEvent = _events[index + i];
+                if (IsTempoMapEvent(midiEvent))
+                    _tempoMapEventsCount--;
+            }
+
+            _events.RemoveRange(index, count);
+
+            IsInitialState = false;
+        }
+
+        internal MidiEvent GetByIndexInternal(int index)
+        {
+            return _events[index];
+        }
+
+        internal void SetByIndexInternal(int index, MidiEvent midiEvent)
+        {
+            _events[index] = midiEvent;
+
+            IsInitialState = false;
+        }
+
+        private static bool IsTempoMapEvent(MidiEvent midiEvent)
+        {
+            return
+                midiEvent.EventType == MidiEventType.SetTempo ||
+                midiEvent.EventType == MidiEventType.TimeSignature;
         }
 
         #endregion

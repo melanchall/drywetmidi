@@ -112,36 +112,67 @@ namespace Melanchall.DryWetMidi.Interaction
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
             ThrowIfArgument.IsNull(nameof(timeDivision), timeDivision);
 
-            var eventsCollections = trackChunks.Where(c => c != null).Select(c => c.Events).ToArray();
-            var eventsCount = eventsCollections.Sum(c => c.Count);
+            //
+
             var result = new TempoMap(timeDivision);
 
-            foreach (var timedEventTuple in eventsCollections.GetTimedEventsLazy(eventsCount, null))
+            var eventsCollections = trackChunks.Select(c => c.Events).Where(e => e.HasTempoMapEvents).ToArray();
+            var eventsCollectionsCount = eventsCollections.Length;
+            if (eventsCollectionsCount == 0)
+                return result;
+
+            var eventsCollectionIndices = new int[eventsCollectionsCount];
+            var eventsCollectionMaxIndices = eventsCollections.Select(e => e.IsInitialState ? e.LastTempoMapEventIndex : e.Count - 1).ToArray();
+            var eventsCollectionTimes = new long[eventsCollectionsCount];
+
+            while (true)
             {
-                var timedEvent = timedEventTuple.Item1;
-                var midiEvent = timedEvent.Event;
+                var eventsCollectionIndex = 0;
+                var minTime = long.MaxValue;
+                var endReached = true;
+
+                for (var j = 0; j < eventsCollectionsCount; j++)
+                {
+                    var index = eventsCollectionIndices[j];
+                    if (index > eventsCollectionMaxIndices[j])
+                        continue;
+
+                    var eventTime = eventsCollections[j][index].DeltaTime + eventsCollectionTimes[j];
+                    if (eventTime < minTime)
+                    {
+                        minTime = eventTime;
+                        eventsCollectionIndex = j;
+                    }
+
+                    endReached = false;
+                }
+
+                if (endReached)
+                    break;
+
+                var midiEvent = eventsCollections[eventsCollectionIndex][eventsCollectionIndices[eventsCollectionIndex]];
 
                 switch (midiEvent.EventType)
                 {
                     case MidiEventType.TimeSignature:
                         {
                             var timeSignatureEvent = (TimeSignatureEvent)midiEvent;
-                            result.TimeSignatureLine.SetValue(
-                                timedEvent.Time,
-                                new TimeSignature(
-                                    timeSignatureEvent.Numerator,
-                                    timeSignatureEvent.Denominator));
+                            result.TimeSignatureLine.SetValue(minTime, new TimeSignature(
+                                timeSignatureEvent.Numerator,
+                                timeSignatureEvent.Denominator));
                         }
                         break;
                     case MidiEventType.SetTempo:
                         {
                             var setTempoEvent = (SetTempoEvent)midiEvent;
-                            result.TempoLine.SetValue(
-                                timedEvent.Time,
-                                new Tempo(setTempoEvent.MicrosecondsPerQuarterNote));
+                            result.TempoLine.SetValue(minTime, new Tempo(
+                                setTempoEvent.MicrosecondsPerQuarterNote));
                         }
                         break;
                 }
+
+                eventsCollectionTimes[eventsCollectionIndex] = minTime;
+                eventsCollectionIndices[eventsCollectionIndex]++;
             }
 
             return result;
