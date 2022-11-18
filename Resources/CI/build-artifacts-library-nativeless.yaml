@@ -32,6 +32,10 @@ stages:
   - job: BuildBinaries
     displayName: Build binaries
     steps:
+    - template: Templates/step-setup-framework.yaml
+      parameters:
+        framework: 'Net'
+    
     - template: Templates/step-generate-doc-links.yaml
     
     - task: PowerShell@2

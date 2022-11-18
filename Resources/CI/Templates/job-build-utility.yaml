@@ -12,6 +12,10 @@ jobs:
     steps:
     - template: step-copy-native-libraries-near-csproj.yaml
     
+    - template: step-setup-framework.yaml
+      parameters:
+        framework: 'Net'
+    
     - task: DotNetCoreCLI@2
       displayName: Publish project
       inputs:
@@ -38,7 +42,7 @@ jobs:
     - task: ArchiveFiles@2
       displayName: Archive utility
       inputs:
-        rootFolderOrFile: 'Utilities\${{ parameters.projectName }}\bin\$(BuildConfiguration)\net6.0\${{ rid }}\publish'
+        rootFolderOrFile: 'Utilities\${{ parameters.projectName }}\bin\$(BuildConfiguration)\net7.0\${{ rid }}\publish'
         includeRootFolder: false
         archiveType: 'zip'
         archiveFile: '$(Build.ArtifactStagingDirectory)\Utility\Melanchall.${{ parameters.projectName }}.$(LibraryVersion)-${{ rid }}.zip'

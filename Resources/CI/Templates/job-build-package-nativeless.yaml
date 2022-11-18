@@ -31,6 +31,10 @@ jobs:
           $xml.Project.PropertyGroup[1].Version = $newVersion
           $xml.Save($filePath)
   
+  - template: step-setup-framework.yaml
+    parameters:
+      framework: 'Net'
+  
   - template: step-generate-doc-links.yaml
   
   - task: PowerShell@2

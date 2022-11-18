@@ -29,6 +29,10 @@ stages:
     displayName: Run ReSharper analysis
     steps:
     - template: Templates/step-copy-native-libraries-near-csproj.yaml
+    
+    - template: Templates/step-setup-framework.yaml
+      parameters:
+        framework: 'Net'
   
     - task: CmdLine@2
       displayName: Install tool

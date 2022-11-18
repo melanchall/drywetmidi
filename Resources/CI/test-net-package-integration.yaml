@@ -109,7 +109,8 @@ stages:
         targetType: 'inline'
         script: |
           $path = Resolve-Path 'Resources\PackageIntegrationTestUtilities\DwmNetConsoleApp\DwmNetConsoleApp\DwmNetConsoleApp.csproj'
-          dotnet restore "$path" -s "$(Pipeline.Workspace)\NuGetPackage"
+          dotnet nuget add source "$(Pipeline.Workspace)\NuGetPackage"
+          dotnet restore "$path"
 
     - task: PowerShell@2
       displayName: Run test program
