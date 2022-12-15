@@ -555,8 +555,10 @@ IN_DISCONNECTRESULT DisconnectFromInputDevice(void* handle)
     return IN_DISCONNECTRESULT_OK;
 }
 
-IN_GETEVENTDATARESULT GetEventDataFromInputDevice(MIDIPacketList* packetList, int packetIndex, Byte** data, int* length)
+IN_GETEVENTDATARESULT GetEventDataFromInputDevice(MIDIPacketList* packetList, int packetIndex, Byte** data, int* length, int* packetsCount)
 {
+	*packetsCount = packetList->numPackets;
+	
     if (packetIndex == 0)
     {
         *data = packetList->packet[0].data;
@@ -564,7 +566,7 @@ IN_GETEVENTDATARESULT GetEventDataFromInputDevice(MIDIPacketList* packetList, in
         return IN_GETEVENTDATARESULT_OK;
     }
 
-    MIDIPacket* packetPtr = &packetList->packet[0];
+    MIDIPacket* packetPtr = packetList->packet;
 
     for (int i = 0; i < packetIndex; i++)
     {

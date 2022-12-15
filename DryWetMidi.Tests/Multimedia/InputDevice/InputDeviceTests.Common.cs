@@ -43,18 +43,31 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             }
         }
 
+        private sealed class DataPacket
+        {
+            public DataPacket(params byte[] data)
+            {
+                Data = data;
+            }
+
+            public byte[] Data { get; }
+        }
+
+        private sealed class DataPackage
+        {
+            public DataPackage(params DataPacket[] packets)
+            {
+                Packets = packets;
+            }
+
+            public DataPacket[] Packets { get; }
+        }
+
         #endregion
 
         #region Constants
 
         private const int RetriesNumber = 3;
-
-        #endregion
-
-        #region Extern functions
-
-        [DllImport("SendTestData", CallingConvention = CallingConvention.Cdecl)]
-        private static extern int SendData(IntPtr portName, byte[] data, int length, int[] indices, int indicesLength);
 
         #endregion
 
@@ -294,27 +307,50 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
         #region Private methods
 
-        private static InputDevice GetUserInputDevice()
-        {
-            return InputDevice.GetByName(MidiDevicesNames.DeviceA);
-        }
+        private static InputDevice GetUserInputDevice() =>
+            InputDevice.GetByName(MidiDevicesNames.DeviceA);
 
-        private void ReceiveData(byte[] data, int[] indices, ICollection<MidiEvent> expectedEvents)
+        private static void WaitAfterReceiveData() =>
+            WaitOperations.Wait(2000);
+
+        private void ReceiveData(
+            DataPackage[] packages,
+            ICollection<MidiEvent> expectedEvents,
+            bool checkCheckpoints = true)
         {
             var deviceName = MidiDevicesNames.DeviceA;
-            var deviceNamePtr = Marshal.StringToHGlobalAnsi(deviceName);
 
             var receivedEvents = new List<MidiEvent>(expectedEvents.Count);
+            var checkpoints = new TestCheckpoints();
 
+            using (var dataSender = new DataSender(deviceName))
             using (var inputDevice = InputDevice.GetByName(deviceName))
             {
+                inputDevice.TestCheckpoints = checkpoints;
                 inputDevice.EventReceived += (_, e) => receivedEvents.Add(e.Event);
                 inputDevice.StartEventsListening();
 
-                SendData(deviceNamePtr, data, data.Length, indices, indices.Length);
+                foreach (var package in packages)
+                {
+                    var data = package.Packets.SelectMany(p => p.Data).ToArray();
 
-                var timeout = SendReceiveUtilities.MaximumEventSendReceiveDelay;
-                var areEventReceived = WaitOperations.Wait(() => receivedEvents.Count >= expectedEvents.Count, timeout);
+                    var index = 0;
+                    var indices = new List<int>();
+
+                    foreach (var packet in package.Packets)
+                    {
+                        indices.Add(index);
+                        index += packet.Data.Length;
+                    }
+
+                    dataSender.SendData(data, data.Length, indices.ToArray(), indices.Count);
+                    WaitOperations.Wait(5);
+                }
+
+                var timeout = SendReceiveUtilities.MaximumEventSendReceiveDelay + TimeSpan.FromMilliseconds(30);
+                var areEventReceived = WaitOperations.Wait(
+                    () => receivedEvents.Count >= expectedEvents.Count,
+                    timeout);
                 Assert.IsTrue(areEventReceived, $"Events are not received for [{timeout}] (received are: {string.Join(", ", receivedEvents)}).");
 
                 MidiAsserts.AreEqual(
@@ -322,9 +358,32 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     receivedEvents,
                     false,
                     "Received events are invalid.");
+
+                if (checkCheckpoints)
+                {
+                    var expectedCheckpointData = packages.SelectMany(p => new object[] { null }.Concat(p.Packets.Select(pp => pp.Data))).ToArray();
+                    var checkpointData = checkpoints.GetCheckpointDataList(InputDeviceCheckpointsNames.MessageDataReceived);
+                    if (expectedCheckpointData.Length != checkpointData.Count)
+                        Assert.Fail($"Invalid checkpoint's data count: {string.Join("; ", checkpointData.Select(d => d == null ? "null" : string.Join(" ", ((byte[])d).Select(b => Convert.ToString(b, 16).PadLeft(2, '0').ToUpper()))))}.");
+
+                    for (var i = 0; i < expectedCheckpointData.Length; i++)
+                    {
+                        var expected = expectedCheckpointData.ElementAt(i);
+                        var actual = checkpointData.ElementAt(i);
+
+                        if (ReferenceEquals(expected, actual))
+                            continue;
+
+                        var expectedBytes = (byte[])expected;
+                        var actualBytes = (byte[])actual;
+                        CollectionAssert.AreEqual(expectedBytes, actualBytes, $"Bytes of data record {i} are invalid.");
+                    }
+                }
             }
+
+            WaitAfterReceiveData();
         }
 
-        #endregion
+#endregion
     }
 }

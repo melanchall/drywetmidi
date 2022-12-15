@@ -56,7 +56,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         private static extern IN_DISCONNECTRESULT DisconnectFromInputDevice(IntPtr handle);
 
         [DllImport(LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
-        private static extern IN_GETEVENTDATARESULT GetEventDataFromInputDevice(IntPtr packetList, int packetIndex, out IntPtr data, out int length);
+        private static extern IN_GETEVENTDATARESULT GetEventDataFromInputDevice(IntPtr packetList, int packetIndex, out IntPtr data, out int length, out int packetsCount);
 
         [DllImport(LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
         private static extern IN_GETSYSEXDATARESULT GetInputDeviceSysExBufferData(IntPtr header, out IntPtr data, out int size);
@@ -124,9 +124,9 @@ namespace Melanchall.DryWetMidi.Multimedia
             return DisconnectFromInputDevice(handle);
         }
 
-        public override IN_GETEVENTDATARESULT Api_GetEventData(IntPtr packetList, int packetIndex, out IntPtr data, out int length)
+        public override IN_GETEVENTDATARESULT Api_GetEventData(IntPtr packetList, int packetIndex, out IntPtr data, out int length, out int packetsCount)
         {
-            return GetEventDataFromInputDevice(packetList, packetIndex, out data, out length);
+            return GetEventDataFromInputDevice(packetList, packetIndex, out data, out length, out packetsCount);
         }
 
         public override IN_GETSYSEXDATARESULT Api_GetSysExBufferData(IntPtr header, out IntPtr data, out int size)

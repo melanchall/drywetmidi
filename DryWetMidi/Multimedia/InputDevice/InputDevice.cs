@@ -100,6 +100,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         private readonly byte[] _channelParametersBuffer = new byte[ChannelParametersBufferSize];
 
         private readonly Dictionary<MidiTimeCodeComponent, FourBitNumber> _midiTimeCodeComponents = new Dictionary<MidiTimeCodeComponent, FourBitNumber>();
+        private readonly List<byte[]> _sysExParts = new List<byte[]>();
 
         private readonly CommonApi.API_TYPE _apiType;
         private readonly int _hashCode;
@@ -503,6 +504,21 @@ namespace Melanchall.DryWetMidi.Multimedia
             if (!IsListeningForEvents || !IsEnabled)
                 return;
 
+#if TEST
+            TestCheckpoints?.SetCheckpointReached(InputDeviceCheckpointsNames.MessageDataReceived, null);
+#endif
+
+            int packetsCount = 1;
+
+            for (var i = 0; i < packetsCount; i++)
+            {
+                OnPacket_Mac(pktlist, i, out packetsCount);
+            }
+        }
+
+        private void OnPacket_Mac(IntPtr pktlist, int packetIndex, out int packetsCount)
+        {
+            packetsCount = 0;
             byte[] data = null;
 
             try
@@ -511,19 +527,51 @@ namespace Melanchall.DryWetMidi.Multimedia
                 int length;
 
                 NativeApiUtilities.HandleDevicesNativeApiResult(
-                    InputDeviceApiProvider.Api.Api_GetEventData(pktlist, 0, out dataPtr, out length));
+                    InputDeviceApiProvider.Api.Api_GetEventData(pktlist, packetIndex, out dataPtr, out length, out packetsCount));
 
                 data = new byte[length];
                 Marshal.Copy(dataPtr, data, 0, length);
 
-                // TODO: handle escape sysex
+#if TEST
+                TestCheckpoints?.SetCheckpointReached(InputDeviceCheckpointsNames.MessageDataReceived, data);
+#endif
+
                 if (data[0] == EventStatusBytes.Global.NormalSysEx)
                 {
                     var sysExData = new byte[length - 1];
                     Buffer.BlockCopy(data, 1, sysExData, 0, sysExData.Length);
 
-                    var midiEvent = new NormalSysExEvent(sysExData);
-                    OnEventReceived(midiEvent);
+                    if (data[data.Length - 1] == SysExEvent.EndOfEventByte)
+                    {
+                        var midiEvent = new NormalSysExEvent(sysExData);
+                        OnEventReceived(midiEvent);
+                    }
+                    else
+                        _sysExParts.Add(sysExData);
+
+                    return;
+                }
+                else if (_sysExParts.Any())
+                {
+                    _sysExParts.Add(data);
+
+                    if (data[data.Length - 1] == SysExEvent.EndOfEventByte)
+                    {
+                        var sysExData = new byte[_sysExParts.Sum(p => p.Length)];
+                        var i = 0;
+
+                        foreach (var p in _sysExParts)
+                        {
+                            Buffer.BlockCopy(p, 0, sysExData, i, p.Length);
+                            i += p.Length;
+                        }
+
+                        _sysExParts.Clear();
+
+                        var midiEvent = new NormalSysExEvent(sysExData);
+                        OnEventReceived(midiEvent);
+                    }
+
                     return;
                 }
 

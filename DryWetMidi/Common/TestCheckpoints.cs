@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace Melanchall.DryWetMidi.Common
 {
@@ -7,7 +8,7 @@ namespace Melanchall.DryWetMidi.Common
     {
         #region Fields
 
-        private readonly Dictionary<string, bool> _checkpointsReachedStates = new Dictionary<string, bool>();
+        private readonly Dictionary<string, List<object>> _checkpointsReachedStates = new Dictionary<string, List<object>>();
 
         #endregion
 
@@ -15,13 +16,30 @@ namespace Melanchall.DryWetMidi.Common
 
         public void SetCheckpointReached(string checkpointName)
         {
-            _checkpointsReachedStates[checkpointName] = true;
+            SetCheckpointReached(checkpointName, null);
+        }
+
+        public void SetCheckpointReached(string checkpointName, object data)
+        {
+            List<object> dataList;
+            if (!_checkpointsReachedStates.TryGetValue(checkpointName, out dataList))
+                _checkpointsReachedStates.Add(checkpointName, dataList = new List<object>());
+
+            dataList.Add(data);
         }
 
         public bool IsCheckpointReached(string checkpointName)
         {
-            bool state;
-            return _checkpointsReachedStates.TryGetValue(checkpointName, out state) && state;
+            List<object> dataList;
+            return _checkpointsReachedStates.TryGetValue(checkpointName, out dataList) && dataList.Any();
+        }
+
+        public ICollection<object> GetCheckpointDataList(string checkpointName)
+        {
+            List<object> dataList;
+            return _checkpointsReachedStates.TryGetValue(checkpointName, out dataList)
+                ? dataList
+                : null;
         }
 
         #endregion

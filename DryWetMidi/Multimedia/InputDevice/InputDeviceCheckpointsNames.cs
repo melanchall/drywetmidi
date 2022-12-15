@@ -8,6 +8,8 @@
         public const string DeviceDisconnectedInHandleFinalizer = "IN B";
         public const string DeviceClosedInHandleFinalizer = "IN C";
 
+        public const string MessageDataReceived = "MSG DATA";
+
         #endregion
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Threading;
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Multimedia;
@@ -17,9 +18,106 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
         [Test]
         [Platform("MacOsX")]
+        public void ReceiveData_SysEx_Single_SinglePacket() => ReceiveData(
+            packages: new[]
+            {
+                new DataPackage(
+                    new DataPacket(0xF0, 0x7F, 0x60, 0x40, 0xF7))
+            },
+            expectedEvents: new MidiEvent[]
+            {
+                new NormalSysExEvent(new byte[] { 0x7F, 0x60, 0x40, 0xF7 })
+            });
+
+        [Test]
+        [Platform("MacOsX")]
+        public void ReceiveData_SysEx_Single_SinglePackage() => ReceiveData(
+            packages: new[]
+            {
+                new DataPackage(
+                    new DataPacket(0xF0, 0x7F, 0x60),
+                    new DataPacket(0x40, 0xF7))
+            },
+            expectedEvents: new MidiEvent[]
+            {
+                new NormalSysExEvent(new byte[] { 0x7F, 0x60, 0x40, 0xF7 })
+            });
+
+        [Test]
+        [Platform("MacOsX")]
+        public void ReceiveData_SysEx_Multiple_SinglePackage() => ReceiveData(
+            packages: new[]
+            {
+                new DataPackage(
+                    new DataPacket(0xF0, 0x7F, 0x60),
+                    new DataPacket(0x40, 0xF7),
+                    new DataPacket(0xF0, 0x5D, 0x6E),
+                    new DataPacket(0x7F, 0xF7))
+            },
+            expectedEvents: new MidiEvent[]
+            {
+                new NormalSysExEvent(new byte[] { 0x7F, 0x60, 0x40, 0xF7 }),
+                new NormalSysExEvent(new byte[] { 0x5D, 0x6E, 0x7F, 0xF7 }),
+            });
+
+        [Test]
+        [Platform("MacOsX")]
+        public void ReceiveData_SysEx_Multiple_SinglePacket() => ReceiveData(
+            packages: new[]
+            {
+                new DataPackage(
+                    new DataPacket(0xF0, 0x7F, 0x60, 0x40, 0xF7),
+                    new DataPacket(0xF0, 0x5D, 0x6E, 0x7F, 0xF7))
+            },
+            expectedEvents: new MidiEvent[]
+            {
+                new NormalSysExEvent(new byte[] { 0x7F, 0x60, 0x40, 0xF7 }),
+                new NormalSysExEvent(new byte[] { 0x5D, 0x6E, 0x7F, 0xF7 }),
+            });
+
+        [Test]
+        [Platform("MacOsX")]
+        public void ReceiveData_SysEx_Single_MultiPackage() => ReceiveData(
+            packages: new[]
+            {
+                new DataPackage(
+                    new DataPacket(0xF0, 0x7F, 0x60)),
+                new DataPackage(
+                    new DataPacket(0x40, 0xF7)),
+            },
+            expectedEvents: new MidiEvent[]
+            {
+                new NormalSysExEvent(new byte[] { 0x7F, 0x60, 0x40, 0xF7 })
+            });
+
+        [Test]
+        [Platform("MacOsX")]
+        public void ReceiveData_SysEx_Multiple_MultiPackage() => ReceiveData(
+            packages: new[]
+            {
+                new DataPackage(
+                    new DataPacket(0xF0, 0x7F, 0x60)),
+                new DataPackage(
+                    new DataPacket(0x40, 0xF7)),
+                new DataPackage(
+                    new DataPacket(0xF0, 0x5D, 0x6E)),
+                new DataPackage(
+                    new DataPacket(0x7F, 0xF7)),
+            },
+            expectedEvents: new MidiEvent[]
+            {
+                new NormalSysExEvent(new byte[] { 0x7F, 0x60, 0x40, 0xF7 }),
+                new NormalSysExEvent(new byte[] { 0x5D, 0x6E, 0x7F, 0xF7 }),
+            });
+
+        [Test]
+        [Platform("MacOsX")]
         public void ReceiveData_SingleEventWithStatusByte() => ReceiveData(
-            data: new byte[] { 0x90, 0x75, 0x56 },
-            indices: new[] { 0 },
+            packages: new[]
+            {
+                new DataPackage(
+                    new DataPacket(0x90, 0x75, 0x56))
+            },
             expectedEvents: new MidiEvent[]
             {
                 new NoteOnEvent((SevenBitNumber)0x75, (SevenBitNumber)0x56)
@@ -28,8 +126,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         [Platform("MacOsX")]
         public void ReceiveData_MultipleEventsWithStatusBytes() => ReceiveData(
-            data: new byte[] { 0x90, 0x75, 0x56, 0x80, 0x55, 0x65, 0x90, 0x75, 0x56 },
-            indices: new[] { 0, 3, 6 },
+            packages: new[]
+            {
+                new DataPackage(
+                    new DataPacket(0x90, 0x75, 0x56, 0x80, 0x55, 0x65, 0x90, 0x75, 0x56))
+            },
             expectedEvents: new MidiEvent[]
             {
                 new NoteOnEvent((SevenBitNumber)0x75, (SevenBitNumber)0x56),
@@ -40,8 +141,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         [Platform("MacOsX")]
         public void ReceiveData_MultipleEventsWithRunningStatus() => ReceiveData(
-            data: new byte[] { 0x90, 0x15, 0x56, 0x55, 0x65, 0x45, 0x60 },
-            indices: new[] { 0 },
+            packages: new[]
+            {
+                new DataPackage(
+                    new DataPacket(0x90, 0x15, 0x56, 0x55, 0x65, 0x45, 0x60))
+            },
             expectedEvents: new MidiEvent[]
             {
                 new NoteOnEvent((SevenBitNumber)0x15, (SevenBitNumber)0x56),
@@ -56,18 +160,18 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             const int eventsCount = 3333;
 
             ReceiveData(
-                data: Enumerable
-                    .Range(0, eventsCount)
-                    .SelectMany(i => new byte[] { 0x90, 0x75, 0x56 })
-                    .ToArray(),
-                indices: Enumerable
-                    .Range(0, eventsCount)
-                    .Select(i => i * 3)
-                    .ToArray(),
+                packages: new[]
+                {
+                    new DataPackage(new DataPacket(Enumerable
+                        .Range(0, eventsCount)
+                        .SelectMany(i => new byte[] { 0x90, 0x75, 0x56 })
+                        .ToArray()))
+                },
                 expectedEvents: Enumerable
                     .Range(0, eventsCount)
                     .Select(i => new NoteOnEvent((SevenBitNumber)0x75, (SevenBitNumber)0x56))
-                    .ToArray());
+                    .ToArray(),
+                checkCheckpoints: false);
         }
 
         [Test]
@@ -75,11 +179,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         public void ReceiveData_UnexpectedRunningStatus()
         {
             var deviceName = MidiDevicesNames.DeviceA;
-            var deviceNamePtr = Marshal.StringToHGlobalAnsi(deviceName);
 
             var data = new byte[] { 0x56, 0x67, 0x45 };
             var indices = new[] { 0 };
 
+            using (var dataSender = new DataSender(deviceName))
             using (var inputDevice = InputDevice.GetByName(deviceName))
             {
                 Exception exception = null;
@@ -87,14 +191,17 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 inputDevice.ErrorOccurred += (_, e) => exception = e.Exception;
                 inputDevice.StartEventsListening();
 
-                SendData(deviceNamePtr, data, data.Length, indices, indices.Length);
+                dataSender.SendData(data, data.Length, indices, indices.Length);
 
                 var timeout = SendReceiveUtilities.MaximumEventSendReceiveDelay;
                 var errorOccurred = WaitOperations.Wait(() => exception != null, timeout);
+
                 Assert.IsTrue(errorOccurred, $"Error was not occurred for [{timeout}].");
                 Assert.IsInstanceOf(typeof(MidiDeviceException), exception, "Exception type is invalid");
                 Assert.IsInstanceOf(typeof(UnexpectedRunningStatusException), exception.InnerException, "Inner exception type is invalid.");
             }
+
+            WaitAfterReceiveData();
         }
 
         [Test]

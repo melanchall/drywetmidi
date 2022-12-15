@@ -152,7 +152,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         public abstract IN_DISCONNECTRESULT Api_Disconnect(IntPtr handle);
 
-        public abstract IN_GETEVENTDATARESULT Api_GetEventData(IntPtr packetList, int packetIndex, out IntPtr data, out int length);
+        public abstract IN_GETEVENTDATARESULT Api_GetEventData(IntPtr packetList, int packetIndex, out IntPtr data, out int length, out int packetsCount);
 
         public abstract IN_GETSYSEXDATARESULT Api_GetSysExBufferData(IntPtr header, out IntPtr data, out int size);
 

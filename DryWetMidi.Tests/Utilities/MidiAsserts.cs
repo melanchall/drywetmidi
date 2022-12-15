@@ -229,7 +229,6 @@ namespace Melanchall.DryWetMidi.Tests.Utilities
                 midiEvent2,
                 new MidiEventEqualityCheckSettings { CompareDeltaTimes = compareDeltaTimes },
                 out eventsComparingMessage);
-
             Assert.IsTrue(areEqual, $"{message} {eventsComparingMessage}");
         }
 
