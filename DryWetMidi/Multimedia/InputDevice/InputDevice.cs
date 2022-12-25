@@ -148,6 +148,8 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// </summary>
         public bool RaiseMidiTimeCodeReceived { get; set; } = true;
 
+        public bool WaitForCompleteSysExEvent { get; set; } = true;
+
         /// <summary>
         /// Gets a value that indicates whether <see cref="InputDevice"/> is currently listening for
         /// incoming MIDI events.
@@ -538,76 +540,104 @@ namespace Melanchall.DryWetMidi.Multimedia
 
                 if (data[0] == EventStatusBytes.Global.NormalSysEx)
                 {
-                    var sysExData = new byte[length - 1];
-                    Buffer.BlockCopy(data, 1, sysExData, 0, sysExData.Length);
-
-                    if (data[data.Length - 1] == SysExEvent.EndOfEventByte)
-                    {
-                        var midiEvent = new NormalSysExEvent(sysExData);
-                        OnEventReceived(midiEvent);
-                    }
-                    else
-                        _sysExParts.Add(sysExData);
-
+                    HandleSysExStartPart(data);
                     return;
                 }
                 else if (_sysExParts.Any())
                 {
-                    _sysExParts.Add(data);
-
-                    if (data[data.Length - 1] == SysExEvent.EndOfEventByte)
-                    {
-                        var sysExData = new byte[_sysExParts.Sum(p => p.Length)];
-                        var i = 0;
-
-                        foreach (var p in _sysExParts)
-                        {
-                            Buffer.BlockCopy(p, 0, sysExData, i, p.Length);
-                            i += p.Length;
-                        }
-
-                        _sysExParts.Clear();
-
-                        var midiEvent = new NormalSysExEvent(sysExData);
-                        OnEventReceived(midiEvent);
-                    }
-
+                    HandleSysExSubsequentPart(data);
                     return;
                 }
 
-                byte? runningStatusByte = null;
-
-                using (var stream = new MemoryStream(data))
-                using (var midiReader = new MidiReader(stream, new ReaderSettings()))
-                {
-                    midiReader.Position = 0;
-
-                    while (midiReader.Position < length)
-                    {
-                        var statusByte = midiReader.ReadByte();
-                        if (statusByte <= SevenBitNumber.MaxValue)
-                        {
-                            if (runningStatusByte == null)
-                                throw new UnexpectedRunningStatusException();
-
-                            statusByte = runningStatusByte.Value;
-                            midiReader.Position--;
-                        }
-
-                        runningStatusByte = statusByte;
-
-                        var eventReader = EventReaderFactory.GetReader(statusByte, smfOnly: false);
-                        var midiEvent = eventReader.Read(midiReader, _bytesToMidiEventConverter.ReadingSettings, statusByte);
-
-                        OnEventReceived(midiEvent);
-                    }
-                }
+                HandleEvents(data);
             }
             catch (Exception ex)
             {
                 var exception = new MidiDeviceException($"Failed to parse message.", ex);
                 exception.Data.Add("Data", data);
                 OnError(exception);
+            }
+        }
+
+        private void HandleSysExStartPart(byte[] data)
+        {
+            var sysExData = new byte[data.Length - 1];
+            Buffer.BlockCopy(data, 1, sysExData, 0, sysExData.Length);
+
+            if (data[data.Length - 1] == SysExEvent.EndOfEventByte || !WaitForCompleteSysExEvent)
+            {
+                var midiEvent = new NormalSysExEvent(sysExData);
+                OnEventReceived(midiEvent);
+            }
+            else
+                _sysExParts.Add(sysExData);
+        }
+
+        private void HandleSysExSubsequentPart(byte[] data)
+        {
+            _sysExParts.Add(data);
+
+            if (data[data.Length - 1] == SysExEvent.EndOfEventByte)
+            {
+                var sysExData = new byte[_sysExParts.Sum(p => p.Length)];
+                var i = 0;
+
+                foreach (var p in _sysExParts)
+                {
+                    Buffer.BlockCopy(p, 0, sysExData, i, p.Length);
+                    i += p.Length;
+                }
+
+                _sysExParts.Clear();
+
+                var midiEvent = new NormalSysExEvent(sysExData);
+                OnEventReceived(midiEvent);
+            }
+        }
+
+        private void HandleEvents(byte[] data)
+        {
+            byte? runningStatusByte = null;
+            var length = data.Length;
+
+            using (var stream = new MemoryStream(data))
+            using (var midiReader = new MidiReader(stream, new ReaderSettings()))
+            {
+                midiReader.Position = 0;
+
+                while (midiReader.Position < length)
+                {
+                    var statusByte = midiReader.ReadByte();
+                    if (statusByte <= SevenBitNumber.MaxValue)
+                    {
+                        if (runningStatusByte == null)
+                            throw new UnexpectedRunningStatusException();
+
+                        statusByte = runningStatusByte.Value;
+                        midiReader.Position--;
+                    }
+
+                    runningStatusByte = statusByte;
+
+                    var eventReader = EventReaderFactory.GetReader(statusByte, smfOnly: false);
+                    var midiEvent = eventReader.Read(midiReader, _bytesToMidiEventConverter.ReadingSettings, statusByte);
+                    
+                    if (statusByte == EventStatusBytes.Global.NormalSysEx)
+                    {
+                        var sysExEvent = (SysExEvent)midiEvent;
+                        if (sysExEvent.Completed || !WaitForCompleteSysExEvent)
+                            OnEventReceived(midiEvent);
+                        else
+                        {
+                            var buffer = new byte[sysExEvent.Data.Length + 1];
+                            buffer[0] = statusByte;
+                            Buffer.BlockCopy(sysExEvent.Data, 0, buffer, 1, sysExEvent.Data.Length);
+                            _sysExParts.Add(buffer);
+                        }
+                    }
+                    else
+                        OnEventReceived(midiEvent);
+                }
             }
         }
 
@@ -672,11 +702,17 @@ namespace Melanchall.DryWetMidi.Multimedia
                 if (size <= 0)
                     return;
 
-                data = new byte[size - 1];
-                Marshal.Copy(IntPtr.Add(dataPointer, 1), data, 0, data.Length);
+                data = new byte[size];
+                Marshal.Copy(dataPointer, data, 0, data.Length);
 
-                var midiEvent = new NormalSysExEvent(data);
-                OnEventReceived(midiEvent);
+#if TEST
+                TestCheckpoints?.SetCheckpointReached(InputDeviceCheckpointsNames.MessageDataReceived, data);
+#endif
+
+                if (data[0] == EventStatusBytes.Global.NormalSysEx)
+                    HandleSysExStartPart(data);
+                else if (_sysExParts.Any())
+                    HandleSysExSubsequentPart(data);
 
                 NativeApiUtilities.HandleDevicesNativeApiResult(
                     InputDeviceApiProvider.Api.Api_RenewSysExBuffer(_handle.DeviceHandle, SysExBufferSize));

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Multimedia;
@@ -313,10 +312,17 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         private static void WaitAfterReceiveData() =>
             WaitOperations.Wait(2000);
 
-        private void ReceiveData(
+        private static string GetCheckpointDataString(ICollection<object> data) =>
+            string.Join(
+                "; ",
+                data?.Select(d => d == null ? "null" : string.Join(" ", ((byte[])d).Select(b => Convert.ToString(b, 16).PadLeft(2, '0').ToUpper()))) ??
+                Array.Empty<string>());
+
+        private void ReceiveData_Mac(
             DataPackage[] packages,
             ICollection<MidiEvent> expectedEvents,
-            bool checkCheckpoints = true)
+            bool checkCheckpoints = true,
+            bool waitForCompleteSysExEvent = true)
         {
             var deviceName = MidiDevicesNames.DeviceA;
 
@@ -327,6 +333,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             using (var inputDevice = InputDevice.GetByName(deviceName))
             {
                 inputDevice.TestCheckpoints = checkpoints;
+                inputDevice.WaitForCompleteSysExEvent = waitForCompleteSysExEvent;
+
                 inputDevice.EventReceived += (_, e) => receivedEvents.Add(e.Event);
                 inputDevice.StartEventsListening();
 
@@ -351,7 +359,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 var areEventReceived = WaitOperations.Wait(
                     () => receivedEvents.Count >= expectedEvents.Count,
                     timeout);
-                Assert.IsTrue(areEventReceived, $"Events are not received for [{timeout}] (received are: {string.Join(", ", receivedEvents)}).");
+
+                var checkpointData = checkpoints.GetCheckpointDataList(InputDeviceCheckpointsNames.MessageDataReceived);
+                Assert.IsTrue(
+                    areEventReceived,
+                    $"Events are not received for [{timeout}] (received are: {string.Join(", ", receivedEvents)}). Checkpoint's data: {GetCheckpointDataString(checkpointData)}.");
 
                 MidiAsserts.AreEqual(
                     expectedEvents,
@@ -362,9 +374,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 if (checkCheckpoints)
                 {
                     var expectedCheckpointData = packages.SelectMany(p => new object[] { null }.Concat(p.Packets.Select(pp => pp.Data))).ToArray();
-                    var checkpointData = checkpoints.GetCheckpointDataList(InputDeviceCheckpointsNames.MessageDataReceived);
                     if (expectedCheckpointData.Length != checkpointData.Count)
-                        Assert.Fail($"Invalid checkpoint's data count: {string.Join("; ", checkpointData.Select(d => d == null ? "null" : string.Join(" ", ((byte[])d).Select(b => Convert.ToString(b, 16).PadLeft(2, '0').ToUpper()))))}.");
+                        Assert.Fail($"Invalid checkpoint's data count: {GetCheckpointDataString(checkpointData)}.");
 
                     for (var i = 0; i < expectedCheckpointData.Length; i++)
                     {
@@ -384,6 +395,73 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             WaitAfterReceiveData();
         }
 
-#endregion
+        private void ReceiveData_Win(
+            DataPacket[] packets,
+            ICollection<MidiEvent> expectedEvents,
+            bool checkCheckpoints = true,
+            bool waitForCompleteSysExEvent = true)
+        {
+            var deviceName = MidiDevicesNames.DeviceA;
+
+            var receivedEvents = new List<MidiEvent>(expectedEvents.Count);
+            var checkpoints = new TestCheckpoints();
+
+            using (var outputDevice = OutputDevice.GetByName(deviceName))
+            using (var inputDevice = InputDevice.GetByName(deviceName))
+            {
+                inputDevice.TestCheckpoints = checkpoints;
+                inputDevice.WaitForCompleteSysExEvent = waitForCompleteSysExEvent;
+
+                inputDevice.EventReceived += (_, e) => receivedEvents.Add(e.Event);
+                inputDevice.StartEventsListening();
+
+                foreach (var packet in packets)
+                {
+                    var data = packet.Data;
+                    outputDevice.SendData_Win(data);
+                    WaitOperations.Wait(5);
+                }
+
+                var timeout = SendReceiveUtilities.MaximumEventSendReceiveDelay + TimeSpan.FromMilliseconds(30);
+                var areEventReceived = WaitOperations.Wait(
+                    () => receivedEvents.Count >= expectedEvents.Count,
+                    timeout);
+
+                var checkpointData = checkpoints.GetCheckpointDataList(InputDeviceCheckpointsNames.MessageDataReceived);
+                Assert.IsTrue(
+                    areEventReceived,
+                    $"Events are not received for [{timeout}] (received are: {string.Join(", ", receivedEvents)}). Checkpoint's data: {GetCheckpointDataString(checkpointData)}.");
+
+                MidiAsserts.AreEqual(
+                    expectedEvents,
+                    receivedEvents,
+                    false,
+                    "Received events are invalid.");
+
+                if (checkCheckpoints)
+                {
+                    var expectedCheckpointData = packets.Select(pp => pp.Data).ToArray();
+                    if (expectedCheckpointData.Length != checkpointData.Count)
+                        Assert.Fail($"Invalid checkpoint's data count: {GetCheckpointDataString(checkpointData)}.");
+
+                    for (var i = 0; i < expectedCheckpointData.Length; i++)
+                    {
+                        var expected = expectedCheckpointData.ElementAt(i);
+                        var actual = checkpointData.ElementAt(i);
+
+                        if (ReferenceEquals(expected, actual))
+                            continue;
+
+                        var expectedBytes = (byte[])expected;
+                        var actualBytes = (byte[])actual;
+                        CollectionAssert.AreEqual(expectedBytes, actualBytes, $"Bytes of data record {i} are invalid.");
+                    }
+                }
+            }
+
+            WaitAfterReceiveData();
+        }
+
+        #endregion
     }
 }

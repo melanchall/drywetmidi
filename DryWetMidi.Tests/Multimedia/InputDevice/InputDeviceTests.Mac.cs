@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
-using System.Threading;
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Multimedia;
@@ -18,7 +16,87 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
         [Test]
         [Platform("MacOsX")]
-        public void ReceiveData_SysEx_Single_SinglePacket() => ReceiveData(
+        public void ReceiveData_NoteOnAndSysExInOnePackage_Mac() => ReceiveData_Mac(
+            packages: new[]
+            {
+                new DataPackage(
+                    new DataPacket(0x90, 0x75, 0x56),
+                    new DataPacket(0xF0, 0x7F, 0x60, 0x40, 0xF7))
+            },
+            expectedEvents: new MidiEvent[]
+            {
+                new NoteOnEvent((SevenBitNumber)0x75, (SevenBitNumber)0x56),
+                new NormalSysExEvent(new byte[] { 0x7F, 0x60, 0x40, 0xF7 })
+            });
+
+        [Test]
+        [Platform("MacOsX")]
+        public void ReceiveData_NoteOnAndMultipartSysExInOnePackage_Mac_1() => ReceiveData_Mac(
+            packages: new[]
+            {
+                new DataPackage(
+                    new DataPacket(0x90, 0x75, 0x56),
+                    new DataPacket(0xF0, 0x7F, 0x60),
+                    new DataPacket(0x40, 0xF7))
+            },
+            expectedEvents: new MidiEvent[]
+            {
+                new NoteOnEvent((SevenBitNumber)0x75, (SevenBitNumber)0x56),
+                new NormalSysExEvent(new byte[] { 0x7F, 0x60, 0x40, 0xF7 })
+            });
+
+        [Test]
+        [Platform("MacOsX")]
+        public void ReceiveData_NoteOnAndMultipartSysExInOnePackage_Mac_2() => ReceiveData_Mac(
+            packages: new[]
+            {
+                new DataPackage(
+                    new DataPacket(0xF0, 0x7F, 0x60),
+                    new DataPacket(0x90, 0x75, 0x56),
+                    new DataPacket(0x40, 0xF7))
+            },
+            expectedEvents: new MidiEvent[]
+            {
+                new NormalSysExEvent(new byte[] { 0x7F, 0x60, 0x90, 0x75, 0x56, 0x40, 0xF7 })
+            });
+
+        [Test]
+        [Platform("MacOsX")]
+        public void ReceiveData_NoteOnAndMultipartSysExInOnePackage_DontWaitForCompleteSysExEvent_Mac_1() => ReceiveData_Mac(
+            packages: new[]
+            {
+                new DataPackage(
+                    new DataPacket(0x90, 0x75, 0x56),
+                    new DataPacket(0xF0, 0x7F, 0x60),
+                    new DataPacket(0x40, 0xF7))
+            },
+            expectedEvents: new MidiEvent[]
+            {
+                new NoteOnEvent((SevenBitNumber)0x75, (SevenBitNumber)0x56),
+                new NormalSysExEvent(new byte[] { 0x7F, 0x60 })
+            },
+            waitForCompleteSysExEvent: false);
+
+        [Test]
+        [Platform("MacOsX")]
+        public void ReceiveData_NoteOnAndMultipartSysExInOnePackage_DontWaitForCompleteSysExEvent_Mac_2() => ReceiveData_Mac(
+            packages: new[]
+            {
+                new DataPackage(
+                    new DataPacket(0xF0, 0x7F, 0x60),
+                    new DataPacket(0x90, 0x75, 0x56),
+                    new DataPacket(0x40, 0xF7))
+            },
+            expectedEvents: new MidiEvent[]
+            {
+                new NormalSysExEvent(new byte[] { 0x7F, 0x60 }),
+                new NoteOnEvent((SevenBitNumber)0x75, (SevenBitNumber)0x56),
+            },
+            waitForCompleteSysExEvent: false);
+
+        [Test]
+        [Platform("MacOsX")]
+        public void ReceiveData_SinglepartSysExInSinglePacket_Mac() => ReceiveData_Mac(
             packages: new[]
             {
                 new DataPackage(
@@ -31,7 +109,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
         [Test]
         [Platform("MacOsX")]
-        public void ReceiveData_SysEx_Single_SinglePackage() => ReceiveData(
+        public void ReceiveData_MultipartSysExInOnePackage_Mac() => ReceiveData_Mac(
             packages: new[]
             {
                 new DataPackage(
@@ -45,7 +123,22 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
         [Test]
         [Platform("MacOsX")]
-        public void ReceiveData_SysEx_Multiple_SinglePackage() => ReceiveData(
+        public void ReceiveData_MultipartSysExInOnePackage_DontWaitForCompleteSysExEvent_Mac() => ReceiveData_Mac(
+            packages: new[]
+            {
+                new DataPackage(
+                    new DataPacket(0xF0, 0x7F, 0x60),
+                    new DataPacket(0x40, 0xF7))
+            },
+            expectedEvents: new MidiEvent[]
+            {
+                new NormalSysExEvent(new byte[] { 0x7F, 0x60 })
+            },
+            waitForCompleteSysExEvent: false);
+
+        [Test]
+        [Platform("MacOsX")]
+        public void ReceiveData_MultipleMultipartSysExInOnePackage_Mac() => ReceiveData_Mac(
             packages: new[]
             {
                 new DataPackage(
@@ -62,7 +155,25 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
         [Test]
         [Platform("MacOsX")]
-        public void ReceiveData_SysEx_Multiple_SinglePacket() => ReceiveData(
+        public void ReceiveData_MultipleMultipartSysExInOnePackage_DontWaitForCompleteSysExEvent_Mac() => ReceiveData_Mac(
+            packages: new[]
+            {
+                new DataPackage(
+                    new DataPacket(0xF0, 0x7F, 0x60),
+                    new DataPacket(0x40, 0xF7),
+                    new DataPacket(0xF0, 0x5D, 0x6E),
+                    new DataPacket(0x7F, 0xF7))
+            },
+            expectedEvents: new MidiEvent[]
+            {
+                new NormalSysExEvent(new byte[] { 0x7F, 0x60 }),
+                new NormalSysExEvent(new byte[] { 0x5D, 0x6E }),
+            },
+            waitForCompleteSysExEvent: false);
+
+        [Test]
+        [Platform("MacOsX")]
+        public void ReceiveData_MultipleCompleteSysExInOnePackage_Mac() => ReceiveData_Mac(
             packages: new[]
             {
                 new DataPackage(
@@ -77,7 +188,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
         [Test]
         [Platform("MacOsX")]
-        public void ReceiveData_SysEx_Single_MultiPackage() => ReceiveData(
+        public void ReceiveData_MultipartSysExInMultiplePackages_Mac() => ReceiveData_Mac(
             packages: new[]
             {
                 new DataPackage(
@@ -92,7 +203,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
         [Test]
         [Platform("MacOsX")]
-        public void ReceiveData_SysEx_Multiple_MultiPackage() => ReceiveData(
+        public void ReceiveData_MultipleMultipartSysExsInMultiplePackage_Mac() => ReceiveData_Mac(
             packages: new[]
             {
                 new DataPackage(
@@ -112,7 +223,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
         [Test]
         [Platform("MacOsX")]
-        public void ReceiveData_SingleEventWithStatusByte() => ReceiveData(
+        public void ReceiveData_SingleEventWithStatusByte_Mac() => ReceiveData_Mac(
             packages: new[]
             {
                 new DataPackage(
@@ -125,7 +236,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
         [Test]
         [Platform("MacOsX")]
-        public void ReceiveData_MultipleEventsWithStatusBytes() => ReceiveData(
+        public void ReceiveData_MultipleEventsWithStatusBytes_Mac() => ReceiveData_Mac(
             packages: new[]
             {
                 new DataPackage(
@@ -140,7 +251,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
         [Test]
         [Platform("MacOsX")]
-        public void ReceiveData_MultipleEventsWithRunningStatus() => ReceiveData(
+        public void ReceiveData_MultipleEventsWithRunningStatus_Mac() => ReceiveData_Mac(
             packages: new[]
             {
                 new DataPackage(
@@ -155,11 +266,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
         [Test]
         [Platform("MacOsX")]
-        public void ReceiveData_LotOfEventsWithStatusBytes()
+        public void ReceiveData_LotOfEventsWithStatusBytes_Mac()
         {
             const int eventsCount = 3333;
 
-            ReceiveData(
+            ReceiveData_Mac(
                 packages: new[]
                 {
                     new DataPackage(new DataPacket(Enumerable
@@ -176,7 +287,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
         [Test]
         [Platform("MacOsX")]
-        public void ReceiveData_UnexpectedRunningStatus()
+        public void ReceiveData_UnexpectedRunningStatus_Mac()
         {
             var deviceName = MidiDevicesNames.DeviceA;
 

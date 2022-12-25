@@ -234,7 +234,7 @@ namespace Melanchall.DryWetMidi.Tests.Utilities
 
         public static void AreEqual(ICollection<MidiEvent> expectedEvents, ICollection<MidiEvent> actualEvents, bool compareDeltaTimes, string message = null)
         {
-            Assert.AreEqual(expectedEvents.Count, actualEvents.Count, "Events count is invalid.");
+            Assert.AreEqual(expectedEvents.Count, actualEvents.Count, $"{message} Events count is invalid.");
 
             var expectedEventsArray = expectedEvents.ToArray();
             var actualEventsArray = actualEvents.ToArray();
@@ -244,7 +244,7 @@ namespace Melanchall.DryWetMidi.Tests.Utilities
                 var expectedEvent = expectedEventsArray[i];
                 var actualEvent = actualEventsArray[i];
 
-                AreEqual(expectedEvent, actualEvent, compareDeltaTimes, $"Invalid event {i}.");
+                AreEqual(expectedEvent, actualEvent, compareDeltaTimes, $"{message} Invalid event {i}.");
             }
         }
 

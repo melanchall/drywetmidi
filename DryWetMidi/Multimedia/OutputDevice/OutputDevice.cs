@@ -450,6 +450,21 @@ namespace Melanchall.DryWetMidi.Multimedia
             return device;
         }
 
+        internal void SendData_Win(byte[] data)
+        {
+            EnsureDeviceIsNotDisposed();
+            EnsureDeviceIsNotRemoved();
+            EnsureSessionIsCreated();
+            EnsureHandleIsCreated();
+
+            var bufferLength = data.Length;
+            var bufferPointer = Marshal.AllocHGlobal(bufferLength);
+            Marshal.Copy(data, 0, bufferPointer, data.Length);
+
+            NativeApiUtilities.HandleDevicesNativeApiResult(
+                OutputDeviceApiProvider.Api.Api_SendSysExEvent_Win(_handle.DeviceHandle, bufferPointer, bufferLength));
+        }
+
         private static IEnumerable<OutputDevice> GetAllLazy()
         {
             var devicesCount = GetDevicesCount();

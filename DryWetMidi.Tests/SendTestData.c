@@ -2,6 +2,24 @@
 #include <CoreMIDI/CoreMIDI.h>
 #include <mach/mach_time.h>
 
+typedef int OPENRESULT;
+
+#define OPENRESULT_OK 0
+
+#define OPENRESULT_FAILEDCREATECLIENT 1
+#define OPENRESULT_FAILEDCREATEPORT 2
+#define OPENRESULT_FAILEDFINDPORT 3
+
+typedef int CLOSERESULT;
+
+#define CLOSERESULT_OK 0
+
+typedef int SENDRESULT;
+
+#define SENDRESULT_OK 0
+
+#define SENDRESULT_FAILEDSEND 1
+
 typedef struct
 {
     MIDIClientRef clientRef;
@@ -9,17 +27,22 @@ typedef struct
     MIDIEndpointRef endpointRef;
 } SenderHandle;
 
-int OpenSender(char* portName, void** handle)
+OPENRESULT OpenSender(char* portName, void** handle)
 {
     MIDIClientRef clientRef;
-    MIDIClientCreate(CFSTR("CLIENT"), NULL, NULL, &clientRef);
+    OSStatus status = MIDIClientCreate(CFSTR("CLIENT"), NULL, NULL, &clientRef);
+	if (status != noErr)
+		return OPENRESULT_FAILEDCREATECLIENT;
     
     MIDIPortRef portRef;
-    MIDIOutputPortCreate(clientRef, CFSTR("OUT"), &portRef);
+    status = MIDIOutputPortCreate(clientRef, CFSTR("OUT"), &portRef);
+	if (status != noErr)
+		return OPENRESULT_FAILEDCREATEPORT;
     
     CFStringRef portNameRef = CFStringCreateWithCString(kCFAllocatorDefault, portName, kCFStringEncodingUTF8);
 	
 	MIDIEndpointRef endpointRef;
+	unsigned char portFound = 0;
     ItemCount destinationsCount = MIDIGetNumberOfDestinations();
     
     for (int i = 0; i < destinationsCount; i++)
@@ -31,9 +54,13 @@ int OpenSender(char* portName, void** handle)
         
         if (CFStringCompare(name, portNameRef, 0) == kCFCompareEqualTo)
         {
+			portFound = 1;
             break;
         }
     }
+	
+	if (portFound == 0)
+		return OPENRESULT_FAILEDFINDPORT;
 	
 	//
 	
@@ -44,17 +71,17 @@ int OpenSender(char* portName, void** handle)
 	senderHandle->endpointRef = endpointRef;
 	
 	*handle = senderHandle;
-	return 0;
+	return OPENRESULT_OK;
 }
 
-int CloseSender(void* handle)
+CLOSERESULT CloseSender(void* handle)
 {
 	SenderHandle* senderHandle = (SenderHandle*)handle;
 	free(senderHandle);
-	return 0;
+	return CLOSERESULT_OK;
 }
 
-int SendData(void* handle, Byte* data, int length, int* indices, int indicesLength)
+SENDRESULT SendData(void* handle, Byte* data, int length, int* indices, int indicesLength)
 {
     SenderHandle* senderHandle = (SenderHandle*)handle;
     
@@ -70,6 +97,9 @@ int SendData(void* handle, Byte* data, int length, int* indices, int indicesLeng
 		packet = MIDIPacketListAdd(packetList, sizeof(buffer), packet, mach_absolute_time() + i, packetSize, &data[indices[i]]);
 	}
 	
-	MIDISend(senderHandle->portRef, senderHandle->endpointRef, packetList);
-    return 0;
+	OSStatus status = MIDISend(senderHandle->portRef, senderHandle->endpointRef, packetList);
+	if (status != noErr)
+		return SENDRESULT_FAILEDSEND;
+	
+    return SENDRESULT_OK;
 }
