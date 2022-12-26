@@ -1,5 +1,29 @@
 steps:
 - task: PowerShell@2
+  displayName: Collect crash dump
+  condition: and(failed(), contains(variables.VmImage, 'windows'))
+  inputs:
+    targetType: 'inline'
+    script: |
+      Write-Host "Checking if a crash dump created..."
+      Start-Sleep -s 10
+      
+      $path = Resolve-Path "$(Build.SourcesDirectory)"
+      $dumpFile = Get-ChildItem -Path "$path" -Include "*.dmp" -Recurse | Select-Object -First 1
+      
+      if ($dumpFile)
+      {
+        Write-Host "There is a crash dump, setting variables..."
+        Write-Host "##vso[task.setvariable variable=CrashDumpPath]$dumpFile"
+        Write-Host "##vso[task.setvariable variable=CrashDumpFound]true"
+      }
+      else
+      {
+        Write-Host "There are no crash dumps found."
+        Write-Host "##vso[task.setvariable variable=CrashDumpFound]false"
+      }
+          
+- task: PowerShell@2
   displayName: Collect diagnostic reports
   condition: and(failed(), eq(variables.VmImage, 'macos-latest'))
   inputs:
@@ -21,7 +45,15 @@ steps:
         Write-Host "There are no diagnostic reports found."
         Write-Host "##vso[task.setvariable variable=DiagnosticReportsFound]false"
       }
-          
+
+- task: PublishPipelineArtifact@1
+  displayName: Publish 'CrashDump' artifact
+  condition: eq(variables['CrashDumpFound'], true)
+  inputs:
+    targetPath: '$(CrashDumpPath)'
+    artifactName: 'CrashDump'
+    artifactType: pipeline
+
 - task: PublishPipelineArtifact@1
   displayName: Publish 'DiagnosticReports' artifact
   condition: eq(variables['DiagnosticReportsFound'], true)

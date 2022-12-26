@@ -31,6 +31,8 @@ namespace Melanchall.DryWetMidi.Multimedia
         private TickGeneratorApi.TimerCallback_Mac _tickCallback_Mac;
         private IntPtr _tickGeneratorInfo;
 
+        private readonly object _lockObject = new object();
+
         #endregion
 
         #region Finalizer
@@ -116,9 +118,15 @@ namespace Melanchall.DryWetMidi.Multimedia
             if (_tickGeneratorInfo == IntPtr.Zero)
                 return TickGeneratorApi.TG_STOPRESULT.TG_STOPRESULT_OK;
 
-            var result = TickGeneratorApiProvider.Api.Api_StopHighPrecisionTickGenerator(TickGeneratorSession.GetSessionHandle(), _tickGeneratorInfo);
-            _tickGeneratorInfo = IntPtr.Zero;
-            return result;
+            lock (_lockObject)
+            {
+                if (_tickGeneratorInfo == IntPtr.Zero)
+                    return TickGeneratorApi.TG_STOPRESULT.TG_STOPRESULT_OK;
+
+                var result = TickGeneratorApiProvider.Api.Api_StopHighPrecisionTickGenerator(TickGeneratorSession.GetSessionHandle(), _tickGeneratorInfo);
+                _tickGeneratorInfo = IntPtr.Zero;
+                return result;
+            }
         }
 
         private TickGeneratorApi.TG_STARTRESULT StartHighPrecisionTickGenerator_Win(int intervalInMilliseconds, out IntPtr tickGeneratorInfo)
