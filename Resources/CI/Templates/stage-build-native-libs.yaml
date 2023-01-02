@@ -3,12 +3,12 @@ stages:
   displayName: Build native libraries
   jobs:
   - job: BuildDll64
-    displayName: 'Build 64-bit dll'
+    displayName: 'Build 64-bit .dll'
     pool:
       vmImage: 'windows-latest'
     steps:
     - task: PowerShell@2
-      displayName: 'Build dll'
+      displayName: 'Build .dll'
       inputs:
         targetType: 'inline'
         script: |
@@ -16,42 +16,19 @@ stages:
           gcc -c NativeApi-Windows.c -lwinmm
           gcc -shared -o Melanchall_DryWetMidi_Native64.dll NativeApi-Windows.o -lwinmm
     - task: PublishPipelineArtifact@1
-      displayName: 'Publish dll artifact'
+      displayName: 'Publish .dll artifact'
       inputs:
         targetPath: 'Resources\Native\Melanchall_DryWetMidi_Native64.dll'
         artifactName: 'Melanchall_DryWetMidi_Native64.dll'
         artifactType: pipeline
-  - job: BuildDylib64
-    displayName: 'Build 64-bit dylib'
-    pool:
-      vmImage: 'macos-latest'
-    steps:
-    - task: PowerShell@2
-      displayName: 'Build dylib'
-      inputs:
-        targetType: 'inline'
-        script: |
-          cd Resources/Native
-          Write-Host "Building arm64 dylib..."
-          clang -shared -undefined dynamic_lookup -o Melanchall_DryWetMidi_Native64_arm64.dylib NativeApi-macOS.c -framework CoreServices -framework CoreFoundation -framework CoreMIDI -arch arm64
-          Write-Host "Building x86_64 dylib..."
-          clang -shared -undefined dynamic_lookup -o Melanchall_DryWetMidi_Native64_x86_64.dylib NativeApi-macOS.c -framework CoreServices -framework CoreFoundation -framework CoreMIDI -arch x86_64
-          Write-Host "Merging dylibs into single unversal one..."
-          lipo Melanchall_DryWetMidi_Native64_x86_64.dylib Melanchall_DryWetMidi_Native64_arm64.dylib -output Melanchall_DryWetMidi_Native64.dylib -create
-          lipo -info Melanchall_DryWetMidi_Native64.dylib
-    - task: PublishPipelineArtifact@1
-      displayName: 'Publish dylib artifact'
-      inputs:
-        targetPath: 'Resources/Native/Melanchall_DryWetMidi_Native64.dylib'
-        artifactName: 'Melanchall_DryWetMidi_Native64.dylib'
-        artifactType: pipeline
+        
   - job: BuildDll32
-    displayName: 'Build 32-bit dll'
+    displayName: 'Build 32-bit .dll'
     pool:
       vmImage: 'windows-latest'
     steps:
     - task: PowerShell@2
-      displayName: 'Build dll'
+      displayName: 'Build .dll'
       inputs:
         targetType: 'inline'
         script: |
@@ -64,7 +41,7 @@ stages:
           Expand-Archive -LiteralPath 'winlibs.zip' -DestinationPath "winlibs"
           Write-Host "Extracted."
           
-          Write-Host "Building DLL..."
+          Write-Host "Building .dll..."
           $gccPath = Get-ChildItem -Path "winlibs" -File -Filter "i686-w64-mingw32-gcc.exe" -Recurse
           
           cd Resources\Native
@@ -72,8 +49,65 @@ stages:
           & $gccPath.FullName -shared -o Melanchall_DryWetMidi_Native32.dll NativeApi-Windows.o -m32 -lwinmm
           Write-Host "Built."
     - task: PublishPipelineArtifact@1
-      displayName: 'Publish dll artifact'
+      displayName: 'Publish .dll artifact'
       inputs:
         targetPath: 'Resources\Native\Melanchall_DryWetMidi_Native32.dll'
         artifactName: 'Melanchall_DryWetMidi_Native32.dll'
+        artifactType: pipeline
+        
+  - job: BuildDylib64
+    displayName: 'Build 64-bit .dylib'
+    pool:
+      vmImage: 'macos-latest'
+    steps:
+    - task: PowerShell@2
+      displayName: 'Build .dylib'
+      inputs:
+        targetType: 'inline'
+        script: |
+          cd Resources/Native
+          Write-Host "Building arm64 .dylib..."
+          clang -shared -undefined dynamic_lookup -o Melanchall_DryWetMidi_Native64_arm64.dylib NativeApi-macOS.c -framework CoreServices -framework CoreFoundation -framework CoreMIDI -arch arm64
+          Write-Host "Building x86_64 .dylib..."
+          clang -shared -undefined dynamic_lookup -o Melanchall_DryWetMidi_Native64_x86_64.dylib NativeApi-macOS.c -framework CoreServices -framework CoreFoundation -framework CoreMIDI -arch x86_64
+          Write-Host "Merging .dylib files into a single unversal one..."
+          lipo Melanchall_DryWetMidi_Native64_x86_64.dylib Melanchall_DryWetMidi_Native64_arm64.dylib -output Melanchall_DryWetMidi_Native64.dylib -create
+          Write-Host "Merged archs are:"
+          lipo -info Melanchall_DryWetMidi_Native64.dylib
+    - task: PublishPipelineArtifact@1
+      displayName: 'Publish .dylib artifact'
+      inputs:
+        targetPath: 'Resources/Native/Melanchall_DryWetMidi_Native64.dylib'
+        artifactName: 'Melanchall_DryWetMidi_Native64.dylib'
+        artifactType: pipeline
+        
+  - job: BuildIos
+    displayName: 'Build 64-bit .a'
+    pool:
+      vmImage: 'macos-latest'
+    steps:
+    - task: PowerShell@2
+      displayName: 'Build .a'
+      inputs:
+        targetType: 'inline'
+        script: |
+          cd Resources/Native
+          
+          Write-Host "Building arm64 .a..."
+          clang -c NativeApi-macOS.c -o Melanchall_DryWetMidi_Native64_arm64.o -arch arm64
+          ar -rv Melanchall_DryWetMidi_Native64_arm64.a Melanchall_DryWetMidi_Native64_arm64.o
+          
+          Write-Host "Building x86_64 .a..."
+          clang -c NativeApi-macOS.c -o Melanchall_DryWetMidi_Native64_x86_64.o -arch x86_64
+          ar -rv Melanchall_DryWetMidi_Native64_x86_64.a Melanchall_DryWetMidi_Native64_x86_64.o
+          
+          Write-Host "Merging .a files into a single unversal one..."
+          lipo Melanchall_DryWetMidi_Native64_x86_64.a Melanchall_DryWetMidi_Native64_arm64.a -output Melanchall_DryWetMidi_Native64.a -create
+          Write-Host "Merged archs are:"
+          lipo -info Melanchall_DryWetMidi_Native64.a
+    - task: PublishPipelineArtifact@1
+      displayName: 'Publish .a artifact'
+      inputs:
+        targetPath: 'Resources/Native/Melanchall_DryWetMidi_Native64.a'
+        artifactName: 'Melanchall_DryWetMidi_Native64.a'
         artifactType: pipeline

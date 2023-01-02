@@ -12,3 +12,4 @@ steps:
     script: |
       Copy-Item -Path "$(Pipeline.Workspace)/NativeLibraries/**/*.dll" -Destination "DryWetMidi"
       Copy-Item -Path "$(Pipeline.Workspace)/NativeLibraries/**/*.dylib" -Destination "DryWetMidi"
+      Copy-Item -Path "$(Pipeline.Workspace)/NativeLibraries/**/*.a" -Destination "DryWetMidi"
