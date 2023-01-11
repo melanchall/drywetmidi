@@ -350,8 +350,9 @@ SESSION_OPENRESULT OpenSession_Mac(char* name, InputDeviceCallback inputDeviceCa
             case kMIDIServerStartErr: return SESSION_OPENRESULT_SERVERSTARTERROR;
             case kMIDIWrongThread: return SESSION_OPENRESULT_WRONGTHREAD;
             case kMIDINotPermitted: return SESSION_OPENRESULT_NOTPERMITTED;
-            case kMIDIUnknownError: return SESSION_OPENRESULT_UNKNOWNERROR;
         }
+        
+        return SESSION_OPENRESULT_UNKNOWNERROR;
     }
 
     *handle = sessionHandle;
@@ -417,8 +418,9 @@ IN_GETPROPERTYRESULT GetInputDeviceStringPropertyValue(InputDeviceInfo* inputDev
             case kMIDIUnknownEndpoint: return IN_GETPROPERTYRESULT_UNKNOWNENDPOINT;
             case SMALL_BUFFER_ERROR: return IN_GETPROPERTYRESULT_TOOLONG;
             case kMIDIUnknownProperty: return IN_GETPROPERTYRESULT_UNKNOWNPROPERTY;
-            default: return IN_GETPROPERTYRESULT_UNKNOWNERROR;
         }
+        
+        return IN_GETPROPERTYRESULT_UNKNOWNERROR;
     }
     
     return IN_GETPROPERTYRESULT_OK;
@@ -433,8 +435,9 @@ IN_GETPROPERTYRESULT GetInputDeviceIntPropertyValue(InputDeviceInfo* inputDevice
         {
             case kMIDIUnknownEndpoint: return IN_GETPROPERTYRESULT_UNKNOWNENDPOINT;
             case kMIDIUnknownProperty: return IN_GETPROPERTYRESULT_UNKNOWNPROPERTY;
-            default: return IN_GETPROPERTYRESULT_UNKNOWNERROR;
         }
+        
+        return IN_GETPROPERTYRESULT_UNKNOWNERROR;
     }
     
     return IN_GETPROPERTYRESULT_OK;
@@ -495,8 +498,9 @@ IN_OPENRESULT OpenInputDevice_Mac(void* info, void* sessionHandle, MIDIReadProc 
             case kMIDIInvalidClient: return IN_OPENRESULT_INVALIDCLIENT;
             case kMIDIWrongThread: return IN_OPENRESULT_WRONGTHREAD;
             case kMIDINotPermitted: return IN_OPENRESULT_NOTPERMITTED;
-            case kMIDIUnknownError: return IN_OPENRESULT_UNKNOWNERROR;
         }
+        
+        return IN_OPENRESULT_UNKNOWNERROR;
     }
 
     return IN_OPENRESULT_OK;
@@ -521,13 +525,14 @@ IN_CONNECTRESULT ConnectToInputDevice(void* handle)
     {
         switch (status)
         {
-            case kMIDIUnknownError: return IN_CONNECTRESULT_UNKNOWNERROR;
             case kMIDIInvalidPort: return IN_CONNECTRESULT_INVALIDPORT;
             case kMIDIWrongThread: return IN_CONNECTRESULT_WRONGTHREAD;
             case kMIDINotPermitted: return IN_CONNECTRESULT_NOTPERMITTED;
             case kMIDIUnknownEndpoint: return IN_CONNECTRESULT_UNKNOWNENDPOINT;
             case kMIDIWrongEndpointType: return IN_CONNECTRESULT_WRONGENDPOINT;
         }
+        
+        return IN_CONNECTRESULT_UNKNOWNERROR;
     }
 
     return IN_CONNECTRESULT_OK;
@@ -542,7 +547,6 @@ IN_DISCONNECTRESULT DisconnectFromInputDevice(void* handle)
     {
         switch (status)
         {
-            case kMIDIUnknownError: return IN_DISCONNECTRESULT_UNKNOWNERROR;
             case kMIDIInvalidPort: return IN_DISCONNECTRESULT_INVALIDPORT;
             case kMIDIWrongThread: return IN_DISCONNECTRESULT_WRONGTHREAD;
             case kMIDINotPermitted: return IN_DISCONNECTRESULT_NOTPERMITTED;
@@ -550,6 +554,8 @@ IN_DISCONNECTRESULT DisconnectFromInputDevice(void* handle)
             case kMIDIWrongEndpointType: return IN_DISCONNECTRESULT_WRONGENDPOINT;
             case kMIDINoConnection: return IN_DISCONNECTRESULT_NOCONNECTION;
         }
+        
+        return IN_DISCONNECTRESULT_UNKNOWNERROR;
     }
 
     return IN_DISCONNECTRESULT_OK;
@@ -557,8 +563,8 @@ IN_DISCONNECTRESULT DisconnectFromInputDevice(void* handle)
 
 IN_GETEVENTDATARESULT GetEventDataFromInputDevice(MIDIPacketList* packetList, int packetIndex, Byte** data, int* length, int* packetsCount)
 {
-	*packetsCount = packetList->numPackets;
-	
+    *packetsCount = packetList->numPackets;
+    
     if (packetIndex == 0)
     {
         *data = packetList->packet[0].data;
@@ -645,8 +651,9 @@ OUT_GETPROPERTYRESULT GetOutputDeviceStringPropertyValue(OutputDeviceInfo* outpu
             case kMIDIUnknownEndpoint: return OUT_GETPROPERTYRESULT_UNKNOWNENDPOINT;
             case SMALL_BUFFER_ERROR: return OUT_GETPROPERTYRESULT_TOOLONG;
             case kMIDIUnknownProperty: return OUT_GETPROPERTYRESULT_UNKNOWNPROPERTY;
-            default: return OUT_GETPROPERTYRESULT_UNKNOWNERROR;
         }
+        
+        return OUT_GETPROPERTYRESULT_UNKNOWNERROR;
     }
     
     return OUT_GETPROPERTYRESULT_OK;
@@ -661,8 +668,9 @@ OUT_GETPROPERTYRESULT GetOutputDeviceIntPropertyValue(OutputDeviceInfo* outputDe
         {
             case kMIDIUnknownEndpoint: return OUT_GETPROPERTYRESULT_UNKNOWNENDPOINT;
             case kMIDIUnknownProperty: return OUT_GETPROPERTYRESULT_UNKNOWNPROPERTY;
-            default: return OUT_GETPROPERTYRESULT_UNKNOWNERROR;
         }
+        
+        return OUT_GETPROPERTYRESULT_UNKNOWNERROR;
     }
     
     return OUT_GETPROPERTYRESULT_OK;
@@ -723,8 +731,9 @@ OUT_OPENRESULT OpenOutputDevice_Mac(void* info, void* sessionHandle, void** hand
             case kMIDIInvalidClient: return OUT_OPENRESULT_INVALIDCLIENT;
             case kMIDIWrongThread: return OUT_OPENRESULT_WRONGTHREAD;
             case kMIDINotPermitted: return OUT_OPENRESULT_NOTPERMITTED;
-            case kMIDIUnknownError: return OUT_OPENRESULT_UNKNOWNERROR;
         }
+        
+        return OUT_OPENRESULT_UNKNOWNERROR;
     }
 
     return OUT_OPENRESULT_OK;
@@ -780,8 +789,9 @@ OUT_SENDSHORTRESULT SendShortEventToOutputDevice(void* handle, int message)
             case kMIDIServerStartErr: return OUT_SENDSHORTRESULT_SERVERSTARTERROR;
             case kMIDIWrongThread: return OUT_SENDSHORTRESULT_WRONGTHREAD;
             case kMIDINotPermitted: return OUT_SENDSHORTRESULT_NOTPERMITTED;
-            case kMIDIUnknownError: return OUT_SENDSHORTRESULT_UNKNOWNERROR;
         }
+        
+        return OUT_SENDSHORTRESULT_UNKNOWNERROR;
     }
 
     return OUT_SENDSHORTRESULT_OK;
@@ -809,8 +819,9 @@ OUT_SENDSYSEXRESULT SendSysExEventToOutputDevice_Mac(void* handle, Byte* data, B
             case kMIDIServerStartErr: return OUT_SENDSYSEXRESULT_SERVERSTARTERROR;
             case kMIDIWrongThread: return OUT_SENDSYSEXRESULT_WRONGTHREAD;
             case kMIDINotPermitted: return OUT_SENDSYSEXRESULT_NOTPERMITTED;
-            case kMIDIUnknownError: return OUT_SENDSYSEXRESULT_UNKNOWNERROR;
         }
+        
+        return OUT_SENDSYSEXRESULT_UNKNOWNERROR;
     }
 
     return OUT_SENDSYSEXRESULT_OK;
@@ -860,8 +871,9 @@ VIRTUAL_OPENRESULT OpenVirtualDevice_Mac(char* name, void* sessionHandle, MIDIRe
             case kMIDIServerStartErr: return VIRTUAL_OPENRESULT_CREATESOURCE_SERVERSTARTERROR;
             case kMIDIWrongThread: return VIRTUAL_OPENRESULT_CREATESOURCE_WRONGTHREAD;
             case kMIDINotPermitted: return VIRTUAL_OPENRESULT_CREATESOURCE_NOTPERMITTED;
-            case kMIDIUnknownError: return VIRTUAL_OPENRESULT_CREATESOURCE_UNKNOWNERROR;
         }
+        
+        return VIRTUAL_OPENRESULT_CREATESOURCE_UNKNOWNERROR;
     }
     
     InputDeviceInfo* inputDeviceInfo = malloc(sizeof(InputDeviceInfo));
@@ -877,8 +889,9 @@ VIRTUAL_OPENRESULT OpenVirtualDevice_Mac(char* name, void* sessionHandle, MIDIRe
             case kMIDIServerStartErr: return VIRTUAL_OPENRESULT_CREATEDESTINATION_SERVERSTARTERROR;
             case kMIDIWrongThread: return VIRTUAL_OPENRESULT_CREATEDESTINATION_WRONGTHREAD;
             case kMIDINotPermitted: return VIRTUAL_OPENRESULT_CREATEDESTINATION_NOTPERMITTED;
-            case kMIDIUnknownError: return VIRTUAL_OPENRESULT_CREATEDESTINATION_UNKNOWNERROR;
         }
+        
+        return VIRTUAL_OPENRESULT_CREATEDESTINATION_UNKNOWNERROR;
     }
     
     OutputDeviceInfo* outputDeviceInfo = malloc(sizeof(OutputDeviceInfo));
@@ -901,8 +914,9 @@ VIRTUAL_CLOSERESULT CloseVirtualDevice(void* info)
         {
             case kMIDIUnknownEndpoint: return VIRTUAL_CLOSERESULT_DISPOSESOURCE_UNKNOWNENDPOINT;
             case kMIDINotPermitted: return VIRTUAL_CLOSERESULT_DISPOSESOURCE_NOTPERMITTED;
-            case kMIDIUnknownError: return VIRTUAL_CLOSERESULT_DISPOSESOURCE_UNKNOWNERROR;
         }
+        
+        return VIRTUAL_CLOSERESULT_DISPOSESOURCE_UNKNOWNERROR;
     }
     
     status = MIDIEndpointDispose(virtualDeviceInfo->outputDeviceInfo->endpointRef);
@@ -912,8 +926,9 @@ VIRTUAL_CLOSERESULT CloseVirtualDevice(void* info)
         {
             case kMIDIUnknownEndpoint: return VIRTUAL_CLOSERESULT_DISPOSEDESTINATION_UNKNOWNENDPOINT;
             case kMIDINotPermitted: return VIRTUAL_CLOSERESULT_DISPOSEDESTINATION_NOTPERMITTED;
-            case kMIDIUnknownError: return VIRTUAL_CLOSERESULT_DISPOSEDESTINATION_UNKNOWNERROR;
         }
+        
+        return VIRTUAL_CLOSERESULT_DISPOSEDESTINATION_UNKNOWNERROR;
     }
     
     free(virtualDeviceInfo);
@@ -932,12 +947,13 @@ VIRTUAL_SENDBACKRESULT SendDataBackFromVirtualDevice(const MIDIPacketList *pktli
         {
             case kMIDIUnknownEndpoint: return VIRTUAL_SENDBACKRESULT_UNKNOWNENDPOINT;
             case kMIDINotPermitted: return VIRTUAL_SENDBACKRESULT_NOTPERMITTED;
-            case kMIDIUnknownError: return VIRTUAL_SENDBACKRESULT_UNKNOWNERROR;
             case kMIDIWrongEndpointType: return VIRTUAL_SENDBACKRESULT_WRONGENDPOINT;
             case kMIDIMessageSendErr: return VIRTUAL_SENDBACKRESULT_MESSAGESENDERROR;
             case kMIDIServerStartErr: return VIRTUAL_SENDBACKRESULT_SERVERSTARTERROR;
             case kMIDIWrongThread: return VIRTUAL_SENDBACKRESULT_WRONGTHREAD;
         }
+        
+        return VIRTUAL_SENDBACKRESULT_UNKNOWNERROR;
     }
     
     return VIRTUAL_SENDBACKRESULT_OK;

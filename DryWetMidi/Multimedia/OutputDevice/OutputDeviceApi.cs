@@ -14,6 +14,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             OUT_GETINFORESULT_NODRIVER = 3,
             [NativeErrorType(NativeErrorType.NoMemory)]
             OUT_GETINFORESULT_NOMEMORY = 4,
+            OUT_GETINFORESULT_UNKNOWNERROR = 1000
         }
 
         public enum OUT_OPENRESULT
@@ -38,10 +39,12 @@ namespace Melanchall.DryWetMidi.Multimedia
         {
             OUT_CLOSERESULT_OK = 0,
             OUT_CLOSERESULT_RESET_INVALIDHANDLE = 1,
+            OUT_CLOSERESULT_RESET_UNKNOWNERROR = 1000,
             OUT_CLOSERESULT_CLOSE_STILLPLAYING = 2,
             OUT_CLOSERESULT_CLOSE_INVALIDHANDLE = 3,
             [NativeErrorType(NativeErrorType.NoMemory)]
-            OUT_CLOSERESULT_CLOSE_NOMEMORY = 4
+            OUT_CLOSERESULT_CLOSE_NOMEMORY = 4,
+            OUT_CLOSERESULT_CLOSE_UNKNOWNERROR = 2000
         }
 
         public enum OUT_SENDSHORTRESULT
@@ -70,6 +73,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             OUT_SENDSYSEXRESULT_PREPAREBUFFER_INVALIDADDRESS = 2,
             [NativeErrorType(NativeErrorType.NoMemory)]
             OUT_SENDSYSEXRESULT_PREPAREBUFFER_NOMEMORY = 3,
+            OUT_SENDSYSEXRESULT_PREPAREBUFFER_UNKNOWNERROR = 1000,
             [NativeErrorType(NativeErrorType.Busy)]
             OUT_SENDSYSEXRESULT_NOTREADY = 4,
             OUT_SENDSYSEXRESULT_UNPREPARED = 5,
@@ -92,7 +96,8 @@ namespace Melanchall.DryWetMidi.Multimedia
             OUT_GETSYSEXDATARESULT_OK = 0,
             OUT_GETSYSEXDATARESULT_STILLPLAYING = 1,
             OUT_GETSYSEXDATARESULT_INVALIDSTRUCTURE = 2,
-            OUT_GETSYSEXDATARESULT_INVALIDHANDLE = 3
+            OUT_GETSYSEXDATARESULT_INVALIDHANDLE = 3,
+            OUT_GETSYSEXDATARESULT_UNKNOWNERROR = 1000
         }
 
         public enum OUT_GETPROPERTYRESULT
