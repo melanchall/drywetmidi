@@ -5,21 +5,19 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Enum SilentNoteOnPolicy
-   | DryWetMIDI </title>
+    <title>Supported OS | DryWetMIDI </title>
     <meta name="viewport" content="width=device-width">
-    <meta name="title" content="Enum SilentNoteOnPolicy
-   | DryWetMIDI ">
+    <meta name="title" content="Supported OS | DryWetMIDI ">
     <meta name="generator" content="docfx 2.59.4.0">
     
-    <link rel="shortcut icon" href="../images/favicon.png">
-    <link rel="stylesheet" href="../styles/docfx.vendor.css">
-    <link rel="stylesheet" href="../styles/docfx.css">
-    <link rel="stylesheet" href="../styles/main.css">
-    <meta property="docfx:navrel" content="../toc.html">
-    <meta property="docfx:tocrel" content="toc.html">
+    <link rel="shortcut icon" href="../../images/favicon.png">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <meta property="docfx:navrel" content="../../toc.html">
+    <meta property="docfx:tocrel" content="../toc.html">
     
-    <meta property="docfx:rel" content="../">
+    <meta property="docfx:rel" content="../../">
     
   </head>
   <body data-spy="scroll" data-target="#affix" data-offset="120">
@@ -36,8 +34,8 @@
                 <span class="icon-bar"></span>
               </button>
               
-              <a class="navbar-brand" href="../index.html">
-                <img id="logo" class="svg" src="../images/logo.png" alt="">
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../images/logo.png" alt="">
               </a>
             </div>
             <div class="collapse navbar-collapse" id="navbar">
@@ -78,46 +76,15 @@
         </div>
         <div class="article row grid-right">
           <div class="col-md-10">
-            <article class="content wrap" id="_content" data-uid="Melanchall.DryWetMidi.Core.SilentNoteOnPolicy">
-  
-  
-  <h1 id="Melanchall_DryWetMidi_Core_SilentNoteOnPolicy" data-uid="Melanchall.DryWetMidi.Core.SilentNoteOnPolicy" class="text-break">Enum SilentNoteOnPolicy
-  </h1>
-  <div class="markdown level0 summary">
-Specifies how reading engine should react on <code>Note On</code> events with velocity of zero.
-The default is <a class="xref" href="Melanchall.DryWetMidi.Core.SilentNoteOnPolicy.html#Melanchall_DryWetMidi_Core_SilentNoteOnPolicy_NoteOff">NoteOff</a>.
-</div>
-  <div class="markdown level0 conceptual"></div>
-  <h6><strong>Namespace</strong>: <a class="xref" href="Melanchall.DryWetMidi.Core.html">Melanchall.DryWetMidi.Core</a></h6>
-  <h6><strong>Assembly</strong>: Melanchall.DryWetMidi.dll</h6>
-  <h5 id="Melanchall_DryWetMidi_Core_SilentNoteOnPolicy_syntax">Syntax</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public enum SilentNoteOnPolicy : byte</code></pre>
-  </div>
-  <h3 id="fields">Fields
-  </h3>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    <thead>
-    <tbody>
-      <tr>
-        <td id="Melanchall_DryWetMidi_Core_SilentNoteOnPolicy_NoteOff">NoteOff</td>
-        <td>
-Read an event as <a class="xref" href="Melanchall.DryWetMidi.Core.NoteOffEvent.html">NoteOffEvent</a>.
-</td>
-      </tr>
-      <tr>
-        <td id="Melanchall_DryWetMidi_Core_SilentNoteOnPolicy_NoteOn">NoteOn</td>
-        <td>
-Read an event as <a class="xref" href="Melanchall.DryWetMidi.Core.NoteOnEvent.html">NoteOnEvent</a>.
-</td>
-      </tr>
-    </tbody>
-  </thead></thead></table>
+            <article class="content wrap" id="_content" data-uid="a_develop_supported_os">
+<h1 id="supported-os">Supported OS</h1>
+
+<p>This article describes what operating systems the library supports and what parts of its API can be used on those systems.</p>
+<p>First of all, please take a look at the start of the <a class="xref" href="Project-health.html">Project health</a> article which states DryWetMIDI consists of two parts logically – <strong>Core API</strong> and <strong>Multimedia API</strong>. Also you can see what exact classes of the library are considered a part of the Multimedia API. Now we can define what APIs and where you can use across different platforms:</p>
+<h2 id="core-api">Core API</h2>
+<p>Can be used on any platform .NET supports. You can find the list of the supported platforms here – <a href="https://github.com/dotnet/core/tree/main/release-notes">https://github.com/dotnet/core/tree/main/release-notes</a>. Just open the folder that corresponds to the version of .NET you're interested in and open <strong>supported-os.md</strong> file there. For example, for .NET 7 the file is <a href="https://github.com/dotnet/core/blob/main/release-notes/7.0/supported-os.md">https://github.com/dotnet/core/blob/main/release-notes/7.0/supported-os.md</a>.</p>
+<h2 id="multimedia-api">Multimedia API</h2>
+<p>Can be used currently on Windows and macOS only.</p>
 </article>
           </div>
           
@@ -146,8 +113,8 @@ Read an event as <a class="xref" href="Melanchall.DryWetMidi.Core.NoteOnEvent.ht
       </footer>
     </div>
     
-    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
-    <script type="text/javascript" src="../styles/docfx.js"></script>
-    <script type="text/javascript" src="../styles/main.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
   </body>
 </html>

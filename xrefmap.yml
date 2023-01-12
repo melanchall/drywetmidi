@@ -37,6 +37,9 @@ references:
 - uid: a_develop_project_health
   name: Project health
   href: articles/dev/Project-health.html
+- uid: a_develop_supported_os
+  name: Supported OS
+  href: articles/dev/Supported-OS.html
 - uid: a_develop_unity
   name: Using in Unity
   href: articles/dev/Using-in-Unity.html
@@ -19443,6 +19446,19 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Multimedia.InputDevice.ToString
   nameWithType: InputDevice.ToString
+- uid: Melanchall.DryWetMidi.Multimedia.InputDevice.WaitForCompleteSysExEvent
+  name: WaitForCompleteSysExEvent
+  href: api/Melanchall.DryWetMidi.Multimedia.InputDevice.html#Melanchall_DryWetMidi_Multimedia_InputDevice_WaitForCompleteSysExEvent
+  commentId: P:Melanchall.DryWetMidi.Multimedia.InputDevice.WaitForCompleteSysExEvent
+  fullName: Melanchall.DryWetMidi.Multimedia.InputDevice.WaitForCompleteSysExEvent
+  nameWithType: InputDevice.WaitForCompleteSysExEvent
+- uid: Melanchall.DryWetMidi.Multimedia.InputDevice.WaitForCompleteSysExEvent*
+  name: WaitForCompleteSysExEvent
+  href: api/Melanchall.DryWetMidi.Multimedia.InputDevice.html#Melanchall_DryWetMidi_Multimedia_InputDevice_WaitForCompleteSysExEvent_
+  commentId: Overload:Melanchall.DryWetMidi.Multimedia.InputDevice.WaitForCompleteSysExEvent
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Multimedia.InputDevice.WaitForCompleteSysExEvent
+  nameWithType: InputDevice.WaitForCompleteSysExEvent
 - uid: Melanchall.DryWetMidi.Multimedia.InputDeviceProperty
   name: InputDeviceProperty
   href: api/Melanchall.DryWetMidi.Multimedia.InputDeviceProperty.html
