@@ -145,9 +145,45 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         /// <summary>
         /// Gets or sets a value indicating if <see cref="MidiTimeCodeReceived"/> event should be raised or not.
+        /// Default value is <c>true</c>.
         /// </summary>
         public bool RaiseMidiTimeCodeReceived { get; set; } = true;
 
+        /// <summary>
+        /// Gets or sets a value indicating whether system exclusive event is treated as received only
+        /// when it's completed or not. Default value is <c>true</c>.
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// Some MIDI devices and MIDI subsystems of operating systems can split a system exclusive
+        /// event into several parts on sending the event. If <see cref="WaitForCompleteSysExEvent"/> is
+        /// set to <c>true</c> (default value), DryWetMIDI will wait until last part received, then the library
+        /// will combine all event's parts into single MIDI event and fire the <see cref="EventReceived"/> event.
+        /// </para>
+        /// <para>
+        /// For example, considereng following separate events are received (here bytes in hex format):
+        /// </para>
+        /// <para>
+        /// <c>F0 7F 60</c>
+        /// </para>
+        /// <para>
+        /// <c>40 F7</c>
+        /// </para>
+        /// <para>
+        /// With <see cref="WaitForCompleteSysExEvent"/> set to <c>true</c>, the <see cref="EventReceived"/>
+        /// will be fired only once providing the single event:
+        /// </para>
+        /// <para>
+        /// <c>F0 7F 60 40 F7</c>
+        /// </para>
+        /// <para>
+        /// (<c>F7</c> is a marker of a completed system exclusive event).
+        /// </para>
+        /// <para>
+        /// With the property set to <c>false</c> you'll be notified with <see cref="EventReceived"/> event
+        /// two times, so every part will be considered as a MIDI event.
+        /// </para>
+        /// </remarks>
         public bool WaitForCompleteSysExEvent { get; set; } = true;
 
         /// <summary>
