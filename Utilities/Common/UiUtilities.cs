@@ -1,5 +1,4 @@
 ﻿using System.Reflection;
-using System.Text.RegularExpressions;
 
 namespace Melanchall.Common
 {
@@ -69,28 +68,6 @@ namespace Melanchall.Common
 
         private static void WriteLines(params string[] lines) =>
             lines.ToList().ForEach(Console.WriteLine);
-
-        private static void WriteColoredLine(string text, ConsoleColor? foreground, ConsoleColor? background)
-        {
-            var oldForeground = Console.ForegroundColor;
-            var oldBackground = Console.BackgroundColor;
-
-            try
-            {
-                if (foreground != null)
-                    Console.ForegroundColor = foreground.Value;
-
-                if (background != null)
-                    Console.BackgroundColor = background.Value;
-
-                Console.WriteLine(text);
-            }
-            finally
-            {
-                Console.ForegroundColor = oldForeground;
-                Console.BackgroundColor = oldBackground;
-            }
-        }
 
         #endregion
     }
