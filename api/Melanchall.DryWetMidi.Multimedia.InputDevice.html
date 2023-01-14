@@ -204,6 +204,7 @@ Gets the name of the current MIDI device.
   <h4 id="Melanchall_DryWetMidi_Multimedia_InputDevice_RaiseMidiTimeCodeReceived" data-uid="Melanchall.DryWetMidi.Multimedia.InputDevice.RaiseMidiTimeCodeReceived">RaiseMidiTimeCodeReceived</h4>
   <div class="markdown level1 summary">
 Gets or sets a value indicating if <a class="xref" href="Melanchall.DryWetMidi.Multimedia.InputDevice.html#Melanchall_DryWetMidi_Multimedia_InputDevice_MidiTimeCodeReceived">MidiTimeCodeReceived</a> event should be raised or not.
+Default value is <code>true</code>.
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -268,7 +269,10 @@ The default is <a class="xref" href="Melanchall.DryWetMidi.Core.SilentNoteOnPoli
   </table>
   <a id="Melanchall_DryWetMidi_Multimedia_InputDevice_WaitForCompleteSysExEvent_" data-uid="Melanchall.DryWetMidi.Multimedia.InputDevice.WaitForCompleteSysExEvent*"></a>
   <h4 id="Melanchall_DryWetMidi_Multimedia_InputDevice_WaitForCompleteSysExEvent" data-uid="Melanchall.DryWetMidi.Multimedia.InputDevice.WaitForCompleteSysExEvent">WaitForCompleteSysExEvent</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary">
+Gets or sets a value indicating whether system exclusive event is treated as received only
+when it&apos;s completed or not. Default value is <code>true</code>.
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -289,6 +293,38 @@ The default is <a class="xref" href="Melanchall.DryWetMidi.Core.SilentNoteOnPoli
       </tr>
     </tbody>
   </table>
+  <h5 id="Melanchall_DryWetMidi_Multimedia_InputDevice_WaitForCompleteSysExEvent_remarks">Remarks</h5>
+  <div class="markdown level1 remarks">
+<p>
+Some MIDI devices and MIDI subsystems of operating systems can split a system exclusive
+event into several parts on sending the event. If <a class="xref" href="Melanchall.DryWetMidi.Multimedia.InputDevice.html#Melanchall_DryWetMidi_Multimedia_InputDevice_WaitForCompleteSysExEvent">WaitForCompleteSysExEvent</a> is
+set to <code>true</code> (default value), DryWetMIDI will wait until last part received, then the library
+will combine all event&apos;s parts into single MIDI event and fire the <a class="xref" href="Melanchall.DryWetMidi.Multimedia.InputDevice.html#Melanchall_DryWetMidi_Multimedia_InputDevice_EventReceived">EventReceived</a> event.
+</p>
+<p>
+For example, considereng following separate events are received (here bytes in hex format):
+</p>
+<p>
+<code>F0 7F 60</code>
+</p>
+<p>
+<code>40 F7</code>
+</p>
+<p>
+With <a class="xref" href="Melanchall.DryWetMidi.Multimedia.InputDevice.html#Melanchall_DryWetMidi_Multimedia_InputDevice_WaitForCompleteSysExEvent">WaitForCompleteSysExEvent</a> set to <code>true</code>, the <a class="xref" href="Melanchall.DryWetMidi.Multimedia.InputDevice.html#Melanchall_DryWetMidi_Multimedia_InputDevice_EventReceived">EventReceived</a>
+will be fired only once providing the single event:
+</p>
+<p>
+<code>F0 7F 60 40 F7</code>
+</p>
+<p>
+(<code>F7</code> is a marker of a completed system exclusive event).
+</p>
+<p>
+With the property set to <code>false</code> you&apos;ll be notified with <a class="xref" href="Melanchall.DryWetMidi.Multimedia.InputDevice.html#Melanchall_DryWetMidi_Multimedia_InputDevice_EventReceived">EventReceived</a> event
+two times, so every part will be considered as a MIDI event.
+</p>
+</div>
   <h3 id="methods">Methods
   </h3>
   <a id="Melanchall_DryWetMidi_Multimedia_InputDevice_Equals_" data-uid="Melanchall.DryWetMidi.Multimedia.InputDevice.Equals*"></a>
