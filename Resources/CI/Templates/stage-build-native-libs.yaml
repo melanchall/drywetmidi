@@ -72,7 +72,6 @@ stages:
           clang -shared -undefined dynamic_lookup -o Melanchall_DryWetMidi_Native64_x86_64.dylib NativeApi-macOS.c -framework CoreServices -framework CoreFoundation -framework CoreMIDI -arch x86_64
           Write-Host "Merging .dylib files into a single unversal one..."
           lipo Melanchall_DryWetMidi_Native64_x86_64.dylib Melanchall_DryWetMidi_Native64_arm64.dylib -output Melanchall_DryWetMidi_Native64.dylib -create
-          Write-Host "Merged archs are:"
           lipo -info Melanchall_DryWetMidi_Native64.dylib
     - task: PublishPipelineArtifact@1
       displayName: 'Publish .dylib artifact'
@@ -94,16 +93,15 @@ stages:
           cd Resources/Native
           
           Write-Host "Building arm64 .a..."
-          clang -c NativeApi-macOS.c -o Melanchall_DryWetMidi_Native64_arm64.o -arch arm64
+          xcrun --sdk iphoneos --verbose clang -c NativeApi-macOS.c -o Melanchall_DryWetMidi_Native64_arm64.o -arch arm64
           ar -rv Melanchall_DryWetMidi_Native64_arm64.a Melanchall_DryWetMidi_Native64_arm64.o
           
           Write-Host "Building x86_64 .a..."
-          clang -c NativeApi-macOS.c -o Melanchall_DryWetMidi_Native64_x86_64.o -arch x86_64
+          xcrun --sdk iphoneos --verbose clang -c NativeApi-macOS.c -o Melanchall_DryWetMidi_Native64_x86_64.o -arch x86_64
           ar -rv Melanchall_DryWetMidi_Native64_x86_64.a Melanchall_DryWetMidi_Native64_x86_64.o
           
           Write-Host "Merging .a files into a single unversal one..."
           lipo Melanchall_DryWetMidi_Native64_x86_64.a Melanchall_DryWetMidi_Native64_arm64.a -output Melanchall_DryWetMidi_Native64.a -create
-          Write-Host "Merged archs are:"
           lipo -info Melanchall_DryWetMidi_Native64.a
     - task: PublishPipelineArtifact@1
       displayName: 'Publish .a artifact'
