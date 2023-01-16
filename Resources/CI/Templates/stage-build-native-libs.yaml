@@ -92,23 +92,19 @@ stages:
         script: |
           cd Resources/Native
           
-          Write-Host "AAA"
-          xcrun --sdk iphoneos --find clang
-          Write-Host "BBB"
           $x = xcrun --sdk iphoneos --find clang
-          Write-Host "X = $x"
           $y = xcrun --sdk iphoneos --show-sdk-path
           
           Write-Host "Building arm64 .a..."
           & "$x" -isysroot "$y" -c NativeApi-macOS.c -o Melanchall_DryWetMidi_Native64_arm64.o -arch arm64
           ar -rv Melanchall_DryWetMidi_Native64_arm64.a Melanchall_DryWetMidi_Native64_arm64.o
           
-          Write-Host "Building x86_64 .a..."
-          & "$x" -isysroot "$y" -c NativeApi-macOS.c -o Melanchall_DryWetMidi_Native64_x86_64.o -arch x86_64
-          ar -rv Melanchall_DryWetMidi_Native64_x86_64.a Melanchall_DryWetMidi_Native64_x86_64.o
+          #Write-Host "Building x86_64 .a..."
+          #& "$x" -isysroot "$y" -c NativeApi-macOS.c -o Melanchall_DryWetMidi_Native64_x86_64.o -arch x86_64
+          #ar -rv Melanchall_DryWetMidi_Native64_x86_64.a Melanchall_DryWetMidi_Native64_x86_64.o
           
           Write-Host "Merging .a files into a single unversal one..."
-          lipo Melanchall_DryWetMidi_Native64_x86_64.a Melanchall_DryWetMidi_Native64_arm64.a -output Melanchall_DryWetMidi_Native64.a -create
+          lipo Melanchall_DryWetMidi_Native64_arm64.a -output Melanchall_DryWetMidi_Native64.a -create
           lipo -info Melanchall_DryWetMidi_Native64.a
     - task: PublishPipelineArtifact@1
       displayName: 'Publish .a artifact'
