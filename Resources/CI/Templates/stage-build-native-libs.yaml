@@ -107,7 +107,7 @@ stages:
           ar -rv Melanchall_DryWetMidi_Native64_x86_64.a Melanchall_DryWetMidi_Native64_x86_64.o
           
           Write-Host "Merging .a files into a single unversal one..."
-          lipo Melanchall_DryWetMidi_Native64_arm64.a -output Melanchall_DryWetMidi_Native64.a -create
+          lipo Melanchall_DryWetMidi_Native64_arm64.a Melanchall_DryWetMidi_Native64_x86_64.a -output Melanchall_DryWetMidi_Native64.a -create
           lipo -info Melanchall_DryWetMidi_Native64.a
     - task: PublishPipelineArtifact@1
       displayName: 'Publish .a artifact'
