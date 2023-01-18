@@ -95,12 +95,15 @@ stages:
           $x = xcrun --sdk iphoneos --find clang
           $y = xcrun --sdk iphoneos --show-sdk-path
           
+          $a = xcrun --sdk iphonesimulator --find clang
+          $b = xcrun --sdk iphonesimulator --show-sdk-path
+          
           Write-Host "Building arm64 .a..."
           & "$x" -isysroot "$y" -c NativeApi-macOS.c -o Melanchall_DryWetMidi_Native64_arm64.o -arch arm64
           ar -rv Melanchall_DryWetMidi_Native64_arm64.a Melanchall_DryWetMidi_Native64_arm64.o
           
           #Write-Host "Building x86_64 .a..."
-          #& "$x" -isysroot "$y" -c NativeApi-macOS.c -o Melanchall_DryWetMidi_Native64_x86_64.o -arch x86_64
+          #& "$a" -isysroot "$b" -c NativeApi-macOS.c -o Melanchall_DryWetMidi_Native64_x86_64.o -arch x86_64
           #ar -rv Melanchall_DryWetMidi_Native64_x86_64.a Melanchall_DryWetMidi_Native64_x86_64.o
           
           Write-Host "Merging .a files into a single unversal one..."
