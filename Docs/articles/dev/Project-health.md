@@ -7,12 +7,7 @@ uid: a_develop_project_health
 Here you can see "health" of the project in terms of test pipelines are passed or not. First of all, we need to define two subsets of the library API:
 
 * **Core API** - it's all API except Multimedia one; in other words it's the API that is supported by .NET itself, so it can be run on any platform .NET Core / .NET supported.
-* **Multimedia API** - it's platform-specific API that includes following key classes:  
-  * [InputDevice](xref:Melanchall.DryWetMidi.Multimedia.InputDevice) (more details in the [InputDevice](zref:a_dev_input) article);
-  * [OutputDevice](xref:Melanchall.DryWetMidi.Multimedia.OutputDevice) (more details in the [OutputDevice](xref:a_dev_output) article);
-  * [VirtualDevice](xref:Melanchall.DryWetMidi.Multimedia.VirtualDevice) (more details in the [VirtualDevice](xref:a_dev_virtual) article);
-  * [DevicesWatcher](xref:Melanchall.DryWetMidi.Multimedia.DevicesWatcher) (more details in the [DevicesWatcher](xref:a_dev_watcher) article);
-  * [HighPrecisionTickGenerator](xref:Melanchall.DryWetMidi.Multimedia.HighPrecisionTickGenerator).
+* **Multimedia API** - it's platform-specific API. The list of the key classes can be found in the [Supported OS](xref:a_develop_supported_os) article.
 
 ## Windows
 

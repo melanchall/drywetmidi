@@ -6,18 +6,18 @@ uid: a_develop_unity
 
 This article describes how to integrate DryWetMIDI in a Unity project. You have two main ways:
 
-* import the [DryWetMIDI asset](https://assetstore.unity.com/packages/tools/audio/drywetmidi-222171) from the Unity Asset Store;
+* import the [DryWetMIDI asset](https://assetstore.unity.com/packages/tools/audio/drywetmidi-222171) (or [DryWetMIDI.Nativeless](https://assetstore.unity.com/packages/tools/audio/drywetmidi-nativeless-228998) one) from the Unity Asset Store;
 * install the library manually.
 
 There are also ways to import a NuGet package via 3d party tools (for example, [NuGetForUnity](https://github.com/GlitchEnzo/NuGetForUnity)).
 
 ## Unity asset
 
-It's the simplest way. Just use built-in ways to import the official [DryWetMIDI asset](https://assetstore.unity.com/packages/tools/audio/drywetmidi-222171) into your Unity project from the Asset Store.
+It's the simplest way. Just use built-in ways to import the official [DryWetMIDI asset](https://assetstore.unity.com/packages/tools/audio/drywetmidi-222171) (or [DryWetMIDI.Nativeless](https://assetstore.unity.com/packages/tools/audio/drywetmidi-nativeless-228998) one) into your Unity project from the Asset Store.
 
 ## Manual installation
 
-Instruction below shows how to integrate full version of the DryWetMIDI into your Unity project manually. If you want to use [nativeless version](xref:a_develop_nativeless), just take archive with _-nativeless_ suffix on the second step and skip third one.
+Instruction below shows how to integrate full version of the DryWetMIDI into your Unity project manually. If you want to use the [nativeless version](xref:a_develop_nativeless), just take an archive with _-nativeless_ suffix on the second step and skip third one.
 
 1. Create _Melanchall_ folder in project's _Assets_ folder and _DryWetMIDI_ subfolder within the _Melanchall_ one.
 2. Download the library main binary:

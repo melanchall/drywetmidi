@@ -6,7 +6,7 @@ uid: a_develop_supported_os
 
 This article describes what operating systems the library supports and what parts of its API can be used on those systems.
 
-First of all, please take a look at the start of the [Project health](xref:a_develop_project_health) article which states DryWetMIDI consists of two parts logically – **Core API** and **Multimedia API**. Also you can see what exact classes of the library are considered a part of the Multimedia API. Now we can define what APIs and where you can use across different platforms:
+First of all, please take a look at the start of the [Project health](xref:a_develop_project_health) article which states DryWetMIDI consists of two parts logically – **Core API** and **Multimedia API**. Now we can define what APIs and where you can use across different platforms:
 
 ## Core API
 
@@ -14,4 +14,10 @@ Can be used on any platform .NET supports. You can find the list of the supporte
 
 ## Multimedia API
 
-Can be used currently on Windows and macOS only.
+Can be used currently on Windows and macOS only. Here the list of the key classes:
+
+* [InputDevice](xref:Melanchall.DryWetMidi.Multimedia.InputDevice);
+* [OutputDevice](xref:Melanchall.DryWetMidi.Multimedia.OutputDevice);
+* [VirtualDevice](xref:Melanchall.DryWetMidi.Multimedia.VirtualDevice) (implemented for **macOS** only);
+* [DevicesWatcher](xref:Melanchall.DryWetMidi.Multimedia.DevicesWatcher) (implemented for **macOS** only);
+* [HighPrecisionTickGenerator](xref:Melanchall.DryWetMidi.Multimedia.HighPrecisionTickGenerator).
