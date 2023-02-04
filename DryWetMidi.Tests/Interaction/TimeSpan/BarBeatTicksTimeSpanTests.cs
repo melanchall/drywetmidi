@@ -501,6 +501,22 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                                                  TimeSpanTestUtilities.ComplexTempoMap);
         }
 
+        // TODO: check cyclic conversion
+        //[Test]
+        public void Convert_Complex_5()
+        {
+            // 5/8            5/16      3/8     13/8
+            //  |--+--+--+--+--|-+-+-+-+-|--+--+--|--+--+--+--+--+--+--+--+--+--+--+--+--|
+            //  0              1         2        3                                      4
+            //        |===============================================================|
+            //        '  '  '  ^         ^        ^  '  '  '  '  '  '  '  '  '  '  '  '
+
+            TimeSpanTestUtilities.TestConversion(new BarBeatTicksTimeSpan(3, 10),
+                                                 18 * MusicalTimeSpan.Eighth + 5 * MusicalTimeSpan.Sixteenth,
+                                                 2 * MusicalTimeSpan.Eighth,
+                                                 TimeSpanTestUtilities.ComplexTempoMap2);
+        }
+
         #endregion
 
         #endregion

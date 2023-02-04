@@ -24,7 +24,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
             var timeSignatureLine = tempoMap.TimeSignatureLine;
             var timeSignatureChanges = timeSignatureLine
-                .Where(v => v.Time > time && v.Time < endTime)
+                .Where(v => v.Time >= time && v.Time <= endTime)
                 .ToList();
 
             var bars = 0L;
@@ -57,7 +57,7 @@ namespace Melanchall.DryWetMidi.Interaction
                                 out ticksBefore);
 
             long barsAfter, beatsAfter, ticksAfter;
-            CalculateComponents(time + timeSpan - lastTime,
+            CalculateComponents(endTime - lastTime,
                                 lastTimeSignature,
                                 ticksPerQuarterNote,
                                 out barsAfter,
@@ -69,13 +69,10 @@ namespace Melanchall.DryWetMidi.Interaction
             // Try to complete a bar
 
             var beats = beatsBefore + beatsAfter;
-            if (beats > 0)
+            if (beats > 0 && beatsBefore > 0 && beats >= firstTimeSignature.Numerator)
             {
-                if (beatsBefore > 0 && beats >= firstTimeSignature.Numerator)
-                {
-                    bars++;
-                    beats -= firstTimeSignature.Numerator;
-                }
+                bars++;
+                beats -= firstTimeSignature.Numerator;
             }
 
             // Try to complete a beat

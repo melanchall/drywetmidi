@@ -125,6 +125,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         public static readonly TempoMap DefaultTempoMap = GenerateDefaultTempoMap();
         public static readonly TempoMap SimpleTempoMap = GenerateSimpleTempoMap();
         public static readonly TempoMap ComplexTempoMap = GenerateComplexTempoMap();
+        public static readonly TempoMap ComplexTempoMap2 = GenerateComplexTempoMap2();
 
         // TODO: find a way to decrease this constant
         private const long MetricTimeSpanEqualityTolerance = 500; // μs
@@ -353,6 +354,38 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 Tuple.Create(2 * MusicalTimeSpan.Whole, new TimeSignature(5, 8)),
                 Tuple.Create(5 * MusicalTimeSpan.Eighth, new TimeSignature(5, 16)),
                 Tuple.Create(15 * MusicalTimeSpan.Sixteenth, new TimeSignature(5, 8)),
+            };
+
+            using (var tempoMapManager = new TempoMapManager(new TicksPerQuarterNoteTimeDivision(TicksPerQuarterNote)))
+            {
+                var time = new MusicalTimeSpan();
+
+                foreach (var step in steps)
+                {
+                    time += step.Item1;
+                    tempoMapManager.SetTimeSignature(time, step.Item2);
+                }
+
+                tempoMapManager.SetTempo(new MetricTimeSpan(0, 0, 10), Tempo.FromMillisecondsPerQuarterNote(300));
+                tempoMapManager.SetTempo(new MetricTimeSpan(0, 1, 30), Tempo.FromMillisecondsPerQuarterNote(600));
+                tempoMapManager.SetTempo(new MetricTimeSpan(0, 1, 31), Tempo.FromMillisecondsPerQuarterNote(640));
+
+                return tempoMapManager.TempoMap;
+            }
+        }
+
+        private static TempoMap GenerateComplexTempoMap2()
+        {
+            // 5/8            5/16      3/8     13/8
+            //  |--+--+--+--+--|-+-+-+-+-|--+--+--|--+--+--+--+--+--+--+--+--+--+--+--+--|
+            //  0              1         2        3                                      4
+
+            var steps = new[]
+            {
+                Tuple.Create(new MusicalTimeSpan(), new TimeSignature(5, 8)),
+                Tuple.Create(5 * MusicalTimeSpan.Eighth, new TimeSignature(5, 16)),
+                Tuple.Create(5 * MusicalTimeSpan.Sixteenth, new TimeSignature(3, 8)),
+                Tuple.Create(3 * MusicalTimeSpan.Eighth, new TimeSignature(13, 8)),
             };
 
             using (var tempoMapManager = new TempoMapManager(new TicksPerQuarterNoteTimeDivision(TicksPerQuarterNote)))
