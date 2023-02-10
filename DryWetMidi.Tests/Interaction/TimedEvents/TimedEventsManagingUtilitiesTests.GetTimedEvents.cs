@@ -341,6 +341,22 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             MidiAsserts.AreEqual(new[] { new TimedEvent(new NoteOnEvent(), deltaTime) }, timedEvents, false, 0, "Timed events are invalid.");
         }
 
+        [TestCase(0)]
+        [TestCase(100)]
+        [TestCase(100000)]
+        public void GetTimedEvents_TrackChunksCollection_SingleAsMultipleTrackChunks(long deltaTime)
+        {
+            var midiEvent = new NoteOnEvent { DeltaTime = deltaTime };
+            var trackChunk = new TrackChunk(new MidiEvent[]
+            {
+                midiEvent
+            });
+
+            var timedEvents = new[] { trackChunk }.GetTimedEvents();
+            MidiAsserts.AreEqual(new[] { new TimedEvent(new NoteOnEvent(), deltaTime) }, timedEvents, false, 0, "Timed events are invalid.");
+            Assert.AreNotSame(midiEvent, timedEvents.First().Event, "New event is a clone of the original one.");
+        }
+
         [TestCase(0, 0)]
         [TestCase(0, 100)]
         [TestCase(100, 0)]

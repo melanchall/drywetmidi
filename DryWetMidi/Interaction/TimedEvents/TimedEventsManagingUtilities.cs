@@ -829,7 +829,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
             if (eventsCollectionsCount == 1)
             {
-                foreach (var timedEvent in eventsCollections[0].GetTimedEventsLazy(settings, false))
+                foreach (var timedEvent in eventsCollections[0].GetTimedEventsLazy(settings, cloneEvent))
                 {
                     yield return Tuple.Create(timedEvent, 0);
                 }
