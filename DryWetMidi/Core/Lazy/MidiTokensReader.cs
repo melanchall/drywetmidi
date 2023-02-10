@@ -151,6 +151,8 @@ namespace Melanchall.DryWetMidi.Core
         {
             Instruction instruction = null;
 
+            var startPosition = _reader.Position;
+
             do
             {
                 if (_reader.EndReached || (_smfEndPosition != null && _reader.Position >= _smfEndPosition))
@@ -184,7 +186,14 @@ namespace Melanchall.DryWetMidi.Core
             }
             while (instruction.InstructionType == InstructionType.Read);
 
-            return instruction.Token;
+            var token = instruction.Token;
+            if (token != null)
+            {
+                token.Position = startPosition;
+                token.Length = _reader.Position - startPosition;
+            }
+
+            return token;
         }
 
         private static void ReactOnNotEnoughBytes(NotEnoughBytesPolicy policy, Exception exception)

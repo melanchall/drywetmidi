@@ -2,8 +2,6 @@
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Tests.Common;
 using NUnit.Framework;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 
 namespace Melanchall.DryWetMidi.Tests.Core
@@ -21,8 +19,8 @@ namespace Melanchall.DryWetMidi.Tests.Core
             readingSettings: null,
             expectedTokens: new MidiToken[]
             {
-                new ChunkHeaderToken(HeaderChunk.Id, 6),
-                new FileHeaderToken((ushort)format, new TicksPerQuarterNoteTimeDivision(), 0)
+                new ChunkHeaderToken(HeaderChunk.Id, 6) { Position = 0, Length = 8 },
+                new FileHeaderToken((ushort)format, new TicksPerQuarterNoteTimeDivision(), 0) { Position = 8, Length = 6 }
             });
 
         [Test]
@@ -35,12 +33,12 @@ namespace Melanchall.DryWetMidi.Tests.Core
             readingSettings: null,
             expectedTokens: new MidiToken[]
             {
-                new ChunkHeaderToken(HeaderChunk.Id, 6),
-                new FileHeaderToken((ushort)format, new TicksPerQuarterNoteTimeDivision(), 1),
+                new ChunkHeaderToken(HeaderChunk.Id, 6) { Position = 0, Length = 8 },
+                new FileHeaderToken((ushort)format, new TicksPerQuarterNoteTimeDivision(), 1) { Position = 8, Length = 6 },
                 
-                new ChunkHeaderToken(TrackChunk.Id, 8),
-                new MidiEventToken(new NoteOnEvent((SevenBitNumber)70, SevenBitNumber.MaxValue) { DeltaTime = 100, Channel = (FourBitNumber)4 }),
-                new MidiEventToken(new EndOfTrackEvent())
+                new ChunkHeaderToken(TrackChunk.Id, 8) { Position = 14, Length = 8 },
+                new MidiEventToken(new NoteOnEvent((SevenBitNumber)70, SevenBitNumber.MaxValue) { DeltaTime = 100, Channel = (FourBitNumber)4 }) { Position = 22, Length = 4 },
+                new MidiEventToken(new EndOfTrackEvent()) { Position = 26, Length = 4 }
             });
 
         [Test]
@@ -54,13 +52,13 @@ namespace Melanchall.DryWetMidi.Tests.Core
             readingSettings: null,
             expectedTokens: new MidiToken[]
             {
-                new ChunkHeaderToken(HeaderChunk.Id, 6),
-                new FileHeaderToken((ushort)format, new TicksPerQuarterNoteTimeDivision(), 1),
+                new ChunkHeaderToken(HeaderChunk.Id, 6) { Position = 0, Length = 8 },
+                new FileHeaderToken((ushort)format, new TicksPerQuarterNoteTimeDivision(), 1) { Position = 8, Length = 6 },
                 
-                new ChunkHeaderToken(TrackChunk.Id, 12),
-                new MidiEventToken(new NoteOnEvent((SevenBitNumber)70, SevenBitNumber.MaxValue) { DeltaTime = 100, Channel = (FourBitNumber)4 }),
-                new MidiEventToken(new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue) { DeltaTime = 50, Channel = (FourBitNumber)4 }),
-                new MidiEventToken(new EndOfTrackEvent())
+                new ChunkHeaderToken(TrackChunk.Id, 12) { Position = 14, Length = 8 },
+                new MidiEventToken(new NoteOnEvent((SevenBitNumber)70, SevenBitNumber.MaxValue) { DeltaTime = 100, Channel = (FourBitNumber)4 }) { Position = 22, Length = 4 },
+                new MidiEventToken(new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue) { DeltaTime = 50, Channel = (FourBitNumber)4 }){ Position = 26, Length = 4 },
+                new MidiEventToken(new EndOfTrackEvent()) { Position = 30, Length = 4 }
             });
 
         [Test]
@@ -81,13 +79,13 @@ namespace Melanchall.DryWetMidi.Tests.Core
             },
             expectedTokens: new MidiToken[]
             {
-                new ChunkHeaderToken(HeaderChunk.Id, 6),
-                new FileHeaderToken((ushort)format, new TicksPerQuarterNoteTimeDivision(), 1),
+                new ChunkHeaderToken(HeaderChunk.Id, 6) { Position = 0, Length = 8 },
+                new FileHeaderToken((ushort)format, new TicksPerQuarterNoteTimeDivision(), 1) { Position = 8, Length = 6 },
                 
-                new ChunkHeaderToken(TrackChunk.Id, 11),
-                new MidiEventToken(new NoteOnEvent((SevenBitNumber)70, SevenBitNumber.MaxValue) { DeltaTime = 100, Channel = (FourBitNumber)4 }),
-                new MidiEventToken(new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue) { DeltaTime = 50, Channel = (FourBitNumber)4 }),
-                new MidiEventToken(new EndOfTrackEvent())
+                new ChunkHeaderToken(TrackChunk.Id, 11) { Position = 14, Length = 8 },
+                new MidiEventToken(new NoteOnEvent((SevenBitNumber)70, SevenBitNumber.MaxValue) { DeltaTime = 100, Channel = (FourBitNumber)4 }) { Position = 22, Length = 4 },
+                new MidiEventToken(new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue) { DeltaTime = 50, Channel = (FourBitNumber)4 }) { Position = 26, Length = 3 },
+                new MidiEventToken(new EndOfTrackEvent()) { Position = 29, Length = 4 }
             });
 
         [Test]
@@ -110,17 +108,17 @@ namespace Melanchall.DryWetMidi.Tests.Core
             },
             expectedTokens: new MidiToken[]
             {
-                new ChunkHeaderToken(HeaderChunk.Id, 6),
-                new FileHeaderToken((ushort)format, new TicksPerQuarterNoteTimeDivision(), 2),
+                new ChunkHeaderToken(HeaderChunk.Id, 6) { Position = 0, Length = 8 },
+                new FileHeaderToken((ushort)format, new TicksPerQuarterNoteTimeDivision(), 2) { Position = 8, Length = 6 },
 
-                new ChunkHeaderToken(TrackChunk.Id, 8),
-                new MidiEventToken(new ControlChangeEvent((SevenBitNumber)70, SevenBitNumber.MaxValue)),
-                new MidiEventToken(new EndOfTrackEvent()),
+                new ChunkHeaderToken(TrackChunk.Id, 8) { Position = 14, Length = 8 },
+                new MidiEventToken(new ControlChangeEvent((SevenBitNumber)70, SevenBitNumber.MaxValue)) { Position = 22, Length = 4 },
+                new MidiEventToken(new EndOfTrackEvent()) { Position = 26, Length = 4 },
                 
-                new ChunkHeaderToken(TrackChunk.Id, 11),
-                new MidiEventToken(new NoteOnEvent((SevenBitNumber)70, SevenBitNumber.MaxValue) { DeltaTime = 100, Channel = (FourBitNumber)4 }),
-                new MidiEventToken(new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue) { DeltaTime = 50, Channel = (FourBitNumber)4 }),
-                new MidiEventToken(new EndOfTrackEvent())
+                new ChunkHeaderToken(TrackChunk.Id, 11) { Position = 30, Length = 8 },
+                new MidiEventToken(new NoteOnEvent((SevenBitNumber)70, SevenBitNumber.MaxValue) { DeltaTime = 100, Channel = (FourBitNumber)4 }) { Position = 38, Length = 4 },
+                new MidiEventToken(new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue) { DeltaTime = 50, Channel = (FourBitNumber)4 }) { Position = 42, Length = 3 },
+                new MidiEventToken(new EndOfTrackEvent()) { Position = 45, Length = 4 }
             });
 
         [Test]
@@ -140,18 +138,18 @@ namespace Melanchall.DryWetMidi.Tests.Core
             },
             expectedTokens: new MidiToken[]
             {
-                new ChunkHeaderToken(HeaderChunk.Id, 6),
-                new FileHeaderToken((ushort)MidiFileFormat.MultiTrack, new TicksPerQuarterNoteTimeDivision(), 1),
+                new ChunkHeaderToken(HeaderChunk.Id, 6) { Position = 0, Length = 8 },
+                new FileHeaderToken((ushort)MidiFileFormat.MultiTrack, new TicksPerQuarterNoteTimeDivision(), 1) { Position = 8, Length = 6 },
 
-                new ChunkHeaderToken(TrackChunk.Id, 8),
-                new MidiEventToken(new ControlChangeEvent((SevenBitNumber)70, SevenBitNumber.MaxValue)),
-                new MidiEventToken(new EndOfTrackEvent()),
+                new ChunkHeaderToken(TrackChunk.Id, 8) { Position = 14, Length = 8 },
+                new MidiEventToken(new ControlChangeEvent((SevenBitNumber)70, SevenBitNumber.MaxValue)) { Position = 22, Length = 4 },
+                new MidiEventToken(new EndOfTrackEvent()) { Position = 26, Length = 4 },
 
-                new ChunkHeaderToken("Unkn", 8),
-                new BytesPacketToken(new byte[] { 1, 2 }),
-                new BytesPacketToken(new byte[] { 3, 4 }),
-                new BytesPacketToken(new byte[] { 5, 6 }),
-                new BytesPacketToken(new byte[] { 7, 8 }),
+                new ChunkHeaderToken("Unkn", 8) { Position = 30, Length = 8 },
+                new BytesPacketToken(new byte[] { 1, 2 }) { Position = 38, Length = 2 },
+                new BytesPacketToken(new byte[] { 3, 4 }) { Position = 40, Length = 2 },
+                new BytesPacketToken(new byte[] { 5, 6 }) { Position = 42, Length = 2 },
+                new BytesPacketToken(new byte[] { 7, 8 }) { Position = 44, Length = 2 },
             });
 
         [Test]
@@ -171,14 +169,14 @@ namespace Melanchall.DryWetMidi.Tests.Core
             },
             expectedTokens: new MidiToken[]
             {
-                new ChunkHeaderToken(HeaderChunk.Id, 6),
-                new FileHeaderToken((ushort)MidiFileFormat.MultiTrack, new TicksPerQuarterNoteTimeDivision(), 1),
+                new ChunkHeaderToken(HeaderChunk.Id, 6) { Position = 0, Length = 8 },
+                new FileHeaderToken((ushort)MidiFileFormat.MultiTrack, new TicksPerQuarterNoteTimeDivision(), 1) { Position = 8, Length = 6 },
 
-                new ChunkHeaderToken(TrackChunk.Id, 8),
-                new MidiEventToken(new ControlChangeEvent((SevenBitNumber)70, SevenBitNumber.MaxValue)),
-                new MidiEventToken(new EndOfTrackEvent()),
+                new ChunkHeaderToken(TrackChunk.Id, 8) { Position = 14, Length = 8 },
+                new MidiEventToken(new ControlChangeEvent((SevenBitNumber)70, SevenBitNumber.MaxValue)) { Position = 22, Length = 4 },
+                new MidiEventToken(new EndOfTrackEvent()) { Position = 26, Length = 4 },
 
-                new ChunkHeaderToken("Unkn", 0)
+                new ChunkHeaderToken("Unkn", 0) { Position = 30, Length = 8 }
             });
 
         [Test]
@@ -198,19 +196,19 @@ namespace Melanchall.DryWetMidi.Tests.Core
             },
             expectedTokens: new MidiToken[]
             {
-                new ChunkHeaderToken(HeaderChunk.Id, 6),
-                new FileHeaderToken((ushort)MidiFileFormat.MultiTrack, new TicksPerQuarterNoteTimeDivision(), 1),
+                new ChunkHeaderToken(HeaderChunk.Id, 6) { Position = 0, Length = 8 },
+                new FileHeaderToken((ushort)MidiFileFormat.MultiTrack, new TicksPerQuarterNoteTimeDivision(), 1) { Position = 8, Length = 6 },
 
-                new ChunkHeaderToken(TrackChunk.Id, 8),
-                new MidiEventToken(new ControlChangeEvent((SevenBitNumber)70, SevenBitNumber.MaxValue)),
-                new MidiEventToken(new EndOfTrackEvent()),
+                new ChunkHeaderToken(TrackChunk.Id, 8) { Position = 14, Length = 8 },
+                new MidiEventToken(new ControlChangeEvent((SevenBitNumber)70, SevenBitNumber.MaxValue)) { Position = 22, Length = 4 },
+                new MidiEventToken(new EndOfTrackEvent()) { Position = 26, Length = 4 },
 
-                new ChunkHeaderToken("Unkn", 9),
-                new BytesPacketToken(new byte[] { 1, 2 }),
-                new BytesPacketToken(new byte[] { 3, 4 }),
-                new BytesPacketToken(new byte[] { 5, 6 }),
-                new BytesPacketToken(new byte[] { 7, 8 }),
-                new BytesPacketToken(new byte[] { 9 }),
+                new ChunkHeaderToken("Unkn", 9) { Position = 30, Length = 8 },
+                new BytesPacketToken(new byte[] { 1, 2 }) { Position = 38, Length = 2 },
+                new BytesPacketToken(new byte[] { 3, 4 }) { Position = 40, Length = 2 },
+                new BytesPacketToken(new byte[] { 5, 6 }) { Position = 42, Length = 2 },
+                new BytesPacketToken(new byte[] { 7, 8 }) { Position = 44, Length = 2 },
+                new BytesPacketToken(new byte[] { 9 }) { Position = 46, Length = 1 },
             });
 
         #endregion
@@ -260,6 +258,9 @@ namespace Melanchall.DryWetMidi.Tests.Core
 
             if (!expectedToken.GetType().Equals(actualToken.GetType()))
                 return false;
+
+            Assert.AreEqual(expectedToken.Position, actualToken.Position, "Position is invalid.");
+            Assert.AreEqual(expectedToken.Length, actualToken.Length, "Length is invalid.");
 
             var expectedChunkHeaderToken = expectedToken as ChunkHeaderToken;
             if (expectedChunkHeaderToken != null)

@@ -27,6 +27,10 @@
         /// </summary>
         public MidiTokenType TokenType { get; }
 
+        public long Position { get; internal set; }
+
+        public long Length { get; internal set; }
+
         #endregion
     }
 }
