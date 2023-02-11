@@ -588,38 +588,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             });
 
         [Test]
-        public void GetChords_DetectionSettings_TrackChunks_AllEventsCollections_NotesTolerance_1([Values] bool wrapToFile) => GetChords_DetectionSettings_TrackChunks(
-            wrapToFile,
-            new ChordDetectionSettings
-            {
-                NotesTolerance = 0,
-                ChordSearchContext = ChordSearchContext.AllEventsCollections,
-                NoteDetectionSettings = new NoteDetectionSettings
-                {
-                    NoteSearchContext = NoteSearchContext.AllEventsCollections
-                }
-            },
-            midiEvents: new[]
-            {
-                new MidiEvent[]
-                {
-                    new NoteOnEvent(),
-                    new NoteOffEvent(),
-                },
-                new MidiEvent[]
-                {
-                    new NoteOnEvent((SevenBitNumber)70, SevenBitNumber.MaxValue),
-                    new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue),
-                }
-            },
-            expectedChords: new[]
-            {
-                new Chord(
-                    new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue },
-                    new Note((SevenBitNumber)70) { Velocity = SevenBitNumber.MaxValue })
-            });
-
-        [Test]
         public void GetChords_DetectionSettings_TrackChunks_NotesTolerance_2([Values] bool wrapToFile, [Values(1, 10)] int notesTolerance) => GetChords_DetectionSettings_TrackChunks(
             wrapToFile,
             new ChordDetectionSettings { NotesTolerance = 10 },
@@ -654,43 +622,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     new Note((SevenBitNumber)70) { Velocity = SevenBitNumber.MaxValue, Time = notesTolerance - 1 }),
                 new Chord(
                     new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue, Time = 100 }),
-            });
-
-        [Test]
-        public void GetChords_DetectionSettings_TrackChunks_AllEventsCollections_NotesTolerance_2([Values] bool wrapToFile, [Values(1, 10)] int notesTolerance) => GetChords_DetectionSettings_TrackChunks(
-            wrapToFile,
-            new ChordDetectionSettings
-            {
-                NotesTolerance = 10,
-                ChordSearchContext = ChordSearchContext.AllEventsCollections,
-                NoteDetectionSettings = new NoteDetectionSettings
-                {
-                    NoteSearchContext = NoteSearchContext.AllEventsCollections
-                }
-            },
-            midiEvents: new[]
-            {
-                new MidiEvent[]
-                {
-                    new TextEvent("A"),
-                    new NoteOnEvent(),
-                    new TextEvent("B"),
-                },
-                new MidiEvent[]
-                {
-                    new NoteOffEvent(),
-                    new TextEvent("C"),
-                    new NoteOnEvent((SevenBitNumber)70, SevenBitNumber.MaxValue) { DeltaTime = notesTolerance - 1 },
-                    new TextEvent("D"),
-                    new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue),
-                    new TextEvent("E"),
-                }
-            },
-            expectedChords: new[]
-            {
-                new Chord(
-                    new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue },
-                    new Note((SevenBitNumber)70) { Velocity = SevenBitNumber.MaxValue, Time = notesTolerance - 1 })
             });
 
         [Test]
@@ -751,39 +682,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             });
 
         [Test]
-        public void GetChords_DetectionSettings_TrackChunks_AllEventsCollections_NotesMinCount_1([Values] bool wrapToFile) => GetChords_DetectionSettings_TrackChunks(
-            wrapToFile,
-            new ChordDetectionSettings
-            {
-                NotesMinCount = 1,
-                ChordSearchContext = ChordSearchContext.AllEventsCollections,
-                NoteDetectionSettings = new NoteDetectionSettings
-                {
-                    NoteSearchContext = NoteSearchContext.AllEventsCollections
-                }
-            },
-            midiEvents: new[]
-            {
-                new MidiEvent[]
-                {
-                    new NoteOnEvent(),
-                    new NoteOffEvent(),
-                    new NoteOnEvent((SevenBitNumber)70, SevenBitNumber.MaxValue),
-                    new TextEvent("D"),
-                },
-                new MidiEvent[]
-                {
-                    new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue),
-                }
-            },
-            expectedChords: new[]
-            {
-                new Chord(
-                    new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue },
-                    new Note((SevenBitNumber)70) { Velocity = SevenBitNumber.MaxValue })
-            });
-
-        [Test]
         public void GetChords_DetectionSettings_TrackChunks_NotesMinCount_2([Values] bool wrapToFile) => GetChords_DetectionSettings_TrackChunks(
             wrapToFile,
             new ChordDetectionSettings { NotesMinCount = 2 },
@@ -812,41 +710,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 new Chord(
                     new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue },
                     new Note((SevenBitNumber)70) { Velocity = SevenBitNumber.MaxValue }),
-            });
-
-        [Test]
-        public void GetChords_DetectionSettings_TrackChunks_AllEventsCollections_NotesMinCount_2([Values] bool wrapToFile) => GetChords_DetectionSettings_TrackChunks(
-            wrapToFile,
-            new ChordDetectionSettings
-            {
-                NotesMinCount = 2,
-                ChordSearchContext = ChordSearchContext.AllEventsCollections,
-                NoteDetectionSettings = new NoteDetectionSettings
-                {
-                    NoteSearchContext = NoteSearchContext.AllEventsCollections
-                }
-            },
-            midiEvents: new[]
-            {
-                new MidiEvent[]
-                {
-                    new TextEvent("A"),
-                    new NoteOnEvent(),
-                    new NoteOffEvent(),
-                },
-                new MidiEvent[]
-                {
-                    new TextEvent("C"),
-                    new NoteOnEvent((SevenBitNumber)70, SevenBitNumber.MaxValue),
-                    new TextEvent("D"),
-                    new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue),
-                }
-            },
-            expectedChords: new[]
-            {
-                new Chord(
-                    new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue },
-                    new Note((SevenBitNumber)70) { Velocity = SevenBitNumber.MaxValue })
             });
 
         [Test]

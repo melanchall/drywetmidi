@@ -190,7 +190,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             var timedObjects = trackChunks
                 .GetTimedEventsLazy(playbackSettings?.TimedEventDetectionSettings)
                 .GetNotesAndTimedEventsLazy(playbackSettings?.NoteDetectionSettings ?? new NoteDetectionSettings())
-                .Select(o => o.Item1);
+                .Select(o => o.Object);
 
             return new Playback(timedObjects, tempoMap, outputDevice, playbackSettings);
         }
@@ -223,7 +223,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             var timedObjects = trackChunks
                 .GetTimedEventsLazy(playbackSettings?.TimedEventDetectionSettings)
                 .GetNotesAndTimedEventsLazy(playbackSettings?.NoteDetectionSettings ?? new NoteDetectionSettings())
-                .Select(o => o.Item1);
+                .Select(o => o.Object);
 
             return new Playback(timedObjects, tempoMap, playbackSettings);
         }

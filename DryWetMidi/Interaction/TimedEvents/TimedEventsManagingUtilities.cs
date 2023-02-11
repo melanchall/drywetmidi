@@ -157,9 +157,9 @@ namespace Melanchall.DryWetMidi.Interaction
             var eventsCount = eventsCollections.Sum(c => c.Count);
             var result = new List<TimedEvent>(eventsCount);
 
-            foreach (var timedEventTuple in eventsCollections.GetTimedEventsLazy(eventsCount, settings))
+            foreach (var timedEventAt in eventsCollections.GetTimedEventsLazy(eventsCount, settings))
             {
-                result.Add(timedEventTuple.Item1);
+                result.Add(timedEventAt.Object);
             }
 
             return result;
@@ -462,11 +462,11 @@ namespace Melanchall.DryWetMidi.Interaction
             var iMatched = 0;
 
             var timesChanged = false;
-            var timedEvents = new List<Tuple<TimedEvent, int>>(eventsCount);
+            var timedEvents = new List<TimedObjectAt<TimedEvent>>(eventsCount);
 
-            foreach (var timedEventTuple in eventsCollections.GetTimedEventsLazy(eventsCount, settings, false))
+            foreach (var timedEventAt in eventsCollections.GetTimedEventsLazy(eventsCount, settings, false))
             {
-                var timedEvent = timedEventTuple.Item1;
+                var timedEvent = timedEventAt.Object;
                 if (match(timedEvent))
                 {
                     var deltaTime = timedEvent.Event.DeltaTime;
@@ -480,7 +480,7 @@ namespace Melanchall.DryWetMidi.Interaction
                     iMatched++;
                 }
 
-                timedEvents.Add(timedEventTuple);
+                timedEvents.Add(timedEventAt);
             }
 
             if (timesChanged)
@@ -810,7 +810,7 @@ namespace Melanchall.DryWetMidi.Interaction
             return file.GetTrackChunks().RemoveTimedEvents(match, settings);
         }
 
-        internal static IEnumerable<Tuple<TimedEvent, int>> GetTimedEventsLazy(this IEnumerable<TrackChunk> trackChunks, TimedEventDetectionSettings settings, bool cloneEvent = true)
+        internal static IEnumerable<TimedObjectAt<TimedEvent>> GetTimedEventsLazy(this IEnumerable<TrackChunk> trackChunks, TimedEventDetectionSettings settings, bool cloneEvent = true)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
 
@@ -820,7 +820,7 @@ namespace Melanchall.DryWetMidi.Interaction
             return eventsCollections.GetTimedEventsLazy(eventsCount, settings, cloneEvent);
         }
 
-        internal static IEnumerable<Tuple<TimedEvent, int>> GetTimedEventsLazy(this EventsCollection[] eventsCollections, int eventsCount, TimedEventDetectionSettings settings, bool cloneEvent = true)
+        internal static IEnumerable<TimedObjectAt<TimedEvent>> GetTimedEventsLazy(this EventsCollection[] eventsCollections, int eventsCount, TimedEventDetectionSettings settings, bool cloneEvent = true)
         {
             var eventsCollectionsCount = eventsCollections.Length;
 
@@ -831,7 +831,7 @@ namespace Melanchall.DryWetMidi.Interaction
             {
                 foreach (var timedEvent in eventsCollections[0].GetTimedEventsLazy(settings, cloneEvent))
                 {
-                    yield return Tuple.Create(timedEvent, 0);
+                    yield return new TimedObjectAt<TimedEvent>(timedEvent, 0);
                 }
 
                 yield break;
@@ -881,7 +881,7 @@ namespace Melanchall.DryWetMidi.Interaction
                     timedEvent._time = minTime;
                 }
 
-                yield return Tuple.Create(timedEvent, eventsCollectionIndex);
+                yield return new TimedObjectAt<TimedEvent>(timedEvent, eventsCollectionIndex);
 
                 eventsCollectionTimes[eventsCollectionIndex] = minTime;
                 eventsCollectionIndices[eventsCollectionIndex]++;
@@ -939,18 +939,18 @@ namespace Melanchall.DryWetMidi.Interaction
             }
         }
 
-        internal static void SortAndUpdateEvents(this EventsCollection[] eventsCollections, IEnumerable<Tuple<TimedEvent, int>> timedEvents)
+        internal static void SortAndUpdateEvents(this EventsCollection[] eventsCollections, IEnumerable<TimedObjectAt<TimedEvent>> timedEvents)
         {
             var times = new long[eventsCollections.Length];
             var indices = new int[eventsCollections.Length];
 
-            foreach (var e in timedEvents.OrderBy(e => e.Item1.Time))
+            foreach (var e in timedEvents.OrderBy(e => e.Object.Time))
             {
-                var midiEvent = e.Item1.Event;
-                midiEvent.DeltaTime = e.Item1.Time - times[e.Item2];
-                eventsCollections[e.Item2][indices[e.Item2]++] = midiEvent;
+                var midiEvent = e.Object.Event;
+                midiEvent.DeltaTime = e.Object.Time - times[e.AtIndex];
+                eventsCollections[e.AtIndex][indices[e.AtIndex]++] = midiEvent;
 
-                times[e.Item2] = e.Item1.Time;
+                times[e.AtIndex] = e.Object.Time;
             }
         }
 

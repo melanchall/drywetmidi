@@ -221,27 +221,25 @@ namespace Melanchall.DryWetMidi.Interaction
         }
 
         public IEnumerable<Note> GetNotesLazy(
-            IEnumerable<Tuple<TimedEvent, int>> timedEvents,
+            IEnumerable<TimedObjectAt<TimedEvent>> timedEvents,
             bool collectTimedEvents = false,
-            List<Tuple<TimedEvent, int>> collectedTimedEvents = null)
+            List<TimedObjectAt<TimedEvent>> collectedTimedEvents = null)
         {
             var notesDescriptors = new LinkedList<NoteDescriptor>();
             var notesDescriptorsNodes = new Dictionary<Tuple<int, int>, NoteOnsHolder>();
-
-            var respectEventsCollectionIndex = _noteDetectionSettings.NoteSearchContext == NoteSearchContext.SingleEventsCollection;
 
             foreach (var timedEventTuple in timedEvents)
             {
                 if (collectTimedEvents)
                     collectedTimedEvents.Add(timedEventTuple);
 
-                var timedEvent = timedEventTuple.Item1;
+                var timedEvent = timedEventTuple.Object;
                 switch (timedEvent.Event.EventType)
                 {
                     case MidiEventType.NoteOn:
                         {
                             var noteId = GetNoteEventId((NoteOnEvent)timedEvent.Event);
-                            var noteFullId = Tuple.Create(noteId, respectEventsCollectionIndex ? timedEventTuple.Item2 : -1);
+                            var noteFullId = Tuple.Create(noteId, timedEventTuple.AtIndex);
                             var node = notesDescriptors.AddLast(new NoteDescriptor(timedEvent));
 
                             NoteOnsHolder noteOnsHolder;
@@ -254,7 +252,7 @@ namespace Melanchall.DryWetMidi.Interaction
                     case MidiEventType.NoteOff:
                         {
                             var noteId = GetNoteEventId((NoteOffEvent)timedEvent.Event);
-                            var noteFullId = Tuple.Create(noteId, respectEventsCollectionIndex ? timedEventTuple.Item2 : -1);
+                            var noteFullId = Tuple.Create(noteId, timedEventTuple.AtIndex);
 
                             NoteOnsHolder noteOnsHolder;
                             LinkedListNode<NoteDescriptor> node;
@@ -293,28 +291,26 @@ namespace Melanchall.DryWetMidi.Interaction
         }
 
         public IEnumerable<Tuple<Note, int>> GetIndexedNotesLazy(
-            IEnumerable<Tuple<TimedEvent, int>> timedEvents,
+            IEnumerable<TimedObjectAt<TimedEvent>> timedEvents,
             bool collectTimedEvents = false,
-            List<Tuple<TimedEvent, int>> collectedTimedEvents = null)
+            List<TimedObjectAt<TimedEvent>> collectedTimedEvents = null)
         {
             var notesDescriptors = new LinkedList<IndexedNoteDescriptor>();
             var notesDescriptorsNodes = new Dictionary<Tuple<int, int>, IndexedNoteOnsHolder>();
-
-            var respectEventsCollectionIndex = _noteDetectionSettings.NoteSearchContext == NoteSearchContext.SingleEventsCollection;
 
             foreach (var timedEventTuple in timedEvents)
             {
                 if (collectTimedEvents)
                     collectedTimedEvents.Add(timedEventTuple);
 
-                var timedEvent = timedEventTuple.Item1;
+                var timedEvent = timedEventTuple.Object;
                 switch (timedEvent.Event.EventType)
                 {
                     case MidiEventType.NoteOn:
                         {
                             var noteId = GetNoteEventId((NoteOnEvent)timedEvent.Event);
-                            var noteFullId = Tuple.Create(noteId, respectEventsCollectionIndex ? timedEventTuple.Item2 : -1);
-                            var node = notesDescriptors.AddLast(new IndexedNoteDescriptor(timedEvent, timedEventTuple.Item2));
+                            var noteFullId = Tuple.Create(noteId, timedEventTuple.AtIndex);
+                            var node = notesDescriptors.AddLast(new IndexedNoteDescriptor(timedEvent, timedEventTuple.AtIndex));
 
                             IndexedNoteOnsHolder noteOnsHolder;
                             if (!notesDescriptorsNodes.TryGetValue(noteFullId, out noteOnsHolder))
@@ -326,7 +322,7 @@ namespace Melanchall.DryWetMidi.Interaction
                     case MidiEventType.NoteOff:
                         {
                             var noteId = GetNoteEventId((NoteOffEvent)timedEvent.Event);
-                            var noteFullId = Tuple.Create(noteId, respectEventsCollectionIndex ? timedEventTuple.Item2 : -1);
+                            var noteFullId = Tuple.Create(noteId, timedEventTuple.AtIndex);
 
                             IndexedNoteOnsHolder noteOnsHolder;
                             LinkedListNode<IndexedNoteDescriptor> node;

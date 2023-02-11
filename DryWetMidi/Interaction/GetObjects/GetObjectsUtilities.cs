@@ -64,9 +64,7 @@ namespace Melanchall.DryWetMidi.Interaction
             ThrowIfArgument.IsNull(nameof(midiEvents), midiEvents);
 
             return midiEvents
-                .GetTimedEventsLazy(settings?.TimedEventDetectionSettings
-                    ?? (objectType.HasFlag(ObjectType.Note) ? settings?.NoteDetectionSettings?.TimedEventDetectionSettings : null)
-                    ?? (objectType.HasFlag(ObjectType.Chord) ? settings?.ChordDetectionSettings?.NoteDetectionSettings?.TimedEventDetectionSettings : null))
+                .GetTimedEventsLazy(GetTimedEventDetectionSettings(objectType, settings))
                 .GetObjectsFromSortedTimedObjects(0, objectType, settings);
         }
 
@@ -94,9 +92,7 @@ namespace Melanchall.DryWetMidi.Interaction
                 "Rest object type specified.");
 
             return midiEvents
-                .GetTimedEventsLazy(settings?.TimedEventDetectionSettings
-                    ?? (objectType.HasFlag(ObjectType.Note) ? settings?.NoteDetectionSettings?.TimedEventDetectionSettings : null)
-                    ?? (objectType.HasFlag(ObjectType.Chord) ? settings?.ChordDetectionSettings?.NoteDetectionSettings?.TimedEventDetectionSettings : null))
+                .GetTimedEventsLazy(GetTimedEventDetectionSettings(objectType, settings))
                 .EnumerateObjectsFromSortedTimedObjects(objectType, settings);
         }
 
@@ -117,9 +113,7 @@ namespace Melanchall.DryWetMidi.Interaction
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
 
             return eventsCollection
-                .GetTimedEventsLazy(settings?.TimedEventDetectionSettings
-                    ?? (objectType.HasFlag(ObjectType.Note) ? settings?.NoteDetectionSettings?.TimedEventDetectionSettings : null)
-                    ?? (objectType.HasFlag(ObjectType.Chord) ? settings?.ChordDetectionSettings?.NoteDetectionSettings?.TimedEventDetectionSettings : null))
+                .GetTimedEventsLazy(GetTimedEventDetectionSettings(objectType, settings))
                 .GetObjectsFromSortedTimedObjects(eventsCollection.Count / 2, objectType, settings);
         }
 
@@ -166,13 +160,13 @@ namespace Melanchall.DryWetMidi.Interaction
                 settings?.TimedEventDetectionSettings
                     ?? (objectType.HasFlag(ObjectType.Note) ? settings?.NoteDetectionSettings?.TimedEventDetectionSettings : null)
                     ?? (objectType.HasFlag(ObjectType.Chord) ? settings?.ChordDetectionSettings?.NoteDetectionSettings?.TimedEventDetectionSettings : null));
-            var timedObjects = (IEnumerable<ITimedObject>)timedEvents.Select(o => o.Item1);
+            var timedObjects = (IEnumerable<ITimedObject>)timedEvents.Select(o => o.Object);
 
             if (objectType.HasFlag(ObjectType.Chord) || objectType.HasFlag(ObjectType.Note) || objectType.HasFlag(ObjectType.Rest))
             {
                 timedObjects = !objectType.HasFlag(ObjectType.Chord)
-                    ? timedEvents.GetNotesAndTimedEventsLazy(settings?.NoteDetectionSettings ?? new NoteDetectionSettings()).Select(o => o.Item1)
-                    : timedEvents.GetChordsAndNotesAndTimedEventsLazy(settings?.ChordDetectionSettings ?? new ChordDetectionSettings()).Select(o => o.Item1);
+                    ? timedEvents.GetNotesAndTimedEventsLazy(settings?.NoteDetectionSettings ?? new NoteDetectionSettings()).Select(o => o.Object)
+                    : timedEvents.GetChordsAndNotesAndTimedEventsLazy(settings?.ChordDetectionSettings ?? new ChordDetectionSettings()).Select(o => o.Object);
             }
 
             return timedObjects.GetObjectsFromSortedTimedObjects(eventsCount / 2, objectType, settings, false);
@@ -474,6 +468,13 @@ namespace Melanchall.DryWetMidi.Interaction
                     }
                 }
             }
+        }
+
+        private static TimedEventDetectionSettings GetTimedEventDetectionSettings(ObjectType objectType, ObjectDetectionSettings settings)
+        {
+            return settings?.TimedEventDetectionSettings
+                ?? (objectType.HasFlag(ObjectType.Note) ? settings?.NoteDetectionSettings?.TimedEventDetectionSettings : null)
+                ?? (objectType.HasFlag(ObjectType.Chord) ? settings?.ChordDetectionSettings?.NoteDetectionSettings?.TimedEventDetectionSettings : null);
         }
 
         #endregion

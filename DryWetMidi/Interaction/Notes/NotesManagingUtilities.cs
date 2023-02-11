@@ -105,7 +105,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
         private interface IObjectDescriptorIndexed : IObjectDescriptor
         {
-            Tuple<ITimedObject, int, int> GetIndexedObject(Func<NoteData, Note> constructor);
+            TimedObjectAt<ITimedObject> GetIndexedObject(Func<NoteData, Note> constructor);
         }
 
         private class NoteDescriptor : IObjectDescriptor
@@ -150,20 +150,17 @@ namespace Melanchall.DryWetMidi.Interaction
 
         private sealed class NoteDescriptorIndexed : NoteDescriptor, IObjectDescriptorIndexed
         {
-            private readonly int _noteOnIndex;
+            private readonly int _index;
 
-            public NoteDescriptorIndexed(TimedEvent noteOnTimedEvent, int noteOnIndex)
+            public NoteDescriptorIndexed(TimedEvent noteOnTimedEvent, int index)
                 : base(noteOnTimedEvent)
             {
-                _noteOnIndex = noteOnIndex;
-                NoteOffIndex = _noteOnIndex;
+                _index = index;
             }
 
-            public int NoteOffIndex { get; set; }
-
-            public Tuple<ITimedObject, int, int> GetIndexedObject(Func<NoteData, Note> constructor)
+            public TimedObjectAt<ITimedObject> GetIndexedObject(Func<NoteData, Note> constructor)
             {
-                return Tuple.Create(GetObject(constructor), _noteOnIndex, NoteOffIndex);
+                return new TimedObjectAt<ITimedObject>(GetObject(constructor), _index);
             }
         }
 
@@ -194,9 +191,9 @@ namespace Melanchall.DryWetMidi.Interaction
                 _index = index;
             }
 
-            public Tuple<ITimedObject, int, int> GetIndexedObject(Func<NoteData, Note> constructor)
+            public TimedObjectAt<ITimedObject> GetIndexedObject(Func<NoteData, Note> constructor)
             {
-                return Tuple.Create(GetObject(constructor), _index, _index);
+                return new TimedObjectAt<ITimedObject>(GetObject(constructor), _index);
             }
         }
 
@@ -850,7 +847,7 @@ namespace Melanchall.DryWetMidi.Interaction
             var iMatched = 0;
 
             var timeOrLengthChanged = false;
-            var collectedTimedEvents = canTimeOrLengthBeChanged ? new List<Tuple<TimedEvent, int>>(eventsCount) : null;
+            var collectedTimedEvents = canTimeOrLengthBeChanged ? new List<TimedObjectAt<TimedEvent>>(eventsCount) : null;
 
             var notesBuilder = new NotesBuilder(noteDetectionSettings);
             var notes = notesBuilder.GetNotesLazy(eventsCollections.GetTimedEventsLazy(eventsCount, noteDetectionSettings?.TimedEventDetectionSettings, false), canTimeOrLengthBeChanged, collectedTimedEvents);
@@ -912,26 +909,25 @@ namespace Melanchall.DryWetMidi.Interaction
             return iMatched;
         }
 
-        internal static IEnumerable<Tuple<ITimedObject, int, int>> GetNotesAndTimedEventsLazy(
-            this IEnumerable<Tuple<TimedEvent, int>> timedEvents,
+        internal static IEnumerable<TimedObjectAt<ITimedObject>> GetNotesAndTimedEventsLazy(
+            this IEnumerable<TimedObjectAt<TimedEvent>> timedEvents,
             NoteDetectionSettings settings)
         {
             var objectsDescriptors = new LinkedList<IObjectDescriptorIndexed>();
             var notesDescriptorsNodes = new Dictionary<Tuple<int, int>, NoteOnsHolderIndexed>();
 
-            var respectEventsCollectionIndex = settings.NoteSearchContext == NoteSearchContext.SingleEventsCollection;
             var constructor = settings?.Constructor;
 
             foreach (var timedEventTuple in timedEvents)
             {
-                var timedEvent = timedEventTuple.Item1;
+                var timedEvent = timedEventTuple.Object;
                 switch (timedEvent.Event.EventType)
                 {
                     case MidiEventType.NoteOn:
                         {
                             var noteId = GetNoteEventId((NoteOnEvent)timedEvent.Event);
-                            var noteFullId = Tuple.Create(noteId, respectEventsCollectionIndex ? timedEventTuple.Item2 : -1);
-                            var node = objectsDescriptors.AddLast(new NoteDescriptorIndexed(timedEvent, timedEventTuple.Item2));
+                            var noteFullId = Tuple.Create(noteId, timedEventTuple.AtIndex);
+                            var node = objectsDescriptors.AddLast(new NoteDescriptorIndexed(timedEvent, timedEventTuple.AtIndex));
 
                             NoteOnsHolderIndexed noteOnsHolder;
                             if (!notesDescriptorsNodes.TryGetValue(noteFullId, out noteOnsHolder))
@@ -943,20 +939,19 @@ namespace Melanchall.DryWetMidi.Interaction
                     case MidiEventType.NoteOff:
                         {
                             var noteId = GetNoteEventId((NoteOffEvent)timedEvent.Event);
-                            var noteFullId = Tuple.Create(noteId, respectEventsCollectionIndex ? timedEventTuple.Item2 : -1);
+                            var noteFullId = Tuple.Create(noteId, timedEventTuple.AtIndex);
 
                             NoteOnsHolderIndexed noteOnsHolder;
                             LinkedListNode<IObjectDescriptorIndexed> node;
 
                             if (!notesDescriptorsNodes.TryGetValue(noteFullId, out noteOnsHolder) || noteOnsHolder.Count == 0 || (node = noteOnsHolder.GetNext()).List == null)
                             {
-                                objectsDescriptors.AddLast(new TimedEventDescriptorIndexed(timedEvent, timedEventTuple.Item2));
+                                objectsDescriptors.AddLast(new TimedEventDescriptorIndexed(timedEvent, timedEventTuple.AtIndex));
                                 break;
                             }
 
                             var noteDescriptorIndexed = (NoteDescriptorIndexed)node.Value;
                             noteDescriptorIndexed.NoteOffTimedEvent = timedEvent;
-                            noteDescriptorIndexed.NoteOffIndex = timedEventTuple.Item2;
 
                             var previousNode = node.Previous;
                             if (previousNode != null)
@@ -978,9 +973,9 @@ namespace Melanchall.DryWetMidi.Interaction
                     default:
                         {
                             if (objectsDescriptors.Count == 0)
-                                yield return Tuple.Create((ITimedObject)timedEvent, timedEventTuple.Item2, timedEventTuple.Item2);
+                                yield return new TimedObjectAt<ITimedObject>(timedEvent, timedEventTuple.AtIndex);
                             else
-                                objectsDescriptors.AddLast(new TimedEventDescriptorIndexed(timedEvent, timedEventTuple.Item2));
+                                objectsDescriptors.AddLast(new TimedEventDescriptorIndexed(timedEvent, timedEventTuple.AtIndex));
                         }
                         break;
                 }

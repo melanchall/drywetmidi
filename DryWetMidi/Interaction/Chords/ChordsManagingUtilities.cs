@@ -31,7 +31,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
         private interface IObjectDescriptorIndexed : IObjectDescriptor
         {
-            Tuple<ITimedObject, int, int> IndexedTimedObject { get; }
+            TimedObjectAt<ITimedObject> IndexedTimedObject { get; }
         }
 
         private class TimedEventDescriptor : IObjectDescriptor
@@ -72,7 +72,7 @@ namespace Melanchall.DryWetMidi.Interaction
                 _index = index;
             }
 
-            public Tuple<ITimedObject, int, int> IndexedTimedObject => Tuple.Create(TimedObject, _index, _index);
+            public TimedObjectAt<ITimedObject> IndexedTimedObject => new TimedObjectAt<ITimedObject>(TimedObject, _index);
         }
 
         private class NoteDescriptor : IObjectDescriptor
@@ -93,16 +93,14 @@ namespace Melanchall.DryWetMidi.Interaction
         private class NoteDescriptorIndexed : NoteDescriptor, IObjectDescriptorIndexed
         {
             private readonly int _noteOnIndex;
-            private readonly int _noteOffIndex;
 
-            public NoteDescriptorIndexed(Note note, int noteOnIndex, int noteOffIndex, bool chordStart)
+            public NoteDescriptorIndexed(Note note, int noteOnIndex, bool chordStart)
                 : base(note, chordStart)
             {
                 _noteOnIndex = noteOnIndex;
-                _noteOffIndex = noteOffIndex;
             }
 
-            public Tuple<ITimedObject, int, int> IndexedTimedObject => Tuple.Create(TimedObject, _noteOnIndex, _noteOffIndex);
+            public TimedObjectAt<ITimedObject> IndexedTimedObject => new TimedObjectAt<ITimedObject>(TimedObject, _noteOnIndex);
         }
 
         private sealed class ChordDescriptor : IChordDescriptor
@@ -814,8 +812,8 @@ namespace Melanchall.DryWetMidi.Interaction
             return new MusicTheory.Chord(chord.Notes.OrderBy(n => n.NoteNumber).Select(n => n.NoteName).ToArray());
         }
 
-        internal static IEnumerable<Tuple<ITimedObject, int[]>> GetChordsAndNotesAndTimedEventsLazy(
-            this IEnumerable<Tuple<TimedEvent, int>> timedEvents,
+        internal static IEnumerable<TimedObjectAt<ITimedObject>> GetChordsAndNotesAndTimedEventsLazy(
+            this IEnumerable<TimedObjectAt<TimedEvent>> timedEvents,
             ChordDetectionSettings settings)
         {
             settings = settings ?? new ChordDetectionSettings();
@@ -826,19 +824,18 @@ namespace Melanchall.DryWetMidi.Interaction
             var chordsDescriptorsByChannel = new LinkedListNode<ChordDescriptorIndexed>[FourBitNumber.MaxValue + 1];
 
             var notesTolerance = settings.NotesTolerance;
-            var eventsCollectionShouldMatch = settings.ChordSearchContext == ChordSearchContext.SingleEventsCollection;
 
             foreach (var timedObjectTuple in timedEvents.GetNotesAndTimedEventsLazy(settings.NoteDetectionSettings ?? new NoteDetectionSettings()))
             {
-                var timedObject = timedObjectTuple.Item1;
+                var timedObject = timedObjectTuple.Object;
 
                 var timedEvent = timedObject as TimedEvent;
                 if (timedEvent != null)
                 {
                     if (timedObjects.Count == 0)
-                        yield return Tuple.Create(timedObject, new[] { timedObjectTuple.Item2 });
+                        yield return new TimedObjectAt<ITimedObject>(timedObject, timedObjectTuple.AtIndex);
                     else
-                        timedObjects.AddLast(new TimedEventDescriptorIndexed(timedEvent, timedObjectTuple.Item2));
+                        timedObjects.AddLast(new TimedEventDescriptorIndexed(timedEvent, timedObjectTuple.AtIndex));
 
                     continue;
                 }
@@ -848,14 +845,14 @@ namespace Melanchall.DryWetMidi.Interaction
 
                 if (timedObjects.Count == 0 || chordDescriptorNode == null || chordDescriptorNode.List == null)
                 {
-                    CreateChordDescriptor(chordsDescriptors, chordsDescriptorsByChannel, timedObjects, note, timedObjectTuple.Item2, timedObjectTuple.Item3, settings);
+                    CreateChordDescriptor(chordsDescriptors, chordsDescriptorsByChannel, timedObjects, note, timedObjectTuple.AtIndex, settings);
                 }
                 else
                 {
                     var chordDescriptor = chordDescriptorNode.Value;
-                    if (CanNoteBeAddedToChord(chordDescriptor, note, notesTolerance, timedObjectTuple.Item2, eventsCollectionShouldMatch))
+                    if (CanNoteBeAddedToChord(chordDescriptor, note, notesTolerance, timedObjectTuple.AtIndex))
                     {
-                        var noteNode = timedObjects.AddLast(new NoteDescriptorIndexed(note, timedObjectTuple.Item2, timedObjectTuple.Item3, false) { ChordDescriptor = chordDescriptor });
+                        var noteNode = timedObjects.AddLast(new NoteDescriptorIndexed(note, timedObjectTuple.AtIndex, false) { ChordDescriptor = chordDescriptor });
                         chordDescriptor.NotesNodes.Add(noteNode);
                     }
                     else
@@ -870,7 +867,7 @@ namespace Melanchall.DryWetMidi.Interaction
                             }
                         }
 
-                        CreateChordDescriptor(chordsDescriptors, chordsDescriptorsByChannel, timedObjects, note, timedObjectTuple.Item2, timedObjectTuple.Item3, settings);
+                        CreateChordDescriptor(chordsDescriptors, chordsDescriptorsByChannel, timedObjects, note, timedObjectTuple.AtIndex, settings);
                     }
                 }
             }
@@ -1012,7 +1009,7 @@ namespace Melanchall.DryWetMidi.Interaction
             var iMatched = 0;
 
             var timeOrLengthChanged = false;
-            var collectedTimedEvents = canTimeOrLengthBeChanged ? new List<Tuple<TimedEvent, int>>(eventsCount) : null;
+            var collectedTimedEvents = canTimeOrLengthBeChanged ? new List<TimedObjectAt<TimedEvent>>(eventsCount) : null;
 
             var chordsBuilder = new ChordsBuilder(settings);
             var chords = chordsBuilder.GetChordsLazy(eventsCollections.GetTimedEventsLazy(eventsCount, settings?.NoteDetectionSettings?.TimedEventDetectionSettings, false), canTimeOrLengthBeChanged, collectedTimedEvents);
@@ -1079,7 +1076,7 @@ namespace Melanchall.DryWetMidi.Interaction
             }
         }
 
-        private static IEnumerable<Tuple<ITimedObject, int[]>> GetTimedObjects(
+        private static IEnumerable<TimedObjectAt<ITimedObject>> GetTimedObjects(
             LinkedListNode<ChordDescriptorIndexed> startChordDescriptorNode,
             LinkedList<ChordDescriptorIndexed> chordsDescriptors,
             LinkedList<IObjectDescriptorIndexed> timedObjects,
@@ -1096,29 +1093,22 @@ namespace Melanchall.DryWetMidi.Interaction
                 {
                     var notesCount = chordDescriptor.NotesNodes.Count;
                     var notes = new Note[notesCount];
-                    var indices = new int[notesCount * 2];
 
                     for (var i = 0; i < notesCount; i++)
                     {
-                        var noteNode = chordDescriptor.NotesNodes[i];
-                        timedObjects.Remove(noteNode);
-
-                        var objectDescriptor = chordDescriptor.NotesNodes[i].Value;
-
-                        notes[i] = (Note)objectDescriptor.TimedObject;
-                        indices[i * 2] = objectDescriptor.IndexedTimedObject.Item2;
-                        indices[i * 2 + 1] = objectDescriptor.IndexedTimedObject.Item3;
+                        timedObjects.Remove(chordDescriptor.NotesNodes[i]);
+                        notes[i] = (Note)chordDescriptor.NotesNodes[i].Value.TimedObject;
                     }
 
-                    yield return Tuple.Create(
-                        (ITimedObject)(constructor == null ? new Chord(notes) : constructor(new ChordData(notes))),
-                        indices);
+                    yield return new TimedObjectAt<ITimedObject>(
+                        constructor == null ? new Chord(notes) : constructor(new ChordData(notes)),
+                        chordDescriptor.NotesNodes[0].Value.IndexedTimedObject.AtIndex);
                 }
 
                 for (var node = timedObjects.First; node != null && (!chordDescriptor.IsCompleted || !node.Value.ChordStart);)
                 {
                     var timedObject = node.Value.IndexedTimedObject;
-                    yield return Tuple.Create(timedObject.Item1, new[] { timedObject.Item2, timedObject.Item3 });
+                    yield return new TimedObjectAt<ITimedObject>(timedObject.Object, timedObject.AtIndex);
 
                     var nextNode = node.Next;
                     timedObjects.Remove(node);
@@ -1151,10 +1141,9 @@ namespace Melanchall.DryWetMidi.Interaction
             LinkedList<IObjectDescriptorIndexed> timedObjects,
             Note note,
             int noteOnIndex,
-            int noteOffIndex,
             ChordDetectionSettings settings)
         {
-            var noteDescriptor = new NoteDescriptorIndexed(note, noteOnIndex, noteOffIndex, true);
+            var noteDescriptor = new NoteDescriptorIndexed(note, noteOnIndex, true);
             var noteNode = timedObjects.AddLast(noteDescriptor);
             var chordDescriptor = new ChordDescriptorIndexed(note.Time, noteNode, settings.NotesMinCount) { EventsCollectionIndex = noteOnIndex };
             noteDescriptor.ChordDescriptor = chordDescriptor;
@@ -1166,9 +1155,9 @@ namespace Melanchall.DryWetMidi.Interaction
             return note.Time - chordDescriptor.Time <= notesTolerance;
         }
 
-        private static bool CanNoteBeAddedToChord(ChordDescriptorIndexed chordDescriptor, Note note, long notesTolerance, int eventsCollectionIndex, bool eventsCollectionShouldMatch)
+        private static bool CanNoteBeAddedToChord(ChordDescriptorIndexed chordDescriptor, Note note, long notesTolerance, int eventsCollectionIndex)
         {
-            return note.Time - chordDescriptor.Time <= notesTolerance && (!eventsCollectionShouldMatch || chordDescriptor.EventsCollectionIndex == eventsCollectionIndex);
+            return note.Time - chordDescriptor.Time <= notesTolerance && chordDescriptor.EventsCollectionIndex == eventsCollectionIndex;
         }
 
         #endregion

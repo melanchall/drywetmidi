@@ -111,7 +111,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
             return trackChunks
                 .GetTimedEventsLazy(null, false)
-                .Select(e => e.Item1)
+                .Select(e => e.Object)
                 .LastOrDefault()
                 ?.TimeAs<TTimeSpan>(tempoMap) ?? TimeSpanUtilities.GetZeroTimeSpan<TTimeSpan>();
         }
@@ -145,7 +145,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
             return trackChunks
                 .GetTimedEventsLazy(null, false)
-                .Select(e => e.Item1)
+                .Select(e => e.Object)
                 .LastOrDefault()
                 ?.TimeAs(durationType, tempoMap) ?? TimeSpanUtilities.GetZeroTimeSpan(durationType);
         }

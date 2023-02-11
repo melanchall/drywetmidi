@@ -124,26 +124,6 @@ So every _Note Off_ event will be combined with **first** free _Note On_ event i
 
 So _Note Off_ events will be combined with **last** free _Note On_ event into a note.
 
-#### `NoteSearchContext`
-
-The [NoteSearchContext](xref:Melanchall.DryWetMidi.Interaction.NoteDetectionSettings.NoteSearchContext) property defines a context to search notes within. The default value is [NoteSearchContext.SingleEventsCollection](xref:Melanchall.DryWetMidi.Interaction.NoteSearchContext.SingleEventsCollection). The property is applicable only to `GetChords` that accepts collection of [TrackChunk](xref:Melanchall.DryWetMidi.Core.TrackChunk)s and [MidiFile](xref:Melanchall.DryWetMidi.Core.MidiFile).
-
-To understand how this policy works let's take a look at the following events sequences within two track chunks:
-
-![NoteSearchContext-Initial](images/Getting-objects-NoteSearchContext-Initial.png)
-
-where empty circle and filled one mean _Note On_ and _Note Off_ events correspondingly; cross means any other event. So we have two overlapped notes here (we assume all note events have the same note number). So we have two overlapped notes here. We assume that [NoteStartDetectionPolicy.FirstNoteOn](xref:Melanchall.DryWetMidi.Interaction.NoteStartDetectionPolicy.FirstNoteOn) is used to search a note's start and all note events have the same note number.
-
-If we use [NoteSearchContext.SingleEventsCollection](xref:Melanchall.DryWetMidi.Interaction.NoteSearchContext.SingleEventsCollection) as the context, notes will be constructed in the following way:
-
-![NoteSearchContext-SingleEventsCollection](images/Getting-objects-NoteSearchContext-SingleEventsCollection.png)
-
-So every _Note On_ event will be combined with _Note Off_ one within the **same** events collection. But if we use [NoteSearchContext.AllEventsCollections](xref:Melanchall.DryWetMidi.Interaction.NoteSearchContext.AllEventsCollections), notes will be constructed in a new way:
-
-![NoteSearchContext-AllEventsCollections](images/Getting-objects-NoteSearchContext-AllEventsCollections.png)
-
-So _Note On_ event can be combined now with _Note Off_ one within **different** events collection, i.e. ends of a note can be placed in difefrent track chunks.
-
 ## GetChords
 
 There is the [ChordsManagingUtilities](xref:Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities) class which provides useful methods `GetChords` to get notes from a MIDI file or track chunk. For example, you can get chords a MIDI file contains with this code:
@@ -300,24 +280,6 @@ Last note will not be turned into a chord because count of notes for a chord wil
 
 First possible chord will contain two notes and second chord will contain one note. In both cases count of notes is less than the specified minimum count.
 
-#### `ChordSearchContext`
-
-The [ChordSearchContext](xref:Melanchall.DryWetMidi.Interaction.ChordDetectionSettings.ChordSearchContext) property defines a context to search chords within. The default value is [ChordSearchContext.SingleEventsCollection](xref:Melanchall.DryWetMidi.Interaction.ChordSearchContext.SingleEventsCollection). The property is applicable only to `GetChords` that accepts collection of [TrackChunk](xref:Melanchall.DryWetMidi.Core.TrackChunk)s and [MidiFile](xref:Melanchall.DryWetMidi.Core.MidiFile).
-
-To understand how this policy works let's take a look at the following data within two track chunks:
-
-![ChordSearchContext-Initial](images/Getting-objects-ChordSearchContext-Initial.png)
-
-If we use [ChordSearchContext.SingleEventsCollection](xref:Melanchall.DryWetMidi.Interaction.ChordSearchContext.SingleEventsCollection) as the context, chords will be constructed in the following way:
-
-![ChordSearchContext-SingleEventsCollection](images/Getting-objects-ChordSearchContext-SingleEventsCollection.png)
-
-So chords will be constructed only from notes within the same events collection (track chunk). But if we use [ChordSearchContext.AllEventsCollections](xref:Melanchall.DryWetMidi.Interaction.ChordSearchContext.AllEventsCollections), chords will be constructed in a new way:
-
-![ChordSearchContext-AllEventsCollections](images/Getting-objects-ChordSearchContext-AllEventsCollections.png)
-
-So a chord can be constructed from notes within different events collections.
-
 ## GetObjects
 
 All methods we saw before return collection of objects of the **same type**. So you can get only either notes or chords or timed events. To highlight the problem, let's take a look at the following events sequence:
@@ -381,7 +343,6 @@ namespace DwmExamples
             Console.WriteLine("Getting chords...");
             WriteTimedObjects(midiFile.GetChords(new ChordDetectionSettings
             {
-                ChordSearchContext = ChordSearchContext.AllEventsCollections,
                 NotesMinCount = 2
             }));
 
@@ -479,7 +440,6 @@ WriteTimedObjects(midiFile.GetObjects(
     {
         ChordDetectionSettings = new ChordDetectionSettings
         {
-            ChordSearchContext = ChordSearchContext.AllEventsCollections,
             NotesMinCount = 2
         }
     }));

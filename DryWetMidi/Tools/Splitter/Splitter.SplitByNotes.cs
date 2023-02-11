@@ -49,11 +49,11 @@ namespace Melanchall.DryWetMidi.Tools
 
             var timedEvents = midiFile.GetTrackChunks().GetTimedEventsLazy(null);
             if (filter != null)
-                timedEvents = timedEvents.Where(e => filter(e.Item1));
+                timedEvents = timedEvents.Where(e => filter(e.Object));
 
             foreach (var timedEventTuple in timedEvents)
             {
-                var timedEvent = timedEventTuple.Item1;
+                var timedEvent = timedEventTuple.Object;
 
                 var noteEvent = timedEvent.Event as NoteEvent;
                 if (noteEvent != null)

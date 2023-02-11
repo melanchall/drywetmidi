@@ -272,87 +272,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             });
 
         [Test]
-        public void GetNotes_DetectionSettings_TrackChunks_AllEventsCollections_FirstNoteOn_1([Values] bool wrapToFile) => GetNotes_DetectionSettings_TrackChunks(
-            wrapToFile,
-            new NoteDetectionSettings
-            {
-                NoteStartDetectionPolicy = NoteStartDetectionPolicy.FirstNoteOn,
-                NoteSearchContext = NoteSearchContext.AllEventsCollections
-            },
-            midiEvents: new[]
-            {
-                new MidiEvent[]
-                {
-                    new NoteOnEvent(),
-                    new NoteOnEvent(),
-                },
-                new MidiEvent[]
-                {
-                    new NoteOffEvent(),
-                    new NoteOffEvent(),
-                }
-            },
-            new[]
-            {
-                new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue },
-                new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue },
-            });
-
-        [Test]
-        public void GetNotes_DetectionSettings_TrackChunks_AllEventsCollections_FirstNoteOn_2([Values] bool wrapToFile) => GetNotes_DetectionSettings_TrackChunks(
-            wrapToFile,
-            new NoteDetectionSettings
-            {
-                NoteStartDetectionPolicy = NoteStartDetectionPolicy.FirstNoteOn,
-                NoteSearchContext = NoteSearchContext.AllEventsCollections
-            },
-            midiEvents: new[]
-            {
-                new MidiEvent[]
-                {
-                    new NoteOnEvent(),
-                },
-                new MidiEvent[]
-                {
-                    new NoteOnEvent(),
-                    new NoteOffEvent(),
-                    new NoteOffEvent(),
-                }
-            },
-            new[]
-            {
-                new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue },
-                new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue },
-            });
-
-        [Test]
-        public void GetNotes_DetectionSettings_TrackChunks_AllEventsCollections_FirstNoteOn_3([Values] bool wrapToFile) => GetNotes_DetectionSettings_TrackChunks(
-            wrapToFile,
-            new NoteDetectionSettings
-            {
-                NoteStartDetectionPolicy = NoteStartDetectionPolicy.FirstNoteOn,
-                NoteSearchContext = NoteSearchContext.AllEventsCollections
-            },
-            midiEvents: new[]
-            {
-                new MidiEvent[]
-                {
-                    new NoteOnEvent(),
-                    new NoteOnEvent(),
-                    new NoteOffEvent(),
-                },
-                new MidiEvent[]
-                {
-                    new NoteOffEvent(),
-                }
-            },
-            new[]
-            {
-                new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue },
-                new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue },
-            });
-
-        [Test]
         public void GetNotes_DetectionSettings_TrackChunks_FirstNoteOn_4([Values] bool wrapToFile) => GetNotes_DetectionSettings_TrackChunks(
             wrapToFile,
             new NoteDetectionSettings { NoteStartDetectionPolicy = NoteStartDetectionPolicy.FirstNoteOn },
@@ -402,90 +321,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             });
 
         [Test]
-        public void GetNotes_DetectionSettings_TrackChunks_AllEventsCollections_FirstNoteOn_10([Values] bool wrapToFile) => GetNotes_DetectionSettings_TrackChunks(
-            wrapToFile,
-            new NoteDetectionSettings
-            {
-                NoteStartDetectionPolicy = NoteStartDetectionPolicy.FirstNoteOn,
-                NoteSearchContext = NoteSearchContext.AllEventsCollections
-            },
-            midiEvents: new[]
-            {
-                new MidiEvent[]
-                {
-                    new NoteOnEvent(),
-                    new NoteOnEvent { DeltaTime = 100 },
-                    new NoteOffEvent { DeltaTime = 50 },
-                    new NoteOffEvent(),
-                },
-                new MidiEvent[]
-                {
-                    new NoteOnEvent { DeltaTime = 100 },
-                    new NoteOffEvent(),
-                }
-            },
-            new[]
-            {
-                new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue, Length = 100 },
-                new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue, Time = 100, Length = 50 },
-                new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue, Time = 100, Length = 50 },
-            });
-
-        [Test]
-        public void GetNotes_DetectionSettings_TrackChunks_AllEventsCollections_FirstNoteOn_4([Values] bool wrapToFile) => GetNotes_DetectionSettings_TrackChunks(
-            wrapToFile,
-            new NoteDetectionSettings
-            {
-                NoteStartDetectionPolicy = NoteStartDetectionPolicy.FirstNoteOn,
-                NoteSearchContext = NoteSearchContext.AllEventsCollections
-            },
-            midiEvents: new[]
-            {
-                new MidiEvent[]
-                {
-                    new NoteOnEvent(),
-                    new NoteOnEvent { DeltaTime = 100 },
-                },
-                new MidiEvent[]
-                {
-                    new NoteOffEvent { DeltaTime = 100 },
-                    new NoteOffEvent(),
-                }
-            },
-            new[]
-            {
-                new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue, Length = 100 },
-                new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue, Time = 100 },
-            });
-
-        [Test]
-        public void GetNotes_DetectionSettings_TrackChunks_AllEventsCollections_FirstNoteOn_5([Values] bool wrapToFile) => GetNotes_DetectionSettings_TrackChunks(
-            wrapToFile,
-            new NoteDetectionSettings
-            {
-                NoteStartDetectionPolicy = NoteStartDetectionPolicy.FirstNoteOn,
-                NoteSearchContext = NoteSearchContext.AllEventsCollections
-            },
-            midiEvents: new[]
-            {
-                new MidiEvent[]
-                {
-                    new NoteOnEvent(),
-                    new NoteOnEvent { DeltaTime = 100 },
-                    new NoteOffEvent(),
-                },
-                new MidiEvent[]
-                {
-                    new NoteOffEvent { DeltaTime = 100 },
-                }
-            },
-            new[]
-            {
-                new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue, Length = 100 },
-                new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue, Time = 100 },
-            });
-
-        [Test]
         public void GetNotes_DetectionSettings_TrackChunks_FirstNoteOn_6([Values] bool wrapToFile) => GetNotes_DetectionSettings_TrackChunks(
             wrapToFile,
             new NoteDetectionSettings { NoteStartDetectionPolicy = NoteStartDetectionPolicy.FirstNoteOn },
@@ -512,33 +347,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             });
 
         [Test]
-        public void GetNotes_DetectionSettings_TrackChunks_AllEventsCollections_FirstNoteOn_6([Values] bool wrapToFile) => GetNotes_DetectionSettings_TrackChunks(
-            wrapToFile,
-            new NoteDetectionSettings
-            {
-                NoteStartDetectionPolicy = NoteStartDetectionPolicy.FirstNoteOn,
-                NoteSearchContext = NoteSearchContext.AllEventsCollections
-            },
-            midiEvents: new[]
-            {
-                new MidiEvent[]
-                {
-                    new NoteOnEvent { DeltaTime = 100 },
-                    new NoteOnEvent { DeltaTime = 10 },
-                },
-                new MidiEvent[]
-                {
-                    new NoteOffEvent { DeltaTime = 180 },
-                    new NoteOffEvent { DeltaTime = 50 },
-                }
-            },
-            new[]
-            {
-                new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue, Time = 100, Length = 80 },
-                new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue, Time = 110, Length = 120 },
-            });
-
-        [Test]
         public void GetNotes_DetectionSettings_TrackChunks_FirstNoteOn_7([Values] bool wrapToFile) => GetNotes_DetectionSettings_TrackChunks(
             wrapToFile,
             new NoteDetectionSettings { NoteStartDetectionPolicy = NoteStartDetectionPolicy.FirstNoteOn },
@@ -560,33 +368,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             new[]
             {
                 new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue },
-                new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue, Time = 100, Length = 80 },
-                new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue, Time = 110, Length = 120 },
-            });
-
-        [Test]
-        public void GetNotes_DetectionSettings_TrackChunks_AllEventsCollections_FirstNoteOn_7([Values] bool wrapToFile) => GetNotes_DetectionSettings_TrackChunks(
-            wrapToFile,
-            new NoteDetectionSettings
-            {
-                NoteStartDetectionPolicy = NoteStartDetectionPolicy.FirstNoteOn,
-                NoteSearchContext = NoteSearchContext.AllEventsCollections
-            },
-            midiEvents: new[]
-            {
-                new MidiEvent[]
-                {
-                    new NoteOnEvent { DeltaTime = 100 },
-                    new NoteOnEvent { DeltaTime = 10 },
-                    new NoteOffEvent { DeltaTime = 70 },
-                },
-                new MidiEvent[]
-                {
-                    new NoteOffEvent { DeltaTime = 230 },
-                }
-            },
-            new[]
-            {
                 new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue, Time = 100, Length = 80 },
                 new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue, Time = 110, Length = 120 },
             });
@@ -621,60 +402,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             });
 
         [Test]
-        public void GetNotes_DetectionSettings_TrackChunks_AllEventsCollections_FirstNoteOn_8([Values] bool wrapToFile) => GetNotes_DetectionSettings_TrackChunks(
-            wrapToFile,
-            new NoteDetectionSettings
-            {
-                NoteStartDetectionPolicy = NoteStartDetectionPolicy.FirstNoteOn,
-                NoteSearchContext = NoteSearchContext.AllEventsCollections
-            },
-            midiEvents: new[]
-            {
-                new MidiEvent[]
-                {
-                    new NoteOnEvent { DeltaTime = 100 },
-                },
-                new MidiEvent[]
-                {
-                    new NoteOnEvent { DeltaTime = 110 },
-                    new NoteOffEvent { DeltaTime = 70 },
-                    new NoteOffEvent { DeltaTime = 50 },
-                }
-            },
-            new[]
-            {
-                new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue, Time = 100, Length = 80 },
-                new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue, Time = 110, Length = 120 },
-            });
-
-        [Test]
-        public void GetNotes_DetectionSettings_TrackChunks_AllEventsCollections_FirstNoteOn_9([Values] bool wrapToFile) => GetNotes_DetectionSettings_TrackChunks(
-            wrapToFile,
-            new NoteDetectionSettings
-            {
-                NoteStartDetectionPolicy = NoteStartDetectionPolicy.FirstNoteOn,
-                NoteSearchContext = NoteSearchContext.AllEventsCollections
-            },
-            midiEvents: new[]
-            {
-                new MidiEvent[]
-                {
-                    new NoteOnEvent { DeltaTime = 100 },
-                },
-                new MidiEvent[]
-                {
-                    new NoteOnEvent { DeltaTime = 110 },
-                    new NoteOffEvent { DeltaTime = 70 },
-                    new NoteOffEvent { DeltaTime = 50 },
-                }
-            },
-            new[]
-            {
-                new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue, Time = 100, Length = 80 },
-                new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue, Time = 110, Length = 120 },
-            });
-
-        [Test]
         public void GetNotes_DetectionSettings_TrackChunks_LastNoteOn_1([Values] bool wrapToFile) => GetNotes_DetectionSettings_TrackChunks(
             wrapToFile,
             new NoteDetectionSettings { NoteStartDetectionPolicy = NoteStartDetectionPolicy.LastNoteOn },
@@ -696,87 +423,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             new[]
             {
                 new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue },
-                new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue },
-                new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue },
-            });
-
-        [Test]
-        public void GetNotes_DetectionSettings_TrackChunks_AllEventsCollections_LastNoteOn_1([Values] bool wrapToFile) => GetNotes_DetectionSettings_TrackChunks(
-            wrapToFile,
-            new NoteDetectionSettings
-            {
-                NoteStartDetectionPolicy = NoteStartDetectionPolicy.LastNoteOn,
-                NoteSearchContext = NoteSearchContext.AllEventsCollections
-            },
-            midiEvents: new[]
-            {
-                new MidiEvent[]
-                {
-                    new NoteOnEvent(),
-                    new NoteOnEvent(),
-                },
-                new MidiEvent[]
-                {
-                    new NoteOffEvent(),
-                    new NoteOffEvent(),
-                }
-            },
-            new[]
-            {
-                new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue },
-                new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue },
-            });
-
-        [Test]
-        public void GetNotes_DetectionSettings_TrackChunks_AllEventsCollections_LastNoteOn_2([Values] bool wrapToFile) => GetNotes_DetectionSettings_TrackChunks(
-            wrapToFile,
-            new NoteDetectionSettings
-            {
-                NoteStartDetectionPolicy = NoteStartDetectionPolicy.LastNoteOn,
-                NoteSearchContext = NoteSearchContext.AllEventsCollections
-            },
-            midiEvents: new[]
-            {
-                new MidiEvent[]
-                {
-                    new NoteOnEvent(),
-                },
-                new MidiEvent[]
-                {
-                    new NoteOnEvent(),
-                    new NoteOffEvent(),
-                    new NoteOffEvent(),
-                }
-            },
-            new[]
-            {
-                new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue },
-                new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue },
-            });
-
-        [Test]
-        public void GetNotes_DetectionSettings_TrackChunks_AllEventsCollections_LastNoteOn_3([Values] bool wrapToFile) => GetNotes_DetectionSettings_TrackChunks(
-            wrapToFile,
-            new NoteDetectionSettings
-            {
-                NoteStartDetectionPolicy = NoteStartDetectionPolicy.LastNoteOn,
-                NoteSearchContext = NoteSearchContext.AllEventsCollections
-            },
-            midiEvents: new[]
-            {
-                new MidiEvent[]
-                {
-                    new NoteOnEvent(),
-                    new NoteOnEvent(),
-                    new NoteOffEvent(),
-                },
-                new MidiEvent[]
-                {
-                    new NoteOffEvent(),
-                }
-            },
-            new[]
-            {
                 new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue },
                 new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue },
             });
@@ -804,33 +450,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             {
                 new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue, Length = 100 },
                 new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue, Time = 100 },
-                new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue, Time = 100 },
-            });
-
-        [Test]
-        public void GetNotes_DetectionSettings_TrackChunks_AllEventsCollections_LastNoteOn_4([Values] bool wrapToFile) => GetNotes_DetectionSettings_TrackChunks(
-            wrapToFile,
-            new NoteDetectionSettings
-            {
-                NoteStartDetectionPolicy = NoteStartDetectionPolicy.LastNoteOn,
-                NoteSearchContext = NoteSearchContext.AllEventsCollections
-            },
-            midiEvents: new[]
-            {
-                new MidiEvent[]
-                {
-                    new NoteOnEvent(),
-                    new NoteOnEvent { DeltaTime = 100 },
-                },
-                new MidiEvent[]
-                {
-                    new NoteOffEvent { DeltaTime = 100 },
-                    new NoteOffEvent(),
-                }
-            },
-            new[]
-            {
-                new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue, Length = 100 },
                 new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue, Time = 100 },
             });
 
@@ -867,60 +486,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             });
 
         [Test]
-        public void GetNotes_DetectionSettings_TrackChunks_AllEventsCollections_LastNoteOn_5([Values] bool wrapToFile) => GetNotes_DetectionSettings_TrackChunks(
-            wrapToFile,
-            new NoteDetectionSettings
-            {
-                NoteStartDetectionPolicy = NoteStartDetectionPolicy.LastNoteOn,
-                NoteSearchContext = NoteSearchContext.AllEventsCollections
-            },
-            midiEvents: new[]
-            {
-                new MidiEvent[]
-                {
-                    new NoteOnEvent(),
-                },
-                new MidiEvent[]
-                {
-                    new NoteOnEvent { DeltaTime = 100 },
-                    new NoteOffEvent(),
-                    new NoteOffEvent(),
-                }
-            },
-            new[]
-            {
-                new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue, Length = 100 },
-                new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue, Time = 100 },
-            });
-
-        [Test]
-        public void GetNotes_DetectionSettings_TrackChunks_AllEventsCollections_LastNoteOn_6([Values] bool wrapToFile) => GetNotes_DetectionSettings_TrackChunks(
-            wrapToFile,
-            new NoteDetectionSettings
-            {
-                NoteStartDetectionPolicy = NoteStartDetectionPolicy.LastNoteOn,
-                NoteSearchContext = NoteSearchContext.AllEventsCollections
-            },
-            midiEvents: new[]
-            {
-                new MidiEvent[]
-                {
-                    new NoteOnEvent(),
-                    new NoteOnEvent { DeltaTime = 100 },
-                    new NoteOffEvent(),
-                },
-                new MidiEvent[]
-                {
-                    new NoteOffEvent { DeltaTime = 100 },
-                }
-            },
-            new[]
-            {
-                new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue, Length = 100 },
-                new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue, Time = 100 },
-            });
-
-        [Test]
         public void GetNotes_DetectionSettings_TrackChunks_LastNoteOn_7([Values] bool wrapToFile) => GetNotes_DetectionSettings_TrackChunks(
             wrapToFile,
             new NoteDetectionSettings { NoteStartDetectionPolicy = NoteStartDetectionPolicy.LastNoteOn },
@@ -942,33 +507,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             new[]
             {
                 new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue },
-                new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue, Time = 100, Length = 130 },
-                new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue, Time = 110, Length = 70 },
-            });
-
-        [Test]
-        public void GetNotes_DetectionSettings_TrackChunks_AllEventsCollections_LastNoteOn_7([Values] bool wrapToFile) => GetNotes_DetectionSettings_TrackChunks(
-            wrapToFile,
-            new NoteDetectionSettings
-            {
-                NoteStartDetectionPolicy = NoteStartDetectionPolicy.LastNoteOn,
-                NoteSearchContext = NoteSearchContext.AllEventsCollections
-            },
-            midiEvents: new[]
-            {
-                new MidiEvent[]
-                {
-                    new NoteOnEvent { DeltaTime = 100 },
-                    new NoteOnEvent { DeltaTime = 10 },
-                },
-                new MidiEvent[]
-                {
-                    new NoteOffEvent { DeltaTime = 180 },
-                    new NoteOffEvent { DeltaTime = 50 },
-                }
-            },
-            new[]
-            {
                 new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue, Time = 100, Length = 130 },
                 new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue, Time = 110, Length = 70 },
             });
@@ -1000,33 +538,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             });
 
         [Test]
-        public void GetNotes_DetectionSettings_TrackChunks_AllEventsCollections_LastNoteOn_8([Values] bool wrapToFile) => GetNotes_DetectionSettings_TrackChunks(
-            wrapToFile,
-            new NoteDetectionSettings
-            {
-                NoteStartDetectionPolicy = NoteStartDetectionPolicy.LastNoteOn,
-                NoteSearchContext = NoteSearchContext.AllEventsCollections
-            },
-            midiEvents: new[]
-            {
-                new MidiEvent[]
-                {
-                    new NoteOnEvent { DeltaTime = 100 },
-                },
-                new MidiEvent[]
-                {
-                    new NoteOnEvent { DeltaTime = 110 },
-                    new NoteOffEvent { DeltaTime = 70 },
-                    new NoteOffEvent { DeltaTime = 50 },
-                }
-            },
-            new[]
-            {
-                new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue, Time = 100, Length = 130 },
-                new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue, Time = 110, Length = 70 },
-            });
-
-        [Test]
         public void GetNotes_DetectionSettings_TrackChunks_LastNoteOn_9([Values] bool wrapToFile) => GetNotes_DetectionSettings_TrackChunks(
             wrapToFile,
             new NoteDetectionSettings { NoteStartDetectionPolicy = NoteStartDetectionPolicy.LastNoteOn },
@@ -1052,33 +563,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue, Time = 100, Length = 130 },
                 new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue, Time = 100, Length = 130 },
                 new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue, Time = 110, Length = 70 },
-                new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue, Time = 110, Length = 70 },
-            });
-
-        [Test]
-        public void GetNotes_DetectionSettings_TrackChunks_AllEventsCollections_LastNoteOn_9([Values] bool wrapToFile) => GetNotes_DetectionSettings_TrackChunks(
-            wrapToFile,
-            new NoteDetectionSettings
-            {
-                NoteStartDetectionPolicy = NoteStartDetectionPolicy.LastNoteOn,
-                NoteSearchContext = NoteSearchContext.AllEventsCollections
-            },
-            midiEvents: new[]
-            {
-                new MidiEvent[]
-                {
-                    new NoteOnEvent { DeltaTime = 100 },
-                    new NoteOnEvent { DeltaTime = 10 },
-                    new NoteOffEvent { DeltaTime = 70 },
-                },
-                new MidiEvent[]
-                {
-                    new NoteOffEvent { DeltaTime = 230 },
-                }
-            },
-            new[]
-            {
-                new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue, Time = 100, Length = 130 },
                 new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue, Time = 110, Length = 70 },
             });
 

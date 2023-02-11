@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Melanchall.DryWetMidi.Common;
 
 namespace Melanchall.DryWetMidi.Interaction
@@ -106,15 +105,13 @@ namespace Melanchall.DryWetMidi.Interaction
             }
         }
 
-        public IEnumerable<Chord> GetChordsLazy(IEnumerable<Tuple<TimedEvent, int>> timedEvents, bool collectTimedEvents = false, List<Tuple<TimedEvent, int>> collectedTimedEvents = null)
+        public IEnumerable<Chord> GetChordsLazy(IEnumerable<TimedObjectAt<TimedEvent>> timedEvents, bool collectTimedEvents = false, List<TimedObjectAt<TimedEvent>> collectedTimedEvents = null)
         {
             var chordsDescriptors = new LinkedList<ChordDescriptorIndexed>();
             var chordsDescriptorsByChannel = new LinkedListNode<ChordDescriptorIndexed>[FourBitNumber.MaxValue + 1];
 
             var notesBuilder = new NotesBuilder(_chordDetectionSettings.NoteDetectionSettings);
             var notes = notesBuilder.GetIndexedNotesLazy(timedEvents, collectTimedEvents, collectedTimedEvents);
-
-            var eventsCollectionShouldMatch = _chordDetectionSettings.ChordSearchContext == ChordSearchContext.SingleEventsCollection;
 
             foreach (var noteTuple in notes)
             {
@@ -128,7 +125,7 @@ namespace Melanchall.DryWetMidi.Interaction
                 else
                 {
                     var chordDescriptor = chordDescriptorNode.Value;
-                    if (CanNoteBeAddedToChord(chordDescriptor, note, _chordDetectionSettings.NotesTolerance, noteTuple.Item2, eventsCollectionShouldMatch))
+                    if (CanNoteBeAddedToChord(chordDescriptor, note, _chordDetectionSettings.NotesTolerance, noteTuple.Item2))
                     {
                         chordDescriptor.Notes.Add(note);
                     }
@@ -202,9 +199,9 @@ namespace Melanchall.DryWetMidi.Interaction
             return note.Time - chordDescriptor.Time <= notesTolerance;
         }
 
-        private static bool CanNoteBeAddedToChord(ChordDescriptorIndexed chordDescriptor, Note note, long notesTolerance, int eventsCollectionIndex, bool eventsCollectionShouldMatch)
+        private static bool CanNoteBeAddedToChord(ChordDescriptorIndexed chordDescriptor, Note note, long notesTolerance, int eventsCollectionIndex)
         {
-            return note.Time - chordDescriptor.Time <= notesTolerance && (!eventsCollectionShouldMatch || chordDescriptor.EventsCollectionIndex == eventsCollectionIndex);
+            return note.Time - chordDescriptor.Time <= notesTolerance && chordDescriptor.EventsCollectionIndex == eventsCollectionIndex;
         }
 
         #endregion
