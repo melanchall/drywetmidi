@@ -11,6 +11,52 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
     [TestFixture]
     public sealed partial class TimedObjectsManagerTests
     {
+        #region Nested classes
+
+        private sealed class TimedObjectsComparerOnSameEventTime : TimedObjectsComparer
+        {
+            private readonly Comparison<MidiEvent> _sameTimeEventsComparison;
+
+            public TimedObjectsComparerOnSameEventTime()
+                : this(null)
+            {
+            }
+
+            public TimedObjectsComparerOnSameEventTime(Comparison<MidiEvent> sameTimeEventsComparison)
+            {
+                _sameTimeEventsComparison = sameTimeEventsComparison;
+            }
+
+            public override int Compare(ITimedObject x, ITimedObject y)
+            {
+                if (ReferenceEquals(x, y))
+                    return 0;
+
+                if (ReferenceEquals(x, null))
+                    return -1;
+
+                if (ReferenceEquals(y, null))
+                    return 1;
+
+                var baseResult = Math.Sign(x.Time - y.Time);
+                if (baseResult != 0)
+                    return baseResult;
+
+                //
+
+                var timedEventX = x as TimedEvent;
+                var timedEventY = y as TimedEvent;
+                if (timedEventX == null || timedEventY == null)
+                    return 0;
+
+                //
+
+                return _sameTimeEventsComparison?.Invoke(timedEventX.Event, timedEventY.Event) ?? 0;
+            }
+        }
+
+        #endregion
+
         #region Private methods
 
         private void CheckObjectsManager_Generic<TObject>(
@@ -22,7 +68,10 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             Comparison<MidiEvent> sameTimeEventComparison = null)
             where TObject : ITimedObject
         {
-            using (var manager = new TimedObjectsManager<TObject>(eventsCollection, settings, new TimedObjectsComparerOnSameEventTime(sameTimeEventComparison)))
+            using (var manager = new TimedObjectsManager<TObject>(
+                eventsCollection,
+                settings,
+                sameTimeEventComparison != null ? new TimedObjectsComparerOnSameEventTime(sameTimeEventComparison) : null))
             {
                 manageObjects(manager.Objects);
                 MidiAsserts.AreEqual(

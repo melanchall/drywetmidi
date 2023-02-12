@@ -2,52 +2,62 @@
   "OBS19": {
     "Hint": "Use Splitter.SplitByObjects method.",
     "ObsoleteFromVersion": "6.1.1",
-    "InLibrary": true
+    "InLibrary": false,
+    "RemovedFromVersion": "7.0.0"
   },
   "OBS18": {
     "Hint": "Use Resizer class.",
     "ObsoleteFromVersion": "6.1.1",
-    "InLibrary": true
+    "InLibrary": false,
+    "RemovedFromVersion": "7.0.0"
   },
   "OBS17": {
     "Hint": "Use Merger class.",
     "ObsoleteFromVersion": "6.1.1",
-    "InLibrary": true
+    "InLibrary": false,
+    "RemovedFromVersion": "7.0.0"
   },
   "OBS16": {
     "Hint": "Use TimedEvent constructor and add an object manually.",
     "ObsoleteFromVersion": "6.1.0",
-    "InLibrary": true
+    "InLibrary": false,
+    "RemovedFromVersion": "7.0.0"
   },
   "OBS15": {
     "Hint": "Use SetTime/SetLength methods from TimedObjectUtilities/LengthedObjectUtilities.",
     "ObsoleteFromVersion": "6.1.0",
-    "InLibrary": true
+    "InLibrary": false,
+    "RemovedFromVersion": "7.0.0"
   },
   "OBS14": {
     "Hint": "Use SetTime method from TimedObjectUtilities.",
     "ObsoleteFromVersion": "6.1.0",
-    "InLibrary": true
+    "InLibrary": false,
+    "RemovedFromVersion": "7.0.0"
   },
   "OBS13": {
     "Hint": "Use Quantizer class.",
     "ObsoleteFromVersion": "6.1.0",
-    "InLibrary": true
+    "InLibrary": false,
+    "RemovedFromVersion": "7.0.0"
   },
   "OBS12": {
     "Hint": "Use Splitter class.",
     "ObsoleteFromVersion": "6.1.0",
-    "InLibrary": true
+    "InLibrary": false,
+    "RemovedFromVersion": "7.0.0"
   },
   "OBS11": {
     "Hint": "Use TimedObjectsManager class.",
     "ObsoleteFromVersion": "6.1.0",
-    "InLibrary": true
+    "InLibrary": false,
+    "RemovedFromVersion": "7.0.0"
   },
   "OBS10": {
     "Hint": "Use Quantizer class passing QuantizingSettings with its RandomizingSettings property set.",
     "ObsoleteFromVersion": "6.1.0",
-    "InLibrary": true
+    "InLibrary": false,
+    "RemovedFromVersion": "7.0.0"
   },
   "OBS9": {
     "Hint": "Use AddObjects methods from TimedObjectUtilities.",

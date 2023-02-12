@@ -20,8 +20,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var timedEvent = Factory.GetTimedEvent("100");
 
-            // TODO: use extension syntax after OBS14 removed
-            var result = TimedObjectUtilities.SetTime(timedEvent, (MidiTimeSpan)time, Factory.TempoMap);
+            var result = timedEvent.SetTime((MidiTimeSpan)time, Factory.TempoMap);
 
             Assert.AreSame(timedEvent, result, "Result is not the same object.");
             Assert.AreEqual(time, result.Time, "Invalid time.");
@@ -32,8 +31,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var note = Factory.GetNote("100", "50");
 
-            // TODO: use extension syntax after OBS14 removed
-            var result = TimedObjectUtilities.SetTime(note, (MidiTimeSpan)time, Factory.TempoMap);
+            var result = note.SetTime((MidiTimeSpan)time, Factory.TempoMap);
 
             Assert.AreSame(note, result, "Result is not the same object.");
             Assert.AreEqual(time, result.Time, "Invalid time.");
@@ -47,8 +45,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 "100", "50",
                 "110", "40");
 
-            // TODO: use extension syntax after OBS14 removed
-            var result = TimedObjectUtilities.SetTime(chord, (MidiTimeSpan)time, Factory.TempoMap);
+            var result = chord.SetTime((MidiTimeSpan)time, Factory.TempoMap);
 
             Assert.AreSame(chord, result, "Result is not the same object.");
             Assert.AreEqual(time, result.Time, "Invalid time.");
@@ -60,8 +57,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var timedEvent = Factory.GetTimedEvent("100");
 
-            // TODO: use extension syntax after OBS14 removed
-            var result = TimedObjectUtilities.SetTime(timedEvent, new MetricTimeSpan(0, 0, 0, ms), Factory.TempoMap);
+            var result = timedEvent.SetTime(new MetricTimeSpan(0, 0, 0, ms), Factory.TempoMap);
 
             Assert.AreSame(timedEvent, result, "Result is not the same object.");
             Assert.AreEqual(
@@ -75,8 +71,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var timedEvent = default(TimedEvent);
 
-            // TODO: use extension syntax after OBS14 removed
-            Assert.Throws<ArgumentNullException>(() => TimedObjectUtilities.SetTime(timedEvent, new MidiTimeSpan(), Factory.TempoMap));
+            Assert.Throws<ArgumentNullException>(() => timedEvent.SetTime(new MidiTimeSpan(), Factory.TempoMap));
         }
 
         [Test]
@@ -84,8 +79,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var timedEvent = Factory.GetTimedEvent("10");
 
-            // TODO: use extension syntax after OBS14 removed
-            Assert.Throws<ArgumentNullException>(() => TimedObjectUtilities.SetTime(timedEvent, null, Factory.TempoMap));
+            Assert.Throws<ArgumentNullException>(() => timedEvent.SetTime(null, Factory.TempoMap));
         }
 
         [Test]
@@ -93,8 +87,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var timedEvent = Factory.GetTimedEvent("10");
 
-            // TODO: use extension syntax after OBS14 removed
-            Assert.Throws<ArgumentNullException>(() => TimedObjectUtilities.SetTime(timedEvent, new MidiTimeSpan(), null));
+            Assert.Throws<ArgumentNullException>(() => timedEvent.SetTime(new MidiTimeSpan(), null));
         }
 
         #endregion

@@ -357,7 +357,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <remarks>
         /// This method will rewrite content of all events collections were used to construct the current
-        /// <see cref="TempoMapManager"/> with events were managed by underlying <see cref="TimedEventsManager"/>
+        /// <see cref="TempoMapManager"/> with events were managed by underlying <see cref="TimedObjectsManager"/>
         /// objects of this manager. Also all delta-times of wrapped events will be recalculated according to
         /// the <see cref="TimedEvent.Time"/> of event wrappers.
         /// </remarks>

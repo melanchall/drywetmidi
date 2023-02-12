@@ -14,37 +14,6 @@ namespace Melanchall.DryWetMidi.Interaction
         #region Methods
 
         /// <summary>
-        /// Sets time of the specified timed event.
-        /// </summary>
-        /// <param name="timedEvent">Timed event to set time to.</param>
-        /// <param name="time">Time to set to <paramref name="timedEvent"/>.</param>
-        /// <param name="tempoMap">Tempo map that will be used for time conversion.</param>
-        /// <returns>An input <paramref name="timedEvent"/> with new time.</returns>
-        /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
-        /// <list type="bullet">
-        /// <item>
-        /// <description><paramref name="timedEvent"/> is <c>null</c>.</description>
-        /// </item>
-        /// <item>
-        /// <description><paramref name="time"/> is <c>null</c>.</description>
-        /// </item>
-        /// <item>
-        /// <description><paramref name="tempoMap"/> is <c>null</c>.</description>
-        /// </item>
-        /// </list>
-        /// </exception>
-        [Obsolete("OBS14")]
-        public static TimedEvent SetTime(this TimedEvent timedEvent, ITimeSpan time, TempoMap tempoMap)
-        {
-            ThrowIfArgument.IsNull(nameof(timedEvent), timedEvent);
-            ThrowIfArgument.IsNull(nameof(time), time);
-            ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
-
-            return TimedObjectUtilities.SetTime(timedEvent, time, tempoMap);
-        }
-
-        /// <summary>
         /// Creates an instance of the <see cref="TimedObjectsManager{TimedEvent}"/> initializing it with the
         /// specified events collection. More info in the <see href="xref:a_managers">Objects managers</see> article.
         /// </summary>
@@ -183,80 +152,6 @@ namespace Melanchall.DryWetMidi.Interaction
             ThrowIfArgument.IsNull(nameof(file), file);
 
             return file.GetTrackChunks().GetTimedEvents(settings);
-        }
-
-        /// <summary>
-        /// Adds a <see cref="MidiEvent"/> into a <see cref="TimedObjectsCollection{TObject}"/> with the specified
-        /// absolute time.
-        /// </summary>
-        /// <param name="eventsCollection"><see cref="TimedObjectsCollection{TObject}"/> to add an event into.</param>
-        /// <param name="midiEvent">Event to add into the <paramref name="eventsCollection"/>.</param>
-        /// <param name="time">Absolute time that will be assigned to the <paramref name="midiEvent"/>
-        /// when it will be placed into the <paramref name="eventsCollection"/>.</param>
-        /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
-        /// <list type="bullet">
-        /// <item>
-        /// <description><paramref name="eventsCollection"/> is <c>null</c>.</description>
-        /// </item>
-        /// <item>
-        /// <description><paramref name="midiEvent"/> is <c>null</c>.</description>
-        /// </item>
-        /// </list>
-        /// </exception>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="time"/> is negative.</exception>
-        /// <exception cref="ArgumentException"><paramref name="midiEvent"/> is either system real-time or
-        /// system common one.</exception>
-        [Obsolete("OBS16")]
-        public static void AddEvent(this TimedObjectsCollection<TimedEvent> eventsCollection, MidiEvent midiEvent, long time)
-        {
-            ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
-            ThrowIfArgument.IsNull(nameof(midiEvent), midiEvent);
-            ThrowIfArgument.IsOfInvalidType<SystemRealTimeEvent, SystemCommonEvent>(nameof(midiEvent), midiEvent, "Event is either system real-time or system common one.");
-            ThrowIfTimeArgument.IsNegative(nameof(time), time);
-
-            eventsCollection.Add(new TimedEvent(midiEvent, time));
-        }
-
-        /// <summary>
-        /// Adds a <see cref="MidiEvent"/> into a <see cref="TimedObjectsCollection{TObject}"/> with the specified
-        /// absolute time.
-        /// </summary>
-        /// <param name="eventsCollection"><see cref="TimedObjectsCollection{TObject}"/> to add an event into.</param>
-        /// <param name="midiEvent">Event to add into the <paramref name="eventsCollection"/>.</param>
-        /// <param name="time">Absolute time that will be assigned to the <paramref name="midiEvent"/>
-        /// when it will be placed into the <paramref name="eventsCollection"/>.</param>
-        /// <param name="tempoMap">Tempo map used to place <paramref name="midiEvent"/> into the
-        /// <paramref name="eventsCollection"/> with the specified time.</param>
-        /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
-        /// <list type="bullet">
-        /// <item>
-        /// <description><paramref name="eventsCollection"/> is <c>null</c>.</description>
-        /// </item>
-        /// <item>
-        /// <description><paramref name="midiEvent"/> is <c>null</c>.</description>
-        /// </item>
-        /// <item>
-        /// <description><paramref name="time"/> is <c>null</c>.</description>
-        /// </item>
-        /// <item>
-        /// <description><paramref name="tempoMap"/> is <c>null</c>.</description>
-        /// </item>
-        /// </list>
-        /// </exception>
-        /// <exception cref="ArgumentException"><paramref name="midiEvent"/> is either system real-time or
-        /// system common one.</exception>
-        [Obsolete("OBS16")]
-        public static void AddEvent(this TimedObjectsCollection<TimedEvent> eventsCollection, MidiEvent midiEvent, ITimeSpan time, TempoMap tempoMap)
-        {
-            ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
-            ThrowIfArgument.IsNull(nameof(midiEvent), midiEvent);
-            ThrowIfArgument.IsOfInvalidType<SystemRealTimeEvent, SystemCommonEvent>(nameof(midiEvent), midiEvent, "Event is either system real-time or system common one.");
-            ThrowIfArgument.IsNull(nameof(time), time);
-            ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
-
-            eventsCollection.AddEvent(midiEvent, TimeConverter.ConvertFrom(time, tempoMap));
         }
 
         /// <summary>

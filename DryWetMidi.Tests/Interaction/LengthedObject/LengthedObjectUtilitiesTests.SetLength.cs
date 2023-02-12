@@ -1,8 +1,6 @@
 ﻿using Melanchall.DryWetMidi.Interaction;
 using NUnit.Framework;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Melanchall.DryWetMidi.Tests.Interaction
 {

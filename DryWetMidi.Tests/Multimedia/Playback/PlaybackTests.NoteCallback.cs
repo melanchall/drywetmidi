@@ -48,11 +48,13 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         public void NoteCallback_ReturnNull_ReturnOriginal()
         {
+            var tempoMap = TempoMap.Default;
             var note = new Note((SevenBitNumber)100)
             {
                 Velocity = (SevenBitNumber)80
             }
-            .SetTimeAndLength((MetricTimeSpan)TimeSpan.FromMilliseconds(1500), (MetricTimeSpan)TimeSpan.FromMilliseconds(500), TempoMap.Default);
+            .SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(1500), tempoMap)
+            .SetLength((MetricTimeSpan)TimeSpan.FromMilliseconds(500), tempoMap);
 
             CheckNoteCallback(
                 eventsToSend: new[]
@@ -78,11 +80,13 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         public void NoteCallback_ReturnOriginal_ReturnNull()
         {
+            var tempoMap = TempoMap.Default;
             var note = new Note(SevenBitNumber.MinValue)
             {
                 Velocity = SevenBitNumber.MinValue
             }
-            .SetTimeAndLength((MetricTimeSpan)TimeSpan.Zero, (MetricTimeSpan)TimeSpan.FromSeconds(1), TempoMap.Default);
+            .SetTime((MetricTimeSpan)TimeSpan.Zero, tempoMap)
+            .SetLength((MetricTimeSpan)TimeSpan.FromSeconds(1), tempoMap);
 
             CheckNoteCallback(
                 eventsToSend: new[]
@@ -108,17 +112,21 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         public void NoteCallback_Transpose()
         {
+            var tempoMap = TempoMap.Default;
+
             var note1 = new Note(TransposeBy)
             {
                 Velocity = SevenBitNumber.MinValue
             }
-            .SetTimeAndLength((MetricTimeSpan)TimeSpan.Zero, (MetricTimeSpan)TimeSpan.FromSeconds(1), TempoMap.Default);
+            .SetTime((MetricTimeSpan)TimeSpan.Zero, tempoMap)
+            .SetLength((MetricTimeSpan)TimeSpan.FromSeconds(1), tempoMap);
 
             var note2 = new Note((SevenBitNumber)(100 + TransposeBy))
             {
                 Velocity = (SevenBitNumber)80
             }
-            .SetTimeAndLength((MetricTimeSpan)TimeSpan.FromMilliseconds(1500), (MetricTimeSpan)TimeSpan.FromMilliseconds(500), TempoMap.Default);
+            .SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(1500), tempoMap)
+            .SetLength((MetricTimeSpan)TimeSpan.FromMilliseconds(500), tempoMap);
 
             CheckNoteCallback(
                 eventsToSend: new[]

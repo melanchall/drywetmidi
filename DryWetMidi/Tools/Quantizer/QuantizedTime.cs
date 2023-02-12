@@ -9,11 +9,12 @@ namespace Melanchall.DryWetMidi.Tools
     {
         #region Constructor
 
-        internal QuantizedTime(long newTime,
-                               long gridTime,
-                               ITimeSpan shift,
-                               long distanceToGridTime,
-                               ITimeSpan convertedDistanceToGridTime)
+        internal QuantizedTime(
+            long newTime,
+            long gridTime,
+            ITimeSpan shift,
+            long distanceToGridTime,
+            ITimeSpan convertedDistanceToGridTime)
         {
             NewTime = newTime;
             GridTime = gridTime;
@@ -48,7 +49,7 @@ namespace Melanchall.DryWetMidi.Tools
 
         /// <summary>
         /// Gets the distance between an object's current time and the nearest grid time as time span
-        /// of the type specified by <see cref="QuantizingSettings{TObject}.DistanceCalculationType"/>.
+        /// of the type specified by <see cref="QuantizingSettings.DistanceCalculationType"/>.
         /// </summary>
         public ITimeSpan ConvertedDistanceToGridTime { get; }
 

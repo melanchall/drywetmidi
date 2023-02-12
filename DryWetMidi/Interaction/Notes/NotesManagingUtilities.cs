@@ -202,42 +202,6 @@ namespace Melanchall.DryWetMidi.Interaction
         #region Methods
 
         /// <summary>
-        /// Sets time and length of the specified note.
-        /// </summary>
-        /// <param name="note">Note to set time and length to.</param>
-        /// <param name="time">Time to set to <paramref name="note"/>.</param>
-        /// <param name="length">Length to set to <paramref name="note"/>.</param>
-        /// <param name="tempoMap">Tempo map that will be used for time and length conversion.</param>
-        /// <returns>An input <paramref name="note"/> with new time and length.</returns>
-        /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
-        /// <list type="bullet">
-        /// <item>
-        /// <description><paramref name="note"/> is <c>null</c>.</description>
-        /// </item>
-        /// <item>
-        /// <description><paramref name="time"/> is <c>null</c>.</description>
-        /// </item>
-        /// <item>
-        /// <description><paramref name="length"/> is <c>null</c>.</description>
-        /// </item>
-        /// <item>
-        /// <description><paramref name="tempoMap"/> is <c>null</c>.</description>
-        /// </item>
-        /// </list>
-        /// </exception>
-        [Obsolete("OBS15")]
-        public static Note SetTimeAndLength(this Note note, ITimeSpan time, ITimeSpan length, TempoMap tempoMap)
-        {
-            ThrowIfArgument.IsNull(nameof(note), note);
-            ThrowIfArgument.IsNull(nameof(time), time);
-            ThrowIfArgument.IsNull(nameof(length), length);
-            ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
-
-            return note.SetTime(time, tempoMap).SetLength(length, tempoMap);
-        }
-
-        /// <summary>
         /// Creates an instance of the <see cref="TimedObjectsManager{Note}"/> initializing it with the
         /// specified events collection. More info in the <see href="xref:a_managers">Objects managers</see> article.
         /// </summary>

@@ -100,9 +100,24 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             IGrid grid,
             TempoMap tempoMap,
             QuantizingSettings settings,
+            ICollection<ITimedObject> expectedObjects) =>
+            CheckQuantize(
+                new Quantizer(),
+                timedObjects,
+                grid,
+                tempoMap,
+                settings,
+                expectedObjects);
+
+        private void CheckQuantize(
+            Quantizer quantizer,
+            ICollection<ITimedObject> timedObjects,
+            IGrid grid,
+            TempoMap tempoMap,
+            QuantizingSettings settings,
             ICollection<ITimedObject> expectedObjects)
         {
-            new Quantizer().Quantize(timedObjects, grid, tempoMap, settings);
+            quantizer.Quantize(timedObjects, grid, tempoMap, settings);
             MidiAsserts.AreEqual(expectedObjects, timedObjects, "Invalid quantized objects.");
         }
 
