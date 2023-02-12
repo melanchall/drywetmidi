@@ -173,16 +173,6 @@ note A#4 (note number = 70)
 <p>So every <em>Note Off</em> event will be combined with <strong>first</strong> free <em>Note On</em> event into a note (events are processed one by one consecutively). But if set <code>NoteStartDetectionPolicy</code> to <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.NoteStartDetectionPolicy.html#Melanchall_DryWetMidi_Interaction_NoteStartDetectionPolicy_LastNoteOn">NoteStartDetectionPolicy.LastNoteOn</a>, we'll get another picture:</p>
 <p><img src="images/Getting-objects-NoteStartDetectionPolicy-LastNoteOn.png" alt="NoteStartDetectionPolicy-LastNoteOn"></p>
 <p>So <em>Note Off</em> events will be combined with <strong>last</strong> free <em>Note On</em> event into a note.</p>
-<h4 id="notesearchcontext"><code>NoteSearchContext</code></h4>
-<p>The <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.NoteDetectionSettings.html#Melanchall_DryWetMidi_Interaction_NoteDetectionSettings_NoteSearchContext">NoteSearchContext</a> property defines a context to search notes within. The default value is <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.NoteSearchContext.html#Melanchall_DryWetMidi_Interaction_NoteSearchContext_SingleEventsCollection">NoteSearchContext.SingleEventsCollection</a>. The property is applicable only to <code>GetChords</code> that accepts collection of <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a>s and <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a>.</p>
-<p>To understand how this policy works let's take a look at the following events sequences within two track chunks:</p>
-<p><img src="images/Getting-objects-NoteSearchContext-Initial.png" alt="NoteSearchContext-Initial"></p>
-<p>where empty circle and filled one mean <em>Note On</em> and <em>Note Off</em> events correspondingly; cross means any other event. So we have two overlapped notes here (we assume all note events have the same note number). So we have two overlapped notes here. We assume that <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.NoteStartDetectionPolicy.html#Melanchall_DryWetMidi_Interaction_NoteStartDetectionPolicy_FirstNoteOn">NoteStartDetectionPolicy.FirstNoteOn</a> is used to search a note's start and all note events have the same note number.</p>
-<p>If we use <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.NoteSearchContext.html#Melanchall_DryWetMidi_Interaction_NoteSearchContext_SingleEventsCollection">NoteSearchContext.SingleEventsCollection</a> as the context, notes will be constructed in the following way:</p>
-<p><img src="images/Getting-objects-NoteSearchContext-SingleEventsCollection.png" alt="NoteSearchContext-SingleEventsCollection"></p>
-<p>So every <em>Note On</em> event will be combined with <em>Note Off</em> one within the <strong>same</strong> events collection. But if we use <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.NoteSearchContext.html#Melanchall_DryWetMidi_Interaction_NoteSearchContext_AllEventsCollections">NoteSearchContext.AllEventsCollections</a>, notes will be constructed in a new way:</p>
-<p><img src="images/Getting-objects-NoteSearchContext-AllEventsCollections.png" alt="NoteSearchContext-AllEventsCollections"></p>
-<p>So <em>Note On</em> event can be combined now with <em>Note Off</em> one within <strong>different</strong> events collection, i.e. ends of a note can be placed in difefrent track chunks.</p>
 <h2 id="getchords">GetChords</h2>
 <p>There is the <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.html">ChordsManagingUtilities</a> class which provides useful methods <code>GetChords</code> to get notes from a MIDI file or track chunk. For example, you can get chords a MIDI file contains with this code:</p>
 <pre><code class="lang-csharp">using System;
@@ -306,15 +296,6 @@ chord
 <p>Last note will not be turned into a chord because count of notes for a chord will be <code>1</code> which is less than the specified minimum count. With minimum count of notes of <code>3</code> we'll get no chords:</p>
 <p><img src="images/Getting-objects-NotesMinCount-3.png" alt="NotesMinCount-3"></p>
 <p>First possible chord will contain two notes and second chord will contain one note. In both cases count of notes is less than the specified minimum count.</p>
-<h4 id="chordsearchcontext"><code>ChordSearchContext</code></h4>
-<p>The <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.ChordDetectionSettings.html#Melanchall_DryWetMidi_Interaction_ChordDetectionSettings_ChordSearchContext">ChordSearchContext</a> property defines a context to search chords within. The default value is <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.ChordSearchContext.html#Melanchall_DryWetMidi_Interaction_ChordSearchContext_SingleEventsCollection">ChordSearchContext.SingleEventsCollection</a>. The property is applicable only to <code>GetChords</code> that accepts collection of <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a>s and <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a>.</p>
-<p>To understand how this policy works let's take a look at the following data within two track chunks:</p>
-<p><img src="images/Getting-objects-ChordSearchContext-Initial.png" alt="ChordSearchContext-Initial"></p>
-<p>If we use <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.ChordSearchContext.html#Melanchall_DryWetMidi_Interaction_ChordSearchContext_SingleEventsCollection">ChordSearchContext.SingleEventsCollection</a> as the context, chords will be constructed in the following way:</p>
-<p><img src="images/Getting-objects-ChordSearchContext-SingleEventsCollection.png" alt="ChordSearchContext-SingleEventsCollection"></p>
-<p>So chords will be constructed only from notes within the same events collection (track chunk). But if we use <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.ChordSearchContext.html#Melanchall_DryWetMidi_Interaction_ChordSearchContext_AllEventsCollections">ChordSearchContext.AllEventsCollections</a>, chords will be constructed in a new way:</p>
-<p><img src="images/Getting-objects-ChordSearchContext-AllEventsCollections.png" alt="ChordSearchContext-AllEventsCollections"></p>
-<p>So a chord can be constructed from notes within different events collections.</p>
 <h2 id="getobjects">GetObjects</h2>
 <p>All methods we saw before return collection of objects of the <strong>same type</strong>. So you can get only either notes or chords or timed events. To highlight the problem, let's take a look at the following events sequence:</p>
 <p><img src="images/Getting-objects-GetObjects-Initial.png" alt="GetObjects-Initial"></p>
@@ -368,7 +349,6 @@ namespace DwmExamples
             Console.WriteLine(&quot;Getting chords...&quot;);
             WriteTimedObjects(midiFile.GetChords(new ChordDetectionSettings
             {
-                ChordSearchContext = ChordSearchContext.AllEventsCollections,
                 NotesMinCount = 2
             }));
 
@@ -452,7 +432,6 @@ WriteTimedObjects(midiFile.GetObjects(
     {
         ChordDetectionSettings = new ChordDetectionSettings
         {
-            ChordSearchContext = ChordSearchContext.AllEventsCollections,
             NotesMinCount = 2
         }
     }));
