@@ -17,7 +17,7 @@ variables:
 pool:
   vmImage: 'windows-latest'
   
-name: RunStaticAnalysis_$(LibraryVersion)$(Rev:.r)
+name: RunStaticAnalysis_$(SourceBranchName)_$(LibraryVersion)$(Rev:.r)
 
 stages:
 - template: Templates/stage-build-native-libs.yaml

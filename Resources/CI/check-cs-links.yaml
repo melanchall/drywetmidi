@@ -31,7 +31,7 @@ schedules:
 pool:
   vmImage: 'windows-latest'
 
-name: $(TeamProject)_$(SourceBranchName)_CheckCsLinks_$(Rev:r)
+name: CheckCsLinks_$(Rev:r)
 
 steps:
 - task: PowerShell@2

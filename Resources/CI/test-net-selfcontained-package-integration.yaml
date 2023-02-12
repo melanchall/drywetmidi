@@ -21,7 +21,7 @@ pr: none
 variables:
 - group: DryWetMIDI-Common-Variables
 
-name: TestPackageIntegration_NetSelfContained_$(LibraryVersion)$(Rev:.r)
+name: TestPackageIntegration_NetSelfContained_$(SourceBranchName)_$(LibraryVersion)$(Rev:.r)
 
 stages:
 - template: Templates/stage-build-native-libs.yaml

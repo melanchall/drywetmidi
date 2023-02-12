@@ -10,7 +10,7 @@ variables:
 - name: prereleaseNumber
   value: $[counter(variables['LibraryVersion'], 1)]
 
-name: BuildLibrary_PreRelease_$(LibraryVersion)$(Rev:.r)
+name: BuildLibrary_PreRelease_$(SourceBranchName)_$(LibraryVersion)$(Rev:.r)
 
 stages:
 - template: Templates/stage-build-native-libs.yaml

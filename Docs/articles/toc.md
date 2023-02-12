@@ -1,10 +1,10 @@
 # Project
+## [Support](dev/Support.md)
 ## [Project health](dev/Project-health.md)
 ## [Supported OS](dev/Supported-OS.md)
 ## [Manual build](dev/Manual-build.md)
 ## [Using in Unity](dev/Using-in-Unity.md)
 ## [Nativeless package](dev/Nativeless-package.md)
-## [Support](dev/Support.md)
 
 # MIDI file reading/writing
 ## [MIDI file reading](file-reading-writing/MIDI-file-reading.md)

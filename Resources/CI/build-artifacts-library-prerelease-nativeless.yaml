@@ -10,7 +10,7 @@ variables:
 - name: prereleaseNumber
   value: $[counter(variables['LibraryVersion'], 1)]
 
-name: BuildLibrary_Nativeless_PreRelease_$(LibraryVersion)$(Rev:.r)
+name: BuildLibrary_Nativeless_PreRelease_$(SourceBranchName)_$(LibraryVersion)$(Rev:.r)
 
 stages:
 - stage: BuildBinaries

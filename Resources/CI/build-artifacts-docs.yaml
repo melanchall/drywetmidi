@@ -20,7 +20,7 @@ pool:
 variables:
 - group: DryWetMIDI-Common-Variables
 
-name: $(TeamProject)_$(SourceBranchName)_BuildDocs_$(LibraryVersion)$(Rev:.r)
+name: BuildDocs_$(SourceBranchName)_$(LibraryVersion)$(Rev:.r)
 
 steps:
 - task: PowerShell@2

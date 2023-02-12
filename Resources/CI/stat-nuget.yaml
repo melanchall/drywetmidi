@@ -25,7 +25,7 @@ pool:
 variables:
 - group: DryWetMIDI-InfluxDB-Variables
 
-name: $(TeamProject)_ExportNuGetStat_$(Rev:r)
+name: ExportNuGetStat_$(Rev:r)
 
 steps:
 - task: PowerShell@2

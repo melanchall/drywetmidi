@@ -25,7 +25,7 @@ pool:
 variables:
 - group: DryWetMIDI-InfluxDB-Variables
 
-name: $(TeamProject)_ExportStackExchangeStat_$(Rev:r)
+name: ExportStackExchangeStat_$(Rev:r)
 
 steps:
 - task: PowerShell@2

@@ -20,7 +20,7 @@ pr: none
 variables:
 - group: DryWetMIDI-Common-Variables
 
-name: BuildLibrary_$(LibraryVersion)$(Rev:.r)
+name: BuildLibrary_$(SourceBranchName)_$(LibraryVersion)$(Rev:.r)
 
 stages:
 - template: Templates/stage-build-native-libs.yaml

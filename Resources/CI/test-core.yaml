@@ -41,7 +41,7 @@ pr:
 variables:
 - group: DryWetMIDI-Common-Variables
 
-name: TestCore_$(Framework)_$(LibraryVersion)$(Rev:.r)
+name: TestCore_$(Framework)_$(SourceBranchName)_$(LibraryVersion)$(Rev:.r)
 
 stages:
 - template: Templates/stage-build-native-libs.yaml

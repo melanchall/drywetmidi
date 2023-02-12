@@ -16,6 +16,9 @@ DryWetMIDI is the .NET library to work with MIDI data and MIDI devices. It allow
 
 Please see [Getting started](#getting-started) section below for quick jump into the library.
 
+> **Warning**  
+> If you want to create an issue or a discussion, read this article first – [Support](https://melanchall.github.io/drywetmidi/articles/dev/Support.html).
+
 ## Useful links
 
 * [NuGet](https://www.nuget.org/packages/Melanchall.DryWetMidi)
