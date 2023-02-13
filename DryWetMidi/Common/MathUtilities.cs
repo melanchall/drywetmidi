@@ -5,7 +5,45 @@ namespace Melanchall.DryWetMidi.Common
 {
     internal static class MathUtilities
     {
+        #region Nested classes
+
+        public sealed class RationalNumber
+        {
+            public RationalNumber(int numerator, int denominator)
+            {
+                Numerator = numerator;
+                Denominator = denominator;
+            }
+
+            public int Numerator { get; }
+
+            public int Denominator { get; }
+
+            public override string ToString()
+            {
+                return $"{Numerator}/{Denominator}";
+            }
+        }
+
+        #endregion
+
         #region Methods
+
+        // https://stackoverflow.com/questions/445113/approximate-greatest-common-divisor/479028#479028
+        public static IEnumerable<RationalNumber> GetRationalizations(double number, double epsilon)
+        {
+            var intPart = (int)Math.Floor(number);
+            yield return new RationalNumber(intPart, 1);
+
+            var fractionPart = number - intPart;
+            if (fractionPart < epsilon)
+                yield break;
+
+            foreach (var rationalNumber in GetRationalizations(1 / fractionPart, epsilon))
+            {
+                yield return new RationalNumber(rationalNumber.Denominator + intPart * rationalNumber.Numerator, rationalNumber.Numerator);
+            }
+        }
 
         public static double AddRelativeMargin(double value, double margin)
         {
@@ -91,6 +129,7 @@ namespace Melanchall.DryWetMidi.Common
             return a;
         }
 
+        // ax + by = 0
         public static Tuple<long, long> SolveDiophantineEquation(long a, long b)
         {
             var greatestCommonDivisor = GreatestCommonDivisor(a, b);

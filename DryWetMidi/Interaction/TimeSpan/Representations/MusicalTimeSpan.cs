@@ -1,6 +1,7 @@
 ﻿using Melanchall.DryWetMidi.Common;
 using System;
 using System.ComponentModel;
+using System.Linq;
 
 namespace Melanchall.DryWetMidi.Interaction
 {
@@ -77,7 +78,8 @@ namespace Melanchall.DryWetMidi.Interaction
         #region Constructor
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="MusicalTimeSpan"/>.
+        /// Initializes a new instance of the <see cref="MusicalTimeSpan"/>. The time span
+        /// will be of zero size (0/1).
         /// </summary>
         public MusicalTimeSpan()
             : this(ZeroTimeSpanNumerator, ZeroTimeSpanDenominator)
@@ -86,7 +88,8 @@ namespace Melanchall.DryWetMidi.Interaction
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MusicalTimeSpan"/> with the specified
-        /// fraction of the whole note's length.
+        /// fraction of the whole note's length. The time span will be 1/<paramref name="fraction"/>
+        /// (for example, 1/4 if <paramref name="fraction"/> is 4).
         /// </summary>
         /// <param name="fraction">The fraction of the whole note's length.</param>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="fraction"/> is zero or negative.</exception>
@@ -284,19 +287,32 @@ namespace Melanchall.DryWetMidi.Interaction
             return ParsingUtilities.Parse<MusicalTimeSpan>(input, MusicalTimeSpanParser.TryParse);
         }
 
-        /// <summary>
-        /// Reduces the specified musical time spans to the common denominator.
-        /// </summary>
-        /// <param name="fraction1">First time span.</param>
-        /// <param name="fraction2">Second time span.</param>
-        /// <param name="numerator1">Numerator of the reduced first time span.</param>
-        /// <param name="numerator2">Numerator of the reduced second time span.</param>
-        /// <param name="denominator">Common denominator of reduced time spans.</param>
-        private static void ReduceToCommonDenominator(MusicalTimeSpan fraction1,
-                                                      MusicalTimeSpan fraction2,
-                                                      out long numerator1,
-                                                      out long numerator2,
-                                                      out long denominator)
+        public static MusicalTimeSpan FromDouble(double number, DoubleToMusicalTimeSpanSettings settings = null)
+        {
+            ThrowIfArgument.IsNegative(nameof(number), number, "Number is negative.");
+
+            if (number < double.Epsilon)
+                return new MusicalTimeSpan();
+
+            settings = settings ?? new DoubleToMusicalTimeSpanSettings();
+
+            var rationalization = MathUtilities
+                .GetRationalizations(number, settings.FractionalPartEpsilon)
+                .Take(settings.MaxIterationsCount)
+                .FirstOrDefault(r => Math.Abs((double)r.Numerator / r.Denominator - number) <= settings.Precision);
+
+            if (rationalization == null)
+                throw new InvalidOperationException("Failed to find rationalization for the specified number. Try to refine settings.");
+
+            return new MusicalTimeSpan(rationalization.Numerator, rationalization.Denominator);
+        }
+
+        private static void ReduceToCommonDenominator(
+            MusicalTimeSpan fraction1,
+            MusicalTimeSpan fraction2,
+            out long numerator1,
+            out long numerator2,
+            out long denominator)
         {
             denominator = MathUtilities.LeastCommonMultiple(fraction1.Denominator, fraction2.Denominator);
 

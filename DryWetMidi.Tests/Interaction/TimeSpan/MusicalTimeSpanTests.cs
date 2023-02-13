@@ -1097,6 +1097,52 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
         #endregion
 
+        #region FromDouble
+
+        [TestCase(1.0, "1/1")]
+        [TestCase(1.0 / 2, "1/2")]
+        [TestCase(1.0 / 4, "1/4")]
+        [TestCase(1.0 / 8, "1/8")]
+        [TestCase(1.0 / 16, "1/16")]
+        [TestCase(1.0 / 32, "1/32")]
+        [TestCase(1.0 / 64, "1/64")]
+        [TestCase(1.0 / 2 + 1.0 / 8, "5/8")]
+        [TestCase(1.0 / 2 + 1.0 / 8 + 1.0 / 16, "11/16")]
+        [TestCase(1.0 / 2 + 1.0 / 8 + 1.0 / 16 + 1.0 / 32 + 1.0 / 64, "47/64")]
+        [TestCase(0.123, "23/187")]
+        public void FromDouble(double number, string expectedTimeSpanString)
+        {
+            var expectedTimeSpan = MusicalTimeSpan.Parse(expectedTimeSpanString);
+            var actualTimeSpan = MusicalTimeSpan.FromDouble(number);
+            Assert.AreEqual(expectedTimeSpan, actualTimeSpan, "Invalid time span.");
+        }
+
+        [TestCase(0.123, 0.00001, "23/187")]
+        [TestCase(0.123, 0.0000001, "123/1000")]
+        [TestCase(0.123, 0.5, "0/1")]
+        public void FromDouble_Precision(double number, double precision, string expectedTimeSpanString)
+        {
+            var expectedTimeSpan = MusicalTimeSpan.Parse(expectedTimeSpanString);
+            var actualTimeSpan = MusicalTimeSpan.FromDouble(number, new DoubleToMusicalTimeSpanSettings
+            {
+                Precision = precision
+            });
+            Assert.AreEqual(expectedTimeSpan, actualTimeSpan, "Invalid time span.");
+        }
+
+        [TestCase]
+        public void FromDouble_MaxIterationsCount()
+        {
+            Assert.Throws<InvalidOperationException>(
+                () => MusicalTimeSpan.FromDouble(0.123, new DoubleToMusicalTimeSpanSettings
+                {
+                    MaxIterationsCount = 2
+                }),
+                "No exception thrown.");
+        }
+
+        #endregion
+
         #endregion
 
         #region Private methods
