@@ -29,7 +29,6 @@ namespace Melanchall.DryWetMidi.Common
 
         #region Methods
 
-        // https://stackoverflow.com/questions/445113/approximate-greatest-common-divisor/479028#479028
         public static IEnumerable<RationalNumber> GetRationalizations(double number, double epsilon)
         {
             var intPart = (int)Math.Floor(number);
