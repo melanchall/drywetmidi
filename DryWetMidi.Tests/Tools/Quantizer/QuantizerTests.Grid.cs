@@ -244,6 +244,27 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         }
 
         [Test]
+        public void Quantize_Grid_Arbitrary()
+        {
+            var objects = new ITimedObject[]
+            {
+                _factory.GetTimedEvent("3"),
+                _factory.GetTimedEvent("24"),
+                _factory.GetTimedEvent("4"),
+            };
+
+            CheckQuantize(
+                timedObjects: objects,
+                grid: new ArbitraryGrid((MidiTimeSpan)10),
+                tempoMap: TempoMap.Default,
+                settings: null,
+                expectedObjects: _factory.WithTimes(objects,
+                    "10",
+                    "10",
+                    "10"));
+        }
+
+        [Test]
         public void Quantize_Grid_Arbitrary_Start_NearGridEnd()
         {
             var objects = new ITimedObject[]

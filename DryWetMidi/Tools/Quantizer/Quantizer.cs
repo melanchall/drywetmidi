@@ -129,7 +129,7 @@ namespace Melanchall.DryWetMidi.Tools
         private void QuantizeObject(
             ITimedObject obj,
             IGrid grid,
-            ICollection<long> times,
+            long[] times,
             TempoMap tempoMap,
             QuantizingSettings settings)
         {
@@ -152,7 +152,7 @@ namespace Melanchall.DryWetMidi.Tools
         private void QuantizeObjectBothEnds(
             ITimedObject obj,
             IGrid grid,
-            ICollection<long> times,
+            long[] times,
             TempoMap tempoMap,
             QuantizingSettings settings)
         {
@@ -190,7 +190,7 @@ namespace Melanchall.DryWetMidi.Tools
         private void QuantizeObjectSingleEnd(
             ITimedObject obj,
             IGrid grid,
-            ICollection<long> times,
+            long[] times,
             LengthedObjectTarget target,
             TempoMap tempoMap,
             QuantizingSettings settings)
@@ -291,7 +291,7 @@ namespace Melanchall.DryWetMidi.Tools
             return minTime + Common.Random.Instance.Next(difference) + 1;
         }
 
-        private static ICollection<long> GetGridTimes(
+        private static long[] GetGridTimes(
             IEnumerable<ITimedObject> objects,
             Func<ITimedObject, bool> filter,
             IGrid grid,
@@ -320,29 +320,51 @@ namespace Melanchall.DryWetMidi.Tools
 
             using (var enumerator = times.GetEnumerator())
             {
-                while (enumerator.MoveNext() && enumerator.Current < lastTime)
+                var timesAvailable = true;
+
+                while ((timesAvailable = enumerator.MoveNext()) && enumerator.Current < lastTime)
                     yield return enumerator.Current;
 
-                yield return enumerator.Current;
+                if (timesAvailable)
+                    yield return enumerator.Current;
             }
         }
 
         private static QuantizedTime FindNearestTime(
-            ICollection<long> grid,
+            long[] grid,
             long time,
             TimeSpanType distanceCalculationType,
             double quantizingLevel,
             TempoMap tempoMap)
         {
-            if (grid.Count == 0)
+            if (grid.Length == 0)
                 return null;
 
             var distanceToGridTime = -1L;
             var convertedDistanceToGridTime = TimeSpanUtilities.GetMaxTimeSpan(distanceCalculationType);
             var gridTime = -1L;
 
-            // TODO: bin search
-            foreach (var currentGridTime in grid)
+            //
+
+            long[] candidateTimes;
+            int bottomGridTimeIndex;
+
+            var bottomGridTime = MathUtilities.GetLastElementBelowThreshold(grid, time, _ => _, out bottomGridTimeIndex);
+            if (bottomGridTimeIndex < 0)
+            {
+                candidateTimes = new[] { grid[0] };
+            }
+            else
+            {
+                var topGridTimeIndex = bottomGridTimeIndex + 1;
+                candidateTimes = topGridTimeIndex >= grid.Length
+                    ? new[] { grid[bottomGridTimeIndex] }
+                    : new[] { grid[bottomGridTimeIndex], grid[topGridTimeIndex] };
+            }
+
+            //
+
+            foreach (var currentGridTime in candidateTimes)
             {
                 var distance = Math.Abs(time - currentGridTime);
                 var convertedDistance = LengthConverter.ConvertTo(distance, distanceCalculationType, Math.Min(time, currentGridTime), tempoMap);
