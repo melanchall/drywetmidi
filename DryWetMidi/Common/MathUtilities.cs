@@ -72,8 +72,8 @@ namespace Melanchall.DryWetMidi.Common
                     firstIndex = middleIndex + 1;
                 else
                 {
-                    index = middleIndex > 0 ? middleIndex - 1 : -1;
-                    return middleIndex > 0 ? elements[middleIndex - 1] : default(T);
+                    firstIndex = middleIndex;
+                    break;
                 }
             }
 
