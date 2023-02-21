@@ -57,7 +57,6 @@ namespace Melanchall.DryWetMidi.Tools
             }
         }
 
-        // TODO: provide an option to round to floor and not to ceiling only
         /// <summary>
         /// Gets or sets a step that should be used to round final shift in case of
         /// <see cref="ShiftRoundingPolicy"/> set to a value other than <see cref="TimeSpanRoundingPolicy.NoRounding"/>.

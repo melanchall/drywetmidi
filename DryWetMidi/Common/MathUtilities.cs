@@ -99,9 +99,6 @@ namespace Melanchall.DryWetMidi.Common
 
         public static long LeastCommonMultiple(long a, long b)
         {
-            ThrowIfArgument.IsNonpositive(nameof(a), a, "First number is zero or negative.");
-            ThrowIfArgument.IsNonpositive(nameof(b), b, "Second number is zero or negative.");
-
             long n1, n2;
 
             if (a > b)
