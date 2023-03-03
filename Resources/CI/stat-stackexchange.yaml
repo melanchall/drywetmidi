@@ -24,26 +24,18 @@ pool:
 
 variables:
 - group: DryWetMIDI-InfluxDB-Variables
+- group: DryWetMIDI-Common-Variables
 
 name: ExportStackExchangeStat_$(Rev:r)
 
 steps:
-- task: PowerShell@2
-  displayName: Export StackExchange info to InfluxDB Cloud
+- template: Templates/step-setup-framework.yaml
+  parameters:
+    framework: 'Net'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Export StackExchange info to InfluxDB Cloud'
   inputs:
-    targetType: 'inline'
-    script: |
-      $location = Get-Location
-      Write-Host "Building ExportStackExchangeStatistics..."
-      dotnet publish "Resources/Utilities/ExportStackExchangeStatistics/ExportStackExchangeStatistics.sln" -c Release -r win10-x64 -o "$location/ExportStackExchangeStatistics"
-      Write-Host "Built."
-      
-      Write-Host "Exporting GitHub repo info..."
-      $url = "$(InfluxDB.Url)"
-      $writeToken = "$(InfluxDB.WriteToken)"
-      $readToken = "$(InfluxDB.ReadToken)"
-      $organization = "$(InfluxDB.Organization)"
-      $bucket = "$(InfluxDB.Bucket)"
-      $measurement = "$(InfluxDB.Measurement.StackExchange)"
-      Start-Process "ExportStackExchangeStatistics/ExportStackExchangeStatistics.exe" -ArgumentList """$url"" ""$writeToken"" ""$readToken"" ""$organization"" ""$bucket"" ""$measurement""" -Wait -NoNewWindow
-      Write-Host "Exported."
+    command: 'run'
+    projects: 'Resources/Utilities/ExportNuGetStatistics/ExportNuGetStatistics/ExportNuGetStatistics.csproj'
+    arguments: '-c Release -- "$(InfluxDB.Url)" "$(InfluxDB.WriteToken)" "$(InfluxDB.ReadToken)" "$(InfluxDB.Organization)" "$(InfluxDB.Bucket)" "$(InfluxDB.Measurement.StackExchange)"'
