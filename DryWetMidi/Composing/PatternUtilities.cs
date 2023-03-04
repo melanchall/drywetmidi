@@ -252,7 +252,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// <param name="patterns">Patterns to combine.</param>
         /// <returns>Pattern that made up from <paramref name="patterns"/> following each other.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="patterns"/> is <c>null</c>.</exception>
-        public static Pattern CombineInSequence(this IEnumerable<Pattern> patterns)
+        public static Pattern MergeSequentially(this IEnumerable<Pattern> patterns)
         {
             ThrowIfArgument.IsNull(nameof(patterns), patterns);
 
@@ -272,7 +272,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// <param name="patterns">Patterns to combine.</param>
         /// <returns>Pattern that made up from <paramref name="patterns"/> arranged into stack.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="patterns"/> is <c>null</c>.</exception>
-        public static Pattern CombineInParallel(this IEnumerable<Pattern> patterns)
+        public static Pattern MergeSimultaneously(this IEnumerable<Pattern> patterns)
         {
             ThrowIfArgument.IsNull(nameof(patterns), patterns);
 

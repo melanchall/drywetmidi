@@ -11,26 +11,26 @@ namespace Melanchall.DryWetMidi.Tests.Composing
         #region Test methods
 
         [Test]
-        public void CombineInSequence_EmptyPatterns()
+        public void MergeSequentially_EmptyPatterns()
         {
             var pattern1 = new PatternBuilder().Build();
             var pattern2 = new PatternBuilder().Build();
 
-            var pattern = new[] { pattern1, pattern2 }.CombineInSequence();
+            var pattern = new[] { pattern1, pattern2 }.MergeSequentially();
 
             CollectionAssert.IsEmpty(pattern.ToTrackChunk(TempoMap.Default).Events, "Pattern is not empty.");
         }
 
         [Test]
-        public void CombineInSequence_Nulls()
+        public void MergeSequentially_Nulls()
         {
-            var pattern = new Pattern[] { null, new PatternBuilder().Build() }.CombineInSequence();
+            var pattern = new Pattern[] { null, new PatternBuilder().Build() }.MergeSequentially();
 
             CollectionAssert.IsEmpty(pattern.ToTrackChunk(TempoMap.Default).Events, "Pattern is not empty.");
         }
 
         [Test]
-        public void CombineInSequence()
+        public void MergeSequentially()
         {
             var pattern1 = new PatternBuilder()
                 .Note(Notes.DSharp2)
@@ -43,7 +43,7 @@ namespace Melanchall.DryWetMidi.Tests.Composing
                 .Note(Notes.ASharp4)
                 .Build();
 
-            var pattern = new[] { pattern1, pattern2 }.CombineInSequence();
+            var pattern = new[] { pattern1, pattern2 }.MergeSequentially();
 
             PatternTestUtilities.TestNotes(pattern, new[]
             {

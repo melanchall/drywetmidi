@@ -11,26 +11,26 @@ namespace Melanchall.DryWetMidi.Tests.Composing
         #region Test methods
 
         [Test]
-        public void CombineInParallel_EmptyPatterns()
+        public void MergeSimultaneously_EmptyPatterns()
         {
             var pattern1 = new PatternBuilder().Build();
             var pattern2 = new PatternBuilder().Build();
 
-            var pattern = new[] { pattern1, pattern2 }.CombineInParallel();
+            var pattern = new[] { pattern1, pattern2 }.MergeSimultaneously();
 
             CollectionAssert.IsEmpty(pattern.ToTrackChunk(TempoMap.Default).Events, "Pattern is not empty.");
         }
 
         [Test]
-        public void CombineInParallel_Nulls()
+        public void MergeSimultaneously_Nulls()
         {
-            var pattern = new Pattern[] { null, new PatternBuilder().Build() }.CombineInParallel();
+            var pattern = new Pattern[] { null, new PatternBuilder().Build() }.MergeSimultaneously();
 
             CollectionAssert.IsEmpty(pattern.ToTrackChunk(TempoMap.Default).Events, "Pattern is not empty.");
         }
 
         [Test]
-        public void CombineInParallel()
+        public void MergeSimultaneously()
         {
             var pattern1 = new PatternBuilder()
                 .Note(Notes.DSharp2)
@@ -43,7 +43,7 @@ namespace Melanchall.DryWetMidi.Tests.Composing
                 .Note(Notes.ASharp4)
                 .Build();
 
-            var pattern = new[] { pattern1, pattern2 }.CombineInParallel();
+            var pattern = new[] { pattern1, pattern2 }.MergeSimultaneously();
 
             PatternTestUtilities.TestNotes(pattern, new[]
             {
@@ -56,7 +56,7 @@ namespace Melanchall.DryWetMidi.Tests.Composing
 
         [Test]
         [Description("This test ensures that the final operation when combining patterns in parallel does not end with a move back to the previous time.")]
-        public void CombineInParallel_No_Final_Move()
+        public void MergeSimultaneously_No_Final_Move()
         {
             var pattern1 = new PatternBuilder()
                 .Note(Notes.DSharp2)
@@ -69,7 +69,7 @@ namespace Melanchall.DryWetMidi.Tests.Composing
                 .Note(Notes.ASharp4)
                 .Build();
 
-            var parallelPatterns = new[] { pattern1, pattern2 }.CombineInParallel();
+            var parallelPatterns = new[] { pattern1, pattern2 }.MergeSimultaneously();
 
             var pattern = new PatternBuilder()
                 .Pattern(parallelPatterns)
