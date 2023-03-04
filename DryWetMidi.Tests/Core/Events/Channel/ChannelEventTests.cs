@@ -45,7 +45,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
         public void PitchBend_CreateDefault()
         {
             var pitchBendEvent = new PitchBendEvent();
-            Assert.AreEqual(PitchBendEvent.MinPitchValue, pitchBendEvent.PitchValue, "Pitch value is invalid.");
+            Assert.AreEqual(PitchBendEvent.DefaultPitchValue, pitchBendEvent.PitchValue, "Pitch value is invalid.");
         }
 
         #endregion

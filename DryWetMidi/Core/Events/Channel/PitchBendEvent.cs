@@ -24,6 +24,8 @@ namespace Melanchall.DryWetMidi.Core
         /// </summary>
         public const ushort MaxPitchValue = (1 << 14) - 1;
 
+        public const ushort DefaultPitchValue = 1 << 13;
+
         #endregion
 
         #region Constructor
@@ -32,7 +34,7 @@ namespace Melanchall.DryWetMidi.Core
         /// Initializes a new instance of the <see cref="PitchBendEvent"/>.
         /// </summary>
         public PitchBendEvent()
-            : base(MidiEventType.PitchBend)
+            : this(DefaultPitchValue)
         {
         }
 
@@ -44,7 +46,7 @@ namespace Melanchall.DryWetMidi.Core
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="pitchValue"/> is out of
         /// [<see cref="MinPitchValue"/>; <see cref="MaxPitchValue"/>] range.</exception>
         public PitchBendEvent(ushort pitchValue)
-            : this()
+            : base(MidiEventType.PitchBend)
         {
             PitchValue = pitchValue;
         }
