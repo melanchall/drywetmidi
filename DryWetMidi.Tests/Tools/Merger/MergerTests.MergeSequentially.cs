@@ -159,9 +159,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 new TrackChunk(
                     new TextEvent("B") { DeltaTime = 90 }),
                 new TrackChunk(
-                    new TimeSignatureEvent() { DeltaTime = 90 },
-                    new SetTempoEvent(),
-                    new ControlChangeEvent() { DeltaTime = 40 },
+                    new ControlChangeEvent() { DeltaTime = 130 },
                     new TextEvent("B")))
             {
                 TimeDivision = new TicksPerQuarterNoteTimeDivision(120)
@@ -205,14 +203,10 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 new TrackChunk(
                     new TextEvent("B") { DeltaTime = 180 }),
                 new TrackChunk(
-                    new TimeSignatureEvent() { DeltaTime = 180 },
-                    new SetTempoEvent(),
-                    new ControlChangeEvent() { DeltaTime = 80 },
+                    new ControlChangeEvent() { DeltaTime = 260 },
                     new TextEvent("B")),
                 new TrackChunk(
-                    new TimeSignatureEvent() { DeltaTime = 260 },
-                    new SetTempoEvent(),
-                    new TextEvent("C") { DeltaTime = 120 },
+                    new TextEvent("C") { DeltaTime = 380 },
                     new ControlChangeEvent()),
                 new TrackChunk(
                     new TextEvent("D") { DeltaTime = 560 }))
@@ -251,8 +245,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 new TrackChunk(
                     new TextEvent("B") { DeltaTime = 90 }),
                 new TrackChunk(
-                    new TimeSignatureEvent() { DeltaTime = 90 },
-                    new SetTempoEvent(),
+                    new SetTempoEvent() { DeltaTime = 90 },
                     new ControlChangeEvent() { DeltaTime = 40 },
                     new TextEvent("B")))
             {
@@ -291,8 +284,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 new TrackChunk(
                     new TextEvent("B") { DeltaTime = 90 }),
                 new TrackChunk(
-                    new TimeSignatureEvent() { DeltaTime = 90 },
-                    new SetTempoEvent(),
+                    new SetTempoEvent() { DeltaTime = 90 },
                     new ControlChangeEvent() { DeltaTime = 40 },
                     new TextEvent("B")))
             {
@@ -331,14 +323,310 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 new TrackChunk(
                     new TextEvent("B") { DeltaTime = 90 }),
                 new TrackChunk(
-                    new TimeSignatureEvent() { DeltaTime = 90 },
-                    new SetTempoEvent(),
+                    new SetTempoEvent() { DeltaTime = 90 },
                     new ControlChangeEvent() { DeltaTime = 40 },
                     new TextEvent("B"),
                     new SetTempoEvent(500)))
             {
                 TimeDivision = new TicksPerQuarterNoteTimeDivision(120)
             });
+
+        [Test]
+        public void MergeSequentially_SetTempo_4() => MergeSequentially(
+            midiFiles: new[]
+            {
+                new MidiFile(
+                    new TrackChunk(
+                        new TextEvent("A"),
+                        new SetTempoEvent(),
+                        new PitchBendEvent() { DeltaTime = 20 }),
+                    new TrackChunk(
+                        new TextEvent("B") { DeltaTime = 30 }))
+                {
+                    TimeDivision = new TicksPerQuarterNoteTimeDivision(40)
+                },
+                new MidiFile(
+                    new TrackChunk(
+                        new ControlChangeEvent() { DeltaTime = 10 },
+                        new TextEvent("B")))
+                {
+                    TimeDivision = new TicksPerQuarterNoteTimeDivision(30)
+                },
+            },
+            settings: null,
+            expectedMidiFile: new MidiFile(
+                new TrackChunk(
+                    new TextEvent("A"),
+                    new SetTempoEvent(),
+                    new PitchBendEvent() { DeltaTime = 60 }),
+                new TrackChunk(
+                    new TextEvent("B") { DeltaTime = 90 }),
+                new TrackChunk(
+                    new ControlChangeEvent() { DeltaTime = 130 },
+                    new TextEvent("B")))
+            {
+                TimeDivision = new TicksPerQuarterNoteTimeDivision(120)
+            });
+
+        [Test]
+        public void MergeSequentially_SetTempo_5() => MergeSequentially(
+            midiFiles: new[]
+            {
+                new MidiFile(
+                    new TrackChunk(
+                        new TextEvent("A"),
+                        new PitchBendEvent() { DeltaTime = 24 }),
+                    new TrackChunk(
+                        new TextEvent("B") { DeltaTime = 32 })),
+                new MidiFile(
+                    new TrackChunk(
+                        new ControlChangeEvent() { DeltaTime = 48 },
+                        new SetTempoEvent(200),
+                        new TextEvent("C"))),
+                new MidiFile(
+                    new TrackChunk(
+                        new TextEvent("D") { DeltaTime = 24 })),
+            },
+            settings: null,
+            expectedMidiFile: new MidiFile(
+                new TrackChunk(
+                    new TextEvent("A"),
+                    new PitchBendEvent() { DeltaTime = 24 }),
+                new TrackChunk(
+                    new TextEvent("B") { DeltaTime = 32 }),
+                new TrackChunk(
+                    new ControlChangeEvent() { DeltaTime = 80 },
+                    new SetTempoEvent(200),
+                    new TextEvent("C")),
+                new TrackChunk(
+                    new SetTempoEvent() { DeltaTime = 80 },
+                    new TextEvent("D") { DeltaTime = 24 })));
+
+        [Test]
+        public void MergeSequentially_PitchBend_1() => MergeSequentially(
+            midiFiles: new[]
+            {
+                new MidiFile(
+                    new TrackChunk(
+                        new TextEvent("A"),
+                        new PitchBendEvent(200) { DeltaTime = 20 }),
+                    new TrackChunk(
+                        new TextEvent("B") { DeltaTime = 30 }))
+                {
+                    TimeDivision = new TicksPerQuarterNoteTimeDivision(40)
+                },
+                new MidiFile(
+                    new TrackChunk(
+                        new ControlChangeEvent() { DeltaTime = 10 },
+                        new TextEvent("B")))
+                {
+                    TimeDivision = new TicksPerQuarterNoteTimeDivision(30)
+                },
+            },
+            settings: null,
+            expectedMidiFile: new MidiFile(
+                new TrackChunk(
+                    new TextEvent("A"),
+                    new PitchBendEvent(200) { DeltaTime = 60 }),
+                new TrackChunk(
+                    new TextEvent("B") { DeltaTime = 90 }),
+                new TrackChunk(
+                    new PitchBendEvent() { DeltaTime = 90 },
+                    new ControlChangeEvent() { DeltaTime = 40 },
+                    new TextEvent("B")))
+            {
+                TimeDivision = new TicksPerQuarterNoteTimeDivision(120)
+            });
+
+        [Test]
+        public void MergeSequentially_PitchBend_2() => MergeSequentially(
+            midiFiles: new[]
+            {
+                new MidiFile(
+                    new TrackChunk(
+                        new TextEvent("A"),
+                        new PitchBendEvent(200) { DeltaTime = 20, Channel = (FourBitNumber)5 }),
+                    new TrackChunk(
+                        new TextEvent("B") { DeltaTime = 30 }))
+                {
+                    TimeDivision = new TicksPerQuarterNoteTimeDivision(40)
+                },
+                new MidiFile(
+                    new TrackChunk(
+                        new ControlChangeEvent() { DeltaTime = 10 },
+                        new TextEvent("B")))
+                {
+                    TimeDivision = new TicksPerQuarterNoteTimeDivision(30)
+                },
+            },
+            settings: null,
+            expectedMidiFile: new MidiFile(
+                new TrackChunk(
+                    new TextEvent("A"),
+                    new PitchBendEvent(200) { DeltaTime = 60, Channel = (FourBitNumber)5 }),
+                new TrackChunk(
+                    new TextEvent("B") { DeltaTime = 90 }),
+                new TrackChunk(
+                    new PitchBendEvent() { DeltaTime = 90, Channel = (FourBitNumber)5 },
+                    new ControlChangeEvent() { DeltaTime = 40 },
+                    new TextEvent("B")))
+            {
+                TimeDivision = new TicksPerQuarterNoteTimeDivision(120)
+            });
+
+        [Test]
+        public void MergeSequentially_PitchBend_3() => MergeSequentially(
+            midiFiles: new[]
+            {
+                new MidiFile(
+                    new TrackChunk(
+                        new TextEvent("A"),
+                        new PitchBendEvent() { DeltaTime = 20 }),
+                    new TrackChunk(
+                        new TextEvent("B") { DeltaTime = 30 }))
+                {
+                    TimeDivision = new TicksPerQuarterNoteTimeDivision(40)
+                },
+                new MidiFile(
+                    new TrackChunk(
+                        new PitchBendEvent(),
+                        new ControlChangeEvent() { DeltaTime = 10 },
+                        new TextEvent("B")))
+                {
+                    TimeDivision = new TicksPerQuarterNoteTimeDivision(30)
+                },
+            },
+            settings: null,
+            expectedMidiFile: new MidiFile(
+                new TrackChunk(
+                    new TextEvent("A"),
+                    new PitchBendEvent() { DeltaTime = 60 }),
+                new TrackChunk(
+                    new TextEvent("B") { DeltaTime = 90 }),
+                new TrackChunk(
+                    new PitchBendEvent() { DeltaTime = 90 },
+                    new ControlChangeEvent() { DeltaTime = 40 },
+                    new TextEvent("B")))
+            {
+                TimeDivision = new TicksPerQuarterNoteTimeDivision(120)
+            });
+
+        [Test]
+        public void MergeSequentially_PitchBend_4() => MergeSequentially(
+            midiFiles: new[]
+            {
+                new MidiFile(
+                    new TrackChunk(
+                        new TextEvent("A"),
+                        new PitchBendEvent() { DeltaTime = 20, Channel = (FourBitNumber)5 }),
+                    new TrackChunk(
+                        new TextEvent("B") { DeltaTime = 30 }))
+                {
+                    TimeDivision = new TicksPerQuarterNoteTimeDivision(40)
+                },
+                new MidiFile(
+                    new TrackChunk(
+                        new PitchBendEvent(),
+                        new ControlChangeEvent() { DeltaTime = 10 },
+                        new TextEvent("B")))
+                {
+                    TimeDivision = new TicksPerQuarterNoteTimeDivision(30)
+                },
+            },
+            settings: null,
+            expectedMidiFile: new MidiFile(
+                new TrackChunk(
+                    new TextEvent("A"),
+                    new PitchBendEvent() { DeltaTime = 60, Channel = (FourBitNumber)5 }),
+                new TrackChunk(
+                    new TextEvent("B") { DeltaTime = 90 }),
+                new TrackChunk(
+                    new PitchBendEvent() { DeltaTime = 90 },
+                    new ControlChangeEvent() { DeltaTime = 40 },
+                    new TextEvent("B")))
+            {
+                TimeDivision = new TicksPerQuarterNoteTimeDivision(120)
+            });
+
+        [Test]
+        public void MergeSequentially_PitchBend_5() => MergeSequentially(
+            midiFiles: new[]
+            {
+                new MidiFile(
+                    new TrackChunk(
+                        new TextEvent("A"),
+                        new SetTempoEvent(),
+                        new PitchBendEvent() { DeltaTime = 20 }),
+                    new TrackChunk(
+                        new TextEvent("B") { DeltaTime = 30 }))
+                {
+                    TimeDivision = new TicksPerQuarterNoteTimeDivision(40)
+                },
+                new MidiFile(
+                    new TrackChunk(
+                        new ControlChangeEvent() { DeltaTime = 10 },
+                        new TextEvent("B")))
+                {
+                    TimeDivision = new TicksPerQuarterNoteTimeDivision(30)
+                },
+            },
+            settings: null,
+            expectedMidiFile: new MidiFile(
+                new TrackChunk(
+                    new TextEvent("A"),
+                    new SetTempoEvent(),
+                    new PitchBendEvent() { DeltaTime = 60 }),
+                new TrackChunk(
+                    new TextEvent("B") { DeltaTime = 90 }),
+                new TrackChunk(
+                    new ControlChangeEvent() { DeltaTime = 130 },
+                    new TextEvent("B")))
+            {
+                TimeDivision = new TicksPerQuarterNoteTimeDivision(120)
+            });
+
+        [Test]
+        public void MergeSequentially_PitchBend_6() => MergeSequentially(
+            midiFiles: new[]
+            {
+                new MidiFile(
+                    new TrackChunk(
+                        new TextEvent("A"),
+                        new PitchBendEvent() { DeltaTime = 24 }),
+                    new TrackChunk(
+                        new TextEvent("B") { DeltaTime = 32 })),
+                new MidiFile(
+                    new TrackChunk(
+                        new ControlChangeEvent() { DeltaTime = 48 },
+                        new PitchBendEvent(200),
+                        new TextEvent("C"))),
+                new MidiFile(
+                    new TrackChunk(
+                        new TextEvent("D") { DeltaTime = 24 },
+                        new PitchBendEvent(500) { Channel = (FourBitNumber)5 })),
+                new MidiFile(
+                    new TrackChunk(
+                        new TextEvent("E") { DeltaTime = 24 })),
+            },
+            settings: null,
+            expectedMidiFile: new MidiFile(
+                new TrackChunk(
+                    new TextEvent("A"),
+                    new PitchBendEvent() { DeltaTime = 24 }),
+                new TrackChunk(
+                    new TextEvent("B") { DeltaTime = 32 }),
+                new TrackChunk(
+                    new ControlChangeEvent() { DeltaTime = 80 },
+                    new PitchBendEvent(200),
+                    new TextEvent("C")),
+                new TrackChunk(
+                    new PitchBendEvent() { DeltaTime = 80 },
+                    new TextEvent("D") { DeltaTime = 24 },
+                    new PitchBendEvent(500) { Channel = (FourBitNumber)5 }),
+                new TrackChunk(
+                    new PitchBendEvent() { DeltaTime = 104, Channel = (FourBitNumber)5 },
+                    new PitchBendEvent(),
+                    new TextEvent("E") { DeltaTime = 24 })));
 
         [Test]
         public void MergeSequentially_TimeSignature_1() => MergeSequentially(
@@ -372,7 +660,6 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                     new TextEvent("B") { DeltaTime = 90 }),
                 new TrackChunk(
                     new TimeSignatureEvent() { DeltaTime = 90 },
-                    new SetTempoEvent(),
                     new ControlChangeEvent() { DeltaTime = 40 },
                     new TextEvent("B")))
             {
@@ -419,8 +706,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 new TrackChunk(
                     new TextEvent("B") { DeltaTime = 90 }),
                 new TrackChunk(
-                    new SetTempoEvent() { DeltaTime = 90 },
-                    new TimeSignatureEvent(),
+                    new TimeSignatureEvent() { DeltaTime = 90 },
                     new ControlChangeEvent() { DeltaTime = 40 },
                     new TextEvent("B")))
             {
@@ -472,7 +758,6 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                     new TextEvent("B") { DeltaTime = 90 }),
                 new TrackChunk(
                     new TimeSignatureEvent() { DeltaTime = 90 },
-                    new SetTempoEvent(),
                     new ControlChangeEvent() { DeltaTime = 40 },
                     new TextEvent("B"),
                     new TimeSignatureEvent(
@@ -516,9 +801,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 new TrackChunk(
                     new TextEvent("B") { DeltaTime = 90 }),
                 new TrackChunk(
-                    new TimeSignatureEvent() { DeltaTime = 240 },
-                    new SetTempoEvent(),
-                    new ControlChangeEvent() { DeltaTime = 40 },
+                    new ControlChangeEvent() { DeltaTime = 280 },
                     new TextEvent("B")))
             {
                 TimeDivision = new TicksPerQuarterNoteTimeDivision(120)
@@ -565,14 +848,10 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 new TrackChunk(
                     new TextEvent("B") { DeltaTime = 180 }),
                 new TrackChunk(
-                    new TimeSignatureEvent() { DeltaTime = 480 },
-                    new SetTempoEvent(),
-                    new ControlChangeEvent() { DeltaTime = 80 },
+                    new ControlChangeEvent() { DeltaTime = 560 },
                     new TextEvent("B")),
                 new TrackChunk(
-                    new TimeSignatureEvent() { DeltaTime = 960 },
-                    new SetTempoEvent(),
-                    new TextEvent("C") { DeltaTime = 120 },
+                    new TextEvent("C") { DeltaTime = 1080 },
                     new ControlChangeEvent()),
                 new TrackChunk(
                     new TextEvent("D") { DeltaTime = 1260 }))
@@ -612,9 +891,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 new TrackChunk(
                     new TextEvent("B") { DeltaTime = 90 }),
                 new TrackChunk(
-                    new TimeSignatureEvent() { DeltaTime = 330 },
-                    new SetTempoEvent(),
-                    new ControlChangeEvent() { DeltaTime = 40 },
+                    new ControlChangeEvent() { DeltaTime = 370 },
                     new TextEvent("B")))
             {
                 TimeDivision = new TicksPerQuarterNoteTimeDivision(120)
@@ -652,9 +929,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 new TrackChunk(
                     new TextEvent("B") { DeltaTime = 90 }),
                 new TrackChunk(
-                    new TimeSignatureEvent() { DeltaTime = 90 },
-                    new SetTempoEvent(),
-                    new ControlChangeEvent() { DeltaTime = 40 },
+                    new ControlChangeEvent() { DeltaTime = 130 },
                     new TextEvent("B")),
                 new UnknownChunk("Unkn") { Data = new byte[] { 1, 2, 3 } })
             {
@@ -693,9 +968,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 new TrackChunk(
                     new TextEvent("B") { DeltaTime = 90 }),
                 new TrackChunk(
-                    new TimeSignatureEvent() { DeltaTime = 90 },
-                    new SetTempoEvent(),
-                    new ControlChangeEvent() { DeltaTime = 40 },
+                    new ControlChangeEvent() { DeltaTime = 130 },
                     new TextEvent("B")),
                 new UnknownChunk("Unkn") { Data = new byte[] { 1, 2, 3, 4 } })
             {
@@ -736,9 +1009,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 new TrackChunk(
                     new TextEvent("B") { DeltaTime = 90 }),
                 new TrackChunk(
-                    new TimeSignatureEvent() { DeltaTime = 90 },
-                    new SetTempoEvent(),
-                    new ControlChangeEvent() { DeltaTime = 40 },
+                    new ControlChangeEvent() { DeltaTime = 130 },
                     new TextEvent("B")))
             {
                 TimeDivision = new TicksPerQuarterNoteTimeDivision(120)
@@ -777,9 +1048,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 new TrackChunk(
                     new TextEvent("B") { DeltaTime = 90 }),
                 new TrackChunk(
-                    new TimeSignatureEvent() { DeltaTime = 270 },
-                    new SetTempoEvent(),
-                    new ControlChangeEvent() { DeltaTime = 40 },
+                    new ControlChangeEvent() { DeltaTime = 310 },
                     new TextEvent("B")))
             {
                 TimeDivision = new TicksPerQuarterNoteTimeDivision(120)
@@ -817,9 +1086,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 new TrackChunk(
                     new TextEvent("B") { DeltaTime = 90 }),
                 new TrackChunk(
-                    new TimeSignatureEvent() { DeltaTime = 1200 },
-                    new SetTempoEvent(),
-                    new ControlChangeEvent() { DeltaTime = 40 },
+                    new ControlChangeEvent() { DeltaTime = 1240 },
                     new TextEvent("B")))
             {
                 TimeDivision = new TicksPerQuarterNoteTimeDivision(120)
@@ -860,8 +1127,6 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                     new TextEvent("B") { DeltaTime = 90 }),
                 new TrackChunk(
                     new MarkerEvent("Start") { DeltaTime = 90 },
-                    new TimeSignatureEvent(),
-                    new SetTempoEvent(),
                     new ControlChangeEvent() { DeltaTime = 40 },
                     new TextEvent("B")))
             {
@@ -905,8 +1170,6 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                     new TextEvent("B") { DeltaTime = 90 }),
                 new TrackChunk(
                     new MarkerEvent("Start") { DeltaTime = 210 },
-                    new TimeSignatureEvent(),
-                    new SetTempoEvent(),
                     new ControlChangeEvent() { DeltaTime = 40 },
                     new TextEvent("B")))
             {
@@ -947,9 +1210,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                     new TextEvent("B") { DeltaTime = 90 },
                     new MarkerEvent("End")),
                 new TrackChunk(
-                    new TimeSignatureEvent() { DeltaTime = 90 },
-                    new SetTempoEvent(),
-                    new ControlChangeEvent() { DeltaTime = 40 },
+                    new ControlChangeEvent() { DeltaTime = 130 },
                     new TextEvent("B"),
                     new MarkerEvent("End")))
             {
@@ -992,9 +1253,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                     new TextEvent("B") { DeltaTime = 90 },
                     new MarkerEvent("End") { DeltaTime = 30 }),
                 new TrackChunk(
-                    new TimeSignatureEvent() { DeltaTime = 210 },
-                    new SetTempoEvent(),
-                    new ControlChangeEvent() { DeltaTime = 40 },
+                    new ControlChangeEvent() { DeltaTime = 250 },
                     new TextEvent("B"),
                     new MarkerEvent("End") { DeltaTime = 40 }))
             {
@@ -1039,8 +1298,6 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                     new MarkerEvent("End")),
                 new TrackChunk(
                     new MarkerEvent("Start") { DeltaTime = 90 },
-                    new TimeSignatureEvent(),
-                    new SetTempoEvent(),
                     new ControlChangeEvent() { DeltaTime = 40 },
                     new TextEvent("B"),
                     new MarkerEvent("End")))
@@ -1088,8 +1345,6 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                     new MarkerEvent("End1") { DeltaTime = 30 }),
                 new TrackChunk(
                     new MarkerEvent("Start") { DeltaTime = 210 },
-                    new TimeSignatureEvent(),
-                    new SetTempoEvent(),
                     new ControlChangeEvent() { DeltaTime = 40 },
                     new TextEvent("B"),
                     new MarkerEvent("End2") { DeltaTime = 40 }))
@@ -1191,9 +1446,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 new TrackChunk(
                     new TextEvent("A"),
                     new PitchBendEvent() { DeltaTime = 60 },
-                    new TimeSignatureEvent() { DeltaTime = 30 },
-                    new SetTempoEvent(),
-                    new ControlChangeEvent() { DeltaTime = 40 },
+                    new ControlChangeEvent() { DeltaTime = 70 },
                     new TextEvent("B")),
                 new TrackChunk(
                     new TextEvent("B") { DeltaTime = 90 }))
@@ -1239,12 +1492,8 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 new TrackChunk(
                     new TextEvent("A"),
                     new PitchBendEvent() { DeltaTime = 120 },
-                    new TimeSignatureEvent() { DeltaTime = 60 },
-                    new SetTempoEvent(),
-                    new ControlChangeEvent() { DeltaTime = 80 },
+                    new ControlChangeEvent() { DeltaTime = 140 },
                     new TextEvent("B"),
-                    new TimeSignatureEvent(),
-                    new SetTempoEvent(),
                     new TextEvent("C") { DeltaTime = 120 },
                     new ControlChangeEvent()),
                 new TrackChunk(
@@ -1283,8 +1532,6 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 new TrackChunk(
                     new ControlChangeEvent() { DeltaTime = 40 },
                     new TextEvent("B"),
-                    new TimeSignatureEvent(),
-                    new SetTempoEvent(),
                     new TextEvent("A"),
                     new PitchBendEvent() { DeltaTime = 60 }),
                 new TrackChunk(
@@ -1324,8 +1571,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                     new TextEvent("A"),
                     new PitchBendEvent() { DeltaTime = 60 },
                     new SetTempoEvent(200),
-                    new TimeSignatureEvent() { DeltaTime = 30 },
-                    new SetTempoEvent(),
+                    new SetTempoEvent() { DeltaTime = 30 },
                     new ControlChangeEvent() { DeltaTime = 40 },
                     new TextEvent("B")),
                 new TrackChunk(
@@ -1366,8 +1612,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                     new TextEvent("A"),
                     new PitchBendEvent() { DeltaTime = 60 },
                     new SetTempoEvent(200),
-                    new TimeSignatureEvent() { DeltaTime = 30 },
-                    new SetTempoEvent(),
+                    new SetTempoEvent() { DeltaTime = 30 },
                     new ControlChangeEvent() { DeltaTime = 40 },
                     new TextEvent("B")),
                 new TrackChunk(
@@ -1408,8 +1653,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                     new TextEvent("A"),
                     new SetTempoEvent(200),
                     new PitchBendEvent() { DeltaTime = 60 },
-                    new TimeSignatureEvent() { DeltaTime = 30 },
-                    new SetTempoEvent(),
+                    new SetTempoEvent() { DeltaTime = 30 },
                     new ControlChangeEvent() { DeltaTime = 40 },
                     new TextEvent("B"),
                     new SetTempoEvent(500)),
@@ -1451,7 +1695,6 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                     new PitchBendEvent() { DeltaTime = 60 },
                     new TimeSignatureEvent(5, 8),
                     new TimeSignatureEvent() { DeltaTime = 30 },
-                    new SetTempoEvent(),
                     new ControlChangeEvent() { DeltaTime = 40 },
                     new TextEvent("B")),
                 new TrackChunk(
@@ -1500,8 +1743,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                         TimeSignatureEvent.DefaultDenominator,
                         TimeSignatureEvent.DefaultClocksPerClick + 1,
                         TimeSignatureEvent.DefaultThirtySecondNotesPerBeat),
-                    new SetTempoEvent() { DeltaTime = 30 },
-                    new TimeSignatureEvent(),
+                    new TimeSignatureEvent() { DeltaTime = 30 },
                     new ControlChangeEvent() { DeltaTime = 40 },
                     new TextEvent("B")),
                 new TrackChunk(
@@ -1555,7 +1797,6 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                         TimeSignatureEvent.DefaultThirtySecondNotesPerBeat + 1),
                     new PitchBendEvent() { DeltaTime = 60 },
                     new TimeSignatureEvent() { DeltaTime = 30 },
-                    new SetTempoEvent(),
                     new ControlChangeEvent() { DeltaTime = 40 },
                     new TextEvent("B"),
                     new TimeSignatureEvent(
@@ -1599,9 +1840,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 new TrackChunk(
                     new TextEvent("A"),
                     new PitchBendEvent() { DeltaTime = 60 },
-                    new TimeSignatureEvent() { DeltaTime = 180 },
-                    new SetTempoEvent(),
-                    new ControlChangeEvent() { DeltaTime = 40 },
+                    new ControlChangeEvent() { DeltaTime = 220 },
                     new TextEvent("B")),
                 new TrackChunk(
                     new TextEvent("B") { DeltaTime = 90 }))
@@ -1648,13 +1887,9 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 new TrackChunk(
                     new TextEvent("A"),
                     new PitchBendEvent() { DeltaTime = 120 },
-                    new TimeSignatureEvent() { DeltaTime = 360 },
-                    new SetTempoEvent(),
-                    new ControlChangeEvent() { DeltaTime = 80 },
+                    new ControlChangeEvent() { DeltaTime = 440 },
                     new TextEvent("B"),
-                    new TimeSignatureEvent() { DeltaTime = 400 },
-                    new SetTempoEvent(),
-                    new TextEvent("C") { DeltaTime = 120 },
+                    new TextEvent("C") { DeltaTime = 520 },
                     new ControlChangeEvent()),
                 new TrackChunk(
                     new TextEvent("B") { DeltaTime = 180 },
@@ -1693,9 +1928,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 new TrackChunk(
                     new TextEvent("A"),
                     new PitchBendEvent() { DeltaTime = 60 },
-                    new TimeSignatureEvent() { DeltaTime = 270 },
-                    new SetTempoEvent(),
-                    new ControlChangeEvent() { DeltaTime = 40 },
+                    new ControlChangeEvent() { DeltaTime = 310 },
                     new TextEvent("B")),
                 new TrackChunk(
                     new TextEvent("B") { DeltaTime = 90 }))
@@ -1734,9 +1967,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 new TrackChunk(
                     new TextEvent("A"),
                     new PitchBendEvent() { DeltaTime = 60 },
-                    new TimeSignatureEvent() { DeltaTime = 30 },
-                    new SetTempoEvent(),
-                    new ControlChangeEvent() { DeltaTime = 40 },
+                    new ControlChangeEvent() { DeltaTime = 70 },
                     new TextEvent("B")),
                 new CustomChunk(30),
                 new TrackChunk(
@@ -1777,9 +2008,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 new TrackChunk(
                     new TextEvent("A"),
                     new PitchBendEvent() { DeltaTime = 60 },
-                    new TimeSignatureEvent() { DeltaTime = 30 },
-                    new SetTempoEvent(),
-                    new ControlChangeEvent() { DeltaTime = 40 },
+                    new ControlChangeEvent() { DeltaTime = 70 },
                     new TextEvent("B")),
                 new CustomChunk(30),
                 new TrackChunk(
@@ -1821,9 +2050,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 new TrackChunk(
                     new TextEvent("A"),
                     new PitchBendEvent() { DeltaTime = 60 },
-                    new TimeSignatureEvent() { DeltaTime = 30 },
-                    new SetTempoEvent(),
-                    new ControlChangeEvent() { DeltaTime = 40 },
+                    new ControlChangeEvent() { DeltaTime = 70 },
                     new TextEvent("B")),
                 new TrackChunk(
                     new TextEvent("B") { DeltaTime = 90 }))
@@ -1862,9 +2089,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 new TrackChunk(
                     new TextEvent("A"),
                     new PitchBendEvent() { DeltaTime = 60 },
-                    new TimeSignatureEvent() { DeltaTime = 210 },
-                    new SetTempoEvent(),
-                    new ControlChangeEvent() { DeltaTime = 40 },
+                    new ControlChangeEvent() { DeltaTime = 250 },
                     new TextEvent("B")),
                 new TrackChunk(
                     new TextEvent("B") { DeltaTime = 90 }))
@@ -1902,9 +2127,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 new TrackChunk(
                     new TextEvent("A"),
                     new PitchBendEvent() { DeltaTime = 60 },
-                    new TimeSignatureEvent() { DeltaTime = 1140 },
-                    new SetTempoEvent(),
-                    new ControlChangeEvent() { DeltaTime = 40 },
+                    new ControlChangeEvent() { DeltaTime = 1180 },
                     new TextEvent("B")),
                 new TrackChunk(
                     new TextEvent("B") { DeltaTime = 90 }))
@@ -1944,8 +2167,6 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                     new TextEvent("A"),
                     new PitchBendEvent() { DeltaTime = 60 },
                     new MarkerEvent("Start") { DeltaTime = 30 },
-                    new TimeSignatureEvent(),
-                    new SetTempoEvent(),
                     new ControlChangeEvent() { DeltaTime = 40 },
                     new TextEvent("B")),
                 new TrackChunk(
@@ -1989,8 +2210,6 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                     new TextEvent("A"),
                     new PitchBendEvent() { DeltaTime = 60 },
                     new MarkerEvent("Start") { DeltaTime = 150 },
-                    new TimeSignatureEvent(),
-                    new SetTempoEvent(),
                     new ControlChangeEvent() { DeltaTime = 40 },
                     new TextEvent("B")),
                 new TrackChunk(
@@ -2031,8 +2250,6 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                     new TextEvent("A"),
                     new PitchBendEvent() { DeltaTime = 60 },
                     new MarkerEvent("End") { DeltaTime = 30 },
-                    new TimeSignatureEvent(),
-                    new SetTempoEvent(),
                     new ControlChangeEvent() { DeltaTime = 40 },
                     new TextEvent("B"),
                     new MarkerEvent("End")),
@@ -2076,9 +2293,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                     new TextEvent("A"),
                     new PitchBendEvent() { DeltaTime = 60 },
                     new MarkerEvent("End") { DeltaTime = 60 },
-                    new TimeSignatureEvent() { DeltaTime = 90 },
-                    new SetTempoEvent(),
-                    new ControlChangeEvent() { DeltaTime = 40 },
+                    new ControlChangeEvent() { DeltaTime = 130 },
                     new TextEvent("B"),
                     new MarkerEvent("End") { DeltaTime = 40 }),
                 new TrackChunk(
@@ -2122,8 +2337,6 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                     new PitchBendEvent() { DeltaTime = 60 },
                     new MarkerEvent("End") { DeltaTime = 30 },
                     new MarkerEvent("Start"),
-                    new TimeSignatureEvent(),
-                    new SetTempoEvent(),
                     new ControlChangeEvent() { DeltaTime = 40 },
                     new TextEvent("B"),
                     new MarkerEvent("End")),
@@ -2171,8 +2384,6 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                     new PitchBendEvent() { DeltaTime = 60 },
                     new MarkerEvent("End1") { DeltaTime = 60 },
                     new MarkerEvent("Start") { DeltaTime = 90 },
-                    new TimeSignatureEvent(),
-                    new SetTempoEvent(),
                     new ControlChangeEvent() { DeltaTime = 40 },
                     new TextEvent("B"),
                     new MarkerEvent("End2") { DeltaTime = 40 }),

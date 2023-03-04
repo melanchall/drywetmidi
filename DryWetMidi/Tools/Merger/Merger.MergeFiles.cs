@@ -9,6 +9,45 @@ namespace Melanchall.DryWetMidi.Tools
 {
     public static partial class Merger
     {
+        #region Nested classes
+
+        private sealed class ChunkDescriptor
+        {
+            public ChunkDescriptor(MidiChunk chunk)
+            {
+                Chunk = chunk;
+            }
+
+            public MidiChunk Chunk { get; }
+
+            public long LastEventTime { get; set; }
+        }
+
+        #endregion
+
+        #region Constants
+
+        private static readonly Dictionary<MidiEventType, Func<MidiEvent, object>> EventsKeysGetters =
+            new Dictionary<MidiEventType, Func<MidiEvent, object>>
+            {
+                [MidiEventType.SetTempo] = midiEvent => MidiEventType.SetTempo,
+                [MidiEventType.TimeSignature] = midiEvent => MidiEventType.TimeSignature,
+                [MidiEventType.PitchBend] = midiEvent =>
+                {
+                    var pitchBendEvent = (PitchBendEvent)midiEvent;
+                    return Tuple.Create(MidiEventType.PitchBend, pitchBendEvent.Channel);
+                },
+            };
+
+        private static readonly Dictionary<object, Func<MidiEvent>> DefaultEventsGetters = GetDefaultEventsGetters();
+
+        private static MidiEventEqualityCheckSettings MidiEventEqualityCheckSettings = new MidiEventEqualityCheckSettings
+        {
+            CompareDeltaTimes = false
+        };
+
+        #endregion
+
         #region Methods
 
         public static MidiFile MergeSequentially(
@@ -27,20 +66,23 @@ namespace Melanchall.DryWetMidi.Tools
 
             var offset = 0L;
             var initialState = true;
+            var eventsContext = new Dictionary<object, MidiEvent>();
 
             foreach (var midiFile in midiFiles)
             {
                 var tempoMap = midiFile.GetTempoMap();
                 var fileDuration = GetFileDuration(midiFile, tempoMap, settings.FileDurationRoundingStep);
 
-                var chunks = GetChunksForProcessing(midiFile, initialState);
+                var chunks = GetChunksForProcessing(midiFile, initialState, eventsContext);
                 InsertMarkers(midiFile, chunks, fileDuration, settings);
                 var deltaTimeFactor = GetDeltaTimeFactor(timeDivision, midiFile.TimeDivision);
 
                 var newChunks = new List<MidiChunk>();
 
-                foreach (var chunk in chunks)
+                foreach (var chunkDescriptor in chunks)
                 {
+                    var chunk = chunkDescriptor.Chunk;
+
                     var trackChunk = chunk as TrackChunk;
                     if (trackChunk != null)
                         ScaleTrackChunk(trackChunk, deltaTimeFactor);
@@ -125,6 +167,22 @@ namespace Melanchall.DryWetMidi.Tools
             return result;
         }
 
+        private static Dictionary<object, Func<MidiEvent>> GetDefaultEventsGetters()
+        {
+            var result = new Dictionary<object, Func<MidiEvent>>
+            {
+                [MidiEventType.SetTempo] = () => new SetTempoEvent(),
+                [MidiEventType.TimeSignature] = () => new TimeSignatureEvent(),
+            };
+
+            foreach (var channel in FourBitNumber.Values)
+            {
+                result.Add(Tuple.Create(MidiEventType.PitchBend, channel), () => new PitchBendEvent { Channel = channel });
+            }
+
+            return result;
+        }
+
         private static void AddTrackChunksMinimizingCount(
             MidiFile result,
             List<MidiChunk> newChunks)
@@ -196,36 +254,91 @@ namespace Melanchall.DryWetMidi.Tools
             }
         }
 
-        private static ICollection<MidiChunk> GetChunksForProcessing(
+        private static ICollection<ChunkDescriptor> GetChunksForProcessing(
             MidiFile midiFile,
-            bool initialState)
+            bool initialState,
+            Dictionary<object, MidiEvent> eventsContext)
         {
-            var chunks = midiFile.Chunks.Select(c => c.Clone()).ToArray();
+            var chunksCount = midiFile.Chunks.Count;
+            var result = new ChunkDescriptor[chunksCount];
 
-            if (!initialState)
+            TrackChunk firstTrackChunk = null;
+
+            var eventsAtStart = new Dictionary<object, MidiEvent>();
+            var trackedEvents = new Dictionary<object, Tuple<MidiEvent, long>>();
+
+            for (var i = 0; i < chunksCount; i++)
             {
-                var zeroTimeEvents = chunks
-                    .OfType<TrackChunk>()
-                    .GetTimedEventsLazy(null, false)
-                    .TakeWhile(e => e.Object.Time == 0)
-                    .ToArray();
+                var chunk = midiFile.Chunks[i].Clone();
+                result[i] = new ChunkDescriptor(chunk);
 
-                var firstTrackChunk = chunks.OfType<TrackChunk>().FirstOrDefault();
-                if (firstTrackChunk != null)
+                var trackChunk = chunk as TrackChunk;
+                if (trackChunk == null)
+                    continue;
+
+                firstTrackChunk = firstTrackChunk ?? trackChunk;
+
+                var events = trackChunk.Events;
+                var evensCount = events.Count;
+                var time = 0L;
+
+                for (var j = 0; j < evensCount; j++)
                 {
-                    if (!zeroTimeEvents.Any(e => e.Object.Event.EventType == MidiEventType.SetTempo))
-                        firstTrackChunk.Events.Insert(0, new SetTempoEvent());
-                    if (!zeroTimeEvents.Any(e => e.Object.Event.EventType == MidiEventType.TimeSignature))
-                        firstTrackChunk.Events.Insert(0, new TimeSignatureEvent());
+                    var midiEvent = events[j];
+                    time += midiEvent.DeltaTime;
+
+                    Func<MidiEvent, object> keyGetter;
+                    EventsKeysGetters.TryGetValue(midiEvent.EventType, out keyGetter);
+
+                    if (keyGetter != null)
+                    {
+                        var key = keyGetter(midiEvent);
+                        if (time == 0)
+                            eventsAtStart[key] = midiEvent;
+
+                        Tuple<MidiEvent, long> trackedEvent;
+                        if (!trackedEvents.TryGetValue(key, out trackedEvent))
+                            trackedEvents.Add(key, trackedEvent = Tuple.Create(midiEvent, time));
+
+                        if (time >= trackedEvent.Item2)
+                            trackedEvents[key] = Tuple.Create(midiEvent, time);
+                    }
+                }
+
+                result[i].LastEventTime = time;
+            }
+
+            if (firstTrackChunk != null)
+            {
+                foreach (var keyToEvent in eventsContext)
+                {
+                    MidiEvent midiEvent;
+                    if (eventsAtStart.TryGetValue(keyToEvent.Key, out midiEvent))
+                        continue;
+
+                    Func<MidiEvent> defaultEventGetter;
+                    if (!DefaultEventsGetters.TryGetValue(keyToEvent.Key, out defaultEventGetter))
+                        continue;
+
+                    var defaultEvent = defaultEventGetter();
+                    
+                    string message;
+                    if (!MidiEvent.Equals(keyToEvent.Value, defaultEvent, MidiEventEqualityCheckSettings, out message))
+                        firstTrackChunk.Events.Insert(0, defaultEvent);
                 }
             }
 
-            return chunks;
+            foreach (var keyToTrackedEvent in trackedEvents)
+            {
+                eventsContext[keyToTrackedEvent.Key] = keyToTrackedEvent.Value.Item1;
+            }
+
+            return result;
         }
 
         private static void InsertMarkers(
             MidiFile originalMidiFile,
-            ICollection<MidiChunk> chunks,
+            ICollection<ChunkDescriptor> chunks,
             long fileDuration,
             SequentialMergingSettings settings)
         {
@@ -235,8 +348,12 @@ namespace Melanchall.DryWetMidi.Tools
             if (fileStartMarkerEventFactory == null && fileEndMarkerEventFactory == null)
                 return;
 
-            foreach (var trackChunk in chunks.OfType<TrackChunk>())
+            foreach (var chunkDescriptor in chunks)
             {
+                var trackChunk = chunkDescriptor.Chunk as TrackChunk;
+                if (trackChunk == null)
+                    continue;
+
                 var fileStartMarkerEvent = fileStartMarkerEventFactory?.Invoke(originalMidiFile);
                 if (fileStartMarkerEvent != null)
                     trackChunk.Events.Insert(0, fileStartMarkerEvent);
@@ -244,7 +361,7 @@ namespace Melanchall.DryWetMidi.Tools
                 var fileEndMarkerEvent = fileEndMarkerEventFactory?.Invoke(originalMidiFile);
                 if (fileEndMarkerEvent != null)
                 {
-                    fileEndMarkerEvent.DeltaTime = fileDuration - trackChunk.Events.Sum(e => e.DeltaTime);
+                    fileEndMarkerEvent.DeltaTime = fileDuration - chunkDescriptor.LastEventTime;
                     trackChunk.Events.Add(fileEndMarkerEvent);
                 }
             }
