@@ -16,6 +16,55 @@ namespace Melanchall.DryWetMidi.Tests.Core
     {
         #region Test methods
 
+        [Test]
+        public void Read_StopReadingOnExpectedTrackChunksCountReached_Single_EmptyFile() => Read_StopReadingOnExpectedTrackChunksCountReached(
+            midiFile: new MidiFile());
+
+        [Test]
+        public void Read_StopReadingOnExpectedTrackChunksCountReached_Single_MultipleTrackChunks() => Read_StopReadingOnExpectedTrackChunksCountReached(
+            midiFile: new MidiFile(
+                new TrackChunk(
+                    new TextEvent("A"),
+                    new NoteOnEvent(),
+                    new NoteOffEvent()),
+                new TrackChunk(
+                    new ProgramChangeEvent((SevenBitNumber)70),
+                    new NoteOnEvent(),
+                    new NoteOffEvent(),
+                    new TextEvent("B"))));
+
+        [Test]
+        public void Read_StopReadingOnExpectedTrackChunksCountReached_Multiple_EmptyFiles() => Read_StopReadingOnExpectedTrackChunksCountReached(
+            midiFiles: new[]
+            {
+                new MidiFile(),
+                new MidiFile()
+            });
+
+        [Test]
+        public void Read_StopReadingOnExpectedTrackChunksCountReached_Multiple_MultipleTrackChunks() => Read_StopReadingOnExpectedTrackChunksCountReached(
+            midiFiles: new[]
+            {
+                new MidiFile(
+                    new TrackChunk(
+                        new TextEvent("A"),
+                        new NoteOnEvent(),
+                        new NoteOffEvent()),
+                    new TrackChunk(
+                        new ProgramChangeEvent((SevenBitNumber)70),
+                        new NoteOnEvent(),
+                        new NoteOffEvent(),
+                        new TextEvent("B"))),
+                new MidiFile(
+                    new TrackChunk(
+                        new TextEvent("C"),
+                        new ProgramChangeEvent((SevenBitNumber)10) { Channel = (FourBitNumber)4 }),
+                    new TrackChunk(
+                        new NoteOnEvent(),
+                        new ProgramChangeEvent((SevenBitNumber)70),
+                        new NoteOffEvent())),
+            });
+
         [TestCase(0, 1)]
         [TestCase(1, 0)]
         [TestCase(1, 2)]
@@ -1741,7 +1790,63 @@ namespace Melanchall.DryWetMidi.Tests.Core
 
         #region Private methods
 
-        public void Read_NotEnoughBytes_Ignore_NonEndOfTrackEvent(
+        private void Read_StopReadingOnExpectedTrackChunksCountReached(MidiFile midiFile)
+        {
+            using (var stream = new MemoryStream())
+            {
+                midiFile.Write(stream, settings: new WritingSettings
+                {
+                    NoteOffAsSilentNoteOn = false,
+                });
+
+                var random = DryWetMidi.Common.Random.Instance;
+                var additionalBytes = new byte[random.Next(100, 1000)];
+                random.NextBytes(additionalBytes);
+                stream.Write(additionalBytes, 0, additionalBytes.Length);
+
+                stream.Position = 0;
+
+                var newMidiFile = MidiFile.Read(stream, new ReadingSettings
+                {
+                    StopReadingOnExpectedTrackChunksCountReached = true,
+                    SilentNoteOnPolicy = SilentNoteOnPolicy.NoteOn,
+                });
+
+                MidiAsserts.AreEqual(midiFile, newMidiFile, false, "Invalid file.");
+            }
+        }
+
+        private void Read_StopReadingOnExpectedTrackChunksCountReached(ICollection<MidiFile> midiFiles)
+        {
+            using (var stream = new MemoryStream())
+            {
+                foreach (var midiFile in midiFiles)
+                {
+                    midiFile.Write(stream, settings: new WritingSettings
+                    {
+                        NoteOffAsSilentNoteOn = false,
+                    });
+                }
+
+                stream.Position = 0;
+
+                var newMidiFiles = new List<MidiFile>();
+
+                for (var i = 0; i < midiFiles.Count; i++)
+                {
+                    var newMidiFile = MidiFile.Read(stream, new ReadingSettings
+                    {
+                        StopReadingOnExpectedTrackChunksCountReached = true,
+                        SilentNoteOnPolicy = SilentNoteOnPolicy.NoteOn,
+                    });
+                    newMidiFiles.Add(newMidiFile);
+                }
+
+                MidiAsserts.AreEqual(midiFiles, newMidiFiles, false, "Invalid files.");
+            }
+        }
+
+        private void Read_NotEnoughBytes_Ignore_NonEndOfTrackEvent(
             MidiEvent midiEvent,
             int trimBytesCount,
             params MidiEvent[] expectedEvents) => Read_NotEnoughBytes_Ignore(
@@ -1749,7 +1854,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
             bytes => bytes.Take(bytes.Length - 4 /* EOT */ - trimBytesCount).ToArray(),
             new MidiFile(new TrackChunk(expectedEvents ?? Array.Empty<MidiEvent>())));
 
-        public void Read_NotEnoughBytes_Ignore(
+        private void Read_NotEnoughBytes_Ignore(
             MidiFile midiFile,
             Func<byte[], byte[]> transformBytes,
             MidiFile expectedMidiFile) => ReadInvalidFile(
@@ -1769,11 +1874,11 @@ namespace Melanchall.DryWetMidi.Tests.Core
             },
             transformBytes);
 
-        public void Read_NotEnoughBytes_Abort_NonEndOfTrackEvent(MidiEvent midiEvent, int trimBytesCount) => Read_NotEnoughBytes_Abort(
+        private void Read_NotEnoughBytes_Abort_NonEndOfTrackEvent(MidiEvent midiEvent, int trimBytesCount) => Read_NotEnoughBytes_Abort(
             new MidiFile(new TrackChunk(midiEvent)),
             bytes => bytes.Take(bytes.Length - 4 /* EOT */ - trimBytesCount).ToArray());
 
-        public void Read_NotEnoughBytes_Abort(
+        private void Read_NotEnoughBytes_Abort(
             MidiFile midiFile,
             Func<byte[], byte[]> transformBytes) => ReadInvalidFileWithException<NotEnoughBytesException>(
             midiFile,

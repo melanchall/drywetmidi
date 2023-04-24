@@ -31,6 +31,8 @@ namespace Melanchall.DryWetMidi.Core
 
         #region Properties
 
+        public bool StopReadingOnExpectedTrackChunksCountReached { get; set; }
+
         /// <summary>
         /// Gets or sets reaction of the reading engine on unexpected track chunks count. The default is
         /// <see cref="UnexpectedTrackChunksCountPolicy.Ignore"/>.

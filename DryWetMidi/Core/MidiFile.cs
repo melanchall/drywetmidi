@@ -484,6 +484,11 @@ namespace Melanchall.DryWetMidi.Core
 
                     while (!reader.EndReached && (smfEndPosition == null || reader.Position < smfEndPosition))
                     {
+                        if (expectedTrackChunksCount != null &&
+                            actualTrackChunksCount == expectedTrackChunksCount &&
+                            settings.StopReadingOnExpectedTrackChunksCountReached)
+                            return file;
+
                         // Read chunk
 
                         var chunk = ReadChunk(reader, settings, actualTrackChunksCount, expectedTrackChunksCount);
