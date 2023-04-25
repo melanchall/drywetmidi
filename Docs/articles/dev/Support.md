@@ -20,5 +20,6 @@ Things to pay attention for are:
 7. Use formatting for your messages (especially for code blocks):  
     * on GitHub use [Markdown](https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax);
     * on emails use formatting provided by your mail client.
+8. Use English language.
 
 Creating an issue or a discussion on the project's GitHub page, be sure to provide short title and put all required info as the description.
