@@ -90,7 +90,7 @@
       "output": {
         ".html": {
           "relative_path": "articles/dev/Support.html",
-          "hash": "Hpd8hXKlJfA9c74Qc5L3xumeYS9gadrEE0uUjdW9oXE="
+          "hash": "81i8ZY2Pfxh5bh5xrqwnHe1CjlUa1d2wwlpRSM9zPCc="
         }
       },
       "is_incremental": false,
@@ -1511,7 +1511,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Composing.PatternUtilities.html",
-          "hash": "EGJEbOCknWxm4VmhIvigBO5v+/xfmgbaGzSIJdK13EM="
+          "hash": "TDveR2gp69eKn/cewIAXCN1vy01S2f58mi8DOY2m2FU="
         }
       },
       "is_incremental": false,
@@ -2147,7 +2147,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Core.MidiFile.html",
-          "hash": "fkDpWRehV3jU73woOQv/WD/7qm5etvE/giTdrBQQ3ic="
+          "hash": "E6hJWRtn66yLimXzl6RkfFtJI/LhUHuBabA4uxXqMMU="
         }
       },
       "is_incremental": false,
@@ -2459,7 +2459,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Core.PitchBendEvent.html",
-          "hash": "wevTFKI0NQmvXsfgpzYcovF0AGfPGN+GzKAhG9XBp1s="
+          "hash": "PF1uvqvuH6H52ioKuje5OmB6eqUzT6I+4qVxuo5xnlo="
         }
       },
       "is_incremental": false,
@@ -2519,7 +2519,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Core.ReadingSettings.html",
-          "hash": "Fky1Dz8QG3lM0W6KVBO6A+4Tg1SzztRPtoIoDtg7iis="
+          "hash": "ZrFMRJA9zQ1+hs+PYQKoz3rGJaxbm32nWnNpiDtTzRw="
         }
       },
       "is_incremental": false,
@@ -3163,6 +3163,18 @@
     },
     {
       "type": "ManagedReference",
+      "source_relative_path": "obj/api/Melanchall.DryWetMidi.Interaction.DoubleToMusicalTimeSpanSettings.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Melanchall.DryWetMidi.Interaction.DoubleToMusicalTimeSpanSettings.html",
+          "hash": "1plB6zRbUWz91FyanGpexrvlbjSA5SOYonQ2S3Dq03k="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
       "source_relative_path": "obj/api/Melanchall.DryWetMidi.Interaction.GetObjectsUtilities.yml",
       "output": {
         ".html": {
@@ -3395,7 +3407,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Interaction.MusicalTimeSpan.html",
-          "hash": "/uSvq7mip334sN+cf+RIZV2nQcQUpHMHvQJUcTjzbHo="
+          "hash": "fl5vXxvJtMcs0rEUOVXEVCvpT7xUgDZ8G7u/9/93JcU="
         }
       },
       "is_incremental": false,
@@ -3959,7 +3971,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Interaction.html",
-          "hash": "aAsLpM1vnM0S+qQGbvA5OCIRmQ9qySXekkHn1MaVNKU="
+          "hash": "A6OKMdydKDtvJwkB9nTE0D0yNY431LnDcxFzwJfBu6Q="
         }
       },
       "is_incremental": false,
@@ -5159,7 +5171,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Tools.Merger.html",
-          "hash": "qBdtSRZwv0R2COK1XyQypPmOgleds0VTKrkSym7Yh60="
+          "hash": "lnoGqtAkynJESJCUWvEcD/RwG+sCgKanDR107pAejvE="
         }
       },
       "is_incremental": false,
@@ -5419,11 +5431,71 @@
     },
     {
       "type": "ManagedReference",
+      "source_relative_path": "obj/api/Melanchall.DryWetMidi.Tools.ResultTrackChunksCreationPolicy.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Melanchall.DryWetMidi.Tools.ResultTrackChunksCreationPolicy.html",
+          "hash": "sqK46m438BUyVOs4rmy8AS9LckLu6Zso1SbugFTrvm8="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/Melanchall.DryWetMidi.Tools.Sanitizer.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Melanchall.DryWetMidi.Tools.Sanitizer.html",
+          "hash": "N0w4Od+VnR94ctR5VY3Zw5C8wCx2Xb/S7bNhJDRwvAI="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/Melanchall.DryWetMidi.Tools.SanitizingSettings.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Melanchall.DryWetMidi.Tools.SanitizingSettings.html",
+          "hash": "2D6wa3QRqk1S4+KBSmzfRUIDKTb3V6TPzQtm7oxMiBc="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/Melanchall.DryWetMidi.Tools.SequentialMergingSettings.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Melanchall.DryWetMidi.Tools.SequentialMergingSettings.html",
+          "hash": "YTToHadrjvKHmFIw4xFwg6TEYcdS/Lh1Dc/lKtCkqLo="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
       "source_relative_path": "obj/api/Melanchall.DryWetMidi.Tools.ShiftPolicy.yml",
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Tools.ShiftPolicy.html",
           "hash": "o/FVwZLCLBBt9tr52xEvoWntalR93sJzPUs6go4ZMbk="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/Melanchall.DryWetMidi.Tools.SimultaneousMergingSettings.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Melanchall.DryWetMidi.Tools.SimultaneousMergingSettings.html",
+          "hash": "CNAawOlHe4bHuh3q7e7BS5yQbBGFTJVgSjplMGerqHc="
         }
       },
       "is_incremental": false,
@@ -5543,7 +5615,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Tools.html",
-          "hash": "IhR7YMIksd5vhlGoQjA4pCl1jKBau+hOQE7it47RAZg="
+          "hash": "V1KzPYKO3prqg/GmSrVP/hjmnSFTQwAkd5jDdjiRolI="
         }
       },
       "is_incremental": false,
@@ -5555,7 +5627,7 @@
       "output": {
         ".html": {
           "relative_path": "api/toc.html",
-          "hash": "iBy4N9DWsen/CU7avj0DdevfumKx0gi2z+xDY39tKFM="
+          "hash": "pjD+ZBuBuyuRIoMEcVFESjBIGbmXCbolFsfiZDuqbRs="
         }
       },
       "is_incremental": false,
@@ -6302,7 +6374,7 @@
         "ManagedReferenceDocumentProcessor": {
           "can_incremental": false,
           "incrementalPhase": "build",
-          "total_file_count": 353,
+          "total_file_count": 359,
           "skipped_file_count": 0
         },
         "ResourceDocumentProcessor": {
