@@ -289,6 +289,36 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             CheckLengthChangedEvent_Changed(GetChord_NonzeroTime());
         }
 
+        [Test]
+        public void Length_Set_BelowLastNoteDistance_1([Values(0, 20)] long time, [Values(0, 10)] long secondNoteShift)
+        {
+            var chord = new Chord(
+                new Note((SevenBitNumber)70, 100, time),
+                new Note((SevenBitNumber)80, 100, time + secondNoteShift));
+
+            Assert.Throws<ArgumentOutOfRangeException>(() => chord.Length = secondNoteShift - 1, "No exception thrown.");
+        }
+
+        [Test]
+        public void Length_Set_LastNoteDistance([Values(0, 20)] long time, [Values(0, 10)] long secondNoteShift)
+        {
+            var chord = new Chord(
+                new Note((SevenBitNumber)70, 100, time),
+                new Note((SevenBitNumber)80, 100, time + secondNoteShift));
+
+            Assert.DoesNotThrow(() => chord.Length = secondNoteShift, "Exception thrown.");
+        }
+
+        [Test]
+        public void Length_Set_AboveLastNoteDistance([Values(0, 20)] long time, [Values(0, 10)] long secondNoteShift)
+        {
+            var chord = new Chord(
+                new Note((SevenBitNumber)70, 100, time),
+                new Note((SevenBitNumber)80, 100, time + secondNoteShift));
+
+            Assert.DoesNotThrow(() => chord.Length = secondNoteShift + 1, "Exception thrown.");
+        }
+
         #endregion
 
         #region Clone

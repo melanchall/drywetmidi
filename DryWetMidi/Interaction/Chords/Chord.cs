@@ -156,6 +156,21 @@ namespace Melanchall.DryWetMidi.Interaction
                 if (value == oldLength)
                     return;
 
+                var lastNoteTime = 0L;
+                var firstNoteTime = long.MaxValue;
+
+                foreach (var note in Notes)
+                {
+                    if (note.Time > lastNoteTime)
+                        lastNoteTime = note.Time;
+
+                    if (note.Time < firstNoteTime)
+                        firstNoteTime = note.Time;
+                }
+
+                var lastNoteShift = lastNoteTime - firstNoteTime;
+                ThrowIfArgument.IsLessThan(nameof(value), value, lastNoteShift, $"Value is less than {lastNoteShift}. Length must not be less than the distance between chord's start and its last note.");
+
                 var lengthChange = value - Length;
 
                 foreach (var note in Notes)

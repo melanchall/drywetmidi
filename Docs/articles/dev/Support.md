@@ -13,7 +13,7 @@ Things to pay attention for are:
 
 1. If possible provide MIDI files you have problem with or create sample ones to reproduce the error or show what you want to do.
 2. Provide the error message or/and screenshot of it in case of exception or build error.
-3. Provide your code and point me to the place there where the error occurred or where you need to do something.
+3. Provide your code (as text, not as a screenshot!) and point me to the place there where the error occurred or where you need to do something.
 4. What is your operating system?
 5. What version of the library do you use?
 6. Use proper MIDI terminology. Official MIDI specification can be found on the [midi.org](https://midi.org/specifications/midi1-specifications/m1-v4-2-1-midi-1-0-detailed-specification-96-1-4).
