@@ -5,10 +5,10 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Class Sanitizer
+    <title>Class TimedEventsQuantizingSettings
    | DryWetMIDI </title>
     <meta name="viewport" content="width=device-width">
-    <meta name="title" content="Class Sanitizer
+    <meta name="title" content="Class TimedEventsQuantizingSettings
    | DryWetMIDI ">
     <meta name="generator" content="docfx 2.59.4.0">
     
@@ -78,20 +78,32 @@
         </div>
         <div class="article row grid-right">
           <div class="col-md-10">
-            <article class="content wrap" id="_content" data-uid="Melanchall.DryWetMidi.Tools.Sanitizer">
+            <article class="content wrap" id="_content" data-uid="Melanchall.DryWetMidi.Tools.TimedEventsQuantizingSettings">
   
   
-  <h1 id="Melanchall_DryWetMidi_Tools_Sanitizer" data-uid="Melanchall.DryWetMidi.Tools.Sanitizer" class="text-break">Class Sanitizer
+  <h1 id="Melanchall_DryWetMidi_Tools_TimedEventsQuantizingSettings" data-uid="Melanchall.DryWetMidi.Tools.TimedEventsQuantizingSettings" class="text-break">Class TimedEventsQuantizingSettings
   </h1>
-  <div class="markdown level0 summary"></div>
+  <div class="markdown level0 summary">
+Settings according to which timed events should be quantized.
+</div>
   <div class="markdown level0 conceptual"></div>
   <div class="inheritance">
     <h5>Inheritance</h5>
     <div class="level0"><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">Object</a></div>
-    <div class="level1"><span class="xref">Sanitizer</span></div>
+    <div class="level1"><a class="xref" href="Melanchall.DryWetMidi.Tools.QuantizingSettings-1.html">QuantizingSettings</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEvent.html">TimedEvent</a>&gt;</div>
+    <div class="level2"><span class="xref">TimedEventsQuantizingSettings</span></div>
   </div>
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Tools.QuantizingSettings-1.html#Melanchall_DryWetMidi_Tools_QuantizingSettings_1_DistanceCalculationType">QuantizingSettings&lt;TimedEvent&gt;.DistanceCalculationType</a>
+    </div>
+    <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Tools.QuantizingSettings-1.html#Melanchall_DryWetMidi_Tools_QuantizingSettings_1_QuantizingLevel">QuantizingSettings&lt;TimedEvent&gt;.QuantizingLevel</a>
+    </div>
+    <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Tools.QuantizingSettings-1.html#Melanchall_DryWetMidi_Tools_QuantizingSettings_1_Filter">QuantizingSettings&lt;TimedEvent&gt;.Filter</a>
+    </div>
     <div>
       <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)">Object.Equals(Object)</a>
     </div>
@@ -116,42 +128,11 @@
   </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="Melanchall.DryWetMidi.Tools.html">Melanchall.DryWetMidi.Tools</a></h6>
   <h6><strong>Assembly</strong>: Melanchall.DryWetMidi.dll</h6>
-  <h5 id="Melanchall_DryWetMidi_Tools_Sanitizer_syntax">Syntax</h5>
+  <h5 id="Melanchall_DryWetMidi_Tools_TimedEventsQuantizingSettings_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static class Sanitizer</code></pre>
+    <pre><code class="lang-csharp hljs">[Obsolete(&quot;OBS13: Use Quantizer class. More info: https://melanchall.github.io/drywetmidi/obsolete/obsolete.html#obs13.&quot;)]
+public class TimedEventsQuantizingSettings : QuantizingSettings&lt;TimedEvent&gt;</code></pre>
   </div>
-  <h3 id="methods">Methods
-  </h3>
-  <a id="Melanchall_DryWetMidi_Tools_Sanitizer_Sanitize_" data-uid="Melanchall.DryWetMidi.Tools.Sanitizer.Sanitize*"></a>
-  <h4 id="Melanchall_DryWetMidi_Tools_Sanitizer_Sanitize_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Tools_SanitizingSettings_" data-uid="Melanchall.DryWetMidi.Tools.Sanitizer.Sanitize(Melanchall.DryWetMidi.Core.MidiFile,Melanchall.DryWetMidi.Tools.SanitizingSettings)">Sanitize(MidiFile, SanitizingSettings)</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void Sanitize(this MidiFile midiFile, SanitizingSettings settings = null)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a></td>
-        <td><span class="parametername">midiFile</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Tools.SanitizingSettings.html">SanitizingSettings</a></td>
-        <td><span class="parametername">settings</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
 </article>
           </div>
           

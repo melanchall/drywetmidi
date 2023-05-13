@@ -1851,6 +1851,82 @@ Removes all the <a class="xref" href="Melanchall.DryWetMidi.Interaction.Chord.ht
       </tr>
     </tbody>
   </table>
+  <a id="Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_SetTimeAndLength_" data-uid="Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.SetTimeAndLength*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_SetTimeAndLength_Melanchall_DryWetMidi_Interaction_Chord_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_TempoMap_" data-uid="Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.SetTimeAndLength(Melanchall.DryWetMidi.Interaction.Chord,Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Interaction.TempoMap)">SetTimeAndLength(Chord, ITimeSpan, ITimeSpan, TempoMap)</h4>
+  <div class="markdown level1 summary">
+Sets time and length of the specified chord.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[Obsolete(&quot;OBS15: Use SetTime/SetLength methods from TimedObjectUtilities/LengthedObjectUtilities. More info: https://melanchall.github.io/drywetmidi/obsolete/obsolete.html#obs15.&quot;)]
+public static Chord SetTimeAndLength(this Chord chord, ITimeSpan time, ITimeSpan length, TempoMap tempoMap)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.Chord.html">Chord</a></td>
+        <td><span class="parametername">chord</span></td>
+        <td>Chord to set time and length to.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a></td>
+        <td><span class="parametername">time</span></td>
+        <td>Time to set to <code data-dev-comment-type="paramref" class="paramref">chord</code>.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a></td>
+        <td><span class="parametername">length</span></td>
+        <td>Length to set to <code data-dev-comment-type="paramref" class="paramref">chord</code>.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TempoMap.html">TempoMap</a></td>
+        <td><span class="parametername">tempoMap</span></td>
+        <td>Tempo map that will be used for time and length conversion.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.Chord.html">Chord</a></td>
+        <td>An input <code data-dev-comment-type="paramref" class="paramref">chord</code> with new time and length.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td>
+<p>One of the following errors occured:</p>
+<ul><li><code data-dev-comment-type="paramref" class="paramref">chord</code> is <code>null</code>.</li><li><code data-dev-comment-type="paramref" class="paramref">time</code> is <code>null</code>.</li><li><code data-dev-comment-type="paramref" class="paramref">length</code> is <code>null</code>.</li><li><code data-dev-comment-type="paramref" class="paramref">tempoMap</code> is <code>null</code>.</li></ul>
+</td>
+      </tr>
+    </tbody>
+  </table>
 </article>
           </div>
           

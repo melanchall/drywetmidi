@@ -81,7 +81,7 @@
 
 <div class="IMPORTANT">
 <h5>Important</h5>
-<p>Virtual devices API is a platform-specific one so please refer to the <a class="xref" href="../dev/Supported-OS.html">Supported OS</a> article to learn more. For Windows you can use products like <a href="https://www.tobias-erichsen.de/software/virtualmidi/virtualmidi-sdk.html">virtualMIDI SDK</a> or similar to work with virtual MIDI ports programmatically. Be careful with license of these products.</p>
+<p>Virtual devices API available for macOS only. For Windows you can use products like <a href="https://www.tobias-erichsen.de/software/virtualmidi/virtualmidi-sdk.html">virtualMIDI SDK</a> or similar to work with virtual MIDI ports programmatically. Be careful with license of these products.</p>
 </div>
 <p>With DryWetMIDI you can programmatically create virtual MIDI devices with the specified name using <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.VirtualDevice.html#Melanchall_DryWetMidi_Multimedia_VirtualDevice_Create_System_String_">VirtualDevice.Create</a> method. In fact virtual device is an <a class="xref" href="Input-device.html">input</a> and an <a class="xref" href="Output-device.html">output</a> devices paired together in a way that any MIDI event sent to the output device will be immediately transfered back from the virtual device and can be received by an application from its input subdevice.</p>
 <p>Thus we have <a href="https://en.wikipedia.org/wiki/Loopback">loopback</a> device here. Loopback device is useful, for example, as intermediate layer between an application and some software synthesizer. In this case:</p>
@@ -117,7 +117,7 @@ namespace DwmExamples
 }
 </code></pre>
 <p>Output of the program:</p>
-<pre><code class="lang-text">Virtual device Virtual device created with subdevices:
+<pre><code>Virtual device Virtual device created with subdevices:
   input = MyDevice
   output = MyDevice
 Input device MyDevice got as regular input device.
@@ -170,16 +170,13 @@ namespace DwmExamples
 }
 </code></pre>
 <p>This program will print following lines:</p>
-<pre><code class="lang-text">Sending Note On [5] (70, 60) event...
+<pre><code>Sending Note On [5] (70, 60) event...
 Event Note On [5] (70, 60) received on device Leaf1.
 Event Note On [5] (70, 60) received on device Leaf2.
 </code></pre>
-<div class="IMPORTANT">
-<h5>Important</h5>
-<p>As with input and output device you must always <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.MidiDevice.html#Melanchall_DryWetMidi_Multimedia_MidiDevice_Dispose">dispose</a> virtual device when you're done with it:</p>
+<p>As with input and output device you should always <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.MidiDevice.html#Melanchall_DryWetMidi_Multimedia_MidiDevice_Dispose">dispose</a> virtual device when you're done with it:</p>
 <pre><code class="lang-csharp">virtualDevice.Dispose();
 </code></pre>
-</div>
 <p>You must not explicitly dispose subdevices of a virtual device. More than that calling <code>Dispose</code> on <code>virtualDevice.InputDevice</code> and <code>virtualDevice.OutputDevice</code> will throw an exception. But if you got references to the subdevices by regular methods (for example, by <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.InputDevice.html#Melanchall_DryWetMidi_Multimedia_InputDevice_GetByName_System_String_">InputDevice.GetByName</a>), you can call <code>Dispose</code> on that references of course.</p>
 </article>
           </div>

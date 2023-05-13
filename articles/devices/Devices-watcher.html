@@ -81,7 +81,7 @@
 
 <div class="IMPORTANT">
 <h5>Important</h5>
-<p>Devices watching API is a platform-specific one so please refer to the <a class="xref" href="../dev/Supported-OS.html">Supported OS</a> article to learn more.</p>
+<p>Watching devices available for macOS only.</p>
 </div>
 <p>DryWetMIDI allows to track whether a MIDI device added to or removed from the system. There is <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.DevicesWatcher.html">DevicesWatcher</a> class for that purpose. The class is singleton and you can get the instance with <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.DevicesWatcher.html#Melanchall_DryWetMidi_Multimedia_DevicesWatcher_Instance">Instance</a> property.</p>
 <p><code>DevicesWatcher</code> provides two events: <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.DevicesWatcher.html#Melanchall_DryWetMidi_Multimedia_DevicesWatcher_DeviceAdded">DeviceAdded</a> and <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.DevicesWatcher.html#Melanchall_DryWetMidi_Multimedia_DevicesWatcher_DeviceRemoved">DeviceRemoved</a>. First one will be fired when a MIDI device is added to the system, and second one - when a device removed from it. You can then cast device instance from the events arguments to <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.InputDevice.html">InputDevice</a> or <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.OutputDevice.html">OutputDevice</a>. See following sample program:</p>
@@ -122,7 +122,7 @@ namespace DwmExamples
 }
 </code></pre>
 <p>Running the program we'll see following output:</p>
-<pre><code class="lang-text">Adding device...
+<pre><code>Adding device...
 Device added: Melanchall.DryWetMidi.Multimedia.InputDevice (MyDevice)
 Device added: Melanchall.DryWetMidi.Multimedia.OutputDevice (MyDevice)
 Removing device...
@@ -160,7 +160,7 @@ namespace DwmExamples
 }
 </code></pre>
 <p>The progrum will be crashed with:</p>
-<pre><code class="lang-text">Removing device...
+<pre><code>Removing device...
 Device removed. Getting its name...
 Unhandled exception. System.InvalidOperationException: Operation can't be performed on removed device.
 </code></pre>
@@ -205,7 +205,7 @@ namespace DwmExamples
 }
 </code></pre>
 <p>Output is:</p>
-<pre><code class="lang-text">Removing device...
+<pre><code>Removing device...
 Device removed. Getting its name...
 Name is MyDevice
 Device removed. Getting its name...
@@ -214,7 +214,7 @@ Name is MyDevice
 <p>Device instances comparing can be useful in programs with GUI where you need update the list of available devices. So when a device is added, you just add it to the list. When some device is removed, you find corresponding item in the current list via <code>Equals</code> on device instances and remove that item.</p>
 <div class="IMPORTANT">
 <h5>Important</h5>
-<p>Checking for devices equality supported for <strong>macOS</strong> only. On Windows any call of <code>Equals</code> will just compare references.</p>
+<p>Checking for devices equality supported for macOS only. On Windows any call of <code>Equals</code> will just compare references.</p>
 </div>
 </article>
           </div>

@@ -5,10 +5,10 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Class SimultaneousMergingSettings
+    <title>Class LengthedObjectsRandomizingSettings&lt;TObject&gt;
    | DryWetMIDI </title>
     <meta name="viewport" content="width=device-width">
-    <meta name="title" content="Class SimultaneousMergingSettings
+    <meta name="title" content="Class LengthedObjectsRandomizingSettings&lt;TObject&gt;
    | DryWetMIDI ">
     <meta name="generator" content="docfx 2.59.4.0">
     
@@ -78,20 +78,28 @@
         </div>
         <div class="article row grid-right">
           <div class="col-md-10">
-            <article class="content wrap" id="_content" data-uid="Melanchall.DryWetMidi.Tools.SimultaneousMergingSettings">
+            <article class="content wrap" id="_content" data-uid="Melanchall.DryWetMidi.Tools.LengthedObjectsRandomizingSettings`1">
   
   
-  <h1 id="Melanchall_DryWetMidi_Tools_SimultaneousMergingSettings" data-uid="Melanchall.DryWetMidi.Tools.SimultaneousMergingSettings" class="text-break">Class SimultaneousMergingSettings
+  <h1 id="Melanchall_DryWetMidi_Tools_LengthedObjectsRandomizingSettings_1" data-uid="Melanchall.DryWetMidi.Tools.LengthedObjectsRandomizingSettings`1" class="text-break">Class LengthedObjectsRandomizingSettings&lt;TObject&gt;
   </h1>
-  <div class="markdown level0 summary"></div>
+  <div class="markdown level0 summary">
+Settings according to which lengthed objects should be randomized.
+</div>
   <div class="markdown level0 conceptual"></div>
   <div class="inheritance">
     <h5>Inheritance</h5>
     <div class="level0"><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">Object</a></div>
-    <div class="level1"><span class="xref">SimultaneousMergingSettings</span></div>
+    <div class="level1"><a class="xref" href="Melanchall.DryWetMidi.Tools.RandomizingSettings-1.html">RandomizingSettings</a>&lt;TObject&gt;</div>
+    <div class="level2"><span class="xref">LengthedObjectsRandomizingSettings&lt;TObject&gt;</span></div>
+      <div class="level3"><a class="xref" href="Melanchall.DryWetMidi.Tools.ChordsRandomizingSettings.html">ChordsRandomizingSettings</a></div>
+      <div class="level3"><a class="xref" href="Melanchall.DryWetMidi.Tools.NotesRandomizingSettings.html">NotesRandomizingSettings</a></div>
   </div>
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Tools.RandomizingSettings-1.html#Melanchall_DryWetMidi_Tools_RandomizingSettings_1_Filter">RandomizingSettings&lt;TObject&gt;.Filter</a>
+    </div>
     <div>
       <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)">Object.Equals(Object)</a>
     </div>
@@ -116,19 +124,38 @@
   </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="Melanchall.DryWetMidi.Tools.html">Melanchall.DryWetMidi.Tools</a></h6>
   <h6><strong>Assembly</strong>: Melanchall.DryWetMidi.dll</h6>
-  <h5 id="Melanchall_DryWetMidi_Tools_SimultaneousMergingSettings_syntax">Syntax</h5>
+  <h5 id="Melanchall_DryWetMidi_Tools_LengthedObjectsRandomizingSettings_1_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public sealed class SimultaneousMergingSettings</code></pre>
+    <pre><code class="lang-csharp hljs">[Obsolete(&quot;OBS10: Use Quantizer class passing QuantizingSettings with its RandomizingSettings property set. More info: https://melanchall.github.io/drywetmidi/obsolete/obsolete.html#obs10.&quot;)]
+public abstract class LengthedObjectsRandomizingSettings&lt;TObject&gt; : RandomizingSettings&lt;TObject&gt; where TObject : ILengthedObject</code></pre>
   </div>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">TObject</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
   <h3 id="properties">Properties
   </h3>
-  <a id="Melanchall_DryWetMidi_Tools_SimultaneousMergingSettings_CopyNonTrackChunks_" data-uid="Melanchall.DryWetMidi.Tools.SimultaneousMergingSettings.CopyNonTrackChunks*"></a>
-  <h4 id="Melanchall_DryWetMidi_Tools_SimultaneousMergingSettings_CopyNonTrackChunks" data-uid="Melanchall.DryWetMidi.Tools.SimultaneousMergingSettings.CopyNonTrackChunks">CopyNonTrackChunks</h4>
-  <div class="markdown level1 summary"></div>
+  <a id="Melanchall_DryWetMidi_Tools_LengthedObjectsRandomizingSettings_1_FixOppositeEnd_" data-uid="Melanchall.DryWetMidi.Tools.LengthedObjectsRandomizingSettings`1.FixOppositeEnd*"></a>
+  <h4 id="Melanchall_DryWetMidi_Tools_LengthedObjectsRandomizingSettings_1_FixOppositeEnd" data-uid="Melanchall.DryWetMidi.Tools.LengthedObjectsRandomizingSettings`1.FixOppositeEnd">FixOppositeEnd</h4>
+  <div class="markdown level1 summary">
+Gets or sets a value indicating whether an opposite side of an object should be fixed or not.
+The default value is <code>false</code>.
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public bool CopyNonTrackChunks { get; set; }</code></pre>
+    <pre><code class="lang-csharp hljs">public bool FixOppositeEnd { get; set; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -145,13 +172,20 @@
       </tr>
     </tbody>
   </table>
-  <a id="Melanchall_DryWetMidi_Tools_SimultaneousMergingSettings_IgnoreDifferentTempoMaps_" data-uid="Melanchall.DryWetMidi.Tools.SimultaneousMergingSettings.IgnoreDifferentTempoMaps*"></a>
-  <h4 id="Melanchall_DryWetMidi_Tools_SimultaneousMergingSettings_IgnoreDifferentTempoMaps" data-uid="Melanchall.DryWetMidi.Tools.SimultaneousMergingSettings.IgnoreDifferentTempoMaps">IgnoreDifferentTempoMaps</h4>
-  <div class="markdown level1 summary"></div>
+  <h5 id="Melanchall_DryWetMidi_Tools_LengthedObjectsRandomizingSettings_1_FixOppositeEnd_remarks">Remarks</h5>
+  <div class="markdown level1 remarks">
+When an object&apos;s side is fixed the length can be changed during randomizing.
+</div>
+  <a id="Melanchall_DryWetMidi_Tools_LengthedObjectsRandomizingSettings_1_RandomizingTarget_" data-uid="Melanchall.DryWetMidi.Tools.LengthedObjectsRandomizingSettings`1.RandomizingTarget*"></a>
+  <h4 id="Melanchall_DryWetMidi_Tools_LengthedObjectsRandomizingSettings_1_RandomizingTarget" data-uid="Melanchall.DryWetMidi.Tools.LengthedObjectsRandomizingSettings`1.RandomizingTarget">RandomizingTarget</h4>
+  <div class="markdown level1 summary">
+Gets or sets the side of an object that should be randomized.
+The default value is <a class="xref" href="Melanchall.DryWetMidi.Tools.LengthedObjectTarget.html#Melanchall_DryWetMidi_Tools_LengthedObjectTarget_Start">Start</a>.
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public bool IgnoreDifferentTempoMaps { get; set; }</code></pre>
+    <pre><code class="lang-csharp hljs">public LengthedObjectTarget RandomizingTarget { get; set; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -163,8 +197,23 @@
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Tools.LengthedObjectTarget.html">LengthedObjectTarget</a></td>
         <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.componentmodel.invalidenumargumentexception">InvalidEnumArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">value</code> specified an invalid value.</td>
       </tr>
     </tbody>
   </table>

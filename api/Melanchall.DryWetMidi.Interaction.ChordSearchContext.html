@@ -5,10 +5,10 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Enum ResultTrackChunksCreationPolicy
+    <title>Enum ChordSearchContext
    | DryWetMIDI </title>
     <meta name="viewport" content="width=device-width">
-    <meta name="title" content="Enum ResultTrackChunksCreationPolicy
+    <meta name="title" content="Enum ChordSearchContext
    | DryWetMIDI ">
     <meta name="generator" content="docfx 2.59.4.0">
     
@@ -78,18 +78,22 @@
         </div>
         <div class="article row grid-right">
           <div class="col-md-10">
-            <article class="content wrap" id="_content" data-uid="Melanchall.DryWetMidi.Tools.ResultTrackChunksCreationPolicy">
+            <article class="content wrap" id="_content" data-uid="Melanchall.DryWetMidi.Interaction.ChordSearchContext">
   
   
-  <h1 id="Melanchall_DryWetMidi_Tools_ResultTrackChunksCreationPolicy" data-uid="Melanchall.DryWetMidi.Tools.ResultTrackChunksCreationPolicy" class="text-break">Enum ResultTrackChunksCreationPolicy
+  <h1 id="Melanchall_DryWetMidi_Interaction_ChordSearchContext" data-uid="Melanchall.DryWetMidi.Interaction.ChordSearchContext" class="text-break">Enum ChordSearchContext
   </h1>
-  <div class="markdown level0 summary"></div>
+  <div class="markdown level0 summary">
+Defines a context to search chords within. More info in the
+<a class="xref" href="../articles/high-level-managing/Getting-objects.html#chordsearchcontext">Getting objects: GetChords: Settings: ChordSearchContext</a>
+article.
+</div>
   <div class="markdown level0 conceptual"></div>
-  <h6><strong>Namespace</strong>: <a class="xref" href="Melanchall.DryWetMidi.Tools.html">Melanchall.DryWetMidi.Tools</a></h6>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Melanchall.DryWetMidi.Interaction.html">Melanchall.DryWetMidi.Interaction</a></h6>
   <h6><strong>Assembly</strong>: Melanchall.DryWetMidi.dll</h6>
-  <h5 id="Melanchall_DryWetMidi_Tools_ResultTrackChunksCreationPolicy_syntax">Syntax</h5>
+  <h5 id="Melanchall_DryWetMidi_Interaction_ChordSearchContext_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public enum ResultTrackChunksCreationPolicy</code></pre>
+    <pre><code class="lang-csharp hljs">public enum ChordSearchContext</code></pre>
   </div>
   <h3 id="fields">Fields
   </h3>
@@ -102,15 +106,28 @@
     <thead>
     <tbody>
       <tr>
-        <td id="Melanchall_DryWetMidi_Tools_ResultTrackChunksCreationPolicy_CreateForEachFile">CreateForEachFile</td>
-        <td></td>
+        <td id="Melanchall_DryWetMidi_Interaction_ChordSearchContext_AllEventsCollections">AllEventsCollections</td>
+        <td>
+A chord can be detected within all events collection (<a class="xref" href="Melanchall.DryWetMidi.Core.EventsCollection.html">EventsCollection</a>
+or <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a>) of the source (<a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a> for example). It means
+MIDI events that make up a chord can be present in different events collections.
+</td>
       </tr>
       <tr>
-        <td id="Melanchall_DryWetMidi_Tools_ResultTrackChunksCreationPolicy_MinimizeCount">MinimizeCount</td>
-        <td></td>
+        <td id="Melanchall_DryWetMidi_Interaction_ChordSearchContext_SingleEventsCollection">SingleEventsCollection</td>
+        <td>
+A chord should be detected only within single events collection (<a class="xref" href="Melanchall.DryWetMidi.Core.EventsCollection.html">EventsCollection</a>
+or <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a>). It means all MIDI events that make up a chord should be present
+in one events collection.
+</td>
       </tr>
     </tbody>
   </thead></thead></table>
+  <h5 id="Melanchall_DryWetMidi_Interaction_ChordSearchContext_seealso">See Also</h5>
+  <div class="seealso">
+      <div><a class="xref" href="Melanchall.DryWetMidi.Interaction.ChordDetectionSettings.html">ChordDetectionSettings</a></div>
+      <div><a class="xref" href="Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.html">ChordsManagingUtilities</a></div>
+  </div>
 </article>
           </div>
           

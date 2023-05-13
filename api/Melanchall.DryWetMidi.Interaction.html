@@ -127,12 +127,14 @@ Holds the data for a <a class="xref" href="Melanchall.DryWetMidi.Interaction.Cho
 Settings which define how chords should be detected and built. More info in the
 <a class="xref" href="../articles/high-level-managing/Getting-objects.html#settings-1">Getting objects: GetChords: Settings</a> article.
 </section>
+      <h4><a class="xref" href="Melanchall.DryWetMidi.Interaction.ChordsManager.html">ChordsManager</a></h4>
+      <section>
+Provides a way to manage chords of a MIDI file.
+</section>
       <h4><a class="xref" href="Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.html">ChordsManagingUtilities</a></h4>
       <section>
 Extension methods for chords managing.
 </section>
-      <h4><a class="xref" href="Melanchall.DryWetMidi.Interaction.DoubleToMusicalTimeSpanSettings.html">DoubleToMusicalTimeSpanSettings</a></h4>
-      <section></section>
       <h4><a class="xref" href="Melanchall.DryWetMidi.Interaction.GetObjectsUtilities.html">GetObjectsUtilities</a></h4>
       <section>
 Provides utilities to extract objects of different types at once. More info in the
@@ -192,6 +194,10 @@ Holds the data for a <a class="xref" href="Melanchall.DryWetMidi.Interaction.Not
 Settings which define how notes should be detected and built. More info in the
 <a class="xref" href="../articles/high-level-managing/Getting-objects.html#settings">Getting objects: GetNotes: Settings</a> article.
 </section>
+      <h4><a class="xref" href="Melanchall.DryWetMidi.Interaction.NotesManager.html">NotesManager</a></h4>
+      <section>
+Provides a way to manage notes of a MIDI file.
+</section>
       <h4><a class="xref" href="Melanchall.DryWetMidi.Interaction.NotesManagingUtilities.html">NotesManagingUtilities</a></h4>
       <section>
 Extension methods for notes managing.
@@ -215,6 +221,10 @@ Pitch Bend Sensitivity registered parameter.
       <h4><a class="xref" href="Melanchall.DryWetMidi.Interaction.RegisteredParameter.html">RegisteredParameter</a></h4>
       <section>
 Represents MIDI registered parameter (RPN).
+</section>
+      <h4><a class="xref" href="Melanchall.DryWetMidi.Interaction.ResizeNotesUtilities.html">ResizeNotesUtilities</a></h4>
+      <section>
+Provides ways to resize collection of notes.
 </section>
       <h4><a class="xref" href="Melanchall.DryWetMidi.Interaction.Rest.html">Rest</a></h4>
       <section>
@@ -270,6 +280,10 @@ Holds the data for a <a class="xref" href="Melanchall.DryWetMidi.Interaction.Tim
       <h4><a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEventDetectionSettings.html">TimedEventDetectionSettings</a></h4>
       <section>
 Settings which define how timed events should be detected and built.
+</section>
+      <h4><a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEventsManager.html">TimedEventsManager</a></h4>
+      <section>
+Provides a way to manage events of a MIDI file by their absolute time.
 </section>
       <h4><a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.html">TimedEventsManagingUtilities</a></h4>
       <section>
@@ -373,6 +387,12 @@ Time span that represents time or length.
 </section>
     <h3 id="enums">Enums
   </h3>
+      <h4><a class="xref" href="Melanchall.DryWetMidi.Interaction.ChordSearchContext.html">ChordSearchContext</a></h4>
+      <section>
+Defines a context to search chords within. More info in the
+<a class="xref" href="../articles/high-level-managing/Getting-objects.html#chordsearchcontext">Getting objects: GetChords: Settings: ChordSearchContext</a>
+article.
+</section>
       <h4><a class="xref" href="Melanchall.DryWetMidi.Interaction.LengthedObjectPart.html">LengthedObjectPart</a></h4>
       <section>
 Part of an <a class="xref" href="Melanchall.DryWetMidi.Interaction.ILengthedObject.html">ILengthedObject</a>.
@@ -381,6 +401,13 @@ Part of an <a class="xref" href="Melanchall.DryWetMidi.Interaction.ILengthedObje
       <section>
 Represents a simple math operation used by the <a class="xref" href="Melanchall.DryWetMidi.Interaction.MathTimeSpan.html">MathTimeSpan</a>.
 The default is <a class="xref" href="Melanchall.DryWetMidi.Interaction.MathOperation.html#Melanchall_DryWetMidi_Interaction_MathOperation_Add">Add</a>.
+</section>
+      <h4><a class="xref" href="Melanchall.DryWetMidi.Interaction.NoteSearchContext.html">NoteSearchContext</a></h4>
+      <section>
+Defines a context to search notes within. The default value is <a class="xref" href="Melanchall.DryWetMidi.Interaction.NoteSearchContext.html#Melanchall_DryWetMidi_Interaction_NoteSearchContext_SingleEventsCollection">SingleEventsCollection</a>.
+More info in the
+<a class="xref" href="../articles/high-level-managing/Getting-objects.html#notesearchcontext">Getting objects: GetNotes: Settings: NoteSearchContext</a>
+article.
 </section>
       <h4><a class="xref" href="Melanchall.DryWetMidi.Interaction.NoteStartDetectionPolicy.html">NoteStartDetectionPolicy</a></h4>
       <section>

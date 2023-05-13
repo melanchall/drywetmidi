@@ -124,6 +124,142 @@ Extension methods for managing MIDI events by their absolute time.
   </div>
   <h3 id="methods">Methods
   </h3>
+  <a id="Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_AddEvent_" data-uid="Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.AddEvent*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_AddEvent_Melanchall_DryWetMidi_Interaction_TimedObjectsCollection_Melanchall_DryWetMidi_Interaction_TimedEvent__Melanchall_DryWetMidi_Core_MidiEvent_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_TempoMap_" data-uid="Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.AddEvent(Melanchall.DryWetMidi.Interaction.TimedObjectsCollection{Melanchall.DryWetMidi.Interaction.TimedEvent},Melanchall.DryWetMidi.Core.MidiEvent,Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Interaction.TempoMap)">AddEvent(TimedObjectsCollection&lt;TimedEvent&gt;, MidiEvent, ITimeSpan, TempoMap)</h4>
+  <div class="markdown level1 summary">
+Adds a <a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html">MidiEvent</a> into a <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedObjectsCollection-1.html">TimedObjectsCollection&lt;TObject&gt;</a> with the specified
+absolute time.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[Obsolete(&quot;OBS16: Use TimedEvent constructor and add an object manually. More info: https://melanchall.github.io/drywetmidi/obsolete/obsolete.html#obs16.&quot;)]
+public static void AddEvent(this TimedObjectsCollection&lt;TimedEvent&gt; eventsCollection, MidiEvent midiEvent, ITimeSpan time, TempoMap tempoMap)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedObjectsCollection-1.html">TimedObjectsCollection</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEvent.html">TimedEvent</a>&gt;</td>
+        <td><span class="parametername">eventsCollection</span></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedObjectsCollection-1.html">TimedObjectsCollection&lt;TObject&gt;</a> to add an event into.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html">MidiEvent</a></td>
+        <td><span class="parametername">midiEvent</span></td>
+        <td>Event to add into the <code data-dev-comment-type="paramref" class="paramref">eventsCollection</code>.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a></td>
+        <td><span class="parametername">time</span></td>
+        <td>Absolute time that will be assigned to the <code data-dev-comment-type="paramref" class="paramref">midiEvent</code>
+when it will be placed into the <code data-dev-comment-type="paramref" class="paramref">eventsCollection</code>.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TempoMap.html">TempoMap</a></td>
+        <td><span class="parametername">tempoMap</span></td>
+        <td>Tempo map used to place <code data-dev-comment-type="paramref" class="paramref">midiEvent</code> into the
+<code data-dev-comment-type="paramref" class="paramref">eventsCollection</code> with the specified time.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td>
+<p>One of the following errors occured:</p>
+<ul><li><code data-dev-comment-type="paramref" class="paramref">eventsCollection</code> is <code>null</code>.</li><li><code data-dev-comment-type="paramref" class="paramref">midiEvent</code> is <code>null</code>.</li><li><code data-dev-comment-type="paramref" class="paramref">time</code> is <code>null</code>.</li><li><code data-dev-comment-type="paramref" class="paramref">tempoMap</code> is <code>null</code>.</li></ul>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentexception">ArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">midiEvent</code> is either system real-time or
+    system common one.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_AddEvent_" data-uid="Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.AddEvent*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_AddEvent_Melanchall_DryWetMidi_Interaction_TimedObjectsCollection_Melanchall_DryWetMidi_Interaction_TimedEvent__Melanchall_DryWetMidi_Core_MidiEvent_System_Int64_" data-uid="Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.AddEvent(Melanchall.DryWetMidi.Interaction.TimedObjectsCollection{Melanchall.DryWetMidi.Interaction.TimedEvent},Melanchall.DryWetMidi.Core.MidiEvent,System.Int64)">AddEvent(TimedObjectsCollection&lt;TimedEvent&gt;, MidiEvent, Int64)</h4>
+  <div class="markdown level1 summary">
+Adds a <a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html">MidiEvent</a> into a <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedObjectsCollection-1.html">TimedObjectsCollection&lt;TObject&gt;</a> with the specified
+absolute time.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[Obsolete(&quot;OBS16: Use TimedEvent constructor and add an object manually. More info: https://melanchall.github.io/drywetmidi/obsolete/obsolete.html#obs16.&quot;)]
+public static void AddEvent(this TimedObjectsCollection&lt;TimedEvent&gt; eventsCollection, MidiEvent midiEvent, long time)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedObjectsCollection-1.html">TimedObjectsCollection</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEvent.html">TimedEvent</a>&gt;</td>
+        <td><span class="parametername">eventsCollection</span></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedObjectsCollection-1.html">TimedObjectsCollection&lt;TObject&gt;</a> to add an event into.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html">MidiEvent</a></td>
+        <td><span class="parametername">midiEvent</span></td>
+        <td>Event to add into the <code data-dev-comment-type="paramref" class="paramref">eventsCollection</code>.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int64">Int64</a></td>
+        <td><span class="parametername">time</span></td>
+        <td>Absolute time that will be assigned to the <code data-dev-comment-type="paramref" class="paramref">midiEvent</code>
+when it will be placed into the <code data-dev-comment-type="paramref" class="paramref">eventsCollection</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td>
+<p>One of the following errors occured:</p>
+<ul><li><code data-dev-comment-type="paramref" class="paramref">eventsCollection</code> is <code>null</code>.</li><li><code data-dev-comment-type="paramref" class="paramref">midiEvent</code> is <code>null</code>.</li></ul>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">time</code> is negative.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentexception">ArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">midiEvent</code> is either system real-time or
+    system common one.</td>
+      </tr>
+    </tbody>
+  </table>
   <a id="Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_GetTimedEvents_" data-uid="Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.GetTimedEvents*"></a>
   <h4 id="Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_GetTimedEvents_Melanchall_DryWetMidi_Core_EventsCollection_Melanchall_DryWetMidi_Interaction_TimedEventDetectionSettings_" data-uid="Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.GetTimedEvents(Melanchall.DryWetMidi.Core.EventsCollection,Melanchall.DryWetMidi.Interaction.TimedEventDetectionSettings)">GetTimedEvents(EventsCollection, TimedEventDetectionSettings)</h4>
   <div class="markdown level1 summary">
@@ -1645,6 +1781,77 @@ Removes all the <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEve
         <td>
 <p>One of the following errors occured:</p>
 <ul><li><code data-dev-comment-type="paramref" class="paramref">trackChunks</code> is <code>null</code>.</li><li><code data-dev-comment-type="paramref" class="paramref">match</code> is <code>null</code>.</li></ul>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_SetTime_" data-uid="Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.SetTime*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_SetTime_Melanchall_DryWetMidi_Interaction_TimedEvent_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_TempoMap_" data-uid="Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.SetTime(Melanchall.DryWetMidi.Interaction.TimedEvent,Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Interaction.TempoMap)">SetTime(TimedEvent, ITimeSpan, TempoMap)</h4>
+  <div class="markdown level1 summary">
+Sets time of the specified timed event.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[Obsolete(&quot;OBS14: Use SetTime method from TimedObjectUtilities. More info: https://melanchall.github.io/drywetmidi/obsolete/obsolete.html#obs14.&quot;)]
+public static TimedEvent SetTime(this TimedEvent timedEvent, ITimeSpan time, TempoMap tempoMap)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEvent.html">TimedEvent</a></td>
+        <td><span class="parametername">timedEvent</span></td>
+        <td>Timed event to set time to.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a></td>
+        <td><span class="parametername">time</span></td>
+        <td>Time to set to <code data-dev-comment-type="paramref" class="paramref">timedEvent</code>.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TempoMap.html">TempoMap</a></td>
+        <td><span class="parametername">tempoMap</span></td>
+        <td>Tempo map that will be used for time conversion.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEvent.html">TimedEvent</a></td>
+        <td>An input <code data-dev-comment-type="paramref" class="paramref">timedEvent</code> with new time.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td>
+<p>One of the following errors occured:</p>
+<ul><li><code data-dev-comment-type="paramref" class="paramref">timedEvent</code> is <code>null</code>.</li><li><code data-dev-comment-type="paramref" class="paramref">time</code> is <code>null</code>.</li><li><code data-dev-comment-type="paramref" class="paramref">tempoMap</code> is <code>null</code>.</li></ul>
 </td>
       </tr>
     </tbody>

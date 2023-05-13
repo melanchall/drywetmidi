@@ -5,10 +5,10 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Class SanitizingSettings
+    <title>Class NotesMergingSettings
    | DryWetMIDI </title>
     <meta name="viewport" content="width=device-width">
-    <meta name="title" content="Class SanitizingSettings
+    <meta name="title" content="Class NotesMergingSettings
    | DryWetMIDI ">
     <meta name="generator" content="docfx 2.59.4.0">
     
@@ -78,17 +78,19 @@
         </div>
         <div class="article row grid-right">
           <div class="col-md-10">
-            <article class="content wrap" id="_content" data-uid="Melanchall.DryWetMidi.Tools.SanitizingSettings">
+            <article class="content wrap" id="_content" data-uid="Melanchall.DryWetMidi.Tools.NotesMergingSettings">
   
   
-  <h1 id="Melanchall_DryWetMidi_Tools_SanitizingSettings" data-uid="Melanchall.DryWetMidi.Tools.SanitizingSettings" class="text-break">Class SanitizingSettings
+  <h1 id="Melanchall_DryWetMidi_Tools_NotesMergingSettings" data-uid="Melanchall.DryWetMidi.Tools.NotesMergingSettings" class="text-break">Class NotesMergingSettings
   </h1>
-  <div class="markdown level0 summary"></div>
+  <div class="markdown level0 summary">
+Settings according to which nearby notes should be merged.
+</div>
   <div class="markdown level0 conceptual"></div>
   <div class="inheritance">
     <h5>Inheritance</h5>
     <div class="level0"><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">Object</a></div>
-    <div class="level1"><span class="xref">SanitizingSettings</span></div>
+    <div class="level1"><span class="xref">NotesMergingSettings</span></div>
   </div>
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
@@ -116,15 +118,46 @@
   </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="Melanchall.DryWetMidi.Tools.html">Melanchall.DryWetMidi.Tools</a></h6>
   <h6><strong>Assembly</strong>: Melanchall.DryWetMidi.dll</h6>
-  <h5 id="Melanchall_DryWetMidi_Tools_SanitizingSettings_syntax">Syntax</h5>
+  <h5 id="Melanchall_DryWetMidi_Tools_NotesMergingSettings_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public sealed class SanitizingSettings</code></pre>
+    <pre><code class="lang-csharp hljs">[Obsolete(&quot;OBS17: Use Merger class. More info: https://melanchall.github.io/drywetmidi/obsolete/obsolete.html#obs17.&quot;)]
+public sealed class NotesMergingSettings</code></pre>
   </div>
   <h3 id="properties">Properties
   </h3>
-  <a id="Melanchall_DryWetMidi_Tools_SanitizingSettings_NoteDetectionSettings_" data-uid="Melanchall.DryWetMidi.Tools.SanitizingSettings.NoteDetectionSettings*"></a>
-  <h4 id="Melanchall_DryWetMidi_Tools_SanitizingSettings_NoteDetectionSettings" data-uid="Melanchall.DryWetMidi.Tools.SanitizingSettings.NoteDetectionSettings">NoteDetectionSettings</h4>
-  <div class="markdown level1 summary"></div>
+  <a id="Melanchall_DryWetMidi_Tools_NotesMergingSettings_Filter_" data-uid="Melanchall.DryWetMidi.Tools.NotesMergingSettings.Filter*"></a>
+  <h4 id="Melanchall_DryWetMidi_Tools_NotesMergingSettings_Filter" data-uid="Melanchall.DryWetMidi.Tools.NotesMergingSettings.Filter">Filter</h4>
+  <div class="markdown level1 summary">
+Gets or sets a predicate to filter notes out. If predicate returns <code>true</code>,
+a note will be processed; if <code>false</code> - it won&apos;t. If the property set to <code>null</code>,
+all notes will be processed.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Predicate&lt;Note&gt; Filter { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.predicate-1">Predicate</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.Note.html">Note</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Tools_NotesMergingSettings_NoteDetectionSettings_" data-uid="Melanchall.DryWetMidi.Tools.NotesMergingSettings.NoteDetectionSettings*"></a>
+  <h4 id="Melanchall_DryWetMidi_Tools_NotesMergingSettings_NoteDetectionSettings" data-uid="Melanchall.DryWetMidi.Tools.NotesMergingSettings.NoteDetectionSettings">NoteDetectionSettings</h4>
+  <div class="markdown level1 summary">
+Gets or sets settings which define how notes should be detected and built. You can set it to
+<code>null</code> to use default settings.
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -145,13 +178,57 @@
       </tr>
     </tbody>
   </table>
-  <a id="Melanchall_DryWetMidi_Tools_SanitizingSettings_NoteMinLength_" data-uid="Melanchall.DryWetMidi.Tools.SanitizingSettings.NoteMinLength*"></a>
-  <h4 id="Melanchall_DryWetMidi_Tools_SanitizingSettings_NoteMinLength" data-uid="Melanchall.DryWetMidi.Tools.SanitizingSettings.NoteMinLength">NoteMinLength</h4>
-  <div class="markdown level1 summary"></div>
+  <a id="Melanchall_DryWetMidi_Tools_NotesMergingSettings_OffVelocityMergingPolicy_" data-uid="Melanchall.DryWetMidi.Tools.NotesMergingSettings.OffVelocityMergingPolicy*"></a>
+  <h4 id="Melanchall_DryWetMidi_Tools_NotesMergingSettings_OffVelocityMergingPolicy" data-uid="Melanchall.DryWetMidi.Tools.NotesMergingSettings.OffVelocityMergingPolicy">OffVelocityMergingPolicy</h4>
+  <div class="markdown level1 summary">
+Gets or sets a policy which determines how <a class="xref" href="Melanchall.DryWetMidi.Interaction.Note.html#Melanchall_DryWetMidi_Interaction_Note_OffVelocity">OffVelocity</a> of notes should be merged.
+The default value is <a class="xref" href="Melanchall.DryWetMidi.Tools.VelocityMergingPolicy.html#Melanchall_DryWetMidi_Tools_VelocityMergingPolicy_Last">Last</a>.
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public ITimeSpan NoteMinLength { get; set; }</code></pre>
+    <pre><code class="lang-csharp hljs">public VelocityMergingPolicy OffVelocityMergingPolicy { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Tools.VelocityMergingPolicy.html">VelocityMergingPolicy</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.componentmodel.invalidenumargumentexception">InvalidEnumArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">value</code> specified an invalid value.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Tools_NotesMergingSettings_Tolerance_" data-uid="Melanchall.DryWetMidi.Tools.NotesMergingSettings.Tolerance*"></a>
+  <h4 id="Melanchall_DryWetMidi_Tools_NotesMergingSettings_Tolerance" data-uid="Melanchall.DryWetMidi.Tools.NotesMergingSettings.Tolerance">Tolerance</h4>
+  <div class="markdown level1 summary">
+Gets or sets maximum distance between two notes to consider them as nearby. The default value
+is time span of zero length.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ITimeSpan Tolerance { get; set; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -168,13 +245,31 @@
       </tr>
     </tbody>
   </table>
-  <a id="Melanchall_DryWetMidi_Tools_SanitizingSettings_RemoveDuplicatedPitchBendEvents_" data-uid="Melanchall.DryWetMidi.Tools.SanitizingSettings.RemoveDuplicatedPitchBendEvents*"></a>
-  <h4 id="Melanchall_DryWetMidi_Tools_SanitizingSettings_RemoveDuplicatedPitchBendEvents" data-uid="Melanchall.DryWetMidi.Tools.SanitizingSettings.RemoveDuplicatedPitchBendEvents">RemoveDuplicatedPitchBendEvents</h4>
-  <div class="markdown level1 summary"></div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">value</code> is <code>null</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Tools_NotesMergingSettings_VelocityMergingPolicy_" data-uid="Melanchall.DryWetMidi.Tools.NotesMergingSettings.VelocityMergingPolicy*"></a>
+  <h4 id="Melanchall_DryWetMidi_Tools_NotesMergingSettings_VelocityMergingPolicy" data-uid="Melanchall.DryWetMidi.Tools.NotesMergingSettings.VelocityMergingPolicy">VelocityMergingPolicy</h4>
+  <div class="markdown level1 summary">
+Gets or sets a policy which determines how <a class="xref" href="Melanchall.DryWetMidi.Interaction.Note.html#Melanchall_DryWetMidi_Interaction_Note_Velocity">Velocity</a> of notes should be merged.
+The default value is <a class="xref" href="Melanchall.DryWetMidi.Tools.VelocityMergingPolicy.html#Melanchall_DryWetMidi_Tools_VelocityMergingPolicy_First">First</a>.
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public bool RemoveDuplicatedPitchBendEvents { get; set; }</code></pre>
+    <pre><code class="lang-csharp hljs">public VelocityMergingPolicy VelocityMergingPolicy { get; set; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -186,146 +281,23 @@
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Tools.VelocityMergingPolicy.html">VelocityMergingPolicy</a></td>
         <td></td>
       </tr>
     </tbody>
   </table>
-  <a id="Melanchall_DryWetMidi_Tools_SanitizingSettings_RemoveDuplicatedSetTempoEvents_" data-uid="Melanchall.DryWetMidi.Tools.SanitizingSettings.RemoveDuplicatedSetTempoEvents*"></a>
-  <h4 id="Melanchall_DryWetMidi_Tools_SanitizingSettings_RemoveDuplicatedSetTempoEvents" data-uid="Melanchall.DryWetMidi.Tools.SanitizingSettings.RemoveDuplicatedSetTempoEvents">RemoveDuplicatedSetTempoEvents</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public bool RemoveDuplicatedSetTempoEvents { get; set; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
+  <h5 class="exceptions">Exceptions</h5>
   <table class="table table-bordered table-striped table-condensed">
     <thead>
       <tr>
         <th>Type</th>
-        <th>Description</th>
+        <th>Condition</th>
       </tr>
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <a id="Melanchall_DryWetMidi_Tools_SanitizingSettings_RemoveDuplicatedTimeSignatureEvents_" data-uid="Melanchall.DryWetMidi.Tools.SanitizingSettings.RemoveDuplicatedTimeSignatureEvents*"></a>
-  <h4 id="Melanchall_DryWetMidi_Tools_SanitizingSettings_RemoveDuplicatedTimeSignatureEvents" data-uid="Melanchall.DryWetMidi.Tools.SanitizingSettings.RemoveDuplicatedTimeSignatureEvents">RemoveDuplicatedTimeSignatureEvents</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public bool RemoveDuplicatedTimeSignatureEvents { get; set; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <a id="Melanchall_DryWetMidi_Tools_SanitizingSettings_RemoveEmptyTrackChunks_" data-uid="Melanchall.DryWetMidi.Tools.SanitizingSettings.RemoveEmptyTrackChunks*"></a>
-  <h4 id="Melanchall_DryWetMidi_Tools_SanitizingSettings_RemoveEmptyTrackChunks" data-uid="Melanchall.DryWetMidi.Tools.SanitizingSettings.RemoveEmptyTrackChunks">RemoveEmptyTrackChunks</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public bool RemoveEmptyTrackChunks { get; set; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <a id="Melanchall_DryWetMidi_Tools_SanitizingSettings_RemoveEventsOnUnusedChannels_" data-uid="Melanchall.DryWetMidi.Tools.SanitizingSettings.RemoveEventsOnUnusedChannels*"></a>
-  <h4 id="Melanchall_DryWetMidi_Tools_SanitizingSettings_RemoveEventsOnUnusedChannels" data-uid="Melanchall.DryWetMidi.Tools.SanitizingSettings.RemoveEventsOnUnusedChannels">RemoveEventsOnUnusedChannels</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public bool RemoveEventsOnUnusedChannels { get; set; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <a id="Melanchall_DryWetMidi_Tools_SanitizingSettings_RemoveOrphanedNoteOffEvents_" data-uid="Melanchall.DryWetMidi.Tools.SanitizingSettings.RemoveOrphanedNoteOffEvents*"></a>
-  <h4 id="Melanchall_DryWetMidi_Tools_SanitizingSettings_RemoveOrphanedNoteOffEvents" data-uid="Melanchall.DryWetMidi.Tools.SanitizingSettings.RemoveOrphanedNoteOffEvents">RemoveOrphanedNoteOffEvents</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public bool RemoveOrphanedNoteOffEvents { get; set; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <a id="Melanchall_DryWetMidi_Tools_SanitizingSettings_RemoveOrphanedNoteOnEvents_" data-uid="Melanchall.DryWetMidi.Tools.SanitizingSettings.RemoveOrphanedNoteOnEvents*"></a>
-  <h4 id="Melanchall_DryWetMidi_Tools_SanitizingSettings_RemoveOrphanedNoteOnEvents" data-uid="Melanchall.DryWetMidi.Tools.SanitizingSettings.RemoveOrphanedNoteOnEvents">RemoveOrphanedNoteOnEvents</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public bool RemoveOrphanedNoteOnEvents { get; set; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
-        <td></td>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.componentmodel.invalidenumargumentexception">InvalidEnumArgumentException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">value</code> specified an invalid value.</td>
       </tr>
     </tbody>
   </table>
