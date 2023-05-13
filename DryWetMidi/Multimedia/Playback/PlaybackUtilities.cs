@@ -21,7 +21,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         /// <summary>
         /// Retrieves an instance of the <see cref="Playback"/> for playing MIDI events collection.
-        /// Events will be sheduled for playback according to their delta-times.
+        /// Events will be scheduled for playback according to their delta-times.
         /// </summary>
         /// <param name="events">MIDI events to play.</param>
         /// <param name="tempoMap">Tempo map used to calculate events times.</param>
@@ -29,7 +29,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <param name="playbackSettings">Settings according to which a playback should be created.</param>
         /// <returns>An instance of the <see cref="Playback"/> for playing <paramref name="events"/>.</returns>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="events"/> is <c>null</c>.</description>
@@ -57,14 +57,14 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         /// <summary>
         /// Retrieves an instance of the <see cref="Playback"/> for playing MIDI events collection.
-        /// Events will be sheduled for playback according to their delta-times.
+        /// Events will be scheduled for playback according to their delta-times.
         /// </summary>
         /// <param name="events">MIDI events to play.</param>
         /// <param name="tempoMap">Tempo map used to calculate events times.</param>
         /// <param name="playbackSettings">Settings according to which a playback should be created.</param>
         /// <returns>An instance of the <see cref="Playback"/> for playing <paramref name="events"/>.</returns>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="events"/> is <c>null</c>.</description>
@@ -97,7 +97,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <returns>An instance of the <see cref="Playback"/> for playing MIDI events contained in
         /// the <paramref name="trackChunk"/>.</returns>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="trackChunk"/> is <c>null</c>.</description>
@@ -134,7 +134,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <returns>An instance of the <see cref="Playback"/> for playing MIDI events contained in
         /// the <paramref name="trackChunk"/>.</returns>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="trackChunk"/> is <c>null</c>.</description>
@@ -168,7 +168,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <returns>An instance of the <see cref="Playback"/> for playing MIDI events contained in
         /// the <paramref name="trackChunks"/>.</returns>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="trackChunks"/> is <c>null</c>.</description>
@@ -205,7 +205,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <returns>An instance of the <see cref="Playback"/> for playing MIDI events contained in
         /// the <paramref name="trackChunks"/>.</returns>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="trackChunks"/> is <c>null</c>.</description>
@@ -238,7 +238,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <returns>An instance of the <see cref="Playback"/> for playing MIDI events contained in
         /// the <paramref name="midiFile"/>.</returns>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="midiFile"/> is <c>null</c>.</description>
@@ -284,7 +284,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <returns>An instance of the <see cref="Playback"/> for playing MIDI events that will be
         /// produced by the <paramref name="pattern"/>.</returns>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="pattern"/> is <c>null</c>.</description>
@@ -317,7 +317,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <returns>An instance of the <see cref="Playback"/> for playing MIDI events that will be
         /// produced by the <paramref name="pattern"/>.</returns>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="pattern"/> is <c>null</c>.</description>
@@ -347,7 +347,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <param name="playbackSettings">Settings according to which a playback should be created.</param>
         /// <returns>An instance of the <see cref="Playback"/> for playing <paramref name="objects"/>.</returns>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="objects"/> is <c>null</c>.</description>
@@ -386,7 +386,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <param name="playbackSettings">Settings according to which a playback should be created.</param>
         /// <returns>An instance of the <see cref="Playback"/> for playing <paramref name="objects"/>.</returns>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="objects"/> is <c>null</c>.</description>
@@ -427,7 +427,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <param name="playbackSettings">Settings according to which a playback should be created.</param>
         /// <returns>An instance of the <see cref="Playback"/> for playing <paramref name="objects"/>.</returns>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="objects"/> is <c>null</c>.</description>
@@ -464,7 +464,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <param name="outputDevice">Output MIDI device to play events through.</param>
         /// <param name="playbackSettings">Settings according to which a playback should be created.</param>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="trackChunk"/> is <c>null</c>.</description>
@@ -497,7 +497,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <param name="outputDevice">Output MIDI device to play events through.</param>
         /// <param name="playbackSettings">Settings according to which a playback should be created.</param>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="trackChunks"/> is <c>null</c>.</description>
@@ -529,7 +529,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <param name="outputDevice">Output MIDI device to play events through.</param>
         /// <param name="playbackSettings">Settings according to which a playback should be created.</param>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="midiFile"/> is <c>null</c>.</description>
@@ -556,7 +556,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <param name="outputDevice">Output MIDI device to play events through.</param>
         /// <param name="playbackSettings">Settings according to which a playback should be created.</param>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="pattern"/> is <c>null</c>.</description>
@@ -588,7 +588,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <param name="programNumber">Program that should be used to play <paramref name="objects"/>.</param>
         /// <param name="playbackSettings">Settings according to which a playback should be created.</param>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="objects"/> is <c>null</c>.</description>
@@ -624,7 +624,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <param name="generalMidiProgram">Program that should be used to play <paramref name="objects"/>.</param>
         /// <param name="playbackSettings">Settings according to which a playback should be created.</param>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="objects"/> is <c>null</c>.</description>
@@ -662,7 +662,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <param name="generalMidi2Program">Program that should be used to play <paramref name="objects"/>.</param>
         /// <param name="playbackSettings">Settings according to which a playback should be created.</param>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="objects"/> is <c>null</c>.</description>

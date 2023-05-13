@@ -73,7 +73,7 @@
         /// <summary>
         /// 'Electric Snare 2' General Sound percussion note.
         /// </summary>
-        SnaeDrum2 = 40,
+        SnareDrum2 = 40,
 
         /// <summary>
         /// 'TR-808 Low Tom 2' General Sound percussion note.

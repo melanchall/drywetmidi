@@ -19,7 +19,7 @@ namespace Melanchall.DryWetMidi.Core
         #region Constants
 
         /// <summary>
-        /// ID of the track chunk. This field is constsnt.
+        /// ID of the track chunk. This field is constant.
         /// </summary>
         public const string Id = "MTrk";
 
@@ -40,7 +40,7 @@ namespace Melanchall.DryWetMidi.Core
         /// </summary>
         /// <param name="events">Events to add to the track chunk.</param>
         /// <remarks>
-        /// Note that End Of Track events cannot be added into the collection since it may cause inconsistence in a
+        /// Note that End Of Track events cannot be added into the collection since it may cause inconsistency in a
         /// track chunk structure. End Of Track event will be written to the track chunk automatically on
         /// <see cref="MidiFile.Write(string, bool, MidiFileFormat, WritingSettings)"/>.
         /// </remarks>
@@ -58,7 +58,7 @@ namespace Melanchall.DryWetMidi.Core
         /// </summary>
         /// <param name="events">Events to add to the track chunk.</param>
         /// <remarks>
-        /// Note that End Of Track events cannot be added into the collection since it may cause inconsistence in a
+        /// Note that End Of Track events cannot be added into the collection since it may cause inconsistency in a
         /// track chunk structure. End Of Track event will be written to the track chunk automatically on
         /// <see cref="MidiFile.Write(string, bool, MidiFileFormat, WritingSettings)"/>.
         /// </remarks>

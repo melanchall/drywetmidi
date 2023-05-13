@@ -46,7 +46,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <param name="tempoMap">Tempo map used to calculate events times.</param>
         /// <param name="inputDevice">Input MIDI device to capture MIDI data from.</param>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="tempoMap"/> is <c>null</c>.</description>

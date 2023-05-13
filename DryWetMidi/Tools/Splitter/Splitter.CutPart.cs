@@ -24,7 +24,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <returns><see cref="MidiFile"/> which is the <paramref name="midiFile"/> without a part defined by
         /// <paramref name="partStart"/> and <paramref name="partLength"/>.</returns>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="midiFile"/> is <c>null</c>.</description>

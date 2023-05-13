@@ -174,7 +174,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="timeSignature">Time signature of the tempo map.</param>
         /// <returns><see cref="TempoMap"/> with the specified tempo and time signature.</returns>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="tempo"/> is <c>null</c>.</description>
@@ -252,7 +252,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="tempo">Tempo of the tempo map.</param>
         /// <returns><see cref="TempoMap"/> with the specified time division and tempo.</returns>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="timeDivision"/> is <c>null</c>.</description>
@@ -281,7 +281,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="timeSignature">Time signature of the tempo map.</param>
         /// <returns><see cref="TempoMap"/> with the specified time division and time signature.</returns>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="timeDivision"/> is <c>null</c>.</description>
@@ -309,9 +309,9 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="timeDivision">Time division of the tempo map.</param>
         /// <param name="tempo">Tempo of the tempo map.</param>
         /// <param name="timeSignature">Time signature of the tempo map.</param>
-        /// <returns><see cref="TempoMap"/> with the specified time division, tempoand time signature.</returns>
+        /// <returns><see cref="TempoMap"/> with the specified time division, tempo and time signature.</returns>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="timeDivision"/> is <c>null</c>.</description>

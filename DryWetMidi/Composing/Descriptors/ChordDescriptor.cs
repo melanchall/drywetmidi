@@ -21,7 +21,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// <param name="velocity">Velocity of the chord's notes.</param>
         /// <param name="length">Length of the chord.</param>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="notes"/> is <c>null</c>.</description>

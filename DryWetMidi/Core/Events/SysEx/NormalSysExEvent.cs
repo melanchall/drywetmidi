@@ -12,9 +12,9 @@ namespace Melanchall.DryWetMidi.Core
     /// The action that this message prompts for can be anything.
     /// Note that although the terminal 0xF7 is redundant (strictly speaking, due to the use of a length
     /// parameter) it must be included.
-    /// System exclisive events can be split into multiple packets. In this case the first packet uses
+    /// System exclusive events can be split into multiple packets. In this case the first packet uses
     /// the 0xF0 status (such event will be read as <see cref="NormalSysExEvent"/>), whereas the second and
-    /// subsequent packets use the 0xF7 status (suzh events will be read as <see cref="EscapeSysExEvent"/>).
+    /// subsequent packets use the 0xF7 status (such events will be read as <see cref="EscapeSysExEvent"/>).
     /// This use of the 0xF7 status is referred to as a continuation event.
     /// </remarks>
     public sealed class NormalSysExEvent : SysExEvent

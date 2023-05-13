@@ -16,7 +16,7 @@ namespace Melanchall.DryWetMidi.Tools
         #region Methods
 
         /// <summary>
-        /// Converts the specified <see cref="MidiFile"/> to CSV represenattion and writes it to a file.
+        /// Converts the specified <see cref="MidiFile"/> to CSV representation and writes it to a file.
         /// </summary>
         /// <remarks>
         /// Note that <see cref="MidiFile"/> can be converted to different CSV representations. You can specify desired
@@ -41,7 +41,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <exception cref="IOException">An I/O error occurred while writing the file.</exception>
         /// <exception cref="NotSupportedException"><paramref name="filePath"/> is in an invalid format.</exception>
         /// <exception cref="UnauthorizedAccessException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description>This operation is not supported on the current platform.</description>
@@ -65,7 +65,7 @@ namespace Melanchall.DryWetMidi.Tools
         }
 
         /// <summary>
-        /// Converts the specified <see cref="MidiFile"/> to CSV represenattion and writes it to a stream.
+        /// Converts the specified <see cref="MidiFile"/> to CSV representation and writes it to a stream.
         /// </summary>
         /// <remarks>
         /// Note that <see cref="MidiFile"/> can be converted to different CSV representations. You can specify desired
@@ -76,7 +76,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="settings">Settings according to which <paramref name="midiFile"/> must be converted.
         /// Pass <c>null</c> to use default settings.</param>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="midiFile"/> is <c>null</c>.</description>
@@ -123,7 +123,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <exception cref="IOException">An I/O error occurred while reading the file.</exception>
         /// <exception cref="NotSupportedException"><paramref name="filePath"/> is in an invalid format.</exception>
         /// <exception cref="UnauthorizedAccessException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description>This operation is not supported on the current platform.</description>
@@ -166,7 +166,7 @@ namespace Melanchall.DryWetMidi.Tools
         }
 
         /// <summary>
-        /// Converts the specified collection of <see cref="Note"/> to CSV represenattion and writes it to a file.
+        /// Converts the specified collection of <see cref="Note"/> to CSV representation and writes it to a file.
         /// </summary>
         /// <param name="notes">Collection of <see cref="Note"/> to convert to CSV.</param>
         /// <param name="filePath">Path of the output CSV file.</param>
@@ -176,7 +176,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="settings">Settings according to which <paramref name="notes"/> must be converted.
         /// Pass <c>null</c> to use default settings.</param>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="notes"/> is <c>null</c>.</description>
@@ -198,7 +198,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <exception cref="IOException">An I/O error occurred while writing the file.</exception>
         /// <exception cref="NotSupportedException"><paramref name="filePath"/> is in an invalid format.</exception>
         /// <exception cref="UnauthorizedAccessException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description>This operation is not supported on the current platform.</description>
@@ -223,7 +223,7 @@ namespace Melanchall.DryWetMidi.Tools
         }
 
         /// <summary>
-        /// Converts the specified collection of <see cref="Note"/> to CSV represenattion and writes it to a stream.
+        /// Converts the specified collection of <see cref="Note"/> to CSV representation and writes it to a stream.
         /// </summary>
         /// <param name="notes">Collection of <see cref="Note"/> to convert to CSV.</param>
         /// <param name="stream">Stream to write CSV representation to.</param>
@@ -231,7 +231,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="settings">Settings according to which <paramref name="notes"/> must be converted.
         /// Pass <c>null</c> to use default settings.</param>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="notes"/> is <c>null</c>.</description>
@@ -271,7 +271,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// contains only white space, or contains one or more invalid characters as defined by
         /// <see cref="Path.InvalidPathChars"/>.</exception>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="filePath"/> is <c>null</c>.</description>
@@ -289,7 +289,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <exception cref="IOException">An I/O error occurred while reading the file.</exception>
         /// <exception cref="NotSupportedException"><paramref name="filePath"/> is in an invalid format.</exception>
         /// <exception cref="UnauthorizedAccessException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description>This operation is not supported on the current platform.</description>
@@ -321,7 +321,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// use default settings.</param>
         /// <returns>Collection of <see cref="Note"/> representing notes written in CSV format.</returns>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="stream"/> is <c>null</c>.</description>

@@ -54,7 +54,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <returns>A collection of new <see cref="TrackChunk"/> instances which are the <paramref name="trackChunks"/>
         /// repeated <paramref name="repeatsNumber"/> times using <paramref name="settings"/>.</returns>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="trackChunks"/> is <c>null</c>.</description>
@@ -95,7 +95,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <returns>A new instance of the <see cref="TrackChunk"/> which is the <paramref name="trackChunk"/>
         /// repeated <paramref name="repeatsNumber"/> times using <paramref name="settings"/>.</returns>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="trackChunk"/> is <c>null</c>.</description>
@@ -134,7 +134,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <returns>A collection of new <see cref="TrackChunk"/> instances which are the <paramref name="timedObjects"/>
         /// repeated <paramref name="repeatsNumber"/> times using <paramref name="settings"/>.</returns>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="timedObjects"/> is <c>null</c>.</description>

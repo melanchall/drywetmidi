@@ -54,7 +54,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="eventsCollections">Collection of <see cref="EventsCollection"/> which hold events that
         /// represent tempo map of a MIDI file.</param>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="timeDivision"/> is <c>null</c>.</description>
@@ -123,7 +123,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="timeSignature">New time signature that will last from the specified
         /// time until next change of time signature.</param>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="time"/> is <c>null</c>.</description>
@@ -142,7 +142,7 @@ namespace Melanchall.DryWetMidi.Interaction
         }
 
         /// <summary>
-        /// Removes all changes of time signature that occured since the specified time.
+        /// Removes all changes of time signature that occurred since the specified time.
         /// </summary>
         /// <param name="startTime">Time to remove changes of time signature since.</param>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="startTime"/> is negative.</exception>
@@ -154,7 +154,7 @@ namespace Melanchall.DryWetMidi.Interaction
         }
 
         /// <summary>
-        /// Removes all changes of time signature that occured since the specified time.
+        /// Removes all changes of time signature that occurred since the specified time.
         /// </summary>
         /// <param name="startTime">Time to remove changes of time signature since.</param>
         /// <exception cref="ArgumentNullException"><paramref name="startTime"/> is <c>null</c>.</exception>
@@ -166,12 +166,12 @@ namespace Melanchall.DryWetMidi.Interaction
         }
 
         /// <summary>
-        /// Removes all changes of time signature that occured between the specified times.
+        /// Removes all changes of time signature that occurred between the specified times.
         /// </summary>
         /// <param name="startTime">Start of time range to remove changes of time signature in.</param>
         /// <param name="endTime">End of time range to remove changes of time signature in.</param>
         /// <exception cref="ArgumentOutOfRangeException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="startTime"/> is negative.</description>
@@ -190,12 +190,12 @@ namespace Melanchall.DryWetMidi.Interaction
         }
 
         /// <summary>
-        /// Removes all changes of time signature that occured between the specified times.
+        /// Removes all changes of time signature that occurred between the specified times.
         /// </summary>
         /// <param name="startTime">Start of time range to remove changes of time signature in.</param>
         /// <param name="endTime">End of time range to remove changes of time signature in.</param>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="startTime"/> is <c>null</c>.</description>
@@ -237,7 +237,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="tempo">New tempo that will last from the specified time until next change
         /// of tempo.</param>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="time"/> is <c>null</c>.</description>
@@ -256,7 +256,7 @@ namespace Melanchall.DryWetMidi.Interaction
         }
 
         /// <summary>
-        /// Removes all changes of tempo that occured since the specified time.
+        /// Removes all changes of tempo that occurred since the specified time.
         /// </summary>
         /// <param name="startTime">Time to remove changes of tempo since.</param>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="startTime"/> is negative.</exception>
@@ -268,7 +268,7 @@ namespace Melanchall.DryWetMidi.Interaction
         }
 
         /// <summary>
-        /// Removes all changes of tempo that occured since the specified time.
+        /// Removes all changes of tempo that occurred since the specified time.
         /// </summary>
         /// <param name="startTime">Time to remove changes of tempo since.</param>
         /// <exception cref="ArgumentNullException"><paramref name="startTime"/> is <c>null</c>.</exception>
@@ -280,12 +280,12 @@ namespace Melanchall.DryWetMidi.Interaction
         }
 
         /// <summary>
-        /// Removes all changes of tempo that occured between the specified times.
+        /// Removes all changes of tempo that occurred between the specified times.
         /// </summary>
         /// <param name="startTime">Start of time range to remove changes of tempo in.</param>
         /// <param name="endTime">End of time range to remove changes of tempo in.</param>
         /// <exception cref="ArgumentOutOfRangeException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="startTime"/> is negative.</description>
@@ -304,12 +304,12 @@ namespace Melanchall.DryWetMidi.Interaction
         }
 
         /// <summary>
-        /// Removes all changes of tempo that occured between the specified times.
+        /// Removes all changes of tempo that occurred between the specified times.
         /// </summary>
         /// <param name="startTime">Start of time range to remove changes of tempo in.</param>
         /// <param name="endTime">End of time range to remove changes of tempo in.</param>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="startTime"/> is <c>null</c>.</description>

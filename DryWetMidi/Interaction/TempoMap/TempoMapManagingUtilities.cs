@@ -24,7 +24,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <returns>An instance of the <see cref="TempoMapManager"/> that can be used to manage
         /// tempo map represented by the <paramref name="eventsCollections"/> and <paramref name="timeDivision"/>.</returns>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="eventsCollections"/> is <c>null</c>.</description>
@@ -54,7 +54,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <returns>An instance of the <see cref="TempoMapManager"/> that can be used to manage
         /// tempo map represented by the <paramref name="trackChunks"/> and <paramref name="timeDivision"/>.</returns>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="trackChunks"/> is <c>null</c>.</description>
@@ -97,7 +97,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// used by events of the file.</param>
         /// <returns>Tempo map represented by the <paramref name="trackChunks"/> and <paramref name="timeDivision"/>.</returns>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="trackChunks"/> is <c>null</c>.</description>
@@ -198,7 +198,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="eventsCollections">Collection of the <see cref="EventsCollection"/> holding a tempo map to replace.</param>
         /// <param name="tempoMap">Tempo map to replace the one contained in the <paramref name="eventsCollections"/>.</param>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="eventsCollections"/> is <c>null</c>.</description>
@@ -230,7 +230,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="trackChunks">Collection of the <see cref="TrackChunk"/> holding a tempo map to replace.</param>
         /// <param name="tempoMap">Tempo map to replace the one contained in the <paramref name="trackChunks"/>.</param>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="trackChunks"/> is <c>null</c>.</description>
@@ -255,7 +255,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="file"><see cref="MidiFile"/> holding a tempo map to replace.</param>
         /// <param name="tempoMap">Tempo map to replace the one contained in the <paramref name="file"/>.</param>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="file"/> is <c>null</c>.</description>

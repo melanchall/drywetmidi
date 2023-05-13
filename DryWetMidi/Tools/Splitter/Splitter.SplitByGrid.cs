@@ -23,7 +23,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="settings">Settings according to which file should be split.</param>
         /// <returns>Collection of <see cref="MidiFile"/> produced during splitting the input file by grid.</returns>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="midiFile"/> is <c>null</c>.</description>

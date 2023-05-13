@@ -20,13 +20,13 @@ namespace Melanchall.DryWetMidi.Tools
         /// </summary>
         /// <param name="trackChunk"><see cref="TrackChunk"/> to quantize objects within.</param>
         /// <param name="objectType">The type of objects to quantize.</param>
-        /// <param name="grid">Grid to use for quantizing.</param>
+        /// <param name="grid">Grid to use for quantization.</param>
         /// <param name="tempoMap">Tempo map used to perform time and length conversions.</param>
         /// <param name="quantizerSettings">Settings according to which objects should be quantized.</param>
         /// <param name="objectDetectionSettings">Settings according to which objects should be
         /// detected and built.</param>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="trackChunk"/> is <c>null</c>.</description>
@@ -67,13 +67,13 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="trackChunk"><see cref="TrackChunk"/> to quantize objects within.</param>
         /// <param name="quantizer">Quantizer to quantize objects with.</param>
         /// <param name="objectType">The type of objects to quantize.</param>
-        /// <param name="grid">Grid to use for quantizing.</param>
+        /// <param name="grid">Grid to use for quantization.</param>
         /// <param name="tempoMap">Tempo map used to perform time and length conversions.</param>
         /// <param name="quantizerSettings">Settings according to which objects should be quantized.</param>
         /// <param name="objectDetectionSettings">Settings according to which objects should be
         /// detected and built.</param>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="trackChunk"/> is <c>null</c>.</description>
@@ -114,13 +114,13 @@ namespace Melanchall.DryWetMidi.Tools
         /// </summary>
         /// <param name="trackChunks">Collection of <see cref="TrackChunk"/> to quantize objects within.</param>
         /// <param name="objectType">The type of objects to quantize.</param>
-        /// <param name="grid">Grid to use for quantizing.</param>
+        /// <param name="grid">Grid to use for quantization.</param>
         /// <param name="tempoMap">Tempo map used to perform time and length conversions.</param>
         /// <param name="quantizerSettings">Settings according to which objects should be quantized.</param>
         /// <param name="objectDetectionSettings">Settings according to which objects should be
         /// detected and built.</param>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="trackChunks"/> is <c>null</c>.</description>
@@ -161,13 +161,13 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="trackChunks">Collection of <see cref="TrackChunk"/> to quantize objects within.</param>
         /// <param name="quantizer">Quantizer to quantize objects with.</param>
         /// <param name="objectType">The type of objects to quantize.</param>
-        /// <param name="grid">Grid to use for quantizing.</param>
+        /// <param name="grid">Grid to use for quantization.</param>
         /// <param name="tempoMap">Tempo map used to perform time and length conversions.</param>
         /// <param name="quantizerSettings">Settings according to which objects should be quantized.</param>
         /// <param name="objectDetectionSettings">Settings according to which objects should be
         /// detected and built.</param>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="trackChunks"/> is <c>null</c>.</description>
@@ -208,12 +208,12 @@ namespace Melanchall.DryWetMidi.Tools
         /// </summary>
         /// <param name="midiFile"><see cref="MidiFile"/> to quantize objects within.</param>
         /// <param name="objectType">The type of objects to quantize.</param>
-        /// <param name="grid">Grid to use for quantizing.</param>
+        /// <param name="grid">Grid to use for quantization.</param>
         /// <param name="quantizerSettings">Settings according to which objects should be quantized.</param>
         /// <param name="objectDetectionSettings">Settings according to which objects should be
         /// detected and built.</param>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="midiFile"/> is <c>null</c>.</description>
@@ -248,12 +248,12 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="midiFile"><see cref="MidiFile"/> to quantize objects within.</param>
         /// <param name="quantizer">Quantizer to quantize objects with.</param>
         /// <param name="objectType">The type of objects to quantize.</param>
-        /// <param name="grid">Grid to use for quantizing.</param>
+        /// <param name="grid">Grid to use for quantization.</param>
         /// <param name="quantizerSettings">Settings according to which objects should be quantized.</param>
         /// <param name="objectDetectionSettings">Settings according to which objects should be
         /// detected and built.</param>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="midiFile"/> is <c>null</c>.</description>

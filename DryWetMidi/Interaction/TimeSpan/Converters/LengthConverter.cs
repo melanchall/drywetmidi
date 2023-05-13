@@ -21,7 +21,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="tempoMap">Tempo map used to convert <paramref name="length"/>.</param>
         /// <returns>Length as an instance of <typeparamref name="TTimeSpan"/>.</returns>
         /// <exception cref="ArgumentOutOfRangeException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="length"/> is negative.</description>
@@ -52,7 +52,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="tempoMap">Tempo map used to convert <paramref name="length"/>.</param>
         /// <returns>Length as an instance of time span defined by <paramref name="lengthType"/>.</returns>
         /// <exception cref="ArgumentOutOfRangeException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="length"/> is negative.</description>
@@ -84,7 +84,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <returns>Length as an instance of <typeparamref name="TTimeSpan"/>.</returns>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="length"/> is negative.</exception>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="time"/> is <c>null</c>.</description>
@@ -115,7 +115,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <returns>Length as an instance of time span defined by <paramref name="lengthType"/>.</returns>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="length"/> is negative.</exception>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="time"/> is <c>null</c>.</description>
@@ -146,7 +146,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <returns>Length as an instance of <typeparamref name="TTimeSpan"/>.</returns>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="time"/> is negative.</exception>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="length"/> is <c>null</c>.</description>
@@ -177,7 +177,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <returns>Length as an instance of time span defined by <paramref name="lengthType"/>.</returns>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="time"/> is negative.</exception>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="length"/> is <c>null</c>.</description>
@@ -207,7 +207,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="tempoMap">Tempo map used to convert <paramref name="length"/>.</param>
         /// <returns>Length as an instance of <typeparamref name="TTimeSpan"/>.</returns>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="length"/> is <c>null</c>.</description>
@@ -240,7 +240,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="tempoMap">Tempo map used to convert <paramref name="length"/>.</param>
         /// <returns>Length as an instance of time span defined by <paramref name="lengthType"/>.</returns>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="length"/> is <c>null</c>.</description>
@@ -273,7 +273,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="tempoMap">Tempo map used to convert <paramref name="length"/>.</param>
         /// <returns>Length as an instance of <paramref name="lengthType"/>.</returns>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="length"/> is <c>null</c>.</description>
@@ -307,7 +307,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="tempoMap">Tempo map used to convert <paramref name="length"/>.</param>
         /// <returns>Length as an instance of <paramref name="lengthType"/>.</returns>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="length"/> is <c>null</c>.</description>
@@ -343,7 +343,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <returns>Length as <see cref="long"/>.</returns>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="time"/> is negative.</exception>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="length"/> is <c>null</c>.</description>
@@ -370,7 +370,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="tempoMap">Tempo map used to convert <paramref name="length"/>.</param>
         /// <returns>Length as <see cref="long"/>.</returns>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="length"/> is <c>null</c>.</description>

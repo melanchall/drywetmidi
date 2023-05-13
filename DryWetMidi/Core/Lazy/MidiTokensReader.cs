@@ -120,7 +120,7 @@ namespace Melanchall.DryWetMidi.Core
         /// in its header and that should be treated as error according to the <see cref="ReadingSettings.InvalidChunkSizePolicy"/>
         /// of the used settings.</exception>
         /// <exception cref="UnknownChunkException">Chunk to be read has unknown ID and that
-        /// should be treated as error accordng to the <see cref="ReadingSettings.UnknownChunkIdPolicy"/> of the
+        /// should be treated as error according to the <see cref="ReadingSettings.UnknownChunkIdPolicy"/> of the
         /// used settings.</exception>
         /// <exception cref="UnexpectedTrackChunksCountException">Actual track chunks
         /// count differs from the expected one (declared in the file header) and that should be treated as error according to
@@ -142,7 +142,7 @@ namespace Melanchall.DryWetMidi.Core
         /// of the used settings.</exception>
         /// <exception cref="UnexpectedRunningStatusException">Unexpected running status is encountered.</exception>
         /// <exception cref="MissedEndOfTrackEventException">Track chunk doesn't end with <c>End Of Track</c> event and that
-        /// should be treated as error accordng to the <see cref="ReadingSettings.MissedEndOfTrackPolicy"/> of
+        /// should be treated as error according to the <see cref="ReadingSettings.MissedEndOfTrackPolicy"/> of
         /// the used settings.</exception>
         /// <exception cref="InvalidOperationException"><see cref="ReaderSettings.Buffer"/> of the used settings
         /// is <c>null</c> in case of <see cref="ReaderSettings.BufferingPolicy"/> set to

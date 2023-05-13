@@ -22,7 +22,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="tempoMap">Tempo map to calculate length of the <paramref name="obj"/>.</param>
         /// <returns>Length of the specified object as an instance of <typeparamref name="TLength"/>.</returns>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="obj"/> is <c>null</c>.</description>
@@ -52,7 +52,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <returns>Time of the specified object as an instance of time span defined by the
         /// <paramref name="lengthType"/>.</returns>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="obj"/> is <c>null</c>.</description>
@@ -81,7 +81,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="tempoMap">Tempo map to calculate end time of the <paramref name="obj"/>.</param>
         /// <returns>End time of the specified object as an instance of <typeparamref name="TTime"/>.</returns>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="obj"/> is <c>null</c>.</description>
@@ -111,7 +111,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <returns>End time of the specified object as an instance of time span defined by the
         /// <paramref name="timeType"/>.</returns>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="obj"/> is <c>null</c>.</description>
@@ -144,7 +144,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// save them you need to use a manager appropriate for an object's type.
         /// </remarks>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="objects"/> is <c>null</c>.</description>
@@ -174,7 +174,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// save them you need to use a manager appropriate for an object's type.
         /// </remarks>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="objects"/> is <c>null</c>.</description>
@@ -205,7 +205,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// save them you need to use a manager appropriate for an object's type.
         /// </remarks>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="objects"/> is <c>null</c>.</description>
@@ -241,7 +241,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// save them you need to use a manager appropriate for an object's type.
         /// </remarks>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="objects"/> is <c>null</c>.</description>
@@ -277,7 +277,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// save them you need to use a manager appropriate for an object's type.
         /// </remarks>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="objects"/> is <c>null</c>.</description>
@@ -314,7 +314,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// save them you need to use a manager appropriate for an object's type.
         /// </remarks>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="objects"/> is <c>null</c>.</description>
@@ -352,7 +352,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="tempoMap"><see cref="TempoMap"/> used to calculate new length in ticks.</param>
         /// <returns>The same object the method was called on.</returns>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="obj"/> is <c>null</c>.</description>

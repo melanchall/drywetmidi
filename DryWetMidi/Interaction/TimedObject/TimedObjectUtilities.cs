@@ -23,7 +23,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="tempoMap">Tempo map to calculate time of the <paramref name="obj"/>.</param>
         /// <returns>Time of the specified object as an instance of <typeparamref name="TTime"/>.</returns>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="obj"/> is <c>null</c>.</description>
@@ -53,7 +53,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <returns>Time of the specified object as an instance of time span defined by the
         /// <paramref name="timeType"/>.</returns>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="obj"/> is <c>null</c>.</description>
@@ -110,7 +110,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// save them you need to use a manager appropriate for an object's type.
         /// </remarks>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="objects"/> is <c>null</c>.</description>
@@ -178,7 +178,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="eventsCollection"><see cref="EventsCollection"/> to add objects to.</param>
         /// <param name="timedObjects">Objects to add to <paramref name="eventsCollection"/>.</param>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="eventsCollection"/> is <c>null</c>.</description>
@@ -216,7 +216,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="trackChunk"><see cref="TrackChunk"/> to add objects to.</param>
         /// <param name="timedObjects">Objects to add to <paramref name="trackChunk"/>.</param>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="trackChunk"/> is <c>null</c>.</description>
@@ -243,7 +243,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="tempoMap"><see cref="TempoMap"/> used to calculate new time in ticks.</param>
         /// <returns>The same object the method was called on.</returns>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="obj"/> is <c>null</c>.</description>

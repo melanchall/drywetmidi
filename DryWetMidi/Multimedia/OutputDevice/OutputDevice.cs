@@ -426,7 +426,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <param name="name">The name of an output MIDI device to retrieve.</param>
         /// <returns>Output MIDI device with the specified name.</returns>
         /// <exception cref="ArgumentException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="name"/> is <c>null</c> or contains white-spaces only.</description>

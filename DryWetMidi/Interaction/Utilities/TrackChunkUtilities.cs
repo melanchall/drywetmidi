@@ -20,7 +20,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="distance">Distance to shift events by.</param>
         /// <param name="tempoMap">Tempo map used for internal distance conversions.</param>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="trackChunk"/> is <c>null</c>.</description>
@@ -55,7 +55,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="distance">Distance to shift events by.</param>
         /// <param name="tempoMap">Tempo map used for internal distance conversions.</param>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="trackChunks"/> is <c>null</c>.</description>

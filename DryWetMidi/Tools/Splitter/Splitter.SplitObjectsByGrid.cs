@@ -25,7 +25,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="objectDetectionSettings">Settings according to which objects should be
         /// detected and built.</param>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="trackChunk"/> is <c>null</c>.</description>
@@ -70,7 +70,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="objectDetectionSettings">Settings according to which objects should be
         /// detected and built.</param>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="trackChunks"/> is <c>null</c>.</description>
@@ -113,7 +113,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="objectDetectionSettings">Settings according to which objects should be
         /// detected and built.</param>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="midiFile"/> is <c>null</c>.</description>
@@ -150,7 +150,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <returns>Objects that are result of splitting <paramref name="objects"/> going in the same
         /// order as elements of <paramref name="objects"/>.</returns>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="objects"/> is <c>null</c>.</description>

@@ -34,7 +34,7 @@ namespace Melanchall.DryWetMidi.Core
         /// <param name="stream">Stream to write MIDI file to.</param>
         /// <param name="settings">Settings according to which MIDI data should be written.</param>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="stream"/> is <c>null</c>.</description>

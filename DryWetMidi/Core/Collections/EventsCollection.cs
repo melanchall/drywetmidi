@@ -83,7 +83,7 @@ namespace Melanchall.DryWetMidi.Core
         /// </summary>
         /// <param name="midiEvent">The event to be added to the end of the collection.</param>
         /// <remarks>
-        /// Note that End Of Track events cannot be added into the collection since it may cause inconsistence in a
+        /// Note that End Of Track events cannot be added into the collection since it may cause inconsistency in a
         /// track chunk structure. End Of Track event will be written to the track chunk automatically on
         /// <see cref="MidiFile.Write(string, bool, MidiFileFormat, WritingSettings)"/>.
         /// </remarks>
@@ -102,7 +102,7 @@ namespace Melanchall.DryWetMidi.Core
         /// </summary>
         /// <param name="events">Events to be added to the end of the collection.</param>
         /// <remarks>
-        /// Note that End Of Track events cannot be added into the collection since it may cause inconsistence in a
+        /// Note that End Of Track events cannot be added into the collection since it may cause inconsistency in a
         /// track chunk structure. End Of Track event will be written to the track chunk automatically on
         /// <see cref="MidiFile.Write(string, bool, MidiFileFormat, WritingSettings)"/>.
         /// </remarks>
@@ -127,7 +127,7 @@ namespace Melanchall.DryWetMidi.Core
         /// Inserts an event into the collection at the specified index.
         /// </summary>
         /// <remarks>
-        /// Note that End Of Track events cannot be added into the collection since it may cause inconsistence in a
+        /// Note that End Of Track events cannot be added into the collection since it may cause inconsistency in a
         /// track chunk structure. End Of Track event will be written to the track chunk automatically on
         /// a MIDI file writing.
         /// </remarks>
@@ -135,7 +135,7 @@ namespace Melanchall.DryWetMidi.Core
         /// <param name="midiEvent">The event to insert.</param>
         /// <exception cref="ArgumentNullException"><paramref name="midiEvent"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="index"/> is less than 0.</description>
@@ -162,7 +162,7 @@ namespace Melanchall.DryWetMidi.Core
         /// Inserts a set of events into the collection at the specified index.
         /// </summary>
         /// <remarks>
-        /// Note that End Of Track events cannot be added into the collection since it may cause inconsistence in a
+        /// Note that End Of Track events cannot be added into the collection since it may cause inconsistency in a
         /// track chunk structure. End Of Track event will be written to the track chunk automatically on
         /// a MIDI file writing.
         /// </remarks>
@@ -170,7 +170,7 @@ namespace Melanchall.DryWetMidi.Core
         /// <param name="midiEvents">The events to insert.</param>
         /// <exception cref="ArgumentNullException"><paramref name="midiEvents"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="index"/> is less than 0.</description>

@@ -13,10 +13,10 @@ namespace Melanchall.DryWetMidi.Core
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SmpteTimeDivision"/> with the
-        /// specified format (frame rate) and resoltion.
+        /// specified format (frame rate) and resolution.
         /// </summary>
         /// <param name="format">SMPTE format representing the number of frames per second.</param>
-        /// <param name="resolution">Resoltuion within a frame.</param>
+        /// <param name="resolution">Resolution within a frame.</param>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="format"/> specified an invalid value.</exception>
         public SmpteTimeDivision(SmpteFormat format, byte resolution)
         {
@@ -36,7 +36,7 @@ namespace Melanchall.DryWetMidi.Core
         public SmpteFormat Format { get; }
 
         /// <summary>
-        /// Gets resoltion within a frame.
+        /// Gets resolution within a frame.
         /// </summary>
         public byte Resolution { get; }
 

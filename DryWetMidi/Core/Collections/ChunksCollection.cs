@@ -65,7 +65,7 @@ namespace Melanchall.DryWetMidi.Core
         /// </summary>
         /// <param name="chunk">The chunk to be added to the end of the collection.</param>
         /// <remarks>
-        /// Note that header chunks cannot be added into the collection since it may cause inconsistence in the file structure.
+        /// Note that header chunks cannot be added into the collection since it may cause inconsistency in the file structure.
         /// Header chunk with appropriate information will be written to a file automatically on
         /// <see cref="MidiFile.Write(string, bool, MidiFileFormat, WritingSettings)"/>.
         /// </remarks>
@@ -82,7 +82,7 @@ namespace Melanchall.DryWetMidi.Core
         /// </summary>
         /// <param name="chunks">Chunks to add to the collection.</param>
         /// <remarks>
-        /// Note that header chunks cannot be added into the collection since it may cause inconsistence in the file structure.
+        /// Note that header chunks cannot be added into the collection since it may cause inconsistency in the file structure.
         /// Header chunk with appropriate information will be written to a file automatically on
         /// <see cref="MidiFile.Write(string, bool, MidiFileFormat, WritingSettings)"/>.
         /// </remarks>
@@ -98,7 +98,7 @@ namespace Melanchall.DryWetMidi.Core
         /// Inserts a chunk into the collection at the specified index.
         /// </summary>
         /// <remarks>
-        /// Note that header chunks cannot be inserted into the collection since it may cause inconsistence in the file structure.
+        /// Note that header chunks cannot be inserted into the collection since it may cause inconsistency in the file structure.
         /// Header chunk with appropriate information will be written to a file automatically on
         /// <see cref="MidiFile.Write(string, bool, MidiFileFormat, WritingSettings)"/>.
         /// </remarks>
@@ -106,7 +106,7 @@ namespace Melanchall.DryWetMidi.Core
         /// <param name="chunk">The chunk to insert.</param>
         /// <exception cref="ArgumentNullException"><paramref name="chunk"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="index"/> is less than 0.</description>
@@ -128,7 +128,7 @@ namespace Melanchall.DryWetMidi.Core
         /// Inserts a set of chunks into the collection at the specified index.
         /// </summary>
         /// <remarks>
-        /// Note that header chunks cannot be inserted into the collection since it may cause inconsistence in the file structure.
+        /// Note that header chunks cannot be inserted into the collection since it may cause inconsistency in the file structure.
         /// Header chunk with appropriate information will be written to a file automatically on
         /// <see cref="MidiFile.Write(string, bool, MidiFileFormat, WritingSettings)"/>.
         /// </remarks>
@@ -136,7 +136,7 @@ namespace Melanchall.DryWetMidi.Core
         /// <param name="chunks">The chunk to insert.</param>
         /// <exception cref="ArgumentNullException"><paramref name="chunks"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="index"/> is less than 0.</description>

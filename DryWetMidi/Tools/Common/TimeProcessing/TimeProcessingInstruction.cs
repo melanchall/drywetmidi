@@ -5,7 +5,7 @@ namespace Melanchall.DryWetMidi.Tools
 {
     /// <summary>
     /// Holds the new time that will be set to an object is being processed and action
-    /// indicating whether quantizing should be cancelled or not.
+    /// indicating whether quantization should be cancelled or not.
     /// </summary>
     public sealed class TimeProcessingInstruction
     {

@@ -55,7 +55,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="tempoMap">Tempo map used to calculate new time span.</param>
         /// <returns>A new time span which is the <paramref name="timeSpan"/> rounded using the passed parameters.</returns>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="timeSpan"/> is <c>null</c>.</description>

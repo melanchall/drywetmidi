@@ -24,7 +24,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <returns>An instance of <typeparamref name="TTimeSpan"/> representing
         /// duration of <paramref name="trackChunk"/>.</returns>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="trackChunk"/> is <c>null</c>.</description>
@@ -58,7 +58,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <returns>An implementation of <see cref="ITimeSpan"/> representing
         /// duration of <paramref name="trackChunk"/>.</returns>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="trackChunk"/> is <c>null</c>.</description>
@@ -92,7 +92,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <returns>An instance of <typeparamref name="TTimeSpan"/> representing
         /// duration of <paramref name="trackChunks"/>.</returns>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="trackChunks"/> is <c>null</c>.</description>
@@ -126,7 +126,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <returns>An implementation of <see cref="ITimeSpan"/> representing
         /// duration of <paramref name="trackChunks"/>.</returns>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="trackChunks"/> is <c>null</c>.</description>
@@ -212,7 +212,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="midiFile"><see cref="MidiFile"/> containing events to shift.</param>
         /// <param name="distance">Distance to shift events by.</param>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="midiFile"/> is <c>null</c>.</description>

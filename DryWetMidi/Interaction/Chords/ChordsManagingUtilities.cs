@@ -156,7 +156,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// specified events collection. More info in the <see href="xref:a_managers">Objects managers</see> article.
         /// </summary>
         /// <param name="eventsCollection"><see cref="EventsCollection"/> that holds chords to manage.</param>
-        /// <param name="settings">Settings accoridng to which chords should be detected and built.</param>
+        /// <param name="settings">Settings according to which chords should be detected and built.</param>
         /// <param name="comparer">Comparer that will be used to order objects on enumerating and saving objects
         /// back to the <paramref name="eventsCollection"/> via <see cref="TimedObjectsManager{TObject}.SaveChanges"/>
         /// or <see cref="TimedObjectsManager{TObject}.Dispose()"/>.</param>
@@ -182,7 +182,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <see href="xref:a_managers">Objects managers</see> article.
         /// </summary>
         /// <param name="trackChunk"><see cref="TrackChunk"/> that holds chords to manage.</param>
-        /// <param name="settings">Settings accoridng to which chords should be detected and built.</param>
+        /// <param name="settings">Settings according to which chords should be detected and built.</param>
         /// <param name="comparer">Comparer that will be used to order objects on enumerating and saving objects
         /// back to the <paramref name="trackChunk"/> via <see cref="TimedObjectsManager{TObject}.SaveChanges"/>
         /// or <see cref="TimedObjectsManager{TObject}.Dispose()"/>.</param>
@@ -201,7 +201,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <see href="xref:a_getting_objects#getchords">Getting objects: GetChords</see> article.
         /// </summary>
         /// <param name="midiEvents">Collection of<see cref="MidiFile"/> to search for chords.</param>
-        /// <param name="settings">Settings accoridng to which chords should be detected and built.</param>
+        /// <param name="settings">Settings according to which chords should be detected and built.</param>
         /// <returns>Collection of chords contained in <paramref name="midiEvents"/> ordered by time.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="midiEvents"/> is <c>null</c>.</exception>
         public static ICollection<Chord> GetChords(this IEnumerable<MidiEvent> midiEvents, ChordDetectionSettings settings = null)
@@ -223,7 +223,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <see href="xref:a_getting_objects#getchords">Getting objects: GetChords</see> article.
         /// </summary>
         /// <param name="eventsCollection"><see cref="EventsCollection"/> to search for chords.</param>
-        /// <param name="settings">Settings accoridng to which chords should be detected and built.</param>
+        /// <param name="settings">Settings according to which chords should be detected and built.</param>
         /// <returns>Collection of chords contained in <paramref name="eventsCollection"/> ordered by time.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="eventsCollection"/> is <c>null</c>.</exception>
         /// <seealso cref="ProcessChords(EventsCollection, Action{Chord}, Predicate{Chord}, ChordDetectionSettings)"/>
@@ -249,7 +249,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <see href="xref:a_getting_objects#getchords">Getting objects: GetChords</see> article.
         /// </summary>
         /// <param name="trackChunk"><see cref="TrackChunk"/> to search for chords.</param>
-        /// <param name="settings">Settings accoridng to which chords should be detected and built.</param>
+        /// <param name="settings">Settings according to which chords should be detected and built.</param>
         /// <returns>Collection of chords contained in <paramref name="trackChunk"/> ordered by time.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="trackChunk"/> is <c>null</c>.</exception>
         /// <seealso cref="ProcessChords(TrackChunk, Action{Chord}, Predicate{Chord}, ChordDetectionSettings)"/>
@@ -269,7 +269,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <see href="xref:a_getting_objects#getchords">Getting objects: GetChords</see> article.
         /// </summary>
         /// <param name="trackChunks">Track chunks to search for chords.</param>
-        /// <param name="settings">Settings accoridng to which chords should be detected and built.</param>
+        /// <param name="settings">Settings according to which chords should be detected and built.</param>
         /// <returns>Collection of chords contained in <paramref name="trackChunks"/> ordered by time.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="trackChunks"/> is <c>null</c>.</exception>
         /// <seealso cref="ProcessChords(IEnumerable{TrackChunk}, Action{Chord}, Predicate{Chord}, ChordDetectionSettings)"/>
@@ -304,7 +304,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <see href="xref:a_getting_objects#getchords">Getting objects: GetChords</see> article.
         /// </summary>
         /// <param name="file"><see cref="MidiFile"/> to search for chords.</param>
-        /// <param name="settings">Settings accoridng to which chords should be detected and built.</param>
+        /// <param name="settings">Settings according to which chords should be detected and built.</param>
         /// <returns>Collection of chords contained in <paramref name="file"/> ordered by time.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="file"/> is <c>null</c>.</exception>
         /// <seealso cref="ProcessChords(MidiFile, Action{Chord}, Predicate{Chord}, ChordDetectionSettings)"/>
@@ -323,7 +323,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// Creates chords from notes.
         /// </summary>
         /// <param name="notes">Notes to create chords from.</param>
-        /// <param name="settings">Settings accoridng to which chords should be detected and built.</param>
+        /// <param name="settings">Settings according to which chords should be detected and built.</param>
         /// <returns>Collection of chords made up from <paramref name="notes"/>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="notes"/> is <c>null</c>.</exception>
         public static IEnumerable<Chord> GetChords(this IEnumerable<Note> notes, ChordDetectionSettings settings = null)
@@ -339,10 +339,10 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="eventsCollection"><see cref="EventsCollection"/> to search for chords to process.</param>
         /// <param name="action">The action to perform on each <see cref="Chord"/> contained in the
         /// <paramref name="eventsCollection"/>.</param>
-        /// <param name="settings">Settings accoridng to which chords should be detected and built.</param>
+        /// <param name="settings">Settings according to which chords should be detected and built.</param>
         /// <returns>Count of processed chords.</returns>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="eventsCollection"/> is <c>null</c>.</description>
@@ -367,10 +367,10 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="action">The action to perform on each <see cref="Chord"/> contained in the
         /// <paramref name="eventsCollection"/>.</param>
         /// <param name="match">The predicate that defines the conditions of the <see cref="Chord"/> to process.</param>
-        /// <param name="settings">Settings accoridng to which chords should be detected and built.</param>
+        /// <param name="settings">Settings according to which chords should be detected and built.</param>
         /// <returns>Count of processed chords.</returns>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="eventsCollection"/> is <c>null</c>.</description>
@@ -398,10 +398,10 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="trackChunk"><see cref="TrackChunk"/> to search for chords to process.</param>
         /// <param name="action">The action to perform on each <see cref="Chord"/> contained in the
         /// <paramref name="trackChunk"/>.</param>
-        /// <param name="settings">Settings accoridng to which chords should be detected and built.</param>
+        /// <param name="settings">Settings according to which chords should be detected and built.</param>
         /// <returns>Count of processed chords.</returns>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="trackChunk"/> is <c>null</c>.</description>
@@ -426,10 +426,10 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="action">The action to perform on each <see cref="Chord"/> contained in the
         /// <paramref name="trackChunk"/>.</param>
         /// <param name="match">The predicate that defines the conditions of the <see cref="Chord"/> to process.</param>
-        /// <param name="settings">Settings accoridng to which chords should be detected and built.</param>
+        /// <param name="settings">Settings according to which chords should be detected and built.</param>
         /// <returns>Count of processed chords.</returns>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="trackChunk"/> is <c>null</c>.</description>
@@ -458,10 +458,10 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="trackChunks">Collection of <see cref="TrackChunk"/> to search for chords to process.</param>
         /// <param name="action">The action to perform on each <see cref="Chord"/> contained in the
         /// <paramref name="trackChunks"/>.</param>
-        /// <param name="settings">Settings accoridng to which chords should be detected and built.</param>
+        /// <param name="settings">Settings according to which chords should be detected and built.</param>
         /// <returns>Count of processed chords.</returns>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="trackChunks"/> is <c>null</c>.</description>
@@ -487,10 +487,10 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="action">The action to perform on each <see cref="Chord"/> contained in the
         /// <paramref name="trackChunks"/>.</param>
         /// <param name="match">The predicate that defines the conditions of the <see cref="Chord"/> to process.</param>
-        /// <param name="settings">Settings accoridng to which chords should be detected and built.</param>
+        /// <param name="settings">Settings according to which chords should be detected and built.</param>
         /// <returns>Count of processed chords.</returns>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="trackChunks"/> is <c>null</c>.</description>
@@ -518,10 +518,10 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="file"><see cref="MidiFile"/> to search for chords to process.</param>
         /// <param name="action">The action to perform on each <see cref="Chord"/> contained in the
         /// <paramref name="file"/>.</param>
-        /// <param name="settings">Settings accoridng to which chords should be detected and built.</param>
+        /// <param name="settings">Settings according to which chords should be detected and built.</param>
         /// <returns>Count of processed chords.</returns>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="file"/> is <c>null</c>.</description>
@@ -546,10 +546,10 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="action">The action to perform on each <see cref="Chord"/> contained in the
         /// <paramref name="file"/>.</param>
         /// <param name="match">The predicate that defines the conditions of the <see cref="Chord"/> to process.</param>
-        /// <param name="settings">Settings accoridng to which chords should be detected and built.</param>
+        /// <param name="settings">Settings according to which chords should be detected and built.</param>
         /// <returns>Count of processed chords.</returns>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="file"/> is <c>null</c>.</description>
@@ -575,7 +575,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// Removes all the <see cref="Chord"/> that match the conditions defined by the specified predicate.
         /// </summary>
         /// <param name="eventsCollection"><see cref="EventsCollection"/> to search for chords to remove.</param>
-        /// <param name="settings">Settings accoridng to which chords should be detected and built.</param>
+        /// <param name="settings">Settings according to which chords should be detected and built.</param>
         /// <returns>Count of removed chords.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="eventsCollection"/> is <c>null</c>.</exception>
         public static int RemoveChords(this EventsCollection eventsCollection, ChordDetectionSettings settings = null)
@@ -590,10 +590,10 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <param name="eventsCollection"><see cref="EventsCollection"/> to search for chords to remove.</param>
         /// <param name="match">The predicate that defines the conditions of the <see cref="Chord"/> to remove.</param>
-        /// <param name="settings">Settings accoridng to which chords should be detected and built.</param>
+        /// <param name="settings">Settings according to which chords should be detected and built.</param>
         /// <returns>Count of removed chords.</returns>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="eventsCollection"/> is <c>null</c>.</description>
@@ -631,7 +631,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// Removes all the <see cref="Chord"/> that match the conditions defined by the specified predicate.
         /// </summary>
         /// <param name="trackChunk"><see cref="TrackChunk"/> to search for chords to remove.</param>
-        /// <param name="settings">Settings accoridng to which chords should be detected and built.</param>
+        /// <param name="settings">Settings according to which chords should be detected and built.</param>
         /// <returns>Count of removed chords.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="trackChunk"/> is <c>null</c>.</exception>
         public static int RemoveChords(this TrackChunk trackChunk, ChordDetectionSettings settings = null)
@@ -646,10 +646,10 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <param name="trackChunk"><see cref="TrackChunk"/> to search for chords to remove.</param>
         /// <param name="match">The predicate that defines the conditions of the <see cref="Chord"/> to remove.</param>
-        /// <param name="settings">Settings accoridng to which chords should be detected and built.</param>
+        /// <param name="settings">Settings according to which chords should be detected and built.</param>
         /// <returns>Count of removed chords.</returns>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="trackChunk"/> is <c>null</c>.</description>
@@ -671,7 +671,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// Removes all the <see cref="Chord"/> that match the conditions defined by the specified predicate.
         /// </summary>
         /// <param name="trackChunks">Collection of <see cref="TrackChunk"/> to search for chords to remove.</param>
-        /// <param name="settings">Settings accoridng to which chords should be detected and built.</param>
+        /// <param name="settings">Settings according to which chords should be detected and built.</param>
         /// <returns>Count of removed chords.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="trackChunks"/> is <c>null</c>.</exception>
         public static int RemoveChords(this IEnumerable<TrackChunk> trackChunks, ChordDetectionSettings settings = null)
@@ -686,10 +686,10 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <param name="trackChunks">Collection of <see cref="TrackChunk"/> to search for chords to remove.</param>
         /// <param name="match">The predicate that defines the conditions of the <see cref="Chord"/> to remove.</param>
-        /// <param name="settings">Settings accoridng to which chords should be detected and built.</param>
+        /// <param name="settings">Settings according to which chords should be detected and built.</param>
         /// <returns>Count of removed chords.</returns>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="trackChunks"/> is <c>null</c>.</description>
@@ -727,7 +727,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// Removes all the <see cref="Chord"/> that match the conditions defined by the specified predicate.
         /// </summary>
         /// <param name="file"><see cref="MidiFile"/> to search for chords to remove.</param>
-        /// <param name="settings">Settings accoridng to which chords should be detected and built.</param>
+        /// <param name="settings">Settings according to which chords should be detected and built.</param>
         /// <returns>Count of removed chords.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="file"/> is <c>null</c>.</exception>
         public static int RemoveChords(this MidiFile file, ChordDetectionSettings settings = null)
@@ -742,10 +742,10 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <param name="file"><see cref="MidiFile"/> to search for chords to remove.</param>
         /// <param name="match">The predicate that defines the conditions of the <see cref="Chord"/> to remove.</param>
-        /// <param name="settings">Settings accoridng to which chords should be detected and built.</param>
+        /// <param name="settings">Settings according to which chords should be detected and built.</param>
         /// <returns>Count of removed chords.</returns>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="file"/> is <c>null</c>.</description>

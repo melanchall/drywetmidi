@@ -31,7 +31,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="leftSize">Left part's size of the time range.</param>
         /// <param name="rightSize">Right part's size of the time range.</param>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="leftSize"/> is <c>null</c>.</description>

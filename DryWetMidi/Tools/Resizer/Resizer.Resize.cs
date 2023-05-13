@@ -23,7 +23,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="length">New length of the <paramref name="trackChunk"/>.</param>
         /// <param name="tempoMap">Tempo map used to calculate length.</param>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="trackChunk"/> is <c>null</c>.</description>
@@ -78,7 +78,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="length">New length of the <paramref name="trackChunks"/>.</param>
         /// <param name="tempoMap">Tempo map used to calculate length.</param>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="trackChunks"/> is <c>null</c>.</description>
@@ -135,7 +135,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="midiFile"><see cref="MidiFile"/> to resize.</param>
         /// <param name="length">New length of the <paramref name="midiFile"/>.</param>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="midiFile"/> is <c>null</c>.</description>

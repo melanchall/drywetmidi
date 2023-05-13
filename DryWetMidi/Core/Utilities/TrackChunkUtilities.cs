@@ -29,7 +29,7 @@ namespace Melanchall.DryWetMidi.Core
         /// Merges multiple track chunks into one that corresponds to <see cref="MidiFileFormat.SingleTrack"/>.
         /// </summary>
         /// <param name="trackChunks">Track chunks to merge into one.</param>
-        /// <returns>Track chunk that containes all events from the <paramref name="trackChunks"/>.</returns>
+        /// <returns>Track chunk that contains all events from the <paramref name="trackChunks"/>.</returns>
         /// <remarks>
         /// Note that events will be cloned so events in the result track chunk will not be equal
         /// by reference to events in the <paramref name="trackChunks"/>.

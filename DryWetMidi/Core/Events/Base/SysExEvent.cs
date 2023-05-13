@@ -37,7 +37,7 @@ namespace Melanchall.DryWetMidi.Core
         #region Properties
 
         /// <summary>
-        /// Gets a value indicating whether this sytem exclusive event is completed or not.
+        /// Gets a value indicating whether this system exclusive event is completed or not.
         /// </summary>
         public bool Completed => Data?.LastOrDefault() == EndOfEventByte;
 

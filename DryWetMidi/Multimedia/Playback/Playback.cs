@@ -110,7 +110,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <param name="tempoMap">Tempo map used to calculate events times.</param>
         /// <param name="playbackSettings">Settings according to which a playback should be created.</param>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="timedObjects"/> is <c>null</c>.</description>
@@ -163,7 +163,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <param name="outputDevice">Output MIDI device to play <paramref name="timedObjects"/> through.</param>
         /// <param name="playbackSettings">Settings according to which a playback should be created.</param>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="timedObjects"/> is <c>null</c>.</description>

@@ -7,7 +7,7 @@ namespace Melanchall.DryWetMidi.Core
     /// Represents an unknown meta event.
     /// </summary>
     /// <remarks>
-    /// Structure of meta eventa allows custom ones be implemented and stored within a MIDI file.
+    /// Structure of meta events allows custom ones be implemented and stored within a MIDI file.
     /// Any meta event DryWetMIDI doesn't know about will be read as an instance of the
     /// <see cref="UnknownMetaEvent"/>.
     /// </remarks>

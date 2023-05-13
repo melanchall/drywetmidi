@@ -7,17 +7,17 @@
     public enum QuantizingBeyondZeroPolicy
     {
         /// <summary>
-        /// Object will be shrinked due to end time quantizing and fixed at zero.
+        /// Object will be shrinked due to end time quantization and fixed at zero.
         /// </summary>
         FixAtZero = 0,
 
         /// <summary>
-        /// Object will be skipped so quantizing will not be applied to it.
+        /// Object will be skipped so quantization will not be applied to it.
         /// </summary>
         Skip,
 
         /// <summary>
-        /// Throw an exception aborting quantizing.
+        /// Throw an exception aborting quantization.
         /// </summary>
         Abort
     }

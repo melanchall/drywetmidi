@@ -58,7 +58,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="tempoMap">Tempo map used to convert <paramref name="time"/>.</param>
         /// <returns>Time as an instance of <typeparamref name="TTimeSpan"/>.</returns>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="time"/> is <c>null</c>.</description>
@@ -86,7 +86,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="tempoMap">Tempo map used to convert <paramref name="time"/>.</param>
         /// <returns>Time as an instance of time span defined by <paramref name="timeType"/>.</returns>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="time"/> is <c>null</c>.</description>
@@ -114,7 +114,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="tempoMap">Tempo map used to convert <paramref name="time"/>.</param>
         /// <returns>Time as an instance of <paramref name="timeType"/>.</returns>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="time"/> is <c>null</c>.</description>
@@ -144,7 +144,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="tempoMap">Tempo map used to convert <paramref name="time"/>.</param>
         /// <returns>Time as <see cref="long"/>.</returns>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="time"/> is <c>null</c>.</description>

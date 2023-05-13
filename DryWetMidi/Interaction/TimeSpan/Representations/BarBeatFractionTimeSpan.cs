@@ -45,7 +45,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="bars">The number of bars.</param>
         /// <param name="beats">The number of beats.</param>
         /// <exception cref="ArgumentOutOfRangeException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="bars"/> is negative.</description>
@@ -149,7 +149,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <returns>An object whose value is the sum of the values of <paramref name="timeSpan1"/> and
         /// <paramref name="timeSpan2"/>.</returns>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="timeSpan1"/> is <c>null</c>.</description>
@@ -176,7 +176,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <returns>An object whose value is the result of the value of <paramref name="timeSpan1"/> minus
         /// the value of <paramref name="timeSpan2"/>.</returns>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="timeSpan1"/> is <c>null</c>.</description>
@@ -207,7 +207,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <returns><c>true</c> if the value of <paramref name="timeSpan1"/> is less than the value of
         /// <paramref name="timeSpan2"/>; otherwise, <c>false</c>.</returns>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="timeSpan1"/> is <c>null</c>.</description>
@@ -233,7 +233,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <returns><c>true</c> if the value of <paramref name="timeSpan1"/> is greater than the value of
         /// <paramref name="timeSpan2"/>; otherwise, <c>false</c>.</returns>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="timeSpan1"/> is <c>null</c>.</description>
@@ -260,7 +260,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <returns><c>true</c> if the value of <paramref name="timeSpan1"/> is less than or equal to the value of
         /// <paramref name="timeSpan2"/>; otherwise, <c>false</c>.</returns>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="timeSpan1"/> is <c>null</c>.</description>
@@ -287,7 +287,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <returns><c>true</c> if the value of <paramref name="timeSpan1"/> is greater than or equal to the value of
         /// <paramref name="timeSpan2"/>; otherwise, <c>false</c>.</returns>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="timeSpan1"/> is <c>null</c>.</description>

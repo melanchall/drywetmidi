@@ -32,7 +32,7 @@ namespace Melanchall.DryWetMidi.Core
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SmpteOffsetEvent"/> with the
-        /// specified SMPE format, hours, minutes, seconds, number of frames and sub-frames.
+        /// specified SMPTE format, hours, minutes, seconds, number of frames and sub-frames.
         /// </summary>
         /// <param name="format">SMPTE format.</param>
         /// <param name="hours">Number of hours.</param>
@@ -42,7 +42,7 @@ namespace Melanchall.DryWetMidi.Core
         /// <param name="subFrames">Number of sub-frames.</param>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="format"/> specified an invalid value.</exception>
         /// <exception cref="ArgumentOutOfRangeException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="hours"/> is out of valid range.</description>

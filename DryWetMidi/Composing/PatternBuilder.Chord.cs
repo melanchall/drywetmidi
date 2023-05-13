@@ -56,7 +56,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// </para>
         /// </remarks>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="chord"/> is <c>null</c>.</description>
@@ -91,7 +91,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// </para>
         /// </remarks>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="chord"/> is <c>null</c>.</description>
@@ -123,7 +123,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// </para>
         /// </remarks>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="chord"/> is <c>null</c>.</description>
@@ -183,7 +183,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// </para>
         /// </remarks>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="chord"/> is <c>null</c>.</description>
@@ -215,7 +215,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// </para>
         /// </remarks>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="chord"/> is <c>null</c>.</description>
@@ -242,7 +242,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// <param name="velocity">Chord's notes velocity.</param>
         /// <returns>The current <see cref="PatternBuilder"/>.</returns>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="chord"/> is <c>null</c>.</description>
@@ -296,7 +296,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// velocity is 100.
         /// </remarks>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="intervals"/> is <c>null</c>.</description>
@@ -344,7 +344,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// <param name="velocity">The velocity of a chord.</param>
         /// <returns>The current <see cref="PatternBuilder"/>.</returns>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="intervals"/> is <c>null</c>.</description>
@@ -381,7 +381,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// velocity is 100.
         /// </remarks>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="intervals"/> is <c>null</c>.</description>
@@ -413,7 +413,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// velocity is 100.
         /// </remarks>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="interval"/> is <c>null</c>.</description>
@@ -450,7 +450,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// is 1/4.
         /// </remarks>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="intervals"/> is <c>null</c>.</description>
@@ -483,7 +483,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// the <paramref name="rootNote"/> by the <paramref name="intervals"/>.
         /// </remarks>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="intervals"/> is <c>null</c>.</description>
@@ -539,7 +539,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// velocity is 100.
         /// </remarks>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="noteNames"/> is <c>null</c>.</description>
@@ -582,7 +582,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// To set default octave use <see cref="SetOctave"/> method. By default the octave number is 4.
         /// </remarks>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="noteNames"/> is <c>null</c>.</description>
@@ -627,7 +627,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// velocity is 100.
         /// </remarks>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="notes"/> is <c>null</c>.</description>
@@ -666,7 +666,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// <param name="velocity">The velocity of a chord.</param>
         /// <returns>The current <see cref="PatternBuilder"/>.</returns>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="notes"/> is <c>null</c>.</description>
@@ -782,7 +782,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// <exception cref="ArgumentException"><paramref name="chord"/> is <c>null</c> or contains white-spaces only.</exception>
         /// <exception cref="FormatException"><paramref name="chord"/> has invalid format.</exception>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="octave"/> is <c>null</c>.</description>
@@ -885,7 +885,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// <exception cref="ArgumentException"><paramref name="chord"/> is <c>null</c> or contains white-spaces only.</exception>
         /// <exception cref="FormatException"><paramref name="chord"/> has invalid format.</exception>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="octave"/> is <c>null</c>.</description>

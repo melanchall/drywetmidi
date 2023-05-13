@@ -153,7 +153,7 @@ namespace Melanchall.DryWetMidi.Core
         /// <exception cref="ArgumentNullException"><paramref name="midiEvent"/> is <c>null</c>.</exception>
         /// <exception cref="IOException">An I/O error occurred while writing the file.</exception>
         /// <exception cref="InvalidOperationException">
-        /// One of the following errors occured:
+        /// One of the following errors occurred:
         /// <list type="bullet">
         /// <item>
         /// <description>A track chunk is not started (see <see cref="StartTrackChunk"/>).</description>

@@ -55,7 +55,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// <param name="rootNoteName">The root note's name.</param>
         /// <param name="notesNamesAboveRoot">The set of names of the notes above root one.</param>
         /// <exception cref="InvalidEnumArgumentException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="rootNoteName"/> specified an invalid value.</description>
@@ -171,7 +171,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// <param name="intervalsFromRoot">Intervals from root note.</param>
         /// <returns>Chord created by triad with addition of notes defined by <paramref name="intervalsFromRoot"/>.</returns>
         /// <exception cref="InvalidEnumArgumentException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="rootNoteName"/> specified an invalid value.</description>

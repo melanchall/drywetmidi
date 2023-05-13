@@ -48,7 +48,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// <param name="octave">Octave to resolve root note of the <paramref name="chord"/>.</param>
         /// <returns>Root note of the chord regarding to <paramref name="octave"/>.</returns>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="chord"/> is <c>null</c>.</description>
@@ -73,7 +73,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// <param name="octave">Octave to resolve notes of the <paramref name="chord"/>.</param>
         /// <returns>Notes of the chord regarding to <paramref name="octave"/>.</returns>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="chord"/> is <c>null</c>.</description>

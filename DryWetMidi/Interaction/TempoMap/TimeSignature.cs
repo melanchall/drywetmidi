@@ -29,7 +29,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="numerator">Numerator of the time signature which defines number of beats.</param>
         /// <param name="denominator">Denominator of the time signature which defines beat length.</param>
         /// <exception cref="ArgumentOutOfRangeException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="numerator"/> is zero or negative.</description>
@@ -110,7 +110,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <returns><c>true</c> if the value of <paramref name="timeSignature1"/> is less than the value of
         /// <paramref name="timeSignature2"/>; otherwise, <c>false</c>.</returns>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="timeSignature1"/> is <c>null</c>.</description>
@@ -137,7 +137,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <returns><c>true</c> if the value of <paramref name="timeSignature1"/> is less than or equal to the value of
         /// <paramref name="timeSignature2"/>; otherwise, <c>false</c>.</returns>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="timeSignature1"/> is <c>null</c>.</description>
@@ -163,7 +163,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <returns><c>true</c> if the value of <paramref name="timeSignature1"/> is greater than the value of
         /// <paramref name="timeSignature2"/>; otherwise, <c>false</c>.</returns>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="timeSignature1"/> is <c>null</c>.</description>
@@ -190,7 +190,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <returns><c>true</c> if the value of <paramref name="timeSignature1"/> is greater than or equal to the value of
         /// <paramref name="timeSignature2"/>; otherwise, <c>false</c>.</returns>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="timeSignature1"/> is <c>null</c>.</description>

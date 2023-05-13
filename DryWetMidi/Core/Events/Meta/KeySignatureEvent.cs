@@ -70,7 +70,7 @@ namespace Melanchall.DryWetMidi.Core
         /// sharps (if positive).</param>
         /// <param name="scale">The scale (0 for major or 1 for minor).</param>
         /// <exception cref="ArgumentOutOfRangeException">
-        /// One of the following errors occured:
+        /// One of the following errors occurred:
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="key"/> is out of [<see cref="MinKey"/>; <see cref="MaxKey"/>] range.</description>

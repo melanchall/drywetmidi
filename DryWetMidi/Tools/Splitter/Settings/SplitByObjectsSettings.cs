@@ -36,7 +36,7 @@ namespace Melanchall.DryWetMidi.Tools
 
         /// <summary>
         /// Gets or sets a predicate to filter out objects that should be copied to each new
-        /// file (i.e. for those objects <see cref="WriteToAllFilesPredicate"/> returnes <c>true</c> for).
+        /// file (i.e. for those objects <see cref="WriteToAllFilesPredicate"/> returns <c>true</c> for).
         /// The default value is <c>null</c> which means no filter applied.
         /// </summary>
         public Predicate<ITimedObject> AllFilesObjectsFilter { get; set; }

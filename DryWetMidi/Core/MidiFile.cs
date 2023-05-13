@@ -110,7 +110,7 @@ namespace Melanchall.DryWetMidi.Core
         /// Gets collection of chunks of a MIDI file.
         /// </summary>
         /// <remarks>
-        /// <para> MIDI files are made up of chunks. Сollection returned by this property may contain chunks
+        /// <para> MIDI files are made up of chunks. Collection returned by this property may contain chunks
         /// of the following types:</para>
         /// <list type="bullet">
         /// <item>
@@ -177,7 +177,7 @@ namespace Melanchall.DryWetMidi.Core
         /// <exception cref="IOException">An I/O error occurred while reading the file.</exception>
         /// <exception cref="NotSupportedException"><paramref name="filePath"/> is in an invalid format.</exception>
         /// <exception cref="UnauthorizedAccessException">
-        /// One of the following errors occured:
+        /// One of the following errors occurred:
         /// <list type="bullet">
         /// <item>
         /// <description>This operation is not supported on the current platform.</description>
@@ -196,7 +196,7 @@ namespace Melanchall.DryWetMidi.Core
         /// in its header and that should be treated as error according to the <see cref="ReadingSettings.InvalidChunkSizePolicy"/>
         /// of the <paramref name="settings"/>.</exception>
         /// <exception cref="UnknownChunkException">Chunk to be read has unknown ID and that
-        /// should be treated as error accordng to the <see cref="ReadingSettings.UnknownChunkIdPolicy"/> of the
+        /// should be treated as error according to the <see cref="ReadingSettings.UnknownChunkIdPolicy"/> of the
         /// <paramref name="settings"/>.</exception>
         /// <exception cref="UnexpectedTrackChunksCountException">Actual track chunks
         /// count differs from the expected one (declared in the file header) and that should be treated as error according to
@@ -218,7 +218,7 @@ namespace Melanchall.DryWetMidi.Core
         /// of the <paramref name="settings"/>.</exception>
         /// <exception cref="UnexpectedRunningStatusException">Unexpected running status is encountered.</exception>
         /// <exception cref="MissedEndOfTrackEventException">Track chunk doesn't end with <c>End Of Track</c> event and that
-        /// should be treated as error accordng to the <see cref="ReadingSettings.MissedEndOfTrackPolicy"/> of
+        /// should be treated as error according to the <see cref="ReadingSettings.MissedEndOfTrackPolicy"/> of
         /// the <paramref name="settings"/>.</exception>
         /// <exception cref="InvalidOperationException"><see cref="ReaderSettings.Buffer"/> of <paramref name="settings"/>
         /// is <c>null</c> in case of <see cref="ReaderSettings.BufferingPolicy"/> set to
@@ -252,7 +252,7 @@ namespace Melanchall.DryWetMidi.Core
         /// <exception cref="IOException">An I/O error occurred while reading the file.</exception>
         /// <exception cref="NotSupportedException"><paramref name="filePath"/> is in an invalid format.</exception>
         /// <exception cref="UnauthorizedAccessException">
-        /// One of the following errors occured:
+        /// One of the following errors occurred:
         /// <list type="bullet">
         /// <item>
         /// <description>This operation is not supported on the current platform.</description>
@@ -293,7 +293,7 @@ namespace Melanchall.DryWetMidi.Core
         /// <exception cref="IOException">An I/O error occurred while writing the file.</exception>
         /// <exception cref="NotSupportedException"><paramref name="filePath"/> is in an invalid format.</exception>
         /// <exception cref="UnauthorizedAccessException">
-        /// One of the following errors occured:
+        /// One of the following errors occurred:
         /// <list type="bullet">
         /// <item>
         /// <description>This operation is not supported on the current platform.</description>
@@ -347,7 +347,7 @@ namespace Melanchall.DryWetMidi.Core
         /// <exception cref="IOException">An I/O error occurred while writing the file.</exception>
         /// <exception cref="NotSupportedException"><paramref name="filePath"/> is in an invalid format.</exception>
         /// <exception cref="UnauthorizedAccessException">
-        /// One of the following errors occured:
+        /// One of the following errors occurred:
         /// <list type="bullet">
         /// <item>
         /// <description>This operation is not supported on the current platform.</description>
@@ -389,7 +389,7 @@ namespace Melanchall.DryWetMidi.Core
         /// </remarks>
         /// <exception cref="ArgumentNullException"><paramref name="stream"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">
-        /// One of the following errors occured:
+        /// One of the following errors occurred:
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="stream"/> doesn't support reading.</description>
@@ -402,7 +402,7 @@ namespace Melanchall.DryWetMidi.Core
         /// <exception cref="IOException">An I/O error occurred while reading the file.</exception>
         /// <exception cref="ObjectDisposedException"><paramref name="stream"/> is disposed.</exception>
         /// <exception cref="UnauthorizedAccessException">
-        /// One of the following errors occured:
+        /// One of the following errors occurred:
         /// <list type="bullet">
         /// <item>
         /// <description>This operation is not supported on the current platform.</description>
@@ -418,7 +418,7 @@ namespace Melanchall.DryWetMidi.Core
         /// in its header and that should be treated as error according to the <see cref="ReadingSettings.InvalidChunkSizePolicy"/>
         /// of the <paramref name="settings"/>.</exception>
         /// <exception cref="UnknownChunkException">Chunk to be read has unknown ID and that
-        /// should be treated as error accordng to the <see cref="ReadingSettings.UnknownChunkIdPolicy"/> of the
+        /// should be treated as error according to the <see cref="ReadingSettings.UnknownChunkIdPolicy"/> of the
         /// <paramref name="settings"/>.</exception>
         /// <exception cref="UnexpectedTrackChunksCountException">Actual track chunks
         /// count differs from the expected one (declared in the file header) and that should be treated as error according to
@@ -440,7 +440,7 @@ namespace Melanchall.DryWetMidi.Core
         /// of the <paramref name="settings"/>.</exception>
         /// <exception cref="UnexpectedRunningStatusException">Unexpected running status is encountered.</exception>
         /// <exception cref="MissedEndOfTrackEventException">Track chunk doesn't end with <c>End Of Track</c> event and that
-        /// should be treated as error accordng to the <see cref="ReadingSettings.MissedEndOfTrackPolicy"/> of
+        /// should be treated as error according to the <see cref="ReadingSettings.MissedEndOfTrackPolicy"/> of
         /// the <paramref name="settings"/>.</exception>
         /// <exception cref="InvalidOperationException"><see cref="ReaderSettings.Buffer"/> of <paramref name="settings"/>
         /// is <c>null</c> in case of <see cref="ReaderSettings.BufferingPolicy"/> set to
@@ -562,7 +562,7 @@ namespace Melanchall.DryWetMidi.Core
         /// </remarks>
         /// <exception cref="ArgumentNullException"><paramref name="stream"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">
-        /// One of the following errors occured:
+        /// One of the following errors occurred:
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="stream"/> doesn't support reading.</description>
@@ -575,7 +575,7 @@ namespace Melanchall.DryWetMidi.Core
         /// <exception cref="IOException">An I/O error occurred while reading the file.</exception>
         /// <exception cref="ObjectDisposedException"><paramref name="stream"/> is disposed.</exception>
         /// <exception cref="UnauthorizedAccessException">
-        /// One of the following errors occured:
+        /// One of the following errors occurred:
         /// <list type="bullet">
         /// <item>
         /// <description>This operation is not supported on the current platform.</description>
@@ -676,7 +676,7 @@ namespace Melanchall.DryWetMidi.Core
         /// <exception cref="TooManyTrackChunksException">Count of track chunks presented in the file
         /// exceeds maximum value allowed for MIDI file.</exception>
         /// <exception cref="UnauthorizedAccessException">
-        /// One of the following errors occured:
+        /// One of the following errors occurred:
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="stream"/> doesn't support writing (<see cref="Stream.CanWrite"/> is <c>false</c>).</description>

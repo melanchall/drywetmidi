@@ -144,7 +144,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="timedNoteOnEvent"><see cref="TimedEvent"/> holding <see cref="NoteOnEvent"/> event of a note.</param>
         /// <param name="timedNoteOffEvent"><see cref="TimedEvent"/> holding <see cref="NoteOffEvent"/> event of a note.</param>
         /// <exception cref="ArgumentOutOfRangeException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description>Underlying event of the <paramref name="timedNoteOnEvent"/> is not <see cref="NoteOnEvent"/>.</description>

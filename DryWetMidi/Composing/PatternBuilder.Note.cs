@@ -44,7 +44,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// velocity is 100.
         /// </remarks>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="interval"/> is <c>null</c>.</description>
@@ -93,7 +93,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// To set root note use <see cref="SetRootNote(MusicTheory.Note)"/> method. By default the root note is C4.
         /// </remarks>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="interval"/> is <c>null</c>.</description>
@@ -209,7 +209,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// velocity is 100.
         /// </remarks>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="note"/> is <c>null</c>.</description>
@@ -248,7 +248,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// <param name="velocity">The velocity of a note.</param>
         /// <returns>The current <see cref="PatternBuilder"/>.</returns>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="note"/> is <c>null</c>.</description>

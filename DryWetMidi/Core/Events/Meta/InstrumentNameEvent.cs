@@ -7,7 +7,7 @@
     /// The MIDI instrument name meta message shows the name of the instrument used in the
     /// current track. This optional event is used to provide a textual clue regarding the
     /// intended instrumentation for a track (e.g. 'Piano' or 'Flute', etc). If used, it is
-    /// reccommended to place this event near the start of a track.
+    /// recommended to place this event near the start of a track.
     /// </remarks>
     public sealed class InstrumentNameEvent : BaseTextEvent
     {

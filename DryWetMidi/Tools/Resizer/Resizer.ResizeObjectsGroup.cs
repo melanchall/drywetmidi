@@ -19,7 +19,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="tempoMap">Tempo map used to calculate length.</param>
         /// <param name="settings">Settings according to which objects should be resized.</param>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="objects"/> is <c>null</c>.</description>
@@ -97,7 +97,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="tempoMap">Tempo map used to calculate length.</param>
         /// <param name="settings">Settings according to which objects should be resized.</param>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="objects"/> is <c>null</c>.</description>

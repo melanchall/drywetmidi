@@ -30,7 +30,7 @@
         BarBeatFraction,
 
         /// <summary>
-        /// MIDI time span which represnts an amount of time measured in units of the time division
+        /// MIDI time span which represents an amount of time measured in units of the time division
         /// of a MIDI file. More info in the
         /// <see href="xref:a_time_length#midi">Time and length: Representations: MIDI</see> article.
         /// </summary>

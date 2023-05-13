@@ -25,7 +25,7 @@ namespace Melanchall.DryWetMidi.Core
         /// <param name="type">Type of chunk.</param>
         /// <param name="id">ID of chunk.</param>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="type"/> is <c>null</c>.</description>

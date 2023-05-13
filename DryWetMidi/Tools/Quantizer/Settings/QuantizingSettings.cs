@@ -6,7 +6,7 @@ using System.ComponentModel;
 namespace Melanchall.DryWetMidi.Tools
 {
     /// <summary>
-    /// Settings according to which quantizing should be performed by the <see cref="Quantizer"/>.
+    /// Settings according to which quantization should be performed by the <see cref="Quantizer"/>.
     /// More info in the <see href="xref:a_quantizer">Quantizer</see> article.
     /// </summary>
     public sealed class QuantizingSettings
@@ -52,7 +52,7 @@ namespace Melanchall.DryWetMidi.Tools
         }
 
         /// <summary>
-        /// Gets or sets the level of quantizing from 0.0 (no quantizing) to 1.0 (full quantizng).
+        /// Gets or sets the level of quantization from 0.0 (no quantization) to 1.0 (full quantization).
         /// </summary>
         /// <remarks>
         /// This setting specifies how close an object should be moved to nearest grid time. For example,
@@ -158,7 +158,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// The default value is <c>false</c>.
         /// </summary>
         /// <remarks>
-        /// When an object's side is fixed the length can be changed during quantizing.
+        /// When an object's side is fixed the length can be changed during quantization.
         /// </remarks>
         public bool FixOppositeEnd { get; set; }
 

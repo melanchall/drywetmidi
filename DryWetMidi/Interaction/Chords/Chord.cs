@@ -191,7 +191,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// Gets or sets channel to play the chord on.
         /// </summary>
         /// <exception cref="InvalidOperationException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description>Unable to get channel since a chord doesn't contain notes.</description>
@@ -238,7 +238,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// Gets or sets velocity of the underlying <see cref="NoteOnEvent"/> events of a chord's notes.
         /// </summary>
         /// <exception cref="InvalidOperationException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description>Unable to get velocity since a chord doesn't contain notes.</description>
@@ -285,7 +285,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// Gets or sets velocity of the underlying <see cref="NoteOffEvent"/> events of a chord's notes.
         /// </summary>
         /// <exception cref="InvalidOperationException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description>Unable to get off velocity since a chord doesn't contain notes.</description>

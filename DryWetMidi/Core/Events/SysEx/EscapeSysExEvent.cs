@@ -4,10 +4,10 @@ using Melanchall.DryWetMidi.Common;
 namespace Melanchall.DryWetMidi.Core
 {
     /// <summary>
-    /// Reprsents an "escape" system exclusive event which defines an escape sequence.
+    /// Represents an "escape" system exclusive event which defines an escape sequence.
     /// </summary>
     /// <remarks>
-    /// "Escape" system exclisive events start with 0xF7 byte and don't have a terminal 0xF7
+    /// "Escape" system exclusive events start with 0xF7 byte and don't have a terminal 0xF7
     /// byte that is required for normal sysex events.
     /// When an "escape" sysex event is encountered whilst reading a MIDI file, its interpretation
     /// (SysEx packet or escape sequence) is determined as follows:

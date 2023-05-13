@@ -113,7 +113,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// <returns>Notes that belong to the <paramref name="scale"/> in ascending order starting with
         /// the <paramref name="rootNote"/>.</returns>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="scale"/> is <c>null</c>.</description>
@@ -141,7 +141,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// <returns>Notes that belong to the <paramref name="scale"/> in descending order starting with
         /// the <paramref name="rootNote"/>.</returns>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="scale"/> is <c>null</c>.</description>
@@ -170,7 +170,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// <returns><c>true</c> if <paramref name="note"/> belongs to the <paramref name="scale"/>;
         /// otherwise, <c>false</c>.</returns>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="scale"/> is <c>null</c>.</description>
@@ -197,7 +197,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// <returns>A note next to the <paramref name="note"/> that belongs to the
         /// <paramref name="scale"/>.</returns>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="scale"/> is <c>null</c>.</description>
@@ -225,7 +225,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// <returns>A note previous to the <paramref name="note"/> that belongs to the
         /// <paramref name="scale"/>.</returns>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="scale"/> is <c>null</c>.</description>

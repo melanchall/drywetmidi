@@ -22,7 +22,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// set to <c>true</c> (default value), each new file will also contain all non-channel events from the original file.
         /// If an input file doesn't contain channel events, result file will be just a copy of the input one.
         /// </remarks>
-        /// <param name="settings">Settings accoridng to which MIDI file should be split.</param>
+        /// <param name="settings">Settings according to which MIDI file should be split.</param>
         /// <param name="midiFile"><see cref="MidiFile"/> to split.</param>
         /// <returns>Collection of <see cref="MidiFile"/> where each file contains events for single channel
         /// and meta and sysex ones as defined by <paramref name="settings"/>.</returns>

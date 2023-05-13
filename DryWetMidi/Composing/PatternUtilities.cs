@@ -30,7 +30,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// default value is <c>true</c>.</param>
         /// <returns><see cref="Pattern"/> that created by transforming notes of the <paramref name="pattern"/>.</returns>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="pattern"/> is <c>null</c>.</description>
@@ -59,7 +59,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// default value is <c>true</c>.</param>
         /// <returns><see cref="Pattern"/> that created by transforming notes of the <paramref name="pattern"/>.</returns>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="pattern"/> is <c>null</c>.</description>
@@ -91,7 +91,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// default value is <c>true</c>.</param>
         /// <returns><see cref="Pattern"/> that created by transforming chords of the <paramref name="pattern"/>.</returns>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="pattern"/> is <c>null</c>.</description>
@@ -120,7 +120,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// default value is <c>true</c>.</param>
         /// <returns><see cref="Pattern"/> that created by transforming chords of the <paramref name="pattern"/>.</returns>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="pattern"/> is <c>null</c>.</description>
@@ -153,7 +153,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// <returns>A collection whose elements are the subpatterns from the <paramref name="pattern"/> that is
         /// split at <paramref name="anchor"/>.</returns>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="pattern"/> is <c>null</c>.</description>
@@ -204,7 +204,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// <returns>A collection whose elements are the subpatterns from the <paramref name="pattern"/> that is
         /// split at <paramref name="marker"/>.</returns>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="pattern"/> is <c>null</c>.</description>
@@ -301,7 +301,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// <param name="recursive">A value indicating whether nested patterns should be processed or not. The
         /// default value is <c>true</c>.</param>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="pattern"/> is <c>null</c>.</description>
@@ -331,7 +331,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// <param name="recursive">A value indicating whether nested patterns should be processed or not. The
         /// default value is <c>true</c>.</param>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="pattern"/> is <c>null</c>.</description>

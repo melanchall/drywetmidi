@@ -1,7 +1,7 @@
 ﻿namespace Melanchall.DryWetMidi.Composing
 {
     /// <summary>
-    /// Defines additional options for a patterns's actions repeating.
+    /// Defines additional options for a pattern's actions repeating.
     /// </summary>
     /// <seealso cref="PatternBuilder"/>
     public sealed class RepeatSettings

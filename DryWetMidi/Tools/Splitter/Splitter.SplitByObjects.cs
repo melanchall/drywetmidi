@@ -17,7 +17,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// </summary>
         /// <param name="midiFile"><see cref="MidiFile"/> to split.</param>
         /// <param name="objectType">Combination of desired types of objects to split by.</param>
-        /// <param name="settings">Settings accoridng to which notes should be detected and built.</param>
+        /// <param name="settings">Settings according to which notes should be detected and built.</param>
         /// <param name="objectDetectionSettings">Settings according to which objects should be detected and built.</param>
         /// <returns>Collection of <see cref="MidiFile"/> where each file contains objects as defined by
         /// <paramref name="settings"/>.</returns>

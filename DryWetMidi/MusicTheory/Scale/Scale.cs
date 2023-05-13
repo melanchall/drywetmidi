@@ -36,7 +36,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         #region Properties
 
         /// <summary>
-        /// Gets inetrvals between adjacent notes of the current <see cref="Scale"/>.
+        /// Gets intervals between adjacent notes of the current <see cref="Scale"/>.
         /// </summary>
         public IEnumerable<Interval> Intervals { get; }
 

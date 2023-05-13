@@ -29,7 +29,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         public const int OctaveSize = 12;
 
         /// <summary>
-        /// The smalles possible value of an octave's number.
+        /// The smallest possible value of an octave's number.
         /// </summary>
         public static readonly int MinOctaveNumber = NoteUtilities.GetNoteOctave(SevenBitNumber.MinValue);
 

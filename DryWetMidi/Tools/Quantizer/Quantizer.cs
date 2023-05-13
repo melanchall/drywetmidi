@@ -7,7 +7,7 @@ using System.Linq;
 namespace Melanchall.DryWetMidi.Tools
 {
     /// <summary>
-    /// Performs quantizing of objects. The process can be adjusted in many ways by <see cref="QuantizingSettings"/>.
+    /// Performs quantization of objects. The process can be adjusted in many ways by <see cref="QuantizingSettings"/>.
     /// More info in the <see href="xref:a_quantizer">Quantizer</see> article.
     /// </summary>
     public class Quantizer
@@ -18,11 +18,11 @@ namespace Melanchall.DryWetMidi.Tools
         /// Quantizes objects using the specified grid.
         /// </summary>
         /// <param name="objects">Objects to quantize.</param>
-        /// <param name="grid">Grid to use for quantizing.</param>
+        /// <param name="grid">Grid to use for quantization.</param>
         /// <param name="tempoMap">Tempo map used to perform time and length conversions.</param>
         /// <param name="settings">Settings according to which <paramref name="objects"/> should be quantized.</param>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="objects"/> is <c>null</c>.</description>
@@ -64,7 +64,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="grid">Grid to quantize <paramref name="obj"/> by.</param>
         /// <param name="target">Target time (start or end) to update.</param>
         /// <param name="tempoMap">Tempo map used to quantize <paramref name="obj"/>.</param>
-        /// <param name="settings">Settings according to which quantizing performed.</param>
+        /// <param name="settings">Settings according to which quantization performed.</param>
         /// <returns>An object indicating whether the new time should be set to the object
         /// or not. Also returned object contains that new time.</returns>
         protected virtual TimeProcessingInstruction OnObjectQuantizing(
@@ -91,7 +91,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="time">New time for <paramref name="obj"/>.</param>
         /// <param name="target">Target time (start or end) to update.</param>
         /// <param name="tempoMap">Tempo map used to quantize <paramref name="obj"/>.</param>
-        /// <param name="settings">Settings according to which quantizing performed.</param>
+        /// <param name="settings">Settings according to which quantization performed.</param>
         /// <returns>An object indicating whether the new time should be set to the object
         /// or not. Also returned object contains that new time.</returns>
         protected virtual TimeProcessingInstruction OnObjectRandomizing(

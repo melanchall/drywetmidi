@@ -17,7 +17,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <param name="inputDevice">Input MIDI device to connect to <paramref name="outputDevices"/>.</param>
         /// <param name="outputDevices">Output MIDI devices to connect <paramref name="inputDevice"/> to.</param>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="inputDevice"/> is <c>null</c>.</description>

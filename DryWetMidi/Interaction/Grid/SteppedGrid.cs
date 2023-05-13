@@ -33,7 +33,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="start">Start time of the grid.</param>
         /// <param name="step">Distance between adjacent times.</param>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="start"/> is <c>null</c>.</description>
@@ -81,7 +81,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="start">Start time of the grid.</param>
         /// <param name="steps">Collection of grid's steps.</param>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="start"/> is <c>null</c>.</description>

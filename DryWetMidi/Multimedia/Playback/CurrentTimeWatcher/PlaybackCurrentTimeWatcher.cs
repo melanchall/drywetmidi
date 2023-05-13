@@ -192,7 +192,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <summary>
         /// Sets the type the current time of the specified playback should be converted to.
         /// </summary>
-        /// <param name="playback">Playback to set timetype for.</param>
+        /// <param name="playback">Playback to set time type for.</param>
         /// <param name="timeType">Type to convert current time of the <paramref name="playback"/> to.</param>
         /// /// <exception cref="ArgumentNullException"><paramref name="playback"/> is <c>null</c>.</exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="timeType"/> specified an invalid value.</exception>

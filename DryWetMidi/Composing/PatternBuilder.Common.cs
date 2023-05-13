@@ -59,7 +59,7 @@ namespace Melanchall.DryWetMidi.Composing
     ///     .Note(Interval.Eight) // +8  (E4)
     ///     .Note(Interval.Zero)  // +0  (G#3)
     ///     .Note(Interval.Five)  // +5  (C#4)
-    ///     .Note(Intervaln.Seven) // +7  (D#4)
+    ///     .Note(Interval.Seven) // +7  (D#4)
     ///     .Note(-Interval.Two)  // -2  (F#3)
     ///     .Note(Interval.Four)  // +4  (C4)
     ///     .Note(Interval.Seven) // +7  (D#4)

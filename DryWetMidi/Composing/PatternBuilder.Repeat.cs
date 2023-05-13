@@ -23,7 +23,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// actions and will not be repeated since default values applies immediately on next actions.
         /// </remarks>
         /// <exception cref="ArgumentOutOfRangeException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="actionsCount"/> is negative.</description>

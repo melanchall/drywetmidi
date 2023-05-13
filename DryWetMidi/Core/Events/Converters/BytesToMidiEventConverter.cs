@@ -254,7 +254,7 @@ namespace Melanchall.DryWetMidi.Core
         /// <exception cref="ArgumentNullException"><paramref name="bytes"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException"><paramref name="bytes"/> is an empty array.</exception>
         /// <exception cref="ArgumentOutOfRangeException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="offset"/> is out of range.</description>
@@ -403,7 +403,7 @@ namespace Melanchall.DryWetMidi.Core
         /// <exception cref="ArgumentNullException"><paramref name="bytes"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException"><paramref name="bytes"/> is an empty array.</exception>
         /// <exception cref="ArgumentOutOfRangeException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="offset"/> is out of range.</description>

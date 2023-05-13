@@ -14,7 +14,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <summary>
         /// Splits <see cref="MidiFile"/> by chunks within it.
         /// </summary>
-        /// <param name="settings">Settings accoridng to which MIDI file should be split.</param>
+        /// <param name="settings">Settings according to which MIDI file should be split.</param>
         /// <param name="midiFile"><see cref="MidiFile"/> to split.</param>
         /// <returns>Collection of <see cref="MidiFile"/> where each file contains single chunk from
         /// the original file.</returns>

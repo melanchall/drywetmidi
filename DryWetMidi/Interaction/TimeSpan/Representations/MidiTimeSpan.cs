@@ -51,7 +51,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// between them.
         /// </summary>
         /// <param name="timeSpan"><see cref="MidiTimeSpan"/> to divide the current time span by.</param>
-        /// <returns>Rayion between the current <see cref="MidiTimeSpan"/> and <paramref name="timeSpan"/>.</returns>
+        /// <returns>Ratio of the current <see cref="MidiTimeSpan"/> and <paramref name="timeSpan"/>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="timeSpan"/> is <c>null</c>.</exception>
         /// <exception cref="DivideByZeroException"><paramref name="timeSpan"/> represents a time span of zero length.</exception>
         public double Divide(MidiTimeSpan timeSpan)
@@ -152,7 +152,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <returns>An object whose value is the sum of the values of <paramref name="timeSpan1"/> and
         /// <paramref name="timeSpan2"/>.</returns>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="timeSpan1"/> is <c>null</c>.</description>
@@ -178,7 +178,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <returns>An object whose value is the result of the value of <paramref name="timeSpan1"/> minus
         /// the value of <paramref name="timeSpan2"/>.</returns>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="timeSpan1"/> is <c>null</c>.</description>
@@ -208,7 +208,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <returns><c>true</c> if the value of <paramref name="timeSpan1"/> is less than the value of
         /// <paramref name="timeSpan2"/>; otherwise, <c>false</c>.</returns>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="timeSpan1"/> is <c>null</c>.</description>
@@ -234,7 +234,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <returns><c>true</c> if the value of <paramref name="timeSpan1"/> is greater than the value of
         /// <paramref name="timeSpan2"/>; otherwise, <c>false</c>.</returns>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="timeSpan1"/> is <c>null</c>.</description>
@@ -261,7 +261,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <returns><c>true</c> if the value of <paramref name="timeSpan1"/> is less than or equal to the value of
         /// <paramref name="timeSpan2"/>; otherwise, <c>false</c>.</returns>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="timeSpan1"/> is <c>null</c>.</description>
@@ -288,7 +288,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <returns><c>true</c> if the value of <paramref name="timeSpan1"/> is greater than or equal to the value of
         /// <paramref name="timeSpan2"/>; otherwise, <c>false</c>.</returns>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="timeSpan1"/> is <c>null</c>.</description>

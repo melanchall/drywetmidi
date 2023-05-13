@@ -23,12 +23,12 @@
         SwapEnds,
 
         /// <summary>
-        /// Object will be skipped so quantizing will not be applied to it.
+        /// Object will be skipped so quantization will not be applied to it.
         /// </summary>
         Skip,
 
         /// <summary>
-        /// Throw an exception aborting quantizing.
+        /// Throw an exception aborting quantization.
         /// </summary>
         Abort
     }

@@ -36,6 +36,6 @@
         /// </summary>
         ModulationDepthRange
 
-        // TODO: MPE Configurarion
+        // TODO: MPE Configuration
     }
 }

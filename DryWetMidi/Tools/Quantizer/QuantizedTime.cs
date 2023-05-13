@@ -3,7 +3,7 @@
 namespace Melanchall.DryWetMidi.Tools
 {
     /// <summary>
-    /// Holds information about new time for an object that was calculated during quantizing.
+    /// Holds information about new time for an object that was calculated during quantization.
     /// </summary>
     public sealed class QuantizedTime
     {

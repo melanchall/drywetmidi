@@ -161,7 +161,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// will combine all event's parts into single MIDI event and fire the <see cref="EventReceived"/> event.
         /// </para>
         /// <para>
-        /// For example, considereng following separate events are received (here bytes in hex format):
+        /// For example, considering following separate events are received (here bytes in hex format):
         /// </para>
         /// <para>
         /// <c>F0 7F 60</c>
@@ -425,7 +425,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <param name="name">The name of an input MIDI device to retrieve.</param>
         /// <returns>Input MIDI device with the specified name.</returns>
         /// <exception cref="ArgumentException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="name"/> is <c>null</c> or contains white-spaces only.</description>

@@ -8,7 +8,7 @@ namespace Melanchall.DryWetMidi.Core
         #region Constants
 
         /// <summary>
-        /// ID of the header chunk. This field is constsnt.
+        /// ID of the header chunk. This field is constant.
         /// </summary>
         public const string Id = "MThd";
 

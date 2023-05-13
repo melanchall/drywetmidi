@@ -44,7 +44,7 @@ namespace Melanchall.DryWetMidi.Core
         /// <param name="stream">Stream to read MIDI file from.</param>
         /// <param name="settings">Settings according to which MIDI data should be read.</param>
         /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occured:</para>
+        /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
         /// <item>
         /// <description><paramref name="stream"/> is <c>null</c>.</description>
