@@ -9,7 +9,7 @@ uid: a_dev_watcher
 
 DryWetMIDI allows to track whether a MIDI device added to or removed from the system. There is [DevicesWatcher](xref:Melanchall.DryWetMidi.Multimedia.DevicesWatcher) class for that purpose. The class is singleton and you can get the instance with [Instance](xref:Melanchall.DryWetMidi.Multimedia.DevicesWatcher.Instance) property.
 
-`DevicesWatcher` provides two events: [DeviceAdded](xref:Melanchall.DryWetMidi.Multimedia.DevicesWatcher.DeviceAdded) and [DeviceRemoved](xref:Melanchall.DryWetMidi.Multimedia.DevicesWatcher.DeviceRemoved). First one will be fired when a MIDI device is added to the system, and second one - when a device removed from it. You can then cast device instance from the events arguments to [InputDevice](xref:Melanchall.DryWetMidi.Multimedia.InputDevice) or [OutputDevice](xref:Melanchall.DryWetMidi.Multimedia.OutputDevice). See following sample program:
+`DevicesWatcher` provides two events: [DeviceAdded](xref:Melanchall.DryWetMidi.Multimedia.DevicesWatcher.DeviceAdded) and [DeviceRemoved](xref:Melanchall.DryWetMidi.Multimedia.DevicesWatcher.DeviceRemoved). First one will be fired when a MIDI device is added to the system, and second one – when a device removed from it. You can then cast device instance from the events arguments to [InputDevice](xref:Melanchall.DryWetMidi.Multimedia.InputDevice) or [OutputDevice](xref:Melanchall.DryWetMidi.Multimedia.OutputDevice). See following sample program:
 
 ```csharp
 using System;

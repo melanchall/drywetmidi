@@ -2,7 +2,7 @@
 uid: a_playback_overview
 ---
 
-# Playback - Overview
+# Playback – Overview
 
 [Playback](xref:Melanchall.DryWetMidi.Multimedia.Playback) class allows to play MIDI events via an [IOutputDevice](xref:Melanchall.DryWetMidi.Multimedia.IOutputDevice) (see [Output device](xref:a_dev_output) article) or without a device at all (see [Playback without device](#playback-without-device)). To get an instance of the `Playback` you can use its [constructors](xref:Melanchall.DryWetMidi.Multimedia.Playback#constructors) or `GetPlayback` extension methods in [PlaybackUtilities](xref:Melanchall.DryWetMidi.Multimedia.PlaybackUtilities).
 

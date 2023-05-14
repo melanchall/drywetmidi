@@ -14,7 +14,7 @@ quantizer.Quantize(
     });
 ```
 
-Of course, there is the new class with utility methods for quantizing objects within a [MIDI file](xref:Melanchall.DryWetMidi.Core.MidiFile) or [track chunk](xref:Melanchall.DryWetMidi.Core.TrackChunk) - [QuantizerUtilities](xref:Melanchall.DryWetMidi.Tools.QuantizerUtilities). Following example shows how to quantize both ends of [notes](xref:Melanchall.DryWetMidi.Interaction.Note) and [chords](xref:Melanchall.DryWetMidi.Interaction.Chord) by the grid of `1` second step within a MIDI file. We'll define a chord as a set of notes with minimum length of `2`:
+Of course, there is the new class with utility methods for quantizing objects within a [MIDI file](xref:Melanchall.DryWetMidi.Core.MidiFile) or [track chunk](xref:Melanchall.DryWetMidi.Core.TrackChunk) – [QuantizerUtilities](xref:Melanchall.DryWetMidi.Tools.QuantizerUtilities). Following example shows how to quantize both ends of [notes](xref:Melanchall.DryWetMidi.Interaction.Note) and [chords](xref:Melanchall.DryWetMidi.Interaction.Chord) by the grid of `1` second step within a MIDI file. We'll define a chord as a set of notes with minimum length of `2`:
 
 ```csharp
 midiFile.QuantizeObjects(

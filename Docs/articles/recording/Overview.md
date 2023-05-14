@@ -2,7 +2,7 @@
 uid: a_recording_overview
 ---
 
-# Recording - Overview
+# Recording – Overview
 
 To capture MIDI data from an input MIDI device (see [Input device](xref:a_dev_input) article) you can use [Recording](xref:Melanchall.DryWetMidi.Multimedia.Recording) class which will collect incoming MIDI events. To start recording you need create an instance of the `Recording` class passing [tempo map](xref:Melanchall.DryWetMidi.Interaction.TempoMap) and input device to its constructor:
 

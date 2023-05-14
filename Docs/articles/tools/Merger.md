@@ -110,4 +110,4 @@ midiFile.MergeObjects(
     });
 ```
 
-So if the tool encounters a chord, it uses our custom merger; for any other object's type - default one.
+So if the tool encounters a chord, it uses our custom merger; for any other object's type – default one.

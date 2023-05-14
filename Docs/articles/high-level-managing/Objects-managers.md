@@ -6,7 +6,7 @@ uid: a_managers
 
 Working with low-level objects (like MIDI event) sometimes is not convenient. In this cases it's much more handy to manage MIDI data via concepts of [timed events](xref:Melanchall.DryWetMidi.Interaction.TimedEvent), [notes](xref:Melanchall.DryWetMidi.Interaction.Note) or [chords](xref:Melanchall.DryWetMidi.Interaction.Chord).
 
-DryWetMIDI provides a way to work with such high-level objects - [TimedObjectsManager](xref:Melanchall.DryWetMidi.Interaction.TimedObjectsManager). This class allows to work with objects of different types within an events collection (see [TrackChunk.Events](xref:Melanchall.DryWetMidi.Core.TrackChunk.Events)):
+DryWetMIDI provides a way to work with such high-level objects – [TimedObjectsManager](xref:Melanchall.DryWetMidi.Interaction.TimedObjectsManager). This class allows to work with objects of different types within an events collection (see [TrackChunk.Events](xref:Melanchall.DryWetMidi.Core.TrackChunk.Events)):
 
 ```csharp
 using (var manager = new TimedObjectsManager(trackChunk.Events, ObjectType.Note | ObjectType.TimedEvent))

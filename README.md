@@ -116,7 +116,7 @@ TempoMap tempoMap = midiFile.GetTempoMap();
 var trackChunk = new TrackChunk();
 using (var notesManager = trackChunk.ManageNotes())
 {
-    NotesCollection notes = notesManager.Notes;
+    NotesCollection notes = notesManager.Objects;
     notes.Add(new Note(
         NoteName.A,
         4,
@@ -178,7 +178,7 @@ foreach (var trackChunk in midiFile.GetTrackChunks())
 {
     using (var notesManager = trackChunk.ManageNotes())
     {
-        notesManager.Notes.RemoveAll(n => n.NoteName == NoteName.CSharp);
+        notesManager.Objects.RemoveAll(n => n.NoteName == NoteName.CSharp);
     }
 }
 ```
@@ -215,7 +215,7 @@ using (var notesManager = trackChunk.ManageNotes())
         0,
         tempoMap);
     var note = new Note(NoteName.A, 4, length);
-    notesManager.Notes.Add(note);
+    notesManager.Objects.Add(note);
 }
 
 midiFile.Chunks.Add(trackChunk);

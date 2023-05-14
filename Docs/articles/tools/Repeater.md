@@ -4,11 +4,11 @@ uid: a_repeater
 
 # Repeater
 
-With DryWetMIDI you can easily repeat groups of objects or entire MIDI files using the dedicated tool - [Repeater](xref:Melanchall.DryWetMidi.Tools.Repeater). Quick example of repeating a group of different objects two times:
+With DryWetMIDI you can easily repeat groups of objects or entire MIDI files using the dedicated tool – [Repeater](xref:Melanchall.DryWetMidi.Tools.Repeater). Quick example of repeating a group of different objects two times:
 
 ![Objects repeating](images/Repeater/Repeat.png)
 
-It's a simple case. To calculate the distance to move each new part by, the tool looks at the value of the [ShiftPolicy](xref:Melanchall.DryWetMidi.Tools.RepeatingSettings.ShiftPolicy) property of the settings passed to [Repeat](xref:Melanchall.DryWetMidi.Tools.Repeater.Repeat*) methods. The default value is [ShiftPolicy.ShiftByMaxTime](xref:Melanchall.DryWetMidi.Tools.ShiftPolicy.ShiftByMaxTime) and you can see how this options works on the image above - the tool takes maximum time among all objects and shifts objects within each new part by this value.
+It's a simple case. To calculate the distance to move each new part by, the tool looks at the value of the [ShiftPolicy](xref:Melanchall.DryWetMidi.Tools.RepeatingSettings.ShiftPolicy) property of the settings passed to [Repeat](xref:Melanchall.DryWetMidi.Tools.Repeater.Repeat*) methods. The default value is [ShiftPolicy.ShiftByMaxTime](xref:Melanchall.DryWetMidi.Tools.ShiftPolicy.ShiftByMaxTime) and you can see how this options works on the image above – the tool takes maximum time among all objects and shifts objects within each new part by this value.
 
 But you can use fixed value to shift objects by. You need to specify [ShiftPolicy.ShiftByFixedValue](xref:Melanchall.DryWetMidi.Tools.ShiftPolicy.ShiftByFixedValue) for shift policy and set [Shift](xref:Melanchall.DryWetMidi.Tools.RepeatingSettings.Shift) property of the settings. So times of objects won't affect distance calculation now and data will be shifted by the value of the `Shift` property:
 
