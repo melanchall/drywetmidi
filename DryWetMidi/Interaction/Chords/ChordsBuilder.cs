@@ -59,53 +59,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
         #region Methods
 
-        public IEnumerable<Chord> GetChordsLazy(IEnumerable<TimedEvent> timedEvents, bool collectTimedEvents = false, List<TimedEvent> collectedTimedEvents = null)
-        {
-            var chordsDescriptors = new LinkedList<ChordDescriptor>();
-            var chordsDescriptorsByChannel = new LinkedListNode<ChordDescriptor>[FourBitNumber.MaxValue + 1];
-
-            var notesBuilder = new NotesBuilder(_chordDetectionSettings.NoteDetectionSettings);
-            var notes = notesBuilder.GetNotesLazy(timedEvents, collectTimedEvents, collectedTimedEvents);
-
-            foreach (var note in notes)
-            {
-                var chordDescriptorNode = chordsDescriptorsByChannel[note.Channel];
-
-                if (chordDescriptorNode == null || chordDescriptorNode.List == null)
-                {
-                    CreateChordDescriptor(chordsDescriptors, chordsDescriptorsByChannel, note);
-                }
-                else
-                {
-                    var chordDescriptor = chordDescriptorNode.Value;
-                    if (CanNoteBeAddedToChord(chordDescriptor, note, _chordDetectionSettings.NotesTolerance))
-                    {
-                        chordDescriptor.Notes.Add(note);
-                    }
-                    else
-                    {
-                        chordDescriptor.IsSealed = true;
-
-                        if (chordDescriptorNode.Previous == null)
-                        {
-                            foreach (var timedObjectX in GetChords(chordDescriptorNode, chordsDescriptors, true))
-                            {
-                                yield return timedObjectX;
-                            }
-                        }
-
-                        CreateChordDescriptor(chordsDescriptors, chordsDescriptorsByChannel, note);
-                    }
-                }
-            }
-
-            foreach (var chord in GetChords(chordsDescriptors.First, chordsDescriptors, false))
-            {
-                yield return chord;
-            }
-        }
-
-        public IEnumerable<Chord> GetChordsLazy(IEnumerable<TimedObjectAt<TimedEvent>> timedEvents, bool collectTimedEvents = false, List<TimedObjectAt<TimedEvent>> collectedTimedEvents = null)
+        public IEnumerable<TimedObjectAt<Chord>> GetChordsLazy(IEnumerable<TimedObjectAt<TimedEvent>> timedEvents, bool collectTimedEvents = false, List<TimedObjectAt<TimedEvent>> collectedTimedEvents = null)
         {
             var chordsDescriptors = new LinkedList<ChordDescriptorIndexed>();
             var chordsDescriptorsByChannel = new LinkedListNode<ChordDescriptorIndexed>[FourBitNumber.MaxValue + 1];
@@ -137,7 +91,7 @@ namespace Melanchall.DryWetMidi.Interaction
                         {
                             foreach (var timedObjectX in GetChords(chordDescriptorNode, chordsDescriptors, true))
                             {
-                                yield return timedObjectX;
+                                yield return new TimedObjectAt<Chord>(timedObjectX, chordDescriptorNode.Value.EventsCollectionIndex);
                             }
                         }
 
@@ -148,7 +102,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
             foreach (var chord in GetChords(chordsDescriptors.First, chordsDescriptors, false))
             {
-                yield return chord;
+                yield return new TimedObjectAt<Chord>(chord, chordsDescriptors.First.Value.EventsCollectionIndex);
             }
         }
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
 
@@ -224,7 +225,7 @@ namespace Melanchall.DryWetMidi.Interaction
                     timesChanged = timedEvent.Time != time;
                     iMatched++;
                 }
-                
+
                 timedEvents.Add(timedEvent);
             }
 
@@ -822,13 +823,13 @@ namespace Melanchall.DryWetMidi.Interaction
         internal static void SortAndUpdateEvents(this EventsCollection eventsCollection, IEnumerable<TimedEvent> timedEvents)
         {
             var time = 0L;
-            var i = 0;
+            var index = 0;
 
             foreach (var e in timedEvents.OrderBy(e => e.Time))
             {
                 var midiEvent = e.Event;
                 midiEvent.DeltaTime = e.Time - time;
-                eventsCollection[i++] = midiEvent;
+                eventsCollection[index++] = midiEvent;
 
                 time = e.Time;
             }
@@ -837,13 +838,20 @@ namespace Melanchall.DryWetMidi.Interaction
         internal static void SortAndUpdateEvents(this EventsCollection[] eventsCollections, IEnumerable<TimedObjectAt<TimedEvent>> timedEvents)
         {
             var times = new long[eventsCollections.Length];
-            var indices = new int[eventsCollections.Length];
+
+            foreach (var c in eventsCollections)
+            {
+                c.Clear();
+            }
 
             foreach (var e in timedEvents.OrderBy(e => e.Object.Time))
             {
+                if (e.Object.Event.Flag)
+                    continue;
+
                 var midiEvent = e.Object.Event;
                 midiEvent.DeltaTime = e.Object.Time - times[e.AtIndex];
-                eventsCollections[e.AtIndex][indices[e.AtIndex]++] = midiEvent;
+                eventsCollections[e.AtIndex].Add(midiEvent);
 
                 times[e.AtIndex] = e.Object.Time;
             }

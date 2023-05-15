@@ -201,6 +201,104 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             expectedProcessedCount: 1);
 
         [Test]
+        public void ProcessChords_EventsCollection_WithPredicate_OneChord_Matched_Processing_RemoveNote_WithHint([Values] ContainerType containerType) => ProcessChords_EventsCollection_WithPredicate(
+            containerType,
+            midiEvents: new MidiEvent[]
+            {
+                new NoteOnEvent(),
+                new NoteOffEvent(),
+                new NoteOnEvent((SevenBitNumber)70, SevenBitNumber.MaxValue),
+                new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue),
+                new TextEvent("A"),
+                new ControlChangeEvent(),
+            },
+            action: c => c.Notes.Remove(c.Notes.First()),
+            match: c => true,
+            expectedMidiEvents: new MidiEvent[]
+            {
+                new NoteOnEvent((SevenBitNumber)70, SevenBitNumber.MaxValue),
+                new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue),
+                new TextEvent("A"),
+                new ControlChangeEvent(),
+            },
+            expectedProcessedCount: 1,
+            hint: ChordProcessingHint.NotesCollectionCanBeChanged);
+
+        [Test]
+        public void ProcessChords_EventsCollection_WithPredicate_OneChord_Matched_Processing_RemoveNote_WithoutHint([Values] ContainerType containerType) => ProcessChords_EventsCollection_WithPredicate(
+            containerType,
+            midiEvents: new MidiEvent[]
+            {
+                new NoteOnEvent(),
+                new NoteOffEvent(),
+                new NoteOnEvent((SevenBitNumber)70, SevenBitNumber.MaxValue),
+                new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue),
+                new TextEvent("A"),
+                new ControlChangeEvent(),
+            },
+            action: c => c.Notes.Remove(c.Notes.First()),
+            match: c => true,
+            expectedMidiEvents: new MidiEvent[]
+            {
+                new NoteOnEvent(),
+                new NoteOffEvent(),
+                new NoteOnEvent((SevenBitNumber)70, SevenBitNumber.MaxValue),
+                new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue),
+                new TextEvent("A"),
+                new ControlChangeEvent(),
+            },
+            expectedProcessedCount: 1,
+            hint: ChordProcessingHint.None);
+
+        [Test]
+        public void ProcessChords_EventsCollection_WithPredicate_OneChord_Matched_Processing_AddNote_WithHint([Values] ContainerType containerType) => ProcessChords_EventsCollection_WithPredicate(
+            containerType,
+            midiEvents: new MidiEvent[]
+            {
+                new NoteOnEvent(),
+                new NoteOffEvent(),
+                new TextEvent("A"),
+                new ControlChangeEvent(),
+            },
+            action: c => c.Notes.Add(new Note((SevenBitNumber)70, 0, 0)),
+            match: c => true,
+            expectedMidiEvents: new MidiEvent[]
+            {
+                new NoteOnEvent(),
+                new NoteOffEvent(),
+                new TextEvent("A"),
+                new ControlChangeEvent(),
+                new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity),
+                new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity),
+            },
+            expectedProcessedCount: 1,
+            hint: ChordProcessingHint.NotesCollectionCanBeChanged,
+            newReferencesAllowed: true);
+
+        [Test]
+        public void ProcessChords_EventsCollection_WithPredicate_OneChord_Matched_Processing_AddNote_WithoutHint([Values] ContainerType containerType) => ProcessChords_EventsCollection_WithPredicate(
+            containerType,
+            midiEvents: new MidiEvent[]
+            {
+                new NoteOnEvent(),
+                new NoteOffEvent(),
+                new TextEvent("A"),
+                new ControlChangeEvent(),
+            },
+            action: c => c.Notes.Add(new Note((SevenBitNumber)70, 0, 0)),
+            match: c => true,
+            expectedMidiEvents: new MidiEvent[]
+            {
+                new NoteOnEvent(),
+                new NoteOffEvent(),
+                new TextEvent("A"),
+                new ControlChangeEvent(),
+            },
+            expectedProcessedCount: 1,
+            hint: ChordProcessingHint.None,
+            newReferencesAllowed: true);
+
+        [Test]
         public void ProcessChords_EventsCollection_WithPredicate_OneChord_Matched_Processing_Time([Values] ContainerType containerType) => ProcessChords_EventsCollection_WithPredicate(
             containerType,
             midiEvents: new MidiEvent[]
@@ -329,6 +427,55 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 new NoteOffEvent(),
             },
             expectedProcessedCount: 1);
+
+        [Test]
+        public void ProcessChords_EventsCollection_WithPredicate_MultipleChords_SomeMatched_Processing_RemoveNote([Values] ContainerType containerType) => ProcessChords_EventsCollection_WithPredicate(
+            containerType,
+            midiEvents: new MidiEvent[]
+            {
+                new NoteOnEvent(),
+                new NoteOffEvent(),
+                new NoteOnEvent((SevenBitNumber)70, SevenBitNumber.MaxValue),
+                new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue),
+                new NoteOnEvent { Channel = (FourBitNumber)4 },
+                new NoteOffEvent { Channel = (FourBitNumber)4 },
+            },
+            action: c => c.Notes.Remove(c.Notes.First()),
+            match: c => c.Channel == 0,
+            expectedMidiEvents: new MidiEvent[]
+            {
+                new NoteOnEvent((SevenBitNumber)70, SevenBitNumber.MaxValue),
+                new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue),
+                new NoteOnEvent { Channel = (FourBitNumber)4 },
+                new NoteOffEvent { Channel = (FourBitNumber)4 },
+            },
+            hint: ChordProcessingHint.NotesCollectionCanBeChanged,
+            expectedProcessedCount: 1);
+
+        [Test]
+        public void ProcessChords_EventsCollection_WithPredicate_MultipleChords_SomeMatched_Processing_AddNote([Values] ContainerType containerType) => ProcessChords_EventsCollection_WithPredicate(
+            containerType,
+            midiEvents: new MidiEvent[]
+            {
+                new NoteOnEvent(),
+                new NoteOffEvent(),
+                new NoteOnEvent { Channel = (FourBitNumber)4 },
+                new NoteOffEvent { Channel = (FourBitNumber)4 },
+            },
+            action: c => c.Notes.Add(new Note((SevenBitNumber)70)),
+            match: c => c.Channel == 0,
+            expectedMidiEvents: new MidiEvent[]
+            {
+                new NoteOnEvent(),
+                new NoteOffEvent(),
+                new NoteOnEvent { Channel = (FourBitNumber)4 },
+                new NoteOffEvent { Channel = (FourBitNumber)4 },
+                new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity),
+                new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity),
+            },
+            expectedProcessedCount: 1,
+            hint: ChordProcessingHint.NotesCollectionCanBeChanged,
+            newReferencesAllowed: true);
 
         [Test]
         public void ProcessChords_EventsCollection_WithPredicate_MultipleChords_SomeMatched_Processing_1([Values] ContainerType containerType) => ProcessChords_EventsCollection_WithPredicate(
@@ -486,6 +633,59 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue),
             },
             expectedProcessedCount: 2);
+
+        [Test]
+        public void ProcessChords_EventsCollection_WithPredicate_MultipleChords_AllMatched_Processing_RemoveNote([Values] ContainerType containerType) => ProcessChords_EventsCollection_WithPredicate(
+            containerType,
+            midiEvents: new MidiEvent[]
+            {
+                new NoteOnEvent(),
+                new NoteOffEvent(),
+                new NoteOnEvent((SevenBitNumber)70, SevenBitNumber.MaxValue),
+                new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue),
+                new NoteOnEvent { Channel = (FourBitNumber)4 },
+                new NoteOffEvent { Channel = (FourBitNumber)4 },
+                new NoteOnEvent((SevenBitNumber)80, SevenBitNumber.MaxValue) { Channel = (FourBitNumber)4 },
+                new NoteOffEvent((SevenBitNumber)80, SevenBitNumber.MinValue) { Channel = (FourBitNumber)4 },
+            },
+            action: c => c.Notes.Remove(c.Notes.Last()),
+            match: c => true,
+            expectedMidiEvents: new MidiEvent[]
+            {
+                new NoteOnEvent(),
+                new NoteOffEvent(),
+                new NoteOnEvent { Channel = (FourBitNumber)4 },
+                new NoteOffEvent { Channel = (FourBitNumber)4 },
+            },
+            expectedProcessedCount: 2,
+            hint: ChordProcessingHint.NotesCollectionCanBeChanged);
+
+        [Test]
+        public void ProcessChords_EventsCollection_WithPredicate_MultipleChords_AllMatched_Processing_AddNote([Values] ContainerType containerType) => ProcessChords_EventsCollection_WithPredicate(
+            containerType,
+            midiEvents: new MidiEvent[]
+            {
+                new NoteOnEvent(),
+                new NoteOffEvent(),
+                new NoteOnEvent { Channel = (FourBitNumber)4 },
+                new NoteOffEvent { Channel = (FourBitNumber)4 },
+            },
+            action: c => c.Notes.Add(new Note((SevenBitNumber)70) { Channel = c.Channel }),
+            match: c => true,
+            expectedMidiEvents: new MidiEvent[]
+            {
+                new NoteOnEvent(),
+                new NoteOffEvent(),
+                new NoteOnEvent { Channel = (FourBitNumber)4 },
+                new NoteOffEvent { Channel = (FourBitNumber)4 },
+                new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity),
+                new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity),
+                new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity) { Channel = (FourBitNumber)4 },
+                new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity) { Channel = (FourBitNumber)4 },
+            },
+            expectedProcessedCount: 2,
+            hint: ChordProcessingHint.NotesCollectionCanBeChanged,
+            newReferencesAllowed: true);
 
         [Test]
         public void ProcessChords_EventsCollection_WithPredicate_MultipleChords_AllMatched_Processing_1([Values] ContainerType containerType) => ProcessChords_EventsCollection_WithPredicate(
@@ -834,6 +1034,51 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 new ControlChangeEvent(),
                 new NoteOffEvent { DeltaTime = 100 },
             });
+
+        [Test]
+        public void ProcessChords_EventsCollection_WithoutPredicate_OneChord_Processing_RemoveNote([Values] ContainerType containerType) => ProcessChords_EventsCollection_WithoutPredicate(
+            containerType,
+            midiEvents: new MidiEvent[]
+            {
+                new NoteOnEvent(),
+                new NoteOffEvent(),
+                new NoteOnEvent((SevenBitNumber)70, SevenBitNumber.MaxValue),
+                new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue),
+                new TextEvent("A"),
+                new ControlChangeEvent(),
+            },
+            action: c => c.Notes.Remove(c.Notes.First()),
+            expectedMidiEvents: new MidiEvent[]
+            {
+                new NoteOnEvent((SevenBitNumber)70, SevenBitNumber.MaxValue),
+                new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue),
+                new TextEvent("A"),
+                new ControlChangeEvent(),
+            },
+            hint: ChordProcessingHint.NotesCollectionCanBeChanged);
+
+        [Test]
+        public void ProcessChords_EventsCollection_WithoutPredicate_OneChord_Processing_AddNote([Values] ContainerType containerType) => ProcessChords_EventsCollection_WithoutPredicate(
+            containerType,
+            midiEvents: new MidiEvent[]
+            {
+                new NoteOnEvent(),
+                new NoteOffEvent(),
+                new TextEvent("A"),
+                new ControlChangeEvent(),
+            },
+            action: c => c.Notes.Add(new Note((SevenBitNumber)70, 0, 0)),
+            expectedMidiEvents: new MidiEvent[]
+            {
+                new NoteOnEvent(),
+                new NoteOffEvent(),
+                new TextEvent("A"),
+                new ControlChangeEvent(),
+                new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity),
+                new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity),
+            },
+            hint: ChordProcessingHint.NotesCollectionCanBeChanged,
+            newReferencesAllowed: true);
 
         [Test]
         public void ProcessChords_EventsCollection_WithoutPredicate_OneChord_Processing_TimeAndLength([Values] ContainerType containerType) => ProcessChords_EventsCollection_WithoutPredicate(
@@ -1205,6 +1450,128 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             expectedProcessedCount: 1);
 
         [Test]
+        public void ProcessChords_TrackChunks_WithPredicate_OneChord_Matched_Processing_AddNote_1([Values] bool wrapToFile) => ProcessChords_TrackChunks_WithPredicate(
+            wrapToFile,
+            midiEvents: new[]
+            {
+                new MidiEvent[]
+                {
+                    new TextEvent("A"),
+                    new TextEvent("B"),
+                },
+                new MidiEvent[]
+                {
+                    new NoteOnEvent(),
+                    new TextEvent("C"),
+                    new NoteOffEvent(),
+                },
+            },
+            action: c => c.Notes.Add(new Note((SevenBitNumber)70)),
+            match: c => true,
+            expectedMidiEvents: new[]
+            {
+                new MidiEvent[]
+                {
+                    new TextEvent("A"),
+                    new TextEvent("B"),
+                },
+                new MidiEvent[]
+                {
+                    new NoteOnEvent(),
+                    new TextEvent("C"),
+                    new NoteOffEvent(),
+                    new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity),
+                    new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity),
+                },
+            },
+            expectedProcessedCount: 1,
+            hint: ChordProcessingHint.NotesCollectionCanBeChanged,
+            newReferencesAllowed: true);
+
+        [Test]
+        public void ProcessChords_TrackChunks_WithPredicate_OneChord_Matched_Processing_AddNote_2([Values] bool wrapToFile) => ProcessChords_TrackChunks_WithPredicate(
+            wrapToFile,
+            midiEvents: new[]
+            {
+                new MidiEvent[]
+                {
+                    new TextEvent("A"),
+                    new TextEvent("B"),
+                    new NoteOnEvent(),
+                    new NoteOffEvent(),
+                },
+                new MidiEvent[]
+                {
+                    new NoteOnEvent(),
+                    new TextEvent("C"),
+                    new NoteOffEvent(),
+                },
+            },
+            action: c => c.Notes.Add(new Note((SevenBitNumber)70)),
+            match: c => true,
+            expectedMidiEvents: new[]
+            {
+                new MidiEvent[]
+                {
+                    new TextEvent("A"),
+                    new TextEvent("B"),
+                    new NoteOnEvent(),
+                    new NoteOffEvent(),
+                    new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity),
+                    new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity),
+                },
+                new MidiEvent[]
+                {
+                    new NoteOnEvent(),
+                    new TextEvent("C"),
+                    new NoteOffEvent(),
+                    new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity),
+                    new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity),
+                },
+            },
+            expectedProcessedCount: 2,
+            hint: ChordProcessingHint.NotesCollectionCanBeChanged,
+            newReferencesAllowed: true);
+
+        [Test]
+        public void ProcessChords_TrackChunks_WithPredicate_OneChord_Matched_Processing_RemoveNote([Values] bool wrapToFile) => ProcessChords_TrackChunks_WithPredicate(
+            wrapToFile,
+            midiEvents: new[]
+            {
+                new MidiEvent[]
+                {
+                    new TextEvent("A"),
+                    new TextEvent("B"),
+                },
+                new MidiEvent[]
+                {
+                    new NoteOnEvent(),
+                    new TextEvent("C"),
+                    new NoteOffEvent(),
+                    new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity),
+                    new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity),
+                },
+            },
+            action: c => c.Notes.Remove(c.Notes.Last()),
+            match: c => true,
+            expectedMidiEvents: new[]
+            {
+                new MidiEvent[]
+                {
+                    new TextEvent("A"),
+                    new TextEvent("B"),
+                },
+                new MidiEvent[]
+                {
+                    new NoteOnEvent(),
+                    new TextEvent("C"),
+                    new NoteOffEvent(),
+                },
+            },
+            expectedProcessedCount: 1,
+            hint: ChordProcessingHint.NotesCollectionCanBeChanged);
+
+        [Test]
         public void ProcessChords_TrackChunks_WithPredicate_OneChord_Matched_Processing_Channel([Values] bool wrapToFile) => ProcessChords_TrackChunks_WithPredicate(
             wrapToFile,
             midiEvents: new[]
@@ -1524,6 +1891,57 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 },
             },
             expectedProcessedCount: 1);
+
+        [Test]
+        public void ProcessChords_TrackChunks_WithPredicate_MultipleChords_SomeMatched_Processing_AddNote([Values] bool wrapToFile) => ProcessChords_TrackChunks_WithPredicate(
+            wrapToFile,
+            midiEvents: new[]
+            {
+                new MidiEvent[]
+                {
+                    new NoteOnEvent(),
+                    new NoteOnEvent((SevenBitNumber)70, SevenBitNumber.MaxValue),
+                    new NoteOffEvent(),
+                    new NoteOnEvent { Channel = (FourBitNumber)4, DeltaTime = 10 },
+                    new NoteOnEvent { DeltaTime = 40 },
+                    new NoteOffEvent { Channel = (FourBitNumber)4 },
+                    new NoteOffEvent(),
+                    new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue),
+                },
+                new MidiEvent[]
+                {
+                    new NoteOnEvent(),
+                    new NoteOffEvent(),
+                },
+            },
+            action: c => c.Notes.Add(new Note((SevenBitNumber)90)),
+            match: c => c.Time == 0,
+            expectedMidiEvents: new[]
+            {
+                new MidiEvent[]
+                {
+                    new NoteOnEvent(),
+                    new NoteOnEvent((SevenBitNumber)70, SevenBitNumber.MaxValue),
+                    new NoteOffEvent(),
+                    new NoteOnEvent((SevenBitNumber)90, Note.DefaultVelocity),
+                    new NoteOffEvent((SevenBitNumber)90, Note.DefaultOffVelocity),
+                    new NoteOnEvent { Channel = (FourBitNumber)4, DeltaTime = 10 },
+                    new NoteOnEvent { DeltaTime = 40 },
+                    new NoteOffEvent { Channel = (FourBitNumber)4 },
+                    new NoteOffEvent(),
+                    new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue),
+                },
+                new MidiEvent[]
+                {
+                    new NoteOnEvent(),
+                    new NoteOffEvent(),
+                    new NoteOnEvent((SevenBitNumber)90, Note.DefaultVelocity),
+                    new NoteOffEvent((SevenBitNumber)90, Note.DefaultOffVelocity),
+                },
+            },
+            expectedProcessedCount: 2,
+            hint: ChordProcessingHint.NotesCollectionCanBeChanged,
+            newReferencesAllowed: true);
 
         [Test]
         public void ProcessChords_TrackChunks_WithPredicate_MultipleChords_SomeMatched_Processing_1([Values] bool wrapToFile) => ProcessChords_TrackChunks_WithPredicate(
@@ -2445,7 +2863,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             Action<Chord> action,
             Predicate<Chord> match,
             ICollection<MidiEvent> expectedMidiEvents,
-            int expectedProcessedCount)
+            int expectedProcessedCount,
+            ChordProcessingHint hint = ChordProcessingHint.Default,
+            bool newReferencesAllowed = false)
         {
             var eventsCollection = new EventsCollection();
             eventsCollection.AddRange(midiEvents);
@@ -2456,13 +2876,14 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     {
                         Assert.AreEqual(
                             expectedProcessedCount,
-                            eventsCollection.ProcessChords(action, match),
+                            eventsCollection.ProcessChords(action, match, hint: hint),
                             "Invalid count of processed chords.");
 
                         var expectedEventsCollection = new EventsCollection();
                         expectedEventsCollection.AddRange(expectedMidiEvents);
                         MidiAsserts.AreEqual(expectedEventsCollection, eventsCollection, true, "Events are invalid.");
                         Assert.IsTrue(
+                            newReferencesAllowed ||
                             eventsCollection.All(e => midiEvents.Any(ee => object.ReferenceEquals(e, ee))),
                             "There are new events references.");
                     }
@@ -2473,12 +2894,13 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
                         Assert.AreEqual(
                             expectedProcessedCount,
-                            trackChunk.ProcessChords(action, match),
+                            trackChunk.ProcessChords(action, match, hint: hint),
                             "Invalid count of processed chords.");
 
                         var expectedTrackChunk = new TrackChunk(expectedMidiEvents);
                         MidiAsserts.AreEqual(expectedTrackChunk, trackChunk, true, "Events are invalid.");
                         Assert.IsTrue(
+                            newReferencesAllowed ||
                             trackChunk.Events.All(e => midiEvents.Any(ee => object.ReferenceEquals(e, ee))),
                             "There are new events references.");
                     }
@@ -2492,7 +2914,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                             action,
                             match,
                             new[] { expectedMidiEvents },
-                            expectedProcessedCount);
+                            expectedProcessedCount,
+                            hint,
+                            newReferencesAllowed);
                     }
                     break;
             }
@@ -2502,7 +2926,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             ContainerType containerType,
             ICollection<MidiEvent> midiEvents,
             Action<Chord> action,
-            ICollection<MidiEvent> expectedMidiEvents)
+            ICollection<MidiEvent> expectedMidiEvents,
+            ChordProcessingHint hint = ChordProcessingHint.Default,
+            bool newReferencesAllowed = false)
         {
             var chordsCount = midiEvents.GetChords().Count;
 
@@ -2515,13 +2941,14 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
                         Assert.AreEqual(
                             chordsCount,
-                            eventsCollection.ProcessChords(action),
+                            eventsCollection.ProcessChords(action, hint: hint),
                             "Invalid count of processed chords.");
 
                         var expectedEventsCollection = new EventsCollection();
                         expectedEventsCollection.AddRange(expectedMidiEvents);
                         MidiAsserts.AreEqual(expectedEventsCollection, eventsCollection, true, "Events are invalid.");
                         Assert.IsTrue(
+                            newReferencesAllowed ||
                             eventsCollection.All(e => midiEvents.Any(ee => object.ReferenceEquals(e, ee))),
                             "There are new events references.");
                     }
@@ -2532,12 +2959,13 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
                         Assert.AreEqual(
                             chordsCount,
-                            trackChunk.ProcessChords(action),
+                            trackChunk.ProcessChords(action, hint: hint),
                             "Invalid count of processed chords.");
 
                         var expectedTrackChunk = new TrackChunk(expectedMidiEvents);
                         MidiAsserts.AreEqual(expectedTrackChunk, trackChunk, true, "Events are invalid.");
                         Assert.IsTrue(
+                            newReferencesAllowed ||
                             trackChunk.Events.All(e => midiEvents.Any(ee => object.ReferenceEquals(e, ee))),
                             "There are new events references.");
                     }
@@ -2548,7 +2976,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                             false,
                             new[] { midiEvents },
                             action,
-                            new[] { expectedMidiEvents });
+                            new[] { expectedMidiEvents },
+                            hint,
+                            newReferencesAllowed);
                     }
                     break;
                 case ContainerType.File:
@@ -2557,7 +2987,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                             true,
                             new[] { midiEvents },
                             action,
-                            new[] { expectedMidiEvents });
+                            new[] { expectedMidiEvents },
+                            hint,
+                            newReferencesAllowed);
                     }
                     break;
             }
@@ -2569,7 +3001,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             Action<Chord> action,
             Predicate<Chord> match,
             ICollection<ICollection<MidiEvent>> expectedMidiEvents,
-            int expectedProcessedCount)
+            int expectedProcessedCount,
+            ChordProcessingHint hint = ChordProcessingHint.Default,
+            bool newReferencesAllowed = false)
         {
             var trackChunks = midiEvents.Select(e => new TrackChunk(e)).ToList();
 
@@ -2579,11 +3013,12 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
                 Assert.AreEqual(
                     expectedProcessedCount,
-                    midiFile.ProcessChords(action, match),
+                    midiFile.ProcessChords(action, match, hint: hint),
                     "Invalid count of processed chords.");
 
                 MidiAsserts.AreEqual(new MidiFile(expectedMidiEvents.Select(e => new TrackChunk(e))), midiFile, false, "Events are invalid.");
                 Assert.IsTrue(
+                    newReferencesAllowed ||
                     midiFile.GetTrackChunks().SelectMany(c => c.Events).All(e => midiEvents.SelectMany(ee => ee).Any(ee => object.ReferenceEquals(e, ee))),
                     "There are new events references.");
             }
@@ -2591,11 +3026,12 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             {
                 Assert.AreEqual(
                     expectedProcessedCount,
-                    trackChunks.ProcessChords(action, match),
+                    trackChunks.ProcessChords(action, match, hint: hint),
                     "Invalid count of processed chords.");
 
                 MidiAsserts.AreEqual(expectedMidiEvents.Select(e => new TrackChunk(e)), trackChunks, true, "Events are invalid.");
                 Assert.IsTrue(
+                    newReferencesAllowed ||
                     trackChunks.SelectMany(c => c.Events).All(e => midiEvents.SelectMany(ee => ee).Any(ee => object.ReferenceEquals(e, ee))),
                     "There are new events references.");
             }
@@ -2605,7 +3041,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             bool wrapToFile,
             ICollection<ICollection<MidiEvent>> midiEvents,
             Action<Chord> action,
-            ICollection<ICollection<MidiEvent>> expectedMidiEvents)
+            ICollection<ICollection<MidiEvent>> expectedMidiEvents,
+            ChordProcessingHint hint = ChordProcessingHint.Default,
+            bool newReferencesAllowed = false)
         {
             var trackChunks = midiEvents.Select(e => new TrackChunk(e)).ToList();
             var chordsCount = trackChunks.GetChords().Count;
@@ -2616,11 +3054,12 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
                 Assert.AreEqual(
                     chordsCount,
-                    midiFile.ProcessChords(action),
+                    midiFile.ProcessChords(action, hint: hint),
                     "Invalid count of processed chords.");
 
                 MidiAsserts.AreEqual(new MidiFile(expectedMidiEvents.Select(e => new TrackChunk(e))), midiFile, false, "Events are invalid.");
                 Assert.IsTrue(
+                    newReferencesAllowed ||
                     midiFile.GetTrackChunks().SelectMany(c => c.Events).All(e => midiEvents.SelectMany(ee => ee).Any(ee => object.ReferenceEquals(e, ee))),
                     "There are new events references.");
             }
@@ -2628,11 +3067,12 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             {
                 Assert.AreEqual(
                     chordsCount,
-                    trackChunks.ProcessChords(action),
+                    trackChunks.ProcessChords(action, hint: hint),
                     "Invalid count of processed chords.");
 
                 MidiAsserts.AreEqual(expectedMidiEvents.Select(e => new TrackChunk(e)), trackChunks, true, "Events are invalid.");
                 Assert.IsTrue(
+                    newReferencesAllowed ||
                     trackChunks.SelectMany(c => c.Events).All(e => midiEvents.SelectMany(ee => ee).Any(ee => object.ReferenceEquals(e, ee))),
                     "There are new events references.");
             }

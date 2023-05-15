@@ -117,7 +117,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
             public long Time { get; }
 
-            public List<LinkedListNode<IObjectDescriptor>> NotesNodes { get; }  = new List<LinkedListNode<IObjectDescriptor>>(3);
+            public List<LinkedListNode<IObjectDescriptor>> NotesNodes { get; } = new List<LinkedListNode<IObjectDescriptor>>(3);
 
             public bool IsSealed { get; set; }
 
@@ -238,9 +238,9 @@ namespace Melanchall.DryWetMidi.Interaction
             var result = new List<Chord>();
             var chordsBuilder = new ChordsBuilder(settings);
 
-            var chords = chordsBuilder.GetChordsLazy(eventsCollection.GetTimedEventsLazy(settings?.NoteDetectionSettings?.TimedEventDetectionSettings));
+            var chords = chordsBuilder.GetChordsLazy(new[] { eventsCollection }.GetTimedEventsLazy(eventsCollection.Count, settings?.NoteDetectionSettings?.TimedEventDetectionSettings));
 
-            result.AddRange(chords);
+            result.AddRange(chords.Select(c => c.Object));
             return result;
         }
 
@@ -295,7 +295,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
             var chords = chordsBuilder.GetChordsLazy(eventsCollections.GetTimedEventsLazy(eventsCount, settings?.NoteDetectionSettings?.TimedEventDetectionSettings));
 
-            result.AddRange(chords);
+            result.AddRange(chords.Select(c => c.Object));
             return result;
         }
 
@@ -352,12 +352,16 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </item>
         /// </list>
         /// </exception>
-        public static int ProcessChords(this EventsCollection eventsCollection, Action<Chord> action, ChordDetectionSettings settings = null)
+        public static int ProcessChords(
+            this EventsCollection eventsCollection,
+            Action<Chord> action,
+            ChordDetectionSettings settings = null,
+            ChordProcessingHint hint = ChordProcessingHint.Default)
         {
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
             ThrowIfArgument.IsNull(nameof(action), action);
 
-            return eventsCollection.ProcessChords(action, chord => true, settings);
+            return eventsCollection.ProcessChords(action, chord => true, settings, hint);
         }
 
         /// <summary>
@@ -383,13 +387,18 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </item>
         /// </list>
         /// </exception>
-        public static int ProcessChords(this EventsCollection eventsCollection, Action<Chord> action, Predicate<Chord> match, ChordDetectionSettings settings = null)
+        public static int ProcessChords(
+            this EventsCollection eventsCollection,
+            Action<Chord> action,
+            Predicate<Chord> match,
+            ChordDetectionSettings settings = null,
+            ChordProcessingHint hint = ChordProcessingHint.Default)
         {
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
             ThrowIfArgument.IsNull(nameof(action), action);
             ThrowIfArgument.IsNull(nameof(match), match);
 
-            return eventsCollection.ProcessChords(action, match, settings, true);
+            return new[] { eventsCollection }.ProcessChordsInternal(action, match, settings, hint);
         }
 
         /// <summary>
@@ -411,12 +420,16 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </item>
         /// </list>
         /// </exception>
-        public static int ProcessChords(this TrackChunk trackChunk, Action<Chord> action, ChordDetectionSettings settings = null)
+        public static int ProcessChords(
+            this TrackChunk trackChunk,
+            Action<Chord> action,
+            ChordDetectionSettings settings = null,
+            ChordProcessingHint hint = ChordProcessingHint.Default)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
             ThrowIfArgument.IsNull(nameof(action), action);
 
-            return trackChunk.ProcessChords(action, chord => true, settings);
+            return trackChunk.ProcessChords(action, chord => true, settings, hint);
         }
 
         /// <summary>
@@ -442,13 +455,18 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </item>
         /// </list>
         /// </exception>
-        public static int ProcessChords(this TrackChunk trackChunk, Action<Chord> action, Predicate<Chord> match, ChordDetectionSettings settings = null)
+        public static int ProcessChords(
+            this TrackChunk trackChunk,
+            Action<Chord> action,
+            Predicate<Chord> match,
+            ChordDetectionSettings settings = null,
+            ChordProcessingHint hint = ChordProcessingHint.Default)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
             ThrowIfArgument.IsNull(nameof(action), action);
             ThrowIfArgument.IsNull(nameof(match), match);
 
-            return trackChunk.Events.ProcessChords(action, match, settings);
+            return trackChunk.Events.ProcessChords(action, match, settings, hint);
         }
 
         /// <summary>
@@ -471,12 +489,16 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </item>
         /// </list>
         /// </exception>
-        public static int ProcessChords(this IEnumerable<TrackChunk> trackChunks, Action<Chord> action, ChordDetectionSettings settings = null)
+        public static int ProcessChords(
+            this IEnumerable<TrackChunk> trackChunks,
+            Action<Chord> action,
+            ChordDetectionSettings settings = null,
+            ChordProcessingHint hint = ChordProcessingHint.Default)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
             ThrowIfArgument.IsNull(nameof(action), action);
 
-            return trackChunks.ProcessChords(action, chord => true, settings);
+            return trackChunks.ProcessChords(action, chord => true, settings, hint);
         }
 
         /// <summary>
@@ -503,13 +525,21 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </item>
         /// </list>
         /// </exception>
-        public static int ProcessChords(this IEnumerable<TrackChunk> trackChunks, Action<Chord> action, Predicate<Chord> match, ChordDetectionSettings settings = null)
+        public static int ProcessChords(
+            this IEnumerable<TrackChunk> trackChunks,
+            Action<Chord> action,
+            Predicate<Chord> match,
+            ChordDetectionSettings settings = null,
+            ChordProcessingHint hint = ChordProcessingHint.Default)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
             ThrowIfArgument.IsNull(nameof(action), action);
             ThrowIfArgument.IsNull(nameof(match), match);
 
-            return trackChunks.ProcessChords(action, match, settings, true);
+            return trackChunks
+                .Where(c => c != null)
+                .Select(c => c.Events)
+                .ProcessChordsInternal(action, match, settings, hint);
         }
 
         /// <summary>
@@ -531,12 +561,16 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </item>
         /// </list>
         /// </exception>
-        public static int ProcessChords(this MidiFile file, Action<Chord> action, ChordDetectionSettings settings = null)
+        public static int ProcessChords(
+            this MidiFile file,
+            Action<Chord> action,
+            ChordDetectionSettings settings = null,
+            ChordProcessingHint hint = ChordProcessingHint.Default)
         {
             ThrowIfArgument.IsNull(nameof(file), file);
             ThrowIfArgument.IsNull(nameof(action), action);
 
-            return file.ProcessChords(action, chord => true, settings);
+            return file.ProcessChords(action, chord => true, settings, hint);
         }
 
         /// <summary>
@@ -562,13 +596,18 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </item>
         /// </list>
         /// </exception>
-        public static int ProcessChords(this MidiFile file, Action<Chord> action, Predicate<Chord> match, ChordDetectionSettings settings = null)
+        public static int ProcessChords(
+            this MidiFile file,
+            Action<Chord> action,
+            Predicate<Chord> match,
+            ChordDetectionSettings settings = null,
+            ChordProcessingHint hint = ChordProcessingHint.Default)
         {
             ThrowIfArgument.IsNull(nameof(file), file);
             ThrowIfArgument.IsNull(nameof(action), action);
             ThrowIfArgument.IsNull(nameof(match), match);
 
-            return file.GetTrackChunks().ProcessChords(action, match, settings);
+            return file.GetTrackChunks().ProcessChords(action, match, settings, hint);
         }
 
         /// <summary>
@@ -618,7 +657,7 @@ namespace Melanchall.DryWetMidi.Interaction
                 },
                 match,
                 settings,
-                false);
+                ChordProcessingHint.None);
 
             if (chordsToRemoveCount == 0)
                 return 0;
@@ -714,7 +753,7 @@ namespace Melanchall.DryWetMidi.Interaction
                 },
                 match,
                 settings,
-                false);
+                ChordProcessingHint.None);
 
             if (chordsToRemoveCount == 0)
                 return 0;
@@ -930,71 +969,81 @@ namespace Melanchall.DryWetMidi.Interaction
             }
         }
 
-        internal static int ProcessChords(this EventsCollection eventsCollection, Action<Chord> action, Predicate<Chord> match, ChordDetectionSettings settings, bool canTimeOrLengthBeChanged)
+        internal static int ProcessChordsInternal(
+            this IEnumerable<EventsCollection> eventsCollectionsIn,
+            Action<Chord> action,
+            Predicate<Chord> match,
+            ChordDetectionSettings settings,
+            ChordProcessingHint hint)
         {
             settings = settings ?? new ChordDetectionSettings();
 
-            var iMatched = 0;
-
-            var timeOrLengthChanged = false;
-            var collectedTimedEvents = canTimeOrLengthBeChanged ? new List<TimedEvent>(eventsCollection.Count) : null;
-
-            var chordsBuilder = new ChordsBuilder(settings);
-            var chords = chordsBuilder.GetChordsLazy(eventsCollection.GetTimedEventsLazy(settings?.NoteDetectionSettings?.TimedEventDetectionSettings, false), canTimeOrLengthBeChanged, collectedTimedEvents);
-
-            foreach (var chord in chords)
-            {
-                if (match(chord))
-                {
-                    var time = chord.Time;
-                    var length = chord.Length;
-
-                    action(chord);
-
-                    timeOrLengthChanged |= chord.Time != time || chord.Length != length;
-
-                    iMatched++;
-                }
-            }
-
-            if (timeOrLengthChanged)
-                eventsCollection.SortAndUpdateEvents(collectedTimedEvents);
-
-            return iMatched;
-        }
-
-        internal static int ProcessChords(this IEnumerable<TrackChunk> trackChunks, Action<Chord> action, Predicate<Chord> match, ChordDetectionSettings settings, bool canTimeOrLengthBeChanged)
-        {
-            settings = settings ?? new ChordDetectionSettings();
-
-            var eventsCollections = trackChunks.Where(c => c != null).Select(c => c.Events).ToArray();
+            var eventsCollections = eventsCollectionsIn.Where(c => c != null).ToArray();
             var eventsCount = eventsCollections.Sum(c => c.Count);
 
             var iMatched = 0;
 
             var timeOrLengthChanged = false;
-            var collectedTimedEvents = canTimeOrLengthBeChanged ? new List<TimedObjectAt<TimedEvent>>(eventsCount) : null;
+            var notesCollectionChanged = false;
+
+            var timeOrLengthCanBeChanged = hint.HasFlag(ChordProcessingHint.TimeOrLengthCanBeChanged);
+            var notesCollectionCanBeChanged = hint.HasFlag(ChordProcessingHint.NotesCollectionCanBeChanged);
+
+            var collectedTimedEvents = timeOrLengthCanBeChanged || notesCollectionCanBeChanged
+                ? new List<TimedObjectAt<TimedEvent>>(eventsCount)
+                : null;
 
             var chordsBuilder = new ChordsBuilder(settings);
-            var chords = chordsBuilder.GetChordsLazy(eventsCollections.GetTimedEventsLazy(eventsCount, settings?.NoteDetectionSettings?.TimedEventDetectionSettings, false), canTimeOrLengthBeChanged, collectedTimedEvents);
+            var chords = chordsBuilder.GetChordsLazy(eventsCollections.GetTimedEventsLazy(eventsCount, settings?.NoteDetectionSettings?.TimedEventDetectionSettings, false), collectedTimedEvents != null, collectedTimedEvents);
 
-            foreach (var chord in chords)
+            foreach (var chordAt in chords)
             {
-                if (match(chord))
+                var chord = chordAt.Object;
+                if (!match(chord))
+                    continue;
+
+                var time = chord.Time;
+                var length = chord.Length;
+                var notes = notesCollectionCanBeChanged ? chord.Notes.ToArray() : null;
+
+                action(chord);
+
+                var addedNotes = notesCollectionCanBeChanged ? chord.Notes.Except(notes).ToArray() : null;
+                var removedNotes = notesCollectionCanBeChanged ? notes.Except(chord.Notes).ToArray() : null;
+
+                timeOrLengthChanged |=
+                    chord.Time != time ||
+                    chord.Length != length;
+
+                notesCollectionChanged |=
+                    addedNotes?.Length > 0 ||
+                    removedNotes?.Length > 0;
+
+                if (notesCollectionChanged)
                 {
-                    var time = chord.Time;
-                    var length = chord.Length;
+                    foreach (var note in addedNotes)
+                    {
+                        collectedTimedEvents?.Add(new TimedObjectAt<TimedEvent>(
+                            note.TimedNoteOnEvent,
+                            chordAt.AtIndex));
+                        collectedTimedEvents?.Add(new TimedObjectAt<TimedEvent>(
+                            note.TimedNoteOffEvent,
+                            chordAt.AtIndex));
+                    }
 
-                    action(chord);
-
-                    timeOrLengthChanged |= chord.Time != time || chord.Length != length;
-
-                    iMatched++;
+                    foreach (var note in removedNotes)
+                    {
+                        note.TimedNoteOnEvent.Event.Flag = note.TimedNoteOffEvent.Event.Flag = true;
+                    }
                 }
+
+                iMatched++;
             }
 
-            if (timeOrLengthChanged)
-                eventsCollections.SortAndUpdateEvents(collectedTimedEvents);
+            if (!timeOrLengthChanged && !notesCollectionChanged)
+                return iMatched;
+
+            eventsCollections.SortAndUpdateEvents(collectedTimedEvents);
 
             return iMatched;
         }
