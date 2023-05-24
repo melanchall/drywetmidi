@@ -41,10 +41,10 @@ namespace Melanchall.DryWetMidi.Interaction
 
             public int EventsCollectionIndex { get; }
 
-            public Tuple<Note, int> GetIndexedNote(Func<NoteData, Note> constructor)
+            public TimedObjectAt<Note> GetIndexedNote(Func<NoteData, Note> constructor)
             {
                 return IsCompleted
-                    ? Tuple.Create(
+                    ? new TimedObjectAt<Note>(
                         (constructor == null
                             ? new Note(NoteOnTimedEvent, NoteOffTimedEvent, false)
                             : constructor(new NoteData(NoteOnTimedEvent, NoteOffTimedEvent))),
@@ -220,77 +220,7 @@ namespace Melanchall.DryWetMidi.Interaction
             }
         }
 
-        public IEnumerable<Note> GetNotesLazy(
-            IEnumerable<TimedObjectAt<TimedEvent>> timedEvents,
-            bool collectTimedEvents = false,
-            List<TimedObjectAt<TimedEvent>> collectedTimedEvents = null)
-        {
-            var notesDescriptors = new LinkedList<NoteDescriptor>();
-            var notesDescriptorsNodes = new Dictionary<Tuple<int, int>, NoteOnsHolder>();
-
-            foreach (var timedEventTuple in timedEvents)
-            {
-                if (collectTimedEvents)
-                    collectedTimedEvents.Add(timedEventTuple);
-
-                var timedEvent = timedEventTuple.Object;
-                switch (timedEvent.Event.EventType)
-                {
-                    case MidiEventType.NoteOn:
-                        {
-                            var noteId = GetNoteEventId((NoteOnEvent)timedEvent.Event);
-                            var noteFullId = Tuple.Create(noteId, timedEventTuple.AtIndex);
-                            var node = notesDescriptors.AddLast(new NoteDescriptor(timedEvent));
-
-                            NoteOnsHolder noteOnsHolder;
-                            if (!notesDescriptorsNodes.TryGetValue(noteFullId, out noteOnsHolder))
-                                notesDescriptorsNodes.Add(noteFullId, noteOnsHolder = new NoteOnsHolder(_noteDetectionSettings.NoteStartDetectionPolicy));
-
-                            noteOnsHolder.Add(node);
-                        }
-                        break;
-                    case MidiEventType.NoteOff:
-                        {
-                            var noteId = GetNoteEventId((NoteOffEvent)timedEvent.Event);
-                            var noteFullId = Tuple.Create(noteId, timedEventTuple.AtIndex);
-
-                            NoteOnsHolder noteOnsHolder;
-                            LinkedListNode<NoteDescriptor> node;
-
-                            if (!notesDescriptorsNodes.TryGetValue(noteFullId, out noteOnsHolder) || noteOnsHolder.Count == 0 || (node = noteOnsHolder.GetNext()).List == null)
-                                continue;
-
-                            node.Value.NoteOffTimedEvent = timedEvent;
-
-                            var previousNode = node.Previous;
-                            if (previousNode != null)
-                                continue;
-
-                            for (var n = node; n != null;)
-                            {
-                                if (!n.Value.IsCompleted)
-                                    break;
-
-                                yield return n.Value.GetNote(_noteDetectionSettings.Constructor);
-
-                                var next = n.Next;
-                                notesDescriptors.Remove(n);
-                                n = next;
-                            }
-                        }
-                        break;
-                }
-            }
-
-            foreach (var noteDescriptor in notesDescriptors)
-            {
-                var note = noteDescriptor.GetNote(_noteDetectionSettings.Constructor);
-                if (note != null)
-                    yield return note;
-            }
-        }
-
-        public IEnumerable<Tuple<Note, int>> GetIndexedNotesLazy(
+        public IEnumerable<TimedObjectAt<Note>> GetNotesLazy(
             IEnumerable<TimedObjectAt<TimedEvent>> timedEvents,
             bool collectTimedEvents = false,
             List<TimedObjectAt<TimedEvent>> collectedTimedEvents = null)

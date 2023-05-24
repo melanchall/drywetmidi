@@ -288,7 +288,7 @@ namespace Melanchall.DryWetMidi.Interaction
             var notesBuilder = new NotesBuilder(settings);
 
             var notes = notesBuilder.GetNotesLazy(eventsCollection.GetTimedEventsLazy(settings?.TimedEventDetectionSettings));
-            
+
             result.AddRange(notes);
             return result;
         }
@@ -344,7 +344,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
             var notes = notesBuilder.GetNotesLazy(eventsCollections.GetTimedEventsLazy(eventsCount, settings?.TimedEventDetectionSettings));
 
-            result.AddRange(notes);
+            result.AddRange(notes.Select(n => n.Object));
             return result;
         }
 
@@ -387,12 +387,12 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </item>
         /// </list>
         /// </exception>
-        public static int ProcessNotes(this EventsCollection eventsCollection, Action<Note> action, NoteDetectionSettings settings = null)
+        public static int ProcessNotes(this EventsCollection eventsCollection, Action<Note> action, NoteDetectionSettings settings = null, NoteProcessingHint hint = NoteProcessingHint.Default)
         {
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
             ThrowIfArgument.IsNull(nameof(action), action);
 
-            return eventsCollection.ProcessNotes(action, note => true, settings);
+            return eventsCollection.ProcessNotes(action, note => true, settings, hint);
         }
 
         /// <summary>
@@ -418,13 +418,13 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </item>
         /// </list>
         /// </exception>
-        public static int ProcessNotes(this EventsCollection eventsCollection, Action<Note> action, Predicate<Note> match, NoteDetectionSettings settings = null)
+        public static int ProcessNotes(this EventsCollection eventsCollection, Action<Note> action, Predicate<Note> match, NoteDetectionSettings settings = null, NoteProcessingHint hint = NoteProcessingHint.Default)
         {
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
             ThrowIfArgument.IsNull(nameof(action), action);
             ThrowIfArgument.IsNull(nameof(match), match);
 
-            return eventsCollection.ProcessNotes(action, match, settings, true);
+            return new[] { eventsCollection }.ProcessNotesInternal(action, match, settings, hint);
         }
 
         /// <summary>
@@ -446,12 +446,12 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </item>
         /// </list>
         /// </exception>
-        public static int ProcessNotes(this TrackChunk trackChunk, Action<Note> action, NoteDetectionSettings settings = null)
+        public static int ProcessNotes(this TrackChunk trackChunk, Action<Note> action, NoteDetectionSettings settings = null, NoteProcessingHint hint = NoteProcessingHint.Default)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
             ThrowIfArgument.IsNull(nameof(action), action);
 
-            return trackChunk.ProcessNotes(action, note => true, settings);
+            return trackChunk.ProcessNotes(action, note => true, settings, hint);
         }
 
         /// <summary>
@@ -477,12 +477,12 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </item>
         /// </list>
         /// </exception>
-        public static int ProcessNotes(this TrackChunk trackChunk, Action<Note> action, Predicate<Note> match, NoteDetectionSettings settings = null)
+        public static int ProcessNotes(this TrackChunk trackChunk, Action<Note> action, Predicate<Note> match, NoteDetectionSettings settings = null, NoteProcessingHint hint = NoteProcessingHint.Default)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
             ThrowIfArgument.IsNull(nameof(action), action);
 
-            return trackChunk.Events.ProcessNotes(action, match, settings);
+            return trackChunk.Events.ProcessNotes(action, match, settings, hint);
         }
 
         /// <summary>
@@ -505,12 +505,12 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </item>
         /// </list>
         /// </exception>
-        public static int ProcessNotes(this IEnumerable<TrackChunk> trackChunks, Action<Note> action, NoteDetectionSettings settings = null)
+        public static int ProcessNotes(this IEnumerable<TrackChunk> trackChunks, Action<Note> action, NoteDetectionSettings settings = null, NoteProcessingHint hint = NoteProcessingHint.Default)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
             ThrowIfArgument.IsNull(nameof(action), action);
 
-            return trackChunks.ProcessNotes(action, note => true, settings);
+            return trackChunks.ProcessNotes(action, note => true, settings, hint);
         }
 
         /// <summary>
@@ -537,13 +537,16 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </item>
         /// </list>
         /// </exception>
-        public static int ProcessNotes(this IEnumerable<TrackChunk> trackChunks, Action<Note> action, Predicate<Note> match, NoteDetectionSettings settings = null)
+        public static int ProcessNotes(this IEnumerable<TrackChunk> trackChunks, Action<Note> action, Predicate<Note> match, NoteDetectionSettings settings = null, NoteProcessingHint hint = NoteProcessingHint.Default)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
             ThrowIfArgument.IsNull(nameof(action), action);
             ThrowIfArgument.IsNull(nameof(match), match);
 
-            return trackChunks.ProcessNotes(action, match, settings, true);
+            return trackChunks
+                .Where(c => c != null)
+                .Select(c => c.Events)
+                .ProcessNotesInternal(action, match, settings, hint);
         }
 
         /// <summary>
@@ -565,12 +568,12 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </item>
         /// </list>
         /// </exception>
-        public static int ProcessNotes(this MidiFile file, Action<Note> action, NoteDetectionSettings settings = null)
+        public static int ProcessNotes(this MidiFile file, Action<Note> action, NoteDetectionSettings settings = null, NoteProcessingHint hint = NoteProcessingHint.Default)
         {
             ThrowIfArgument.IsNull(nameof(file), file);
             ThrowIfArgument.IsNull(nameof(action), action);
 
-            return file.ProcessNotes(action, note => true, settings);
+            return file.ProcessNotes(action, note => true, settings, hint);
         }
 
         /// <summary>
@@ -596,13 +599,13 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </item>
         /// </list>
         /// </exception>
-        public static int ProcessNotes(this MidiFile file, Action<Note> action, Predicate<Note> match, NoteDetectionSettings settings = null)
+        public static int ProcessNotes(this MidiFile file, Action<Note> action, Predicate<Note> match, NoteDetectionSettings settings = null, NoteProcessingHint hint = NoteProcessingHint.Default)
         {
             ThrowIfArgument.IsNull(nameof(file), file);
             ThrowIfArgument.IsNull(nameof(action), action);
             ThrowIfArgument.IsNull(nameof(match), match);
 
-            return file.GetTrackChunks().ProcessNotes(action, match, settings);
+            return file.GetTrackChunks().ProcessNotes(action, match, settings, hint);
         }
 
         /// <summary>
@@ -646,7 +649,7 @@ namespace Melanchall.DryWetMidi.Interaction
                 n => n.TimedNoteOnEvent.Event.Flag = n.TimedNoteOffEvent.Event.Flag = true,
                 match,
                 settings,
-                false);
+                NoteProcessingHint.None);
 
             if (notesToRemoveCount == 0)
                 return 0;
@@ -736,7 +739,7 @@ namespace Melanchall.DryWetMidi.Interaction
                 n => n.TimedNoteOnEvent.Event.Flag = n.TimedNoteOffEvent.Event.Flag = true,
                 match,
                 settings,
-                false);
+                NoteProcessingHint.None);
 
             if (notesToRemoveCount == 0)
                 return 0;
@@ -798,26 +801,28 @@ namespace Melanchall.DryWetMidi.Interaction
             return note.UnderlyingNote;
         }
 
-        internal static int ProcessNotes(
-            this IEnumerable<TrackChunk> trackChunks,
+        internal static int ProcessNotesInternal(
+            this IEnumerable<EventsCollection> eventsCollectionsIn,
             Action<Note> action,
             Predicate<Note> match,
             NoteDetectionSettings noteDetectionSettings,
-            bool canTimeOrLengthBeChanged)
+            NoteProcessingHint hint)
         {
-            var eventsCollections = trackChunks.Where(c => c != null).Select(c => c.Events).ToArray();
+            var eventsCollections = eventsCollectionsIn.Where(c => c != null).ToArray();
             var eventsCount = eventsCollections.Sum(c => c.Count);
 
             var iMatched = 0;
 
             var timeOrLengthChanged = false;
-            var collectedTimedEvents = canTimeOrLengthBeChanged ? new List<TimedObjectAt<TimedEvent>>(eventsCount) : null;
+            var timeOrLengthCanBeChanged = hint.HasFlag(NoteProcessingHint.TimeOrLengthCanBeChanged);
+            var collectedTimedEvents = timeOrLengthCanBeChanged ? new List<TimedObjectAt<TimedEvent>>(eventsCount) : null;
 
             var notesBuilder = new NotesBuilder(noteDetectionSettings);
-            var notes = notesBuilder.GetNotesLazy(eventsCollections.GetTimedEventsLazy(eventsCount, noteDetectionSettings?.TimedEventDetectionSettings, false), canTimeOrLengthBeChanged, collectedTimedEvents);
+            var notes = notesBuilder.GetNotesLazy(eventsCollections.GetTimedEventsLazy(eventsCount, noteDetectionSettings?.TimedEventDetectionSettings, false), collectedTimedEvents != null, collectedTimedEvents);
 
-            foreach (var note in notes)
+            foreach (var noteAt in notes)
             {
+                var note = noteAt.Object;
                 if (match(note))
                 {
                     var startTime = note.TimedNoteOnEvent.Time;
@@ -831,44 +836,8 @@ namespace Melanchall.DryWetMidi.Interaction
                 }
             }
 
-            if (timeOrLengthChanged)
+            if (timeOrLengthCanBeChanged && timeOrLengthChanged)
                 eventsCollections.SortAndUpdateEvents(collectedTimedEvents);
-
-            return iMatched;
-        }
-
-        internal static int ProcessNotes(
-            this EventsCollection eventsCollection,
-            Action<Note> action,
-            Predicate<Note> match,
-            NoteDetectionSettings noteDetectionSettings,
-            bool canTimeOrLengthBeChanged)
-        {
-            var iMatched = 0;
-
-            var timeOrLengthChanged = false;
-            var collectedTimedEvents = canTimeOrLengthBeChanged ? new List<TimedEvent>(eventsCollection.Count) : null;
-
-            var notesBuilder = new NotesBuilder(noteDetectionSettings);
-            var notes = notesBuilder.GetNotesLazy(eventsCollection.GetTimedEventsLazy(noteDetectionSettings?.TimedEventDetectionSettings, false), canTimeOrLengthBeChanged, collectedTimedEvents);
-
-            foreach (var note in notes)
-            {
-                if (match(note))
-                {
-                    var startTime = note.TimedNoteOnEvent.Time;
-                    var endTime = note.TimedNoteOffEvent.Time;
-
-                    action(note);
-
-                    timeOrLengthChanged |= note.TimedNoteOnEvent.Time != startTime || note.TimedNoteOffEvent.Time != endTime;
-
-                    iMatched++;
-                }
-            }
-
-            if (timeOrLengthChanged)
-                eventsCollection.SortAndUpdateEvents(collectedTimedEvents);
 
             return iMatched;
         }
@@ -1016,7 +985,7 @@ namespace Melanchall.DryWetMidi.Interaction
                             if (previousNode != null)
                                 break;
 
-                            for (var n = node; n != null; )
+                            for (var n = node; n != null;)
                             {
                                 if (!n.Value.IsCompleted)
                                     break;

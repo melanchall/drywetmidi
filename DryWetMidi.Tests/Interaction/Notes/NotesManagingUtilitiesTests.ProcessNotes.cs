@@ -201,6 +201,27 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
+        public void ProcessNotes_EventsCollection_WithoutPredicate_OneNote_Processing_Time_HintNone([Values] ContainerType containerType)
+        {
+            ProcessNotes_EventsCollection_WithoutPredicate(
+                containerType,
+                midiEvents: new MidiEvent[]
+                {
+                    new NoteOnEvent(),
+                    new TextEvent("A"),
+                    new NoteOffEvent()
+                },
+                action: n => n.Time = 100,
+                expectedMidiEvents: new MidiEvent[]
+                {
+                    new NoteOnEvent(),
+                    new TextEvent("A"),
+                    new NoteOffEvent()
+                },
+                hint: NoteProcessingHint.None);
+        }
+
+        [Test]
         public void ProcessNotes_EventsCollection_WithoutPredicate_OneNote_Processing_Length([Values] ContainerType containerType)
         {
             ProcessNotes_EventsCollection_WithoutPredicate(
@@ -218,6 +239,27 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     new TextEvent("A"),
                     new NoteOffEvent { DeltaTime = 100 }
                 });
+        }
+
+        [Test]
+        public void ProcessNotes_EventsCollection_WithoutPredicate_OneNote_Processing_Length_HintNone([Values] ContainerType containerType)
+        {
+            ProcessNotes_EventsCollection_WithoutPredicate(
+                containerType,
+                midiEvents: new MidiEvent[]
+                {
+                    new NoteOnEvent(),
+                    new TextEvent("A"),
+                    new NoteOffEvent()
+                },
+                action: n => n.Length = 100,
+                expectedMidiEvents: new MidiEvent[]
+                {
+                    new NoteOnEvent(),
+                    new TextEvent("A"),
+                    new NoteOffEvent()
+                },
+                hint: NoteProcessingHint.None);
         }
 
         [Test]
@@ -2466,7 +2508,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             Action<Note> action,
             Predicate<Note> match,
             ICollection<MidiEvent> expectedMidiEvents,
-            int expectedProcessedCount)
+            int expectedProcessedCount,
+            NoteProcessingHint hint = NoteProcessingHint.Default)
         {
             var eventsCollection = new EventsCollection();
             eventsCollection.AddRange(midiEvents);
@@ -2477,7 +2520,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     {
                         Assert.AreEqual(
                             expectedProcessedCount,
-                            eventsCollection.ProcessNotes(action, match),
+                            eventsCollection.ProcessNotes(action, match, hint: hint),
                             "Invalid count of processed notes.");
 
                         var expectedEventsCollection = new EventsCollection();
@@ -2494,7 +2537,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
                         Assert.AreEqual(
                             expectedProcessedCount,
-                            trackChunk.ProcessNotes(action, match),
+                            trackChunk.ProcessNotes(action, match, hint: hint),
                             "Invalid count of processed notes.");
 
                         var expectedTrackChunk = new TrackChunk(expectedMidiEvents);
@@ -2513,7 +2556,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                             action,
                             match,
                             new[] { expectedMidiEvents },
-                            expectedProcessedCount);
+                            expectedProcessedCount,
+                            hint);
                     }
                     break;
             }
@@ -2523,7 +2567,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             ContainerType containerType,
             ICollection<MidiEvent> midiEvents,
             Action<Note> action,
-            ICollection<MidiEvent> expectedMidiEvents)
+            ICollection<MidiEvent> expectedMidiEvents,
+            NoteProcessingHint hint = NoteProcessingHint.Default)
         {
             var notesCount = midiEvents.GetNotes().Count();
 
@@ -2536,7 +2581,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
                         Assert.AreEqual(
                             notesCount,
-                            eventsCollection.ProcessNotes(action),
+                            eventsCollection.ProcessNotes(action, hint: hint),
                             "Invalid count of processed notes.");
 
                         var expectedEventsCollection = new EventsCollection();
@@ -2553,7 +2598,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
                         Assert.AreEqual(
                             notesCount,
-                            trackChunk.ProcessNotes(action),
+                            trackChunk.ProcessNotes(action, hint: hint),
                             "Invalid count of processed notes.");
 
                         var expectedTrackChunk = new TrackChunk(expectedMidiEvents);
@@ -2569,7 +2614,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                             false,
                             new[] { midiEvents },
                             action,
-                            new[] { expectedMidiEvents });
+                            new[] { expectedMidiEvents },
+                            hint);
                     }
                     break;
                 case ContainerType.File:
@@ -2578,7 +2624,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                             true,
                             new[] { midiEvents },
                             action,
-                            new[] { expectedMidiEvents });
+                            new[] { expectedMidiEvents },
+                            hint);
                     }
                     break;
             }
@@ -2590,7 +2637,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             Action<Note> action,
             Predicate<Note> match,
             ICollection<ICollection<MidiEvent>> expectedMidiEvents,
-            int expectedProcessedCount)
+            int expectedProcessedCount,
+            NoteProcessingHint hint = NoteProcessingHint.Default)
         {
             var trackChunks = midiEvents.Select(e => new TrackChunk(e)).ToList();
 
@@ -2600,7 +2648,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
                 Assert.AreEqual(
                     expectedProcessedCount,
-                    midiFile.ProcessNotes(action, match),
+                    midiFile.ProcessNotes(action, match, hint: hint),
                     "Invalid count of processed notes.");
 
                 MidiAsserts.AreEqual(new MidiFile(expectedMidiEvents.Select(e => new TrackChunk(e))), midiFile, false, "Events are invalid.");
@@ -2612,7 +2660,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             {
                 Assert.AreEqual(
                     expectedProcessedCount,
-                    trackChunks.ProcessNotes(action, match),
+                    trackChunks.ProcessNotes(action, match, hint: hint),
                     "Invalid count of processed notes.");
 
                 MidiAsserts.AreEqual(expectedMidiEvents.Select(e => new TrackChunk(e)), trackChunks, true, "Events are invalid.");
@@ -2626,7 +2674,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             bool wrapToFile,
             ICollection<ICollection<MidiEvent>> midiEvents,
             Action<Note> action,
-            ICollection<ICollection<MidiEvent>> expectedMidiEvents)
+            ICollection<ICollection<MidiEvent>> expectedMidiEvents,
+            NoteProcessingHint hint = NoteProcessingHint.Default)
         {
             var trackChunks = midiEvents.Select(e => new TrackChunk(e)).ToList();
             var notesCount = trackChunks.GetNotes().Count();
@@ -2637,7 +2686,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
                 Assert.AreEqual(
                     notesCount,
-                    midiFile.ProcessNotes(action),
+                    midiFile.ProcessNotes(action, hint: hint),
                     "Invalid count of processed notes.");
 
                 MidiAsserts.AreEqual(new MidiFile(expectedMidiEvents.Select(e => new TrackChunk(e))), midiFile, false, "Events are invalid.");
@@ -2649,7 +2698,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             {
                 Assert.AreEqual(
                     notesCount,
-                    trackChunks.ProcessNotes(action),
+                    trackChunks.ProcessNotes(action, hint: hint),
                     "Invalid count of processed notes.");
 
                 MidiAsserts.AreEqual(expectedMidiEvents.Select(e => new TrackChunk(e)), trackChunks, true, "Events are invalid.");

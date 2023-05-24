@@ -320,6 +320,28 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             expectedProcessedCount: 1);
 
         [Test]
+        public void ProcessChords_EventsCollection_WithPredicate_OneChord_Matched_Processing_Time_HintNone([Values] ContainerType containerType) => ProcessChords_EventsCollection_WithPredicate(
+            containerType,
+            midiEvents: new MidiEvent[]
+            {
+                new NoteOnEvent(),
+                new NoteOffEvent(),
+                new TextEvent("A"),
+                new ControlChangeEvent(),
+            },
+            action: c => c.Time = 100,
+            match: c => true,
+            expectedMidiEvents: new MidiEvent[]
+            {
+                new NoteOnEvent(),
+                new NoteOffEvent(),
+                new TextEvent("A"),
+                new ControlChangeEvent(),
+            },
+            expectedProcessedCount: 1,
+            hint: ChordProcessingHint.None);
+
+        [Test]
         public void ProcessChords_EventsCollection_WithPredicate_OneChord_Matched_Processing_Length([Values] ContainerType containerType) => ProcessChords_EventsCollection_WithPredicate(
             containerType,
             midiEvents: new MidiEvent[]
@@ -339,6 +361,28 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 new NoteOffEvent { DeltaTime = 100 },
             },
             expectedProcessedCount: 1);
+
+        [Test]
+        public void ProcessChords_EventsCollection_WithPredicate_OneChord_Matched_Processing_Length_HintNone([Values] ContainerType containerType) => ProcessChords_EventsCollection_WithPredicate(
+            containerType,
+            midiEvents: new MidiEvent[]
+            {
+                new NoteOnEvent(),
+                new NoteOffEvent(),
+                new TextEvent("A"),
+                new ControlChangeEvent(),
+            },
+            action: c => c.Length = 100,
+            match: c => true,
+            expectedMidiEvents: new MidiEvent[]
+            {
+                new NoteOnEvent(),
+                new NoteOffEvent(),
+                new TextEvent("A"),
+                new ControlChangeEvent(),
+            },
+            expectedProcessedCount: 1,
+            hint: ChordProcessingHint.None);
 
         [Test]
         public void ProcessChords_EventsCollection_WithPredicate_OneChord_Matched_Processing_TimeAndLength([Values] ContainerType containerType) => ProcessChords_EventsCollection_WithPredicate(

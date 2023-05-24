@@ -65,21 +65,21 @@ namespace Melanchall.DryWetMidi.Interaction
             var chordsDescriptorsByChannel = new LinkedListNode<ChordDescriptorIndexed>[FourBitNumber.MaxValue + 1];
 
             var notesBuilder = new NotesBuilder(_chordDetectionSettings.NoteDetectionSettings);
-            var notes = notesBuilder.GetIndexedNotesLazy(timedEvents, collectTimedEvents, collectedTimedEvents);
+            var notes = notesBuilder.GetNotesLazy(timedEvents, collectTimedEvents, collectedTimedEvents);
 
             foreach (var noteTuple in notes)
             {
-                var note = noteTuple.Item1;
+                var note = noteTuple.Object;
                 var chordDescriptorNode = chordsDescriptorsByChannel[note.Channel];
 
                 if (chordDescriptorNode == null || chordDescriptorNode.List == null)
                 {
-                    CreateChordDescriptor(chordsDescriptors, chordsDescriptorsByChannel, note, noteTuple.Item2);
+                    CreateChordDescriptor(chordsDescriptors, chordsDescriptorsByChannel, note, noteTuple.AtIndex);
                 }
                 else
                 {
                     var chordDescriptor = chordDescriptorNode.Value;
-                    if (CanNoteBeAddedToChord(chordDescriptor, note, _chordDetectionSettings.NotesTolerance, noteTuple.Item2))
+                    if (CanNoteBeAddedToChord(chordDescriptor, note, _chordDetectionSettings.NotesTolerance, noteTuple.AtIndex))
                     {
                         chordDescriptor.Notes.Add(note);
                     }
@@ -95,7 +95,7 @@ namespace Melanchall.DryWetMidi.Interaction
                             }
                         }
 
-                        CreateChordDescriptor(chordsDescriptors, chordsDescriptorsByChannel, note, noteTuple.Item2);
+                        CreateChordDescriptor(chordsDescriptors, chordsDescriptorsByChannel, note, noteTuple.AtIndex);
                     }
                 }
             }
@@ -130,15 +130,6 @@ namespace Melanchall.DryWetMidi.Interaction
         }
 
         private void CreateChordDescriptor(
-            LinkedList<ChordDescriptor> chordsDescriptors,
-            LinkedListNode<ChordDescriptor>[] chordsDescriptorsByChannel,
-            Note note)
-        {
-            var chordDescriptor = new ChordDescriptor(note, _chordDetectionSettings.NotesMinCount);
-            chordsDescriptorsByChannel[note.Channel] = chordsDescriptors.AddLast(chordDescriptor);
-        }
-
-        private void CreateChordDescriptor(
             LinkedList<ChordDescriptorIndexed> chordsDescriptors,
             LinkedListNode<ChordDescriptorIndexed>[] chordsDescriptorsByChannel,
             Note note,
@@ -146,11 +137,6 @@ namespace Melanchall.DryWetMidi.Interaction
         {
             var chordDescriptor = new ChordDescriptorIndexed(note, _chordDetectionSettings.NotesMinCount) { EventsCollectionIndex = noteOnIndex };
             chordsDescriptorsByChannel[note.Channel] = chordsDescriptors.AddLast(chordDescriptor);
-        }
-
-        private static bool CanNoteBeAddedToChord(ChordDescriptor chordDescriptor, Note note, long notesTolerance)
-        {
-            return note.Time - chordDescriptor.Time <= notesTolerance;
         }
 
         private static bool CanNoteBeAddedToChord(ChordDescriptorIndexed chordDescriptor, Note note, long notesTolerance, int eventsCollectionIndex)

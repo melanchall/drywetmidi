@@ -1040,7 +1040,7 @@ namespace Melanchall.DryWetMidi.Interaction
                 iMatched++;
             }
 
-            if (!timeOrLengthChanged && !notesCollectionChanged)
+            if ((!timeOrLengthCanBeChanged || !timeOrLengthChanged) && (!notesCollectionCanBeChanged || !notesCollectionChanged))
                 return iMatched;
 
             eventsCollections.SortAndUpdateEvents(collectedTimedEvents);
