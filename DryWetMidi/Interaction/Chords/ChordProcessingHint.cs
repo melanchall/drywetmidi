@@ -7,8 +7,13 @@ namespace Melanchall.DryWetMidi.Interaction
     {
         TimeOrLengthCanBeChanged = 1,
         NotesCollectionCanBeChanged = 2,
+        NoteTimeOrLengthCanBeChanged = 4,
 
         None = 0,
         Default = TimeOrLengthCanBeChanged,
+        AllPropertiesCanBeChanged =
+            TimeOrLengthCanBeChanged |
+            NotesCollectionCanBeChanged |
+            NoteTimeOrLengthCanBeChanged,
     }
 }

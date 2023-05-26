@@ -367,6 +367,28 @@ namespace Melanchall.DryWetMidi.Interaction
             return new SplitLengthedObject(leftPart, rightPart);
         }
 
+        internal void GetTimeAndLength(out long time, out long length)
+        {
+            var startTime = long.MaxValue;
+            var endTime = long.MinValue;
+
+            var hasNotes = false;
+
+            foreach (var note in Notes)
+            {
+                var noteStartTime = note.Time;
+                startTime = Math.Min(noteStartTime, startTime);
+
+                var noteEndTime = noteStartTime + note.Length;
+                endTime = Math.Max(noteEndTime, endTime);
+
+                hasNotes = true;
+            }
+
+            time = hasNotes ? startTime : 0;
+            length = hasNotes ? endTime - startTime : 0;
+        }
+
         private void OnNotesCollectionChanged(TimedObjectsCollection<Note> collection, TimedObjectsCollectionChangedEventArgs<Note> args)
         {
             _channel = null;

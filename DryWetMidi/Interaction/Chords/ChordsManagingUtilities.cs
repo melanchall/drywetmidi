@@ -985,11 +985,13 @@ namespace Melanchall.DryWetMidi.Interaction
 
             var timeOrLengthChanged = false;
             var notesCollectionChanged = false;
+            var noteTimeOrLengthChanged = false;
 
             var timeOrLengthCanBeChanged = hint.HasFlag(ChordProcessingHint.TimeOrLengthCanBeChanged);
             var notesCollectionCanBeChanged = hint.HasFlag(ChordProcessingHint.NotesCollectionCanBeChanged);
+            var noteTimeOrLengthCanBeChanged = hint.HasFlag(ChordProcessingHint.NoteTimeOrLengthCanBeChanged);
 
-            var collectedTimedEvents = timeOrLengthCanBeChanged || notesCollectionCanBeChanged
+            var collectedTimedEvents = timeOrLengthCanBeChanged || notesCollectionCanBeChanged || noteTimeOrLengthCanBeChanged
                 ? new List<TimedObjectAt<TimedEvent>>(eventsCount)
                 : null;
 
@@ -1002,22 +1004,42 @@ namespace Melanchall.DryWetMidi.Interaction
                 if (!match(chord))
                     continue;
 
-                var time = chord.Time;
-                var length = chord.Length;
-                var notes = notesCollectionCanBeChanged ? chord.Notes.ToArray() : null;
+                long time;
+                long length;
+                chord.GetTimeAndLength(out time, out length);
+
+                var notes = notesCollectionCanBeChanged || noteTimeOrLengthCanBeChanged
+                    ? chord.Notes.ToArray()
+                    : null;
+
+                var notesTimes = noteTimeOrLengthCanBeChanged
+                    ? notes.ToDictionary(n => n, n => n.Time)
+                    : null;
+                var notesLengths = noteTimeOrLengthCanBeChanged
+                    ? notes.ToDictionary(n => n, n => n.Length)
+                    : null;
 
                 action(chord);
 
+                long newTime;
+                long newLength;
+                chord.GetTimeAndLength(out newTime, out newLength);
+                timeOrLengthChanged |=
+                    newTime != time ||
+                    newLength != length;
+
                 var addedNotes = notesCollectionCanBeChanged ? chord.Notes.Except(notes).ToArray() : null;
                 var removedNotes = notesCollectionCanBeChanged ? notes.Except(chord.Notes).ToArray() : null;
-
-                timeOrLengthChanged |=
-                    chord.Time != time ||
-                    chord.Length != length;
-
                 notesCollectionChanged |=
                     addedNotes?.Length > 0 ||
                     removedNotes?.Length > 0;
+
+                var savedNotes = noteTimeOrLengthCanBeChanged
+                    ? (notesCollectionCanBeChanged ? (IEnumerable<Note>)notes.Intersect(chord.Notes).ToArray() : chord.Notes)
+                    : null;
+                noteTimeOrLengthChanged |=
+                    savedNotes?.Any(n => n.Time != notesTimes[n]) == true ||
+                    savedNotes?.Any(n => n.Length != notesLengths[n]) == true;
 
                 if (notesCollectionChanged)
                 {
@@ -1040,7 +1062,9 @@ namespace Melanchall.DryWetMidi.Interaction
                 iMatched++;
             }
 
-            if ((!timeOrLengthCanBeChanged || !timeOrLengthChanged) && (!notesCollectionCanBeChanged || !notesCollectionChanged))
+            if ((!timeOrLengthCanBeChanged || !timeOrLengthChanged) &&
+                (!notesCollectionCanBeChanged || !notesCollectionChanged) &&
+                (!noteTimeOrLengthCanBeChanged || !noteTimeOrLengthChanged))
                 return iMatched;
 
             eventsCollections.SortAndUpdateEvents(collectedTimedEvents);
