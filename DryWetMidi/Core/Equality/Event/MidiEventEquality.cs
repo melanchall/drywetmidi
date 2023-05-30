@@ -74,7 +74,14 @@ namespace Melanchall.DryWetMidi.Core
                 {
                     return ((SongSelectEvent)e1).Number == ((SongSelectEvent)e2).Number;
                 },
-                [MidiEventType.TuneRequest] = (e1, e2) => true
+                [MidiEventType.TuneRequest] = (e1, e2) => true,
+
+                // Non-standard
+
+                [MidiEventType.SelectPartGroup] = (e1, e2) =>
+                {
+                    return ((SelectPartGroupEvent)e1).PartGroupNumber == ((SelectPartGroupEvent)e2).PartGroupNumber;
+                },
             };
 
         #endregion

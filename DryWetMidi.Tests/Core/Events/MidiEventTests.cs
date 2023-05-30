@@ -216,6 +216,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
             var events = TypesProvider.GetAllEventTypes()
                 .Where(t => !typeof(SystemCommonEvent).IsAssignableFrom(t) &&
                             !typeof(SystemRealTimeEvent).IsAssignableFrom(t) &&
+                            !typeof(NonStandardEvent).IsAssignableFrom(t) &&
                             t != typeof(EndOfTrackEvent) &&
                             t != typeof(UnknownMetaEvent))
                 .Select(createMidiEvent)

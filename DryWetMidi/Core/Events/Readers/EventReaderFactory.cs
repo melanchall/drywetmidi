@@ -12,6 +12,7 @@
         private static readonly IEventReader SysExEventReader = new SysExEventReader();
         private static readonly IEventReader SystemRealTimeEventReader = new SystemRealTimeEventReader();
         private static readonly IEventReader SystemCommonEventReader = new SystemCommonEventReader();
+        private static readonly IEventReader NonStandardEventReader = new NonStandardEventReader();
 
         #endregion
 
@@ -44,6 +45,9 @@
                     statusByte == EventStatusBytes.SystemCommon.SongSelect ||
                     statusByte == EventStatusBytes.SystemCommon.TuneRequest)
                     return SystemCommonEventReader;
+
+                if (statusByte == EventStatusBytes.NonStandard.SelectPartGroup)
+                    return NonStandardEventReader;
             }
 
             if (statusByte == EventStatusBytes.Global.Meta)

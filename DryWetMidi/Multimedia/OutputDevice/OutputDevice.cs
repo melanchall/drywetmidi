@@ -144,7 +144,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             EnsureSessionIsCreated();
             EnsureHandleIsCreated();
 
-            if (midiEvent is ChannelEvent || midiEvent is SystemCommonEvent || midiEvent is SystemRealTimeEvent)
+            if (midiEvent is ChannelEvent || midiEvent is SystemCommonEvent || midiEvent is SystemRealTimeEvent || midiEvent is NonStandardEvent)
             {
                 var message = PackShortEvent(midiEvent);
                 NativeApiUtilities.HandleDevicesNativeApiResult(

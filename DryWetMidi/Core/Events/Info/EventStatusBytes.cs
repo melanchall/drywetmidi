@@ -59,5 +59,10 @@
             public const byte SongSelect          = 0xF3;
             public const byte TuneRequest         = 0xF6;
         }
+
+        internal static class NonStandard
+        {
+            public const byte SelectPartGroup = 0xF5;
+        }
     }
 }
