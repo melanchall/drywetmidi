@@ -142,7 +142,7 @@ namespace Melanchall.DryWetMidi.Tests.Composing
             var pattern = new PatternBuilder()
                 .Note("a0")
                 .SetNoteLength(noteLength)
-                .Note("C#5", velocity)
+                .Note("C#5", velocity: velocity)
                 .Build();
 
             PatternTestUtilities.TestNotes(pattern, new[]

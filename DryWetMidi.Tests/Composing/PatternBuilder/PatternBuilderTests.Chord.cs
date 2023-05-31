@@ -49,7 +49,9 @@ namespace Melanchall.DryWetMidi.Tests.Composing
             var pattern = new PatternBuilder()
                 .SetNoteLength(MusicalTimeSpan.Whole)
                 .SetOctave(Octave.Get(7))
-                .Chord(new DryWetMidi.MusicTheory.Chord(NoteName.A, NoteName.C), MusicalTimeSpan.Eighth)
+                .Chord(
+                    new DryWetMidi.MusicTheory.Chord(NoteName.A, NoteName.C),
+                    length: MusicalTimeSpan.Eighth)
                 .Build();
 
             PatternTestUtilities.TestNotes(pattern, new[]
@@ -80,7 +82,9 @@ namespace Melanchall.DryWetMidi.Tests.Composing
         {
             var pattern = new PatternBuilder()
                 .SetVelocity((SevenBitNumber)80)
-                .Chord(new DryWetMidi.MusicTheory.Chord(NoteName.A, NoteName.C), (SevenBitNumber)70)
+                .Chord(
+                    new DryWetMidi.MusicTheory.Chord(NoteName.A, NoteName.C),
+                    velocity: (SevenBitNumber)70)
                 .Build();
 
             PatternTestUtilities.TestNotes(pattern, new[]
@@ -96,7 +100,10 @@ namespace Melanchall.DryWetMidi.Tests.Composing
             var pattern = new PatternBuilder()
                 .SetVelocity((SevenBitNumber)80)
                 .SetOctave(Octave.Get(5))
-                .Chord(new DryWetMidi.MusicTheory.Chord(NoteName.A, NoteName.C), Octave.Get(1),(SevenBitNumber)70)
+                .Chord(
+                    new DryWetMidi.MusicTheory.Chord(NoteName.A, NoteName.C),
+                    Octave.Get(1),
+                    velocity: (SevenBitNumber)70)
                 .Build();
 
             PatternTestUtilities.TestNotes(pattern, new[]
@@ -112,7 +119,10 @@ namespace Melanchall.DryWetMidi.Tests.Composing
             var pattern = new PatternBuilder()
                 .SetVelocity((SevenBitNumber)80)
                 .SetNoteLength(MusicalTimeSpan.ThirtySecond)
-                .Chord(new DryWetMidi.MusicTheory.Chord(NoteName.A, NoteName.C), MusicalTimeSpan.Half, (SevenBitNumber)70)
+                .Chord(
+                    new DryWetMidi.MusicTheory.Chord(NoteName.A, NoteName.C),
+                    length: MusicalTimeSpan.Half,
+                    velocity: (SevenBitNumber)70)
                 .Build();
 
             PatternTestUtilities.TestNotes(pattern, new[]
@@ -197,7 +207,7 @@ namespace Melanchall.DryWetMidi.Tests.Composing
             var pattern = new PatternBuilder()
                 .SetOctave(defaultOctave)
                 .SetNoteLength(defaultNoteLength)
-                .Chord(new[] { Interval.FromHalfSteps(2), Interval.FromHalfSteps(4) }, NoteName.D, chordVelocity)
+                .Chord(new[] { Interval.FromHalfSteps(2), Interval.FromHalfSteps(4) }, NoteName.D, velocity: chordVelocity)
                 .Build();
 
             PatternTestUtilities.TestNotes(pattern, new[]
@@ -287,7 +297,10 @@ namespace Melanchall.DryWetMidi.Tests.Composing
             var pattern = new PatternBuilder()
                 .SetOctave(defaultOctave)
                 .SetNoteLength(defaultNoteLength)
-                .Chord(new[] { Interval.FromHalfSteps(2), Interval.FromHalfSteps(4) }, Notes.D3, chordVelocity)
+                .Chord(
+                    new[] { Interval.FromHalfSteps(2), Interval.FromHalfSteps(4) },
+                    Notes.D3,
+                    velocity: chordVelocity)
                 .Build();
 
             PatternTestUtilities.TestNotes(pattern, new[]
@@ -377,7 +390,9 @@ namespace Melanchall.DryWetMidi.Tests.Composing
             var pattern = new PatternBuilder()
                 .SetOctave(defaultOctave)
                 .SetNoteLength(defaultNoteLength)
-                .Chord(new[] { NoteName.D, NoteName.E, NoteName.FSharp }, chordVelocity)
+                .Chord(
+                    new[] { NoteName.D, NoteName.E, NoteName.FSharp },
+                    velocity: chordVelocity)
                 .Build();
 
             PatternTestUtilities.TestNotes(pattern, new[]
@@ -467,7 +482,9 @@ namespace Melanchall.DryWetMidi.Tests.Composing
             var pattern = new PatternBuilder()
                 .SetOctave(defaultOctave)
                 .SetNoteLength(defaultNoteLength)
-                .Chord(new[] { Notes.D3, Notes.E3, Notes.FSharp4 }, chordVelocity)
+                .Chord(
+                    new[] { Notes.D3, Notes.E3, Notes.FSharp4 },
+                    velocity: chordVelocity)
                 .Build();
 
             PatternTestUtilities.TestNotes(pattern, new[]
@@ -552,7 +569,9 @@ namespace Melanchall.DryWetMidi.Tests.Composing
             var pattern = new PatternBuilder()
                 .SetOctave(octave)
                 .SetVelocity(velocity)
-                .Chord("Cmin", chordLength)
+                .Chord(
+                    "Cmin",
+                    length: chordLength)
                 .Build();
 
             PatternTestUtilities.TestNotes(pattern, new[]
@@ -573,7 +592,9 @@ namespace Melanchall.DryWetMidi.Tests.Composing
             var pattern = new PatternBuilder()
                 .SetOctave(octave)
                 .SetNoteLength(chordLength)
-                .Chord("Cmin", velocity)
+                .Chord(
+                    "Cmin",
+                    velocity: velocity)
                 .Build();
 
             PatternTestUtilities.TestNotes(pattern, new[]
@@ -613,7 +634,10 @@ namespace Melanchall.DryWetMidi.Tests.Composing
 
             var pattern = new PatternBuilder()
                 .SetNoteLength(chordLength)
-                .Chord("Cmin", octave, velocity)
+                .Chord(
+                    "Cmin",
+                    octave,
+                    velocity: velocity)
                 .Build();
 
             PatternTestUtilities.TestNotes(pattern, new[]
@@ -633,7 +657,10 @@ namespace Melanchall.DryWetMidi.Tests.Composing
 
             var pattern = new PatternBuilder()
                 .SetOctave(octave)
-                .Chord("Cmin", chordLength, velocity)
+                .Chord(
+                    "Cmin",
+                    length: chordLength,
+                    velocity: velocity)
                 .Build();
 
             PatternTestUtilities.TestNotes(pattern, new[]
