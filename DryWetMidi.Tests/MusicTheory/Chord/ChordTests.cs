@@ -163,6 +163,26 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
             CollectionAssert.Contains(names, expectedChordName);
         }
 
+        [Test]
+        public void GetNames_SortByLength()
+        {
+            var chord = new Chord(NoteName.E, NoteName.C, NoteName.G);
+            var names = chord.GetNames();
+            CollectionAssert.AreEqual(
+                new[] { "C", "CM", "C5/E", "Cmaj" },
+                names);
+        }
+
+        [Test]
+        public void GetNames_SortByRelevance()
+        {
+            var chord = new Chord(NoteName.E, NoteName.C, NoteName.G);
+            var names = chord.GetNames(ChordNamesSortingPolicy.ByRelevance);
+            CollectionAssert.AreEqual(
+                new[] { "C5/E", "C", "CM", "Cmaj" },
+                names);
+        }
+
         #endregion
     }
 }
