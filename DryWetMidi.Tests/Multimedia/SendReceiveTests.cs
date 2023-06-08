@@ -42,10 +42,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         public void CheckEventsReceiving_AllEventTypes_ExceptSysEx()
         {
             var events = TypesProvider.GetAllEventTypes()
-                .Where(t =>
-                    !typeof(MetaEvent).IsAssignableFrom(t) &&
-                    !typeof(SysExEvent).IsAssignableFrom(t) &&
-                    !typeof(NonStandardEvent).IsAssignableFrom(t))
+                .Where(t => !typeof(MetaEvent).IsAssignableFrom(t) && !typeof(SysExEvent).IsAssignableFrom(t))
                 .Select(t => (MidiEvent)Activator.CreateInstance(t))
                 .ToArray();
 

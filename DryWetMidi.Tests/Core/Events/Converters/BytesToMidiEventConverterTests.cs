@@ -514,35 +514,6 @@ namespace Melanchall.DryWetMidi.Tests.Core
             }
         }
 
-        [Test]
-        public void Convert_Bytes_StackOverflow()
-        {
-            using (var bytesToMidiEventConverter = new BytesToMidiEventConverter())
-            {
-                ConvertMultiple_Bytes(
-                    bytesToMidiEventConverter,
-                    new byte[] {
-                        0xF5 , 0x02,
-                        0x90, 0x3C, 0x7F,
-                        0x40, 0x7F,
-                        0x43, 0x7F,
-                        0x80, 0x3C, 0x00,
-                        0x40, 0x00,
-                        0x43, 0x00
-                    },
-                    new MidiEvent[]
-                    {
-                        new SelectPartGroupEvent(2),
-                        new NoteOnEvent((SevenBitNumber)0x3C, (SevenBitNumber)0x7F),
-                        new NoteOnEvent((SevenBitNumber)0x40, (SevenBitNumber)0x7F),
-                        new NoteOnEvent((SevenBitNumber)0x43, (SevenBitNumber)0x7F),
-                        new NoteOffEvent((SevenBitNumber)0x3C, (SevenBitNumber)0x00),
-                        new NoteOffEvent((SevenBitNumber)0x40, (SevenBitNumber)0x00),
-                        new NoteOffEvent((SevenBitNumber)0x43, (SevenBitNumber)0x00),
-                    });
-            }
-        }
-
         #endregion
 
         #region Private methods

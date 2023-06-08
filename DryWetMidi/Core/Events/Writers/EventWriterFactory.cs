@@ -14,7 +14,6 @@ namespace Melanchall.DryWetMidi.Core
         private static readonly IEventWriter SysExEventWriter = new SysExEventWriter();
         private static readonly IEventWriter SystemRealTimeEventWriter = new SystemRealTimeEventWriter();
         private static readonly IEventWriter SystemCommonEventWriter = new SystemCommonEventWriter();
-        private static readonly IEventWriter NonStandardEventWriter = new NonStandardEventWriter();
 
         #endregion
 
@@ -42,9 +41,6 @@ namespace Melanchall.DryWetMidi.Core
 
             if (midiEvent is SystemCommonEvent)
                 return SystemCommonEventWriter;
-
-            if (midiEvent is NonStandardEvent)
-                return NonStandardEventWriter;
 
             return SysExEventWriter;
         }

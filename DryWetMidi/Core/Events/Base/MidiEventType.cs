@@ -198,8 +198,6 @@
         /// <summary>
         /// Tune Request event.
         /// </summary>
-        TuneRequest,
-
-        SelectPartGroup,
+        TuneRequest
     }
 }
