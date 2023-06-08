@@ -125,12 +125,12 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// Returns collection of names of the current <see cref="Chord"/>.
         /// </summary>
         /// <returns>Collection of names of the current <see cref="Chord"/>.</returns>
-        public IReadOnlyCollection<string> GetNames(ChordNamesSortingPolicy sortingPolicy = ChordNamesSortingPolicy.ByLength)
+        public IReadOnlyCollection<string> GetNames()
         {
             if (_chordNames != null)
                 return _chordNames;
 
-            var names = ChordsNamesTable.GetChordNames(NotesNames.ToArray(), sortingPolicy);
+            var names = ChordsNamesTable.GetChordNames(NotesNames.ToArray());
             return _chordNames = new ReadOnlyCollection<string>(names);
         }
 
