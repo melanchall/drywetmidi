@@ -7,7 +7,7 @@ uid: a_dev_virtual
 > [!IMPORTANT]
 > Virtual devices API is a platform-specific one so please refer to the [Supported OS](xref:a_develop_supported_os) article to learn more. For Windows you can use products like [virtualMIDI SDK](https://www.tobias-erichsen.de/software/virtualmidi/virtualmidi-sdk.html) or similar to work with virtual MIDI ports programmatically. Be careful with license of these products.
 
-With DryWetMIDI you can programmatically create virtual MIDI devices with the specified name using [VirtualDevice.Create](xref:Melanchall.DryWetMidi.Multimedia.VirtualDevice.Create(System.String)) method. In fact virtual device is an [input](xref:a_dev_input) and an [output](xref:a_dev_output) devices paired together in a way that any MIDI event sent to the output device will be immediately transfered back from the virtual device and can be received by an application from its input subdevice.
+With DryWetMIDI you can programmatically create virtual MIDI devices with the specified name using [VirtualDevice.Create](xref:Melanchall.DryWetMidi.Multimedia.VirtualDevice.Create(System.String)) method. In fact virtual device is an [input](xref:a_dev_input) and an [output](xref:a_dev_output) devices paired together in a way that any MIDI event sent to the output device will be immediately transferred back from the virtual device and can be received by an application from its input subdevice.
 
 Thus we have [loopback](https://en.wikipedia.org/wiki/Loopback) device here. Loopback device is useful, for example, as intermediate layer between an application and some software synthesizer. In this case:
 

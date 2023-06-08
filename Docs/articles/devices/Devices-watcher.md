@@ -93,7 +93,7 @@ namespace DwmExamples
 }
 ```
 
-The progrum will be crashed with:
+The program will be crashed with:
 
 ```text
 Removing device...

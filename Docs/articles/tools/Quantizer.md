@@ -50,7 +50,7 @@ Also if one side (start or end) of an object is fixed, there is a chance that th
 
 You can derive from the [Quantizer](xref:Melanchall.DryWetMidi.Tools.Quantizer) class and override its [OnObjectQuantizing](xref:Melanchall.DryWetMidi.Tools.Quantizer.OnObjectQuantizing*) method. Inside this method you can decide whether quantizing for an object should be performed or not and if yes, what new time should be set.
 
-Information about what quantizer is going to do with an object is passed via `quantizedTime` parameter of [QuantizedTime](xref:Melanchall.DryWetMidi.Tools.QuantizedTime) type. Image below shows what information is holded within this class:
+Information about what quantizer is going to do with an object is passed via `quantizedTime` parameter of [QuantizedTime](xref:Melanchall.DryWetMidi.Tools.QuantizedTime) type. Image below shows what information is held within this class:
 
 ![QuantizedTime](images/Quantizer/QuantizedTime.png)
 
@@ -105,13 +105,13 @@ class Program
 
             .StepForward(MusicalTimeSpan.Sixteenth)
             .Note("A5")
-                
+
             .StepForward(MusicalTimeSpan.Quarter)
             .Note("B2")
-                
+
             .StepForward(new MusicalTimeSpan(3, 8))
             .Note("C#3")
-                
+
             .Build()
             .ToFile(tempoMap);
 

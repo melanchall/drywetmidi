@@ -12,7 +12,7 @@ So as you can see the tool treats all passed objects as a single group and then 
 
 ![Objects resizing in detail](images/Resizer/ResizeObjectsGroup-Details.png)
 
-You use [ResizeObjectsGroup](xref:Melanchall.DryWetMidi.Tools.Resizer.ResizeObjectsGroup*) methods to stretch or shrink a group of [timed objects](xref:Melanchall.DryWetMidi.Interaction.ITimedObject). You can size a group either to the specified new length or by ratio. Ratio means that all distances from the start of a group will be multiplied by this value. So if ratio of `2` is specified, an objects group will be enlarged by 2 times. And `0.5` means the group will be shrinked by 2 times (new length will be half (`0.5`) of the original one).
+You use [ResizeObjectsGroup](xref:Melanchall.DryWetMidi.Tools.Resizer.ResizeObjectsGroup*) methods to stretch or shrink a group of [timed objects](xref:Melanchall.DryWetMidi.Interaction.ITimedObject). You can size a group either to the specified new length or by ratio. Ratio means that all distances from the start of a group will be multiplied by this value. So if ratio of `2` is specified, an objects group will be enlarged by 2 times. And `0.5` means the group will be shrunk by 2 times (new length will be half (`0.5`) of the original one).
 
 There also [Resize](xref:Melanchall.DryWetMidi.Tools.Resizer.Resize*) methods to resize [MidiFile](xref:Melanchall.DryWetMidi.Core.MidiFile) or [TrackChunk](xref:Melanchall.DryWetMidi.Core.TrackChunk).
 

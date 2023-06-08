@@ -20,9 +20,9 @@ namespace Melanchall.DryWetMidi.Tools
 
             #region Constructor
 
-            public TimedEventsHolder(IEnumerator<TimedEvent> timedEventsEumerator)
+            public TimedEventsHolder(IEnumerator<TimedEvent> timedEventsEnumerator)
             {
-                Enumerator = timedEventsEumerator;
+                Enumerator = timedEventsEnumerator;
                 Enumerator.MoveNext();
             }
 

@@ -93,11 +93,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var timedEvents = GetTimedEvents(midiFile);
             var outputDevice = new OutputDeviceWithMetadataRegistration();
 
-            var trachChunkIndices = new List<int>();
+            var trackChunkIndices = new List<int>();
 
             using (var playback = new PlaybackWithMetadataRegistration(timedEvents, midiFile.GetTempoMap(), outputDevice))
             {
-                playback.EventPlayed += (_, e) => trachChunkIndices.Add((int)e.Metadata);
+                playback.EventPlayed += (_, e) => trackChunkIndices.Add((int)e.Metadata);
 
                 playback.Start();
 
@@ -108,8 +108,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
             CollectionAssert.AreEqual(
                 new[] { 0, 1, 0, 1, 0, 1, 0, 1 },
-                trachChunkIndices,
-                "Invalid track chunk indicies registered.");
+                trackChunkIndices,
+                "Invalid track chunk indices registered.");
         }
 
         [Retry(RetriesNumber)]
