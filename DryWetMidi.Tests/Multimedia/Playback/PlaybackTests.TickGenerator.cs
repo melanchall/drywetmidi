@@ -68,7 +68,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
         #endregion
 
-        #region Test mthods
+        #region Test methods
 
         [Retry(RetriesNumber)]
         [Test]

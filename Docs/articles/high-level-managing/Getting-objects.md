@@ -430,7 +430,7 @@ Getting notes and timed events...
 
 So all note events that build up a note were turned into instances of [Note](xref:Melanchall.DryWetMidi.Interaction.Note), and all remaining events (including "free" _Note On_ one) were returned as instances of [TimedEvent](xref:Melanchall.DryWetMidi.Interaction.TimedEvent).
 
-We can go futher and collect all possible chords, notes and timed events:
+We can go further and collect all possible chords, notes and timed events:
 
 ```csharp
 Console.WriteLine("Getting chords, notes and timed events...");

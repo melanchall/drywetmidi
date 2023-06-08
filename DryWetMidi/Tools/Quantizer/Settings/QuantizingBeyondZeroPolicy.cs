@@ -7,7 +7,7 @@
     public enum QuantizingBeyondZeroPolicy
     {
         /// <summary>
-        /// Object will be shrinked due to end time quantization and fixed at zero.
+        /// Object will be shrunk due to end time quantization and fixed at zero.
         /// </summary>
         FixAtZero = 0,
 

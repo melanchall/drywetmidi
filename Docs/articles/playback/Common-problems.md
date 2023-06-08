@@ -6,7 +6,7 @@ uid: a_playback_commonproblems
 
 ## Playback doesn't produce sound or events logs
 
-Make sure an instance of [Playback](xref:Melanchall.DryWetMidi.Multimedia.Playback) class is holded by class field, global variable or something else that can live longer that method where you instantiate `Playback`. In this case
+Make sure an instance of [Playback](xref:Melanchall.DryWetMidi.Multimedia.Playback) class is held by class field, global variable or something else that can live longer that method where you instantiate `Playback`. In this case
 
 ```csharp
 private void StartPlayback()
@@ -20,7 +20,7 @@ private void StartPlayback()
 
 ## Unity hangs or crash on entering Play mode second time
 
-By default `Playback` uses [HighPrecisionTickGenerator](xref:Melanchall.DryWetMidi.Multimedia.HighPrecisionTickGenerator) tick generator (see [Tick generator](Tick-generator.md) article to learn more). `HighPrecisionTickGenerator` uses WinAPI methods by P/Invoke wich causes troubles in Unity environment. You may notice that Unity hangs forever if you hit Play button second time. Unfortunately it seems the [problem](https://issuetracker.unity3d.com/issues/editor-freezes-when-updating-a-nativearray-on-the-net-4-dot-x-scripting-runtime-and-entering-play-mode-a-second-time) won't be fixed. Answer of Unity tech support:
+By default `Playback` uses [HighPrecisionTickGenerator](xref:Melanchall.DryWetMidi.Multimedia.HighPrecisionTickGenerator) tick generator (see [Tick generator](Tick-generator.md) article to learn more). `HighPrecisionTickGenerator` uses WinAPI methods by P/Invoke which causes troubles in Unity environment. You may notice that Unity hangs forever if you hit Play button second time. Unfortunately it seems the [problem](https://issuetracker.unity3d.com/issues/editor-freezes-when-updating-a-nativearray-on-the-net-4-dot-x-scripting-runtime-and-entering-play-mode-a-second-time) won't be fixed. Answer of Unity tech support:
 
 > Unfortunately, that is correct = we will not be able to fix this in the near term because it probably requires rewriting of internal threading functionality, which might introduce new issues. The main case has been tagged for a revisit internally, but it will probably be months until the case is re-valuated again.
 

@@ -56,13 +56,13 @@ namespace ExportBenchmarksResults
                 public string ProcessorName { get; set; }
                 
                 public int PhysicalProcessorCount { get; set; }
-                
+
                 public int PhysicalCoreCount { get; set; }
 
                 public int LogicalCoreCount { get; set; }
 
                 public string RuntimeVersion { get; set; }
-                
+
                 public string Architecture { get; set; }
 
                 public bool HasRyuJit { get; set; }
@@ -75,9 +75,9 @@ namespace ExportBenchmarksResults
                     public double Min { get; set; }
 
                     public double Median { get; set; }
-                    
+
                     public double Mean { get; set; }
-                    
+
                     public double Max { get; set; }
                 }
 
@@ -108,14 +108,14 @@ namespace ExportBenchmarksResults
             var client = InfluxDBClientFactory.Create(url, token.ToCharArray());
             var timestamp = DateTime.UtcNow;
 
-            var filesPathes = Directory.GetFiles(resultsFolderPath, "*.json", SearchOption.AllDirectories);
-            var totalFilesCount = filesPathes.Length;
+            var filesPaths = Directory.GetFiles(resultsFolderPath, "*.json", SearchOption.AllDirectories);
+            var totalFilesCount = filesPaths.Length;
 
             using (var writeApi = client.GetWriteApi())
             {
                 for (var i = 0; i < totalFilesCount; i++)
                 {
-                    var resultsFilePath = filesPathes[i];
+                    var resultsFilePath = filesPaths[i];
                     Console.WriteLine($"Exporting results from file #{i + 1} from {totalFilesCount}: {resultsFilePath}...");
 
                     var json = System.IO.File.ReadAllText(resultsFilePath);

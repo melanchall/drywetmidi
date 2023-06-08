@@ -561,7 +561,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// <param name="interval">The interval to shrink.</param>
         /// <param name="divisor">The number to divide the <paramref name="interval"/> by.</param>
         /// <returns>The <see cref="Interval"/> which is the <paramref name="interval"/>
-        /// shrinked by the <paramref name="divisor"/>.</returns>
+        /// shrunk by the <paramref name="divisor"/>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="interval"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="divisor"/> is zero.</exception>
         public static Interval operator /(Interval interval, int divisor)

@@ -10,7 +10,7 @@ The simplest code for MIDI file writing is:
 file.Write("Some great song.mid");
 ```
 
-If file with this name already exist, you'll get an excption. To overwrite existing file pass `true` to `overwriteFile` parameter:
+If file with this name already exist, you'll get an exception. To overwrite existing file pass `true` to `overwriteFile` parameter:
 
 ```csharp
 file.Write("Some great song.mid", overwriteFile: true);
