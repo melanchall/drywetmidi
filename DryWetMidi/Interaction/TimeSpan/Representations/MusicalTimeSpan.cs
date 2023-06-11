@@ -287,14 +287,30 @@ namespace Melanchall.DryWetMidi.Interaction
             return ParsingUtilities.Parse<MusicalTimeSpan>(input, MusicalTimeSpanParser.TryParse);
         }
 
+        /// <summary>
+        /// Creates an instance of the <see cref="MusicalTimeSpan"/> from the specified double number.
+        /// For example, <c>0.5</c> will be converted to the time span of <c>1/2</c>, and <c>3/2</c>
+        /// will be returned for the input number <c>1.5</c>.
+        /// </summary>
+        /// <param name="number">A number to convert to <see cref="MusicalTimeSpan"/>.</param>
+        /// <param name="settings">Settings which controls the process of conversion <paramref name="number"/>
+        /// to <see cref="MusicalTimeSpan"/>.</param>
+        /// <remarks>
+        /// The method tries to build a stream of rationalizations of the <paramref name="number"/> and returns
+        /// the best one according to the <paramref name="settings"/>.
+        /// </remarks>
+        /// <returns>An instance of the <see cref="MusicalTimeSpan"/> which represents the <paramref name="number"/>.</returns>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="number"/> is negative.</exception>
+        /// <exception cref="InvalidOperationException">Failed to find rationalization for the specified number.
+        /// Try to refine settings.</exception>
         public static MusicalTimeSpan FromDouble(double number, DoubleToMusicalTimeSpanSettings settings = null)
         {
             ThrowIfArgument.IsNegative(nameof(number), number, "Number is negative.");
 
-            if (number < double.Epsilon)
-                return new MusicalTimeSpan();
-
             settings = settings ?? new DoubleToMusicalTimeSpanSettings();
+
+            if (number < settings.FractionalPartEpsilon)
+                return new MusicalTimeSpan();
 
             var rationalization = MathUtilities
                 .GetRationalizations(number, settings.FractionalPartEpsilon)

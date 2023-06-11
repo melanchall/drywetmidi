@@ -226,8 +226,8 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="settings">Settings according to which chords should be detected and built.</param>
         /// <returns>Collection of chords contained in <paramref name="eventsCollection"/> ordered by time.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="eventsCollection"/> is <c>null</c>.</exception>
-        /// <seealso cref="ProcessChords(EventsCollection, Action{Chord}, Predicate{Chord}, ChordDetectionSettings)"/>
-        /// <seealso cref="ProcessChords(EventsCollection, Action{Chord}, ChordDetectionSettings)"/>
+        /// <seealso cref="ProcessChords(EventsCollection, Action{Chord}, Predicate{Chord}, ChordDetectionSettings, ChordProcessingHint)"/>
+        /// <seealso cref="ProcessChords(EventsCollection, Action{Chord}, ChordDetectionSettings, ChordProcessingHint)"/>
         /// <seealso cref="RemoveChords(EventsCollection, ChordDetectionSettings)"/>
         /// <seealso cref="RemoveChords(EventsCollection, Predicate{Chord}, ChordDetectionSettings)"/>
         /// <seealso cref="GetObjectsUtilities"/>
@@ -252,8 +252,8 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="settings">Settings according to which chords should be detected and built.</param>
         /// <returns>Collection of chords contained in <paramref name="trackChunk"/> ordered by time.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="trackChunk"/> is <c>null</c>.</exception>
-        /// <seealso cref="ProcessChords(TrackChunk, Action{Chord}, Predicate{Chord}, ChordDetectionSettings)"/>
-        /// <seealso cref="ProcessChords(TrackChunk, Action{Chord}, ChordDetectionSettings)"/>
+        /// <seealso cref="ProcessChords(TrackChunk, Action{Chord}, Predicate{Chord}, ChordDetectionSettings, ChordProcessingHint)"/>
+        /// <seealso cref="ProcessChords(TrackChunk, Action{Chord}, ChordDetectionSettings, ChordProcessingHint)"/>
         /// <seealso cref="RemoveChords(TrackChunk, ChordDetectionSettings)"/>
         /// <seealso cref="RemoveChords(TrackChunk, Predicate{Chord}, ChordDetectionSettings)"/>
         /// <seealso cref="GetObjectsUtilities"/>
@@ -272,8 +272,8 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="settings">Settings according to which chords should be detected and built.</param>
         /// <returns>Collection of chords contained in <paramref name="trackChunks"/> ordered by time.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="trackChunks"/> is <c>null</c>.</exception>
-        /// <seealso cref="ProcessChords(IEnumerable{TrackChunk}, Action{Chord}, Predicate{Chord}, ChordDetectionSettings)"/>
-        /// <seealso cref="ProcessChords(IEnumerable{TrackChunk}, Action{Chord}, ChordDetectionSettings)"/>
+        /// <seealso cref="ProcessChords(IEnumerable{TrackChunk}, Action{Chord}, Predicate{Chord}, ChordDetectionSettings, ChordProcessingHint)"/>
+        /// <seealso cref="ProcessChords(IEnumerable{TrackChunk}, Action{Chord}, ChordDetectionSettings, ChordProcessingHint)"/>
         /// <seealso cref="RemoveChords(IEnumerable{TrackChunk}, ChordDetectionSettings)"/>
         /// <seealso cref="RemoveChords(IEnumerable{TrackChunk}, Predicate{Chord}, ChordDetectionSettings)"/>
         /// <seealso cref="GetObjectsUtilities"/>
@@ -307,8 +307,8 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="settings">Settings according to which chords should be detected and built.</param>
         /// <returns>Collection of chords contained in <paramref name="file"/> ordered by time.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="file"/> is <c>null</c>.</exception>
-        /// <seealso cref="ProcessChords(MidiFile, Action{Chord}, Predicate{Chord}, ChordDetectionSettings)"/>
-        /// <seealso cref="ProcessChords(MidiFile, Action{Chord}, ChordDetectionSettings)"/>
+        /// <seealso cref="ProcessChords(MidiFile, Action{Chord}, Predicate{Chord}, ChordDetectionSettings, ChordProcessingHint)"/>
+        /// <seealso cref="ProcessChords(MidiFile, Action{Chord}, ChordDetectionSettings, ChordProcessingHint)"/>
         /// <seealso cref="RemoveChords(MidiFile, ChordDetectionSettings)"/>
         /// <seealso cref="RemoveChords(MidiFile, Predicate{Chord}, ChordDetectionSettings)"/>
         /// <seealso cref="GetObjectsUtilities"/>
@@ -340,6 +340,13 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="action">The action to perform on each <see cref="Chord"/> contained in the
         /// <paramref name="eventsCollection"/>.</param>
         /// <param name="settings">Settings according to which chords should be detected and built.</param>
+        /// <param name="hint">Hint which tells the processing algorithm how it can optimize its performance.
+        /// The default value is <see cref="ChordProcessingHint.Default"/>.</param>
+        /// <remarks>
+        /// Note that you can always use <see href="xref:a_managers">an object manager</see> to
+        /// perform any manipulations with chords but dedicated methods of the <see cref="ChordsManagingUtilities"/> will
+        /// always be faster and will consume less memory.
+        /// </remarks>
         /// <returns>Count of processed chords.</returns>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occurred:</para>
@@ -372,6 +379,13 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <paramref name="eventsCollection"/>.</param>
         /// <param name="match">The predicate that defines the conditions of the <see cref="Chord"/> to process.</param>
         /// <param name="settings">Settings according to which chords should be detected and built.</param>
+        /// <param name="hint">Hint which tells the processing algorithm how it can optimize its performance.
+        /// The default value is <see cref="ChordProcessingHint.Default"/>.</param>
+        /// <remarks>
+        /// Note that you can always use <see href="xref:a_managers">an object manager</see> to
+        /// perform any manipulations with chords but dedicated methods of the <see cref="ChordsManagingUtilities"/> will
+        /// always be faster and will consume less memory.
+        /// </remarks>
         /// <returns>Count of processed chords.</returns>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occurred:</para>
@@ -408,6 +422,13 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="action">The action to perform on each <see cref="Chord"/> contained in the
         /// <paramref name="trackChunk"/>.</param>
         /// <param name="settings">Settings according to which chords should be detected and built.</param>
+        /// <param name="hint">Hint which tells the processing algorithm how it can optimize its performance.
+        /// The default value is <see cref="ChordProcessingHint.Default"/>.</param>
+        /// <remarks>
+        /// Note that you can always use <see href="xref:a_managers">an object manager</see> to
+        /// perform any manipulations with chords but dedicated methods of the <see cref="ChordsManagingUtilities"/> will
+        /// always be faster and will consume less memory.
+        /// </remarks>
         /// <returns>Count of processed chords.</returns>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occurred:</para>
@@ -440,6 +461,13 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <paramref name="trackChunk"/>.</param>
         /// <param name="match">The predicate that defines the conditions of the <see cref="Chord"/> to process.</param>
         /// <param name="settings">Settings according to which chords should be detected and built.</param>
+        /// <param name="hint">Hint which tells the processing algorithm how it can optimize its performance.
+        /// The default value is <see cref="ChordProcessingHint.Default"/>.</param>
+        /// <remarks>
+        /// Note that you can always use <see href="xref:a_managers">an object manager</see> to
+        /// perform any manipulations with chords but dedicated methods of the <see cref="ChordsManagingUtilities"/> will
+        /// always be faster and will consume less memory.
+        /// </remarks>
         /// <returns>Count of processed chords.</returns>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occurred:</para>
@@ -477,6 +505,13 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="action">The action to perform on each <see cref="Chord"/> contained in the
         /// <paramref name="trackChunks"/>.</param>
         /// <param name="settings">Settings according to which chords should be detected and built.</param>
+        /// <param name="hint">Hint which tells the processing algorithm how it can optimize its performance.
+        /// The default value is <see cref="ChordProcessingHint.Default"/>.</param>
+        /// <remarks>
+        /// Note that you can always use <see href="xref:a_managers">an object manager</see> to
+        /// perform any manipulations with chords but dedicated methods of the <see cref="ChordsManagingUtilities"/> will
+        /// always be faster and will consume less memory.
+        /// </remarks>
         /// <returns>Count of processed chords.</returns>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occurred:</para>
@@ -510,6 +545,13 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <paramref name="trackChunks"/>.</param>
         /// <param name="match">The predicate that defines the conditions of the <see cref="Chord"/> to process.</param>
         /// <param name="settings">Settings according to which chords should be detected and built.</param>
+        /// <param name="hint">Hint which tells the processing algorithm how it can optimize its performance.
+        /// The default value is <see cref="ChordProcessingHint.Default"/>.</param>
+        /// <remarks>
+        /// Note that you can always use <see href="xref:a_managers">an object manager</see> to
+        /// perform any manipulations with chords but dedicated methods of the <see cref="ChordsManagingUtilities"/> will
+        /// always be faster and will consume less memory.
+        /// </remarks>
         /// <returns>Count of processed chords.</returns>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occurred:</para>
@@ -549,6 +591,13 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="action">The action to perform on each <see cref="Chord"/> contained in the
         /// <paramref name="file"/>.</param>
         /// <param name="settings">Settings according to which chords should be detected and built.</param>
+        /// <param name="hint">Hint which tells the processing algorithm how it can optimize its performance.
+        /// The default value is <see cref="ChordProcessingHint.Default"/>.</param>
+        /// <remarks>
+        /// Note that you can always use <see href="xref:a_managers">an object manager</see> to
+        /// perform any manipulations with chords but dedicated methods of the <see cref="ChordsManagingUtilities"/> will
+        /// always be faster and will consume less memory.
+        /// </remarks>
         /// <returns>Count of processed chords.</returns>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occurred:</para>
@@ -581,6 +630,13 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <paramref name="file"/>.</param>
         /// <param name="match">The predicate that defines the conditions of the <see cref="Chord"/> to process.</param>
         /// <param name="settings">Settings according to which chords should be detected and built.</param>
+        /// <param name="hint">Hint which tells the processing algorithm how it can optimize its performance.
+        /// The default value is <see cref="ChordProcessingHint.Default"/>.</param>
+        /// <remarks>
+        /// Note that you can always use <see href="xref:a_managers">an object manager</see> to
+        /// perform any manipulations with chords but dedicated methods of the <see cref="ChordsManagingUtilities"/> will
+        /// always be faster and will consume less memory.
+        /// </remarks>
         /// <returns>Count of processed chords.</returns>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occurred:</para>

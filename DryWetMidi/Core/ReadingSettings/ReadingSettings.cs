@@ -31,6 +31,12 @@ namespace Melanchall.DryWetMidi.Core
 
         #region Properties
 
+        /// <summary>
+        /// Gets or sets a value indicating whether the reading engine should stop or not when
+        /// the count of read chunks is equal to the value defined in a file's header. The
+        /// default value is <c>false</c> which means all chunks will be read.
+        /// </summary>
+        /// <seealso cref="UnexpectedTrackChunksCountPolicy"/>
         public bool StopReadingOnExpectedTrackChunksCountReached { get; set; }
 
         /// <summary>

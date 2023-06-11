@@ -1,14 +1,26 @@
 ﻿using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
+using System;
 using System.Linq;
 
 namespace Melanchall.DryWetMidi.Tools
 {
+    /// <summary>
+    /// Provides a way to sanitize a MIDI file applying different options.
+    /// </summary>
     public static class Sanitizer
     {
         #region Methods
 
+        /// <summary>
+        /// Sanitizes a MIDI file according to the specified settings. Note that the input file will be
+        /// transformed instead of returning a new one so be sure you've cloned it if needed.
+        /// </summary>
+        /// <param name="midiFile"><see cref="MidiFile"/> to process.</param>
+        /// <param name="settings">Settings which control how the <paramref name="midiFile"/>
+        /// should be sanitized.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is <c>null</c>.</exception>
         public static void Sanitize(this MidiFile midiFile, SanitizingSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);

@@ -23,12 +23,18 @@
         #region Properties
 
         /// <summary>
-        /// Gets the type of the current MIDI token.
+        /// Gets the type of a MIDI token.
         /// </summary>
         public MidiTokenType TokenType { get; }
 
+        /// <summary>
+        /// Gets the position of a MIDI token within an input data stream.
+        /// </summary>
         public long Position { get; internal set; }
 
+        /// <summary>
+        /// Gets the length of a MIDI token in bytes within an input data stream.
+        /// </summary>
         public long Length { get; internal set; }
 
         #endregion

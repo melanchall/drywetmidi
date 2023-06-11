@@ -50,6 +50,37 @@ namespace Melanchall.DryWetMidi.Tools
 
         #region Methods
 
+        /// <summary>
+        /// Merges the specified MIDI files sequentially so they are placed one after other in the result file.
+        /// </summary>
+        /// <param name="midiFiles">MIDI files to merge.</param>
+        /// <param name="settings">Settings that control how <paramref name="midiFiles"/> should be merged.</param>
+        /// <returns>An instance of the <see cref="MidiFile"/> which represents <paramref name="midiFiles"/>
+        /// that are merged sequentially.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="midiFiles"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentException">
+        /// <para>One of the following errors occurred:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="midiFiles"/> collection contains <c>null</c>.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="midiFiles"/> is an empty collection.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
+        /// <exception cref="InvalidOperationException">
+        /// <para>One of the following errors occurred:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description>Time division of one of the <paramref name="midiFiles"/> is not an instance
+        /// of the <see cref="TicksPerQuarterNoteTimeDivision"/>.</description>
+        /// </item>
+        /// <item>
+        /// <description>Failed to provide common time division since its value exceeds <see cref="short.MaxValue"/>.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static MidiFile MergeSequentially(
             this IEnumerable<MidiFile> midiFiles,
             SequentialMergingSettings settings = null)
@@ -108,6 +139,48 @@ namespace Melanchall.DryWetMidi.Tools
             return result;
         }
 
+        /// <summary>
+        /// Merges the specified MIDI files "simultaneously" so they are placed "one below other" in the result file.
+        /// </summary>
+        /// <param name="midiFiles">MIDI files to merge.</param>
+        /// <param name="settings">Settings that control how <paramref name="midiFiles"/> should be merged.</param>
+        /// <remarks>
+        /// The method has a limitation: it can process only the files which have the same tempo maps, i.e.
+        /// the same changes of tempo and time signature,and the same time divisions. You can disable the
+        /// exception throwing by setting <see cref="SimultaneousMergingSettings.IgnoreDifferentTempoMaps"/> of
+        /// the <paramref name="settings"/> to <c>true</c>, but proper structure (in terms of correct playing for example)
+        /// of the result MIDI file is not guaranteed in this case.
+        /// </remarks>
+        /// <returns>An instance of the <see cref="MidiFile"/> which represents <paramref name="midiFiles"/>
+        /// that are merged sequentially.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="midiFiles"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentException">
+        /// <para>One of the following errors occurred:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="midiFiles"/> collection contains <c>null</c>.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="midiFiles"/> is an empty collection.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
+        /// <exception cref="InvalidOperationException">
+        /// <para>One of the following errors occurred:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description>Time division of one of the <paramref name="midiFiles"/> is not an instance
+        /// of the <see cref="TicksPerQuarterNoteTimeDivision"/>.</description>
+        /// </item>
+        /// <item>
+        /// <description>Failed to provide common time division since its value exceeds <see cref="short.MaxValue"/>.</description>
+        /// </item>
+        /// <item>
+        /// <description>MIDI files have different tempo maps and <see cref="SimultaneousMergingSettings.IgnoreDifferentTempoMaps"/>
+        /// of the <paramref name="settings"/> is set to <c>false</c>.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static MidiFile MergeSimultaneously(
             this IEnumerable<MidiFile> midiFiles,
             SimultaneousMergingSettings settings = null)

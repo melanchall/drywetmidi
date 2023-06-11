@@ -275,8 +275,8 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="settings">Settings according to which notes should be detected and built.</param>
         /// <returns>Collection of notes contained in <paramref name="eventsCollection"/> ordered by time.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="eventsCollection"/> is <c>null</c>.</exception>
-        /// <seealso cref="ProcessNotes(EventsCollection, Action{Note}, Predicate{Note}, NoteDetectionSettings)"/>
-        /// <seealso cref="ProcessNotes(EventsCollection, Action{Note}, NoteDetectionSettings)"/>
+        /// <seealso cref="ProcessNotes(EventsCollection, Action{Note}, Predicate{Note}, NoteDetectionSettings, NoteProcessingHint)"/>
+        /// <seealso cref="ProcessNotes(EventsCollection, Action{Note}, NoteDetectionSettings, NoteProcessingHint)"/>
         /// <seealso cref="RemoveNotes(EventsCollection, NoteDetectionSettings)"/>
         /// <seealso cref="RemoveNotes(EventsCollection, Predicate{Note}, NoteDetectionSettings)"/>
         /// <seealso cref="GetObjectsUtilities"/>
@@ -301,8 +301,8 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="settings">Settings according to which notes should be detected and built.</param>
         /// <returns>Collection of notes contained in <paramref name="trackChunk"/> ordered by time.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="trackChunk"/> is <c>null</c>.</exception>
-        /// <seealso cref="ProcessNotes(TrackChunk, Action{Note}, Predicate{Note}, NoteDetectionSettings)"/>
-        /// <seealso cref="ProcessNotes(TrackChunk, Action{Note}, NoteDetectionSettings)"/>
+        /// <seealso cref="ProcessNotes(TrackChunk, Action{Note}, Predicate{Note}, NoteDetectionSettings, NoteProcessingHint)"/>
+        /// <seealso cref="ProcessNotes(TrackChunk, Action{Note}, NoteDetectionSettings, NoteProcessingHint)"/>
         /// <seealso cref="RemoveNotes(TrackChunk, NoteDetectionSettings)"/>
         /// <seealso cref="RemoveNotes(TrackChunk, Predicate{Note}, NoteDetectionSettings)"/>
         /// <seealso cref="GetObjectsUtilities"/>
@@ -321,8 +321,8 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="settings">Settings according to which notes should be detected and built.</param>
         /// <returns>Collection of notes contained in <paramref name="trackChunks"/> ordered by time.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="trackChunks"/> is <c>null</c>.</exception>
-        /// <seealso cref="ProcessNotes(IEnumerable{TrackChunk}, Action{Note}, Predicate{Note}, NoteDetectionSettings)"/>
-        /// <seealso cref="ProcessNotes(IEnumerable{TrackChunk}, Action{Note}, NoteDetectionSettings)"/>
+        /// <seealso cref="ProcessNotes(IEnumerable{TrackChunk}, Action{Note}, Predicate{Note}, NoteDetectionSettings, NoteProcessingHint)"/>
+        /// <seealso cref="ProcessNotes(IEnumerable{TrackChunk}, Action{Note}, NoteDetectionSettings, NoteProcessingHint)"/>
         /// <seealso cref="RemoveNotes(IEnumerable{TrackChunk}, NoteDetectionSettings)"/>
         /// <seealso cref="RemoveNotes(IEnumerable{TrackChunk}, Predicate{Note}, NoteDetectionSettings)"/>
         /// <seealso cref="GetObjectsUtilities"/>
@@ -356,8 +356,8 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="settings">Settings according to which notes should be detected and built.</param>
         /// <returns>Collection of notes contained in <paramref name="file"/> ordered by time.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="file"/> is <c>null</c>.</exception>
-        /// <seealso cref="ProcessNotes(MidiFile, Action{Note}, Predicate{Note}, NoteDetectionSettings)"/>
-        /// <seealso cref="ProcessNotes(MidiFile, Action{Note}, NoteDetectionSettings)"/>
+        /// <seealso cref="ProcessNotes(MidiFile, Action{Note}, Predicate{Note}, NoteDetectionSettings, NoteProcessingHint)"/>
+        /// <seealso cref="ProcessNotes(MidiFile, Action{Note}, NoteDetectionSettings, NoteProcessingHint)"/>
         /// <seealso cref="RemoveNotes(MidiFile, NoteDetectionSettings)"/>
         /// <seealso cref="RemoveNotes(MidiFile, Predicate{Note}, NoteDetectionSettings)"/>
         /// <seealso cref="GetObjectsUtilities"/>
@@ -375,6 +375,13 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="action">The action to perform on each <see cref="Note"/> contained in the
         /// <paramref name="eventsCollection"/>.</param>
         /// <param name="settings">Settings according to which notes should be detected and built.</param>
+        /// <param name="hint">Hint which tells the processing algorithm how it can optimize its performance.
+        /// The default value is <see cref="NoteProcessingHint.Default"/>.</param>
+        /// <remarks>
+        /// Note that you can always use <see href="xref:a_managers">an object manager</see> to
+        /// perform any manipulations with notes but dedicated methods of the <see cref="NotesManagingUtilities"/> will
+        /// always be faster and will consume less memory.
+        /// </remarks>
         /// <returns>Count of processed notes.</returns>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occurred:</para>
@@ -403,6 +410,13 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <paramref name="eventsCollection"/>.</param>
         /// <param name="match">The predicate that defines the conditions of the <see cref="Note"/> to process.</param>
         /// <param name="settings">Settings according to which notes should be detected and built.</param>
+        /// <param name="hint">Hint which tells the processing algorithm how it can optimize its performance.
+        /// The default value is <see cref="NoteProcessingHint.Default"/>.</param>
+        /// <remarks>
+        /// Note that you can always use <see href="xref:a_managers">an object manager</see> to
+        /// perform any manipulations with notes but dedicated methods of the <see cref="NotesManagingUtilities"/> will
+        /// always be faster and will consume less memory.
+        /// </remarks>
         /// <returns>Count of processed notes.</returns>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occurred:</para>
@@ -434,6 +448,13 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="action">The action to perform on each <see cref="Note"/> contained in the
         /// <paramref name="trackChunk"/>.</param>
         /// <param name="settings">Settings according to which notes should be detected and built.</param>
+        /// <param name="hint">Hint which tells the processing algorithm how it can optimize its performance.
+        /// The default value is <see cref="NoteProcessingHint.Default"/>.</param>
+        /// <remarks>
+        /// Note that you can always use <see href="xref:a_managers">an object manager</see> to
+        /// perform any manipulations with notes but dedicated methods of the <see cref="NotesManagingUtilities"/> will
+        /// always be faster and will consume less memory.
+        /// </remarks>
         /// <returns>Count of processed notes.</returns>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occurred:</para>
@@ -462,6 +483,13 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <paramref name="trackChunk"/>.</param>
         /// <param name="match">The predicate that defines the conditions of the <see cref="Note"/> to process.</param>
         /// <param name="settings">Settings according to which notes should be detected and built.</param>
+        /// <param name="hint">Hint which tells the processing algorithm how it can optimize its performance.
+        /// The default value is <see cref="NoteProcessingHint.Default"/>.</param>
+        /// <remarks>
+        /// Note that you can always use <see href="xref:a_managers">an object manager</see> to
+        /// perform any manipulations with notes but dedicated methods of the <see cref="NotesManagingUtilities"/> will
+        /// always be faster and will consume less memory.
+        /// </remarks>
         /// <returns>Count of processed notes.</returns>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occurred:</para>
@@ -493,6 +521,13 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="action">The action to perform on each <see cref="Note"/> contained in the
         /// <paramref name="trackChunks"/>.</param>
         /// <param name="settings">Settings according to which notes should be detected and built.</param>
+        /// <param name="hint">Hint which tells the processing algorithm how it can optimize its performance.
+        /// The default value is <see cref="NoteProcessingHint.Default"/>.</param>
+        /// <remarks>
+        /// Note that you can always use <see href="xref:a_managers">an object manager</see> to
+        /// perform any manipulations with notes but dedicated methods of the <see cref="NotesManagingUtilities"/> will
+        /// always be faster and will consume less memory.
+        /// </remarks>
         /// <returns>Count of processed notes.</returns>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occurred:</para>
@@ -522,6 +557,13 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <paramref name="trackChunks"/>.</param>
         /// <param name="match">The predicate that defines the conditions of the <see cref="Note"/> to process.</param>
         /// <param name="settings">Settings according to which notes should be detected and built.</param>
+        /// <param name="hint">Hint which tells the processing algorithm how it can optimize its performance.
+        /// The default value is <see cref="NoteProcessingHint.Default"/>.</param>
+        /// <remarks>
+        /// Note that you can always use <see href="xref:a_managers">an object manager</see> to
+        /// perform any manipulations with notes but dedicated methods of the <see cref="NotesManagingUtilities"/> will
+        /// always be faster and will consume less memory.
+        /// </remarks>
         /// <returns>Count of processed notes.</returns>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occurred:</para>
@@ -556,6 +598,13 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="action">The action to perform on each <see cref="Note"/> contained in the
         /// <paramref name="file"/>.</param>
         /// <param name="settings">Settings according to which notes should be detected and built.</param>
+        /// <param name="hint">Hint which tells the processing algorithm how it can optimize its performance.
+        /// The default value is <see cref="NoteProcessingHint.Default"/>.</param>
+        /// <remarks>
+        /// Note that you can always use <see href="xref:a_managers">an object manager</see> to
+        /// perform any manipulations with notes but dedicated methods of the <see cref="NotesManagingUtilities"/> will
+        /// always be faster and will consume less memory.
+        /// </remarks>
         /// <returns>Count of processed notes.</returns>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occurred:</para>
@@ -584,6 +633,13 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <paramref name="file"/>.</param>
         /// <param name="match">The predicate that defines the conditions of the <see cref="Note"/> to process.</param>
         /// <param name="settings">Settings according to which notes should be detected and built.</param>
+        /// <param name="hint">Hint which tells the processing algorithm how it can optimize its performance.
+        /// The default value is <see cref="NoteProcessingHint.Default"/>.</param>
+        /// <remarks>
+        /// Note that you can always use <see href="xref:a_managers">an object manager</see> to
+        /// perform any manipulations with notes but dedicated methods of the <see cref="NotesManagingUtilities"/> will
+        /// always be faster and will consume less memory.
+        /// </remarks>
         /// <returns>Count of processed notes.</returns>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occurred:</para>

@@ -178,7 +178,8 @@ namespace Melanchall.DryWetMidi.Composing
         /// <para>
         /// There are methods to add notes and chords that don't take velocity as an argument. In these
         /// cases the value of the <see cref="Velocity"/> property will be used. For example,
-        /// <see cref="Note(MusicTheory.Note)"/> or <see cref="Chord(IEnumerable{Interval}, MusicTheory.Note)"/>.
+        /// <see cref="Note(MusicTheory.Note, ITimeSpan, SevenBitNumber?)"/> or
+        /// <see cref="Chord(IEnumerable{Interval}, MusicTheory.Note, ITimeSpan, SevenBitNumber?)"/>.
         /// </para>
         /// </remarks>
         public SevenBitNumber Velocity { get; private set; } = DefaultVelocity;
@@ -191,7 +192,8 @@ namespace Melanchall.DryWetMidi.Composing
         /// <para>
         /// There are methods to add notes and chords that don't take length as an argument. In these
         /// cases the value of the <see cref="NoteLength"/> property will be used. For example,
-        /// <see cref="Note(MusicTheory.Note)"/> or <see cref="Chord(IEnumerable{Interval}, MusicTheory.Note)"/>.
+        /// <see cref="Note(MusicTheory.Note, ITimeSpan, SevenBitNumber?)"/> or
+        /// <see cref="Chord(IEnumerable{Interval}, MusicTheory.Note, ITimeSpan, SevenBitNumber?)"/>.
         /// </para>
         /// </remarks>
         public ITimeSpan NoteLength { get; private set; } = DefaultNoteLength;
@@ -217,7 +219,8 @@ namespace Melanchall.DryWetMidi.Composing
         /// <para>
         /// There are methods to add notes and chords where octave is not specified explicitly. In these
         /// cases the value of the <see cref="Octave"/> property will be used. For example,
-        /// <see cref="Note(NoteName)"/> or <see cref="Chord(IEnumerable{Interval}, NoteName)"/>.
+        /// <see cref="Note(NoteName, ITimeSpan, SevenBitNumber?)"/> or
+        /// <see cref="Chord(IEnumerable{Interval}, NoteName, ITimeSpan, SevenBitNumber?)"/>.
         /// </para>
         /// </remarks>
         public Octave Octave { get; private set; } = DefaultOctave;
@@ -230,7 +233,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// <para>
         /// There are methods to add notes by interval where root note is not specified explicitly.
         /// In these cases the value of the <see cref="RootNote"/> property will be used. For example,
-        /// <see cref="Note(Interval)"/>.
+        /// <see cref="Note(Interval, ITimeSpan, SevenBitNumber?)"/>.
         /// </para>
         /// </remarks>
         public MusicTheory.Note RootNote { get; private set; } = DefaultRootNote;

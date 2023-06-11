@@ -66,8 +66,8 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="settings">Settings according to which timed events should be detected and built.</param>
         /// <returns>Collection of timed events contained in <paramref name="eventsCollection"/> ordered by time.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="eventsCollection"/> is <c>null</c>.</exception>
-        /// <seealso cref="ProcessTimedEvents(EventsCollection, Action{TimedEvent}, Predicate{TimedEvent}, TimedEventDetectionSettings)"/>
-        /// <seealso cref="ProcessTimedEvents(EventsCollection, Action{TimedEvent}, TimedEventDetectionSettings)"/>
+        /// <seealso cref="ProcessTimedEvents(EventsCollection, Action{TimedEvent}, Predicate{TimedEvent}, TimedEventDetectionSettings, TimedEventProcessingHint)"/>
+        /// <seealso cref="ProcessTimedEvents(EventsCollection, Action{TimedEvent}, TimedEventDetectionSettings, TimedEventProcessingHint)"/>
         /// <seealso cref="RemoveTimedEvents(EventsCollection)"/>
         /// <seealso cref="RemoveTimedEvents(EventsCollection, Predicate{TimedEvent}, TimedEventDetectionSettings)"/>
         /// <seealso cref="GetObjectsUtilities"/>
@@ -93,8 +93,8 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="settings">Settings according to which timed events should be detected and built.</param>
         /// <returns>Collection of timed events contained in <paramref name="trackChunk"/> ordered by time.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="trackChunk"/> is <c>null</c>.</exception>
-        /// <seealso cref="ProcessTimedEvents(TrackChunk, Action{TimedEvent}, Predicate{TimedEvent}, TimedEventDetectionSettings)"/>
-        /// <seealso cref="ProcessTimedEvents(TrackChunk, Action{TimedEvent}, TimedEventDetectionSettings)"/>
+        /// <seealso cref="ProcessTimedEvents(TrackChunk, Action{TimedEvent}, Predicate{TimedEvent}, TimedEventDetectionSettings, TimedEventProcessingHint)"/>
+        /// <seealso cref="ProcessTimedEvents(TrackChunk, Action{TimedEvent}, TimedEventDetectionSettings, TimedEventProcessingHint)"/>
         /// <seealso cref="RemoveTimedEvents(TrackChunk)"/>
         /// <seealso cref="RemoveTimedEvents(TrackChunk, Predicate{TimedEvent}, TimedEventDetectionSettings)"/>
         /// <seealso cref="GetObjectsUtilities"/>
@@ -113,8 +113,8 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="settings">Settings according to which timed events should be detected and built.</param>
         /// <returns>Collection of timed events contained in <paramref name="trackChunks"/> ordered by time.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="trackChunks"/> is <c>null</c>.</exception>
-        /// <seealso cref="ProcessTimedEvents(IEnumerable{TrackChunk}, Action{TimedEvent}, Predicate{TimedEvent}, TimedEventDetectionSettings)"/>
-        /// <seealso cref="ProcessTimedEvents(IEnumerable{TrackChunk}, Action{TimedEvent}, TimedEventDetectionSettings)"/>
+        /// <seealso cref="ProcessTimedEvents(IEnumerable{TrackChunk}, Action{TimedEvent}, Predicate{TimedEvent}, TimedEventDetectionSettings, TimedEventProcessingHint)"/>
+        /// <seealso cref="ProcessTimedEvents(IEnumerable{TrackChunk}, Action{TimedEvent}, TimedEventDetectionSettings, TimedEventProcessingHint)"/>
         /// <seealso cref="RemoveTimedEvents(IEnumerable{TrackChunk})"/>
         /// <seealso cref="RemoveTimedEvents(IEnumerable{TrackChunk}, Predicate{TimedEvent}, TimedEventDetectionSettings)"/>
         /// <seealso cref="GetObjectsUtilities"/>
@@ -142,8 +142,8 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="settings">Settings according to which timed events should be detected and built.</param>
         /// <returns>Collection of timed events contained in <paramref name="file"/> ordered by time.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="file"/> is <c>null</c>.</exception>
-        /// <seealso cref="ProcessTimedEvents(MidiFile, Action{TimedEvent}, Predicate{TimedEvent}, TimedEventDetectionSettings)"/>
-        /// <seealso cref="ProcessTimedEvents(MidiFile, Action{TimedEvent}, TimedEventDetectionSettings)"/>
+        /// <seealso cref="ProcessTimedEvents(MidiFile, Action{TimedEvent}, Predicate{TimedEvent}, TimedEventDetectionSettings, TimedEventProcessingHint)"/>
+        /// <seealso cref="ProcessTimedEvents(MidiFile, Action{TimedEvent}, TimedEventDetectionSettings, TimedEventProcessingHint)"/>
         /// <seealso cref="RemoveTimedEvents(MidiFile)"/>
         /// <seealso cref="RemoveTimedEvents(MidiFile, Predicate{TimedEvent}, TimedEventDetectionSettings)"/>
         /// <seealso cref="GetObjectsUtilities"/>
@@ -161,6 +161,13 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="action">The action to perform on each <see cref="TimedEvent"/> contained in the
         /// <paramref name="eventsCollection"/>.</param>
         /// <param name="settings">Settings according to which timed events should be detected and built.</param>
+        /// <param name="hint">Hint which tells the processing algorithm how it can optimize its performance.
+        /// The default value is <see cref="TimedEventProcessingHint.Default"/>.</param>
+        /// <remarks>
+        /// Note that you can always use <see href="xref:a_managers">an object manager</see> to
+        /// perform any manipulations with timed events but dedicated methods of the <see cref="TimedEventsManagingUtilities"/> will
+        /// always be faster and will consume less memory.
+        /// </remarks>
         /// <returns>Count of processed timed events.</returns>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occurred:</para>
@@ -189,6 +196,13 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <paramref name="eventsCollection"/>.</param>
         /// <param name="match">The predicate that defines the conditions of the <see cref="TimedEvent"/> to process.</param>
         /// <param name="settings">Settings according to which timed events should be detected and built.</param>
+        /// <param name="hint">Hint which tells the processing algorithm how it can optimize its performance.
+        /// The default value is <see cref="TimedEventProcessingHint.Default"/>.</param>
+        /// <remarks>
+        /// Note that you can always use <see href="xref:a_managers">an object manager</see> to
+        /// perform any manipulations with timed events but dedicated methods of the <see cref="TimedEventsManagingUtilities"/> will
+        /// always be faster and will consume less memory.
+        /// </remarks>
         /// <returns>Count of processed timed events.</returns>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occurred:</para>
@@ -220,6 +234,13 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="action">The action to perform on each <see cref="TimedEvent"/> contained in the
         /// <paramref name="trackChunk"/>.</param>
         /// <param name="settings">Settings according to which timed events should be detected and built.</param>
+        /// <param name="hint">Hint which tells the processing algorithm how it can optimize its performance.
+        /// The default value is <see cref="TimedEventProcessingHint.Default"/>.</param>
+        /// <remarks>
+        /// Note that you can always use <see href="xref:a_managers">an object manager</see> to
+        /// perform any manipulations with timed events but dedicated methods of the <see cref="TimedEventsManagingUtilities"/> will
+        /// always be faster and will consume less memory.
+        /// </remarks>
         /// <returns>Count of processed timed events.</returns>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occurred:</para>
@@ -248,6 +269,13 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <paramref name="trackChunk"/>.</param>
         /// <param name="match">The predicate that defines the conditions of the <see cref="TimedEvent"/> to process.</param>
         /// <param name="settings">Settings according to which timed events should be detected and built.</param>
+        /// <param name="hint">Hint which tells the processing algorithm how it can optimize its performance.
+        /// The default value is <see cref="TimedEventProcessingHint.Default"/>.</param>
+        /// <remarks>
+        /// Note that you can always use <see href="xref:a_managers">an object manager</see> to
+        /// perform any manipulations with timed events but dedicated methods of the <see cref="TimedEventsManagingUtilities"/> will
+        /// always be faster and will consume less memory.
+        /// </remarks>
         /// <returns>Count of processed timed events.</returns>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occurred:</para>
@@ -280,6 +308,13 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="action">The action to perform on each <see cref="TimedEvent"/> contained in the
         /// <paramref name="trackChunks"/>.</param>
         /// <param name="settings">Settings according to which timed events should be detected and built.</param>
+        /// <param name="hint">Hint which tells the processing algorithm how it can optimize its performance.
+        /// The default value is <see cref="TimedEventProcessingHint.Default"/>.</param>
+        /// <remarks>
+        /// Note that you can always use <see href="xref:a_managers">an object manager</see> to
+        /// perform any manipulations with timed events but dedicated methods of the <see cref="TimedEventsManagingUtilities"/> will
+        /// always be faster and will consume less memory.
+        /// </remarks>
         /// <returns>Count of processed timed events.</returns>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occurred:</para>
@@ -309,6 +344,13 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <paramref name="trackChunks"/>.</param>
         /// <param name="match">The predicate that defines the conditions of the <see cref="TimedEvent"/> to process.</param>
         /// <param name="settings">Settings according to which timed events should be detected and built.</param>
+        /// <param name="hint">Hint which tells the processing algorithm how it can optimize its performance.
+        /// The default value is <see cref="TimedEventProcessingHint.Default"/>.</param>
+        /// <remarks>
+        /// Note that you can always use <see href="xref:a_managers">an object manager</see> to
+        /// perform any manipulations with timed events but dedicated methods of the <see cref="TimedEventsManagingUtilities"/> will
+        /// always be faster and will consume less memory.
+        /// </remarks>
         /// <returns>Count of processed timed events.</returns>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occurred:</para>
@@ -343,6 +385,13 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="action">The action to perform on each <see cref="TimedEvent"/> contained in the
         /// <paramref name="file"/>.</param>
         /// <param name="settings">Settings according to which timed events should be detected and built.</param>
+        /// <param name="hint">Hint which tells the processing algorithm how it can optimize its performance.
+        /// The default value is <see cref="TimedEventProcessingHint.Default"/>.</param>
+        /// <remarks>
+        /// Note that you can always use <see href="xref:a_managers">an object manager</see> to
+        /// perform any manipulations with timed events but dedicated methods of the <see cref="TimedEventsManagingUtilities"/> will
+        /// always be faster and will consume less memory.
+        /// </remarks>
         /// <returns>Count of processed timed events.</returns>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occurred:</para>
@@ -371,6 +420,13 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <paramref name="file"/>.</param>
         /// <param name="match">The predicate that defines the conditions of the <see cref="TimedEvent"/> to process.</param>
         /// <param name="settings">Settings according to which timed events should be detected and built.</param>
+        /// <param name="hint">Hint which tells the processing algorithm how it can optimize its performance.
+        /// The default value is <see cref="TimedEventProcessingHint.Default"/>.</param>
+        /// <remarks>
+        /// Note that you can always use <see href="xref:a_managers">an object manager</see> to
+        /// perform any manipulations with timed events but dedicated methods of the <see cref="TimedEventsManagingUtilities"/> will
+        /// always be faster and will consume less memory.
+        /// </remarks>
         /// <returns>Count of processed timed events.</returns>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occurred:</para>

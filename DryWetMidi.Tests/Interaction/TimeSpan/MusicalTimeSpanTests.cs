@@ -1099,6 +1099,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
         #region FromDouble
 
+        [TestCase(0.00000001, "0/1")]
         [TestCase(1.0, "1/1")]
         [TestCase(1.0 / 2, "1/2")]
         [TestCase(1.0 / 4, "1/4")]

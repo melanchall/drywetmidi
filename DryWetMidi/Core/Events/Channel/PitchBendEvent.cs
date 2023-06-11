@@ -24,6 +24,9 @@ namespace Melanchall.DryWetMidi.Core
         /// </summary>
         public const ushort MaxPitchValue = (1 << 14) - 1;
 
+        /// <summary>
+        /// Represents the default pitch value which means no pitch bend applied.
+        /// </summary>
         public const ushort DefaultPitchValue = 1 << 13;
 
         #endregion

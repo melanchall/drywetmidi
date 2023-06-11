@@ -5,8 +5,9 @@
     /// </summary>
     /// <remarks>
     /// Pattern actions correspond to methods on <see cref="PatternBuilder"/>. For example,
-    /// <see cref="PatternBuilder.Note(MusicTheory.Interval)"/> creates 'Add note' action,
-    /// so the state will define whether a note will be enabled, disabled or excluded from pattern at all.
+    /// <see cref="PatternBuilder.Note(MusicTheory.Interval, Interaction.ITimeSpan, Common.SevenBitNumber?)"/>
+    /// creates 'Add note' action, so the state will define whether a note will be enabled, disabled or excluded
+    /// from pattern at all.
     /// </remarks>
     public enum PatternActionState
     {

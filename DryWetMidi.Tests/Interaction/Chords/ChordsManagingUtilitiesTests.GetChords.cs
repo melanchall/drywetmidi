@@ -347,10 +347,10 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             {
                 new MidiEvent[]
                 {
+                    new NoteOnEvent { DeltaTime = 50 },
                     new TextEvent("A"),
-                    new NoteOnEvent(),
+                    new NoteOffEvent { DeltaTime = 100 },
                     new TextEvent("B"),
-                    new NoteOffEvent { DeltaTime = 100 }
                 },
                 new MidiEvent[]
                 {
@@ -359,7 +359,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             },
             expectedChords: new[]
             {
-                new Chord(new Note(SevenBitNumber.MinValue, 100) { Velocity = SevenBitNumber.MinValue }),
+                new Chord(new Note(SevenBitNumber.MinValue, 100, 50) { Velocity = SevenBitNumber.MinValue }),
             });
 
         [Test]
@@ -369,14 +369,14 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             {
                 new MidiEvent[]
                 {
+                    new ControlChangeEvent(),
+                },
+                new MidiEvent[]
+                {
                     new NoteOnEvent { DeltaTime = 50 },
                     new TextEvent("A"),
                     new NoteOffEvent { DeltaTime = 100 },
                     new TextEvent("B"),
-                },
-                new MidiEvent[]
-                {
-                    new ControlChangeEvent(),
                 },
             },
             expectedChords: new[]
@@ -386,28 +386,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
         [Test]
         public void GetChords_TrackChunks_OneNote_4([Values] bool wrapToFile) => GetChords_TrackChunks(
-            wrapToFile,
-            midiEvents: new[]
-            {
-                new MidiEvent[]
-                {
-                    new ControlChangeEvent(),
-                },
-                new MidiEvent[]
-                {
-                    new NoteOnEvent { DeltaTime = 50 },
-                    new TextEvent("A"),
-                    new NoteOffEvent { DeltaTime = 100 },
-                    new TextEvent("B"),
-                },
-            },
-            expectedChords: new[]
-            {
-                new Chord(new Note(SevenBitNumber.MinValue, 100, 50) { Velocity = SevenBitNumber.MinValue }),
-            });
-
-        [Test]
-        public void GetChords_TrackChunks_OneNote_5([Values] bool wrapToFile) => GetChords_TrackChunks(
             wrapToFile,
             midiEvents: new[]
             {
@@ -427,7 +405,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             });
 
         [Test]
-        public void GetChords_TrackChunks_OneNote_6([Values] bool wrapToFile) => GetChords_TrackChunks(
+        public void GetChords_TrackChunks_OneNote_5([Values] bool wrapToFile) => GetChords_TrackChunks(
             wrapToFile,
             midiEvents: new[]
             {
