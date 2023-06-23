@@ -19,7 +19,7 @@ Please see [Getting started](#getting-started) section below for quick jump into
 > **Warning**  
 > If you want to create an issue or a discussion, read this article first – [Support](https://melanchall.github.io/drywetmidi/articles/dev/Support.html).
 
-## Useful links
+## Useful Links
 
 * [NuGet](https://www.nuget.org/packages/Melanchall.DryWetMidi)
 * [Documentation](https://melanchall.github.io/drywetmidi)
@@ -44,6 +44,8 @@ Here the list of noticeable projects that use DryWetMIDI:
 * Sample applications from [CIRCE-EYES](https://github.com/CIRCE-EYES):
   * https://github.com/melanchall/drywetmidi/issues/105
   * https://github.com/melanchall/drywetmidi/issues/139
+
+If you find that DryWetMIDI has been useful for your project, please put a link to the library in your project's About section or something like that.
 
 ## Getting Started
 
@@ -285,3 +287,8 @@ private void OnEventSent(object sender, MidiEventSentEventArgs e)
     Console.WriteLine($"Event sent to '{midiDevice.Name}' at {DateTime.Now}: {e.Event}");
 }
 ```
+
+## SAST Tools
+
+* [JetBrains All Products Pack](https://jb.gg/OpenSourceSupport) – all JetBrains desktop tools by open source license.
+* [PVS-Studio](https://pvs-studio.com/en/pvs-studio/?utm_source=website&utm_medium=github&utm_campaign=open_source) – static analyzer for C, C++, C#, and Java code.

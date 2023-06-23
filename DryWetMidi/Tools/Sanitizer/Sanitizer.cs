@@ -7,7 +7,8 @@ using System.Linq;
 namespace Melanchall.DryWetMidi.Tools
 {
     /// <summary>
-    /// Provides a way to sanitize a MIDI file applying different options.
+    /// Provides a way to sanitize a MIDI file applying different options. More info in the
+    /// <see href="xref:a_sanitizer">Sanitizer</see> article.
     /// </summary>
     public static class Sanitizer
     {

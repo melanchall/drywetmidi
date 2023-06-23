@@ -52,6 +52,7 @@ namespace Melanchall.DryWetMidi.Tools
 
         /// <summary>
         /// Merges the specified MIDI files sequentially so they are placed one after other in the result file.
+        /// More info in the <see href="xref:a_files_merging#mergesequentially">MIDI files merging: MergeSequentially</see> article.
         /// </summary>
         /// <param name="midiFiles">MIDI files to merge.</param>
         /// <param name="settings">Settings that control how <paramref name="midiFiles"/> should be merged.</param>
@@ -141,6 +142,7 @@ namespace Melanchall.DryWetMidi.Tools
 
         /// <summary>
         /// Merges the specified MIDI files "simultaneously" so they are placed "one below other" in the result file.
+        /// More info in the <see href="xref:a_files_merging#mergesimultaneously">MIDI files merging: MergeSimultaneously</see> article.
         /// </summary>
         /// <param name="midiFiles">MIDI files to merge.</param>
         /// <param name="settings">Settings that control how <paramref name="midiFiles"/> should be merged.</param>

@@ -21,6 +21,7 @@ x86/
 bld/
 [Bb]in/
 [Oo]bj/
+[Oo]bj */
 [Ll]og/
 
 # Visual Studio 2015 cache/options directory
@@ -199,6 +200,7 @@ ClientBin/
 node_modules/
 orleans.codegen.cs
 _site/
+_site */
 
 # Since there are multiple workflows, uncomment next line to ignore bower_components
 # (https://github.com/github/gitignore/pull/1529#issuecomment-104372622)
