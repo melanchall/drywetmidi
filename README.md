@@ -1,6 +1,6 @@
 ![DryWetMIDI Logo](https://raw.githubusercontent.com/melanchall/drywetmidi/develop/Resources/Images/dwm-logo.png)
 
-[![NuGet (full)](https://img.shields.io/nuget/v/Melanchall.DryWetMidi.svg?label=NuGet%20(full)&color=5295D0)](https://www.nuget.org/packages/Melanchall.DryWetMidi/) [![NuGet (nativeless)](https://img.shields.io/nuget/v/Melanchall.DryWetMidi.Nativeless.svg?label=NuGet%20(nativeless)&color=5295D0)](https://www.nuget.org/packages/Melanchall.DryWetMidi.Nativeless/) [![Unity asset (full)](https://img.shields.io/static/v1?label=Unity%20Asset%20(full)&message=v6.1.4&color=5295D0)](https://assetstore.unity.com/packages/tools/audio/drywetmidi-222171) [![Unity asset (nativeless)](https://img.shields.io/static/v1?label=Unity%20Asset%20(nativeless)&message=v6.1.4&color=5295D0)](https://assetstore.unity.com/packages/tools/audio/drywetmidi-nativeless-228998)
+[![NuGet (full)](https://img.shields.io/nuget/v/Melanchall.DryWetMidi.svg?label=NuGet%20(full)&color=5295D0)](https://www.nuget.org/packages/Melanchall.DryWetMidi/) [![NuGet (nativeless)](https://img.shields.io/nuget/v/Melanchall.DryWetMidi.Nativeless.svg?label=NuGet%20(nativeless)&color=5295D0)](https://www.nuget.org/packages/Melanchall.DryWetMidi.Nativeless/) [![Unity asset (full)](https://img.shields.io/static/v1?label=Unity%20Asset%20(full)&message=v7.0.0&color=5295D0)](https://assetstore.unity.com/packages/tools/audio/drywetmidi-222171) [![Unity asset (nativeless)](https://img.shields.io/static/v1?label=Unity%20Asset%20(nativeless)&message=v7.0.0&color=5295D0)](https://assetstore.unity.com/packages/tools/audio/drywetmidi-nativeless-228998)
 
 <!--OVERVIEW-->
 
@@ -17,7 +17,7 @@ DryWetMIDI is the .NET library to work with MIDI data and MIDI devices. It allow
 Please see [Getting started](#getting-started) section below for quick jump into the library.
 
 > **Warning**  
-> If you want to create an issue or a discussion, read this article first – [Support](https://melanchall.github.io/drywetmidi/articles/dev/Support.html).
+> If you want to create an issue or a discussion, read this article first â€“ [Support](https://melanchall.github.io/drywetmidi/articles/dev/Support.html).
 
 ## Useful Links
 
@@ -290,5 +290,5 @@ private void OnEventSent(object sender, MidiEventSentEventArgs e)
 
 ## SAST Tools
 
-* [JetBrains All Products Pack](https://jb.gg/OpenSourceSupport) – all JetBrains desktop tools by open source license.
-* [PVS-Studio](https://pvs-studio.com/en/pvs-studio/?utm_source=website&utm_medium=github&utm_campaign=open_source) – static analyzer for C, C++, C#, and Java code.
+* [JetBrains All Products Pack](https://jb.gg/OpenSourceSupport) â€“ all JetBrains desktop tools by open source license.
+* [PVS-Studio](https://pvs-studio.com/en/pvs-studio/?utm_source=website&utm_medium=github&utm_campaign=open_source) â€“ static analyzer for C, C++, C#, and Java code.
