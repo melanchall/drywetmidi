@@ -161,9 +161,9 @@ carries information that is specific to the manufacturer of the MIDI device rece
 The action that this message prompts for can be anything.
 Note that although the terminal 0xF7 is redundant (strictly speaking, due to the use of a length
 parameter) it must be included.
-System exclisive events can be split into multiple packets. In this case the first packet uses
+System exclusive events can be split into multiple packets. In this case the first packet uses
 the 0xF0 status (such event will be read as <a class="xref" href="Melanchall.DryWetMidi.Core.NormalSysExEvent.html">NormalSysExEvent</a>), whereas the second and
-subsequent packets use the 0xF7 status (suzh events will be read as <a class="xref" href="Melanchall.DryWetMidi.Core.EscapeSysExEvent.html">EscapeSysExEvent</a>).
+subsequent packets use the 0xF7 status (such events will be read as <a class="xref" href="Melanchall.DryWetMidi.Core.EscapeSysExEvent.html">EscapeSysExEvent</a>).
 This use of the 0xF7 status is referred to as a continuation event.
 </div>
   <h3 id="constructors">Constructors

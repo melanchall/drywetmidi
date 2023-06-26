@@ -105,7 +105,7 @@
 <p><img src="images/Quantizer/QuantizeBeyondFixedEnd.png" alt="Quantize start time beyond fixed end"></p>
 <h2 id="custom-quantizing">Custom quantizing</h2>
 <p>You can derive from the <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.Quantizer.html">Quantizer</a> class and override its <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.Quantizer.html#Melanchall_DryWetMidi_Tools_Quantizer_OnObjectQuantizing_">OnObjectQuantizing</a> method. Inside this method you can decide whether quantizing for an object should be performed or not and if yes, what new time should be set.</p>
-<p>Information about what quantizer is going to do with an object is passed via <code>quantizedTime</code> parameter of <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.QuantizedTime.html">QuantizedTime</a> type. Image below shows what information is holded within this class:</p>
+<p>Information about what quantizer is going to do with an object is passed via <code>quantizedTime</code> parameter of <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.QuantizedTime.html">QuantizedTime</a> type. Image below shows what information is held within this class:</p>
 <p><img src="images/Quantizer/QuantizedTime.png" alt="QuantizedTime"></p>
 <p><strong>A</strong>: <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.QuantizedTime.html#Melanchall_DryWetMidi_Tools_QuantizedTime_GridTime">GridTime</a></p>
 <p>Grid time that was selected for an object as the nearest one.</p>
@@ -144,13 +144,13 @@
 
             .StepForward(MusicalTimeSpan.Sixteenth)
             .Note(&quot;A5&quot;)
-                
+
             .StepForward(MusicalTimeSpan.Quarter)
             .Note(&quot;B2&quot;)
-                
+
             .StepForward(new MusicalTimeSpan(3, 8))
             .Note(&quot;C#3&quot;)
-                
+
             .Build()
             .ToFile(tempoMap);
 

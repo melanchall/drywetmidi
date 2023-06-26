@@ -80,7 +80,7 @@
 <h1 id="common-problems">Common problems</h1>
 
 <h2 id="playback-doesnt-produce-sound-or-events-logs">Playback doesn't produce sound or events logs</h2>
-<p>Make sure an instance of <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.Playback.html">Playback</a> class is holded by class field, global variable or something else that can live longer that method where you instantiate <code>Playback</code>. In this case</p>
+<p>Make sure an instance of <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.Playback.html">Playback</a> class is held by class field, global variable or something else that can live longer that method where you instantiate <code>Playback</code>. In this case</p>
 <pre><code class="lang-csharp">private void StartPlayback()
 {
     var playback = _midiFile.GetPlayback();
@@ -89,7 +89,7 @@
 </code></pre>
 <p><code>playback</code> variable will &quot;die&quot; (will be ready to be collected by GC) after program exits <code>StartPlayback</code> method so playback won't work.</p>
 <h2 id="unity-hangs-or-crash-on-entering-play-mode-second-time">Unity hangs or crash on entering Play mode second time</h2>
-<p>By default <code>Playback</code> uses <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.HighPrecisionTickGenerator.html">HighPrecisionTickGenerator</a> tick generator (see <a href="Tick-generator.html">Tick generator</a> article to learn more). <code>HighPrecisionTickGenerator</code> uses WinAPI methods by P/Invoke wich causes troubles in Unity environment. You may notice that Unity hangs forever if you hit Play button second time. Unfortunately it seems the <a href="https://issuetracker.unity3d.com/issues/editor-freezes-when-updating-a-nativearray-on-the-net-4-dot-x-scripting-runtime-and-entering-play-mode-a-second-time">problem</a> won't be fixed. Answer of Unity tech support:</p>
+<p>By default <code>Playback</code> uses <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.HighPrecisionTickGenerator.html">HighPrecisionTickGenerator</a> tick generator (see <a href="Tick-generator.html">Tick generator</a> article to learn more). <code>HighPrecisionTickGenerator</code> uses WinAPI methods by P/Invoke which causes troubles in Unity environment. You may notice that Unity hangs forever if you hit Play button second time. Unfortunately it seems the <a href="https://issuetracker.unity3d.com/issues/editor-freezes-when-updating-a-nativearray-on-the-net-4-dot-x-scripting-runtime-and-entering-play-mode-a-second-time">problem</a> won't be fixed. Answer of Unity tech support:</p>
 <blockquote>
 <p>Unfortunately, that is correct = we will not be able to fix this in the near term because it probably requires rewriting of internal threading functionality, which might introduce new issues. The main case has been tagged for a revisit internally, but it will probably be months until the case is re-valuated again.</p>
 </blockquote>

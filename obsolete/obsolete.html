@@ -74,6 +74,10 @@
 
 <p>Here the table of API that is obsolete and thus either will be removed from the library by a next release or already removed from the DryWetMIDI. Title of each obsolete API is just ID, please see description to see an old API and new replacement.</p>
 <h3 id="obs19">OBS19</h3>
+<div class="IMPORTANT">
+<h5>Important</h5>
+<p>API removed from the library by 7.0.0 release.</p>
+</div>
 <p><code>Splitter.SplitByNotes</code> method is now obsolere since it has been replaced by <a class="xref" href="../api/Melanchall.DryWetMidi.Tools.Splitter.html#Melanchall_DryWetMidi_Tools_Splitter_SplitByObjects_">Splitter.SplitByObjects</a> one which can split a MIDI file by objects of difefrent types and with more flexibility.</p>
 <p>Simple example of how to split a file by notes with the new tool:</p>
 <pre><code class="lang-csharp">var newFiles = midiFile.SplitByObjects(ObjectType.Note);
@@ -105,6 +109,10 @@
 <li><a class="xref" href="../api/Melanchall.DryWetMidi.Tools.Splitter.html#Melanchall_DryWetMidi_Tools_Splitter_SplitByObjects_">Splitter.SplitByObjects</a></li>
 </ul>
 <h3 id="obs18">OBS18</h3>
+<div class="IMPORTANT">
+<h5>Important</h5>
+<p>API removed from the library by 7.0.0 release.</p>
+</div>
 <p><code>ResizeNotesUtilities</code> class and its methods have been generalized by the <a class="xref" href="../api/Melanchall.DryWetMidi.Tools.Resizer.html">Resizer</a> class which can resize groups of objects of different types simultaneously.</p>
 <p>Quick example of how to resize objects group using the new tool:</p>
 <pre><code class="lang-csharp">objects.ResizeObjectsGroup(
@@ -126,6 +134,10 @@
 <li><a class="xref" href="../api/Melanchall.DryWetMidi.Tools.Resizer.html#Melanchall_DryWetMidi_Tools_Resizer_ResizeObjectsGroup_">Resizer.ResizeObjectsGroup</a></li>
 </ul>
 <h3 id="obs17">OBS17</h3>
+<div class="IMPORTANT">
+<h5>Important</h5>
+<p>API removed from the library by 7.0.0 release.</p>
+</div>
 <p><code>NotesMerger</code> class has been generalized by the <a class="xref" href="../api/Melanchall.DryWetMidi.Tools.Merger.html">Merger</a> class which can merge objects of different types simultaneously.</p>
 <p>To merge objects within a collection of <a class="xref" href="../api/Melanchall.DryWetMidi.Interaction.ITimedObject.html">timed objects</a>:</p>
 <pre><code class="lang-csharp">var newObjects = objects.MergeObjects(
@@ -157,6 +169,10 @@
 <li><a class="xref" href="../api/Melanchall.DryWetMidi.Tools.Merger.html#Melanchall_DryWetMidi_Tools_Merger_MergeObjects_">Merger.MergeObjects</a></li>
 </ul>
 <h3 id="obs16">OBS16</h3>
+<div class="IMPORTANT">
+<h5>Important</h5>
+<p>API removed from the library by 7.0.0 release.</p>
+</div>
 <p><code>TimedEventsManagingUtilities.AddEvent</code> methods are now obsolete since they are nothing more than just calling <a class="xref" href="../api/Melanchall.DryWetMidi.Interaction.TimedEvent.html">TimedEvent</a> constructor and adding a new instance to a collection:</p>
 <pre><code class="lang-csharp">eventsCollection.Add(new TimedEvent(midiEvent, time));
 </code></pre>
@@ -170,6 +186,10 @@
 <li>no</li>
 </ul>
 <h3 id="obs15">OBS15</h3>
+<div class="IMPORTANT">
+<h5>Important</h5>
+<p>API removed from the library by 7.0.0 release.</p>
+</div>
 <p><code>SetTimeAndLength</code> separate methods for <a class="xref" href="../api/Melanchall.DryWetMidi.Interaction.Note.html">notes</a> and <a class="xref" href="../api/Melanchall.DryWetMidi.Interaction.Chord.html">chords</a> have been replaced with generic <a class="xref" href="../api/Melanchall.DryWetMidi.Interaction.LengthedObjectUtilities.html#Melanchall_DryWetMidi_Interaction_LengthedObjectUtilities_SetLength_">SetLength</a>. Since <a class="xref" href="../api/Melanchall.DryWetMidi.Interaction.TimedObjectUtilities.html#Melanchall_DryWetMidi_Interaction_TimedObjectUtilities_SetTime_">SetTime</a> method also exists, the new way to set time and length with one instruction is:</p>
 <pre><code class="lang-csharp">note
     .SetTime(new MetricTimeSpan(0, 0, 0, 500), tempoMap)
@@ -186,6 +206,10 @@
 <li><a class="xref" href="../api/Melanchall.DryWetMidi.Interaction.LengthedObjectUtilities.html#Melanchall_DryWetMidi_Interaction_LengthedObjectUtilities_SetLength_">LengthedObjectUtilities.SetLength</a></li>
 </ul>
 <h3 id="obs14">OBS14</h3>
+<div class="IMPORTANT">
+<h5>Important</h5>
+<p>API removed from the library by 7.0.0 release.</p>
+</div>
 <p><code>TimedEventsManagingUtilities.SetTime</code> method has been replaced with generic <a class="xref" href="../api/Melanchall.DryWetMidi.Interaction.TimedObjectUtilities.html#Melanchall_DryWetMidi_Interaction_TimedObjectUtilities_SetTime_">TimedObjectUtilities.SetTime</a> allowing to set time for objects of different types, not for only <a class="xref" href="../api/Melanchall.DryWetMidi.Interaction.TimedEvent.html">timed events</a>.</p>
 <p>Small example:</p>
 <pre><code class="lang-csharp">timedEvent.SetTime(new BarBeatTicksTimeSpan(2), tempoMap);
@@ -202,6 +226,10 @@ chord.SetTime(new MetricTimeSpan(0, 1, 10), tempoMap);
 <li><a class="xref" href="../api/Melanchall.DryWetMidi.Interaction.TimedObjectUtilities.html#Melanchall_DryWetMidi_Interaction_TimedObjectUtilities_SetTime_">TimedObjectUtilities.SetTime</a></li>
 </ul>
 <h3 id="obs13">OBS13</h3>
+<div class="IMPORTANT">
+<h5>Important</h5>
+<p>API removed from the library by 7.0.0 release.</p>
+</div>
 <p>Complex inheritance hierarchy of quantizer classes has been reduced to general-purpose new <a class="xref" href="../api/Melanchall.DryWetMidi.Tools.Quantizer.html">Quantizer</a> class which can quantize objects of different types at the same time. More than that, it can quantize both start and end time simultaneously.</p>
 <p>For example, to quantize both ends of objects by the grid of <code>1/8</code> step:</p>
 <pre><code class="lang-csharp">var quantizer = new Quantizer();
@@ -214,7 +242,7 @@ quantizer.Quantize(
         Target = QuantizerTarget.Start | QuantizerTarget.End
     });
 </code></pre>
-<p>Of course, there is the new class with utility methods for quantizing objects within a <a class="xref" href="../api/Melanchall.DryWetMidi.Core.MidiFile.html">MIDI file</a> or <a class="xref" href="../api/Melanchall.DryWetMidi.Core.TrackChunk.html">track chunk</a> - <a class="xref" href="../api/Melanchall.DryWetMidi.Tools.QuantizerUtilities.html">QuantizerUtilities</a>. Following example shows how to quantize both ends of <a class="xref" href="../api/Melanchall.DryWetMidi.Interaction.Note.html">notes</a> and <a class="xref" href="../api/Melanchall.DryWetMidi.Interaction.Chord.html">chords</a> by the grid of <code>1</code> second step within a MIDI file. We'll define a chord as a set of notes with minimum length of <code>2</code>:</p>
+<p>Of course, there is the new class with utility methods for quantizing objects within a <a class="xref" href="../api/Melanchall.DryWetMidi.Core.MidiFile.html">MIDI file</a> or <a class="xref" href="../api/Melanchall.DryWetMidi.Core.TrackChunk.html">track chunk</a> � <a class="xref" href="../api/Melanchall.DryWetMidi.Tools.QuantizerUtilities.html">QuantizerUtilities</a>. Following example shows how to quantize both ends of <a class="xref" href="../api/Melanchall.DryWetMidi.Interaction.Note.html">notes</a> and <a class="xref" href="../api/Melanchall.DryWetMidi.Interaction.Chord.html">chords</a> by the grid of <code>1</code> second step within a MIDI file. We'll define a chord as a set of notes with minimum length of <code>2</code>:</p>
 <pre><code class="lang-csharp">midiFile.QuantizeObjects(
     ObjectType.Note | ObjectType.Chord,
     new SteppedGrid(new MetricTimeSpan(0, 0, 1)),
@@ -254,6 +282,10 @@ quantizer.Quantize(
 <li><a class="xref" href="../api/Melanchall.DryWetMidi.Tools.QuantizerUtilities.html">QuantizerUtilities</a></li>
 </ul>
 <h3 id="obs12">OBS12</h3>
+<div class="IMPORTANT">
+<h5>Important</h5>
+<p>API removed from the library by 7.0.0 release.</p>
+</div>
 <p>Separate splitter classes for notes and chords have been replaced by <a class="xref" href="../api/Melanchall.DryWetMidi.Tools.Splitter.html">Splitter</a> class which can split objects of different types simultaneously.</p>
 <p>For example, to split <a class="xref" href="../api/Melanchall.DryWetMidi.Interaction.Note.html">notes</a> and <a class="xref" href="../api/Melanchall.DryWetMidi.Interaction.Chord.html">chords</a> into <code>4</code> parts:</p>
 <pre><code class="lang-csharp">midiFile.SplitObjectsByPartsNumber(
@@ -279,6 +311,10 @@ quantizer.Quantize(
 <li><a class="xref" href="../api/Melanchall.DryWetMidi.Tools.Splitter.html#Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsByPartsNumber_">Splitter.SplitObjectsByPartsNumber</a></li>
 </ul>
 <h3 id="obs11">OBS11</h3>
+<div class="IMPORTANT">
+<h5>Important</h5>
+<p>API removed from the library by 7.0.0 release.</p>
+</div>
 <p>Separate manager classes for each MIDI object type are replaced with <a class="xref" href="../api/Melanchall.DryWetMidi.Interaction.TimedObjectsManager.html">TimedObjectsManager</a> which can manage objects of different types simultaneously.</p>
 <p>For example, to manage just <a class="xref" href="../api/Melanchall.DryWetMidi.Interaction.TimedEvent.html">timed events</a>:</p>
 <pre><code class="lang-csharp">using (var objectsManager = new TimedObjectsManager(trackChunk.Events, ObjectType.TimedEvent))
@@ -318,6 +354,10 @@ quantizer.Quantize(
 <li><a class="xref" href="../api/Melanchall.DryWetMidi.Interaction.TimedObjectsManager.html">TimedObjectsManager</a></li>
 </ul>
 <h3 id="obs10">OBS10</h3>
+<div class="IMPORTANT">
+<h5>Important</h5>
+<p>API removed from the library by 7.0.0 release.</p>
+</div>
 <p><code>Randomizer</code> tool is obsolete now. Randomization feature has been moved to <a class="xref" href="../api/Melanchall.DryWetMidi.Tools.Quantizer.html">Quantizer</a> so you can quantize and randomize MIDI data at the same time.</p>
 <p>Following small example shows how to randomize <a class="xref" href="../api/Melanchall.DryWetMidi.Interaction.TimedEvent.html">timed events</a> and start times of <a class="xref" href="../api/Melanchall.DryWetMidi.Interaction.Note.html">notes</a> in range from <code>-100</code> to <code>+100</code> ticks:</p>
 <pre><code class="lang-csharp">midiFile.QuantizeObjects(

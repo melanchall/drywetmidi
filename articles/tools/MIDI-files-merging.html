@@ -1,0 +1,182 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>MIDI files merging | DryWetMIDI </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="MIDI files merging | DryWetMIDI ">
+    <meta name="generator" content="docfx 2.59.4.0">
+    
+    <link rel="shortcut icon" href="../../images/favicon.png">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <meta property="docfx:navrel" content="../../toc.html">
+    <meta property="docfx:tocrel" content="../toc.html">
+    
+    <meta property="docfx:rel" content="../../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list">Search Results for <span></span></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination" data-first="First" data-prev="Previous" data-next="Next" data-last="Last"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="a_files_merging">
+<h1 id="midi-files-merging">MIDI files merging</h1>
+
+<p><a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.Merger.html">Merger</a> provides two ways of merging MIDI files:</p>
+<ul>
+<li><strong>sequentially</strong> – placing files one after other;</li>
+<li><strong>simultaneously</strong> – placing files &quot;one below other&quot;.</li>
+</ul>
+<p>Both routines are extension methods for <code>IEnumerable&lt;MidiFile&gt;</code>. Please see sections below to learn more about each method.</p>
+<h2 id="mergesequentially">MergeSequentially</h2>
+<p>Image below shows a quick overview of what you'll get with the <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.Merger.html#Melanchall_DryWetMidi_Tools_Merger_MergeSequentially_">MergeSequentially</a> method:</p>
+<p><img src="images/Merger/MergeFiles/MergeSequentially.png" alt="MergeSequentially"></p>
+<p>Here we're merging three files each of two track chunks. So as you can see events of the second file are placed right after last event of the first file, and events of the third file are placed directly after last event of the second one. In the code it looks like that:</p>
+<pre><code class="lang-csharp">midiFiles.MergeSequentially();
+</code></pre>
+<p>There is one important note about how merging works. Obviously files can have different time divisions. If shortly, a MIDI tick (single unit of time) can have different length in milliseconds. Just placing files one after other and using time division of the first file, for example, we'll ruine timings of MIDI events of the files are merged.</p>
+<p>To preserve correct timings of all MIDI events of all input files in the result one <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.Merger.html#Melanchall_DryWetMidi_Tools_Merger_MergeSequentially_">MergeSequentially</a> does following steps:</p>
+<ol>
+<li>calculates new time division as the least common multiple of TPQNs (<a class="xref" href="../../api/Melanchall.DryWetMidi.Core.TicksPerQuarterNoteTimeDivision.html">ticks per quarter note</a>) of the input files;</li>
+<li>for each input file calculates a scale factor every delta-time in the file should be multiplied by;</li>
+<li>writes MIDI events in the result file using the new time division and scaled delta-times.</li>
+</ol>
+<p>If you want to add some spacing between files, you can set its length using <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.SequentialMergingSettings.html">SequentialMergingSettings</a> and the <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.SequentialMergingSettings.html#Melanchall_DryWetMidi_Tools_SequentialMergingSettings_DelayBetweenFiles">DelayBetweenFiles</a> property:</p>
+<pre><code class="lang-csharp">midiFiles.MergeSequentially(new SequentialMergingSettings
+{
+    DelayBetweenFiles = MusicalTimeSpan.Quarter
+});
+</code></pre>
+<p><img src="images/Merger/MergeFiles/MergeSequentially-DelayBetweenFiles.png" alt="MergeSequentially with DelayBetweenFiles"></p>
+<p>We may want also to align starts of the input files to a grid. It would be better to describe the task with an example:</p>
+<pre><code class="lang-csharp">var midiFile = new PatternBuilder()
+    .SetNoteLength(MusicalTimeSpan.Quarter)
+    .StepForward(MusicalTimeSpan.Half)
+    .Note(&quot;A4&quot;)
+    .Build()
+    .ToFile(TempoMap.Default);
+</code></pre>
+<p>Here we have the file with a single A4 note of quarter length. The note starts at 1/2. So we have a space (<code>S</code>) of quarter length from the end of the note (<code>N</code>) to the end of a bar:</p>
+<pre><code class="lang-text">0    4/4
+|----|
+|  AS|
+</code></pre>
+<p>And now we want to merge this file with another one starting the second file at the bar line. For this purpose there is the <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.SequentialMergingSettings.html#Melanchall_DryWetMidi_Tools_SequentialMergingSettings_FileDurationRoundingStep">FileDurationRoundingStep</a> property:</p>
+<pre><code class="lang-csharp">midiFiles.MergeSequentially(new SequentialMergingSettings
+{
+    FileDurationRoundingStep = new BarBeatTicksTimeSpan(1)
+});
+</code></pre>
+<p>Here we state that duartion of each file should be <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.TimeSpanRoundingPolicy.html#Melanchall_DryWetMidi_Interaction_TimeSpanRoundingPolicy_RoundUp">rounded up</a> to 1 bar and then a next file can be placed:</p>
+<p><img src="images/Merger/MergeFiles/MergeSequentially-FileDurationRoundingStep.png" alt="MergeSequentially with FileDurationRoundingStep"></p>
+<p>If both <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.SequentialMergingSettings.html#Melanchall_DryWetMidi_Tools_SequentialMergingSettings_DelayBetweenFiles">DelayBetweenFiles</a> and <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.SequentialMergingSettings.html#Melanchall_DryWetMidi_Tools_SequentialMergingSettings_FileDurationRoundingStep">FileDurationRoundingStep</a> are set, the method will first round duration and then add a delay.</p>
+<p>In all previous examples you can see that a result file has number of track chunks that is the sum of all input files' track chunks numbers. So a track chunk of an input MIDI file will be written to a separate track chunk in a result MIDI file. We can change this default behavior setting <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.SequentialMergingSettings.html#Melanchall_DryWetMidi_Tools_SequentialMergingSettings_ResultTrackChunksCreationPolicy">ResultTrackChunksCreationPolicy</a> to the <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.ResultTrackChunksCreationPolicy.html#Melanchall_DryWetMidi_Tools_ResultTrackChunksCreationPolicy_MinimizeCount">ResultTrackChunksCreationPolicy</a> value:</p>
+<pre><code class="lang-csharp">midiFiles.MergeSequentially(new SequentialMergingSettings
+{
+    ResultTrackChunksCreationPolicy = ResultTrackChunksCreationPolicy.MinimizeCount
+});
+</code></pre>
+<p><img src="images/Merger/MergeFiles/MergeSequentially-MinimizeTrackChunksCount.png" alt="MergeSequentially with ResultTrackChunksCreationPolicy set to MinimizeCount"></p>
+<h2 id="mergesimultaneously">MergeSimultaneously</h2>
+<p>Image below shows a quick overview of how the <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.Merger.html#Melanchall_DryWetMidi_Tools_Merger_MergeSimultaneously_">MergeSimultaneously</a> method works:</p>
+<p><img src="images/Merger/MergeFiles/MergeSimultaneously.png" alt="MergeSimultaneously"></p>
+<p>So with this code:</p>
+<pre><code class="lang-csharp">midiFiles.MergeSimultaneously();
+</code></pre>
+<p>track chunks of all input files will be &quot;stacked&quot; in the result MIDI file.</p>
+<p>This method uses the same logic to preserve timings of the input files as the <a href="#mergesequentially">MergeSequentially</a> one. But <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.Merger.html#Melanchall_DryWetMidi_Tools_Merger_MergeSimultaneously_">MergeSimultaneously</a> has a limitation by default: tempo maps of all input files after this logic applied must be equal. It means that all files must have the same tempo changes and time signature changes and at the same times. You can turn off this check with the <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.SimultaneousMergingSettings.html#Melanchall_DryWetMidi_Tools_SimultaneousMergingSettings_IgnoreDifferentTempoMaps">IgnoreDifferentTempoMaps</a> property set to <code>true</code>:</p>
+<pre><code class="lang-csharp">midiFiles.MergeSimultaneously(new SimultaneousMergingSettings
+{
+    IgnoreDifferentTempoMaps = true
+});
+</code></pre>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            2023 / Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>

@@ -81,21 +81,21 @@
 
 <p>DryWetMIDI provides ability to send MIDI data to or receive it from MIDI devices. For that purpose there are following types:</p>
 <ul>
-<li><a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.IInputDevice.html">IInputDevice</a> (see <a href="Input-device.html">Input device</a>);</li>
-<li><a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.IOutputDevice.html">IOutputDevice</a> (see <a href="Output-device.html">Output device</a>);</li>
-<li><a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.DevicesConnector.html">DevicesConnector</a> (see <a href="Devices-connector.html">Devices connector</a>).</li>
+<li><a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.IInputDevice.html">IInputDevice</a> (see <a href="Input-device.html">Input device</a> article);</li>
+<li><a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.IOutputDevice.html">IOutputDevice</a> (see <a href="Output-device.html">Output device</a> article);</li>
+<li><a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.DevicesConnector.html">DevicesConnector</a> (see <a href="Devices-connector.html">Devices connector</a> article).</li>
 </ul>
 <p>The library provides implementations for both <code>IInputDevice</code> and <code>IOutputDevice</code>: <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.InputDevice.html">InputDevice</a> and <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.OutputDevice.html">OutputDevice</a> correspondingly which represent MIDI devices visible by the operating system. Both classes implement <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.idisposable">IDisposable</a> interface so you should always dispose them to free devices for using by another applications.</p>
 <div class="IMPORTANT">
 <h5>Important</h5>
-<p>You can use <code>InputDevice</code> and <code>OutputDevice</code> built-in implementations of <code>IInputDevice</code> and <code>IOutputDevice</code> on Windows and macOS only. Of course you can create your own implementations of <code>IInputDevice</code> and <code>IOutputDevice</code>.</p>
+<p>You can use <code>InputDevice</code> and <code>OutputDevice</code> built-in implementations of <code>IInputDevice</code> and <code>IOutputDevice</code> only on the systems listed in the <a class="xref" href="../dev/Supported-OS.html">Supported OS</a> article. Of course you can create your own implementations of <code>IInputDevice</code> and <code>IOutputDevice</code>.</p>
 </div>
 <p>All classes that interact with devices work with interfaces mentioned above, so you can create custom implementation of your devices (see examples in <a href="Input-device.html">Input device</a> and <a href="Output-device.html">Output device</a> articles) and use it for playback or recording, for example.</p>
 <p>MIDI devices API classes are placed in the <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.html">Melanchall.DryWetMidi.Multimedia</a> namespace.</p>
 <p>To understand what is an input and an output device in DryWetMIDI take a look at the following image:</p>
 <p><img src="images/Devices.png" alt="Devices"></p>
 <p>So, as you can see, although a MIDI port is <em>MIDI IN</em> for MIDI device, it will be an <strong>output device</strong> in DryWetMIDI because your application will <strong>send MIDI data to</strong> this port. <em>MIDI OUT</em> of MIDI device will be an <strong>input device</strong> in DryWetMIDI because a program will <strong>receive MIDI data from</strong> the port.</p>
-<p>If some error occured during sending or receiving a MIDI event, the <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.MidiDevice.html#Melanchall_DryWetMidi_Multimedia_MidiDevice_ErrorOccurred">ErrorOccurred</a> event will be fired holding an exception caused the error.</p>
+<p>If some error occurred during sending or receiving a MIDI event, the <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.MidiDevice.html#Melanchall_DryWetMidi_Multimedia_MidiDevice_ErrorOccurred">ErrorOccurred</a> event will be fired holding an exception caused the error.</p>
 </article>
           </div>
           

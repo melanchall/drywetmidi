@@ -240,7 +240,7 @@ Merges nearby objects within the specified <a class="xref" href="Melanchall.DryW
       <tr>
         <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
         <td>
-<p>One of the following errors occured:</p>
+<p>One of the following errors occurred:</p>
 <ul><li><code data-dev-comment-type="paramref" class="paramref">trackChunk</code> is <code>null</code>.</li><li><code data-dev-comment-type="paramref" class="paramref">tempoMap</code> is <code>null</code>.</li></ul>
 </td>
       </tr>
@@ -305,7 +305,7 @@ Merges nearby objects within the specified collection of <a class="xref" href="M
       <tr>
         <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
         <td>
-<p>One of the following errors occured:</p>
+<p>One of the following errors occurred:</p>
 <ul><li><code data-dev-comment-type="paramref" class="paramref">trackChunks</code> is <code>null</code>.</li><li><code data-dev-comment-type="paramref" class="paramref">tempoMap</code> is <code>null</code>.</li></ul>
 </td>
       </tr>
@@ -375,8 +375,175 @@ Merges nearby objects.
       <tr>
         <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
         <td>
-<p>One of the following errors occured:</p>
+<p>One of the following errors occurred:</p>
 <ul><li><code data-dev-comment-type="paramref" class="paramref">objects</code> is <code>null</code>.</li><li><code data-dev-comment-type="paramref" class="paramref">tempoMap</code> is <code>null</code>.</li></ul>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Tools_Merger_MergeSequentially_" data-uid="Melanchall.DryWetMidi.Tools.Merger.MergeSequentially*"></a>
+  <h4 id="Melanchall_DryWetMidi_Tools_Merger_MergeSequentially_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_MidiFile__Melanchall_DryWetMidi_Tools_SequentialMergingSettings_" data-uid="Melanchall.DryWetMidi.Tools.Merger.MergeSequentially(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.MidiFile},Melanchall.DryWetMidi.Tools.SequentialMergingSettings)">MergeSequentially(IEnumerable&lt;MidiFile&gt;, SequentialMergingSettings)</h4>
+  <div class="markdown level1 summary">
+Merges the specified MIDI files sequentially so they are placed one after other in the result file.
+More info in the <a class="xref" href="../articles/tools/MIDI-files-merging.html#mergesequentially">MIDI files merging: MergeSequentially</a> article.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static MidiFile MergeSequentially(this IEnumerable&lt;MidiFile&gt; midiFiles, SequentialMergingSettings settings = null)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a>&gt;</td>
+        <td><span class="parametername">midiFiles</span></td>
+        <td>MIDI files to merge.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Tools.SequentialMergingSettings.html">SequentialMergingSettings</a></td>
+        <td><span class="parametername">settings</span></td>
+        <td>Settings that control how <code data-dev-comment-type="paramref" class="paramref">midiFiles</code> should be merged.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a></td>
+        <td>An instance of the <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a> which represents <code data-dev-comment-type="paramref" class="paramref">midiFiles</code>
+that are merged sequentially.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">midiFiles</code> is <code>null</code>.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentexception">ArgumentException</a></td>
+        <td>
+<p>One of the following errors occurred:</p>
+<ul><li><code data-dev-comment-type="paramref" class="paramref">midiFiles</code> collection contains <code>null</code>.</li><li><code data-dev-comment-type="paramref" class="paramref">midiFiles</code> is an empty collection.</li></ul>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.invalidoperationexception">InvalidOperationException</a></td>
+        <td>
+<p>One of the following errors occurred:</p>
+<ul><li>Time division of one of the <code data-dev-comment-type="paramref" class="paramref">midiFiles</code> is not an instance
+of the <a class="xref" href="Melanchall.DryWetMidi.Core.TicksPerQuarterNoteTimeDivision.html">TicksPerQuarterNoteTimeDivision</a>.</li><li>Failed to provide common time division since its value exceeds <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int16.maxvalue">MaxValue</a>.</li></ul>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Tools_Merger_MergeSimultaneously_" data-uid="Melanchall.DryWetMidi.Tools.Merger.MergeSimultaneously*"></a>
+  <h4 id="Melanchall_DryWetMidi_Tools_Merger_MergeSimultaneously_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_MidiFile__Melanchall_DryWetMidi_Tools_SimultaneousMergingSettings_" data-uid="Melanchall.DryWetMidi.Tools.Merger.MergeSimultaneously(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.MidiFile},Melanchall.DryWetMidi.Tools.SimultaneousMergingSettings)">MergeSimultaneously(IEnumerable&lt;MidiFile&gt;, SimultaneousMergingSettings)</h4>
+  <div class="markdown level1 summary">
+Merges the specified MIDI files &quot;simultaneously&quot; so they are placed &quot;one below other&quot; in the result file.
+More info in the <a class="xref" href="../articles/tools/MIDI-files-merging.html#mergesimultaneously">MIDI files merging: MergeSimultaneously</a> article.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static MidiFile MergeSimultaneously(this IEnumerable&lt;MidiFile&gt; midiFiles, SimultaneousMergingSettings settings = null)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a>&gt;</td>
+        <td><span class="parametername">midiFiles</span></td>
+        <td>MIDI files to merge.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Tools.SimultaneousMergingSettings.html">SimultaneousMergingSettings</a></td>
+        <td><span class="parametername">settings</span></td>
+        <td>Settings that control how <code data-dev-comment-type="paramref" class="paramref">midiFiles</code> should be merged.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a></td>
+        <td>An instance of the <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a> which represents <code data-dev-comment-type="paramref" class="paramref">midiFiles</code>
+that are merged sequentially.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Melanchall_DryWetMidi_Tools_Merger_MergeSimultaneously_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_MidiFile__Melanchall_DryWetMidi_Tools_SimultaneousMergingSettings__remarks">Remarks</h5>
+  <div class="markdown level1 remarks">
+The method has a limitation: it can process only the files which have the same tempo maps, i.e.
+the same changes of tempo and time signature,and the same time divisions. You can disable the
+exception throwing by setting <a class="xref" href="Melanchall.DryWetMidi.Tools.SimultaneousMergingSettings.html#Melanchall_DryWetMidi_Tools_SimultaneousMergingSettings_IgnoreDifferentTempoMaps">IgnoreDifferentTempoMaps</a> of
+the <code data-dev-comment-type="paramref" class="paramref">settings</code> to <code>true</code>, but proper structure (in terms of correct playing for example)
+of the result MIDI file is not guaranteed in this case.
+</div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">midiFiles</code> is <code>null</code>.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentexception">ArgumentException</a></td>
+        <td>
+<p>One of the following errors occurred:</p>
+<ul><li><code data-dev-comment-type="paramref" class="paramref">midiFiles</code> collection contains <code>null</code>.</li><li><code data-dev-comment-type="paramref" class="paramref">midiFiles</code> is an empty collection.</li></ul>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.invalidoperationexception">InvalidOperationException</a></td>
+        <td>
+<p>One of the following errors occurred:</p>
+<ul><li>Time division of one of the <code data-dev-comment-type="paramref" class="paramref">midiFiles</code> is not an instance
+of the <a class="xref" href="Melanchall.DryWetMidi.Core.TicksPerQuarterNoteTimeDivision.html">TicksPerQuarterNoteTimeDivision</a>.</li><li>Failed to provide common time division since its value exceeds <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int16.maxvalue">MaxValue</a>.</li><li>MIDI files have different tempo maps and <a class="xref" href="Melanchall.DryWetMidi.Tools.SimultaneousMergingSettings.html#Melanchall_DryWetMidi_Tools_SimultaneousMergingSettings_IgnoreDifferentTempoMaps">IgnoreDifferentTempoMaps</a>
+of the <code data-dev-comment-type="paramref" class="paramref">settings</code> is set to <code>false</code>.</li></ul>
 </td>
       </tr>
     </tbody>

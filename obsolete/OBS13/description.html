@@ -83,7 +83,7 @@ quantizer.Quantize(
         Target = QuantizerTarget.Start | QuantizerTarget.End
     });
 </code></pre>
-<p>Of course, there is the new class with utility methods for quantizing objects within a <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.MidiFile.html">MIDI file</a> or <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.TrackChunk.html">track chunk</a> - <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.QuantizerUtilities.html">QuantizerUtilities</a>. Following example shows how to quantize both ends of <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.Note.html">notes</a> and <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.Chord.html">chords</a> by the grid of <code>1</code> second step within a MIDI file. We'll define a chord as a set of notes with minimum length of <code>2</code>:</p>
+<p>Of course, there is the new class with utility methods for quantizing objects within a <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.MidiFile.html">MIDI file</a> or <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.TrackChunk.html">track chunk</a> � <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.QuantizerUtilities.html">QuantizerUtilities</a>. Following example shows how to quantize both ends of <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.Note.html">notes</a> and <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.Chord.html">chords</a> by the grid of <code>1</code> second step within a MIDI file. We'll define a chord as a set of notes with minimum length of <code>2</code>:</p>
 <pre><code class="lang-csharp">midiFile.QuantizeObjects(
     ObjectType.Note | ObjectType.Chord,
     new SteppedGrid(new MetricTimeSpan(0, 0, 1)),

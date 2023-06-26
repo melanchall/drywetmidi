@@ -126,7 +126,8 @@ Represents a time span as a fraction of the whole note&apos;s length. More info 
   <a id="Melanchall_DryWetMidi_Interaction_MusicalTimeSpan__ctor_" data-uid="Melanchall.DryWetMidi.Interaction.MusicalTimeSpan.#ctor*"></a>
   <h4 id="Melanchall_DryWetMidi_Interaction_MusicalTimeSpan__ctor" data-uid="Melanchall.DryWetMidi.Interaction.MusicalTimeSpan.#ctor">MusicalTimeSpan()</h4>
   <div class="markdown level1 summary">
-Initializes a new instance of the <a class="xref" href="Melanchall.DryWetMidi.Interaction.MusicalTimeSpan.html">MusicalTimeSpan</a>.
+Initializes a new instance of the <a class="xref" href="Melanchall.DryWetMidi.Interaction.MusicalTimeSpan.html">MusicalTimeSpan</a>. The time span
+will be of zero size (0/1).
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -137,7 +138,8 @@ Initializes a new instance of the <a class="xref" href="Melanchall.DryWetMidi.In
   <h4 id="Melanchall_DryWetMidi_Interaction_MusicalTimeSpan__ctor_System_Int64_" data-uid="Melanchall.DryWetMidi.Interaction.MusicalTimeSpan.#ctor(System.Int64)">MusicalTimeSpan(Int64)</h4>
   <div class="markdown level1 summary">
 Initializes a new instance of the <a class="xref" href="Melanchall.DryWetMidi.Interaction.MusicalTimeSpan.html">MusicalTimeSpan</a> with the specified
-fraction of the whole note&apos;s length.
+fraction of the whole note&apos;s length. The time span will be 1/<code data-dev-comment-type="paramref" class="paramref">fraction</code>
+(for example, 1/4 if <code data-dev-comment-type="paramref" class="paramref">fraction</code> is 4).
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -226,7 +228,7 @@ numerator and denominator of the fraction of the whole note&apos;s length.
       <tr>
         <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
         <td>
-<p>One of the following errors occured:</p>
+<p>One of the following errors occurred:</p>
 <ul><li><code data-dev-comment-type="paramref" class="paramref">numerator</code> is negative.</li><li><code data-dev-comment-type="paramref" class="paramref">denominator</code> is zero or negative.</li></ul>
 </td>
       </tr>
@@ -745,7 +747,7 @@ between them.
     <tbody>
       <tr>
         <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">Double</a></td>
-        <td>Rayion between the current <a class="xref" href="Melanchall.DryWetMidi.Interaction.MusicalTimeSpan.html">MusicalTimeSpan</a> and <code data-dev-comment-type="paramref" class="paramref">timeSpan</code>.</td>
+        <td>Ratio of the current <a class="xref" href="Melanchall.DryWetMidi.Interaction.MusicalTimeSpan.html">MusicalTimeSpan</a> and <code data-dev-comment-type="paramref" class="paramref">timeSpan</code>.</td>
       </tr>
     </tbody>
   </table>
@@ -1019,6 +1021,81 @@ Determines whether the specified object is equal to the current object.
   </table>
   <h5 class="overrides">Overrides</h5>
   <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)">Object.Equals(Object)</a></div>
+  <a id="Melanchall_DryWetMidi_Interaction_MusicalTimeSpan_FromDouble_" data-uid="Melanchall.DryWetMidi.Interaction.MusicalTimeSpan.FromDouble*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_MusicalTimeSpan_FromDouble_System_Double_Melanchall_DryWetMidi_Interaction_DoubleToMusicalTimeSpanSettings_" data-uid="Melanchall.DryWetMidi.Interaction.MusicalTimeSpan.FromDouble(System.Double,Melanchall.DryWetMidi.Interaction.DoubleToMusicalTimeSpanSettings)">FromDouble(Double, DoubleToMusicalTimeSpanSettings)</h4>
+  <div class="markdown level1 summary">
+Creates an instance of the <a class="xref" href="Melanchall.DryWetMidi.Interaction.MusicalTimeSpan.html">MusicalTimeSpan</a> from the specified double number.
+For example, <code>0.5</code> will be converted to the time span of <code>1/2</code>, and <code>3/2</code>
+will be returned for the input number <code>1.5</code>.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static MusicalTimeSpan FromDouble(double number, DoubleToMusicalTimeSpanSettings settings = null)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">Double</a></td>
+        <td><span class="parametername">number</span></td>
+        <td>A number to convert to <a class="xref" href="Melanchall.DryWetMidi.Interaction.MusicalTimeSpan.html">MusicalTimeSpan</a>.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.DoubleToMusicalTimeSpanSettings.html">DoubleToMusicalTimeSpanSettings</a></td>
+        <td><span class="parametername">settings</span></td>
+        <td>Settings which controls the process of conversion <code data-dev-comment-type="paramref" class="paramref">number</code>
+to <a class="xref" href="Melanchall.DryWetMidi.Interaction.MusicalTimeSpan.html">MusicalTimeSpan</a>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.MusicalTimeSpan.html">MusicalTimeSpan</a></td>
+        <td>An instance of the <a class="xref" href="Melanchall.DryWetMidi.Interaction.MusicalTimeSpan.html">MusicalTimeSpan</a> which represents the <code data-dev-comment-type="paramref" class="paramref">number</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Melanchall_DryWetMidi_Interaction_MusicalTimeSpan_FromDouble_System_Double_Melanchall_DryWetMidi_Interaction_DoubleToMusicalTimeSpanSettings__remarks">Remarks</h5>
+  <div class="markdown level1 remarks">
+The method tries to build a stream of rationalizations of the <code data-dev-comment-type="paramref" class="paramref">number</code> and returns
+the best one according to the <code data-dev-comment-type="paramref" class="paramref">settings</code>.
+</div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">number</code> is negative.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.invalidoperationexception">InvalidOperationException</a></td>
+        <td>Failed to find rationalization for the specified number.
+Try to refine settings.</td>
+      </tr>
+    </tbody>
+  </table>
   <a id="Melanchall_DryWetMidi_Interaction_MusicalTimeSpan_GetHashCode_" data-uid="Melanchall.DryWetMidi.Interaction.MusicalTimeSpan.GetHashCode*"></a>
   <h4 id="Melanchall_DryWetMidi_Interaction_MusicalTimeSpan_GetHashCode" data-uid="Melanchall.DryWetMidi.Interaction.MusicalTimeSpan.GetHashCode">GetHashCode()</h4>
   <div class="markdown level1 summary">
@@ -1427,7 +1504,7 @@ Returns a tuplet based on the current <a class="xref" href="Melanchall.DryWetMid
       <tr>
         <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
         <td>
-<p>One of the following errors occured:</p>
+<p>One of the following errors occurred:</p>
 <ul><li><code data-dev-comment-type="paramref" class="paramref">tupletNotesCount</code> is zero or negative.</li><li><code data-dev-comment-type="paramref" class="paramref">tupletSpaceSize</code> is zero or negative.</li></ul>
 </td>
       </tr>
@@ -1495,7 +1572,7 @@ Adds two specified <a class="xref" href="Melanchall.DryWetMidi.Interaction.Music
       <tr>
         <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
         <td>
-<p>One of the following errors occured:</p>
+<p>One of the following errors occurred:</p>
 <ul><li><code data-dev-comment-type="paramref" class="paramref">timeSpan1</code> is <code>null</code>.</li><li><code data-dev-comment-type="paramref" class="paramref">timeSpan2</code> is <code>null</code>.</li></ul>
 </td>
       </tr>
@@ -1675,7 +1752,7 @@ Indicates whether a specified <a class="xref" href="Melanchall.DryWetMidi.Intera
       <tr>
         <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
         <td>
-<p>One of the following errors occured:</p>
+<p>One of the following errors occurred:</p>
 <ul><li><code data-dev-comment-type="paramref" class="paramref">timeSpan1</code> is <code>null</code>.</li><li><code data-dev-comment-type="paramref" class="paramref">timeSpan2</code> is <code>null</code>.</li></ul>
 </td>
       </tr>
@@ -1742,7 +1819,7 @@ another one.
       <tr>
         <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
         <td>
-<p>One of the following errors occured:</p>
+<p>One of the following errors occurred:</p>
 <ul><li><code data-dev-comment-type="paramref" class="paramref">timeSpan1</code> is <code>null</code>.</li><li><code data-dev-comment-type="paramref" class="paramref">timeSpan2</code> is <code>null</code>.</li></ul>
 </td>
       </tr>
@@ -1855,7 +1932,7 @@ Indicates whether a specified <a class="xref" href="Melanchall.DryWetMidi.Intera
       <tr>
         <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
         <td>
-<p>One of the following errors occured:</p>
+<p>One of the following errors occurred:</p>
 <ul><li><code data-dev-comment-type="paramref" class="paramref">timeSpan1</code> is <code>null</code>.</li><li><code data-dev-comment-type="paramref" class="paramref">timeSpan2</code> is <code>null</code>.</li></ul>
 </td>
       </tr>
@@ -1922,7 +1999,7 @@ another one.
       <tr>
         <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
         <td>
-<p>One of the following errors occured:</p>
+<p>One of the following errors occurred:</p>
 <ul><li><code data-dev-comment-type="paramref" class="paramref">timeSpan1</code> is <code>null</code>.</li><li><code data-dev-comment-type="paramref" class="paramref">timeSpan2</code> is <code>null</code>.</li></ul>
 </td>
       </tr>
@@ -2122,7 +2199,7 @@ the value of <code data-dev-comment-type="paramref" class="paramref">timeSpan2</
       <tr>
         <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
         <td>
-<p>One of the following errors occured:</p>
+<p>One of the following errors occurred:</p>
 <ul><li><code data-dev-comment-type="paramref" class="paramref">timeSpan1</code> is <code>null</code>.</li><li><code data-dev-comment-type="paramref" class="paramref">timeSpan2</code> is <code>null</code>.</li></ul>
 </td>
       </tr>
