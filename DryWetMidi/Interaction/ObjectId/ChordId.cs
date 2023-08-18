@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace Melanchall.DryWetMidi.Interaction
 {
-    internal sealed class ChordId : IObjectId
+    internal sealed class ChordId
     {
         #region Constructor
 

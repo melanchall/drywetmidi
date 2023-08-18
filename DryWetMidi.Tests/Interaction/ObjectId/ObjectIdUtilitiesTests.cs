@@ -8,7 +8,7 @@ using System.Linq;
 namespace Melanchall.DryWetMidi.Tests.Interaction
 {
     [TestFixture]
-    internal class ObjectIdUtilitiesTests
+    internal sealed class ObjectIdUtilitiesTests
     {
         #region Test methods
 

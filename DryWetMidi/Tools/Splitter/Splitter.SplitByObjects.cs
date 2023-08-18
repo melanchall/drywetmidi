@@ -38,7 +38,7 @@ namespace Melanchall.DryWetMidi.Tools
             var tempoMap = midiFile.GetTempoMap();
             var objects = midiFile.GetObjects(objectType, objectDetectionSettings);
 
-            var objectsByKeys = new Dictionary<IObjectId, List<ITimedObject>>();
+            var objectsByKeys = new Dictionary<object, List<ITimedObject>>();
             var allFilesObjects = new List<ITimedObject>();
 
             List<ITimedObject> nullKeyObjects = null;
@@ -48,7 +48,7 @@ namespace Melanchall.DryWetMidi.Tools
                 if (settings.Filter?.Invoke(obj) == false)
                     continue;
 
-                var key = keySelector(obj);
+                var key = keySelector(obj) ?? obj.GetObjectId();
                 if (writeToAllFilesPredicate(obj))
                 {
                     if (settings.AllFilesObjectsFilter?.Invoke(obj) == false)

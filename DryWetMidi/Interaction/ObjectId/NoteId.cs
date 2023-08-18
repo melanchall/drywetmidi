@@ -2,7 +2,7 @@
 
 namespace Melanchall.DryWetMidi.Interaction
 {
-    internal sealed class NoteId : IObjectId
+    internal sealed class NoteId
     {
         #region Constructor
 

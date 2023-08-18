@@ -192,7 +192,7 @@ namespace Melanchall.DryWetMidi.Tools
             settings = settings ?? new ObjectsMergingSettings();
 
             var objectsDescriptors = new LinkedList<IObjectDescriptor>();
-            var objectsMergersNodes = new Dictionary<IObjectId, LinkedListNode<IObjectDescriptor>>();
+            var objectsMergersNodes = new Dictionary<object, LinkedListNode<IObjectDescriptor>>();
 
             var objectsMergerFactory = settings.ObjectsMergerFactory ?? (obj => new ObjectsMerger(obj));
 
@@ -258,10 +258,10 @@ namespace Melanchall.DryWetMidi.Tools
         }
 
         private static void CreateObjectsMerger(
-            IObjectId objectId,
+            object objectId,
             ILengthedObject lengthedObject,
             LinkedList<IObjectDescriptor> objectsDescriptors,
-            Dictionary<IObjectId, LinkedListNode<IObjectDescriptor>> objectsMergers,
+            Dictionary<object, LinkedListNode<IObjectDescriptor>> objectsMergers,
             Func<ILengthedObject, ObjectsMerger> objectsMergerFactory)
         {
             objectsMergers[objectId] = objectsDescriptors.AddLast(new ObjectsMergerDescriptor(objectsMergerFactory(lengthedObject)));

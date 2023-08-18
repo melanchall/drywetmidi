@@ -16,10 +16,9 @@ namespace Melanchall.DryWetMidi.Tools
 
         /// <summary>
         /// Gets or sets a method to get the ID (key) of an object. The default value
-        /// is <c>null</c> which means the default key selector will be used. You can use
-        /// the property to implement custom key selection (please see <see cref="ObjectIdUtilities"/>).
+        /// is <c>null</c> which means the default key selector will be used.
         /// </summary>
-        public Func<ITimedObject, IObjectId> KeySelector { get; set; }
+        public Func<ITimedObject, object> KeySelector { get; set; }
 
         /// <summary>
         /// Gets or sets a predicate to determine whether an object should be copied

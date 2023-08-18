@@ -47,19 +47,17 @@ var newFiles = midiFile.SplitByObjects(
     ObjectType.Note | ObjectType.TimedEvent,
     new SplitByObjectsSettings
     {
-        KeySelector = obj => obj is Note note
-            ? ObjectIdUtilities.GetObjectId(note.NoteNumber)
-            : obj.GetObjectId(),
+        KeySelector = obj => (obj as Note)?.NoteNumber,
         WriteToAllFilesPredicate = obj => obj is TimedEvent
     });
 ```
 
-[ObjectIdUtilities.GetObjectId(value)](xref:Melanchall.DryWetMidi.Interaction.ObjectIdUtilities.GetObjectId``1(``0)) returns an implementation of [IObjectId](xref:Melanchall.DryWetMidi.Interaction.IObjectId) which simply holds the provided value. [ObjectIdUtilities.GetObjectId(object)](xref:Melanchall.DryWetMidi.Interaction.ObjectIdUtilities.GetObjectId(Melanchall.DryWetMidi.Interaction.ITimedObject)) returns the default ID (key) for an object. So if an object is a note, we use its note number as the key; and default key for any other object types.
+Here a key will be resolved to `null` if an object is not an instance of the `Note`. `null` key means to use the default key calculation logic shown above.
 
-If custom logic of key selection is complex, you may decide to implement the [IObjectId](xref:Melanchall.DryWetMidi.Interaction.IObjectId) interface and return that implementation. Just for example, let's create an ID class that identifies a chord by its shortest name:
+If key selection is complex, you may decide to implement a class for such key. Just for example, let's create the key class that identifies a chord by its shortest name:
 
 ```csharp
-private sealed class ChordNameId : IObjectId
+private sealed class ChordNameId
 {
     private readonly string _name;
     

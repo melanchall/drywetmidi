@@ -1,6 +1,6 @@
 ﻿namespace Melanchall.DryWetMidi.Interaction
 {
-    internal sealed class RegisteredParameterId : IObjectId
+    internal sealed class RegisteredParameterId
     {
         #region Constructor
 

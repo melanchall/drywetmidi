@@ -1,6 +1,6 @@
 ﻿namespace Melanchall.DryWetMidi.Interaction
 {
-    internal sealed class ConstantObjectId<TId> : IObjectId
+    internal sealed class ConstantObjectId<TId>
     {
         #region Constructor
 

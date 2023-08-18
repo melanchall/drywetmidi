@@ -19,11 +19,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         public void SplitByObjects_EmptyFile() => SplitByObjects(
             timedObjects: Array.Empty<ITimedObject>(),
             objectType: ObjectType.Note,
-            expectedObjects: Array.Empty<ICollection<ITimedObject>>(),
-            settings: new SplitByObjectsSettings
-            {
-                KeySelector = obj => ((Note)obj).GetObjectId(),
-            });
+            expectedObjects: Array.Empty<ICollection<ITimedObject>>());
 
         [Test]
         public void SplitByObjects_Notes_NoteNumberAndChannel() => SplitByObjects(
@@ -55,7 +51,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             },
             settings: new SplitByObjectsSettings
             {
-                KeySelector = obj => ((Note)obj).GetObjectId(),
+                KeySelector = null,
             });
 
         [Test]
@@ -157,7 +153,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             },
             settings: new SplitByObjectsSettings
             {
-                KeySelector = obj => ObjectIdUtilities.GetObjectId(((Note)obj).NoteNumber),
+                KeySelector = obj => ((Note)obj).NoteNumber,
             });
 
         [Test]
@@ -187,7 +183,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             },
             settings: new SplitByObjectsSettings
             {
-                KeySelector = obj => ObjectIdUtilities.GetObjectId(((Note)obj).Channel),
+                KeySelector = obj => ((Note)obj).Channel,
             });
 
         [Test]
@@ -209,7 +205,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             },
             settings: new SplitByObjectsSettings
             {
-                KeySelector = obj => ObjectIdUtilities.GetObjectId(((Note)obj).NoteNumber),
+                KeySelector = obj => ((Note)obj).NoteNumber,
                 Filter = obj => ((Note)obj).Length != 70
             },
             objectDetectionSettings: new ObjectDetectionSettings
@@ -239,7 +235,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             },
             settings: new SplitByObjectsSettings
             {
-                KeySelector = obj => ObjectIdUtilities.GetObjectId(((Note)obj).NoteNumber),
+                KeySelector = obj => ((Note)obj).NoteNumber,
                 Filter = obj => ((Note)obj).Length != 70
             },
             objectDetectionSettings: new ObjectDetectionSettings
@@ -286,7 +282,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             },
             settings: new SplitByObjectsSettings
             {
-                KeySelector = obj => ObjectIdUtilities.GetObjectId((obj as Note)?.NoteNumber),
+                KeySelector = obj => (obj as Note)?.NoteNumber,
                 WriteToAllFilesPredicate = obj => obj is TimedEvent,
             });
 
@@ -325,7 +321,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             },
             settings: new SplitByObjectsSettings
             {
-                KeySelector = obj => ObjectIdUtilities.GetObjectId((obj as Note)?.NoteNumber),
+                KeySelector = obj => (obj as Note)?.NoteNumber,
                 WriteToAllFilesPredicate = obj => obj is TimedEvent,
             }));
 
@@ -363,7 +359,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             },
             settings: new SplitByObjectsSettings
             {
-                KeySelector = obj => ObjectIdUtilities.GetObjectId((obj as Note)?.NoteNumber),
+                KeySelector = obj => (obj as Note)?.NoteNumber,
                 WriteToAllFilesPredicate = obj => obj is TimedEvent,
                 AllFilesObjectsFilter = obj => ((TextEvent)((TimedEvent)obj).Event).Text != "B"
             });
@@ -402,7 +398,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             },
             settings: new SplitByObjectsSettings
             {
-                KeySelector = obj => ObjectIdUtilities.GetObjectId((obj as Note)?.NoteNumber),
+                KeySelector = obj => (obj as Note)?.NoteNumber,
                 WriteToAllFilesPredicate = obj => obj is TimedEvent || ((Note)obj).Channel == 2,
             });
 
@@ -440,7 +436,88 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             },
             settings: new SplitByObjectsSettings
             {
-                KeySelector = obj => ObjectIdUtilities.GetObjectId((obj as Note)?.NoteNumber),
+                KeySelector = obj => (obj as Note)?.NoteNumber,
+            });
+
+        [Test]
+        public void SplitByObjects_WriteToAllFiles_6() => SplitByObjects(
+            timedObjects: new ITimedObject[]
+            {
+                new TimedEvent(new TextEvent("A"), 0),
+                new TimedEvent(new MarkerEvent("B"), 0),
+                new Note((SevenBitNumber)100, 20, 0),
+                new Note((SevenBitNumber)50, 10, 10),
+                new Note((SevenBitNumber)100, 30, 30),
+                new Note((SevenBitNumber)50, 40, 100),
+                new Note((SevenBitNumber)50, 40, 200) { Channel = (FourBitNumber)2 },
+                new TimedEvent(new TextEvent("C"), 150),
+            },
+            objectType: ObjectType.Note | ObjectType.TimedEvent,
+            expectedObjects: new[]
+            {
+                new ITimedObject[]
+                {
+                    new TimedEvent(new TextEvent("A"), 0),
+                    new TimedEvent(new MarkerEvent("B"), 0),
+                    new TimedEvent(new TextEvent("C"), 150),
+                },
+                new ITimedObject[]
+                {
+                    new Note((SevenBitNumber)100, 20, 0),
+                    new Note((SevenBitNumber)100, 30, 30),
+                },
+                new ITimedObject[]
+                {
+                    new Note((SevenBitNumber)50, 10, 10),
+                    new Note((SevenBitNumber)50, 40, 100),
+                    new Note((SevenBitNumber)50, 40, 200) { Channel = (FourBitNumber)2 },
+                },
+            },
+            settings: new SplitByObjectsSettings
+            {
+                KeySelector = obj => (obj as Note)?.NoteNumber ?? 0,
+            });
+
+        [Test]
+        public void SplitByObjects_WriteToAllFiles_7() => SplitByObjects(
+            timedObjects: new ITimedObject[]
+            {
+                new TimedEvent(new TextEvent("A"), 0),
+                new TimedEvent(new MarkerEvent("B"), 0),
+                new Note((SevenBitNumber)100, 20, 0),
+                new Note((SevenBitNumber)50, 10, 10),
+                new Note((SevenBitNumber)100, 30, 30),
+                new Note((SevenBitNumber)50, 40, 100),
+                new Note((SevenBitNumber)50, 40, 200) { Channel = (FourBitNumber)2 },
+                new TimedEvent(new TextEvent("C"), 150),
+            },
+            objectType: ObjectType.Note | ObjectType.TimedEvent,
+            expectedObjects: new[]
+            {
+                new ITimedObject[]
+                {
+                    new TimedEvent(new TextEvent("A"), 0),
+                    new TimedEvent(new TextEvent("C"), 150),
+                },
+                new ITimedObject[]
+                {
+                    new TimedEvent(new MarkerEvent("B"), 0),
+                },
+                new ITimedObject[]
+                {
+                    new Note((SevenBitNumber)100, 20, 0),
+                    new Note((SevenBitNumber)100, 30, 30),
+                },
+                new ITimedObject[]
+                {
+                    new Note((SevenBitNumber)50, 10, 10),
+                    new Note((SevenBitNumber)50, 40, 100),
+                    new Note((SevenBitNumber)50, 40, 200) { Channel = (FourBitNumber)2 },
+                },
+            },
+            settings: new SplitByObjectsSettings
+            {
+                KeySelector = obj => (obj as Note)?.NoteNumber,
             });
 
         [Test]
@@ -477,7 +554,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             },
             settings: new SplitByObjectsSettings
             {
-                KeySelector = obj => ObjectIdUtilities.GetObjectId((obj as Note)?.NoteNumber),
+                KeySelector = obj => (obj as Note)?.NoteNumber,
                 WriteToAllFilesPredicate = obj => obj is TimedEvent || ((Note)obj).Channel == 2,
             },
             ticksPerQuarterNote: 200);
@@ -517,7 +594,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             },
             settings: new SplitByObjectsSettings
             {
-                KeySelector = obj => ObjectIdUtilities.GetObjectId((obj as Note)?.NoteNumber),
+                KeySelector = obj => (obj as Note)?.NoteNumber,
             });
 
         [Test]
@@ -553,7 +630,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             },
             settings: new SplitByObjectsSettings
             {
-                KeySelector = obj => ObjectIdUtilities.GetObjectId((obj as Note)?.NoteNumber),
+                KeySelector = obj => (obj as Note)?.NoteNumber,
                 WriteToAllFilesPredicate = obj => obj is TimedEvent,
             });
 

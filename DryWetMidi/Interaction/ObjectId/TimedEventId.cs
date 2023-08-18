@@ -2,7 +2,7 @@
 
 namespace Melanchall.DryWetMidi.Interaction
 {
-    internal sealed class TimedEventId : IObjectId
+    internal sealed class TimedEventId
     {
         #region Constructor
 
