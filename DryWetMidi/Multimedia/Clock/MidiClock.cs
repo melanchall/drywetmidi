@@ -9,26 +9,6 @@ namespace Melanchall.DryWetMidi.Multimedia
     /// </summary>
     public sealed class MidiClock : IDisposable
     {
-        #region Nested classes
-
-        private sealed class CustomStopwatch : Stopwatch
-        {
-            private TimeSpan _startTime;
-
-            public void Reset(TimeSpan startTime)
-            {
-                Reset();
-                _startTime = startTime;
-            }
-
-            public new TimeSpan Elapsed
-            {
-                get { return base.Elapsed + _startTime; }
-            }
-        }
-
-        #endregion
-
         #region Constants
 
         private const double DefaultSpeed = 1.0;
@@ -49,8 +29,9 @@ namespace Melanchall.DryWetMidi.Multimedia
         private bool _disposed = false;
 
         private readonly bool _startImmediately;
-        private readonly CustomStopwatch _stopwatch = new CustomStopwatch();
+        private readonly Stopwatch _stopwatch = new Stopwatch();
         private TimeSpan _startTime = TimeSpan.Zero;
+        private TimeSpan _elapsed = TimeSpan.Zero;
 
         private double _speed = DefaultSpeed;
 
@@ -132,6 +113,7 @@ namespace Melanchall.DryWetMidi.Multimedia
                 Stop();
 
                 _startTime = GetCurrentTime();
+                _elapsed = _stopwatch.Elapsed;
                 _speed = value;
 
                 if (start)
@@ -205,7 +187,8 @@ namespace Melanchall.DryWetMidi.Multimedia
         {
             EnsureIsNotDisposed();
 
-            _stopwatch.Reset(time);
+            _stopwatch.Reset();
+            _elapsed = TimeSpan.Zero;
             _startTime = time;
             CurrentTime = time;
         }
@@ -254,7 +237,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         private TimeSpan GetCurrentTime()
         {
-            var ticks = (_stopwatch.Elapsed - _startTime).Ticks;
+            var ticks = (_stopwatch.Elapsed - _elapsed).Ticks;
             if (ticks < 0)
                 ticks = 0;
 

@@ -15,17 +15,15 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
     {
         #region Test methods
 
-        // TODO
         [Retry(RetriesNumber)]
-        //[Test]
+        [Test]
         public void CheckPlaybackCurrentTimeAfterSpeedChange(
             [Values(0.5, 1, 10)] double speed,
             [Values(1, 10, 100)] int waitAfterSpeedChangeMs) =>
             CheckPlaybackCurrentTimeAfterSpeedChanges(speed, waitAfterSpeedChangeMs, false);
 
-        // TODO
         [Retry(RetriesNumber)]
-        //[Test]
+        [Test]
         public void CheckPlaybackCurrentTimeAfterMultipleSpeedChanges(
             [Values(0.5, 1, 10)] double speed,
             [Values(1, 10, 100)] int waitAfterSpeedChangeMs) =>
