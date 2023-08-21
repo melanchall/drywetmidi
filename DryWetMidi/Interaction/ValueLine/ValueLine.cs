@@ -33,6 +33,18 @@ namespace Melanchall.DryWetMidi.Interaction
 
         #endregion
 
+        #region Properties
+
+        public int ValueChangesCount
+        {
+            get
+            {
+                return _valueChanges.Count;
+            }
+        }
+
+        #endregion
+
         #region Methods
 
         public TValue GetValueAtTime(long time)

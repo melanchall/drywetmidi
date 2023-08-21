@@ -390,5 +390,44 @@ namespace Melanchall.DryWetMidi.Interaction
         }
 
         #endregion
+
+        #region Overrides
+
+        /// <summary>
+        /// Determines whether the specified object is equal to the current object.
+        /// </summary>
+        /// <param name="obj">The object to compare with the current object.</param>
+        /// <returns><c>true</c> if the specified object is equal to the current object; otherwise, <c>false</c>.</returns>
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(obj, this))
+                return true;
+
+            var tempoMap = obj as TempoMap;
+            if (ReferenceEquals(tempoMap, null))
+                return false;
+
+            return
+                TimeDivision.Equals(tempoMap.TimeDivision) &&
+                GetTempoChanges().SequenceEqual(tempoMap.GetTempoChanges()) &&
+                GetTimeSignatureChanges().SequenceEqual(tempoMap.GetTimeSignatureChanges());
+        }
+
+        /// <summary>
+        /// Returns the hash code for this instance.
+        /// </summary>
+        /// <returns>A 32-bit signed integer hash code.</returns>
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                var result = TimeDivision.GetHashCode();
+                result = result * 23 + _tempoLine.ValueChangesCount.GetHashCode();
+                result = result * 23 + _timeSignatureLine.ValueChangesCount.GetHashCode();
+                return result;
+            }
+        }
+
+        #endregion
     }
 }

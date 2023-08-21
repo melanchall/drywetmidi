@@ -2,7 +2,7 @@
 using Melanchall.DryWetMidi.Interaction;
 using NUnit.Framework;
 
-namespace Melanchall.DryWetMidi.Tests.Interaction.ObjectId
+namespace Melanchall.DryWetMidi.Tests.Interaction
 {
     [TestFixture]
     public sealed class ChordIdTests

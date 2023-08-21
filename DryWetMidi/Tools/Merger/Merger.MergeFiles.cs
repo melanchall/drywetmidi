@@ -230,11 +230,7 @@ namespace Melanchall.DryWetMidi.Tools
 
                 foreach (var tempoMap in newTempoMaps.Skip(1))
                 {
-                    // TODO: implement TempoMap.Equals
-
-                    if (!referenceTempoMap.TimeDivision.Equals(tempoMap.TimeDivision) ||
-                        !referenceTempoMap.GetTempoChanges().SequenceEqual(tempoMap.GetTempoChanges()) ||
-                        !referenceTempoMap.GetTimeSignatureChanges().SequenceEqual(tempoMap.GetTimeSignatureChanges()))
+                    if (!referenceTempoMap.Equals(tempoMap))
                         throw new InvalidOperationException("MIDI files have different tempo maps.");
                 }
             }
