@@ -7,7 +7,7 @@ namespace Melanchall.DryWetMidi.Interaction
     {
         #region Constructor
 
-        public ChordId(ICollection<NoteId> notesIds)
+        public ChordId(NoteId[] notesIds)
         {
             NotesIds = notesIds;
         }
@@ -16,7 +16,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
         #region Properties
 
-        public ICollection<NoteId> NotesIds { get; }
+        public NoteId[] NotesIds { get; }
 
         #endregion
 
@@ -31,8 +31,25 @@ namespace Melanchall.DryWetMidi.Interaction
             if (ReferenceEquals(chordId, null))
                 return false;
 
-            // TODO: ignore order
-            return NotesIds.SequenceEqual(chordId.NotesIds);
+            var length = NotesIds.Length;
+            if (length != chordId.NotesIds.Length)
+                return false;
+
+            var set = new HashSet<NoteId>();
+
+            for (var i = 0; i < length; i++)
+            {
+                var x = NotesIds[i];
+                var y = chordId.NotesIds[i];
+
+                if (!set.Add(x))
+                    set.Remove(x);
+
+                if (!set.Add(y))
+                    set.Remove(y);
+            }
+
+            return !set.Any();
         }
 
         public override int GetHashCode()

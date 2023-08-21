@@ -238,7 +238,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                     new Note((SevenBitNumber)20, 60, 0),
                     new Note((SevenBitNumber)30, 60, 0)),
                 new Chord(
-                    new Note((SevenBitNumber)30, 30, 60),
+                    new Note((SevenBitNumber)40, 30, 60),
                     new Note((SevenBitNumber)20, 60, 60)),
             },
             settings: null,
@@ -249,7 +249,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                     new Note((SevenBitNumber)20, 60, 0),
                     new Note((SevenBitNumber)30, 60, 0)),
                 new Chord(
-                    new Note((SevenBitNumber)30, 30, 60),
+                    new Note((SevenBitNumber)40, 30, 60),
                     new Note((SevenBitNumber)20, 60, 60)),
             });
 
@@ -613,7 +613,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                     new Note((SevenBitNumber)20, 60, 0),
                     new Note((SevenBitNumber)30, 60, 0)),
                 new Chord(
-                    new Note((SevenBitNumber)30, 30, 60),
+                    new Note((SevenBitNumber)40, 30, 60),
                     new Note((SevenBitNumber)20, 60, 60)),
             },
             objectType: ObjectType.Chord,
@@ -625,7 +625,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                     new Note((SevenBitNumber)20, 60, 0),
                     new Note((SevenBitNumber)30, 60, 0)),
                 new Chord(
-                    new Note((SevenBitNumber)30, 30, 60),
+                    new Note((SevenBitNumber)40, 30, 60),
                     new Note((SevenBitNumber)20, 60, 60)),
             });
 
