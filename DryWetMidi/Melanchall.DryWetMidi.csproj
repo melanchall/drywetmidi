@@ -9,7 +9,7 @@
 
   <PropertyGroup Label="Package">
     <PackageId>Melanchall.DryWetMidi</PackageId>
-    <Version>7.0.0</Version>
+    <Version>7.0.1</Version>
     <Authors>melanchall</Authors>
     <Owners>melanchall</Owners>
     <licenseUrl>https://github.com/melanchall/drywetmidi/blob/master/LICENSE</licenseUrl>
