@@ -41,14 +41,11 @@ namespace Melanchall.DryWetMidi.Tools
             var objectsByKeys = new Dictionary<object, List<ITimedObject>>();
             var allFilesObjects = new List<ITimedObject>();
 
-            List<ITimedObject> nullKeyObjects = null;
-
             foreach (var obj in objects)
             {
                 if (settings.Filter?.Invoke(obj) == false)
                     continue;
 
-                var key = keySelector(obj) ?? obj.GetObjectId();
                 if (writeToAllFilesPredicate(obj))
                 {
                     if (settings.AllFilesObjectsFilter?.Invoke(obj) == false)
@@ -60,21 +57,13 @@ namespace Melanchall.DryWetMidi.Tools
                     {
                         objectsByKey.Add(obj);
                     }
-
-                    nullKeyObjects?.Add(obj);
                 }
                 else
                 {
+                    var key = keySelector(obj) ?? obj.GetObjectId();
+
                     List<ITimedObject> objectsByKey;
-
-                    if (key == null)
-                    {
-                        if (nullKeyObjects == null)
-                            nullKeyObjects = new List<ITimedObject>(allFilesObjects);
-
-                        objectsByKey = nullKeyObjects;
-                    }
-                    else if (!objectsByKeys.TryGetValue(key, out objectsByKey))
+                    if (!objectsByKeys.TryGetValue(key, out objectsByKey))
                     {
                         objectsByKeys.Add(key, objectsByKey = new List<ITimedObject>(allFilesObjects));
                     }
@@ -85,7 +74,6 @@ namespace Melanchall.DryWetMidi.Tools
 
             return objectsByKeys
                 .Values
-                .Concat(new[] { nullKeyObjects ?? Enumerable.Empty<ITimedObject>() })
                 .Where(objectsByKey => objectsByKey.Any())
                 .Select(objectsByKey =>
                 {

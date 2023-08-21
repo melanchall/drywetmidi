@@ -43,11 +43,13 @@ namespace Melanchall.SendMidiData
 
             try
             {
-                var converter = new BytesToMidiEventConverter();
-                var midiEvents = converter.ConvertMultiple(bytes.ToArray());
-                var playback = midiEvents.GetPlayback(TempoMap.Default, outputDevice);
-                playback.Play();
-                return SendResult.Sent;
+                using (var converter = new BytesToMidiEventConverter())
+                {
+                    var midiEvents = converter.ConvertMultiple(bytes.ToArray());
+                    var playback = midiEvents.GetPlayback(TempoMap.Default, outputDevice);
+                    playback.Play();
+                    return SendResult.Sent;
+                }
             }
             catch (Exception ex)
             {
