@@ -284,7 +284,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             };
 
             var objects = new List<object>();
-            var objectsCount = objects.Count;
+            var objectsCount = 0;
 
             using (var playback = events.GetPlayback(TempoMap.Default))
             using (var watcher = new PlaybackCurrentTimeWatcher())

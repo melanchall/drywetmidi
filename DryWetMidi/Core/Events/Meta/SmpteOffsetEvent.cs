@@ -14,6 +14,30 @@ namespace Melanchall.DryWetMidi.Core
     /// </remarks>
     public sealed class SmpteOffsetEvent : MetaEvent
     {
+        #region Constants
+
+        /// <summary>
+        /// Represents the largest possible hours value.
+        /// </summary>
+        public const byte MaxHours = SmpteData.MaxHours;
+
+        /// <summary>
+        /// Represents the largest possible minutes value.
+        /// </summary>
+        public const byte MaxMinutes = SmpteData.MaxMinutes;
+
+        /// <summary>
+        /// Represents the largest possible seconds value.
+        /// </summary>
+        public const byte MaxSeconds = SmpteData.MaxSeconds;
+
+        /// <summary>
+        /// Represents the largest possible sub-frames value.
+        /// </summary>
+        public const byte MaxSubFrames = SmpteData.MaxSubFrames;
+
+        #endregion
+
         #region Fields
 
         private SmpteData _smpteData = new SmpteData();
