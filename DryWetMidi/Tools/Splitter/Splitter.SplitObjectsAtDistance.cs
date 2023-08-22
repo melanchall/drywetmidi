@@ -30,6 +30,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="tempoMap">Tempo map used for distances calculations.</param>
         /// <param name="objectDetectionSettings">Settings according to which objects should be
         /// detected and built.</param>
+        /// <param name="filter">Predicate used to determine whether an object should be split or not.
+        /// <c>true</c> as a return value of the predicate means an object should be split; <c>false</c>
+        /// means don't split it. <c>null</c> (the default value) can be passed to the parameter
+        /// to process all objects.</param>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
@@ -79,6 +83,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="tempoMap">Tempo map used for distances calculations.</param>
         /// <param name="objectDetectionSettings">Settings according to which objects should be
         /// detected and built.</param>
+        /// <param name="filter">Predicate used to determine whether an object should be split or not.
+        /// <c>true</c> as a return value of the predicate means an object should be split; <c>false</c>
+        /// means don't split it. <c>null</c> (the default value) can be passed to the parameter
+        /// to process all objects.</param>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
@@ -125,6 +133,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="from">Point of an object <paramref name="distance"/> should be measured from.</param>
         /// <param name="objectDetectionSettings">Settings according to which objects should be
         /// detected and built.</param>
+        /// <param name="filter">Predicate used to determine whether an object should be split or not.
+        /// <c>true</c> as a return value of the predicate means an object should be split; <c>false</c>
+        /// means don't split it. <c>null</c> (the default value) can be passed to the parameter
+        /// to process all objects.</param>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
@@ -168,6 +180,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="tempoMap">Tempo map used for distances calculations.</param>
         /// <param name="objectDetectionSettings">Settings according to which objects should be
         /// detected and built.</param>
+        /// <param name="filter">Predicate used to determine whether an object should be split or not.
+        /// <c>true</c> as a return value of the predicate means an object should be split; <c>false</c>
+        /// means don't split it. <c>null</c> (the default value) can be passed to the parameter
+        /// to process all objects.</param>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
@@ -232,6 +248,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="tempoMap">Tempo map used for distances calculations.</param>
         /// <param name="objectDetectionSettings">Settings according to which objects should be
         /// detected and built.</param>
+        /// <param name="filter">Predicate used to determine whether an object should be split or not.
+        /// <c>true</c> as a return value of the predicate means an object should be split; <c>false</c>
+        /// means don't split it. <c>null</c> (the default value) can be passed to the parameter
+        /// to process all objects.</param>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
@@ -294,6 +314,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="from">Point of an object distance should be measured from.</param>
         /// <param name="objectDetectionSettings">Settings according to which objects should be
         /// detected and built.</param>
+        /// <param name="filter">Predicate used to determine whether an object should be split or not.
+        /// <c>true</c> as a return value of the predicate means an object should be split; <c>false</c>
+        /// means don't split it. <c>null</c> (the default value) can be passed to the parameter
+        /// to process all objects.</param>
         /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="ratio"/> is out of valid range.</exception>
         /// <exception cref="InvalidEnumArgumentException">
@@ -339,6 +363,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="distance">Distance to split objects at.</param>
         /// <param name="from">Point of an object <paramref name="distance"/> should be measured from.</param>
         /// <param name="tempoMap">Tempo map used for distances calculations.</param>
+        /// <param name="filter">Predicate used to determine whether an object should be split or not.
+        /// <c>true</c> as a return value of the predicate means an object should be split; <c>false</c>
+        /// means don't split it. <c>null</c> (the default value) can be passed to the parameter
+        /// to process all objects.</param>
         /// <returns>Objects that are result of splitting <paramref name="objects"/> going in the same
         /// order as elements of <paramref name="objects"/>.</returns>
         /// <exception cref="ArgumentNullException">
@@ -404,6 +432,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="lengthType">The type an object's length should be processed according to.</param>
         /// <param name="from">Point of an object distance should be measured from.</param>
         /// <param name="tempoMap">Tempo map used for distances calculations.</param>
+        /// <param name="filter">Predicate used to determine whether an object should be split or not.
+        /// <c>true</c> as a return value of the predicate means an object should be split; <c>false</c>
+        /// means don't split it. <c>null</c> (the default value) can be passed to the parameter
+        /// to process all objects.</param>
         /// <returns>Objects that are result of splitting <paramref name="objects"/> going in the same
         /// order as elements of <paramref name="objects"/>.</returns>
         /// <exception cref="ArgumentNullException">

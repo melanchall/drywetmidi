@@ -24,6 +24,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="tempoMap">Tempo map used to calculate times to split by.</param>
         /// <param name="objectDetectionSettings">Settings according to which objects should be
         /// detected and built.</param>
+        /// <param name="filter">Predicate used to determine whether an object should be split or not.
+        /// <c>true</c> as a return value of the predicate means an object should be split; <c>false</c>
+        /// means don't split it. <c>null</c> (the default value) can be passed to the parameter
+        /// to process all objects.</param>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
@@ -43,7 +47,8 @@ namespace Melanchall.DryWetMidi.Tools
             ObjectType objectType,
             IGrid grid,
             TempoMap tempoMap,
-            ObjectDetectionSettings objectDetectionSettings = null)
+            ObjectDetectionSettings objectDetectionSettings = null,
+            Predicate<ITimedObject> filter = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
             ThrowIfArgument.IsNull(nameof(grid), grid);
@@ -53,7 +58,7 @@ namespace Melanchall.DryWetMidi.Tools
                 trackChunk,
                 objectType,
                 objectDetectionSettings,
-                objects => SplitObjectsByGrid(objects, grid, tempoMap));
+                objects => SplitObjectsByGrid(objects, grid, tempoMap, filter));
         }
 
         /// <summary>
@@ -69,6 +74,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="tempoMap">Tempo map used to calculate times to split by.</param>
         /// <param name="objectDetectionSettings">Settings according to which objects should be
         /// detected and built.</param>
+        /// <param name="filter">Predicate used to determine whether an object should be split or not.
+        /// <c>true</c> as a return value of the predicate means an object should be split; <c>false</c>
+        /// means don't split it. <c>null</c> (the default value) can be passed to the parameter
+        /// to process all objects.</param>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
@@ -88,7 +97,8 @@ namespace Melanchall.DryWetMidi.Tools
             ObjectType objectType,
             IGrid grid,
             TempoMap tempoMap,
-            ObjectDetectionSettings objectDetectionSettings = null)
+            ObjectDetectionSettings objectDetectionSettings = null,
+            Predicate<ITimedObject> filter = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
             ThrowIfArgument.IsNull(nameof(grid), grid);
@@ -96,7 +106,7 @@ namespace Melanchall.DryWetMidi.Tools
 
             foreach (var trackChunk in trackChunks)
             {
-                trackChunk.SplitObjectsByGrid(objectType, grid, tempoMap, objectDetectionSettings);
+                trackChunk.SplitObjectsByGrid(objectType, grid, tempoMap, objectDetectionSettings, filter);
             }
         }
 
@@ -112,6 +122,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="grid">Grid to split objects by.</param>
         /// <param name="objectDetectionSettings">Settings according to which objects should be
         /// detected and built.</param>
+        /// <param name="filter">Predicate used to determine whether an object should be split or not.
+        /// <c>true</c> as a return value of the predicate means an object should be split; <c>false</c>
+        /// means don't split it. <c>null</c> (the default value) can be passed to the parameter
+        /// to process all objects.</param>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
@@ -127,14 +141,15 @@ namespace Melanchall.DryWetMidi.Tools
             this MidiFile midiFile,
             ObjectType objectType,
             IGrid grid,
-            ObjectDetectionSettings objectDetectionSettings = null)
+            ObjectDetectionSettings objectDetectionSettings = null,
+            Predicate<ITimedObject> filter = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
             ThrowIfArgument.IsNull(nameof(grid), grid);
 
             var tempoMap = midiFile.GetTempoMap();
 
-            midiFile.GetTrackChunks().SplitObjectsByGrid(objectType, grid, tempoMap, objectDetectionSettings);
+            midiFile.GetTrackChunks().SplitObjectsByGrid(objectType, grid, tempoMap, objectDetectionSettings, filter);
         }
 
         /// <summary>
@@ -147,6 +162,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="objects">Objects to split.</param>
         /// <param name="grid">Grid to split objects by.</param>
         /// <param name="tempoMap">Tempo map used to calculate times to split by.</param>
+        /// <param name="filter">Predicate used to determine whether an object should be split or not.
+        /// <c>true</c> as a return value of the predicate means an object should be split; <c>false</c>
+        /// means don't split it. <c>null</c> (the default value) can be passed to the parameter
+        /// to process all objects.</param>
         /// <returns>Objects that are result of splitting <paramref name="objects"/> going in the same
         /// order as elements of <paramref name="objects"/>.</returns>
         /// <exception cref="ArgumentNullException">
@@ -163,7 +182,11 @@ namespace Melanchall.DryWetMidi.Tools
         /// </item>
         /// </list>
         /// </exception>
-        public static IEnumerable<ITimedObject> SplitObjectsByGrid(this IEnumerable<ITimedObject> objects, IGrid grid, TempoMap tempoMap)
+        public static IEnumerable<ITimedObject> SplitObjectsByGrid(
+            this IEnumerable<ITimedObject> objects,
+            IGrid grid,
+            TempoMap tempoMap,
+            Predicate<ITimedObject> filter = null)
         {
             ThrowIfArgument.IsNull(nameof(objects), objects);
             ThrowIfArgument.IsNull(nameof(grid), grid);
@@ -188,7 +211,7 @@ namespace Melanchall.DryWetMidi.Tools
                 }
 
                 var lengthedObject = obj as ILengthedObject;
-                if (lengthedObject == null)
+                if (lengthedObject == null || filter?.Invoke(obj) == false)
                 {
                     yield return obj;
                     continue;
