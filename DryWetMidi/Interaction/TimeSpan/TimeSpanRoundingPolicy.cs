@@ -78,7 +78,6 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         RoundUp,
 
-        // TODO: test
         /// <summary>
         /// Round time span down (like, for example, <see cref="Math.Floor(double)"/>).
         /// </summary>

@@ -248,7 +248,6 @@ namespace Melanchall.DryWetMidi.Interaction
             trackChunks.Select(c => c.Events).ReplaceTempoMap(tempoMap);
         }
 
-        // TODO: test on empty
         /// <summary>
         /// Replaces tempo map contained in the specified <see cref="MidiFile"/> with another one.
         /// </summary>

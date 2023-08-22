@@ -164,47 +164,6 @@ namespace Melanchall.DryWetMidi.Tests.Core
             #endregion
         }
 
-        // TODO: test
-        private sealed class CustomChunkWithInvalidId : MidiChunk
-        {
-            #region Constants
-
-            public const string Id = "MTrk";
-
-            #endregion
-
-            #region Constructor
-
-            public CustomChunkWithInvalidId()
-                : base(Id)
-            {
-            }
-
-            #endregion
-
-            #region Overrides
-
-            public override MidiChunk Clone()
-            {
-                return new CustomChunkWithInvalidId();
-            }
-
-            protected override uint GetContentSize(WritingSettings settings)
-            {
-                return 0;
-            }
-
-            protected override void ReadContent(MidiReader reader, ReadingSettings settings, uint size)
-            {
-            }
-
-            protected override void WriteContent(MidiWriter writer, WritingSettings settings)
-            {
-            }
-
-            #endregion
-        }
-
         #endregion
 
         #region Test methods
@@ -236,7 +195,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
             var customMetaEvents = midiFile.GetEvents().OfType<CustomMetaEvent>().ToArray();
             Assert.AreEqual(1, customMetaEvents.Length, "Custom meta events count is invalid.");
 
-            var customMetaEvent = customMetaEvents.First();
+            var customMetaEvent = customMetaEvents.Single();
             Assert.AreEqual(100, customMetaEvent.DeltaTime, "Delta-time is invalid.");
             Assert.AreEqual(expectedA, customMetaEvent.A, "A value is invalid");
             Assert.AreEqual(expectedB, customMetaEvent.B, "B value is invalid");
@@ -269,10 +228,43 @@ namespace Melanchall.DryWetMidi.Tests.Core
             var customChunks = midiFile.Chunks.OfType<CustomChunk>().ToArray();
             Assert.AreEqual(1, customChunks.Length, "Custom chunks count is invalid.");
 
-            var customChunk = customChunks.First();
+            var customChunk = customChunks.Single();
             Assert.AreEqual(expectedA, customChunk.A, "A value is invalid");
             Assert.AreEqual(expectedB, customChunk.B, "B value is invalid");
             Assert.AreEqual(expectedC, customChunk.C, "C value is invalid");
+        }
+
+        [Test]
+        public void ReadWriteCustomChunk_NoTypesProvided()
+        {
+            const int expectedA = 1234567;
+            const string expectedB = "Test";
+            const byte expectedC = 45;
+
+            var midiFile = MidiFileTestUtilities.Read(
+                new MidiFile(
+                    new TrackChunk(
+                        new TextEvent("foo"),
+                        new MarkerEvent("bar")),
+                    new CustomChunk(expectedA, expectedB, expectedC)),
+                null,
+                null);
+
+            var customChunks = midiFile.Chunks.OfType<CustomChunk>().ToArray();
+            CollectionAssert.IsEmpty(customChunks, "Custom chunks are read.");
+
+            var unknownChunks = midiFile.Chunks.OfType<UnknownChunk>().ToArray();
+            Assert.AreEqual(1, unknownChunks.Length, "Unknown chunks count is invalid.");
+
+            var unknownChunk = unknownChunks.Single();
+            Assert.AreEqual(CustomChunk.Id, unknownChunk.ChunkId, "Unknown chunk ID is invalid.");
+
+            var expectedBytesCount =
+                expectedA.GetVlqLength() +
+                expectedB.Length.GetVlqLength() +
+                expectedB.Length +
+                1;
+            Assert.AreEqual(expectedBytesCount, unknownChunk.Data.Length, "Unknown chunk data length is invalid.");
         }
 
         #endregion

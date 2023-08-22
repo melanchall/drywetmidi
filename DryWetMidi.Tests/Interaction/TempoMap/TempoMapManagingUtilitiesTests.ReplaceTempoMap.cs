@@ -51,6 +51,14 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         #region Test methods
 
         [Test]
+        public void ReplaceTempoMap_EmptyFile()
+        {
+            var midiFile = new MidiFile();
+            midiFile.ReplaceTempoMap(TempoMap.Default);
+            MidiAsserts.AreEqual(new MidiFile(), midiFile, false, "Invalid file.");
+        }
+
+        [Test]
         public void ReplaceTempoMap_EventsCollections_Empty() => ReplaceTempoMap(
             events: Array.Empty<ICollection<MidiEvent>>(),
             tempoMap: GetNewTempoMap(null, null),
