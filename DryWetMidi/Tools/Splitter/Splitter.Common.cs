@@ -31,7 +31,6 @@ namespace Melanchall.DryWetMidi.Tools
             return midiFile;
         }
 
-        // TODO: objects filter
         private static void SplitTrackChunkObjects(
             TrackChunk trackChunk,
             ObjectType objectType,
