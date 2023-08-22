@@ -51,7 +51,8 @@ namespace Melanchall.DryWetMidi.Tools
             ITimeSpan distance,
             LengthedObjectTarget from,
             TempoMap tempoMap,
-            ObjectDetectionSettings objectDetectionSettings = null)
+            ObjectDetectionSettings objectDetectionSettings = null,
+            Predicate<ITimedObject> filter = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
             ThrowIfArgument.IsNull(nameof(distance), distance);
@@ -62,7 +63,7 @@ namespace Melanchall.DryWetMidi.Tools
                 trackChunk,
                 objectType,
                 objectDetectionSettings,
-                objects => SplitObjectsAtDistance(objects, distance, from, tempoMap));
+                objects => SplitObjectsAtDistance(objects, distance, from, tempoMap, filter));
         }
 
         /// <summary>
@@ -99,7 +100,8 @@ namespace Melanchall.DryWetMidi.Tools
             ITimeSpan distance,
             LengthedObjectTarget from,
             TempoMap tempoMap,
-            ObjectDetectionSettings objectDetectionSettings = null)
+            ObjectDetectionSettings objectDetectionSettings = null,
+            Predicate<ITimedObject> filter = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
             ThrowIfArgument.IsNull(nameof(distance), distance);
@@ -108,7 +110,7 @@ namespace Melanchall.DryWetMidi.Tools
 
             foreach (var trackChunk in trackChunks)
             {
-                trackChunk.SplitObjectsAtDistance(objectType, distance, from, tempoMap, objectDetectionSettings);
+                trackChunk.SplitObjectsAtDistance(objectType, distance, from, tempoMap, objectDetectionSettings, filter);
             }
         }
 
@@ -140,7 +142,8 @@ namespace Melanchall.DryWetMidi.Tools
             ObjectType objectType,
             ITimeSpan distance,
             LengthedObjectTarget from,
-            ObjectDetectionSettings objectDetectionSettings = null)
+            ObjectDetectionSettings objectDetectionSettings = null,
+            Predicate<ITimedObject> filter = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
             ThrowIfArgument.IsNull(nameof(distance), distance);
@@ -148,7 +151,7 @@ namespace Melanchall.DryWetMidi.Tools
 
             var tempoMap = midiFile.GetTempoMap();
 
-            midiFile.GetTrackChunks().SplitObjectsAtDistance(objectType, distance, from, tempoMap, objectDetectionSettings);
+            midiFile.GetTrackChunks().SplitObjectsAtDistance(objectType, distance, from, tempoMap, objectDetectionSettings, filter);
         }
 
         /// <summary>
@@ -195,7 +198,8 @@ namespace Melanchall.DryWetMidi.Tools
             TimeSpanType lengthType,
             LengthedObjectTarget from,
             TempoMap tempoMap,
-            ObjectDetectionSettings objectDetectionSettings = null)
+            ObjectDetectionSettings objectDetectionSettings = null,
+            Predicate<ITimedObject> filter = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
             ThrowIfArgument.IsOutOfRange(nameof(ratio),
@@ -211,7 +215,7 @@ namespace Melanchall.DryWetMidi.Tools
                 trackChunk,
                 objectType,
                 objectDetectionSettings,
-                objects => SplitObjectsAtDistance(objects, ratio, lengthType, from, tempoMap));
+                objects => SplitObjectsAtDistance(objects, ratio, lengthType, from, tempoMap, filter));
         }
 
         /// <summary>
@@ -258,7 +262,8 @@ namespace Melanchall.DryWetMidi.Tools
             TimeSpanType lengthType,
             LengthedObjectTarget from,
             TempoMap tempoMap,
-            ObjectDetectionSettings objectDetectionSettings = null)
+            ObjectDetectionSettings objectDetectionSettings = null,
+            Predicate<ITimedObject> filter = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
             ThrowIfArgument.IsOutOfRange(nameof(ratio),
@@ -272,7 +277,7 @@ namespace Melanchall.DryWetMidi.Tools
 
             foreach (var trackChunk in trackChunks)
             {
-                trackChunk.SplitObjectsAtDistance(objectType, ratio, lengthType, from, tempoMap, objectDetectionSettings);
+                trackChunk.SplitObjectsAtDistance(objectType, ratio, lengthType, from, tempoMap, objectDetectionSettings, filter);
             }
         }
 
@@ -308,7 +313,8 @@ namespace Melanchall.DryWetMidi.Tools
             double ratio,
             TimeSpanType lengthType,
             LengthedObjectTarget from,
-            ObjectDetectionSettings objectDetectionSettings = null)
+            ObjectDetectionSettings objectDetectionSettings = null,
+            Predicate<ITimedObject> filter = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
             ThrowIfArgument.IsOutOfRange(nameof(ratio),
@@ -321,7 +327,7 @@ namespace Melanchall.DryWetMidi.Tools
 
             var tempoMap = midiFile.GetTempoMap();
 
-            midiFile.GetTrackChunks().SplitObjectsAtDistance(objectType, ratio, lengthType, from, tempoMap, objectDetectionSettings);
+            midiFile.GetTrackChunks().SplitObjectsAtDistance(objectType, ratio, lengthType, from, tempoMap, objectDetectionSettings, filter);
         }
 
         /// <summary>
@@ -350,7 +356,12 @@ namespace Melanchall.DryWetMidi.Tools
         /// </list>
         /// </exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="from"/> specified an invalid value.</exception>
-        public static IEnumerable<ITimedObject> SplitObjectsAtDistance(this IEnumerable<ITimedObject> objects, ITimeSpan distance, LengthedObjectTarget from, TempoMap tempoMap)
+        public static IEnumerable<ITimedObject> SplitObjectsAtDistance(
+            this IEnumerable<ITimedObject> objects,
+            ITimeSpan distance,
+            LengthedObjectTarget from,
+            TempoMap tempoMap,
+            Predicate<ITimedObject> filter = null)
         {
             ThrowIfArgument.IsNull(nameof(objects), objects);
             ThrowIfArgument.IsNull(nameof(distance), distance);
@@ -366,7 +377,7 @@ namespace Melanchall.DryWetMidi.Tools
                 }
 
                 var lengthedObject = obj as ILengthedObject;
-                if (lengthedObject == null)
+                if (lengthedObject == null || filter?.Invoke(obj) == false)
                 {
                     yield return obj;
                     continue;
@@ -418,7 +429,13 @@ namespace Melanchall.DryWetMidi.Tools
         /// </item>
         /// </list>
         /// </exception>
-        public static IEnumerable<ITimedObject> SplitObjectsAtDistance(this IEnumerable<ITimedObject> objects, double ratio, TimeSpanType lengthType, LengthedObjectTarget from, TempoMap tempoMap)
+        public static IEnumerable<ITimedObject> SplitObjectsAtDistance(
+            this IEnumerable<ITimedObject> objects,
+            double ratio,
+            TimeSpanType lengthType,
+            LengthedObjectTarget from,
+            TempoMap tempoMap,
+            Predicate<ITimedObject> filter = null)
         {
             ThrowIfArgument.IsNull(nameof(objects), objects);
             ThrowIfArgument.IsOutOfRange(nameof(ratio),
@@ -439,7 +456,7 @@ namespace Melanchall.DryWetMidi.Tools
                 }
 
                 var lengthedObject = obj as ILengthedObject;
-                if (lengthedObject == null)
+                if (lengthedObject == null || filter?.Invoke(obj) == false)
                 {
                     yield return obj;
                     continue;
