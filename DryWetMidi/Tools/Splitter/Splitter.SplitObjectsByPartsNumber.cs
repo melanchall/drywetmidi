@@ -28,6 +28,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="tempoMap">Tempo map used to calculate times to split by.</param>
         /// <param name="objectDetectionSettings">Settings according to which objects should be
         /// detected and built.</param>
+        /// <param name="filter">Predicate used to determine whether an object should be split or not.
+        /// <c>true</c> as a return value of the predicate means an object should be split; <c>false</c>
+        /// means don't split it. <c>null</c> (the default value) can be passed to the parameter
+        /// to process all objects.</param>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
@@ -47,7 +51,8 @@ namespace Melanchall.DryWetMidi.Tools
             int partsNumber,
             TimeSpanType lengthType,
             TempoMap tempoMap,
-            ObjectDetectionSettings objectDetectionSettings = null)
+            ObjectDetectionSettings objectDetectionSettings = null,
+            Predicate<ITimedObject> filter = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
             ThrowIfArgument.IsNonpositive(nameof(partsNumber), partsNumber, "Parts number is zero or negative.");
@@ -58,7 +63,7 @@ namespace Melanchall.DryWetMidi.Tools
                 trackChunk,
                 objectType,
                 objectDetectionSettings,
-                objects => SplitObjectsByPartsNumber(objects, partsNumber, lengthType, tempoMap));
+                objects => SplitObjectsByPartsNumber(objects, partsNumber, lengthType, tempoMap, filter));
         }
 
         /// <summary>
@@ -78,6 +83,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="tempoMap">Tempo map used to calculate times to split by.</param>
         /// <param name="objectDetectionSettings">Settings according to which objects should be
         /// detected and built.</param>
+        /// <param name="filter">Predicate used to determine whether an object should be split or not.
+        /// <c>true</c> as a return value of the predicate means an object should be split; <c>false</c>
+        /// means don't split it. <c>null</c> (the default value) can be passed to the parameter
+        /// to process all objects.</param>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
@@ -97,7 +106,8 @@ namespace Melanchall.DryWetMidi.Tools
             int partsNumber,
             TimeSpanType lengthType,
             TempoMap tempoMap,
-            ObjectDetectionSettings objectDetectionSettings = null)
+            ObjectDetectionSettings objectDetectionSettings = null,
+            Predicate<ITimedObject> filter = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
             ThrowIfArgument.IsNonpositive(nameof(partsNumber), partsNumber, "Parts number is zero or negative.");
@@ -106,7 +116,7 @@ namespace Melanchall.DryWetMidi.Tools
 
             foreach (var trackChunk in trackChunks)
             {
-                trackChunk.SplitObjectsByPartsNumber(objectType, partsNumber, lengthType, tempoMap, objectDetectionSettings);
+                trackChunk.SplitObjectsByPartsNumber(objectType, partsNumber, lengthType, tempoMap, objectDetectionSettings, filter);
             }
         }
 
@@ -125,6 +135,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="lengthType">Type of a part's length.</param>
         /// <param name="objectDetectionSettings">Settings according to which objects should be
         /// detected and built.</param>
+        /// <param name="filter">Predicate used to determine whether an object should be split or not.
+        /// <c>true</c> as a return value of the predicate means an object should be split; <c>false</c>
+        /// means don't split it. <c>null</c> (the default value) can be passed to the parameter
+        /// to process all objects.</param>
         /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="partsNumber"/> is zero or negative.</exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="lengthType"/> specified an invalid value.</exception>
@@ -133,7 +147,8 @@ namespace Melanchall.DryWetMidi.Tools
             ObjectType objectType,
             int partsNumber,
             TimeSpanType lengthType,
-            ObjectDetectionSettings objectDetectionSettings = null)
+            ObjectDetectionSettings objectDetectionSettings = null,
+            Predicate<ITimedObject> filter = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
             ThrowIfArgument.IsNonpositive(nameof(partsNumber), partsNumber, "Parts number is zero or negative.");
@@ -142,7 +157,7 @@ namespace Melanchall.DryWetMidi.Tools
             var tempoMap = midiFile.GetTempoMap();
             midiFile
                 .GetTrackChunks()
-                .SplitObjectsByPartsNumber(objectType, partsNumber, lengthType, tempoMap, objectDetectionSettings);
+                .SplitObjectsByPartsNumber(objectType, partsNumber, lengthType, tempoMap, objectDetectionSettings, filter);
         }
 
         /// <summary>
@@ -158,6 +173,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="partsNumber">The number of parts to split objects into.</param>
         /// <param name="lengthType">Type of a part's length.</param>
         /// <param name="tempoMap">Tempo map used to calculate times to split by.</param>
+        /// <param name="filter">Predicate used to determine whether an object should be split or not.
+        /// <c>true</c> as a return value of the predicate means an object should be split; <c>false</c>
+        /// means don't split it. <c>null</c> (the default value) can be passed to the parameter
+        /// to process all objects.</param>
         /// <returns>Objects that are result of splitting <paramref name="objects"/> going in the same
         /// order as elements of <paramref name="objects"/>.</returns>
         /// <exception cref="ArgumentNullException">
@@ -173,7 +192,12 @@ namespace Melanchall.DryWetMidi.Tools
         /// </exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="partsNumber"/> is zero or negative.</exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="lengthType"/> specified an invalid value.</exception>
-        public static IEnumerable<ITimedObject> SplitObjectsByPartsNumber(this IEnumerable<ITimedObject> objects, int partsNumber, TimeSpanType lengthType, TempoMap tempoMap)
+        public static IEnumerable<ITimedObject> SplitObjectsByPartsNumber(
+            this IEnumerable<ITimedObject> objects,
+            int partsNumber,
+            TimeSpanType lengthType,
+            TempoMap tempoMap,
+            Predicate<ITimedObject> filter = null)
         {
             ThrowIfArgument.IsNull(nameof(objects), objects);
             ThrowIfArgument.IsNonpositive(nameof(partsNumber), partsNumber, "Parts number is zero or negative.");
@@ -189,7 +213,7 @@ namespace Melanchall.DryWetMidi.Tools
                 }
 
                 var lengthedObject = obj as ILengthedObject;
-                if (lengthedObject == null)
+                if (lengthedObject == null || filter?.Invoke(obj) == false)
                 {
                     yield return obj;
                     continue;
