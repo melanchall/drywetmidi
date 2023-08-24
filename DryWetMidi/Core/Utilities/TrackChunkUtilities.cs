@@ -35,9 +35,11 @@ namespace Melanchall.DryWetMidi.Core
         /// by reference to events in the <paramref name="trackChunks"/>.
         /// </remarks>
         /// <exception cref="ArgumentNullException"><paramref name="trackChunks"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentException"><paramref name="trackChunks"/> is an empty collection.</exception>
         public static TrackChunk Merge(this IEnumerable<TrackChunk> trackChunks)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
+            ThrowIfArgument.IsEmptyCollection(nameof(trackChunks), trackChunks, "Track chunks collection is empty.");
 
             return ConvertTrackChunks(trackChunks, MidiFileFormat.SingleTrack).First();
         }

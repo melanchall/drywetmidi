@@ -1,5 +1,4 @@
-﻿using Melanchall.DryWetMidi.Common;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -65,12 +64,8 @@ namespace Melanchall.DryWetMidi.Core
 
         public IEnumerable<MidiChunk> Convert(IEnumerable<MidiChunk> chunks)
         {
-            ThrowIfArgument.IsNull(nameof(chunks), chunks);
-
-            //
-
             var trackChunks = chunks.OfType<TrackChunk>().ToArray();
-            if (trackChunks.Length == 1)
+            if (trackChunks.Length < 2)
                 return chunks;
 
             //
@@ -92,7 +87,7 @@ namespace Melanchall.DryWetMidi.Core
 
             foreach (var eventDescriptor in eventsDescriptors)
             {
-                MidiEvent midiEvent = eventDescriptor.Event.Clone();
+                var midiEvent = eventDescriptor.Event.Clone();
 
                 midiEvent.DeltaTime = eventDescriptor.AbsoluteTime - time;
                 resultTrackChunk.Events.Add(midiEvent);
