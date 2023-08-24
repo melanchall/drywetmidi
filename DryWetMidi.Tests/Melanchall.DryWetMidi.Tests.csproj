@@ -13,10 +13,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Core\MidiFile\MidiFileTests.Write.cs~RF15614cac.TMP" />
     <None Remove="SendTestData.c" />
-    <None Remove="Tools\Quantizer\QuantizerTests.LengthType.cs~RF2586582e.TMP" />
-    <None Remove="Tools\Resizer\ResizerTests.Resize.cs~RF6d3cd06e.TMP" />
   </ItemGroup>
 
   <ItemGroup>
@@ -39,10 +36,6 @@
       <Link>Melanchall_DryWetMidi_Native64.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <!--<None Include="..\DryWetMidi\Melanchall_DryWetMidi_Native32.dylib">
-      <Link>Melanchall_DryWetMidi_Native32.dylib</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>-->
     <None Include="..\DryWetMidi\Melanchall_DryWetMidi_Native64.dylib">
       <Link>Melanchall_DryWetMidi_Native64.dylib</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
