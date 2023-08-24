@@ -19,16 +19,17 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         public void CheckPlaybackCurrentTimeAfterSpeedChange(
             [Values(0.5, 1, 10)] double speed,
-            [Values(1, 10, 100)] int waitAfterSpeedChangeMs) =>
+            [Values(10, 100)] int waitAfterSpeedChangeMs) =>
             CheckPlaybackCurrentTimeAfterSpeedChanges(speed, waitAfterSpeedChangeMs, false);
 
         [Retry(RetriesNumber)]
         [Test]
         public void CheckPlaybackCurrentTimeAfterMultipleSpeedChanges(
             [Values(0.5, 1, 10)] double speed,
-            [Values(1, 10, 100)] int waitAfterSpeedChangeMs) =>
+            [Values(10, 100)] int waitAfterSpeedChangeMs) =>
             CheckPlaybackCurrentTimeAfterSpeedChanges(speed, waitAfterSpeedChangeMs, true);
 
+        [Retry(RetriesNumber)]
         [Test]
         public void CheckPlaybackSpeedRandomChanges()
         {

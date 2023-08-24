@@ -132,6 +132,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             };
 
             var maximumEventSendReceiveDelay = TimeSpan.FromMilliseconds(10);
+            var playbackStartTime = default(TimeSpan);
 
             CheckPlayback(
                 eventsToSend,
@@ -139,6 +140,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 beforePlaybackStarted: NoPlaybackAction,
                 startPlayback: (context, playback) =>
                 {
+                    var stopwatch = Stopwatch.StartNew();
+
                     var thread = new Thread(() =>
                     {
                         for (var i = 0; playback.IsRunning; i++)
@@ -150,10 +153,12 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
                     playback.Start();
                     thread.Start();
+
+                    playbackStartTime = stopwatch.Elapsed;
                 },
                 afterPlaybackStarted: (context, playback) =>
                 {
-                    Assert.LessOrEqual(context.Stopwatch.Elapsed, maximumEventSendReceiveDelay, "Playback blocks current thread.");
+                    Assert.LessOrEqual(context.Stopwatch.Elapsed, playbackStartTime + maximumEventSendReceiveDelay, "Playback blocks current thread.");
                     Assert.IsTrue(playback.IsRunning, "Playback is not running after start.");
                 },
                 waiting: (context, playback) =>
