@@ -193,12 +193,18 @@ namespace Melanchall.DryWetMidi.Interaction
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
             ThrowIfArgument.IsNull(nameof(timedObjects), timedObjects);
 
-            var timedEventsObjects = timedObjects.GetObjects(ObjectType.TimedEvent);
-            if (timedEventsObjects.Count == 0)
+            var timedEvents = timedObjects.GetObjects(ObjectType.TimedEvent);
+            if (timedEvents.Count == 0)
                 return;
 
+            if (eventsCollection.Count == 0)
+            {
+                AddTimedEventsToEventsCollection(eventsCollection, timedEvents);
+                return;
+            }
+
             var eventsCollectionToAdd = new EventsCollection();
-            AddTimedEventsToEventsCollection(eventsCollectionToAdd, timedEventsObjects);
+            AddTimedEventsToEventsCollection(eventsCollectionToAdd, timedEvents);
 
             var newEventsCount = eventsCollection.Count + eventsCollectionToAdd.Count;
             var allTimedEvents = new[] { eventsCollection, eventsCollectionToAdd }
