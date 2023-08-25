@@ -119,6 +119,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             }
         }
 
+#if TEST
         [Test]
         public void OutputDeviceIsReleasedByFinalizer()
         {
@@ -154,6 +155,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 checkpoints.CheckCheckpointReached(OutputDeviceCheckpointsNames.DeviceClosedInHandleFinalizer);
             }
         }
+#endif
 
         [Test]
         public void DisableEnableOutputDevice()

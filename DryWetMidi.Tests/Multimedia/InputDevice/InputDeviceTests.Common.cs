@@ -174,6 +174,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             }
         }
 
+#if TEST
         [Test]
         public void InputDeviceIsReleasedByFinalizer()
         {
@@ -211,6 +212,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 checkpoints.CheckCheckpointReached(InputDeviceCheckpointsNames.DeviceClosedInHandleFinalizer);
             }
         }
+#endif
 
         [Test]
         public void DisableEnableInputDevice()
@@ -302,7 +304,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             }
         }
 
-        #endregion
+#endregion
 
         #region Private methods
 
@@ -332,7 +334,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             using (var dataSender = new DataSender(deviceName))
             using (var inputDevice = InputDevice.GetByName(deviceName))
             {
+#if TEST
                 inputDevice.TestCheckpoints = checkpoints;
+#endif
                 inputDevice.WaitForCompleteSysExEvent = waitForCompleteSysExEvent;
 
                 inputDevice.EventReceived += (_, e) => receivedEvents.Add(e.Event);
@@ -371,6 +375,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     false,
                     "Received events are invalid.");
 
+#if TEST
                 if (checkCheckpoints)
                 {
                     var expectedCheckpointData = packages.SelectMany(p => new object[] { null }.Concat(p.Packets.Select(pp => pp.Data))).ToArray();
@@ -390,6 +395,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                         CollectionAssert.AreEqual(expectedBytes, actualBytes, $"Bytes of data record {i} are invalid.");
                     }
                 }
+#endif
             }
 
             WaitAfterReceiveData();
@@ -409,7 +415,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             using (var outputDevice = OutputDevice.GetByName(deviceName))
             using (var inputDevice = InputDevice.GetByName(deviceName))
             {
+#if TEST
                 inputDevice.TestCheckpoints = checkpoints;
+#endif
                 inputDevice.WaitForCompleteSysExEvent = waitForCompleteSysExEvent;
 
                 inputDevice.EventReceived += (_, e) => receivedEvents.Add(e.Event);
@@ -438,6 +446,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     false,
                     "Received events are invalid.");
 
+#if TEST
                 if (checkCheckpoints)
                 {
                     var expectedCheckpointData = packets.Select(pp => pp.Data).ToArray();
@@ -457,6 +466,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                         CollectionAssert.AreEqual(expectedBytes, actualBytes, $"Bytes of data record {i} are invalid.");
                     }
                 }
+#endif
             }
 
             WaitAfterReceiveData();

@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Linq;
+using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
+using Melanchall.DryWetMidi.Multimedia;
+using Melanchall.DryWetMidi.Tests.Common;
 using NUnit.Framework;
 
 namespace Melanchall.DryWetMidi.Tests.Multimedia
@@ -110,6 +114,35 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     ScaleTimeSpan(lastEventTime - stepAfterStop - stepAfterResumed, 1.0 / speed) + stopPeriod
                 },
                 speed: speed);
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
+        public void MoveForward_Repeated()
+        {
+            var tempoMap = TempoMap.Default;
+            var objects = Enumerable
+                .Range(0, 5000)
+                .Select(i => new Note((SevenBitNumber)70)
+                    .SetTime(new MetricTimeSpan(TimeSpan.FromSeconds(i * 3)), tempoMap)
+                    .SetLength(new MetricTimeSpan(TimeSpan.FromSeconds(3)), tempoMap));
+
+            using (var playback = new Playback(objects, tempoMap))
+            {
+                var duration = playback.GetDuration<MetricTimeSpan>();
+                var stepsCount = (int)Math.Round(duration.TotalSeconds / 2);
+                var step = new MetricTimeSpan(0, 0, 2);
+
+                playback.TrackNotes = true;
+                playback.Start();
+
+                for (var i = 0; i < stepsCount; i++)
+                {
+                    playback.MoveForward(step);
+                }
+
+                WaitOperations.Wait(() => !playback.IsRunning);
+            }
         }
 
         [Retry(RetriesNumber)]

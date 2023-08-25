@@ -12,6 +12,14 @@
     <DefineConstants>COVERAGE</DefineConstants>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)'=='DebugTest'">
+    <DefineConstants>TRACE;TEST</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)'=='ReleaseTest'">
+    <DefineConstants>TRACE;TEST</DefineConstants>
+  </PropertyGroup>
+
   <ItemGroup>
     <None Remove="SendTestData.c" />
   </ItemGroup>

@@ -57,24 +57,34 @@ namespace Melanchall.DryWetMidi.Common
 
         public static T GetLastElementBelowThreshold<T>(T[] elements, long keyThreshold, Func<T, long> keySelector, out int index)
         {
-            var firstIndex = 0;
-            var lastIndex = elements.Length - 1;
+            return GetLastElementBelowThreshold(
+                elements,
+                0,
+                elements.Length - 1,
+                keyThreshold,
+                keySelector,
+                out index);
+        }
 
+        public static T GetLastElementBelowThreshold<T>(
+            T[] elements,
+            int firstIndex,
+            int lastIndex,
+            long keyThreshold,
+            Func<T, long> keySelector,
+            out int index)
+        {
             while (firstIndex <= lastIndex)
             {
                 var middleIndex = (firstIndex + lastIndex) / 2;
                 var middle = elements[middleIndex];
 
                 var key = keySelector(middle);
-                if (key > keyThreshold)
+                if (key >= keyThreshold)
                     lastIndex = middleIndex - 1;
                 else if (key < keyThreshold)
                     firstIndex = middleIndex + 1;
-                else
-                {
-                    firstIndex = middleIndex;
-                    break;
-                }
+                // TODO: improve for 'key == keyThreshold': just step backward while ==
             }
 
             index = firstIndex > 0 ? firstIndex - 1 : -1;
