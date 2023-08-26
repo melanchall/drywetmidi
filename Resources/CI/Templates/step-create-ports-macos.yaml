@@ -18,6 +18,7 @@ steps:
       lipo -info LoopbackDevice
 - task: PublishPipelineArtifact@1
   displayName: Publish 'LoopbackDevice' artifact
+  enabled: false
   condition: contains(variables.VmImage, 'macos')
   inputs:
     targetPath: 'Resources/Utilities/CreateLoopbackPort_macOS/LoopbackDevice'
