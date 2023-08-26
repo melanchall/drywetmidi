@@ -960,12 +960,14 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         private void OnNotesPlaybackStarted(params Note[] notes)
         {
-            NotesPlaybackStarted?.Invoke(this, new NotesEventArgs(notes));
+            if (notes.Any())
+                NotesPlaybackStarted?.Invoke(this, new NotesEventArgs(notes));
         }
 
         private void OnNotesPlaybackFinished(params Note[] notes)
         {
-            NotesPlaybackFinished?.Invoke(this, new NotesEventArgs(notes));
+            if (notes.Any())
+                NotesPlaybackFinished?.Invoke(this, new NotesEventArgs(notes));
         }
 
         private void OnEventPlayed(MidiEvent midiEvent, object metadata)

@@ -86,6 +86,36 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
         [Retry(RetriesNumber)]
         [Test]
+        public void CheckPlaybackEvents_NoNotesPlaybackEventsWithoutNotes()
+        {
+            var tempoMap = TempoMap.Default;
+            var objects = new[]
+            {
+                new TimedEvent(new TextEvent("A")),
+                new TimedEvent(new TextEvent("B")).SetTime(new MetricTimeSpan(0, 0, 2), tempoMap),
+            };
+
+            var notesPlaybackStartedFired = false;
+            var notesPlaybackFinishedFired = false;
+
+            using (var playback = new Playback(objects, tempoMap))
+            {
+                playback.NotesPlaybackStarted += (_, __) => notesPlaybackStartedFired = true;
+                playback.NotesPlaybackFinished += (_, __) => notesPlaybackFinishedFired = true;
+                playback.TrackNotes = true;
+
+                playback.Start();
+                playback.MoveToTime(new MetricTimeSpan(0, 0, 1));
+
+                WaitOperations.Wait(() => !playback.IsRunning);
+            }
+
+            Assert.IsFalse(notesPlaybackStartedFired, "NotesPlaybackStarted fired.");
+            Assert.IsFalse(notesPlaybackFinishedFired, "NotesPlaybackFinished fired.");
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
         public void CheckPlaybackEvents_DeviceErrorOccurred()
         {
             var exceptionMessage = "AAA";
