@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
+using Melanchall.DryWetMidi.Interaction;
+using Melanchall.DryWetMidi.Multimedia;
 using NUnit.Framework;
 
 namespace Melanchall.DryWetMidi.Tests.Multimedia
@@ -10,6 +12,25 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
     public sealed partial class PlaybackTests
     {
         #region Test methods
+
+        [Retry(RetriesNumber)]
+        [TestCase(PlaybackHint.DisableControlValueTracking)]
+        [TestCase(PlaybackHint.DisableDataTracking)]
+        public void DisableControlValueTracking_NoEventsFired(PlaybackHint playbackHint) => CheckNoEventsFiredTrackingDisabled(
+            objects: new[]
+            {
+                new TimedEvent(new NoteOnEvent()).SetTime(new MetricTimeSpan(0, 0, 0, 500), TempoMap.Default),
+                new TimedEvent(new ControlChangeEvent((SevenBitNumber)70, (SevenBitNumber)10)).SetTime(new MetricTimeSpan(0, 0, 0, 600), TempoMap.Default),
+                new TimedEvent(new NoteOffEvent()).SetTime(new MetricTimeSpan(0, 0, 1), TempoMap.Default),
+            },
+            playbackHint: playbackHint);
+
+        [Retry(RetriesNumber)]
+        [TestCase(PlaybackHint.DisableControlValueTracking)]
+        [TestCase(PlaybackHint.DisableDataTracking)]
+        public void DisableControlValueTracking_FailOnEnableTracking(PlaybackHint playbackHint) => CheckFailOnEnableTracking(
+            playbackHint: playbackHint,
+            enableTracking: playback => playback.TrackControlValue = true);
 
         [Retry(RetriesNumber)]
         [TestCase(true, 0)]

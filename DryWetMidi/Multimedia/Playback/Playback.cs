@@ -97,6 +97,9 @@ namespace Melanchall.DryWetMidi.Multimedia
         private readonly NotePlaybackEventMetadata[] _notesMetadata;
 
         private readonly PlaybackDataTracker _playbackDataTracker;
+        private readonly PlaybackHint _hint;
+
+        private bool _trackNotes;
 
         private bool _disposed = false;
 
@@ -128,30 +131,26 @@ namespace Melanchall.DryWetMidi.Multimedia
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
             playbackSettings = playbackSettings ?? new PlaybackSettings();
+            _hint = playbackSettings.Hint;
 
             var noteDetectionSettings = playbackSettings.NoteDetectionSettings ?? new NoteDetectionSettings();
             _playbackEvents = GetPlaybackEvents(timedObjects.GetNotesAndTimedEventsLazy(noteDetectionSettings, true), tempoMap);
             MoveToNextPlaybackEvent();
+
+            TempoMap = tempoMap;
 
             var lastPlaybackEvent = _playbackEvents.LastOrDefault();
             _duration = lastPlaybackEvent?.Time ?? TimeSpan.Zero;
             _durationInTicks = lastPlaybackEvent?.RawTime ?? 0;
 
             _notesMetadata = BuildNotesMetadata();
-
-            TempoMap = tempoMap;
+            _playbackDataTracker = BuildDataTracker();
 
             var clockSettings = playbackSettings.ClockSettings ?? new MidiClockSettings();
             _clock = new MidiClock(false, clockSettings.CreateTickGeneratorCallback(), ClockInterval);
             _clock.Ticked += OnClockTicked;
 
             Snapping = new PlaybackSnapping(_playbackEvents, tempoMap);
-
-            _playbackDataTracker = new PlaybackDataTracker(TempoMap);
-            foreach (var playbackEvent in _playbackEvents)
-            {
-                _playbackDataTracker.InitializeData(playbackEvent.Event, playbackEvent.RawTime, playbackEvent.Metadata.TimedEvent.Metadata);
-            }
         }
 
         /// <summary>
@@ -232,7 +231,19 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// will be treated as just Note On/Note Off events. The default value is <c>false</c>. More info in the
         /// <see href="xref:a_playback_datatrack#notes-tracking">Data tracking: Notes tracking</see> article.
         /// </summary>
-        public bool TrackNotes { get; set; }
+        /// <exception cref="InvalidOperationException">Can't enable notes tracking due to the
+        /// <see cref="PlaybackHint.DisableNotesTracking"/> hint has been specified on the playback creation.</exception>
+        public bool TrackNotes
+        {
+            get { return _trackNotes; }
+            set
+            {
+                if (value && _hint.HasFlag(PlaybackHint.DisableNotesTracking))
+                    throw new InvalidOperationException($"Can't enable notes tracking due to the '{PlaybackHint.DisableNotesTracking}' hint has been specified on the playback creation.");
+
+                _trackNotes = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets a value indicating whether program must be tracked or not. If <c>true</c>, any jump
@@ -241,11 +252,16 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <see href="xref:a_playback_datatrack#midi-parameters-values-tracking">Data tracking: MIDI parameters values tracking</see>
         /// article.
         /// </summary>
+        /// <exception cref="InvalidOperationException">Can't enable program tracking due to the
+        /// <see cref="PlaybackHint.DisableProgramTracking"/> hint has been specified on the playback creation.</exception>
         public bool TrackProgram
         {
             get { return _playbackDataTracker.TrackProgram; }
             set
             {
+                if (value && _hint.HasFlag(PlaybackHint.DisableProgramTracking))
+                    throw new InvalidOperationException($"Can't enable program tracking due to the '{PlaybackHint.DisableProgramTracking}' hint has been specified on the playback creation.");
+
                 if (_playbackDataTracker.TrackProgram == value)
                     return;
 
@@ -263,11 +279,16 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <see href="xref:a_playback_datatrack#midi-parameters-values-tracking">Data tracking: MIDI parameters values tracking</see>
         /// article.
         /// </summary>
+        /// <exception cref="InvalidOperationException">Can't enable pitch value tracking due to the
+        /// <see cref="PlaybackHint.DisablePitchValueTracking"/> hint has been specified on the playback creation.</exception>
         public bool TrackPitchValue
         {
             get { return _playbackDataTracker.TrackPitchValue; }
             set
             {
+                if (value && _hint.HasFlag(PlaybackHint.DisablePitchValueTracking))
+                    throw new InvalidOperationException($"Can't enable pitch value tracking due to the '{PlaybackHint.DisablePitchValueTracking}' hint has been specified on the playback creation.");
+
                 if (_playbackDataTracker.TrackPitchValue == value)
                     return;
 
@@ -285,11 +306,16 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <see href="xref:a_playback_datatrack#midi-parameters-values-tracking">Data tracking: MIDI parameters values tracking</see>
         /// article.
         /// </summary>
+        /// <exception cref="InvalidOperationException">Can't enable control value tracking due to the
+        /// <see cref="PlaybackHint.DisableControlValueTracking"/> hint has been specified on the playback creation.</exception>
         public bool TrackControlValue
         {
             get { return _playbackDataTracker.TrackControlValue; }
             set
             {
+                if (value && _hint.HasFlag(PlaybackHint.DisableControlValueTracking))
+                    throw new InvalidOperationException($"Can't enable control value tracking due to the '{PlaybackHint.DisableControlValueTracking}' hint has been specified on the playback creation.");
+
                 if (_playbackDataTracker.TrackControlValue == value)
                     return;
 
@@ -841,6 +867,25 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         private void SendTrackedData(PlaybackDataTracker.TrackedParameterType trackedParameterType = PlaybackDataTracker.TrackedParameterType.All)
         {
+            if (_hint.HasFlag(PlaybackHint.DisableDataTracking))
+                return;
+
+            switch (trackedParameterType)
+            {
+                case PlaybackDataTracker.TrackedParameterType.Program:
+                    if (_hint.HasFlag(PlaybackHint.DisableProgramTracking))
+                        return;
+                    break;
+                case PlaybackDataTracker.TrackedParameterType.PitchValue:
+                    if (_hint.HasFlag(PlaybackHint.DisablePitchValueTracking))
+                        return;
+                    break;
+                case PlaybackDataTracker.TrackedParameterType.ControlValue:
+                    if (_hint.HasFlag(PlaybackHint.DisableControlValueTracking))
+                        return;
+                    break;
+            }
+
             foreach (var eventWithMetadata in _playbackDataTracker.GetEventsAtTime(_clock.CurrentTime, trackedParameterType))
             {
                 PlayEvent(eventWithMetadata.Event, eventWithMetadata.Metadata);
@@ -926,6 +971,9 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         private NotePlaybackEventMetadata[] BuildNotesMetadata()
         {
+            if (_hint.HasFlag(PlaybackHint.DisableNotesTracking))
+                return new NotePlaybackEventMetadata[0];
+
             var notesMetadata = new HashSet<NotePlaybackEventMetadata>();
 
             foreach (var e in _playbackEvents)
@@ -936,6 +984,25 @@ namespace Melanchall.DryWetMidi.Multimedia
             }
 
             return notesMetadata.ToArray();
+        }
+
+        private PlaybackDataTracker BuildDataTracker()
+        {
+            var playbackDataTracker = new PlaybackDataTracker(TempoMap);
+
+            if (_hint.HasFlag(PlaybackHint.DisableDataTracking))
+                return playbackDataTracker;
+
+            foreach (var playbackEvent in _playbackEvents)
+            {
+                playbackDataTracker.InitializeData(
+                    playbackEvent.Event,
+                    playbackEvent.RawTime,
+                    playbackEvent.Metadata.TimedEvent.Metadata,
+                    _hint);
+            }
+
+            return playbackDataTracker;
         }
 
         private void OnStarted()
@@ -1103,7 +1170,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         private void PlayEvent(MidiEvent midiEvent, object metadata)
         {
-            _playbackDataTracker.UpdateCurrentData(midiEvent, metadata);
+            _playbackDataTracker.UpdateCurrentData(midiEvent, metadata, _hint);
 
             try
             {
