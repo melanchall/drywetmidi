@@ -8930,6 +8930,30 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Core.SmpteOffsetEvent.Hours
   nameWithType: SmpteOffsetEvent.Hours
+- uid: Melanchall.DryWetMidi.Core.SmpteOffsetEvent.MaxHours
+  name: MaxHours
+  href: api/Melanchall.DryWetMidi.Core.SmpteOffsetEvent.html#Melanchall_DryWetMidi_Core_SmpteOffsetEvent_MaxHours
+  commentId: F:Melanchall.DryWetMidi.Core.SmpteOffsetEvent.MaxHours
+  fullName: Melanchall.DryWetMidi.Core.SmpteOffsetEvent.MaxHours
+  nameWithType: SmpteOffsetEvent.MaxHours
+- uid: Melanchall.DryWetMidi.Core.SmpteOffsetEvent.MaxMinutes
+  name: MaxMinutes
+  href: api/Melanchall.DryWetMidi.Core.SmpteOffsetEvent.html#Melanchall_DryWetMidi_Core_SmpteOffsetEvent_MaxMinutes
+  commentId: F:Melanchall.DryWetMidi.Core.SmpteOffsetEvent.MaxMinutes
+  fullName: Melanchall.DryWetMidi.Core.SmpteOffsetEvent.MaxMinutes
+  nameWithType: SmpteOffsetEvent.MaxMinutes
+- uid: Melanchall.DryWetMidi.Core.SmpteOffsetEvent.MaxSeconds
+  name: MaxSeconds
+  href: api/Melanchall.DryWetMidi.Core.SmpteOffsetEvent.html#Melanchall_DryWetMidi_Core_SmpteOffsetEvent_MaxSeconds
+  commentId: F:Melanchall.DryWetMidi.Core.SmpteOffsetEvent.MaxSeconds
+  fullName: Melanchall.DryWetMidi.Core.SmpteOffsetEvent.MaxSeconds
+  nameWithType: SmpteOffsetEvent.MaxSeconds
+- uid: Melanchall.DryWetMidi.Core.SmpteOffsetEvent.MaxSubFrames
+  name: MaxSubFrames
+  href: api/Melanchall.DryWetMidi.Core.SmpteOffsetEvent.html#Melanchall_DryWetMidi_Core_SmpteOffsetEvent_MaxSubFrames
+  commentId: F:Melanchall.DryWetMidi.Core.SmpteOffsetEvent.MaxSubFrames
+  fullName: Melanchall.DryWetMidi.Core.SmpteOffsetEvent.MaxSubFrames
+  nameWithType: SmpteOffsetEvent.MaxSubFrames
 - uid: Melanchall.DryWetMidi.Core.SmpteOffsetEvent.Minutes
   name: Minutes
   href: api/Melanchall.DryWetMidi.Core.SmpteOffsetEvent.html#Melanchall_DryWetMidi_Core_SmpteOffsetEvent_Minutes
@@ -12596,12 +12620,6 @@ references:
   commentId: E:Melanchall.DryWetMidi.Interaction.INotifyTimeChanged.TimeChanged
   fullName: Melanchall.DryWetMidi.Interaction.INotifyTimeChanged.TimeChanged
   nameWithType: INotifyTimeChanged.TimeChanged
-- uid: Melanchall.DryWetMidi.Interaction.IObjectId
-  name: IObjectId
-  href: api/Melanchall.DryWetMidi.Interaction.IObjectId.html
-  commentId: T:Melanchall.DryWetMidi.Interaction.IObjectId
-  fullName: Melanchall.DryWetMidi.Interaction.IObjectId
-  nameWithType: IObjectId
 - uid: Melanchall.DryWetMidi.Interaction.ITimedObject
   name: ITimedObject
   href: api/Melanchall.DryWetMidi.Interaction.ITimedObject.html
@@ -15445,34 +15463,6 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings.TimedEventDetectionSettings
   nameWithType: ObjectDetectionSettings.TimedEventDetectionSettings
-- uid: Melanchall.DryWetMidi.Interaction.ObjectIdUtilities
-  name: ObjectIdUtilities
-  href: api/Melanchall.DryWetMidi.Interaction.ObjectIdUtilities.html
-  commentId: T:Melanchall.DryWetMidi.Interaction.ObjectIdUtilities
-  fullName: Melanchall.DryWetMidi.Interaction.ObjectIdUtilities
-  nameWithType: ObjectIdUtilities
-- uid: Melanchall.DryWetMidi.Interaction.ObjectIdUtilities.GetObjectId(Melanchall.DryWetMidi.Interaction.ITimedObject)
-  name: GetObjectId(ITimedObject)
-  href: api/Melanchall.DryWetMidi.Interaction.ObjectIdUtilities.html#Melanchall_DryWetMidi_Interaction_ObjectIdUtilities_GetObjectId_Melanchall_DryWetMidi_Interaction_ITimedObject_
-  commentId: M:Melanchall.DryWetMidi.Interaction.ObjectIdUtilities.GetObjectId(Melanchall.DryWetMidi.Interaction.ITimedObject)
-  fullName: Melanchall.DryWetMidi.Interaction.ObjectIdUtilities.GetObjectId(Melanchall.DryWetMidi.Interaction.ITimedObject)
-  nameWithType: ObjectIdUtilities.GetObjectId(ITimedObject)
-- uid: Melanchall.DryWetMidi.Interaction.ObjectIdUtilities.GetObjectId*
-  name: GetObjectId
-  href: api/Melanchall.DryWetMidi.Interaction.ObjectIdUtilities.html#Melanchall_DryWetMidi_Interaction_ObjectIdUtilities_GetObjectId_
-  commentId: Overload:Melanchall.DryWetMidi.Interaction.ObjectIdUtilities.GetObjectId
-  isSpec: "True"
-  fullName: Melanchall.DryWetMidi.Interaction.ObjectIdUtilities.GetObjectId
-  nameWithType: ObjectIdUtilities.GetObjectId
-- uid: Melanchall.DryWetMidi.Interaction.ObjectIdUtilities.GetObjectId``1(``0)
-  name: GetObjectId<TId>(TId)
-  href: api/Melanchall.DryWetMidi.Interaction.ObjectIdUtilities.html#Melanchall_DryWetMidi_Interaction_ObjectIdUtilities_GetObjectId__1___0_
-  commentId: M:Melanchall.DryWetMidi.Interaction.ObjectIdUtilities.GetObjectId``1(``0)
-  name.vb: GetObjectId(Of TId)(TId)
-  fullName: Melanchall.DryWetMidi.Interaction.ObjectIdUtilities.GetObjectId<TId>(TId)
-  fullName.vb: Melanchall.DryWetMidi.Interaction.ObjectIdUtilities.GetObjectId(Of TId)(TId)
-  nameWithType: ObjectIdUtilities.GetObjectId<TId>(TId)
-  nameWithType.vb: ObjectIdUtilities.GetObjectId(Of TId)(TId)
 - uid: Melanchall.DryWetMidi.Interaction.ObjectType
   name: ObjectType
   href: api/Melanchall.DryWetMidi.Interaction.ObjectType.html
@@ -16462,6 +16452,32 @@ references:
   commentId: F:Melanchall.DryWetMidi.Interaction.TempoMap.Default
   fullName: Melanchall.DryWetMidi.Interaction.TempoMap.Default
   nameWithType: TempoMap.Default
+- uid: Melanchall.DryWetMidi.Interaction.TempoMap.Equals(System.Object)
+  name: Equals(Object)
+  href: api/Melanchall.DryWetMidi.Interaction.TempoMap.html#Melanchall_DryWetMidi_Interaction_TempoMap_Equals_System_Object_
+  commentId: M:Melanchall.DryWetMidi.Interaction.TempoMap.Equals(System.Object)
+  fullName: Melanchall.DryWetMidi.Interaction.TempoMap.Equals(System.Object)
+  nameWithType: TempoMap.Equals(Object)
+- uid: Melanchall.DryWetMidi.Interaction.TempoMap.Equals*
+  name: Equals
+  href: api/Melanchall.DryWetMidi.Interaction.TempoMap.html#Melanchall_DryWetMidi_Interaction_TempoMap_Equals_
+  commentId: Overload:Melanchall.DryWetMidi.Interaction.TempoMap.Equals
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Interaction.TempoMap.Equals
+  nameWithType: TempoMap.Equals
+- uid: Melanchall.DryWetMidi.Interaction.TempoMap.GetHashCode
+  name: GetHashCode()
+  href: api/Melanchall.DryWetMidi.Interaction.TempoMap.html#Melanchall_DryWetMidi_Interaction_TempoMap_GetHashCode
+  commentId: M:Melanchall.DryWetMidi.Interaction.TempoMap.GetHashCode
+  fullName: Melanchall.DryWetMidi.Interaction.TempoMap.GetHashCode()
+  nameWithType: TempoMap.GetHashCode()
+- uid: Melanchall.DryWetMidi.Interaction.TempoMap.GetHashCode*
+  name: GetHashCode
+  href: api/Melanchall.DryWetMidi.Interaction.TempoMap.html#Melanchall_DryWetMidi_Interaction_TempoMap_GetHashCode_
+  commentId: Overload:Melanchall.DryWetMidi.Interaction.TempoMap.GetHashCode
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Interaction.TempoMap.GetHashCode
+  nameWithType: TempoMap.GetHashCode
 - uid: Melanchall.DryWetMidi.Interaction.TempoMap.GetTempoAtTime(Melanchall.DryWetMidi.Interaction.ITimeSpan)
   name: GetTempoAtTime(ITimeSpan)
   href: api/Melanchall.DryWetMidi.Interaction.TempoMap.html#Melanchall_DryWetMidi_Interaction_TempoMap_GetTempoAtTime_Melanchall_DryWetMidi_Interaction_ITimeSpan_
@@ -21129,6 +21145,48 @@ references:
   commentId: T:Melanchall.DryWetMidi.Multimedia.PlaybackEventCallback
   fullName: Melanchall.DryWetMidi.Multimedia.PlaybackEventCallback
   nameWithType: PlaybackEventCallback
+- uid: Melanchall.DryWetMidi.Multimedia.PlaybackHint
+  name: PlaybackHint
+  href: api/Melanchall.DryWetMidi.Multimedia.PlaybackHint.html
+  commentId: T:Melanchall.DryWetMidi.Multimedia.PlaybackHint
+  fullName: Melanchall.DryWetMidi.Multimedia.PlaybackHint
+  nameWithType: PlaybackHint
+- uid: Melanchall.DryWetMidi.Multimedia.PlaybackHint.Default
+  name: Default
+  href: api/Melanchall.DryWetMidi.Multimedia.PlaybackHint.html#Melanchall_DryWetMidi_Multimedia_PlaybackHint_Default
+  commentId: F:Melanchall.DryWetMidi.Multimedia.PlaybackHint.Default
+  fullName: Melanchall.DryWetMidi.Multimedia.PlaybackHint.Default
+  nameWithType: PlaybackHint.Default
+- uid: Melanchall.DryWetMidi.Multimedia.PlaybackHint.DisableControlValueTracking
+  name: DisableControlValueTracking
+  href: api/Melanchall.DryWetMidi.Multimedia.PlaybackHint.html#Melanchall_DryWetMidi_Multimedia_PlaybackHint_DisableControlValueTracking
+  commentId: F:Melanchall.DryWetMidi.Multimedia.PlaybackHint.DisableControlValueTracking
+  fullName: Melanchall.DryWetMidi.Multimedia.PlaybackHint.DisableControlValueTracking
+  nameWithType: PlaybackHint.DisableControlValueTracking
+- uid: Melanchall.DryWetMidi.Multimedia.PlaybackHint.DisableDataTracking
+  name: DisableDataTracking
+  href: api/Melanchall.DryWetMidi.Multimedia.PlaybackHint.html#Melanchall_DryWetMidi_Multimedia_PlaybackHint_DisableDataTracking
+  commentId: F:Melanchall.DryWetMidi.Multimedia.PlaybackHint.DisableDataTracking
+  fullName: Melanchall.DryWetMidi.Multimedia.PlaybackHint.DisableDataTracking
+  nameWithType: PlaybackHint.DisableDataTracking
+- uid: Melanchall.DryWetMidi.Multimedia.PlaybackHint.DisableNotesTracking
+  name: DisableNotesTracking
+  href: api/Melanchall.DryWetMidi.Multimedia.PlaybackHint.html#Melanchall_DryWetMidi_Multimedia_PlaybackHint_DisableNotesTracking
+  commentId: F:Melanchall.DryWetMidi.Multimedia.PlaybackHint.DisableNotesTracking
+  fullName: Melanchall.DryWetMidi.Multimedia.PlaybackHint.DisableNotesTracking
+  nameWithType: PlaybackHint.DisableNotesTracking
+- uid: Melanchall.DryWetMidi.Multimedia.PlaybackHint.DisablePitchValueTracking
+  name: DisablePitchValueTracking
+  href: api/Melanchall.DryWetMidi.Multimedia.PlaybackHint.html#Melanchall_DryWetMidi_Multimedia_PlaybackHint_DisablePitchValueTracking
+  commentId: F:Melanchall.DryWetMidi.Multimedia.PlaybackHint.DisablePitchValueTracking
+  fullName: Melanchall.DryWetMidi.Multimedia.PlaybackHint.DisablePitchValueTracking
+  nameWithType: PlaybackHint.DisablePitchValueTracking
+- uid: Melanchall.DryWetMidi.Multimedia.PlaybackHint.DisableProgramTracking
+  name: DisableProgramTracking
+  href: api/Melanchall.DryWetMidi.Multimedia.PlaybackHint.html#Melanchall_DryWetMidi_Multimedia_PlaybackHint_DisableProgramTracking
+  commentId: F:Melanchall.DryWetMidi.Multimedia.PlaybackHint.DisableProgramTracking
+  fullName: Melanchall.DryWetMidi.Multimedia.PlaybackHint.DisableProgramTracking
+  nameWithType: PlaybackHint.DisableProgramTracking
 - uid: Melanchall.DryWetMidi.Multimedia.PlaybackSettings
   name: PlaybackSettings
   href: api/Melanchall.DryWetMidi.Multimedia.PlaybackSettings.html
@@ -21148,6 +21206,19 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Multimedia.PlaybackSettings.ClockSettings
   nameWithType: PlaybackSettings.ClockSettings
+- uid: Melanchall.DryWetMidi.Multimedia.PlaybackSettings.Hint
+  name: Hint
+  href: api/Melanchall.DryWetMidi.Multimedia.PlaybackSettings.html#Melanchall_DryWetMidi_Multimedia_PlaybackSettings_Hint
+  commentId: P:Melanchall.DryWetMidi.Multimedia.PlaybackSettings.Hint
+  fullName: Melanchall.DryWetMidi.Multimedia.PlaybackSettings.Hint
+  nameWithType: PlaybackSettings.Hint
+- uid: Melanchall.DryWetMidi.Multimedia.PlaybackSettings.Hint*
+  name: Hint
+  href: api/Melanchall.DryWetMidi.Multimedia.PlaybackSettings.html#Melanchall_DryWetMidi_Multimedia_PlaybackSettings_Hint_
+  commentId: Overload:Melanchall.DryWetMidi.Multimedia.PlaybackSettings.Hint
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Multimedia.PlaybackSettings.Hint
+  nameWithType: PlaybackSettings.Hint
 - uid: Melanchall.DryWetMidi.Multimedia.PlaybackSettings.NoteDetectionSettings
   name: NoteDetectionSettings
   href: api/Melanchall.DryWetMidi.Multimedia.PlaybackSettings.html#Melanchall_DryWetMidi_Multimedia_PlaybackSettings_NoteDetectionSettings
@@ -37766,66 +37837,78 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Tools.Splitter.SplitByObjects
   nameWithType: Splitter.SplitByObjects
-- uid: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsAtDistance(Melanchall.DryWetMidi.Core.MidiFile,Melanchall.DryWetMidi.Interaction.ObjectType,Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Tools.LengthedObjectTarget,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings)
-  name: SplitObjectsAtDistance(MidiFile, ObjectType, ITimeSpan, LengthedObjectTarget, ObjectDetectionSettings)
-  href: api/Melanchall.DryWetMidi.Tools.Splitter.html#Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsAtDistance_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Interaction_ObjectType_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Tools_LengthedObjectTarget_Melanchall_DryWetMidi_Interaction_ObjectDetectionSettings_
-  commentId: M:Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsAtDistance(Melanchall.DryWetMidi.Core.MidiFile,Melanchall.DryWetMidi.Interaction.ObjectType,Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Tools.LengthedObjectTarget,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings)
-  fullName: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsAtDistance(Melanchall.DryWetMidi.Core.MidiFile, Melanchall.DryWetMidi.Interaction.ObjectType, Melanchall.DryWetMidi.Interaction.ITimeSpan, Melanchall.DryWetMidi.Tools.LengthedObjectTarget, Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings)
-  nameWithType: Splitter.SplitObjectsAtDistance(MidiFile, ObjectType, ITimeSpan, LengthedObjectTarget, ObjectDetectionSettings)
-- uid: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsAtDistance(Melanchall.DryWetMidi.Core.MidiFile,Melanchall.DryWetMidi.Interaction.ObjectType,System.Double,Melanchall.DryWetMidi.Interaction.TimeSpanType,Melanchall.DryWetMidi.Tools.LengthedObjectTarget,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings)
-  name: SplitObjectsAtDistance(MidiFile, ObjectType, Double, TimeSpanType, LengthedObjectTarget, ObjectDetectionSettings)
-  href: api/Melanchall.DryWetMidi.Tools.Splitter.html#Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsAtDistance_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Interaction_ObjectType_System_Double_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Tools_LengthedObjectTarget_Melanchall_DryWetMidi_Interaction_ObjectDetectionSettings_
-  commentId: M:Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsAtDistance(Melanchall.DryWetMidi.Core.MidiFile,Melanchall.DryWetMidi.Interaction.ObjectType,System.Double,Melanchall.DryWetMidi.Interaction.TimeSpanType,Melanchall.DryWetMidi.Tools.LengthedObjectTarget,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings)
-  fullName: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsAtDistance(Melanchall.DryWetMidi.Core.MidiFile, Melanchall.DryWetMidi.Interaction.ObjectType, System.Double, Melanchall.DryWetMidi.Interaction.TimeSpanType, Melanchall.DryWetMidi.Tools.LengthedObjectTarget, Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings)
-  nameWithType: Splitter.SplitObjectsAtDistance(MidiFile, ObjectType, Double, TimeSpanType, LengthedObjectTarget, ObjectDetectionSettings)
-- uid: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsAtDistance(Melanchall.DryWetMidi.Core.TrackChunk,Melanchall.DryWetMidi.Interaction.ObjectType,Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Tools.LengthedObjectTarget,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings)
-  name: SplitObjectsAtDistance(TrackChunk, ObjectType, ITimeSpan, LengthedObjectTarget, TempoMap, ObjectDetectionSettings)
-  href: api/Melanchall.DryWetMidi.Tools.Splitter.html#Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsAtDistance_Melanchall_DryWetMidi_Core_TrackChunk_Melanchall_DryWetMidi_Interaction_ObjectType_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Tools_LengthedObjectTarget_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Interaction_ObjectDetectionSettings_
-  commentId: M:Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsAtDistance(Melanchall.DryWetMidi.Core.TrackChunk,Melanchall.DryWetMidi.Interaction.ObjectType,Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Tools.LengthedObjectTarget,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings)
-  fullName: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsAtDistance(Melanchall.DryWetMidi.Core.TrackChunk, Melanchall.DryWetMidi.Interaction.ObjectType, Melanchall.DryWetMidi.Interaction.ITimeSpan, Melanchall.DryWetMidi.Tools.LengthedObjectTarget, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings)
-  nameWithType: Splitter.SplitObjectsAtDistance(TrackChunk, ObjectType, ITimeSpan, LengthedObjectTarget, TempoMap, ObjectDetectionSettings)
-- uid: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsAtDistance(Melanchall.DryWetMidi.Core.TrackChunk,Melanchall.DryWetMidi.Interaction.ObjectType,System.Double,Melanchall.DryWetMidi.Interaction.TimeSpanType,Melanchall.DryWetMidi.Tools.LengthedObjectTarget,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings)
-  name: SplitObjectsAtDistance(TrackChunk, ObjectType, Double, TimeSpanType, LengthedObjectTarget, TempoMap, ObjectDetectionSettings)
-  href: api/Melanchall.DryWetMidi.Tools.Splitter.html#Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsAtDistance_Melanchall_DryWetMidi_Core_TrackChunk_Melanchall_DryWetMidi_Interaction_ObjectType_System_Double_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Tools_LengthedObjectTarget_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Interaction_ObjectDetectionSettings_
-  commentId: M:Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsAtDistance(Melanchall.DryWetMidi.Core.TrackChunk,Melanchall.DryWetMidi.Interaction.ObjectType,System.Double,Melanchall.DryWetMidi.Interaction.TimeSpanType,Melanchall.DryWetMidi.Tools.LengthedObjectTarget,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings)
-  fullName: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsAtDistance(Melanchall.DryWetMidi.Core.TrackChunk, Melanchall.DryWetMidi.Interaction.ObjectType, System.Double, Melanchall.DryWetMidi.Interaction.TimeSpanType, Melanchall.DryWetMidi.Tools.LengthedObjectTarget, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings)
-  nameWithType: Splitter.SplitObjectsAtDistance(TrackChunk, ObjectType, Double, TimeSpanType, LengthedObjectTarget, TempoMap, ObjectDetectionSettings)
-- uid: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsAtDistance(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk},Melanchall.DryWetMidi.Interaction.ObjectType,Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Tools.LengthedObjectTarget,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings)
-  name: SplitObjectsAtDistance(IEnumerable<TrackChunk>, ObjectType, ITimeSpan, LengthedObjectTarget, TempoMap, ObjectDetectionSettings)
-  href: api/Melanchall.DryWetMidi.Tools.Splitter.html#Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsAtDistance_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__Melanchall_DryWetMidi_Interaction_ObjectType_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Tools_LengthedObjectTarget_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Interaction_ObjectDetectionSettings_
-  commentId: M:Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsAtDistance(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk},Melanchall.DryWetMidi.Interaction.ObjectType,Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Tools.LengthedObjectTarget,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings)
-  name.vb: SplitObjectsAtDistance(IEnumerable(Of TrackChunk), ObjectType, ITimeSpan, LengthedObjectTarget, TempoMap, ObjectDetectionSettings)
-  fullName: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsAtDistance(System.Collections.Generic.IEnumerable<Melanchall.DryWetMidi.Core.TrackChunk>, Melanchall.DryWetMidi.Interaction.ObjectType, Melanchall.DryWetMidi.Interaction.ITimeSpan, Melanchall.DryWetMidi.Tools.LengthedObjectTarget, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings)
-  fullName.vb: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsAtDistance(System.Collections.Generic.IEnumerable(Of Melanchall.DryWetMidi.Core.TrackChunk), Melanchall.DryWetMidi.Interaction.ObjectType, Melanchall.DryWetMidi.Interaction.ITimeSpan, Melanchall.DryWetMidi.Tools.LengthedObjectTarget, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings)
-  nameWithType: Splitter.SplitObjectsAtDistance(IEnumerable<TrackChunk>, ObjectType, ITimeSpan, LengthedObjectTarget, TempoMap, ObjectDetectionSettings)
-  nameWithType.vb: Splitter.SplitObjectsAtDistance(IEnumerable(Of TrackChunk), ObjectType, ITimeSpan, LengthedObjectTarget, TempoMap, ObjectDetectionSettings)
-- uid: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsAtDistance(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk},Melanchall.DryWetMidi.Interaction.ObjectType,System.Double,Melanchall.DryWetMidi.Interaction.TimeSpanType,Melanchall.DryWetMidi.Tools.LengthedObjectTarget,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings)
-  name: SplitObjectsAtDistance(IEnumerable<TrackChunk>, ObjectType, Double, TimeSpanType, LengthedObjectTarget, TempoMap, ObjectDetectionSettings)
-  href: api/Melanchall.DryWetMidi.Tools.Splitter.html#Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsAtDistance_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__Melanchall_DryWetMidi_Interaction_ObjectType_System_Double_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Tools_LengthedObjectTarget_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Interaction_ObjectDetectionSettings_
-  commentId: M:Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsAtDistance(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk},Melanchall.DryWetMidi.Interaction.ObjectType,System.Double,Melanchall.DryWetMidi.Interaction.TimeSpanType,Melanchall.DryWetMidi.Tools.LengthedObjectTarget,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings)
-  name.vb: SplitObjectsAtDistance(IEnumerable(Of TrackChunk), ObjectType, Double, TimeSpanType, LengthedObjectTarget, TempoMap, ObjectDetectionSettings)
-  fullName: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsAtDistance(System.Collections.Generic.IEnumerable<Melanchall.DryWetMidi.Core.TrackChunk>, Melanchall.DryWetMidi.Interaction.ObjectType, System.Double, Melanchall.DryWetMidi.Interaction.TimeSpanType, Melanchall.DryWetMidi.Tools.LengthedObjectTarget, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings)
-  fullName.vb: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsAtDistance(System.Collections.Generic.IEnumerable(Of Melanchall.DryWetMidi.Core.TrackChunk), Melanchall.DryWetMidi.Interaction.ObjectType, System.Double, Melanchall.DryWetMidi.Interaction.TimeSpanType, Melanchall.DryWetMidi.Tools.LengthedObjectTarget, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings)
-  nameWithType: Splitter.SplitObjectsAtDistance(IEnumerable<TrackChunk>, ObjectType, Double, TimeSpanType, LengthedObjectTarget, TempoMap, ObjectDetectionSettings)
-  nameWithType.vb: Splitter.SplitObjectsAtDistance(IEnumerable(Of TrackChunk), ObjectType, Double, TimeSpanType, LengthedObjectTarget, TempoMap, ObjectDetectionSettings)
-- uid: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsAtDistance(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Interaction.ITimedObject},Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Tools.LengthedObjectTarget,Melanchall.DryWetMidi.Interaction.TempoMap)
-  name: SplitObjectsAtDistance(IEnumerable<ITimedObject>, ITimeSpan, LengthedObjectTarget, TempoMap)
-  href: api/Melanchall.DryWetMidi.Tools.Splitter.html#Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsAtDistance_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_ITimedObject__Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Tools_LengthedObjectTarget_Melanchall_DryWetMidi_Interaction_TempoMap_
-  commentId: M:Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsAtDistance(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Interaction.ITimedObject},Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Tools.LengthedObjectTarget,Melanchall.DryWetMidi.Interaction.TempoMap)
-  name.vb: SplitObjectsAtDistance(IEnumerable(Of ITimedObject), ITimeSpan, LengthedObjectTarget, TempoMap)
-  fullName: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsAtDistance(System.Collections.Generic.IEnumerable<Melanchall.DryWetMidi.Interaction.ITimedObject>, Melanchall.DryWetMidi.Interaction.ITimeSpan, Melanchall.DryWetMidi.Tools.LengthedObjectTarget, Melanchall.DryWetMidi.Interaction.TempoMap)
-  fullName.vb: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsAtDistance(System.Collections.Generic.IEnumerable(Of Melanchall.DryWetMidi.Interaction.ITimedObject), Melanchall.DryWetMidi.Interaction.ITimeSpan, Melanchall.DryWetMidi.Tools.LengthedObjectTarget, Melanchall.DryWetMidi.Interaction.TempoMap)
-  nameWithType: Splitter.SplitObjectsAtDistance(IEnumerable<ITimedObject>, ITimeSpan, LengthedObjectTarget, TempoMap)
-  nameWithType.vb: Splitter.SplitObjectsAtDistance(IEnumerable(Of ITimedObject), ITimeSpan, LengthedObjectTarget, TempoMap)
-- uid: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsAtDistance(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Interaction.ITimedObject},System.Double,Melanchall.DryWetMidi.Interaction.TimeSpanType,Melanchall.DryWetMidi.Tools.LengthedObjectTarget,Melanchall.DryWetMidi.Interaction.TempoMap)
-  name: SplitObjectsAtDistance(IEnumerable<ITimedObject>, Double, TimeSpanType, LengthedObjectTarget, TempoMap)
-  href: api/Melanchall.DryWetMidi.Tools.Splitter.html#Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsAtDistance_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_ITimedObject__System_Double_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Tools_LengthedObjectTarget_Melanchall_DryWetMidi_Interaction_TempoMap_
-  commentId: M:Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsAtDistance(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Interaction.ITimedObject},System.Double,Melanchall.DryWetMidi.Interaction.TimeSpanType,Melanchall.DryWetMidi.Tools.LengthedObjectTarget,Melanchall.DryWetMidi.Interaction.TempoMap)
-  name.vb: SplitObjectsAtDistance(IEnumerable(Of ITimedObject), Double, TimeSpanType, LengthedObjectTarget, TempoMap)
-  fullName: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsAtDistance(System.Collections.Generic.IEnumerable<Melanchall.DryWetMidi.Interaction.ITimedObject>, System.Double, Melanchall.DryWetMidi.Interaction.TimeSpanType, Melanchall.DryWetMidi.Tools.LengthedObjectTarget, Melanchall.DryWetMidi.Interaction.TempoMap)
-  fullName.vb: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsAtDistance(System.Collections.Generic.IEnumerable(Of Melanchall.DryWetMidi.Interaction.ITimedObject), System.Double, Melanchall.DryWetMidi.Interaction.TimeSpanType, Melanchall.DryWetMidi.Tools.LengthedObjectTarget, Melanchall.DryWetMidi.Interaction.TempoMap)
-  nameWithType: Splitter.SplitObjectsAtDistance(IEnumerable<ITimedObject>, Double, TimeSpanType, LengthedObjectTarget, TempoMap)
-  nameWithType.vb: Splitter.SplitObjectsAtDistance(IEnumerable(Of ITimedObject), Double, TimeSpanType, LengthedObjectTarget, TempoMap)
+- uid: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsAtDistance(Melanchall.DryWetMidi.Core.MidiFile,Melanchall.DryWetMidi.Interaction.ObjectType,Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Tools.LengthedObjectTarget,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings,System.Predicate{Melanchall.DryWetMidi.Interaction.ITimedObject})
+  name: SplitObjectsAtDistance(MidiFile, ObjectType, ITimeSpan, LengthedObjectTarget, ObjectDetectionSettings, Predicate<ITimedObject>)
+  href: api/Melanchall.DryWetMidi.Tools.Splitter.html#Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsAtDistance_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Interaction_ObjectType_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Tools_LengthedObjectTarget_Melanchall_DryWetMidi_Interaction_ObjectDetectionSettings_System_Predicate_Melanchall_DryWetMidi_Interaction_ITimedObject__
+  commentId: M:Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsAtDistance(Melanchall.DryWetMidi.Core.MidiFile,Melanchall.DryWetMidi.Interaction.ObjectType,Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Tools.LengthedObjectTarget,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings,System.Predicate{Melanchall.DryWetMidi.Interaction.ITimedObject})
+  name.vb: SplitObjectsAtDistance(MidiFile, ObjectType, ITimeSpan, LengthedObjectTarget, ObjectDetectionSettings, Predicate(Of ITimedObject))
+  fullName: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsAtDistance(Melanchall.DryWetMidi.Core.MidiFile, Melanchall.DryWetMidi.Interaction.ObjectType, Melanchall.DryWetMidi.Interaction.ITimeSpan, Melanchall.DryWetMidi.Tools.LengthedObjectTarget, Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings, System.Predicate<Melanchall.DryWetMidi.Interaction.ITimedObject>)
+  fullName.vb: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsAtDistance(Melanchall.DryWetMidi.Core.MidiFile, Melanchall.DryWetMidi.Interaction.ObjectType, Melanchall.DryWetMidi.Interaction.ITimeSpan, Melanchall.DryWetMidi.Tools.LengthedObjectTarget, Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings, System.Predicate(Of Melanchall.DryWetMidi.Interaction.ITimedObject))
+  nameWithType: Splitter.SplitObjectsAtDistance(MidiFile, ObjectType, ITimeSpan, LengthedObjectTarget, ObjectDetectionSettings, Predicate<ITimedObject>)
+  nameWithType.vb: Splitter.SplitObjectsAtDistance(MidiFile, ObjectType, ITimeSpan, LengthedObjectTarget, ObjectDetectionSettings, Predicate(Of ITimedObject))
+- uid: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsAtDistance(Melanchall.DryWetMidi.Core.MidiFile,Melanchall.DryWetMidi.Interaction.ObjectType,System.Double,Melanchall.DryWetMidi.Interaction.TimeSpanType,Melanchall.DryWetMidi.Tools.LengthedObjectTarget,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings,System.Predicate{Melanchall.DryWetMidi.Interaction.ITimedObject})
+  name: SplitObjectsAtDistance(MidiFile, ObjectType, Double, TimeSpanType, LengthedObjectTarget, ObjectDetectionSettings, Predicate<ITimedObject>)
+  href: api/Melanchall.DryWetMidi.Tools.Splitter.html#Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsAtDistance_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Interaction_ObjectType_System_Double_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Tools_LengthedObjectTarget_Melanchall_DryWetMidi_Interaction_ObjectDetectionSettings_System_Predicate_Melanchall_DryWetMidi_Interaction_ITimedObject__
+  commentId: M:Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsAtDistance(Melanchall.DryWetMidi.Core.MidiFile,Melanchall.DryWetMidi.Interaction.ObjectType,System.Double,Melanchall.DryWetMidi.Interaction.TimeSpanType,Melanchall.DryWetMidi.Tools.LengthedObjectTarget,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings,System.Predicate{Melanchall.DryWetMidi.Interaction.ITimedObject})
+  name.vb: SplitObjectsAtDistance(MidiFile, ObjectType, Double, TimeSpanType, LengthedObjectTarget, ObjectDetectionSettings, Predicate(Of ITimedObject))
+  fullName: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsAtDistance(Melanchall.DryWetMidi.Core.MidiFile, Melanchall.DryWetMidi.Interaction.ObjectType, System.Double, Melanchall.DryWetMidi.Interaction.TimeSpanType, Melanchall.DryWetMidi.Tools.LengthedObjectTarget, Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings, System.Predicate<Melanchall.DryWetMidi.Interaction.ITimedObject>)
+  fullName.vb: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsAtDistance(Melanchall.DryWetMidi.Core.MidiFile, Melanchall.DryWetMidi.Interaction.ObjectType, System.Double, Melanchall.DryWetMidi.Interaction.TimeSpanType, Melanchall.DryWetMidi.Tools.LengthedObjectTarget, Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings, System.Predicate(Of Melanchall.DryWetMidi.Interaction.ITimedObject))
+  nameWithType: Splitter.SplitObjectsAtDistance(MidiFile, ObjectType, Double, TimeSpanType, LengthedObjectTarget, ObjectDetectionSettings, Predicate<ITimedObject>)
+  nameWithType.vb: Splitter.SplitObjectsAtDistance(MidiFile, ObjectType, Double, TimeSpanType, LengthedObjectTarget, ObjectDetectionSettings, Predicate(Of ITimedObject))
+- uid: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsAtDistance(Melanchall.DryWetMidi.Core.TrackChunk,Melanchall.DryWetMidi.Interaction.ObjectType,Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Tools.LengthedObjectTarget,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings,System.Predicate{Melanchall.DryWetMidi.Interaction.ITimedObject})
+  name: SplitObjectsAtDistance(TrackChunk, ObjectType, ITimeSpan, LengthedObjectTarget, TempoMap, ObjectDetectionSettings, Predicate<ITimedObject>)
+  href: api/Melanchall.DryWetMidi.Tools.Splitter.html#Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsAtDistance_Melanchall_DryWetMidi_Core_TrackChunk_Melanchall_DryWetMidi_Interaction_ObjectType_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Tools_LengthedObjectTarget_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Interaction_ObjectDetectionSettings_System_Predicate_Melanchall_DryWetMidi_Interaction_ITimedObject__
+  commentId: M:Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsAtDistance(Melanchall.DryWetMidi.Core.TrackChunk,Melanchall.DryWetMidi.Interaction.ObjectType,Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Tools.LengthedObjectTarget,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings,System.Predicate{Melanchall.DryWetMidi.Interaction.ITimedObject})
+  name.vb: SplitObjectsAtDistance(TrackChunk, ObjectType, ITimeSpan, LengthedObjectTarget, TempoMap, ObjectDetectionSettings, Predicate(Of ITimedObject))
+  fullName: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsAtDistance(Melanchall.DryWetMidi.Core.TrackChunk, Melanchall.DryWetMidi.Interaction.ObjectType, Melanchall.DryWetMidi.Interaction.ITimeSpan, Melanchall.DryWetMidi.Tools.LengthedObjectTarget, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings, System.Predicate<Melanchall.DryWetMidi.Interaction.ITimedObject>)
+  fullName.vb: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsAtDistance(Melanchall.DryWetMidi.Core.TrackChunk, Melanchall.DryWetMidi.Interaction.ObjectType, Melanchall.DryWetMidi.Interaction.ITimeSpan, Melanchall.DryWetMidi.Tools.LengthedObjectTarget, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings, System.Predicate(Of Melanchall.DryWetMidi.Interaction.ITimedObject))
+  nameWithType: Splitter.SplitObjectsAtDistance(TrackChunk, ObjectType, ITimeSpan, LengthedObjectTarget, TempoMap, ObjectDetectionSettings, Predicate<ITimedObject>)
+  nameWithType.vb: Splitter.SplitObjectsAtDistance(TrackChunk, ObjectType, ITimeSpan, LengthedObjectTarget, TempoMap, ObjectDetectionSettings, Predicate(Of ITimedObject))
+- uid: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsAtDistance(Melanchall.DryWetMidi.Core.TrackChunk,Melanchall.DryWetMidi.Interaction.ObjectType,System.Double,Melanchall.DryWetMidi.Interaction.TimeSpanType,Melanchall.DryWetMidi.Tools.LengthedObjectTarget,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings,System.Predicate{Melanchall.DryWetMidi.Interaction.ITimedObject})
+  name: SplitObjectsAtDistance(TrackChunk, ObjectType, Double, TimeSpanType, LengthedObjectTarget, TempoMap, ObjectDetectionSettings, Predicate<ITimedObject>)
+  href: api/Melanchall.DryWetMidi.Tools.Splitter.html#Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsAtDistance_Melanchall_DryWetMidi_Core_TrackChunk_Melanchall_DryWetMidi_Interaction_ObjectType_System_Double_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Tools_LengthedObjectTarget_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Interaction_ObjectDetectionSettings_System_Predicate_Melanchall_DryWetMidi_Interaction_ITimedObject__
+  commentId: M:Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsAtDistance(Melanchall.DryWetMidi.Core.TrackChunk,Melanchall.DryWetMidi.Interaction.ObjectType,System.Double,Melanchall.DryWetMidi.Interaction.TimeSpanType,Melanchall.DryWetMidi.Tools.LengthedObjectTarget,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings,System.Predicate{Melanchall.DryWetMidi.Interaction.ITimedObject})
+  name.vb: SplitObjectsAtDistance(TrackChunk, ObjectType, Double, TimeSpanType, LengthedObjectTarget, TempoMap, ObjectDetectionSettings, Predicate(Of ITimedObject))
+  fullName: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsAtDistance(Melanchall.DryWetMidi.Core.TrackChunk, Melanchall.DryWetMidi.Interaction.ObjectType, System.Double, Melanchall.DryWetMidi.Interaction.TimeSpanType, Melanchall.DryWetMidi.Tools.LengthedObjectTarget, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings, System.Predicate<Melanchall.DryWetMidi.Interaction.ITimedObject>)
+  fullName.vb: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsAtDistance(Melanchall.DryWetMidi.Core.TrackChunk, Melanchall.DryWetMidi.Interaction.ObjectType, System.Double, Melanchall.DryWetMidi.Interaction.TimeSpanType, Melanchall.DryWetMidi.Tools.LengthedObjectTarget, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings, System.Predicate(Of Melanchall.DryWetMidi.Interaction.ITimedObject))
+  nameWithType: Splitter.SplitObjectsAtDistance(TrackChunk, ObjectType, Double, TimeSpanType, LengthedObjectTarget, TempoMap, ObjectDetectionSettings, Predicate<ITimedObject>)
+  nameWithType.vb: Splitter.SplitObjectsAtDistance(TrackChunk, ObjectType, Double, TimeSpanType, LengthedObjectTarget, TempoMap, ObjectDetectionSettings, Predicate(Of ITimedObject))
+- uid: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsAtDistance(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk},Melanchall.DryWetMidi.Interaction.ObjectType,Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Tools.LengthedObjectTarget,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings,System.Predicate{Melanchall.DryWetMidi.Interaction.ITimedObject})
+  name: SplitObjectsAtDistance(IEnumerable<TrackChunk>, ObjectType, ITimeSpan, LengthedObjectTarget, TempoMap, ObjectDetectionSettings, Predicate<ITimedObject>)
+  href: api/Melanchall.DryWetMidi.Tools.Splitter.html#Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsAtDistance_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__Melanchall_DryWetMidi_Interaction_ObjectType_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Tools_LengthedObjectTarget_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Interaction_ObjectDetectionSettings_System_Predicate_Melanchall_DryWetMidi_Interaction_ITimedObject__
+  commentId: M:Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsAtDistance(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk},Melanchall.DryWetMidi.Interaction.ObjectType,Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Tools.LengthedObjectTarget,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings,System.Predicate{Melanchall.DryWetMidi.Interaction.ITimedObject})
+  name.vb: SplitObjectsAtDistance(IEnumerable(Of TrackChunk), ObjectType, ITimeSpan, LengthedObjectTarget, TempoMap, ObjectDetectionSettings, Predicate(Of ITimedObject))
+  fullName: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsAtDistance(System.Collections.Generic.IEnumerable<Melanchall.DryWetMidi.Core.TrackChunk>, Melanchall.DryWetMidi.Interaction.ObjectType, Melanchall.DryWetMidi.Interaction.ITimeSpan, Melanchall.DryWetMidi.Tools.LengthedObjectTarget, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings, System.Predicate<Melanchall.DryWetMidi.Interaction.ITimedObject>)
+  fullName.vb: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsAtDistance(System.Collections.Generic.IEnumerable(Of Melanchall.DryWetMidi.Core.TrackChunk), Melanchall.DryWetMidi.Interaction.ObjectType, Melanchall.DryWetMidi.Interaction.ITimeSpan, Melanchall.DryWetMidi.Tools.LengthedObjectTarget, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings, System.Predicate(Of Melanchall.DryWetMidi.Interaction.ITimedObject))
+  nameWithType: Splitter.SplitObjectsAtDistance(IEnumerable<TrackChunk>, ObjectType, ITimeSpan, LengthedObjectTarget, TempoMap, ObjectDetectionSettings, Predicate<ITimedObject>)
+  nameWithType.vb: Splitter.SplitObjectsAtDistance(IEnumerable(Of TrackChunk), ObjectType, ITimeSpan, LengthedObjectTarget, TempoMap, ObjectDetectionSettings, Predicate(Of ITimedObject))
+- uid: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsAtDistance(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk},Melanchall.DryWetMidi.Interaction.ObjectType,System.Double,Melanchall.DryWetMidi.Interaction.TimeSpanType,Melanchall.DryWetMidi.Tools.LengthedObjectTarget,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings,System.Predicate{Melanchall.DryWetMidi.Interaction.ITimedObject})
+  name: SplitObjectsAtDistance(IEnumerable<TrackChunk>, ObjectType, Double, TimeSpanType, LengthedObjectTarget, TempoMap, ObjectDetectionSettings, Predicate<ITimedObject>)
+  href: api/Melanchall.DryWetMidi.Tools.Splitter.html#Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsAtDistance_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__Melanchall_DryWetMidi_Interaction_ObjectType_System_Double_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Tools_LengthedObjectTarget_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Interaction_ObjectDetectionSettings_System_Predicate_Melanchall_DryWetMidi_Interaction_ITimedObject__
+  commentId: M:Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsAtDistance(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk},Melanchall.DryWetMidi.Interaction.ObjectType,System.Double,Melanchall.DryWetMidi.Interaction.TimeSpanType,Melanchall.DryWetMidi.Tools.LengthedObjectTarget,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings,System.Predicate{Melanchall.DryWetMidi.Interaction.ITimedObject})
+  name.vb: SplitObjectsAtDistance(IEnumerable(Of TrackChunk), ObjectType, Double, TimeSpanType, LengthedObjectTarget, TempoMap, ObjectDetectionSettings, Predicate(Of ITimedObject))
+  fullName: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsAtDistance(System.Collections.Generic.IEnumerable<Melanchall.DryWetMidi.Core.TrackChunk>, Melanchall.DryWetMidi.Interaction.ObjectType, System.Double, Melanchall.DryWetMidi.Interaction.TimeSpanType, Melanchall.DryWetMidi.Tools.LengthedObjectTarget, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings, System.Predicate<Melanchall.DryWetMidi.Interaction.ITimedObject>)
+  fullName.vb: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsAtDistance(System.Collections.Generic.IEnumerable(Of Melanchall.DryWetMidi.Core.TrackChunk), Melanchall.DryWetMidi.Interaction.ObjectType, System.Double, Melanchall.DryWetMidi.Interaction.TimeSpanType, Melanchall.DryWetMidi.Tools.LengthedObjectTarget, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings, System.Predicate(Of Melanchall.DryWetMidi.Interaction.ITimedObject))
+  nameWithType: Splitter.SplitObjectsAtDistance(IEnumerable<TrackChunk>, ObjectType, Double, TimeSpanType, LengthedObjectTarget, TempoMap, ObjectDetectionSettings, Predicate<ITimedObject>)
+  nameWithType.vb: Splitter.SplitObjectsAtDistance(IEnumerable(Of TrackChunk), ObjectType, Double, TimeSpanType, LengthedObjectTarget, TempoMap, ObjectDetectionSettings, Predicate(Of ITimedObject))
+- uid: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsAtDistance(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Interaction.ITimedObject},Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Tools.LengthedObjectTarget,Melanchall.DryWetMidi.Interaction.TempoMap,System.Predicate{Melanchall.DryWetMidi.Interaction.ITimedObject})
+  name: SplitObjectsAtDistance(IEnumerable<ITimedObject>, ITimeSpan, LengthedObjectTarget, TempoMap, Predicate<ITimedObject>)
+  href: api/Melanchall.DryWetMidi.Tools.Splitter.html#Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsAtDistance_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_ITimedObject__Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Tools_LengthedObjectTarget_Melanchall_DryWetMidi_Interaction_TempoMap_System_Predicate_Melanchall_DryWetMidi_Interaction_ITimedObject__
+  commentId: M:Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsAtDistance(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Interaction.ITimedObject},Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Tools.LengthedObjectTarget,Melanchall.DryWetMidi.Interaction.TempoMap,System.Predicate{Melanchall.DryWetMidi.Interaction.ITimedObject})
+  name.vb: SplitObjectsAtDistance(IEnumerable(Of ITimedObject), ITimeSpan, LengthedObjectTarget, TempoMap, Predicate(Of ITimedObject))
+  fullName: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsAtDistance(System.Collections.Generic.IEnumerable<Melanchall.DryWetMidi.Interaction.ITimedObject>, Melanchall.DryWetMidi.Interaction.ITimeSpan, Melanchall.DryWetMidi.Tools.LengthedObjectTarget, Melanchall.DryWetMidi.Interaction.TempoMap, System.Predicate<Melanchall.DryWetMidi.Interaction.ITimedObject>)
+  fullName.vb: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsAtDistance(System.Collections.Generic.IEnumerable(Of Melanchall.DryWetMidi.Interaction.ITimedObject), Melanchall.DryWetMidi.Interaction.ITimeSpan, Melanchall.DryWetMidi.Tools.LengthedObjectTarget, Melanchall.DryWetMidi.Interaction.TempoMap, System.Predicate(Of Melanchall.DryWetMidi.Interaction.ITimedObject))
+  nameWithType: Splitter.SplitObjectsAtDistance(IEnumerable<ITimedObject>, ITimeSpan, LengthedObjectTarget, TempoMap, Predicate<ITimedObject>)
+  nameWithType.vb: Splitter.SplitObjectsAtDistance(IEnumerable(Of ITimedObject), ITimeSpan, LengthedObjectTarget, TempoMap, Predicate(Of ITimedObject))
+- uid: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsAtDistance(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Interaction.ITimedObject},System.Double,Melanchall.DryWetMidi.Interaction.TimeSpanType,Melanchall.DryWetMidi.Tools.LengthedObjectTarget,Melanchall.DryWetMidi.Interaction.TempoMap,System.Predicate{Melanchall.DryWetMidi.Interaction.ITimedObject})
+  name: SplitObjectsAtDistance(IEnumerable<ITimedObject>, Double, TimeSpanType, LengthedObjectTarget, TempoMap, Predicate<ITimedObject>)
+  href: api/Melanchall.DryWetMidi.Tools.Splitter.html#Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsAtDistance_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_ITimedObject__System_Double_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Tools_LengthedObjectTarget_Melanchall_DryWetMidi_Interaction_TempoMap_System_Predicate_Melanchall_DryWetMidi_Interaction_ITimedObject__
+  commentId: M:Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsAtDistance(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Interaction.ITimedObject},System.Double,Melanchall.DryWetMidi.Interaction.TimeSpanType,Melanchall.DryWetMidi.Tools.LengthedObjectTarget,Melanchall.DryWetMidi.Interaction.TempoMap,System.Predicate{Melanchall.DryWetMidi.Interaction.ITimedObject})
+  name.vb: SplitObjectsAtDistance(IEnumerable(Of ITimedObject), Double, TimeSpanType, LengthedObjectTarget, TempoMap, Predicate(Of ITimedObject))
+  fullName: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsAtDistance(System.Collections.Generic.IEnumerable<Melanchall.DryWetMidi.Interaction.ITimedObject>, System.Double, Melanchall.DryWetMidi.Interaction.TimeSpanType, Melanchall.DryWetMidi.Tools.LengthedObjectTarget, Melanchall.DryWetMidi.Interaction.TempoMap, System.Predicate<Melanchall.DryWetMidi.Interaction.ITimedObject>)
+  fullName.vb: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsAtDistance(System.Collections.Generic.IEnumerable(Of Melanchall.DryWetMidi.Interaction.ITimedObject), System.Double, Melanchall.DryWetMidi.Interaction.TimeSpanType, Melanchall.DryWetMidi.Tools.LengthedObjectTarget, Melanchall.DryWetMidi.Interaction.TempoMap, System.Predicate(Of Melanchall.DryWetMidi.Interaction.ITimedObject))
+  nameWithType: Splitter.SplitObjectsAtDistance(IEnumerable<ITimedObject>, Double, TimeSpanType, LengthedObjectTarget, TempoMap, Predicate<ITimedObject>)
+  nameWithType.vb: Splitter.SplitObjectsAtDistance(IEnumerable(Of ITimedObject), Double, TimeSpanType, LengthedObjectTarget, TempoMap, Predicate(Of ITimedObject))
 - uid: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsAtDistance*
   name: SplitObjectsAtDistance
   href: api/Melanchall.DryWetMidi.Tools.Splitter.html#Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsAtDistance_
@@ -37833,36 +37916,42 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsAtDistance
   nameWithType: Splitter.SplitObjectsAtDistance
-- uid: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByGrid(Melanchall.DryWetMidi.Core.MidiFile,Melanchall.DryWetMidi.Interaction.ObjectType,Melanchall.DryWetMidi.Interaction.IGrid,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings)
-  name: SplitObjectsByGrid(MidiFile, ObjectType, IGrid, ObjectDetectionSettings)
-  href: api/Melanchall.DryWetMidi.Tools.Splitter.html#Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsByGrid_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Interaction_ObjectType_Melanchall_DryWetMidi_Interaction_IGrid_Melanchall_DryWetMidi_Interaction_ObjectDetectionSettings_
-  commentId: M:Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByGrid(Melanchall.DryWetMidi.Core.MidiFile,Melanchall.DryWetMidi.Interaction.ObjectType,Melanchall.DryWetMidi.Interaction.IGrid,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings)
-  fullName: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByGrid(Melanchall.DryWetMidi.Core.MidiFile, Melanchall.DryWetMidi.Interaction.ObjectType, Melanchall.DryWetMidi.Interaction.IGrid, Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings)
-  nameWithType: Splitter.SplitObjectsByGrid(MidiFile, ObjectType, IGrid, ObjectDetectionSettings)
-- uid: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByGrid(Melanchall.DryWetMidi.Core.TrackChunk,Melanchall.DryWetMidi.Interaction.ObjectType,Melanchall.DryWetMidi.Interaction.IGrid,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings)
-  name: SplitObjectsByGrid(TrackChunk, ObjectType, IGrid, TempoMap, ObjectDetectionSettings)
-  href: api/Melanchall.DryWetMidi.Tools.Splitter.html#Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsByGrid_Melanchall_DryWetMidi_Core_TrackChunk_Melanchall_DryWetMidi_Interaction_ObjectType_Melanchall_DryWetMidi_Interaction_IGrid_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Interaction_ObjectDetectionSettings_
-  commentId: M:Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByGrid(Melanchall.DryWetMidi.Core.TrackChunk,Melanchall.DryWetMidi.Interaction.ObjectType,Melanchall.DryWetMidi.Interaction.IGrid,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings)
-  fullName: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByGrid(Melanchall.DryWetMidi.Core.TrackChunk, Melanchall.DryWetMidi.Interaction.ObjectType, Melanchall.DryWetMidi.Interaction.IGrid, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings)
-  nameWithType: Splitter.SplitObjectsByGrid(TrackChunk, ObjectType, IGrid, TempoMap, ObjectDetectionSettings)
-- uid: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByGrid(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk},Melanchall.DryWetMidi.Interaction.ObjectType,Melanchall.DryWetMidi.Interaction.IGrid,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings)
-  name: SplitObjectsByGrid(IEnumerable<TrackChunk>, ObjectType, IGrid, TempoMap, ObjectDetectionSettings)
-  href: api/Melanchall.DryWetMidi.Tools.Splitter.html#Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsByGrid_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__Melanchall_DryWetMidi_Interaction_ObjectType_Melanchall_DryWetMidi_Interaction_IGrid_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Interaction_ObjectDetectionSettings_
-  commentId: M:Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByGrid(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk},Melanchall.DryWetMidi.Interaction.ObjectType,Melanchall.DryWetMidi.Interaction.IGrid,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings)
-  name.vb: SplitObjectsByGrid(IEnumerable(Of TrackChunk), ObjectType, IGrid, TempoMap, ObjectDetectionSettings)
-  fullName: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByGrid(System.Collections.Generic.IEnumerable<Melanchall.DryWetMidi.Core.TrackChunk>, Melanchall.DryWetMidi.Interaction.ObjectType, Melanchall.DryWetMidi.Interaction.IGrid, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings)
-  fullName.vb: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByGrid(System.Collections.Generic.IEnumerable(Of Melanchall.DryWetMidi.Core.TrackChunk), Melanchall.DryWetMidi.Interaction.ObjectType, Melanchall.DryWetMidi.Interaction.IGrid, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings)
-  nameWithType: Splitter.SplitObjectsByGrid(IEnumerable<TrackChunk>, ObjectType, IGrid, TempoMap, ObjectDetectionSettings)
-  nameWithType.vb: Splitter.SplitObjectsByGrid(IEnumerable(Of TrackChunk), ObjectType, IGrid, TempoMap, ObjectDetectionSettings)
-- uid: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByGrid(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Interaction.ITimedObject},Melanchall.DryWetMidi.Interaction.IGrid,Melanchall.DryWetMidi.Interaction.TempoMap)
-  name: SplitObjectsByGrid(IEnumerable<ITimedObject>, IGrid, TempoMap)
-  href: api/Melanchall.DryWetMidi.Tools.Splitter.html#Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsByGrid_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_ITimedObject__Melanchall_DryWetMidi_Interaction_IGrid_Melanchall_DryWetMidi_Interaction_TempoMap_
-  commentId: M:Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByGrid(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Interaction.ITimedObject},Melanchall.DryWetMidi.Interaction.IGrid,Melanchall.DryWetMidi.Interaction.TempoMap)
-  name.vb: SplitObjectsByGrid(IEnumerable(Of ITimedObject), IGrid, TempoMap)
-  fullName: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByGrid(System.Collections.Generic.IEnumerable<Melanchall.DryWetMidi.Interaction.ITimedObject>, Melanchall.DryWetMidi.Interaction.IGrid, Melanchall.DryWetMidi.Interaction.TempoMap)
-  fullName.vb: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByGrid(System.Collections.Generic.IEnumerable(Of Melanchall.DryWetMidi.Interaction.ITimedObject), Melanchall.DryWetMidi.Interaction.IGrid, Melanchall.DryWetMidi.Interaction.TempoMap)
-  nameWithType: Splitter.SplitObjectsByGrid(IEnumerable<ITimedObject>, IGrid, TempoMap)
-  nameWithType.vb: Splitter.SplitObjectsByGrid(IEnumerable(Of ITimedObject), IGrid, TempoMap)
+- uid: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByGrid(Melanchall.DryWetMidi.Core.MidiFile,Melanchall.DryWetMidi.Interaction.ObjectType,Melanchall.DryWetMidi.Interaction.IGrid,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings,System.Predicate{Melanchall.DryWetMidi.Interaction.ITimedObject})
+  name: SplitObjectsByGrid(MidiFile, ObjectType, IGrid, ObjectDetectionSettings, Predicate<ITimedObject>)
+  href: api/Melanchall.DryWetMidi.Tools.Splitter.html#Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsByGrid_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Interaction_ObjectType_Melanchall_DryWetMidi_Interaction_IGrid_Melanchall_DryWetMidi_Interaction_ObjectDetectionSettings_System_Predicate_Melanchall_DryWetMidi_Interaction_ITimedObject__
+  commentId: M:Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByGrid(Melanchall.DryWetMidi.Core.MidiFile,Melanchall.DryWetMidi.Interaction.ObjectType,Melanchall.DryWetMidi.Interaction.IGrid,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings,System.Predicate{Melanchall.DryWetMidi.Interaction.ITimedObject})
+  name.vb: SplitObjectsByGrid(MidiFile, ObjectType, IGrid, ObjectDetectionSettings, Predicate(Of ITimedObject))
+  fullName: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByGrid(Melanchall.DryWetMidi.Core.MidiFile, Melanchall.DryWetMidi.Interaction.ObjectType, Melanchall.DryWetMidi.Interaction.IGrid, Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings, System.Predicate<Melanchall.DryWetMidi.Interaction.ITimedObject>)
+  fullName.vb: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByGrid(Melanchall.DryWetMidi.Core.MidiFile, Melanchall.DryWetMidi.Interaction.ObjectType, Melanchall.DryWetMidi.Interaction.IGrid, Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings, System.Predicate(Of Melanchall.DryWetMidi.Interaction.ITimedObject))
+  nameWithType: Splitter.SplitObjectsByGrid(MidiFile, ObjectType, IGrid, ObjectDetectionSettings, Predicate<ITimedObject>)
+  nameWithType.vb: Splitter.SplitObjectsByGrid(MidiFile, ObjectType, IGrid, ObjectDetectionSettings, Predicate(Of ITimedObject))
+- uid: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByGrid(Melanchall.DryWetMidi.Core.TrackChunk,Melanchall.DryWetMidi.Interaction.ObjectType,Melanchall.DryWetMidi.Interaction.IGrid,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings,System.Predicate{Melanchall.DryWetMidi.Interaction.ITimedObject})
+  name: SplitObjectsByGrid(TrackChunk, ObjectType, IGrid, TempoMap, ObjectDetectionSettings, Predicate<ITimedObject>)
+  href: api/Melanchall.DryWetMidi.Tools.Splitter.html#Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsByGrid_Melanchall_DryWetMidi_Core_TrackChunk_Melanchall_DryWetMidi_Interaction_ObjectType_Melanchall_DryWetMidi_Interaction_IGrid_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Interaction_ObjectDetectionSettings_System_Predicate_Melanchall_DryWetMidi_Interaction_ITimedObject__
+  commentId: M:Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByGrid(Melanchall.DryWetMidi.Core.TrackChunk,Melanchall.DryWetMidi.Interaction.ObjectType,Melanchall.DryWetMidi.Interaction.IGrid,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings,System.Predicate{Melanchall.DryWetMidi.Interaction.ITimedObject})
+  name.vb: SplitObjectsByGrid(TrackChunk, ObjectType, IGrid, TempoMap, ObjectDetectionSettings, Predicate(Of ITimedObject))
+  fullName: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByGrid(Melanchall.DryWetMidi.Core.TrackChunk, Melanchall.DryWetMidi.Interaction.ObjectType, Melanchall.DryWetMidi.Interaction.IGrid, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings, System.Predicate<Melanchall.DryWetMidi.Interaction.ITimedObject>)
+  fullName.vb: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByGrid(Melanchall.DryWetMidi.Core.TrackChunk, Melanchall.DryWetMidi.Interaction.ObjectType, Melanchall.DryWetMidi.Interaction.IGrid, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings, System.Predicate(Of Melanchall.DryWetMidi.Interaction.ITimedObject))
+  nameWithType: Splitter.SplitObjectsByGrid(TrackChunk, ObjectType, IGrid, TempoMap, ObjectDetectionSettings, Predicate<ITimedObject>)
+  nameWithType.vb: Splitter.SplitObjectsByGrid(TrackChunk, ObjectType, IGrid, TempoMap, ObjectDetectionSettings, Predicate(Of ITimedObject))
+- uid: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByGrid(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk},Melanchall.DryWetMidi.Interaction.ObjectType,Melanchall.DryWetMidi.Interaction.IGrid,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings,System.Predicate{Melanchall.DryWetMidi.Interaction.ITimedObject})
+  name: SplitObjectsByGrid(IEnumerable<TrackChunk>, ObjectType, IGrid, TempoMap, ObjectDetectionSettings, Predicate<ITimedObject>)
+  href: api/Melanchall.DryWetMidi.Tools.Splitter.html#Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsByGrid_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__Melanchall_DryWetMidi_Interaction_ObjectType_Melanchall_DryWetMidi_Interaction_IGrid_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Interaction_ObjectDetectionSettings_System_Predicate_Melanchall_DryWetMidi_Interaction_ITimedObject__
+  commentId: M:Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByGrid(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk},Melanchall.DryWetMidi.Interaction.ObjectType,Melanchall.DryWetMidi.Interaction.IGrid,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings,System.Predicate{Melanchall.DryWetMidi.Interaction.ITimedObject})
+  name.vb: SplitObjectsByGrid(IEnumerable(Of TrackChunk), ObjectType, IGrid, TempoMap, ObjectDetectionSettings, Predicate(Of ITimedObject))
+  fullName: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByGrid(System.Collections.Generic.IEnumerable<Melanchall.DryWetMidi.Core.TrackChunk>, Melanchall.DryWetMidi.Interaction.ObjectType, Melanchall.DryWetMidi.Interaction.IGrid, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings, System.Predicate<Melanchall.DryWetMidi.Interaction.ITimedObject>)
+  fullName.vb: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByGrid(System.Collections.Generic.IEnumerable(Of Melanchall.DryWetMidi.Core.TrackChunk), Melanchall.DryWetMidi.Interaction.ObjectType, Melanchall.DryWetMidi.Interaction.IGrid, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings, System.Predicate(Of Melanchall.DryWetMidi.Interaction.ITimedObject))
+  nameWithType: Splitter.SplitObjectsByGrid(IEnumerable<TrackChunk>, ObjectType, IGrid, TempoMap, ObjectDetectionSettings, Predicate<ITimedObject>)
+  nameWithType.vb: Splitter.SplitObjectsByGrid(IEnumerable(Of TrackChunk), ObjectType, IGrid, TempoMap, ObjectDetectionSettings, Predicate(Of ITimedObject))
+- uid: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByGrid(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Interaction.ITimedObject},Melanchall.DryWetMidi.Interaction.IGrid,Melanchall.DryWetMidi.Interaction.TempoMap,System.Predicate{Melanchall.DryWetMidi.Interaction.ITimedObject})
+  name: SplitObjectsByGrid(IEnumerable<ITimedObject>, IGrid, TempoMap, Predicate<ITimedObject>)
+  href: api/Melanchall.DryWetMidi.Tools.Splitter.html#Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsByGrid_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_ITimedObject__Melanchall_DryWetMidi_Interaction_IGrid_Melanchall_DryWetMidi_Interaction_TempoMap_System_Predicate_Melanchall_DryWetMidi_Interaction_ITimedObject__
+  commentId: M:Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByGrid(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Interaction.ITimedObject},Melanchall.DryWetMidi.Interaction.IGrid,Melanchall.DryWetMidi.Interaction.TempoMap,System.Predicate{Melanchall.DryWetMidi.Interaction.ITimedObject})
+  name.vb: SplitObjectsByGrid(IEnumerable(Of ITimedObject), IGrid, TempoMap, Predicate(Of ITimedObject))
+  fullName: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByGrid(System.Collections.Generic.IEnumerable<Melanchall.DryWetMidi.Interaction.ITimedObject>, Melanchall.DryWetMidi.Interaction.IGrid, Melanchall.DryWetMidi.Interaction.TempoMap, System.Predicate<Melanchall.DryWetMidi.Interaction.ITimedObject>)
+  fullName.vb: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByGrid(System.Collections.Generic.IEnumerable(Of Melanchall.DryWetMidi.Interaction.ITimedObject), Melanchall.DryWetMidi.Interaction.IGrid, Melanchall.DryWetMidi.Interaction.TempoMap, System.Predicate(Of Melanchall.DryWetMidi.Interaction.ITimedObject))
+  nameWithType: Splitter.SplitObjectsByGrid(IEnumerable<ITimedObject>, IGrid, TempoMap, Predicate<ITimedObject>)
+  nameWithType.vb: Splitter.SplitObjectsByGrid(IEnumerable(Of ITimedObject), IGrid, TempoMap, Predicate(Of ITimedObject))
 - uid: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByGrid*
   name: SplitObjectsByGrid
   href: api/Melanchall.DryWetMidi.Tools.Splitter.html#Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsByGrid_
@@ -37870,36 +37959,42 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByGrid
   nameWithType: Splitter.SplitObjectsByGrid
-- uid: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByPartsNumber(Melanchall.DryWetMidi.Core.MidiFile,Melanchall.DryWetMidi.Interaction.ObjectType,System.Int32,Melanchall.DryWetMidi.Interaction.TimeSpanType,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings)
-  name: SplitObjectsByPartsNumber(MidiFile, ObjectType, Int32, TimeSpanType, ObjectDetectionSettings)
-  href: api/Melanchall.DryWetMidi.Tools.Splitter.html#Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsByPartsNumber_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Interaction_ObjectType_System_Int32_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Interaction_ObjectDetectionSettings_
-  commentId: M:Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByPartsNumber(Melanchall.DryWetMidi.Core.MidiFile,Melanchall.DryWetMidi.Interaction.ObjectType,System.Int32,Melanchall.DryWetMidi.Interaction.TimeSpanType,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings)
-  fullName: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByPartsNumber(Melanchall.DryWetMidi.Core.MidiFile, Melanchall.DryWetMidi.Interaction.ObjectType, System.Int32, Melanchall.DryWetMidi.Interaction.TimeSpanType, Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings)
-  nameWithType: Splitter.SplitObjectsByPartsNumber(MidiFile, ObjectType, Int32, TimeSpanType, ObjectDetectionSettings)
-- uid: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByPartsNumber(Melanchall.DryWetMidi.Core.TrackChunk,Melanchall.DryWetMidi.Interaction.ObjectType,System.Int32,Melanchall.DryWetMidi.Interaction.TimeSpanType,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings)
-  name: SplitObjectsByPartsNumber(TrackChunk, ObjectType, Int32, TimeSpanType, TempoMap, ObjectDetectionSettings)
-  href: api/Melanchall.DryWetMidi.Tools.Splitter.html#Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsByPartsNumber_Melanchall_DryWetMidi_Core_TrackChunk_Melanchall_DryWetMidi_Interaction_ObjectType_System_Int32_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Interaction_ObjectDetectionSettings_
-  commentId: M:Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByPartsNumber(Melanchall.DryWetMidi.Core.TrackChunk,Melanchall.DryWetMidi.Interaction.ObjectType,System.Int32,Melanchall.DryWetMidi.Interaction.TimeSpanType,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings)
-  fullName: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByPartsNumber(Melanchall.DryWetMidi.Core.TrackChunk, Melanchall.DryWetMidi.Interaction.ObjectType, System.Int32, Melanchall.DryWetMidi.Interaction.TimeSpanType, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings)
-  nameWithType: Splitter.SplitObjectsByPartsNumber(TrackChunk, ObjectType, Int32, TimeSpanType, TempoMap, ObjectDetectionSettings)
-- uid: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByPartsNumber(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk},Melanchall.DryWetMidi.Interaction.ObjectType,System.Int32,Melanchall.DryWetMidi.Interaction.TimeSpanType,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings)
-  name: SplitObjectsByPartsNumber(IEnumerable<TrackChunk>, ObjectType, Int32, TimeSpanType, TempoMap, ObjectDetectionSettings)
-  href: api/Melanchall.DryWetMidi.Tools.Splitter.html#Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsByPartsNumber_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__Melanchall_DryWetMidi_Interaction_ObjectType_System_Int32_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Interaction_ObjectDetectionSettings_
-  commentId: M:Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByPartsNumber(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk},Melanchall.DryWetMidi.Interaction.ObjectType,System.Int32,Melanchall.DryWetMidi.Interaction.TimeSpanType,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings)
-  name.vb: SplitObjectsByPartsNumber(IEnumerable(Of TrackChunk), ObjectType, Int32, TimeSpanType, TempoMap, ObjectDetectionSettings)
-  fullName: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByPartsNumber(System.Collections.Generic.IEnumerable<Melanchall.DryWetMidi.Core.TrackChunk>, Melanchall.DryWetMidi.Interaction.ObjectType, System.Int32, Melanchall.DryWetMidi.Interaction.TimeSpanType, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings)
-  fullName.vb: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByPartsNumber(System.Collections.Generic.IEnumerable(Of Melanchall.DryWetMidi.Core.TrackChunk), Melanchall.DryWetMidi.Interaction.ObjectType, System.Int32, Melanchall.DryWetMidi.Interaction.TimeSpanType, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings)
-  nameWithType: Splitter.SplitObjectsByPartsNumber(IEnumerable<TrackChunk>, ObjectType, Int32, TimeSpanType, TempoMap, ObjectDetectionSettings)
-  nameWithType.vb: Splitter.SplitObjectsByPartsNumber(IEnumerable(Of TrackChunk), ObjectType, Int32, TimeSpanType, TempoMap, ObjectDetectionSettings)
-- uid: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByPartsNumber(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Interaction.ITimedObject},System.Int32,Melanchall.DryWetMidi.Interaction.TimeSpanType,Melanchall.DryWetMidi.Interaction.TempoMap)
-  name: SplitObjectsByPartsNumber(IEnumerable<ITimedObject>, Int32, TimeSpanType, TempoMap)
-  href: api/Melanchall.DryWetMidi.Tools.Splitter.html#Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsByPartsNumber_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_ITimedObject__System_Int32_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Interaction_TempoMap_
-  commentId: M:Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByPartsNumber(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Interaction.ITimedObject},System.Int32,Melanchall.DryWetMidi.Interaction.TimeSpanType,Melanchall.DryWetMidi.Interaction.TempoMap)
-  name.vb: SplitObjectsByPartsNumber(IEnumerable(Of ITimedObject), Int32, TimeSpanType, TempoMap)
-  fullName: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByPartsNumber(System.Collections.Generic.IEnumerable<Melanchall.DryWetMidi.Interaction.ITimedObject>, System.Int32, Melanchall.DryWetMidi.Interaction.TimeSpanType, Melanchall.DryWetMidi.Interaction.TempoMap)
-  fullName.vb: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByPartsNumber(System.Collections.Generic.IEnumerable(Of Melanchall.DryWetMidi.Interaction.ITimedObject), System.Int32, Melanchall.DryWetMidi.Interaction.TimeSpanType, Melanchall.DryWetMidi.Interaction.TempoMap)
-  nameWithType: Splitter.SplitObjectsByPartsNumber(IEnumerable<ITimedObject>, Int32, TimeSpanType, TempoMap)
-  nameWithType.vb: Splitter.SplitObjectsByPartsNumber(IEnumerable(Of ITimedObject), Int32, TimeSpanType, TempoMap)
+- uid: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByPartsNumber(Melanchall.DryWetMidi.Core.MidiFile,Melanchall.DryWetMidi.Interaction.ObjectType,System.Int32,Melanchall.DryWetMidi.Interaction.TimeSpanType,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings,System.Predicate{Melanchall.DryWetMidi.Interaction.ITimedObject})
+  name: SplitObjectsByPartsNumber(MidiFile, ObjectType, Int32, TimeSpanType, ObjectDetectionSettings, Predicate<ITimedObject>)
+  href: api/Melanchall.DryWetMidi.Tools.Splitter.html#Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsByPartsNumber_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Interaction_ObjectType_System_Int32_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Interaction_ObjectDetectionSettings_System_Predicate_Melanchall_DryWetMidi_Interaction_ITimedObject__
+  commentId: M:Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByPartsNumber(Melanchall.DryWetMidi.Core.MidiFile,Melanchall.DryWetMidi.Interaction.ObjectType,System.Int32,Melanchall.DryWetMidi.Interaction.TimeSpanType,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings,System.Predicate{Melanchall.DryWetMidi.Interaction.ITimedObject})
+  name.vb: SplitObjectsByPartsNumber(MidiFile, ObjectType, Int32, TimeSpanType, ObjectDetectionSettings, Predicate(Of ITimedObject))
+  fullName: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByPartsNumber(Melanchall.DryWetMidi.Core.MidiFile, Melanchall.DryWetMidi.Interaction.ObjectType, System.Int32, Melanchall.DryWetMidi.Interaction.TimeSpanType, Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings, System.Predicate<Melanchall.DryWetMidi.Interaction.ITimedObject>)
+  fullName.vb: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByPartsNumber(Melanchall.DryWetMidi.Core.MidiFile, Melanchall.DryWetMidi.Interaction.ObjectType, System.Int32, Melanchall.DryWetMidi.Interaction.TimeSpanType, Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings, System.Predicate(Of Melanchall.DryWetMidi.Interaction.ITimedObject))
+  nameWithType: Splitter.SplitObjectsByPartsNumber(MidiFile, ObjectType, Int32, TimeSpanType, ObjectDetectionSettings, Predicate<ITimedObject>)
+  nameWithType.vb: Splitter.SplitObjectsByPartsNumber(MidiFile, ObjectType, Int32, TimeSpanType, ObjectDetectionSettings, Predicate(Of ITimedObject))
+- uid: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByPartsNumber(Melanchall.DryWetMidi.Core.TrackChunk,Melanchall.DryWetMidi.Interaction.ObjectType,System.Int32,Melanchall.DryWetMidi.Interaction.TimeSpanType,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings,System.Predicate{Melanchall.DryWetMidi.Interaction.ITimedObject})
+  name: SplitObjectsByPartsNumber(TrackChunk, ObjectType, Int32, TimeSpanType, TempoMap, ObjectDetectionSettings, Predicate<ITimedObject>)
+  href: api/Melanchall.DryWetMidi.Tools.Splitter.html#Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsByPartsNumber_Melanchall_DryWetMidi_Core_TrackChunk_Melanchall_DryWetMidi_Interaction_ObjectType_System_Int32_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Interaction_ObjectDetectionSettings_System_Predicate_Melanchall_DryWetMidi_Interaction_ITimedObject__
+  commentId: M:Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByPartsNumber(Melanchall.DryWetMidi.Core.TrackChunk,Melanchall.DryWetMidi.Interaction.ObjectType,System.Int32,Melanchall.DryWetMidi.Interaction.TimeSpanType,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings,System.Predicate{Melanchall.DryWetMidi.Interaction.ITimedObject})
+  name.vb: SplitObjectsByPartsNumber(TrackChunk, ObjectType, Int32, TimeSpanType, TempoMap, ObjectDetectionSettings, Predicate(Of ITimedObject))
+  fullName: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByPartsNumber(Melanchall.DryWetMidi.Core.TrackChunk, Melanchall.DryWetMidi.Interaction.ObjectType, System.Int32, Melanchall.DryWetMidi.Interaction.TimeSpanType, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings, System.Predicate<Melanchall.DryWetMidi.Interaction.ITimedObject>)
+  fullName.vb: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByPartsNumber(Melanchall.DryWetMidi.Core.TrackChunk, Melanchall.DryWetMidi.Interaction.ObjectType, System.Int32, Melanchall.DryWetMidi.Interaction.TimeSpanType, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings, System.Predicate(Of Melanchall.DryWetMidi.Interaction.ITimedObject))
+  nameWithType: Splitter.SplitObjectsByPartsNumber(TrackChunk, ObjectType, Int32, TimeSpanType, TempoMap, ObjectDetectionSettings, Predicate<ITimedObject>)
+  nameWithType.vb: Splitter.SplitObjectsByPartsNumber(TrackChunk, ObjectType, Int32, TimeSpanType, TempoMap, ObjectDetectionSettings, Predicate(Of ITimedObject))
+- uid: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByPartsNumber(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk},Melanchall.DryWetMidi.Interaction.ObjectType,System.Int32,Melanchall.DryWetMidi.Interaction.TimeSpanType,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings,System.Predicate{Melanchall.DryWetMidi.Interaction.ITimedObject})
+  name: SplitObjectsByPartsNumber(IEnumerable<TrackChunk>, ObjectType, Int32, TimeSpanType, TempoMap, ObjectDetectionSettings, Predicate<ITimedObject>)
+  href: api/Melanchall.DryWetMidi.Tools.Splitter.html#Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsByPartsNumber_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__Melanchall_DryWetMidi_Interaction_ObjectType_System_Int32_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Interaction_ObjectDetectionSettings_System_Predicate_Melanchall_DryWetMidi_Interaction_ITimedObject__
+  commentId: M:Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByPartsNumber(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk},Melanchall.DryWetMidi.Interaction.ObjectType,System.Int32,Melanchall.DryWetMidi.Interaction.TimeSpanType,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings,System.Predicate{Melanchall.DryWetMidi.Interaction.ITimedObject})
+  name.vb: SplitObjectsByPartsNumber(IEnumerable(Of TrackChunk), ObjectType, Int32, TimeSpanType, TempoMap, ObjectDetectionSettings, Predicate(Of ITimedObject))
+  fullName: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByPartsNumber(System.Collections.Generic.IEnumerable<Melanchall.DryWetMidi.Core.TrackChunk>, Melanchall.DryWetMidi.Interaction.ObjectType, System.Int32, Melanchall.DryWetMidi.Interaction.TimeSpanType, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings, System.Predicate<Melanchall.DryWetMidi.Interaction.ITimedObject>)
+  fullName.vb: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByPartsNumber(System.Collections.Generic.IEnumerable(Of Melanchall.DryWetMidi.Core.TrackChunk), Melanchall.DryWetMidi.Interaction.ObjectType, System.Int32, Melanchall.DryWetMidi.Interaction.TimeSpanType, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings, System.Predicate(Of Melanchall.DryWetMidi.Interaction.ITimedObject))
+  nameWithType: Splitter.SplitObjectsByPartsNumber(IEnumerable<TrackChunk>, ObjectType, Int32, TimeSpanType, TempoMap, ObjectDetectionSettings, Predicate<ITimedObject>)
+  nameWithType.vb: Splitter.SplitObjectsByPartsNumber(IEnumerable(Of TrackChunk), ObjectType, Int32, TimeSpanType, TempoMap, ObjectDetectionSettings, Predicate(Of ITimedObject))
+- uid: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByPartsNumber(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Interaction.ITimedObject},System.Int32,Melanchall.DryWetMidi.Interaction.TimeSpanType,Melanchall.DryWetMidi.Interaction.TempoMap,System.Predicate{Melanchall.DryWetMidi.Interaction.ITimedObject})
+  name: SplitObjectsByPartsNumber(IEnumerable<ITimedObject>, Int32, TimeSpanType, TempoMap, Predicate<ITimedObject>)
+  href: api/Melanchall.DryWetMidi.Tools.Splitter.html#Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsByPartsNumber_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_ITimedObject__System_Int32_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Interaction_TempoMap_System_Predicate_Melanchall_DryWetMidi_Interaction_ITimedObject__
+  commentId: M:Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByPartsNumber(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Interaction.ITimedObject},System.Int32,Melanchall.DryWetMidi.Interaction.TimeSpanType,Melanchall.DryWetMidi.Interaction.TempoMap,System.Predicate{Melanchall.DryWetMidi.Interaction.ITimedObject})
+  name.vb: SplitObjectsByPartsNumber(IEnumerable(Of ITimedObject), Int32, TimeSpanType, TempoMap, Predicate(Of ITimedObject))
+  fullName: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByPartsNumber(System.Collections.Generic.IEnumerable<Melanchall.DryWetMidi.Interaction.ITimedObject>, System.Int32, Melanchall.DryWetMidi.Interaction.TimeSpanType, Melanchall.DryWetMidi.Interaction.TempoMap, System.Predicate<Melanchall.DryWetMidi.Interaction.ITimedObject>)
+  fullName.vb: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByPartsNumber(System.Collections.Generic.IEnumerable(Of Melanchall.DryWetMidi.Interaction.ITimedObject), System.Int32, Melanchall.DryWetMidi.Interaction.TimeSpanType, Melanchall.DryWetMidi.Interaction.TempoMap, System.Predicate(Of Melanchall.DryWetMidi.Interaction.ITimedObject))
+  nameWithType: Splitter.SplitObjectsByPartsNumber(IEnumerable<ITimedObject>, Int32, TimeSpanType, TempoMap, Predicate<ITimedObject>)
+  nameWithType.vb: Splitter.SplitObjectsByPartsNumber(IEnumerable(Of ITimedObject), Int32, TimeSpanType, TempoMap, Predicate(Of ITimedObject))
 - uid: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByPartsNumber*
   name: SplitObjectsByPartsNumber
   href: api/Melanchall.DryWetMidi.Tools.Splitter.html#Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsByPartsNumber_
@@ -37907,36 +38002,42 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByPartsNumber
   nameWithType: Splitter.SplitObjectsByPartsNumber
-- uid: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByStep(Melanchall.DryWetMidi.Core.MidiFile,Melanchall.DryWetMidi.Interaction.ObjectType,Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings)
-  name: SplitObjectsByStep(MidiFile, ObjectType, ITimeSpan, ObjectDetectionSettings)
-  href: api/Melanchall.DryWetMidi.Tools.Splitter.html#Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsByStep_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Interaction_ObjectType_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_ObjectDetectionSettings_
-  commentId: M:Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByStep(Melanchall.DryWetMidi.Core.MidiFile,Melanchall.DryWetMidi.Interaction.ObjectType,Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings)
-  fullName: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByStep(Melanchall.DryWetMidi.Core.MidiFile, Melanchall.DryWetMidi.Interaction.ObjectType, Melanchall.DryWetMidi.Interaction.ITimeSpan, Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings)
-  nameWithType: Splitter.SplitObjectsByStep(MidiFile, ObjectType, ITimeSpan, ObjectDetectionSettings)
-- uid: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByStep(Melanchall.DryWetMidi.Core.TrackChunk,Melanchall.DryWetMidi.Interaction.ObjectType,Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings)
-  name: SplitObjectsByStep(TrackChunk, ObjectType, ITimeSpan, TempoMap, ObjectDetectionSettings)
-  href: api/Melanchall.DryWetMidi.Tools.Splitter.html#Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsByStep_Melanchall_DryWetMidi_Core_TrackChunk_Melanchall_DryWetMidi_Interaction_ObjectType_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Interaction_ObjectDetectionSettings_
-  commentId: M:Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByStep(Melanchall.DryWetMidi.Core.TrackChunk,Melanchall.DryWetMidi.Interaction.ObjectType,Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings)
-  fullName: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByStep(Melanchall.DryWetMidi.Core.TrackChunk, Melanchall.DryWetMidi.Interaction.ObjectType, Melanchall.DryWetMidi.Interaction.ITimeSpan, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings)
-  nameWithType: Splitter.SplitObjectsByStep(TrackChunk, ObjectType, ITimeSpan, TempoMap, ObjectDetectionSettings)
-- uid: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByStep(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk},Melanchall.DryWetMidi.Interaction.ObjectType,Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings)
-  name: SplitObjectsByStep(IEnumerable<TrackChunk>, ObjectType, ITimeSpan, TempoMap, ObjectDetectionSettings)
-  href: api/Melanchall.DryWetMidi.Tools.Splitter.html#Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsByStep_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__Melanchall_DryWetMidi_Interaction_ObjectType_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Interaction_ObjectDetectionSettings_
-  commentId: M:Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByStep(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk},Melanchall.DryWetMidi.Interaction.ObjectType,Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings)
-  name.vb: SplitObjectsByStep(IEnumerable(Of TrackChunk), ObjectType, ITimeSpan, TempoMap, ObjectDetectionSettings)
-  fullName: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByStep(System.Collections.Generic.IEnumerable<Melanchall.DryWetMidi.Core.TrackChunk>, Melanchall.DryWetMidi.Interaction.ObjectType, Melanchall.DryWetMidi.Interaction.ITimeSpan, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings)
-  fullName.vb: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByStep(System.Collections.Generic.IEnumerable(Of Melanchall.DryWetMidi.Core.TrackChunk), Melanchall.DryWetMidi.Interaction.ObjectType, Melanchall.DryWetMidi.Interaction.ITimeSpan, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings)
-  nameWithType: Splitter.SplitObjectsByStep(IEnumerable<TrackChunk>, ObjectType, ITimeSpan, TempoMap, ObjectDetectionSettings)
-  nameWithType.vb: Splitter.SplitObjectsByStep(IEnumerable(Of TrackChunk), ObjectType, ITimeSpan, TempoMap, ObjectDetectionSettings)
-- uid: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByStep(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Interaction.ITimedObject},Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Interaction.TempoMap)
-  name: SplitObjectsByStep(IEnumerable<ITimedObject>, ITimeSpan, TempoMap)
-  href: api/Melanchall.DryWetMidi.Tools.Splitter.html#Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsByStep_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_ITimedObject__Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_TempoMap_
-  commentId: M:Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByStep(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Interaction.ITimedObject},Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Interaction.TempoMap)
-  name.vb: SplitObjectsByStep(IEnumerable(Of ITimedObject), ITimeSpan, TempoMap)
-  fullName: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByStep(System.Collections.Generic.IEnumerable<Melanchall.DryWetMidi.Interaction.ITimedObject>, Melanchall.DryWetMidi.Interaction.ITimeSpan, Melanchall.DryWetMidi.Interaction.TempoMap)
-  fullName.vb: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByStep(System.Collections.Generic.IEnumerable(Of Melanchall.DryWetMidi.Interaction.ITimedObject), Melanchall.DryWetMidi.Interaction.ITimeSpan, Melanchall.DryWetMidi.Interaction.TempoMap)
-  nameWithType: Splitter.SplitObjectsByStep(IEnumerable<ITimedObject>, ITimeSpan, TempoMap)
-  nameWithType.vb: Splitter.SplitObjectsByStep(IEnumerable(Of ITimedObject), ITimeSpan, TempoMap)
+- uid: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByStep(Melanchall.DryWetMidi.Core.MidiFile,Melanchall.DryWetMidi.Interaction.ObjectType,Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings,System.Predicate{Melanchall.DryWetMidi.Interaction.ITimedObject})
+  name: SplitObjectsByStep(MidiFile, ObjectType, ITimeSpan, ObjectDetectionSettings, Predicate<ITimedObject>)
+  href: api/Melanchall.DryWetMidi.Tools.Splitter.html#Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsByStep_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Interaction_ObjectType_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_ObjectDetectionSettings_System_Predicate_Melanchall_DryWetMidi_Interaction_ITimedObject__
+  commentId: M:Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByStep(Melanchall.DryWetMidi.Core.MidiFile,Melanchall.DryWetMidi.Interaction.ObjectType,Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings,System.Predicate{Melanchall.DryWetMidi.Interaction.ITimedObject})
+  name.vb: SplitObjectsByStep(MidiFile, ObjectType, ITimeSpan, ObjectDetectionSettings, Predicate(Of ITimedObject))
+  fullName: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByStep(Melanchall.DryWetMidi.Core.MidiFile, Melanchall.DryWetMidi.Interaction.ObjectType, Melanchall.DryWetMidi.Interaction.ITimeSpan, Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings, System.Predicate<Melanchall.DryWetMidi.Interaction.ITimedObject>)
+  fullName.vb: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByStep(Melanchall.DryWetMidi.Core.MidiFile, Melanchall.DryWetMidi.Interaction.ObjectType, Melanchall.DryWetMidi.Interaction.ITimeSpan, Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings, System.Predicate(Of Melanchall.DryWetMidi.Interaction.ITimedObject))
+  nameWithType: Splitter.SplitObjectsByStep(MidiFile, ObjectType, ITimeSpan, ObjectDetectionSettings, Predicate<ITimedObject>)
+  nameWithType.vb: Splitter.SplitObjectsByStep(MidiFile, ObjectType, ITimeSpan, ObjectDetectionSettings, Predicate(Of ITimedObject))
+- uid: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByStep(Melanchall.DryWetMidi.Core.TrackChunk,Melanchall.DryWetMidi.Interaction.ObjectType,Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings,System.Predicate{Melanchall.DryWetMidi.Interaction.ITimedObject})
+  name: SplitObjectsByStep(TrackChunk, ObjectType, ITimeSpan, TempoMap, ObjectDetectionSettings, Predicate<ITimedObject>)
+  href: api/Melanchall.DryWetMidi.Tools.Splitter.html#Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsByStep_Melanchall_DryWetMidi_Core_TrackChunk_Melanchall_DryWetMidi_Interaction_ObjectType_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Interaction_ObjectDetectionSettings_System_Predicate_Melanchall_DryWetMidi_Interaction_ITimedObject__
+  commentId: M:Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByStep(Melanchall.DryWetMidi.Core.TrackChunk,Melanchall.DryWetMidi.Interaction.ObjectType,Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings,System.Predicate{Melanchall.DryWetMidi.Interaction.ITimedObject})
+  name.vb: SplitObjectsByStep(TrackChunk, ObjectType, ITimeSpan, TempoMap, ObjectDetectionSettings, Predicate(Of ITimedObject))
+  fullName: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByStep(Melanchall.DryWetMidi.Core.TrackChunk, Melanchall.DryWetMidi.Interaction.ObjectType, Melanchall.DryWetMidi.Interaction.ITimeSpan, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings, System.Predicate<Melanchall.DryWetMidi.Interaction.ITimedObject>)
+  fullName.vb: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByStep(Melanchall.DryWetMidi.Core.TrackChunk, Melanchall.DryWetMidi.Interaction.ObjectType, Melanchall.DryWetMidi.Interaction.ITimeSpan, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings, System.Predicate(Of Melanchall.DryWetMidi.Interaction.ITimedObject))
+  nameWithType: Splitter.SplitObjectsByStep(TrackChunk, ObjectType, ITimeSpan, TempoMap, ObjectDetectionSettings, Predicate<ITimedObject>)
+  nameWithType.vb: Splitter.SplitObjectsByStep(TrackChunk, ObjectType, ITimeSpan, TempoMap, ObjectDetectionSettings, Predicate(Of ITimedObject))
+- uid: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByStep(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk},Melanchall.DryWetMidi.Interaction.ObjectType,Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings,System.Predicate{Melanchall.DryWetMidi.Interaction.ITimedObject})
+  name: SplitObjectsByStep(IEnumerable<TrackChunk>, ObjectType, ITimeSpan, TempoMap, ObjectDetectionSettings, Predicate<ITimedObject>)
+  href: api/Melanchall.DryWetMidi.Tools.Splitter.html#Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsByStep_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__Melanchall_DryWetMidi_Interaction_ObjectType_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Interaction_ObjectDetectionSettings_System_Predicate_Melanchall_DryWetMidi_Interaction_ITimedObject__
+  commentId: M:Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByStep(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk},Melanchall.DryWetMidi.Interaction.ObjectType,Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings,System.Predicate{Melanchall.DryWetMidi.Interaction.ITimedObject})
+  name.vb: SplitObjectsByStep(IEnumerable(Of TrackChunk), ObjectType, ITimeSpan, TempoMap, ObjectDetectionSettings, Predicate(Of ITimedObject))
+  fullName: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByStep(System.Collections.Generic.IEnumerable<Melanchall.DryWetMidi.Core.TrackChunk>, Melanchall.DryWetMidi.Interaction.ObjectType, Melanchall.DryWetMidi.Interaction.ITimeSpan, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings, System.Predicate<Melanchall.DryWetMidi.Interaction.ITimedObject>)
+  fullName.vb: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByStep(System.Collections.Generic.IEnumerable(Of Melanchall.DryWetMidi.Core.TrackChunk), Melanchall.DryWetMidi.Interaction.ObjectType, Melanchall.DryWetMidi.Interaction.ITimeSpan, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings, System.Predicate(Of Melanchall.DryWetMidi.Interaction.ITimedObject))
+  nameWithType: Splitter.SplitObjectsByStep(IEnumerable<TrackChunk>, ObjectType, ITimeSpan, TempoMap, ObjectDetectionSettings, Predicate<ITimedObject>)
+  nameWithType.vb: Splitter.SplitObjectsByStep(IEnumerable(Of TrackChunk), ObjectType, ITimeSpan, TempoMap, ObjectDetectionSettings, Predicate(Of ITimedObject))
+- uid: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByStep(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Interaction.ITimedObject},Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Interaction.TempoMap,System.Predicate{Melanchall.DryWetMidi.Interaction.ITimedObject})
+  name: SplitObjectsByStep(IEnumerable<ITimedObject>, ITimeSpan, TempoMap, Predicate<ITimedObject>)
+  href: api/Melanchall.DryWetMidi.Tools.Splitter.html#Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsByStep_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_ITimedObject__Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_TempoMap_System_Predicate_Melanchall_DryWetMidi_Interaction_ITimedObject__
+  commentId: M:Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByStep(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Interaction.ITimedObject},Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Interaction.TempoMap,System.Predicate{Melanchall.DryWetMidi.Interaction.ITimedObject})
+  name.vb: SplitObjectsByStep(IEnumerable(Of ITimedObject), ITimeSpan, TempoMap, Predicate(Of ITimedObject))
+  fullName: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByStep(System.Collections.Generic.IEnumerable<Melanchall.DryWetMidi.Interaction.ITimedObject>, Melanchall.DryWetMidi.Interaction.ITimeSpan, Melanchall.DryWetMidi.Interaction.TempoMap, System.Predicate<Melanchall.DryWetMidi.Interaction.ITimedObject>)
+  fullName.vb: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByStep(System.Collections.Generic.IEnumerable(Of Melanchall.DryWetMidi.Interaction.ITimedObject), Melanchall.DryWetMidi.Interaction.ITimeSpan, Melanchall.DryWetMidi.Interaction.TempoMap, System.Predicate(Of Melanchall.DryWetMidi.Interaction.ITimedObject))
+  nameWithType: Splitter.SplitObjectsByStep(IEnumerable<ITimedObject>, ITimeSpan, TempoMap, Predicate<ITimedObject>)
+  nameWithType.vb: Splitter.SplitObjectsByStep(IEnumerable(Of ITimedObject), ITimeSpan, TempoMap, Predicate(Of ITimedObject))
 - uid: Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByStep*
   name: SplitObjectsByStep
   href: api/Melanchall.DryWetMidi.Tools.Splitter.html#Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsByStep_

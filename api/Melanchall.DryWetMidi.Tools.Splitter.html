@@ -562,7 +562,7 @@ Splits <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile<
     </tbody>
   </table>
   <a id="Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsAtDistance_" data-uid="Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsAtDistance*"></a>
-  <h4 id="Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsAtDistance_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Interaction_ObjectType_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Tools_LengthedObjectTarget_Melanchall_DryWetMidi_Interaction_ObjectDetectionSettings_" data-uid="Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsAtDistance(Melanchall.DryWetMidi.Core.MidiFile,Melanchall.DryWetMidi.Interaction.ObjectType,Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Tools.LengthedObjectTarget,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings)">SplitObjectsAtDistance(MidiFile, ObjectType, ITimeSpan, LengthedObjectTarget, ObjectDetectionSettings)</h4>
+  <h4 id="Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsAtDistance_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Interaction_ObjectType_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Tools_LengthedObjectTarget_Melanchall_DryWetMidi_Interaction_ObjectDetectionSettings_System_Predicate_Melanchall_DryWetMidi_Interaction_ITimedObject__" data-uid="Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsAtDistance(Melanchall.DryWetMidi.Core.MidiFile,Melanchall.DryWetMidi.Interaction.ObjectType,Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Tools.LengthedObjectTarget,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings,System.Predicate{Melanchall.DryWetMidi.Interaction.ITimedObject})">SplitObjectsAtDistance(MidiFile, ObjectType, ITimeSpan, LengthedObjectTarget, ObjectDetectionSettings, Predicate&lt;ITimedObject&gt;)</h4>
   <div class="markdown level1 summary">
 Splits objects within a <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a> at the specified distance from an object&apos;s start or end.
 More info in the <a class="xref" href="../articles/tools/Objects-splitting.html#splitobjectsatdistance">Objects splitting: SplitObjectsAtDistance</a>
@@ -571,7 +571,7 @@ article.
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void SplitObjectsAtDistance(this MidiFile midiFile, ObjectType objectType, ITimeSpan distance, LengthedObjectTarget from, ObjectDetectionSettings objectDetectionSettings = null)</code></pre>
+    <pre><code class="lang-csharp hljs">public static void SplitObjectsAtDistance(this MidiFile midiFile, ObjectType objectType, ITimeSpan distance, LengthedObjectTarget from, ObjectDetectionSettings objectDetectionSettings = null, Predicate&lt;ITimedObject&gt; filter = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -609,6 +609,14 @@ article.
         <td>Settings according to which objects should be
 detected and built.</td>
       </tr>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.predicate-1">Predicate</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimedObject.html">ITimedObject</a>&gt;</td>
+        <td><span class="parametername">filter</span></td>
+        <td>Predicate used to determine whether an object should be split or not.
+<code>true</code> as a return value of the predicate means an object should be split; <code>false</code>
+means don&apos;t split it. <code>null</code> (the default value) can be passed to the parameter
+to process all objects.</td>
+      </tr>
     </tbody>
   </table>
   <h5 class="exceptions">Exceptions</h5>
@@ -634,7 +642,7 @@ detected and built.</td>
     </tbody>
   </table>
   <a id="Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsAtDistance_" data-uid="Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsAtDistance*"></a>
-  <h4 id="Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsAtDistance_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Interaction_ObjectType_System_Double_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Tools_LengthedObjectTarget_Melanchall_DryWetMidi_Interaction_ObjectDetectionSettings_" data-uid="Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsAtDistance(Melanchall.DryWetMidi.Core.MidiFile,Melanchall.DryWetMidi.Interaction.ObjectType,System.Double,Melanchall.DryWetMidi.Interaction.TimeSpanType,Melanchall.DryWetMidi.Tools.LengthedObjectTarget,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings)">SplitObjectsAtDistance(MidiFile, ObjectType, Double, TimeSpanType, LengthedObjectTarget, ObjectDetectionSettings)</h4>
+  <h4 id="Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsAtDistance_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Interaction_ObjectType_System_Double_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Tools_LengthedObjectTarget_Melanchall_DryWetMidi_Interaction_ObjectDetectionSettings_System_Predicate_Melanchall_DryWetMidi_Interaction_ITimedObject__" data-uid="Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsAtDistance(Melanchall.DryWetMidi.Core.MidiFile,Melanchall.DryWetMidi.Interaction.ObjectType,System.Double,Melanchall.DryWetMidi.Interaction.TimeSpanType,Melanchall.DryWetMidi.Tools.LengthedObjectTarget,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings,System.Predicate{Melanchall.DryWetMidi.Interaction.ITimedObject})">SplitObjectsAtDistance(MidiFile, ObjectType, Double, TimeSpanType, LengthedObjectTarget, ObjectDetectionSettings, Predicate&lt;ITimedObject&gt;)</h4>
   <div class="markdown level1 summary">
 Splits objects within a <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a> by the specified ratio of an object&apos;s length measuring
 it from the object&apos;s start or end. For example, 0.5 means splitting at the center of an object. More info
@@ -644,7 +652,7 @@ article.
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void SplitObjectsAtDistance(this MidiFile midiFile, ObjectType objectType, double ratio, TimeSpanType lengthType, LengthedObjectTarget from, ObjectDetectionSettings objectDetectionSettings = null)</code></pre>
+    <pre><code class="lang-csharp hljs">public static void SplitObjectsAtDistance(this MidiFile midiFile, ObjectType objectType, double ratio, TimeSpanType lengthType, LengthedObjectTarget from, ObjectDetectionSettings objectDetectionSettings = null, Predicate&lt;ITimedObject&gt; filter = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -686,6 +694,14 @@ article.
         <td><span class="parametername">objectDetectionSettings</span></td>
         <td>Settings according to which objects should be
 detected and built.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.predicate-1">Predicate</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimedObject.html">ITimedObject</a>&gt;</td>
+        <td><span class="parametername">filter</span></td>
+        <td>Predicate used to determine whether an object should be split or not.
+<code>true</code> as a return value of the predicate means an object should be split; <code>false</code>
+means don&apos;t split it. <code>null</code> (the default value) can be passed to the parameter
+to process all objects.</td>
       </tr>
     </tbody>
   </table>
@@ -716,7 +732,7 @@ detected and built.</td>
     </tbody>
   </table>
   <a id="Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsAtDistance_" data-uid="Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsAtDistance*"></a>
-  <h4 id="Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsAtDistance_Melanchall_DryWetMidi_Core_TrackChunk_Melanchall_DryWetMidi_Interaction_ObjectType_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Tools_LengthedObjectTarget_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Interaction_ObjectDetectionSettings_" data-uid="Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsAtDistance(Melanchall.DryWetMidi.Core.TrackChunk,Melanchall.DryWetMidi.Interaction.ObjectType,Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Tools.LengthedObjectTarget,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings)">SplitObjectsAtDistance(TrackChunk, ObjectType, ITimeSpan, LengthedObjectTarget, TempoMap, ObjectDetectionSettings)</h4>
+  <h4 id="Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsAtDistance_Melanchall_DryWetMidi_Core_TrackChunk_Melanchall_DryWetMidi_Interaction_ObjectType_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Tools_LengthedObjectTarget_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Interaction_ObjectDetectionSettings_System_Predicate_Melanchall_DryWetMidi_Interaction_ITimedObject__" data-uid="Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsAtDistance(Melanchall.DryWetMidi.Core.TrackChunk,Melanchall.DryWetMidi.Interaction.ObjectType,Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Tools.LengthedObjectTarget,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings,System.Predicate{Melanchall.DryWetMidi.Interaction.ITimedObject})">SplitObjectsAtDistance(TrackChunk, ObjectType, ITimeSpan, LengthedObjectTarget, TempoMap, ObjectDetectionSettings, Predicate&lt;ITimedObject&gt;)</h4>
   <div class="markdown level1 summary">
 Splits objects within a <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a> at the specified distance from an object&apos;s start or end.
 More info in the <a class="xref" href="../articles/tools/Objects-splitting.html#splitobjectsatdistance">Objects splitting: SplitObjectsAtDistance</a>
@@ -725,7 +741,7 @@ article.
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void SplitObjectsAtDistance(this TrackChunk trackChunk, ObjectType objectType, ITimeSpan distance, LengthedObjectTarget from, TempoMap tempoMap, ObjectDetectionSettings objectDetectionSettings = null)</code></pre>
+    <pre><code class="lang-csharp hljs">public static void SplitObjectsAtDistance(this TrackChunk trackChunk, ObjectType objectType, ITimeSpan distance, LengthedObjectTarget from, TempoMap tempoMap, ObjectDetectionSettings objectDetectionSettings = null, Predicate&lt;ITimedObject&gt; filter = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -768,6 +784,14 @@ article.
         <td>Settings according to which objects should be
 detected and built.</td>
       </tr>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.predicate-1">Predicate</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimedObject.html">ITimedObject</a>&gt;</td>
+        <td><span class="parametername">filter</span></td>
+        <td>Predicate used to determine whether an object should be split or not.
+<code>true</code> as a return value of the predicate means an object should be split; <code>false</code>
+means don&apos;t split it. <code>null</code> (the default value) can be passed to the parameter
+to process all objects.</td>
+      </tr>
     </tbody>
   </table>
   <h5 class="exceptions">Exceptions</h5>
@@ -793,7 +817,7 @@ detected and built.</td>
     </tbody>
   </table>
   <a id="Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsAtDistance_" data-uid="Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsAtDistance*"></a>
-  <h4 id="Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsAtDistance_Melanchall_DryWetMidi_Core_TrackChunk_Melanchall_DryWetMidi_Interaction_ObjectType_System_Double_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Tools_LengthedObjectTarget_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Interaction_ObjectDetectionSettings_" data-uid="Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsAtDistance(Melanchall.DryWetMidi.Core.TrackChunk,Melanchall.DryWetMidi.Interaction.ObjectType,System.Double,Melanchall.DryWetMidi.Interaction.TimeSpanType,Melanchall.DryWetMidi.Tools.LengthedObjectTarget,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings)">SplitObjectsAtDistance(TrackChunk, ObjectType, Double, TimeSpanType, LengthedObjectTarget, TempoMap, ObjectDetectionSettings)</h4>
+  <h4 id="Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsAtDistance_Melanchall_DryWetMidi_Core_TrackChunk_Melanchall_DryWetMidi_Interaction_ObjectType_System_Double_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Tools_LengthedObjectTarget_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Interaction_ObjectDetectionSettings_System_Predicate_Melanchall_DryWetMidi_Interaction_ITimedObject__" data-uid="Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsAtDistance(Melanchall.DryWetMidi.Core.TrackChunk,Melanchall.DryWetMidi.Interaction.ObjectType,System.Double,Melanchall.DryWetMidi.Interaction.TimeSpanType,Melanchall.DryWetMidi.Tools.LengthedObjectTarget,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings,System.Predicate{Melanchall.DryWetMidi.Interaction.ITimedObject})">SplitObjectsAtDistance(TrackChunk, ObjectType, Double, TimeSpanType, LengthedObjectTarget, TempoMap, ObjectDetectionSettings, Predicate&lt;ITimedObject&gt;)</h4>
   <div class="markdown level1 summary">
 Splits objects within a <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a> by the specified ratio of an object&apos;s length measuring
 it from the object&apos;s start or end. For example, 0.5 means splitting at the center of an object. More info
@@ -803,7 +827,7 @@ article.
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void SplitObjectsAtDistance(this TrackChunk trackChunk, ObjectType objectType, double ratio, TimeSpanType lengthType, LengthedObjectTarget from, TempoMap tempoMap, ObjectDetectionSettings objectDetectionSettings = null)</code></pre>
+    <pre><code class="lang-csharp hljs">public static void SplitObjectsAtDistance(this TrackChunk trackChunk, ObjectType objectType, double ratio, TimeSpanType lengthType, LengthedObjectTarget from, TempoMap tempoMap, ObjectDetectionSettings objectDetectionSettings = null, Predicate&lt;ITimedObject&gt; filter = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -850,6 +874,14 @@ article.
         <td><span class="parametername">objectDetectionSettings</span></td>
         <td>Settings according to which objects should be
 detected and built.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.predicate-1">Predicate</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimedObject.html">ITimedObject</a>&gt;</td>
+        <td><span class="parametername">filter</span></td>
+        <td>Predicate used to determine whether an object should be split or not.
+<code>true</code> as a return value of the predicate means an object should be split; <code>false</code>
+means don&apos;t split it. <code>null</code> (the default value) can be passed to the parameter
+to process all objects.</td>
       </tr>
     </tbody>
   </table>
@@ -883,7 +915,7 @@ detected and built.</td>
     </tbody>
   </table>
   <a id="Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsAtDistance_" data-uid="Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsAtDistance*"></a>
-  <h4 id="Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsAtDistance_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__Melanchall_DryWetMidi_Interaction_ObjectType_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Tools_LengthedObjectTarget_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Interaction_ObjectDetectionSettings_" data-uid="Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsAtDistance(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk},Melanchall.DryWetMidi.Interaction.ObjectType,Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Tools.LengthedObjectTarget,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings)">SplitObjectsAtDistance(IEnumerable&lt;TrackChunk&gt;, ObjectType, ITimeSpan, LengthedObjectTarget, TempoMap, ObjectDetectionSettings)</h4>
+  <h4 id="Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsAtDistance_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__Melanchall_DryWetMidi_Interaction_ObjectType_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Tools_LengthedObjectTarget_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Interaction_ObjectDetectionSettings_System_Predicate_Melanchall_DryWetMidi_Interaction_ITimedObject__" data-uid="Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsAtDistance(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk},Melanchall.DryWetMidi.Interaction.ObjectType,Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Tools.LengthedObjectTarget,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings,System.Predicate{Melanchall.DryWetMidi.Interaction.ITimedObject})">SplitObjectsAtDistance(IEnumerable&lt;TrackChunk&gt;, ObjectType, ITimeSpan, LengthedObjectTarget, TempoMap, ObjectDetectionSettings, Predicate&lt;ITimedObject&gt;)</h4>
   <div class="markdown level1 summary">
 Splits objects within a collection of <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a> at the specified distance from an
 object&apos;s start or end. More info in the
@@ -893,7 +925,7 @@ article.
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void SplitObjectsAtDistance(this IEnumerable&lt;TrackChunk&gt; trackChunks, ObjectType objectType, ITimeSpan distance, LengthedObjectTarget from, TempoMap tempoMap, ObjectDetectionSettings objectDetectionSettings = null)</code></pre>
+    <pre><code class="lang-csharp hljs">public static void SplitObjectsAtDistance(this IEnumerable&lt;TrackChunk&gt; trackChunks, ObjectType objectType, ITimeSpan distance, LengthedObjectTarget from, TempoMap tempoMap, ObjectDetectionSettings objectDetectionSettings = null, Predicate&lt;ITimedObject&gt; filter = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -936,6 +968,14 @@ article.
         <td>Settings according to which objects should be
 detected and built.</td>
       </tr>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.predicate-1">Predicate</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimedObject.html">ITimedObject</a>&gt;</td>
+        <td><span class="parametername">filter</span></td>
+        <td>Predicate used to determine whether an object should be split or not.
+<code>true</code> as a return value of the predicate means an object should be split; <code>false</code>
+means don&apos;t split it. <code>null</code> (the default value) can be passed to the parameter
+to process all objects.</td>
+      </tr>
     </tbody>
   </table>
   <h5 class="exceptions">Exceptions</h5>
@@ -961,7 +1001,7 @@ detected and built.</td>
     </tbody>
   </table>
   <a id="Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsAtDistance_" data-uid="Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsAtDistance*"></a>
-  <h4 id="Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsAtDistance_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__Melanchall_DryWetMidi_Interaction_ObjectType_System_Double_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Tools_LengthedObjectTarget_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Interaction_ObjectDetectionSettings_" data-uid="Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsAtDistance(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk},Melanchall.DryWetMidi.Interaction.ObjectType,System.Double,Melanchall.DryWetMidi.Interaction.TimeSpanType,Melanchall.DryWetMidi.Tools.LengthedObjectTarget,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings)">SplitObjectsAtDistance(IEnumerable&lt;TrackChunk&gt;, ObjectType, Double, TimeSpanType, LengthedObjectTarget, TempoMap, ObjectDetectionSettings)</h4>
+  <h4 id="Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsAtDistance_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__Melanchall_DryWetMidi_Interaction_ObjectType_System_Double_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Tools_LengthedObjectTarget_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Interaction_ObjectDetectionSettings_System_Predicate_Melanchall_DryWetMidi_Interaction_ITimedObject__" data-uid="Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsAtDistance(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk},Melanchall.DryWetMidi.Interaction.ObjectType,System.Double,Melanchall.DryWetMidi.Interaction.TimeSpanType,Melanchall.DryWetMidi.Tools.LengthedObjectTarget,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings,System.Predicate{Melanchall.DryWetMidi.Interaction.ITimedObject})">SplitObjectsAtDistance(IEnumerable&lt;TrackChunk&gt;, ObjectType, Double, TimeSpanType, LengthedObjectTarget, TempoMap, ObjectDetectionSettings, Predicate&lt;ITimedObject&gt;)</h4>
   <div class="markdown level1 summary">
 Splits objects within a collection of <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a> by the specified ratio of an object&apos;s
 length measuring it from the object&apos;s start or end. For example, 0.5 means splitting at the center of an object.
@@ -971,7 +1011,7 @@ article.
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void SplitObjectsAtDistance(this IEnumerable&lt;TrackChunk&gt; trackChunks, ObjectType objectType, double ratio, TimeSpanType lengthType, LengthedObjectTarget from, TempoMap tempoMap, ObjectDetectionSettings objectDetectionSettings = null)</code></pre>
+    <pre><code class="lang-csharp hljs">public static void SplitObjectsAtDistance(this IEnumerable&lt;TrackChunk&gt; trackChunks, ObjectType objectType, double ratio, TimeSpanType lengthType, LengthedObjectTarget from, TempoMap tempoMap, ObjectDetectionSettings objectDetectionSettings = null, Predicate&lt;ITimedObject&gt; filter = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -1019,6 +1059,14 @@ article.
         <td>Settings according to which objects should be
 detected and built.</td>
       </tr>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.predicate-1">Predicate</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimedObject.html">ITimedObject</a>&gt;</td>
+        <td><span class="parametername">filter</span></td>
+        <td>Predicate used to determine whether an object should be split or not.
+<code>true</code> as a return value of the predicate means an object should be split; <code>false</code>
+means don&apos;t split it. <code>null</code> (the default value) can be passed to the parameter
+to process all objects.</td>
+      </tr>
     </tbody>
   </table>
   <h5 class="exceptions">Exceptions</h5>
@@ -1051,7 +1099,7 @@ detected and built.</td>
     </tbody>
   </table>
   <a id="Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsAtDistance_" data-uid="Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsAtDistance*"></a>
-  <h4 id="Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsAtDistance_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_ITimedObject__Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Tools_LengthedObjectTarget_Melanchall_DryWetMidi_Interaction_TempoMap_" data-uid="Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsAtDistance(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Interaction.ITimedObject},Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Tools.LengthedObjectTarget,Melanchall.DryWetMidi.Interaction.TempoMap)">SplitObjectsAtDistance(IEnumerable&lt;ITimedObject&gt;, ITimeSpan, LengthedObjectTarget, TempoMap)</h4>
+  <h4 id="Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsAtDistance_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_ITimedObject__Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Tools_LengthedObjectTarget_Melanchall_DryWetMidi_Interaction_TempoMap_System_Predicate_Melanchall_DryWetMidi_Interaction_ITimedObject__" data-uid="Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsAtDistance(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Interaction.ITimedObject},Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Tools.LengthedObjectTarget,Melanchall.DryWetMidi.Interaction.TempoMap,System.Predicate{Melanchall.DryWetMidi.Interaction.ITimedObject})">SplitObjectsAtDistance(IEnumerable&lt;ITimedObject&gt;, ITimeSpan, LengthedObjectTarget, TempoMap, Predicate&lt;ITimedObject&gt;)</h4>
   <div class="markdown level1 summary">
 Splits objects at the specified distance from an object&apos;s start or end. More info in the
 <a class="xref" href="../articles/tools/Objects-splitting.html#splitobjectsatdistance">Objects splitting: SplitObjectsAtDistance</a>
@@ -1060,7 +1108,7 @@ article.
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static IEnumerable&lt;ITimedObject&gt; SplitObjectsAtDistance(this IEnumerable&lt;ITimedObject&gt; objects, ITimeSpan distance, LengthedObjectTarget from, TempoMap tempoMap)</code></pre>
+    <pre><code class="lang-csharp hljs">public static IEnumerable&lt;ITimedObject&gt; SplitObjectsAtDistance(this IEnumerable&lt;ITimedObject&gt; objects, ITimeSpan distance, LengthedObjectTarget from, TempoMap tempoMap, Predicate&lt;ITimedObject&gt; filter = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -1091,6 +1139,14 @@ article.
         <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TempoMap.html">TempoMap</a></td>
         <td><span class="parametername">tempoMap</span></td>
         <td>Tempo map used for distances calculations.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.predicate-1">Predicate</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimedObject.html">ITimedObject</a>&gt;</td>
+        <td><span class="parametername">filter</span></td>
+        <td>Predicate used to determine whether an object should be split or not.
+<code>true</code> as a return value of the predicate means an object should be split; <code>false</code>
+means don&apos;t split it. <code>null</code> (the default value) can be passed to the parameter
+to process all objects.</td>
       </tr>
     </tbody>
   </table>
@@ -1133,7 +1189,7 @@ order as elements of <code data-dev-comment-type="paramref" class="paramref">obj
     </tbody>
   </table>
   <a id="Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsAtDistance_" data-uid="Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsAtDistance*"></a>
-  <h4 id="Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsAtDistance_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_ITimedObject__System_Double_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Tools_LengthedObjectTarget_Melanchall_DryWetMidi_Interaction_TempoMap_" data-uid="Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsAtDistance(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Interaction.ITimedObject},System.Double,Melanchall.DryWetMidi.Interaction.TimeSpanType,Melanchall.DryWetMidi.Tools.LengthedObjectTarget,Melanchall.DryWetMidi.Interaction.TempoMap)">SplitObjectsAtDistance(IEnumerable&lt;ITimedObject&gt;, Double, TimeSpanType, LengthedObjectTarget, TempoMap)</h4>
+  <h4 id="Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsAtDistance_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_ITimedObject__System_Double_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Tools_LengthedObjectTarget_Melanchall_DryWetMidi_Interaction_TempoMap_System_Predicate_Melanchall_DryWetMidi_Interaction_ITimedObject__" data-uid="Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsAtDistance(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Interaction.ITimedObject},System.Double,Melanchall.DryWetMidi.Interaction.TimeSpanType,Melanchall.DryWetMidi.Tools.LengthedObjectTarget,Melanchall.DryWetMidi.Interaction.TempoMap,System.Predicate{Melanchall.DryWetMidi.Interaction.ITimedObject})">SplitObjectsAtDistance(IEnumerable&lt;ITimedObject&gt;, Double, TimeSpanType, LengthedObjectTarget, TempoMap, Predicate&lt;ITimedObject&gt;)</h4>
   <div class="markdown level1 summary">
 Splits objects by the specified ratio of an object&apos;s length measuring it from
 the object&apos;s start or end. For example, 0.5 means splitting at the center of an object. More info in the
@@ -1143,7 +1199,7 @@ article.
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static IEnumerable&lt;ITimedObject&gt; SplitObjectsAtDistance(this IEnumerable&lt;ITimedObject&gt; objects, double ratio, TimeSpanType lengthType, LengthedObjectTarget from, TempoMap tempoMap)</code></pre>
+    <pre><code class="lang-csharp hljs">public static IEnumerable&lt;ITimedObject&gt; SplitObjectsAtDistance(this IEnumerable&lt;ITimedObject&gt; objects, double ratio, TimeSpanType lengthType, LengthedObjectTarget from, TempoMap tempoMap, Predicate&lt;ITimedObject&gt; filter = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -1179,6 +1235,14 @@ article.
         <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TempoMap.html">TempoMap</a></td>
         <td><span class="parametername">tempoMap</span></td>
         <td>Tempo map used for distances calculations.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.predicate-1">Predicate</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimedObject.html">ITimedObject</a>&gt;</td>
+        <td><span class="parametername">filter</span></td>
+        <td>Predicate used to determine whether an object should be split or not.
+<code>true</code> as a return value of the predicate means an object should be split; <code>false</code>
+means don&apos;t split it. <code>null</code> (the default value) can be passed to the parameter
+to process all objects.</td>
       </tr>
     </tbody>
   </table>
@@ -1228,7 +1292,7 @@ order as elements of <code data-dev-comment-type="paramref" class="paramref">obj
     </tbody>
   </table>
   <a id="Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsByGrid_" data-uid="Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByGrid*"></a>
-  <h4 id="Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsByGrid_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Interaction_ObjectType_Melanchall_DryWetMidi_Interaction_IGrid_Melanchall_DryWetMidi_Interaction_ObjectDetectionSettings_" data-uid="Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByGrid(Melanchall.DryWetMidi.Core.MidiFile,Melanchall.DryWetMidi.Interaction.ObjectType,Melanchall.DryWetMidi.Interaction.IGrid,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings)">SplitObjectsByGrid(MidiFile, ObjectType, IGrid, ObjectDetectionSettings)</h4>
+  <h4 id="Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsByGrid_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Interaction_ObjectType_Melanchall_DryWetMidi_Interaction_IGrid_Melanchall_DryWetMidi_Interaction_ObjectDetectionSettings_System_Predicate_Melanchall_DryWetMidi_Interaction_ITimedObject__" data-uid="Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByGrid(Melanchall.DryWetMidi.Core.MidiFile,Melanchall.DryWetMidi.Interaction.ObjectType,Melanchall.DryWetMidi.Interaction.IGrid,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings,System.Predicate{Melanchall.DryWetMidi.Interaction.ITimedObject})">SplitObjectsByGrid(MidiFile, ObjectType, IGrid, ObjectDetectionSettings, Predicate&lt;ITimedObject&gt;)</h4>
   <div class="markdown level1 summary">
 Splits objects within a <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a> by the specified grid. More info in the
 <a class="xref" href="../articles/tools/Objects-splitting.html#splitobjectsbygrid">Objects splitting: SplitObjectsByGrid</a> article.
@@ -1236,7 +1300,7 @@ Splits objects within a <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFil
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void SplitObjectsByGrid(this MidiFile midiFile, ObjectType objectType, IGrid grid, ObjectDetectionSettings objectDetectionSettings = null)</code></pre>
+    <pre><code class="lang-csharp hljs">public static void SplitObjectsByGrid(this MidiFile midiFile, ObjectType objectType, IGrid grid, ObjectDetectionSettings objectDetectionSettings = null, Predicate&lt;ITimedObject&gt; filter = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -1269,9 +1333,17 @@ Splits objects within a <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFil
         <td>Settings according to which objects should be
 detected and built.</td>
       </tr>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.predicate-1">Predicate</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimedObject.html">ITimedObject</a>&gt;</td>
+        <td><span class="parametername">filter</span></td>
+        <td>Predicate used to determine whether an object should be split or not.
+<code>true</code> as a return value of the predicate means an object should be split; <code>false</code>
+means don&apos;t split it. <code>null</code> (the default value) can be passed to the parameter
+to process all objects.</td>
+      </tr>
     </tbody>
   </table>
-  <h5 id="Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsByGrid_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Interaction_ObjectType_Melanchall_DryWetMidi_Interaction_IGrid_Melanchall_DryWetMidi_Interaction_ObjectDetectionSettings__remarks">Remarks</h5>
+  <h5 id="Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsByGrid_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Interaction_ObjectType_Melanchall_DryWetMidi_Interaction_IGrid_Melanchall_DryWetMidi_Interaction_ObjectDetectionSettings_System_Predicate_Melanchall_DryWetMidi_Interaction_ITimedObject___remarks">Remarks</h5>
   <div class="markdown level1 remarks">
 Nulls will not be split and will be returned as <code>null</code>s.
 </div>
@@ -1294,7 +1366,7 @@ Nulls will not be split and will be returned as <code>null</code>s.
     </tbody>
   </table>
   <a id="Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsByGrid_" data-uid="Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByGrid*"></a>
-  <h4 id="Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsByGrid_Melanchall_DryWetMidi_Core_TrackChunk_Melanchall_DryWetMidi_Interaction_ObjectType_Melanchall_DryWetMidi_Interaction_IGrid_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Interaction_ObjectDetectionSettings_" data-uid="Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByGrid(Melanchall.DryWetMidi.Core.TrackChunk,Melanchall.DryWetMidi.Interaction.ObjectType,Melanchall.DryWetMidi.Interaction.IGrid,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings)">SplitObjectsByGrid(TrackChunk, ObjectType, IGrid, TempoMap, ObjectDetectionSettings)</h4>
+  <h4 id="Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsByGrid_Melanchall_DryWetMidi_Core_TrackChunk_Melanchall_DryWetMidi_Interaction_ObjectType_Melanchall_DryWetMidi_Interaction_IGrid_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Interaction_ObjectDetectionSettings_System_Predicate_Melanchall_DryWetMidi_Interaction_ITimedObject__" data-uid="Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByGrid(Melanchall.DryWetMidi.Core.TrackChunk,Melanchall.DryWetMidi.Interaction.ObjectType,Melanchall.DryWetMidi.Interaction.IGrid,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings,System.Predicate{Melanchall.DryWetMidi.Interaction.ITimedObject})">SplitObjectsByGrid(TrackChunk, ObjectType, IGrid, TempoMap, ObjectDetectionSettings, Predicate&lt;ITimedObject&gt;)</h4>
   <div class="markdown level1 summary">
 Splits objects within a <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a> by the specified grid. More info in the
 <a class="xref" href="../articles/tools/Objects-splitting.html#splitobjectsbygrid">Objects splitting: SplitObjectsByGrid</a> article.
@@ -1302,7 +1374,7 @@ Splits objects within a <a class="xref" href="Melanchall.DryWetMidi.Core.TrackCh
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void SplitObjectsByGrid(this TrackChunk trackChunk, ObjectType objectType, IGrid grid, TempoMap tempoMap, ObjectDetectionSettings objectDetectionSettings = null)</code></pre>
+    <pre><code class="lang-csharp hljs">public static void SplitObjectsByGrid(this TrackChunk trackChunk, ObjectType objectType, IGrid grid, TempoMap tempoMap, ObjectDetectionSettings objectDetectionSettings = null, Predicate&lt;ITimedObject&gt; filter = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -1340,9 +1412,17 @@ Splits objects within a <a class="xref" href="Melanchall.DryWetMidi.Core.TrackCh
         <td>Settings according to which objects should be
 detected and built.</td>
       </tr>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.predicate-1">Predicate</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimedObject.html">ITimedObject</a>&gt;</td>
+        <td><span class="parametername">filter</span></td>
+        <td>Predicate used to determine whether an object should be split or not.
+<code>true</code> as a return value of the predicate means an object should be split; <code>false</code>
+means don&apos;t split it. <code>null</code> (the default value) can be passed to the parameter
+to process all objects.</td>
+      </tr>
     </tbody>
   </table>
-  <h5 id="Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsByGrid_Melanchall_DryWetMidi_Core_TrackChunk_Melanchall_DryWetMidi_Interaction_ObjectType_Melanchall_DryWetMidi_Interaction_IGrid_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Interaction_ObjectDetectionSettings__remarks">Remarks</h5>
+  <h5 id="Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsByGrid_Melanchall_DryWetMidi_Core_TrackChunk_Melanchall_DryWetMidi_Interaction_ObjectType_Melanchall_DryWetMidi_Interaction_IGrid_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Interaction_ObjectDetectionSettings_System_Predicate_Melanchall_DryWetMidi_Interaction_ITimedObject___remarks">Remarks</h5>
   <div class="markdown level1 remarks">
 Nulls will not be split and will be returned as <code>null</code>s.
 </div>
@@ -1365,7 +1445,7 @@ Nulls will not be split and will be returned as <code>null</code>s.
     </tbody>
   </table>
   <a id="Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsByGrid_" data-uid="Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByGrid*"></a>
-  <h4 id="Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsByGrid_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__Melanchall_DryWetMidi_Interaction_ObjectType_Melanchall_DryWetMidi_Interaction_IGrid_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Interaction_ObjectDetectionSettings_" data-uid="Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByGrid(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk},Melanchall.DryWetMidi.Interaction.ObjectType,Melanchall.DryWetMidi.Interaction.IGrid,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings)">SplitObjectsByGrid(IEnumerable&lt;TrackChunk&gt;, ObjectType, IGrid, TempoMap, ObjectDetectionSettings)</h4>
+  <h4 id="Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsByGrid_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__Melanchall_DryWetMidi_Interaction_ObjectType_Melanchall_DryWetMidi_Interaction_IGrid_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Interaction_ObjectDetectionSettings_System_Predicate_Melanchall_DryWetMidi_Interaction_ITimedObject__" data-uid="Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByGrid(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk},Melanchall.DryWetMidi.Interaction.ObjectType,Melanchall.DryWetMidi.Interaction.IGrid,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings,System.Predicate{Melanchall.DryWetMidi.Interaction.ITimedObject})">SplitObjectsByGrid(IEnumerable&lt;TrackChunk&gt;, ObjectType, IGrid, TempoMap, ObjectDetectionSettings, Predicate&lt;ITimedObject&gt;)</h4>
   <div class="markdown level1 summary">
 Splits objects within a collection of <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a> by the specified grid. More info in the
 <a class="xref" href="../articles/tools/Objects-splitting.html#splitobjectsbygrid">Objects splitting: SplitObjectsByGrid</a> article.
@@ -1373,7 +1453,7 @@ Splits objects within a collection of <a class="xref" href="Melanchall.DryWetMid
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void SplitObjectsByGrid(this IEnumerable&lt;TrackChunk&gt; trackChunks, ObjectType objectType, IGrid grid, TempoMap tempoMap, ObjectDetectionSettings objectDetectionSettings = null)</code></pre>
+    <pre><code class="lang-csharp hljs">public static void SplitObjectsByGrid(this IEnumerable&lt;TrackChunk&gt; trackChunks, ObjectType objectType, IGrid grid, TempoMap tempoMap, ObjectDetectionSettings objectDetectionSettings = null, Predicate&lt;ITimedObject&gt; filter = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -1411,9 +1491,17 @@ Splits objects within a collection of <a class="xref" href="Melanchall.DryWetMid
         <td>Settings according to which objects should be
 detected and built.</td>
       </tr>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.predicate-1">Predicate</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimedObject.html">ITimedObject</a>&gt;</td>
+        <td><span class="parametername">filter</span></td>
+        <td>Predicate used to determine whether an object should be split or not.
+<code>true</code> as a return value of the predicate means an object should be split; <code>false</code>
+means don&apos;t split it. <code>null</code> (the default value) can be passed to the parameter
+to process all objects.</td>
+      </tr>
     </tbody>
   </table>
-  <h5 id="Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsByGrid_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__Melanchall_DryWetMidi_Interaction_ObjectType_Melanchall_DryWetMidi_Interaction_IGrid_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Interaction_ObjectDetectionSettings__remarks">Remarks</h5>
+  <h5 id="Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsByGrid_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__Melanchall_DryWetMidi_Interaction_ObjectType_Melanchall_DryWetMidi_Interaction_IGrid_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Interaction_ObjectDetectionSettings_System_Predicate_Melanchall_DryWetMidi_Interaction_ITimedObject___remarks">Remarks</h5>
   <div class="markdown level1 remarks">
 Nulls will not be split and will be returned as <code>null</code>s.
 </div>
@@ -1436,7 +1524,7 @@ Nulls will not be split and will be returned as <code>null</code>s.
     </tbody>
   </table>
   <a id="Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsByGrid_" data-uid="Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByGrid*"></a>
-  <h4 id="Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsByGrid_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_ITimedObject__Melanchall_DryWetMidi_Interaction_IGrid_Melanchall_DryWetMidi_Interaction_TempoMap_" data-uid="Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByGrid(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Interaction.ITimedObject},Melanchall.DryWetMidi.Interaction.IGrid,Melanchall.DryWetMidi.Interaction.TempoMap)">SplitObjectsByGrid(IEnumerable&lt;ITimedObject&gt;, IGrid, TempoMap)</h4>
+  <h4 id="Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsByGrid_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_ITimedObject__Melanchall_DryWetMidi_Interaction_IGrid_Melanchall_DryWetMidi_Interaction_TempoMap_System_Predicate_Melanchall_DryWetMidi_Interaction_ITimedObject__" data-uid="Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByGrid(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Interaction.ITimedObject},Melanchall.DryWetMidi.Interaction.IGrid,Melanchall.DryWetMidi.Interaction.TempoMap,System.Predicate{Melanchall.DryWetMidi.Interaction.ITimedObject})">SplitObjectsByGrid(IEnumerable&lt;ITimedObject&gt;, IGrid, TempoMap, Predicate&lt;ITimedObject&gt;)</h4>
   <div class="markdown level1 summary">
 Splits objects by the specified grid. More info in the
 <a class="xref" href="../articles/tools/Objects-splitting.html#splitobjectsbygrid">Objects splitting: SplitObjectsByGrid</a> article.
@@ -1444,7 +1532,7 @@ Splits objects by the specified grid. More info in the
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static IEnumerable&lt;ITimedObject&gt; SplitObjectsByGrid(this IEnumerable&lt;ITimedObject&gt; objects, IGrid grid, TempoMap tempoMap)</code></pre>
+    <pre><code class="lang-csharp hljs">public static IEnumerable&lt;ITimedObject&gt; SplitObjectsByGrid(this IEnumerable&lt;ITimedObject&gt; objects, IGrid grid, TempoMap tempoMap, Predicate&lt;ITimedObject&gt; filter = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -1471,6 +1559,14 @@ Splits objects by the specified grid. More info in the
         <td><span class="parametername">tempoMap</span></td>
         <td>Tempo map used to calculate times to split by.</td>
       </tr>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.predicate-1">Predicate</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimedObject.html">ITimedObject</a>&gt;</td>
+        <td><span class="parametername">filter</span></td>
+        <td>Predicate used to determine whether an object should be split or not.
+<code>true</code> as a return value of the predicate means an object should be split; <code>false</code>
+means don&apos;t split it. <code>null</code> (the default value) can be passed to the parameter
+to process all objects.</td>
+      </tr>
     </tbody>
   </table>
   <h5 class="returns">Returns</h5>
@@ -1489,7 +1585,7 @@ order as elements of <code data-dev-comment-type="paramref" class="paramref">obj
       </tr>
     </tbody>
   </table>
-  <h5 id="Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsByGrid_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_ITimedObject__Melanchall_DryWetMidi_Interaction_IGrid_Melanchall_DryWetMidi_Interaction_TempoMap__remarks">Remarks</h5>
+  <h5 id="Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsByGrid_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_ITimedObject__Melanchall_DryWetMidi_Interaction_IGrid_Melanchall_DryWetMidi_Interaction_TempoMap_System_Predicate_Melanchall_DryWetMidi_Interaction_ITimedObject___remarks">Remarks</h5>
   <div class="markdown level1 remarks">
 Nulls will not be split and will be returned as <code>null</code>s.
 </div>
@@ -1512,7 +1608,7 @@ Nulls will not be split and will be returned as <code>null</code>s.
     </tbody>
   </table>
   <a id="Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsByPartsNumber_" data-uid="Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByPartsNumber*"></a>
-  <h4 id="Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsByPartsNumber_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Interaction_ObjectType_System_Int32_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Interaction_ObjectDetectionSettings_" data-uid="Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByPartsNumber(Melanchall.DryWetMidi.Core.MidiFile,Melanchall.DryWetMidi.Interaction.ObjectType,System.Int32,Melanchall.DryWetMidi.Interaction.TimeSpanType,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings)">SplitObjectsByPartsNumber(MidiFile, ObjectType, Int32, TimeSpanType, ObjectDetectionSettings)</h4>
+  <h4 id="Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsByPartsNumber_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Interaction_ObjectType_System_Int32_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Interaction_ObjectDetectionSettings_System_Predicate_Melanchall_DryWetMidi_Interaction_ITimedObject__" data-uid="Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByPartsNumber(Melanchall.DryWetMidi.Core.MidiFile,Melanchall.DryWetMidi.Interaction.ObjectType,System.Int32,Melanchall.DryWetMidi.Interaction.TimeSpanType,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings,System.Predicate{Melanchall.DryWetMidi.Interaction.ITimedObject})">SplitObjectsByPartsNumber(MidiFile, ObjectType, Int32, TimeSpanType, ObjectDetectionSettings, Predicate&lt;ITimedObject&gt;)</h4>
   <div class="markdown level1 summary">
 Splits objects within a <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a> into the specified number of parts of the equal length.
 More info in the <a class="xref" href="../articles/tools/Objects-splitting.html#splitobjectsbypartsnumber">Objects splitting: SplitObjectsByPartsNumber</a>
@@ -1521,7 +1617,7 @@ article.
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void SplitObjectsByPartsNumber(this MidiFile midiFile, ObjectType objectType, int partsNumber, TimeSpanType lengthType, ObjectDetectionSettings objectDetectionSettings = null)</code></pre>
+    <pre><code class="lang-csharp hljs">public static void SplitObjectsByPartsNumber(this MidiFile midiFile, ObjectType objectType, int partsNumber, TimeSpanType lengthType, ObjectDetectionSettings objectDetectionSettings = null, Predicate&lt;ITimedObject&gt; filter = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -1559,9 +1655,17 @@ article.
         <td>Settings according to which objects should be
 detected and built.</td>
       </tr>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.predicate-1">Predicate</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimedObject.html">ITimedObject</a>&gt;</td>
+        <td><span class="parametername">filter</span></td>
+        <td>Predicate used to determine whether an object should be split or not.
+<code>true</code> as a return value of the predicate means an object should be split; <code>false</code>
+means don&apos;t split it. <code>null</code> (the default value) can be passed to the parameter
+to process all objects.</td>
+      </tr>
     </tbody>
   </table>
-  <h5 id="Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsByPartsNumber_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Interaction_ObjectType_System_Int32_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Interaction_ObjectDetectionSettings__remarks">Remarks</h5>
+  <h5 id="Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsByPartsNumber_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Interaction_ObjectType_System_Int32_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Interaction_ObjectDetectionSettings_System_Predicate_Melanchall_DryWetMidi_Interaction_ITimedObject___remarks">Remarks</h5>
   <div class="markdown level1 remarks">
 Nulls will not be split and will be returned as <code>null</code>s. If an object has zero length,
 it will be split into the specified number of parts of zero length.
@@ -1590,7 +1694,7 @@ it will be split into the specified number of parts of zero length.
     </tbody>
   </table>
   <a id="Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsByPartsNumber_" data-uid="Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByPartsNumber*"></a>
-  <h4 id="Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsByPartsNumber_Melanchall_DryWetMidi_Core_TrackChunk_Melanchall_DryWetMidi_Interaction_ObjectType_System_Int32_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Interaction_ObjectDetectionSettings_" data-uid="Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByPartsNumber(Melanchall.DryWetMidi.Core.TrackChunk,Melanchall.DryWetMidi.Interaction.ObjectType,System.Int32,Melanchall.DryWetMidi.Interaction.TimeSpanType,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings)">SplitObjectsByPartsNumber(TrackChunk, ObjectType, Int32, TimeSpanType, TempoMap, ObjectDetectionSettings)</h4>
+  <h4 id="Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsByPartsNumber_Melanchall_DryWetMidi_Core_TrackChunk_Melanchall_DryWetMidi_Interaction_ObjectType_System_Int32_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Interaction_ObjectDetectionSettings_System_Predicate_Melanchall_DryWetMidi_Interaction_ITimedObject__" data-uid="Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByPartsNumber(Melanchall.DryWetMidi.Core.TrackChunk,Melanchall.DryWetMidi.Interaction.ObjectType,System.Int32,Melanchall.DryWetMidi.Interaction.TimeSpanType,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings,System.Predicate{Melanchall.DryWetMidi.Interaction.ITimedObject})">SplitObjectsByPartsNumber(TrackChunk, ObjectType, Int32, TimeSpanType, TempoMap, ObjectDetectionSettings, Predicate&lt;ITimedObject&gt;)</h4>
   <div class="markdown level1 summary">
 Splits objects within a <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a> into the specified number of parts of the equal length.
 More info in the <a class="xref" href="../articles/tools/Objects-splitting.html#splitobjectsbypartsnumber">Objects splitting: SplitObjectsByPartsNumber</a>
@@ -1599,7 +1703,7 @@ article.
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void SplitObjectsByPartsNumber(this TrackChunk trackChunk, ObjectType objectType, int partsNumber, TimeSpanType lengthType, TempoMap tempoMap, ObjectDetectionSettings objectDetectionSettings = null)</code></pre>
+    <pre><code class="lang-csharp hljs">public static void SplitObjectsByPartsNumber(this TrackChunk trackChunk, ObjectType objectType, int partsNumber, TimeSpanType lengthType, TempoMap tempoMap, ObjectDetectionSettings objectDetectionSettings = null, Predicate&lt;ITimedObject&gt; filter = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -1642,9 +1746,17 @@ article.
         <td>Settings according to which objects should be
 detected and built.</td>
       </tr>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.predicate-1">Predicate</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimedObject.html">ITimedObject</a>&gt;</td>
+        <td><span class="parametername">filter</span></td>
+        <td>Predicate used to determine whether an object should be split or not.
+<code>true</code> as a return value of the predicate means an object should be split; <code>false</code>
+means don&apos;t split it. <code>null</code> (the default value) can be passed to the parameter
+to process all objects.</td>
+      </tr>
     </tbody>
   </table>
-  <h5 id="Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsByPartsNumber_Melanchall_DryWetMidi_Core_TrackChunk_Melanchall_DryWetMidi_Interaction_ObjectType_System_Int32_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Interaction_ObjectDetectionSettings__remarks">Remarks</h5>
+  <h5 id="Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsByPartsNumber_Melanchall_DryWetMidi_Core_TrackChunk_Melanchall_DryWetMidi_Interaction_ObjectType_System_Int32_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Interaction_ObjectDetectionSettings_System_Predicate_Melanchall_DryWetMidi_Interaction_ITimedObject___remarks">Remarks</h5>
   <div class="markdown level1 remarks">
 Nulls will not be split and will be returned as <code>null</code>s. If an object has zero length,
 it will be split into the specified number of parts of zero length.
@@ -1676,7 +1788,7 @@ it will be split into the specified number of parts of zero length.
     </tbody>
   </table>
   <a id="Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsByPartsNumber_" data-uid="Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByPartsNumber*"></a>
-  <h4 id="Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsByPartsNumber_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__Melanchall_DryWetMidi_Interaction_ObjectType_System_Int32_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Interaction_ObjectDetectionSettings_" data-uid="Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByPartsNumber(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk},Melanchall.DryWetMidi.Interaction.ObjectType,System.Int32,Melanchall.DryWetMidi.Interaction.TimeSpanType,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings)">SplitObjectsByPartsNumber(IEnumerable&lt;TrackChunk&gt;, ObjectType, Int32, TimeSpanType, TempoMap, ObjectDetectionSettings)</h4>
+  <h4 id="Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsByPartsNumber_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__Melanchall_DryWetMidi_Interaction_ObjectType_System_Int32_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Interaction_ObjectDetectionSettings_System_Predicate_Melanchall_DryWetMidi_Interaction_ITimedObject__" data-uid="Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByPartsNumber(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk},Melanchall.DryWetMidi.Interaction.ObjectType,System.Int32,Melanchall.DryWetMidi.Interaction.TimeSpanType,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings,System.Predicate{Melanchall.DryWetMidi.Interaction.ITimedObject})">SplitObjectsByPartsNumber(IEnumerable&lt;TrackChunk&gt;, ObjectType, Int32, TimeSpanType, TempoMap, ObjectDetectionSettings, Predicate&lt;ITimedObject&gt;)</h4>
   <div class="markdown level1 summary">
 Splits objects within a collection of <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a> into the specified number of parts of
 the equal length. More info in the
@@ -1686,7 +1798,7 @@ article.
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void SplitObjectsByPartsNumber(this IEnumerable&lt;TrackChunk&gt; trackChunks, ObjectType objectType, int partsNumber, TimeSpanType lengthType, TempoMap tempoMap, ObjectDetectionSettings objectDetectionSettings = null)</code></pre>
+    <pre><code class="lang-csharp hljs">public static void SplitObjectsByPartsNumber(this IEnumerable&lt;TrackChunk&gt; trackChunks, ObjectType objectType, int partsNumber, TimeSpanType lengthType, TempoMap tempoMap, ObjectDetectionSettings objectDetectionSettings = null, Predicate&lt;ITimedObject&gt; filter = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -1729,9 +1841,17 @@ article.
         <td>Settings according to which objects should be
 detected and built.</td>
       </tr>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.predicate-1">Predicate</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimedObject.html">ITimedObject</a>&gt;</td>
+        <td><span class="parametername">filter</span></td>
+        <td>Predicate used to determine whether an object should be split or not.
+<code>true</code> as a return value of the predicate means an object should be split; <code>false</code>
+means don&apos;t split it. <code>null</code> (the default value) can be passed to the parameter
+to process all objects.</td>
+      </tr>
     </tbody>
   </table>
-  <h5 id="Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsByPartsNumber_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__Melanchall_DryWetMidi_Interaction_ObjectType_System_Int32_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Interaction_ObjectDetectionSettings__remarks">Remarks</h5>
+  <h5 id="Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsByPartsNumber_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__Melanchall_DryWetMidi_Interaction_ObjectType_System_Int32_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Interaction_ObjectDetectionSettings_System_Predicate_Melanchall_DryWetMidi_Interaction_ITimedObject___remarks">Remarks</h5>
   <div class="markdown level1 remarks">
 Nulls will not be split and will be returned as <code>null</code>s. If an object has zero length,
 it will be split into the specified number of parts of zero length.
@@ -1763,7 +1883,7 @@ it will be split into the specified number of parts of zero length.
     </tbody>
   </table>
   <a id="Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsByPartsNumber_" data-uid="Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByPartsNumber*"></a>
-  <h4 id="Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsByPartsNumber_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_ITimedObject__System_Int32_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Interaction_TempoMap_" data-uid="Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByPartsNumber(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Interaction.ITimedObject},System.Int32,Melanchall.DryWetMidi.Interaction.TimeSpanType,Melanchall.DryWetMidi.Interaction.TempoMap)">SplitObjectsByPartsNumber(IEnumerable&lt;ITimedObject&gt;, Int32, TimeSpanType, TempoMap)</h4>
+  <h4 id="Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsByPartsNumber_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_ITimedObject__System_Int32_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Interaction_TempoMap_System_Predicate_Melanchall_DryWetMidi_Interaction_ITimedObject__" data-uid="Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByPartsNumber(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Interaction.ITimedObject},System.Int32,Melanchall.DryWetMidi.Interaction.TimeSpanType,Melanchall.DryWetMidi.Interaction.TempoMap,System.Predicate{Melanchall.DryWetMidi.Interaction.ITimedObject})">SplitObjectsByPartsNumber(IEnumerable&lt;ITimedObject&gt;, Int32, TimeSpanType, TempoMap, Predicate&lt;ITimedObject&gt;)</h4>
   <div class="markdown level1 summary">
 Splits objects into the specified number of parts of the equal length. More info in the
 <a class="xref" href="../articles/tools/Objects-splitting.html#splitobjectsbypartsnumber">Objects splitting: SplitObjectsByPartsNumber</a>
@@ -1772,7 +1892,7 @@ article.
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static IEnumerable&lt;ITimedObject&gt; SplitObjectsByPartsNumber(this IEnumerable&lt;ITimedObject&gt; objects, int partsNumber, TimeSpanType lengthType, TempoMap tempoMap)</code></pre>
+    <pre><code class="lang-csharp hljs">public static IEnumerable&lt;ITimedObject&gt; SplitObjectsByPartsNumber(this IEnumerable&lt;ITimedObject&gt; objects, int partsNumber, TimeSpanType lengthType, TempoMap tempoMap, Predicate&lt;ITimedObject&gt; filter = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -1804,6 +1924,14 @@ article.
         <td><span class="parametername">tempoMap</span></td>
         <td>Tempo map used to calculate times to split by.</td>
       </tr>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.predicate-1">Predicate</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimedObject.html">ITimedObject</a>&gt;</td>
+        <td><span class="parametername">filter</span></td>
+        <td>Predicate used to determine whether an object should be split or not.
+<code>true</code> as a return value of the predicate means an object should be split; <code>false</code>
+means don&apos;t split it. <code>null</code> (the default value) can be passed to the parameter
+to process all objects.</td>
+      </tr>
     </tbody>
   </table>
   <h5 class="returns">Returns</h5>
@@ -1822,7 +1950,7 @@ order as elements of <code data-dev-comment-type="paramref" class="paramref">obj
       </tr>
     </tbody>
   </table>
-  <h5 id="Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsByPartsNumber_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_ITimedObject__System_Int32_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Interaction_TempoMap__remarks">Remarks</h5>
+  <h5 id="Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsByPartsNumber_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_ITimedObject__System_Int32_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Interaction_TempoMap_System_Predicate_Melanchall_DryWetMidi_Interaction_ITimedObject___remarks">Remarks</h5>
   <div class="markdown level1 remarks">
 Nulls will not be split and will be returned as <code>null</code>s. If an object has zero length,
 it will be split into the specified number of parts of zero length.
@@ -1854,7 +1982,7 @@ it will be split into the specified number of parts of zero length.
     </tbody>
   </table>
   <a id="Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsByStep_" data-uid="Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByStep*"></a>
-  <h4 id="Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsByStep_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Interaction_ObjectType_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_ObjectDetectionSettings_" data-uid="Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByStep(Melanchall.DryWetMidi.Core.MidiFile,Melanchall.DryWetMidi.Interaction.ObjectType,Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings)">SplitObjectsByStep(MidiFile, ObjectType, ITimeSpan, ObjectDetectionSettings)</h4>
+  <h4 id="Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsByStep_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Interaction_ObjectType_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_ObjectDetectionSettings_System_Predicate_Melanchall_DryWetMidi_Interaction_ITimedObject__" data-uid="Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByStep(Melanchall.DryWetMidi.Core.MidiFile,Melanchall.DryWetMidi.Interaction.ObjectType,Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings,System.Predicate{Melanchall.DryWetMidi.Interaction.ITimedObject})">SplitObjectsByStep(MidiFile, ObjectType, ITimeSpan, ObjectDetectionSettings, Predicate&lt;ITimedObject&gt;)</h4>
   <div class="markdown level1 summary">
 Splits objects within a <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a> by the specified step so every object will be split
 at points equally distanced from each other starting from the object&apos;s start time. More info in the
@@ -1863,7 +1991,7 @@ at points equally distanced from each other starting from the object&apos;s star
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void SplitObjectsByStep(this MidiFile midiFile, ObjectType objectType, ITimeSpan step, ObjectDetectionSettings objectDetectionSettings = null)</code></pre>
+    <pre><code class="lang-csharp hljs">public static void SplitObjectsByStep(this MidiFile midiFile, ObjectType objectType, ITimeSpan step, ObjectDetectionSettings objectDetectionSettings = null, Predicate&lt;ITimedObject&gt; filter = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -1896,9 +2024,17 @@ at points equally distanced from each other starting from the object&apos;s star
         <td>Settings according to which objects should be
 detected and built.</td>
       </tr>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.predicate-1">Predicate</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimedObject.html">ITimedObject</a>&gt;</td>
+        <td><span class="parametername">filter</span></td>
+        <td>Predicate used to determine whether an object should be split or not.
+<code>true</code> as a return value of the predicate means an object should be split; <code>false</code>
+means don&apos;t split it. <code>null</code> (the default value) can be passed to the parameter
+to process all objects.</td>
+      </tr>
     </tbody>
   </table>
-  <h5 id="Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsByStep_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Interaction_ObjectType_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_ObjectDetectionSettings__remarks">Remarks</h5>
+  <h5 id="Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsByStep_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Interaction_ObjectType_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_ObjectDetectionSettings_System_Predicate_Melanchall_DryWetMidi_Interaction_ITimedObject___remarks">Remarks</h5>
   <div class="markdown level1 remarks">
 Nulls, objects with zero length and objects with length smaller than <code data-dev-comment-type="paramref" class="paramref">step</code>
 will not be split and will be returned as clones of the input objects.
@@ -1922,7 +2058,7 @@ will not be split and will be returned as clones of the input objects.
     </tbody>
   </table>
   <a id="Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsByStep_" data-uid="Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByStep*"></a>
-  <h4 id="Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsByStep_Melanchall_DryWetMidi_Core_TrackChunk_Melanchall_DryWetMidi_Interaction_ObjectType_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Interaction_ObjectDetectionSettings_" data-uid="Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByStep(Melanchall.DryWetMidi.Core.TrackChunk,Melanchall.DryWetMidi.Interaction.ObjectType,Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings)">SplitObjectsByStep(TrackChunk, ObjectType, ITimeSpan, TempoMap, ObjectDetectionSettings)</h4>
+  <h4 id="Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsByStep_Melanchall_DryWetMidi_Core_TrackChunk_Melanchall_DryWetMidi_Interaction_ObjectType_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Interaction_ObjectDetectionSettings_System_Predicate_Melanchall_DryWetMidi_Interaction_ITimedObject__" data-uid="Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByStep(Melanchall.DryWetMidi.Core.TrackChunk,Melanchall.DryWetMidi.Interaction.ObjectType,Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings,System.Predicate{Melanchall.DryWetMidi.Interaction.ITimedObject})">SplitObjectsByStep(TrackChunk, ObjectType, ITimeSpan, TempoMap, ObjectDetectionSettings, Predicate&lt;ITimedObject&gt;)</h4>
   <div class="markdown level1 summary">
 Splits objects within a <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a> by the specified step so every object will be split
 at points equally distanced from each other starting from the object&apos;s start time. More info in the
@@ -1931,7 +2067,7 @@ at points equally distanced from each other starting from the object&apos;s star
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void SplitObjectsByStep(this TrackChunk trackChunk, ObjectType objectType, ITimeSpan step, TempoMap tempoMap, ObjectDetectionSettings objectDetectionSettings = null)</code></pre>
+    <pre><code class="lang-csharp hljs">public static void SplitObjectsByStep(this TrackChunk trackChunk, ObjectType objectType, ITimeSpan step, TempoMap tempoMap, ObjectDetectionSettings objectDetectionSettings = null, Predicate&lt;ITimedObject&gt; filter = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -1969,9 +2105,17 @@ at points equally distanced from each other starting from the object&apos;s star
         <td>Settings according to which objects should be
 detected and built.</td>
       </tr>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.predicate-1">Predicate</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimedObject.html">ITimedObject</a>&gt;</td>
+        <td><span class="parametername">filter</span></td>
+        <td>Predicate used to determine whether an object should be split or not.
+<code>true</code> as a return value of the predicate means an object should be split; <code>false</code>
+means don&apos;t split it. <code>null</code> (the default value) can be passed to the parameter
+to process all objects.</td>
+      </tr>
     </tbody>
   </table>
-  <h5 id="Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsByStep_Melanchall_DryWetMidi_Core_TrackChunk_Melanchall_DryWetMidi_Interaction_ObjectType_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Interaction_ObjectDetectionSettings__remarks">Remarks</h5>
+  <h5 id="Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsByStep_Melanchall_DryWetMidi_Core_TrackChunk_Melanchall_DryWetMidi_Interaction_ObjectType_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Interaction_ObjectDetectionSettings_System_Predicate_Melanchall_DryWetMidi_Interaction_ITimedObject___remarks">Remarks</h5>
   <div class="markdown level1 remarks">
 Nulls, objects with zero length and objects with length smaller than <code data-dev-comment-type="paramref" class="paramref">step</code>
 will not be split and will be returned as clones of the input objects.
@@ -1995,7 +2139,7 @@ will not be split and will be returned as clones of the input objects.
     </tbody>
   </table>
   <a id="Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsByStep_" data-uid="Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByStep*"></a>
-  <h4 id="Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsByStep_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__Melanchall_DryWetMidi_Interaction_ObjectType_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Interaction_ObjectDetectionSettings_" data-uid="Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByStep(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk},Melanchall.DryWetMidi.Interaction.ObjectType,Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings)">SplitObjectsByStep(IEnumerable&lt;TrackChunk&gt;, ObjectType, ITimeSpan, TempoMap, ObjectDetectionSettings)</h4>
+  <h4 id="Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsByStep_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__Melanchall_DryWetMidi_Interaction_ObjectType_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Interaction_ObjectDetectionSettings_System_Predicate_Melanchall_DryWetMidi_Interaction_ITimedObject__" data-uid="Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByStep(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.TrackChunk},Melanchall.DryWetMidi.Interaction.ObjectType,Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings,System.Predicate{Melanchall.DryWetMidi.Interaction.ITimedObject})">SplitObjectsByStep(IEnumerable&lt;TrackChunk&gt;, ObjectType, ITimeSpan, TempoMap, ObjectDetectionSettings, Predicate&lt;ITimedObject&gt;)</h4>
   <div class="markdown level1 summary">
 Splits objects within a collection of <a class="xref" href="Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a> by the specified step so every object
 will be split at points equally distanced from each other starting from the object&apos;s start time. More info
@@ -2004,7 +2148,7 @@ in the <a class="xref" href="../articles/tools/Objects-splitting.html#splitobjec
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void SplitObjectsByStep(this IEnumerable&lt;TrackChunk&gt; trackChunks, ObjectType objectType, ITimeSpan step, TempoMap tempoMap, ObjectDetectionSettings objectDetectionSettings = null)</code></pre>
+    <pre><code class="lang-csharp hljs">public static void SplitObjectsByStep(this IEnumerable&lt;TrackChunk&gt; trackChunks, ObjectType objectType, ITimeSpan step, TempoMap tempoMap, ObjectDetectionSettings objectDetectionSettings = null, Predicate&lt;ITimedObject&gt; filter = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -2042,9 +2186,17 @@ in the <a class="xref" href="../articles/tools/Objects-splitting.html#splitobjec
         <td>Settings according to which objects should be
 detected and built.</td>
       </tr>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.predicate-1">Predicate</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimedObject.html">ITimedObject</a>&gt;</td>
+        <td><span class="parametername">filter</span></td>
+        <td>Predicate used to determine whether an object should be split or not.
+<code>true</code> as a return value of the predicate means an object should be split; <code>false</code>
+means don&apos;t split it. <code>null</code> (the default value) can be passed to the parameter
+to process all objects.</td>
+      </tr>
     </tbody>
   </table>
-  <h5 id="Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsByStep_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__Melanchall_DryWetMidi_Interaction_ObjectType_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Interaction_ObjectDetectionSettings__remarks">Remarks</h5>
+  <h5 id="Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsByStep_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_TrackChunk__Melanchall_DryWetMidi_Interaction_ObjectType_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Interaction_ObjectDetectionSettings_System_Predicate_Melanchall_DryWetMidi_Interaction_ITimedObject___remarks">Remarks</h5>
   <div class="markdown level1 remarks">
 Nulls, objects with zero length and objects with length smaller than <code data-dev-comment-type="paramref" class="paramref">step</code>
 will not be split and will be returned as clones of the input objects.
@@ -2068,7 +2220,7 @@ will not be split and will be returned as clones of the input objects.
     </tbody>
   </table>
   <a id="Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsByStep_" data-uid="Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByStep*"></a>
-  <h4 id="Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsByStep_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_ITimedObject__Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_TempoMap_" data-uid="Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByStep(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Interaction.ITimedObject},Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Interaction.TempoMap)">SplitObjectsByStep(IEnumerable&lt;ITimedObject&gt;, ITimeSpan, TempoMap)</h4>
+  <h4 id="Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsByStep_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_ITimedObject__Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_TempoMap_System_Predicate_Melanchall_DryWetMidi_Interaction_ITimedObject__" data-uid="Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByStep(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Interaction.ITimedObject},Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Interaction.TempoMap,System.Predicate{Melanchall.DryWetMidi.Interaction.ITimedObject})">SplitObjectsByStep(IEnumerable&lt;ITimedObject&gt;, ITimeSpan, TempoMap, Predicate&lt;ITimedObject&gt;)</h4>
   <div class="markdown level1 summary">
 Splits objects by the specified step so every object will be split at points
 equally distanced from each other starting from the object&apos;s start time. More info in the
@@ -2077,7 +2229,7 @@ equally distanced from each other starting from the object&apos;s start time. Mo
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static IEnumerable&lt;ITimedObject&gt; SplitObjectsByStep(this IEnumerable&lt;ITimedObject&gt; objects, ITimeSpan step, TempoMap tempoMap)</code></pre>
+    <pre><code class="lang-csharp hljs">public static IEnumerable&lt;ITimedObject&gt; SplitObjectsByStep(this IEnumerable&lt;ITimedObject&gt; objects, ITimeSpan step, TempoMap tempoMap, Predicate&lt;ITimedObject&gt; filter = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -2104,6 +2256,14 @@ equally distanced from each other starting from the object&apos;s start time. Mo
         <td><span class="parametername">tempoMap</span></td>
         <td>Tempo map used to calculate times to split by.</td>
       </tr>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.predicate-1">Predicate</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimedObject.html">ITimedObject</a>&gt;</td>
+        <td><span class="parametername">filter</span></td>
+        <td>Predicate used to determine whether an object should be split or not.
+<code>true</code> as a return value of the predicate means an object should be split; <code>false</code>
+means don&apos;t split it. <code>null</code> (the default value) can be passed to the parameter
+to process all objects.</td>
+      </tr>
     </tbody>
   </table>
   <h5 class="returns">Returns</h5>
@@ -2122,7 +2282,7 @@ order as elements of <code data-dev-comment-type="paramref" class="paramref">obj
       </tr>
     </tbody>
   </table>
-  <h5 id="Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsByStep_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_ITimedObject__Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_TempoMap__remarks">Remarks</h5>
+  <h5 id="Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsByStep_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_ITimedObject__Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_TempoMap_System_Predicate_Melanchall_DryWetMidi_Interaction_ITimedObject___remarks">Remarks</h5>
   <div class="markdown level1 remarks">
 Nulls, objects with zero length and objects with length smaller than <code data-dev-comment-type="paramref" class="paramref">step</code>
 will not be split and will be returned as clones of the input objects.

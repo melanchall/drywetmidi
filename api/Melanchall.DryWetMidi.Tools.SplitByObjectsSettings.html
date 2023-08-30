@@ -184,13 +184,12 @@ which means no filter applied.
   <h4 id="Melanchall_DryWetMidi_Tools_SplitByObjectsSettings_KeySelector" data-uid="Melanchall.DryWetMidi.Tools.SplitByObjectsSettings.KeySelector">KeySelector</h4>
   <div class="markdown level1 summary">
 Gets or sets a method to get the ID (key) of an object. The default value
-is <code>null</code> which means the default key selector will be used. You can use
-the property to implement custom key selection (please see <a class="xref" href="Melanchall.DryWetMidi.Interaction.ObjectIdUtilities.html">ObjectIdUtilities</a>).
+is <code>null</code> which means the default key selector will be used.
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Func&lt;ITimedObject, IObjectId&gt; KeySelector { get; set; }</code></pre>
+    <pre><code class="lang-csharp hljs">public Func&lt;ITimedObject, object&gt; KeySelector { get; set; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -202,7 +201,7 @@ the property to implement custom key selection (please see <a class="xref" href=
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.func-2">Func</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimedObject.html">ITimedObject</a>, <a class="xref" href="Melanchall.DryWetMidi.Interaction.IObjectId.html">IObjectId</a>&gt;</td>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.func-2">Func</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimedObject.html">ITimedObject</a>, <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">Object</a>&gt;</td>
         <td></td>
       </tr>
     </tbody>

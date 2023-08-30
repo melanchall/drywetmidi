@@ -5,10 +5,10 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Interface IObjectId
+    <title>Enum PlaybackHint
    | DryWetMIDI </title>
     <meta name="viewport" content="width=device-width">
-    <meta name="title" content="Interface IObjectId
+    <meta name="title" content="Enum PlaybackHint
    | DryWetMIDI ">
     <meta name="generator" content="docfx 2.59.4.0">
     
@@ -78,21 +78,77 @@
         </div>
         <div class="article row grid-right">
           <div class="col-md-10">
-            <article class="content wrap" id="_content" data-uid="Melanchall.DryWetMidi.Interaction.IObjectId">
+            <article class="content wrap" id="_content" data-uid="Melanchall.DryWetMidi.Multimedia.PlaybackHint">
   
   
-  <h1 id="Melanchall_DryWetMidi_Interaction_IObjectId" data-uid="Melanchall.DryWetMidi.Interaction.IObjectId" class="text-break">Interface IObjectId
+  <h1 id="Melanchall_DryWetMidi_Multimedia_PlaybackHint" data-uid="Melanchall.DryWetMidi.Multimedia.PlaybackHint" class="text-break">Enum PlaybackHint
   </h1>
   <div class="markdown level0 summary">
-Represents the ID (key) of an object.
+Provide a hint for a playback creation. The hint can improve performance if you don&apos;t need
+some features of the <a class="xref" href="Melanchall.DryWetMidi.Multimedia.Playback.html">Playback</a>.
 </div>
   <div class="markdown level0 conceptual"></div>
-  <h6><strong>Namespace</strong>: <a class="xref" href="Melanchall.DryWetMidi.Interaction.html">Melanchall.DryWetMidi.Interaction</a></h6>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Melanchall.DryWetMidi.Multimedia.html">Melanchall.DryWetMidi.Multimedia</a></h6>
   <h6><strong>Assembly</strong>: Melanchall.DryWetMidi.dll</h6>
-  <h5 id="Melanchall_DryWetMidi_Interaction_IObjectId_syntax">Syntax</h5>
+  <h5 id="Melanchall_DryWetMidi_Multimedia_PlaybackHint_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public interface IObjectId</code></pre>
+    <pre><code class="lang-csharp hljs">[Flags]
+public enum PlaybackHint</code></pre>
   </div>
+  <h3 id="fields">Fields
+  </h3>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    <thead>
+    <tbody>
+      <tr>
+        <td id="Melanchall_DryWetMidi_Multimedia_PlaybackHint_Default">Default</td>
+        <td>
+Enable usage of all features of the <a class="xref" href="Melanchall.DryWetMidi.Multimedia.Playback.html">Playback</a>.
+</td>
+      </tr>
+      <tr>
+        <td id="Melanchall_DryWetMidi_Multimedia_PlaybackHint_DisableControlValueTracking">DisableControlValueTracking</td>
+        <td>
+Disable usage of control value tracking. You won&apos;t be able to set <a class="xref" href="Melanchall.DryWetMidi.Multimedia.Playback.html#Melanchall_DryWetMidi_Multimedia_Playback_TrackControlValue">TrackControlValue</a>
+to <code>true</code>.
+</td>
+      </tr>
+      <tr>
+        <td id="Melanchall_DryWetMidi_Multimedia_PlaybackHint_DisableDataTracking">DisableDataTracking</td>
+        <td>
+Disable usage of data tracking at all. Includes <a class="xref" href="Melanchall.DryWetMidi.Multimedia.PlaybackHint.html#Melanchall_DryWetMidi_Multimedia_PlaybackHint_DisableNotesTracking">DisableNotesTracking</a>,
+<a class="xref" href="Melanchall.DryWetMidi.Multimedia.PlaybackHint.html#Melanchall_DryWetMidi_Multimedia_PlaybackHint_DisableProgramTracking">DisableProgramTracking</a>, <a class="xref" href="Melanchall.DryWetMidi.Multimedia.PlaybackHint.html#Melanchall_DryWetMidi_Multimedia_PlaybackHint_DisablePitchValueTracking">DisablePitchValueTracking</a> and
+<a class="xref" href="Melanchall.DryWetMidi.Multimedia.PlaybackHint.html#Melanchall_DryWetMidi_Multimedia_PlaybackHint_DisableControlValueTracking">DisableControlValueTracking</a>.
+</td>
+      </tr>
+      <tr>
+        <td id="Melanchall_DryWetMidi_Multimedia_PlaybackHint_DisableNotesTracking">DisableNotesTracking</td>
+        <td>
+Disable usage of notes tracking. You won&apos;t be able to set <a class="xref" href="Melanchall.DryWetMidi.Multimedia.Playback.html#Melanchall_DryWetMidi_Multimedia_Playback_TrackNotes">TrackNotes</a>
+to <code>true</code>.
+</td>
+      </tr>
+      <tr>
+        <td id="Melanchall_DryWetMidi_Multimedia_PlaybackHint_DisablePitchValueTracking">DisablePitchValueTracking</td>
+        <td>
+Disable usage of pitch value tracking. You won&apos;t be able to set <a class="xref" href="Melanchall.DryWetMidi.Multimedia.Playback.html#Melanchall_DryWetMidi_Multimedia_Playback_TrackPitchValue">TrackPitchValue</a>
+to <code>true</code>.
+</td>
+      </tr>
+      <tr>
+        <td id="Melanchall_DryWetMidi_Multimedia_PlaybackHint_DisableProgramTracking">DisableProgramTracking</td>
+        <td>
+Disable usage of program tracking. You won&apos;t be able to set <a class="xref" href="Melanchall.DryWetMidi.Multimedia.Playback.html#Melanchall_DryWetMidi_Multimedia_Playback_TrackProgram">TrackProgram</a>
+to <code>true</code>.
+</td>
+      </tr>
+    </tbody>
+  </thead></thead></table>
 </article>
           </div>
           

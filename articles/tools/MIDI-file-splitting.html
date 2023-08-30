@@ -127,15 +127,13 @@
     ObjectType.Note | ObjectType.TimedEvent,
     new SplitByObjectsSettings
     {
-        KeySelector = obj =&gt; obj is Note note
-            ? ObjectIdUtilities.GetObjectId(note.NoteNumber)
-            : obj.GetObjectId(),
+        KeySelector = obj =&gt; (obj as Note)?.NoteNumber,
         WriteToAllFilesPredicate = obj =&gt; obj is TimedEvent
     });
 </code></pre>
-<p><a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.ObjectIdUtilities.html#Melanchall_DryWetMidi_Interaction_ObjectIdUtilities_GetObjectId__1___0_">ObjectIdUtilities.GetObjectId(value)</a> returns an implementation of <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.IObjectId.html">IObjectId</a> which simply holds the provided value. <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.ObjectIdUtilities.html#Melanchall_DryWetMidi_Interaction_ObjectIdUtilities_GetObjectId_Melanchall_DryWetMidi_Interaction_ITimedObject_">ObjectIdUtilities.GetObjectId(object)</a> returns the default ID (key) for an object. So if an object is a note, we use its note number as the key; and default key for any other object types.</p>
-<p>If custom logic of key selection is complex, you may decide to implement the <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.IObjectId.html">IObjectId</a> interface and return that implementation. Just for example, let's create an ID class that identifies a chord by its shortest name:</p>
-<pre><code class="lang-csharp">private sealed class ChordNameId : IObjectId
+<p>Here a key will be resolved to <code>null</code> if an object is not an instance of the <code>Note</code>. <code>null</code> key means to use the default key calculation logic shown above.</p>
+<p>If key selection is complex, you may decide to implement a class for such key. Just for example, let's create the key class that identifies a chord by its shortest name:</p>
+<pre><code class="lang-csharp">private sealed class ChordNameId
 {
     private readonly string _name;
     

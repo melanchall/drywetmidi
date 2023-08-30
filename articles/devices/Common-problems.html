@@ -79,10 +79,40 @@
             <article class="content wrap" id="_content" data-uid="a_devices_commonproblems">
 <h1 id="common-problems">Common problems</h1>
 
-<h2 id="startcoroutine-can-only-be-called-from-the-main-thread-in-unity">StartCoroutine can only be called from the main thread in Unity</h2>
+<h2 id="startcoroutine-can-only-be-called-from-the-main-thread-in-unity"><code>StartCoroutine</code> can only be called from the main thread in Unity</h2>
 <p>Sometimes you want to start Unity coroutine in a handler of <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.IInputDevice.html#Melanchall_DryWetMidi_Multimedia_IInputDevice_EventReceived">EventReceived</a> event of <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.InputDevice.html">InputDevice</a>. Your code can be executed on separate thread in these case. It can happen because of events are received by device on separate (system) thread.</p>
 <p>But UI related things like call of <code>StartCoroutine</code> can be executed on UI thread only. You can use the solution from here: <a href="https://stackoverflow.com/a/56715254">https://stackoverflow.com/a/56715254</a>.</p>
 <p>Related question on StackOverflow: <a href="https://stackoverflow.com/q/62750863">Catching and processing multiple keyboard inputs at once</a></p>
+<h2 id="inputdevice-declared-as-a-local-variable"><code>InputDevice</code> declared as a local variable</h2>
+<p>If an instance of the <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.InputDevice.html">InputDevice</a> is declared as a local variable and you’ve subscribed to its <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.IInputDevice.html#Melanchall_DryWetMidi_Multimedia_IInputDevice_EventReceived">EventReceived</a> event, the event handler won’t be called or you can get undefined behavior. For example, let’s look at this code:</p>
+<pre><code class="lang-csharp">private void StartListening()
+{
+    var inputDevice = InputDevice.GetByName(&quot;My Device&quot;);
+    inputDevice.EventReceived += OnEventReceived;
+    inputDevice.StartEventsListening();
+}
+
+private void OnEventReceived(object sender, MidiEventReceivedEventArgs e)
+{
+    // Do something ...
+}
+</code></pre>
+<p>What happens when the <code>StartListening</code> method exits? Right, all local variables are marked as ready for garbage collection, so they will be deleted within a short time span. So the <code>OnEventReceived</code> method becomes attached to a deleted entity (<code>inputDevice</code>) when the <code>StartListening</code> exited. In the best case you just won't get <code>OnEventReceived</code> called. In worst case you may get different strange things, see this issues:</p>
+<ul>
+<li><a href="https://github.com/melanchall/drywetmidi/issues/262">InputDevice event listening crash</a></li>
+<li><a href="https://github.com/melanchall/drywetmidi/issues/267">Crash when running in Unity on M2 MacBook</a></li>
+</ul>
+<p>Input device <strong>must</strong> be stored in a class field:</p>
+<pre><code class="lang-csharp">private InputDevice _inputDevice;
+
+private void StartListening()
+{
+    _inputDevice = InputDevice.GetByName(&quot;My Device&quot;);
+    _inputDevice.EventReceived += OnEventReceived;
+    _inputDevice.StartEventsListening();
+}
+</code></pre>
+<p>And don't forget to dispose the device when you're done with it. Please read the <a class="xref" href="Input-device.html">Input device</a> article to learn more.</p>
 </article>
           </div>
           
