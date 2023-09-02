@@ -6,7 +6,7 @@ trigger:
   paths:
     include:
     - 'DryWetMidi/*'
-    - 'Resources/Scripts/Check links.ps1'
+    - 'Resources/Utilities/CheckLinks/*'
     - 'Resources/CI/check-cs-links.yaml'
 
 pr:
@@ -16,7 +16,7 @@ pr:
   paths:
     include:
     - 'DryWetMidi/*'
-    - 'Resources/Scripts/Check links.ps1'
+    - 'Resources/Utilities/CheckLinks/*'
     - 'Resources/CI/check-cs-links.yaml'
 
 schedules:
@@ -31,13 +31,12 @@ schedules:
 pool:
   vmImage: 'windows-latest'
 
-name: CheckCsLinks_$(Rev:r)
+name: CheckCsLinks_$(SourceBranchName)_$(Rev:r)
 
 steps:
-- task: PowerShell@2
-  displayName: Check links
+- task: DotNetCoreCLI@2
+  displayName: 'Check links'
   inputs:
-    targetType: filePath
-    filePath: '$(Build.SourcesDirectory)/Resources/Scripts/Check links.ps1'
-    arguments: '-Folder "$(Build.SourcesDirectory)/DryWetMidi" -Filter "*.cs"'
-    failOnStderr: 'true'
+    command: 'run'
+    projects: 'Resources/Utilities/CheckLinks/CheckLinks/CheckLinks.csproj'
+    arguments: '-c Release -- "$(Build.SourcesDirectory)/DryWetMidi" "*.cs"'
