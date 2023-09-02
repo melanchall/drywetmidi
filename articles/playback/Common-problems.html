@@ -88,16 +88,6 @@
 }
 </code></pre>
 <p><code>playback</code> variable will &quot;die&quot; (will be ready to be collected by GC) after program exits <code>StartPlayback</code> method so playback won't work.</p>
-<h2 id="unity-hangs-or-crash-on-entering-play-mode-second-time">Unity hangs or crash on entering Play mode second time</h2>
-<p>By default <code>Playback</code> uses <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.HighPrecisionTickGenerator.html">HighPrecisionTickGenerator</a> tick generator (see <a href="Tick-generator.html">Tick generator</a> article to learn more). <code>HighPrecisionTickGenerator</code> uses WinAPI methods by P/Invoke which causes troubles in Unity environment. You may notice that Unity hangs forever if you hit Play button second time. Unfortunately it seems the <a href="https://issuetracker.unity3d.com/issues/editor-freezes-when-updating-a-nativearray-on-the-net-4-dot-x-scripting-runtime-and-entering-play-mode-a-second-time">problem</a> won't be fixed. Answer of Unity tech support:</p>
-<blockquote>
-<p>Unfortunately, that is correct = we will not be able to fix this in the near term because it probably requires rewriting of internal threading functionality, which might introduce new issues. The main case has been tagged for a revisit internally, but it will probably be months until the case is re-valuated again.</p>
-</blockquote>
-<p>Solution is to use either <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.RegularPrecisionTickGenerator.html">RegularPrecisionTickGenerator</a> or a <a href="Tick-generator.html#custom-tick-generator">custom</a> one. Related issues on GitHub:</p>
-<ul>
-<li><a href="https://github.com/melanchall/drywetmidi/issues/31">Playback produces unexpected results in Unity</a></li>
-<li><a href="https://github.com/melanchall/drywetmidi/issues/79">Visualization of notes</a></li>
-</ul>
 <h2 id="setactive-can-only-be-called-from-the-main-thread-in-unity">SetActive can only be called from the main thread in Unity</h2>
 <p>Sometimes you want to handle <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.Playback.html#events">playback events</a> or use <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.Playback.html#Melanchall_DryWetMidi_Multimedia_Playback_EventCallback">event</a> or <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.Playback.html#Melanchall_DryWetMidi_Multimedia_Playback_NoteCallback">note</a> callbacks. Your code can be executed on separate thread in these cases. It can happen because of <code>Playback</code>'s internals (like <a href="Tick-generator.html">tick generator</a>'s tick handling) work on separate thread.</p>
 <p>But UI related things like call of <code>SetActive</code> can be executed on UI thread only. You can use the solution from here: <a href="https://stackoverflow.com/a/56715254">https://stackoverflow.com/a/56715254</a>.</p>
