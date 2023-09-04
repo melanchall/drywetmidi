@@ -18,7 +18,8 @@ stages:
   pool:
     vmImage: 'windows-latest'
   jobs:
-  - template: Templates/job-build-package-nativeless.yaml
+  - template: Templates/job-build-package.yaml
     parameters:
       buildConfiguration: $(BuildConfiguration)
       prereleaseNumber: $(prereleaseNumber)
+      packageType: 'Nativeless'

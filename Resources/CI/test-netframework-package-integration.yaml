@@ -32,6 +32,7 @@ stages:
   - template: Templates/job-build-package.yaml
     parameters:
       buildConfiguration: $(BuildConfiguration)
+      packageType: 'Full'
 
 - stage: TestPackageIntegration
   displayName: Test package integration

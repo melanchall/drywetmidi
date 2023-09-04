@@ -6,6 +6,9 @@ parameters:
   displayName: 'Pre-release number'
   type: string
   default: ''
+- name: packageType
+  displayName: 'Package type'
+  type: string
 
 jobs:
 - job: BuildPackage
@@ -15,27 +18,50 @@ jobs:
   steps:
   - task: DownloadPipelineArtifact@2
     displayName: Download native libraries
+    condition: eq('${{ parameters.packageType }}', 'Full')
     inputs:
       source: 'current'
       path: '$(Pipeline.Workspace)\NativeLibraries'
   
-  - ${{ if not(eq(parameters.prereleaseNumber, '')) }}:
-    - task: PowerShell@2
-      displayName: Write prerelease version
-      inputs:
-        targetType: 'inline'
-        script: |
-          $filePath = Resolve-Path "DryWetMidi\Melanchall.DryWetMidi.csproj"
-          $xml = New-Object xml
-          $xml.PreserveWhitespace = $true
-          $xml.Load($filePath)
-          $version = $xml.Project.PropertyGroup[1].Version
-          Write-Host "Current version is $version"
-          Write-Host "Prerelease number is ${{ parameters.prereleaseNumber }}"
-          $newVersion = $version + "-prerelease" + ${{ parameters.prereleaseNumber }}
-          Write-Host "New version is $newVersion"
-          $xml.Project.PropertyGroup[1].Version = $newVersion
-          $xml.Save($filePath)
+  - task: PowerShell@2
+    displayName: Setup version
+    inputs:
+      targetType: 'inline'
+      script: |
+        $filePath = Resolve-Path "DryWetMidi\Melanchall.DryWetMidi.csproj"
+        $xml = New-Object xml
+        $xml.PreserveWhitespace = $true
+        $xml.Load($filePath)
+        $version = $xml.Project.PropertyGroup[1].Version
+        Write-Host "Current version is $version"
+        $newVersion = "$(LibraryVersion)"
+        $xml.Project.PropertyGroup[1].Version = $newVersion
+        Write-Host "New version: $($xml.Project.PropertyGroup[1].Version)"
+        Write-Host "Setting release notes up..."
+        $xml.Project.PropertyGroup[1].PackageReleaseNotes = "https://github.com/melanchall/drywetmidi/releases/tag/v$(LibraryVersion)"
+        Write-Host "Release notes: $($xml.Project.PropertyGroup[1].PackageReleaseNotes)"
+        $xml.Save($filePath)
+  
+  - task: PowerShell@2
+    displayName: Setup prerelease version
+    condition: not(eq('${{ parameters.prereleaseNumber }}', ''))
+    inputs:
+      targetType: 'inline'
+      script: |
+        $filePath = Resolve-Path "DryWetMidi\Melanchall.DryWetMidi.csproj"
+        $xml = New-Object xml
+        $xml.PreserveWhitespace = $true
+        $xml.Load($filePath)
+        $version = $xml.Project.PropertyGroup[1].Version
+        Write-Host "Current version is $version"
+        Write-Host "Prerelease number is ${{ parameters.prereleaseNumber }}"
+        $newVersion = $version + "-prerelease" + ${{ parameters.prereleaseNumber }}
+        $xml.Project.PropertyGroup[1].Version = $newVersion
+        Write-Host "New version: $($xml.Project.PropertyGroup[1].Version)"
+        Write-Host "Removing release notes..."
+        $xml.Project.PropertyGroup[1].PackageReleaseNotes = ""
+        Write-Host "Release notes: $($xml.Project.PropertyGroup[1].PackageReleaseNotes)"
+        $xml.Save($filePath)
   
   - template: step-setup-framework.yaml
     parameters:
@@ -48,9 +74,13 @@ jobs:
     inputs:
       targetType: filePath
       filePath: '$(Build.SourcesDirectory)/Resources/Scripts/Generate obsolete API hints.ps1'
-      
+  
+  - ${{ if eq(parameters.packageType, 'Nativeless') }}:  
+    - template: step-setup-nativeless-project.yaml
+  
   - task: PowerShell@2
     displayName: Copy native libraries near csproj
+    condition: eq('${{ parameters.packageType }}', 'Full')
     inputs:
       targetType: 'inline'
       script: |

@@ -8,7 +8,7 @@ trigger:
     include:
     - 'DryWetMidi/*'
     - 'Resources/CI/build-artifacts-library.yaml'
-    - 'Resources/CI/Templates/job-build-package-nativeless.yaml'
+    - 'Resources/CI/Templates/job-build-package.yaml'
     - 'Resources/CI/Templates/step-build-docs.yaml'
     - 'Resources/CI/Templates/step-generate-doc-links.yaml'
     - 'Resources/CI/Templates/step-setup-nativeless-project.yaml'
@@ -26,9 +26,10 @@ stages:
   pool:
     vmImage: 'windows-latest'
   jobs:
-  - template: Templates/job-build-package-nativeless.yaml
+  - template: Templates/job-build-package.yaml
     parameters:
       buildConfiguration: $(BuildConfiguration)
+      packageType: 'Nativeless'
   - job: BuildBinaries
     displayName: Build binaries
     steps:
