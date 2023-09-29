@@ -200,7 +200,7 @@ Examples:
 `0.0.0` – zero time span  
 `1.0.0` – 1 bar  
 `0.10.5` – 10 beats and 5 ticks  
-`100.20.0` – 100 bars and 20 ticks
+`100.20.0` – 100 bars and 20 beats
 
 ### Bars, beats and fraction
 
