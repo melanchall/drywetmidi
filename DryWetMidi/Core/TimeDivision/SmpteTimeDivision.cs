@@ -79,7 +79,7 @@ namespace Melanchall.DryWetMidi.Core
 
         internal override short ToInt16()
         {
-            return (short)-DataTypesUtilities.Combine((byte)Format, Resolution);
+            return (short)DataTypesUtilities.Combine((byte)-(byte)Format, Resolution);
         }
 
         /// <summary>
