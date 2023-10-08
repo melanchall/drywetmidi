@@ -7,6 +7,21 @@ namespace Melanchall.DryWetMidi.Tests.Common
     {
         #region Methods
 
+        public static MidiFile Read(byte[] midiFile, ReadingSettings readingSettings)
+        {
+            var filePath = FileOperations.GetTempFilePath();
+            FileOperations.WriteAllBytesToFile(filePath, midiFile);
+
+            try
+            {
+                return MidiFile.Read(filePath, readingSettings);
+            }
+            finally
+            {
+                FileOperations.DeleteFile(filePath);
+            }
+        }
+
         public static MidiFile Read(MidiFile midiFile, WritingSettings writingSettings, ReadingSettings readingSettings, MidiFileFormat? format = null)
         {
             var filePath = FileOperations.GetTempFilePath();

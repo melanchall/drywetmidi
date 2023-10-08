@@ -16,6 +16,23 @@ namespace Melanchall.DryWetMidi.Tests.Core
         #region Test methods
 
         [Test]
+        public void Write_SmpteTimeDivision()
+        {
+            MidiFileTestUtilities.Write(
+                midiFile: new MidiFile { TimeDivision = new SmpteTimeDivision(SmpteFormat.Thirty, 80) },
+                action: filePath =>
+                {
+                    var bytes = FileOperations.ReadAllFileBytes(filePath);
+                    var timeDivisionBytes = new byte[2];
+                    Buffer.BlockCopy(bytes, 12, timeDivisionBytes, 0, 2);
+                    CollectionAssert.AreEqual(
+                        new byte[] { 0xE2, 0x50 },
+                        timeDivisionBytes,
+                        "Invalid time division bytes.");
+                });
+        }
+
+        [Test]
         public void Write_Compression_NoCompression()
         {
             var midiFile = new MidiFile(

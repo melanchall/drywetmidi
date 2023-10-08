@@ -17,6 +17,45 @@ namespace Melanchall.DryWetMidi.Tests.Core
         #region Test methods
 
         [Test]
+        public void Read_SmpteTimeDivision_1()
+        {
+            var midiFile = MidiFileTestUtilities.Read(
+                midiFile: new byte[]
+                {
+                    0x4D, 0x54, 0x68, 0x64, // MThd
+                    0x00, 0x00, 0x00, 0x06, // length = 6
+                    0x00, 0x00,             // format = 0
+                    0x00, 0x01,             // tracks number = 1
+                    0xE2, 0x50,             // time division
+                },
+                readingSettings: null);
+
+            Assert.IsInstanceOf(typeof(SmpteTimeDivision), midiFile.TimeDivision, "Invalid time division type.");
+
+            var smpteTimeDivision = (SmpteTimeDivision)midiFile.TimeDivision;
+            Assert.AreEqual(SmpteFormat.Thirty, smpteTimeDivision.Format, "Invaid SMPTE format.");
+            Assert.AreEqual(80, smpteTimeDivision.Resolution, "Invaid SMPTE resolution.");
+        }
+
+        [Test]
+        public void Read_SmpteTimeDivision_2()
+        {
+            var originalTimeDivision = new SmpteTimeDivision(SmpteFormat.Thirty, 80);
+            var midiFile = MidiFileTestUtilities.Read(
+                midiFile: new MidiFile { TimeDivision = originalTimeDivision },
+                writingSettings: null,
+                readingSettings: null);
+
+            Assert.IsInstanceOf(typeof(SmpteTimeDivision), midiFile.TimeDivision, "Invalid time division type.");
+
+            var smpteTimeDivision = (SmpteTimeDivision)midiFile.TimeDivision;
+            Assert.AreEqual(SmpteFormat.Thirty, smpteTimeDivision.Format, "Invaid SMPTE format.");
+            Assert.AreEqual(80, smpteTimeDivision.Resolution, "Invaid SMPTE resolution.");
+
+            Assert.AreEqual(originalTimeDivision, midiFile.TimeDivision, "Invalid time division.");
+        }
+
+        [Test]
         public void Read_StopReadingOnExpectedTrackChunksCountReached_Single_EmptyFile() => Read_StopReadingOnExpectedTrackChunksCountReached(
             midiFile: new MidiFile());
 
