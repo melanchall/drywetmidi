@@ -10,8 +10,7 @@ namespace Melanchall.DryWetMidi.Core
         {
             if (division < 0)
             {
-                division = (short)-division;
-                return new SmpteTimeDivision((SmpteFormat)division.GetHead(), division.GetTail());
+                return new SmpteTimeDivision((SmpteFormat)(-division.GetHead()), division.GetTail());
             }
 
             return new TicksPerQuarterNoteTimeDivision(division);
