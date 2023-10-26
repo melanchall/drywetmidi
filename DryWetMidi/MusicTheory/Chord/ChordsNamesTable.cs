@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Melanchall.DryWetMidi.Common;
 
 namespace Melanchall.DryWetMidi.MusicTheory
 {
@@ -8,7 +7,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
     {
         #region Nested classes
 
-        private sealed class NameDefinition
+        internal sealed class NameDefinition
         {
             #region Constructor
 
@@ -33,7 +32,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
 
         #region Constants
 
-        private static readonly NameDefinition[] NamesDefinitions = new[]
+        internal static readonly NameDefinition[] NamesDefinitions = new[]
             {
                 new NameDefinition(new[] { new[] { 0, 4, 7 } }, "maj", "M", string.Empty),
                 new NameDefinition(new[] { new[] { 0, 3, 7 } }, "min", "m"),
@@ -71,7 +70,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
                 new NameDefinition(new[] { new[] { 0, 4, 7, 9, 14 }, new[] { 4, 7, 9, 14 }, new[] { 0, 4, 9, 14 }, new[] { 4, 9, 14 } }, "maj6(9)", "6(9)", "6/9", "M6/9", "M6(9)"),
                 new NameDefinition(new[] { new[] { 0, 3, 7, 9, 14 }, new[] { 3, 7, 9, 14 }, new[] { 0, 3, 9, 14 }, new[] { 3, 9, 14 } }, "min6(9)", "m6(9)", "m6/9", "min6/9"),
                 new NameDefinition(new[] { new[] { 0, 4, 7, 10, 14 } }, "9"),
-                new NameDefinition(new[] { new[] { 0, 2, 7, 10, 14 } }, "9sus2"),
+                new NameDefinition(new[] { new[] { 0, 2, 7, 10 } }, "9sus2"),
                 new NameDefinition(new[] { new[] { 0, 5, 7, 10, 14 } }, "9sus4"),
                 new NameDefinition(new[] { new[] { 0, 4, 7, 10, 14, 17 } }, "11"),
                 new NameDefinition(new[] { new[] { 0, 4, 7, 17 } }, "add11"),
@@ -79,6 +78,20 @@ namespace Melanchall.DryWetMidi.MusicTheory
             }
             .OrderByDescending(d => d.Intervals.First().Length)
             .ToArray();
+
+        private static readonly int MinIntervalsCount = NamesDefinitions
+            .SelectMany(d => d.Intervals.Select(i => i.Length))
+            .Min();
+
+        private static readonly int MaxIntervalsCount = NamesDefinitions
+            .SelectMany(d => d.Intervals.Select(i => i.Length))
+            .Max();
+
+        #endregion
+
+        #region Fields
+
+        private static readonly string[] NotesPrettyNames = new string[Octave.OctaveSize];
 
         #endregion
 
@@ -103,28 +116,41 @@ namespace Melanchall.DryWetMidi.MusicTheory
             if (!notesNames.Any())
                 return result;
 
-            var chordsStrings = new HashSet<string>();
+            var notesNamesSet = new HashSet<NoteName>(notesNames).ToArray();
 
-            foreach (var permutation in MathUtilities.GetPermutations(notesNames))
+            result.AddRange(GetChordNamesInternal(notesNamesSet));
+
+            var tail = new NoteName[notesNamesSet.Length - 1];
+
+            for (var i = 0; i < notesNamesSet.Length; i++)
             {
-                var chordString = new string(permutation.Select(n => (char)n).ToArray());
-                if (!chordsStrings.Add(chordString))
-                    continue;
+                var k = 0;
 
-                result.AddRange(GetChordNamesByPermutation(permutation));
+                for (var j = 0; j < notesNamesSet.Length; j++)
+                {
+                    if (i == j)
+                        continue;
+
+                    tail[k++] = notesNamesSet[j];
+                }
+
+                var tailNames = GetChordNamesInternal(tail);
+                result.AddRange(tailNames.Select(name => $"{name}/{GetPrettyName(notesNamesSet[i])}"));
             }
 
             return result.Distinct().OrderBy(n => n.Length).ToArray();
         }
 
-        private static IList<string> GetChordNamesByPermutation(NoteName[] notesNames)
+        private static string GetPrettyName(NoteName noteName)
         {
-            var result = new List<string>(GetChordNamesInternal(notesNames));
+            var index = (int)noteName;
 
-            var firstNoteName = notesNames.First();
-            result.AddRange(GetChordNamesInternal(notesNames.Skip(1).ToArray()).Select(n => $"{n}/{firstNoteName.ToString().Replace(Note.SharpLongString, Note.SharpShortString)}"));
+            if (string.IsNullOrWhiteSpace(NotesPrettyNames[index]))
+            {
+                NotesPrettyNames[index] = noteName.ToString().Replace(Note.SharpLongString, Note.SharpShortString);
+            }
 
-            return result;
+            return NotesPrettyNames[index];
         }
 
         private static List<string> GetChordNamesInternal(ICollection<NoteName> notesNames)
@@ -133,52 +159,40 @@ namespace Melanchall.DryWetMidi.MusicTheory
             if (!notesNames.Any())
                 return result;
 
-            var rootNoteName = notesNames.First();
-            var intervals = ChordUtilities.GetIntervalsFromRootNote(notesNames).Select(i => i.HalfSteps).ToArray();
+            var notesNamesSet = new HashSet<NoteName>(notesNames);
 
-            foreach (var nameDefinition in NamesDefinitions)
+            if (notesNamesSet.Count < MinIntervalsCount || notesNamesSet.Count > MaxIntervalsCount)
+                return result;
+
+            foreach (var noteName in notesNamesSet)
             {
-                var matched = false;
-
-                foreach (var definitionIntervals in nameDefinition.Intervals)
+                foreach (var nameDefinition in NamesDefinitions)
                 {
-                    var processedIntervals = intervals;
-
-                    if (definitionIntervals[0] != 0)
+                    foreach (var intervals in nameDefinition.Intervals)
                     {
-                        // TODO: process omitted root
-                        continue;
+                        if (notesNamesSet.Count != intervals.Length)
+                            continue;
+
+                        var checkFailed = false;
+
+                        for (var i = 0; i < intervals.Length; i++)
+                        {
+                            var newNoteName = intervals[i] == 0
+                                ? noteName
+                                : (NoteName)(((int)noteName + intervals[i]) % Octave.OctaveSize);
+
+                            if (!notesNamesSet.Contains(newNoteName))
+                            {
+                                checkFailed = true;
+                                break;
+                            }
+                        }
+
+                        if (checkFailed)
+                            continue;
+
+                        result.AddRange(nameDefinition.Names.Select(name => $"{GetPrettyName(noteName)}{name}"));
                     }
-                    else
-                    {
-                        processedIntervals = new[] { 0 }.Concat(intervals).ToArray();
-                    }
-
-                    var subMatched = processedIntervals.Length >= definitionIntervals.Length;
-                    var j = 0;
-
-                    for (int i = 0; i < definitionIntervals.Length && i < processedIntervals.Length && subMatched; i++, j++)
-                    {
-                        var interval = definitionIntervals[i];
-                        if (processedIntervals[i] != interval && !processedIntervals.Contains(interval - 12) && !processedIntervals.Contains(interval - 24))
-                            subMatched = false;
-                    }
-
-                    for (; j < processedIntervals.Length && subMatched; j++)
-                    {
-                        if (!processedIntervals.Contains(processedIntervals[j] - 12) && !processedIntervals.Contains(processedIntervals[j] - 24))
-                            subMatched = false;
-                    }
-
-                    matched |= subMatched && j >= processedIntervals.Length;
-                    if (matched)
-                        break;
-                }
-
-                if (matched)
-                {
-                    result.AddRange(nameDefinition.Names.Select(n => $"{rootNoteName.ToString().Replace(Note.SharpLongString, Note.SharpShortString)}{n}"));
-                    break;
                 }
             }
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using Melanchall.DryWetMidi.MusicTheory;
@@ -99,7 +100,7 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
         [TestCase("Csus2", new[] { NoteName.C, NoteName.D, NoteName.G })]
         [TestCase("C9", new[] { NoteName.C, NoteName.E, NoteName.G, NoteName.ASharp, NoteName.D })]
         [TestCase("C9sus4", new[] { NoteName.C, NoteName.F, NoteName.G, NoteName.ASharp, NoteName.D })]
-        [TestCase("C9sus2", new[] { NoteName.C, NoteName.D, NoteName.G, NoteName.ASharp, NoteName.D })]
+        [TestCase("C9sus2", new[] { NoteName.C, NoteName.D, NoteName.G, NoteName.ASharp })]
         [TestCase("F/G", new[] { NoteName.G, NoteName.F, NoteName.A, NoteName.C })]
         [TestCase("C11", new[] { NoteName.C, NoteName.E, NoteName.G, NoteName.ASharp, NoteName.D, NoteName.F })]
         [TestCase("Cm11", new[] { NoteName.C, NoteName.DSharp, NoteName.G, NoteName.ASharp, NoteName.D, NoteName.F })]
@@ -161,6 +162,32 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
             var chord = new Chord(notesNames);
             var names = chord.GetNames();
             CollectionAssert.Contains(names, expectedChordName);
+        }
+
+        [Test]
+        public void CheckChordNamesTableDoesntContainOctaves()
+        {
+            var namesWithOctaves = new HashSet<string>();
+
+            foreach (var nameDefinition in ChordsNamesTable.NamesDefinitions)
+            {
+                foreach (var intervals in nameDefinition.Intervals)
+                {
+                    for (var i = 0; i < intervals.Length; i++)
+                    {
+                        for (var j = i + 1; j < intervals.Length; j++)
+                        {
+                            var delta = Math.Abs(intervals[i] - intervals[j]);
+                            if (delta % 12 == 0)
+                            {
+                                namesWithOctaves.Add(string.Join(", ", nameDefinition.Names));
+                            }
+                        }
+                    }
+                }
+            }
+
+            CollectionAssert.IsEmpty(namesWithOctaves, "There are names with octaves.");
         }
 
         #endregion
