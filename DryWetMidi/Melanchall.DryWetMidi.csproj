@@ -33,7 +33,7 @@
       * Build musical compositions.
       * Perform complex musical tasks like quantizing, notes splitting or converting MIDI files to CSV.
     </Description>
-    <Copyright>Copyright © Melanchall 2023</Copyright>
+    <Copyright>Copyright © Melanchall 2024</Copyright>
     <PackageTags>midi smf music composing notes chords device playback record</PackageTags>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
