@@ -37,5 +37,5 @@ steps:
   displayName: 'Export StackExchange info to InfluxDB Cloud'
   inputs:
     command: 'run'
-    projects: 'Resources/Utilities/ExportNuGetStatistics/ExportNuGetStatistics/ExportNuGetStatistics.csproj'
+    projects: 'Resources/Utilities/ExportStackExchangeStatistics/ExportStackExchangeStatistics/ExportStackExchangeStatistics.csproj'
     arguments: '-c Release -- "$(InfluxDB.Url)" "$(InfluxDB.WriteToken)" "$(InfluxDB.ReadToken)" "$(InfluxDB.Organization)" "$(InfluxDB.Bucket)" "$(InfluxDB.Measurement.StackExchange)"'
