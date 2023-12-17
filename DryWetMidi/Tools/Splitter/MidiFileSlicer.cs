@@ -14,6 +14,8 @@ namespace Melanchall.DryWetMidi.Tools
         {
             #region Fields
 
+            private readonly IEnumerator<TimedEvent> _enumerator;
+
             private bool _disposed = false;
 
             #endregion
@@ -22,19 +24,33 @@ namespace Melanchall.DryWetMidi.Tools
 
             public TimedEventsHolder(IEnumerator<TimedEvent> timedEventsEnumerator)
             {
-                Enumerator = timedEventsEnumerator;
-                Enumerator.MoveNext();
+                _enumerator = timedEventsEnumerator;
+                CanBeEnumerated = _enumerator.MoveNext();
             }
 
             #endregion
 
             #region Properties
 
-            public IEnumerator<TimedEvent> Enumerator { get; }
+            public bool CanBeEnumerated { get; private set; }
 
             public List<TimedEvent> EventsToCopyToNextPart { get; } = new List<TimedEvent>();
 
             public List<TimedEvent> EventsToStartNextPart { get; } = new List<TimedEvent>();
+
+            #endregion
+
+            #region Methods
+
+            public bool MoveToNextEvent()
+            {
+                return CanBeEnumerated = _enumerator.MoveNext();
+            }
+
+            public TimedEvent GetCurrentEvent()
+            {
+                return _enumerator.Current;
+            }
 
             #endregion
 
@@ -46,7 +62,7 @@ namespace Melanchall.DryWetMidi.Tools
                     return;
 
                 if (disposing)
-                    Enumerator.Dispose();
+                    _enumerator.Dispose();
 
                 _disposed = true;
             }
@@ -142,7 +158,7 @@ namespace Melanchall.DryWetMidi.Tools
 
         #region Properties
 
-        public bool AllEventsProcessed => _timedEventsHolders.All(c => !c.EventsToStartNextPart.Any() && c.Enumerator.Current == null);
+        public bool AllEventsProcessed => _timedEventsHolders.All(c => !c.EventsToStartNextPart.Any() && !c.CanBeEnumerated);
 
         #endregion
 
@@ -191,7 +207,6 @@ namespace Melanchall.DryWetMidi.Tools
             {
                 var timedEventsHolder = _timedEventsHolders[i];
 
-                var timedEventsEnumerator = timedEventsHolder.Enumerator;
                 var eventsToCopyToNextPart = timedEventsHolder.EventsToCopyToNextPart;
                 var eventsToStartNextPart = timedEventsHolder.EventsToStartNextPart;
 
@@ -202,29 +217,32 @@ namespace Melanchall.DryWetMidi.Tools
                     eventsToStartNextPart,
                     out newEventsStartIndex);
 
-                do
+                if (timedEventsHolder.CanBeEnumerated)
                 {
-                    var timedEvent = timedEventsEnumerator.Current;
-                    if (timedEvent == null)
-                        break;
-
-                    var time = timedEvent.Time;
-                    if (time > endTime)
-                        break;
-
-                    if (time == endTime)
+                    do
                     {
-                        if (!TryToMoveEdgeNoteOffsToPreviousPart(timedEvent, takenTimedEvents))
-                            eventsToStartNextPart.Add(timedEvent);
+                        var timedEvent = timedEventsHolder.GetCurrentEvent();
+                        if (timedEvent == null)
+                            break;
 
-                        continue;
+                        var time = timedEvent.Time;
+                        if (time > endTime)
+                            break;
+
+                        if (time == endTime)
+                        {
+                            if (!TryToMoveEdgeNoteOffsToPreviousPart(timedEvent, takenTimedEvents))
+                                eventsToStartNextPart.Add(timedEvent);
+
+                            continue;
+                        }
+
+                        UpdateEventsToCopyToNextPart(eventsToCopyToNextPart, timedEvent);
+
+                        takenTimedEvents.Add(timedEvent);
                     }
-
-                    UpdateEventsToCopyToNextPart(eventsToCopyToNextPart, timedEvent);
-
-                    takenTimedEvents.Add(timedEvent);
+                    while (timedEventsHolder.MoveToNextEvent());
                 }
-                while (timedEventsEnumerator.MoveNext());
 
                 isPartEmpty &= newEventsStartIndex >= takenTimedEvents.Count;
 

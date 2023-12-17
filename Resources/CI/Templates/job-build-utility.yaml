@@ -42,7 +42,7 @@ jobs:
     - task: ArchiveFiles@2
       displayName: Archive utility
       inputs:
-        rootFolderOrFile: 'Utilities\${{ parameters.projectName }}\bin\$(BuildConfiguration)\net7.0\${{ rid }}\publish'
+        rootFolderOrFile: 'Utilities\${{ parameters.projectName }}\bin\$(BuildConfiguration)\$(Build.Framework.Net.Tfm)\${{ rid }}\publish'
         includeRootFolder: false
         archiveType: 'zip'
         archiveFile: '$(Build.ArtifactStagingDirectory)\Utility\Melanchall.${{ parameters.projectName }}.$(LibraryVersion)-${{ rid }}.zip'

@@ -82,6 +82,14 @@ stages:
         enabled: contains(variables.vmImage, 'macos')
     
     - task: PowerShell@2
+      displayName: Restore NuGet packages
+      inputs:
+        targetType: 'inline'
+        script: |
+          $path = Resolve-Path 'Resources\PackageIntegrationTestUtilities\DwmNetSelfContainedConsoleApp\DwmNetSelfContainedConsoleApp\DwmNetSelfContainedConsoleApp.csproj'
+          dotnet restore "$path" -s "https://api.nuget.org/v3/index.json"
+    
+    - task: PowerShell@2
       displayName: Add package to the project
       inputs:
         targetType: 'inline'
