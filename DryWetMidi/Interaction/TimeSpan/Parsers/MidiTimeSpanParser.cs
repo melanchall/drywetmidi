@@ -12,7 +12,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
         private static readonly string[] Patterns = new[]
         {
-            $@"{TimeSpanGroup}",
+            TimeSpanGroup,
         };
 
         private const string OutOfRange = "Time span is out of range.";

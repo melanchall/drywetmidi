@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Melanchall.DryWetMidi.Common;
+using System;
 using System.Collections.Generic;
-using Melanchall.DryWetMidi.Common;
 
 namespace Melanchall.DryWetMidi.Multimedia
 {
@@ -157,7 +157,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         public void Dispose()
         {
             if (Context == CreationContext.VirtualDevice)
-                throw new InvalidOperationException($"Disposing of a subdevice of a virtual device is prohibited.");
+                throw new InvalidOperationException("Disposing of a subdevice of a virtual device is prohibited.");
 
             Dispose(true);
             GC.SuppressFinalize(this);

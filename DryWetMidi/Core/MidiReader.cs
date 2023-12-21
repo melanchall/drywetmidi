@@ -298,10 +298,11 @@ namespace Melanchall.DryWetMidi.Core
         public long ReadVlqLongNumber()
         {
             long result = 0;
-            byte b;
 
             try
             {
+                byte b;
+
                 do
                 {
                     b = ReadByte();

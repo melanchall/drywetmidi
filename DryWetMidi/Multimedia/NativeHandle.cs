@@ -7,7 +7,7 @@ namespace Melanchall.DryWetMidi.Multimedia
     {
         #region Constructor
 
-        public NativeHandle(IntPtr validHandle)
+        protected NativeHandle(IntPtr validHandle)
                 : base(IntPtr.Zero, true)
         {
             SetHandle(validHandle);

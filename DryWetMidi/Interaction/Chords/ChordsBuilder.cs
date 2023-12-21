@@ -11,7 +11,7 @@ namespace Melanchall.DryWetMidi.Interaction
         {
             private readonly int _notesMinCount;
 
-            public ChordDescriptor(Note firstNote, int notesMinCount)
+            protected ChordDescriptor(Note firstNote, int notesMinCount)
             {
                 Time = firstNote.Time;
                 Notes.Add(firstNote);

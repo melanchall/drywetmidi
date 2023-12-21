@@ -414,7 +414,6 @@ namespace Melanchall.DryWetMidi.Interaction
                 ?? (getChords ? settings.ChordDetectionSettings?.NoteDetectionSettings : null)
                 ?? new NoteDetectionSettings();
             var chordDetectionSettings = settings.ChordDetectionSettings ?? new ChordDetectionSettings();
-            var restDetectionSettings = settings.RestDetectionSettings ?? new RestDetectionSettings();
 
             var timedObjects = processedTimedObjects;
 
@@ -428,11 +427,6 @@ namespace Melanchall.DryWetMidi.Interaction
             }
 
             //
-
-            var notesLastEndTimes = new Dictionary<object, long>();
-            var noteDescriptorProvider = NoteDescriptorProviders[restDetectionSettings.RestSeparationPolicy];
-            var setRestChannel = SetRestChannel[restDetectionSettings.RestSeparationPolicy];
-            var setRestNoteNumber = SetRestNoteNumber[restDetectionSettings.RestSeparationPolicy];
 
             foreach (var timedObject in timedObjects)
             {

@@ -109,7 +109,7 @@ namespace Melanchall.DryWetMidi.Tools
             using (var slicer = MidiFileSlicer.CreateFromFile(midiFile))
             {
                 var startPart = slicer.GetNextSlice(times[0], internalSettings);
-                var mid = slicer.GetNextSlice(times[1], internalSettings);
+                slicer.GetNextSlice(times[1], internalSettings);
                 var endPart = slicer.GetNextSlice(Math.Max(times.Last(), midiFile.GetDuration<MidiTimeSpan>()) + 1, internalSettings);
 
                 if (internalSettings.PreserveTimes)

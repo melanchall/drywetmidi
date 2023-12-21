@@ -133,11 +133,9 @@ namespace Melanchall.DryWetMidi.Common
 
         public static long GreatestCommonDivisor(long a, long b)
         {
-            long remainder;
-
             while (b != 0)
             {
-                remainder = a % b;
+                var remainder = a % b;
                 a = b;
                 b = remainder;
             }

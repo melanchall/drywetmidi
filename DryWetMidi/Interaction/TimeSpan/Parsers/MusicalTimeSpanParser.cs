@@ -117,7 +117,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
         private static string GetMnemonicGroup(string groupName, IEnumerable<string> mnemonics)
         {
-            return $@"(?<{groupName}>[{string.Join(string.Empty, mnemonics)}])";
+            return $"(?<{groupName}>[{string.Join(string.Empty, mnemonics)}])";
         }
 
         #endregion

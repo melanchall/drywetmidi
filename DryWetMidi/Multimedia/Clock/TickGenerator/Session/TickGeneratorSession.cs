@@ -20,7 +20,6 @@ namespace Melanchall.DryWetMidi.Multimedia
             {
                 if (_handle == IntPtr.Zero)
                 {
-                    var apiType = CommonApiProvider.Api.Api_GetApiType();
                     NativeApiUtilities.HandleTickGeneratorNativeApiResult(
                         TickGeneratorSessionApiProvider.Api.Api_OpenSession(out _handle));
                 }

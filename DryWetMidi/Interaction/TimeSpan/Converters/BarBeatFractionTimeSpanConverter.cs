@@ -158,7 +158,6 @@ namespace Melanchall.DryWetMidi.Interaction
                     lastBarLength = BarBeatUtilities.GetBarLength(lastTimeSignature, ticksPerQuarterNote);
                     lastBeatLength = BarBeatUtilities.GetBeatLength(lastTimeSignature, ticksPerQuarterNote);
 
-                    // TODO: lastBarLength can be 0
                     var currentBars = Math.Min(deltaTime / lastBarLength, bars);
                     bars -= currentBars;
                     lastTime += currentBars * lastBarLength;

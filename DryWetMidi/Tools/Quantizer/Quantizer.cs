@@ -349,7 +349,7 @@ namespace Melanchall.DryWetMidi.Tools
             long[] candidateTimes;
             int bottomGridTimeIndex;
 
-            var bottomGridTime = MathUtilities.GetLastElementBelowThreshold(grid, time, _ => _, out bottomGridTimeIndex);
+            MathUtilities.GetLastElementBelowThreshold(grid, time, _ => _, out bottomGridTimeIndex);
             if (bottomGridTimeIndex < 0)
             {
                 candidateTimes = new[] { grid[0] };

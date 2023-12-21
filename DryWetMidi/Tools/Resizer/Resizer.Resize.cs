@@ -167,7 +167,6 @@ namespace Melanchall.DryWetMidi.Tools
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
             ThrowIfArgument.IsNegative(nameof(ratio), ratio, "Ratio is negative.");
 
-            var tempoMap = midiFile.GetTempoMap();
             midiFile.GetTrackChunks().Resize(ratio);
         }
 

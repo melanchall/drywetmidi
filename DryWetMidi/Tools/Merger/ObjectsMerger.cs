@@ -97,7 +97,7 @@ namespace Melanchall.DryWetMidi.Tools
                 case ObjectType.Note:
                     return MergeNotes(settings);
                 case ObjectType.Rest:
-                    return MergeRests(settings);
+                    return MergeRests();
                 case ObjectType.Chord:
                     return MergeChords(settings);
             }
@@ -110,7 +110,7 @@ namespace Melanchall.DryWetMidi.Tools
             return MergeNotes(_objects.Cast<Note>(), settings);
         }
 
-        private Rest MergeRests(ObjectsMergingSettings settings)
+        private Rest MergeRests()
         {
             var result = (Rest)_objects.First().Clone();
             var lastRest = _objects.Last();
@@ -121,7 +121,6 @@ namespace Melanchall.DryWetMidi.Tools
 
         private Chord MergeChords(ObjectsMergingSettings settings)
         {
-            var result = new Chord();
             var notesCount = ((Chord)_objects.First()).Notes.Count;
 
             return new Chord(Enumerable

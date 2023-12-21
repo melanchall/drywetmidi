@@ -41,7 +41,7 @@ namespace Melanchall.DryWetMidi.Tools
 
         private static readonly Dictionary<object, Func<MidiEvent>> DefaultEventsGetters = GetDefaultEventsGetters();
 
-        private static MidiEventEqualityCheckSettings MidiEventEqualityCheckSettings = new MidiEventEqualityCheckSettings
+        private static readonly MidiEventEqualityCheckSettings MidiEventEqualityCheckSettings = new MidiEventEqualityCheckSettings
         {
             CompareDeltaTimes = false
         };
@@ -97,7 +97,6 @@ namespace Melanchall.DryWetMidi.Tools
             var resultTrackChunksCreationPolicy = settings.ResultTrackChunksCreationPolicy;
 
             var offset = 0L;
-            var initialState = true;
             var eventsContext = new Dictionary<object, MidiEvent>();
 
             foreach (var midiFile in midiFiles)
@@ -105,7 +104,7 @@ namespace Melanchall.DryWetMidi.Tools
                 var tempoMap = midiFile.GetTempoMap();
                 var fileDuration = GetFileDuration(midiFile, tempoMap, settings.FileDurationRoundingStep);
 
-                var chunks = GetChunksForProcessing(midiFile, initialState, eventsContext);
+                var chunks = GetChunksForProcessing(midiFile, eventsContext);
                 InsertMarkers(midiFile, chunks, fileDuration, settings);
                 var deltaTimeFactor = GetDeltaTimeFactor(timeDivision, midiFile.TimeDivision);
 
@@ -133,8 +132,6 @@ namespace Melanchall.DryWetMidi.Tools
 
                 if (resultTrackChunksCreationPolicy == ResultTrackChunksCreationPolicy.MinimizeCount)
                     AddTrackChunksMinimizingCount(result, newChunks);
-
-                initialState = false;
             }
 
             return result;
@@ -284,6 +281,8 @@ namespace Melanchall.DryWetMidi.Tools
             {
                 result.Chunks.Add(newChunks[i]);
             }
+
+            trackChunksEnumerator.Dispose();
         }
 
         private static void ScaleTrackChunk(TrackChunk trackChunk, int deltaTimeFactor)
@@ -327,7 +326,6 @@ namespace Melanchall.DryWetMidi.Tools
 
         private static ICollection<ChunkDescriptor> GetChunksForProcessing(
             MidiFile midiFile,
-            bool initialState,
             Dictionary<object, MidiEvent> eventsContext)
         {
             var chunksCount = midiFile.Chunks.Count;

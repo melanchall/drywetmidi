@@ -11,14 +11,14 @@ namespace Melanchall.DryWetMidi.MusicTheory
         
         private const string ScaleDegreeGroupName = "sd";
 
-        private static readonly string ScaleDegreeGroup = $@"(?<{ScaleDegreeGroupName}>(?i:M{{0,4}}(CM|CD|D?C{{0,3}})(XC|XL|L?X{{0,3}})(IX|IV|V?I{{0,3}})))";
+        private static readonly string ScaleDegreeGroup = $"(?<{ScaleDegreeGroupName}>(?i:M{{0,4}}(CM|CD|D?C{{0,3}})(XC|XL|L?X{{0,3}})(IX|IV|V?I{{0,3}})))";
 
         private static readonly string[] Patterns = new[]
         {
             $@"{ScaleDegreeGroup}\s*{ChordParser.ChordCharacteristicsGroup}"
         };
 
-        private static Dictionary<char, int> RomanMap = new Dictionary<char, int>
+        private static readonly Dictionary<char, int> RomanMap = new Dictionary<char, int>
         {
             ['i'] = 1,
             ['v'] = 5,

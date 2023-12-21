@@ -22,7 +22,7 @@ namespace Melanchall.DryWetMidi.Interaction
             private readonly Stack<LinkedListNode<TDescriptor>> _nodesStack;
             private readonly Queue<LinkedListNode<TDescriptor>> _nodesQueue;
 
-            public NoteOnsHolderBase(NoteStartDetectionPolicy noteStartDetectionPolicy)
+            protected NoteOnsHolderBase(NoteStartDetectionPolicy noteStartDetectionPolicy)
             {
                 switch (noteStartDetectionPolicy)
                 {
@@ -110,12 +110,12 @@ namespace Melanchall.DryWetMidi.Interaction
 
         private class NoteDescriptor : IObjectDescriptor
         {
+            private TimedEvent _noteOnTimedEvent;
+
             public NoteDescriptor(TimedEvent noteOnTimedEvent)
             {
-                NoteOnTimedEvent = noteOnTimedEvent;
+                _noteOnTimedEvent = noteOnTimedEvent;
             }
-
-            public TimedEvent NoteOnTimedEvent { get; }
 
             public TimedEvent NoteOffTimedEvent { get; set; }
 
@@ -125,9 +125,9 @@ namespace Melanchall.DryWetMidi.Interaction
             {
                 return IsCompleted
                     ? (constructor == null
-                        ? new Note(NoteOnTimedEvent, NoteOffTimedEvent, false)
-                        : constructor(new NoteData(NoteOnTimedEvent, NoteOffTimedEvent)))
-                    : (ITimedObject)NoteOnTimedEvent;
+                        ? new Note(_noteOnTimedEvent, NoteOffTimedEvent, false)
+                        : constructor(new NoteData(_noteOnTimedEvent, NoteOffTimedEvent)))
+                    : (ITimedObject)_noteOnTimedEvent;
             }
         }
 
@@ -166,18 +166,18 @@ namespace Melanchall.DryWetMidi.Interaction
 
         private class TimedEventDescriptor : IObjectDescriptor
         {
+            private TimedEvent _timedEvent;
+
             public TimedEventDescriptor(TimedEvent timedEvent)
             {
-                TimedEvent = timedEvent;
+                _timedEvent = timedEvent;
             }
-
-            public TimedEvent TimedEvent { get; }
 
             public bool IsCompleted { get; } = true;
 
             public ITimedObject GetObject(Func<NoteData, Note> constructor)
             {
-                return TimedEvent;
+                return _timedEvent;
             }
         }
 

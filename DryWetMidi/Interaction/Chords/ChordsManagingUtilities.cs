@@ -1052,7 +1052,7 @@ namespace Melanchall.DryWetMidi.Interaction
                 : null;
 
             var chordsBuilder = new ChordsBuilder(settings);
-            var chords = chordsBuilder.GetChordsLazy(eventsCollections.GetTimedEventsLazy(eventsCount, settings?.NoteDetectionSettings?.TimedEventDetectionSettings, false), collectedTimedEvents != null, collectedTimedEvents);
+            var chords = chordsBuilder.GetChordsLazy(eventsCollections.GetTimedEventsLazy(eventsCount, settings.NoteDetectionSettings?.TimedEventDetectionSettings, false), collectedTimedEvents != null, collectedTimedEvents);
 
             foreach (var chordAt in chords)
             {

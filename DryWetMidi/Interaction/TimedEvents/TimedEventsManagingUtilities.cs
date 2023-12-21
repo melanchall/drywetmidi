@@ -843,8 +843,6 @@ namespace Melanchall.DryWetMidi.Interaction
 
                 time += midiEvent.DeltaTime;
 
-                TimedEvent timedEvent = null;
-
                 if (useCustomConstructor)
                 {
                     yield return constructor(new TimedEventData(
@@ -855,7 +853,7 @@ namespace Melanchall.DryWetMidi.Interaction
                 }
                 else
                 {
-                    timedEvent = new TimedEvent(cloneEvent ? midiEvent.Clone() : midiEvent);
+                    var timedEvent = new TimedEvent(cloneEvent ? midiEvent.Clone() : midiEvent);
                     timedEvent._time = time;
                     yield return timedEvent;
                 }

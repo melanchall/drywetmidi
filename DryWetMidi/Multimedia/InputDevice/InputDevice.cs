@@ -589,7 +589,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             }
             catch (Exception ex)
             {
-                var exception = new MidiDeviceException($"Failed to parse message.", ex);
+                var exception = new MidiDeviceException("Failed to parse message.", ex);
                 exception.Data.Add("Data", data);
                 OnError(exception);
             }
@@ -717,7 +717,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             }
             catch (Exception ex)
             {
-                var exception = new MidiDeviceException($"Failed to parse short message.", ex);
+                var exception = new MidiDeviceException("Failed to parse short message.", ex);
                 exception.Data.Add("Message", message);
                 OnError(exception);
             }
@@ -755,7 +755,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             }
             catch (Exception ex)
             {
-                var exception = new MidiDeviceException($"Failed to parse system exclusive message.", ex);
+                var exception = new MidiDeviceException("Failed to parse system exclusive message.", ex);
                 exception.Data.Add("Data", data);
                 OnError(exception);
             }

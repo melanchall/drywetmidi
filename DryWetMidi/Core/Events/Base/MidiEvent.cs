@@ -34,7 +34,7 @@ namespace Melanchall.DryWetMidi.Core
         /// Initializes a new instance of the <see cref="MidiEvent"/> with the specified event type.
         /// </summary>
         /// <param name="eventType">The type of event.</param>
-        public MidiEvent(MidiEventType eventType)
+        protected MidiEvent(MidiEventType eventType)
         {
             EventType = eventType;
         }

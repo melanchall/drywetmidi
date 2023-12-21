@@ -6,7 +6,7 @@ namespace Melanchall.DryWetMidi.Composing
     {
         #region Constructor
 
-        public StepAction(ITimeSpan step)
+        protected StepAction(ITimeSpan step)
         {
             Step = step;
         }

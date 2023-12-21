@@ -18,7 +18,7 @@ namespace Melanchall.DryWetMidi.Core
         /// <summary>
         /// Initializes a new instance of the <see cref="BaseTextEvent"/>.
         /// </summary>
-        public BaseTextEvent(MidiEventType eventType)
+        protected BaseTextEvent(MidiEventType eventType)
             : base(eventType)
         {
         }
@@ -29,7 +29,7 @@ namespace Melanchall.DryWetMidi.Core
         /// <param name="eventType">The type of event.</param>
         /// <param name="text">Text contained in the event.</param>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="eventType"/> specified an invalid value.</exception>
-        public BaseTextEvent(MidiEventType eventType, string text)
+        protected BaseTextEvent(MidiEventType eventType, string text)
             : this(eventType)
         {
             Text = text;

@@ -168,8 +168,6 @@ namespace Melanchall.DryWetMidi.Interaction
 
         private TimedEvent[] GetObjectTimedEvents(ITimedObject timedObject)
         {
-            var result = new List<TimedEvent>();
-
             var timedEvent = timedObject as TimedEvent;
             if (timedEvent != null)
                 return new[] { timedEvent };

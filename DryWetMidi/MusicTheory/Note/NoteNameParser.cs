@@ -18,7 +18,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         private static readonly string[] Patterns = new[]
         {
             $@"{NoteNameGroup}\s*{AccidentalGroup}",
-            $@"{NoteNameGroup}",
+            NoteNameGroup,
         };
 
         #endregion

@@ -40,13 +40,13 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         private abstract class DataChange<TData> : IMetadata
         {
-            public DataChange(TData data, object metadata)
+            protected DataChange(TData data, object metadata)
             {
                 Data = data;
                 Metadata = metadata;
             }
 
-            public DataChange(TData data, object metadata, bool isDefault)
+            protected DataChange(TData data, object metadata, bool isDefault)
                 : this(data, metadata)
             {
                 IsDefault = isDefault;
@@ -56,7 +56,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
             public object Metadata { get; set; }
 
-            public bool IsDefault { get; set; }
+            public bool IsDefault { get; }
         }
 
         private sealed class ProgramChange : DataChange<SevenBitNumber>
