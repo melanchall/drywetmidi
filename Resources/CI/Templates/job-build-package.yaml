@@ -24,7 +24,7 @@ jobs:
       path: '$(Pipeline.Workspace)\NativeLibraries'
   
   - task: PowerShell@2
-    displayName: Setup version
+    displayName: Setup metadata
     inputs:
       targetType: 'inline'
       script: |
@@ -32,14 +32,21 @@ jobs:
         $xml = New-Object xml
         $xml.PreserveWhitespace = $true
         $xml.Load($filePath)
+        
         $version = $xml.Project.PropertyGroup[1].Version
         Write-Host "Current version is $version"
         $newVersion = "$(LibraryVersion)"
         $xml.Project.PropertyGroup[1].Version = $newVersion
         Write-Host "New version: $($xml.Project.PropertyGroup[1].Version)"
+        
         Write-Host "Setting release notes up..."
         $xml.Project.PropertyGroup[1].PackageReleaseNotes = "https://github.com/melanchall/drywetmidi/releases/tag/v$(LibraryVersion)"
         Write-Host "Release notes: $($xml.Project.PropertyGroup[1].PackageReleaseNotes)"
+        
+        Write-Host "Setting copyright up..."
+        $xml.Project.PropertyGroup[1].Copyright = "Copyright © Melanchall $((Get-Date).Year)"
+        Write-Host "Copyright: $($xml.Project.PropertyGroup[1].Copyright)"
+        
         $xml.Save($filePath)
   
   - task: PowerShell@2

@@ -53,5 +53,11 @@ steps:
 - task: PublishPipelineArtifact@1
   displayName: Publish 'Docs' artifact
   inputs:
-    targetPath: Docs\_site
+    targetPath: 'Docs\_site'
     artifact: Docs
+    
+- task: PublishPipelineArtifact@1
+  displayName: Publish 'docfx.json' artifact
+  inputs:
+    targetPath: 'Docs\docfx.json'
+    artifact: docfx.json

@@ -4,7 +4,16 @@ steps:
   inputs:
     targetType: 'inline'
     script: choco install docfx -y --version $(DocFxVersion)
-      
+
+- task: PowerShell@2
+  displayName: Setup year
+  inputs:
+    targetType: 'inline'
+    script: |
+      $filePath = Resolve-Path "Docs\docfx.json"
+      $content = Get-Content $filePath -Raw
+      Set-Content $filePath -Value ($content -replace '0000', (Get-Date).Year)
+
 - task: PowerShell@2
   displayName: Build docs
   inputs:
