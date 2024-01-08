@@ -10,104 +10,39 @@ namespace Melanchall.DryWetMidi.Tools
     {
         #region Constants
 
-        private static readonly Dictionary<string, EventParser> EventsParsers_MidiCsv =
+        private static readonly Dictionary<string, EventParser> EventsParsers =
             new Dictionary<string, EventParser>(StringComparer.OrdinalIgnoreCase)
             {
-                [MidiCsvRecordTypes.Events.SequenceTrackName] = GetTextEventParser<SequenceTrackNameEvent>(),
-                [MidiCsvRecordTypes.Events.CopyrightNotice] = GetTextEventParser<CopyrightNoticeEvent>(),
-                [MidiCsvRecordTypes.Events.InstrumentName] = GetTextEventParser<InstrumentNameEvent>(),
-                [MidiCsvRecordTypes.Events.Marker] = GetTextEventParser<MarkerEvent>(),
-                [MidiCsvRecordTypes.Events.CuePoint] = GetTextEventParser<CuePointEvent>(),
-                [MidiCsvRecordTypes.Events.Lyric] = GetTextEventParser<LyricEvent>(),
-                [MidiCsvRecordTypes.Events.Text] = GetTextEventParser<TextEvent>(),
-                [MidiCsvRecordTypes.Events.SequenceNumber] = GetEventParser(
+                [RecordLabels.Events.SequenceTrackName] = GetTextEventParser<SequenceTrackNameEvent>(),
+                [RecordLabels.Events.CopyrightNotice] = GetTextEventParser<CopyrightNoticeEvent>(),
+                [RecordLabels.Events.InstrumentName] = GetTextEventParser<InstrumentNameEvent>(),
+                [RecordLabels.Events.Marker] = GetTextEventParser<MarkerEvent>(),
+                [RecordLabels.Events.CuePoint] = GetTextEventParser<CuePointEvent>(),
+                [RecordLabels.Events.Lyric] = GetTextEventParser<LyricEvent>(),
+                [RecordLabels.Events.Text] = GetTextEventParser<TextEvent>(),
+                [RecordLabels.Events.SequenceNumber] = GetEventParser(
                     x => new SequenceNumberEvent((ushort)x[0]),
                     TypeParser.UShort),
-                [MidiCsvRecordTypes.Events.PortPrefix] = GetEventParser(
+                [RecordLabels.Events.PortPrefix] = GetEventParser(
                     x => new PortPrefixEvent((byte)x[0]),
                     TypeParser.Byte),
-                [MidiCsvRecordTypes.Events.ChannelPrefix] = GetEventParser(
+                [RecordLabels.Events.ChannelPrefix] = GetEventParser(
                     x => new ChannelPrefixEvent((byte)x[0]),
                     TypeParser.Byte),
-                [MidiCsvRecordTypes.Events.TimeSignature] = GetEventParser(
-                    x => new TimeSignatureEvent((byte)x[0], (byte)Math.Pow(2, (byte)x[1]), (byte)x[2], (byte)x[3]),
-                    TypeParser.Byte,
-                    TypeParser.Byte,
-                    TypeParser.Byte,
-                    TypeParser.Byte),
-                [MidiCsvRecordTypes.Events.KeySignature] = GetEventParser(
-                    x => new KeySignatureEvent((sbyte)x[0], (byte)x[1]),
-                    TypeParser.SByte,
-                    TypeParser.Byte),
-                [MidiCsvRecordTypes.Events.SetTempo] = GetEventParser(
-                    x => new SetTempoEvent((long)x[0]),
-                    TypeParser.Long),
-                [MidiCsvRecordTypes.Events.SmpteOffset] = GetEventParser(
-                    x => new SmpteOffsetEvent(SmpteData.GetFormat((byte)x[0]),
-                                              SmpteData.GetHours((byte)x[0]),
-                                              (byte)x[1],
-                                              (byte)x[2],
-                                              (byte)x[3],
-                                              (byte)x[4]),
-                    TypeParser.Byte,
-                    TypeParser.Byte,
-                    TypeParser.Byte,
-                    TypeParser.Byte,
-                    TypeParser.Byte),
-                [MidiCsvRecordTypes.Events.SequencerSpecific] = GetBytesBasedEventParser(
-                    x => new SequencerSpecificEvent((byte[])x[1])),
-                [MidiCsvRecordTypes.Events.UnknownMeta] = GetBytesBasedEventParser(
-                    x => new UnknownMetaEvent((byte)x[0], (byte[])x[2]),
-                    TypeParser.Byte),
-                [MidiCsvRecordTypes.Events.NoteOn] = GetNoteEventParser<NoteOnEvent>(2),
-                [MidiCsvRecordTypes.Events.NoteOff] = GetNoteEventParser<NoteOffEvent>(2),
-                [MidiCsvRecordTypes.Events.PitchBend] = GetEventParser(
-                    x => new PitchBendEvent((ushort)x[1]) { Channel = (FourBitNumber)x[0] },
-                    TypeParser.FourBitNumber,
-                    TypeParser.UShort),
-                [MidiCsvRecordTypes.Events.ControlChange] = GetChannelEventParser<ControlChangeEvent>(2),
-                [MidiCsvRecordTypes.Events.ProgramChange] = GetChannelEventParser<ProgramChangeEvent>(1),
-                [MidiCsvRecordTypes.Events.ChannelAftertouch] = GetChannelEventParser<ChannelAftertouchEvent>(1),
-                [MidiCsvRecordTypes.Events.NoteAftertouch] = GetNoteEventParser<ChannelAftertouchEvent>(2),
-                [MidiCsvRecordTypes.Events.SysExCompleted] = GetBytesBasedEventParser(
-                    x => new NormalSysExEvent((byte[])x[1])),
-                [MidiCsvRecordTypes.Events.SysExIncompleted] = GetBytesBasedEventParser(
-                    x => new NormalSysExEvent((byte[])x[1])),
-            };
-
-        private static readonly Dictionary<string, EventParser> EventsParsers_DryWetMidi =
-            new Dictionary<string, EventParser>(StringComparer.OrdinalIgnoreCase)
-            {
-                [DryWetMidiRecordTypes.Events.SequenceTrackName] = GetTextEventParser<SequenceTrackNameEvent>(),
-                [DryWetMidiRecordTypes.Events.CopyrightNotice] = GetTextEventParser<CopyrightNoticeEvent>(),
-                [DryWetMidiRecordTypes.Events.InstrumentName] = GetTextEventParser<InstrumentNameEvent>(),
-                [DryWetMidiRecordTypes.Events.Marker] = GetTextEventParser<MarkerEvent>(),
-                [DryWetMidiRecordTypes.Events.CuePoint] = GetTextEventParser<CuePointEvent>(),
-                [DryWetMidiRecordTypes.Events.Lyric] = GetTextEventParser<LyricEvent>(),
-                [DryWetMidiRecordTypes.Events.Text] = GetTextEventParser<TextEvent>(),
-                [DryWetMidiRecordTypes.Events.SequenceNumber] = GetEventParser(
-                    x => new SequenceNumberEvent((ushort)x[0]),
-                    TypeParser.UShort),
-                [DryWetMidiRecordTypes.Events.PortPrefix] = GetEventParser(
-                    x => new PortPrefixEvent((byte)x[0]),
-                    TypeParser.Byte),
-                [DryWetMidiRecordTypes.Events.ChannelPrefix] = GetEventParser(
-                    x => new ChannelPrefixEvent((byte)x[0]),
-                    TypeParser.Byte),
-                [DryWetMidiRecordTypes.Events.TimeSignature] = GetEventParser(
+                [RecordLabels.Events.TimeSignature] = GetEventParser(
                     x => new TimeSignatureEvent((byte)x[0], (byte)x[1], (byte)x[2], (byte)x[3]),
                     TypeParser.Byte,
                     TypeParser.Byte,
                     TypeParser.Byte,
                     TypeParser.Byte),
-                [DryWetMidiRecordTypes.Events.KeySignature] = GetEventParser(
+                [RecordLabels.Events.KeySignature] = GetEventParser(
                     x => new KeySignatureEvent((sbyte)x[0], (byte)x[1]),
                     TypeParser.SByte,
                     TypeParser.Byte),
-                [DryWetMidiRecordTypes.Events.SetTempo] = GetEventParser(
+                [RecordLabels.Events.SetTempo] = GetEventParser(
                     x => new SetTempoEvent((long)x[0]),
                     TypeParser.Long),
-                [DryWetMidiRecordTypes.Events.SmpteOffset] = GetEventParser(
+                [RecordLabels.Events.SmpteOffset] = GetEventParser(
                     x => new SmpteOffsetEvent(SmpteData.GetFormat((byte)x[0]),
                                               SmpteData.GetHours((byte)x[0]),
                                               (byte)x[1],
@@ -119,24 +54,24 @@ namespace Melanchall.DryWetMidi.Tools
                     TypeParser.Byte,
                     TypeParser.Byte,
                     TypeParser.Byte),
-                [DryWetMidiRecordTypes.Events.SequencerSpecific] = GetBytesBasedEventParser(
+                [RecordLabels.Events.SequencerSpecific] = GetBytesBasedEventParser(
                     x => new SequencerSpecificEvent((byte[])x[1])),
-                [DryWetMidiRecordTypes.Events.UnknownMeta] = GetBytesBasedEventParser(
+                [RecordLabels.Events.UnknownMeta] = GetBytesBasedEventParser(
                     x => new UnknownMetaEvent((byte)x[0], (byte[])x[2]),
                     TypeParser.Byte),
-                [DryWetMidiRecordTypes.Events.NoteOn] = GetNoteEventParser<NoteOnEvent>(2),
-                [DryWetMidiRecordTypes.Events.NoteOff] = GetNoteEventParser<NoteOffEvent>(2),
-                [DryWetMidiRecordTypes.Events.PitchBend] = GetEventParser(
+                [RecordLabels.Events.NoteOn] = GetNoteEventParser<NoteOnEvent>(2),
+                [RecordLabels.Events.NoteOff] = GetNoteEventParser<NoteOffEvent>(2),
+                [RecordLabels.Events.PitchBend] = GetEventParser(
                     x => new PitchBendEvent((ushort)x[1]) { Channel = (FourBitNumber)x[0] },
                     TypeParser.FourBitNumber,
                     TypeParser.UShort),
-                [DryWetMidiRecordTypes.Events.ControlChange] = GetChannelEventParser<ControlChangeEvent>(2),
-                [DryWetMidiRecordTypes.Events.ProgramChange] = GetChannelEventParser<ProgramChangeEvent>(1),
-                [DryWetMidiRecordTypes.Events.ChannelAftertouch] = GetChannelEventParser<ChannelAftertouchEvent>(1),
-                [DryWetMidiRecordTypes.Events.NoteAftertouch] = GetNoteEventParser<ChannelAftertouchEvent>(2),
-                [DryWetMidiRecordTypes.Events.SysExCompleted] = GetBytesBasedEventParser(
+                [RecordLabels.Events.ControlChange] = GetChannelEventParser<ControlChangeEvent>(2),
+                [RecordLabels.Events.ProgramChange] = GetChannelEventParser<ProgramChangeEvent>(1),
+                [RecordLabels.Events.ChannelAftertouch] = GetChannelEventParser<ChannelAftertouchEvent>(1),
+                [RecordLabels.Events.NoteAftertouch] = GetNoteEventParser<ChannelAftertouchEvent>(2),
+                [RecordLabels.Events.SysExCompleted] = GetBytesBasedEventParser(
                     x => new NormalSysExEvent((byte[])x[1])),
-                [DryWetMidiRecordTypes.Events.SysExIncompleted] = GetBytesBasedEventParser(
+                [RecordLabels.Events.SysExIncompleted] = GetBytesBasedEventParser(
                     x => new NormalSysExEvent((byte[])x[1])),
             };
 
@@ -144,17 +79,9 @@ namespace Melanchall.DryWetMidi.Tools
 
         #region Methods
 
-        public static EventParser Get(string eventName, MidiFileCsvLayout layout)
+        public static EventParser Get(string eventName)
         {
-            switch (layout)
-            {
-                case MidiFileCsvLayout.DryWetMidi:
-                    return EventsParsers_DryWetMidi[eventName];
-                case MidiFileCsvLayout.MidiCsv:
-                    return EventsParsers_MidiCsv[eventName];
-            }
-
-            return null;
+            return EventsParsers[eventName];
         }
 
         private static EventParser GetBytesBasedEventParser(Func<object[], MidiEvent> eventCreator, params ParameterParser[] parametersParsers)

@@ -18,10 +18,6 @@ namespace Melanchall.DryWetMidi.Tools
         /// <summary>
         /// Converts the specified <see cref="MidiFile"/> to CSV representation and writes it to a file.
         /// </summary>
-        /// <remarks>
-        /// Note that <see cref="MidiFile"/> can be converted to different CSV representations. You can specify desired
-        /// CSV layout via <paramref name="settings"/> using <see cref="MidiFileCsvConversionSettings.CsvLayout"/> property.
-        /// </remarks>
         /// <param name="midiFile"><see cref="MidiFile"/> to convert to CSV.</param>
         /// <param name="filePath">Path of the output CSV file.</param>
         /// <param name="overwriteFile">If <c>true</c> and file specified by <paramref name="filePath"/> already
@@ -67,10 +63,6 @@ namespace Melanchall.DryWetMidi.Tools
         /// <summary>
         /// Converts the specified <see cref="MidiFile"/> to CSV representation and writes it to a stream.
         /// </summary>
-        /// <remarks>
-        /// Note that <see cref="MidiFile"/> can be converted to different CSV representations. You can specify desired
-        /// CSV layout via <paramref name="settings"/> using <see cref="MidiFileCsvConversionSettings.CsvLayout"/> property.
-        /// </remarks>
         /// <param name="midiFile"><see cref="MidiFile"/> to convert to CSV.</param>
         /// <param name="stream">Stream to write CSV representation to.</param>
         /// <param name="settings">Settings according to which <paramref name="midiFile"/> must be converted.
@@ -103,10 +95,6 @@ namespace Melanchall.DryWetMidi.Tools
         /// <summary>
         /// Converts CSV representation of a MIDI file to <see cref="MidiFile"/> reading CSV data from a file.
         /// </summary>
-        /// <remarks>
-        /// Note that CSV representation of a MIDI file can be different. You can specify expected CSV layout
-        /// via <paramref name="settings"/> using <see cref="MidiFileCsvConversionSettings.CsvLayout"/> property.
-        /// </remarks>
         /// <param name="filePath">Path of the file with CSV representation of a MIDI file.</param>
         /// <param name="settings">Settings according to which CSV data must be converted. Pass <c>null</c> to
         /// use default settings.</param>

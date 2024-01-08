@@ -12,20 +12,11 @@ namespace Melanchall.DryWetMidi.Tools
     {
         #region Constants
 
-        private static readonly Dictionary<string, RecordType> RecordTypes_DryWetMidi =
+        private static readonly Dictionary<string, RecordType> RecordLabelsToRecordTypes =
             new Dictionary<string, RecordType>(StringComparer.OrdinalIgnoreCase)
             {
-                [DryWetMidiRecordTypes.File.Header] = RecordType.Header,
-                [DryWetMidiRecordTypes.Note] = RecordType.Note
-            };
-
-        private static readonly Dictionary<string, RecordType> RecordTypes_MidiCsv =
-            new Dictionary<string, RecordType>(StringComparer.OrdinalIgnoreCase)
-            {
-                [MidiCsvRecordTypes.File.Header] = RecordType.Header,
-                [MidiCsvRecordTypes.File.TrackChunkStart] = RecordType.TrackChunkStart,
-                [MidiCsvRecordTypes.File.TrackChunkEnd] = RecordType.TrackChunkEnd,
-                [MidiCsvRecordTypes.File.FileEnd] = RecordType.FileEnd
+                [RecordLabels.File.Header] = RecordType.Header,
+                [RecordLabels.Note] = RecordType.Note
             };
 
         #endregion
@@ -141,15 +132,10 @@ namespace Melanchall.DryWetMidi.Tools
 
         private static RecordType? GetRecordType(string recordType, MidiFileCsvConversionSettings settings)
         {
-            var csvLayout = settings.CsvLayout;
-
-            var recordTypes = csvLayout == MidiFileCsvLayout.DryWetMidi
-                ? RecordTypes_DryWetMidi
-                : RecordTypes_MidiCsv;
-            var eventsNames = EventsNamesProvider.Get(csvLayout);
+            var eventsNames = EventsNamesProvider.Get();
 
             RecordType result;
-            if (recordTypes.TryGetValue(recordType, out result))
+            if (RecordLabelsToRecordTypes.TryGetValue(recordType, out result))
                 return result;
 
             if (eventsNames.Contains(recordType, StringComparer.OrdinalIgnoreCase))
@@ -165,35 +151,15 @@ namespace Melanchall.DryWetMidi.Tools
             var format = default(MidiFileFormat?);
             var timeDivision = default(short);
 
-            switch (settings.CsvLayout)
-            {
-                case MidiFileCsvLayout.DryWetMidi:
-                    {
-                        if (parameters.Length < 2)
-                            CsvError.ThrowBadFormat(record.LineNumber, "Parameters count is invalid.");
+            if (parameters.Length < 2)
+                CsvError.ThrowBadFormat(record.LineNumber, "Parameters count is invalid.");
 
-                        MidiFileFormat formatValue;
-                        if (Enum.TryParse(parameters[0], true, out formatValue))
-                            format = formatValue;
+            MidiFileFormat formatValue;
+            if (Enum.TryParse(parameters[0], true, out formatValue))
+                format = formatValue;
 
-                        if (!short.TryParse(parameters[1], out timeDivision))
-                            CsvError.ThrowBadFormat(record.LineNumber, "Invalid time division.");
-                    }
-                    break;
-                case MidiFileCsvLayout.MidiCsv:
-                    {
-                        if (parameters.Length < 3)
-                            CsvError.ThrowBadFormat(record.LineNumber, "Parameters count is invalid.");
-
-                        ushort formatValue;
-                        if (ushort.TryParse(parameters[0], out formatValue) && Enum.IsDefined(typeof(MidiFileFormat), formatValue))
-                            format = (MidiFileFormat)formatValue;
-
-                        if (!short.TryParse(parameters[2], out timeDivision))
-                            CsvError.ThrowBadFormat(record.LineNumber, "Invalid time division.");
-                    }
-                    break;
-            }
+            if (!short.TryParse(parameters[1], out timeDivision))
+                CsvError.ThrowBadFormat(record.LineNumber, "Invalid time division.");
 
             return new HeaderChunk
             {
@@ -210,7 +176,7 @@ namespace Melanchall.DryWetMidi.Tools
             if (record.Time == null)
                 CsvError.ThrowBadFormat(record.LineNumber, "Invalid time.");
 
-            var eventParser = EventParserProvider.Get(record.RecordType, settings.CsvLayout);
+            var eventParser = EventParserProvider.Get(record.RecordType);
 
             try
             {

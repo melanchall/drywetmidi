@@ -1,6 +1,6 @@
 ﻿namespace Melanchall.DryWetMidi.Tools
 {
-    internal static class DryWetMidiRecordTypes
+    internal static class RecordLabels
     {
         public static class File
         {

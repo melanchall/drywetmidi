@@ -24,18 +24,7 @@ namespace Melanchall.DryWetMidi.Tools
                 [typeof(PortPrefixEvent)] = GetParameters<PortPrefixEvent>((e, s) => e.Port),
                 [typeof(ChannelPrefixEvent)] = GetParameters<ChannelPrefixEvent>((e, s) => e.Channel),
                 [typeof(TimeSignatureEvent)] = GetParameters<TimeSignatureEvent>((e, s) => e.Numerator,
-                                                                                 (e, s) =>
-                                                                                 {
-                                                                                     switch (s.CsvLayout)
-                                                                                     {
-                                                                                         case MidiFileCsvLayout.DryWetMidi:
-                                                                                             return e.Denominator;
-                                                                                         case MidiFileCsvLayout.MidiCsv:
-                                                                                             return (byte)Math.Log(e.Denominator, 2);
-                                                                                     }
-
-                                                                                     return null;
-                                                                                 },
+                                                                                 (e, s) => e.Denominator,
                                                                                  (e, s) => e.ClocksPerClick,
                                                                                  (e, s) => e.ThirtySecondNotesPerBeat),
                 [typeof(KeySignatureEvent)] = GetParameters<KeySignatureEvent>((e, s) => e.Key,
@@ -92,9 +81,6 @@ namespace Melanchall.DryWetMidi.Tools
 
         private static object FormatNoteNumber(SevenBitNumber noteNumber, MidiFileCsvConversionSettings settings)
         {
-            if (settings.CsvLayout == MidiFileCsvLayout.MidiCsv)
-                return noteNumber;
-
             return NoteCsvConversionUtilities.FormatNoteNumber(noteNumber, settings.NoteNumberFormat);
         }
 

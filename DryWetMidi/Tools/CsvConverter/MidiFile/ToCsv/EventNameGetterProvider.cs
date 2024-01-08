@@ -8,85 +8,45 @@ namespace Melanchall.DryWetMidi.Tools
     {
         #region Constants
 
-        private static readonly Dictionary<Type, EventNameGetter> EventsTypes_MidiCsv =
+        private static readonly Dictionary<Type, EventNameGetter> EventsTypes =
             new Dictionary<Type, EventNameGetter>
             {
-                [typeof(SequenceTrackNameEvent)] = GetType(MidiCsvRecordTypes.Events.SequenceTrackName),
-                [typeof(CopyrightNoticeEvent)]   = GetType(MidiCsvRecordTypes.Events.CopyrightNotice),
-                [typeof(InstrumentNameEvent)]    = GetType(MidiCsvRecordTypes.Events.InstrumentName),
-                [typeof(MarkerEvent)]            = GetType(MidiCsvRecordTypes.Events.Marker),
-                [typeof(CuePointEvent)]          = GetType(MidiCsvRecordTypes.Events.CuePoint),
-                [typeof(LyricEvent)]             = GetType(MidiCsvRecordTypes.Events.Lyric),
-                [typeof(TextEvent)]              = GetType(MidiCsvRecordTypes.Events.Text),
-                [typeof(SequenceNumberEvent)]    = GetType(MidiCsvRecordTypes.Events.SequenceNumber),
-                [typeof(PortPrefixEvent)]        = GetType(MidiCsvRecordTypes.Events.PortPrefix),
-                [typeof(ChannelPrefixEvent)]     = GetType(MidiCsvRecordTypes.Events.ChannelPrefix),
-                [typeof(TimeSignatureEvent)]     = GetType(MidiCsvRecordTypes.Events.TimeSignature),
-                [typeof(KeySignatureEvent)]      = GetType(MidiCsvRecordTypes.Events.KeySignature),
-                [typeof(SetTempoEvent)]          = GetType(MidiCsvRecordTypes.Events.SetTempo),
-                [typeof(SmpteOffsetEvent)]       = GetType(MidiCsvRecordTypes.Events.SmpteOffset),
-                [typeof(SequencerSpecificEvent)] = GetType(MidiCsvRecordTypes.Events.SequencerSpecific),
-                [typeof(UnknownMetaEvent)]       = GetType(MidiCsvRecordTypes.Events.UnknownMeta),
-                [typeof(NoteOnEvent)]            = GetType(MidiCsvRecordTypes.Events.NoteOn),
-                [typeof(NoteOffEvent)]           = GetType(MidiCsvRecordTypes.Events.NoteOff),
-                [typeof(PitchBendEvent)]         = GetType(MidiCsvRecordTypes.Events.PitchBend),
-                [typeof(ControlChangeEvent)]     = GetType(MidiCsvRecordTypes.Events.ControlChange),
-                [typeof(ProgramChangeEvent)]     = GetType(MidiCsvRecordTypes.Events.ProgramChange),
-                [typeof(ChannelAftertouchEvent)] = GetType(MidiCsvRecordTypes.Events.ChannelAftertouch),
-                [typeof(NoteAftertouchEvent)]    = GetType(MidiCsvRecordTypes.Events.NoteAftertouch),
-                [typeof(NormalSysExEvent)]       = GetSysExType(MidiCsvRecordTypes.Events.SysExCompleted,
-                                                                MidiCsvRecordTypes.Events.SysExIncompleted),
-                [typeof(EscapeSysExEvent)]       = GetSysExType(MidiCsvRecordTypes.Events.SysExCompleted,
-                                                                MidiCsvRecordTypes.Events.SysExIncompleted)
-            };
-
-        private static readonly Dictionary<Type, EventNameGetter> EventsTypes_DryWetMidi =
-            new Dictionary<Type, EventNameGetter>
-            {
-                [typeof(SequenceTrackNameEvent)] = GetType(DryWetMidiRecordTypes.Events.SequenceTrackName),
-                [typeof(CopyrightNoticeEvent)]   = GetType(DryWetMidiRecordTypes.Events.CopyrightNotice),
-                [typeof(InstrumentNameEvent)]    = GetType(DryWetMidiRecordTypes.Events.InstrumentName),
-                [typeof(MarkerEvent)]            = GetType(DryWetMidiRecordTypes.Events.Marker),
-                [typeof(CuePointEvent)]          = GetType(DryWetMidiRecordTypes.Events.CuePoint),
-                [typeof(LyricEvent)]             = GetType(DryWetMidiRecordTypes.Events.Lyric),
-                [typeof(TextEvent)]              = GetType(DryWetMidiRecordTypes.Events.Text),
-                [typeof(SequenceNumberEvent)]    = GetType(DryWetMidiRecordTypes.Events.SequenceNumber),
-                [typeof(PortPrefixEvent)]        = GetType(DryWetMidiRecordTypes.Events.PortPrefix),
-                [typeof(ChannelPrefixEvent)]     = GetType(DryWetMidiRecordTypes.Events.ChannelPrefix),
-                [typeof(TimeSignatureEvent)]     = GetType(DryWetMidiRecordTypes.Events.TimeSignature),
-                [typeof(KeySignatureEvent)]      = GetType(DryWetMidiRecordTypes.Events.KeySignature),
-                [typeof(SetTempoEvent)]          = GetType(DryWetMidiRecordTypes.Events.SetTempo),
-                [typeof(SmpteOffsetEvent)]       = GetType(DryWetMidiRecordTypes.Events.SmpteOffset),
-                [typeof(SequencerSpecificEvent)] = GetType(DryWetMidiRecordTypes.Events.SequencerSpecific),
-                [typeof(UnknownMetaEvent)]       = GetType(DryWetMidiRecordTypes.Events.UnknownMeta),
-                [typeof(NoteOnEvent)]            = GetType(DryWetMidiRecordTypes.Events.NoteOn),
-                [typeof(NoteOffEvent)]           = GetType(DryWetMidiRecordTypes.Events.NoteOff),
-                [typeof(PitchBendEvent)]         = GetType(DryWetMidiRecordTypes.Events.PitchBend),
-                [typeof(ControlChangeEvent)]     = GetType(DryWetMidiRecordTypes.Events.ControlChange),
-                [typeof(ProgramChangeEvent)]     = GetType(DryWetMidiRecordTypes.Events.ProgramChange),
-                [typeof(ChannelAftertouchEvent)] = GetType(DryWetMidiRecordTypes.Events.ChannelAftertouch),
-                [typeof(NoteAftertouchEvent)]    = GetType(DryWetMidiRecordTypes.Events.NoteAftertouch),
-                [typeof(NormalSysExEvent)]       = GetSysExType(DryWetMidiRecordTypes.Events.SysExCompleted,
-                                                                DryWetMidiRecordTypes.Events.SysExIncompleted),
-                [typeof(EscapeSysExEvent)]       = GetSysExType(DryWetMidiRecordTypes.Events.SysExCompleted,
-                                                                DryWetMidiRecordTypes.Events.SysExIncompleted)
+                [typeof(SequenceTrackNameEvent)] = GetType(RecordLabels.Events.SequenceTrackName),
+                [typeof(CopyrightNoticeEvent)]   = GetType(RecordLabels.Events.CopyrightNotice),
+                [typeof(InstrumentNameEvent)]    = GetType(RecordLabels.Events.InstrumentName),
+                [typeof(MarkerEvent)]            = GetType(RecordLabels.Events.Marker),
+                [typeof(CuePointEvent)]          = GetType(RecordLabels.Events.CuePoint),
+                [typeof(LyricEvent)]             = GetType(RecordLabels.Events.Lyric),
+                [typeof(TextEvent)]              = GetType(RecordLabels.Events.Text),
+                [typeof(SequenceNumberEvent)]    = GetType(RecordLabels.Events.SequenceNumber),
+                [typeof(PortPrefixEvent)]        = GetType(RecordLabels.Events.PortPrefix),
+                [typeof(ChannelPrefixEvent)]     = GetType(RecordLabels.Events.ChannelPrefix),
+                [typeof(TimeSignatureEvent)]     = GetType(RecordLabels.Events.TimeSignature),
+                [typeof(KeySignatureEvent)]      = GetType(RecordLabels.Events.KeySignature),
+                [typeof(SetTempoEvent)]          = GetType(RecordLabels.Events.SetTempo),
+                [typeof(SmpteOffsetEvent)]       = GetType(RecordLabels.Events.SmpteOffset),
+                [typeof(SequencerSpecificEvent)] = GetType(RecordLabels.Events.SequencerSpecific),
+                [typeof(UnknownMetaEvent)]       = GetType(RecordLabels.Events.UnknownMeta),
+                [typeof(NoteOnEvent)]            = GetType(RecordLabels.Events.NoteOn),
+                [typeof(NoteOffEvent)]           = GetType(RecordLabels.Events.NoteOff),
+                [typeof(PitchBendEvent)]         = GetType(RecordLabels.Events.PitchBend),
+                [typeof(ControlChangeEvent)]     = GetType(RecordLabels.Events.ControlChange),
+                [typeof(ProgramChangeEvent)]     = GetType(RecordLabels.Events.ProgramChange),
+                [typeof(ChannelAftertouchEvent)] = GetType(RecordLabels.Events.ChannelAftertouch),
+                [typeof(NoteAftertouchEvent)]    = GetType(RecordLabels.Events.NoteAftertouch),
+                [typeof(NormalSysExEvent)]       = GetSysExType(RecordLabels.Events.SysExCompleted,
+                                                                RecordLabels.Events.SysExIncompleted),
+                [typeof(EscapeSysExEvent)]       = GetSysExType(RecordLabels.Events.SysExCompleted,
+                                                                RecordLabels.Events.SysExIncompleted)
             };
 
         #endregion
 
         #region Methods
 
-        public static EventNameGetter Get(Type eventType, MidiFileCsvLayout layout)
+        public static EventNameGetter Get(Type eventType)
         {
-            switch (layout)
-            {
-                case MidiFileCsvLayout.DryWetMidi:
-                    return EventsTypes_DryWetMidi[eventType];
-                case MidiFileCsvLayout.MidiCsv:
-                    return EventsTypes_MidiCsv[eventType];
-            }
-
-            return null;
+            return EventsTypes[eventType];
         }
 
         private static EventNameGetter GetType(string type)
