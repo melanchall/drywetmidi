@@ -9,7 +9,7 @@ namespace Melanchall.DryWetMidi.Tools
     {
         #region Methods
 
-        public static void ConvertToCsv(this MidiFile midiFile, ObjectType objectType, ObjectDetectionSettings objectDetectionSettings)
+        public static string ConvertToCsv(this MidiFile midiFile, ObjectType objectType, ObjectDetectionSettings objectDetectionSettings)
         {
             // header chunk
 
@@ -21,9 +21,11 @@ namespace Melanchall.DryWetMidi.Tools
             {
                 WriteChunk(chunk, writer, objectType, objectDetectionSettings, chunkIndex++);
             }
+
+            return writer.GetCsv();
         }
 
-        public static void ConvertToCsv(this IEnumerable<TrackChunk> trackChunks, ObjectType objectType, ObjectDetectionSettings objectDetectionSettings)
+        public static string ConvertToCsv(this IEnumerable<TrackChunk> trackChunks, ObjectType objectType, ObjectDetectionSettings objectDetectionSettings)
         {
             var chunkIndex = 0;
 
@@ -33,20 +35,26 @@ namespace Melanchall.DryWetMidi.Tools
             {
                 WriteTrackChunk(trackChunk, writer, objectType, objectDetectionSettings, chunkIndex++);
             }
+
+            return writer.GetCsv();
         }
 
-        public static void ConvertToCsv(this TrackChunk trackChunk, ObjectType objectType, ObjectDetectionSettings objectDetectionSettings)
+        public static string ConvertToCsv(this TrackChunk trackChunk, ObjectType objectType, ObjectDetectionSettings objectDetectionSettings)
         {
             var writer = new CsvWriter2(null);
 
             WriteTrackChunk(trackChunk, writer, objectType, objectDetectionSettings, 0);
+
+            return writer.GetCsv();
         }
 
-        public static void ConvertToCsv(this IEnumerable<ITimedObject> timedObjects)
+        public static string ConvertToCsv(this IEnumerable<ITimedObject> timedObjects)
         {
             var writer = new CsvWriter2(null);
 
             WriteObjects(timedObjects, writer, null, null);
+
+            return writer.GetCsv();
         }
 
         private static void WriteChunk(MidiChunk midiChunk, CsvWriter2 writer, ObjectType objectType, ObjectDetectionSettings objectDetectionSettings, int chunkIndex)

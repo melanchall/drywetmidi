@@ -35,7 +35,7 @@ namespace Melanchall.DryWetMidi.Tools
 
         public string GetCsv()
         {
-            return _stringBuilder.ToString();
+            return _stringBuilder.ToString().Trim();
         }
 
         #endregion
