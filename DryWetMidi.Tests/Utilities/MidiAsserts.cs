@@ -112,11 +112,11 @@ namespace Melanchall.DryWetMidi.Tests.Utilities
             Assert.IsTrue(areEqual, $"{message} {eventsComparingMessage}");
         }
 
-        public static void AreEqual(TrackChunk trackChunk1, TrackChunk trackChunk2, bool compareDeltaTimes, string message = null)
+        public static void AreEqual(MidiChunk midiChunk1, MidiChunk midiChunk2, bool compareDeltaTimes, string message = null)
         {
             var areEqual = MidiChunkEquality.Equals(
-                trackChunk1,
-                trackChunk2,
+                midiChunk1,
+                midiChunk2,
                 new MidiChunkEqualityCheckSettings
                 {
                     EventEqualityCheckSettings = new MidiEventEqualityCheckSettings

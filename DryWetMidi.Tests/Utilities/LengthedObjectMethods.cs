@@ -1,18 +1,11 @@
-﻿using System.Collections.Generic;
-using Melanchall.DryWetMidi.Interaction;
+﻿using Melanchall.DryWetMidi.Interaction;
 
 namespace Melanchall.DryWetMidi.Tests.Utilities
 {
-    public abstract class LengthedObjectMethods<TObject> : TimedObjectMethods<TObject>
+    public abstract class LengthedObjectMethods<TObject>
         where TObject : ILengthedObject
     {
         #region Methods
-
-        public void SetLength(TObject obj, ITimeSpan length, ITimeSpan time, TempoMap tempoMap)
-        {
-            var convertedTime = TimeConverter.ConvertFrom(time, tempoMap);
-            SetLength(obj, LengthConverter.ConvertFrom(length, convertedTime, tempoMap));
-        }
 
         public TObject Create(ITimeSpan time, ITimeSpan length, TempoMap tempoMap)
         {
@@ -20,25 +13,7 @@ namespace Melanchall.DryWetMidi.Tests.Utilities
             return Create(convertedTime, LengthConverter.ConvertFrom(length, convertedTime, tempoMap));
         }
 
-        public IEnumerable<TObject> CreateCollection(TempoMap tempoMap, params string[] timeAndLengthStrings)
-        {
-            var result = new List<TObject>();
-
-            foreach (var timeAndLengthString in timeAndLengthStrings)
-            {
-                var parts = timeAndLengthString.Split(';');
-                var time = TimeSpanUtilities.Parse(parts[0]);
-                var length = TimeSpanUtilities.Parse(parts[1]);
-
-                result.Add(Create(time, length, tempoMap));
-            }
-
-            return result;
-        }
-
         public abstract TObject Create(long time, long length);
-
-        public abstract void SetLength(TObject obj, long length);
 
         #endregion
     }

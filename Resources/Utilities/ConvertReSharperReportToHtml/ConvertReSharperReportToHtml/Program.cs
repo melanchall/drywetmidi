@@ -1,7 +1,7 @@
-﻿using System.Text;
+﻿using ConvertReSharperReportToHtml;
+using System.Text;
+using System.Text.Json;
 using System.Text.RegularExpressions;
-using System.Xml.Linq;
-using System.Xml.XPath;
 
 var inputFilePath = Path.GetFullPath(args[0]);
 var outputFilePath = Path.GetFullPath(args[1]);
@@ -9,7 +9,8 @@ var branch = args[2];
 
 Console.WriteLine($"Converting [{inputFilePath}] to HTML [{outputFilePath}] for [{branch}] branch...");
 
-var xDocument = XDocument.Load(inputFilePath);
+var reportJson = File.ReadAllText(inputFilePath);
+var xDocument = JsonSerializer.Deserialize<ReportDto>(reportJson, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 var issueTypes = GetIssueTypes(xDocument);
 var projects = GetProjects(xDocument);
 
@@ -20,10 +21,21 @@ var stringBuilder = new StringBuilder().AppendLine(@"
 
 foreach (var project in projects)
 {
+    Console.WriteLine($"Processing [{project}] project...");
+    if (project.Contains("Test"))
+    {
+        Console.WriteLine("    skip test project");
+        continue;
+    }
+
     var allIssues = GetProjectIssues(xDocument, project, issueTypes);
+    Console.WriteLine($"    [{allIssues.Length}] issues found");
+
     var issuesGroups = allIssues
         .GroupBy(i => i.IssueType)
         .ToArray();
+
+    Console.WriteLine($"    [{issuesGroups.Length}] issues groups built");
 
     stringBuilder.AppendLine($@"
         <hr>
@@ -31,16 +43,25 @@ foreach (var project in projects)
         <h1>{project} ({allIssues.Length} issues)</h1>
 ");
 
+    var i = 1;
+
     foreach (var issues in issuesGroups)
     {
+        Console.WriteLine($"    [{i} / {issuesGroups.Length}] {issues.Key}");
+
         stringBuilder.AppendLine($@"
         <hr>
         <h2>[{issues.Key.Severity}] {issues.Key.Description}</h2>
         <table>
 ");
 
+        var j = 1;
+        var groupSize = issues.Count();
+
         foreach (var issue in issues)
         {
+            Console.WriteLine($"        [{j} / {groupSize}] {issue.Message}");
+
             var gitHubPath = issue.FilePath.Replace('\\', '/');
             stringBuilder.AppendLine($@"
             <tr>
@@ -48,11 +69,15 @@ foreach (var project in projects)
                 <td>{issue.Message}</td>
             </tr>
 ");
+
+            j++;
         }
 
         stringBuilder.AppendLine($@"
         </table>
 ");
+
+        i++;
     }
 }
 
@@ -63,27 +88,33 @@ Console.WriteLine("All done.");
 
 //
 
-Dictionary<string, IssueType> GetIssueTypes(XDocument xDocument) => xDocument
-    .Root
-    .XPathSelectElements("//IssueType")
+Dictionary<string, IssueType> GetIssueTypes(ReportDto xDocument) => xDocument
+    .Runs
+    .First()
+    .Tool
+    .Driver
+    .Rules
     .ToDictionary(
-        e => e.Attribute("Id").Value,
-        e => new IssueType(e.Attribute("Description").Value, e.Attribute("Severity").Value));
+        e => e.Id,
+        e => new IssueType(e.FullDescription?.Text ?? e.ShortDescription.Text, e.Relationships.First().Target.Id));
 
-string[] GetProjects(XDocument xDocument) => xDocument
-    .Root
-    .XPathSelectElements("//Issues//Project")
-    .Select(e => e.Attribute("Name").Value)
+string[] GetProjects(ReportDto xDocument) => xDocument
+    .Runs
+    .First()
+    .Results
+    .Select(e => Regex.Match(e.Locations.First().PhysicalLocation.ArtifactLocation.Uri, @"(.+?)/").Groups[1].Value)
     .ToArray();
 
-Issue[] GetProjectIssues(XDocument xDocument, string project, Dictionary<string, IssueType> issueTypes) => xDocument
-    .Root
-    .XPathSelectElements($"//Issues//Project[@Name='{project}']//Issue")
+Issue[] GetProjectIssues(ReportDto xDocument, string project, Dictionary<string, IssueType> issueTypes) => xDocument
+    .Runs
+    .First()
+    .Results
+    .Where(e => e.Locations.First().PhysicalLocation.ArtifactLocation.Uri.StartsWith($"{project}/"))
     .Select(e => new Issue(
-        e.Attribute("File").Value,
-        issueTypes[e.Attribute("TypeId").Value],
-        Convert.ToInt32(e.Attribute("Line")?.Value ?? "-1"),
-        e.Attribute("Message").Value))
+        e.Locations.First().PhysicalLocation.ArtifactLocation.Uri,
+        issueTypes[e.RuleId],
+        e.Locations.First().PhysicalLocation.Region.StartLine,
+        e.Message.Text))
     .ToArray();
 
 record IssueType(string Description, string Severity);

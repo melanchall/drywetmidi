@@ -27,6 +27,6 @@ namespace Melanchall.DryWetMidi.Tests.Common
             File.ReadAllLines(filePath);
 
         public static string GetTempFilePath() =>
-            Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
+            Path.Combine(Path.GetTempPath(), $"dwmtest_{Path.GetRandomFileName()}");
     }
 }

@@ -1,5 +1,4 @@
-﻿using System;
-using Melanchall.DryWetMidi.Common;
+﻿using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Interaction;
 
 namespace Melanchall.DryWetMidi.Tests.Utilities
@@ -8,19 +7,9 @@ namespace Melanchall.DryWetMidi.Tests.Utilities
     {
         #region Overrides
 
-        public override void SetTime(Note obj, long time)
-        {
-            obj.Time = time;
-        }
-
-        public override void SetLength(Note obj, long length)
-        {
-            obj.Length = length;
-        }
-
         public override Note Create(long time, long length)
         {
-            return new Note((SevenBitNumber)DryWetMidi.Common.Random.Instance.Next(SevenBitNumber.MaxValue), length, time);
+            return new Note((SevenBitNumber)Random.Instance.Next(SevenBitNumber.MaxValue), length, time);
         }
 
         #endregion

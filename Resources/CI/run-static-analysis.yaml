@@ -42,14 +42,14 @@ stages:
     - task: CmdLine@2
       displayName: Run analysis
       inputs:
-        script: 'jb inspectcode Melanchall.DryWetMidi.sln --properties:Configuration=DebugTest --exclude="DryWetMidi.Benchmarks\**.*" -o=ReSharperReport.xml -f="xml"'
+        script: 'jb inspectcode Melanchall.DryWetMidi.sln --properties:Configuration=DebugTest --exclude="DryWetMidi.Benchmarks\**.*" -o=ReSharperReport.sarif'
     
     - task: DotNetCoreCLI@2
       displayName: Convert report to HTML
       inputs:
         command: 'run'
         projects: 'Resources/Utilities/ConvertReSharperReportToHtml/ConvertReSharperReportToHtml/ConvertReSharperReportToHtml.csproj'
-        arguments: '-c Release -- ReSharperReport.xml ReSharperReport.html $(Build.SourceBranchName)'
+        arguments: '-c Release -- ReSharperReport.sarif ReSharperReport.html $(Build.SourceBranchName)'
     
     - task: PublishPipelineArtifact@1
       displayName: Publish 'ReSharperReport' artifact
