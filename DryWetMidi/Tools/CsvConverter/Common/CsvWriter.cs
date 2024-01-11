@@ -31,6 +31,11 @@ namespace Melanchall.DryWetMidi.Tools
             _streamWriter.WriteLine(string.Join(_delimiter.ToString(), values));
         }
 
+        public void WriteRecord(params object[] values)
+        {
+            _streamWriter.WriteLine(string.Join(_delimiter.ToString(), values));
+        }
+
         #endregion
 
         #region IDisposable
