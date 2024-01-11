@@ -15,12 +15,11 @@ namespace Melanchall.DryWetMidi.Tools
 
             var chunkIndex = 0;
 
-            using (var writer = new CsvWriter(null, null))
+            var writer = new CsvWriter2(null);
+
+            foreach (var chunk in midiFile.Chunks)
             {
-                foreach (var chunk in midiFile.Chunks)
-                {
-                    WriteChunk(chunk, writer, objectType, objectDetectionSettings, chunkIndex++);
-                }
+                WriteChunk(chunk, writer, objectType, objectDetectionSettings, chunkIndex++);
             }
         }
 
@@ -28,32 +27,29 @@ namespace Melanchall.DryWetMidi.Tools
         {
             var chunkIndex = 0;
 
-            using (var writer = new CsvWriter(null, null))
+            var writer = new CsvWriter2(null);
+
+            foreach (var trackChunk in trackChunks)
             {
-                foreach (var trackChunk in trackChunks)
-                {
-                    WriteTrackChunk(trackChunk, writer, objectType, objectDetectionSettings, chunkIndex++);
-                }
+                WriteTrackChunk(trackChunk, writer, objectType, objectDetectionSettings, chunkIndex++);
             }
         }
 
         public static void ConvertToCsv(this TrackChunk trackChunk, ObjectType objectType, ObjectDetectionSettings objectDetectionSettings)
         {
-            using (var writer = new CsvWriter(null, null))
-            {
-                WriteTrackChunk(trackChunk, writer, objectType, objectDetectionSettings, 0);
-            }
+            var writer = new CsvWriter2(null);
+
+            WriteTrackChunk(trackChunk, writer, objectType, objectDetectionSettings, 0);
         }
 
         public static void ConvertToCsv(this IEnumerable<ITimedObject> timedObjects)
         {
-            using (var writer = new CsvWriter(null, null))
-            {
-                WriteObjects(timedObjects, writer, null, null);
-            }
+            var writer = new CsvWriter2(null);
+
+            WriteObjects(timedObjects, writer, null, null);
         }
 
-        private static void WriteChunk(MidiChunk midiChunk, CsvWriter writer, ObjectType objectType, ObjectDetectionSettings objectDetectionSettings, int chunkIndex)
+        private static void WriteChunk(MidiChunk midiChunk, CsvWriter2 writer, ObjectType objectType, ObjectDetectionSettings objectDetectionSettings, int chunkIndex)
         {
             var trackChunk = midiChunk as TrackChunk;
             if (trackChunk != null)
@@ -72,20 +68,20 @@ namespace Melanchall.DryWetMidi.Tools
             WriteCustomChunk(midiChunk, writer, chunkIndex);
         }
 
-        private static void WriteTrackChunk(TrackChunk trackChunk, CsvWriter writer, ObjectType objectType, ObjectDetectionSettings objectDetectionSettings, int chunkIndex)
+        private static void WriteTrackChunk(TrackChunk trackChunk, CsvWriter2 writer, ObjectType objectType, ObjectDetectionSettings objectDetectionSettings, int chunkIndex)
         {
             WriteObjects(trackChunk.GetObjects(objectType, objectDetectionSettings), writer, chunkIndex, TrackChunk.Id);
         }
 
-        private static void WriteUnknownChunk(UnknownChunk unknownChunk, CsvWriter writer, int chunkIndex)
+        private static void WriteUnknownChunk(UnknownChunk unknownChunk, CsvWriter2 writer, int chunkIndex)
         {
         }
 
-        private static void WriteCustomChunk(MidiChunk midiChunk, CsvWriter writer, int chunkIndex)
+        private static void WriteCustomChunk(MidiChunk midiChunk, CsvWriter2 writer, int chunkIndex)
         {
         }
 
-        private static void WriteObjects(IEnumerable<ITimedObject> timedObjects, CsvWriter writer, int? chunkIndex, string chunkId)
+        private static void WriteObjects(IEnumerable<ITimedObject> timedObjects, CsvWriter2 writer, int? chunkIndex, string chunkId)
         {
             var objectIndex = 0;
 
@@ -95,7 +91,7 @@ namespace Melanchall.DryWetMidi.Tools
             }
         }
 
-        private static void WriteObject(ITimedObject timedObject, CsvWriter writer, int objectIndex, int? chunkIndex, string chunkId)
+        private static void WriteObject(ITimedObject timedObject, CsvWriter2 writer, int objectIndex, int? chunkIndex, string chunkId)
         {
             var timedEvent = timedObject as TimedEvent;
             if (timedEvent != null)
@@ -132,7 +128,7 @@ namespace Melanchall.DryWetMidi.Tools
             WriteCustomObject(timedObject, writer, objectIndex, chunkIndex, chunkId);
         }
 
-        private static void WriteRegisteredParameter(RegisteredParameter registeredParameter, CsvWriter writer, int objectIndex, int? chunkIndex, string chunkId)
+        private static void WriteRegisteredParameter(RegisteredParameter registeredParameter, CsvWriter2 writer, int objectIndex, int? chunkIndex, string chunkId)
         {
             foreach (var timedEvent in registeredParameter.GetTimedEvents())
             {
@@ -140,7 +136,7 @@ namespace Melanchall.DryWetMidi.Tools
             }
         }
 
-        private static void WriteTimedEvent(TimedEvent timedEvent, CsvWriter writer, int objectIndex, int? chunkIndex, string chunkId)
+        private static void WriteTimedEvent(TimedEvent timedEvent, CsvWriter2 writer, int objectIndex, int? chunkIndex, string chunkId)
         {
             var midiEvent = timedEvent.Event;
             var eventType = midiEvent.GetType();
@@ -166,7 +162,7 @@ namespace Melanchall.DryWetMidi.Tools
                 .Concat(processedParameters));
         }
 
-        private static void WriteNote(Note note, CsvWriter writer, int objectIndex, int? chunkIndex, string chunkId)
+        private static void WriteNote(Note note, CsvWriter2 writer, int objectIndex, int? chunkIndex, string chunkId)
         {
             writer.WriteRecord(
                 chunkIndex,
@@ -180,7 +176,7 @@ namespace Melanchall.DryWetMidi.Tools
                 note.OffVelocity);
         }
 
-        private static void WriteChord(Chord chord, CsvWriter writer, int objectIndex, int? chunkIndex, string chunkId)
+        private static void WriteChord(Chord chord, CsvWriter2 writer, int objectIndex, int? chunkIndex, string chunkId)
         {
             foreach (var note in chord.Notes)
             {
@@ -188,7 +184,7 @@ namespace Melanchall.DryWetMidi.Tools
             }
         }
 
-        private static void WriteCustomObject(ITimedObject timedObject, CsvWriter writer, int objectIndex, int? chunkIndex, string chunkId)
+        private static void WriteCustomObject(ITimedObject timedObject, CsvWriter2 writer, int objectIndex, int? chunkIndex, string chunkId)
         {
         }
 
