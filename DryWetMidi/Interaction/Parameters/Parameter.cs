@@ -53,6 +53,11 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <summary>
         /// Gets or sets absolute time of the parameter data in units defined by the time division of a MIDI file.
         /// </summary>
+        /// <remarks>
+        /// Note that the returned value will be in ticks (not seconds, not milliseconds and so on).
+        /// Please read <see href="xref:a_time_length">Time and length</see> article to learn how you can
+        /// get the time in different representations.
+        /// </remarks>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="value"/> is negative.</exception>
         public long Time
         {

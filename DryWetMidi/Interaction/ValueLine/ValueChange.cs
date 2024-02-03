@@ -41,6 +41,12 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <summary>
         /// Gets the MIDI time when value is changed.
         /// </summary>
+        /// <remarks>
+        /// Note that the returned value will be in ticks (not seconds, not milliseconds and so on).
+        /// Please read <see href="xref:a_time_length">Time and length</see> article to learn how you can
+        /// get the time in different representations.
+        /// </remarks>
+        /// <exception cref="InvalidOperationException">Setting time of value change object is not allowed.</exception>
         public long Time
         {
             get { return _time; }
