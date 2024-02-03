@@ -103,11 +103,13 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
             var sentEvents = new List<SentEvent>();
             var receivedEvents = new List<ReceivedEvent>();
+            var recordedEvents = new List<ReceivedEvent>();
             var stopwatch = new Stopwatch();
 
             var expectedTimes = new List<TimeSpan>();
             var expectedRecordedTimes = new List<TimeSpan>();
             var currentTime = TimeSpan.Zero;
+
             foreach (var eventToSend in eventsToSend)
             {
                 currentTime += eventToSend.Delay;
@@ -119,7 +121,6 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
             using (var outputDevice = OutputDevice.GetByName(SendReceiveUtilities.DeviceToTestOnName))
             {
-                //SendReceiveUtilities.WarmUpDevice(outputDevice);
                 outputDevice.EventSent += (_, e) => sentEvents.Add(new SentEvent(e.Event, stopwatch.Elapsed));
 
                 using (var inputDevice = InputDevice.GetByName(SendReceiveUtilities.DeviceToTestOnName))
@@ -129,6 +130,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
                     using (var recording = new Recording(tempoMap, inputDevice))
                     {
+                        recording.EventRecorded += (_, e) => recordedEvents.Add(new ReceivedEvent(e.Event, stopwatch.Elapsed));
+
                         var sendingThread = new Thread(() =>
                         {
                             SendReceiveUtilities.SendEvents(eventsToSend, outputDevice);
@@ -152,9 +155,10 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                         Assert.IsTrue(areEventsReceived, $"Events are not received for [{timeout}] (received are: {string.Join(", ", receivedEvents)}).");
 
                         CompareSentReceivedEvents(sentEvents, receivedEvents, expectedTimes);
+                        CompareSentReceivedEvents(sentEvents, recordedEvents, expectedTimes);
 
-                        var recordedEvents = recording.GetEvents();
-                        CheckRecordedEvents(recordedEvents, expectedRecordedTimes, tempoMap);
+                        var events = recording.GetEvents();
+                        CheckRecordedEvents(events.ToList(), expectedRecordedTimes, tempoMap);
                     }
                 }
             }

@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using Melanchall.DryWetMidi.Common;
+using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
 
 namespace Melanchall.DryWetMidi.Multimedia
@@ -25,6 +26,8 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// Occurs when recording stopped via <see cref="Stop"/> method.
         /// </summary>
         public event EventHandler Stopped;
+
+        public event EventHandler<MidiEventRecordedEventArgs> EventRecorded;
 
         #endregion
 
@@ -120,11 +123,11 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// Gets MIDI events recorded by the current <see cref="Recording"/>.
         /// </summary>
         /// <returns>MIDI events recorded by the current <see cref="Recording"/>.</returns>
-        public IReadOnlyList<TimedEvent> GetEvents()
+        public ICollection<TimedEvent> GetEvents()
         {
-            return _events.Select(e => new TimedEvent(e.Event, TimeConverter.ConvertFrom((MetricTimeSpan)e.Time, TempoMap)))
-                          .ToList()
-                          .AsReadOnly();
+            return _events
+                .Select(e => new TimedEvent(e.Event, TimeConverter.ConvertFrom((MetricTimeSpan)e.Time, TempoMap)))
+                .ToArray();
         }
 
         /// <summary>
@@ -172,6 +175,13 @@ namespace Melanchall.DryWetMidi.Multimedia
                 return;
 
             _events.Add(new RecordingEvent(e.Event, _stopwatch.Elapsed));
+
+            OnEventRecorded(e.Event);
+        }
+
+        private void OnEventRecorded(MidiEvent midiEvent)
+        {
+            EventRecorded?.Invoke(this, new MidiEventRecordedEventArgs(midiEvent));
         }
 
         #endregion
