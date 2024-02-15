@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime;
+using System.Xml.Linq;
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
 
@@ -85,15 +87,22 @@ namespace Melanchall.DryWetMidi.Interaction
             ObjectDetectionSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiEvents), midiEvents);
-            ThrowIfArgument.DoesntSatisfyCondition(
-                nameof(objectType),
-                objectType,
-                t => !t.HasFlag(ObjectType.Rest),
-                "Rest object type specified.");
 
-            return midiEvents
-                .GetTimedEventsLazy(GetTimedEventDetectionSettings(objectType, settings))
-                .EnumerateObjectsFromSortedTimedObjects(objectType, settings);
+            var effectiveObjectType = objectType.HasFlag(ObjectType.Rest)
+                ? objectType | ObjectType.Note
+                : objectType;
+            var objects = midiEvents
+                .GetTimedEventsLazy(GetTimedEventDetectionSettings(effectiveObjectType, settings))
+                .EnumerateObjectsFromSortedTimedObjects(effectiveObjectType, settings);
+
+            if (!objectType.HasFlag(ObjectType.Rest))
+                return objects;
+
+            var rests = GetSortedRestsFromObjects(objects, settings?.RestDetectionSettings);
+            if (objectType == ObjectType.Rest)
+                return rests;
+
+            return EnumerateObjectsAndRests(objects, rests);
         }
 
         /// <summary>
@@ -229,6 +238,89 @@ namespace Melanchall.DryWetMidi.Interaction
                 resultCollectionSize,
                 objectType,
                 settings);
+        }
+
+        private static IEnumerable<ITimedObject> EnumerateObjectsAndRests(
+            IEnumerable<ITimedObject> objects,
+            IEnumerable<Rest> rests)
+        {
+            var objectsEnumerator = objects.GetEnumerator();
+            var objectCanBeTaken = objectsEnumerator.MoveNext();
+
+            var restsEnumerator = rests.GetEnumerator();
+            var restCanBeTaken = restsEnumerator.MoveNext();
+
+            while (objectCanBeTaken && restCanBeTaken)
+            {
+                var rest = restsEnumerator.Current;
+                var obj = objectsEnumerator.Current;
+
+                if (obj.Time < rest.Time)
+                {
+                    yield return obj;
+                    objectCanBeTaken = objectsEnumerator.MoveNext();
+                }
+                else
+                {
+                    yield return rest;
+                    restCanBeTaken = restsEnumerator.MoveNext();
+                }
+            }
+
+            while (objectCanBeTaken)
+            {
+                yield return objectsEnumerator.Current;
+                objectCanBeTaken = objectsEnumerator.MoveNext();
+            }
+
+            while (restCanBeTaken)
+            {
+                yield return restsEnumerator.Current;
+                restCanBeTaken = restsEnumerator.MoveNext();
+            }
+        }
+
+        private static ICollection<Rest> GetSortedRestsFromObjects(
+            IEnumerable<ITimedObject> objects,
+            RestDetectionSettings restDetectionSettings)
+        {
+            restDetectionSettings = restDetectionSettings ?? new RestDetectionSettings();
+
+            var notesLastEndTimes = new Dictionary<object, long>();
+            var noteDescriptorProvider = NoteDescriptorProviders[restDetectionSettings.RestSeparationPolicy];
+            var setRestChannel = SetRestChannel[restDetectionSettings.RestSeparationPolicy];
+            var setRestNoteNumber = SetRestNoteNumber[restDetectionSettings.RestSeparationPolicy];
+
+            var rests = new List<Rest>();
+
+            foreach (var obj in objects)
+            {
+                var note = obj as Note;
+                if (note == null)
+                    continue;
+
+                var noteDescriptor = noteDescriptorProvider(note);
+
+                long lastEndTime;
+                notesLastEndTimes.TryGetValue(noteDescriptor, out lastEndTime);
+
+                if (note.Time > lastEndTime)
+                {
+                    var rest = new Rest(
+                        lastEndTime,
+                        note.Time - lastEndTime,
+                        setRestChannel ? (FourBitNumber?)note.Channel : null,
+                        setRestNoteNumber ? (SevenBitNumber?)note.NoteNumber : null);
+
+                    rests.Add(rest);
+                }
+
+                notesLastEndTimes[noteDescriptor] = Math.Max(lastEndTime, note.EndTime);
+            }
+
+            rests.Sort((r1, r2) => Math.Sign(r1.Time - r2.Time));
+
+            return rests;
         }
 
         private static bool TryProcessTimedEvent(TimedEvent timedEvent, List<ITimedObject> processedTimedObjects)
@@ -406,7 +498,6 @@ namespace Melanchall.DryWetMidi.Interaction
         {
             var getChords = objectType.HasFlag(ObjectType.Chord);
             var getNotes = objectType.HasFlag(ObjectType.Note);
-            var getRests = objectType.HasFlag(ObjectType.Rest);
             var getTimedEvents = objectType.HasFlag(ObjectType.TimedEvent);
 
             settings = settings ?? new ObjectDetectionSettings();
@@ -417,7 +508,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
             var timedObjects = processedTimedObjects;
 
-            if (createNotes && (getChords || getNotes || getRests))
+            if (createNotes && (getChords || getNotes))
             {
                 var notesAndTimedEvents = processedTimedObjects.GetNotesAndTimedEventsLazy(noteDetectionSettings, true);
 

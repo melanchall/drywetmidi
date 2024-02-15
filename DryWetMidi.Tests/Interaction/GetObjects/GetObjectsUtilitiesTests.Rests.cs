@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
@@ -406,6 +407,70 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 });
         }
 
+        [Test]
+        public void EnumerateObjects_Rests_NoSeparation_1() => EnumerateObjects_Rests(
+            restSeparationPolicy: RestSeparationPolicy.NoSeparation,
+            inputEvents: new MidiEvent[]
+            {
+                new NoteOnEvent(),
+                new NoteOffEvent { DeltaTime = 20 },
+            },
+            outputObjects: Array.Empty<ITimedObject>());
+
+        [Test]
+        public void EnumerateObjects_Rests_NoSeparation_2([Values(10, 100)] long restLength) => EnumerateObjects_Rests(
+            restSeparationPolicy: RestSeparationPolicy.NoSeparation,
+            inputEvents: new MidiEvent[]
+            {
+                new NoteOnEvent { DeltaTime = restLength },
+                new NoteOffEvent { DeltaTime = 20 },
+            },
+            outputObjects: new ITimedObject[]
+            {
+                new Rest(0, restLength, null, null),
+            });
+
+        [Test]
+        public void EnumerateObjects_Rests_NoSeparation_3([Values(10, 100)] long restLength) => EnumerateObjects_Rests(
+            restSeparationPolicy: RestSeparationPolicy.NoSeparation,
+            inputEvents: new MidiEvent[]
+            {
+                new NoteOnEvent(),
+                new NoteOnEvent { DeltaTime = 10, Channel = (FourBitNumber)4 },
+                new NoteOffEvent { DeltaTime = 10 },
+                new NoteOffEvent { DeltaTime = 10, Channel = (FourBitNumber)4 },
+                new NoteOnEvent { DeltaTime = restLength },
+                new NoteOffEvent { DeltaTime = 10 },
+                new NoteOnEvent { DeltaTime = 20, Channel = (FourBitNumber)4 },
+                new NoteOffEvent { DeltaTime = 30, Channel = (FourBitNumber)4 },
+            },
+            outputObjects: new ITimedObject[]
+            {
+                new Rest(30, restLength, null, null),
+                new Rest(40 + restLength, 20, null, null),
+            });
+
+        [Test]
+        public void EnumerateObjects_Rests_SeparateByChannel([Values(10, 100)] long restLength) => EnumerateObjects_Rests(
+            restSeparationPolicy: RestSeparationPolicy.SeparateByChannel,
+            inputEvents: new MidiEvent[]
+            {
+                new NoteOnEvent(),
+                new NoteOnEvent { DeltaTime = 10, Channel = (FourBitNumber)4 },
+                new NoteOffEvent { DeltaTime = 10 },
+                new NoteOffEvent { DeltaTime = 10, Channel = (FourBitNumber)4 },
+                new NoteOnEvent { DeltaTime = restLength },
+                new NoteOffEvent { DeltaTime = 10 },
+                new NoteOnEvent { DeltaTime = 20, Channel = (FourBitNumber)4 },
+                new NoteOffEvent { DeltaTime = 30, Channel = (FourBitNumber)4 },
+            },
+            outputObjects: new ITimedObject[]
+            {
+                new Rest(0, 10, (FourBitNumber)4, null),
+                new Rest(20, 10 + restLength, (FourBitNumber)0, null),
+                new Rest(30, restLength + 30, (FourBitNumber)4, null),
+            });
+
         #endregion
 
         #region Private methods
@@ -417,6 +482,24 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             GetObjects(
                 inputObjects,
+                outputObjects,
+                ObjectType.Rest,
+                new ObjectDetectionSettings
+                {
+                    RestDetectionSettings = new RestDetectionSettings
+                    {
+                        RestSeparationPolicy = restSeparationPolicy
+                    }
+                });
+        }
+
+        private void EnumerateObjects_Rests(
+            RestSeparationPolicy restSeparationPolicy,
+            IEnumerable<MidiEvent> inputEvents,
+            IEnumerable<ITimedObject> outputObjects)
+        {
+            EnumerateObjects(
+                inputEvents,
                 outputObjects,
                 ObjectType.Rest,
                 new ObjectDetectionSettings

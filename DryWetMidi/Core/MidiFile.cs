@@ -129,12 +129,12 @@ namespace Melanchall.DryWetMidi.Core
         public ChunksCollection Chunks { get; } = new ChunksCollection();
 
         /// <summary>
-        /// Gets original format of the file was read or <c>null</c> if the current <see cref="MidiFile"/>
+        /// Gets original format of the file that was read or <c>null</c> if the current <see cref="MidiFile"/>
         /// was created by constructor.
         /// </summary>
         /// <exception cref="UnknownFileFormatException">File format is unknown.</exception>
         /// <exception cref="InvalidOperationException">Unable to get original format of the file. It means
-        /// the current <see cref="MidiFile"/> was created via constructor rather than via <c>Read</c> method.</exception>
+        /// the current <see cref="MidiFile"/> was created not as a result of reading the file.</exception>
         public MidiFileFormat OriginalFormat
         {
             get
