@@ -81,6 +81,22 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             });
 
         [Test]
+        public void CheckRepeat_MultipleCollections_ZeroRepeatsNumber() => CheckRepeat_ZeroRepeatsNumber(
+            new[]
+            {
+                new[]
+                {
+                    new TimedEvent(new TextEvent("A"), 0),
+                    new TimedEvent(new ControlChangeEvent(), 20),
+                },
+                new[]
+                {
+                    new TimedEvent(new TextEvent("A"), 10),
+                    new TimedEvent(new ControlChangeEvent(), 30),
+                }
+            });
+
+        [Test]
         public void CheckRepeat_MultipleCollections_TimedEventsAndNotes() => CheckRepeat(
             inputObjects: new[]
             {
@@ -150,6 +166,15 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         #endregion
 
         #region Private methods
+
+        private void CheckRepeat_ZeroRepeatsNumber(
+            ICollection<ICollection<ITimedObject>> inputObjects) =>
+            CheckRepeat(
+                inputObjects,
+                0,
+                TempoMap.Default,
+                null,
+                inputObjects.Select(objects => objects.Select(o => o.Clone()).ToArray()).ToArray());
 
         private void CheckRepeat(
             ICollection<ICollection<ITimedObject>> inputObjects,

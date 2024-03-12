@@ -24,13 +24,13 @@ namespace Melanchall.DryWetMidi.Tools
         /// <returns>A new instance of the <see cref="MidiFile"/> which is the <paramref name="midiFile"/>
         /// repeated <paramref name="repeatsNumber"/> times using <paramref name="settings"/>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="repeatsNumber"/> is zero or negative.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="repeatsNumber"/> is negative.</exception>
         /// <exception cref="ArgumentException"><see cref="RepeatingSettings.Shift"/> of the <paramref name="settings"/>
         /// is <c>null</c> for fixed-value shift.</exception>
         public static MidiFile Repeat(this MidiFile midiFile, int repeatsNumber, RepeatingSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
-            ThrowIfArgument.IsNonpositive(nameof(repeatsNumber), repeatsNumber, "Repeats number is zero or negative.");
+            ThrowIfArgument.IsNegative(nameof(repeatsNumber), repeatsNumber, "Repeats number is negative.");
 
             return new Repeater().Repeat(midiFile, repeatsNumber, settings);
         }
@@ -56,14 +56,14 @@ namespace Melanchall.DryWetMidi.Tools
         /// </item>
         /// </list>
         /// </exception>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="repeatsNumber"/> is zero or negative.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="repeatsNumber"/> is negative.</exception>
         /// <exception cref="ArgumentException"><see cref="RepeatingSettings.Shift"/> of the <paramref name="settings"/>
         /// is <c>null</c> for fixed-value shift.</exception>
         public static TrackChunk Repeat(this TrackChunk trackChunk, int repeatsNumber, TempoMap tempoMap, RepeatingSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
-            ThrowIfArgument.IsNonpositive(nameof(repeatsNumber), repeatsNumber, "Repeats number is zero or negative.");
+            ThrowIfArgument.IsNegative(nameof(repeatsNumber), repeatsNumber, "Repeats number is negative.");
 
             return new Repeater().Repeat(trackChunk, repeatsNumber, tempoMap, settings);
         }
@@ -89,14 +89,14 @@ namespace Melanchall.DryWetMidi.Tools
         /// </item>
         /// </list>
         /// </exception>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="repeatsNumber"/> is zero or negative.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="repeatsNumber"/> is negative.</exception>
         /// <exception cref="ArgumentException"><see cref="RepeatingSettings.Shift"/> of the <paramref name="settings"/>
         /// is <c>null</c> for fixed-value shift.</exception>
         public static ICollection<TrackChunk> Repeat(this IEnumerable<TrackChunk> trackChunks, int repeatsNumber, TempoMap tempoMap, RepeatingSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
-            ThrowIfArgument.IsNonpositive(nameof(repeatsNumber), repeatsNumber, "Repeats number is zero or negative.");
+            ThrowIfArgument.IsNegative(nameof(repeatsNumber), repeatsNumber, "Repeats number is negative.");
 
             return new Repeater().Repeat(trackChunks, repeatsNumber, tempoMap, settings);
         }
@@ -122,14 +122,14 @@ namespace Melanchall.DryWetMidi.Tools
         /// </item>
         /// </list>
         /// </exception>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="repeatsNumber"/> is zero or negative.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="repeatsNumber"/> is negative.</exception>
         /// <exception cref="ArgumentException"><see cref="RepeatingSettings.Shift"/> of the <paramref name="settings"/>
         /// is <c>null</c> for fixed-value shift.</exception>
         public static ICollection<ITimedObject> Repeat(this IEnumerable<ITimedObject> timedObjects, int repeatsNumber, TempoMap tempoMap, RepeatingSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(timedObjects), timedObjects);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
-            ThrowIfArgument.IsNonpositive(nameof(repeatsNumber), repeatsNumber, "Repeats number is zero or negative.");
+            ThrowIfArgument.IsNegative(nameof(repeatsNumber), repeatsNumber, "Repeats number is negative.");
 
             return new Repeater().Repeat(timedObjects, repeatsNumber, tempoMap, settings);
         }

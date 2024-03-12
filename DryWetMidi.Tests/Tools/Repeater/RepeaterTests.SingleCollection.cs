@@ -151,6 +151,18 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             expectedObjects: Array.Empty<ITimedObject>());
 
         [Test]
+        public void CheckRepeat_SingleCollection_ZeroRepeatsNumber_1() => CheckRepeat_ZeroRepeatsNumber(
+            new[] { new TimedEvent(new TextEvent("A")) });
+
+        [Test]
+        public void CheckRepeat_SingleCollection_ZeroRepeatsNumber_2() => CheckRepeat_ZeroRepeatsNumber(
+            new ITimedObject[]
+            {
+                new TimedEvent(new TextEvent("A")),
+                new Note(DryWetMidi.MusicTheory.NoteName.ASharp, 2),
+            });
+
+        [Test]
         public void CheckRepeat_SingleCollection_SingleTimedEvent_DefaultSettings([Values(0, 10)] long eventTime, [Values(1, 10)] int repeatsNumber) => CheckRepeat(
             inputObjects: new[]
             {
@@ -512,7 +524,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             });
 
         [Test]
-        public void CheckRepeat_NonPositiveRepeatsNumber([Values(0, -1)] int repeatsNumber)
+        public void CheckRepeat_NegativeRepeatsNumber([Values(-1)] int repeatsNumber)
         {
             var repeater = new Repeater();
 
@@ -576,6 +588,12 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         #endregion
 
         #region Private methods
+
+        private void CheckRepeat_ZeroRepeatsNumber(ICollection<ITimedObject> inputObjects) => CheckRepeat(
+            inputObjects: inputObjects,
+            repeatsNumber: 0,
+            settings: null,
+            expectedObjects: inputObjects.Select(o => o.Clone()).ToArray());
 
         private void CheckRepeat(
             ICollection<ITimedObject> inputObjects,
