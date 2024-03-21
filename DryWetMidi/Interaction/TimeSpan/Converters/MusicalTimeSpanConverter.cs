@@ -17,8 +17,8 @@ namespace Melanchall.DryWetMidi.Interaction
             if (timeSpan == 0)
                 return new MusicalTimeSpan();
 
-            var xy = MathUtilities.SolveDiophantineEquation(4 * ticksPerQuarterNoteTimeDivision.TicksPerQuarterNote, -timeSpan);
-            return new MusicalTimeSpan(Math.Abs(xy.Item1), Math.Abs(xy.Item2));
+            var gcd = MathUtilities.GreatestCommonDivisor(timeSpan, 4 * ticksPerQuarterNoteTimeDivision.TicksPerQuarterNote);
+            return new MusicalTimeSpan(timeSpan / gcd, 4 * ticksPerQuarterNoteTimeDivision.TicksPerQuarterNote / gcd);
         }
 
         public long ConvertFrom(ITimeSpan timeSpan, long time, TempoMap tempoMap)

@@ -143,13 +143,6 @@ namespace Melanchall.DryWetMidi.Common
             return a;
         }
 
-        // ax + by = 0
-        public static Tuple<long, long> SolveDiophantineEquation(long a, long b)
-        {
-            var greatestCommonDivisor = GreatestCommonDivisor(a, b);
-            return Tuple.Create(b / greatestCommonDivisor, -a / greatestCommonDivisor);
-        }
-
         public static double Round(double value)
         {
             return Math.Round(value, MidpointRounding.AwayFromZero);
