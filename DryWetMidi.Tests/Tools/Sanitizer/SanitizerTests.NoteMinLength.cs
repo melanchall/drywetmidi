@@ -1,5 +1,4 @@
 ﻿using Melanchall.DryWetMidi.Common;
-using Melanchall.DryWetMidi.Composing;
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
 using Melanchall.DryWetMidi.Tools;
@@ -62,7 +61,10 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             midiFile: new MidiFile(
                 new TrackChunk(
                     new TextEvent("A") { DeltaTime = 20 })),
-            settings: null,
+            settings: new SanitizingSettings
+            {
+                Trim = false
+            },
             expectedMidiFile: new MidiFile(
                 new TrackChunk(
                     new TextEvent("A") { DeltaTime = 20 })));

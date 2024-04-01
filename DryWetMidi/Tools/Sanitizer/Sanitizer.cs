@@ -32,6 +32,31 @@ namespace Melanchall.DryWetMidi.Tools
             var usedChannels = RemoveDuplicatedEventsCollectingUsedChannels(midiFile, settings);
             RemoveEventsOnUnusedChannels(midiFile, settings, usedChannels);
             RemoveEmptyTrackChunks(midiFile, settings);
+            TrimFile(midiFile, settings);
+        }
+
+        private static void TrimFile(
+            MidiFile midiFile,
+            SanitizingSettings settings)
+        {
+            if (!settings.Trim)
+                return;
+
+            var nonEmptyTrackChunks = midiFile
+                .GetTrackChunks()
+                .Where(c => c.Events.Any())
+                .ToArray();
+
+            if (!nonEmptyTrackChunks.Any())
+                return;
+
+            var minStartTime = nonEmptyTrackChunks
+                .Min(c => c.Events.First().DeltaTime);
+
+            foreach (var trackChunk in nonEmptyTrackChunks)
+            {
+                trackChunk.Events.First().DeltaTime -= minStartTime;
+            }
         }
 
         private static void RemoveEmptyTrackChunks(

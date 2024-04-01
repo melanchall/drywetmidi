@@ -75,7 +75,8 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                     new NoteOffEvent() { Channel = (FourBitNumber) 7 })),
             settings: new SanitizingSettings
             {
-                RemoveEmptyTrackChunks = false
+                RemoveEmptyTrackChunks = false,
+                Trim = false
             },
             expectedMidiFile: new MidiFile(
                 new TrackChunk(
@@ -199,7 +200,8 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             settings: new SanitizingSettings
             {
                 RemoveEmptyTrackChunks = false,
-                RemoveEventsOnUnusedChannels = false
+                RemoveEventsOnUnusedChannels = false,
+                Trim = false
             },
             expectedMidiFile: new MidiFile(
                 new TrackChunk(

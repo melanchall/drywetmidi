@@ -78,6 +78,8 @@ namespace Melanchall.DryWetMidi.Tools
         /// </summary>
         public bool RemoveEventsOnUnusedChannels { get; set; } = true;
 
+        public bool Trim { get; set; } = true;
+
         #endregion
     }
 }

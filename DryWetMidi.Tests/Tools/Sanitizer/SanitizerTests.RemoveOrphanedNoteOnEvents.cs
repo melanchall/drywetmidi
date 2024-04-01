@@ -100,7 +100,8 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                     new NoteOnEvent())),
             settings: new SanitizingSettings
             {
-                RemoveOrphanedNoteOffEvents = false
+                RemoveOrphanedNoteOffEvents = false,
+                Trim = false
             },
             expectedMidiFile: new MidiFile(
                 new TrackChunk(
@@ -140,7 +141,8 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 NoteDetectionSettings = new NoteDetectionSettings
                 {
                     NoteStartDetectionPolicy = NoteStartDetectionPolicy.FirstNoteOn
-                }
+                },
+                Trim = false
             },
             expectedMidiFile: new MidiFile(
                 new TrackChunk(
@@ -160,7 +162,8 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 NoteDetectionSettings = new NoteDetectionSettings
                 {
                     NoteStartDetectionPolicy = NoteStartDetectionPolicy.LastNoteOn
-                }
+                },
+                Trim = false
             },
             expectedMidiFile: new MidiFile(
                 new TrackChunk(
@@ -180,7 +183,8 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 NoteDetectionSettings = new NoteDetectionSettings
                 {
                     NoteStartDetectionPolicy = NoteStartDetectionPolicy.LastNoteOn
-                }
+                },
+                Trim = false
             },
             expectedMidiFile: new MidiFile(
                 new TrackChunk(
@@ -196,7 +200,8 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             settings: new SanitizingSettings
             {
                 RemoveOrphanedNoteOffEvents = false,
-                RemoveOrphanedNoteOnEvents = false
+                RemoveOrphanedNoteOnEvents = false,
+                Trim = false
             },
             expectedMidiFile: new MidiFile(
                 new TrackChunk(
@@ -240,7 +245,8 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 {
                     NoteStartDetectionPolicy = NoteStartDetectionPolicy.FirstNoteOn
                 },
-                RemoveOrphanedNoteOnEvents = false
+                RemoveOrphanedNoteOnEvents = false,
+                Trim = false
             },
             expectedMidiFile: new MidiFile(
                 new TrackChunk(
@@ -262,7 +268,8 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 {
                     NoteStartDetectionPolicy = NoteStartDetectionPolicy.LastNoteOn
                 },
-                RemoveOrphanedNoteOnEvents = false
+                RemoveOrphanedNoteOnEvents = false,
+                Trim = false
             },
             expectedMidiFile: new MidiFile(
                 new TrackChunk(
@@ -284,7 +291,8 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 {
                     NoteStartDetectionPolicy = NoteStartDetectionPolicy.LastNoteOn
                 },
-                RemoveOrphanedNoteOnEvents = false
+                RemoveOrphanedNoteOnEvents = false,
+                Trim = false
             },
             expectedMidiFile: new MidiFile(
                 new TrackChunk(

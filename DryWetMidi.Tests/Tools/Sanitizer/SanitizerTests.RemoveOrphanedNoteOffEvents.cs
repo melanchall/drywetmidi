@@ -99,7 +99,8 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                     new NoteOnEvent())),
             settings: new SanitizingSettings
             {
-                RemoveOrphanedNoteOnEvents = false
+                RemoveOrphanedNoteOnEvents = false,
+                Trim = false
             },
             expectedMidiFile: new MidiFile(
                 new TrackChunk(
@@ -135,7 +136,10 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                     new NoteOffEvent() { DeltaTime = 20 },
                     new NoteOffEvent() { DeltaTime = 25 },
                     new NoteOffEvent() { DeltaTime = 30 })),
-            settings: null,
+            settings: new SanitizingSettings
+            {
+                Trim = false
+            },
             expectedMidiFile: new MidiFile(
                 new TrackChunk(
                     new NoteOnEvent() { DeltaTime = 15 },
@@ -152,7 +156,10 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                     new NoteOffEvent() { DeltaTime = 25 },
                     new NoteOffEvent() { DeltaTime = 30 },
                     new TextEvent("C") { DeltaTime = 40 })),
-            settings: null,
+            settings: new SanitizingSettings
+            {
+                Trim = false
+            },
             expectedMidiFile: new MidiFile(
                 new TrackChunk(
                     new NoteOnEvent() { DeltaTime = 15 },
@@ -170,7 +177,8 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             settings: new SanitizingSettings
             {
                 RemoveOrphanedNoteOnEvents = false,
-                RemoveOrphanedNoteOffEvents = false
+                RemoveOrphanedNoteOffEvents = false,
+                Trim = false
             },
             expectedMidiFile: new MidiFile(
                 new TrackChunk(
@@ -211,7 +219,8 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                     new NoteOffEvent() { DeltaTime = 30 })),
             settings: new SanitizingSettings
             {
-                RemoveOrphanedNoteOffEvents = false
+                RemoveOrphanedNoteOffEvents = false,
+                Trim = false
             },
             expectedMidiFile: new MidiFile(
                 new TrackChunk(
@@ -233,7 +242,8 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                     new TextEvent("C") { DeltaTime = 40 })),
             settings: new SanitizingSettings
             {
-                RemoveOrphanedNoteOffEvents = false
+                RemoveOrphanedNoteOffEvents = false,
+                Trim = false
             },
             expectedMidiFile: new MidiFile(
                 new TrackChunk(
