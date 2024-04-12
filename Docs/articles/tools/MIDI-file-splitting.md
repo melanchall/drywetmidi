@@ -38,7 +38,6 @@ To split a file by objects the tool needs to determine the key of each object. O
 |[TimedEvent](xref:Melanchall.DryWetMidi.Interaction.ObjectType.TimedEvent)|The type of the underlying event ([EventType](xref:Melanchall.DryWetMidi.Core.MidiEvent.EventType) of [TimedEvent.Event](xref:Melanchall.DryWetMidi.Interaction.TimedEvent.Event)).|
 |[Note](xref:Melanchall.DryWetMidi.Interaction.ObjectType.Note)|Pair of the [channel](xref:Melanchall.DryWetMidi.Interaction.Note.Channel) and [note number](xref:Melanchall.DryWetMidi.Interaction.Note.NoteNumber) of a note.|
 |[Chord](xref:Melanchall.DryWetMidi.Interaction.ObjectType.Chord)|Collection of keys of the underlying [notes](xref:Melanchall.DryWetMidi.Interaction.Chord.Notes).|
-|[Rest](xref:Melanchall.DryWetMidi.Interaction.ObjectType.Rest)|Pair of the [channel](xref:Melanchall.DryWetMidi.Interaction.Rest.Channel) and [note number](xref:Melanchall.DryWetMidi.Interaction.Rest.NoteNumber) of a rest.|
 
 You can alter key calculation logic providing custom key selector. For example, to separate notes by only note number ignoring a note's channel:
 

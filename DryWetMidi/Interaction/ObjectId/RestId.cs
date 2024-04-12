@@ -1,24 +1,19 @@
-﻿using Melanchall.DryWetMidi.Common;
-
-namespace Melanchall.DryWetMidi.Interaction
+﻿namespace Melanchall.DryWetMidi.Interaction
 {
     internal sealed class RestId
     {
         #region Constructor
 
-        public RestId(FourBitNumber? channel, SevenBitNumber? noteNumber)
+        public RestId(object key)
         {
-            Channel = channel;
-            NoteNumber = noteNumber;
+            Key = key;
         }
 
         #endregion
 
         #region Properties
 
-        public FourBitNumber? Channel { get; }
-
-        public SevenBitNumber? NoteNumber { get; }
+        public object Key { get; }
 
         #endregion
 
@@ -33,13 +28,12 @@ namespace Melanchall.DryWetMidi.Interaction
             if (ReferenceEquals(restId, null))
                 return false;
 
-            return Channel == restId.Channel &&
-                   NoteNumber == restId.NoteNumber;
+            return Key?.Equals(restId.Key) == true;
         }
 
         public override int GetHashCode()
         {
-            return (Channel ?? 20) * 1000 + (NoteNumber ?? 200);
+            return Key?.GetHashCode() ?? 0;
         }
 
         #endregion

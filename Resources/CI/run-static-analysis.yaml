@@ -42,7 +42,7 @@ stages:
     - task: CmdLine@2
       displayName: Run analysis
       inputs:
-        script: 'jb inspectcode Melanchall.DryWetMidi.sln --properties:Configuration=DebugTest --exclude="DryWetMidi.Benchmarks\**.*" -o=ReSharperReport.xml'
+        script: 'jb inspectcode Melanchall.DryWetMidi.sln --properties:Configuration=DebugTest --exclude="DryWetMidi.Benchmarks\**.*" -o=ReSharperReport.xml -f="xml"'
     
     - task: DotNetCoreCLI@2
       displayName: Convert report to HTML

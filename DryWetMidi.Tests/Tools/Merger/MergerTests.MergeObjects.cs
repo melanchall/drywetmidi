@@ -331,52 +331,52 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         public void MergeObjects_Objects_Rests_NoMerging_1() => MergeObjects_Objects(
             timedObjects: new ITimedObject[]
             {
-                new Rest(10, 30, null, (SevenBitNumber)70),
-                new Rest(40, 30, null, null),
-                new Rest(300, 10, null, (SevenBitNumber)70),
-                new Rest(310, 30, null, (SevenBitNumber)80),
+                new Rest(10, 30, (0, (SevenBitNumber)70)),
+                new Rest(40, 30, (0, 0)),
+                new Rest(300, 10, (0, (SevenBitNumber)70)),
+                new Rest(310, 30, (0, (SevenBitNumber)80)),
             },
             settings: null,
             expectedObjects: new ITimedObject[]
             {
-                new Rest(10, 30, null, (SevenBitNumber)70),
-                new Rest(40, 30, null, null),
-                new Rest(300, 10, null, (SevenBitNumber)70),
-                new Rest(310, 30, null, (SevenBitNumber)80),
+                new Rest(10, 30, (0, (SevenBitNumber)70)),
+                new Rest(40, 30, (0, 0)),
+                new Rest(300, 10, (0, (SevenBitNumber)70)),
+                new Rest(310, 30, (0, (SevenBitNumber)80)),
             });
 
         [Test]
         public void MergeObjects_Objects_Rests_NoMerging_2() => MergeObjects_Objects(
             timedObjects: new ITimedObject[]
             {
-                new Rest(10, 30, null, (SevenBitNumber)70),
-                new Rest(40, 30, (FourBitNumber)2, (SevenBitNumber)70),
-                new Rest(300, 10, (FourBitNumber)2, null),
-                new Rest(310, 30, (FourBitNumber)3, null),
+                new Rest(10, 30, (0, (SevenBitNumber)70)),
+                new Rest(40, 30, ((FourBitNumber)2, (SevenBitNumber)70)),
+                new Rest(300, 10, ((FourBitNumber)2, 0)),
+                new Rest(310, 30, ((FourBitNumber)3, 0)),
             },
             settings: null,
             expectedObjects: new ITimedObject[]
             {
-                new Rest(10, 30, null, (SevenBitNumber)70),
-                new Rest(40, 30, (FourBitNumber)2, (SevenBitNumber)70),
-                new Rest(300, 10, (FourBitNumber)2, null),
-                new Rest(310, 30, (FourBitNumber)3, null),
+                new Rest(10, 30, (0, (SevenBitNumber)70)),
+                new Rest(40, 30, ((FourBitNumber) 2,(SevenBitNumber) 70)),
+                new Rest(300, 10, ((FourBitNumber)2, 0)),
+                new Rest(310, 30, ((FourBitNumber)3, 0)),
             });
 
         [Test]
         public void MergeObjects_Objects_Rests_Merging_1() => MergeObjects_Objects(
             timedObjects: new ITimedObject[]
             {
-                new Rest(10, 30, null, (SevenBitNumber)70),
-                new Rest(40, 30, null, (SevenBitNumber)70),
-                new Rest(300, 10, (FourBitNumber)2, null),
-                new Rest(310, 30, (FourBitNumber)2, null),
+                new Rest(10, 30, (0, (SevenBitNumber)70)),
+                new Rest(40, 30, (0, (SevenBitNumber)70)),
+                new Rest(300, 10, ((FourBitNumber)2, 0)),
+                new Rest(310, 30, ((FourBitNumber)2, 0)),
             },
             settings: null,
             expectedObjects: new ITimedObject[]
             {
-                new Rest(10, 60, null, (SevenBitNumber)70),
-                new Rest(300, 40, (FourBitNumber)2, null),
+                new Rest(10, 60, (0, (SevenBitNumber)70)),
+                new Rest(300, 40, ((FourBitNumber)2, 0)),
             });
 
         [Test]

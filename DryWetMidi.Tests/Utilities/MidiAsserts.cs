@@ -282,8 +282,7 @@ namespace Melanchall.DryWetMidi.Tests.Utilities
 
         private static void AreEqual(Rest expectedRest, Rest actualRest, string message)
         {
-            Assert.AreEqual(expectedRest.NoteNumber, actualRest.NoteNumber, $"{message} Note number is invalid.");
-            Assert.AreEqual(expectedRest.Channel, actualRest.Channel, $"{message} Channel is invalid.");
+            Assert.AreEqual(expectedRest.Key, actualRest.Key, $"{message} Key is invalid.");
             Assert.AreEqual(expectedRest.Time, actualRest.Time, $"{message} Time is invalid.");
             Assert.AreEqual(expectedRest.Length, actualRest.Length, $"{message} Length is invalid.");
         }

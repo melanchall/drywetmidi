@@ -264,7 +264,7 @@ namespace Melanchall.DryWetMidi.Interaction
             var notes = notesBuilder.GetNotesLazy(midiEvents.GetTimedEventsLazy(settings?.TimedEventDetectionSettings));
 
             result.AddRange(notes);
-            return result;
+            return new SortedTimedObjectsImmutableCollection<Note>(result);
         }
 
         /// <summary>
@@ -290,7 +290,7 @@ namespace Melanchall.DryWetMidi.Interaction
             var notes = notesBuilder.GetNotesLazy(eventsCollection.GetTimedEventsLazy(settings?.TimedEventDetectionSettings));
 
             result.AddRange(notes);
-            return result;
+            return new SortedTimedObjectsImmutableCollection<Note>(result);
         }
 
         /// <summary>
@@ -345,7 +345,7 @@ namespace Melanchall.DryWetMidi.Interaction
             var notes = notesBuilder.GetNotesLazy(eventsCollections.GetTimedEventsLazy(eventsCount, settings?.TimedEventDetectionSettings));
 
             result.AddRange(notes.Select(n => n.Object));
-            return result;
+            return new SortedTimedObjectsImmutableCollection<Note>(result);
         }
 
         /// <summary>

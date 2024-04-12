@@ -21,7 +21,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <summary>
         /// The type of objects in the current group.
         /// </summary>
-        protected readonly ObjectType _objectsType;
+        protected readonly Type _objectsType;
 
         #endregion
 
@@ -92,15 +92,14 @@ namespace Melanchall.DryWetMidi.Tools
             if (_objects.Count == 1)
                 return (ILengthedObject)_objects.First().Clone();
 
-            switch (_objectsType)
-            {
-                case ObjectType.Note:
-                    return MergeNotes(settings);
-                case ObjectType.Rest:
-                    return MergeRests();
-                case ObjectType.Chord:
-                    return MergeChords(settings);
-            }
+            if (_objectsType == typeof(Note))
+                return MergeNotes(settings);
+
+            if (_objectsType == typeof(Chord))
+                return MergeChords(settings);
+
+            if (_objectsType == typeof(Rest))
+                return MergeRests();
 
             throw new NotImplementedException($"Merging objects of {_objectsType} type is not implemented.");
         }
@@ -161,18 +160,9 @@ namespace Melanchall.DryWetMidi.Tools
             throw new NotImplementedException($"Merging velocities by {velocityMergingPolicy} policy is not implemented.");
         }
 
-        private ObjectType GetObjectsType()
+        private Type GetObjectsType()
         {
-            var firstObject = _objects.First();
-
-            if (firstObject is Note)
-                return ObjectType.Note;
-            if (firstObject is Chord)
-                return ObjectType.Chord;
-            if (firstObject is Rest)
-                return ObjectType.Rest;
-
-            throw new NotImplementedException($"Getting object type for {firstObject} is not implemented.");
+            return _objects.First().GetType();
         }
 
         #endregion

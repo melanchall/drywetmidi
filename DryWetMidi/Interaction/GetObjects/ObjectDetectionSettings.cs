@@ -22,11 +22,6 @@
         /// </summary>
         public ChordDetectionSettings ChordDetectionSettings { get; set; }
 
-        /// <summary>
-        /// Gets or sets settings which define how rests should be detected and built.
-        /// </summary>
-        public RestDetectionSettings RestDetectionSettings { get; set; }
-
         #endregion
     }
 }

@@ -29,7 +29,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 ITimedObject obj = null;
 
                 if (type == typeof(Rest))
-                    obj = new Rest(0, 100, null, null);
+                    obj = new Rest(0, 100, null);
                 else if (type == typeof(Note))
                     obj = new Note((SevenBitNumber)70);
                 else if (type == typeof(TimedEvent))

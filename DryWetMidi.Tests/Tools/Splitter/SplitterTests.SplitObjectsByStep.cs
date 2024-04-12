@@ -192,7 +192,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                     new Note((SevenBitNumber)70, 100, 0),
                     new Note((SevenBitNumber)90, 100, 30),
                     new Note((SevenBitNumber)70, 100, 60)),
-                new Rest(10, 80, null, null)
+                new Rest(10, 80, null)
             },
             step: (MidiTimeSpan)40,
             expectedObjects: new ILengthedObject[]
@@ -213,8 +213,8 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 new Chord(
                     new Note((SevenBitNumber)90, 10, 120),
                     new Note((SevenBitNumber)70, 40, 120)),
-                new Rest(10, 40, null, null),
-                new Rest(50, 40, null, null)
+                new Rest(10, 40, null),
+                new Rest(50, 40, null)
             });
 
         [Test]

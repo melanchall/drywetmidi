@@ -215,7 +215,7 @@ namespace Melanchall.DryWetMidi.Interaction
                 result.Add(chord);
             }
 
-            return result;
+            return new SortedTimedObjectsImmutableCollection<Chord>(result);
         }
 
         /// <summary>
@@ -241,7 +241,7 @@ namespace Melanchall.DryWetMidi.Interaction
             var chords = chordsBuilder.GetChordsLazy(new[] { eventsCollection }.GetTimedEventsLazy(eventsCollection.Count, settings?.NoteDetectionSettings?.TimedEventDetectionSettings));
 
             result.AddRange(chords.Select(c => c.Object));
-            return result;
+            return new SortedTimedObjectsImmutableCollection<Chord>(result);
         }
 
         /// <summary>
@@ -296,7 +296,7 @@ namespace Melanchall.DryWetMidi.Interaction
             var chords = chordsBuilder.GetChordsLazy(eventsCollections.GetTimedEventsLazy(eventsCount, settings?.NoteDetectionSettings?.TimedEventDetectionSettings));
 
             result.AddRange(chords.Select(c => c.Object));
-            return result;
+            return new SortedTimedObjectsImmutableCollection<Chord>(result);
         }
 
         /// <summary>
@@ -330,7 +330,7 @@ namespace Melanchall.DryWetMidi.Interaction
         {
             ThrowIfArgument.IsNull(nameof(notes), notes);
 
-            return notes.GetChordsAndNotesAndTimedEventsLazy(settings).OfType<Chord>().ToArray();
+            return new SortedTimedObjectsImmutableCollection<Chord>(notes.GetChordsAndNotesAndTimedEventsLazy(settings).OfType<Chord>().ToArray());
         }
 
         /// <summary>

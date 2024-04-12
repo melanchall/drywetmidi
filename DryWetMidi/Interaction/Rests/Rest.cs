@@ -1,12 +1,7 @@
 ﻿using System;
-using Melanchall.DryWetMidi.Common;
 
 namespace Melanchall.DryWetMidi.Interaction
 {
-    /// <summary>
-    /// Represents a musical rest. More info in the
-    /// <see href="xref:a_getting_objects#rests">Getting objects: GetObjects: Rests</see> article.
-    /// </summary>
     public sealed class Rest : ILengthedObject, INotifyTimeChanged, INotifyLengthChanged
     {
         #region Events
@@ -32,13 +27,12 @@ namespace Melanchall.DryWetMidi.Interaction
 
         #region Constructor
 
-        internal Rest(long time, long length, FourBitNumber? channel, SevenBitNumber? noteNumber)
+        internal Rest(long time, long length, object key)
         {
             _time = time;
             _length = length;
 
-            Channel = channel;
-            NoteNumber = noteNumber;
+            Key = key;
         }
 
         #endregion
@@ -100,15 +94,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         public long EndTime => Time + Length;
 
-        /// <summary>
-        /// Gets a channel the rest was constructed for.
-        /// </summary>
-        public FourBitNumber? Channel { get; }
-
-        /// <summary>
-        /// Gets a note number the rest was constructed for.
-        /// </summary>
-        public SevenBitNumber? NoteNumber { get; }
+        public object Key { get; }
 
         #endregion
 
@@ -130,8 +116,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
             return rest1.Time == rest2.Time &&
                    rest1.Length == rest2.Length &&
-                   rest1.Channel == rest2.Channel &&
-                   rest1.NoteNumber == rest2.NoteNumber;
+                   rest1.Key.Equals(rest2.Key);
         }
 
         /// <summary>
@@ -155,7 +140,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <returns>Copy of the object.</returns>
         public ITimedObject Clone()
         {
-            return new Rest(Time, Length, Channel, NoteNumber);
+            return new Rest(Time, Length, Key);
         }
 
         #endregion
@@ -196,7 +181,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <returns>A string that represents the current object.</returns>
         public override string ToString()
         {
-            return $"Rest (channel = {Channel}, note number = {NoteNumber})";
+            return $"Rest (key = {Key})";
         }
 
         /// <summary>
@@ -220,8 +205,7 @@ namespace Melanchall.DryWetMidi.Interaction
                 var result = 17;
                 result = result * 23 + Time.GetHashCode();
                 result = result * 23 + Length.GetHashCode();
-                result = result * 23 + Channel.GetHashCode();
-                result = result * 23 + NoteNumber.GetHashCode();
+                result = result * 23 + Key.GetHashCode();
                 return result;
             }
         }

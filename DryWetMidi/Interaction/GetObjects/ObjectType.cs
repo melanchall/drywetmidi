@@ -22,10 +22,5 @@ namespace Melanchall.DryWetMidi.Interaction
         /// Represents a chord (see <see cref="Interaction.Chord"/>).
         /// </summary>
         Chord = 1 << 2,
-
-        /// <summary>
-        /// Represents a rest (see <see cref="Interaction.Rest"/>).
-        /// </summary>
-        Rest = 1 << 3,
     }
 }

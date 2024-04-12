@@ -26,7 +26,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
             var rest = obj as Rest;
             if (rest != null)
-                return new RestId(rest.Channel, rest.NoteNumber);
+                return new RestId(rest.Key);
 
             var registeredParameter = obj as RegisteredParameter;
             if (registeredParameter != null)

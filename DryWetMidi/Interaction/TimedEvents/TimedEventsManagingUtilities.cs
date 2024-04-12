@@ -82,7 +82,7 @@ namespace Melanchall.DryWetMidi.Interaction
                 result.Add(timedEvent);
             }
 
-            return result;
+            return new SortedTimedObjectsImmutableCollection<TimedEvent>(result);
         }
 
         /// <summary>
@@ -131,7 +131,7 @@ namespace Melanchall.DryWetMidi.Interaction
                 result.Add(timedEventAt.Object);
             }
 
-            return result;
+            return new SortedTimedObjectsImmutableCollection<TimedEvent>(result);
         }
 
         /// <summary>
