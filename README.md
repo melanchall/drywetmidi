@@ -33,6 +33,8 @@ Please see [Getting started](#getting-started) section below for quick jump into
 
 Here the list of noticeable projects that use DryWetMIDI:
 
+* [Musical Bits](https://musicalbits.de/)  
+  Musical Bits creates software that helps you creating music. Our software uses latest technology, including AI, to model all layers of creativity of a human composer. These layers are implemented as reusable and combinable software components. Musical Bits software is available as co-pilot for producers and composers under the name KLANGMACHT and helps you create, drumsounds, beats, guitars, background choirs, lyrics and more. We even create and distribute full virtual bands, albums and songs. For example, check out the Frostbite Orckings.
 * [CoyoteMIDI](https://coyotemidi.com)  
   CoyoteMIDI extends the functionality of your MIDI devices to include keyboard and mouse input, including complex key combinations and multi-step macros.
 * [Clone Hero](https://clonehero.net)  
