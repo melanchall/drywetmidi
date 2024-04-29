@@ -120,7 +120,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             },
             settings: new CsvSerializationSettings
             {
-                NoteNumberFormat = CsvNoteFormat.Letter,
+                NoteFormat = CsvNoteFormat.Letter,
                 TimeType = TimeSpanType.Metric,
                 LengthType = TimeSpanType.Musical,
             },
@@ -145,7 +145,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             },
             settings: new CsvSerializationSettings
             {
-                NoteNumberFormat = CsvNoteFormat.Letter,
+                NoteFormat = CsvNoteFormat.Letter,
             },
             expectedMidiFile: new MidiFile(
                 new TrackChunk(
@@ -226,7 +226,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             },
             settings: new CsvSerializationSettings
             {
-                NoteNumberFormat = CsvNoteFormat.Letter,
+                NoteFormat = CsvNoteFormat.Letter,
             },
             expectedObjects: new ITimedObject[]
             {
@@ -250,7 +250,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             },
             settings: new CsvSerializationSettings
             {
-                NoteNumberFormat = CsvNoteFormat.Letter,
+                NoteFormat = CsvNoteFormat.Letter,
             },
             expectedObjects: new ITimedObject[]
             {
@@ -274,7 +274,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             },
             settings: new CsvSerializationSettings
             {
-                NoteNumberFormat = CsvNoteFormat.Letter,
+                NoteFormat = CsvNoteFormat.Letter,
             },
             expectedObjects: new ITimedObject[]
             {

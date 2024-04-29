@@ -480,7 +480,7 @@ Currently `GetObjects` can build objects of the following types:
 * [Chord](xref:Melanchall.DryWetMidi.Interaction.Chord)
 * [Rest](xref:Melanchall.DryWetMidi.Interaction.Rest)
 
-### Rests
+## Rests
 
 To build rests you need to use extension methods from the [RestsUtilities](xref:Melanchall.DryWetMidi.Interaction.RestsUtilities) class.
 

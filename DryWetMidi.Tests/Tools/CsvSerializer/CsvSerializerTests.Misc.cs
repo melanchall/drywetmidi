@@ -22,7 +22,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         };
         private static readonly CsvSerializationSettings NoteLetterSettings = new CsvSerializationSettings
         {
-            NoteNumberFormat = CsvNoteFormat.Letter,
+            NoteFormat = CsvNoteFormat.Letter,
         };
 
         private static readonly object[][] EventsData = new[]

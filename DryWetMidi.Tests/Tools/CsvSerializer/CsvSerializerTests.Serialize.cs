@@ -141,7 +141,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             originalFormat: null,
             settings: new CsvSerializationSettings
             {
-                NoteNumberFormat = CsvNoteFormat.Letter,
+                NoteFormat = CsvNoteFormat.Letter,
                 TimeType = TimeSpanType.Metric,
                 LengthType = TimeSpanType.Musical,
             },
@@ -171,7 +171,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             originalFormat: null,
             settings: new CsvSerializationSettings
             {
-                NoteNumberFormat = CsvNoteFormat.Letter,
+                NoteFormat = CsvNoteFormat.Letter,
             },
             objectType: ObjectType.TimedEvent | ObjectType.Note | ObjectType.Chord,
             objectDetectionSettings: new ObjectDetectionSettings

@@ -40,6 +40,16 @@ namespace Melanchall.DryWetMidi.Tools
 
         #region Methods
 
+        /// <summary>
+        /// Reads a <see cref="MidiFile"/> represented as CSV from the specified stream.
+        /// </summary>
+        /// <param name="stream"><see cref="Stream"/> to read the file from.</param>
+        /// <param name="settings">Settings according to which <see cref="MidiFile"/> should be deserialized.</param>
+        /// <returns>An instance of the <see cref="MidiFile"/> read from CSV representation from
+        /// <paramref name="stream"/>.</returns>
+        /// <exception cref="ArgumentException"><paramref name="stream"/> doesn't support reading.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="stream"/> is <c>null</c>.</exception>
+        /// <exception cref="FormatException">Invalid CSV representation.</exception>
         public static MidiFile DeserializeFileFromCsv(
             Stream stream,
             CsvSerializationSettings settings = null)
@@ -70,6 +80,17 @@ namespace Melanchall.DryWetMidi.Tools
             return midiFile;
         }
 
+        /// <summary>
+        /// Reads a <see cref="MidiFile"/> represented as CSV from the specified file.
+        /// </summary>
+        /// <param name="filePath">Path to the file to read the file from.</param>
+        /// <param name="settings">Settings according to which <see cref="MidiFile"/> should be deserialized.</param>
+        /// <returns>An instance of the <see cref="MidiFile"/> read from CSV representation from
+        /// <paramref name="filePath"/>.</returns>
+        /// <exception cref="ArgumentException"><paramref name="filePath"/> is <c>null</c>, a zero-length string,
+        /// contains only white space, or contains one or more invalid characters as defined by
+        /// <see cref="Path.InvalidPathChars"/>.</exception>
+        /// <exception cref="FormatException">Invalid CSV representation.</exception>
         public static MidiFile DeserializeFileFromCsv(
             string filePath,
             CsvSerializationSettings settings = null)
@@ -82,7 +103,29 @@ namespace Melanchall.DryWetMidi.Tools
             }
         }
 
-        public static IEnumerable<MidiChunk> DeserializeChunksFromCsv(
+        /// <summary>
+        /// Reads a collection of <see cref="MidiChunk"/> represented as CSV from the specified stream.
+        /// </summary>
+        /// <param name="stream"><see cref="Stream"/> to read chunks from.</param>
+        /// <param name="tempoMap"><see cref="TempoMap"/> to use for time/length conversions.</param>
+        /// <param name="settings">Settings according to which collection of <see cref="MidiChunk"/> should
+        /// be deserialized.</param>
+        /// <returns>Collection of <see cref="MidiChunk"/> read from CSV representation from
+        /// <paramref name="stream"/>.</returns>
+        /// <exception cref="ArgumentException"><paramref name="stream"/> doesn't support reading.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occurred:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="stream"/> is <c>null</c>.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="tempoMap"/> is <c>null</c>.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
+        /// <exception cref="FormatException">Invalid CSV representation.</exception>
+        public static ICollection<MidiChunk> DeserializeChunksFromCsv(
             Stream stream,
             TempoMap tempoMap,
             CsvSerializationSettings settings = null)
@@ -105,7 +148,21 @@ namespace Melanchall.DryWetMidi.Tools
             }
         }
 
-        public static IEnumerable<MidiChunk> DeserializeChunksFromCsv(
+        /// <summary>
+        /// Reads a collection of <see cref="MidiChunk"/> represented as CSV from the specified file.
+        /// </summary>
+        /// <param name="filePath">Path to the file to read chunks from.</param>
+        /// <param name="tempoMap"><see cref="TempoMap"/> to use for time/length conversions.</param>
+        /// <param name="settings">Settings according to which collection of <see cref="MidiChunk"/> should
+        /// be deserialized.</param>
+        /// <returns>Collection of <see cref="MidiChunk"/> read from CSV representation from
+        /// <paramref name="filePath"/>.</returns>
+        /// <exception cref="ArgumentException"><paramref name="filePath"/> is <c>null</c>, a zero-length string,
+        /// contains only white space, or contains one or more invalid characters as defined by
+        /// <see cref="Path.InvalidPathChars"/>.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="tempoMap"/> is <c>null</c>.</exception>
+        /// <exception cref="FormatException">Invalid CSV representation.</exception>
+        public static ICollection<MidiChunk> DeserializeChunksFromCsv(
             string filePath,
             TempoMap tempoMap,
             CsvSerializationSettings settings = null)
@@ -119,6 +176,28 @@ namespace Melanchall.DryWetMidi.Tools
             }
         }
 
+        /// <summary>
+        /// Reads a <see cref="MidiChunk"/> represented as CSV from the specified stream.
+        /// </summary>
+        /// <param name="stream"><see cref="Stream"/> to read a chunk from.</param>
+        /// <param name="tempoMap"><see cref="TempoMap"/> to use for time/length conversions.</param>
+        /// <param name="settings">Settings according to which <see cref="MidiChunk"/> should
+        /// be deserialized.</param>
+        /// <returns>An instance of the <see cref="MidiChunk"/> read from CSV representation from
+        /// <paramref name="stream"/>.</returns>
+        /// <exception cref="ArgumentException"><paramref name="stream"/> doesn't support reading.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occurred:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="stream"/> is <c>null</c>.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="tempoMap"/> is <c>null</c>.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
+        /// <exception cref="FormatException">Invalid CSV representation.</exception>
         public static MidiChunk DeserializeChunkFromCsv(
             Stream stream,
             TempoMap tempoMap,
@@ -147,6 +226,20 @@ namespace Melanchall.DryWetMidi.Tools
             }
         }
 
+        /// <summary>
+        /// Reads a <see cref="MidiChunk"/> represented as CSV from the specified file.
+        /// </summary>
+        /// <param name="filePath">Path to the file to read a chunk from.</param>
+        /// <param name="tempoMap"><see cref="TempoMap"/> to use for time/length conversions.</param>
+        /// <param name="settings">Settings according to which <see cref="MidiChunk"/> should
+        /// be deserialized.</param>
+        /// <returns>An instance of the <see cref="MidiChunk"/> read from CSV representation from
+        /// <paramref name="filePath"/>.</returns>
+        /// <exception cref="ArgumentException"><paramref name="filePath"/> is <c>null</c>, a zero-length string,
+        /// contains only white space, or contains one or more invalid characters as defined by
+        /// <see cref="Path.InvalidPathChars"/>.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="tempoMap"/> is <c>null</c>.</exception>
+        /// <exception cref="FormatException">Invalid CSV representation.</exception>
         public static MidiChunk DeserializeChunkFromCsv(
             string filePath,
             TempoMap tempoMap,
@@ -161,7 +254,29 @@ namespace Melanchall.DryWetMidi.Tools
             }
         }
 
-        public static IEnumerable<ITimedObject> DeserializeObjectsFromCsv(
+        /// <summary>
+        /// Reads collection of <see cref="ITimedObject"/> represented as CSV from the specified stream.
+        /// </summary>
+        /// <param name="stream"><see cref="Stream"/> to read objects from.</param>
+        /// <param name="tempoMap"><see cref="TempoMap"/> to use for time/length conversions.</param>
+        /// <param name="settings">Settings according to which collection of <see cref="ITimedObject"/> should
+        /// be deserialized.</param>
+        /// <returns>Collection of <see cref="ITimedObject"/> read from CSV representation from
+        /// <paramref name="stream"/>.</returns>
+        /// <exception cref="ArgumentException"><paramref name="stream"/> doesn't support reading.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occurred:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="stream"/> is <c>null</c>.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="tempoMap"/> is <c>null</c>.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
+        /// <exception cref="FormatException">Invalid CSV representation.</exception>
+        public static ICollection<ITimedObject> DeserializeObjectsFromCsv(
             Stream stream,
             TempoMap tempoMap,
             CsvSerializationSettings settings = null)
@@ -189,7 +304,21 @@ namespace Melanchall.DryWetMidi.Tools
             }
         }
 
-        public static IEnumerable<ITimedObject> DeserializeObjectsFromCsv(
+        /// <summary>
+        /// Reads collection of <see cref="ITimedObject"/> represented as CSV from the specified file.
+        /// </summary>
+        /// <param name="filePath">Path to the file to read objects from.</param>
+        /// <param name="tempoMap"><see cref="TempoMap"/> to use for time/length conversions.</param>
+        /// <param name="settings">Settings according to which collection of <see cref="ITimedObject"/> should
+        /// be deserialized.</param>
+        /// <returns>Collection of <see cref="ITimedObject"/> read from CSV representation from
+        /// <paramref name="filePath"/>.</returns>
+        /// <exception cref="ArgumentException"><paramref name="filePath"/> is <c>null</c>, a zero-length string,
+        /// contains only white space, or contains one or more invalid characters as defined by
+        /// <see cref="Path.InvalidPathChars"/>.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="tempoMap"/> is <c>null</c>.</exception>
+        /// <exception cref="FormatException">Invalid CSV representation.</exception>
+        public static ICollection<ITimedObject> DeserializeObjectsFromCsv(
             string filePath,
             TempoMap tempoMap,
             CsvSerializationSettings settings = null)

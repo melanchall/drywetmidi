@@ -66,11 +66,11 @@ namespace Melanchall.DryWetMidi.Tools
                     (e, s) => e.Data),
                 [MidiEventType.NoteOn] = GetParameters<NoteOnEvent>(
                     (e, s) => e.Channel,
-                    (e, s) => CsvFormattingUtilities.FormatNoteNumber(e.NoteNumber, s.NoteNumberFormat),
+                    (e, s) => CsvFormattingUtilities.FormatNoteNumber(e.NoteNumber, s.NoteFormat),
                     (e, s) => e.Velocity),
                 [MidiEventType.NoteOff] = GetParameters<NoteOffEvent>(
                     (e, s) => e.Channel,
-                    (e, s) => CsvFormattingUtilities.FormatNoteNumber(e.NoteNumber, s.NoteNumberFormat),
+                    (e, s) => CsvFormattingUtilities.FormatNoteNumber(e.NoteNumber, s.NoteFormat),
                     (e, s) => e.Velocity),
                 [MidiEventType.PitchBend] = GetParameters<PitchBendEvent>(
                     (e, s) => e.Channel,
@@ -87,7 +87,7 @@ namespace Melanchall.DryWetMidi.Tools
                     (e, s) => e.AftertouchValue),
                 [MidiEventType.NoteAftertouch] = GetParameters<NoteAftertouchEvent>(
                     (e, s) => e.Channel,
-                    (e, s) => CsvFormattingUtilities.FormatNoteNumber(e.NoteNumber, s.NoteNumberFormat),
+                    (e, s) => CsvFormattingUtilities.FormatNoteNumber(e.NoteNumber, s.NoteFormat),
                     (e, s) => e.AftertouchValue),
                 [MidiEventType.NormalSysEx] = GetParameters<NormalSysExEvent>(
                     (e, s) => e.Data),

@@ -44,6 +44,7 @@ header .navbar-inverse {
 
 .navbar-inverse .navbar-nav > .active > a, .navbar-inverse .navbar-nav > .active > a:focus, .navbar-inverse .navbar-nav > .active > a:hover {
     background-color: #EC5508;
+    font-weight: bold;
 }
 
 .btn.focus, .btn:focus, .btn:hover {

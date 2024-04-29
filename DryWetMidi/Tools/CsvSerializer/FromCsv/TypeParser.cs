@@ -16,7 +16,7 @@ namespace Melanchall.DryWetMidi.Tools
         public static readonly ParameterParser SevenBitNumber = (p, s) => (SevenBitNumber)byte.Parse(p);
         public static readonly ParameterParser NoteNumber = (p, s) =>
         {
-            switch (s.NoteNumberFormat)
+            switch (s.NoteFormat)
             {
                 case CsvNoteFormat.NoteNumber:
                     return SevenBitNumber(p, s);

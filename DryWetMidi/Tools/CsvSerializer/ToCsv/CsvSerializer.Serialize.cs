@@ -8,10 +8,45 @@ using System.Linq;
 
 namespace Melanchall.DryWetMidi.Tools
 {
+    /// <summary>
+    /// Provides methods to serialize MIDI data to CSV and deserialize it back. More info in the
+    /// <see href="xref:a_csv_serializer">CSV serializer</see> article.
+    /// </summary>
+    /// <seealso cref="CsvSerializer"/>
     public static partial class CsvSerializer
     {
         #region Methods
 
+        /// <summary>
+        /// Writes the specified <see cref="MidiFile"/> to a stream in CSV format.
+        /// </summary>
+        /// <param name="midiFile"><see cref="MidiFile"/> to serialize to CSV representation.</param>
+        /// <param name="stream"><see cref="Stream"/> to write the <paramref name="midiFile"/> to.</param>
+        /// <param name="settings">Settings according to which <paramref name="midiFile"/> should be serialized.</param>
+        /// <param name="objectType">Types of objects within track chunks of the <paramref name="midiFile"/>
+        /// to serialize (see Remarks section).</param>
+        /// <param name="objectDetectionSettings">Settings according to which objects within track chunks should be
+        /// detected and built.</param>
+        /// <remarks>
+        /// <paramref name="objectType"/> defines what kind of objects to put to the <paramref name="objectType"/>
+        /// as CSV. For example, if you specify <see cref="ObjectType.TimedEvent"/>, all events within track chunks
+        /// of the <paramref name="midiFile"/> will be written to the stream. If you specify <see cref="ObjectType.Note"/>,
+        /// only notes will be written. If you specify <see cref="ObjectType.Note"/> | <see cref="ObjectType.TimedEvent"/>,
+        /// events and notes will be written. Please see <see href="xref:a_getting_objects#getobjects">Getting objects: GetObjects</see>
+        /// article to learn more.
+        /// </remarks>
+        /// <exception cref="ArgumentException"><paramref name="stream"/> doesn't support writing.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occurred:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="midiFile"/> is <c>null</c>.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="stream"/> is <c>null</c>.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static void SerializeToCsv(
             this MidiFile midiFile,
             Stream stream,
@@ -42,6 +77,30 @@ namespace Melanchall.DryWetMidi.Tools
             }
         }
 
+        /// <summary>
+        /// Writes the specified <see cref="MidiFile"/> to a file in CSV format.
+        /// </summary>
+        /// <param name="midiFile"><see cref="MidiFile"/> to serialize to CSV representation.</param>
+        /// <param name="filePath">Path to the file to write the <paramref name="midiFile"/> to.</param>
+        /// <param name="overwriteFile">If <c>true</c> and file specified by <paramref name="filePath"/> already
+        /// exists it will be overwritten; if <c>false</c> and the file exists exception will be thrown.</param>
+        /// <param name="settings">Settings according to which <paramref name="midiFile"/> should be serialized.</param>
+        /// <param name="objectType">Types of objects within track chunks of the <paramref name="midiFile"/>
+        /// to serialize (see Remarks section).</param>
+        /// <param name="objectDetectionSettings">Settings according to which objects within track chunks should be
+        /// detected and built.</param>
+        /// <remarks>
+        /// <paramref name="objectType"/> defines what kind of objects to put to the <paramref name="objectType"/>
+        /// as CSV. For example, if you specify <see cref="ObjectType.TimedEvent"/>, all events within track chunks
+        /// of the <paramref name="midiFile"/> will be written to the stream. If you specify <see cref="ObjectType.Note"/>,
+        /// only notes will be written. If you specify <see cref="ObjectType.Note"/> | <see cref="ObjectType.TimedEvent"/>,
+        /// events and notes will be written. Please see <see href="xref:a_getting_objects#getobjects">Getting objects: GetObjects</see>
+        /// article to learn more.
+        /// </remarks>
+        /// <exception cref="ArgumentException"><paramref name="filePath"/> is a zero-length string,
+        /// contains only white space, or contains one or more invalid characters as defined by
+        /// <see cref="Path.InvalidPathChars"/>.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is <c>null</c>.</exception>
         public static void SerializeToCsv(
             this MidiFile midiFile,
             string filePath,
@@ -59,6 +118,40 @@ namespace Melanchall.DryWetMidi.Tools
             }
         }
 
+        /// <summary>
+        /// Writes the specified collection of <see cref="MidiChunk"/> to a stream in CSV format.
+        /// </summary>
+        /// <param name="midiChunks">Collection of <see cref="MidiChunk"/> to serialize to CSV representation.</param>
+        /// <param name="stream"><see cref="Stream"/> to write the <paramref name="midiChunks"/> to.</param>
+        /// <param name="tempoMap"><see cref="TempoMap"/> to use for time/length conversions.</param>
+        /// <param name="settings">Settings according to which <paramref name="midiChunks"/> should be serialized.</param>
+        /// <param name="objectType">Types of objects within track chunks of the <paramref name="midiChunks"/>
+        /// to serialize (see Remarks section).</param>
+        /// <param name="objectDetectionSettings">Settings according to which objects within track chunks should be
+        /// detected and built.</param>
+        /// <remarks>
+        /// <paramref name="objectType"/> defines what kind of objects to put to the <paramref name="objectType"/>
+        /// as CSV. For example, if you specify <see cref="ObjectType.TimedEvent"/>, all events within track chunks
+        /// of the <paramref name="midiChunks"/> will be written to the stream. If you specify <see cref="ObjectType.Note"/>,
+        /// only notes will be written. If you specify <see cref="ObjectType.Note"/> | <see cref="ObjectType.TimedEvent"/>,
+        /// events and notes will be written. Please see <see href="xref:a_getting_objects#getobjects">Getting objects: GetObjects</see>
+        /// article to learn more.
+        /// </remarks>
+        /// <exception cref="ArgumentException"><paramref name="stream"/> doesn't support writing.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occurred:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="midiChunks"/> is <c>null</c>.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="stream"/> is <c>null</c>.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="tempoMap"/> is <c>null</c>.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static void SerializeToCsv(
             this IEnumerable<MidiChunk> midiChunks,
             Stream stream,
@@ -88,6 +181,41 @@ namespace Melanchall.DryWetMidi.Tools
             }
         }
 
+        /// <summary>
+        /// Writes the specified collection of <see cref="MidiChunk"/> to a file in CSV format.
+        /// </summary>
+        /// <param name="midiChunks">Collection of <see cref="MidiChunk"/> to serialize to CSV representation.</param>
+        /// <param name="filePath">Path to the file to write the <paramref name="midiChunks"/> to.</param>
+        /// <param name="overwriteFile">If <c>true</c> and file specified by <paramref name="filePath"/> already
+        /// exists it will be overwritten; if <c>false</c> and the file exists exception will be thrown.</param>
+        /// <param name="tempoMap"><see cref="TempoMap"/> to use for time/length conversions.</param>
+        /// <param name="settings">Settings according to which <paramref name="midiChunks"/> should be serialized.</param>
+        /// <param name="objectType">Types of objects within track chunks of the <paramref name="midiChunks"/>
+        /// to serialize (see Remarks section).</param>
+        /// <param name="objectDetectionSettings">Settings according to which objects within track chunks should be
+        /// detected and built.</param>
+        /// <remarks>
+        /// <paramref name="objectType"/> defines what kind of objects to put to the <paramref name="objectType"/>
+        /// as CSV. For example, if you specify <see cref="ObjectType.TimedEvent"/>, all events within track chunks
+        /// of the <paramref name="midiChunks"/> will be written to the stream. If you specify <see cref="ObjectType.Note"/>,
+        /// only notes will be written. If you specify <see cref="ObjectType.Note"/> | <see cref="ObjectType.TimedEvent"/>,
+        /// events and notes will be written. Please see <see href="xref:a_getting_objects#getobjects">Getting objects: GetObjects</see>
+        /// article to learn more.
+        /// </remarks>
+        /// <exception cref="ArgumentException"><paramref name="filePath"/> is a zero-length string,
+        /// contains only white space, or contains one or more invalid characters as defined by
+        /// <see cref="Path.InvalidPathChars"/>.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occurred:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="midiChunks"/> is <c>null</c>.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="tempoMap"/> is <c>null</c>.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static void SerializeToCsv(
             this IEnumerable<MidiChunk> midiChunks,
             string filePath,
@@ -107,6 +235,40 @@ namespace Melanchall.DryWetMidi.Tools
             }
         }
 
+        /// <summary>
+        /// Writes the specified <see cref="MidiChunk"/> to a stream in CSV format.
+        /// </summary>
+        /// <param name="midiChunk"><see cref="MidiChunk"/> to serialize to CSV representation.</param>
+        /// <param name="stream"><see cref="Stream"/> to write the <paramref name="midiChunk"/> to.</param>
+        /// <param name="tempoMap"><see cref="TempoMap"/> to use for time/length conversions.</param>
+        /// <param name="settings">Settings according to which <paramref name="midiChunk"/> should be serialized.</param>
+        /// <param name="objectType">Types of objects within <paramref name="midiChunk"/> to serialize
+        /// if it's a track chunk (see Remarks section).</param>
+        /// <param name="objectDetectionSettings">Settings according to which objects within a track chunk should be
+        /// detected and built.</param>
+        /// <remarks>
+        /// <paramref name="objectType"/> defines what kind of objects to put to the <paramref name="objectType"/>
+        /// as CSV. For example, if you specify <see cref="ObjectType.TimedEvent"/>, all events within <paramref name="midiChunk"/>
+        /// will be written to the stream if it's a track chunk. If you specify <see cref="ObjectType.Note"/>,
+        /// only notes will be written. If you specify <see cref="ObjectType.Note"/> | <see cref="ObjectType.TimedEvent"/>,
+        /// events and notes will be written. Please see <see href="xref:a_getting_objects#getobjects">Getting objects: GetObjects</see>
+        /// article to learn more.
+        /// </remarks>
+        /// <exception cref="ArgumentException"><paramref name="stream"/> doesn't support writing.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occurred:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="midiChunk"/> is <c>null</c>.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="stream"/> is <c>null</c>.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="tempoMap"/> is <c>null</c>.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static void SerializeToCsv(
             this MidiChunk midiChunk,
             Stream stream,
@@ -131,6 +293,41 @@ namespace Melanchall.DryWetMidi.Tools
             }
         }
 
+        /// <summary>
+        /// Writes the specified <see cref="MidiChunk"/> to a file in CSV format.
+        /// </summary>
+        /// <param name="midiChunk"><see cref="MidiChunk"/> to serialize to CSV representation.</param>
+        /// <param name="filePath">Path to the file to write the <paramref name="midiChunk"/> to.</param>
+        /// <param name="overwriteFile">If <c>true</c> and file specified by <paramref name="filePath"/> already
+        /// exists it will be overwritten; if <c>false</c> and the file exists exception will be thrown.</param>
+        /// <param name="tempoMap"><see cref="TempoMap"/> to use for time/length conversions.</param>
+        /// <param name="settings">Settings according to which <paramref name="midiChunk"/> should be serialized.</param>
+        /// <param name="objectType">Types of objects within <paramref name="midiChunk"/> to serialize
+        /// if it's a track chunk (see Remarks section).</param>
+        /// <param name="objectDetectionSettings">Settings according to which objects within a track chunk should be
+        /// detected and built.</param>
+        /// <remarks>
+        /// <paramref name="objectType"/> defines what kind of objects to put to the <paramref name="objectType"/>
+        /// as CSV. For example, if you specify <see cref="ObjectType.TimedEvent"/>, all events within <paramref name="midiChunk"/>
+        /// will be written to the stream if it's a track chunk. If you specify <see cref="ObjectType.Note"/>,
+        /// only notes will be written. If you specify <see cref="ObjectType.Note"/> | <see cref="ObjectType.TimedEvent"/>,
+        /// events and notes will be written. Please see <see href="xref:a_getting_objects#getobjects">Getting objects: GetObjects</see>
+        /// article to learn more.
+        /// </remarks>
+        /// <exception cref="ArgumentException"><paramref name="filePath"/> is a zero-length string,
+        /// contains only white space, or contains one or more invalid characters as defined by
+        /// <see cref="Path.InvalidPathChars"/>.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occurred:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="midiChunk"/> is <c>null</c>.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="tempoMap"/> is <c>null</c>.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static void SerializeToCsv(
             this MidiChunk midiChunk,
             string filePath,
@@ -150,6 +347,28 @@ namespace Melanchall.DryWetMidi.Tools
             }
         }
 
+        /// <summary>
+        /// Writes the specified objects to a stream in CSV format.
+        /// </summary>
+        /// <param name="timedObjects">Collection of <see cref="ITimedObject"/> to serialize to CSV representation.</param>
+        /// <param name="stream"><see cref="Stream"/> to write the <paramref name="timedObjects"/> to.</param>
+        /// <param name="tempoMap"><see cref="TempoMap"/> to use for time/length conversions.</param>
+        /// <param name="settings">Settings according to which <paramref name="timedObjects"/> should be serialized.</param>
+        /// <exception cref="ArgumentException"><paramref name="stream"/> doesn't support writing.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occurred:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="timedObjects"/> is <c>null</c>.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="stream"/> is <c>null</c>.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="tempoMap"/> is <c>null</c>.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static void SerializeToCsv(
             this IEnumerable<ITimedObject> timedObjects,
             Stream stream,
@@ -171,6 +390,29 @@ namespace Melanchall.DryWetMidi.Tools
             }
         }
 
+        /// <summary>
+        /// Writes the specified objects to a file in CSV format.
+        /// </summary>
+        /// <param name="timedObjects">Collection of <see cref="ITimedObject"/> to serialize to CSV representation.</param>
+        /// <param name="filePath">Path to the file to write the <paramref name="timedObjects"/> to.</param>
+        /// <param name="overwriteFile">If <c>true</c> and file specified by <paramref name="filePath"/> already
+        /// exists it will be overwritten; if <c>false</c> and the file exists exception will be thrown.</param>
+        /// <param name="tempoMap"><see cref="TempoMap"/> to use for time/length conversions.</param>
+        /// <param name="settings">Settings according to which <paramref name="timedObjects"/> should be serialized.</param>
+        /// <exception cref="ArgumentException"><paramref name="filePath"/> is a zero-length string,
+        /// contains only white space, or contains one or more invalid characters as defined by
+        /// <see cref="Path.InvalidPathChars"/>.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occurred:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="timedObjects"/> is <c>null</c>.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="tempoMap"/> is <c>null</c>.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static void SerializeToCsv(
             this IEnumerable<ITimedObject> timedObjects,
             string filePath,
@@ -384,7 +626,7 @@ namespace Melanchall.DryWetMidi.Tools
                 note,
                 CsvFormattingUtilities.FormatLength(note, settings.LengthType, tempoMap),
                 note.Channel,
-                CsvFormattingUtilities.FormatNoteNumber(note.NoteNumber, settings.NoteNumberFormat),
+                CsvFormattingUtilities.FormatNoteNumber(note.NoteNumber, settings.NoteFormat),
                 note.Velocity,
                 note.OffVelocity);
         }

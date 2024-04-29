@@ -33,7 +33,7 @@
 ## [Resizer](tools/Resizer.md)
 ## [Repeater](tools/Repeater.md)
 ## [Sanitizer](tools/Sanitizer.md)
-## [CSV converter](xref:Melanchall.DryWetMidi.Tools.CsvConverter)
+## [CSV serializer](tools/CSV-serializer.md)
 
 # Composing
 ## [Pattern](composing/Pattern.md)
