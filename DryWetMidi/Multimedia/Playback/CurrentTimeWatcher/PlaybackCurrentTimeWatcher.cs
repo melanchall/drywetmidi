@@ -203,11 +203,11 @@ namespace Melanchall.DryWetMidi.Multimedia
         {
             ThrowIfArgument.IsNull(nameof(playback), playback);
             ThrowIfArgument.IsInvalidEnumValue(nameof(timeType), timeType);
-            ThrowIfArgument.DoesntSatisfyCondition(nameof(playback), playback, p => _playbacks.ContainsKey(p), "Playback is not being watched.");
             EnsureIsNotDisposed();
 
             lock (_playbacksLock)
             {
+                ThrowIfArgument.DoesntSatisfyCondition(nameof(playback), playback, p => _playbacks.ContainsKey(p), "Playback is not being watched.");
                 _playbacks[playback] = timeType;
             }
         }

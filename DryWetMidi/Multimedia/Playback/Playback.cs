@@ -85,7 +85,6 @@ namespace Melanchall.DryWetMidi.Multimedia
         private readonly long _durationInTicks;
 
         private ITimeSpan _playbackStart;
-        private TimeSpan _playbackStartMetric = MinPlaybackTime;
         private ITimeSpan _playbackEnd;
         private TimeSpan _playbackEndMetric = MaxPlaybackTime;
 
@@ -442,13 +441,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         public ITimeSpan PlaybackStart
         {
             get { return _playbackStart; }
-            set
-            {
-                _playbackStart = value;
-                _playbackStartMetric = _playbackStart != null
-                    ? (TimeSpan)TimeConverter.ConvertTo<MetricTimeSpan>(_playbackStart, TempoMap)
-                    : MinPlaybackTime;
-            }
+            set { _playbackStart = value; }
         }
 
         /// <summary>

@@ -42,33 +42,35 @@ namespace Melanchall.DryWetMidi.Interaction
             IEnumerable<ITimedObject> objects,
             IEnumerable<Rest> rests)
         {
-            var objectsEnumerator = objects.GetEnumerator();
-            var objectCanBeTaken = objectsEnumerator.MoveNext();
-
-            var restsEnumerator = rests.GetEnumerator();
-            var restCanBeTaken = restsEnumerator.MoveNext();
-
-            while (objectCanBeTaken && restCanBeTaken)
+            using (var objectsEnumerator = objects.GetEnumerator())
+            using (var restsEnumerator = rests.GetEnumerator())
             {
-                var rest = restsEnumerator.Current;
-                var obj = objectsEnumerator.Current;
+                var objectCanBeTaken = objectsEnumerator.MoveNext();
 
-                if (obj.Time <= rest.Time)
+                var restCanBeTaken = restsEnumerator.MoveNext();
+
+                while (objectCanBeTaken && restCanBeTaken)
                 {
-                    yield return obj;
+                    var rest = restsEnumerator.Current;
+                    var obj = objectsEnumerator.Current;
+
+                    if (obj.Time <= rest.Time)
+                    {
+                        yield return obj;
+                        objectCanBeTaken = objectsEnumerator.MoveNext();
+                    }
+                    else
+                    {
+                        yield return rest;
+                        restCanBeTaken = restsEnumerator.MoveNext();
+                    }
+                }
+
+                while (objectCanBeTaken)
+                {
+                    yield return objectsEnumerator.Current;
                     objectCanBeTaken = objectsEnumerator.MoveNext();
                 }
-                else
-                {
-                    yield return rest;
-                    restCanBeTaken = restsEnumerator.MoveNext();
-                }
-            }
-
-            while (objectCanBeTaken)
-            {
-                yield return objectsEnumerator.Current;
-                objectCanBeTaken = objectsEnumerator.MoveNext();
             }
         }
 

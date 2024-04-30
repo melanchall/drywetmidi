@@ -131,7 +131,7 @@ namespace Melanchall.DryWetMidi.Interaction
         public ValueLine<TValue> Reverse(long centerTime)
         {
             var maxTime = 2 * centerTime;
-            var changes = this.TakeWhile(c => c.Time <= maxTime);
+            var changes = this.TakeWhile(c => c.Time <= maxTime).ToArray();
 
             var values = new[] { _defaultValue }.Concat(changes.Select(c => c.Value)).Reverse();
             var times = new[] { 0L }.Concat(changes.Select(c => maxTime - c.Time).Reverse());

@@ -4,7 +4,7 @@
     {
         #region Constrcutor
 
-        public CsvObject(int? chunkIndex, string chunkId, int? objectIndex)
+        protected CsvObject(int? chunkIndex, string chunkId, int? objectIndex)
         {
             ChunkIndex = chunkIndex;
             ChunkId = chunkId;

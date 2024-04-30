@@ -181,8 +181,8 @@ namespace Melanchall.DryWetMidi.Multimedia
 
             if (disposing)
             {
-                InputDevice?.Dispose(disposing);
-                OutputDevice?.Dispose(disposing);
+                InputDevice?.Dispose(true);
+                OutputDevice?.Dispose(true);
                 _handle?.Dispose();
             }
 

@@ -668,7 +668,7 @@ namespace Melanchall.DryWetMidi.Tools
             params object[] values)
         {
             writer.WriteRecord(
-                new object[]
+                new[]
                 {
                     chunkIndex,
                     chunkId,

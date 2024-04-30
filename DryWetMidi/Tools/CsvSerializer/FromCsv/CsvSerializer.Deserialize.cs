@@ -568,6 +568,7 @@ namespace Melanchall.DryWetMidi.Tools
             CsvSerializationSettings settings,
             bool parseChunkId)
         {
+            // TODO
             //if (record.TrackNumber == null)
             //    CsvError.ThrowBadFormat(record.CsvRecord.LineNumber, "Invalid track number.");
             //
@@ -600,6 +601,7 @@ namespace Melanchall.DryWetMidi.Tools
             CsvSerializationSettings settings,
             bool parseChunkId)
         {
+            // TODO
             //if (record.TrackNumber == null)
             //    CsvError.ThrowBadFormat(record.CsvRecord.LineNumber, "Invalid track number.");
             //
@@ -632,7 +634,7 @@ namespace Melanchall.DryWetMidi.Tools
             return new CsvNote(noteNumber, velocity, offVelocity, channel, length, record.ChunkIndex, record.ChunkId, record.ObjectIndex, time);
         }
 
-        private static TempoMap GetTempoMap(IEnumerable<CsvObject> objects, TimeDivision timeDivision)
+        private static TempoMap GetTempoMap(ICollection<CsvObject> objects, TimeDivision timeDivision)
         {
             using (var tempoMapManager = new TempoMapManager(timeDivision))
             {
