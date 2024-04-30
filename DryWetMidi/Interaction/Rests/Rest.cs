@@ -2,6 +2,11 @@
 
 namespace Melanchall.DryWetMidi.Interaction
 {
+    /// <summary>
+    /// Represents a musical rest. More info in the <see href="xref:a_getting_objects#rests">Getting objects: Rests</see> article.
+    /// </summary>
+    /// <seealso cref="RestsUtilities"/>
+    /// <seealso cref="RestDetectionSettings"/>
     public sealed class Rest : ILengthedObject, INotifyTimeChanged, INotifyLengthChanged
     {
         #region Events
@@ -39,15 +44,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
         #region Properties
 
-        /// <summary>
-        /// Gets start time of an object.
-        /// </summary>
-        /// <remarks>
-        /// Note that the returned value will be in ticks (not seconds, not milliseconds and so on).
-        /// Please read <see href="xref:a_time_length">Time and length</see> article to learn how you can
-        /// get the time in different representations.
-        /// </remarks>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="value"/> is negative.</exception>
+        /// <inheritdoc/>
         public long Time
         {
             get { return _time; }
@@ -64,15 +61,7 @@ namespace Melanchall.DryWetMidi.Interaction
             }
         }
 
-        /// <summary>
-        /// Gets length of an object.
-        /// </summary>
-        /// <remarks>
-        /// Note that the returned value will be in ticks (not seconds, not milliseconds and so on).
-        /// Please read <see href="xref:a_time_length">Time and length</see> article to learn how you can
-        /// get the length in different representations.
-        /// </remarks>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="value"/> is negative.</exception>
+        /// <inheritdoc/>
         public long Length
         {
             get { return _length; }
@@ -89,11 +78,14 @@ namespace Melanchall.DryWetMidi.Interaction
             }
         }
 
-        /// <summary>
-        /// Gets the end time of an object.
-        /// </summary>
+        /// <inheritdoc/>
         public long EndTime => Time + Length;
 
+        /// <summary>
+        /// Gets the key of objects the current rest has been built for. Please read
+        /// <see href="xref:a_getting_objects#rests">Getting objects: Rests</see> article to
+        /// understand the key concept.
+        /// </summary>
         public object Key { get; }
 
         #endregion

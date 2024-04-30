@@ -121,3 +121,27 @@ var midiFile = new MidiFile(
 [RemoveEventsOnUnusedChannels](xref:Melanchall.DryWetMidi.Tools.SanitizingSettings.RemoveEventsOnUnusedChannels) property turns on or off removing such channel events that have no effect since ther are no notes on those channels:
 
 ![SanitizingSettings.RemoveEventsOnUnusedChannels](images/Sanitizer/RemoveEventsOnUnusedChannels.png)
+
+### Trim
+
+[Trim](xref:Melanchall.DryWetMidi.Tools.SanitizingSettings.Trim) property allows to automatically remove an empty space at the start of a MIDI file. For example:
+
+```csharp
+var midiFile = new MidiFile(
+    new TrackChunk(
+        new TextEvent("A") { DeltaTime = 20 }),
+    new TrackChunk(
+        new TextEvent("B") { DeltaTime = 30 },
+        new TextEvent("C") { DeltaTime = 15 }));
+```
+
+Here we have a silence of 20 ticks at the start of the file. So after sanitizing with `Trim` property set to `true` (the default value) we will have this file:
+
+```csharp
+var midiFile = new MidiFile(
+    new TrackChunk(
+        new TextEvent("A") { DeltaTime = 0 }),
+    new TrackChunk(
+        new TextEvent("B") { DeltaTime = 10 },
+        new TextEvent("C") { DeltaTime = 15 }));
+```

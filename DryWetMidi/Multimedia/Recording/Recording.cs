@@ -27,6 +27,9 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// </summary>
         public event EventHandler Stopped;
 
+        /// <summary>
+        /// Occurs when a MIDI event is captured by the current recording.
+        /// </summary>
         public event EventHandler<MidiEventRecordedEventArgs> EventRecorded;
 
         #endregion

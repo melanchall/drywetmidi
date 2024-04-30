@@ -5,26 +5,69 @@ using System.Linq;
 
 namespace Melanchall.DryWetMidi.Interaction
 {
+    /// <summary>
+    /// Provides methods to get rests between different objects.
+    /// </summary>
     public static class RestsUtilities
     {
         #region Methods
 
+        /// <summary>
+        /// Returns a collection of the specified objects and rests between them according to
+        /// the provided settings. Objects (including rests) in the result collection are
+        /// ordered by time.
+        /// </summary>
+        /// <param name="timedObjects">The input objects collection.</param>
+        /// <param name="settings">Settings according to which rests should be detected and built.</param>
+        /// <returns>Collection with objects from <paramref name="timedObjects"/> and rests
+        /// between them.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occurred:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="timedObjects"/> is <c>null</c>.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="settings"/> is <c>null</c>.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static IEnumerable<ITimedObject> WithRests(
             this IEnumerable<ITimedObject> timedObjects,
             RestDetectionSettings settings)
         {
             ThrowIfArgument.IsNull(nameof(timedObjects), timedObjects);
+            ThrowIfArgument.IsNull(nameof(settings), settings);
 
             timedObjects = GetSortedObjects(timedObjects);
             var rests = GetSortedRestsFromObjects(timedObjects, settings);
             return EnumerateObjectsAndRests(timedObjects, rests);
         }
 
+        /// <summary>
+        /// Returns rests between objects within the specified collection according to
+        /// the provided settings. Rests in the result collection are ordered by time.
+        /// </summary>
+        /// <param name="timedObjects">The input objects collection.</param>
+        /// <param name="settings">Settings according to which rests should be detected and built.</param>
+        /// <returns>Collection of rests between objects within <paramref name="timedObjects"/>.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occurred:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="timedObjects"/> is <c>null</c>.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="settings"/> is <c>null</c>.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static ICollection<Rest> GetRests(
             this IEnumerable<ITimedObject> timedObjects,
             RestDetectionSettings settings)
         {
             ThrowIfArgument.IsNull(nameof(timedObjects), timedObjects);
+            ThrowIfArgument.IsNull(nameof(settings), settings);
 
             timedObjects = GetSortedObjects(timedObjects);
             return GetSortedRestsFromObjects(timedObjects, settings);

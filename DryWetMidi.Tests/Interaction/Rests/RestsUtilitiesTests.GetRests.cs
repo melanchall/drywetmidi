@@ -56,6 +56,42 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 });
         }
 
+        [TestCase(10, 10, 50, 50)]
+        [TestCase(10, 2, 50, 50)]
+        [TestCase(10, 10, 50, 100)]
+        [TestCase(10, 2, 50, 100)]
+        public void GetRests_Notes_SameKey_PredefinedKeySelector(
+            byte channel1,
+            byte channel2,
+            byte noteNumber1,
+            byte noteNumber2)
+        {
+            GetRests(
+                restDetectionSettings: RestDetectionSettings.NoNotes,
+                inputObjects: new ITimedObject[]
+                {
+                    new Note((SevenBitNumber)noteNumber1, 100, 10) { Channel = (FourBitNumber)channel2 },
+                    new Note((SevenBitNumber)noteNumber1, 100, 30) { Channel = (FourBitNumber)channel1 },
+                    new Note((SevenBitNumber)noteNumber2, 50, 300) { Channel = (FourBitNumber)channel2 },
+                    new Note((SevenBitNumber)noteNumber1, 500, 1000) { Channel = (FourBitNumber)channel1 },
+                    new Note((SevenBitNumber)noteNumber2, 150, 1200) { Channel = (FourBitNumber)channel2 },
+                    new Note((SevenBitNumber)noteNumber1, 1000, 1300) { Channel = (FourBitNumber)channel1 },
+                    new Note((SevenBitNumber)noteNumber2, 1000, 10000) { Channel = (FourBitNumber)channel2 },
+                    new Note((SevenBitNumber)noteNumber1, 1000, 100000) { Channel = (FourBitNumber)channel1 },
+                    new Note((SevenBitNumber)noteNumber2, 10, 100100) { Channel = (FourBitNumber)channel2 },
+                    new Note((SevenBitNumber)noteNumber1, 10, 110000) { Channel = (FourBitNumber)channel1 },
+                },
+                expectedRests: new[]
+                {
+                    new Rest(0, 10, "Note"),
+                    new Rest(130, 170, "Note"),
+                    new Rest(350, 650, "Note"),
+                    new Rest(2300, 7700, "Note"),
+                    new Rest(11000, 89000, "Note"),
+                    new Rest(101000, 9000, "Note"),
+                });
+        }
+
         [TestCase(10, 10)]
         [TestCase(10, 50)]
         public void GetRests_Notes_RestsByChannel_SameChannel(
@@ -96,6 +132,36 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
             GetRests(
                 keySelector: obj => (obj as Note)?.Channel,
+                inputObjects: new ITimedObject[]
+                {
+                    new Note((SevenBitNumber)noteNumber1, 100, 10) { Channel = channel1 },
+                    new Note((SevenBitNumber)noteNumber1, 100, 30) { Channel = channel2 },
+                    new Note((SevenBitNumber)noteNumber2, 50, 300) { Channel = channel1 },
+                    new Note((SevenBitNumber)noteNumber1, 500, 1000) { Channel = channel2 },
+                    new Note((SevenBitNumber)noteNumber2, 150, 1200) { Channel = channel1 },
+                    new Note((SevenBitNumber)noteNumber1, 1000, 1300) { Channel = channel2 },
+                },
+                expectedRests: new[]
+                {
+                    new Rest(0, 10, channel1),
+                    new Rest(0, 30, channel2),
+                    new Rest(110, 190, channel1),
+                    new Rest(130, 870, channel2),
+                    new Rest(350, 850, channel1),
+                });
+        }
+
+        [TestCase(10, 10)]
+        [TestCase(10, 50)]
+        public void GetRests_Notes_RestsByChannel_PredefinedKeySelector(
+            byte noteNumber1,
+            byte noteNumber2)
+        {
+            var channel1 = (FourBitNumber)10;
+            var channel2 = (FourBitNumber)2;
+
+            GetRests(
+                restDetectionSettings: RestDetectionSettings.NoNotesByChannel,
                 inputObjects: new ITimedObject[]
                 {
                     new Note((SevenBitNumber)noteNumber1, 100, 10) { Channel = channel1 },
@@ -168,6 +234,32 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 });
         }
 
+        [TestCase(10, 10)]
+        [TestCase(10, 5)]
+        public void GetRests_Notes_RestsByNoteNumber_PredefinedKeySelector(
+            byte channel1,
+            byte channel2)
+        {
+            var noteNumber1 = (SevenBitNumber)10;
+            var noteNumber2 = (SevenBitNumber)100;
+
+            GetRests(
+                restDetectionSettings: RestDetectionSettings.NoNotesByNoteNumber,
+                inputObjects: new ITimedObject[]
+                {
+                    new Note(noteNumber1, 100, 0) { Channel = (FourBitNumber)channel2 },
+                    new Note(noteNumber2, 100, 30) { Channel = (FourBitNumber)channel1 },
+                    new Note(noteNumber1, 50, 300) { Channel = (FourBitNumber)channel2 },
+                    new Note(noteNumber2, 500, 1000) { Channel = (FourBitNumber)channel1 },
+                },
+                expectedRests: new[]
+                {
+                    new Rest(0, 30, noteNumber2),
+                    new Rest(100, 200, noteNumber1),
+                    new Rest(130, 870, noteNumber2),
+                });
+        }
+
         [Test]
         public void GetRests_Notes_RestsByChannelAndNoteNumber()
         {
@@ -195,6 +287,36 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     new Rest(0, 1000, (channel2, noteNumber2)),
                     new Rest(110, 1090, (channel1, noteNumber1)),
                     new Rest(130, 1170, (channel1, noteNumber2)),
+                });
+        }
+
+        [Test]
+        public void GetRests_Notes_RestsByChannelAndNoteNumber_PredefinedKeySelector()
+        {
+            var noteNumber1 = (SevenBitNumber)10;
+            var noteNumber2 = (SevenBitNumber)100;
+            var channel1 = (FourBitNumber)10;
+            var channel2 = (FourBitNumber)2;
+
+            GetRests(
+                restDetectionSettings: RestDetectionSettings.NoNotesByChannelAndNoteNumber,
+                inputObjects: new ITimedObject[]
+                {
+                    new Note(noteNumber1, 100, 10) { Channel = channel1 },
+                    new Note(noteNumber2, 100, 30) { Channel = channel1 },
+                    new Note(noteNumber1, 50, 300) { Channel = channel2 },
+                    new Note(noteNumber2, 500, 1000) { Channel = channel2 },
+                    new Note(noteNumber1, 150, 1200) { Channel = channel1 },
+                    new Note(noteNumber2, 1000, 1300) { Channel = channel1 },
+                },
+                expectedRests: new[]
+                {
+                    new Rest(0, 10, Tuple.Create(channel1, noteNumber1)),
+                    new Rest(0, 30, Tuple.Create(channel1, noteNumber2)),
+                    new Rest(0, 300, Tuple.Create(channel2, noteNumber1)),
+                    new Rest(0, 1000, Tuple.Create(channel2, noteNumber2)),
+                    new Rest(110, 1090, Tuple.Create(channel1, noteNumber1)),
+                    new Rest(130, 1170, Tuple.Create(channel1, noteNumber2)),
                 });
         }
 
@@ -442,6 +564,18 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 {
                     KeySelector = keySelector
                 })
+                .ToArray();
+
+            MidiAsserts.AreEqual(expectedRests, actualRests, true, 0, "Rests are invalid.");
+        }
+
+        private void GetRests(
+            RestDetectionSettings restDetectionSettings,
+            IEnumerable<ITimedObject> inputObjects,
+            IEnumerable<Rest> expectedRests)
+        {
+            var actualRests = inputObjects
+                .GetRests(restDetectionSettings)
                 .ToArray();
 
             MidiAsserts.AreEqual(expectedRests, actualRests, true, 0, "Rests are invalid.");

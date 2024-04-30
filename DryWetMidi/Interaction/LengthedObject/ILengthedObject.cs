@@ -10,8 +10,14 @@ namespace Melanchall.DryWetMidi.Interaction
         #region Properties
 
         /// <summary>
-        /// Gets or sets the length of an object.
+        /// Gets the length of an object.
         /// </summary>
+        /// <remarks>
+        /// Note that the returned value will be in ticks (not seconds, not milliseconds and so on).
+        /// Please read <see href="xref:a_time_length">Time and length</see> article to learn how you can
+        /// get the length in different representations.
+        /// </remarks>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="value"/> is negative.</exception>
         long Length { get; set; }
 
         /// <summary>

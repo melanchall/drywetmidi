@@ -1,4 +1,6 @@
-﻿namespace Melanchall.DryWetMidi.Interaction
+﻿using System;
+
+namespace Melanchall.DryWetMidi.Interaction
 {
     /// <summary>
     /// Represents an object that has time.
@@ -8,8 +10,14 @@
         #region Properties
 
         /// <summary>
-        /// Gets or sets the time of an object.
+        /// Gets the start time of an object.
         /// </summary>
+        /// <remarks>
+        /// Note that the returned value will be in ticks (not seconds, not milliseconds and so on).
+        /// Please read <see href="xref:a_time_length">Time and length</see> article to learn how you can
+        /// get the time in different representations.
+        /// </remarks>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="value"/> is negative.</exception>
         long Time { get; set; }
 
         #endregion

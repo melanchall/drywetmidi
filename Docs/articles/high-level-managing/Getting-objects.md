@@ -510,6 +510,13 @@ An important concept we need to discuss is a key selection. Key is used to calcu
 
 In the code above we're saying: _The key of each object is 0_. So for the rests building algorithm all objects are same, there is no difference between channels and note numbers, for example. So rests will be constructed only at spaces where there are no notes at all (with any channels and any note numbers).
 
+Also please take a look at the predefined key selectors available via constants of the [RestDetectionSettings](xref:Melanchall.DryWetMidi.Interaction.RestDetectionSettings). We can rewrite code above:
+
+```csharp
+var notesAndRests = notes
+    .WithRests(RestDetectionSettings.NoNotes);
+```
+
 Using following code:
 
 ```csharp
