@@ -466,127 +466,75 @@ WriteTimedObjects(midiFile.GetObjects(
 <li><a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.Chord.html">Chord</a></li>
 <li><a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.Rest.html">Rest</a></li>
 </ul>
-<h3 id="rests">Rests</h3>
-<p>Let's see on rests building in details, since <code>GetObjects</code> is the only way to get them. First of all, all <code>GetObjects</code> overloads accept settings as an instance of the <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings.html">ObjectDetectionSettings</a> class. Most of its properties are already discussed in previous sections on <a href="#settings">notes building settings</a> and <a href="#settings-1">chords building ones</a>. But there is the <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings.html#Melanchall_DryWetMidi_Interaction_ObjectDetectionSettings_RestDetectionSettings">RestDetectionSettings</a> property which controls how rests should be detected.</p>
+<h2 id="rests">Rests</h2>
+<p>To build rests you need to use extension methods from the <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.RestsUtilities.html">RestsUtilities</a> class.</p>
+<p>If you take a look into the class, you'll discover two methods – <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.RestsUtilities.html#Melanchall_DryWetMidi_Interaction_RestsUtilities_WithRests_">WithRests</a> and <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.RestsUtilities.html#Melanchall_DryWetMidi_Interaction_RestsUtilities_GetRests_">GetRests</a>. The first one adds rests to a collection of objects you've passed to the method. The second method returns rests only.</p>
+<p>It will be much easier to understand how rests building works with examples. So let's look on <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.RestsUtilities.html#Melanchall_DryWetMidi_Interaction_RestsUtilities_WithRests_">WithRests</a> (there is no great value to discuss <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.RestsUtilities.html#Melanchall_DryWetMidi_Interaction_RestsUtilities_GetRests_">GetRests</a> since it works in the same way but just returns rests only).</p>
 <p>Supposing we have following notes (with two different note numbers on two different channels):</p>
 <p><img src="images/Getting-objects-GetObjects-Rests-Initial.png" alt="GetObjects-Rests-Initial"></p>
-<p><a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.RestDetectionSettings.html">RestDetectionSettings</a> provides <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.RestDetectionSettings.html#Melanchall_DryWetMidi_Interaction_RestDetectionSettings_RestSeparationPolicy">RestSeparationPolicy</a> property which determines a rule for creating rests. Now we'll see how each possible value of the policy affects the result of rests building.</p>
-<p>Using <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.RestSeparationPolicy.html#Melanchall_DryWetMidi_Interaction_RestSeparationPolicy_NoSeparation">NoSeparation</a> (which is the default value) we'll get only one rest:</p>
+<p>Using following code:</p>
+<pre><code class="lang-csharp">var notesAndRests = notes
+    .WithRests(new RestDetectionSettings
+    {
+        KeySelector = obj =&gt; 0
+    });
+</code></pre>
+<p>we'll get only one rest:</p>
 <p><img src="images/Getting-objects-GetObjects-Rests-NoSeparation.png" alt="GetObjects-Rests-NoSeparation"></p>
-<p><em>&quot;No separation&quot;</em> means <em>&quot;there is no difference between channels and note numbers&quot;</em> so rests will be constructed only at spaces where there are no notes at all (with any channels and any note numbers).</p>
-<p>With <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.RestSeparationPolicy.html#Melanchall_DryWetMidi_Interaction_RestSeparationPolicy_SeparateByChannel">SeparateByChannel</a> we'll get three rests:</p>
+<p>An important concept we need to discuss is a key selection. Key is used to calculate rests. Rests are always calculated only between objects with the same key. If an object with different key is encountered, rests will be calculated for that key.</p>
+<p>In the code above we're saying: <em>The key of each object is 0</em>. So for the rests building algorithm all objects are same, there is no difference between channels and note numbers, for example. So rests will be constructed only at spaces where there are no notes at all (with any channels and any note numbers).</p>
+<p>Also please take a look at the predefined key selectors available via constants of the <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.RestDetectionSettings.html">RestDetectionSettings</a>. We can rewrite code above:</p>
+<pre><code class="lang-csharp">var notesAndRests = notes
+    .WithRests(RestDetectionSettings.NoNotes);
+</code></pre>
+<p>Using following code:</p>
+<pre><code class="lang-csharp">var notesAndRests = notes
+    .WithRests(new RestDetectionSettings
+    {
+        KeySelector = obj =&gt; (obj as Note)?.Channel
+    });
+</code></pre>
+<p>we'll get three rests now:</p>
 <p><img src="images/Getting-objects-GetObjects-Rests-SeparateByChannel.png" alt="GetObjects-Rests-SeparateByChannel"></p>
-<p>So rests are separated by channels only. Note number of a note doesn't matter, all numbers are treated as the same one. So rests will be constructed for each channel at spaces where there are no notes (with any note numbers).</p>
-<p>With <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.RestSeparationPolicy.html#Melanchall_DryWetMidi_Interaction_RestSeparationPolicy_SeparateByNoteNumber">SeparateByNoteNumber</a> we'll get following rests:</p>
+<p>So rests are separated by channels. Channel is the key of an object. Note number of a note doesn't matter, all numbers are treated as the same one. So rests will be constructed separately for each channel at spaces where there are no notes (with any note numbers).</p>
+<p>The key for which a rest has been built will be store in the <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.Rest.html#Melanchall_DryWetMidi_Interaction_Rest_Key">Key</a> property of <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.Rest.html">Rest</a> class. <code>notesAndRests</code> is a collection containing both <code>notes</code> and calculated rests, and elements of this collection are sorted by their times.</p>
+<p>Note that you can build rests for objects of different types. Why not to get chords from a MIDI file and add rests between them?</p>
+<pre><code class="lang-csharp">var chordsAndRests = midiFile
+    .GetObjects(ObjectType.Chord)
+    .WithRests(new RestDetectionSettings
+    {
+        KeySelector = obj =&gt; (obj as Chord)?.Channel
+    });
+</code></pre>
+<p>And a couple of words about return value of key selector. If <code>null</code> is returned, an object won't participate in rests building process. It allows you to have rests for desired objects only. For example:</p>
+<pre><code class="lang-csharp">var notesAndChordsAndRests = midiFile
+    .GetObjects(ObjectType.Note | ObjectType.Chord)
+    .WithRests(new RestDetectionSettings
+    {
+        KeySelector = obj =&gt; (obj as Note)?.Channel
+    });
+</code></pre>
+<p>Here we specify that rests will be built for notes only (key selector will return <code>null</code> for an object other than note). So the result collection will have chords, notes and rests between notes with channel as the key.</p>
+<p>And a couple of additional examples with notes presented on the picture above.</p>
+<p>Code:</p>
+<pre><code class="lang-csharp">var notesAndRests = notes
+    .WithRests(new RestDetectionSettings
+    {
+        KeySelector = obj =&gt; (obj as Note)?.NoteNumber
+    });
+</code></pre>
+<p>Rests:</p>
 <p><img src="images/Getting-objects-GetObjects-Rests-SeparateByNoteNumber.png" alt="GetObjects-Rests-SeparateByNoteNumber"></p>
 <p>As you can see rests now are separated by note number (channel doesn't matter). So rests will be constructed for each note number at spaces where there are no notes (with any channel).</p>
-<p>With <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.RestSeparationPolicy.html#Melanchall_DryWetMidi_Interaction_RestSeparationPolicy_SeparateByChannelAndNoteNumber">SeparateByChannelAndNoteNumber</a> we'll get rests at every &quot;free&quot; space:</p>
-<p><img src="images/Getting-objects-GetObjects-Rests-SeparateByChannelAndNoteNumber.png" alt="GetObjects-Rests-SeparateByChannelAndNoteNumber"></p>
-<p>Let's see all these processes in action with a small program:</p>
-<pre><code class="lang-csharp">using System;
-using System.Collections.Generic;
-using System.Linq;
-using Melanchall.DryWetMidi.Common;
-using Melanchall.DryWetMidi.Interaction;
-using NoteName = Melanchall.DryWetMidi.MusicTheory.NoteName;
-
-namespace DwmExamples
-{
-    class Program
+<p>Code:</p>
+<pre><code class="lang-csharp">var notesAndRests = notes
+    .WithRests(new RestDetectionSettings
     {
-        static void Main(string[] args)
-        {
-            var ch0 = (FourBitNumber)0;
-            var a2Ch0Notes = new[]
-            {
-                new Note(NoteName.A, 2, 3, 0) { Channel = ch0 },
-                new Note(NoteName.A, 2, 2, 6) { Channel = ch0 },
-                new Note(NoteName.A, 2, 2, 8) { Channel = ch0 },
-                new Note(NoteName.A, 2, 3, 11) { Channel = ch0 }
-            };
-            var b1Ch0Notes = new[]
-            {
-                new Note(NoteName.B, 1, 3, 1) { Channel = ch0 },
-                new Note(NoteName.B, 1, 4, 4) { Channel = ch0 },
-                new Note(NoteName.B, 1, 1, 13) { Channel = ch0 }
-            };
-
-            var ch1 = (FourBitNumber)1;
-            var a2Ch1Notes = new[]
-            {
-                new Note(NoteName.A, 2, 2, 0) { Channel = ch1 },
-                new Note(NoteName.A, 2, 2, 7) { Channel = ch1 }
-            };
-            var b1Ch1Notes = new[]
-            {
-                new Note(NoteName.B, 1, 3, 1) { Channel = ch1 },
-                new Note(NoteName.B, 1, 3, 5) { Channel = ch1 },
-                new Note(NoteName.B, 1, 2, 12) { Channel = ch1 }
-            };
-
-            var notes = a2Ch0Notes
-                .Concat(b1Ch0Notes)
-                .Concat(a2Ch1Notes)
-                .Concat(b1Ch1Notes)
-                .ToArray();
-
-            WriteRests(notes, RestSeparationPolicy.NoSeparation);
-            WriteRests(notes, RestSeparationPolicy.SeparateByChannel);
-            WriteRests(notes, RestSeparationPolicy.SeparateByNoteNumber);
-            WriteRests(notes, RestSeparationPolicy.SeparateByChannelAndNoteNumber);
-
-            Console.ReadKey();
-        }
-
-        private static void WriteRests(
-            ICollection&lt;Note&gt; notes,
-            RestSeparationPolicy restSeparationPolicy)
-        {
-            var rests = notes
-                .GetObjects(
-                    ObjectType.Rest,
-                    new ObjectDetectionSettings
-                    {
-                        RestDetectionSettings = new RestDetectionSettings
-                        {
-                            RestSeparationPolicy = restSeparationPolicy
-                        }
-                    })
-                .Cast&lt;Rest&gt;()
-                .ToArray();
-
-            Console.WriteLine($&quot;Rests by {restSeparationPolicy} policy:&quot;);
-
-            foreach (var rest in rests)
-            {
-                Console.WriteLine($&quot;[{rest.Length}] at [{rest.Time}] (note number = {rest.NoteNumber}, channel = {rest.Channel})&quot;);
-            }
-        }
-    }
-}
+        KeySelector = obj =&gt; ((obj as Note)?.NoteNumber, (obj as Note)?.NoteNumber)
+    });
 </code></pre>
-<p>Output is:</p>
-<pre><code class="lang-text">Rests by NoSeparation policy:
-[1] at [10] (note number = , channel = )
-Rests by SeparateByChannel policy:
-[1] at [4] (note number = , channel = 1)
-[3] at [9] (note number = , channel = 1)
-[1] at [10] (note number = , channel = 0)
-Rests by SeparateByNoteNumber policy:
-[1] at [0] (note number = 35, channel = )
-[3] at [3] (note number = 45, channel = )
-[4] at [8] (note number = 35, channel = )
-[1] at [10] (note number = 45, channel = )
-Rests by SeparateByChannelAndNoteNumber policy:
-[1] at [0] (note number = 35, channel = 0)
-[1] at [0] (note number = 35, channel = 1)
-[5] at [2] (note number = 45, channel = 1)
-[3] at [3] (note number = 45, channel = 0)
-[1] at [4] (note number = 35, channel = 1)
-[4] at [8] (note number = 35, channel = 1)
-[5] at [8] (note number = 35, channel = 0)
-[1] at [10] (note number = 45, channel = 0)
-</code></pre>
+<p>Now we'll get rests at every &quot;free&quot; space (since the key is a pair of channel and note's number):</p>
+<p><img src="images/Getting-objects-GetObjects-Rests-SeparateByChannelAndNoteNumber.png" alt="GetObjects-Rests-SeparateByChannelAndNoteNumber"></p>
 </article>
           </div>
           

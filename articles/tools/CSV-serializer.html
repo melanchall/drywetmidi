@@ -1,0 +1,363 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>CSV serializer | DryWetMIDI </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="CSV serializer | DryWetMIDI ">
+    <meta name="generator" content="docfx 2.59.4.0">
+    
+    <link rel="shortcut icon" href="../../images/favicon.png">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <meta property="docfx:navrel" content="../../toc.html">
+    <meta property="docfx:tocrel" content="../toc.html">
+    
+    <meta property="docfx:rel" content="../../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list">Search Results for <span></span></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination" data-first="First" data-prev="Previous" data-next="Next" data-last="Last"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="a_csv_serializer">
+<h1 id="csv-serializer">CSV serializer</h1>
+
+<p>With the <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.CsvSerializer.html">CsvSerializer</a> you can either serialize objects to CSV or deserialize them back from CSV.</p>
+<p>In this article the comma (<code>,</code>) used as a values delimiter. You can change it with the <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.CsvSerializationSettings.html#Melanchall_DryWetMidi_Tools_CsvSerializationSettings_Delimiter">Delimiter</a> property of the <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.CsvSerializationSettings.html">CsvSerializationSettings</a>.</p>
+<h2 id="example">Example</h2>
+<p>Here is a quick example of CSV:</p>
+<pre><code class="lang-text">0,&quot;MThd&quot;,0,&quot;Header&quot;,96
+1,&quot;MTrk&quot;,0,&quot;Text&quot;,0,&quot;A&quot;
+1,&quot;MTrk&quot;,1,&quot;Text&quot;,100,&quot;B&quot;
+2,&quot;MTrk&quot;,0,&quot;Note&quot;,0,100,4,E7,127,0
+2,&quot;MTrk&quot;,1,&quot;Note&quot;,100,100,3,D3,127,0
+2,&quot;MTrk&quot;,1,&quot;Note&quot;,110,100,3,E2,127,0
+</code></pre>
+<p>The meaning of these lines:</p>
+<ul>
+<li>The file has the time division of 96 ticks per quarter note.</li>
+<li>Track chunk #1 contains two events:
+<ul>
+<li>#0: <em>Text</em> event with text of <em>A</em>;</li>
+<li>#1: <em>Text</em> event with text of <em>B</em>.</li>
+</ul>
+</li>
+<li>Track chunk #2 contains two objects:
+<ul>
+<li>#0: note <em>E7</em>;</li>
+<li>#1: chord with two notes: <em>D3</em> and <em>E2</em>.</li>
+</ul>
+</li>
+</ul>
+<p>See detailed description of the format in the next section.</p>
+<h2 id="format">Format</h2>
+<p>Each record in CSV representation is in the following form:</p>
+<pre><code class="lang-text">ChunkIndex,ChunkId,ObjectIndex,ObjectName,ObjectData
+</code></pre>
+<p><code>ChunkIndex</code> is a number of a <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.MidiChunk.html">MIDI chunk</a> with an object. <code>ChunkId</code> is the ID of the chunk, for example, <code>&quot;MTrk&quot;</code> for a <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.TrackChunk.html">track chunk</a> or <code>&quot;MThd&quot;</code> for a header one.</p>
+<p><code>ObjectIndex</code> is a number of an object within the chunk. Also note that if two notes have the same <code>ObjectIndex</code>, it means they form a chord. For example:</p>
+<pre><code class="lang-text">2,&quot;MTrk&quot;,0,&quot;Note&quot;,0,100,4,E7,127,0
+2,&quot;MTrk&quot;,1,&quot;Note&quot;,100,100,3,D3,127,0
+2,&quot;MTrk&quot;,1,&quot;Note&quot;,110,100,3,E2,127,0
+</code></pre>
+<p>Here we have a single note <em>E7</em> (the object #0) and a chord (the object #1) with two notes: <em>D3</em> and <em>E2</em>.</p>
+<p>If <code>ObjectName</code> is <code>&quot;Header&quot;</code> then <code>ObjectData</code> will contain a single number – <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.TimeDivision.html">time division</a>.</p>
+<p>If <code>ObjectName</code> is <code>&quot;Note&quot;</code> then <code>ObjectData</code> will be in the following format:</p>
+<pre><code class="lang-text">Time,Length,Channel,Note,Velocity,OffVelocity
+</code></pre>
+<p>where <code>Time</code>, <code>Length</code>, <code>Channel</code>, <code>Velocity</code> and <code>OffVelocity</code> hold values of the corresponding properties of a <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.Note.html">Note</a> object. You can change <code>Time</code> and <code>Length</code> representations via <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.CsvSerializationSettings.html#Melanchall_DryWetMidi_Tools_CsvSerializationSettings_TimeType">TimeType</a> and <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.CsvSerializationSettings.html#Melanchall_DryWetMidi_Tools_CsvSerializationSettings_LengthType">LengthType</a> properties of the <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.CsvSerializationSettings.html">CsvSerializationSettings</a> correspondingly. <code>Note</code> can be either the note number or letter (<em>C4</em>, for example) depending on the <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.CsvSerializationSettings.html#Melanchall_DryWetMidi_Tools_CsvSerializationSettings_NoteFormat">NoteFormat</a> property value.</p>
+<p>In other cases of <code>ObjectName</code> it's assumed that this component represents the <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.MidiEvent.html#Melanchall_DryWetMidi_Core_MidiEvent_EventType">type</a> of a MIDI event. For example, you can see <code>&quot;NoteOn&quot;</code> or <code>&quot;SequenceTrackName&quot;</code> as a value for <code>ObjectName</code>. <code>ObjectData</code> for such records will be in the following format:</p>
+<pre><code class="lang-text">Time,EventData
+</code></pre>
+<p>As for the <code>Time</code>, it holds the time of a <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.TimedEvent.html">TimedEvent</a> object. You can change <code>Time</code> representation via <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.CsvSerializationSettings.html#Melanchall_DryWetMidi_Tools_CsvSerializationSettings_TimeType">TimeType</a> property of the <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.CsvSerializationSettings.html">CsvSerializationSettings</a>. <code>EventData</code> depends on the type of an event:</p>
+<table>
+<thead>
+<tr>
+<th>ObjectName</th>
+<th>EventData</th>
+<th>Modifiers</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>&quot;SequenceTrackName&quot;</td>
+<td><a class="xref" href="../../api/Melanchall.DryWetMidi.Core.BaseTextEvent.html#Melanchall_DryWetMidi_Core_BaseTextEvent_Text">Text</a></td>
+<td></td>
+</tr>
+<tr>
+<td>&quot;CopyrightNotice&quot;</td>
+<td><a class="xref" href="../../api/Melanchall.DryWetMidi.Core.BaseTextEvent.html#Melanchall_DryWetMidi_Core_BaseTextEvent_Text">Text</a></td>
+<td></td>
+</tr>
+<tr>
+<td>&quot;InstrumentName&quot;</td>
+<td><a class="xref" href="../../api/Melanchall.DryWetMidi.Core.BaseTextEvent.html#Melanchall_DryWetMidi_Core_BaseTextEvent_Text">Text</a></td>
+<td></td>
+</tr>
+<tr>
+<td>&quot;Marker&quot;</td>
+<td><a class="xref" href="../../api/Melanchall.DryWetMidi.Core.BaseTextEvent.html#Melanchall_DryWetMidi_Core_BaseTextEvent_Text">Text</a></td>
+<td></td>
+</tr>
+<tr>
+<td>&quot;CuePoint&quot;</td>
+<td><a class="xref" href="../../api/Melanchall.DryWetMidi.Core.BaseTextEvent.html#Melanchall_DryWetMidi_Core_BaseTextEvent_Text">Text</a></td>
+<td></td>
+</tr>
+<tr>
+<td>&quot;Lyric&quot;</td>
+<td><a class="xref" href="../../api/Melanchall.DryWetMidi.Core.BaseTextEvent.html#Melanchall_DryWetMidi_Core_BaseTextEvent_Text">Text</a></td>
+<td></td>
+</tr>
+<tr>
+<td>&quot;Text&quot;</td>
+<td><a class="xref" href="../../api/Melanchall.DryWetMidi.Core.BaseTextEvent.html#Melanchall_DryWetMidi_Core_BaseTextEvent_Text">Text</a></td>
+<td></td>
+</tr>
+<tr>
+<td>&quot;ProgramName&quot;</td>
+<td><a class="xref" href="../../api/Melanchall.DryWetMidi.Core.BaseTextEvent.html#Melanchall_DryWetMidi_Core_BaseTextEvent_Text">Text</a></td>
+<td></td>
+</tr>
+<tr>
+<td>&quot;DeviceName&quot;</td>
+<td><a class="xref" href="../../api/Melanchall.DryWetMidi.Core.BaseTextEvent.html#Melanchall_DryWetMidi_Core_BaseTextEvent_Text">Text</a></td>
+<td></td>
+</tr>
+<tr>
+<td>&quot;SequenceNumber&quot;</td>
+<td><a class="xref" href="../../api/Melanchall.DryWetMidi.Core.SequenceNumberEvent.html#Melanchall_DryWetMidi_Core_SequenceNumberEvent_Number">Number</a></td>
+<td></td>
+</tr>
+<tr>
+<td>&quot;PortPrefix&quot;</td>
+<td><a class="xref" href="../../api/Melanchall.DryWetMidi.Core.PortPrefixEvent.html#Melanchall_DryWetMidi_Core_PortPrefixEvent_Port">Port</a></td>
+<td></td>
+</tr>
+<tr>
+<td>&quot;ChannelPrefix&quot;</td>
+<td><a class="xref" href="../../api/Melanchall.DryWetMidi.Core.ChannelPrefixEvent.html#Melanchall_DryWetMidi_Core_ChannelPrefixEvent_Channel">Channel</a></td>
+<td></td>
+</tr>
+<tr>
+<td>&quot;TimeSignature&quot;</td>
+<td><a class="xref" href="../../api/Melanchall.DryWetMidi.Core.TimeSignatureEvent.html#Melanchall_DryWetMidi_Core_TimeSignatureEvent_Numerator">Numerator</a>,<a class="xref" href="../../api/Melanchall.DryWetMidi.Core.TimeSignatureEvent.html#Melanchall_DryWetMidi_Core_TimeSignatureEvent_Denominator">Denominator</a>,<a class="xref" href="../../api/Melanchall.DryWetMidi.Core.TimeSignatureEvent.html#Melanchall_DryWetMidi_Core_TimeSignatureEvent_ClocksPerClick">ClocksPerClick</a>,<a class="xref" href="../../api/Melanchall.DryWetMidi.Core.TimeSignatureEvent.html#Melanchall_DryWetMidi_Core_TimeSignatureEvent_ThirtySecondNotesPerBeat">ThirtySecondNotesPerBeat</a></td>
+<td></td>
+</tr>
+<tr>
+<td>&quot;KeySignature&quot;</td>
+<td><a class="xref" href="../../api/Melanchall.DryWetMidi.Core.KeySignatureEvent.html#Melanchall_DryWetMidi_Core_KeySignatureEvent_Key">Key</a>,<a class="xref" href="../../api/Melanchall.DryWetMidi.Core.KeySignatureEvent.html#Melanchall_DryWetMidi_Core_KeySignatureEvent_Scale">Scale</a></td>
+<td></td>
+</tr>
+<tr>
+<td>&quot;SetTempo&quot;</td>
+<td><a class="xref" href="../../api/Melanchall.DryWetMidi.Core.SetTempoEvent.html#Melanchall_DryWetMidi_Core_SetTempoEvent_MicrosecondsPerQuarterNote">MicrosecondsPerQuarterNote</a></td>
+<td></td>
+</tr>
+<tr>
+<td>&quot;SmpteOffset&quot;</td>
+<td><a class="xref" href="../../api/Melanchall.DryWetMidi.Core.SmpteOffsetEvent.html#Melanchall_DryWetMidi_Core_SmpteOffsetEvent_Format">Format</a>,<a class="xref" href="../../api/Melanchall.DryWetMidi.Core.SmpteOffsetEvent.html#Melanchall_DryWetMidi_Core_SmpteOffsetEvent_Hours">Hours</a>,<a class="xref" href="../../api/Melanchall.DryWetMidi.Core.SmpteOffsetEvent.html#Melanchall_DryWetMidi_Core_SmpteOffsetEvent_Minutes">Minutes</a>,<a class="xref" href="../../api/Melanchall.DryWetMidi.Core.SmpteOffsetEvent.html#Melanchall_DryWetMidi_Core_SmpteOffsetEvent_Seconds">Seconds</a>,<a class="xref" href="../../api/Melanchall.DryWetMidi.Core.SmpteOffsetEvent.html#Melanchall_DryWetMidi_Core_SmpteOffsetEvent_Frames">Frames</a>,<a class="xref" href="../../api/Melanchall.DryWetMidi.Core.SmpteOffsetEvent.html#Melanchall_DryWetMidi_Core_SmpteOffsetEvent_SubFrames">SubFrames</a></td>
+<td></td>
+</tr>
+<tr>
+<td>&quot;SequencerSpecific&quot;</td>
+<td><a class="xref" href="../../api/Melanchall.DryWetMidi.Core.SequencerSpecificEvent.html#Melanchall_DryWetMidi_Core_SequencerSpecificEvent_Data">Data</a></td>
+<td>BytesArray</td>
+</tr>
+<tr>
+<td>&quot;UnknownMeta&quot;</td>
+<td><a class="xref" href="../../api/Melanchall.DryWetMidi.Core.UnknownMetaEvent.html#Melanchall_DryWetMidi_Core_UnknownMetaEvent_StatusByte">StatusByte</a>,<a class="xref" href="../../api/Melanchall.DryWetMidi.Core.UnknownMetaEvent.html#Melanchall_DryWetMidi_Core_UnknownMetaEvent_Data">Data</a></td>
+<td>BytesArray</td>
+</tr>
+<tr>
+<td>&quot;NoteOn&quot;</td>
+<td><a class="xref" href="../../api/Melanchall.DryWetMidi.Core.ChannelEvent.html#Melanchall_DryWetMidi_Core_ChannelEvent_Channel">Channel</a>,<a class="xref" href="../../api/Melanchall.DryWetMidi.Core.NoteEvent.html#Melanchall_DryWetMidi_Core_NoteEvent_NoteNumber">Note</a>,<a class="xref" href="../../api/Melanchall.DryWetMidi.Core.NoteEvent.html#Melanchall_DryWetMidi_Core_NoteEvent_Velocity">Velocity</a></td>
+<td>Note</td>
+</tr>
+<tr>
+<td>&quot;NoteOff&quot;</td>
+<td><a class="xref" href="../../api/Melanchall.DryWetMidi.Core.ChannelEvent.html#Melanchall_DryWetMidi_Core_ChannelEvent_Channel">Channel</a>,<a class="xref" href="../../api/Melanchall.DryWetMidi.Core.NoteEvent.html#Melanchall_DryWetMidi_Core_NoteEvent_NoteNumber">Note</a>,<a class="xref" href="../../api/Melanchall.DryWetMidi.Core.NoteEvent.html#Melanchall_DryWetMidi_Core_NoteEvent_Velocity">Velocity</a></td>
+<td>Note</td>
+</tr>
+<tr>
+<td>&quot;PitchBend&quot;</td>
+<td><a class="xref" href="../../api/Melanchall.DryWetMidi.Core.ChannelEvent.html#Melanchall_DryWetMidi_Core_ChannelEvent_Channel">Channel</a>,<a class="xref" href="../../api/Melanchall.DryWetMidi.Core.PitchBendEvent.html#Melanchall_DryWetMidi_Core_PitchBendEvent_PitchValue">PitchValue</a></td>
+<td></td>
+</tr>
+<tr>
+<td>&quot;ControlChange&quot;</td>
+<td><a class="xref" href="../../api/Melanchall.DryWetMidi.Core.ChannelEvent.html#Melanchall_DryWetMidi_Core_ChannelEvent_Channel">Channel</a>,<a class="xref" href="../../api/Melanchall.DryWetMidi.Core.ControlChangeEvent.html#Melanchall_DryWetMidi_Core_ControlChangeEvent_ControlNumber">ControlNumber</a>,<a class="xref" href="../../api/Melanchall.DryWetMidi.Core.ControlChangeEvent.html#Melanchall_DryWetMidi_Core_ControlChangeEvent_ControlValue">ControlValue</a></td>
+<td></td>
+</tr>
+<tr>
+<td>&quot;ProgramChange&quot;</td>
+<td><a class="xref" href="../../api/Melanchall.DryWetMidi.Core.ChannelEvent.html#Melanchall_DryWetMidi_Core_ChannelEvent_Channel">Channel</a>,<a class="xref" href="../../api/Melanchall.DryWetMidi.Core.ProgramChangeEvent.html#Melanchall_DryWetMidi_Core_ProgramChangeEvent_ProgramNumber">ProgramNumber</a></td>
+<td></td>
+</tr>
+<tr>
+<td>&quot;ChannelAftertouch&quot;</td>
+<td><a class="xref" href="../../api/Melanchall.DryWetMidi.Core.ChannelEvent.html#Melanchall_DryWetMidi_Core_ChannelEvent_Channel">Channel</a>,<a class="xref" href="../../api/Melanchall.DryWetMidi.Core.ChannelAftertouchEvent.html#Melanchall_DryWetMidi_Core_ChannelAftertouchEvent_AftertouchValue">AftertouchValue</a></td>
+<td></td>
+</tr>
+<tr>
+<td>&quot;NoteAftertouch&quot;</td>
+<td><a class="xref" href="../../api/Melanchall.DryWetMidi.Core.ChannelEvent.html#Melanchall_DryWetMidi_Core_ChannelEvent_Channel">Channel</a>,<a class="xref" href="../../api/Melanchall.DryWetMidi.Core.NoteAftertouchEvent.html#Melanchall_DryWetMidi_Core_NoteAftertouchEvent_NoteNumber">Note</a>,<a class="xref" href="../../api/Melanchall.DryWetMidi.Core.NoteAftertouchEvent.html#Melanchall_DryWetMidi_Core_NoteAftertouchEvent_AftertouchValue">AftertouchValue</a></td>
+<td>Note</td>
+</tr>
+<tr>
+<td>&quot;NormalSysEx&quot;</td>
+<td><a class="xref" href="../../api/Melanchall.DryWetMidi.Core.SysExEvent.html#Melanchall_DryWetMidi_Core_SysExEvent_Data">Data</a></td>
+<td>BytesArray</td>
+</tr>
+<tr>
+<td>&quot;EscapeSysEx&quot;</td>
+<td><a class="xref" href="../../api/Melanchall.DryWetMidi.Core.SysExEvent.html#Melanchall_DryWetMidi_Core_SysExEvent_Data">Data</a></td>
+<td>BytesArray</td>
+</tr>
+<tr>
+<td>&quot;ActiveSensing&quot;</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>&quot;Start&quot;</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>&quot;Stop&quot;</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>&quot;Reset&quot;</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>&quot;Continue&quot;</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>&quot;TimingClock&quot;</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>&quot;TuneRequest&quot;</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>&quot;MidiTimeCode&quot;</td>
+<td><a class="xref" href="../../api/Melanchall.DryWetMidi.Core.MidiTimeCodeEvent.html#Melanchall_DryWetMidi_Core_MidiTimeCodeEvent_Component">Component</a>,<a class="xref" href="../../api/Melanchall.DryWetMidi.Core.MidiTimeCodeEvent.html#Melanchall_DryWetMidi_Core_MidiTimeCodeEvent_ComponentValue">ComponentValue</a></td>
+<td></td>
+</tr>
+<tr>
+<td>&quot;SongSelect&quot;</td>
+<td><a class="xref" href="../../api/Melanchall.DryWetMidi.Core.SongSelectEvent.html#Melanchall_DryWetMidi_Core_SongSelectEvent_Number">Number</a></td>
+<td></td>
+</tr>
+<tr>
+<td>&quot;SongPositionPointer&quot;</td>
+<td><a class="xref" href="../../api/Melanchall.DryWetMidi.Core.SongPositionPointerEvent.html#Melanchall_DryWetMidi_Core_SongPositionPointerEvent_PointerValue">PointerValue</a></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>where <strong>Modifiers</strong> are:</p>
+<ul>
+<li><strong>BytesArray</strong> – <code>Data</code> property is serialized as <code>&quot;B1 B2 B3 ...&quot;</code> with format of bytes depending on the <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.CsvSerializationSettings.html#Melanchall_DryWetMidi_Tools_CsvSerializationSettings_BytesArrayFormat">BytesArrayFormat</a> property of the <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.CsvSerializationSettings.html">CsvSerializationSettings</a>;</li>
+<li><strong>Note</strong> – <code>Note</code> property is serialized as either the note number or letter (<em>C4</em>, for example) depending on the <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.CsvSerializationSettings.html#Melanchall_DryWetMidi_Tools_CsvSerializationSettings_NoteFormat">NoteFormat</a> property of the <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.CsvSerializationSettings.html">CsvSerializationSettings</a>.</li>
+</ul>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            2024 / Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>

@@ -76,7 +76,7 @@
 <h1 id="overview">Overview</h1>
 <p>DryWetMIDI is the .NET library to work with MIDI data and MIDI devices. It allows:</p>
 <ul>
-<li>Read, write and create <a href="https://www.midi.org/specifications/file-format-specifications/standard-midi-files">Standard MIDI Files (SMF)</a>. It is also possible to read <a href="https://www.loc.gov/preservation/digital/formats/fdd/fdd000120.shtml">RMID</a> files where SMF wrapped to RIFF chunk. You can easily catch specific error when reading or writing MIDI file since all possible errors in a MIDI file are presented as separate exception classes.</li>
+<li>Read, write and create <a href="https://midi.org/standard-midi-files-specification">Standard MIDI Files (SMF)</a>. It is also possible to read <a href="https://www.loc.gov/preservation/digital/formats/fdd/fdd000120.shtml">RMID</a> files where SMF wrapped to RIFF chunk. You can easily catch specific error when reading or writing MIDI file since all possible errors in a MIDI file are presented as separate exception classes.</li>
 <li><a href="https://melanchall.github.io/drywetmidi/articles/devices/Output-device.html">Send</a> MIDI events to/<a href="https://melanchall.github.io/drywetmidi/articles/devices/Input-device.html">receive</a> them from MIDI devices, <a href="https://melanchall.github.io/drywetmidi/articles/playback/Overview.html">play</a> MIDI data and <a href="https://melanchall.github.io/drywetmidi/articles/recording/Overview.html">record</a> it. This APIs support Windows and macOS.</li>
 <li>Finely adjust process of reading and writing. It allows, for example, to read corrupted files and repair them, or build MIDI file validators.</li>
 <li>Implement <a href="https://melanchall.github.io/drywetmidi/articles/custom-data-structures/Custom-meta-events.html">custom meta events</a> and <a href="https://melanchall.github.io/drywetmidi/articles/custom-data-structures/Custom-chunks.html">custom chunks</a> that can be written to and read from MIDI files.</li>
@@ -105,6 +105,10 @@ If you want to create an issue or a discussion, read this article first – <a h
 <h2 id="projects-using-drywetmidi">Projects using DryWetMIDI</h2>
 <p>Here the list of noticeable projects that use DryWetMIDI:</p>
 <ul>
+<li><a href="https://www.enttec.com/product/dmx-lighting-control-software/emu-sound-to-light-controller">EMU – Sound to Light Controller</a><br>
+EMU (DMXIS’s next generation) is a state-of-the-art, intuitive sound-to-light controller designed for professional live musicians and DJs. Easy to use software, EMU allows you to run automated or responsive DMX light shows, leaving you to focus on your show!</li>
+<li><a href="https://musicalbits.de">Musical Bits</a><br>
+Musical Bits creates software that helps you creating music. Our software uses latest technology, including AI, to model all layers of creativity of a human composer. These layers are implemented as reusable and combinable software components. Musical Bits software is available as co-pilot for producers and composers under the name KLANGMACHT and helps you create, drumsounds, beats, guitars, background choirs, lyrics and more. We even create and distribute full virtual bands, albums and songs. For example, check out the Frostbite Orckings.</li>
 <li><a href="https://coyotemidi.com">CoyoteMIDI</a><br>
 CoyoteMIDI extends the functionality of your MIDI devices to include keyboard and mouse input, including complex key combinations and multi-step macros.</li>
 <li><a href="https://clonehero.net">Clone Hero</a><br>
@@ -113,16 +117,10 @@ Free rhythm game, which can be played with any 5 or 6 button guitar controller, 
 A collection of virtual musical instruments that features real MIDI output.</li>
 <li><a href="https://store.steampowered.com/app/1222580/Rustissimo">Rustissimo</a><br>
 Using Rustissimo you can create a concert with your friends and play instruments with synchronization.</li>
-<li>Sample applications from <a href="https://github.com/CIRCE-EYES">CIRCE-EYES</a>:
-<ul>
-<li><a href="https://github.com/melanchall/drywetmidi/issues/105">https://github.com/melanchall/drywetmidi/issues/105</a></li>
-<li><a href="https://github.com/melanchall/drywetmidi/issues/139">https://github.com/melanchall/drywetmidi/issues/139</a></li>
-</ul>
-</li>
 </ul>
 <p>If you find that DryWetMIDI has been useful for your project, please put a link to the library in your project's About section or something like that.</p>
 <h2 id="getting-started">Getting Started</h2>
-<p>Let's see some examples of what you can do with DryWetMIDI.</p>
+<p>Let's see some examples of what you can do with DryWetMIDI. Also you can check out sample applications from <a href="https://github.com/CIRCE-EYES">CIRCE-EYES</a> (see the profile, VB.NET used).</p>
 <p>To <a href="https://melanchall.github.io/drywetmidi/articles/file-reading-writing/MIDI-file-reading.html">read a MIDI file</a> you have to use <code>Read</code> static method of the <code>MidiFile</code>:</p>
 <pre><code class="lang-csharp">var midiFile = MidiFile.Read(&quot;Some Great Song.mid&quot;);
 </code></pre>

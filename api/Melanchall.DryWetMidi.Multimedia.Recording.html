@@ -378,7 +378,7 @@ Gets MIDI events recorded by the current <a class="xref" href="Melanchall.DryWet
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public IReadOnlyList&lt;TimedEvent&gt; GetEvents()</code></pre>
+    <pre><code class="lang-csharp hljs">public ICollection&lt;TimedEvent&gt; GetEvents()</code></pre>
   </div>
   <h5 class="returns">Returns</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -390,7 +390,7 @@ Gets MIDI events recorded by the current <a class="xref" href="Melanchall.DryWet
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1">IReadOnlyList</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEvent.html">TimedEvent</a>&gt;</td>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.icollection-1">ICollection</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEvent.html">TimedEvent</a>&gt;</td>
         <td>MIDI events recorded by the current <a class="xref" href="Melanchall.DryWetMidi.Multimedia.Recording.html">Recording</a>.</td>
       </tr>
     </tbody>
@@ -433,6 +433,30 @@ call <a class="xref" href="Melanchall.DryWetMidi.Multimedia.Recording.html#Melan
   </div>
   <h3 id="events">Events
   </h3>
+  <h4 id="Melanchall_DryWetMidi_Multimedia_Recording_EventRecorded" data-uid="Melanchall.DryWetMidi.Multimedia.Recording.EventRecorded">EventRecorded</h4>
+  <div class="markdown level1 summary">
+Occurs when a MIDI event is captured by the current recording.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public event EventHandler&lt;MidiEventRecordedEventArgs&gt; EventRecorded</code></pre>
+  </div>
+  <h5 class="eventType">Event Type</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.eventhandler-1">EventHandler</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Multimedia.MidiEventRecordedEventArgs.html">MidiEventRecordedEventArgs</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
   <h4 id="Melanchall_DryWetMidi_Multimedia_Recording_Started" data-uid="Melanchall.DryWetMidi.Multimedia.Recording.Started">Started</h4>
   <div class="markdown level1 summary">
 Occurs when recording started via <a class="xref" href="Melanchall.DryWetMidi.Multimedia.Recording.html#Melanchall_DryWetMidi_Multimedia_Recording_Start">Start()</a> method.

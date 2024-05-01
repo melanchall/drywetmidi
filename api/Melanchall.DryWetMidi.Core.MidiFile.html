@@ -135,7 +135,7 @@ following chunk classes (derived from <a class="xref" href="Melanchall.DryWetMid
 (<a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html#Melanchall_DryWetMidi_Core_MidiFile_Write_System_String_System_Boolean_Melanchall_DryWetMidi_Core_MidiFileFormat_Melanchall_DryWetMidi_Core_WritingSettings_">Write(String, Boolean, MidiFileFormat, WritingSettings)</a> or
 <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html#Melanchall_DryWetMidi_Core_MidiFile_Write_System_IO_Stream_Melanchall_DryWetMidi_Core_MidiFileFormat_Melanchall_DryWetMidi_Core_WritingSettings_">Write(Stream, MidiFileFormat, WritingSettings)</a>).</p>
 <p>
-See <a href="https://www.midi.org/specifications/file-format-specifications/standard-midi-files">https://www.midi.org/specifications/file-format-specifications/standard-midi-files</a> for detailed MIDI file specification.
+See <a href="https://midi.org/standard-midi-files-specification">https://midi.org/standard-midi-files-specification</a> for detailed MIDI file specification.
 </p>
 </div>
   <h3 id="constructors">Constructors
@@ -286,7 +286,7 @@ library on reading unknown chunk (neither track chunk nor custom one).</p>
   <a id="Melanchall_DryWetMidi_Core_MidiFile_OriginalFormat_" data-uid="Melanchall.DryWetMidi.Core.MidiFile.OriginalFormat*"></a>
   <h4 id="Melanchall_DryWetMidi_Core_MidiFile_OriginalFormat" data-uid="Melanchall.DryWetMidi.Core.MidiFile.OriginalFormat">OriginalFormat</h4>
   <div class="markdown level1 summary">
-Gets original format of the file was read or <code>null</code> if the current <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a>
+Gets original format of the file that was read or <code>null</code> if the current <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a>
 was created by constructor.
 </div>
   <div class="markdown level1 conceptual"></div>
@@ -325,7 +325,7 @@ was created by constructor.
       <tr>
         <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.invalidoperationexception">InvalidOperationException</a></td>
         <td>Unable to get original format of the file. It means
-the current <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a> was created via constructor rather than via <code>Read</code> method.</td>
+the current <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a> was created not as a result of reading the file.</td>
       </tr>
     </tbody>
   </table>
@@ -1614,6 +1614,12 @@ exceeds maximum value allowed for MIDI file.</td>
   </div>
   <div>
       <a class="xref" href="Melanchall.DryWetMidi.Multimedia.PlaybackUtilities.html#Melanchall_DryWetMidi_Multimedia_PlaybackUtilities_Play_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Multimedia_IOutputDevice_Melanchall_DryWetMidi_Multimedia_PlaybackSettings_">PlaybackUtilities.Play(MidiFile, IOutputDevice, PlaybackSettings)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Tools.CsvSerializer.html#Melanchall_DryWetMidi_Tools_CsvSerializer_SerializeToCsv_Melanchall_DryWetMidi_Core_MidiFile_System_IO_Stream_Melanchall_DryWetMidi_Tools_CsvSerializationSettings_Melanchall_DryWetMidi_Interaction_ObjectType_Melanchall_DryWetMidi_Interaction_ObjectDetectionSettings_">CsvSerializer.SerializeToCsv(MidiFile, Stream, CsvSerializationSettings, ObjectType, ObjectDetectionSettings)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Tools.CsvSerializer.html#Melanchall_DryWetMidi_Tools_CsvSerializer_SerializeToCsv_Melanchall_DryWetMidi_Core_MidiFile_System_String_System_Boolean_Melanchall_DryWetMidi_Tools_CsvSerializationSettings_Melanchall_DryWetMidi_Interaction_ObjectType_Melanchall_DryWetMidi_Interaction_ObjectDetectionSettings_">CsvSerializer.SerializeToCsv(MidiFile, String, Boolean, CsvSerializationSettings, ObjectType, ObjectDetectionSettings)</a>
   </div>
   <div>
       <a class="xref" href="Melanchall.DryWetMidi.Tools.Merger.html#Melanchall_DryWetMidi_Tools_Merger_MergeObjects_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Interaction_ObjectType_Melanchall_DryWetMidi_Tools_ObjectsMergingSettings_Melanchall_DryWetMidi_Interaction_ObjectDetectionSettings_">Merger.MergeObjects(MidiFile, ObjectType, ObjectsMergingSettings, ObjectDetectionSettings)</a>

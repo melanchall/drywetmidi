@@ -84,7 +84,8 @@
   <h1 id="Melanchall_DryWetMidi_Interaction_RestDetectionSettings" data-uid="Melanchall.DryWetMidi.Interaction.RestDetectionSettings" class="text-break">Class RestDetectionSettings
   </h1>
   <div class="markdown level0 summary">
-Settings which define how rests should be detected and built.
+Settings which define how rests should be detected and built. More info in the
+<a class="xref" href="../articles/high-level-managing/Getting-objects.html#rests">Getting objects: Rests</a> article.
 </div>
   <div class="markdown level0 conceptual"></div>
   <div class="inheritance">
@@ -122,23 +123,165 @@ Settings which define how rests should be detected and built.
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public sealed class RestDetectionSettings</code></pre>
   </div>
-  <h5 id="Melanchall_DryWetMidi_Interaction_RestDetectionSettings_remarks"><strong>Remarks</strong></h5>
-  <div class="markdown level0 remarks">
-Please see <a class="xref" href="../articles/high-level-managing/Getting-objects.html#rests">Getting objects
-(section GetObjects → Rests)</a> article to learn more.
-</div>
-  <h3 id="properties">Properties
+  <h3 id="fields">Fields
   </h3>
-  <a id="Melanchall_DryWetMidi_Interaction_RestDetectionSettings_RestSeparationPolicy_" data-uid="Melanchall.DryWetMidi.Interaction.RestDetectionSettings.RestSeparationPolicy*"></a>
-  <h4 id="Melanchall_DryWetMidi_Interaction_RestDetectionSettings_RestSeparationPolicy" data-uid="Melanchall.DryWetMidi.Interaction.RestDetectionSettings.RestSeparationPolicy">RestSeparationPolicy</h4>
+  <h4 id="Melanchall_DryWetMidi_Interaction_RestDetectionSettings_NoChords" data-uid="Melanchall.DryWetMidi.Interaction.RestDetectionSettings.NoChords">NoChords</h4>
   <div class="markdown level1 summary">
-Gets or sets a value that defines a rule for creating rests. The default value is
-<a class="xref" href="Melanchall.DryWetMidi.Interaction.RestSeparationPolicy.html#Melanchall_DryWetMidi_Interaction_RestSeparationPolicy_NoSeparation">NoSeparation</a>.
+Rests will be built only at spaces without chords at all.
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public RestSeparationPolicy RestSeparationPolicy { get; set; }</code></pre>
+    <pre><code class="lang-csharp hljs">public static readonly RestDetectionSettings NoChords</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.RestDetectionSettings.html">RestDetectionSettings</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h4 id="Melanchall_DryWetMidi_Interaction_RestDetectionSettings_NoChordsByChannel" data-uid="Melanchall.DryWetMidi.Interaction.RestDetectionSettings.NoChordsByChannel">NoChordsByChannel</h4>
+  <div class="markdown level1 summary">
+Rests will be built between chords separately for each channel.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static readonly RestDetectionSettings NoChordsByChannel</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.RestDetectionSettings.html">RestDetectionSettings</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h4 id="Melanchall_DryWetMidi_Interaction_RestDetectionSettings_NoNotes" data-uid="Melanchall.DryWetMidi.Interaction.RestDetectionSettings.NoNotes">NoNotes</h4>
+  <div class="markdown level1 summary">
+Rests will be built only at spaces without notes at all.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static readonly RestDetectionSettings NoNotes</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.RestDetectionSettings.html">RestDetectionSettings</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h4 id="Melanchall_DryWetMidi_Interaction_RestDetectionSettings_NoNotesByChannel" data-uid="Melanchall.DryWetMidi.Interaction.RestDetectionSettings.NoNotesByChannel">NoNotesByChannel</h4>
+  <div class="markdown level1 summary">
+Rests will be built between notes separately for each channel.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static readonly RestDetectionSettings NoNotesByChannel</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.RestDetectionSettings.html">RestDetectionSettings</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h4 id="Melanchall_DryWetMidi_Interaction_RestDetectionSettings_NoNotesByChannelAndNoteNumber" data-uid="Melanchall.DryWetMidi.Interaction.RestDetectionSettings.NoNotesByChannelAndNoteNumber">NoNotesByChannelAndNoteNumber</h4>
+  <div class="markdown level1 summary">
+Rests will be built between notes separately for each channel and note number.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static readonly RestDetectionSettings NoNotesByChannelAndNoteNumber</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.RestDetectionSettings.html">RestDetectionSettings</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h4 id="Melanchall_DryWetMidi_Interaction_RestDetectionSettings_NoNotesByNoteNumber" data-uid="Melanchall.DryWetMidi.Interaction.RestDetectionSettings.NoNotesByNoteNumber">NoNotesByNoteNumber</h4>
+  <div class="markdown level1 summary">
+Rests will be built between notes separately for each note number.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static readonly RestDetectionSettings NoNotesByNoteNumber</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.RestDetectionSettings.html">RestDetectionSettings</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+  </h3>
+  <a id="Melanchall_DryWetMidi_Interaction_RestDetectionSettings_KeySelector_" data-uid="Melanchall.DryWetMidi.Interaction.RestDetectionSettings.KeySelector*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_RestDetectionSettings_KeySelector" data-uid="Melanchall.DryWetMidi.Interaction.RestDetectionSettings.KeySelector">KeySelector</h4>
+  <div class="markdown level1 summary">
+Gets or sets a function that returns the key of an object. Please read
+<a class="xref" href="../articles/high-level-managing/Getting-objects.html#rests">Getting objects: Rests</a> article to
+understand the key concept.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Func&lt;ITimedObject, object&gt; KeySelector { get; set; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -150,29 +293,14 @@ Gets or sets a value that defines a rule for creating rests. The default value i
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.RestSeparationPolicy.html">RestSeparationPolicy</a></td>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.func-2">Func</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimedObject.html">ITimedObject</a>, <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">Object</a>&gt;</td>
         <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.componentmodel.invalidenumargumentexception">InvalidEnumArgumentException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">value</code> specified an invalid value.</td>
       </tr>
     </tbody>
   </table>
   <h3 id="seealso">See Also</h3>
   <div class="seealso">
-      <div><a class="xref" href="Melanchall.DryWetMidi.Interaction.GetObjectsUtilities.html">GetObjectsUtilities</a></div>
+      <div><a class="xref" href="Melanchall.DryWetMidi.Interaction.RestsUtilities.html">RestsUtilities</a></div>
   </div>
 </article>
           </div>

@@ -151,6 +151,23 @@
 </code></pre>
 <p><a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.SanitizingSettings.html#Melanchall_DryWetMidi_Tools_SanitizingSettings_RemoveEventsOnUnusedChannels">RemoveEventsOnUnusedChannels</a> property turns on or off removing such channel events that have no effect since ther are no notes on those channels:</p>
 <p><img src="images/Sanitizer/RemoveEventsOnUnusedChannels.png" alt="SanitizingSettings.RemoveEventsOnUnusedChannels"></p>
+<h3 id="trim">Trim</h3>
+<p><a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.SanitizingSettings.html#Melanchall_DryWetMidi_Tools_SanitizingSettings_Trim">Trim</a> property allows to automatically remove an empty space at the start of a MIDI file. For example:</p>
+<pre><code class="lang-csharp">var midiFile = new MidiFile(
+    new TrackChunk(
+        new TextEvent(&quot;A&quot;) { DeltaTime = 20 }),
+    new TrackChunk(
+        new TextEvent(&quot;B&quot;) { DeltaTime = 30 },
+        new TextEvent(&quot;C&quot;) { DeltaTime = 15 }));
+</code></pre>
+<p>Here we have a silence of 20 ticks at the start of the file. So after sanitizing with <code>Trim</code> property set to <code>true</code> (the default value) we will have this file:</p>
+<pre><code class="lang-csharp">var midiFile = new MidiFile(
+    new TrackChunk(
+        new TextEvent(&quot;A&quot;) { DeltaTime = 0 }),
+    new TrackChunk(
+        new TextEvent(&quot;B&quot;) { DeltaTime = 10 },
+        new TextEvent(&quot;C&quot;) { DeltaTime = 15 }));
+</code></pre>
 </article>
           </div>
           

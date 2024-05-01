@@ -91,7 +91,7 @@
 </code></pre>
 <p><code>ReadingSettings</code> has a lot of useful properties. You can read documentation on all of them to learn how you can adjust MIDI file reading.</p>
 <h2 id="reading-corrupted-files">Reading corrupted files</h2>
-<p>DryWetMIDI allows to read MIDI files with various violations of <a href="https://www.midi.org/specifications/file-format-specifications/standard-midi-files">SMF</a> standard. Example below shows how to read a MIDI file with different errors:</p>
+<p>DryWetMIDI allows to read MIDI files with various violations of <a href="https://midi.org/standard-midi-files-specification">SMF</a> standard. Example below shows how to read a MIDI file with different errors:</p>
 <pre><code class="lang-csharp">var file = MidiFile.Read(&quot;Some great song.mid&quot;, new ReadingSettings
 {
     InvalidChannelEventParameterValuePolicy = InvalidChannelEventParameterValuePolicy.ReadValid,

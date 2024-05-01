@@ -91,27 +91,18 @@
       <section>
 Time range which is constant for each object to be processed.
 </section>
-      <h4><a class="xref" href="Melanchall.DryWetMidi.Tools.CsvConverter.html">CsvConverter</a></h4>
+      <h4><a class="xref" href="Melanchall.DryWetMidi.Tools.CsvSerializationSettings.html">CsvSerializationSettings</a></h4>
       <section>
-Provides methods to convert MIDI objects to CSV representation and vice versa.
+Privides settings that control the process of CSV serialization/deserialization.
 </section>
-      <h4><a class="xref" href="Melanchall.DryWetMidi.Tools.CsvSettings.html">CsvSettings</a></h4>
+      <h4><a class="xref" href="Melanchall.DryWetMidi.Tools.CsvSerializer.html">CsvSerializer</a></h4>
       <section>
-Common CSV reading/writing settings.
+Provides methods to serialize MIDI data to CSV and deserialize it back. More info in the
+<a class="xref" href="../articles/tools/CSV-serializer.html">CSV serializer</a> article.
 </section>
       <h4><a class="xref" href="Melanchall.DryWetMidi.Tools.Merger.html">Merger</a></h4>
       <section>
 Provides methods to merge nearby objects. More info in the <a class="xref" href="../articles/tools/Merger.html">Merger</a> article.
-</section>
-      <h4><a class="xref" href="Melanchall.DryWetMidi.Tools.MidiFileCsvConversionSettings.html">MidiFileCsvConversionSettings</a></h4>
-      <section>
-Settings according to which <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a> must be read from or written to
-CSV representation.
-</section>
-      <h4><a class="xref" href="Melanchall.DryWetMidi.Tools.NoteCsvConversionSettings.html">NoteCsvConversionSettings</a></h4>
-      <section>
-Settings according to which instances of the <a class="xref" href="Melanchall.DryWetMidi.Interaction.Note.html">Note</a> must be read from or written to
-CSV representation.
 </section>
       <h4><a class="xref" href="Melanchall.DryWetMidi.Tools.ObjectsGroupResizingSettings.html">ObjectsGroupResizingSettings</a></h4>
       <section>
@@ -236,22 +227,19 @@ Represents time range used in time processing tools.
 </section>
     <h3 id="enums">Enums
   </h3>
+      <h4><a class="xref" href="Melanchall.DryWetMidi.Tools.CsvBytesArrayFormat.html">CsvBytesArrayFormat</a></h4>
+      <section>
+Defines how bytes arrays (for example, <a class="xref" href="Melanchall.DryWetMidi.Core.SequencerSpecificEvent.html#Melanchall_DryWetMidi_Core_SequencerSpecificEvent_Data">Data</a>) should be
+presented in CSV. The default value is <a class="xref" href="Melanchall.DryWetMidi.Tools.CsvBytesArrayFormat.html#Melanchall_DryWetMidi_Tools_CsvBytesArrayFormat_Decimal">Decimal</a>.
+</section>
+      <h4><a class="xref" href="Melanchall.DryWetMidi.Tools.CsvNoteFormat.html">CsvNoteFormat</a></h4>
+      <section>
+Defines how note numbers (for example, <a class="xref" href="Melanchall.DryWetMidi.Core.NoteAftertouchEvent.html#Melanchall_DryWetMidi_Core_NoteAftertouchEvent_NoteNumber">NoteNumber</a>) should be
+presented in CSV. The default value is <a class="xref" href="Melanchall.DryWetMidi.Tools.CsvNoteFormat.html#Melanchall_DryWetMidi_Tools_CsvNoteFormat_NoteNumber">NoteNumber</a>.
+</section>
       <h4><a class="xref" href="Melanchall.DryWetMidi.Tools.LengthedObjectTarget.html">LengthedObjectTarget</a></h4>
       <section>
 Target of an object that should be processed by a tool.
-</section>
-      <h4><a class="xref" href="Melanchall.DryWetMidi.Tools.MidiFileCsvLayout.html">MidiFileCsvLayout</a></h4>
-      <section>
-Layout (format) of CSV data representing a MIDI file. The default value is <a class="xref" href="Melanchall.DryWetMidi.Tools.MidiFileCsvLayout.html#Melanchall_DryWetMidi_Tools_MidiFileCsvLayout_DryWetMidi">DryWetMidi</a>.
-</section>
-      <h4><a class="xref" href="Melanchall.DryWetMidi.Tools.NoteFormat.html">NoteFormat</a></h4>
-      <section>
-The format which should be used to write notes to or read them from CSV.
-</section>
-      <h4><a class="xref" href="Melanchall.DryWetMidi.Tools.NoteNumberFormat.html">NoteNumberFormat</a></h4>
-      <section>
-Defines how a note&apos;s number is presented in CSV representation: either a number or
-a letter (for example, A#5).
 </section>
       <h4><a class="xref" href="Melanchall.DryWetMidi.Tools.QuantizerTarget.html">QuantizerTarget</a></h4>
       <section>

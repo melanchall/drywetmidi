@@ -5,10 +5,10 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Class NoteCsvConversionSettings
+    <title>Class RestsUtilities
    | DryWetMIDI </title>
     <meta name="viewport" content="width=device-width">
-    <meta name="title" content="Class NoteCsvConversionSettings
+    <meta name="title" content="Class RestsUtilities
    | DryWetMIDI ">
     <meta name="generator" content="docfx 2.59.4.0">
     
@@ -78,20 +78,19 @@
         </div>
         <div class="article row grid-right">
           <div class="col-md-10">
-            <article class="content wrap" id="_content" data-uid="Melanchall.DryWetMidi.Tools.NoteCsvConversionSettings">
+            <article class="content wrap" id="_content" data-uid="Melanchall.DryWetMidi.Interaction.RestsUtilities">
   
   
-  <h1 id="Melanchall_DryWetMidi_Tools_NoteCsvConversionSettings" data-uid="Melanchall.DryWetMidi.Tools.NoteCsvConversionSettings" class="text-break">Class NoteCsvConversionSettings
+  <h1 id="Melanchall_DryWetMidi_Interaction_RestsUtilities" data-uid="Melanchall.DryWetMidi.Interaction.RestsUtilities" class="text-break">Class RestsUtilities
   </h1>
   <div class="markdown level0 summary">
-Settings according to which instances of the <a class="xref" href="Melanchall.DryWetMidi.Interaction.Note.html">Note</a> must be read from or written to
-CSV representation.
+Provides methods to get rests between different objects.
 </div>
   <div class="markdown level0 conceptual"></div>
   <div class="inheritance">
     <h5>Inheritance</h5>
     <div class="level0"><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">Object</a></div>
-    <div class="level1"><span class="xref">NoteCsvConversionSettings</span></div>
+    <div class="level1"><span class="xref">RestsUtilities</span></div>
   </div>
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
@@ -117,51 +116,48 @@ CSV representation.
       <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.tostring#system-object-tostring">Object.ToString()</a>
     </div>
   </div>
-  <h6><strong>Namespace</strong>: <a class="xref" href="Melanchall.DryWetMidi.Tools.html">Melanchall.DryWetMidi.Tools</a></h6>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Melanchall.DryWetMidi.Interaction.html">Melanchall.DryWetMidi.Interaction</a></h6>
   <h6><strong>Assembly</strong>: Melanchall.DryWetMidi.dll</h6>
-  <h5 id="Melanchall_DryWetMidi_Tools_NoteCsvConversionSettings_syntax">Syntax</h5>
+  <h5 id="Melanchall_DryWetMidi_Interaction_RestsUtilities_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public sealed class NoteCsvConversionSettings</code></pre>
+    <pre><code class="lang-csharp hljs">public static class RestsUtilities</code></pre>
   </div>
-  <h3 id="properties">Properties
+  <h3 id="methods">Methods
   </h3>
-  <a id="Melanchall_DryWetMidi_Tools_NoteCsvConversionSettings_CsvSettings_" data-uid="Melanchall.DryWetMidi.Tools.NoteCsvConversionSettings.CsvSettings*"></a>
-  <h4 id="Melanchall_DryWetMidi_Tools_NoteCsvConversionSettings_CsvSettings" data-uid="Melanchall.DryWetMidi.Tools.NoteCsvConversionSettings.CsvSettings">CsvSettings</h4>
+  <a id="Melanchall_DryWetMidi_Interaction_RestsUtilities_GetRests_" data-uid="Melanchall.DryWetMidi.Interaction.RestsUtilities.GetRests*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_RestsUtilities_GetRests_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_ITimedObject__Melanchall_DryWetMidi_Interaction_RestDetectionSettings_" data-uid="Melanchall.DryWetMidi.Interaction.RestsUtilities.GetRests(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Interaction.ITimedObject},Melanchall.DryWetMidi.Interaction.RestDetectionSettings)">GetRests(IEnumerable&lt;ITimedObject&gt;, RestDetectionSettings)</h4>
   <div class="markdown level1 summary">
-Gets common CSV settings.
+Returns rests between objects within the specified collection according to
+the provided settings. Rests in the result collection are ordered by time.
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public CsvSettings CsvSettings { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">public static ICollection&lt;Rest&gt; GetRests(this IEnumerable&lt;ITimedObject&gt; timedObjects, RestDetectionSettings settings)</code></pre>
   </div>
-  <h5 class="propertyValue">Property Value</h5>
+  <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
     <thead>
       <tr>
         <th>Type</th>
+        <th>Name</th>
         <th>Description</th>
       </tr>
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Tools.CsvSettings.html">CsvSettings</a></td>
-        <td></td>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimedObject.html">ITimedObject</a>&gt;</td>
+        <td><span class="parametername">timedObjects</span></td>
+        <td>The input objects collection.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.RestDetectionSettings.html">RestDetectionSettings</a></td>
+        <td><span class="parametername">settings</span></td>
+        <td>Settings according to which rests should be detected and built.</td>
       </tr>
     </tbody>
   </table>
-  <a id="Melanchall_DryWetMidi_Tools_NoteCsvConversionSettings_NoteLengthType_" data-uid="Melanchall.DryWetMidi.Tools.NoteCsvConversionSettings.NoteLengthType*"></a>
-  <h4 id="Melanchall_DryWetMidi_Tools_NoteCsvConversionSettings_NoteLengthType" data-uid="Melanchall.DryWetMidi.Tools.NoteCsvConversionSettings.NoteLengthType">NoteLengthType</h4>
-  <div class="markdown level1 summary">
-Gets or sets the type of a note length (metric, bar/beat and so on) which should be used to
-write to or read from CSV. The default value is <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimeSpanType.html#Melanchall_DryWetMidi_Interaction_TimeSpanType_Midi">Midi</a>.
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public TimeSpanType NoteLengthType { get; set; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
+  <h5 class="returns">Returns</h5>
   <table class="table table-bordered table-striped table-condensed">
     <thead>
       <tr>
@@ -171,8 +167,8 @@ write to or read from CSV. The default value is <a class="xref" href="Melanchall
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TimeSpanType.html">TimeSpanType</a></td>
-        <td></td>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.icollection-1">ICollection</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.Rest.html">Rest</a>&gt;</td>
+        <td>Collection of rests between objects within <code data-dev-comment-type="paramref" class="paramref">timedObjects</code>.</td>
       </tr>
     </tbody>
   </table>
@@ -186,23 +182,49 @@ write to or read from CSV. The default value is <a class="xref" href="Melanchall
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.componentmodel.invalidenumargumentexception">InvalidEnumArgumentException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">value</code> specified an invalid value.</td>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td>
+<p>One of the following errors occurred:</p>
+<ul><li><code data-dev-comment-type="paramref" class="paramref">timedObjects</code> is <code>null</code>.</li><li><code data-dev-comment-type="paramref" class="paramref">settings</code> is <code>null</code>.</li></ul>
+</td>
       </tr>
     </tbody>
   </table>
-  <a id="Melanchall_DryWetMidi_Tools_NoteCsvConversionSettings_NoteNumberFormat_" data-uid="Melanchall.DryWetMidi.Tools.NoteCsvConversionSettings.NoteNumberFormat*"></a>
-  <h4 id="Melanchall_DryWetMidi_Tools_NoteCsvConversionSettings_NoteNumberFormat" data-uid="Melanchall.DryWetMidi.Tools.NoteCsvConversionSettings.NoteNumberFormat">NoteNumberFormat</h4>
+  <a id="Melanchall_DryWetMidi_Interaction_RestsUtilities_WithRests_" data-uid="Melanchall.DryWetMidi.Interaction.RestsUtilities.WithRests*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_RestsUtilities_WithRests_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_ITimedObject__Melanchall_DryWetMidi_Interaction_RestDetectionSettings_" data-uid="Melanchall.DryWetMidi.Interaction.RestsUtilities.WithRests(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Interaction.ITimedObject},Melanchall.DryWetMidi.Interaction.RestDetectionSettings)">WithRests(IEnumerable&lt;ITimedObject&gt;, RestDetectionSettings)</h4>
   <div class="markdown level1 summary">
-Gets or sets the format which should be used to write a note&apos;s number to or read it from CSV.
-The default value is <a class="xref" href="Melanchall.DryWetMidi.Tools.NoteNumberFormat.html#Melanchall_DryWetMidi_Tools_NoteNumberFormat_NoteNumber">NoteNumber</a>.
+Returns a collection of the specified objects and rests between them according to
+the provided settings. Objects (including rests) in the result collection are
+ordered by time.
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public NoteNumberFormat NoteNumberFormat { get; set; }</code></pre>
+    <pre><code class="lang-csharp hljs">public static IEnumerable&lt;ITimedObject&gt; WithRests(this IEnumerable&lt;ITimedObject&gt; timedObjects, RestDetectionSettings settings)</code></pre>
   </div>
-  <h5 class="propertyValue">Property Value</h5>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimedObject.html">ITimedObject</a>&gt;</td>
+        <td><span class="parametername">timedObjects</span></td>
+        <td>The input objects collection.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.RestDetectionSettings.html">RestDetectionSettings</a></td>
+        <td><span class="parametername">settings</span></td>
+        <td>Settings according to which rests should be detected and built.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
   <table class="table table-bordered table-striped table-condensed">
     <thead>
       <tr>
@@ -212,8 +234,9 @@ The default value is <a class="xref" href="Melanchall.DryWetMidi.Tools.NoteNumbe
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Tools.NoteNumberFormat.html">NoteNumberFormat</a></td>
-        <td></td>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimedObject.html">ITimedObject</a>&gt;</td>
+        <td>Collection with objects from <code data-dev-comment-type="paramref" class="paramref">timedObjects</code> and rests
+between them.</td>
       </tr>
     </tbody>
   </table>
@@ -227,48 +250,11 @@ The default value is <a class="xref" href="Melanchall.DryWetMidi.Tools.NoteNumbe
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.componentmodel.invalidenumargumentexception">InvalidEnumArgumentException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">value</code> specified an invalid value.</td>
-      </tr>
-    </tbody>
-  </table>
-  <a id="Melanchall_DryWetMidi_Tools_NoteCsvConversionSettings_TimeType_" data-uid="Melanchall.DryWetMidi.Tools.NoteCsvConversionSettings.TimeType*"></a>
-  <h4 id="Melanchall_DryWetMidi_Tools_NoteCsvConversionSettings_TimeType" data-uid="Melanchall.DryWetMidi.Tools.NoteCsvConversionSettings.TimeType">TimeType</h4>
-  <div class="markdown level1 summary">
-Gets or sets format of timestamps inside CSV representation. The default value is <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimeSpanType.html#Melanchall_DryWetMidi_Interaction_TimeSpanType_Midi">Midi</a>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public TimeSpanType TimeType { get; set; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TimeSpanType.html">TimeSpanType</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.componentmodel.invalidenumargumentexception">InvalidEnumArgumentException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">value</code> specified an invalid value.</td>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td>
+<p>One of the following errors occurred:</p>
+<ul><li><code data-dev-comment-type="paramref" class="paramref">timedObjects</code> is <code>null</code>.</li><li><code data-dev-comment-type="paramref" class="paramref">settings</code> is <code>null</code>.</li></ul>
+</td>
       </tr>
     </tbody>
   </table>

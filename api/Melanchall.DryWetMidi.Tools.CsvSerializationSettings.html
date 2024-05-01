@@ -5,10 +5,10 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Class MidiFileCsvConversionSettings
+    <title>Class CsvSerializationSettings
    | DryWetMIDI </title>
     <meta name="viewport" content="width=device-width">
-    <meta name="title" content="Class MidiFileCsvConversionSettings
+    <meta name="title" content="Class CsvSerializationSettings
    | DryWetMIDI ">
     <meta name="generator" content="docfx 2.59.4.0">
     
@@ -78,20 +78,19 @@
         </div>
         <div class="article row grid-right">
           <div class="col-md-10">
-            <article class="content wrap" id="_content" data-uid="Melanchall.DryWetMidi.Tools.MidiFileCsvConversionSettings">
+            <article class="content wrap" id="_content" data-uid="Melanchall.DryWetMidi.Tools.CsvSerializationSettings">
   
   
-  <h1 id="Melanchall_DryWetMidi_Tools_MidiFileCsvConversionSettings" data-uid="Melanchall.DryWetMidi.Tools.MidiFileCsvConversionSettings" class="text-break">Class MidiFileCsvConversionSettings
+  <h1 id="Melanchall_DryWetMidi_Tools_CsvSerializationSettings" data-uid="Melanchall.DryWetMidi.Tools.CsvSerializationSettings" class="text-break">Class CsvSerializationSettings
   </h1>
   <div class="markdown level0 summary">
-Settings according to which <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a> must be read from or written to
-CSV representation.
+Privides settings that control the process of CSV serialization/deserialization.
 </div>
   <div class="markdown level0 conceptual"></div>
   <div class="inheritance">
     <h5>Inheritance</h5>
     <div class="level0"><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">Object</a></div>
-    <div class="level1"><span class="xref">MidiFileCsvConversionSettings</span></div>
+    <div class="level1"><span class="xref">CsvSerializationSettings</span></div>
   </div>
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
@@ -119,22 +118,22 @@ CSV representation.
   </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="Melanchall.DryWetMidi.Tools.html">Melanchall.DryWetMidi.Tools</a></h6>
   <h6><strong>Assembly</strong>: Melanchall.DryWetMidi.dll</h6>
-  <h5 id="Melanchall_DryWetMidi_Tools_MidiFileCsvConversionSettings_syntax">Syntax</h5>
+  <h5 id="Melanchall_DryWetMidi_Tools_CsvSerializationSettings_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public sealed class MidiFileCsvConversionSettings</code></pre>
+    <pre><code class="lang-csharp hljs">public sealed class CsvSerializationSettings</code></pre>
   </div>
   <h3 id="properties">Properties
   </h3>
-  <a id="Melanchall_DryWetMidi_Tools_MidiFileCsvConversionSettings_CsvLayout_" data-uid="Melanchall.DryWetMidi.Tools.MidiFileCsvConversionSettings.CsvLayout*"></a>
-  <h4 id="Melanchall_DryWetMidi_Tools_MidiFileCsvConversionSettings_CsvLayout" data-uid="Melanchall.DryWetMidi.Tools.MidiFileCsvConversionSettings.CsvLayout">CsvLayout</h4>
+  <a id="Melanchall_DryWetMidi_Tools_CsvSerializationSettings_BytesArrayFormat_" data-uid="Melanchall.DryWetMidi.Tools.CsvSerializationSettings.BytesArrayFormat*"></a>
+  <h4 id="Melanchall_DryWetMidi_Tools_CsvSerializationSettings_BytesArrayFormat" data-uid="Melanchall.DryWetMidi.Tools.CsvSerializationSettings.BytesArrayFormat">BytesArrayFormat</h4>
   <div class="markdown level1 summary">
-Gets or sets layout of CSV representation of <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a>. The default value is
-<a class="xref" href="Melanchall.DryWetMidi.Tools.MidiFileCsvLayout.html#Melanchall_DryWetMidi_Tools_MidiFileCsvLayout_DryWetMidi">DryWetMidi</a>.
+Gets or sets a value that defines how bytes arrays (for example, <a class="xref" href="Melanchall.DryWetMidi.Core.SequencerSpecificEvent.html#Melanchall_DryWetMidi_Core_SequencerSpecificEvent_Data">Data</a>)
+should be presented in CSV. The default value is <a class="xref" href="Melanchall.DryWetMidi.Tools.CsvBytesArrayFormat.html#Melanchall_DryWetMidi_Tools_CsvBytesArrayFormat_Decimal">Decimal</a>.
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public MidiFileCsvLayout CsvLayout { get; set; }</code></pre>
+    <pre><code class="lang-csharp hljs">public CsvBytesArrayFormat BytesArrayFormat { get; set; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -146,80 +145,7 @@ Gets or sets layout of CSV representation of <a class="xref" href="Melanchall.Dr
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Tools.MidiFileCsvLayout.html">MidiFileCsvLayout</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 id="Melanchall_DryWetMidi_Tools_MidiFileCsvConversionSettings_CsvLayout_remarks">Remarks</h5>
-  <div class="markdown level1 remarks">
-At now there are two layouts: <a class="xref" href="Melanchall.DryWetMidi.Tools.MidiFileCsvLayout.html#Melanchall_DryWetMidi_Tools_MidiFileCsvLayout_DryWetMidi">DryWetMidi</a> and
-<a class="xref" href="Melanchall.DryWetMidi.Tools.MidiFileCsvLayout.html#Melanchall_DryWetMidi_Tools_MidiFileCsvLayout_MidiCsv">MidiCsv</a> which produces slightly different CSV representations.
-The default value is <a class="xref" href="Melanchall.DryWetMidi.Tools.MidiFileCsvLayout.html#Melanchall_DryWetMidi_Tools_MidiFileCsvLayout_DryWetMidi">DryWetMidi</a> that gives more compact and more
-human readable CSV data.
-</div>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.componentmodel.invalidenumargumentexception">InvalidEnumArgumentException</a></td>
-        <td><code data-dev-comment-type="paramref" class="paramref">value</code> specified an invalid value.</td>
-      </tr>
-    </tbody>
-  </table>
-  <a id="Melanchall_DryWetMidi_Tools_MidiFileCsvConversionSettings_CsvSettings_" data-uid="Melanchall.DryWetMidi.Tools.MidiFileCsvConversionSettings.CsvSettings*"></a>
-  <h4 id="Melanchall_DryWetMidi_Tools_MidiFileCsvConversionSettings_CsvSettings" data-uid="Melanchall.DryWetMidi.Tools.MidiFileCsvConversionSettings.CsvSettings">CsvSettings</h4>
-  <div class="markdown level1 summary">
-Gets common CSV settings.
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public CsvSettings CsvSettings { get; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Tools.CsvSettings.html">CsvSettings</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <a id="Melanchall_DryWetMidi_Tools_MidiFileCsvConversionSettings_NoteFormat_" data-uid="Melanchall.DryWetMidi.Tools.MidiFileCsvConversionSettings.NoteFormat*"></a>
-  <h4 id="Melanchall_DryWetMidi_Tools_MidiFileCsvConversionSettings_NoteFormat" data-uid="Melanchall.DryWetMidi.Tools.MidiFileCsvConversionSettings.NoteFormat">NoteFormat</h4>
-  <div class="markdown level1 summary">
-Gets or sets the format which should be used to write notes to or read them from CSV.
-The default value is <a class="xref" href="Melanchall.DryWetMidi.Tools.NoteFormat.html#Melanchall_DryWetMidi_Tools_NoteFormat_Events">Events</a>.
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public NoteFormat NoteFormat { get; set; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Tools.NoteFormat.html">NoteFormat</a></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Tools.CsvBytesArrayFormat.html">CsvBytesArrayFormat</a></td>
         <td></td>
       </tr>
     </tbody>
@@ -239,16 +165,43 @@ The default value is <a class="xref" href="Melanchall.DryWetMidi.Tools.NoteForma
       </tr>
     </tbody>
   </table>
-  <a id="Melanchall_DryWetMidi_Tools_MidiFileCsvConversionSettings_NoteLengthType_" data-uid="Melanchall.DryWetMidi.Tools.MidiFileCsvConversionSettings.NoteLengthType*"></a>
-  <h4 id="Melanchall_DryWetMidi_Tools_MidiFileCsvConversionSettings_NoteLengthType" data-uid="Melanchall.DryWetMidi.Tools.MidiFileCsvConversionSettings.NoteLengthType">NoteLengthType</h4>
+  <a id="Melanchall_DryWetMidi_Tools_CsvSerializationSettings_Delimiter_" data-uid="Melanchall.DryWetMidi.Tools.CsvSerializationSettings.Delimiter*"></a>
+  <h4 id="Melanchall_DryWetMidi_Tools_CsvSerializationSettings_Delimiter" data-uid="Melanchall.DryWetMidi.Tools.CsvSerializationSettings.Delimiter">Delimiter</h4>
   <div class="markdown level1 summary">
-Gets or sets the type of a note length (metric, bar/beat and so on) which should be used to
-write to or read from CSV. The default value is <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimeSpanType.html#Melanchall_DryWetMidi_Interaction_TimeSpanType_Midi">Midi</a>.
+Gets or sets a char used as the values delimiter in CSV records. The default value
+is comma (<code>&apos;,&apos;</code>).
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public TimeSpanType NoteLengthType { get; set; }</code></pre>
+    <pre><code class="lang-csharp hljs">public char Delimiter { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.char">Char</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Tools_CsvSerializationSettings_LengthType_" data-uid="Melanchall.DryWetMidi.Tools.CsvSerializationSettings.LengthType*"></a>
+  <h4 id="Melanchall_DryWetMidi_Tools_CsvSerializationSettings_LengthType" data-uid="Melanchall.DryWetMidi.Tools.CsvSerializationSettings.LengthType">LengthType</h4>
+  <div class="markdown level1 summary">
+Gets or sets a value that defines how length of notes should be presented in CSV.
+The default value is <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimeSpanType.html#Melanchall_DryWetMidi_Interaction_TimeSpanType_Midi">Midi</a>. More info on the supported
+formats in the <a class="xref" href="../articles/high-level-managing/Time-and-length.html">Time and length</a> article.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public TimeSpanType LengthType { get; set; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -280,16 +233,16 @@ write to or read from CSV. The default value is <a class="xref" href="Melanchall
       </tr>
     </tbody>
   </table>
-  <a id="Melanchall_DryWetMidi_Tools_MidiFileCsvConversionSettings_NoteNumberFormat_" data-uid="Melanchall.DryWetMidi.Tools.MidiFileCsvConversionSettings.NoteNumberFormat*"></a>
-  <h4 id="Melanchall_DryWetMidi_Tools_MidiFileCsvConversionSettings_NoteNumberFormat" data-uid="Melanchall.DryWetMidi.Tools.MidiFileCsvConversionSettings.NoteNumberFormat">NoteNumberFormat</h4>
+  <a id="Melanchall_DryWetMidi_Tools_CsvSerializationSettings_NoteFormat_" data-uid="Melanchall.DryWetMidi.Tools.CsvSerializationSettings.NoteFormat*"></a>
+  <h4 id="Melanchall_DryWetMidi_Tools_CsvSerializationSettings_NoteFormat" data-uid="Melanchall.DryWetMidi.Tools.CsvSerializationSettings.NoteFormat">NoteFormat</h4>
   <div class="markdown level1 summary">
-Gets or sets the format which should be used to write a note&apos;s number to or read it from CSV.
-The default value is <a class="xref" href="Melanchall.DryWetMidi.Tools.NoteNumberFormat.html#Melanchall_DryWetMidi_Tools_NoteNumberFormat_NoteNumber">NoteNumber</a>.
+Gets or sets a value that defines how note numbers (for example, <a class="xref" href="Melanchall.DryWetMidi.Core.NoteAftertouchEvent.html#Melanchall_DryWetMidi_Core_NoteAftertouchEvent_NoteNumber">NoteNumber</a>)
+should be presented in CSV. The default value is <a class="xref" href="Melanchall.DryWetMidi.Tools.CsvNoteFormat.html#Melanchall_DryWetMidi_Tools_CsvNoteFormat_NoteNumber">NoteNumber</a>.
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public NoteNumberFormat NoteNumberFormat { get; set; }</code></pre>
+    <pre><code class="lang-csharp hljs">public CsvNoteFormat NoteFormat { get; set; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -301,7 +254,7 @@ The default value is <a class="xref" href="Melanchall.DryWetMidi.Tools.NoteNumbe
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Tools.NoteNumberFormat.html">NoteNumberFormat</a></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Tools.CsvNoteFormat.html">CsvNoteFormat</a></td>
         <td></td>
       </tr>
     </tbody>
@@ -321,10 +274,53 @@ The default value is <a class="xref" href="Melanchall.DryWetMidi.Tools.NoteNumbe
       </tr>
     </tbody>
   </table>
-  <a id="Melanchall_DryWetMidi_Tools_MidiFileCsvConversionSettings_TimeType_" data-uid="Melanchall.DryWetMidi.Tools.MidiFileCsvConversionSettings.TimeType*"></a>
-  <h4 id="Melanchall_DryWetMidi_Tools_MidiFileCsvConversionSettings_TimeType" data-uid="Melanchall.DryWetMidi.Tools.MidiFileCsvConversionSettings.TimeType">TimeType</h4>
+  <a id="Melanchall_DryWetMidi_Tools_CsvSerializationSettings_ReadWriteBufferSize_" data-uid="Melanchall.DryWetMidi.Tools.CsvSerializationSettings.ReadWriteBufferSize*"></a>
+  <h4 id="Melanchall_DryWetMidi_Tools_CsvSerializationSettings_ReadWriteBufferSize" data-uid="Melanchall.DryWetMidi.Tools.CsvSerializationSettings.ReadWriteBufferSize">ReadWriteBufferSize</h4>
   <div class="markdown level1 summary">
-Gets or sets format of timestamps inside CSV representation. The default value is <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimeSpanType.html#Melanchall_DryWetMidi_Interaction_TimeSpanType_Midi">Midi</a>
+Gets or sets the size in bytes of the internal buffer for reading/writing data within
+the process of CSV serialization/deserialization. The default value is <code>1024</code>.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int ReadWriteBufferSize { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">Int32</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">value</code> is zero or negative.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Tools_CsvSerializationSettings_TimeType_" data-uid="Melanchall.DryWetMidi.Tools.CsvSerializationSettings.TimeType*"></a>
+  <h4 id="Melanchall_DryWetMidi_Tools_CsvSerializationSettings_TimeType" data-uid="Melanchall.DryWetMidi.Tools.CsvSerializationSettings.TimeType">TimeType</h4>
+  <div class="markdown level1 summary">
+Gets or sets a value that defines how the time of objects should be presented in CSV.
+The default value is <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimeSpanType.html#Melanchall_DryWetMidi_Interaction_TimeSpanType_Midi">Midi</a>. More info on the supported
+formats in the <a class="xref" href="../articles/high-level-managing/Time-and-length.html">Time and length</a> article.
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -346,12 +342,6 @@ Gets or sets format of timestamps inside CSV representation. The default value i
       </tr>
     </tbody>
   </table>
-  <h5 id="Melanchall_DryWetMidi_Tools_MidiFileCsvConversionSettings_TimeType_remarks">Remarks</h5>
-  <div class="markdown level1 remarks">
-Note that it is recommended to use <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimeSpanType.html#Melanchall_DryWetMidi_Interaction_TimeSpanType_Midi">Midi</a> if you use
-<a class="xref" href="Melanchall.DryWetMidi.Tools.MidiFileCsvLayout.html#Melanchall_DryWetMidi_Tools_MidiFileCsvLayout_MidiCsv">MidiCsv</a> CSV layout to ensure produced CSV data can be read
-by other readers that supports format used by midicsv (http://www.fourmilab.ch/webtools/midicsv/) program.
-</div>
   <h5 class="exceptions">Exceptions</h5>
   <table class="table table-bordered table-striped table-condensed">
     <thead>
@@ -367,6 +357,10 @@ by other readers that supports format used by midicsv (http://www.fourmilab.ch/w
       </tr>
     </tbody>
   </table>
+  <h3 id="seealso">See Also</h3>
+  <div class="seealso">
+      <div><a class="xref" href="Melanchall.DryWetMidi.Tools.CsvSerializer.html">CsvSerializer</a></div>
+  </div>
 </article>
           </div>
           

@@ -159,6 +159,27 @@ Gets the MIDI time when value is changed.
       </tr>
     </tbody>
   </table>
+  <h5 id="Melanchall_DryWetMidi_Interaction_ValueChange_1_Time_remarks">Remarks</h5>
+  <div class="markdown level1 remarks">
+Note that the returned value will be in ticks (not seconds, not milliseconds and so on).
+Please read <a class="xref" href="../articles/high-level-managing/Time-and-length.html">Time and length</a> article to learn how you can
+get the time in different representations.
+</div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.invalidoperationexception">InvalidOperationException</a></td>
+        <td>Setting time of value change object is not allowed.</td>
+      </tr>
+    </tbody>
+  </table>
   <a id="Melanchall_DryWetMidi_Interaction_ValueChange_1_Value_" data-uid="Melanchall.DryWetMidi.Interaction.ValueChange`1.Value*"></a>
   <h4 id="Melanchall_DryWetMidi_Interaction_ValueChange_1_Value" data-uid="Melanchall.DryWetMidi.Interaction.ValueChange`1.Value">Value</h4>
   <div class="markdown level1 summary">

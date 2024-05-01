@@ -98,7 +98,7 @@ Represents an object that has time.
   <a id="Melanchall_DryWetMidi_Interaction_ITimedObject_Time_" data-uid="Melanchall.DryWetMidi.Interaction.ITimedObject.Time*"></a>
   <h4 id="Melanchall_DryWetMidi_Interaction_ITimedObject_Time" data-uid="Melanchall.DryWetMidi.Interaction.ITimedObject.Time">Time</h4>
   <div class="markdown level1 summary">
-Gets or sets the time of an object.
+Gets the start time of an object.
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -117,6 +117,27 @@ Gets or sets the time of an object.
       <tr>
         <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int64">Int64</a></td>
         <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Melanchall_DryWetMidi_Interaction_ITimedObject_Time_remarks">Remarks</h5>
+  <div class="markdown level1 remarks">
+Note that the returned value will be in ticks (not seconds, not milliseconds and so on).
+Please read <a class="xref" href="../articles/high-level-managing/Time-and-length.html">Time and length</a> article to learn how you can
+get the time in different representations.
+</div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">value</code> is negative.</td>
       </tr>
     </tbody>
   </table>

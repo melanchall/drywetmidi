@@ -84,8 +84,7 @@
   <h1 id="Melanchall_DryWetMidi_Interaction_Rest" data-uid="Melanchall.DryWetMidi.Interaction.Rest" class="text-break">Class Rest
   </h1>
   <div class="markdown level0 summary">
-Represents a musical rest. More info in the
-<a class="xref" href="../articles/high-level-managing/Getting-objects.html#rests">Getting objects: GetObjects: Rests</a> article.
+Represents a musical rest. More info in the <a class="xref" href="../articles/high-level-managing/Getting-objects.html#rests">Getting objects: Rests</a> article.
 </div>
   <div class="markdown level0 conceptual"></div>
   <div class="inheritance">
@@ -123,31 +122,6 @@ Represents a musical rest. More info in the
   </div>
   <h3 id="properties">Properties
   </h3>
-  <a id="Melanchall_DryWetMidi_Interaction_Rest_Channel_" data-uid="Melanchall.DryWetMidi.Interaction.Rest.Channel*"></a>
-  <h4 id="Melanchall_DryWetMidi_Interaction_Rest_Channel" data-uid="Melanchall.DryWetMidi.Interaction.Rest.Channel">Channel</h4>
-  <div class="markdown level1 summary">
-Gets a channel the rest was constructed for.
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public FourBitNumber? Channel { get; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.nullable-1">Nullable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Common.FourBitNumber.html">FourBitNumber</a>&gt;</td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
   <a id="Melanchall_DryWetMidi_Interaction_Rest_EndTime_" data-uid="Melanchall.DryWetMidi.Interaction.Rest.EndTime*"></a>
   <h4 id="Melanchall_DryWetMidi_Interaction_Rest_EndTime" data-uid="Melanchall.DryWetMidi.Interaction.Rest.EndTime">EndTime</h4>
   <div class="markdown level1 summary">
@@ -173,10 +147,37 @@ Gets the end time of an object.
       </tr>
     </tbody>
   </table>
+  <a id="Melanchall_DryWetMidi_Interaction_Rest_Key_" data-uid="Melanchall.DryWetMidi.Interaction.Rest.Key*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_Rest_Key" data-uid="Melanchall.DryWetMidi.Interaction.Rest.Key">Key</h4>
+  <div class="markdown level1 summary">
+Gets the key of objects the current rest has been built for. Please read
+<a class="xref" href="../articles/high-level-managing/Getting-objects.html#rests">Getting objects: Rests</a> article to
+understand the key concept.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public object Key { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">Object</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
   <a id="Melanchall_DryWetMidi_Interaction_Rest_Length_" data-uid="Melanchall.DryWetMidi.Interaction.Rest.Length*"></a>
   <h4 id="Melanchall_DryWetMidi_Interaction_Rest_Length" data-uid="Melanchall.DryWetMidi.Interaction.Rest.Length">Length</h4>
   <div class="markdown level1 summary">
-Gets length of an object.
+Gets the length of an object.
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -198,35 +199,31 @@ Gets length of an object.
       </tr>
     </tbody>
   </table>
-  <a id="Melanchall_DryWetMidi_Interaction_Rest_NoteNumber_" data-uid="Melanchall.DryWetMidi.Interaction.Rest.NoteNumber*"></a>
-  <h4 id="Melanchall_DryWetMidi_Interaction_Rest_NoteNumber" data-uid="Melanchall.DryWetMidi.Interaction.Rest.NoteNumber">NoteNumber</h4>
-  <div class="markdown level1 summary">
-Gets a note number the rest was constructed for.
+  <h5 id="Melanchall_DryWetMidi_Interaction_Rest_Length_remarks">Remarks</h5>
+  <div class="markdown level1 remarks">
+Note that the returned value will be in ticks (not seconds, not milliseconds and so on).
+Please read <a class="xref" href="../articles/high-level-managing/Time-and-length.html">Time and length</a> article to learn how you can
+get the length in different representations.
 </div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public SevenBitNumber? NoteNumber { get; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
+  <h5 class="exceptions">Exceptions</h5>
   <table class="table table-bordered table-striped table-condensed">
     <thead>
       <tr>
         <th>Type</th>
-        <th>Description</th>
+        <th>Condition</th>
       </tr>
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.nullable-1">Nullable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Common.SevenBitNumber.html">SevenBitNumber</a>&gt;</td>
-        <td></td>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">value</code> is negative.</td>
       </tr>
     </tbody>
   </table>
   <a id="Melanchall_DryWetMidi_Interaction_Rest_Time_" data-uid="Melanchall.DryWetMidi.Interaction.Rest.Time*"></a>
   <h4 id="Melanchall_DryWetMidi_Interaction_Rest_Time" data-uid="Melanchall.DryWetMidi.Interaction.Rest.Time">Time</h4>
   <div class="markdown level1 summary">
-Gets start time of an object.
+Gets the start time of an object.
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -245,6 +242,27 @@ Gets start time of an object.
       <tr>
         <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int64">Int64</a></td>
         <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Melanchall_DryWetMidi_Interaction_Rest_Time_remarks">Remarks</h5>
+  <div class="markdown level1 remarks">
+Note that the returned value will be in ticks (not seconds, not milliseconds and so on).
+Please read <a class="xref" href="../articles/high-level-managing/Time-and-length.html">Time and length</a> article to learn how you can
+get the time in different representations.
+</div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
+        <td><code data-dev-comment-type="paramref" class="paramref">value</code> is negative.</td>
       </tr>
     </tbody>
   </table>
@@ -632,6 +650,11 @@ Determines if two <a class="xref" href="Melanchall.DryWetMidi.Interaction.Rest.h
   </div>
   <div>
       <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedObjectUtilities.html#Melanchall_DryWetMidi_Interaction_TimedObjectUtilities_SetTime__1___0_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_TempoMap_">TimedObjectUtilities.SetTime&lt;TObject&gt;(TObject, ITimeSpan, TempoMap)</a>
+  </div>
+  <h3 id="seealso">See Also</h3>
+  <div class="seealso">
+      <div><a class="xref" href="Melanchall.DryWetMidi.Interaction.RestsUtilities.html">RestsUtilities</a></div>
+      <div><a class="xref" href="Melanchall.DryWetMidi.Interaction.RestDetectionSettings.html">RestDetectionSettings</a></div>
   </div>
 </article>
           </div>

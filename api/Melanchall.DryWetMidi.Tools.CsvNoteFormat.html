@@ -5,10 +5,10 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Enum MidiFileCsvLayout
+    <title>Enum CsvNoteFormat
    | DryWetMIDI </title>
     <meta name="viewport" content="width=device-width">
-    <meta name="title" content="Enum MidiFileCsvLayout
+    <meta name="title" content="Enum CsvNoteFormat
    | DryWetMIDI ">
     <meta name="generator" content="docfx 2.59.4.0">
     
@@ -78,20 +78,21 @@
         </div>
         <div class="article row grid-right">
           <div class="col-md-10">
-            <article class="content wrap" id="_content" data-uid="Melanchall.DryWetMidi.Tools.MidiFileCsvLayout">
+            <article class="content wrap" id="_content" data-uid="Melanchall.DryWetMidi.Tools.CsvNoteFormat">
   
   
-  <h1 id="Melanchall_DryWetMidi_Tools_MidiFileCsvLayout" data-uid="Melanchall.DryWetMidi.Tools.MidiFileCsvLayout" class="text-break">Enum MidiFileCsvLayout
+  <h1 id="Melanchall_DryWetMidi_Tools_CsvNoteFormat" data-uid="Melanchall.DryWetMidi.Tools.CsvNoteFormat" class="text-break">Enum CsvNoteFormat
   </h1>
   <div class="markdown level0 summary">
-Layout (format) of CSV data representing a MIDI file. The default value is <a class="xref" href="Melanchall.DryWetMidi.Tools.MidiFileCsvLayout.html#Melanchall_DryWetMidi_Tools_MidiFileCsvLayout_DryWetMidi">DryWetMidi</a>.
+Defines how note numbers (for example, <a class="xref" href="Melanchall.DryWetMidi.Core.NoteAftertouchEvent.html#Melanchall_DryWetMidi_Core_NoteAftertouchEvent_NoteNumber">NoteNumber</a>) should be
+presented in CSV. The default value is <a class="xref" href="Melanchall.DryWetMidi.Tools.CsvNoteFormat.html#Melanchall_DryWetMidi_Tools_CsvNoteFormat_NoteNumber">NoteNumber</a>.
 </div>
   <div class="markdown level0 conceptual"></div>
   <h6><strong>Namespace</strong>: <a class="xref" href="Melanchall.DryWetMidi.Tools.html">Melanchall.DryWetMidi.Tools</a></h6>
   <h6><strong>Assembly</strong>: Melanchall.DryWetMidi.dll</h6>
-  <h5 id="Melanchall_DryWetMidi_Tools_MidiFileCsvLayout_syntax">Syntax</h5>
+  <h5 id="Melanchall_DryWetMidi_Tools_CsvNoteFormat_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public enum MidiFileCsvLayout</code></pre>
+    <pre><code class="lang-csharp hljs">public enum CsvNoteFormat</code></pre>
   </div>
   <h3 id="fields">Fields
   </h3>
@@ -104,16 +105,16 @@ Layout (format) of CSV data representing a MIDI file. The default value is <a cl
     <thead>
     <tbody>
       <tr>
-        <td id="Melanchall_DryWetMidi_Tools_MidiFileCsvLayout_DryWetMidi">DryWetMidi</td>
+        <td id="Melanchall_DryWetMidi_Tools_CsvNoteFormat_Letter">Letter</td>
         <td>
-Format used by DryWetMIDI which gives more compact and human readable CSV
-representation.
+A note number should be presented as a letter including accidental and octave number.
+For example, <code>C4</code>.
 </td>
       </tr>
       <tr>
-        <td id="Melanchall_DryWetMidi_Tools_MidiFileCsvLayout_MidiCsv">MidiCsv</td>
+        <td id="Melanchall_DryWetMidi_Tools_CsvNoteFormat_NoteNumber">NoteNumber</td>
         <td>
-Format used by midicsv (http://www.fourmilab.ch/webtools/midicsv/) program.
+A note number should be presented as just a number. For example, <code>60</code>.
 </td>
       </tr>
     </tbody>

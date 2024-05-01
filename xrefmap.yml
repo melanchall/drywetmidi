@@ -4,6 +4,9 @@ references:
 - uid: a_composing_pattern
   name: Pattern
   href: articles/composing/Pattern.html
+- uid: a_csv_serializer
+  name: CSV serializer
+  href: articles/tools/CSV-serializer.html
 - uid: a_custom_chunk
   name: Custom chunks
   href: articles/custom-data-structures/Custom-chunks.html
@@ -15437,19 +15440,6 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings.NoteDetectionSettings
   nameWithType: ObjectDetectionSettings.NoteDetectionSettings
-- uid: Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings.RestDetectionSettings
-  name: RestDetectionSettings
-  href: api/Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings.html#Melanchall_DryWetMidi_Interaction_ObjectDetectionSettings_RestDetectionSettings
-  commentId: P:Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings.RestDetectionSettings
-  fullName: Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings.RestDetectionSettings
-  nameWithType: ObjectDetectionSettings.RestDetectionSettings
-- uid: Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings.RestDetectionSettings*
-  name: RestDetectionSettings
-  href: api/Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings.html#Melanchall_DryWetMidi_Interaction_ObjectDetectionSettings_RestDetectionSettings_
-  commentId: Overload:Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings.RestDetectionSettings
-  isSpec: "True"
-  fullName: Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings.RestDetectionSettings
-  nameWithType: ObjectDetectionSettings.RestDetectionSettings
 - uid: Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings.TimedEventDetectionSettings
   name: TimedEventDetectionSettings
   href: api/Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings.html#Melanchall_DryWetMidi_Interaction_ObjectDetectionSettings_TimedEventDetectionSettings
@@ -15481,12 +15471,6 @@ references:
   commentId: F:Melanchall.DryWetMidi.Interaction.ObjectType.Note
   fullName: Melanchall.DryWetMidi.Interaction.ObjectType.Note
   nameWithType: ObjectType.Note
-- uid: Melanchall.DryWetMidi.Interaction.ObjectType.Rest
-  name: Rest
-  href: api/Melanchall.DryWetMidi.Interaction.ObjectType.html#Melanchall_DryWetMidi_Interaction_ObjectType_Rest
-  commentId: F:Melanchall.DryWetMidi.Interaction.ObjectType.Rest
-  fullName: Melanchall.DryWetMidi.Interaction.ObjectType.Rest
-  nameWithType: ObjectType.Rest
 - uid: Melanchall.DryWetMidi.Interaction.ObjectType.TimedEvent
   name: TimedEvent
   href: api/Melanchall.DryWetMidi.Interaction.ObjectType.html#Melanchall_DryWetMidi_Interaction_ObjectType_TimedEvent
@@ -15853,19 +15837,6 @@ references:
   commentId: T:Melanchall.DryWetMidi.Interaction.Rest
   fullName: Melanchall.DryWetMidi.Interaction.Rest
   nameWithType: Rest
-- uid: Melanchall.DryWetMidi.Interaction.Rest.Channel
-  name: Channel
-  href: api/Melanchall.DryWetMidi.Interaction.Rest.html#Melanchall_DryWetMidi_Interaction_Rest_Channel
-  commentId: P:Melanchall.DryWetMidi.Interaction.Rest.Channel
-  fullName: Melanchall.DryWetMidi.Interaction.Rest.Channel
-  nameWithType: Rest.Channel
-- uid: Melanchall.DryWetMidi.Interaction.Rest.Channel*
-  name: Channel
-  href: api/Melanchall.DryWetMidi.Interaction.Rest.html#Melanchall_DryWetMidi_Interaction_Rest_Channel_
-  commentId: Overload:Melanchall.DryWetMidi.Interaction.Rest.Channel
-  isSpec: "True"
-  fullName: Melanchall.DryWetMidi.Interaction.Rest.Channel
-  nameWithType: Rest.Channel
 - uid: Melanchall.DryWetMidi.Interaction.Rest.Clone
   name: Clone()
   href: api/Melanchall.DryWetMidi.Interaction.Rest.html#Melanchall_DryWetMidi_Interaction_Rest_Clone
@@ -15918,6 +15889,19 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Interaction.Rest.GetHashCode
   nameWithType: Rest.GetHashCode
+- uid: Melanchall.DryWetMidi.Interaction.Rest.Key
+  name: Key
+  href: api/Melanchall.DryWetMidi.Interaction.Rest.html#Melanchall_DryWetMidi_Interaction_Rest_Key
+  commentId: P:Melanchall.DryWetMidi.Interaction.Rest.Key
+  fullName: Melanchall.DryWetMidi.Interaction.Rest.Key
+  nameWithType: Rest.Key
+- uid: Melanchall.DryWetMidi.Interaction.Rest.Key*
+  name: Key
+  href: api/Melanchall.DryWetMidi.Interaction.Rest.html#Melanchall_DryWetMidi_Interaction_Rest_Key_
+  commentId: Overload:Melanchall.DryWetMidi.Interaction.Rest.Key
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Interaction.Rest.Key
+  nameWithType: Rest.Key
 - uid: Melanchall.DryWetMidi.Interaction.Rest.Length
   name: Length
   href: api/Melanchall.DryWetMidi.Interaction.Rest.html#Melanchall_DryWetMidi_Interaction_Rest_Length
@@ -15937,19 +15921,6 @@ references:
   commentId: E:Melanchall.DryWetMidi.Interaction.Rest.LengthChanged
   fullName: Melanchall.DryWetMidi.Interaction.Rest.LengthChanged
   nameWithType: Rest.LengthChanged
-- uid: Melanchall.DryWetMidi.Interaction.Rest.NoteNumber
-  name: NoteNumber
-  href: api/Melanchall.DryWetMidi.Interaction.Rest.html#Melanchall_DryWetMidi_Interaction_Rest_NoteNumber
-  commentId: P:Melanchall.DryWetMidi.Interaction.Rest.NoteNumber
-  fullName: Melanchall.DryWetMidi.Interaction.Rest.NoteNumber
-  nameWithType: Rest.NoteNumber
-- uid: Melanchall.DryWetMidi.Interaction.Rest.NoteNumber*
-  name: NoteNumber
-  href: api/Melanchall.DryWetMidi.Interaction.Rest.html#Melanchall_DryWetMidi_Interaction_Rest_NoteNumber_
-  commentId: Overload:Melanchall.DryWetMidi.Interaction.Rest.NoteNumber
-  isSpec: "True"
-  fullName: Melanchall.DryWetMidi.Interaction.Rest.NoteNumber
-  nameWithType: Rest.NoteNumber
 - uid: Melanchall.DryWetMidi.Interaction.Rest.op_Equality(Melanchall.DryWetMidi.Interaction.Rest,Melanchall.DryWetMidi.Interaction.Rest)
   name: Equality(Rest, Rest)
   href: api/Melanchall.DryWetMidi.Interaction.Rest.html#Melanchall_DryWetMidi_Interaction_Rest_op_Equality_Melanchall_DryWetMidi_Interaction_Rest_Melanchall_DryWetMidi_Interaction_Rest_
@@ -16027,49 +15998,93 @@ references:
   commentId: T:Melanchall.DryWetMidi.Interaction.RestDetectionSettings
   fullName: Melanchall.DryWetMidi.Interaction.RestDetectionSettings
   nameWithType: RestDetectionSettings
-- uid: Melanchall.DryWetMidi.Interaction.RestDetectionSettings.RestSeparationPolicy
-  name: RestSeparationPolicy
-  href: api/Melanchall.DryWetMidi.Interaction.RestDetectionSettings.html#Melanchall_DryWetMidi_Interaction_RestDetectionSettings_RestSeparationPolicy
-  commentId: P:Melanchall.DryWetMidi.Interaction.RestDetectionSettings.RestSeparationPolicy
-  fullName: Melanchall.DryWetMidi.Interaction.RestDetectionSettings.RestSeparationPolicy
-  nameWithType: RestDetectionSettings.RestSeparationPolicy
-- uid: Melanchall.DryWetMidi.Interaction.RestDetectionSettings.RestSeparationPolicy*
-  name: RestSeparationPolicy
-  href: api/Melanchall.DryWetMidi.Interaction.RestDetectionSettings.html#Melanchall_DryWetMidi_Interaction_RestDetectionSettings_RestSeparationPolicy_
-  commentId: Overload:Melanchall.DryWetMidi.Interaction.RestDetectionSettings.RestSeparationPolicy
+- uid: Melanchall.DryWetMidi.Interaction.RestDetectionSettings.KeySelector
+  name: KeySelector
+  href: api/Melanchall.DryWetMidi.Interaction.RestDetectionSettings.html#Melanchall_DryWetMidi_Interaction_RestDetectionSettings_KeySelector
+  commentId: P:Melanchall.DryWetMidi.Interaction.RestDetectionSettings.KeySelector
+  fullName: Melanchall.DryWetMidi.Interaction.RestDetectionSettings.KeySelector
+  nameWithType: RestDetectionSettings.KeySelector
+- uid: Melanchall.DryWetMidi.Interaction.RestDetectionSettings.KeySelector*
+  name: KeySelector
+  href: api/Melanchall.DryWetMidi.Interaction.RestDetectionSettings.html#Melanchall_DryWetMidi_Interaction_RestDetectionSettings_KeySelector_
+  commentId: Overload:Melanchall.DryWetMidi.Interaction.RestDetectionSettings.KeySelector
   isSpec: "True"
-  fullName: Melanchall.DryWetMidi.Interaction.RestDetectionSettings.RestSeparationPolicy
-  nameWithType: RestDetectionSettings.RestSeparationPolicy
-- uid: Melanchall.DryWetMidi.Interaction.RestSeparationPolicy
-  name: RestSeparationPolicy
-  href: api/Melanchall.DryWetMidi.Interaction.RestSeparationPolicy.html
-  commentId: T:Melanchall.DryWetMidi.Interaction.RestSeparationPolicy
-  fullName: Melanchall.DryWetMidi.Interaction.RestSeparationPolicy
-  nameWithType: RestSeparationPolicy
-- uid: Melanchall.DryWetMidi.Interaction.RestSeparationPolicy.NoSeparation
-  name: NoSeparation
-  href: api/Melanchall.DryWetMidi.Interaction.RestSeparationPolicy.html#Melanchall_DryWetMidi_Interaction_RestSeparationPolicy_NoSeparation
-  commentId: F:Melanchall.DryWetMidi.Interaction.RestSeparationPolicy.NoSeparation
-  fullName: Melanchall.DryWetMidi.Interaction.RestSeparationPolicy.NoSeparation
-  nameWithType: RestSeparationPolicy.NoSeparation
-- uid: Melanchall.DryWetMidi.Interaction.RestSeparationPolicy.SeparateByChannel
-  name: SeparateByChannel
-  href: api/Melanchall.DryWetMidi.Interaction.RestSeparationPolicy.html#Melanchall_DryWetMidi_Interaction_RestSeparationPolicy_SeparateByChannel
-  commentId: F:Melanchall.DryWetMidi.Interaction.RestSeparationPolicy.SeparateByChannel
-  fullName: Melanchall.DryWetMidi.Interaction.RestSeparationPolicy.SeparateByChannel
-  nameWithType: RestSeparationPolicy.SeparateByChannel
-- uid: Melanchall.DryWetMidi.Interaction.RestSeparationPolicy.SeparateByChannelAndNoteNumber
-  name: SeparateByChannelAndNoteNumber
-  href: api/Melanchall.DryWetMidi.Interaction.RestSeparationPolicy.html#Melanchall_DryWetMidi_Interaction_RestSeparationPolicy_SeparateByChannelAndNoteNumber
-  commentId: F:Melanchall.DryWetMidi.Interaction.RestSeparationPolicy.SeparateByChannelAndNoteNumber
-  fullName: Melanchall.DryWetMidi.Interaction.RestSeparationPolicy.SeparateByChannelAndNoteNumber
-  nameWithType: RestSeparationPolicy.SeparateByChannelAndNoteNumber
-- uid: Melanchall.DryWetMidi.Interaction.RestSeparationPolicy.SeparateByNoteNumber
-  name: SeparateByNoteNumber
-  href: api/Melanchall.DryWetMidi.Interaction.RestSeparationPolicy.html#Melanchall_DryWetMidi_Interaction_RestSeparationPolicy_SeparateByNoteNumber
-  commentId: F:Melanchall.DryWetMidi.Interaction.RestSeparationPolicy.SeparateByNoteNumber
-  fullName: Melanchall.DryWetMidi.Interaction.RestSeparationPolicy.SeparateByNoteNumber
-  nameWithType: RestSeparationPolicy.SeparateByNoteNumber
+  fullName: Melanchall.DryWetMidi.Interaction.RestDetectionSettings.KeySelector
+  nameWithType: RestDetectionSettings.KeySelector
+- uid: Melanchall.DryWetMidi.Interaction.RestDetectionSettings.NoChords
+  name: NoChords
+  href: api/Melanchall.DryWetMidi.Interaction.RestDetectionSettings.html#Melanchall_DryWetMidi_Interaction_RestDetectionSettings_NoChords
+  commentId: F:Melanchall.DryWetMidi.Interaction.RestDetectionSettings.NoChords
+  fullName: Melanchall.DryWetMidi.Interaction.RestDetectionSettings.NoChords
+  nameWithType: RestDetectionSettings.NoChords
+- uid: Melanchall.DryWetMidi.Interaction.RestDetectionSettings.NoChordsByChannel
+  name: NoChordsByChannel
+  href: api/Melanchall.DryWetMidi.Interaction.RestDetectionSettings.html#Melanchall_DryWetMidi_Interaction_RestDetectionSettings_NoChordsByChannel
+  commentId: F:Melanchall.DryWetMidi.Interaction.RestDetectionSettings.NoChordsByChannel
+  fullName: Melanchall.DryWetMidi.Interaction.RestDetectionSettings.NoChordsByChannel
+  nameWithType: RestDetectionSettings.NoChordsByChannel
+- uid: Melanchall.DryWetMidi.Interaction.RestDetectionSettings.NoNotes
+  name: NoNotes
+  href: api/Melanchall.DryWetMidi.Interaction.RestDetectionSettings.html#Melanchall_DryWetMidi_Interaction_RestDetectionSettings_NoNotes
+  commentId: F:Melanchall.DryWetMidi.Interaction.RestDetectionSettings.NoNotes
+  fullName: Melanchall.DryWetMidi.Interaction.RestDetectionSettings.NoNotes
+  nameWithType: RestDetectionSettings.NoNotes
+- uid: Melanchall.DryWetMidi.Interaction.RestDetectionSettings.NoNotesByChannel
+  name: NoNotesByChannel
+  href: api/Melanchall.DryWetMidi.Interaction.RestDetectionSettings.html#Melanchall_DryWetMidi_Interaction_RestDetectionSettings_NoNotesByChannel
+  commentId: F:Melanchall.DryWetMidi.Interaction.RestDetectionSettings.NoNotesByChannel
+  fullName: Melanchall.DryWetMidi.Interaction.RestDetectionSettings.NoNotesByChannel
+  nameWithType: RestDetectionSettings.NoNotesByChannel
+- uid: Melanchall.DryWetMidi.Interaction.RestDetectionSettings.NoNotesByChannelAndNoteNumber
+  name: NoNotesByChannelAndNoteNumber
+  href: api/Melanchall.DryWetMidi.Interaction.RestDetectionSettings.html#Melanchall_DryWetMidi_Interaction_RestDetectionSettings_NoNotesByChannelAndNoteNumber
+  commentId: F:Melanchall.DryWetMidi.Interaction.RestDetectionSettings.NoNotesByChannelAndNoteNumber
+  fullName: Melanchall.DryWetMidi.Interaction.RestDetectionSettings.NoNotesByChannelAndNoteNumber
+  nameWithType: RestDetectionSettings.NoNotesByChannelAndNoteNumber
+- uid: Melanchall.DryWetMidi.Interaction.RestDetectionSettings.NoNotesByNoteNumber
+  name: NoNotesByNoteNumber
+  href: api/Melanchall.DryWetMidi.Interaction.RestDetectionSettings.html#Melanchall_DryWetMidi_Interaction_RestDetectionSettings_NoNotesByNoteNumber
+  commentId: F:Melanchall.DryWetMidi.Interaction.RestDetectionSettings.NoNotesByNoteNumber
+  fullName: Melanchall.DryWetMidi.Interaction.RestDetectionSettings.NoNotesByNoteNumber
+  nameWithType: RestDetectionSettings.NoNotesByNoteNumber
+- uid: Melanchall.DryWetMidi.Interaction.RestsUtilities
+  name: RestsUtilities
+  href: api/Melanchall.DryWetMidi.Interaction.RestsUtilities.html
+  commentId: T:Melanchall.DryWetMidi.Interaction.RestsUtilities
+  fullName: Melanchall.DryWetMidi.Interaction.RestsUtilities
+  nameWithType: RestsUtilities
+- uid: Melanchall.DryWetMidi.Interaction.RestsUtilities.GetRests(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Interaction.ITimedObject},Melanchall.DryWetMidi.Interaction.RestDetectionSettings)
+  name: GetRests(IEnumerable<ITimedObject>, RestDetectionSettings)
+  href: api/Melanchall.DryWetMidi.Interaction.RestsUtilities.html#Melanchall_DryWetMidi_Interaction_RestsUtilities_GetRests_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_ITimedObject__Melanchall_DryWetMidi_Interaction_RestDetectionSettings_
+  commentId: M:Melanchall.DryWetMidi.Interaction.RestsUtilities.GetRests(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Interaction.ITimedObject},Melanchall.DryWetMidi.Interaction.RestDetectionSettings)
+  name.vb: GetRests(IEnumerable(Of ITimedObject), RestDetectionSettings)
+  fullName: Melanchall.DryWetMidi.Interaction.RestsUtilities.GetRests(System.Collections.Generic.IEnumerable<Melanchall.DryWetMidi.Interaction.ITimedObject>, Melanchall.DryWetMidi.Interaction.RestDetectionSettings)
+  fullName.vb: Melanchall.DryWetMidi.Interaction.RestsUtilities.GetRests(System.Collections.Generic.IEnumerable(Of Melanchall.DryWetMidi.Interaction.ITimedObject), Melanchall.DryWetMidi.Interaction.RestDetectionSettings)
+  nameWithType: RestsUtilities.GetRests(IEnumerable<ITimedObject>, RestDetectionSettings)
+  nameWithType.vb: RestsUtilities.GetRests(IEnumerable(Of ITimedObject), RestDetectionSettings)
+- uid: Melanchall.DryWetMidi.Interaction.RestsUtilities.GetRests*
+  name: GetRests
+  href: api/Melanchall.DryWetMidi.Interaction.RestsUtilities.html#Melanchall_DryWetMidi_Interaction_RestsUtilities_GetRests_
+  commentId: Overload:Melanchall.DryWetMidi.Interaction.RestsUtilities.GetRests
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Interaction.RestsUtilities.GetRests
+  nameWithType: RestsUtilities.GetRests
+- uid: Melanchall.DryWetMidi.Interaction.RestsUtilities.WithRests(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Interaction.ITimedObject},Melanchall.DryWetMidi.Interaction.RestDetectionSettings)
+  name: WithRests(IEnumerable<ITimedObject>, RestDetectionSettings)
+  href: api/Melanchall.DryWetMidi.Interaction.RestsUtilities.html#Melanchall_DryWetMidi_Interaction_RestsUtilities_WithRests_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_ITimedObject__Melanchall_DryWetMidi_Interaction_RestDetectionSettings_
+  commentId: M:Melanchall.DryWetMidi.Interaction.RestsUtilities.WithRests(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Interaction.ITimedObject},Melanchall.DryWetMidi.Interaction.RestDetectionSettings)
+  name.vb: WithRests(IEnumerable(Of ITimedObject), RestDetectionSettings)
+  fullName: Melanchall.DryWetMidi.Interaction.RestsUtilities.WithRests(System.Collections.Generic.IEnumerable<Melanchall.DryWetMidi.Interaction.ITimedObject>, Melanchall.DryWetMidi.Interaction.RestDetectionSettings)
+  fullName.vb: Melanchall.DryWetMidi.Interaction.RestsUtilities.WithRests(System.Collections.Generic.IEnumerable(Of Melanchall.DryWetMidi.Interaction.ITimedObject), Melanchall.DryWetMidi.Interaction.RestDetectionSettings)
+  nameWithType: RestsUtilities.WithRests(IEnumerable<ITimedObject>, RestDetectionSettings)
+  nameWithType.vb: RestsUtilities.WithRests(IEnumerable(Of ITimedObject), RestDetectionSettings)
+- uid: Melanchall.DryWetMidi.Interaction.RestsUtilities.WithRests*
+  name: WithRests
+  href: api/Melanchall.DryWetMidi.Interaction.RestsUtilities.html#Melanchall_DryWetMidi_Interaction_RestsUtilities_WithRests_
+  commentId: Overload:Melanchall.DryWetMidi.Interaction.RestsUtilities.WithRests
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Interaction.RestsUtilities.WithRests
+  nameWithType: RestsUtilities.WithRests
 - uid: Melanchall.DryWetMidi.Interaction.SplitLengthedObject
   name: SplitLengthedObject
   href: api/Melanchall.DryWetMidi.Interaction.SplitLengthedObject.html
@@ -19723,6 +19738,25 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Multimedia.MidiEventReceivedEventArgs.Event
   nameWithType: MidiEventReceivedEventArgs.Event
+- uid: Melanchall.DryWetMidi.Multimedia.MidiEventRecordedEventArgs
+  name: MidiEventRecordedEventArgs
+  href: api/Melanchall.DryWetMidi.Multimedia.MidiEventRecordedEventArgs.html
+  commentId: T:Melanchall.DryWetMidi.Multimedia.MidiEventRecordedEventArgs
+  fullName: Melanchall.DryWetMidi.Multimedia.MidiEventRecordedEventArgs
+  nameWithType: MidiEventRecordedEventArgs
+- uid: Melanchall.DryWetMidi.Multimedia.MidiEventRecordedEventArgs.Event
+  name: Event
+  href: api/Melanchall.DryWetMidi.Multimedia.MidiEventRecordedEventArgs.html#Melanchall_DryWetMidi_Multimedia_MidiEventRecordedEventArgs_Event
+  commentId: P:Melanchall.DryWetMidi.Multimedia.MidiEventRecordedEventArgs.Event
+  fullName: Melanchall.DryWetMidi.Multimedia.MidiEventRecordedEventArgs.Event
+  nameWithType: MidiEventRecordedEventArgs.Event
+- uid: Melanchall.DryWetMidi.Multimedia.MidiEventRecordedEventArgs.Event*
+  name: Event
+  href: api/Melanchall.DryWetMidi.Multimedia.MidiEventRecordedEventArgs.html#Melanchall_DryWetMidi_Multimedia_MidiEventRecordedEventArgs_Event_
+  commentId: Overload:Melanchall.DryWetMidi.Multimedia.MidiEventRecordedEventArgs.Event
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Multimedia.MidiEventRecordedEventArgs.Event
+  nameWithType: MidiEventRecordedEventArgs.Event
 - uid: Melanchall.DryWetMidi.Multimedia.MidiEventSentEventArgs
   name: MidiEventSentEventArgs
   href: api/Melanchall.DryWetMidi.Multimedia.MidiEventSentEventArgs.html
@@ -21588,6 +21622,12 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Multimedia.Recording.Dispose
   nameWithType: Recording.Dispose
+- uid: Melanchall.DryWetMidi.Multimedia.Recording.EventRecorded
+  name: EventRecorded
+  href: api/Melanchall.DryWetMidi.Multimedia.Recording.html#Melanchall_DryWetMidi_Multimedia_Recording_EventRecorded
+  commentId: E:Melanchall.DryWetMidi.Multimedia.Recording.EventRecorded
+  fullName: Melanchall.DryWetMidi.Multimedia.Recording.EventRecorded
+  nameWithType: Recording.EventRecorded
 - uid: Melanchall.DryWetMidi.Multimedia.Recording.GetDuration(Melanchall.DryWetMidi.Interaction.TimeSpanType)
   name: GetDuration(TimeSpanType)
   href: api/Melanchall.DryWetMidi.Multimedia.Recording.html#Melanchall_DryWetMidi_Multimedia_Recording_GetDuration_Melanchall_DryWetMidi_Interaction_TimeSpanType_
@@ -35873,126 +35913,275 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Tools.ConstantBounds.RightSize
   nameWithType: ConstantBounds.RightSize
-- uid: Melanchall.DryWetMidi.Tools.CsvConverter
-  name: CsvConverter
-  href: api/Melanchall.DryWetMidi.Tools.CsvConverter.html
-  commentId: T:Melanchall.DryWetMidi.Tools.CsvConverter
-  fullName: Melanchall.DryWetMidi.Tools.CsvConverter
-  nameWithType: CsvConverter
-- uid: Melanchall.DryWetMidi.Tools.CsvConverter.ConvertCsvToMidiFile(System.IO.Stream,Melanchall.DryWetMidi.Tools.MidiFileCsvConversionSettings)
-  name: ConvertCsvToMidiFile(Stream, MidiFileCsvConversionSettings)
-  href: api/Melanchall.DryWetMidi.Tools.CsvConverter.html#Melanchall_DryWetMidi_Tools_CsvConverter_ConvertCsvToMidiFile_System_IO_Stream_Melanchall_DryWetMidi_Tools_MidiFileCsvConversionSettings_
-  commentId: M:Melanchall.DryWetMidi.Tools.CsvConverter.ConvertCsvToMidiFile(System.IO.Stream,Melanchall.DryWetMidi.Tools.MidiFileCsvConversionSettings)
-  fullName: Melanchall.DryWetMidi.Tools.CsvConverter.ConvertCsvToMidiFile(System.IO.Stream, Melanchall.DryWetMidi.Tools.MidiFileCsvConversionSettings)
-  nameWithType: CsvConverter.ConvertCsvToMidiFile(Stream, MidiFileCsvConversionSettings)
-- uid: Melanchall.DryWetMidi.Tools.CsvConverter.ConvertCsvToMidiFile(System.String,Melanchall.DryWetMidi.Tools.MidiFileCsvConversionSettings)
-  name: ConvertCsvToMidiFile(String, MidiFileCsvConversionSettings)
-  href: api/Melanchall.DryWetMidi.Tools.CsvConverter.html#Melanchall_DryWetMidi_Tools_CsvConverter_ConvertCsvToMidiFile_System_String_Melanchall_DryWetMidi_Tools_MidiFileCsvConversionSettings_
-  commentId: M:Melanchall.DryWetMidi.Tools.CsvConverter.ConvertCsvToMidiFile(System.String,Melanchall.DryWetMidi.Tools.MidiFileCsvConversionSettings)
-  fullName: Melanchall.DryWetMidi.Tools.CsvConverter.ConvertCsvToMidiFile(System.String, Melanchall.DryWetMidi.Tools.MidiFileCsvConversionSettings)
-  nameWithType: CsvConverter.ConvertCsvToMidiFile(String, MidiFileCsvConversionSettings)
-- uid: Melanchall.DryWetMidi.Tools.CsvConverter.ConvertCsvToMidiFile*
-  name: ConvertCsvToMidiFile
-  href: api/Melanchall.DryWetMidi.Tools.CsvConverter.html#Melanchall_DryWetMidi_Tools_CsvConverter_ConvertCsvToMidiFile_
-  commentId: Overload:Melanchall.DryWetMidi.Tools.CsvConverter.ConvertCsvToMidiFile
+- uid: Melanchall.DryWetMidi.Tools.CsvBytesArrayFormat
+  name: CsvBytesArrayFormat
+  href: api/Melanchall.DryWetMidi.Tools.CsvBytesArrayFormat.html
+  commentId: T:Melanchall.DryWetMidi.Tools.CsvBytesArrayFormat
+  fullName: Melanchall.DryWetMidi.Tools.CsvBytesArrayFormat
+  nameWithType: CsvBytesArrayFormat
+- uid: Melanchall.DryWetMidi.Tools.CsvBytesArrayFormat.Decimal
+  name: Decimal
+  href: api/Melanchall.DryWetMidi.Tools.CsvBytesArrayFormat.html#Melanchall_DryWetMidi_Tools_CsvBytesArrayFormat_Decimal
+  commentId: F:Melanchall.DryWetMidi.Tools.CsvBytesArrayFormat.Decimal
+  fullName: Melanchall.DryWetMidi.Tools.CsvBytesArrayFormat.Decimal
+  nameWithType: CsvBytesArrayFormat.Decimal
+- uid: Melanchall.DryWetMidi.Tools.CsvBytesArrayFormat.Hexadecimal
+  name: Hexadecimal
+  href: api/Melanchall.DryWetMidi.Tools.CsvBytesArrayFormat.html#Melanchall_DryWetMidi_Tools_CsvBytesArrayFormat_Hexadecimal
+  commentId: F:Melanchall.DryWetMidi.Tools.CsvBytesArrayFormat.Hexadecimal
+  fullName: Melanchall.DryWetMidi.Tools.CsvBytesArrayFormat.Hexadecimal
+  nameWithType: CsvBytesArrayFormat.Hexadecimal
+- uid: Melanchall.DryWetMidi.Tools.CsvNoteFormat
+  name: CsvNoteFormat
+  href: api/Melanchall.DryWetMidi.Tools.CsvNoteFormat.html
+  commentId: T:Melanchall.DryWetMidi.Tools.CsvNoteFormat
+  fullName: Melanchall.DryWetMidi.Tools.CsvNoteFormat
+  nameWithType: CsvNoteFormat
+- uid: Melanchall.DryWetMidi.Tools.CsvNoteFormat.Letter
+  name: Letter
+  href: api/Melanchall.DryWetMidi.Tools.CsvNoteFormat.html#Melanchall_DryWetMidi_Tools_CsvNoteFormat_Letter
+  commentId: F:Melanchall.DryWetMidi.Tools.CsvNoteFormat.Letter
+  fullName: Melanchall.DryWetMidi.Tools.CsvNoteFormat.Letter
+  nameWithType: CsvNoteFormat.Letter
+- uid: Melanchall.DryWetMidi.Tools.CsvNoteFormat.NoteNumber
+  name: NoteNumber
+  href: api/Melanchall.DryWetMidi.Tools.CsvNoteFormat.html#Melanchall_DryWetMidi_Tools_CsvNoteFormat_NoteNumber
+  commentId: F:Melanchall.DryWetMidi.Tools.CsvNoteFormat.NoteNumber
+  fullName: Melanchall.DryWetMidi.Tools.CsvNoteFormat.NoteNumber
+  nameWithType: CsvNoteFormat.NoteNumber
+- uid: Melanchall.DryWetMidi.Tools.CsvSerializationSettings
+  name: CsvSerializationSettings
+  href: api/Melanchall.DryWetMidi.Tools.CsvSerializationSettings.html
+  commentId: T:Melanchall.DryWetMidi.Tools.CsvSerializationSettings
+  fullName: Melanchall.DryWetMidi.Tools.CsvSerializationSettings
+  nameWithType: CsvSerializationSettings
+- uid: Melanchall.DryWetMidi.Tools.CsvSerializationSettings.BytesArrayFormat
+  name: BytesArrayFormat
+  href: api/Melanchall.DryWetMidi.Tools.CsvSerializationSettings.html#Melanchall_DryWetMidi_Tools_CsvSerializationSettings_BytesArrayFormat
+  commentId: P:Melanchall.DryWetMidi.Tools.CsvSerializationSettings.BytesArrayFormat
+  fullName: Melanchall.DryWetMidi.Tools.CsvSerializationSettings.BytesArrayFormat
+  nameWithType: CsvSerializationSettings.BytesArrayFormat
+- uid: Melanchall.DryWetMidi.Tools.CsvSerializationSettings.BytesArrayFormat*
+  name: BytesArrayFormat
+  href: api/Melanchall.DryWetMidi.Tools.CsvSerializationSettings.html#Melanchall_DryWetMidi_Tools_CsvSerializationSettings_BytesArrayFormat_
+  commentId: Overload:Melanchall.DryWetMidi.Tools.CsvSerializationSettings.BytesArrayFormat
   isSpec: "True"
-  fullName: Melanchall.DryWetMidi.Tools.CsvConverter.ConvertCsvToMidiFile
-  nameWithType: CsvConverter.ConvertCsvToMidiFile
-- uid: Melanchall.DryWetMidi.Tools.CsvConverter.ConvertCsvToNotes(System.IO.Stream,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Tools.NoteCsvConversionSettings)
-  name: ConvertCsvToNotes(Stream, TempoMap, NoteCsvConversionSettings)
-  href: api/Melanchall.DryWetMidi.Tools.CsvConverter.html#Melanchall_DryWetMidi_Tools_CsvConverter_ConvertCsvToNotes_System_IO_Stream_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Tools_NoteCsvConversionSettings_
-  commentId: M:Melanchall.DryWetMidi.Tools.CsvConverter.ConvertCsvToNotes(System.IO.Stream,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Tools.NoteCsvConversionSettings)
-  fullName: Melanchall.DryWetMidi.Tools.CsvConverter.ConvertCsvToNotes(System.IO.Stream, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Tools.NoteCsvConversionSettings)
-  nameWithType: CsvConverter.ConvertCsvToNotes(Stream, TempoMap, NoteCsvConversionSettings)
-- uid: Melanchall.DryWetMidi.Tools.CsvConverter.ConvertCsvToNotes(System.String,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Tools.NoteCsvConversionSettings)
-  name: ConvertCsvToNotes(String, TempoMap, NoteCsvConversionSettings)
-  href: api/Melanchall.DryWetMidi.Tools.CsvConverter.html#Melanchall_DryWetMidi_Tools_CsvConverter_ConvertCsvToNotes_System_String_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Tools_NoteCsvConversionSettings_
-  commentId: M:Melanchall.DryWetMidi.Tools.CsvConverter.ConvertCsvToNotes(System.String,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Tools.NoteCsvConversionSettings)
-  fullName: Melanchall.DryWetMidi.Tools.CsvConverter.ConvertCsvToNotes(System.String, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Tools.NoteCsvConversionSettings)
-  nameWithType: CsvConverter.ConvertCsvToNotes(String, TempoMap, NoteCsvConversionSettings)
-- uid: Melanchall.DryWetMidi.Tools.CsvConverter.ConvertCsvToNotes*
-  name: ConvertCsvToNotes
-  href: api/Melanchall.DryWetMidi.Tools.CsvConverter.html#Melanchall_DryWetMidi_Tools_CsvConverter_ConvertCsvToNotes_
-  commentId: Overload:Melanchall.DryWetMidi.Tools.CsvConverter.ConvertCsvToNotes
+  fullName: Melanchall.DryWetMidi.Tools.CsvSerializationSettings.BytesArrayFormat
+  nameWithType: CsvSerializationSettings.BytesArrayFormat
+- uid: Melanchall.DryWetMidi.Tools.CsvSerializationSettings.Delimiter
+  name: Delimiter
+  href: api/Melanchall.DryWetMidi.Tools.CsvSerializationSettings.html#Melanchall_DryWetMidi_Tools_CsvSerializationSettings_Delimiter
+  commentId: P:Melanchall.DryWetMidi.Tools.CsvSerializationSettings.Delimiter
+  fullName: Melanchall.DryWetMidi.Tools.CsvSerializationSettings.Delimiter
+  nameWithType: CsvSerializationSettings.Delimiter
+- uid: Melanchall.DryWetMidi.Tools.CsvSerializationSettings.Delimiter*
+  name: Delimiter
+  href: api/Melanchall.DryWetMidi.Tools.CsvSerializationSettings.html#Melanchall_DryWetMidi_Tools_CsvSerializationSettings_Delimiter_
+  commentId: Overload:Melanchall.DryWetMidi.Tools.CsvSerializationSettings.Delimiter
   isSpec: "True"
-  fullName: Melanchall.DryWetMidi.Tools.CsvConverter.ConvertCsvToNotes
-  nameWithType: CsvConverter.ConvertCsvToNotes
-- uid: Melanchall.DryWetMidi.Tools.CsvConverter.ConvertMidiFileToCsv(Melanchall.DryWetMidi.Core.MidiFile,System.IO.Stream,Melanchall.DryWetMidi.Tools.MidiFileCsvConversionSettings)
-  name: ConvertMidiFileToCsv(MidiFile, Stream, MidiFileCsvConversionSettings)
-  href: api/Melanchall.DryWetMidi.Tools.CsvConverter.html#Melanchall_DryWetMidi_Tools_CsvConverter_ConvertMidiFileToCsv_Melanchall_DryWetMidi_Core_MidiFile_System_IO_Stream_Melanchall_DryWetMidi_Tools_MidiFileCsvConversionSettings_
-  commentId: M:Melanchall.DryWetMidi.Tools.CsvConverter.ConvertMidiFileToCsv(Melanchall.DryWetMidi.Core.MidiFile,System.IO.Stream,Melanchall.DryWetMidi.Tools.MidiFileCsvConversionSettings)
-  fullName: Melanchall.DryWetMidi.Tools.CsvConverter.ConvertMidiFileToCsv(Melanchall.DryWetMidi.Core.MidiFile, System.IO.Stream, Melanchall.DryWetMidi.Tools.MidiFileCsvConversionSettings)
-  nameWithType: CsvConverter.ConvertMidiFileToCsv(MidiFile, Stream, MidiFileCsvConversionSettings)
-- uid: Melanchall.DryWetMidi.Tools.CsvConverter.ConvertMidiFileToCsv(Melanchall.DryWetMidi.Core.MidiFile,System.String,System.Boolean,Melanchall.DryWetMidi.Tools.MidiFileCsvConversionSettings)
-  name: ConvertMidiFileToCsv(MidiFile, String, Boolean, MidiFileCsvConversionSettings)
-  href: api/Melanchall.DryWetMidi.Tools.CsvConverter.html#Melanchall_DryWetMidi_Tools_CsvConverter_ConvertMidiFileToCsv_Melanchall_DryWetMidi_Core_MidiFile_System_String_System_Boolean_Melanchall_DryWetMidi_Tools_MidiFileCsvConversionSettings_
-  commentId: M:Melanchall.DryWetMidi.Tools.CsvConverter.ConvertMidiFileToCsv(Melanchall.DryWetMidi.Core.MidiFile,System.String,System.Boolean,Melanchall.DryWetMidi.Tools.MidiFileCsvConversionSettings)
-  fullName: Melanchall.DryWetMidi.Tools.CsvConverter.ConvertMidiFileToCsv(Melanchall.DryWetMidi.Core.MidiFile, System.String, System.Boolean, Melanchall.DryWetMidi.Tools.MidiFileCsvConversionSettings)
-  nameWithType: CsvConverter.ConvertMidiFileToCsv(MidiFile, String, Boolean, MidiFileCsvConversionSettings)
-- uid: Melanchall.DryWetMidi.Tools.CsvConverter.ConvertMidiFileToCsv*
-  name: ConvertMidiFileToCsv
-  href: api/Melanchall.DryWetMidi.Tools.CsvConverter.html#Melanchall_DryWetMidi_Tools_CsvConverter_ConvertMidiFileToCsv_
-  commentId: Overload:Melanchall.DryWetMidi.Tools.CsvConverter.ConvertMidiFileToCsv
+  fullName: Melanchall.DryWetMidi.Tools.CsvSerializationSettings.Delimiter
+  nameWithType: CsvSerializationSettings.Delimiter
+- uid: Melanchall.DryWetMidi.Tools.CsvSerializationSettings.LengthType
+  name: LengthType
+  href: api/Melanchall.DryWetMidi.Tools.CsvSerializationSettings.html#Melanchall_DryWetMidi_Tools_CsvSerializationSettings_LengthType
+  commentId: P:Melanchall.DryWetMidi.Tools.CsvSerializationSettings.LengthType
+  fullName: Melanchall.DryWetMidi.Tools.CsvSerializationSettings.LengthType
+  nameWithType: CsvSerializationSettings.LengthType
+- uid: Melanchall.DryWetMidi.Tools.CsvSerializationSettings.LengthType*
+  name: LengthType
+  href: api/Melanchall.DryWetMidi.Tools.CsvSerializationSettings.html#Melanchall_DryWetMidi_Tools_CsvSerializationSettings_LengthType_
+  commentId: Overload:Melanchall.DryWetMidi.Tools.CsvSerializationSettings.LengthType
   isSpec: "True"
-  fullName: Melanchall.DryWetMidi.Tools.CsvConverter.ConvertMidiFileToCsv
-  nameWithType: CsvConverter.ConvertMidiFileToCsv
-- uid: Melanchall.DryWetMidi.Tools.CsvConverter.ConvertNotesToCsv(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Interaction.Note},System.IO.Stream,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Tools.NoteCsvConversionSettings)
-  name: ConvertNotesToCsv(IEnumerable<Note>, Stream, TempoMap, NoteCsvConversionSettings)
-  href: api/Melanchall.DryWetMidi.Tools.CsvConverter.html#Melanchall_DryWetMidi_Tools_CsvConverter_ConvertNotesToCsv_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_Note__System_IO_Stream_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Tools_NoteCsvConversionSettings_
-  commentId: M:Melanchall.DryWetMidi.Tools.CsvConverter.ConvertNotesToCsv(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Interaction.Note},System.IO.Stream,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Tools.NoteCsvConversionSettings)
-  name.vb: ConvertNotesToCsv(IEnumerable(Of Note), Stream, TempoMap, NoteCsvConversionSettings)
-  fullName: Melanchall.DryWetMidi.Tools.CsvConverter.ConvertNotesToCsv(System.Collections.Generic.IEnumerable<Melanchall.DryWetMidi.Interaction.Note>, System.IO.Stream, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Tools.NoteCsvConversionSettings)
-  fullName.vb: Melanchall.DryWetMidi.Tools.CsvConverter.ConvertNotesToCsv(System.Collections.Generic.IEnumerable(Of Melanchall.DryWetMidi.Interaction.Note), System.IO.Stream, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Tools.NoteCsvConversionSettings)
-  nameWithType: CsvConverter.ConvertNotesToCsv(IEnumerable<Note>, Stream, TempoMap, NoteCsvConversionSettings)
-  nameWithType.vb: CsvConverter.ConvertNotesToCsv(IEnumerable(Of Note), Stream, TempoMap, NoteCsvConversionSettings)
-- uid: Melanchall.DryWetMidi.Tools.CsvConverter.ConvertNotesToCsv(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Interaction.Note},System.String,Melanchall.DryWetMidi.Interaction.TempoMap,System.Boolean,Melanchall.DryWetMidi.Tools.NoteCsvConversionSettings)
-  name: ConvertNotesToCsv(IEnumerable<Note>, String, TempoMap, Boolean, NoteCsvConversionSettings)
-  href: api/Melanchall.DryWetMidi.Tools.CsvConverter.html#Melanchall_DryWetMidi_Tools_CsvConverter_ConvertNotesToCsv_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_Note__System_String_Melanchall_DryWetMidi_Interaction_TempoMap_System_Boolean_Melanchall_DryWetMidi_Tools_NoteCsvConversionSettings_
-  commentId: M:Melanchall.DryWetMidi.Tools.CsvConverter.ConvertNotesToCsv(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Interaction.Note},System.String,Melanchall.DryWetMidi.Interaction.TempoMap,System.Boolean,Melanchall.DryWetMidi.Tools.NoteCsvConversionSettings)
-  name.vb: ConvertNotesToCsv(IEnumerable(Of Note), String, TempoMap, Boolean, NoteCsvConversionSettings)
-  fullName: Melanchall.DryWetMidi.Tools.CsvConverter.ConvertNotesToCsv(System.Collections.Generic.IEnumerable<Melanchall.DryWetMidi.Interaction.Note>, System.String, Melanchall.DryWetMidi.Interaction.TempoMap, System.Boolean, Melanchall.DryWetMidi.Tools.NoteCsvConversionSettings)
-  fullName.vb: Melanchall.DryWetMidi.Tools.CsvConverter.ConvertNotesToCsv(System.Collections.Generic.IEnumerable(Of Melanchall.DryWetMidi.Interaction.Note), System.String, Melanchall.DryWetMidi.Interaction.TempoMap, System.Boolean, Melanchall.DryWetMidi.Tools.NoteCsvConversionSettings)
-  nameWithType: CsvConverter.ConvertNotesToCsv(IEnumerable<Note>, String, TempoMap, Boolean, NoteCsvConversionSettings)
-  nameWithType.vb: CsvConverter.ConvertNotesToCsv(IEnumerable(Of Note), String, TempoMap, Boolean, NoteCsvConversionSettings)
-- uid: Melanchall.DryWetMidi.Tools.CsvConverter.ConvertNotesToCsv*
-  name: ConvertNotesToCsv
-  href: api/Melanchall.DryWetMidi.Tools.CsvConverter.html#Melanchall_DryWetMidi_Tools_CsvConverter_ConvertNotesToCsv_
-  commentId: Overload:Melanchall.DryWetMidi.Tools.CsvConverter.ConvertNotesToCsv
+  fullName: Melanchall.DryWetMidi.Tools.CsvSerializationSettings.LengthType
+  nameWithType: CsvSerializationSettings.LengthType
+- uid: Melanchall.DryWetMidi.Tools.CsvSerializationSettings.NoteFormat
+  name: NoteFormat
+  href: api/Melanchall.DryWetMidi.Tools.CsvSerializationSettings.html#Melanchall_DryWetMidi_Tools_CsvSerializationSettings_NoteFormat
+  commentId: P:Melanchall.DryWetMidi.Tools.CsvSerializationSettings.NoteFormat
+  fullName: Melanchall.DryWetMidi.Tools.CsvSerializationSettings.NoteFormat
+  nameWithType: CsvSerializationSettings.NoteFormat
+- uid: Melanchall.DryWetMidi.Tools.CsvSerializationSettings.NoteFormat*
+  name: NoteFormat
+  href: api/Melanchall.DryWetMidi.Tools.CsvSerializationSettings.html#Melanchall_DryWetMidi_Tools_CsvSerializationSettings_NoteFormat_
+  commentId: Overload:Melanchall.DryWetMidi.Tools.CsvSerializationSettings.NoteFormat
   isSpec: "True"
-  fullName: Melanchall.DryWetMidi.Tools.CsvConverter.ConvertNotesToCsv
-  nameWithType: CsvConverter.ConvertNotesToCsv
-- uid: Melanchall.DryWetMidi.Tools.CsvSettings
-  name: CsvSettings
-  href: api/Melanchall.DryWetMidi.Tools.CsvSettings.html
-  commentId: T:Melanchall.DryWetMidi.Tools.CsvSettings
-  fullName: Melanchall.DryWetMidi.Tools.CsvSettings
-  nameWithType: CsvSettings
-- uid: Melanchall.DryWetMidi.Tools.CsvSettings.CsvDelimiter
-  name: CsvDelimiter
-  href: api/Melanchall.DryWetMidi.Tools.CsvSettings.html#Melanchall_DryWetMidi_Tools_CsvSettings_CsvDelimiter
-  commentId: P:Melanchall.DryWetMidi.Tools.CsvSettings.CsvDelimiter
-  fullName: Melanchall.DryWetMidi.Tools.CsvSettings.CsvDelimiter
-  nameWithType: CsvSettings.CsvDelimiter
-- uid: Melanchall.DryWetMidi.Tools.CsvSettings.CsvDelimiter*
-  name: CsvDelimiter
-  href: api/Melanchall.DryWetMidi.Tools.CsvSettings.html#Melanchall_DryWetMidi_Tools_CsvSettings_CsvDelimiter_
-  commentId: Overload:Melanchall.DryWetMidi.Tools.CsvSettings.CsvDelimiter
+  fullName: Melanchall.DryWetMidi.Tools.CsvSerializationSettings.NoteFormat
+  nameWithType: CsvSerializationSettings.NoteFormat
+- uid: Melanchall.DryWetMidi.Tools.CsvSerializationSettings.ReadWriteBufferSize
+  name: ReadWriteBufferSize
+  href: api/Melanchall.DryWetMidi.Tools.CsvSerializationSettings.html#Melanchall_DryWetMidi_Tools_CsvSerializationSettings_ReadWriteBufferSize
+  commentId: P:Melanchall.DryWetMidi.Tools.CsvSerializationSettings.ReadWriteBufferSize
+  fullName: Melanchall.DryWetMidi.Tools.CsvSerializationSettings.ReadWriteBufferSize
+  nameWithType: CsvSerializationSettings.ReadWriteBufferSize
+- uid: Melanchall.DryWetMidi.Tools.CsvSerializationSettings.ReadWriteBufferSize*
+  name: ReadWriteBufferSize
+  href: api/Melanchall.DryWetMidi.Tools.CsvSerializationSettings.html#Melanchall_DryWetMidi_Tools_CsvSerializationSettings_ReadWriteBufferSize_
+  commentId: Overload:Melanchall.DryWetMidi.Tools.CsvSerializationSettings.ReadWriteBufferSize
   isSpec: "True"
-  fullName: Melanchall.DryWetMidi.Tools.CsvSettings.CsvDelimiter
-  nameWithType: CsvSettings.CsvDelimiter
-- uid: Melanchall.DryWetMidi.Tools.CsvSettings.IoBufferSize
-  name: IoBufferSize
-  href: api/Melanchall.DryWetMidi.Tools.CsvSettings.html#Melanchall_DryWetMidi_Tools_CsvSettings_IoBufferSize
-  commentId: P:Melanchall.DryWetMidi.Tools.CsvSettings.IoBufferSize
-  fullName: Melanchall.DryWetMidi.Tools.CsvSettings.IoBufferSize
-  nameWithType: CsvSettings.IoBufferSize
-- uid: Melanchall.DryWetMidi.Tools.CsvSettings.IoBufferSize*
-  name: IoBufferSize
-  href: api/Melanchall.DryWetMidi.Tools.CsvSettings.html#Melanchall_DryWetMidi_Tools_CsvSettings_IoBufferSize_
-  commentId: Overload:Melanchall.DryWetMidi.Tools.CsvSettings.IoBufferSize
+  fullName: Melanchall.DryWetMidi.Tools.CsvSerializationSettings.ReadWriteBufferSize
+  nameWithType: CsvSerializationSettings.ReadWriteBufferSize
+- uid: Melanchall.DryWetMidi.Tools.CsvSerializationSettings.TimeType
+  name: TimeType
+  href: api/Melanchall.DryWetMidi.Tools.CsvSerializationSettings.html#Melanchall_DryWetMidi_Tools_CsvSerializationSettings_TimeType
+  commentId: P:Melanchall.DryWetMidi.Tools.CsvSerializationSettings.TimeType
+  fullName: Melanchall.DryWetMidi.Tools.CsvSerializationSettings.TimeType
+  nameWithType: CsvSerializationSettings.TimeType
+- uid: Melanchall.DryWetMidi.Tools.CsvSerializationSettings.TimeType*
+  name: TimeType
+  href: api/Melanchall.DryWetMidi.Tools.CsvSerializationSettings.html#Melanchall_DryWetMidi_Tools_CsvSerializationSettings_TimeType_
+  commentId: Overload:Melanchall.DryWetMidi.Tools.CsvSerializationSettings.TimeType
   isSpec: "True"
-  fullName: Melanchall.DryWetMidi.Tools.CsvSettings.IoBufferSize
-  nameWithType: CsvSettings.IoBufferSize
+  fullName: Melanchall.DryWetMidi.Tools.CsvSerializationSettings.TimeType
+  nameWithType: CsvSerializationSettings.TimeType
+- uid: Melanchall.DryWetMidi.Tools.CsvSerializer
+  name: CsvSerializer
+  href: api/Melanchall.DryWetMidi.Tools.CsvSerializer.html
+  commentId: T:Melanchall.DryWetMidi.Tools.CsvSerializer
+  fullName: Melanchall.DryWetMidi.Tools.CsvSerializer
+  nameWithType: CsvSerializer
+- uid: Melanchall.DryWetMidi.Tools.CsvSerializer.DeserializeChunkFromCsv(System.IO.Stream,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Tools.CsvSerializationSettings)
+  name: DeserializeChunkFromCsv(Stream, TempoMap, CsvSerializationSettings)
+  href: api/Melanchall.DryWetMidi.Tools.CsvSerializer.html#Melanchall_DryWetMidi_Tools_CsvSerializer_DeserializeChunkFromCsv_System_IO_Stream_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Tools_CsvSerializationSettings_
+  commentId: M:Melanchall.DryWetMidi.Tools.CsvSerializer.DeserializeChunkFromCsv(System.IO.Stream,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Tools.CsvSerializationSettings)
+  fullName: Melanchall.DryWetMidi.Tools.CsvSerializer.DeserializeChunkFromCsv(System.IO.Stream, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Tools.CsvSerializationSettings)
+  nameWithType: CsvSerializer.DeserializeChunkFromCsv(Stream, TempoMap, CsvSerializationSettings)
+- uid: Melanchall.DryWetMidi.Tools.CsvSerializer.DeserializeChunkFromCsv(System.String,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Tools.CsvSerializationSettings)
+  name: DeserializeChunkFromCsv(String, TempoMap, CsvSerializationSettings)
+  href: api/Melanchall.DryWetMidi.Tools.CsvSerializer.html#Melanchall_DryWetMidi_Tools_CsvSerializer_DeserializeChunkFromCsv_System_String_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Tools_CsvSerializationSettings_
+  commentId: M:Melanchall.DryWetMidi.Tools.CsvSerializer.DeserializeChunkFromCsv(System.String,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Tools.CsvSerializationSettings)
+  fullName: Melanchall.DryWetMidi.Tools.CsvSerializer.DeserializeChunkFromCsv(System.String, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Tools.CsvSerializationSettings)
+  nameWithType: CsvSerializer.DeserializeChunkFromCsv(String, TempoMap, CsvSerializationSettings)
+- uid: Melanchall.DryWetMidi.Tools.CsvSerializer.DeserializeChunkFromCsv*
+  name: DeserializeChunkFromCsv
+  href: api/Melanchall.DryWetMidi.Tools.CsvSerializer.html#Melanchall_DryWetMidi_Tools_CsvSerializer_DeserializeChunkFromCsv_
+  commentId: Overload:Melanchall.DryWetMidi.Tools.CsvSerializer.DeserializeChunkFromCsv
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Tools.CsvSerializer.DeserializeChunkFromCsv
+  nameWithType: CsvSerializer.DeserializeChunkFromCsv
+- uid: Melanchall.DryWetMidi.Tools.CsvSerializer.DeserializeChunksFromCsv(System.IO.Stream,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Tools.CsvSerializationSettings)
+  name: DeserializeChunksFromCsv(Stream, TempoMap, CsvSerializationSettings)
+  href: api/Melanchall.DryWetMidi.Tools.CsvSerializer.html#Melanchall_DryWetMidi_Tools_CsvSerializer_DeserializeChunksFromCsv_System_IO_Stream_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Tools_CsvSerializationSettings_
+  commentId: M:Melanchall.DryWetMidi.Tools.CsvSerializer.DeserializeChunksFromCsv(System.IO.Stream,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Tools.CsvSerializationSettings)
+  fullName: Melanchall.DryWetMidi.Tools.CsvSerializer.DeserializeChunksFromCsv(System.IO.Stream, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Tools.CsvSerializationSettings)
+  nameWithType: CsvSerializer.DeserializeChunksFromCsv(Stream, TempoMap, CsvSerializationSettings)
+- uid: Melanchall.DryWetMidi.Tools.CsvSerializer.DeserializeChunksFromCsv(System.String,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Tools.CsvSerializationSettings)
+  name: DeserializeChunksFromCsv(String, TempoMap, CsvSerializationSettings)
+  href: api/Melanchall.DryWetMidi.Tools.CsvSerializer.html#Melanchall_DryWetMidi_Tools_CsvSerializer_DeserializeChunksFromCsv_System_String_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Tools_CsvSerializationSettings_
+  commentId: M:Melanchall.DryWetMidi.Tools.CsvSerializer.DeserializeChunksFromCsv(System.String,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Tools.CsvSerializationSettings)
+  fullName: Melanchall.DryWetMidi.Tools.CsvSerializer.DeserializeChunksFromCsv(System.String, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Tools.CsvSerializationSettings)
+  nameWithType: CsvSerializer.DeserializeChunksFromCsv(String, TempoMap, CsvSerializationSettings)
+- uid: Melanchall.DryWetMidi.Tools.CsvSerializer.DeserializeChunksFromCsv*
+  name: DeserializeChunksFromCsv
+  href: api/Melanchall.DryWetMidi.Tools.CsvSerializer.html#Melanchall_DryWetMidi_Tools_CsvSerializer_DeserializeChunksFromCsv_
+  commentId: Overload:Melanchall.DryWetMidi.Tools.CsvSerializer.DeserializeChunksFromCsv
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Tools.CsvSerializer.DeserializeChunksFromCsv
+  nameWithType: CsvSerializer.DeserializeChunksFromCsv
+- uid: Melanchall.DryWetMidi.Tools.CsvSerializer.DeserializeFileFromCsv(System.IO.Stream,Melanchall.DryWetMidi.Tools.CsvSerializationSettings)
+  name: DeserializeFileFromCsv(Stream, CsvSerializationSettings)
+  href: api/Melanchall.DryWetMidi.Tools.CsvSerializer.html#Melanchall_DryWetMidi_Tools_CsvSerializer_DeserializeFileFromCsv_System_IO_Stream_Melanchall_DryWetMidi_Tools_CsvSerializationSettings_
+  commentId: M:Melanchall.DryWetMidi.Tools.CsvSerializer.DeserializeFileFromCsv(System.IO.Stream,Melanchall.DryWetMidi.Tools.CsvSerializationSettings)
+  fullName: Melanchall.DryWetMidi.Tools.CsvSerializer.DeserializeFileFromCsv(System.IO.Stream, Melanchall.DryWetMidi.Tools.CsvSerializationSettings)
+  nameWithType: CsvSerializer.DeserializeFileFromCsv(Stream, CsvSerializationSettings)
+- uid: Melanchall.DryWetMidi.Tools.CsvSerializer.DeserializeFileFromCsv(System.String,Melanchall.DryWetMidi.Tools.CsvSerializationSettings)
+  name: DeserializeFileFromCsv(String, CsvSerializationSettings)
+  href: api/Melanchall.DryWetMidi.Tools.CsvSerializer.html#Melanchall_DryWetMidi_Tools_CsvSerializer_DeserializeFileFromCsv_System_String_Melanchall_DryWetMidi_Tools_CsvSerializationSettings_
+  commentId: M:Melanchall.DryWetMidi.Tools.CsvSerializer.DeserializeFileFromCsv(System.String,Melanchall.DryWetMidi.Tools.CsvSerializationSettings)
+  fullName: Melanchall.DryWetMidi.Tools.CsvSerializer.DeserializeFileFromCsv(System.String, Melanchall.DryWetMidi.Tools.CsvSerializationSettings)
+  nameWithType: CsvSerializer.DeserializeFileFromCsv(String, CsvSerializationSettings)
+- uid: Melanchall.DryWetMidi.Tools.CsvSerializer.DeserializeFileFromCsv*
+  name: DeserializeFileFromCsv
+  href: api/Melanchall.DryWetMidi.Tools.CsvSerializer.html#Melanchall_DryWetMidi_Tools_CsvSerializer_DeserializeFileFromCsv_
+  commentId: Overload:Melanchall.DryWetMidi.Tools.CsvSerializer.DeserializeFileFromCsv
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Tools.CsvSerializer.DeserializeFileFromCsv
+  nameWithType: CsvSerializer.DeserializeFileFromCsv
+- uid: Melanchall.DryWetMidi.Tools.CsvSerializer.DeserializeObjectsFromCsv(System.IO.Stream,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Tools.CsvSerializationSettings)
+  name: DeserializeObjectsFromCsv(Stream, TempoMap, CsvSerializationSettings)
+  href: api/Melanchall.DryWetMidi.Tools.CsvSerializer.html#Melanchall_DryWetMidi_Tools_CsvSerializer_DeserializeObjectsFromCsv_System_IO_Stream_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Tools_CsvSerializationSettings_
+  commentId: M:Melanchall.DryWetMidi.Tools.CsvSerializer.DeserializeObjectsFromCsv(System.IO.Stream,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Tools.CsvSerializationSettings)
+  fullName: Melanchall.DryWetMidi.Tools.CsvSerializer.DeserializeObjectsFromCsv(System.IO.Stream, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Tools.CsvSerializationSettings)
+  nameWithType: CsvSerializer.DeserializeObjectsFromCsv(Stream, TempoMap, CsvSerializationSettings)
+- uid: Melanchall.DryWetMidi.Tools.CsvSerializer.DeserializeObjectsFromCsv(System.String,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Tools.CsvSerializationSettings)
+  name: DeserializeObjectsFromCsv(String, TempoMap, CsvSerializationSettings)
+  href: api/Melanchall.DryWetMidi.Tools.CsvSerializer.html#Melanchall_DryWetMidi_Tools_CsvSerializer_DeserializeObjectsFromCsv_System_String_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Tools_CsvSerializationSettings_
+  commentId: M:Melanchall.DryWetMidi.Tools.CsvSerializer.DeserializeObjectsFromCsv(System.String,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Tools.CsvSerializationSettings)
+  fullName: Melanchall.DryWetMidi.Tools.CsvSerializer.DeserializeObjectsFromCsv(System.String, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Tools.CsvSerializationSettings)
+  nameWithType: CsvSerializer.DeserializeObjectsFromCsv(String, TempoMap, CsvSerializationSettings)
+- uid: Melanchall.DryWetMidi.Tools.CsvSerializer.DeserializeObjectsFromCsv*
+  name: DeserializeObjectsFromCsv
+  href: api/Melanchall.DryWetMidi.Tools.CsvSerializer.html#Melanchall_DryWetMidi_Tools_CsvSerializer_DeserializeObjectsFromCsv_
+  commentId: Overload:Melanchall.DryWetMidi.Tools.CsvSerializer.DeserializeObjectsFromCsv
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Tools.CsvSerializer.DeserializeObjectsFromCsv
+  nameWithType: CsvSerializer.DeserializeObjectsFromCsv
+- uid: Melanchall.DryWetMidi.Tools.CsvSerializer.SerializeToCsv(Melanchall.DryWetMidi.Core.MidiChunk,System.IO.Stream,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Tools.CsvSerializationSettings,Melanchall.DryWetMidi.Interaction.ObjectType,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings)
+  name: SerializeToCsv(MidiChunk, Stream, TempoMap, CsvSerializationSettings, ObjectType, ObjectDetectionSettings)
+  href: api/Melanchall.DryWetMidi.Tools.CsvSerializer.html#Melanchall_DryWetMidi_Tools_CsvSerializer_SerializeToCsv_Melanchall_DryWetMidi_Core_MidiChunk_System_IO_Stream_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Tools_CsvSerializationSettings_Melanchall_DryWetMidi_Interaction_ObjectType_Melanchall_DryWetMidi_Interaction_ObjectDetectionSettings_
+  commentId: M:Melanchall.DryWetMidi.Tools.CsvSerializer.SerializeToCsv(Melanchall.DryWetMidi.Core.MidiChunk,System.IO.Stream,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Tools.CsvSerializationSettings,Melanchall.DryWetMidi.Interaction.ObjectType,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings)
+  fullName: Melanchall.DryWetMidi.Tools.CsvSerializer.SerializeToCsv(Melanchall.DryWetMidi.Core.MidiChunk, System.IO.Stream, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Tools.CsvSerializationSettings, Melanchall.DryWetMidi.Interaction.ObjectType, Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings)
+  nameWithType: CsvSerializer.SerializeToCsv(MidiChunk, Stream, TempoMap, CsvSerializationSettings, ObjectType, ObjectDetectionSettings)
+- uid: Melanchall.DryWetMidi.Tools.CsvSerializer.SerializeToCsv(Melanchall.DryWetMidi.Core.MidiChunk,System.String,System.Boolean,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Tools.CsvSerializationSettings,Melanchall.DryWetMidi.Interaction.ObjectType,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings)
+  name: SerializeToCsv(MidiChunk, String, Boolean, TempoMap, CsvSerializationSettings, ObjectType, ObjectDetectionSettings)
+  href: api/Melanchall.DryWetMidi.Tools.CsvSerializer.html#Melanchall_DryWetMidi_Tools_CsvSerializer_SerializeToCsv_Melanchall_DryWetMidi_Core_MidiChunk_System_String_System_Boolean_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Tools_CsvSerializationSettings_Melanchall_DryWetMidi_Interaction_ObjectType_Melanchall_DryWetMidi_Interaction_ObjectDetectionSettings_
+  commentId: M:Melanchall.DryWetMidi.Tools.CsvSerializer.SerializeToCsv(Melanchall.DryWetMidi.Core.MidiChunk,System.String,System.Boolean,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Tools.CsvSerializationSettings,Melanchall.DryWetMidi.Interaction.ObjectType,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings)
+  fullName: Melanchall.DryWetMidi.Tools.CsvSerializer.SerializeToCsv(Melanchall.DryWetMidi.Core.MidiChunk, System.String, System.Boolean, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Tools.CsvSerializationSettings, Melanchall.DryWetMidi.Interaction.ObjectType, Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings)
+  nameWithType: CsvSerializer.SerializeToCsv(MidiChunk, String, Boolean, TempoMap, CsvSerializationSettings, ObjectType, ObjectDetectionSettings)
+- uid: Melanchall.DryWetMidi.Tools.CsvSerializer.SerializeToCsv(Melanchall.DryWetMidi.Core.MidiFile,System.IO.Stream,Melanchall.DryWetMidi.Tools.CsvSerializationSettings,Melanchall.DryWetMidi.Interaction.ObjectType,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings)
+  name: SerializeToCsv(MidiFile, Stream, CsvSerializationSettings, ObjectType, ObjectDetectionSettings)
+  href: api/Melanchall.DryWetMidi.Tools.CsvSerializer.html#Melanchall_DryWetMidi_Tools_CsvSerializer_SerializeToCsv_Melanchall_DryWetMidi_Core_MidiFile_System_IO_Stream_Melanchall_DryWetMidi_Tools_CsvSerializationSettings_Melanchall_DryWetMidi_Interaction_ObjectType_Melanchall_DryWetMidi_Interaction_ObjectDetectionSettings_
+  commentId: M:Melanchall.DryWetMidi.Tools.CsvSerializer.SerializeToCsv(Melanchall.DryWetMidi.Core.MidiFile,System.IO.Stream,Melanchall.DryWetMidi.Tools.CsvSerializationSettings,Melanchall.DryWetMidi.Interaction.ObjectType,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings)
+  fullName: Melanchall.DryWetMidi.Tools.CsvSerializer.SerializeToCsv(Melanchall.DryWetMidi.Core.MidiFile, System.IO.Stream, Melanchall.DryWetMidi.Tools.CsvSerializationSettings, Melanchall.DryWetMidi.Interaction.ObjectType, Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings)
+  nameWithType: CsvSerializer.SerializeToCsv(MidiFile, Stream, CsvSerializationSettings, ObjectType, ObjectDetectionSettings)
+- uid: Melanchall.DryWetMidi.Tools.CsvSerializer.SerializeToCsv(Melanchall.DryWetMidi.Core.MidiFile,System.String,System.Boolean,Melanchall.DryWetMidi.Tools.CsvSerializationSettings,Melanchall.DryWetMidi.Interaction.ObjectType,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings)
+  name: SerializeToCsv(MidiFile, String, Boolean, CsvSerializationSettings, ObjectType, ObjectDetectionSettings)
+  href: api/Melanchall.DryWetMidi.Tools.CsvSerializer.html#Melanchall_DryWetMidi_Tools_CsvSerializer_SerializeToCsv_Melanchall_DryWetMidi_Core_MidiFile_System_String_System_Boolean_Melanchall_DryWetMidi_Tools_CsvSerializationSettings_Melanchall_DryWetMidi_Interaction_ObjectType_Melanchall_DryWetMidi_Interaction_ObjectDetectionSettings_
+  commentId: M:Melanchall.DryWetMidi.Tools.CsvSerializer.SerializeToCsv(Melanchall.DryWetMidi.Core.MidiFile,System.String,System.Boolean,Melanchall.DryWetMidi.Tools.CsvSerializationSettings,Melanchall.DryWetMidi.Interaction.ObjectType,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings)
+  fullName: Melanchall.DryWetMidi.Tools.CsvSerializer.SerializeToCsv(Melanchall.DryWetMidi.Core.MidiFile, System.String, System.Boolean, Melanchall.DryWetMidi.Tools.CsvSerializationSettings, Melanchall.DryWetMidi.Interaction.ObjectType, Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings)
+  nameWithType: CsvSerializer.SerializeToCsv(MidiFile, String, Boolean, CsvSerializationSettings, ObjectType, ObjectDetectionSettings)
+- uid: Melanchall.DryWetMidi.Tools.CsvSerializer.SerializeToCsv(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.MidiChunk},System.IO.Stream,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Tools.CsvSerializationSettings,Melanchall.DryWetMidi.Interaction.ObjectType,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings)
+  name: SerializeToCsv(IEnumerable<MidiChunk>, Stream, TempoMap, CsvSerializationSettings, ObjectType, ObjectDetectionSettings)
+  href: api/Melanchall.DryWetMidi.Tools.CsvSerializer.html#Melanchall_DryWetMidi_Tools_CsvSerializer_SerializeToCsv_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_MidiChunk__System_IO_Stream_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Tools_CsvSerializationSettings_Melanchall_DryWetMidi_Interaction_ObjectType_Melanchall_DryWetMidi_Interaction_ObjectDetectionSettings_
+  commentId: M:Melanchall.DryWetMidi.Tools.CsvSerializer.SerializeToCsv(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.MidiChunk},System.IO.Stream,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Tools.CsvSerializationSettings,Melanchall.DryWetMidi.Interaction.ObjectType,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings)
+  name.vb: SerializeToCsv(IEnumerable(Of MidiChunk), Stream, TempoMap, CsvSerializationSettings, ObjectType, ObjectDetectionSettings)
+  fullName: Melanchall.DryWetMidi.Tools.CsvSerializer.SerializeToCsv(System.Collections.Generic.IEnumerable<Melanchall.DryWetMidi.Core.MidiChunk>, System.IO.Stream, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Tools.CsvSerializationSettings, Melanchall.DryWetMidi.Interaction.ObjectType, Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings)
+  fullName.vb: Melanchall.DryWetMidi.Tools.CsvSerializer.SerializeToCsv(System.Collections.Generic.IEnumerable(Of Melanchall.DryWetMidi.Core.MidiChunk), System.IO.Stream, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Tools.CsvSerializationSettings, Melanchall.DryWetMidi.Interaction.ObjectType, Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings)
+  nameWithType: CsvSerializer.SerializeToCsv(IEnumerable<MidiChunk>, Stream, TempoMap, CsvSerializationSettings, ObjectType, ObjectDetectionSettings)
+  nameWithType.vb: CsvSerializer.SerializeToCsv(IEnumerable(Of MidiChunk), Stream, TempoMap, CsvSerializationSettings, ObjectType, ObjectDetectionSettings)
+- uid: Melanchall.DryWetMidi.Tools.CsvSerializer.SerializeToCsv(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.MidiChunk},System.String,System.Boolean,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Tools.CsvSerializationSettings,Melanchall.DryWetMidi.Interaction.ObjectType,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings)
+  name: SerializeToCsv(IEnumerable<MidiChunk>, String, Boolean, TempoMap, CsvSerializationSettings, ObjectType, ObjectDetectionSettings)
+  href: api/Melanchall.DryWetMidi.Tools.CsvSerializer.html#Melanchall_DryWetMidi_Tools_CsvSerializer_SerializeToCsv_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Core_MidiChunk__System_String_System_Boolean_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Tools_CsvSerializationSettings_Melanchall_DryWetMidi_Interaction_ObjectType_Melanchall_DryWetMidi_Interaction_ObjectDetectionSettings_
+  commentId: M:Melanchall.DryWetMidi.Tools.CsvSerializer.SerializeToCsv(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Core.MidiChunk},System.String,System.Boolean,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Tools.CsvSerializationSettings,Melanchall.DryWetMidi.Interaction.ObjectType,Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings)
+  name.vb: SerializeToCsv(IEnumerable(Of MidiChunk), String, Boolean, TempoMap, CsvSerializationSettings, ObjectType, ObjectDetectionSettings)
+  fullName: Melanchall.DryWetMidi.Tools.CsvSerializer.SerializeToCsv(System.Collections.Generic.IEnumerable<Melanchall.DryWetMidi.Core.MidiChunk>, System.String, System.Boolean, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Tools.CsvSerializationSettings, Melanchall.DryWetMidi.Interaction.ObjectType, Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings)
+  fullName.vb: Melanchall.DryWetMidi.Tools.CsvSerializer.SerializeToCsv(System.Collections.Generic.IEnumerable(Of Melanchall.DryWetMidi.Core.MidiChunk), System.String, System.Boolean, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Tools.CsvSerializationSettings, Melanchall.DryWetMidi.Interaction.ObjectType, Melanchall.DryWetMidi.Interaction.ObjectDetectionSettings)
+  nameWithType: CsvSerializer.SerializeToCsv(IEnumerable<MidiChunk>, String, Boolean, TempoMap, CsvSerializationSettings, ObjectType, ObjectDetectionSettings)
+  nameWithType.vb: CsvSerializer.SerializeToCsv(IEnumerable(Of MidiChunk), String, Boolean, TempoMap, CsvSerializationSettings, ObjectType, ObjectDetectionSettings)
+- uid: Melanchall.DryWetMidi.Tools.CsvSerializer.SerializeToCsv(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Interaction.ITimedObject},System.IO.Stream,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Tools.CsvSerializationSettings)
+  name: SerializeToCsv(IEnumerable<ITimedObject>, Stream, TempoMap, CsvSerializationSettings)
+  href: api/Melanchall.DryWetMidi.Tools.CsvSerializer.html#Melanchall_DryWetMidi_Tools_CsvSerializer_SerializeToCsv_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_ITimedObject__System_IO_Stream_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Tools_CsvSerializationSettings_
+  commentId: M:Melanchall.DryWetMidi.Tools.CsvSerializer.SerializeToCsv(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Interaction.ITimedObject},System.IO.Stream,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Tools.CsvSerializationSettings)
+  name.vb: SerializeToCsv(IEnumerable(Of ITimedObject), Stream, TempoMap, CsvSerializationSettings)
+  fullName: Melanchall.DryWetMidi.Tools.CsvSerializer.SerializeToCsv(System.Collections.Generic.IEnumerable<Melanchall.DryWetMidi.Interaction.ITimedObject>, System.IO.Stream, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Tools.CsvSerializationSettings)
+  fullName.vb: Melanchall.DryWetMidi.Tools.CsvSerializer.SerializeToCsv(System.Collections.Generic.IEnumerable(Of Melanchall.DryWetMidi.Interaction.ITimedObject), System.IO.Stream, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Tools.CsvSerializationSettings)
+  nameWithType: CsvSerializer.SerializeToCsv(IEnumerable<ITimedObject>, Stream, TempoMap, CsvSerializationSettings)
+  nameWithType.vb: CsvSerializer.SerializeToCsv(IEnumerable(Of ITimedObject), Stream, TempoMap, CsvSerializationSettings)
+- uid: Melanchall.DryWetMidi.Tools.CsvSerializer.SerializeToCsv(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Interaction.ITimedObject},System.String,System.Boolean,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Tools.CsvSerializationSettings)
+  name: SerializeToCsv(IEnumerable<ITimedObject>, String, Boolean, TempoMap, CsvSerializationSettings)
+  href: api/Melanchall.DryWetMidi.Tools.CsvSerializer.html#Melanchall_DryWetMidi_Tools_CsvSerializer_SerializeToCsv_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_ITimedObject__System_String_System_Boolean_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Tools_CsvSerializationSettings_
+  commentId: M:Melanchall.DryWetMidi.Tools.CsvSerializer.SerializeToCsv(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Interaction.ITimedObject},System.String,System.Boolean,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Tools.CsvSerializationSettings)
+  name.vb: SerializeToCsv(IEnumerable(Of ITimedObject), String, Boolean, TempoMap, CsvSerializationSettings)
+  fullName: Melanchall.DryWetMidi.Tools.CsvSerializer.SerializeToCsv(System.Collections.Generic.IEnumerable<Melanchall.DryWetMidi.Interaction.ITimedObject>, System.String, System.Boolean, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Tools.CsvSerializationSettings)
+  fullName.vb: Melanchall.DryWetMidi.Tools.CsvSerializer.SerializeToCsv(System.Collections.Generic.IEnumerable(Of Melanchall.DryWetMidi.Interaction.ITimedObject), System.String, System.Boolean, Melanchall.DryWetMidi.Interaction.TempoMap, Melanchall.DryWetMidi.Tools.CsvSerializationSettings)
+  nameWithType: CsvSerializer.SerializeToCsv(IEnumerable<ITimedObject>, String, Boolean, TempoMap, CsvSerializationSettings)
+  nameWithType.vb: CsvSerializer.SerializeToCsv(IEnumerable(Of ITimedObject), String, Boolean, TempoMap, CsvSerializationSettings)
+- uid: Melanchall.DryWetMidi.Tools.CsvSerializer.SerializeToCsv*
+  name: SerializeToCsv
+  href: api/Melanchall.DryWetMidi.Tools.CsvSerializer.html#Melanchall_DryWetMidi_Tools_CsvSerializer_SerializeToCsv_
+  commentId: Overload:Melanchall.DryWetMidi.Tools.CsvSerializer.SerializeToCsv
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Tools.CsvSerializer.SerializeToCsv
+  nameWithType: CsvSerializer.SerializeToCsv
 - uid: Melanchall.DryWetMidi.Tools.IBounds
   name: IBounds
   href: api/Melanchall.DryWetMidi.Tools.IBounds.html
@@ -36105,202 +36294,6 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Tools.Merger.MergeSimultaneously
   nameWithType: Merger.MergeSimultaneously
-- uid: Melanchall.DryWetMidi.Tools.MidiFileCsvConversionSettings
-  name: MidiFileCsvConversionSettings
-  href: api/Melanchall.DryWetMidi.Tools.MidiFileCsvConversionSettings.html
-  commentId: T:Melanchall.DryWetMidi.Tools.MidiFileCsvConversionSettings
-  fullName: Melanchall.DryWetMidi.Tools.MidiFileCsvConversionSettings
-  nameWithType: MidiFileCsvConversionSettings
-- uid: Melanchall.DryWetMidi.Tools.MidiFileCsvConversionSettings.CsvLayout
-  name: CsvLayout
-  href: api/Melanchall.DryWetMidi.Tools.MidiFileCsvConversionSettings.html#Melanchall_DryWetMidi_Tools_MidiFileCsvConversionSettings_CsvLayout
-  commentId: P:Melanchall.DryWetMidi.Tools.MidiFileCsvConversionSettings.CsvLayout
-  fullName: Melanchall.DryWetMidi.Tools.MidiFileCsvConversionSettings.CsvLayout
-  nameWithType: MidiFileCsvConversionSettings.CsvLayout
-- uid: Melanchall.DryWetMidi.Tools.MidiFileCsvConversionSettings.CsvLayout*
-  name: CsvLayout
-  href: api/Melanchall.DryWetMidi.Tools.MidiFileCsvConversionSettings.html#Melanchall_DryWetMidi_Tools_MidiFileCsvConversionSettings_CsvLayout_
-  commentId: Overload:Melanchall.DryWetMidi.Tools.MidiFileCsvConversionSettings.CsvLayout
-  isSpec: "True"
-  fullName: Melanchall.DryWetMidi.Tools.MidiFileCsvConversionSettings.CsvLayout
-  nameWithType: MidiFileCsvConversionSettings.CsvLayout
-- uid: Melanchall.DryWetMidi.Tools.MidiFileCsvConversionSettings.CsvSettings
-  name: CsvSettings
-  href: api/Melanchall.DryWetMidi.Tools.MidiFileCsvConversionSettings.html#Melanchall_DryWetMidi_Tools_MidiFileCsvConversionSettings_CsvSettings
-  commentId: P:Melanchall.DryWetMidi.Tools.MidiFileCsvConversionSettings.CsvSettings
-  fullName: Melanchall.DryWetMidi.Tools.MidiFileCsvConversionSettings.CsvSettings
-  nameWithType: MidiFileCsvConversionSettings.CsvSettings
-- uid: Melanchall.DryWetMidi.Tools.MidiFileCsvConversionSettings.CsvSettings*
-  name: CsvSettings
-  href: api/Melanchall.DryWetMidi.Tools.MidiFileCsvConversionSettings.html#Melanchall_DryWetMidi_Tools_MidiFileCsvConversionSettings_CsvSettings_
-  commentId: Overload:Melanchall.DryWetMidi.Tools.MidiFileCsvConversionSettings.CsvSettings
-  isSpec: "True"
-  fullName: Melanchall.DryWetMidi.Tools.MidiFileCsvConversionSettings.CsvSettings
-  nameWithType: MidiFileCsvConversionSettings.CsvSettings
-- uid: Melanchall.DryWetMidi.Tools.MidiFileCsvConversionSettings.NoteFormat
-  name: NoteFormat
-  href: api/Melanchall.DryWetMidi.Tools.MidiFileCsvConversionSettings.html#Melanchall_DryWetMidi_Tools_MidiFileCsvConversionSettings_NoteFormat
-  commentId: P:Melanchall.DryWetMidi.Tools.MidiFileCsvConversionSettings.NoteFormat
-  fullName: Melanchall.DryWetMidi.Tools.MidiFileCsvConversionSettings.NoteFormat
-  nameWithType: MidiFileCsvConversionSettings.NoteFormat
-- uid: Melanchall.DryWetMidi.Tools.MidiFileCsvConversionSettings.NoteFormat*
-  name: NoteFormat
-  href: api/Melanchall.DryWetMidi.Tools.MidiFileCsvConversionSettings.html#Melanchall_DryWetMidi_Tools_MidiFileCsvConversionSettings_NoteFormat_
-  commentId: Overload:Melanchall.DryWetMidi.Tools.MidiFileCsvConversionSettings.NoteFormat
-  isSpec: "True"
-  fullName: Melanchall.DryWetMidi.Tools.MidiFileCsvConversionSettings.NoteFormat
-  nameWithType: MidiFileCsvConversionSettings.NoteFormat
-- uid: Melanchall.DryWetMidi.Tools.MidiFileCsvConversionSettings.NoteLengthType
-  name: NoteLengthType
-  href: api/Melanchall.DryWetMidi.Tools.MidiFileCsvConversionSettings.html#Melanchall_DryWetMidi_Tools_MidiFileCsvConversionSettings_NoteLengthType
-  commentId: P:Melanchall.DryWetMidi.Tools.MidiFileCsvConversionSettings.NoteLengthType
-  fullName: Melanchall.DryWetMidi.Tools.MidiFileCsvConversionSettings.NoteLengthType
-  nameWithType: MidiFileCsvConversionSettings.NoteLengthType
-- uid: Melanchall.DryWetMidi.Tools.MidiFileCsvConversionSettings.NoteLengthType*
-  name: NoteLengthType
-  href: api/Melanchall.DryWetMidi.Tools.MidiFileCsvConversionSettings.html#Melanchall_DryWetMidi_Tools_MidiFileCsvConversionSettings_NoteLengthType_
-  commentId: Overload:Melanchall.DryWetMidi.Tools.MidiFileCsvConversionSettings.NoteLengthType
-  isSpec: "True"
-  fullName: Melanchall.DryWetMidi.Tools.MidiFileCsvConversionSettings.NoteLengthType
-  nameWithType: MidiFileCsvConversionSettings.NoteLengthType
-- uid: Melanchall.DryWetMidi.Tools.MidiFileCsvConversionSettings.NoteNumberFormat
-  name: NoteNumberFormat
-  href: api/Melanchall.DryWetMidi.Tools.MidiFileCsvConversionSettings.html#Melanchall_DryWetMidi_Tools_MidiFileCsvConversionSettings_NoteNumberFormat
-  commentId: P:Melanchall.DryWetMidi.Tools.MidiFileCsvConversionSettings.NoteNumberFormat
-  fullName: Melanchall.DryWetMidi.Tools.MidiFileCsvConversionSettings.NoteNumberFormat
-  nameWithType: MidiFileCsvConversionSettings.NoteNumberFormat
-- uid: Melanchall.DryWetMidi.Tools.MidiFileCsvConversionSettings.NoteNumberFormat*
-  name: NoteNumberFormat
-  href: api/Melanchall.DryWetMidi.Tools.MidiFileCsvConversionSettings.html#Melanchall_DryWetMidi_Tools_MidiFileCsvConversionSettings_NoteNumberFormat_
-  commentId: Overload:Melanchall.DryWetMidi.Tools.MidiFileCsvConversionSettings.NoteNumberFormat
-  isSpec: "True"
-  fullName: Melanchall.DryWetMidi.Tools.MidiFileCsvConversionSettings.NoteNumberFormat
-  nameWithType: MidiFileCsvConversionSettings.NoteNumberFormat
-- uid: Melanchall.DryWetMidi.Tools.MidiFileCsvConversionSettings.TimeType
-  name: TimeType
-  href: api/Melanchall.DryWetMidi.Tools.MidiFileCsvConversionSettings.html#Melanchall_DryWetMidi_Tools_MidiFileCsvConversionSettings_TimeType
-  commentId: P:Melanchall.DryWetMidi.Tools.MidiFileCsvConversionSettings.TimeType
-  fullName: Melanchall.DryWetMidi.Tools.MidiFileCsvConversionSettings.TimeType
-  nameWithType: MidiFileCsvConversionSettings.TimeType
-- uid: Melanchall.DryWetMidi.Tools.MidiFileCsvConversionSettings.TimeType*
-  name: TimeType
-  href: api/Melanchall.DryWetMidi.Tools.MidiFileCsvConversionSettings.html#Melanchall_DryWetMidi_Tools_MidiFileCsvConversionSettings_TimeType_
-  commentId: Overload:Melanchall.DryWetMidi.Tools.MidiFileCsvConversionSettings.TimeType
-  isSpec: "True"
-  fullName: Melanchall.DryWetMidi.Tools.MidiFileCsvConversionSettings.TimeType
-  nameWithType: MidiFileCsvConversionSettings.TimeType
-- uid: Melanchall.DryWetMidi.Tools.MidiFileCsvLayout
-  name: MidiFileCsvLayout
-  href: api/Melanchall.DryWetMidi.Tools.MidiFileCsvLayout.html
-  commentId: T:Melanchall.DryWetMidi.Tools.MidiFileCsvLayout
-  fullName: Melanchall.DryWetMidi.Tools.MidiFileCsvLayout
-  nameWithType: MidiFileCsvLayout
-- uid: Melanchall.DryWetMidi.Tools.MidiFileCsvLayout.DryWetMidi
-  name: DryWetMidi
-  href: api/Melanchall.DryWetMidi.Tools.MidiFileCsvLayout.html#Melanchall_DryWetMidi_Tools_MidiFileCsvLayout_DryWetMidi
-  commentId: F:Melanchall.DryWetMidi.Tools.MidiFileCsvLayout.DryWetMidi
-  fullName: Melanchall.DryWetMidi.Tools.MidiFileCsvLayout.DryWetMidi
-  nameWithType: MidiFileCsvLayout.DryWetMidi
-- uid: Melanchall.DryWetMidi.Tools.MidiFileCsvLayout.MidiCsv
-  name: MidiCsv
-  href: api/Melanchall.DryWetMidi.Tools.MidiFileCsvLayout.html#Melanchall_DryWetMidi_Tools_MidiFileCsvLayout_MidiCsv
-  commentId: F:Melanchall.DryWetMidi.Tools.MidiFileCsvLayout.MidiCsv
-  fullName: Melanchall.DryWetMidi.Tools.MidiFileCsvLayout.MidiCsv
-  nameWithType: MidiFileCsvLayout.MidiCsv
-- uid: Melanchall.DryWetMidi.Tools.NoteCsvConversionSettings
-  name: NoteCsvConversionSettings
-  href: api/Melanchall.DryWetMidi.Tools.NoteCsvConversionSettings.html
-  commentId: T:Melanchall.DryWetMidi.Tools.NoteCsvConversionSettings
-  fullName: Melanchall.DryWetMidi.Tools.NoteCsvConversionSettings
-  nameWithType: NoteCsvConversionSettings
-- uid: Melanchall.DryWetMidi.Tools.NoteCsvConversionSettings.CsvSettings
-  name: CsvSettings
-  href: api/Melanchall.DryWetMidi.Tools.NoteCsvConversionSettings.html#Melanchall_DryWetMidi_Tools_NoteCsvConversionSettings_CsvSettings
-  commentId: P:Melanchall.DryWetMidi.Tools.NoteCsvConversionSettings.CsvSettings
-  fullName: Melanchall.DryWetMidi.Tools.NoteCsvConversionSettings.CsvSettings
-  nameWithType: NoteCsvConversionSettings.CsvSettings
-- uid: Melanchall.DryWetMidi.Tools.NoteCsvConversionSettings.CsvSettings*
-  name: CsvSettings
-  href: api/Melanchall.DryWetMidi.Tools.NoteCsvConversionSettings.html#Melanchall_DryWetMidi_Tools_NoteCsvConversionSettings_CsvSettings_
-  commentId: Overload:Melanchall.DryWetMidi.Tools.NoteCsvConversionSettings.CsvSettings
-  isSpec: "True"
-  fullName: Melanchall.DryWetMidi.Tools.NoteCsvConversionSettings.CsvSettings
-  nameWithType: NoteCsvConversionSettings.CsvSettings
-- uid: Melanchall.DryWetMidi.Tools.NoteCsvConversionSettings.NoteLengthType
-  name: NoteLengthType
-  href: api/Melanchall.DryWetMidi.Tools.NoteCsvConversionSettings.html#Melanchall_DryWetMidi_Tools_NoteCsvConversionSettings_NoteLengthType
-  commentId: P:Melanchall.DryWetMidi.Tools.NoteCsvConversionSettings.NoteLengthType
-  fullName: Melanchall.DryWetMidi.Tools.NoteCsvConversionSettings.NoteLengthType
-  nameWithType: NoteCsvConversionSettings.NoteLengthType
-- uid: Melanchall.DryWetMidi.Tools.NoteCsvConversionSettings.NoteLengthType*
-  name: NoteLengthType
-  href: api/Melanchall.DryWetMidi.Tools.NoteCsvConversionSettings.html#Melanchall_DryWetMidi_Tools_NoteCsvConversionSettings_NoteLengthType_
-  commentId: Overload:Melanchall.DryWetMidi.Tools.NoteCsvConversionSettings.NoteLengthType
-  isSpec: "True"
-  fullName: Melanchall.DryWetMidi.Tools.NoteCsvConversionSettings.NoteLengthType
-  nameWithType: NoteCsvConversionSettings.NoteLengthType
-- uid: Melanchall.DryWetMidi.Tools.NoteCsvConversionSettings.NoteNumberFormat
-  name: NoteNumberFormat
-  href: api/Melanchall.DryWetMidi.Tools.NoteCsvConversionSettings.html#Melanchall_DryWetMidi_Tools_NoteCsvConversionSettings_NoteNumberFormat
-  commentId: P:Melanchall.DryWetMidi.Tools.NoteCsvConversionSettings.NoteNumberFormat
-  fullName: Melanchall.DryWetMidi.Tools.NoteCsvConversionSettings.NoteNumberFormat
-  nameWithType: NoteCsvConversionSettings.NoteNumberFormat
-- uid: Melanchall.DryWetMidi.Tools.NoteCsvConversionSettings.NoteNumberFormat*
-  name: NoteNumberFormat
-  href: api/Melanchall.DryWetMidi.Tools.NoteCsvConversionSettings.html#Melanchall_DryWetMidi_Tools_NoteCsvConversionSettings_NoteNumberFormat_
-  commentId: Overload:Melanchall.DryWetMidi.Tools.NoteCsvConversionSettings.NoteNumberFormat
-  isSpec: "True"
-  fullName: Melanchall.DryWetMidi.Tools.NoteCsvConversionSettings.NoteNumberFormat
-  nameWithType: NoteCsvConversionSettings.NoteNumberFormat
-- uid: Melanchall.DryWetMidi.Tools.NoteCsvConversionSettings.TimeType
-  name: TimeType
-  href: api/Melanchall.DryWetMidi.Tools.NoteCsvConversionSettings.html#Melanchall_DryWetMidi_Tools_NoteCsvConversionSettings_TimeType
-  commentId: P:Melanchall.DryWetMidi.Tools.NoteCsvConversionSettings.TimeType
-  fullName: Melanchall.DryWetMidi.Tools.NoteCsvConversionSettings.TimeType
-  nameWithType: NoteCsvConversionSettings.TimeType
-- uid: Melanchall.DryWetMidi.Tools.NoteCsvConversionSettings.TimeType*
-  name: TimeType
-  href: api/Melanchall.DryWetMidi.Tools.NoteCsvConversionSettings.html#Melanchall_DryWetMidi_Tools_NoteCsvConversionSettings_TimeType_
-  commentId: Overload:Melanchall.DryWetMidi.Tools.NoteCsvConversionSettings.TimeType
-  isSpec: "True"
-  fullName: Melanchall.DryWetMidi.Tools.NoteCsvConversionSettings.TimeType
-  nameWithType: NoteCsvConversionSettings.TimeType
-- uid: Melanchall.DryWetMidi.Tools.NoteFormat
-  name: NoteFormat
-  href: api/Melanchall.DryWetMidi.Tools.NoteFormat.html
-  commentId: T:Melanchall.DryWetMidi.Tools.NoteFormat
-  fullName: Melanchall.DryWetMidi.Tools.NoteFormat
-  nameWithType: NoteFormat
-- uid: Melanchall.DryWetMidi.Tools.NoteFormat.Events
-  name: Events
-  href: api/Melanchall.DryWetMidi.Tools.NoteFormat.html#Melanchall_DryWetMidi_Tools_NoteFormat_Events
-  commentId: F:Melanchall.DryWetMidi.Tools.NoteFormat.Events
-  fullName: Melanchall.DryWetMidi.Tools.NoteFormat.Events
-  nameWithType: NoteFormat.Events
-- uid: Melanchall.DryWetMidi.Tools.NoteFormat.Note
-  name: Note
-  href: api/Melanchall.DryWetMidi.Tools.NoteFormat.html#Melanchall_DryWetMidi_Tools_NoteFormat_Note
-  commentId: F:Melanchall.DryWetMidi.Tools.NoteFormat.Note
-  fullName: Melanchall.DryWetMidi.Tools.NoteFormat.Note
-  nameWithType: NoteFormat.Note
-- uid: Melanchall.DryWetMidi.Tools.NoteNumberFormat
-  name: NoteNumberFormat
-  href: api/Melanchall.DryWetMidi.Tools.NoteNumberFormat.html
-  commentId: T:Melanchall.DryWetMidi.Tools.NoteNumberFormat
-  fullName: Melanchall.DryWetMidi.Tools.NoteNumberFormat
-  nameWithType: NoteNumberFormat
-- uid: Melanchall.DryWetMidi.Tools.NoteNumberFormat.Letter
-  name: Letter
-  href: api/Melanchall.DryWetMidi.Tools.NoteNumberFormat.html#Melanchall_DryWetMidi_Tools_NoteNumberFormat_Letter
-  commentId: F:Melanchall.DryWetMidi.Tools.NoteNumberFormat.Letter
-  fullName: Melanchall.DryWetMidi.Tools.NoteNumberFormat.Letter
-  nameWithType: NoteNumberFormat.Letter
-- uid: Melanchall.DryWetMidi.Tools.NoteNumberFormat.NoteNumber
-  name: NoteNumber
-  href: api/Melanchall.DryWetMidi.Tools.NoteNumberFormat.html#Melanchall_DryWetMidi_Tools_NoteNumberFormat_NoteNumber
-  commentId: F:Melanchall.DryWetMidi.Tools.NoteNumberFormat.NoteNumber
-  fullName: Melanchall.DryWetMidi.Tools.NoteNumberFormat.NoteNumber
-  nameWithType: NoteNumberFormat.NoteNumber
 - uid: Melanchall.DryWetMidi.Tools.ObjectsGroupResizingSettings
   name: ObjectsGroupResizingSettings
   href: api/Melanchall.DryWetMidi.Tools.ObjectsGroupResizingSettings.html
@@ -37375,6 +37368,19 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Tools.SanitizingSettings.RemoveOrphanedNoteOnEvents
   nameWithType: SanitizingSettings.RemoveOrphanedNoteOnEvents
+- uid: Melanchall.DryWetMidi.Tools.SanitizingSettings.Trim
+  name: Trim
+  href: api/Melanchall.DryWetMidi.Tools.SanitizingSettings.html#Melanchall_DryWetMidi_Tools_SanitizingSettings_Trim
+  commentId: P:Melanchall.DryWetMidi.Tools.SanitizingSettings.Trim
+  fullName: Melanchall.DryWetMidi.Tools.SanitizingSettings.Trim
+  nameWithType: SanitizingSettings.Trim
+- uid: Melanchall.DryWetMidi.Tools.SanitizingSettings.Trim*
+  name: Trim
+  href: api/Melanchall.DryWetMidi.Tools.SanitizingSettings.html#Melanchall_DryWetMidi_Tools_SanitizingSettings_Trim_
+  commentId: Overload:Melanchall.DryWetMidi.Tools.SanitizingSettings.Trim
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Tools.SanitizingSettings.Trim
+  nameWithType: SanitizingSettings.Trim
 - uid: Melanchall.DryWetMidi.Tools.SequentialMergingSettings
   name: SequentialMergingSettings
   href: api/Melanchall.DryWetMidi.Tools.SequentialMergingSettings.html
