@@ -16,7 +16,7 @@ Things to pay attention for are:
 3. Provide your code (as text, not as a screenshot!) and point me to the place there where the error occurred or where you need to do something.
 4. What is your operating system?
 5. What version of the library do you use?
-6. Use proper MIDI terminology. Official MIDI specification can be found on the [midi.org](https://www.midi.org/specifications/midi1-specifications/midi-1-0-core-specifications/midi-1-0-detailed-specification-2).
+6. Use proper MIDI terminology. Official MIDI specification can be found on the [midi.org](https://midi.org/midi-1-0-detailed-specification).
 7. Use formatting for your messages (especially for code blocks):  
     * on GitHub use [Markdown](https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax);
     * on emails use formatting provided by your mail client.

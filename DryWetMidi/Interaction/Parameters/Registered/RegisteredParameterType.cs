@@ -1,6 +1,6 @@
 ﻿namespace Melanchall.DryWetMidi.Interaction
 {
-    // TODO: https://www.midi.org/specifications-old/item/table-3-control-change-messages-data-bytes-2
+    // TODO: https://midi.org/midi-1-0-control-change-messages
     /// <summary>
     /// the type of a registered parameter.
     /// </summary>

@@ -25,7 +25,7 @@ var file = MidiFile.Read("Some great song.mid", new ReadingSettings
 
 ## Reading corrupted files
 
-DryWetMIDI allows to read MIDI files with various violations of [SMF](https://www.midi.org/specifications/file-format-specifications/standard-midi-files) standard. Example below shows how to read a MIDI file with different errors:
+DryWetMIDI allows to read MIDI files with various violations of [SMF](https://midi.org/standard-midi-files-specification) standard. Example below shows how to read a MIDI file with different errors:
 
 ```csharp
 var file = MidiFile.Read("Some great song.mid", new ReadingSettings
