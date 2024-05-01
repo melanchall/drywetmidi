@@ -33,7 +33,9 @@ Please see [Getting started](#getting-started) section below for quick jump into
 
 Here the list of noticeable projects that use DryWetMIDI:
 
-* [Musical Bits](https://musicalbits.de/)  
+* [EMU – Sound to Light Controller](https://www.enttec.com/product/dmx-lighting-control-software/emu-sound-to-light-controller)  
+  EMU (DMXIS’s next generation) is a state-of-the-art, intuitive sound-to-light controller designed for professional live musicians and DJs. Easy to use software, EMU allows you to run automated or responsive DMX light shows, leaving you to focus on your show!
+* [Musical Bits](https://musicalbits.de)  
   Musical Bits creates software that helps you creating music. Our software uses latest technology, including AI, to model all layers of creativity of a human composer. These layers are implemented as reusable and combinable software components. Musical Bits software is available as co-pilot for producers and composers under the name KLANGMACHT and helps you create, drumsounds, beats, guitars, background choirs, lyrics and more. We even create and distribute full virtual bands, albums and songs. For example, check out the Frostbite Orckings.
 * [CoyoteMIDI](https://coyotemidi.com)  
   CoyoteMIDI extends the functionality of your MIDI devices to include keyboard and mouse input, including complex key combinations and multi-step macros.
@@ -43,15 +45,12 @@ Here the list of noticeable projects that use DryWetMIDI:
   A collection of virtual musical instruments that features real MIDI output.
 * [Rustissimo](https://store.steampowered.com/app/1222580/Rustissimo)  
   Using Rustissimo you can create a concert with your friends and play instruments with synchronization.
-* Sample applications from [CIRCE-EYES](https://github.com/CIRCE-EYES):
-  * https://github.com/melanchall/drywetmidi/issues/105
-  * https://github.com/melanchall/drywetmidi/issues/139
 
 If you find that DryWetMIDI has been useful for your project, please put a link to the library in your project's About section or something like that.
 
 ## Getting Started
 
-Let's see some examples of what you can do with DryWetMIDI.
+Let's see some examples of what you can do with DryWetMIDI. Also you can check out sample applications from [CIRCE-EYES](https://github.com/CIRCE-EYES) (see the profile, VB.NET used).
 
 To [read a MIDI file](https://melanchall.github.io/drywetmidi/articles/file-reading-writing/MIDI-file-reading.html) you have to use ```Read``` static method of the ```MidiFile```:
 
