@@ -2012,7 +2012,7 @@
   "articles/tools/Overview.html": {
     "href": "articles/tools/Overview.html",
     "title": "Overview | DryWetMIDI",
-    "keywords": "Overview DryWetMIDI provides some useful tools to solve complex tasks: Splitter to split objects and MIDI files in many different ways. Quantizer to quantize objects. Merger to merge nearby objects and MIDI files. Resizer to resize groups of objects or MIDI files. Repeater to repeat groups of objects or MIDI files. Sanitizer to clean a MIDI file up removing redundant events and so on. CSV converter to convert MIDI objects to CSV representation and read them back."
+    "keywords": "Overview DryWetMIDI provides some useful tools to solve complex tasks: Splitter to split objects and MIDI files in many different ways. Quantizer to quantize objects. Merger to merge nearby objects and MIDI files. Resizer to resize groups of objects or MIDI files. Repeater to repeat groups of objects or MIDI files. Sanitizer to clean a MIDI file up removing redundant events and so on. CSV serializer to convert MIDI objects to CSV representation and read them back."
   },
   "articles/tools/Quantizer.html": {
     "href": "articles/tools/Quantizer.html",
