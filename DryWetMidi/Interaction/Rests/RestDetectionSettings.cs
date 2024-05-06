@@ -11,12 +11,14 @@ namespace Melanchall.DryWetMidi.Interaction
     {
         #region Constants
 
+        private static readonly Func<ITimedObject, object> NoNotesKeySelector = obj => obj is Note ? "Note" : null;
+
         /// <summary>
         /// Rests will be built only at spaces without notes at all.
         /// </summary>
         public static readonly RestDetectionSettings NoNotes = new RestDetectionSettings
         {
-            KeySelector = obj => obj is Note ? "Note" : null
+            KeySelector = NoNotesKeySelector
         };
 
         /// <summary>
@@ -66,9 +68,11 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <summary>
         /// Gets or sets a function that returns the key of an object. Please read
         /// <see href="xref:a_getting_objects#rests">Getting objects: Rests</see> article to
-        /// understand the key concept.
+        /// understand the key concept. The default key selector is
+        /// <c>obj => obj is Note ? "Note" : null</c> which means rests will be built
+        /// between notes where there are no notes at all.
         /// </summary>
-        public Func<ITimedObject, object> KeySelector { get; set; }
+        public Func<ITimedObject, object> KeySelector { get; set; } = NoNotesKeySelector;
 
         #endregion
     }

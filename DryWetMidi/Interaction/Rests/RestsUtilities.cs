@@ -21,23 +21,14 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="settings">Settings according to which rests should be detected and built.</param>
         /// <returns>Collection with objects from <paramref name="timedObjects"/> and rests
         /// between them.</returns>
-        /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occurred:</para>
-        /// <list type="bullet">
-        /// <item>
-        /// <description><paramref name="timedObjects"/> is <c>null</c>.</description>
-        /// </item>
-        /// <item>
-        /// <description><paramref name="settings"/> is <c>null</c>.</description>
-        /// </item>
-        /// </list>
-        /// </exception>
+        /// <exception cref="ArgumentNullException"><paramref name="timedObjects"/> is <c>null</c>.</exception>
         public static IEnumerable<ITimedObject> WithRests(
             this IEnumerable<ITimedObject> timedObjects,
-            RestDetectionSettings settings)
+            RestDetectionSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(timedObjects), timedObjects);
-            ThrowIfArgument.IsNull(nameof(settings), settings);
+
+            settings = settings ?? new RestDetectionSettings();
 
             timedObjects = GetSortedObjects(timedObjects);
             var rests = GetSortedRestsFromObjects(timedObjects, settings);
@@ -51,23 +42,14 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="timedObjects">The input objects collection.</param>
         /// <param name="settings">Settings according to which rests should be detected and built.</param>
         /// <returns>Collection of rests between objects within <paramref name="timedObjects"/>.</returns>
-        /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occurred:</para>
-        /// <list type="bullet">
-        /// <item>
-        /// <description><paramref name="timedObjects"/> is <c>null</c>.</description>
-        /// </item>
-        /// <item>
-        /// <description><paramref name="settings"/> is <c>null</c>.</description>
-        /// </item>
-        /// </list>
-        /// </exception>
+        /// <exception cref="ArgumentNullException"><paramref name="timedObjects"/> is <c>null</c>.</exception>
         public static ICollection<Rest> GetRests(
             this IEnumerable<ITimedObject> timedObjects,
-            RestDetectionSettings settings)
+            RestDetectionSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(timedObjects), timedObjects);
-            ThrowIfArgument.IsNull(nameof(settings), settings);
+
+            settings = settings ?? new RestDetectionSettings();
 
             timedObjects = GetSortedObjects(timedObjects);
             return GetSortedRestsFromObjects(timedObjects, settings);
