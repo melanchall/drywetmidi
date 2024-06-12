@@ -760,7 +760,12 @@ namespace Melanchall.DryWetMidi.Interaction
             return eventsCollections.GetTimedEventsLazy(eventsCount, settings, cloneEvent);
         }
 
-        internal static IEnumerable<TimedObjectAt<TimedEvent>> GetTimedEventsLazy(this EventsCollection[] eventsCollections, int eventsCount, TimedEventDetectionSettings settings, bool cloneEvent = true)
+        internal static IEnumerable<TimedObjectAt<TimedEvent>> GetTimedEventsLazy(
+            this EventsCollection[] eventsCollections,
+            int eventsCount,
+            TimedEventDetectionSettings settings,
+            bool cloneEvent = true,
+            List<TimedObjectAt<TimedEvent>> collectedTimedEvents = null)
         {
             var eventsCollectionsCount = eventsCollections.Length;
 
@@ -771,7 +776,12 @@ namespace Melanchall.DryWetMidi.Interaction
             {
                 foreach (var timedEvent in eventsCollections[0].GetTimedEventsLazy(settings, cloneEvent))
                 {
-                    yield return new TimedObjectAt<TimedEvent>(timedEvent, 0);
+                    var timedObjectAt = new TimedObjectAt<TimedEvent>(timedEvent, 0);
+
+                    if (collectedTimedEvents != null)
+                        collectedTimedEvents.Add(timedObjectAt);
+
+                    yield return timedObjectAt;
                 }
 
                 yield break;
@@ -821,7 +831,12 @@ namespace Melanchall.DryWetMidi.Interaction
                     timedEvent._time = minTime;
                 }
 
-                yield return new TimedObjectAt<TimedEvent>(timedEvent, eventsCollectionIndex);
+                var timedObjectAt = new TimedObjectAt<TimedEvent>(timedEvent, eventsCollectionIndex);
+
+                if (collectedTimedEvents != null)
+                    collectedTimedEvents.Add(timedObjectAt);
+
+                yield return timedObjectAt;
 
                 eventsCollectionTimes[eventsCollectionIndex] = minTime;
                 eventsCollectionIndices[eventsCollectionIndex]++;

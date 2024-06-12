@@ -10,7 +10,7 @@ namespace Melanchall.DryWetMidi.Interaction
     /// <summary>
     /// Extension methods for objects that implement the <see cref="ITimedObject"/> interface.
     /// </summary>
-    public static class TimedObjectUtilities
+    public static partial class TimedObjectUtilities
     {
         #region Methods
 

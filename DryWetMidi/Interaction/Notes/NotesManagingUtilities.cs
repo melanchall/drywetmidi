@@ -910,6 +910,7 @@ namespace Melanchall.DryWetMidi.Interaction
             foreach (var timedEventTuple in timedEvents)
             {
                 var timedEvent = timedEventTuple.Object;
+
                 switch (timedEvent.Event.EventType)
                 {
                     case MidiEventType.NoteOn:
