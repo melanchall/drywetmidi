@@ -97,6 +97,15 @@ namespace Melanchall.DryWetMidi.Tools
             MidiFile midiFile,
             SanitizingSettings settings)
         {
+            var usedChannels = new bool[FourBitNumber.MaxValue + 1];
+
+            if (!settings.RemoveEventsOnUnusedChannels &&
+                !settings.RemoveDuplicatedPitchBendEvents &&
+                !settings.RemoveDuplicatedSequenceTrackNameEvents &&
+                !settings.RemoveDuplicatedSetTempoEvents &&
+                !settings.RemoveDuplicatedTimeSignatureEvents)
+                return usedChannels;
+
             var microsecondsPerQuarterNote = SetTempoEvent.DefaultMicrosecondsPerQuarterNote;
 
             var timeSignatureNumerator = TimeSignatureEvent.DefaultNumerator;
@@ -107,7 +116,7 @@ namespace Melanchall.DryWetMidi.Tools
             ushort? pitchValue = null;
             FourBitNumber? pitchBendChannel = null;
 
-            var usedChannels = new bool[FourBitNumber.MaxValue + 1];
+            string sequenceTrackName = null;
 
             midiFile.RemoveTimedEvents(e =>
             {
@@ -155,6 +164,29 @@ namespace Melanchall.DryWetMidi.Tools
 
                 return false;
             });
+
+            if (settings.RemoveDuplicatedSequenceTrackNameEvents)
+            {
+                foreach (var trackChunk in midiFile.GetTrackChunks())
+                {
+                    trackChunk.RemoveTimedEvents(e =>
+                    {
+                        var midiEvent = e.Event;
+                        var midiEventType = midiEvent.EventType;
+
+                        if (midiEventType == MidiEventType.SequenceTrackName && settings.RemoveDuplicatedSequenceTrackNameEvents)
+                        {
+                            var sequenceTrackNameEvent = (SequenceTrackNameEvent)midiEvent;
+                            var result = sequenceTrackNameEvent.Text == sequenceTrackName;
+
+                            sequenceTrackName = sequenceTrackNameEvent.Text;
+                            return result;
+                        }
+
+                        return false;
+                    });
+                }
+            }
 
             return usedChannels;
         }

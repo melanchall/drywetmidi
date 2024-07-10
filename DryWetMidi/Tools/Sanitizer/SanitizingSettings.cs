@@ -71,6 +71,8 @@ namespace Melanchall.DryWetMidi.Tools
         /// </summary>
         public bool RemoveDuplicatedPitchBendEvents { get; set; } = true;
 
+        public bool RemoveDuplicatedSequenceTrackNameEvents { get; set; } = true;
+
         /// <summary>
         /// Gets or sets a value indicating whether events on unused channels should be removed or not.
         /// Unused channel means there are no notes on this channel. The default value is <c>true</c>.
