@@ -69,14 +69,6 @@ namespace Melanchall.DryWetMidi.Interaction
             }
         }
 
-        /// <summary>
-        /// Gets or sets settings according to which notes should be detected and built. Chords will be
-        /// built on top of those notes. More info in the
-        /// <see href="xref:a_getting_objects#notedetectionsettings">Getting objects: GetChords: Settings: NoteDetectionSettings</see>
-        /// article.
-        /// </summary>
-        public NoteDetectionSettings NoteDetectionSettings { get; set; } = new NoteDetectionSettings();
-
         #endregion
     }
 }

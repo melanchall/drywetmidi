@@ -176,18 +176,18 @@ namespace Melanchall.DryWetMidi.Interaction
             var getNotes = objectType.HasFlag(ObjectType.Note);
             var getChords = objectType.HasFlag(ObjectType.Chord);
 
+            var timedEvents = eventsCollections
+                .GetTimedEventsLazy(eventsCount, objectDetectionSettings?.TimedEventDetectionSettings, false, collectedTimedEvents);
+
             IEnumerable<TimedObjectAt<ITimedObject>> timedObjects = null;
             if (getChords)
-                timedObjects = eventsCollections
-                    .GetTimedEventsLazy(eventsCount, objectDetectionSettings?.ChordDetectionSettings?.NoteDetectionSettings?.TimedEventDetectionSettings, false, collectedTimedEvents)
-                    .GetChordsAndNotesAndTimedEventsLazy(objectDetectionSettings?.ChordDetectionSettings ?? new ChordDetectionSettings());
+                timedObjects = timedEvents
+                    .GetChordsAndNotesAndTimedEventsLazy(objectDetectionSettings?.ChordDetectionSettings ?? new ChordDetectionSettings(), objectDetectionSettings?.NoteDetectionSettings ?? new NoteDetectionSettings(), objectDetectionSettings?.TimedEventDetectionSettings ?? new TimedEventDetectionSettings());
             else if (getNotes)
-                timedObjects = eventsCollections
-                    .GetTimedEventsLazy(eventsCount, objectDetectionSettings?.NoteDetectionSettings?.TimedEventDetectionSettings, false, collectedTimedEvents)
+                timedObjects = timedEvents
                     .GetNotesAndTimedEventsLazy(objectDetectionSettings?.NoteDetectionSettings ?? new NoteDetectionSettings());
             else if (getTimedEvents)
-                timedObjects = eventsCollections
-                    .GetTimedEventsLazy(eventsCount, objectDetectionSettings?.TimedEventDetectionSettings, false, collectedTimedEvents)
+                timedObjects = timedEvents
                     .Select(e => new TimedObjectAt<ITimedObject>(e.Object, e.AtIndex));
             else
                 return 0;

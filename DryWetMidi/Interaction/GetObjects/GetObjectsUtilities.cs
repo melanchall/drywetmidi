@@ -31,7 +31,7 @@ namespace Melanchall.DryWetMidi.Interaction
             ThrowIfArgument.IsNull(nameof(midiEvents), midiEvents);
 
             return midiEvents
-                .GetTimedEventsLazy(GetTimedEventDetectionSettings(objectType, settings))
+                .GetTimedEventsLazy(settings?.TimedEventDetectionSettings)
                 .GetObjectsFromSortedTimedObjects(0, objectType, settings);
         }
 
@@ -52,7 +52,7 @@ namespace Melanchall.DryWetMidi.Interaction
             ThrowIfArgument.IsNull(nameof(midiEvents), midiEvents);
 
             return midiEvents
-                .GetTimedEventsLazy(GetTimedEventDetectionSettings(objectType, settings))
+                .GetTimedEventsLazy(settings?.TimedEventDetectionSettings)
                 .EnumerateObjectsFromSortedTimedObjects(objectType, settings);
         }
 
@@ -73,7 +73,7 @@ namespace Melanchall.DryWetMidi.Interaction
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
 
             return eventsCollection
-                .GetTimedEventsLazy(GetTimedEventDetectionSettings(objectType, settings))
+                .GetTimedEventsLazy(settings?.TimedEventDetectionSettings)
                 .GetObjectsFromSortedTimedObjects(eventsCollection.Count / 2, objectType, settings);
         }
 
@@ -117,16 +117,14 @@ namespace Melanchall.DryWetMidi.Interaction
 
             var timedEvents = eventsCollections.GetTimedEventsLazy(
                 eventsCount,
-                settings?.TimedEventDetectionSettings
-                    ?? (objectType.HasFlag(ObjectType.Note) ? settings?.NoteDetectionSettings?.TimedEventDetectionSettings : null)
-                    ?? (objectType.HasFlag(ObjectType.Chord) ? settings?.ChordDetectionSettings?.NoteDetectionSettings?.TimedEventDetectionSettings : null));
+                settings?.TimedEventDetectionSettings);
             var timedObjects = (IEnumerable<ITimedObject>)timedEvents.Select(o => o.Object);
 
             if (objectType.HasFlag(ObjectType.Chord) || objectType.HasFlag(ObjectType.Note))
             {
                 timedObjects = !objectType.HasFlag(ObjectType.Chord)
                     ? timedEvents.GetNotesAndTimedEventsLazy(settings?.NoteDetectionSettings ?? new NoteDetectionSettings()).Select(o => o.Object)
-                    : timedEvents.GetChordsAndNotesAndTimedEventsLazy(settings?.ChordDetectionSettings ?? new ChordDetectionSettings()).Select(o => o.Object);
+                    : timedEvents.GetChordsAndNotesAndTimedEventsLazy(settings?.ChordDetectionSettings ?? new ChordDetectionSettings(), settings?.NoteDetectionSettings ?? new NoteDetectionSettings(), settings?.TimedEventDetectionSettings ?? new TimedEventDetectionSettings()).Select(o => o.Object);
             }
 
             return timedObjects.GetObjectsFromSortedTimedObjects(eventsCount / 2, objectType, settings, false);
@@ -249,9 +247,7 @@ namespace Melanchall.DryWetMidi.Interaction
             var getTimedEvents = objectType.HasFlag(ObjectType.TimedEvent);
 
             settings = settings ?? new ObjectDetectionSettings();
-            var noteDetectionSettings = settings.NoteDetectionSettings
-                ?? (getChords ? settings.ChordDetectionSettings?.NoteDetectionSettings : null)
-                ?? new NoteDetectionSettings();
+            var noteDetectionSettings = settings.NoteDetectionSettings ?? new NoteDetectionSettings();
             var chordDetectionSettings = settings.ChordDetectionSettings ?? new ChordDetectionSettings();
 
             var timedObjects = processedTimedObjects;
@@ -321,9 +317,7 @@ namespace Melanchall.DryWetMidi.Interaction
             var getTimedEvents = objectType.HasFlag(ObjectType.TimedEvent);
 
             settings = settings ?? new ObjectDetectionSettings();
-            var noteDetectionSettings = settings.NoteDetectionSettings
-                ?? (getChords ? settings.ChordDetectionSettings?.NoteDetectionSettings : null)
-                ?? new NoteDetectionSettings();
+            var noteDetectionSettings = settings.NoteDetectionSettings ?? new NoteDetectionSettings();
             var chordDetectionSettings = settings.ChordDetectionSettings ?? new ChordDetectionSettings();
 
             var timedObjects = processedTimedObjects;
@@ -373,13 +367,6 @@ namespace Melanchall.DryWetMidi.Interaction
                     }
                 }
             }
-        }
-
-        private static TimedEventDetectionSettings GetTimedEventDetectionSettings(ObjectType objectType, ObjectDetectionSettings settings)
-        {
-            return settings?.TimedEventDetectionSettings
-                ?? (objectType.HasFlag(ObjectType.Note) ? settings?.NoteDetectionSettings?.TimedEventDetectionSettings : null)
-                ?? (objectType.HasFlag(ObjectType.Chord) ? settings?.ChordDetectionSettings?.NoteDetectionSettings?.TimedEventDetectionSettings : null);
         }
 
         #endregion

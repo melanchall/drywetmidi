@@ -676,11 +676,11 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 NoteDetectionSettings = new NoteDetectionSettings
                 {
                     Constructor = data => new CustomNote(data.TimedNoteOnEvent, data.TimedNoteOffEvent, ((CustomTimedEvent)data.TimedNoteOnEvent).EventsCollectionIndex),
-                    TimedEventDetectionSettings = new TimedEventDetectionSettings
-                    {
-                        Constructor = data => new CustomTimedEvent(data.Event, data.Time, data.EventsCollectionIndex, data.EventIndex)
-                    },
-                }
+                },
+                TimedEventDetectionSettings = new TimedEventDetectionSettings
+                {
+                    Constructor = data => new CustomTimedEvent(data.Event, data.Time, data.EventsCollectionIndex, data.EventIndex)
+                },
             });
 
         [Test]
@@ -1185,16 +1185,16 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             {
                 ChordDetectionSettings = new ChordDetectionSettings
                 {
-                    NoteDetectionSettings = new NoteDetectionSettings
-                    {
-                        Constructor = data => new CustomNote(data.TimedNoteOnEvent, data.TimedNoteOffEvent, ((CustomTimedEvent)data.TimedNoteOnEvent).EventsCollectionIndex),
-                        TimedEventDetectionSettings = new TimedEventDetectionSettings
-                        {
-                            Constructor = data => new CustomTimedEvent(data.Event, data.Time, data.EventsCollectionIndex, data.EventIndex)
-                        },
-                    },
                     Constructor = data => new CustomChord(data.Notes, ((CustomNote)data.Notes.First()).EventsCollectionIndex),
-                }
+                },
+                NoteDetectionSettings = new NoteDetectionSettings
+                {
+                    Constructor = data => new CustomNote(data.TimedNoteOnEvent, data.TimedNoteOffEvent, ((CustomTimedEvent)data.TimedNoteOnEvent).EventsCollectionIndex),
+                },
+                TimedEventDetectionSettings = new TimedEventDetectionSettings
+                {
+                    Constructor = data => new CustomTimedEvent(data.Event, data.Time, data.EventsCollectionIndex, data.EventIndex)
+                },
             });
 
         #endregion

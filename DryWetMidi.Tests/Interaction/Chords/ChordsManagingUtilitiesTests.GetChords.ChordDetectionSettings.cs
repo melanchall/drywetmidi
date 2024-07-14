@@ -85,10 +85,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             {
                 NotesTolerance = 0,
                 Constructor = CustomChordConstructor,
-                NoteDetectionSettings = new NoteDetectionSettings
-                {
-                    Constructor = CustomNoteConstructor
-                }
             },
             midiEvents: new MidiEvent[]
             {
@@ -119,6 +115,10 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                         Assert.IsNotInstanceOf<CustomTimedEvent>(n.GetTimedNoteOffEvent(), "Invalid Note Off timed event type.");
                     }
                 }
+            },
+            noteDetectionSettings: new NoteDetectionSettings
+            {
+                Constructor = CustomNoteConstructor
             });
 
         [Test]
@@ -128,11 +128,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             {
                 NotesTolerance = 0,
                 Constructor = CustomChordConstructor,
-                NoteDetectionSettings = new NoteDetectionSettings
-                {
-                    Constructor = CustomNoteConstructor,
-                    TimedEventDetectionSettings = CustomEventSettings
-                }
             },
             midiEvents: new MidiEvent[]
             {
@@ -163,7 +158,12 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                         Assert.IsInstanceOf<CustomTimedEvent>(n.GetTimedNoteOffEvent(), "Invalid Note Off timed event type.");
                     }
                 }
-            });
+            },
+            noteDetectionSettings: new NoteDetectionSettings
+            {
+                Constructor = CustomNoteConstructor,
+            },
+            timedEventDetectionSettings: CustomEventSettings);
 
         [Test]
         public void GetChords_DetectionSettings_EventsCollection_NotesTolerance_2([Values] ContainerType containerType, [Values(1, 10)] int notesTolerance) => GetChords_DetectionSettings_EventsCollection(
@@ -473,10 +473,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             {
                 NotesTolerance = 0,
                 Constructor = CustomChordConstructor,
-                NoteDetectionSettings = new NoteDetectionSettings
-                {
-                    Constructor = CustomNoteConstructor
-                }
             },
             midiEvents: new[]
             {
@@ -524,6 +520,10 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                         Assert.IsNotInstanceOf<CustomTimedEvent>(n.GetTimedNoteOffEvent(), "Invalid Note Off timed event type.");
                     }
                 }
+            },
+            noteDetectionSettings: new NoteDetectionSettings
+            {
+                Constructor = CustomNoteConstructor
             });
 
         [Test]
@@ -533,11 +533,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             {
                 NotesTolerance = 0,
                 Constructor = CustomChordConstructor,
-                NoteDetectionSettings = new NoteDetectionSettings
-                {
-                    Constructor = CustomNoteConstructor,
-                    TimedEventDetectionSettings = CustomEventSettings
-                }
             },
             midiEvents: new[]
             {
@@ -585,7 +580,12 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                         Assert.IsInstanceOf<CustomTimedEvent>(n.GetTimedNoteOffEvent(), "Invalid Note Off timed event type.");
                     }
                 }
-            });
+            },
+            noteDetectionSettings: new NoteDetectionSettings
+            {
+                Constructor = CustomNoteConstructor,
+            },
+            timedEventDetectionSettings: CustomEventSettings);
 
         [Test]
         public void GetChords_DetectionSettings_TrackChunks_NotesTolerance_2([Values] bool wrapToFile, [Values(1, 10)] int notesTolerance) => GetChords_DetectionSettings_TrackChunks(
@@ -830,7 +830,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             ChordDetectionSettings settings,
             ICollection<MidiEvent> midiEvents,
             ICollection<Chord> expectedChords,
-            Action<ICollection<Chord>> additionalChecks = null)
+            Action<ICollection<Chord>> additionalChecks = null,
+            NoteDetectionSettings noteDetectionSettings = null,
+            TimedEventDetectionSettings timedEventDetectionSettings = null)
         {
             switch (containerType)
             {
@@ -839,11 +841,16 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                         var eventsCollection = new EventsCollection();
                         eventsCollection.AddRange(midiEvents);
                         
-                        var chords = eventsCollection.GetChords(settings);
+                        var chords = eventsCollection.GetChords(settings, noteDetectionSettings, timedEventDetectionSettings);
                         MidiAsserts.AreEqual(expectedChords, chords, "Chords are invalid.");
                         additionalChecks?.Invoke(chords);
 
-                        var timedObjects = eventsCollection.GetObjects(ObjectType.Chord, new ObjectDetectionSettings { ChordDetectionSettings = settings });
+                        var timedObjects = eventsCollection.GetObjects(ObjectType.Chord, new ObjectDetectionSettings
+                        {
+                            ChordDetectionSettings = settings,
+                            NoteDetectionSettings = noteDetectionSettings,
+                            TimedEventDetectionSettings = timedEventDetectionSettings,
+                        });
                         MidiAsserts.AreEqual(expectedChords, timedObjects, "Chords are invalid from GetObjects.");
                         additionalChecks?.Invoke(timedObjects.Cast<Chord>().ToArray());
                     }
@@ -852,11 +859,16 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     {
                         var trackChunk = new TrackChunk(midiEvents);
                         
-                        var chords = trackChunk.GetChords(settings);
+                        var chords = trackChunk.GetChords(settings, noteDetectionSettings, timedEventDetectionSettings);
                         MidiAsserts.AreEqual(expectedChords, chords, "Chords are invalid.");
                         additionalChecks?.Invoke(chords);
 
-                        var timedObjects = trackChunk.GetObjects(ObjectType.Chord, new ObjectDetectionSettings { ChordDetectionSettings = settings });
+                        var timedObjects = trackChunk.GetObjects(ObjectType.Chord, new ObjectDetectionSettings
+                        {
+                            ChordDetectionSettings = settings,
+                            NoteDetectionSettings = noteDetectionSettings,
+                            TimedEventDetectionSettings = timedEventDetectionSettings,
+                        });
                         MidiAsserts.AreEqual(expectedChords, timedObjects, "Chords are invalid from GetObjects.");
                         additionalChecks?.Invoke(timedObjects.Cast<Chord>().ToArray());
                     }
@@ -869,7 +881,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                             settings,
                             new[] { midiEvents },
                             expectedChords,
-                            additionalChecks);
+                            additionalChecks,
+                            noteDetectionSettings,
+                            timedEventDetectionSettings);
                     }
                     break;
             }
@@ -880,16 +894,18 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             ChordDetectionSettings settings,
             ICollection<ICollection<MidiEvent>> midiEvents,
             IEnumerable<Chord> expectedChords,
-            Action<ICollection<Chord>> additionalChecks = null)
+            Action<ICollection<Chord>> additionalChecks = null,
+            NoteDetectionSettings noteDetectionSettings = null,
+            TimedEventDetectionSettings timedEventDetectionSettings = null)
         {
             ICollection<Chord> chords;
 
             var trackChunks = midiEvents.Select(e => new TrackChunk(e)).ToArray();
 
             if (wrapToFile)
-                chords = new MidiFile(trackChunks).GetChords(settings);
+                chords = new MidiFile(trackChunks).GetChords(settings, noteDetectionSettings, timedEventDetectionSettings);
             else
-                chords = trackChunks.GetChords(settings);
+                chords = trackChunks.GetChords(settings, noteDetectionSettings, timedEventDetectionSettings);
 
             MidiAsserts.AreEqual(expectedChords, chords, "Chords are invalid.");
             additionalChecks?.Invoke(chords);
@@ -899,9 +915,19 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             IEnumerable<ITimedObject> timedObjects;
 
             if (wrapToFile)
-                timedObjects = new MidiFile(trackChunks).GetObjects(ObjectType.Chord, new ObjectDetectionSettings { ChordDetectionSettings = settings });
+                timedObjects = new MidiFile(trackChunks).GetObjects(ObjectType.Chord, new ObjectDetectionSettings
+                {
+                    ChordDetectionSettings = settings,
+                    NoteDetectionSettings = noteDetectionSettings,
+                    TimedEventDetectionSettings = timedEventDetectionSettings,
+                });
             else
-                timedObjects = trackChunks.GetObjects(ObjectType.Chord, new ObjectDetectionSettings { ChordDetectionSettings = settings });
+                timedObjects = trackChunks.GetObjects(ObjectType.Chord, new ObjectDetectionSettings
+                {
+                    ChordDetectionSettings = settings,
+                    NoteDetectionSettings = noteDetectionSettings,
+                    TimedEventDetectionSettings = timedEventDetectionSettings,
+                });
 
             MidiAsserts.AreEqual(expectedChords, timedObjects, "Chords are invalid from GetObjects.");
             additionalChecks?.Invoke(timedObjects.Cast<Chord>().ToArray());

@@ -43,15 +43,19 @@ namespace Melanchall.DryWetMidi.Interaction
         #region Fields
 
         private readonly ChordDetectionSettings _chordDetectionSettings;
+        private readonly NoteDetectionSettings _noteDetectionSettings;
         private readonly bool _useCustomConstructor;
 
         #endregion
 
         #region Constructor
 
-        public ChordsBuilder(ChordDetectionSettings chordDetectionSettings)
+        public ChordsBuilder(
+            ChordDetectionSettings chordDetectionSettings,
+            NoteDetectionSettings noteDetectionSettings)
         {
             _chordDetectionSettings = chordDetectionSettings ?? new ChordDetectionSettings();
+            _noteDetectionSettings = noteDetectionSettings ?? new NoteDetectionSettings();
             _useCustomConstructor = _chordDetectionSettings.Constructor != null;
         }
 
@@ -64,7 +68,7 @@ namespace Melanchall.DryWetMidi.Interaction
             var chordsDescriptors = new LinkedList<ChordDescriptorIndexed>();
             var chordsDescriptorsByChannel = new LinkedListNode<ChordDescriptorIndexed>[FourBitNumber.MaxValue + 1];
 
-            var notesBuilder = new NotesBuilder(_chordDetectionSettings.NoteDetectionSettings);
+            var notesBuilder = new NotesBuilder(_noteDetectionSettings);
             var notes = notesBuilder.GetNotesLazy(timedEvents, collectTimedEvents, collectedTimedEvents);
 
             foreach (var noteTuple in notes)

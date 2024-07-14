@@ -953,17 +953,17 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     Constructor = data => new CustomChord(
                         data.Notes,
                         (data.Notes.FirstOrDefault() as CustomNote)?.EventsCollectionIndex),
-                    NoteDetectionSettings = new NoteDetectionSettings
-                    {
-                        Constructor = data => new CustomNote(
-                            data.TimedNoteOnEvent,
-                            data.TimedNoteOffEvent,
-                            (data.TimedNoteOnEvent as CustomTimedEvent)?.EventsCollectionIndex),
-                        TimedEventDetectionSettings = new TimedEventDetectionSettings
-                        {
-                            Constructor = data => new CustomTimedEvent(data.Event, data.Time, data.EventsCollectionIndex, data.EventIndex)
-                        }
-                    }
+                },
+                NoteDetectionSettings = new NoteDetectionSettings
+                {
+                    Constructor = data => new CustomNote(
+                        data.TimedNoteOnEvent,
+                        data.TimedNoteOffEvent,
+                        (data.TimedNoteOnEvent as CustomTimedEvent)?.EventsCollectionIndex),
+                },
+                TimedEventDetectionSettings = new TimedEventDetectionSettings
+                {
+                    Constructor = data => new CustomTimedEvent(data.Event, data.Time, data.EventsCollectionIndex, data.EventIndex)
                 }
             });
 
