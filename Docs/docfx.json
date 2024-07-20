@@ -47,6 +47,9 @@
     ],
     "markdownEngineName": "markdig",
     "dest": "_site",
-    "xrefService": [ "https://xref.docs.microsoft.com/query?uid={uid}" ]
+    "xrefService": [ "https://xref.docs.microsoft.com/query?uid={uid}" ],
+	"xref": [
+      "https://learn.microsoft.com/en-us/dotnet/.xrefmap.json"
+    ]
   }
 }

@@ -210,6 +210,10 @@ hr {
     color: #ce9178;
 }
 
+pre code.hljs {
+    padding: 0;
+}
+
 .toc .nav > li > a {
     color: #D5D5D5;
 }

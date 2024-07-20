@@ -111,9 +111,9 @@ namespace Melanchall.DryWetMidi.Composing
                 }
                 else
                 {
-                    Action<MusicTheory.Note, PatternBuilder> customAction;
+                    Action<MusicTheory.Note, PatternBuilder> customAction = null;
                     if (settings.CustomActions?.TryGetValue(symbol, out customAction) == true)
-                        customAction(note, patternBuilder);
+                        customAction?.Invoke(note, patternBuilder);
                     else if (!isNoteBuilding)
                         patternBuilder.StepForward();
                 }
