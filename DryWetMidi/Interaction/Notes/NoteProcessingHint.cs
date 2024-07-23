@@ -7,7 +7,7 @@ namespace Melanchall.DryWetMidi.Interaction
     /// </summary>
     /// <remarks>
     /// If you want to get the maximum performance of a note processing (for example,
-    /// <see cref="NotesManagingUtilities.ProcessNotes(Core.MidiFile, Action{Note}, Predicate{Note}, NoteDetectionSettings, NoteProcessingHint)"/>),
+    /// <see cref="NotesManagingUtilities.ProcessNotes(Core.MidiFile, Action{Note}, Predicate{Note}, NoteDetectionSettings, TimedEventDetectionSettings, NoteProcessingHint)"/>),
     /// choose a hint carefully. Note that you can always use <see href="xref:a_managers">an object manager</see> to
     /// perform any manipulations with notes but dedicated methods of the <see cref="NotesManagingUtilities"/> will
     /// always be faster and will consume less memory.

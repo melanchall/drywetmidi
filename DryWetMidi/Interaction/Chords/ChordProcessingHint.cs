@@ -7,7 +7,7 @@ namespace Melanchall.DryWetMidi.Interaction
     /// </summary>
     /// <remarks>
     /// If you want to get the maximum performance of a chord processing (for example,
-    /// <see cref="ChordsManagingUtilities.ProcessChords(Core.MidiFile, Action{Chord}, Predicate{Chord}, ChordDetectionSettings, ChordProcessingHint)"/>),
+    /// <see cref="ChordsManagingUtilities.ProcessChords(Core.MidiFile, Action{Chord}, Predicate{Chord}, ChordDetectionSettings, NoteDetectionSettings, TimedEventDetectionSettings, ChordProcessingHint)"/>),
     /// choose a hint carefully. Note that you can always use <see href="xref:a_managers">an object manager</see> to
     /// perform any manipulations with chords but dedicated methods of the <see cref="ChordsManagingUtilities"/> will
     /// always be faster and will consume less memory.

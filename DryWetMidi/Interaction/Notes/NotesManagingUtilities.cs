@@ -254,14 +254,18 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="settings">Settings according to which notes should be detected and built.</param>
         /// <returns>Collection of notes contained in <paramref name="midiEvents"/> ordered by time.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="midiEvents"/> is <c>null</c>.</exception>
-        public static ICollection<Note> GetNotes(this IEnumerable<MidiEvent> midiEvents, NoteDetectionSettings settings = null)
+        /// <seealso cref="GetObjectsUtilities"/>
+        public static ICollection<Note> GetNotes(
+            this IEnumerable<MidiEvent> midiEvents,
+            NoteDetectionSettings settings = null,
+            TimedEventDetectionSettings timedEventDetectionSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiEvents), midiEvents);
 
             var result = new List<Note>();
             var notesBuilder = new NotesBuilder(settings);
 
-            var notes = notesBuilder.GetNotesLazy(midiEvents.GetTimedEventsLazy(settings?.TimedEventDetectionSettings));
+            var notes = notesBuilder.GetNotesLazy(midiEvents.GetTimedEventsLazy(timedEventDetectionSettings));
 
             result.AddRange(notes);
             return new SortedTimedObjectsImmutableCollection<Note>(result);
@@ -275,19 +279,22 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="settings">Settings according to which notes should be detected and built.</param>
         /// <returns>Collection of notes contained in <paramref name="eventsCollection"/> ordered by time.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="eventsCollection"/> is <c>null</c>.</exception>
-        /// <seealso cref="ProcessNotes(EventsCollection, Action{Note}, Predicate{Note}, NoteDetectionSettings, NoteProcessingHint)"/>
-        /// <seealso cref="ProcessNotes(EventsCollection, Action{Note}, NoteDetectionSettings, NoteProcessingHint)"/>
-        /// <seealso cref="RemoveNotes(EventsCollection, NoteDetectionSettings)"/>
-        /// <seealso cref="RemoveNotes(EventsCollection, Predicate{Note}, NoteDetectionSettings)"/>
+        /// <seealso cref="ProcessNotes(EventsCollection, Action{Note}, Predicate{Note}, NoteDetectionSettings, TimedEventDetectionSettings, NoteProcessingHint)"/>
+        /// <seealso cref="ProcessNotes(EventsCollection, Action{Note}, NoteDetectionSettings, TimedEventDetectionSettings, NoteProcessingHint)"/>
+        /// <seealso cref="RemoveNotes(EventsCollection, NoteDetectionSettings, TimedEventDetectionSettings)"/>
+        /// <seealso cref="RemoveNotes(EventsCollection, Predicate{Note}, NoteDetectionSettings, TimedEventDetectionSettings)"/>
         /// <seealso cref="GetObjectsUtilities"/>
-        public static ICollection<Note> GetNotes(this EventsCollection eventsCollection, NoteDetectionSettings settings = null)
+        public static ICollection<Note> GetNotes(
+            this EventsCollection eventsCollection,
+            NoteDetectionSettings settings = null,
+            TimedEventDetectionSettings timedEventDetectionSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
 
             var result = new List<Note>();
             var notesBuilder = new NotesBuilder(settings);
 
-            var notes = notesBuilder.GetNotesLazy(eventsCollection.GetTimedEventsLazy(settings?.TimedEventDetectionSettings));
+            var notes = notesBuilder.GetNotesLazy(eventsCollection.GetTimedEventsLazy(timedEventDetectionSettings));
 
             result.AddRange(notes);
             return new SortedTimedObjectsImmutableCollection<Note>(result);
@@ -301,16 +308,19 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="settings">Settings according to which notes should be detected and built.</param>
         /// <returns>Collection of notes contained in <paramref name="trackChunk"/> ordered by time.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="trackChunk"/> is <c>null</c>.</exception>
-        /// <seealso cref="ProcessNotes(TrackChunk, Action{Note}, Predicate{Note}, NoteDetectionSettings, NoteProcessingHint)"/>
-        /// <seealso cref="ProcessNotes(TrackChunk, Action{Note}, NoteDetectionSettings, NoteProcessingHint)"/>
-        /// <seealso cref="RemoveNotes(TrackChunk, NoteDetectionSettings)"/>
-        /// <seealso cref="RemoveNotes(TrackChunk, Predicate{Note}, NoteDetectionSettings)"/>
+        /// <seealso cref="ProcessNotes(TrackChunk, Action{Note}, Predicate{Note}, NoteDetectionSettings, TimedEventDetectionSettings, NoteProcessingHint)"/>
+        /// <seealso cref="ProcessNotes(TrackChunk, Action{Note}, NoteDetectionSettings, TimedEventDetectionSettings, NoteProcessingHint)"/>
+        /// <seealso cref="RemoveNotes(TrackChunk, NoteDetectionSettings, TimedEventDetectionSettings)"/>
+        /// <seealso cref="RemoveNotes(TrackChunk, Predicate{Note}, NoteDetectionSettings, TimedEventDetectionSettings)"/>
         /// <seealso cref="GetObjectsUtilities"/>
-        public static ICollection<Note> GetNotes(this TrackChunk trackChunk, NoteDetectionSettings settings = null)
+        public static ICollection<Note> GetNotes(
+            this TrackChunk trackChunk,
+            NoteDetectionSettings settings = null,
+            TimedEventDetectionSettings timedEventDetectionSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
 
-            return trackChunk.Events.GetNotes(settings);
+            return trackChunk.Events.GetNotes(settings, timedEventDetectionSettings);
         }
 
         /// <summary>
@@ -321,12 +331,15 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="settings">Settings according to which notes should be detected and built.</param>
         /// <returns>Collection of notes contained in <paramref name="trackChunks"/> ordered by time.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="trackChunks"/> is <c>null</c>.</exception>
-        /// <seealso cref="ProcessNotes(IEnumerable{TrackChunk}, Action{Note}, Predicate{Note}, NoteDetectionSettings, NoteProcessingHint)"/>
-        /// <seealso cref="ProcessNotes(IEnumerable{TrackChunk}, Action{Note}, NoteDetectionSettings, NoteProcessingHint)"/>
-        /// <seealso cref="RemoveNotes(IEnumerable{TrackChunk}, NoteDetectionSettings)"/>
-        /// <seealso cref="RemoveNotes(IEnumerable{TrackChunk}, Predicate{Note}, NoteDetectionSettings)"/>
+        /// <seealso cref="ProcessNotes(IEnumerable{TrackChunk}, Action{Note}, Predicate{Note}, NoteDetectionSettings, TimedEventDetectionSettings, NoteProcessingHint)"/>
+        /// <seealso cref="ProcessNotes(IEnumerable{TrackChunk}, Action{Note}, NoteDetectionSettings, TimedEventDetectionSettings, NoteProcessingHint)"/>
+        /// <seealso cref="RemoveNotes(IEnumerable{TrackChunk}, NoteDetectionSettings, TimedEventDetectionSettings)"/>
+        /// <seealso cref="RemoveNotes(IEnumerable{TrackChunk}, Predicate{Note}, NoteDetectionSettings, TimedEventDetectionSettings)"/>
         /// <seealso cref="GetObjectsUtilities"/>
-        public static ICollection<Note> GetNotes(this IEnumerable<TrackChunk> trackChunks, NoteDetectionSettings settings = null)
+        public static ICollection<Note> GetNotes(
+            this IEnumerable<TrackChunk> trackChunks,
+            NoteDetectionSettings settings = null,
+            TimedEventDetectionSettings timedEventDetectionSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
 
@@ -335,14 +348,14 @@ namespace Melanchall.DryWetMidi.Interaction
             switch (eventsCollections.Length)
             {
                 case 0: return new Note[0];
-                case 1: return eventsCollections[0].GetNotes(settings);
+                case 1: return eventsCollections[0].GetNotes(settings, timedEventDetectionSettings);
             }
 
             var eventsCount = eventsCollections.Sum(e => e.Count);
             var result = new List<Note>(eventsCount / 3);
             var notesBuilder = new NotesBuilder(settings);
 
-            var notes = notesBuilder.GetNotesLazy(eventsCollections.GetTimedEventsLazy(eventsCount, settings?.TimedEventDetectionSettings));
+            var notes = notesBuilder.GetNotesLazy(eventsCollections.GetTimedEventsLazy(eventsCount, timedEventDetectionSettings));
 
             result.AddRange(notes.Select(n => n.Object));
             return new SortedTimedObjectsImmutableCollection<Note>(result);
@@ -356,16 +369,19 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="settings">Settings according to which notes should be detected and built.</param>
         /// <returns>Collection of notes contained in <paramref name="file"/> ordered by time.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="file"/> is <c>null</c>.</exception>
-        /// <seealso cref="ProcessNotes(MidiFile, Action{Note}, Predicate{Note}, NoteDetectionSettings, NoteProcessingHint)"/>
-        /// <seealso cref="ProcessNotes(MidiFile, Action{Note}, NoteDetectionSettings, NoteProcessingHint)"/>
-        /// <seealso cref="RemoveNotes(MidiFile, NoteDetectionSettings)"/>
-        /// <seealso cref="RemoveNotes(MidiFile, Predicate{Note}, NoteDetectionSettings)"/>
+        /// <seealso cref="ProcessNotes(MidiFile, Action{Note}, Predicate{Note}, NoteDetectionSettings, TimedEventDetectionSettings, NoteProcessingHint)"/>
+        /// <seealso cref="ProcessNotes(MidiFile, Action{Note}, NoteDetectionSettings, TimedEventDetectionSettings, NoteProcessingHint)"/>
+        /// <seealso cref="RemoveNotes(MidiFile, NoteDetectionSettings, TimedEventDetectionSettings)"/>
+        /// <seealso cref="RemoveNotes(MidiFile, Predicate{Note}, NoteDetectionSettings, TimedEventDetectionSettings)"/>
         /// <seealso cref="GetObjectsUtilities"/>
-        public static ICollection<Note> GetNotes(this MidiFile file, NoteDetectionSettings settings = null)
+        public static ICollection<Note> GetNotes(
+            this MidiFile file,
+            NoteDetectionSettings settings = null,
+            TimedEventDetectionSettings timedEventDetectionSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(file), file);
 
-            return file.GetTrackChunks().GetNotes(settings);
+            return file.GetTrackChunks().GetNotes(settings, timedEventDetectionSettings);
         }
 
         /// <summary>
@@ -394,12 +410,18 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </item>
         /// </list>
         /// </exception>
-        public static int ProcessNotes(this EventsCollection eventsCollection, Action<Note> action, NoteDetectionSettings settings = null, NoteProcessingHint hint = NoteProcessingHint.Default)
+        /// <seealso cref="TimedObjectUtilities.ProcessObjects(EventsCollection, ObjectType, Action{ITimedObject}, ObjectDetectionSettings, ObjectProcessingHint)"/>
+        public static int ProcessNotes(
+            this EventsCollection eventsCollection,
+            Action<Note> action,
+            NoteDetectionSettings settings = null,
+            TimedEventDetectionSettings timedEventDetectionSettings = null,
+            NoteProcessingHint hint = NoteProcessingHint.Default)
         {
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
             ThrowIfArgument.IsNull(nameof(action), action);
 
-            return eventsCollection.ProcessNotes(action, note => true, settings, hint);
+            return eventsCollection.ProcessNotes(action, note => true, settings, timedEventDetectionSettings, hint);
         }
 
         /// <summary>
@@ -432,13 +454,20 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </item>
         /// </list>
         /// </exception>
-        public static int ProcessNotes(this EventsCollection eventsCollection, Action<Note> action, Predicate<Note> match, NoteDetectionSettings settings = null, NoteProcessingHint hint = NoteProcessingHint.Default)
+        /// <seealso cref="TimedObjectUtilities.ProcessObjects(EventsCollection, ObjectType, Action{ITimedObject}, Predicate{ITimedObject}, ObjectDetectionSettings, ObjectProcessingHint)"/>
+        public static int ProcessNotes(
+            this EventsCollection eventsCollection,
+            Action<Note> action,
+            Predicate<Note> match,
+            NoteDetectionSettings settings = null,
+            TimedEventDetectionSettings timedEventDetectionSettings = null,
+            NoteProcessingHint hint = NoteProcessingHint.Default)
         {
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
             ThrowIfArgument.IsNull(nameof(action), action);
             ThrowIfArgument.IsNull(nameof(match), match);
 
-            return new[] { eventsCollection }.ProcessNotesInternal(action, match, settings, hint);
+            return new[] { eventsCollection }.ProcessNotesInternal(action, match, settings, timedEventDetectionSettings, hint);
         }
 
         /// <summary>
@@ -467,12 +496,18 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </item>
         /// </list>
         /// </exception>
-        public static int ProcessNotes(this TrackChunk trackChunk, Action<Note> action, NoteDetectionSettings settings = null, NoteProcessingHint hint = NoteProcessingHint.Default)
+        /// <seealso cref="TimedObjectUtilities.ProcessObjects(TrackChunk, ObjectType, Action{ITimedObject}, ObjectDetectionSettings, ObjectProcessingHint)"/>
+        public static int ProcessNotes(
+            this TrackChunk trackChunk,
+            Action<Note> action,
+            NoteDetectionSettings settings = null,
+            TimedEventDetectionSettings timedEventDetectionSettings = null,
+            NoteProcessingHint hint = NoteProcessingHint.Default)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
             ThrowIfArgument.IsNull(nameof(action), action);
 
-            return trackChunk.ProcessNotes(action, note => true, settings, hint);
+            return trackChunk.ProcessNotes(action, note => true, settings, timedEventDetectionSettings, hint);
         }
 
         /// <summary>
@@ -505,12 +540,19 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </item>
         /// </list>
         /// </exception>
-        public static int ProcessNotes(this TrackChunk trackChunk, Action<Note> action, Predicate<Note> match, NoteDetectionSettings settings = null, NoteProcessingHint hint = NoteProcessingHint.Default)
+        /// <seealso cref="TimedObjectUtilities.ProcessObjects(TrackChunk, ObjectType, Action{ITimedObject}, Predicate{ITimedObject}, ObjectDetectionSettings, ObjectProcessingHint)"/>
+        public static int ProcessNotes(
+            this TrackChunk trackChunk,
+            Action<Note> action,
+            Predicate<Note> match,
+            NoteDetectionSettings settings = null,
+            TimedEventDetectionSettings timedEventDetectionSettings = null,
+            NoteProcessingHint hint = NoteProcessingHint.Default)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
             ThrowIfArgument.IsNull(nameof(action), action);
 
-            return trackChunk.Events.ProcessNotes(action, match, settings, hint);
+            return trackChunk.Events.ProcessNotes(action, match, settings, timedEventDetectionSettings, hint);
         }
 
         /// <summary>
@@ -540,12 +582,18 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </item>
         /// </list>
         /// </exception>
-        public static int ProcessNotes(this IEnumerable<TrackChunk> trackChunks, Action<Note> action, NoteDetectionSettings settings = null, NoteProcessingHint hint = NoteProcessingHint.Default)
+        /// <seealso cref="TimedObjectUtilities.ProcessObjects(IEnumerable{TrackChunk}, ObjectType, Action{ITimedObject}, ObjectDetectionSettings, ObjectProcessingHint)"/>
+        public static int ProcessNotes(
+            this IEnumerable<TrackChunk> trackChunks,
+            Action<Note> action,
+            NoteDetectionSettings settings = null,
+            TimedEventDetectionSettings timedEventDetectionSettings = null,
+            NoteProcessingHint hint = NoteProcessingHint.Default)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
             ThrowIfArgument.IsNull(nameof(action), action);
 
-            return trackChunks.ProcessNotes(action, note => true, settings, hint);
+            return trackChunks.ProcessNotes(action, note => true, settings, timedEventDetectionSettings, hint);
         }
 
         /// <summary>
@@ -579,7 +627,14 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </item>
         /// </list>
         /// </exception>
-        public static int ProcessNotes(this IEnumerable<TrackChunk> trackChunks, Action<Note> action, Predicate<Note> match, NoteDetectionSettings settings = null, NoteProcessingHint hint = NoteProcessingHint.Default)
+        /// <seealso cref="TimedObjectUtilities.ProcessObjects(IEnumerable{TrackChunk}, ObjectType, Action{ITimedObject}, Predicate{ITimedObject}, ObjectDetectionSettings, ObjectProcessingHint)"/>
+        public static int ProcessNotes(
+            this IEnumerable<TrackChunk> trackChunks,
+            Action<Note> action,
+            Predicate<Note> match,
+            NoteDetectionSettings settings = null,
+            TimedEventDetectionSettings timedEventDetectionSettings = null,
+            NoteProcessingHint hint = NoteProcessingHint.Default)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
             ThrowIfArgument.IsNull(nameof(action), action);
@@ -588,7 +643,7 @@ namespace Melanchall.DryWetMidi.Interaction
             return trackChunks
                 .Where(c => c != null)
                 .Select(c => c.Events)
-                .ProcessNotesInternal(action, match, settings, hint);
+                .ProcessNotesInternal(action, match, settings, timedEventDetectionSettings, hint);
         }
 
         /// <summary>
@@ -617,12 +672,18 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </item>
         /// </list>
         /// </exception>
-        public static int ProcessNotes(this MidiFile file, Action<Note> action, NoteDetectionSettings settings = null, NoteProcessingHint hint = NoteProcessingHint.Default)
+        /// <seealso cref="TimedObjectUtilities.ProcessObjects(MidiFile, ObjectType, Action{ITimedObject}, ObjectDetectionSettings, ObjectProcessingHint)"/>
+        public static int ProcessNotes(
+            this MidiFile file,
+            Action<Note> action,
+            NoteDetectionSettings settings = null,
+            TimedEventDetectionSettings timedEventDetectionSettings = null,
+            NoteProcessingHint hint = NoteProcessingHint.Default)
         {
             ThrowIfArgument.IsNull(nameof(file), file);
             ThrowIfArgument.IsNull(nameof(action), action);
 
-            return file.ProcessNotes(action, note => true, settings, hint);
+            return file.ProcessNotes(action, note => true, settings, timedEventDetectionSettings, hint);
         }
 
         /// <summary>
@@ -655,13 +716,20 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </item>
         /// </list>
         /// </exception>
-        public static int ProcessNotes(this MidiFile file, Action<Note> action, Predicate<Note> match, NoteDetectionSettings settings = null, NoteProcessingHint hint = NoteProcessingHint.Default)
+        /// <seealso cref="TimedObjectUtilities.ProcessObjects(MidiFile, ObjectType, Action{ITimedObject}, Predicate{ITimedObject}, ObjectDetectionSettings, ObjectProcessingHint)"/>
+        public static int ProcessNotes(
+            this MidiFile file,
+            Action<Note> action,
+            Predicate<Note> match,
+            NoteDetectionSettings settings = null,
+            TimedEventDetectionSettings timedEventDetectionSettings = null,
+            NoteProcessingHint hint = NoteProcessingHint.Default)
         {
             ThrowIfArgument.IsNull(nameof(file), file);
             ThrowIfArgument.IsNull(nameof(action), action);
             ThrowIfArgument.IsNull(nameof(match), match);
 
-            return file.GetTrackChunks().ProcessNotes(action, match, settings, hint);
+            return file.GetTrackChunks().ProcessNotes(action, match, settings, timedEventDetectionSettings, hint);
         }
 
         /// <summary>
@@ -671,11 +739,15 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="settings">Settings according to which notes should be detected and built.</param>
         /// <returns>Count of removed notes.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="eventsCollection"/> is <c>null</c>.</exception>
-        public static int RemoveNotes(this EventsCollection eventsCollection, NoteDetectionSettings settings = null)
+        /// <seealso cref="TimedObjectUtilities.RemoveObjects(EventsCollection, ObjectType, ObjectDetectionSettings)"/>
+        public static int RemoveNotes(
+            this EventsCollection eventsCollection,
+            NoteDetectionSettings settings = null,
+            TimedEventDetectionSettings timedEventDetectionSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
 
-            return eventsCollection.RemoveNotes(note => true, settings);
+            return eventsCollection.RemoveNotes(note => true, settings, timedEventDetectionSettings);
         }
 
         /// <summary>
@@ -696,7 +768,12 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </item>
         /// </list>
         /// </exception>
-        public static int RemoveNotes(this EventsCollection eventsCollection, Predicate<Note> match, NoteDetectionSettings settings = null)
+        /// <seealso cref="TimedObjectUtilities.RemoveObjects(EventsCollection, ObjectType, Predicate{ITimedObject}, ObjectDetectionSettings)"/>
+        public static int RemoveNotes(
+            this EventsCollection eventsCollection,
+            Predicate<Note> match,
+            NoteDetectionSettings settings = null,
+            TimedEventDetectionSettings timedEventDetectionSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
             ThrowIfArgument.IsNull(nameof(match), match);
@@ -705,6 +782,7 @@ namespace Melanchall.DryWetMidi.Interaction
                 n => n.TimedNoteOnEvent.Event.Flag = n.TimedNoteOffEvent.Event.Flag = true,
                 match,
                 settings,
+                timedEventDetectionSettings,
                 NoteProcessingHint.None);
 
             if (notesToRemoveCount == 0)
@@ -721,11 +799,15 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="settings">Settings according to which notes should be detected and built.</param>
         /// <returns>Count of removed notes.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="trackChunk"/> is <c>null</c>.</exception>
-        public static int RemoveNotes(this TrackChunk trackChunk, NoteDetectionSettings settings = null)
+        /// <seealso cref="TimedObjectUtilities.RemoveObjects(TrackChunk, ObjectType, ObjectDetectionSettings)"/>
+        public static int RemoveNotes(
+            this TrackChunk trackChunk,
+            NoteDetectionSettings settings = null,
+            TimedEventDetectionSettings timedEventDetectionSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
 
-            return trackChunk.RemoveNotes(note => true, settings);
+            return trackChunk.RemoveNotes(note => true, settings, timedEventDetectionSettings);
         }
 
         /// <summary>
@@ -746,12 +828,17 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </item>
         /// </list>
         /// </exception>
-        public static int RemoveNotes(this TrackChunk trackChunk, Predicate<Note> match, NoteDetectionSettings settings = null)
+        /// <seealso cref="TimedObjectUtilities.RemoveObjects(TrackChunk, ObjectType, Predicate{ITimedObject}, ObjectDetectionSettings)"/>
+        public static int RemoveNotes(
+            this TrackChunk trackChunk,
+            Predicate<Note> match,
+            NoteDetectionSettings settings = null,
+            TimedEventDetectionSettings timedEventDetectionSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
             ThrowIfArgument.IsNull(nameof(match), match);
 
-            return trackChunk.Events.RemoveNotes(match, settings);
+            return trackChunk.Events.RemoveNotes(match, settings, timedEventDetectionSettings);
         }
 
         /// <summary>
@@ -761,11 +848,15 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="settings">Settings according to which notes should be detected and built.</param>
         /// <returns>Count of removed notes.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="trackChunks"/> is <c>null</c>.</exception>
-        public static int RemoveNotes(this IEnumerable<TrackChunk> trackChunks, NoteDetectionSettings settings = null)
+        /// <seealso cref="TimedObjectUtilities.RemoveObjects(IEnumerable{TrackChunk}, ObjectType, ObjectDetectionSettings)"/>
+        public static int RemoveNotes(
+            this IEnumerable<TrackChunk> trackChunks,
+            NoteDetectionSettings settings = null,
+            TimedEventDetectionSettings timedEventDetectionSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
 
-            return trackChunks.RemoveNotes(note => true, settings);
+            return trackChunks.RemoveNotes(note => true, settings, timedEventDetectionSettings);
         }
 
         /// <summary>
@@ -786,7 +877,12 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </item>
         /// </list>
         /// </exception>
-        public static int RemoveNotes(this IEnumerable<TrackChunk> trackChunks, Predicate<Note> match, NoteDetectionSettings settings = null)
+        /// <seealso cref="TimedObjectUtilities.RemoveObjects(IEnumerable{TrackChunk}, ObjectType, Predicate{ITimedObject}, ObjectDetectionSettings)"/>
+        public static int RemoveNotes(
+            this IEnumerable<TrackChunk> trackChunks,
+            Predicate<Note> match,
+            NoteDetectionSettings settings = null,
+            TimedEventDetectionSettings timedEventDetectionSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
             ThrowIfArgument.IsNull(nameof(match), match);
@@ -795,6 +891,7 @@ namespace Melanchall.DryWetMidi.Interaction
                 n => n.TimedNoteOnEvent.Event.Flag = n.TimedNoteOffEvent.Event.Flag = true,
                 match,
                 settings,
+                timedEventDetectionSettings,
                 NoteProcessingHint.None);
 
             if (notesToRemoveCount == 0)
@@ -811,11 +908,15 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="settings">Settings according to which notes should be detected and built.</param>
         /// <returns>Count of removed notes.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="file"/> is <c>null</c>.</exception>
-        public static int RemoveNotes(this MidiFile file, NoteDetectionSettings settings = null)
+        /// <seealso cref="TimedObjectUtilities.RemoveObjects(MidiFile, ObjectType, ObjectDetectionSettings)"/>
+        public static int RemoveNotes(
+            this MidiFile file,
+            NoteDetectionSettings settings = null,
+            TimedEventDetectionSettings timedEventDetectionSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(file), file);
 
-            return file.RemoveNotes(note => true, settings);
+            return file.RemoveNotes(note => true, settings, timedEventDetectionSettings);
         }
 
         /// <summary>
@@ -836,12 +937,17 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </item>
         /// </list>
         /// </exception>
-        public static int RemoveNotes(this MidiFile file, Predicate<Note> match, NoteDetectionSettings settings = null)
+        /// <seealso cref="TimedObjectUtilities.RemoveObjects(MidiFile, ObjectType, Predicate{ITimedObject}, ObjectDetectionSettings)"/>
+        public static int RemoveNotes(
+            this MidiFile file,
+            Predicate<Note> match,
+            NoteDetectionSettings settings = null,
+            TimedEventDetectionSettings timedEventDetectionSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(file), file);
             ThrowIfArgument.IsNull(nameof(match), match);
 
-            return file.GetTrackChunks().RemoveNotes(match, settings);
+            return file.GetTrackChunks().RemoveNotes(match, settings, timedEventDetectionSettings);
         }
 
         /// <summary>
@@ -862,6 +968,7 @@ namespace Melanchall.DryWetMidi.Interaction
             Action<Note> action,
             Predicate<Note> match,
             NoteDetectionSettings noteDetectionSettings,
+            TimedEventDetectionSettings timedEventDetectionSettings,
             NoteProcessingHint hint)
         {
             var eventsCollections = eventsCollectionsIn.Where(c => c != null).ToArray();
@@ -874,7 +981,7 @@ namespace Melanchall.DryWetMidi.Interaction
             var collectedTimedEvents = timeOrLengthCanBeChanged ? new List<TimedObjectAt<TimedEvent>>(eventsCount) : null;
 
             var notesBuilder = new NotesBuilder(noteDetectionSettings);
-            var notes = notesBuilder.GetNotesLazy(eventsCollections.GetTimedEventsLazy(eventsCount, noteDetectionSettings?.TimedEventDetectionSettings, false), collectedTimedEvents != null, collectedTimedEvents);
+            var notes = notesBuilder.GetNotesLazy(eventsCollections.GetTimedEventsLazy(eventsCount, timedEventDetectionSettings, false), collectedTimedEvents != null, collectedTimedEvents);
 
             foreach (var noteAt in notes)
             {

@@ -102,7 +102,11 @@ Please examine [NotesManagingUtilities](xref:Melanchall.DryWetMidi.Interaction.N
 
 ### Settings
 
-All `GetNotes` overloads can accept [NoteDetectionSettings](xref:Melanchall.DryWetMidi.Interaction.NoteDetectionSettings) as last parameter. Via this parameter you can adjust the process of notes building. Let's see each setting in details.
+All `GetNotes` overloads can accept [NoteDetectionSettings](xref:Melanchall.DryWetMidi.Interaction.NoteDetectionSettings) as a parameter. Via this parameter you can adjust the process of notes building.
+
+More than that, notes are built on top of timed events. So you can pass [TimedEventDetectionSettings](xref:Melanchall.DryWetMidi.Interaction.TimedEventDetectionSettings) as a separate parameter to control how underlying MIDI events will be constructed.
+
+Let's see each setting of the [NoteDetectionSettings](xref:Melanchall.DryWetMidi.Interaction.NoteDetectionSettings) in details.
 
 #### `NoteStartDetectionPolicy`
 
@@ -176,7 +180,6 @@ chord
 
                 foreach (var note in chord.Notes)
                 {
-
                     Console.Write($@"
   note {note} (note number = {note.NoteNumber})
     channel = {note.Channel}
@@ -232,11 +235,13 @@ Please examine [ChordsManagingUtilities](xref:Melanchall.DryWetMidi.Interaction.
 
 ### Settings
 
-All `GetChords` overloads can accept [ChordDetectionSettings](xref:Melanchall.DryWetMidi.Interaction.ChordDetectionSettings) as last parameter. Via this parameter you can adjust the process of chords building. Let's see each setting in details.
+All `GetChords` overloads can accept [ChordDetectionSettings](xref:Melanchall.DryWetMidi.Interaction.ChordDetectionSettings) as a parameter. Via this parameter you can adjust the process of chords building.
 
-#### `NoteDetectionSettings`
+Also note that chords are built on top of notes. So to build chords we need to build notes. The process of notes building is adjustable via [NoteDetectionSettings](xref:Melanchall.DryWetMidi.Interaction.NoteDetectionSettings) which you can pass to the methods too. Properties of the [NoteDetectionSettings](xref:Melanchall.DryWetMidi.Interaction.NoteDetectionSettings) are described in detail [above](#settings).
 
-Chords are built on top of notes. So to build chords we need to build notes. The process of notes building is adjustable via [NoteDetectionSettings](xref:Melanchall.DryWetMidi.Interaction.ChordDetectionSettings.NoteDetectionSettings) property. Properties of the [NoteDetectionSettings](xref:Melanchall.DryWetMidi.Interaction.NoteDetectionSettings) are described in detail [above](#settings).
+More than that, notes are built on top of timed events as described [above](#settings). So you can pass [TimedEventDetectionSettings](xref:Melanchall.DryWetMidi.Interaction.TimedEventDetectionSettings) too.
+
+Let's see each setting of the [ChordDetectionSettings](xref:Melanchall.DryWetMidi.Interaction.ChordDetectionSettings) in details.
 
 #### `NotesTolerance`
 

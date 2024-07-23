@@ -16,6 +16,12 @@ namespace Melanchall.DryWetMidi.Common
 
         #region Methods
 
+        internal static void IsProhibitedValue(string parameterName, char argument, char invalidValue)
+        {
+            if (argument == invalidValue)
+                throw new ArgumentException($"'{invalidValue}' is the prohibted value for this parameter.", parameterName);
+        }
+
         internal static void IsNull(string parameterName, object argument)
         {
             if (argument == null)

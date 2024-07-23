@@ -67,7 +67,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             {
                 NoteStartDetectionPolicy = NoteStartDetectionPolicy.FirstNoteOn,
                 Constructor = CustomNoteConstructor,
-                TimedEventDetectionSettings = CustomEventSettings
             },
             midiEvents: new MidiEvent[]
             {
@@ -88,7 +87,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     Assert.IsInstanceOf<CustomTimedEvent>(n.GetTimedNoteOnEvent(), "Invalid Note On timed event type.");
                     Assert.IsInstanceOf<CustomTimedEvent>(n.GetTimedNoteOffEvent(), "Invalid Note Off timed event type.");
                 }
-            });
+            },
+            timedEventDetectionSettings: CustomEventSettings);
 
         [Test]
         public void GetNotes_DetectionSettings_EventsCollection_FirstNoteOn_2([Values] ContainerType containerType) => GetNotes_DetectionSettings_EventsCollection(
@@ -240,7 +240,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             {
                 NoteStartDetectionPolicy = NoteStartDetectionPolicy.FirstNoteOn,
                 Constructor = CustomNoteConstructor,
-                TimedEventDetectionSettings = CustomEventSettings
             },
             midiEvents: new[]
             {
@@ -269,7 +268,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     Assert.IsInstanceOf<CustomTimedEvent>(n.GetTimedNoteOffEvent(), "Invalid Note Off timed event type.");
                     Assert.AreEqual(1, ((CustomTimedEvent)n.GetTimedNoteOffEvent()).EventIndex, "Invalid index of Note Off event.");
                 }
-            });
+            },
+            timedEventDetectionSettings: CustomEventSettings);
 
         [Test]
         public void GetNotes_DetectionSettings_TrackChunks_FirstNoteOn_4([Values] bool wrapToFile) => GetNotes_DetectionSettings_TrackChunks(
@@ -575,7 +575,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             NoteDetectionSettings settings,
             ICollection<MidiEvent> midiEvents,
             ICollection<Note> expectedNotes,
-            Action<ICollection<Note>> additionalChecks = null)
+            Action<ICollection<Note>> additionalChecks = null,
+            TimedEventDetectionSettings timedEventDetectionSettings = null)
         {
             switch (containerType)
             {
@@ -584,11 +585,15 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                         var eventsCollection = new EventsCollection();
                         eventsCollection.AddRange(midiEvents);
                         
-                        var notes = eventsCollection.GetNotes(settings);
+                        var notes = eventsCollection.GetNotes(settings, timedEventDetectionSettings);
                         MidiAsserts.AreEqual(expectedNotes, notes, "Notes are invalid.");
                         additionalChecks?.Invoke(notes);
 
-                        var timedObjects = eventsCollection.GetObjects(ObjectType.Note, new ObjectDetectionSettings { NoteDetectionSettings = settings });
+                        var timedObjects = eventsCollection.GetObjects(ObjectType.Note, new ObjectDetectionSettings
+                        {
+                            NoteDetectionSettings = settings,
+                            TimedEventDetectionSettings = timedEventDetectionSettings
+                        });
                         MidiAsserts.AreEqual(expectedNotes, timedObjects, "Notes are invalid from GetObjects.");
                         additionalChecks?.Invoke(timedObjects.Cast<Note>().ToArray());
                     }
@@ -597,11 +602,15 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     {
                         var trackChunk = new TrackChunk(midiEvents);
 
-                        var notes = trackChunk.GetNotes(settings);
+                        var notes = trackChunk.GetNotes(settings, timedEventDetectionSettings);
                         MidiAsserts.AreEqual(expectedNotes, notes, "Notes are invalid.");
                         additionalChecks?.Invoke(notes);
 
-                        var timedObjects = trackChunk.GetObjects(ObjectType.Note, new ObjectDetectionSettings { NoteDetectionSettings = settings });
+                        var timedObjects = trackChunk.GetObjects(ObjectType.Note, new ObjectDetectionSettings
+                        {
+                            NoteDetectionSettings = settings,
+                            TimedEventDetectionSettings = timedEventDetectionSettings
+                        });
                         MidiAsserts.AreEqual(expectedNotes, timedObjects, "Notes are invalid from GetObjects.");
                         additionalChecks?.Invoke(timedObjects.Cast<Note>().ToArray());
                     }
@@ -614,7 +623,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                             settings,
                             new[] { midiEvents },
                             expectedNotes,
-                            additionalChecks);
+                            additionalChecks,
+                            timedEventDetectionSettings);
                     }
                     break;
             }
@@ -625,16 +635,17 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             NoteDetectionSettings settings,
             ICollection<ICollection<MidiEvent>> midiEvents,
             IEnumerable<Note> expectedNotes,
-            Action<ICollection<Note>> additionalChecks = null)
+            Action<ICollection<Note>> additionalChecks = null,
+            TimedEventDetectionSettings timedEventDetectionSettings = null)
         {
             ICollection<Note> notes;
 
             var trackChunks = midiEvents.Select(e => new TrackChunk(e)).ToArray();
 
             if (wrapToFile)
-                notes = new MidiFile(trackChunks).GetNotes(settings);
+                notes = new MidiFile(trackChunks).GetNotes(settings, timedEventDetectionSettings);
             else
-                notes = trackChunks.GetNotes(settings);
+                notes = trackChunks.GetNotes(settings, timedEventDetectionSettings);
 
             MidiAsserts.AreEqual(expectedNotes, notes, "Notes are invalid.");
             additionalChecks?.Invoke(notes);
@@ -644,9 +655,17 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             IEnumerable<ITimedObject> timedObjects;
 
             if (wrapToFile)
-                timedObjects = new MidiFile(trackChunks).GetObjects(ObjectType.Note, new ObjectDetectionSettings { NoteDetectionSettings = settings });
+                timedObjects = new MidiFile(trackChunks).GetObjects(ObjectType.Note, new ObjectDetectionSettings
+                {
+                    NoteDetectionSettings = settings,
+                    TimedEventDetectionSettings = timedEventDetectionSettings
+                });
             else
-                timedObjects = trackChunks.GetObjects(ObjectType.Note, new ObjectDetectionSettings { NoteDetectionSettings = settings });
+                timedObjects = trackChunks.GetObjects(ObjectType.Note, new ObjectDetectionSettings
+                {
+                    NoteDetectionSettings = settings,
+                    TimedEventDetectionSettings = timedEventDetectionSettings
+                });
 
             MidiAsserts.AreEqual(expectedNotes, timedObjects, "Notes are invalid from GetObjects.");
             additionalChecks?.Invoke(timedObjects.Cast<Note>().ToArray());

@@ -204,13 +204,17 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="settings">Settings according to which chords should be detected and built.</param>
         /// <returns>Collection of chords contained in <paramref name="midiEvents"/> ordered by time.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="midiEvents"/> is <c>null</c>.</exception>
-        public static ICollection<Chord> GetChords(this IEnumerable<MidiEvent> midiEvents, ChordDetectionSettings settings = null)
+        public static ICollection<Chord> GetChords(
+            this IEnumerable<MidiEvent> midiEvents,
+            ChordDetectionSettings settings = null,
+            NoteDetectionSettings noteDetectionSettings = null,
+            TimedEventDetectionSettings timedEventDetectionSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiEvents), midiEvents);
 
             var result = new List<Chord>();
 
-            foreach (var chord in GetChordsAndNotesAndTimedEventsLazy(midiEvents.GetTimedEventsLazy(settings?.NoteDetectionSettings?.TimedEventDetectionSettings), settings).OfType<Chord>())
+            foreach (var chord in GetChordsAndNotesAndTimedEventsLazy(midiEvents.GetTimedEventsLazy(timedEventDetectionSettings), settings, noteDetectionSettings, timedEventDetectionSettings).OfType<Chord>())
             {
                 result.Add(chord);
             }
@@ -226,19 +230,23 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="settings">Settings according to which chords should be detected and built.</param>
         /// <returns>Collection of chords contained in <paramref name="eventsCollection"/> ordered by time.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="eventsCollection"/> is <c>null</c>.</exception>
-        /// <seealso cref="ProcessChords(EventsCollection, Action{Chord}, Predicate{Chord}, ChordDetectionSettings, ChordProcessingHint)"/>
-        /// <seealso cref="ProcessChords(EventsCollection, Action{Chord}, ChordDetectionSettings, ChordProcessingHint)"/>
-        /// <seealso cref="RemoveChords(EventsCollection, ChordDetectionSettings)"/>
-        /// <seealso cref="RemoveChords(EventsCollection, Predicate{Chord}, ChordDetectionSettings)"/>
+        /// <seealso cref="ProcessChords(EventsCollection, Action{Chord}, Predicate{Chord}, ChordDetectionSettings, NoteDetectionSettings, TimedEventDetectionSettings, ChordProcessingHint)"/>
+        /// <seealso cref="ProcessChords(EventsCollection, Action{Chord}, ChordDetectionSettings, NoteDetectionSettings, TimedEventDetectionSettings, ChordProcessingHint)"/>
+        /// <seealso cref="RemoveChords(EventsCollection, ChordDetectionSettings, NoteDetectionSettings, TimedEventDetectionSettings)"/>
+        /// <seealso cref="RemoveChords(EventsCollection, Predicate{Chord}, ChordDetectionSettings, NoteDetectionSettings, TimedEventDetectionSettings)"/>
         /// <seealso cref="GetObjectsUtilities"/>
-        public static ICollection<Chord> GetChords(this EventsCollection eventsCollection, ChordDetectionSettings settings = null)
+        public static ICollection<Chord> GetChords(
+            this EventsCollection eventsCollection,
+            ChordDetectionSettings settings = null,
+            NoteDetectionSettings noteDetectionSettings = null,
+            TimedEventDetectionSettings timedEventDetectionSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
 
             var result = new List<Chord>();
-            var chordsBuilder = new ChordsBuilder(settings);
+            var chordsBuilder = new ChordsBuilder(settings, noteDetectionSettings);
 
-            var chords = chordsBuilder.GetChordsLazy(new[] { eventsCollection }.GetTimedEventsLazy(eventsCollection.Count, settings?.NoteDetectionSettings?.TimedEventDetectionSettings));
+            var chords = chordsBuilder.GetChordsLazy(new[] { eventsCollection }.GetTimedEventsLazy(eventsCollection.Count, timedEventDetectionSettings));
 
             result.AddRange(chords.Select(c => c.Object));
             return new SortedTimedObjectsImmutableCollection<Chord>(result);
@@ -252,16 +260,20 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="settings">Settings according to which chords should be detected and built.</param>
         /// <returns>Collection of chords contained in <paramref name="trackChunk"/> ordered by time.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="trackChunk"/> is <c>null</c>.</exception>
-        /// <seealso cref="ProcessChords(TrackChunk, Action{Chord}, Predicate{Chord}, ChordDetectionSettings, ChordProcessingHint)"/>
-        /// <seealso cref="ProcessChords(TrackChunk, Action{Chord}, ChordDetectionSettings, ChordProcessingHint)"/>
-        /// <seealso cref="RemoveChords(TrackChunk, ChordDetectionSettings)"/>
-        /// <seealso cref="RemoveChords(TrackChunk, Predicate{Chord}, ChordDetectionSettings)"/>
+        /// <seealso cref="ProcessChords(TrackChunk, Action{Chord}, Predicate{Chord}, ChordDetectionSettings, NoteDetectionSettings, TimedEventDetectionSettings, ChordProcessingHint)"/>
+        /// <seealso cref="ProcessChords(TrackChunk, Action{Chord}, ChordDetectionSettings, NoteDetectionSettings, TimedEventDetectionSettings, ChordProcessingHint)"/>
+        /// <seealso cref="RemoveChords(TrackChunk, ChordDetectionSettings, NoteDetectionSettings, TimedEventDetectionSettings)"/>
+        /// <seealso cref="RemoveChords(TrackChunk, Predicate{Chord}, ChordDetectionSettings, NoteDetectionSettings, TimedEventDetectionSettings)"/>
         /// <seealso cref="GetObjectsUtilities"/>
-        public static ICollection<Chord> GetChords(this TrackChunk trackChunk, ChordDetectionSettings settings = null)
+        public static ICollection<Chord> GetChords(
+            this TrackChunk trackChunk,
+            ChordDetectionSettings settings = null,
+            NoteDetectionSettings noteDetectionSettings = null,
+            TimedEventDetectionSettings timedEventDetectionSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
 
-            return trackChunk.Events.GetChords(settings);
+            return trackChunk.Events.GetChords(settings, noteDetectionSettings, timedEventDetectionSettings);
         }
 
         /// <summary>
@@ -272,12 +284,16 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="settings">Settings according to which chords should be detected and built.</param>
         /// <returns>Collection of chords contained in <paramref name="trackChunks"/> ordered by time.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="trackChunks"/> is <c>null</c>.</exception>
-        /// <seealso cref="ProcessChords(IEnumerable{TrackChunk}, Action{Chord}, Predicate{Chord}, ChordDetectionSettings, ChordProcessingHint)"/>
-        /// <seealso cref="ProcessChords(IEnumerable{TrackChunk}, Action{Chord}, ChordDetectionSettings, ChordProcessingHint)"/>
-        /// <seealso cref="RemoveChords(IEnumerable{TrackChunk}, ChordDetectionSettings)"/>
-        /// <seealso cref="RemoveChords(IEnumerable{TrackChunk}, Predicate{Chord}, ChordDetectionSettings)"/>
+        /// <seealso cref="ProcessChords(IEnumerable{TrackChunk}, Action{Chord}, Predicate{Chord}, ChordDetectionSettings, NoteDetectionSettings, TimedEventDetectionSettings, ChordProcessingHint)"/>
+        /// <seealso cref="ProcessChords(IEnumerable{TrackChunk}, Action{Chord}, ChordDetectionSettings, NoteDetectionSettings, TimedEventDetectionSettings, ChordProcessingHint)"/>
+        /// <seealso cref="RemoveChords(IEnumerable{TrackChunk}, ChordDetectionSettings, NoteDetectionSettings, TimedEventDetectionSettings)"/>
+        /// <seealso cref="RemoveChords(IEnumerable{TrackChunk}, Predicate{Chord}, ChordDetectionSettings, NoteDetectionSettings, TimedEventDetectionSettings)"/>
         /// <seealso cref="GetObjectsUtilities"/>
-        public static ICollection<Chord> GetChords(this IEnumerable<TrackChunk> trackChunks, ChordDetectionSettings settings = null)
+        public static ICollection<Chord> GetChords(
+            this IEnumerable<TrackChunk> trackChunks,
+            ChordDetectionSettings settings = null,
+            NoteDetectionSettings noteDetectionSettings = null,
+            TimedEventDetectionSettings timedEventDetectionSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
 
@@ -286,14 +302,14 @@ namespace Melanchall.DryWetMidi.Interaction
             switch (eventsCollections.Length)
             {
                 case 0: return new Chord[0];
-                case 1: return eventsCollections[0].GetChords(settings);
+                case 1: return eventsCollections[0].GetChords(settings, noteDetectionSettings, timedEventDetectionSettings);
             }
 
             var eventsCount = eventsCollections.Sum(e => e.Count);
             var result = new List<Chord>(eventsCount / 3);
-            var chordsBuilder = new ChordsBuilder(settings);
+            var chordsBuilder = new ChordsBuilder(settings, noteDetectionSettings);
 
-            var chords = chordsBuilder.GetChordsLazy(eventsCollections.GetTimedEventsLazy(eventsCount, settings?.NoteDetectionSettings?.TimedEventDetectionSettings));
+            var chords = chordsBuilder.GetChordsLazy(eventsCollections.GetTimedEventsLazy(eventsCount, timedEventDetectionSettings));
 
             result.AddRange(chords.Select(c => c.Object));
             return new SortedTimedObjectsImmutableCollection<Chord>(result);
@@ -307,16 +323,20 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="settings">Settings according to which chords should be detected and built.</param>
         /// <returns>Collection of chords contained in <paramref name="file"/> ordered by time.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="file"/> is <c>null</c>.</exception>
-        /// <seealso cref="ProcessChords(MidiFile, Action{Chord}, Predicate{Chord}, ChordDetectionSettings, ChordProcessingHint)"/>
-        /// <seealso cref="ProcessChords(MidiFile, Action{Chord}, ChordDetectionSettings, ChordProcessingHint)"/>
-        /// <seealso cref="RemoveChords(MidiFile, ChordDetectionSettings)"/>
-        /// <seealso cref="RemoveChords(MidiFile, Predicate{Chord}, ChordDetectionSettings)"/>
+        /// <seealso cref="ProcessChords(MidiFile, Action{Chord}, Predicate{Chord}, ChordDetectionSettings, NoteDetectionSettings, TimedEventDetectionSettings, ChordProcessingHint)"/>
+        /// <seealso cref="ProcessChords(MidiFile, Action{Chord}, ChordDetectionSettings, NoteDetectionSettings, TimedEventDetectionSettings, ChordProcessingHint)"/>
+        /// <seealso cref="RemoveChords(MidiFile, ChordDetectionSettings, NoteDetectionSettings, TimedEventDetectionSettings)"/>
+        /// <seealso cref="RemoveChords(MidiFile, Predicate{Chord}, ChordDetectionSettings, NoteDetectionSettings, TimedEventDetectionSettings)"/>
         /// <seealso cref="GetObjectsUtilities"/>
-        public static ICollection<Chord> GetChords(this MidiFile file, ChordDetectionSettings settings = null)
+        public static ICollection<Chord> GetChords(
+            this MidiFile file,
+            ChordDetectionSettings settings = null,
+            NoteDetectionSettings noteDetectionSettings = null,
+            TimedEventDetectionSettings timedEventDetectionSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(file), file);
 
-            return file.GetTrackChunks().GetChords(settings);
+            return file.GetTrackChunks().GetChords(settings, noteDetectionSettings, timedEventDetectionSettings);
         }
 
         /// <summary>
@@ -326,7 +346,11 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="settings">Settings according to which chords should be detected and built.</param>
         /// <returns>Collection of chords made up from <paramref name="notes"/>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="notes"/> is <c>null</c>.</exception>
-        public static IEnumerable<Chord> GetChords(this IEnumerable<Note> notes, ChordDetectionSettings settings = null)
+        public static IEnumerable<Chord> GetChords(
+            this IEnumerable<Note> notes,
+            ChordDetectionSettings settings = null,
+            NoteDetectionSettings noteDetectionSettings = null,
+            TimedEventDetectionSettings timedEventDetectionSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(notes), notes);
 
@@ -359,16 +383,19 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </item>
         /// </list>
         /// </exception>
+        /// <seealso cref="TimedObjectUtilities.ProcessObjects(EventsCollection, ObjectType, Action{ITimedObject}, ObjectDetectionSettings, ObjectProcessingHint)"/>
         public static int ProcessChords(
             this EventsCollection eventsCollection,
             Action<Chord> action,
             ChordDetectionSettings settings = null,
+            NoteDetectionSettings noteDetectionSettings = null,
+            TimedEventDetectionSettings timedEventDetectionSettings = null,
             ChordProcessingHint hint = ChordProcessingHint.Default)
         {
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
             ThrowIfArgument.IsNull(nameof(action), action);
 
-            return eventsCollection.ProcessChords(action, chord => true, settings, hint);
+            return eventsCollection.ProcessChords(action, chord => true, settings, noteDetectionSettings, timedEventDetectionSettings, hint);
         }
 
         /// <summary>
@@ -401,18 +428,27 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </item>
         /// </list>
         /// </exception>
+        /// <seealso cref="TimedObjectUtilities.ProcessObjects(EventsCollection, ObjectType, Action{ITimedObject}, Predicate{ITimedObject}, ObjectDetectionSettings, ObjectProcessingHint)"/>
         public static int ProcessChords(
             this EventsCollection eventsCollection,
             Action<Chord> action,
             Predicate<Chord> match,
             ChordDetectionSettings settings = null,
+            NoteDetectionSettings noteDetectionSettings = null,
+            TimedEventDetectionSettings timedEventDetectionSettings = null,
             ChordProcessingHint hint = ChordProcessingHint.Default)
         {
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
             ThrowIfArgument.IsNull(nameof(action), action);
             ThrowIfArgument.IsNull(nameof(match), match);
 
-            return new[] { eventsCollection }.ProcessChordsInternal(action, match, settings, hint);
+            return new[] { eventsCollection }.ProcessChordsInternal(
+                action,
+                match,
+                settings,
+                noteDetectionSettings,
+                timedEventDetectionSettings,
+                hint);
         }
 
         /// <summary>
@@ -441,16 +477,19 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </item>
         /// </list>
         /// </exception>
+        /// <seealso cref="TimedObjectUtilities.ProcessObjects(TrackChunk, ObjectType, Action{ITimedObject}, ObjectDetectionSettings, ObjectProcessingHint)"/>
         public static int ProcessChords(
             this TrackChunk trackChunk,
             Action<Chord> action,
             ChordDetectionSettings settings = null,
+            NoteDetectionSettings noteDetectionSettings = null,
+            TimedEventDetectionSettings timedEventDetectionSettings = null,
             ChordProcessingHint hint = ChordProcessingHint.Default)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
             ThrowIfArgument.IsNull(nameof(action), action);
 
-            return trackChunk.ProcessChords(action, chord => true, settings, hint);
+            return trackChunk.ProcessChords(action, chord => true, settings, noteDetectionSettings, timedEventDetectionSettings, hint);
         }
 
         /// <summary>
@@ -483,18 +522,21 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </item>
         /// </list>
         /// </exception>
+        /// <seealso cref="TimedObjectUtilities.ProcessObjects(TrackChunk, ObjectType, Action{ITimedObject}, Predicate{ITimedObject}, ObjectDetectionSettings, ObjectProcessingHint)"/>
         public static int ProcessChords(
             this TrackChunk trackChunk,
             Action<Chord> action,
             Predicate<Chord> match,
             ChordDetectionSettings settings = null,
+            NoteDetectionSettings noteDetectionSettings = null,
+            TimedEventDetectionSettings timedEventDetectionSettings = null,
             ChordProcessingHint hint = ChordProcessingHint.Default)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
             ThrowIfArgument.IsNull(nameof(action), action);
             ThrowIfArgument.IsNull(nameof(match), match);
 
-            return trackChunk.Events.ProcessChords(action, match, settings, hint);
+            return trackChunk.Events.ProcessChords(action, match, settings, noteDetectionSettings, timedEventDetectionSettings, hint);
         }
 
         /// <summary>
@@ -524,16 +566,19 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </item>
         /// </list>
         /// </exception>
+        /// <seealso cref="TimedObjectUtilities.ProcessObjects(IEnumerable{TrackChunk}, ObjectType, Action{ITimedObject}, ObjectDetectionSettings, ObjectProcessingHint)"/>
         public static int ProcessChords(
             this IEnumerable<TrackChunk> trackChunks,
             Action<Chord> action,
             ChordDetectionSettings settings = null,
+            NoteDetectionSettings noteDetectionSettings = null,
+            TimedEventDetectionSettings timedEventDetectionSettings = null,
             ChordProcessingHint hint = ChordProcessingHint.Default)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
             ThrowIfArgument.IsNull(nameof(action), action);
 
-            return trackChunks.ProcessChords(action, chord => true, settings, hint);
+            return trackChunks.ProcessChords(action, chord => true, settings, noteDetectionSettings, timedEventDetectionSettings, hint);
         }
 
         /// <summary>
@@ -567,11 +612,14 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </item>
         /// </list>
         /// </exception>
+        /// <seealso cref="TimedObjectUtilities.ProcessObjects(IEnumerable{TrackChunk}, ObjectType, Action{ITimedObject}, Predicate{ITimedObject}, ObjectDetectionSettings, ObjectProcessingHint)"/>
         public static int ProcessChords(
             this IEnumerable<TrackChunk> trackChunks,
             Action<Chord> action,
             Predicate<Chord> match,
             ChordDetectionSettings settings = null,
+            NoteDetectionSettings noteDetectionSettings = null,
+            TimedEventDetectionSettings timedEventDetectionSettings = null,
             ChordProcessingHint hint = ChordProcessingHint.Default)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
@@ -581,7 +629,13 @@ namespace Melanchall.DryWetMidi.Interaction
             return trackChunks
                 .Where(c => c != null)
                 .Select(c => c.Events)
-                .ProcessChordsInternal(action, match, settings, hint);
+                .ProcessChordsInternal(
+                    action,
+                    match,
+                    settings,
+                    noteDetectionSettings,
+                    timedEventDetectionSettings,
+                    hint);
         }
 
         /// <summary>
@@ -610,16 +664,19 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </item>
         /// </list>
         /// </exception>
+        /// <seealso cref="TimedObjectUtilities.ProcessObjects(MidiFile, ObjectType, Action{ITimedObject}, ObjectDetectionSettings, ObjectProcessingHint)"/>
         public static int ProcessChords(
             this MidiFile file,
             Action<Chord> action,
             ChordDetectionSettings settings = null,
+            NoteDetectionSettings noteDetectionSettings = null,
+            TimedEventDetectionSettings timedEventDetectionSettings = null,
             ChordProcessingHint hint = ChordProcessingHint.Default)
         {
             ThrowIfArgument.IsNull(nameof(file), file);
             ThrowIfArgument.IsNull(nameof(action), action);
 
-            return file.ProcessChords(action, chord => true, settings, hint);
+            return file.ProcessChords(action, chord => true, settings, noteDetectionSettings, timedEventDetectionSettings, hint);
         }
 
         /// <summary>
@@ -652,18 +709,21 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </item>
         /// </list>
         /// </exception>
+        /// <seealso cref="TimedObjectUtilities.ProcessObjects(MidiFile, ObjectType, Action{ITimedObject}, Predicate{ITimedObject}, ObjectDetectionSettings, ObjectProcessingHint)"/>
         public static int ProcessChords(
             this MidiFile file,
             Action<Chord> action,
             Predicate<Chord> match,
             ChordDetectionSettings settings = null,
+            NoteDetectionSettings noteDetectionSettings = null,
+            TimedEventDetectionSettings timedEventDetectionSettings = null,
             ChordProcessingHint hint = ChordProcessingHint.Default)
         {
             ThrowIfArgument.IsNull(nameof(file), file);
             ThrowIfArgument.IsNull(nameof(action), action);
             ThrowIfArgument.IsNull(nameof(match), match);
 
-            return file.GetTrackChunks().ProcessChords(action, match, settings, hint);
+            return file.GetTrackChunks().ProcessChords(action, match, settings, noteDetectionSettings, timedEventDetectionSettings, hint);
         }
 
         /// <summary>
@@ -673,11 +733,16 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="settings">Settings according to which chords should be detected and built.</param>
         /// <returns>Count of removed chords.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="eventsCollection"/> is <c>null</c>.</exception>
-        public static int RemoveChords(this EventsCollection eventsCollection, ChordDetectionSettings settings = null)
+        /// <seealso cref="TimedObjectUtilities.RemoveObjects(EventsCollection, ObjectType, ObjectDetectionSettings)"/>
+        public static int RemoveChords(
+            this EventsCollection eventsCollection,
+            ChordDetectionSettings settings = null,
+            NoteDetectionSettings noteDetectionSettings = null,
+            TimedEventDetectionSettings timedEventDetectionSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
 
-            return eventsCollection.RemoveChords(chord => true, settings);
+            return eventsCollection.RemoveChords(chord => true, settings, noteDetectionSettings, timedEventDetectionSettings);
         }
 
         /// <summary>
@@ -698,7 +763,13 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </item>
         /// </list>
         /// </exception>
-        public static int RemoveChords(this EventsCollection eventsCollection, Predicate<Chord> match, ChordDetectionSettings settings = null)
+        /// <seealso cref="TimedObjectUtilities.RemoveObjects(EventsCollection, ObjectType, Predicate{ITimedObject}, ObjectDetectionSettings)"/>
+        public static int RemoveChords(
+            this EventsCollection eventsCollection,
+            Predicate<Chord> match,
+            ChordDetectionSettings settings = null,
+            NoteDetectionSettings noteDetectionSettings = null,
+            TimedEventDetectionSettings timedEventDetectionSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
             ThrowIfArgument.IsNull(nameof(match), match);
@@ -713,6 +784,8 @@ namespace Melanchall.DryWetMidi.Interaction
                 },
                 match,
                 settings,
+                noteDetectionSettings,
+                timedEventDetectionSettings,
                 ChordProcessingHint.None);
 
             if (chordsToRemoveCount == 0)
@@ -729,11 +802,16 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="settings">Settings according to which chords should be detected and built.</param>
         /// <returns>Count of removed chords.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="trackChunk"/> is <c>null</c>.</exception>
-        public static int RemoveChords(this TrackChunk trackChunk, ChordDetectionSettings settings = null)
+        /// <seealso cref="TimedObjectUtilities.RemoveObjects(TrackChunk, ObjectType, ObjectDetectionSettings)"/>
+        public static int RemoveChords(
+            this TrackChunk trackChunk,
+            ChordDetectionSettings settings = null,
+            NoteDetectionSettings noteDetectionSettings = null,
+            TimedEventDetectionSettings timedEventDetectionSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
 
-            return trackChunk.RemoveChords(note => true, settings);
+            return trackChunk.RemoveChords(note => true, settings, noteDetectionSettings, timedEventDetectionSettings);
         }
 
         /// <summary>
@@ -754,12 +832,18 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </item>
         /// </list>
         /// </exception>
-        public static int RemoveChords(this TrackChunk trackChunk, Predicate<Chord> match, ChordDetectionSettings settings = null)
+        /// <seealso cref="TimedObjectUtilities.RemoveObjects(TrackChunk, ObjectType, Predicate{ITimedObject}, ObjectDetectionSettings)"/>
+        public static int RemoveChords(
+            this TrackChunk trackChunk,
+            Predicate<Chord> match,
+            ChordDetectionSettings settings = null,
+            NoteDetectionSettings noteDetectionSettings = null,
+            TimedEventDetectionSettings timedEventDetectionSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
             ThrowIfArgument.IsNull(nameof(match), match);
 
-            return trackChunk.Events.RemoveChords(match, settings);
+            return trackChunk.Events.RemoveChords(match, settings, noteDetectionSettings, timedEventDetectionSettings);
         }
 
         /// <summary>
@@ -769,11 +853,16 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="settings">Settings according to which chords should be detected and built.</param>
         /// <returns>Count of removed chords.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="trackChunks"/> is <c>null</c>.</exception>
-        public static int RemoveChords(this IEnumerable<TrackChunk> trackChunks, ChordDetectionSettings settings = null)
+        /// <seealso cref="TimedObjectUtilities.RemoveObjects(IEnumerable{TrackChunk}, ObjectType, ObjectDetectionSettings)"/>
+        public static int RemoveChords(
+            this IEnumerable<TrackChunk> trackChunks,
+            ChordDetectionSettings settings = null,
+            NoteDetectionSettings noteDetectionSettings = null,
+            TimedEventDetectionSettings timedEventDetectionSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
 
-            return trackChunks.RemoveChords(note => true, settings);
+            return trackChunks.RemoveChords(note => true, settings, noteDetectionSettings, timedEventDetectionSettings);
         }
 
         /// <summary>
@@ -794,7 +883,13 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </item>
         /// </list>
         /// </exception>
-        public static int RemoveChords(this IEnumerable<TrackChunk> trackChunks, Predicate<Chord> match, ChordDetectionSettings settings = null)
+        /// <seealso cref="TimedObjectUtilities.RemoveObjects(IEnumerable{TrackChunk}, ObjectType, Predicate{ITimedObject}, ObjectDetectionSettings)"/>
+        public static int RemoveChords(
+            this IEnumerable<TrackChunk> trackChunks,
+            Predicate<Chord> match,
+            ChordDetectionSettings settings = null,
+            NoteDetectionSettings noteDetectionSettings = null,
+            TimedEventDetectionSettings timedEventDetectionSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
             ThrowIfArgument.IsNull(nameof(match), match);
@@ -809,6 +904,8 @@ namespace Melanchall.DryWetMidi.Interaction
                 },
                 match,
                 settings,
+                noteDetectionSettings,
+                timedEventDetectionSettings,
                 ChordProcessingHint.None);
 
             if (chordsToRemoveCount == 0)
@@ -825,11 +922,16 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="settings">Settings according to which chords should be detected and built.</param>
         /// <returns>Count of removed chords.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="file"/> is <c>null</c>.</exception>
-        public static int RemoveChords(this MidiFile file, ChordDetectionSettings settings = null)
+        /// <seealso cref="TimedObjectUtilities.RemoveObjects(MidiFile, ObjectType, ObjectDetectionSettings)"/>
+        public static int RemoveChords(
+            this MidiFile file,
+            ChordDetectionSettings settings = null,
+            NoteDetectionSettings noteDetectionSettings = null,
+            TimedEventDetectionSettings timedEventDetectionSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(file), file);
 
-            return file.RemoveChords(chord => true, settings);
+            return file.RemoveChords(chord => true, settings, noteDetectionSettings, timedEventDetectionSettings);
         }
 
         /// <summary>
@@ -850,12 +952,18 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </item>
         /// </list>
         /// </exception>
-        public static int RemoveChords(this MidiFile file, Predicate<Chord> match, ChordDetectionSettings settings = null)
+        /// <seealso cref="TimedObjectUtilities.RemoveObjects(MidiFile, ObjectType, Predicate{ITimedObject}, ObjectDetectionSettings)"/>
+        public static int RemoveChords(
+            this MidiFile file,
+            Predicate<Chord> match,
+            ChordDetectionSettings settings = null,
+            NoteDetectionSettings noteDetectionSettings = null,
+            TimedEventDetectionSettings timedEventDetectionSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(file), file);
             ThrowIfArgument.IsNull(nameof(match), match);
 
-            return file.GetTrackChunks().RemoveChords(match, settings);
+            return file.GetTrackChunks().RemoveChords(match, settings, noteDetectionSettings, timedEventDetectionSettings);
         }
 
         /// <summary>
@@ -873,9 +981,14 @@ namespace Melanchall.DryWetMidi.Interaction
 
         internal static IEnumerable<TimedObjectAt<ITimedObject>> GetChordsAndNotesAndTimedEventsLazy(
             this IEnumerable<TimedObjectAt<TimedEvent>> timedEvents,
-            ChordDetectionSettings settings)
+            ChordDetectionSettings settings,
+            NoteDetectionSettings noteDetectionSettings,
+            TimedEventDetectionSettings timedEventDetectionSettings)
         {
             settings = settings ?? new ChordDetectionSettings();
+            noteDetectionSettings = noteDetectionSettings ?? new NoteDetectionSettings();
+            timedEventDetectionSettings = timedEventDetectionSettings ?? new TimedEventDetectionSettings();
+
             var constructor = settings.Constructor;
 
             var timedObjects = new LinkedList<IObjectDescriptorIndexed>();
@@ -884,7 +997,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
             var notesTolerance = settings.NotesTolerance;
 
-            foreach (var timedObjectTuple in timedEvents.GetNotesAndTimedEventsLazy(settings.NoteDetectionSettings ?? new NoteDetectionSettings()))
+            foreach (var timedObjectTuple in timedEvents.GetNotesAndTimedEventsLazy(noteDetectionSettings ?? new NoteDetectionSettings()))
             {
                 var timedObject = timedObjectTuple.Object;
 
@@ -937,21 +1050,30 @@ namespace Melanchall.DryWetMidi.Interaction
             }
         }
 
-        internal static IEnumerable<ITimedObject> GetChordsAndNotesAndTimedEventsLazy(this IEnumerable<TimedEvent> timedEvents, ChordDetectionSettings settings)
+        internal static IEnumerable<ITimedObject> GetChordsAndNotesAndTimedEventsLazy(
+            this IEnumerable<TimedEvent> timedEvents,
+            ChordDetectionSettings settings,
+            NoteDetectionSettings noteDetectionSettings,
+            TimedEventDetectionSettings timedEventDetectionSettings)
         {
             settings = settings ?? new ChordDetectionSettings();
 
             return timedEvents
-                .GetNotesAndTimedEventsLazy(settings.NoteDetectionSettings ?? new NoteDetectionSettings())
+                .GetNotesAndTimedEventsLazy(noteDetectionSettings ?? new NoteDetectionSettings())
                 .GetChordsAndNotesAndTimedEventsLazy(settings);
         }
 
-        internal static IEnumerable<ITimedObject> GetChordsAndNotesAndTimedEventsLazy(this IEnumerable<ITimedObject> notesAndTimedEvents, ChordDetectionSettings settings)
+        internal static IEnumerable<ITimedObject> GetChordsAndNotesAndTimedEventsLazy(
+            this IEnumerable<ITimedObject> notesAndTimedEvents,
+            ChordDetectionSettings settings)
         {
             return notesAndTimedEvents.GetChordsAndNotesAndTimedEventsLazy(settings, false);
         }
 
-        internal static IEnumerable<ITimedObject> GetChordsAndNotesAndTimedEventsLazy(this IEnumerable<ITimedObject> notesAndTimedEvents, ChordDetectionSettings settings, bool chordsAllowed)
+        internal static IEnumerable<ITimedObject> GetChordsAndNotesAndTimedEventsLazy(
+            this IEnumerable<ITimedObject> notesAndTimedEvents,
+            ChordDetectionSettings settings,
+            bool chordsAllowed)
         {
             settings = settings ?? new ChordDetectionSettings();
             var constructor = settings.Constructor;
@@ -1030,9 +1152,13 @@ namespace Melanchall.DryWetMidi.Interaction
             Action<Chord> action,
             Predicate<Chord> match,
             ChordDetectionSettings settings,
+            NoteDetectionSettings noteDetectionSettings,
+            TimedEventDetectionSettings timedEventDetectionSettings,
             ChordProcessingHint hint)
         {
             settings = settings ?? new ChordDetectionSettings();
+            noteDetectionSettings = noteDetectionSettings ?? new NoteDetectionSettings();
+            timedEventDetectionSettings = timedEventDetectionSettings ?? new TimedEventDetectionSettings();
 
             var eventsCollections = eventsCollectionsIn.Where(c => c != null).ToArray();
             var eventsCount = eventsCollections.Sum(c => c.Count);
@@ -1051,8 +1177,8 @@ namespace Melanchall.DryWetMidi.Interaction
                 ? new List<TimedObjectAt<TimedEvent>>(eventsCount)
                 : null;
 
-            var chordsBuilder = new ChordsBuilder(settings);
-            var chords = chordsBuilder.GetChordsLazy(eventsCollections.GetTimedEventsLazy(eventsCount, settings.NoteDetectionSettings?.TimedEventDetectionSettings, false), collectedTimedEvents != null, collectedTimedEvents);
+            var chordsBuilder = new ChordsBuilder(settings, noteDetectionSettings);
+            var chords = chordsBuilder.GetChordsLazy(eventsCollections.GetTimedEventsLazy(eventsCount, timedEventDetectionSettings, false), collectedTimedEvents != null, collectedTimedEvents);
 
             foreach (var chordAt in chords)
             {

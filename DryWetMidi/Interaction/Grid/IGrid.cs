@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Melanchall.DryWetMidi.Interaction
 {
@@ -12,6 +13,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <param name="tempoMap">Tempo map used to get grid's times.</param>
         /// <returns>Collection of times (in MIDI ticks) of the current grid.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="tempoMap"/> is <c>null</c>.</exception>
         IEnumerable<long> GetTimes(TempoMap tempoMap);
     }
 }

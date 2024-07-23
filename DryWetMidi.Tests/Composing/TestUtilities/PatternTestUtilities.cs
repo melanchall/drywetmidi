@@ -40,7 +40,7 @@ namespace Melanchall.DryWetMidi.Tests.Composing
                 var expectedTime = TimeConverter.ConvertFrom(i.Time ?? new MetricTimeSpan(), tempoMap);
                 var expectedLength = LengthConverter.ConvertFrom(i.Length, expectedTime, tempoMap);
 
-                return new DryWetMidi.Interaction.Note(i.NoteNumber, expectedLength, expectedTime)
+                return new Note(i.NoteNumber, expectedLength, expectedTime)
                 {
                     Velocity = i.Velocity,
                     Channel = Channel
