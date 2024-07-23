@@ -3,7 +3,7 @@ using Melanchall.DryWetMidi.Core;
 
 namespace Melanchall.DryWetMidi.Multimedia
 {
-    internal sealed class PlaybackEvent
+    public class PlaybackEvent
     {
         #region Constructor
 

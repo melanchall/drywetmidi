@@ -313,12 +313,12 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <summary>
         /// Gets Note On timed event of the note.
         /// </summary>
-        internal TimedEvent TimedNoteOnEvent { get; } = new TimedEvent(new NoteOnEvent { Velocity = DefaultVelocity });
+        public TimedEvent TimedNoteOnEvent { get; } = new TimedEvent(new NoteOnEvent { Velocity = DefaultVelocity });
 
         /// <summary>
         /// Gets Note Off timed event of the note.
         /// </summary>
-        internal TimedEvent TimedNoteOffEvent { get; } = new TimedEvent(new NoteOffEvent { Velocity = DefaultOffVelocity });
+        public TimedEvent TimedNoteOffEvent { get; } = new TimedEvent(new NoteOffEvent { Velocity = DefaultOffVelocity });
 
         internal MusicTheory.Note UnderlyingNote => MusicTheory.Note.Get(NoteNumber);
 

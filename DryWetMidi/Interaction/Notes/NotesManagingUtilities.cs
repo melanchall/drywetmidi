@@ -898,7 +898,7 @@ namespace Melanchall.DryWetMidi.Interaction
             return iMatched;
         }
 
-        internal static IEnumerable<TimedObjectAt<ITimedObject>> GetNotesAndTimedEventsLazy(
+        public static IEnumerable<TimedObjectAt<ITimedObject>> GetNotesAndTimedEventsLazy(
             this IEnumerable<TimedObjectAt<TimedEvent>> timedEvents,
             NoteDetectionSettings settings)
         {
@@ -977,14 +977,14 @@ namespace Melanchall.DryWetMidi.Interaction
             }
         }
 
-        internal static IEnumerable<ITimedObject> GetNotesAndTimedEventsLazy(
+        public static IEnumerable<ITimedObject> GetNotesAndTimedEventsLazy(
             this IEnumerable<TimedEvent> timedEvents,
             NoteDetectionSettings settings)
         {
             return GetNotesAndTimedEventsLazy(timedEvents, settings, false);
         }
 
-        internal static IEnumerable<ITimedObject> GetNotesAndTimedEventsLazy(
+        public static IEnumerable<ITimedObject> GetNotesAndTimedEventsLazy(
             this IEnumerable<ITimedObject> timedObjects,
             NoteDetectionSettings settings,
             bool completeObjectsAllowed)

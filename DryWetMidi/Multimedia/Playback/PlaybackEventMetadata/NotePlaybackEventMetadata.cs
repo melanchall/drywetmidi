@@ -3,7 +3,7 @@ using Melanchall.DryWetMidi.Interaction;
 
 namespace Melanchall.DryWetMidi.Multimedia
 {
-    internal sealed class NotePlaybackEventMetadata
+    public class NotePlaybackEventMetadata
     {
         #region Constructor
 

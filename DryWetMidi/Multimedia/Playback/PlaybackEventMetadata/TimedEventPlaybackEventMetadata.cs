@@ -1,6 +1,6 @@
 ﻿namespace Melanchall.DryWetMidi.Multimedia
 {
-    internal sealed class TimedEventPlaybackEventMetadata
+    public class TimedEventPlaybackEventMetadata
     {
         #region Constructor
 

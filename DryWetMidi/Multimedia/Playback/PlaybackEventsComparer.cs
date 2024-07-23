@@ -4,7 +4,7 @@ using Melanchall.DryWetMidi.Core;
 
 namespace Melanchall.DryWetMidi.Multimedia
 {
-    internal sealed class PlaybackEventsComparer : IComparer<PlaybackEvent>
+    public class PlaybackEventsComparer : IComparer<PlaybackEvent>
     {
         #region IComparer<PlaybackEvent>
 
