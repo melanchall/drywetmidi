@@ -1,4 +1,5 @@
-﻿using Melanchall.DryWetMidi.Core;
+﻿using Melanchall.DryWetMidi.Common;
+using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
 
 namespace Melanchall.DryWetMidi.Tools
@@ -18,6 +19,8 @@ namespace Melanchall.DryWetMidi.Tools
         /// More info in the <see href="xref:a_sanitizer#noteminlength">Sanitizer: NoteMinLength</see> article.
         /// </summary>
         public ITimeSpan NoteMinLength { get; set; }
+
+        public SevenBitNumber NoteMinVelocity { get; set; }
 
         /// <summary>
         /// Gets or sets settings which define how notes should be detected and built. More info in the

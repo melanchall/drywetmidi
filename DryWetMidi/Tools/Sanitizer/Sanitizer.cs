@@ -198,7 +198,13 @@ namespace Melanchall.DryWetMidi.Tools
             var noteMinLength = settings.NoteMinLength;
             var removeShortNotes = noteMinLength != null && !noteMinLength.IsZeroTimeSpan();
 
-            if (!removeShortNotes && !settings.RemoveOrphanedNoteOnEvents && !settings.RemoveOrphanedNoteOffEvents)
+            var noteMinVelocity = settings.NoteMinVelocity;
+            var removeSilentNotes = noteMinVelocity > 0;
+
+            if (!removeShortNotes &&
+                !removeSilentNotes &&
+                !settings.RemoveOrphanedNoteOnEvents &&
+                !settings.RemoveOrphanedNoteOffEvents)
                 return;
 
             var tempoMap = midiFile.GetTempoMap();
@@ -218,6 +224,10 @@ namespace Melanchall.DryWetMidi.Tools
                         {
                             if (removeShortNotes &&
                                 LengthConverter.ConvertTo((MidiTimeSpan)note.Length, timeSpanType, note.Time, tempoMap).CompareTo(noteMinLength) < 0)
+                                return true;
+
+                            if (removeSilentNotes &&
+                                note.Velocity < noteMinVelocity)
                                 return true;
                         }
                         else

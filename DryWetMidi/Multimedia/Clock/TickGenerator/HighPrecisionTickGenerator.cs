@@ -57,11 +57,12 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// [<see cref="MinInterval"/>; <see cref="MaxInterval"/>] range.</exception>
         protected override void Start(TimeSpan interval)
         {
-            ThrowIfArgument.IsOutOfRange(nameof(interval),
-                                         interval,
-                                         MinInterval,
-                                         MaxInterval,
-                                         $"Interval is out of [{MinInterval}, {MaxInterval}] range.");
+            ThrowIfArgument.IsOutOfRange(
+                nameof(interval),
+                interval,
+                MinInterval,
+                MaxInterval,
+                $"Interval is out of [{MinInterval}, {MaxInterval}] range.");
             EnsureSessionIsCreated();
 
             var intervalInMilliseconds = (int)interval.TotalMilliseconds;
