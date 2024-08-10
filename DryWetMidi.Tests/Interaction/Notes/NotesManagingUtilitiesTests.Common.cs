@@ -1,7 +1,6 @@
 ﻿using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
-using Melanchall.DryWetMidi.Tests.Utilities;
 using NUnit.Framework;
 using System;
 
@@ -70,11 +69,16 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
         #region Constants
 
-        private static readonly NoteMethods NoteMethods = new NoteMethods();
+        private static readonly Func<TimedEventData, CustomTimedEvent> CustomTimedEventConstructor =
+            data => new CustomTimedEvent(
+                data.Event,
+                data.Time,
+                data.EventsCollectionIndex,
+                data.EventIndex);
 
         private static readonly TimedEventDetectionSettings CustomEventSettings = new TimedEventDetectionSettings
         {
-            Constructor = data => new CustomTimedEvent(data.Event, data.Time, data.EventsCollectionIndex, data.EventIndex)
+            Constructor = CustomTimedEventConstructor
         };
 
         private static readonly Func<NoteData, Note> CustomNoteConstructor =

@@ -213,7 +213,11 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <returns>An instance of the <see cref="TimedObjectsManager{Note}"/> that can be used to manage
         /// notes represented by the <paramref name="eventsCollection"/>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="eventsCollection"/> is <c>null</c>.</exception>
-        public static TimedObjectsManager<Note> ManageNotes(this EventsCollection eventsCollection, NoteDetectionSettings settings = null, TimedObjectsComparer comparer = null)
+        public static TimedObjectsManager<Note> ManageNotes(
+            this EventsCollection eventsCollection,
+            NoteDetectionSettings settings = null,
+            TimedEventDetectionSettings timedEventDetectionSettings = null,
+            TimedObjectsComparer comparer = null)
         {
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
 
@@ -221,7 +225,8 @@ namespace Melanchall.DryWetMidi.Interaction
                 eventsCollection,
                 new ObjectDetectionSettings
                 {
-                    NoteDetectionSettings = settings
+                    NoteDetectionSettings = settings,
+                    TimedEventDetectionSettings = timedEventDetectionSettings
                 },
                 comparer);
         }
@@ -239,11 +244,15 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <returns>An instance of the <see cref="TimedObjectsManager{Note}"/> that can be used to manage
         /// notes represented by the <paramref name="trackChunk"/>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="trackChunk"/> is <c>null</c>.</exception>
-        public static TimedObjectsManager<Note> ManageNotes(this TrackChunk trackChunk, NoteDetectionSettings settings = null, TimedObjectsComparer comparer = null)
+        public static TimedObjectsManager<Note> ManageNotes(
+            this TrackChunk trackChunk,
+            NoteDetectionSettings settings = null,
+            TimedEventDetectionSettings timedEventDetectionSettings = null,
+            TimedObjectsComparer comparer = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
 
-            return trackChunk.Events.ManageNotes(settings, comparer);
+            return trackChunk.Events.ManageNotes(settings, timedEventDetectionSettings, comparer);
         }
 
         /// <summary>

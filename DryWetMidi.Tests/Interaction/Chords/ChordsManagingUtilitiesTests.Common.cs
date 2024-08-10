@@ -94,11 +94,16 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
         #region Constants
 
-        private static readonly ChordMethods ChordMethods = new ChordMethods();
+        private static readonly Func<TimedEventData, CustomTimedEvent> CustomTimedEventConstructor =
+            data => new CustomTimedEvent(
+                data.Event,
+                data.Time,
+                data.EventsCollectionIndex,
+                data.EventIndex);
 
         private static readonly TimedEventDetectionSettings CustomEventSettings = new TimedEventDetectionSettings
         {
-            Constructor = data => new CustomTimedEvent(data.Event, data.Time, data.EventsCollectionIndex, data.EventIndex)
+            Constructor = CustomTimedEventConstructor
         };
 
         private static readonly Func<NoteData, Note> CustomNoteConstructor =
