@@ -1,10 +1,10 @@
 ﻿using Melanchall.DryWetMidi.Common;
+using Melanchall.DryWetMidi.Composing.Actions;
 using Melanchall.DryWetMidi.Core;
-using Melanchall.DryWetMidi.Interaction;
 
 namespace Melanchall.DryWetMidi.Composing
 {
-    internal sealed class AddControlChangeEventAction : PatternAction
+    internal sealed class AddControlChangeEventAction : AddChannelEventAction<ControlChangeEvent>
     {
         #region Constructor
 
@@ -26,20 +26,14 @@ namespace Melanchall.DryWetMidi.Composing
 
         #region Overrides
 
-        public override PatternActionResult Invoke(long time, PatternContext context)
-        {
-            if (State != PatternActionState.Enabled)
-                return PatternActionResult.DoNothing;
-
-            var controlChangeEvent = new ControlChangeEvent(ControlNumber, ControlValue) { Channel = context.Channel };
-            var timedEvent = new TimedEvent(controlChangeEvent, time);
-
-            return new PatternActionResult(time, new[] { timedEvent });
-        }
-
         public override PatternAction Clone()
         {
             return new AddControlChangeEventAction(ControlNumber, ControlValue);
+        }
+
+        protected override ControlChangeEvent CreateEvent()
+        {
+            return new ControlChangeEvent(ControlNumber, ControlValue);
         }
 
         #endregion

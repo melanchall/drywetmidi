@@ -145,6 +145,8 @@ namespace Melanchall.DryWetMidi.Tests.Composing
                     patternAction = new AddTextEventAction<TextEvent>(string.Empty);
                 else if (type == typeof(AddControlChangeEventAction))
                     patternAction = new AddControlChangeEventAction((SevenBitNumber)70, (SevenBitNumber)30);
+                else if (type == typeof(AddPitchBendEventAction))
+                    patternAction = new AddPitchBendEventAction(600);
                 else if (type == typeof(MoveToAnchorAction))
                     patternAction = new MoveToAnchorAction(AnchorPosition.First);
                 else if (type == typeof(SetGeneralMidi2ProgramAction))
