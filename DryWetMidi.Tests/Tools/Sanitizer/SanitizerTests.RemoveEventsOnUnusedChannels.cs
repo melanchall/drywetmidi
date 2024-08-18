@@ -28,7 +28,10 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 new TrackChunk(
                     new NoteOnEvent() { Channel = (FourBitNumber)7 },
                     new NoteOffEvent() { Channel = (FourBitNumber)7 })),
-            settings: null,
+            settings: new SanitizingSettings
+            {
+                RemoveDuplicatedNotes = false,
+            },
             expectedMidiFile: new MidiFile(
                 new TrackChunk(
                     new NoteOnEvent(),
@@ -52,7 +55,10 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 new TrackChunk(
                     new NoteOnEvent(),
                     new NoteOffEvent())),
-            settings: null,
+            settings: new SanitizingSettings
+            {
+                RemoveDuplicatedNotes = false,
+            },
             expectedMidiFile: new MidiFile(
                 new TrackChunk(
                     new NoteOnEvent(),
@@ -174,7 +180,8 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                     new NoteOffEvent())),
             settings: new SanitizingSettings
             {
-                RemoveEventsOnUnusedChannels = false
+                RemoveEventsOnUnusedChannels = false,
+                RemoveDuplicatedNotes = false,
             },
             expectedMidiFile: new MidiFile(
                 new TrackChunk(

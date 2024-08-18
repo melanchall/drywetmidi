@@ -36,7 +36,8 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                     new TextEvent("A") { DeltaTime = firstEventTime })),
             settings: new SanitizingSettings
             {
-                RemoveEmptyTrackChunks = false
+                RemoveEmptyTrackChunks = false,
+                Trim = true,
             },
             expectedMidiFile: new MidiFile(
                 new TrackChunk(
@@ -50,7 +51,8 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 new TrackChunk()),
             settings: new SanitizingSettings
             {
-                RemoveEmptyTrackChunks = false
+                RemoveEmptyTrackChunks = false,
+                Trim = true,
             },
             expectedMidiFile: new MidiFile(
                 new TrackChunk(
@@ -71,7 +73,8 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                         new TextEvent("B") { DeltaTime = bFirstEventTime })),
                 settings: new SanitizingSettings
                 {
-                    RemoveEmptyTrackChunks = false
+                    RemoveEmptyTrackChunks = false,
+                    Trim = true,
                 },
                 expectedMidiFile: new MidiFile(
                     new TrackChunk(
@@ -95,7 +98,8 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                         new TextEvent("B") { DeltaTime = bFirstEventTime })),
                 settings: new SanitizingSettings
                 {
-                    RemoveEmptyTrackChunks = false
+                    RemoveEmptyTrackChunks = false,
+                    Trim = true,
                 },
                 expectedMidiFile: new MidiFile(
                     new TrackChunk(

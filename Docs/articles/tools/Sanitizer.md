@@ -135,7 +135,7 @@ var midiFile = new MidiFile(
         new TextEvent("C") { DeltaTime = 15 }));
 ```
 
-Here we have a silence of 20 ticks at the start of the file. So after sanitizing with `Trim` property set to `true` (the default value) we will have this file:
+Here we have a silence of 20 ticks at the start of the file. So after sanitizing with `Trim` property set to `true` we will have this file:
 
 ```csharp
 var midiFile = new MidiFile(
