@@ -22,6 +22,8 @@ namespace Melanchall.DryWetMidi.Tools
 
         public SevenBitNumber NoteMinVelocity { get; set; }
 
+        public bool RemoveDuplicatedNotes { get; set; } = true;
+
         /// <summary>
         /// Gets or sets settings which define how notes should be detected and built. More info in the
         /// <see href="xref:a_getting_objects#settings">Getting objects: GetNotes: Settings</see> article.

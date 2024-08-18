@@ -203,6 +203,7 @@ namespace Melanchall.DryWetMidi.Tools
 
             if (!removeShortNotes &&
                 !removeSilentNotes &&
+                !settings.RemoveDuplicatedNotes &&
                 !settings.RemoveOrphanedNoteOnEvents &&
                 !settings.RemoveOrphanedNoteOffEvents)
                 return;
@@ -210,39 +211,43 @@ namespace Melanchall.DryWetMidi.Tools
             var tempoMap = midiFile.GetTempoMap();
             var timeSpanType = noteMinLength?.GetType();
 
-            foreach (var trackChunk in midiFile.GetTrackChunks())
-            {
-                using (var objectsManager = new TimedObjectsManager(
-                    trackChunk.Events,
-                    ObjectType.TimedEvent | ObjectType.Note,
-                    new ObjectDetectionSettings { NoteDetectionSettings = settings.NoteDetectionSettings }))
+            var lastNotes = new Note[FourBitNumber.MaxValue + 1, SevenBitNumber.MaxValue + 1];
+
+            midiFile.RemoveObjects(
+                ObjectType.TimedEvent | ObjectType.Note,
+                obj =>
                 {
-                    objectsManager.Objects.RemoveAll(obj =>
+                    var note = obj as Note;
+                    if (note != null)
                     {
-                        var note = obj as Note;
-                        if (note != null)
-                        {
-                            if (removeShortNotes &&
-                                LengthConverter.ConvertTo((MidiTimeSpan)note.Length, timeSpanType, note.Time, tempoMap).CompareTo(noteMinLength) < 0)
-                                return true;
+                        var lastNote = lastNotes[note.Channel, note.NoteNumber];
+                        lastNotes[note.Channel, note.NoteNumber] = note;
 
-                            if (removeSilentNotes &&
-                                note.Velocity < noteMinVelocity)
-                                return true;
-                        }
-                        else
-                        {
-                            var timedEvent = (TimedEvent)obj;
+                        if (settings.RemoveDuplicatedNotes &&
+                            lastNote?.Time == note.Time &&
+                            lastNote?.Length == note.Length)
+                            return true;
 
-                            if ((settings.RemoveOrphanedNoteOnEvents && timedEvent.Event.EventType == MidiEventType.NoteOn) ||
-                                (settings.RemoveOrphanedNoteOffEvents && timedEvent.Event.EventType == MidiEventType.NoteOff))
-                                return true;
-                        }
+                        if (removeShortNotes &&
+                            LengthConverter.ConvertTo((MidiTimeSpan)note.Length, timeSpanType, note.Time, tempoMap).CompareTo(noteMinLength) < 0)
+                            return true;
 
-                        return false;
-                    });
-                }
-            }
+                        if (removeSilentNotes &&
+                            note.Velocity < noteMinVelocity)
+                            return true;
+                    }
+                    else
+                    {
+                        var timedEvent = (TimedEvent)obj;
+
+                        if ((settings.RemoveOrphanedNoteOnEvents && timedEvent.Event.EventType == MidiEventType.NoteOn) ||
+                            (settings.RemoveOrphanedNoteOffEvents && timedEvent.Event.EventType == MidiEventType.NoteOff))
+                            return true;
+                    }
+
+                    return false;
+                },
+                new ObjectDetectionSettings { NoteDetectionSettings = settings.NoteDetectionSettings });
         }
 
         #endregion
