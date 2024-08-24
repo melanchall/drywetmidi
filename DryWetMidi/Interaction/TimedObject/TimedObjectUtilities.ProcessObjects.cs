@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System;
 using System.Linq;
 using Melanchall.DryWetMidi.Common;
+using System.Text.RegularExpressions;
+using System.IO;
 
 namespace Melanchall.DryWetMidi.Interaction
 {
@@ -34,6 +36,35 @@ namespace Melanchall.DryWetMidi.Interaction
 
         #region Methods
 
+        /// <summary>
+        /// Performs the specified action on each object contained in the <see cref="EventsCollection"/>. Objects
+        /// for processing will be selected by the specified object type. More info in the
+        /// <see href="xref:a_processing_objects#processobjects">Processing objects: ProcessObjects</see> article.
+        /// </summary>
+        /// <param name="eventsCollection"><see cref="EventsCollection"/> to search for objects to process.</param>
+        /// <param name="objectType">Types of objects to process (for example, <c>ObjectType.Chord | ObjectType.TimedEvent</c>).</param>
+        /// <param name="action">The action to perform on each object contained in the
+        /// <paramref name="eventsCollection"/>.</param>
+        /// <param name="settings">Settings according to which objects should be detected and built.</param>
+        /// <param name="hint">Hint which tells the processing algorithm how it can optimize its performance.
+        /// The default value is <see cref="ObjectProcessingHint.Default"/>.</param>
+        /// <remarks>
+        /// Note that you can always use <see href="xref:a_managers">an object manager</see> to
+        /// perform any manipulations with objects but dedicated methods of the <see cref="TimedObjectUtilities"/> will
+        /// always be faster and will consume less memory.
+        /// </remarks>
+        /// <returns>Count of processed objects.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occurred:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="eventsCollection"/> is <c>null</c>.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="action"/> is <c>null</c>.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static int ProcessObjects(
             this EventsCollection eventsCollection,
             ObjectType objectType,
@@ -44,9 +75,53 @@ namespace Melanchall.DryWetMidi.Interaction
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
             ThrowIfArgument.IsNull(nameof(action), action);
 
-            return eventsCollection.ProcessObjects(objectType, action, note => true, settings, hint);
+            switch (objectType)
+            {
+                case ObjectType.TimedEvent:
+                    return eventsCollection.ProcessTimedEvents(action, settings?.TimedEventDetectionSettings, hint.ToTimedEventProcessingHint());
+                case ObjectType.Note:
+                    return eventsCollection.ProcessNotes(action, settings?.NoteDetectionSettings, settings?.TimedEventDetectionSettings, hint.ToNoteProcessingHint());
+                case ObjectType.Chord:
+                    return eventsCollection.ProcessChords(action, settings?.ChordDetectionSettings, settings?.NoteDetectionSettings, settings?.TimedEventDetectionSettings, hint.ToChordProcessingHint());
+            }
+
+            return eventsCollection.ProcessObjects(objectType, action, obj => true, settings, hint);
         }
 
+        /// <summary>
+        /// Performs the specified action on objects contained in the <see cref="EventsCollection"/>. Objects
+        /// for processing will be selected by the specified object type and matching predicate. More info in the
+        /// <see href="xref:a_processing_objects#processobjects">Processing objects: ProcessObjects</see> article.
+        /// </summary>
+        /// <param name="eventsCollection"><see cref="EventsCollection"/> to search for objects to process.</param>
+        /// <param name="objectType">Types of objects to process (for example, <c>ObjectType.Chord | ObjectType.TimedEvent</c>).</param>
+        /// <param name="action">The action to perform on each object contained in the
+        /// <paramref name="eventsCollection"/>.</param>
+        /// <param name="match">The predicate that defines the conditions of an object to process. Predicate
+        /// should return <c>true</c> for an object to process.</param>
+        /// <param name="settings">Settings according to which objects should be detected and built.</param>
+        /// <param name="hint">Hint which tells the processing algorithm how it can optimize its performance.
+        /// The default value is <see cref="ObjectProcessingHint.Default"/>.</param>
+        /// <remarks>
+        /// Note that you can always use <see href="xref:a_managers">an object manager</see> to
+        /// perform any manipulations with objects but dedicated methods of the <see cref="TimedObjectUtilities"/> will
+        /// always be faster and will consume less memory.
+        /// </remarks>
+        /// <returns>Count of processed objects.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occurred:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="eventsCollection"/> is <c>null</c>.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="action"/> is <c>null</c>.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="match"/> is <c>null</c>.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static int ProcessObjects(
             this EventsCollection eventsCollection,
             ObjectType objectType,
@@ -58,10 +133,49 @@ namespace Melanchall.DryWetMidi.Interaction
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
             ThrowIfArgument.IsNull(nameof(action), action);
             ThrowIfArgument.IsNull(nameof(match), match);
+
+            switch (objectType)
+            {
+                case ObjectType.TimedEvent:
+                    return eventsCollection.ProcessTimedEvents(action, match, settings?.TimedEventDetectionSettings, hint.ToTimedEventProcessingHint());
+                case ObjectType.Note:
+                    return eventsCollection.ProcessNotes(action, match, settings?.NoteDetectionSettings, settings?.TimedEventDetectionSettings, hint.ToNoteProcessingHint());
+                case ObjectType.Chord:
+                    return eventsCollection.ProcessChords(action, match, settings?.ChordDetectionSettings, settings?.NoteDetectionSettings, settings?.TimedEventDetectionSettings, hint.ToChordProcessingHint());
+            }
 
             return new[] { eventsCollection }.ProcessObjectsInternal(objectType, action, match, settings, hint);
         }
 
+        /// <summary>
+        /// Performs the specified action on each object contained in the <see cref="TrackChunk"/>. Objects
+        /// for processing will be selected by the specified object type. More info in the
+        /// <see href="xref:a_processing_objects#processobjects">Processing objects: ProcessObjects</see> article.
+        /// </summary>
+        /// <param name="trackChunk"><see cref="TrackChunk"/> to search for objects to process.</param>
+        /// <param name="objectType">Types of objects to process (for example, <c>ObjectType.Chord | ObjectType.TimedEvent</c>).</param>
+        /// <param name="action">The action to perform on each object contained in the
+        /// <paramref name="trackChunk"/>.</param>
+        /// <param name="settings">Settings according to which objects should be detected and built.</param>
+        /// <param name="hint">Hint which tells the processing algorithm how it can optimize its performance.
+        /// The default value is <see cref="ObjectProcessingHint.Default"/>.</param>
+        /// <remarks>
+        /// Note that you can always use <see href="xref:a_managers">an object manager</see> to
+        /// perform any manipulations with objects but dedicated methods of the <see cref="TimedObjectUtilities"/> will
+        /// always be faster and will consume less memory.
+        /// </remarks>
+        /// <returns>Count of processed objects.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occurred:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="trackChunk"/> is <c>null</c>.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="action"/> is <c>null</c>.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static int ProcessObjects(
             this TrackChunk trackChunk,
             ObjectType objectType,
@@ -72,9 +186,53 @@ namespace Melanchall.DryWetMidi.Interaction
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
             ThrowIfArgument.IsNull(nameof(action), action);
 
-            return trackChunk.ProcessObjects(objectType, action, note => true, settings, hint);
+            switch (objectType)
+            {
+                case ObjectType.TimedEvent:
+                    return trackChunk.ProcessTimedEvents(action, settings?.TimedEventDetectionSettings, hint.ToTimedEventProcessingHint());
+                case ObjectType.Note:
+                    return trackChunk.ProcessNotes(action, settings?.NoteDetectionSettings, settings?.TimedEventDetectionSettings, hint.ToNoteProcessingHint());
+                case ObjectType.Chord:
+                    return trackChunk.ProcessChords(action, settings?.ChordDetectionSettings, settings?.NoteDetectionSettings, settings?.TimedEventDetectionSettings, hint.ToChordProcessingHint());
+            }
+
+            return trackChunk.ProcessObjects(objectType, action, obj => true, settings, hint);
         }
 
+        /// <summary>
+        /// Performs the specified action on objects contained in the <see cref="TrackChunk"/>. Objects
+        /// for processing will be selected by the specified object type and matching predicate. More info in the
+        /// <see href="xref:a_processing_objects#processobjects">Processing objects: ProcessObjects</see> article.
+        /// </summary>
+        /// <param name="trackChunk"><see cref="TrackChunk"/> to search for objects to process.</param>
+        /// <param name="objectType">Types of objects to process (for example, <c>ObjectType.Chord | ObjectType.TimedEvent</c>).</param>
+        /// <param name="action">The action to perform on each object contained in the
+        /// <paramref name="trackChunk"/>.</param>
+        /// <param name="match">The predicate that defines the conditions of an object to process. Predicate
+        /// should return <c>true</c> for an object to process.</param>
+        /// <param name="settings">Settings according to which objects should be detected and built.</param>
+        /// <param name="hint">Hint which tells the processing algorithm how it can optimize its performance.
+        /// The default value is <see cref="ObjectProcessingHint.Default"/>.</param>
+        /// <remarks>
+        /// Note that you can always use <see href="xref:a_managers">an object manager</see> to
+        /// perform any manipulations with objects but dedicated methods of the <see cref="TimedObjectUtilities"/> will
+        /// always be faster and will consume less memory.
+        /// </remarks>
+        /// <returns>Count of processed objects.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occurred:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="trackChunk"/> is <c>null</c>.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="action"/> is <c>null</c>.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="match"/> is <c>null</c>.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static int ProcessObjects(
             this TrackChunk trackChunk,
             ObjectType objectType,
@@ -86,9 +244,48 @@ namespace Melanchall.DryWetMidi.Interaction
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
             ThrowIfArgument.IsNull(nameof(action), action);
 
+            switch (objectType)
+            {
+                case ObjectType.TimedEvent:
+                    return trackChunk.ProcessTimedEvents(action, match, settings?.TimedEventDetectionSettings, hint.ToTimedEventProcessingHint());
+                case ObjectType.Note:
+                    return trackChunk.ProcessNotes(action, match, settings?.NoteDetectionSettings, settings?.TimedEventDetectionSettings, hint.ToNoteProcessingHint());
+                case ObjectType.Chord:
+                    return trackChunk.ProcessChords(action, match, settings?.ChordDetectionSettings, settings?.NoteDetectionSettings, settings?.TimedEventDetectionSettings, hint.ToChordProcessingHint());
+            }
+
             return trackChunk.Events.ProcessObjects(objectType, action, match, settings, hint);
         }
 
+        /// <summary>
+        /// Performs the specified action on each object contained in the collection of <see cref="TrackChunk"/>. Objects
+        /// for processing will be selected by the specified object type. More info in the
+        /// <see href="xref:a_processing_objects#processobjects">Processing objects: ProcessObjects</see> article.
+        /// </summary>
+        /// <param name="trackChunks">The collection of <see cref="TrackChunk"/> to search for objects to process.</param>
+        /// <param name="objectType">Types of objects to process (for example, <c>ObjectType.Chord | ObjectType.TimedEvent</c>).</param>
+        /// <param name="action">The action to perform on each object contained in the
+        /// <paramref name="trackChunks"/>.</param>
+        /// <param name="settings">Settings according to which objects should be detected and built.</param>
+        /// <param name="hint">Hint which tells the processing algorithm how it can optimize its performance.
+        /// The default value is <see cref="ObjectProcessingHint.Default"/>.</param>
+        /// <remarks>
+        /// Note that you can always use <see href="xref:a_managers">an object manager</see> to
+        /// perform any manipulations with objects but dedicated methods of the <see cref="TimedObjectUtilities"/> will
+        /// always be faster and will consume less memory.
+        /// </remarks>
+        /// <returns>Count of processed objects.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occurred:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="trackChunks"/> is <c>null</c>.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="action"/> is <c>null</c>.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static int ProcessObjects(
             this IEnumerable<TrackChunk> trackChunks,
             ObjectType objectType,
@@ -99,9 +296,53 @@ namespace Melanchall.DryWetMidi.Interaction
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
             ThrowIfArgument.IsNull(nameof(action), action);
 
-            return trackChunks.ProcessObjects(objectType, action, note => true, settings, hint);
+            switch (objectType)
+            {
+                case ObjectType.TimedEvent:
+                    return trackChunks.ProcessTimedEvents(action, settings?.TimedEventDetectionSettings, hint.ToTimedEventProcessingHint());
+                case ObjectType.Note:
+                    return trackChunks.ProcessNotes(action, settings?.NoteDetectionSettings, settings?.TimedEventDetectionSettings, hint.ToNoteProcessingHint());
+                case ObjectType.Chord:
+                    return trackChunks.ProcessChords(action, settings?.ChordDetectionSettings, settings?.NoteDetectionSettings, settings?.TimedEventDetectionSettings, hint.ToChordProcessingHint());
+            }
+
+            return trackChunks.ProcessObjects(objectType, action, obj => true, settings, hint);
         }
 
+        /// <summary>
+        /// Performs the specified action on objects contained in the collection of <see cref="TrackChunk"/>. Objects
+        /// for processing will be selected by the specified object type and matching predicate. More info in the
+        /// <see href="xref:a_processing_objects#processobjects">Processing objects: ProcessObjects</see> article.
+        /// </summary>
+        /// <param name="trackChunks">The collection of <see cref="TrackChunk"/> to search for objects to process.</param>
+        /// <param name="objectType">Types of objects to process (for example, <c>ObjectType.Chord | ObjectType.TimedEvent</c>).</param>
+        /// <param name="action">The action to perform on each object contained in the
+        /// <paramref name="trackChunks"/>.</param>
+        /// <param name="match">The predicate that defines the conditions of an object to process. Predicate
+        /// should return <c>true</c> for an object to process.</param>
+        /// <param name="settings">Settings according to which objects should be detected and built.</param>
+        /// <param name="hint">Hint which tells the processing algorithm how it can optimize its performance.
+        /// The default value is <see cref="ObjectProcessingHint.Default"/>.</param>
+        /// <remarks>
+        /// Note that you can always use <see href="xref:a_managers">an object manager</see> to
+        /// perform any manipulations with objects but dedicated methods of the <see cref="TimedObjectUtilities"/> will
+        /// always be faster and will consume less memory.
+        /// </remarks>
+        /// <returns>Count of processed objects.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occurred:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="trackChunks"/> is <c>null</c>.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="action"/> is <c>null</c>.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="match"/> is <c>null</c>.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static int ProcessObjects(
             this IEnumerable<TrackChunk> trackChunks,
             ObjectType objectType,
@@ -113,6 +354,16 @@ namespace Melanchall.DryWetMidi.Interaction
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
             ThrowIfArgument.IsNull(nameof(action), action);
             ThrowIfArgument.IsNull(nameof(match), match);
+
+            switch (objectType)
+            {
+                case ObjectType.TimedEvent:
+                    return trackChunks.ProcessTimedEvents(action, match, settings?.TimedEventDetectionSettings, hint.ToTimedEventProcessingHint());
+                case ObjectType.Note:
+                    return trackChunks.ProcessNotes(action, match, settings?.NoteDetectionSettings, settings?.TimedEventDetectionSettings, hint.ToNoteProcessingHint());
+                case ObjectType.Chord:
+                    return trackChunks.ProcessChords(action, match, settings?.ChordDetectionSettings, settings?.NoteDetectionSettings, settings?.TimedEventDetectionSettings, hint.ToChordProcessingHint());
+            }
 
             return trackChunks
                 .Where(c => c != null)
@@ -120,6 +371,35 @@ namespace Melanchall.DryWetMidi.Interaction
                 .ProcessObjectsInternal(objectType, action, match, settings, hint);
         }
 
+        /// <summary>
+        /// Performs the specified action on each object contained in <see cref="MidiFile"/>. Objects
+        /// for processing will be selected by the specified object type. More info in the
+        /// <see href="xref:a_processing_objects#processobjects">Processing objects: ProcessObjects</see> article.
+        /// </summary>
+        /// <param name="file"><see cref="MidiFile"/> to search for objects to process.</param>
+        /// <param name="objectType">Types of objects to process (for example, <c>ObjectType.Chord | ObjectType.TimedEvent</c>).</param>
+        /// <param name="action">The action to perform on each object contained in the
+        /// <paramref name="file"/>.</param>
+        /// <param name="settings">Settings according to which objects should be detected and built.</param>
+        /// <param name="hint">Hint which tells the processing algorithm how it can optimize its performance.
+        /// The default value is <see cref="ObjectProcessingHint.Default"/>.</param>
+        /// <remarks>
+        /// Note that you can always use <see href="xref:a_managers">an object manager</see> to
+        /// perform any manipulations with objects but dedicated methods of the <see cref="TimedObjectUtilities"/> will
+        /// always be faster and will consume less memory.
+        /// </remarks>
+        /// <returns>Count of processed objects.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occurred:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="file"/> is <c>null</c>.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="action"/> is <c>null</c>.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static int ProcessObjects(
             this MidiFile file,
             ObjectType objectType,
@@ -130,9 +410,53 @@ namespace Melanchall.DryWetMidi.Interaction
             ThrowIfArgument.IsNull(nameof(file), file);
             ThrowIfArgument.IsNull(nameof(action), action);
 
-            return file.ProcessObjects(objectType, action, note => true, settings, hint);
+            switch (objectType)
+            {
+                case ObjectType.TimedEvent:
+                    return file.ProcessTimedEvents(action, settings?.TimedEventDetectionSettings, hint.ToTimedEventProcessingHint());
+                case ObjectType.Note:
+                    return file.ProcessNotes(action, settings?.NoteDetectionSettings, settings?.TimedEventDetectionSettings, hint.ToNoteProcessingHint());
+                case ObjectType.Chord:
+                    return file.ProcessChords(action, settings?.ChordDetectionSettings, settings?.NoteDetectionSettings, settings?.TimedEventDetectionSettings, hint.ToChordProcessingHint());
+            }
+
+            return file.ProcessObjects(objectType, action, obj => true, settings, hint);
         }
 
+        /// <summary>
+        /// Performs the specified action on objects contained in <see cref="MidiFile"/>. Objects
+        /// for processing will be selected by the specified object type and matching predicate. More info in the
+        /// <see href="xref:a_processing_objects#processobjects">Processing objects: ProcessObjects</see> article.
+        /// </summary>
+        /// <param name="file"><see cref="MidiFile"/> to search for objects to process.</param>
+        /// <param name="objectType">Types of objects to process (for example, <c>ObjectType.Chord | ObjectType.TimedEvent</c>).</param>
+        /// <param name="action">The action to perform on each object contained in the
+        /// <paramref name="file"/>.</param>
+        /// <param name="match">The predicate that defines the conditions of an object to process. Predicate
+        /// should return <c>true</c> for an object to process.</param>
+        /// <param name="settings">Settings according to which objects should be detected and built.</param>
+        /// <param name="hint">Hint which tells the processing algorithm how it can optimize its performance.
+        /// The default value is <see cref="ObjectProcessingHint.Default"/>.</param>
+        /// <remarks>
+        /// Note that you can always use <see href="xref:a_managers">an object manager</see> to
+        /// perform any manipulations with objects but dedicated methods of the <see cref="TimedObjectUtilities"/> will
+        /// always be faster and will consume less memory.
+        /// </remarks>
+        /// <returns>Count of processed objects.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// <para>One of the following errors occurred:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="file"/> is <c>null</c>.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="action"/> is <c>null</c>.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="match"/> is <c>null</c>.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public static int ProcessObjects(
             this MidiFile file,
             ObjectType objectType,
@@ -144,6 +468,16 @@ namespace Melanchall.DryWetMidi.Interaction
             ThrowIfArgument.IsNull(nameof(file), file);
             ThrowIfArgument.IsNull(nameof(action), action);
             ThrowIfArgument.IsNull(nameof(match), match);
+
+            switch (objectType)
+            {
+                case ObjectType.TimedEvent:
+                    return file.ProcessTimedEvents(action, match, settings?.TimedEventDetectionSettings, hint.ToTimedEventProcessingHint());
+                case ObjectType.Note:
+                    return file.ProcessNotes(action, match, settings?.NoteDetectionSettings, settings?.TimedEventDetectionSettings, hint.ToNoteProcessingHint());
+                case ObjectType.Chord:
+                    return file.ProcessChords(action, match, settings?.ChordDetectionSettings, settings?.NoteDetectionSettings, settings?.TimedEventDetectionSettings, hint.ToChordProcessingHint());
+            }
 
             return file.GetTrackChunks().ProcessObjects(objectType, action, match, settings, hint);
         }
@@ -342,6 +676,40 @@ namespace Melanchall.DryWetMidi.Interaction
             }
 
             return true;
+        }
+
+        private static TimedEventProcessingHint ToTimedEventProcessingHint(this ObjectProcessingHint hint)
+        {
+            var result = TimedEventProcessingHint.None;
+
+            if (hint.HasFlag(ObjectProcessingHint.TimeOrLengthCanBeChanged))
+                result |= TimedEventProcessingHint.TimeCanBeChanged;
+
+            return result;
+        }
+
+        private static NoteProcessingHint ToNoteProcessingHint(this ObjectProcessingHint hint)
+        {
+            var result = NoteProcessingHint.None;
+
+            if (hint.HasFlag(ObjectProcessingHint.TimeOrLengthCanBeChanged))
+                result |= NoteProcessingHint.TimeOrLengthCanBeChanged;
+
+            return result;
+        }
+
+        private static ChordProcessingHint ToChordProcessingHint(this ObjectProcessingHint hint)
+        {
+            var result = ChordProcessingHint.None;
+
+            if (hint.HasFlag(ObjectProcessingHint.TimeOrLengthCanBeChanged))
+                result |= ChordProcessingHint.TimeOrLengthCanBeChanged;
+            if (hint.HasFlag(ObjectProcessingHint.NoteTimeOrLengthCanBeChanged))
+                result |= ChordProcessingHint.NoteTimeOrLengthCanBeChanged;
+            if (hint.HasFlag(ObjectProcessingHint.NotesCollectionCanBeChanged))
+                result |= ChordProcessingHint.NotesCollectionCanBeChanged;
+
+            return result;
         }
 
         #endregion

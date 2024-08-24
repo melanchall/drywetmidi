@@ -157,6 +157,10 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <param name="eventsCollection"><see cref="EventsCollection"/> that holds chords to manage.</param>
         /// <param name="settings">Settings according to which chords should be detected and built.</param>
+        /// <param name="noteDetectionSettings">Settings according to which timed events should be detected
+        /// and built to construct notes.</param>
+        /// <param name="timedEventDetectionSettings">Settings according to which timed events should be detected
+        /// and built to construct notes for chords.</param>
         /// <param name="comparer">Comparer that will be used to order objects on enumerating and saving objects
         /// back to the <paramref name="eventsCollection"/> via <see cref="TimedObjectsManager{TObject}.SaveChanges"/>
         /// or <see cref="TimedObjectsManager{TObject}.Dispose()"/>.</param>
@@ -190,6 +194,10 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <param name="trackChunk"><see cref="TrackChunk"/> that holds chords to manage.</param>
         /// <param name="settings">Settings according to which chords should be detected and built.</param>
+        /// <param name="noteDetectionSettings">Settings according to which timed events should be detected
+        /// and built to construct notes.</param>
+        /// <param name="timedEventDetectionSettings">Settings according to which timed events should be detected
+        /// and built to construct notes for chords.</param>
         /// <param name="comparer">Comparer that will be used to order objects on enumerating and saving objects
         /// back to the <paramref name="trackChunk"/> via <see cref="TimedObjectsManager{TObject}.SaveChanges"/>
         /// or <see cref="TimedObjectsManager{TObject}.Dispose()"/>.</param>
@@ -214,6 +222,10 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <param name="midiEvents">Collection of<see cref="MidiFile"/> to search for chords.</param>
         /// <param name="settings">Settings according to which chords should be detected and built.</param>
+        /// <param name="noteDetectionSettings">Settings according to which timed events should be detected
+        /// and built to construct notes.</param>
+        /// <param name="timedEventDetectionSettings">Settings according to which timed events should be detected
+        /// and built to construct notes for chords.</param>
         /// <returns>Collection of chords contained in <paramref name="midiEvents"/> ordered by time.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="midiEvents"/> is <c>null</c>.</exception>
         public static ICollection<Chord> GetChords(
@@ -240,6 +252,10 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <param name="eventsCollection"><see cref="EventsCollection"/> to search for chords.</param>
         /// <param name="settings">Settings according to which chords should be detected and built.</param>
+        /// <param name="noteDetectionSettings">Settings according to which timed events should be detected
+        /// and built to construct notes.</param>
+        /// <param name="timedEventDetectionSettings">Settings according to which timed events should be detected
+        /// and built to construct notes for chords.</param>
         /// <returns>Collection of chords contained in <paramref name="eventsCollection"/> ordered by time.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="eventsCollection"/> is <c>null</c>.</exception>
         /// <seealso cref="ProcessChords(EventsCollection, Action{Chord}, Predicate{Chord}, ChordDetectionSettings, NoteDetectionSettings, TimedEventDetectionSettings, ChordProcessingHint)"/>
@@ -270,6 +286,10 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <param name="trackChunk"><see cref="TrackChunk"/> to search for chords.</param>
         /// <param name="settings">Settings according to which chords should be detected and built.</param>
+        /// <param name="noteDetectionSettings">Settings according to which timed events should be detected
+        /// and built to construct notes.</param>
+        /// <param name="timedEventDetectionSettings">Settings according to which timed events should be detected
+        /// and built to construct notes for chords.</param>
         /// <returns>Collection of chords contained in <paramref name="trackChunk"/> ordered by time.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="trackChunk"/> is <c>null</c>.</exception>
         /// <seealso cref="ProcessChords(TrackChunk, Action{Chord}, Predicate{Chord}, ChordDetectionSettings, NoteDetectionSettings, TimedEventDetectionSettings, ChordProcessingHint)"/>
@@ -294,6 +314,10 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <param name="trackChunks">Track chunks to search for chords.</param>
         /// <param name="settings">Settings according to which chords should be detected and built.</param>
+        /// <param name="noteDetectionSettings">Settings according to which timed events should be detected
+        /// and built to construct notes.</param>
+        /// <param name="timedEventDetectionSettings">Settings according to which timed events should be detected
+        /// and built to construct notes for chords.</param>
         /// <returns>Collection of chords contained in <paramref name="trackChunks"/> ordered by time.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="trackChunks"/> is <c>null</c>.</exception>
         /// <seealso cref="ProcessChords(IEnumerable{TrackChunk}, Action{Chord}, Predicate{Chord}, ChordDetectionSettings, NoteDetectionSettings, TimedEventDetectionSettings, ChordProcessingHint)"/>
@@ -333,6 +357,10 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <param name="file"><see cref="MidiFile"/> to search for chords.</param>
         /// <param name="settings">Settings according to which chords should be detected and built.</param>
+        /// <param name="noteDetectionSettings">Settings according to which timed events should be detected
+        /// and built to construct notes.</param>
+        /// <param name="timedEventDetectionSettings">Settings according to which timed events should be detected
+        /// and built to construct notes for chords.</param>
         /// <returns>Collection of chords contained in <paramref name="file"/> ordered by time.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="file"/> is <c>null</c>.</exception>
         /// <seealso cref="ProcessChords(MidiFile, Action{Chord}, Predicate{Chord}, ChordDetectionSettings, NoteDetectionSettings, TimedEventDetectionSettings, ChordProcessingHint)"/>
@@ -356,6 +384,10 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <param name="notes">Notes to create chords from.</param>
         /// <param name="settings">Settings according to which chords should be detected and built.</param>
+        /// <param name="noteDetectionSettings">Settings according to which timed events should be detected
+        /// and built to construct notes.</param>
+        /// <param name="timedEventDetectionSettings">Settings according to which timed events should be detected
+        /// and built to construct notes for chords.</param>
         /// <returns>Collection of chords made up from <paramref name="notes"/>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="notes"/> is <c>null</c>.</exception>
         public static IEnumerable<Chord> GetChords(
@@ -371,11 +403,16 @@ namespace Melanchall.DryWetMidi.Interaction
 
         /// <summary>
         /// Performs the specified action on each <see cref="Chord"/> contained in the <see cref="EventsCollection"/>.
+        /// More info in the <see href="xref:a_processing_objects#processchords">Processing objects: ProcessChords</see> article.
         /// </summary>
         /// <param name="eventsCollection"><see cref="EventsCollection"/> to search for chords to process.</param>
         /// <param name="action">The action to perform on each <see cref="Chord"/> contained in the
         /// <paramref name="eventsCollection"/>.</param>
         /// <param name="settings">Settings according to which chords should be detected and built.</param>
+        /// <param name="noteDetectionSettings">Settings according to which timed events should be detected
+        /// and built to construct notes.</param>
+        /// <param name="timedEventDetectionSettings">Settings according to which timed events should be detected
+        /// and built to construct notes for chords.</param>
         /// <param name="hint">Hint which tells the processing algorithm how it can optimize its performance.
         /// The default value is <see cref="ChordProcessingHint.Default"/>.</param>
         /// <remarks>
@@ -412,12 +449,17 @@ namespace Melanchall.DryWetMidi.Interaction
 
         /// <summary>
         /// Performs the specified action on each <see cref="Chord"/> contained in the <see cref="EventsCollection"/>.
+        /// More info in the <see href="xref:a_processing_objects#processchords">Processing objects: ProcessChords</see> article.
         /// </summary>
         /// <param name="eventsCollection"><see cref="EventsCollection"/> to search for chords to process.</param>
         /// <param name="action">The action to perform on each <see cref="Chord"/> contained in the
         /// <paramref name="eventsCollection"/>.</param>
         /// <param name="match">The predicate that defines the conditions of the <see cref="Chord"/> to process.</param>
         /// <param name="settings">Settings according to which chords should be detected and built.</param>
+        /// <param name="noteDetectionSettings">Settings according to which timed events should be detected
+        /// and built to construct notes.</param>
+        /// <param name="timedEventDetectionSettings">Settings according to which timed events should be detected
+        /// and built to construct notes for chords.</param>
         /// <param name="hint">Hint which tells the processing algorithm how it can optimize its performance.
         /// The default value is <see cref="ChordProcessingHint.Default"/>.</param>
         /// <remarks>
@@ -465,11 +507,16 @@ namespace Melanchall.DryWetMidi.Interaction
 
         /// <summary>
         /// Performs the specified action on each <see cref="Chord"/> contained in the <see cref="TrackChunk"/>.
+        /// More info in the <see href="xref:a_processing_objects#processchords">Processing objects: ProcessChords</see> article.
         /// </summary>
         /// <param name="trackChunk"><see cref="TrackChunk"/> to search for chords to process.</param>
         /// <param name="action">The action to perform on each <see cref="Chord"/> contained in the
         /// <paramref name="trackChunk"/>.</param>
         /// <param name="settings">Settings according to which chords should be detected and built.</param>
+        /// <param name="noteDetectionSettings">Settings according to which timed events should be detected
+        /// and built to construct notes.</param>
+        /// <param name="timedEventDetectionSettings">Settings according to which timed events should be detected
+        /// and built to construct notes for chords.</param>
         /// <param name="hint">Hint which tells the processing algorithm how it can optimize its performance.
         /// The default value is <see cref="ChordProcessingHint.Default"/>.</param>
         /// <remarks>
@@ -506,12 +553,17 @@ namespace Melanchall.DryWetMidi.Interaction
 
         /// <summary>
         /// Performs the specified action on each <see cref="Chord"/> contained in the <see cref="TrackChunk"/>.
+        /// More info in the <see href="xref:a_processing_objects#processchords">Processing objects: ProcessChords</see> article.
         /// </summary>
         /// <param name="trackChunk"><see cref="TrackChunk"/> to search for chords to process.</param>
         /// <param name="action">The action to perform on each <see cref="Chord"/> contained in the
         /// <paramref name="trackChunk"/>.</param>
         /// <param name="match">The predicate that defines the conditions of the <see cref="Chord"/> to process.</param>
         /// <param name="settings">Settings according to which chords should be detected and built.</param>
+        /// <param name="noteDetectionSettings">Settings according to which timed events should be detected
+        /// and built to construct notes.</param>
+        /// <param name="timedEventDetectionSettings">Settings according to which timed events should be detected
+        /// and built to construct notes for chords.</param>
         /// <param name="hint">Hint which tells the processing algorithm how it can optimize its performance.
         /// The default value is <see cref="ChordProcessingHint.Default"/>.</param>
         /// <remarks>
@@ -553,12 +605,17 @@ namespace Melanchall.DryWetMidi.Interaction
 
         /// <summary>
         /// Performs the specified action on each <see cref="Chord"/> contained in the collection of
-        /// <see cref="TrackChunk"/>.
+        /// <see cref="TrackChunk"/>. More info in the
+        /// <see href="xref:a_processing_objects#processchords">Processing objects: ProcessChords</see> article.
         /// </summary>
         /// <param name="trackChunks">Collection of <see cref="TrackChunk"/> to search for chords to process.</param>
         /// <param name="action">The action to perform on each <see cref="Chord"/> contained in the
         /// <paramref name="trackChunks"/>.</param>
         /// <param name="settings">Settings according to which chords should be detected and built.</param>
+        /// <param name="noteDetectionSettings">Settings according to which timed events should be detected
+        /// and built to construct notes.</param>
+        /// <param name="timedEventDetectionSettings">Settings according to which timed events should be detected
+        /// and built to construct notes for chords.</param>
         /// <param name="hint">Hint which tells the processing algorithm how it can optimize its performance.
         /// The default value is <see cref="ChordProcessingHint.Default"/>.</param>
         /// <remarks>
@@ -595,13 +652,18 @@ namespace Melanchall.DryWetMidi.Interaction
 
         /// <summary>
         /// Performs the specified action on each <see cref="Chord"/> contained in the collection of
-        /// <see cref="TrackChunk"/>.
+        /// <see cref="TrackChunk"/>. More info in the
+        /// <see href="xref:a_processing_objects#processchords">Processing objects: ProcessChords</see> article.
         /// </summary>
         /// <param name="trackChunks">Collection of <see cref="TrackChunk"/> to search for chords to process.</param>
         /// <param name="action">The action to perform on each <see cref="Chord"/> contained in the
         /// <paramref name="trackChunks"/>.</param>
         /// <param name="match">The predicate that defines the conditions of the <see cref="Chord"/> to process.</param>
         /// <param name="settings">Settings according to which chords should be detected and built.</param>
+        /// <param name="noteDetectionSettings">Settings according to which timed events should be detected
+        /// and built to construct notes.</param>
+        /// <param name="timedEventDetectionSettings">Settings according to which timed events should be detected
+        /// and built to construct notes for chords.</param>
         /// <param name="hint">Hint which tells the processing algorithm how it can optimize its performance.
         /// The default value is <see cref="ChordProcessingHint.Default"/>.</param>
         /// <remarks>
@@ -652,11 +714,16 @@ namespace Melanchall.DryWetMidi.Interaction
 
         /// <summary>
         /// Performs the specified action on each <see cref="Chord"/> contained in the <see cref="MidiFile"/>.
+        /// More info in the <see href="xref:a_processing_objects#processchords">Processing objects: ProcessChords</see> article.
         /// </summary>
         /// <param name="file"><see cref="MidiFile"/> to search for chords to process.</param>
         /// <param name="action">The action to perform on each <see cref="Chord"/> contained in the
         /// <paramref name="file"/>.</param>
         /// <param name="settings">Settings according to which chords should be detected and built.</param>
+        /// <param name="noteDetectionSettings">Settings according to which timed events should be detected
+        /// and built to construct notes.</param>
+        /// <param name="timedEventDetectionSettings">Settings according to which timed events should be detected
+        /// and built to construct notes for chords.</param>
         /// <param name="hint">Hint which tells the processing algorithm how it can optimize its performance.
         /// The default value is <see cref="ChordProcessingHint.Default"/>.</param>
         /// <remarks>
@@ -693,12 +760,17 @@ namespace Melanchall.DryWetMidi.Interaction
 
         /// <summary>
         /// Performs the specified action on each <see cref="Chord"/> contained in the <see cref="MidiFile"/>.
+        /// More info in the <see href="xref:a_processing_objects#processchords">Processing objects: ProcessChords</see> article.
         /// </summary>
         /// <param name="file"><see cref="MidiFile"/> to search for chords to process.</param>
         /// <param name="action">The action to perform on each <see cref="Chord"/> contained in the
         /// <paramref name="file"/>.</param>
         /// <param name="match">The predicate that defines the conditions of the <see cref="Chord"/> to process.</param>
         /// <param name="settings">Settings according to which chords should be detected and built.</param>
+        /// <param name="noteDetectionSettings">Settings according to which timed events should be detected
+        /// and built to construct notes.</param>
+        /// <param name="timedEventDetectionSettings">Settings according to which timed events should be detected
+        /// and built to construct notes for chords.</param>
         /// <param name="hint">Hint which tells the processing algorithm how it can optimize its performance.
         /// The default value is <see cref="ChordProcessingHint.Default"/>.</param>
         /// <remarks>
@@ -739,10 +811,15 @@ namespace Melanchall.DryWetMidi.Interaction
         }
 
         /// <summary>
-        /// Removes all the <see cref="Chord"/> that match the conditions defined by the specified predicate.
+        /// Removes all chords from the <see cref="EventsCollection"/>. More info in the
+        /// <see href="xref:a_removing_objects#removechords">Removing objects: RemoveChords</see> article.
         /// </summary>
         /// <param name="eventsCollection"><see cref="EventsCollection"/> to search for chords to remove.</param>
         /// <param name="settings">Settings according to which chords should be detected and built.</param>
+        /// <param name="noteDetectionSettings">Settings according to which timed events should be detected
+        /// and built to construct notes.</param>
+        /// <param name="timedEventDetectionSettings">Settings according to which timed events should be detected
+        /// and built to construct notes for chords.</param>
         /// <returns>Count of removed chords.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="eventsCollection"/> is <c>null</c>.</exception>
         /// <seealso cref="TimedObjectUtilities.RemoveObjects(EventsCollection, ObjectType, ObjectDetectionSettings)"/>
@@ -758,11 +835,16 @@ namespace Melanchall.DryWetMidi.Interaction
         }
 
         /// <summary>
-        /// Removes all the <see cref="Chord"/> that match the conditions defined by the specified predicate.
+        /// Removes chords that match the specified conditions from the <see cref="EventsCollection"/>.
+        /// More info in the <see href="xref:a_removing_objects#removechords">Removing objects: RemoveChords</see> article.
         /// </summary>
         /// <param name="eventsCollection"><see cref="EventsCollection"/> to search for chords to remove.</param>
         /// <param name="match">The predicate that defines the conditions of the <see cref="Chord"/> to remove.</param>
         /// <param name="settings">Settings according to which chords should be detected and built.</param>
+        /// <param name="noteDetectionSettings">Settings according to which timed events should be detected
+        /// and built to construct notes.</param>
+        /// <param name="timedEventDetectionSettings">Settings according to which timed events should be detected
+        /// and built to construct notes for chords.</param>
         /// <returns>Count of removed chords.</returns>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occurred:</para>
@@ -808,10 +890,15 @@ namespace Melanchall.DryWetMidi.Interaction
         }
 
         /// <summary>
-        /// Removes all the <see cref="Chord"/> that match the conditions defined by the specified predicate.
+        /// Removes all chords from the <see cref="TrackChunk"/>. More info in the
+        /// <see href="xref:a_removing_objects#removechords">Removing objects: RemoveChords</see> article.
         /// </summary>
         /// <param name="trackChunk"><see cref="TrackChunk"/> to search for chords to remove.</param>
         /// <param name="settings">Settings according to which chords should be detected and built.</param>
+        /// <param name="noteDetectionSettings">Settings according to which timed events should be detected
+        /// and built to construct notes.</param>
+        /// <param name="timedEventDetectionSettings">Settings according to which timed events should be detected
+        /// and built to construct notes for chords.</param>
         /// <returns>Count of removed chords.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="trackChunk"/> is <c>null</c>.</exception>
         /// <seealso cref="TimedObjectUtilities.RemoveObjects(TrackChunk, ObjectType, ObjectDetectionSettings)"/>
@@ -827,11 +914,16 @@ namespace Melanchall.DryWetMidi.Interaction
         }
 
         /// <summary>
-        /// Removes all the <see cref="Chord"/> that match the conditions defined by the specified predicate.
+        /// Removes chords that match the specified conditions from the <see cref="TrackChunk"/>.
+        /// More info in the <see href="xref:a_removing_objects#removechords">Removing objects: RemoveChords</see> article.
         /// </summary>
         /// <param name="trackChunk"><see cref="TrackChunk"/> to search for chords to remove.</param>
         /// <param name="match">The predicate that defines the conditions of the <see cref="Chord"/> to remove.</param>
         /// <param name="settings">Settings according to which chords should be detected and built.</param>
+        /// <param name="noteDetectionSettings">Settings according to which timed events should be detected
+        /// and built to construct notes.</param>
+        /// <param name="timedEventDetectionSettings">Settings according to which timed events should be detected
+        /// and built to construct notes for chords.</param>
         /// <returns>Count of removed chords.</returns>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occurred:</para>
@@ -859,10 +951,15 @@ namespace Melanchall.DryWetMidi.Interaction
         }
 
         /// <summary>
-        /// Removes all the <see cref="Chord"/> that match the conditions defined by the specified predicate.
+        /// Removes all chords from the collection of <see cref="TrackChunk"/>. More info in the
+        /// <see href="xref:a_removing_objects#removechords">Removing objects: RemoveChords</see> article.
         /// </summary>
         /// <param name="trackChunks">Collection of <see cref="TrackChunk"/> to search for chords to remove.</param>
         /// <param name="settings">Settings according to which chords should be detected and built.</param>
+        /// <param name="noteDetectionSettings">Settings according to which timed events should be detected
+        /// and built to construct notes.</param>
+        /// <param name="timedEventDetectionSettings">Settings according to which timed events should be detected
+        /// and built to construct notes for chords.</param>
         /// <returns>Count of removed chords.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="trackChunks"/> is <c>null</c>.</exception>
         /// <seealso cref="TimedObjectUtilities.RemoveObjects(IEnumerable{TrackChunk}, ObjectType, ObjectDetectionSettings)"/>
@@ -878,11 +975,16 @@ namespace Melanchall.DryWetMidi.Interaction
         }
 
         /// <summary>
-        /// Removes all the <see cref="Chord"/> that match the conditions defined by the specified predicate.
+        /// Removes chords that match the specified conditions from the collection of <see cref="TrackChunk"/>.
+        /// More info in the <see href="xref:a_removing_objects#removechords">Removing objects: RemoveChords</see> article.
         /// </summary>
         /// <param name="trackChunks">Collection of <see cref="TrackChunk"/> to search for chords to remove.</param>
         /// <param name="match">The predicate that defines the conditions of the <see cref="Chord"/> to remove.</param>
         /// <param name="settings">Settings according to which chords should be detected and built.</param>
+        /// <param name="noteDetectionSettings">Settings according to which timed events should be detected
+        /// and built to construct notes.</param>
+        /// <param name="timedEventDetectionSettings">Settings according to which timed events should be detected
+        /// and built to construct notes for chords.</param>
         /// <returns>Count of removed chords.</returns>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occurred:</para>
@@ -928,10 +1030,15 @@ namespace Melanchall.DryWetMidi.Interaction
         }
 
         /// <summary>
-        /// Removes all the <see cref="Chord"/> that match the conditions defined by the specified predicate.
+        /// Removes all chords from the <see cref="MidiFile"/>. More info in the
+        /// <see href="xref:a_removing_objects#removechords">Removing objects: RemoveChords</see> article.
         /// </summary>
         /// <param name="file"><see cref="MidiFile"/> to search for chords to remove.</param>
         /// <param name="settings">Settings according to which chords should be detected and built.</param>
+        /// <param name="noteDetectionSettings">Settings according to which timed events should be detected
+        /// and built to construct notes.</param>
+        /// <param name="timedEventDetectionSettings">Settings according to which timed events should be detected
+        /// and built to construct notes for chords.</param>
         /// <returns>Count of removed chords.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="file"/> is <c>null</c>.</exception>
         /// <seealso cref="TimedObjectUtilities.RemoveObjects(MidiFile, ObjectType, ObjectDetectionSettings)"/>
@@ -947,11 +1054,16 @@ namespace Melanchall.DryWetMidi.Interaction
         }
 
         /// <summary>
-        /// Removes all the <see cref="Chord"/> that match the conditions defined by the specified predicate.
+        /// Removes chords that match the specified conditions from the <see cref="MidiFile"/>.
+        /// More info in the <see href="xref:a_removing_objects#removechords">Removing objects: RemoveChords</see> article.
         /// </summary>
         /// <param name="file"><see cref="MidiFile"/> to search for chords to remove.</param>
         /// <param name="match">The predicate that defines the conditions of the <see cref="Chord"/> to remove.</param>
         /// <param name="settings">Settings according to which chords should be detected and built.</param>
+        /// <param name="noteDetectionSettings">Settings according to which timed events should be detected
+        /// and built to construct notes.</param>
+        /// <param name="timedEventDetectionSettings">Settings according to which timed events should be detected
+        /// and built to construct notes for chords.</param>
         /// <returns>Count of removed chords.</returns>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occurred:</para>

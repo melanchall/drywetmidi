@@ -6,7 +6,7 @@ uid: a_develop_manual_build
 
 This article describes how you can manually build the library from sources. Just follow the steps below:
 
-1. Select branch you want to build sources from (_master_ or _develop_).
+1. Select the branch you want to build sources from (_master_ or _develop_).
 2. Download sources with any method you want:
     * via `Code` → `Download ZIP` button on GitHub, then extract archive; or
     * `git clone https://github.com/melanchall/drywetmidi.git`; or

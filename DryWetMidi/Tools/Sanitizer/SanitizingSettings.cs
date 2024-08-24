@@ -20,8 +20,19 @@ namespace Melanchall.DryWetMidi.Tools
         /// </summary>
         public ITimeSpan NoteMinLength { get; set; }
 
+        /// <summary>
+        /// Gets or sets a minimum velocity for notes within an input file. All notes with velocity below this
+        /// value will be removed. The default value is zero which means notes can have any velocity.
+        /// <see cref="NoteDetectionSettings"/> property affects how notes are detected.
+        /// More info in the <see href="xref:a_sanitizer#noteminvelocity">Sanitizer: NoteMinVelocity</see> article.
+        /// </summary>
         public SevenBitNumber NoteMinVelocity { get; set; }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether duplicated notes should be removed or not.
+        /// The default value is <c>true</c>. More info in the
+        /// <see href="xref:a_sanitizer#removeduplicatednotes">Sanitizer: RemoveDuplicatedNotes</see> article.
+        /// </summary>
         public bool RemoveDuplicatedNotes { get; set; } = true;
 
         /// <summary>
@@ -76,6 +87,11 @@ namespace Melanchall.DryWetMidi.Tools
         /// </summary>
         public bool RemoveDuplicatedPitchBendEvents { get; set; } = true;
 
+        /// <summary>
+        /// Gets or sets a value indicating whether duplicated Sequence/Track Name (see <see cref="SequenceTrackNameEvent"/>)
+        /// events should be removed or not. The default value is <c>true</c>. More info in the
+        /// <see href="xref:a_sanitizer#removeduplicatedsequencetracknameevents">Sanitizer: RemoveDuplicatedSequenceTrackNameEvents</see> article.
+        /// </summary>
         public bool RemoveDuplicatedSequenceTrackNameEvents { get; set; } = true;
 
         /// <summary>

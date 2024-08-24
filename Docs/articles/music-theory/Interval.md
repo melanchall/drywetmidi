@@ -4,7 +4,7 @@ uid: a_mt_interval
 
 # Interval
 
-[Interval](xref:Melanchall.DryWetMidi.MusicTheory.Interval) holds number of half steps and used, for example, to transpose notes or describing chords when working with [PatternBuilder](xref:Melanchall.DryWetMidi.Composing.PatternBuilder). Some examples of usage:
+[Interval](xref:Melanchall.DryWetMidi.MusicTheory.Interval) holds a number of half steps and is used, for example, to transpose notes or describing chords when working with [PatternBuilder](xref:Melanchall.DryWetMidi.Composing.PatternBuilder). Some examples of usage:
 
 ```csharp
 // Get A4 note
@@ -41,7 +41,7 @@ where
   * `A` for augmented interval;
   * `m` for minor interval;
   * `M` for major interval.
-* **IntervalNumber** is a number of interval, for example, `1`. A number must be greater than zero.
+* **IntervalNumber** is the number of an interval, for example, `1`. A number must be greater than zero.
 
 Examples of valid interval strings:
 

@@ -23,7 +23,7 @@ var note4 = Note.Parse("a3");
 var note5Parsed = Note.TryParse("c#2", out var note5);
 ```
 
-Also see [Interval](Interval.md) article for additional examples.
+Also see the [Interval](Interval.md) article for additional examples.
 
 ## Parsing
 
@@ -37,7 +37,7 @@ where
 * **Accidental** is one of the following strings:  
   * `#` or `sharp` for sharp;
   * `b` or `flat` for flat.
-* **OctaveNumber** is a number of octave. A number must be between `-1` and `9`.
+* **OctaveNumber** is the number of an octave. A number must be between `-1` and `9`.
 
 Examples of valid note strings:
 

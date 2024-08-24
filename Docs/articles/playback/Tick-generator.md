@@ -4,12 +4,12 @@ uid: a_playback_tickgen
 
 # Tick generator
 
-Playback uses timer under the hood. In DryWetMIDI this timer called tick generator. On every tick of timer playback looks what objects should be played by the current time, plays them and advances position within objects list waiting for next tick.
+Playback uses a timer under the hood. In DryWetMIDI this timer is called **tick generator**. On every tick of the timer playback looks at what objects should be played by the current time, plays them and advances position within the objects list waiting for the next tick.
 
-To make playback smooth and correct, precision of timer should be ~1ms. So tick will be generated every one millisecond. By default, DryWetMIDI uses [HighPrecisionTickGenerator](xref:Melanchall.DryWetMidi.Multimedia.HighPrecisionTickGenerator) which is the best option in terms of CPU usage, memory usage and precision.
+To make playback smooth and correct, the precision of the timer should be ~1ms. So tick will be generated every one millisecond. By default, DryWetMIDI uses [HighPrecisionTickGenerator](xref:Melanchall.DryWetMidi.Multimedia.HighPrecisionTickGenerator) which is the best option in terms of CPU usage, memory usage and precision.
 
 > [!IMPORTANT]
-> `HighPrecisionTickGenerator` is supported for Windows and macOS only at now.
+> `HighPrecisionTickGenerator` is supported for Windows and macOS only at the moment.
 
 You can also use [RegularPrecisionTickGenerator](xref:Melanchall.DryWetMidi.Multimedia.RegularPrecisionTickGenerator) which uses standard [Timer](xref:System.Timers.Timer) and thus provides precision about 16ms on Windows. But this tick generator is cross-platform.
 
@@ -27,9 +27,9 @@ var playback = midiFile.GetPlayback(new PlaybackSettings
 
 ## Custom tick generator
 
-All built-in tick generators extend abstract [TickGenerator](xref:Melanchall.DryWetMidi.Multimedia.TickGenerator) class so you can create your own and use it for [Playback](xref:Melanchall.DryWetMidi.Multimedia.Playback) and [PlaybackCurrentTimeWatcher](xref:Melanchall.DryWetMidi.Multimedia.PlaybackCurrentTimeWatcher).
+All built-in tick generators extend the abstract [TickGenerator](xref:Melanchall.DryWetMidi.Multimedia.TickGenerator) class so you can create your own and use it for [Playback](xref:Melanchall.DryWetMidi.Multimedia.Playback) and [PlaybackCurrentTimeWatcher](xref:Melanchall.DryWetMidi.Multimedia.PlaybackCurrentTimeWatcher).
 
-As an example we create simple loop tick generator working in separate thread. The code is:
+As an example we create a simple loop tick generator working in a separate thread. The code is:
 
 ```csharp
 private sealed class ThreadTickGenerator : TickGenerator
@@ -96,7 +96,7 @@ Of course this tick generator will use a lot of CPU due to infinite loop but it'
 
 ## Manual ticking
 
-Also you can tick playback's internal clock manually without tick generator via [TickClock](xref:Melanchall.DryWetMidi.Multimedia.Playback.TickClock) method of [Playback](xref:Melanchall.DryWetMidi.Multimedia.Playback). For example, you can use manual ticking within every frame update in Unity.
+Also you can tick playback's internal clock manually without a tick generator via the [TickClock](xref:Melanchall.DryWetMidi.Multimedia.Playback.TickClock) method of [Playback](xref:Melanchall.DryWetMidi.Multimedia.Playback). For example, you can use manual ticking within every frame update in Unity.
 
 To use only manual ticking you should return `null` in [CreateTickGeneratorCallback](xref:Melanchall.DryWetMidi.Multimedia.MidiClockSettings.CreateTickGeneratorCallback):
 
@@ -118,4 +118,4 @@ playback.TickClock();
 
 when needed.
 
-You also can use manual ticking in conjunction with tick generator.
+You also can use manual ticking in conjunction with a tick generator.

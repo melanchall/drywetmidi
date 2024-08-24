@@ -48,7 +48,7 @@ where
 
 * **RootNote** is a note name (with or without accidental), for example, `C` or `A#`.
 * **ScaleName** is the name of a known scale, for example, `major` or `bebop minor`. You can take a look at [ScaleIntervals](xref:Melanchall.DryWetMidi.MusicTheory.ScaleIntervals) to see all known scales supported by the library.
-* **Interval** is a string a musical interval can be parsed from. See [Parsing](Interval.md#parsing) section of the [Interval](Interval.md) article to see how an interval can be represented as a string.
+* **Interval** is a string a musical interval can be parsed from. See the [Parsing](Interval.md#parsing) section of the [Interval](Interval.md) article to see how an interval can be represented as a string.
 
 Examples of valid scale strings:
 

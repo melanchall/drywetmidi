@@ -6,7 +6,7 @@ uid: a_playback_overview
 
 [Playback](xref:Melanchall.DryWetMidi.Multimedia.Playback) class allows to play MIDI events via an [IOutputDevice](xref:Melanchall.DryWetMidi.Multimedia.IOutputDevice) (see [Output device](xref:a_dev_output) article) or without a device at all (see [Playback without device](#playback-without-device)). To get an instance of the `Playback` you can use its [constructors](xref:Melanchall.DryWetMidi.Multimedia.Playback#constructors) or `GetPlayback` extension methods in [PlaybackUtilities](xref:Melanchall.DryWetMidi.Multimedia.PlaybackUtilities).
 
-Following example shows simple console app where specified MIDI file is played until end of the file reached or `B` note is about to be played. So in our example `B` note means to stop playback.
+Following example shows a simple console app where the specified MIDI file is played until the end of the file reached or `B` note is about to be played. So in our example `B` note means to stop playback.
 
 ```csharp
 using System;
@@ -52,13 +52,13 @@ Please read [Tick generator](Tick-generator.md) article and [PlaybackSettings](x
 
 ## Playback without device
 
-There are constructors of [Playback](xref:Melanchall.DryWetMidi.Multimedia.Playback) that don't accept [IOutputDevice](xref:Melanchall.DryWetMidi.Multimedia.IOutputDevice) as an argument. It can be useful, for example, for notes visualization without sound. [Playback](xref:Melanchall.DryWetMidi.Multimedia.Playback) provides events that will be fired with or without output device (see [Events](xref:Melanchall.DryWetMidi.Multimedia.Playback#events) section of the [Playback](xref:Melanchall.DryWetMidi.Multimedia.Playback) API page). Also all `GetPlayback` extensions methods have overloads without the `outputDevice` parameter.
+There are constructors of [Playback](xref:Melanchall.DryWetMidi.Multimedia.Playback) that don't accept [IOutputDevice](xref:Melanchall.DryWetMidi.Multimedia.IOutputDevice) as an argument. It can be useful, for example, for notes visualization without sound. [Playback](xref:Melanchall.DryWetMidi.Multimedia.Playback) provides events that will be fired with or without an output device (see [Events](xref:Melanchall.DryWetMidi.Multimedia.Playback#events) section of the [Playback](xref:Melanchall.DryWetMidi.Multimedia.Playback) API page). Also all `GetPlayback` extensions methods have overloads without the `outputDevice` parameter.
 
-Also if you don't specify output device and use [tick generator](Tick-generator.md) other than [HighPrecisionTickGenerator](xref:Melanchall.DryWetMidi.Multimedia.HighPrecisionTickGenerator), you can use `Playback` in cross-platform app like Unity game that is supposed to be built for different platforms.
+Also if you don't specify an output device and use a [tick generator](Tick-generator.md) other than [HighPrecisionTickGenerator](xref:Melanchall.DryWetMidi.Multimedia.HighPrecisionTickGenerator), you can use `Playback` in a cross-platform app like Unity game that is supposed to be built for different platforms.
 
 ## Blocking playback
 
-If you call [Play](xref:Melanchall.DryWetMidi.Multimedia.Playback.Play) method of the `Playback`, the calling thread will be blocked until entire collection of MIDI events will be played. Note that execution of this method will be infinite if the [Loop](xref:Melanchall.DryWetMidi.Multimedia.Playback.Loop) property set to `true`.
+If you call the [Play](xref:Melanchall.DryWetMidi.Multimedia.Playback.Play) method of the `Playback`, the calling thread will be blocked until the entire collection of MIDI events is played. Note that execution of this method will be infinite if the [Loop](xref:Melanchall.DryWetMidi.Multimedia.Playback.Loop) property is set to `true`.
 
 There are also extension methods `Play` in [PlaybackUtilities](xref:Melanchall.DryWetMidi.Multimedia.PlaybackUtilities):
 
@@ -73,7 +73,7 @@ using (var outputDevice = OutputDevice.GetByName("Output MIDI device"))
 
 ## Non-blocking playback
 
-Is you call [Start](xref:Melanchall.DryWetMidi.Multimedia.Playback.Start) method of the [Playback](xref:Melanchall.DryWetMidi.Multimedia.Playback), execution of the calling thread will continue immediately after the method is called. To stop playback use [Stop](xref:Melanchall.DryWetMidi.Multimedia.Playback.Stop) method. Note that there is no any pausing method since it's useless. `Stop` leaves playback at the point where the method was called. To move to the start of the playback use [MoveToStart](xref:Melanchall.DryWetMidi.Multimedia.Playback.MoveToStart) method.
+If you call the [Start](xref:Melanchall.DryWetMidi.Multimedia.Playback.Start) method of the [Playback](xref:Melanchall.DryWetMidi.Multimedia.Playback), execution of the calling thread will continue immediately after the method is called. To stop playback use the [Stop](xref:Melanchall.DryWetMidi.Multimedia.Playback.Stop) method. Note that there is no any pausing method since it's useless. `Stop` leaves playback at the point where the method was called. To move to the start of the playback use the [MoveToStart](xref:Melanchall.DryWetMidi.Multimedia.Playback.MoveToStart) method.
 
 > [!IMPORTANT]
 > You should be very careful with this approach and `using` block. Example below shows the case where part of MIDI data **will not be played** because of playback is disposed before the last MIDI event will be played:
@@ -88,4 +88,4 @@ Is you call [Start](xref:Melanchall.DryWetMidi.Multimedia.Playback.Start) method
 > }
 > ```
 > 
-> With non-blocking approach you must call `Dispose` manually after you've finished work with playback object.
+> With the non-blocking approach you must call `Dispose` manually after you've finished work with the playback object.

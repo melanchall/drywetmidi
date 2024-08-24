@@ -4,7 +4,7 @@ uid: a_managers
 
 # Objects managers
 
-Working with low-level objects (like MIDI event) sometimes is not convenient. In this cases it's much more handy to manage MIDI data via concepts of [timed events](xref:Melanchall.DryWetMidi.Interaction.TimedEvent), [notes](xref:Melanchall.DryWetMidi.Interaction.Note) or [chords](xref:Melanchall.DryWetMidi.Interaction.Chord).
+Working with low-level objects (like a MIDI event) sometimes is not convenient. In this case it's much more handy to manage MIDI data via concepts of [timed events](xref:Melanchall.DryWetMidi.Interaction.TimedEvent), [notes](xref:Melanchall.DryWetMidi.Interaction.Note) or [chords](xref:Melanchall.DryWetMidi.Interaction.Chord).
 
 DryWetMIDI provides a way to work with such high-level objects – [TimedObjectsManager](xref:Melanchall.DryWetMidi.Interaction.TimedObjectsManager). This class allows to work with objects of different types within an events collection (see [TrackChunk.Events](xref:Melanchall.DryWetMidi.Core.TrackChunk.Events)):
 
@@ -42,7 +42,7 @@ var notesManager = new TimedObjectsManager<Note>(trackChunk.Events);
 notesManager.SaveChanges();
 ```
 
-Objects will be placed in the underlying events collection in chronological order of course. Also as you can see there is the generic constructor that allows to manage objects of the single type. `Objects` property will return in this case objects of this type, no need to cast them to the type.
+Objects will be placed in the underlying events collection in chronological order of course. Also as you can see there is the generic constructor that allows managing objects of the single type. `Objects` property will return in this case objects of this type, no need to cast them to the type.
 
 ## Simultaneous editing of events collection
 
@@ -70,4 +70,4 @@ var notesManager = new TimedObjectsManager<Note>(trackChunk.Events);
 timedEventsManager.SaveChanges();
 ```
 
-will cause changes made with the `notesManager` will be lost because `SaveChanges` (or `Dispose` in first code snippet) of `timedEventsManager` executed after `SaveChanges` of `notesManager`, and thus rewrites underlying events collection. You need to save changes made with a previous manager before managing objects with next one.
+will cause changes made with the `notesManager` will be lost because `SaveChanges` (or `Dispose` in first code snippet) of `timedEventsManager` executed after `SaveChanges` of `notesManager`, and thus rewrites underlying events collection. You need to save changes made with a previous manager before managing objects with the next one.

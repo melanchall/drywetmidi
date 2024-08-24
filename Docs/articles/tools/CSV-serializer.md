@@ -69,7 +69,7 @@ In other cases of `ObjectName` it's assumed that this component represents the [
 Time,EventData
 ```
 
-As for the `Time`, it holds the time of a [TimedEvent](xref:Melanchall.DryWetMidi.Interaction.TimedEvent) object. You can change `Time` representation via [TimeType](xref:Melanchall.DryWetMidi.Tools.CsvSerializationSettings.TimeType) property of the [CsvSerializationSettings](xref:Melanchall.DryWetMidi.Tools.CsvSerializationSettings). `EventData` depends on the type of an event:
+As for the `Time`, it holds the time of a [TimedEvent](xref:Melanchall.DryWetMidi.Interaction.TimedEvent) object. You can change `Time` representation via the [TimeType](xref:Melanchall.DryWetMidi.Tools.CsvSerializationSettings.TimeType) property of the [CsvSerializationSettings](xref:Melanchall.DryWetMidi.Tools.CsvSerializationSettings). `EventData` depends on the type of an event:
 
 |ObjectName|EventData|Modifiers|
 |---|---|---|

@@ -60,7 +60,8 @@ namespace Melanchall.DryWetMidi.Interaction
     /// <para>
     /// To start manage objects you need to get an instance of the <see cref="TimedObjectsManager{TObject}"/>.
     /// Also <c>ManageX</c> methods within specific object type utilities class (for example,
-    /// <see cref="NotesManagingUtilities.ManageNotes(TrackChunk, NoteDetectionSettings, TimedObjectsComparer)"/>)
+    /// <see cref="NotesManagingUtilities.ManageNotes(TrackChunk, NoteDetectionSettings, TimedEventDetectionSettings, TimedObjectsComparer)"/>
+    /// or <see cref="ChordsManagingUtilities.ManageChords(TrackChunk, ChordDetectionSettings, NoteDetectionSettings, TimedEventDetectionSettings, TimedObjectsComparer)"/>)
     /// can be used.
     /// </para>
     /// <para>

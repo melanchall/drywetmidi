@@ -30,7 +30,8 @@
       {
         "files": [
           "images/**",
-          "articles/**/images/**" ]
+          "articles/**/images/**",
+		  "articles/**/*.mid" ]
       }
     ],
     "globalMetadata": {

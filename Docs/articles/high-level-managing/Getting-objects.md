@@ -30,7 +30,7 @@ namespace DwmExamples
 }
 ```
 
-Please examine [TimedEventsManagingUtilities](xref:Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities) class to see other `GetTimedEvents` overloads.
+Please examine the [TimedEventsManagingUtilities](xref:Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities) class to see other `GetTimedEvents` overloads.
 
 ## GetNotes
 
@@ -106,11 +106,11 @@ All `GetNotes` overloads can accept [NoteDetectionSettings](xref:Melanchall.DryW
 
 More than that, notes are built on top of timed events. So you can pass [TimedEventDetectionSettings](xref:Melanchall.DryWetMidi.Interaction.TimedEventDetectionSettings) as a separate parameter to control how underlying MIDI events will be constructed.
 
-Let's see each setting of the [NoteDetectionSettings](xref:Melanchall.DryWetMidi.Interaction.NoteDetectionSettings) in details.
+Let's see each setting of the [NoteDetectionSettings](xref:Melanchall.DryWetMidi.Interaction.NoteDetectionSettings) in detail.
 
 #### `NoteStartDetectionPolicy`
 
-The [NoteStartDetectionPolicy](xref:Melanchall.DryWetMidi.Interaction.NoteDetectionSettings.NoteStartDetectionPolicy) property defines how start event of a note should be found in case of overlapping notes with the same note number and channel. The default value is [NoteStartDetectionPolicy.FirstNoteOn](xref:Melanchall.DryWetMidi.Interaction.NoteStartDetectionPolicy.FirstNoteOn).
+The [NoteStartDetectionPolicy](xref:Melanchall.DryWetMidi.Interaction.NoteDetectionSettings.NoteStartDetectionPolicy) property defines how the start event of a note should be found in case of overlapping notes with the same note number and channel. The default value is [NoteStartDetectionPolicy.FirstNoteOn](xref:Melanchall.DryWetMidi.Interaction.NoteStartDetectionPolicy.FirstNoteOn).
 
 To understand how this policy works let's take a look at the following events sequence:
 
@@ -122,11 +122,11 @@ If we set `NoteStartDetectionPolicy` to [NoteStartDetectionPolicy.FirstNoteOn](x
 
 ![NoteStartDetectionPolicy-FirstNoteOn](images/Getting-objects-NoteStartDetectionPolicy-FirstNoteOn.png)
 
-So every _Note Off_ event will be combined with **first** free _Note On_ event into a note (events are processed one by one consecutively). But if set `NoteStartDetectionPolicy` to [NoteStartDetectionPolicy.LastNoteOn](xref:Melanchall.DryWetMidi.Interaction.NoteStartDetectionPolicy.LastNoteOn), we'll get another picture:
+So every _Note Off_ event will be combined with the **first** free _Note On_ event into a note (events are processed one by one consecutively). But if set `NoteStartDetectionPolicy` to [NoteStartDetectionPolicy.LastNoteOn](xref:Melanchall.DryWetMidi.Interaction.NoteStartDetectionPolicy.LastNoteOn), we'll get another picture:
 
 ![NoteStartDetectionPolicy-LastNoteOn](images/Getting-objects-NoteStartDetectionPolicy-LastNoteOn.png)
 
-So _Note Off_ events will be combined with **last** free _Note On_ event into a note.
+So _Note Off_ events will be combined with the **last** free _Note On_ event into a note.
 
 ## GetChords
 
@@ -231,17 +231,17 @@ chord
     off velocity = 30
 ```
 
-Please examine [ChordsManagingUtilities](xref:Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities) class to see other `GetChords` overloads.
+Please examine the [ChordsManagingUtilities](xref:Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities) class to see other `GetChords` overloads.
 
 ### Settings
 
-All `GetChords` overloads can accept [ChordDetectionSettings](xref:Melanchall.DryWetMidi.Interaction.ChordDetectionSettings) as a parameter. Via this parameter you can adjust the process of chords building.
+All `GetChords` overloads can accept [ChordDetectionSettings](xref:Melanchall.DryWetMidi.Interaction.ChordDetectionSettings) as a parameter. Via this parameter you can adjust the process of chord building.
 
 Also note that chords are built on top of notes. So to build chords we need to build notes. The process of notes building is adjustable via [NoteDetectionSettings](xref:Melanchall.DryWetMidi.Interaction.NoteDetectionSettings) which you can pass to the methods too. Properties of the [NoteDetectionSettings](xref:Melanchall.DryWetMidi.Interaction.NoteDetectionSettings) are described in detail [above](#settings).
 
 More than that, notes are built on top of timed events as described [above](#settings). So you can pass [TimedEventDetectionSettings](xref:Melanchall.DryWetMidi.Interaction.TimedEventDetectionSettings) too.
 
-Let's see each setting of the [ChordDetectionSettings](xref:Melanchall.DryWetMidi.Interaction.ChordDetectionSettings) in details.
+Let's see each setting of the [ChordDetectionSettings](xref:Melanchall.DryWetMidi.Interaction.ChordDetectionSettings) in detail.
 
 #### `NotesTolerance`
 
@@ -255,7 +255,7 @@ If we set notes tolerance to `0` (which is default value), we'll get three diffe
 
 ![NotesTolerance-0](images/Getting-objects-NotesTolerance-0.png)
 
-Different colors denotes different chords. If we set notes tolerance to `1`, we'll get two chords:
+Different colors denote different chords. If we set notes tolerance to `1`, we'll get two chords:
 
 ![NotesTolerance-1](images/Getting-objects-NotesTolerance-1.png)
 
@@ -265,7 +265,7 @@ With tolerance of `2` we'll finally get a single chord:
 
 #### `NotesMinCount`
 
-The [NotesMinCount](xref:Melanchall.DryWetMidi.Interaction.ChordDetectionSettings.NotesMinCount) property defines the minimum count of notes a chord can contain. So if count of simultaneously sounding notes is less than this value, they won't make up a chord. The default value is `1` which means a single note can be turned to a chord.
+The [NotesMinCount](xref:Melanchall.DryWetMidi.Interaction.ChordDetectionSettings.NotesMinCount) property defines the minimum count of notes a chord can contain. So if the count of simultaneously sounding notes is less than this value, they won't make up a chord. The default value is `1` which means a single note can be turned to a chord.
 
 To understand how this property works let's take a look at the following notes (cross means any non-note event):
 
@@ -279,15 +279,15 @@ If we set notes min count to `2`, we'll get only one chord:
 
 ![NotesMinCount-2](images/Getting-objects-NotesMinCount-2.png)
 
-Last note will not be turned into a chord because count of notes for a chord will be `1` which is less than the specified minimum count. With minimum count of notes of `3` we'll get no chords:
+Last note will not be turned into a chord because the count of notes for a chord will be `1` which is less than the specified minimum count. With minimum count of notes of `3` we'll get no chords:
 
 ![NotesMinCount-3](images/Getting-objects-NotesMinCount-3.png)
 
-First possible chord will contain two notes and second chord will contain one note. In both cases count of notes is less than the specified minimum count.
+First possible chord will contain two notes and the second chord will contain one note. In both cases the count of notes is less than the specified minimum count.
 
 ## GetObjects
 
-All methods we saw before return collection of objects of the **same type**. So you can get only either notes or chords or timed events. To highlight the problem, let's take a look at the following events sequence:
+All methods we saw before return a collection of objects of the **same type**. So you can get only either notes or chords or timed events. To highlight the problem, let's take a look at the following events sequence:
 
 ![GetObjects-Initial](images/Getting-objects-GetObjects-Initial.png)
 
@@ -400,7 +400,7 @@ Getting chords...
 [Chord] C-1 C-1 (time = 5)
 ```
 
-As you can see there is "free" _Note On_ event without corresponding _Note Off_ one so we can't build a note for it. What if we want to get all possible notes and all remaining timed events? DryWetMIDI provides [GetObjectsUtilities](xref:Melanchall.DryWetMidi.Interaction.GetObjectsUtilities) class which contains `GetObjects` methods (for the same MIDI structures as previous methods). We can change printing part of the program above to:
+As you can see there is a "free" _Note On_ event without corresponding _Note Off_ one so we can't build a note for it. What if we want to get all possible notes and all remaining timed events? DryWetMIDI provides the [GetObjectsUtilities](xref:Melanchall.DryWetMidi.Interaction.GetObjectsUtilities) class which contains `GetObjects` methods (for the same MIDI structures as previous methods). We can change printing part of the program above to:
 
 
 ```csharp
@@ -491,7 +491,7 @@ To build rests you need to use extension methods from the [RestsUtilities](xref:
 
 If you take a look into the class, you'll discover two methods – [WithRests](xref:Melanchall.DryWetMidi.Interaction.RestsUtilities.WithRests*) and [GetRests](xref:Melanchall.DryWetMidi.Interaction.RestsUtilities.GetRests*). The first one adds rests to a collection of objects you've passed to the method. The second method returns rests only.
 
-It will be much easier to understand how rests building works with examples. So let's look on [WithRests](xref:Melanchall.DryWetMidi.Interaction.RestsUtilities.WithRests*) (there is no great value to discuss [GetRests](xref:Melanchall.DryWetMidi.Interaction.RestsUtilities.GetRests*) since it works in the same way but just returns rests only).
+It will be much easier to understand how rests building works with examples. So let's look at the [WithRests](xref:Melanchall.DryWetMidi.Interaction.RestsUtilities.WithRests*) (there is no great value to discuss [GetRests](xref:Melanchall.DryWetMidi.Interaction.RestsUtilities.GetRests*) since it works in the same way but just returns rests only).
 
 Supposing we have following notes (with two different note numbers on two different channels):
 
@@ -511,9 +511,9 @@ we'll get only one rest:
 
 ![GetObjects-Rests-NoSeparation](images/Getting-objects-GetObjects-Rests-NoSeparation.png)
 
-An important concept we need to discuss is a key selection. Key is used to calculate rests. Rests are always calculated only between objects with the same key. If an object with different key is encountered, rests will be calculated for that key.
+An important concept we need to discuss is **key selection**. Key is used to calculate rests. Rests are always calculated only between objects with the same key. If an object with different key is encountered, rests will be calculated for that key.
 
-In the code above we're saying: _The key of each object is 0_. So for the rests building algorithm all objects are same, there is no difference between channels and note numbers, for example. So rests will be constructed only at spaces where there are no notes at all (with any channels and any note numbers).
+In the code above we're saying: _The key of each object is 0_. So for the rests building algorithm all objects are the same, there is no difference between channels and note numbers, for example. So rests will be constructed only at spaces where there are no notes at all (with any channels and any note numbers).
 
 Also please take a look at the predefined key selectors available via constants of the [RestDetectionSettings](xref:Melanchall.DryWetMidi.Interaction.RestDetectionSettings). We can rewrite code above:
 
@@ -538,9 +538,9 @@ var notesAndRests = notes
 
 So rests are separated by channels. Channel is the key of an object. Note number of a note doesn't matter, all numbers are treated as the same one. So rests will be constructed separately for each channel at spaces where there are no notes (with any note numbers).
 
-The key for which a rest has been built will be store in the [Key](xref:Melanchall.DryWetMidi.Interaction.Rest.Key) property of [Rest](xref:Melanchall.DryWetMidi.Interaction.Rest) class. `notesAndRests` is a collection containing both `notes` and calculated rests, and elements of this collection are sorted by their times.
+The key for which a rest has been built will be stored in the [Key](xref:Melanchall.DryWetMidi.Interaction.Rest.Key) property of [Rest](xref:Melanchall.DryWetMidi.Interaction.Rest) class. `notesAndRests` is a collection containing both `notes` and calculated rests, and elements of this collection are sorted by their times.
 
-Note that you can build rests for objects of different types. Why not to get chords from a MIDI file and add rests between them?
+Note that you can build rests for objects of different types. Why not get chords from a MIDI file and add rests between them?
 
 ```csharp
 var chordsAndRests = midiFile
@@ -551,7 +551,7 @@ var chordsAndRests = midiFile
     });
 ```
 
-And a couple of words about return value of key selector. If `null` is returned, an object won't participate in rests building process. It allows you to have rests for desired objects only. For example:
+And a couple of words about return value of the key selector. If `null` is returned, an object won't participate in rests building process. It allows you to have rests for desired objects only. For example:
 
 ```csharp
 var notesAndChordsAndRests = midiFile
@@ -580,7 +580,7 @@ Rests:
 
 ![GetObjects-Rests-SeparateByNoteNumber](images/Getting-objects-GetObjects-Rests-SeparateByNoteNumber.png)
 
-As you can see rests now are separated by note number (channel doesn't matter). So rests will be constructed for each note number at spaces where there are no notes (with any channel).
+As you can see, rests now are separated by note number (channel doesn't matter). So rests will be constructed for each note number at spaces where there are no notes (with any channel).
 
 Code:
 

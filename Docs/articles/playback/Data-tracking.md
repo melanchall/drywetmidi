@@ -31,7 +31,7 @@ The same situation with opposite case:
 
 ![Move from note with TrackNotes set to true](images/NotesTrack-FromNote-True.png)
 
-So we want here to jump from the middle of a note to the time after the note. As in previous example if `TrackNotes` is `false`, just the current time of the playback will be changed. But if in case of `true`, new _Note Off_ event will be generated and played when we jump to the new time.
+So we want to jump from the middle of a note to the time after the note. As in the previous example, if `TrackNotes` is `false`, just the current time of the playback will be changed. But if in case of `true`, a new _Note Off_ event will be generated and played when we jump to the new time.
 
 So `TrackNotes = true` tells playback to track time jumps when the current time pointer of the playback either leaves a note or enters one to finish or start the note correspondingly.
 
@@ -51,11 +51,11 @@ And now we want to jump from the current time of a playback to a new time (with 
 
 ![Move after B program](images/ProgTrack-AfterB.png)
 
-So by the current time `A` event is played and the current program corresponds to `A`. If the playback just change the current time, the note will be played using program `A` which may be wrong since the note is actually is under `B` program influence.
+So by the current time `A` event is played and the current program corresponds to `A`. If the playback just changes the current time, the note will be played using program `A` which may be wrong since the note is actually under `B` program influence.
 
-To track a program `Playback` class has [TrackProgram](xref:Melanchall.DryWetMidi.Multimedia.Playback.TrackProgram) property. If it's set to `false`, nothing will happen except changing the current time. All following notes can sound incorrectly due to possibly skipped program changes.
+To track a program, `Playback` class has the [TrackProgram](xref:Melanchall.DryWetMidi.Multimedia.Playback.TrackProgram) property. If it's set to `false`, nothing will happen except changing the current time. All following notes can sound incorrectly due to possibly skipped program changes.
 
-But if we set `TrackProgram` to `true`, playback will play required _Program Change_ event immediately after time changed. So in our example `B` will be played and then playback continues from new time:
+But if we set `TrackProgram` to `true`, playback will play the required _Program Change_ event immediately after time changed. So in our example `B` will be played and then playback continues from new time:
 
 ![Move after B program with TrackProgram set to true](images/ProgTrack-AfterB-2.png)
 

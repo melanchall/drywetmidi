@@ -4,7 +4,7 @@ uid: a_mt_chord_progression
 
 # Chord progression
 
-[ChordProgression](xref:Melanchall.DryWetMidi.MusicTheory.ChordProgression) represents set of [chords](Chord.md) which represents musical chord progression. Some examples of usage:
+[ChordProgression](xref:Melanchall.DryWetMidi.MusicTheory.ChordProgression) represents a set of [chords](Chord.md) which represents musical chord progression. Some examples of usage:
 
 ```csharp
 // Get I-II-IV chord progression for C Major scale
@@ -23,7 +23,7 @@ Following strings can be parsed to `ChordProgression`:
 where
 
 * **DegreeNumber** is a scale degree as a roman number, for example, `I` or `IV`.
-* **ChordCharacteristic** is combination of chord quality, altered and added tones and so on. See [Parsing](Chord.md#parsing) section of [Chord](Chord.md) article to learn more.
+* **ChordCharacteristic** is a combination of chord quality, altered and added tones and so on. See the [Parsing](Chord.md#parsing) section of the [Chord](Chord.md) article to learn more.
 
 Examples of valid chord progression strings:
 

@@ -4,9 +4,9 @@ uid: a_develop_project_health
 
 # Project health
 
-Here you can see "health" of the project in terms of test pipelines are passed or not. First of all, we need to define two subsets of the library API:
+Here you can see the "health" of the project in terms of whether test pipelines are passed or not. First of all, we need to define two subsets of the library API:
 
-* **Core API** – it's all API except Multimedia one; in other words it's the API that is supported by .NET itself, so it can be run on any platform .NET Core / .NET supported.
+* **Core API** – it's all API except Multimedia one; in other words, it's the API that is supported by .NET itself, so it can be run on any platform .NET Core / .NET supported.
 * **Multimedia API** – it's platform-specific API. The list of the key classes can be found in the [Supported OS](xref:a_develop_supported_os) article.
 
 ## Windows

@@ -8,7 +8,7 @@ With DryWetMIDI you can easily repeat groups of objects or entire MIDI files usi
 
 ![Objects repeating](images/Repeater/Repeat.png)
 
-It's a simple case. To calculate the distance to move each new part by, the tool looks at the value of the [ShiftPolicy](xref:Melanchall.DryWetMidi.Tools.RepeatingSettings.ShiftPolicy) property of the settings passed to [Repeat](xref:Melanchall.DryWetMidi.Tools.Repeater.Repeat*) methods. The default value is [ShiftPolicy.ShiftByMaxTime](xref:Melanchall.DryWetMidi.Tools.ShiftPolicy.ShiftByMaxTime) and you can see how this options works on the image above – the tool takes maximum time among all objects and shifts objects within each new part by this value.
+It's a simple case. To calculate the distance to move each new part by, the tool looks at the value of the [ShiftPolicy](xref:Melanchall.DryWetMidi.Tools.RepeatingSettings.ShiftPolicy) property of the settings passed to [Repeat](xref:Melanchall.DryWetMidi.Tools.Repeater.Repeat*) methods. The default value is [ShiftPolicy.ShiftByMaxTime](xref:Melanchall.DryWetMidi.Tools.ShiftPolicy.ShiftByMaxTime) and you can see how this option works on the image above – the tool takes maximum time among all objects and shifts objects within each new part by this value.
 
 But you can use fixed value to shift objects by. You need to specify [ShiftPolicy.ShiftByFixedValue](xref:Melanchall.DryWetMidi.Tools.ShiftPolicy.ShiftByFixedValue) for shift policy and set [Shift](xref:Melanchall.DryWetMidi.Tools.RepeatingSettings.Shift) property of the settings. So times of objects won't affect distance calculation now and data will be shifted by the value of the `Shift` property:
 
@@ -22,11 +22,11 @@ var newFile = midiFile.Repeat(2, new RepeatingSettings
 
 ![Shift objects by fixed value](images/Repeater/ShiftByFixedValue.png)
 
-Also [RepeatingSettings](xref:Melanchall.DryWetMidi.Tools.RepeatingSettings) class provides options to round shift value (calculated by max time or constant one). It can be useful, for example, when objects are not aligned with the grid. Please take a look at the following image:
+Also the [RepeatingSettings](xref:Melanchall.DryWetMidi.Tools.RepeatingSettings) class provides options to round a shift value (calculated by max time or constant one). It can be useful, for example, when objects are not aligned with the grid. Please take a look at the following image:
 
 ![Round shift up](images/Repeater/RoundingUp.png)
 
-Here the data doesn't reach bar line time, but we want to repeat the objects with aligning to bars lines. Obviously we can't use [ShiftPolicy.ShiftByMaxTime](xref:Melanchall.DryWetMidi.Tools.ShiftPolicy.ShiftByMaxTime) option here. But we can't use [ShiftPolicy.ShiftByFixedValue](xref:Melanchall.DryWetMidi.Tools.ShiftPolicy.ShiftByFixedValue) too because we don't know the length of data in general case. We just want to repeat the objects and be sure the start of the objects group is always on a bar line. So we can write this code:
+Here the data doesn't reach bar line time, but we want to repeat the objects by aligning to bars lines. Obviously we can't use the [ShiftPolicy.ShiftByMaxTime](xref:Melanchall.DryWetMidi.Tools.ShiftPolicy.ShiftByMaxTime) option here. But we can't use [ShiftPolicy.ShiftByFixedValue](xref:Melanchall.DryWetMidi.Tools.ShiftPolicy.ShiftByFixedValue) too because we don't know the length of data in the general case. We just want to repeat the objects and be sure the start of the objects group is always on a bar line. So we can write this code:
 
 ```csharp
 var newFile = midiFile.Repeat(2, new RepeatingSettings

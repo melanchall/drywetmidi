@@ -4,7 +4,7 @@ uid: a_mt_octave
 
 # Octave
 
-The main purpose of the [Octave](xref:Melanchall.DryWetMidi.MusicTheory.Octave) class is to provide alternative way to get an instance of the [Note](xref:Melanchall.DryWetMidi.MusicTheory.Note) class. Some examples of usage:
+The main purpose of the [Octave](xref:Melanchall.DryWetMidi.MusicTheory.Octave) class is to provide an alternative way to get an instance of the [Note](xref:Melanchall.DryWetMidi.MusicTheory.Note) class. Some examples of usage:
 
 ```csharp
 // Get first octave
@@ -26,7 +26,7 @@ Following strings can be parsed to `Octave`:
 
 where
 
-* **OctaveNumber** is a number of octave. A number must be between `-1` and `9`.
+* **OctaveNumber** is the number of an octave. A number must be between `-1` and `9`.
 
 Examples of valid interval strings:
 

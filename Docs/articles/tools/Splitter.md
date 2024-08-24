@@ -9,4 +9,4 @@ You can split MIDI objects in different ways using extension methods from the [S
 * [objects splitting](Objects-splitting.md);
 * [MIDI file splitting](MIDI-file-splitting.md).
 
-Please note that these articles doesn't cover all possible methods and their settings. Please read API documentation on [Splitter](xref:Melanchall.DryWetMidi.Tools.Splitter) to get complete information.
+Please note that these articles don't cover all possible methods and their settings. Please read API documentation on [Splitter](xref:Melanchall.DryWetMidi.Tools.Splitter) to get complete information.

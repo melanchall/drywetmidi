@@ -7,9 +7,9 @@ uid: a_dev_watcher
 > [!IMPORTANT]
 > Devices watching API is a platform-specific one so please refer to the [Supported OS](xref:a_develop_supported_os) article to learn more.
 
-DryWetMIDI allows to track whether a MIDI device added to or removed from the system. There is [DevicesWatcher](xref:Melanchall.DryWetMidi.Multimedia.DevicesWatcher) class for that purpose. The class is singleton and you can get the instance with [Instance](xref:Melanchall.DryWetMidi.Multimedia.DevicesWatcher.Instance) property.
+DryWetMIDI allows to track whether a MIDI device is added to or removed from the system. There is the [DevicesWatcher](xref:Melanchall.DryWetMidi.Multimedia.DevicesWatcher) class for that purpose. The class is singleton and you can get the instance with [Instance](xref:Melanchall.DryWetMidi.Multimedia.DevicesWatcher.Instance) property.
 
-`DevicesWatcher` provides two events: [DeviceAdded](xref:Melanchall.DryWetMidi.Multimedia.DevicesWatcher.DeviceAdded) and [DeviceRemoved](xref:Melanchall.DryWetMidi.Multimedia.DevicesWatcher.DeviceRemoved). First one will be fired when a MIDI device is added to the system, and second one – when a device removed from it. You can then cast device instance from the events arguments to [InputDevice](xref:Melanchall.DryWetMidi.Multimedia.InputDevice) or [OutputDevice](xref:Melanchall.DryWetMidi.Multimedia.OutputDevice). See following sample program:
+`DevicesWatcher` provides two events: [DeviceAdded](xref:Melanchall.DryWetMidi.Multimedia.DevicesWatcher.DeviceAdded) and [DeviceRemoved](xref:Melanchall.DryWetMidi.Multimedia.DevicesWatcher.DeviceRemoved). First one will be fired when a MIDI device is added to the system, and second one – when a device is removed from it. You can then cast a device instance from the event's arguments to [InputDevice](xref:Melanchall.DryWetMidi.Multimedia.InputDevice) or [OutputDevice](xref:Melanchall.DryWetMidi.Multimedia.OutputDevice). See following sample program:
 
 ```csharp
 using System;
@@ -60,7 +60,7 @@ Device removed: Melanchall.DryWetMidi.Multimedia.InputDevice
 Device removed: Melanchall.DryWetMidi.Multimedia.OutputDevice
 ```
 
-When device is added you can immediately interact with it using an instance from the `DeviceAdded` event's arguments. But an instance from the `DeviceRemoved` event's arguments is non-interactable, because device is removed and doesn't exist in the system anymore. Any attempt to call methods or properties on that instance will throw an exception:
+When a device is added you can immediately interact with it using an instance from the `DeviceAdded` event's arguments. But an instance from the `DeviceRemoved` event's arguments is non-interactable, because the device is removed and doesn't exist in the system anymore. Any attempt to call methods or properties on that instance will throw an exception:
 
 ```csharp
 using System;
@@ -154,7 +154,7 @@ Device removed. Getting its name...
 Name is MyDevice
 ```
 
-Device instances comparing can be useful in programs with GUI where you need update the list of available devices. So when a device is added, you just add it to the list. When some device is removed, you find corresponding item in the current list via `Equals` on device instances and remove that item.
+Device instances comparison can be useful in programs with GUI where you need to update the list of available devices. So when a device is added, you just add it to the list. When some device is removed, you find the corresponding item in the current list via `Equals` on device instances and remove that item.
 
 > [!IMPORTANT]
-> Checking for devices equality supported for **macOS** only. On Windows any call of `Equals` will just compare references.
+> Checking for devices equality supported for **macOS** only. On Windows call of `Equals` will just compare references.

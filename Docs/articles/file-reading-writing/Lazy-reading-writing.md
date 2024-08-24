@@ -6,7 +6,7 @@ uid: a_file_lazy_reading_writing
 
 ## Reading
 
-When you call [MidiFile.Read](xref:Melanchall.DryWetMidi.Core.MidiFile.Read*) method, the entire structure of a MIDI file will be put to memory as an object of the [MidiFile](xref:Melanchall.DryWetMidi.Core.MidiFile) type. It means that more or less big MIDI file will span significant amount of bytes in the memory. Although it's much easy to work with such fully initialized object, memory consumption can be a critical parameter for your application.
+When you call the [MidiFile.Read](xref:Melanchall.DryWetMidi.Core.MidiFile.Read*) method, the entire structure of a MIDI file will be put to memory as an object of the [MidiFile](xref:Melanchall.DryWetMidi.Core.MidiFile) type. It means that a more or less big MIDI file will span a significant number of bytes in the memory. Although it's much easier to work with such fully initialized objects, memory consumption can be a critical parameter for your application.
 
 To solve the problem DryWetMIDI provides [MidiFile.ReadLazy](xref:Melanchall.DryWetMidi.Core.MidiFile.ReadLazy*) methods which return an instance of the [MidiTokensReader](xref:Melanchall.DryWetMidi.Core.MidiTokensReader) class that can read a MIDI file sequentially token by token:
 
@@ -34,7 +34,7 @@ using (var tokensReader = MidiFile.ReadLazy("test.mid"))
 }
 ```
 
-With this approach each call of [ReadToken](xref:Melanchall.DryWetMidi.Core.MidiTokensReader.ReadToken) method will read next portion of data from a MIDI file (in fact, the internal reader in DryWetMIDI uses the buffer of `4096` bytes by default, the size of this buffer can be adjusted via [BufferSize](xref:Melanchall.DryWetMidi.Core.ReaderSettings.BufferSize) property of [ReadingSettings.ReaderSettings](xref:Melanchall.DryWetMidi.Core.ReadingSettings.ReaderSettings)). So the memory consumption will be almost always constant (despite a MIDI file size) and low. But of course there's the price – slower reading and much more difficult implementation of some logic and algorithms needed for your application. Also many high level tools provided by DryWetMIDI will be unavailable.
+With this approach each call of [ReadToken](xref:Melanchall.DryWetMidi.Core.MidiTokensReader.ReadToken) method will read next portion of data from a MIDI file (in fact, the internal reader in DryWetMIDI uses the buffer of `4096` bytes by default, the size of this buffer can be adjusted via [BufferSize](xref:Melanchall.DryWetMidi.Core.ReaderSettings.BufferSize) property of [ReadingSettings.ReaderSettings](xref:Melanchall.DryWetMidi.Core.ReadingSettings.ReaderSettings)). So, the memory consumption will be almost always constant (despite a MIDI file size) and low. But of course, there's the price – slower reading and much more difficult implementation of some logic and algorithms needed for your application. Also, many high level tools provided by DryWetMIDI will be unavailable.
 
 Some useful methods can be found in the [MidiTokensReaderUtilities](xref:Melanchall.DryWetMidi.Core.MidiTokensReaderUtilities) class. Following example shows how you can calculate count of all _A#_ notes for each track chunk ([EnumerateObjects](xref:Melanchall.DryWetMidi.Interaction.GetObjectsUtilities.EnumerateObjects*) method also used):
 
@@ -131,4 +131,4 @@ using (var objectsWriter = new TimedObjectsWriter(tokensWriter))
 }
 ```
 
-The code above writes one million notes to a MIDI file. Of course you can combine [MidiTokensReader](xref:Melanchall.DryWetMidi.Core.MidiTokensReader), [EnumerateObjects](xref:Melanchall.DryWetMidi.Interaction.GetObjectsUtilities.EnumerateObjects*), [MidiTokensWriter](xref:Melanchall.DryWetMidi.Core.MidiTokensWriter) and [TimedObjectsWriter](xref:Melanchall.DryWetMidi.Interaction.TimedObjectsWriter) to process MIDI objects transforming a MIDI file into another one.
+The code above writes one million notes to a MIDI file. Of course, you can combine [MidiTokensReader](xref:Melanchall.DryWetMidi.Core.MidiTokensReader), [EnumerateObjects](xref:Melanchall.DryWetMidi.Interaction.GetObjectsUtilities.EnumerateObjects*), [MidiTokensWriter](xref:Melanchall.DryWetMidi.Core.MidiTokensWriter) and [TimedObjectsWriter](xref:Melanchall.DryWetMidi.Interaction.TimedObjectsWriter) to process MIDI objects transforming a MIDI file into another one.

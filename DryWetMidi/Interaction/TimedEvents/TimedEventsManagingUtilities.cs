@@ -156,6 +156,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
         /// <summary>
         /// Performs the specified action on each <see cref="TimedEvent"/> contained in the <see cref="EventsCollection"/>.
+        /// More info in the <see href="xref:a_processing_objects#processtimedevents">Processing objects: ProcessTimedEvents</see> article.
         /// </summary>
         /// <param name="eventsCollection"><see cref="EventsCollection"/> to search for events to process.</param>
         /// <param name="action">The action to perform on each <see cref="TimedEvent"/> contained in the
@@ -191,6 +192,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
         /// <summary>
         /// Performs the specified action on each <see cref="TimedEvent"/> contained in the <see cref="EventsCollection"/>.
+        /// More info in the <see href="xref:a_processing_objects#processtimedevents">Processing objects: ProcessTimedEvents</see> article.
         /// </summary>
         /// <param name="eventsCollection"><see cref="EventsCollection"/> to search for events to process.</param>
         /// <param name="action">The action to perform on each <see cref="TimedEvent"/> contained in the
@@ -231,6 +233,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
         /// <summary>
         /// Performs the specified action on each <see cref="TimedEvent"/> contained in the <see cref="TrackChunk"/>.
+        /// More info in the <see href="xref:a_processing_objects#processtimedevents">Processing objects: ProcessTimedEvents</see> article.
         /// </summary>
         /// <param name="trackChunk"><see cref="TrackChunk"/> to search for events to process.</param>
         /// <param name="action">The action to perform on each <see cref="TimedEvent"/> contained in the
@@ -266,6 +269,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
         /// <summary>
         /// Performs the specified action on each <see cref="TimedEvent"/> contained in the <see cref="TrackChunk"/>.
+        /// More info in the <see href="xref:a_processing_objects#processtimedevents">Processing objects: ProcessTimedEvents</see> article.
         /// </summary>
         /// <param name="trackChunk"><see cref="TrackChunk"/> to search for events to process.</param>
         /// <param name="action">The action to perform on each <see cref="TimedEvent"/> contained in the
@@ -306,7 +310,8 @@ namespace Melanchall.DryWetMidi.Interaction
 
         /// <summary>
         /// Performs the specified action on each <see cref="TimedEvent"/> contained in the collection of
-        /// <see cref="TrackChunk"/>.
+        /// <see cref="TrackChunk"/>. More info in the
+        /// <see href="xref:a_processing_objects#processtimedevents">Processing objects: ProcessTimedEvents</see> article.
         /// </summary>
         /// <param name="trackChunks">Collection of <see cref="TrackChunk"/> to search for events to process.</param>
         /// <param name="action">The action to perform on each <see cref="TimedEvent"/> contained in the
@@ -342,7 +347,8 @@ namespace Melanchall.DryWetMidi.Interaction
 
         /// <summary>
         /// Performs the specified action on each <see cref="TimedEvent"/> contained in the collection of
-        /// <see cref="TrackChunk"/>.
+        /// <see cref="TrackChunk"/>. More info in the
+        /// <see href="xref:a_processing_objects#processtimedevents">Processing objects: ProcessTimedEvents</see> article.
         /// </summary>
         /// <param name="trackChunks">Collection of <see cref="TrackChunk"/> to search for events to process.</param>
         /// <param name="action">The action to perform on each <see cref="TimedEvent"/> contained in the
@@ -386,6 +392,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
         /// <summary>
         /// Performs the specified action on each <see cref="TimedEvent"/> contained in the <see cref="MidiFile"/>.
+        /// More info in the <see href="xref:a_processing_objects#processtimedevents">Processing objects: ProcessTimedEvents</see> article.
         /// </summary>
         /// <param name="file"><see cref="MidiFile"/> to search for events to process.</param>
         /// <param name="action">The action to perform on each <see cref="TimedEvent"/> contained in the
@@ -421,6 +428,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
         /// <summary>
         /// Performs the specified action on each <see cref="TimedEvent"/> contained in the <see cref="MidiFile"/>.
+        /// More info in the <see href="xref:a_processing_objects#processtimedevents">Processing objects: ProcessTimedEvents</see> article.
         /// </summary>
         /// <param name="file"><see cref="MidiFile"/> to search for events to process.</param>
         /// <param name="action">The action to perform on each <see cref="TimedEvent"/> contained in the
@@ -460,7 +468,8 @@ namespace Melanchall.DryWetMidi.Interaction
         }
 
         /// <summary>
-        /// Removes all the <see cref="TimedEvent"/> that match the conditions defined by the specified predicate.
+        /// Removes all timed events from the <see cref="EventsCollection"/>.
+        /// More info in the <see href="xref:a_removing_objects#removetimedevents">Removing objects: RemoveTimedEvents</see> article.
         /// </summary>
         /// <param name="eventsCollection"><see cref="EventsCollection"/> to search for events to remove.</param>
         /// <returns>Count of removed timed events.</returns>
@@ -476,7 +485,8 @@ namespace Melanchall.DryWetMidi.Interaction
         }
 
         /// <summary>
-        /// Removes all the <see cref="TimedEvent"/> that match the conditions defined by the specified predicate.
+        /// Removes timed events that match the specified conditions from the <see cref="EventsCollection"/>.
+        /// More info in the <see href="xref:a_removing_objects#removetimedevents">Removing objects: RemoveTimedEvents</see> article.
         /// </summary>
         /// <param name="eventsCollection"><see cref="EventsCollection"/> to search for events to remove.</param>
         /// <param name="match">The predicate that defines the conditions of the <see cref="TimedEvent"/> to remove.</param>
@@ -534,7 +544,8 @@ namespace Melanchall.DryWetMidi.Interaction
         }
 
         /// <summary>
-        /// Removes all the <see cref="TimedEvent"/> that match the conditions defined by the specified predicate.
+        /// Removes all timed events from the <see cref="TrackChunk"/>.
+        /// More info in the <see href="xref:a_removing_objects#removetimedevents">Removing objects: RemoveTimedEvents</see> article.
         /// </summary>
         /// <param name="trackChunk"><see cref="TrackChunk"/> to search for events to remove.</param>
         /// <returns>Count of removed timed events.</returns>
@@ -550,7 +561,8 @@ namespace Melanchall.DryWetMidi.Interaction
         }
 
         /// <summary>
-        /// Removes all the <see cref="TimedEvent"/> that match the conditions defined by the specified predicate.
+        /// Removes timed events that match the specified conditions from the <see cref="TrackChunk"/>.
+        /// More info in the <see href="xref:a_removing_objects#removetimedevents">Removing objects: RemoveTimedEvents</see> article.
         /// </summary>
         /// <param name="trackChunk"><see cref="TrackChunk"/> to search for events to remove.</param>
         /// <param name="match">The predicate that defines the conditions of the <see cref="TimedEvent"/> to remove.</param>
@@ -577,7 +589,8 @@ namespace Melanchall.DryWetMidi.Interaction
         }
 
         /// <summary>
-        /// Removes all the <see cref="TimedEvent"/> that match the conditions defined by the specified predicate.
+        /// Removes all timed events from the collection of <see cref="TrackChunk"/>.
+        /// More info in the <see href="xref:a_removing_objects#removetimedevents">Removing objects: RemoveTimedEvents</see> article.
         /// </summary>
         /// <param name="trackChunks">Collection of <see cref="TrackChunk"/> to search for events to remove.</param>
         /// <returns>Count of removed timed events.</returns>
@@ -598,7 +611,8 @@ namespace Melanchall.DryWetMidi.Interaction
         }
 
         /// <summary>
-        /// Removes all the <see cref="TimedEvent"/> that match the conditions defined by the specified predicate.
+        /// Removes timed events that match the specified conditions from the collection of <see cref="TrackChunk"/>.
+        /// More info in the <see href="xref:a_removing_objects#removetimedevents">Removing objects: RemoveTimedEvents</see> article.
         /// </summary>
         /// <param name="trackChunks">Collection of <see cref="TrackChunk"/> to search for events to remove.</param>
         /// <param name="match">The predicate that defines the conditions of the <see cref="TimedEvent"/> to remove.</param>
@@ -689,7 +703,8 @@ namespace Melanchall.DryWetMidi.Interaction
         }
 
         /// <summary>
-        /// Removes all the <see cref="TimedEvent"/> that match the conditions defined by the specified predicate.
+        /// Removes all timed events from the <see cref="MidiFile"/>.
+        /// More info in the <see href="xref:a_removing_objects#removetimedevents">Removing objects: RemoveTimedEvents</see> article.
         /// </summary>
         /// <param name="file"><see cref="MidiFile"/> to search for events to remove.</param>
         /// <returns>Count of removed timed events.</returns>
@@ -703,7 +718,8 @@ namespace Melanchall.DryWetMidi.Interaction
         }
 
         /// <summary>
-        /// Removes all the <see cref="TimedEvent"/> that match the conditions defined by the specified predicate.
+        /// Removes timed events that match the specified conditions from the <see cref="MidiFile"/>.
+        /// More info in the <see href="xref:a_removing_objects#removetimedevents">Removing objects: RemoveTimedEvents</see> article.
         /// </summary>
         /// <param name="file"><see cref="MidiFile"/> to search for events to remove.</param>
         /// <param name="match">The predicate that defines the conditions of the <see cref="TimedEvent"/> to remove.</param>

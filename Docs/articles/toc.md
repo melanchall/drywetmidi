@@ -20,6 +20,8 @@
 ## [Tempo map](high-level-managing/Tempo-map.md)
 ## [Time and length](high-level-managing/Time-and-length.md)
 ## [Getting objects](high-level-managing/Getting-objects.md)
+## [Processing objects](high-level-managing/Processing-objects.md)
+## [Removing objects](high-level-managing/Removing-objects.md)
 
 # Tools
 ## [Overview](tools/Overview.md)

@@ -6,7 +6,7 @@ uid: a_custom_chunk
 
 MIDI files are made up of **chunks**. Each chunk has a 4-character ID and a 32-bit length, which is the number of bytes in the chunk. This structure allows future or custom chunk types to be designed which may be easily ignored if encountered by a program written before a chunk type is introduced or if the program doesn't know about the type. DryWetMIDI allows you to implement custom chunks which can be written to a MIDI file and be read from it.
 
-For example, we want to design a chunk that will contain information about changes in whatever we want. A change is described by **date** (day, month, year) and **comment**. Let's create the class to store single change.
+For example, we want to design a chunk that will contain information about changes in whatever we want. A change is described by **date** (day, month, year) and **comment**. Let's create a class to store a single change.
 
 ```csharp
 public sealed class Change
@@ -30,7 +30,7 @@ Now we are going to implement a custom chunk. Custom chunk class must be derived
 * [GetContentSize](xref:Melanchall.DryWetMidi.Core.MidiChunk.GetContentSize(Melanchall.DryWetMidi.Core.WritingSettings));
 * [Clone](xref:Melanchall.DryWetMidi.Core.MidiChunk.Clone).
 
-Also the class must have parameterless constructor which calls constructor of the base class ([MidiChunk](xref:Melanchall.DryWetMidi.Core.MidiChunk)) passing chunk's ID to it. ID is a 4-character string which will be **Hstr** for our chunk. ID of custom chunk should not be the same as one of standard chunks IDs. To get IDs of standard chunks you can call [MidiChunk.GetStandardChunkIds](xref:Melanchall.DryWetMidi.Core.MidiChunk.GetStandardChunkIds).
+Also, the class must have a parameterless constructor which calls the constructor of the base class ([MidiChunk](xref:Melanchall.DryWetMidi.Core.MidiChunk)) passing chunk's ID to it. ID is a 4-character string which will be **Hstr** for our chunk. The ID of a custom chunk should not be the same as one of standard chunks IDs. To get IDs of standard chunks you can call [MidiChunk.GetStandardChunkIds](xref:Melanchall.DryWetMidi.Core.MidiChunk.GetStandardChunkIds).
 
 The class will look like this:
 
@@ -73,9 +73,9 @@ public sealed class HistoryChunk : MidiChunk
 }
 ```
 
-Before we will start to implement four methods mentioned above we need to determine the structure of change records according to which it should be read and written.
+Before we will start to implement four methods mentioned above, we need to determine the structure of change records according to which it should be read and written.
 
-Chunk's content will be started with the count of changes. We will write this count as [variable-length quantity](https://en.wikipedia.org/wiki/Variable-length_quantity) (VLQ) number. The count followed by change records.
+Chunk's content will be started with the count of changes. We will write this count as a [variable-length quantity](https://en.wikipedia.org/wiki/Variable-length_quantity) (VLQ) number. The count followed by change records.
 
 Each change is:
 
@@ -83,9 +83,9 @@ Each change is:
 * one byte for **month**;
 * two bytes for **year**;
 * VLQ number bytes representing size of bytes array which is encoded comment;
-* bytes which represent encoded comment string.
+* bytes which represent an encoded comment string.
 
-To store comments we will use [](xref:System.Text.Encoding.Unicode?title=Encoding.Unicode) encoding.
+To store comments, we will use [](xref:System.Text.Encoding.Unicode?title=Encoding.Unicode) encoding.
 
 Let's implement the `ReadContent` method:
 
@@ -117,7 +117,7 @@ protected override void ReadContent(MidiReader reader, ReadingSettings settings,
 }
 ```
 
-It is highly recommended that count of the bytes were read by this method is equal to the value passed to `size` parameter.
+It is highly recommended that the count of the bytes read by this method is equal to the value passed to `size` parameter.
 
 To be able to write the chunk we need to implement `WriteContent` method:
 
@@ -153,7 +153,7 @@ protected override void WriteContent(MidiWriter writer, WritingSettings settings
 }
 ```
 
-Every chunk starts with ID and its size. DryWetMIDI calls `GetContentSize` method of the `MidiChunk` to write its return value as chunk's size. You must calculate real size of the chunk's content in order to programs which will be read a MIDI file with your custom chunk will be able to skip it by advancing position of the reader on this size. Let's implement `GetContentSize`:
+Every chunk starts with an ID and its size. DryWetMIDI calls `GetContentSize` method of the `MidiChunk` to write its return value as chunk's size. You must calculate the real size of the chunk's content in order to programs which will read a MIDI file with your custom chunk will be able to skip it by advancing the position of the reader on this size. Let's implement `GetContentSize`:
 
 ```csharp
 protected override uint GetContentSize(WritingSettings settings)
@@ -183,7 +183,7 @@ public override MidiChunk Clone()
 }
 ```
 
-That's all! Custom chunk is completely implemented. See code sample below to know how to read and write it:
+That's all! The custom chunk is completely implemented. See code sample below to know how to read and write it:
 
 ```csharp
 // Create a history chunk and populate it by some changes

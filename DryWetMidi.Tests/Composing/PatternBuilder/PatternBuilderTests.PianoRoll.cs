@@ -62,6 +62,33 @@ namespace Melanchall.DryWetMidi.Tests.Composing
         }
 
         [Test]
+        public void PianoRoll_3()
+        {
+            var step = MusicalTimeSpan.Sixteenth;
+            var velocity = (SevenBitNumber)90;
+
+            var pattern = new PatternBuilder()
+                .SetNoteLength(step)
+                .SetVelocity(velocity)
+                .PianoRoll(@"
+                    57  ---- ---|
+                    47  --|- --|-
+                    44  |--- |--|
+                ")
+                .Build();
+
+            PatternTestUtilities.TestNotes(pattern, new[]
+            {
+                new NoteInfo(NoteName.GSharp, 2, step * 0, step, velocity),
+                new NoteInfo(NoteName.B, 2, step * 2, step, velocity),
+                new NoteInfo(NoteName.GSharp, 2, step * 4, step, velocity),
+                new NoteInfo(NoteName.B, 2, step * 6, step, velocity),
+                new NoteInfo(NoteName.A, 3, step * 7, step, velocity),
+                new NoteInfo(NoteName.GSharp, 2, step * 7, step, velocity),
+            });
+        }
+
+        [Test]
         public void PianoRoll_CustomSymbols()
         {
             var step = MusicalTimeSpan.Sixteenth;

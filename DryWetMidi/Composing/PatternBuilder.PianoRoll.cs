@@ -1,6 +1,7 @@
 ﻿using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Interaction;
 using System;
+using System.IO;
 using System.Linq;
 
 namespace Melanchall.DryWetMidi.Composing
@@ -15,6 +16,33 @@ namespace Melanchall.DryWetMidi.Composing
 
         #region Methods
 
+        /// <summary>
+        /// Inserts notes data by the specified piano roll string. More info in the
+        /// <see href="xref:a_composing_pattern#piano-roll">Pattern: Piano roll</see> article.
+        /// </summary>
+        /// <param name="pianoRoll">String that represents notes data as a piano roll.</param>
+        /// <param name="settings">Settings according to which a piano roll should be handled.</param>
+        /// <returns>The current <see cref="PatternBuilder"/>.</returns>
+        /// <exception cref="ArgumentException"><paramref name="pianoRoll"/> is <c>null</c>, a zero-length string,
+        /// contains only white space, or contains one or more invalid characters as defined by
+        /// <see cref="Path.InvalidPathChars"/>.</exception>
+        /// <exception cref="InvalidOperationException">
+        /// One of the following errors occurred:
+        /// <list type="bullet">
+        /// <item>
+        /// <description>Failed to parse a note.</description>
+        /// </item>
+        /// <item>
+        /// <description>Single-cell note can't be placed inside a multi-cell one.</description>
+        /// </item>
+        /// <item>
+        /// <description>Note can't be started while a previous one is not ended.</description>
+        /// </item>
+        /// <item>
+        /// <description>Note is not started.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public PatternBuilder PianoRoll(
             string pianoRoll,
             PianoRollSettings settings = null)
@@ -60,14 +88,23 @@ namespace Melanchall.DryWetMidi.Composing
             string line,
             out int dataStartIndex)
         {
-            var digitIndex = line.IndexOfAny(Digits);
-            var notePart = line.Substring(0, digitIndex + 1);
+            var notePartEndIndex = line.IndexOfAny(Digits);
+            var notePart = line.Substring(0, notePartEndIndex + 1);
 
             MusicTheory.Note note;
             if (!MusicTheory.Note.TryParse(notePart, out note))
-                throw new InvalidOperationException($"Failed to parse note from '{notePart}'.");
+            {
+                notePartEndIndex = Enumerable.Range(0, line.Length).FirstOrDefault(i => !char.IsDigit(line[i])) - 1;
+                notePart = line.Substring(0, notePartEndIndex + 1).Trim();
 
-            dataStartIndex = digitIndex + 1;
+                SevenBitNumber noteNumber;
+                if (!SevenBitNumber.TryParse(notePart, out noteNumber))
+                    throw new InvalidOperationException($"Failed to parse a note from '{notePart}'.");
+                else
+                    note = MusicTheory.Note.Get(noteNumber);
+            }
+
+            dataStartIndex = notePartEndIndex + 1;
 
             return note;
         }

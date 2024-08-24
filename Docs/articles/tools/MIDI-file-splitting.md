@@ -39,7 +39,7 @@ To split a file by objects the tool needs to determine the key of each object. O
 |[Note](xref:Melanchall.DryWetMidi.Interaction.ObjectType.Note)|Pair of the [channel](xref:Melanchall.DryWetMidi.Interaction.Note.Channel) and [note number](xref:Melanchall.DryWetMidi.Interaction.Note.NoteNumber) of a note.|
 |[Chord](xref:Melanchall.DryWetMidi.Interaction.ObjectType.Chord)|Collection of keys of the underlying [notes](xref:Melanchall.DryWetMidi.Interaction.Chord.Notes).|
 
-You can alter key calculation logic providing custom key selector. For example, to separate notes by only note number ignoring a note's channel:
+You can alter key calculation logic by providing custom key selector. For example, to separate notes by only note number ignoring a note's channel:
 
 ```csharp
 var newFiles = midiFile.SplitByObjects(
@@ -53,7 +53,7 @@ var newFiles = midiFile.SplitByObjects(
 
 Here a key will be resolved to `null` if an object is not an instance of the `Note`. `null` key means to use the default key calculation logic shown above.
 
-If key selection is complex, you may decide to implement a class for such key. Just for example, let's create the key class that identifies a chord by its shortest name:
+If key selection is complex, you may decide to implement a class for such a key. Just for example, let's create the key class that identifies a chord by its shortest name:
 
 ```csharp
 private sealed class ChordNameId
@@ -89,11 +89,11 @@ Please see documentation on [SplitByObjectsSettings](xref:Melanchall.DryWetMidi.
 
 ## SplitByGrid
 
-[SplitByGrid](xref:Melanchall.DryWetMidi.Tools.Splitter.SplitByGrid*) method splits MIDI file by the specified grid. Each file will preserve original tempo map and all parameters changes (like a control value or program changes). The image below shows general case of splitting a MIDI file by grid:
+[SplitByGrid](xref:Melanchall.DryWetMidi.Tools.Splitter.SplitByGrid*) method splits a MIDI file by the specified grid. Each file will preserve the original tempo map and all parameters changes (like a control value or program changes). The image below shows general case of splitting a MIDI file by grid:
 
 ![Split MIDI file by grid](images/Splitter/SplitFileByGrid.png)
 
-Splitting can be adjusted via `settings` parameter of the [SliceMidiFileSettings](xref:Melanchall.DryWetMidi.Tools.SliceMidiFileSettings) type. [SplitNotes](xref:Melanchall.DryWetMidi.Tools.SliceMidiFileSettings.SplitNotes) and [PreserveTimes](xref:Melanchall.DryWetMidi.Tools.SliceMidiFileSettings.PreserveTimes) properties described below. Please see all available properties in documentation for [SliceMidiFileSettings](xref:Melanchall.DryWetMidi.Tools.SliceMidiFileSettings).
+Splitting can be adjusted via the `settings` parameter of the [SliceMidiFileSettings](xref:Melanchall.DryWetMidi.Tools.SliceMidiFileSettings) type. [SplitNotes](xref:Melanchall.DryWetMidi.Tools.SliceMidiFileSettings.SplitNotes) and [PreserveTimes](xref:Melanchall.DryWetMidi.Tools.SliceMidiFileSettings.PreserveTimes) properties described below. Please see all available properties in documentation for [SliceMidiFileSettings](xref:Melanchall.DryWetMidi.Tools.SliceMidiFileSettings).
 
 ### SplitNotes
 
@@ -109,7 +109,7 @@ Splitting can be adjusted via `settings` parameter of the [SliceMidiFileSettings
 
 ## SkipPart
 
-[SkipPart](xref:Melanchall.DryWetMidi.Tools.Splitter.SkipPart*) method skips part of the specified length of a MIDI file and returns remaining part as an instance of [MidiFile](xref:Melanchall.DryWetMidi.Core.MidiFile). The image below shows general case of skipping a part of a MIDI file:
+[SkipPart](xref:Melanchall.DryWetMidi.Tools.Splitter.SkipPart*) method skips part of the specified length of a MIDI file and returns the remaining part as an instance of [MidiFile](xref:Melanchall.DryWetMidi.Core.MidiFile). The image below shows general case of skipping a part of a MIDI file:
 
 ![Skip part of a MIDI file](images/Splitter/SkipPart.png)
 

@@ -9,11 +9,11 @@ You can subclass from [Playback](xref:Melanchall.DryWetMidi.Multimedia.Playback)
 * [bool TryPlayEvent(MidiEvent midiEvent, object metadata)](xref:Melanchall.DryWetMidi.Multimedia.Playback.TryPlayEvent(Melanchall.DryWetMidi.Core.MidiEvent,System.Object))
 * [IEnumerable<TimedEvent> GetTimedEvents(ITimedObject timedObject)](xref:Melanchall.DryWetMidi.Multimedia.Playback.GetTimedEvents(Melanchall.DryWetMidi.Interaction.ITimedObject))
 
-Let's see what each method needed for.
+Let's see what each method is needed for.
 
 ## TryPlayEvent
 
-`TryPlayEvent` method called by playback each time an event should be played. Result value of the method tells playback whether the event was played or not. Default implementation of the method just sends a MIDI event to [output device](xref:Melanchall.DryWetMidi.Multimedia.Playback.OutputDevice) and returns `true`.
+`TryPlayEvent` method called by playback each time an event should be played. Result value of the method tells playback whether the event was played or not. Default implementation of the method just sends a MIDI event to an [output device](xref:Melanchall.DryWetMidi.Multimedia.Playback.OutputDevice) and returns `true`.
 
 So you can implement your own logic of playing a MIDI event. Please pay attention to the second parameter of the method – `metadata`. If input objects of playback implement [IMetadata](xref:Melanchall.DryWetMidi.Common.IMetadata) interface, metadata will be passed via that parameter. For example, you can subclass from `TimedEvent` and implement `IMetadata` on a new class, and then create your own playback on instances of that class.
 
@@ -64,4 +64,4 @@ var playback = new MyPlayback(timedEvents, tempoMap);
 
 ## GetTimedEvents
 
-`Playback` internally transforms all input objects to instances of `TimedEvent`. So if some input objects implement [ITimedObject](xref:Melanchall.DryWetMidi.Interaction.ITimedObject) but their type is unknown for DryWetMIDI, we need to override `GetTimedEvents` method to provide transformation of our custom timed object to collection of timed events. Of course those timed events can be subclasses of `TimedEvent` and implement `IMetadata` (see previous section) so metadata will correctly go between a playback's internals. By default the method returns empty collection.
+`Playback` internally transforms all input objects to instances of `TimedEvent`. So if some input objects implement [ITimedObject](xref:Melanchall.DryWetMidi.Interaction.ITimedObject) but their type is unknown for DryWetMIDI, we need to override `GetTimedEvents` method to provide transformation of our custom timed object to collection of timed events. Of course those timed events can be subclasses of `TimedEvent` and implement `IMetadata` (see previous section) so metadata will correctly go between a playback's internals. By default the method returns an empty collection.

@@ -10,11 +10,11 @@ All times and lengths in a MIDI file are presented as some long values in units 
 * [BarBeatTicksTimeSpan](#bars-beats-and-ticks) for time span in terms of number of bars, beats and ticks;
 * [BarBeatFractionTimeSpan](#bars-beats-and-fraction) for time span in terms of number of bars and fractional beats (for example, `0.5` beats);
 * [MusicalTimeSpan](#musical) for time span in terms of a fraction of the whole note length;
-* [MidiTimeSpan](#midi) exists for unification purposes and simply holds long value in units defined by the time division of a file.
+* [MidiTimeSpan](#midi) exists for unification purposes and simply holds a `long` value in units defined by the time division of a file.
 
-All time span classes implement [ITimeSpan](xref:Melanchall.DryWetMidi.Interaction.ITimeSpan) interface.
+All time span classes implement the [ITimeSpan](xref:Melanchall.DryWetMidi.Interaction.ITimeSpan) interface.
 
-To convert time span between different representations you should use [TimeConverter](xref:Melanchall.DryWetMidi.Interaction.TimeConverter) or [LengthConverter](xref:Melanchall.DryWetMidi.Interaction.LengthConverter) classes (these conversions require [tempo map](xref:Melanchall.DryWetMidi.Interaction.TempoMap) of a MIDI file). (You can use `LengthConverter` for time conversions too but with the `TimeConverter` you don't need to specify time where time span starts since it is always zero.)
+To convert time span between different representations you should use [TimeConverter](xref:Melanchall.DryWetMidi.Interaction.TimeConverter) or [LengthConverter](xref:Melanchall.DryWetMidi.Interaction.LengthConverter) classes (these conversions require the [tempo map](xref:Melanchall.DryWetMidi.Interaction.TempoMap) of a MIDI file). (You can use `LengthConverter` for time conversions too but with the `TimeConverter` you don't need to specify the time where time span starts since it is always zero.)
 
 Examples of time conversions:
 
@@ -66,7 +66,7 @@ MusicalTimeSpan musicalLengthFromMetric = LengthConverter.ConvertTo<MusicalTimeS
 long ticksFromMetricLength = LengthConverter.ConvertFrom(metricLength, time, tempoMap);
 ```
 
-You could notice that `LengthConverter`'s methods take a `time` as parameter. In general case MIDI file has changes of the tempo and time signature. Thus the same `long` (X) value can represent different amount of seconds, for example, depending on the time of an object with length of this X value. The methods above can take time either as `long` or as `ITimeSpan`.
+You could notice that `LengthConverter`'s methods have the `time` parameter. In general, a MIDI file has changes of the tempo and time signature. Thus the same `long` (X) value can represent different numbers of seconds, for example, depending on the time of an object with length of this X value. The methods above can take time either as `long` or as `ITimeSpan`.
 
 There are some useful methods in the [TimedObjectUtilities](xref:Melanchall.DryWetMidi.Interaction.TimedObjectUtilities) class. This class contains extension methods for types that implement the [ITimedObject](xref:Melanchall.DryWetMidi.Interaction.ITimedObject) interface – [TimedEvent](xref:Melanchall.DryWetMidi.Interaction.TimedEvent), [Note](xref:Melanchall.DryWetMidi.Interaction.Note) and [Chord](xref:Melanchall.DryWetMidi.Interaction.Chord). For example, you can get time of a timed event in hours, minutes, seconds with [TimeAs](xref:Melanchall.DryWetMidi.Interaction.TimedObjectUtilities.TimeAs``1(Melanchall.DryWetMidi.Interaction.ITimedObject,Melanchall.DryWetMidi.Interaction.TempoMap)) method:
 
@@ -106,7 +106,7 @@ var timeSpan2 = new MetricTimeSpan(0, 0, 10);
 ITimeSpan result = timeSpan1.Add(timeSpan2, TimeSpanMode.TimeLength);
 ```
 
-You need to specify mode of the operation. In the example above `TimeLength` is used which means that first time span represents a time and the second one represents a length. This information is needed for conversion engine when operands are of different types. There are also `TimeTime` and `LengthLength` modes.
+You need to specify the mode of the operation. In the example above `TimeLength` is used which means that the first time span represents a time and the second one represents a length. This information is needed for the conversion engine when operands are of different types. There are also `TimeTime` and `LengthLength` modes.
 
 You can also subtract one time span from another one:
 
@@ -125,7 +125,7 @@ ITimeSpan stretchedTimeSpan = new MetricTimeSpan(0, 0, 10).Multiply(2.5);
 ITimeSpan shrinkedTimeSpan = new BarBeatTicksTimeSpan(0, 2).Divide(2);
 ```
 
-There are some useful methods in the [TimeSpanUtilities](xref:Melanchall.DryWetMidi.Interaction.TimeSpanUtilities) class. These methods include `Parse` and `TryParse` ones that allows to parse a string to appropriate time span. Please read article corresponding to desired time span type to learn formats of strings that can be parsed to this type (use links at the start of this article).
+There are some useful methods in the [TimeSpanUtilities](xref:Melanchall.DryWetMidi.Interaction.TimeSpanUtilities) class. These methods include `Parse` and `TryParse` ones that allow parsing a string to appropriate time span. Please read the article corresponding to the desired time span type to learn formats of strings that can be parsed to this type (use links at the start of this article).
 
 ## Representations
 
@@ -237,7 +237,7 @@ where
   * `Numerator/Denominator` where **Numerator** and **Denominator** are nonnegative integer numbers; **Numerator** can be omitted assuming it's `1`;
   * `w`, `h`, `q`, `e` or `s` which mean whole, half, quarter, eighth or sixteenth note length respectively.  
 * **Tuplet** represents tuplet definition which is one of the following terms:  
-  * `[NotesCount : SpaceSize]` where **NotesCount** is positive integer count of notes with length defined by **Fraction** part; **SpaceSize** is the count of notes of normal length.
+  * `[NotesCount : SpaceSize]` where **NotesCount** is a positive integer count of notes with length defined by the **Fraction** part; **SpaceSize** is the count of notes of normal length.
   * `t` or `d` which mean triplet and duplet respectively.
 * **Dots** is any number of dots.
 
@@ -255,7 +255,7 @@ Examples:
 
 ### MIDI
 
-[MidiTimeSpan](xref:Melanchall.DryWetMidi.Interaction.MidiTimeSpan) exists for unification purposes and simply holds long value in units defined by the time division of a MIDI file.
+[MidiTimeSpan](xref:Melanchall.DryWetMidi.Interaction.MidiTimeSpan) exists for unification purposes and simply holds a `long` value in units defined by the time division of a MIDI file.
 
 Following strings can be parsed to `MidiTimeSpan`:
 

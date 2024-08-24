@@ -17,7 +17,7 @@ It's the simplest way. Just use built-in ways to import the official [DryWetMIDI
 
 ## Manual installation
 
-Instruction below shows how to integrate full version of the DryWetMIDI into your Unity project manually. If you want to use the [nativeless version](xref:a_develop_nativeless), just take an archive with _-nativeless_ suffix on the second step and skip third one.
+Instruction below shows how to integrate the full version of the DryWetMIDI into your Unity project manually. If you want to use the [nativeless version](xref:a_develop_nativeless), just take an archive with _-nativeless_ suffix on the second step and skip the third one.
 
 1. Create _Melanchall_ folder in project's _Assets_ folder and _DryWetMIDI_ subfolder within the _Melanchall_ one.
 2. Download the library main binary:
@@ -156,4 +156,4 @@ public class DemoScript : MonoBehaviour
 ```
 
 > [!IMPORTANT]
-> Pay attention to `OnApplicationQuit` method. You should always take care about disposing MIDI devices. Without it all resources taken by the device will live until GC collect them. In case of Unity it means Unity may need be reopened to be able to use the same devices again (for example, on Windows).
+> Pay attention to `OnApplicationQuit` method. You should always take care about disposing of MIDI devices. Without it all resources taken by the device will live until GC collects them. In the case of Unity, it means Unity may need to be reopened to be able to use the same devices again (for example, on Windows).

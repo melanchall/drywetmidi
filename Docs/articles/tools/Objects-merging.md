@@ -4,7 +4,7 @@ uid: a_obj_merging
 
 # Objects merging
 
-To merge nearby objects into one DryWetMIDI provides [Merger](xref:Melanchall.DryWetMidi.Tools.Merger) class. Quick example of merging in action:
+To merge nearby objects into one DryWetMIDI provides the [Merger](xref:Melanchall.DryWetMidi.Tools.Merger) class. Quick example of merging in action:
 
 ![Objects merging](images/Merger/MergeObjects/MergeObjects.png)
 
@@ -19,11 +19,11 @@ var newObjects = objects.MergeObjects(
     });
 ```
 
-Now objects will be merged if the distance between them from `0` to `1` second. So tolerance is maximum distance between two objects to consider them as nearby. Please take a look at how tolerance (`T`) affects process of merging:
+Now objects will be merged if the distance between them is from `0` to `1` second. So tolerance is the maximum distance between two objects to consider them as nearby. Please take a look at how tolerance (`T`) affects process of merging:
 
 ![Objects merging tolerance](images/Merger/MergeObjects/MergeObjects-Tolerance.png)
 
-Of course merging available not for objects collections only. You can use also [MergeObjects](xref:Melanchall.DryWetMidi.Tools.Merger.MergeObjects*) methods on [MidiFile](xref:Melanchall.DryWetMidi.Core.MidiFile) and [TrackChunk](xref:Melanchall.DryWetMidi.Core.TrackChunk):
+Of course merging is available not for objects collections only. You can use also [MergeObjects](xref:Melanchall.DryWetMidi.Tools.Merger.MergeObjects*) methods on [MidiFile](xref:Melanchall.DryWetMidi.Core.MidiFile) and [TrackChunk](xref:Melanchall.DryWetMidi.Core.TrackChunk):
 
 ```csharp
 midiFile.MergeObjects(
@@ -41,13 +41,13 @@ midiFile.MergeObjects(
     });
 ```
 
-The tool need to determine somehow whether two objects have the same "key" or not to take decision about merging them. For example, if we have a `C` note and `D` one, by default such notes are different in terms of their keys and thus won't be merged. To understand what the key is, please read [MIDI file splitting: SplitByObjects](xref:a_file_splitting#splitbyobjects) article.
+The tool needs to determine somehow whether two objects have the same "key" or not to make a decision about merging them. For example, if we have a `C` note and `D` one, by default such notes are different in terms of their keys and thus won't be merged. To understand what the key is, please read [MIDI file splitting: SplitByObjects](xref:a_file_splitting#splitbyobjects) article.
 
 Of course you can customize how objects are merged. For example, following picture shows how chords are merged using the default merging logic:
 
 ![Chords merging using default logic](images/Merger/MergeObjects/MergeObjects-Chords.png)
 
-Now let's change the logic: chords can be merged only if there are notes in them without gap. Also notes in result chord need to start at the same time and have the same length. Following image shows how chords will be merged:
+Now let's change the logic: chords can be merged only if there are notes in them without gaps. Also notes in the result chord need to start at the same time and have the same length. Following image shows how chords will be merged:
 
 ![Chords merging using custom logic](images/Merger/MergeObjects/MergeObjects-Chords-Custom.png)
 

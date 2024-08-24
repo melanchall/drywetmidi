@@ -46,7 +46,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
         /// <summary>
         /// The processing algorithm will consider that everything related to a chord can be changed.
-        /// this hint means minimum performance, i.e. the processing will take more time and consume more memory.
+        /// This hint means minimum performance, i.e. the processing will take more time and consume more memory.
         /// For maximum performance see <see cref="None"/> option.
         /// </summary>
         AllPropertiesCanBeChanged =

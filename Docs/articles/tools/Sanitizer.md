@@ -4,7 +4,7 @@ uid: a_sanitizer
 
 # Sanitizer
 
-DryWetMIDI provides a tool to clean a MIDI file up removing redundant events and so on – [Sanitizer](xref:Melanchall.DryWetMidi.Tools.Sanitizer). The process can be run via the [Sanitize](xref:Melanchall.DryWetMidi.Tools.Sanitizer.Sanitize*) extension method:
+DryWetMIDI provides a tool to clean a MIDI file by removing redundant events and so on – [Sanitizer](xref:Melanchall.DryWetMidi.Tools.Sanitizer). The process can be run via the [Sanitize](xref:Melanchall.DryWetMidi.Tools.Sanitizer.Sanitize*) extension method:
 
 ```csharp
 midiFile.Sanitize();
@@ -37,6 +37,58 @@ Image below shows how you can get rid of short notes with this option:
 ![SanitizingSettings.NoteMinLength](images/Sanitizer/NoteMinLength.png)
 
 Please notice that how notes will be detected is handled by the [NoteDetectionSettings](xref:Melanchall.DryWetMidi.Tools.SanitizingSettings.NoteDetectionSettings) property. You can read more about the [NoteDetectionSettings](xref:Melanchall.DryWetMidi.Interaction.NoteDetectionSettings) class in the [Getting objects: GetNotes: Settings](xref:a_getting_objects#settings) article.
+
+### NoteMinVelocity
+
+[NoteMinVelocity](xref:Melanchall.DryWetMidi.Tools.SanitizingSettings.NoteMinVelocity) property of the [SanitizingSettings](xref:Melanchall.DryWetMidi.Tools.SanitizingSettings) sets a minimum velocity for notes within an input file. All notes with velocity below this value will be removed. The default value is zero which means notes can have any velocity (zero or above).
+
+For example, if we have such a file with two notes (with numbers of `70` and `50`):
+
+```csharp
+var midiFile = new MidiFile(
+    new TrackChunk(
+        new NoteOnEvent((SevenBitNumber)70, (SevenBitNumber)50),
+        new NoteOffEvent((SevenBitNumber)70, (SevenBitNumber)0),
+        new NoteOnEvent((SevenBitNumber)50, (SevenBitNumber)40),
+        new NoteOffEvent((SevenBitNumber)50, (SevenBitNumber)0)));
+```
+
+then this instruction will remove the second one:
+
+```csharp
+midiFile.Sanitize(new SanitizingSettings
+{
+    NoteMinVelocity = (SevenBitNumber)45
+});
+```
+
+### RemoveDuplicatedNotes
+
+[RemoveDuplicatedNotes](xref:Melanchall.DryWetMidi.Tools.SanitizingSettings.RemoveDuplicatedNotes) property of the [SanitizingSettings](xref:Melanchall.DryWetMidi.Tools.SanitizingSettings) determines whether duplicated notes should be removed or not. The default value is `true`.
+
+Notes are considered duplicated when they are meet all the following conditions:
+
+1. the same note number;
+2. the same channel;
+3. the same time;
+4. the same length.
+
+For example, if we have such a file with two notes (with number of `70` and length of `20`):
+
+```csharp
+var midiFile = new MidiFile(
+    new TrackChunk(
+        new NoteOnEvent((SevenBitNumber)70, (SevenBitNumber)50),
+        new NoteOnEvent((SevenBitNumber)70, (SevenBitNumber)40),
+        new NoteOffEvent((SevenBitNumber)70, (SevenBitNumber)0) { DeltaTime = 20 },
+        new NoteOffEvent((SevenBitNumber)70, (SevenBitNumber)0)));
+```
+
+then this instruction will remove the second one:
+
+```csharp
+midiFile.Sanitize();
+```
 
 ### RemoveEmptyTrackChunks
 
@@ -105,6 +157,10 @@ var midiFile = new MidiFile(
 
 [RemoveDuplicatedPitchBendEvents](xref:Melanchall.DryWetMidi.Tools.SanitizingSettings.RemoveDuplicatedPitchBendEvents) does the same actions as the [RemoveDuplicatedSetTempoEvents](#removeduplicatedsettempoevents) or [RemoveDuplicatedTimeSignatureEvents](#removeduplicatedtimesignatureevents) one but for duplicated [Pitch Bend](xref:Melanchall.DryWetMidi.Core.PitchBendEvent) events.
 
+### RemoveDuplicatedSequenceTrackNameEvents
+
+[RemoveDuplicatedSequenceTrackNameEvents](xref:Melanchall.DryWetMidi.Tools.SanitizingSettings.RemoveDuplicatedSequenceTrackNameEvents) does the same actions as the [RemoveDuplicatedSetTempoEvents](#removeduplicatedsettempoevents) or [RemoveDuplicatedTimeSignatureEvents](#removeduplicatedtimesignatureevents) one but for duplicated [Sequence/Track Name](xref:Melanchall.DryWetMidi.Core.SequenceTrackNameEvent) events.
+
 ### RemoveEventsOnUnusedChannels
 
 If a MIDI file doesn't contain notes on some channel, we can safely remove all events on that channel. For example, the [Control Change](xref:Melanchall.DryWetMidi.Core.ControlChangeEvent) event on channel `2` in the following example is redundant:
@@ -118,7 +174,7 @@ var midiFile = new MidiFile(
         new NoteOffEvent { Channel = (FourBitNumber)5 }));
 ```
 
-[RemoveEventsOnUnusedChannels](xref:Melanchall.DryWetMidi.Tools.SanitizingSettings.RemoveEventsOnUnusedChannels) property turns on or off removing such channel events that have no effect since ther are no notes on those channels:
+[RemoveEventsOnUnusedChannels](xref:Melanchall.DryWetMidi.Tools.SanitizingSettings.RemoveEventsOnUnusedChannels) property turns on or off removing such channel events that have no effect since there are no notes on those channels:
 
 ![SanitizingSettings.RemoveEventsOnUnusedChannels](images/Sanitizer/RemoveEventsOnUnusedChannels.png)
 
@@ -145,3 +201,5 @@ var midiFile = new MidiFile(
         new TextEvent("B") { DeltaTime = 10 },
         new TextEvent("C") { DeltaTime = 15 }));
 ```
+
+The default value is `false` since this behavior can be undesired.

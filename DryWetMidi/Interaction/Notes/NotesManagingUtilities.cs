@@ -207,6 +207,8 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <param name="eventsCollection"><see cref="EventsCollection"/> that holds notes to manage.</param>
         /// <param name="settings">Settings according to which notes should be detected and built.</param>
+        /// <param name="timedEventDetectionSettings">Settings according to which timed events should be detected
+        /// and built to construct notes.</param>
         /// <param name="comparer">Comparer that will be used to order objects on enumerating and saving objects
         /// back to the <paramref name="eventsCollection"/> via <see cref="TimedObjectsManager{TObject}.SaveChanges"/>
         /// or <see cref="TimedObjectsManager{TObject}.Dispose()"/>.</param>
@@ -238,6 +240,8 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <param name="trackChunk"><see cref="TrackChunk"/> that holds notes to manage.</param>
         /// <param name="settings">Settings according to which notes should be detected and built.</param>
+        /// <param name="timedEventDetectionSettings">Settings according to which timed events should be detected
+        /// and built to construct notes.</param>
         /// <param name="comparer">Comparer that will be used to order objects on enumerating and saving objects
         /// back to the <paramref name="trackChunk"/> via <see cref="TimedObjectsManager{TObject}.SaveChanges"/>
         /// or <see cref="TimedObjectsManager{TObject}.Dispose()"/>.</param>
@@ -261,6 +265,8 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <param name="midiEvents">Collection of <see cref="MidiEvent"/> to search for notes.</param>
         /// <param name="settings">Settings according to which notes should be detected and built.</param>
+        /// <param name="timedEventDetectionSettings">Settings according to which timed events should be detected
+        /// and built to construct notes.</param>
         /// <returns>Collection of notes contained in <paramref name="midiEvents"/> ordered by time.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="midiEvents"/> is <c>null</c>.</exception>
         /// <seealso cref="GetObjectsUtilities"/>
@@ -286,6 +292,8 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <param name="eventsCollection"><see cref="EventsCollection"/> to search for notes.</param>
         /// <param name="settings">Settings according to which notes should be detected and built.</param>
+        /// <param name="timedEventDetectionSettings">Settings according to which timed events should be detected
+        /// and built to construct notes.</param>
         /// <returns>Collection of notes contained in <paramref name="eventsCollection"/> ordered by time.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="eventsCollection"/> is <c>null</c>.</exception>
         /// <seealso cref="ProcessNotes(EventsCollection, Action{Note}, Predicate{Note}, NoteDetectionSettings, TimedEventDetectionSettings, NoteProcessingHint)"/>
@@ -315,6 +323,8 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <param name="trackChunk"><see cref="TrackChunk"/> to search for notes.</param>
         /// <param name="settings">Settings according to which notes should be detected and built.</param>
+        /// <param name="timedEventDetectionSettings">Settings according to which timed events should be detected
+        /// and built to construct notes.</param>
         /// <returns>Collection of notes contained in <paramref name="trackChunk"/> ordered by time.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="trackChunk"/> is <c>null</c>.</exception>
         /// <seealso cref="ProcessNotes(TrackChunk, Action{Note}, Predicate{Note}, NoteDetectionSettings, TimedEventDetectionSettings, NoteProcessingHint)"/>
@@ -338,6 +348,8 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <param name="trackChunks">Track chunks to search for notes.</param>
         /// <param name="settings">Settings according to which notes should be detected and built.</param>
+        /// <param name="timedEventDetectionSettings">Settings according to which timed events should be detected
+        /// and built to construct notes.</param>
         /// <returns>Collection of notes contained in <paramref name="trackChunks"/> ordered by time.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="trackChunks"/> is <c>null</c>.</exception>
         /// <seealso cref="ProcessNotes(IEnumerable{TrackChunk}, Action{Note}, Predicate{Note}, NoteDetectionSettings, TimedEventDetectionSettings, NoteProcessingHint)"/>
@@ -376,6 +388,8 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <param name="file"><see cref="MidiFile"/> to search for notes.</param>
         /// <param name="settings">Settings according to which notes should be detected and built.</param>
+        /// <param name="timedEventDetectionSettings">Settings according to which timed events should be detected
+        /// and built to construct notes.</param>
         /// <returns>Collection of notes contained in <paramref name="file"/> ordered by time.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="file"/> is <c>null</c>.</exception>
         /// <seealso cref="ProcessNotes(MidiFile, Action{Note}, Predicate{Note}, NoteDetectionSettings, TimedEventDetectionSettings, NoteProcessingHint)"/>
@@ -395,11 +409,14 @@ namespace Melanchall.DryWetMidi.Interaction
 
         /// <summary>
         /// Performs the specified action on each <see cref="Note"/> contained in the <see cref="EventsCollection"/>.
+        /// More info in the <see href="xref:a_processing_objects#processnotes">Processing objects: ProcessNotes</see> article.
         /// </summary>
         /// <param name="eventsCollection"><see cref="EventsCollection"/> to search for notes to process.</param>
         /// <param name="action">The action to perform on each <see cref="Note"/> contained in the
         /// <paramref name="eventsCollection"/>.</param>
         /// <param name="settings">Settings according to which notes should be detected and built.</param>
+        /// <param name="timedEventDetectionSettings">Settings according to which timed events should be detected
+        /// and built to construct notes.</param>
         /// <param name="hint">Hint which tells the processing algorithm how it can optimize its performance.
         /// The default value is <see cref="NoteProcessingHint.Default"/>.</param>
         /// <remarks>
@@ -435,12 +452,15 @@ namespace Melanchall.DryWetMidi.Interaction
 
         /// <summary>
         /// Performs the specified action on each <see cref="Note"/> contained in the <see cref="EventsCollection"/>.
+        /// More info in the <see href="xref:a_processing_objects#processnotes">Processing objects: ProcessNotes</see> article.
         /// </summary>
         /// <param name="eventsCollection"><see cref="EventsCollection"/> to search for notes to process.</param>
         /// <param name="action">The action to perform on each <see cref="Note"/> contained in the
         /// <paramref name="eventsCollection"/>.</param>
         /// <param name="match">The predicate that defines the conditions of the <see cref="Note"/> to process.</param>
         /// <param name="settings">Settings according to which notes should be detected and built.</param>
+        /// <param name="timedEventDetectionSettings">Settings according to which timed events should be detected
+        /// and built to construct notes.</param>
         /// <param name="hint">Hint which tells the processing algorithm how it can optimize its performance.
         /// The default value is <see cref="NoteProcessingHint.Default"/>.</param>
         /// <remarks>
@@ -481,11 +501,14 @@ namespace Melanchall.DryWetMidi.Interaction
 
         /// <summary>
         /// Performs the specified action on each <see cref="Note"/> contained in the <see cref="TrackChunk"/>.
+        /// More info in the <see href="xref:a_processing_objects#processnotes">Processing objects: ProcessNotes</see> article.
         /// </summary>
         /// <param name="trackChunk"><see cref="TrackChunk"/> to search for notes to process.</param>
         /// <param name="action">The action to perform on each <see cref="Note"/> contained in the
         /// <paramref name="trackChunk"/>.</param>
         /// <param name="settings">Settings according to which notes should be detected and built.</param>
+        /// <param name="timedEventDetectionSettings">Settings according to which timed events should be detected
+        /// and built to construct notes.</param>
         /// <param name="hint">Hint which tells the processing algorithm how it can optimize its performance.
         /// The default value is <see cref="NoteProcessingHint.Default"/>.</param>
         /// <remarks>
@@ -521,12 +544,15 @@ namespace Melanchall.DryWetMidi.Interaction
 
         /// <summary>
         /// Performs the specified action on each <see cref="Note"/> contained in the <see cref="TrackChunk"/>.
+        /// More info in the <see href="xref:a_processing_objects#processnotes">Processing objects: ProcessNotes</see> article.
         /// </summary>
         /// <param name="trackChunk"><see cref="TrackChunk"/> to search for notes to process.</param>
         /// <param name="action">The action to perform on each <see cref="Note"/> contained in the
         /// <paramref name="trackChunk"/>.</param>
         /// <param name="match">The predicate that defines the conditions of the <see cref="Note"/> to process.</param>
         /// <param name="settings">Settings according to which notes should be detected and built.</param>
+        /// <param name="timedEventDetectionSettings">Settings according to which timed events should be detected
+        /// and built to construct notes.</param>
         /// <param name="hint">Hint which tells the processing algorithm how it can optimize its performance.
         /// The default value is <see cref="NoteProcessingHint.Default"/>.</param>
         /// <remarks>
@@ -566,12 +592,15 @@ namespace Melanchall.DryWetMidi.Interaction
 
         /// <summary>
         /// Performs the specified action on each <see cref="Note"/> contained in the collection of
-        /// <see cref="TrackChunk"/>.
+        /// <see cref="TrackChunk"/>. More info in the
+        /// <see href="xref:a_processing_objects#processnotes">Processing objects: ProcessNotes</see> article.
         /// </summary>
         /// <param name="trackChunks">Collection of <see cref="TrackChunk"/> to search for notes to process.</param>
         /// <param name="action">The action to perform on each <see cref="Note"/> contained in the
         /// <paramref name="trackChunks"/>.</param>
         /// <param name="settings">Settings according to which notes should be detected and built.</param>
+        /// <param name="timedEventDetectionSettings">Settings according to which timed events should be detected
+        /// and built to construct notes.</param>
         /// <param name="hint">Hint which tells the processing algorithm how it can optimize its performance.
         /// The default value is <see cref="NoteProcessingHint.Default"/>.</param>
         /// <remarks>
@@ -607,13 +636,16 @@ namespace Melanchall.DryWetMidi.Interaction
 
         /// <summary>
         /// Performs the specified action on each <see cref="Note"/> contained in the collection of
-        /// <see cref="TrackChunk"/>.
+        /// <see cref="TrackChunk"/>. More info in the
+        /// <see href="xref:a_processing_objects#processnotes">Processing objects: ProcessNotes</see> article.
         /// </summary>
         /// <param name="trackChunks">Collection of <see cref="TrackChunk"/> to search for notes to process.</param>
         /// <param name="action">The action to perform on each <see cref="Note"/> contained in the
         /// <paramref name="trackChunks"/>.</param>
         /// <param name="match">The predicate that defines the conditions of the <see cref="Note"/> to process.</param>
         /// <param name="settings">Settings according to which notes should be detected and built.</param>
+        /// <param name="timedEventDetectionSettings">Settings according to which timed events should be detected
+        /// and built to construct notes.</param>
         /// <param name="hint">Hint which tells the processing algorithm how it can optimize its performance.
         /// The default value is <see cref="NoteProcessingHint.Default"/>.</param>
         /// <remarks>
@@ -657,11 +689,14 @@ namespace Melanchall.DryWetMidi.Interaction
 
         /// <summary>
         /// Performs the specified action on each <see cref="Note"/> contained in the <see cref="MidiFile"/>.
+        /// More info in the <see href="xref:a_processing_objects#processnotes">Processing objects: ProcessNotes</see> article.
         /// </summary>
         /// <param name="file"><see cref="MidiFile"/> to search for notes to process.</param>
         /// <param name="action">The action to perform on each <see cref="Note"/> contained in the
         /// <paramref name="file"/>.</param>
         /// <param name="settings">Settings according to which notes should be detected and built.</param>
+        /// <param name="timedEventDetectionSettings">Settings according to which timed events should be detected
+        /// and built to construct notes.</param>
         /// <param name="hint">Hint which tells the processing algorithm how it can optimize its performance.
         /// The default value is <see cref="NoteProcessingHint.Default"/>.</param>
         /// <remarks>
@@ -697,12 +732,15 @@ namespace Melanchall.DryWetMidi.Interaction
 
         /// <summary>
         /// Performs the specified action on each <see cref="Note"/> contained in the <see cref="MidiFile"/>.
+        /// More info in the <see href="xref:a_processing_objects#processnotes">Processing objects: ProcessNotes</see> article.
         /// </summary>
         /// <param name="file"><see cref="MidiFile"/> to search for notes to process.</param>
         /// <param name="action">The action to perform on each <see cref="Note"/> contained in the
         /// <paramref name="file"/>.</param>
         /// <param name="match">The predicate that defines the conditions of the <see cref="Note"/> to process.</param>
         /// <param name="settings">Settings according to which notes should be detected and built.</param>
+        /// <param name="timedEventDetectionSettings">Settings according to which timed events should be detected
+        /// and built to construct notes.</param>
         /// <param name="hint">Hint which tells the processing algorithm how it can optimize its performance.
         /// The default value is <see cref="NoteProcessingHint.Default"/>.</param>
         /// <remarks>
@@ -742,10 +780,13 @@ namespace Melanchall.DryWetMidi.Interaction
         }
 
         /// <summary>
-        /// Removes all the <see cref="Note"/> that match the conditions defined by the specified predicate.
+        /// Removes all notes from the <see cref="EventsCollection"/>.
+        /// More info in the <see href="xref:a_removing_objects#removenotes">Removing objects: RemoveNotes</see> article.
         /// </summary>
         /// <param name="eventsCollection"><see cref="EventsCollection"/> to search for notes to remove.</param>
         /// <param name="settings">Settings according to which notes should be detected and built.</param>
+        /// <param name="timedEventDetectionSettings">Settings according to which timed events should be detected
+        /// and built to construct notes.</param>
         /// <returns>Count of removed notes.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="eventsCollection"/> is <c>null</c>.</exception>
         /// <seealso cref="TimedObjectUtilities.RemoveObjects(EventsCollection, ObjectType, ObjectDetectionSettings)"/>
@@ -760,11 +801,14 @@ namespace Melanchall.DryWetMidi.Interaction
         }
 
         /// <summary>
-        /// Removes all the <see cref="Note"/> that match the conditions defined by the specified predicate.
+        /// Removes notes that match the specified conditions from the <see cref="EventsCollection"/>.
+        /// More info in the <see href="xref:a_removing_objects#removenotes">Removing objects: RemoveNotes</see> article.
         /// </summary>
         /// <param name="eventsCollection"><see cref="EventsCollection"/> to search for notes to remove.</param>
         /// <param name="match">The predicate that defines the conditions of the <see cref="Note"/> to remove.</param>
         /// <param name="settings">Settings according to which notes should be detected and built.</param>
+        /// <param name="timedEventDetectionSettings">Settings according to which timed events should be detected
+        /// and built to construct notes.</param>
         /// <returns>Count of removed notes.</returns>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occurred:</para>
@@ -802,10 +846,13 @@ namespace Melanchall.DryWetMidi.Interaction
         }
 
         /// <summary>
-        /// Removes all the <see cref="Note"/> that match the conditions defined by the specified predicate.
+        /// Removes all notes from the <see cref="TrackChunk"/>.
+        /// More info in the <see href="xref:a_removing_objects#removenotes">Removing objects: RemoveNotes</see> article.
         /// </summary>
         /// <param name="trackChunk"><see cref="TrackChunk"/> to search for notes to remove.</param>
         /// <param name="settings">Settings according to which notes should be detected and built.</param>
+        /// <param name="timedEventDetectionSettings">Settings according to which timed events should be detected
+        /// and built to construct notes.</param>
         /// <returns>Count of removed notes.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="trackChunk"/> is <c>null</c>.</exception>
         /// <seealso cref="TimedObjectUtilities.RemoveObjects(TrackChunk, ObjectType, ObjectDetectionSettings)"/>
@@ -820,11 +867,14 @@ namespace Melanchall.DryWetMidi.Interaction
         }
 
         /// <summary>
-        /// Removes all the <see cref="Note"/> that match the conditions defined by the specified predicate.
+        /// Removes notes that match the specified conditions from the <see cref="TrackChunk"/>.
+        /// More info in the <see href="xref:a_removing_objects#removenotes">Removing objects: RemoveNotes</see> article.
         /// </summary>
         /// <param name="trackChunk"><see cref="TrackChunk"/> to search for notes to remove.</param>
         /// <param name="match">The predicate that defines the conditions of the <see cref="Note"/> to remove.</param>
         /// <param name="settings">Settings according to which notes should be detected and built.</param>
+        /// <param name="timedEventDetectionSettings">Settings according to which timed events should be detected
+        /// and built to construct notes.</param>
         /// <returns>Count of removed notes.</returns>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occurred:</para>
@@ -851,10 +901,13 @@ namespace Melanchall.DryWetMidi.Interaction
         }
 
         /// <summary>
-        /// Removes all the <see cref="Note"/> that match the conditions defined by the specified predicate.
+        /// Removes all notes from the collection of <see cref="EventsCollection"/>.
+        /// More info in the <see href="xref:a_removing_objects#removenotes">Removing objects: RemoveNotes</see> article.
         /// </summary>
         /// <param name="trackChunks">Collection of <see cref="TrackChunk"/> to search for notes to remove.</param>
         /// <param name="settings">Settings according to which notes should be detected and built.</param>
+        /// <param name="timedEventDetectionSettings">Settings according to which timed events should be detected
+        /// and built to construct notes.</param>
         /// <returns>Count of removed notes.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="trackChunks"/> is <c>null</c>.</exception>
         /// <seealso cref="TimedObjectUtilities.RemoveObjects(IEnumerable{TrackChunk}, ObjectType, ObjectDetectionSettings)"/>
@@ -869,11 +922,14 @@ namespace Melanchall.DryWetMidi.Interaction
         }
 
         /// <summary>
-        /// Removes all the <see cref="Note"/> that match the conditions defined by the specified predicate.
+        /// Removes notes that match the specified conditions from the collection of <see cref="TrackChunk"/>.
+        /// More info in the <see href="xref:a_removing_objects#removenotes">Removing objects: RemoveNotes</see> article.
         /// </summary>
         /// <param name="trackChunks">Collection of <see cref="TrackChunk"/> to search for notes to remove.</param>
         /// <param name="match">The predicate that defines the conditions of the <see cref="Note"/> to remove.</param>
         /// <param name="settings">Settings according to which notes should be detected and built.</param>
+        /// <param name="timedEventDetectionSettings">Settings according to which timed events should be detected
+        /// and built to construct notes.</param>
         /// <returns>Count of removed notes.</returns>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occurred:</para>
@@ -911,10 +967,13 @@ namespace Melanchall.DryWetMidi.Interaction
         }
 
         /// <summary>
-        /// Removes all the <see cref="Note"/> that match the conditions defined by the specified predicate.
+        /// Removes all notes from the <see cref="MidiFile"/>.
+        /// More info in the <see href="xref:a_removing_objects#removenotes">Removing objects: RemoveNotes</see> article.
         /// </summary>
         /// <param name="file"><see cref="MidiFile"/> to search for notes to remove.</param>
         /// <param name="settings">Settings according to which notes should be detected and built.</param>
+        /// <param name="timedEventDetectionSettings">Settings according to which timed events should be detected
+        /// and built to construct notes.</param>
         /// <returns>Count of removed notes.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="file"/> is <c>null</c>.</exception>
         /// <seealso cref="TimedObjectUtilities.RemoveObjects(MidiFile, ObjectType, ObjectDetectionSettings)"/>
@@ -929,11 +988,14 @@ namespace Melanchall.DryWetMidi.Interaction
         }
 
         /// <summary>
-        /// Removes all the <see cref="Note"/> that match the conditions defined by the specified predicate.
+        /// Removes notes that match the specified conditions from the <see cref="MidiFile"/>.
+        /// More info in the <see href="xref:a_removing_objects#removenotes">Removing objects: RemoveNotes</see> article.
         /// </summary>
         /// <param name="file"><see cref="MidiFile"/> to search for notes to remove.</param>
         /// <param name="match">The predicate that defines the conditions of the <see cref="Note"/> to remove.</param>
         /// <param name="settings">Settings according to which notes should be detected and built.</param>
+        /// <param name="timedEventDetectionSettings">Settings according to which timed events should be detected
+        /// and built to construct notes.</param>
         /// <returns>Count of removed notes.</returns>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occurred:</para>
