@@ -1,21 +1,21 @@
 ﻿<!DOCTYPE html>
 <!--[if IE]><![endif]-->
 <html>
-  
+
   <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Pattern | DryWetMIDI </title>
-    <meta name="viewport" content="width=device-width">
-    <meta name="title" content="Pattern | DryWetMIDI ">
-    <meta name="generator" content="docfx 2.59.4.0">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+      <title>Pattern | DryWetMIDI </title>
+      <meta name="viewport" content="width=device-width">
+      <meta name="title" content="Pattern | DryWetMIDI ">
     
-    <link rel="shortcut icon" href="../../images/favicon.png">
-    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
-    <link rel="stylesheet" href="../../styles/docfx.css">
-    <link rel="stylesheet" href="../../styles/main.css">
-    <meta property="docfx:navrel" content="../../toc.html">
-    <meta property="docfx:tocrel" content="../toc.html">
+    
+      <link rel="shortcut icon" href="../../images/favicon.png">
+      <link rel="stylesheet" href="../../styles/docfx.vendor.min.css">
+      <link rel="stylesheet" href="../../styles/docfx.css">
+      <link rel="stylesheet" href="../../styles/main.css">
+      <meta property="docfx:navrel" content="../../toc.html">
+      <meta property="docfx:tocrel" content="../toc.html">
     
     <meta property="docfx:rel" content="../../">
     
@@ -23,7 +23,7 @@
   <body data-spy="scroll" data-target="#affix" data-offset="120">
     <div id="wrapper">
       <header>
-        
+
         <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
           <div class="container">
             <div class="navbar-header">
@@ -33,7 +33,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
               </button>
-              
+
               <a class="navbar-brand" href="../../index.html">
                 <img id="logo" class="svg" src="../../images/logo.png" alt="">
               </a>
@@ -47,7 +47,7 @@
             </div>
           </div>
         </nav>
-        
+
         <div class="subnav navbar navbar-default">
           <div class="container hide-when-search" id="breadcrumb">
             <ul class="breadcrumb">
@@ -57,7 +57,7 @@
         </div>
       </header>
       <div class="container body-content">
-        
+
         <div id="search-results">
           <div class="search-list">Search Results for <span></span></div>
           <div class="sr-items">
@@ -67,7 +67,7 @@
         </div>
       </div>
       <div role="main" class="container body-content hide-when-search">
-        
+
         <div class="sidenav hide-when-search">
           <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
           <div class="sidetoggle collapse" id="sidetoggle">
@@ -79,7 +79,7 @@
             <article class="content wrap" id="_content" data-uid="a_composing_pattern">
 <h1 id="pattern">Pattern</h1>
 
-<p>DryWetMIDI provides a way to create a MIDI file in more &quot;musical&quot; manner. The key class here is the <a class="xref" href="../../api/Melanchall.DryWetMidi.Composing.PatternBuilder.html">PatternBuilder</a> which allows to build a musical composition. <code>PatternBuilder</code> provides a fluent interface to program the music. For example, you can insert a note like this:</p>
+<p>DryWetMIDI provides a way to create a MIDI file in a more &quot;musical&quot; manner. The key class here is the <a class="xref" href="../../api/Melanchall.DryWetMidi.Composing.PatternBuilder.html">PatternBuilder</a> which allows to build a musical composition. <code>PatternBuilder</code> provides a fluent interface to program the music. For example, you can insert a note like this:</p>
 <pre><code class="lang-csharp">using Melanchall.DryWetMidi.Composing;
 
 var patternBuilder = new PatternBuilder()
@@ -105,7 +105,7 @@ var patternBuilder = new PatternBuilder()
     // All the following notes will have quarter length
     .Note(Octave.Get(2).A);
 </code></pre>
-<p>Please take a look at entire API provided by <a class="xref" href="../../api/Melanchall.DryWetMidi.Composing.PatternBuilder.html">PatternBuilder</a>.</p>
+<p>Please take a look at the entire API provided by <a class="xref" href="../../api/Melanchall.DryWetMidi.Composing.PatternBuilder.html">PatternBuilder</a>.</p>
 <p>Following example shows how to create first four bars of Beethoven's 'Moonlight Sonata':</p>
 <pre><code class="lang-csharp">// Define a chord for bass part which is just an octave
 var bassChord = new[] { Interval.Twelve };
@@ -198,21 +198,166 @@ var pattern = new PatternBuilder()
 </code></pre>
 <p><a class="xref" href="../../api/Melanchall.DryWetMidi.Composing.PatternBuilder.html#Melanchall_DryWetMidi_Composing_PatternBuilder_Build">Build</a> method returns an instance of <a class="xref" href="../../api/Melanchall.DryWetMidi.Composing.Pattern.html">Pattern</a>. Pattern can be transformed or altered by methods in <a class="xref" href="../../api/Melanchall.DryWetMidi.Composing.PatternUtilities.html">PatternUtilities</a>.</p>
 <p>Pattern can be then saved to <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a> (via <a class="xref" href="../../api/Melanchall.DryWetMidi.Composing.Pattern.html#Melanchall_DryWetMidi_Composing_Pattern_ToFile_">ToFile</a> method) or <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a> (via <a class="xref" href="../../api/Melanchall.DryWetMidi.Composing.Pattern.html#Melanchall_DryWetMidi_Composing_Pattern_ToTrackChunk_">ToTrackChunk</a> method). You need to provide a <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.TempoMap.html">tempo map</a>. Also you can optionally specify the channel that should be set to events. The default channel is <code>0</code>.</p>
-<p>Also please see <a class="xref" href="../../api/Melanchall.DryWetMidi.Composing.Pattern.html#extensionmethods">Extension methods</a> section of the <a class="xref" href="../../api/Melanchall.DryWetMidi.Composing.Pattern.html">Pattern</a> API.</p>
+<p>Also please see the <a class="xref" href="../../api/Melanchall.DryWetMidi.Composing.Pattern.html#extensionmethods">Extension methods</a> section of the <a class="xref" href="../../api/Melanchall.DryWetMidi.Composing.Pattern.html">Pattern</a> API.</p>
+<h2 id="piano-roll">Piano roll</h2>
+<p>There is a way to create simple patterns easily – via the <a class="xref" href="../../api/Melanchall.DryWetMidi.Composing.PatternBuilder.html#Melanchall_DryWetMidi_Composing_PatternBuilder_PianoRoll_">PianoRoll</a> method. To quickly dive into the method, just take a look at this example:</p>
+<pre><code class="lang-csharp">var midiFile = new PatternBuilder()
+    .SetNoteLength(MusicalTimeSpan.Eighth)
+    .PianoRoll(@&quot;
+        F#2   ||||||||
+        D2    --|---|-
+        C2    |---|---&quot;)
+    .Repeat(9)
+    .Build()
+    .ToFile(TempoMap.Default, (FourBitNumber)9);
+midiFile.Write(&quot;pianoroll-simple.mid&quot;, true);
+</code></pre>
+<p>Each line starts with a note. Think about the line as a piano roll lane in your favorite DAW. So notes on the first line will be <em>F#2</em>, on the second line – <em>D2</em> and on the third one – <em>C2</em>. Each character then <strong>except spaces</strong> means one cell. The length of a cell is determined by the <a class="xref" href="../../api/Melanchall.DryWetMidi.Composing.PatternBuilder.html#Melanchall_DryWetMidi_Composing_PatternBuilder_SetNoteLength_">SetNoteLength</a> method.</p>
+<p><code>'|'</code> symbol means a single-cell note, i.e. the note's length is equal to a cell's length. So each note in the example will be an 8th one. By the way, you can alter this symbol with the <a class="xref" href="../../api/Melanchall.DryWetMidi.Composing.PianoRollSettings.html#Melanchall_DryWetMidi_Composing_PianoRollSettings_SingleCellNoteSymbol">SingleCellNoteSymbol</a> property of the <a class="xref" href="../../api/Melanchall.DryWetMidi.Composing.PianoRollSettings.html">PianoRollSettings</a> passed to the <a class="xref" href="../../api/Melanchall.DryWetMidi.Composing.PatternBuilder.html#Melanchall_DryWetMidi_Composing_PatternBuilder_PianoRoll_">PianoRoll</a> method.</p>
+<p>Hyphen (<code>'-'</code>) means nothing except a step of a cell's length. We will call it as <strong>fill symbol</strong>.</p>
+<div class="IMPORTANT">
+<h5>Important</h5>
+<p>Spaces will be cut from the piano roll string before processing. So it's required to use a fill symbol to specify an empty space (rest) to get correct results. For example, this pattern:</p>
+<pre><code class="lang-text">F2   ||||
+D2     |
+C2   |
+</code></pre>
+<p>will be transformed by the piano roll processing engine to these strings:</p>
+<pre><code class="lang-text">F2||||
+D2|
+C2|
+</code></pre>
+<p>which is probably not what you want.</p>
+</div>
+<p>Be aware that fill symbol must not be the same as those used for notes and must not be a part of a collection of custom actions symbols (see <a href="#customization">Customization</a> section further).</p>
+<p>The example above demonstrates how to create a simple drum rhythm – standard 8th note groove – using General MIDI drum map. You can listen to the file produced – <a href="files/pianoroll-simple.mid">pianoroll-simple.mid</a>. By the way, you can use notes numbers instead of letters and octaves (and don't forget about string interpolation along with meaningful variables names):</p>
+<pre><code class="lang-csharp">var bassDrum = 36;
+var snareDrum = 38;
+var closedHiHat = 42;
+
+var midiFile = new PatternBuilder()
+    .SetNoteLength(MusicalTimeSpan.Eighth)
+    .PianoRoll(@$&quot;
+        {closedHiHat}   ||||||||
+          {snareDrum}   --|---|-
+           {bassDrum}   |---|---&quot;)
+    .Repeat(9)
+    .Build()
+    .ToFile(TempoMap.Default, (FourBitNumber)9);
+midiFile.Write(&quot;pianoroll-simple.mid&quot;, true);
+</code></pre>
+<p>But let's take a more interesting example which we looked at above – 'Moonlight Sonata'. The same first four bars of it can be constructed via piano roll like this:</p>
+<pre><code class="lang-csharp">var midiFile = new PatternBuilder()
+    .SetNoteLength(MusicalTimeSpan.Eighth.Triplet())
+    .PianoRoll(@&quot;
+        F#4   ∙∙∙∙∙∙∙∙∙∙∙∙   ∙∙∙∙∙∙∙∙∙∙∙∙   ∙∙∙∙∙∙∙∙|∙∙|   ∙∙|∙∙∙∙∙∙∙∙∙
+        E4    ∙∙|∙∙|∙∙|∙∙|   ∙∙|∙∙|∙∙|∙∙|   ∙∙|∙∙|∙∙∙∙∙∙   ∙∙∙∙∙|∙∙∙∙∙∙
+        D#4   ∙∙∙∙∙∙∙∙∙∙∙∙   ∙∙∙∙∙∙∙∙∙∙∙∙   ∙∙∙∙∙∙∙∙∙∙∙∙   ∙∙∙∙∙∙∙∙|∙∙|
+        C#4   ∙|∙∙|∙∙|∙∙|∙   ∙|∙∙|∙∙|∙∙|∙   ∙|∙∙|∙∙∙∙∙∙∙   ∙∙∙∙|∙∙|∙∙∙∙
+        C4    ∙∙∙∙∙∙∙∙∙∙∙∙   ∙∙∙∙∙∙∙∙∙∙∙∙   ∙∙∙∙∙∙∙∙∙∙∙∙   ∙|∙∙∙∙∙∙∙∙|∙
+        D4    ∙∙∙∙∙∙∙∙∙∙∙∙   ∙∙∙∙∙∙∙∙∙∙∙∙   ∙∙∙∙∙∙∙|∙∙|∙   ∙∙∙∙∙∙∙∙∙∙∙∙
+        A3    ∙∙∙∙∙∙∙∙∙∙∙∙   ∙∙∙∙∙∙∙∙∙∙∙∙   |∙∙|∙∙|∙∙|∙∙   ∙∙∙∙∙∙∙∙∙∙∙∙
+        G#3   |∙∙|∙∙|∙∙|∙∙   |∙∙|∙∙|∙∙|∙∙   ∙∙∙∙∙∙∙∙∙∙∙∙   |∙∙|∙∙|∙∙∙∙∙
+        F#3   ∙∙∙∙∙∙∙∙∙∙∙∙   ∙∙∙∙∙∙∙∙∙∙∙∙   ∙∙∙∙∙∙∙∙∙∙∙∙   ∙∙∙∙∙∙∙∙∙|∙∙
+                                                                       
+        C#3   [==========]   ∙∙∙∙∙∙∙∙∙∙∙∙   ∙∙∙∙∙∙∙∙∙∙∙∙   ∙∙∙∙∙∙∙∙∙∙∙∙
+        B2    ∙∙∙∙∙∙∙∙∙∙∙∙   [==========]   ∙∙∙∙∙∙∙∙∙∙∙∙   ∙∙∙∙∙∙∙∙∙∙∙∙
+        A2    ∙∙∙∙∙∙∙∙∙∙∙∙   ∙∙∙∙∙∙∙∙∙∙∙∙   [====]∙∙∙∙∙∙   ∙∙∙∙∙∙∙∙∙∙∙∙
+        G#2   ∙∙∙∙∙∙∙∙∙∙∙∙   ∙∙∙∙∙∙∙∙∙∙∙∙   ∙∙∙∙∙∙∙∙∙∙∙∙   [====][====]
+        F#2   ∙∙∙∙∙∙∙∙∙∙∙∙   ∙∙∙∙∙∙∙∙∙∙∙∙   ∙∙∙∙∙∙[====]   ∙∙∙∙∙∙∙∙∙∙∙∙
+        C#2   [==========]   ∙∙∙∙∙∙∙∙∙∙∙∙   ∙∙∙∙∙∙∙∙∙∙∙∙   ∙∙∙∙∙∙∙∙∙∙∙∙
+        B1    ∙∙∙∙∙∙∙∙∙∙∙∙   [==========]   ∙∙∙∙∙∙∙∙∙∙∙∙   ∙∙∙∙∙∙∙∙∙∙∙∙
+        A1    ∙∙∙∙∙∙∙∙∙∙∙∙   ∙∙∙∙∙∙∙∙∙∙∙∙   [====]∙∙∙∙∙∙   ∙∙∙∙∙∙∙∙∙∙∙∙
+        G#1   ∙∙∙∙∙∙∙∙∙∙∙∙   ∙∙∙∙∙∙∙∙∙∙∙∙   ∙∙∙∙∙∙∙∙∙∙∙∙   [====][====]
+        F#1   ∙∙∙∙∙∙∙∙∙∙∙∙   ∙∙∙∙∙∙∙∙∙∙∙∙   ∙∙∙∙∙∙[====]   ∙∙∙∙∙∙∙∙∙∙∙∙&quot;)
+    .Build()
+    .ToFile(TempoMap.Create(Tempo.FromBeatsPerMinute(69)));
+midiFile.Write(&quot;pianoroll-moonlight-sonata.mid&quot;, true);
+</code></pre>
+<p>And here is the file – <a href="files/pianoroll-moonlight-sonata.mid">pianoroll-moonlight-sonata.mid</a>.</p>
+<p>Along with usage of spaces to separate bars visually for more readability you can see several new symbols in this example:</p>
+<ul>
+<li><code>'.'</code> and <code>'='</code> are both just fill symbols.</li>
+<li><code>'['</code> and <code>']'</code> mean the start and the end of a multi-cell note correspondingly. These symbols can be changed too, see properties <a class="xref" href="../../api/Melanchall.DryWetMidi.Composing.PianoRollSettings.html#Melanchall_DryWetMidi_Composing_PianoRollSettings_MultiCellNoteStartSymbol">MultiCellNoteStartSymbol</a> and <a class="xref" href="../../api/Melanchall.DryWetMidi.Composing.PianoRollSettings.html#Melanchall_DryWetMidi_Composing_PianoRollSettings_MultiCellNoteEndSymbol">MultiCellNoteEndSymbol</a> of the <a class="xref" href="../../api/Melanchall.DryWetMidi.Composing.PianoRollSettings.html">PianoRollSettings</a> that you can pass to the <a class="xref" href="../../api/Melanchall.DryWetMidi.Composing.PatternBuilder.html#Melanchall_DryWetMidi_Composing_PatternBuilder_PianoRoll_">PianoRoll</a> method.</li>
+</ul>
+<p>Well, we can define long notes (multi-cell) along with single-cell ones. As for length of such notes, let's see at this note:</p>
+<pre><code class="lang-text">[====]
+</code></pre>
+<p>The length will be of six cells:</p>
+<pre><code class="lang-text">[====]
+123456
+</code></pre>
+<p>So if one cell means 8th triplet time span in our example, the length of the note will be <code>1/2</code>.</p>
+<h2 id="customization">Customization</h2>
+<p>It's time to discuss how you can adjust piano roll processing. First of all, as we said before, you can set custom symbols for a single-cell note, start and end of a multi-cell note:</p>
+<pre><code class="lang-csharp">var midiFile = new PatternBuilder()
+    .SetNoteLength(MusicalTimeSpan.Eighth.Triplet())
+    .PianoRoll(@&quot;
+        F#4 ∙∙@∙∙@∙∙∙∙∙∙
+        E4  ∙∙∙(~~~~~~~)&quot;, new PianoRollSettings
+        {
+            SingleCellNoteSymbol = '@',
+            MultiCellNoteStartSymbol = '(',
+            MultiCellNoteEndSymbol = ')',
+        })
+    .Build()
+    .ToFile(TempoMap.Default);
+</code></pre>
+<p>So the way to customize the piano roll algorithm is to pass <a class="xref" href="../../api/Melanchall.DryWetMidi.Composing.PianoRollSettings.html">PianoRollSettings</a>. But you can also define your own actions triggered by specified symbols. Let's take a look at the following example (yes, drums again):</p>
+<pre><code class="lang-csharp">var pianoRollSettings = new PianoRollSettings
+{
+    CustomActions = new Dictionary&lt;char, Action&lt;Melanchall.DryWetMidi.MusicTheory.Note, PatternBuilder&gt;&gt;
+    {
+        ['*'] = (note, pianoRollBuilder) =&gt; pianoRollBuilder
+            .Note(note, velocity: (SevenBitNumber)(pianoRollBuilder.Velocity / 2)),
+        ['║'] = (note, pianoRollBuilder) =&gt; pianoRollBuilder
+            .Note(note, pianoRollBuilder.NoteLength.Divide(2))
+            .Note(note, pianoRollBuilder.NoteLength.Divide(2), (SevenBitNumber)(pianoRollBuilder.Velocity / 2)),
+        ['!'] = (note, pianoRollBuilder) =&gt; pianoRollBuilder
+            .StepBack(MusicalTimeSpan.ThirtySecond)
+            .Note(note, MusicalTimeSpan.ThirtySecond, (SevenBitNumber)(pianoRollBuilder.Velocity / 3))
+            .Note(note),
+    }
+};
+
+var bassDrum = 36;
+var snareDrum = 38;
+var closedHiHat = 42;
+
+var midiFile = new PatternBuilder()
+    .SetNoteLength(MusicalTimeSpan.Eighth)
+    .PianoRoll(@$&quot;
+        {closedHiHat}   -------|   ║║|----|
+          {snareDrum}   -*|---!-   --|--*!|
+           {bassDrum}   |--║|---   |-|║|---&quot;,
+        pianoRollSettings)
+    .Repeat(9)
+    .Build()
+    .ToFile(TempoMap.Default, (FourBitNumber)9);
+midiFile.Write(&quot;pianoroll-custom.mid&quot;, true);
+</code></pre>
+<p>And here the file – <a href="files/pianoroll-custom.mid">pianoroll-custom.mid</a>. But what we have in the piano roll string:</p>
+<ul>
+<li><code>'*'</code> – ghost note (played with half of the current velocity);</li>
+<li><code>'║'</code> – double note (two notes, each with length of half of the single-cell note);</li>
+<li><code>'!'</code> – flam (ghost thirthy-second note right before main beat).</li>
+</ul>
+<p>Right now it's possible to specify single-cell actions only. A way to put custom multi-cell actions will be implemented in the next release.</p>
+
 </article>
           </div>
-          
+
           <div class="hidden-sm col-md-2" role="complementary">
             <div class="sideaffix">
               <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
-                <h5>In This Article</h5>
+                <h5>In this article</h5>
                 <div></div>
               </nav>
             </div>
           </div>
         </div>
       </div>
-      
+
       <footer>
         <div class="grad-bottom"></div>
         <div class="footer">
@@ -220,14 +365,14 @@ var pattern = new PatternBuilder()
             <span class="pull-right">
               <a href="#top">Back to top</a>
             </span>
-            2024 / Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
-            
+      2024 / Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
+      
           </div>
         </div>
       </footer>
     </div>
-    
-    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+
+    <script type="text/javascript" src="../../styles/docfx.vendor.min.js"></script>
     <script type="text/javascript" src="../../styles/docfx.js"></script>
     <script type="text/javascript" src="../../styles/main.js"></script>
   </body>

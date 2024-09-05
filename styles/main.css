@@ -190,7 +190,7 @@ hr {
     color: rgb(227, 227, 227);
 }
 
-.hljs-keyword, .hljs-selector-tag, .hljs-type {
+.hljs-keyword, .hljs-selector-tag, .hljs-type, .hljs-attr, .hljs-attribute, .hljs-literal, .hljs-meta, .hljs-number, .hljs-operator, .hljs-selector-attr, .hljs-selector-class, .hljs-selector-id, .hljs-variable, .hljs-built_in {
     color: #569cd6;
 }
 
@@ -208,6 +208,14 @@ hr {
 
 .hljs-string {
     color: #ce9178;
+}
+
+.hljs-subst {
+    color: rgb(227, 227, 227);
+}
+
+pre code.hljs {
+    padding: 0;
 }
 
 .toc .nav > li > a {
@@ -496,7 +504,7 @@ img[src*="logo.png"], img[src*="build/status"], img[src*="img.shields.io"] {
 .alert-danger {
     color: #F8F8F8;
     border-radius: 0px;
-    background-color: transparent;
+    background-color: #EC550811;
     border-color: #EC5508;
 }
 
@@ -532,4 +540,8 @@ img.text-image {
     background-color: transparent;
     padding: 0px;
     border: none;
+}
+
+.alert > pre {
+    margin-top: 10px;
 }

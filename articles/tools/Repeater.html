@@ -1,21 +1,21 @@
 ﻿<!DOCTYPE html>
 <!--[if IE]><![endif]-->
 <html>
-  
+
   <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Repeater | DryWetMIDI </title>
-    <meta name="viewport" content="width=device-width">
-    <meta name="title" content="Repeater | DryWetMIDI ">
-    <meta name="generator" content="docfx 2.59.4.0">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+      <title>Repeater | DryWetMIDI </title>
+      <meta name="viewport" content="width=device-width">
+      <meta name="title" content="Repeater | DryWetMIDI ">
     
-    <link rel="shortcut icon" href="../../images/favicon.png">
-    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
-    <link rel="stylesheet" href="../../styles/docfx.css">
-    <link rel="stylesheet" href="../../styles/main.css">
-    <meta property="docfx:navrel" content="../../toc.html">
-    <meta property="docfx:tocrel" content="../toc.html">
+    
+      <link rel="shortcut icon" href="../../images/favicon.png">
+      <link rel="stylesheet" href="../../styles/docfx.vendor.min.css">
+      <link rel="stylesheet" href="../../styles/docfx.css">
+      <link rel="stylesheet" href="../../styles/main.css">
+      <meta property="docfx:navrel" content="../../toc.html">
+      <meta property="docfx:tocrel" content="../toc.html">
     
     <meta property="docfx:rel" content="../../">
     
@@ -23,7 +23,7 @@
   <body data-spy="scroll" data-target="#affix" data-offset="120">
     <div id="wrapper">
       <header>
-        
+
         <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
           <div class="container">
             <div class="navbar-header">
@@ -33,7 +33,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
               </button>
-              
+
               <a class="navbar-brand" href="../../index.html">
                 <img id="logo" class="svg" src="../../images/logo.png" alt="">
               </a>
@@ -47,7 +47,7 @@
             </div>
           </div>
         </nav>
-        
+
         <div class="subnav navbar navbar-default">
           <div class="container hide-when-search" id="breadcrumb">
             <ul class="breadcrumb">
@@ -57,7 +57,7 @@
         </div>
       </header>
       <div class="container body-content">
-        
+
         <div id="search-results">
           <div class="search-list">Search Results for <span></span></div>
           <div class="sr-items">
@@ -67,7 +67,7 @@
         </div>
       </div>
       <div role="main" class="container body-content hide-when-search">
-        
+
         <div class="sidenav hide-when-search">
           <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
           <div class="sidetoggle collapse" id="sidetoggle">
@@ -81,7 +81,7 @@
 
 <p>With DryWetMIDI you can easily repeat groups of objects or entire MIDI files using the dedicated tool – <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.Repeater.html">Repeater</a>. Quick example of repeating a group of different objects two times:</p>
 <p><img src="images/Repeater/Repeat.png" alt="Objects repeating"></p>
-<p>It's a simple case. To calculate the distance to move each new part by, the tool looks at the value of the <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.RepeatingSettings.html#Melanchall_DryWetMidi_Tools_RepeatingSettings_ShiftPolicy">ShiftPolicy</a> property of the settings passed to <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.Repeater.html#Melanchall_DryWetMidi_Tools_Repeater_Repeat_">Repeat</a> methods. The default value is <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.ShiftPolicy.html#Melanchall_DryWetMidi_Tools_ShiftPolicy_ShiftByMaxTime">ShiftPolicy.ShiftByMaxTime</a> and you can see how this options works on the image above – the tool takes maximum time among all objects and shifts objects within each new part by this value.</p>
+<p>It's a simple case. To calculate the distance to move each new part by, the tool looks at the value of the <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.RepeatingSettings.html#Melanchall_DryWetMidi_Tools_RepeatingSettings_ShiftPolicy">ShiftPolicy</a> property of the settings passed to <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.Repeater.html#Melanchall_DryWetMidi_Tools_Repeater_Repeat_">Repeat</a> methods. The default value is <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.ShiftPolicy.html#Melanchall_DryWetMidi_Tools_ShiftPolicy_ShiftByMaxTime">ShiftPolicy.ShiftByMaxTime</a> and you can see how this option works on the image above – the tool takes maximum time among all objects and shifts objects within each new part by this value.</p>
 <p>But you can use fixed value to shift objects by. You need to specify <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.ShiftPolicy.html#Melanchall_DryWetMidi_Tools_ShiftPolicy_ShiftByFixedValue">ShiftPolicy.ShiftByFixedValue</a> for shift policy and set <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.RepeatingSettings.html#Melanchall_DryWetMidi_Tools_RepeatingSettings_Shift">Shift</a> property of the settings. So times of objects won't affect distance calculation now and data will be shifted by the value of the <code>Shift</code> property:</p>
 <pre><code class="lang-csharp">var newFile = midiFile.Repeat(2, new RepeatingSettings
 {
@@ -90,9 +90,9 @@
 });
 </code></pre>
 <p><img src="images/Repeater/ShiftByFixedValue.png" alt="Shift objects by fixed value"></p>
-<p>Also <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.RepeatingSettings.html">RepeatingSettings</a> class provides options to round shift value (calculated by max time or constant one). It can be useful, for example, when objects are not aligned with the grid. Please take a look at the following image:</p>
+<p>Also the <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.RepeatingSettings.html">RepeatingSettings</a> class provides options to round a shift value (calculated by max time or constant one). It can be useful, for example, when objects are not aligned with the grid. Please take a look at the following image:</p>
 <p><img src="images/Repeater/RoundingUp.png" alt="Round shift up"></p>
-<p>Here the data doesn't reach bar line time, but we want to repeat the objects with aligning to bars lines. Obviously we can't use <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.ShiftPolicy.html#Melanchall_DryWetMidi_Tools_ShiftPolicy_ShiftByMaxTime">ShiftPolicy.ShiftByMaxTime</a> option here. But we can't use <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.ShiftPolicy.html#Melanchall_DryWetMidi_Tools_ShiftPolicy_ShiftByFixedValue">ShiftPolicy.ShiftByFixedValue</a> too because we don't know the length of data in general case. We just want to repeat the objects and be sure the start of the objects group is always on a bar line. So we can write this code:</p>
+<p>Here the data doesn't reach bar line time, but we want to repeat the objects by aligning to bars lines. Obviously we can't use the <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.ShiftPolicy.html#Melanchall_DryWetMidi_Tools_ShiftPolicy_ShiftByMaxTime">ShiftPolicy.ShiftByMaxTime</a> option here. But we can't use <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.ShiftPolicy.html#Melanchall_DryWetMidi_Tools_ShiftPolicy_ShiftByFixedValue">ShiftPolicy.ShiftByFixedValue</a> too because we don't know the length of data in the general case. We just want to repeat the objects and be sure the start of the objects group is always on a bar line. So we can write this code:</p>
 <pre><code class="lang-csharp">var newFile = midiFile.Repeat(2, new RepeatingSettings
 {
     ShiftPolicy = ShiftPolicy.ShiftByMaxTime,
@@ -138,20 +138,21 @@
     ShiftPolicy = ShiftPolicy.None
 });
 </code></pre>
+
 </article>
           </div>
-          
+
           <div class="hidden-sm col-md-2" role="complementary">
             <div class="sideaffix">
               <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
-                <h5>In This Article</h5>
+                <h5>In this article</h5>
                 <div></div>
               </nav>
             </div>
           </div>
         </div>
       </div>
-      
+
       <footer>
         <div class="grad-bottom"></div>
         <div class="footer">
@@ -159,14 +160,14 @@
             <span class="pull-right">
               <a href="#top">Back to top</a>
             </span>
-            2024 / Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
-            
+      2024 / Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
+      
           </div>
         </div>
       </footer>
     </div>
-    
-    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+
+    <script type="text/javascript" src="../../styles/docfx.vendor.min.js"></script>
     <script type="text/javascript" src="../../styles/docfx.js"></script>
     <script type="text/javascript" src="../../styles/main.js"></script>
   </body>

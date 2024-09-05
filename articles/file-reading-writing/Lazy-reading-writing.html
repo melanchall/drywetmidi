@@ -1,21 +1,21 @@
 ﻿<!DOCTYPE html>
 <!--[if IE]><![endif]-->
 <html>
-  
+
   <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Lazy reading/writing | DryWetMIDI </title>
-    <meta name="viewport" content="width=device-width">
-    <meta name="title" content="Lazy reading/writing | DryWetMIDI ">
-    <meta name="generator" content="docfx 2.59.4.0">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+      <title>Lazy reading/writing | DryWetMIDI </title>
+      <meta name="viewport" content="width=device-width">
+      <meta name="title" content="Lazy reading/writing | DryWetMIDI ">
     
-    <link rel="shortcut icon" href="../../images/favicon.png">
-    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
-    <link rel="stylesheet" href="../../styles/docfx.css">
-    <link rel="stylesheet" href="../../styles/main.css">
-    <meta property="docfx:navrel" content="../../toc.html">
-    <meta property="docfx:tocrel" content="../toc.html">
+    
+      <link rel="shortcut icon" href="../../images/favicon.png">
+      <link rel="stylesheet" href="../../styles/docfx.vendor.min.css">
+      <link rel="stylesheet" href="../../styles/docfx.css">
+      <link rel="stylesheet" href="../../styles/main.css">
+      <meta property="docfx:navrel" content="../../toc.html">
+      <meta property="docfx:tocrel" content="../toc.html">
     
     <meta property="docfx:rel" content="../../">
     
@@ -23,7 +23,7 @@
   <body data-spy="scroll" data-target="#affix" data-offset="120">
     <div id="wrapper">
       <header>
-        
+
         <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
           <div class="container">
             <div class="navbar-header">
@@ -33,7 +33,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
               </button>
-              
+
               <a class="navbar-brand" href="../../index.html">
                 <img id="logo" class="svg" src="../../images/logo.png" alt="">
               </a>
@@ -47,7 +47,7 @@
             </div>
           </div>
         </nav>
-        
+
         <div class="subnav navbar navbar-default">
           <div class="container hide-when-search" id="breadcrumb">
             <ul class="breadcrumb">
@@ -57,7 +57,7 @@
         </div>
       </header>
       <div class="container body-content">
-        
+
         <div id="search-results">
           <div class="search-list">Search Results for <span></span></div>
           <div class="sr-items">
@@ -67,7 +67,7 @@
         </div>
       </div>
       <div role="main" class="container body-content hide-when-search">
-        
+
         <div class="sidenav hide-when-search">
           <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
           <div class="sidetoggle collapse" id="sidetoggle">
@@ -80,7 +80,7 @@
 <h1 id="lazy-readingwriting">Lazy reading/writing</h1>
 
 <h2 id="reading">Reading</h2>
-<p>When you call <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.MidiFile.html#Melanchall_DryWetMidi_Core_MidiFile_Read_">MidiFile.Read</a> method, the entire structure of a MIDI file will be put to memory as an object of the <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a> type. It means that more or less big MIDI file will span significant amount of bytes in the memory. Although it's much easy to work with such fully initialized object, memory consumption can be a critical parameter for your application.</p>
+<p>When you call the <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.MidiFile.html#Melanchall_DryWetMidi_Core_MidiFile_Read_">MidiFile.Read</a> method, the entire structure of a MIDI file will be put to memory as an object of the <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a> type. It means that a more or less big MIDI file will span a significant number of bytes in the memory. Although it's much easier to work with such fully initialized objects, memory consumption can be a critical parameter for your application.</p>
 <p>To solve the problem DryWetMIDI provides <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.MidiFile.html#Melanchall_DryWetMidi_Core_MidiFile_ReadLazy_">MidiFile.ReadLazy</a> methods which return an instance of the <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.MidiTokensReader.html">MidiTokensReader</a> class that can read a MIDI file sequentially token by token:</p>
 <pre><code class="lang-csharp">using (var tokensReader = MidiFile.ReadLazy(&quot;test.mid&quot;))
 {
@@ -104,7 +104,7 @@
     }
 }
 </code></pre>
-<p>With this approach each call of <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.MidiTokensReader.html#Melanchall_DryWetMidi_Core_MidiTokensReader_ReadToken">ReadToken</a> method will read next portion of data from a MIDI file (in fact, the internal reader in DryWetMIDI uses the buffer of <code>4096</code> bytes by default, the size of this buffer can be adjusted via <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.ReaderSettings.html#Melanchall_DryWetMidi_Core_ReaderSettings_BufferSize">BufferSize</a> property of <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.ReadingSettings.html#Melanchall_DryWetMidi_Core_ReadingSettings_ReaderSettings">ReadingSettings.ReaderSettings</a>). So the memory consumption will be almost always constant (despite a MIDI file size) and low. But of course there's the price – slower reading and much more difficult implementation of some logic and algorithms needed for your application. Also many high level tools provided by DryWetMIDI will be unavailable.</p>
+<p>With this approach each call of <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.MidiTokensReader.html#Melanchall_DryWetMidi_Core_MidiTokensReader_ReadToken">ReadToken</a> method will read next portion of data from a MIDI file (in fact, the internal reader in DryWetMIDI uses the buffer of <code>4096</code> bytes by default, the size of this buffer can be adjusted via <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.ReaderSettings.html#Melanchall_DryWetMidi_Core_ReaderSettings_BufferSize">BufferSize</a> property of <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.ReadingSettings.html#Melanchall_DryWetMidi_Core_ReadingSettings_ReaderSettings">ReadingSettings.ReaderSettings</a>). So, the memory consumption will be almost always constant (despite a MIDI file size) and low. But of course, there's the price – slower reading and much more difficult implementation of some logic and algorithms needed for your application. Also, many high level tools provided by DryWetMIDI will be unavailable.</p>
 <p>Some useful methods can be found in the <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.MidiTokensReaderUtilities.html">MidiTokensReaderUtilities</a> class. Following example shows how you can calculate count of all <em>A#</em> notes for each track chunk (<a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.GetObjectsUtilities.html#Melanchall_DryWetMidi_Interaction_GetObjectsUtilities_EnumerateObjects_">EnumerateObjects</a> method also used):</p>
 <pre><code class="lang-csharp">bool IsTrackChunkHeaderToken(MidiToken token) =&gt;
     token is ChunkHeaderToken chunkHeaderToken &amp;&amp;
@@ -186,21 +186,22 @@ using (var objectsWriter = new TimedObjectsWriter(tokensWriter))
     objectsWriter.WriteObjects(GetObjects());
 }
 </code></pre>
-<p>The code above writes one million notes to a MIDI file. Of course you can combine <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.MidiTokensReader.html">MidiTokensReader</a>, <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.GetObjectsUtilities.html#Melanchall_DryWetMidi_Interaction_GetObjectsUtilities_EnumerateObjects_">EnumerateObjects</a>, <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.MidiTokensWriter.html">MidiTokensWriter</a> and <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.TimedObjectsWriter.html">TimedObjectsWriter</a> to process MIDI objects transforming a MIDI file into another one.</p>
+<p>The code above writes one million notes to a MIDI file. Of course, you can combine <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.MidiTokensReader.html">MidiTokensReader</a>, <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.GetObjectsUtilities.html#Melanchall_DryWetMidi_Interaction_GetObjectsUtilities_EnumerateObjects_">EnumerateObjects</a>, <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.MidiTokensWriter.html">MidiTokensWriter</a> and <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.TimedObjectsWriter.html">TimedObjectsWriter</a> to process MIDI objects transforming a MIDI file into another one.</p>
+
 </article>
           </div>
-          
+
           <div class="hidden-sm col-md-2" role="complementary">
             <div class="sideaffix">
               <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
-                <h5>In This Article</h5>
+                <h5>In this article</h5>
                 <div></div>
               </nav>
             </div>
           </div>
         </div>
       </div>
-      
+
       <footer>
         <div class="grad-bottom"></div>
         <div class="footer">
@@ -208,14 +209,14 @@ using (var objectsWriter = new TimedObjectsWriter(tokensWriter))
             <span class="pull-right">
               <a href="#top">Back to top</a>
             </span>
-            2024 / Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
-            
+      2024 / Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
+      
           </div>
         </div>
       </footer>
     </div>
-    
-    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+
+    <script type="text/javascript" src="../../styles/docfx.vendor.min.js"></script>
     <script type="text/javascript" src="../../styles/docfx.js"></script>
     <script type="text/javascript" src="../../styles/main.js"></script>
   </body>

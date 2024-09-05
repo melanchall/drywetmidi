@@ -1,21 +1,21 @@
 ﻿<!DOCTYPE html>
 <!--[if IE]><![endif]-->
 <html>
-  
+
   <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Objects splitting | DryWetMIDI </title>
-    <meta name="viewport" content="width=device-width">
-    <meta name="title" content="Objects splitting | DryWetMIDI ">
-    <meta name="generator" content="docfx 2.59.4.0">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+      <title>Objects splitting | DryWetMIDI </title>
+      <meta name="viewport" content="width=device-width">
+      <meta name="title" content="Objects splitting | DryWetMIDI ">
     
-    <link rel="shortcut icon" href="../../images/favicon.png">
-    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
-    <link rel="stylesheet" href="../../styles/docfx.css">
-    <link rel="stylesheet" href="../../styles/main.css">
-    <meta property="docfx:navrel" content="../../toc.html">
-    <meta property="docfx:tocrel" content="../toc.html">
+    
+      <link rel="shortcut icon" href="../../images/favicon.png">
+      <link rel="stylesheet" href="../../styles/docfx.vendor.min.css">
+      <link rel="stylesheet" href="../../styles/docfx.css">
+      <link rel="stylesheet" href="../../styles/main.css">
+      <meta property="docfx:navrel" content="../../toc.html">
+      <meta property="docfx:tocrel" content="../toc.html">
     
     <meta property="docfx:rel" content="../../">
     
@@ -23,7 +23,7 @@
   <body data-spy="scroll" data-target="#affix" data-offset="120">
     <div id="wrapper">
       <header>
-        
+
         <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
           <div class="container">
             <div class="navbar-header">
@@ -33,7 +33,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
               </button>
-              
+
               <a class="navbar-brand" href="../../index.html">
                 <img id="logo" class="svg" src="../../images/logo.png" alt="">
               </a>
@@ -47,7 +47,7 @@
             </div>
           </div>
         </nav>
-        
+
         <div class="subnav navbar navbar-default">
           <div class="container hide-when-search" id="breadcrumb">
             <ul class="breadcrumb">
@@ -57,7 +57,7 @@
         </div>
       </header>
       <div class="container body-content">
-        
+
         <div id="search-results">
           <div class="search-list">Search Results for <span></span></div>
           <div class="sr-items">
@@ -67,7 +67,7 @@
         </div>
       </div>
       <div role="main" class="container body-content hide-when-search">
-        
+
         <div class="sidenav hide-when-search">
           <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
           <div class="sidetoggle collapse" id="sidetoggle">
@@ -86,14 +86,14 @@
 <li><a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.Splitter.html#Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsByGrid_">SplitObjectsByGrid</a></li>
 <li><a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.Splitter.html#Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsAtDistance_">SplitObjectsAtDistance</a></li>
 </ul>
-<p>Each method takes collection of <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.ITimedObject.html">timed objects</a> or MIDI containers (like <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.MidiFile.html">file</a> or <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.TrackChunk.html">track chunk</a>) and splits objects within by the specified strategy. These methods are discussed in details below.</p>
+<p>Each method takes a collection of <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.ITimedObject.html">timed objects</a> or MIDI containers (like <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.MidiFile.html">file</a> or <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.TrackChunk.html">track chunk</a>) and splits objects within by the specified strategy. These methods are discussed in detail below.</p>
 <p>Also please note that every class that implements <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.ILengthedObject.html">ILengthedObject</a> has <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.ILengthedObject.html#Melanchall_DryWetMidi_Interaction_ILengthedObject_Split_">Split</a> method allowing to split an object at the specified time.</p>
 <h2 id="splitobjectsbystep">SplitObjectsByStep</h2>
-<p><a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.Splitter.html#Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsByStep_">SplitObjectsByStep</a> methods split each object by the specified step starting at the start of an object. For example, if step is <code>1</code> second, an object will be split at <code>1</code> second from its start, at <code>1</code> second from previous point of splitting (<code>2</code> seconds from the object's start), at <code>1</code> second from previous point of splitting (<code>3</code> seconds from the object's start) and so on. If an object's length is less than the specified step, the object will not be split and copy of it will be returned.</p>
+<p><a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.Splitter.html#Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsByStep_">SplitObjectsByStep</a> methods split each object by the specified step starting at the start of an object. For example, if step is <code>1</code> second, an object will be split at <code>1</code> second from its start, at <code>1</code> second from previous point of splitting (<code>2</code> seconds from the object's start), at <code>1</code> second from previous point of splitting (<code>3</code> seconds from the object's start) and so on. If an object's length is less than the specified step, the object will not be split and a copy of it will be returned.</p>
 <p>The image below illustrates splitting notes and chord by the same step:</p>
 <p><img src="images/Splitter/SplitByStep.png" alt="Split by step"></p>
 <h2 id="splitobjectsbypartsnumber">SplitObjectsByPartsNumber</h2>
-<p><a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.Splitter.html#Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsByPartsNumber_">SplitObjectsByPartsNumber</a> methods split each object into the specified number of parts of equal length. It is necessary to specify the <code>lengthType</code> argument to meet your expectations. For example, with metric type each part of an input object will last the same number of microseconds, while with musical type each part's length will represent the same fraction of the whole note's length. But the length of parts can be different in terms of MIDI ticks using different length type depending on tempo map passed to the method.</p>
+<p><a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.Splitter.html#Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsByPartsNumber_">SplitObjectsByPartsNumber</a> methods split each object into the specified number of parts of equal length. It is necessary to specify the <code>lengthType</code> argument to meet your expectations. For example, with metric type each part of an input object will last the same number of microseconds, while with musical type each part's length will represent the same fraction of the whole note's length. But the length of parts can be different in terms of MIDI ticks using different length types depending on the tempo map passed to the method.</p>
 <p>The image below illustrates splitting notes and chord into <code>4</code> parts:</p>
 <p><img src="images/Splitter/SplitByPartsNumber.png" alt="Split by parts number"></p>
 <h2 id="splitobjectsbygrid">SplitObjectsByGrid</h2>
@@ -104,22 +104,23 @@
 <p><a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.Splitter.html#Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsAtDistance_">SplitObjectsAtDistance</a> methods split each object at the specified distance or by the specified ratio from start or end of an object (which is defined by <code>from</code> parameter). It is necessary to specify the <code>lengthType</code> argument for splitting by ratio to meet your expectations.</p>
 <p>The image below illustrates splitting notes and chord at the same distance from the start of an object:</p>
 <p><img src="images/Splitter/SplitAtDistanceByStepFromStart.png" alt="Split at distance by step from start"></p>
-<p>Next image illustrates splitting notes and chord by the ration of <code>0.25</code> from the end of an object:</p>
+<p>Next image illustrates splitting notes and chord by the ratio of <code>0.25</code> from the end of an object:</p>
 <p><img src="images/Splitter/SplitAtDistanceByRatioFromEnd.png" alt="Split at distance by ratio from end"></p>
+
 </article>
           </div>
-          
+
           <div class="hidden-sm col-md-2" role="complementary">
             <div class="sideaffix">
               <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
-                <h5>In This Article</h5>
+                <h5>In this article</h5>
                 <div></div>
               </nav>
             </div>
           </div>
         </div>
       </div>
-      
+
       <footer>
         <div class="grad-bottom"></div>
         <div class="footer">
@@ -127,14 +128,14 @@
             <span class="pull-right">
               <a href="#top">Back to top</a>
             </span>
-            2024 / Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
-            
+      2024 / Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
+      
           </div>
         </div>
       </footer>
     </div>
-    
-    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+
+    <script type="text/javascript" src="../../styles/docfx.vendor.min.js"></script>
     <script type="text/javascript" src="../../styles/docfx.js"></script>
     <script type="text/javascript" src="../../styles/main.js"></script>
   </body>

@@ -1,21 +1,21 @@
 ﻿<!DOCTYPE html>
 <!--[if IE]><![endif]-->
 <html>
-  
+
   <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Tempo map | DryWetMIDI </title>
-    <meta name="viewport" content="width=device-width">
-    <meta name="title" content="Tempo map | DryWetMIDI ">
-    <meta name="generator" content="docfx 2.59.4.0">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+      <title>Tempo map | DryWetMIDI </title>
+      <meta name="viewport" content="width=device-width">
+      <meta name="title" content="Tempo map | DryWetMIDI ">
     
-    <link rel="shortcut icon" href="../../images/favicon.png">
-    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
-    <link rel="stylesheet" href="../../styles/docfx.css">
-    <link rel="stylesheet" href="../../styles/main.css">
-    <meta property="docfx:navrel" content="../../toc.html">
-    <meta property="docfx:tocrel" content="../toc.html">
+    
+      <link rel="shortcut icon" href="../../images/favicon.png">
+      <link rel="stylesheet" href="../../styles/docfx.vendor.min.css">
+      <link rel="stylesheet" href="../../styles/docfx.css">
+      <link rel="stylesheet" href="../../styles/main.css">
+      <meta property="docfx:navrel" content="../../toc.html">
+      <meta property="docfx:tocrel" content="../toc.html">
     
     <meta property="docfx:rel" content="../../">
     
@@ -23,7 +23,7 @@
   <body data-spy="scroll" data-target="#affix" data-offset="120">
     <div id="wrapper">
       <header>
-        
+
         <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
           <div class="container">
             <div class="navbar-header">
@@ -33,7 +33,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
               </button>
-              
+
               <a class="navbar-brand" href="../../index.html">
                 <img id="logo" class="svg" src="../../images/logo.png" alt="">
               </a>
@@ -47,7 +47,7 @@
             </div>
           </div>
         </nav>
-        
+
         <div class="subnav navbar navbar-default">
           <div class="container hide-when-search" id="breadcrumb">
             <ul class="breadcrumb">
@@ -57,7 +57,7 @@
         </div>
       </header>
       <div class="container body-content">
-        
+
         <div id="search-results">
           <div class="search-list">Search Results for <span></span></div>
           <div class="sr-items">
@@ -67,7 +67,7 @@
         </div>
       </div>
       <div role="main" class="container body-content hide-when-search">
-        
+
         <div class="sidenav hide-when-search">
           <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
           <div class="sidetoggle collapse" id="sidetoggle">
@@ -79,9 +79,9 @@
             <article class="content wrap" id="_content" data-uid="a_tempo_map">
 <h1 id="tempo-map">Tempo map</h1>
 
-<p>Tempo map is a set of changes of time signature and tempo. Tempo map is one of the key objects in high-level managing of MIDI data. You need to have a tempo map to convert <a href="Time-and-length.html">time and length</a> between different representations, either explicitly or internally at some parts of the library (for example, in <a class="xref" href="../tools/Overview.html">tools</a>). Following image shows how tempo map constructed for a given set of events or MIDI file:</p>
+<p>Tempo map is a set of changes of time signature and tempo. Tempo map is one of the key objects in high-level management of MIDI data. You need to have a tempo map to convert <a href="Time-and-length.html">time and length</a> between different representations, either explicitly or internally at some parts of the library (for example, in <a class="xref" href="../tools/Overview.html">tools</a>). Following image shows how tempo map constructed for a given set of events or MIDI file:</p>
 <p><img src="images/TempoMap.png" alt="Tempo map"></p>
-<p>So as you can see tempo map doesn't reflect original MIDI events. Tempo map holds real tempo and time signature changes. Default tempo is 120 BPM by MIDI specifications so there is no need to hold first two tempo &quot;changes&quot; because tempo is not changed in fact. The same for time signature (which is <code>4/4</code> by default). Also any repeated values are ignored since they don't change tempo or time signature.</p>
+<p>So as you can see a tempo map doesn't reflect original MIDI events. Tempo map holds real tempo and time signature changes. Default tempo is 120 BPM by MIDI specifications so there is no need to hold first two tempo &quot;changes&quot; because tempo is not changed in fact. The same for time signature (which is <code>4/4</code> by default). Also any repeated values are ignored since they don't change tempo or time signature.</p>
 <p>Instead of messing with <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.TimeSignatureEvent.html">Time Signature</a> and <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.SetTempoEvent.html">Set Tempo</a> events DryWetMIDI provides <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.TempoMapManager.html">TempoMapManager</a> which helps to manage tempo map of a MIDI file:</p>
 <pre><code class="lang-csharp">using (var tempoMapManager = new TempoMapManager(
     midiFile.TimeDivision,
@@ -98,8 +98,8 @@
     tempoMapManager.ClearTimeSignature(456);
 }
 </code></pre>
-<p>To get tempo map being managed by the current <code>TempoMapManager</code> you need to use <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.TempoMapManager.html#Melanchall_DryWetMidi_Interaction_TempoMapManager_TempoMap">TempoMap</a> property which returns an instance of the <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.TempoMap.html">TempoMap</a> class.</p>
-<p>Once you've got an instance of <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.TempoMap.html">TempoMap</a> you can use <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.TempoMap.html#Melanchall_DryWetMidi_Interaction_TempoMap_GetTempoChanges">GetTempoChanges</a> method to get all tempo changes. Use <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.TempoMap.html#Melanchall_DryWetMidi_Interaction_TempoMap_GetTimeSignatureChanges">GetTimeSignatureChanges</a> method to get time signature changes. <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.TempoMap.html#Melanchall_DryWetMidi_Interaction_TempoMap_GetTempoAtTime_Melanchall_DryWetMidi_Interaction_ITimeSpan_">GetTempoAtTime</a> and <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.TempoMap.html#Melanchall_DryWetMidi_Interaction_TempoMap_GetTimeSignatureAtTime_Melanchall_DryWetMidi_Interaction_ITimeSpan_">GetTimeSignatureAtTime</a> methods allow to get tempo and time signature at the specified time.</p>
+<p>To get the tempo map being managed by the current <code>TempoMapManager</code> you need to use <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.TempoMapManager.html#Melanchall_DryWetMidi_Interaction_TempoMapManager_TempoMap">TempoMap</a> property which returns an instance of the <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.TempoMap.html">TempoMap</a> class.</p>
+<p>Once you've got an instance of <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.TempoMap.html">TempoMap</a> you can use the <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.TempoMap.html#Melanchall_DryWetMidi_Interaction_TempoMap_GetTempoChanges">GetTempoChanges</a> method to get all tempo changes. Use <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.TempoMap.html#Melanchall_DryWetMidi_Interaction_TempoMap_GetTimeSignatureChanges">GetTimeSignatureChanges</a> method to get time signature changes. <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.TempoMap.html#Melanchall_DryWetMidi_Interaction_TempoMap_GetTempoAtTime_Melanchall_DryWetMidi_Interaction_ITimeSpan_">GetTempoAtTime</a> and <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.TempoMap.html#Melanchall_DryWetMidi_Interaction_TempoMap_GetTimeSignatureAtTime_Melanchall_DryWetMidi_Interaction_ITimeSpan_">GetTimeSignatureAtTime</a> methods allow to get tempo and time signature at the specified time.</p>
 <p>You can also create new tempo map with <code>TempoMapManager</code>:</p>
 <pre><code class="lang-csharp">using (var tempoMapManager = new TempoMapManager())
 {
@@ -113,26 +113,27 @@
     // ...
 }
 </code></pre>
-<p>This method and another useful ones are placed in <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.TempoMapManagingUtilities.html">TempoMapManagingUtilities</a>. For example, to get tempo map of a MIDI file you can write:</p>
+<p>This method and other useful ones are placed in <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.TempoMapManagingUtilities.html">TempoMapManagingUtilities</a>. For example, to get tempo map of a MIDI file you can write:</p>
 <pre><code class="lang-csharp">TempoMap tempoMap = midiFile.GetTempoMap();
 </code></pre>
 <p>Also you can replace the entire tempo map of a MIDI file using <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.TempoMapManagingUtilities.html#Melanchall_DryWetMidi_Interaction_TempoMapManagingUtilities_ReplaceTempoMap_">ReplaceTempoMap</a> method:</p>
 <pre><code class="lang-csharp">midiFile.ReplaceTempoMap(TempoMap.Create(Tempo.FromBeatsPerMinute(140)));
 </code></pre>
+
 </article>
           </div>
-          
+
           <div class="hidden-sm col-md-2" role="complementary">
             <div class="sideaffix">
               <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
-                <h5>In This Article</h5>
+                <h5>In this article</h5>
                 <div></div>
               </nav>
             </div>
           </div>
         </div>
       </div>
-      
+
       <footer>
         <div class="grad-bottom"></div>
         <div class="footer">
@@ -140,14 +141,14 @@
             <span class="pull-right">
               <a href="#top">Back to top</a>
             </span>
-            2024 / Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
-            
+      2024 / Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
+      
           </div>
         </div>
       </footer>
     </div>
-    
-    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+
+    <script type="text/javascript" src="../../styles/docfx.vendor.min.js"></script>
     <script type="text/javascript" src="../../styles/docfx.js"></script>
     <script type="text/javascript" src="../../styles/main.js"></script>
   </body>

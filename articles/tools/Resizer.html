@@ -1,21 +1,21 @@
 ﻿<!DOCTYPE html>
 <!--[if IE]><![endif]-->
 <html>
-  
+
   <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Resizer | DryWetMIDI </title>
-    <meta name="viewport" content="width=device-width">
-    <meta name="title" content="Resizer | DryWetMIDI ">
-    <meta name="generator" content="docfx 2.59.4.0">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+      <title>Resizer | DryWetMIDI </title>
+      <meta name="viewport" content="width=device-width">
+      <meta name="title" content="Resizer | DryWetMIDI ">
     
-    <link rel="shortcut icon" href="../../images/favicon.png">
-    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
-    <link rel="stylesheet" href="../../styles/docfx.css">
-    <link rel="stylesheet" href="../../styles/main.css">
-    <meta property="docfx:navrel" content="../../toc.html">
-    <meta property="docfx:tocrel" content="../toc.html">
+    
+      <link rel="shortcut icon" href="../../images/favicon.png">
+      <link rel="stylesheet" href="../../styles/docfx.vendor.min.css">
+      <link rel="stylesheet" href="../../styles/docfx.css">
+      <link rel="stylesheet" href="../../styles/main.css">
+      <meta property="docfx:navrel" content="../../toc.html">
+      <meta property="docfx:tocrel" content="../toc.html">
     
     <meta property="docfx:rel" content="../../">
     
@@ -23,7 +23,7 @@
   <body data-spy="scroll" data-target="#affix" data-offset="120">
     <div id="wrapper">
       <header>
-        
+
         <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
           <div class="container">
             <div class="navbar-header">
@@ -33,7 +33,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
               </button>
-              
+
               <a class="navbar-brand" href="../../index.html">
                 <img id="logo" class="svg" src="../../images/logo.png" alt="">
               </a>
@@ -47,7 +47,7 @@
             </div>
           </div>
         </nav>
-        
+
         <div class="subnav navbar navbar-default">
           <div class="container hide-when-search" id="breadcrumb">
             <ul class="breadcrumb">
@@ -57,7 +57,7 @@
         </div>
       </header>
       <div class="container body-content">
-        
+
         <div id="search-results">
           <div class="search-list">Search Results for <span></span></div>
           <div class="sr-items">
@@ -67,7 +67,7 @@
         </div>
       </div>
       <div role="main" class="container body-content hide-when-search">
-        
+
         <div class="sidenav hide-when-search">
           <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
           <div class="sidetoggle collapse" id="sidetoggle">
@@ -81,25 +81,26 @@
 
 <p>DryWetMIDI provides the tool to resize a group of objects or an entire MIDI file – <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.Resizer.html">Resizer</a>. Quick example of resizing in action:</p>
 <p><img src="images/Resizer/ResizeObjectsGroup.png" alt="Objects resizing"></p>
-<p>So as you can see the tool treats all passed objects as a single group and then sizes this group to the new length saving all time-to-length ratios. For example, if an event was at the middle of objects group, it will be at the middle of the group too after resizing. Following image explains this visually for the group of three notes:</p>
+<p>So as you can see the tool treats all passed objects as a single group and then sizes this group to the new length saving all time-to-length ratios. For example, if an event was at the middle of an objects group, it will be at the middle of the group too after resizing. Following image explains this visually for the group of three notes:</p>
 <p><img src="images/Resizer/ResizeObjectsGroup-Details.png" alt="Objects resizing in detail"></p>
 <p>You use <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.Resizer.html#Melanchall_DryWetMidi_Tools_Resizer_ResizeObjectsGroup_">ResizeObjectsGroup</a> methods to stretch or shrink a group of <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.ITimedObject.html">timed objects</a>. You can size a group either to the specified new length or by ratio. Ratio means that all distances from the start of a group will be multiplied by this value. So if ratio of <code>2</code> is specified, an objects group will be enlarged by 2 times. And <code>0.5</code> means the group will be shrunk by 2 times (new length will be half (<code>0.5</code>) of the original one).</p>
-<p>There also <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.Resizer.html#Melanchall_DryWetMidi_Tools_Resizer_Resize_">Resize</a> methods to resize <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a> or <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a>.</p>
-<p>If you're resizing a group or file to the specified length, please take care of the distance calculation type which can be set via <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.ObjectsGroupResizingSettings.html#Melanchall_DryWetMidi_Tools_ObjectsGroupResizingSettings_DistanceCalculationType">ObjectsGroupResizingSettings.DistanceCalculationType</a> property of the settings that you can pass to the tool's methods. For example, if you specify new length as a <a class="xref" href="../high-level-managing/Time-and-length.html#metric">metric</a> one – <code>10</code> seconds – it worth to set <code>DistanceCalculationType</code> to the <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.TimeSpanType.html#Melanchall_DryWetMidi_Interaction_TimeSpanType_Metric">TimeSpanType.Metric</a> value.</p>
+<p>There are also <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.Resizer.html#Melanchall_DryWetMidi_Tools_Resizer_Resize_">Resize</a> methods to resize <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a> or <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a>.</p>
+<p>If you're resizing a group or file to the specified length, please take care of the distance calculation type which can be set via <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.ObjectsGroupResizingSettings.html#Melanchall_DryWetMidi_Tools_ObjectsGroupResizingSettings_DistanceCalculationType">ObjectsGroupResizingSettings.DistanceCalculationType</a> property of the settings that you can pass to the tool's methods. For example, if you specify new length as a <a class="xref" href="../high-level-managing/Time-and-length.html#metric">metric</a> one – <code>10</code> seconds – it's worth to set the <code>DistanceCalculationType</code> to the <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.TimeSpanType.html#Melanchall_DryWetMidi_Interaction_TimeSpanType_Metric">TimeSpanType.Metric</a> value.</p>
+
 </article>
           </div>
-          
+
           <div class="hidden-sm col-md-2" role="complementary">
             <div class="sideaffix">
               <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
-                <h5>In This Article</h5>
+                <h5>In this article</h5>
                 <div></div>
               </nav>
             </div>
           </div>
         </div>
       </div>
-      
+
       <footer>
         <div class="grad-bottom"></div>
         <div class="footer">
@@ -107,14 +108,14 @@
             <span class="pull-right">
               <a href="#top">Back to top</a>
             </span>
-            2024 / Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
-            
+      2024 / Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
+      
           </div>
         </div>
       </footer>
     </div>
-    
-    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+
+    <script type="text/javascript" src="../../styles/docfx.vendor.min.js"></script>
     <script type="text/javascript" src="../../styles/docfx.js"></script>
     <script type="text/javascript" src="../../styles/main.js"></script>
   </body>

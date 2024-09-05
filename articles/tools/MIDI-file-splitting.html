@@ -1,21 +1,21 @@
 ﻿<!DOCTYPE html>
 <!--[if IE]><![endif]-->
 <html>
-  
+
   <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>MIDI file splitting | DryWetMIDI </title>
-    <meta name="viewport" content="width=device-width">
-    <meta name="title" content="MIDI file splitting | DryWetMIDI ">
-    <meta name="generator" content="docfx 2.59.4.0">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+      <title>MIDI file splitting | DryWetMIDI </title>
+      <meta name="viewport" content="width=device-width">
+      <meta name="title" content="MIDI file splitting | DryWetMIDI ">
     
-    <link rel="shortcut icon" href="../../images/favicon.png">
-    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
-    <link rel="stylesheet" href="../../styles/docfx.css">
-    <link rel="stylesheet" href="../../styles/main.css">
-    <meta property="docfx:navrel" content="../../toc.html">
-    <meta property="docfx:tocrel" content="../toc.html">
+    
+      <link rel="shortcut icon" href="../../images/favicon.png">
+      <link rel="stylesheet" href="../../styles/docfx.vendor.min.css">
+      <link rel="stylesheet" href="../../styles/docfx.css">
+      <link rel="stylesheet" href="../../styles/main.css">
+      <meta property="docfx:navrel" content="../../toc.html">
+      <meta property="docfx:tocrel" content="../toc.html">
     
     <meta property="docfx:rel" content="../../">
     
@@ -23,7 +23,7 @@
   <body data-spy="scroll" data-target="#affix" data-offset="120">
     <div id="wrapper">
       <header>
-        
+
         <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
           <div class="container">
             <div class="navbar-header">
@@ -33,7 +33,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
               </button>
-              
+
               <a class="navbar-brand" href="../../index.html">
                 <img id="logo" class="svg" src="../../images/logo.png" alt="">
               </a>
@@ -47,7 +47,7 @@
             </div>
           </div>
         </nav>
-        
+
         <div class="subnav navbar navbar-default">
           <div class="container hide-when-search" id="breadcrumb">
             <ul class="breadcrumb">
@@ -57,7 +57,7 @@
         </div>
       </header>
       <div class="container body-content">
-        
+
         <div id="search-results">
           <div class="search-list">Search Results for <span></span></div>
           <div class="sr-items">
@@ -67,7 +67,7 @@
         </div>
       </div>
       <div role="main" class="container body-content hide-when-search">
-        
+
         <div class="sidenav hide-when-search">
           <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
           <div class="sidetoggle collapse" id="sidetoggle">
@@ -118,7 +118,7 @@
 </tr>
 </tbody>
 </table>
-<p>You can alter key calculation logic providing custom key selector. For example, to separate notes by only note number ignoring a note's channel:</p>
+<p>You can alter key calculation logic by providing custom key selector. For example, to separate notes by only note number ignoring a note's channel:</p>
 <pre><code class="lang-csharp">var newFiles = midiFile.SplitByObjects(
     ObjectType.Note | ObjectType.TimedEvent,
     new SplitByObjectsSettings
@@ -128,7 +128,7 @@
     });
 </code></pre>
 <p>Here a key will be resolved to <code>null</code> if an object is not an instance of the <code>Note</code>. <code>null</code> key means to use the default key calculation logic shown above.</p>
-<p>If key selection is complex, you may decide to implement a class for such key. Just for example, let's create the key class that identifies a chord by its shortest name:</p>
+<p>If key selection is complex, you may decide to implement a class for such a key. Just for example, let's create the key class that identifies a chord by its shortest name:</p>
 <pre><code class="lang-csharp">private sealed class ChordNameId
 {
     private readonly string _name;
@@ -156,9 +156,9 @@
 </code></pre>
 <p>Please see documentation on <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.SplitByObjectsSettings.html">SplitByObjectsSettings</a> to learn more about how you can adjust the process of splitting.</p>
 <h2 id="splitbygrid">SplitByGrid</h2>
-<p><a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.Splitter.html#Melanchall_DryWetMidi_Tools_Splitter_SplitByGrid_">SplitByGrid</a> method splits MIDI file by the specified grid. Each file will preserve original tempo map and all parameters changes (like a control value or program changes). The image below shows general case of splitting a MIDI file by grid:</p>
+<p><a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.Splitter.html#Melanchall_DryWetMidi_Tools_Splitter_SplitByGrid_">SplitByGrid</a> method splits a MIDI file by the specified grid. Each file will preserve the original tempo map and all parameters changes (like a control value or program changes). The image below shows general case of splitting a MIDI file by grid:</p>
 <p><img src="images/Splitter/SplitFileByGrid.png" alt="Split MIDI file by grid"></p>
-<p>Splitting can be adjusted via <code>settings</code> parameter of the <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.SliceMidiFileSettings.html">SliceMidiFileSettings</a> type. <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.SliceMidiFileSettings.html#Melanchall_DryWetMidi_Tools_SliceMidiFileSettings_SplitNotes">SplitNotes</a> and <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.SliceMidiFileSettings.html#Melanchall_DryWetMidi_Tools_SliceMidiFileSettings_PreserveTimes">PreserveTimes</a> properties described below. Please see all available properties in documentation for <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.SliceMidiFileSettings.html">SliceMidiFileSettings</a>.</p>
+<p>Splitting can be adjusted via the <code>settings</code> parameter of the <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.SliceMidiFileSettings.html">SliceMidiFileSettings</a> type. <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.SliceMidiFileSettings.html#Melanchall_DryWetMidi_Tools_SliceMidiFileSettings_SplitNotes">SplitNotes</a> and <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.SliceMidiFileSettings.html#Melanchall_DryWetMidi_Tools_SliceMidiFileSettings_PreserveTimes">PreserveTimes</a> properties described below. Please see all available properties in documentation for <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.SliceMidiFileSettings.html">SliceMidiFileSettings</a>.</p>
 <h3 id="splitnotes">SplitNotes</h3>
 <p><a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.SliceMidiFileSettings.html#Melanchall_DryWetMidi_Tools_SliceMidiFileSettings_SplitNotes">SplitNotes</a> indicates whether notes should be split at points of grid intersection or not. The default value is <code>true</code>. If <code>false</code> used, notes treated as just Note On / Note Off events rather than note objects. Splitting notes produces new Note On / Note Off events at points where grid intersects notes if the property set to <code>true</code>. The following image shows splitting by grid if <code>SplitNotes</code> set to <code>false</code>:</p>
 <p><img src="images/Splitter/SplitByGridDontSplitNotes.png" alt="Split MIDI file by grid without splitting notes"></p>
@@ -166,7 +166,7 @@
 <p><a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.SliceMidiFileSettings.html#Melanchall_DryWetMidi_Tools_SliceMidiFileSettings_PreserveTimes">PreserveTimes</a> indicates whether original times of events should be preserved or not. The default value is <code>false</code>. If <code>false</code> used, events will be moved to the start of a new file. If <code>true</code> used, events will be placed in new files at the same times as in the input file. The following image shows splitting in case of <code>PreserveTimes</code> set to <code>true</code>:</p>
 <p><img src="images/Splitter/SplitByGridPreserveTimes.png" alt="Split MIDI file by grid preserving times"></p>
 <h2 id="skippart">SkipPart</h2>
-<p><a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.Splitter.html#Melanchall_DryWetMidi_Tools_Splitter_SkipPart_">SkipPart</a> method skips part of the specified length of a MIDI file and returns remaining part as an instance of <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a>. The image below shows general case of skipping a part of a MIDI file:</p>
+<p><a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.Splitter.html#Melanchall_DryWetMidi_Tools_Splitter_SkipPart_">SkipPart</a> method skips part of the specified length of a MIDI file and returns the remaining part as an instance of <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a>. The image below shows general case of skipping a part of a MIDI file:</p>
 <p><img src="images/Splitter/SkipPart.png" alt="Skip part of a MIDI file"></p>
 <h2 id="takepart">TakePart</h2>
 <p><a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.Splitter.html#Melanchall_DryWetMidi_Tools_Splitter_TakePart_">TakePart</a> methods take part of the specified length of a MIDI file (starting at the start or at the specified time within the file) and return it as an instance of <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a>. The image below shows both cases of taking a part of a MIDI file:</p>
@@ -175,20 +175,21 @@
 <h2 id="cutpart">CutPart</h2>
 <p><a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.Splitter.html#Melanchall_DryWetMidi_Tools_Splitter_CutPart_">CutPart</a> method cuts a part of the specified length from a MIDI file (starting at the specified time within the file) and returns a new instance of <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a> which is the original file without the part. The image below shows how the method works:</p>
 <p><img src="images/Splitter/CutPart.png" alt="Cut part from a MIDI file"></p>
+
 </article>
           </div>
-          
+
           <div class="hidden-sm col-md-2" role="complementary">
             <div class="sideaffix">
               <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
-                <h5>In This Article</h5>
+                <h5>In this article</h5>
                 <div></div>
               </nav>
             </div>
           </div>
         </div>
       </div>
-      
+
       <footer>
         <div class="grad-bottom"></div>
         <div class="footer">
@@ -196,14 +197,14 @@
             <span class="pull-right">
               <a href="#top">Back to top</a>
             </span>
-            2024 / Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
-            
+      2024 / Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
+      
           </div>
         </div>
       </footer>
     </div>
-    
-    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+
+    <script type="text/javascript" src="../../styles/docfx.vendor.min.js"></script>
     <script type="text/javascript" src="../../styles/docfx.js"></script>
     <script type="text/javascript" src="../../styles/main.js"></script>
   </body>

@@ -1,21 +1,21 @@
 ﻿<!DOCTYPE html>
 <!--[if IE]><![endif]-->
 <html>
-  
+
   <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Playback &#8211; Overview | DryWetMIDI </title>
-    <meta name="viewport" content="width=device-width">
-    <meta name="title" content="Playback &#8211; Overview | DryWetMIDI ">
-    <meta name="generator" content="docfx 2.59.4.0">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+      <title>Playback – Overview | DryWetMIDI </title>
+      <meta name="viewport" content="width=device-width">
+      <meta name="title" content="Playback – Overview | DryWetMIDI ">
     
-    <link rel="shortcut icon" href="../../images/favicon.png">
-    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
-    <link rel="stylesheet" href="../../styles/docfx.css">
-    <link rel="stylesheet" href="../../styles/main.css">
-    <meta property="docfx:navrel" content="../../toc.html">
-    <meta property="docfx:tocrel" content="../toc.html">
+    
+      <link rel="shortcut icon" href="../../images/favicon.png">
+      <link rel="stylesheet" href="../../styles/docfx.vendor.min.css">
+      <link rel="stylesheet" href="../../styles/docfx.css">
+      <link rel="stylesheet" href="../../styles/main.css">
+      <meta property="docfx:navrel" content="../../toc.html">
+      <meta property="docfx:tocrel" content="../toc.html">
     
     <meta property="docfx:rel" content="../../">
     
@@ -23,7 +23,7 @@
   <body data-spy="scroll" data-target="#affix" data-offset="120">
     <div id="wrapper">
       <header>
-        
+
         <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
           <div class="container">
             <div class="navbar-header">
@@ -33,7 +33,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
               </button>
-              
+
               <a class="navbar-brand" href="../../index.html">
                 <img id="logo" class="svg" src="../../images/logo.png" alt="">
               </a>
@@ -47,7 +47,7 @@
             </div>
           </div>
         </nav>
-        
+
         <div class="subnav navbar navbar-default">
           <div class="container hide-when-search" id="breadcrumb">
             <ul class="breadcrumb">
@@ -57,7 +57,7 @@
         </div>
       </header>
       <div class="container body-content">
-        
+
         <div id="search-results">
           <div class="search-list">Search Results for <span></span></div>
           <div class="sr-items">
@@ -67,7 +67,7 @@
         </div>
       </div>
       <div role="main" class="container body-content hide-when-search">
-        
+
         <div class="sidenav hide-when-search">
           <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
           <div class="sidetoggle collapse" id="sidetoggle">
@@ -80,7 +80,7 @@
 <h1 id="playback--overview">Playback – Overview</h1>
 
 <p><a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.Playback.html">Playback</a> class allows to play MIDI events via an <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.IOutputDevice.html">IOutputDevice</a> (see <a class="xref" href="../devices/Output-device.html">Output device</a> article) or without a device at all (see <a href="#playback-without-device">Playback without device</a>). To get an instance of the <code>Playback</code> you can use its <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.Playback.html#constructors">constructors</a> or <code>GetPlayback</code> extension methods in <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.PlaybackUtilities.html">PlaybackUtilities</a>.</p>
-<p>Following example shows simple console app where specified MIDI file is played until end of the file reached or <code>B</code> note is about to be played. So in our example <code>B</code> note means to stop playback.</p>
+<p>Following example shows a simple console app where the specified MIDI file is played until the end of the file reached or <code>B</code> note is about to be played. So in our example <code>B</code> note means to stop playback.</p>
 <pre><code class="lang-csharp">using System;
 using System.Linq;
 using System.Threading;
@@ -121,10 +121,10 @@ namespace SimplePlaybackApp
 </code></pre>
 <p>Please read <a href="Tick-generator.html">Tick generator</a> article and <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.PlaybackSettings.html">PlaybackSettings</a> class documentation to learn how you can adjust playback's internals.</p>
 <h2 id="playback-without-device">Playback without device</h2>
-<p>There are constructors of <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.Playback.html">Playback</a> that don't accept <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.IOutputDevice.html">IOutputDevice</a> as an argument. It can be useful, for example, for notes visualization without sound. <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.Playback.html">Playback</a> provides events that will be fired with or without output device (see <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.Playback.html#events">Events</a> section of the <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.Playback.html">Playback</a> API page). Also all <code>GetPlayback</code> extensions methods have overloads without the <code>outputDevice</code> parameter.</p>
-<p>Also if you don't specify output device and use <a href="Tick-generator.html">tick generator</a> other than <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.HighPrecisionTickGenerator.html">HighPrecisionTickGenerator</a>, you can use <code>Playback</code> in cross-platform app like Unity game that is supposed to be built for different platforms.</p>
+<p>There are constructors of <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.Playback.html">Playback</a> that don't accept <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.IOutputDevice.html">IOutputDevice</a> as an argument. It can be useful, for example, for notes visualization without sound. <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.Playback.html">Playback</a> provides events that will be fired with or without an output device (see <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.Playback.html#events">Events</a> section of the <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.Playback.html">Playback</a> API page). Also all <code>GetPlayback</code> extensions methods have overloads without the <code>outputDevice</code> parameter.</p>
+<p>Also if you don't specify an output device and use a <a href="Tick-generator.html">tick generator</a> other than <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.HighPrecisionTickGenerator.html">HighPrecisionTickGenerator</a>, you can use <code>Playback</code> in a cross-platform app like Unity game that is supposed to be built for different platforms.</p>
 <h2 id="blocking-playback">Blocking playback</h2>
-<p>If you call <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.Playback.html#Melanchall_DryWetMidi_Multimedia_Playback_Play">Play</a> method of the <code>Playback</code>, the calling thread will be blocked until entire collection of MIDI events will be played. Note that execution of this method will be infinite if the <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.Playback.html#Melanchall_DryWetMidi_Multimedia_Playback_Loop">Loop</a> property set to <code>true</code>.</p>
+<p>If you call the <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.Playback.html#Melanchall_DryWetMidi_Multimedia_Playback_Play">Play</a> method of the <code>Playback</code>, the calling thread will be blocked until the entire collection of MIDI events is played. Note that execution of this method will be infinite if the <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.Playback.html#Melanchall_DryWetMidi_Multimedia_Playback_Loop">Loop</a> property is set to <code>true</code>.</p>
 <p>There are also extension methods <code>Play</code> in <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.PlaybackUtilities.html">PlaybackUtilities</a>:</p>
 <pre><code class="lang-csharp">using (var outputDevice = OutputDevice.GetByName(&quot;Output MIDI device&quot;))
 {
@@ -134,7 +134,7 @@ namespace SimplePlaybackApp
 }
 </code></pre>
 <h2 id="non-blocking-playback">Non-blocking playback</h2>
-<p>Is you call <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.Playback.html#Melanchall_DryWetMidi_Multimedia_Playback_Start">Start</a> method of the <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.Playback.html">Playback</a>, execution of the calling thread will continue immediately after the method is called. To stop playback use <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.Playback.html#Melanchall_DryWetMidi_Multimedia_Playback_Stop">Stop</a> method. Note that there is no any pausing method since it's useless. <code>Stop</code> leaves playback at the point where the method was called. To move to the start of the playback use <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.Playback.html#Melanchall_DryWetMidi_Multimedia_Playback_MoveToStart">MoveToStart</a> method.</p>
+<p>If you call the <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.Playback.html#Melanchall_DryWetMidi_Multimedia_Playback_Start">Start</a> method of the <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.Playback.html">Playback</a>, execution of the calling thread will continue immediately after the method is called. To stop playback use the <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.Playback.html#Melanchall_DryWetMidi_Multimedia_Playback_Stop">Stop</a> method. Note that there is no any pausing method since it's useless. <code>Stop</code> leaves playback at the point where the method was called. To move to the start of the playback use the <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.Playback.html#Melanchall_DryWetMidi_Multimedia_Playback_MoveToStart">MoveToStart</a> method.</p>
 <div class="IMPORTANT">
 <h5>Important</h5>
 <p>You should be very careful with this approach and <code>using</code> block. Example below shows the case where part of MIDI data <strong>will not be played</strong> because of playback is disposed before the last MIDI event will be played:</p>
@@ -146,22 +146,23 @@ using (var playback = MidiFile.Read(&quot;Some MIDI file.mid&quot;).GetPlayback(
     // ...
 }
 </code></pre>
-<p>With non-blocking approach you must call <code>Dispose</code> manually after you've finished work with playback object.</p>
+<p>With the non-blocking approach you must call <code>Dispose</code> manually after you've finished work with the playback object.</p>
 </div>
+
 </article>
           </div>
-          
+
           <div class="hidden-sm col-md-2" role="complementary">
             <div class="sideaffix">
               <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
-                <h5>In This Article</h5>
+                <h5>In this article</h5>
                 <div></div>
               </nav>
             </div>
           </div>
         </div>
       </div>
-      
+
       <footer>
         <div class="grad-bottom"></div>
         <div class="footer">
@@ -169,14 +170,14 @@ using (var playback = MidiFile.Read(&quot;Some MIDI file.mid&quot;).GetPlayback(
             <span class="pull-right">
               <a href="#top">Back to top</a>
             </span>
-            2024 / Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
-            
+      2024 / Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
+      
           </div>
         </div>
       </footer>
     </div>
-    
-    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+
+    <script type="text/javascript" src="../../styles/docfx.vendor.min.js"></script>
     <script type="text/javascript" src="../../styles/docfx.js"></script>
     <script type="text/javascript" src="../../styles/main.js"></script>
   </body>

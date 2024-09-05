@@ -1,21 +1,21 @@
 ﻿<!DOCTYPE html>
 <!--[if IE]><![endif]-->
 <html>
-  
+
   <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Common problems | DryWetMIDI </title>
-    <meta name="viewport" content="width=device-width">
-    <meta name="title" content="Common problems | DryWetMIDI ">
-    <meta name="generator" content="docfx 2.59.4.0">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+      <title>Common problems | DryWetMIDI </title>
+      <meta name="viewport" content="width=device-width">
+      <meta name="title" content="Common problems | DryWetMIDI ">
     
-    <link rel="shortcut icon" href="../../images/favicon.png">
-    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
-    <link rel="stylesheet" href="../../styles/docfx.css">
-    <link rel="stylesheet" href="../../styles/main.css">
-    <meta property="docfx:navrel" content="../../toc.html">
-    <meta property="docfx:tocrel" content="../toc.html">
+    
+      <link rel="shortcut icon" href="../../images/favicon.png">
+      <link rel="stylesheet" href="../../styles/docfx.vendor.min.css">
+      <link rel="stylesheet" href="../../styles/docfx.css">
+      <link rel="stylesheet" href="../../styles/main.css">
+      <meta property="docfx:navrel" content="../../toc.html">
+      <meta property="docfx:tocrel" content="../toc.html">
     
     <meta property="docfx:rel" content="../../">
     
@@ -23,7 +23,7 @@
   <body data-spy="scroll" data-target="#affix" data-offset="120">
     <div id="wrapper">
       <header>
-        
+
         <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
           <div class="container">
             <div class="navbar-header">
@@ -33,7 +33,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
               </button>
-              
+
               <a class="navbar-brand" href="../../index.html">
                 <img id="logo" class="svg" src="../../images/logo.png" alt="">
               </a>
@@ -47,7 +47,7 @@
             </div>
           </div>
         </nav>
-        
+
         <div class="subnav navbar navbar-default">
           <div class="container hide-when-search" id="breadcrumb">
             <ul class="breadcrumb">
@@ -57,7 +57,7 @@
         </div>
       </header>
       <div class="container body-content">
-        
+
         <div id="search-results">
           <div class="search-list">Search Results for <span></span></div>
           <div class="sr-items">
@@ -67,7 +67,7 @@
         </div>
       </div>
       <div role="main" class="container body-content hide-when-search">
-        
+
         <div class="sidenav hide-when-search">
           <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
           <div class="sidetoggle collapse" id="sidetoggle">
@@ -80,7 +80,7 @@
 <h1 id="common-problems">Common problems</h1>
 
 <h2 id="startcoroutine-can-only-be-called-from-the-main-thread-in-unity"><code>StartCoroutine</code> can only be called from the main thread in Unity</h2>
-<p>Sometimes you want to start Unity coroutine in a handler of <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.IInputDevice.html#Melanchall_DryWetMidi_Multimedia_IInputDevice_EventReceived">EventReceived</a> event of <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.InputDevice.html">InputDevice</a>. Your code can be executed on separate thread in these case. It can happen because of events are received by device on separate (system) thread.</p>
+<p>Sometimes you want to start Unity coroutine in a handler of the <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.IInputDevice.html#Melanchall_DryWetMidi_Multimedia_IInputDevice_EventReceived">EventReceived</a> event of <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.InputDevice.html">InputDevice</a>. Your code can be executed on a separate thread in this case. It can happen because events are received by device on a separate (system) thread.</p>
 <p>But UI related things like call of <code>StartCoroutine</code> can be executed on UI thread only. You can use the solution from here: <a href="https://stackoverflow.com/a/56715254">https://stackoverflow.com/a/56715254</a>.</p>
 <p>Related question on StackOverflow: <a href="https://stackoverflow.com/q/62750863">Catching and processing multiple keyboard inputs at once</a></p>
 <h2 id="inputdevice-declared-as-a-local-variable"><code>InputDevice</code> declared as a local variable</h2>
@@ -112,21 +112,22 @@ private void StartListening()
     _inputDevice.StartEventsListening();
 }
 </code></pre>
-<p>And don't forget to dispose the device when you're done with it. Please read the <a class="xref" href="Input-device.html">Input device</a> article to learn more.</p>
+<p>And don't forget to dispose of the device when you're done with it. Please read the <a class="xref" href="Input-device.html">Input device</a> article to learn more.</p>
+
 </article>
           </div>
-          
+
           <div class="hidden-sm col-md-2" role="complementary">
             <div class="sideaffix">
               <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
-                <h5>In This Article</h5>
+                <h5>In this article</h5>
                 <div></div>
               </nav>
             </div>
           </div>
         </div>
       </div>
-      
+
       <footer>
         <div class="grad-bottom"></div>
         <div class="footer">
@@ -134,14 +135,14 @@ private void StartListening()
             <span class="pull-right">
               <a href="#top">Back to top</a>
             </span>
-            2024 / Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
-            
+      2024 / Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
+      
           </div>
         </div>
       </footer>
     </div>
-    
-    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+
+    <script type="text/javascript" src="../../styles/docfx.vendor.min.js"></script>
     <script type="text/javascript" src="../../styles/docfx.js"></script>
     <script type="text/javascript" src="../../styles/main.js"></script>
   </body>

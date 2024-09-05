@@ -1,21 +1,21 @@
 ﻿<!DOCTYPE html>
 <!--[if IE]><![endif]-->
 <html>
-  
+
   <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Input device | DryWetMIDI </title>
-    <meta name="viewport" content="width=device-width">
-    <meta name="title" content="Input device | DryWetMIDI ">
-    <meta name="generator" content="docfx 2.59.4.0">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+      <title>Input device | DryWetMIDI </title>
+      <meta name="viewport" content="width=device-width">
+      <meta name="title" content="Input device | DryWetMIDI ">
     
-    <link rel="shortcut icon" href="../../images/favicon.png">
-    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
-    <link rel="stylesheet" href="../../styles/docfx.css">
-    <link rel="stylesheet" href="../../styles/main.css">
-    <meta property="docfx:navrel" content="../../toc.html">
-    <meta property="docfx:tocrel" content="../toc.html">
+    
+      <link rel="shortcut icon" href="../../images/favicon.png">
+      <link rel="stylesheet" href="../../styles/docfx.vendor.min.css">
+      <link rel="stylesheet" href="../../styles/docfx.css">
+      <link rel="stylesheet" href="../../styles/main.css">
+      <meta property="docfx:navrel" content="../../toc.html">
+      <meta property="docfx:tocrel" content="../toc.html">
     
     <meta property="docfx:rel" content="../../">
     
@@ -23,7 +23,7 @@
   <body data-spy="scroll" data-target="#affix" data-offset="120">
     <div id="wrapper">
       <header>
-        
+
         <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
           <div class="container">
             <div class="navbar-header">
@@ -33,7 +33,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
               </button>
-              
+
               <a class="navbar-brand" href="../../index.html">
                 <img id="logo" class="svg" src="../../images/logo.png" alt="">
               </a>
@@ -47,7 +47,7 @@
             </div>
           </div>
         </nav>
-        
+
         <div class="subnav navbar navbar-default">
           <div class="container hide-when-search" id="breadcrumb">
             <ul class="breadcrumb">
@@ -57,7 +57,7 @@
         </div>
       </header>
       <div class="container body-content">
-        
+
         <div id="search-results">
           <div class="search-list">Search Results for <span></span></div>
           <div class="sr-items">
@@ -67,7 +67,7 @@
         </div>
       </div>
       <div role="main" class="container body-content hide-when-search">
-        
+
         <div class="sidenav hide-when-search">
           <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
           <div class="sidetoggle collapse" id="sidetoggle">
@@ -79,14 +79,32 @@
             <article class="content wrap" id="_content" data-uid="a_dev_input">
 <h1 id="input-device">Input device</h1>
 
-<p>In DryWetMIDI an input MIDI device is represented by <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.IInputDevice.html">IInputDevice</a> interface. It allows to receive events from a MIDI device. To understand what an input MIDI device is in DryWetMIDI, please read <a href="Overview.html">Overview</a> article.</p>
-<p>The library provides built-in implementation of <code>IInputDevice</code>: <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.InputDevice.html">InputDevice</a> class. To get an instance of <code>InputDevice</code> you can use either <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.InputDevice.html#Melanchall_DryWetMidi_Multimedia_InputDevice_GetByName_System_String_">GetByName</a> or <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.InputDevice.html#Melanchall_DryWetMidi_Multimedia_InputDevice_GetByIndex_System_Int32_">GetByIndex</a> static methods. ID of a MIDI device is a number from <code>0</code> to <em>devices count minus one</em>. To get count of input MIDI devices presented in the system there is the <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.InputDevice.html#Melanchall_DryWetMidi_Multimedia_InputDevice_GetDevicesCount">GetDevicesCount</a> method. You can get all input MIDI devices with <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.InputDevice.html#Melanchall_DryWetMidi_Multimedia_InputDevice_GetAll">GetAll</a> method.</p>
+<p>In DryWetMIDI an input MIDI device is represented by the <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.IInputDevice.html">IInputDevice</a> interface. It allows to receive events from a MIDI device. To understand what an input MIDI device is in DryWetMIDI, please read the <a href="Overview.html">Overview</a> article.</p>
+<p>The library provides built-in implementation of <code>IInputDevice</code>: <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.InputDevice.html">InputDevice</a> class. To get an instance of <code>InputDevice</code> you can use either <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.InputDevice.html#Melanchall_DryWetMidi_Multimedia_InputDevice_GetByName_System_String_">GetByName</a> or <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.InputDevice.html#Melanchall_DryWetMidi_Multimedia_InputDevice_GetByIndex_System_Int32_">GetByIndex</a> static methods. ID of a MIDI device is a number from <code>0</code> to <em>devices count minus one</em>. To get count of input MIDI devices presented in the system there is the <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.InputDevice.html#Melanchall_DryWetMidi_Multimedia_InputDevice_GetDevicesCount">GetDevicesCount</a> method. You can get all input MIDI devices with the <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.InputDevice.html#Melanchall_DryWetMidi_Multimedia_InputDevice_GetAll">GetAll</a> method.</p>
 <div class="IMPORTANT">
 <h5>Important</h5>
-<p>You can use <code>InputDevice</code> built-in implementation of <code>IInputDevice</code> only on the systems listed in the <a class="xref" href="../dev/Supported-OS.html">Supported OS</a> article. Of course you can create your own implementation of <code>IInputDevice</code> as described in <a href="#custom-input-device">Custom input device</a> section below.</p>
+<p>You can use <code>InputDevice</code> built-in implementation of <code>IInputDevice</code> only on the systems listed in the <a class="xref" href="../dev/Supported-OS.html">Supported OS</a> article. Of course you can create your own implementation of <code>IInputDevice</code> as described in the <a href="#custom-input-device">Custom input device</a> section below.</p>
 </div>
-<p>After an instance of <code>InputDevice</code> is obtained, call <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.IInputDevice.html#Melanchall_DryWetMidi_Multimedia_IInputDevice_StartEventsListening">StartEventsListening</a> to start listening incoming MIDI events going from an input MIDI device. If you don't need to listen for events anymore, call <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.IInputDevice.html#Melanchall_DryWetMidi_Multimedia_IInputDevice_StopEventsListening">StopEventsListening</a>. Also this method will be called automatically on <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.MidiDevice.html#Melanchall_DryWetMidi_Multimedia_MidiDevice_Dispose">Dispose</a>. To check whether <code>InputDevice</code> is currently listening for events or not use <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.IInputDevice.html#Melanchall_DryWetMidi_Multimedia_IInputDevice_IsListeningForEvents">IsListeningForEvents</a> property.</p>
-<p>If an input device is listening for events, it will fire <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.IInputDevice.html#Melanchall_DryWetMidi_Multimedia_IInputDevice_EventReceived">EventReceived</a> event for each incoming MIDI event. Received MIDI event will be passed to event's handler.</p>
+<p>After an instance of <code>InputDevice</code> is obtained, call <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.IInputDevice.html#Melanchall_DryWetMidi_Multimedia_IInputDevice_StartEventsListening">StartEventsListening</a> to start listening to incoming MIDI events going from an input MIDI device. If you don't need to listen for events anymore, call <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.IInputDevice.html#Melanchall_DryWetMidi_Multimedia_IInputDevice_StopEventsListening">StopEventsListening</a>. Also this method will be called automatically on <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.MidiDevice.html#Melanchall_DryWetMidi_Multimedia_MidiDevice_Dispose">Dispose</a>. To check whether <code>InputDevice</code> is currently listening for events or not use <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.IInputDevice.html#Melanchall_DryWetMidi_Multimedia_IInputDevice_IsListeningForEvents">IsListeningForEvents</a> property.</p>
+<p>If an input device is listening for events, it will fire the <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.IInputDevice.html#Melanchall_DryWetMidi_Multimedia_IInputDevice_EventReceived">EventReceived</a> event for each incoming MIDI event. Received MIDI event will be passed to an event's handler.</p>
+<div class="IMPORTANT">
+<h5>Important</h5>
+<p>If you use an instance of the <code>InputDevice</code> within a <code>using</code> block, you need to be very careful. In general it's not a good practice and can cause problems. For example, with this code</p>
+<pre><code class="lang-csharp">using (var inputDevice = InputDevice.GetByName(&quot;Some MIDI device&quot;))
+{
+    inputDevice.EventReceived += OnEventReceived;
+    inputDevice.StartEventsListening();
+}
+
+// ...
+
+private static void OnEventReceived(object? sender, MidiEventReceivedEventArgs e)
+{
+    // ...
+}
+</code></pre>
+<p>the <code>OnEventReceived</code> method will not be probably called at all since the program leaves the <code>using</code> block before any event is received, and thus the device instance will be destroyed and not functioning of course.</p>
+</div>
 <p>Small example (console app) that shows receiving MIDI data:</p>
 <pre><code class="lang-csharp">using System;
 using Melanchall.DryWetMidi.Multimedia;
@@ -119,12 +137,12 @@ namespace InputDeviceExample
 </code></pre>
 <div class="IMPORTANT">
 <h5>Important</h5>
-<p>You must always take care about disposing an <code>InputDevice</code>, so use it inside <code>using</code> block or call <code>Dispose</code> manually. Without it all resources taken by the device will live until GC collect them via finalizer of the <code>InputDevice</code>. It means that sometimes you will not be able to use different instances of the same device across multiple applications or different pieces of a program.</p>
+<p>You must always take care about disposing an <code>InputDevice</code>, so use it inside <code>using</code> block or call <code>Dispose</code> manually. Without it all resources taken by the device will live until GC collects them via the finalizer of the <code>InputDevice</code>. It means that sometimes you will not be able to use different instances of the same device across multiple applications or different pieces of a program.</p>
 </div>
-<p><code>InputDevice</code> has <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.InputDevice.html#Melanchall_DryWetMidi_Multimedia_InputDevice_MidiTimeCodeReceived">MidiTimeCodeReceived</a> event which, by default, will be fired only when <strong>all</strong> MIDI Time Code components (separate <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.MidiTimeCodeEvent.html">MidiTimeCodeEvent</a> events) are received forming <em>hours:minutes:seconds:frames</em> timestamp. You can turn this behavior off by setting <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.InputDevice.html#Melanchall_DryWetMidi_Multimedia_InputDevice_RaiseMidiTimeCodeReceived">RaiseMidiTimeCodeReceived</a> to <code>false</code>.</p>
-<p>If an invalid <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.ChannelEvent.html">channel</a>, <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.SystemCommonEvent.html">system common</a> or <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.SystemRealTimeEvent.html">system real-time</a> or system exclusive event received, <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.MidiDevice.html#Melanchall_DryWetMidi_Multimedia_MidiDevice_ErrorOccurred">ErrorOccurred</a> event will be fired with <code>Data</code> property of the exception filled with an information about the error.</p>
+<p><code>InputDevice</code> has the <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.InputDevice.html#Melanchall_DryWetMidi_Multimedia_InputDevice_MidiTimeCodeReceived">MidiTimeCodeReceived</a> event which, by default, will be fired only when <strong>all</strong> MIDI Time Code components (separate <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.MidiTimeCodeEvent.html">MidiTimeCodeEvent</a> events) are received forming <em>hours:minutes:seconds:frames</em> timestamp. You can turn this behavior off by setting <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.InputDevice.html#Melanchall_DryWetMidi_Multimedia_InputDevice_RaiseMidiTimeCodeReceived">RaiseMidiTimeCodeReceived</a> to <code>false</code>.</p>
+<p>If an invalid <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.ChannelEvent.html">channel</a>, <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.SystemCommonEvent.html">system common</a> or <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.SystemRealTimeEvent.html">system real-time</a> or system exclusive event received, <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.MidiDevice.html#Melanchall_DryWetMidi_Multimedia_MidiDevice_ErrorOccurred">ErrorOccurred</a> event will be fired with the <code>Data</code> property of the exception filled with information about the error.</p>
 <h2 id="custom-input-device">Custom input device</h2>
-<p>You can create your own input device implementation and use it in your app. For example, let's create device that will listen for specific keyboard keys and report corresponding note via <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.IInputDevice.html#Melanchall_DryWetMidi_Multimedia_IInputDevice_EventReceived">EventReceived</a> event. Also we will control current octave with <em>up arrow</em> and <em>down arrow</em> increasing or decreasing octave number correspondingly. Following image shows the scheme of our device:</p>
+<p>You can create your own input device implementation and use it in your app. For example, let's create a device that will listen for specific keyboard keys and report corresponding notes via the <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.IInputDevice.html#Melanchall_DryWetMidi_Multimedia_IInputDevice_EventReceived">EventReceived</a> event. Also we will control the current octave with <em>up arrow</em> and <em>down arrow</em> keys increasing or decreasing octave number correspondingly. Following image shows the scheme of our device:</p>
 <p><img src="images/CustomInputDevice.png" alt="Custom input device"></p>
 <p>Now we implement it:</p>
 <pre><code class="lang-csharp">public sealed class KeyboardInputDevice : IInputDevice
@@ -234,20 +252,21 @@ namespace InputDeviceExample
 <pre><code class="lang-csharp">var outputDevice = OutputDevice.GetByName(&quot;Microsoft GS Wavetable Synth&quot;);
 var devicesConnector = keyboardInputDevice.Connect(outputDevice);
 </code></pre>
+
 </article>
           </div>
-          
+
           <div class="hidden-sm col-md-2" role="complementary">
             <div class="sideaffix">
               <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
-                <h5>In This Article</h5>
+                <h5>In this article</h5>
                 <div></div>
               </nav>
             </div>
           </div>
         </div>
       </div>
-      
+
       <footer>
         <div class="grad-bottom"></div>
         <div class="footer">
@@ -255,14 +274,14 @@ var devicesConnector = keyboardInputDevice.Connect(outputDevice);
             <span class="pull-right">
               <a href="#top">Back to top</a>
             </span>
-            2024 / Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
-            
+      2024 / Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
+      
           </div>
         </div>
       </footer>
     </div>
-    
-    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+
+    <script type="text/javascript" src="../../styles/docfx.vendor.min.js"></script>
     <script type="text/javascript" src="../../styles/docfx.js"></script>
     <script type="text/javascript" src="../../styles/main.js"></script>
   </body>

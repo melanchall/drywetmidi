@@ -1,0 +1,175 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+
+  <head>
+    <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+      <title>Removing objects | DryWetMIDI </title>
+      <meta name="viewport" content="width=device-width">
+      <meta name="title" content="Removing objects | DryWetMIDI ">
+    
+    
+      <link rel="shortcut icon" href="../../images/favicon.png">
+      <link rel="stylesheet" href="../../styles/docfx.vendor.min.css">
+      <link rel="stylesheet" href="../../styles/docfx.css">
+      <link rel="stylesheet" href="../../styles/main.css">
+      <meta property="docfx:navrel" content="../../toc.html">
+      <meta property="docfx:tocrel" content="../toc.html">
+    
+    <meta property="docfx:rel" content="../../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+
+        <div id="search-results">
+          <div class="search-list">Search Results for <span></span></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination" data-first="First" data-prev="Previous" data-next="Next" data-last="Last"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="a_removing_objects">
+<h1 id="removing-objects">Removing objects</h1>
+
+<div class="IMPORTANT">
+<h5>Important</h5>
+<p>Please read <a class="xref" href="Getting-objects.html">Getting objects</a> and <a class="xref" href="Processing-objects.html">Processing objects</a> articles before reading this one.</p>
+</div>
+<p>This article describes ways to remove different objects (like <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.TimedEvent.html">timed events</a> or <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.Note.html">notes</a>) from MIDI files and track chunks.</p>
+<h2 id="removetimedevents">RemoveTimedEvents</h2>
+<p><a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.html#Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_RemoveTimedEvents_">RemoveTimedEvents</a> methods is what you need to remove MIDI events by the specified conditions. For example, we have such a file:</p>
+<pre><code class="lang-csharp">var midiFile = new MidiFile(
+    new TrackChunk(
+        new TextEvent(&quot;A&quot;) { DeltaTime = 10 },
+        new NoteOnEvent(),
+        new NoteOffEvent()),
+    new TrackChunk(
+        new TextEvent(&quot;B&quot;)));
+</code></pre>
+<p>And we want to remove all <em>Text</em> events:</p>
+<pre><code class="lang-csharp">midiFile.RemoveTimedEvents(
+    e =&gt; e.Event.EventType == MidiEventType.Text);
+</code></pre>
+<p>After this instruction executed, the file will be equal to this one:</p>
+<pre><code class="lang-csharp">var midiFile = new MidiFile(
+    new TrackChunk(
+        new NoteOnEvent() { DeltaTime = 10 },
+        new NoteOffEvent()),
+    new TrackChunk());
+</code></pre>
+<p>So <code>e =&gt; e.Event.EventType == MidiEventType.Text</code> defines what objects to remove. Of course, absolute times of all events will be preserved as you can see. We can also use the overload without predicate to remove all timed events:</p>
+<pre><code class="lang-csharp">midiFile.RemoveTimedEvents();
+</code></pre>
+<p>Please examine the <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.html">TimedEventsManagingUtilities</a> class to see other <code>RemoveTimedEvents</code> overloads.</p>
+<p>As you've learned from the <a class="xref" href="Processing-objects.html#processtimedevents">Processing objects: ProcessTimedEvents</a> article, you can instantiate timed events as custom classes derived from <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.TimedEvent.html">TimedEvent</a> and use those instances within a predicate to select objects. This article won't repeat information from there so please read it.</p>
+<p>All <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.html#Melanchall_DryWetMidi_Interaction_TimedEventsManagingUtilities_RemoveTimedEvents_">RemoveTimedEvents</a> methods return count of removed objects.</p>
+<h2 id="removenotes">RemoveNotes</h2>
+<p>Use <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.NotesManagingUtilities.html#Melanchall_DryWetMidi_Interaction_NotesManagingUtilities_RemoveNotes_">RemoveNotes</a> methods to remove notes. The approach is the same as for timed events removing (see above): you just work with notes instead of timed events.</p>
+<p>Please read <a class="xref" href="Processing-objects.html#processnotes">Processing objects: ProcessNotes</a> article to learn about how to customize objects selection.</p>
+<h2 id="removechords">RemoveChords</h2>
+<p>Obviously you can remove chords too – <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.html#Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_RemoveChords_">RemoveChords</a> is what you need. It's redundant to describe how to use these methods since usage is the same as for <a href="#removetimedevents">timed events</a> and <a href="#removenotes">notes</a>. Also please read <a class="xref" href="Processing-objects.html#processchords">Processing objects: ProcessChords</a> article.</p>
+<h2 id="removeobjects">RemoveObjects</h2>
+<p>All methods we saw before remove objects of the <strong>same type</strong>. So you can remove only either notes or chords or timed events. But there is a way to remove objects of different types at the same time – <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.TimedObjectUtilities.html#Melanchall_DryWetMidi_Interaction_TimedObjectUtilities_RemoveObjects_">RemoveObjects</a>. For example, if you want to remove notes that are not a part of some chord:</p>
+<pre><code class="lang-csharp">midiFile.RemoveObjects(
+    ObjectType.Note | ObjectType.Chord,
+    obj =&gt; obj is Note);
+</code></pre>
+<p>Or we can remove objects based on the type of an object:</p>
+<pre><code class="lang-csharp">midiFile.RemoveObjects(
+    ObjectType.Note | ObjectType.Chord,
+    obj =&gt; obj is Note note
+        ? note.Velocity &gt; 10
+        : ((Chord)obj).Velocity &gt; 20);
+</code></pre>
+<p>If you need to remove objects of several types simultaneously, <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.TimedObjectUtilities.html#Melanchall_DryWetMidi_Interaction_TimedObjectUtilities_RemoveObjects_">RemoveObjects</a> will be much faster than consecutive calls of methods for specific object types. I.e. this instruction</p>
+<pre><code class="lang-csharp">midiFile.RemoveObjects(
+    ObjectType.Note | ObjectType.Chord,
+    /*...*/);
+</code></pre>
+<p>will execute faster than</p>
+<pre><code class="lang-csharp">midiFile.RemoveChords(/*...*/);
+midiFile.RemoveNotes(/*...*/);
+</code></pre>
+<p>More than that, some cases can be covered with <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.TimedObjectUtilities.html#Melanchall_DryWetMidi_Interaction_TimedObjectUtilities_RemoveObjects_">RemoveObjects</a> only like the example described above – <em>remove notes that are not a part of some chord</em>. Of course you can always use <a class="xref" href="Objects-managers.html">objects managers</a> to remove objects with any desired logic, but that way is much slower.</p>
+
+</article>
+          </div>
+
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In this article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+      2024 / Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
+      
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <script type="text/javascript" src="../../styles/docfx.vendor.min.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>

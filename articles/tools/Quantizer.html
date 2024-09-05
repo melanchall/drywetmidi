@@ -1,21 +1,21 @@
 ﻿<!DOCTYPE html>
 <!--[if IE]><![endif]-->
 <html>
-  
+
   <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Quantizer | DryWetMIDI </title>
-    <meta name="viewport" content="width=device-width">
-    <meta name="title" content="Quantizer | DryWetMIDI ">
-    <meta name="generator" content="docfx 2.59.4.0">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+      <title>Quantizer | DryWetMIDI </title>
+      <meta name="viewport" content="width=device-width">
+      <meta name="title" content="Quantizer | DryWetMIDI ">
     
-    <link rel="shortcut icon" href="../../images/favicon.png">
-    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
-    <link rel="stylesheet" href="../../styles/docfx.css">
-    <link rel="stylesheet" href="../../styles/main.css">
-    <meta property="docfx:navrel" content="../../toc.html">
-    <meta property="docfx:tocrel" content="../toc.html">
+    
+      <link rel="shortcut icon" href="../../images/favicon.png">
+      <link rel="stylesheet" href="../../styles/docfx.vendor.min.css">
+      <link rel="stylesheet" href="../../styles/docfx.css">
+      <link rel="stylesheet" href="../../styles/main.css">
+      <meta property="docfx:navrel" content="../../toc.html">
+      <meta property="docfx:tocrel" content="../toc.html">
     
     <meta property="docfx:rel" content="../../">
     
@@ -23,7 +23,7 @@
   <body data-spy="scroll" data-target="#affix" data-offset="120">
     <div id="wrapper">
       <header>
-        
+
         <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
           <div class="container">
             <div class="navbar-header">
@@ -33,7 +33,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
               </button>
-              
+
               <a class="navbar-brand" href="../../index.html">
                 <img id="logo" class="svg" src="../../images/logo.png" alt="">
               </a>
@@ -47,7 +47,7 @@
             </div>
           </div>
         </nav>
-        
+
         <div class="subnav navbar navbar-default">
           <div class="container hide-when-search" id="breadcrumb">
             <ul class="breadcrumb">
@@ -57,7 +57,7 @@
         </div>
       </header>
       <div class="container body-content">
-        
+
         <div id="search-results">
           <div class="search-list">Search Results for <span></span></div>
           <div class="sr-items">
@@ -67,7 +67,7 @@
         </div>
       </div>
       <div role="main" class="container body-content hide-when-search">
-        
+
         <div class="sidenav hide-when-search">
           <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
           <div class="sidetoggle collapse" id="sidetoggle">
@@ -79,7 +79,7 @@
             <article class="content wrap" id="_content" data-uid="a_quantizer">
 <h1 id="quantizer">Quantizer</h1>
 
-<p>DryWetMIDI provides a tool to perform quantizing of objects of different types by the specified grid. The class aimed to solve this task is <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.Quantizer.html">Quantizer</a>. Sections below describe usage of the tool in details.</p>
+<p>DryWetMIDI provides a tool to perform quantization of objects of different types by the specified grid. The class aimed to solve this task is <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.Quantizer.html">Quantizer</a>. Sections below describe usage of the tool in detail.</p>
 <p>Note that quantizing routine modifies passed objects instead of returning new ones with quantized times. So be sure you've cloned input objects if you want to save them. All classes implementing <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.ITimedObject.html">ITimedObject</a> as well as <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a> and <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a> have <code>Clone</code> method you can use for that purpose.</p>
 <p>Also there are <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.QuantizerUtilities.html">QuantizerUtilities</a> class that contains useful methods to quantize objects inside <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.TrackChunk.html">TrackChunk</a> and <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a> without necessity to work with objects collections directly.</p>
 <p>Please note that the article doesn't cover all settings and use cases so please read API documentation on <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.Quantizer.html">Quantizer</a> to get complete information.</p>
@@ -96,23 +96,23 @@
 <li>quantize both start and end times.</li>
 </ul>
 <p>You choose the desired option specifying <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.QuantizingSettings.html#Melanchall_DryWetMidi_Tools_QuantizingSettings_Target">QuantizingSettings.Target</a> property.</p>
-<p>By default if an object quantized, it will be entirely moved to a grid position. So if you quantize start time, end time can be changed since the object will be moved. You can see the process in action on the first image of the article. Of course this behavior can be altered. Just set <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.QuantizingSettings.html#Melanchall_DryWetMidi_Tools_QuantizingSettings_FixOppositeEnd">FixOppositeEnd</a> to <code>true</code> to prevent changing of time that is not the target of quantizing. The following image illustrates quantizing of start time with the property set to <code>true</code>:</p>
+<p>By default if an object is quantized, it will be entirely moved to a grid position. So if you quantize start time, end time can be changed since the object will be moved. You can see the process in action on the first image of the article. Of course this behavior can be altered. Just set <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.QuantizingSettings.html#Melanchall_DryWetMidi_Tools_QuantizingSettings_FixOppositeEnd">FixOppositeEnd</a> to <code>true</code> to prevent changing of time that is not the target of quantizing. The following image illustrates quantizing of start time with the property set to <code>true</code>:</p>
 <p><img src="images/Quantizer/FixOppositeEnd.png" alt="Quantizing with FixOppositeEnd set to true"></p>
 <p>Of course this property works in case of end time quantizing too.</p>
-<p>When the start time of an object is not fixed, there is a chance that the object's end time will be quantized in a such way that the start time will be negative due to the object is moved to the left. Negative time is invalid so you can set <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.QuantizingSettings.html#Melanchall_DryWetMidi_Tools_QuantizingSettings_QuantizingBeyondZeroPolicy">QuantizingSettings.QuantizingBeyondZeroPolicy</a> property to desired value to handle this situation. The image below shows how quantizing works if the property set to <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.QuantizingBeyondZeroPolicy.html#Melanchall_DryWetMidi_Tools_QuantizingBeyondZeroPolicy_FixAtZero">FixAtZero</a>:</p>
+<p>When the start time of an object is not fixed, there is a chance that the object's end time will be quantized in such a way that the start time will be negative due to the object is moved to the left. Negative time is invalid so you can set <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.QuantizingSettings.html#Melanchall_DryWetMidi_Tools_QuantizingSettings_QuantizingBeyondZeroPolicy">QuantizingSettings.QuantizingBeyondZeroPolicy</a> property to desired value to handle this situation. The image below shows how quantizing works if the property set to <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.QuantizingBeyondZeroPolicy.html#Melanchall_DryWetMidi_Tools_QuantizingBeyondZeroPolicy_FixAtZero">FixAtZero</a>:</p>
 <p><img src="images/Quantizer/QuantizeEndBeyondZero.png" alt="Quantizing with QuantizeEndBeyondZero set to FixAtZero"></p>
-<p>Also if one side (start or end) of an object is fixed, there is a chance that the object's opposite time will be quantized in a such way that the object will be reversed resulting to negative length. You can handle this situation with <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.QuantizingSettings.html#Melanchall_DryWetMidi_Tools_QuantizingSettings_QuantizingBeyondFixedEndPolicy">QuantizingSettings.QuantizingBeyondFixedEndPolicy</a> property. The image below shows some options in action when start time is being quantized beyond the end one:</p>
+<p>Also if one side (start or end) of an object is fixed, there is a chance that the object's opposite time will be quantized in such a way that the object will be reversed resulting to negative length. You can handle this situation with the <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.QuantizingSettings.html#Melanchall_DryWetMidi_Tools_QuantizingSettings_QuantizingBeyondFixedEndPolicy">QuantizingSettings.QuantizingBeyondFixedEndPolicy</a> property. The image below shows some options in action when start time is being quantized beyond the end one:</p>
 <p><img src="images/Quantizer/QuantizeBeyondFixedEnd.png" alt="Quantize start time beyond fixed end"></p>
 <h2 id="custom-quantizing">Custom quantizing</h2>
 <p>You can derive from the <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.Quantizer.html">Quantizer</a> class and override its <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.Quantizer.html#Melanchall_DryWetMidi_Tools_Quantizer_OnObjectQuantizing_">OnObjectQuantizing</a> method. Inside this method you can decide whether quantizing for an object should be performed or not and if yes, what new time should be set.</p>
-<p>Information about what quantizer is going to do with an object is passed via <code>quantizedTime</code> parameter of <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.QuantizedTime.html">QuantizedTime</a> type. Image below shows what information is held within this class:</p>
+<p>Information about what the quantizer is going to do with an object is passed via the <code>quantizedTime</code> parameter of <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.QuantizedTime.html">QuantizedTime</a> type. Image below shows what information is held within this class:</p>
 <p><img src="images/Quantizer/QuantizedTime.png" alt="QuantizedTime"></p>
 <p><strong>A</strong>: <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.QuantizedTime.html#Melanchall_DryWetMidi_Tools_QuantizedTime_GridTime">GridTime</a></p>
 <p>Grid time that was selected for an object as the nearest one.</p>
 <p><strong>B</strong>: <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.QuantizedTime.html#Melanchall_DryWetMidi_Tools_QuantizedTime_NewTime">NewTime</a></p>
 <p>The new time of an object that was calculated during quantizing.</p>
 <p><strong>C</strong>: <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.QuantizedTime.html#Melanchall_DryWetMidi_Tools_QuantizedTime_DistanceToGridTime">DistanceToGridTime</a></p>
-<p>The distance between an object's current time and the nearest grid time. There is also <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.QuantizedTime.html#Melanchall_DryWetMidi_Tools_QuantizedTime_ConvertedDistanceToGridTime">ConvertedDistanceToGridTime</a> which holds the distance as <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.ITimeSpan.html">time span</a> of the type specified by <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.QuantizingSettings.html#Melanchall_DryWetMidi_Tools_QuantizingSettings_DistanceCalculationType">DistanceCalculationType</a> property of quantizing settings.</p>
+<p>The distance between an object's current time and the nearest grid time. There is also <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.QuantizedTime.html#Melanchall_DryWetMidi_Tools_QuantizedTime_ConvertedDistanceToGridTime">ConvertedDistanceToGridTime</a> which holds the distance as <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.ITimeSpan.html">time span</a> of the type specified by <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.QuantizingSettings.html#Melanchall_DryWetMidi_Tools_QuantizingSettings_DistanceCalculationType">DistanceCalculationType</a> property of quantization settings.</p>
 <p><strong>D</strong>: <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.QuantizedTime.html#Melanchall_DryWetMidi_Tools_QuantizedTime_Shift">Shift</a></p>
 <p>The distance an object is going to be moved on toward the new time. If <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.QuantizingSettings.html#Melanchall_DryWetMidi_Tools_QuantizingSettings_QuantizingLevel">QuantizingLevel</a> is less than <code>1.0</code>, <code>D</code> will be less than <code>C</code>.</p>
 <p>Let's create a simple custom quantizer. We will call it <code>SoftQuantizer</code>:</p>
@@ -132,7 +132,7 @@
     }
 }
 </code></pre>
-<p>What it does? If distance between an object and the nearest grid time is greater than <code>1/8</code>, just don't quantize the object. Otherwise do base quantizing.</p>
+<p>What does it do? If the distance between an object and the nearest grid time is greater than <code>1/8</code>, just don't quantize the object. Otherwise do base quantizing.</p>
 <p>Our small program to test the tool:</p>
 <pre><code class="lang-csharp">class Program
 {
@@ -198,21 +198,22 @@ Note [B2]: time = [7/16], length = [1/8]
 Note [C#3]: time = [1/1], length = [1/8]
 Press any key to exit...
 </code></pre>
-<p>So all works as expected, middle note is not quantized since it's too far from grid times.</p>
+<p>So all works as expected, the middle note is not quantized since it's too far from grid times.</p>
+
 </article>
           </div>
-          
+
           <div class="hidden-sm col-md-2" role="complementary">
             <div class="sideaffix">
               <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
-                <h5>In This Article</h5>
+                <h5>In this article</h5>
                 <div></div>
               </nav>
             </div>
           </div>
         </div>
       </div>
-      
+
       <footer>
         <div class="grad-bottom"></div>
         <div class="footer">
@@ -220,14 +221,14 @@ Press any key to exit...
             <span class="pull-right">
               <a href="#top">Back to top</a>
             </span>
-            2024 / Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
-            
+      2024 / Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
+      
           </div>
         </div>
       </footer>
     </div>
-    
-    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+
+    <script type="text/javascript" src="../../styles/docfx.vendor.min.js"></script>
     <script type="text/javascript" src="../../styles/docfx.js"></script>
     <script type="text/javascript" src="../../styles/main.js"></script>
   </body>

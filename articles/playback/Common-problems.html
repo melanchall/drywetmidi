@@ -1,21 +1,21 @@
 ﻿<!DOCTYPE html>
 <!--[if IE]><![endif]-->
 <html>
-  
+
   <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Common problems | DryWetMIDI </title>
-    <meta name="viewport" content="width=device-width">
-    <meta name="title" content="Common problems | DryWetMIDI ">
-    <meta name="generator" content="docfx 2.59.4.0">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+      <title>Common problems | DryWetMIDI </title>
+      <meta name="viewport" content="width=device-width">
+      <meta name="title" content="Common problems | DryWetMIDI ">
     
-    <link rel="shortcut icon" href="../../images/favicon.png">
-    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
-    <link rel="stylesheet" href="../../styles/docfx.css">
-    <link rel="stylesheet" href="../../styles/main.css">
-    <meta property="docfx:navrel" content="../../toc.html">
-    <meta property="docfx:tocrel" content="../toc.html">
+    
+      <link rel="shortcut icon" href="../../images/favicon.png">
+      <link rel="stylesheet" href="../../styles/docfx.vendor.min.css">
+      <link rel="stylesheet" href="../../styles/docfx.css">
+      <link rel="stylesheet" href="../../styles/main.css">
+      <meta property="docfx:navrel" content="../../toc.html">
+      <meta property="docfx:tocrel" content="../toc.html">
     
     <meta property="docfx:rel" content="../../">
     
@@ -23,7 +23,7 @@
   <body data-spy="scroll" data-target="#affix" data-offset="120">
     <div id="wrapper">
       <header>
-        
+
         <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
           <div class="container">
             <div class="navbar-header">
@@ -33,7 +33,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
               </button>
-              
+
               <a class="navbar-brand" href="../../index.html">
                 <img id="logo" class="svg" src="../../images/logo.png" alt="">
               </a>
@@ -47,7 +47,7 @@
             </div>
           </div>
         </nav>
-        
+
         <div class="subnav navbar navbar-default">
           <div class="container hide-when-search" id="breadcrumb">
             <ul class="breadcrumb">
@@ -57,7 +57,7 @@
         </div>
       </header>
       <div class="container body-content">
-        
+
         <div id="search-results">
           <div class="search-list">Search Results for <span></span></div>
           <div class="sr-items">
@@ -67,7 +67,7 @@
         </div>
       </div>
       <div role="main" class="container body-content hide-when-search">
-        
+
         <div class="sidenav hide-when-search">
           <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
           <div class="sidetoggle collapse" id="sidetoggle">
@@ -80,35 +80,36 @@
 <h1 id="common-problems">Common problems</h1>
 
 <h2 id="playback-doesnt-produce-sound-or-events-logs">Playback doesn't produce sound or events logs</h2>
-<p>Make sure an instance of <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.Playback.html">Playback</a> class is held by class field, global variable or something else that can live longer that method where you instantiate <code>Playback</code>. In this case</p>
+<p>Make sure an instance of <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.Playback.html">Playback</a> class is held by class field, global variable or something else that can live longer than the method where you instantiate <code>Playback</code>. In this case</p>
 <pre><code class="lang-csharp">private void StartPlayback()
 {
     var playback = _midiFile.GetPlayback();
     playback.Start();
 }
 </code></pre>
-<p><code>playback</code> variable will &quot;die&quot; (will be ready to be collected by GC) after program exits <code>StartPlayback</code> method so playback won't work.</p>
+<p><code>playback</code> variable will &quot;die&quot; (will be ready to be collected by GC) after the program exits the <code>StartPlayback</code> method so playback won't work.</p>
 <h2 id="setactive-can-only-be-called-from-the-main-thread-in-unity">SetActive can only be called from the main thread in Unity</h2>
-<p>Sometimes you want to handle <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.Playback.html#events">playback events</a> or use <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.Playback.html#Melanchall_DryWetMidi_Multimedia_Playback_EventCallback">event</a> or <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.Playback.html#Melanchall_DryWetMidi_Multimedia_Playback_NoteCallback">note</a> callbacks. Your code can be executed on separate thread in these cases. It can happen because of <code>Playback</code>'s internals (like <a href="Tick-generator.html">tick generator</a>'s tick handling) work on separate thread.</p>
+<p>Sometimes you want to handle <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.Playback.html#events">playback events</a> or use <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.Playback.html#Melanchall_DryWetMidi_Multimedia_Playback_EventCallback">event</a> or <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.Playback.html#Melanchall_DryWetMidi_Multimedia_Playback_NoteCallback">note</a> callbacks. Your code can be executed on a separate thread in these cases. It can happen because <code>Playback</code>'s internals (like <a href="Tick-generator.html">tick generator</a>'s tick handling) work on separate thread.</p>
 <p>But UI related things like call of <code>SetActive</code> can be executed on UI thread only. You can use the solution from here: <a href="https://stackoverflow.com/a/56715254">https://stackoverflow.com/a/56715254</a>.</p>
 <p>Related issues on GitHub:</p>
 <ul>
 <li><a href="https://github.com/melanchall/drywetmidi/issues/85">trigger object with a note in Unity</a></li>
 </ul>
+
 </article>
           </div>
-          
+
           <div class="hidden-sm col-md-2" role="complementary">
             <div class="sideaffix">
               <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
-                <h5>In This Article</h5>
+                <h5>In this article</h5>
                 <div></div>
               </nav>
             </div>
           </div>
         </div>
       </div>
-      
+
       <footer>
         <div class="grad-bottom"></div>
         <div class="footer">
@@ -116,14 +117,14 @@
             <span class="pull-right">
               <a href="#top">Back to top</a>
             </span>
-            2024 / Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
-            
+      2024 / Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
+      
           </div>
         </div>
       </footer>
     </div>
-    
-    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+
+    <script type="text/javascript" src="../../styles/docfx.vendor.min.js"></script>
     <script type="text/javascript" src="../../styles/docfx.js"></script>
     <script type="text/javascript" src="../../styles/main.js"></script>
   </body>

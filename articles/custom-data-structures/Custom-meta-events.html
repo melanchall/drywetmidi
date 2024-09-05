@@ -1,21 +1,21 @@
 ﻿<!DOCTYPE html>
 <!--[if IE]><![endif]-->
 <html>
-  
+
   <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Custom meta events | DryWetMIDI </title>
-    <meta name="viewport" content="width=device-width">
-    <meta name="title" content="Custom meta events | DryWetMIDI ">
-    <meta name="generator" content="docfx 2.59.4.0">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+      <title>Custom meta events | DryWetMIDI </title>
+      <meta name="viewport" content="width=device-width">
+      <meta name="title" content="Custom meta events | DryWetMIDI ">
     
-    <link rel="shortcut icon" href="../../images/favicon.png">
-    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
-    <link rel="stylesheet" href="../../styles/docfx.css">
-    <link rel="stylesheet" href="../../styles/main.css">
-    <meta property="docfx:navrel" content="../../toc.html">
-    <meta property="docfx:tocrel" content="../toc.html">
+    
+      <link rel="shortcut icon" href="../../images/favicon.png">
+      <link rel="stylesheet" href="../../styles/docfx.vendor.min.css">
+      <link rel="stylesheet" href="../../styles/docfx.css">
+      <link rel="stylesheet" href="../../styles/main.css">
+      <meta property="docfx:navrel" content="../../toc.html">
+      <meta property="docfx:tocrel" content="../toc.html">
     
     <meta property="docfx:rel" content="../../">
     
@@ -23,7 +23,7 @@
   <body data-spy="scroll" data-target="#affix" data-offset="120">
     <div id="wrapper">
       <header>
-        
+
         <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
           <div class="container">
             <div class="navbar-header">
@@ -33,7 +33,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
               </button>
-              
+
               <a class="navbar-brand" href="../../index.html">
                 <img id="logo" class="svg" src="../../images/logo.png" alt="">
               </a>
@@ -47,7 +47,7 @@
             </div>
           </div>
         </nav>
-        
+
         <div class="subnav navbar navbar-default">
           <div class="container hide-when-search" id="breadcrumb">
             <ul class="breadcrumb">
@@ -57,7 +57,7 @@
         </div>
       </header>
       <div class="container body-content">
-        
+
         <div id="search-results">
           <div class="search-list">Search Results for <span></span></div>
           <div class="sr-items">
@@ -67,7 +67,7 @@
         </div>
       </div>
       <div role="main" class="container body-content hide-when-search">
-        
+
         <div class="sidenav hide-when-search">
           <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
           <div class="sidetoggle collapse" id="sidetoggle">
@@ -79,7 +79,7 @@
             <article class="content wrap" id="_content" data-uid="a_custom_meta_event">
 <h1 id="custom-meta-events">Custom meta events</h1>
 
-<p>Meta events specify non-MIDI information useful to specific application. As with <a class="xref" href="Custom-chunks.html">custom chunks</a>, future or custom meta events may be designed. Format of meta events allows to programs which don't know about these new events to skip them without reading process failure. DryWetMIDI allows you to implement custom meta events which can be written to a MIDI file <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.TrackChunk.html">track chunk</a> and be read from it.</p>
+<p>Meta events specify non-MIDI information useful to specific applications. As with <a class="xref" href="Custom-chunks.html">custom chunks</a>, future or custom meta events may be designed. Format of meta events allows programs which don't know about these new events to skip them without reading process failure. DryWetMIDI allows you to implement custom meta events which can be written to a MIDI file <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.TrackChunk.html">track chunk</a> and be read from it.</p>
 <p>For example, let's create an event which will hold an image. Custom meta event must be derived from the <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.MetaEvent.html">MetaEvent</a> and must implement four abstract methods:</p>
 <ul>
 <li><a class="xref" href="../../api/Melanchall.DryWetMidi.Core.MetaEvent.html#Melanchall_DryWetMidi_Core_MetaEvent_ReadContent_Melanchall_DryWetMidi_Core_MidiReader_Melanchall_DryWetMidi_Core_ReadingSettings_System_Int32_">ReadContent</a>;</li>
@@ -87,7 +87,7 @@
 <li><a class="xref" href="../../api/Melanchall.DryWetMidi.Core.MetaEvent.html#Melanchall_DryWetMidi_Core_MetaEvent_GetContentSize_Melanchall_DryWetMidi_Core_WritingSettings_">GetContentSize</a>;</li>
 <li><a class="xref" href="../../api/Melanchall.DryWetMidi.Core.MidiEvent.html#Melanchall_DryWetMidi_Core_MidiEvent_CloneEvent">CloneEvent</a>.</li>
 </ul>
-<p>Also a class must have parameterless constructor.</p>
+<p>Also a class must have a parameterless constructor.</p>
 <pre><code class="lang-csharp">public sealed class ImageEvent : MetaEvent
 {
     public ImageEvent()
@@ -136,7 +136,7 @@
     Image = (Image)converter.ConvertFrom(imageBytes);
 }
 </code></pre>
-<p>Every meta event contains size of the event's content. Size is passed to <code>ReadContent</code> through <code>size</code> parameter so we know how much bytes we need to read in order to restore an image.</p>
+<p>Every meta event contains the size of the event's content. Size is passed to <code>ReadContent</code> through the <code>size</code> parameter so we know how many bytes we need to read in order to restore an image.</p>
 <p>Now let's implement <code>WriteContent</code>:</p>
 <pre><code class="lang-csharp">protected override void WriteContent(MidiWriter writer, WritingSettings settings)
 {
@@ -168,14 +168,14 @@
     return new ImageEvent(Image?.Clone() as Image);
 }
 </code></pre>
-<p>Custom meta event is completely implemented. In order to read and write it we must assign status byte to the event. You have to pick value from the <strong>[0x5F; 0x7E]</strong> range which will be the status byte of your event type. You can get status bytes of standard meta events via <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.MetaEvent.html#Melanchall_DryWetMidi_Core_MetaEvent_GetStandardMetaEventStatusBytes">MetaEvent.GetStandardMetaEventStatusBytes</a>. See code sample below to know how to read and write custom meta event:</p>
+<p>The custom meta event is completely implemented. In order to read and write it we must assign a status byte to the event. You have to pick a value from the <strong>[0x5F; 0x7E]</strong> range which will be the status byte of your event type. You can get status bytes of standard meta events via <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.MetaEvent.html#Melanchall_DryWetMidi_Core_MetaEvent_GetStandardMetaEventStatusBytes">MetaEvent.GetStandardMetaEventStatusBytes</a>. See code sample below to know how to read and write custom meta event:</p>
 <pre><code class="lang-csharp">// Define collection of custom meta event types along with
 // corresponding status bytes.
 
 var customMetaEventTypes = new EventTypesCollection
-                {
-                    { typeof(ImageEvent), 0x5F }
-                };
+{
+    { typeof(ImageEvent), 0x5F }
+};
 
 // Write an image event to an existing file.
 
@@ -187,13 +187,14 @@ var image = Image.FromFile(&quot;My image.jpg&quot;);
 var imageEvent = new ImageEvent(image);
 trackChunk.Events.Add(imageEvent);
 
-file.Write(&quot;My Great Song.mid&quot;,
-            true,
-            MidiFileFormat.MultiTrack,
-            new WritingSettings
-            {
-                CustomMetaEventTypes = customMetaEventTypes
-            });
+file.Write(
+    &quot;My Great Song.mid&quot;,
+    true,
+    MidiFileFormat.MultiTrack,
+    new WritingSettings
+    {
+        CustomMetaEventTypes = customMetaEventTypes
+    });
 
 // Read a MIDI file with ImageEvent inside.
 //
@@ -207,20 +208,21 @@ var updatedFile = MidiFile.Read(
         CustomMetaEventTypes = customMetaEventTypes
     });
 </code></pre>
+
 </article>
           </div>
-          
+
           <div class="hidden-sm col-md-2" role="complementary">
             <div class="sideaffix">
               <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
-                <h5>In This Article</h5>
+                <h5>In this article</h5>
                 <div></div>
               </nav>
             </div>
           </div>
         </div>
       </div>
-      
+
       <footer>
         <div class="grad-bottom"></div>
         <div class="footer">
@@ -228,14 +230,14 @@ var updatedFile = MidiFile.Read(
             <span class="pull-right">
               <a href="#top">Back to top</a>
             </span>
-            2024 / Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
-            
+      2024 / Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
+      
           </div>
         </div>
       </footer>
     </div>
-    
-    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+
+    <script type="text/javascript" src="../../styles/docfx.vendor.min.js"></script>
     <script type="text/javascript" src="../../styles/docfx.js"></script>
     <script type="text/javascript" src="../../styles/main.js"></script>
   </body>
