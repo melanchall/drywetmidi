@@ -72,7 +72,7 @@
             <article class="content wrap" id="_content" data-uid="">
 
 <p><img src="https://raw.githubusercontent.com/melanchall/drywetmidi/develop/Resources/Images/dwm-logo.png" alt="DryWetMIDI Logo"></p>
-<p><a href="https://www.nuget.org/packages/Melanchall.DryWetMidi/"><img src="https://img.shields.io/nuget/v/Melanchall.DryWetMidi.svg?label=NuGet%20(full)&amp;color=5295D0" alt="NuGet (full)"></a> <a href="https://www.nuget.org/packages/Melanchall.DryWetMidi.Nativeless/"><img src="https://img.shields.io/nuget/v/Melanchall.DryWetMidi.Nativeless.svg?label=NuGet%20(nativeless)&amp;color=5295D0" alt="NuGet (nativeless)"></a> <a href="https://assetstore.unity.com/packages/tools/audio/drywetmidi-222171"><img src="https://img.shields.io/static/v1?label=Unity%20Asset%20(full)&amp;message=v7.1.0&amp;color=5295D0" alt="Unity asset (full)"></a> <a href="https://assetstore.unity.com/packages/tools/audio/drywetmidi-nativeless-228998"><img src="https://img.shields.io/static/v1?label=Unity%20Asset%20(nativeless)&amp;message=v7.1.0&amp;color=5295D0" alt="Unity asset (nativeless)"></a></p>
+<p><a href="https://www.nuget.org/packages/Melanchall.DryWetMidi/"><img src="https://img.shields.io/nuget/v/Melanchall.DryWetMidi.svg?label=NuGet%20(full)&amp;color=5295D0" alt="NuGet (full)"></a> <a href="https://www.nuget.org/packages/Melanchall.DryWetMidi.Nativeless/"><img src="https://img.shields.io/nuget/v/Melanchall.DryWetMidi.Nativeless.svg?label=NuGet%20(nativeless)&amp;color=5295D0" alt="NuGet (nativeless)"></a> <a href="https://assetstore.unity.com/packages/tools/audio/drywetmidi-222171"><img src="https://img.shields.io/static/v1?label=Unity%20Asset%20(full)&amp;message=v7.2.0&amp;color=5295D0" alt="Unity asset (full)"></a> <a href="https://assetstore.unity.com/packages/tools/audio/drywetmidi-nativeless-228998"><img src="https://img.shields.io/static/v1?label=Unity%20Asset%20(nativeless)&amp;message=v7.2.0&amp;color=5295D0" alt="Unity asset (nativeless)"></a></p>
 <h1 id="overview">Overview</h1>
 <p>DryWetMIDI is the .NET library to work with MIDI data and MIDI devices. It allows:</p>
 <ul>
@@ -268,6 +268,13 @@ midiFile.Write(&quot;Single note great song.mid&quot;);
     .Note(NoteName.A)
     .Note(NoteName.B)
     .Note(NoteName.GSharp)
+
+    // Insert a simple drum pattern
+    .PianoRoll(@&quot;
+        F#2   ||||||||
+        D2    --|---|-
+        C2    |---|---&quot;)
+    .Repeat(9)
 
     // Get pattern
     .Build();
