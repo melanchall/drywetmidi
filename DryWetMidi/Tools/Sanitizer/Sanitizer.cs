@@ -12,6 +12,20 @@ namespace Melanchall.DryWetMidi.Tools
     /// </summary>
     public static class Sanitizer
     {
+        #region Constants
+
+        private static readonly ControlName[] ControlsToSkip = new[]
+        {
+            ControlName.NonRegisteredParameterNumberLsb,
+            ControlName.NonRegisteredParameterNumberMsb,
+            ControlName.RegisteredParameterNumberLsb,
+            ControlName.RegisteredParameterNumberMsb,
+            ControlName.DataEntryMsb,
+            ControlName.LsbForDataEntry,
+        };
+
+        #endregion
+
         #region Methods
 
         /// <summary>
@@ -103,7 +117,8 @@ namespace Melanchall.DryWetMidi.Tools
                 !settings.RemoveDuplicatedPitchBendEvents &&
                 !settings.RemoveDuplicatedSequenceTrackNameEvents &&
                 !settings.RemoveDuplicatedSetTempoEvents &&
-                !settings.RemoveDuplicatedTimeSignatureEvents)
+                !settings.RemoveDuplicatedTimeSignatureEvents &&
+                !settings.RemoveDuplicatedControlChangeEvents)
                 return usedChannels;
 
             var microsecondsPerQuarterNote = SetTempoEvent.DefaultMicrosecondsPerQuarterNote;
@@ -116,7 +131,12 @@ namespace Melanchall.DryWetMidi.Tools
             ushort? pitchValue = null;
             FourBitNumber? pitchBendChannel = null;
 
+            // TODO: split by track
             string sequenceTrackName = null;
+
+            var controlValues = new SevenBitNumber?[FourBitNumber.MaxValue + 1, SevenBitNumber.MaxValue + 1];
+
+            // TODO: tests on disabled duplicates removing
 
             midiFile.RemoveTimedEvents(e =>
             {
@@ -159,6 +179,20 @@ namespace Melanchall.DryWetMidi.Tools
 
                     pitchValue = pitchBendEvent.PitchValue;
                     pitchBendChannel = pitchBendEvent.Channel;
+                    return result;
+                }
+
+                if (midiEventType == MidiEventType.ControlChange && settings.RemoveDuplicatedControlChangeEvents)
+                {
+                    var controlChangeEvent = (ControlChangeEvent)midiEvent;
+                    if (ControlsToSkip.Contains(controlChangeEvent.GetControlName()))
+                    {
+                        return false;
+                    }
+
+                    var result = controlChangeEvent.ControlValue == controlValues[controlChangeEvent.Channel, controlChangeEvent.ControlNumber];
+
+                    controlValues[controlChangeEvent.Channel, controlChangeEvent.ControlNumber] = controlChangeEvent.ControlValue;
                     return result;
                 }
 

@@ -101,6 +101,8 @@ namespace Melanchall.DryWetMidi.Tools
         /// </summary>
         public bool RemoveEventsOnUnusedChannels { get; set; } = true;
 
+        public bool RemoveDuplicatedControlChangeEvents { get; set; } = true;
+
         /// <summary>
         /// Gets or sets a value indicating whether a silence at the start of a MIDI file should be
         /// removed or not. The default value is <c>false</c>. More info in the
