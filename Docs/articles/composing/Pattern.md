@@ -249,7 +249,7 @@ The length will be of six cells:
 
 So if one cell means 8th triplet time span in our example, the length of the note will be `1/2`.
 
-## Customization
+### Customization
 
 It's time to discuss how you can adjust piano roll processing. First of all, as we said before, you can set custom symbols for a single-cell note, start and end of a multi-cell note:
 
