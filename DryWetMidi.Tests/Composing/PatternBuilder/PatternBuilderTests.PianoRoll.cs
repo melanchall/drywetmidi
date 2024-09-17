@@ -4,7 +4,6 @@ using Melanchall.DryWetMidi.Interaction;
 using Melanchall.DryWetMidi.MusicTheory;
 using NUnit.Framework;
 using System;
-using System.Collections.Generic;
 
 namespace Melanchall.DryWetMidi.Tests.Composing
 {
@@ -146,7 +145,7 @@ namespace Melanchall.DryWetMidi.Tests.Composing
             }));
 
         [Test]
-        public void PianoRoll_CustomActions()
+        public void PianoRoll_CustomActions_1()
         {
             var step = MusicalTimeSpan.Sixteenth;
             var velocity = (SevenBitNumber)90;
@@ -160,17 +159,17 @@ namespace Melanchall.DryWetMidi.Tests.Composing
                 ", new PianoRollSettings
                 {
                     SingleCellNoteSymbol = '+',
-                    CustomActions = new Dictionary<char, Action<DryWetMidi.MusicTheory.Note, PatternBuilder>>
+                    CustomActions = new[]
                     {
-                        ['/'] = (note, builder) => builder
+                        PianoRollAction.CreateSingleCell('/', (builder, context) => builder
                             .StepBack(MusicalTimeSpan.ThirtySecond)
-                            .Note(note, MusicalTimeSpan.ThirtySecond, (SevenBitNumber)(builder.Velocity * 0.5))
-                            .Note(note),
-                        ['#'] = (note, builder) => builder
+                            .Note(context.Note, MusicalTimeSpan.ThirtySecond, (SevenBitNumber)(builder.Velocity * 0.5))
+                            .Note(context.Note)),
+                        PianoRollAction.CreateSingleCell('#', (builder, context) => builder
                             .StepBack(MusicalTimeSpan.ThirtySecond)
-                            .Note(note, new MusicalTimeSpan(1, 64), (SevenBitNumber)70)
-                            .Note(note, new MusicalTimeSpan(1, 64), (SevenBitNumber)50)
-                            .Note(note),
+                            .Note(context.Note, new MusicalTimeSpan(1, 64), (SevenBitNumber)70)
+                            .Note(context.Note, new MusicalTimeSpan(1, 64), (SevenBitNumber)50)
+                            .Note(context.Note)),
                     },
                 })
                 .Build();
@@ -191,12 +190,90 @@ namespace Melanchall.DryWetMidi.Tests.Composing
         }
 
         [Test]
+        public void PianoRoll_CustomActions_2()
+        {
+            var step = MusicalTimeSpan.Sixteenth;
+            var velocity = (SevenBitNumber)90;
+
+            var pattern = new PatternBuilder()
+                .SetNoteLength(step)
+                .SetVelocity(velocity)
+                .PianoRoll(@"
+                    B2    --/- --#- {==}
+                    G#2   +--- +--- ----
+                ", new PianoRollSettings
+                {
+                    SingleCellNoteSymbol = '+',
+                    CustomActions = new[]
+                    {
+                        PianoRollAction.CreateSingleCell('/', (builder, context) => builder
+                            .StepBack(MusicalTimeSpan.ThirtySecond)
+                            .Note(context.Note, MusicalTimeSpan.ThirtySecond, (SevenBitNumber)(builder.Velocity * 0.5))
+                            .Note(context.Note)),
+                        PianoRollAction.CreateSingleCell('#', (builder, context) => builder
+                            .StepBack(MusicalTimeSpan.ThirtySecond)
+                            .Note(context.Note, new MusicalTimeSpan(1, 64), (SevenBitNumber)70)
+                            .Note(context.Note, new MusicalTimeSpan(1, 64), (SevenBitNumber)50)
+                            .Note(context.Note)),
+                        PianoRollAction.CreateMultiCell('{', '}', (builder, context) => builder
+                            .Note(context.Note, builder.NoteLength.Multiply(context.CellsNumber), (SevenBitNumber)40)),
+                    },
+                })
+                .Build();
+
+            PatternTestUtilities.TestNotes(pattern, new[]
+            {
+                new NoteInfo(NoteName.GSharp, 2, step * 0, step, velocity),
+
+                new NoteInfo(NoteName.B, 2, step * 2 - MusicalTimeSpan.ThirtySecond, MusicalTimeSpan.ThirtySecond, (SevenBitNumber)45),
+                new NoteInfo(NoteName.B, 2, step * 2, step, velocity),
+
+                new NoteInfo(NoteName.GSharp, 2, step * 4, step, velocity),
+
+                new NoteInfo(NoteName.B, 2, step * 6 - MusicalTimeSpan.ThirtySecond, new MusicalTimeSpan(1, 64), (SevenBitNumber)70),
+                new NoteInfo(NoteName.B, 2, step * 6 - new MusicalTimeSpan(1, 64), new MusicalTimeSpan(1, 64), (SevenBitNumber)50),
+                new NoteInfo(NoteName.B, 2, step * 6, step, velocity),
+
+                new NoteInfo(NoteName.B, 2, step * 8, step * 4, (SevenBitNumber)40),
+            });
+        }
+
+        [TestCase('{', '}')]
+        [TestCase('/', '/')]
+        public void PianoRoll_CustomActions_MultiCell(char startSymbol, char endSymbol)
+        {
+            var step = MusicalTimeSpan.Sixteenth;
+            var velocity = (SevenBitNumber)90;
+
+            var pattern = new PatternBuilder()
+                .SetNoteLength(step)
+                .SetVelocity(velocity)
+                .PianoRoll($@"
+                    B2    {startSymbol}=={endSymbol}
+                    G#2   ----
+                ", new PianoRollSettings
+                {
+                    CustomActions = new[]
+                    {
+                        PianoRollAction.CreateMultiCell(startSymbol, endSymbol, (builder, context) => builder
+                            .Note(context.Note, context.Length, (SevenBitNumber)40)),
+                    },
+                })
+                .Build();
+
+            PatternTestUtilities.TestNotes(pattern, new[]
+            {
+                new NoteInfo(NoteName.B, 2, step * 0, step * 4, (SevenBitNumber)40),
+            });
+        }
+
+        [Test]
         public void PianoRoll_CustomActions_ContainsSingleCellNoteSymbol() => Assert.Throws<ArgumentOutOfRangeException>(
             () => new PatternBuilder().PianoRoll(@"AH3  ----", new PianoRollSettings
             {
-                CustomActions = new Dictionary<char, Action<DryWetMidi.MusicTheory.Note, PatternBuilder>>
+                CustomActions = new[]
                 {
-                    ['|'] = (note, builder) => { },
+                    PianoRollAction.CreateSingleCell('|', (_, __) => { }),
                 }
             }));
 
@@ -204,9 +281,9 @@ namespace Melanchall.DryWetMidi.Tests.Composing
         public void PianoRoll_CustomActions_ContainsMultiCellNoteStartSymbol() => Assert.Throws<ArgumentOutOfRangeException>(
             () => new PatternBuilder().PianoRoll(@"AH3  ----", new PianoRollSettings
             {
-                CustomActions = new Dictionary<char, Action<DryWetMidi.MusicTheory.Note, PatternBuilder>>
+                CustomActions = new[]
                 {
-                    ['['] = (note, builder) => { },
+                    PianoRollAction.CreateSingleCell('[', (_, __) => { }),
                 }
             }));
 
@@ -214,9 +291,9 @@ namespace Melanchall.DryWetMidi.Tests.Composing
         public void PianoRoll_CustomActions_ContainsMultiCellNoteEndSymbol() => Assert.Throws<ArgumentOutOfRangeException>(
             () => new PatternBuilder().PianoRoll(@"AH3  ----", new PianoRollSettings
             {
-                CustomActions = new Dictionary<char, Action<DryWetMidi.MusicTheory.Note, PatternBuilder>>
+                CustomActions = new[]
                 {
-                    [']'] = (note, builder) => { },
+                    PianoRollAction.CreateSingleCell(']', (_, __) => { }),
                 }
             }));
 

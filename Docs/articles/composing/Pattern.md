@@ -273,17 +273,17 @@ So the way to customize the piano roll algorithm is to pass [PianoRollSettings](
 ```csharp
 var pianoRollSettings = new PianoRollSettings
 {
-    CustomActions = new Dictionary<char, Action<Melanchall.DryWetMidi.MusicTheory.Note, PatternBuilder>>
+    CustomActions = new[]
     {
-        ['*'] = (note, pianoRollBuilder) => pianoRollBuilder
-            .Note(note, velocity: (SevenBitNumber)(pianoRollBuilder.Velocity / 2)),
-        ['║'] = (note, pianoRollBuilder) => pianoRollBuilder
-            .Note(note, pianoRollBuilder.NoteLength.Divide(2))
-            .Note(note, pianoRollBuilder.NoteLength.Divide(2), (SevenBitNumber)(pianoRollBuilder.Velocity / 2)),
-        ['!'] = (note, pianoRollBuilder) => pianoRollBuilder
+        PianoRollAction.CreateSingleCell('*', (pianoRollBuilder, context) => pianoRollBuilder
+            .Note(context.Note, velocity: (SevenBitNumber)(pianoRollBuilder.Velocity / 2))),
+        PianoRollAction.CreateSingleCell('║', (pianoRollBuilder, context) => pianoRollBuilder
+            .Note(context.Note, pianoRollBuilder.NoteLength.Divide(2))
+            .Note(context.Note, pianoRollBuilder.NoteLength.Divide(2), (SevenBitNumber)(pianoRollBuilder.Velocity / 2))),
+        PianoRollAction.CreateSingleCell('!', (pianoRollBuilder, context) => pianoRollBuilder
             .StepBack(MusicalTimeSpan.ThirtySecond)
-            .Note(note, MusicalTimeSpan.ThirtySecond, (SevenBitNumber)(pianoRollBuilder.Velocity / 3))
-            .Note(note),
+            .Note(context.Note, MusicalTimeSpan.ThirtySecond, (SevenBitNumber)(pianoRollBuilder.Velocity / 3))
+            .Note(context.Note)),
     }
 };
 
@@ -310,4 +310,48 @@ And here the file – [pianoroll-custom.mid](files/pianoroll-custom.mid). But wh
 * `'║'` – double note (two notes, each with length of half of the single-cell note);
 * `'!'` – flam (ghost thirthy-second note right before main beat).
 
-Right now it's possible to specify single-cell actions only. A way to put custom multi-cell actions will be implemented in the next release.
+We've used [PianoRollAction.CreateSingleCell](xref:Melanchall.DryWetMidi.Composing.PianoRollAction.CreateSingleCell*) method here to specify single-cell actions. But you can also define multi-cell ones – [PianoRollAction.CreateMultiCell](xref:Melanchall.DryWetMidi.Composing.PianoRollAction.CreateMultiCell*) method is what we need for this purpose. For example, if we want to be able to put quiet notes:
+
+```csharp
+var pianoRollSettings = new PianoRollSettings
+{
+    CustomActions = new[]
+    {
+        PianoRollAction.CreateMultiCell('{', '}', (pianoRollBuilder, context) => pianoRollBuilder
+            .Note(context.Note, context.Length, (SevenBitNumber)40)),
+    }
+};
+
+var pattern = new PatternBuilder()
+    .SetNoteLength(MusicalTimeSpan.Eighth.SingleDotted())
+    .PianoRoll(@"
+        A4  ----{==}
+        B3  -{=}----
+        G#3 -----{}-",
+        pianoRollSettings)
+    .Build();
+```
+
+If you want, you can designate start and end of a multi-cell action with the same symbol:
+
+```csharp
+var pianoRollSettings = new PianoRollSettings
+{
+    CustomActions = new[]
+    {
+        PianoRollAction.CreateMultiCell('/', '/', (pianoRollBuilder, context) => pianoRollBuilder
+            .Note(context.Note, context.Length, (SevenBitNumber)40)),
+    }
+};
+
+var pattern = new PatternBuilder()
+    .SetNoteLength(MusicalTimeSpan.Eighth.SingleDotted())
+    .PianoRoll(@"
+        A4  ----/==/
+        B3  -/=/----
+        G#3 -----//-",
+        pianoRollSettings)
+    .Build();
+```
+
+So the first `'/'` starts an action and the second one ends it.

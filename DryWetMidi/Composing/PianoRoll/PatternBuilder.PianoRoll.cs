@@ -1,5 +1,4 @@
 ﻿using Melanchall.DryWetMidi.Common;
-using Melanchall.DryWetMidi.Interaction;
 using System;
 using System.IO;
 using System.Linq;
@@ -67,6 +66,8 @@ namespace Melanchall.DryWetMidi.Composing
                 .SetNoteLength(parentPatternBuilder.NoteLength)
                 .SetStep(parentPatternBuilder.NoteLength)
                 .SetVelocity(parentPatternBuilder.Velocity)
+                .SetOctave(parentPatternBuilder.Octave)
+                .SetRootNote(parentPatternBuilder.RootNote)
                 .Anchor(pianoRollStartSnchor);
 
             var lines = GetPianoRollLines(pianoRoll);
@@ -116,45 +117,101 @@ namespace Melanchall.DryWetMidi.Composing
             MusicTheory.Note note,
             int dataStartIndex)
         {
-            var noteStartIndex = 0;
-            var isNoteBuilding = false;
+            var multiCellActionStartIndex = 0;
+            var multiCellActionInProgress = false;
 
             for (var i = dataStartIndex; i < line.Length; i++)
             {
                 var symbol = line[i];
 
                 if (symbol == settings.SingleCellNoteSymbol)
-                {
-                    if (isNoteBuilding)
-                        throw new InvalidOperationException("Single-cell note can't be placed inside a multi-cell one.");
-
-                    patternBuilder.Note(note);
-                }
+                    ExecuteSingleCellAction(
+                        multiCellActionInProgress,
+                        () => patternBuilder.Note(note));
                 else if (symbol == settings.MultiCellNoteStartSymbol)
-                {
-                    if (isNoteBuilding)
-                        throw new InvalidOperationException("Note can't be started while a previous one is not ended.");
-
-                    isNoteBuilding = true;
-                    noteStartIndex = i;
-                }
+                    StartMultiCellAction(
+                        i,
+                        ref multiCellActionStartIndex,
+                        ref multiCellActionInProgress);
                 else if (symbol == settings.MultiCellNoteEndSymbol)
-                {
-                    if (!isNoteBuilding)
-                        throw new InvalidOperationException("Note is not started.");
-
-                    patternBuilder.Note(note, patternBuilder.NoteLength.Multiply(i - noteStartIndex + 1));
-                    isNoteBuilding = false;
-                }
+                    EndMultiCellAction(
+                        () => patternBuilder.Note(note, patternBuilder.NoteLength.Multiply(i - multiCellActionStartIndex + 1)),
+                        ref multiCellActionInProgress);
                 else
                 {
-                    Action<MusicTheory.Note, PatternBuilder> customAction = null;
-                    if (settings.CustomActions?.TryGetValue(symbol, out customAction) == true)
-                        customAction?.Invoke(note, patternBuilder);
-                    else if (!isNoteBuilding)
-                        patternBuilder.StepForward();
+                    var action = settings
+                        .CustomActions
+                        ?.FirstOrDefault(a => a.StartSymbol == symbol || a.EndSymbol == symbol);
+
+                    if (action == null)
+                    {
+                        if (!multiCellActionInProgress)
+                            patternBuilder.StepForward();
+                    }
+                    else if (action.EndSymbol != null)
+                    {
+                        if (action.StartSymbol == symbol)
+                        {
+                            if (action.EndSymbol == symbol && multiCellActionInProgress)
+                            {
+                                var cellsNumber = i - multiCellActionStartIndex + 1;
+                                EndMultiCellAction(
+                                    () => action.Action(patternBuilder, new PianoRollActionContext(note, cellsNumber, patternBuilder.NoteLength.Multiply(cellsNumber))),
+                                    ref multiCellActionInProgress);
+                            }
+                            else
+                                StartMultiCellAction(
+                                    i,
+                                    ref multiCellActionStartIndex,
+                                    ref multiCellActionInProgress);
+                        }
+                        else
+                        {
+                            var cellsNumber = i - multiCellActionStartIndex + 1;
+                            EndMultiCellAction(
+                                () => action.Action(patternBuilder, new PianoRollActionContext(note, cellsNumber, patternBuilder.NoteLength.Multiply(cellsNumber))),
+                                ref multiCellActionInProgress);
+                        }
+                    }
+                    else
+                        ExecuteSingleCellAction(
+                            multiCellActionInProgress,
+                            () => action.Action(patternBuilder, new PianoRollActionContext(note, 1, patternBuilder.NoteLength)));
                 }
             }
+        }
+
+        private static void ExecuteSingleCellAction(
+            bool multiCellActionInProgress,
+            Action action)
+        {
+            if (multiCellActionInProgress)
+                throw new InvalidOperationException("Single-cell note can't be placed inside a multi-cell one.");
+
+            action();
+        }
+
+        private static void StartMultiCellAction(
+            int i,
+            ref int multiCellActionStartIndex,
+            ref bool multiCellActionInProgress)
+        {
+            if (multiCellActionInProgress)
+                throw new InvalidOperationException("Note can't be started while a previous one is not ended.");
+
+            multiCellActionInProgress = true;
+            multiCellActionStartIndex = i;
+        }
+
+        private static void EndMultiCellAction(
+            Action action,
+            ref bool multiCellActionInProgress)
+        {
+            if (!multiCellActionInProgress)
+                throw new InvalidOperationException("Note is not started.");
+
+            action();
+            multiCellActionInProgress = false;
         }
 
         private static string[] GetPianoRollLines(string pianoRoll)

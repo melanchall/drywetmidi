@@ -28,7 +28,7 @@ namespace Melanchall.DryWetMidi.Composing
         private char _multiCellNoteStartSymbol = DefaultMultiCellNoteStartSymbol;
         private char _multiCellNoteEndSymbol = DefaultMultiCellNoteEndSymbol;
 
-        private Dictionary<char, Action<MusicTheory.Note, PatternBuilder>> _customActions;
+        private IEnumerable<PianoRollAction> _customActions;
 
         #endregion
 
@@ -75,8 +75,8 @@ namespace Melanchall.DryWetMidi.Composing
                 ThrowIfArgument.DoesntSatisfyCondition(
                     nameof(value),
                     value,
-                    v => CustomActions?.Keys.Contains(v) != true,
-                    $"The symbol used for a custom action wuthin the {nameof(CustomActions)}.");
+                    v => CustomActions?.Any(a => a.StartSymbol == v || a.EndSymbol == v) != true,
+                    $"The symbol used for a custom action within the {nameof(CustomActions)}.");
 
                 _singleCellNoteSymbol = value;
             }
@@ -123,8 +123,8 @@ namespace Melanchall.DryWetMidi.Composing
                 ThrowIfArgument.DoesntSatisfyCondition(
                     nameof(value),
                     value,
-                    v => CustomActions?.Keys.Contains(v) != true,
-                    $"The symbol used for a custom action wuthin the {nameof(CustomActions)}.");
+                    v => CustomActions?.Any(a => a.StartSymbol == v || a.EndSymbol == v) != true,
+                    $"The symbol used for a custom action within the {nameof(CustomActions)}.");
 
                 _multiCellNoteStartSymbol = value;
             }
@@ -171,8 +171,8 @@ namespace Melanchall.DryWetMidi.Composing
                 ThrowIfArgument.DoesntSatisfyCondition(
                     nameof(value),
                     value,
-                    v => CustomActions?.Keys.Contains(v) != true,
-                    $"The symbol used for a custom action wuthin the {nameof(CustomActions)}.");
+                    v => CustomActions?.Any(a => a.StartSymbol == v || a.EndSymbol == v) != true,
+                    $"The symbol used for a custom action within the {nameof(CustomActions)}.");
 
                 _multiCellNoteEndSymbol = value;
             }
@@ -201,7 +201,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// </item>
         /// </list>
         /// </exception>
-        public Dictionary<char, Action<MusicTheory.Note, PatternBuilder>> CustomActions
+        public IEnumerable<PianoRollAction> CustomActions
         {
             get { return _customActions; }
             set
@@ -211,26 +211,26 @@ namespace Melanchall.DryWetMidi.Composing
                     ThrowIfArgument.DoesntSatisfyCondition(
                         nameof(value),
                         value,
-                        v => !v.Keys.Contains(ProhibitedSymbol),
-                        $"Actions keys contain the space (' ') symbol which is prohibited.");
+                        v => v?.Any(a => a.StartSymbol == ProhibitedSymbol) != true,
+                        $"Actions symbols contain the space (' ') symbol which is prohibited.");
 
                     ThrowIfArgument.DoesntSatisfyCondition(
                         nameof(value),
                         value,
-                        v => !v.Keys.Contains(SingleCellNoteSymbol),
-                        $"Actions keys contain the symbol defined by the {nameof(SingleCellNoteSymbol)} ('{SingleCellNoteSymbol}') property which is prohibited.");
+                        v => v?.Any(a => a.StartSymbol == SingleCellNoteSymbol) != true,
+                        $"Actions symbols contain the symbol defined by the {nameof(SingleCellNoteSymbol)} ('{SingleCellNoteSymbol}') property which is prohibited.");
 
                     ThrowIfArgument.DoesntSatisfyCondition(
                         nameof(value),
                         value,
-                        v => !v.Keys.Contains(MultiCellNoteStartSymbol),
-                        $"Actions keys contain the symbol defined by the {nameof(MultiCellNoteStartSymbol)} ('{MultiCellNoteStartSymbol}') property which is prohibited.");
+                        v => v?.Any(a => a.StartSymbol == MultiCellNoteStartSymbol) != true,
+                        $"Actions symbols contain the symbol defined by the {nameof(MultiCellNoteStartSymbol)} ('{MultiCellNoteStartSymbol}') property which is prohibited.");
 
                     ThrowIfArgument.DoesntSatisfyCondition(
                         nameof(value),
                         value,
-                        v => !v.Keys.Contains(MultiCellNoteEndSymbol),
-                        $"Actions keys contain the symbol defined by the {nameof(MultiCellNoteEndSymbol)} ('{MultiCellNoteEndSymbol}') property which is prohibited.");
+                        v => v?.Any(a => a.StartSymbol == MultiCellNoteEndSymbol) != true,
+                        $"Actions symbols contain the symbol defined by the {nameof(MultiCellNoteEndSymbol)} ('{MultiCellNoteEndSymbol}') property which is prohibited.");
                 }
 
                 _customActions = value;
