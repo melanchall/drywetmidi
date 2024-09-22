@@ -2,11 +2,23 @@
 using System;
 using System.IO;
 using System.Linq;
+using static System.Collections.Specialized.BitVector32;
 
 namespace Melanchall.DryWetMidi.Composing
 {
     public sealed partial class PatternBuilder
     {
+        #region Private enums
+
+        private enum ActionInstruction
+        {
+            SingleCell,
+            MultiCellStart,
+            MultiCellEnd,
+        }
+
+        #endregion
+
         #region Constants
 
         private static readonly char[] Digits = "0123456789".ToCharArray();
@@ -71,15 +83,22 @@ namespace Melanchall.DryWetMidi.Composing
                 .Anchor(pianoRollStartSnchor);
 
             var lines = GetPianoRollLines(pianoRoll);
+            var lineIndex = 0;
 
             foreach (var line in lines)
             {
                 patternBuilder.MoveToLastAnchor(pianoRollStartSnchor);
 
                 int dataStartIndex;
-                var note = IdentifyLineNote(line, out dataStartIndex);
+                var note = IdentifyLineNote(line, lineIndex, out dataStartIndex);
 
-                ProcessLine(patternBuilder, settings, line, note, dataStartIndex);
+                ProcessLine(
+                    patternBuilder,
+                    settings,
+                    line,
+                    lineIndex++,
+                    note,
+                    dataStartIndex);
             }
 
             return patternBuilder.Build();
@@ -87,20 +106,21 @@ namespace Melanchall.DryWetMidi.Composing
 
         private static MusicTheory.Note IdentifyLineNote(
             string line,
+            int lineIndex,
             out int dataStartIndex)
         {
             var notePartEndIndex = line.IndexOfAny(Digits);
-            var notePart = line.Substring(0, notePartEndIndex + 1);
+            var notePart = line.Substring(0, notePartEndIndex + 1).Trim();
 
             MusicTheory.Note note;
             if (!MusicTheory.Note.TryParse(notePart, out note))
             {
-                notePartEndIndex = Enumerable.Range(0, line.Length).FirstOrDefault(i => !char.IsDigit(line[i])) - 1;
+                notePartEndIndex = Enumerable.Range(0, line.Length).FirstOrDefault(i => !char.IsDigit(line[i]) && !char.IsWhiteSpace(line[i])) - 1;
                 notePart = line.Substring(0, notePartEndIndex + 1).Trim();
 
                 SevenBitNumber noteNumber;
                 if (!SevenBitNumber.TryParse(notePart, out noteNumber))
-                    throw new InvalidOperationException($"Failed to parse a note from '{notePart}'.");
+                    throw new InvalidOperationException($"Failed to parse a note from '{notePart}' (line {lineIndex}).");
                 else
                     note = MusicTheory.Note.Get(noteNumber);
             }
@@ -114,101 +134,129 @@ namespace Melanchall.DryWetMidi.Composing
             PatternBuilder patternBuilder,
             PianoRollSettings settings,
             string line,
+            int lineIndex,
             MusicTheory.Note note,
             int dataStartIndex)
         {
             var multiCellActionStartIndex = 0;
             var multiCellActionInProgress = false;
 
-            for (var i = dataStartIndex; i < line.Length; i++)
+            for (var symbolIndex = dataStartIndex; symbolIndex < line.Length; symbolIndex++)
             {
-                var symbol = line[i];
+                var symbol = line[symbolIndex];
+                if (char.IsWhiteSpace(symbol))
+                    continue;
+
+                var instruction = default(ActionInstruction?);
+                var action = default(Action);
 
                 if (symbol == settings.SingleCellNoteSymbol)
-                    ExecuteSingleCellAction(
-                        multiCellActionInProgress,
-                        () => patternBuilder.Note(note));
+                {
+                    instruction = ActionInstruction.SingleCell;
+                    action = () => patternBuilder.Note(note);
+                }
                 else if (symbol == settings.MultiCellNoteStartSymbol)
-                    StartMultiCellAction(
-                        i,
-                        ref multiCellActionStartIndex,
-                        ref multiCellActionInProgress);
+                {
+                    instruction = ActionInstruction.MultiCellStart;
+                }
                 else if (symbol == settings.MultiCellNoteEndSymbol)
-                    EndMultiCellAction(
-                        () => patternBuilder.Note(note, patternBuilder.NoteLength.Multiply(i - multiCellActionStartIndex + 1)),
-                        ref multiCellActionInProgress);
+                {
+                    instruction = ActionInstruction.MultiCellEnd;
+                    action = () => patternBuilder.Note(note, patternBuilder.NoteLength.Multiply(symbolIndex - multiCellActionStartIndex + 1));
+                }
                 else
                 {
-                    var action = settings
+                    var customAction = settings
                         .CustomActions
                         ?.FirstOrDefault(a => a.StartSymbol == symbol || a.EndSymbol == symbol);
 
-                    if (action == null)
+                    if (customAction != null)
                     {
-                        if (!multiCellActionInProgress)
-                            patternBuilder.StepForward();
-                    }
-                    else if (action.EndSymbol != null)
-                    {
-                        if (action.StartSymbol == symbol)
+                        if (customAction.EndSymbol != null)
                         {
-                            if (action.EndSymbol == symbol && multiCellActionInProgress)
+                            if (customAction.StartSymbol != symbol || (customAction.EndSymbol == symbol && multiCellActionInProgress))
                             {
-                                var cellsNumber = i - multiCellActionStartIndex + 1;
-                                EndMultiCellAction(
-                                    () => action.Action(patternBuilder, new PianoRollActionContext(note, cellsNumber, patternBuilder.NoteLength.Multiply(cellsNumber))),
-                                    ref multiCellActionInProgress);
+                                var cellsNumber = symbolIndex - multiCellActionStartIndex + 1;
+                                instruction = ActionInstruction.MultiCellEnd;
+                                action = () => customAction.Action(patternBuilder, new PianoRollActionContext(note, cellsNumber, patternBuilder.NoteLength.Multiply(cellsNumber)));
                             }
-                            else
-                                StartMultiCellAction(
-                                    i,
-                                    ref multiCellActionStartIndex,
-                                    ref multiCellActionInProgress);
+                            else if (customAction.StartSymbol == symbol && (customAction.EndSymbol != symbol || !multiCellActionInProgress))
+                            {
+                                instruction = ActionInstruction.MultiCellStart;
+                            }
                         }
                         else
                         {
-                            var cellsNumber = i - multiCellActionStartIndex + 1;
-                            EndMultiCellAction(
-                                () => action.Action(patternBuilder, new PianoRollActionContext(note, cellsNumber, patternBuilder.NoteLength.Multiply(cellsNumber))),
-                                ref multiCellActionInProgress);
+                            instruction = ActionInstruction.SingleCell;
+                            action = () => customAction.Action(patternBuilder, new PianoRollActionContext(note, 1, patternBuilder.NoteLength));
                         }
                     }
-                    else
+                }
+
+                switch (instruction)
+                {
+                    case ActionInstruction.SingleCell:
                         ExecuteSingleCellAction(
+                            lineIndex,
+                            symbolIndex,
                             multiCellActionInProgress,
-                            () => action.Action(patternBuilder, new PianoRollActionContext(note, 1, patternBuilder.NoteLength)));
+                            action);
+                        break;
+                    case ActionInstruction.MultiCellStart:
+                        StartMultiCellAction(
+                            lineIndex,
+                            symbolIndex,
+                            ref multiCellActionStartIndex,
+                            ref multiCellActionInProgress);
+                        break;
+                    case ActionInstruction.MultiCellEnd:
+                        EndMultiCellAction(
+                            lineIndex,
+                            symbolIndex,
+                            action,
+                            ref multiCellActionInProgress);
+                        break;
+                    default:
+                        if (!multiCellActionInProgress)
+                            patternBuilder.StepForward();
+                        break;
                 }
             }
         }
 
         private static void ExecuteSingleCellAction(
+            int lineIndex,
+            int symbolIndex,
             bool multiCellActionInProgress,
             Action action)
         {
             if (multiCellActionInProgress)
-                throw new InvalidOperationException("Single-cell note can't be placed inside a multi-cell one.");
+                throw new InvalidOperationException($"Single-cell note can't be placed inside a multi-cell one (line {lineIndex}, position {symbolIndex}).");
 
             action();
         }
 
         private static void StartMultiCellAction(
-            int i,
+            int lineIndex,
+            int symbolIndex,
             ref int multiCellActionStartIndex,
             ref bool multiCellActionInProgress)
         {
             if (multiCellActionInProgress)
-                throw new InvalidOperationException("Note can't be started while a previous one is not ended.");
+                throw new InvalidOperationException($"Note can't be started while a previous one is not ended (line {lineIndex}, position {symbolIndex}).");
 
             multiCellActionInProgress = true;
-            multiCellActionStartIndex = i;
+            multiCellActionStartIndex = symbolIndex;
         }
 
         private static void EndMultiCellAction(
+            int lineIndex,
+            int symbolIndex,
             Action action,
             ref bool multiCellActionInProgress)
         {
             if (!multiCellActionInProgress)
-                throw new InvalidOperationException("Note is not started.");
+                throw new InvalidOperationException($"Note is not started (line {lineIndex}, position {symbolIndex}).");
 
             action();
             multiCellActionInProgress = false;
@@ -218,7 +266,6 @@ namespace Melanchall.DryWetMidi.Composing
         {
             return pianoRoll
                 .Split('\n', '\r')
-                .Select(l => l.Trim().Replace(" ", string.Empty))
                 .Where(l => !string.IsNullOrWhiteSpace(l))
                 .ToArray();
         }

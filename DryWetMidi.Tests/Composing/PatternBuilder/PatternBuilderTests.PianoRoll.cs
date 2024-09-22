@@ -333,20 +333,57 @@ namespace Melanchall.DryWetMidi.Tests.Composing
         }
 
         [Test]
-        public void PianoRoll_FailedToParseNote() => Assert.Throws<InvalidOperationException>(
-            () => new PatternBuilder().PianoRoll(@"AH3  ----"));
+        public void PianoRoll_FailedToParseNote_1()
+        {
+            var exception = Assert.Throws<InvalidOperationException>(() => new PatternBuilder().PianoRoll(
+                @"AH3  ----"));
+            StringAssert.Contains("0", exception.Message, "No line index.");
+        }
 
         [Test]
-        public void PianoRoll_SingleCellNoteInMultiCellOne() => Assert.Throws<InvalidOperationException>(
-            () => new PatternBuilder().PianoRoll(@"A3  -[-|-]"));
+        public void PianoRoll_FailedToParseNote_2()
+        {
+            var exception = Assert.Throws<InvalidOperationException>(() => new PatternBuilder().PianoRoll(
+                @"A3   ----
+                  AH3  ----"));
+            StringAssert.Contains("1", exception.Message, "No line index.");
+        }
 
         [Test]
-        public void PianoRoll_NoteStartedWithPreviousNotEnded() => Assert.Throws<InvalidOperationException>(
-            () => new PatternBuilder().PianoRoll(@"A3  -[-[-]]"));
+        public void PianoRoll_SingleCellNoteInMultiCellOne_1()
+        {
+            var exception = Assert.Throws<InvalidOperationException>(() => new PatternBuilder().PianoRoll(
+                @"A3  -[-|-]"));
+            StringAssert.Contains("0", exception.Message, "No line index.");
+            StringAssert.Contains("7", exception.Message, "No symbol index.");
+        }
 
         [Test]
-        public void PianoRoll_NoteNotStarted() => Assert.Throws<InvalidOperationException>(
-            () => new PatternBuilder().PianoRoll(@"A3  -[]--]--"));
+        public void PianoRoll_SingleCellNoteInMultiCellOne_2()
+        {
+            var exception = Assert.Throws<InvalidOperationException>(() => new PatternBuilder().PianoRoll(
+                "B3  -[---]\nA3  -[-|-]"));
+            StringAssert.Contains("1", exception.Message, "No line index.");
+            StringAssert.Contains("7", exception.Message, "No symbol index.");
+        }
+
+        [Test]
+        public void PianoRoll_NoteStartedWithPreviousNotEnded()
+        {
+            var exception = Assert.Throws<InvalidOperationException>(() => new PatternBuilder().PianoRoll(
+                @"A3  -[-[-]]"));
+            StringAssert.Contains("0", exception.Message, "No line index.");
+            StringAssert.Contains("7", exception.Message, "No symbol index.");
+        }
+
+        [Test]
+        public void PianoRoll_NoteNotStarted()
+        {
+            var exception = Assert.Throws<InvalidOperationException>(() => new PatternBuilder().PianoRoll(
+                @"A3  -[]--]--"));
+            StringAssert.Contains("0", exception.Message, "No line index.");
+            StringAssert.Contains("9", exception.Message, "No symbol index.");
+        }
 
         #endregion
     }
