@@ -26,12 +26,6 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// </summary>
         public NoteDetectionSettings NoteDetectionSettings { get; set; }
 
-        /// <summary>
-        /// Gets or sets a hint for a playback creation. The hint can improve performance if you don't need
-        /// some features of the <see cref="Playback"/>.
-        /// </summary>
-        public PlaybackHint Hint { get; set; } = PlaybackHint.Default;
-
         #endregion
     }
 }

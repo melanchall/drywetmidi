@@ -2,35 +2,15 @@
 using System.Collections.Generic;
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
-using Melanchall.DryWetMidi.Interaction;
-using Melanchall.DryWetMidi.Multimedia;
 using NUnit.Framework;
 
 namespace Melanchall.DryWetMidi.Tests.Multimedia
 {
+    // TODO: check tracking disabled
     [TestFixture]
     public sealed partial class PlaybackTests
     {
         #region Test methods
-
-        [Retry(RetriesNumber)]
-        [TestCase(PlaybackHint.DisablePitchValueTracking)]
-        [TestCase(PlaybackHint.DisableDataTracking)]
-        public void DisablePitchValueTracking_NoEventsFired(PlaybackHint playbackHint) => CheckNoEventsFiredTrackingDisabled(
-            objects: new[]
-            {
-                new TimedEvent(new NoteOnEvent()).SetTime(new MetricTimeSpan(0, 0, 0, 500), TempoMap.Default),
-                new TimedEvent(new PitchBendEvent(1200)).SetTime(new MetricTimeSpan(0, 0, 0, 600), TempoMap.Default),
-                new TimedEvent(new NoteOffEvent()).SetTime(new MetricTimeSpan(0, 0, 1), TempoMap.Default),
-            },
-            playbackHint: playbackHint);
-
-        [Retry(RetriesNumber)]
-        [TestCase(PlaybackHint.DisablePitchValueTracking)]
-        [TestCase(PlaybackHint.DisableDataTracking)]
-        public void DisablePitchValueTracking_FailOnEnableTracking(PlaybackHint playbackHint) => CheckFailOnEnableTracking(
-            playbackHint: playbackHint,
-            enableTracking: playback => playback.TrackPitchValue = true);
 
         [Retry(RetriesNumber)]
         [TestCase(true, 0)]

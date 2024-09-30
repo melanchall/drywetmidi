@@ -14,43 +14,6 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
     [TestFixture]
     public sealed partial class PlaybackTests
     {
-        private void CheckNoEventsFiredTrackingDisabled(
-            ICollection<ITimedObject> objects,
-            PlaybackHint playbackHint)
-        {
-            var tempoMap = TempoMap.Default;
-            var playedEvents = new List<MidiEvent>();
-
-            using (var playback = new Playback(objects, tempoMap, new PlaybackSettings { Hint = playbackHint }))
-            {
-                playback.EventPlayed += (_, e) => playedEvents.Add(e.Event);
-
-                playback.Start();
-                playback.MoveToTime(new MetricTimeSpan(0, 0, 0, 750));
-                playback.MoveToStart();
-                playback.Stop();
-            }
-
-            CollectionAssert.IsEmpty(playedEvents, "Events are played.");
-        }
-
-        private void CheckFailOnEnableTracking(
-            PlaybackHint playbackHint,
-            Action<Playback> enableTracking)
-        {
-            var objects = new[]
-            {
-                new TimedEvent(new NoteOnEvent()),
-            };
-
-            using (var playback = new Playback(objects, TempoMap.Default, new PlaybackSettings { Hint = playbackHint }))
-            {
-                Assert.Throws<InvalidOperationException>(
-                    () => enableTracking(playback),
-                    "No exception thrown.");
-            }
-        }
-
         private IEnumerable<SnapPoint> GetActiveSnapPoints(Playback playback)
         {
             return playback.Snapping.GetActiveSnapPoints().ToList();

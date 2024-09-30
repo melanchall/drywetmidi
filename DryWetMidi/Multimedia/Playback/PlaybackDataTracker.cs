@@ -158,28 +158,18 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         #region Methods
 
-        public void InitializeData(MidiEvent midiEvent, long time, object metadata, PlaybackHint playbackHint)
+        public void InitializeData(MidiEvent midiEvent, long time, object metadata)
         {
-            if (!playbackHint.HasFlag(PlaybackHint.DisableProgramTracking))
-                InitializeProgramChangeData(midiEvent as ProgramChangeEvent, time, metadata);
-
-            if (!playbackHint.HasFlag(PlaybackHint.DisablePitchValueTracking))
-                InitializePitchBendData(midiEvent as PitchBendEvent, time, metadata);
-
-            if (!playbackHint.HasFlag(PlaybackHint.DisableControlValueTracking))
-                InitializeControlData(midiEvent as ControlChangeEvent, time, metadata);
+            InitializeProgramChangeData(midiEvent as ProgramChangeEvent, time, metadata);
+            InitializePitchBendData(midiEvent as PitchBendEvent, time, metadata);
+            InitializeControlData(midiEvent as ControlChangeEvent, time, metadata);
         }
 
-        public void UpdateCurrentData(MidiEvent midiEvent, object metadata, PlaybackHint playbackHint)
+        public void UpdateCurrentData(MidiEvent midiEvent, object metadata)
         {
-            if (!playbackHint.HasFlag(PlaybackHint.DisableProgramTracking))
-                UpdateCurrentProgramChangeData(midiEvent as ProgramChangeEvent, metadata);
-
-            if (!playbackHint.HasFlag(PlaybackHint.DisablePitchValueTracking))
-                UpdateCurrentPitchBendData(midiEvent as PitchBendEvent, metadata);
-
-            if (!playbackHint.HasFlag(PlaybackHint.DisableControlValueTracking))
-                UpdateCurrentControlData(midiEvent as ControlChangeEvent, metadata);
+            UpdateCurrentProgramChangeData(midiEvent as ProgramChangeEvent, metadata);
+            UpdateCurrentPitchBendData(midiEvent as PitchBendEvent, metadata);
+            UpdateCurrentControlData(midiEvent as ControlChangeEvent, metadata);
         }
 
         public IEnumerable<EventWithMetadata> GetEventsAtTime(TimeSpan time, TrackedParameterType trackedParameterType)
