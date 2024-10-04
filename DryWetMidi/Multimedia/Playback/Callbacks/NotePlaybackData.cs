@@ -66,18 +66,18 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// </summary>
         public FourBitNumber Channel { get; }
 
-        internal bool PlayNote { get; }
+        public bool PlayNote { get; }
 
         #endregion
 
         #region Methods
 
-        internal NoteOnEvent GetNoteOnEvent()
+        public NoteOnEvent GetNoteOnEvent()
         {
             return new NoteOnEvent(NoteNumber, Velocity) { Channel = Channel };
         }
 
-        internal NoteOffEvent GetNoteOffEvent()
+        public NoteOffEvent GetNoteOffEvent()
         {
             return new NoteOffEvent(NoteNumber, OffVelocity) { Channel = Channel };
         }

@@ -7,7 +7,7 @@ using Melanchall.DryWetMidi.Interaction;
 
 namespace Melanchall.DryWetMidi.Multimedia
 {
-    internal sealed class PlaybackDataTracker
+    public class PlaybackDataTracker
     {
         #region Nested enums
 

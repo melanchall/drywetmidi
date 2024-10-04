@@ -1,6 +1,6 @@
 ﻿namespace Melanchall.DryWetMidi.Interaction
 {
-    internal sealed class TimedObjectAt<TObject>
+    public class TimedObjectAt<TObject>
         where TObject : ITimedObject
     {
         #region Constructor
