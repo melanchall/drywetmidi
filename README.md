@@ -21,13 +21,9 @@ Please see [Getting started](#getting-started) section below for quick jump into
 
 ## Useful Links
 
-* [NuGet](https://www.nuget.org/packages/Melanchall.DryWetMidi)
 * [Documentation](https://melanchall.github.io/drywetmidi)
+* [NuGet](https://www.nuget.org/packages/Melanchall.DryWetMidi)
 * [Project health](https://melanchall.github.io/drywetmidi/articles/dev/Project-health.html)
-* CodeProject articles:
-  * [DryWetMIDI: High-Level Processing of MIDI Files](https://www.codeproject.com/Articles/1200014/DryWetMIDI-High-level-processing-of-MIDI-files)
-  * [DryWetMIDI: Notes Quantization](https://www.codeproject.com/Articles/1204629/DryWetMIDI-Notes-Quantization)
-  * [DryWetMIDI: Working with MIDI Devices](https://www.codeproject.com/Articles/1275475/DryWetMIDI-Working-with-MIDI-Devices)
 
 ## Projects using DryWetMIDI
 
@@ -295,8 +291,3 @@ private void OnEventSent(object sender, MidiEventSentEventArgs e)
     Console.WriteLine($"Event sent to '{midiDevice.Name}' at {DateTime.Now}: {e.Event}");
 }
 ```
-
-## SAST Tools
-
-* [JetBrains All Products Pack](https://jb.gg/OpenSourceSupport) – all JetBrains desktop tools by open source license.
-* [PVS-Studio](https://pvs-studio.com/en/pvs-studio/?utm_source=website&utm_medium=github&utm_campaign=open_source) – static analyzer for C, C++, C#, and Java code.
