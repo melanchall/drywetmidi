@@ -1,5 +1,4 @@
 ﻿using Melanchall.DryWetMidi.Common;
-using Melanchall.DryWetMidi.Composing.Actions;
 using Melanchall.DryWetMidi.Core;
 
 namespace Melanchall.DryWetMidi.Composing

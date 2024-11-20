@@ -1,7 +1,7 @@
 ﻿using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
 
-namespace Melanchall.DryWetMidi.Composing.Actions
+namespace Melanchall.DryWetMidi.Composing
 {
     internal abstract class AddChannelEventAction<TEvent> : PatternAction
         where TEvent : ChannelEvent
