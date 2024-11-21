@@ -14,7 +14,6 @@ namespace Melanchall.DryWetMidi.Tests.Composing
         #region Test methods
 
         [Test]
-        [Description("Add two notes where first one takes default length and velocity and the second takes specified ones.")]
         public void Note_MixedLengthAndVelocity()
         {
             var defaultNoteLength = MusicalTimeSpan.Quarter;
@@ -40,7 +39,6 @@ namespace Melanchall.DryWetMidi.Tests.Composing
         }
 
         [Test]
-        [Description("Add several notes with metric lengths.")]
         public void Note_Multiple_MetricLengths()
         {
             var pattern = new PatternBuilder()
@@ -63,7 +61,6 @@ namespace Melanchall.DryWetMidi.Tests.Composing
         }
 
         [Test]
-        [Description("Add several notes with metric lengths.")]
         public void Note_Multiple_MetricLengths_TempoChanged()
         {
             var pattern = new PatternBuilder()
@@ -90,7 +87,6 @@ namespace Melanchall.DryWetMidi.Tests.Composing
         }
 
         [Test]
-        [Description("Add several notes by intervals.")]
         public void Note_Multiple_Interval()
         {
             var defaultNoteLength = MusicalTimeSpan.Quarter;
@@ -112,6 +108,18 @@ namespace Melanchall.DryWetMidi.Tests.Composing
                 new NoteInfo(NoteName.A, 4, defaultNoteLength, defaultNoteLength, defaultVelocity)
             });
         }
+
+        [Test]
+        public void Note_ByInterval_OutOfRange_Up() => Assert.Throws<ArgumentException>(() =>
+            new PatternBuilder()
+                .SetRootNote(DryWetMidi.MusicTheory.Note.Get((SevenBitNumber)30))
+                .Note(Interval.FromHalfSteps(100)));
+
+        [Test]
+        public void Note_ByInterval_OutOfRange_Down() => Assert.Throws<ArgumentException>(() =>
+            new PatternBuilder()
+                .SetRootNote(DryWetMidi.MusicTheory.Note.Get((SevenBitNumber)30))
+                .Note(-Interval.FromHalfSteps(100)));
 
         [Test]
         public void Note_ByString()

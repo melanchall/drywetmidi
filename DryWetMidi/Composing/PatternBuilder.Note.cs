@@ -27,8 +27,12 @@ namespace Melanchall.DryWetMidi.Composing
         {
             ThrowIfArgument.IsNull(nameof(interval), interval);
 
+            var newNoteNumber = RootNote.NoteNumber + interval.HalfSteps;
+            if (newNoteNumber < SevenBitNumber.MinValue || newNoteNumber > SevenBitNumber.MaxValue)
+                throw new ArgumentException($"The result of transposition ({newNoteNumber}) of the current root note ({RootNote}) by the specified interval is out of valid note's number range.", nameof(newNoteNumber));
+
             return Note(
-                RootNote.Transpose(interval),
+                MusicTheory.Note.Get((SevenBitNumber)newNoteNumber),
                 length ?? NoteLength,
                 velocity ?? Velocity);
         }
