@@ -704,6 +704,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         {
             var currentTime = TimeSpan.Zero;
 
+            Assert.AreEqual(expectedEvents.Count, receivedEvents.Count, "Invalid received events count.");
+            Assert.AreEqual(expectedEvents.Count, sentEvents.Count, "Invalid sent events count.");
+
             for (var i = 0; i < sentEvents.Count; i++)
             {
                 var sentEvent = sentEvents[i];
@@ -745,30 +748,46 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
         private void CompareReceivedEvents(
             IReadOnlyList<ReceivedEvent> receivedEvents,
-            IReadOnlyList<ReceivedEvent> expectedReceivedEvents)
+            IReadOnlyList<ReceivedEvent> expectedReceivedEvents,
+            TimeSpan? sendReceiveTimeDelta = null)
         {
             Assert.AreEqual(
                 expectedReceivedEvents.Count,
                 receivedEvents.Count,
-                $"Received events count is invalid. Actual events:{Environment.NewLine}" +
+                $"Received events count is invalid.{Environment.NewLine}Actual events:{Environment.NewLine}" +
                     string.Join(Environment.NewLine, receivedEvents) +
                     $"{Environment.NewLine}Expected events:{Environment.NewLine}" +
                     string.Join(Environment.NewLine, expectedReceivedEvents));
 
-            for (var i = 0; i < receivedEvents.Count; i++)
+            var equalityCheckSettings = new MidiEventEqualityCheckSettings { CompareDeltaTimes = false };
+            var timeDelta = sendReceiveTimeDelta ?? SendReceiveUtilities.MaximumEventSendReceiveDelay;
+
+            var actualEventsList = receivedEvents.ToList();
+            var notReceivedEvents = new List<ReceivedEvent>();
+
+            foreach (var expectedReceivedEvent in expectedReceivedEvents)
             {
-                var receivedEvent = receivedEvents[i];
-                var expectedReceivedEvent = expectedReceivedEvents[i];
+                var actualEvent = actualEventsList.FirstOrDefault(e =>
+                {
+                    if (!MidiEvent.Equals(expectedReceivedEvent.Event, e.Event, equalityCheckSettings))
+                        return false;
 
-                MidiAsserts.AreEqual(expectedReceivedEvent.Event, receivedEvent.Event, false, $"Received event [{receivedEvent.Event}] doesn't match expected one [{expectedReceivedEvent.Event}].");
+                    var expectedTime = expectedReceivedEvent.Time;
+                    var offsetFromExpectedTime = (e.Time - expectedTime).Duration();
 
-                var expectedTime = expectedReceivedEvent.Time;
-                var offsetFromExpectedTime = (receivedEvent.Time - expectedTime).Duration();
-                Assert.LessOrEqual(
-                    offsetFromExpectedTime,
-                    SendReceiveUtilities.MaximumEventSendReceiveDelay,
-                    $"Event was received at wrong time ({receivedEvent.Time}; expected is {expectedTime}).");
+                    return offsetFromExpectedTime <= timeDelta;
+                });
+
+                if (actualEvent == null)
+                    notReceivedEvents.Add(expectedReceivedEvent);
+                else
+                    actualEventsList.Remove(actualEvent);
             }
+
+            CollectionAssert.IsEmpty(
+                notReceivedEvents,
+                $"Following events was not received:{Environment.NewLine}{string.Join(Environment.NewLine, notReceivedEvents)}{Environment.NewLine}" +
+                $"Actual events:{Environment.NewLine}{string.Join(Environment.NewLine, receivedEvents)}");
         }
 
         private static void CheckCurrentTime(Playback playback, TimeSpan expectedCurrentTime, string afterPlaybackAction)

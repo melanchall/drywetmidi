@@ -39,6 +39,18 @@ namespace Melanchall.DryWetMidi.Interaction
 
         #endregion
 
+        #region Fields
+
+        private SevenBitNumber _noteNumber;
+        private SevenBitNumber _velocity = DefaultVelocity;
+        private SevenBitNumber _offVelocity = DefaultOffVelocity;
+        private FourBitNumber _channel;
+
+        private long _time;
+        private long _length;
+
+        #endregion
+
         #region Constructor
 
         /// <summary>
@@ -189,9 +201,13 @@ namespace Melanchall.DryWetMidi.Interaction
             TimedNoteOnEvent = timedNoteOnEvent;
             TimedNoteOffEvent = timedNoteOffEvent;
 
+            NoteNumber = noteOnEvent.NoteNumber;
             Velocity = noteOnEvent.Velocity;
             OffVelocity = noteOffEvent.Velocity;
             Channel = noteOnEvent.Channel;
+
+            _time = timedNoteOnEvent.Time;
+            _length = timedNoteOffEvent.Time - timedNoteOnEvent.Time;
         }
 
         #endregion
@@ -209,7 +225,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="value"/> is negative.</exception>
         public long Time
         {
-            get { return TimedNoteOnEvent.Time; }
+            get { return _time; }
             set
             {
                 ThrowIfTimeArgument.IsNegative(nameof(value), value);
@@ -220,6 +236,8 @@ namespace Melanchall.DryWetMidi.Interaction
 
                 TimedNoteOffEvent.Time = value + Length;
                 TimedNoteOnEvent.Time = value;
+
+                _time = value;
 
                 TimeChanged?.Invoke(this, new TimeChangedEventArgs(oldTime, value));
             }
@@ -236,7 +254,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="value"/> is negative.</exception>
         public long Length
         {
-            get { return TimedNoteOffEvent.Time - TimedNoteOnEvent.Time; }
+            get { return _length; }
             set
             {
                 ThrowIfLengthArgument.IsNegative(nameof(value), value);
@@ -246,6 +264,8 @@ namespace Melanchall.DryWetMidi.Interaction
                     return;
 
                 TimedNoteOffEvent.Time = TimedNoteOnEvent.Time + value;
+
+                _length = value;
 
                 LengthChanged?.Invoke(this, new LengthChangedEventArgs(oldLength, value));
             }
@@ -261,11 +281,13 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         public SevenBitNumber NoteNumber
         {
-            get { return ((NoteOnEvent)TimedNoteOnEvent.Event).NoteNumber; }
+            get { return _noteNumber; }
             set
             {
                 ((NoteOnEvent)TimedNoteOnEvent.Event).NoteNumber = value;
                 ((NoteOffEvent)TimedNoteOffEvent.Event).NoteNumber = value;
+
+                _noteNumber = value;
             }
         }
 
@@ -274,8 +296,13 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         public SevenBitNumber Velocity
         {
-            get { return ((NoteOnEvent)TimedNoteOnEvent.Event).Velocity; }
-            set { ((NoteOnEvent)TimedNoteOnEvent.Event).Velocity = value; }
+            get { return _velocity; }
+            set
+            {
+                ((NoteOnEvent)TimedNoteOnEvent.Event).Velocity = value;
+
+                _velocity = value;
+            }
         }
 
         /// <summary>
@@ -283,8 +310,13 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         public SevenBitNumber OffVelocity
         {
-            get { return ((NoteOffEvent)TimedNoteOffEvent.Event).Velocity; }
-            set { ((NoteOffEvent)TimedNoteOffEvent.Event).Velocity = value; }
+            get { return _offVelocity; }
+            set
+            {
+                ((NoteOffEvent)TimedNoteOffEvent.Event).Velocity = value;
+
+                _offVelocity = value;
+            }
         }
 
         /// <summary>
@@ -292,23 +324,25 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         public FourBitNumber Channel
         {
-            get { return ((NoteOnEvent)TimedNoteOnEvent.Event).Channel; }
+            get { return _channel; }
             set
             {
                 ((NoteOnEvent)TimedNoteOnEvent.Event).Channel = value;
                 ((NoteOffEvent)TimedNoteOffEvent.Event).Channel = value;
+
+                _channel = value;
             }
         }
 
         /// <summary>
         /// Gets name of the note.
         /// </summary>
-        public NoteName NoteName => ((NoteOnEvent)TimedNoteOnEvent.Event).GetNoteName();
+        public NoteName NoteName => NoteUtilities.GetNoteName(NoteNumber);
 
         /// <summary>
         /// Gets octave of the note.
         /// </summary>
-        public int Octave => ((NoteOnEvent)TimedNoteOnEvent.Event).GetNoteOctave();
+        public int Octave => NoteUtilities.GetNoteOctave(NoteNumber);
 
         /// <summary>
         /// Gets Note On timed event of the note.
@@ -332,7 +366,15 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <returns>The 'Note On' timed event of the current note.</returns>
         public TimedEvent GetTimedNoteOnEvent()
         {
-            return (TimedEvent)TimedNoteOnEvent.Clone();
+            var clonedEvent = (TimedEvent)TimedNoteOnEvent.Clone();
+            clonedEvent.Time = Time;
+
+            var noteEvent = (NoteOnEvent)clonedEvent.Event;
+            noteEvent.NoteNumber = NoteNumber;
+            noteEvent.Velocity = Velocity;
+            noteEvent.Channel = Channel;
+
+            return clonedEvent;
         }
 
         /// <summary>
@@ -341,7 +383,15 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <returns>The 'Note Off' timed event of the current note.</returns>
         public TimedEvent GetTimedNoteOffEvent()
         {
-            return (TimedEvent)TimedNoteOffEvent.Clone();
+            var clonedEvent = (TimedEvent)TimedNoteOffEvent.Clone();
+            clonedEvent.Time = Time + Length;
+
+            var noteEvent = (NoteOffEvent)clonedEvent.Event;
+            noteEvent.NoteNumber = NoteNumber;
+            noteEvent.Velocity = OffVelocity;
+            noteEvent.Channel = Channel;
+
+            return clonedEvent;
         }
 
         /// <summary>
@@ -368,13 +418,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <returns>Copy of the object.</returns>
         public virtual ITimedObject Clone()
         {
-            var newTimedNoteOnEvent = GetTimedNoteOnEvent();
-            newTimedNoteOnEvent._time = TimedNoteOnEvent.Time;
-
-            var newTimedNoteOffEvent = GetTimedNoteOffEvent();
-            newTimedNoteOffEvent._time = TimedNoteOffEvent.Time;
-
-            return new Note(newTimedNoteOnEvent, newTimedNoteOffEvent, false);
+            return new Note(GetTimedNoteOnEvent(), GetTimedNoteOffEvent(), false);
         }
 
         /// <inheritdoc/>

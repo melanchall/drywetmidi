@@ -59,7 +59,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             public bool IsDefault { get; }
         }
 
-        private sealed class ProgramChange : DataChange<SevenBitNumber>
+        private sealed class ProgramChange : DataChange<SevenBitNumber>, IEquatable<ProgramChange>
         {
             public ProgramChange(SevenBitNumber programNumber, object metadata)
                 : base(programNumber, metadata)
@@ -70,9 +70,16 @@ namespace Melanchall.DryWetMidi.Multimedia
                 : base(programNumber, metadata, isDefault)
             {
             }
+
+            public bool Equals(ProgramChange other)
+            {
+                return other != null &&
+                       Data == other.Data &&
+                       IsDefault == other.IsDefault;
+            }
         }
 
-        private sealed class PitchValueChange : DataChange<ushort>
+        private sealed class PitchValueChange : DataChange<ushort>, IEquatable<PitchValueChange>
         {
             public PitchValueChange(ushort pitchValue, object metadata)
                 : base(pitchValue, metadata)
@@ -83,9 +90,16 @@ namespace Melanchall.DryWetMidi.Multimedia
                 : base(pitchValue, metadata, isDefault)
             {
             }
+
+            public bool Equals(PitchValueChange other)
+            {
+                return other != null &&
+                       Data == other.Data &&
+                       IsDefault == other.IsDefault;
+            }
         }
 
-        private sealed class ControlValueChange : DataChange<SevenBitNumber>
+        private sealed class ControlValueChange : DataChange<SevenBitNumber>, IEquatable<ControlValueChange>
         {
             public ControlValueChange(SevenBitNumber controlValue, object metadata)
                 : base(controlValue, metadata)
@@ -96,6 +110,13 @@ namespace Melanchall.DryWetMidi.Multimedia
                 : base(controlValue, metadata, isDefault)
             {
             }
+
+            public bool Equals(ControlValueChange other)
+            {
+                return other != null &&
+                       Data == other.Data &&
+                       IsDefault == other.IsDefault;
+            }
         }
 
         #endregion
@@ -103,7 +124,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         #region Constants
 
         private static readonly ProgramChange DefaultProgramChange = new ProgramChange(SevenBitNumber.MinValue, null, true);
-        private static readonly PitchValueChange DefaultPitchValueChange = new PitchValueChange(ushort.MinValue, null, true);
+        private static readonly PitchValueChange DefaultPitchValueChange = new PitchValueChange(PitchBendEvent.DefaultPitchValue, null, true);
         private static readonly ControlValueChange DefaultControlValueChange = new ControlValueChange(SevenBitNumber.MinValue, null, true);
 
         #endregion
@@ -111,18 +132,18 @@ namespace Melanchall.DryWetMidi.Multimedia
         #region Fields
 
         private readonly ProgramChange[] _currentProgramChanges = new ProgramChange[FourBitNumber.MaxValue + 1];
-        private readonly ValueLine<ProgramChange>[] _programsChangesLinesByChannels = FourBitNumber.Values
-            .Select(n => new ValueLine<ProgramChange>(DefaultProgramChange))
+        private readonly RedBlackTree<long, ProgramChange>[] _programChangesTreesByChannel = FourBitNumber.Values
+            .Select(n => new RedBlackTree<long, ProgramChange>())
             .ToArray();
 
         private readonly PitchValueChange[] _currentPitchValues = new PitchValueChange[FourBitNumber.MaxValue + 1];
-        private readonly ValueLine<PitchValueChange>[] _pitchValuesLinesByChannel = FourBitNumber.Values
-            .Select(n => new ValueLine<PitchValueChange>(DefaultPitchValueChange))
+        private readonly RedBlackTree<long, PitchValueChange>[] _pitchValuesTreesByChannel = FourBitNumber.Values
+            .Select(n => new RedBlackTree<long, PitchValueChange>())
             .ToArray();
 
         private readonly Dictionary<SevenBitNumber, ControlValueChange>[] _currentControlsValuesChangesByChannel = new Dictionary<SevenBitNumber, ControlValueChange>[FourBitNumber.MaxValue + 1];
-        private readonly Dictionary<SevenBitNumber, ValueLine<ControlValueChange>>[] _controlsValuesChangesLinesByChannel = FourBitNumber.Values
-            .Select(n => new Dictionary<SevenBitNumber, ValueLine<ControlValueChange>>())
+        private readonly Dictionary<SevenBitNumber, RedBlackTree<long, ControlValueChange>>[] _controlsValuesChangesTreesByChannel = FourBitNumber.Values
+            .Select(n => new Dictionary<SevenBitNumber, RedBlackTree<long, ControlValueChange>>())
             .ToArray();
 
         private readonly TempoMap _tempoMap;
@@ -172,6 +193,13 @@ namespace Melanchall.DryWetMidi.Multimedia
             UpdateCurrentControlData(midiEvent as ControlChangeEvent, metadata);
         }
 
+        public void RemoveData(MidiEvent midiEvent, long time)
+        {
+            RemoveProgramChangeData(midiEvent as ProgramChangeEvent, time);
+            RemovePitchBendData(midiEvent as PitchBendEvent, time);
+            RemoveControlData(midiEvent as ControlChangeEvent, time);
+        }
+
         public IEnumerable<EventWithMetadata> GetEventsAtTime(TimeSpan time, TrackedParameterType trackedParameterType)
         {
             var convertedTime = TimeConverter.ConvertFrom((MetricTimeSpan)time, _tempoMap);
@@ -201,7 +229,25 @@ namespace Melanchall.DryWetMidi.Multimedia
             if (programChangeEvent == null)
                 return;
 
-            _programsChangesLinesByChannels[programChangeEvent.Channel].SetValue(time, new ProgramChange(programChangeEvent.ProgramNumber, metadata));
+            var tree = _programChangesTreesByChannel[programChangeEvent.Channel];
+            tree.Add(time, new ProgramChange(programChangeEvent.ProgramNumber, metadata));
+        }
+
+        private void RemoveProgramChangeData(ProgramChangeEvent programChangeEvent, long time)
+        {
+            if (programChangeEvent == null)
+                return;
+
+            var tree = _programChangesTreesByChannel[programChangeEvent.Channel];
+            var nodes = tree.SearchNodes(time);
+
+            var programChange = new ProgramChange(programChangeEvent.ProgramNumber, null);
+
+            foreach (var node in nodes)
+            {
+                if (node.Value.Equals(programChange))
+                    tree.Delete(node);
+            }
         }
 
         private IEnumerable<EventWithMetadata> GetProgramChangeEventsAtTime(long time)
@@ -211,13 +257,12 @@ namespace Melanchall.DryWetMidi.Multimedia
 
             foreach (var channel in FourBitNumber.Values)
             {
-                var valueChange = _programsChangesLinesByChannels[channel].GetValueChangeAtTime(time);
-                if (valueChange?.Time == time)
+                var tree = _programChangesTreesByChannel[channel];
+                var node = tree.GetLastNodeBelowThreshold(time + 1);
+                if (node?.Key == time)
                     continue;
 
-                var programChangeAtTime = valueChange != null
-                    ? valueChange.Value
-                    : DefaultProgramChange;
+                var programChangeAtTime = node?.Value ?? DefaultProgramChange;
 
                 var currentProgramChange = _currentProgramChanges[channel];
                 if (programChangeAtTime.Data != currentProgramChange?.Data && (currentProgramChange != null || !programChangeAtTime.IsDefault))
@@ -240,7 +285,25 @@ namespace Melanchall.DryWetMidi.Multimedia
             if (pitchBendEvent == null)
                 return;
 
-            _pitchValuesLinesByChannel[pitchBendEvent.Channel].SetValue(time, new PitchValueChange(pitchBendEvent.PitchValue, metadata));
+            var tree = _pitchValuesTreesByChannel[pitchBendEvent.Channel];
+            tree.Add(time, new PitchValueChange(pitchBendEvent.PitchValue, metadata));
+        }
+
+        private void RemovePitchBendData(PitchBendEvent pitchBendEvent, long time)
+        {
+            if (pitchBendEvent == null)
+                return;
+
+            var tree = _pitchValuesTreesByChannel[pitchBendEvent.Channel];
+            var nodes = tree.SearchNodes(time);
+
+            var pitchBend = new PitchValueChange(pitchBendEvent.PitchValue, null);
+
+            foreach (var node in nodes)
+            {
+                if (node.Value.Equals(pitchBend))
+                    tree.Delete(node);
+            }
         }
 
         private IEnumerable<EventWithMetadata> GetPitchBendEventsAtTime(long time)
@@ -250,13 +313,12 @@ namespace Melanchall.DryWetMidi.Multimedia
 
             foreach (var channel in FourBitNumber.Values)
             {
-                var valueChange = _pitchValuesLinesByChannel[channel].GetValueChangeAtTime(time);
-                if (valueChange?.Time == time)
+                var tree = _pitchValuesTreesByChannel[channel];
+                var node = tree.GetLastNodeBelowThreshold(time + 1);
+                if (node?.Key == time)
                     continue;
 
-                var pitchValueChangeAtTime = valueChange != null
-                    ? valueChange.Value
-                    : DefaultPitchValueChange;
+                var pitchValueChangeAtTime = node?.Value ?? DefaultPitchValueChange;
 
                 var currentPitchValueChange = _currentPitchValues[channel];
                 if (pitchValueChangeAtTime.Data != currentPitchValueChange?.Data && (currentPitchValueChange != null || !pitchValueChangeAtTime.IsDefault))
@@ -283,13 +345,35 @@ namespace Melanchall.DryWetMidi.Multimedia
             if (controlChangeEvent == null)
                 return;
 
-            var controlsLines = _controlsValuesChangesLinesByChannel[controlChangeEvent.Channel];
+            var trees = _controlsValuesChangesTreesByChannel[controlChangeEvent.Channel];
 
-            ValueLine<ControlValueChange> controlValueLine;
-            if (!controlsLines.TryGetValue(controlChangeEvent.ControlNumber, out controlValueLine))
-                controlsLines.Add(controlChangeEvent.ControlNumber, controlValueLine = new ValueLine<ControlValueChange>(DefaultControlValueChange));
+            RedBlackTree<long, ControlValueChange> tree;
+            if (!trees.TryGetValue(controlChangeEvent.ControlNumber, out tree))
+                trees.Add(controlChangeEvent.ControlNumber, tree = new RedBlackTree<long, ControlValueChange>());
 
-            controlValueLine.SetValue(time, new ControlValueChange(controlChangeEvent.ControlValue, metadata));
+            tree.Add(time, new ControlValueChange(controlChangeEvent.ControlValue, metadata));
+        }
+
+        private void RemoveControlData(ControlChangeEvent controlChangeEvent, long time)
+        {
+            if (controlChangeEvent == null)
+                return;
+
+            var trees = _controlsValuesChangesTreesByChannel[controlChangeEvent.Channel];
+
+            RedBlackTree<long, ControlValueChange> tree;
+            if (!trees.TryGetValue(controlChangeEvent.ControlNumber, out tree))
+                trees.Add(controlChangeEvent.ControlNumber, tree = new RedBlackTree<long, ControlValueChange>());
+
+            var nodes = tree.SearchNodes(time);
+
+            var controlValueChange = new ControlValueChange(controlChangeEvent.ControlValue, null);
+
+            foreach (var node in nodes)
+            {
+                if (node.Value.Equals(controlValueChange))
+                    tree.Delete(node);
+            }
         }
 
         private IEnumerable<EventWithMetadata> GetControlChangeEventsAtTime(long time)
@@ -299,22 +383,20 @@ namespace Melanchall.DryWetMidi.Multimedia
 
             foreach (var channel in FourBitNumber.Values)
             {
-                var controlsValuesChangesLinesByControlNumber = _controlsValuesChangesLinesByChannel[channel];
+                var controlsValuesChangesTreesByControlNumber = _controlsValuesChangesTreesByChannel[channel];
                 var currentControlsValuesChangesByControlNumber = _currentControlsValuesChangesByChannel[channel];
 
                 foreach (var controlNumber in SevenBitNumber.Values)
                 {
-                    ValueLine<ControlValueChange> controlValueLine;
-                    if (!controlsValuesChangesLinesByControlNumber.TryGetValue(controlNumber, out controlValueLine))
+                    RedBlackTree<long, ControlValueChange> tree;
+                    if (!controlsValuesChangesTreesByControlNumber.TryGetValue(controlNumber, out tree))
                         continue;
 
-                    var valueChange = controlValueLine.GetValueChangeAtTime(time);
-                    if (valueChange?.Time == time)
+                    var node = tree.GetLastNodeBelowThreshold(time + 1);
+                    if (node?.Key == time)
                         continue;
 
-                    var controlValueChangeAtTime = valueChange != null
-                        ? valueChange.Value
-                        : DefaultControlValueChange;
+                    var controlValueChangeAtTime = node?.Value ?? DefaultControlValueChange;
 
                     ControlValueChange currentControlValueChange = null;
                     if (currentControlsValuesChangesByControlNumber != null)

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Multimedia;
@@ -68,6 +67,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             }
 
             public object Metadata { get; set; }
+
+            public override ITimedObject Clone()
+            {
+                return new TimedEventWithTrackChunkIndex(Event.Clone(), Time, (int)Metadata);
+            }
         }
 
         #endregion
@@ -167,7 +171,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
             var midiFile = new MidiFile(
                 new TrackChunk(),
-                new TrackChunk(new NoteOffEvent { DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)noteOffDelay, TempoMap.Default) }));
+                new TrackChunk(new TextEvent { DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)noteOffDelay, TempoMap.Default) }));
 
             CheckTrackControlValueWithMetadata(
                 midiFile,
@@ -175,7 +179,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 moveTo: moveTo,
                 expectedMetadata: new (MidiEvent, object)[]
                 {
-                    (new NoteOffEvent(), 1)
+                    (new TextEvent(), 1)
                 });
         }
 
@@ -190,7 +194,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
             var midiFile = new MidiFile(
                 new TrackChunk(new TextEvent()),
-                new TrackChunk(new NoteOffEvent { DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)noteOffDelay, TempoMap.Default) }));
+                new TrackChunk(new ProgramChangeEvent { DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)noteOffDelay, TempoMap.Default) }));
 
             CheckTrackControlValueWithMetadata(
                 midiFile,
@@ -200,7 +204,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 {
                     (new TextEvent(), 0),
                     (new TextEvent(), 0),
-                    (new NoteOffEvent(), 1)
+                    (new ProgramChangeEvent(), 1)
                 });
         }
 
@@ -217,7 +221,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
             var midiFile = new MidiFile(
                 new TrackChunk(new ControlChangeEvent(controlNumber, controlValue)),
-                new TrackChunk(new NoteOffEvent { DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)noteOffDelay, TempoMap.Default) }));
+                new TrackChunk(new TextEvent { DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)noteOffDelay, TempoMap.Default) }));
 
             CheckTrackControlValueWithMetadata(
                 midiFile,
@@ -226,7 +230,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 expectedMetadata: new (MidiEvent, object)[]
                 {
                     (new ControlChangeEvent(controlNumber, controlValue), 0),
-                    (new NoteOffEvent(), 1)
+                    (new TextEvent(), 1)
                 });
         }
 
@@ -254,7 +258,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                         Channel = (FourBitNumber)10,
                         DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)controlChangeDelay, TempoMap.Default)
                     },
-                    new NoteOffEvent
+                    new TextEvent
                     {
                         DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)(noteOffDelay - controlChangeDelay), TempoMap.Default)
                     }));
@@ -268,7 +272,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     (new ControlChangeEvent(controlNumber1, controlValue1), 0),
                     (new ControlChangeEvent(controlNumber1, controlValue1), 0),
                     (new ControlChangeEvent(controlNumber2, controlValue2) { Channel = (FourBitNumber)10 }, 1),
-                    (new NoteOffEvent(), 1)
+                    (new TextEvent(), 1)
                 });
         }
 
@@ -291,7 +295,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new ControlChangeEvent(controlNumber1, controlValue1)),
                 new TrackChunk(
                     new ControlChangeEvent(controlNumber2, controlValue2),
-                    new NoteOffEvent
+                    new TextEvent
                     {
                         DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)noteOffDelay, TempoMap.Default)
                     }));
@@ -306,7 +310,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     (new ControlChangeEvent(controlNumber2, controlValue2), 1),
                     (new ControlChangeEvent(controlNumber1, controlValue1), 0),
                     (new ControlChangeEvent(controlNumber2, controlValue2), 1),
-                    (new NoteOffEvent(), 1)
+                    (new TextEvent(), 1)
                 });
         }
 
@@ -330,7 +334,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                         DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)controlChangeTime, TempoMap.Default)
                     }),
                 new TrackChunk(
-                    new NoteOffEvent
+                    new TextEvent
                     {
                         DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)(noteOffTime - controlChangeTime), TempoMap.Default)
                     }));
@@ -342,7 +346,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 expectedMetadata: new (MidiEvent, object)[]
                 {
                     (new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, 0),
-                    (new NoteOffEvent(), 1)
+                    (new TextEvent(), 1)
                 });
         }
 
@@ -366,7 +370,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                         DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)controlChangeTime, TempoMap.Default)
                     }),
                 new TrackChunk(
-                    new NoteOffEvent
+                    new TextEvent
                     {
                         DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)(noteOffTime - controlChangeTime), TempoMap.Default)
                     }));
@@ -378,7 +382,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 expectedMetadata: new (MidiEvent, object)[]
                 {
                     (new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, 0),
-                    (new NoteOffEvent(), 1)
+                    (new TextEvent(), 1)
                 });
         }
 
@@ -402,7 +406,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                         DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)controlChangeTime, TempoMap.Default)
                     }),
                 new TrackChunk(
-                    new NoteOffEvent
+                    new TextEvent
                     {
                         DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)(noteOffTime - controlChangeTime), TempoMap.Default)
                     }));
@@ -414,7 +418,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 expectedMetadata: new (MidiEvent, object)[]
                 {
                     (new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, 0),
-                    (new NoteOffEvent(), 1)
+                    (new TextEvent(), 1)
                 });
         }
 
@@ -438,7 +442,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                         DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)controlChangeTime, TempoMap.Default)
                     }),
                 new TrackChunk(
-                    new NoteOffEvent
+                    new TextEvent
                     {
                         DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)(noteOffTime - controlChangeTime), TempoMap.Default)
                     }));
@@ -450,7 +454,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 expectedMetadata: new (MidiEvent, object)[]
                 {
                     (new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, 0),
-                    (new NoteOffEvent(), 1)
+                    (new TextEvent(), 1)
                 });
         }
 
@@ -474,7 +478,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                         DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)controlChangeTime, TempoMap.Default)
                     }),
                 new TrackChunk(
-                    new NoteOffEvent
+                    new TextEvent
                     {
                         DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)(noteOffTime - controlChangeTime), TempoMap.Default)
                     }));
@@ -488,7 +492,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     (new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, 0),
                     (new ControlChangeEvent(controlNumber, SevenBitNumber.MinValue) { Channel = (FourBitNumber)4 }, null),
                     (new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, 0),
-                    (new NoteOffEvent(), 1)
+                    (new TextEvent(), 1)
                 });
         }
 
@@ -505,7 +509,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var midiFile = new MidiFile(
                 new TrackChunk(),
                 new TrackChunk(
-                    new NoteOffEvent
+                    new TextEvent
                     {
                         DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)noteOffDelay, TempoMap.Default)
                     }));
@@ -516,7 +520,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 moveTo: moveTo,
                 expectedMetadata: new (MidiEvent, object)[]
                 {
-                    (new NoteOffEvent(), 1)
+                    (new TextEvent(), 1)
                 });
         }
 
@@ -532,7 +536,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var midiFile = new MidiFile(
                 new TrackChunk(),
                 new TrackChunk(
-                    new NoteOffEvent
+                    new TextEvent
                     {
                         DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)noteOffDelay, TempoMap.Default)
                     }));
@@ -543,7 +547,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 moveTo: moveTo,
                 expectedMetadata: new (MidiEvent, object)[]
                 {
-                    (new NoteOffEvent(), 1)
+                    (new TextEvent(), 1)
                 });
         }
 
@@ -561,7 +565,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 new TrackChunk(
                     new PitchBendEvent(pitchValue)),
                 new TrackChunk(
-                    new NoteOffEvent
+                    new TextEvent
                     {
                         DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)noteOffDelay, TempoMap.Default)
                     }));
@@ -573,7 +577,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 expectedMetadata: new (MidiEvent, object)[]
                 {
                     (new PitchBendEvent(pitchValue), 0),
-                    (new NoteOffEvent(), 1)
+                    (new TextEvent(), 1)
                 });
         }
 
@@ -591,7 +595,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 new TrackChunk(
                     new PitchBendEvent(pitchValue)),
                 new TrackChunk(
-                    new NoteOffEvent
+                    new TextEvent
                     {
                         DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)noteOffDelay, TempoMap.Default)
                     }));
@@ -604,7 +608,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 {
                     (new PitchBendEvent(pitchValue), 0),
                     (new PitchBendEvent(pitchValue), 0),
-                    (new NoteOffEvent(), 1)
+                    (new TextEvent(), 1)
                 });
         }
 
@@ -627,7 +631,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                         DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)pitchBendTime, TempoMap.Default)
                     }),
                 new TrackChunk(
-                    new NoteOffEvent
+                    new TextEvent
                     {
                         DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)(noteOffTime - pitchBendTime), TempoMap.Default)
                     }));
@@ -639,7 +643,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 expectedMetadata: new (MidiEvent, object)[]
                 {
                     (new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, 0),
-                    (new NoteOffEvent(), 1)
+                    (new TextEvent(), 1)
                 });
         }
 
@@ -662,7 +666,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                         DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)pitchBendTime, TempoMap.Default)
                     }),
                 new TrackChunk(
-                    new NoteOffEvent
+                    new TextEvent
                     {
                         DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)(noteOffTime - pitchBendTime), TempoMap.Default)
                     }));
@@ -674,7 +678,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 expectedMetadata: new (MidiEvent, object)[]
                 {
                     (new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, 0),
-                    (new NoteOffEvent(), 1)
+                    (new TextEvent(), 1)
                 });
         }
 
@@ -697,7 +701,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                         DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)pitchBendTime, TempoMap.Default)
                     }),
                 new TrackChunk(
-                    new NoteOffEvent
+                    new TextEvent
                     {
                         DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)(noteOffTime - pitchBendTime), TempoMap.Default)
                     }));
@@ -709,7 +713,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 expectedMetadata: new (MidiEvent, object)[]
                 {
                     (new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, 0),
-                    (new NoteOffEvent(), 1)
+                    (new TextEvent(), 1)
                 });
         }
 
@@ -732,7 +736,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                         DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)pitchBendTime, TempoMap.Default)
                     }),
                 new TrackChunk(
-                    new NoteOffEvent
+                    new TextEvent
                     {
                         DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)(noteOffTime - pitchBendTime), TempoMap.Default)
                     }));
@@ -744,9 +748,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 expectedMetadata: new (MidiEvent, object)[]
                 {
                     (new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, 0),
-                    (new PitchBendEvent(SevenBitNumber.MinValue) { Channel = (FourBitNumber)4 }, null),
+                    (new PitchBendEvent() { Channel = (FourBitNumber)4 }, null),
                     (new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, 0),
-                    (new NoteOffEvent(), 1)
+                    (new TextEvent(), 1)
                 });
         }
 
@@ -763,7 +767,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var midiFile = new MidiFile(
                 new TrackChunk(),
                 new TrackChunk(
-                    new NoteOffEvent
+                    new TextEvent
                     {
                         DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)noteOffDelay, TempoMap.Default)
                     }));
@@ -774,7 +778,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 moveTo: moveTo,
                 expectedMetadata: new (MidiEvent, object)[]
                 {
-                    (new NoteOffEvent(), 1)
+                    (new TextEvent(), 1)
                 });
         }
 
@@ -790,7 +794,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var midiFile = new MidiFile(
                 new TrackChunk(),
                 new TrackChunk(
-                    new NoteOffEvent
+                    new TextEvent
                     {
                         DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)noteOffDelay, TempoMap.Default)
                     }));
@@ -801,7 +805,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 moveTo: moveTo,
                 expectedMetadata: new (MidiEvent, object)[]
                 {
-                    (new NoteOffEvent(), 1)
+                    (new TextEvent(), 1)
                 });
         }
 
@@ -819,7 +823,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 new TrackChunk(
                     new ProgramChangeEvent(programNumber)),
                 new TrackChunk(
-                    new NoteOffEvent
+                    new TextEvent
                     {
                         DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)noteOffDelay, TempoMap.Default)
                     }));
@@ -831,7 +835,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 expectedMetadata: new (MidiEvent, object)[]
                 {
                     (new ProgramChangeEvent(programNumber), 0),
-                    (new NoteOffEvent(), 1)
+                    (new TextEvent(), 1)
                 });
         }
 
@@ -849,7 +853,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 new TrackChunk(
                     new ProgramChangeEvent(programNumber)),
                 new TrackChunk(
-                    new NoteOffEvent
+                    new TextEvent
                     {
                         DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)noteOffDelay, TempoMap.Default)
                     }));
@@ -862,7 +866,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 {
                     (new ProgramChangeEvent(programNumber), 0),
                     (new ProgramChangeEvent(programNumber), 0),
-                    (new NoteOffEvent(), 1)
+                    (new TextEvent(), 1)
                 });
         }
 
@@ -885,7 +889,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                         DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)programChangeTime, TempoMap.Default)
                     }),
                 new TrackChunk(
-                    new NoteOffEvent
+                    new TextEvent
                     {
                         DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)(noteOffTime - programChangeTime), TempoMap.Default)
                     }));
@@ -897,7 +901,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 expectedMetadata: new (MidiEvent, object)[]
                 {
                     (new ProgramChangeEvent(programNumber) { Channel = (FourBitNumber)4 }, 0),
-                    (new NoteOffEvent(), 1)
+                    (new TextEvent(), 1)
                 });
         }
 
@@ -920,7 +924,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                         DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)programChangeTime, TempoMap.Default)
                     }),
                 new TrackChunk(
-                    new NoteOffEvent
+                    new TextEvent
                     {
                         DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)(noteOffTime - programChangeTime), TempoMap.Default)
                     }));
@@ -932,7 +936,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 expectedMetadata: new (MidiEvent, object)[]
                 {
                     (new ProgramChangeEvent(programNumber) { Channel = (FourBitNumber)4 }, 0),
-                    (new NoteOffEvent(), 1)
+                    (new TextEvent(), 1)
                 });
         }
 
@@ -955,7 +959,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                         DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)programChangeTime, TempoMap.Default)
                     }),
                 new TrackChunk(
-                    new NoteOffEvent
+                    new TextEvent
                     {
                         DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)(noteOffTime - programChangeTime), TempoMap.Default)
                     }));
@@ -967,7 +971,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 expectedMetadata: new (MidiEvent, object)[]
                 {
                     (new ProgramChangeEvent(programNumber) { Channel = (FourBitNumber)4 }, 0),
-                    (new NoteOffEvent(), 1)
+                    (new TextEvent(), 1)
                 });
         }
 
@@ -990,7 +994,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                         DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)programChangeTime, TempoMap.Default)
                     }),
                 new TrackChunk(
-                    new NoteOffEvent
+                    new TextEvent
                     {
                         DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)(noteOffTime - programChangeTime), TempoMap.Default)
                     }));
@@ -1004,7 +1008,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     (new ProgramChangeEvent(programNumber) { Channel = (FourBitNumber)4 }, 0),
                     (new ProgramChangeEvent(SevenBitNumber.MinValue) { Channel = (FourBitNumber)4 }, null),
                     (new ProgramChangeEvent(programNumber) { Channel = (FourBitNumber)4 }, 0),
-                    (new NoteOffEvent(), 1)
+                    (new TextEvent(), 1)
                 });
         }
 
@@ -1764,13 +1768,17 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 afterResume: (context, playback) => CheckCurrentTime(playback, stopAfter - stepAfterStop, "stopped"),
                 runningAfterResume: new[]
                 {
-                    Tuple.Create<TimeSpan, PlaybackAction>(firstAfterResumeDelay, (context, playback) => CheckCurrentTime(playback, stopAfter + firstAfterResumeDelay - stepAfterStop, "resumed")),
+                    Tuple.Create<TimeSpan, PlaybackAction>(firstAfterResumeDelay, (context, playback) =>
+                    {
+                        Assert.IsTrue(playback.IsRunning, "Playback is not running after resumed.");
+                        CheckCurrentTime(playback, stopAfter + firstAfterResumeDelay - stepAfterStop, "resumed on first span");
+                    }),
                     Tuple.Create<TimeSpan, PlaybackAction>(secondAfterResumeDelay, (context, playback) =>
                     {
                         playback.MoveBack((MetricTimeSpan)stepAfterResumed);
-                        CheckCurrentTime(playback, stopAfter + firstAfterResumeDelay + secondAfterResumeDelay - stepAfterStop - stepAfterResumed, "resumed");
+                        CheckCurrentTime(playback, stopAfter + firstAfterResumeDelay + secondAfterResumeDelay - stepAfterStop - stepAfterResumed, "resumed on second span");
                     }),
-                    Tuple.Create<TimeSpan, PlaybackAction>(thirdAfterResumeDelay, (context, playback) => CheckCurrentTime(playback, stopAfter + firstAfterResumeDelay + secondAfterResumeDelay + thirdAfterResumeDelay - stepAfterStop - stepAfterResumed, "resumed"))
+                    Tuple.Create<TimeSpan, PlaybackAction>(thirdAfterResumeDelay, (context, playback) => CheckCurrentTime(playback, stopAfter + firstAfterResumeDelay + secondAfterResumeDelay + thirdAfterResumeDelay - stepAfterStop - stepAfterResumed, "resumed on third span"))
                 },
                 expectedMetadata: new (MidiEvent, object)[]
                 {

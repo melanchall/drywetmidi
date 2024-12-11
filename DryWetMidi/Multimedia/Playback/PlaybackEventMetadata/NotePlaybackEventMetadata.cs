@@ -3,7 +3,7 @@ using Melanchall.DryWetMidi.Interaction;
 
 namespace Melanchall.DryWetMidi.Multimedia
 {
-    internal sealed class NotePlaybackEventMetadata
+    internal sealed class NotePlaybackEventMetadata : IEquatable<NotePlaybackEventMetadata>
     {
         #region Constructor
 
@@ -57,6 +57,15 @@ namespace Melanchall.DryWetMidi.Multimedia
         {
             NotePlaybackData = notePlaybackData;
             IsCustomNotePlaybackDataSet = true;
+        }
+
+        #endregion
+
+        #region IEquatable<NotePlaybackEventMetadata>
+
+        public bool Equals(NotePlaybackEventMetadata other)
+        {
+            return object.ReferenceEquals(this, other);
         }
 
         #endregion

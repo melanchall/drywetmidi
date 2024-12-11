@@ -518,8 +518,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             action: c =>
             {
                 var note = ((CustomChord)c).Notes.First();
-                ((CustomTimedEvent)note.TimedNoteOnEvent).Time = 10;
-                ((CustomTimedEvent)note.TimedNoteOffEvent).Time = 10;
+                ((CustomTimedEvent)note.GetTimedNoteOnEvent()).Time = 10;
+                ((CustomTimedEvent)note.GetTimedNoteOffEvent()).Time = 10;
+                note.Time = 10;
             },
             expectedMidiEvents: new MidiEvent[]
             {

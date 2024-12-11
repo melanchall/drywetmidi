@@ -121,7 +121,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var exceptionMessage = "AAA";
             var outputDevice = new OutputDeviceWithExceptionOnSendEvent(() => new Exception(exceptionMessage));
 
-            using (var playback = new[] { new NoteOffEvent() }.GetPlayback(TempoMap.Default, outputDevice))
+            using (var playback = new[] { new TextEvent() }.GetPlayback(TempoMap.Default, outputDevice))
             {
                 Exception exception = null;
 

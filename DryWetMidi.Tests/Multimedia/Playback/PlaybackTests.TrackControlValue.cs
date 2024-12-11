@@ -27,11 +27,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             CheckTrackControlValue(
                 eventsToSend: new[]
                 {
-                    new EventToSend(new NoteOffEvent(), noteOffDelay)
+                    new EventToSend(new StartEvent(), noteOffDelay)
                 },
                 eventsWillBeSent: new[]
                 {
-                    new EventToSend(new NoteOffEvent(), noteOffDelay - (moveTo - moveFrom))
+                    new EventToSend(new StartEvent(), noteOffDelay - (moveTo - moveFrom))
                 },
                 moveFrom: moveFrom,
                 moveTo: moveTo,
@@ -51,11 +51,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             CheckTrackControlValue(
                 eventsToSend: new[]
                 {
-                    new EventToSend(new NoteOffEvent(), noteOffDelay)
+                    new EventToSend(new StartEvent(), noteOffDelay)
                 },
                 eventsWillBeSent: new[]
                 {
-                    new EventToSend(new NoteOffEvent(), noteOffDelay - (moveTo - moveFrom))
+                    new EventToSend(new StartEvent(), noteOffDelay - (moveTo - moveFrom))
                 },
                 moveFrom: moveFrom,
                 moveTo: moveTo,
@@ -78,12 +78,12 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 eventsToSend: new[]
                 {
                     new EventToSend(new ControlChangeEvent(controlNumber, controlValue), TimeSpan.Zero),
-                    new EventToSend(new NoteOffEvent(), noteOffDelay)
+                    new EventToSend(new StartEvent(), noteOffDelay)
                 },
                 eventsWillBeSent: new[]
                 {
                     new EventToSend(new ControlChangeEvent(controlNumber, controlValue), TimeSpan.Zero),
-                    new EventToSend(new NoteOffEvent(), noteOffDelay - (moveTo - moveFrom))
+                    new EventToSend(new StartEvent(), noteOffDelay - (moveTo - moveFrom))
                 },
                 moveFrom: moveFrom,
                 moveTo: moveTo,
@@ -111,14 +111,14 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 {
                     new EventToSend(new ControlChangeEvent(controlNumber1, controlValue1), TimeSpan.Zero),
                     new EventToSend(new ControlChangeEvent(controlNumber2, controlValue2) { Channel = (FourBitNumber)10 }, controlChangeDelay),
-                    new EventToSend(new NoteOffEvent(), noteOffDelay - controlChangeDelay)
+                    new EventToSend(new StartEvent(), noteOffDelay - controlChangeDelay)
                 },
                 eventsWillBeSent: new[]
                 {
                     new EventToSend(new ControlChangeEvent(controlNumber1, controlValue1), TimeSpan.Zero),
                     new EventToSend(new ControlChangeEvent(controlNumber1, controlValue1), moveFrom),
                     new EventToSend(new ControlChangeEvent(controlNumber2, controlValue2) { Channel = (FourBitNumber)10 }, controlChangeDelay),
-                    new EventToSend(new NoteOffEvent(), noteOffDelay - controlChangeDelay)
+                    new EventToSend(new StartEvent(), noteOffDelay - controlChangeDelay)
                 },
                 moveFrom: moveFrom,
                 moveTo: moveTo,
@@ -145,7 +145,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 {
                     new EventToSend(new ControlChangeEvent(controlNumber1, controlValue1), TimeSpan.Zero),
                     new EventToSend(new ControlChangeEvent(controlNumber2, controlValue2), TimeSpan.Zero),
-                    new EventToSend(new NoteOffEvent(), noteOffDelay)
+                    new EventToSend(new StartEvent(), noteOffDelay)
                 },
                 eventsWillBeSent: new[]
                 {
@@ -153,7 +153,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new EventToSend(new ControlChangeEvent(controlNumber2, controlValue2), TimeSpan.Zero),
                     new EventToSend(new ControlChangeEvent(controlNumber1, controlValue1), moveFrom),
                     new EventToSend(new ControlChangeEvent(controlNumber2, controlValue2), TimeSpan.Zero),
-                    new EventToSend(new NoteOffEvent(), noteOffDelay)
+                    new EventToSend(new StartEvent(), noteOffDelay)
                 },
                 moveFrom: moveFrom,
                 moveTo: moveTo,
@@ -177,12 +177,12 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 eventsToSend: new[]
                 {
                     new EventToSend(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, controlChangeTime),
-                    new EventToSend(new NoteOffEvent(), noteOffTime - controlChangeTime)
+                    new EventToSend(new StartEvent(), noteOffTime - controlChangeTime)
                 },
                 eventsWillBeSent: new[]
                 {
                     new EventToSend(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, controlChangeTime - (moveTo - moveFrom)),
-                    new EventToSend(new NoteOffEvent(), noteOffTime - controlChangeTime)
+                    new EventToSend(new StartEvent(), noteOffTime - controlChangeTime)
                 },
                 moveFrom: moveFrom,
                 moveTo: moveTo,
@@ -206,12 +206,12 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 eventsToSend: new[]
                 {
                     new EventToSend(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, controlChangeTime),
-                    new EventToSend(new NoteOffEvent(), noteOffTime - controlChangeTime)
+                    new EventToSend(new StartEvent(), noteOffTime - controlChangeTime)
                 },
                 eventsWillBeSent: new[]
                 {
                     new EventToSend(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, moveFrom),
-                    new EventToSend(new NoteOffEvent(), noteOffTime - (moveTo - moveFrom) - moveFrom)
+                    new EventToSend(new StartEvent(), noteOffTime - (moveTo - moveFrom) - moveFrom)
                 },
                 moveFrom: moveFrom,
                 moveTo: moveTo,
@@ -235,12 +235,12 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 eventsToSend: new[]
                 {
                     new EventToSend(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, controlChangeTime),
-                    new EventToSend(new NoteOffEvent(), noteOffTime - controlChangeTime)
+                    new EventToSend(new StartEvent(), noteOffTime - controlChangeTime)
                 },
                 eventsWillBeSent: new[]
                 {
                     new EventToSend(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, moveFrom),
-                    new EventToSend(new NoteOffEvent(), noteOffTime - moveTo)
+                    new EventToSend(new StartEvent(), noteOffTime - moveTo)
                 },
                 moveFrom: moveFrom,
                 moveTo: moveTo,
@@ -264,12 +264,12 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 eventsToSend: new[]
                 {
                     new EventToSend(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, controlChangeTime),
-                    new EventToSend(new NoteOffEvent(), noteOffTime - controlChangeTime)
+                    new EventToSend(new StartEvent(), noteOffTime - controlChangeTime)
                 },
                 eventsWillBeSent: new[]
                 {
                     new EventToSend(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, controlChangeTime),
-                    new EventToSend(new NoteOffEvent(), noteOffTime - controlChangeTime - (moveTo - moveFrom))
+                    new EventToSend(new StartEvent(), noteOffTime - controlChangeTime - (moveTo - moveFrom))
                 },
                 moveFrom: moveFrom,
                 moveTo: moveTo,
@@ -293,14 +293,14 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 eventsToSend: new[]
                 {
                     new EventToSend(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, controlChangeTime),
-                    new EventToSend(new NoteOffEvent(), noteOffTime - controlChangeTime)
+                    new EventToSend(new StartEvent(), noteOffTime - controlChangeTime)
                 },
                 eventsWillBeSent: new[]
                 {
                     new EventToSend(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, controlChangeTime),
                     new EventToSend(new ControlChangeEvent(controlNumber, SevenBitNumber.MinValue) { Channel = (FourBitNumber)4 }, moveFrom - controlChangeTime),
                     new EventToSend(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, controlChangeTime - moveTo),
-                    new EventToSend(new NoteOffEvent(), noteOffTime - controlChangeTime)
+                    new EventToSend(new StartEvent(), noteOffTime - controlChangeTime)
                 },
                 moveFrom: moveFrom,
                 moveTo: moveTo,
@@ -324,12 +324,12 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 eventsToSend: new[]
                 {
                     new EventToSend(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, controlChangeTime),
-                    new EventToSend(new NoteOffEvent(), noteOffTime - controlChangeTime)
+                    new EventToSend(new StartEvent(), noteOffTime - controlChangeTime)
                 },
                 eventsWillBeSent: new[]
                 {
                     new EventToSend(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, moveFrom),
-                    new EventToSend(new NoteOffEvent(), noteOffTime - moveTo)
+                    new EventToSend(new StartEvent(), noteOffTime - moveTo)
                 },
                 moveFrom: moveFrom,
                 moveTo: moveTo,
@@ -353,13 +353,13 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 eventsToSend: new[]
                 {
                     new EventToSend(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, controlChangeTime),
-                    new EventToSend(new NoteOffEvent(), noteOffTime - controlChangeTime)
+                    new EventToSend(new StartEvent(), noteOffTime - controlChangeTime)
                 },
                 eventsWillBeSent: new[]
                 {
                     new EventToSend(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, controlChangeTime),
                     new EventToSend(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, moveFrom - controlChangeTime),
-                    new EventToSend(new NoteOffEvent(), noteOffTime - controlChangeTime)
+                    new EventToSend(new StartEvent(), noteOffTime - controlChangeTime)
                 },
                 moveFrom: moveFrom,
                 moveTo: moveTo,
@@ -387,12 +387,12 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 {
                     new EventToSend(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, controlChangeTime),
                     new EventToSend(new ProgramChangeEvent(programNumber), programChangeTime - controlChangeTime),
-                    new EventToSend(new NoteOffEvent(), noteOffTime - programChangeTime)
+                    new EventToSend(new StartEvent(), noteOffTime - programChangeTime)
                 },
                 eventsWillBeSent: new[]
                 {
                     new EventToSend(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, moveFrom + enableAfter),
-                    new EventToSend(new NoteOffEvent(), noteOffTime - (moveTo + enableAfter))
+                    new EventToSend(new StartEvent(), noteOffTime - (moveTo + enableAfter))
                 },
                 moveFrom: moveFrom,
                 moveTo: moveTo,
@@ -418,14 +418,14 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 eventsToSend: new[]
                 {
                     new EventToSend(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, controlChangeTime),
-                    new EventToSend(new NoteOffEvent(), noteOffTime - controlChangeTime)
+                    new EventToSend(new StartEvent(), noteOffTime - controlChangeTime)
                 },
                 eventsWillBeSent: new[]
                 {
                     new EventToSend(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, controlChangeTime),
                     new EventToSend(new ControlChangeEvent(controlNumber, SevenBitNumber.MinValue) { Channel = (FourBitNumber)4 }, moveFrom - controlChangeTime + enableAfter),
                     new EventToSend(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, controlChangeTime - (moveTo + enableAfter)),
-                    new EventToSend(new NoteOffEvent(), noteOffTime - controlChangeTime)
+                    new EventToSend(new StartEvent(), noteOffTime - controlChangeTime)
                 },
                 moveFrom: moveFrom,
                 moveTo: moveTo,

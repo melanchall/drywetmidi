@@ -8,6 +8,9 @@ using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
 
+using PlaybackEventsCollection = Melanchall.DryWetMidi.Common.RedBlackTree<System.TimeSpan, Melanchall.DryWetMidi.Multimedia.PlaybackEvent>;
+using NotePlaybackEventMetadataCollection = Melanchall.DryWetMidi.Common.RedBlackTree<System.TimeSpan, Melanchall.DryWetMidi.Multimedia.NotePlaybackEventMetadata>;
+
 namespace Melanchall.DryWetMidi.Multimedia
 {
     /// <summary>
@@ -18,7 +21,7 @@ namespace Melanchall.DryWetMidi.Multimedia
     /// You can derive from the <see cref="Playback"/> class to create your own playback logic.
     /// Please see <see href="xref:a_playback_custom">Custom playback</see> article to learn more.
     /// </remarks>
-    public class Playback : IDisposable, IClockDrivenObject
+    public partial class Playback : IDisposable, IClockDrivenObject
     {
         #region Constants
 
@@ -78,11 +81,13 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         #region Fields
 
-        private readonly PlaybackEvent[] _playbackEvents;
-        private int _playbackEventsPosition = -1;
+        private readonly PlaybackEventsCollection _playbackEvents = new PlaybackEventsCollection();
+        private readonly object _playbackLockObject = new object();
+        private RedBlackTreeNode<TimeSpan, PlaybackEvent> _playbackEventsPosition;
+        private bool _beforeStart = true;
 
-        private readonly TimeSpan _duration;
-        private readonly long _durationInTicks;
+        private TimeSpan _duration = TimeSpan.Zero;
+        private long _durationInTicks;
 
         private ITimeSpan _playbackStart;
         private ITimeSpan _playbackEnd;
@@ -93,8 +98,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         private readonly MidiClock _clock;
 
         private readonly ConcurrentDictionary<NotePlaybackEventMetadata, byte> _activeNotesMetadata = new ConcurrentDictionary<NotePlaybackEventMetadata, byte>();
-        private readonly HashSet<NotePlaybackEventMetadata> _notesMetadataHashSet = new HashSet<NotePlaybackEventMetadata>();
-        private readonly NotePlaybackEventMetadata[] _notesMetadata;
+        private readonly NotePlaybackEventMetadataCollection _notesMetadata = new NotePlaybackEventMetadataCollection();
 
         private readonly PlaybackDataTracker _playbackDataTracker;
 
@@ -127,6 +131,8 @@ namespace Melanchall.DryWetMidi.Multimedia
             ThrowIfArgument.IsNull(nameof(timedObjects), timedObjects);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
+            SubscribeToObjectsCollectionChanged(timedObjects);
+
             playbackSettings = playbackSettings ?? new PlaybackSettings();
 
             TempoMap = tempoMap;
@@ -134,14 +140,12 @@ namespace Melanchall.DryWetMidi.Multimedia
             var noteDetectionSettings = playbackSettings.NoteDetectionSettings ?? new NoteDetectionSettings();
             _playbackDataTracker = new PlaybackDataTracker(TempoMap);
 
-            _playbackEvents = GetPlaybackEvents(timedObjects.GetNotesAndTimedEventsLazy(noteDetectionSettings, true), tempoMap);
+            InitializePlaybackEvents(timedObjects.GetNotesAndTimedEventsLazy(noteDetectionSettings, true), tempoMap);
             MoveToNextPlaybackEvent();
 
-            var lastPlaybackEvent = _playbackEvents.LastOrDefault();
+            var lastPlaybackEvent = _playbackEvents.GetMaximumNode().Value;
             _duration = lastPlaybackEvent?.Time ?? TimeSpan.Zero;
             _durationInTicks = lastPlaybackEvent?.RawTime ?? 0;
-
-            _notesMetadata = _notesMetadataHashSet.ToArray();
 
             var clockSettings = playbackSettings.ClockSettings ?? new MidiClockSettings();
             _clock = new MidiClock(false, clockSettings.CreateTickGeneratorCallback(), ClockInterval);
@@ -747,7 +751,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <exception cref="MidiDeviceException">An error occurred on device.</exception>
         public void MoveToTime(ITimeSpan time)
         {
-            MoveToTime(time, 0, _playbackEvents.Length - 1);
+            MoveToTimeInternal(time);
         }
 
         /// <summary>
@@ -763,10 +767,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             EnsureIsNotDisposed();
 
             var currentTime = (MetricTimeSpan)_clock.CurrentTime;
-            MoveToTime(
-                currentTime.Add(step, TimeSpanMode.TimeLength),
-                _playbackEventsPosition,
-                _playbackEvents.Length - 1);
+            MoveToTimeInternal(currentTime.Add(step, TimeSpanMode.TimeLength));
         }
 
         /// <summary>
@@ -782,12 +783,10 @@ namespace Melanchall.DryWetMidi.Multimedia
             EnsureIsNotDisposed();
 
             var currentTime = (MetricTimeSpan)_clock.CurrentTime;
-            MoveToTime(
+            MoveToTimeInternal(
                 TimeConverter.ConvertTo<MetricTimeSpan>(step, TempoMap) > currentTime
                     ? new MetricTimeSpan()
-                    : currentTime.Subtract(step, TimeSpanMode.TimeLength),
-                0,
-                _playbackEventsPosition);
+                    : currentTime.Subtract(step, TimeSpanMode.TimeLength));
         }
 
         /// <summary>
@@ -844,10 +843,10 @@ namespace Melanchall.DryWetMidi.Multimedia
 
             var notesToPlay = GetNotesMetadataAtCurrentTime();
             var onNotesMetadata = notesToPlay.Any()
-                ? notesToPlay.Where(n => !_activeNotesMetadata.Keys.Contains(n)).ToArray()
+                ? notesToPlay.Where(n => !_activeNotesMetadata.Keys.Any(nn => new NoteId(nn.RawNote.Channel, nn.RawNote.NoteNumber).Equals(new NoteId(n.RawNote.Channel, n.RawNote.NoteNumber)))).ToArray()
                 : new NotePlaybackEventMetadata[0];
             var offNotesMetadata = notesToPlay.Any()
-                ? _activeNotesMetadata.Keys.Where(n => !notesToPlay.Contains(n)).ToArray()
+                ? _activeNotesMetadata.Keys.Where(n => !notesToPlay.Any(nn => new NoteId(nn.RawNote.Channel, nn.RawNote.NoteNumber).Equals(new NoteId(n.RawNote.Channel, n.RawNote.NoteNumber)))).ToArray()
                 : _activeNotesMetadata.Keys;
 
             OutputDevice?.PrepareForEventsSending();
@@ -878,36 +877,39 @@ namespace Melanchall.DryWetMidi.Multimedia
         private ICollection<NotePlaybackEventMetadata> GetNotesMetadataAtCurrentTime()
         {
             var currentTime = _clock.CurrentTime;
-
-            int firstIndex;
-            MathUtilities.GetLastElementBelowThreshold(
-                _notesMetadata,
-                currentTime.Ticks,
-                m => m.EndTime.Ticks,
-                out firstIndex);
-
-            while (++firstIndex < _notesMetadata.Length && _notesMetadata[firstIndex].EndTime <= currentTime)
-            {
-            }
-
             var notesToPlay = new List<NotePlaybackEventMetadata>();
 
-            if (firstIndex < _notesMetadata.Length)
-            {
-                int lastIndex;
-                MathUtilities.GetLastElementBelowThreshold(
-                    _notesMetadata,
-                    firstIndex,
-                    _notesMetadata.Length - 1,
-                    currentTime.Ticks,
-                    m => m.StartTime.Ticks,
-                    out lastIndex);
+            var firstNode = _notesMetadata.GetLastNodeBelowThreshold(
+                currentTime,
+                node => node.Value.EndTime);
 
-                for (var i = firstIndex; i <= lastIndex; i++)
+            if (firstNode == null)
+                firstNode = _notesMetadata.GetMinimumNode();
+
+            if (firstNode == RedBlackTreeNode<TimeSpan, NotePlaybackEventMetadata>.Void)
+                firstNode = null;
+
+            while (firstNode != null && firstNode.Value.EndTime <= currentTime)
+            {
+                firstNode = _notesMetadata.GetNextNode(firstNode);
+            }
+
+            if (firstNode != null)
+            {
+                var lastNode = _notesMetadata.GetLastNodeBelowThreshold(
+                    currentTime,
+                    node => node.Value.StartTime);
+
+                while (firstNode != null)
                 {
-                    var metadata = _notesMetadata[i];
+                    var metadata = firstNode.Value;
                     if (metadata.StartTime < currentTime && metadata.EndTime > currentTime)
                         notesToPlay.Add(metadata);
+
+                    if (firstNode == lastNode)
+                        break;
+
+                    firstNode = _notesMetadata.GetNextNode(firstNode);
                 }
             }
 
@@ -958,66 +960,69 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         private void OnClockTicked(object sender, EventArgs e)
         {
-            do
+            lock (_playbackLockObject)
             {
-                var time = _clock.CurrentTime;
-                if (time >= _playbackEndMetric)
-                    break;
-
-                var playbackEvent = GetCurrentPlaybackEvent();
-                if (playbackEvent == null)
-                    continue;
-
-                if (playbackEvent.Time > time)
-                    return;
-
-                var midiEvent = playbackEvent.Event;
-                if (midiEvent == null)
-                    continue;
-
-                if (!IsRunning)
-                    return;
-
-                Note note;
-                if (TryPlayNoteEvent(playbackEvent, out note))
+                do
                 {
-                    if (note != null)
+                    var time = _clock.CurrentTime;
+                    if (time >= _playbackEndMetric)
+                        break;
+
+                    var playbackEvent = GetCurrentPlaybackEvent();
+                    if (playbackEvent == null)
+                        continue;
+
+                    if (playbackEvent.Time > time)
+                        return;
+
+                    var midiEvent = playbackEvent.Event;
+                    if (midiEvent == null)
+                        continue;
+
+                    if (!IsRunning)
+                        return;
+
+                    Note note;
+                    if (TryPlayNoteEvent(playbackEvent, out note))
                     {
-                        if (playbackEvent.Event is NoteOnEvent)
-                            OnNotesPlaybackStarted(note);
-                        else
-                            OnNotesPlaybackFinished(note);
+                        if (note != null)
+                        {
+                            if (playbackEvent.Event is NoteOnEvent)
+                                OnNotesPlaybackStarted(note);
+                            else
+                                OnNotesPlaybackFinished(note);
+                        }
+
+                        continue;
                     }
 
-                    continue;
+                    var eventCallback = EventCallback;
+                    if (eventCallback != null)
+                        midiEvent = eventCallback(midiEvent.Clone(), playbackEvent.RawTime, time);
+
+                    if (midiEvent == null)
+                        continue;
+
+                    PlayEvent(midiEvent, playbackEvent.Metadata.TimedEvent.Metadata);
+                }
+                while (MoveToNextPlaybackEvent());
+
+                if (!Loop)
+                {
+                    _clock.StopInternally();
+                    OnFinished();
+                    return;
                 }
 
-                var eventCallback = EventCallback;
-                if (eventCallback != null)
-                    midiEvent = eventCallback(midiEvent.Clone(), playbackEvent.RawTime, time);
+                _clock.StopShortly();
+                _clock.ResetCurrentTime();
+                ResetPlaybackEventsPosition();
+                MoveToNextPlaybackEvent();
 
-                if (midiEvent == null)
-                    continue;
-
-                PlayEvent(midiEvent, playbackEvent.Metadata.TimedEvent.Metadata);
+                MoveToStart();
+                _clock.Start();
+                OnRepeatStarted();
             }
-            while (MoveToNextPlaybackEvent());
-
-            if (!Loop)
-            {
-                _clock.StopInternally();
-                OnFinished();
-                return;
-            }
-
-            _clock.StopShortly();
-            _clock.ResetCurrentTime();
-            ResetPlaybackEventsPosition();
-            MoveToNextPlaybackEvent();
-
-            MoveToStart();
-            _clock.Start();
-            OnRepeatStarted();
         }
 
         private void EnsureIsNotDisposed()
@@ -1026,55 +1031,52 @@ namespace Melanchall.DryWetMidi.Multimedia
                 throw new ObjectDisposedException("Playback is disposed.");
         }
 
-        private void MoveToTime(ITimeSpan time, int firstIndex, int lastIndex)
+        private void MoveToTimeInternal(ITimeSpan time)
         {
             ThrowIfArgument.IsNull(nameof(time), time);
             EnsureIsNotDisposed();
 
-            if (TimeConverter.ConvertFrom(time, TempoMap) > _durationInTicks)
-                time = (MetricTimeSpan)_duration;
-
-            var isRunning = IsRunning;
-
-            SetStartTime(time, firstIndex, lastIndex);
-
-            if (isRunning)
+            lock (_playbackLockObject)
             {
-                SendTrackedData();
-                StopStartNotes();
-                _clock.Start();
+                if (TimeConverter.ConvertFrom(time, TempoMap) > _durationInTicks)
+                    time = (MetricTimeSpan)_duration;
+
+                var isRunning = IsRunning;
+
+                SetStartTime(time);
+
+                if (isRunning)
+                {
+                    SendTrackedData();
+                    StopStartNotes();
+                    _clock?.Start();
+                }
             }
         }
 
-        private void SetStartTime(ITimeSpan time, int firstIndex, int lastIndex)
+        private void SetStartTime(ITimeSpan time)
         {
             var convertedTime = (TimeSpan)TimeConverter.ConvertTo<MetricTimeSpan>(time, TempoMap);
             _clock.SetCurrentTime(convertedTime);
 
             if (convertedTime.Ticks == 0)
             {
-                _playbackEventsPosition = 0;
+                _playbackEventsPosition = _playbackEvents.GetMinimumNode();
                 return;
             }
 
             if (convertedTime > _duration)
             {
-                _playbackEventsPosition = _playbackEvents.Length;
+                _playbackEventsPosition = null;
+                _beforeStart = false;
                 return;
             }
 
-            if (firstIndex >= lastIndex)
-                return;
+            _playbackEventsPosition = _playbackEvents.GetLastNodeBelowThreshold(convertedTime);
+            if (_playbackEventsPosition == null)
+                _beforeStart = true;
 
-            MathUtilities.GetLastElementBelowThreshold(
-                _playbackEvents,
-                Math.Max(firstIndex, 0),
-                Math.Min(lastIndex, _playbackEvents.Length - 1),
-                convertedTime.Ticks,
-                e => e.Time.Ticks,
-                out _playbackEventsPosition);
-
-            _playbackEventsPosition++;
+            MoveToNextPlaybackEvent();
         }
 
         private void PlayEvent(MidiEvent midiEvent, object metadata)
@@ -1156,130 +1158,31 @@ namespace Melanchall.DryWetMidi.Multimedia
             return true;
         }
 
-        private PlaybackEvent[] GetPlaybackEvents(IEnumerable<ITimedObject> timedObjects, TempoMap tempoMap)
-        {
-            var playbackEvents = new List<PlaybackEvent>();
-
-            foreach (var timedObject in timedObjects)
-            {
-                var customObjectProcessed = false;
-                foreach (var e in GetTimedEvents(timedObject))
-                {
-                    playbackEvents.Add(GetPlaybackEvent(e, tempoMap));
-                    customObjectProcessed = true;
-                }
-
-                if (customObjectProcessed)
-                    continue;
-
-                var chord = timedObject as Chord;
-                if (chord != null)
-                {
-                    playbackEvents.AddRange(GetPlaybackEvents(chord, tempoMap));
-                    continue;
-                }
-
-                var note = timedObject as Note;
-                if (note != null)
-                {
-                    playbackEvents.AddRange(GetPlaybackEvents(note, tempoMap));
-                    continue;
-                }
-
-                var timedEvent = timedObject as TimedEvent;
-                if (timedEvent != null)
-                {
-                    playbackEvents.Add(GetPlaybackEvent(timedEvent, tempoMap));
-                    continue;
-                }
-
-                var registeredParameter = timedObject as RegisteredParameter;
-                if (registeredParameter != null)
-                {
-                    playbackEvents.AddRange(registeredParameter.GetTimedEvents().Select(e => GetPlaybackEvent(e, tempoMap)));
-                    continue;
-                }
-            }
-
-            return playbackEvents.OrderBy(e => e, new PlaybackEventsComparer()).ToArray();
-        }
-
-        private PlaybackEvent GetPlaybackEvent(TimedEvent timedEvent, TempoMap tempoMap)
-        {
-            var playbackEvent = CreatePlaybackEvent(timedEvent, tempoMap);
-            playbackEvent.Metadata.TimedEvent = new TimedEventPlaybackEventMetadata((timedEvent as IMetadata)?.Metadata);
-            InitializeTrackedData(playbackEvent);
-            return playbackEvent;
-        }
-
-        private IEnumerable<PlaybackEvent> GetPlaybackEvents(Chord chord, TempoMap tempoMap)
-        {
-            foreach (var note in chord.Notes)
-            {
-                foreach (var playbackEvent in GetPlaybackEvents(note, tempoMap))
-                {
-                    yield return playbackEvent;
-                }
-            }
-        }
-
-        private IEnumerable<PlaybackEvent> GetPlaybackEvents(Note note, TempoMap tempoMap)
-        {
-            TimeSpan noteStartTime = note.TimeAs<MetricTimeSpan>(tempoMap);
-            TimeSpan noteEndTime = TimeConverter.ConvertTo<MetricTimeSpan>(note.EndTime, tempoMap);
-            var noteMetadata = new NotePlaybackEventMetadata(note, noteStartTime, noteEndTime);
-
-            yield return GetPlaybackEventWithNoteMetadata(note.TimedNoteOnEvent, tempoMap, noteMetadata);
-            yield return GetPlaybackEventWithNoteMetadata(note.TimedNoteOffEvent, tempoMap, noteMetadata);
-        }
-
-        private PlaybackEvent GetPlaybackEventWithNoteMetadata(TimedEvent timedEvent, TempoMap tempoMap, NotePlaybackEventMetadata noteMetadata)
-        {
-            var playbackEvent = CreatePlaybackEvent(timedEvent, tempoMap);
-            playbackEvent.Metadata.Note = noteMetadata;
-            playbackEvent.Metadata.TimedEvent = new TimedEventPlaybackEventMetadata((timedEvent as IMetadata)?.Metadata);
-            InitializeTrackedData(playbackEvent);
-            return playbackEvent;
-        }
-
-        private PlaybackEvent CreatePlaybackEvent(TimedEvent timedEvent, TempoMap tempoMap)
-        {
-            return new PlaybackEvent(timedEvent.Event, timedEvent.TimeAs<MetricTimeSpan>(tempoMap), timedEvent.Time);
-        }
-
-        private void InitializeTrackedData(PlaybackEvent playbackEvent)
-        {
-            _playbackDataTracker.InitializeData(
-                playbackEvent.Event,
-                playbackEvent.RawTime,
-                playbackEvent.Metadata.TimedEvent.Metadata);
-
-            var noteMetadata = playbackEvent.Metadata.Note;
-            if (noteMetadata != null)
-                _notesMetadataHashSet.Add(noteMetadata);
-        }
-
         private void ResetPlaybackEventsPosition()
         {
-            _playbackEventsPosition = -1;
+            _playbackEventsPosition = null;
+            _beforeStart = true;
         }
 
         private bool MoveToNextPlaybackEvent()
         {
-            _playbackEventsPosition++;
+            _playbackEventsPosition = _playbackEventsPosition != null
+                ? _playbackEvents.GetNextNode(_playbackEventsPosition)
+                : (_beforeStart ? _playbackEvents.GetMinimumNode() : null);
+            _beforeStart = _playbackEventsPosition != null;
             return IsPlaybackEventsPositionValid();
         }
 
         private PlaybackEvent GetCurrentPlaybackEvent()
         {
             return IsPlaybackEventsPositionValid()
-                ? _playbackEvents[_playbackEventsPosition]
+                ? _playbackEventsPosition.Value
                 : null;
         }
 
         private bool IsPlaybackEventsPositionValid()
         {
-            return _playbackEventsPosition >= 0 && _playbackEventsPosition < _playbackEvents.Length;
+            return _playbackEventsPosition != null;
         }
 
         #endregion
