@@ -5,6 +5,7 @@ using Melanchall.DryWetMidi.Interaction;
 using Melanchall.DryWetMidi.Multimedia;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace Melanchall.SendMidiData
 {
@@ -47,7 +48,10 @@ namespace Melanchall.SendMidiData
                 {
                     var midiEvents = converter.ConvertMultiple(bytes.ToArray());
                     var playback = midiEvents.GetPlayback(TempoMap.Default, outputDevice);
-                    playback.Play();
+
+                    playback.Start();
+                    SpinWait.SpinUntil(() => !playback.IsRunning);
+
                     return SendResult.Sent;
                 }
             }
@@ -82,7 +86,10 @@ namespace Melanchall.SendMidiData
 
             var note = new Note(musicTheoryNote.NoteNumber).SetLength(length, TempoMap.Default);
             var playback = new[] { note }.GetPlayback(TempoMap.Default, outputDevice, DryWetMidi.Standards.GeneralMidiProgram.AcousticGrandPiano);
-            playback.Play();
+
+            playback.Start();
+            SpinWait.SpinUntil(() => !playback.IsRunning);
+
             return SendResult.Sent;
         }
 

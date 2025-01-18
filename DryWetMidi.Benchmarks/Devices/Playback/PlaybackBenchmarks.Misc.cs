@@ -46,18 +46,6 @@ namespace Melanchall.DryWetMidi.Benchmarks.Devices
                 _playback.MoveToStart();
                 _playbackWithNoteCallback.MoveToStart();
             }
-
-            [Benchmark]
-            public void Play()
-            {
-                _playback.Play();
-            }
-
-            [Benchmark]
-            public void PlayWithNoteCallback()
-            {
-                _playbackWithNoteCallback.Play();
-            }
         }
 
         #endregion

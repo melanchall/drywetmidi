@@ -558,23 +558,6 @@ namespace Melanchall.DryWetMidi.Multimedia
         }
 
         /// <summary>
-        /// Starts playing of the MIDI data. This method will block execution of a program until all
-        /// MIDI data is played.
-        /// </summary>
-        /// <remarks>
-        /// If <see cref="Loop"/> is set to <c>true</c>, this method will execute forever.
-        /// </remarks>
-        /// <exception cref="ObjectDisposedException">The current <see cref="Playback"/> is disposed.</exception>
-        /// <exception cref="MidiDeviceException">An error occurred on device.</exception>
-        public void Play()
-        {
-            EnsureIsNotDisposed();
-
-            Start();
-            SpinWait.SpinUntil(() => !_clock.IsRunning);
-        }
-
-        /// <summary>
         /// Sets playback position to the time of the specified snap point.
         /// </summary>
         /// <param name="snapPoint">Snap point to move to.</param>

@@ -9,6 +9,7 @@ using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
 using Melanchall.DryWetMidi.Standards;
 using NUnit.Framework;
+using System.Threading;
 
 namespace Melanchall.DryWetMidi.Tests.Multimedia
 {
@@ -137,7 +138,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     playback.NotesPlaybackFinished += (_, e) => receivedNotesFinished.AddRange(e.Notes.Select(n => new ReceivedNote(n, stopwatch.Elapsed)));
 
                     stopwatch.Start();
-                    playback.Play();
+
+                    playback.Start();
+                    SpinWait.SpinUntil(() => !playback.IsRunning);
 
                     Assert.IsFalse(playback.IsRunning, "Playback is running after completed.");
                 }
