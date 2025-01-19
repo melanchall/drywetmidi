@@ -1,301 +1,298 @@
 ﻿using System;
-using System.Collections.Generic;
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
+using Melanchall.DryWetMidi.Interaction;
 using NUnit.Framework;
 
 namespace Melanchall.DryWetMidi.Tests.Multimedia
 {
-    // TODO: check tracking disabled
     [TestFixture]
     public sealed partial class PlaybackTests
     {
         #region Test methods
 
         [Retry(RetriesNumber)]
-        [TestCase(true, 0)]
-        [TestCase(true, 100)]
-        [TestCase(false, 0)]
-        [TestCase(false, 100)]
-        public void TrackProgram_NoProgramChanges_MoveToTime(bool useOutputDevice, int moveFromMs)
+        [Test]
+        public void TrackProgram_NoProgramChanges_MoveToTime(
+            [Values(0, 100)] int moveFromMs,
+            [Values(0, 500)] int moveToMs)
         {
-            var noteOffDelay = TimeSpan.FromSeconds(2);
-
+            var lastEventTime = TimeSpan.FromSeconds(1);
             var moveFrom = TimeSpan.FromMilliseconds(moveFromMs);
-            var moveTo = TimeSpan.FromMilliseconds(500);
+            var moveTo = TimeSpan.FromMilliseconds(moveToMs);
 
-            CheckTrackProgram(
-                eventsToSend: new[]
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
                 {
-                    new EventToSend(new StartEvent(), noteOffDelay)
+                    new TimedEvent(new StartEvent())
+                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap.Default),
                 },
-                eventsWillBeSent: new[]
+                actions: new[]
                 {
-                    new EventToSend(new StartEvent(), noteOffDelay - (moveTo - moveFrom))
+                    new PlaybackChangerBase(moveFromMs, p => p.MoveToTime((MetricTimeSpan)moveTo)),
                 },
-                moveFrom: moveFrom,
-                moveTo: moveTo,
-                useOutputDevice: useOutputDevice);
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new StartEvent(), lastEventTime - (moveTo - moveFrom)),
+                });
         }
 
         [Retry(RetriesNumber)]
-        [TestCase(true)]
-        [TestCase(false)]
-        public void TrackProgram_NoProgramChanges_MoveToStart(bool useOutputDevice)
+        [Test]
+        public void TrackProgram_ProgramChangeAtZero_MoveToTime()
         {
-            var noteOffDelay = TimeSpan.FromSeconds(2);
-
-            var moveFrom = TimeSpan.FromMilliseconds(500);
-            var moveTo = TimeSpan.Zero;
-
-            CheckTrackProgram(
-                eventsToSend: new[]
-                {
-                    new EventToSend(new StartEvent(), noteOffDelay)
-                },
-                eventsWillBeSent: new[]
-                {
-                    new EventToSend(new StartEvent(), noteOffDelay - (moveTo - moveFrom))
-                },
-                moveFrom: moveFrom,
-                moveTo: moveTo,
-                useOutputDevice: useOutputDevice);
-        }
-
-        [Retry(RetriesNumber)]
-        [TestCase(true)]
-        [TestCase(false)]
-        public void TrackProgram_ProgramChangeAtZero_MoveToTime(bool useOutputDevice)
-        {
-            var noteOffDelay = TimeSpan.FromSeconds(2);
+            var lastEventTime = TimeSpan.FromSeconds(1);
             var programNumber = (SevenBitNumber)100;
 
             var moveFrom = TimeSpan.FromMilliseconds(100);
             var moveTo = TimeSpan.FromMilliseconds(500);
 
-            CheckTrackProgram(
-                eventsToSend: new[]
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
                 {
-                    new EventToSend(new ProgramChangeEvent(programNumber), TimeSpan.Zero),
-                    new EventToSend(new StartEvent(), noteOffDelay)
+                    new TimedEvent(new ProgramChangeEvent(programNumber)),
+                    new TimedEvent(new StartEvent())
+                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap.Default),
                 },
-                eventsWillBeSent: new[]
+                actions: new[]
                 {
-                    new EventToSend(new ProgramChangeEvent(programNumber), TimeSpan.Zero),
-                    new EventToSend(new StartEvent(), noteOffDelay - (moveTo - moveFrom))
+                    new PlaybackChangerBase(moveFrom, p => p.MoveToTime((MetricTimeSpan)moveTo)),
                 },
-                moveFrom: moveFrom,
-                moveTo: moveTo,
-                useOutputDevice: useOutputDevice);
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new ProgramChangeEvent(programNumber), TimeSpan.Zero),
+                    new ReceivedEvent(new StartEvent(), lastEventTime - (moveTo - moveFrom)),
+                });
         }
 
         [Retry(RetriesNumber)]
-        [TestCase(true)]
-        [TestCase(false)]
-        public void TrackProgram_ProgramChangeAtZero_MoveToStart(bool useOutputDevice)
+        [Test]
+        public void TrackProgram_ProgramChangeAtZero_MoveToStart()
         {
-            var noteOffDelay = TimeSpan.FromSeconds(2);
+            var lastEventTime = TimeSpan.FromSeconds(1);
             var programNumber = (SevenBitNumber)100;
 
             var moveFrom = TimeSpan.FromMilliseconds(500);
             var moveTo = TimeSpan.Zero;
 
-            CheckTrackProgram(
-                eventsToSend: new[]
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
                 {
-                    new EventToSend(new ProgramChangeEvent(programNumber), TimeSpan.Zero),
-                    new EventToSend(new StartEvent(), noteOffDelay)
+                    new TimedEvent(new ProgramChangeEvent(programNumber)),
+                    new TimedEvent(new StartEvent())
+                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap.Default),
                 },
-                eventsWillBeSent: new[]
+                actions: new[]
                 {
-                    new EventToSend(new ProgramChangeEvent(programNumber), TimeSpan.Zero),
-                    new EventToSend(new ProgramChangeEvent(programNumber), moveFrom),
-                    new EventToSend(new StartEvent(), noteOffDelay - moveTo)
+                    new PlaybackChangerBase(moveFrom, p => p.MoveToTime((MetricTimeSpan)moveTo)),
                 },
-                moveFrom: moveFrom,
-                moveTo: moveTo,
-                useOutputDevice: useOutputDevice);
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new ProgramChangeEvent(programNumber), TimeSpan.Zero),
+                    new ReceivedEvent(new ProgramChangeEvent(programNumber), moveFrom),
+                    new ReceivedEvent(new StartEvent(), lastEventTime - (moveTo - moveFrom)),
+                });
         }
 
         [Retry(RetriesNumber)]
-        [TestCase(true)]
-        [TestCase(false)]
-        public void TrackProgram_FromBeforeProgramChange_ToBeforeProgramChange(bool useOutputDevice)
+        [Test]
+        public void TrackProgram_FromBeforeProgramChange_ToBeforeProgramChange()
         {
             var programChangeTime = TimeSpan.FromMilliseconds(800);
-            var noteOffTime = TimeSpan.FromSeconds(2);
+            var lastEventTime = TimeSpan.FromSeconds(2);
             var programNumber = (SevenBitNumber)100;
 
             var moveFrom = TimeSpan.FromMilliseconds(100);
             var moveTo = TimeSpan.FromMilliseconds(500);
 
-            CheckTrackProgram(
-                eventsToSend: new[]
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
                 {
-                    new EventToSend(new ProgramChangeEvent(programNumber) { Channel = (FourBitNumber)4 }, programChangeTime),
-                    new EventToSend(new StartEvent(), noteOffTime - programChangeTime)
+                    new TimedEvent(new ProgramChangeEvent(programNumber) { Channel = (FourBitNumber)4 })
+                        .SetTime((MetricTimeSpan)programChangeTime, TempoMap.Default),
+                    new TimedEvent(new StartEvent())
+                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap.Default),
                 },
-                eventsWillBeSent: new[]
+                actions: new[]
                 {
-                    new EventToSend(new ProgramChangeEvent(programNumber) { Channel = (FourBitNumber)4 }, programChangeTime - (moveTo - moveFrom)),
-                    new EventToSend(new StartEvent(), noteOffTime - programChangeTime)
+                    new PlaybackChangerBase(moveFrom, p => p.MoveToTime((MetricTimeSpan)moveTo)),
                 },
-                moveFrom: moveFrom,
-                moveTo: moveTo,
-                useOutputDevice: useOutputDevice);
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new ProgramChangeEvent(programNumber) { Channel = (FourBitNumber)4 }, programChangeTime - (moveTo - moveFrom)),
+                    new ReceivedEvent(new StartEvent(), moveFrom - moveTo + lastEventTime),
+                });
         }
 
         [Retry(RetriesNumber)]
-        [TestCase(true)]
-        [TestCase(false)]
-        public void TrackProgram_FromBeforeProgramChange_ToAfterProgramChange(bool useOutputDevice)
+        [Test]
+        public void TrackProgram_FromBeforeProgramChange_ToAfterProgramChange()
         {
-            var programChangeTime = TimeSpan.FromMilliseconds(800);
-            var noteOffTime = TimeSpan.FromSeconds(2);
+            var programChangeTime = TimeSpan.FromMilliseconds(500);
+            var lastEventTime = TimeSpan.FromSeconds(1);
             var programNumber = (SevenBitNumber)100;
 
-            var moveFrom = TimeSpan.FromMilliseconds(500);
-            var moveTo = TimeSpan.FromMilliseconds(1000);
+            var moveFrom = TimeSpan.FromMilliseconds(300);
+            var moveTo = TimeSpan.FromMilliseconds(700);
 
-            CheckTrackProgram(
-                eventsToSend: new[]
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
                 {
-                    new EventToSend(new ProgramChangeEvent(programNumber) { Channel = (FourBitNumber)4 }, programChangeTime),
-                    new EventToSend(new StartEvent(), noteOffTime - programChangeTime)
+                    new TimedEvent(new ProgramChangeEvent(programNumber) { Channel = (FourBitNumber)4 })
+                        .SetTime((MetricTimeSpan)programChangeTime, TempoMap.Default),
+                    new TimedEvent(new StartEvent())
+                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap.Default),
                 },
-                eventsWillBeSent: new[]
+                actions: new[]
                 {
-                    new EventToSend(new ProgramChangeEvent(programNumber) { Channel = (FourBitNumber)4 }, moveFrom),
-                    new EventToSend(new StartEvent(), noteOffTime - (moveTo - moveFrom) - moveFrom)
+                    new PlaybackChangerBase(moveFrom, p => p.MoveToTime((MetricTimeSpan)moveTo)),
                 },
-                moveFrom: moveFrom,
-                moveTo: moveTo,
-                useOutputDevice: useOutputDevice);
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new ProgramChangeEvent(programNumber) { Channel = (FourBitNumber)4 }, moveFrom),
+                    new ReceivedEvent(new StartEvent(), lastEventTime - (moveTo - moveFrom)),
+                });
         }
 
         [Retry(RetriesNumber)]
-        [TestCase(true)]
-        [TestCase(false)]
-        public void TrackProgram_FromAfterProgramChange_ToAfterProgramChange(bool useOutputDevice)
+        [Test]
+        public void TrackProgram_FromAfterProgramChange_ToAfterProgramChange()
         {
             var programChangeTime = TimeSpan.FromMilliseconds(800);
-            var noteOffTime = TimeSpan.FromSeconds(2);
+            var lastEventTime = TimeSpan.FromSeconds(2);
             var programNumber = (SevenBitNumber)100;
 
             var moveFrom = TimeSpan.FromMilliseconds(1000);
             var moveTo = TimeSpan.FromMilliseconds(1500);
 
-            CheckTrackProgram(
-                eventsToSend: new[]
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
                 {
-                    new EventToSend(new ProgramChangeEvent(programNumber) { Channel = (FourBitNumber)4 }, programChangeTime),
-                    new EventToSend(new StartEvent(), noteOffTime - programChangeTime)
+                    new TimedEvent(new ProgramChangeEvent(programNumber) { Channel = (FourBitNumber)4 })
+                        .SetTime((MetricTimeSpan)programChangeTime, TempoMap.Default),
+                    new TimedEvent(new StartEvent())
+                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap.Default),
                 },
-                eventsWillBeSent: new[]
+                actions: new[]
                 {
-                    new EventToSend(new ProgramChangeEvent(programNumber) { Channel = (FourBitNumber)4 }, programChangeTime),
-                    new EventToSend(new StartEvent(), noteOffTime - programChangeTime - (moveTo - moveFrom))
+                    new PlaybackChangerBase(moveFrom, p => p.MoveToTime((MetricTimeSpan)moveTo)),
                 },
-                moveFrom: moveFrom,
-                moveTo: moveTo,
-                useOutputDevice: useOutputDevice);
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new ProgramChangeEvent(programNumber) { Channel = (FourBitNumber)4 }, programChangeTime),
+                    new ReceivedEvent(new StartEvent(), lastEventTime - (moveTo - moveFrom)),
+                });
         }
 
         [Retry(RetriesNumber)]
-        [TestCase(true)]
-        [TestCase(false)]
-        public void TrackProgram_FromAfterProgramChange_ToBeforeProgramChange(bool useOutputDevice)
+        [Test]
+        public void TrackProgram_FromAfterProgramChange_ToBeforeProgramChange()
         {
-            var programChangeTime = TimeSpan.FromMilliseconds(800);
-            var noteOffTime = TimeSpan.FromSeconds(2);
+            var programChangeTime = TimeSpan.FromMilliseconds(700);
+            var lastEventTime = TimeSpan.FromSeconds(1);
             var programNumber = (SevenBitNumber)100;
 
-            var moveFrom = TimeSpan.FromMilliseconds(1000);
+            var moveFrom = TimeSpan.FromMilliseconds(800);
             var moveTo = TimeSpan.FromMilliseconds(500);
 
-            CheckTrackProgram(
-                eventsToSend: new[]
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
                 {
-                    new EventToSend(new ProgramChangeEvent(programNumber) { Channel = (FourBitNumber)4 }, programChangeTime),
-                    new EventToSend(new StartEvent(), noteOffTime - programChangeTime)
+                    new TimedEvent(new ProgramChangeEvent(programNumber) { Channel = (FourBitNumber)4 })
+                        .SetTime((MetricTimeSpan)programChangeTime, TempoMap.Default),
+                    new TimedEvent(new StartEvent())
+                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap.Default),
                 },
-                eventsWillBeSent: new[]
+                actions: new[]
                 {
-                    new EventToSend(new ProgramChangeEvent(programNumber) { Channel = (FourBitNumber)4 }, programChangeTime),
-                    new EventToSend(new ProgramChangeEvent(SevenBitNumber.MinValue) { Channel = (FourBitNumber)4 }, moveFrom - programChangeTime),
-                    new EventToSend(new ProgramChangeEvent(programNumber) { Channel = (FourBitNumber)4 }, programChangeTime - moveTo),
-                    new EventToSend(new StartEvent(), noteOffTime - programChangeTime)
+                    new PlaybackChangerBase(moveFrom, p => p.MoveToTime((MetricTimeSpan)moveTo)),
                 },
-                moveFrom: moveFrom,
-                moveTo: moveTo,
-                useOutputDevice: useOutputDevice);
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new ProgramChangeEvent(programNumber) { Channel = (FourBitNumber)4 }, programChangeTime),
+                    new ReceivedEvent(new ProgramChangeEvent(SevenBitNumber.MinValue) { Channel = (FourBitNumber)4 }, moveFrom),
+                    new ReceivedEvent(new ProgramChangeEvent(programNumber) { Channel = (FourBitNumber)4 }, programChangeTime + moveFrom - moveTo),
+                    new ReceivedEvent(new StartEvent(), lastEventTime + moveFrom - moveTo),
+                });
         }
 
         [Retry(RetriesNumber)]
-        [TestCase(true)]
-        [TestCase(false)]
-        public void TrackProgram_FromBeforeProgramChange_ToProgramChange(bool useOutputDevice)
+        [Test]
+        public void TrackProgram_FromBeforeProgramChange_ToProgramChange()
         {
             var programChangeTime = TimeSpan.FromMilliseconds(800);
-            var noteOffTime = TimeSpan.FromSeconds(2);
+            var lastEventTime = TimeSpan.FromSeconds(1);
             var programNumber = (SevenBitNumber)100;
 
             var moveFrom = TimeSpan.FromMilliseconds(500);
             var moveTo = TimeSpan.FromMilliseconds(800);
 
-            CheckTrackProgram(
-                eventsToSend: new[]
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
                 {
-                    new EventToSend(new ProgramChangeEvent(programNumber) { Channel = (FourBitNumber)4 }, programChangeTime),
-                    new EventToSend(new StartEvent(), noteOffTime - programChangeTime)
+                    new TimedEvent(new ProgramChangeEvent(programNumber) { Channel = (FourBitNumber)4 })
+                        .SetTime((MetricTimeSpan)programChangeTime, TempoMap.Default),
+                    new TimedEvent(new StartEvent())
+                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap.Default),
                 },
-                eventsWillBeSent: new[]
+                actions: new[]
                 {
-                    new EventToSend(new ProgramChangeEvent(programNumber) { Channel = (FourBitNumber)4 }, moveFrom),
-                    new EventToSend(new StartEvent(), noteOffTime - (moveTo - moveFrom) - moveFrom)
+                    new PlaybackChangerBase(moveFrom, p => p.MoveToTime((MetricTimeSpan)moveTo)),
                 },
-                moveFrom: moveFrom,
-                moveTo: moveTo,
-                useOutputDevice: useOutputDevice);
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new ProgramChangeEvent(programNumber) { Channel = (FourBitNumber)4 }, moveFrom),
+                    new ReceivedEvent(new StartEvent(), lastEventTime - (moveTo - moveFrom)),
+                });
         }
 
         [Retry(RetriesNumber)]
-        [TestCase(true)]
-        [TestCase(false)]
-        public void TrackProgram_FromAfterProgramChange_ToProgramChange(bool useOutputDevice)
+        [Test]
+        public void TrackProgram_FromAfterProgramChange_ToProgramChange()
         {
-            var programChangeTime = TimeSpan.FromMilliseconds(800);
-            var noteOffTime = TimeSpan.FromSeconds(2);
+            var programChangeTime = TimeSpan.FromMilliseconds(500);
+            var lastEventTime = TimeSpan.FromSeconds(1);
             var programNumber = (SevenBitNumber)100;
 
-            var moveFrom = TimeSpan.FromMilliseconds(1000);
-            var moveTo = TimeSpan.FromMilliseconds(800);
+            var moveFrom = TimeSpan.FromMilliseconds(700);
+            var moveTo = TimeSpan.FromMilliseconds(500);
 
-            CheckTrackProgram(
-                eventsToSend: new[]
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
                 {
-                    new EventToSend(new ProgramChangeEvent(programNumber) { Channel = (FourBitNumber)4 }, programChangeTime),
-                    new EventToSend(new StartEvent(), noteOffTime - programChangeTime)
+                    new TimedEvent(new ProgramChangeEvent(programNumber) { Channel = (FourBitNumber)4 })
+                        .SetTime((MetricTimeSpan)programChangeTime, TempoMap.Default),
+                    new TimedEvent(new StartEvent())
+                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap.Default),
                 },
-                eventsWillBeSent: new[]
+                actions: new[]
                 {
-                    new EventToSend(new ProgramChangeEvent(programNumber) { Channel = (FourBitNumber)4 }, programChangeTime),
-                    new EventToSend(new ProgramChangeEvent(programNumber) { Channel = (FourBitNumber)4 }, moveFrom - programChangeTime),
-                    new EventToSend(new StartEvent(), noteOffTime - programChangeTime)
+                    new PlaybackChangerBase(moveFrom, p => p.MoveToTime((MetricTimeSpan)moveTo)),
                 },
-                moveFrom: moveFrom,
-                moveTo: moveTo,
-                useOutputDevice: useOutputDevice);
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new ProgramChangeEvent(programNumber) { Channel = (FourBitNumber)4 }, programChangeTime),
+                    new ReceivedEvent(new ProgramChangeEvent(programNumber) { Channel = (FourBitNumber)4 }, moveFrom),
+                    new ReceivedEvent(new StartEvent(), lastEventTime - programChangeTime + moveFrom),
+                });
         }
 
         [Retry(RetriesNumber)]
-        [TestCase(true)]
-        [TestCase(false)]
-        public void TrackProgram_EnableInMiddle_FromBeforeProgramChange_ToAfterProgramChange(bool useOutputDevice)
+        [Test]
+        public void TrackProgram_EnableInMiddle_FromBeforeProgramChange_ToAfterProgramChange()
         {
             var programChangeTime = TimeSpan.FromMilliseconds(800);
             var pitchBendTime = TimeSpan.FromSeconds(1);
-            var noteOffTime = TimeSpan.FromSeconds(2);
+            var lastEventTime = TimeSpan.FromSeconds(2);
             var programNumber = (SevenBitNumber)100;
             var pitchValue = (ushort)1000;
 
@@ -303,90 +300,419 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var moveTo = TimeSpan.FromMilliseconds(1200);
             var enableAfter = TimeSpan.FromMilliseconds(500);
 
-            CheckTrackProgramEnabledInMiddle(
-                eventsToSend: new[]
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
                 {
-                    new EventToSend(new ProgramChangeEvent(programNumber) { Channel = (FourBitNumber)4 }, programChangeTime),
-                    new EventToSend(new PitchBendEvent(pitchValue), pitchBendTime - programChangeTime),
-                    new EventToSend(new StartEvent(), noteOffTime - pitchBendTime)
+                    new TimedEvent(new ProgramChangeEvent(programNumber) { Channel = (FourBitNumber)4 })
+                        .SetTime((MetricTimeSpan)programChangeTime, TempoMap.Default),
+                    new TimedEvent(new PitchBendEvent(pitchValue))
+                        .SetTime((MetricTimeSpan)pitchBendTime, TempoMap.Default),
+                    new TimedEvent(new StartEvent())
+                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap.Default),
                 },
-                eventsWillBeSent: new[]
+                actions: new[]
                 {
-                    new EventToSend(new ProgramChangeEvent(programNumber) { Channel = (FourBitNumber)4 }, moveFrom + enableAfter),
-                    new EventToSend(new StartEvent(), noteOffTime - (moveTo + enableAfter))
+                    new PlaybackChangerBase(moveFrom, p => p.MoveToTime((MetricTimeSpan)moveTo)),
+                    new PlaybackChangerBase(enableAfter, p => p.TrackProgram = true),
                 },
-                moveFrom: moveFrom,
-                moveTo: moveTo,
-                useOutputDevice: useOutputDevice,
-                enableAfter: enableAfter);
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new ProgramChangeEvent(programNumber) { Channel = (FourBitNumber)4 }, moveFrom + enableAfter),
+                    new ReceivedEvent(new StartEvent(), moveFrom + lastEventTime - moveTo),
+                },
+                setupPlayback: playback => playback.TrackProgram = false);
         }
 
         [Retry(RetriesNumber)]
-        [TestCase(true)]
-        [TestCase(false)]
-        public void TrackProgram_EnableInMiddle_FromAfterProgramChange_ToBeforeProgramChange(bool useOutputDevice)
+        [Test]
+        public void TrackProgram_EnableInMiddle_FromAfterProgramChange_ToBeforeProgramChange()
         {
             var programChangeTime = TimeSpan.FromMilliseconds(800);
-            var noteOffTime = TimeSpan.FromSeconds(2);
+            var lastEventTime = TimeSpan.FromSeconds(2);
             var programNumber = (SevenBitNumber)100;
 
             var moveFrom = TimeSpan.FromMilliseconds(1000);
             var moveTo = TimeSpan.FromMilliseconds(500);
             var enableAfter = TimeSpan.FromMilliseconds(150);
 
-            CheckTrackProgramEnabledInMiddle(
-                eventsToSend: new[]
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
                 {
-                    new EventToSend(new ProgramChangeEvent(programNumber) { Channel = (FourBitNumber)4 }, programChangeTime),
-                    new EventToSend(new StartEvent(), noteOffTime - programChangeTime)
+                    new TimedEvent(new ProgramChangeEvent(programNumber) { Channel = (FourBitNumber)4 })
+                        .SetTime((MetricTimeSpan)programChangeTime, TempoMap.Default),
+                    new TimedEvent(new StartEvent())
+                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap.Default),
                 },
-                eventsWillBeSent: new[]
+                actions: new[]
                 {
-                    new EventToSend(new ProgramChangeEvent(programNumber) { Channel = (FourBitNumber)4 }, programChangeTime),
-                    new EventToSend(new ProgramChangeEvent(SevenBitNumber.MinValue) { Channel = (FourBitNumber)4 }, moveFrom - programChangeTime + enableAfter),
-                    new EventToSend(new ProgramChangeEvent(programNumber) { Channel = (FourBitNumber)4 }, programChangeTime - (moveTo + enableAfter)),
-                    new EventToSend(new StartEvent(), noteOffTime - programChangeTime)
+                    new PlaybackChangerBase(moveFrom, p => p.MoveToTime((MetricTimeSpan)moveTo)),
+                    new PlaybackChangerBase(enableAfter, p => p.TrackProgram = true),
                 },
-                moveFrom: moveFrom,
-                moveTo: moveTo,
-                useOutputDevice: useOutputDevice,
-                enableAfter: enableAfter);
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new ProgramChangeEvent(programNumber) { Channel = (FourBitNumber)4 }, programChangeTime),
+                    new ReceivedEvent(new ProgramChangeEvent(SevenBitNumber.MinValue) { Channel = (FourBitNumber)4 }, moveFrom + enableAfter),
+                    new ReceivedEvent(new ProgramChangeEvent(programNumber) { Channel = (FourBitNumber)4 }, moveFrom + programChangeTime - moveTo),
+                    new ReceivedEvent(new StartEvent(), moveFrom - moveTo + lastEventTime),
+                },
+                setupPlayback: playback => playback.TrackProgram = false);
         }
 
-        #endregion
+        [Retry(RetriesNumber)]
+        [Test]
+        public void DontTrackProgram_NoProgramChanges_MoveToTime(
+            [Values(0, 100)] int moveFromMs,
+            [Values(0, 500)] int moveToMs)
+        {
+            var lastEventTime = TimeSpan.FromSeconds(1);
+            var moveFrom = TimeSpan.FromMilliseconds(moveFromMs);
+            var moveTo = TimeSpan.FromMilliseconds(moveToMs);
 
-        #region Private methods
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
+                {
+                    new TimedEvent(new StartEvent())
+                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap.Default),
+                },
+                actions: new[]
+                {
+                    new PlaybackChangerBase(moveFromMs, p => p.MoveToTime((MetricTimeSpan)moveTo)),
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new StartEvent(), lastEventTime - (moveTo - moveFrom)),
+                },
+                setupPlayback: playback => playback.TrackProgram = false);
+        }
 
-        private void CheckTrackProgram(
-            ICollection<EventToSend> eventsToSend,
-            ICollection<EventToSend> eventsWillBeSent,
-            TimeSpan moveFrom,
-            TimeSpan moveTo,
-            bool useOutputDevice) =>
-            CheckDataTracking(
-                p => p.TrackProgram = true,
-                eventsToSend,
-                eventsWillBeSent,
-                moveFrom,
-                moveTo,
-                useOutputDevice);
+        [Retry(RetriesNumber)]
+        [Test]
+        public void DontTrackProgram_ProgramChangeAtZero_MoveToTime()
+        {
+            var lastEventTime = TimeSpan.FromSeconds(1);
+            var programNumber = (SevenBitNumber)100;
 
-        private void CheckTrackProgramEnabledInMiddle(
-            ICollection<EventToSend> eventsToSend,
-            ICollection<EventToSend> eventsWillBeSent,
-            TimeSpan moveFrom,
-            TimeSpan moveTo,
-            bool useOutputDevice,
-            TimeSpan enableAfter) =>
-            CheckDataTracking(
-                p => p.TrackProgram = false,
-                eventsToSend,
-                eventsWillBeSent,
-                moveFrom,
-                moveTo,
-                useOutputDevice,
-                enableAfter,
-                p => p.TrackProgram = true);
+            var moveFrom = TimeSpan.FromMilliseconds(100);
+            var moveTo = TimeSpan.FromMilliseconds(500);
+
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
+                {
+                    new TimedEvent(new ProgramChangeEvent(programNumber)),
+                    new TimedEvent(new StartEvent())
+                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap.Default),
+                },
+                actions: new[]
+                {
+                    new PlaybackChangerBase(moveFrom, p => p.MoveToTime((MetricTimeSpan)moveTo)),
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new ProgramChangeEvent(programNumber), TimeSpan.Zero),
+                    new ReceivedEvent(new StartEvent(), lastEventTime - (moveTo - moveFrom)),
+                },
+                setupPlayback: playback => playback.TrackProgram = false);
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
+        public void DontTrackProgram_ProgramChangeAtZero_MoveToStart()
+        {
+            var lastEventTime = TimeSpan.FromSeconds(1);
+            var programNumber = (SevenBitNumber)100;
+
+            var moveFrom = TimeSpan.FromMilliseconds(500);
+            var moveTo = TimeSpan.Zero;
+
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
+                {
+                    new TimedEvent(new ProgramChangeEvent(programNumber)),
+                    new TimedEvent(new StartEvent())
+                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap.Default),
+                },
+                actions: new[]
+                {
+                    new PlaybackChangerBase(moveFrom, p => p.MoveToTime((MetricTimeSpan)moveTo)),
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new ProgramChangeEvent(programNumber), TimeSpan.Zero),
+                    new ReceivedEvent(new ProgramChangeEvent(programNumber), moveFrom),
+                    new ReceivedEvent(new StartEvent(), lastEventTime - (moveTo - moveFrom)),
+                },
+                setupPlayback: playback => playback.TrackProgram = false);
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
+        public void DontTrackProgram_FromBeforeProgramChange_ToBeforeProgramChange()
+        {
+            var programChangeTime = TimeSpan.FromMilliseconds(800);
+            var lastEventTime = TimeSpan.FromSeconds(1);
+            var programNumber = (SevenBitNumber)100;
+
+            var moveFrom = TimeSpan.FromMilliseconds(100);
+            var moveTo = TimeSpan.FromMilliseconds(500);
+
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
+                {
+                    new TimedEvent(new ProgramChangeEvent(programNumber) { Channel = (FourBitNumber)4 })
+                        .SetTime((MetricTimeSpan)programChangeTime, TempoMap.Default),
+                    new TimedEvent(new StartEvent())
+                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap.Default),
+                },
+                actions: new[]
+                {
+                    new PlaybackChangerBase(moveFrom, p => p.MoveToTime((MetricTimeSpan)moveTo)),
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new ProgramChangeEvent(programNumber) { Channel = (FourBitNumber)4 }, programChangeTime - (moveTo - moveFrom)),
+                    new ReceivedEvent(new StartEvent(), lastEventTime - (moveTo - moveFrom)),
+                },
+                setupPlayback: playback => playback.TrackProgram = false);
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
+        public void DontTrackProgram_FromBeforeProgramChange_ToAfterProgramChange()
+        {
+            var programChangeTime = TimeSpan.FromMilliseconds(500);
+            var lastEventTime = TimeSpan.FromSeconds(1);
+            var programNumber = (SevenBitNumber)100;
+
+            var moveFrom = TimeSpan.FromMilliseconds(300);
+            var moveTo = TimeSpan.FromMilliseconds(700);
+
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
+                {
+                    new TimedEvent(new ProgramChangeEvent(programNumber) { Channel = (FourBitNumber)4 })
+                        .SetTime((MetricTimeSpan)programChangeTime, TempoMap.Default),
+                    new TimedEvent(new StartEvent())
+                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap.Default),
+                },
+                actions: new[]
+                {
+                    new PlaybackChangerBase(moveFrom, p => p.MoveToTime((MetricTimeSpan)moveTo)),
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new StartEvent(), lastEventTime - (moveTo - moveFrom)),
+                },
+                setupPlayback: playback => playback.TrackProgram = false);
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
+        public void DontTrackProgram_FromAfterProgramChange_ToAfterProgramChange()
+        {
+            var programChangeTime = TimeSpan.FromMilliseconds(500);
+            var lastEventTime = TimeSpan.FromSeconds(1);
+            var programNumber = (SevenBitNumber)100;
+
+            var moveFrom = TimeSpan.FromMilliseconds(700);
+            var moveTo = TimeSpan.FromMilliseconds(900);
+
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
+                {
+                    new TimedEvent(new ProgramChangeEvent(programNumber) { Channel = (FourBitNumber)4 })
+                        .SetTime((MetricTimeSpan)programChangeTime, TempoMap.Default),
+                    new TimedEvent(new StartEvent())
+                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap.Default),
+                },
+                actions: new[]
+                {
+                    new PlaybackChangerBase(moveFrom, p => p.MoveToTime((MetricTimeSpan)moveTo)),
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new ProgramChangeEvent(programNumber) { Channel = (FourBitNumber)4 }, programChangeTime),
+                    new ReceivedEvent(new StartEvent(), lastEventTime - (moveTo - moveFrom)),
+                },
+                setupPlayback: playback => playback.TrackProgram = false);
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
+        public void DontTrackProgram_FromAfterProgramChange_ToBeforeProgramChange()
+        {
+            var programChangeTime = TimeSpan.FromMilliseconds(500);
+            var lastEventTime = TimeSpan.FromSeconds(1);
+            var programNumber = (SevenBitNumber)100;
+
+            var moveFrom = TimeSpan.FromMilliseconds(700);
+            var moveTo = TimeSpan.FromMilliseconds(300);
+
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
+                {
+                    new TimedEvent(new ProgramChangeEvent(programNumber) { Channel = (FourBitNumber)4 })
+                        .SetTime((MetricTimeSpan)programChangeTime, TempoMap.Default),
+                    new TimedEvent(new StartEvent())
+                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap.Default),
+                },
+                actions: new[]
+                {
+                    new PlaybackChangerBase(moveFrom, p => p.MoveToTime((MetricTimeSpan)moveTo)),
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new ProgramChangeEvent(programNumber) { Channel = (FourBitNumber)4 }, programChangeTime),
+                    new ReceivedEvent(new ProgramChangeEvent(programNumber) { Channel = (FourBitNumber)4 }, programChangeTime + moveFrom - moveTo),
+                    new ReceivedEvent(new StartEvent(), moveFrom - moveTo + lastEventTime),
+                },
+                setupPlayback: playback => playback.TrackProgram = false);
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
+        public void DontTrackProgram_FromBeforeProgramChange_ToProgramChange()
+        {
+            var programChangeTime = TimeSpan.FromMilliseconds(800);
+            var lastEventTime = TimeSpan.FromSeconds(1);
+            var programNumber = (SevenBitNumber)100;
+
+            var moveFrom = TimeSpan.FromMilliseconds(500);
+            var moveTo = TimeSpan.FromMilliseconds(800);
+
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
+                {
+                    new TimedEvent(new ProgramChangeEvent(programNumber) { Channel = (FourBitNumber)4 })
+                        .SetTime((MetricTimeSpan)programChangeTime, TempoMap.Default),
+                    new TimedEvent(new StartEvent())
+                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap.Default),
+                },
+                actions: new[]
+                {
+                    new PlaybackChangerBase(moveFrom, p => p.MoveToTime((MetricTimeSpan)moveTo)),
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new ProgramChangeEvent(programNumber) { Channel = (FourBitNumber)4 }, moveFrom),
+                    new ReceivedEvent(new StartEvent(), lastEventTime - (moveTo - moveFrom)),
+                },
+                setupPlayback: playback => playback.TrackProgram = false);
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
+        public void DontTrackProgram_FromAfterProgramChange_ToProgramChange()
+        {
+            var programChangeTime = TimeSpan.FromMilliseconds(800);
+            var lastEventTime = TimeSpan.FromSeconds(2);
+            var programNumber = (SevenBitNumber)100;
+
+            var moveFrom = TimeSpan.FromMilliseconds(1000);
+            var moveTo = TimeSpan.FromMilliseconds(800);
+
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
+                {
+                    new TimedEvent(new ProgramChangeEvent(programNumber) { Channel = (FourBitNumber)4 })
+                        .SetTime((MetricTimeSpan)programChangeTime, TempoMap.Default),
+                    new TimedEvent(new StartEvent())
+                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap.Default),
+                },
+                actions: new[]
+                {
+                    new PlaybackChangerBase(moveFrom, p => p.MoveToTime((MetricTimeSpan)moveTo)),
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new ProgramChangeEvent(programNumber) { Channel = (FourBitNumber)4 }, programChangeTime),
+                    new ReceivedEvent(new ProgramChangeEvent(programNumber) { Channel = (FourBitNumber)4 }, moveFrom),
+                    new ReceivedEvent(new StartEvent(), moveFrom + lastEventTime - programChangeTime),
+                },
+                setupPlayback: playback => playback.TrackProgram = false);
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
+        public void TrackProgram_DisableInMiddle_FromBeforeProgramChange_ToAfterProgramChange()
+        {
+            var programChangeTime = TimeSpan.FromMilliseconds(800);
+            var pitchBendTime = TimeSpan.FromSeconds(1);
+            var lastEventTime = TimeSpan.FromSeconds(2);
+            var programNumber = (SevenBitNumber)100;
+            var pitchValue = (ushort)1000;
+
+            var moveFrom = TimeSpan.FromMilliseconds(500);
+            var moveTo = TimeSpan.FromMilliseconds(1200);
+            var disableAfter = TimeSpan.FromMilliseconds(500);
+
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
+                {
+                    new TimedEvent(new ProgramChangeEvent(programNumber) { Channel = (FourBitNumber)4 })
+                        .SetTime((MetricTimeSpan)programChangeTime, TempoMap.Default),
+                    new TimedEvent(new PitchBendEvent(pitchValue))
+                        .SetTime((MetricTimeSpan)pitchBendTime, TempoMap.Default),
+                    new TimedEvent(new StartEvent())
+                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap.Default),
+                },
+                actions: new[]
+                {
+                    new PlaybackChangerBase(moveFrom, p => p.MoveToTime((MetricTimeSpan)moveTo)),
+                    new PlaybackChangerBase(disableAfter, p => p.TrackProgram = false),
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new ProgramChangeEvent(programNumber) { Channel = (FourBitNumber)4 }, moveFrom),
+                    new ReceivedEvent(new StartEvent(), moveFrom + lastEventTime - moveTo),
+                });
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
+        public void TrackProgram_DisableInMiddle_FromAfterProgramChange_ToBeforeProgramChange()
+        {
+            var programChangeTime = TimeSpan.FromMilliseconds(800);
+            var lastEventTime = TimeSpan.FromSeconds(2);
+            var programNumber = (SevenBitNumber)100;
+
+            var moveFrom = TimeSpan.FromMilliseconds(1000);
+            var moveTo = TimeSpan.FromMilliseconds(500);
+            var disableAfter = TimeSpan.FromMilliseconds(150);
+
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
+                {
+                    new TimedEvent(new ProgramChangeEvent(programNumber) { Channel = (FourBitNumber)4 })
+                        .SetTime((MetricTimeSpan)programChangeTime, TempoMap.Default),
+                    new TimedEvent(new StartEvent())
+                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap.Default),
+                },
+                actions: new[]
+                {
+                    new PlaybackChangerBase(moveFrom, p => p.MoveToTime((MetricTimeSpan)moveTo)),
+                    new PlaybackChangerBase(disableAfter, p => p.TrackProgram = false),
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new ProgramChangeEvent(programNumber) { Channel = (FourBitNumber)4 }, programChangeTime),
+                    new ReceivedEvent(new ProgramChangeEvent(SevenBitNumber.MinValue) { Channel = (FourBitNumber)4 }, moveFrom),
+                    new ReceivedEvent(new ProgramChangeEvent(programNumber) { Channel = (FourBitNumber)4 }, moveFrom + programChangeTime - moveTo),
+                    new ReceivedEvent(new StartEvent(), moveFrom - moveTo + lastEventTime),
+                });
+        }
 
         #endregion
     }

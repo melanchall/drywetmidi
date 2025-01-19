@@ -1,11 +1,9 @@
-﻿using Melanchall.DryWetMidi.Tests.Common;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using System.Collections.Generic;
 using System;
 using Melanchall.DryWetMidi.Multimedia;
 using Melanchall.DryWetMidi.Interaction;
 using System.Linq;
-using System.Diagnostics;
 using Melanchall.DryWetMidi.Core;
 
 namespace Melanchall.DryWetMidi.Tests.Multimedia
@@ -14,6 +12,31 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
     public sealed partial class PlaybackTests
     {
         #region Nested classes
+
+        private sealed class PlaybackChangerBase
+        {
+            public PlaybackChangerBase(
+                TimeSpan period,
+                Action<Playback> action)
+                : this((int)period.TotalMilliseconds, action)
+            {
+            }
+
+            public PlaybackChangerBase(
+                int periodMs,
+                Action<Playback> action)
+            {
+                PeriodMs = periodMs;
+                Action = action;
+            }
+
+            public int PeriodMs { get; }
+
+            public Action<Playback> Action { get; }
+
+            public override string ToString() =>
+                $"After {PeriodMs} ms";
+        }
 
         private sealed class PlaybackChanger
         {
@@ -33,18 +56,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 $"After {PeriodMs} ms";
         }
 
-        private sealed class EventsCollectingDevice : IOutputDevice
+        private sealed class EmptyOutputDevice : IOutputDevice
         {
             public event EventHandler<MidiEventSentEventArgs> EventSent;
-
-            private readonly Stopwatch _stopwatch = new Stopwatch();
-
-            public List<ReceivedEvent> ReceivedEvents { get; } = new List<ReceivedEvent>();
-
-            public void StartCollecting()
-            {
-                _stopwatch.Start();
-            }
 
             public void PrepareForEventsSending()
             {
@@ -52,13 +66,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
             public void SendEvent(MidiEvent midiEvent)
             {
-                ReceivedEvents.Add(new ReceivedEvent(midiEvent, _stopwatch.Elapsed));
                 EventSent?.Invoke(this, new MidiEventSentEventArgs(midiEvent));
             }
 
             public void Dispose()
             {
-                _stopwatch.Stop();
             }
         }
 
@@ -82,55 +94,15 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         {
             var collection = new ObservableTimedObjectsCollection(initialObjects);
 
-            using (var outputDevice = new EventsCollectingDevice())
-            using (var playback = new Playback(collection, OnTheFlyChecksTempoMap, outputDevice))
-            {
-                setupPlayback?.Invoke(playback);
-
-                if (repeatsCount > 0)
-                    playback.Loop = true;
-
-                var actualRepeatsCount = 0;
-                playback.RepeatStarted += (_, __) =>
-                {
-                    actualRepeatsCount++;
-                    if (actualRepeatsCount == repeatsCount)
-                        playback.Loop = false;
-                };
-
-                var actionsExecutedCount = 0;
-
-                playback.Start();
-                outputDevice.StartCollecting();
-
-                foreach (var action in actions)
-                {
-                    var stopwatch = Stopwatch.StartNew();
-
-                    while (stopwatch.ElapsedMilliseconds < action.PeriodMs)
-                    {
-                    }
-                    
-                    action.Action(playback, collection);
-                    actionsExecutedCount++;
-                }
-
-                var timeout = TimeSpan.FromSeconds(10);
-                var stopped = WaitOperations.Wait(() => !playback.IsRunning, timeout);
-                Assert.IsTrue(stopped, $"Playback is running after {timeout}.");
-
-                WaitOperations.Wait(SendReceiveUtilities.MaximumEventSendReceiveDelay);
-
-                Assert.AreEqual(
-                    actions.Length,
-                    actionsExecutedCount,
-                    "Invalid number of actions executed.");
-
-                CompareReceivedEvents(
-                    outputDevice.ReceivedEvents,
-                    expectedReceivedEvents.ToList(),
-                    sendReceiveTimeDelta: TimeSpan.FromMilliseconds(10));
-            }
+            CheckPlayback(
+                useOutputDevice: false,
+                createPlayback: outputDevice => new Playback(collection, OnTheFlyChecksTempoMap, outputDevice),
+                actions: actions
+                    .Select(a => new PlaybackChangerBase(a.PeriodMs, p => a.Action(p, collection)))
+                    .ToArray(),
+                expectedReceivedEvents: expectedReceivedEvents,
+                setupPlayback: setupPlayback,
+                repeatsCount: repeatsCount);
         }
 
         private void CheckDuration(

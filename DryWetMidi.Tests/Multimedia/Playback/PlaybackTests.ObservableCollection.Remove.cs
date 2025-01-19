@@ -199,8 +199,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 {
                     new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
                     new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(800)),
-                },
-                setupPlayback: playback => playback.TrackProgram = true);
+                });
         }
 
         [Retry(OnTheFlyChecksRetriesNumber)]
@@ -228,8 +227,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 {
                     new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
                     new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(800)),
-                },
-                setupPlayback: playback => playback.TrackProgram = true);
+                });
         }
 
         [Retry(OnTheFlyChecksRetriesNumber)]
@@ -259,8 +257,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new ReceivedEvent(new ProgramChangeEvent(), TimeSpan.FromMilliseconds(200)),
                     new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
                     new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(800)),
-                },
-                setupPlayback: playback => playback.TrackProgram = true);
+                });
         }
 
         [Retry(OnTheFlyChecksRetriesNumber)]
@@ -296,8 +293,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new ReceivedEvent(new ProgramChangeEvent(), TimeSpan.FromMilliseconds(300)),
                     new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(400)),
                     new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(700)),
-                },
-                setupPlayback: playback => playback.TrackProgram = true);
+                });
         }
 
         [Retry(OnTheFlyChecksRetriesNumber)]
@@ -1167,7 +1163,6 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(1100)),
                     new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1600)),
                 },
-                setupPlayback: playback => playback.TrackProgram = true,
                 repeatsCount: 1);
         }
 
@@ -1199,7 +1194,6 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(1100)),
                     new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1600)),
                 },
-                setupPlayback: playback => playback.TrackProgram = true,
                 repeatsCount: 1);
         }
 
@@ -1233,7 +1227,6 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(1100)),
                     new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1600)),
                 },
-                setupPlayback: playback => playback.TrackProgram = true,
                 repeatsCount: 1);
         }
 
@@ -1273,7 +1266,6 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(1100)),
                     new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1400)),
                 },
-                setupPlayback: playback => playback.TrackProgram = true,
                 repeatsCount: 1);
         }
 

@@ -186,8 +186,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
                     new ReceivedEvent(new ProgramChangeEvent((SevenBitNumber)70), TimeSpan.FromMilliseconds(700)),
                     new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1000)),
-                },
-                setupPlayback: playback => playback.TrackProgram = true);
+                });
         }
 
         [Retry(OnTheFlyChecksRetriesNumber)]
@@ -214,8 +213,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new ReceivedEvent(new ProgramChangeEvent((SevenBitNumber)70), TimeSpan.FromMilliseconds(700)),
                     new ReceivedEvent(new ProgramChangeEvent((SevenBitNumber)50), TimeSpan.FromMilliseconds(900)),
                     new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1000)),
-                },
-                setupPlayback: playback => playback.TrackProgram = true);
+                });
         }
 
         [Retry(OnTheFlyChecksRetriesNumber)]
@@ -242,8 +240,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new ReceivedEvent(new ProgramChangeEvent((SevenBitNumber)70), TimeSpan.FromMilliseconds(700)),
                     new ReceivedEvent(new ProgramChangeEvent((SevenBitNumber)70) { Channel = (FourBitNumber)4 }, TimeSpan.FromMilliseconds(900)),
                     new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1000)),
-                },
-                setupPlayback: playback => playback.TrackProgram = true);
+                });
         }
 
         [Retry(OnTheFlyChecksRetriesNumber)]
@@ -272,8 +269,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new ReceivedEvent(new ProgramChangeEvent((SevenBitNumber)70), TimeSpan.FromMilliseconds(700)),
                     new ReceivedEvent(new ProgramChangeEvent((SevenBitNumber)50), TimeSpan.FromMilliseconds(900)),
                     new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1000)),
-                },
-                setupPlayback: playback => playback.TrackProgram = true);
+                });
         }
 
         [Retry(OnTheFlyChecksRetriesNumber)]
@@ -298,8 +294,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
                     new ReceivedEvent(new ProgramChangeEvent((SevenBitNumber)70), TimeSpan.FromMilliseconds(500)),
                     new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1000)),
-                },
-                setupPlayback: playback => playback.TrackProgram = true);
+                });
         }
 
         [Retry(OnTheFlyChecksRetriesNumber)]
@@ -325,8 +320,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
                     new ReceivedEvent(new ProgramChangeEvent((SevenBitNumber)50), TimeSpan.FromMilliseconds(500)),
                     new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1000)),
-                },
-                setupPlayback: playback => playback.TrackProgram = true);
+                });
         }
 
         [Retry(OnTheFlyChecksRetriesNumber)]
@@ -353,8 +347,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new ReceivedEvent(new ProgramChangeEvent((SevenBitNumber)70), TimeSpan.FromMilliseconds(500)),
                     new ReceivedEvent(new ProgramChangeEvent((SevenBitNumber)70) { Channel = (FourBitNumber)4 }, TimeSpan.FromMilliseconds(500)),
                     new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1000)),
-                },
-                setupPlayback: playback => playback.TrackProgram = true);
+                });
         }
 
         [Retry(OnTheFlyChecksRetriesNumber)]
@@ -383,8 +376,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
                     new ReceivedEvent(new ProgramChangeEvent((SevenBitNumber)70), TimeSpan.FromMilliseconds(500)),
                     new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(800)),
-                },
-                setupPlayback: playback => playback.TrackProgram = true);
+                });
         }
 
         [Retry(OnTheFlyChecksRetriesNumber)]
@@ -422,8 +414,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new ReceivedEvent(new ProgramChangeEvent((SevenBitNumber)50), TimeSpan.FromMilliseconds(600)),
                     new ReceivedEvent(new ProgramChangeEvent((SevenBitNumber)70), TimeSpan.FromMilliseconds(800)),
                     new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1200)),
-                },
-                setupPlayback: playback => playback.TrackProgram = true);
+                });
         }
 
         [Retry(OnTheFlyChecksRetriesNumber)]
@@ -1401,7 +1392,6 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new ReceivedEvent(new ProgramChangeEvent((SevenBitNumber)70), TimeSpan.FromMilliseconds(900)),
                     new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1200)),
                 },
-                setupPlayback: playback => playback.TrackProgram = true,
                 repeatsCount: 1);
         }
 
@@ -1434,7 +1424,6 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new ReceivedEvent(new ProgramChangeEvent((SevenBitNumber)50), TimeSpan.FromMilliseconds(1100)),
                     new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1200)),
                 },
-                setupPlayback: playback => playback.TrackProgram = true,
                 repeatsCount: 1);
         }
 
@@ -1467,7 +1456,6 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new ReceivedEvent(new ProgramChangeEvent((SevenBitNumber)70) { Channel = (FourBitNumber)4 }, TimeSpan.FromMilliseconds(1100)),
                     new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1200)),
                 },
-                setupPlayback: playback => playback.TrackProgram = true,
                 repeatsCount: 1);
         }
 
@@ -1502,7 +1490,6 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new ReceivedEvent(new ProgramChangeEvent((SevenBitNumber)50), TimeSpan.FromMilliseconds(1100)),
                     new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1200)),
                 },
-                setupPlayback: playback => playback.TrackProgram = true,
                 repeatsCount: 1);
         }
 
@@ -1532,7 +1519,6 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new ReceivedEvent(new ProgramChangeEvent((SevenBitNumber)70), TimeSpan.FromMilliseconds(900)),
                     new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1200)),
                 },
-                setupPlayback: playback => playback.TrackProgram = true,
                 repeatsCount: 1);
         }
 
@@ -1564,7 +1550,6 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new ReceivedEvent(new ProgramChangeEvent((SevenBitNumber)50), TimeSpan.FromMilliseconds(1000)),
                     new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1200)),
                 },
-                setupPlayback: playback => playback.TrackProgram = true,
                 repeatsCount: 1);
         }
 
@@ -1597,7 +1582,6 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new ReceivedEvent(new ProgramChangeEvent((SevenBitNumber)70) { Channel = (FourBitNumber)4 }, TimeSpan.FromMilliseconds(1000)),
                     new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1200)),
                 },
-                setupPlayback: playback => playback.TrackProgram = true,
                 repeatsCount: 1);
         }
 
@@ -1631,7 +1615,6 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new ReceivedEvent(new ProgramChangeEvent((SevenBitNumber)70), TimeSpan.FromMilliseconds(800)),
                     new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1000)),
                 },
-                setupPlayback: playback => playback.TrackProgram = true,
                 repeatsCount: 1);
         }
 
@@ -1675,7 +1658,6 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new ReceivedEvent(new ProgramChangeEvent((SevenBitNumber)70), TimeSpan.FromMilliseconds(1800)),
                     new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(2200)),
                 },
-                setupPlayback: playback => playback.TrackProgram = true,
                 repeatsCount: 1);
         }
 

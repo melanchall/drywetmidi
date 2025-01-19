@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
+using Melanchall.DryWetMidi.Multimedia;
 using NUnit.Framework;
 
 namespace Melanchall.DryWetMidi.Tests.Multimedia
@@ -397,7 +398,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 moveFrom: moveFrom,
                 moveTo: moveTo,
                 useOutputDevice: useOutputDevice,
-                enableAfter: enableAfter);
+                enableAfter: enableAfter,
+                setupPlayback: playback => playback.TrackProgram = false);
         }
 
         [Retry(RetriesNumber)]
@@ -442,9 +444,14 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             ICollection<EventToSend> eventsWillBeSent,
             TimeSpan moveFrom,
             TimeSpan moveTo,
-            bool useOutputDevice) =>
+            bool useOutputDevice,
+            Action<Playback> setupPlayback = null) =>
             CheckDataTracking(
-                p => p.TrackControlValue = true,
+                p =>
+                {
+                    p.TrackControlValue = true;
+                    setupPlayback?.Invoke(p);
+                },
                 eventsToSend,
                 eventsWillBeSent,
                 moveFrom,
@@ -457,9 +464,14 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             TimeSpan moveFrom,
             TimeSpan moveTo,
             bool useOutputDevice,
-            TimeSpan enableAfter) =>
+            TimeSpan enableAfter,
+            Action<Playback> setupPlayback = null) =>
             CheckDataTracking(
-                p => p.TrackControlValue = false,
+                p =>
+                {
+                    p.TrackControlValue = false;
+                    setupPlayback?.Invoke(p);
+                },
                 eventsToSend,
                 eventsWillBeSent,
                 moveFrom,

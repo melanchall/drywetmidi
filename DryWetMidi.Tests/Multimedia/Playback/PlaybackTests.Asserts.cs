@@ -8,12 +8,102 @@ using Melanchall.DryWetMidi.Interaction;
 using Melanchall.DryWetMidi.Tests.Utilities;
 using NUnit.Framework;
 using Melanchall.DryWetMidi.Tests.Common;
+using System.Diagnostics;
 
 namespace Melanchall.DryWetMidi.Tests.Multimedia
 {
     [TestFixture]
     public sealed partial class PlaybackTests
     {
+        private void CheckPlayback(
+            bool useOutputDevice,
+            ICollection<ITimedObject> initialPlaybackObjects,
+            PlaybackChangerBase[] actions,
+            ICollection<ReceivedEvent> expectedReceivedEvents,
+            Action<Playback> setupPlayback = null,
+            int? repeatsCount = null) => CheckPlayback(
+                useOutputDevice,
+                outpuDevice => new Playback(initialPlaybackObjects, TempoMap.Default, outpuDevice),
+                actions,
+                expectedReceivedEvents,
+                setupPlayback,
+                repeatsCount);
+
+        private void CheckPlayback(
+            bool useOutputDevice,
+            Func<IOutputDevice, Playback> createPlayback,
+            PlaybackChangerBase[] actions,
+            ICollection<ReceivedEvent> expectedReceivedEvents,
+            Action<Playback> setupPlayback = null,
+            int? repeatsCount = null)
+        {
+            var outputDevice = useOutputDevice
+                ? (IOutputDevice)OutputDevice.GetByName(SendReceiveUtilities.DeviceToTestOnName)
+                : new EmptyOutputDevice();
+
+            var stopwatch = new Stopwatch();
+            var receivedEvents = new List<ReceivedEvent>();
+
+            using (outputDevice)
+            {
+                if (useOutputDevice)
+                    SendReceiveUtilities.WarmUpDevice((OutputDevice)outputDevice);
+
+                outputDevice.EventSent += (_, e) => receivedEvents.Add(new ReceivedEvent(e.Event, stopwatch.Elapsed));
+
+                using (var playback = createPlayback(outputDevice))
+                {
+                    setupPlayback?.Invoke(playback);
+
+                    if (repeatsCount > 0)
+                        playback.Loop = true;
+
+                    var actualRepeatsCount = 0;
+                    playback.RepeatStarted += (_, __) =>
+                    {
+                        actualRepeatsCount++;
+                        if (actualRepeatsCount == repeatsCount)
+                            playback.Loop = false;
+                    };
+
+                    var actionsExecutedCount = 0;
+
+                    stopwatch.Start();
+                    playback.Start();
+
+                    foreach (var action in actions)
+                    {
+                        var waitStopwatch = Stopwatch.StartNew();
+
+                        while (waitStopwatch.ElapsedMilliseconds < action.PeriodMs)
+                        {
+                        }
+
+                        action.Action(playback);
+                        actionsExecutedCount++;
+                    }
+
+                    var timeout = TimeSpan.FromSeconds(10);
+                    var stopped = WaitOperations.Wait(() => !playback.IsRunning, timeout);
+                    Assert.IsTrue(stopped, $"Playback is running after {timeout}.");
+
+                    WaitOperations.Wait(SendReceiveUtilities.MaximumEventSendReceiveDelay);
+
+                    Assert.AreEqual(
+                        actions.Length,
+                        actionsExecutedCount,
+                        "Invalid number of actions executed.");
+
+                    CompareReceivedEvents(
+                        receivedEvents,
+                        expectedReceivedEvents.ToList(),
+                        sendReceiveTimeDelta: useOutputDevice
+                            ? SendReceiveUtilities.MaximumEventSendReceiveDelay
+                            : TimeSpan.FromMilliseconds(10));
+                }
+            }
+        }
+
         private IEnumerable<SnapPoint> GetActiveSnapPoints(Playback playback)
         {
             return playback.Snapping.GetActiveSnapPoints().ToList();
@@ -721,7 +811,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 Assert.LessOrEqual(
                     offsetFromExpectedTime,
                     SendReceiveUtilities.MaximumEventSendReceiveDelay,
-                    $"Event was sent at wrong time ({sentEvent.Time}; expected is {expectedTime}).");
+                    $"Event '{sentEvent.Event}' was sent at wrong time ({sentEvent.Time}; expected is {expectedTime}).");
             }
         }
 

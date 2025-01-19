@@ -35,12 +35,12 @@ namespace Melanchall.DryWetMidi.Multimedia
         #region Events
 
         /// <summary>
-        /// Occurs when playback started via <see cref="Start"/> or <see cref="Play"/> methods.
+        /// Occurs when playback started via the <see cref="Start"/> method.
         /// </summary>
         public event EventHandler Started;
 
         /// <summary>
-        /// Occurs when playback stopped via <see cref="Stop"/> method.
+        /// Occurs when playback stopped via the <see cref="Stop"/> method.
         /// </summary>
         public event EventHandler Stopped;
 

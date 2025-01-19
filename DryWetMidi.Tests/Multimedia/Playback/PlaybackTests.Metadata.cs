@@ -1936,7 +1936,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             (MidiEvent, object)[] expectedMetadata)
         {
             CheckTrackDataWithMetadata(
-                p => p.TrackProgram = true,
+                p => { },
                 midiFile,
                 moveFrom,
                 moveTo,

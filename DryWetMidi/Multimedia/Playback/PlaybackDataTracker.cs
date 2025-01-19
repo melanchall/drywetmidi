@@ -169,7 +169,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         #region Properties
 
-        public bool TrackProgram { get; set; }
+        public bool TrackProgram { get; set; } = true;
 
         public bool TrackPitchValue { get; set; }
 
