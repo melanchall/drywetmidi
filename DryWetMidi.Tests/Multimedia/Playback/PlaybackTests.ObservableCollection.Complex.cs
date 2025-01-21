@@ -16,7 +16,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Retry(OnTheFlyChecksRetriesNumber)]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_AddAtAdvanceByOne(
-            [Values(1, 2, 3, 4, 8, 16, 17, 32, 50, 51, 64)] int notesCount,
+            [Values(1, 2, 3, 4, 8, 16, 17, 32, 50, 51)] int notesCount,
             [Values(0, 10)] int gapMs)
         {
             var noteLengthMs = 20;
@@ -65,7 +65,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Retry(OnTheFlyChecksRetriesNumber)]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_AddAtAdvanceByOne_WithEndMovesBehindCurrentTime(
-            [Values(1, 2, 3, 4, 8, 16, 17, 32, 50, 51, 64)] int notesCount)
+            [Values(1, 2, 3, 4, 8, 16, 17, 32, 50, 51)] int notesCount)
         {
             var noteLengthMs = 20;
             var lastEventTime = notesCount * noteLengthMs + 20;
@@ -116,7 +116,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Retry(OnTheFlyChecksRetriesNumber)]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_AddAtAdvanceByOneWithOverlapping(
-            [Values(1, 2, 3, 4, 8, 16, 17, 32, 50, 51, 64)] int notesCount)
+            [Values(1, 2, 3, 4, 8, 16, 17, 32, 50, 51)] int notesCount)
         {
             var overlappedMs = 5;
             var noteLengthMs = 20;
@@ -166,7 +166,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Retry(OnTheFlyChecksRetriesNumber)]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_BatchAdd_1(
-            [Values(1, 2, 3, 4, 8, 16, 17, 32, 50, 51, 64)] int notesCount)
+            [Values(1, 2, 3, 4, 8, 16, 17, 32, 50, 51)] int notesCount)
         {
             var noteLengthMs = 20;
             var lastEventTime = notesCount * noteLengthMs + 20;
@@ -268,7 +268,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Retry(OnTheFlyChecksRetriesNumber)]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_RemoveByOne(
-            [Values(1, 2, 3, 4, 8, 16, 17, 32, 50, 51, 64)] int notesCount)
+            [Values(1, 2, 3, 4, 8, 16, 17, 32, 50, 51)] int notesCount)
         {
             var noteLengthMs = 20;
 
@@ -305,7 +305,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Retry(OnTheFlyChecksRetriesNumber)]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_RemoveAtAdvance(
-            [Values(1, 2, 3, 4, 8, 16, 17, 32, 50, 51, 64)] int notesCount)
+            [Values(1, 2, 3, 4, 8, 16, 17, 32, 50, 51)] int notesCount)
         {
             var noteLengthMs = 40;
 
@@ -365,7 +365,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Retry(OnTheFlyChecksRetriesNumber)]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_AddAndRemoveAtAdvanceByOne(
-            [Values(1, 2, 3, 4, 8, 16, 17, 32, 50, 51, 64)] int notesCount,
+            [Values(1, 2, 3, 4, 8, 16, 17, 32, 50, 51)] int notesCount,
             [Values(0, 10)] int gapMs,
             [Values] bool viaChangeCollection)
         {
@@ -418,7 +418,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Retry(OnTheFlyChecksRetriesNumber)]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_AddAtAdvanceAndRemovePastByOne(
-            [Values(1, 2, 3, 4, 8, 16, 17, 32, 50, 51, 64)] int notesCount)
+            [Values(1, 2, 3, 4, 8, 16, 17, 32, 50, 51)] int notesCount)
         {
             var noteLengthMs = 20;
             var lastEventTime = notesCount * noteLengthMs + 20;

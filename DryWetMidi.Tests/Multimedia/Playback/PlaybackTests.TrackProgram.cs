@@ -321,7 +321,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new ReceivedEvent(new ProgramChangeEvent(programNumber) { Channel = (FourBitNumber)4 }, moveFrom + enableAfter),
                     new ReceivedEvent(new StartEvent(), moveFrom + lastEventTime - moveTo),
                 },
-                setupPlayback: playback => playback.TrackProgram = false);
+                setupPlayback: playback =>
+                {
+                    playback.TrackProgram = false;
+                    playback.TrackPitchValue = false;
+                });
         }
 
         [Retry(RetriesNumber)]
@@ -676,7 +680,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 {
                     new ReceivedEvent(new ProgramChangeEvent(programNumber) { Channel = (FourBitNumber)4 }, moveFrom),
                     new ReceivedEvent(new StartEvent(), moveFrom + lastEventTime - moveTo),
-                });
+                },
+                setupPlayback: playback => playback.TrackPitchValue = false);
         }
 
         [Retry(RetriesNumber)]

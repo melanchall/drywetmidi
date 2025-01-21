@@ -1,302 +1,310 @@
 ﻿using System;
-using System.Collections.Generic;
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
-using Melanchall.DryWetMidi.Multimedia;
+using Melanchall.DryWetMidi.Interaction;
 using NUnit.Framework;
 
 namespace Melanchall.DryWetMidi.Tests.Multimedia
 {
-    // TODO: check tracking disabled
     [TestFixture]
     public sealed partial class PlaybackTests
     {
         #region Test methods
 
         [Retry(RetriesNumber)]
-        [TestCase(true, 0)]
-        [TestCase(true, 100)]
-        [TestCase(false, 0)]
-        [TestCase(false, 100)]
-        public void TrackPitchValue_NoPitchBend_MoveToTime(bool useOutputDevice, int moveFromMs)
+        [Test]
+        public void TrackPitchValue_NoPitchBend_MoveToTime(
+            [Values(0, 100)] int moveFromMs,
+            [Values(0, 500)] int moveToMs)
         {
-            var noteOffDelay = TimeSpan.FromSeconds(2);
+            var lastEventTime = TimeSpan.FromSeconds(1);
 
             var moveFrom = TimeSpan.FromMilliseconds(moveFromMs);
-            var moveTo = TimeSpan.FromMilliseconds(500);
+            var moveTo = TimeSpan.FromMilliseconds(moveToMs);
 
-            CheckTrackPitchValue(
-                eventsToSend: new[]
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
                 {
-                    new EventToSend(new StartEvent(), noteOffDelay)
+                    new TimedEvent(new StartEvent())
+                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap.Default),
                 },
-                eventsWillBeSent: new[]
+                actions: new[]
                 {
-                    new EventToSend(new StartEvent(), noteOffDelay - (moveTo - moveFrom))
+                    new PlaybackChangerBase(moveFrom,
+                        p => p.MoveToTime((MetricTimeSpan)moveTo))
                 },
-                moveFrom: moveFrom,
-                moveTo: moveTo,
-                useOutputDevice: useOutputDevice);
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new StartEvent(), lastEventTime - (moveTo - moveFrom)),
+                });
         }
 
         [Retry(RetriesNumber)]
-        [TestCase(true)]
-        [TestCase(false)]
-        public void TrackPitchValue_NoPitchBend_MoveToStart(bool useOutputDevice)
+        [Test]
+        public void TrackPitchValue_PitchBendAtZero_MoveToTime()
         {
-            var noteOffDelay = TimeSpan.FromSeconds(2);
-
-            var moveFrom = TimeSpan.FromMilliseconds(500);
-            var moveTo = TimeSpan.Zero;
-
-            CheckTrackPitchValue(
-                eventsToSend: new[]
-                {
-                    new EventToSend(new StartEvent(), noteOffDelay)
-                },
-                eventsWillBeSent: new[]
-                {
-                    new EventToSend(new StartEvent(), noteOffDelay - (moveTo - moveFrom))
-                },
-                moveFrom: moveFrom,
-                moveTo: moveTo,
-                useOutputDevice: useOutputDevice);
-        }
-
-        [Retry(RetriesNumber)]
-        [TestCase(true)]
-        [TestCase(false)]
-        public void TrackPitchValue_PitchBendAtZero_MoveToTime(bool useOutputDevice)
-        {
-            var noteOffDelay = TimeSpan.FromSeconds(2);
+            var lastEventTime = TimeSpan.FromSeconds(1);
             var pitchValue = (ushort)234;
 
             var moveFrom = TimeSpan.FromMilliseconds(100);
             var moveTo = TimeSpan.FromMilliseconds(500);
 
-            CheckTrackPitchValue(
-                eventsToSend: new[]
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
                 {
-                    new EventToSend(new PitchBendEvent(pitchValue), TimeSpan.Zero),
-                    new EventToSend(new StartEvent(), noteOffDelay)
+                    new TimedEvent(new PitchBendEvent(pitchValue))
+                        .SetTime((MetricTimeSpan)TimeSpan.Zero, TempoMap.Default),
+                    new TimedEvent(new StartEvent())
+                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap.Default),
                 },
-                eventsWillBeSent: new[]
+                actions: new[]
                 {
-                    new EventToSend(new PitchBendEvent(pitchValue), TimeSpan.Zero),
-                    new EventToSend(new StartEvent(), noteOffDelay - (moveTo - moveFrom))
+                    new PlaybackChangerBase(moveFrom,
+                        p => p.MoveToTime((MetricTimeSpan)moveTo))
                 },
-                moveFrom: moveFrom,
-                moveTo: moveTo,
-                useOutputDevice: useOutputDevice);
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new PitchBendEvent(pitchValue), TimeSpan.Zero),
+                    new ReceivedEvent(new StartEvent(), lastEventTime - (moveTo - moveFrom)),
+                });
         }
 
         [Retry(RetriesNumber)]
-        [TestCase(true)]
-        [TestCase(false)]
-        public void TrackPitchValue_PitchBendAtZero_MoveToStart(bool useOutputDevice)
+        [Test]
+        public void TrackPitchValue_PitchBendAtZero_MoveToStart()
         {
-            var noteOffDelay = TimeSpan.FromSeconds(2);
+            var lastEventTime = TimeSpan.FromSeconds(1);
             var pitchValue = (ushort)234;
 
             var moveFrom = TimeSpan.FromMilliseconds(500);
             var moveTo = TimeSpan.Zero;
 
-            CheckTrackPitchValue(
-                eventsToSend: new[]
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
                 {
-                    new EventToSend(new PitchBendEvent(pitchValue), TimeSpan.Zero),
-                    new EventToSend(new StartEvent(), noteOffDelay)
+                    new TimedEvent(new PitchBendEvent(pitchValue))
+                        .SetTime((MetricTimeSpan)TimeSpan.Zero, TempoMap.Default),
+                    new TimedEvent(new StartEvent())
+                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap.Default),
                 },
-                eventsWillBeSent: new[]
+                actions: new[]
                 {
-                    new EventToSend(new PitchBendEvent(pitchValue), TimeSpan.Zero),
-                    new EventToSend(new PitchBendEvent(pitchValue), moveFrom),
-                    new EventToSend(new StartEvent(), noteOffDelay - moveTo)
+                    new PlaybackChangerBase(moveFrom,
+                        p => p.MoveToTime((MetricTimeSpan)moveTo))
                 },
-                moveFrom: moveFrom,
-                moveTo: moveTo,
-                useOutputDevice: useOutputDevice);
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new PitchBendEvent(pitchValue), TimeSpan.Zero),
+                    new ReceivedEvent(new PitchBendEvent(pitchValue), moveFrom),
+                    new ReceivedEvent(new StartEvent(), lastEventTime - (moveTo - moveFrom)),
+                });
         }
 
         [Retry(RetriesNumber)]
-        [TestCase(true)]
-        [TestCase(false)]
-        public void TrackPitchValue_FromBeforePitchBend_ToBeforePitchBend(bool useOutputDevice)
+        [Test]
+        public void TrackPitchValue_FromBeforePitchBend_ToBeforePitchBend()
         {
             var pitchBendTime = TimeSpan.FromMilliseconds(800);
-            var noteOffTime = TimeSpan.FromSeconds(2);
+            var lastEventTime = TimeSpan.FromSeconds(1);
             var pitchValue = (ushort)234;
 
             var moveFrom = TimeSpan.FromMilliseconds(100);
             var moveTo = TimeSpan.FromMilliseconds(500);
 
-            CheckTrackPitchValue(
-                eventsToSend: new[]
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
                 {
-                    new EventToSend(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, pitchBendTime),
-                    new EventToSend(new StartEvent(), noteOffTime - pitchBendTime)
+                    new TimedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 })
+                        .SetTime((MetricTimeSpan)pitchBendTime, TempoMap.Default),
+                    new TimedEvent(new StartEvent())
+                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap.Default),
                 },
-                eventsWillBeSent: new[]
+                actions: new[]
                 {
-                    new EventToSend(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, pitchBendTime - (moveTo - moveFrom)),
-                    new EventToSend(new StartEvent(), noteOffTime - pitchBendTime)
+                    new PlaybackChangerBase(moveFrom,
+                        p => p.MoveToTime((MetricTimeSpan)moveTo))
                 },
-                moveFrom: moveFrom,
-                moveTo: moveTo,
-                useOutputDevice: useOutputDevice);
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, pitchBendTime - (moveTo - moveFrom)),
+                    new ReceivedEvent(new StartEvent(), lastEventTime - (moveTo - moveFrom)),
+                });
         }
 
         [Retry(RetriesNumber)]
-        [TestCase(true)]
-        [TestCase(false)]
-        public void TrackPitchValue_FromBeforePitchBend_ToAfterPitchBend(bool useOutputDevice)
+        [Test]
+        public void TrackPitchValue_FromBeforePitchBend_ToAfterPitchBend()
         {
-            var pitchBendTime = TimeSpan.FromMilliseconds(800);
-            var noteOffTime = TimeSpan.FromSeconds(2);
+            var pitchBendTime = TimeSpan.FromMilliseconds(500);
+            var lastEventTime = TimeSpan.FromSeconds(1);
+            var pitchValue = (ushort)234;
+
+            var moveFrom = TimeSpan.FromMilliseconds(300);
+            var moveTo = TimeSpan.FromMilliseconds(700);
+
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
+                {
+                    new TimedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 })
+                        .SetTime((MetricTimeSpan)pitchBendTime, TempoMap.Default),
+                    new TimedEvent(new StartEvent())
+                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap.Default),
+                },
+                actions: new[]
+                {
+                    new PlaybackChangerBase(moveFrom,
+                        p => p.MoveToTime((MetricTimeSpan)moveTo))
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, moveFrom),
+                    new ReceivedEvent(new StartEvent(), lastEventTime - (moveTo - moveFrom)),
+                });
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
+        public void TrackPitchValue_FromAfterPitchBend_ToAfterPitchBend()
+        {
+            var pitchBendTime = TimeSpan.FromMilliseconds(400);
+            var lastEventTime = TimeSpan.FromSeconds(1);
             var pitchValue = (ushort)234;
 
             var moveFrom = TimeSpan.FromMilliseconds(500);
-            var moveTo = TimeSpan.FromMilliseconds(1000);
+            var moveTo = TimeSpan.FromMilliseconds(700);
 
-            CheckTrackPitchValue(
-                eventsToSend: new[]
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
                 {
-                    new EventToSend(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, pitchBendTime),
-                    new EventToSend(new StartEvent(), noteOffTime - pitchBendTime)
+                    new TimedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 })
+                        .SetTime((MetricTimeSpan)pitchBendTime, TempoMap.Default),
+                    new TimedEvent(new StartEvent())
+                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap.Default),
                 },
-                eventsWillBeSent: new[]
+                actions: new[]
                 {
-                    new EventToSend(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, moveFrom),
-                    new EventToSend(new StartEvent(), noteOffTime - (moveTo - moveFrom) - moveFrom)
+                    new PlaybackChangerBase(moveFrom,
+                        p => p.MoveToTime((MetricTimeSpan)moveTo))
                 },
-                moveFrom: moveFrom,
-                moveTo: moveTo,
-                useOutputDevice: useOutputDevice);
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, pitchBendTime),
+                    new ReceivedEvent(new StartEvent(), lastEventTime - (moveTo - moveFrom)),
+                });
         }
 
         [Retry(RetriesNumber)]
-        [TestCase(true)]
-        [TestCase(false)]
-        public void TrackPitchValue_FromAfterPitchBend_ToAfterPitchBend(bool useOutputDevice)
+        [Test]
+        public void TrackPitchValue_FromAfterPitchBend_ToBeforePitchBend()
         {
-            var pitchBendTime = TimeSpan.FromMilliseconds(800);
-            var noteOffTime = TimeSpan.FromSeconds(2);
+            var pitchBendTime = TimeSpan.FromMilliseconds(500);
+            var lastEventTime = TimeSpan.FromSeconds(1);
             var pitchValue = (ushort)234;
 
-            var moveFrom = TimeSpan.FromMilliseconds(1000);
-            var moveTo = TimeSpan.FromMilliseconds(1500);
+            var moveFrom = TimeSpan.FromMilliseconds(700);
+            var moveTo = TimeSpan.FromMilliseconds(300);
 
-            CheckTrackPitchValue(
-                eventsToSend: new[]
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
                 {
-                    new EventToSend(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, pitchBendTime),
-                    new EventToSend(new StartEvent(), noteOffTime - pitchBendTime)
+                    new TimedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 })
+                        .SetTime((MetricTimeSpan)pitchBendTime, TempoMap.Default),
+                    new TimedEvent(new StartEvent())
+                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap.Default),
                 },
-                eventsWillBeSent: new[]
+                actions: new[]
                 {
-                    new EventToSend(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, pitchBendTime),
-                    new EventToSend(new StartEvent(), noteOffTime - pitchBendTime - (moveTo - moveFrom))
+                    new PlaybackChangerBase(moveFrom,
+                        p => p.MoveToTime((MetricTimeSpan)moveTo))
                 },
-                moveFrom: moveFrom,
-                moveTo: moveTo,
-                useOutputDevice: useOutputDevice);
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, pitchBendTime),
+                    new ReceivedEvent(new PitchBendEvent() { Channel = (FourBitNumber)4 }, moveFrom),
+                    new ReceivedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, pitchBendTime + moveFrom - moveTo),
+                    new ReceivedEvent(new StartEvent(), lastEventTime + moveFrom - moveTo),
+                });
         }
 
         [Retry(RetriesNumber)]
-        [TestCase(true)]
-        [TestCase(false)]
-        public void TrackPitchValue_FromAfterPitchBend_ToBeforePitchBend(bool useOutputDevice)
+        [Test]
+        public void TrackPitchValue_FromBeforePitchBend_ToPitchBend()
         {
             var pitchBendTime = TimeSpan.FromMilliseconds(800);
-            var noteOffTime = TimeSpan.FromSeconds(2);
-            var pitchValue = (ushort)234;
-
-            var moveFrom = TimeSpan.FromMilliseconds(1000);
-            var moveTo = TimeSpan.FromMilliseconds(500);
-
-            CheckTrackPitchValue(
-                eventsToSend: new[]
-                {
-                    new EventToSend(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, pitchBendTime),
-                    new EventToSend(new StartEvent(), noteOffTime - pitchBendTime)
-                },
-                eventsWillBeSent: new[]
-                {
-                    new EventToSend(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, pitchBendTime),
-                    new EventToSend(new PitchBendEvent() { Channel = (FourBitNumber)4 }, moveFrom - pitchBendTime),
-                    new EventToSend(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, pitchBendTime - moveTo),
-                    new EventToSend(new StartEvent(), noteOffTime - pitchBendTime)
-                },
-                moveFrom: moveFrom,
-                moveTo: moveTo,
-                useOutputDevice: useOutputDevice);
-        }
-
-        [Retry(RetriesNumber)]
-        [TestCase(true)]
-        [TestCase(false)]
-        public void TrackPitchValue_FromBeforePitchBend_ToPitchBend(bool useOutputDevice)
-        {
-            var pitchBendTime = TimeSpan.FromMilliseconds(800);
-            var noteOffTime = TimeSpan.FromSeconds(2);
+            var lastEventTime = TimeSpan.FromSeconds(1);
             var pitchValue = (ushort)234;
 
             var moveFrom = TimeSpan.FromMilliseconds(500);
             var moveTo = TimeSpan.FromMilliseconds(800);
 
-            CheckTrackPitchValue(
-                eventsToSend: new[]
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
                 {
-                    new EventToSend(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, pitchBendTime),
-                    new EventToSend(new StartEvent(), noteOffTime - pitchBendTime)
+                    new TimedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 })
+                        .SetTime((MetricTimeSpan)pitchBendTime, TempoMap.Default),
+                    new TimedEvent(new StartEvent())
+                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap.Default),
                 },
-                eventsWillBeSent: new[]
+                actions: new[]
                 {
-                    new EventToSend(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, moveFrom),
-                    new EventToSend(new StartEvent(), noteOffTime - (moveTo - moveFrom) - moveFrom)
+                    new PlaybackChangerBase(moveFrom,
+                        p => p.MoveToTime((MetricTimeSpan)moveTo))
                 },
-                moveFrom: moveFrom,
-                moveTo: moveTo,
-                useOutputDevice: useOutputDevice);
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, moveFrom),
+                    new ReceivedEvent(new StartEvent(), lastEventTime + moveFrom - moveTo),
+                });
         }
 
         [Retry(RetriesNumber)]
-        [TestCase(true)]
-        [TestCase(false)]
-        public void TrackPitchValue_FromAfterPitchBend_ToPitchBend(bool useOutputDevice)
+        [Test]
+        public void TrackPitchValue_FromAfterPitchBend_ToPitchBend()
         {
             var pitchBendTime = TimeSpan.FromMilliseconds(800);
-            var noteOffTime = TimeSpan.FromSeconds(2);
+            var lastEventTime = TimeSpan.FromSeconds(1);
             var pitchValue = (ushort)234;
 
-            var moveFrom = TimeSpan.FromMilliseconds(1000);
+            var moveFrom = TimeSpan.FromMilliseconds(900);
             var moveTo = TimeSpan.FromMilliseconds(800);
 
-            CheckTrackPitchValue(
-                eventsToSend: new[]
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
                 {
-                    new EventToSend(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, pitchBendTime),
-                    new EventToSend(new StartEvent(), noteOffTime - pitchBendTime)
+                    new TimedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 })
+                        .SetTime((MetricTimeSpan)pitchBendTime, TempoMap.Default),
+                    new TimedEvent(new StartEvent())
+                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap.Default),
                 },
-                eventsWillBeSent: new[]
+                actions: new[]
                 {
-                    new EventToSend(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, pitchBendTime),
-                    new EventToSend(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, moveFrom - pitchBendTime),
-                    new EventToSend(new StartEvent(), noteOffTime - pitchBendTime)
+                    new PlaybackChangerBase(moveFrom,
+                        p => p.MoveToTime((MetricTimeSpan)moveTo))
                 },
-                moveFrom: moveFrom,
-                moveTo: moveTo,
-                useOutputDevice: useOutputDevice);
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, pitchBendTime),
+                    new ReceivedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, moveFrom),
+                    new ReceivedEvent(new StartEvent(), lastEventTime - pitchBendTime + moveFrom),
+                });
         }
 
         [Retry(RetriesNumber)]
-        [TestCase(true)]
-        [TestCase(false)]
-        public void TrackPitchValue_EnableInMiddle_FromBeforePitchBend_ToAfterPitchBend(bool useOutputDevice)
+        [Test]
+        public void TrackPitchValue_EnableInMiddle_FromBeforePitchBend_ToAfterPitchBend()
         {
             var pitchBendTime = TimeSpan.FromMilliseconds(800);
             var programChangeTime = TimeSpan.FromSeconds(1);
-            var noteOffTime = TimeSpan.FromSeconds(2);
+            var lastEventTime = TimeSpan.FromSeconds(2);
             var pitchValue = (ushort)234;
             var programNumber = (SevenBitNumber)100;
 
@@ -304,101 +312,447 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var moveTo = TimeSpan.FromMilliseconds(1200);
             var enableAfter = TimeSpan.FromMilliseconds(500);
 
-            CheckTrackPitchValueEnabledInMiddle(
-                eventsToSend: new[]
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
                 {
-                    new EventToSend(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, pitchBendTime),
-                    new EventToSend(new ProgramChangeEvent(programNumber), programChangeTime - pitchBendTime),
-                    new EventToSend(new StartEvent(), noteOffTime - programChangeTime)
+                    new TimedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 })
+                        .SetTime((MetricTimeSpan)pitchBendTime, TempoMap.Default),
+                    new TimedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 })
+                        .SetTime((MetricTimeSpan)programChangeTime, TempoMap.Default),
+                    new TimedEvent(new StartEvent())
+                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap.Default),
                 },
-                eventsWillBeSent: new[]
+                actions: new[]
                 {
-                    new EventToSend(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, moveFrom + enableAfter),
-                    new EventToSend(new StartEvent(), noteOffTime - (moveTo + enableAfter))
+                    new PlaybackChangerBase(moveFrom,
+                        p => p.MoveToTime((MetricTimeSpan)moveTo)),
+                    new PlaybackChangerBase(enableAfter,
+                        p => p.TrackPitchValue = true),
                 },
-                moveFrom: moveFrom,
-                moveTo: moveTo,
-                useOutputDevice: useOutputDevice,
-                enableAfter: enableAfter,
-                setupPlayback: playback => playback.TrackProgram = false);
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, moveFrom + enableAfter),
+                    new ReceivedEvent(new StartEvent(), lastEventTime - moveTo + moveFrom),
+                },
+                setupPlayback: playback =>
+                {
+                    playback.TrackProgram = false;
+                    playback.TrackPitchValue = false;
+                });
         }
 
         [Retry(RetriesNumber)]
-        [TestCase(true)]
-        [TestCase(false)]
-        public void TrackPitchValue_EnableInMiddle_FromAfterPitchBend_ToBeforePitchBend(bool useOutputDevice)
+        [Test]
+        public void TrackPitchValue_EnableInMiddle_FromAfterPitchBend_ToBeforePitchBend()
         {
             var pitchBendTime = TimeSpan.FromMilliseconds(800);
-            var noteOffTime = TimeSpan.FromSeconds(2);
+            var lastEventTime = TimeSpan.FromSeconds(2);
             var pitchValue = (ushort)234;
 
             var moveFrom = TimeSpan.FromMilliseconds(1000);
             var moveTo = TimeSpan.FromMilliseconds(500);
             var enableAfter = TimeSpan.FromMilliseconds(150);
 
-            CheckTrackPitchValueEnabledInMiddle(
-                eventsToSend: new[]
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
                 {
-                    new EventToSend(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, pitchBendTime),
-                    new EventToSend(new StartEvent(), noteOffTime - pitchBendTime)
+                    new TimedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 })
+                        .SetTime((MetricTimeSpan)pitchBendTime, TempoMap.Default),
+                    new TimedEvent(new StartEvent())
+                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap.Default),
                 },
-                eventsWillBeSent: new[]
+                actions: new[]
                 {
-                    new EventToSend(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, pitchBendTime),
-                    new EventToSend(new PitchBendEvent() { Channel = (FourBitNumber)4 }, moveFrom - pitchBendTime + enableAfter),
-                    new EventToSend(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, pitchBendTime - (moveTo + enableAfter)),
-                    new EventToSend(new StartEvent(), noteOffTime - pitchBendTime)
+                    new PlaybackChangerBase(moveFrom,
+                        p => p.MoveToTime((MetricTimeSpan)moveTo)),
+                    new PlaybackChangerBase(enableAfter,
+                        p => p.TrackPitchValue = true),
                 },
-                moveFrom: moveFrom,
-                moveTo: moveTo,
-                useOutputDevice: useOutputDevice,
-                enableAfter: enableAfter);
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, pitchBendTime),
+                    new ReceivedEvent(new PitchBendEvent() { Channel = (FourBitNumber)4 }, moveFrom + enableAfter),
+                    new ReceivedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, pitchBendTime - moveTo + moveFrom),
+                    new ReceivedEvent(new StartEvent(), lastEventTime - moveTo + moveFrom),
+                },
+                setupPlayback: playback => playback.TrackPitchValue = false);
         }
 
-        #endregion
+        [Retry(RetriesNumber)]
+        [Test]
+        public void DontTrackPitchValue_NoPitchBend_MoveToTime(
+            [Values(0, 100)] int moveFromMs,
+            [Values(0, 500)] int moveToMs)
+        {
+            var lastEventTime = TimeSpan.FromSeconds(1);
 
-        #region Private methods
+            var moveFrom = TimeSpan.FromMilliseconds(moveFromMs);
+            var moveTo = TimeSpan.FromMilliseconds(moveToMs);
 
-        private void CheckTrackPitchValue(
-            ICollection<EventToSend> eventsToSend,
-            ICollection<EventToSend> eventsWillBeSent,
-            TimeSpan moveFrom,
-            TimeSpan moveTo,
-            bool useOutputDevice,
-            Action<Playback> setupPlayback = null) =>
-            CheckDataTracking(
-                p =>
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
                 {
-                    p.TrackPitchValue = true;
-                    setupPlayback?.Invoke(p);
+                    new TimedEvent(new StartEvent())
+                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap.Default),
                 },
-                eventsToSend,
-                eventsWillBeSent,
-                moveFrom,
-                moveTo,
-                useOutputDevice);
-
-        private void CheckTrackPitchValueEnabledInMiddle(
-            ICollection<EventToSend> eventsToSend,
-            ICollection<EventToSend> eventsWillBeSent,
-            TimeSpan moveFrom,
-            TimeSpan moveTo,
-            bool useOutputDevice,
-            TimeSpan enableAfter,
-            Action<Playback> setupPlayback = null) =>
-            CheckDataTracking(
-                p =>
+                actions: new[]
                 {
-                    p.TrackPitchValue = false;
-                    setupPlayback?.Invoke(p);
+                    new PlaybackChangerBase(moveFrom,
+                        p => p.MoveToTime((MetricTimeSpan)moveTo))
                 },
-                eventsToSend,
-                eventsWillBeSent,
-                moveFrom,
-                moveTo,
-                useOutputDevice,
-                enableAfter,
-                p => p.TrackPitchValue = true);
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new StartEvent(), lastEventTime - (moveTo - moveFrom)),
+                },
+                setupPlayback: playback => playback.TrackPitchValue = false);
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
+        public void DontTrackPitchValue_PitchBendAtZero_MoveToTime()
+        {
+            var lastEventTime = TimeSpan.FromSeconds(1);
+            var pitchValue = (ushort)234;
+
+            var moveFrom = TimeSpan.FromMilliseconds(100);
+            var moveTo = TimeSpan.FromMilliseconds(500);
+
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
+                {
+                    new TimedEvent(new PitchBendEvent(pitchValue))
+                        .SetTime((MetricTimeSpan)TimeSpan.Zero, TempoMap.Default),
+                    new TimedEvent(new StartEvent())
+                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap.Default),
+                },
+                actions: new[]
+                {
+                    new PlaybackChangerBase(moveFrom,
+                        p => p.MoveToTime((MetricTimeSpan)moveTo))
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new PitchBendEvent(pitchValue), TimeSpan.Zero),
+                    new ReceivedEvent(new StartEvent(), lastEventTime - (moveTo - moveFrom)),
+                },
+                setupPlayback: playback => playback.TrackPitchValue = false);
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
+        public void DontTrackPitchValue_PitchBendAtZero_MoveToStart()
+        {
+            var lastEventTime = TimeSpan.FromSeconds(1);
+            var pitchValue = (ushort)234;
+
+            var moveFrom = TimeSpan.FromMilliseconds(500);
+            var moveTo = TimeSpan.Zero;
+
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
+                {
+                    new TimedEvent(new PitchBendEvent(pitchValue))
+                        .SetTime((MetricTimeSpan)TimeSpan.Zero, TempoMap.Default),
+                    new TimedEvent(new StartEvent())
+                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap.Default),
+                },
+                actions: new[]
+                {
+                    new PlaybackChangerBase(moveFrom,
+                        p => p.MoveToTime((MetricTimeSpan)moveTo))
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new PitchBendEvent(pitchValue), TimeSpan.Zero),
+                    new ReceivedEvent(new PitchBendEvent(pitchValue), moveFrom),
+                    new ReceivedEvent(new StartEvent(), lastEventTime - (moveTo - moveFrom)),
+                },
+                setupPlayback: playback => playback.TrackPitchValue = false);
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
+        public void DontTrackPitchValue_FromBeforePitchBend_ToBeforePitchBend()
+        {
+            var pitchBendTime = TimeSpan.FromMilliseconds(800);
+            var lastEventTime = TimeSpan.FromSeconds(1);
+            var pitchValue = (ushort)234;
+
+            var moveFrom = TimeSpan.FromMilliseconds(100);
+            var moveTo = TimeSpan.FromMilliseconds(500);
+
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
+                {
+                    new TimedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 })
+                        .SetTime((MetricTimeSpan)pitchBendTime, TempoMap.Default),
+                    new TimedEvent(new StartEvent())
+                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap.Default),
+                },
+                actions: new[]
+                {
+                    new PlaybackChangerBase(moveFrom,
+                        p => p.MoveToTime((MetricTimeSpan)moveTo))
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, pitchBendTime - (moveTo - moveFrom)),
+                    new ReceivedEvent(new StartEvent(), lastEventTime - (moveTo - moveFrom)),
+                },
+                setupPlayback: playback => playback.TrackPitchValue = false);
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
+        public void DontTrackPitchValue_FromBeforePitchBend_ToAfterPitchBend()
+        {
+            var pitchBendTime = TimeSpan.FromMilliseconds(500);
+            var lastEventTime = TimeSpan.FromSeconds(1);
+            var pitchValue = (ushort)234;
+
+            var moveFrom = TimeSpan.FromMilliseconds(300);
+            var moveTo = TimeSpan.FromMilliseconds(700);
+
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
+                {
+                    new TimedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 })
+                        .SetTime((MetricTimeSpan)pitchBendTime, TempoMap.Default),
+                    new TimedEvent(new StartEvent())
+                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap.Default),
+                },
+                actions: new[]
+                {
+                    new PlaybackChangerBase(moveFrom,
+                        p => p.MoveToTime((MetricTimeSpan)moveTo))
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new StartEvent(), lastEventTime - (moveTo - moveFrom)),
+                },
+                setupPlayback: playback => playback.TrackPitchValue = false);
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
+        public void DontTrackPitchValue_FromAfterPitchBend_ToAfterPitchBend()
+        {
+            var pitchBendTime = TimeSpan.FromMilliseconds(400);
+            var lastEventTime = TimeSpan.FromSeconds(1);
+            var pitchValue = (ushort)234;
+
+            var moveFrom = TimeSpan.FromMilliseconds(500);
+            var moveTo = TimeSpan.FromMilliseconds(700);
+
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
+                {
+                    new TimedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 })
+                        .SetTime((MetricTimeSpan)pitchBendTime, TempoMap.Default),
+                    new TimedEvent(new StartEvent())
+                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap.Default),
+                },
+                actions: new[]
+                {
+                    new PlaybackChangerBase(moveFrom,
+                        p => p.MoveToTime((MetricTimeSpan)moveTo))
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, pitchBendTime),
+                    new ReceivedEvent(new StartEvent(), lastEventTime - (moveTo - moveFrom)),
+                },
+                setupPlayback: playback => playback.TrackPitchValue = false);
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
+        public void DontTrackPitchValue_FromAfterPitchBend_ToBeforePitchBend()
+        {
+            var pitchBendTime = TimeSpan.FromMilliseconds(500);
+            var lastEventTime = TimeSpan.FromSeconds(1);
+            var pitchValue = (ushort)234;
+
+            var moveFrom = TimeSpan.FromMilliseconds(700);
+            var moveTo = TimeSpan.FromMilliseconds(300);
+
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
+                {
+                    new TimedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 })
+                        .SetTime((MetricTimeSpan)pitchBendTime, TempoMap.Default),
+                    new TimedEvent(new StartEvent())
+                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap.Default),
+                },
+                actions: new[]
+                {
+                    new PlaybackChangerBase(moveFrom,
+                        p => p.MoveToTime((MetricTimeSpan)moveTo))
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, pitchBendTime),
+                    new ReceivedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, pitchBendTime + moveFrom - moveTo),
+                    new ReceivedEvent(new StartEvent(), lastEventTime + moveFrom - moveTo),
+                },
+                setupPlayback: playback => playback.TrackPitchValue = false);
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
+        public void DontTrackPitchValue_FromBeforePitchBend_ToPitchBend()
+        {
+            var pitchBendTime = TimeSpan.FromMilliseconds(800);
+            var lastEventTime = TimeSpan.FromSeconds(1);
+            var pitchValue = (ushort)234;
+
+            var moveFrom = TimeSpan.FromMilliseconds(500);
+            var moveTo = TimeSpan.FromMilliseconds(800);
+
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
+                {
+                    new TimedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 })
+                        .SetTime((MetricTimeSpan)pitchBendTime, TempoMap.Default),
+                    new TimedEvent(new StartEvent())
+                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap.Default),
+                },
+                actions: new[]
+                {
+                    new PlaybackChangerBase(moveFrom,
+                        p => p.MoveToTime((MetricTimeSpan)moveTo))
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, moveFrom),
+                    new ReceivedEvent(new StartEvent(), lastEventTime + moveFrom - moveTo),
+                },
+                setupPlayback: playback => playback.TrackPitchValue = false);
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
+        public void DontTrackPitchValue_FromAfterPitchBend_ToPitchBend()
+        {
+            var pitchBendTime = TimeSpan.FromMilliseconds(800);
+            var lastEventTime = TimeSpan.FromSeconds(1);
+            var pitchValue = (ushort)234;
+
+            var moveFrom = TimeSpan.FromMilliseconds(900);
+            var moveTo = TimeSpan.FromMilliseconds(800);
+
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
+                {
+                    new TimedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 })
+                        .SetTime((MetricTimeSpan)pitchBendTime, TempoMap.Default),
+                    new TimedEvent(new StartEvent())
+                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap.Default),
+                },
+                actions: new[]
+                {
+                    new PlaybackChangerBase(moveFrom,
+                        p => p.MoveToTime((MetricTimeSpan)moveTo))
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, pitchBendTime),
+                    new ReceivedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, moveFrom),
+                    new ReceivedEvent(new StartEvent(), lastEventTime - pitchBendTime + moveFrom),
+                },
+                setupPlayback: playback => playback.TrackPitchValue = false);
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
+        public void TrackPitchValue_DisableInMiddle_FromBeforePitchBend_ToAfterPitchBend()
+        {
+            var pitchBendTime = TimeSpan.FromMilliseconds(800);
+            var programChangeTime = TimeSpan.FromSeconds(1);
+            var lastEventTime = TimeSpan.FromSeconds(2);
+            var pitchValue = (ushort)234;
+            var programNumber = (SevenBitNumber)100;
+
+            var moveFrom = TimeSpan.FromMilliseconds(500);
+            var moveTo = TimeSpan.FromMilliseconds(1200);
+            var disableAfter = TimeSpan.FromMilliseconds(500);
+
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
+                {
+                    new TimedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 })
+                        .SetTime((MetricTimeSpan)pitchBendTime, TempoMap.Default),
+                    new TimedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 })
+                        .SetTime((MetricTimeSpan)programChangeTime, TempoMap.Default),
+                    new TimedEvent(new StartEvent())
+                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap.Default),
+                },
+                actions: new[]
+                {
+                    new PlaybackChangerBase(moveFrom,
+                        p => p.MoveToTime((MetricTimeSpan)moveTo)),
+                    new PlaybackChangerBase(disableAfter,
+                        p => p.TrackPitchValue = false),
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, moveFrom),
+                    new ReceivedEvent(new StartEvent(), lastEventTime - moveTo + moveFrom),
+                },
+                setupPlayback: playback =>
+                {
+                    playback.TrackProgram = false;
+                });
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
+        public void TrackPitchValue_DisableInMiddle_FromAfterPitchBend_ToBeforePitchBend()
+        {
+            var pitchBendTime = TimeSpan.FromMilliseconds(800);
+            var lastEventTime = TimeSpan.FromSeconds(2);
+            var pitchValue = (ushort)234;
+
+            var moveFrom = TimeSpan.FromMilliseconds(1000);
+            var moveTo = TimeSpan.FromMilliseconds(500);
+            var disableAfter = TimeSpan.FromMilliseconds(150);
+
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
+                {
+                    new TimedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 })
+                        .SetTime((MetricTimeSpan)pitchBendTime, TempoMap.Default),
+                    new TimedEvent(new StartEvent())
+                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap.Default),
+                },
+                actions: new[]
+                {
+                    new PlaybackChangerBase(moveFrom,
+                        p => p.MoveToTime((MetricTimeSpan)moveTo)),
+                    new PlaybackChangerBase(disableAfter,
+                        p => p.TrackPitchValue = false),
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, pitchBendTime),
+                    new ReceivedEvent(new PitchBendEvent() { Channel = (FourBitNumber)4 }, moveFrom),
+                    new ReceivedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, pitchBendTime - moveTo + moveFrom),
+                    new ReceivedEvent(new StartEvent(), lastEventTime - moveTo + moveFrom),
+                });
+        }
 
         #endregion
     }

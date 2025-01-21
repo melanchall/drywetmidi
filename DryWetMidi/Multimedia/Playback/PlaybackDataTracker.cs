@@ -171,7 +171,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         public bool TrackProgram { get; set; } = true;
 
-        public bool TrackPitchValue { get; set; }
+        public bool TrackPitchValue { get; set; } = true;
 
         public bool TrackControlValue { get; set; }
 
