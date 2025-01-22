@@ -173,7 +173,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         public bool TrackPitchValue { get; set; } = true;
 
-        public bool TrackControlValue { get; set; }
+        public bool TrackControlValue { get; set; } = true;
 
         #endregion
 

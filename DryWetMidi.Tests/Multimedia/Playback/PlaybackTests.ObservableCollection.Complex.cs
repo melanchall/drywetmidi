@@ -369,8 +369,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             [Values(0, 10)] int gapMs,
             [Values] bool viaChangeCollection)
         {
-            var noteLengthMs = 20;
-            var lastEventTime = notesCount * noteLengthMs + 20 + notesCount * gapMs;
+            var noteLengthMs = 40;
+            var lastEventTime = notesCount * noteLengthMs + 40 + notesCount * gapMs;
 
             var initialObjects = new ITimedObject[]
             {
@@ -382,7 +382,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 .Values
                 .Take(notesCount)
                 .Select(n => new Note(n)
-                    .SetTime(new MetricTimeSpan(0, 0, 0, n * noteLengthMs + 10 + n * gapMs), OnTheFlyChecksTempoMap)
+                    .SetTime(new MetricTimeSpan(0, 0, 0, n * noteLengthMs + 20 + n * gapMs), OnTheFlyChecksTempoMap)
                     .SetLength(new MetricTimeSpan(0, 0, 0, noteLengthMs), OnTheFlyChecksTempoMap))
                 .ToArray();
 

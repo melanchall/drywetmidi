@@ -1,102 +1,82 @@
 ﻿using System;
-using System.Collections.Generic;
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
-using Melanchall.DryWetMidi.Multimedia;
+using Melanchall.DryWetMidi.Interaction;
 using NUnit.Framework;
 
 namespace Melanchall.DryWetMidi.Tests.Multimedia
 {
-    // TODO: check tracking disabled
     [TestFixture]
     public sealed partial class PlaybackTests
     {
         #region Test methods
 
         [Retry(RetriesNumber)]
-        [TestCase(true, 0)]
-        [TestCase(true, 100)]
-        [TestCase(false, 0)]
-        [TestCase(false, 100)]
-        public void TrackControlValue_NoControlChanges_MoveToTime(bool useOutputDevice, int moveFromMs)
+        [Test]
+        public void TrackControlValue_NoControlChanges_MoveToTime(
+            [Values(0, 100)] int moveFromMs,
+            [Values(0, 500)] int moveToMs)
         {
-            var noteOffDelay = TimeSpan.FromSeconds(2);
+            var lastEventTime = TimeSpan.FromSeconds(1);
 
             var moveFrom = TimeSpan.FromMilliseconds(moveFromMs);
-            var moveTo = TimeSpan.FromMilliseconds(500);
+            var moveTo = TimeSpan.FromMilliseconds(moveToMs);
 
-            CheckTrackControlValue(
-                eventsToSend: new[]
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
                 {
-                    new EventToSend(new StartEvent(), noteOffDelay)
+                    new TimedEvent(new StartEvent())
+                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap.Default),
                 },
-                eventsWillBeSent: new[]
+                actions: new[]
                 {
-                    new EventToSend(new StartEvent(), noteOffDelay - (moveTo - moveFrom))
+                    new PlaybackChangerBase(moveFrom,
+                        p => p.MoveToTime((MetricTimeSpan)moveTo)),
                 },
-                moveFrom: moveFrom,
-                moveTo: moveTo,
-                useOutputDevice: useOutputDevice);
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new StartEvent(), lastEventTime - (moveTo - moveFrom)),
+                });
         }
 
         [Retry(RetriesNumber)]
-        [TestCase(true)]
-        [TestCase(false)]
-        public void TrackControlValue_NoControlChanges_MoveToStart(bool useOutputDevice)
+        [Test]
+        public void TrackControlValue_ControlChangeAtZero_MoveToTime()
         {
-            var noteOffDelay = TimeSpan.FromSeconds(2);
-
-            var moveFrom = TimeSpan.FromMilliseconds(500);
-            var moveTo = TimeSpan.Zero;
-
-            CheckTrackControlValue(
-                eventsToSend: new[]
-                {
-                    new EventToSend(new StartEvent(), noteOffDelay)
-                },
-                eventsWillBeSent: new[]
-                {
-                    new EventToSend(new StartEvent(), noteOffDelay - (moveTo - moveFrom))
-                },
-                moveFrom: moveFrom,
-                moveTo: moveTo,
-                useOutputDevice: useOutputDevice);
-        }
-
-        [Retry(RetriesNumber)]
-        [TestCase(true)]
-        [TestCase(false)]
-        public void TrackControlValue_ControlChangeAtZero_MoveToTime(bool useOutputDevice)
-        {
-            var noteOffDelay = TimeSpan.FromSeconds(2);
+            var lastEventTime = TimeSpan.FromSeconds(1);
             var controlNumber = (SevenBitNumber)100;
             var controlValue = (SevenBitNumber)70;
 
             var moveFrom = TimeSpan.FromMilliseconds(100);
             var moveTo = TimeSpan.FromMilliseconds(500);
 
-            CheckTrackControlValue(
-                eventsToSend: new[]
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
                 {
-                    new EventToSend(new ControlChangeEvent(controlNumber, controlValue), TimeSpan.Zero),
-                    new EventToSend(new StartEvent(), noteOffDelay)
+                    new TimedEvent(new ControlChangeEvent(controlNumber, controlValue))
+                        .SetTime((MetricTimeSpan)TimeSpan.Zero, TempoMap.Default),
+                    new TimedEvent(new StartEvent())
+                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap.Default),
                 },
-                eventsWillBeSent: new[]
+                actions: new[]
                 {
-                    new EventToSend(new ControlChangeEvent(controlNumber, controlValue), TimeSpan.Zero),
-                    new EventToSend(new StartEvent(), noteOffDelay - (moveTo - moveFrom))
+                    new PlaybackChangerBase(moveFrom,
+                        p => p.MoveToTime((MetricTimeSpan)moveTo)),
                 },
-                moveFrom: moveFrom,
-                moveTo: moveTo,
-                useOutputDevice: useOutputDevice);
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new ControlChangeEvent(controlNumber, controlValue), TimeSpan.Zero),
+                    new ReceivedEvent(new StartEvent(), lastEventTime - (moveTo - moveFrom)),
+                });
         }
 
         [Retry(RetriesNumber)]
-        [TestCase(true)]
-        [TestCase(false)]
-        public void TrackControlValue_ControlChangeAtZero_MoveToStart(bool useOutputDevice)
+        [Test]
+        public void TrackControlValue_ControlChangeAtZero_MoveToStart()
         {
-            var noteOffDelay = TimeSpan.FromSeconds(2);
+            var lastEventTime = TimeSpan.FromSeconds(1);
             var controlNumber1 = (SevenBitNumber)100;
             var controlValue1 = (SevenBitNumber)70;
 
@@ -107,31 +87,36 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var moveFrom = TimeSpan.FromMilliseconds(500);
             var moveTo = TimeSpan.Zero;
 
-            CheckTrackControlValue(
-                eventsToSend: new[]
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
                 {
-                    new EventToSend(new ControlChangeEvent(controlNumber1, controlValue1), TimeSpan.Zero),
-                    new EventToSend(new ControlChangeEvent(controlNumber2, controlValue2) { Channel = (FourBitNumber)10 }, controlChangeDelay),
-                    new EventToSend(new StartEvent(), noteOffDelay - controlChangeDelay)
+                    new TimedEvent(new ControlChangeEvent(controlNumber1, controlValue1))
+                        .SetTime((MetricTimeSpan)TimeSpan.Zero, TempoMap.Default),
+                    new TimedEvent(new ControlChangeEvent(controlNumber2, controlValue2) { Channel = (FourBitNumber)10 })
+                        .SetTime((MetricTimeSpan)controlChangeDelay, TempoMap.Default),
+                    new TimedEvent(new StartEvent())
+                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap.Default),
                 },
-                eventsWillBeSent: new[]
+                actions: new[]
                 {
-                    new EventToSend(new ControlChangeEvent(controlNumber1, controlValue1), TimeSpan.Zero),
-                    new EventToSend(new ControlChangeEvent(controlNumber1, controlValue1), moveFrom),
-                    new EventToSend(new ControlChangeEvent(controlNumber2, controlValue2) { Channel = (FourBitNumber)10 }, controlChangeDelay),
-                    new EventToSend(new StartEvent(), noteOffDelay - controlChangeDelay)
+                    new PlaybackChangerBase(moveFrom,
+                        p => p.MoveToTime((MetricTimeSpan)moveTo)),
                 },
-                moveFrom: moveFrom,
-                moveTo: moveTo,
-                useOutputDevice: useOutputDevice);
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new ControlChangeEvent(controlNumber1, controlValue1), TimeSpan.Zero),
+                    new ReceivedEvent(new ControlChangeEvent(controlNumber1, controlValue1), moveFrom),
+                    new ReceivedEvent(new ControlChangeEvent(controlNumber2, controlValue2) { Channel = (FourBitNumber)10 }, moveFrom + controlChangeDelay),
+                    new ReceivedEvent(new StartEvent(), moveFrom + lastEventTime),
+                });
         }
 
         [Retry(RetriesNumber)]
-        [TestCase(true)]
-        [TestCase(false)]
-        public void TrackControlValue_ControlChangesAtZero_MoveToStart(bool useOutputDevice)
+        [Test]
+        public void TrackControlValue_ControlChangesAtZero_MoveToStart()
         {
-            var noteOffDelay = TimeSpan.FromSeconds(2);
+            var lastEventTime = TimeSpan.FromSeconds(1);
             var controlNumber1 = (SevenBitNumber)100;
             var controlValue1 = (SevenBitNumber)70;
 
@@ -141,240 +126,273 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var moveFrom = TimeSpan.FromMilliseconds(500);
             var moveTo = TimeSpan.Zero;
 
-            CheckTrackControlValue(
-                eventsToSend: new[]
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
                 {
-                    new EventToSend(new ControlChangeEvent(controlNumber1, controlValue1), TimeSpan.Zero),
-                    new EventToSend(new ControlChangeEvent(controlNumber2, controlValue2), TimeSpan.Zero),
-                    new EventToSend(new StartEvent(), noteOffDelay)
+                    new TimedEvent(new ControlChangeEvent(controlNumber1, controlValue1))
+                        .SetTime((MetricTimeSpan)TimeSpan.Zero, TempoMap.Default),
+                    new TimedEvent(new ControlChangeEvent(controlNumber2, controlValue2))
+                        .SetTime((MetricTimeSpan)TimeSpan.Zero, TempoMap.Default),
+                    new TimedEvent(new StartEvent())
+                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap.Default),
                 },
-                eventsWillBeSent: new[]
+                actions: new[]
                 {
-                    new EventToSend(new ControlChangeEvent(controlNumber1, controlValue1), TimeSpan.Zero),
-                    new EventToSend(new ControlChangeEvent(controlNumber2, controlValue2), TimeSpan.Zero),
-                    new EventToSend(new ControlChangeEvent(controlNumber1, controlValue1), moveFrom),
-                    new EventToSend(new ControlChangeEvent(controlNumber2, controlValue2), TimeSpan.Zero),
-                    new EventToSend(new StartEvent(), noteOffDelay)
+                    new PlaybackChangerBase(moveFrom,
+                        p => p.MoveToTime((MetricTimeSpan)moveTo)),
                 },
-                moveFrom: moveFrom,
-                moveTo: moveTo,
-                useOutputDevice: useOutputDevice);
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new ControlChangeEvent(controlNumber1, controlValue1), TimeSpan.Zero),
+                    new ReceivedEvent(new ControlChangeEvent(controlNumber2, controlValue2), TimeSpan.Zero),
+                    new ReceivedEvent(new ControlChangeEvent(controlNumber1, controlValue1), moveFrom),
+                    new ReceivedEvent(new ControlChangeEvent(controlNumber2, controlValue2), moveFrom),
+                    new ReceivedEvent(new StartEvent(), lastEventTime + moveFrom),
+                });
         }
 
         [Retry(RetriesNumber)]
-        [TestCase(true)]
-        [TestCase(false)]
-        public void TrackControlValue_FromBeforeControlChange_ToBeforeControlChange(bool useOutputDevice)
+        [Test]
+        public void TrackControlValue_FromBeforeControlChange_ToBeforeControlChange()
         {
             var controlChangeTime = TimeSpan.FromMilliseconds(800);
-            var noteOffTime = TimeSpan.FromSeconds(2);
+            var lastEventTime = TimeSpan.FromSeconds(1);
             var controlNumber = (SevenBitNumber)100;
             var controlValue = (SevenBitNumber)70;
 
             var moveFrom = TimeSpan.FromMilliseconds(100);
             var moveTo = TimeSpan.FromMilliseconds(500);
 
-            CheckTrackControlValue(
-                eventsToSend: new[]
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
                 {
-                    new EventToSend(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, controlChangeTime),
-                    new EventToSend(new StartEvent(), noteOffTime - controlChangeTime)
+                    new TimedEvent(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 })
+                        .SetTime((MetricTimeSpan)controlChangeTime, TempoMap.Default),
+                    new TimedEvent(new StartEvent())
+                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap.Default),
                 },
-                eventsWillBeSent: new[]
+                actions: new[]
                 {
-                    new EventToSend(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, controlChangeTime - (moveTo - moveFrom)),
-                    new EventToSend(new StartEvent(), noteOffTime - controlChangeTime)
+                    new PlaybackChangerBase(moveFrom,
+                        p => p.MoveToTime((MetricTimeSpan)moveTo)),
                 },
-                moveFrom: moveFrom,
-                moveTo: moveTo,
-                useOutputDevice: useOutputDevice);
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, controlChangeTime - (moveTo - moveFrom)),
+                    new ReceivedEvent(new StartEvent(), lastEventTime - (moveTo - moveFrom)),
+                });
         }
 
         [Retry(RetriesNumber)]
-        [TestCase(true)]
-        [TestCase(false)]
-        public void TrackControlValue_FromBeforeControlChange_ToAfterControlChange(bool useOutputDevice)
+        [Test]
+        public void TrackControlValue_FromBeforeControlChange_ToAfterControlChange()
         {
-            var controlChangeTime = TimeSpan.FromMilliseconds(800);
-            var noteOffTime = TimeSpan.FromSeconds(2);
+            var controlChangeTime = TimeSpan.FromMilliseconds(500);
+            var lastEventTime = TimeSpan.FromSeconds(1);
             var controlNumber = (SevenBitNumber)100;
             var controlValue = (SevenBitNumber)10;
 
-            var moveFrom = TimeSpan.FromMilliseconds(500);
-            var moveTo = TimeSpan.FromMilliseconds(1000);
+            var moveFrom = TimeSpan.FromMilliseconds(300);
+            var moveTo = TimeSpan.FromMilliseconds(800);
 
-            CheckTrackControlValue(
-                eventsToSend: new[]
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
                 {
-                    new EventToSend(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, controlChangeTime),
-                    new EventToSend(new StartEvent(), noteOffTime - controlChangeTime)
+                    new TimedEvent(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 })
+                        .SetTime((MetricTimeSpan)controlChangeTime, TempoMap.Default),
+                    new TimedEvent(new StartEvent())
+                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap.Default),
                 },
-                eventsWillBeSent: new[]
+                actions: new[]
                 {
-                    new EventToSend(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, moveFrom),
-                    new EventToSend(new StartEvent(), noteOffTime - (moveTo - moveFrom) - moveFrom)
+                    new PlaybackChangerBase(moveFrom,
+                        p => p.MoveToTime((MetricTimeSpan)moveTo)),
                 },
-                moveFrom: moveFrom,
-                moveTo: moveTo,
-                useOutputDevice: useOutputDevice);
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, moveFrom),
+                    new ReceivedEvent(new StartEvent(), lastEventTime - (moveTo - moveFrom)),
+                });
         }
 
         [Retry(RetriesNumber)]
-        [TestCase(true)]
-        [TestCase(false)]
-        public void TrackControlValue_Default_FromBeforeControlChange_ToAfterControlChange(bool useOutputDevice)
+        [Test]
+        public void TrackControlValue_Default_FromBeforeControlChange_ToAfterControlChange()
         {
-            var controlChangeTime = TimeSpan.FromMilliseconds(800);
-            var noteOffTime = TimeSpan.FromSeconds(2);
+            var controlChangeTime = TimeSpan.FromMilliseconds(500);
+            var lastEventTime = TimeSpan.FromSeconds(1);
             var controlNumber = (SevenBitNumber)100;
             var controlValue = (SevenBitNumber)0;
 
-            var moveFrom = TimeSpan.FromMilliseconds(500);
-            var moveTo = TimeSpan.FromMilliseconds(1000);
+            var moveFrom = TimeSpan.FromMilliseconds(300);
+            var moveTo = TimeSpan.FromMilliseconds(700);
 
-            CheckTrackControlValue(
-                eventsToSend: new[]
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
                 {
-                    new EventToSend(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, controlChangeTime),
-                    new EventToSend(new StartEvent(), noteOffTime - controlChangeTime)
+                    new TimedEvent(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 })
+                        .SetTime((MetricTimeSpan)controlChangeTime, TempoMap.Default),
+                    new TimedEvent(new StartEvent())
+                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap.Default),
                 },
-                eventsWillBeSent: new[]
+                actions: new[]
                 {
-                    new EventToSend(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, moveFrom),
-                    new EventToSend(new StartEvent(), noteOffTime - moveTo)
+                    new PlaybackChangerBase(moveFrom,
+                        p => p.MoveToTime((MetricTimeSpan)moveTo)),
                 },
-                moveFrom: moveFrom,
-                moveTo: moveTo,
-                useOutputDevice: useOutputDevice);
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, moveFrom),
+                    new ReceivedEvent(new StartEvent(), lastEventTime - (moveTo - moveFrom)),
+                });
         }
 
         [Retry(RetriesNumber)]
-        [TestCase(true)]
-        [TestCase(false)]
-        public void TrackControlValue_FromAfterControlChange_ToAfterControlChange(bool useOutputDevice)
+        [Test]
+        public void TrackControlValue_FromAfterControlChange_ToAfterControlChange()
         {
-            var controlChangeTime = TimeSpan.FromMilliseconds(800);
-            var noteOffTime = TimeSpan.FromSeconds(2);
+            var controlChangeTime = TimeSpan.FromMilliseconds(500);
+            var lastEventTime = TimeSpan.FromSeconds(1);
             var controlNumber = (SevenBitNumber)0;
             var controlValue = (SevenBitNumber)90;
 
-            var moveFrom = TimeSpan.FromMilliseconds(1000);
-            var moveTo = TimeSpan.FromMilliseconds(1500);
+            var moveFrom = TimeSpan.FromMilliseconds(700);
+            var moveTo = TimeSpan.FromMilliseconds(900);
 
-            CheckTrackControlValue(
-                eventsToSend: new[]
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
                 {
-                    new EventToSend(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, controlChangeTime),
-                    new EventToSend(new StartEvent(), noteOffTime - controlChangeTime)
+                    new TimedEvent(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 })
+                        .SetTime((MetricTimeSpan)controlChangeTime, TempoMap.Default),
+                    new TimedEvent(new StartEvent())
+                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap.Default),
                 },
-                eventsWillBeSent: new[]
+                actions: new[]
                 {
-                    new EventToSend(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, controlChangeTime),
-                    new EventToSend(new StartEvent(), noteOffTime - controlChangeTime - (moveTo - moveFrom))
+                    new PlaybackChangerBase(moveFrom,
+                        p => p.MoveToTime((MetricTimeSpan)moveTo)),
                 },
-                moveFrom: moveFrom,
-                moveTo: moveTo,
-                useOutputDevice: useOutputDevice);
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, controlChangeTime),
+                    new ReceivedEvent(new StartEvent(), lastEventTime - (moveTo - moveFrom)),
+                });
         }
 
         [Retry(RetriesNumber)]
-        [TestCase(true)]
-        [TestCase(false)]
-        public void TrackControlValue_FromAfterControlChange_ToBeforeControlChange(bool useOutputDevice)
+        [Test]
+        public void TrackControlValue_FromAfterControlChange_ToBeforeControlChange()
         {
             var controlChangeTime = TimeSpan.FromMilliseconds(800);
-            var noteOffTime = TimeSpan.FromSeconds(2);
+            var lastEventTime = TimeSpan.FromSeconds(2);
             var controlNumber = (SevenBitNumber)100;
             var controlValue = (SevenBitNumber)50;
 
             var moveFrom = TimeSpan.FromMilliseconds(1000);
             var moveTo = TimeSpan.FromMilliseconds(500);
 
-            CheckTrackControlValue(
-                eventsToSend: new[]
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
                 {
-                    new EventToSend(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, controlChangeTime),
-                    new EventToSend(new StartEvent(), noteOffTime - controlChangeTime)
+                    new TimedEvent(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 })
+                        .SetTime((MetricTimeSpan)controlChangeTime, TempoMap.Default),
+                    new TimedEvent(new StartEvent())
+                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap.Default),
                 },
-                eventsWillBeSent: new[]
+                actions: new[]
                 {
-                    new EventToSend(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, controlChangeTime),
-                    new EventToSend(new ControlChangeEvent(controlNumber, SevenBitNumber.MinValue) { Channel = (FourBitNumber)4 }, moveFrom - controlChangeTime),
-                    new EventToSend(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, controlChangeTime - moveTo),
-                    new EventToSend(new StartEvent(), noteOffTime - controlChangeTime)
+                    new PlaybackChangerBase(moveFrom,
+                        p => p.MoveToTime((MetricTimeSpan)moveTo)),
                 },
-                moveFrom: moveFrom,
-                moveTo: moveTo,
-                useOutputDevice: useOutputDevice);
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, controlChangeTime),
+                    new ReceivedEvent(new ControlChangeEvent(controlNumber, SevenBitNumber.MinValue) { Channel = (FourBitNumber)4 }, moveFrom),
+                    new ReceivedEvent(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, controlChangeTime - moveTo + moveFrom),
+                    new ReceivedEvent(new StartEvent(), lastEventTime  - moveTo + moveFrom),
+                });
         }
 
         [Retry(RetriesNumber)]
-        [TestCase(true)]
-        [TestCase(false)]
-        public void TrackControlValue_Default_FromBeforeControlChange_ToControlChange(bool useOutputDevice)
+        [Test]
+        public void TrackControlValue_Default_FromBeforeControlChange_ToControlChange()
         {
             var controlChangeTime = TimeSpan.FromMilliseconds(800);
-            var noteOffTime = TimeSpan.FromSeconds(2);
+            var lastEventTime = TimeSpan.FromSeconds(1);
             var controlNumber = (SevenBitNumber)100;
             var controlValue = (SevenBitNumber)0;
 
             var moveFrom = TimeSpan.FromMilliseconds(500);
             var moveTo = TimeSpan.FromMilliseconds(800);
 
-            CheckTrackControlValue(
-                eventsToSend: new[]
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
                 {
-                    new EventToSend(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, controlChangeTime),
-                    new EventToSend(new StartEvent(), noteOffTime - controlChangeTime)
+                    new TimedEvent(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 })
+                        .SetTime((MetricTimeSpan)controlChangeTime, TempoMap.Default),
+                    new TimedEvent(new StartEvent())
+                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap.Default),
                 },
-                eventsWillBeSent: new[]
+                actions: new[]
                 {
-                    new EventToSend(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, moveFrom),
-                    new EventToSend(new StartEvent(), noteOffTime - moveTo)
+                    new PlaybackChangerBase(moveFrom,
+                        p => p.MoveToTime((MetricTimeSpan)moveTo)),
                 },
-                moveFrom: moveFrom,
-                moveTo: moveTo,
-                useOutputDevice: useOutputDevice);
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, moveFrom),
+                    new ReceivedEvent(new StartEvent(), lastEventTime - (moveTo - moveFrom)),
+                });
         }
 
         [Retry(RetriesNumber)]
-        [TestCase(true)]
-        [TestCase(false)]
-        public void TrackControlValue_FromAfterControlChange_ToControlChange(bool useOutputDevice)
+        [Test]
+        public void TrackControlValue_FromAfterControlChange_ToControlChange()
         {
             var controlChangeTime = TimeSpan.FromMilliseconds(800);
-            var noteOffTime = TimeSpan.FromSeconds(2);
+            var lastEventTime = TimeSpan.FromSeconds(1);
             var controlNumber = (SevenBitNumber)100;
             var controlValue = (SevenBitNumber)50;
 
-            var moveFrom = TimeSpan.FromMilliseconds(1000);
+            var moveFrom = TimeSpan.FromMilliseconds(900);
             var moveTo = TimeSpan.FromMilliseconds(800);
 
-            CheckTrackControlValue(
-                eventsToSend: new[]
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
                 {
-                    new EventToSend(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, controlChangeTime),
-                    new EventToSend(new StartEvent(), noteOffTime - controlChangeTime)
+                    new TimedEvent(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 })
+                        .SetTime((MetricTimeSpan)controlChangeTime, TempoMap.Default),
+                    new TimedEvent(new StartEvent())
+                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap.Default),
                 },
-                eventsWillBeSent: new[]
+                actions: new[]
                 {
-                    new EventToSend(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, controlChangeTime),
-                    new EventToSend(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, moveFrom - controlChangeTime),
-                    new EventToSend(new StartEvent(), noteOffTime - controlChangeTime)
+                    new PlaybackChangerBase(moveFrom,
+                        p => p.MoveToTime((MetricTimeSpan)moveTo)),
                 },
-                moveFrom: moveFrom,
-                moveTo: moveTo,
-                useOutputDevice: useOutputDevice);
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, controlChangeTime),
+                    new ReceivedEvent(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, moveFrom),
+                    new ReceivedEvent(new StartEvent(), lastEventTime - controlChangeTime + moveFrom),
+                });
         }
 
         [Retry(RetriesNumber)]
-        [TestCase(true)]
-        [TestCase(false)]
-        public void TrackControlValue_EnableInMiddle_FromBeforeControlChange_ToAfterControlChange(bool useOutputDevice)
+        [Test]
+        public void TrackControlValue_EnableInMiddle_FromBeforeControlChange_ToAfterControlChange()
         {
             var controlChangeTime = TimeSpan.FromMilliseconds(800);
             var programChangeTime = TimeSpan.FromSeconds(1);
-            var noteOffTime = TimeSpan.FromSeconds(2);
+            var lastEventTime = TimeSpan.FromSeconds(2);
             var controlNumber = (SevenBitNumber)100;
             var controlValue = (SevenBitNumber)10;
             var programNumber = (SevenBitNumber)100;
@@ -383,32 +401,42 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var moveTo = TimeSpan.FromMilliseconds(1200);
             var enableAfter = TimeSpan.FromMilliseconds(500);
 
-            CheckTrackControlValueEnabledInMiddle(
-                eventsToSend: new[]
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
                 {
-                    new EventToSend(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, controlChangeTime),
-                    new EventToSend(new ProgramChangeEvent(programNumber), programChangeTime - controlChangeTime),
-                    new EventToSend(new StartEvent(), noteOffTime - programChangeTime)
+                    new TimedEvent(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 })
+                        .SetTime((MetricTimeSpan)controlChangeTime, TempoMap.Default),
+                    new TimedEvent(new ProgramChangeEvent(programNumber))
+                        .SetTime((MetricTimeSpan)programChangeTime, TempoMap.Default),
+                    new TimedEvent(new StartEvent())
+                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap.Default),
                 },
-                eventsWillBeSent: new[]
+                actions: new[]
                 {
-                    new EventToSend(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, moveFrom + enableAfter),
-                    new EventToSend(new StartEvent(), noteOffTime - (moveTo + enableAfter))
+                    new PlaybackChangerBase(moveFrom,
+                        p => p.MoveToTime((MetricTimeSpan)moveTo)),
+                    new PlaybackChangerBase(enableAfter,
+                        p => p.TrackControlValue = true),
                 },
-                moveFrom: moveFrom,
-                moveTo: moveTo,
-                useOutputDevice: useOutputDevice,
-                enableAfter: enableAfter,
-                setupPlayback: playback => playback.TrackProgram = false);
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, moveFrom + enableAfter),
+                    new ReceivedEvent(new StartEvent(), lastEventTime + moveFrom - moveTo),
+                },
+                setupPlayback: playback =>
+                {
+                    playback.TrackControlValue = false;
+                    playback.TrackProgram = false;
+                });
         }
 
         [Retry(RetriesNumber)]
-        [TestCase(true)]
-        [TestCase(false)]
-        public void TrackControlValue_EnableInMiddle_FromAfterControlChange_ToBeforeControlChange(bool useOutputDevice)
+        [Test]
+        public void TrackControlValue_EnableInMiddle_FromAfterControlChange_ToBeforeControlChange()
         {
             var controlChangeTime = TimeSpan.FromMilliseconds(800);
-            var noteOffTime = TimeSpan.FromSeconds(2);
+            var lastEventTime = TimeSpan.FromSeconds(2);
             var controlNumber = (SevenBitNumber)100;
             var controlValue = (SevenBitNumber)50;
 
@@ -416,69 +444,493 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var moveTo = TimeSpan.FromMilliseconds(500);
             var enableAfter = TimeSpan.FromMilliseconds(150);
 
-            CheckTrackControlValueEnabledInMiddle(
-                eventsToSend: new[]
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
                 {
-                    new EventToSend(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, controlChangeTime),
-                    new EventToSend(new StartEvent(), noteOffTime - controlChangeTime)
+                    new TimedEvent(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 })
+                        .SetTime((MetricTimeSpan)controlChangeTime, TempoMap.Default),
+                    new TimedEvent(new StartEvent())
+                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap.Default),
                 },
-                eventsWillBeSent: new[]
+                actions: new[]
                 {
-                    new EventToSend(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, controlChangeTime),
-                    new EventToSend(new ControlChangeEvent(controlNumber, SevenBitNumber.MinValue) { Channel = (FourBitNumber)4 }, moveFrom - controlChangeTime + enableAfter),
-                    new EventToSend(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, controlChangeTime - (moveTo + enableAfter)),
-                    new EventToSend(new StartEvent(), noteOffTime - controlChangeTime)
+                    new PlaybackChangerBase(moveFrom,
+                        p => p.MoveToTime((MetricTimeSpan)moveTo)),
+                    new PlaybackChangerBase(enableAfter,
+                        p => p.TrackControlValue = true),
                 },
-                moveFrom: moveFrom,
-                moveTo: moveTo,
-                useOutputDevice: useOutputDevice,
-                enableAfter: enableAfter);
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, controlChangeTime),
+                    new ReceivedEvent(new ControlChangeEvent(controlNumber, SevenBitNumber.MinValue) { Channel = (FourBitNumber)4 }, moveFrom + enableAfter),
+                    new ReceivedEvent(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, controlChangeTime - moveTo + moveFrom),
+                    new ReceivedEvent(new StartEvent(), lastEventTime - moveTo + moveFrom),
+                },
+                setupPlayback: playback => playback.TrackControlValue = false);
         }
 
-        #endregion
+        [Retry(RetriesNumber)]
+        [Test]
+        public void DontTrackControlValue_NoControlChanges_MoveToTime(
+            [Values(0, 100)] int moveFromMs,
+            [Values(0, 500)] int moveToMs)
+        {
+            var lastEventTime = TimeSpan.FromSeconds(1);
 
-        #region Private methods
+            var moveFrom = TimeSpan.FromMilliseconds(moveFromMs);
+            var moveTo = TimeSpan.FromMilliseconds(moveToMs);
 
-        private void CheckTrackControlValue(
-            ICollection<EventToSend> eventsToSend,
-            ICollection<EventToSend> eventsWillBeSent,
-            TimeSpan moveFrom,
-            TimeSpan moveTo,
-            bool useOutputDevice,
-            Action<Playback> setupPlayback = null) =>
-            CheckDataTracking(
-                p =>
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
                 {
-                    p.TrackControlValue = true;
-                    setupPlayback?.Invoke(p);
+                    new TimedEvent(new StartEvent())
+                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap.Default),
                 },
-                eventsToSend,
-                eventsWillBeSent,
-                moveFrom,
-                moveTo,
-                useOutputDevice);
-
-        private void CheckTrackControlValueEnabledInMiddle(
-            ICollection<EventToSend> eventsToSend,
-            ICollection<EventToSend> eventsWillBeSent,
-            TimeSpan moveFrom,
-            TimeSpan moveTo,
-            bool useOutputDevice,
-            TimeSpan enableAfter,
-            Action<Playback> setupPlayback = null) =>
-            CheckDataTracking(
-                p =>
+                actions: new[]
                 {
-                    p.TrackControlValue = false;
-                    setupPlayback?.Invoke(p);
+                    new PlaybackChangerBase(moveFrom,
+                        p => p.MoveToTime((MetricTimeSpan)moveTo)),
                 },
-                eventsToSend,
-                eventsWillBeSent,
-                moveFrom,
-                moveTo,
-                useOutputDevice,
-                enableAfter,
-                p => p.TrackControlValue = true);
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new StartEvent(), lastEventTime - (moveTo - moveFrom)),
+                },
+                setupPlayback: playback => playback.TrackControlValue = false);
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
+        public void DontTrackControlValue_ControlChangeAtZero_MoveToTime()
+        {
+            var lastEventTime = TimeSpan.FromSeconds(1);
+            var controlNumber = (SevenBitNumber)100;
+            var controlValue = (SevenBitNumber)70;
+
+            var moveFrom = TimeSpan.FromMilliseconds(100);
+            var moveTo = TimeSpan.FromMilliseconds(500);
+
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
+                {
+                    new TimedEvent(new ControlChangeEvent(controlNumber, controlValue))
+                        .SetTime((MetricTimeSpan)TimeSpan.Zero, TempoMap.Default),
+                    new TimedEvent(new StartEvent())
+                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap.Default),
+                },
+                actions: new[]
+                {
+                    new PlaybackChangerBase(moveFrom,
+                        p => p.MoveToTime((MetricTimeSpan)moveTo)),
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new ControlChangeEvent(controlNumber, controlValue), TimeSpan.Zero),
+                    new ReceivedEvent(new StartEvent(), lastEventTime - (moveTo - moveFrom)),
+                },
+                setupPlayback: playback => playback.TrackControlValue = false);
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
+        public void DontTrackControlValue_ControlChangeAtZero_MoveToStart()
+        {
+            var lastEventTime = TimeSpan.FromSeconds(1);
+            var controlNumber1 = (SevenBitNumber)100;
+            var controlValue1 = (SevenBitNumber)70;
+
+            var controlChangeDelay = TimeSpan.FromMilliseconds(800);
+            var controlNumber2 = (SevenBitNumber)10;
+            var controlValue2 = (SevenBitNumber)80;
+
+            var moveFrom = TimeSpan.FromMilliseconds(500);
+            var moveTo = TimeSpan.Zero;
+
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
+                {
+                    new TimedEvent(new ControlChangeEvent(controlNumber1, controlValue1))
+                        .SetTime((MetricTimeSpan)TimeSpan.Zero, TempoMap.Default),
+                    new TimedEvent(new ControlChangeEvent(controlNumber2, controlValue2) { Channel = (FourBitNumber)10 })
+                        .SetTime((MetricTimeSpan)controlChangeDelay, TempoMap.Default),
+                    new TimedEvent(new StartEvent())
+                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap.Default),
+                },
+                actions: new[]
+                {
+                    new PlaybackChangerBase(moveFrom,
+                        p => p.MoveToTime((MetricTimeSpan)moveTo)),
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new ControlChangeEvent(controlNumber1, controlValue1), TimeSpan.Zero),
+                    new ReceivedEvent(new ControlChangeEvent(controlNumber1, controlValue1), moveFrom),
+                    new ReceivedEvent(new ControlChangeEvent(controlNumber2, controlValue2) { Channel = (FourBitNumber)10 }, moveFrom + controlChangeDelay),
+                    new ReceivedEvent(new StartEvent(), moveFrom + lastEventTime),
+                },
+                setupPlayback: playback => playback.TrackControlValue = false);
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
+        public void DontTrackControlValue_ControlChangesAtZero_MoveToStart()
+        {
+            var lastEventTime = TimeSpan.FromSeconds(1);
+            var controlNumber1 = (SevenBitNumber)100;
+            var controlValue1 = (SevenBitNumber)70;
+
+            var controlNumber2 = (SevenBitNumber)10;
+            var controlValue2 = (SevenBitNumber)80;
+
+            var moveFrom = TimeSpan.FromMilliseconds(500);
+            var moveTo = TimeSpan.Zero;
+
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
+                {
+                    new TimedEvent(new ControlChangeEvent(controlNumber1, controlValue1))
+                        .SetTime((MetricTimeSpan)TimeSpan.Zero, TempoMap.Default),
+                    new TimedEvent(new ControlChangeEvent(controlNumber2, controlValue2))
+                        .SetTime((MetricTimeSpan)TimeSpan.Zero, TempoMap.Default),
+                    new TimedEvent(new StartEvent())
+                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap.Default),
+                },
+                actions: new[]
+                {
+                    new PlaybackChangerBase(moveFrom,
+                        p => p.MoveToTime((MetricTimeSpan)moveTo)),
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new ControlChangeEvent(controlNumber1, controlValue1), TimeSpan.Zero),
+                    new ReceivedEvent(new ControlChangeEvent(controlNumber2, controlValue2), TimeSpan.Zero),
+                    new ReceivedEvent(new ControlChangeEvent(controlNumber1, controlValue1), moveFrom),
+                    new ReceivedEvent(new ControlChangeEvent(controlNumber2, controlValue2), moveFrom),
+                    new ReceivedEvent(new StartEvent(), lastEventTime + moveFrom),
+                },
+                setupPlayback: playback => playback.TrackControlValue = false);
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
+        public void DontTrackControlValue_FromBeforeControlChange_ToBeforeControlChange()
+        {
+            var controlChangeTime = TimeSpan.FromMilliseconds(800);
+            var lastEventTime = TimeSpan.FromSeconds(1);
+            var controlNumber = (SevenBitNumber)100;
+            var controlValue = (SevenBitNumber)70;
+
+            var moveFrom = TimeSpan.FromMilliseconds(100);
+            var moveTo = TimeSpan.FromMilliseconds(500);
+
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
+                {
+                    new TimedEvent(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 })
+                        .SetTime((MetricTimeSpan)controlChangeTime, TempoMap.Default),
+                    new TimedEvent(new StartEvent())
+                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap.Default),
+                },
+                actions: new[]
+                {
+                    new PlaybackChangerBase(moveFrom,
+                        p => p.MoveToTime((MetricTimeSpan)moveTo)),
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, controlChangeTime - (moveTo - moveFrom)),
+                    new ReceivedEvent(new StartEvent(), lastEventTime - (moveTo - moveFrom)),
+                },
+                setupPlayback: playback => playback.TrackControlValue = false);
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
+        public void DontTrackControlValue_FromBeforeControlChange_ToAfterControlChange()
+        {
+            var controlChangeTime = TimeSpan.FromMilliseconds(500);
+            var lastEventTime = TimeSpan.FromSeconds(1);
+            var controlNumber = (SevenBitNumber)100;
+            var controlValue = (SevenBitNumber)10;
+
+            var moveFrom = TimeSpan.FromMilliseconds(300);
+            var moveTo = TimeSpan.FromMilliseconds(800);
+
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
+                {
+                    new TimedEvent(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 })
+                        .SetTime((MetricTimeSpan)controlChangeTime, TempoMap.Default),
+                    new TimedEvent(new StartEvent())
+                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap.Default),
+                },
+                actions: new[]
+                {
+                    new PlaybackChangerBase(moveFrom,
+                        p => p.MoveToTime((MetricTimeSpan)moveTo)),
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new StartEvent(), lastEventTime - (moveTo - moveFrom)),
+                },
+                setupPlayback: playback => playback.TrackControlValue = false);
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
+        public void DontTrackControlValue_Default_FromBeforeControlChange_ToAfterControlChange()
+        {
+            var controlChangeTime = TimeSpan.FromMilliseconds(500);
+            var lastEventTime = TimeSpan.FromSeconds(1);
+            var controlNumber = (SevenBitNumber)100;
+            var controlValue = (SevenBitNumber)0;
+
+            var moveFrom = TimeSpan.FromMilliseconds(300);
+            var moveTo = TimeSpan.FromMilliseconds(700);
+
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
+                {
+                    new TimedEvent(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 })
+                        .SetTime((MetricTimeSpan)controlChangeTime, TempoMap.Default),
+                    new TimedEvent(new StartEvent())
+                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap.Default),
+                },
+                actions: new[]
+                {
+                    new PlaybackChangerBase(moveFrom,
+                        p => p.MoveToTime((MetricTimeSpan)moveTo)),
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new StartEvent(), lastEventTime - (moveTo - moveFrom)),
+                },
+                setupPlayback: playback => playback.TrackControlValue = false);
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
+        public void DontTrackControlValue_FromAfterControlChange_ToAfterControlChange()
+        {
+            var controlChangeTime = TimeSpan.FromMilliseconds(500);
+            var lastEventTime = TimeSpan.FromSeconds(1);
+            var controlNumber = (SevenBitNumber)0;
+            var controlValue = (SevenBitNumber)90;
+
+            var moveFrom = TimeSpan.FromMilliseconds(700);
+            var moveTo = TimeSpan.FromMilliseconds(900);
+
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
+                {
+                    new TimedEvent(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 })
+                        .SetTime((MetricTimeSpan)controlChangeTime, TempoMap.Default),
+                    new TimedEvent(new StartEvent())
+                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap.Default),
+                },
+                actions: new[]
+                {
+                    new PlaybackChangerBase(moveFrom,
+                        p => p.MoveToTime((MetricTimeSpan)moveTo)),
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, controlChangeTime),
+                    new ReceivedEvent(new StartEvent(), lastEventTime - (moveTo - moveFrom)),
+                },
+                setupPlayback: playback => playback.TrackControlValue = false);
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
+        public void DontTrackControlValue_FromAfterControlChange_ToBeforeControlChange()
+        {
+            var controlChangeTime = TimeSpan.FromMilliseconds(800);
+            var lastEventTime = TimeSpan.FromSeconds(2);
+            var controlNumber = (SevenBitNumber)100;
+            var controlValue = (SevenBitNumber)50;
+
+            var moveFrom = TimeSpan.FromMilliseconds(1000);
+            var moveTo = TimeSpan.FromMilliseconds(500);
+
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
+                {
+                    new TimedEvent(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 })
+                        .SetTime((MetricTimeSpan)controlChangeTime, TempoMap.Default),
+                    new TimedEvent(new StartEvent())
+                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap.Default),
+                },
+                actions: new[]
+                {
+                    new PlaybackChangerBase(moveFrom,
+                        p => p.MoveToTime((MetricTimeSpan)moveTo)),
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, controlChangeTime),
+                    new ReceivedEvent(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, controlChangeTime - moveTo + moveFrom),
+                    new ReceivedEvent(new StartEvent(), lastEventTime  - moveTo + moveFrom),
+                },
+                setupPlayback: playback => playback.TrackControlValue = false);
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
+        public void DontTrackControlValue_Default_FromBeforeControlChange_ToControlChange()
+        {
+            var controlChangeTime = TimeSpan.FromMilliseconds(800);
+            var lastEventTime = TimeSpan.FromSeconds(1);
+            var controlNumber = (SevenBitNumber)100;
+            var controlValue = (SevenBitNumber)0;
+
+            var moveFrom = TimeSpan.FromMilliseconds(500);
+            var moveTo = TimeSpan.FromMilliseconds(800);
+
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
+                {
+                    new TimedEvent(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 })
+                        .SetTime((MetricTimeSpan)controlChangeTime, TempoMap.Default),
+                    new TimedEvent(new StartEvent())
+                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap.Default),
+                },
+                actions: new[]
+                {
+                    new PlaybackChangerBase(moveFrom,
+                        p => p.MoveToTime((MetricTimeSpan)moveTo)),
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, moveFrom),
+                    new ReceivedEvent(new StartEvent(), lastEventTime - (moveTo - moveFrom)),
+                },
+                setupPlayback: playback => playback.TrackControlValue = false);
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
+        public void DontTrackControlValue_FromAfterControlChange_ToControlChange()
+        {
+            var controlChangeTime = TimeSpan.FromMilliseconds(800);
+            var lastEventTime = TimeSpan.FromSeconds(1);
+            var controlNumber = (SevenBitNumber)100;
+            var controlValue = (SevenBitNumber)50;
+
+            var moveFrom = TimeSpan.FromMilliseconds(900);
+            var moveTo = TimeSpan.FromMilliseconds(800);
+
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
+                {
+                    new TimedEvent(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 })
+                        .SetTime((MetricTimeSpan)controlChangeTime, TempoMap.Default),
+                    new TimedEvent(new StartEvent())
+                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap.Default),
+                },
+                actions: new[]
+                {
+                    new PlaybackChangerBase(moveFrom,
+                        p => p.MoveToTime((MetricTimeSpan)moveTo)),
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, controlChangeTime),
+                    new ReceivedEvent(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, moveFrom),
+                    new ReceivedEvent(new StartEvent(), lastEventTime - controlChangeTime + moveFrom),
+                },
+                setupPlayback: playback => playback.TrackControlValue = false);
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
+        public void TrackControlValue_DisableInMiddle_FromBeforeControlChange_ToAfterControlChange()
+        {
+            var controlChangeTime = TimeSpan.FromMilliseconds(800);
+            var programChangeTime = TimeSpan.FromSeconds(1);
+            var lastEventTime = TimeSpan.FromSeconds(2);
+            var controlNumber = (SevenBitNumber)100;
+            var controlValue = (SevenBitNumber)10;
+            var programNumber = (SevenBitNumber)100;
+
+            var moveFrom = TimeSpan.FromMilliseconds(500);
+            var moveTo = TimeSpan.FromMilliseconds(1200);
+            var disableAfter = TimeSpan.FromMilliseconds(500);
+
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
+                {
+                    new TimedEvent(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 })
+                        .SetTime((MetricTimeSpan)controlChangeTime, TempoMap.Default),
+                    new TimedEvent(new ProgramChangeEvent(programNumber))
+                        .SetTime((MetricTimeSpan)programChangeTime, TempoMap.Default),
+                    new TimedEvent(new StartEvent())
+                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap.Default),
+                },
+                actions: new[]
+                {
+                    new PlaybackChangerBase(moveFrom,
+                        p => p.MoveToTime((MetricTimeSpan)moveTo)),
+                    new PlaybackChangerBase(disableAfter,
+                        p => p.TrackControlValue = false),
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, moveFrom),
+                    new ReceivedEvent(new StartEvent(), lastEventTime + moveFrom - moveTo),
+                },
+                setupPlayback: playback => playback.TrackProgram = false);
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
+        public void TrackControlValue_DisableInMiddle_FromAfterControlChange_ToBeforeControlChange()
+        {
+            var controlChangeTime = TimeSpan.FromMilliseconds(800);
+            var lastEventTime = TimeSpan.FromSeconds(2);
+            var controlNumber = (SevenBitNumber)100;
+            var controlValue = (SevenBitNumber)50;
+
+            var moveFrom = TimeSpan.FromMilliseconds(1000);
+            var moveTo = TimeSpan.FromMilliseconds(500);
+            var disableAfter = TimeSpan.FromMilliseconds(150);
+
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
+                {
+                    new TimedEvent(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 })
+                        .SetTime((MetricTimeSpan)controlChangeTime, TempoMap.Default),
+                    new TimedEvent(new StartEvent())
+                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap.Default),
+                },
+                actions: new[]
+                {
+                    new PlaybackChangerBase(moveFrom,
+                        p => p.MoveToTime((MetricTimeSpan)moveTo)),
+                    new PlaybackChangerBase(disableAfter,
+                        p => p.TrackControlValue = false),
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, controlChangeTime),
+                    new ReceivedEvent(new ControlChangeEvent(controlNumber, SevenBitNumber.MinValue) { Channel = (FourBitNumber)4 }, moveFrom),
+                    new ReceivedEvent(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, controlChangeTime - moveTo + moveFrom),
+                    new ReceivedEvent(new StartEvent(), lastEventTime - moveTo + moveFrom),
+                });
+        }
 
         #endregion
     }
