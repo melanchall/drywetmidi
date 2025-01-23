@@ -8,6 +8,7 @@ using Melanchall.DryWetMidi.Interaction;
 using Melanchall.DryWetMidi.Tests.Common;
 using Melanchall.DryWetMidi.Tests.Utilities;
 using NUnit.Framework;
+using System.Diagnostics;
 
 namespace Melanchall.DryWetMidi.Tests.Multimedia
 {
@@ -15,48 +16,6 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
     public sealed partial class PlaybackTests
     {
         #region Nested classes
-
-        private sealed class OutputDeviceWithMetadataRegistration : IOutputDevice
-        {
-            public event EventHandler<MidiEventSentEventArgs> EventSent;
-
-            public List<(MidiEvent, object)> Metadata { get; } = new List<(MidiEvent, object)>();
-
-            public void PrepareForEventsSending()
-            {
-            }
-
-            public void SendEvent(MidiEvent midiEvent)
-            {
-            }
-
-            public bool SendEventWithMetadata(MidiEvent midiEvent, object metadata)
-            {
-                Metadata.Add((midiEvent, metadata));
-                return true;
-            }
-
-            public void Dispose()
-            {
-            }
-        }
-
-        private sealed class PlaybackWithMetadataRegistration : Playback
-        {
-            public PlaybackWithMetadataRegistration(
-                IEnumerable<ITimedObject> timedObjects,
-                TempoMap tempoMap,
-                IOutputDevice outputDevice,
-                PlaybackSettings playbackSettings = null)
-                : base(timedObjects, tempoMap, outputDevice, playbackSettings)
-            {
-            }
-
-            protected override bool TryPlayEvent(MidiEvent midiEvent, object metadata)
-            {
-                return ((OutputDeviceWithMetadataRegistration)OutputDevice).SendEventWithMetadata(midiEvent, metadata);
-            }
-        }
 
         private sealed class TimedEventWithTrackChunkIndex : TimedEvent, IMetadata
         {
@@ -80,9 +39,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
         [Retry(RetriesNumber)]
         [Test]
-        public void CheckPlaybackMetadata_EventPlayed()
-        {
-            var midiFile = new MidiFile(
+        public void CheckPlaybackMetadata_EventPlayed() => CheckPlaybackMetadata(
+            midiFile: new MidiFile(
                 new TrackChunk(
                     new NoteOnEvent(),
                     new NoteOffEvent { DeltaTime = 50 },
@@ -92,142 +50,71 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new NoteOnEvent { DeltaTime = 25 },
                     new NoteOffEvent { DeltaTime = 50 },
                     new NoteOnEvent { DeltaTime = 50 },
-                    new NoteOffEvent { DeltaTime = 50 }));
-
-            var timedEvents = GetTimedEvents(midiFile);
-            var outputDevice = new OutputDeviceWithMetadataRegistration();
-
-            var trackChunkIndices = new List<int>();
-
-            using (var playback = new PlaybackWithMetadataRegistration(timedEvents, midiFile.GetTempoMap(), outputDevice))
+                    new NoteOffEvent { DeltaTime = 50 })),
+            actions: Array.Empty<PlaybackChangerBase>(),
+            expectedEvents: new (MidiEvent, object)[]
             {
-                playback.EventPlayed += (_, e) => trackChunkIndices.Add((int)e.Metadata);
-
-                playback.Start();
-
-                var timeout = (TimeSpan)midiFile.GetDuration<MetricTimeSpan>() + SendReceiveUtilities.MaximumEventSendReceiveDelay;
-                var playbackFinished = WaitOperations.Wait(() => !playback.IsRunning, timeout);
-                Assert.IsTrue(playbackFinished, "Playback not finished.");
-            }
-
-            CollectionAssert.AreEqual(
-                new[] { 0, 1, 0, 1, 0, 1, 0, 1 },
-                trackChunkIndices,
-                "Invalid track chunk indices registered.");
-        }
+                (new NoteOnEvent(), 0),
+                (new NoteOnEvent(), 1),
+                (new NoteOffEvent(), 0),
+                (new NoteOffEvent(), 1),
+                (new NoteOnEvent(), 0),
+                (new NoteOnEvent(), 1),
+                (new NoteOffEvent(), 0),
+                (new NoteOffEvent(), 1),
+            });
 
         [Retry(RetriesNumber)]
         [Test]
-        public void CheckPlaybackMetadata_NormalPlayback()
-        {
-            var midiFile = new MidiFile(
-                new TrackChunk(
-                    new NoteOnEvent(),
-                    new NoteOffEvent { DeltaTime = 50 },
-                    new NoteOnEvent { DeltaTime = 50 },
-                    new NoteOffEvent { DeltaTime = 50 }),
-                new TrackChunk(
-                    new NoteOnEvent { DeltaTime = 25 },
-                    new NoteOffEvent { DeltaTime = 50 },
-                    new NoteOnEvent { DeltaTime = 50 },
-                    new NoteOffEvent { DeltaTime = 50 }));
-
-            var timedEvents = GetTimedEvents(midiFile);
-            var outputDevice = new OutputDeviceWithMetadataRegistration();
-
-            using (var playback = new PlaybackWithMetadataRegistration(timedEvents, midiFile.GetTempoMap(), outputDevice))
-            {
-                playback.Start();
-
-                var timeout = (TimeSpan)midiFile.GetDuration<MetricTimeSpan>() + SendReceiveUtilities.MaximumEventSendReceiveDelay;
-                var playbackFinished = WaitOperations.Wait(() => !playback.IsRunning, timeout);
-                Assert.IsTrue(playbackFinished, "Playback not finished.");
-            }
-
-            CheckRegisteredMetadata(
-                expectedMetadata: new (MidiEvent, object)[]
-                {
-                    (new NoteOnEvent(), 0),
-                    (new NoteOnEvent(), 1),
-                    (new NoteOffEvent(), 0),
-                    (new NoteOffEvent(), 1),
-                    (new NoteOnEvent(), 0),
-                    (new NoteOnEvent(), 1),
-                    (new NoteOffEvent(), 0),
-                    (new NoteOffEvent(), 1),
-                },
-                actualMetadata: outputDevice.Metadata.ToArray());
-        }
-
-        [Retry(RetriesNumber)]
-        [TestCase(0)]
-        [TestCase(100)]
-        public void CheckPlaybackMetadata_TrackControlValue_NoControlChanges_MoveToTime(int moveFromMs)
-        {
-            var noteOffDelay = TimeSpan.FromSeconds(2);
-
-            var moveFrom = TimeSpan.FromMilliseconds(moveFromMs);
-            var moveTo = TimeSpan.FromMilliseconds(500);
-
-            var midiFile = new MidiFile(
+        public void CheckPlaybackMetadata_TrackControlValue_NoControlChanges_MoveToTime([Values(0, 100)] int moveFromMs) => CheckPlaybackMetadata(
+            midiFile: new MidiFile(
                 new TrackChunk(),
-                new TrackChunk(new TextEvent { DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)noteOffDelay, TempoMap.Default) }));
-
-            CheckTrackControlValueWithMetadata(
-                midiFile,
-                moveFrom: moveFrom,
-                moveTo: moveTo,
-                expectedMetadata: new (MidiEvent, object)[]
-                {
-                    (new TextEvent(), 1)
-                });
-        }
+                new TrackChunk(new TextEvent { DeltaTime = GetDeltaTime(TimeSpan.FromSeconds(1)) })),
+            actions: new[]
+            {
+                new PlaybackChangerBase(moveFromMs,
+                    p => p.MoveToTime((MetricTimeSpan)TimeSpan.FromMilliseconds(500))),
+            },
+            expectedEvents: new (MidiEvent, object)[]
+            {
+                (new TextEvent(), 1)
+            });
 
         [Retry(RetriesNumber)]
         [Test]
-        public void CheckPlaybackMetadata_TrackControlValue_NoControlChanges_MoveToStart()
-        {
-            var noteOffDelay = TimeSpan.FromSeconds(2);
-
-            var moveFrom = TimeSpan.FromMilliseconds(500);
-            var moveTo = TimeSpan.Zero;
-
-            var midiFile = new MidiFile(
+        public void CheckPlaybackMetadata_TrackControlValue_NoControlChanges_MoveToStart() => CheckPlaybackMetadata(
+            midiFile: new MidiFile(
                 new TrackChunk(new TextEvent()),
-                new TrackChunk(new ProgramChangeEvent { DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)noteOffDelay, TempoMap.Default) }));
-
-            CheckTrackControlValueWithMetadata(
-                midiFile,
-                moveFrom: moveFrom,
-                moveTo: moveTo,
-                expectedMetadata: new (MidiEvent, object)[]
-                {
-                    (new TextEvent(), 0),
-                    (new TextEvent(), 0),
-                    (new ProgramChangeEvent(), 1)
-                });
-        }
+                new TrackChunk(new ProgramChangeEvent { DeltaTime = GetDeltaTime(TimeSpan.FromSeconds(1)) })),
+            actions: new[]
+            {
+                new PlaybackChangerBase(500,
+                    p => p.MoveToStart()),
+            },
+            expectedEvents: new (MidiEvent, object)[]
+            {
+                (new TextEvent(), 0),
+                (new TextEvent(), 0),
+                (new ProgramChangeEvent(), 1)
+            });
 
         [Retry(RetriesNumber)]
         [Test]
         public void CheckPlaybackMetadata_TrackControlValue_ControlChangeAtZero_MoveToTime()
         {
-            var noteOffDelay = TimeSpan.FromSeconds(2);
             var controlNumber = (SevenBitNumber)100;
             var controlValue = (SevenBitNumber)70;
 
-            var moveFrom = TimeSpan.FromMilliseconds(100);
-            var moveTo = TimeSpan.FromMilliseconds(500);
-
-            var midiFile = new MidiFile(
-                new TrackChunk(new ControlChangeEvent(controlNumber, controlValue)),
-                new TrackChunk(new TextEvent { DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)noteOffDelay, TempoMap.Default) }));
-
-            CheckTrackControlValueWithMetadata(
-                midiFile,
-                moveFrom: moveFrom,
-                moveTo: moveTo,
-                expectedMetadata: new (MidiEvent, object)[]
+            CheckPlaybackMetadata(
+                midiFile: new MidiFile(
+                    new TrackChunk(new ControlChangeEvent(controlNumber, controlValue)),
+                    new TrackChunk(new TextEvent { DeltaTime = GetDeltaTime(TimeSpan.FromSeconds(1)) })),
+                actions: new[]
+                {
+                    new PlaybackChangerBase(100,
+                        p => p.MoveToTime((MetricTimeSpan)TimeSpan.FromMilliseconds(500))),
+                },
+                expectedEvents: new (MidiEvent, object)[]
                 {
                     (new ControlChangeEvent(controlNumber, controlValue), 0),
                     (new TextEvent(), 1)
@@ -249,25 +136,26 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var moveFrom = TimeSpan.FromMilliseconds(500);
             var moveTo = TimeSpan.Zero;
 
-            var midiFile = new MidiFile(
-                new TrackChunk(
-                    new ControlChangeEvent(controlNumber1, controlValue1)),
-                new TrackChunk(
-                    new ControlChangeEvent(controlNumber2, controlValue2)
-                    {
-                        Channel = (FourBitNumber)10,
-                        DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)controlChangeDelay, TempoMap.Default)
-                    },
-                    new TextEvent
-                    {
-                        DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)(noteOffDelay - controlChangeDelay), TempoMap.Default)
-                    }));
-
-            CheckTrackControlValueWithMetadata(
-                midiFile,
-                moveFrom: moveFrom,
-                moveTo: moveTo,
-                expectedMetadata: new (MidiEvent, object)[]
+            CheckPlaybackMetadata(
+                midiFile: new MidiFile(
+                    new TrackChunk(
+                        new ControlChangeEvent(controlNumber1, controlValue1)),
+                    new TrackChunk(
+                        new ControlChangeEvent(controlNumber2, controlValue2)
+                        {
+                            Channel = (FourBitNumber)10,
+                            DeltaTime = GetDeltaTime(controlChangeDelay)
+                        },
+                        new TextEvent
+                        {
+                            DeltaTime = GetDeltaTime(noteOffDelay - controlChangeDelay)
+                        })),
+                actions: new[]
+                {
+                    new PlaybackChangerBase(moveFrom,
+                        p => p.MoveToTime((MetricTimeSpan)moveTo)),
+                },
+                expectedEvents: new (MidiEvent, object)[]
                 {
                     (new ControlChangeEvent(controlNumber1, controlValue1), 0),
                     (new ControlChangeEvent(controlNumber1, controlValue1), 0),
@@ -290,21 +178,22 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var moveFrom = TimeSpan.FromMilliseconds(500);
             var moveTo = TimeSpan.Zero;
 
-            var midiFile = new MidiFile(
-                new TrackChunk(
-                    new ControlChangeEvent(controlNumber1, controlValue1)),
-                new TrackChunk(
-                    new ControlChangeEvent(controlNumber2, controlValue2),
-                    new TextEvent
-                    {
-                        DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)noteOffDelay, TempoMap.Default)
-                    }));
-
-            CheckTrackControlValueWithMetadata(
-                midiFile,
-                moveFrom: moveFrom,
-                moveTo: moveTo,
-                expectedMetadata: new (MidiEvent, object)[]
+            CheckPlaybackMetadata(
+                midiFile: new MidiFile(
+                    new TrackChunk(
+                        new ControlChangeEvent(controlNumber1, controlValue1)),
+                    new TrackChunk(
+                        new ControlChangeEvent(controlNumber2, controlValue2),
+                        new TextEvent
+                        {
+                            DeltaTime = GetDeltaTime(noteOffDelay)
+                        })),
+                actions: new[]
+                {
+                    new PlaybackChangerBase(moveFrom,
+                        p => p.MoveToTime((MetricTimeSpan)moveTo)),
+                },
+                expectedEvents: new (MidiEvent, object)[]
                 {
                     (new ControlChangeEvent(controlNumber1, controlValue1), 0),
                     (new ControlChangeEvent(controlNumber2, controlValue2), 1),
@@ -326,24 +215,25 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var moveFrom = TimeSpan.FromMilliseconds(100);
             var moveTo = TimeSpan.FromMilliseconds(500);
 
-            var midiFile = new MidiFile(
-                new TrackChunk(
-                    new ControlChangeEvent(controlNumber, controlValue)
-                    {
-                        Channel = (FourBitNumber)4,
-                        DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)controlChangeTime, TempoMap.Default)
-                    }),
-                new TrackChunk(
-                    new TextEvent
-                    {
-                        DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)(noteOffTime - controlChangeTime), TempoMap.Default)
-                    }));
-
-            CheckTrackControlValueWithMetadata(
-                midiFile,
-                moveFrom: moveFrom,
-                moveTo: moveTo,
-                expectedMetadata: new (MidiEvent, object)[]
+            CheckPlaybackMetadata(
+                midiFile: new MidiFile(
+                    new TrackChunk(
+                        new ControlChangeEvent(controlNumber, controlValue)
+                        {
+                            Channel = (FourBitNumber)4,
+                            DeltaTime = GetDeltaTime(controlChangeTime)
+                        }),
+                    new TrackChunk(
+                        new TextEvent
+                        {
+                            DeltaTime = GetDeltaTime(noteOffTime - controlChangeTime)
+                        })),
+                actions: new[]
+                {
+                    new PlaybackChangerBase(moveFrom,
+                        p => p.MoveToTime((MetricTimeSpan)moveTo)),
+                },
+                expectedEvents: new (MidiEvent, object)[]
                 {
                     (new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, 0),
                     (new TextEvent(), 1)
@@ -362,24 +252,25 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var moveFrom = TimeSpan.FromMilliseconds(500);
             var moveTo = TimeSpan.FromMilliseconds(1000);
 
-            var midiFile = new MidiFile(
-                new TrackChunk(
-                    new ControlChangeEvent(controlNumber, controlValue)
-                    {
-                        Channel = (FourBitNumber)4,
-                        DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)controlChangeTime, TempoMap.Default)
-                    }),
-                new TrackChunk(
-                    new TextEvent
-                    {
-                        DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)(noteOffTime - controlChangeTime), TempoMap.Default)
-                    }));
-
-            CheckTrackControlValueWithMetadata(
-                midiFile,
-                moveFrom: moveFrom,
-                moveTo: moveTo,
-                expectedMetadata: new (MidiEvent, object)[]
+            CheckPlaybackMetadata(
+                midiFile: new MidiFile(
+                    new TrackChunk(
+                        new ControlChangeEvent(controlNumber, controlValue)
+                        {
+                            Channel = (FourBitNumber)4,
+                            DeltaTime = GetDeltaTime(controlChangeTime)
+                        }),
+                    new TrackChunk(
+                        new TextEvent
+                        {
+                            DeltaTime = GetDeltaTime(noteOffTime - controlChangeTime)
+                        })),
+                actions: new[]
+                {
+                    new PlaybackChangerBase(moveFrom,
+                        p => p.MoveToTime((MetricTimeSpan)moveTo)),
+                },
+                expectedEvents: new (MidiEvent, object)[]
                 {
                     (new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, 0),
                     (new TextEvent(), 1)
@@ -398,24 +289,25 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var moveFrom = TimeSpan.FromMilliseconds(500);
             var moveTo = TimeSpan.FromMilliseconds(1000);
 
-            var midiFile = new MidiFile(
-                new TrackChunk(
-                    new ControlChangeEvent(controlNumber, controlValue)
-                    {
-                        Channel = (FourBitNumber)4,
-                        DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)controlChangeTime, TempoMap.Default)
-                    }),
-                new TrackChunk(
-                    new TextEvent
-                    {
-                        DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)(noteOffTime - controlChangeTime), TempoMap.Default)
-                    }));
-
-            CheckTrackControlValueWithMetadata(
-                midiFile,
-                moveFrom: moveFrom,
-                moveTo: moveTo,
-                expectedMetadata: new (MidiEvent, object)[]
+            CheckPlaybackMetadata(
+                midiFile: new MidiFile(
+                    new TrackChunk(
+                        new ControlChangeEvent(controlNumber, controlValue)
+                        {
+                            Channel = (FourBitNumber)4,
+                            DeltaTime = GetDeltaTime(controlChangeTime)
+                        }),
+                    new TrackChunk(
+                        new TextEvent
+                        {
+                            DeltaTime = GetDeltaTime(noteOffTime - controlChangeTime)
+                        })),
+                actions: new[]
+                {
+                    new PlaybackChangerBase(moveFrom,
+                        p => p.MoveToTime((MetricTimeSpan)moveTo)),
+                },
+                expectedEvents: new (MidiEvent, object)[]
                 {
                     (new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, 0),
                     (new TextEvent(), 1)
@@ -434,24 +326,25 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var moveFrom = TimeSpan.FromMilliseconds(1000);
             var moveTo = TimeSpan.FromMilliseconds(1500);
 
-            var midiFile = new MidiFile(
-                new TrackChunk(
-                    new ControlChangeEvent(controlNumber, controlValue)
-                    {
-                        Channel = (FourBitNumber)4,
-                        DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)controlChangeTime, TempoMap.Default)
-                    }),
-                new TrackChunk(
-                    new TextEvent
-                    {
-                        DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)(noteOffTime - controlChangeTime), TempoMap.Default)
-                    }));
-
-            CheckTrackControlValueWithMetadata(
-                midiFile,
-                moveFrom: moveFrom,
-                moveTo: moveTo,
-                expectedMetadata: new (MidiEvent, object)[]
+            CheckPlaybackMetadata(
+                midiFile: new MidiFile(
+                    new TrackChunk(
+                        new ControlChangeEvent(controlNumber, controlValue)
+                        {
+                            Channel = (FourBitNumber)4,
+                            DeltaTime = GetDeltaTime(controlChangeTime)
+                        }),
+                    new TrackChunk(
+                        new TextEvent
+                        {
+                            DeltaTime = GetDeltaTime(noteOffTime - controlChangeTime)
+                        })),
+                actions: new[]
+                {
+                    new PlaybackChangerBase(moveFrom,
+                        p => p.MoveToTime((MetricTimeSpan)moveTo)),
+                },
+                expectedEvents: new (MidiEvent, object)[]
                 {
                     (new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, 0),
                     (new TextEvent(), 1)
@@ -470,24 +363,25 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var moveFrom = TimeSpan.FromMilliseconds(1000);
             var moveTo = TimeSpan.FromMilliseconds(500);
 
-            var midiFile = new MidiFile(
-                new TrackChunk(
-                    new ControlChangeEvent(controlNumber, controlValue)
-                    {
-                        Channel = (FourBitNumber)4,
-                        DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)controlChangeTime, TempoMap.Default)
-                    }),
-                new TrackChunk(
-                    new TextEvent
-                    {
-                        DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)(noteOffTime - controlChangeTime), TempoMap.Default)
-                    }));
-
-            CheckTrackControlValueWithMetadata(
-                midiFile,
-                moveFrom: moveFrom,
-                moveTo: moveTo,
-                expectedMetadata: new (MidiEvent, object)[]
+            CheckPlaybackMetadata(
+                midiFile: new MidiFile(
+                    new TrackChunk(
+                        new ControlChangeEvent(controlNumber, controlValue)
+                        {
+                            Channel = (FourBitNumber)4,
+                            DeltaTime = GetDeltaTime(controlChangeTime)
+                        }),
+                    new TrackChunk(
+                        new TextEvent
+                        {
+                            DeltaTime = GetDeltaTime(noteOffTime - controlChangeTime)
+                        })),
+                actions: new[]
+                {
+                    new PlaybackChangerBase(moveFrom,
+                        p => p.MoveToTime((MetricTimeSpan)moveTo)),
+                },
+                expectedEvents: new (MidiEvent, object)[]
                 {
                     (new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, 0),
                     (new ControlChangeEvent(controlNumber, SevenBitNumber.MinValue) { Channel = (FourBitNumber)4 }, null),
@@ -506,19 +400,20 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var moveFrom = TimeSpan.FromMilliseconds(moveFromMs);
             var moveTo = TimeSpan.FromMilliseconds(500);
 
-            var midiFile = new MidiFile(
-                new TrackChunk(),
-                new TrackChunk(
-                    new TextEvent
-                    {
-                        DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)noteOffDelay, TempoMap.Default)
-                    }));
-
-            CheckTrackPitchValueWithMetadata(
-                midiFile,
-                moveFrom: moveFrom,
-                moveTo: moveTo,
-                expectedMetadata: new (MidiEvent, object)[]
+            CheckPlaybackMetadata(
+                midiFile: new MidiFile(
+                    new TrackChunk(),
+                    new TrackChunk(
+                        new TextEvent
+                        {
+                            DeltaTime = GetDeltaTime(noteOffDelay)
+                        })),
+                actions: new[]
+                {
+                    new PlaybackChangerBase(moveFrom,
+                        p => p.MoveToTime((MetricTimeSpan)moveTo)),
+                },
+                expectedEvents: new (MidiEvent, object)[]
                 {
                     (new TextEvent(), 1)
                 });
@@ -533,19 +428,20 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var moveFrom = TimeSpan.FromMilliseconds(500);
             var moveTo = TimeSpan.Zero;
 
-            var midiFile = new MidiFile(
-                new TrackChunk(),
-                new TrackChunk(
-                    new TextEvent
-                    {
-                        DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)noteOffDelay, TempoMap.Default)
-                    }));
-
-            CheckTrackPitchValueWithMetadata(
-                midiFile,
-                moveFrom: moveFrom,
-                moveTo: moveTo,
-                expectedMetadata: new (MidiEvent, object)[]
+            CheckPlaybackMetadata(
+                midiFile: new MidiFile(
+                    new TrackChunk(),
+                    new TrackChunk(
+                        new TextEvent
+                        {
+                            DeltaTime = GetDeltaTime(noteOffDelay)
+                        })),
+                actions: new[]
+                {
+                    new PlaybackChangerBase(moveFrom,
+                        p => p.MoveToTime((MetricTimeSpan)moveTo)),
+                },
+                expectedEvents: new (MidiEvent, object)[]
                 {
                     (new TextEvent(), 1)
                 });
@@ -561,20 +457,21 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var moveFrom = TimeSpan.FromMilliseconds(100);
             var moveTo = TimeSpan.FromMilliseconds(500);
 
-            var midiFile = new MidiFile(
-                new TrackChunk(
-                    new PitchBendEvent(pitchValue)),
-                new TrackChunk(
-                    new TextEvent
-                    {
-                        DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)noteOffDelay, TempoMap.Default)
-                    }));
-
-            CheckTrackPitchValueWithMetadata(
-                midiFile,
-                moveFrom: moveFrom,
-                moveTo: moveTo,
-                expectedMetadata: new (MidiEvent, object)[]
+            CheckPlaybackMetadata(
+                midiFile: new MidiFile(
+                    new TrackChunk(
+                        new PitchBendEvent(pitchValue)),
+                    new TrackChunk(
+                        new TextEvent
+                        {
+                            DeltaTime = GetDeltaTime(noteOffDelay)
+                        })),
+                actions: new[]
+                {
+                    new PlaybackChangerBase(moveFrom,
+                        p => p.MoveToTime((MetricTimeSpan)moveTo)),
+                },
+                expectedEvents: new (MidiEvent, object)[]
                 {
                     (new PitchBendEvent(pitchValue), 0),
                     (new TextEvent(), 1)
@@ -591,20 +488,21 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var moveFrom = TimeSpan.FromMilliseconds(500);
             var moveTo = TimeSpan.Zero;
 
-            var midiFile = new MidiFile(
-                new TrackChunk(
-                    new PitchBendEvent(pitchValue)),
-                new TrackChunk(
-                    new TextEvent
-                    {
-                        DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)noteOffDelay, TempoMap.Default)
-                    }));
-
-            CheckTrackPitchValueWithMetadata(
-                midiFile,
-                moveFrom: moveFrom,
-                moveTo: moveTo,
-                expectedMetadata: new (MidiEvent, object)[]
+            CheckPlaybackMetadata(
+                midiFile: new MidiFile(
+                    new TrackChunk(
+                        new PitchBendEvent(pitchValue)),
+                    new TrackChunk(
+                        new TextEvent
+                        {
+                            DeltaTime = GetDeltaTime(noteOffDelay)
+                        })),
+                actions: new[]
+                {
+                    new PlaybackChangerBase(moveFrom,
+                        p => p.MoveToTime((MetricTimeSpan)moveTo)),
+                },
+                expectedEvents: new (MidiEvent, object)[]
                 {
                     (new PitchBendEvent(pitchValue), 0),
                     (new PitchBendEvent(pitchValue), 0),
@@ -623,24 +521,25 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var moveFrom = TimeSpan.FromMilliseconds(100);
             var moveTo = TimeSpan.FromMilliseconds(500);
 
-            var midiFile = new MidiFile(
-                new TrackChunk(
-                    new PitchBendEvent(pitchValue)
-                    {
-                        Channel = (FourBitNumber)4,
-                        DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)pitchBendTime, TempoMap.Default)
-                    }),
-                new TrackChunk(
-                    new TextEvent
-                    {
-                        DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)(noteOffTime - pitchBendTime), TempoMap.Default)
-                    }));
-
-            CheckTrackPitchValueWithMetadata(
-                midiFile,
-                moveFrom: moveFrom,
-                moveTo: moveTo,
-                expectedMetadata: new (MidiEvent, object)[]
+            CheckPlaybackMetadata(
+                midiFile: new MidiFile(
+                    new TrackChunk(
+                        new PitchBendEvent(pitchValue)
+                        {
+                            Channel = (FourBitNumber)4,
+                            DeltaTime = GetDeltaTime(pitchBendTime)
+                        }),
+                    new TrackChunk(
+                        new TextEvent
+                        {
+                            DeltaTime = GetDeltaTime((noteOffTime - pitchBendTime))
+                        })),
+                actions: new[]
+                {
+                    new PlaybackChangerBase(moveFrom,
+                        p => p.MoveToTime((MetricTimeSpan)moveTo)),
+                },
+                expectedEvents: new (MidiEvent, object)[]
                 {
                     (new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, 0),
                     (new TextEvent(), 1)
@@ -658,24 +557,25 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var moveFrom = TimeSpan.FromMilliseconds(500);
             var moveTo = TimeSpan.FromMilliseconds(1000);
 
-            var midiFile = new MidiFile(
-                new TrackChunk(
-                    new PitchBendEvent(pitchValue)
-                    {
-                        Channel = (FourBitNumber)4,
-                        DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)pitchBendTime, TempoMap.Default)
-                    }),
-                new TrackChunk(
-                    new TextEvent
-                    {
-                        DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)(noteOffTime - pitchBendTime), TempoMap.Default)
-                    }));
-
-            CheckTrackPitchValueWithMetadata(
-                midiFile,
-                moveFrom: moveFrom,
-                moveTo: moveTo,
-                expectedMetadata: new (MidiEvent, object)[]
+            CheckPlaybackMetadata(
+                midiFile: new MidiFile(
+                    new TrackChunk(
+                        new PitchBendEvent(pitchValue)
+                        {
+                            Channel = (FourBitNumber)4,
+                            DeltaTime = GetDeltaTime(pitchBendTime)
+                        }),
+                    new TrackChunk(
+                        new TextEvent
+                        {
+                            DeltaTime = GetDeltaTime(noteOffTime - pitchBendTime)
+                        })),
+                actions: new[]
+                {
+                    new PlaybackChangerBase(moveFrom,
+                        p => p.MoveToTime((MetricTimeSpan)moveTo)),
+                },
+                expectedEvents: new (MidiEvent, object)[]
                 {
                     (new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, 0),
                     (new TextEvent(), 1)
@@ -693,24 +593,25 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var moveFrom = TimeSpan.FromMilliseconds(1000);
             var moveTo = TimeSpan.FromMilliseconds(1500);
 
-            var midiFile = new MidiFile(
-                new TrackChunk(
-                    new PitchBendEvent(pitchValue)
-                    {
-                        Channel = (FourBitNumber)4,
-                        DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)pitchBendTime, TempoMap.Default)
-                    }),
-                new TrackChunk(
-                    new TextEvent
-                    {
-                        DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)(noteOffTime - pitchBendTime), TempoMap.Default)
-                    }));
-
-            CheckTrackPitchValueWithMetadata(
-                midiFile,
-                moveFrom: moveFrom,
-                moveTo: moveTo,
-                expectedMetadata: new (MidiEvent, object)[]
+            CheckPlaybackMetadata(
+                midiFile: new MidiFile(
+                    new TrackChunk(
+                        new PitchBendEvent(pitchValue)
+                        {
+                            Channel = (FourBitNumber)4,
+                            DeltaTime = GetDeltaTime(pitchBendTime)
+                        }),
+                    new TrackChunk(
+                        new TextEvent
+                        {
+                            DeltaTime = GetDeltaTime(noteOffTime - pitchBendTime)
+                        })),
+                actions: new[]
+                {
+                    new PlaybackChangerBase(moveFrom,
+                        p => p.MoveToTime((MetricTimeSpan)moveTo)),
+                },
+                expectedEvents: new (MidiEvent, object)[]
                 {
                     (new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, 0),
                     (new TextEvent(), 1)
@@ -728,24 +629,25 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var moveFrom = TimeSpan.FromMilliseconds(1000);
             var moveTo = TimeSpan.FromMilliseconds(500);
 
-            var midiFile = new MidiFile(
-                new TrackChunk(
-                    new PitchBendEvent(pitchValue)
-                    {
-                        Channel = (FourBitNumber)4,
-                        DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)pitchBendTime, TempoMap.Default)
-                    }),
-                new TrackChunk(
-                    new TextEvent
-                    {
-                        DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)(noteOffTime - pitchBendTime), TempoMap.Default)
-                    }));
-
-            CheckTrackPitchValueWithMetadata(
-                midiFile,
-                moveFrom: moveFrom,
-                moveTo: moveTo,
-                expectedMetadata: new (MidiEvent, object)[]
+            CheckPlaybackMetadata(
+                midiFile: new MidiFile(
+                    new TrackChunk(
+                        new PitchBendEvent(pitchValue)
+                        {
+                            Channel = (FourBitNumber)4,
+                            DeltaTime = GetDeltaTime(pitchBendTime)
+                        }),
+                    new TrackChunk(
+                        new TextEvent
+                        {
+                            DeltaTime = GetDeltaTime(noteOffTime - pitchBendTime)
+                        })),
+                actions: new[]
+                {
+                    new PlaybackChangerBase(moveFrom,
+                        p => p.MoveToTime((MetricTimeSpan)moveTo)),
+                },
+                expectedEvents: new (MidiEvent, object)[]
                 {
                     (new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, 0),
                     (new PitchBendEvent() { Channel = (FourBitNumber)4 }, null),
@@ -764,19 +666,20 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var moveFrom = TimeSpan.FromMilliseconds(moveFromMs);
             var moveTo = TimeSpan.FromMilliseconds(500);
 
-            var midiFile = new MidiFile(
-                new TrackChunk(),
-                new TrackChunk(
-                    new TextEvent
-                    {
-                        DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)noteOffDelay, TempoMap.Default)
-                    }));
-
-            CheckTrackProgramWithMetadata(
-                midiFile,
-                moveFrom: moveFrom,
-                moveTo: moveTo,
-                expectedMetadata: new (MidiEvent, object)[]
+            CheckPlaybackMetadata(
+                midiFile: new MidiFile(
+                    new TrackChunk(),
+                    new TrackChunk(
+                        new TextEvent
+                        {
+                            DeltaTime = GetDeltaTime(noteOffDelay)
+                        })),
+                actions: new[]
+                {
+                    new PlaybackChangerBase(moveFrom,
+                        p => p.MoveToTime((MetricTimeSpan)moveTo)),
+                },
+                expectedEvents: new (MidiEvent, object)[]
                 {
                     (new TextEvent(), 1)
                 });
@@ -791,19 +694,20 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var moveFrom = TimeSpan.FromMilliseconds(500);
             var moveTo = TimeSpan.Zero;
 
-            var midiFile = new MidiFile(
-                new TrackChunk(),
-                new TrackChunk(
-                    new TextEvent
-                    {
-                        DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)noteOffDelay, TempoMap.Default)
-                    }));
-
-            CheckTrackProgramWithMetadata(
-                midiFile,
-                moveFrom: moveFrom,
-                moveTo: moveTo,
-                expectedMetadata: new (MidiEvent, object)[]
+            CheckPlaybackMetadata(
+                midiFile: new MidiFile(
+                    new TrackChunk(),
+                    new TrackChunk(
+                        new TextEvent
+                        {
+                            DeltaTime = GetDeltaTime(noteOffDelay)
+                        })),
+                actions: new[]
+                {
+                    new PlaybackChangerBase(moveFrom,
+                        p => p.MoveToTime((MetricTimeSpan)moveTo)),
+                },
+                expectedEvents: new (MidiEvent, object)[]
                 {
                     (new TextEvent(), 1)
                 });
@@ -819,20 +723,21 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var moveFrom = TimeSpan.FromMilliseconds(100);
             var moveTo = TimeSpan.FromMilliseconds(500);
 
-            var midiFile = new MidiFile(
-                new TrackChunk(
-                    new ProgramChangeEvent(programNumber)),
-                new TrackChunk(
-                    new TextEvent
-                    {
-                        DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)noteOffDelay, TempoMap.Default)
-                    }));
-
-            CheckTrackProgramWithMetadata(
-                midiFile,
-                moveFrom: moveFrom,
-                moveTo: moveTo,
-                expectedMetadata: new (MidiEvent, object)[]
+            CheckPlaybackMetadata(
+                midiFile: new MidiFile(
+                    new TrackChunk(
+                        new ProgramChangeEvent(programNumber)),
+                    new TrackChunk(
+                        new TextEvent
+                        {
+                            DeltaTime = GetDeltaTime(noteOffDelay)
+                        })),
+                actions: new[]
+                {
+                    new PlaybackChangerBase(moveFrom,
+                        p => p.MoveToTime((MetricTimeSpan)moveTo)),
+                },
+                expectedEvents: new (MidiEvent, object)[]
                 {
                     (new ProgramChangeEvent(programNumber), 0),
                     (new TextEvent(), 1)
@@ -849,20 +754,21 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var moveFrom = TimeSpan.FromMilliseconds(500);
             var moveTo = TimeSpan.Zero;
 
-            var midiFile = new MidiFile(
-                new TrackChunk(
-                    new ProgramChangeEvent(programNumber)),
-                new TrackChunk(
-                    new TextEvent
-                    {
-                        DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)noteOffDelay, TempoMap.Default)
-                    }));
-
-            CheckTrackProgramWithMetadata(
-                midiFile,
-                moveFrom: moveFrom,
-                moveTo: moveTo,
-                expectedMetadata: new (MidiEvent, object)[]
+            CheckPlaybackMetadata(
+                midiFile: new MidiFile(
+                    new TrackChunk(
+                        new ProgramChangeEvent(programNumber)),
+                    new TrackChunk(
+                        new TextEvent
+                        {
+                            DeltaTime = GetDeltaTime(noteOffDelay)
+                        })),
+                actions: new[]
+                {
+                    new PlaybackChangerBase(moveFrom,
+                        p => p.MoveToTime((MetricTimeSpan)moveTo)),
+                },
+                expectedEvents: new (MidiEvent, object)[]
                 {
                     (new ProgramChangeEvent(programNumber), 0),
                     (new ProgramChangeEvent(programNumber), 0),
@@ -881,24 +787,25 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var moveFrom = TimeSpan.FromMilliseconds(100);
             var moveTo = TimeSpan.FromMilliseconds(500);
 
-            var midiFile = new MidiFile(
-                new TrackChunk(
-                    new ProgramChangeEvent(programNumber)
-                    {
-                        Channel = (FourBitNumber)4,
-                        DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)programChangeTime, TempoMap.Default)
-                    }),
-                new TrackChunk(
-                    new TextEvent
-                    {
-                        DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)(noteOffTime - programChangeTime), TempoMap.Default)
-                    }));
-
-            CheckTrackProgramWithMetadata(
-                midiFile,
-                moveFrom: moveFrom,
-                moveTo: moveTo,
-                expectedMetadata: new (MidiEvent, object)[]
+            CheckPlaybackMetadata(
+                midiFile: new MidiFile(
+                    new TrackChunk(
+                        new ProgramChangeEvent(programNumber)
+                        {
+                            Channel = (FourBitNumber)4,
+                            DeltaTime = GetDeltaTime(programChangeTime)
+                        }),
+                    new TrackChunk(
+                        new TextEvent
+                        {
+                            DeltaTime = GetDeltaTime(noteOffTime - programChangeTime)
+                        })),
+                actions: new[]
+                {
+                    new PlaybackChangerBase(moveFrom,
+                        p => p.MoveToTime((MetricTimeSpan)moveTo)),
+                },
+                expectedEvents: new (MidiEvent, object)[]
                 {
                     (new ProgramChangeEvent(programNumber) { Channel = (FourBitNumber)4 }, 0),
                     (new TextEvent(), 1)
@@ -916,24 +823,25 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var moveFrom = TimeSpan.FromMilliseconds(500);
             var moveTo = TimeSpan.FromMilliseconds(1000);
 
-            var midiFile = new MidiFile(
-                new TrackChunk(
-                    new ProgramChangeEvent(programNumber)
-                    {
-                        Channel = (FourBitNumber)4,
-                        DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)programChangeTime, TempoMap.Default)
-                    }),
-                new TrackChunk(
-                    new TextEvent
-                    {
-                        DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)(noteOffTime - programChangeTime), TempoMap.Default)
-                    }));
-
-            CheckTrackProgramWithMetadata(
-                midiFile,
-                moveFrom: moveFrom,
-                moveTo: moveTo,
-                expectedMetadata: new (MidiEvent, object)[]
+            CheckPlaybackMetadata(
+                midiFile: new MidiFile(
+                    new TrackChunk(
+                        new ProgramChangeEvent(programNumber)
+                        {
+                            Channel = (FourBitNumber)4,
+                            DeltaTime = GetDeltaTime(programChangeTime)
+                        }),
+                    new TrackChunk(
+                        new TextEvent
+                        {
+                            DeltaTime = GetDeltaTime(noteOffTime - programChangeTime)
+                        })),
+                actions: new[]
+                {
+                    new PlaybackChangerBase(moveFrom,
+                        p => p.MoveToTime((MetricTimeSpan)moveTo)),
+                },
+                expectedEvents: new (MidiEvent, object)[]
                 {
                     (new ProgramChangeEvent(programNumber) { Channel = (FourBitNumber)4 }, 0),
                     (new TextEvent(), 1)
@@ -951,24 +859,25 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var moveFrom = TimeSpan.FromMilliseconds(1000);
             var moveTo = TimeSpan.FromMilliseconds(1500);
 
-            var midiFile = new MidiFile(
-                new TrackChunk(
-                    new ProgramChangeEvent(programNumber)
-                    {
-                        Channel = (FourBitNumber)4,
-                        DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)programChangeTime, TempoMap.Default)
-                    }),
-                new TrackChunk(
-                    new TextEvent
-                    {
-                        DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)(noteOffTime - programChangeTime), TempoMap.Default)
-                    }));
-
-            CheckTrackProgramWithMetadata(
-                midiFile,
-                moveFrom: moveFrom,
-                moveTo: moveTo,
-                expectedMetadata: new (MidiEvent, object)[]
+            CheckPlaybackMetadata(
+                midiFile: new MidiFile(
+                    new TrackChunk(
+                        new ProgramChangeEvent(programNumber)
+                        {
+                            Channel = (FourBitNumber)4,
+                            DeltaTime = GetDeltaTime(programChangeTime)
+                        }),
+                    new TrackChunk(
+                        new TextEvent
+                        {
+                            DeltaTime = GetDeltaTime(noteOffTime - programChangeTime)
+                        })),
+                actions: new[]
+                {
+                    new PlaybackChangerBase(moveFrom,
+                        p => p.MoveToTime((MetricTimeSpan)moveTo)),
+                },
+                expectedEvents: new (MidiEvent, object)[]
                 {
                     (new ProgramChangeEvent(programNumber) { Channel = (FourBitNumber)4 }, 0),
                     (new TextEvent(), 1)
@@ -986,24 +895,25 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var moveFrom = TimeSpan.FromMilliseconds(1000);
             var moveTo = TimeSpan.FromMilliseconds(500);
 
-            var midiFile = new MidiFile(
-                new TrackChunk(
-                    new ProgramChangeEvent(programNumber)
-                    {
-                        Channel = (FourBitNumber)4,
-                        DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)programChangeTime, TempoMap.Default)
-                    }),
-                new TrackChunk(
-                    new TextEvent
-                    {
-                        DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)(noteOffTime - programChangeTime), TempoMap.Default)
-                    }));
-
-            CheckTrackProgramWithMetadata(
-                midiFile,
-                moveFrom: moveFrom,
-                moveTo: moveTo,
-                expectedMetadata: new (MidiEvent, object)[]
+            CheckPlaybackMetadata(
+                midiFile: new MidiFile(
+                    new TrackChunk(
+                        new ProgramChangeEvent(programNumber)
+                        {
+                            Channel = (FourBitNumber)4,
+                            DeltaTime = GetDeltaTime(programChangeTime)
+                        }),
+                    new TrackChunk(
+                        new TextEvent
+                        {
+                            DeltaTime = GetDeltaTime(noteOffTime - programChangeTime)
+                        })),
+                actions: new[]
+                {
+                    new PlaybackChangerBase(moveFrom,
+                        p => p.MoveToTime((MetricTimeSpan)moveTo)),
+                },
+                expectedEvents: new (MidiEvent, object)[]
                 {
                     (new ProgramChangeEvent(programNumber) { Channel = (FourBitNumber)4 }, 0),
                     (new ProgramChangeEvent(SevenBitNumber.MinValue) { Channel = (FourBitNumber)4 }, null),
@@ -1025,27 +935,29 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var moveFrom = TimeSpan.FromMilliseconds(500);
             var moveTo = TimeSpan.FromMilliseconds(1500);
 
-            var midiFile = new MidiFile(
-                new TrackChunk(
-                    new NoteOnEvent(noteNumber, noteOnVelocity)
-                    {
-                        DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)noteOnDelay, TempoMap.Default)
-                    }),
-                new TrackChunk(
-                    new NoteOffEvent(noteNumber, noteOffVelocity)
-                    {
-                        DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)(noteOnDelay + noteOffDelay), TempoMap.Default)
-                    }));
-
-            CheckTrackNotesWithMetadata(
-                midiFile,
-                moveFrom: moveFrom,
-                moveTo: moveTo,
-                expectedMetadata: new (MidiEvent, object)[]
+            CheckPlaybackMetadata(
+                midiFile: new MidiFile(
+                    new TrackChunk(
+                        new NoteOnEvent(noteNumber, noteOnVelocity)
+                        {
+                            DeltaTime = GetDeltaTime(noteOnDelay)
+                        }),
+                    new TrackChunk(
+                        new NoteOffEvent(noteNumber, noteOffVelocity)
+                        {
+                            DeltaTime = GetDeltaTime(noteOnDelay + noteOffDelay)
+                        })),
+                actions: new[]
+                {
+                    new PlaybackChangerBase(moveFrom,
+                        p => p.MoveToTime((MetricTimeSpan)moveTo)),
+                },
+                expectedEvents: new (MidiEvent, object)[]
                 {
                     (new NoteOnEvent(noteNumber, noteOnVelocity), 0),
                     (new NoteOffEvent(noteNumber, noteOffVelocity), 1)
-                });
+                },
+                setupPlayback: playback => playback.TrackNotes = true);
         }
 
         [Retry(RetriesNumber)]
@@ -1062,34 +974,36 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var moveFrom = TimeSpan.FromSeconds(1);
             var moveTo = TimeSpan.FromMilliseconds(500);
 
-            var midiFile = new MidiFile(
-                new TrackChunk(
-                    new NoteOnEvent(noteNumber, noteOnVelocity)
-                    {
-                        DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)noteOnDelay, TempoMap.Default)
-                    }),
-                new TrackChunk(
-                    new NoteOffEvent(noteNumber, noteOffVelocity)
-                    {
-                        DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)(noteOnDelay + noteOffDelay), TempoMap.Default)
-                    },
-                    new PitchBendEvent()
-                    {
-                        DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)pitchBendDelay, TempoMap.Default)
-                    }));
-
-            CheckTrackNotesWithMetadata(
-                midiFile,
-                moveFrom: moveFrom,
-                moveTo: moveTo,
-                expectedMetadata: new (MidiEvent, object)[]
+            CheckPlaybackMetadata(
+                midiFile: new MidiFile(
+                    new TrackChunk(
+                        new NoteOnEvent(noteNumber, noteOnVelocity)
+                        {
+                            DeltaTime = GetDeltaTime(noteOnDelay)
+                        }),
+                    new TrackChunk(
+                        new NoteOffEvent(noteNumber, noteOffVelocity)
+                        {
+                            DeltaTime = GetDeltaTime(noteOnDelay + noteOffDelay)
+                        },
+                        new PitchBendEvent()
+                        {
+                            DeltaTime = GetDeltaTime(pitchBendDelay)
+                        })),
+                actions: new[]
+                {
+                    new PlaybackChangerBase(moveFrom,
+                        p => p.MoveToTime((MetricTimeSpan)moveTo)),
+                },
+                expectedEvents: new (MidiEvent, object)[]
                 {
                     (new NoteOnEvent(noteNumber, noteOnVelocity), 0),
                     (new NoteOffEvent(noteNumber, noteOffVelocity), 1),
                     (new NoteOnEvent(noteNumber, noteOnVelocity), 0),
                     (new NoteOffEvent(noteNumber, noteOffVelocity), 1),
                     (new PitchBendEvent(), 1)
-                });
+                },
+                setupPlayback: playback => playback.TrackNotes = true);
         }
 
         [Retry(RetriesNumber)]
@@ -1106,32 +1020,34 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var moveFrom = TimeSpan.FromMilliseconds(500);
             var moveTo = TimeSpan.FromMilliseconds(1000);
 
-            var midiFile = new MidiFile(
-                new TrackChunk(
-                    new NoteOnEvent(noteNumber, noteOnVelocity)
-                    {
-                        DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)noteOnDelay, TempoMap.Default)
-                    }),
-                new TrackChunk(
-                    new NoteOffEvent(noteNumber, noteOffVelocity)
-                    {
-                        DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)(noteOnDelay + noteOffDelay), TempoMap.Default)
-                    },
-                    new PitchBendEvent()
-                    {
-                        DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)pitchBendDelay, TempoMap.Default)
-                    }));
-
-            CheckTrackNotesWithMetadata(
-                midiFile,
-                moveFrom: moveFrom,
-                moveTo: moveTo,
-                expectedMetadata: new (MidiEvent, object)[]
+            CheckPlaybackMetadata(
+                midiFile: new MidiFile(
+                    new TrackChunk(
+                        new NoteOnEvent(noteNumber, noteOnVelocity)
+                        {
+                            DeltaTime = GetDeltaTime(noteOnDelay)
+                        }),
+                    new TrackChunk(
+                        new NoteOffEvent(noteNumber, noteOffVelocity)
+                        {
+                            DeltaTime = GetDeltaTime(noteOnDelay + noteOffDelay)
+                        },
+                        new PitchBendEvent()
+                        {
+                            DeltaTime = GetDeltaTime(pitchBendDelay)
+                        })),
+                actions: new[]
+                {
+                    new PlaybackChangerBase(moveFrom,
+                        p => p.MoveToTime((MetricTimeSpan)moveTo)),
+                },
+                expectedEvents: new (MidiEvent, object)[]
                 {
                     (new NoteOnEvent(noteNumber, noteOnVelocity), 0),
                     (new NoteOffEvent(noteNumber, noteOffVelocity), 1),
                     (new PitchBendEvent(), 1)
-                });
+                },
+                setupPlayback: playback => playback.TrackNotes = true);
         }
 
         [Retry(RetriesNumber)]
@@ -1147,29 +1063,31 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var moveFrom = TimeSpan.FromMilliseconds(1200);
             var moveTo = TimeSpan.FromMilliseconds(700);
 
-            var midiFile = new MidiFile(
-                new TrackChunk(
-                    new NoteOnEvent(noteNumber, noteOnVelocity)
-                    {
-                        DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)noteOnDelay, TempoMap.Default)
-                    }),
-                new TrackChunk(
-                    new NoteOffEvent(noteNumber, noteOffVelocity)
-                    {
-                        DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)(noteOnDelay + noteOffDelay), TempoMap.Default)
-                    }));
-
-            CheckTrackNotesWithMetadata(
-                midiFile,
-                moveFrom: moveFrom,
-                moveTo: moveTo,
-                expectedMetadata: new (MidiEvent, object)[]
+            CheckPlaybackMetadata(
+                midiFile: new MidiFile(
+                    new TrackChunk(
+                        new NoteOnEvent(noteNumber, noteOnVelocity)
+                        {
+                            DeltaTime = GetDeltaTime(noteOnDelay)
+                        }),
+                    new TrackChunk(
+                        new NoteOffEvent(noteNumber, noteOffVelocity)
+                        {
+                            DeltaTime = GetDeltaTime(noteOnDelay + noteOffDelay)
+                        })),
+                actions: new[]
+                {
+                    new PlaybackChangerBase(moveFrom,
+                        p => p.MoveToTime((MetricTimeSpan)moveTo)),
+                },
+                expectedEvents: new (MidiEvent, object)[]
                 {
                     (new NoteOnEvent(noteNumber, noteOnVelocity), 0),
                     (new NoteOffEvent(noteNumber, noteOffVelocity), 1),
                     (new NoteOnEvent(noteNumber, noteOnVelocity), 0),
                     (new NoteOffEvent(noteNumber, noteOffVelocity), 1)
-                });
+                },
+                setupPlayback: playback => playback.TrackNotes = true);
         }
 
         [Retry(RetriesNumber)]
@@ -1185,27 +1103,29 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var moveFrom = TimeSpan.FromMilliseconds(200);
             var moveTo = TimeSpan.FromMilliseconds(700);
 
-            var midiFile = new MidiFile(
-                new TrackChunk(
-                    new NoteOnEvent(noteNumber, noteOnVelocity)
-                    {
-                        DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)noteOnDelay, TempoMap.Default)
-                    }),
-                new TrackChunk(
-                    new NoteOffEvent(noteNumber, noteOffVelocity)
-                    {
-                        DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)(noteOnDelay + noteOffDelay), TempoMap.Default)
-                    }));
-
-            CheckTrackNotesWithMetadata(
-                midiFile,
-                moveFrom: moveFrom,
-                moveTo: moveTo,
-                expectedMetadata: new (MidiEvent, object)[]
+            CheckPlaybackMetadata(
+                midiFile: new MidiFile(
+                    new TrackChunk(
+                        new NoteOnEvent(noteNumber, noteOnVelocity)
+                        {
+                            DeltaTime = GetDeltaTime(noteOnDelay)
+                        }),
+                    new TrackChunk(
+                        new NoteOffEvent(noteNumber, noteOffVelocity)
+                        {
+                            DeltaTime = GetDeltaTime(noteOnDelay + noteOffDelay)
+                        })),
+                actions: new[]
+                {
+                    new PlaybackChangerBase(moveFrom,
+                        p => p.MoveToTime((MetricTimeSpan)moveTo)),
+                },
+                expectedEvents: new (MidiEvent, object)[]
                 {
                     (new NoteOnEvent(noteNumber, noteOnVelocity), 0),
                     (new NoteOffEvent(noteNumber, noteOffVelocity), 1),
-                });
+                },
+                setupPlayback: playback => playback.TrackNotes = true);
         }
 
         [Retry(RetriesNumber)]
@@ -1221,27 +1141,29 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var moveFrom = TimeSpan.FromMilliseconds(700);
             var moveTo = TimeSpan.FromMilliseconds(400);
 
-            var midiFile = new MidiFile(
-                new TrackChunk(
-                    new NoteOnEvent(noteNumber, noteOnVelocity)
-                    {
-                        DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)noteOnDelay, TempoMap.Default)
-                    }),
-                new TrackChunk(
-                    new NoteOffEvent(noteNumber, noteOffVelocity)
-                    {
-                        DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)(noteOnDelay + noteOffDelay), TempoMap.Default)
-                    }));
-
-            CheckTrackNotesWithMetadata(
-                midiFile,
-                moveFrom: moveFrom,
-                moveTo: moveTo,
-                expectedMetadata: new (MidiEvent, object)[]
+            CheckPlaybackMetadata(
+                midiFile: new MidiFile(
+                    new TrackChunk(
+                        new NoteOnEvent(noteNumber, noteOnVelocity)
+                        {
+                            DeltaTime = GetDeltaTime(noteOnDelay)
+                        }),
+                    new TrackChunk(
+                        new NoteOffEvent(noteNumber, noteOffVelocity)
+                        {
+                            DeltaTime = GetDeltaTime(noteOnDelay + noteOffDelay)
+                        })),
+                actions: new[]
+                {
+                    new PlaybackChangerBase(moveFrom,
+                        p => p.MoveToTime((MetricTimeSpan)moveTo)),
+                },
+                expectedEvents: new (MidiEvent, object)[]
                 {
                     (new NoteOnEvent(noteNumber, noteOnVelocity), 0),
                     (new NoteOffEvent(noteNumber, noteOffVelocity), 1),
-                });
+                },
+                setupPlayback: playback => playback.TrackNotes = true);
         }
 
         [Retry(RetriesNumber)]
@@ -1263,37 +1185,39 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var moveFrom = TimeSpan.FromMilliseconds(500);
             var moveTo = TimeSpan.FromMilliseconds(1400);
 
-            var midiFile = new MidiFile(
-                new TrackChunk(
-                    new NoteOnEvent(noteNumber1, noteOnVelocity1)
-                    {
-                        DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)noteOnDelay1, TempoMap.Default)
-                    },
-                    new NoteOffEvent(noteNumber1, noteOffVelocity1)
-                    {
-                        DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)noteOffDelay1, TempoMap.Default)
-                    }),
-                new TrackChunk(
-                    new NoteOnEvent(noteNumber2, noteOnVelocity2)
-                    {
-                        DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)(noteOnDelay1 + noteOffDelay1 + noteOnDelay2), TempoMap.Default)
-                    },
-                    new NoteOffEvent(noteNumber2, noteOffVelocity2)
-                    {
-                        DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)noteOffDelay2, TempoMap.Default)
-                    }));
-
-            CheckTrackNotesWithMetadata(
-                midiFile,
-                moveFrom: moveFrom,
-                moveTo: moveTo,
-                expectedMetadata: new (MidiEvent, object)[]
+            CheckPlaybackMetadata(
+                midiFile: new MidiFile(
+                    new TrackChunk(
+                        new NoteOnEvent(noteNumber1, noteOnVelocity1)
+                        {
+                            DeltaTime = GetDeltaTime(noteOnDelay1)
+                        },
+                        new NoteOffEvent(noteNumber1, noteOffVelocity1)
+                        {
+                            DeltaTime = GetDeltaTime(noteOffDelay1)
+                        }),
+                    new TrackChunk(
+                        new NoteOnEvent(noteNumber2, noteOnVelocity2)
+                        {
+                            DeltaTime = GetDeltaTime(noteOnDelay1 + noteOffDelay1 + noteOnDelay2)
+                        },
+                        new NoteOffEvent(noteNumber2, noteOffVelocity2)
+                        {
+                            DeltaTime = GetDeltaTime(noteOffDelay2)
+                        })),
+                actions: new[]
+                {
+                    new PlaybackChangerBase(moveFrom,
+                        p => p.MoveToTime((MetricTimeSpan)moveTo)),
+                },
+                expectedEvents: new (MidiEvent, object)[]
                 {
                     (new NoteOnEvent(noteNumber1, noteOnVelocity1), 0),
                     (new NoteOffEvent(noteNumber1, noteOffVelocity1), 0),
                     (new NoteOnEvent(noteNumber2, noteOnVelocity2), 1),
                     (new NoteOffEvent(noteNumber2, noteOffVelocity2), 1)
-                });
+                },
+                setupPlayback: playback => playback.TrackNotes = true);
         }
 
         [Retry(RetriesNumber)]
@@ -1315,31 +1239,32 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var moveFrom = TimeSpan.FromMilliseconds(1400);
             var moveTo = TimeSpan.FromMilliseconds(500);
 
-            var midiFile = new MidiFile(
-                new TrackChunk(
-                    new NoteOnEvent(noteNumber1, noteOnVelocity1)
-                    {
-                        DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)noteOnDelay1, TempoMap.Default)
-                    },
-                    new NoteOffEvent(noteNumber1, noteOffVelocity1)
-                    {
-                        DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)noteOffDelay1, TempoMap.Default)
-                    }),
-                new TrackChunk(
-                    new NoteOnEvent(noteNumber2, noteOnVelocity2)
-                    {
-                        DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)(noteOnDelay1 + noteOffDelay1 + noteOnDelay2), TempoMap.Default)
-                    },
-                    new NoteOffEvent(noteNumber2, noteOffVelocity2)
-                    {
-                        DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)noteOffDelay2, TempoMap.Default)
-                    }));
-
-            CheckTrackNotesWithMetadata(
-                midiFile,
-                moveFrom: moveFrom,
-                moveTo: moveTo,
-                expectedMetadata: new (MidiEvent, object)[]
+            CheckPlaybackMetadata(
+                midiFile: new MidiFile(
+                    new TrackChunk(
+                        new NoteOnEvent(noteNumber1, noteOnVelocity1)
+                        {
+                            DeltaTime = GetDeltaTime(noteOnDelay1)
+                        },
+                        new NoteOffEvent(noteNumber1, noteOffVelocity1)
+                        {
+                            DeltaTime = GetDeltaTime(noteOffDelay1)
+                        }),
+                    new TrackChunk(
+                        new NoteOnEvent(noteNumber2, noteOnVelocity2)
+                        {
+                            DeltaTime = GetDeltaTime(noteOnDelay1 + noteOffDelay1 + noteOnDelay2)
+                        },
+                        new NoteOffEvent(noteNumber2, noteOffVelocity2)
+                        {
+                            DeltaTime = GetDeltaTime(noteOffDelay2)
+                        })),
+                actions: new[]
+                {
+                    new PlaybackChangerBase(moveFrom,
+                        p => p.MoveToTime((MetricTimeSpan)moveTo)),
+                },
+                expectedEvents: new (MidiEvent, object)[]
                 {
                     (new NoteOnEvent(noteNumber1, noteOnVelocity1), 0),
                     (new NoteOffEvent(noteNumber1, noteOffVelocity1), 0),
@@ -1349,7 +1274,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     (new NoteOffEvent(noteNumber1, noteOffVelocity1), 0),
                     (new NoteOnEvent(noteNumber2, noteOnVelocity2), 1),
                     (new NoteOffEvent(noteNumber2, noteOffVelocity2), 1)
-                });
+                },
+                setupPlayback: playback => playback.TrackNotes = true);
         }
 
         [Retry(RetriesNumber)]
@@ -1362,29 +1288,36 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var stopAfter = TimeSpan.FromSeconds(1);
             var stopPeriod = TimeSpan.Zero;
 
-            var midiFile = new MidiFile(
-                new TrackChunk(
-                    new NoteOnEvent()
-                    {
-                        DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)noteOnDelay, TempoMap.Default)
-                    }),
-                new TrackChunk(
-                    new NoteOffEvent()
-                    {
-                        DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)(noteOnDelay + noteOffDelay), TempoMap.Default)
-                    }));
-
-            CheckTrackNotesInterruptingNotesWithMetadata(
-                midiFile,
-                stopAfter: stopAfter,
-                stopPeriod: stopPeriod,
-                interruptNotesOnStop: true,
-                expectedMetadata: new (MidiEvent, object)[]
+            CheckPlaybackMetadata(
+                midiFile: new MidiFile(
+                    new TrackChunk(
+                        new NoteOnEvent()
+                        {
+                            DeltaTime = GetDeltaTime(noteOnDelay)
+                        }),
+                    new TrackChunk(
+                        new NoteOffEvent()
+                        {
+                            DeltaTime = GetDeltaTime(noteOnDelay + noteOffDelay)
+                        })),
+                actions: new[]
+                {
+                    new PlaybackChangerBase(stopAfter,
+                        p => p.Stop()),
+                    new PlaybackChangerBase(stopPeriod,
+                        p => p.Start()),
+                },
+                expectedEvents: new (MidiEvent, object)[]
                 {
                     (new NoteOnEvent(), 0),
                     (new NoteOffEvent(), 1),
                     (new NoteOnEvent(), 0),
                     (new NoteOffEvent(), 1)
+                },
+                setupPlayback: playback =>
+                {
+                    playback.TrackNotes = true;
+                    playback.InterruptNotesOnStop = true;
                 });
         }
 
@@ -1398,27 +1331,34 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var stopAfter = TimeSpan.FromSeconds(1);
             var stopPeriod = TimeSpan.Zero;
 
-            var midiFile = new MidiFile(
-                new TrackChunk(
-                    new NoteOnEvent()
-                    {
-                        DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)noteOnDelay, TempoMap.Default)
-                    }),
-                new TrackChunk(
-                    new NoteOffEvent()
-                    {
-                        DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)(noteOnDelay + noteOffDelay), TempoMap.Default)
-                    }));
-
-            CheckTrackNotesInterruptingNotesWithMetadata(
-                midiFile,
-                stopAfter: stopAfter,
-                stopPeriod: stopPeriod,
-                interruptNotesOnStop: false,
-                expectedMetadata: new (MidiEvent, object)[]
+            CheckPlaybackMetadata(
+                midiFile: new MidiFile(
+                    new TrackChunk(
+                        new NoteOnEvent()
+                        {
+                            DeltaTime = GetDeltaTime(noteOnDelay)
+                        }),
+                    new TrackChunk(
+                        new NoteOffEvent()
+                        {
+                            DeltaTime = GetDeltaTime(noteOnDelay + noteOffDelay)
+                        })),
+                actions: new[]
+                {
+                    new PlaybackChangerBase(stopAfter,
+                        p => p.Stop()),
+                    new PlaybackChangerBase(stopPeriod,
+                        p => p.Start()),
+                },
+                expectedEvents: new (MidiEvent, object)[]
                 {
                     (new NoteOnEvent(), 0),
                     (new NoteOffEvent(), 1)
+                },
+                setupPlayback: playback =>
+                {
+                    playback.TrackNotes = true;
+                    playback.InterruptNotesOnStop = false;
                 });
         }
 
@@ -1426,61 +1366,71 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         public void CheckPlaybackMetadata_NoteCallback_ReturnNull_ReturnSkipNote()
         {
-            var midiFile = new MidiFile(
-                new TrackChunk(
-                    new NoteOnEvent(),
-                    new NoteOffEvent()
-                    {
-                        DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)TimeSpan.FromSeconds(1), TempoMap.Default)
-                    }),
-                new TrackChunk(
-                    new NoteOnEvent((SevenBitNumber)100, (SevenBitNumber)80)
-                    {
-                        DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)(TimeSpan.FromSeconds(1) + TimeSpan.FromMilliseconds(500)), TempoMap.Default)
-                    },
-                    new NoteOffEvent((SevenBitNumber)100, (SevenBitNumber)0)
-                    {
-                        DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)TimeSpan.FromMilliseconds(500), TempoMap.Default)
-                    }));
-
-            CheckNoteCallbackWithMetadata(
-                midiFile,
-                changeCallbackAfter: TimeSpan.FromMilliseconds(500),
-                noteCallback: (d, rt, rl, t) => null,
-                secondNoteCallback: (d, rt, rl, t) => NotePlaybackData.SkipNote,
-                expectedMetadata: new (MidiEvent, object)[0]);
+            CheckPlaybackMetadata(
+                midiFile: new MidiFile(
+                    new TrackChunk(
+                        new NoteOnEvent(),
+                        new NoteOffEvent()
+                        {
+                            DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)TimeSpan.FromSeconds(1), TempoMap.Default)
+                        }),
+                    new TrackChunk(
+                        new NoteOnEvent((SevenBitNumber)100, (SevenBitNumber)80)
+                        {
+                            DeltaTime = GetDeltaTime(TimeSpan.FromSeconds(1) + TimeSpan.FromMilliseconds(500))
+                        },
+                        new NoteOffEvent((SevenBitNumber)100, (SevenBitNumber)0)
+                        {
+                            DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)TimeSpan.FromMilliseconds(500), TempoMap.Default)
+                        })),
+                actions: new[]
+                {
+                    new PlaybackChangerBase(TimeSpan.FromMilliseconds(500),
+                        p => p.NoteCallback = (d, rt, rl, t) => NotePlaybackData.SkipNote),
+                },
+                expectedEvents: new (MidiEvent, object)[0],
+                setupPlayback: playback =>
+                {
+                    playback.TrackNotes = true;
+                    playback.NoteCallback = (d, rt, rl, t) => null;
+                });
         }
 
         [Retry(RetriesNumber)]
         [Test]
         public void CheckPlaybackMetadata_NoteCallback_ReturnNull_ReturnOriginal()
         {
-            var midiFile = new MidiFile(
-                new TrackChunk(
-                    new NoteOnEvent(),
-                    new NoteOffEvent()
-                    {
-                        DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)TimeSpan.FromSeconds(1), TempoMap.Default)
-                    }),
-                new TrackChunk(
-                    new NoteOnEvent((SevenBitNumber)100, (SevenBitNumber)80)
-                    {
-                        DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)(TimeSpan.FromSeconds(1) + TimeSpan.FromMilliseconds(500)), TempoMap.Default)
-                    },
-                    new NoteOffEvent((SevenBitNumber)100, (SevenBitNumber)0)
-                    {
-                        DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)TimeSpan.FromMilliseconds(500), TempoMap.Default)
-                    }));
-
-            CheckNoteCallbackWithMetadata(
-                midiFile,
-                changeCallbackAfter: TimeSpan.FromMilliseconds(500),
-                noteCallback: (d, rt, rl, t) => null,
-                secondNoteCallback: (d, rt, rl, t) => d,
-                expectedMetadata: new (MidiEvent, object)[]
+            CheckPlaybackMetadata(
+                midiFile: new MidiFile(
+                    new TrackChunk(
+                        new NoteOnEvent(),
+                        new NoteOffEvent()
+                        {
+                            DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)TimeSpan.FromSeconds(1), TempoMap.Default)
+                        }),
+                    new TrackChunk(
+                        new NoteOnEvent((SevenBitNumber)100, (SevenBitNumber)80)
+                        {
+                            DeltaTime = GetDeltaTime(TimeSpan.FromSeconds(1) + TimeSpan.FromMilliseconds(500))
+                        },
+                        new NoteOffEvent((SevenBitNumber)100, (SevenBitNumber)0)
+                        {
+                            DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)TimeSpan.FromMilliseconds(500), TempoMap.Default)
+                        })),
+                actions: new[]
+                {
+                    new PlaybackChangerBase(TimeSpan.FromMilliseconds(500),
+                        p => p.NoteCallback = (d, rt, rl, t) => d),
+                },
+                expectedEvents: new (MidiEvent, object)[]
                 {
                     (new NoteOnEvent((SevenBitNumber)100, (SevenBitNumber)80), 1),
                     (new NoteOffEvent((SevenBitNumber)100, (SevenBitNumber)0), 1)
+                },
+                setupPlayback: playback =>
+                {
+                    playback.TrackNotes = true;
+                    playback.NoteCallback = (d, rt, rl, t) => null;
                 });
         }
 
@@ -1488,32 +1438,37 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         public void CheckPlaybackMetadata_NoteCallback_ReturnOriginal_ReturnNull()
         {
-            var midiFile = new MidiFile(
-                new TrackChunk(
-                    new NoteOnEvent(),
-                    new NoteOffEvent()
-                    {
-                        DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)TimeSpan.FromSeconds(1), TempoMap.Default)
-                    }),
-                new TrackChunk(
-                    new NoteOnEvent((SevenBitNumber)100, (SevenBitNumber)80)
-                    {
-                        DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)(TimeSpan.FromSeconds(1) + TimeSpan.FromMilliseconds(500)), TempoMap.Default)
-                    },
-                    new NoteOffEvent((SevenBitNumber)100, (SevenBitNumber)0)
-                    {
-                        DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)TimeSpan.FromMilliseconds(500), TempoMap.Default)
-                    }));
-
-            CheckNoteCallbackWithMetadata(
-                midiFile,
-                changeCallbackAfter: TimeSpan.FromMilliseconds(500),
-                noteCallback: (d, rt, rl, t) => d,
-                secondNoteCallback: (d, rt, rl, t) => null,
-                expectedMetadata: new (MidiEvent, object)[]
+            CheckPlaybackMetadata(
+                midiFile: new MidiFile(
+                    new TrackChunk(
+                        new NoteOnEvent(),
+                        new NoteOffEvent()
+                        {
+                            DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)TimeSpan.FromSeconds(1), TempoMap.Default)
+                        }),
+                    new TrackChunk(
+                        new NoteOnEvent((SevenBitNumber)100, (SevenBitNumber)80)
+                        {
+                            DeltaTime = GetDeltaTime(TimeSpan.FromSeconds(1) + TimeSpan.FromMilliseconds(500))
+                        },
+                        new NoteOffEvent((SevenBitNumber)100, (SevenBitNumber)0)
+                        {
+                            DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)TimeSpan.FromMilliseconds(500), TempoMap.Default)
+                        })),
+                actions: new[]
+                {
+                    new PlaybackChangerBase(TimeSpan.FromMilliseconds(500),
+                        p => p.NoteCallback = (d, rt, rl, t) => null),
+                },
+                expectedEvents: new (MidiEvent, object)[]
                 {
                     (new NoteOnEvent(), 0),
                     (new NoteOffEvent(), 0)
+                },
+                setupPlayback: playback =>
+                {
+                    playback.TrackNotes = true;
+                    playback.NoteCallback = (d, rt, rl, t) => d;
                 });
         }
 
@@ -1521,34 +1476,39 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         public void CheckPlaybackMetadata_NoteCallback_Transpose()
         {
-            var midiFile = new MidiFile(
-                new TrackChunk(
-                    new NoteOnEvent(),
-                    new NoteOffEvent()
-                    {
-                        DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)TimeSpan.FromSeconds(1), TempoMap.Default)
-                    }),
-                new TrackChunk(
-                    new NoteOnEvent((SevenBitNumber)100, (SevenBitNumber)80)
-                    {
-                        DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)(TimeSpan.FromSeconds(1) + TimeSpan.FromMilliseconds(500)), TempoMap.Default)
-                    },
-                    new NoteOffEvent((SevenBitNumber)100, (SevenBitNumber)0)
-                    {
-                        DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)TimeSpan.FromMilliseconds(500), TempoMap.Default)
-                    }));
-
-            CheckNoteCallbackWithMetadata(
-                midiFile,
-                changeCallbackAfter: TimeSpan.FromMilliseconds(500),
-                noteCallback: NoteCallback,
-                secondNoteCallback: NoteCallback,
-                expectedMetadata: new (MidiEvent, object)[]
+            CheckPlaybackMetadata(
+                midiFile: new MidiFile(
+                    new TrackChunk(
+                        new NoteOnEvent(),
+                        new NoteOffEvent()
+                        {
+                            DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)TimeSpan.FromSeconds(1), TempoMap.Default)
+                        }),
+                    new TrackChunk(
+                        new NoteOnEvent((SevenBitNumber)100, (SevenBitNumber)80)
+                        {
+                            DeltaTime = GetDeltaTime(TimeSpan.FromSeconds(1) + TimeSpan.FromMilliseconds(500))
+                        },
+                        new NoteOffEvent((SevenBitNumber)100, (SevenBitNumber)0)
+                        {
+                            DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)TimeSpan.FromMilliseconds(500), TempoMap.Default)
+                        })),
+                actions: new[]
+                {
+                    new PlaybackChangerBase(TimeSpan.FromMilliseconds(500),
+                        p => p.NoteCallback = NoteCallback),
+                },
+                expectedEvents: new (MidiEvent, object)[]
                 {
                     (new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), 0),
                     (new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), 0),
                     (new NoteOnEvent((SevenBitNumber)(100 + TransposeBy), (SevenBitNumber)80), 1),
                     (new NoteOffEvent((SevenBitNumber)(100 + TransposeBy), (SevenBitNumber)0), 1)
+                },
+                setupPlayback: playback =>
+                {
+                    playback.TrackNotes = true;
+                    playback.NoteCallback = NoteCallback;
                 });
         }
 
@@ -1562,33 +1522,32 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var stopAfter = TimeSpan.FromSeconds(1);
             var stopPeriod = TimeSpan.FromMilliseconds(400);
 
-            var midiFile = new MidiFile(
-                new TrackChunk(
-                    new NoteOnEvent()),
-                new TrackChunk(
-                    new NoteOffEvent
-                    {
-                        DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)noteOffDelay, TempoMap.Default)
-                    }));
-
-            CheckNoteCallbackWithMetadata(
-                midiFile,
-                stopAfter: stopAfter,
-                stopPeriod: stopPeriod,
-                setupPlayback: (context, playback) =>
+            CheckPlaybackMetadata(
+                midiFile: new MidiFile(
+                    new TrackChunk(
+                        new NoteOnEvent()),
+                    new TrackChunk(
+                        new NoteOffEvent
+                        {
+                            DeltaTime = GetDeltaTime(noteOffDelay)
+                        })),
+                actions: new[]
                 {
-                    playback.InterruptNotesOnStop = true;
-                    playback.NoteCallback = NoteCallback;
+                    new PlaybackChangerBase(stopAfter,
+                        p => p.Stop()),
+                    new PlaybackChangerBase(stopPeriod,
+                        p => p.Start()),
                 },
-                afterStart: NoPlaybackAction,
-                afterStop: NoPlaybackAction,
-                afterResume: NoPlaybackAction,
-                runningAfterResume: null,
-                expectedMetadata: new (MidiEvent, object)[]
+                expectedEvents: new (MidiEvent, object)[]
                 {
                     (new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), 0),
                     (new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), 1),
                     (new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), 1),
+                },
+                setupPlayback: playback =>
+                {
+                    playback.InterruptNotesOnStop = true;
+                    playback.NoteCallback = NoteCallback;
                 });
         }
 
@@ -1606,42 +1565,54 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var secondAfterResumeDelay = TimeSpan.FromSeconds(1);
             var thirdAfterResumeDelay = TimeSpan.FromMilliseconds(500);
 
-            var midiFile = new MidiFile(
-                new TrackChunk(
-                    new NoteOnEvent()
-                    {
-                        DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)firstEventTime, TempoMap.Default)
-                    }),
-                new TrackChunk(
-                    new NoteOffEvent()
-                    {
-                        DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)(firstEventTime + lastEventTime), TempoMap.Default)
-                    }));
-
-            CheckNoteCallbackWithMetadata(
-                midiFile,
-                stopAfter: stopAfter,
-                stopPeriod: stopPeriod,
-                setupPlayback: (context, playback) => playback.NoteCallback = NoteCallback,
-                afterStart: NoPlaybackAction,
-                afterStop: (context, playback) => playback.MoveToStart(),
-                afterResume: (context, playback) => CheckCurrentTime(playback, TimeSpan.Zero, "stopped"),
-                runningAfterResume: new[]
+            CheckPlaybackMetadata(
+                midiFile: new MidiFile(
+                    new TrackChunk(
+                        new NoteOnEvent()
+                        {
+                            DeltaTime = GetDeltaTime(firstEventTime)
+                        }),
+                    new TrackChunk(
+                        new NoteOffEvent()
+                        {
+                            DeltaTime = GetDeltaTime(firstEventTime + lastEventTime)
+                        })),
+                actions: new[]
                 {
-                    Tuple.Create<TimeSpan, PlaybackAction>(firstAfterResumeDelay, (context, playback) => CheckCurrentTime(playback, firstAfterResumeDelay, "resumed")),
-                    Tuple.Create<TimeSpan, PlaybackAction>(secondAfterResumeDelay, (context, playback) =>
-                    {
-                        playback.MoveToStart();
-                        CheckCurrentTime(playback, TimeSpan.Zero, "resumed");
-                    }),
-                    Tuple.Create<TimeSpan, PlaybackAction>(thirdAfterResumeDelay, (context, playback) => CheckCurrentTime(playback, thirdAfterResumeDelay, "resumed"))
+                    new PlaybackChangerBase(stopAfter,
+                        p =>
+                        {
+                            p.Stop();
+                            p.MoveToStart();
+                        }),
+                    new PlaybackChangerBase(stopPeriod,
+                        p =>
+                        {
+                            p.Start();
+                            CheckCurrentTime(p, TimeSpan.Zero, "stopped");
+                        }),
+                    new PlaybackChangerBase(firstAfterResumeDelay,
+                        p => CheckCurrentTime(p, firstAfterResumeDelay, "resumed")),
+                    new PlaybackChangerBase(secondAfterResumeDelay,
+                        p =>
+                        {
+                            p.MoveToStart();
+                            CheckCurrentTime(p, TimeSpan.Zero, "resumed");
+                        }),
+                    new PlaybackChangerBase(thirdAfterResumeDelay,
+                        p => CheckCurrentTime(p, thirdAfterResumeDelay, "resumed")),
                 },
-                expectedMetadata: new (MidiEvent, object)[]
+                expectedEvents: new (MidiEvent, object)[]
                 {
                     (new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), 0),
                     (new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), 0),
                     (new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), 0),
                     (new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), 1),
+                },
+                setupPlayback: playback =>
+                {
+                    playback.InterruptNotesOnStop = false;
+                    playback.NoteCallback = NoteCallback;
                 });
         }
 
@@ -1662,40 +1633,52 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var secondAfterResumeDelay = TimeSpan.FromSeconds(1);
             var thirdAfterResumeDelay = TimeSpan.FromMilliseconds(500);
 
-            var midiFile = new MidiFile(
-                new TrackChunk(
-                    new NoteOnEvent()
-                    {
-                        DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)firstEventTime, TempoMap.Default)
-                    }),
-                new TrackChunk(
-                    new NoteOffEvent()
-                    {
-                        DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)(firstEventTime + lastEventTime), TempoMap.Default)
-                    }));
-
-            CheckNoteCallbackWithMetadata(
-                midiFile,
-                stopAfter: stopAfter,
-                stopPeriod: stopPeriod,
-                setupPlayback: (context, playback) => playback.NoteCallback = NoteCallback,
-                afterStart: NoPlaybackAction,
-                afterStop: (context, playback) => playback.MoveForward((MetricTimeSpan)stepAfterStop),
-                afterResume: (context, playback) => CheckCurrentTime(playback, stopAfter + stepAfterStop, "stopped"),
-                runningAfterResume: new[]
+            CheckPlaybackMetadata(
+                midiFile: new MidiFile(
+                    new TrackChunk(
+                        new NoteOnEvent()
+                        {
+                            DeltaTime = GetDeltaTime(firstEventTime)
+                        }),
+                    new TrackChunk(
+                        new NoteOffEvent()
+                        {
+                            DeltaTime = GetDeltaTime(firstEventTime + lastEventTime)
+                        })),
+                actions: new[]
                 {
-                    Tuple.Create<TimeSpan, PlaybackAction>(firstAfterResumeDelay, (context, playback) => CheckCurrentTime(playback, stopAfter + firstAfterResumeDelay + stepAfterStop, "resumed")),
-                    Tuple.Create<TimeSpan, PlaybackAction>(secondAfterResumeDelay, (context, playback) =>
-                    {
-                        playback.MoveForward((MetricTimeSpan)stepAfterResumed);
-                        CheckCurrentTime(playback, stopAfter + firstAfterResumeDelay + secondAfterResumeDelay + stepAfterStop + stepAfterResumed, "resumed");
-                    }),
-                    Tuple.Create<TimeSpan, PlaybackAction>(thirdAfterResumeDelay, (context, playback) => CheckCurrentTime(playback, stopAfter + firstAfterResumeDelay + secondAfterResumeDelay + thirdAfterResumeDelay + stepAfterStop + stepAfterResumed, "resumed"))
+                    new PlaybackChangerBase(stopAfter,
+                        p =>
+                        {
+                            p.Stop();
+                            p.MoveForward((MetricTimeSpan)stepAfterStop);
+                        }),
+                    new PlaybackChangerBase(stopPeriod,
+                        p =>
+                        {
+                            p.Start();
+                            CheckCurrentTime(p, stopAfter + stepAfterStop, "stopped");
+                        }),
+                    new PlaybackChangerBase(firstAfterResumeDelay,
+                        p => CheckCurrentTime(p, stopAfter + firstAfterResumeDelay + stepAfterStop, "resumed")),
+                    new PlaybackChangerBase(secondAfterResumeDelay,
+                        p =>
+                        {
+                            p.MoveForward((MetricTimeSpan)stepAfterResumed);
+                            CheckCurrentTime(p, stopAfter + firstAfterResumeDelay + secondAfterResumeDelay + stepAfterStop + stepAfterResumed, "resumed");
+                        }),
+                    new PlaybackChangerBase(thirdAfterResumeDelay,
+                        p => CheckCurrentTime(p, stopAfter + firstAfterResumeDelay + secondAfterResumeDelay + thirdAfterResumeDelay + stepAfterStop + stepAfterResumed, "resumed")),
                 },
-                expectedMetadata: new (MidiEvent, object)[]
+                expectedEvents: new (MidiEvent, object)[]
                 {
                     (new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), 0),
                     (new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), 1),
+                },
+                setupPlayback: playback =>
+                {
+                    playback.InterruptNotesOnStop = false;
+                    playback.NoteCallback = NoteCallback;
                 });
         }
 
@@ -1708,28 +1691,39 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
             var stepAfterStop = TimeSpan.FromSeconds(10);
 
-            var midiFile = new MidiFile(
-                new TrackChunk(
-                    new NoteOnEvent()),
-                new TrackChunk(
-                    new NoteOffEvent()
-                    {
-                        DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)TimeSpan.FromSeconds(4), TempoMap.Default)
-                    }));
-
-            CheckNoteCallbackWithMetadata(
-                midiFile,
-                stopAfter: stopAfter,
-                stopPeriod: stopPeriod,
-                setupPlayback: (context, playback) => playback.NoteCallback = NoteCallback,
-                afterStart: NoPlaybackAction,
-                afterStop: (context, playback) => playback.MoveForward((MetricTimeSpan)stepAfterStop),
-                afterResume: (context, playback) => CheckCurrentTime(playback, TimeSpan.FromSeconds(4), "stopped"),
-                runningAfterResume: null,
-                expectedMetadata: new (MidiEvent, object)[]
+            CheckPlaybackMetadata(
+                midiFile: new MidiFile(
+                    new TrackChunk(
+                        new NoteOnEvent()),
+                    new TrackChunk(
+                        new NoteOffEvent()
+                        {
+                            DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)TimeSpan.FromSeconds(4), TempoMap.Default)
+                        })),
+                actions: new[]
+                {
+                    new PlaybackChangerBase(stopAfter,
+                        p =>
+                        {
+                            p.Stop();
+                            p.MoveForward((MetricTimeSpan)stepAfterStop);
+                        }),
+                    new PlaybackChangerBase(stopPeriod,
+                        p =>
+                        {
+                            p.Start();
+                            CheckCurrentTime(p, TimeSpan.FromSeconds(4), "stopped");
+                        }),
+                },
+                expectedEvents: new (MidiEvent, object)[]
                 {
                     (new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), 0),
                     (new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), 1),
+                },
+                setupPlayback: playback =>
+                {
+                    playback.InterruptNotesOnStop = false;
+                    playback.NoteCallback = NoteCallback;
                 });
         }
 
@@ -1749,41 +1743,53 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
             var lastEventTime = TimeSpan.FromMilliseconds(5500);
 
-            var midiFile = new MidiFile(
-                new TrackChunk(
-                    new NoteOnEvent()),
-                new TrackChunk(
-                    new NoteOffEvent()
-                    {
-                        DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)lastEventTime, TempoMap.Default)
-                    }));
-
-            CheckNoteCallbackWithMetadata(
-                midiFile,
-                stopAfter: stopAfter,
-                stopPeriod: stopPeriod,
-                setupPlayback: (context, playback) => playback.NoteCallback = NoteCallback,
-                afterStart: NoPlaybackAction,
-                afterStop: (context, playback) => playback.MoveBack((MetricTimeSpan)stepAfterStop),
-                afterResume: (context, playback) => CheckCurrentTime(playback, stopAfter - stepAfterStop, "stopped"),
-                runningAfterResume: new[]
+            CheckPlaybackMetadata(
+                midiFile: new MidiFile(
+                    new TrackChunk(
+                        new NoteOnEvent()),
+                    new TrackChunk(
+                        new NoteOffEvent()
+                        {
+                            DeltaTime = GetDeltaTime(lastEventTime)
+                        })),
+                actions: new[]
                 {
-                    Tuple.Create<TimeSpan, PlaybackAction>(firstAfterResumeDelay, (context, playback) =>
-                    {
-                        Assert.IsTrue(playback.IsRunning, "Playback is not running after resumed.");
-                        CheckCurrentTime(playback, stopAfter + firstAfterResumeDelay - stepAfterStop, "resumed on first span");
-                    }),
-                    Tuple.Create<TimeSpan, PlaybackAction>(secondAfterResumeDelay, (context, playback) =>
-                    {
-                        playback.MoveBack((MetricTimeSpan)stepAfterResumed);
-                        CheckCurrentTime(playback, stopAfter + firstAfterResumeDelay + secondAfterResumeDelay - stepAfterStop - stepAfterResumed, "resumed on second span");
-                    }),
-                    Tuple.Create<TimeSpan, PlaybackAction>(thirdAfterResumeDelay, (context, playback) => CheckCurrentTime(playback, stopAfter + firstAfterResumeDelay + secondAfterResumeDelay + thirdAfterResumeDelay - stepAfterStop - stepAfterResumed, "resumed on third span"))
+                    new PlaybackChangerBase(stopAfter,
+                        p =>
+                        {
+                            p.Stop();
+                            p.MoveBack((MetricTimeSpan)stepAfterStop);
+                        }),
+                    new PlaybackChangerBase(stopPeriod,
+                        p =>
+                        {
+                            p.Start();
+                            CheckCurrentTime(p, stopAfter - stepAfterStop, "stopped");
+                        }),
+                    new PlaybackChangerBase(firstAfterResumeDelay,
+                        p =>
+                        {
+                            Assert.IsTrue(p.IsRunning, "Playback is not running after resumed.");
+                            CheckCurrentTime(p, stopAfter + firstAfterResumeDelay - stepAfterStop, "resumed on first span");
+                        }),
+                    new PlaybackChangerBase(secondAfterResumeDelay,
+                        p =>
+                        {
+                            p.MoveBack((MetricTimeSpan)stepAfterResumed);
+                            CheckCurrentTime(p, stopAfter + firstAfterResumeDelay + secondAfterResumeDelay - stepAfterStop - stepAfterResumed, "resumed on second span");
+                        }),
+                    new PlaybackChangerBase(thirdAfterResumeDelay,
+                        p => CheckCurrentTime(p, stopAfter + firstAfterResumeDelay + secondAfterResumeDelay + thirdAfterResumeDelay - stepAfterStop - stepAfterResumed, "resumed on third span")),
                 },
-                expectedMetadata: new (MidiEvent, object)[]
+                expectedEvents: new (MidiEvent, object)[]
                 {
                     (new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), 0),
                     (new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), 1),
+                },
+                setupPlayback: playback =>
+                {
+                    playback.InterruptNotesOnStop = false;
+                    playback.NoteCallback = NoteCallback;
                 });
         }
 
@@ -1803,38 +1809,50 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var secondAfterResumeDelay = TimeSpan.FromSeconds(1);
             var thirdAfterResumeDelay = TimeSpan.FromMilliseconds(500);
 
-            var midiFile = new MidiFile(
-               new TrackChunk(
-                   new NoteOnEvent()),
-               new TrackChunk(
-                   new NoteOffEvent()
-                   {
-                       DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)lastEventTime, TempoMap.Default)
-                   }));
-
-            CheckNoteCallbackWithMetadata(
-                midiFile,
-                stopAfter: stopAfter,
-                stopPeriod: stopPeriod,
-                setupPlayback: (context, playback) => playback.NoteCallback = NoteCallback,
-                afterStart: NoPlaybackAction,
-                afterStop: (context, playback) => playback.MoveBack((MetricTimeSpan)stepAfterStop),
-                afterResume: (context, playback) => CheckCurrentTime(playback, TimeSpan.Zero, "stopped"),
-                runningAfterResume: new[]
+            CheckPlaybackMetadata(
+                midiFile: new MidiFile(
+                    new TrackChunk(
+                        new NoteOnEvent()),
+                    new TrackChunk(
+                        new NoteOffEvent()
+                        {
+                            DeltaTime = GetDeltaTime(lastEventTime)
+                        })),
+                actions: new[]
                 {
-                    Tuple.Create<TimeSpan, PlaybackAction>(firstAfterResumeDelay, (context, playback) => CheckCurrentTime(playback, firstAfterResumeDelay, "resumed")),
-                    Tuple.Create<TimeSpan, PlaybackAction>(secondAfterResumeDelay, (context, playback) =>
-                    {
-                        playback.MoveBack((MetricTimeSpan)stepAfterResumed);
-                        CheckCurrentTime(playback, firstAfterResumeDelay + secondAfterResumeDelay - stepAfterResumed, "resumed");
-                    }),
-                    Tuple.Create<TimeSpan, PlaybackAction>(thirdAfterResumeDelay, (context, playback) => CheckCurrentTime(playback, firstAfterResumeDelay + secondAfterResumeDelay + thirdAfterResumeDelay - stepAfterResumed, "resumed"))
+                    new PlaybackChangerBase(stopAfter,
+                        p =>
+                        {
+                            p.Stop();
+                            p.MoveBack((MetricTimeSpan)stepAfterStop);
+                        }),
+                    new PlaybackChangerBase(stopPeriod,
+                        p =>
+                        {
+                            p.Start();
+                            CheckCurrentTime(p, TimeSpan.Zero, "stopped");
+                        }),
+                    new PlaybackChangerBase(firstAfterResumeDelay,
+                        p => CheckCurrentTime(p, firstAfterResumeDelay, "resumed")),
+                    new PlaybackChangerBase(secondAfterResumeDelay,
+                        p =>
+                        {
+                            p.MoveBack((MetricTimeSpan)stepAfterResumed);
+                            CheckCurrentTime(p, firstAfterResumeDelay + secondAfterResumeDelay - stepAfterResumed, "resumed");
+                        }),
+                    new PlaybackChangerBase(thirdAfterResumeDelay,
+                        p => CheckCurrentTime(p, firstAfterResumeDelay + secondAfterResumeDelay + thirdAfterResumeDelay - stepAfterResumed, "resumed")),
                 },
-                expectedMetadata: new (MidiEvent, object)[]
+                expectedEvents: new (MidiEvent, object)[]
                 {
                     (new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), 0),
                     (new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), 0),
                     (new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), 1),
+                },
+                setupPlayback: playback =>
+                {
+                    playback.InterruptNotesOnStop = false;
+                    playback.NoteCallback = NoteCallback;
                 });
         }
 
@@ -1845,37 +1863,49 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var stopAfter = TimeSpan.FromSeconds(4);
             var stopPeriod = TimeSpan.FromSeconds(2);
 
-            var midiFile = new MidiFile(
-               new TrackChunk(
-                   new NoteOnEvent()),
-               new TrackChunk(
-                   new NoteOffEvent()
-                   {
-                       DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)TimeSpan.FromSeconds(10), TempoMap.Default)
-                   }));
-
-            CheckNoteCallbackWithMetadata(
-                midiFile,
-                stopAfter: stopAfter,
-                stopPeriod: stopPeriod,
-                setupPlayback: (context, playback) => playback.NoteCallback = NoteCallback,
-                afterStart: NoPlaybackAction,
-                afterStop: (context, playback) => playback.MoveToTime(new MetricTimeSpan(0, 0, 1)),
-                afterResume: (context, playback) => CheckCurrentTime(playback, TimeSpan.FromSeconds(1), "stopped"),
-                runningAfterResume: new[]
+            CheckPlaybackMetadata(
+                midiFile: new MidiFile(
+                    new TrackChunk(
+                        new NoteOnEvent()),
+                    new TrackChunk(
+                        new NoteOffEvent()
+                        {
+                            DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)TimeSpan.FromSeconds(10), TempoMap.Default)
+                        })),
+                actions: new[]
                 {
-                    Tuple.Create<TimeSpan, PlaybackAction>(TimeSpan.FromSeconds(1), (context, playback) => CheckCurrentTime(playback, TimeSpan.FromSeconds(2), "resumed")),
-                    Tuple.Create<TimeSpan, PlaybackAction>(TimeSpan.FromSeconds(2), (context, playback) =>
-                    {
-                        playback.MoveToTime(new MetricTimeSpan(0, 0, 8));
-                        CheckCurrentTime(playback, TimeSpan.FromSeconds(8), "resumed");
-                    }),
-                    Tuple.Create<TimeSpan, PlaybackAction>(TimeSpan.FromSeconds(1), (context, playback) => CheckCurrentTime(playback, TimeSpan.FromSeconds(9), "resumed"))
+                    new PlaybackChangerBase(stopAfter,
+                        p =>
+                        {
+                            p.Stop();
+                            p.MoveToTime(new MetricTimeSpan(0, 0, 1));
+                        }),
+                    new PlaybackChangerBase(stopPeriod,
+                        p =>
+                        {
+                            p.Start();
+                            CheckCurrentTime(p, TimeSpan.FromSeconds(1), "stopped");
+                        }),
+                    new PlaybackChangerBase(TimeSpan.FromSeconds(1),
+                        p => CheckCurrentTime(p, TimeSpan.FromSeconds(2), "resumed")),
+                    new PlaybackChangerBase(TimeSpan.FromSeconds(2),
+                        p =>
+                        {
+                            p.MoveToTime(new MetricTimeSpan(0, 0, 8));
+                            CheckCurrentTime(p, TimeSpan.FromSeconds(8), "resumed");
+                        }),
+                    new PlaybackChangerBase(TimeSpan.FromSeconds(1),
+                        p => CheckCurrentTime(p, TimeSpan.FromSeconds(9), "resumed")),
                 },
-                expectedMetadata: new (MidiEvent, object)[]
+                expectedEvents: new (MidiEvent, object)[]
                 {
                     (new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), 0),
                     (new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), 1),
+                },
+                setupPlayback: playback =>
+                {
+                    playback.InterruptNotesOnStop = false;
+                    playback.NoteCallback = NoteCallback;
                 });
         }
 
@@ -1886,278 +1916,45 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var stopAfter = TimeSpan.FromSeconds(2);
             var stopPeriod = TimeSpan.FromSeconds(2);
 
-            var midiFile = new MidiFile(
-               new TrackChunk(
-                   new NoteOnEvent()),
-               new TrackChunk(
-                   new NoteOffEvent()
-                   {
-                       DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)TimeSpan.FromSeconds(4), TempoMap.Default)
-                   }));
-
-            CheckNoteCallbackWithMetadata(
-                midiFile,
-                stopAfter: stopAfter,
-                stopPeriod: stopPeriod,
-                setupPlayback: (context, playback) => playback.NoteCallback = NoteCallback,
-                afterStart: NoPlaybackAction,
-                afterStop: (context, playback) => playback.MoveToTime(new MetricTimeSpan(0, 0, 10)),
-                afterResume: (context, playback) => CheckCurrentTime(playback, TimeSpan.FromSeconds(4), "stopped"),
-                runningAfterResume: null,
-                expectedMetadata: new (MidiEvent, object)[]
+            CheckPlaybackMetadata(
+                midiFile: new MidiFile(
+                    new TrackChunk(
+                        new NoteOnEvent()),
+                    new TrackChunk(
+                        new NoteOffEvent()
+                        {
+                            DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)TimeSpan.FromSeconds(4), TempoMap.Default)
+                        })),
+                actions: new[]
+                {
+                    new PlaybackChangerBase(stopAfter,
+                        p =>
+                        {
+                            p.Stop();
+                            p.MoveToTime(new MetricTimeSpan(0, 0, 10));
+                        }),
+                    new PlaybackChangerBase(stopPeriod,
+                        p =>
+                        {
+                            p.Start();
+                            CheckCurrentTime(p, TimeSpan.FromSeconds(4), "stopped");
+                        }),
+                },
+                expectedEvents: new (MidiEvent, object)[]
                 {
                     (new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), 0),
                     (new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), 1),
+                },
+                setupPlayback: playback =>
+                {
+                    playback.InterruptNotesOnStop = false;
+                    playback.NoteCallback = NoteCallback;
                 });
         }
 
         #endregion
 
         #region Private methods
-
-        private void CheckTrackControlValueWithMetadata(
-            MidiFile midiFile,
-            TimeSpan moveFrom,
-            TimeSpan moveTo,
-            (MidiEvent, object)[] expectedMetadata)
-        {
-            CheckTrackDataWithMetadata(
-                p => p.TrackControlValue = true,
-                midiFile,
-                moveFrom,
-                moveTo,
-                expectedMetadata);
-        }
-
-        private void CheckTrackProgramWithMetadata(
-            MidiFile midiFile,
-            TimeSpan moveFrom,
-            TimeSpan moveTo,
-            (MidiEvent, object)[] expectedMetadata)
-        {
-            CheckTrackDataWithMetadata(
-                p => { },
-                midiFile,
-                moveFrom,
-                moveTo,
-                expectedMetadata);
-        }
-
-        private void CheckTrackPitchValueWithMetadata(
-            MidiFile midiFile,
-            TimeSpan moveFrom,
-            TimeSpan moveTo,
-            (MidiEvent, object)[] expectedMetadata)
-        {
-            CheckTrackDataWithMetadata(
-                p => p.TrackPitchValue = true,
-                midiFile,
-                moveFrom,
-                moveTo,
-                expectedMetadata);
-        }
-
-        private void CheckTrackDataWithMetadata(
-            Action<Playback> setupPlayback,
-            MidiFile midiFile,
-            TimeSpan moveFrom,
-            TimeSpan moveTo,
-            (MidiEvent, object)[] expectedMetadata)
-        {
-            var playbackContext = new PlaybackContext();
-            var stopwatch = playbackContext.Stopwatch;
-            var tempoMap = playbackContext.TempoMap;
-
-            var timedEvents = GetTimedEvents(midiFile);
-            var outputDevice = new OutputDeviceWithMetadataRegistration();
-
-            using (var playback = new PlaybackWithMetadataRegistration(timedEvents, tempoMap, outputDevice))
-            {
-                setupPlayback(playback);
-
-                stopwatch.Start();
-                playback.Start();
-
-                WaitOperations.Wait(() => stopwatch.Elapsed >= moveFrom);
-                playback.MoveToTime((MetricTimeSpan)moveTo);
-
-                stopwatch.Stop();
-
-                var timeout = (TimeSpan)midiFile.GetDuration<MetricTimeSpan>() + SendReceiveUtilities.MaximumEventSendReceiveDelay;
-                var playbackFinished = WaitOperations.Wait(() => !playback.IsRunning, timeout);
-                Assert.IsTrue(playbackFinished, "Playback not finished.");
-            }
-
-            CheckRegisteredMetadata(
-                expectedMetadata: expectedMetadata,
-                actualMetadata: outputDevice.Metadata.ToArray());
-        }
-
-        private void CheckTrackNotesWithMetadata(
-            MidiFile midiFile,
-            TimeSpan moveFrom,
-            TimeSpan moveTo,
-            (MidiEvent, object)[] expectedMetadata)
-        {
-            var playbackContext = new PlaybackContext();
-            var stopwatch = playbackContext.Stopwatch;
-            var tempoMap = playbackContext.TempoMap;
-
-            var timedEvents = GetTimedEvents(midiFile);
-            var outputDevice = new OutputDeviceWithMetadataRegistration();
-
-            using (var playback = new PlaybackWithMetadataRegistration(timedEvents, tempoMap, outputDevice))
-            {
-                playback.TrackNotes = true;
-
-                stopwatch.Start();
-                playback.Start();
-
-                WaitOperations.Wait(() => stopwatch.Elapsed >= moveFrom);
-                playback.MoveToTime((MetricTimeSpan)moveTo);
-
-                stopwatch.Stop();
-
-                var timeout = (TimeSpan)midiFile.GetDuration<MetricTimeSpan>() + SendReceiveUtilities.MaximumEventSendReceiveDelay;
-                var playbackFinished = WaitOperations.Wait(() => !playback.IsRunning, timeout);
-                Assert.IsTrue(playbackFinished, "Playback not finished.");
-            }
-
-            CheckRegisteredMetadata(
-                expectedMetadata: expectedMetadata,
-                actualMetadata: outputDevice.Metadata.ToArray());
-        }
-
-        private void CheckTrackNotesInterruptingNotesWithMetadata(
-            MidiFile midiFile,
-            TimeSpan stopAfter,
-            TimeSpan stopPeriod,
-            bool interruptNotesOnStop,
-            (MidiEvent, object)[] expectedMetadata)
-        {
-            var playbackContext = new PlaybackContext();
-
-            var stopwatch = playbackContext.Stopwatch;
-            var tempoMap = playbackContext.TempoMap;
-
-            var timedEvents = GetTimedEvents(midiFile);
-            var outputDevice = new OutputDeviceWithMetadataRegistration();
-
-            using (var playback = new PlaybackWithMetadataRegistration(timedEvents, tempoMap, outputDevice))
-            {
-                playback.InterruptNotesOnStop = interruptNotesOnStop;
-                playback.TrackNotes = true;
-
-                stopwatch.Start();
-                playback.Start();
-
-                WaitOperations.Wait(() => stopwatch.Elapsed >= stopAfter);
-                playback.Stop();
-
-                WaitOperations.Wait(stopPeriod);
-                playback.Start();
-
-                stopwatch.Stop();
-
-                var timeout = (TimeSpan)midiFile.GetDuration<MetricTimeSpan>() + SendReceiveUtilities.MaximumEventSendReceiveDelay;
-                var playbackFinished = WaitOperations.Wait(() => !playback.IsRunning, timeout);
-                Assert.IsTrue(playbackFinished, "Playback not finished.");
-            }
-
-            CheckRegisteredMetadata(
-                expectedMetadata: expectedMetadata,
-                actualMetadata: outputDevice.Metadata.ToArray());
-        }
-
-        private void CheckNoteCallbackWithMetadata(
-            MidiFile midiFile,
-            TimeSpan changeCallbackAfter,
-            NoteCallback noteCallback,
-            NoteCallback secondNoteCallback,
-            (MidiEvent, object)[] expectedMetadata)
-        {
-            var playbackContext = new PlaybackContext();
-            var stopwatch = playbackContext.Stopwatch;
-            var tempoMap = playbackContext.TempoMap;
-
-            var timedEvents = GetTimedEvents(midiFile);
-            var outputDevice = new OutputDeviceWithMetadataRegistration();
-
-            using (var playback = new PlaybackWithMetadataRegistration(timedEvents, tempoMap, outputDevice))
-            {
-                playback.NoteCallback = noteCallback;
-
-                stopwatch.Start();
-                playback.Start();
-
-                WaitOperations.Wait(() => stopwatch.Elapsed >= changeCallbackAfter);
-                playback.NoteCallback = secondNoteCallback;
-
-                var timeout = (TimeSpan)midiFile.GetDuration<MetricTimeSpan>() + SendReceiveUtilities.MaximumEventSendReceiveDelay;
-                var playbackFinished = WaitOperations.Wait(() => !playback.IsRunning, timeout);
-                Assert.IsTrue(playbackFinished, "Playback not finished.");
-            }
-
-            CheckRegisteredMetadata(
-                expectedMetadata: expectedMetadata,
-                actualMetadata: outputDevice.Metadata.ToArray());
-        }
-
-        private void CheckNoteCallbackWithMetadata(
-            MidiFile midiFile,
-            TimeSpan stopAfter,
-            TimeSpan stopPeriod,
-            PlaybackAction setupPlayback,
-            PlaybackAction afterStart,
-            PlaybackAction afterStop,
-            PlaybackAction afterResume,
-            IEnumerable<Tuple<TimeSpan, PlaybackAction>> runningAfterResume,
-            (MidiEvent, object)[] expectedMetadata)
-        {
-            var playbackContext = new PlaybackContext();
-            var stopwatch = playbackContext.Stopwatch;
-            var tempoMap = playbackContext.TempoMap;
-
-            var timedEvents = GetTimedEvents(midiFile);
-            var outputDevice = new OutputDeviceWithMetadataRegistration();
-
-            using (var playback = new PlaybackWithMetadataRegistration(timedEvents, tempoMap, outputDevice))
-            {
-                playback.InterruptNotesOnStop = false;
-                setupPlayback(playbackContext, playback);
-
-                stopwatch.Start();
-                playback.Start();
-
-                afterStart(playbackContext, playback);
-
-                WaitOperations.Wait(() => stopwatch.Elapsed >= stopAfter);
-                playback.Stop();
-
-                afterStop(playbackContext, playback);
-
-                WaitOperations.Wait(stopPeriod);
-                playback.Start();
-
-                afterResume(playbackContext, playback);
-
-                if (runningAfterResume != null)
-                {
-                    foreach (var check in runningAfterResume)
-                    {
-                        WaitOperations.Wait(check.Item1);
-                        check.Item2(playbackContext, playback);
-                    }
-                }
-
-                stopwatch.Stop();
-                WaitOperations.Wait(() => !playback.IsRunning);
-            }
-
-            CheckRegisteredMetadata(
-                expectedMetadata: expectedMetadata,
-                actualMetadata: outputDevice.Metadata.ToArray());
-        }
 
         private static IEnumerable<TimedEvent> GetTimedEvents(MidiFile midiFile) => midiFile
             .GetTrackChunks()
@@ -2168,7 +1965,13 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             (MidiEvent, object)[] expectedMetadata,
             (MidiEvent, object)[] actualMetadata)
         {
-            Assert.AreEqual(expectedMetadata.Length, actualMetadata.Length, "Count of metadata records is invalid.");
+            Assert.AreEqual(
+                expectedMetadata.Length,
+                actualMetadata.Length,
+                $"Metadata count is invalid.{Environment.NewLine}Actual metadata:{Environment.NewLine}" +
+                    string.Join(Environment.NewLine, actualMetadata) +
+                    $"{Environment.NewLine}Expected metadata:{Environment.NewLine}" +
+                    string.Join(Environment.NewLine, expectedMetadata));
 
             for (var i = 0; i < expectedMetadata.Length; i++)
             {
@@ -2178,6 +1981,51 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 MidiAsserts.AreEqual(expectedRecord.Item1, actualRecord.Item1, false, $"Record {i}: Event is invalid.");
                 Assert.AreEqual(expectedRecord.Item2, actualRecord.Item2, $"Record {i}: Metadata is invalid.");
             }
+        }
+
+        private long GetDeltaTime(TimeSpan deltaTime) =>
+            TimeConverter.ConvertFrom((MetricTimeSpan)deltaTime, TempoMap.Default);
+
+        private void CheckPlaybackMetadata(
+            MidiFile midiFile,
+            PlaybackChangerBase[] actions,
+            (MidiEvent, object)[] expectedEvents,
+            Action<Playback> setupPlayback = null,
+            Action<Playback> afterStart = null)
+        {
+            var timedEvents = GetTimedEvents(midiFile);
+            var timeout = (TimeSpan)midiFile.GetDuration<MetricTimeSpan>() + SendReceiveUtilities.MaximumEventSendReceiveDelay;
+            var stopwatch = new Stopwatch();
+
+            var actualEvents = new List<(MidiEvent, object)>();
+
+            using (var playback = new Playback(timedEvents, midiFile.GetTempoMap(), new EmptyOutputDevice()))
+            {
+                setupPlayback?.Invoke(playback);
+
+                playback.EventPlayed += (_, e) => actualEvents.Add((e.Event, (int?)e.Metadata));
+
+                stopwatch.Start();
+                playback.Start();
+
+                afterStart?.Invoke(playback);
+
+                foreach (var action in actions)
+                {
+                    var waitStopwatch = Stopwatch.StartNew();
+
+                    while (waitStopwatch.ElapsedMilliseconds < action.PeriodMs)
+                    {
+                    }
+
+                    action.Action(playback);
+                }
+
+                var playbackFinished = WaitOperations.Wait(() => !playback.IsRunning, timeout);
+                Assert.IsTrue(playbackFinished, "Playback not finished.");
+            }
+
+            CheckRegisteredMetadata(expectedEvents, actualEvents.ToArray());
         }
 
         #endregion
