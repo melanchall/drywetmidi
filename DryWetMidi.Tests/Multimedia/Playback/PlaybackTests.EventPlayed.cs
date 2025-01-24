@@ -79,6 +79,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 stopPeriod: stopPeriod,
                 setupPlayback: (context, playback) =>
                 {
+                    playback.TrackNotes = false;
                     playback.InterruptNotesOnStop = true;
                 },
                 afterStart: NoPlaybackAction,
@@ -117,7 +118,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 eventsWillBeSent: new EventToSend[] { },
                 stopAfter: stopAfter,
                 stopPeriod: stopPeriod,
-                setupPlayback: NoPlaybackAction,
+                setupPlayback: (context, playback) => playback.TrackNotes = false,
                 afterStart: NoPlaybackAction,
                 afterStop: (context, playback) => playback.MoveToStart(),
                 afterResume: (context, playback) => CheckCurrentTime(playback, TimeSpan.Zero, "stopped"),
@@ -211,7 +212,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 eventsWillBeSent: new EventToSend[] { },
                 stopAfter: stopAfter,
                 stopPeriod: stopPeriod,
-                setupPlayback: NoPlaybackAction,
+                setupPlayback: (context, playback) => playback.TrackNotes = false,
                 afterStart: NoPlaybackAction,
                 afterStop: (context, playback) => playback.MoveForward((MetricTimeSpan)stepAfterStop),
                 afterResume: (context, playback) => CheckCurrentTime(playback, TimeSpan.FromSeconds(4), "stopped"),
@@ -300,7 +301,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 eventsWillBeSent: new EventToSend[] { },
                 stopAfter: stopAfter,
                 stopPeriod: stopPeriod,
-                setupPlayback: NoPlaybackAction,
+                setupPlayback: (context, playback) => playback.TrackNotes = false,
                 afterStart: NoPlaybackAction,
                 afterStop: (context, playback) => playback.MoveBack((MetricTimeSpan)stepAfterStop),
                 afterResume: (context, playback) => CheckCurrentTime(playback, TimeSpan.Zero, "stopped"),
@@ -338,7 +339,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 eventsWillBeSent: new EventToSend[] { },
                 stopAfter: stopAfter,
                 stopPeriod: stopPeriod,
-                setupPlayback: NoPlaybackAction,
+                setupPlayback: (context, playback) => playback.TrackNotes = false,
                 afterStart: NoPlaybackAction,
                 afterStop: (context, playback) => playback.MoveToTime(new MetricTimeSpan(0, 0, 1)),
                 afterResume: (context, playback) => CheckCurrentTime(playback, TimeSpan.FromSeconds(1), "stopped"),
@@ -375,7 +376,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 eventsWillBeSent: new EventToSend[] { },
                 stopAfter: stopAfter,
                 stopPeriod: stopPeriod,
-                setupPlayback: NoPlaybackAction,
+                setupPlayback: (context, playback) => playback.TrackNotes = false,
                 afterStart: NoPlaybackAction,
                 afterStop: (context, playback) => playback.MoveToTime(new MetricTimeSpan(0, 0, 10)),
                 afterResume: (context, playback) => CheckCurrentTime(playback, TimeSpan.FromSeconds(4), "stopped"),

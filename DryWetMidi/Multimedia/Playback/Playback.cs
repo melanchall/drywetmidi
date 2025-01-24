@@ -223,21 +223,21 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         /// <summary>
         /// Gets or sets a value indicating whether currently playing notes must be stopped
-        /// on playback stop or not.
+        /// on playback stop or not. The default value is <c>true</c>.
         /// </summary>
         public bool InterruptNotesOnStop { get; set; } = true;
 
         /// <summary>
         /// Gets or sets a value indicating whether notes must be tracked or not. If <c>false</c>, notes
-        /// will be treated as just Note On/Note Off events. The default value is <c>false</c>. More info in the
+        /// will be treated as just Note On/Note Off events. The default value is <c>true</c>. More info in the
         /// <see href="xref:a_playback_datatrack#notes-tracking">Data tracking: Notes tracking</see> article.
         /// </summary>
-        public bool TrackNotes { get; set; }
+        public bool TrackNotes { get; set; } = true;
 
         /// <summary>
         /// Gets or sets a value indicating whether program must be tracked or not. If <c>true</c>, any jump
         /// in time will force playback send <see cref="ProgramChangeEvent"/> corresponding to the program at new time,
-        /// if needed. The default value is <c>false</c>. More info in the
+        /// if needed. The default value is <c>true</c>. More info in the
         /// <see href="xref:a_playback_datatrack#midi-parameters-values-tracking">Data tracking: MIDI parameters values tracking</see>
         /// article.
         /// </summary>
@@ -259,7 +259,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <summary>
         /// Gets or sets a value indicating whether pitch value must be tracked or not. If <c>true</c>, any jump
         /// in time will force playback send <see cref="PitchBendEvent"/> corresponding to the pitch value at new time,
-        /// if needed. The default value is <c>false</c>. More info in the
+        /// if needed. The default value is <c>true</c>. More info in the
         /// <see href="xref:a_playback_datatrack#midi-parameters-values-tracking">Data tracking: MIDI parameters values tracking</see>
         /// article.
         /// </summary>
@@ -281,7 +281,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <summary>
         /// Gets or sets a value indicating whether controller values must be tracked or not. If <c>true</c>, any jump
         /// in time will force playback send <see cref="ControlChangeEvent"/> corresponding to the controller value at new time,
-        /// if needed. The default value is <c>false</c>. More info in the
+        /// if needed. The default value is <c>true</c>. More info in the
         /// <see href="xref:a_playback_datatrack#midi-parameters-values-tracking">Data tracking: MIDI parameters values tracking</see>
         /// article.
         /// </summary>

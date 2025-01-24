@@ -792,6 +792,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 stopPeriod: stopPeriod,
                 setupPlayback: (context, playback) =>
                 {
+                    playback.TrackNotes = false;
+
                     snapPointsGroup = playback.Snapping.SnapToNotesStarts();
                     var snapPointsGroup2 = playback.Snapping.SnapToNotesStarts();
                     Assert.That(playback.Snapping.SnapPoints, Has.Count.EqualTo(2), "Count of snap points is invalid.");
@@ -852,6 +854,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 stopPeriod: stopPeriod,
                 setupPlayback: (context, playback) =>
                 {
+                    playback.TrackNotes = false;
+
                     snapPointsGroup = playback.Snapping.SnapToNotesEnds();
                     var snapPointsGroup2 = playback.Snapping.SnapToNotesEnds();
                     Assert.That(playback.Snapping.SnapPoints, Has.Count.EqualTo(2), "Count of snap points is invalid.");

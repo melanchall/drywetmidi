@@ -732,7 +732,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 stopAfter: stopAfter,
                 stopPeriod: stopPeriod,
-                setupPlayback: (context, playback) => playback.InterruptNotesOnStop = true,
+                setupPlayback: (context, playback) =>
+                {
+                    playback.TrackNotes = false;
+                    playback.InterruptNotesOnStop = true;
+                },
                 afterStart: NoPlaybackAction,
                 afterStop: NoPlaybackAction,
                 afterResume: NoPlaybackAction);

@@ -1,6 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
+using Melanchall.DryWetMidi.Interaction;
+using Melanchall.DryWetMidi.Multimedia;
+using Melanchall.DryWetMidi.Tests.Utilities;
 using NUnit.Framework;
 
 namespace Melanchall.DryWetMidi.Tests.Multimedia
@@ -11,9 +16,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         #region Test methods
 
         [Retry(RetriesNumber)]
-        [TestCase(true)]
-        [TestCase(false)]
-        public void TrackNotes_MoveForwardToNote(bool useOutputDevice)
+        [Test]
+        public void TrackNotes_MoveForwardToNote()
         {
             var noteNumber = (SevenBitNumber)60;
             var noteOnDelay = TimeSpan.FromSeconds(1);
@@ -24,28 +28,30 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var moveFrom = TimeSpan.FromMilliseconds(500);
             var moveTo = TimeSpan.FromMilliseconds(1500);
 
-            CheckTrackNotes(
-                eventsToSend: new[]
+            CheckNotesTracking(
+                initialTimedObjects: new[]
                 {
-                    new EventToSend(new NoteOnEvent(noteNumber, noteOnVelocity), noteOnDelay),
-                    new EventToSend(new NoteOffEvent(noteNumber, noteOffVelocity), noteOffDelay)
+                    new TimedEvent(new NoteOnEvent(noteNumber, noteOnVelocity))
+                        .SetTime((MetricTimeSpan)noteOnDelay, TempoMap.Default),
+                    new TimedEvent(new NoteOffEvent(noteNumber, noteOffVelocity))
+                        .SetTime((MetricTimeSpan)(noteOnDelay + noteOffDelay), TempoMap.Default),
                 },
-                eventsWillBeSent: new[]
+                expectedReceivedEvents: new[]
                 {
-                    new EventToSend(new NoteOnEvent(noteNumber, noteOnVelocity), moveFrom),
-                    new EventToSend(new NoteOffEvent(noteNumber, noteOffVelocity), noteOnDelay + noteOffDelay - moveTo)
+                    new ReceivedEvent(new NoteOnEvent(noteNumber, noteOnVelocity), moveFrom),
+                    new ReceivedEvent(new NoteOffEvent(noteNumber, noteOffVelocity), noteOnDelay + noteOffDelay - moveTo + moveFrom)
                 },
-                moveFrom: moveFrom,
-                moveTo: moveTo,
+                actions: new[]
+                {
+                    new PlaybackChangerBase(moveFrom, p => p.MoveToTime((MetricTimeSpan)moveTo)),
+                },
                 notesWillBeStarted: new[] { 0 },
-                notesWillBeFinished: new[] { 0 },
-                useOutputDevice: useOutputDevice);
+                notesWillBeFinished: new[] { 0 });
         }
 
         [Retry(RetriesNumber)]
-        [TestCase(true)]
-        [TestCase(false)]
-        public void TrackNotes_MoveBackToNote(bool useOutputDevice)
+        [Test]
+        public void TrackNotes_MoveBackToNote()
         {
             var noteNumber = (SevenBitNumber)60;
             var noteOnDelay = TimeSpan.Zero;
@@ -57,32 +63,35 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var moveFrom = TimeSpan.FromSeconds(1);
             var moveTo = TimeSpan.FromMilliseconds(500);
 
-            CheckTrackNotes(
-                eventsToSend: new[]
+            CheckNotesTracking(
+                initialTimedObjects: new[]
                 {
-                    new EventToSend(new NoteOnEvent(noteNumber, noteOnVelocity), noteOnDelay),
-                    new EventToSend(new NoteOffEvent(noteNumber, noteOffVelocity), noteOffDelay),
-                    new EventToSend(new PitchBendEvent(), pitchBendDelay)
+                    new TimedEvent(new NoteOnEvent(noteNumber, noteOnVelocity))
+                        .SetTime((MetricTimeSpan)noteOnDelay, TempoMap.Default),
+                    new TimedEvent(new NoteOffEvent(noteNumber, noteOffVelocity))
+                        .SetTime((MetricTimeSpan)(noteOnDelay + noteOffDelay), TempoMap.Default),
+                    new TimedEvent(new PitchBendEvent())
+                        .SetTime((MetricTimeSpan)(noteOnDelay + noteOffDelay + pitchBendDelay), TempoMap.Default),
                 },
-                eventsWillBeSent: new[]
+                actions: new[]
                 {
-                    new EventToSend(new NoteOnEvent(noteNumber, noteOnVelocity), noteOnDelay),
-                    new EventToSend(new NoteOffEvent(noteNumber, noteOffVelocity), noteOffDelay),
-                    new EventToSend(new NoteOnEvent(noteNumber, noteOnVelocity), moveFrom - (noteOnDelay + noteOffDelay)),
-                    new EventToSend(new NoteOffEvent(noteNumber, noteOffVelocity), noteOnDelay + noteOffDelay - moveTo),
-                    new EventToSend(new PitchBendEvent(), pitchBendDelay)
+                    new PlaybackChangerBase(moveFrom, p => p.MoveToTime((MetricTimeSpan)moveTo)),
                 },
-                moveFrom: moveFrom,
-                moveTo: moveTo,
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new NoteOnEvent(noteNumber, noteOnVelocity), noteOnDelay),
+                    new ReceivedEvent(new NoteOffEvent(noteNumber, noteOffVelocity), noteOnDelay + noteOffDelay),
+                    new ReceivedEvent(new NoteOnEvent(noteNumber, noteOnVelocity), moveFrom),
+                    new ReceivedEvent(new NoteOffEvent(noteNumber, noteOffVelocity), noteOnDelay + noteOffDelay - moveTo + moveFrom),
+                    new ReceivedEvent(new PitchBendEvent(), noteOnDelay + noteOffDelay - moveTo + moveFrom + pitchBendDelay)
+                },
                 notesWillBeStarted: new[] { 0, 0 },
-                notesWillBeFinished: new[] { 0, 0 },
-                useOutputDevice: useOutputDevice);
+                notesWillBeFinished: new[] { 0, 0 });
         }
 
         [Retry(RetriesNumber)]
-        [TestCase(true)]
-        [TestCase(false)]
-        public void TrackNotes_MoveForwardFromNote(bool useOutputDevice)
+        [Test]
+        public void TrackNotes_MoveForwardFromNote()
         {
             var noteNumber = (SevenBitNumber)60;
             var noteOnDelay = TimeSpan.Zero;
@@ -94,30 +103,33 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var moveFrom = TimeSpan.FromMilliseconds(500);
             var moveTo = TimeSpan.FromMilliseconds(1000);
 
-            CheckTrackNotes(
-                eventsToSend: new[]
+            CheckNotesTracking(
+                initialTimedObjects: new[]
                 {
-                    new EventToSend(new NoteOnEvent(noteNumber, noteOnVelocity), noteOnDelay),
-                    new EventToSend(new NoteOffEvent(noteNumber, noteOffVelocity), noteOffDelay),
-                    new EventToSend(new PitchBendEvent(), pitchBendDelay)
+                    new TimedEvent(new NoteOnEvent(noteNumber, noteOnVelocity))
+                        .SetTime((MetricTimeSpan)noteOnDelay, TempoMap.Default),
+                    new TimedEvent(new NoteOffEvent(noteNumber, noteOffVelocity))
+                        .SetTime((MetricTimeSpan)(noteOnDelay + noteOffDelay), TempoMap.Default),
+                    new TimedEvent(new PitchBendEvent())
+                        .SetTime((MetricTimeSpan)(noteOnDelay + noteOffDelay + pitchBendDelay), TempoMap.Default),
                 },
-                eventsWillBeSent: new[]
+                actions: new[]
                 {
-                    new EventToSend(new NoteOnEvent(noteNumber, noteOnVelocity), noteOnDelay),
-                    new EventToSend(new NoteOffEvent(noteNumber, noteOffVelocity), moveFrom - noteOnDelay),
-                    new EventToSend(new PitchBendEvent(), noteOnDelay + noteOffDelay + pitchBendDelay - moveTo)
+                    new PlaybackChangerBase(moveFrom, p => p.MoveToTime((MetricTimeSpan)moveTo)),
                 },
-                moveFrom: moveFrom,
-                moveTo: moveTo,
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new NoteOnEvent(noteNumber, noteOnVelocity), noteOnDelay),
+                    new ReceivedEvent(new NoteOffEvent(noteNumber, noteOffVelocity), moveFrom),
+                    new ReceivedEvent(new PitchBendEvent(), noteOnDelay + noteOffDelay + pitchBendDelay - moveTo + moveFrom)
+                },
                 notesWillBeStarted: new[] { 0 },
-                notesWillBeFinished: new[] { 0 },
-                useOutputDevice: useOutputDevice);
+                notesWillBeFinished: new[] { 0 });
         }
 
         [Retry(RetriesNumber)]
-        [TestCase(true)]
-        [TestCase(false)]
-        public void TrackNotes_MoveBackFromNote(bool useOutputDevice)
+        [Test]
+        public void TrackNotes_MoveBackFromNote()
         {
             var noteNumber = (SevenBitNumber)60;
             var noteOnDelay = TimeSpan.FromSeconds(1);
@@ -128,30 +140,32 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var moveFrom = TimeSpan.FromMilliseconds(1200);
             var moveTo = TimeSpan.FromMilliseconds(700);
 
-            CheckTrackNotes(
-                eventsToSend: new[]
+            CheckNotesTracking(
+                initialTimedObjects: new[]
                 {
-                    new EventToSend(new NoteOnEvent(noteNumber, noteOnVelocity), noteOnDelay),
-                    new EventToSend(new NoteOffEvent(noteNumber, noteOffVelocity), noteOffDelay)
+                    new TimedEvent(new NoteOnEvent(noteNumber, noteOnVelocity))
+                        .SetTime((MetricTimeSpan)noteOnDelay, TempoMap.Default),
+                    new TimedEvent(new NoteOffEvent(noteNumber, noteOffVelocity))
+                        .SetTime((MetricTimeSpan)(noteOnDelay + noteOffDelay), TempoMap.Default),
                 },
-                eventsWillBeSent: new[]
+                actions: new[]
                 {
-                    new EventToSend(new NoteOnEvent(noteNumber, noteOnVelocity), noteOnDelay),
-                    new EventToSend(new NoteOffEvent(noteNumber, noteOffVelocity), moveFrom - noteOnDelay),
-                    new EventToSend(new NoteOnEvent(noteNumber, noteOnVelocity), noteOnDelay - moveTo),
-                    new EventToSend(new NoteOffEvent(noteNumber, noteOffVelocity), noteOffDelay)
+                    new PlaybackChangerBase(moveFrom, p => p.MoveToTime((MetricTimeSpan)moveTo)),
                 },
-                moveFrom: moveFrom,
-                moveTo: moveTo,
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new NoteOnEvent(noteNumber, noteOnVelocity), noteOnDelay),
+                    new ReceivedEvent(new NoteOffEvent(noteNumber, noteOffVelocity), moveFrom),
+                    new ReceivedEvent(new NoteOnEvent(noteNumber, noteOnVelocity), noteOnDelay - moveTo + moveFrom),
+                    new ReceivedEvent(new NoteOffEvent(noteNumber, noteOffVelocity), noteOffDelay + noteOnDelay - moveTo + moveFrom)
+                },
                 notesWillBeStarted: new[] { 0, 0 },
-                notesWillBeFinished: new[] { 0, 0 },
-                useOutputDevice: useOutputDevice);
+                notesWillBeFinished: new[] { 0, 0 });
         }
 
         [Retry(RetriesNumber)]
-        [TestCase(true)]
-        [TestCase(false)]
-        public void TrackNotes_MoveForwardToSameNote(bool useOutputDevice)
+        [Test]
+        public void TrackNotes_MoveForwardToSameNote()
         {
             var noteNumber = (SevenBitNumber)60;
             var noteOnDelay = TimeSpan.Zero;
@@ -162,28 +176,30 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var moveFrom = TimeSpan.FromMilliseconds(200);
             var moveTo = TimeSpan.FromMilliseconds(700);
 
-            CheckTrackNotes(
-                eventsToSend: new[]
+            CheckNotesTracking(
+                initialTimedObjects: new[]
                 {
-                    new EventToSend(new NoteOnEvent(noteNumber, noteOnVelocity), noteOnDelay),
-                    new EventToSend(new NoteOffEvent(noteNumber, noteOffVelocity), noteOffDelay)
+                    new TimedEvent(new NoteOnEvent(noteNumber, noteOnVelocity))
+                        .SetTime((MetricTimeSpan)noteOnDelay, TempoMap.Default),
+                    new TimedEvent(new NoteOffEvent(noteNumber, noteOffVelocity))
+                        .SetTime((MetricTimeSpan)(noteOnDelay + noteOffDelay), TempoMap.Default),
                 },
-                eventsWillBeSent: new[]
+                actions: new[]
                 {
-                    new EventToSend(new NoteOnEvent(noteNumber, noteOnVelocity), noteOnDelay),
-                    new EventToSend(new NoteOffEvent(noteNumber, noteOffVelocity), noteOnDelay + noteOffDelay - moveTo + moveFrom)
+                    new PlaybackChangerBase(moveFrom, p => p.MoveToTime((MetricTimeSpan)moveTo)),
                 },
-                moveFrom: moveFrom,
-                moveTo: moveTo,
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new NoteOnEvent(noteNumber, noteOnVelocity), noteOnDelay),
+                    new ReceivedEvent(new NoteOffEvent(noteNumber, noteOffVelocity), noteOnDelay + noteOnDelay + noteOffDelay - moveTo + moveFrom)
+                },
                 notesWillBeStarted: new[] { 0 },
-                notesWillBeFinished: new[] { 0 },
-                useOutputDevice: useOutputDevice);
+                notesWillBeFinished: new[] { 0 });
         }
 
         [Retry(RetriesNumber)]
-        [TestCase(true)]
-        [TestCase(false)]
-        public void TrackNotes_MoveBackToSameNote(bool useOutputDevice)
+        [Test]
+        public void TrackNotes_MoveBackToSameNote()
         {
             var noteNumber = (SevenBitNumber)60;
             var noteOnDelay = TimeSpan.Zero;
@@ -194,28 +210,30 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var moveFrom = TimeSpan.FromMilliseconds(700);
             var moveTo = TimeSpan.FromMilliseconds(400);
 
-            CheckTrackNotes(
-                eventsToSend: new[]
+            CheckNotesTracking(
+                initialTimedObjects: new[]
                 {
-                    new EventToSend(new NoteOnEvent(noteNumber, noteOnVelocity), noteOnDelay),
-                    new EventToSend(new NoteOffEvent(noteNumber, noteOffVelocity), noteOffDelay)
+                    new TimedEvent(new NoteOnEvent(noteNumber, noteOnVelocity))
+                        .SetTime((MetricTimeSpan)noteOnDelay, TempoMap.Default),
+                    new TimedEvent(new NoteOffEvent(noteNumber, noteOffVelocity))
+                        .SetTime((MetricTimeSpan)(noteOnDelay + noteOffDelay), TempoMap.Default),
                 },
-                eventsWillBeSent: new[]
+                actions: new[]
                 {
-                    new EventToSend(new NoteOnEvent(noteNumber, noteOnVelocity), noteOnDelay),
-                    new EventToSend(new NoteOffEvent(noteNumber, noteOffVelocity), noteOnDelay + noteOffDelay - moveTo + moveFrom)
+                    new PlaybackChangerBase(moveFrom, p => p.MoveToTime((MetricTimeSpan)moveTo)),
                 },
-                moveFrom: moveFrom,
-                moveTo: moveTo,
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new NoteOnEvent(noteNumber, noteOnVelocity), noteOnDelay),
+                    new ReceivedEvent(new NoteOffEvent(noteNumber, noteOffVelocity), noteOnDelay + noteOnDelay + noteOffDelay - moveTo + moveFrom)
+                },
                 notesWillBeStarted: new[] { 0 },
-                notesWillBeFinished: new[] { 0 },
-                useOutputDevice: useOutputDevice);
+                notesWillBeFinished: new[] { 0 });
         }
 
         [Retry(RetriesNumber)]
-        [TestCase(true)]
-        [TestCase(false)]
-        public void TrackNotes_MoveForwardFromNoteToNote(bool useOutputDevice)
+        [Test]
+        public void TrackNotes_MoveForwardFromNoteToNote()
         {
             var noteNumber1 = (SevenBitNumber)60;
             var noteOnDelay1 = TimeSpan.Zero;
@@ -232,32 +250,36 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var moveFrom = TimeSpan.FromMilliseconds(500);
             var moveTo = TimeSpan.FromMilliseconds(1400);
 
-            CheckTrackNotes(
-                eventsToSend: new[]
+            CheckNotesTracking(
+                initialTimedObjects: new[]
                 {
-                    new EventToSend(new NoteOnEvent(noteNumber1, noteOnVelocity1), noteOnDelay1),
-                    new EventToSend(new NoteOffEvent(noteNumber1, noteOffVelocity1), noteOffDelay1),
-                    new EventToSend(new NoteOnEvent(noteNumber2, noteOnVelocity2), noteOnDelay2),
-                    new EventToSend(new NoteOffEvent(noteNumber2, noteOffVelocity2), noteOffDelay2)
+                    new TimedEvent(new NoteOnEvent(noteNumber1, noteOnVelocity1))
+                        .SetTime((MetricTimeSpan)noteOnDelay1, TempoMap.Default),
+                    new TimedEvent(new NoteOffEvent(noteNumber1, noteOffVelocity1))
+                        .SetTime((MetricTimeSpan)(noteOnDelay1 + noteOffDelay1), TempoMap.Default),
+                    new TimedEvent(new NoteOnEvent(noteNumber2, noteOnVelocity2))
+                        .SetTime((MetricTimeSpan)(noteOnDelay1 + noteOffDelay1 + noteOnDelay2), TempoMap.Default),
+                    new TimedEvent(new NoteOffEvent(noteNumber2, noteOffVelocity2))
+                        .SetTime((MetricTimeSpan)(noteOnDelay1 + noteOffDelay1 + noteOnDelay2 + noteOffDelay2), TempoMap.Default),
                 },
-                eventsWillBeSent: new[]
+                actions: new[]
                 {
-                    new EventToSend(new NoteOnEvent(noteNumber1, noteOnVelocity1), noteOnDelay1),
-                    new EventToSend(new NoteOffEvent(noteNumber1, noteOffVelocity1), moveFrom),
-                    new EventToSend(new NoteOnEvent(noteNumber2, noteOnVelocity2), TimeSpan.Zero),
-                    new EventToSend(new NoteOffEvent(noteNumber2, noteOffVelocity2), noteOnDelay1 + noteOffDelay1 + noteOnDelay2 + noteOffDelay2 - moveTo)
+                    new PlaybackChangerBase(moveFrom, p => p.MoveToTime((MetricTimeSpan)moveTo)),
                 },
-                moveFrom: moveFrom,
-                moveTo: moveTo,
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new NoteOnEvent(noteNumber1, noteOnVelocity1), noteOnDelay1),
+                    new ReceivedEvent(new NoteOffEvent(noteNumber1, noteOffVelocity1), noteOnDelay1 + moveFrom),
+                    new ReceivedEvent(new NoteOnEvent(noteNumber2, noteOnVelocity2), noteOnDelay1 + moveFrom),
+                    new ReceivedEvent(new NoteOffEvent(noteNumber2, noteOffVelocity2), noteOnDelay1 + moveFrom + noteOnDelay1 + noteOffDelay1 + noteOnDelay2 + noteOffDelay2 - moveTo)
+                },
                 notesWillBeStarted: new[] { 0, 1 },
-                notesWillBeFinished: new[] { 0, 1 },
-                useOutputDevice: useOutputDevice);
+                notesWillBeFinished: new[] { 0, 1 });
         }
 
         [Retry(RetriesNumber)]
-        [TestCase(true)]
-        [TestCase(false)]
-        public void TrackNotes_MoveBackFromNoteToNote(bool useOutputDevice)
+        [Test]
+        public void TrackNotes_MoveBackFromNoteToNote()
         {
             var noteNumber1 = (SevenBitNumber)60;
             var noteOnDelay1 = TimeSpan.Zero;
@@ -274,30 +296,35 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var moveFrom = TimeSpan.FromMilliseconds(1400);
             var moveTo = TimeSpan.FromMilliseconds(500);
 
-            CheckTrackNotes(
-                eventsToSend: new[]
+            CheckNotesTracking(
+                initialTimedObjects: new[]
                 {
-                    new EventToSend(new NoteOnEvent(noteNumber1, noteOnVelocity1), noteOnDelay1),
-                    new EventToSend(new NoteOffEvent(noteNumber1, noteOffVelocity1), noteOffDelay1),
-                    new EventToSend(new NoteOnEvent(noteNumber2, noteOnVelocity2), noteOnDelay2),
-                    new EventToSend(new NoteOffEvent(noteNumber2, noteOffVelocity2), noteOffDelay2)
+                    new TimedEvent(new NoteOnEvent(noteNumber1, noteOnVelocity1))
+                        .SetTime((MetricTimeSpan)noteOnDelay1, TempoMap.Default),
+                    new TimedEvent(new NoteOffEvent(noteNumber1, noteOffVelocity1))
+                        .SetTime((MetricTimeSpan)(noteOnDelay1 + noteOffDelay1), TempoMap.Default),
+                    new TimedEvent(new NoteOnEvent(noteNumber2, noteOnVelocity2))
+                        .SetTime((MetricTimeSpan)(noteOnDelay1 + noteOffDelay1 + noteOnDelay2), TempoMap.Default),
+                    new TimedEvent(new NoteOffEvent(noteNumber2, noteOffVelocity2))
+                        .SetTime((MetricTimeSpan)(noteOnDelay1 + noteOffDelay1 + noteOnDelay2 + noteOffDelay2), TempoMap.Default),
                 },
-                eventsWillBeSent: new[]
+                actions: new[]
                 {
-                    new EventToSend(new NoteOnEvent(noteNumber1, noteOnVelocity1), noteOnDelay1),
-                    new EventToSend(new NoteOffEvent(noteNumber1, noteOffVelocity1), noteOffDelay1),
-                    new EventToSend(new NoteOnEvent(noteNumber2, noteOnVelocity2), noteOnDelay2),
-                    new EventToSend(new NoteOffEvent(noteNumber2, noteOffVelocity2), moveFrom - (noteOnDelay1 + noteOffDelay1 + noteOnDelay2)),
-                    new EventToSend(new NoteOnEvent(noteNumber1, noteOnVelocity1), TimeSpan.Zero),
-                    new EventToSend(new NoteOffEvent(noteNumber1, noteOffVelocity1), noteOnDelay1 + noteOffDelay1 - moveTo),
-                    new EventToSend(new NoteOnEvent(noteNumber2, noteOnVelocity2), noteOnDelay2),
-                    new EventToSend(new NoteOffEvent(noteNumber2, noteOffVelocity2), noteOffDelay2)
+                    new PlaybackChangerBase(moveFrom, p => p.MoveToTime((MetricTimeSpan)moveTo)),
                 },
-                moveFrom: moveFrom,
-                moveTo: moveTo,
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new NoteOnEvent(noteNumber1, noteOnVelocity1), noteOnDelay1),
+                    new ReceivedEvent(new NoteOffEvent(noteNumber1, noteOffVelocity1), noteOnDelay1 + noteOffDelay1),
+                    new ReceivedEvent(new NoteOnEvent(noteNumber2, noteOnVelocity2), noteOnDelay1 + noteOffDelay1 + noteOnDelay2),
+                    new ReceivedEvent(new NoteOffEvent(noteNumber2, noteOffVelocity2), moveFrom),
+                    new ReceivedEvent(new NoteOnEvent(noteNumber1, noteOnVelocity1), moveFrom),
+                    new ReceivedEvent(new NoteOffEvent(noteNumber1, noteOffVelocity1), noteOnDelay1 + noteOffDelay1 - moveTo + moveFrom),
+                    new ReceivedEvent(new NoteOnEvent(noteNumber2, noteOnVelocity2), noteOnDelay1 + noteOffDelay1 - moveTo + moveFrom + noteOnDelay2),
+                    new ReceivedEvent(new NoteOffEvent(noteNumber2, noteOffVelocity2), noteOnDelay1 + noteOffDelay1 - moveTo + moveFrom + noteOnDelay2 + noteOffDelay2)
+                },
                 notesWillBeStarted: new[] { 0, 1, 0, 1 },
-                notesWillBeFinished: new[] { 0, 1, 0, 1 },
-                useOutputDevice: useOutputDevice);
+                notesWillBeFinished: new[] { 0, 1, 0, 1 });
         }
 
         [Retry(RetriesNumber)]
@@ -310,29 +337,32 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var stopAfter = TimeSpan.FromSeconds(1);
             var stopPeriod = TimeSpan.Zero;
 
-            CheckPlaybackStop(
-                eventsToSend: new[]
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
                 {
-                    new EventToSend(new NoteOnEvent(), noteOnDelay),
-                    new EventToSend(new NoteOffEvent(), noteOffDelay)
+                    new TimedEvent(new NoteOnEvent())
+                        .SetTime((MetricTimeSpan)noteOnDelay, TempoMap.Default),
+                    new TimedEvent(new NoteOffEvent())
+                        .SetTime((MetricTimeSpan)(noteOnDelay + noteOffDelay), TempoMap.Default),
                 },
-                eventsWillBeSent: new[]
+                actions: new[]
                 {
-                    new EventToSend(new NoteOnEvent(), noteOnDelay),
-                    new EventToSend(new NoteOffEvent(), stopAfter),
-                    new EventToSend(new NoteOnEvent(), TimeSpan.Zero),
-                    new EventToSend(new NoteOffEvent(), noteOnDelay + noteOffDelay - stopAfter)
+                    new PlaybackChangerBase(stopAfter, p => p.Stop()),
+                    new PlaybackChangerBase(stopPeriod, p => p.Start()),
                 },
-                stopAfter: stopAfter,
-                stopPeriod: stopPeriod,
-                setupPlayback: (context, playback) =>
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new NoteOnEvent(), noteOnDelay),
+                    new ReceivedEvent(new NoteOffEvent(), noteOnDelay + stopAfter),
+                    new ReceivedEvent(new NoteOnEvent(), noteOnDelay + stopAfter),
+                    new ReceivedEvent(new NoteOffEvent(), noteOnDelay + noteOffDelay + noteOnDelay)
+                },
+                setupPlayback: playback =>
                 {
                     playback.InterruptNotesOnStop = true;
                     playback.TrackNotes = true;
-                },
-                afterStart: NoPlaybackAction,
-                afterStop: NoPlaybackAction,
-                afterResume: NoPlaybackAction);
+                });
         }
 
         [Retry(RetriesNumber)]
@@ -345,27 +375,64 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var stopAfter = TimeSpan.FromSeconds(1);
             var stopPeriod = TimeSpan.Zero;
 
-            CheckPlaybackStop(
-                eventsToSend: new[]
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
                 {
-                    new EventToSend(new NoteOnEvent(), noteOnDelay),
-                    new EventToSend(new NoteOffEvent(), noteOffDelay)
+                    new TimedEvent(new NoteOnEvent())
+                        .SetTime((MetricTimeSpan)noteOnDelay, TempoMap.Default),
+                    new TimedEvent(new NoteOffEvent())
+                        .SetTime((MetricTimeSpan)(noteOnDelay + noteOffDelay), TempoMap.Default),
                 },
-                eventsWillBeSent: new[]
+                actions: new[]
                 {
-                    new EventToSend(new NoteOnEvent(), noteOnDelay),
-                    new EventToSend(new NoteOffEvent(), noteOffDelay)
+                    new PlaybackChangerBase(stopAfter, p => p.Stop()),
+                    new PlaybackChangerBase(stopPeriod, p => p.Start()),
                 },
-                stopAfter: stopAfter,
-                stopPeriod: stopPeriod,
-                setupPlayback: (context, playback) =>
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new NoteOnEvent(), noteOnDelay),
+                    new ReceivedEvent(new NoteOffEvent(), noteOnDelay + noteOffDelay),
+                },
+                setupPlayback: playback =>
                 {
                     playback.InterruptNotesOnStop = false;
                     playback.TrackNotes = true;
-                },
-                afterStart: NoPlaybackAction,
-                afterStop: NoPlaybackAction,
-                afterResume: NoPlaybackAction);
+                });
+        }
+
+        #endregion
+
+        #region Private methods
+
+        private void CheckNotesTracking(
+            ITimedObject[] initialTimedObjects,
+            PlaybackChangerBase[] actions,
+            ICollection<ReceivedEvent> expectedReceivedEvents,
+            IEnumerable<int> notesWillBeStarted,
+            IEnumerable<int> notesWillBeFinished,
+            Action<Playback> setupPlayback = null)
+        {
+            var notes = initialTimedObjects.GetObjects(ObjectType.Note).Cast<Note>().ToArray();
+            var notesStarted = new List<Note>();
+            var notesFinished = new List<Note>();
+
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: initialTimedObjects,
+                actions: actions,
+                expectedReceivedEvents: expectedReceivedEvents,
+                setupPlayback: playback =>
+                {
+                    setupPlayback?.Invoke(playback);
+
+                    playback.TrackNotes = true;
+                    playback.NotesPlaybackStarted += (_, e) => notesStarted.AddRange(e.Notes);
+                    playback.NotesPlaybackFinished += (_, e) => notesFinished.AddRange(e.Notes);
+                });
+
+            MidiAsserts.AreEqual(notesStarted, notesWillBeStarted.Select(i => notes[i]), "Invalid notes started.");
+            MidiAsserts.AreEqual(notesFinished, notesWillBeFinished.Select(i => notes[i]), "Invalid notes finished.");
         }
 
         #endregion
