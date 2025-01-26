@@ -78,7 +78,6 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
         #region Constants
 
-        private static readonly TempoMap OnTheFlyChecksTempoMap = new TempoMap(new TicksPerQuarterNoteTimeDivision(500));
         private const int OnTheFlyChecksRetriesNumber = 5;
 
         #endregion
@@ -96,7 +95,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
             CheckPlayback(
                 useOutputDevice: false,
-                createPlayback: outputDevice => new Playback(collection, OnTheFlyChecksTempoMap, outputDevice),
+                createPlayback: outputDevice => new Playback(collection, TempoMap, outputDevice),
                 actions: actions
                     .Select(a => new PlaybackChangerBase(a.PeriodMs, p => a.Action(p, collection)))
                     .ToArray(),

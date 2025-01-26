@@ -27,7 +27,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialPlaybackObjects: new[]
                 {
                     new TimedEvent(new StartEvent())
-                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap.Default),
+                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap),
                 },
                 actions: new[]
                 {
@@ -56,9 +56,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialPlaybackObjects: new[]
                 {
                     new TimedEvent(new ControlChangeEvent(controlNumber, controlValue))
-                        .SetTime((MetricTimeSpan)TimeSpan.Zero, TempoMap.Default),
+                        .SetTime((MetricTimeSpan)TimeSpan.Zero, TempoMap),
                     new TimedEvent(new StartEvent())
-                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap.Default),
+                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap),
                 },
                 actions: new[]
                 {
@@ -92,11 +92,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialPlaybackObjects: new[]
                 {
                     new TimedEvent(new ControlChangeEvent(controlNumber1, controlValue1))
-                        .SetTime((MetricTimeSpan)TimeSpan.Zero, TempoMap.Default),
+                        .SetTime((MetricTimeSpan)TimeSpan.Zero, TempoMap),
                     new TimedEvent(new ControlChangeEvent(controlNumber2, controlValue2) { Channel = (FourBitNumber)10 })
-                        .SetTime((MetricTimeSpan)controlChangeDelay, TempoMap.Default),
+                        .SetTime((MetricTimeSpan)controlChangeDelay, TempoMap),
                     new TimedEvent(new StartEvent())
-                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap.Default),
+                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap),
                 },
                 actions: new[]
                 {
@@ -131,11 +131,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialPlaybackObjects: new[]
                 {
                     new TimedEvent(new ControlChangeEvent(controlNumber1, controlValue1))
-                        .SetTime((MetricTimeSpan)TimeSpan.Zero, TempoMap.Default),
+                        .SetTime((MetricTimeSpan)TimeSpan.Zero, TempoMap),
                     new TimedEvent(new ControlChangeEvent(controlNumber2, controlValue2))
-                        .SetTime((MetricTimeSpan)TimeSpan.Zero, TempoMap.Default),
+                        .SetTime((MetricTimeSpan)TimeSpan.Zero, TempoMap),
                     new TimedEvent(new StartEvent())
-                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap.Default),
+                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap),
                 },
                 actions: new[]
                 {
@@ -169,9 +169,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialPlaybackObjects: new[]
                 {
                     new TimedEvent(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 })
-                        .SetTime((MetricTimeSpan)controlChangeTime, TempoMap.Default),
+                        .SetTime((MetricTimeSpan)controlChangeTime, TempoMap),
                     new TimedEvent(new StartEvent())
-                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap.Default),
+                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap),
                 },
                 actions: new[]
                 {
@@ -202,9 +202,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialPlaybackObjects: new[]
                 {
                     new TimedEvent(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 })
-                        .SetTime((MetricTimeSpan)controlChangeTime, TempoMap.Default),
+                        .SetTime((MetricTimeSpan)controlChangeTime, TempoMap),
                     new TimedEvent(new StartEvent())
-                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap.Default),
+                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap),
                 },
                 actions: new[]
                 {
@@ -235,9 +235,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialPlaybackObjects: new[]
                 {
                     new TimedEvent(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 })
-                        .SetTime((MetricTimeSpan)controlChangeTime, TempoMap.Default),
+                        .SetTime((MetricTimeSpan)controlChangeTime, TempoMap),
                     new TimedEvent(new StartEvent())
-                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap.Default),
+                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap),
                 },
                 actions: new[]
                 {
@@ -268,9 +268,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialPlaybackObjects: new[]
                 {
                     new TimedEvent(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 })
-                        .SetTime((MetricTimeSpan)controlChangeTime, TempoMap.Default),
+                        .SetTime((MetricTimeSpan)controlChangeTime, TempoMap),
                     new TimedEvent(new StartEvent())
-                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap.Default),
+                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap),
                 },
                 actions: new[]
                 {
@@ -301,9 +301,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialPlaybackObjects: new[]
                 {
                     new TimedEvent(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 })
-                        .SetTime((MetricTimeSpan)controlChangeTime, TempoMap.Default),
+                        .SetTime((MetricTimeSpan)controlChangeTime, TempoMap),
                     new TimedEvent(new StartEvent())
-                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap.Default),
+                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap),
                 },
                 actions: new[]
                 {
@@ -336,9 +336,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialPlaybackObjects: new[]
                 {
                     new TimedEvent(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 })
-                        .SetTime((MetricTimeSpan)controlChangeTime, TempoMap.Default),
+                        .SetTime((MetricTimeSpan)controlChangeTime, TempoMap),
                     new TimedEvent(new StartEvent())
-                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap.Default),
+                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap),
                 },
                 actions: new[]
                 {
@@ -369,9 +369,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialPlaybackObjects: new[]
                 {
                     new TimedEvent(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 })
-                        .SetTime((MetricTimeSpan)controlChangeTime, TempoMap.Default),
+                        .SetTime((MetricTimeSpan)controlChangeTime, TempoMap),
                     new TimedEvent(new StartEvent())
-                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap.Default),
+                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap),
                 },
                 actions: new[]
                 {
@@ -406,11 +406,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialPlaybackObjects: new[]
                 {
                     new TimedEvent(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 })
-                        .SetTime((MetricTimeSpan)controlChangeTime, TempoMap.Default),
+                        .SetTime((MetricTimeSpan)controlChangeTime, TempoMap),
                     new TimedEvent(new ProgramChangeEvent(programNumber))
-                        .SetTime((MetricTimeSpan)programChangeTime, TempoMap.Default),
+                        .SetTime((MetricTimeSpan)programChangeTime, TempoMap),
                     new TimedEvent(new StartEvent())
-                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap.Default),
+                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap),
                 },
                 actions: new[]
                 {
@@ -449,9 +449,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialPlaybackObjects: new[]
                 {
                     new TimedEvent(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 })
-                        .SetTime((MetricTimeSpan)controlChangeTime, TempoMap.Default),
+                        .SetTime((MetricTimeSpan)controlChangeTime, TempoMap),
                     new TimedEvent(new StartEvent())
-                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap.Default),
+                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap),
                 },
                 actions: new[]
                 {
@@ -486,7 +486,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialPlaybackObjects: new[]
                 {
                     new TimedEvent(new StartEvent())
-                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap.Default),
+                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap),
                 },
                 actions: new[]
                 {
@@ -516,9 +516,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialPlaybackObjects: new[]
                 {
                     new TimedEvent(new ControlChangeEvent(controlNumber, controlValue))
-                        .SetTime((MetricTimeSpan)TimeSpan.Zero, TempoMap.Default),
+                        .SetTime((MetricTimeSpan)TimeSpan.Zero, TempoMap),
                     new TimedEvent(new StartEvent())
-                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap.Default),
+                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap),
                 },
                 actions: new[]
                 {
@@ -553,11 +553,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialPlaybackObjects: new[]
                 {
                     new TimedEvent(new ControlChangeEvent(controlNumber1, controlValue1))
-                        .SetTime((MetricTimeSpan)TimeSpan.Zero, TempoMap.Default),
+                        .SetTime((MetricTimeSpan)TimeSpan.Zero, TempoMap),
                     new TimedEvent(new ControlChangeEvent(controlNumber2, controlValue2) { Channel = (FourBitNumber)10 })
-                        .SetTime((MetricTimeSpan)controlChangeDelay, TempoMap.Default),
+                        .SetTime((MetricTimeSpan)controlChangeDelay, TempoMap),
                     new TimedEvent(new StartEvent())
-                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap.Default),
+                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap),
                 },
                 actions: new[]
                 {
@@ -593,11 +593,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialPlaybackObjects: new[]
                 {
                     new TimedEvent(new ControlChangeEvent(controlNumber1, controlValue1))
-                        .SetTime((MetricTimeSpan)TimeSpan.Zero, TempoMap.Default),
+                        .SetTime((MetricTimeSpan)TimeSpan.Zero, TempoMap),
                     new TimedEvent(new ControlChangeEvent(controlNumber2, controlValue2))
-                        .SetTime((MetricTimeSpan)TimeSpan.Zero, TempoMap.Default),
+                        .SetTime((MetricTimeSpan)TimeSpan.Zero, TempoMap),
                     new TimedEvent(new StartEvent())
-                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap.Default),
+                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap),
                 },
                 actions: new[]
                 {
@@ -632,9 +632,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialPlaybackObjects: new[]
                 {
                     new TimedEvent(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 })
-                        .SetTime((MetricTimeSpan)controlChangeTime, TempoMap.Default),
+                        .SetTime((MetricTimeSpan)controlChangeTime, TempoMap),
                     new TimedEvent(new StartEvent())
-                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap.Default),
+                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap),
                 },
                 actions: new[]
                 {
@@ -666,9 +666,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialPlaybackObjects: new[]
                 {
                     new TimedEvent(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 })
-                        .SetTime((MetricTimeSpan)controlChangeTime, TempoMap.Default),
+                        .SetTime((MetricTimeSpan)controlChangeTime, TempoMap),
                     new TimedEvent(new StartEvent())
-                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap.Default),
+                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap),
                 },
                 actions: new[]
                 {
@@ -699,9 +699,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialPlaybackObjects: new[]
                 {
                     new TimedEvent(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 })
-                        .SetTime((MetricTimeSpan)controlChangeTime, TempoMap.Default),
+                        .SetTime((MetricTimeSpan)controlChangeTime, TempoMap),
                     new TimedEvent(new StartEvent())
-                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap.Default),
+                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap),
                 },
                 actions: new[]
                 {
@@ -732,9 +732,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialPlaybackObjects: new[]
                 {
                     new TimedEvent(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 })
-                        .SetTime((MetricTimeSpan)controlChangeTime, TempoMap.Default),
+                        .SetTime((MetricTimeSpan)controlChangeTime, TempoMap),
                     new TimedEvent(new StartEvent())
-                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap.Default),
+                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap),
                 },
                 actions: new[]
                 {
@@ -766,9 +766,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialPlaybackObjects: new[]
                 {
                     new TimedEvent(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 })
-                        .SetTime((MetricTimeSpan)controlChangeTime, TempoMap.Default),
+                        .SetTime((MetricTimeSpan)controlChangeTime, TempoMap),
                     new TimedEvent(new StartEvent())
-                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap.Default),
+                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap),
                 },
                 actions: new[]
                 {
@@ -801,9 +801,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialPlaybackObjects: new[]
                 {
                     new TimedEvent(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 })
-                        .SetTime((MetricTimeSpan)controlChangeTime, TempoMap.Default),
+                        .SetTime((MetricTimeSpan)controlChangeTime, TempoMap),
                     new TimedEvent(new StartEvent())
-                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap.Default),
+                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap),
                 },
                 actions: new[]
                 {
@@ -835,9 +835,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialPlaybackObjects: new[]
                 {
                     new TimedEvent(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 })
-                        .SetTime((MetricTimeSpan)controlChangeTime, TempoMap.Default),
+                        .SetTime((MetricTimeSpan)controlChangeTime, TempoMap),
                     new TimedEvent(new StartEvent())
-                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap.Default),
+                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap),
                 },
                 actions: new[]
                 {
@@ -873,11 +873,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialPlaybackObjects: new[]
                 {
                     new TimedEvent(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 })
-                        .SetTime((MetricTimeSpan)controlChangeTime, TempoMap.Default),
+                        .SetTime((MetricTimeSpan)controlChangeTime, TempoMap),
                     new TimedEvent(new ProgramChangeEvent(programNumber))
-                        .SetTime((MetricTimeSpan)programChangeTime, TempoMap.Default),
+                        .SetTime((MetricTimeSpan)programChangeTime, TempoMap),
                     new TimedEvent(new StartEvent())
-                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap.Default),
+                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap),
                 },
                 actions: new[]
                 {
@@ -912,9 +912,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialPlaybackObjects: new[]
                 {
                     new TimedEvent(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 })
-                        .SetTime((MetricTimeSpan)controlChangeTime, TempoMap.Default),
+                        .SetTime((MetricTimeSpan)controlChangeTime, TempoMap),
                     new TimedEvent(new StartEvent())
-                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap.Default),
+                        .SetTime((MetricTimeSpan)lastEventTime, TempoMap),
                 },
                 actions: new[]
                 {

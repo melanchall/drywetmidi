@@ -25,15 +25,15 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var initialObjects = new ITimedObject[]
             {
                 new TimedEvent(new TextEvent("END"))
-                    .SetTime(new MetricTimeSpan(0, 0, 0, lastEventTime), OnTheFlyChecksTempoMap),
+                    .SetTime(new MetricTimeSpan(0, 0, 0, lastEventTime), TempoMap),
             };
 
             var objectsToAdd = SevenBitNumber
                 .Values
                 .Take(notesCount)
                 .Select(n => new Note(n)
-                    .SetTime(new MetricTimeSpan(0, 0, 0, n * noteLengthMs + 10 + n * gapMs), OnTheFlyChecksTempoMap)
-                    .SetLength(new MetricTimeSpan(0, 0, 0, noteLengthMs), OnTheFlyChecksTempoMap))
+                    .SetTime(new MetricTimeSpan(0, 0, 0, n * noteLengthMs + 10 + n * gapMs), TempoMap)
+                    .SetLength(new MetricTimeSpan(0, 0, 0, noteLengthMs), TempoMap))
                 .ToArray();
 
             var actions = SevenBitNumber
@@ -71,7 +71,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var lastEventTime = notesCount * noteLengthMs + 20;
 
             var endObject = new TimedEvent(new TextEvent("END"))
-                .SetTime(new MetricTimeSpan(0, 0, 0, lastEventTime), OnTheFlyChecksTempoMap);
+                .SetTime(new MetricTimeSpan(0, 0, 0, lastEventTime), TempoMap);
             var initialObjects = new ITimedObject[]
             {
                 endObject,
@@ -81,8 +81,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 .Values
                 .Take(notesCount)
                 .Select(n => new Note(n)
-                    .SetTime(new MetricTimeSpan(0, 0, 0, n * noteLengthMs + 10), OnTheFlyChecksTempoMap)
-                    .SetLength(new MetricTimeSpan(0, 0, 0, noteLengthMs), OnTheFlyChecksTempoMap))
+                    .SetTime(new MetricTimeSpan(0, 0, 0, n * noteLengthMs + 10), TempoMap)
+                    .SetLength(new MetricTimeSpan(0, 0, 0, noteLengthMs), TempoMap))
                 .ToArray();
 
             var actions = SevenBitNumber
@@ -93,7 +93,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     {
                         collection.Add(objectsToAdd[n]);
                         collection.ChangeObject(endObject, obj => obj
-                            .SetTime(new MetricTimeSpan(0, 0, 0, n * noteLengthMs + 15), OnTheFlyChecksTempoMap));
+                            .SetTime(new MetricTimeSpan(0, 0, 0, n * noteLengthMs + 15), TempoMap));
                     })))
                 .ToArray();
 
@@ -119,21 +119,21 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             [Values(1, 2, 3, 4, 8, 16, 17, 32, 50, 51)] int notesCount)
         {
             var overlappedMs = 5;
-            var noteLengthMs = 20;
-            var lastEventTime = notesCount * noteLengthMs + 20 - notesCount * overlappedMs;
+            var noteLengthMs = 40;
+            var lastEventTime = notesCount * noteLengthMs + 40 - notesCount * overlappedMs;
 
             var initialObjects = new ITimedObject[]
             {
                 new TimedEvent(new TextEvent("END"))
-                    .SetTime(new MetricTimeSpan(0, 0, 0, lastEventTime), OnTheFlyChecksTempoMap),
+                    .SetTime(new MetricTimeSpan(0, 0, 0, lastEventTime), TempoMap),
             };
 
             var objectsToAdd = SevenBitNumber
                 .Values
                 .Take(notesCount)
                 .Select(n => new Note(n)
-                    .SetTime(new MetricTimeSpan(0, 0, 0, n * noteLengthMs + 10 - n * overlappedMs), OnTheFlyChecksTempoMap)
-                    .SetLength(new MetricTimeSpan(0, 0, 0, noteLengthMs), OnTheFlyChecksTempoMap))
+                    .SetTime(new MetricTimeSpan(0, 0, 0, n * noteLengthMs + 20 - n * overlappedMs), TempoMap)
+                    .SetLength(new MetricTimeSpan(0, 0, 0, noteLengthMs), TempoMap))
                 .ToArray();
 
             var actions = SevenBitNumber
@@ -151,8 +151,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     .Take(notesCount)
                     .SelectMany(n => new[]
                     {
-                        new ReceivedEvent(new NoteOnEvent(n, Note.DefaultVelocity), TimeSpan.FromMilliseconds(n * noteLengthMs + 10 - n * overlappedMs)),
-                        new ReceivedEvent(new NoteOffEvent(n, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds((n + 1) * noteLengthMs + 10 - n * overlappedMs)),
+                        new ReceivedEvent(new NoteOnEvent(n, Note.DefaultVelocity), TimeSpan.FromMilliseconds(n * noteLengthMs + 20 - n * overlappedMs)),
+                        new ReceivedEvent(new NoteOffEvent(n, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds((n + 1) * noteLengthMs + 20 - n * overlappedMs)),
                     })
                     .OrderBy(e => e.Time)
                     .Concat(new[]
@@ -174,15 +174,15 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var initialObjects = new ITimedObject[]
             {
                 new TimedEvent(new TextEvent("END"))
-                    .SetTime(new MetricTimeSpan(0, 0, 0, lastEventTime), OnTheFlyChecksTempoMap),
+                    .SetTime(new MetricTimeSpan(0, 0, 0, lastEventTime), TempoMap),
             };
 
             var objectsToAdd = SevenBitNumber
                 .Values
                 .Take(notesCount)
                 .Select(n => new Note(n)
-                    .SetTime(new MetricTimeSpan(0, 0, 0, n * noteLengthMs + 10), OnTheFlyChecksTempoMap)
-                    .SetLength(new MetricTimeSpan(0, 0, 0, noteLengthMs), OnTheFlyChecksTempoMap))
+                    .SetTime(new MetricTimeSpan(0, 0, 0, n * noteLengthMs + 10), TempoMap)
+                    .SetLength(new MetricTimeSpan(0, 0, 0, noteLengthMs), TempoMap))
                 .ToArray();
 
             CheckPlaybackDataChangesOnTheFly(
@@ -220,15 +220,15 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var initialObjects = new ITimedObject[]
             {
                 new TimedEvent(new TextEvent("END"))
-                    .SetTime(new MetricTimeSpan(0, 0, 0, lastEventTime), OnTheFlyChecksTempoMap),
+                    .SetTime(new MetricTimeSpan(0, 0, 0, lastEventTime), TempoMap),
             };
 
             var objectsToAdd = SevenBitNumber
                 .Values
                 .Take(notesCount)
                 .Select(n => new Note(n)
-                    .SetTime(new MetricTimeSpan(0, 0, 0, n * noteLengthMs + 10), OnTheFlyChecksTempoMap)
-                    .SetLength(new MetricTimeSpan(0, 0, 0, noteLengthMs), OnTheFlyChecksTempoMap))
+                    .SetTime(new MetricTimeSpan(0, 0, 0, n * noteLengthMs + 10), TempoMap)
+                    .SetLength(new MetricTimeSpan(0, 0, 0, noteLengthMs), TempoMap))
                 .ToArray();
 
             var receivedEvents = SevenBitNumber
@@ -252,7 +252,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new[]
                     {
                         new ReceivedEvent(
-                            objectsToAdd.AtTime(new MetricTimeSpan(0, 0, 0, addAtMs), OnTheFlyChecksTempoMap, LengthedObjectPart.Entire).First().GetTimedNoteOnEvent().Event,
+                            objectsToAdd.AtTime(new MetricTimeSpan(0, 0, 0, addAtMs), TempoMap, LengthedObjectPart.Entire).First().GetTimedNoteOnEvent().Event,
                             TimeSpan.FromMilliseconds(addAtMs)),
                     }
                     .Concat(receivedEvents
@@ -276,8 +276,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 .Values
                 .Take(notesCount)
                 .Select(n => new Note(n)
-                    .SetTime(new MetricTimeSpan(0, 0, 0, n * noteLengthMs + 10), OnTheFlyChecksTempoMap)
-                    .SetLength(new MetricTimeSpan(0, 0, 0, noteLengthMs), OnTheFlyChecksTempoMap))
+                    .SetTime(new MetricTimeSpan(0, 0, 0, n * noteLengthMs + 10), TempoMap)
+                    .SetLength(new MetricTimeSpan(0, 0, 0, noteLengthMs), TempoMap))
                 .ToArray();
 
             var actions = SevenBitNumber
@@ -313,8 +313,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 .Values
                 .Take(notesCount)
                 .Select(n => new Note(n)
-                    .SetTime(new MetricTimeSpan(0, 0, 0, n * noteLengthMs + 40), OnTheFlyChecksTempoMap)
-                    .SetLength(new MetricTimeSpan(0, 0, 0, noteLengthMs), OnTheFlyChecksTempoMap))
+                    .SetTime(new MetricTimeSpan(0, 0, 0, n * noteLengthMs + 40), TempoMap)
+                    .SetLength(new MetricTimeSpan(0, 0, 0, noteLengthMs), TempoMap))
                 .ToArray();
 
             var actions = SevenBitNumber
@@ -339,14 +339,14 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var noteNumber = (SevenBitNumber)70;
 
             var objectToShift = new Note(noteNumber)
-                .SetTime(new MetricTimeSpan(0, 0, 0, 20), OnTheFlyChecksTempoMap)
-                .SetLength(new MetricTimeSpan(0, 0, 0, noteLengthMs), OnTheFlyChecksTempoMap);
+                .SetTime(new MetricTimeSpan(0, 0, 0, 20), TempoMap)
+                .SetLength(new MetricTimeSpan(0, 0, 0, noteLengthMs), TempoMap);
 
             var actions = Enumerable
                 .Range(0, 10)
                 .Select(n => new PlaybackChanger(n == 0 ? 10 : noteLengthMs,
                     (playback, collection) => collection.ChangeObject(objectToShift, obj => obj
-                        .SetTime(new MetricTimeSpan(0, 0, 0, (n + 1) * noteLengthMs + 20), OnTheFlyChecksTempoMap))))
+                        .SetTime(new MetricTimeSpan(0, 0, 0, (n + 1) * noteLengthMs + 20), TempoMap))))
                 .ToArray();
 
             var lastMs = 10 * noteLengthMs + 20;
@@ -375,15 +375,15 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var initialObjects = new ITimedObject[]
             {
                 new TimedEvent(new TextEvent("END"))
-                    .SetTime(new MetricTimeSpan(0, 0, 0, lastEventTime), OnTheFlyChecksTempoMap),
+                    .SetTime(new MetricTimeSpan(0, 0, 0, lastEventTime), TempoMap),
             };
 
             var objectsToAdd = SevenBitNumber
                 .Values
                 .Take(notesCount)
                 .Select(n => new Note(n)
-                    .SetTime(new MetricTimeSpan(0, 0, 0, n * noteLengthMs + 20 + n * gapMs), OnTheFlyChecksTempoMap)
-                    .SetLength(new MetricTimeSpan(0, 0, 0, noteLengthMs), OnTheFlyChecksTempoMap))
+                    .SetTime(new MetricTimeSpan(0, 0, 0, n * noteLengthMs + 20 + n * gapMs), TempoMap)
+                    .SetLength(new MetricTimeSpan(0, 0, 0, noteLengthMs), TempoMap))
                 .ToArray();
 
             var action = viaChangeCollection
@@ -426,15 +426,15 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var initialObjects = new ITimedObject[]
             {
                 new TimedEvent(new TextEvent("END"))
-                    .SetTime(new MetricTimeSpan(0, 0, 0, lastEventTime), OnTheFlyChecksTempoMap),
+                    .SetTime(new MetricTimeSpan(0, 0, 0, lastEventTime), TempoMap),
             };
 
             var objectsToAdd = SevenBitNumber
                 .Values
                 .Take(notesCount)
                 .Select(n => new Note(n)
-                    .SetTime(new MetricTimeSpan(0, 0, 0, n * noteLengthMs + 10), OnTheFlyChecksTempoMap)
-                    .SetLength(new MetricTimeSpan(0, 0, 0, noteLengthMs), OnTheFlyChecksTempoMap))
+                    .SetTime(new MetricTimeSpan(0, 0, 0, n * noteLengthMs + 10), TempoMap)
+                    .SetLength(new MetricTimeSpan(0, 0, 0, noteLengthMs), TempoMap))
                 .ToArray();
 
             var actions = SevenBitNumber

@@ -15,18 +15,28 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
     [TestFixture]
     public sealed partial class PlaybackTests
     {
+        #region Constants
+
+        private static readonly TempoMap TempoMap = new TempoMap(new TicksPerQuarterNoteTimeDivision(500));
+
+        #endregion
+
+        #region Private methods
+
         private void CheckPlayback(
             bool useOutputDevice,
             ICollection<ITimedObject> initialPlaybackObjects,
             PlaybackChangerBase[] actions,
             ICollection<ReceivedEvent> expectedReceivedEvents,
             Action<Playback> setupPlayback = null,
+            Action<Playback> afterStart = null,
             int? repeatsCount = null) => CheckPlayback(
                 useOutputDevice,
-                outpuDevice => new Playback(initialPlaybackObjects, TempoMap.Default, outpuDevice),
+                outpuDevice => new Playback(initialPlaybackObjects, TempoMap, outpuDevice),
                 actions,
                 expectedReceivedEvents,
                 setupPlayback,
+                afterStart,
                 repeatsCount);
 
         private void CheckPlayback(
@@ -35,6 +45,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             PlaybackChangerBase[] actions,
             ICollection<ReceivedEvent> expectedReceivedEvents,
             Action<Playback> setupPlayback = null,
+            Action<Playback> afterStart = null,
             int? repeatsCount = null)
         {
             var outputDevice = useOutputDevice
@@ -70,6 +81,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
                     stopwatch.Start();
                     playback.Start();
+
+                    afterStart?.Invoke(playback);
 
                     foreach (var action in actions)
                     {
@@ -109,288 +122,6 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             return playback.Snapping.GetActiveSnapPoints().ToList();
         }
 
-        private void CheckEventCallback(
-            ICollection<EventToSend> eventsToSend,
-            ICollection<ReceivedEvent> expectedReceivedEvents,
-            TimeSpan changeCallbackAfter,
-            EventCallback eventCallback,
-            EventCallback secondEventCallback)
-        {
-            var playbackContext = new PlaybackContext();
-
-            var receivedEvents = playbackContext.ReceivedEvents;
-            var sentEvents = playbackContext.SentEvents;
-            var stopwatch = playbackContext.Stopwatch;
-            var tempoMap = playbackContext.TempoMap;
-
-            var eventsForPlayback = GetEventsForPlayback(eventsToSend, tempoMap);
-
-            var notesStarted = new List<Note>();
-            var notesFinished = new List<Note>();
-
-            using (var outputDevice = OutputDevice.GetByName(SendReceiveUtilities.DeviceToTestOnName))
-            {
-                SendReceiveUtilities.WarmUpDevice(outputDevice);
-                outputDevice.EventSent += (_, e) => sentEvents.Add(new SentEvent(e.Event, stopwatch.Elapsed));
-
-                using (var playback = eventsForPlayback.GetPlayback(tempoMap, outputDevice))
-                {
-                    playback.NotesPlaybackStarted += (_, e) => notesStarted.AddRange(e.Notes);
-                    playback.NotesPlaybackFinished += (_, e) => notesFinished.AddRange(e.Notes);
-
-                    playback.EventCallback = eventCallback;
-
-                    using (var inputDevice = InputDevice.GetByName(SendReceiveUtilities.DeviceToTestOnName))
-                    {
-                        inputDevice.EventReceived += (_, e) =>
-                        {
-                            lock (playbackContext.ReceivedEventsLockObject)
-                            {
-                                receivedEvents.Add(new ReceivedEvent(e.Event, stopwatch.Elapsed));
-                            }
-                        };
-
-                        inputDevice.StartEventsListening();
-                        stopwatch.Start();
-                        playback.Start();
-
-                        WaitOperations.Wait(() => stopwatch.Elapsed >= changeCallbackAfter);
-                        playback.EventCallback = secondEventCallback;
-
-                        var timeout = TimeSpan.FromTicks(eventsToSend.Sum(e => e.Delay.Ticks)) + SendReceiveUtilities.MaximumEventSendReceiveDelay;
-                        var playbackStopped = WaitOperations.Wait(() => !playback.IsRunning, timeout);
-                        Assert.IsTrue(playbackStopped, "Playback is running after completed.");
-                    }
-                }
-            }
-
-            CompareReceivedEvents(receivedEvents, expectedReceivedEvents.ToList());
-        }
-
-        private void CheckNoteCallback(
-            ICollection<EventToSend> eventsToSend,
-            ICollection<ReceivedEvent> expectedReceivedEvents,
-            TimeSpan changeCallbackAfter,
-            NoteCallback noteCallback,
-            NoteCallback secondNoteCallback,
-            ICollection<Note> expectedNotesStarted,
-            ICollection<Note> expectedNotesFinished)
-        {
-            var playbackContext = new PlaybackContext();
-
-            var receivedEvents = playbackContext.ReceivedEvents;
-            var sentEvents = playbackContext.SentEvents;
-            var stopwatch = playbackContext.Stopwatch;
-            var tempoMap = playbackContext.TempoMap;
-
-            var eventsForPlayback = GetEventsForPlayback(eventsToSend, tempoMap);
-
-            var notesStarted = new List<Note>();
-            var notesFinished = new List<Note>();
-
-            using (var outputDevice = OutputDevice.GetByName(SendReceiveUtilities.DeviceToTestOnName))
-            {
-                SendReceiveUtilities.WarmUpDevice(outputDevice);
-                outputDevice.EventSent += (_, e) => sentEvents.Add(new SentEvent(e.Event, stopwatch.Elapsed));
-
-                using (var playback = eventsForPlayback.GetPlayback(tempoMap, outputDevice))
-                {
-                    playback.NotesPlaybackStarted += (_, e) => notesStarted.AddRange(e.Notes);
-                    playback.NotesPlaybackFinished += (_, e) => notesFinished.AddRange(e.Notes);
-
-                    playback.NoteCallback = noteCallback;
-
-                    using (var inputDevice = InputDevice.GetByName(SendReceiveUtilities.DeviceToTestOnName))
-                    {
-                        inputDevice.EventReceived += (_, e) =>
-                        {
-                            lock (playbackContext.ReceivedEventsLockObject)
-                            {
-                                receivedEvents.Add(new ReceivedEvent(e.Event, stopwatch.Elapsed));
-                            }
-                        };
-
-                        inputDevice.StartEventsListening();
-                        stopwatch.Start();
-                        playback.Start();
-
-                        WaitOperations.Wait(() => stopwatch.Elapsed >= changeCallbackAfter);
-                        playback.NoteCallback = secondNoteCallback;
-
-                        var timeout = TimeSpan.FromTicks(eventsToSend.Sum(e => e.Delay.Ticks)) + SendReceiveUtilities.MaximumEventSendReceiveDelay;
-                        var playbackStopped = WaitOperations.Wait(() => !playback.IsRunning, timeout);
-                        Assert.IsTrue(playbackStopped, "Playback is running after completed.");
-                    }
-                }
-            }
-
-            CompareReceivedEvents(receivedEvents, expectedReceivedEvents.ToList());
-
-            MidiAsserts.AreEqual(notesStarted, expectedNotesStarted, "Invalid notes started.");
-            MidiAsserts.AreEqual(notesFinished, expectedNotesFinished, "Invalid notes finished.");
-        }
-
-        private void CheckEventPlayedEvent(
-            ICollection<EventToSend> eventsToSend,
-            ICollection<ReceivedEvent> expectedPlayedEvents)
-        {
-            var playbackContext = new PlaybackContext();
-
-            var playedEvents = playbackContext.ReceivedEvents;
-            var sentEvents = playbackContext.SentEvents;
-            var stopwatch = playbackContext.Stopwatch;
-            var tempoMap = playbackContext.TempoMap;
-
-            var eventsForPlayback = GetEventsForPlayback(eventsToSend, tempoMap);
-
-            var notesStarted = new List<Note>();
-            var notesFinished = new List<Note>();
-
-            using (var playback = eventsForPlayback.GetPlayback(tempoMap))
-            {
-                playback.EventPlayed += (_, e) =>
-                {
-                    lock (playbackContext.ReceivedEventsLockObject)
-                    {
-                        playedEvents.Add(new ReceivedEvent(e.Event, stopwatch.Elapsed));
-                    }
-                };
-                    
-                stopwatch.Start();
-                playback.Start();
-
-                var timeout = TimeSpan.FromTicks(eventsToSend.Sum(e => e.Delay.Ticks)) + SendReceiveUtilities.MaximumEventSendReceiveDelay;
-                var playbackStopped = WaitOperations.Wait(() => !playback.IsRunning, timeout);
-                Assert.IsTrue(playbackStopped, "Playback is running after completed.");
-            }
-
-            CompareReceivedEvents(playedEvents, expectedPlayedEvents.ToList());
-        }
-
-        private void CheckTrackNotes(
-            ICollection<EventToSend> eventsToSend,
-            ICollection<EventToSend> eventsWillBeSent,
-            TimeSpan moveFrom,
-            TimeSpan moveTo,
-            IEnumerable<int> notesWillBeStarted,
-            IEnumerable<int> notesWillBeFinished,
-            bool useOutputDevice)
-        {
-            if (useOutputDevice)
-                CheckTrackNotesWithOutputDevice(eventsToSend, eventsWillBeSent, moveFrom, moveTo, notesWillBeStarted, notesWillBeFinished);
-            else
-                CheckTrackNotesWithoutOutputDevice(eventsToSend, eventsWillBeSent, moveFrom, moveTo, notesWillBeStarted, notesWillBeFinished);
-        }
-
-        private void CheckTrackNotesWithOutputDevice(
-            ICollection<EventToSend> eventsToSend,
-            ICollection<EventToSend> eventsWillBeSent,
-            TimeSpan moveFrom,
-            TimeSpan moveTo,
-            IEnumerable<int> notesWillBeStarted,
-            IEnumerable<int> notesWillBeFinished)
-        {
-            var playbackContext = new PlaybackContext();
-
-            var receivedEvents = playbackContext.ReceivedEvents;
-            var sentEvents = playbackContext.SentEvents;
-            var stopwatch = playbackContext.Stopwatch;
-            var tempoMap = playbackContext.TempoMap;
-
-            var eventsForPlayback = GetEventsForPlayback(eventsToSend, tempoMap);
-
-            var notes = eventsForPlayback.GetNotes().ToArray();
-            var notesStarted = new List<Note>();
-            var notesFinished = new List<Note>();
-
-            using (var outputDevice = OutputDevice.GetByName(SendReceiveUtilities.DeviceToTestOnName))
-            {
-                SendReceiveUtilities.WarmUpDevice(outputDevice);
-                outputDevice.EventSent += (_, e) => sentEvents.Add(new SentEvent(e.Event, stopwatch.Elapsed));
-
-                using (var playback = eventsForPlayback.GetPlayback(tempoMap, outputDevice))
-                {
-                    playback.TrackNotes = true;
-                    playback.NotesPlaybackStarted += (_, e) => notesStarted.AddRange(e.Notes);
-                    playback.NotesPlaybackFinished += (_, e) => notesFinished.AddRange(e.Notes);
-
-                    using (var inputDevice = InputDevice.GetByName(SendReceiveUtilities.DeviceToTestOnName))
-                    {
-                        inputDevice.EventReceived += (_, e) =>
-                        {
-                            lock (playbackContext.ReceivedEventsLockObject)
-                            {
-                                receivedEvents.Add(new ReceivedEvent(e.Event, stopwatch.Elapsed));
-                            }
-                        };
-                        inputDevice.StartEventsListening();
-                        stopwatch.Start();
-                        playback.Start();
-
-                        WaitOperations.Wait(() => stopwatch.Elapsed >= moveFrom);
-                        playback.MoveToTime((MetricTimeSpan)moveTo);
-
-                        var timeout = TimeSpan.FromTicks(eventsWillBeSent.Sum(e => e.Delay.Ticks)) + SendReceiveUtilities.MaximumEventSendReceiveDelay;
-                        var areEventsReceived = WaitOperations.Wait(() => receivedEvents.Count == eventsWillBeSent.Count, timeout);
-                        Assert.IsTrue(areEventsReceived, $"Events are not received for timeout {timeout}.");
-
-                        stopwatch.Stop();
-
-                        var playbackStopped = WaitOperations.Wait(() => !playback.IsRunning, SendReceiveUtilities.MaximumEventSendReceiveDelay);
-                        Assert.IsTrue(playbackStopped, "Playback is running after completed.");
-                    }
-                }
-            }
-
-            CompareSentReceivedEvents(sentEvents, receivedEvents, eventsWillBeSent.ToList());
-
-            MidiAsserts.AreEqual(notesStarted, notesWillBeStarted.Select(i => notes[i]), "Invalid notes started.");
-            MidiAsserts.AreEqual(notesFinished, notesWillBeFinished.Select(i => notes[i]), "Invalid notes finished.");
-        }
-
-        private void CheckTrackNotesWithoutOutputDevice(
-            ICollection<EventToSend> eventsToSend,
-            ICollection<EventToSend> eventsWillBeSent,
-            TimeSpan moveFrom,
-            TimeSpan moveTo,
-            IEnumerable<int> notesWillBeStarted,
-            IEnumerable<int> notesWillBeFinished)
-        {
-            var playbackContext = new PlaybackContext();
-
-            var stopwatch = playbackContext.Stopwatch;
-            var tempoMap = playbackContext.TempoMap;
-
-            var eventsForPlayback = GetEventsForPlayback(eventsToSend, tempoMap);
-
-            var notes = eventsForPlayback.GetNotes().ToArray();
-            var notesStarted = new List<Note>();
-            var notesFinished = new List<Note>();
-
-            using (var playback = eventsForPlayback.GetPlayback(tempoMap))
-            {
-                playback.TrackNotes = true;
-                playback.NotesPlaybackStarted += (_, e) => notesStarted.AddRange(e.Notes);
-                playback.NotesPlaybackFinished += (_, e) => notesFinished.AddRange(e.Notes);
-
-                stopwatch.Start();
-                playback.Start();
-
-                WaitOperations.Wait(() => stopwatch.Elapsed >= moveFrom);
-                playback.MoveToTime((MetricTimeSpan)moveTo);
-
-                WaitOperations.Wait(TimeSpan.FromTicks(eventsWillBeSent.Sum(e => e.Delay.Ticks)) + SendReceiveUtilities.MaximumEventSendReceiveDelay);
-
-                stopwatch.Stop();
-
-                var playbackStopped = WaitOperations.Wait(() => !playback.IsRunning, SendReceiveUtilities.MaximumEventSendReceiveDelay);
-                Assert.IsTrue(playbackStopped, "Playback is running after completed.");
-            }
-
-            MidiAsserts.AreEqual(notesStarted, notesWillBeStarted.Select(i => notes[i]), "Invalid notes started.");
-            MidiAsserts.AreEqual(notesFinished, notesWillBeFinished.Select(i => notes[i]), "Invalid notes finished.");
-        }
-
         private void CheckPlaybackEvents(
             int expectedStartedRaised,
             int expectedStoppedRaised,
@@ -410,12 +141,12 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 new NoteOnEvent(),
                 new NoteOffEvent
                 {
-                    DeltaTime = TimeConverter.ConvertFrom(new MetricTimeSpan(0, 0, 1), TempoMap.Default)
+                    DeltaTime = TimeConverter.ConvertFrom(new MetricTimeSpan(0, 0, 1), TempoMap)
                 }
             };
 
             using (var outputDevice = OutputDevice.GetByName(SendReceiveUtilities.DeviceToTestOnName))
-            using (var playback = playbackEvents.GetPlayback(TempoMap.Default, outputDevice))
+            using (var playback = playbackEvents.GetPlayback(TempoMap, outputDevice))
             {
                 setupPlayback(null, playback);
 
@@ -762,5 +493,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         {
             return TimeSpan.FromTicks(MathUtilities.RoundToLong(timeSpan.Ticks / speed));
         }
+
+        #endregion
     }
 }

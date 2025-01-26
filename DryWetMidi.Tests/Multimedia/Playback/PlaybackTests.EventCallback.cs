@@ -3,6 +3,8 @@ using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Multimedia;
 using Melanchall.DryWetMidi.Core;
 using NUnit.Framework;
+using Melanchall.DryWetMidi.Interaction;
+using System.Collections.Generic;
 
 namespace Melanchall.DryWetMidi.Tests.Multimedia
 {
@@ -27,15 +29,18 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         public void EventCallback_ReturnNull()
         {
             CheckEventCallback(
-                eventsToSend: new[]
+                initialPlaybackObjects: new[]
                 {
-                    new EventToSend(new ProgramChangeEvent((SevenBitNumber)33), TimeSpan.FromMilliseconds(200)),
-                    new EventToSend(new StopEvent(), TimeSpan.FromMilliseconds(200))
+                    new TimedEvent(new ProgramChangeEvent((SevenBitNumber)33)).SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(200), TempoMap),
+                    new TimedEvent(new StopEvent()).SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(400), TempoMap),
                 },
-                expectedReceivedEvents: new ReceivedEvent[] { },
-                changeCallbackAfter: TimeSpan.FromMilliseconds(250),
-                eventCallback: (e, rt, t) => null,
-                secondEventCallback: (e, rt, t) => null);
+                initialEventCallback: (e, rt, t) => null,
+                actions: new[]
+                {
+                    new PlaybackChangerBase(TimeSpan.FromMilliseconds(250),
+                        p => p.EventCallback = (e, rt, t) => null),
+                },
+                expectedReceivedEvents: new ReceivedEvent[] { });
         }
 
         [Retry(RetriesNumber)]
@@ -43,20 +48,23 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         public void EventCallback_WithNotes_ReturnNull()
         {
             CheckEventCallback(
-                eventsToSend: new[]
+                initialPlaybackObjects: new[]
                 {
-                    new EventToSend(new NoteOnEvent(), TimeSpan.Zero),
-                    new EventToSend(new NoteOffEvent(), TimeSpan.FromMilliseconds(200)),
-                    new EventToSend(new ProgramChangeEvent((SevenBitNumber)33), TimeSpan.FromMilliseconds(200))
+                    new TimedEvent(new NoteOnEvent()).SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(0), TempoMap),
+                    new TimedEvent(new NoteOffEvent()).SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(200), TempoMap),
+                    new TimedEvent(new ProgramChangeEvent((SevenBitNumber)33)).SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(233), TempoMap),
+                },
+                initialEventCallback: (e, rt, t) => null,
+                actions: new[]
+                {
+                    new PlaybackChangerBase(TimeSpan.FromMilliseconds(250),
+                        p => p.EventCallback = (e, rt, t) => null),
                 },
                 expectedReceivedEvents: new[]
                 {
                     new ReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
                     new ReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(200))
-                },
-                changeCallbackAfter: TimeSpan.FromMilliseconds(250),
-                eventCallback: (e, rt, t) => null,
-                secondEventCallback: (e, rt, t) => null);
+                });
         }
 
         [Retry(RetriesNumber)]
@@ -64,18 +72,21 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         public void EventCallback_ReturnNull_ReturnOriginal()
         {
             CheckEventCallback(
-                eventsToSend: new[]
+                initialPlaybackObjects: new[]
                 {
-                    new EventToSend(new ProgramChangeEvent((SevenBitNumber)33), TimeSpan.FromMilliseconds(200)),
-                    new EventToSend(new StopEvent(), TimeSpan.FromMilliseconds(200))
+                    new TimedEvent(new ProgramChangeEvent((SevenBitNumber)33)).SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(200), TempoMap),
+                    new TimedEvent(new StopEvent()).SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(400), TempoMap),
+                },
+                initialEventCallback: (e, rt, t) => null,
+                actions: new[]
+                {
+                    new PlaybackChangerBase(TimeSpan.FromMilliseconds(250),
+                        p => p.EventCallback = (e, rt, t) => e),
                 },
                 expectedReceivedEvents: new[]
                 {
                     new ReceivedEvent(new StopEvent(), TimeSpan.FromMilliseconds(400))
-                },
-                changeCallbackAfter: TimeSpan.FromMilliseconds(250),
-                eventCallback: (e, rt, t) => null,
-                secondEventCallback: (e, rt, t) => e);
+                });
         }
 
         [Retry(RetriesNumber)]
@@ -83,18 +94,21 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         public void EventCallback_ReturnOriginal_ReturnNull()
         {
             CheckEventCallback(
-                eventsToSend: new[]
+                initialPlaybackObjects: new[]
                 {
-                    new EventToSend(new ProgramChangeEvent((SevenBitNumber)33), TimeSpan.FromMilliseconds(200)),
-                    new EventToSend(new StopEvent(), TimeSpan.FromMilliseconds(200))
+                    new TimedEvent(new ProgramChangeEvent((SevenBitNumber)33)).SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(200), TempoMap),
+                    new TimedEvent(new StopEvent()).SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(400), TempoMap),
+                },
+                initialEventCallback: (e, rt, t) => e,
+                actions: new[]
+                {
+                    new PlaybackChangerBase(TimeSpan.FromMilliseconds(250),
+                        p => p.EventCallback = (e, rt, t) => null),
                 },
                 expectedReceivedEvents: new[]
                 {
                     new ReceivedEvent(new ProgramChangeEvent((SevenBitNumber)33), TimeSpan.FromMilliseconds(200))
-                },
-                changeCallbackAfter: TimeSpan.FromMilliseconds(250),
-                eventCallback: (e, rt, t) => e,
-                secondEventCallback: (e, rt, t) => null);
+                });
         }
 
         [Retry(RetriesNumber)]
@@ -102,12 +116,18 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         public void EventCallback_ReturnOriginal_ReturnNew()
         {
             CheckEventCallback(
-                eventsToSend: new[]
+                initialPlaybackObjects: new[]
                 {
-                    new EventToSend(new NoteOnEvent(), TimeSpan.Zero),
-                    new EventToSend(new NoteOffEvent(), TimeSpan.FromMilliseconds(200)),
-                    new EventToSend(new ProgramChangeEvent((SevenBitNumber)33), TimeSpan.FromMilliseconds(300)),
-                    new EventToSend(new StopEvent(), TimeSpan.FromMilliseconds(100))
+                    new TimedEvent(new NoteOnEvent()).SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(0), TempoMap),
+                    new TimedEvent(new NoteOffEvent()).SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(200), TempoMap),
+                    new TimedEvent(new ProgramChangeEvent((SevenBitNumber)33)).SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(500), TempoMap),
+                    new TimedEvent(new StopEvent()).SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(600), TempoMap),
+                },
+                initialEventCallback: (e, rt, t) => e,
+                actions: new[]
+                {
+                    new PlaybackChangerBase(TimeSpan.FromMilliseconds(550),
+                        p => p.EventCallback = EventCallback),
                 },
                 expectedReceivedEvents: new[]
                 {
@@ -115,10 +135,25 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new ReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(200)),
                     new ReceivedEvent(new ProgramChangeEvent((SevenBitNumber)33), TimeSpan.FromMilliseconds(500)),
                     new ReceivedEvent(MidiEvent, TimeSpan.FromMilliseconds(600))
-                },
-                changeCallbackAfter: TimeSpan.FromMilliseconds(550),
-                eventCallback: (e, rt, t) => e,
-                secondEventCallback: EventCallback);
+                });
+        }
+
+        #endregion
+
+        #region Private methods
+
+        private void CheckEventCallback(
+            ICollection<ITimedObject> initialPlaybackObjects,
+            EventCallback initialEventCallback,
+            PlaybackChangerBase[] actions,
+            ICollection<ReceivedEvent> expectedReceivedEvents)
+        {
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: initialPlaybackObjects,
+                actions: actions,
+                expectedReceivedEvents: expectedReceivedEvents,
+                setupPlayback: playback => playback.EventCallback = initialEventCallback);
         }
 
         #endregion

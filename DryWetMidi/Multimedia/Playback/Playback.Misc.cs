@@ -3,12 +3,10 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Threading;
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
 
-using PlaybackEventsCollection = Melanchall.DryWetMidi.Common.RedBlackTree<System.TimeSpan, Melanchall.DryWetMidi.Multimedia.PlaybackEvent>;
 using NotePlaybackEventMetadataCollection = Melanchall.DryWetMidi.Common.RedBlackTree<System.TimeSpan, Melanchall.DryWetMidi.Multimedia.NotePlaybackEventMetadata>;
 
 namespace Melanchall.DryWetMidi.Multimedia
@@ -81,11 +79,6 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         #region Fields
 
-        private readonly PlaybackEventsCollection _playbackEvents = new PlaybackEventsCollection();
-        private readonly object _playbackLockObject = new object();
-        private RedBlackTreeNode<TimeSpan, PlaybackEvent> _playbackEventsPosition;
-        private bool _beforeStart = true;
-
         private TimeSpan _duration = TimeSpan.Zero;
         private long _durationInTicks;
 
@@ -99,8 +92,6 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         private readonly ConcurrentDictionary<NotePlaybackEventMetadata, byte> _activeNotesMetadata = new ConcurrentDictionary<NotePlaybackEventMetadata, byte>();
         private readonly NotePlaybackEventMetadataCollection _notesMetadata = new NotePlaybackEventMetadataCollection();
-
-        private readonly PlaybackDataTracker _playbackDataTracker;
 
         private bool _disposed = false;
 
@@ -131,21 +122,13 @@ namespace Melanchall.DryWetMidi.Multimedia
             ThrowIfArgument.IsNull(nameof(timedObjects), timedObjects);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
-            SubscribeToObjectsCollectionChanged(timedObjects);
-
             playbackSettings = playbackSettings ?? new PlaybackSettings();
 
             TempoMap = tempoMap;
 
-            var noteDetectionSettings = playbackSettings.NoteDetectionSettings ?? new NoteDetectionSettings();
-            _playbackDataTracker = new PlaybackDataTracker(TempoMap);
-
-            InitializePlaybackEvents(timedObjects.GetNotesAndTimedEventsLazy(noteDetectionSettings, true), tempoMap);
-            MoveToNextPlaybackEvent();
-
-            var lastPlaybackEvent = _playbackEvents.GetMaximumNode().Value;
-            _duration = lastPlaybackEvent?.Time ?? TimeSpan.Zero;
-            _durationInTicks = lastPlaybackEvent?.RawTime ?? 0;
+            InitializeDataTracking();
+            InitializeData(timedObjects, tempoMap, playbackSettings.NoteDetectionSettings ?? new NoteDetectionSettings());
+            UpdateDuration();
 
             var clockSettings = playbackSettings.ClockSettings ?? new MidiClockSettings();
             _clock = new MidiClock(false, clockSettings.CreateTickGeneratorCallback(), ClockInterval);
@@ -233,72 +216,6 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <see href="xref:a_playback_datatrack#notes-tracking">Data tracking: Notes tracking</see> article.
         /// </summary>
         public bool TrackNotes { get; set; } = true;
-
-        /// <summary>
-        /// Gets or sets a value indicating whether program must be tracked or not. If <c>true</c>, any jump
-        /// in time will force playback send <see cref="ProgramChangeEvent"/> corresponding to the program at new time,
-        /// if needed. The default value is <c>true</c>. More info in the
-        /// <see href="xref:a_playback_datatrack#midi-parameters-values-tracking">Data tracking: MIDI parameters values tracking</see>
-        /// article.
-        /// </summary>
-        public bool TrackProgram
-        {
-            get { return _playbackDataTracker.TrackProgram; }
-            set
-            {
-                if (_playbackDataTracker.TrackProgram == value)
-                    return;
-
-                _playbackDataTracker.TrackProgram = value;
-
-                if (value)
-                    SendTrackedData(PlaybackDataTracker.TrackedParameterType.Program);
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether pitch value must be tracked or not. If <c>true</c>, any jump
-        /// in time will force playback send <see cref="PitchBendEvent"/> corresponding to the pitch value at new time,
-        /// if needed. The default value is <c>true</c>. More info in the
-        /// <see href="xref:a_playback_datatrack#midi-parameters-values-tracking">Data tracking: MIDI parameters values tracking</see>
-        /// article.
-        /// </summary>
-        public bool TrackPitchValue
-        {
-            get { return _playbackDataTracker.TrackPitchValue; }
-            set
-            {
-                if (_playbackDataTracker.TrackPitchValue == value)
-                    return;
-
-                _playbackDataTracker.TrackPitchValue = value;
-
-                if (value)
-                    SendTrackedData(PlaybackDataTracker.TrackedParameterType.PitchValue);
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether controller values must be tracked or not. If <c>true</c>, any jump
-        /// in time will force playback send <see cref="ControlChangeEvent"/> corresponding to the controller value at new time,
-        /// if needed. The default value is <c>true</c>. More info in the
-        /// <see href="xref:a_playback_datatrack#midi-parameters-values-tracking">Data tracking: MIDI parameters values tracking</see>
-        /// article.
-        /// </summary>
-        public bool TrackControlValue
-        {
-            get { return _playbackDataTracker.TrackControlValue; }
-            set
-            {
-                if (_playbackDataTracker.TrackControlValue == value)
-                    return;
-
-                _playbackDataTracker.TrackControlValue = value;
-
-                if (value)
-                    SendTrackedData(PlaybackDataTracker.TrackedParameterType.ControlValue);
-            }
-        }
 
         /// <summary>
         /// Gets or sets the speed of events playing. <c>1</c> means normal speed. For example, to play
@@ -803,20 +720,19 @@ namespace Melanchall.DryWetMidi.Multimedia
             return Enumerable.Empty<TimedEvent>();
         }
 
+        private void UpdateDuration()
+        {
+            var lastPlaybackEvent = _playbackEvents.GetMaximumNode().Value;
+            _duration = lastPlaybackEvent?.Time ?? TimeSpan.Zero;
+            _durationInTicks = lastPlaybackEvent?.RawTime ?? 0;
+        }
+
         private bool TryToMoveToSnapPoint(SnapPoint snapPoint)
         {
             if (snapPoint != null)
                 MoveToTime((MetricTimeSpan)snapPoint.Time);
 
             return snapPoint != null;
-        }
-
-        private void SendTrackedData(PlaybackDataTracker.TrackedParameterType trackedParameterType = PlaybackDataTracker.TrackedParameterType.All)
-        {
-            foreach (var eventWithMetadata in _playbackDataTracker.GetEventsAtTime(_clock.CurrentTime, trackedParameterType))
-            {
-                PlayEvent(eventWithMetadata.Event, eventWithMetadata.Metadata);
-            }
         }
 
         private void StopStartNotes()
@@ -1064,7 +980,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         private void PlayEvent(MidiEvent midiEvent, object metadata)
         {
-            _playbackDataTracker.UpdateCurrentData(midiEvent, metadata);
+            UpdateCurrentTrackedData(midiEvent, metadata);
 
             try
             {

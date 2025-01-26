@@ -19,10 +19,10 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         public void CheckPlaybackDataChangesOnTheFly_ChangeObject_1()
         {
             
-            var objectToChange = new TimedEvent(new TextEvent("A")).SetTime(new MetricTimeSpan(0, 0, 0, 100), OnTheFlyChecksTempoMap);
+            var objectToChange = new TimedEvent(new TextEvent("A")).SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap);
             var initialObjects = new ITimedObject[]
             {
-                new Note((SevenBitNumber)70).SetLength(new MetricTimeSpan(0, 0, 0, 1000), OnTheFlyChecksTempoMap),
+                new Note((SevenBitNumber)70).SetLength(new MetricTimeSpan(0, 0, 0, 1000), TempoMap),
                 objectToChange,
             };
 
@@ -33,7 +33,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new PlaybackChanger(400,
                         (playback, collection) => collection.ChangeObject(
                             objectToChange,
-                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 500), OnTheFlyChecksTempoMap))),
+                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 500), TempoMap))),
                 },
                 expectedReceivedEvents: new[]
                 {
@@ -48,10 +48,10 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_ChangeObject_2()
         {
-            var objectToChange = new TimedEvent(new TextEvent("A")).SetTime(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap);
+            var objectToChange = new TimedEvent(new TextEvent("A")).SetTime(new MetricTimeSpan(0, 0, 0, 300), TempoMap);
             var initialObjects = new ITimedObject[]
             {
-                new Note((SevenBitNumber)70).SetLength(new MetricTimeSpan(0, 0, 0, 500), OnTheFlyChecksTempoMap),
+                new Note((SevenBitNumber)70).SetLength(new MetricTimeSpan(0, 0, 0, 500), TempoMap),
                 objectToChange,
             };
 
@@ -62,7 +62,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new PlaybackChanger(200,
                         (playback, collection) => collection.ChangeObject(
                             objectToChange,
-                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 100), OnTheFlyChecksTempoMap))),
+                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap))),
                 },
                 expectedReceivedEvents: new[]
                 {
@@ -75,10 +75,10 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_ChangeObject_ProgramChange_1()
         {
-            var objectToChange = new TimedEvent(new ProgramChangeEvent((SevenBitNumber)70)).SetTime(new MetricTimeSpan(0, 0, 0, 500), OnTheFlyChecksTempoMap);
+            var objectToChange = new TimedEvent(new ProgramChangeEvent((SevenBitNumber)70)).SetTime(new MetricTimeSpan(0, 0, 0, 500), TempoMap);
             var initialObjects = new ITimedObject[]
             {
-                new Note((SevenBitNumber)70).SetLength(new MetricTimeSpan(0, 0, 0, 700), OnTheFlyChecksTempoMap),
+                new Note((SevenBitNumber)70).SetLength(new MetricTimeSpan(0, 0, 0, 700), TempoMap),
                 objectToChange,
             };
 
@@ -91,7 +91,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                             objectToChange,
                             obj =>
                             {
-                                obj.SetTime(new MetricTimeSpan(0, 0, 0, 100), OnTheFlyChecksTempoMap);
+                                obj.SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap);
                                 ((ProgramChangeEvent)((TimedEvent)obj).Event).ProgramNumber = (SevenBitNumber)71;
                             })),
                 },
@@ -107,11 +107,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_ChangeObject_ProgramChange_2()
         {
-            var objectToChange1 = new TimedEvent(new ProgramChangeEvent((SevenBitNumber)70)).SetTime(new MetricTimeSpan(0, 0, 0, 500), OnTheFlyChecksTempoMap);
-            var objectToChange2 = new TimedEvent(new ProgramChangeEvent((SevenBitNumber)50)).SetTime(new MetricTimeSpan(0, 0, 0, 500), OnTheFlyChecksTempoMap);
+            var objectToChange1 = new TimedEvent(new ProgramChangeEvent((SevenBitNumber)70)).SetTime(new MetricTimeSpan(0, 0, 0, 500), TempoMap);
+            var objectToChange2 = new TimedEvent(new ProgramChangeEvent((SevenBitNumber)50)).SetTime(new MetricTimeSpan(0, 0, 0, 500), TempoMap);
             var initialObjects = new ITimedObject[]
             {
-                new Note((SevenBitNumber)70).SetLength(new MetricTimeSpan(0, 0, 0, 700), OnTheFlyChecksTempoMap),
+                new Note((SevenBitNumber)70).SetLength(new MetricTimeSpan(0, 0, 0, 700), TempoMap),
                 objectToChange1,
                 objectToChange2,
             };
@@ -123,11 +123,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new PlaybackChanger(300,
                         (playback, collection) => collection.ChangeObject(
                             objectToChange1,
-                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 200), OnTheFlyChecksTempoMap))),
+                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 200), TempoMap))),
                     new PlaybackChanger(300,
                         (playback, collection) => collection.ChangeObject(
                             objectToChange2,
-                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 100), OnTheFlyChecksTempoMap))),
+                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap))),
                 },
                 expectedReceivedEvents: new[]
                 {
@@ -143,11 +143,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_ChangeObject_ProgramChange_3()
         {
-            var objectToChange = new TimedEvent(new ProgramChangeEvent((SevenBitNumber)80)).SetTime(new MetricTimeSpan(0, 0, 0, 100), OnTheFlyChecksTempoMap);
+            var objectToChange = new TimedEvent(new ProgramChangeEvent((SevenBitNumber)80)).SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap);
             var initialObjects = new ITimedObject[]
             {
-                new Note((SevenBitNumber)70).SetLength(new MetricTimeSpan(0, 0, 0, 700), OnTheFlyChecksTempoMap),
-                new Note((SevenBitNumber)50).SetTime(new MetricTimeSpan(0, 0, 0, 700), OnTheFlyChecksTempoMap).SetLength(new MetricTimeSpan(0, 0, 0, 200), OnTheFlyChecksTempoMap),
+                new Note((SevenBitNumber)70).SetLength(new MetricTimeSpan(0, 0, 0, 700), TempoMap),
+                new Note((SevenBitNumber)50).SetTime(new MetricTimeSpan(0, 0, 0, 700), TempoMap).SetLength(new MetricTimeSpan(0, 0, 0, 200), TempoMap),
                 objectToChange,
             };
 
@@ -158,7 +158,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new PlaybackChanger(300,
                         (playback, collection) => collection.ChangeObject(
                             objectToChange,
-                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 800), OnTheFlyChecksTempoMap))),
+                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 800), TempoMap))),
                 },
                 expectedReceivedEvents: new[]
                 {
@@ -176,11 +176,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_ChangeObject_ProgramChange_4()
         {
-            var objectToChange1 = new TimedEvent(new ProgramChangeEvent((SevenBitNumber)70)).SetTime(new MetricTimeSpan(0, 0, 0, 500), OnTheFlyChecksTempoMap);
-            var objectToChange2 = new TimedEvent(new ProgramChangeEvent((SevenBitNumber)70) { Channel = (FourBitNumber)4 }).SetTime(new MetricTimeSpan(0, 0, 0, 500), OnTheFlyChecksTempoMap);
+            var objectToChange1 = new TimedEvent(new ProgramChangeEvent((SevenBitNumber)70)).SetTime(new MetricTimeSpan(0, 0, 0, 500), TempoMap);
+            var objectToChange2 = new TimedEvent(new ProgramChangeEvent((SevenBitNumber)70) { Channel = (FourBitNumber)4 }).SetTime(new MetricTimeSpan(0, 0, 0, 500), TempoMap);
             var initialObjects = new ITimedObject[]
             {
-                new Note((SevenBitNumber)70).SetLength(new MetricTimeSpan(0, 0, 0, 700), OnTheFlyChecksTempoMap),
+                new Note((SevenBitNumber)70).SetLength(new MetricTimeSpan(0, 0, 0, 700), TempoMap),
                 objectToChange1,
                 objectToChange2,
             };
@@ -192,11 +192,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new PlaybackChanger(300,
                         (playback, collection) => collection.ChangeObject(
                             objectToChange1,
-                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 200), OnTheFlyChecksTempoMap))),
+                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 200), TempoMap))),
                     new PlaybackChanger(300,
                         (playback, collection) => collection.ChangeObject(
                             objectToChange2,
-                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 100), OnTheFlyChecksTempoMap))),
+                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap))),
                 },
                 expectedReceivedEvents: new[]
                 {
@@ -211,10 +211,10 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_ChangeObject_PitchBend_1()
         {
-            var objectToChange = new TimedEvent(new PitchBendEvent(7000)).SetTime(new MetricTimeSpan(0, 0, 0, 500), OnTheFlyChecksTempoMap);
+            var objectToChange = new TimedEvent(new PitchBendEvent(7000)).SetTime(new MetricTimeSpan(0, 0, 0, 500), TempoMap);
             var initialObjects = new ITimedObject[]
             {
-                new Note((SevenBitNumber)70).SetLength(new MetricTimeSpan(0, 0, 0, 700), OnTheFlyChecksTempoMap),
+                new Note((SevenBitNumber)70).SetLength(new MetricTimeSpan(0, 0, 0, 700), TempoMap),
                 objectToChange,
             };
 
@@ -227,7 +227,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                             objectToChange,
                             obj =>
                             {
-                                obj.SetTime(new MetricTimeSpan(0, 0, 0, 100), OnTheFlyChecksTempoMap);
+                                obj.SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap);
                                 ((PitchBendEvent)((TimedEvent)obj).Event).PitchValue = 7100;
                             })),
                 },
@@ -244,11 +244,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_ChangeObject_PitchBend_2()
         {
-            var objectToChange1 = new TimedEvent(new PitchBendEvent(7000)).SetTime(new MetricTimeSpan(0, 0, 0, 500), OnTheFlyChecksTempoMap);
-            var objectToChange2 = new TimedEvent(new PitchBendEvent(5000)).SetTime(new MetricTimeSpan(0, 0, 0, 500), OnTheFlyChecksTempoMap);
+            var objectToChange1 = new TimedEvent(new PitchBendEvent(7000)).SetTime(new MetricTimeSpan(0, 0, 0, 500), TempoMap);
+            var objectToChange2 = new TimedEvent(new PitchBendEvent(5000)).SetTime(new MetricTimeSpan(0, 0, 0, 500), TempoMap);
             var initialObjects = new ITimedObject[]
             {
-                new Note((SevenBitNumber)70).SetLength(new MetricTimeSpan(0, 0, 0, 700), OnTheFlyChecksTempoMap),
+                new Note((SevenBitNumber)70).SetLength(new MetricTimeSpan(0, 0, 0, 700), TempoMap),
                 objectToChange1,
                 objectToChange2,
             };
@@ -260,11 +260,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new PlaybackChanger(300,
                         (playback, collection) => collection.ChangeObject(
                             objectToChange1,
-                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 200), OnTheFlyChecksTempoMap))),
+                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 200), TempoMap))),
                     new PlaybackChanger(300,
                         (playback, collection) => collection.ChangeObject(
                             objectToChange2,
-                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 100), OnTheFlyChecksTempoMap))),
+                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap))),
                 },
                 expectedReceivedEvents: new[]
                 {
@@ -281,11 +281,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_ChangeObject_PitchBend_3()
         {
-            var objectToChange = new TimedEvent(new PitchBendEvent(8000)).SetTime(new MetricTimeSpan(0, 0, 0, 100), OnTheFlyChecksTempoMap);
+            var objectToChange = new TimedEvent(new PitchBendEvent(8000)).SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap);
             var initialObjects = new ITimedObject[]
             {
-                new Note((SevenBitNumber)70).SetLength(new MetricTimeSpan(0, 0, 0, 700), OnTheFlyChecksTempoMap),
-                new Note((SevenBitNumber)50).SetTime(new MetricTimeSpan(0, 0, 0, 700), OnTheFlyChecksTempoMap).SetLength(new MetricTimeSpan(0, 0, 0, 200), OnTheFlyChecksTempoMap),
+                new Note((SevenBitNumber)70).SetLength(new MetricTimeSpan(0, 0, 0, 700), TempoMap),
+                new Note((SevenBitNumber)50).SetTime(new MetricTimeSpan(0, 0, 0, 700), TempoMap).SetLength(new MetricTimeSpan(0, 0, 0, 200), TempoMap),
                 objectToChange,
             };
 
@@ -296,7 +296,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new PlaybackChanger(300,
                         (playback, collection) => collection.ChangeObject(
                             objectToChange,
-                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 800), OnTheFlyChecksTempoMap))),
+                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 800), TempoMap))),
                 },
                 expectedReceivedEvents: new[]
                 {
@@ -315,11 +315,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_ChangeObject_PitchBend_4()
         {
-            var objectToChange1 = new TimedEvent(new PitchBendEvent(7000)).SetTime(new MetricTimeSpan(0, 0, 0, 500), OnTheFlyChecksTempoMap);
-            var objectToChange2 = new TimedEvent(new PitchBendEvent(7000) { Channel = (FourBitNumber)4 }).SetTime(new MetricTimeSpan(0, 0, 0, 500), OnTheFlyChecksTempoMap);
+            var objectToChange1 = new TimedEvent(new PitchBendEvent(7000)).SetTime(new MetricTimeSpan(0, 0, 0, 500), TempoMap);
+            var objectToChange2 = new TimedEvent(new PitchBendEvent(7000) { Channel = (FourBitNumber)4 }).SetTime(new MetricTimeSpan(0, 0, 0, 500), TempoMap);
             var initialObjects = new ITimedObject[]
             {
-                new Note((SevenBitNumber)70).SetLength(new MetricTimeSpan(0, 0, 0, 700), OnTheFlyChecksTempoMap),
+                new Note((SevenBitNumber)70).SetLength(new MetricTimeSpan(0, 0, 0, 700), TempoMap),
                 objectToChange1,
                 objectToChange2,
             };
@@ -331,11 +331,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new PlaybackChanger(300,
                         (playback, collection) => collection.ChangeObject(
                             objectToChange1,
-                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 200), OnTheFlyChecksTempoMap))),
+                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 200), TempoMap))),
                     new PlaybackChanger(300,
                         (playback, collection) => collection.ChangeObject(
                             objectToChange2,
-                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 100), OnTheFlyChecksTempoMap))),
+                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap))),
                 },
                 expectedReceivedEvents: new[]
                 {
@@ -351,10 +351,10 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_ChangeObject_ControlChange_1()
         {
-            var objectToChange = new TimedEvent(new ControlChangeEvent((SevenBitNumber)5, (SevenBitNumber)70)).SetTime(new MetricTimeSpan(0, 0, 0, 500), OnTheFlyChecksTempoMap);
+            var objectToChange = new TimedEvent(new ControlChangeEvent((SevenBitNumber)5, (SevenBitNumber)70)).SetTime(new MetricTimeSpan(0, 0, 0, 500), TempoMap);
             var initialObjects = new ITimedObject[]
             {
-                new Note((SevenBitNumber)70).SetLength(new MetricTimeSpan(0, 0, 0, 700), OnTheFlyChecksTempoMap),
+                new Note((SevenBitNumber)70).SetLength(new MetricTimeSpan(0, 0, 0, 700), TempoMap),
                 objectToChange,
             };
 
@@ -367,7 +367,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                             objectToChange,
                             obj =>
                             {
-                                obj.SetTime(new MetricTimeSpan(0, 0, 0, 100), OnTheFlyChecksTempoMap);
+                                obj.SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap);
                                 ((ControlChangeEvent)((TimedEvent)obj).Event).ControlValue = (SevenBitNumber)71;
                             })),
                 },
@@ -384,11 +384,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_ChangeObject_ControlChange_2()
         {
-            var objectToChange1 = new TimedEvent(new ControlChangeEvent((SevenBitNumber)5, (SevenBitNumber)70)).SetTime(new MetricTimeSpan(0, 0, 0, 500), OnTheFlyChecksTempoMap);
-            var objectToChange2 = new TimedEvent(new ControlChangeEvent((SevenBitNumber)5, (SevenBitNumber)50)).SetTime(new MetricTimeSpan(0, 0, 0, 500), OnTheFlyChecksTempoMap);
+            var objectToChange1 = new TimedEvent(new ControlChangeEvent((SevenBitNumber)5, (SevenBitNumber)70)).SetTime(new MetricTimeSpan(0, 0, 0, 500), TempoMap);
+            var objectToChange2 = new TimedEvent(new ControlChangeEvent((SevenBitNumber)5, (SevenBitNumber)50)).SetTime(new MetricTimeSpan(0, 0, 0, 500), TempoMap);
             var initialObjects = new ITimedObject[]
             {
-                new Note((SevenBitNumber)70).SetLength(new MetricTimeSpan(0, 0, 0, 700), OnTheFlyChecksTempoMap),
+                new Note((SevenBitNumber)70).SetLength(new MetricTimeSpan(0, 0, 0, 700), TempoMap),
                 objectToChange1,
                 objectToChange2,
             };
@@ -400,11 +400,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new PlaybackChanger(300,
                         (playback, collection) => collection.ChangeObject(
                             objectToChange1,
-                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 200), OnTheFlyChecksTempoMap))),
+                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 200), TempoMap))),
                     new PlaybackChanger(300,
                         (playback, collection) => collection.ChangeObject(
                             objectToChange2,
-                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 100), OnTheFlyChecksTempoMap))),
+                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap))),
                 },
                 expectedReceivedEvents: new[]
                 {
@@ -421,11 +421,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_ChangeObject_ControlChange_3()
         {
-            var objectToChange = new TimedEvent(new ControlChangeEvent((SevenBitNumber)5, (SevenBitNumber)80)).SetTime(new MetricTimeSpan(0, 0, 0, 100), OnTheFlyChecksTempoMap);
+            var objectToChange = new TimedEvent(new ControlChangeEvent((SevenBitNumber)5, (SevenBitNumber)80)).SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap);
             var initialObjects = new ITimedObject[]
             {
-                new Note((SevenBitNumber)70).SetLength(new MetricTimeSpan(0, 0, 0, 700), OnTheFlyChecksTempoMap),
-                new Note((SevenBitNumber)50).SetTime(new MetricTimeSpan(0, 0, 0, 700), OnTheFlyChecksTempoMap).SetLength(new MetricTimeSpan(0, 0, 0, 200), OnTheFlyChecksTempoMap),
+                new Note((SevenBitNumber)70).SetLength(new MetricTimeSpan(0, 0, 0, 700), TempoMap),
+                new Note((SevenBitNumber)50).SetTime(new MetricTimeSpan(0, 0, 0, 700), TempoMap).SetLength(new MetricTimeSpan(0, 0, 0, 200), TempoMap),
                 objectToChange,
             };
 
@@ -436,7 +436,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new PlaybackChanger(300,
                         (playback, collection) => collection.ChangeObject(
                             objectToChange,
-                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 800), OnTheFlyChecksTempoMap))),
+                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 800), TempoMap))),
                 },
                 expectedReceivedEvents: new[]
                 {
@@ -455,11 +455,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_ChangeObject_ControlChange_4()
         {
-            var objectToChange1 = new TimedEvent(new ControlChangeEvent((SevenBitNumber)5, (SevenBitNumber)70)).SetTime(new MetricTimeSpan(0, 0, 0, 500), OnTheFlyChecksTempoMap);
-            var objectToChange2 = new TimedEvent(new ControlChangeEvent((SevenBitNumber)5, (SevenBitNumber)70) { Channel = (FourBitNumber)4 }).SetTime(new MetricTimeSpan(0, 0, 0, 500), OnTheFlyChecksTempoMap);
+            var objectToChange1 = new TimedEvent(new ControlChangeEvent((SevenBitNumber)5, (SevenBitNumber)70)).SetTime(new MetricTimeSpan(0, 0, 0, 500), TempoMap);
+            var objectToChange2 = new TimedEvent(new ControlChangeEvent((SevenBitNumber)5, (SevenBitNumber)70) { Channel = (FourBitNumber)4 }).SetTime(new MetricTimeSpan(0, 0, 0, 500), TempoMap);
             var initialObjects = new ITimedObject[]
             {
-                new Note((SevenBitNumber)70).SetLength(new MetricTimeSpan(0, 0, 0, 700), OnTheFlyChecksTempoMap),
+                new Note((SevenBitNumber)70).SetLength(new MetricTimeSpan(0, 0, 0, 700), TempoMap),
                 objectToChange1,
                 objectToChange2,
             };
@@ -471,11 +471,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new PlaybackChanger(300,
                         (playback, collection) => collection.ChangeObject(
                             objectToChange1,
-                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 200), OnTheFlyChecksTempoMap))),
+                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 200), TempoMap))),
                     new PlaybackChanger(300,
                         (playback, collection) => collection.ChangeObject(
                             objectToChange2,
-                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 100), OnTheFlyChecksTempoMap))),
+                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap))),
                 },
                 expectedReceivedEvents: new[]
                 {
@@ -497,11 +497,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             //         |
             // ------[ |   ]--
 
-            var tempoMap = TempoMap.Default;
+            var tempoMap = TempoMap;
 
             var objectToChange = new Note((SevenBitNumber)70)
-                .SetTime(new MetricTimeSpan(0, 0, 0, 200), OnTheFlyChecksTempoMap)
-                .SetLength(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap);
+                .SetTime(new MetricTimeSpan(0, 0, 0, 200), TempoMap)
+                .SetLength(new MetricTimeSpan(0, 0, 0, 300), TempoMap);
             var initialObjects = new ITimedObject[]
             {
                 objectToChange,
@@ -514,7 +514,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new PlaybackChanger(300,
                         (playback, collection) => collection.ChangeObject(
                             objectToChange,
-                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 100), OnTheFlyChecksTempoMap))),
+                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap))),
                         },
                 expectedReceivedEvents: new[]
                 {
@@ -534,11 +534,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             //      |  
             // -----|-[     ]-
 
-            var tempoMap = TempoMap.Default;
+            var tempoMap = TempoMap;
 
             var objectToChange = new Note((SevenBitNumber)70)
-                .SetTime(new MetricTimeSpan(0, 0, 0, 100), OnTheFlyChecksTempoMap)
-                .SetLength(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap);
+                .SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap)
+                .SetLength(new MetricTimeSpan(0, 0, 0, 300), TempoMap);
             var initialObjects = new ITimedObject[]
             {
                 objectToChange,
@@ -553,7 +553,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                             objectToChange,
                             obj =>
                             {
-                                obj.SetTime(new MetricTimeSpan(0, 0, 0, 500), OnTheFlyChecksTempoMap);
+                                obj.SetTime(new MetricTimeSpan(0, 0, 0, 500), TempoMap);
                                 ((Note)obj).Channel = (FourBitNumber)4;
                                 ((Note)obj).NoteNumber = (SevenBitNumber)71;
                             })),
@@ -578,11 +578,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             //           |
             // -[     ]--|----
 
-            var tempoMap = TempoMap.Default;
+            var tempoMap = TempoMap;
 
             var objectToChange = new Note((SevenBitNumber)70)
-                .SetTime(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap)
-                .SetLength(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap);
+                .SetTime(new MetricTimeSpan(0, 0, 0, 300), TempoMap)
+                .SetLength(new MetricTimeSpan(0, 0, 0, 300), TempoMap);
             var initialObjects = new ITimedObject[]
             {
                 objectToChange,
@@ -597,7 +597,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                             objectToChange,
                             obj =>
                             {
-                                obj.SetTime(new MetricTimeSpan(), OnTheFlyChecksTempoMap);
+                                obj.SetTime(new MetricTimeSpan(), TempoMap);
                                 ((Note)obj).Velocity = (SevenBitNumber)30;
                             })),
                 },
@@ -619,11 +619,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             //           |
             // -[     ]--|---------
 
-            var tempoMap = TempoMap.Default;
+            var tempoMap = TempoMap;
 
             var objectToChange = new Note((SevenBitNumber)70)
-                .SetTime(new MetricTimeSpan(0, 0, 0, 400), OnTheFlyChecksTempoMap)
-                .SetLength(new MetricTimeSpan(0, 0, 0, 200), OnTheFlyChecksTempoMap);
+                .SetTime(new MetricTimeSpan(0, 0, 0, 400), TempoMap)
+                .SetLength(new MetricTimeSpan(0, 0, 0, 200), TempoMap);
             var initialObjects = new ITimedObject[]
             {
                 objectToChange,
@@ -638,7 +638,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                             objectToChange,
                             obj =>
                             {
-                                obj.SetTime(new MetricTimeSpan(0, 0, 0, 100), OnTheFlyChecksTempoMap);
+                                obj.SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap);
                                 ((Note)obj).Velocity = (SevenBitNumber)30;
                             })),
                 },
@@ -680,14 +680,14 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             // -------[  2  ]-----|---
 
 
-            var tempoMap = TempoMap.Default;
+            var tempoMap = TempoMap;
 
             var objectToChange1 = new Note((SevenBitNumber)50)
-                .SetTime(new MetricTimeSpan(0, 0, 0, 100), OnTheFlyChecksTempoMap)
-                .SetLength(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap);
+                .SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap)
+                .SetLength(new MetricTimeSpan(0, 0, 0, 300), TempoMap);
             var objectToChange2 = new Note((SevenBitNumber)60)
-                .SetTime(new MetricTimeSpan(0, 0, 0, 400), OnTheFlyChecksTempoMap)
-                .SetLength(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap);
+                .SetTime(new MetricTimeSpan(0, 0, 0, 400), TempoMap)
+                .SetLength(new MetricTimeSpan(0, 0, 0, 300), TempoMap);
 
             var initialObjects = new ITimedObject[]
             {
@@ -704,7 +704,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                             objectToChange1,
                             obj =>
                             {
-                                obj.SetTime(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap);
+                                obj.SetTime(new MetricTimeSpan(0, 0, 0, 300), TempoMap);
                                 ((Note)obj).Velocity = (SevenBitNumber)30;
                             })),
                     new PlaybackChanger(300,
@@ -712,7 +712,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                             objectToChange2,
                             obj =>
                             {
-                                obj.SetTime(new MetricTimeSpan(0, 0, 0, 700), OnTheFlyChecksTempoMap);
+                                obj.SetTime(new MetricTimeSpan(0, 0, 0, 700), TempoMap);
                                 ((Note)obj).NoteNumber = (SevenBitNumber)80;
                             })),
                     new PlaybackChanger(300,
@@ -720,7 +720,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                             objectToChange2,
                             obj =>
                             {
-                                obj.SetTime(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap);
+                                obj.SetTime(new MetricTimeSpan(0, 0, 0, 300), TempoMap);
                                 ((Note)obj).Channel = (FourBitNumber)5;
                                 playback.MoveToStart();
                             })),
@@ -754,8 +754,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var objectToChange = new Chord(note1, note2, note3);
 
             objectToChange
-                .SetTime(new MetricTimeSpan(0, 0, 0, 100), OnTheFlyChecksTempoMap)
-                .SetLength(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap);
+                .SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap)
+                .SetLength(new MetricTimeSpan(0, 0, 0, 300), TempoMap);
             
             var initialObjects = new ITimedObject[]
             {
@@ -792,14 +792,14 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var note1 = new Note((SevenBitNumber)70);
             var note2 = new Note((SevenBitNumber)50);
             var note3 = new Note((SevenBitNumber)90)
-                .SetTime(new MetricTimeSpan(0, 0, 0, 100), OnTheFlyChecksTempoMap)
-                .SetLength(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap);
+                .SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap)
+                .SetLength(new MetricTimeSpan(0, 0, 0, 300), TempoMap);
 
             var objectToChange = new Chord(note1, note2);
 
             objectToChange
-                .SetTime(new MetricTimeSpan(0, 0, 0, 100), OnTheFlyChecksTempoMap)
-                .SetLength(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap);
+                .SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap)
+                .SetLength(new MetricTimeSpan(0, 0, 0, 300), TempoMap);
 
             var initialObjects = new ITimedObject[]
             {
@@ -840,8 +840,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var objectToChange = new Chord(note1, note2);
 
             objectToChange
-                .SetTime(new MetricTimeSpan(0, 0, 0, 100), OnTheFlyChecksTempoMap)
-                .SetLength(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap);
+                .SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap)
+                .SetLength(new MetricTimeSpan(0, 0, 0, 300), TempoMap);
 
             var initialObjects = new ITimedObject[]
             {
@@ -860,8 +860,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                                 var chord = (Chord)obj;
                                 chord.Notes
                                     .Last()
-                                    .SetTime(new MetricTimeSpan(0, 0, 0, 150), OnTheFlyChecksTempoMap)
-                                    .SetLength(new MetricTimeSpan(0, 0, 0, 200), OnTheFlyChecksTempoMap);
+                                    .SetTime(new MetricTimeSpan(0, 0, 0, 150), TempoMap)
+                                    .SetLength(new MetricTimeSpan(0, 0, 0, 200), TempoMap);
                             })),
                 },
                 expectedReceivedEvents: new[]
@@ -884,8 +884,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var objectToChange = new Chord(note1, note2);
 
             objectToChange
-                .SetTime(new MetricTimeSpan(0, 0, 0, 100), OnTheFlyChecksTempoMap)
-                .SetLength(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap);
+                .SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap)
+                .SetLength(new MetricTimeSpan(0, 0, 0, 300), TempoMap);
 
             var initialObjects = new ITimedObject[]
             {
@@ -922,8 +922,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var objectToChange = new Chord(note1, note2, note3);
 
             objectToChange
-                .SetTime(new MetricTimeSpan(0, 0, 0, 100), OnTheFlyChecksTempoMap)
-                .SetLength(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap);
+                .SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap)
+                .SetLength(new MetricTimeSpan(0, 0, 0, 300), TempoMap);
 
             var initialObjects = new ITimedObject[]
             {
@@ -962,14 +962,14 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var note1 = new Note((SevenBitNumber)70);
             var note2 = new Note((SevenBitNumber)50);
             var note3 = new Note((SevenBitNumber)90)
-                .SetTime(new MetricTimeSpan(0, 0, 0, 100), OnTheFlyChecksTempoMap)
-                .SetLength(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap);
+                .SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap)
+                .SetLength(new MetricTimeSpan(0, 0, 0, 300), TempoMap);
 
             var objectToChange = new Chord(note1, note2);
 
             objectToChange
-                .SetTime(new MetricTimeSpan(0, 0, 0, 100), OnTheFlyChecksTempoMap)
-                .SetLength(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap);
+                .SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap)
+                .SetLength(new MetricTimeSpan(0, 0, 0, 300), TempoMap);
 
             var initialObjects = new ITimedObject[]
             {
@@ -1012,8 +1012,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var objectToChange = new Chord(note1, note2);
 
             objectToChange
-                .SetTime(new MetricTimeSpan(0, 0, 0, 100), OnTheFlyChecksTempoMap)
-                .SetLength(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap);
+                .SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap)
+                .SetLength(new MetricTimeSpan(0, 0, 0, 300), TempoMap);
 
             var initialObjects = new ITimedObject[]
             {
@@ -1032,8 +1032,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                                 var chord = (Chord)obj;
                                 chord.Notes
                                     .Last()
-                                    .SetTime(new MetricTimeSpan(0, 0, 0, 150), OnTheFlyChecksTempoMap)
-                                    .SetLength(new MetricTimeSpan(0, 0, 0, 200), OnTheFlyChecksTempoMap);
+                                    .SetTime(new MetricTimeSpan(0, 0, 0, 150), TempoMap)
+                                    .SetLength(new MetricTimeSpan(0, 0, 0, 200), TempoMap);
                             })),
                 },
                 expectedReceivedEvents: new[]
@@ -1056,8 +1056,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var objectToChange = new Chord(note1, note2);
 
             objectToChange
-                .SetTime(new MetricTimeSpan(0, 0, 0, 100), OnTheFlyChecksTempoMap)
-                .SetLength(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap);
+                .SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap)
+                .SetLength(new MetricTimeSpan(0, 0, 0, 300), TempoMap);
 
             var initialObjects = new ITimedObject[]
             {
@@ -1092,10 +1092,10 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         public void CheckPlaybackDataChangesOnTheFly_Loop_ChangeObject_1()
         {
 
-            var objectToChange = new TimedEvent(new TextEvent("A")).SetTime(new MetricTimeSpan(0, 0, 0, 100), OnTheFlyChecksTempoMap);
+            var objectToChange = new TimedEvent(new TextEvent("A")).SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap);
             var initialObjects = new ITimedObject[]
             {
-                new Note((SevenBitNumber)70).SetLength(new MetricTimeSpan(0, 0, 0, 500), OnTheFlyChecksTempoMap),
+                new Note((SevenBitNumber)70).SetLength(new MetricTimeSpan(0, 0, 0, 500), TempoMap),
                 objectToChange,
             };
 
@@ -1106,7 +1106,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new PlaybackChanger(200,
                         (playback, collection) => collection.ChangeObject(
                             objectToChange,
-                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap))),
+                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 300), TempoMap))),
                 },
                 expectedReceivedEvents: new[]
                 {
@@ -1125,10 +1125,10 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Loop_ChangeObject_2()
         {
-            var objectToChange = new TimedEvent(new TextEvent("A")).SetTime(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap);
+            var objectToChange = new TimedEvent(new TextEvent("A")).SetTime(new MetricTimeSpan(0, 0, 0, 300), TempoMap);
             var initialObjects = new ITimedObject[]
             {
-                new Note((SevenBitNumber)70).SetLength(new MetricTimeSpan(0, 0, 0, 500), OnTheFlyChecksTempoMap),
+                new Note((SevenBitNumber)70).SetLength(new MetricTimeSpan(0, 0, 0, 500), TempoMap),
                 objectToChange,
             };
 
@@ -1139,7 +1139,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new PlaybackChanger(200,
                         (playback, collection) => collection.ChangeObject(
                             objectToChange,
-                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 100), OnTheFlyChecksTempoMap))),
+                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap))),
                 },
                 expectedReceivedEvents: new[]
                 {
@@ -1156,10 +1156,10 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Loop_ChangeObject_ProgramChange_1()
         {
-            var objectToChange = new TimedEvent(new ProgramChangeEvent((SevenBitNumber)70)).SetTime(new MetricTimeSpan(0, 0, 0, 500), OnTheFlyChecksTempoMap);
+            var objectToChange = new TimedEvent(new ProgramChangeEvent((SevenBitNumber)70)).SetTime(new MetricTimeSpan(0, 0, 0, 500), TempoMap);
             var initialObjects = new ITimedObject[]
             {
-                new Note((SevenBitNumber)70).SetLength(new MetricTimeSpan(0, 0, 0, 700), OnTheFlyChecksTempoMap),
+                new Note((SevenBitNumber)70).SetLength(new MetricTimeSpan(0, 0, 0, 700), TempoMap),
                 objectToChange,
             };
 
@@ -1172,7 +1172,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                             objectToChange,
                             obj =>
                             {
-                                obj.SetTime(new MetricTimeSpan(0, 0, 0, 100), OnTheFlyChecksTempoMap);
+                                obj.SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap);
                                 ((ProgramChangeEvent)((TimedEvent)obj).Event).ProgramNumber = (SevenBitNumber)71;
                             })),
                 },
@@ -1192,11 +1192,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Loop_ChangeObject_ProgramChange_2()
         {
-            var objectToChange1 = new TimedEvent(new ProgramChangeEvent((SevenBitNumber)70)).SetTime(new MetricTimeSpan(0, 0, 0, 500), OnTheFlyChecksTempoMap);
-            var objectToChange2 = new TimedEvent(new ProgramChangeEvent((SevenBitNumber)50)).SetTime(new MetricTimeSpan(0, 0, 0, 500), OnTheFlyChecksTempoMap);
+            var objectToChange1 = new TimedEvent(new ProgramChangeEvent((SevenBitNumber)70)).SetTime(new MetricTimeSpan(0, 0, 0, 500), TempoMap);
+            var objectToChange2 = new TimedEvent(new ProgramChangeEvent((SevenBitNumber)50)).SetTime(new MetricTimeSpan(0, 0, 0, 500), TempoMap);
             var initialObjects = new ITimedObject[]
             {
-                new Note((SevenBitNumber)70).SetLength(new MetricTimeSpan(0, 0, 0, 700), OnTheFlyChecksTempoMap),
+                new Note((SevenBitNumber)70).SetLength(new MetricTimeSpan(0, 0, 0, 700), TempoMap),
                 objectToChange1,
                 objectToChange2,
             };
@@ -1208,11 +1208,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new PlaybackChanger(300,
                         (playback, collection) => collection.ChangeObject(
                             objectToChange1,
-                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 200), OnTheFlyChecksTempoMap))),
+                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 200), TempoMap))),
                     new PlaybackChanger(300,
                         (playback, collection) => collection.ChangeObject(
                             objectToChange2,
-                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 100), OnTheFlyChecksTempoMap))),
+                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap))),
                 },
                 expectedReceivedEvents: new[]
                 {
@@ -1233,11 +1233,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Loop_ChangeObject_ProgramChange_3()
         {
-            var objectToChange = new TimedEvent(new ProgramChangeEvent((SevenBitNumber)80)).SetTime(new MetricTimeSpan(0, 0, 0, 100), OnTheFlyChecksTempoMap);
+            var objectToChange = new TimedEvent(new ProgramChangeEvent((SevenBitNumber)80)).SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap);
             var initialObjects = new ITimedObject[]
             {
-                new Note((SevenBitNumber)70).SetLength(new MetricTimeSpan(0, 0, 0, 700), OnTheFlyChecksTempoMap),
-                new Note((SevenBitNumber)50).SetTime(new MetricTimeSpan(0, 0, 0, 700), OnTheFlyChecksTempoMap).SetLength(new MetricTimeSpan(0, 0, 0, 200), OnTheFlyChecksTempoMap),
+                new Note((SevenBitNumber)70).SetLength(new MetricTimeSpan(0, 0, 0, 700), TempoMap),
+                new Note((SevenBitNumber)50).SetTime(new MetricTimeSpan(0, 0, 0, 700), TempoMap).SetLength(new MetricTimeSpan(0, 0, 0, 200), TempoMap),
                 objectToChange,
             };
 
@@ -1248,7 +1248,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new PlaybackChanger(300,
                         (playback, collection) => collection.ChangeObject(
                             objectToChange,
-                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 800), OnTheFlyChecksTempoMap))),
+                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 800), TempoMap))),
                 },
                 expectedReceivedEvents: new[]
                 {
@@ -1272,11 +1272,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Loop_ChangeObject_ProgramChange_4()
         {
-            var objectToChange1 = new TimedEvent(new ProgramChangeEvent((SevenBitNumber)70)).SetTime(new MetricTimeSpan(0, 0, 0, 500), OnTheFlyChecksTempoMap);
-            var objectToChange2 = new TimedEvent(new ProgramChangeEvent((SevenBitNumber)70) { Channel = (FourBitNumber)4 }).SetTime(new MetricTimeSpan(0, 0, 0, 500), OnTheFlyChecksTempoMap);
+            var objectToChange1 = new TimedEvent(new ProgramChangeEvent((SevenBitNumber)70)).SetTime(new MetricTimeSpan(0, 0, 0, 500), TempoMap);
+            var objectToChange2 = new TimedEvent(new ProgramChangeEvent((SevenBitNumber)70) { Channel = (FourBitNumber)4 }).SetTime(new MetricTimeSpan(0, 0, 0, 500), TempoMap);
             var initialObjects = new ITimedObject[]
             {
-                new Note((SevenBitNumber)70).SetLength(new MetricTimeSpan(0, 0, 0, 700), OnTheFlyChecksTempoMap),
+                new Note((SevenBitNumber)70).SetLength(new MetricTimeSpan(0, 0, 0, 700), TempoMap),
                 objectToChange1,
                 objectToChange2,
             };
@@ -1288,11 +1288,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new PlaybackChanger(300,
                         (playback, collection) => collection.ChangeObject(
                             objectToChange1,
-                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 200), OnTheFlyChecksTempoMap))),
+                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 200), TempoMap))),
                     new PlaybackChanger(300,
                         (playback, collection) => collection.ChangeObject(
                             objectToChange2,
-                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 100), OnTheFlyChecksTempoMap))),
+                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap))),
                 },
                 expectedReceivedEvents: new[]
                 {
@@ -1312,10 +1312,10 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Loop_ChangeObject_PitchBend_1()
         {
-            var objectToChange = new TimedEvent(new PitchBendEvent(7000)).SetTime(new MetricTimeSpan(0, 0, 0, 500), OnTheFlyChecksTempoMap);
+            var objectToChange = new TimedEvent(new PitchBendEvent(7000)).SetTime(new MetricTimeSpan(0, 0, 0, 500), TempoMap);
             var initialObjects = new ITimedObject[]
             {
-                new Note((SevenBitNumber)70).SetLength(new MetricTimeSpan(0, 0, 0, 700), OnTheFlyChecksTempoMap),
+                new Note((SevenBitNumber)70).SetLength(new MetricTimeSpan(0, 0, 0, 700), TempoMap),
                 objectToChange,
             };
 
@@ -1328,7 +1328,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                             objectToChange,
                             obj =>
                             {
-                                obj.SetTime(new MetricTimeSpan(0, 0, 0, 100), OnTheFlyChecksTempoMap);
+                                obj.SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap);
                                 ((PitchBendEvent)((TimedEvent)obj).Event).PitchValue = 7100;
                             })),
                 },
@@ -1349,11 +1349,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Loop_ChangeObject_PitchBend_2()
         {
-            var objectToChange1 = new TimedEvent(new PitchBendEvent(7000)).SetTime(new MetricTimeSpan(0, 0, 0, 500), OnTheFlyChecksTempoMap);
-            var objectToChange2 = new TimedEvent(new PitchBendEvent(5000)).SetTime(new MetricTimeSpan(0, 0, 0, 500), OnTheFlyChecksTempoMap);
+            var objectToChange1 = new TimedEvent(new PitchBendEvent(7000)).SetTime(new MetricTimeSpan(0, 0, 0, 500), TempoMap);
+            var objectToChange2 = new TimedEvent(new PitchBendEvent(5000)).SetTime(new MetricTimeSpan(0, 0, 0, 500), TempoMap);
             var initialObjects = new ITimedObject[]
             {
-                new Note((SevenBitNumber)70).SetLength(new MetricTimeSpan(0, 0, 0, 700), OnTheFlyChecksTempoMap),
+                new Note((SevenBitNumber)70).SetLength(new MetricTimeSpan(0, 0, 0, 700), TempoMap),
                 objectToChange1,
                 objectToChange2,
             };
@@ -1365,11 +1365,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new PlaybackChanger(300,
                         (playback, collection) => collection.ChangeObject(
                             objectToChange1,
-                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 200), OnTheFlyChecksTempoMap))),
+                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 200), TempoMap))),
                     new PlaybackChanger(300,
                         (playback, collection) => collection.ChangeObject(
                             objectToChange2,
-                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 100), OnTheFlyChecksTempoMap))),
+                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap))),
                 },
                 expectedReceivedEvents: new[]
                 {
@@ -1391,11 +1391,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Loop_ChangeObject_PitchBend_3()
         {
-            var objectToChange = new TimedEvent(new PitchBendEvent(8000)).SetTime(new MetricTimeSpan(0, 0, 0, 100), OnTheFlyChecksTempoMap);
+            var objectToChange = new TimedEvent(new PitchBendEvent(8000)).SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap);
             var initialObjects = new ITimedObject[]
             {
-                new Note((SevenBitNumber)70).SetLength(new MetricTimeSpan(0, 0, 0, 700), OnTheFlyChecksTempoMap),
-                new Note((SevenBitNumber)50).SetTime(new MetricTimeSpan(0, 0, 0, 700), OnTheFlyChecksTempoMap).SetLength(new MetricTimeSpan(0, 0, 0, 200), OnTheFlyChecksTempoMap),
+                new Note((SevenBitNumber)70).SetLength(new MetricTimeSpan(0, 0, 0, 700), TempoMap),
+                new Note((SevenBitNumber)50).SetTime(new MetricTimeSpan(0, 0, 0, 700), TempoMap).SetLength(new MetricTimeSpan(0, 0, 0, 200), TempoMap),
                 objectToChange,
             };
 
@@ -1406,7 +1406,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new PlaybackChanger(300,
                         (playback, collection) => collection.ChangeObject(
                             objectToChange,
-                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 800), OnTheFlyChecksTempoMap))),
+                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 800), TempoMap))),
                 },
                 expectedReceivedEvents: new[]
                 {
@@ -1431,11 +1431,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Loop_ChangeObject_PitchBend_4()
         {
-            var objectToChange1 = new TimedEvent(new PitchBendEvent(7000)).SetTime(new MetricTimeSpan(0, 0, 0, 500), OnTheFlyChecksTempoMap);
-            var objectToChange2 = new TimedEvent(new PitchBendEvent(7000) { Channel = (FourBitNumber)4 }).SetTime(new MetricTimeSpan(0, 0, 0, 500), OnTheFlyChecksTempoMap);
+            var objectToChange1 = new TimedEvent(new PitchBendEvent(7000)).SetTime(new MetricTimeSpan(0, 0, 0, 500), TempoMap);
+            var objectToChange2 = new TimedEvent(new PitchBendEvent(7000) { Channel = (FourBitNumber)4 }).SetTime(new MetricTimeSpan(0, 0, 0, 500), TempoMap);
             var initialObjects = new ITimedObject[]
             {
-                new Note((SevenBitNumber)70).SetLength(new MetricTimeSpan(0, 0, 0, 700), OnTheFlyChecksTempoMap),
+                new Note((SevenBitNumber)70).SetLength(new MetricTimeSpan(0, 0, 0, 700), TempoMap),
                 objectToChange1,
                 objectToChange2,
             };
@@ -1447,11 +1447,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new PlaybackChanger(300,
                         (playback, collection) => collection.ChangeObject(
                             objectToChange1,
-                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 200), OnTheFlyChecksTempoMap))),
+                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 200), TempoMap))),
                     new PlaybackChanger(300,
                         (playback, collection) => collection.ChangeObject(
                             objectToChange2,
-                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 100), OnTheFlyChecksTempoMap))),
+                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap))),
                 },
                 expectedReceivedEvents: new[]
                 {
@@ -1472,10 +1472,10 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Loop_ChangeObject_ControlChange_1()
         {
-            var objectToChange = new TimedEvent(new ControlChangeEvent((SevenBitNumber)5, (SevenBitNumber)70)).SetTime(new MetricTimeSpan(0, 0, 0, 500), OnTheFlyChecksTempoMap);
+            var objectToChange = new TimedEvent(new ControlChangeEvent((SevenBitNumber)5, (SevenBitNumber)70)).SetTime(new MetricTimeSpan(0, 0, 0, 500), TempoMap);
             var initialObjects = new ITimedObject[]
             {
-                new Note((SevenBitNumber)70).SetLength(new MetricTimeSpan(0, 0, 0, 700), OnTheFlyChecksTempoMap),
+                new Note((SevenBitNumber)70).SetLength(new MetricTimeSpan(0, 0, 0, 700), TempoMap),
                 objectToChange,
             };
 
@@ -1488,7 +1488,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                             objectToChange,
                             obj =>
                             {
-                                obj.SetTime(new MetricTimeSpan(0, 0, 0, 100), OnTheFlyChecksTempoMap);
+                                obj.SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap);
                                 ((ControlChangeEvent)((TimedEvent)obj).Event).ControlValue = (SevenBitNumber)71;
                             })),
                 },
@@ -1509,11 +1509,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Loop_ChangeObject_ControlChange_2()
         {
-            var objectToChange1 = new TimedEvent(new ControlChangeEvent((SevenBitNumber)5, (SevenBitNumber)70)).SetTime(new MetricTimeSpan(0, 0, 0, 500), OnTheFlyChecksTempoMap);
-            var objectToChange2 = new TimedEvent(new ControlChangeEvent((SevenBitNumber)5, (SevenBitNumber)50)).SetTime(new MetricTimeSpan(0, 0, 0, 500), OnTheFlyChecksTempoMap);
+            var objectToChange1 = new TimedEvent(new ControlChangeEvent((SevenBitNumber)5, (SevenBitNumber)70)).SetTime(new MetricTimeSpan(0, 0, 0, 500), TempoMap);
+            var objectToChange2 = new TimedEvent(new ControlChangeEvent((SevenBitNumber)5, (SevenBitNumber)50)).SetTime(new MetricTimeSpan(0, 0, 0, 500), TempoMap);
             var initialObjects = new ITimedObject[]
             {
-                new Note((SevenBitNumber)70).SetLength(new MetricTimeSpan(0, 0, 0, 700), OnTheFlyChecksTempoMap),
+                new Note((SevenBitNumber)70).SetLength(new MetricTimeSpan(0, 0, 0, 700), TempoMap),
                 objectToChange1,
                 objectToChange2,
             };
@@ -1525,11 +1525,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new PlaybackChanger(300,
                         (playback, collection) => collection.ChangeObject(
                             objectToChange1,
-                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 200), OnTheFlyChecksTempoMap))),
+                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 200), TempoMap))),
                     new PlaybackChanger(300,
                         (playback, collection) => collection.ChangeObject(
                             objectToChange2,
-                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 100), OnTheFlyChecksTempoMap))),
+                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap))),
                 },
                 expectedReceivedEvents: new[]
                 {
@@ -1551,11 +1551,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Loop_ChangeObject_ControlChange_3()
         {
-            var objectToChange = new TimedEvent(new ControlChangeEvent((SevenBitNumber)5, (SevenBitNumber)80)).SetTime(new MetricTimeSpan(0, 0, 0, 100), OnTheFlyChecksTempoMap);
+            var objectToChange = new TimedEvent(new ControlChangeEvent((SevenBitNumber)5, (SevenBitNumber)80)).SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap);
             var initialObjects = new ITimedObject[]
             {
-                new Note((SevenBitNumber)70).SetLength(new MetricTimeSpan(0, 0, 0, 700), OnTheFlyChecksTempoMap),
-                new Note((SevenBitNumber)50).SetTime(new MetricTimeSpan(0, 0, 0, 700), OnTheFlyChecksTempoMap).SetLength(new MetricTimeSpan(0, 0, 0, 200), OnTheFlyChecksTempoMap),
+                new Note((SevenBitNumber)70).SetLength(new MetricTimeSpan(0, 0, 0, 700), TempoMap),
+                new Note((SevenBitNumber)50).SetTime(new MetricTimeSpan(0, 0, 0, 700), TempoMap).SetLength(new MetricTimeSpan(0, 0, 0, 200), TempoMap),
                 objectToChange,
             };
 
@@ -1566,7 +1566,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new PlaybackChanger(300,
                         (playback, collection) => collection.ChangeObject(
                             objectToChange,
-                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 800), OnTheFlyChecksTempoMap))),
+                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 800), TempoMap))),
                 },
                 expectedReceivedEvents: new[]
                 {
@@ -1591,11 +1591,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Loop_ChangeObject_ControlChange_4()
         {
-            var objectToChange1 = new TimedEvent(new ControlChangeEvent((SevenBitNumber)5, (SevenBitNumber)70)).SetTime(new MetricTimeSpan(0, 0, 0, 500), OnTheFlyChecksTempoMap);
-            var objectToChange2 = new TimedEvent(new ControlChangeEvent((SevenBitNumber)5, (SevenBitNumber)70) { Channel = (FourBitNumber)4 }).SetTime(new MetricTimeSpan(0, 0, 0, 500), OnTheFlyChecksTempoMap);
+            var objectToChange1 = new TimedEvent(new ControlChangeEvent((SevenBitNumber)5, (SevenBitNumber)70)).SetTime(new MetricTimeSpan(0, 0, 0, 500), TempoMap);
+            var objectToChange2 = new TimedEvent(new ControlChangeEvent((SevenBitNumber)5, (SevenBitNumber)70) { Channel = (FourBitNumber)4 }).SetTime(new MetricTimeSpan(0, 0, 0, 500), TempoMap);
             var initialObjects = new ITimedObject[]
             {
-                new Note((SevenBitNumber)70).SetLength(new MetricTimeSpan(0, 0, 0, 700), OnTheFlyChecksTempoMap),
+                new Note((SevenBitNumber)70).SetLength(new MetricTimeSpan(0, 0, 0, 700), TempoMap),
                 objectToChange1,
                 objectToChange2,
             };
@@ -1607,11 +1607,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new PlaybackChanger(300,
                         (playback, collection) => collection.ChangeObject(
                             objectToChange1,
-                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 200), OnTheFlyChecksTempoMap))),
+                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 200), TempoMap))),
                     new PlaybackChanger(300,
                         (playback, collection) => collection.ChangeObject(
                             objectToChange2,
-                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 100), OnTheFlyChecksTempoMap))),
+                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap))),
                 },
                 expectedReceivedEvents: new[]
                 {
@@ -1638,11 +1638,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             //         |
             // ------[ |   ]--
 
-            var tempoMap = TempoMap.Default;
+            var tempoMap = TempoMap;
 
             var objectToChange = new Note((SevenBitNumber)70)
-                .SetTime(new MetricTimeSpan(0, 0, 0, 200), OnTheFlyChecksTempoMap)
-                .SetLength(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap);
+                .SetTime(new MetricTimeSpan(0, 0, 0, 200), TempoMap)
+                .SetLength(new MetricTimeSpan(0, 0, 0, 300), TempoMap);
             var initialObjects = new ITimedObject[]
             {
                 objectToChange,
@@ -1655,7 +1655,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new PlaybackChanger(300,
                         (playback, collection) => collection.ChangeObject(
                             objectToChange,
-                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 100), OnTheFlyChecksTempoMap))),
+                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap))),
                         },
                 expectedReceivedEvents: new[]
                 {
@@ -1678,11 +1678,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             //      |  
             // -----|-[     ]-
 
-            var tempoMap = TempoMap.Default;
+            var tempoMap = TempoMap;
 
             var objectToChange = new Note((SevenBitNumber)70)
-                .SetTime(new MetricTimeSpan(0, 0, 0, 100), OnTheFlyChecksTempoMap)
-                .SetLength(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap);
+                .SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap)
+                .SetLength(new MetricTimeSpan(0, 0, 0, 300), TempoMap);
             var initialObjects = new ITimedObject[]
             {
                 objectToChange,
@@ -1697,7 +1697,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                             objectToChange,
                             obj =>
                             {
-                                obj.SetTime(new MetricTimeSpan(0, 0, 0, 500), OnTheFlyChecksTempoMap);
+                                obj.SetTime(new MetricTimeSpan(0, 0, 0, 500), TempoMap);
                                 ((Note)obj).Channel = (FourBitNumber)4;
                                 ((Note)obj).NoteNumber = (SevenBitNumber)71;
                             })),
@@ -1725,11 +1725,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             //           |
             // -[     ]--|----
 
-            var tempoMap = TempoMap.Default;
+            var tempoMap = TempoMap;
 
             var objectToChange = new Note((SevenBitNumber)70)
-                .SetTime(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap)
-                .SetLength(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap);
+                .SetTime(new MetricTimeSpan(0, 0, 0, 300), TempoMap)
+                .SetLength(new MetricTimeSpan(0, 0, 0, 300), TempoMap);
             var initialObjects = new ITimedObject[]
             {
                 objectToChange,
@@ -1744,7 +1744,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                             objectToChange,
                             obj =>
                             {
-                                obj.SetTime(new MetricTimeSpan(), OnTheFlyChecksTempoMap);
+                                obj.SetTime(new MetricTimeSpan(), TempoMap);
                                 ((Note)obj).Velocity = (SevenBitNumber)30;
                             })),
                 },
@@ -1769,11 +1769,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             //           |
             // -[     ]--|---------
 
-            var tempoMap = TempoMap.Default;
+            var tempoMap = TempoMap;
 
             var objectToChange = new Note((SevenBitNumber)70)
-                .SetTime(new MetricTimeSpan(0, 0, 0, 400), OnTheFlyChecksTempoMap)
-                .SetLength(new MetricTimeSpan(0, 0, 0, 200), OnTheFlyChecksTempoMap);
+                .SetTime(new MetricTimeSpan(0, 0, 0, 400), TempoMap)
+                .SetLength(new MetricTimeSpan(0, 0, 0, 200), TempoMap);
             var initialObjects = new ITimedObject[]
             {
                 objectToChange,
@@ -1788,7 +1788,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                             objectToChange,
                             obj =>
                             {
-                                obj.SetTime(new MetricTimeSpan(0, 0, 0, 100), OnTheFlyChecksTempoMap);
+                                obj.SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap);
                                 ((Note)obj).Velocity = (SevenBitNumber)30;
                             })),
                 },
@@ -1833,14 +1833,14 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             // -------[  2  ]-----|---
 
 
-            var tempoMap = TempoMap.Default;
+            var tempoMap = TempoMap;
 
             var objectToChange1 = new Note((SevenBitNumber)50)
-                .SetTime(new MetricTimeSpan(0, 0, 0, 100), OnTheFlyChecksTempoMap)
-                .SetLength(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap);
+                .SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap)
+                .SetLength(new MetricTimeSpan(0, 0, 0, 300), TempoMap);
             var objectToChange2 = new Note((SevenBitNumber)60)
-                .SetTime(new MetricTimeSpan(0, 0, 0, 400), OnTheFlyChecksTempoMap)
-                .SetLength(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap);
+                .SetTime(new MetricTimeSpan(0, 0, 0, 400), TempoMap)
+                .SetLength(new MetricTimeSpan(0, 0, 0, 300), TempoMap);
 
             var initialObjects = new ITimedObject[]
             {
@@ -1857,7 +1857,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                             objectToChange1,
                             obj =>
                             {
-                                obj.SetTime(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap);
+                                obj.SetTime(new MetricTimeSpan(0, 0, 0, 300), TempoMap);
                                 ((Note)obj).Velocity = (SevenBitNumber)30;
                             })),
                     new PlaybackChanger(300,
@@ -1865,7 +1865,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                             objectToChange2,
                             obj =>
                             {
-                                obj.SetTime(new MetricTimeSpan(0, 0, 0, 700), OnTheFlyChecksTempoMap);
+                                obj.SetTime(new MetricTimeSpan(0, 0, 0, 700), TempoMap);
                                 ((Note)obj).NoteNumber = (SevenBitNumber)80;
                             })),
                     new PlaybackChanger(300,
@@ -1873,7 +1873,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                             objectToChange2,
                             obj =>
                             {
-                                obj.SetTime(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap);
+                                obj.SetTime(new MetricTimeSpan(0, 0, 0, 300), TempoMap);
                                 ((Note)obj).Channel = (FourBitNumber)5;
                                 playback.MoveToStart();
                             })),
@@ -1912,8 +1912,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var objectToChange = new Chord(note1, note2, note3);
 
             objectToChange
-                .SetTime(new MetricTimeSpan(0, 0, 0, 100), OnTheFlyChecksTempoMap)
-                .SetLength(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap);
+                .SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap)
+                .SetLength(new MetricTimeSpan(0, 0, 0, 300), TempoMap);
 
             var initialObjects = new ITimedObject[]
             {
@@ -1955,14 +1955,14 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var note1 = new Note((SevenBitNumber)70);
             var note2 = new Note((SevenBitNumber)50);
             var note3 = new Note((SevenBitNumber)90)
-                .SetTime(new MetricTimeSpan(0, 0, 0, 100), OnTheFlyChecksTempoMap)
-                .SetLength(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap);
+                .SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap)
+                .SetLength(new MetricTimeSpan(0, 0, 0, 300), TempoMap);
 
             var objectToChange = new Chord(note1, note2);
 
             objectToChange
-                .SetTime(new MetricTimeSpan(0, 0, 0, 100), OnTheFlyChecksTempoMap)
-                .SetLength(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap);
+                .SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap)
+                .SetLength(new MetricTimeSpan(0, 0, 0, 300), TempoMap);
 
             var initialObjects = new ITimedObject[]
             {
@@ -2008,8 +2008,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var objectToChange = new Chord(note1, note2);
 
             objectToChange
-                .SetTime(new MetricTimeSpan(0, 0, 0, 100), OnTheFlyChecksTempoMap)
-                .SetLength(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap);
+                .SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap)
+                .SetLength(new MetricTimeSpan(0, 0, 0, 300), TempoMap);
 
             var initialObjects = new ITimedObject[]
             {
@@ -2028,8 +2028,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                                 var chord = (Chord)obj;
                                 chord.Notes
                                     .Last()
-                                    .SetTime(new MetricTimeSpan(0, 0, 0, 150), OnTheFlyChecksTempoMap)
-                                    .SetLength(new MetricTimeSpan(0, 0, 0, 200), OnTheFlyChecksTempoMap);
+                                    .SetTime(new MetricTimeSpan(0, 0, 0, 150), TempoMap)
+                                    .SetLength(new MetricTimeSpan(0, 0, 0, 200), TempoMap);
                             })),
                 },
                 expectedReceivedEvents: new[]
@@ -2057,8 +2057,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var objectToChange = new Chord(note1, note2);
 
             objectToChange
-                .SetTime(new MetricTimeSpan(0, 0, 0, 100), OnTheFlyChecksTempoMap)
-                .SetLength(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap);
+                .SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap)
+                .SetLength(new MetricTimeSpan(0, 0, 0, 300), TempoMap);
 
             var initialObjects = new ITimedObject[]
             {
@@ -2096,8 +2096,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var objectToChange = new Chord(note1, note2, note3);
 
             objectToChange
-                .SetTime(new MetricTimeSpan(0, 0, 0, 100), OnTheFlyChecksTempoMap)
-                .SetLength(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap);
+                .SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap)
+                .SetLength(new MetricTimeSpan(0, 0, 0, 300), TempoMap);
 
             var initialObjects = new ITimedObject[]
             {
@@ -2141,14 +2141,14 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var note1 = new Note((SevenBitNumber)70);
             var note2 = new Note((SevenBitNumber)50);
             var note3 = new Note((SevenBitNumber)90)
-                .SetTime(new MetricTimeSpan(0, 0, 0, 100), OnTheFlyChecksTempoMap)
-                .SetLength(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap);
+                .SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap)
+                .SetLength(new MetricTimeSpan(0, 0, 0, 300), TempoMap);
 
             var objectToChange = new Chord(note1, note2);
 
             objectToChange
-                .SetTime(new MetricTimeSpan(0, 0, 0, 100), OnTheFlyChecksTempoMap)
-                .SetLength(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap);
+                .SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap)
+                .SetLength(new MetricTimeSpan(0, 0, 0, 300), TempoMap);
 
             var initialObjects = new ITimedObject[]
             {
@@ -2196,8 +2196,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var objectToChange = new Chord(note1, note2);
 
             objectToChange
-                .SetTime(new MetricTimeSpan(0, 0, 0, 100), OnTheFlyChecksTempoMap)
-                .SetLength(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap);
+                .SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap)
+                .SetLength(new MetricTimeSpan(0, 0, 0, 300), TempoMap);
 
             var initialObjects = new ITimedObject[]
             {
@@ -2216,8 +2216,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                                 var chord = (Chord)obj;
                                 chord.Notes
                                     .Last()
-                                    .SetTime(new MetricTimeSpan(0, 0, 0, 150), OnTheFlyChecksTempoMap)
-                                    .SetLength(new MetricTimeSpan(0, 0, 0, 200), OnTheFlyChecksTempoMap);
+                                    .SetTime(new MetricTimeSpan(0, 0, 0, 150), TempoMap)
+                                    .SetLength(new MetricTimeSpan(0, 0, 0, 200), TempoMap);
                             })),
                 },
                 expectedReceivedEvents: new[]
@@ -2245,8 +2245,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var objectToChange = new Chord(note1, note2);
 
             objectToChange
-                .SetTime(new MetricTimeSpan(0, 0, 0, 100), OnTheFlyChecksTempoMap)
-                .SetLength(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap);
+                .SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap)
+                .SetLength(new MetricTimeSpan(0, 0, 0, 300), TempoMap);
 
             var initialObjects = new ITimedObject[]
             {
@@ -2282,13 +2282,13 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         public void CheckPlaybackDataChangesOnTheFly_ChangeObject_NoteEvents_1()
         {
             var noteOnEvent = new TimedEvent(new NoteOnEvent((SevenBitNumber)50, SevenBitNumber.MaxValue))
-                .SetTime(new MetricTimeSpan(0, 0, 0, 200), OnTheFlyChecksTempoMap);
+                .SetTime(new MetricTimeSpan(0, 0, 0, 200), TempoMap);
 
             var initialObjects = new ITimedObject[]
             {
                 noteOnEvent,
                 new TimedEvent(new NoteOffEvent((SevenBitNumber)50, SevenBitNumber.MinValue))
-                    .SetTime(new MetricTimeSpan(0, 0, 0, 400), OnTheFlyChecksTempoMap),
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 400), TempoMap),
             };
 
             CheckPlaybackDataChangesOnTheFly(
@@ -2298,7 +2298,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new PlaybackChanger(100,
                         (playback, collection) => collection.ChangeObject(
                             noteOnEvent,
-                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap))),
+                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 300), TempoMap))),
                 },
                 expectedReceivedEvents: new[]
                 {
@@ -2313,13 +2313,13 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         public void CheckPlaybackDataChangesOnTheFly_ChangeObject_NoteEvents_2()
         {
             var noteOnEvent = new TimedEvent(new NoteOnEvent((SevenBitNumber)50, SevenBitNumber.MaxValue))
-                .SetTime(new MetricTimeSpan(0, 0, 0, 100), OnTheFlyChecksTempoMap);
+                .SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap);
 
             var initialObjects = new ITimedObject[]
             {
                 noteOnEvent,
                 new TimedEvent(new NoteOffEvent((SevenBitNumber)50, SevenBitNumber.MinValue))
-                    .SetTime(new MetricTimeSpan(0, 0, 0, 400), OnTheFlyChecksTempoMap),
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 400), TempoMap),
             };
 
             var notesStarted = new List<Note>();
@@ -2335,7 +2335,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                             obj =>
                             {
                                 ((NoteOnEvent)((TimedEvent)obj).Event).Velocity = (SevenBitNumber)70;
-                                obj.SetTime(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap);
+                                obj.SetTime(new MetricTimeSpan(0, 0, 0, 300), TempoMap);
                             })),
                 },
                 expectedReceivedEvents: new[]
@@ -2360,11 +2360,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 new[]
                 {
                     new Note((SevenBitNumber)50) { Velocity = SevenBitNumber.MaxValue }
-                        .SetTime(new MetricTimeSpan(0, 0, 0, 100), OnTheFlyChecksTempoMap)
-                        .SetLength(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap),
+                        .SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap)
+                        .SetLength(new MetricTimeSpan(0, 0, 0, 300), TempoMap),
                     new Note((SevenBitNumber)50) { Velocity = (SevenBitNumber)70 }
-                        .SetTime(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap)
-                        .SetLength(new MetricTimeSpan(0, 0, 0, 100), OnTheFlyChecksTempoMap),
+                        .SetTime(new MetricTimeSpan(0, 0, 0, 300), TempoMap)
+                        .SetLength(new MetricTimeSpan(0, 0, 0, 100), TempoMap),
                 },
                 notesStarted,
                 "Invalid notes.");
@@ -2375,13 +2375,13 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         public void CheckPlaybackDataChangesOnTheFly_ChangeObject_NoteEvents_3()
         {
             var noteOnEvent = new TimedEvent(new NoteOnEvent((SevenBitNumber)50, SevenBitNumber.MaxValue))
-                .SetTime(new MetricTimeSpan(0, 0, 0, 100), OnTheFlyChecksTempoMap);
+                .SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap);
 
             var initialObjects = new ITimedObject[]
             {
                 noteOnEvent,
                 new TimedEvent(new NoteOffEvent((SevenBitNumber)50, SevenBitNumber.MinValue))
-                    .SetTime(new MetricTimeSpan(0, 0, 0, 400), OnTheFlyChecksTempoMap),
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 400), TempoMap),
             };
 
             var notesStarted = new List<Note>();
@@ -2416,8 +2416,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 new[]
                 {
                     new Note((SevenBitNumber)50) { Velocity = SevenBitNumber.MaxValue }
-                        .SetTime(new MetricTimeSpan(0, 0, 0, 100), OnTheFlyChecksTempoMap)
-                        .SetLength(new MetricTimeSpan(0, 0, 0, 300 /* TODO: 100 */), OnTheFlyChecksTempoMap),
+                        .SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap)
+                        .SetLength(new MetricTimeSpan(0, 0, 0, 300 /* TODO: 100 */), TempoMap),
                 },
                 notesStarted,
                 "Invalid notes.");
@@ -2428,12 +2428,12 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         public void CheckPlaybackDataChangesOnTheFly_ChangeObject_NoteEvents_4()
         {
             var noteOffEvent = new TimedEvent(new NoteOffEvent((SevenBitNumber)50, SevenBitNumber.MinValue))
-                .SetTime(new MetricTimeSpan(0, 0, 0, 400), OnTheFlyChecksTempoMap);
+                .SetTime(new MetricTimeSpan(0, 0, 0, 400), TempoMap);
 
             var initialObjects = new ITimedObject[]
             {
                 new TimedEvent(new NoteOnEvent((SevenBitNumber)50, SevenBitNumber.MaxValue))
-                    .SetTime(new MetricTimeSpan(0, 0, 0, 100), OnTheFlyChecksTempoMap),
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap),
                 noteOffEvent,
             };
 
@@ -2444,7 +2444,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new PlaybackChanger(50,
                         (playback, collection) => collection.ChangeObject(
                             noteOffEvent,
-                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap))),
+                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 300), TempoMap))),
                 },
                 expectedReceivedEvents: new[]
                 {
@@ -2459,12 +2459,12 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         public void CheckPlaybackDataChangesOnTheFly_ChangeObject_NoteEvents_5()
         {
             var noteOffEvent = new TimedEvent(new NoteOffEvent((SevenBitNumber)50, SevenBitNumber.MinValue))
-                .SetTime(new MetricTimeSpan(0, 0, 0, 400), OnTheFlyChecksTempoMap);
+                .SetTime(new MetricTimeSpan(0, 0, 0, 400), TempoMap);
 
             var initialObjects = new ITimedObject[]
             {
                 new TimedEvent(new NoteOnEvent((SevenBitNumber)50, SevenBitNumber.MaxValue))
-                    .SetTime(new MetricTimeSpan(0, 0, 0, 100), OnTheFlyChecksTempoMap),
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap),
                 noteOffEvent,
             };
 
@@ -2475,7 +2475,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new PlaybackChanger(200,
                         (playback, collection) => collection.ChangeObject(
                             noteOffEvent,
-                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap))),
+                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 300), TempoMap))),
                 },
                 expectedReceivedEvents: new[]
                 {
@@ -2490,12 +2490,12 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         public void CheckPlaybackDataChangesOnTheFly_ChangeObject_NoteEvents_6()
         {
             var noteOffEvent = new TimedEvent(new NoteOffEvent((SevenBitNumber)50, SevenBitNumber.MinValue))
-                .SetTime(new MetricTimeSpan(0, 0, 0, 400), OnTheFlyChecksTempoMap);
+                .SetTime(new MetricTimeSpan(0, 0, 0, 400), TempoMap);
 
             var initialObjects = new ITimedObject[]
             {
                 new TimedEvent(new NoteOnEvent((SevenBitNumber)50, SevenBitNumber.MaxValue))
-                    .SetTime(new MetricTimeSpan(0, 0, 0, 100), OnTheFlyChecksTempoMap),
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap),
                 noteOffEvent,
             };
 
@@ -2512,7 +2512,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                             obj =>
                             {
                                 ((NoteOffEvent)((TimedEvent)obj).Event).Velocity = (SevenBitNumber)70;
-                                obj.SetTime(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap);
+                                obj.SetTime(new MetricTimeSpan(0, 0, 0, 300), TempoMap);
                             })),
                 },
                 expectedReceivedEvents: new[]
@@ -2534,8 +2534,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 new[]
                 {
                     new Note((SevenBitNumber)50) { Velocity = SevenBitNumber.MaxValue }
-                        .SetTime(new MetricTimeSpan(0, 0, 0, 100 /* TODO: 100 */), OnTheFlyChecksTempoMap)
-                        .SetLength(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap),
+                        .SetTime(new MetricTimeSpan(0, 0, 0, 100 /* TODO: 100 */), TempoMap)
+                        .SetLength(new MetricTimeSpan(0, 0, 0, 300), TempoMap),
                 },
                 notesStarted,
                 "Invalid notes started.");
@@ -2544,8 +2544,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 new[]
                 {
                     new Note((SevenBitNumber)50) { Velocity = SevenBitNumber.MaxValue, OffVelocity = (SevenBitNumber)70 }
-                        .SetTime(new MetricTimeSpan(0, 0, 0, 100 /* TODO: 100 */), OnTheFlyChecksTempoMap)
-                        .SetLength(new MetricTimeSpan(0, 0, 0, 200), OnTheFlyChecksTempoMap),
+                        .SetTime(new MetricTimeSpan(0, 0, 0, 100 /* TODO: 100 */), TempoMap)
+                        .SetLength(new MetricTimeSpan(0, 0, 0, 200), TempoMap),
                 },
                 notesFinished,
                 "Invalid notes finished.");
@@ -2556,12 +2556,12 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         public void CheckPlaybackDataChangesOnTheFly_ChangeObject_NoteEvents_7()
         {
             var noteOffEvent = new TimedEvent(new NoteOffEvent((SevenBitNumber)50, SevenBitNumber.MinValue))
-                .SetTime(new MetricTimeSpan(0, 0, 0, 400), OnTheFlyChecksTempoMap);
+                .SetTime(new MetricTimeSpan(0, 0, 0, 400), TempoMap);
 
             var initialObjects = new ITimedObject[]
             {
                 new TimedEvent(new NoteOnEvent((SevenBitNumber)50, SevenBitNumber.MaxValue))
-                    .SetTime(new MetricTimeSpan(0, 0, 0, 100), OnTheFlyChecksTempoMap),
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap),
                 noteOffEvent,
             };
 
@@ -2596,8 +2596,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 new[]
                 {
                     new Note((SevenBitNumber)50) { Velocity = SevenBitNumber.MaxValue }
-                        .SetTime(new MetricTimeSpan(0, 0, 0, 100), OnTheFlyChecksTempoMap)
-                        .SetLength(new MetricTimeSpan(0, 0, 0, 300 /* TODO: 100 */), OnTheFlyChecksTempoMap),
+                        .SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap)
+                        .SetLength(new MetricTimeSpan(0, 0, 0, 300 /* TODO: 100 */), TempoMap),
                 },
                 notesStarted,
                 "Invalid notes.");

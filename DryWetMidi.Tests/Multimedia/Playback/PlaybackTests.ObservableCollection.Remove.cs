@@ -17,10 +17,10 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_RemoveEventWithinNote_AfterCurrentTime()
         {
-            var objectToRemove = new TimedEvent(new TextEvent("A")).SetTime(new MetricTimeSpan(0, 0, 0, 700), OnTheFlyChecksTempoMap);
+            var objectToRemove = new TimedEvent(new TextEvent("A")).SetTime(new MetricTimeSpan(0, 0, 0, 700), TempoMap);
             var initialObjects = new ITimedObject[]
             {
-                new Note((SevenBitNumber)70).SetLength(new MetricTimeSpan(0, 0, 1), OnTheFlyChecksTempoMap),
+                new Note((SevenBitNumber)70).SetLength(new MetricTimeSpan(0, 0, 1), TempoMap),
                 objectToRemove,
             };
 
@@ -42,10 +42,10 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_RemoveEventWithinNote_BeforeCurrentTime()
         {
-            var objectToRemove = new TimedEvent(new TextEvent("A")).SetTime(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap);
+            var objectToRemove = new TimedEvent(new TextEvent("A")).SetTime(new MetricTimeSpan(0, 0, 0, 300), TempoMap);
             var initialObjects = new ITimedObject[]
             {
-                new Note((SevenBitNumber)70).SetLength(new MetricTimeSpan(0, 0, 1), OnTheFlyChecksTempoMap),
+                new Note((SevenBitNumber)70).SetLength(new MetricTimeSpan(0, 0, 1), TempoMap),
                 objectToRemove,
             };
 
@@ -68,7 +68,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_RemoveLastActiveEvent()
         {
-            var objectToRemove = new TimedEvent(new TextEvent("B")).SetTime(new MetricTimeSpan(0, 0, 0, 500), OnTheFlyChecksTempoMap);
+            var objectToRemove = new TimedEvent(new TextEvent("B")).SetTime(new MetricTimeSpan(0, 0, 0, 500), TempoMap);
             var initialObjects = new ITimedObject[]
             {
                 new TimedEvent(new TextEvent("A")),
@@ -92,9 +92,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_RemoveAtSameTime_AfterCurrentTime([Values(0, 1, 2)] int indexToRemove)
         {
-            var objectToRemove1 = new TimedEvent(new TextEvent("A")).SetTime(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap);
-            var objectToRemove2 = new TimedEvent(new TextEvent("B")).SetTime(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap);
-            var objectToRemove3 = new TimedEvent(new TextEvent("C")).SetTime(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap);
+            var objectToRemove1 = new TimedEvent(new TextEvent("A")).SetTime(new MetricTimeSpan(0, 0, 0, 300), TempoMap);
+            var objectToRemove2 = new TimedEvent(new TextEvent("B")).SetTime(new MetricTimeSpan(0, 0, 0, 300), TempoMap);
+            var objectToRemove3 = new TimedEvent(new TextEvent("C")).SetTime(new MetricTimeSpan(0, 0, 0, 300), TempoMap);
 
             var objectsToRemove = new ITimedObject[]
             {
@@ -105,7 +105,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
             var initialObjects = new ITimedObject[]
             {
-                new Note((SevenBitNumber)70).SetLength(new MetricTimeSpan(0, 0, 0, 500), OnTheFlyChecksTempoMap),
+                new Note((SevenBitNumber)70).SetLength(new MetricTimeSpan(0, 0, 0, 500), TempoMap),
                 objectToRemove1,
                 objectToRemove2,
                 objectToRemove3,
@@ -138,9 +138,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_RemoveAtSameTime_BeforeCurrentTime([Values(0, 1, 2)] int indexToRemove)
         {
-            var objectToRemove1 = new TimedEvent(new TextEvent("A")).SetTime(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap);
-            var objectToRemove2 = new TimedEvent(new TextEvent("B")).SetTime(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap);
-            var objectToRemove3 = new TimedEvent(new TextEvent("C")).SetTime(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap);
+            var objectToRemove1 = new TimedEvent(new TextEvent("A")).SetTime(new MetricTimeSpan(0, 0, 0, 300), TempoMap);
+            var objectToRemove2 = new TimedEvent(new TextEvent("B")).SetTime(new MetricTimeSpan(0, 0, 0, 300), TempoMap);
+            var objectToRemove3 = new TimedEvent(new TextEvent("C")).SetTime(new MetricTimeSpan(0, 0, 0, 300), TempoMap);
 
             var objectsToRemove = new ITimedObject[]
             {
@@ -151,7 +151,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
             var initialObjects = new ITimedObject[]
             {
-                new Note((SevenBitNumber)70).SetLength(new MetricTimeSpan(0, 0, 0, 700), OnTheFlyChecksTempoMap),
+                new Note((SevenBitNumber)70).SetLength(new MetricTimeSpan(0, 0, 0, 700), TempoMap),
                 objectToRemove1,
                 objectToRemove2,
                 objectToRemove3,
@@ -178,13 +178,13 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_RemoveProgramChange_AfterCurrentTime_1()
         {
-            var objectToRemove = new TimedEvent(new ProgramChangeEvent((SevenBitNumber)7)).SetTime(new MetricTimeSpan(0, 0, 0, 250), OnTheFlyChecksTempoMap);
+            var objectToRemove = new TimedEvent(new ProgramChangeEvent((SevenBitNumber)7)).SetTime(new MetricTimeSpan(0, 0, 0, 250), TempoMap);
 
             var initialObjects = new ITimedObject[]
             {
                 new Note((SevenBitNumber)70)
-                    .SetTime(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap)
-                    .SetLength(new MetricTimeSpan(0, 0, 0, 500), OnTheFlyChecksTempoMap),
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 300), TempoMap)
+                    .SetLength(new MetricTimeSpan(0, 0, 0, 500), TempoMap),
                 objectToRemove,
             };
 
@@ -206,13 +206,13 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_RemoveProgramChange_AfterCurrentTime_2()
         {
-            var objectToRemove = new TimedEvent(new ProgramChangeEvent((SevenBitNumber)7)).SetTime(new MetricTimeSpan(0, 0, 0, 500), OnTheFlyChecksTempoMap);
+            var objectToRemove = new TimedEvent(new ProgramChangeEvent((SevenBitNumber)7)).SetTime(new MetricTimeSpan(0, 0, 0, 500), TempoMap);
 
             var initialObjects = new ITimedObject[]
             {
                 new Note((SevenBitNumber)70)
-                    .SetTime(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap)
-                    .SetLength(new MetricTimeSpan(0, 0, 0, 500), OnTheFlyChecksTempoMap),
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 300), TempoMap)
+                    .SetLength(new MetricTimeSpan(0, 0, 0, 500), TempoMap),
                 objectToRemove,
             };
 
@@ -234,13 +234,13 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_RemoveProgramChange_BeforeCurrentTime_1()
         {
-            var objectToRemove = new TimedEvent(new ProgramChangeEvent((SevenBitNumber)7)).SetTime(new MetricTimeSpan(0, 0, 0, 50), OnTheFlyChecksTempoMap);
+            var objectToRemove = new TimedEvent(new ProgramChangeEvent((SevenBitNumber)7)).SetTime(new MetricTimeSpan(0, 0, 0, 50), TempoMap);
 
             var initialObjects = new ITimedObject[]
             {
                 new Note((SevenBitNumber)70)
-                    .SetTime(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap)
-                    .SetLength(new MetricTimeSpan(0, 0, 0, 500), OnTheFlyChecksTempoMap),
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 300), TempoMap)
+                    .SetLength(new MetricTimeSpan(0, 0, 0, 500), TempoMap),
                 objectToRemove,
             };
 
@@ -264,14 +264,14 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_RemoveProgramChange_BeforeCurrentTime_2()
         {
-            var objectToRemove1 = new TimedEvent(new ProgramChangeEvent((SevenBitNumber)7)).SetTime(new MetricTimeSpan(0, 0, 0, 50), OnTheFlyChecksTempoMap);
-            var objectToRemove2 = new TimedEvent(new ProgramChangeEvent((SevenBitNumber)8)).SetTime(new MetricTimeSpan(0, 0, 0, 100), OnTheFlyChecksTempoMap);
+            var objectToRemove1 = new TimedEvent(new ProgramChangeEvent((SevenBitNumber)7)).SetTime(new MetricTimeSpan(0, 0, 0, 50), TempoMap);
+            var objectToRemove2 = new TimedEvent(new ProgramChangeEvent((SevenBitNumber)8)).SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap);
 
             var initialObjects = new ITimedObject[]
             {
                 new Note((SevenBitNumber)70)
-                    .SetTime(new MetricTimeSpan(0, 0, 0, 400), OnTheFlyChecksTempoMap)
-                    .SetLength(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap),
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 400), TempoMap)
+                    .SetLength(new MetricTimeSpan(0, 0, 0, 300), TempoMap),
                 objectToRemove1,
                 objectToRemove2,
             };
@@ -300,13 +300,13 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_RemovePitchBend_AfterCurrentTime_1()
         {
-            var objectToRemove = new TimedEvent(new PitchBendEvent(7000)).SetTime(new MetricTimeSpan(0, 0, 0, 250), OnTheFlyChecksTempoMap);
+            var objectToRemove = new TimedEvent(new PitchBendEvent(7000)).SetTime(new MetricTimeSpan(0, 0, 0, 250), TempoMap);
 
             var initialObjects = new ITimedObject[]
             {
                 new Note((SevenBitNumber)70)
-                    .SetTime(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap)
-                    .SetLength(new MetricTimeSpan(0, 0, 0, 500), OnTheFlyChecksTempoMap),
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 300), TempoMap)
+                    .SetLength(new MetricTimeSpan(0, 0, 0, 500), TempoMap),
                 objectToRemove,
             };
 
@@ -329,13 +329,13 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_RemovePitchBend_AfterCurrentTime_2()
         {
-            var objectToRemove = new TimedEvent(new PitchBendEvent(7000)).SetTime(new MetricTimeSpan(0, 0, 0, 500), OnTheFlyChecksTempoMap);
+            var objectToRemove = new TimedEvent(new PitchBendEvent(7000)).SetTime(new MetricTimeSpan(0, 0, 0, 500), TempoMap);
 
             var initialObjects = new ITimedObject[]
             {
                 new Note((SevenBitNumber)70)
-                    .SetTime(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap)
-                    .SetLength(new MetricTimeSpan(0, 0, 0, 500), OnTheFlyChecksTempoMap),
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 300), TempoMap)
+                    .SetLength(new MetricTimeSpan(0, 0, 0, 500), TempoMap),
                 objectToRemove,
             };
 
@@ -358,13 +358,13 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_RemovePitchBend_BeforeCurrentTime_1()
         {
-            var objectToRemove = new TimedEvent(new PitchBendEvent(7000)).SetTime(new MetricTimeSpan(0, 0, 0, 50), OnTheFlyChecksTempoMap);
+            var objectToRemove = new TimedEvent(new PitchBendEvent(7000)).SetTime(new MetricTimeSpan(0, 0, 0, 50), TempoMap);
 
             var initialObjects = new ITimedObject[]
             {
                 new Note((SevenBitNumber)70)
-                    .SetTime(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap)
-                    .SetLength(new MetricTimeSpan(0, 0, 0, 500), OnTheFlyChecksTempoMap),
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 300), TempoMap)
+                    .SetLength(new MetricTimeSpan(0, 0, 0, 500), TempoMap),
                 objectToRemove,
             };
 
@@ -389,14 +389,14 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_RemovePitchBend_BeforeCurrentTime_2()
         {
-            var objectToRemove1 = new TimedEvent(new PitchBendEvent(7000)).SetTime(new MetricTimeSpan(0, 0, 0, 50), OnTheFlyChecksTempoMap);
-            var objectToRemove2 = new TimedEvent(new PitchBendEvent(8000)).SetTime(new MetricTimeSpan(0, 0, 0, 100), OnTheFlyChecksTempoMap);
+            var objectToRemove1 = new TimedEvent(new PitchBendEvent(7000)).SetTime(new MetricTimeSpan(0, 0, 0, 50), TempoMap);
+            var objectToRemove2 = new TimedEvent(new PitchBendEvent(8000)).SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap);
 
             var initialObjects = new ITimedObject[]
             {
                 new Note((SevenBitNumber)70)
-                    .SetTime(new MetricTimeSpan(0, 0, 0, 400), OnTheFlyChecksTempoMap)
-                    .SetLength(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap),
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 400), TempoMap)
+                    .SetLength(new MetricTimeSpan(0, 0, 0, 300), TempoMap),
                 objectToRemove1,
                 objectToRemove2,
             };
@@ -426,13 +426,13 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_RemoveControlChange_AfterCurrentTime_1()
         {
-            var objectToRemove = new TimedEvent(new ControlChangeEvent((SevenBitNumber)7, (SevenBitNumber)20)).SetTime(new MetricTimeSpan(0, 0, 0, 250), OnTheFlyChecksTempoMap);
+            var objectToRemove = new TimedEvent(new ControlChangeEvent((SevenBitNumber)7, (SevenBitNumber)20)).SetTime(new MetricTimeSpan(0, 0, 0, 250), TempoMap);
 
             var initialObjects = new ITimedObject[]
             {
                 new Note((SevenBitNumber)70)
-                    .SetTime(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap)
-                    .SetLength(new MetricTimeSpan(0, 0, 0, 500), OnTheFlyChecksTempoMap),
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 300), TempoMap)
+                    .SetLength(new MetricTimeSpan(0, 0, 0, 500), TempoMap),
                 objectToRemove,
             };
 
@@ -455,13 +455,13 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_RemoveControlChange_AfterCurrentTime_2()
         {
-            var objectToRemove = new TimedEvent(new ControlChangeEvent((SevenBitNumber)7, (SevenBitNumber)20)).SetTime(new MetricTimeSpan(0, 0, 0, 500), OnTheFlyChecksTempoMap);
+            var objectToRemove = new TimedEvent(new ControlChangeEvent((SevenBitNumber)7, (SevenBitNumber)20)).SetTime(new MetricTimeSpan(0, 0, 0, 500), TempoMap);
 
             var initialObjects = new ITimedObject[]
             {
                 new Note((SevenBitNumber)70)
-                    .SetTime(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap)
-                    .SetLength(new MetricTimeSpan(0, 0, 0, 500), OnTheFlyChecksTempoMap),
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 300), TempoMap)
+                    .SetLength(new MetricTimeSpan(0, 0, 0, 500), TempoMap),
                 objectToRemove,
             };
 
@@ -484,13 +484,13 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_RemoveControlChange_BeforeCurrentTime_1()
         {
-            var objectToRemove = new TimedEvent(new ControlChangeEvent((SevenBitNumber)7, (SevenBitNumber)20)).SetTime(new MetricTimeSpan(0, 0, 0, 50), OnTheFlyChecksTempoMap);
+            var objectToRemove = new TimedEvent(new ControlChangeEvent((SevenBitNumber)7, (SevenBitNumber)20)).SetTime(new MetricTimeSpan(0, 0, 0, 50), TempoMap);
 
             var initialObjects = new ITimedObject[]
             {
                 new Note((SevenBitNumber)70)
-                    .SetTime(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap)
-                    .SetLength(new MetricTimeSpan(0, 0, 0, 500), OnTheFlyChecksTempoMap),
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 300), TempoMap)
+                    .SetLength(new MetricTimeSpan(0, 0, 0, 500), TempoMap),
                 objectToRemove,
             };
 
@@ -515,14 +515,14 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_RemoveControlChange_BeforeCurrentTime_2()
         {
-            var objectToRemove1 = new TimedEvent(new ControlChangeEvent((SevenBitNumber)7, (SevenBitNumber)70)).SetTime(new MetricTimeSpan(0, 0, 0, 50), OnTheFlyChecksTempoMap);
-            var objectToRemove2 = new TimedEvent(new ControlChangeEvent((SevenBitNumber)7, (SevenBitNumber)80)).SetTime(new MetricTimeSpan(0, 0, 0, 100), OnTheFlyChecksTempoMap);
+            var objectToRemove1 = new TimedEvent(new ControlChangeEvent((SevenBitNumber)7, (SevenBitNumber)70)).SetTime(new MetricTimeSpan(0, 0, 0, 50), TempoMap);
+            var objectToRemove2 = new TimedEvent(new ControlChangeEvent((SevenBitNumber)7, (SevenBitNumber)80)).SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap);
 
             var initialObjects = new ITimedObject[]
             {
                 new Note((SevenBitNumber)70)
-                    .SetTime(new MetricTimeSpan(0, 0, 0, 400), OnTheFlyChecksTempoMap)
-                    .SetLength(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap),
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 400), TempoMap)
+                    .SetLength(new MetricTimeSpan(0, 0, 0, 300), TempoMap),
                 objectToRemove1,
                 objectToRemove2,
             };
@@ -552,14 +552,14 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_RemoveControlChange_BeforeCurrentTime_3()
         {
-            var objectToRemove1 = new TimedEvent(new ControlChangeEvent((SevenBitNumber)7, (SevenBitNumber)70)).SetTime(new MetricTimeSpan(0, 0, 0, 50), OnTheFlyChecksTempoMap);
-            var objectToRemove2 = new TimedEvent(new ControlChangeEvent((SevenBitNumber)8, (SevenBitNumber)80)).SetTime(new MetricTimeSpan(0, 0, 0, 100), OnTheFlyChecksTempoMap);
+            var objectToRemove1 = new TimedEvent(new ControlChangeEvent((SevenBitNumber)7, (SevenBitNumber)70)).SetTime(new MetricTimeSpan(0, 0, 0, 50), TempoMap);
+            var objectToRemove2 = new TimedEvent(new ControlChangeEvent((SevenBitNumber)8, (SevenBitNumber)80)).SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap);
 
             var initialObjects = new ITimedObject[]
             {
                 new Note((SevenBitNumber)70)
-                    .SetTime(new MetricTimeSpan(0, 0, 0, 400), OnTheFlyChecksTempoMap)
-                    .SetLength(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap),
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 400), TempoMap)
+                    .SetLength(new MetricTimeSpan(0, 0, 0, 300), TempoMap),
                 objectToRemove1,
                 objectToRemove2,
             };
@@ -589,14 +589,14 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_RemoveControlChange_BeforeCurrentTime_4()
         {
-            var objectToRemove1 = new TimedEvent(new ControlChangeEvent((SevenBitNumber)7, (SevenBitNumber)70)).SetTime(new MetricTimeSpan(0, 0, 0, 50), OnTheFlyChecksTempoMap);
-            var objectToRemove2 = new TimedEvent(new ControlChangeEvent((SevenBitNumber)7, (SevenBitNumber)80) { Channel = (FourBitNumber)6 }).SetTime(new MetricTimeSpan(0, 0, 0, 100), OnTheFlyChecksTempoMap);
+            var objectToRemove1 = new TimedEvent(new ControlChangeEvent((SevenBitNumber)7, (SevenBitNumber)70)).SetTime(new MetricTimeSpan(0, 0, 0, 50), TempoMap);
+            var objectToRemove2 = new TimedEvent(new ControlChangeEvent((SevenBitNumber)7, (SevenBitNumber)80) { Channel = (FourBitNumber)6 }).SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap);
 
             var initialObjects = new ITimedObject[]
             {
                 new Note((SevenBitNumber)70)
-                    .SetTime(new MetricTimeSpan(0, 0, 0, 400), OnTheFlyChecksTempoMap)
-                    .SetLength(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap),
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 400), TempoMap)
+                    .SetLength(new MetricTimeSpan(0, 0, 0, 300), TempoMap),
                 objectToRemove1,
                 objectToRemove2,
             };
@@ -627,14 +627,14 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         public void CheckPlaybackDataChangesOnTheFly_RemoveNotes_1()
         {
             var objectToRemove = new Note((SevenBitNumber)50)
-                .SetTime(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap)
-                .SetLength(new MetricTimeSpan(0, 0, 0, 200), OnTheFlyChecksTempoMap);
+                .SetTime(new MetricTimeSpan(0, 0, 0, 300), TempoMap)
+                .SetLength(new MetricTimeSpan(0, 0, 0, 200), TempoMap);
 
             var initialObjects = new ITimedObject[]
             {
                 new Note((SevenBitNumber)70)
-                    .SetTime(new MetricTimeSpan(0, 0, 0, 700), OnTheFlyChecksTempoMap)
-                    .SetLength(new MetricTimeSpan(0, 0, 0, 100), OnTheFlyChecksTempoMap),
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 700), TempoMap)
+                    .SetLength(new MetricTimeSpan(0, 0, 0, 100), TempoMap),
                 objectToRemove,
             };
 
@@ -660,14 +660,14 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         public void CheckPlaybackDataChangesOnTheFly_RemoveNotes_2()
         {
             var objectToRemove = new Note((SevenBitNumber)50)
-                .SetTime(new MetricTimeSpan(0, 0, 0, 500), OnTheFlyChecksTempoMap)
-                .SetLength(new MetricTimeSpan(0, 0, 0, 200), OnTheFlyChecksTempoMap);
+                .SetTime(new MetricTimeSpan(0, 0, 0, 500), TempoMap)
+                .SetLength(new MetricTimeSpan(0, 0, 0, 200), TempoMap);
 
             var initialObjects = new ITimedObject[]
             {
                 new Note((SevenBitNumber)70)
-                    .SetTime(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap)
-                    .SetLength(new MetricTimeSpan(0, 0, 0, 100), OnTheFlyChecksTempoMap),
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 300), TempoMap)
+                    .SetLength(new MetricTimeSpan(0, 0, 0, 100), TempoMap),
                 objectToRemove,
             };
 
@@ -691,14 +691,14 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         public void CheckPlaybackDataChangesOnTheFly_RemoveNotes_3()
         {
             var objectToRemove = new Note((SevenBitNumber)50)
-                .SetTime(new MetricTimeSpan(0, 0, 0, 100), OnTheFlyChecksTempoMap)
-                .SetLength(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap);
+                .SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap)
+                .SetLength(new MetricTimeSpan(0, 0, 0, 300), TempoMap);
 
             var initialObjects = new ITimedObject[]
             {
                 new Note((SevenBitNumber)70)
-                    .SetTime(new MetricTimeSpan(0, 0, 0, 500), OnTheFlyChecksTempoMap)
-                    .SetLength(new MetricTimeSpan(0, 0, 0, 200), OnTheFlyChecksTempoMap),
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 500), TempoMap)
+                    .SetLength(new MetricTimeSpan(0, 0, 0, 200), TempoMap),
                 objectToRemove,
             };
 
@@ -724,17 +724,17 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         public void CheckPlaybackDataChangesOnTheFly_RemoveNotes_4()
         {
             var objectToRemove1 = new Note((SevenBitNumber)50)
-                .SetTime(new MetricTimeSpan(0, 0, 0, 100), OnTheFlyChecksTempoMap)
-                .SetLength(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap);
+                .SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap)
+                .SetLength(new MetricTimeSpan(0, 0, 0, 300), TempoMap);
             var objectToRemove2 = new Note((SevenBitNumber)60)
-                .SetTime(new MetricTimeSpan(0, 0, 0, 450), OnTheFlyChecksTempoMap)
-                .SetLength(new MetricTimeSpan(0, 0, 0, 100), OnTheFlyChecksTempoMap);
+                .SetTime(new MetricTimeSpan(0, 0, 0, 450), TempoMap)
+                .SetLength(new MetricTimeSpan(0, 0, 0, 100), TempoMap);
 
             var initialObjects = new ITimedObject[]
             {
                 new Note((SevenBitNumber)70)
-                    .SetTime(new MetricTimeSpan(0, 0, 0, 700), OnTheFlyChecksTempoMap)
-                    .SetLength(new MetricTimeSpan(0, 0, 0, 100), OnTheFlyChecksTempoMap),
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 700), TempoMap)
+                    .SetLength(new MetricTimeSpan(0, 0, 0, 100), TempoMap),
                 objectToRemove1,
                 objectToRemove2,
             };
@@ -765,8 +765,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         public void CheckPlaybackDataChangesOnTheFly_RemoveNotes_5()
         {
             var objectToRemove = new Note((SevenBitNumber)50)
-                .SetTime(new MetricTimeSpan(0, 0, 0, 100), OnTheFlyChecksTempoMap)
-                .SetLength(new MetricTimeSpan(0, 0, 0, 400), OnTheFlyChecksTempoMap);
+                .SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap)
+                .SetLength(new MetricTimeSpan(0, 0, 0, 400), TempoMap);
 
             var initialObjects = new ITimedObject[]
             {
@@ -793,17 +793,17 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         public void CheckPlaybackDataChangesOnTheFly_RemoveNotes_6()
         {
             var objectToRemove1 = new Note((SevenBitNumber)50)
-                .SetTime(new MetricTimeSpan(0, 0, 0, 600), OnTheFlyChecksTempoMap)
-                .SetLength(new MetricTimeSpan(0, 0, 0, 200), OnTheFlyChecksTempoMap);
+                .SetTime(new MetricTimeSpan(0, 0, 0, 600), TempoMap)
+                .SetLength(new MetricTimeSpan(0, 0, 0, 200), TempoMap);
             var objectToRemove2 = new Note((SevenBitNumber)80)
-                .SetTime(new MetricTimeSpan(0, 0, 0, 600), OnTheFlyChecksTempoMap)
-                .SetLength(new MetricTimeSpan(0, 0, 0, 200), OnTheFlyChecksTempoMap);
+                .SetTime(new MetricTimeSpan(0, 0, 0, 600), TempoMap)
+                .SetLength(new MetricTimeSpan(0, 0, 0, 200), TempoMap);
 
             var initialObjects = new ITimedObject[]
             {
                 new Note((SevenBitNumber)70)
-                    .SetTime(new MetricTimeSpan(0, 0, 0, 200), OnTheFlyChecksTempoMap)
-                    .SetLength(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap),
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 200), TempoMap)
+                    .SetLength(new MetricTimeSpan(0, 0, 0, 300), TempoMap),
                 objectToRemove1,
                 objectToRemove2,
             };
@@ -831,10 +831,10 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Loop_RemoveEventWithinNote_AfterCurrentTime()
         {
-            var objectToRemove = new TimedEvent(new TextEvent("A")).SetTime(new MetricTimeSpan(0, 0, 0, 400), OnTheFlyChecksTempoMap);
+            var objectToRemove = new TimedEvent(new TextEvent("A")).SetTime(new MetricTimeSpan(0, 0, 0, 400), TempoMap);
             var initialObjects = new ITimedObject[]
             {
-                new Note((SevenBitNumber)70).SetLength(new MetricTimeSpan(0, 0, 0, 500), OnTheFlyChecksTempoMap),
+                new Note((SevenBitNumber)70).SetLength(new MetricTimeSpan(0, 0, 0, 500), TempoMap),
                 objectToRemove,
             };
 
@@ -859,10 +859,10 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Loop_RemoveEventWithinNote_BeforeCurrentTime()
         {
-            var objectToRemove = new TimedEvent(new TextEvent("A")).SetTime(new MetricTimeSpan(0, 0, 0, 200), OnTheFlyChecksTempoMap);
+            var objectToRemove = new TimedEvent(new TextEvent("A")).SetTime(new MetricTimeSpan(0, 0, 0, 200), TempoMap);
             var initialObjects = new ITimedObject[]
             {
-                new Note((SevenBitNumber)70).SetLength(new MetricTimeSpan(0, 0, 0, 500), OnTheFlyChecksTempoMap),
+                new Note((SevenBitNumber)70).SetLength(new MetricTimeSpan(0, 0, 0, 500), TempoMap),
                 objectToRemove,
             };
 
@@ -888,7 +888,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Loop_RemoveLastActiveEvent()
         {
-            var objectToRemove = new TimedEvent(new TextEvent("B")).SetTime(new MetricTimeSpan(0, 0, 0, 500), OnTheFlyChecksTempoMap);
+            var objectToRemove = new TimedEvent(new TextEvent("B")).SetTime(new MetricTimeSpan(0, 0, 0, 500), TempoMap);
             var initialObjects = new ITimedObject[]
             {
                 new TimedEvent(new TextEvent("A")),
@@ -914,13 +914,13 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Loop_RemoveAtSameTime_AfterCurrentTime_1()
         {
-            var objectToRemove1 = new TimedEvent(new TextEvent("A")).SetTime(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap);
-            var objectToRemove2 = new TimedEvent(new TextEvent("B")).SetTime(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap);
-            var objectToRemove3 = new TimedEvent(new TextEvent("C")).SetTime(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap);
+            var objectToRemove1 = new TimedEvent(new TextEvent("A")).SetTime(new MetricTimeSpan(0, 0, 0, 300), TempoMap);
+            var objectToRemove2 = new TimedEvent(new TextEvent("B")).SetTime(new MetricTimeSpan(0, 0, 0, 300), TempoMap);
+            var objectToRemove3 = new TimedEvent(new TextEvent("C")).SetTime(new MetricTimeSpan(0, 0, 0, 300), TempoMap);
 
             var initialObjects = new ITimedObject[]
             {
-                new Note((SevenBitNumber)70).SetLength(new MetricTimeSpan(0, 0, 0, 500), OnTheFlyChecksTempoMap),
+                new Note((SevenBitNumber)70).SetLength(new MetricTimeSpan(0, 0, 0, 500), TempoMap),
                 objectToRemove1,
                 objectToRemove2,
                 objectToRemove3,
@@ -951,13 +951,13 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Loop_RemoveAtSameTime_AfterCurrentTime_2()
         {
-            var objectToRemove1 = new TimedEvent(new TextEvent("A")).SetTime(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap);
-            var objectToRemove2 = new TimedEvent(new TextEvent("B")).SetTime(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap);
-            var objectToRemove3 = new TimedEvent(new TextEvent("C")).SetTime(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap);
+            var objectToRemove1 = new TimedEvent(new TextEvent("A")).SetTime(new MetricTimeSpan(0, 0, 0, 300), TempoMap);
+            var objectToRemove2 = new TimedEvent(new TextEvent("B")).SetTime(new MetricTimeSpan(0, 0, 0, 300), TempoMap);
+            var objectToRemove3 = new TimedEvent(new TextEvent("C")).SetTime(new MetricTimeSpan(0, 0, 0, 300), TempoMap);
 
             var initialObjects = new ITimedObject[]
             {
-                new Note((SevenBitNumber)70).SetLength(new MetricTimeSpan(0, 0, 0, 500), OnTheFlyChecksTempoMap),
+                new Note((SevenBitNumber)70).SetLength(new MetricTimeSpan(0, 0, 0, 500), TempoMap),
                 objectToRemove1,
                 objectToRemove2,
                 objectToRemove3,
@@ -988,13 +988,13 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Loop_RemoveAtSameTime_AfterCurrentTime_3()
         {
-            var objectToRemove1 = new TimedEvent(new TextEvent("A")).SetTime(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap);
-            var objectToRemove2 = new TimedEvent(new TextEvent("B")).SetTime(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap);
-            var objectToRemove3 = new TimedEvent(new TextEvent("C")).SetTime(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap);
+            var objectToRemove1 = new TimedEvent(new TextEvent("A")).SetTime(new MetricTimeSpan(0, 0, 0, 300), TempoMap);
+            var objectToRemove2 = new TimedEvent(new TextEvent("B")).SetTime(new MetricTimeSpan(0, 0, 0, 300), TempoMap);
+            var objectToRemove3 = new TimedEvent(new TextEvent("C")).SetTime(new MetricTimeSpan(0, 0, 0, 300), TempoMap);
 
             var initialObjects = new ITimedObject[]
             {
-                new Note((SevenBitNumber)70).SetLength(new MetricTimeSpan(0, 0, 0, 500), OnTheFlyChecksTempoMap),
+                new Note((SevenBitNumber)70).SetLength(new MetricTimeSpan(0, 0, 0, 500), TempoMap),
                 objectToRemove1,
                 objectToRemove2,
                 objectToRemove3,
@@ -1025,13 +1025,13 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Loop_RemoveAtSameTime_BeforeCurrentTime_1()
         {
-            var objectToRemove1 = new TimedEvent(new TextEvent("A")).SetTime(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap);
-            var objectToRemove2 = new TimedEvent(new TextEvent("B")).SetTime(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap);
-            var objectToRemove3 = new TimedEvent(new TextEvent("C")).SetTime(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap);
+            var objectToRemove1 = new TimedEvent(new TextEvent("A")).SetTime(new MetricTimeSpan(0, 0, 0, 300), TempoMap);
+            var objectToRemove2 = new TimedEvent(new TextEvent("B")).SetTime(new MetricTimeSpan(0, 0, 0, 300), TempoMap);
+            var objectToRemove3 = new TimedEvent(new TextEvent("C")).SetTime(new MetricTimeSpan(0, 0, 0, 300), TempoMap);
 
             var initialObjects = new ITimedObject[]
             {
-                new Note((SevenBitNumber)70).SetLength(new MetricTimeSpan(0, 0, 0, 700), OnTheFlyChecksTempoMap),
+                new Note((SevenBitNumber)70).SetLength(new MetricTimeSpan(0, 0, 0, 700), TempoMap),
                 objectToRemove1,
                 objectToRemove2,
                 objectToRemove3,
@@ -1063,13 +1063,13 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Loop_RemoveAtSameTime_BeforeCurrentTime_2()
         {
-            var objectToRemove1 = new TimedEvent(new TextEvent("A")).SetTime(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap);
-            var objectToRemove2 = new TimedEvent(new TextEvent("B")).SetTime(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap);
-            var objectToRemove3 = new TimedEvent(new TextEvent("C")).SetTime(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap);
+            var objectToRemove1 = new TimedEvent(new TextEvent("A")).SetTime(new MetricTimeSpan(0, 0, 0, 300), TempoMap);
+            var objectToRemove2 = new TimedEvent(new TextEvent("B")).SetTime(new MetricTimeSpan(0, 0, 0, 300), TempoMap);
+            var objectToRemove3 = new TimedEvent(new TextEvent("C")).SetTime(new MetricTimeSpan(0, 0, 0, 300), TempoMap);
 
             var initialObjects = new ITimedObject[]
             {
-                new Note((SevenBitNumber)70).SetLength(new MetricTimeSpan(0, 0, 0, 700), OnTheFlyChecksTempoMap),
+                new Note((SevenBitNumber)70).SetLength(new MetricTimeSpan(0, 0, 0, 700), TempoMap),
                 objectToRemove1,
                 objectToRemove2,
                 objectToRemove3,
@@ -1101,13 +1101,13 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Loop_RemoveAtSameTime_BeforeCurrentTime_3()
         {
-            var objectToRemove1 = new TimedEvent(new TextEvent("A")).SetTime(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap);
-            var objectToRemove2 = new TimedEvent(new TextEvent("B")).SetTime(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap);
-            var objectToRemove3 = new TimedEvent(new TextEvent("C")).SetTime(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap);
+            var objectToRemove1 = new TimedEvent(new TextEvent("A")).SetTime(new MetricTimeSpan(0, 0, 0, 300), TempoMap);
+            var objectToRemove2 = new TimedEvent(new TextEvent("B")).SetTime(new MetricTimeSpan(0, 0, 0, 300), TempoMap);
+            var objectToRemove3 = new TimedEvent(new TextEvent("C")).SetTime(new MetricTimeSpan(0, 0, 0, 300), TempoMap);
 
             var initialObjects = new ITimedObject[]
             {
-                new Note((SevenBitNumber)70).SetLength(new MetricTimeSpan(0, 0, 0, 700), OnTheFlyChecksTempoMap),
+                new Note((SevenBitNumber)70).SetLength(new MetricTimeSpan(0, 0, 0, 700), TempoMap),
                 objectToRemove1,
                 objectToRemove2,
                 objectToRemove3,
@@ -1139,13 +1139,13 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Loop_RemoveProgramChange_AfterCurrentTime_1()
         {
-            var objectToRemove = new TimedEvent(new ProgramChangeEvent((SevenBitNumber)7)).SetTime(new MetricTimeSpan(0, 0, 0, 250), OnTheFlyChecksTempoMap);
+            var objectToRemove = new TimedEvent(new ProgramChangeEvent((SevenBitNumber)7)).SetTime(new MetricTimeSpan(0, 0, 0, 250), TempoMap);
 
             var initialObjects = new ITimedObject[]
             {
                 new Note((SevenBitNumber)70)
-                    .SetTime(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap)
-                    .SetLength(new MetricTimeSpan(0, 0, 0, 500), OnTheFlyChecksTempoMap),
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 300), TempoMap)
+                    .SetLength(new MetricTimeSpan(0, 0, 0, 500), TempoMap),
                 objectToRemove,
             };
 
@@ -1170,13 +1170,13 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Loop_RemoveProgramChange_AfterCurrentTime_2()
         {
-            var objectToRemove = new TimedEvent(new ProgramChangeEvent((SevenBitNumber)7)).SetTime(new MetricTimeSpan(0, 0, 0, 500), OnTheFlyChecksTempoMap);
+            var objectToRemove = new TimedEvent(new ProgramChangeEvent((SevenBitNumber)7)).SetTime(new MetricTimeSpan(0, 0, 0, 500), TempoMap);
 
             var initialObjects = new ITimedObject[]
             {
                 new Note((SevenBitNumber)70)
-                    .SetTime(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap)
-                    .SetLength(new MetricTimeSpan(0, 0, 0, 500), OnTheFlyChecksTempoMap),
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 300), TempoMap)
+                    .SetLength(new MetricTimeSpan(0, 0, 0, 500), TempoMap),
                 objectToRemove,
             };
 
@@ -1201,13 +1201,13 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Loop_RemoveProgramChange_BeforeCurrentTime_1()
         {
-            var objectToRemove = new TimedEvent(new ProgramChangeEvent((SevenBitNumber)7)).SetTime(new MetricTimeSpan(0, 0, 0, 50), OnTheFlyChecksTempoMap);
+            var objectToRemove = new TimedEvent(new ProgramChangeEvent((SevenBitNumber)7)).SetTime(new MetricTimeSpan(0, 0, 0, 50), TempoMap);
 
             var initialObjects = new ITimedObject[]
             {
                 new Note((SevenBitNumber)70)
-                    .SetTime(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap)
-                    .SetLength(new MetricTimeSpan(0, 0, 0, 500), OnTheFlyChecksTempoMap),
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 300), TempoMap)
+                    .SetLength(new MetricTimeSpan(0, 0, 0, 500), TempoMap),
                 objectToRemove,
             };
 
@@ -1234,14 +1234,14 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Loop_RemoveProgramChange_BeforeCurrentTime_2()
         {
-            var objectToRemove1 = new TimedEvent(new ProgramChangeEvent((SevenBitNumber)7)).SetTime(new MetricTimeSpan(0, 0, 0, 50), OnTheFlyChecksTempoMap);
-            var objectToRemove2 = new TimedEvent(new ProgramChangeEvent((SevenBitNumber)8)).SetTime(new MetricTimeSpan(0, 0, 0, 100), OnTheFlyChecksTempoMap);
+            var objectToRemove1 = new TimedEvent(new ProgramChangeEvent((SevenBitNumber)7)).SetTime(new MetricTimeSpan(0, 0, 0, 50), TempoMap);
+            var objectToRemove2 = new TimedEvent(new ProgramChangeEvent((SevenBitNumber)8)).SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap);
 
             var initialObjects = new ITimedObject[]
             {
                 new Note((SevenBitNumber)70)
-                    .SetTime(new MetricTimeSpan(0, 0, 0, 400), OnTheFlyChecksTempoMap)
-                    .SetLength(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap),
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 400), TempoMap)
+                    .SetLength(new MetricTimeSpan(0, 0, 0, 300), TempoMap),
                 objectToRemove1,
                 objectToRemove2,
             };
@@ -1273,13 +1273,13 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Loop_RemovePitchBend_AfterCurrentTime_1()
         {
-            var objectToRemove = new TimedEvent(new PitchBendEvent(7000)).SetTime(new MetricTimeSpan(0, 0, 0, 250), OnTheFlyChecksTempoMap);
+            var objectToRemove = new TimedEvent(new PitchBendEvent(7000)).SetTime(new MetricTimeSpan(0, 0, 0, 250), TempoMap);
 
             var initialObjects = new ITimedObject[]
             {
                 new Note((SevenBitNumber)70)
-                    .SetTime(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap)
-                    .SetLength(new MetricTimeSpan(0, 0, 0, 500), OnTheFlyChecksTempoMap),
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 300), TempoMap)
+                    .SetLength(new MetricTimeSpan(0, 0, 0, 500), TempoMap),
                 objectToRemove,
             };
 
@@ -1305,13 +1305,13 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Loop_RemovePitchBend_AfterCurrentTime_2()
         {
-            var objectToRemove = new TimedEvent(new PitchBendEvent(7000)).SetTime(new MetricTimeSpan(0, 0, 0, 500), OnTheFlyChecksTempoMap);
+            var objectToRemove = new TimedEvent(new PitchBendEvent(7000)).SetTime(new MetricTimeSpan(0, 0, 0, 500), TempoMap);
 
             var initialObjects = new ITimedObject[]
             {
                 new Note((SevenBitNumber)70)
-                    .SetTime(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap)
-                    .SetLength(new MetricTimeSpan(0, 0, 0, 500), OnTheFlyChecksTempoMap),
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 300), TempoMap)
+                    .SetLength(new MetricTimeSpan(0, 0, 0, 500), TempoMap),
                 objectToRemove,
             };
 
@@ -1337,13 +1337,13 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Loop_RemovePitchBend_BeforeCurrentTime_1()
         {
-            var objectToRemove = new TimedEvent(new PitchBendEvent(7000)).SetTime(new MetricTimeSpan(0, 0, 0, 50), OnTheFlyChecksTempoMap);
+            var objectToRemove = new TimedEvent(new PitchBendEvent(7000)).SetTime(new MetricTimeSpan(0, 0, 0, 50), TempoMap);
 
             var initialObjects = new ITimedObject[]
             {
                 new Note((SevenBitNumber)70)
-                    .SetTime(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap)
-                    .SetLength(new MetricTimeSpan(0, 0, 0, 500), OnTheFlyChecksTempoMap),
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 300), TempoMap)
+                    .SetLength(new MetricTimeSpan(0, 0, 0, 500), TempoMap),
                 objectToRemove,
             };
 
@@ -1371,14 +1371,14 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Loop_RemovePitchBend_BeforeCurrentTime_2()
         {
-            var objectToRemove1 = new TimedEvent(new PitchBendEvent(7000)).SetTime(new MetricTimeSpan(0, 0, 0, 50), OnTheFlyChecksTempoMap);
-            var objectToRemove2 = new TimedEvent(new PitchBendEvent(8000)).SetTime(new MetricTimeSpan(0, 0, 0, 100), OnTheFlyChecksTempoMap);
+            var objectToRemove1 = new TimedEvent(new PitchBendEvent(7000)).SetTime(new MetricTimeSpan(0, 0, 0, 50), TempoMap);
+            var objectToRemove2 = new TimedEvent(new PitchBendEvent(8000)).SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap);
 
             var initialObjects = new ITimedObject[]
             {
                 new Note((SevenBitNumber)70)
-                    .SetTime(new MetricTimeSpan(0, 0, 0, 400), OnTheFlyChecksTempoMap)
-                    .SetLength(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap),
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 400), TempoMap)
+                    .SetLength(new MetricTimeSpan(0, 0, 0, 300), TempoMap),
                 objectToRemove1,
                 objectToRemove2,
             };
@@ -1411,13 +1411,13 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Loop_RemoveControlChange_AfterCurrentTime_1()
         {
-            var objectToRemove = new TimedEvent(new ControlChangeEvent((SevenBitNumber)7, (SevenBitNumber)20)).SetTime(new MetricTimeSpan(0, 0, 0, 250), OnTheFlyChecksTempoMap);
+            var objectToRemove = new TimedEvent(new ControlChangeEvent((SevenBitNumber)7, (SevenBitNumber)20)).SetTime(new MetricTimeSpan(0, 0, 0, 250), TempoMap);
 
             var initialObjects = new ITimedObject[]
             {
                 new Note((SevenBitNumber)70)
-                    .SetTime(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap)
-                    .SetLength(new MetricTimeSpan(0, 0, 0, 500), OnTheFlyChecksTempoMap),
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 300), TempoMap)
+                    .SetLength(new MetricTimeSpan(0, 0, 0, 500), TempoMap),
                 objectToRemove,
             };
 
@@ -1443,13 +1443,13 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Loop_RemoveControlChange_AfterCurrentTime_2()
         {
-            var objectToRemove = new TimedEvent(new ControlChangeEvent((SevenBitNumber)7, (SevenBitNumber)20)).SetTime(new MetricTimeSpan(0, 0, 0, 500), OnTheFlyChecksTempoMap);
+            var objectToRemove = new TimedEvent(new ControlChangeEvent((SevenBitNumber)7, (SevenBitNumber)20)).SetTime(new MetricTimeSpan(0, 0, 0, 500), TempoMap);
 
             var initialObjects = new ITimedObject[]
             {
                 new Note((SevenBitNumber)70)
-                    .SetTime(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap)
-                    .SetLength(new MetricTimeSpan(0, 0, 0, 500), OnTheFlyChecksTempoMap),
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 300), TempoMap)
+                    .SetLength(new MetricTimeSpan(0, 0, 0, 500), TempoMap),
                 objectToRemove,
             };
 
@@ -1475,13 +1475,13 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Loop_RemoveControlChange_BeforeCurrentTime_1()
         {
-            var objectToRemove = new TimedEvent(new ControlChangeEvent((SevenBitNumber)7, (SevenBitNumber)20)).SetTime(new MetricTimeSpan(0, 0, 0, 50), OnTheFlyChecksTempoMap);
+            var objectToRemove = new TimedEvent(new ControlChangeEvent((SevenBitNumber)7, (SevenBitNumber)20)).SetTime(new MetricTimeSpan(0, 0, 0, 50), TempoMap);
 
             var initialObjects = new ITimedObject[]
             {
                 new Note((SevenBitNumber)70)
-                    .SetTime(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap)
-                    .SetLength(new MetricTimeSpan(0, 0, 0, 500), OnTheFlyChecksTempoMap),
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 300), TempoMap)
+                    .SetLength(new MetricTimeSpan(0, 0, 0, 500), TempoMap),
                 objectToRemove,
             };
 
@@ -1509,14 +1509,14 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Loop_RemoveControlChange_BeforeCurrentTime_2()
         {
-            var objectToRemove1 = new TimedEvent(new ControlChangeEvent((SevenBitNumber)7, (SevenBitNumber)70)).SetTime(new MetricTimeSpan(0, 0, 0, 50), OnTheFlyChecksTempoMap);
-            var objectToRemove2 = new TimedEvent(new ControlChangeEvent((SevenBitNumber)7, (SevenBitNumber)80)).SetTime(new MetricTimeSpan(0, 0, 0, 100), OnTheFlyChecksTempoMap);
+            var objectToRemove1 = new TimedEvent(new ControlChangeEvent((SevenBitNumber)7, (SevenBitNumber)70)).SetTime(new MetricTimeSpan(0, 0, 0, 50), TempoMap);
+            var objectToRemove2 = new TimedEvent(new ControlChangeEvent((SevenBitNumber)7, (SevenBitNumber)80)).SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap);
 
             var initialObjects = new ITimedObject[]
             {
                 new Note((SevenBitNumber)70)
-                    .SetTime(new MetricTimeSpan(0, 0, 0, 400), OnTheFlyChecksTempoMap)
-                    .SetLength(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap),
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 400), TempoMap)
+                    .SetLength(new MetricTimeSpan(0, 0, 0, 300), TempoMap),
                 objectToRemove1,
                 objectToRemove2,
             };
@@ -1549,14 +1549,14 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Loop_RemoveControlChange_BeforeCurrentTime_3()
         {
-            var objectToRemove1 = new TimedEvent(new ControlChangeEvent((SevenBitNumber)7, (SevenBitNumber)70)).SetTime(new MetricTimeSpan(0, 0, 0, 50), OnTheFlyChecksTempoMap);
-            var objectToRemove2 = new TimedEvent(new ControlChangeEvent((SevenBitNumber)8, (SevenBitNumber)80)).SetTime(new MetricTimeSpan(0, 0, 0, 100), OnTheFlyChecksTempoMap);
+            var objectToRemove1 = new TimedEvent(new ControlChangeEvent((SevenBitNumber)7, (SevenBitNumber)70)).SetTime(new MetricTimeSpan(0, 0, 0, 50), TempoMap);
+            var objectToRemove2 = new TimedEvent(new ControlChangeEvent((SevenBitNumber)8, (SevenBitNumber)80)).SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap);
 
             var initialObjects = new ITimedObject[]
             {
                 new Note((SevenBitNumber)70)
-                    .SetTime(new MetricTimeSpan(0, 0, 0, 400), OnTheFlyChecksTempoMap)
-                    .SetLength(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap),
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 400), TempoMap)
+                    .SetLength(new MetricTimeSpan(0, 0, 0, 300), TempoMap),
                 objectToRemove1,
                 objectToRemove2,
             };
@@ -1589,14 +1589,14 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Loop_RemoveControlChange_BeforeCurrentTime_4()
         {
-            var objectToRemove1 = new TimedEvent(new ControlChangeEvent((SevenBitNumber)7, (SevenBitNumber)70)).SetTime(new MetricTimeSpan(0, 0, 0, 50), OnTheFlyChecksTempoMap);
-            var objectToRemove2 = new TimedEvent(new ControlChangeEvent((SevenBitNumber)7, (SevenBitNumber)80) { Channel = (FourBitNumber)6 }).SetTime(new MetricTimeSpan(0, 0, 0, 100), OnTheFlyChecksTempoMap);
+            var objectToRemove1 = new TimedEvent(new ControlChangeEvent((SevenBitNumber)7, (SevenBitNumber)70)).SetTime(new MetricTimeSpan(0, 0, 0, 50), TempoMap);
+            var objectToRemove2 = new TimedEvent(new ControlChangeEvent((SevenBitNumber)7, (SevenBitNumber)80) { Channel = (FourBitNumber)6 }).SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap);
 
             var initialObjects = new ITimedObject[]
             {
                 new Note((SevenBitNumber)70)
-                    .SetTime(new MetricTimeSpan(0, 0, 0, 400), OnTheFlyChecksTempoMap)
-                    .SetLength(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap),
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 400), TempoMap)
+                    .SetLength(new MetricTimeSpan(0, 0, 0, 300), TempoMap),
                 objectToRemove1,
                 objectToRemove2,
             };
@@ -1630,14 +1630,14 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         public void CheckPlaybackDataChangesOnTheFly_Loop_RemoveNotes_1()
         {
             var objectToRemove = new Note((SevenBitNumber)50)
-                .SetTime(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap)
-                .SetLength(new MetricTimeSpan(0, 0, 0, 200), OnTheFlyChecksTempoMap);
+                .SetTime(new MetricTimeSpan(0, 0, 0, 300), TempoMap)
+                .SetLength(new MetricTimeSpan(0, 0, 0, 200), TempoMap);
 
             var initialObjects = new ITimedObject[]
             {
                 new Note((SevenBitNumber)70)
-                    .SetTime(new MetricTimeSpan(0, 0, 0, 700), OnTheFlyChecksTempoMap)
-                    .SetLength(new MetricTimeSpan(0, 0, 0, 100), OnTheFlyChecksTempoMap),
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 700), TempoMap)
+                    .SetLength(new MetricTimeSpan(0, 0, 0, 100), TempoMap),
                 objectToRemove,
             };
 
@@ -1666,14 +1666,14 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         public void CheckPlaybackDataChangesOnTheFly_Loop_RemoveNotes_2()
         {
             var objectToRemove = new Note((SevenBitNumber)50)
-                .SetTime(new MetricTimeSpan(0, 0, 0, 500), OnTheFlyChecksTempoMap)
-                .SetLength(new MetricTimeSpan(0, 0, 0, 200), OnTheFlyChecksTempoMap);
+                .SetTime(new MetricTimeSpan(0, 0, 0, 500), TempoMap)
+                .SetLength(new MetricTimeSpan(0, 0, 0, 200), TempoMap);
 
             var initialObjects = new ITimedObject[]
             {
                 new Note((SevenBitNumber)70)
-                    .SetTime(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap)
-                    .SetLength(new MetricTimeSpan(0, 0, 0, 100), OnTheFlyChecksTempoMap),
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 300), TempoMap)
+                    .SetLength(new MetricTimeSpan(0, 0, 0, 100), TempoMap),
                 objectToRemove,
             };
 
@@ -1700,14 +1700,14 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         public void CheckPlaybackDataChangesOnTheFly_Loop_RemoveNotes_3()
         {
             var objectToRemove = new Note((SevenBitNumber)50)
-                .SetTime(new MetricTimeSpan(0, 0, 0, 100), OnTheFlyChecksTempoMap)
-                .SetLength(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap);
+                .SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap)
+                .SetLength(new MetricTimeSpan(0, 0, 0, 300), TempoMap);
 
             var initialObjects = new ITimedObject[]
             {
                 new Note((SevenBitNumber)70)
-                    .SetTime(new MetricTimeSpan(0, 0, 0, 500), OnTheFlyChecksTempoMap)
-                    .SetLength(new MetricTimeSpan(0, 0, 0, 200), OnTheFlyChecksTempoMap),
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 500), TempoMap)
+                    .SetLength(new MetricTimeSpan(0, 0, 0, 200), TempoMap),
                 objectToRemove,
             };
 
@@ -1736,17 +1736,17 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         public void CheckPlaybackDataChangesOnTheFly_Loop_RemoveNotes_4()
         {
             var objectToRemove1 = new Note((SevenBitNumber)50)
-                .SetTime(new MetricTimeSpan(0, 0, 0, 100), OnTheFlyChecksTempoMap)
-                .SetLength(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap);
+                .SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap)
+                .SetLength(new MetricTimeSpan(0, 0, 0, 300), TempoMap);
             var objectToRemove2 = new Note((SevenBitNumber)60)
-                .SetTime(new MetricTimeSpan(0, 0, 0, 450), OnTheFlyChecksTempoMap)
-                .SetLength(new MetricTimeSpan(0, 0, 0, 100), OnTheFlyChecksTempoMap);
+                .SetTime(new MetricTimeSpan(0, 0, 0, 450), TempoMap)
+                .SetLength(new MetricTimeSpan(0, 0, 0, 100), TempoMap);
 
             var initialObjects = new ITimedObject[]
             {
                 new Note((SevenBitNumber)70)
-                    .SetTime(new MetricTimeSpan(0, 0, 0, 700), OnTheFlyChecksTempoMap)
-                    .SetLength(new MetricTimeSpan(0, 0, 0, 100), OnTheFlyChecksTempoMap),
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 700), TempoMap)
+                    .SetLength(new MetricTimeSpan(0, 0, 0, 100), TempoMap),
                 objectToRemove1,
                 objectToRemove2,
             };
@@ -1780,8 +1780,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         public void CheckPlaybackDataChangesOnTheFly_Loop_RemoveNotes_5()
         {
             var objectToRemove = new Note((SevenBitNumber)50)
-                .SetTime(new MetricTimeSpan(0, 0, 0, 100), OnTheFlyChecksTempoMap)
-                .SetLength(new MetricTimeSpan(0, 0, 0, 400), OnTheFlyChecksTempoMap);
+                .SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap)
+                .SetLength(new MetricTimeSpan(0, 0, 0, 400), TempoMap);
 
             var initialObjects = new ITimedObject[]
             {
@@ -1809,17 +1809,17 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         public void CheckPlaybackDataChangesOnTheFly_Loop_RemoveNotes_6()
         {
             var objectToRemove1 = new Note((SevenBitNumber)50)
-                .SetTime(new MetricTimeSpan(0, 0, 0, 600), OnTheFlyChecksTempoMap)
-                .SetLength(new MetricTimeSpan(0, 0, 0, 200), OnTheFlyChecksTempoMap);
+                .SetTime(new MetricTimeSpan(0, 0, 0, 600), TempoMap)
+                .SetLength(new MetricTimeSpan(0, 0, 0, 200), TempoMap);
             var objectToRemove2 = new Note((SevenBitNumber)80)
-                .SetTime(new MetricTimeSpan(0, 0, 0, 600), OnTheFlyChecksTempoMap)
-                .SetLength(new MetricTimeSpan(0, 0, 0, 200), OnTheFlyChecksTempoMap);
+                .SetTime(new MetricTimeSpan(0, 0, 0, 600), TempoMap)
+                .SetLength(new MetricTimeSpan(0, 0, 0, 200), TempoMap);
 
             var initialObjects = new ITimedObject[]
             {
                 new Note((SevenBitNumber)70)
-                    .SetTime(new MetricTimeSpan(0, 0, 0, 200), OnTheFlyChecksTempoMap)
-                    .SetLength(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap),
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 200), TempoMap)
+                    .SetLength(new MetricTimeSpan(0, 0, 0, 300), TempoMap),
                 objectToRemove1,
                 objectToRemove2,
             };
@@ -1853,9 +1853,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         public void CheckPlaybackDataChangesOnTheFly_RemoveNoteEvents_1([Values] bool removeNoteOn)
         {
             var objectToRemove1 = new TimedEvent(new NoteOnEvent((SevenBitNumber)50, Note.DefaultVelocity))
-                .SetTime(new MetricTimeSpan(0, 0, 0, 200), OnTheFlyChecksTempoMap);
+                .SetTime(new MetricTimeSpan(0, 0, 0, 200), TempoMap);
             var objectToRemove2 = new TimedEvent(new NoteOffEvent((SevenBitNumber)50, Note.DefaultOffVelocity))
-                .SetTime(new MetricTimeSpan(0, 0, 0, 400), OnTheFlyChecksTempoMap);
+                .SetTime(new MetricTimeSpan(0, 0, 0, 400), TempoMap);
 
             var initialObjects = new ITimedObject[]
             {
@@ -1893,9 +1893,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         public void CheckPlaybackDataChangesOnTheFly_RemoveNoteEvents_2([Values] bool removeNoteOn)
         {
             var objectToRemove1 = new TimedEvent(new NoteOnEvent((SevenBitNumber)50, Note.DefaultVelocity))
-                .SetTime(new MetricTimeSpan(0, 0, 0, 200), OnTheFlyChecksTempoMap);
+                .SetTime(new MetricTimeSpan(0, 0, 0, 200), TempoMap);
             var objectToRemove2 = new TimedEvent(new NoteOffEvent((SevenBitNumber)50, Note.DefaultOffVelocity))
-                .SetTime(new MetricTimeSpan(0, 0, 0, 400), OnTheFlyChecksTempoMap);
+                .SetTime(new MetricTimeSpan(0, 0, 0, 400), TempoMap);
 
             var initialObjects = new ITimedObject[]
             {
@@ -1935,21 +1935,21 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         public void CheckPlaybackDataChangesOnTheFly_RemoveNoteEvents_3()
         {
             var objectToRemove1 = new TimedEvent(new NoteOnEvent((SevenBitNumber)50, Note.DefaultVelocity))
-                .SetTime(new MetricTimeSpan(0, 0, 0, 200), OnTheFlyChecksTempoMap);
+                .SetTime(new MetricTimeSpan(0, 0, 0, 200), TempoMap);
             var objectToRemove2 = new TimedEvent(new NoteOffEvent((SevenBitNumber)50, Note.DefaultOffVelocity))
-                .SetTime(new MetricTimeSpan(0, 0, 0, 400), OnTheFlyChecksTempoMap);
+                .SetTime(new MetricTimeSpan(0, 0, 0, 400), TempoMap);
             
             var objectToAdd1 = new TimedEvent(new NoteOnEvent((SevenBitNumber)50, Note.DefaultVelocity))
-                .SetTime(new MetricTimeSpan(0, 0, 0, 300), OnTheFlyChecksTempoMap);
+                .SetTime(new MetricTimeSpan(0, 0, 0, 300), TempoMap);
             var objectToAdd2 = new TimedEvent(new NoteOffEvent((SevenBitNumber)50, Note.DefaultOffVelocity))
-                .SetTime(new MetricTimeSpan(0, 0, 0, 600), OnTheFlyChecksTempoMap);
+                .SetTime(new MetricTimeSpan(0, 0, 0, 600), TempoMap);
 
             var initialObjects = new ITimedObject[]
             {
                 objectToRemove1,
                 objectToRemove2,
                 new TimedEvent(new TextEvent("END"))
-                    .SetTime(new MetricTimeSpan(0, 0, 0, 700), OnTheFlyChecksTempoMap),
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 700), TempoMap),
             };
 
             var notesStarted = new List<Note>();
@@ -1993,16 +1993,16 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         public void CheckPlaybackDataChangesOnTheFly_RemoveNoteEvents_4()
         {
             var objectToRemove1 = new TimedEvent(new NoteOnEvent((SevenBitNumber)50, Note.DefaultVelocity))
-                .SetTime(new MetricTimeSpan(0, 0, 0, 200), OnTheFlyChecksTempoMap);
+                .SetTime(new MetricTimeSpan(0, 0, 0, 200), TempoMap);
             var objectToRemove2 = new TimedEvent(new NoteOffEvent((SevenBitNumber)50, Note.DefaultOffVelocity))
-                .SetTime(new MetricTimeSpan(0, 0, 0, 400), OnTheFlyChecksTempoMap);
+                .SetTime(new MetricTimeSpan(0, 0, 0, 400), TempoMap);
 
             var initialObjects = new ITimedObject[]
             {
                 objectToRemove1,
                 objectToRemove2,
                 new TimedEvent(new TextEvent("END"))
-                    .SetTime(new MetricTimeSpan(0, 0, 0, 500), OnTheFlyChecksTempoMap),
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 500), TempoMap),
             };
 
             var notesStarted = new List<Note>();

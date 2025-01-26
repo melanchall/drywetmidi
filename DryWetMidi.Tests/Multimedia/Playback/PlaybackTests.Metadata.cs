@@ -1372,7 +1372,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                         new NoteOnEvent(),
                         new NoteOffEvent()
                         {
-                            DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)TimeSpan.FromSeconds(1), TempoMap.Default)
+                            DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)TimeSpan.FromSeconds(1), TempoMap)
                         }),
                     new TrackChunk(
                         new NoteOnEvent((SevenBitNumber)100, (SevenBitNumber)80)
@@ -1381,7 +1381,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                         },
                         new NoteOffEvent((SevenBitNumber)100, (SevenBitNumber)0)
                         {
-                            DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)TimeSpan.FromMilliseconds(500), TempoMap.Default)
+                            DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)TimeSpan.FromMilliseconds(500), TempoMap)
                         })),
                 actions: new[]
                 {
@@ -1406,7 +1406,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                         new NoteOnEvent(),
                         new NoteOffEvent()
                         {
-                            DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)TimeSpan.FromSeconds(1), TempoMap.Default)
+                            DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)TimeSpan.FromSeconds(1), TempoMap)
                         }),
                     new TrackChunk(
                         new NoteOnEvent((SevenBitNumber)100, (SevenBitNumber)80)
@@ -1415,7 +1415,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                         },
                         new NoteOffEvent((SevenBitNumber)100, (SevenBitNumber)0)
                         {
-                            DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)TimeSpan.FromMilliseconds(500), TempoMap.Default)
+                            DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)TimeSpan.FromMilliseconds(500), TempoMap)
                         })),
                 actions: new[]
                 {
@@ -1444,7 +1444,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                         new NoteOnEvent(),
                         new NoteOffEvent()
                         {
-                            DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)TimeSpan.FromSeconds(1), TempoMap.Default)
+                            DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)TimeSpan.FromSeconds(1), TempoMap)
                         }),
                     new TrackChunk(
                         new NoteOnEvent((SevenBitNumber)100, (SevenBitNumber)80)
@@ -1453,7 +1453,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                         },
                         new NoteOffEvent((SevenBitNumber)100, (SevenBitNumber)0)
                         {
-                            DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)TimeSpan.FromMilliseconds(500), TempoMap.Default)
+                            DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)TimeSpan.FromMilliseconds(500), TempoMap)
                         })),
                 actions: new[]
                 {
@@ -1482,7 +1482,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                         new NoteOnEvent(),
                         new NoteOffEvent()
                         {
-                            DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)TimeSpan.FromSeconds(1), TempoMap.Default)
+                            DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)TimeSpan.FromSeconds(1), TempoMap)
                         }),
                     new TrackChunk(
                         new NoteOnEvent((SevenBitNumber)100, (SevenBitNumber)80)
@@ -1491,7 +1491,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                         },
                         new NoteOffEvent((SevenBitNumber)100, (SevenBitNumber)0)
                         {
-                            DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)TimeSpan.FromMilliseconds(500), TempoMap.Default)
+                            DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)TimeSpan.FromMilliseconds(500), TempoMap)
                         })),
                 actions: new[]
                 {
@@ -1700,7 +1700,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new TrackChunk(
                         new NoteOffEvent()
                         {
-                            DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)TimeSpan.FromSeconds(4), TempoMap.Default)
+                            DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)TimeSpan.FromSeconds(4), TempoMap)
                         })),
                 actions: new[]
                 {
@@ -1874,7 +1874,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new TrackChunk(
                         new NoteOffEvent()
                         {
-                            DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)TimeSpan.FromSeconds(10), TempoMap.Default)
+                            DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)TimeSpan.FromSeconds(10), TempoMap)
                         })),
                 actions: new[]
                 {
@@ -1927,7 +1927,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new TrackChunk(
                         new NoteOffEvent()
                         {
-                            DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)TimeSpan.FromSeconds(4), TempoMap.Default)
+                            DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)TimeSpan.FromSeconds(4), TempoMap)
                         })),
                 actions: new[]
                 {
@@ -1989,7 +1989,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         }
 
         private long GetDeltaTime(TimeSpan deltaTime) =>
-            TimeConverter.ConvertFrom((MetricTimeSpan)deltaTime, TempoMap.Default);
+            TimeConverter.ConvertFrom((MetricTimeSpan)deltaTime, TempoMap);
 
         private void CheckPlaybackMetadata(
             MidiFile midiFile,
@@ -2004,7 +2004,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
             var actualEvents = new List<(MidiEvent, object)>();
 
-            using (var playback = new Playback(timedEvents, midiFile.GetTempoMap(), new EmptyOutputDevice()))
+            using (var playback = new Playback(timedEvents, TempoMap, new EmptyOutputDevice()))
             {
                 setupPlayback?.Invoke(playback);
 

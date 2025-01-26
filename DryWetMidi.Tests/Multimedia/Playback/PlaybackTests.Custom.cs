@@ -68,7 +68,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         {
             var actualMetadata = new List<(MidiEvent, object)>();
 
-            using (var playback = new CustomObjectsPlayback(new[] { new CustomTimedObject() }, TempoMap.Default))
+            using (var playback = new CustomObjectsPlayback(new[] { new CustomTimedObject() }, TempoMap))
             {
                 playback.EventPlayed += (_, e) => actualMetadata.Add((e.Event, e.Metadata));
 

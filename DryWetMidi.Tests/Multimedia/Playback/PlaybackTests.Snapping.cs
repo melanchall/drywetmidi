@@ -891,7 +891,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
         private Playback Get10SecondsPlayback()
         {
-            var tempoMap = TempoMap.Default;
+            var tempoMap = TempoMap;
 
             var eventsToSend = new[]
             {

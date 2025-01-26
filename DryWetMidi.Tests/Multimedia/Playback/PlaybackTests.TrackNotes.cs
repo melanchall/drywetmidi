@@ -32,9 +32,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialTimedObjects: new[]
                 {
                     new TimedEvent(new NoteOnEvent(noteNumber, noteOnVelocity))
-                        .SetTime((MetricTimeSpan)noteOnDelay, TempoMap.Default),
+                        .SetTime((MetricTimeSpan)noteOnDelay, TempoMap),
                     new TimedEvent(new NoteOffEvent(noteNumber, noteOffVelocity))
-                        .SetTime((MetricTimeSpan)(noteOnDelay + noteOffDelay), TempoMap.Default),
+                        .SetTime((MetricTimeSpan)(noteOnDelay + noteOffDelay), TempoMap),
                 },
                 expectedReceivedEvents: new[]
                 {
@@ -67,11 +67,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialTimedObjects: new[]
                 {
                     new TimedEvent(new NoteOnEvent(noteNumber, noteOnVelocity))
-                        .SetTime((MetricTimeSpan)noteOnDelay, TempoMap.Default),
+                        .SetTime((MetricTimeSpan)noteOnDelay, TempoMap),
                     new TimedEvent(new NoteOffEvent(noteNumber, noteOffVelocity))
-                        .SetTime((MetricTimeSpan)(noteOnDelay + noteOffDelay), TempoMap.Default),
+                        .SetTime((MetricTimeSpan)(noteOnDelay + noteOffDelay), TempoMap),
                     new TimedEvent(new PitchBendEvent())
-                        .SetTime((MetricTimeSpan)(noteOnDelay + noteOffDelay + pitchBendDelay), TempoMap.Default),
+                        .SetTime((MetricTimeSpan)(noteOnDelay + noteOffDelay + pitchBendDelay), TempoMap),
                 },
                 actions: new[]
                 {
@@ -107,11 +107,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialTimedObjects: new[]
                 {
                     new TimedEvent(new NoteOnEvent(noteNumber, noteOnVelocity))
-                        .SetTime((MetricTimeSpan)noteOnDelay, TempoMap.Default),
+                        .SetTime((MetricTimeSpan)noteOnDelay, TempoMap),
                     new TimedEvent(new NoteOffEvent(noteNumber, noteOffVelocity))
-                        .SetTime((MetricTimeSpan)(noteOnDelay + noteOffDelay), TempoMap.Default),
+                        .SetTime((MetricTimeSpan)(noteOnDelay + noteOffDelay), TempoMap),
                     new TimedEvent(new PitchBendEvent())
-                        .SetTime((MetricTimeSpan)(noteOnDelay + noteOffDelay + pitchBendDelay), TempoMap.Default),
+                        .SetTime((MetricTimeSpan)(noteOnDelay + noteOffDelay + pitchBendDelay), TempoMap),
                 },
                 actions: new[]
                 {
@@ -144,9 +144,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialTimedObjects: new[]
                 {
                     new TimedEvent(new NoteOnEvent(noteNumber, noteOnVelocity))
-                        .SetTime((MetricTimeSpan)noteOnDelay, TempoMap.Default),
+                        .SetTime((MetricTimeSpan)noteOnDelay, TempoMap),
                     new TimedEvent(new NoteOffEvent(noteNumber, noteOffVelocity))
-                        .SetTime((MetricTimeSpan)(noteOnDelay + noteOffDelay), TempoMap.Default),
+                        .SetTime((MetricTimeSpan)(noteOnDelay + noteOffDelay), TempoMap),
                 },
                 actions: new[]
                 {
@@ -180,9 +180,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialTimedObjects: new[]
                 {
                     new TimedEvent(new NoteOnEvent(noteNumber, noteOnVelocity))
-                        .SetTime((MetricTimeSpan)noteOnDelay, TempoMap.Default),
+                        .SetTime((MetricTimeSpan)noteOnDelay, TempoMap),
                     new TimedEvent(new NoteOffEvent(noteNumber, noteOffVelocity))
-                        .SetTime((MetricTimeSpan)(noteOnDelay + noteOffDelay), TempoMap.Default),
+                        .SetTime((MetricTimeSpan)(noteOnDelay + noteOffDelay), TempoMap),
                 },
                 actions: new[]
                 {
@@ -214,9 +214,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialTimedObjects: new[]
                 {
                     new TimedEvent(new NoteOnEvent(noteNumber, noteOnVelocity))
-                        .SetTime((MetricTimeSpan)noteOnDelay, TempoMap.Default),
+                        .SetTime((MetricTimeSpan)noteOnDelay, TempoMap),
                     new TimedEvent(new NoteOffEvent(noteNumber, noteOffVelocity))
-                        .SetTime((MetricTimeSpan)(noteOnDelay + noteOffDelay), TempoMap.Default),
+                        .SetTime((MetricTimeSpan)(noteOnDelay + noteOffDelay), TempoMap),
                 },
                 actions: new[]
                 {
@@ -254,13 +254,13 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialTimedObjects: new[]
                 {
                     new TimedEvent(new NoteOnEvent(noteNumber1, noteOnVelocity1))
-                        .SetTime((MetricTimeSpan)noteOnDelay1, TempoMap.Default),
+                        .SetTime((MetricTimeSpan)noteOnDelay1, TempoMap),
                     new TimedEvent(new NoteOffEvent(noteNumber1, noteOffVelocity1))
-                        .SetTime((MetricTimeSpan)(noteOnDelay1 + noteOffDelay1), TempoMap.Default),
+                        .SetTime((MetricTimeSpan)(noteOnDelay1 + noteOffDelay1), TempoMap),
                     new TimedEvent(new NoteOnEvent(noteNumber2, noteOnVelocity2))
-                        .SetTime((MetricTimeSpan)(noteOnDelay1 + noteOffDelay1 + noteOnDelay2), TempoMap.Default),
+                        .SetTime((MetricTimeSpan)(noteOnDelay1 + noteOffDelay1 + noteOnDelay2), TempoMap),
                     new TimedEvent(new NoteOffEvent(noteNumber2, noteOffVelocity2))
-                        .SetTime((MetricTimeSpan)(noteOnDelay1 + noteOffDelay1 + noteOnDelay2 + noteOffDelay2), TempoMap.Default),
+                        .SetTime((MetricTimeSpan)(noteOnDelay1 + noteOffDelay1 + noteOnDelay2 + noteOffDelay2), TempoMap),
                 },
                 actions: new[]
                 {
@@ -300,13 +300,13 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialTimedObjects: new[]
                 {
                     new TimedEvent(new NoteOnEvent(noteNumber1, noteOnVelocity1))
-                        .SetTime((MetricTimeSpan)noteOnDelay1, TempoMap.Default),
+                        .SetTime((MetricTimeSpan)noteOnDelay1, TempoMap),
                     new TimedEvent(new NoteOffEvent(noteNumber1, noteOffVelocity1))
-                        .SetTime((MetricTimeSpan)(noteOnDelay1 + noteOffDelay1), TempoMap.Default),
+                        .SetTime((MetricTimeSpan)(noteOnDelay1 + noteOffDelay1), TempoMap),
                     new TimedEvent(new NoteOnEvent(noteNumber2, noteOnVelocity2))
-                        .SetTime((MetricTimeSpan)(noteOnDelay1 + noteOffDelay1 + noteOnDelay2), TempoMap.Default),
+                        .SetTime((MetricTimeSpan)(noteOnDelay1 + noteOffDelay1 + noteOnDelay2), TempoMap),
                     new TimedEvent(new NoteOffEvent(noteNumber2, noteOffVelocity2))
-                        .SetTime((MetricTimeSpan)(noteOnDelay1 + noteOffDelay1 + noteOnDelay2 + noteOffDelay2), TempoMap.Default),
+                        .SetTime((MetricTimeSpan)(noteOnDelay1 + noteOffDelay1 + noteOnDelay2 + noteOffDelay2), TempoMap),
                 },
                 actions: new[]
                 {
@@ -342,9 +342,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialPlaybackObjects: new[]
                 {
                     new TimedEvent(new NoteOnEvent())
-                        .SetTime((MetricTimeSpan)noteOnDelay, TempoMap.Default),
+                        .SetTime((MetricTimeSpan)noteOnDelay, TempoMap),
                     new TimedEvent(new NoteOffEvent())
-                        .SetTime((MetricTimeSpan)(noteOnDelay + noteOffDelay), TempoMap.Default),
+                        .SetTime((MetricTimeSpan)(noteOnDelay + noteOffDelay), TempoMap),
                 },
                 actions: new[]
                 {
@@ -380,9 +380,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialPlaybackObjects: new[]
                 {
                     new TimedEvent(new NoteOnEvent())
-                        .SetTime((MetricTimeSpan)noteOnDelay, TempoMap.Default),
+                        .SetTime((MetricTimeSpan)noteOnDelay, TempoMap),
                     new TimedEvent(new NoteOffEvent())
-                        .SetTime((MetricTimeSpan)(noteOnDelay + noteOffDelay), TempoMap.Default),
+                        .SetTime((MetricTimeSpan)(noteOnDelay + noteOffDelay), TempoMap),
                 },
                 actions: new[]
                 {

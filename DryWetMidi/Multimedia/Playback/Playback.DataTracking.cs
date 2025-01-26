@@ -1,18 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Melanchall.DryWetMidi.Common;
+﻿using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Melanchall.DryWetMidi.Multimedia
 {
-    internal sealed class PlaybackDataTracker
+    public partial class Playback
     {
         #region Nested enums
 
         [Flags]
-        public enum TrackedParameterType
+        private enum TrackedParameterType
         {
             Program = 1 << 0,
             PitchValue = 1 << 1,
@@ -25,7 +25,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         #region Nested classes
 
-        public sealed class EventWithMetadata
+        private sealed class EventWithMetadata
         {
             public EventWithMetadata(MidiEvent midiEvent, object metadata)
             {
@@ -146,63 +146,128 @@ namespace Melanchall.DryWetMidi.Multimedia
             .Select(n => new Dictionary<SevenBitNumber, RedBlackTree<long, ControlValueChange>>())
             .ToArray();
 
-        private readonly TempoMap _tempoMap;
-        private readonly Dictionary<TrackedParameterType, Func<long, IEnumerable<EventWithMetadata>>> _getParameterEventsAtTime;
+        private Dictionary<TrackedParameterType, Func<long, IEnumerable<EventWithMetadata>>> _getParameterEventsAtTime;
 
-        #endregion
-
-        #region Constructor
-
-        public PlaybackDataTracker(TempoMap tempoMap)
-        {
-            _tempoMap = tempoMap;
-
-            _getParameterEventsAtTime = new Dictionary<TrackedParameterType, Func<long, IEnumerable<EventWithMetadata>>>
-            {
-                [TrackedParameterType.Program] = time => GetProgramChangeEventsAtTime(time),
-                [TrackedParameterType.PitchValue] = time => GetPitchBendEventsAtTime(time),
-                [TrackedParameterType.ControlValue] = time => GetControlChangeEventsAtTime(time)
-            };
-        }
+        private bool _trackProgram = true;
+        private bool _trackPitchValue = true;
+        private bool _trackControlValue = true;
 
         #endregion
 
         #region Properties
 
-        public bool TrackProgram { get; set; } = true;
+        /// <summary>
+        /// Gets or sets a value indicating whether program must be tracked or not. If <c>true</c>, any jump
+        /// in time will force playback send <see cref="ProgramChangeEvent"/> corresponding to the program at new time,
+        /// if needed. The default value is <c>true</c>. More info in the
+        /// <see href="xref:a_playback_datatrack#midi-parameters-values-tracking">Data tracking: MIDI parameters values tracking</see>
+        /// article.
+        /// </summary>
+        public bool TrackProgram
+        {
+            get { return _trackProgram; }
+            set
+            {
+                if (_trackProgram == value)
+                    return;
 
-        public bool TrackPitchValue { get; set; } = true;
+                _trackProgram = value;
 
-        public bool TrackControlValue { get; set; } = true;
+                if (value)
+                    SendTrackedData(TrackedParameterType.Program);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether pitch value must be tracked or not. If <c>true</c>, any jump
+        /// in time will force playback send <see cref="PitchBendEvent"/> corresponding to the pitch value at new time,
+        /// if needed. The default value is <c>true</c>. More info in the
+        /// <see href="xref:a_playback_datatrack#midi-parameters-values-tracking">Data tracking: MIDI parameters values tracking</see>
+        /// article.
+        /// </summary>
+        public bool TrackPitchValue
+        {
+            get { return _trackPitchValue; }
+            set
+            {
+                if (_trackPitchValue == value)
+                    return;
+
+                _trackPitchValue = value;
+
+                if (value)
+                    SendTrackedData(TrackedParameterType.PitchValue);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether controller values must be tracked or not. If <c>true</c>, any jump
+        /// in time will force playback send <see cref="ControlChangeEvent"/> corresponding to the controller value at new time,
+        /// if needed. The default value is <c>true</c>. More info in the
+        /// <see href="xref:a_playback_datatrack#midi-parameters-values-tracking">Data tracking: MIDI parameters values tracking</see>
+        /// article.
+        /// </summary>
+        public bool TrackControlValue
+        {
+            get { return _trackControlValue; }
+            set
+            {
+                if (_trackControlValue == value)
+                    return;
+
+                _trackControlValue = value;
+
+                if (value)
+                    SendTrackedData(TrackedParameterType.ControlValue);
+            }
+        }
 
         #endregion
 
         #region Methods
 
-        public void InitializeData(MidiEvent midiEvent, long time, object metadata)
+        private void InitializeDataTracking()
+        {
+            _getParameterEventsAtTime = new Dictionary<TrackedParameterType, Func<long, IEnumerable<EventWithMetadata>>>
+            {
+                [TrackedParameterType.Program] = GetProgramChangeEventsAtTime,
+                [TrackedParameterType.PitchValue] = GetPitchBendEventsAtTime,
+                [TrackedParameterType.ControlValue] = GetControlChangeEventsAtTime
+            };
+        }
+
+        private void InitializeTrackedData(MidiEvent midiEvent, long time, object metadata)
         {
             InitializeProgramChangeData(midiEvent as ProgramChangeEvent, time, metadata);
             InitializePitchBendData(midiEvent as PitchBendEvent, time, metadata);
             InitializeControlData(midiEvent as ControlChangeEvent, time, metadata);
         }
 
-        public void UpdateCurrentData(MidiEvent midiEvent, object metadata)
+        private void UpdateCurrentTrackedData(MidiEvent midiEvent, object metadata)
         {
             UpdateCurrentProgramChangeData(midiEvent as ProgramChangeEvent, metadata);
             UpdateCurrentPitchBendData(midiEvent as PitchBendEvent, metadata);
             UpdateCurrentControlData(midiEvent as ControlChangeEvent, metadata);
         }
 
-        public void RemoveData(MidiEvent midiEvent, long time)
+        private void RemoveTrackedData(MidiEvent midiEvent, long time)
         {
             RemoveProgramChangeData(midiEvent as ProgramChangeEvent, time);
             RemovePitchBendData(midiEvent as PitchBendEvent, time);
             RemoveControlData(midiEvent as ControlChangeEvent, time);
         }
 
-        public IEnumerable<EventWithMetadata> GetEventsAtTime(TimeSpan time, TrackedParameterType trackedParameterType)
+        private void SendTrackedData(TrackedParameterType trackedParameterType = TrackedParameterType.All)
         {
-            var convertedTime = TimeConverter.ConvertFrom((MetricTimeSpan)time, _tempoMap);
+            foreach (var eventWithMetadata in GetEventsAtTime(_clock.CurrentTime, trackedParameterType))
+            {
+                PlayEvent(eventWithMetadata.Event, eventWithMetadata.Metadata);
+            }
+        }
+
+        private IEnumerable<EventWithMetadata> GetEventsAtTime(TimeSpan time, TrackedParameterType trackedParameterType)
+        {
+            var convertedTime = TimeConverter.ConvertFrom((MetricTimeSpan)time, TempoMap);
 
             foreach (var getEvents in _getParameterEventsAtTime)
             {
