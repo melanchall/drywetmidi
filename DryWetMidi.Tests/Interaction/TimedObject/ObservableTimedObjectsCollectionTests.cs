@@ -5,6 +5,7 @@ using Melanchall.DryWetMidi.Tests.Utilities;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Tracing;
 using System.Linq;
 
 namespace Melanchall.DryWetMidi.Tests.Interaction
@@ -575,6 +576,48 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 changedObject.TimedObject,
                 "Invalid changed object");
             Assert.AreEqual(15, changedObject.OldTime, "Invalid old time of changed object.");
+        }
+
+        [Test]
+        public void ChangeCollection_RemoveAddChangeSame()
+        {
+            var objectToChange = new TimedEvent(new TextEvent("C"), 15);
+
+            var collection = new ObservableTimedObjectsCollection(new ITimedObject[]
+            {
+                new TimedEvent(new TextEvent("B"), 20),
+                new Note((SevenBitNumber)90, 100, 10),
+                new TimedEvent(new TextEvent("A"), 5),
+                objectToChange,
+            });
+
+            var eventsArgs = new List<ObservableTimedObjectsCollectionChangedEventArgs>();
+            collection.CollectionChanged += (_, e) => eventsArgs.Add(e);
+
+            collection.ChangeCollection(() =>
+            {
+                collection.Remove(objectToChange);
+                collection.Add(objectToChange);
+                collection.ChangeObject(objectToChange, obj => obj.Time = 20);
+            });
+
+            Assert.AreEqual(1, eventsArgs.Count, "Invalid events args count.");
+
+            var eventArgs = eventsArgs.Single();
+
+            CheckCollectionIsNullOrEmpty(eventArgs.RemovedObjects, "There are removed objects.");
+            CheckCollectionIsNullOrEmpty(eventArgs.AddedObjects, "There are added objects.");
+
+            var changedObjects = eventArgs.ChangedObjects;
+            CollectionAssert.AreEqual(new[] { objectToChange }, changedObjects.Select(o => o.TimedObject), "Invalid changed objects.");
+
+            var changedObject = eventArgs.ChangedObjects.Single();
+            MidiAsserts.AreEqual(
+                new TimedEvent(new TextEvent("C"), 20),
+                changedObject.TimedObject,
+                "Invalid changed object");
+            Assert.AreEqual(15, changedObject.OldTime, "Invalid old time of changed object.");
+
         }
 
         #endregion

@@ -46,7 +46,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             ICollection<ReceivedEvent> expectedReceivedEvents,
             Action<Playback> setupPlayback = null,
             Action<Playback> afterStart = null,
-            int? repeatsCount = null)
+            int? repeatsCount = null,
+            Action<Playback> additionalChecks = null)
         {
             var outputDevice = useOutputDevice
                 ? (IOutputDevice)OutputDevice.GetByName(SendReceiveUtilities.DeviceToTestOnName)
@@ -60,7 +61,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 if (useOutputDevice)
                     SendReceiveUtilities.WarmUpDevice((OutputDevice)outputDevice);
 
-                outputDevice.EventSent += (_, e) => receivedEvents.Add(new ReceivedEvent(e.Event, stopwatch.Elapsed));
+                outputDevice.EventSent += (_, e) => receivedEvents.Add(new ReceivedEvent(e.Event.Clone(), stopwatch.Elapsed));
 
                 using (var playback = createPlayback(outputDevice))
                 {
@@ -113,6 +114,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                         sendReceiveTimeDelta: useOutputDevice
                             ? SendReceiveUtilities.MaximumEventSendReceiveDelay
                             : TimeSpan.FromMilliseconds(10));
+
+                    additionalChecks?.Invoke(playback);
                 }
             }
         }

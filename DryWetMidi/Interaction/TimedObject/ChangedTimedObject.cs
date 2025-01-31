@@ -31,8 +31,7 @@
                 return false;
 
             return
-                object.ReferenceEquals(TimedObject, changedTimedObject.TimedObject) &&
-                OldTime == changedTimedObject.OldTime;
+                object.ReferenceEquals(TimedObject, changedTimedObject.TimedObject);
         }
 
         public override int GetHashCode()
@@ -41,7 +40,6 @@
             {
                 var result = 17;
                 result = result * 23 + TimedObject.GetHashCode();
-                result = result * 23 + OldTime.GetHashCode();
                 return result;
             }
         }

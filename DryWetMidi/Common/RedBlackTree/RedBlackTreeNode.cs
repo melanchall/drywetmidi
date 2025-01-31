@@ -26,6 +26,8 @@ namespace Melanchall.DryWetMidi.Common
 
         public RedBlackTreeNodeColor Color { get; set; } = RedBlackTreeNodeColor.Black;
 
+        public bool IsInTree { get; set; } = true;
+
         public RedBlackTreeNode<TKey, TValue> Clone()
         {
             if (this == Void)

@@ -124,17 +124,17 @@ namespace Melanchall.DryWetMidi.Multimedia
 
             playbackSettings = playbackSettings ?? new PlaybackSettings();
 
-            TempoMap = tempoMap;
-
-            InitializeDataTracking();
-            InitializeData(timedObjects, tempoMap, playbackSettings.NoteDetectionSettings ?? new NoteDetectionSettings());
-            UpdateDuration();
+            TempoMap = tempoMap.Clone();
 
             var clockSettings = playbackSettings.ClockSettings ?? new MidiClockSettings();
             _clock = new MidiClock(false, clockSettings.CreateTickGeneratorCallback(), ClockInterval);
             _clock.Ticked += OnClockTicked;
 
-            Snapping = new PlaybackSnapping(_playbackEvents, tempoMap);
+            InitializeDataTracking();
+            InitializeData(timedObjects, TempoMap, playbackSettings.NoteDetectionSettings ?? new NoteDetectionSettings());
+            UpdateDuration();
+
+            Snapping = new PlaybackSnapping(_playbackEvents, TempoMap);
         }
 
         /// <summary>
@@ -722,8 +722,16 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         private void UpdateDuration()
         {
-            var lastPlaybackEvent = _playbackEvents.GetMaximumNode().Value;
-            _duration = lastPlaybackEvent?.Time ?? TimeSpan.Zero;
+            var maximumNode = _playbackEvents.GetMaximumNode();
+            if (maximumNode == null)
+            {
+                _duration = TimeSpan.Zero;
+                _durationInTicks = 0;
+                return;
+            }
+
+            var lastPlaybackEvent = maximumNode.Value;
+            _duration = lastPlaybackEvent.Time ?? TimeSpan.Zero;
             _durationInTicks = lastPlaybackEvent?.RawTime ?? 0;
         }
 

@@ -12,7 +12,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         public PlaybackEvent(
             MidiEvent midiEvent,
-            TimeSpan time,
+            PlaybackTime time,
             long rawTime,
             ITimedObject objectReference)
         {
@@ -28,7 +28,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         public MidiEvent Event { get; }
 
-        public TimeSpan Time { get; }
+        public PlaybackTime Time { get; }
 
         public long RawTime { get; }
 

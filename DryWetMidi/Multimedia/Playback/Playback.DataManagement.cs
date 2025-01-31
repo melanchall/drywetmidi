@@ -40,10 +40,10 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         private void OnObservableTimedObjectsCollectionChanged(object sender, ObservableTimedObjectsCollectionChangedEventArgs e)
         {
-            // TODO: what about tempo map events changes
-
             lock (_playbackLockObject)
             {
+                var isRunning = IsRunning;
+
                 var maxTime = TimeSpan.Zero;
                 var maxTimeInTicks = 0L;
 
@@ -75,7 +75,6 @@ namespace Melanchall.DryWetMidi.Multimedia
                     }
                 }
 
-                // TODO: optimize (see below for add, need to think about remove)
                 if (maxTime > _duration)
                 {
                     _duration = maxTime;
@@ -90,7 +89,7 @@ namespace Melanchall.DryWetMidi.Multimedia
                     _beforeStart = true;
                 }
 
-                if (IsRunning)
+                if (isRunning)
                 {
                     SendTrackedData();
                     StopStartNotes();
@@ -190,6 +189,10 @@ namespace Melanchall.DryWetMidi.Multimedia
 
                 RemoveTrackedData(playbackEvent.Event, oldTime);
             }
+
+            TryRemoveSetTempoEvent(
+                timedEvent,
+                oldTime);
         }
 
         private void InitializePlaybackEvents(IEnumerable<ITimedObject> timedObjects, TempoMap tempoMap)
@@ -211,6 +214,19 @@ namespace Melanchall.DryWetMidi.Multimedia
             ref long maxTimeInTicks)
         {
             if (TryAddNoteEvent(timedObject, tempoMap, isInitialObject, ref maxTime, ref maxTimeInTicks))
+                return;
+
+            TimeSpan? nextTempoTime = null;
+            bool eventShouldBeAdded;
+            Tempo oldTempo;
+
+            PrepareSetTempoEventAdding(
+                timedObject as TimedEvent,
+                out nextTempoTime,
+                out eventShouldBeAdded,
+                out oldTempo);
+
+            if (!eventShouldBeAdded)
                 return;
 
             var playbackEvents = GetPlaybackEvents(timedObject, tempoMap);
@@ -253,11 +269,187 @@ namespace Melanchall.DryWetMidi.Multimedia
                 //    _durationInTicks = e.RawTime;
                 //}
             }
+
+            TryAddSetTempoEvent(
+                timedObject as TimedEvent,
+                nextTempoTime,
+                eventShouldBeAdded,
+                oldTempo);
         }
 
         private NoteId GetNoteId(NoteEvent noteEvent)
         {
             return new NoteId(noteEvent.Channel, noteEvent.NoteNumber);
+        }
+
+        private void TryRemoveSetTempoEvent(
+            TimedEvent timedEvent,
+            long oldTime)
+        {
+            if (timedEvent == null)
+                return;
+
+            var setTempoEvent = timedEvent.Event as SetTempoEvent;
+            if (setTempoEvent == null)
+                return;
+
+            var valuesChanges = TempoMap.TempoLine.ToArray();
+
+            Tempo oldTempo = null;
+            Tempo newTempo = TempoMap.TempoLine.GetValueAtTime(0);
+            TimeSpan? nextTempoTime = null;
+
+            for (var i = 0; i < valuesChanges.Length; i++)
+            {
+                var valueChange = valuesChanges[i];
+                if (valueChange.Time < oldTime)
+                    newTempo = valueChange.Value;
+                else if (valueChange.Time == oldTime)
+                    oldTempo = valueChange.Value;
+                else
+                {
+                    nextTempoTime = TimeConverter.ConvertTo<MetricTimeSpan>(valueChange.Time, TempoMap);
+                    break;
+                }
+            }
+
+            ScaleTimesAfterTempoChange(
+                oldTempo,
+                newTempo,
+                oldTime,
+                nextTempoTime);
+        }
+
+        private void PrepareSetTempoEventAdding(
+            TimedEvent timedEvent,
+            out TimeSpan? nextTempoTime,
+            out bool eventShouldBeAdded,
+            out Tempo oldTempo)
+        {
+            eventShouldBeAdded = true;
+            nextTempoTime = null;
+
+            oldTempo = TempoMap.TempoLine.GetValueAtTime(0);
+
+            if (timedEvent == null)
+                return;
+
+            var setTempoEvent = timedEvent.Event as SetTempoEvent;
+            if (setTempoEvent == null)
+                return;
+
+            var newTempo = new Tempo(setTempoEvent.MicrosecondsPerQuarterNote);
+
+            var valuesChanges = TempoMap.TempoLine.ToArray();
+
+            for (var i = 0; i < valuesChanges.Length; i++)
+            {
+                var valueChange = valuesChanges[i];
+                if (valueChange.Time <= timedEvent.Time)
+                    oldTempo = valueChange.Value;
+                else
+                {
+                    nextTempoTime = TimeConverter.ConvertTo<MetricTimeSpan>(valueChange.Time, TempoMap);
+                    break;
+                }
+            }
+
+            eventShouldBeAdded = oldTempo != newTempo;
+        }
+
+        private void TryAddSetTempoEvent(
+            TimedEvent timedEvent,
+            TimeSpan? nextTempoTime,
+            bool eventShouldBeAdded,
+            Tempo oldTempo)
+        {
+            if (timedEvent == null)
+                return;
+
+            var setTempoEvent = timedEvent.Event as SetTempoEvent;
+            if (setTempoEvent == null || !eventShouldBeAdded)
+                return;
+
+            var newTempo = new Tempo(setTempoEvent.MicrosecondsPerQuarterNote);
+
+            ScaleTimesAfterTempoChange(
+                oldTempo,
+                newTempo,
+                timedEvent.Time,
+                nextTempoTime);
+        }
+
+        private void ScaleTimesAfterTempoChange(
+            Tempo oldTempo,
+            Tempo newTempo,
+            long tempoChangeMidiTime,
+            TimeSpan? nextTempoTime)
+        {
+            var tempoChangeTime = (TimeSpan)TimeConverter.ConvertTo<MetricTimeSpan>(tempoChangeMidiTime, TempoMap);
+            var firstNodeAfterTempoChange = _playbackEvents.GetLastNodeBelowThreshold(tempoChangeTime)
+                ?? _playbackEvents.GetMinimumNode();
+
+            while (firstNodeAfterTempoChange != null && firstNodeAfterTempoChange.Key <= tempoChangeTime)
+            {
+                firstNodeAfterTempoChange = _playbackEvents.GetNextNode(firstNodeAfterTempoChange);
+            }
+
+            if (firstNodeAfterTempoChange == null)
+            {
+                TempoMap.TempoLine.SetValue(tempoChangeMidiTime, newTempo);
+                return;
+            }
+
+            //
+
+            var nodeBeforeNextTempo = nextTempoTime != null
+                ? _playbackEvents.GetLastNodeBelowThreshold(nextTempoTime.Value)
+                : null;
+
+            //
+
+            var scaleFactor = oldTempo.MicrosecondsPerQuarterNote / (double)newTempo.MicrosecondsPerQuarterNote;
+
+            var shift = TimeSpan.Zero;
+            if (nextTempoTime != null && firstNodeAfterTempoChange.Key > nextTempoTime)
+                shift = nextTempoTime.Value - TimeSpan.FromTicks(tempoChangeTime.Ticks + MathUtilities.RoundToLong((nextTempoTime.Value.Ticks - tempoChangeTime.Ticks) / scaleFactor));
+
+            var node = firstNodeAfterTempoChange;
+
+            do
+            {
+                if (nextTempoTime != null && node.Key > nextTempoTime)
+                    node.Key -= shift;
+                else
+                {
+                    var oldTime = node.Key;
+                    var newTime = node.Key = TimeSpan.FromTicks(tempoChangeTime.Ticks + MathUtilities.RoundToLong((node.Key.Ticks - tempoChangeTime.Ticks) / scaleFactor));
+                    shift = oldTime - newTime;
+                }
+
+                node.Value.Time.Time = node.Key;
+
+                if (nodeBeforeNextTempo != null && node == nodeBeforeNextTempo)
+                    shift = nextTempoTime.Value - TimeSpan.FromTicks(tempoChangeTime.Ticks + MathUtilities.RoundToLong((nextTempoTime.Value.Ticks - tempoChangeTime.Ticks) / scaleFactor));
+            }
+            while ((node = _playbackEvents.GetNextNode(node)) != null);
+
+            //
+
+            var currentTime = _clock.CurrentTime;
+            if (currentTime > tempoChangeTime)
+            {
+                if (nextTempoTime != null && currentTime > nextTempoTime)
+                    currentTime -= shift;
+                else
+                    currentTime = TimeSpan.FromTicks(tempoChangeTime.Ticks + MathUtilities.RoundToLong((currentTime.Ticks - tempoChangeTime.Ticks) / scaleFactor));
+
+                _clock.SetCurrentTime(currentTime);
+            }
+
+            //
+
+            TempoMap.TempoLine.SetValue(tempoChangeMidiTime, newTempo);
         }
 
         private bool TryAddNoteEvent(
@@ -369,31 +561,47 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         private IEnumerable<PlaybackEvent> GetPlaybackEvents(Note note, TempoMap tempoMap, ITimedObject objectReference)
         {
-            TimeSpan noteStartTime = note.TimeAs<MetricTimeSpan>(tempoMap);
-            TimeSpan noteEndTime = TimeConverter.ConvertTo<MetricTimeSpan>(note.EndTime, tempoMap);
+            var noteStartTime = new PlaybackTime(note.TimeAs<MetricTimeSpan>(tempoMap));
+            var noteEndTime = new PlaybackTime(TimeConverter.ConvertTo<MetricTimeSpan>(note.EndTime, tempoMap));
             var noteMetadata = new NotePlaybackEventMetadata(note, noteStartTime, noteEndTime);
 
-            yield return GetPlaybackEventWithNoteMetadata(note.GetTimedNoteOnEvent(), tempoMap, noteMetadata, objectReference);
-            yield return GetPlaybackEventWithNoteMetadata(note.GetTimedNoteOffEvent(), tempoMap, noteMetadata, objectReference);
+            yield return GetPlaybackEventWithNoteMetadata(
+                note.GetTimedNoteOnEvent(),
+                noteStartTime,
+                tempoMap,
+                noteMetadata,
+                objectReference);
+
+            yield return GetPlaybackEventWithNoteMetadata(
+                note.GetTimedNoteOffEvent(),
+                noteEndTime,
+                tempoMap,
+                noteMetadata,
+                objectReference);
         }
 
         private PlaybackEvent GetPlaybackEventWithNoteMetadata(
             TimedEvent timedEvent,
+            PlaybackTime time,
             TempoMap tempoMap,
             NotePlaybackEventMetadata noteMetadata,
             ITimedObject objectReference)
         {
-            var playbackEvent = CreatePlaybackEvent(timedEvent, tempoMap, objectReference);
+            var playbackEvent = CreatePlaybackEvent(timedEvent, tempoMap, objectReference, time);
             playbackEvent.Metadata.Note = noteMetadata;
             playbackEvent.Metadata.TimedEvent = new TimedEventPlaybackEventMetadata((timedEvent as IMetadata)?.Metadata);
             return playbackEvent;
         }
 
-        private PlaybackEvent CreatePlaybackEvent(TimedEvent timedEvent, TempoMap tempoMap, ITimedObject objectReference)
+        private PlaybackEvent CreatePlaybackEvent(
+            TimedEvent timedEvent,
+            TempoMap tempoMap,
+            ITimedObject objectReference,
+            PlaybackTime time = null)
         {
             return new PlaybackEvent(
                 timedEvent.Event,
-                timedEvent.TimeAs<MetricTimeSpan>(tempoMap),
+                time ?? new PlaybackTime(timedEvent.TimeAs<MetricTimeSpan>(tempoMap)),
                 timedEvent.Time,
                 objectReference);
         }

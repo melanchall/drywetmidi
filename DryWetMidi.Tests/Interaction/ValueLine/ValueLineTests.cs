@@ -282,7 +282,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 valueChangeTime1: 0,
                 value2: defaultValue,
                 valueChangeTime2: 0,
-                expectedValueChanges: new[] { new ValueChange<string>(0, defaultValue) },
+                expectedValueChanges: Array.Empty<ValueChange<string>>(),
                 expectedValueAtStart: defaultValue,
                 expectedValueBeforeFirstChange: defaultValue,
                 expectedValueAtFirstChange: defaultValue,

@@ -48,7 +48,13 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 .Select(type => type == typeof(UnknownMetaEvent)
                     ? new UnknownMetaEvent(0)
                     : (MidiEvent)Activator.CreateInstance(type, true))
-                .Select(midiEvent => new EventToSend(midiEvent, TimeSpan.FromMilliseconds(delay)))
+                .Select(midiEvent =>
+                {
+                    if (midiEvent is SetTempoEvent)
+                        midiEvent = new SetTempoEvent(500001);
+
+                    return new EventToSend(midiEvent, TimeSpan.FromMilliseconds(delay));
+                })
                 .ToArray();
 
             CheckEventPlayedEvent(

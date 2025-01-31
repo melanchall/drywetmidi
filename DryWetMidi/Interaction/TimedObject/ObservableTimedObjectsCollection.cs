@@ -8,6 +8,14 @@ namespace Melanchall.DryWetMidi.Interaction
 {
     public sealed class ObservableTimedObjectsCollection : IObservableTimedObjectsCollection, IEnumerable<ITimedObject>
     {
+        #region Constants
+
+        private const short AddAction = 0;
+        private const short RemoveAction = 1;
+        private const short ChangeAction = 2;
+
+        #endregion
+
         #region Events
 
         public event EventHandler<ObservableTimedObjectsCollectionChangedEventArgs> CollectionChanged;
@@ -16,8 +24,11 @@ namespace Melanchall.DryWetMidi.Interaction
 
         #region Fields
 
+        // TODO: RBT? No, times can be changed, so it's better to use List
         private readonly List<ITimedObject> _objects = new List<ITimedObject>();
-        private ICollection<ObservableTimedObjectsCollectionChangedEventArgs> _collectionChangedEventsArgs;
+
+        private bool _batchOperationInProgress = false;
+        private readonly List<Tuple<short, ITimedObject, long>> _batchActions = new List<Tuple<short, ITimedObject, long>>();
 
         #endregion
 
@@ -31,7 +42,7 @@ namespace Melanchall.DryWetMidi.Interaction
         {
             ThrowIfArgument.IsNull(nameof(timedObjects), timedObjects);
 
-            Add(timedObjects);
+            AddWithoutHandling(timedObjects);
         }
 
         #endregion
@@ -48,20 +59,23 @@ namespace Melanchall.DryWetMidi.Interaction
         {
             ThrowIfArgument.IsNull(nameof(change), change);
 
-            var deepChange = _collectionChangedEventsArgs != null;
-            _collectionChangedEventsArgs = _collectionChangedEventsArgs ?? new List<ObservableTimedObjectsCollectionChangedEventArgs>();
+            var deepChange = _batchOperationInProgress;
+            _batchOperationInProgress = true;
 
             try
             {
                 change();
 
                 if (!deepChange)
-                    OnCollectionChanged(_collectionChangedEventsArgs);
+                    OnCollectionChanged();
             }
             finally
             {
                 if (!deepChange)
-                    _collectionChangedEventsArgs = null;
+                {
+                    _batchOperationInProgress = false;
+                    _batchActions.Clear();
+                }
             }
         }
 
@@ -79,8 +93,7 @@ namespace Melanchall.DryWetMidi.Interaction
         {
             ThrowIfArgument.IsNull(nameof(timedObjects), timedObjects);
 
-            var addedObjects = timedObjects.Where(o => o != null).ToList();
-            _objects.AddRange(addedObjects);
+            var addedObjects = AddWithoutHandling(timedObjects);
 
             HandleObjectsAdded(addedObjects);
         }
@@ -125,9 +138,26 @@ namespace Melanchall.DryWetMidi.Interaction
             HandleObjectsRemoved(removedObjects);
         }
 
+        private ICollection<ITimedObject> AddWithoutHandling(IEnumerable<ITimedObject> timedObjects)
+        {
+            var addedObjects = timedObjects.Where(o => o != null).ToList();
+            _objects.AddRange(addedObjects);
+
+            return addedObjects;
+        }
+
         private void HandleObjectsAdded(IEnumerable<ITimedObject> addedObjects)
         {
-            var eventsArgs = _collectionChangedEventsArgs ?? new List<ObservableTimedObjectsCollectionChangedEventArgs>();
+            if (_batchOperationInProgress)
+            {
+                foreach (var obj in addedObjects)
+                {
+                    _batchActions.Add(Tuple.Create(AddAction, obj, 0L));
+                }
+
+                return;
+            }
+
             var eventArgs = new ObservableTimedObjectsCollectionChangedEventArgs();
 
             var eventArgsAddedObjects = eventArgs.AddedObjects;
@@ -139,14 +169,24 @@ namespace Melanchall.DryWetMidi.Interaction
                 eventArgsAddedObjects.Add(obj);
             }
 
-            eventsArgs.Add(eventArgs);
-            if (!IsInBatchOperation())
-                OnCollectionChanged(eventsArgs);
+            if (!eventArgs.HasData)
+                return;
+
+            CollectionChanged?.Invoke(this, eventArgs);
         }
 
         private void HandleObjectsRemoved(IEnumerable<ITimedObject> removedObjects)
         {
-            var eventsArgs = _collectionChangedEventsArgs ?? new List<ObservableTimedObjectsCollectionChangedEventArgs>();
+            if (_batchOperationInProgress)
+            {
+                foreach (var obj in removedObjects)
+                {
+                    _batchActions.Add(Tuple.Create(RemoveAction, obj, 0L));
+                }
+
+                return;
+            }
+
             var eventArgs = new ObservableTimedObjectsCollectionChangedEventArgs();
 
             var eventArgsRemovedObjects = eventArgs.RemovedObjects;
@@ -158,14 +198,20 @@ namespace Melanchall.DryWetMidi.Interaction
                 eventArgsRemovedObjects.Add(obj);
             }
 
-            eventsArgs.Add(eventArgs);
-            if (!IsInBatchOperation())
-                OnCollectionChanged(eventsArgs);
+            if (!eventArgs.HasData)
+                return;
+
+            CollectionChanged?.Invoke(this, eventArgs);
         }
 
         private void HandleObjectChanged(ITimedObject timedObject, long oldTime)
         {
-            var eventsArgs = _collectionChangedEventsArgs ?? new List<ObservableTimedObjectsCollectionChangedEventArgs>();
+            if (_batchOperationInProgress)
+            {
+                _batchActions.Add(Tuple.Create(ChangeAction, timedObject, oldTime));
+                return;
+            }
+
             var eventArgs = new ObservableTimedObjectsCollectionChangedEventArgs();
 
             var eventArgsChangedObjects = eventArgs.ChangedObjects;
@@ -174,71 +220,50 @@ namespace Melanchall.DryWetMidi.Interaction
 
             var changedTimedObject = new ChangedTimedObject(timedObject, oldTime);
 
-            if (!eventArgsChangedObjects.Contains(changedTimedObject))
-            {
-                eventArgsChangedObjects.Add(changedTimedObject);
-            }
+            eventArgsChangedObjects.Add(changedTimedObject);
 
-            eventsArgs.Add(eventArgs);
-            if (!IsInBatchOperation())
-                OnCollectionChanged(eventsArgs);
+            if (!eventArgs.HasData)
+                return;
+
+            CollectionChanged?.Invoke(this, eventArgs);
         }
 
-        private void OnCollectionChanged(ICollection<ObservableTimedObjectsCollectionChangedEventArgs> eventsArgs)
+        private void OnCollectionChanged()
         {
-            var allAddedObjects = new List<ITimedObject>();
-            var allRemovedObjects = new List<ITimedObject>();
-            var allChangedObjects = new List<ChangedTimedObject>();
+            var addedObjects = new HashSet<ITimedObject>();
+            var removedObjects = new HashSet<ITimedObject>();
+            var changedObjects = new HashSet<ChangedTimedObject>();
 
-            foreach (var eventArgs in eventsArgs)
+            foreach (var item in _batchActions)
             {
-                var addedObjects = GetNonNullList(eventArgs.AddedObjects);
-                var removedObjects = GetNonNullList(eventArgs.RemovedObjects);
-                var changedObjects = GetNonNullList(eventArgs.ChangedObjects);
+                var action = item.Item1;
+                var timedObject = item.Item2;
+                var oldTime = item.Item3;
 
-                allAddedObjects.AddRange(addedObjects);
-                allRemovedObjects.AddRange(removedObjects);
-                allChangedObjects.AddRange(changedObjects);
-            }
-
-            var changedObjectsHashSet = new HashSet<ITimedObject>();
-
-            for (var i = 0; i < allChangedObjects.Count; i++)
-            {
-                var changedObject = allChangedObjects[i];
-                if (!changedObjectsHashSet.Add(changedObject.TimedObject))
+                switch (action)
                 {
-                    allChangedObjects.RemoveAt(i);
-                    i--;
+                    case AddAction:
+                        addedObjects.Add(timedObject);
+                        if (removedObjects.Remove(timedObject))
+                            addedObjects.Remove(timedObject);
+                        break;
+                    case RemoveAction:
+                        removedObjects.Add(timedObject);
+                        changedObjects.RemoveWhere(obj => obj.TimedObject == timedObject);
+                        if (addedObjects.Remove(timedObject))
+                            removedObjects.Remove(timedObject);
+                        break;
+                    case ChangeAction:
+                        changedObjects.Add(new ChangedTimedObject(timedObject, oldTime));
+                        break;
                 }
-            }
-
-            var finalAddedObjects = new List<ITimedObject>(allAddedObjects);
-            var finalRemovedObjects = new List<ITimedObject>(allRemovedObjects);
-            var finalChangedObjects = new List<ChangedTimedObject>(allChangedObjects);
-
-            foreach (var obj in allRemovedObjects)
-            {
-                if (finalAddedObjects.Remove(obj))
-                    finalRemovedObjects.Remove(obj);
-
-                var removedChangedObjects = finalChangedObjects.Where(c => object.ReferenceEquals(c.TimedObject, obj)).ToArray();
-                foreach (var removedChangedObject in removedChangedObjects)
-                {
-                    finalChangedObjects.Remove(removedChangedObject);
-                }
-            }
-
-            foreach (var obj in allAddedObjects)
-            {
-                finalRemovedObjects.Remove(obj);
             }
 
             var args = new ObservableTimedObjectsCollectionChangedEventArgs
             {
-                AddedObjects = finalAddedObjects,
-                RemovedObjects = finalRemovedObjects,
-                ChangedObjects = finalChangedObjects,
+                AddedObjects = addedObjects,
+                RemovedObjects = removedObjects,
+                ChangedObjects = changedObjects,
             };
 
             if (!args.HasData)
@@ -250,11 +275,6 @@ namespace Melanchall.DryWetMidi.Interaction
         private List<T> GetNonNullList<T>(IEnumerable<T> source)
         {
             return (source ?? Enumerable.Empty<T>()).ToList();
-        }
-
-        private bool IsInBatchOperation()
-        {
-            return _collectionChangedEventsArgs != null;
         }
 
         #endregion

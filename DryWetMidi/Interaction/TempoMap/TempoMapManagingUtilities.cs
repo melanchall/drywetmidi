@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Melanchall.DryWetMidi.Common;
@@ -34,10 +35,17 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </item>
         /// </list>
         /// </exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="eventsCollections"/> is an empty collection.</exception>
         public static TempoMapManager ManageTempoMap(this IEnumerable<EventsCollection> eventsCollections, TimeDivision timeDivision)
         {
             ThrowIfArgument.IsNull(nameof(eventsCollections), eventsCollections);
             ThrowIfArgument.IsNull(nameof(timeDivision), timeDivision);
+
+            var eventsCollectionsCollection = eventsCollections as ICollection<EventsCollection>;
+            if (eventsCollectionsCollection != null && eventsCollectionsCollection.Count == 0 && !eventsCollectionsCollection.IsReadOnly)
+                eventsCollectionsCollection.Add(new EventsCollection());
+
+            ThrowIfArgument.DoesntSatisfyCondition(nameof(eventsCollections), eventsCollections, c => c.Any(), "Failed to manage tempo map on an empty events collections list.");
 
             return new TempoMapManager(timeDivision, eventsCollections);
         }
@@ -64,10 +72,17 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </item>
         /// </list>
         /// </exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="trackChunks"/> is an empty collection.</exception>
         public static TempoMapManager ManageTempoMap(this IEnumerable<TrackChunk> trackChunks, TimeDivision timeDivision)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
             ThrowIfArgument.IsNull(nameof(timeDivision), timeDivision);
+
+            var trackChunksCollection = trackChunks as ICollection<TrackChunk>;
+            if (trackChunksCollection != null && trackChunksCollection.Count == 0 && !trackChunksCollection.IsReadOnly)
+                trackChunksCollection.Add(new TrackChunk());
+
+            ThrowIfArgument.DoesntSatisfyCondition(nameof(trackChunks), trackChunks, c => c.Any(), "Failed to manage tempo map on an empty track chunks collection.");
 
             return trackChunks.Select(c => c.Events).ManageTempoMap(timeDivision);
         }
@@ -83,6 +98,9 @@ namespace Melanchall.DryWetMidi.Interaction
         public static TempoMapManager ManageTempoMap(this MidiFile file)
         {
             ThrowIfArgument.IsNull(nameof(file), file);
+
+            if (!file.GetTrackChunks().Any())
+                file.Chunks.Add(new TrackChunk());
 
             return file.GetTrackChunks().ManageTempoMap(file.TimeDivision);
         }

@@ -2603,6 +2603,150 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 "Invalid notes.");
         }
 
+        [Retry(OnTheFlyChecksRetriesNumber)]
+        [Test]
+        public void CheckPlaybackDataChangesOnTheFly_ChangeObject_SetTempo_1()
+        {
+            var objectToChange = new TimedEvent(new SetTempoEvent(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 2))
+                .SetTime(new MetricTimeSpan(0, 0, 0, 600), TempoMap);
+
+            var initialObjects = new ITimedObject[]
+            {
+                new Note((SevenBitNumber)70)
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 300), TempoMap)
+                    .SetLength(new MetricTimeSpan(0, 0, 0, 200), TempoMap),
+                objectToChange,
+            };
+
+            CheckPlaybackDataChangesOnTheFly(
+                initialObjects: initialObjects,
+                actions: new[]
+                {
+                    new PlaybackChanger(100, (playback, collection) => collection.ChangeObject(
+                        objectToChange,
+                        obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 200), TempoMap))),
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new SetTempoEvent(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 2), TimeSpan.FromMilliseconds(200)),
+                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(250)),
+                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(350)),
+                },
+                additionalChecks: playback => MidiAsserts.AreEqual(
+                    AddTempoChanges(TempoMap, (TimeSpan.FromMilliseconds(200), new Tempo(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 2))),
+                    playback.TempoMap,
+                    "Invalid tempo map."));
+        }
+
+        [Retry(OnTheFlyChecksRetriesNumber)]
+        [Test]
+        public void CheckPlaybackDataChangesOnTheFly_ChangeObject_SetTempo_2()
+        {
+            var objectToChange = new TimedEvent(new SetTempoEvent(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 2))
+                .SetTime(new MetricTimeSpan(0, 0, 0, 600), TempoMap);
+
+            var initialObjects = new ITimedObject[]
+            {
+                new Note((SevenBitNumber)70)
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 300), TempoMap)
+                    .SetLength(new MetricTimeSpan(0, 0, 0, 500), TempoMap),
+                objectToChange,
+            };
+
+            CheckPlaybackDataChangesOnTheFly(
+                initialObjects: initialObjects,
+                actions: new[]
+                {
+                    new PlaybackChanger(100, (playback, collection) => collection.ChangeObject(
+                        objectToChange,
+                        obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 200), TempoMap))),
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new SetTempoEvent(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 2), TimeSpan.FromMilliseconds(200)),
+                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(250)),
+                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(500)),
+                },
+                additionalChecks: playback => MidiAsserts.AreEqual(
+                    AddTempoChanges(TempoMap, (TimeSpan.FromMilliseconds(200), new Tempo(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 2))),
+                    playback.TempoMap,
+                    "Invalid tempo map."));
+        }
+
+        [Retry(OnTheFlyChecksRetriesNumber)]
+        [Test]
+        public void CheckPlaybackDataChangesOnTheFly_ChangeObject_SetTempo_3()
+        {
+            var objectToChange = new TimedEvent(new SetTempoEvent(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 2))
+                .SetTime(new MetricTimeSpan(0, 0, 0, 200), TempoMap);
+
+            var initialObjects = new ITimedObject[]
+            {
+                new Note((SevenBitNumber)70)
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 300), TempoMap)
+                    .SetLength(new MetricTimeSpan(0, 0, 0, 500), TempoMap),
+                objectToChange,
+            };
+
+            CheckPlaybackDataChangesOnTheFly(
+                initialObjects: initialObjects,
+                actions: new[]
+                {
+                    new PlaybackChanger(100, (playback, collection) => collection.ChangeObject(
+                        objectToChange,
+                        obj => ((SetTempoEvent)((TimedEvent)obj).Event).MicrosecondsPerQuarterNote = SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 4)),
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new SetTempoEvent(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 4), TimeSpan.FromMilliseconds(200)),
+                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(225)),
+                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(350)),
+                },
+                additionalChecks: playback => MidiAsserts.AreEqual(
+                    AddTempoChanges(TempoMap, (TimeSpan.FromMilliseconds(200), new Tempo(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 4))),
+                    playback.TempoMap,
+                    "Invalid tempo map."));
+        }
+
+        [Retry(OnTheFlyChecksRetriesNumber)]
+        [Test]
+        public void CheckPlaybackDataChangesOnTheFly_ChangeObject_SetTempo_4()
+        {
+            var objectToChange = new TimedEvent(new SetTempoEvent(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 2))
+                .SetTime(new MetricTimeSpan(0, 0, 0, 200), TempoMap);
+
+            var initialObjects = new ITimedObject[]
+            {
+                new Note((SevenBitNumber)70)
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 300), TempoMap)
+                    .SetLength(new MetricTimeSpan(0, 0, 0, 500), TempoMap),
+                objectToChange,
+            };
+
+            CheckPlaybackDataChangesOnTheFly(
+                initialObjects: initialObjects,
+                actions: new[]
+                {
+                    new PlaybackChanger(400, (playback, collection) =>
+                    {
+                        collection.ChangeObject(
+                            objectToChange,
+                            obj => ((SetTempoEvent)((TimedEvent)obj).Event).MicrosecondsPerQuarterNote = SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 4);
+                        CheckCurrentTime(playback, TimeSpan.FromMilliseconds(300), "after tempo change");
+                    }),
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new SetTempoEvent(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 2), TimeSpan.FromMilliseconds(200)),
+                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(250)),
+                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(450)),
+                },
+                additionalChecks: playback => MidiAsserts.AreEqual(
+                    AddTempoChanges(TempoMap, (TimeSpan.FromMilliseconds(200), new Tempo(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 4))),
+                    playback.TempoMap,
+                    "Invalid tempo map."));
+        }
+
         #endregion
     }
 }

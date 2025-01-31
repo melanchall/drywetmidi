@@ -7,7 +7,7 @@ namespace Melanchall.DryWetMidi.Interaction
     /// Represents a change of a parameter's value at some time.
     /// </summary>
     /// <typeparam name="TValue">Type of value.</typeparam>
-    public sealed class ValueChange<TValue> : ITimedObject
+    public sealed class ValueChange<TValue> : ITimedObject, IEquatable<ValueChange<TValue>>
     {
         #region Fields
 
@@ -106,6 +106,15 @@ namespace Melanchall.DryWetMidi.Interaction
 
         #endregion
 
+        #region IEquatable<ValueChange<TValue>>
+
+        public bool Equals(ValueChange<TValue> other)
+        {
+            return this == other;
+        }
+
+        #endregion
+
         #region Overrides
 
         /// <summary>
@@ -124,7 +133,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <returns><c>true</c> if the specified object is equal to the current object; otherwise, <c>false</c>.</returns>
         public override bool Equals(object obj)
         {
-            return this == (obj as ValueChange<TValue>);
+            return Equals(this, obj as ValueChange<TValue>);
         }
 
         /// <summary>
