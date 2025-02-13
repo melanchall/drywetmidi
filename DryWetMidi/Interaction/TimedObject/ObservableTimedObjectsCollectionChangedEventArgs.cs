@@ -26,5 +26,14 @@ namespace Melanchall.DryWetMidi.Interaction
         }
 
         #endregion
+
+        #region Overrides
+
+        public override string ToString()
+        {
+            return $"+ {AddedObjects?.Count ?? 0} - {RemovedObjects?.Count ?? 0} ~ {ChangedObjects?.Count ?? 0}";
+        }
+
+        #endregion
     }
 }

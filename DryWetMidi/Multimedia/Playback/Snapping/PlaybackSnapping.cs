@@ -237,7 +237,7 @@ namespace Melanchall.DryWetMidi.Multimedia
                 if (noteMetadata == null || (playbackEvent.Event is NoteOnEvent) != snapToNoteOn)
                     continue;
 
-                times.Add((MetricTimeSpan)playbackEvent.Time);
+                times.Add((MetricTimeSpan)playbackEvent.Time.Time);
             }
 
             return SnapToGrid(new ArbitraryGrid(times));

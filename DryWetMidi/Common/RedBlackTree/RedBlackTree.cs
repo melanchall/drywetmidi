@@ -31,7 +31,19 @@ namespace Melanchall.DryWetMidi.Common
 
         #endregion
 
+        #region Properties
+
+        public int Count { get; private set; }
+
+        #endregion
+
         #region Methods
+
+        // TODO: test
+        public void Clear()
+        {
+            _root = RedBlackTreeNode<TKey, TValue>.Void;
+        }
 
         public RedBlackTreeNode<TKey, TValue> GetRoot()
         {
@@ -115,7 +127,7 @@ namespace Melanchall.DryWetMidi.Common
         {
             while (!IsVoid(node?.Left))
                 node = node.Left;
-            return node;
+            return NodeOrNull(node);
         }
 
         public RedBlackTreeNode<TKey, TValue> GetMaximumNode()
@@ -127,11 +139,14 @@ namespace Melanchall.DryWetMidi.Common
         {
             while (!IsVoid(node?.Right))
                 node = node.Right;
-            return node;
+            return NodeOrNull(node);
         }
 
         public RedBlackTreeNode<TKey, TValue> GetNextNode(RedBlackTreeNode<TKey, TValue> node)
         {
+            if (IsVoid(node))
+                return null;
+
             var right = node.Right;
             if (!IsVoid(right))
                 return GetMinimumNode(right);
@@ -152,6 +167,9 @@ namespace Melanchall.DryWetMidi.Common
 
         public RedBlackTreeNode<TKey, TValue> GetPreviousNode(RedBlackTreeNode<TKey, TValue> node)
         {
+            if (IsVoid(node))
+                return null;
+
             var left = node.Left;
             if (!IsVoid(left))
                 return GetMaximumNode(left);
@@ -179,7 +197,7 @@ namespace Melanchall.DryWetMidi.Common
 
         public void Delete(RedBlackTreeNode<TKey, TValue> node)
         {
-            if (IsVoid(node))
+            if (IsVoid(node) || !node.IsInTree)
                 return;
 
             RedBlackTreeNode<TKey, TValue> x = null;
@@ -215,6 +233,9 @@ namespace Melanchall.DryWetMidi.Common
             }
             if (yOriginalColor == RedBlackTreeNodeColor.Black)
                 DeleteFixup(x);
+
+            node.IsInTree = false;
+            Count--;
         }
 
         public RedBlackTreeNode<TKey, TValue> GetLastNodeBelowThreshold(TKey threshold)
@@ -283,6 +304,11 @@ namespace Melanchall.DryWetMidi.Common
             }
         }
 
+        private RedBlackTreeNode<TKey, TValue> NodeOrNull(RedBlackTreeNode<TKey, TValue> node)
+        {
+            return IsVoid(node) ? null : node;
+        }
+
         private bool IsVoid(RedBlackTreeNode<TKey, TValue> node)
         {
             return node == null || node == RedBlackTreeNode<TKey, TValue>.Void;
@@ -306,6 +332,9 @@ namespace Melanchall.DryWetMidi.Common
                 if (x == x.Parent.Left)
                 {
                     var w = x.Parent.Right;
+                    if (IsVoid(w))
+                        break;
+
                     if (w.Color == RedBlackTreeNodeColor.Red)
                     {
                         w.Color = RedBlackTreeNodeColor.Black;
@@ -337,6 +366,9 @@ namespace Melanchall.DryWetMidi.Common
                 else
                 {
                     var w = x.Parent.Left;
+                    if (IsVoid(w))
+                        break;
+
                     if (w.Color == RedBlackTreeNodeColor.Red)
                     {
                         w.Color = RedBlackTreeNodeColor.Black;
@@ -392,6 +424,8 @@ namespace Melanchall.DryWetMidi.Common
             z.Right = RedBlackTreeNode<TKey, TValue>.Void;
             z.Color = RedBlackTreeNodeColor.Red;
             InsertFixup(z);
+
+            Count++;
         }
 
         private void InsertFixup(RedBlackTreeNode<TKey, TValue> z)

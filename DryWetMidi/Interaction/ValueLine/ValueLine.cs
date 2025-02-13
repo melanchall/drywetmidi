@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Melanchall.DryWetMidi.Common;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,12 +16,10 @@ namespace Melanchall.DryWetMidi.Interaction
 
         #region Fields
 
-        private readonly TimedObjectsComparer _comparer = new TimedObjectsComparer();
-        private readonly List<ValueChange<TValue>> _valueChanges = new List<ValueChange<TValue>>();
+        private readonly RedBlackTree<long, ValueChange<TValue>> _valueChanges = new RedBlackTree<long, ValueChange<TValue>>();
         private readonly TValue _defaultValue;
 
         private bool _valuesChanged = true;
-        private long _maxTime = long.MinValue;
 
         #endregion
 
@@ -49,24 +48,18 @@ namespace Melanchall.DryWetMidi.Interaction
 
         public TValue GetValueAtTime(long time)
         {
-            var valueChange = GetValueChangeAtTime(time);
-            return valueChange != null ? valueChange.Value : _defaultValue;
-        }
+            var result = _defaultValue;
 
-        public ValueChange<TValue> GetValueChangeAtTime(long time)
-        {
-            SortValueChanges();
+            var node = _valueChanges.GetLastNodeBelowThreshold(time)
+                ?? _valueChanges.GetMinimumNode();
 
-            var result = default(ValueChange<TValue>);
-            var valuesChangesCount = _valueChanges.Count;
-
-            for (var i = 0; i < valuesChangesCount; i++)
+            while (node != null)
             {
-                var valueChange = _valueChanges[i];
-                if (valueChange.Time > time)
+                if (node.Value.Time > time)
                     break;
 
-                result = valueChange;
+                result = node.Value.Value;
+                node = _valueChanges.GetNextNode(node);
             }
 
             return result;
@@ -74,31 +67,25 @@ namespace Melanchall.DryWetMidi.Interaction
 
         public void SetValue(long time, TValue value)
         {
-            var currentValue = GetValueAtTime(time);
-            if (currentValue.Equals(value))
-                return;
+            var node = _valueChanges.GetLastNodeBelowThreshold(time);
+            var currentValue = node != null ? node.Value.Value : _defaultValue;
 
-            var indexToRemove = -1;
+            node = node ?? _valueChanges.GetMinimumNode();
 
-            for (var i = _valueChanges.Count - 1; i >= 0; i--)
+            while (node != null && node.Key <= time)
             {
-                if (_valueChanges[i].Time != time)
-                    continue;
+                var nextNode = _valueChanges.GetNextNode(node);
 
-                indexToRemove = i;
-                break;
+                if (node.Key == time)
+                    _valueChanges.Delete(node);
+
+                node = nextNode;
             }
 
-            if (indexToRemove >= 0)
-                _valueChanges.RemoveAt(indexToRemove);
+            if (!value.Equals(currentValue))
+                _valueChanges.Add(time, new ValueChange<TValue>(time, value));
 
-            _valueChanges.Add(new ValueChange<TValue>(time, value));
-
-            var forceSort = time < _maxTime;
-            if (time > _maxTime)
-                _maxTime = time;
-
-            OnValuesChanged(forceSort);
+            OnValuesChanged();
         }
 
         public void DeleteValues(long startTime)
@@ -108,7 +95,18 @@ namespace Melanchall.DryWetMidi.Interaction
 
         public void DeleteValues(long startTime, long endTime)
         {
-            _valueChanges.RemoveAll(v => v.Time >= startTime && v.Time <= endTime);
+            var node = _valueChanges.GetLastNodeBelowThreshold(startTime)
+                ?? _valueChanges.GetMinimumNode();
+
+            while (true)
+            {
+                if (node == null || node.Value.Time > endTime)
+                    break;
+
+                var nextNode = _valueChanges.GetNextNode(node);
+                _valueChanges.Delete(node);
+                node = nextNode;
+            }
 
             OnValuesChanged();
         }
@@ -123,7 +121,11 @@ namespace Melanchall.DryWetMidi.Interaction
         public void ReplaceValues(ValueLine<TValue> valueLine)
         {
             _valueChanges.Clear();
-            _valueChanges.AddRange(valueLine._valueChanges);
+
+            foreach (var vc in valueLine._valueChanges)
+            {
+                _valueChanges.Add(vc.Time, vc);
+            }
 
             OnValuesChanged();
         }
@@ -137,36 +139,18 @@ namespace Melanchall.DryWetMidi.Interaction
             var times = new[] { 0L }.Concat(changes.Select(c => maxTime - c.Time).Reverse());
 
             var result = new ValueLine<TValue>(_defaultValue);
-            result._valueChanges.AddRange(values.Zip(times, (v, t) => new ValueChange<TValue>(t, v)));
+
+            foreach (var vc in values.Zip(times, (v, t) => new ValueChange<TValue>(t, v)))
+            {
+                result._valueChanges.Add(vc.Time, vc);
+            }
 
             return result;
         }
 
-        private void OnValuesChanged(bool forceSort = true)
+        private void OnValuesChanged()
         {
-            if (forceSort)
-                OnValueChangesNeedSorting();
-
             ValuesChanged?.Invoke(this, EventArgs.Empty);
-        }
-
-        private void OnValueChangesNeedSorting()
-        {
-            _valuesChanged = true;
-        }
-
-        private void OnValueChangesSortingCompleted()
-        {
-            _valuesChanged = false;
-        }
-
-        private void SortValueChanges()
-        {
-            if (_valuesChanged)
-            {
-                _valueChanges.Sort(_comparer);
-                OnValueChangesSortingCompleted();
-            }
         }
 
         #endregion
@@ -179,7 +163,6 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <returns>An enumerator that can be used to iterate through the collection.</returns>
         public IEnumerator<ValueChange<TValue>> GetEnumerator()
         {
-            SortValueChanges();
             return _valueChanges.GetEnumerator();
         }
 

@@ -89,19 +89,22 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             PlaybackChanger[] actions,
             ICollection<ReceivedEvent> expectedReceivedEvents,
             Action<Playback> setupPlayback = null,
-            int? repeatsCount = null)
+            int? repeatsCount = null,
+            Action<Playback> additionalChecks = null,
+            TempoMap tempoMap = null)
         {
             var collection = new ObservableTimedObjectsCollection(initialObjects);
 
             CheckPlayback(
                 useOutputDevice: false,
-                createPlayback: outputDevice => new Playback(collection, TempoMap, outputDevice),
+                createPlayback: outputDevice => new Playback(collection, tempoMap ?? TempoMap, outputDevice),
                 actions: actions
                     .Select(a => new PlaybackChangerBase(a.PeriodMs, p => a.Action(p, collection)))
                     .ToArray(),
                 expectedReceivedEvents: expectedReceivedEvents,
                 setupPlayback: setupPlayback,
-                repeatsCount: repeatsCount);
+                repeatsCount: repeatsCount,
+                additionalChecks: additionalChecks);
         }
 
         private void CheckDuration(

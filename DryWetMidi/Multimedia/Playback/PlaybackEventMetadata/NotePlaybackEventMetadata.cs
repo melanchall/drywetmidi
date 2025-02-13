@@ -7,7 +7,10 @@ namespace Melanchall.DryWetMidi.Multimedia
     {
         #region Constructor
 
-        public NotePlaybackEventMetadata(Note note, TimeSpan startTime, TimeSpan endTime)
+        public NotePlaybackEventMetadata(
+            Note note,
+            PlaybackTime startTime,
+            PlaybackTime endTime)
         {
             RawNote = note;
             StartTime = startTime;
@@ -23,9 +26,9 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         public Note RawNote { get; }
 
-        public TimeSpan StartTime { get; }
+        public PlaybackTime StartTime { get; }
 
-        public TimeSpan EndTime { get; }
+        public PlaybackTime EndTime { get; }
 
         public NotePlaybackData RawNotePlaybackData { get; }
 

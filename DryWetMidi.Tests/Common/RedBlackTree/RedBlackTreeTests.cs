@@ -4,7 +4,6 @@ using System.Linq;
 using System;
 using Melanchall.DryWetMidi.Common;
 using System.Drawing;
-using Melanchall.DryWetMidi.Tests.Multimedia;
 
 namespace Melanchall.DryWetMidi.Tests.Common
 {
@@ -31,6 +30,8 @@ namespace Melanchall.DryWetMidi.Tests.Common
         public void Enumerate_Empty()
         {
             var tree = new RedBlackTree<int, int>();
+            Assert.AreEqual(0, tree.Count, "Invalid initial count.");
+
             var enumerated = tree.ToArray();
 
             CollectionAssert.IsEmpty(enumerated, "Enumerated collection is not empty.");
@@ -43,6 +44,8 @@ namespace Melanchall.DryWetMidi.Tests.Common
             var data = Enumerable.Range(0, count).Select(_ => random.Next(1000)).ToArray();
 
             var tree = new RedBlackTree<int, int>(data, d => d);
+            Assert.AreEqual(count, tree.Count, "Invalid initial count.");
+
             var enumerated = tree.ToArray();
 
             CollectionAssert.AreEqual(
@@ -56,10 +59,13 @@ namespace Melanchall.DryWetMidi.Tests.Common
         {
             var data = new[] { 2, 3, 1, 1, 10, 100, 50, 45, 0 };
             var tree = new RedBlackTree<int, int>(data, d => d);
+            Assert.AreEqual(data.Length, tree.Count, "Invalid initial count.");
 
             CheckAscendingOrder(tree.ToArray());
 
             tree.Add(value, value);
+            Assert.AreEqual(data.Length + 1, tree.Count, "Invalid count after add.");
+
             CheckAscendingOrder(tree.ToArray());
         }
 
@@ -68,14 +74,17 @@ namespace Melanchall.DryWetMidi.Tests.Common
         {
             var data = new[] { 2, 3, 1, 1, 10, 100, 50, 45, 0 }.ToList();
             var tree = new RedBlackTree<int, int>(data, d => d);
+            Assert.AreEqual(data.Count, tree.Count, "Invalid initial count.");
 
             CheckAscendingOrder(tree.ToArray());
 
             var dataToAdd = new[] { 0, 10, 40, -2, 1000, 12, 2, 9, 11 };
+            var count = data.Count;
 
             foreach (var d in dataToAdd)
             {
                 tree.Add(d, d);
+                Assert.AreEqual(++count, tree.Count, $"Invalid count after {d} addition.");
                 CheckAscendingOrder(tree.ToArray());
             }
         }
@@ -85,10 +94,13 @@ namespace Melanchall.DryWetMidi.Tests.Common
         {
             var data = Enumerable.Range(0, 1000).ToList();
             var tree = new RedBlackTree<int, int>(data, d => d);
+            Assert.AreEqual(data.Count, tree.Count, "Invalid initial count.");
 
             CheckAscendingOrder(tree.ToArray());
 
             tree.Delete(tree.GetFirstNode(value));
+            Assert.AreEqual(data.Count - 1, tree.Count, "Invalid count after deletion.");
+
             CheckAscendingOrder(tree.ToArray());
         }
 
@@ -97,16 +109,37 @@ namespace Melanchall.DryWetMidi.Tests.Common
         {
             var data = Enumerable.Range(0, 1000).ToList();
             var tree = new RedBlackTree<int, int>(data, d => d);
+            Assert.AreEqual(data.Count, tree.Count, "Invalid initial count.");
 
             CheckAscendingOrder(tree.ToArray());
 
             var dataToDelete = new[] { 500, 100, 2, 4, 6, 9, 10, 700, 701, 702, 45, 44, 43 };
+            var count = data.Count;
 
             foreach (var d in dataToDelete)
             {
                 tree.Delete(tree.GetFirstNode(d));
+                Assert.AreEqual(--count, tree.Count, $"Invalid count after {d} deletion.");
+
                 CheckAscendingOrder(tree.ToArray());
             }
+        }
+
+        [Test]
+        public void DeleteNonExisting()
+        {
+            var data = Enumerable.Range(0, 1000).ToList();
+            var tree = new RedBlackTree<int, int>(data, d => d);
+            Assert.AreEqual(data.Count, tree.Count, "Invalid initial count.");
+
+            CheckAscendingOrder(tree.ToArray());
+
+            var nodeToDelete = tree.GetFirstNode(500);
+            tree.Delete(nodeToDelete);
+            Assert.AreEqual(data.Count - 1, tree.Count, $"Invalid count after first deletion.");
+
+            tree.Delete(nodeToDelete);
+            Assert.AreEqual(data.Count - 1, tree.Count, $"Invalid count after second deletion.");
         }
 
         [Test]

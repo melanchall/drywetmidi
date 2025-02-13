@@ -8,7 +8,7 @@ namespace Melanchall.DryWetMidi.Interaction
     /// Represents time signature which is number of beats of specified length.
     /// </summary>
     /// <seealso cref="TempoMap"/>
-    public sealed class TimeSignature
+    public sealed class TimeSignature : IEquatable<TimeSignature>
     {
         #region Constants
 
@@ -210,6 +210,15 @@ namespace Melanchall.DryWetMidi.Interaction
 
         #endregion
 
+        #region IEquatable<TimeSignature>
+
+        public bool Equals(TimeSignature other)
+        {
+            return this == other;
+        }
+
+        #endregion
+
         #region Overrides
 
         /// <summary>
@@ -228,7 +237,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <returns><c>true</c> if the specified object is equal to the current object; otherwise, <c>false</c>.</returns>
         public override bool Equals(object obj)
         {
-            return this == (obj as TimeSignature);
+            return Equals(obj as TimeSignature);
         }
 
         /// <summary>
