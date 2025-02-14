@@ -2,6 +2,7 @@
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
 using Melanchall.DryWetMidi.Multimedia;
+using Melanchall.DryWetMidi.Tests.Utilities;
 using NUnit.Framework;
 using System;
 using System.Linq;
@@ -168,8 +169,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         public void CheckPlaybackDataChangesOnTheFly_BatchAdd_1(
             [Values(1, 2, 3, 4, 8, 16, 17, 32, 50, 51)] int notesCount)
         {
-            var noteLengthMs = 20;
-            var lastEventTime = notesCount * noteLengthMs + 20;
+            var noteLengthMs = 40;
+            var lastEventTime = notesCount * noteLengthMs + 40;
 
             var initialObjects = new ITimedObject[]
             {
@@ -181,7 +182,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 .Values
                 .Take(notesCount)
                 .Select(n => new Note(n)
-                    .SetTime(new MetricTimeSpan(0, 0, 0, n * noteLengthMs + 10), TempoMap)
+                    .SetTime(new MetricTimeSpan(0, 0, 0, n * noteLengthMs + 20), TempoMap)
                     .SetLength(new MetricTimeSpan(0, 0, 0, noteLengthMs), TempoMap))
                 .ToArray();
 
@@ -197,8 +198,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     .Take(notesCount)
                     .SelectMany(n => new[]
                     {
-                        new ReceivedEvent(new NoteOnEvent(n, Note.DefaultVelocity), TimeSpan.FromMilliseconds(n * noteLengthMs + 10)),
-                        new ReceivedEvent(new NoteOffEvent(n, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds((n + 1) * noteLengthMs + 10)),
+                        new ReceivedEvent(new NoteOnEvent(n, Note.DefaultVelocity), TimeSpan.FromMilliseconds(n * noteLengthMs + 20)),
+                        new ReceivedEvent(new NoteOffEvent(n, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds((n + 1) * noteLengthMs + 20)),
                     })
                     .Concat(new[]
                     {
@@ -212,10 +213,10 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_BatchAdd_2(
             [Values(8, 16, 17, 20, 32)] int notesCount,
-            [Values(20, 40, 60, 100)] int addAtMs)
+            [Values(40, 80, 120)] int addAtMs)
         {
-            var noteLengthMs = 20;
-            var lastEventTime = notesCount * noteLengthMs + 20;
+            var noteLengthMs = 40;
+            var lastEventTime = notesCount * noteLengthMs + 40;
 
             var initialObjects = new ITimedObject[]
             {
@@ -227,7 +228,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 .Values
                 .Take(notesCount)
                 .Select(n => new Note(n)
-                    .SetTime(new MetricTimeSpan(0, 0, 0, n * noteLengthMs + 10), TempoMap)
+                    .SetTime(new MetricTimeSpan(0, 0, 0, n * noteLengthMs + 20), TempoMap)
                     .SetLength(new MetricTimeSpan(0, 0, 0, noteLengthMs), TempoMap))
                 .ToArray();
 
@@ -236,8 +237,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 .Take(notesCount)
                 .SelectMany(n => new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent(n, Note.DefaultVelocity), TimeSpan.FromMilliseconds(n * noteLengthMs + 10)),
-                    new ReceivedEvent(new NoteOffEvent(n, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds((n + 1) * noteLengthMs + 10)),
+                    new ReceivedEvent(new NoteOnEvent(n, Note.DefaultVelocity), TimeSpan.FromMilliseconds(n * noteLengthMs + 20)),
+                    new ReceivedEvent(new NoteOffEvent(n, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds((n + 1) * noteLengthMs + 20)),
                 })
                 .ToArray();
 
@@ -270,13 +271,13 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         public void CheckPlaybackDataChangesOnTheFly_RemoveByOne(
             [Values(1, 2, 3, 4, 8, 16, 17, 32, 50, 51)] int notesCount)
         {
-            var noteLengthMs = 20;
+            var noteLengthMs = 40;
 
             var objectsToRemove = SevenBitNumber
                 .Values
                 .Take(notesCount)
                 .Select(n => new Note(n)
-                    .SetTime(new MetricTimeSpan(0, 0, 0, n * noteLengthMs + 10), TempoMap)
+                    .SetTime(new MetricTimeSpan(0, 0, 0, n * noteLengthMs + 20), TempoMap)
                     .SetLength(new MetricTimeSpan(0, 0, 0, noteLengthMs), TempoMap))
                 .ToArray();
 
@@ -295,8 +296,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     .Take(notesCount)
                     .SelectMany(n => new[]
                     {
-                        new ReceivedEvent(new NoteOnEvent(n, Note.DefaultVelocity), TimeSpan.FromMilliseconds(n * noteLengthMs + 10)),
-                        new ReceivedEvent(new NoteOffEvent(n, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(n * noteLengthMs + 20)),
+                        new ReceivedEvent(new NoteOnEvent(n, Note.DefaultVelocity), TimeSpan.FromMilliseconds(n * noteLengthMs + 20)),
+                        new ReceivedEvent(new NoteOffEvent(n, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(n * noteLengthMs + 40)),
                     })
                     .ToArray(),
                 setupPlayback: playback => playback.TrackNotes = true);
@@ -420,8 +421,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         public void CheckPlaybackDataChangesOnTheFly_AddAtAdvanceAndRemovePastByOne(
             [Values(1, 2, 3, 4, 8, 16, 17, 32, 50, 51)] int notesCount)
         {
-            var noteLengthMs = 20;
-            var lastEventTime = notesCount * noteLengthMs + 20;
+            var noteLengthMs = 40;
+            var lastEventTime = notesCount * noteLengthMs + 40;
 
             var initialObjects = new ITimedObject[]
             {
@@ -433,7 +434,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 .Values
                 .Take(notesCount)
                 .Select(n => new Note(n)
-                    .SetTime(new MetricTimeSpan(0, 0, 0, n * noteLengthMs + 10), TempoMap)
+                    .SetTime(new MetricTimeSpan(0, 0, 0, n * noteLengthMs + 20), TempoMap)
                     .SetLength(new MetricTimeSpan(0, 0, 0, noteLengthMs), TempoMap))
                 .ToArray();
 
@@ -461,8 +462,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     .Take(notesCount)
                     .SelectMany(n => new[]
                     {
-                        new ReceivedEvent(new NoteOnEvent(n, Note.DefaultVelocity), TimeSpan.FromMilliseconds(n * noteLengthMs + 10)),
-                        new ReceivedEvent(new NoteOffEvent(n, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds((n + 1) * noteLengthMs + 10)),
+                        new ReceivedEvent(new NoteOnEvent(n, Note.DefaultVelocity), TimeSpan.FromMilliseconds(n * noteLengthMs + 20)),
+                        new ReceivedEvent(new NoteOffEvent(n, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds((n + 1) * noteLengthMs + 20)),
                     })
                     .Concat(new[]
                     {
@@ -676,6 +677,80 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new ReceivedEvent(new NoteOnEvent((SevenBitNumber)90, Note.DefaultVelocity), TimeSpan.FromMilliseconds(640)),
                     new ReceivedEvent(new NoteOffEvent((SevenBitNumber)90, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(790)),
                 });
+        }
+
+        [Retry(OnTheFlyChecksRetriesNumber)]
+        [Test]
+        public void CheckPlaybackDataChangesOnTheFly_TempoMapChanges_1()
+        {
+            var setTempoEvent = new TimedEvent(new SetTempoEvent(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 2))
+                .SetTime(new MetricTimeSpan(0, 0, 0, 200), TempoMap);
+
+            var timeSignatureEvent = new TimedEvent(new TimeSignatureEvent(3, 4))
+                .SetTime(new MetricTimeSpan(0, 0, 0, 300), TempoMap);
+
+            var initialObjects = new ITimedObject[]
+            {
+                new TimedEvent(new TextEvent("END"))
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 700), TempoMap),
+            };
+
+            CheckPlaybackDataChangesOnTheFly(
+                initialObjects: initialObjects,
+                actions: new[]
+                {
+                    new PlaybackChanger(100, (playback, collection) =>
+                        collection.Add(setTempoEvent, timeSignatureEvent)),
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new SetTempoEvent(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 2), TimeSpan.FromMilliseconds(200)),
+                    new ReceivedEvent(new TimeSignatureEvent(3, 4), TimeSpan.FromMilliseconds(250)),
+                    new ReceivedEvent(new TextEvent("END"), TimeSpan.FromMilliseconds(450)),
+                },
+                additionalChecks: playback => MidiAsserts.AreEqual(
+                    AddTimeSignatureChanges(
+                        AddTempoChanges(TempoMap, (TimeSpan.FromMilliseconds(200), new Tempo(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 2))),
+                        (TimeSpan.FromMilliseconds(250), new TimeSignature(3, 4))),
+                    playback.TempoMap,
+                    "Invalid tempo map."));
+        }
+
+        [Retry(OnTheFlyChecksRetriesNumber)]
+        [Test]
+        public void CheckPlaybackDataChangesOnTheFly_TempoMapChanges_2()
+        {
+            var setTempoEvent = new TimedEvent(new SetTempoEvent(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 2))
+                .SetTime(new MetricTimeSpan(0, 0, 0, 200), TempoMap);
+
+            var timeSignatureEvent = new TimedEvent(new TimeSignatureEvent(3, 4))
+                .SetTime(new MetricTimeSpan(0, 0, 0, 300), TempoMap);
+
+            var initialObjects = new ITimedObject[]
+            {
+                new TimedEvent(new TextEvent("END"))
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 700), TempoMap),
+            };
+
+            CheckPlaybackDataChangesOnTheFly(
+                initialObjects: initialObjects,
+                actions: new[]
+                {
+                    new PlaybackChanger(100, (playback, collection) =>
+                        collection.Add(timeSignatureEvent, setTempoEvent)),
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new SetTempoEvent(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 2), TimeSpan.FromMilliseconds(200)),
+                    new ReceivedEvent(new TimeSignatureEvent(3, 4), TimeSpan.FromMilliseconds(250)),
+                    new ReceivedEvent(new TextEvent("END"), TimeSpan.FromMilliseconds(450)),
+                },
+                additionalChecks: playback => MidiAsserts.AreEqual(
+                    AddTimeSignatureChanges(
+                        AddTempoChanges(TempoMap, (TimeSpan.FromMilliseconds(200), new Tempo(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 2))),
+                        (TimeSpan.FromMilliseconds(250), new TimeSignature(3, 4))),
+                    playback.TempoMap,
+                    "Invalid tempo map."));
         }
 
         #endregion

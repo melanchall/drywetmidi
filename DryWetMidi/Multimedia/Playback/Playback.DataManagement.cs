@@ -193,6 +193,10 @@ namespace Melanchall.DryWetMidi.Multimedia
             TryRemoveSetTempoEvent(
                 timedEvent,
                 oldTime);
+
+            TryRemoveTimeSignatureEvent(
+                timedEvent,
+                oldTime);
         }
 
         private void InitializePlaybackEvents(IEnumerable<ITimedObject> timedObjects, TempoMap tempoMap)
@@ -216,18 +220,28 @@ namespace Melanchall.DryWetMidi.Multimedia
             if (TryAddNoteEvent(timedObject, tempoMap, isInitialObject, ref maxTime, ref maxTimeInTicks))
                 return;
 
+            //
+
             TimeSpan? nextTempoTime = null;
-            bool eventShouldBeAdded;
+            bool eventShouldBeAdded = true;
             Tempo oldTempo;
+            TimeSignature oldTimeSignature;
 
             PrepareSetTempoEventAdding(
                 timedObject as TimedEvent,
                 out nextTempoTime,
-                out eventShouldBeAdded,
+                ref eventShouldBeAdded,
                 out oldTempo);
+
+            PrepareTimeSignatureEventAdding(
+                timedObject as TimedEvent,
+                ref eventShouldBeAdded,
+                out oldTimeSignature);
 
             if (!eventShouldBeAdded)
                 return;
+
+            //
 
             var playbackEvents = GetPlaybackEvents(timedObject, tempoMap);
             var eventsGroup = new HashSet<RedBlackTreeNode<TimeSpan, PlaybackEvent>>();
@@ -261,13 +275,6 @@ namespace Melanchall.DryWetMidi.Multimedia
                     maxTime = e.Time;
                     maxTimeInTicks = e.RawTime;
                 }
-
-                // TODO: see above
-                //if (e.Time > _duration)
-                //{
-                //    _duration = e.Time;
-                //    _durationInTicks = e.RawTime;
-                //}
             }
 
             TryAddSetTempoEvent(
@@ -275,6 +282,11 @@ namespace Melanchall.DryWetMidi.Multimedia
                 nextTempoTime,
                 eventShouldBeAdded,
                 oldTempo);
+
+            TryAddTimeSignatureEvent(
+                timedObject as TimedEvent,
+                eventShouldBeAdded,
+                oldTimeSignature);
         }
 
         private NoteId GetNoteId(NoteEvent noteEvent)
@@ -323,13 +335,14 @@ namespace Melanchall.DryWetMidi.Multimedia
         private void PrepareSetTempoEventAdding(
             TimedEvent timedEvent,
             out TimeSpan? nextTempoTime,
-            out bool eventShouldBeAdded,
+            ref bool eventShouldBeAdded,
             out Tempo oldTempo)
         {
-            eventShouldBeAdded = true;
             nextTempoTime = null;
-
             oldTempo = TempoMap.TempoLine.GetValueAtTime(0);
+
+            if (!eventShouldBeAdded)
+                return;
 
             if (timedEvent == null)
                 return;
@@ -450,6 +463,85 @@ namespace Melanchall.DryWetMidi.Multimedia
             //
 
             TempoMap.TempoLine.SetValue(tempoChangeMidiTime, newTempo);
+        }
+
+        private void TryRemoveTimeSignatureEvent(
+            TimedEvent timedEvent,
+            long oldTime)
+        {
+            if (timedEvent == null)
+                return;
+
+            var setTempoEvent = timedEvent.Event as TimeSignatureEvent;
+            if (setTempoEvent == null)
+                return;
+
+            // TODO: optimize
+
+            var valuesChanges = TempoMap.TimeSignatureLine.ToArray();
+
+            var newTempo = TempoMap.TimeSignatureLine.GetValueAtTime(0);
+
+            for (var i = 0; i < valuesChanges.Length; i++)
+            {
+                var valueChange = valuesChanges[i];
+                if (valueChange.Time < oldTime)
+                    newTempo = valueChange.Value;
+                else
+                    break;
+            }
+
+            TempoMap.TimeSignatureLine.SetValue(timedEvent.Time, newTempo);
+        }
+
+        private void PrepareTimeSignatureEventAdding(
+            TimedEvent timedEvent,
+            ref bool eventShouldBeAdded,
+            out TimeSignature oldTimeSignature)
+        {
+            oldTimeSignature = TempoMap.TimeSignatureLine.GetValueAtTime(0);
+
+            if (!eventShouldBeAdded)
+                return;
+
+            if (timedEvent == null)
+                return;
+
+            var timeSignatureEvent = timedEvent.Event as TimeSignatureEvent;
+            if (timeSignatureEvent == null)
+                return;
+
+            var newTimeSignature = new TimeSignature(timeSignatureEvent.Numerator, timeSignatureEvent.Denominator);
+
+            var valuesChanges = TempoMap.TimeSignatureLine.ToArray();
+
+            // TODO: optimize
+
+            for (var i = 0; i < valuesChanges.Length; i++)
+            {
+                var valueChange = valuesChanges[i];
+                if (valueChange.Time <= timedEvent.Time)
+                    oldTimeSignature = valueChange.Value;
+            }
+
+            eventShouldBeAdded = oldTimeSignature != newTimeSignature;
+        }
+
+        private void TryAddTimeSignatureEvent(
+            TimedEvent timedEvent,
+            bool eventShouldBeAdded,
+            TimeSignature oldTempo)
+        {
+            if (timedEvent == null)
+                return;
+
+            var timeSignatureEvent = timedEvent.Event as TimeSignatureEvent;
+            if (timeSignatureEvent == null || !eventShouldBeAdded)
+                return;
+
+            var newTempo = new TimeSignature(timeSignatureEvent.Numerator, timeSignatureEvent.Denominator);
+
+            TempoMap.TimeSignatureLine.SetValue(timedEvent.Time, newTempo);
         }
 
         private bool TryAddNoteEvent(

@@ -3733,6 +3733,677 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     "Invalid tempo map."));
         }
 
+        [Retry(RetriesNumber)]
+        [Test]
+        public void CheckPlaybackDataChangesOnTheFly_Add_TimeSignature_1()
+        {
+            var initialObjects = new ITimedObject[]
+            {
+                new TimedEvent(new TextEvent("A"))
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 200), TempoMap),
+                new TimedEvent(new TextEvent("B"))
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 400), TempoMap),
+                new TimedEvent(new TextEvent("C"))
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 600), TempoMap),
+            };
+
+            var objectToAdd = new TimedEvent(new TimeSignatureEvent(3, 4))
+                .SetTime(new MetricTimeSpan(0, 0, 0, 700), TempoMap);
+
+            CheckPlaybackDataChangesOnTheFly(
+                initialObjects: initialObjects,
+                actions: new[]
+                {
+                    new PlaybackChanger(100,
+                        (playback, collection) => collection.Add(objectToAdd)),
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new TextEvent("A"), TimeSpan.FromMilliseconds(200)),
+                    new ReceivedEvent(new TextEvent("B"), TimeSpan.FromMilliseconds(400)),
+                    new ReceivedEvent(new TextEvent("C"), TimeSpan.FromMilliseconds(600)),
+                    new ReceivedEvent(new TimeSignatureEvent(3, 4), TimeSpan.FromMilliseconds(700)),
+                },
+                additionalChecks: playback => MidiAsserts.AreEqual(
+                    AddTimeSignatureChanges(TempoMap, (TimeSpan.FromMilliseconds(700), new TimeSignature(3, 4))),
+                    playback.TempoMap,
+                    "Invalid tempo map."));
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
+        public void CheckPlaybackDataChangesOnTheFly_Add_TimeSignature_2()
+        {
+            var initialObjects = new ITimedObject[]
+            {
+                new TimedEvent(new TextEvent("A"))
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 200), TempoMap),
+                new TimedEvent(new TextEvent("B"))
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 400), TempoMap),
+                new TimedEvent(new TextEvent("C"))
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 600), TempoMap),
+            };
+
+            var objectToAdd = new TimedEvent(new TimeSignatureEvent(3, 4))
+                .SetTime(new MetricTimeSpan(0, 0, 0, 700), TempoMap);
+
+            CheckPlaybackDataChangesOnTheFly(
+                initialObjects: initialObjects,
+                actions: new[]
+                {
+                    new PlaybackChanger(400,
+                        (playback, collection) => collection.Add(objectToAdd)),
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new TextEvent("A"), TimeSpan.FromMilliseconds(200)),
+                    new ReceivedEvent(new TextEvent("B"), TimeSpan.FromMilliseconds(400)),
+                    new ReceivedEvent(new TextEvent("C"), TimeSpan.FromMilliseconds(600)),
+                    new ReceivedEvent(new TimeSignatureEvent(3, 4), TimeSpan.FromMilliseconds(700)),
+                },
+                additionalChecks: playback => MidiAsserts.AreEqual(
+                    AddTimeSignatureChanges(TempoMap, (TimeSpan.FromMilliseconds(700), new TimeSignature(3, 4))),
+                    playback.TempoMap,
+                    "Invalid tempo map."));
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
+        public void CheckPlaybackDataChangesOnTheFly_Add_TimeSignature_3()
+        {
+            var initialObjects = new ITimedObject[]
+            {
+                new TimedEvent(new TextEvent("A"))
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 200), TempoMap),
+                new TimedEvent(new TextEvent("B"))
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 400), TempoMap),
+                new TimedEvent(new TextEvent("C"))
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 600), TempoMap),
+            };
+
+            var objectToAdd = new TimedEvent(new TimeSignatureEvent(3, 4))
+                .SetTime(new MetricTimeSpan(0, 0, 0, 500), TempoMap);
+
+            CheckPlaybackDataChangesOnTheFly(
+                initialObjects: initialObjects,
+                actions: new[]
+                {
+                    new PlaybackChanger(100,
+                        (playback, collection) => collection.Add(objectToAdd)),
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new TextEvent("A"), TimeSpan.FromMilliseconds(200)),
+                    new ReceivedEvent(new TextEvent("B"), TimeSpan.FromMilliseconds(400)),
+                    new ReceivedEvent(new TimeSignatureEvent(3, 4), TimeSpan.FromMilliseconds(500)),
+                    new ReceivedEvent(new TextEvent("C"), TimeSpan.FromMilliseconds(600)),
+                },
+                additionalChecks: playback => MidiAsserts.AreEqual(
+                    AddTimeSignatureChanges(TempoMap, (TimeSpan.FromMilliseconds(500), new TimeSignature(3, 4))),
+                    playback.TempoMap,
+                    "Invalid tempo map."));
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
+        public void CheckPlaybackDataChangesOnTheFly_Add_TimeSignature_4()
+        {
+            var initialObjects = new ITimedObject[]
+            {
+                new TimedEvent(new TextEvent("A"))
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 200), TempoMap),
+                new TimedEvent(new TextEvent("B"))
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 400), TempoMap),
+                new TimedEvent(new TextEvent("C"))
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 600), TempoMap),
+            };
+
+            var objectToAdd = new TimedEvent(new TimeSignatureEvent(3, 4))
+                .SetTime(new MetricTimeSpan(0, 0, 0, 400), TempoMap);
+
+            CheckPlaybackDataChangesOnTheFly(
+                initialObjects: initialObjects,
+                actions: new[]
+                {
+                    new PlaybackChanger(100,
+                        (playback, collection) => collection.Add(objectToAdd)),
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new TextEvent("A"), TimeSpan.FromMilliseconds(200)),
+                    new ReceivedEvent(new TextEvent("B"), TimeSpan.FromMilliseconds(400)),
+                    new ReceivedEvent(new TimeSignatureEvent(3, 4), TimeSpan.FromMilliseconds(400)),
+                    new ReceivedEvent(new TextEvent("C"), TimeSpan.FromMilliseconds(600)),
+                },
+                additionalChecks: playback => MidiAsserts.AreEqual(
+                    AddTimeSignatureChanges(TempoMap, (TimeSpan.FromMilliseconds(400), new TimeSignature(3, 4))),
+                    playback.TempoMap,
+                    "Invalid tempo map."));
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
+        public void CheckPlaybackDataChangesOnTheFly_Add_TimeSignature_5()
+        {
+            var initialObjects = new ITimedObject[]
+            {
+                new TimedEvent(new TextEvent("A"))
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 200), TempoMap),
+                new TimedEvent(new TextEvent("B"))
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 400), TempoMap),
+                new TimedEvent(new TextEvent("C"))
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 600), TempoMap),
+            };
+
+            var objectToAdd = new TimedEvent(new TimeSignatureEvent(5, 2))
+                .SetTime(new MetricTimeSpan(0, 0, 0, 400), TempoMap);
+
+            CheckPlaybackDataChangesOnTheFly(
+                initialObjects: initialObjects,
+                actions: new[]
+                {
+                    new PlaybackChanger(100,
+                        (playback, collection) => collection.Add(objectToAdd)),
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new TextEvent("A"), TimeSpan.FromMilliseconds(200)),
+                    new ReceivedEvent(new TextEvent("B"), TimeSpan.FromMilliseconds(400)),
+                    new ReceivedEvent(new TimeSignatureEvent(5, 2), TimeSpan.FromMilliseconds(400)),
+                    new ReceivedEvent(new TextEvent("C"), TimeSpan.FromMilliseconds(600)),
+                },
+                additionalChecks: playback => MidiAsserts.AreEqual(
+                    AddTimeSignatureChanges(TempoMap, (TimeSpan.FromMilliseconds(400), new TimeSignature(5, 2))),
+                    playback.TempoMap,
+                    "Invalid tempo map."));
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
+        public void CheckPlaybackDataChangesOnTheFly_Add_TimeSignature_6()
+        {
+            var initialObjects = new ITimedObject[]
+            {
+                new TimedEvent(new TextEvent("A"))
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 200), TempoMap),
+                new TimedEvent(new TextEvent("B"))
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 400), TempoMap),
+                new TimedEvent(new TextEvent("C"))
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 600), TempoMap),
+            };
+
+            var objectToAdd = new TimedEvent(new TimeSignatureEvent(3, 4))
+                .SetTime(new MetricTimeSpan(0, 0, 0, 300), TempoMap);
+
+            CheckPlaybackDataChangesOnTheFly(
+                initialObjects: initialObjects,
+                actions: new[]
+                {
+                    new PlaybackChanger(400, (playback, collection) =>
+                    {
+                        collection.Add(objectToAdd);
+                        CheckCurrentTime(playback, TimeSpan.FromMilliseconds(400), "Invalid current time.");
+                    }),
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new TextEvent("A"), TimeSpan.FromMilliseconds(200)),
+                    new ReceivedEvent(new TextEvent("B"), TimeSpan.FromMilliseconds(400)),
+                    new ReceivedEvent(new TextEvent("C"), TimeSpan.FromMilliseconds(600)),
+                },
+                additionalChecks: playback => MidiAsserts.AreEqual(
+                    AddTimeSignatureChanges(TempoMap, (TimeSpan.FromMilliseconds(300), new TimeSignature(3, 4))),
+                    playback.TempoMap,
+                    "Invalid tempo map."));
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
+        public void CheckPlaybackDataChangesOnTheFly_Add_TimeSignature_7()
+        {
+            var initialObjects = new ITimedObject[]
+            {
+                new TimedEvent(new TextEvent("A"))
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 200), TempoMap),
+                new TimedEvent(new TextEvent("B"))
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 400), TempoMap),
+                new TimedEvent(new TextEvent("C"))
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 600), TempoMap),
+            };
+
+            var objectToAdd1 = new TimedEvent(new TimeSignatureEvent(3, 4))
+                .SetTime(new MetricTimeSpan(0, 0, 0, 700), TempoMap);
+            var objectToAdd2 = new TimedEvent(new TextEvent("D"))
+                .SetTime(new MetricTimeSpan(0, 0, 0, 800), TempoMap);
+
+            CheckPlaybackDataChangesOnTheFly(
+                initialObjects: initialObjects,
+                actions: new[]
+                {
+                    new PlaybackChanger(100,
+                        (playback, collection) => collection.Add(objectToAdd1)),
+                    new PlaybackChanger(500,
+                        (playback, collection) => collection.Add(objectToAdd2)),
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new TextEvent("A"), TimeSpan.FromMilliseconds(200)),
+                    new ReceivedEvent(new TextEvent("B"), TimeSpan.FromMilliseconds(400)),
+                    new ReceivedEvent(new TextEvent("C"), TimeSpan.FromMilliseconds(600)),
+                    new ReceivedEvent(new TimeSignatureEvent(3, 4), TimeSpan.FromMilliseconds(700)),
+                    new ReceivedEvent(new TextEvent("D"), TimeSpan.FromMilliseconds(800)),
+                },
+                additionalChecks: playback => MidiAsserts.AreEqual(
+                    AddTimeSignatureChanges(TempoMap, (TimeSpan.FromMilliseconds(700), new TimeSignature(3, 4))),
+                    playback.TempoMap,
+                    "Invalid tempo map."));
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
+        public void CheckPlaybackDataChangesOnTheFly_Add_TimeSignature_8()
+        {
+            var initialObjects = new ITimedObject[]
+            {
+                new TimedEvent(new TextEvent("A"))
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 200), TempoMap),
+                new TimedEvent(new TextEvent("B"))
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 400), TempoMap),
+                new TimedEvent(new TextEvent("C"))
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 600), TempoMap),
+                new TimedEvent(new TextEvent("D"))
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 800), TempoMap),
+                new TimedEvent(new TextEvent("E"))
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 1000), TempoMap),
+            };
+
+            var objectToAdd1 = new TimedEvent(new TimeSignatureEvent(3, 4))
+                .SetTime(new MetricTimeSpan(0, 0, 0, 500), TempoMap);
+            var objectToAdd2 = new TimedEvent(new TimeSignatureEvent(3, 8))
+                .SetTime(new MetricTimeSpan(0, 0, 0, 700), TempoMap);
+
+            CheckPlaybackDataChangesOnTheFly(
+                initialObjects: initialObjects,
+                actions: new[]
+                {
+                    new PlaybackChanger(100,
+                        (playback, collection) => collection.Add(objectToAdd1)),
+                    new PlaybackChanger(500,
+                        (playback, collection) => collection.Add(objectToAdd2)),
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new TextEvent("A"), TimeSpan.FromMilliseconds(200)),
+                    new ReceivedEvent(new TextEvent("B"), TimeSpan.FromMilliseconds(400)),
+                    new ReceivedEvent(new TimeSignatureEvent(3, 4), TimeSpan.FromMilliseconds(500)),
+                    new ReceivedEvent(new TextEvent("C"), TimeSpan.FromMilliseconds(600)),
+                    new ReceivedEvent(new TimeSignatureEvent(3, 8), TimeSpan.FromMilliseconds(700)),
+                    new ReceivedEvent(new TextEvent("D"), TimeSpan.FromMilliseconds(800)),
+                    new ReceivedEvent(new TextEvent("E"), TimeSpan.FromMilliseconds(1000)),
+                },
+                additionalChecks: playback => MidiAsserts.AreEqual(
+                    AddTimeSignatureChanges(TempoMap,
+                        (TimeSpan.FromMilliseconds(500), new TimeSignature(3, 4)),
+                        (TimeSpan.FromMilliseconds(700), new TimeSignature(3, 8))),
+                    playback.TempoMap,
+                    "Invalid tempo map."));
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
+        public void CheckPlaybackDataChangesOnTheFly_Add_TimeSignature_9()
+        {
+            var tempoMap = AddTimeSignatureChanges(TempoMap,
+                (TimeSpan.FromMilliseconds(650), new TimeSignature(3, 8)));
+
+            var initialObjects = new ITimedObject[]
+            {
+                new TimedEvent(new TextEvent("A"))
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 200), tempoMap),
+                new TimedEvent(new TextEvent("B"))
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 400), tempoMap),
+                new TimedEvent(new TextEvent("C"))
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 600), tempoMap),
+                new TimedEvent(new TextEvent("D"))
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 800), tempoMap),
+            };
+
+            var objectToAdd = new TimedEvent(new TimeSignatureEvent(3, 4))
+                .SetTime(new MetricTimeSpan(0, 0, 0, 300), tempoMap);
+
+            CheckPlaybackDataChangesOnTheFly(
+                initialObjects: initialObjects,
+                actions: new[]
+                {
+                    new PlaybackChanger(100,
+                        (playback, collection) => collection.Add(objectToAdd)),
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new TextEvent("A"), TimeSpan.FromMilliseconds(200)),
+                    new ReceivedEvent(new TimeSignatureEvent(3, 4), TimeSpan.FromMilliseconds(300)),
+                    new ReceivedEvent(new TextEvent("B"), TimeSpan.FromMilliseconds(400)),
+                    new ReceivedEvent(new TextEvent("C"), TimeSpan.FromMilliseconds(600)),
+                    new ReceivedEvent(new TextEvent("D"), TimeSpan.FromMilliseconds(800)),
+                },
+                additionalChecks: playback =>
+                {
+                    MidiAsserts.AreEqual(
+                        AddTimeSignatureChanges(tempoMap,
+                            (TimeSpan.FromMilliseconds(300), new TimeSignature(3, 4))),
+                        playback.TempoMap,
+                        "Invalid tempo map.");
+
+                    var lastTimeSignatureChange = playback.TempoMap.GetTimeSignatureChanges().Last();
+                    var lastTimeSignatureChangeTime = lastTimeSignatureChange.TimeAs<MetricTimeSpan>(playback.TempoMap);
+                    Assert.AreEqual(650, lastTimeSignatureChangeTime.TotalMilliseconds, "Invalid last time signature change time.");
+                },
+                tempoMap: tempoMap);
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
+        public void CheckPlaybackDataChangesOnTheFly_Add_TimeSignature_10()
+        {
+            var initialObjects = new ITimedObject[]
+            {
+                new TimedEvent(new NoteOffEvent())
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 500), TempoMap),
+                new TimedEvent(new TextEvent("END"))
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 600), TempoMap),
+            };
+
+            var objectToAdd1 = new TimedEvent(new TimeSignatureEvent(3, 4))
+                .SetTime(new MetricTimeSpan(0, 0, 0, 400), TempoMap);
+            var objectToAdd2 = new TimedEvent(new NoteOnEvent())
+                .SetTime(new MetricTimeSpan(0, 0, 0, 300), TempoMap);
+
+            CheckPlaybackDataChangesOnTheFly(
+                initialObjects: initialObjects,
+                actions: new[]
+                {
+                    new PlaybackChanger(100,
+                        (playback, collection) => collection.Add(objectToAdd1)),
+                    new PlaybackChanger(100,
+                        (playback, collection) => collection.Add(objectToAdd2)),
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(300)),
+                    new ReceivedEvent(new TimeSignatureEvent(3, 4), TimeSpan.FromMilliseconds(400)),
+                    new ReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(500)),
+                    new ReceivedEvent(new TextEvent("END"), TimeSpan.FromMilliseconds(600)),
+                },
+                additionalChecks: playback => MidiAsserts.AreEqual(
+                    AddTimeSignatureChanges(TempoMap, (TimeSpan.FromMilliseconds(400), new TimeSignature(3, 4))),
+                    playback.TempoMap,
+                    "Invalid tempo map."));
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
+        public void CheckPlaybackDataChangesOnTheFly_Add_TimeSignature_11()
+        {
+            var initialObjects = new ITimedObject[]
+            {
+                new TimedEvent(new NoteOnEvent())
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 300), TempoMap),
+                new TimedEvent(new TextEvent("END"))
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 700), TempoMap),
+            };
+
+            var objectToAdd1 = new TimedEvent(new TimeSignatureEvent(3, 4))
+                .SetTime(new MetricTimeSpan(0, 0, 0, 200), TempoMap);
+            var objectToAdd2 = new TimedEvent(new NoteOffEvent())
+                .SetTime(new MetricTimeSpan(0, 0, 0, 500), TempoMap);
+
+            CheckPlaybackDataChangesOnTheFly(
+                initialObjects: initialObjects,
+                actions: new[]
+                {
+                    new PlaybackChanger(100,
+                        (playback, collection) => collection.Add(objectToAdd1)),
+                    new PlaybackChanger(100,
+                        (playback, collection) => collection.Add(objectToAdd2)),
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new TimeSignatureEvent(3, 4), TimeSpan.FromMilliseconds(200)),
+                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(300)),
+                    new ReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(500)),
+                    new ReceivedEvent(new TextEvent("END"), TimeSpan.FromMilliseconds(700)),
+                },
+                additionalChecks: playback => MidiAsserts.AreEqual(
+                    AddTimeSignatureChanges(TempoMap, (TimeSpan.FromMilliseconds(200), new TimeSignature(3, 4))),
+                    playback.TempoMap,
+                    "Invalid tempo map."));
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
+        public void CheckPlaybackDataChangesOnTheFly_Add_TimeSignature_12()
+        {
+            var initialObjects = new ITimedObject[]
+            {
+                new TimedEvent(new NoteOnEvent())
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 300), TempoMap),
+                new TimedEvent(new TextEvent("END"))
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 700), TempoMap),
+            };
+
+            var objectToAdd1 = new TimedEvent(new TimeSignatureEvent(3, 4))
+                .SetTime(new MetricTimeSpan(0, 0, 0, 200), TempoMap);
+            var objectToAdd2 = new TimedEvent(new NoteOffEvent())
+                .SetTime(new MetricTimeSpan(0, 0, 0, 500), TempoMap);
+
+            CheckPlaybackDataChangesOnTheFly(
+                initialObjects: initialObjects,
+                actions: new[]
+                {
+                    new PlaybackChanger(100,
+                        (playback, collection) => collection.Add(objectToAdd1)),
+                    new PlaybackChanger(200,
+                        (playback, collection) => collection.Add(objectToAdd2)),
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new TimeSignatureEvent(3, 4), TimeSpan.FromMilliseconds(200)),
+                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(300)),
+                    new ReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(500)),
+                    new ReceivedEvent(new TextEvent("END"), TimeSpan.FromMilliseconds(700)),
+                },
+                additionalChecks: playback => MidiAsserts.AreEqual(
+                    AddTimeSignatureChanges(TempoMap, (TimeSpan.FromMilliseconds(200), new TimeSignature(3, 4))),
+                    playback.TempoMap,
+                    "Invalid tempo map."));
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
+        public void CheckPlaybackDataChangesOnTheFly_Add_TimeSignature_13()
+        {
+            var initialObjects = new ITimedObject[]
+            {
+                new TimedEvent(new NoteOnEvent())
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 400), TempoMap),
+                new TimedEvent(new NoteOffEvent())
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 700), TempoMap),
+            };
+
+            var objectToAdd = new TimedEvent(new TimeSignatureEvent(3, 4))
+                .SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap);
+
+            CheckPlaybackDataChangesOnTheFly(
+                initialObjects: initialObjects,
+                actions: new[]
+                {
+                    new PlaybackChanger(200, (playback, collection) =>
+                    {
+                        collection.Add(objectToAdd);
+                        CheckCurrentTime(playback, TimeSpan.FromMilliseconds(200), "before time jump");
+                        playback.MoveToTime((MetricTimeSpan)TimeSpan.FromMilliseconds(500));
+                    }),
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(200)),
+                    new ReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(400)),
+                },
+                additionalChecks: playback => MidiAsserts.AreEqual(
+                    AddTimeSignatureChanges(TempoMap, (TimeSpan.FromMilliseconds(100), new TimeSignature(3, 4))),
+                    playback.TempoMap,
+                    "Invalid tempo map."));
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
+        public void CheckPlaybackDataChangesOnTheFly_Add_TimeSignature_14()
+        {
+            var initialObjects = new ITimedObject[]
+            {
+                new TimedEvent(new NoteOnEvent())
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 400), TempoMap),
+                new TimedEvent(new NoteOffEvent())
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 700), TempoMap),
+                new TimedEvent(new TextEvent("END"))
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 900), TempoMap),
+            };
+
+            var objectToAdd = new TimedEvent(new TimeSignatureEvent(3, 4))
+                .SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap);
+
+            CheckPlaybackDataChangesOnTheFly(
+                initialObjects: initialObjects,
+                actions: new[]
+                {
+                    new PlaybackChanger(200, (playback, collection) =>
+                    {
+                        collection.Add(objectToAdd);
+                        CheckCurrentTime(playback, TimeSpan.FromMilliseconds(200), "before time jump");
+                        playback.MoveToTime((MetricTimeSpan)TimeSpan.FromMilliseconds(800));
+                    }),
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new TextEvent("END"), TimeSpan.FromMilliseconds(300)),
+                },
+                additionalChecks: playback => MidiAsserts.AreEqual(
+                    AddTimeSignatureChanges(TempoMap, (TimeSpan.FromMilliseconds(100), new TimeSignature(3, 4))),
+                    playback.TempoMap,
+                    "Invalid tempo map."));
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
+        public void CheckPlaybackDataChangesOnTheFly_Add_TimeSignature_15()
+        {
+            var initialObjects = new ITimedObject[]
+            {
+                new TimedEvent(new NoteOnEvent())
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 400), TempoMap),
+                new TimedEvent(new NoteOffEvent())
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 700), TempoMap),
+                new TimedEvent(new TextEvent("END"))
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 900), TempoMap),
+            };
+
+            var objectToAdd = new TimedEvent(new TimeSignatureEvent(3, 4))
+                .SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap);
+
+            CheckPlaybackDataChangesOnTheFly(
+                initialObjects: initialObjects,
+                actions: new[]
+                {
+                    new PlaybackChanger(200, (playback, collection) =>
+                    {
+                        collection.Add(objectToAdd);
+                        CheckCurrentTime(playback, TimeSpan.FromMilliseconds(200), "before first time jump");
+                        playback.MoveToTime((MetricTimeSpan)TimeSpan.FromMilliseconds(500));
+                    }),
+                    new PlaybackChanger(100, (playback, collection) =>
+                    {
+                        CheckCurrentTime(playback, TimeSpan.FromMilliseconds(600), "before second time jump");
+                        playback.MoveToTime((MetricTimeSpan)TimeSpan.FromMilliseconds(800));
+                    }),
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(200)),
+                    new ReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(300)),
+                    new ReceivedEvent(new TextEvent("END"), TimeSpan.FromMilliseconds(400)),
+                },
+                additionalChecks: playback => MidiAsserts.AreEqual(
+                    AddTimeSignatureChanges(TempoMap, (TimeSpan.FromMilliseconds(100), new TimeSignature(3, 4))),
+                    playback.TempoMap,
+                    "Invalid tempo map."));
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
+        public void CheckPlaybackDataChangesOnTheFly_Add_TimeSignature_16()
+        {
+            var initialObjects = new ITimedObject[]
+            {
+                new TimedEvent(new TextEvent("END"))
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 800), TempoMap),
+            };
+
+            var objectToAdd1 = new TimedEvent(new TimeSignatureEvent(3, 4))
+                .SetTime(new MetricTimeSpan(0, 0, 0, 300), TempoMap);
+            var objectToAdd2 = new TimedEvent(new TimeSignatureEvent(3, 4))
+                .SetTime(new MetricTimeSpan(0, 0, 0, 400), TempoMap);
+
+            CheckPlaybackDataChangesOnTheFly(
+                initialObjects: initialObjects,
+                actions: new[]
+                {
+                    new PlaybackChanger(100, (playback, collection) => collection.Add(objectToAdd1, objectToAdd2)),
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new TimeSignatureEvent(3, 4), TimeSpan.FromMilliseconds(300)),
+                    new ReceivedEvent(new TextEvent("END"), TimeSpan.FromMilliseconds(800)),
+                },
+                additionalChecks: playback => MidiAsserts.AreEqual(
+                    AddTimeSignatureChanges(TempoMap, (TimeSpan.FromMilliseconds(300), new TimeSignature(3, 4))),
+                    playback.TempoMap,
+                    "Invalid tempo map."));
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
+        public void CheckPlaybackDataChangesOnTheFly_Add_TimeSignature_17()
+        {
+            var initialObjects = new ITimedObject[]
+            {
+                new TimedEvent(new TimeSignatureEvent(3, 4))
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 200), TempoMap),
+                new TimedEvent(new TimeSignatureEvent(3, 4))
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 400), TempoMap),
+                new TimedEvent(new TextEvent("END"))
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 800), TempoMap),
+            };
+
+            var objectToAdd = new TimedEvent(new TimeSignatureEvent(3, 4))
+                .SetTime(new MetricTimeSpan(0, 0, 0, 500), TempoMap);
+
+            CheckPlaybackDataChangesOnTheFly(
+                initialObjects: initialObjects,
+                actions: new[]
+                {
+                    new PlaybackChanger(100, (playback, collection) => collection.Add(objectToAdd)),
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new TimeSignatureEvent(3, 4), TimeSpan.FromMilliseconds(200)),
+                    new ReceivedEvent(new TextEvent("END"), TimeSpan.FromMilliseconds(800)),
+                },
+                additionalChecks: playback => MidiAsserts.AreEqual(
+                    AddTimeSignatureChanges(TempoMap, (TimeSpan.FromMilliseconds(200), new TimeSignature(3, 4))),
+                    playback.TempoMap,
+                    "Invalid tempo map."));
+        }
+
         #endregion
 
         #region Private methods
@@ -3745,6 +4416,19 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             {
                 var midiTime = TimeConverter.ConvertFrom((MetricTimeSpan)tempoChange.Time, tempoMap);
                 tempoMap.TempoLine.SetValue(midiTime, tempoChange.Tempo);
+            }
+
+            return tempoMap;
+        }
+
+        private TempoMap AddTimeSignatureChanges(TempoMap reference, params (TimeSpan Time, TimeSignature TimeSignature)[] timeSignatureChanges)
+        {
+            var tempoMap = reference.Clone();
+
+            foreach (var timeSignatureChange in timeSignatureChanges)
+            {
+                var midiTime = TimeConverter.ConvertFrom((MetricTimeSpan)timeSignatureChange.Time, tempoMap);
+                tempoMap.TimeSignatureLine.SetValue(midiTime, timeSignatureChange.TimeSignature);
             }
 
             return tempoMap;

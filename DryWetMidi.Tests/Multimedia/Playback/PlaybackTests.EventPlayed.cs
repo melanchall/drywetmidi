@@ -53,6 +53,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     if (midiEvent is SetTempoEvent)
                         midiEvent = new SetTempoEvent(500001);
 
+                    if (midiEvent is TimeSignatureEvent)
+                        midiEvent = new TimeSignatureEvent(3, 4);
+
                     return new EventToSend(midiEvent, TimeSpan.FromMilliseconds(delay));
                 })
                 .ToArray();

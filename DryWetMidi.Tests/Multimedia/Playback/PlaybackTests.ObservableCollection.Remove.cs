@@ -2434,6 +2434,407 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     "Invalid tempo map."));
         }
 
+        [Retry(OnTheFlyChecksRetriesNumber)]
+        [Test]
+        public void CheckPlaybackDataChangesOnTheFly_Remove_TimeSignature_1()
+        {
+            var objectToRemove = new TimedEvent(new TimeSignatureEvent(3, 4))
+                .SetTime(new MetricTimeSpan(0, 0, 0, 200), TempoMap);
+
+            var initialObjects = new ITimedObject[]
+            {
+                new Note((SevenBitNumber)70).SetLength(new MetricTimeSpan(0, 0, 0, 100), TempoMap),
+                objectToRemove,
+                new Note((SevenBitNumber)90)
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 400), TempoMap)
+                    .SetLength(new MetricTimeSpan(0, 0, 0, 500), TempoMap),
+            };
+
+            CheckPlaybackDataChangesOnTheFly(
+                initialObjects: initialObjects,
+                actions: new[]
+                {
+                    new PlaybackChanger(150, (playback, collection) =>
+                    {
+                        collection.Remove(objectToRemove);
+                        CheckCurrentTime(playback, TimeSpan.FromMilliseconds(150), "after remove");
+                    }),
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
+                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(100)),
+                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)90, Note.DefaultVelocity), TimeSpan.FromMilliseconds(400)),
+                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)90, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(900)),
+                },
+                additionalChecks: playback => MidiAsserts.AreEqual(
+                    TempoMap,
+                    playback.TempoMap,
+                    "Invalid tempo map."));
+        }
+
+        [Retry(OnTheFlyChecksRetriesNumber)]
+        [Test]
+        public void CheckPlaybackDataChangesOnTheFly_Remove_TimeSignature_2()
+        {
+            var objectToRemove = new TimedEvent(new TimeSignatureEvent(3, 4))
+                .SetTime(new MetricTimeSpan(0, 0, 0, 200), TempoMap);
+
+            var initialObjects = new ITimedObject[]
+            {
+                new Note((SevenBitNumber)70).SetLength(new MetricTimeSpan(0, 0, 0, 100), TempoMap),
+                objectToRemove,
+                new Note((SevenBitNumber)90)
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 400), TempoMap)
+                    .SetLength(new MetricTimeSpan(0, 0, 0, 500), TempoMap),
+            };
+
+            CheckPlaybackDataChangesOnTheFly(
+                initialObjects: initialObjects,
+                actions: new[]
+                {
+                    new PlaybackChanger(400, (playback, collection) =>
+                    {
+                        collection.Remove(objectToRemove);
+                        CheckCurrentTime(playback, TimeSpan.FromMilliseconds(400), "after remove");
+                    }),
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
+                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(100)),
+                    new ReceivedEvent(new TimeSignatureEvent(3, 4), TimeSpan.FromMilliseconds(200)),
+                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)90, Note.DefaultVelocity), TimeSpan.FromMilliseconds(400)),
+                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)90, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(900)),
+                },
+                additionalChecks: playback => MidiAsserts.AreEqual(
+                    TempoMap,
+                    playback.TempoMap,
+                    "Invalid tempo map."));
+        }
+
+        [Retry(OnTheFlyChecksRetriesNumber)]
+        [Test]
+        public void CheckPlaybackDataChangesOnTheFly_Remove_TimeSignature_3()
+        {
+            var objectToRemove = new TimedEvent(new TimeSignatureEvent(3, 4))
+                .SetTime(new MetricTimeSpan(0, 0, 0, 300), TempoMap);
+
+            var initialObjects = new ITimedObject[]
+            {
+                new Note((SevenBitNumber)70).SetLength(new MetricTimeSpan(0, 0, 0, 100), TempoMap),
+                objectToRemove,
+            };
+
+            CheckPlaybackDataChangesOnTheFly(
+                initialObjects: initialObjects,
+                actions: new[]
+                {
+                    new PlaybackChanger(50, (playback, collection) =>
+                    {
+                        collection.Remove(objectToRemove);
+                        CheckCurrentTime(playback, TimeSpan.FromMilliseconds(50), "after remove");
+                    }),
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
+                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(100)),
+                },
+                additionalChecks: playback => MidiAsserts.AreEqual(
+                    TempoMap,
+                    playback.TempoMap,
+                    "Invalid tempo map."));
+        }
+
+        [Retry(OnTheFlyChecksRetriesNumber)]
+        [Test]
+        public void CheckPlaybackDataChangesOnTheFly_Remove_TimeSignature_4()
+        {
+            var objectToRemove = new TimedEvent(new TimeSignatureEvent(3, 4))
+                .SetTime(new MetricTimeSpan(0, 0, 0, 300), TempoMap);
+
+            var initialObjects = new ITimedObject[]
+            {
+                new Note((SevenBitNumber)70).SetLength(new MetricTimeSpan(0, 0, 0, 100), TempoMap),
+                objectToRemove,
+            };
+
+            CheckPlaybackDataChangesOnTheFly(
+                initialObjects: initialObjects,
+                actions: new[]
+                {
+                    new PlaybackChanger(200, (playback, collection) =>
+                    {
+                        collection.Remove(objectToRemove);
+                        CheckCurrentTime(playback, TimeSpan.FromMilliseconds(200), "after remove");
+                    }),
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
+                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(100)),
+                },
+                additionalChecks: playback => MidiAsserts.AreEqual(
+                    TempoMap,
+                    playback.TempoMap,
+                    "Invalid tempo map."));
+        }
+
+        [Retry(OnTheFlyChecksRetriesNumber)]
+        [Test]
+        public void CheckPlaybackDataChangesOnTheFly_Remove_TimeSignature_5()
+        {
+            var objectToRemove = new TimedEvent(new TimeSignatureEvent(3, 4))
+                .SetTime(new MetricTimeSpan(0, 0, 0, 200), TempoMap);
+
+            var initialObjects = new ITimedObject[]
+            {
+                new Note((SevenBitNumber)70).SetLength(new MetricTimeSpan(0, 0, 0, 100), TempoMap),
+                objectToRemove,
+                new TimedEvent(new TimeSignatureEvent(3, 8))
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 300), TempoMap),
+                new Note((SevenBitNumber)90)
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 400), TempoMap)
+                    .SetLength(new MetricTimeSpan(0, 0, 0, 500), TempoMap),
+            };
+
+            CheckPlaybackDataChangesOnTheFly(
+                initialObjects: initialObjects,
+                actions: new[]
+                {
+                    new PlaybackChanger(50, (playback, collection) =>
+                    {
+                        collection.Remove(objectToRemove);
+                        CheckCurrentTime(playback, TimeSpan.FromMilliseconds(50), "after remove");
+                    }),
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
+                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(100)),
+                    new ReceivedEvent(new TimeSignatureEvent(3, 8), TimeSpan.FromMilliseconds(300)),
+                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)90, Note.DefaultVelocity), TimeSpan.FromMilliseconds(400)),
+                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)90, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(900)),
+                },
+                additionalChecks: playback => MidiAsserts.AreEqual(
+                    AddTimeSignatureChanges(TempoMap, (TimeSpan.FromMilliseconds(300), new TimeSignature(3, 8))),
+                    playback.TempoMap,
+                    "Invalid tempo map."));
+        }
+
+        [Retry(OnTheFlyChecksRetriesNumber)]
+        [Test]
+        public void CheckPlaybackDataChangesOnTheFly_Remove_TimeSignature_6()
+        {
+            var objectToRemove = new TimedEvent(new TimeSignatureEvent(3, 4))
+                .SetTime(new MetricTimeSpan(0, 0, 0, 200), TempoMap);
+
+            var initialObjects = new ITimedObject[]
+            {
+                new Note((SevenBitNumber)70).SetLength(new MetricTimeSpan(0, 0, 0, 100), TempoMap),
+                objectToRemove,
+                new TimedEvent(new TimeSignatureEvent(3, 8))
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 300), TempoMap),
+                new Note((SevenBitNumber)90)
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 400), TempoMap)
+                    .SetLength(new MetricTimeSpan(0, 0, 0, 500), TempoMap),
+            };
+
+            CheckPlaybackDataChangesOnTheFly(
+                initialObjects: initialObjects,
+                actions: new[]
+                {
+                    new PlaybackChanger(250, (playback, collection) =>
+                    {
+                        collection.Remove(objectToRemove);
+                        CheckCurrentTime(playback, TimeSpan.FromMilliseconds(250), "after remove");
+                    }),
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
+                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(100)),
+                    new ReceivedEvent(new TimeSignatureEvent(3, 4), TimeSpan.FromMilliseconds(200)),
+                    new ReceivedEvent(new TimeSignatureEvent(3, 8), TimeSpan.FromMilliseconds(300)),
+                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)90, Note.DefaultVelocity), TimeSpan.FromMilliseconds(400)),
+                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)90, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(900)),
+                },
+                additionalChecks: playback => MidiAsserts.AreEqual(
+                    AddTimeSignatureChanges(TempoMap, (TimeSpan.FromMilliseconds(300), new TimeSignature(3, 8))),
+                    playback.TempoMap,
+                    "Invalid tempo map."));
+        }
+
+        [Retry(OnTheFlyChecksRetriesNumber)]
+        [Test]
+        public void CheckPlaybackDataChangesOnTheFly_Remove_TimeSignature_7()
+        {
+            var objectToRemove = new TimedEvent(new TimeSignatureEvent(3, 4))
+                .SetTime(new MetricTimeSpan(0, 0, 0, 200), TempoMap);
+
+            var initialObjects = new ITimedObject[]
+            {
+                new Note((SevenBitNumber)70).SetLength(new MetricTimeSpan(0, 0, 0, 100), TempoMap),
+                objectToRemove,
+                new TimedEvent(new TimeSignatureEvent(3, 8))
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 300), TempoMap),
+                new Note((SevenBitNumber)90)
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 400), TempoMap)
+                    .SetLength(new MetricTimeSpan(0, 0, 0, 500), TempoMap),
+            };
+
+            CheckPlaybackDataChangesOnTheFly(
+                initialObjects: initialObjects,
+                actions: new[]
+                {
+                    new PlaybackChanger(300, (playback, collection) =>
+                    {
+                        collection.Remove(objectToRemove);
+                        CheckCurrentTime(playback, TimeSpan.FromMilliseconds(300), "after remove");
+                    }),
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
+                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(100)),
+                    new ReceivedEvent(new TimeSignatureEvent(3, 4), TimeSpan.FromMilliseconds(200)),
+                    new ReceivedEvent(new TimeSignatureEvent(3, 8), TimeSpan.FromMilliseconds(300)),
+                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)90, Note.DefaultVelocity), TimeSpan.FromMilliseconds(400)),
+                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)90, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(900)),
+                },
+                additionalChecks: playback => MidiAsserts.AreEqual(
+                    AddTimeSignatureChanges(TempoMap, (TimeSpan.FromMilliseconds(300), new TimeSignature(3, 8))),
+                    playback.TempoMap,
+                    "Invalid tempo map."));
+        }
+
+        [Retry(OnTheFlyChecksRetriesNumber)]
+        [Test]
+        public void CheckPlaybackDataChangesOnTheFly_Remove_TimeSignature_8()
+        {
+            var objectToRemove = new TimedEvent(new TimeSignatureEvent(3, 8))
+                .SetTime(new MetricTimeSpan(0, 0, 0, 300), TempoMap);
+
+            var initialObjects = new ITimedObject[]
+            {
+                new Note((SevenBitNumber)70).SetLength(new MetricTimeSpan(0, 0, 0, 100), TempoMap),
+                new TimedEvent(new TimeSignatureEvent(3, 4))
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 200), TempoMap),
+                objectToRemove,
+                new Note((SevenBitNumber)90)
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 400), TempoMap)
+                    .SetLength(new MetricTimeSpan(0, 0, 0, 500), TempoMap),
+            };
+
+            CheckPlaybackDataChangesOnTheFly(
+                initialObjects: initialObjects,
+                actions: new[]
+                {
+                    new PlaybackChanger(50, (playback, collection) =>
+                    {
+                        collection.Remove(objectToRemove);
+                        CheckCurrentTime(playback, TimeSpan.FromMilliseconds(50), "after remove");
+                    }),
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
+                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(100)),
+                    new ReceivedEvent(new TimeSignatureEvent(3, 4), TimeSpan.FromMilliseconds(200)),
+                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)90, Note.DefaultVelocity), TimeSpan.FromMilliseconds(400)),
+                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)90, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(900)),
+                },
+                additionalChecks: playback => MidiAsserts.AreEqual(
+                    AddTimeSignatureChanges(TempoMap, (TimeSpan.FromMilliseconds(200), new TimeSignature(3, 4))),
+                    playback.TempoMap,
+                    "Invalid tempo map."));
+        }
+
+        [Retry(OnTheFlyChecksRetriesNumber)]
+        [Test]
+        public void CheckPlaybackDataChangesOnTheFly_Remove_TimeSignature_9()
+        {
+            var objectToRemove = new TimedEvent(new TimeSignatureEvent(3, 8))
+                .SetTime(new MetricTimeSpan(0, 0, 0, 300), TempoMap);
+
+            var initialObjects = new ITimedObject[]
+            {
+                new Note((SevenBitNumber)70).SetLength(new MetricTimeSpan(0, 0, 0, 100), TempoMap),
+                new TimedEvent(new TimeSignatureEvent(3, 4))
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 200), TempoMap),
+                objectToRemove,
+                new Note((SevenBitNumber)90)
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 400), TempoMap)
+                    .SetLength(new MetricTimeSpan(0, 0, 0, 500), TempoMap),
+            };
+
+            CheckPlaybackDataChangesOnTheFly(
+                initialObjects: initialObjects,
+                actions: new[]
+                {
+                    new PlaybackChanger(220, (playback, collection) =>
+                    {
+                        collection.Remove(objectToRemove);
+                        CheckCurrentTime(playback, TimeSpan.FromMilliseconds(220), "after remove");
+                    }),
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
+                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(100)),
+                    new ReceivedEvent(new TimeSignatureEvent(3, 4), TimeSpan.FromMilliseconds(200)),
+                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)90, Note.DefaultVelocity), TimeSpan.FromMilliseconds(400)),
+                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)90, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(900)),
+                },
+                additionalChecks: playback => MidiAsserts.AreEqual(
+                    AddTimeSignatureChanges(TempoMap, (TimeSpan.FromMilliseconds(200), new TimeSignature(3, 4))),
+                    playback.TempoMap,
+                    "Invalid tempo map."));
+        }
+
+        [Retry(OnTheFlyChecksRetriesNumber)]
+        [Test]
+        public void CheckPlaybackDataChangesOnTheFly_Remove_TimeSignature_10()
+        {
+            var objectToRemove = new TimedEvent(new TimeSignatureEvent(3, 8))
+                .SetTime(new MetricTimeSpan(0, 0, 0, 300), TempoMap);
+
+            var initialObjects = new ITimedObject[]
+            {
+                new Note((SevenBitNumber)70).SetLength(new MetricTimeSpan(0, 0, 0, 100), TempoMap),
+                new TimedEvent(new TimeSignatureEvent(3, 4))
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 200), TempoMap),
+                objectToRemove,
+                new Note((SevenBitNumber)90)
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 400), TempoMap)
+                    .SetLength(new MetricTimeSpan(0, 0, 0, 500), TempoMap),
+            };
+
+            CheckPlaybackDataChangesOnTheFly(
+                initialObjects: initialObjects,
+                actions: new[]
+                {
+                    new PlaybackChanger(300, (playback, collection) =>
+                    {
+                        collection.Remove(objectToRemove);
+                        CheckCurrentTime(playback, TimeSpan.FromMilliseconds(300), "after remove");
+                    }),
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
+                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(100)),
+                    new ReceivedEvent(new TimeSignatureEvent(3, 4), TimeSpan.FromMilliseconds(200)),
+                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)90, Note.DefaultVelocity), TimeSpan.FromMilliseconds(400)),
+                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)90, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(900)),
+                },
+                additionalChecks: playback => MidiAsserts.AreEqual(
+                    AddTimeSignatureChanges(TempoMap, (TimeSpan.FromMilliseconds(200), new TimeSignature(3, 4))),
+                    playback.TempoMap,
+                    "Invalid tempo map."));
+        }
+
         #endregion
     }
 }
