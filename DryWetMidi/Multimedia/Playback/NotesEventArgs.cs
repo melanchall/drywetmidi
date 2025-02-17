@@ -12,9 +12,12 @@ namespace Melanchall.DryWetMidi.Multimedia
     {
         #region Constructor
 
-        internal NotesEventArgs(params Note[] notes)
+        internal NotesEventArgs(
+            Note[] notes,
+            Note[] originalNotes)
         {
             Notes = notes;
+            OriginalNotes = originalNotes;
         }
 
         #endregion
@@ -24,7 +27,9 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <summary>
         /// Gets notes collection that started or finished to play by a <see cref="Playback"/>.
         /// </summary>
-        public IEnumerable<Note> Notes { get; }
+        public ICollection<Note> Notes { get; }
+
+        public ICollection<Note> OriginalNotes { get; }
 
         #endregion
     }

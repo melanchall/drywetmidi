@@ -86,6 +86,9 @@ namespace Melanchall.DryWetMidi.Multimedia
         private ITimeSpan _playbackEnd;
         private TimeSpan _playbackEndMetric = MaxPlaybackTime;
 
+        private readonly List<Note> _notes = new List<Note>();
+        private readonly List<Note> _originalNotes = new List<Note>();
+
         private bool _hasBeenStarted;
 
         private readonly MidiClock _clock;
@@ -458,15 +461,21 @@ namespace Melanchall.DryWetMidi.Multimedia
                 var currentTime = _clock.CurrentTime;
 
                 var notes = new List<Note>();
+                var originalNotes = new List<Note>();
 
                 foreach (var noteMetadata in _activeNotesMetadata.Keys)
                 {
                     Note note;
-                    if (TryPlayNoteEvent(noteMetadata, false, currentTime, out note))
+                    Note originalNote;
+
+                    if (TryPlayNoteEvent(noteMetadata, false, currentTime, out note, out originalNote))
+                    {
                         notes.Add(note);
+                        originalNotes.Add(originalNote);
+                    }
                 }
 
-                OnNotesPlaybackFinished(notes.ToArray());
+                OnNotesPlaybackFinished(notes.ToArray(), originalNotes.ToArray());
 
                 _activeNotesMetadata.Clear();
             }
@@ -758,27 +767,34 @@ namespace Melanchall.DryWetMidi.Multimedia
 
             OutputDevice?.PrepareForEventsSending();
 
-            var notes = new List<Note>();
             var currentTime = _clock.CurrentTime;
 
+            _notes.Clear();
+            _originalNotes.Clear();
+
             Note note;
+            Note originalNote;
 
             foreach (var noteMetadata in offNotesMetadata)
             {
-                TryPlayNoteEvent(noteMetadata, false, currentTime, out note);
-                notes.Add(note);
+                TryPlayNoteEvent(noteMetadata, false, currentTime, out note, out originalNote);
+                _notes.Add(note);
+                _originalNotes.Add(originalNote);
             }
 
-            OnNotesPlaybackFinished(notes.ToArray());
-            notes.Clear();
+            OnNotesPlaybackFinished(_notes.ToArray(), _originalNotes.ToArray());
+            
+            _notes.Clear();
+            _originalNotes.Clear();
 
             foreach (var noteMetadata in onNotesMetadata)
             {
-                TryPlayNoteEvent(noteMetadata, true, currentTime, out note);
-                notes.Add(note);
+                TryPlayNoteEvent(noteMetadata, true, currentTime, out note, out originalNote);
+                _notes.Add(note);
+                _originalNotes.Add(originalNote);
             }
 
-            OnNotesPlaybackStarted(notes.ToArray());
+            OnNotesPlaybackStarted(_notes.ToArray(), _originalNotes.ToArray());
         }
 
         private ICollection<NotePlaybackEventMetadata> GetNotesMetadataAtCurrentTime()
@@ -843,16 +859,16 @@ namespace Melanchall.DryWetMidi.Multimedia
             RepeatStarted?.Invoke(this, EventArgs.Empty);
         }
 
-        private void OnNotesPlaybackStarted(params Note[] notes)
+        private void OnNotesPlaybackStarted(Note[] notes, Note[] originalNotes)
         {
             if (notes.Any())
-                NotesPlaybackStarted?.Invoke(this, new NotesEventArgs(notes));
+                NotesPlaybackStarted?.Invoke(this, new NotesEventArgs(notes, originalNotes));
         }
 
-        private void OnNotesPlaybackFinished(params Note[] notes)
+        private void OnNotesPlaybackFinished(Note[] notes, Note[] originalNotes)
         {
             if (notes.Any())
-                NotesPlaybackFinished?.Invoke(this, new NotesEventArgs(notes));
+                NotesPlaybackFinished?.Invoke(this, new NotesEventArgs(notes, originalNotes));
         }
 
         private void OnEventPlayed(MidiEvent midiEvent, object metadata)
@@ -890,14 +906,16 @@ namespace Melanchall.DryWetMidi.Multimedia
                         return;
 
                     Note note;
-                    if (TryPlayNoteEvent(playbackEvent, out note))
+                    Note originalNote;
+
+                    if (TryPlayNoteEvent(playbackEvent, out note, out originalNote))
                     {
                         if (note != null)
                         {
                             if (playbackEvent.Event is NoteOnEvent)
-                                OnNotesPlaybackStarted(note);
+                                OnNotesPlaybackStarted(new[] { note }, new[] { originalNote });
                             else
-                                OnNotesPlaybackFinished(note);
+                                OnNotesPlaybackFinished(new[] { note }, new[] { originalNote });
                         }
 
                         continue;
@@ -1001,19 +1019,46 @@ namespace Melanchall.DryWetMidi.Multimedia
             }
         }
 
-        private bool TryPlayNoteEvent(NotePlaybackEventMetadata noteMetadata, bool isNoteOnEvent, TimeSpan time, out Note note)
+        private bool TryPlayNoteEvent(
+            NotePlaybackEventMetadata noteMetadata,
+            bool isNoteOnEvent,
+            TimeSpan time,
+            out Note note,
+            out Note originalNote)
         {
-            return TryPlayNoteEvent(noteMetadata, null, isNoteOnEvent, time, out note);
+            return TryPlayNoteEvent(
+                noteMetadata,
+                null,
+                isNoteOnEvent,
+                time,
+                out note,
+                out originalNote);
         }
 
-        private bool TryPlayNoteEvent(PlaybackEvent playbackEvent, out Note note)
+        private bool TryPlayNoteEvent(
+            PlaybackEvent playbackEvent,
+            out Note note,
+            out Note originalNote)
         {
-            return TryPlayNoteEvent(playbackEvent.Metadata.Note, playbackEvent.Event, playbackEvent.Event is NoteOnEvent, playbackEvent.Time, out note);
+            return TryPlayNoteEvent(
+                playbackEvent.Metadata.Note,
+                playbackEvent.Event,
+                playbackEvent.Event is NoteOnEvent,
+                playbackEvent.Time,
+                out note,
+                out originalNote);
         }
 
-        private bool TryPlayNoteEvent(NotePlaybackEventMetadata noteMetadata, MidiEvent midiEvent, bool isNoteOnEvent, TimeSpan time, out Note note)
+        private bool TryPlayNoteEvent(
+            NotePlaybackEventMetadata noteMetadata,
+            MidiEvent midiEvent,
+            bool isNoteOnEvent,
+            TimeSpan time,
+            out Note note,
+            out Note originalNote)
         {
             note = null;
+            originalNote = null;
 
             if (noteMetadata == null)
                 return false;
@@ -1027,6 +1072,7 @@ namespace Melanchall.DryWetMidi.Multimedia
                 noteMetadata.SetCustomNotePlaybackData(notePlaybackData);
             }
 
+            originalNote = noteMetadata.RawNote;
             note = noteMetadata.RawNote;
 
             if (noteMetadata.IsCustomNotePlaybackDataSet)
@@ -1060,7 +1106,10 @@ namespace Melanchall.DryWetMidi.Multimedia
                 }
             }
             else
+            {
                 note = null;
+                originalNote = null;
+            }
 
             return true;
         }
