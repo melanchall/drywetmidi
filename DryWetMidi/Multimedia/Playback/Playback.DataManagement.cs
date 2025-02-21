@@ -83,6 +83,9 @@ namespace Melanchall.DryWetMidi.Multimedia
                 else
                     UpdateDuration();
 
+                UpdatePlaybackEndMetric();
+                UpdatePlaybackStartMetric();
+
                 if (!_playbackEvents.Any())
                 {
                     _playbackEventsPosition = null;
@@ -398,54 +401,52 @@ namespace Melanchall.DryWetMidi.Multimedia
             long tempoChangeMidiTime,
             TimeSpan? nextTempoTime)
         {
-            var tempoChangeTime = (TimeSpan)TimeConverter.ConvertTo<MetricTimeSpan>(tempoChangeMidiTime, TempoMap);
-            var firstNodeAfterTempoChange = _playbackEvents.GetLastNodeBelowThreshold(tempoChangeTime)
-                ?? _playbackEvents.GetMinimumNode();
-
-            while (firstNodeAfterTempoChange != null && firstNodeAfterTempoChange.Key <= tempoChangeTime)
-            {
-                firstNodeAfterTempoChange = _playbackEvents.GetNextNode(firstNodeAfterTempoChange);
-            }
-
-            if (firstNodeAfterTempoChange == null)
-            {
-                TempoMap.TempoLine.SetValue(tempoChangeMidiTime, newTempo);
-                return;
-            }
-
-            //
-
-            var nodeBeforeNextTempo = nextTempoTime != null
-                ? _playbackEvents.GetLastNodeBelowThreshold(nextTempoTime.Value)
-                : null;
-
-            //
-
             var scaleFactor = oldTempo.MicrosecondsPerQuarterNote / (double)newTempo.MicrosecondsPerQuarterNote;
 
+            var tempoChangeTime = (TimeSpan)TimeConverter.ConvertTo<MetricTimeSpan>(tempoChangeMidiTime, TempoMap);
+
             var shift = TimeSpan.Zero;
-            if (nextTempoTime != null && firstNodeAfterTempoChange.Key > nextTempoTime)
-                shift = nextTempoTime.Value - TimeSpan.FromTicks(tempoChangeTime.Ticks + MathUtilities.RoundToLong((nextTempoTime.Value.Ticks - tempoChangeTime.Ticks) / scaleFactor));
+            if (nextTempoTime != null)
+                shift = nextTempoTime.Value - (tempoChangeTime + ScaleTimeSpan(nextTempoTime.Value - tempoChangeTime, scaleFactor));
 
-            var node = firstNodeAfterTempoChange;
+            //
 
-            do
+            var firstNodeAfterTempoChange = _playbackEvents.GetFirstNodeAboveThreshold(tempoChangeTime);
+            if (firstNodeAfterTempoChange != null)
             {
-                if (nextTempoTime != null && node.Key > nextTempoTime)
-                    node.Key -= shift;
-                else
+                var node = firstNodeAfterTempoChange;
+
+                do
                 {
-                    var oldTime = node.Key;
-                    var newTime = node.Key = TimeSpan.FromTicks(tempoChangeTime.Ticks + MathUtilities.RoundToLong((node.Key.Ticks - tempoChangeTime.Ticks) / scaleFactor));
-                    shift = oldTime - newTime;
+                    if (nextTempoTime != null && node.Key > nextTempoTime)
+                        node.Key -= shift;
+                    else
+                        node.Key = tempoChangeTime + ScaleTimeSpan(node.Key - tempoChangeTime, scaleFactor);
+
+                    node.Value.Time.Time = node.Key;
                 }
-
-                node.Value.Time.Time = node.Key;
-
-                if (nodeBeforeNextTempo != null && node == nodeBeforeNextTempo)
-                    shift = nextTempoTime.Value - TimeSpan.FromTicks(tempoChangeTime.Ticks + MathUtilities.RoundToLong((nextTempoTime.Value.Ticks - tempoChangeTime.Ticks) / scaleFactor));
+                while ((node = _playbackEvents.GetNextNode(node)) != null);
             }
-            while ((node = _playbackEvents.GetNextNode(node)) != null);
+
+            //
+
+            // TODO: more tests on this
+            var firstSnapPointNodeAfterTempoChange = _snapPoints.GetFirstNodeAboveThreshold(tempoChangeTime);
+            if (firstSnapPointNodeAfterTempoChange != null)
+            {
+                var node = firstSnapPointNodeAfterTempoChange;
+
+                do
+                {
+                    if (nextTempoTime != null && node.Key > nextTempoTime)
+                        node.Key -= shift;
+                    else
+                        node.Key = tempoChangeTime + ScaleTimeSpan(node.Key - tempoChangeTime, scaleFactor);
+
+                    node.Value.Time = node.Key;
+                }
+                while ((node = _snapPoints.GetNextNode(node)) != null);
+            }
 
             //
 
@@ -455,7 +456,7 @@ namespace Melanchall.DryWetMidi.Multimedia
                 if (nextTempoTime != null && currentTime > nextTempoTime)
                     currentTime -= shift;
                 else
-                    currentTime = TimeSpan.FromTicks(tempoChangeTime.Ticks + MathUtilities.RoundToLong((currentTime.Ticks - tempoChangeTime.Ticks) / scaleFactor));
+                    currentTime = tempoChangeTime + ScaleTimeSpan(currentTime - tempoChangeTime, scaleFactor);
 
                 _clock.SetCurrentTime(currentTime);
             }
@@ -463,6 +464,11 @@ namespace Melanchall.DryWetMidi.Multimedia
             //
 
             TempoMap.TempoLine.SetValue(tempoChangeMidiTime, newTempo);
+        }
+
+        private TimeSpan ScaleTimeSpan(TimeSpan timeSpan, double scaleFactor)
+        {
+            return TimeSpan.FromTicks(MathUtilities.RoundToLong(timeSpan.Ticks / scaleFactor));
         }
 
         private void TryRemoveTimeSignatureEvent(

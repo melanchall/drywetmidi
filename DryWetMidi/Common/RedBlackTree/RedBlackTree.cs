@@ -259,35 +259,11 @@ namespace Melanchall.DryWetMidi.Common
             RedBlackTreeNode<TKey, TValue> node)
             where TValueKey : IComparable<TValueKey>
         {
-            if (IsVoid(node))
-                return null;
-
-            while (true)
+            while (!IsVoid(node))
             {
-                RedBlackTreeNode<TKey, TValue> nextNode = null;
-                if (threshold.CompareTo(keySelector(node)) < 0)
-                {
-                    if (IsVoid(node.Left))
-                    {
-                        var prev = GetPreviousNode(node);
-                        while (!IsVoid(prev) && keySelector(prev).CompareTo(threshold) == 0)
-                            prev = GetPreviousNode(prev);
+                var compareResult = threshold.CompareTo(keySelector(node));
 
-                        return IsVoid(prev)
-                            ? null
-                            : prev;
-                    }
-
-                    nextNode = node.Left;
-                }
-                else if (threshold.CompareTo(keySelector(node)) > 0)
-                {
-                    if (IsVoid(node.Right))
-                        return node;
-
-                    nextNode = node.Right;
-                }
-                else
+                if (compareResult == 0 || (compareResult < 0 && IsVoid(node.Left)))
                 {
                     var prev = GetPreviousNode(node);
                     while (!IsVoid(prev) && keySelector(prev).CompareTo(threshold) == 0)
@@ -298,10 +274,62 @@ namespace Melanchall.DryWetMidi.Common
                         : prev;
                 }
 
-                node = nextNode;
-                if (IsVoid(node))
-                    return null;
+                if (compareResult < 0)
+                    node = node.Left;
+                else if (!IsVoid(node.Right))
+                    node = node.Right;
+                else
+                    return node;
             }
+
+            return null;
+        }
+
+        public RedBlackTreeNode<TKey, TValue> GetFirstNodeAboveThreshold(TKey threshold)
+        {
+            return GetFirstNodeAboveThreshold(
+                threshold,
+                node => node.Key);
+        }
+
+        public RedBlackTreeNode<TKey, TValue> GetFirstNodeAboveThreshold<TValueKey>(
+            TValueKey threshold,
+            Func<RedBlackTreeNode<TKey, TValue>, TValueKey> keySelector)
+            where TValueKey : IComparable<TValueKey>
+        {
+            return GetFirstNodeAboveThreshold(threshold, keySelector, _root);
+        }
+
+        public RedBlackTreeNode<TKey, TValue> GetFirstNodeAboveThreshold<TValueKey>(
+            TValueKey threshold,
+            Func<RedBlackTreeNode<TKey, TValue>, TValueKey> keySelector,
+            RedBlackTreeNode<TKey, TValue> node)
+            where TValueKey : IComparable<TValueKey>
+        {
+            while (!IsVoid(node))
+            {
+                var compareResult = threshold.CompareTo(keySelector(node));
+
+                if (compareResult == 0 || (compareResult > 0 && IsVoid(node.Right)))
+                {
+                    var next = GetNextNode(node);
+                    while (!IsVoid(next) && keySelector(next).CompareTo(threshold) == 0)
+                        next = GetNextNode(next);
+
+                    return IsVoid(next)
+                        ? null
+                        : next;
+                }
+
+                if (compareResult > 0)
+                    node = node.Right;
+                else if (!IsVoid(node.Left))
+                    node = node.Left;
+                else
+                    return node;
+            }
+
+            return null;
         }
 
         private RedBlackTreeNode<TKey, TValue> NodeOrNull(RedBlackTreeNode<TKey, TValue> node)

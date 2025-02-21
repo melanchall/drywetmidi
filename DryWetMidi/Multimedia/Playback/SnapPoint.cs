@@ -5,7 +5,7 @@ namespace Melanchall.DryWetMidi.Multimedia
     /// <summary>
     /// Snap point for <see cref="Playback"/>.
     /// </summary>
-    public class SnapPoint
+    public class SnapPoint : IEquatable<SnapPoint>
     {
         #region Constructor
 
@@ -24,16 +24,16 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// </summary>
         public bool IsEnabled { get; set; } = true;
 
-        /// <summary>
-        /// Gets the time of the current <see cref="SnapPoint"/>.
-        /// </summary>
-        public TimeSpan Time { get; }
+        internal TimeSpan Time { get; set; }
 
-        /// <summary>
-        /// Gets an instance of the <see cref="SnapPointsGroup"/> the current <see cref="SnapPoint"/>
-        /// belongs to; or <c>null</c> if the snap point doesn't belong to a group.
-        /// </summary>
-        public SnapPointsGroup SnapPointsGroup { get; internal set; }
+        #endregion
+
+        #region IEquatable<SnapPoint>
+
+        public bool Equals(SnapPoint other)
+        {
+            return object.ReferenceEquals(this, other);
+        }
 
         #endregion
     }

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System;
 using Melanchall.DryWetMidi.Common;
-using System.Drawing;
 
 namespace Melanchall.DryWetMidi.Tests.Common
 {
@@ -271,12 +270,65 @@ namespace Melanchall.DryWetMidi.Tests.Common
             Check(10, 5, new[] { 5, 4, 4, 4, 3, 2, 2, 2, 1, 1 });
         }
 
+        // TODO: Hmm... what?
         [Test]
         public void GetLastNodeBelowThreshold_InMiddle()
         {
             var tree = new RedBlackTree<int, int>(new[] { 0, 5500 }, d => d);
 
             var result = tree.GetLastNodeBelowThreshold(700);
+        }
+
+        [Test]
+        public void GetFirstNodeAboveThreshold_NoRepeats([Values(1, 2, 4, 8, 16, 32, 64, 128)] int count)
+        {
+            var data = Enumerable.Range(0, count).ToArray();
+            var tree = new RedBlackTree<int, int>(data, d => d);
+
+            for (var i = 0; i < count; i++)
+            {
+                var result = tree.GetFirstNodeAboveThreshold(i);
+                if (i == count - 1)
+                    Assert.IsNull(result, $"Invalid result for {i}.");
+                else
+                    Assert.AreEqual(i + 1, result.Key, $"Invalid result for {i}.");
+            }
+        }
+
+        [Test]
+        public void GetFirstNodeAboveThreshold_Repeats()
+        {
+            var tree = new RedBlackTree<int, int>(new[] { 1, 1, 2, 2, 2, 3, 4, 4, 4, 5 }, d => d);
+
+            var result = tree.GetFirstNodeAboveThreshold(5);
+            Assert.IsNull(result, "Invalid result for 5.");
+
+            void Check(int threshold, int expectedResult, int[] expectedNextValues)
+            {
+                var node = tree.GetFirstNodeAboveThreshold(threshold);
+                var nextValues = EnumerateViaGetNextNode(tree, node).ToArray();
+                Assert.AreEqual(expectedResult, node.Value, $"Invalid result for {threshold}.");
+                CollectionAssert.AreEqual(
+                    expectedNextValues,
+                    nextValues,
+                    $"Invalid next values list for {threshold}.");
+            }
+
+            Check(4, 5, new[] { 5 });
+            Check(3, 4, new[] { 4, 4, 4, 5 });
+            Check(2, 3, new[] { 3, 4, 4, 4, 5 });
+            Check(1, 2, new[] { 2, 2, 2, 3, 4, 4, 4, 5 });
+            Check(0, 1, new[] { 1, 1, 2, 2, 2, 3, 4, 4, 4, 5 });
+            Check(-5, 1, new[] { 1, 1, 2, 2, 2, 3, 4, 4, 4, 5 });
+        }
+
+        // TODO: Hmm... what?
+        [Test]
+        public void GetFirstNodeAboveThreshold_InMiddle()
+        {
+            var tree = new RedBlackTree<int, int>(new[] { 0, 5500 }, d => d);
+
+            var result = tree.GetFirstNodeAboveThreshold(700);
         }
 
         private static IEnumerable<TValue> EnumerateViaGetNextNode<TKey, TValue>(RedBlackTree<TKey, TValue> tree, RedBlackTreeNode<TKey, TValue> node)

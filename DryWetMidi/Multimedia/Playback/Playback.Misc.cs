@@ -83,6 +83,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         private long _durationInTicks;
 
         private ITimeSpan _playbackStart;
+        private TimeSpan _playbackStartMetric = MinPlaybackTime;
         private ITimeSpan _playbackEnd;
         private TimeSpan _playbackEndMetric = MaxPlaybackTime;
 
@@ -93,7 +94,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         private readonly MidiClock _clock;
 
-        private readonly ConcurrentDictionary<NotePlaybackEventMetadata, byte> _activeNotesMetadata = new ConcurrentDictionary<NotePlaybackEventMetadata, byte>();
+        private readonly ConcurrentDictionary<NoteId, NotePlaybackEventMetadata> _activeNotesMetadata = new ConcurrentDictionary<NoteId, NotePlaybackEventMetadata>();
         private readonly NotePlaybackEventMetadataCollection _notesMetadata = new NotePlaybackEventMetadataCollection();
 
         private bool _disposed = false;
@@ -136,8 +137,6 @@ namespace Melanchall.DryWetMidi.Multimedia
             InitializeDataTracking();
             InitializeData(timedObjects, TempoMap, playbackSettings.NoteDetectionSettings ?? new NoteDetectionSettings());
             UpdateDuration();
-
-            Snapping = new PlaybackSnapping(_playbackEvents, TempoMap);
         }
 
         /// <summary>
@@ -259,11 +258,6 @@ namespace Melanchall.DryWetMidi.Multimedia
         }
 
         /// <summary>
-        /// Gets an object to manage playback's snap points.
-        /// </summary>
-        public PlaybackSnapping Snapping { get; }
-
-        /// <summary>
         /// Gets or sets callback used to process note to be played.
         /// </summary>
         /// <example>
@@ -336,7 +330,11 @@ namespace Melanchall.DryWetMidi.Multimedia
         public ITimeSpan PlaybackStart
         {
             get { return _playbackStart; }
-            set { _playbackStart = value; }
+            set
+            {
+                _playbackStart = value;
+                UpdatePlaybackStartMetric();
+            }
         }
 
         /// <summary>
@@ -354,9 +352,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             set
             {
                 _playbackEnd = value;
-                _playbackEndMetric = _playbackEnd != null
-                    ? (TimeSpan)TimeConverter.ConvertTo<MetricTimeSpan>(_playbackEnd, TempoMap)
-                    : MaxPlaybackTime;
+                UpdatePlaybackEndMetric();
             }
         }
 
@@ -456,29 +452,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
             _clock.Stop();
 
-            if (InterruptNotesOnStop)
-            {
-                var currentTime = _clock.CurrentTime;
-
-                var notes = new List<Note>();
-                var originalNotes = new List<Note>();
-
-                foreach (var noteMetadata in _activeNotesMetadata.Keys)
-                {
-                    Note note;
-                    Note originalNote;
-
-                    if (TryPlayNoteEvent(noteMetadata, false, currentTime, out note, out originalNote))
-                    {
-                        notes.Add(note);
-                        originalNotes.Add(originalNote);
-                    }
-                }
-
-                OnNotesPlaybackFinished(notes.ToArray(), originalNotes.ToArray());
-
-                _activeNotesMetadata.Clear();
-            }
+            InterruptActiveNotes();
 
             OnStopped();
         }
@@ -514,7 +488,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         {
             EnsureIsNotDisposed();
 
-            var snapPoint = Snapping.GetNextSnapPoint(TimeSpan.Zero);
+            var snapPoint = GetNextSnapPoint(TimeSpan.Zero);
             return TryToMoveToSnapPoint(snapPoint);
         }
 
@@ -530,7 +504,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         {
             EnsureIsNotDisposed();
 
-            var snapPoint = Snapping.GetNextSnapPoint(TimeSpan.Zero, data);
+            var snapPoint = GetNextSnapPoint(TimeSpan.Zero, data);
             return TryToMoveToSnapPoint(snapPoint);
         }
 
@@ -550,7 +524,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             ThrowIfArgument.IsNull(nameof(snapPointsGroup), snapPointsGroup);
             EnsureIsNotDisposed();
 
-            var snapPoint = Snapping.GetPreviousSnapPoint(_clock.CurrentTime, snapPointsGroup);
+            var snapPoint = GetPreviousSnapPoint(_clock.CurrentTime, snapPointsGroup);
             return TryToMoveToSnapPoint(snapPoint);
         }
 
@@ -566,7 +540,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         {
             EnsureIsNotDisposed();
 
-            var snapPoint = Snapping.GetPreviousSnapPoint(_clock.CurrentTime);
+            var snapPoint = GetPreviousSnapPoint(_clock.CurrentTime);
             return TryToMoveToSnapPoint(snapPoint);
         }
 
@@ -583,7 +557,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         {
             EnsureIsNotDisposed();
 
-            var snapPoint = Snapping.GetPreviousSnapPoint(_clock.CurrentTime, data);
+            var snapPoint = GetPreviousSnapPoint(_clock.CurrentTime, data);
             return TryToMoveToSnapPoint(snapPoint);
         }
 
@@ -603,7 +577,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             ThrowIfArgument.IsNull(nameof(snapPointsGroup), snapPointsGroup);
             EnsureIsNotDisposed();
 
-            var snapPoint = Snapping.GetNextSnapPoint(_clock.CurrentTime, snapPointsGroup);
+            var snapPoint = GetNextSnapPoint(_clock.CurrentTime, snapPointsGroup);
             return TryToMoveToSnapPoint(snapPoint);
         }
 
@@ -619,7 +593,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         {
             EnsureIsNotDisposed();
 
-            var snapPoint = Snapping.GetNextSnapPoint(_clock.CurrentTime);
+            var snapPoint = GetNextSnapPoint(_clock.CurrentTime);
             return TryToMoveToSnapPoint(snapPoint);
         }
 
@@ -635,7 +609,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         {
             EnsureIsNotDisposed();
 
-            var snapPoint = Snapping.GetNextSnapPoint(_clock.CurrentTime, data);
+            var snapPoint = GetNextSnapPoint(_clock.CurrentTime, data);
             return TryToMoveToSnapPoint(snapPoint);
         }
 
@@ -729,6 +703,33 @@ namespace Melanchall.DryWetMidi.Multimedia
             return Enumerable.Empty<TimedEvent>();
         }
 
+        private void InterruptActiveNotes()
+        {
+            if (!InterruptNotesOnStop)
+                return;
+
+            var currentTime = _clock.CurrentTime;
+
+            var notes = new List<Note>();
+            var originalNotes = new List<Note>();
+
+            foreach (var noteMetadata in _activeNotesMetadata.Values)
+            {
+                Note note;
+                Note originalNote;
+
+                if (TryPlayNoteEvent(noteMetadata, false, currentTime, out note, out originalNote))
+                {
+                    notes.Add(note);
+                    originalNotes.Add(originalNote);
+                }
+            }
+
+            OnNotesPlaybackFinished(notes.ToArray(), originalNotes.ToArray());
+
+            _activeNotesMetadata.Clear();
+        }
+
         private void UpdateDuration()
         {
             var maximumNode = _playbackEvents.GetMaximumNode();
@@ -744,12 +745,30 @@ namespace Melanchall.DryWetMidi.Multimedia
             _durationInTicks = lastPlaybackEvent?.RawTime ?? 0;
         }
 
+        private void UpdatePlaybackEndMetric()
+        {
+            _playbackEndMetric = _playbackEnd != null
+                ? (TimeSpan)TimeConverter.ConvertTo<MetricTimeSpan>(_playbackEnd, TempoMap)
+                : MaxPlaybackTime;
+        }
+
+        private void UpdatePlaybackStartMetric()
+        {
+            _playbackStartMetric = _playbackStart != null
+                ? (TimeSpan)TimeConverter.ConvertTo<MetricTimeSpan>(_playbackStart, TempoMap)
+                : MinPlaybackTime;
+        }
+
         private bool TryToMoveToSnapPoint(SnapPoint snapPoint)
         {
-            if (snapPoint != null)
-                MoveToTime((MetricTimeSpan)snapPoint.Time);
+            if (snapPoint == null ||
+                snapPoint.Time < _playbackStartMetric ||
+                snapPoint.Time > _playbackEndMetric ||
+                snapPoint.Time > _duration)
+                return false;
 
-            return snapPoint != null;
+            MoveToTime((MetricTimeSpan)snapPoint.Time);
+            return true;
         }
 
         private void StopStartNotes()
@@ -757,13 +776,14 @@ namespace Melanchall.DryWetMidi.Multimedia
             if (!TrackNotes)
                 return;
 
+            // TODO: simplify getting NoteId
             var notesToPlay = GetNotesMetadataAtCurrentTime();
             var onNotesMetadata = notesToPlay.Any()
-                ? notesToPlay.Where(n => !_activeNotesMetadata.Keys.Any(nn => new NoteId(nn.RawNote.Channel, nn.RawNote.NoteNumber).Equals(new NoteId(n.RawNote.Channel, n.RawNote.NoteNumber)))).ToArray()
+                ? notesToPlay.Where(n => !_activeNotesMetadata.Values.Any(nn => new NoteId(nn.RawNote.Channel, nn.RawNote.NoteNumber).Equals(new NoteId(n.RawNote.Channel, n.RawNote.NoteNumber)))).ToArray()
                 : new NotePlaybackEventMetadata[0];
             var offNotesMetadata = notesToPlay.Any()
-                ? _activeNotesMetadata.Keys.Where(n => !notesToPlay.Any(nn => new NoteId(nn.RawNote.Channel, nn.RawNote.NoteNumber).Equals(new NoteId(n.RawNote.Channel, n.RawNote.NoteNumber)))).ToArray()
-                : _activeNotesMetadata.Keys;
+                ? _activeNotesMetadata.Values.Where(n => !notesToPlay.Any(nn => new NoteId(nn.RawNote.Channel, nn.RawNote.NoteNumber).Equals(new NoteId(n.RawNote.Channel, n.RawNote.NoteNumber)))).ToArray()
+                : _activeNotesMetadata.Values;
 
             OutputDevice?.PrepareForEventsSending();
 
@@ -935,6 +955,7 @@ namespace Melanchall.DryWetMidi.Multimedia
                 if (!Loop)
                 {
                     _clock.StopInternally();
+                    InterruptActiveNotes();
                     OnFinished();
                     return;
                 }
@@ -1097,12 +1118,14 @@ namespace Melanchall.DryWetMidi.Multimedia
                 var timedObjectWithMetadata = isNoteOnEvent ? noteMetadata.RawNote.TimedNoteOnEvent : noteMetadata.RawNote.TimedNoteOffEvent;
                 PlayEvent(midiEvent, (timedObjectWithMetadata as IMetadata)?.Metadata);
 
+                var noteId = GetNoteId((NoteEvent)midiEvent);
+
                 if (midiEvent is NoteOnEvent)
-                    _activeNotesMetadata.TryAdd(noteMetadata, 0);
+                    _activeNotesMetadata.TryAdd(noteId, noteMetadata);
                 else
                 {
-                    byte value;
-                    _activeNotesMetadata.TryRemove(noteMetadata, out value);
+                    NotePlaybackEventMetadata value;
+                    _activeNotesMetadata.TryRemove(noteId, out value);
                 }
             }
             else

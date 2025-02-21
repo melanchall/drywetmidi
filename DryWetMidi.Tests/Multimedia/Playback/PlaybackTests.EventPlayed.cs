@@ -58,6 +58,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
                     return new EventToSend(midiEvent, TimeSpan.FromMilliseconds(delay));
                 })
+                .OrderBy(e => e.Event.EventType == MidiEventType.NoteOn ? -1 : (int)e.Event.EventType)
                 .ToArray();
 
             CheckEventPlayedEvent(

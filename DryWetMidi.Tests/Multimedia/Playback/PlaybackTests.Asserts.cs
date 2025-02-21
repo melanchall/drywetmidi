@@ -80,8 +80,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
                     var actionsExecutedCount = 0;
 
-                    stopwatch.Start();
                     playback.Start();
+                    stopwatch.Start();
 
                     afterStart?.Invoke(playback);
 
@@ -97,7 +97,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                         actionsExecutedCount++;
                     }
 
-                    var timeout = TimeSpan.FromSeconds(10);
+                    var timeout = TimeSpan.FromSeconds(30);
                     var stopped = WaitOperations.Wait(() => !playback.IsRunning, timeout);
                     Assert.IsTrue(stopped, $"Playback is running after {timeout}.");
 
@@ -118,11 +118,6 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     additionalChecks?.Invoke(playback);
                 }
             }
-        }
-
-        private IEnumerable<SnapPoint> GetActiveSnapPoints(Playback playback)
-        {
-            return playback.Snapping.GetActiveSnapPoints().ToList();
         }
 
         private void CheckPlaybackEvents(
@@ -172,6 +167,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             }
         }
 
+        // TODO: eliminate
         private void CheckPlayback(
             ICollection<EventToSend> eventsToSend,
             double speed,
@@ -252,115 +248,6 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             }
 
             CompareSentReceivedEvents(sentEvents.Take(expectedTimes.Count).ToList(), receivedEvents.Take(expectedTimes.Count).ToList(), expectedTimes);
-        }
-
-        private void CheckPlaybackStop(
-            ICollection<EventToSend> eventsToSend,
-            ICollection<EventToSend> eventsWillBeSent,
-            TimeSpan stopAfter,
-            TimeSpan stopPeriod,
-            PlaybackAction setupPlayback,
-            PlaybackAction afterStart,
-            PlaybackAction afterStop,
-            PlaybackAction afterResume,
-            IEnumerable<Tuple<TimeSpan, PlaybackAction>> runningAfterResume = null,
-            ICollection<TimeSpan> explicitExpectedTimes = null,
-            double speed = 1.0,
-            ICollection<ReceivedEvent> expectedReceivedEvents = null,
-            ICollection<ReceivedEvent> expectedPlayedEvents = null)
-        {
-            var playbackContext = new PlaybackContext();
-
-            var playedEvents = new List<ReceivedEvent>();
-            var receivedEvents = playbackContext.ReceivedEvents;
-            var sentEvents = playbackContext.SentEvents;
-            var stopwatch = playbackContext.Stopwatch;
-            var tempoMap = playbackContext.TempoMap;
-
-            var eventsForPlayback = GetEventsForPlayback(eventsToSend, tempoMap);
-            var expectedTimes = playbackContext.ExpectedTimes;
-
-            if (explicitExpectedTimes != null || expectedReceivedEvents != null || expectedPlayedEvents != null)
-                expectedTimes.AddRange(explicitExpectedTimes ?? (expectedReceivedEvents?.Select(e => e.Time) ?? expectedPlayedEvents.Select(e => e.Time)));
-            else
-            {
-                var currentTime = TimeSpan.Zero;
-
-                foreach (var eventWillBeSent in eventsWillBeSent)
-                {
-                    currentTime += eventWillBeSent.Delay;
-                    var scaledCurrentTime = ScaleTimeSpan(currentTime, 1.0 / speed);
-                    expectedTimes.Add(currentTime > stopAfter ? scaledCurrentTime + stopPeriod : scaledCurrentTime);
-                }
-            }
-
-            using (var outputDevice = OutputDevice.GetByName(SendReceiveUtilities.DeviceToTestOnName))
-            {
-                SendReceiveUtilities.WarmUpDevice(outputDevice);
-                outputDevice.EventSent += (_, e) => sentEvents.Add(new SentEvent(e.Event, stopwatch.Elapsed));
-
-                using (var playback = eventsForPlayback.GetPlayback(tempoMap, outputDevice))
-                {
-                    playback.InterruptNotesOnStop = false;
-                    playback.Speed = speed;
-                    setupPlayback(playbackContext, playback);
-
-                    if (expectedPlayedEvents != null)
-                        playback.EventPlayed += (_, e) => playedEvents.Add(new ReceivedEvent(e.Event, stopwatch.Elapsed));
-
-                    using (var inputDevice = InputDevice.GetByName(SendReceiveUtilities.DeviceToTestOnName))
-                    {
-                        inputDevice.EventReceived += (_, e) =>
-                        {
-                            lock (playbackContext.ReceivedEventsLockObject)
-                            {
-                                receivedEvents.Add(new ReceivedEvent(e.Event, stopwatch.Elapsed));
-                            }
-                        };
-                        inputDevice.StartEventsListening();
-                        stopwatch.Start();
-                        playback.Start();
-
-                        afterStart(playbackContext, playback);
-
-                        WaitOperations.Wait(() => stopwatch.Elapsed >= stopAfter);
-                        playback.Stop();
-
-                        afterStop(playbackContext, playback);
-
-                        WaitOperations.Wait(stopPeriod);
-                        playback.Start();
-
-                        afterResume(playbackContext, playback);
-
-                        if (runningAfterResume != null)
-                        {
-                            foreach (var check in runningAfterResume)
-                            {
-                                WaitOperations.Wait(check.Item1);
-                                check.Item2(playbackContext, playback);
-                            }
-                        }
-
-                        var timeout = expectedTimes.Last() + SendReceiveUtilities.MaximumEventSendReceiveDelay;
-                        var areEventsReceived = WaitOperations.Wait(() => receivedEvents.Count == expectedTimes.Count, timeout);
-                        Assert.IsTrue(areEventsReceived, $"Events are not received for timeout {timeout}.");
-
-                        stopwatch.Stop();
-
-                        var playbackStopped = WaitOperations.Wait(() => !playback.IsRunning, SendReceiveUtilities.MaximumEventSendReceiveDelay);
-                        Assert.IsTrue(playbackStopped, "Playback is running after completed.");
-                    }
-                }
-            }
-
-            CompareSentReceivedEvents(sentEvents, receivedEvents, expectedTimes);
-
-            if (expectedReceivedEvents != null)
-                CompareReceivedEvents(receivedEvents, expectedReceivedEvents.ToList());
-
-            if (expectedPlayedEvents != null)
-                CompareReceivedEvents(playedEvents, expectedPlayedEvents.ToList());
         }
 
         private static IEnumerable<MidiEvent> GetEventsForPlayback(IEnumerable<EventToSend> eventsToSend, TempoMap tempoMap)

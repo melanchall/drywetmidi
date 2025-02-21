@@ -13,6 +13,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
     {
         #region Nested classes
 
+        // TODO: rename
         private sealed class PlaybackChangerBase
         {
             public PlaybackChangerBase(

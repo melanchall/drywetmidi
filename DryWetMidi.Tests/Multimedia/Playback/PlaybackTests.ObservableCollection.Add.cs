@@ -1,6 +1,7 @@
 ﻿using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
+using Melanchall.DryWetMidi.Multimedia;
 using Melanchall.DryWetMidi.Tests.Utilities;
 using NUnit.Framework;
 using System;
@@ -3079,6 +3080,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var objectToAdd = new TimedEvent(new SetTempoEvent(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 2))
                 .SetTime(new MetricTimeSpan(0, 0, 0, 700), TempoMap);
 
+            SnapPoint snapPoint = null;
+
             CheckPlaybackDataChangesOnTheFly(
                 initialObjects: initialObjects,
                 actions: new[]
@@ -3093,10 +3096,14 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new ReceivedEvent(new TextEvent("C"), TimeSpan.FromMilliseconds(600)),
                     new ReceivedEvent(new SetTempoEvent(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 2), TimeSpan.FromMilliseconds(700)),
                 },
+                setupPlayback: playback =>
+                    snapPoint = playback.AddSnapPoint(new MetricTimeSpan(0, 0, 0, 400)),
                 additionalChecks: playback => MidiAsserts.AreEqual(
                     AddTempoChanges(TempoMap, (TimeSpan.FromMilliseconds(700), new Tempo(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 2))),
                     playback.TempoMap,
                     "Invalid tempo map."));
+
+            Assert.AreEqual(TimeSpan.FromMilliseconds(400), snapPoint.Time, "Invalid snap point time.");
         }
 
         [Retry(RetriesNumber)]
@@ -3116,6 +3123,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var objectToAdd = new TimedEvent(new SetTempoEvent(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 2))
                 .SetTime(new MetricTimeSpan(0, 0, 0, 700), TempoMap);
 
+            SnapPoint snapPoint = null;
+
             CheckPlaybackDataChangesOnTheFly(
                 initialObjects: initialObjects,
                 actions: new[]
@@ -3130,10 +3139,14 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new ReceivedEvent(new TextEvent("C"), TimeSpan.FromMilliseconds(600)),
                     new ReceivedEvent(new SetTempoEvent(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 2), TimeSpan.FromMilliseconds(700)),
                 },
+                setupPlayback: playback =>
+                    snapPoint = playback.AddSnapPoint(new MetricTimeSpan(0, 0, 0, 600)),
                 additionalChecks: playback => MidiAsserts.AreEqual(
                     AddTempoChanges(TempoMap, (TimeSpan.FromMilliseconds(700), new Tempo(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 2))),
                     playback.TempoMap,
                     "Invalid tempo map."));
+
+            Assert.AreEqual(TimeSpan.FromMilliseconds(600), snapPoint.Time, "Invalid snap point time.");
         }
 
         [Retry(RetriesNumber)]
@@ -3153,6 +3166,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var objectToAdd = new TimedEvent(new SetTempoEvent(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 2))
                 .SetTime(new MetricTimeSpan(0, 0, 0, 500), TempoMap);
 
+            SnapPoint snapPoint = null;
+
             CheckPlaybackDataChangesOnTheFly(
                 initialObjects: initialObjects,
                 actions: new[]
@@ -3167,10 +3182,14 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new ReceivedEvent(new SetTempoEvent(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 2), TimeSpan.FromMilliseconds(500)),
                     new ReceivedEvent(new TextEvent("C"), TimeSpan.FromMilliseconds(550)),
                 },
+                setupPlayback: playback =>
+                    snapPoint = playback.AddSnapPoint(new MetricTimeSpan(0, 0, 0, 600)),
                 additionalChecks: playback => MidiAsserts.AreEqual(
                     AddTempoChanges(TempoMap, (TimeSpan.FromMilliseconds(500), new Tempo(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 2))),
                     playback.TempoMap,
                     "Invalid tempo map."));
+
+            Assert.AreEqual(TimeSpan.FromMilliseconds(550), snapPoint.Time, "Invalid snap point time.");
         }
 
         [Retry(RetriesNumber)]
@@ -3190,6 +3209,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var objectToAdd = new TimedEvent(new SetTempoEvent(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 2))
                 .SetTime(new MetricTimeSpan(0, 0, 0, 400), TempoMap);
 
+            SnapPoint snapPoint = null;
+
             CheckPlaybackDataChangesOnTheFly(
                 initialObjects: initialObjects,
                 actions: new[]
@@ -3204,10 +3225,14 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new ReceivedEvent(new SetTempoEvent(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 2), TimeSpan.FromMilliseconds(400)),
                     new ReceivedEvent(new TextEvent("C"), TimeSpan.FromMilliseconds(500)),
                 },
+                setupPlayback: playback =>
+                    snapPoint = playback.AddSnapPoint(new MetricTimeSpan(0, 0, 0, 600)),
                 additionalChecks: playback => MidiAsserts.AreEqual(
                     AddTempoChanges(TempoMap, (TimeSpan.FromMilliseconds(400), new Tempo(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 2))),
                     playback.TempoMap,
                     "Invalid tempo map."));
+
+            Assert.AreEqual(TimeSpan.FromMilliseconds(500), snapPoint.Time, "Invalid snap point time.");
         }
 
         [Retry(RetriesNumber)]
@@ -3227,6 +3252,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var objectToAdd = new TimedEvent(new SetTempoEvent(SetTempoEvent.DefaultMicrosecondsPerQuarterNote * 2))
                 .SetTime(new MetricTimeSpan(0, 0, 0, 400), TempoMap);
 
+            SnapPoint snapPoint = null;
+
             CheckPlaybackDataChangesOnTheFly(
                 initialObjects: initialObjects,
                 actions: new[]
@@ -3241,10 +3268,14 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new ReceivedEvent(new SetTempoEvent(SetTempoEvent.DefaultMicrosecondsPerQuarterNote * 2), TimeSpan.FromMilliseconds(400)),
                     new ReceivedEvent(new TextEvent("C"), TimeSpan.FromMilliseconds(800)),
                 },
+                setupPlayback: playback =>
+                    snapPoint = playback.AddSnapPoint(new MetricTimeSpan(0, 0, 0, 600)),
                 additionalChecks: playback => MidiAsserts.AreEqual(
                     AddTempoChanges(TempoMap, (TimeSpan.FromMilliseconds(400), new Tempo(SetTempoEvent.DefaultMicrosecondsPerQuarterNote * 2))),
                     playback.TempoMap,
                     "Invalid tempo map."));
+
+            Assert.AreEqual(TimeSpan.FromMilliseconds(800), snapPoint.Time, "Invalid snap point time.");
         }
 
         [Retry(RetriesNumber)]
@@ -3264,6 +3295,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var objectToAdd = new TimedEvent(new SetTempoEvent(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 2))
                 .SetTime(new MetricTimeSpan(0, 0, 0, 300), TempoMap);
 
+            SnapPoint snapPoint = null;
+
             CheckPlaybackDataChangesOnTheFly(
                 initialObjects: initialObjects,
                 actions: new[]
@@ -3280,10 +3313,14 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new ReceivedEvent(new TextEvent("B"), TimeSpan.FromMilliseconds(400)),
                     new ReceivedEvent(new TextEvent("C"), TimeSpan.FromMilliseconds(500)),
                 },
+                setupPlayback: playback =>
+                    snapPoint = playback.AddSnapPoint(new MetricTimeSpan(0, 0, 0, 600)),
                 additionalChecks: playback => MidiAsserts.AreEqual(
                     AddTempoChanges(TempoMap, (TimeSpan.FromMilliseconds(300), new Tempo(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 2))),
                     playback.TempoMap,
                     "Invalid tempo map."));
+
+            Assert.AreEqual(TimeSpan.FromMilliseconds(450), snapPoint.Time, "Invalid snap point time.");
         }
 
         [Retry(RetriesNumber)]
@@ -3305,6 +3342,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var objectToAdd2 = new TimedEvent(new TextEvent("D"))
                 .SetTime(new MetricTimeSpan(0, 0, 0, 800), TempoMap);
 
+            SnapPoint snapPoint1 = null;
+            SnapPoint snapPoint2 = null;
+
             CheckPlaybackDataChangesOnTheFly(
                 initialObjects: initialObjects,
                 actions: new[]
@@ -3322,10 +3362,18 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new ReceivedEvent(new SetTempoEvent(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 2), TimeSpan.FromMilliseconds(700)),
                     new ReceivedEvent(new TextEvent("D"), TimeSpan.FromMilliseconds(750)),
                 },
+                setupPlayback: playback =>
+                {
+                    snapPoint1 = playback.AddSnapPoint(new MetricTimeSpan(0, 0, 0, 600));
+                    snapPoint2 = playback.AddSnapPoint(new MetricTimeSpan(0, 0, 0, 750));
+                },
                 additionalChecks: playback => MidiAsserts.AreEqual(
                     AddTempoChanges(TempoMap, (TimeSpan.FromMilliseconds(700), new Tempo(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 2))),
                     playback.TempoMap,
                     "Invalid tempo map."));
+
+            Assert.AreEqual(TimeSpan.FromMilliseconds(600), snapPoint1.Time, "Invalid first snap point time.");
+            Assert.AreEqual(TimeSpan.FromMilliseconds(725), snapPoint2.Time, "Invalid second snap point time.");
         }
 
         [Retry(RetriesNumber)]
@@ -3351,6 +3399,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var objectToAdd2 = new TimedEvent(new SetTempoEvent(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 4))
                 .SetTime(new MetricTimeSpan(0, 0, 0, 700), TempoMap);
 
+            SnapPoint snapPoint = null;
+
             CheckPlaybackDataChangesOnTheFly(
                 initialObjects: initialObjects,
                 actions: new[]
@@ -3370,12 +3420,16 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new ReceivedEvent(new TextEvent("D"), TimeSpan.FromMilliseconds(625)),
                     new ReceivedEvent(new TextEvent("E"), TimeSpan.FromMilliseconds(675)),
                 },
+                setupPlayback: playback =>
+                    snapPoint = playback.AddSnapPoint(new MetricTimeSpan(0, 0, 0, 1000)),
                 additionalChecks: playback => MidiAsserts.AreEqual(
                     AddTempoChanges(TempoMap,
                         (TimeSpan.FromMilliseconds(500), new Tempo(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 2)),
                         (TimeSpan.FromMilliseconds(600), new Tempo(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 4))),
                     playback.TempoMap,
                     "Invalid tempo map."));
+
+            Assert.AreEqual(TimeSpan.FromMilliseconds(675), snapPoint.Time, "Invalid snap point time.");
         }
 
         [Retry(RetriesNumber)]
@@ -3400,6 +3454,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var objectToAdd = new TimedEvent(new SetTempoEvent(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 2))
                 .SetTime(new MetricTimeSpan(0, 0, 0, 300), tempoMap);
 
+            SnapPoint snapPoint1 = null;
+            SnapPoint snapPoint2 = null;
+
             CheckPlaybackDataChangesOnTheFly(
                 initialObjects: initialObjects,
                 actions: new[]
@@ -3415,6 +3472,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new ReceivedEvent(new TextEvent("C"), TimeSpan.FromMilliseconds(450)),
                     new ReceivedEvent(new TextEvent("D"), TimeSpan.FromMilliseconds(625)),
                 },
+                setupPlayback: playback =>
+                {
+                    snapPoint1 = playback.AddSnapPoint(new MetricTimeSpan(0, 0, 0, 400));
+                    snapPoint2 = playback.AddSnapPoint(new MetricTimeSpan(0, 0, 0, 800));
+                },
                 additionalChecks: playback =>
                 {
                     MidiAsserts.AreEqual(
@@ -3428,6 +3490,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     Assert.AreEqual(475, lastTempoChangeTime.TotalMilliseconds, "Invalid last tempo change time.");
                 },
                 tempoMap: tempoMap);
+
+            Assert.AreEqual(TimeSpan.FromMilliseconds(350), snapPoint1.Time, "Invalid first snap point time.");
+            Assert.AreEqual(TimeSpan.FromMilliseconds(625), snapPoint2.Time, "Invalid second snap point time.");
         }
 
         [Retry(RetriesNumber)]
@@ -3731,6 +3796,93 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     AddTempoChanges(TempoMap, (TimeSpan.FromMilliseconds(200), new Tempo(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 2))),
                     playback.TempoMap,
                     "Invalid tempo map."));
+        }
+
+        [Retry(OnTheFlyChecksRetriesNumber)]
+        [Test]
+        public void CheckPlaybackDataChangesOnTheFly_Add_SetTempo_PlaybackEnd()
+        {
+            var objectToAdd = new TimedEvent(new SetTempoEvent(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 2))
+                .SetTime(new MetricTimeSpan(0, 0, 0, 300), TempoMap);
+
+            var initialObjects = new ITimedObject[]
+            {
+                new TimedEvent(new NoteOnEvent())
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 200), TempoMap),
+                new TimedEvent(new NoteOffEvent())
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 700), TempoMap),
+            };
+
+            CheckPlaybackDataChangesOnTheFly(
+                initialObjects: initialObjects,
+                actions: new[]
+                {
+                    new PlaybackChanger(100, (playback, collection) =>
+                    {
+                        collection.Add(objectToAdd);
+                        CheckCurrentTime(playback, TimeSpan.FromMilliseconds(100), "after tempo change");
+                    }),
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(200)),
+                    new ReceivedEvent(new SetTempoEvent(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 2), TimeSpan.FromMilliseconds(300)),
+                    new ReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(500)),
+                },
+                setupPlayback: playback =>
+                    playback.PlaybackEnd = new MetricTimeSpan(0, 0, 0, 500),
+                additionalChecks: playback =>
+                {
+                    MidiAsserts.AreEqual(
+                        AddTempoChanges(TempoMap, (TimeSpan.FromMilliseconds(300), new Tempo(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 2))),
+                        playback.TempoMap,
+                        "Invalid tempo map.");
+
+                    Assert.AreEqual(new MetricTimeSpan(0, 0, 0, 500), playback.PlaybackEnd, "Invalid playback end.");
+                });
+        }
+
+        [Retry(OnTheFlyChecksRetriesNumber)]
+        [Test]
+        public void CheckPlaybackDataChangesOnTheFly_Add_SetTempo_PlaybackStart()
+        {
+            var objectToAdd = new TimedEvent(new SetTempoEvent(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 2))
+                .SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap);
+
+            var initialObjects = new ITimedObject[]
+            {
+                new TimedEvent(new NoteOnEvent())
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 400), TempoMap),
+                new TimedEvent(new NoteOffEvent())
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 700), TempoMap),
+            };
+
+            CheckPlaybackDataChangesOnTheFly(
+                initialObjects: initialObjects,
+                actions: new[]
+                {
+                    new PlaybackChanger(50, (playback, collection) =>
+                    {
+                        collection.Add(objectToAdd);
+                        CheckCurrentTime(playback, TimeSpan.FromMilliseconds(225), "after tempo change");
+                    }),
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(75)),
+                    new ReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(225)),
+                },
+                setupPlayback: playback =>
+                    playback.PlaybackStart = new MetricTimeSpan(0, 0, 0, 300),
+                additionalChecks: playback =>
+                {
+                    MidiAsserts.AreEqual(
+                        AddTempoChanges(TempoMap, (TimeSpan.FromMilliseconds(100), new Tempo(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 2))),
+                        playback.TempoMap,
+                        "Invalid tempo map.");
+
+                    Assert.AreEqual(new MetricTimeSpan(0, 0, 0, 300), playback.PlaybackStart, "Invalid playback end.");
+                });
         }
 
         [Retry(RetriesNumber)]

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Multimedia;
 using Melanchall.DryWetMidi.Core;
@@ -14,147 +13,298 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         #region Test methods
 
         [Test]
-        public void CheckSnapPoints()
+        public void Snapping_AddSnapPoint_WithoutData()
         {
-            using (var playback = Get10SecondsPlayback())
-            {
-                Assert.IsNotNull(playback.Snapping, "Snapping is null.");
-                CollectionAssert.IsEmpty(playback.Snapping.SnapPoints, "Snap points collection is not empty on start.");
-
-                var customSnapPoint = playback.Snapping.AddSnapPoint(new MetricTimeSpan(0, 0, 0, 300), "Data");
-                Assert.IsNull(customSnapPoint.SnapPointsGroup, "Snap points group for custom snap point is not null.");
-
-                var snapPointsGroup = playback.Snapping.SnapToGrid(new SteppedGrid(new MetricTimeSpan(0, 0, 0, 100), new MetricTimeSpan(0, 0, 4)));
-                Assert.IsNotNull(snapPointsGroup, "Grid snap points group is null.");
-
-                var snapPoints = playback.Snapping.SnapPoints.ToList();
-                Assert.AreEqual(4, snapPoints.Count, "Snap points count is invalid.");
-                CollectionAssert.Contains(snapPoints, customSnapPoint, "Snap points doesn't contain custom one.");
-                Assert.That(snapPoints.Select(p => p.IsEnabled), Is.All.True, "Not all snap points are enabled.");
-
-                var gridSnapPoints = snapPoints.Where(p => p.SnapPointsGroup == snapPointsGroup).ToList();
-                Assert.AreEqual(3, gridSnapPoints.Count, "Grid snap points count is invalid.");
-            }
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
+                {
+                    new TimedEvent(new NoteOnEvent())
+                        .SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(0), TempoMap),
+                    new TimedEvent(new NoteOffEvent())
+                        .SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(500), TempoMap),
+                },
+                actions: new[]
+                {
+                    new PlaybackChangerBase(100, p =>
+                    {
+                        CheckCurrentTime(p, TimeSpan.FromMilliseconds(100), "Aa");
+                        p.MoveToFirstSnapPoint();
+                        CheckCurrentTime(p, TimeSpan.FromMilliseconds(200), "Ab");
+                    }),
+                    new PlaybackChangerBase(200, p =>
+                    {
+                        CheckCurrentTime(p, TimeSpan.FromMilliseconds(400), "Ba");
+                        p.MoveToPreviousSnapPoint();
+                        CheckCurrentTime(p, TimeSpan.FromMilliseconds(200), "Bb");
+                    }),
+                    new PlaybackChangerBase(100, p =>
+                    {
+                        CheckCurrentTime(p, TimeSpan.FromMilliseconds(300), "Ca");
+                        p.MoveToNextSnapPoint();
+                        CheckCurrentTime(p, TimeSpan.FromMilliseconds(300), "Cb");
+                    }),
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(0)),
+                    new ReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(600)),
+                },
+                setupPlayback: playback =>
+                {
+                    Assert.IsInstanceOf<SnapPoint>(playback.AddSnapPoint(new MetricTimeSpan(0, 0, 0, 200)));
+                });
         }
 
         [Test]
-        public void EnableDisableSnapPointsGroup()
+        public void Snapping_AddSnapPoint_WithData()
         {
-            using (var playback = Get10SecondsPlayback())
-            {
-                var snapPointsGroup = playback.Snapping.SnapToGrid(new SteppedGrid(new MetricTimeSpan(0, 0, 0, 100), new MetricTimeSpan(0, 0, 4)));
-                Assert.That(playback.Snapping.SnapPoints.Select(p => p.IsEnabled), Is.All.True, "Not all snap points are enabled.");
-                Assert.IsTrue(snapPointsGroup.IsEnabled, "Snap points group is not enabled on start.");
-                Assert.That(GetActiveSnapPoints(playback), Has.Count.EqualTo(3), "Not all snap points are active.");
-
-                snapPointsGroup.IsEnabled = false;
-                Assert.IsFalse(snapPointsGroup.IsEnabled, "Snap points group is not disabled.");
-                Assert.That(playback.Snapping.SnapPoints.Select(p => p.IsEnabled), Is.All.True, "Not all snap points are enabled after group disabled.");
-                CollectionAssert.IsEmpty(GetActiveSnapPoints(playback), "Some snap points are active after group disabled.");
-
-                snapPointsGroup.IsEnabled = true;
-                Assert.IsTrue(snapPointsGroup.IsEnabled, "Snap points group is not enabled.");
-                Assert.That(playback.Snapping.SnapPoints.Select(p => p.IsEnabled), Is.All.True, "Not all snap points are enabled.");
-                Assert.That(GetActiveSnapPoints(playback), Has.Count.EqualTo(3), "Not all snap points are active after group enabled.");
-            }
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
+                {
+                    new TimedEvent(new NoteOnEvent())
+                        .SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(0), TempoMap),
+                    new TimedEvent(new NoteOffEvent())
+                        .SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(500), TempoMap),
+                },
+                actions: new[]
+                {
+                    new PlaybackChangerBase(100, p =>
+                    {
+                        CheckCurrentTime(p, TimeSpan.FromMilliseconds(100), "Aa");
+                        p.MoveToFirstSnapPoint("X");
+                        CheckCurrentTime(p, TimeSpan.FromMilliseconds(200), "Ab");
+                    }),
+                    new PlaybackChangerBase(200, p =>
+                    {
+                        CheckCurrentTime(p, TimeSpan.FromMilliseconds(400), "Ba");
+                        p.MoveToPreviousSnapPoint("X");
+                        CheckCurrentTime(p, TimeSpan.FromMilliseconds(200), "Bb");
+                    }),
+                    new PlaybackChangerBase(100, p =>
+                    {
+                        CheckCurrentTime(p, TimeSpan.FromMilliseconds(300), "Ca");
+                        p.MoveToNextSnapPoint("X");
+                        CheckCurrentTime(p, TimeSpan.FromMilliseconds(300), "Cb");
+                    }),
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(0)),
+                    new ReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(600)),
+                },
+                setupPlayback: playback =>
+                {
+                    var snapPoint = playback.AddSnapPoint(new MetricTimeSpan(0, 0, 0, 200), "X");
+                    Assert.IsInstanceOf<SnapPoint<string>>(snapPoint, "Invalid snap point's type.");
+                    Assert.AreEqual("X", snapPoint.Data, "Invalid snap point's data.");
+                });
         }
 
         [Test]
-        public void EnableDisableSnapping()
+        public void Snapping_RemoveSnapPoint_WithoutData()
         {
-            using (var playback = Get10SecondsPlayback())
-            {
-                playback.Snapping.SnapToGrid(new SteppedGrid(new MetricTimeSpan(0, 0, 0, 100), new MetricTimeSpan(0, 0, 4)));
-                Assert.That(playback.Snapping.SnapPoints.Select(p => p.IsEnabled), Is.All.True, "Not all snap points are enabled.");
-                Assert.IsTrue(playback.Snapping.IsEnabled, "Snap points group is not enabled on start.");
-                Assert.That(GetActiveSnapPoints(playback), Has.Count.EqualTo(3), "Not all snap points are active.");
+            SnapPoint snapPoint = null;
 
-                playback.Snapping.IsEnabled = false;
-                Assert.IsFalse(playback.Snapping.IsEnabled, "Snap points group is not disabled.");
-                Assert.That(playback.Snapping.SnapPoints.Select(p => p.IsEnabled), Is.All.True, "Not all snap points are enabled after group disabled.");
-                CollectionAssert.IsEmpty(GetActiveSnapPoints(playback), "Some snap points are active after group disabled.");
-
-                playback.Snapping.IsEnabled = true;
-                Assert.IsTrue(playback.Snapping.IsEnabled, "Snap points group is not enabled.");
-                Assert.That(playback.Snapping.SnapPoints.Select(p => p.IsEnabled), Is.All.True, "Not all snap points are enabled.");
-                Assert.That(GetActiveSnapPoints(playback), Has.Count.EqualTo(3), "Not all snap points are active after group enabled.");
-            }
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
+                {
+                    new TimedEvent(new NoteOnEvent())
+                        .SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(0), TempoMap),
+                    new TimedEvent(new NoteOffEvent())
+                        .SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(500), TempoMap),
+                },
+                actions: new[]
+                {
+                    new PlaybackChangerBase(100, p =>
+                    {
+                        CheckCurrentTime(p, TimeSpan.FromMilliseconds(100), "Aa");
+                        Assert.IsTrue(p.MoveToFirstSnapPoint(), "Failed to move to first snap point.");
+                        CheckCurrentTime(p, TimeSpan.FromMilliseconds(200), "Ab");
+                    }),
+                    new PlaybackChangerBase(200, p =>
+                    {
+                        CheckCurrentTime(p, TimeSpan.FromMilliseconds(400), "Ba");
+                        Assert.IsTrue(p.MoveToPreviousSnapPoint(), "Failed to move to previous snap point.");
+                        CheckCurrentTime(p, TimeSpan.FromMilliseconds(200), "Bb");
+                    }),
+                    new PlaybackChangerBase(100, p =>
+                    {
+                        CheckCurrentTime(p, TimeSpan.FromMilliseconds(300), "Ca");
+                        Assert.IsFalse(p.MoveToNextSnapPoint(), "Successfully moved to next snap point.");
+                        CheckCurrentTime(p, TimeSpan.FromMilliseconds(300), "Cb");
+                    }),
+                    new PlaybackChangerBase(100, p =>
+                    {
+                        CheckCurrentTime(p, TimeSpan.FromMilliseconds(400), "Da");
+                        p.RemoveSnapPoint(snapPoint);
+                        Assert.IsFalse(p.MoveToPreviousSnapPoint(), "Successfully moved to previous snap point after deletion.");
+                        CheckCurrentTime(p, TimeSpan.FromMilliseconds(400), "Db");
+                    }),
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(0)),
+                    new ReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(600)),
+                },
+                setupPlayback: playback =>
+                {
+                    Assert.IsInstanceOf<SnapPoint>(snapPoint = playback.AddSnapPoint(new MetricTimeSpan(0, 0, 0, 200)));
+                });
         }
 
         [Test]
-        public void AddSnapPoint_WithoutData()
+        public void Snapping_RemoveSnapPoint_WithData()
         {
-            using (var playback = Get10SecondsPlayback())
-            {
-                var snapPoint = playback.Snapping.AddSnapPoint(new MetricTimeSpan(0, 0, 1));
-                Assert.IsNotNull(snapPoint, "Snap point is null.");
-                Assert.IsInstanceOf<Guid>(snapPoint.Data, "Snap point's data is not of Guid type.");
-                CollectionAssert.Contains(playback.Snapping.SnapPoints, snapPoint, "Snap points doesn't contain the snap point.");
-            }
+            SnapPoint<string> snapPoint = null;
+
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
+                {
+                    new TimedEvent(new NoteOnEvent())
+                        .SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(0), TempoMap),
+                    new TimedEvent(new NoteOffEvent())
+                        .SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(500), TempoMap),
+                },
+                actions: new[]
+                {
+                    new PlaybackChangerBase(100, p =>
+                    {
+                        CheckCurrentTime(p, TimeSpan.FromMilliseconds(100), "Aa");
+                        Assert.IsTrue(p.MoveToFirstSnapPoint("X"), "Failed to move to first snap point.");
+                        CheckCurrentTime(p, TimeSpan.FromMilliseconds(200), "Ab");
+                    }),
+                    new PlaybackChangerBase(200, p =>
+                    {
+                        CheckCurrentTime(p, TimeSpan.FromMilliseconds(400), "Ba");
+                        Assert.IsTrue(p.MoveToPreviousSnapPoint("X"), "Failed to move to previous snap point.");
+                        CheckCurrentTime(p, TimeSpan.FromMilliseconds(200), "Bb");
+                    }),
+                    new PlaybackChangerBase(100, p =>
+                    {
+                        CheckCurrentTime(p, TimeSpan.FromMilliseconds(300), "Ca");
+                        Assert.IsFalse(p.MoveToNextSnapPoint("X"), "Successfully moved to next snap point.");
+                        CheckCurrentTime(p, TimeSpan.FromMilliseconds(300), "Cb");
+                    }),
+                    new PlaybackChangerBase(100, p =>
+                    {
+                        CheckCurrentTime(p, TimeSpan.FromMilliseconds(400), "Da");
+                        p.RemoveSnapPoint(snapPoint);
+                        Assert.IsFalse(p.MoveToPreviousSnapPoint("X"), "Successfully moved to previous snap point after deletion.");
+                        CheckCurrentTime(p, TimeSpan.FromMilliseconds(400), "Db");
+                    }),
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(0)),
+                    new ReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(600)),
+                },
+                setupPlayback: playback =>
+                {
+                    Assert.IsInstanceOf<SnapPoint<string>>(snapPoint = playback.AddSnapPoint(new MetricTimeSpan(0, 0, 0, 200), "X"));
+                });
         }
 
         [Test]
-        public void AddSnapPoint_WithData()
+        public void Snapping_RemoveSnapPointsByData()
         {
-            using (var playback = Get10SecondsPlayback())
-            {
-                var snapPoint = playback.Snapping.AddSnapPoint(new MetricTimeSpan(0, 0, 1), "Data");
-                Assert.IsNotNull(snapPoint, "Snap point is null.");
-                Assert.AreEqual("Data", snapPoint.Data, "Snap point's data is invalid.");
-                CollectionAssert.Contains(playback.Snapping.SnapPoints, snapPoint, "Snap points doesn't contain the snap point.");
-            }
+            SnapPoint snapPoint1 = null;
+            SnapPoint snapPoint2 = null;
+            SnapPoint snapPoint3 = null;
+
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
+                {
+                    new TimedEvent(new NoteOnEvent()),
+                    new TimedEvent(new NoteOffEvent())
+                        .SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(500), TempoMap),
+                },
+                actions: new[]
+                {
+                    new PlaybackChangerBase(150, p =>
+                    {
+                        Assert.IsTrue(p.MoveToPreviousSnapPoint(), "Failed to move to previous snap point.");
+                        CheckCurrentTime(p, snapPoint2.Time, "B");
+                    }),
+                    new PlaybackChangerBase(100, p =>
+                    {
+                        p.RemoveSnapPointsByData((string data) => data.StartsWith("Data"));
+                        Assert.IsTrue(p.MoveToFirstSnapPoint(), "Failed to move to first snap point.");
+                        Assert.IsFalse(p.MoveToFirstSnapPoint("DataX"), "Moved to first data snap point.");
+                    }),
+                },
+                afterStart: playback =>
+                {
+                    Assert.IsTrue(playback.MoveToNextSnapPoint("DataX"), "Failed to move to next snap point.");
+                    CheckCurrentTime(playback, snapPoint1.Time, "A");
+                },
+                setupPlayback: playback =>
+                {
+                    snapPoint1 = playback.AddSnapPoint(new MetricTimeSpan(0, 0, 0, 100), "DataX");
+                    snapPoint2 = playback.AddSnapPoint(new MetricTimeSpan(0, 0, 0, 200), "DataY");
+                    snapPoint3 = playback.AddSnapPoint(new MetricTimeSpan(0, 0, 0, 300), "Something");
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(0)),
+                    new ReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(450)),
+                });
         }
 
         [Test]
-        public void RemoveSnapPoint()
+        public void Snapping_RemoveAllSnapPoints()
         {
-            using (var playback = Get10SecondsPlayback())
-            {
-                var snapPoint = playback.Snapping.AddSnapPoint(new MetricTimeSpan(0, 0, 1));
-                CollectionAssert.Contains(playback.Snapping.SnapPoints, snapPoint, "Snap points doesn't contain the snap point.");
+            SnapPoint snapPoint1 = null;
+            SnapPoint snapPoint2 = null;
+            SnapPoint snapPoint3 = null;
 
-                playback.Snapping.RemoveSnapPoint(snapPoint);
-                CollectionAssert.DoesNotContain(playback.Snapping.SnapPoints, snapPoint, "Snap points contain the snap point after removing.");
-            }
-        }
-
-        [Test]
-        public void RemoveSnapPointsByData()
-        {
-            using (var playback = Get10SecondsPlayback())
-            {
-                var snapPoint1 = playback.Snapping.AddSnapPoint(new MetricTimeSpan(0, 0, 1), "DataX");
-                var snapPoint2 = playback.Snapping.AddSnapPoint(new MetricTimeSpan(0, 0, 2), "DataY");
-                var snapPoint3 = playback.Snapping.AddSnapPoint(new MetricTimeSpan(0, 0, 3), "Something");
-                CollectionAssert.Contains(playback.Snapping.SnapPoints, snapPoint1, "Snap points doesn't contain the snap point #1.");
-                CollectionAssert.Contains(playback.Snapping.SnapPoints, snapPoint2, "Snap points doesn't contain the snap point #2.");
-                CollectionAssert.Contains(playback.Snapping.SnapPoints, snapPoint3, "Snap points doesn't contain the snap point #3.");
-
-                playback.Snapping.RemoveSnapPointsByData((string data) => data.StartsWith("Data"));
-                CollectionAssert.DoesNotContain(playback.Snapping.SnapPoints, snapPoint1, "Snap points contain the snap point #1.");
-                CollectionAssert.DoesNotContain(playback.Snapping.SnapPoints, snapPoint2, "Snap points contain the snap point #2.");
-                CollectionAssert.Contains(playback.Snapping.SnapPoints, snapPoint3, "Snap points doesn't contain the snap point #3.");
-            }
-        }
-
-        [Test]
-        public void Clear()
-        {
-            using (var playback = Get10SecondsPlayback())
-            {
-                playback.Snapping.AddSnapPoint(new MetricTimeSpan(0, 0, 1), "DataX");
-                playback.Snapping.AddSnapPoint(new MetricTimeSpan(0, 0, 2), "DataY");
-                playback.Snapping.AddSnapPoint(new MetricTimeSpan(0, 0, 3), "Something");
-                CollectionAssert.IsNotEmpty(playback.Snapping.SnapPoints, "No snap points after adding them.");
-
-                playback.Snapping.Clear();
-                CollectionAssert.IsEmpty(playback.Snapping.SnapPoints, "There are snap points after clear.");
-            }
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
+                {
+                    new TimedEvent(new NoteOnEvent()),
+                    new TimedEvent(new NoteOffEvent())
+                        .SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(500), TempoMap),
+                },
+                actions: new[]
+                {
+                    new PlaybackChangerBase(150, p =>
+                    {
+                        Assert.IsTrue(p.MoveToPreviousSnapPoint(), "Failed to move to previous snap point.");
+                        CheckCurrentTime(p, snapPoint2.Time, "B");
+                    }),
+                    new PlaybackChangerBase(100, p =>
+                    {
+                        p.RemoveAllSnapPoints();
+                        Assert.IsFalse(p.MoveToFirstSnapPoint(), "Failed to move to first snap point.");
+                        Assert.IsFalse(p.MoveToFirstSnapPoint("DataX"), "Moved to first data snap point.");
+                    }),
+                },
+                afterStart: playback =>
+                {
+                    Assert.IsTrue(playback.MoveToNextSnapPoint("DataX"), "Failed to move to next snap point.");
+                    CheckCurrentTime(playback, snapPoint1.Time, "A");
+                },
+                setupPlayback: playback =>
+                {
+                    snapPoint1 = playback.AddSnapPoint(new MetricTimeSpan(0, 0, 0, 100), "DataX");
+                    snapPoint2 = playback.AddSnapPoint(new MetricTimeSpan(0, 0, 0, 200), "DataY");
+                    snapPoint3 = playback.AddSnapPoint(new MetricTimeSpan(0, 0, 0, 300), "Something");
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(0)),
+                    new ReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(450)),
+                });
         }
 
         [Retry(RetriesNumber)]
         [Test]
-        public void MoveToSnapPoint()
+        public void Snapping_MoveToSnapPoint_1()
         {
             var stopAfter = TimeSpan.FromSeconds(2);
             var stopPeriod = TimeSpan.FromSeconds(1);
@@ -171,160 +321,325 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
             var endTime = TimeSpan.FromSeconds(4);
 
-            CheckPlaybackStop(
-                eventsToSend: new[]
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
                 {
-                    new EventToSend(new NoteOnEvent(), TimeSpan.Zero),
-                    new EventToSend(new NoteOffEvent(), endTime)
+                    new TimedEvent(new NoteOnEvent()),
+                    new TimedEvent(new NoteOffEvent())
+                        .SetTime((MetricTimeSpan)endTime, TempoMap),
                 },
-                eventsWillBeSent: new EventToSend[] { },
-                stopAfter: stopAfter,
-                stopPeriod: stopPeriod,
-                setupPlayback: (context, playback) =>
+                actions: new[]
                 {
-                    snapPoint1 = playback.Snapping.AddSnapPoint((MetricTimeSpan)snapPointTime1, "Data1");
-                    snapPoint2 = playback.Snapping.AddSnapPoint((MetricTimeSpan)snapPointTime2, "Data2");
-                },
-                afterStart: NoPlaybackAction,
-                afterStop: (context, playback) => playback.MoveToSnapPoint(snapPoint1),
-                afterResume: (context, playback) => CheckCurrentTime(playback, snapPointTime1, "stopped"),
-                runningAfterResume: new[]
-                {
-                    Tuple.Create<TimeSpan, PlaybackAction>(firstAfterResumeDelay, (context, playback) => CheckCurrentTime(playback, snapPointTime1 + firstAfterResumeDelay, "resumed")),
-                    Tuple.Create<TimeSpan, PlaybackAction>(secondAfterResumeDelay, (context, playback) =>
+                    new PlaybackChangerBase(stopAfter, p =>
                     {
-                        playback.MoveToSnapPoint(snapPoint2);
-                        CheckCurrentTime(playback, snapPointTime2, "resumed");
+                        p.Stop();
+                        p.MoveToSnapPoint(snapPoint1);
                     }),
-                    Tuple.Create<TimeSpan, PlaybackAction>(thirdAfterResumeDelay, (context, playback) => CheckCurrentTime(playback, snapPointTime2 + thirdAfterResumeDelay, "resumed"))
+                    new PlaybackChangerBase(stopPeriod, p =>
+                    {
+                        p.Start();
+                        CheckCurrentTime(p, snapPointTime1, "stopped");
+                    }),
+                    new PlaybackChangerBase(firstAfterResumeDelay,
+                        p => CheckCurrentTime(p, snapPointTime1 + firstAfterResumeDelay, "resumed")),
+                    new PlaybackChangerBase(secondAfterResumeDelay, p =>
+                    {
+                        p.MoveToSnapPoint(snapPoint2);
+                        CheckCurrentTime(p, snapPointTime2, "resumed");
+                    }),
+                    new PlaybackChangerBase(thirdAfterResumeDelay,
+                        p => CheckCurrentTime(p, snapPointTime2 + thirdAfterResumeDelay, "resumed")),
                 },
-                explicitExpectedTimes: new[]
+                setupPlayback: playback =>
                 {
-                    TimeSpan.Zero,
-                    endTime + stopPeriod + (stopAfter - snapPointTime1) - (snapPointTime2 - (snapPointTime1 + firstAfterResumeDelay + secondAfterResumeDelay))
+                    playback.InterruptNotesOnStop = false;
+
+                    snapPoint1 = playback.AddSnapPoint((MetricTimeSpan)snapPointTime1, "Data1");
+                    snapPoint2 = playback.AddSnapPoint((MetricTimeSpan)snapPointTime2, "Data2");
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
+                    new ReceivedEvent(new NoteOffEvent(), endTime + stopPeriod + (stopAfter - snapPointTime1) - (snapPointTime2 - (snapPointTime1 + firstAfterResumeDelay + secondAfterResumeDelay))),
                 });
         }
 
         [Test]
-        public void MoveToSnapPoint_CheckReturnValue()
+        public void Snapping_MoveToSnapPoint_2()
         {
-            using (var playback = Get10SecondsPlayback())
-            {
-                var snapPoint = playback.Snapping.AddSnapPoint(new MetricTimeSpan(0, 0, 1));
-                Assert.IsTrue(playback.MoveToSnapPoint(snapPoint), "Failed to move to snap point.");
+            SnapPoint snapPoint = null;
 
-                snapPoint.IsEnabled = false;
-                Assert.IsFalse(playback.MoveToSnapPoint(snapPoint), "Position changed to disabled snap point's time.");
-            }
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
+                {
+                    new TimedEvent(new NoteOnEvent()),
+                    new TimedEvent(new NoteOffEvent())
+                        .SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(500), TempoMap),
+                },
+                actions: new[]
+                {
+                    new PlaybackChangerBase(100, p =>
+                    {
+                        CheckCurrentTime(p, TimeSpan.FromMilliseconds(100), "Aa");
+                        Assert.IsTrue(p.MoveToSnapPoint(snapPoint), "Failed to move to snap point.");
+                        CheckCurrentTime(p, TimeSpan.FromMilliseconds(200), "Ab");
+                    }),
+                    new PlaybackChangerBase(200, p =>
+                    {
+                        CheckCurrentTime(p, TimeSpan.FromMilliseconds(400), "Ba");
+                        snapPoint.IsEnabled = false;
+                        Assert.IsFalse(p.MoveToSnapPoint(snapPoint), "Position changed to disabled snap point's time.");
+                        CheckCurrentTime(p, TimeSpan.FromMilliseconds(400), "Bb");
+                    }),
+                },
+                setupPlayback: playback =>
+                {
+                    playback.InterruptNotesOnStop = false;
+
+                    snapPoint = playback.AddSnapPoint(new MetricTimeSpan(0, 0, 0, 200));
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
+                    new ReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(400)),
+                });
         }
 
         [Test]
-        public void MoveToFirstSnapPoint_CheckReturnValue()
+        public void Snapping_MoveToFirstSnapPoint_1()
         {
-            var snapPoint1Time = new MetricTimeSpan(0, 0, 1);
-            var snapPoint2Time = new MetricTimeSpan(0, 0, 2);
+            var snapPoint1Time = new MetricTimeSpan(0, 0, 0, 200);
+            var snapPoint2Time = new MetricTimeSpan(0, 0, 0, 400);
 
-            using (var playback = Get10SecondsPlayback())
-            {
-                var snapPoint1 = playback.Snapping.AddSnapPoint(snapPoint1Time);
-                var snapPoint2 = playback.Snapping.AddSnapPoint(snapPoint2Time);
+            SnapPoint snapPoint1 = null;
+            SnapPoint snapPoint2 = null;
 
-                Assert.IsTrue(playback.MoveToFirstSnapPoint(), "Failed to move to first snap point.");
-                CheckCurrentTime(playback, snapPoint1Time, "moved first time");
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
+                {
+                    new TimedEvent(new NoteOnEvent()),
+                    new TimedEvent(new NoteOffEvent())
+                        .SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(500), TempoMap),
+                },
+                actions: new[]
+                {
+                    new PlaybackChangerBase(100, p =>
+                    {
+                        CheckCurrentTime(p, TimeSpan.FromMilliseconds(100), "Aa");
+                        Assert.IsTrue(p.MoveToFirstSnapPoint(), "Failed to move to first snap point.");
+                        CheckCurrentTime(p, TimeSpan.FromMilliseconds(200), "Ab");
+                    }),
+                    new PlaybackChangerBase(50, p =>
+                    {
+                        CheckCurrentTime(p, TimeSpan.FromMilliseconds(250), "Ba");
+                        Assert.IsTrue(p.MoveToFirstSnapPoint(), "Failed to move to first snap point again.");
+                        CheckCurrentTime(p, TimeSpan.FromMilliseconds(200), "Bb");
+                    }),
+                    new PlaybackChangerBase(100, p =>
+                    {
+                        CheckCurrentTime(p, TimeSpan.FromMilliseconds(300), "Ca");
+                        snapPoint1.IsEnabled = false;
+                        Assert.IsTrue(p.MoveToFirstSnapPoint(), "Failed to move to first snap point after first one disabled.");
+                        CheckCurrentTime(p, TimeSpan.FromMilliseconds(400), "Cb");
+                    }),
+                },
+                setupPlayback: playback =>
+                {
+                    playback.InterruptNotesOnStop = false;
 
-                Assert.IsTrue(playback.MoveToFirstSnapPoint(), "Failed to move to first snap point again.");
-                CheckCurrentTime(playback, snapPoint1Time, "moved second time");
-
-                snapPoint1.IsEnabled = false;
-                Assert.IsTrue(playback.MoveToFirstSnapPoint(), "Failed to move to first snap point after first one disabled.");
-                CheckCurrentTime(playback, snapPoint2Time, "moved third time");
-            }
+                    snapPoint1 = playback.AddSnapPoint(snapPoint1Time);
+                    snapPoint2 = playback.AddSnapPoint(snapPoint2Time);
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
+                    new ReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(350)),
+                });
         }
 
         [Test]
-        public void MoveToFirstSnapPoint_AtZero_CheckReturnValue()
+        public void Snapping_MoveToFirstSnapPoint_2()
         {
             var snapPoint1Time = new MetricTimeSpan();
-            var snapPoint2Time = new MetricTimeSpan(0, 0, 2);
+            var snapPoint2Time = new MetricTimeSpan(0, 0, 0, 200);
 
-            using (var playback = Get10SecondsPlayback())
-            {
-                var snapPoint1 = playback.Snapping.AddSnapPoint(snapPoint1Time);
-                var snapPoint2 = playback.Snapping.AddSnapPoint(snapPoint2Time);
+            SnapPoint snapPoint1 = null;
+            SnapPoint snapPoint2 = null;
 
-                Assert.IsTrue(playback.MoveToFirstSnapPoint(), "Failed to move to first snap point.");
-                CheckCurrentTime(playback, snapPoint1Time, "moved first time");
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
+                {
+                    new TimedEvent(new NoteOnEvent()),
+                    new TimedEvent(new NoteOffEvent())
+                        .SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(500), TempoMap),
+                },
+                actions: new[]
+                {
+                    new PlaybackChangerBase(100, p =>
+                    {
+                        CheckCurrentTime(p, TimeSpan.FromMilliseconds(100), "Aa");
+                        Assert.IsTrue(p.MoveToFirstSnapPoint(), "Failed to move to first snap point.");
+                        CheckCurrentTime(p, snapPoint1Time, "Ab");
+                    }),
+                    new PlaybackChangerBase(50, p =>
+                    {
+                        CheckCurrentTime(p, TimeSpan.FromMilliseconds(50), "Ba");
+                        Assert.IsTrue(p.MoveToFirstSnapPoint(), "Failed to move to first snap point again.");
+                        CheckCurrentTime(p, snapPoint1Time, "Bb");
+                    }),
+                    new PlaybackChangerBase(100, p =>
+                    {
+                        CheckCurrentTime(p, TimeSpan.FromMilliseconds(100), "Ca");
+                        snapPoint1.IsEnabled = false;
+                        Assert.IsTrue(p.MoveToFirstSnapPoint(), "Failed to move to first snap point after first one disabled.");
+                        CheckCurrentTime(p, snapPoint2Time, "Cb");
+                    }),
+                },
+                setupPlayback: playback =>
+                {
+                    playback.InterruptNotesOnStop = false;
 
-                Assert.IsTrue(playback.MoveToFirstSnapPoint(), "Failed to move to first snap point again.");
-                CheckCurrentTime(playback, snapPoint1Time, "moved second time");
-
-                snapPoint1.IsEnabled = false;
-                Assert.IsTrue(playback.MoveToFirstSnapPoint(), "Failed to move to first snap point after first one disabled.");
-                CheckCurrentTime(playback, snapPoint2Time, "moved third time");
-            }
+                    snapPoint1 = playback.AddSnapPoint(snapPoint1Time);
+                    snapPoint2 = playback.AddSnapPoint(snapPoint2Time);
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
+                    new ReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(550)),
+                });
         }
 
         [Test]
-        public void MoveToFirstSnapPoint_ByData_CheckReturnValue()
+        public void Snapping_MoveToFirstSnapPoint_3()
         {
-            var snapPoint1Time = new MetricTimeSpan(0, 0, 1);
-            var snapPoint2Time = new MetricTimeSpan(0, 0, 2);
-            var snapPoint3Time = new MetricTimeSpan(0, 0, 3);
+            var snapPoint1Time = new MetricTimeSpan(0, 0, 0, 100);
+            var snapPoint2Time = new MetricTimeSpan(0, 0, 0, 200);
+            var snapPoint3Time = new MetricTimeSpan(0, 0, 0, 300);
 
-            using (var playback = Get10SecondsPlayback())
-            {
-                var snapPoint1 = playback.Snapping.AddSnapPoint(snapPoint1Time, "X");
-                var snapPoint2 = playback.Snapping.AddSnapPoint(snapPoint2Time, "Y");
-                var snapPoint3 = playback.Snapping.AddSnapPoint(snapPoint3Time, "Z");
+            SnapPoint<string> snapPoint1 = null;
+            SnapPoint<string> snapPoint2 = null;
+            SnapPoint<string> snapPoint3 = null;
 
-                Assert.IsTrue(playback.MoveToFirstSnapPoint("Y"), "Failed to move to first snap point.");
-                CheckCurrentTime(playback, snapPoint2Time, "moved first time");
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
+                {
+                    new TimedEvent(new NoteOnEvent()),
+                    new TimedEvent(new NoteOffEvent())
+                        .SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(500), TempoMap),
+                },
+                actions: new[]
+                {
+                    new PlaybackChangerBase(50, p =>
+                    {
+                        CheckCurrentTime(p, TimeSpan.FromMilliseconds(50), "Aa");
+                        Assert.IsTrue(p.MoveToFirstSnapPoint("Y"), "Failed to move to first snap point.");
+                        CheckCurrentTime(p, snapPoint2Time, "Ab");
+                    }),
+                    new PlaybackChangerBase(100, p =>
+                    {
+                        CheckCurrentTime(p, TimeSpan.FromMilliseconds(300), "Ba");
+                        Assert.IsTrue(p.MoveToFirstSnapPoint("Y"), "Failed to move to first snap point again.");
+                        CheckCurrentTime(p, snapPoint2Time, "Bb");
+                    }),
+                    new PlaybackChangerBase(100, p =>
+                    {
+                        CheckCurrentTime(p, TimeSpan.FromMilliseconds(300), "Ca");
+                        snapPoint2.IsEnabled = false;
+                        Assert.IsFalse(p.MoveToFirstSnapPoint("Y"), "Failed to move to first snap point after first one disabled.");
+                        CheckCurrentTime(p, TimeSpan.FromMilliseconds(300), "Cb");
+                    }),
+                    new PlaybackChangerBase(50, p =>
+                    {
+                        p.MoveToTime(new MetricTimeSpan(0, 0, 0, 400));
+                        Assert.IsTrue(p.MoveToFirstSnapPoint("Z"), "Failed to move to first enabled snap point.");
+                        CheckCurrentTime(p, snapPoint3Time, "Db");
+                    }),
+                },
+                setupPlayback: playback =>
+                {
+                    playback.InterruptNotesOnStop = false;
 
-                Assert.IsTrue(playback.MoveToFirstSnapPoint("Y"), "Failed to move to first snap point again.");
-                CheckCurrentTime(playback, snapPoint2Time, "moved second time");
-
-                snapPoint2.IsEnabled = false;
-                Assert.IsFalse(playback.MoveToFirstSnapPoint("Y"), "Moves to disabled snap point.");
-                CheckCurrentTime(playback, snapPoint2Time, "moved third time");
-
-                playback.MoveToTime(new MetricTimeSpan(0, 0, 5));
-                Assert.IsTrue(playback.MoveToFirstSnapPoint("Z"), "Failed to move to first enabled snap point.");
-                CheckCurrentTime(playback, snapPoint3Time, "moved fourth time");
-            }
+                    snapPoint1 = playback.AddSnapPoint(snapPoint1Time, "X");
+                    snapPoint2 = playback.AddSnapPoint(snapPoint2Time, "Y");
+                    snapPoint3 = playback.AddSnapPoint(snapPoint3Time, "Z");
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
+                    new ReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(500)),
+                });
         }
 
         [Test]
-        public void MoveToFirstSnapPoint_ByData_AtZero_CheckReturnValue()
+        public void Snapping_MoveToFirstSnapPoint_4()
         {
-            var snapPoint1Time = new MetricTimeSpan(0, 0, 1);
-            var snapPoint2Time = new MetricTimeSpan(0, 0, 0);
-            var snapPoint3Time = new MetricTimeSpan(0, 0, 3);
+            var snapPoint1Time = new MetricTimeSpan(0, 0, 0, 100);
+            var snapPoint2Time = new MetricTimeSpan(0, 0, 0, 0);
+            var snapPoint3Time = new MetricTimeSpan(0, 0, 0, 300);
 
-            using (var playback = Get10SecondsPlayback())
-            {
-                var snapPoint1 = playback.Snapping.AddSnapPoint(snapPoint1Time, "X");
-                var snapPoint2 = playback.Snapping.AddSnapPoint(snapPoint2Time, "Y");
-                var snapPoint3 = playback.Snapping.AddSnapPoint(snapPoint3Time, "Z");
+            SnapPoint<string> snapPoint1 = null;
+            SnapPoint<string> snapPoint2 = null;
+            SnapPoint<string> snapPoint3 = null;
 
-                Assert.IsTrue(playback.MoveToFirstSnapPoint("Y"), "Failed to move to first snap point.");
-                CheckCurrentTime(playback, snapPoint2Time, "moved first time");
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
+                {
+                    new TimedEvent(new NoteOnEvent()),
+                    new TimedEvent(new NoteOffEvent())
+                        .SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(500), TempoMap),
+                },
+                actions: new[]
+                {
+                    new PlaybackChangerBase(50, p =>
+                    {
+                        CheckCurrentTime(p, TimeSpan.FromMilliseconds(50), "Aa");
+                        Assert.IsTrue(p.MoveToFirstSnapPoint("Y"), "Failed to move to first snap point.");
+                        CheckCurrentTime(p, snapPoint2Time, "Ab");
+                    }),
+                    new PlaybackChangerBase(100, p =>
+                    {
+                        CheckCurrentTime(p, TimeSpan.FromMilliseconds(100), "Ba");
+                        Assert.IsTrue(p.MoveToFirstSnapPoint("Y"), "Failed to move to first snap point again.");
+                        CheckCurrentTime(p, snapPoint2Time, "Bb");
+                    }),
+                    new PlaybackChangerBase(100, p =>
+                    {
+                        CheckCurrentTime(p, TimeSpan.FromMilliseconds(100), "Ca");
+                        snapPoint2.IsEnabled = false;
+                        Assert.IsFalse(p.MoveToFirstSnapPoint("Y"), "Failed to move to first snap point after first one disabled.");
+                        CheckCurrentTime(p, TimeSpan.FromMilliseconds(100), "Cb");
+                    }),
+                    new PlaybackChangerBase(50, p =>
+                    {
+                        p.MoveToTime(new MetricTimeSpan(0, 0, 0, 400));
+                        Assert.IsTrue(p.MoveToFirstSnapPoint("Z"), "Failed to move to first enabled snap point.");
+                        CheckCurrentTime(p, snapPoint3Time, "Db");
+                    }),
+                },
+                setupPlayback: playback =>
+                {
+                    playback.InterruptNotesOnStop = false;
 
-                Assert.IsTrue(playback.MoveToFirstSnapPoint("Y"), "Failed to move to first snap point again.");
-                CheckCurrentTime(playback, snapPoint2Time, "moved second time");
-
-                snapPoint2.IsEnabled = false;
-                Assert.IsFalse(playback.MoveToFirstSnapPoint("Y"), "Moves to disabled snap point.");
-                CheckCurrentTime(playback, snapPoint2Time, "moved third time");
-
-                playback.MoveToTime(new MetricTimeSpan(0, 0, 5));
-                Assert.IsTrue(playback.MoveToFirstSnapPoint("Z"), "Failed to move to first enabled snap point.");
-                CheckCurrentTime(playback, snapPoint3Time, "moved fourth time");
-            }
+                    snapPoint1 = playback.AddSnapPoint(snapPoint1Time, "X");
+                    snapPoint2 = playback.AddSnapPoint(snapPoint2Time, "Y");
+                    snapPoint3 = playback.AddSnapPoint(snapPoint3Time, "Z");
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
+                    new ReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(500)),
+                });
         }
 
         [Retry(RetriesNumber)]
         [Test]
-        public void MoveToPreviousSnapPoint_ByGroup()
+        public void Snapping_MoveToPreviousSnapPoint_1()
         {
             var stopAfter = TimeSpan.FromSeconds(2);
             var stopPeriod = TimeSpan.FromSeconds(1);
@@ -340,59 +655,114 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
             var endTime = TimeSpan.FromSeconds(4);
 
-            CheckPlaybackStop(
-                eventsToSend: new[]
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
                 {
-                    new EventToSend(new NoteOnEvent(), TimeSpan.Zero),
-                    new EventToSend(new NoteOffEvent(), endTime)
+                    new TimedEvent(new NoteOnEvent()),
+                    new TimedEvent(new MarkerEvent("A"))
+                        .SetTime((MetricTimeSpan)snapPointTime1, TempoMap),
+                    new TimedEvent(new MarkerEvent("B"))
+                        .SetTime((MetricTimeSpan)snapPointTime2, TempoMap),
+                    new TimedEvent(new NoteOffEvent())
+                        .SetTime((MetricTimeSpan)endTime, TempoMap),
                 },
-                eventsWillBeSent: new EventToSend[] { },
-                stopAfter: stopAfter,
-                stopPeriod: stopPeriod,
-                setupPlayback: (context, playback) => snapPointsGroup = playback.Snapping.SnapToGrid(new ArbitraryGrid((MetricTimeSpan)snapPointTime1, (MetricTimeSpan)snapPointTime2)),
-                afterStart: NoPlaybackAction,
-                afterStop: (context, playback) => playback.MoveToPreviousSnapPoint(snapPointsGroup),
-                afterResume: (context, playback) => CheckCurrentTime(playback, snapPointTime1, "stopped"),
-                runningAfterResume: new[]
+                actions: new[]
                 {
-                    Tuple.Create<TimeSpan, PlaybackAction>(firstAfterResumeDelay, (context, playback) => CheckCurrentTime(playback, snapPointTime1 + firstAfterResumeDelay, "resumed")),
-                    Tuple.Create<TimeSpan, PlaybackAction>(secondAfterResumeDelay, (context, playback) =>
+                    new PlaybackChangerBase(stopAfter, p =>
                     {
-                        playback.MoveToPreviousSnapPoint(snapPointsGroup);
-                        CheckCurrentTime(playback, snapPointTime2, "resumed");
+                        p.Stop();
+                        p.MoveToPreviousSnapPoint(snapPointsGroup);
                     }),
-                    Tuple.Create<TimeSpan, PlaybackAction>(thirdAfterResumeDelay, (context, playback) => CheckCurrentTime(playback, snapPointTime2 + thirdAfterResumeDelay, "resumed"))
+                    new PlaybackChangerBase(stopPeriod, p =>
+                    {
+                        p.Start();
+                        CheckCurrentTime(p, snapPointTime1, "stopped");
+                    }),
+                    new PlaybackChangerBase(firstAfterResumeDelay,
+                        p => CheckCurrentTime(p, snapPointTime1 + firstAfterResumeDelay, "resumed")),
+                    new PlaybackChangerBase(secondAfterResumeDelay, p =>
+                    {
+                        p.MoveToPreviousSnapPoint(snapPointsGroup);
+                        CheckCurrentTime(p, snapPointTime2, "resumed");
+                    }),
+                    new PlaybackChangerBase(thirdAfterResumeDelay,
+                        p => CheckCurrentTime(p, snapPointTime2 + thirdAfterResumeDelay, "resumed")),
                 },
-                explicitExpectedTimes: new[]
+                setupPlayback: playback =>
                 {
-                    TimeSpan.Zero,
-                    endTime + stopPeriod + (stopAfter - snapPointTime1) + (snapPointTime1 + firstAfterResumeDelay + secondAfterResumeDelay - snapPointTime2)
+                    playback.InterruptNotesOnStop = false;
+
+                    snapPointsGroup = playback.SnapToEvents(e => e.EventType == MidiEventType.Marker);
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(0)),
+                    new ReceivedEvent(new MarkerEvent("A"), TimeSpan.FromMilliseconds(1000)),
+                    new ReceivedEvent(new MarkerEvent("A"), TimeSpan.FromMilliseconds(3000)),
+                    new ReceivedEvent(new MarkerEvent("B"), TimeSpan.FromMilliseconds(4100)),
+                    new ReceivedEvent(new MarkerEvent("B"), TimeSpan.FromMilliseconds(4600)),
+                    new ReceivedEvent(new NoteOffEvent(), endTime + stopPeriod + (stopAfter - snapPointTime1) + (snapPointTime1 + firstAfterResumeDelay + secondAfterResumeDelay - snapPointTime2)),
                 });
         }
 
         [Test]
-        public void MoveToPreviousSnapPoint_ByGroup_CheckReturnValue()
+        public void Snapping_MoveToPreviousSnapPoint_ByGroup_CheckReturnValue()
         {
-            using (var playback = Get10SecondsPlayback())
-            {
-                var snapPointsGroup = playback.Snapping.SnapToGrid(new ArbitraryGrid(new MetricTimeSpan(0, 0, 1), new MetricTimeSpan(0, 0, 5)));
+            SnapPointsGroup snapPointsGroup = null;
 
-                playback.MoveToTime(playback.GetDuration<MetricTimeSpan>());
-                Assert.IsTrue(playback.MoveToPreviousSnapPoint(snapPointsGroup), "Failed to move to first previous snap point.");
-                Assert.IsTrue(playback.MoveToPreviousSnapPoint(snapPointsGroup), "Failed to move to second previous snap point.");
-                Assert.IsFalse(playback.MoveToPreviousSnapPoint(snapPointsGroup), "Position changed beyond first snap point of the group.");
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
+                {
+                    new TimedEvent(new NoteOnEvent()),
+                    new TimedEvent(new MarkerEvent("A"))
+                        .SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(100), TempoMap),
+                    new TimedEvent(new MarkerEvent("B"))
+                        .SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(400), TempoMap),
+                    new TimedEvent(new NoteOffEvent())
+                        .SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(500), TempoMap),
+                },
+                actions: new[]
+                {
+                    new PlaybackChangerBase(50, p =>
+                    {
+                        p.Stop();
+                        p.MoveToTime(p.GetDuration<MetricTimeSpan>());
 
-                snapPointsGroup.IsEnabled = false;
-                playback.MoveToTime(playback.GetDuration<MetricTimeSpan>());
-                Assert.IsFalse(
-                    playback.MoveToPreviousSnapPoint(snapPointsGroup),
-                    "Position changed to the time of a snap point within disabled snap point group.");
-            }
+                        Assert.IsTrue(p.MoveToPreviousSnapPoint(snapPointsGroup), "Failed to move to first previous snap point.");
+                        Assert.IsTrue(p.MoveToPreviousSnapPoint(snapPointsGroup), "Failed to move to second previous snap point.");
+                        Assert.IsFalse(p.MoveToPreviousSnapPoint(snapPointsGroup), "Position changed beyond first snap point of the group.");
+
+                        p.Start();
+                    }),
+                    new PlaybackChangerBase(100, p =>
+                    {
+                        snapPointsGroup.IsEnabled = false;
+                        p.MoveToTime(p.GetDuration<MetricTimeSpan>());
+                        Assert.IsFalse(
+                            p.MoveToPreviousSnapPoint(snapPointsGroup),
+                            "Position changed to the time of a snap point within disabled snap point group.");
+                    }),
+                },
+                setupPlayback: playback =>
+                {
+                    playback.InterruptNotesOnStop = false;
+
+                    snapPointsGroup = playback.SnapToEvents(e => e.EventType == MidiEventType.Marker);
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(0)),
+                    new ReceivedEvent(new MarkerEvent("A"), TimeSpan.FromMilliseconds(50)),
+                    new ReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(150)),
+                    new ReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(150)),
+                });
         }
 
         [Retry(RetriesNumber)]
         [Test]
-        public void MoveToPreviousSnapPoint_Global()
+        public void Snapping_MoveToPreviousSnapPoint_Global()
         {
             var stopAfter = TimeSpan.FromSeconds(2);
             var stopPeriod = TimeSpan.FromSeconds(1);
@@ -407,69 +777,126 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
             var endTime = TimeSpan.FromSeconds(4);
 
-            CheckPlaybackStop(
-                eventsToSend: new[]
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
                 {
-                    new EventToSend(new NoteOnEvent(), TimeSpan.Zero),
-                    new EventToSend(new NoteOffEvent(), endTime)
+                    new TimedEvent(new NoteOnEvent()),
+                    new TimedEvent(new MarkerEvent("A"))
+                        .SetTime((MetricTimeSpan)snapPointTime1, TempoMap),
+                    new TimedEvent(new MarkerEvent("B"))
+                        .SetTime((MetricTimeSpan)snapPointTime2, TempoMap),
+                    new TimedEvent(new NoteOffEvent())
+                        .SetTime((MetricTimeSpan)endTime, TempoMap),
                 },
-                eventsWillBeSent: new EventToSend[] { },
-                stopAfter: stopAfter,
-                stopPeriod: stopPeriod,
-                setupPlayback: (context, playback) =>
+                actions: new[]
                 {
-                    playback.Snapping.SnapToGrid(new ArbitraryGrid((MetricTimeSpan)snapPointTime1, (MetricTimeSpan)snapPointTime2));
-                    playback.Snapping.AddSnapPoint((MetricTimeSpan)snapPointTime3, "Data");
-                    var snapPoint = playback.Snapping.AddSnapPoint(new MetricTimeSpan(0, 0, 0, 2400), "Data");
+                    new PlaybackChangerBase(stopAfter, p =>
+                    {
+                        p.Stop();
+                        p.MoveToPreviousSnapPoint();
+                    }),
+                    new PlaybackChangerBase(stopPeriod, p =>
+                    {
+                        p.Start();
+                        CheckCurrentTime(p, snapPointTime1, "stopped");
+                    }),
+                    new PlaybackChangerBase(firstAfterResumeDelay,
+                        p => CheckCurrentTime(p, snapPointTime1 + firstAfterResumeDelay, "resumed")),
+                    new PlaybackChangerBase(secondAfterResumeDelay, p =>
+                    {
+                        p.MoveToPreviousSnapPoint();
+                        CheckCurrentTime(p, snapPointTime3, "resumed");
+                    }),
+                    new PlaybackChangerBase(thirdAfterResumeDelay,
+                        p => CheckCurrentTime(p, snapPointTime3 + thirdAfterResumeDelay, "resumed")),
+                },
+                setupPlayback: playback =>
+                {
+                    playback.InterruptNotesOnStop = false;
+
+                    playback.SnapToEvents(e => e.EventType == MidiEventType.Marker);
+                    playback.AddSnapPoint((MetricTimeSpan)snapPointTime3, "Data");
+                    var snapPoint = playback.AddSnapPoint(new MetricTimeSpan(0, 0, 0, 2400), "Data");
                     snapPoint.IsEnabled = false;
                 },
-                afterStart: NoPlaybackAction,
-                afterStop: (context, playback) => playback.MoveToPreviousSnapPoint(),
-                afterResume: (context, playback) => CheckCurrentTime(playback, snapPointTime1, "stopped"),
-                runningAfterResume: new[]
+                expectedReceivedEvents: new[]
                 {
-                    Tuple.Create<TimeSpan, PlaybackAction>(firstAfterResumeDelay, (context, playback) => CheckCurrentTime(playback, snapPointTime1 + firstAfterResumeDelay, "resumed")),
-                    Tuple.Create<TimeSpan, PlaybackAction>(secondAfterResumeDelay, (context, playback) =>
-                    {
-                        playback.MoveToPreviousSnapPoint();
-                        CheckCurrentTime(playback, snapPointTime3, "resumed");
-                    }),
-                    Tuple.Create<TimeSpan, PlaybackAction>(thirdAfterResumeDelay, (context, playback) => CheckCurrentTime(playback, snapPointTime3 + thirdAfterResumeDelay, "resumed"))
-                },
-                explicitExpectedTimes: new[]
-                {
-                    TimeSpan.Zero,
-                    endTime + stopPeriod + (stopAfter - snapPointTime1) + (snapPointTime1 + firstAfterResumeDelay + secondAfterResumeDelay - snapPointTime3)
+                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
+                    new ReceivedEvent(new MarkerEvent("A"), TimeSpan.FromMilliseconds(1000)),
+                    new ReceivedEvent(new MarkerEvent("A"), TimeSpan.FromMilliseconds(3000)),
+                    new ReceivedEvent(new MarkerEvent("B"), TimeSpan.FromMilliseconds(4100)),
+                    new ReceivedEvent(new NoteOffEvent(), endTime + stopPeriod + (stopAfter - snapPointTime1) + (snapPointTime1 + firstAfterResumeDelay + secondAfterResumeDelay - snapPointTime3)),
                 });
         }
 
         [Test]
-        public void MoveToPreviousSnapPoint_Global_CheckReturnValue()
+        public void Snapping_MoveToPreviousSnapPoint_Global_CheckReturnValue()
         {
-            using (var playback = Get10SecondsPlayback())
-            {
-                var snapPoint1 = playback.Snapping.AddSnapPoint(new MetricTimeSpan(0, 0, 1));
-                var snapPoint2 = playback.Snapping.AddSnapPoint(new MetricTimeSpan(0, 0, 5));
+            SnapPoint snapPoint1 = null;
+            SnapPoint snapPoint2 = null;
 
-                playback.MoveToTime(playback.GetDuration<MetricTimeSpan>());
-                Assert.IsTrue(playback.MoveToPreviousSnapPoint(), "Failed to move to first previous snap point.");
-                Assert.IsTrue(playback.MoveToPreviousSnapPoint(), "Failed to move to second previous snap point.");
-                Assert.IsFalse(playback.MoveToPreviousSnapPoint(), "Position changed beyond first snap point.");
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
+                {
+                    new TimedEvent(new NoteOnEvent()),
+                    new TimedEvent(new NoteOffEvent())
+                        .SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(700), TempoMap),
+                },
+                actions: new[]
+                {
+                    new PlaybackChangerBase(50, p =>
+                    {
+                        p.Stop();
 
-                snapPoint2.IsEnabled = false;
-                playback.MoveToTime(playback.GetDuration<MetricTimeSpan>());
-                Assert.IsTrue(playback.MoveToPreviousSnapPoint(), "Failed to move to second previous snap point.");
-                Assert.IsFalse(playback.MoveToPreviousSnapPoint(), "Position changed beyond first snap point.");
+                        p.MoveToTime(p.GetDuration<MetricTimeSpan>());
+                        Assert.IsTrue(p.MoveToPreviousSnapPoint(), "Failed to move to first previous snap point.");
+                        Assert.IsTrue(p.MoveToPreviousSnapPoint(), "Failed to move to second previous snap point.");
+                        Assert.IsFalse(p.MoveToPreviousSnapPoint(), "Position changed beyond first snap point.");
 
-                snapPoint1.IsEnabled = false;
-                playback.MoveToTime(playback.GetDuration<MetricTimeSpan>());
-                Assert.IsFalse(playback.MoveToPreviousSnapPoint(), "Position changed without any snap point enabled.");
-            }
+                        p.Start();
+                    }),
+                    new PlaybackChangerBase(100, p =>
+                    {
+                        p.Stop();
+
+                        snapPoint2.IsEnabled = false;
+                        p.MoveToTime(p.GetDuration<MetricTimeSpan>());
+                        Assert.IsTrue(p.MoveToPreviousSnapPoint(), "Failed to move to second previous snap point.");
+                        Assert.IsFalse(p.MoveToPreviousSnapPoint(), "Position changed beyond first snap point.");
+
+                        p.Start();
+                    }),
+                    new PlaybackChangerBase(100, p =>
+                    {
+                        p.Stop();
+
+                        snapPoint1.IsEnabled = false;
+                        p.MoveToTime(p.GetDuration<MetricTimeSpan>());
+                        Assert.IsFalse(p.MoveToPreviousSnapPoint(), "Position changed without any snap point enabled.");
+
+                        p.Start();
+                    }),
+                },
+                setupPlayback: playback =>
+                {
+                    playback.InterruptNotesOnStop = false;
+
+                    snapPoint1 = playback.AddSnapPoint(new MetricTimeSpan(0, 0, 0, 100));
+                    snapPoint2 = playback.AddSnapPoint(new MetricTimeSpan(0, 0, 0, 500));
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(0)),
+                    new ReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(250)),
+                    new ReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(250)),
+                });
         }
 
         [Retry(RetriesNumber)]
         [Test]
-        public void MoveToPreviousSnapPoint_ByData()
+        public void Snapping_MoveToPreviousSnapPoint_ByData()
         {
             var stopAfter = TimeSpan.FromSeconds(2);
             var stopPeriod = TimeSpan.FromSeconds(1);
@@ -484,63 +911,107 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
             var endTime = TimeSpan.FromSeconds(4);
 
-            CheckPlaybackStop(
-                eventsToSend: new[]
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
                 {
-                    new EventToSend(new NoteOnEvent(), TimeSpan.Zero),
-                    new EventToSend(new NoteOffEvent(), endTime)
+                    new TimedEvent(new NoteOnEvent()),
+                    new TimedEvent(new NoteOffEvent())
+                        .SetTime((MetricTimeSpan)endTime, TempoMap),
                 },
-                eventsWillBeSent: new EventToSend[] { },
-                stopAfter: stopAfter,
-                stopPeriod: stopPeriod,
-                setupPlayback: (context, playback) =>
+                actions: new[]
                 {
-                    playback.Snapping.AddSnapPoint((MetricTimeSpan)snapPointTime1, "X");
-                    playback.Snapping.AddSnapPoint((MetricTimeSpan)snapPointTime2, "Y");
-                    playback.Snapping.AddSnapPoint((MetricTimeSpan)snapPointTime3, "X");
-                    playback.Snapping.AddSnapPoint(new MetricTimeSpan(0, 0, 0, 2400), "Y");
-                },
-                afterStart: NoPlaybackAction,
-                afterStop: (context, playback) => playback.MoveToPreviousSnapPoint("X"),
-                afterResume: (context, playback) => CheckCurrentTime(playback, snapPointTime1, "stopped"),
-                runningAfterResume: new[]
-                {
-                    Tuple.Create<TimeSpan, PlaybackAction>(firstAfterResumeDelay, (context, playback) => CheckCurrentTime(playback, snapPointTime1 + firstAfterResumeDelay, "resumed")),
-                    Tuple.Create<TimeSpan, PlaybackAction>(secondAfterResumeDelay, (context, playback) =>
+                    new PlaybackChangerBase(stopAfter, p =>
                     {
-                        playback.MoveToPreviousSnapPoint("X");
-                        CheckCurrentTime(playback, snapPointTime3, "resumed");
+                        p.Stop();
+                        p.MoveToPreviousSnapPoint("X");
                     }),
-                    Tuple.Create<TimeSpan, PlaybackAction>(thirdAfterResumeDelay, (context, playback) => CheckCurrentTime(playback, snapPointTime3 + thirdAfterResumeDelay, "resumed"))
+                    new PlaybackChangerBase(stopPeriod, p =>
+                    {
+                        p.Start();
+                        CheckCurrentTime(p, snapPointTime1, "stopped");
+                    }),
+                    new PlaybackChangerBase(firstAfterResumeDelay,
+                        p => CheckCurrentTime(p, snapPointTime1 + firstAfterResumeDelay, "resumed")),
+                    new PlaybackChangerBase(secondAfterResumeDelay, p =>
+                    {
+                        p.MoveToPreviousSnapPoint("X");
+                        CheckCurrentTime(p, snapPointTime3, "resumed");
+                    }),
+                    new PlaybackChangerBase(thirdAfterResumeDelay,
+                        p => CheckCurrentTime(p, snapPointTime3 + thirdAfterResumeDelay, "resumed")),
                 },
-                explicitExpectedTimes: new[]
+                setupPlayback: playback =>
                 {
-                    TimeSpan.Zero,
-                    endTime + stopPeriod + (stopAfter - snapPointTime1) + (snapPointTime1 + firstAfterResumeDelay + secondAfterResumeDelay - snapPointTime3)
+                    playback.InterruptNotesOnStop = false;
+
+                    playback.AddSnapPoint((MetricTimeSpan)snapPointTime1, "X");
+                    playback.AddSnapPoint((MetricTimeSpan)snapPointTime2, "Y");
+                    playback.AddSnapPoint((MetricTimeSpan)snapPointTime3, "X");
+                    playback.AddSnapPoint(new MetricTimeSpan(0, 0, 0, 2400), "Y");
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
+                    new ReceivedEvent(new NoteOffEvent(), endTime + stopPeriod + (stopAfter - snapPointTime1) + (snapPointTime1 + firstAfterResumeDelay + secondAfterResumeDelay - snapPointTime3)),
                 });
         }
 
         [Test]
-        public void MoveToPreviousSnapPoint_ByData_CheckReturnValue()
+        public void Snapping_MoveToPreviousSnapPoint_ByData_CheckReturnValue()
         {
-            using (var playback = Get10SecondsPlayback())
-            {
-                var snapPoint1 = playback.Snapping.AddSnapPoint(new MetricTimeSpan(0, 0, 1), "X");
-                var snapPoint2 = playback.Snapping.AddSnapPoint(new MetricTimeSpan(0, 0, 5), "Y");
+            SnapPoint snapPoint1 = null;
+            SnapPoint snapPoint2 = null;
 
-                playback.MoveToTime(playback.GetDuration<MetricTimeSpan>());
-                Assert.IsTrue(playback.MoveToPreviousSnapPoint("X"), "Failed to move to previous snap point.");
-                Assert.IsFalse(playback.MoveToPreviousSnapPoint("X"), "Position changed beyond first snap point.");
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
+                {
+                    new TimedEvent(new NoteOnEvent()),
+                    new TimedEvent(new NoteOffEvent())
+                        .SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(700), TempoMap),
+                },
+                actions: new[]
+                {
+                    new PlaybackChangerBase(50, p =>
+                    {
+                        p.Stop();
 
-                snapPoint1.IsEnabled = false;
-                playback.MoveToTime(playback.GetDuration<MetricTimeSpan>());
-                Assert.IsFalse(playback.MoveToPreviousSnapPoint("X"), "Position changed without any snap point enabled.");
-            }
+                        p.MoveToTime(p.GetDuration<MetricTimeSpan>());
+                        Assert.IsTrue(p.MoveToPreviousSnapPoint("X"), "Failed to move to previous snap point.");
+                        Assert.IsFalse(p.MoveToPreviousSnapPoint("X"), "Position changed beyond first snap point.");
+
+                        p.Start();
+                    }),
+                    new PlaybackChangerBase(100, p =>
+                    {
+                        p.Stop();
+
+                        snapPoint1.IsEnabled = false;
+                        p.MoveToTime(p.GetDuration<MetricTimeSpan>());
+                        Assert.IsFalse(p.MoveToPreviousSnapPoint("X"), "Position changed without any snap point enabled.");
+
+                        p.Start();
+                    }),
+                },
+                setupPlayback: playback =>
+                {
+                    playback.InterruptNotesOnStop = false;
+
+                    snapPoint1 = playback.AddSnapPoint(new MetricTimeSpan(0, 0, 0, 100), "X");
+                    snapPoint2 = playback.AddSnapPoint(new MetricTimeSpan(0, 0, 0, 500), "Y");
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(0)),
+                    new ReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(150)),
+                    new ReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(150)),
+                });
         }
 
         [Retry(RetriesNumber)]
         [Test]
-        public void MoveToNextSnapPoint_ByGroup()
+        public void Snapping_MoveToNextSnapPoint_ByGroup()
         {
             var stopAfter = TimeSpan.FromSeconds(1);
             var stopPeriod = TimeSpan.FromMilliseconds(1100);
@@ -556,58 +1027,110 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
             var endTime = TimeSpan.FromSeconds(4);
 
-            CheckPlaybackStop(
-                eventsToSend: new[]
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
                 {
-                    new EventToSend(new NoteOnEvent(), TimeSpan.Zero),
-                    new EventToSend(new NoteOffEvent(), endTime)
+                    new TimedEvent(new NoteOnEvent()),
+                    new TimedEvent(new MarkerEvent("A"))
+                        .SetTime((MetricTimeSpan)snapPointTime1, TempoMap),
+                    new TimedEvent(new MarkerEvent("B"))
+                        .SetTime((MetricTimeSpan)snapPointTime2, TempoMap),
+                    new TimedEvent(new NoteOffEvent())
+                        .SetTime((MetricTimeSpan)endTime, TempoMap),
                 },
-                eventsWillBeSent: new EventToSend[] { },
-                stopAfter: stopAfter,
-                stopPeriod: stopPeriod,
-                setupPlayback: (context, playback) => snapPointsGroup = playback.Snapping.SnapToGrid(new ArbitraryGrid((MetricTimeSpan)snapPointTime1, (MetricTimeSpan)snapPointTime2)),
-                afterStart: NoPlaybackAction,
-                afterStop: (context, playback) => playback.MoveToNextSnapPoint(snapPointsGroup),
-                afterResume: (context, playback) => CheckCurrentTime(playback, snapPointTime1, "stopped"),
-                runningAfterResume: new[]
+                actions: new[]
                 {
-                    Tuple.Create<TimeSpan, PlaybackAction>(firstAfterResumeDelay, (context, playback) => CheckCurrentTime(playback, snapPointTime1 + firstAfterResumeDelay, "resumed")),
-                    Tuple.Create<TimeSpan, PlaybackAction>(secondAfterResumeDelay, (context, playback) =>
+                    new PlaybackChangerBase(stopAfter, p =>
                     {
-                        playback.MoveToNextSnapPoint(snapPointsGroup);
-                        CheckCurrentTime(playback, snapPointTime2, "resumed");
+                        p.Stop();
+                        p.MoveToNextSnapPoint(snapPointsGroup);
                     }),
-                    Tuple.Create<TimeSpan, PlaybackAction>(thirdAfterResumeDelay, (context, playback) => CheckCurrentTime(playback, snapPointTime2 + thirdAfterResumeDelay, "resumed"))
+                    new PlaybackChangerBase(stopPeriod, p =>
+                    {
+                        p.Start();
+                        CheckCurrentTime(p, snapPointTime1, "stopped");
+                    }),
+                    new PlaybackChangerBase(firstAfterResumeDelay,
+                        p => CheckCurrentTime(p, snapPointTime1 + firstAfterResumeDelay, "resumed")),
+                    new PlaybackChangerBase(secondAfterResumeDelay, p =>
+                    {
+                        p.MoveToNextSnapPoint(snapPointsGroup);
+                        CheckCurrentTime(p, snapPointTime2, "resumed");
+                    }),
+                    new PlaybackChangerBase(thirdAfterResumeDelay,
+                        p => CheckCurrentTime(p, snapPointTime2 + thirdAfterResumeDelay, "resumed")),
                 },
-                explicitExpectedTimes: new[]
+                setupPlayback: playback =>
                 {
-                    TimeSpan.Zero,
-                    endTime + stopPeriod - (snapPointTime1 - stopAfter) - (snapPointTime2 - (snapPointTime1 + firstAfterResumeDelay + secondAfterResumeDelay))
+                    playback.InterruptNotesOnStop = false;
+
+                    snapPointsGroup = playback.SnapToEvents(e => e.EventType == MidiEventType.Marker);
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
+                    new ReceivedEvent(new MarkerEvent("A"), TimeSpan.FromMilliseconds(2100)),
+                    new ReceivedEvent(new MarkerEvent("B"), TimeSpan.FromMilliseconds(3000)),
+                    new ReceivedEvent(new NoteOffEvent(), endTime + stopPeriod - (snapPointTime1 - stopAfter) - (snapPointTime2 - (snapPointTime1 + firstAfterResumeDelay + secondAfterResumeDelay))),
                 });
         }
 
         [Test]
-        public void MoveToNextSnapPoint_ByGroup_CheckReturnValue()
+        public void Snapping_MoveToNextSnapPoint_ByGroup_CheckReturnValue()
         {
-            using (var playback = Get10SecondsPlayback())
-            {
-                var snapPointsGroup = playback.Snapping.SnapToGrid(new ArbitraryGrid(new MetricTimeSpan(0, 0, 1), new MetricTimeSpan(0, 0, 5)));
+            SnapPointsGroup snapPointsGroup = null;
 
-                Assert.IsTrue(playback.MoveToNextSnapPoint(snapPointsGroup), "Failed to move to first next snap point.");
-                Assert.IsTrue(playback.MoveToNextSnapPoint(snapPointsGroup), "Failed to move to second next snap point.");
-                Assert.IsFalse(playback.MoveToNextSnapPoint(snapPointsGroup), "Position changed beyond last snap point of the group.");
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
+                {
+                    new TimedEvent(new NoteOnEvent()),
+                    new TimedEvent(new MarkerEvent("A"))
+                        .SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(100), TempoMap),
+                    new TimedEvent(new MarkerEvent("B"))
+                        .SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(400), TempoMap),
+                    new TimedEvent(new NoteOffEvent())
+                        .SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(500), TempoMap),
+                },
+                actions: new[]
+                {
+                    new PlaybackChangerBase(50, p =>
+                    {
+                        Assert.IsTrue(p.MoveToNextSnapPoint(snapPointsGroup), "Failed to move to first next snap point.");
+                        Assert.IsTrue(p.MoveToNextSnapPoint(snapPointsGroup), "Failed to move to second next snap point.");
+                        Assert.IsFalse(p.MoveToNextSnapPoint(snapPointsGroup), "Position changed beyond last snap point of the group.");
+                    }),
+                    new PlaybackChangerBase(50, p =>
+                    {
+                        snapPointsGroup.IsEnabled = false;
+                        p.MoveToStart();
+                        Assert.IsFalse(
+                            p.MoveToNextSnapPoint(snapPointsGroup),
+                            "Position changed to the time of a snap point within disabled snap point group.");
+                    }),
+                },
+                setupPlayback: playback =>
+                {
+                    playback.InterruptNotesOnStop = false;
 
-                snapPointsGroup.IsEnabled = false;
-                playback.MoveToStart();
-                Assert.IsFalse(
-                    playback.MoveToNextSnapPoint(snapPointsGroup),
-                    "Position changed to the time of a snap point within disabled snap point group.");
-            }
+                    snapPointsGroup = playback.SnapToEvents(e => e.EventType == MidiEventType.Marker);
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(0)),
+                    new ReceivedEvent(new MarkerEvent("B"), TimeSpan.FromMilliseconds(50)),
+                    new ReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(100)),
+                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(100)),
+                    new ReceivedEvent(new MarkerEvent("A"), TimeSpan.FromMilliseconds(200)),
+                    new ReceivedEvent(new MarkerEvent("B"), TimeSpan.FromMilliseconds(500)),
+                    new ReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(600)),
+                });
         }
 
         [Retry(RetriesNumber)]
         [Test]
-        public void MoveToNextSnapPoint_Global()
+        public void Snapping_MoveToNextSnapPoint_Global()
         {
             var stopAfter = TimeSpan.FromSeconds(1);
             var stopPeriod = TimeSpan.FromMilliseconds(1100);
@@ -622,68 +1145,115 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
             var endTime = TimeSpan.FromSeconds(4);
 
-            CheckPlaybackStop(
-                eventsToSend: new[]
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
                 {
-                    new EventToSend(new NoteOnEvent(), TimeSpan.Zero),
-                    new EventToSend(new NoteOffEvent(), endTime)
+                    new TimedEvent(new NoteOnEvent()),
+                    new TimedEvent(new MarkerEvent("A"))
+                        .SetTime((MetricTimeSpan)snapPointTime1, TempoMap),
+                    new TimedEvent(new MarkerEvent("B"))
+                        .SetTime((MetricTimeSpan)snapPointTime2, TempoMap),
+                    new TimedEvent(new NoteOffEvent())
+                        .SetTime((MetricTimeSpan)endTime, TempoMap),
                 },
-                eventsWillBeSent: new EventToSend[] { },
-                stopAfter: stopAfter,
-                stopPeriod: stopPeriod,
-                setupPlayback: (context, playback) =>
+                actions: new[]
                 {
-                    playback.Snapping.SnapToGrid(new ArbitraryGrid((MetricTimeSpan)snapPointTime1, (MetricTimeSpan)snapPointTime2));
-                    playback.Snapping.AddSnapPoint((MetricTimeSpan)snapPointTime3, "Data");
-                    var snapPoint = playback.Snapping.AddSnapPoint(new MetricTimeSpan(0, 0, 0, 1100), "Data");
+                    new PlaybackChangerBase(stopAfter, p =>
+                    {
+                        p.Stop();
+                        p.MoveToNextSnapPoint();
+                    }),
+                    new PlaybackChangerBase(stopPeriod, p =>
+                    {
+                        p.Start();
+                        CheckCurrentTime(p, snapPointTime1, "stopped");
+                    }),
+                    new PlaybackChangerBase(firstAfterResumeDelay,
+                        p => CheckCurrentTime(p, snapPointTime1 + firstAfterResumeDelay, "resumed")),
+                    new PlaybackChangerBase(secondAfterResumeDelay, p =>
+                    {
+                        p.MoveToNextSnapPoint();
+                        CheckCurrentTime(p, snapPointTime3, "resumed");
+                    }),
+                    new PlaybackChangerBase(thirdAfterResumeDelay,
+                        p => CheckCurrentTime(p, snapPointTime3 + thirdAfterResumeDelay, "resumed")),
+                },
+                setupPlayback: playback =>
+                {
+                    playback.InterruptNotesOnStop = false;
+
+                    playback.SnapToEvents(e => e.EventType == MidiEventType.Marker);
+                    playback.AddSnapPoint((MetricTimeSpan)snapPointTime3, "Data");
+                    var snapPoint = playback.AddSnapPoint(new MetricTimeSpan(0, 0, 0, 1100), "Data");
                     snapPoint.IsEnabled = false;
                 },
-                afterStart: NoPlaybackAction,
-                afterStop: (context, playback) => playback.MoveToNextSnapPoint(),
-                afterResume: (context, playback) => CheckCurrentTime(playback, snapPointTime1, "stopped"),
-                runningAfterResume: new[]
+                expectedReceivedEvents: new[]
                 {
-                    Tuple.Create<TimeSpan, PlaybackAction>(firstAfterResumeDelay, (context, playback) => CheckCurrentTime(playback, snapPointTime1 + firstAfterResumeDelay, "resumed")),
-                    Tuple.Create<TimeSpan, PlaybackAction>(secondAfterResumeDelay, (context, playback) =>
-                    {
-                        playback.MoveToNextSnapPoint();
-                        CheckCurrentTime(playback, snapPointTime3, "resumed");
-                    }),
-                    Tuple.Create<TimeSpan, PlaybackAction>(thirdAfterResumeDelay, (context, playback) => CheckCurrentTime(playback, snapPointTime3 + thirdAfterResumeDelay, "resumed"))
-                },
-                explicitExpectedTimes: new[]
-                {
-                    TimeSpan.Zero,
-                    endTime + stopPeriod - (snapPointTime1 - stopAfter) - (snapPointTime3 - (snapPointTime1 + firstAfterResumeDelay + secondAfterResumeDelay))
+                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
+                    new ReceivedEvent(new MarkerEvent("A"), TimeSpan.FromMilliseconds(2100)),
+                    new ReceivedEvent(new MarkerEvent("B"), TimeSpan.FromMilliseconds(3100)),
+                    new ReceivedEvent(new NoteOffEvent(), endTime + stopPeriod - (snapPointTime1 - stopAfter) - (snapPointTime3 - (snapPointTime1 + firstAfterResumeDelay + secondAfterResumeDelay))),
                 });
         }
 
         [Test]
-        public void MoveToNextSnapPoint_Global_CheckReturnValue()
+        public void Snapping_MoveToNextSnapPoint_Global_CheckReturnValue()
         {
-            using (var playback = Get10SecondsPlayback())
-            {
-                var snapPoint1 = playback.Snapping.AddSnapPoint(new MetricTimeSpan(0, 0, 1));
-                var snapPoint2 = playback.Snapping.AddSnapPoint(new MetricTimeSpan(0, 0, 5));
+            SnapPoint snapPoint1 = null;
+            SnapPoint snapPoint2 = null;
 
-                Assert.IsTrue(playback.MoveToNextSnapPoint(), "Failed to move to first next snap point.");
-                Assert.IsTrue(playback.MoveToNextSnapPoint(), "Failed to move to second next snap point.");
-                Assert.IsFalse(playback.MoveToNextSnapPoint(), "Position changed beyond last snap point.");
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
+                {
+                    new TimedEvent(new NoteOnEvent()),
+                    new TimedEvent(new NoteOffEvent())
+                        .SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(700), TempoMap),
+                },
+                actions: new[]
+                {
+                    new PlaybackChangerBase(50, p =>
+                    {
+                        Assert.IsTrue(p.MoveToNextSnapPoint(), "Failed to move to first next snap point.");
+                        Assert.IsTrue(p.MoveToNextSnapPoint(), "Failed to move to second next snap point.");
+                        Assert.IsFalse(p.MoveToNextSnapPoint(), "Position changed beyond last snap point.");
+                    }),
+                    new PlaybackChangerBase(100, p =>
+                    {
+                        snapPoint2.IsEnabled = false;
+                        p.MoveToStart();
+                        Assert.IsTrue(p.MoveToNextSnapPoint(), "Failed to move to second next snap point.");
+                        Assert.IsFalse(p.MoveToNextSnapPoint(), "Position changed beyond last snap point.");
+                    }),
+                    new PlaybackChangerBase(100, p =>
+                    {
+                        snapPoint1.IsEnabled = false;
+                        p.MoveToStart();
+                        Assert.IsFalse(p.MoveToNextSnapPoint(), "Position changed without any snap point enabled.");
+                    }),
+                },
+                setupPlayback: playback =>
+                {
+                    playback.InterruptNotesOnStop = false;
 
-                snapPoint2.IsEnabled = false;
-                playback.MoveToStart();
-                Assert.IsTrue(playback.MoveToNextSnapPoint(), "Failed to move to second next snap point.");
-                Assert.IsFalse(playback.MoveToNextSnapPoint(), "Position changed beyond last snap point.");
-
-                snapPoint1.IsEnabled = false;
-                playback.MoveToStart();
-                Assert.IsFalse(playback.MoveToNextSnapPoint(), "Position changed without any snap point enabled.");
-            }
+                    snapPoint1 = playback.AddSnapPoint(new MetricTimeSpan(0, 0, 0, 100));
+                    snapPoint2 = playback.AddSnapPoint(new MetricTimeSpan(0, 0, 0, 500));
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(0)),
+                    new ReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(150)),
+                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(150)),
+                    new ReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(250)),
+                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(250)),
+                    new ReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(950)),
+                });
         }
 
         [Retry(RetriesNumber)]
         [Test]
-        public void MoveToNextSnapPoint_ByData()
+        public void Snapping_MoveToNextSnapPoint_ByData()
         {
             var stopAfter = TimeSpan.FromSeconds(1);
             var stopPeriod = TimeSpan.FromMilliseconds(1100);
@@ -698,72 +1268,130 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
             var endTime = TimeSpan.FromSeconds(4);
 
-            CheckPlaybackStop(
-                eventsToSend: new[]
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
                 {
-                    new EventToSend(new NoteOnEvent(), TimeSpan.Zero),
-                    new EventToSend(new NoteOffEvent(), endTime)
+                    new TimedEvent(new NoteOnEvent()),
+                    new TimedEvent(new NoteOffEvent())
+                        .SetTime((MetricTimeSpan)endTime, TempoMap),
                 },
-                eventsWillBeSent: new EventToSend[] { },
-                stopAfter: stopAfter,
-                stopPeriod: stopPeriod,
-                setupPlayback: (context, playback) =>
+                actions: new[]
                 {
-                    playback.Snapping.AddSnapPoint((MetricTimeSpan)snapPointTime1, "X");
-                    playback.Snapping.AddSnapPoint((MetricTimeSpan)snapPointTime2, "Y");
-                    playback.Snapping.AddSnapPoint((MetricTimeSpan)snapPointTime3, "X");
-                },
-                afterStart: NoPlaybackAction,
-                afterStop: (context, playback) => playback.MoveToNextSnapPoint("X"),
-                afterResume: (context, playback) => CheckCurrentTime(playback, snapPointTime1, "stopped"),
-                runningAfterResume: new[]
-                {
-                    Tuple.Create<TimeSpan, PlaybackAction>(firstAfterResumeDelay, (context, playback) => CheckCurrentTime(playback, snapPointTime1 + firstAfterResumeDelay, "resumed")),
-                    Tuple.Create<TimeSpan, PlaybackAction>(secondAfterResumeDelay, (context, playback) =>
+                    new PlaybackChangerBase(stopAfter, p =>
                     {
-                        playback.MoveToNextSnapPoint("X");
-                        CheckCurrentTime(playback, snapPointTime3, "resumed");
+                        p.Stop();
+                        p.MoveToNextSnapPoint("X");
                     }),
-                    Tuple.Create<TimeSpan, PlaybackAction>(thirdAfterResumeDelay, (context, playback) => CheckCurrentTime(playback, snapPointTime3 + thirdAfterResumeDelay, "resumed"))
+                    new PlaybackChangerBase(stopPeriod, p =>
+                    {
+                        p.Start();
+                        CheckCurrentTime(p, snapPointTime1, "stopped");
+                    }),
+                    new PlaybackChangerBase(firstAfterResumeDelay,
+                        p => CheckCurrentTime(p, snapPointTime1 + firstAfterResumeDelay, "resumed")),
+                    new PlaybackChangerBase(secondAfterResumeDelay, p =>
+                    {
+                        p.MoveToNextSnapPoint("X");
+                        CheckCurrentTime(p, snapPointTime3, "resumed");
+                    }),
+                    new PlaybackChangerBase(thirdAfterResumeDelay,
+                        p => CheckCurrentTime(p, snapPointTime3 + thirdAfterResumeDelay, "resumed")),
                 },
-                explicitExpectedTimes: new[]
+                setupPlayback: playback =>
                 {
-                    TimeSpan.Zero,
-                    endTime + stopPeriod - (snapPointTime1 - stopAfter) - (snapPointTime3 - (snapPointTime1 + firstAfterResumeDelay + secondAfterResumeDelay))
+                    playback.InterruptNotesOnStop = false;
+
+                    playback.AddSnapPoint((MetricTimeSpan)snapPointTime1, "X");
+                    playback.AddSnapPoint((MetricTimeSpan)snapPointTime2, "Y");
+                    playback.AddSnapPoint((MetricTimeSpan)snapPointTime3, "X");
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
+                    new ReceivedEvent(new NoteOffEvent(), endTime + stopPeriod - (snapPointTime1 - stopAfter) - (snapPointTime3 - (snapPointTime1 + firstAfterResumeDelay + secondAfterResumeDelay))),
                 });
         }
 
         [Test]
-        public void MoveToNextSnapPoint_ByData_CheckReturnValue()
+        public void Snapping_MoveToNextSnapPoint_ByData_CheckReturnValue()
         {
-            using (var playback = Get10SecondsPlayback())
-            {
-                var snapPoint1 = playback.Snapping.AddSnapPoint(new MetricTimeSpan(0, 0, 1), "Y");
-                var snapPoint2 = playback.Snapping.AddSnapPoint(new MetricTimeSpan(0, 0, 5), "X");
+            SnapPoint snapPoint1 = null;
+            SnapPoint snapPoint2 = null;
 
-                Assert.IsTrue(playback.MoveToNextSnapPoint("X"), "Failed to move to next snap point.");
-                Assert.IsFalse(playback.MoveToNextSnapPoint("X"), "Position changed beyond last snap point.");
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
+                {
+                    new TimedEvent(new NoteOnEvent()),
+                    new TimedEvent(new NoteOffEvent())
+                        .SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(700), TempoMap),
+                },
+                actions: new[]
+                {
+                    new PlaybackChangerBase(50, p =>
+                    {
+                        Assert.IsTrue(p.MoveToNextSnapPoint("X"), "Failed to move to next snap point.");
+                        Assert.IsFalse(p.MoveToNextSnapPoint("X"), "Position changed beyond last snap point.");
+                    }),
+                    new PlaybackChangerBase(100, p =>
+                    {
+                        snapPoint2.IsEnabled = false;
+                        p.MoveToStart();
+                        Assert.IsFalse(p.MoveToNextSnapPoint("X"), "Position changed without any snap point enabled.");
+                    }),
+                },
+                setupPlayback: playback =>
+                {
+                    playback.InterruptNotesOnStop = false;
 
-                snapPoint2.IsEnabled = false;
-                playback.MoveToStart();
-                Assert.IsFalse(playback.MoveToNextSnapPoint("X"), "Position changed without any snap point enabled.");
-            }
+                    snapPoint1 = playback.AddSnapPoint(new MetricTimeSpan(0, 0, 0, 100), "Y");
+                    snapPoint2 = playback.AddSnapPoint(new MetricTimeSpan(0, 0, 0, 500), "X");
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(0)),
+                    new ReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(150)),
+                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(150)),
+                    new ReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(850)),
+                });
         }
 
         [Test]
-        public void MoveToNextSnapPoint_ByData_CheckReturnValue_AtZero()
+        public void Snapping_MoveToNextSnapPoint_ByData_CheckReturnValue_AtZero()
         {
-            using (var playback = Get10SecondsPlayback())
-            {
-                playback.Snapping.AddSnapPoint(new MetricTimeSpan(), "X");
-                Assert.IsTrue(playback.MoveToNextSnapPoint("X"), "Failed to move to next snap point.");
-                Assert.IsFalse(playback.MoveToNextSnapPoint("X"), "Position changed beyond last snap point.");
-            }
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
+                {
+                    new TimedEvent(new NoteOnEvent()),
+                    new TimedEvent(new NoteOffEvent())
+                        .SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(700), TempoMap),
+                },
+                actions: new[]
+                {
+                    new PlaybackChangerBase(50, p =>
+                    {
+                        Assert.IsFalse(p.MoveToNextSnapPoint("X"), "Position changed beyond last snap point.");
+                    }),
+                },
+                setupPlayback: playback =>
+                {
+                    playback.InterruptNotesOnStop = false;
+
+                    playback.AddSnapPoint(new MetricTimeSpan(), "X");
+                    Assert.IsTrue(playback.MoveToNextSnapPoint("X"), "Failed to move to next snap point.");
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(0)),
+                    new ReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(700)),
+                });
         }
 
         [Retry(RetriesNumber)]
         [Test]
-        public void SnapToNotesStarts()
+        public void Snapping_SnapToEvents_1()
         {
             var stopAfter = TimeSpan.FromSeconds(2);
             var stopPeriod = TimeSpan.FromSeconds(1);
@@ -779,129 +1407,195 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
             var endTime = snapPointTime2 + TimeSpan.FromMilliseconds(1200);
 
-            CheckPlaybackStop(
-                eventsToSend: new[]
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
                 {
-                    new EventToSend(new NoteOnEvent((SevenBitNumber)100, (SevenBitNumber)100), snapPointTime1),
-                    new EventToSend(new NoteOnEvent((SevenBitNumber)10, (SevenBitNumber)100), snapPointTime2 - snapPointTime1),
-                    new EventToSend(new NoteOffEvent((SevenBitNumber)100, (SevenBitNumber)100), TimeSpan.FromSeconds(1)),
-                    new EventToSend(new NoteOffEvent((SevenBitNumber)10, (SevenBitNumber)100), TimeSpan.FromMilliseconds(200))
+                    new TimedEvent(new NoteOnEvent((SevenBitNumber)100, (SevenBitNumber)100))
+                        .SetTime((MetricTimeSpan)snapPointTime1, TempoMap),
+                    new TimedEvent(new NoteOnEvent((SevenBitNumber)10, (SevenBitNumber)100))
+                        .SetTime((MetricTimeSpan)snapPointTime2, TempoMap),
+                    new TimedEvent(new NoteOffEvent((SevenBitNumber)100, (SevenBitNumber)100))
+                        .SetTime((MetricTimeSpan)(snapPointTime2 + TimeSpan.FromSeconds(1)), TempoMap),
+                    new TimedEvent(new NoteOffEvent((SevenBitNumber)10, (SevenBitNumber)100))
+                        .SetTime((MetricTimeSpan)(snapPointTime2 + TimeSpan.FromMilliseconds(1200)), TempoMap),
                 },
-                eventsWillBeSent: new EventToSend[] { },
-                stopAfter: stopAfter,
-                stopPeriod: stopPeriod,
-                setupPlayback: (context, playback) =>
+                actions: new[]
+                {
+                    new PlaybackChangerBase(stopAfter, p =>
+                    {
+                        p.Stop();
+                        p.MoveToPreviousSnapPoint(snapPointsGroup);
+                    }),
+                    new PlaybackChangerBase(stopPeriod, p =>
+                    {
+                        p.Start();
+                        CheckCurrentTime(p, snapPointTime1, "stopped");
+                    }),
+                    new PlaybackChangerBase(firstAfterResumeDelay,
+                        p => CheckCurrentTime(p, snapPointTime1 + firstAfterResumeDelay, "resumed")),
+                    new PlaybackChangerBase(secondAfterResumeDelay, p =>
+                    {
+                        p.MoveToNextSnapPoint(snapPointsGroup);
+                        CheckCurrentTime(p, snapPointTime2, "resumed");
+                    }),
+                    new PlaybackChangerBase(thirdAfterResumeDelay,
+                        p => CheckCurrentTime(p, snapPointTime2 + thirdAfterResumeDelay, "resumed")),
+                },
+                setupPlayback: playback =>
                 {
                     playback.TrackNotes = false;
+                    playback.InterruptNotesOnStop = false;
 
-                    snapPointsGroup = playback.Snapping.SnapToNotesStarts();
-                    var snapPointsGroup2 = playback.Snapping.SnapToNotesStarts();
-                    Assert.That(playback.Snapping.SnapPoints, Has.Count.EqualTo(2), "Count of snap points is invalid.");
-                    Assert.AreSame(snapPointsGroup, snapPointsGroup2, "Snapping to notes starts creates new snap points group.");
+                    snapPointsGroup = playback.SnapToEvents(e => e.EventType == MidiEventType.NoteOn);
+                    var snapPointsGroup2 = playback.SnapToEvents(e => e.EventType == MidiEventType.NoteOn);
+                    Assert.AreNotSame(snapPointsGroup, snapPointsGroup2, "Snapping to notes starts creates new snap points group.");
                 },
-                afterStart: NoPlaybackAction,
-                afterStop: (context, playback) => playback.MoveToPreviousSnapPoint(snapPointsGroup),
-                afterResume: (context, playback) => CheckCurrentTime(playback, snapPointTime1, "stopped"),
-                runningAfterResume: new[]
+                expectedReceivedEvents: new[]
                 {
-                    Tuple.Create<TimeSpan, PlaybackAction>(firstAfterResumeDelay, (context, playback) => CheckCurrentTime(playback, snapPointTime1 + firstAfterResumeDelay, "resumed")),
-                    Tuple.Create<TimeSpan, PlaybackAction>(secondAfterResumeDelay, (context, playback) =>
-                    {
-                        playback.MoveToNextSnapPoint(snapPointsGroup);
-                        CheckCurrentTime(playback, snapPointTime2, "resumed");
-                    }),
-                    Tuple.Create<TimeSpan, PlaybackAction>(thirdAfterResumeDelay, (context, playback) => CheckCurrentTime(playback, snapPointTime2 + thirdAfterResumeDelay, "resumed"))
-                },
-                explicitExpectedTimes: new[]
-                {
-                    snapPointTime1,
-                    stopAfter + stopPeriod,
-                    stopAfter + stopPeriod + firstAfterResumeDelay + secondAfterResumeDelay,
-                    stopAfter + stopPeriod + firstAfterResumeDelay + secondAfterResumeDelay + TimeSpan.FromSeconds(1),
-                    endTime + stopPeriod + (stopAfter - snapPointTime1) - (snapPointTime2 - (snapPointTime1 + firstAfterResumeDelay + secondAfterResumeDelay))
+                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)100, (SevenBitNumber)100), snapPointTime1),
+                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)100, (SevenBitNumber)100), stopAfter + stopPeriod),
+                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)10, (SevenBitNumber)100), stopAfter + stopPeriod + firstAfterResumeDelay + secondAfterResumeDelay),
+                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)100, (SevenBitNumber)100), stopAfter + stopPeriod + firstAfterResumeDelay + secondAfterResumeDelay + TimeSpan.FromSeconds(1)),
+                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)10, (SevenBitNumber)100), endTime + stopPeriod + (stopAfter - snapPointTime1) - (snapPointTime2 - (snapPointTime1 + firstAfterResumeDelay + secondAfterResumeDelay))),
                 });
         }
 
         [Retry(RetriesNumber)]
         [Test]
-        public void SnapToNotesEnds()
+        public void Snapping_MoveToSnapPoint_BeyondDuration()
         {
-            var stopAfter = TimeSpan.FromSeconds(2);
-            var stopPeriod = TimeSpan.FromSeconds(1);
+            SnapPoint snapPointBeyondDuration = null;
 
-            SnapPointsGroup snapPointsGroup = null;
-
-            var snapPointTime1 = TimeSpan.FromSeconds(1);
-            var snapPointTime2 = TimeSpan.FromSeconds(3);
-
-            var firstAfterResumeDelay = TimeSpan.FromMilliseconds(300);
-            var secondAfterResumeDelay = TimeSpan.FromMilliseconds(600);
-            var thirdAfterResumeDelay = TimeSpan.FromMilliseconds(200);
-
-            var endTime = snapPointTime2 + TimeSpan.FromMilliseconds(200);
-
-            CheckPlaybackStop(
-                eventsToSend: new[]
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
                 {
-                    new EventToSend(new NoteOnEvent((SevenBitNumber)100, (SevenBitNumber)100), TimeSpan.FromMilliseconds(200)),
-                    new EventToSend(new NoteOnEvent((SevenBitNumber)10, (SevenBitNumber)100), TimeSpan.FromMilliseconds(300)),
-                    new EventToSend(new NoteOffEvent((SevenBitNumber)100, (SevenBitNumber)100), snapPointTime1 - TimeSpan.FromMilliseconds(500)),
-                    new EventToSend(new NoteOffEvent((SevenBitNumber)10, (SevenBitNumber)100), snapPointTime2 - snapPointTime1),
-                    new EventToSend(new PitchBendEvent(100), TimeSpan.FromMilliseconds(200))
+                    new TimedEvent(new NoteOnEvent())
+                        .SetTime((MetricTimeSpan)TimeSpan.Zero, TempoMap),
+                    new TimedEvent(new NoteOffEvent())
+                        .SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(500), TempoMap),
                 },
-                eventsWillBeSent: new EventToSend[] { },
-                stopAfter: stopAfter,
-                stopPeriod: stopPeriod,
-                setupPlayback: (context, playback) =>
+                actions: new[]
                 {
-                    playback.TrackNotes = false;
-
-                    snapPointsGroup = playback.Snapping.SnapToNotesEnds();
-                    var snapPointsGroup2 = playback.Snapping.SnapToNotesEnds();
-                    Assert.That(playback.Snapping.SnapPoints, Has.Count.EqualTo(2), "Count of snap points is invalid.");
-                    Assert.AreSame(snapPointsGroup, snapPointsGroup2, "Snapping to notes starts creates new snap points group.");
-                },
-                afterStart: NoPlaybackAction,
-                afterStop: (context, playback) => playback.MoveToPreviousSnapPoint(snapPointsGroup),
-                afterResume: (context, playback) => CheckCurrentTime(playback, snapPointTime1, "stopped"),
-                runningAfterResume: new[]
-                {
-                    Tuple.Create<TimeSpan, PlaybackAction>(firstAfterResumeDelay, (context, playback) => CheckCurrentTime(playback, snapPointTime1 + firstAfterResumeDelay, "resumed")),
-                    Tuple.Create<TimeSpan, PlaybackAction>(secondAfterResumeDelay, (context, playback) =>
+                    new PlaybackChangerBase(100, p =>
                     {
-                        playback.MoveToNextSnapPoint(snapPointsGroup);
-                        CheckCurrentTime(playback, snapPointTime2, "resumed");
+                        Assert.IsTrue(p.MoveToNextSnapPoint(), "Failed to move to snap point.");
+                        CheckCurrentTime(p, TimeSpan.FromMilliseconds(200), "A");
+                        Assert.IsFalse(p.MoveToNextSnapPoint(), "Moved to snap point beyond duration.");
                     }),
-                    Tuple.Create<TimeSpan, PlaybackAction>(thirdAfterResumeDelay, (context, playback) => CheckCurrentTime(playback, snapPointTime2 + thirdAfterResumeDelay, "resumed"))
+                    new PlaybackChangerBase(100, p =>
+                    {
+                        CheckCurrentTime(p, TimeSpan.FromMilliseconds(300), "B");
+                        Assert.IsFalse(p.MoveToSnapPoint(snapPointBeyondDuration), "Moved to snap point beyond duration again.");
+                        CheckCurrentTime(p, TimeSpan.FromMilliseconds(300), "C");
+                    }),
                 },
-                explicitExpectedTimes: new[]
+                setupPlayback: playback =>
                 {
-                    TimeSpan.FromMilliseconds(200),
-                    TimeSpan.FromMilliseconds(500),
-                    snapPointTime1,
-                    stopAfter + stopPeriod,
-                    stopAfter + stopPeriod + firstAfterResumeDelay + secondAfterResumeDelay,
-                    endTime + stopPeriod + (stopAfter - snapPointTime1) - (snapPointTime2 - (snapPointTime1 + firstAfterResumeDelay + secondAfterResumeDelay))
+                    playback.AddSnapPoint(new MetricTimeSpan(0, 0, 0, 200));
+                    snapPointBeyondDuration = playback.AddSnapPoint(new MetricTimeSpan(0, 0, 0, 700));
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
+                    new ReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(400)),
                 });
         }
 
-        #endregion
-
-        #region Private methods
-
-        private Playback Get10SecondsPlayback()
+        [Retry(RetriesNumber)]
+        [Test]
+        public void Snapping_MoveToSnapPoint_BeyondPlaybackEnd()
         {
-            var tempoMap = TempoMap;
+            SnapPoint snapPointBeyondEnd = null;
 
-            var eventsToSend = new[]
-            {
-                new EventToSend(new NoteOnEvent(), TimeSpan.Zero),
-                new EventToSend(new NoteOffEvent(), TimeSpan.FromSeconds(10))
-            };
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
+                {
+                    new TimedEvent(new NoteOnEvent())
+                        .SetTime((MetricTimeSpan)TimeSpan.Zero, TempoMap),
+                    new TimedEvent(new NoteOffEvent())
+                        .SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(600), TempoMap),
+                },
+                actions: new[]
+                {
+                    new PlaybackChangerBase(100, p =>
+                    {
+                        Assert.IsTrue(p.MoveToNextSnapPoint(), "Failed to move to snap point.");
+                        CheckCurrentTime(p, TimeSpan.FromMilliseconds(200), "A");
+                        Assert.IsFalse(p.MoveToNextSnapPoint(), "Moved to snap point beyond end.");
+                    }),
+                    new PlaybackChangerBase(100, p =>
+                    {
+                        CheckCurrentTime(p, TimeSpan.FromMilliseconds(300), "B");
+                        Assert.IsFalse(p.MoveToSnapPoint(snapPointBeyondEnd), "Moved to snap point beyond end again.");
+                        CheckCurrentTime(p, TimeSpan.FromMilliseconds(300), "C");
+                    }),
+                },
+                setupPlayback: playback =>
+                {
+                    playback.AddSnapPoint(new MetricTimeSpan(0, 0, 0, 200));
+                    snapPointBeyondEnd = playback.AddSnapPoint(new MetricTimeSpan(0, 0, 0, 500));
 
-            var eventsForPlayback = GetEventsForPlayback(eventsToSend, tempoMap);
+                    playback.PlaybackEnd = new MetricTimeSpan(0, 0, 0, 400);
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
+                    new ReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(300)),
+                });
+        }
 
-            return eventsForPlayback.GetPlayback(tempoMap);
+        [Retry(RetriesNumber)]
+        [Test]
+        public void Snapping_MoveToSnapPoint_BeyondPlaybackStart()
+        {
+            SnapPoint snapPointBeyondStart = null;
+
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
+                {
+                    new TimedEvent(new TextEvent("A"))
+                        .SetTime((MetricTimeSpan)TimeSpan.Zero, TempoMap),
+                    new TimedEvent(new NoteOnEvent())
+                        .SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(200), TempoMap),
+                    new TimedEvent(new NoteOffEvent())
+                        .SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(600), TempoMap),
+                },
+                actions: new[]
+                {
+                    new PlaybackChangerBase(200, p =>
+                    {
+                        CheckCurrentTime(p, TimeSpan.FromMilliseconds(400), "A");
+                        p.Stop();
+                        Assert.IsTrue(p.MoveToPreviousSnapPoint(), "Failed to move to snap point.");
+                        CheckCurrentTime(p, TimeSpan.FromMilliseconds(300), "B");
+                        Assert.IsFalse(p.MoveToPreviousSnapPoint(), "Moved to snap point beyond start.");
+                        p.Start();
+                    }),
+                    new PlaybackChangerBase(100, p =>
+                    {
+                        CheckCurrentTime(p, TimeSpan.FromMilliseconds(400), "C");
+                        Assert.IsFalse(p.MoveToSnapPoint(snapPointBeyondStart), "Moved to snap point beyond start again.");
+                        CheckCurrentTime(p, TimeSpan.FromMilliseconds(400), "D");
+                    }),
+                },
+                setupPlayback: playback =>
+                {
+                    playback.AddSnapPoint(new MetricTimeSpan(0, 0, 0, 300));
+                    snapPointBeyondStart = playback.AddSnapPoint(new MetricTimeSpan(0, 0, 0, 100));
+
+                    playback.PlaybackStart = new MetricTimeSpan(0, 0, 0, 200);
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
+                    new ReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(200)),
+                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(200)),
+                    new ReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(500)),
+                });
         }
 
         #endregion

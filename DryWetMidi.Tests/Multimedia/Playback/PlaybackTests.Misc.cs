@@ -758,6 +758,31 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
         [Retry(RetriesNumber)]
         [Test]
+        public void InterruptNotesOnStop_PlaybackEnd()
+        {
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
+                {
+                    new TimedEvent(new NoteOnEvent())
+                        .SetTime((MetricTimeSpan)TimeSpan.Zero, TempoMap),
+                    new TimedEvent(new NoteOffEvent())
+                        .SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(500), TempoMap),
+                },
+                actions: new[]
+                {
+                    new PlaybackChangerBase(100, p =>
+                        p.PlaybackEnd = (MetricTimeSpan)TimeSpan.FromMilliseconds(400)),
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
+                    new ReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(400)),
+                });
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
         public void DontInterruptNotesOnStop()
         {
             var stopAfter = TimeSpan.FromSeconds(1);
@@ -787,6 +812,31 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     playback.TrackNotes = false;
                     playback.InterruptNotesOnStop = false;
                 });
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
+        public void DontInterruptNotesOnStop_PlaybackEnd()
+        {
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
+                {
+                    new TimedEvent(new NoteOnEvent())
+                        .SetTime((MetricTimeSpan)TimeSpan.Zero, TempoMap),
+                    new TimedEvent(new NoteOffEvent())
+                        .SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(500), TempoMap),
+                },
+                actions: new[]
+                {
+                    new PlaybackChangerBase(100, p =>
+                        p.PlaybackEnd = (MetricTimeSpan)TimeSpan.FromMilliseconds(400)),
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
+                },
+                setupPlayback: playback => playback.InterruptNotesOnStop = false);
         }
 
         [Retry(RetriesNumber)]

@@ -66,6 +66,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 "Output devices count is invalid.");
         }
 
+        [Timeout(60 * 1000)]
         [Retry(RetriesNumber)]
         [Test]
         public void SendEvent_SysEx()
