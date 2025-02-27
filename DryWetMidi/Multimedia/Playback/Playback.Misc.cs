@@ -425,7 +425,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             if (_clock.IsRunning)
                 return;
 
-            if (!_hasBeenStarted)
+            if (!_hasBeenStarted && PlaybackStart != null && _clock.CurrentTime < _playbackStartMetric)
                 MoveToStart();
 
             OutputDevice?.PrepareForEventsSending();

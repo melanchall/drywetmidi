@@ -434,6 +434,27 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
+        [Retry(RetriesNumber)]
+        [Test]
+        public void MoveToTime_BeforeFirstStart()
+        {
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
+                {
+                    new TimedEvent(new NoteOnEvent()).SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(300), TempoMap),
+                    new TimedEvent(new NoteOffEvent()).SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(800), TempoMap),
+                },
+                actions: Array.Empty<PlaybackChangerBase>(),
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(100)),
+                    new ReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(600)),
+                },
+                setupPlayback: playback =>
+                    playback.MoveToTime(new MetricTimeSpan(0, 0, 0, 200)));
+        }
+
         #endregion
     }
 }
