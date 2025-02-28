@@ -137,24 +137,24 @@ DryWetMIDI provides several representations of time spans.
 
 Following strings can be parsed to `MetricTimeSpan`:
 
-`Hours : Minutes : Seconds : Milliseconds`  
-`HoursGroup : Minutes : Seconds`  
-`Minutes : Seconds`  
-`Hours h Minutes m Seconds s Milliseconds ms`  
-`Hours h Minutes m Seconds s`  
-`Hours h Minutes m Milliseconds ms`  
-`Hours h Seconds s Milliseconds ms`  
-`Minutes m Seconds s Milliseconds ms`  
-`Hours h Minutes m`  
-`Hours h Seconds s`  
-`Hours h Milliseconds ms`  
-`Minutes m Seconds s`  
-`Hours h Milliseconds ms`  
-`Seconds s Milliseconds ms`  
-`Hours h`  
-`Minutes m`  
-`Seconds s`  
-`Milliseconds ms`
+* `Hours : Minutes : Seconds : Milliseconds`  
+* `HoursGroup : Minutes : Seconds`  
+* `Minutes : Seconds`  
+* `Hours h Minutes m Seconds s Milliseconds ms`  
+* `Hours h Minutes m Seconds s`  
+* `Hours h Minutes m Milliseconds ms`  
+* `Hours h Seconds s Milliseconds ms`  
+* `Minutes m Seconds s Milliseconds ms`  
+* `Hours h Minutes m`  
+* `Hours h Seconds s`  
+* `Hours h Milliseconds ms`  
+* `Minutes m Seconds s`  
+* `Hours h Milliseconds ms`  
+* `Seconds s Milliseconds ms`  
+* `Hours h`  
+* `Minutes m`  
+* `Seconds s`  
+* `Milliseconds ms`
 
 where
 
@@ -165,21 +165,21 @@ where
 
 Examples:
 
-`0:0:0:0` – zero time span  
-`0:0:0:156` – 156 milliseconds  
-`2:0:156` – 2 hours and 156 seconds  
-`1:156` – 1 minute and 156 seconds  
-`1h2m3s4ms` – 1 hour 2 minutes 3 seconds 4 milliseconds  
-`1h 2m3s` – 1 hour 2 minutes 3 seconds  
-`1h2M 4ms` – 1 hour 2 minutes 4 milliseconds  
-`1 h3s4ms` – 1 hour 3 seconds 4 milliseconds  
-`2M3 S 4 MS` – 2 minutes 3 seconds 4 milliseconds  
-`1h2m` – 1 hour 2 minutes  
-`1h 3s` – 1 hour 3 seconds  
-`1h4MS` – 1 hour 4 milliseconds  
-`2M3s` – 2 minutes 3 seconds  
-`2 m 4 Ms` – 2 minutes 4 milliseconds  
-`3 s 4 mS` – 2 seconds 4 milliseconds
+* `0:0:0:0` – zero time span  
+* `0:0:0:156` – 156 milliseconds  
+* `2:0:156` – 2 hours and 156 seconds  
+* `1:156` – 1 minute and 156 seconds  
+* `1h2m3s4ms` – 1 hour 2 minutes 3 seconds 4 milliseconds  
+* `1h 2m3s` – 1 hour 2 minutes 3 seconds  
+* `1h2M 4ms` – 1 hour 2 minutes 4 milliseconds  
+* `1 h3s4ms` – 1 hour 3 seconds 4 milliseconds  
+* `2M3 S 4 MS` – 2 minutes 3 seconds 4 milliseconds  
+* `1h2m` – 1 hour 2 minutes  
+* `1h 3s` – 1 hour 3 seconds  
+* `1h4MS` – 1 hour 4 milliseconds  
+* `2M3s` – 2 minutes 3 seconds  
+* `2 m 4 Ms` – 2 minutes 4 milliseconds  
+* `3 s 4 mS` – 2 seconds 4 milliseconds
 
 ### Bars, beats and ticks
 
@@ -197,10 +197,10 @@ where
 
 Examples:
 
-`0.0.0` – zero time span  
-`1.0.0` – 1 bar  
-`0.10.5` – 10 beats and 5 ticks  
-`100.20.0` – 100 bars and 20 beats
+* `0.0.0` – zero time span  
+* `1.0.0` – 1 bar  
+* `0.10.5` – 10 beats and 5 ticks  
+* `100.20.0` – 100 bars and 20 beats
 
 ### Bars, beats and fraction
 
@@ -218,10 +218,10 @@ where
 
 Examples:
 
-`0_0.0` – zero time span  
-`1_0.0` – 1 bar  
-`0_10.5` – 10.5 beats  
-`100_20.2` – 100 bars and 20.2 beats
+* `0_0.0` – zero time span  
+* `1_0.0` – 1 bar  
+* `0_10.5` – 10.5 beats  
+* `100_20.2` – 100 bars and 20.2 beats
 
 ### Musical
 
@@ -245,13 +245,13 @@ where
 
 Examples:
 
-`0/1` – zero time span  
-`q` – quarter note length  
-`1/4.` – dotted quarter note length  
-`/8..` – double dotted eighth note length  
-`wt.` – dotted whole triplet note length  
-`w[3:10]` – length of 3 whole notes in space of 10 notes of normal length  
-`s[3:10]...` – length of 3 sixteenth triple dotted notes in space of 10 notes of normal length
+* `0/1` – zero time span  
+* `q` – quarter length  
+* `1/4.` – dotted quarter length  
+* `/8..` – double dotted eighth length  
+* `wt.` – dotted whole triplet length  
+* `w[3:10]` – we take the length which is the sum of ten whole lengths and then divide that length into three equal parts; each such part will have the length `w[3:10]`.  
+* `s[3:10]...` – see the previous example; but this length will be a triple dotted one
 
 ### MIDI
 
@@ -259,7 +259,7 @@ Examples:
 
 Following strings can be parsed to `MidiTimeSpan`:
 
-`Value`
+* `Value`
 
 where
 
@@ -267,6 +267,6 @@ where
 
 Examples:
 
-`0` – zero time span  
-`100` – 100 ticks  
-`123456` – 123456 ticks
+* `0` – zero time span  
+* `100` – 100 ticks  
+* `123456` – 123456 ticks

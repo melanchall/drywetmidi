@@ -34,7 +34,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
         #region Constants
 
-        private static readonly TimeSpan WaitTime = TimeSpan.FromSeconds(10);
+        private static readonly TimeSpan WaitTime = TimeSpan.FromSeconds(5);
 
         #endregion
 

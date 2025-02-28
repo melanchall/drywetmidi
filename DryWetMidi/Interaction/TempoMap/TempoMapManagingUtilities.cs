@@ -61,6 +61,10 @@ namespace Melanchall.DryWetMidi.Interaction
         /// used by events of the file.</param>
         /// <returns>An instance of the <see cref="TempoMapManager"/> that can be used to manage
         /// tempo map represented by the <paramref name="trackChunks"/> and <paramref name="timeDivision"/>.</returns>
+        /// <remarks>
+        /// If <parameter name="trackChunks"/> is an empty collection and implements <see cref="ICollection{TrackChunk}"/>,
+        /// a new <see cref="TrackChunk"/> will be added to it. Tempo map events will be added to this new track chunk.
+        /// </remarks>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
@@ -94,6 +98,10 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="file">MIDI file to manage tempo map of.</param>
         /// <returns>An instance of the <see cref="TempoMapManager"/> that can be used to manage
         /// tempo map of the <paramref name="file"/>.</returns>
+        /// <remarks>
+        /// If <parameter name="file"/> doesn't contain any track chunks, a new one will be added to it.
+        ///  Tempo map events will be added to this new track chunk.
+        /// </remarks>
         /// <exception cref="ArgumentNullException"><paramref name="file"/> is <c>null</c>.</exception>
         public static TempoMapManager ManageTempoMap(this MidiFile file)
         {
@@ -271,6 +279,10 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <param name="file"><see cref="MidiFile"/> holding a tempo map to replace.</param>
         /// <param name="tempoMap">Tempo map to replace the one contained in the <paramref name="file"/>.</param>
+        /// <remarks>
+        /// If <parameter name="file"/> doesn't contain any track chunks, a new one will be added to it. This
+        /// track chunk will contain all tempo map events from the <paramref name="tempoMap"/>.
+        /// </remarks>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">

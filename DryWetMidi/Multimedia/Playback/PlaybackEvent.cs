@@ -6,7 +6,7 @@ using Melanchall.DryWetMidi.Interaction;
 
 namespace Melanchall.DryWetMidi.Multimedia
 {
-    internal sealed class PlaybackEvent : IEquatable<PlaybackEvent>
+    internal sealed class PlaybackEvent
     {
         #region Constructor
 
@@ -34,18 +34,9 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         public ITimedObject ObjectReference { get; }
 
-        public ICollection<RedBlackTreeNode<TimeSpan, PlaybackEvent>> EventsGroup { get; set; }
+        public ICollection<RedBlackTreeCoordinate<TimeSpan, PlaybackEvent>> EventsGroup { get; set; }
 
         public PlaybackEventMetadata Metadata { get; } = new PlaybackEventMetadata();
-
-        #endregion
-
-        #region IEquatable<PlaybackEvent>
-
-        public bool Equals(PlaybackEvent other)
-        {
-            return object.ReferenceEquals(this, other);
-        }
 
         #endregion
 

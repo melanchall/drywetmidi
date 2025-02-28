@@ -17,7 +17,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
         [Retry(RetriesNumber)]
         [Test]
-        public void TrackNotes_MoveForwardToNote()
+        public void TrackNotes_MoveForwardToNote_1()
         {
             var noteNumber = (SevenBitNumber)60;
             var noteOnDelay = TimeSpan.FromSeconds(1);
@@ -43,10 +43,115 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 actions: new[]
                 {
-                    new PlaybackChangerBase(moveFrom, p => p.MoveToTime((MetricTimeSpan)moveTo)),
+                    new PlaybackAction(moveFrom, p => p.MoveToTime((MetricTimeSpan)moveTo)),
                 },
                 notesWillBeStarted: new[] { 0 },
                 notesWillBeFinished: new[] { 0 });
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
+        public void TrackNotes_MoveForwardToNote_2()
+        {
+            //  1         2
+            // -|--AAAAAAA|AAAAAAA
+            // -|---BBB---|-------
+            // -|----CCC--|-EEE---
+            // -|-----DDD-|--FFF--
+
+            var moveFrom = TimeSpan.FromMilliseconds(100);
+            var moveTo = TimeSpan.FromMilliseconds(1000);
+
+            CheckNotesTracking(
+                initialTimedObjects: new[]
+                {
+                    new Note((SevenBitNumber)100)
+                        .SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(300), TempoMap)
+                        .SetLength((MetricTimeSpan)TimeSpan.FromMilliseconds(1400), TempoMap),
+                    new Note((SevenBitNumber)90)
+                        .SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(400), TempoMap)
+                        .SetLength((MetricTimeSpan)TimeSpan.FromMilliseconds(300), TempoMap),
+                    new Note((SevenBitNumber)80)
+                        .SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(500), TempoMap)
+                        .SetLength((MetricTimeSpan)TimeSpan.FromMilliseconds(300), TempoMap),
+                    new Note((SevenBitNumber)70)
+                        .SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(600), TempoMap)
+                        .SetLength((MetricTimeSpan)TimeSpan.FromMilliseconds(300), TempoMap),
+                    new Note((SevenBitNumber)80)
+                        .SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(1100), TempoMap)
+                        .SetLength((MetricTimeSpan)TimeSpan.FromMilliseconds(300), TempoMap),
+                    new Note((SevenBitNumber)70)
+                        .SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(1200), TempoMap)
+                        .SetLength((MetricTimeSpan)TimeSpan.FromMilliseconds(300), TempoMap),
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)100, Note.DefaultVelocity), moveFrom),
+                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)80, Note.DefaultVelocity), moveFrom + TimeSpan.FromMilliseconds(100)),
+                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), moveFrom + TimeSpan.FromMilliseconds(200)),
+                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)80, Note.DefaultOffVelocity), moveFrom + TimeSpan.FromMilliseconds(400)),
+                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), moveFrom + TimeSpan.FromMilliseconds(500)),
+                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)100, Note.DefaultOffVelocity), moveFrom + TimeSpan.FromMilliseconds(700)),
+                },
+                actions: new[]
+                {
+                    new PlaybackAction(moveFrom, p => p.MoveToTime((MetricTimeSpan)moveTo)),
+                },
+                notesWillBeStarted: new[] { 0, 4, 5 },
+                notesWillBeFinished: new[] { 4, 5, 0 });
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
+        public void TrackNotes_MoveForwardToNote_3()
+        {
+            //  1        2
+            // -|--AAAAAA|AAAAAA
+            // -|---BBB--|------
+            // -|----CCC-|EEE---
+            // -|-----DDD|-FFF--
+
+            var moveFrom = TimeSpan.FromMilliseconds(100);
+            var moveTo = TimeSpan.FromMilliseconds(900);
+
+            CheckNotesTracking(
+                initialTimedObjects: new[]
+                {
+                    new Note((SevenBitNumber)100)
+                        .SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(300), TempoMap)
+                        .SetLength((MetricTimeSpan)TimeSpan.FromMilliseconds(1200), TempoMap),
+                    new Note((SevenBitNumber)90)
+                        .SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(400), TempoMap)
+                        .SetLength((MetricTimeSpan)TimeSpan.FromMilliseconds(300), TempoMap),
+                    new Note((SevenBitNumber)80)
+                        .SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(500), TempoMap)
+                        .SetLength((MetricTimeSpan)TimeSpan.FromMilliseconds(300), TempoMap),
+                    new Note((SevenBitNumber)70)
+                        .SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(600), TempoMap)
+                        .SetLength((MetricTimeSpan)TimeSpan.FromMilliseconds(300), TempoMap),
+                    new Note((SevenBitNumber)80)
+                        .SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(900), TempoMap)
+                        .SetLength((MetricTimeSpan)TimeSpan.FromMilliseconds(300), TempoMap),
+                    new Note((SevenBitNumber)70)
+                        .SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(1000), TempoMap)
+                        .SetLength((MetricTimeSpan)TimeSpan.FromMilliseconds(300), TempoMap),
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)100, Note.DefaultVelocity), moveFrom),
+                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), moveFrom + TimeSpan.FromMilliseconds(0)),
+                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)80, Note.DefaultVelocity), moveFrom + TimeSpan.FromMilliseconds(0)),
+                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), moveFrom + TimeSpan.FromMilliseconds(100)),
+                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)80, Note.DefaultOffVelocity), moveFrom + TimeSpan.FromMilliseconds(300)),
+                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), moveFrom + TimeSpan.FromMilliseconds(400)),
+                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)100, Note.DefaultOffVelocity), moveFrom + TimeSpan.FromMilliseconds(600)),
+                },
+                actions: new[]
+                {
+                    new PlaybackAction(moveFrom, p => p.MoveToTime((MetricTimeSpan)moveTo)),
+                },
+                notesWillBeStarted: new[] { 0, 4, 5 },
+                notesWillBeFinished: new[] { 3, 4, 5, 0 });
         }
 
         [Retry(RetriesNumber)]
@@ -75,7 +180,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 actions: new[]
                 {
-                    new PlaybackChangerBase(moveFrom, p => p.MoveToTime((MetricTimeSpan)moveTo)),
+                    new PlaybackAction(moveFrom, p => p.MoveToTime((MetricTimeSpan)moveTo)),
                 },
                 expectedReceivedEvents: new[]
                 {
@@ -115,7 +220,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 actions: new[]
                 {
-                    new PlaybackChangerBase(moveFrom, p => p.MoveToTime((MetricTimeSpan)moveTo)),
+                    new PlaybackAction(moveFrom, p => p.MoveToTime((MetricTimeSpan)moveTo)),
                 },
                 expectedReceivedEvents: new[]
                 {
@@ -150,7 +255,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 actions: new[]
                 {
-                    new PlaybackChangerBase(moveFrom, p => p.MoveToTime((MetricTimeSpan)moveTo)),
+                    new PlaybackAction(moveFrom, p => p.MoveToTime((MetricTimeSpan)moveTo)),
                 },
                 expectedReceivedEvents: new[]
                 {
@@ -186,7 +291,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 actions: new[]
                 {
-                    new PlaybackChangerBase(moveFrom, p => p.MoveToTime((MetricTimeSpan)moveTo)),
+                    new PlaybackAction(moveFrom, p => p.MoveToTime((MetricTimeSpan)moveTo)),
                 },
                 expectedReceivedEvents: new[]
                 {
@@ -220,7 +325,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 actions: new[]
                 {
-                    new PlaybackChangerBase(moveFrom, p => p.MoveToTime((MetricTimeSpan)moveTo)),
+                    new PlaybackAction(moveFrom, p => p.MoveToTime((MetricTimeSpan)moveTo)),
                 },
                 expectedReceivedEvents: new[]
                 {
@@ -264,7 +369,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 actions: new[]
                 {
-                    new PlaybackChangerBase(moveFrom, p => p.MoveToTime((MetricTimeSpan)moveTo)),
+                    new PlaybackAction(moveFrom, p => p.MoveToTime((MetricTimeSpan)moveTo)),
                 },
                 expectedReceivedEvents: new[]
                 {
@@ -310,7 +415,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 actions: new[]
                 {
-                    new PlaybackChangerBase(moveFrom, p => p.MoveToTime((MetricTimeSpan)moveTo)),
+                    new PlaybackAction(moveFrom, p => p.MoveToTime((MetricTimeSpan)moveTo)),
                 },
                 expectedReceivedEvents: new[]
                 {
@@ -348,8 +453,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 actions: new[]
                 {
-                    new PlaybackChangerBase(stopAfter, p => p.Stop()),
-                    new PlaybackChangerBase(stopPeriod, p => p.Start()),
+                    new PlaybackAction(stopAfter, p => p.Stop()),
+                    new PlaybackAction(stopPeriod, p => p.Start()),
                 },
                 expectedReceivedEvents: new[]
                 {
@@ -386,8 +491,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 actions: new[]
                 {
-                    new PlaybackChangerBase(stopAfter, p => p.Stop()),
-                    new PlaybackChangerBase(stopPeriod, p => p.Start()),
+                    new PlaybackAction(stopAfter, p => p.Stop()),
+                    new PlaybackAction(stopPeriod, p => p.Start()),
                 },
                 expectedReceivedEvents: new[]
                 {
@@ -407,7 +512,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
         private void CheckNotesTracking(
             ITimedObject[] initialTimedObjects,
-            PlaybackChangerBase[] actions,
+            PlaybackAction[] actions,
             ICollection<ReceivedEvent> expectedReceivedEvents,
             IEnumerable<int> notesWillBeStarted,
             IEnumerable<int> notesWillBeFinished,

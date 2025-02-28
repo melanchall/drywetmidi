@@ -1,9 +1,10 @@
-﻿using System;
+﻿using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Interaction;
+using System;
 
 namespace Melanchall.DryWetMidi.Multimedia
 {
-    internal sealed class NotePlaybackEventMetadata : IEquatable<NotePlaybackEventMetadata>
+    internal sealed class NotePlaybackEventMetadata : IInterval<TimeSpan>
     {
         #region Constructor
 
@@ -13,6 +14,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             PlaybackTime endTime)
         {
             RawNote = note;
+            RawNoteId = new NoteId(note.Channel, note.NoteNumber);
             StartTime = startTime;
             EndTime = endTime;
 
@@ -26,6 +28,8 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         public Note RawNote { get; }
 
+        public NoteId RawNoteId { get; }
+
         public PlaybackTime StartTime { get; }
 
         public PlaybackTime EndTime { get; }
@@ -35,6 +39,10 @@ namespace Melanchall.DryWetMidi.Multimedia
         public NotePlaybackData NotePlaybackData { get; private set; }
 
         public bool IsCustomNotePlaybackDataSet { get; private set; }
+
+        public TimeSpan Start => StartTime.Time;
+
+        public TimeSpan End => EndTime.Time;
 
         #endregion
 
@@ -60,15 +68,6 @@ namespace Melanchall.DryWetMidi.Multimedia
         {
             NotePlaybackData = notePlaybackData;
             IsCustomNotePlaybackDataSet = true;
-        }
-
-        #endregion
-
-        #region IEquatable<NotePlaybackEventMetadata>
-
-        public bool Equals(NotePlaybackEventMetadata other)
-        {
-            return object.ReferenceEquals(this, other);
         }
 
         #endregion

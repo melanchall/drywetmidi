@@ -26,19 +26,19 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 actions: new[]
                 {
-                    new PlaybackChangerBase(100, p =>
+                    new PlaybackAction(100, p =>
                     {
                         CheckCurrentTime(p, TimeSpan.FromMilliseconds(100), "Aa");
                         p.MoveToFirstSnapPoint();
                         CheckCurrentTime(p, TimeSpan.FromMilliseconds(200), "Ab");
                     }),
-                    new PlaybackChangerBase(200, p =>
+                    new PlaybackAction(200, p =>
                     {
                         CheckCurrentTime(p, TimeSpan.FromMilliseconds(400), "Ba");
                         p.MoveToPreviousSnapPoint();
                         CheckCurrentTime(p, TimeSpan.FromMilliseconds(200), "Bb");
                     }),
-                    new PlaybackChangerBase(100, p =>
+                    new PlaybackAction(100, p =>
                     {
                         CheckCurrentTime(p, TimeSpan.FromMilliseconds(300), "Ca");
                         p.MoveToNextSnapPoint();
@@ -70,19 +70,19 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 actions: new[]
                 {
-                    new PlaybackChangerBase(100, p =>
+                    new PlaybackAction(100, p =>
                     {
                         CheckCurrentTime(p, TimeSpan.FromMilliseconds(100), "Aa");
                         p.MoveToFirstSnapPoint("X");
                         CheckCurrentTime(p, TimeSpan.FromMilliseconds(200), "Ab");
                     }),
-                    new PlaybackChangerBase(200, p =>
+                    new PlaybackAction(200, p =>
                     {
                         CheckCurrentTime(p, TimeSpan.FromMilliseconds(400), "Ba");
                         p.MoveToPreviousSnapPoint("X");
                         CheckCurrentTime(p, TimeSpan.FromMilliseconds(200), "Bb");
                     }),
-                    new PlaybackChangerBase(100, p =>
+                    new PlaybackAction(100, p =>
                     {
                         CheckCurrentTime(p, TimeSpan.FromMilliseconds(300), "Ca");
                         p.MoveToNextSnapPoint("X");
@@ -118,25 +118,25 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 actions: new[]
                 {
-                    new PlaybackChangerBase(100, p =>
+                    new PlaybackAction(100, p =>
                     {
                         CheckCurrentTime(p, TimeSpan.FromMilliseconds(100), "Aa");
                         Assert.IsTrue(p.MoveToFirstSnapPoint(), "Failed to move to first snap point.");
                         CheckCurrentTime(p, TimeSpan.FromMilliseconds(200), "Ab");
                     }),
-                    new PlaybackChangerBase(200, p =>
+                    new PlaybackAction(200, p =>
                     {
                         CheckCurrentTime(p, TimeSpan.FromMilliseconds(400), "Ba");
                         Assert.IsTrue(p.MoveToPreviousSnapPoint(), "Failed to move to previous snap point.");
                         CheckCurrentTime(p, TimeSpan.FromMilliseconds(200), "Bb");
                     }),
-                    new PlaybackChangerBase(100, p =>
+                    new PlaybackAction(100, p =>
                     {
                         CheckCurrentTime(p, TimeSpan.FromMilliseconds(300), "Ca");
                         Assert.IsFalse(p.MoveToNextSnapPoint(), "Successfully moved to next snap point.");
                         CheckCurrentTime(p, TimeSpan.FromMilliseconds(300), "Cb");
                     }),
-                    new PlaybackChangerBase(100, p =>
+                    new PlaybackAction(100, p =>
                     {
                         CheckCurrentTime(p, TimeSpan.FromMilliseconds(400), "Da");
                         p.RemoveSnapPoint(snapPoint);
@@ -171,25 +171,25 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 actions: new[]
                 {
-                    new PlaybackChangerBase(100, p =>
+                    new PlaybackAction(100, p =>
                     {
                         CheckCurrentTime(p, TimeSpan.FromMilliseconds(100), "Aa");
                         Assert.IsTrue(p.MoveToFirstSnapPoint("X"), "Failed to move to first snap point.");
                         CheckCurrentTime(p, TimeSpan.FromMilliseconds(200), "Ab");
                     }),
-                    new PlaybackChangerBase(200, p =>
+                    new PlaybackAction(200, p =>
                     {
                         CheckCurrentTime(p, TimeSpan.FromMilliseconds(400), "Ba");
                         Assert.IsTrue(p.MoveToPreviousSnapPoint("X"), "Failed to move to previous snap point.");
                         CheckCurrentTime(p, TimeSpan.FromMilliseconds(200), "Bb");
                     }),
-                    new PlaybackChangerBase(100, p =>
+                    new PlaybackAction(100, p =>
                     {
                         CheckCurrentTime(p, TimeSpan.FromMilliseconds(300), "Ca");
                         Assert.IsFalse(p.MoveToNextSnapPoint("X"), "Successfully moved to next snap point.");
                         CheckCurrentTime(p, TimeSpan.FromMilliseconds(300), "Cb");
                     }),
-                    new PlaybackChangerBase(100, p =>
+                    new PlaybackAction(100, p =>
                     {
                         CheckCurrentTime(p, TimeSpan.FromMilliseconds(400), "Da");
                         p.RemoveSnapPoint(snapPoint);
@@ -225,12 +225,12 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 actions: new[]
                 {
-                    new PlaybackChangerBase(150, p =>
+                    new PlaybackAction(150, p =>
                     {
                         Assert.IsTrue(p.MoveToPreviousSnapPoint(), "Failed to move to previous snap point.");
                         CheckCurrentTime(p, snapPoint2.Time, "B");
                     }),
-                    new PlaybackChangerBase(100, p =>
+                    new PlaybackAction(100, p =>
                     {
                         p.RemoveSnapPointsByData((string data) => data.StartsWith("Data"));
                         Assert.IsTrue(p.MoveToFirstSnapPoint(), "Failed to move to first snap point.");
@@ -272,12 +272,12 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 actions: new[]
                 {
-                    new PlaybackChangerBase(150, p =>
+                    new PlaybackAction(150, p =>
                     {
                         Assert.IsTrue(p.MoveToPreviousSnapPoint(), "Failed to move to previous snap point.");
                         CheckCurrentTime(p, snapPoint2.Time, "B");
                     }),
-                    new PlaybackChangerBase(100, p =>
+                    new PlaybackAction(100, p =>
                     {
                         p.RemoveAllSnapPoints();
                         Assert.IsFalse(p.MoveToFirstSnapPoint(), "Failed to move to first snap point.");
@@ -331,24 +331,24 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 actions: new[]
                 {
-                    new PlaybackChangerBase(stopAfter, p =>
+                    new PlaybackAction(stopAfter, p =>
                     {
                         p.Stop();
                         p.MoveToSnapPoint(snapPoint1);
                     }),
-                    new PlaybackChangerBase(stopPeriod, p =>
+                    new PlaybackAction(stopPeriod, p =>
                     {
                         p.Start();
                         CheckCurrentTime(p, snapPointTime1, "stopped");
                     }),
-                    new PlaybackChangerBase(firstAfterResumeDelay,
+                    new PlaybackAction(firstAfterResumeDelay,
                         p => CheckCurrentTime(p, snapPointTime1 + firstAfterResumeDelay, "resumed")),
-                    new PlaybackChangerBase(secondAfterResumeDelay, p =>
+                    new PlaybackAction(secondAfterResumeDelay, p =>
                     {
                         p.MoveToSnapPoint(snapPoint2);
                         CheckCurrentTime(p, snapPointTime2, "resumed");
                     }),
-                    new PlaybackChangerBase(thirdAfterResumeDelay,
+                    new PlaybackAction(thirdAfterResumeDelay,
                         p => CheckCurrentTime(p, snapPointTime2 + thirdAfterResumeDelay, "resumed")),
                 },
                 setupPlayback: playback =>
@@ -380,13 +380,13 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 actions: new[]
                 {
-                    new PlaybackChangerBase(100, p =>
+                    new PlaybackAction(100, p =>
                     {
                         CheckCurrentTime(p, TimeSpan.FromMilliseconds(100), "Aa");
                         Assert.IsTrue(p.MoveToSnapPoint(snapPoint), "Failed to move to snap point.");
                         CheckCurrentTime(p, TimeSpan.FromMilliseconds(200), "Ab");
                     }),
-                    new PlaybackChangerBase(200, p =>
+                    new PlaybackAction(200, p =>
                     {
                         CheckCurrentTime(p, TimeSpan.FromMilliseconds(400), "Ba");
                         snapPoint.IsEnabled = false;
@@ -426,19 +426,19 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 actions: new[]
                 {
-                    new PlaybackChangerBase(100, p =>
+                    new PlaybackAction(100, p =>
                     {
                         CheckCurrentTime(p, TimeSpan.FromMilliseconds(100), "Aa");
                         Assert.IsTrue(p.MoveToFirstSnapPoint(), "Failed to move to first snap point.");
                         CheckCurrentTime(p, TimeSpan.FromMilliseconds(200), "Ab");
                     }),
-                    new PlaybackChangerBase(50, p =>
+                    new PlaybackAction(50, p =>
                     {
                         CheckCurrentTime(p, TimeSpan.FromMilliseconds(250), "Ba");
                         Assert.IsTrue(p.MoveToFirstSnapPoint(), "Failed to move to first snap point again.");
                         CheckCurrentTime(p, TimeSpan.FromMilliseconds(200), "Bb");
                     }),
-                    new PlaybackChangerBase(100, p =>
+                    new PlaybackAction(100, p =>
                     {
                         CheckCurrentTime(p, TimeSpan.FromMilliseconds(300), "Ca");
                         snapPoint1.IsEnabled = false;
@@ -479,19 +479,19 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 actions: new[]
                 {
-                    new PlaybackChangerBase(100, p =>
+                    new PlaybackAction(100, p =>
                     {
                         CheckCurrentTime(p, TimeSpan.FromMilliseconds(100), "Aa");
                         Assert.IsTrue(p.MoveToFirstSnapPoint(), "Failed to move to first snap point.");
                         CheckCurrentTime(p, snapPoint1Time, "Ab");
                     }),
-                    new PlaybackChangerBase(50, p =>
+                    new PlaybackAction(50, p =>
                     {
                         CheckCurrentTime(p, TimeSpan.FromMilliseconds(50), "Ba");
                         Assert.IsTrue(p.MoveToFirstSnapPoint(), "Failed to move to first snap point again.");
                         CheckCurrentTime(p, snapPoint1Time, "Bb");
                     }),
-                    new PlaybackChangerBase(100, p =>
+                    new PlaybackAction(100, p =>
                     {
                         CheckCurrentTime(p, TimeSpan.FromMilliseconds(100), "Ca");
                         snapPoint1.IsEnabled = false;
@@ -534,26 +534,26 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 actions: new[]
                 {
-                    new PlaybackChangerBase(50, p =>
+                    new PlaybackAction(50, p =>
                     {
                         CheckCurrentTime(p, TimeSpan.FromMilliseconds(50), "Aa");
                         Assert.IsTrue(p.MoveToFirstSnapPoint("Y"), "Failed to move to first snap point.");
                         CheckCurrentTime(p, snapPoint2Time, "Ab");
                     }),
-                    new PlaybackChangerBase(100, p =>
+                    new PlaybackAction(100, p =>
                     {
                         CheckCurrentTime(p, TimeSpan.FromMilliseconds(300), "Ba");
                         Assert.IsTrue(p.MoveToFirstSnapPoint("Y"), "Failed to move to first snap point again.");
                         CheckCurrentTime(p, snapPoint2Time, "Bb");
                     }),
-                    new PlaybackChangerBase(100, p =>
+                    new PlaybackAction(100, p =>
                     {
                         CheckCurrentTime(p, TimeSpan.FromMilliseconds(300), "Ca");
                         snapPoint2.IsEnabled = false;
                         Assert.IsFalse(p.MoveToFirstSnapPoint("Y"), "Failed to move to first snap point after first one disabled.");
                         CheckCurrentTime(p, TimeSpan.FromMilliseconds(300), "Cb");
                     }),
-                    new PlaybackChangerBase(50, p =>
+                    new PlaybackAction(50, p =>
                     {
                         p.MoveToTime(new MetricTimeSpan(0, 0, 0, 400));
                         Assert.IsTrue(p.MoveToFirstSnapPoint("Z"), "Failed to move to first enabled snap point.");
@@ -596,26 +596,26 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 actions: new[]
                 {
-                    new PlaybackChangerBase(50, p =>
+                    new PlaybackAction(50, p =>
                     {
                         CheckCurrentTime(p, TimeSpan.FromMilliseconds(50), "Aa");
                         Assert.IsTrue(p.MoveToFirstSnapPoint("Y"), "Failed to move to first snap point.");
                         CheckCurrentTime(p, snapPoint2Time, "Ab");
                     }),
-                    new PlaybackChangerBase(100, p =>
+                    new PlaybackAction(100, p =>
                     {
                         CheckCurrentTime(p, TimeSpan.FromMilliseconds(100), "Ba");
                         Assert.IsTrue(p.MoveToFirstSnapPoint("Y"), "Failed to move to first snap point again.");
                         CheckCurrentTime(p, snapPoint2Time, "Bb");
                     }),
-                    new PlaybackChangerBase(100, p =>
+                    new PlaybackAction(100, p =>
                     {
                         CheckCurrentTime(p, TimeSpan.FromMilliseconds(100), "Ca");
                         snapPoint2.IsEnabled = false;
                         Assert.IsFalse(p.MoveToFirstSnapPoint("Y"), "Failed to move to first snap point after first one disabled.");
                         CheckCurrentTime(p, TimeSpan.FromMilliseconds(100), "Cb");
                     }),
-                    new PlaybackChangerBase(50, p =>
+                    new PlaybackAction(50, p =>
                     {
                         p.MoveToTime(new MetricTimeSpan(0, 0, 0, 400));
                         Assert.IsTrue(p.MoveToFirstSnapPoint("Z"), "Failed to move to first enabled snap point.");
@@ -669,24 +669,24 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 actions: new[]
                 {
-                    new PlaybackChangerBase(stopAfter, p =>
+                    new PlaybackAction(stopAfter, p =>
                     {
                         p.Stop();
                         p.MoveToPreviousSnapPoint(snapPointsGroup);
                     }),
-                    new PlaybackChangerBase(stopPeriod, p =>
+                    new PlaybackAction(stopPeriod, p =>
                     {
                         p.Start();
                         CheckCurrentTime(p, snapPointTime1, "stopped");
                     }),
-                    new PlaybackChangerBase(firstAfterResumeDelay,
+                    new PlaybackAction(firstAfterResumeDelay,
                         p => CheckCurrentTime(p, snapPointTime1 + firstAfterResumeDelay, "resumed")),
-                    new PlaybackChangerBase(secondAfterResumeDelay, p =>
+                    new PlaybackAction(secondAfterResumeDelay, p =>
                     {
                         p.MoveToPreviousSnapPoint(snapPointsGroup);
                         CheckCurrentTime(p, snapPointTime2, "resumed");
                     }),
-                    new PlaybackChangerBase(thirdAfterResumeDelay,
+                    new PlaybackAction(thirdAfterResumeDelay,
                         p => CheckCurrentTime(p, snapPointTime2 + thirdAfterResumeDelay, "resumed")),
                 },
                 setupPlayback: playback =>
@@ -725,7 +725,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 actions: new[]
                 {
-                    new PlaybackChangerBase(50, p =>
+                    new PlaybackAction(50, p =>
                     {
                         p.Stop();
                         p.MoveToTime(p.GetDuration<MetricTimeSpan>());
@@ -736,7 +736,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
                         p.Start();
                     }),
-                    new PlaybackChangerBase(100, p =>
+                    new PlaybackAction(100, p =>
                     {
                         snapPointsGroup.IsEnabled = false;
                         p.MoveToTime(p.GetDuration<MetricTimeSpan>());
@@ -791,24 +791,24 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 actions: new[]
                 {
-                    new PlaybackChangerBase(stopAfter, p =>
+                    new PlaybackAction(stopAfter, p =>
                     {
                         p.Stop();
                         p.MoveToPreviousSnapPoint();
                     }),
-                    new PlaybackChangerBase(stopPeriod, p =>
+                    new PlaybackAction(stopPeriod, p =>
                     {
                         p.Start();
                         CheckCurrentTime(p, snapPointTime1, "stopped");
                     }),
-                    new PlaybackChangerBase(firstAfterResumeDelay,
+                    new PlaybackAction(firstAfterResumeDelay,
                         p => CheckCurrentTime(p, snapPointTime1 + firstAfterResumeDelay, "resumed")),
-                    new PlaybackChangerBase(secondAfterResumeDelay, p =>
+                    new PlaybackAction(secondAfterResumeDelay, p =>
                     {
                         p.MoveToPreviousSnapPoint();
                         CheckCurrentTime(p, snapPointTime3, "resumed");
                     }),
-                    new PlaybackChangerBase(thirdAfterResumeDelay,
+                    new PlaybackAction(thirdAfterResumeDelay,
                         p => CheckCurrentTime(p, snapPointTime3 + thirdAfterResumeDelay, "resumed")),
                 },
                 setupPlayback: playback =>
@@ -846,7 +846,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 actions: new[]
                 {
-                    new PlaybackChangerBase(50, p =>
+                    new PlaybackAction(50, p =>
                     {
                         p.Stop();
 
@@ -857,7 +857,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
                         p.Start();
                     }),
-                    new PlaybackChangerBase(100, p =>
+                    new PlaybackAction(100, p =>
                     {
                         p.Stop();
 
@@ -868,7 +868,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
                         p.Start();
                     }),
-                    new PlaybackChangerBase(100, p =>
+                    new PlaybackAction(100, p =>
                     {
                         p.Stop();
 
@@ -921,24 +921,24 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 actions: new[]
                 {
-                    new PlaybackChangerBase(stopAfter, p =>
+                    new PlaybackAction(stopAfter, p =>
                     {
                         p.Stop();
                         p.MoveToPreviousSnapPoint("X");
                     }),
-                    new PlaybackChangerBase(stopPeriod, p =>
+                    new PlaybackAction(stopPeriod, p =>
                     {
                         p.Start();
                         CheckCurrentTime(p, snapPointTime1, "stopped");
                     }),
-                    new PlaybackChangerBase(firstAfterResumeDelay,
+                    new PlaybackAction(firstAfterResumeDelay,
                         p => CheckCurrentTime(p, snapPointTime1 + firstAfterResumeDelay, "resumed")),
-                    new PlaybackChangerBase(secondAfterResumeDelay, p =>
+                    new PlaybackAction(secondAfterResumeDelay, p =>
                     {
                         p.MoveToPreviousSnapPoint("X");
                         CheckCurrentTime(p, snapPointTime3, "resumed");
                     }),
-                    new PlaybackChangerBase(thirdAfterResumeDelay,
+                    new PlaybackAction(thirdAfterResumeDelay,
                         p => CheckCurrentTime(p, snapPointTime3 + thirdAfterResumeDelay, "resumed")),
                 },
                 setupPlayback: playback =>
@@ -973,7 +973,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 actions: new[]
                 {
-                    new PlaybackChangerBase(50, p =>
+                    new PlaybackAction(50, p =>
                     {
                         p.Stop();
 
@@ -983,7 +983,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
                         p.Start();
                     }),
-                    new PlaybackChangerBase(100, p =>
+                    new PlaybackAction(100, p =>
                     {
                         p.Stop();
 
@@ -1041,24 +1041,24 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 actions: new[]
                 {
-                    new PlaybackChangerBase(stopAfter, p =>
+                    new PlaybackAction(stopAfter, p =>
                     {
                         p.Stop();
                         p.MoveToNextSnapPoint(snapPointsGroup);
                     }),
-                    new PlaybackChangerBase(stopPeriod, p =>
+                    new PlaybackAction(stopPeriod, p =>
                     {
                         p.Start();
                         CheckCurrentTime(p, snapPointTime1, "stopped");
                     }),
-                    new PlaybackChangerBase(firstAfterResumeDelay,
+                    new PlaybackAction(firstAfterResumeDelay,
                         p => CheckCurrentTime(p, snapPointTime1 + firstAfterResumeDelay, "resumed")),
-                    new PlaybackChangerBase(secondAfterResumeDelay, p =>
+                    new PlaybackAction(secondAfterResumeDelay, p =>
                     {
                         p.MoveToNextSnapPoint(snapPointsGroup);
                         CheckCurrentTime(p, snapPointTime2, "resumed");
                     }),
-                    new PlaybackChangerBase(thirdAfterResumeDelay,
+                    new PlaybackAction(thirdAfterResumeDelay,
                         p => CheckCurrentTime(p, snapPointTime2 + thirdAfterResumeDelay, "resumed")),
                 },
                 setupPlayback: playback =>
@@ -1095,13 +1095,13 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 actions: new[]
                 {
-                    new PlaybackChangerBase(50, p =>
+                    new PlaybackAction(50, p =>
                     {
                         Assert.IsTrue(p.MoveToNextSnapPoint(snapPointsGroup), "Failed to move to first next snap point.");
                         Assert.IsTrue(p.MoveToNextSnapPoint(snapPointsGroup), "Failed to move to second next snap point.");
                         Assert.IsFalse(p.MoveToNextSnapPoint(snapPointsGroup), "Position changed beyond last snap point of the group.");
                     }),
-                    new PlaybackChangerBase(50, p =>
+                    new PlaybackAction(50, p =>
                     {
                         snapPointsGroup.IsEnabled = false;
                         p.MoveToStart();
@@ -1159,24 +1159,24 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 actions: new[]
                 {
-                    new PlaybackChangerBase(stopAfter, p =>
+                    new PlaybackAction(stopAfter, p =>
                     {
                         p.Stop();
                         p.MoveToNextSnapPoint();
                     }),
-                    new PlaybackChangerBase(stopPeriod, p =>
+                    new PlaybackAction(stopPeriod, p =>
                     {
                         p.Start();
                         CheckCurrentTime(p, snapPointTime1, "stopped");
                     }),
-                    new PlaybackChangerBase(firstAfterResumeDelay,
+                    new PlaybackAction(firstAfterResumeDelay,
                         p => CheckCurrentTime(p, snapPointTime1 + firstAfterResumeDelay, "resumed")),
-                    new PlaybackChangerBase(secondAfterResumeDelay, p =>
+                    new PlaybackAction(secondAfterResumeDelay, p =>
                     {
                         p.MoveToNextSnapPoint();
                         CheckCurrentTime(p, snapPointTime3, "resumed");
                     }),
-                    new PlaybackChangerBase(thirdAfterResumeDelay,
+                    new PlaybackAction(thirdAfterResumeDelay,
                         p => CheckCurrentTime(p, snapPointTime3 + thirdAfterResumeDelay, "resumed")),
                 },
                 setupPlayback: playback =>
@@ -1213,20 +1213,20 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 actions: new[]
                 {
-                    new PlaybackChangerBase(50, p =>
+                    new PlaybackAction(50, p =>
                     {
                         Assert.IsTrue(p.MoveToNextSnapPoint(), "Failed to move to first next snap point.");
                         Assert.IsTrue(p.MoveToNextSnapPoint(), "Failed to move to second next snap point.");
                         Assert.IsFalse(p.MoveToNextSnapPoint(), "Position changed beyond last snap point.");
                     }),
-                    new PlaybackChangerBase(100, p =>
+                    new PlaybackAction(100, p =>
                     {
                         snapPoint2.IsEnabled = false;
                         p.MoveToStart();
                         Assert.IsTrue(p.MoveToNextSnapPoint(), "Failed to move to second next snap point.");
                         Assert.IsFalse(p.MoveToNextSnapPoint(), "Position changed beyond last snap point.");
                     }),
-                    new PlaybackChangerBase(100, p =>
+                    new PlaybackAction(100, p =>
                     {
                         snapPoint1.IsEnabled = false;
                         p.MoveToStart();
@@ -1278,24 +1278,24 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 actions: new[]
                 {
-                    new PlaybackChangerBase(stopAfter, p =>
+                    new PlaybackAction(stopAfter, p =>
                     {
                         p.Stop();
                         p.MoveToNextSnapPoint("X");
                     }),
-                    new PlaybackChangerBase(stopPeriod, p =>
+                    new PlaybackAction(stopPeriod, p =>
                     {
                         p.Start();
                         CheckCurrentTime(p, snapPointTime1, "stopped");
                     }),
-                    new PlaybackChangerBase(firstAfterResumeDelay,
+                    new PlaybackAction(firstAfterResumeDelay,
                         p => CheckCurrentTime(p, snapPointTime1 + firstAfterResumeDelay, "resumed")),
-                    new PlaybackChangerBase(secondAfterResumeDelay, p =>
+                    new PlaybackAction(secondAfterResumeDelay, p =>
                     {
                         p.MoveToNextSnapPoint("X");
                         CheckCurrentTime(p, snapPointTime3, "resumed");
                     }),
-                    new PlaybackChangerBase(thirdAfterResumeDelay,
+                    new PlaybackAction(thirdAfterResumeDelay,
                         p => CheckCurrentTime(p, snapPointTime3 + thirdAfterResumeDelay, "resumed")),
                 },
                 setupPlayback: playback =>
@@ -1329,12 +1329,12 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 actions: new[]
                 {
-                    new PlaybackChangerBase(50, p =>
+                    new PlaybackAction(50, p =>
                     {
                         Assert.IsTrue(p.MoveToNextSnapPoint("X"), "Failed to move to next snap point.");
                         Assert.IsFalse(p.MoveToNextSnapPoint("X"), "Position changed beyond last snap point.");
                     }),
-                    new PlaybackChangerBase(100, p =>
+                    new PlaybackAction(100, p =>
                     {
                         snapPoint2.IsEnabled = false;
                         p.MoveToStart();
@@ -1370,7 +1370,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 actions: new[]
                 {
-                    new PlaybackChangerBase(50, p =>
+                    new PlaybackAction(50, p =>
                     {
                         Assert.IsFalse(p.MoveToNextSnapPoint("X"), "Position changed beyond last snap point.");
                     }),
@@ -1422,24 +1422,24 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 actions: new[]
                 {
-                    new PlaybackChangerBase(stopAfter, p =>
+                    new PlaybackAction(stopAfter, p =>
                     {
                         p.Stop();
                         p.MoveToPreviousSnapPoint(snapPointsGroup);
                     }),
-                    new PlaybackChangerBase(stopPeriod, p =>
+                    new PlaybackAction(stopPeriod, p =>
                     {
                         p.Start();
                         CheckCurrentTime(p, snapPointTime1, "stopped");
                     }),
-                    new PlaybackChangerBase(firstAfterResumeDelay,
+                    new PlaybackAction(firstAfterResumeDelay,
                         p => CheckCurrentTime(p, snapPointTime1 + firstAfterResumeDelay, "resumed")),
-                    new PlaybackChangerBase(secondAfterResumeDelay, p =>
+                    new PlaybackAction(secondAfterResumeDelay, p =>
                     {
                         p.MoveToNextSnapPoint(snapPointsGroup);
                         CheckCurrentTime(p, snapPointTime2, "resumed");
                     }),
-                    new PlaybackChangerBase(thirdAfterResumeDelay,
+                    new PlaybackAction(thirdAfterResumeDelay,
                         p => CheckCurrentTime(p, snapPointTime2 + thirdAfterResumeDelay, "resumed")),
                 },
                 setupPlayback: playback =>
@@ -1478,13 +1478,13 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 actions: new[]
                 {
-                    new PlaybackChangerBase(100, p =>
+                    new PlaybackAction(100, p =>
                     {
                         Assert.IsTrue(p.MoveToNextSnapPoint(), "Failed to move to snap point.");
                         CheckCurrentTime(p, TimeSpan.FromMilliseconds(200), "A");
                         Assert.IsFalse(p.MoveToNextSnapPoint(), "Moved to snap point beyond duration.");
                     }),
-                    new PlaybackChangerBase(100, p =>
+                    new PlaybackAction(100, p =>
                     {
                         CheckCurrentTime(p, TimeSpan.FromMilliseconds(300), "B");
                         Assert.IsFalse(p.MoveToSnapPoint(snapPointBeyondDuration), "Moved to snap point beyond duration again.");
@@ -1507,7 +1507,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         public void Snapping_MoveToSnapPoint_BeyondPlaybackEnd()
         {
-            SnapPoint snapPointBeyondEnd = null;
+            SnapPoint snapPointBeyondPlaybackEnd = null;
 
             CheckPlayback(
                 useOutputDevice: false,
@@ -1516,34 +1516,38 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new TimedEvent(new NoteOnEvent())
                         .SetTime((MetricTimeSpan)TimeSpan.Zero, TempoMap),
                     new TimedEvent(new NoteOffEvent())
-                        .SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(600), TempoMap),
+                        .SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(500), TempoMap),
+                    new TimedEvent(new NoteOnEvent())
+                        .SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(700), TempoMap),
+                    new TimedEvent(new NoteOffEvent())
+                        .SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(900), TempoMap),
                 },
                 actions: new[]
                 {
-                    new PlaybackChangerBase(100, p =>
+                    new PlaybackAction(100, p =>
                     {
                         Assert.IsTrue(p.MoveToNextSnapPoint(), "Failed to move to snap point.");
                         CheckCurrentTime(p, TimeSpan.FromMilliseconds(200), "A");
-                        Assert.IsFalse(p.MoveToNextSnapPoint(), "Moved to snap point beyond end.");
+                        Assert.IsFalse(p.MoveToNextSnapPoint(), "Moved to snap point beyond duration.");
                     }),
-                    new PlaybackChangerBase(100, p =>
+                    new PlaybackAction(100, p =>
                     {
                         CheckCurrentTime(p, TimeSpan.FromMilliseconds(300), "B");
-                        Assert.IsFalse(p.MoveToSnapPoint(snapPointBeyondEnd), "Moved to snap point beyond end again.");
+                        Assert.IsFalse(p.MoveToSnapPoint(snapPointBeyondPlaybackEnd), "Moved to snap point beyond duration again.");
                         CheckCurrentTime(p, TimeSpan.FromMilliseconds(300), "C");
                     }),
                 },
                 setupPlayback: playback =>
                 {
-                    playback.AddSnapPoint(new MetricTimeSpan(0, 0, 0, 200));
-                    snapPointBeyondEnd = playback.AddSnapPoint(new MetricTimeSpan(0, 0, 0, 500));
+                    playback.PlaybackEnd = new MetricTimeSpan(0, 0, 0, 600);
 
-                    playback.PlaybackEnd = new MetricTimeSpan(0, 0, 0, 400);
+                    playback.AddSnapPoint(new MetricTimeSpan(0, 0, 0, 200));
+                    snapPointBeyondPlaybackEnd = playback.AddSnapPoint(new MetricTimeSpan(0, 0, 0, 650));
                 },
                 expectedReceivedEvents: new[]
                 {
                     new ReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
-                    new ReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(300)),
+                    new ReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(400)),
                 });
         }
 
@@ -1566,7 +1570,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 actions: new[]
                 {
-                    new PlaybackChangerBase(200, p =>
+                    new PlaybackAction(200, p =>
                     {
                         CheckCurrentTime(p, TimeSpan.FromMilliseconds(400), "A");
                         p.Stop();
@@ -1575,7 +1579,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                         Assert.IsFalse(p.MoveToPreviousSnapPoint(), "Moved to snap point beyond start.");
                         p.Start();
                     }),
-                    new PlaybackChangerBase(100, p =>
+                    new PlaybackAction(100, p =>
                     {
                         CheckCurrentTime(p, TimeSpan.FromMilliseconds(400), "C");
                         Assert.IsFalse(p.MoveToSnapPoint(snapPointBeyondStart), "Moved to snap point beyond start again.");

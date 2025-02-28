@@ -19,8 +19,6 @@ namespace Melanchall.DryWetMidi.Interaction
         private readonly RedBlackTree<long, ValueChange<TValue>> _valueChanges = new RedBlackTree<long, ValueChange<TValue>>();
         private readonly TValue _defaultValue;
 
-        private bool _valuesChanged = true;
-
         #endregion
 
         #region Constructor
@@ -48,40 +46,29 @@ namespace Melanchall.DryWetMidi.Interaction
 
         public TValue GetValueAtTime(long time)
         {
-            var result = _defaultValue;
+            var node = _valueChanges.GetFirstCoordinateAboveThreshold(time)
+                ?? _valueChanges.GetMaximumCoordinate();
+            
+            if (node == null)
+                return _defaultValue;
 
-            var node = _valueChanges.GetLastNodeBelowThreshold(time)
-                ?? _valueChanges.GetMinimumNode();
+            node = node.Key > time
+                ? _valueChanges.GetPreviousCoordinate(node)
+                : node;
 
-            while (node != null)
-            {
-                if (node.Value.Time > time)
-                    break;
-
-                result = node.Value.Value;
-                node = _valueChanges.GetNextNode(node);
-            }
-
-            return result;
+            return node != null
+                ? node.Value.Value
+                : _defaultValue;
         }
 
         public void SetValue(long time, TValue value)
         {
-            var node = _valueChanges.GetLastNodeBelowThreshold(time);
-            var currentValue = node != null ? node.Value.Value : _defaultValue;
+            var node = _valueChanges.GetNodeByKey(time);
+            if (node != null)
+                _valueChanges.Remove(node);
 
-            node = node ?? _valueChanges.GetMinimumNode();
-
-            while (node != null && node.Key <= time)
-            {
-                var nextNode = _valueChanges.GetNextNode(node);
-
-                if (node.Key == time)
-                    _valueChanges.Delete(node);
-
-                node = nextNode;
-            }
-
+            var coordinate = _valueChanges.GetLastCoordinateBelowThreshold(time);
+            var currentValue = coordinate != null ? coordinate.Value.Value : _defaultValue;
             if (!value.Equals(currentValue))
                 _valueChanges.Add(time, new ValueChange<TValue>(time, value));
 
@@ -95,16 +82,16 @@ namespace Melanchall.DryWetMidi.Interaction
 
         public void DeleteValues(long startTime, long endTime)
         {
-            var node = _valueChanges.GetLastNodeBelowThreshold(startTime)
-                ?? _valueChanges.GetMinimumNode();
+            var node = _valueChanges.GetLastCoordinateBelowThreshold(startTime)
+                ?? _valueChanges.GetMinimumCoordinate();
 
             while (true)
             {
                 if (node == null || node.Value.Time > endTime)
                     break;
 
-                var nextNode = _valueChanges.GetNextNode(node);
-                _valueChanges.Delete(node);
+                var nextNode = _valueChanges.GetNextCoordinate(node);
+                _valueChanges.Remove(node);
                 node = nextNode;
             }
 

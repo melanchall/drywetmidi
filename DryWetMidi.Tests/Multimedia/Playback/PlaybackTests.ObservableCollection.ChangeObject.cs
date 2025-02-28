@@ -30,7 +30,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(400,
+                    new DynamicPlaybackAction(400,
                         (playback, collection) => collection.ChangeObject(
                             objectToChange,
                             obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 500), TempoMap))),
@@ -59,7 +59,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(200,
+                    new DynamicPlaybackAction(200,
                         (playback, collection) => collection.ChangeObject(
                             objectToChange,
                             obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap))),
@@ -86,7 +86,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(300,
+                    new DynamicPlaybackAction(300,
                         (playback, collection) => collection.ChangeObject(
                             objectToChange,
                             obj =>
@@ -120,11 +120,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(300,
+                    new DynamicPlaybackAction(300,
                         (playback, collection) => collection.ChangeObject(
                             objectToChange1,
                             obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 200), TempoMap))),
-                    new PlaybackChanger(300,
+                    new DynamicPlaybackAction(300,
                         (playback, collection) => collection.ChangeObject(
                             objectToChange2,
                             obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap))),
@@ -155,7 +155,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(300,
+                    new DynamicPlaybackAction(300,
                         (playback, collection) => collection.ChangeObject(
                             objectToChange,
                             obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 800), TempoMap))),
@@ -189,11 +189,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(300,
+                    new DynamicPlaybackAction(300,
                         (playback, collection) => collection.ChangeObject(
                             objectToChange1,
                             obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 200), TempoMap))),
-                    new PlaybackChanger(300,
+                    new DynamicPlaybackAction(300,
                         (playback, collection) => collection.ChangeObject(
                             objectToChange2,
                             obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap))),
@@ -222,7 +222,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(300,
+                    new DynamicPlaybackAction(300,
                         (playback, collection) => collection.ChangeObject(
                             objectToChange,
                             obj =>
@@ -257,11 +257,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(300,
+                    new DynamicPlaybackAction(300,
                         (playback, collection) => collection.ChangeObject(
                             objectToChange1,
                             obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 200), TempoMap))),
-                    new PlaybackChanger(300,
+                    new DynamicPlaybackAction(300,
                         (playback, collection) => collection.ChangeObject(
                             objectToChange2,
                             obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap))),
@@ -293,7 +293,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(300,
+                    new DynamicPlaybackAction(300,
                         (playback, collection) => collection.ChangeObject(
                             objectToChange,
                             obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 800), TempoMap))),
@@ -328,11 +328,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(300,
+                    new DynamicPlaybackAction(300,
                         (playback, collection) => collection.ChangeObject(
                             objectToChange1,
                             obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 200), TempoMap))),
-                    new PlaybackChanger(300,
+                    new DynamicPlaybackAction(300,
                         (playback, collection) => collection.ChangeObject(
                             objectToChange2,
                             obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap))),
@@ -362,7 +362,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(300,
+                    new DynamicPlaybackAction(300,
                         (playback, collection) => collection.ChangeObject(
                             objectToChange,
                             obj =>
@@ -397,11 +397,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(300,
+                    new DynamicPlaybackAction(300,
                         (playback, collection) => collection.ChangeObject(
                             objectToChange1,
                             obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 200), TempoMap))),
-                    new PlaybackChanger(300,
+                    new DynamicPlaybackAction(300,
                         (playback, collection) => collection.ChangeObject(
                             objectToChange2,
                             obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap))),
@@ -433,7 +433,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(300,
+                    new DynamicPlaybackAction(300,
                         (playback, collection) => collection.ChangeObject(
                             objectToChange,
                             obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 800), TempoMap))),
@@ -468,11 +468,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(300,
+                    new DynamicPlaybackAction(300,
                         (playback, collection) => collection.ChangeObject(
                             objectToChange1,
                             obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 200), TempoMap))),
-                    new PlaybackChanger(300,
+                    new DynamicPlaybackAction(300,
                         (playback, collection) => collection.ChangeObject(
                             objectToChange2,
                             obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap))),
@@ -511,7 +511,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(300,
+                    new DynamicPlaybackAction(300,
                         (playback, collection) => collection.ChangeObject(
                             objectToChange,
                             obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap))),
@@ -548,7 +548,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(200,
+                    new DynamicPlaybackAction(200,
                         (playback, collection) => collection.ChangeObject(
                             objectToChange,
                             obj =>
@@ -592,7 +592,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(400,
+                    new DynamicPlaybackAction(400,
                         (playback, collection) => collection.ChangeObject(
                             objectToChange,
                             obj =>
@@ -633,7 +633,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(350,
+                    new DynamicPlaybackAction(350,
                         (playback, collection) => collection.ChangeObject(
                             objectToChange,
                             obj =>
@@ -699,7 +699,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(200,
+                    new DynamicPlaybackAction(200,
                         (playback, collection) => collection.ChangeObject(
                             objectToChange1,
                             obj =>
@@ -707,7 +707,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                                 obj.SetTime(new MetricTimeSpan(0, 0, 0, 300), TempoMap);
                                 ((Note)obj).Velocity = (SevenBitNumber)30;
                             })),
-                    new PlaybackChanger(300,
+                    new DynamicPlaybackAction(300,
                         (playback, collection) => collection.ChangeObject(
                             objectToChange2,
                             obj =>
@@ -715,7 +715,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                                 obj.SetTime(new MetricTimeSpan(0, 0, 0, 700), TempoMap);
                                 ((Note)obj).NoteNumber = (SevenBitNumber)80;
                             })),
-                    new PlaybackChanger(300,
+                    new DynamicPlaybackAction(300,
                         (playback, collection) => collection.ChangeObject(
                             objectToChange2,
                             obj =>
@@ -766,7 +766,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(50,
+                    new DynamicPlaybackAction(50,
                         (playback, collection) => collection.ChangeObject(
                             objectToChange,
                             obj =>
@@ -810,7 +810,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(50,
+                    new DynamicPlaybackAction(50,
                         (playback, collection) => collection.ChangeObject(
                             objectToChange,
                             obj =>
@@ -852,7 +852,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(50,
+                    new DynamicPlaybackAction(50,
                         (playback, collection) => collection.ChangeObject(
                             objectToChange,
                             obj =>
@@ -896,7 +896,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(50,
+                    new DynamicPlaybackAction(50,
                         (playback, collection) => collection.ChangeObject(
                             objectToChange,
                             obj =>
@@ -934,7 +934,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(200,
+                    new DynamicPlaybackAction(200,
                         (playback, collection) => collection.ChangeObject(
                             objectToChange,
                             obj =>
@@ -980,7 +980,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(200,
+                    new DynamicPlaybackAction(200,
                         (playback, collection) => collection.ChangeObject(
                             objectToChange,
                             obj =>
@@ -1024,7 +1024,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(200,
+                    new DynamicPlaybackAction(200,
                         (playback, collection) => collection.ChangeObject(
                             objectToChange,
                             obj =>
@@ -1068,7 +1068,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(200,
+                    new DynamicPlaybackAction(200,
                         (playback, collection) => collection.ChangeObject(
                             objectToChange,
                             obj =>
@@ -1103,7 +1103,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(200,
+                    new DynamicPlaybackAction(200,
                         (playback, collection) => collection.ChangeObject(
                             objectToChange,
                             obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 300), TempoMap))),
@@ -1136,7 +1136,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(200,
+                    new DynamicPlaybackAction(200,
                         (playback, collection) => collection.ChangeObject(
                             objectToChange,
                             obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap))),
@@ -1167,7 +1167,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(300,
+                    new DynamicPlaybackAction(300,
                         (playback, collection) => collection.ChangeObject(
                             objectToChange,
                             obj =>
@@ -1205,11 +1205,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(300,
+                    new DynamicPlaybackAction(300,
                         (playback, collection) => collection.ChangeObject(
                             objectToChange1,
                             obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 200), TempoMap))),
-                    new PlaybackChanger(300,
+                    new DynamicPlaybackAction(300,
                         (playback, collection) => collection.ChangeObject(
                             objectToChange2,
                             obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap))),
@@ -1245,7 +1245,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(300,
+                    new DynamicPlaybackAction(300,
                         (playback, collection) => collection.ChangeObject(
                             objectToChange,
                             obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 800), TempoMap))),
@@ -1285,11 +1285,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(300,
+                    new DynamicPlaybackAction(300,
                         (playback, collection) => collection.ChangeObject(
                             objectToChange1,
                             obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 200), TempoMap))),
-                    new PlaybackChanger(300,
+                    new DynamicPlaybackAction(300,
                         (playback, collection) => collection.ChangeObject(
                             objectToChange2,
                             obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap))),
@@ -1323,7 +1323,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(300,
+                    new DynamicPlaybackAction(300,
                         (playback, collection) => collection.ChangeObject(
                             objectToChange,
                             obj =>
@@ -1362,11 +1362,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(300,
+                    new DynamicPlaybackAction(300,
                         (playback, collection) => collection.ChangeObject(
                             objectToChange1,
                             obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 200), TempoMap))),
-                    new PlaybackChanger(300,
+                    new DynamicPlaybackAction(300,
                         (playback, collection) => collection.ChangeObject(
                             objectToChange2,
                             obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap))),
@@ -1403,7 +1403,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(300,
+                    new DynamicPlaybackAction(300,
                         (playback, collection) => collection.ChangeObject(
                             objectToChange,
                             obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 800), TempoMap))),
@@ -1444,11 +1444,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(300,
+                    new DynamicPlaybackAction(300,
                         (playback, collection) => collection.ChangeObject(
                             objectToChange1,
                             obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 200), TempoMap))),
-                    new PlaybackChanger(300,
+                    new DynamicPlaybackAction(300,
                         (playback, collection) => collection.ChangeObject(
                             objectToChange2,
                             obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap))),
@@ -1483,7 +1483,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(300,
+                    new DynamicPlaybackAction(300,
                         (playback, collection) => collection.ChangeObject(
                             objectToChange,
                             obj =>
@@ -1522,11 +1522,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(300,
+                    new DynamicPlaybackAction(300,
                         (playback, collection) => collection.ChangeObject(
                             objectToChange1,
                             obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 200), TempoMap))),
-                    new PlaybackChanger(300,
+                    new DynamicPlaybackAction(300,
                         (playback, collection) => collection.ChangeObject(
                             objectToChange2,
                             obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap))),
@@ -1563,7 +1563,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(300,
+                    new DynamicPlaybackAction(300,
                         (playback, collection) => collection.ChangeObject(
                             objectToChange,
                             obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 800), TempoMap))),
@@ -1604,11 +1604,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(300,
+                    new DynamicPlaybackAction(300,
                         (playback, collection) => collection.ChangeObject(
                             objectToChange1,
                             obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 200), TempoMap))),
-                    new PlaybackChanger(300,
+                    new DynamicPlaybackAction(300,
                         (playback, collection) => collection.ChangeObject(
                             objectToChange2,
                             obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap))),
@@ -1652,7 +1652,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(300,
+                    new DynamicPlaybackAction(300,
                         (playback, collection) => collection.ChangeObject(
                             objectToChange,
                             obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap))),
@@ -1692,7 +1692,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(200,
+                    new DynamicPlaybackAction(200,
                         (playback, collection) => collection.ChangeObject(
                             objectToChange,
                             obj =>
@@ -1739,7 +1739,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(400,
+                    new DynamicPlaybackAction(400,
                         (playback, collection) => collection.ChangeObject(
                             objectToChange,
                             obj =>
@@ -1783,7 +1783,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(350,
+                    new DynamicPlaybackAction(350,
                         (playback, collection) => collection.ChangeObject(
                             objectToChange,
                             obj =>
@@ -1852,7 +1852,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(200,
+                    new DynamicPlaybackAction(200,
                         (playback, collection) => collection.ChangeObject(
                             objectToChange1,
                             obj =>
@@ -1860,7 +1860,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                                 obj.SetTime(new MetricTimeSpan(0, 0, 0, 300), TempoMap);
                                 ((Note)obj).Velocity = (SevenBitNumber)30;
                             })),
-                    new PlaybackChanger(300,
+                    new DynamicPlaybackAction(300,
                         (playback, collection) => collection.ChangeObject(
                             objectToChange2,
                             obj =>
@@ -1868,7 +1868,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                                 obj.SetTime(new MetricTimeSpan(0, 0, 0, 700), TempoMap);
                                 ((Note)obj).NoteNumber = (SevenBitNumber)80;
                             })),
-                    new PlaybackChanger(300,
+                    new DynamicPlaybackAction(300,
                         (playback, collection) => collection.ChangeObject(
                             objectToChange2,
                             obj =>
@@ -1924,7 +1924,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(50,
+                    new DynamicPlaybackAction(50,
                         (playback, collection) => collection.ChangeObject(
                             objectToChange,
                             obj =>
@@ -1973,7 +1973,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(50,
+                    new DynamicPlaybackAction(50,
                         (playback, collection) => collection.ChangeObject(
                             objectToChange,
                             obj =>
@@ -2020,7 +2020,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(50,
+                    new DynamicPlaybackAction(50,
                         (playback, collection) => collection.ChangeObject(
                             objectToChange,
                             obj =>
@@ -2069,7 +2069,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(50,
+                    new DynamicPlaybackAction(50,
                         (playback, collection) => collection.ChangeObject(
                             objectToChange,
                             obj =>
@@ -2108,7 +2108,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(200,
+                    new DynamicPlaybackAction(200,
                         (playback, collection) => collection.ChangeObject(
                             objectToChange,
                             obj =>
@@ -2159,7 +2159,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(200,
+                    new DynamicPlaybackAction(200,
                         (playback, collection) => collection.ChangeObject(
                             objectToChange,
                             obj =>
@@ -2208,7 +2208,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(200,
+                    new DynamicPlaybackAction(200,
                         (playback, collection) => collection.ChangeObject(
                             objectToChange,
                             obj =>
@@ -2257,7 +2257,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(200,
+                    new DynamicPlaybackAction(200,
                         (playback, collection) => collection.ChangeObject(
                             objectToChange,
                             obj =>
@@ -2295,7 +2295,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(100,
+                    new DynamicPlaybackAction(100,
                         (playback, collection) => collection.ChangeObject(
                             noteOnEvent,
                             obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 300), TempoMap))),
@@ -2329,7 +2329,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(200,
+                    new DynamicPlaybackAction(200,
                         (playback, collection) => collection.ChangeObject(
                             noteOnEvent,
                             obj =>
@@ -2391,7 +2391,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(200,
+                    new DynamicPlaybackAction(200,
                         (playback, collection) => collection.ChangeObject(
                             noteOnEvent,
                             obj => ((NoteOnEvent)((TimedEvent)obj).Event).Channel = (FourBitNumber)4)),
@@ -2417,7 +2417,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 {
                     new Note((SevenBitNumber)50) { Velocity = SevenBitNumber.MaxValue }
                         .SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap)
-                        .SetLength(new MetricTimeSpan(0, 0, 0, 300 /* TODO: 100 */), TempoMap),
+                        .SetLength(new MetricTimeSpan(0, 0, 0, 300), TempoMap),
                 },
                 notesStarted,
                 "Invalid notes.");
@@ -2441,7 +2441,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(50,
+                    new DynamicPlaybackAction(50,
                         (playback, collection) => collection.ChangeObject(
                             noteOffEvent,
                             obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 300), TempoMap))),
@@ -2472,7 +2472,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(200,
+                    new DynamicPlaybackAction(200,
                         (playback, collection) => collection.ChangeObject(
                             noteOffEvent,
                             obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 300), TempoMap))),
@@ -2506,7 +2506,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(200,
+                    new DynamicPlaybackAction(200,
                         (playback, collection) => collection.ChangeObject(
                             noteOffEvent,
                             obj =>
@@ -2534,7 +2534,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 new[]
                 {
                     new Note((SevenBitNumber)50) { Velocity = SevenBitNumber.MaxValue }
-                        .SetTime(new MetricTimeSpan(0, 0, 0, 100 /* TODO: 100 */), TempoMap)
+                        .SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap)
                         .SetLength(new MetricTimeSpan(0, 0, 0, 300), TempoMap),
                 },
                 notesStarted,
@@ -2544,7 +2544,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 new[]
                 {
                     new Note((SevenBitNumber)50) { Velocity = SevenBitNumber.MaxValue, OffVelocity = (SevenBitNumber)70 }
-                        .SetTime(new MetricTimeSpan(0, 0, 0, 100 /* TODO: 100 */), TempoMap)
+                        .SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap)
                         .SetLength(new MetricTimeSpan(0, 0, 0, 200), TempoMap),
                 },
                 notesFinished,
@@ -2572,7 +2572,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(200,
+                    new DynamicPlaybackAction(200,
                         (playback, collection) => collection.ChangeObject(
                             noteOffEvent,
                             obj => ((NoteOffEvent)((TimedEvent)obj).Event).Channel = (FourBitNumber)4)),
@@ -2597,7 +2597,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 {
                     new Note((SevenBitNumber)50) { Velocity = SevenBitNumber.MaxValue }
                         .SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap)
-                        .SetLength(new MetricTimeSpan(0, 0, 0, 300 /* TODO: 100 */), TempoMap),
+                        .SetLength(new MetricTimeSpan(0, 0, 0, 300), TempoMap),
                 },
                 notesStarted,
                 "Invalid notes.");
@@ -2622,7 +2622,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(100, (playback, collection) => collection.ChangeObject(
+                    new DynamicPlaybackAction(100, (playback, collection) => collection.ChangeObject(
                         objectToChange,
                         obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 200), TempoMap))),
                 },
@@ -2657,7 +2657,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(100, (playback, collection) => collection.ChangeObject(
+                    new DynamicPlaybackAction(100, (playback, collection) => collection.ChangeObject(
                         objectToChange,
                         obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 200), TempoMap))),
                 },
@@ -2692,7 +2692,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(100, (playback, collection) => collection.ChangeObject(
+                    new DynamicPlaybackAction(100, (playback, collection) => collection.ChangeObject(
                         objectToChange,
                         obj => ((SetTempoEvent)((TimedEvent)obj).Event).MicrosecondsPerQuarterNote = SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 4)),
                 },
@@ -2727,7 +2727,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(400, (playback, collection) =>
+                    new DynamicPlaybackAction(400, (playback, collection) =>
                     {
                         collection.ChangeObject(
                             objectToChange,

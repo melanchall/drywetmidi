@@ -21,10 +21,10 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
         private static readonly object[] ParametersForDurationCheck =
         {
-            new object[] { TimeSpan.Zero, TimeSpan.FromSeconds(2) },
-            new object[] { TimeSpan.FromMilliseconds(500), TimeSpan.FromSeconds(3) },
-            new object[] { TimeSpan.Zero, TimeSpan.FromSeconds(3) },
-            new object[] { TimeSpan.FromSeconds(4), TimeSpan.FromSeconds(1) }
+            new object[] { TimeSpan.Zero, TimeSpan.FromMilliseconds(300) },
+            new object[] { TimeSpan.FromMilliseconds(500), TimeSpan.FromSeconds(2) },
+            new object[] { TimeSpan.Zero, TimeSpan.FromSeconds(1) },
+            new object[] { TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(2) }
         };
 
         #endregion
@@ -54,34 +54,30 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var receivedEvents = new List<ReceivedEvent>();
             var stopwatch = new Stopwatch();
 
-            using (var outputDevice = OutputDevice.GetByName(SendReceiveUtilities.DeviceToTestOnName))
+            var loopbackDevice = new LoopbackDeviceMock();
+            var outputDevice = loopbackDevice.Output;
+            var inputDevice = loopbackDevice.Input;
+
+            inputDevice.StartEventsListening();
+            inputDevice.EventReceived += (_, e) => receivedEvents.Add(new ReceivedEvent(e.Event, stopwatch.Elapsed));
+
+            using (var recording = new Recording(TempoMap.Default, inputDevice))
             {
-                SendReceiveUtilities.WarmUpDevice(outputDevice);
+                recording.Start();
+                stopwatch.Start();
+                SendReceiveUtilities.SendEvents(eventsToSend, outputDevice);
 
-                using (var inputDevice = InputDevice.GetByName(SendReceiveUtilities.DeviceToTestOnName))
-                {
-                    inputDevice.StartEventsListening();
-                    inputDevice.EventReceived += (_, e) => receivedEvents.Add(new ReceivedEvent(e.Event, stopwatch.Elapsed));
+                var timeout = start + delayFromStart + SendReceiveUtilities.MaximumEventSendReceiveDelay;
+                var areEventsReceived = WaitOperations.Wait(() => receivedEvents.Count == eventsToSend.Length, timeout);
+                Assert.IsTrue(areEventsReceived, $"Events are not received for timeout {timeout}.");
 
-                    using (var recording = new Recording(TempoMap.Default, inputDevice))
-                    {
-                        recording.Start();
-                        stopwatch.Start();
-                        SendReceiveUtilities.SendEvents(eventsToSend, outputDevice);
+                recording.Stop();
+                Assert.IsFalse(recording.IsRunning, "Recording is running after stop.");
 
-                        var timeout = start + delayFromStart + SendReceiveUtilities.MaximumEventSendReceiveDelay;
-                        var areEventsReceived = WaitOperations.Wait(() => receivedEvents.Count == eventsToSend.Length, timeout);
-                        Assert.IsTrue(areEventsReceived, $"Events are not received for timeout {timeout}.");
-
-                        recording.Stop();
-                        Assert.IsFalse(recording.IsRunning, "Recording is running after stop.");
-
-                        TimeSpan duration = recording.GetDuration<MetricTimeSpan>();
-                        Assert.IsTrue(
-                            AreTimeSpansEqual(duration, start + delayFromStart),
-                            $"Duration is invalid. Actual is {duration}. Expected is {start + delayFromStart}.");
-                    }
-                }
+                TimeSpan duration = recording.GetDuration<MetricTimeSpan>();
+                Assert.IsTrue(
+                    AreTimeSpansEqual(duration, start + delayFromStart),
+                    $"Duration is invalid. Actual is {duration}. Expected is {start + delayFromStart}.");
             }
         }
 
@@ -119,48 +115,46 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
             var timeout = expectedTimes.Last() + SendReceiveUtilities.MaximumEventSendReceiveDelay;
 
-            using (var outputDevice = OutputDevice.GetByName(SendReceiveUtilities.DeviceToTestOnName))
+            var loopbackDevice = new LoopbackDeviceMock();
+            var outputDevice = loopbackDevice.Output;
+            var inputDevice = loopbackDevice.Input;
+
+            outputDevice.EventSent += (_, e) => sentEvents.Add(new SentEvent(e.Event, stopwatch.Elapsed));
+
+            inputDevice.StartEventsListening();
+            inputDevice.EventReceived += (_, e) => receivedEvents.Add(new ReceivedEvent(e.Event, stopwatch.Elapsed));
+
+            using (var recording = new Recording(tempoMap, inputDevice))
             {
-                outputDevice.EventSent += (_, e) => sentEvents.Add(new SentEvent(e.Event, stopwatch.Elapsed));
+                recording.EventRecorded += (_, e) => recordedEvents.Add(new ReceivedEvent(e.Event, stopwatch.Elapsed));
 
-                using (var inputDevice = InputDevice.GetByName(SendReceiveUtilities.DeviceToTestOnName))
+                var sendingThread = new Thread(() =>
                 {
-                    inputDevice.StartEventsListening();
-                    inputDevice.EventReceived += (_, e) => receivedEvents.Add(new ReceivedEvent(e.Event, stopwatch.Elapsed));
+                    SendReceiveUtilities.SendEvents(eventsToSend, outputDevice);
+                });
 
-                    using (var recording = new Recording(tempoMap, inputDevice))
-                    {
-                        recording.EventRecorded += (_, e) => recordedEvents.Add(new ReceivedEvent(e.Event, stopwatch.Elapsed));
+                stopwatch.Start();
+                recording.Start();
+                sendingThread.Start();
+                WaitOperations.Wait(stopAfter);
 
-                        var sendingThread = new Thread(() =>
-                        {
-                            SendReceiveUtilities.SendEvents(eventsToSend, outputDevice);
-                        });
+                recording.Stop();
+                WaitOperations.Wait(stopPeriod);
 
-                        stopwatch.Start();
-                        recording.Start();
-                        sendingThread.Start();
-                        WaitOperations.Wait(stopAfter);
+                recording.Start();
 
-                        recording.Stop();
-                        WaitOperations.Wait(stopPeriod);
+                var threadAliveTimeout = timeout + TimeSpan.FromSeconds(30);
+                var threadExited = WaitOperations.Wait(() => !sendingThread.IsAlive, threadAliveTimeout);
+                Assert.IsTrue(threadExited, $"Sending thread is alive after [{threadAliveTimeout}].");
 
-                        recording.Start();
+                var areEventsReceived = WaitOperations.Wait(() => receivedEvents.Count >= expectedTimes.Count, timeout);
+                Assert.IsTrue(areEventsReceived, $"Events are not received for [{timeout}] (received are: {string.Join(", ", receivedEvents)}).");
 
-                        var threadAliveTimeout = timeout + TimeSpan.FromSeconds(30);
-                        var threadExited = WaitOperations.Wait(() => !sendingThread.IsAlive, threadAliveTimeout);
-                        Assert.IsTrue(threadExited, $"Sending thread is alive after [{threadAliveTimeout}].");
+                CompareSentReceivedEvents(sentEvents, receivedEvents, expectedTimes);
+                CompareSentReceivedEvents(sentEvents, recordedEvents, expectedTimes);
 
-                        var areEventsReceived = WaitOperations.Wait(() => receivedEvents.Count >= expectedTimes.Count, timeout);
-                        Assert.IsTrue(areEventsReceived, $"Events are not received for [{timeout}] (received are: {string.Join(", ", receivedEvents)}).");
-
-                        CompareSentReceivedEvents(sentEvents, receivedEvents, expectedTimes);
-                        CompareSentReceivedEvents(sentEvents, recordedEvents, expectedTimes);
-
-                        var events = recording.GetEvents();
-                        CheckRecordedEvents(events.ToList(), expectedRecordedTimes, tempoMap);
-                    }
-                }
+                var events = recording.GetEvents();
+                CheckRecordedEvents(events.ToList(), expectedRecordedTimes, tempoMap);
             }
         }
 

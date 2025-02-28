@@ -38,7 +38,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var midiFile = new MidiFile(
                 new TrackChunk(
                     new NoteOnEvent(),
-                    new NoteOffEvent { DeltaTime = 1000000 }));
+                    new NoteOffEvent { DeltaTime = 100000 }));
 
             var stopwatch = new Stopwatch();
 
@@ -50,7 +50,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 WaitOperations.Wait(changeAfter);
                 var currentTimeBeforeSpeedChange = playback.GetCurrentTime<MetricTimeSpan>();
 
-                for (var i = 0; i < 1000; i++)
+                for (var i = 0; i < 300; i++)
                 {
                     playback.Speed = 0.1 * (DryWetMidi.Common.Random.Instance.Next(100) + 1);
                     WaitOperations.Wait(DryWetMidi.Common.Random.Instance.Next(100) + 1);

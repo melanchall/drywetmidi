@@ -53,11 +53,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             CompareSentReceivedEvents(eventsToSend, sentEvents, receivedEvents);
         }
 
-        public static void SendEvents(IEnumerable<EventToSend> eventsToSend, OutputDevice outputDevice)
+        public static void SendEvents(IEnumerable<EventToSend> eventsToSend, IOutputDevice outputDevice)
         {
             foreach (var eventToSend in eventsToSend)
             {
-                WaitOperations.Wait(eventToSend.Delay);
+                WaitOperations.WaitPrecisely(eventToSend.Delay);
                 outputDevice.SendEvent(eventToSend.Event);
             }
         }

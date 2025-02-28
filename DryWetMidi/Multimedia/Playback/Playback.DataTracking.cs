@@ -57,9 +57,22 @@ namespace Melanchall.DryWetMidi.Multimedia
             public object Metadata { get; set; }
 
             public bool IsDefault { get; }
+
+            public override bool Equals(object obj)
+            {
+                var other = obj as DataChange<TData>;
+                return other != null &&
+                       Data.Equals(other.Data) &&
+                       IsDefault == other.IsDefault;
+            }
+
+            public override int GetHashCode()
+            {
+                return Data.GetHashCode();
+            }
         }
 
-        private sealed class ProgramChange : DataChange<SevenBitNumber>, IEquatable<ProgramChange>
+        private sealed class ProgramChange : DataChange<SevenBitNumber>
         {
             public ProgramChange(SevenBitNumber programNumber, object metadata)
                 : base(programNumber, metadata)
@@ -70,16 +83,9 @@ namespace Melanchall.DryWetMidi.Multimedia
                 : base(programNumber, metadata, isDefault)
             {
             }
-
-            public bool Equals(ProgramChange other)
-            {
-                return other != null &&
-                       Data == other.Data &&
-                       IsDefault == other.IsDefault;
-            }
         }
 
-        private sealed class PitchValueChange : DataChange<ushort>, IEquatable<PitchValueChange>
+        private sealed class PitchValueChange : DataChange<ushort>
         {
             public PitchValueChange(ushort pitchValue, object metadata)
                 : base(pitchValue, metadata)
@@ -90,16 +96,9 @@ namespace Melanchall.DryWetMidi.Multimedia
                 : base(pitchValue, metadata, isDefault)
             {
             }
-
-            public bool Equals(PitchValueChange other)
-            {
-                return other != null &&
-                       Data == other.Data &&
-                       IsDefault == other.IsDefault;
-            }
         }
 
-        private sealed class ControlValueChange : DataChange<SevenBitNumber>, IEquatable<ControlValueChange>
+        private sealed class ControlValueChange : DataChange<SevenBitNumber>
         {
             public ControlValueChange(SevenBitNumber controlValue, object metadata)
                 : base(controlValue, metadata)
@@ -109,13 +108,6 @@ namespace Melanchall.DryWetMidi.Multimedia
             public ControlValueChange(SevenBitNumber controlValue, object metadata, bool isDefault)
                 : base(controlValue, metadata, isDefault)
             {
-            }
-
-            public bool Equals(ControlValueChange other)
-            {
-                return other != null &&
-                       Data == other.Data &&
-                       IsDefault == other.IsDefault;
             }
         }
 
@@ -304,14 +296,14 @@ namespace Melanchall.DryWetMidi.Multimedia
                 return;
 
             var tree = _programChangesTreesByChannel[programChangeEvent.Channel];
-            var nodes = tree.SearchNodes(time);
+            var nodes = tree.GetCoordinatesByKey(time);
 
             var programChange = new ProgramChange(programChangeEvent.ProgramNumber, null);
 
             foreach (var node in nodes)
             {
                 if (node.Value.Equals(programChange))
-                    tree.Delete(node);
+                    tree.Remove(node);
             }
         }
 
@@ -323,7 +315,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             foreach (var channel in FourBitNumber.Values)
             {
                 var tree = _programChangesTreesByChannel[channel];
-                var node = tree.GetLastNodeBelowThreshold(time + 1);
+                var node = tree.GetLastCoordinateBelowThreshold(time + 1);
                 if (node?.Key == time)
                     continue;
 
@@ -360,14 +352,14 @@ namespace Melanchall.DryWetMidi.Multimedia
                 return;
 
             var tree = _pitchValuesTreesByChannel[pitchBendEvent.Channel];
-            var nodes = tree.SearchNodes(time);
+            var nodes = tree.GetCoordinatesByKey(time);
 
             var pitchBend = new PitchValueChange(pitchBendEvent.PitchValue, null);
 
             foreach (var node in nodes)
             {
                 if (node.Value.Equals(pitchBend))
-                    tree.Delete(node);
+                    tree.Remove(node);
             }
         }
 
@@ -379,7 +371,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             foreach (var channel in FourBitNumber.Values)
             {
                 var tree = _pitchValuesTreesByChannel[channel];
-                var node = tree.GetLastNodeBelowThreshold(time + 1);
+                var node = tree.GetLastCoordinateBelowThreshold(time + 1);
                 if (node?.Key == time)
                     continue;
 
@@ -430,14 +422,14 @@ namespace Melanchall.DryWetMidi.Multimedia
             if (!trees.TryGetValue(controlChangeEvent.ControlNumber, out tree))
                 trees.Add(controlChangeEvent.ControlNumber, tree = new RedBlackTree<long, ControlValueChange>());
 
-            var nodes = tree.SearchNodes(time);
+            var nodes = tree.GetCoordinatesByKey(time);
 
             var controlValueChange = new ControlValueChange(controlChangeEvent.ControlValue, null);
 
             foreach (var node in nodes)
             {
                 if (node.Value.Equals(controlValueChange))
-                    tree.Delete(node);
+                    tree.Remove(node);
             }
         }
 
@@ -457,7 +449,7 @@ namespace Melanchall.DryWetMidi.Multimedia
                     if (!controlsValuesChangesTreesByControlNumber.TryGetValue(controlNumber, out tree))
                         continue;
 
-                    var node = tree.GetLastNodeBelowThreshold(time + 1);
+                    var node = tree.GetLastCoordinateBelowThreshold(time + 1);
                     if (node?.Key == time)
                         continue;
 

@@ -21,7 +21,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         private readonly PlaybackEventsCollection _playbackEvents = new PlaybackEventsCollection();
         private readonly object _playbackLockObject = new object();
-        private RedBlackTreeNode<TimeSpan, PlaybackEvent> _playbackEventsPosition;
+        private RedBlackTreeCoordinate<TimeSpan, PlaybackEvent> _playbackEventsPosition;
         private bool _beforeStart = true;
 
         #endregion
@@ -100,7 +100,7 @@ namespace Melanchall.DryWetMidi.Multimedia
                 }
 
                 var currentTime = _clock.CurrentTime;
-                if (!Loop && currentTime >= _duration)
+                if (!Loop && currentTime >= _playbackEndMetric)
                 {
                     _clock.StopInternally();
                     OnFinished();
@@ -122,7 +122,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
             var time = TimeConverter.ConvertTo<MetricTimeSpan>(oldTime, TempoMap);
             var playbackEventsNodes = _playbackEvents
-                .SearchNodes(time)
+                .GetCoordinatesByKey(time)
                 .Where(n =>
                 {
                     var objectReference = n.Value.ObjectReference;
@@ -140,13 +140,13 @@ namespace Melanchall.DryWetMidi.Multimedia
                         ? object.ReferenceEquals(note.TimedNoteOnEvent, timedEvent)
                         : object.ReferenceEquals(note.TimedNoteOffEvent, timedEvent);
                 })
-                .SelectMany(n => n.Value.EventsGroup ?? Enumerable.Empty<RedBlackTreeNode<TimeSpan, PlaybackEvent>>())
+                .SelectMany(n => n.Value.EventsGroup ?? Enumerable.Empty<RedBlackTreeCoordinate<TimeSpan, PlaybackEvent>>())
                 .Distinct()
                 .ToArray();
 
             if (noteEvent != null)
             {
-                var noteId = new NoteId(noteEvent.Channel, noteEvent.NoteNumber);
+                var noteId = GetNoteId(noteEvent);
 
                 foreach (var playbackEventNode in playbackEventsNodes)
                 {
@@ -167,26 +167,26 @@ namespace Melanchall.DryWetMidi.Multimedia
             {
                 var playbackEvent = playbackEventNode.Value;
 
-                if (playbackEventNode == _playbackEventsPosition)
+                if (playbackEventNode.Equals(_playbackEventsPosition))
                 {
-                    _playbackEventsPosition = _playbackEvents.GetNextNode(_playbackEventsPosition);
+                    _playbackEventsPosition = _playbackEvents.GetNextCoordinate(_playbackEventsPosition);
                     if (_playbackEventsPosition == null)
                         _beforeStart = false;
                 }
 
-                _playbackEvents.Delete(playbackEventNode);
+                _playbackEvents.Remove(playbackEventNode);
 
                 var noteMetadata = playbackEvent.Metadata.Note;
                 if (noteMetadata != null)
                 {
                     _notesMetadataHashSet.Remove(noteMetadata);
 
-                    var metadataNodes = _notesMetadata.SearchNodes(noteMetadata.StartTime);
+                    var metadataNodes = _notesMetadata.GetCoordinatesByKey(noteMetadata.StartTime);
 
                     foreach (var metadataNode in metadataNodes)
                     {
                         if (metadataNode.Value == noteMetadata)
-                            _notesMetadata.Delete(metadataNode);
+                            _notesMetadata.Remove(metadataNode);
                     }
                 }
 
@@ -247,7 +247,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             //
 
             var playbackEvents = GetPlaybackEvents(timedObject, tempoMap);
-            var eventsGroup = new HashSet<RedBlackTreeNode<TimeSpan, PlaybackEvent>>();
+            var eventsGroup = new HashSet<RedBlackTreeCoordinate<TimeSpan, PlaybackEvent>>();
 
             var minTime = TimeSpan.MaxValue;
 
@@ -401,55 +401,47 @@ namespace Melanchall.DryWetMidi.Multimedia
             long tempoChangeMidiTime,
             TimeSpan? nextTempoTime)
         {
-            var scaleFactor = oldTempo.MicrosecondsPerQuarterNote / (double)newTempo.MicrosecondsPerQuarterNote;
-
             var tempoChangeTime = (TimeSpan)TimeConverter.ConvertTo<MetricTimeSpan>(tempoChangeMidiTime, TempoMap);
+            
+            var scaleFactor = oldTempo.MicrosecondsPerQuarterNote / (double)newTempo.MicrosecondsPerQuarterNote;
+            var shift = nextTempoTime == null
+                ? TimeSpan.Zero
+                : nextTempoTime.Value - (tempoChangeTime + ScaleTimeSpan(nextTempoTime.Value - tempoChangeTime, scaleFactor));
 
-            var shift = TimeSpan.Zero;
-            if (nextTempoTime != null)
-                shift = nextTempoTime.Value - (tempoChangeTime + ScaleTimeSpan(nextTempoTime.Value - tempoChangeTime, scaleFactor));
+            ScalePlaybackEventsTimes(
+                tempoChangeTime,
+                nextTempoTime,
+                scaleFactor,
+                shift);
 
-            //
+            ScaleNotesMetadataTimes(
+                tempoChangeTime,
+                nextTempoTime,
+                scaleFactor,
+                shift);
 
-            var firstNodeAfterTempoChange = _playbackEvents.GetFirstNodeAboveThreshold(tempoChangeTime);
-            if (firstNodeAfterTempoChange != null)
-            {
-                var node = firstNodeAfterTempoChange;
+            // TODO: more tests
+            ScaleSnapPointsTimes(
+                tempoChangeTime,
+                nextTempoTime,
+                scaleFactor,
+                shift);
 
-                do
-                {
-                    if (nextTempoTime != null && node.Key > nextTempoTime)
-                        node.Key -= shift;
-                    else
-                        node.Key = tempoChangeTime + ScaleTimeSpan(node.Key - tempoChangeTime, scaleFactor);
+            ScaleCurrentTime(
+                tempoChangeTime,
+                nextTempoTime,
+                scaleFactor,
+                shift);
 
-                    node.Value.Time.Time = node.Key;
-                }
-                while ((node = _playbackEvents.GetNextNode(node)) != null);
-            }
+            TempoMap.TempoLine.SetValue(tempoChangeMidiTime, newTempo);
+        }
 
-            //
-
-            // TODO: more tests on this
-            var firstSnapPointNodeAfterTempoChange = _snapPoints.GetFirstNodeAboveThreshold(tempoChangeTime);
-            if (firstSnapPointNodeAfterTempoChange != null)
-            {
-                var node = firstSnapPointNodeAfterTempoChange;
-
-                do
-                {
-                    if (nextTempoTime != null && node.Key > nextTempoTime)
-                        node.Key -= shift;
-                    else
-                        node.Key = tempoChangeTime + ScaleTimeSpan(node.Key - tempoChangeTime, scaleFactor);
-
-                    node.Value.Time = node.Key;
-                }
-                while ((node = _snapPoints.GetNextNode(node)) != null);
-            }
-
-            //
-
+        private void ScaleCurrentTime(
+            TimeSpan tempoChangeTime,
+            TimeSpan? nextTempoTime,
+            double scaleFactor,
+            TimeSpan shift)
+        {
             var currentTime = _clock.CurrentTime;
             if (currentTime > tempoChangeTime)
             {
@@ -460,10 +452,91 @@ namespace Melanchall.DryWetMidi.Multimedia
 
                 _clock.SetCurrentTime(currentTime);
             }
+        }
 
-            //
+        private void ScalePlaybackEventsTimes(
+            TimeSpan tempoChangeTime,
+            TimeSpan? nextTempoTime,
+            double scaleFactor,
+            TimeSpan shift)
+        {
+            ScaleDataAfterTempoChange(
+                _playbackEvents,
+                tempoChangeTime,
+                nextTempoTime,
+                scaleFactor,
+                shift,
+                (e, time) => e.Time.Time = time);
+        }
 
-            TempoMap.TempoLine.SetValue(tempoChangeMidiTime, newTempo);
+        private void ScaleNotesMetadataTimes(
+            TimeSpan tempoChangeTime,
+            TimeSpan? nextTempoTime,
+            double scaleFactor,
+            TimeSpan shift)
+        {
+            ScaleDataAfterTempoChange(
+                _notesMetadata,
+                tempoChangeTime,
+                nextTempoTime,
+                scaleFactor,
+                shift,
+                processNode: node =>
+                {
+                    if (_notesMetadata.UpdateMax(node.TreeNode))
+                        _notesMetadata.UpdateMaxUp(node.TreeNode);
+                });
+
+            var intersectedNodes = _notesMetadata.Search(tempoChangeTime);
+
+            foreach (var node in intersectedNodes)
+            {
+                if (_notesMetadata.UpdateMax(node.TreeNode))
+                    _notesMetadata.UpdateMaxUp(node.TreeNode);
+            }
+        }
+
+        private void ScaleSnapPointsTimes(
+            TimeSpan tempoChangeTime,
+            TimeSpan? nextTempoTime,
+            double scaleFactor,
+            TimeSpan shift)
+        {
+            ScaleDataAfterTempoChange(
+                _snapPoints,
+                tempoChangeTime,
+                nextTempoTime,
+                scaleFactor,
+                shift,
+                (e, time) => e.Time = time);
+        }
+
+        private void ScaleDataAfterTempoChange<TValue>(
+            RedBlackTree<TimeSpan, TValue> tree,
+            TimeSpan tempoChangeTime,
+            TimeSpan? nextTempoTime,
+            double scaleFactor,
+            TimeSpan shift,
+            Action<TValue, TimeSpan> updateValueTime = null,
+            Action<RedBlackTreeCoordinate<TimeSpan, TValue>> processNode = null)
+        {
+            var firstNodeAfterTempoChange = tree.GetFirstCoordinateAboveThreshold(tempoChangeTime);
+            if (firstNodeAfterTempoChange == null)
+                return;
+
+            var node = firstNodeAfterTempoChange;
+
+            do
+            {
+                if (nextTempoTime != null && node.Key > nextTempoTime)
+                    node.Key -= shift;
+                else
+                    node.Key = tempoChangeTime + ScaleTimeSpan(node.Key - tempoChangeTime, scaleFactor);
+
+                processNode?.Invoke(node);
+                updateValueTime?.Invoke(node.Value, node.Key);
+            }
+            while ((node = tree.GetNextCoordinate(node)) != null);
         }
 
         private TimeSpan ScaleTimeSpan(TimeSpan timeSpan, double scaleFactor)

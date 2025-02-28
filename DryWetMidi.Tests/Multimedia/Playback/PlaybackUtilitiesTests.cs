@@ -83,24 +83,25 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
         #region Methods
 
-        private static void CheckNotesPlayback(Func<IEnumerable<Note>, TempoMap, OutputDevice, Playback> playbackGetter,
-                                               Func<FourBitNumber, IEnumerable<MidiEvent>> programEventsGetter)
+        private static void CheckNotesPlayback(
+            Func<IEnumerable<Note>, TempoMap, IOutputDevice, Playback> playbackGetter,
+            Func<FourBitNumber, IEnumerable<MidiEvent>> programEventsGetter)
         {
             var tempoMap = TempoMap.Default;
             var channel1 = (FourBitNumber)5;
             var channel2 = (FourBitNumber)7;
 
             var notes1 = new PatternBuilder()
-                .Note(DryWetMidi.MusicTheory.NoteName.A, new MetricTimeSpan(0, 0, 5))
+                .Note(DryWetMidi.MusicTheory.NoteName.A, new MetricTimeSpan(0, 0, 0, 500))
                 .MoveToTime(new MetricTimeSpan(0, 0, 1))
-                .Note(DryWetMidi.MusicTheory.NoteName.B, new MetricTimeSpan(0, 0, 1))
-                .Note(DryWetMidi.MusicTheory.NoteName.C, new MetricTimeSpan(0, 0, 1))
+                .Note(DryWetMidi.MusicTheory.NoteName.B, new MetricTimeSpan(0, 0, 0, 100))
+                .Note(DryWetMidi.MusicTheory.NoteName.C, new MetricTimeSpan(0, 0, 0, 100))
                 .Build()
                 .ToTrackChunk(tempoMap, channel1)
                 .GetNotes();
             var notes2 = new PatternBuilder()
                 .StepForward(new MetricTimeSpan(0, 0, 2))
-                .Note(DryWetMidi.MusicTheory.NoteName.D, new MetricTimeSpan(0, 0, 5))
+                .Note(DryWetMidi.MusicTheory.NoteName.D, new MetricTimeSpan(0, 0, 0, 500))
                 .Build()
                 .ToTrackChunk(tempoMap, channel2)
                 .GetNotes();
@@ -109,9 +110,10 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             CheckNotesPlayback(notes, (m, d) => playbackGetter(notes, m, d), programEventsGetter);
         }
 
-        private static void CheckNotesPlayback(IEnumerable<Note> notes,
-                                               Func<TempoMap, OutputDevice, Playback> playbackGetter,
-                                               Func<FourBitNumber, IEnumerable<MidiEvent>> programEventsGetter)
+        private static void CheckNotesPlayback(
+            IEnumerable<Note> notes,
+            Func<TempoMap, IOutputDevice, Playback> playbackGetter,
+            Func<FourBitNumber, IEnumerable<MidiEvent>> programEventsGetter)
         {
             var tempoMap = TempoMap.Default;
             var stopwatch = new Stopwatch();
@@ -119,16 +121,19 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var receivedNotesStarted = new List<ReceivedNote>();
             var receivedNotesFinished = new List<ReceivedNote>();
 
-            var expectedReceivedNotesStarted = notes.OrderBy(n => n.Time)
-                                                    .Select(n => new ReceivedNote(n, n.TimeAs<MetricTimeSpan>(tempoMap)))
-                                                    .ToList();
-            var expectedReceivedNotesFinished = notes.OrderBy(n => n.EndTime)
-                                                     .Select(n => new ReceivedNote(n, n.EndTimeAs<MetricTimeSpan>(tempoMap)))
-                                                     .ToList();
+            var expectedReceivedNotesStarted = notes
+                .OrderBy(n => n.Time)
+                .Select(n => new ReceivedNote(n, n.TimeAs<MetricTimeSpan>(tempoMap)))
+                .ToList();
+
+            var expectedReceivedNotesFinished = notes
+                .OrderBy(n => n.EndTime)
+                .Select(n => new ReceivedNote(n, n.EndTimeAs<MetricTimeSpan>(tempoMap)))
+                .ToList();
 
             var sentEvents = new List<SentEvent>();
 
-            using (var outputDevice = OutputDevice.GetByName(SendReceiveUtilities.DeviceToTestOnName))
+            using (var outputDevice = new OutputDeviceMock())
             {
                 outputDevice.EventSent += (_, e) => sentEvents.Add(new SentEvent(e.Event, stopwatch.Elapsed));
 

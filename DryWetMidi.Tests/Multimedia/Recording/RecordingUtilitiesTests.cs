@@ -45,49 +45,45 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var waitTimeout = eventsToSend.Aggregate(TimeSpan.Zero, (result, e) => result + e.Delay) +
                 SendReceiveUtilities.MaximumEventSendReceiveDelay;
 
-            using (var outputDevice = OutputDevice.GetByName(SendReceiveUtilities.DeviceToTestOnName))
+            var loopbackDevice = new LoopbackDeviceMock();
+            var outputDevice = loopbackDevice.Output;
+            var inputDevice = loopbackDevice.Input;
+
+            inputDevice.StartEventsListening();
+            inputDevice.EventReceived += (_, e) => receivedEvents.Add(new ReceivedEvent(e.Event, stopwatch.Elapsed));
+
+            using (var recording = new Recording(tempoMap, inputDevice))
             {
-                //SendReceiveUtilities.WarmUpDevice(outputDevice);
-
-                using (var inputDevice = InputDevice.GetByName(SendReceiveUtilities.DeviceToTestOnName))
+                var sendingThread = new Thread(() =>
                 {
-                    inputDevice.StartEventsListening();
-                    inputDevice.EventReceived += (_, e) => receivedEvents.Add(new ReceivedEvent(e.Event, stopwatch.Elapsed));
+                    SendReceiveUtilities.SendEvents(eventsToSend, outputDevice);
+                });
 
-                    using (var recording = new Recording(tempoMap, inputDevice))
-                    {
-                        var sendingThread = new Thread(() =>
-                        {
-                            SendReceiveUtilities.SendEvents(eventsToSend, outputDevice);
-                        });
+                stopwatch.Start();
+                recording.Start();
+                sendingThread.Start();
 
-                        stopwatch.Start();
-                        recording.Start();
-                        sendingThread.Start();
+                var threadAliveTimeout = waitTimeout + TimeSpan.FromSeconds(30);
+                var threadExited = WaitOperations.Wait(() => !sendingThread.IsAlive, threadAliveTimeout);
+                Assert.IsTrue(threadExited, $"Sending thread is alive after [{threadAliveTimeout}].");
 
-                        var threadAliveTimeout = waitTimeout + TimeSpan.FromSeconds(30);
-                        var threadExited = WaitOperations.Wait(() => !sendingThread.IsAlive, threadAliveTimeout);
-                        Assert.IsTrue(threadExited, $"Sending thread is alive after [{threadAliveTimeout}].");
+                var eventsReceived = WaitOperations.Wait(() => receivedEvents.Count >= eventsToSend.Length, waitTimeout);
+                Assert.IsTrue(eventsReceived, $"Events are not received for [{waitTimeout}] (received are: {string.Join(", ", receivedEvents)}).");
 
-                        var eventsReceived = WaitOperations.Wait(() => receivedEvents.Count >= eventsToSend.Length, waitTimeout);
-                        Assert.IsTrue(eventsReceived, $"Events are not received for [{waitTimeout}] (received are: {string.Join(", ", receivedEvents)}).");
+                recording.Stop();
 
-                        recording.Stop();
+                var midiFile = recording.ToFile();
+                var timedEvents = midiFile.GetTimedEvents();
 
-                        var midiFile = recording.ToFile();
-                        var timedEvents = midiFile.GetTimedEvents();
+                var expectedEvents = new[]
+                {
+                    new TimedEvent(new NoteOnEvent(), TimeConverter.ConvertFrom((MetricTimeSpan)TimeSpan.Zero, tempoMap)),
+                    new TimedEvent(new NoteOffEvent(), TimeConverter.ConvertFrom((MetricTimeSpan)TimeSpan.FromMilliseconds(500), tempoMap)),
+                    new TimedEvent(new ProgramChangeEvent((SevenBitNumber)40), TimeConverter.ConvertFrom((MetricTimeSpan)TimeSpan.FromSeconds(5.5), tempoMap)),
+                    new TimedEvent(new ProgramChangeEvent((SevenBitNumber)50), TimeConverter.ConvertFrom((MetricTimeSpan)TimeSpan.FromSeconds(6.1), tempoMap))
+                };
 
-                        var expectedEvents = new[]
-                        {
-                            new TimedEvent(new NoteOnEvent(), TimeConverter.ConvertFrom((MetricTimeSpan)TimeSpan.Zero, tempoMap)),
-                            new TimedEvent(new NoteOffEvent(), TimeConverter.ConvertFrom((MetricTimeSpan)TimeSpan.FromMilliseconds(500), tempoMap)),
-                            new TimedEvent(new ProgramChangeEvent((SevenBitNumber)40), TimeConverter.ConvertFrom((MetricTimeSpan)TimeSpan.FromSeconds(5.5), tempoMap)),
-                            new TimedEvent(new ProgramChangeEvent((SevenBitNumber)50), TimeConverter.ConvertFrom((MetricTimeSpan)TimeSpan.FromSeconds(6.1), tempoMap))
-                        };
-
-                        MidiAsserts.AreEqual(expectedEvents, timedEvents, false, 10, "Timed events saved incorrectly.");
-                    }
-                }
+                MidiAsserts.AreEqual(expectedEvents, timedEvents, false, 10, "Timed events saved incorrectly.");
             }
         }
 

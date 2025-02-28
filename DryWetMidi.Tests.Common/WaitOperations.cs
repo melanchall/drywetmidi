@@ -24,6 +24,18 @@ namespace Melanchall.DryWetMidi.Tests.Common
             return stopwatch.ElapsedMilliseconds;
         }
 
+        public static void WaitPrecisely(TimeSpan waitTime) =>
+            WaitPrecisely((long)waitTime.TotalMilliseconds);
+
+        public static void WaitPrecisely(long waitTime)
+        {
+            var stopwatch = Stopwatch.StartNew();
+
+            while (stopwatch.ElapsedMilliseconds < waitTime)
+            {
+            }
+        }
+
         public static bool Wait(Func<bool> exitCondition) =>
             Wait(exitCondition, TimeSpan.MaxValue);
 

@@ -7,7 +7,7 @@ using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
 
-using NotePlaybackEventMetadataCollection = Melanchall.DryWetMidi.Common.RedBlackTree<System.TimeSpan, Melanchall.DryWetMidi.Multimedia.NotePlaybackEventMetadata>;
+using NotePlaybackEventMetadataCollection = Melanchall.DryWetMidi.Common.IntervalTree<System.TimeSpan, Melanchall.DryWetMidi.Multimedia.NotePlaybackEventMetadata>;
 
 namespace Melanchall.DryWetMidi.Multimedia
 {
@@ -666,10 +666,16 @@ namespace Melanchall.DryWetMidi.Multimedia
             EnsureIsNotDisposed();
 
             var currentTime = (MetricTimeSpan)_clock.CurrentTime;
-            MoveToTimeInternal(
-                TimeConverter.ConvertTo<MetricTimeSpan>(step, TempoMap) > currentTime
-                    ? new MetricTimeSpan()
-                    : currentTime.Subtract(step, TimeSpanMode.TimeLength));
+            var metricStep = TimeConverter.ConvertTo<MetricTimeSpan>(step, TempoMap);
+
+            var time = metricStep > currentTime
+                ? new MetricTimeSpan()
+                : currentTime - metricStep;
+            
+            if (time < (MetricTimeSpan)_playbackStartMetric)
+                time = (MetricTimeSpan)_playbackStartMetric;
+
+            MoveToTimeInternal(time);
         }
 
         /// <summary>
@@ -732,7 +738,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         private void UpdateDuration()
         {
-            var maximumNode = _playbackEvents.GetMaximumNode();
+            var maximumNode = _playbackEvents.GetMaximumCoordinate();
             if (maximumNode == null)
             {
                 _duration = TimeSpan.Zero;
@@ -776,13 +782,12 @@ namespace Melanchall.DryWetMidi.Multimedia
             if (!TrackNotes)
                 return;
 
-            // TODO: simplify getting NoteId
             var notesToPlay = GetNotesMetadataAtCurrentTime();
             var onNotesMetadata = notesToPlay.Any()
-                ? notesToPlay.Where(n => !_activeNotesMetadata.Values.Any(nn => new NoteId(nn.RawNote.Channel, nn.RawNote.NoteNumber).Equals(new NoteId(n.RawNote.Channel, n.RawNote.NoteNumber)))).ToArray()
+                ? notesToPlay.Where(n => !_activeNotesMetadata.Values.Any(nn => nn.RawNoteId.Equals(n.RawNoteId))).ToArray()
                 : new NotePlaybackEventMetadata[0];
             var offNotesMetadata = notesToPlay.Any()
-                ? _activeNotesMetadata.Values.Where(n => !notesToPlay.Any(nn => new NoteId(nn.RawNote.Channel, nn.RawNote.NoteNumber).Equals(new NoteId(n.RawNote.Channel, n.RawNote.NoteNumber)))).ToArray()
+                ? _activeNotesMetadata.Values.Where(n => !notesToPlay.Any(nn => nn.RawNoteId.Equals(n.RawNoteId))).ToArray()
                 : _activeNotesMetadata.Values;
 
             OutputDevice?.PrepareForEventsSending();
@@ -803,7 +808,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             }
 
             OnNotesPlaybackFinished(_notes.ToArray(), _originalNotes.ToArray());
-            
+
             _notes.Clear();
             _originalNotes.Clear();
 
@@ -820,43 +825,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         private ICollection<NotePlaybackEventMetadata> GetNotesMetadataAtCurrentTime()
         {
             var currentTime = _clock.CurrentTime;
-            var notesToPlay = new List<NotePlaybackEventMetadata>();
-
-            var firstNode = _notesMetadata.GetLastNodeBelowThreshold(
-                currentTime,
-                node => node.Value.EndTime);
-
-            if (firstNode == null)
-                firstNode = _notesMetadata.GetMinimumNode();
-
-            if (firstNode == RedBlackTreeNode<TimeSpan, NotePlaybackEventMetadata>.Void)
-                firstNode = null;
-
-            while (firstNode != null && firstNode.Value.EndTime <= currentTime)
-            {
-                firstNode = _notesMetadata.GetNextNode(firstNode);
-            }
-
-            if (firstNode != null)
-            {
-                var lastNode = _notesMetadata.GetLastNodeBelowThreshold(
-                    currentTime,
-                    node => node.Value.StartTime);
-
-                while (firstNode != null)
-                {
-                    var metadata = firstNode.Value;
-                    if (metadata.StartTime < currentTime && metadata.EndTime > currentTime)
-                        notesToPlay.Add(metadata);
-
-                    if (firstNode == lastNode)
-                        break;
-
-                    firstNode = _notesMetadata.GetNextNode(firstNode);
-                }
-            }
-
-            return notesToPlay;
+            return _notesMetadata.Search(currentTime).Select(c => c.Value).ToArray();
         }
 
         private void OnStarted()
@@ -984,9 +953,6 @@ namespace Melanchall.DryWetMidi.Multimedia
 
             lock (_playbackLockObject)
             {
-                if (TimeConverter.ConvertFrom(time, TempoMap) > _durationInTicks)
-                    time = (MetricTimeSpan)_duration;
-
                 var isRunning = IsRunning;
 
                 SetStartTime(time);
@@ -1003,22 +969,32 @@ namespace Melanchall.DryWetMidi.Multimedia
         private void SetStartTime(ITimeSpan time)
         {
             var convertedTime = (TimeSpan)TimeConverter.ConvertTo<MetricTimeSpan>(time, TempoMap);
+            
+            var end = _playbackEndMetric < _duration ? _playbackEndMetric : _duration;
+            var movedBeyondEnd = false;
+
+            if ((TimeSpan)TimeConverter.ConvertTo<MetricTimeSpan>(time, TempoMap) > end)
+            {
+                convertedTime = (MetricTimeSpan)end;
+                movedBeyondEnd = true;
+            }
+
             _clock.SetCurrentTime(convertedTime);
 
             if (convertedTime.Ticks == 0)
             {
-                _playbackEventsPosition = _playbackEvents.GetMinimumNode();
+                _playbackEventsPosition = _playbackEvents.GetMinimumCoordinate();
                 return;
             }
 
-            if (convertedTime > _duration)
+            if (convertedTime > end || movedBeyondEnd)
             {
                 _playbackEventsPosition = null;
                 _beforeStart = false;
                 return;
             }
 
-            _playbackEventsPosition = _playbackEvents.GetLastNodeBelowThreshold(convertedTime);
+            _playbackEventsPosition = _playbackEvents.GetLastCoordinateBelowThreshold(convertedTime);
             if (_playbackEventsPosition == null)
                 _beforeStart = true;
 
@@ -1146,8 +1122,8 @@ namespace Melanchall.DryWetMidi.Multimedia
         private bool MoveToNextPlaybackEvent()
         {
             _playbackEventsPosition = _playbackEventsPosition != null
-                ? _playbackEvents.GetNextNode(_playbackEventsPosition)
-                : (_beforeStart ? _playbackEvents.GetMinimumNode() : null);
+                ? _playbackEvents.GetNextCoordinate(_playbackEventsPosition)
+                : (_beforeStart ? _playbackEvents.GetMinimumCoordinate() : null);
             _beforeStart = _playbackEventsPosition != null;
             return IsPlaybackEventsPositionValid();
         }

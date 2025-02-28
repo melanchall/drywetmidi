@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
@@ -7,376 +8,293 @@ using NUnit.Framework;
 
 namespace Melanchall.DryWetMidi.Tests.Interaction
 {
-    // TODO: get rid of duplicated MidiAsserts.AreEqual
     [TestFixture]
     public sealed partial class TimedEventsManagingUtilitiesTests
     {
         #region Test methods
 
         [Test]
-        public void GetTimedEvents_EventsCollection_Empty()
-        {
-            var timedEvents = new EventsCollection().GetTimedEvents();
-            CollectionAssert.IsEmpty(timedEvents, "Timed events collection is not empty.");
-        }
+        public void GetTimedEvents_EventsCollection_Empty() => GetTimedEvents_EventsCollection(
+            midiEvents: Array.Empty<MidiEvent>(),
+            expectedTimedEvents: Array.Empty<ITimedObject>());
 
         [TestCase(0)]
         [TestCase(100)]
         [TestCase(100000)]
-        public void GetTimedEvents_EventsCollection_OneEvent(long deltaTime)
-        {
-            var eventsCollection = new EventsCollection
+        public void GetTimedEvents_EventsCollection_OneEvent(long deltaTime) => GetTimedEvents_EventsCollection(
+            midiEvents: new[]
             {
-                new NoteOnEvent { DeltaTime = deltaTime }
-            };
-
-            var timedEvents = eventsCollection.GetTimedEvents();
-            MidiAsserts.AreEqual(new[] { new TimedEvent(new NoteOnEvent(), deltaTime) }, timedEvents, false, 0, "Timed events are invalid.");
-        }
+                new NoteOnEvent { DeltaTime = deltaTime },
+            },
+            expectedTimedEvents: new[]
+            {
+                new TimedEvent(new NoteOnEvent(), deltaTime)
+            });
 
         [Test]
-        public void GetTimedEvents_EventsCollection_OneEvent_Custom([Values(0, 100, 100000)] long deltaTime)
-        {
-            var eventsCollection = new EventsCollection
+        public void GetTimedEvents_EventsCollection_OneEvent_Custom([Values(0, 100, 100000)] long deltaTime) => GetTimedEvents_EventsCollection(
+            midiEvents: new[]
             {
-                new NoteOnEvent { DeltaTime = deltaTime }
-            };
+                new NoteOnEvent { DeltaTime = deltaTime },
+            },
+            expectedTimedEvents: new[]
+            {
+                new CustomTimedEvent(new NoteOnEvent(), deltaTime, 0),
+            },
+            settings: CustomEventSettings);
 
-            var timedEvents = eventsCollection.GetTimedEvents(CustomEventSettings);
-            MidiAsserts.AreEqual(
-                new[]
-                {
-                    new CustomTimedEvent(new NoteOnEvent(), deltaTime, 0)
-                },
-                timedEvents,
-                false,
-                0,
-                "Timed events are invalid.");
-        }
-
-        [TestCase(0, 0)]
-        [TestCase(0, 100)]
-        [TestCase(100, 0)]
-        [TestCase(100, 100)]
-        public void GetTimedEvents_EventsCollection_MultipleEvents(long deltaTime1, long deltaTime2)
-        {
-            var eventsCollection = new EventsCollection
+        [Test]
+        public void GetTimedEvents_EventsCollection_MultipleEvents([Values(0, 100)] long deltaTime1, [Values(0, 100)] long deltaTime2) => GetTimedEvents_EventsCollection(
+            midiEvents: new MidiEvent[]
             {
                 new NoteOnEvent { DeltaTime = deltaTime1 },
                 new NoteOffEvent { DeltaTime = deltaTime2 },
-            };
-
-            var timedEvents = eventsCollection.GetTimedEvents();
-            MidiAsserts.AreEqual(
-                new[] { new TimedEvent(new NoteOnEvent(), deltaTime1), new TimedEvent(new NoteOffEvent(), deltaTime1 + deltaTime2) },
-                timedEvents,
-                false,
-                0,
-                "Timed events are invalid.");
-        }
+            },
+            expectedTimedEvents: new[]
+            {
+                new TimedEvent(new NoteOnEvent(), deltaTime1),
+                new TimedEvent(new NoteOffEvent(), deltaTime1 + deltaTime2)
+            });
 
         [Test]
-        public void GetTimedEvents_EventsCollection_MultipleEvents_Custom_1([Values(0, 100)] long deltaTime1, [Values(0, 100)] long deltaTime2)
-        {
-            var eventsCollection = new EventsCollection
+        public void GetTimedEvents_EventsCollection_MultipleEvents_Custom_1([Values(0, 100)] long deltaTime1, [Values(0, 100)] long deltaTime2) => GetTimedEvents_EventsCollection(
+            midiEvents: new MidiEvent[]
             {
                 new NoteOnEvent { DeltaTime = deltaTime1 },
                 new NoteOffEvent { DeltaTime = deltaTime2 },
-            };
-
-            var timedEvents = eventsCollection.GetTimedEvents(CustomEventSettings);
-            MidiAsserts.AreEqual(
-                new[]
-                {
-                    new CustomTimedEvent(new NoteOnEvent(), deltaTime1, 0),
-                    new CustomTimedEvent(new NoteOffEvent(), deltaTime1 + deltaTime2, 0)
-                },
-                timedEvents,
-                false,
-                0,
-                "Timed events are invalid.");
-        }
+            },
+            expectedTimedEvents: new[]
+            {
+                new CustomTimedEvent(new NoteOnEvent(), deltaTime1, 0),
+                new CustomTimedEvent(new NoteOffEvent(), deltaTime1 + deltaTime2, 0),
+            },
+            settings: CustomEventSettings);
 
         [Test]
-        public void GetTimedEvents_EventsCollection_MultipleEvents_Custom_2([Values(0, 100)] long deltaTime1, [Values(0, 100)] long deltaTime2)
-        {
-            var eventsCollection = new EventsCollection
+        public void GetTimedEvents_EventsCollection_MultipleEvents_Custom_2([Values(0, 100)] long deltaTime1, [Values(0, 100)] long deltaTime2) => GetTimedEvents_EventsCollection(
+            midiEvents: new MidiEvent[]
             {
                 new NoteOnEvent { DeltaTime = deltaTime1 },
                 new NoteOffEvent { DeltaTime = deltaTime2 },
-            };
-
-            var timedEvents = eventsCollection.GetTimedEvents(CustomEventSettings2);
-            MidiAsserts.AreEqual(
-                new[]
-                {
-                    new CustomTimedEvent2(new NoteOnEvent(), deltaTime1, 0, 0),
-                    new CustomTimedEvent2(new NoteOffEvent(), deltaTime1 + deltaTime2, 0, 1)
-                },
-                timedEvents,
-                false,
-                0,
-                "Timed events are invalid.");
-        }
+            },
+            expectedTimedEvents: new[]
+            {
+                new CustomTimedEvent2(new NoteOnEvent(), deltaTime1, 0, 0),
+                new CustomTimedEvent2(new NoteOffEvent(), deltaTime1 + deltaTime2, 0, 1),
+            },
+            settings: CustomEventSettings2);
 
         [Test]
-        public void GetTimedEvents_TrackChunk_Empty()
-        {
-            var timedEvents = new TrackChunk(Enumerable.Empty<MidiEvent>()).GetTimedEvents();
-            CollectionAssert.IsEmpty(timedEvents, "Timed events collection is not empty.");
-        }
-
-        [TestCase(0)]
-        [TestCase(100)]
-        [TestCase(100000)]
-        public void GetTimedEvents_TrackChunk_OneEvent(long deltaTime)
-        {
-            var trackChunk = new TrackChunk(new MidiEvent[]
-            {
-                new NoteOnEvent { DeltaTime = deltaTime }
-            });
-
-            var timedEvents = trackChunk.GetTimedEvents();
-            MidiAsserts.AreEqual(new[] { new TimedEvent(new NoteOnEvent(), deltaTime) }, timedEvents, false, 0, "Timed events are invalid.");
-        }
+        public void GetTimedEvents_TrackChunk_Empty() => GetTimedEvents_TrackChunk(
+            midiEvents: Array.Empty<MidiEvent>(),
+            expectedTimedEvents: Array.Empty<ITimedObject>());
 
         [Test]
-        public void GetTimedEvents_TrackChunk_OneEvent_Custom([Values(0, 100, 100000)] long deltaTime)
-        {
-            var trackChunk = new TrackChunk(new MidiEvent[]
+        public void GetTimedEvents_TrackChunk_OneEvent([Values(0, 100, 100000)] long deltaTime) => GetTimedEvents_TrackChunk(
+            midiEvents: new[]
             {
-                new NoteOnEvent { DeltaTime = deltaTime }
+                new NoteOnEvent { DeltaTime = deltaTime },
+            },
+            expectedTimedEvents: new[]
+            {
+                new TimedEvent(new NoteOnEvent(), deltaTime),
             });
 
-            var timedEvents = trackChunk.GetTimedEvents(CustomEventSettings);
-            MidiAsserts.AreEqual(
-                new[]
-                {
-                    new CustomTimedEvent(new NoteOnEvent(), deltaTime, 0)
-                },
-                timedEvents,
-                false,
-                0,
-                "Timed events are invalid.");
-        }
+        [Test]
+        public void GetTimedEvents_TrackChunk_OneEvent_Custom([Values(0, 100, 100000)] long deltaTime) => GetTimedEvents_TrackChunk(
+            midiEvents: new[]
+            {
+                new NoteOnEvent { DeltaTime = deltaTime },
+            },
+            expectedTimedEvents: new[]
+            {
+                new CustomTimedEvent(new NoteOnEvent(), deltaTime, 0),
+            },
+            settings: CustomEventSettings);
 
-        [TestCase(0, 0)]
-        [TestCase(0, 100)]
-        [TestCase(100, 0)]
-        [TestCase(100, 100)]
-        public void GetTimedEvents_TrackChunk_MultipleEvents(long deltaTime1, long deltaTime2)
-        {
-            var trackChunk = new TrackChunk(new MidiEvent[]
+        [Test]
+        public void GetTimedEvents_TrackChunk_MultipleEvents([Values(0, 100)] long deltaTime1, [Values(0, 100)] long deltaTime2) => GetTimedEvents_TrackChunk(
+            midiEvents: new MidiEvent[]
             {
                 new NoteOnEvent { DeltaTime = deltaTime1 },
                 new NoteOffEvent { DeltaTime = deltaTime2 },
+            },
+            expectedTimedEvents: new[]
+            {
+                new TimedEvent(new NoteOnEvent(), deltaTime1),
+                new TimedEvent(new NoteOffEvent(), deltaTime1 + deltaTime2)
             });
 
-            var timedEvents = trackChunk.GetTimedEvents();
-            MidiAsserts.AreEqual(
-                new[] { new TimedEvent(new NoteOnEvent(), deltaTime1), new TimedEvent(new NoteOffEvent(), deltaTime1 + deltaTime2) },
-                timedEvents,
-                false,
-                0,
-                "Timed events are invalid.");
-        }
-
         [Test]
-        public void GetTimedEvents_TrackChunk_MultipleEvents_Custom([Values(0, 100)] long deltaTime1, [Values(0, 100)] long deltaTime2)
-        {
-            var trackChunk = new TrackChunk(new MidiEvent[]
+        public void GetTimedEvents_TrackChunk_MultipleEvents_Custom([Values(0, 100)] long deltaTime1, [Values(0, 100)] long deltaTime2) => GetTimedEvents_TrackChunk(
+            midiEvents: new MidiEvent[]
             {
                 new NoteOnEvent { DeltaTime = deltaTime1 },
                 new NoteOffEvent { DeltaTime = deltaTime2 },
-            });
+            },
+            expectedTimedEvents: new[]
+            {
+                new CustomTimedEvent(new NoteOnEvent(), deltaTime1, 0),
+                new CustomTimedEvent(new NoteOffEvent(), deltaTime1 + deltaTime2, 0),
+            },
+            settings: CustomEventSettings);
 
-            var timedEvents = trackChunk.GetTimedEvents(CustomEventSettings);
-            MidiAsserts.AreEqual(
-                new[]
+        [Test]
+        public void GetTimedEvents_TrackChunksCollection_Empty() => GetTimedEvents_TrackChunksCollection(
+            midiEvents: Array.Empty<ICollection<MidiEvent>>(),
+            expectedTimedEvents: Array.Empty<ITimedObject>());
+
+        [Test]
+        public void GetTimedEvents_TrackChunksCollection_OneTrackChunk_Empty() => GetTimedEvents_TrackChunksCollection(
+            midiEvents: new[]
+            {
+                Array.Empty<MidiEvent>(),
+            },
+            expectedTimedEvents: Array.Empty<ITimedObject>());
+
+        [Test]
+        public void GetTimedEvents_TrackChunksCollection_OneTrackChunk_OneEvent([Values(0, 100, 100000)] long deltaTime) => GetTimedEvents_TrackChunksCollection(
+            midiEvents: new[]
+            {
+                new MidiEvent[]
                 {
-                    new CustomTimedEvent(new NoteOnEvent(), deltaTime1, 0),
-                    new CustomTimedEvent(new NoteOffEvent(), deltaTime1 + deltaTime2, 0)
+                    new NoteOnEvent { DeltaTime = deltaTime },
                 },
-                timedEvents,
-                false,
-                0,
-                "Timed events are invalid.");
-        }
-
-        [Test]
-        public void GetTimedEvents_TrackChunksCollection_Empty()
-        {
-            var timedEvents = Enumerable.Empty<TrackChunk>().GetTimedEvents();
-            CollectionAssert.IsEmpty(timedEvents, "Timed events collection is not empty.");
-        }
-
-        [Test]
-        public void GetTimedEvents_TrackChunksCollection_OneTrackChunk_Empty()
-        {
-            var timedEvents = new[] { new TrackChunk() }.GetTimedEvents();
-            CollectionAssert.IsEmpty(timedEvents, "Timed events collection is not empty.");
-        }
-
-        [TestCase(0)]
-        [TestCase(100)]
-        [TestCase(100000)]
-        public void GetTimedEvents_TrackChunksCollection_OneTrackChunk_OneEvent(long deltaTime)
-        {
-            var trackChunk = new TrackChunk(new MidiEvent[]
+            },
+            expectedTimedEvents: new[]
             {
-                new NoteOnEvent { DeltaTime = deltaTime }
+                new TimedEvent(new NoteOnEvent(), deltaTime),
             });
 
-            var timedEvents = new[] { trackChunk }.GetTimedEvents();
-            MidiAsserts.AreEqual(new[] { new TimedEvent(new NoteOnEvent(), deltaTime) }, timedEvents, false, 0, "Timed events are invalid.");
-        }
-
         [Test]
-        public void GetTimedEvents_TrackChunksCollection_OneTrackChunk_OneEvent_Custom([Values(0, 100, 100000)] long deltaTime)
-        {
-            var trackChunk = new TrackChunk(new MidiEvent[]
+        public void GetTimedEvents_TrackChunksCollection_OneTrackChunk_OneEvent_Custom([Values(0, 100, 100000)] long deltaTime) => GetTimedEvents_TrackChunksCollection(
+            midiEvents: new[]
             {
-                new NoteOnEvent { DeltaTime = deltaTime }
-            });
-
-            var timedEvents = new[] { trackChunk }.GetTimedEvents(CustomEventSettings);
-            MidiAsserts.AreEqual(
-                new[]
+                new MidiEvent[]
                 {
-                    new CustomTimedEvent(new NoteOnEvent(), deltaTime, 0)
+                    new NoteOnEvent { DeltaTime = deltaTime },
                 },
-                timedEvents,
-                false,
-                0,
-                "Timed events are invalid.");
-        }
-
-        [TestCase(0, 0)]
-        [TestCase(0, 100)]
-        [TestCase(100, 0)]
-        [TestCase(100, 100)]
-        public void GetTimedEvents_TrackChunksCollection_OneTrackChunk_MultipleEvents(long deltaTime1, long deltaTime2)
-        {
-            var trackChunk = new TrackChunk(new MidiEvent[]
+            },
+            expectedTimedEvents: new[]
             {
-                new NoteOnEvent { DeltaTime = deltaTime1 },
-                new NoteOffEvent { DeltaTime = deltaTime2 },
-            });
+                new CustomTimedEvent(new NoteOnEvent(), deltaTime, 0),
+            },
+            settings: CustomEventSettings);
 
-            var timedEvents = new[] { trackChunk }.GetTimedEvents();
-            MidiAsserts.AreEqual(
-                new[] { new TimedEvent(new NoteOnEvent(), deltaTime1), new TimedEvent(new NoteOffEvent(), deltaTime1 + deltaTime2) },
-                timedEvents,
-                false,
-                0,
-                "Timed events are invalid.");
-        }
+        [Test]
+        public void GetTimedEvents_TrackChunksCollection_OneTrackChunk_MultipleEvents([Values(0, 100)] long deltaTime1, [Values(0, 100)] long deltaTime2) => GetTimedEvents_TrackChunksCollection(
+            midiEvents: new[]
+            {
+                new MidiEvent[]
+                {
+                    new NoteOnEvent { DeltaTime = deltaTime1 },
+                    new NoteOffEvent { DeltaTime = deltaTime2 },
+                },
+            },
+            expectedTimedEvents: new[]
+            {
+                new TimedEvent(new NoteOnEvent(), deltaTime1),
+                new TimedEvent(new NoteOffEvent(), deltaTime1 + deltaTime2),
+            });
 
         [Test]
         public void GetTimedEvents_TrackChunksCollection_OneTrackChunk_MultipleEvents_Custom(
             [Values(0, 100)] long deltaTime1,
-            [Values(0, 100)] long deltaTime2)
-        {
-            var trackChunk = new TrackChunk(new MidiEvent[]
+            [Values(0, 100)] long deltaTime2) => GetTimedEvents_TrackChunksCollection(
+            midiEvents: new[]
             {
-                new NoteOnEvent { DeltaTime = deltaTime1 },
-                new NoteOffEvent { DeltaTime = deltaTime2 },
-            });
-
-            var timedEvents = new[] { trackChunk }.GetTimedEvents(CustomEventSettings);
-            MidiAsserts.AreEqual(
-                new[]
+                new MidiEvent[]
                 {
-                    new CustomTimedEvent(new NoteOnEvent(), deltaTime1, 0),
-                    new CustomTimedEvent(new NoteOffEvent(), deltaTime1 + deltaTime2, 0)
+                    new NoteOnEvent { DeltaTime = deltaTime1 },
+                    new NoteOffEvent { DeltaTime = deltaTime2 },
                 },
-                timedEvents,
-                false,
-                0,
-                "Timed events are invalid.");
-        }
+            },
+            expectedTimedEvents: new[]
+            {
+                new CustomTimedEvent(new NoteOnEvent(), deltaTime1, 0),
+                new CustomTimedEvent(new NoteOffEvent(), deltaTime1 + deltaTime2, 0),
+            },
+            settings: CustomEventSettings);
 
         [Test]
         public void GetTimedEvents_TrackChunksCollection_OneTrackChunk_MultipleEvents_Custom_Fail(
             [Values(0, 100)] long deltaTime1,
-            [Values(0, 100)] long deltaTime2)
-        {
-            var trackChunk = new TrackChunk(new MidiEvent[]
+            [Values(0, 100)] long deltaTime2) => GetTimedEvents_TrackChunksCollection(
+            midiEvents: new[]
             {
-                new NoteOnEvent { DeltaTime = deltaTime1 },
-                new NoteOffEvent { DeltaTime = deltaTime2 },
+                new MidiEvent[]
+                {
+                    new NoteOnEvent { DeltaTime = deltaTime1 },
+                    new NoteOffEvent { DeltaTime = deltaTime2 },
+                },
+            },
+            expectedTimedEvents: new[]
+            {
+                new TimedEvent(new NoteOnEvent(), deltaTime1),
+                new TimedEvent(new NoteOffEvent(), deltaTime1 + deltaTime2),
             });
 
-            var timedEvents = new[] { trackChunk }.GetTimedEvents(CustomEventSettings);
-            Assert.Throws<AssertionException>(() => MidiAsserts.AreEqual(
+        [Test]
+        public void GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_Empty_Empty() => GetTimedEvents_TrackChunksCollection(
+            midiEvents: new[]
+            {
+                Array.Empty<MidiEvent>(),
+                Array.Empty<MidiEvent>(),
+            },
+            expectedTimedEvents: Array.Empty<ITimedObject>());
+
+        [Test]
+        public void GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_OneEvent_Empty([Values(0, 100, 100000)] long deltaTime) => GetTimedEvents_TrackChunksCollection(
+            midiEvents: new[]
+            {
                 new[]
                 {
-                    new TimedEvent(new NoteOnEvent(), deltaTime1),
-                    new TimedEvent(new NoteOffEvent(), deltaTime1 + deltaTime2)
+                    new NoteOnEvent { DeltaTime = deltaTime },
                 },
-                timedEvents,
-                false,
-                0,
-                "Timed events are invalid."));
+                Array.Empty<MidiEvent>(),
+            },
+            expectedTimedEvents: new[]
+            {
+                new TimedEvent(new NoteOnEvent(), deltaTime),
+            });
+
+        [Test]
+        public void GetTimedEvents_TrackChunksCollection_SingleAsMultipleTrackChunks([Values(0, 100, 100000)] long deltaTime)
+        {
+            var midiEvent = new NoteOnEvent { DeltaTime = deltaTime };
+            GetTimedEvents_TrackChunksCollection(
+                midiEvents: new[]
+                {
+                    new[]
+                    {
+                        midiEvent,
+                    },
+                    Array.Empty<MidiEvent>(),
+                },
+                expectedTimedEvents: new[]
+                {
+                    new TimedEvent(new NoteOnEvent(), deltaTime),
+                },
+                additionalCheck: timedEvents =>
+                    Assert.AreNotSame(midiEvent, timedEvents.First().Event, "New event is a clone of the original one."));
         }
 
         [Test]
-        public void GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_Empty_Empty()
-        {
-            var timedEvents = new[] { new TrackChunk(), new TrackChunk() }.GetTimedEvents();
-            CollectionAssert.IsEmpty(timedEvents, "Timed events collection is not empty.");
-        }
-
-        [TestCase(0)]
-        [TestCase(100)]
-        [TestCase(100000)]
-        public void GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_OneEvent_Empty(long deltaTime)
-        {
-            var trackChunk = new TrackChunk(new MidiEvent[]
+        public void GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_MultipleEvents_Empty([Values(0, 100)] long deltaTime1, [Values(0, 100)] long deltaTime2) => GetTimedEvents_TrackChunksCollection(
+            midiEvents: new[]
             {
-                new NoteOnEvent { DeltaTime = deltaTime }
-            });
-
-            var timedEvents = new[] { trackChunk, new TrackChunk() }.GetTimedEvents();
-            MidiAsserts.AreEqual(new[] { new TimedEvent(new NoteOnEvent(), deltaTime) }, timedEvents, false, 0, "Timed events are invalid.");
-        }
-
-        [TestCase(0)]
-        [TestCase(100)]
-        [TestCase(100000)]
-        public void GetTimedEvents_TrackChunksCollection_SingleAsMultipleTrackChunks(long deltaTime)
-        {
-            var midiEvent = new NoteOnEvent { DeltaTime = deltaTime };
-            var trackChunk = new TrackChunk(new MidiEvent[]
+                new MidiEvent[]
+                {
+                    new NoteOnEvent { DeltaTime = deltaTime1 },
+                    new NoteOffEvent { DeltaTime = deltaTime2 },
+                },
+                Array.Empty<MidiEvent>(),
+            },
+            expectedTimedEvents: new[]
             {
-                midiEvent
+                new TimedEvent(new NoteOnEvent(), deltaTime1),
+                new TimedEvent(new NoteOffEvent(), deltaTime1 + deltaTime2)
             });
-
-            var timedEvents = new[] { trackChunk }.GetTimedEvents();
-            MidiAsserts.AreEqual(new[] { new TimedEvent(new NoteOnEvent(), deltaTime) }, timedEvents, false, 0, "Timed events are invalid.");
-            Assert.AreNotSame(midiEvent, timedEvents.First().Event, "New event is a clone of the original one.");
-        }
-
-        [TestCase(0, 0)]
-        [TestCase(0, 100)]
-        [TestCase(100, 0)]
-        [TestCase(100, 100)]
-        public void GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_MultipleEvents_Empty(long deltaTime1, long deltaTime2)
-        {
-            var trackChunk = new TrackChunk(new MidiEvent[]
-            {
-                new NoteOnEvent { DeltaTime = deltaTime1 },
-                new NoteOffEvent { DeltaTime = deltaTime2 },
-            });
-
-            var timedEvents = new[] { trackChunk, new TrackChunk() }.GetTimedEvents();
-            MidiAsserts.AreEqual(
-                new[] { new TimedEvent(new NoteOnEvent(), deltaTime1), new TimedEvent(new NoteOffEvent(), deltaTime1 + deltaTime2) },
-                timedEvents,
-                false,
-                0,
-                "Timed events are invalid.");
-        }
 
         [Test]
         public void GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_MultipleEvents_OneEvent_1() =>
@@ -2160,6 +2078,64 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         #endregion
 
         #region Private methods
+
+        private void GetTimedEvents_EventsCollection(
+            ICollection<MidiEvent> midiEvents,
+            ICollection<ITimedObject> expectedTimedEvents,
+            TimedEventDetectionSettings settings = null)
+        {
+            var eventsCollection = new EventsCollection();
+
+            foreach (var midiEvent in midiEvents)
+            {
+                eventsCollection.Add(midiEvent);
+            }
+
+            var timedEvents = settings != null
+                ? eventsCollection.GetTimedEvents(settings)
+                : eventsCollection.GetTimedEvents();
+
+            CheckTimedEvents(expectedTimedEvents, timedEvents.ToArray());
+        }
+
+        private void GetTimedEvents_TrackChunk(
+            ICollection<MidiEvent> midiEvents,
+            ICollection<ITimedObject> expectedTimedEvents,
+            TimedEventDetectionSettings settings = null)
+        {
+            var trackChunk = new TrackChunk(midiEvents);
+
+            var timedEvents = settings != null
+                ? trackChunk.GetTimedEvents(settings)
+                : trackChunk.GetTimedEvents();
+
+            CheckTimedEvents(expectedTimedEvents, timedEvents.ToArray());
+        }
+
+        private void GetTimedEvents_TrackChunksCollection(
+            ICollection<ICollection<MidiEvent>> midiEvents,
+            ICollection<ITimedObject> expectedTimedEvents,
+            TimedEventDetectionSettings settings = null,
+            Action<ICollection<TimedEvent>> additionalCheck = null)
+        {
+            var trackChunks = midiEvents.Select(e => new TrackChunk(e)).ToArray();
+
+            var timedEvents = settings != null
+                ? trackChunks.GetTimedEvents(settings)
+                : trackChunks.GetTimedEvents();
+
+            CheckTimedEvents(expectedTimedEvents, timedEvents.ToArray());
+            additionalCheck?.Invoke(timedEvents);
+        }
+
+        private void CheckTimedEvents(
+            ICollection<ITimedObject> expectedTimedEvents,
+            ICollection<ITimedObject> actualTimedEvents) => MidiAsserts.AreEqual(
+                expectedTimedEvents,
+                actualTimedEvents,
+                false,
+                0,
+                "Timed events are invalid.");
 
         private void GetTimedEvents_TrackChunksCollection_MultipleTrackChunks_MultipleEvents_MultipleEvents(
             long aDeltaTime1,

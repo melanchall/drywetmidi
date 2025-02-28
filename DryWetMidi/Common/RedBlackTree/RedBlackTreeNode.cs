@@ -1,22 +1,22 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Melanchall.DryWetMidi.Common
 {
     internal sealed class RedBlackTreeNode<TKey, TValue>
         where TKey : IComparable<TKey>
     {
-        public static readonly RedBlackTreeNode<TKey, TValue> Void = new RedBlackTreeNode<TKey, TValue>(default(TKey), default(TValue), null);
+        public static readonly RedBlackTreeNode<TKey, TValue> Void = new RedBlackTreeNode<TKey, TValue>(default(TKey), null);
 
-        public RedBlackTreeNode(TKey key, TValue value, RedBlackTreeNode<TKey, TValue> parent)
+        public RedBlackTreeNode(TKey key, RedBlackTreeNode<TKey, TValue> parent)
         {
             Key = key;
-            Value = value;
             Parent = parent;
         }
 
         public TKey Key { get; set; }
 
-        public TValue Value { get; set; }
+        public LinkedList<TValue> Values { get; set; } = new LinkedList<TValue>();
 
         public RedBlackTreeNode<TKey, TValue> Left { get; set; }
 
@@ -26,27 +26,13 @@ namespace Melanchall.DryWetMidi.Common
 
         public RedBlackTreeNodeColor Color { get; set; } = RedBlackTreeNodeColor.Black;
 
-        public bool IsInTree { get; set; } = true;
+        public RedBlackTree<TKey, TValue> Tree { get; set; }
 
-        public RedBlackTreeNode<TKey, TValue> Clone()
-        {
-            if (this == Void)
-                return Void;
-
-            var node = new RedBlackTreeNode<TKey, TValue>(Key, Value, Parent)
-            {
-                Color = Color,
-                Left = Left.Clone(),
-                Right = Right.Clone(),
-            };
-
-            node.Left.Parent = node.Right.Parent = node;
-            return node;
-        }
+        public object Data { get; set; }
 
         public override string ToString()
         {
-            return this != Void ? $"{Key}: {Value}" : "<Void>";
+            return this != Void ? $"{Key}: {string.Join(", ", Values)}" : "<Void>";
         }
     }
 }

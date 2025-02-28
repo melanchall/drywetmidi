@@ -29,7 +29,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(500,
+                    new DynamicPlaybackAction(500,
                         (playback, collection) => collection.Remove(objectToRemove)),
                 },
                 expectedReceivedEvents: new[]
@@ -54,7 +54,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(500,
+                    new DynamicPlaybackAction(500,
                         (playback, collection) => collection.Remove(objectToRemove)),
                 },
                 expectedReceivedEvents: new[]
@@ -80,7 +80,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(200,
+                    new DynamicPlaybackAction(200,
                         (playback, collection) => collection.Remove(objectToRemove)),
                 },
                 expectedReceivedEvents: new[]
@@ -116,7 +116,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(200,
+                    new DynamicPlaybackAction(200,
                         (playback, collection) => collection.Remove(objectsToRemove[indexToRemove])),
                 },
                 expectedReceivedEvents:
@@ -162,7 +162,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(500,
+                    new DynamicPlaybackAction(500,
                         (playback, collection) => collection.Remove(objectsToRemove[indexToRemove])),
                 },
                 expectedReceivedEvents: new[]
@@ -193,7 +193,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(200,
+                    new DynamicPlaybackAction(200,
                         (playback, collection) => collection.Remove(objectToRemove)),
                 },
                 expectedReceivedEvents: new[]
@@ -221,7 +221,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(400,
+                    new DynamicPlaybackAction(400,
                         (playback, collection) => collection.Remove(objectToRemove)),
                 },
                 expectedReceivedEvents: new[]
@@ -249,7 +249,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(200,
+                    new DynamicPlaybackAction(200,
                         (playback, collection) => collection.Remove(objectToRemove)),
                 },
                 expectedReceivedEvents: new[]
@@ -281,9 +281,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(200,
+                    new DynamicPlaybackAction(200,
                         (playback, collection) => collection.Remove(objectToRemove2)),
-                    new PlaybackChanger(100,
+                    new DynamicPlaybackAction(100,
                         (playback, collection) => collection.Remove(objectToRemove1)),
                 },
                 expectedReceivedEvents: new[]
@@ -315,7 +315,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(200,
+                    new DynamicPlaybackAction(200,
                         (playback, collection) => collection.Remove(objectToRemove)),
                 },
                 expectedReceivedEvents: new[]
@@ -344,7 +344,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(400,
+                    new DynamicPlaybackAction(400,
                         (playback, collection) => collection.Remove(objectToRemove)),
                 },
                 expectedReceivedEvents: new[]
@@ -373,7 +373,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(200,
+                    new DynamicPlaybackAction(200,
                         (playback, collection) => collection.Remove(objectToRemove)),
                 },
                 expectedReceivedEvents: new[]
@@ -406,9 +406,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(200,
+                    new DynamicPlaybackAction(200,
                         (playback, collection) => collection.Remove(objectToRemove2)),
-                    new PlaybackChanger(100,
+                    new DynamicPlaybackAction(100,
                         (playback, collection) => collection.Remove(objectToRemove1)),
                 },
                 expectedReceivedEvents: new[]
@@ -441,7 +441,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(200,
+                    new DynamicPlaybackAction(200,
                         (playback, collection) => collection.Remove(objectToRemove)),
                 },
                 expectedReceivedEvents: new[]
@@ -470,7 +470,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(400,
+                    new DynamicPlaybackAction(400,
                         (playback, collection) => collection.Remove(objectToRemove)),
                 },
                 expectedReceivedEvents: new[]
@@ -499,7 +499,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(200,
+                    new DynamicPlaybackAction(200,
                         (playback, collection) => collection.Remove(objectToRemove)),
                 },
                 expectedReceivedEvents: new[]
@@ -532,9 +532,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(200,
+                    new DynamicPlaybackAction(200,
                         (playback, collection) => collection.Remove(objectToRemove2)),
-                    new PlaybackChanger(100,
+                    new DynamicPlaybackAction(100,
                         (playback, collection) => collection.Remove(objectToRemove1)),
                 },
                 expectedReceivedEvents: new[]
@@ -569,9 +569,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(200,
+                    new DynamicPlaybackAction(200,
                         (playback, collection) => collection.Remove(objectToRemove2)),
-                    new PlaybackChanger(100,
+                    new DynamicPlaybackAction(100,
                         (playback, collection) => collection.Remove(objectToRemove1)),
                 },
                 expectedReceivedEvents: new[]
@@ -606,9 +606,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(200,
+                    new DynamicPlaybackAction(200,
                         (playback, collection) => collection.Remove(objectToRemove2)),
-                    new PlaybackChanger(100,
+                    new DynamicPlaybackAction(100,
                         (playback, collection) => collection.Remove(objectToRemove1)),
                 },
                 expectedReceivedEvents: new[]
@@ -643,7 +643,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(600,
+                    new DynamicPlaybackAction(600,
                         (playback, collection) => collection.Remove(objectToRemove)),
                 },
                 expectedReceivedEvents: new[]
@@ -676,7 +676,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(450,
+                    new DynamicPlaybackAction(450,
                         (playback, collection) => collection.Remove(objectToRemove)),
                 },
                 expectedReceivedEvents: new[]
@@ -707,7 +707,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(200,
+                    new DynamicPlaybackAction(200,
                         (playback, collection) => collection.Remove(objectToRemove)),
                 },
                 expectedReceivedEvents: new[]
@@ -744,9 +744,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(200,
+                    new DynamicPlaybackAction(200,
                         (playback, collection) => collection.Remove(objectToRemove1)),
-                    new PlaybackChanger(300,
+                    new DynamicPlaybackAction(300,
                         (playback, collection) => collection.Remove(objectToRemove2)),
                 },
                 expectedReceivedEvents: new[]
@@ -778,7 +778,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(200,
+                    new DynamicPlaybackAction(200,
                         (playback, collection) => collection.Remove(objectToRemove)),
                 },
                 expectedReceivedEvents: new[]
@@ -813,7 +813,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(700,
+                    new DynamicPlaybackAction(700,
                         (playback, collection) => collection.Remove(objectToRemove1)),
                 },
                 expectedReceivedEvents: new[]
@@ -843,7 +843,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(300,
+                    new DynamicPlaybackAction(300,
                         (playback, collection) => collection.Remove(objectToRemove)),
                 },
                 expectedReceivedEvents: new[]
@@ -871,7 +871,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(300,
+                    new DynamicPlaybackAction(300,
                         (playback, collection) => collection.Remove(objectToRemove)),
                 },
                 expectedReceivedEvents: new[]
@@ -900,7 +900,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(200,
+                    new DynamicPlaybackAction(200,
                         (playback, collection) => collection.Remove(objectToRemove)),
                 },
                 expectedReceivedEvents: new[]
@@ -931,7 +931,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(200,
+                    new DynamicPlaybackAction(200,
                         (playback, collection) => collection.Remove(objectToRemove1)),
                 },
                 expectedReceivedEvents: new[]
@@ -968,7 +968,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(200,
+                    new DynamicPlaybackAction(200,
                         (playback, collection) => collection.Remove(objectToRemove2)),
                 },
                 expectedReceivedEvents: new[]
@@ -1005,7 +1005,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(200,
+                    new DynamicPlaybackAction(200,
                         (playback, collection) => collection.Remove(objectToRemove3)),
                 },
                 expectedReceivedEvents: new[]
@@ -1042,7 +1042,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(500,
+                    new DynamicPlaybackAction(500,
                         (playback, collection) => collection.Remove(objectToRemove1)),
                 },
                 expectedReceivedEvents: new[]
@@ -1080,7 +1080,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(500,
+                    new DynamicPlaybackAction(500,
                         (playback, collection) => collection.Remove(objectToRemove2)),
                 },
                 expectedReceivedEvents: new[]
@@ -1118,7 +1118,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(500,
+                    new DynamicPlaybackAction(500,
                         (playback, collection) => collection.Remove(objectToRemove3)),
                 },
                 expectedReceivedEvents: new[]
@@ -1154,7 +1154,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(200,
+                    new DynamicPlaybackAction(200,
                         (playback, collection) => collection.Remove(objectToRemove)),
                 },
                 expectedReceivedEvents: new[]
@@ -1185,7 +1185,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(400,
+                    new DynamicPlaybackAction(400,
                         (playback, collection) => collection.Remove(objectToRemove)),
                 },
                 expectedReceivedEvents: new[]
@@ -1216,7 +1216,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(200,
+                    new DynamicPlaybackAction(200,
                         (playback, collection) => collection.Remove(objectToRemove)),
                 },
                 expectedReceivedEvents: new[]
@@ -1251,9 +1251,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(200,
+                    new DynamicPlaybackAction(200,
                         (playback, collection) => collection.Remove(objectToRemove2)),
-                    new PlaybackChanger(100,
+                    new DynamicPlaybackAction(100,
                         (playback, collection) => collection.Remove(objectToRemove1)),
                 },
                 expectedReceivedEvents: new[]
@@ -1288,7 +1288,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(200,
+                    new DynamicPlaybackAction(200,
                         (playback, collection) => collection.Remove(objectToRemove)),
                 },
                 expectedReceivedEvents: new[]
@@ -1320,7 +1320,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(400,
+                    new DynamicPlaybackAction(400,
                         (playback, collection) => collection.Remove(objectToRemove)),
                 },
                 expectedReceivedEvents: new[]
@@ -1352,7 +1352,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(200,
+                    new DynamicPlaybackAction(200,
                         (playback, collection) => collection.Remove(objectToRemove)),
                 },
                 expectedReceivedEvents: new[]
@@ -1388,9 +1388,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(200,
+                    new DynamicPlaybackAction(200,
                         (playback, collection) => collection.Remove(objectToRemove2)),
-                    new PlaybackChanger(100,
+                    new DynamicPlaybackAction(100,
                         (playback, collection) => collection.Remove(objectToRemove1)),
                 },
                 expectedReceivedEvents: new[]
@@ -1426,7 +1426,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(200,
+                    new DynamicPlaybackAction(200,
                         (playback, collection) => collection.Remove(objectToRemove)),
                 },
                 expectedReceivedEvents: new[]
@@ -1458,7 +1458,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(400,
+                    new DynamicPlaybackAction(400,
                         (playback, collection) => collection.Remove(objectToRemove)),
                 },
                 expectedReceivedEvents: new[]
@@ -1490,7 +1490,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(200,
+                    new DynamicPlaybackAction(200,
                         (playback, collection) => collection.Remove(objectToRemove)),
                 },
                 expectedReceivedEvents: new[]
@@ -1526,9 +1526,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(200,
+                    new DynamicPlaybackAction(200,
                         (playback, collection) => collection.Remove(objectToRemove2)),
-                    new PlaybackChanger(100,
+                    new DynamicPlaybackAction(100,
                         (playback, collection) => collection.Remove(objectToRemove1)),
                 },
                 expectedReceivedEvents: new[]
@@ -1566,9 +1566,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(200,
+                    new DynamicPlaybackAction(200,
                         (playback, collection) => collection.Remove(objectToRemove2)),
-                    new PlaybackChanger(100,
+                    new DynamicPlaybackAction(100,
                         (playback, collection) => collection.Remove(objectToRemove1)),
                 },
                 expectedReceivedEvents: new[]
@@ -1606,9 +1606,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(200,
+                    new DynamicPlaybackAction(200,
                         (playback, collection) => collection.Remove(objectToRemove2)),
-                    new PlaybackChanger(100,
+                    new DynamicPlaybackAction(100,
                         (playback, collection) => collection.Remove(objectToRemove1)),
                 },
                 expectedReceivedEvents: new[]
@@ -1646,7 +1646,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(600,
+                    new DynamicPlaybackAction(600,
                         (playback, collection) => collection.Remove(objectToRemove)),
                 },
                 expectedReceivedEvents: new[]
@@ -1682,7 +1682,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(450,
+                    new DynamicPlaybackAction(450,
                         (playback, collection) => collection.Remove(objectToRemove)),
                 },
                 expectedReceivedEvents: new[]
@@ -1716,7 +1716,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(200,
+                    new DynamicPlaybackAction(200,
                         (playback, collection) => collection.Remove(objectToRemove)),
                 },
                 expectedReceivedEvents: new[]
@@ -1756,9 +1756,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(200,
+                    new DynamicPlaybackAction(200,
                         (playback, collection) => collection.Remove(objectToRemove1)),
-                    new PlaybackChanger(300,
+                    new DynamicPlaybackAction(300,
                         (playback, collection) => collection.Remove(objectToRemove2)),
                 },
                 expectedReceivedEvents: new[]
@@ -1793,7 +1793,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(200,
+                    new DynamicPlaybackAction(200,
                         (playback, collection) => collection.Remove(objectToRemove)),
                 },
                 expectedReceivedEvents: new[]
@@ -1829,7 +1829,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(700,
+                    new DynamicPlaybackAction(700,
                         (playback, collection) => collection.Remove(objectToRemove1)),
                 },
                 expectedReceivedEvents: new[]
@@ -1871,7 +1871,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(100,
+                    new DynamicPlaybackAction(100,
                         (playback, collection) => collection.Remove(removeNoteOn ? objectToRemove1 : objectToRemove2)),
                 },
                 expectedReceivedEvents: new ReceivedEvent[0]
@@ -1911,7 +1911,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(300,
+                    new DynamicPlaybackAction(300,
                         (playback, collection) => collection.Remove(removeNoteOn ? objectToRemove1 : objectToRemove2)),
                 },
                 expectedReceivedEvents: new[]
@@ -1960,13 +1960,13 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(50,
+                    new DynamicPlaybackAction(50,
                         (playback, collection) => collection.Remove(objectToRemove1)),
-                    new PlaybackChanger(50,
+                    new DynamicPlaybackAction(50,
                         (playback, collection) => collection.Add(objectToAdd1)),
-                    new PlaybackChanger(250,
+                    new DynamicPlaybackAction(250,
                         (playback, collection) => collection.Remove(objectToRemove2)),
-                    new PlaybackChanger(50,
+                    new DynamicPlaybackAction(50,
                         (playback, collection) => collection.Add(objectToAdd2)),
                 },
                 expectedReceivedEvents: new[]
@@ -2013,7 +2013,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(100,
+                    new DynamicPlaybackAction(100,
                         (playback, collection) => collection.Remove(objectToRemove1, objectToRemove2)),
                 },
                 expectedReceivedEvents: new[]
@@ -2052,7 +2052,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(150, (playback, collection) =>
+                    new DynamicPlaybackAction(150, (playback, collection) =>
                     {
                         collection.Remove(objectToRemove);
                         CheckCurrentTime(playback, TimeSpan.FromMilliseconds(150), "after remove");
@@ -2091,7 +2091,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(400, (playback, collection) =>
+                    new DynamicPlaybackAction(400, (playback, collection) =>
                     {
                         collection.Remove(objectToRemove);
                         CheckCurrentTime(playback, TimeSpan.FromMilliseconds(600), "after remove");
@@ -2128,7 +2128,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(50, (playback, collection) =>
+                    new DynamicPlaybackAction(50, (playback, collection) =>
                     {
                         collection.Remove(objectToRemove);
                         CheckCurrentTime(playback, TimeSpan.FromMilliseconds(50), "after remove");
@@ -2162,7 +2162,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(200, (playback, collection) =>
+                    new DynamicPlaybackAction(200, (playback, collection) =>
                     {
                         collection.Remove(objectToRemove);
                         CheckCurrentTime(playback, TimeSpan.FromMilliseconds(200), "after remove");
@@ -2201,7 +2201,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(50, (playback, collection) =>
+                    new DynamicPlaybackAction(50, (playback, collection) =>
                     {
                         collection.Remove(objectToRemove);
                         CheckCurrentTime(playback, TimeSpan.FromMilliseconds(50), "after remove");
@@ -2243,7 +2243,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(220, (playback, collection) =>
+                    new DynamicPlaybackAction(220, (playback, collection) =>
                     {
                         collection.Remove(objectToRemove);
                         CheckCurrentTime(playback, TimeSpan.FromMilliseconds(240), "after remove");
@@ -2286,10 +2286,10 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(300, (playback, collection) =>
+                    new DynamicPlaybackAction(300, (playback, collection) =>
                     {
                         collection.Remove(objectToRemove);
-                        CheckCurrentTime(playback, TimeSpan.FromMilliseconds(325), "after remove");
+                        CheckCurrentTime(playback, TimeSpan.FromMilliseconds(350), "after remove");
                     }),
                 },
                 expectedReceivedEvents: new[]
@@ -2329,7 +2329,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(50, (playback, collection) =>
+                    new DynamicPlaybackAction(50, (playback, collection) =>
                     {
                         collection.Remove(objectToRemove);
                         CheckCurrentTime(playback, TimeSpan.FromMilliseconds(50), "after remove");
@@ -2371,7 +2371,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(220, (playback, collection) =>
+                    new DynamicPlaybackAction(220, (playback, collection) =>
                     {
                         collection.Remove(objectToRemove);
                         CheckCurrentTime(playback, TimeSpan.FromMilliseconds(220), "after remove");
@@ -2413,7 +2413,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(300, (playback, collection) =>
+                    new DynamicPlaybackAction(300, (playback, collection) =>
                     {
                         collection.Remove(objectToRemove);
                         CheckCurrentTime(playback, TimeSpan.FromMilliseconds(350), "after remove");
@@ -2454,7 +2454,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(150, (playback, collection) =>
+                    new DynamicPlaybackAction(150, (playback, collection) =>
                     {
                         collection.Remove(objectToRemove);
                         CheckCurrentTime(playback, TimeSpan.FromMilliseconds(150), "after remove");
@@ -2493,7 +2493,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(400, (playback, collection) =>
+                    new DynamicPlaybackAction(400, (playback, collection) =>
                     {
                         collection.Remove(objectToRemove);
                         CheckCurrentTime(playback, TimeSpan.FromMilliseconds(400), "after remove");
@@ -2530,7 +2530,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(50, (playback, collection) =>
+                    new DynamicPlaybackAction(50, (playback, collection) =>
                     {
                         collection.Remove(objectToRemove);
                         CheckCurrentTime(playback, TimeSpan.FromMilliseconds(50), "after remove");
@@ -2564,7 +2564,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(200, (playback, collection) =>
+                    new DynamicPlaybackAction(200, (playback, collection) =>
                     {
                         collection.Remove(objectToRemove);
                         CheckCurrentTime(playback, TimeSpan.FromMilliseconds(200), "after remove");
@@ -2603,7 +2603,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(50, (playback, collection) =>
+                    new DynamicPlaybackAction(50, (playback, collection) =>
                     {
                         collection.Remove(objectToRemove);
                         CheckCurrentTime(playback, TimeSpan.FromMilliseconds(50), "after remove");
@@ -2645,7 +2645,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(250, (playback, collection) =>
+                    new DynamicPlaybackAction(250, (playback, collection) =>
                     {
                         collection.Remove(objectToRemove);
                         CheckCurrentTime(playback, TimeSpan.FromMilliseconds(250), "after remove");
@@ -2688,7 +2688,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(300, (playback, collection) =>
+                    new DynamicPlaybackAction(300, (playback, collection) =>
                     {
                         collection.Remove(objectToRemove);
                         CheckCurrentTime(playback, TimeSpan.FromMilliseconds(300), "after remove");
@@ -2731,7 +2731,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(50, (playback, collection) =>
+                    new DynamicPlaybackAction(50, (playback, collection) =>
                     {
                         collection.Remove(objectToRemove);
                         CheckCurrentTime(playback, TimeSpan.FromMilliseconds(50), "after remove");
@@ -2773,7 +2773,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(220, (playback, collection) =>
+                    new DynamicPlaybackAction(220, (playback, collection) =>
                     {
                         collection.Remove(objectToRemove);
                         CheckCurrentTime(playback, TimeSpan.FromMilliseconds(220), "after remove");
@@ -2815,7 +2815,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(300, (playback, collection) =>
+                    new DynamicPlaybackAction(300, (playback, collection) =>
                     {
                         collection.Remove(objectToRemove);
                         CheckCurrentTime(playback, TimeSpan.FromMilliseconds(300), "after remove");

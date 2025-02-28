@@ -5,13 +5,12 @@ using System.Linq;
 
 namespace Melanchall.DryWetMidi.Common
 {
-    internal sealed class RedBlackTree<TKey, TValue> : IEnumerable<TValue>
+    internal class RedBlackTree<TKey, TValue> : IEnumerable<TValue>
         where TKey : IComparable<TKey>
-        where TValue : IEquatable<TValue>
     {
         #region Fields
 
-        private RedBlackTreeNode<TKey, TValue> _root = RedBlackTreeNode<TKey, TValue>.Void;
+        protected RedBlackTreeNode<TKey, TValue> _root = RedBlackTreeNode<TKey, TValue>.Void;
 
         #endregion
 
@@ -39,39 +38,12 @@ namespace Melanchall.DryWetMidi.Common
 
         #region Methods
 
-        // TODO: test
         public void Clear()
         {
             _root = RedBlackTreeNode<TKey, TValue>.Void;
         }
 
-        public RedBlackTreeNode<TKey, TValue> GetRoot()
-        {
-            return _root;
-        }
-
-        public RedBlackTree<TKey, TValue> Clone()
-        {
-            return new RedBlackTree<TKey, TValue>
-            {
-                _root = _root.Clone(),
-            };
-        }
-
-        public IEnumerable<RedBlackTreeNode<TKey, TValue>> EnumerateNodes()
-        {
-            var node = GetMinimumNode();
-            if (IsVoid(node))
-                yield break;
-
-            do
-            {
-                yield return node;
-            }
-            while ((node = GetNextNode(node)) != null);
-        }
-
-        public RedBlackTreeNode<TKey, TValue> GetFirstNode(TKey key)
+        public RedBlackTreeNode<TKey, TValue> GetNodeByKey(TKey key)
         {
             var node = _root;
 
@@ -86,119 +58,189 @@ namespace Melanchall.DryWetMidi.Common
             return !IsVoid(node) ? node : null;
         }
 
-        public IEnumerable<RedBlackTreeNode<TKey, TValue>> SearchNodes(TKey key)
+        public IEnumerable<RedBlackTreeCoordinate<TKey, TValue>> GetCoordinatesByKey(TKey key)
         {
-            // TODO: optimize
+            var node = GetNodeByKey(key);
+            if (IsVoid(node))
+                yield break;
 
-            var queue = new Queue<RedBlackTreeNode<TKey, TValue>>();
-            queue.Enqueue(GetFirstNode(key));
-
-            var visited = new HashSet<RedBlackTreeNode<TKey, TValue>>();
-
-            while (queue.Count > 0)
+            for (var n = node.Values.First; n != null; n = n.Next)
             {
-                var node = queue.Dequeue();
-                if (IsVoid(node) || node.Key.CompareTo(key) != 0 || !visited.Add(node))
-                    continue;
-
-                yield return node;
-
-                queue.Enqueue(GetNextNode(node));
-                queue.Enqueue(GetPreviousNode(node));
+                yield return new RedBlackTreeCoordinate<TKey, TValue>(node, n);
             }
         }
 
-        public IEnumerable<TValue> GetValues(TKey key)
+        public IEnumerable<TValue> GetValuesByKey(TKey key)
         {
-            return SearchNodes(key).Select(n => n.Value);
+            return GetCoordinatesByKey(key).Select(n => n.Value);
         }
 
-        public RedBlackTreeNode<TKey, TValue> GetFirstNode(TKey key, TValue value)
+        public RedBlackTreeCoordinate<TKey, TValue> GetCoordinate(TKey key, TValue value)
         {
-            return SearchNodes(key).FirstOrDefault(n => n.Value.Equals(value));
+            return GetCoordinatesByKey(key).FirstOrDefault(n => n.Value.Equals(value));
         }
 
-        public RedBlackTreeNode<TKey, TValue> GetMinimumNode()
+        public RedBlackTreeCoordinate<TKey, TValue> GetMinimumCoordinate()
         {
-            return GetMinimumNode(_root);
+            return GetMinimumCoordinate(_root);
         }
 
-        public RedBlackTreeNode<TKey, TValue> GetMinimumNode(RedBlackTreeNode<TKey, TValue> node)
+        public RedBlackTreeCoordinate<TKey, TValue> GetMinimumCoordinate(RedBlackTreeNode<TKey, TValue> startNode)
         {
-            while (!IsVoid(node?.Left))
-                node = node.Left;
-            return NodeOrNull(node);
+            while (!IsVoid(startNode?.Left))
+                startNode = startNode.Left;
+
+            var result = NodeOrNull(startNode);
+            return result != null
+                ? new RedBlackTreeCoordinate<TKey, TValue>(result, result.Values.First)
+                : null;
         }
 
-        public RedBlackTreeNode<TKey, TValue> GetMaximumNode()
+        public RedBlackTreeCoordinate<TKey, TValue> GetMaximumCoordinate()
         {
-            return GetMaximumNode(_root);
+            return GetMaximumCoordinate(_root);
         }
 
-        public RedBlackTreeNode<TKey, TValue> GetMaximumNode(RedBlackTreeNode<TKey, TValue> node)
+        public RedBlackTreeCoordinate<TKey, TValue> GetMaximumCoordinate(RedBlackTreeNode<TKey, TValue> startNode)
         {
-            while (!IsVoid(node?.Right))
-                node = node.Right;
-            return NodeOrNull(node);
+            while (!IsVoid(startNode?.Right))
+                startNode = startNode.Right;
+
+            var result = NodeOrNull(startNode);
+            return result != null
+                ? new RedBlackTreeCoordinate<TKey, TValue>(result, result.Values.Last)
+                : null;
         }
 
-        public RedBlackTreeNode<TKey, TValue> GetNextNode(RedBlackTreeNode<TKey, TValue> node)
+        public RedBlackTreeCoordinate<TKey, TValue> GetNextCoordinate(RedBlackTreeCoordinate<TKey, TValue> coordinate)
         {
-            if (IsVoid(node))
+            if (coordinate == null || IsVoid(coordinate.TreeNode))
                 return null;
+
+            var nextElement = coordinate.NodeElement.Next;
+            if (nextElement != null)
+                return new RedBlackTreeCoordinate<TKey, TValue>(coordinate.TreeNode, nextElement);
+
+            var node = coordinate.TreeNode;
 
             var right = node.Right;
             if (!IsVoid(right))
-                return GetMinimumNode(right);
+                return GetMinimumCoordinate(right);
 
             var nextNode = node.Parent;
 
             while (!IsVoid(nextNode))
             {
                 if (node == nextNode.Left)
-                    return nextNode;
+                    return new RedBlackTreeCoordinate<TKey, TValue>(nextNode, nextNode.Values.First);
 
                 node = nextNode;
                 nextNode = node.Parent;
             }
 
-            return IsVoid(nextNode) ? null : nextNode;
+            return IsVoid(nextNode)
+                ? null
+                : new RedBlackTreeCoordinate<TKey, TValue>(nextNode, nextNode.Values.First);
         }
 
-        public RedBlackTreeNode<TKey, TValue> GetPreviousNode(RedBlackTreeNode<TKey, TValue> node)
+        public RedBlackTreeCoordinate<TKey, TValue> GetPreviousCoordinate(RedBlackTreeCoordinate<TKey, TValue> coordinate)
         {
-            if (IsVoid(node))
+            if (coordinate == null || IsVoid(coordinate.TreeNode))
                 return null;
+
+            var previousElement = coordinate.NodeElement.Previous;
+            if (previousElement != null)
+                return new RedBlackTreeCoordinate<TKey, TValue>(coordinate.TreeNode, previousElement);
+
+            var node = coordinate.TreeNode;
 
             var left = node.Left;
             if (!IsVoid(left))
-                return GetMaximumNode(left);
+                return GetMaximumCoordinate(left);
 
             var previousNode = node.Parent;
 
             while (!IsVoid(previousNode))
             {
                 if (node == previousNode.Right)
-                    return previousNode;
+                    return new RedBlackTreeCoordinate<TKey, TValue>(previousNode, previousNode.Values.Last);
 
                 node = previousNode;
                 previousNode = node.Parent;
             }
 
-            return IsVoid(previousNode) ? null : previousNode;
+            return IsVoid(previousNode)
+                ? null
+                : new RedBlackTreeCoordinate<TKey, TValue>(previousNode, previousNode.Values.Last);
         }
 
-        public RedBlackTreeNode<TKey, TValue> Add(TKey key, TValue value)
+        public RedBlackTreeCoordinate<TKey, TValue> Add(TKey key, TValue value)
         {
-            var node = new RedBlackTreeNode<TKey, TValue>(key, value, null);
-            Insert(node);
-            return node;
+            var x = _root;
+            var y = RedBlackTreeNode<TKey, TValue>.Void;
+
+            while (x != RedBlackTreeNode<TKey, TValue>.Void)
+            {
+                y = x;
+
+                var compareResult = key.CompareTo(x.Key);
+                if (compareResult < 0)
+                    x = x.Left;
+                else if (compareResult > 0)
+                    x = x.Right;
+                else
+                {
+                    Count++;
+                    var existingNode = new RedBlackTreeCoordinate<TKey, TValue>(x, x.Values.AddLast(value));
+                    OnValueAdded(existingNode, value);
+                    return existingNode;
+                }
+            }
+
+            var z = new RedBlackTreeNode<TKey, TValue>(key, y) { Tree = this };
+            var result = new RedBlackTreeCoordinate<TKey, TValue>(z, z.Values.AddLast(value));
+
+            if (y == RedBlackTreeNode<TKey, TValue>.Void)
+                _root = z;
+            else if (key.CompareTo(y.Key) < 0)
+                y.Left = z;
+            else
+                y.Right = z;
+
+            z.Left = RedBlackTreeNode<TKey, TValue>.Void;
+            z.Right = RedBlackTreeNode<TKey, TValue>.Void;
+            z.Color = RedBlackTreeNodeColor.Red;
+
+            OnValueAdded(result, value);
+            InsertFixup(z);
+
+            Count++;
+            return result;
         }
 
-        public void Delete(RedBlackTreeNode<TKey, TValue> node)
+        public bool Remove(RedBlackTreeCoordinate<TKey, TValue> coordinate)
         {
-            if (IsVoid(node) || !node.IsInTree)
-                return;
+            if (coordinate == null || coordinate.NodeElement.List == null)
+                return false;
+
+            var node = coordinate.TreeNode;
+            if (IsVoid(node) || node.Tree != this)
+                return false;
+
+            node.Values.Remove(coordinate.NodeElement);
+            if (node.Values.Count > 0)
+            {
+                OnValueRemoved(node);
+                return true;
+            }
+
+            return Remove(node);
+        }
+
+        public bool Remove(RedBlackTreeNode<TKey, TValue> node)
+        {
+            if (IsVoid(node) || node.Tree != this)
+                return false;
 
             RedBlackTreeNode<TKey, TValue> x = null;
             var y = node;
@@ -215,7 +257,7 @@ namespace Melanchall.DryWetMidi.Common
             }
             else
             {
-                y = GetMinimumNode(node.Right);
+                y = GetMinimumCoordinate(node.Right).TreeNode;
                 yOriginalColor = y.Color;
                 x = y.Right;
                 if (y != node.Right)
@@ -231,115 +273,117 @@ namespace Melanchall.DryWetMidi.Common
                 y.Left.Parent = y;
                 y.Color = node.Color;
             }
+
+            OnTransplanted(y);
+
             if (yOriginalColor == RedBlackTreeNodeColor.Black)
-                DeleteFixup(x);
+                RemoveFixup(x);
 
-            node.IsInTree = false;
+            node.Tree = null;
             Count--;
+
+            return true;
         }
 
-        public RedBlackTreeNode<TKey, TValue> GetLastNodeBelowThreshold(TKey threshold)
+        public RedBlackTreeCoordinate<TKey, TValue> GetLastCoordinateBelowThreshold(TKey threshold)
         {
-            return GetLastNodeBelowThreshold(
-                threshold,
-                node => node.Key);
-        }
+            var node = _root;
 
-        public RedBlackTreeNode<TKey, TValue> GetLastNodeBelowThreshold<TValueKey>(
-            TValueKey threshold,
-            Func<RedBlackTreeNode<TKey, TValue>, TValueKey> keySelector)
-            where TValueKey : IComparable<TValueKey>
-        {
-            return GetLastNodeBelowThreshold(threshold, keySelector, _root);
-        }
-
-        public RedBlackTreeNode<TKey, TValue> GetLastNodeBelowThreshold<TValueKey>(
-            TValueKey threshold,
-            Func<RedBlackTreeNode<TKey, TValue>, TValueKey> keySelector,
-            RedBlackTreeNode<TKey, TValue> node)
-            where TValueKey : IComparable<TValueKey>
-        {
             while (!IsVoid(node))
             {
-                var compareResult = threshold.CompareTo(keySelector(node));
+                var compareResult = threshold.CompareTo(node.Key);
+                if (compareResult == 0)
+                    return GetPreviousCoordinate(new RedBlackTreeCoordinate<TKey, TValue>(node, node.Values.First));
 
-                if (compareResult == 0 || (compareResult < 0 && IsVoid(node.Left)))
+                var nextNode = compareResult > 0 ? node.Right : node.Left;
+
+                if (IsVoid(nextNode))
                 {
-                    var prev = GetPreviousNode(node);
-                    while (!IsVoid(prev) && keySelector(prev).CompareTo(threshold) == 0)
-                        prev = GetPreviousNode(prev);
-
-                    return IsVoid(prev)
-                        ? null
-                        : prev;
+                    if (compareResult > 0)
+                        return new RedBlackTreeCoordinate<TKey, TValue>(node, node.Values.Last);
+                    else if (compareResult < 0)
+                        return GetPreviousCoordinate(new RedBlackTreeCoordinate<TKey, TValue>(node, node.Values.First));
                 }
 
-                if (compareResult < 0)
-                    node = node.Left;
-                else if (!IsVoid(node.Right))
-                    node = node.Right;
-                else
-                    return node;
+                node = nextNode;
             }
 
             return null;
         }
 
-        public RedBlackTreeNode<TKey, TValue> GetFirstNodeAboveThreshold(TKey threshold)
+        public RedBlackTreeCoordinate<TKey, TValue> GetFirstCoordinateAboveThreshold(TKey threshold)
         {
-            return GetFirstNodeAboveThreshold(
-                threshold,
-                node => node.Key);
-        }
+            var node = _root;
 
-        public RedBlackTreeNode<TKey, TValue> GetFirstNodeAboveThreshold<TValueKey>(
-            TValueKey threshold,
-            Func<RedBlackTreeNode<TKey, TValue>, TValueKey> keySelector)
-            where TValueKey : IComparable<TValueKey>
-        {
-            return GetFirstNodeAboveThreshold(threshold, keySelector, _root);
-        }
-
-        public RedBlackTreeNode<TKey, TValue> GetFirstNodeAboveThreshold<TValueKey>(
-            TValueKey threshold,
-            Func<RedBlackTreeNode<TKey, TValue>, TValueKey> keySelector,
-            RedBlackTreeNode<TKey, TValue> node)
-            where TValueKey : IComparable<TValueKey>
-        {
             while (!IsVoid(node))
             {
-                var compareResult = threshold.CompareTo(keySelector(node));
+                var compareResult = threshold.CompareTo(node.Key);
+                if (compareResult == 0)
+                    return GetNextCoordinate(new RedBlackTreeCoordinate<TKey, TValue>(node, node.Values.Last));
 
-                if (compareResult == 0 || (compareResult > 0 && IsVoid(node.Right)))
+                var nextNode = compareResult > 0 ? node.Right : node.Left;
+
+                if (IsVoid(nextNode))
                 {
-                    var next = GetNextNode(node);
-                    while (!IsVoid(next) && keySelector(next).CompareTo(threshold) == 0)
-                        next = GetNextNode(next);
-
-                    return IsVoid(next)
-                        ? null
-                        : next;
+                    if (compareResult > 0)
+                        return GetNextCoordinate(new RedBlackTreeCoordinate<TKey, TValue>(node, node.Values.Last));
+                    else if (compareResult < 0)
+                        return new RedBlackTreeCoordinate<TKey, TValue>(node, node.Values.First);
                 }
 
-                if (compareResult > 0)
-                    node = node.Right;
-                else if (!IsVoid(node.Left))
-                    node = node.Left;
-                else
-                    return node;
+                node = nextNode;
             }
 
             return null;
+        }
+
+        internal IEnumerable<RedBlackTreeCoordinate<TKey, TValue>> GetAllCoordinates()
+        {
+            var node = GetMinimumCoordinate();
+            if (node == null || IsVoid(node.TreeNode))
+                yield break;
+
+            do
+            {
+                yield return node;
+            }
+            while ((node = GetNextCoordinate(node)) != null);
+        }
+
+        internal RedBlackTreeNode<TKey, TValue> GetRoot()
+        {
+            return NodeOrNull(_root);
+        }
+
+        protected virtual void OnValueAdded(
+            RedBlackTreeCoordinate<TKey, TValue> coordinate,
+            TValue value)
+        {
+        }
+
+        protected virtual void OnValueRemoved(
+            RedBlackTreeNode<TKey, TValue> node)
+        {
+        }
+
+        protected virtual void OnRotated(
+            RedBlackTreeNode<TKey, TValue> x,
+            RedBlackTreeNode<TKey, TValue> y)
+        {
+        }
+
+        protected virtual void OnTransplanted(RedBlackTreeNode<TKey, TValue> node)
+        {
+        }
+
+        protected bool IsVoid(RedBlackTreeNode<TKey, TValue> node)
+        {
+            return node == null || node == RedBlackTreeNode<TKey, TValue>.Void;
         }
 
         private RedBlackTreeNode<TKey, TValue> NodeOrNull(RedBlackTreeNode<TKey, TValue> node)
         {
             return IsVoid(node) ? null : node;
-        }
-
-        private bool IsVoid(RedBlackTreeNode<TKey, TValue> node)
-        {
-            return node == null || node == RedBlackTreeNode<TKey, TValue>.Void;
         }
 
         private void Transplant(RedBlackTreeNode<TKey, TValue> u, RedBlackTreeNode<TKey, TValue> v)
@@ -353,7 +397,7 @@ namespace Melanchall.DryWetMidi.Common
             v.Parent = u.Parent;
         }
 
-        private void DeleteFixup(RedBlackTreeNode<TKey, TValue> x)
+        private void RemoveFixup(RedBlackTreeNode<TKey, TValue> x)
         {
             while (x != _root && x.Color == RedBlackTreeNodeColor.Black)
             {
@@ -429,33 +473,6 @@ namespace Melanchall.DryWetMidi.Common
             x.Color = RedBlackTreeNodeColor.Black;
         }
 
-        private void Insert(RedBlackTreeNode<TKey, TValue> z)
-        {
-            var x = _root;
-            var y = RedBlackTreeNode<TKey, TValue>.Void;
-            while (x != RedBlackTreeNode<TKey, TValue>.Void)
-            {
-                y = x;
-                if (z.Key.CompareTo(x.Key) < 0)
-                    x = x.Left;
-                else
-                    x = x.Right;
-            }
-            z.Parent = y;
-            if (y == RedBlackTreeNode<TKey, TValue>.Void)
-                _root = z;
-            else if (z.Key.CompareTo(y.Key) < 0)
-                y.Left = z;
-            else
-                y.Right = z;
-            z.Left = RedBlackTreeNode<TKey, TValue>.Void;
-            z.Right = RedBlackTreeNode<TKey, TValue>.Void;
-            z.Color = RedBlackTreeNodeColor.Red;
-            InsertFixup(z);
-
-            Count++;
-        }
-
         private void InsertFixup(RedBlackTreeNode<TKey, TValue> z)
         {
             while (z.Parent.Color == RedBlackTreeNodeColor.Red)
@@ -511,35 +528,45 @@ namespace Melanchall.DryWetMidi.Common
         private void LeftRotate(RedBlackTreeNode<TKey, TValue> x)
         {
             var y = x.Right;
+            
             x.Right = y.Left;
             if (y.Left != RedBlackTreeNode<TKey, TValue>.Void)
                 y.Left.Parent = x;
             y.Parent = x.Parent;
+
             if (x.Parent == RedBlackTreeNode<TKey, TValue>.Void)
                 _root = y;
             else if (x == x.Parent.Left)
                 x.Parent.Left = y;
             else
                 x.Parent.Right = y;
+
             y.Left = x;
             x.Parent = y;
+
+            OnRotated(x, y);
         }
 
         private void RightRotate(RedBlackTreeNode<TKey, TValue> x)
         {
             var y = x.Left;
+
             x.Left = y.Right;
             if (y.Right != RedBlackTreeNode<TKey, TValue>.Void)
                 y.Right.Parent = x;
             y.Parent = x.Parent;
+
             if (x.Parent == RedBlackTreeNode<TKey, TValue>.Void)
                 _root = y;
             else if (x == x.Parent.Right)
                 x.Parent.Right = y;
             else
                 x.Parent.Left = y;
+
             y.Right = x;
             x.Parent = y;
+
+            OnRotated(x, y);
         }
 
         #endregion
@@ -548,7 +575,7 @@ namespace Melanchall.DryWetMidi.Common
 
         public IEnumerator<TValue> GetEnumerator()
         {
-            foreach (var node in EnumerateNodes())
+            foreach (var node in GetAllCoordinates())
             {
                 yield return node.Value;
             }

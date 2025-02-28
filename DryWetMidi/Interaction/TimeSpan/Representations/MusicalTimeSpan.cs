@@ -104,7 +104,9 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <param name="numerator">The numerator of fraction of the whole note's length.</param>
         /// <param name="denominator">The denominator of fraction of the whole note's length.</param>
-        /// <param name="simplify"><c>true</c> if the time span should be simplified, <c>false</c> otherwise.</param>
+        /// <param name="simplify"><c>true</c> if the time span should be simplified (in math terms),
+        /// <c>false</c> otherwise. So if <c>true</c>, passing, for example, 4 as <paramref name="numerator"/>
+        /// and 8 as <paramref name="denominator"/>, the time span will be 1/2 instead of 4/8.</param>
         /// <exception cref="ArgumentOutOfRangeException">
         /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">

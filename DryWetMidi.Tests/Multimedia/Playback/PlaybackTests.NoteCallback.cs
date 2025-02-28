@@ -49,7 +49,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             },
             actions: new[]
             {
-                new PlaybackChangerBase(TimeSpan.FromMilliseconds(500),
+                new PlaybackAction(TimeSpan.FromMilliseconds(500),
                     p => p.NoteCallback = (d, rt, rl, t) => NotePlaybackData.SkipNote),
             },
             expectedReceivedEvents: Array.Empty<ReceivedEvent>(),
@@ -74,7 +74,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 actions: new[]
                 {
-                    new PlaybackChangerBase(TimeSpan.FromMilliseconds(500),
+                    new PlaybackAction(TimeSpan.FromMilliseconds(500),
                         p => p.NoteCallback = (d, rt, rl, t) => d),
                 },
                 expectedReceivedEvents: new[]
@@ -108,7 +108,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 actions: new[]
                 {
-                    new PlaybackChangerBase(TimeSpan.FromMilliseconds(500),
+                    new PlaybackAction(TimeSpan.FromMilliseconds(500),
                         p => p.NoteCallback = (d, rt, rl, t) => null),
                 },
                 expectedReceivedEvents: new[]
@@ -152,7 +152,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 actions: new[]
                 {
-                    new PlaybackChangerBase(TimeSpan.FromMilliseconds(500),
+                    new PlaybackAction(TimeSpan.FromMilliseconds(500),
                         p => p.NoteCallback = NoteCallback),
                 },
                 expectedReceivedEvents: new[]
@@ -196,8 +196,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 actions: new[]
                 {
-                    new PlaybackChangerBase(stopAfter, p => p.Stop()),
-                    new PlaybackChangerBase(stopPeriod, p => p.Start()),
+                    new PlaybackAction(stopAfter, p => p.Stop()),
+                    new PlaybackAction(stopPeriod, p => p.Start()),
                 },
                 expectedReceivedEvents: new[]
                 {
@@ -225,17 +225,15 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [TestCase(0.5)]
         public void NoteCallback_MoveToStart(double speed)
         {
-            var stopAfter = TimeSpan.FromMilliseconds(500);
-            var stopPeriod = TimeSpan.FromSeconds(1);
+            var stopAfter = TimeSpan.FromMilliseconds(200);
+            var stopPeriod = TimeSpan.FromMilliseconds(400);
 
             var firstEventTime = TimeSpan.Zero;
+            var lastEventTime = TimeSpan.FromMilliseconds(1500);
 
-            // TODO: changing to 2 sec breaks the test
-            var lastEventTime = TimeSpan.FromSeconds(5);
-
-            var firstAfterResumeDelay = TimeSpan.FromMilliseconds(400);
-            var secondAfterResumeDelay = TimeSpan.FromSeconds(1);
-            var thirdAfterResumeDelay = TimeSpan.FromMilliseconds(500);
+            var firstAfterResumeDelay = TimeSpan.FromMilliseconds(100);
+            var secondAfterResumeDelay = TimeSpan.FromMilliseconds(400);
+            var thirdAfterResumeDelay = TimeSpan.FromMilliseconds(200);
 
             var originalNote = new Note((SevenBitNumber)0) { Velocity = SevenBitNumber.MinValue }
                 .SetLength((MetricTimeSpan)lastEventTime, TempoMap);
@@ -251,28 +249,30 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 actions: new[]
                 {
-                    new PlaybackChangerBase(stopAfter,
-                        p =>
-                        {
-                            p.Stop();
-                            p.MoveToStart();
-                        }),
-                    new PlaybackChangerBase(stopPeriod,
-                        p =>
-                        {
-                            p.Start();
-                            CheckCurrentTime(p, TimeSpan.Zero, "stopped");
-                        }),
-                    new PlaybackChangerBase(firstAfterResumeDelay,
-                        p => CheckCurrentTime(p, ScaleTimeSpan(firstAfterResumeDelay, speed), "resumed")),
-                    new PlaybackChangerBase(secondAfterResumeDelay,
-                        p =>
-                        {
-                            p.MoveToStart();
-                            CheckCurrentTime(p, TimeSpan.Zero, "resumed");
-                        }),
-                    new PlaybackChangerBase(thirdAfterResumeDelay,
-                        p => CheckCurrentTime(p, ScaleTimeSpan(thirdAfterResumeDelay, speed), "resumed")),
+                    new PlaybackAction(stopAfter, p =>
+                    {
+                        p.Stop();
+                        p.MoveToStart();
+                    }),
+                    new PlaybackAction(stopPeriod, p =>
+                    {
+                        p.Start();
+                        CheckCurrentTime(p, TimeSpan.Zero, "stopped");
+                    }),
+                    new PlaybackAction(firstAfterResumeDelay, p =>
+                        CheckCurrentTime(p, ScaleTimeSpan(firstAfterResumeDelay, speed), "resumed 1")),
+                    new PlaybackAction(secondAfterResumeDelay, p =>
+                    {
+                        Assert.IsTrue(p.IsRunning, "Playback is not running 1.");
+                        p.MoveToStart();
+                        CheckCurrentTime(p, TimeSpan.Zero, "resumed 2");
+                        Assert.IsTrue(p.IsRunning, "Playback is not running 2.");
+                    }),
+                    new PlaybackAction(thirdAfterResumeDelay, p =>
+                    {
+                        Assert.IsTrue(p.IsRunning, "Playback is not running 3.");
+                        CheckCurrentTime(p, ScaleTimeSpan(thirdAfterResumeDelay, speed), "resumed 3");
+                    }),
                 },
                 expectedReceivedEvents: new[]
                 {
@@ -303,18 +303,18 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [TestCase(0.5)]
         public void NoteCallback_MoveForward(double speed)
         {
-            var stopAfter = TimeSpan.FromSeconds(1);
-            var stopPeriod = TimeSpan.FromMilliseconds(500);
+            var stopAfter = TimeSpan.FromMilliseconds(200);
+            var stopPeriod = TimeSpan.FromMilliseconds(300);
 
-            var stepAfterStop = TimeSpan.FromSeconds(1);
-            var stepAfterResumed = TimeSpan.FromMilliseconds(500);
+            var stepAfterStop = TimeSpan.FromMilliseconds(400);
+            var stepAfterResumed = TimeSpan.FromMilliseconds(300);
 
             var firstEventTime = TimeSpan.Zero;
-            var lastEventTime = TimeSpan.FromSeconds(8);
+            var lastEventTime = TimeSpan.FromSeconds(4);
 
-            var firstAfterResumeDelay = TimeSpan.FromMilliseconds(600);
-            var secondAfterResumeDelay = TimeSpan.FromSeconds(1);
-            var thirdAfterResumeDelay = TimeSpan.FromMilliseconds(500);
+            var firstAfterResumeDelay = TimeSpan.FromMilliseconds(300);
+            var secondAfterResumeDelay = TimeSpan.FromMilliseconds(500);
+            var thirdAfterResumeDelay = TimeSpan.FromMilliseconds(200);
 
             var originalNote = new Note((SevenBitNumber)0) { Velocity = SevenBitNumber.MinValue }
                 .SetLength((MetricTimeSpan)lastEventTime, TempoMap);
@@ -330,27 +330,27 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 actions: new[]
                 {
-                    new PlaybackChangerBase(stopAfter,
+                    new PlaybackAction(stopAfter,
                         p =>
                         {
                             p.Stop();
                             p.MoveForward((MetricTimeSpan)stepAfterStop);
                         }),
-                    new PlaybackChangerBase(stopPeriod,
+                    new PlaybackAction(stopPeriod,
                         p =>
                         {
                             p.Start();
                             CheckCurrentTime(p, ScaleTimeSpan(stopAfter, speed) + stepAfterStop, "stopped");
                         }),
-                    new PlaybackChangerBase(firstAfterResumeDelay,
+                    new PlaybackAction(firstAfterResumeDelay,
                         p => CheckCurrentTime(p, ScaleTimeSpan(stopAfter + firstAfterResumeDelay, speed) + stepAfterStop, "resumed")),
-                    new PlaybackChangerBase(secondAfterResumeDelay,
+                    new PlaybackAction(secondAfterResumeDelay,
                         p =>
                         {
                             p.MoveForward((MetricTimeSpan)stepAfterResumed);
                             CheckCurrentTime(p, ScaleTimeSpan(stopAfter + firstAfterResumeDelay + secondAfterResumeDelay, speed) + stepAfterStop + stepAfterResumed, "resumed");
                         }),
-                    new PlaybackChangerBase(thirdAfterResumeDelay,
+                    new PlaybackAction(thirdAfterResumeDelay,
                         p => CheckCurrentTime(p, ScaleTimeSpan(stopAfter + firstAfterResumeDelay + secondAfterResumeDelay + thirdAfterResumeDelay, speed) + stepAfterStop + stepAfterResumed, "resumed")),
                 },
                 expectedReceivedEvents: new[]
@@ -397,13 +397,13 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 actions: new[]
                 {
-                    new PlaybackChangerBase(stopAfter,
+                    new PlaybackAction(stopAfter,
                         p =>
                         {
                             p.Stop();
                             p.MoveForward((MetricTimeSpan)stepAfterStop);
                         }),
-                    new PlaybackChangerBase(stopPeriod,
+                    new PlaybackAction(stopPeriod,
                         p =>
                         {
                             p.Start();
@@ -413,7 +413,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 expectedReceivedEvents: new[]
                 {
                     new ReceivedEvent(new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), TimeSpan.Zero),
-                    new ReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), stopAfter + stopPeriod),
+                    new ReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), stopAfter),
                 },
                 expectedNotesEvents: new[]
                 {
@@ -422,9 +422,66 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 setupPlayback: playback =>
                 {
-                    playback.InterruptNotesOnStop = false;
                     playback.TrackNotes = false;
                     playback.NoteCallback = NoteCallback;
+                });
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
+        public void NoteCallback_MoveForward_BeyondPlaybackEnd()
+        {
+            var stopAfter = TimeSpan.FromMilliseconds(200);
+            var stopPeriod = TimeSpan.FromMilliseconds(200);
+
+            var stepAfterStop = TimeSpan.FromMilliseconds(300);
+
+            var noteLength = TimeSpan.FromMilliseconds(400);
+
+            var originalNote = new Note((SevenBitNumber)0) { Velocity = SevenBitNumber.MinValue }
+                .SetLength((MetricTimeSpan)noteLength, TempoMap);
+
+            var note = (Note)originalNote.Clone();
+            note.NoteNumber += TransposeBy;
+
+            CheckNoteCallback(
+                initialPlaybackObjects: new[]
+                {
+                    new TimedEvent(new NoteOnEvent()).SetTime((MetricTimeSpan)TimeSpan.Zero, TempoMap),
+                    new TimedEvent(new NoteOffEvent()).SetTime((MetricTimeSpan)noteLength, TempoMap),
+                    new TimedEvent(new NoteOnEvent()).SetTime((MetricTimeSpan)(noteLength + TimeSpan.FromMilliseconds(200)), TempoMap),
+                    new TimedEvent(new NoteOffEvent()).SetTime((MetricTimeSpan)(noteLength + TimeSpan.FromMilliseconds(300)), TempoMap),
+                },
+                actions: new[]
+                {
+                    new PlaybackAction(stopAfter,
+                        p =>
+                        {
+                            p.Stop();
+                            p.MoveForward((MetricTimeSpan)stepAfterStop);
+                        }),
+                    new PlaybackAction(stopPeriod,
+                        p =>
+                        {
+                            p.Start();
+                            CheckCurrentTime(p, TimeSpan.FromMilliseconds(450), "stopped");
+                        }),
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), TimeSpan.Zero),
+                    new ReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), stopAfter),
+                },
+                expectedNotesEvents: new[]
+                {
+                    (EventType.Started, note, originalNote, false),
+                    (EventType.Finished, note, originalNote, false),
+                },
+                setupPlayback: playback =>
+                {
+                    playback.TrackNotes = false;
+                    playback.NoteCallback = NoteCallback;
+                    playback.PlaybackEnd = new MetricTimeSpan(0, 0, 0, 450);
                 });
         }
 
@@ -434,20 +491,20 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [TestCase(0.5)]
         public void NoteCallback_MoveBack(double speed)
         {
-            var stopAfter = TimeSpan.FromSeconds(1);
-            var stopPeriod = TimeSpan.FromMilliseconds(500);
+            var stopAfter = TimeSpan.FromMilliseconds(700);
+            var stopPeriod = TimeSpan.FromMilliseconds(200);
 
             var stepAfterStop = TimeSpan.FromMilliseconds(300);
-            Debug.Assert(stepAfterStop <= ScaleTimeSpan(stopAfter, speed), "Step after stop is invalid.");
+            Assert.LessOrEqual(stepAfterStop, ScaleTimeSpan(stopAfter, speed), "Step after stop is invalid.");
 
-            var stepAfterResumed = TimeSpan.FromMilliseconds(500);
+            var stepAfterResumed = TimeSpan.FromMilliseconds(100);
 
-            var firstAfterResumeDelay = TimeSpan.FromMilliseconds(500);
-            var secondAfterResumeDelay = TimeSpan.FromSeconds(1);
-            var thirdAfterResumeDelay = TimeSpan.FromMilliseconds(500);
+            var firstAfterResumeDelay = TimeSpan.FromMilliseconds(200);
+            var secondAfterResumeDelay = TimeSpan.FromMilliseconds(500);
+            var thirdAfterResumeDelay = TimeSpan.FromMilliseconds(200);
 
-            var lastEventTime = TimeSpan.FromMilliseconds(5500);
-            Debug.Assert(lastEventTime >= ScaleTimeSpan(stopAfter + firstAfterResumeDelay + secondAfterResumeDelay + thirdAfterResumeDelay, speed) - stepAfterStop - stepAfterResumed, "Last event time is invalid.");
+            var lastEventTime = TimeSpan.FromMilliseconds(3000);
+            Assert.GreaterOrEqual(lastEventTime, ScaleTimeSpan(stopAfter + firstAfterResumeDelay + secondAfterResumeDelay + thirdAfterResumeDelay, speed) - stepAfterStop - stepAfterResumed, "Last event time is invalid.");
 
             var originalNote = new Note((SevenBitNumber)0) { Velocity = SevenBitNumber.MinValue }
                 .SetLength((MetricTimeSpan)lastEventTime, TempoMap);
@@ -463,27 +520,27 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 actions: new[]
                 {
-                    new PlaybackChangerBase(stopAfter,
+                    new PlaybackAction(stopAfter,
                         p =>
                         {
                             p.Stop();
                             p.MoveBack((MetricTimeSpan)stepAfterStop);
                         }),
-                    new PlaybackChangerBase(stopPeriod,
+                    new PlaybackAction(stopPeriod,
                         p =>
                         {
                             p.Start();
                             CheckCurrentTime(p, ScaleTimeSpan(stopAfter, speed) - stepAfterStop, "stopped");
                         }),
-                    new PlaybackChangerBase(firstAfterResumeDelay,
+                    new PlaybackAction(firstAfterResumeDelay,
                         p => CheckCurrentTime(p, ScaleTimeSpan(stopAfter + firstAfterResumeDelay, speed) - stepAfterStop, "resumed")),
-                    new PlaybackChangerBase(secondAfterResumeDelay,
+                    new PlaybackAction(secondAfterResumeDelay,
                         p =>
                         {
                             p.MoveBack((MetricTimeSpan)stepAfterResumed);
                             CheckCurrentTime(p, ScaleTimeSpan(stopAfter + firstAfterResumeDelay + secondAfterResumeDelay, speed) - stepAfterStop - stepAfterResumed, "resumed");
                         }),
-                    new PlaybackChangerBase(thirdAfterResumeDelay,
+                    new PlaybackAction(thirdAfterResumeDelay,
                         p => CheckCurrentTime(p, ScaleTimeSpan(stopAfter + firstAfterResumeDelay + secondAfterResumeDelay + thirdAfterResumeDelay, speed) - stepAfterStop - stepAfterResumed, "resumed")),
                 },
                 expectedReceivedEvents: new[]
@@ -509,17 +566,17 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         public void NoteCallback_MoveBack_BeyondZero()
         {
-            var stopAfter = TimeSpan.FromSeconds(3);
-            var stopPeriod = TimeSpan.FromSeconds(2);
+            var stopAfter = TimeSpan.FromMilliseconds(500);
+            var stopPeriod = TimeSpan.FromMilliseconds(600);
 
-            var stepAfterStop = TimeSpan.FromSeconds(5);
+            var stepAfterStop = TimeSpan.FromMilliseconds(2000);
             var stepAfterResumed = TimeSpan.FromMilliseconds(500);
 
-            var lastEventTime = TimeSpan.FromSeconds(5);
+            var lastEventTime = TimeSpan.FromSeconds(2);
 
-            var firstAfterResumeDelay = TimeSpan.FromMilliseconds(500);
-            var secondAfterResumeDelay = TimeSpan.FromSeconds(1);
-            var thirdAfterResumeDelay = TimeSpan.FromMilliseconds(500);
+            var firstAfterResumeDelay = TimeSpan.FromMilliseconds(200);
+            var secondAfterResumeDelay = TimeSpan.FromMilliseconds(400);
+            var thirdAfterResumeDelay = TimeSpan.FromMilliseconds(300);
 
             var originalNote = new Note((SevenBitNumber)0) { Velocity = SevenBitNumber.MinValue }
                 .SetLength((MetricTimeSpan)lastEventTime, TempoMap);
@@ -535,27 +592,27 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 actions: new[]
                 {
-                    new PlaybackChangerBase(stopAfter,
+                    new PlaybackAction(stopAfter,
                         p =>
                         {
                             p.Stop();
                             p.MoveBack((MetricTimeSpan)stepAfterStop);
                         }),
-                    new PlaybackChangerBase(stopPeriod,
+                    new PlaybackAction(stopPeriod,
                         p =>
                         {
                             p.Start();
                             CheckCurrentTime(p, TimeSpan.Zero, "stopped");
                         }),
-                    new PlaybackChangerBase(firstAfterResumeDelay,
+                    new PlaybackAction(firstAfterResumeDelay,
                         p => CheckCurrentTime(p, firstAfterResumeDelay, "resumed")),
-                    new PlaybackChangerBase(secondAfterResumeDelay,
+                    new PlaybackAction(secondAfterResumeDelay,
                         p =>
                         {
                             p.MoveBack((MetricTimeSpan)stepAfterResumed);
                             CheckCurrentTime(p, firstAfterResumeDelay + secondAfterResumeDelay - stepAfterResumed, "resumed");
                         }),
-                    new PlaybackChangerBase(thirdAfterResumeDelay,
+                    new PlaybackAction(thirdAfterResumeDelay,
                         p => CheckCurrentTime(p, firstAfterResumeDelay + secondAfterResumeDelay + thirdAfterResumeDelay - stepAfterResumed, "resumed")),
                 },
                 expectedReceivedEvents: new[]
@@ -580,13 +637,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
         [Retry(RetriesNumber)]
         [Test]
-        public void NoteCallback_MoveToTime()
+        public void NoteCallback_MoveBack_BeyondPlaybackStart()
         {
-            var stopAfter = TimeSpan.FromSeconds(4);
-            var stopPeriod = TimeSpan.FromSeconds(2);
-
             var originalNote = new Note((SevenBitNumber)0) { Velocity = SevenBitNumber.MinValue }
-                .SetLength((MetricTimeSpan)TimeSpan.FromSeconds(10), TempoMap);
+                .SetTime(new MetricTimeSpan(0, 0, 0, 400), TempoMap)
+                .SetLength(new MetricTimeSpan(0, 0, 0, 200), TempoMap);
 
             var note = (Note)originalNote.Clone();
             note.NoteNumber += TransposeBy;
@@ -595,42 +650,101 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialPlaybackObjects: new[]
                 {
                     new TimedEvent(new NoteOnEvent()).SetTime((MetricTimeSpan)TimeSpan.Zero, TempoMap),
-                    new TimedEvent(new NoteOffEvent()).SetTime((MetricTimeSpan)TimeSpan.FromSeconds(10), TempoMap),
+                    new TimedEvent(new NoteOffEvent()).SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(200), TempoMap),
+                    new TimedEvent(new NoteOnEvent()).SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(400), TempoMap),
+                    new TimedEvent(new NoteOffEvent()).SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(600), TempoMap),
                 },
-                actions: new[]
+                actions: new PlaybackAction[]
                 {
-                    new PlaybackChangerBase(stopAfter,
-                        p =>
-                        {
-                            p.Stop();
-                            p.MoveToTime(new MetricTimeSpan(0, 0, 1));
-                        }),
-                    new PlaybackChangerBase(stopPeriod,
-                        p =>
-                        {
-                            p.Start();
-                            CheckCurrentTime(p, TimeSpan.FromSeconds(1), "stopped");
-                        }),
-                    new PlaybackChangerBase(TimeSpan.FromSeconds(1),
-                        p => CheckCurrentTime(p, TimeSpan.FromSeconds(2), "resumed")),
-                    new PlaybackChangerBase(TimeSpan.FromSeconds(2),
-                        p =>
-                        {
-                            p.MoveToTime(new MetricTimeSpan(0, 0, 8));
-                            CheckCurrentTime(p, TimeSpan.FromSeconds(8), "resumed");
-                        }),
-                    new PlaybackChangerBase(TimeSpan.FromSeconds(1),
-                        p => CheckCurrentTime(p, TimeSpan.FromSeconds(9), "resumed")),
+                    new PlaybackAction(200, p =>
+                    {
+                        CheckCurrentTime(p, TimeSpan.FromMilliseconds(500), "A");
+                        p.MoveBack(new MetricTimeSpan(0, 0, 0, 400));
+                        CheckCurrentTime(p, TimeSpan.FromMilliseconds(300), "B");
+                    }),
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), TimeSpan.Zero),
-                    new ReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), TimeSpan.FromSeconds(11)),
+                    new ReceivedEvent(new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), TimeSpan.FromMilliseconds(100)),
+                    new ReceivedEvent(new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), TimeSpan.FromMilliseconds(300)),
+                    new ReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), TimeSpan.FromMilliseconds(500))
                 },
                 expectedNotesEvents: new[]
                 {
                     (EventType.Started, note, originalNote, false),
+                    (EventType.Started, note, originalNote, false),
                     (EventType.Finished, note, originalNote, false),
+                },
+                setupPlayback: playback =>
+                {
+                    playback.InterruptNotesOnStop = false;
+                    playback.TrackNotes = false;
+                    playback.NoteCallback = NoteCallback;
+                    playback.PlaybackStart = new MetricTimeSpan(0, 0, 0, 300);
+                });
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
+        public void NoteCallback_MoveToTime()
+        {
+            var lastEventTime = TimeSpan.FromMilliseconds(2000);
+
+            var stopAfter = TimeSpan.FromMilliseconds(800);
+            var stopPeriod = TimeSpan.FromMilliseconds(400);
+
+            var moveTime1 = TimeSpan.FromMilliseconds(200);
+            var moveTime2 = TimeSpan.FromMilliseconds(1600);
+
+            var firstAfterResumeDelay = TimeSpan.FromMilliseconds(200);
+            var secondAfterResumeDelay = TimeSpan.FromMilliseconds(400);
+            var thirdAfterResumeDelay = TimeSpan.FromMilliseconds(200);
+
+            var originalNote = new Note((SevenBitNumber)0) { Velocity = SevenBitNumber.MinValue }
+                .SetLength((MetricTimeSpan)lastEventTime, TempoMap);
+
+            var note = (Note)originalNote.Clone();
+            note.NoteNumber += TransposeBy;
+
+            CheckNoteCallback(
+                initialPlaybackObjects: new[]
+                {
+                    originalNote,
+                },
+                actions: new[]
+                {
+                    new PlaybackAction(stopAfter, p =>
+                    {
+                        p.Stop();
+                        p.MoveToTime((MetricTimeSpan)moveTime1);
+                        CheckCurrentTime(p, moveTime1, "first move");
+                    }),
+                    new PlaybackAction(stopPeriod, p =>
+                    {
+                        p.Start();
+                        CheckCurrentTime(p, moveTime1, "stopped");
+                    }),
+                    new PlaybackAction(firstAfterResumeDelay,
+                        p => CheckCurrentTime(p, moveTime1 + firstAfterResumeDelay, "resumed")),
+                    new PlaybackAction(secondAfterResumeDelay,
+                        p =>
+                        {
+                            CheckCurrentTime(p, moveTime1 + firstAfterResumeDelay + secondAfterResumeDelay, "resumed");
+                            p.MoveToTime((MetricTimeSpan)moveTime2);
+                            CheckCurrentTime(p, moveTime2, "resumed");
+                        }),
+                    new PlaybackAction(thirdAfterResumeDelay,
+                        p => CheckCurrentTime(p, moveTime2 + thirdAfterResumeDelay, "resumed"))
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), TimeSpan.Zero),
+                    new ReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), stopAfter + stopPeriod + firstAfterResumeDelay + secondAfterResumeDelay + lastEventTime - moveTime2),
+                },
+                expectedNotesEvents: new[]
+                {
+                    (EventType.Started, note, originalNote, true),
+                    (EventType.Finished, note, originalNote, true),
                 },
                 setupPlayback: playback =>
                 {
@@ -661,13 +775,13 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 actions: new[]
                 {
-                    new PlaybackChangerBase(stopAfter,
+                    new PlaybackAction(stopAfter,
                         p =>
                         {
                             p.Stop();
                             p.MoveToTime(new MetricTimeSpan(0, 0, 10));
                         }),
-                    new PlaybackChangerBase(stopPeriod,
+                    new PlaybackAction(stopPeriod,
                         p =>
                         {
                             p.Start();
@@ -677,7 +791,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 expectedReceivedEvents: new[]
                 {
                     new ReceivedEvent(new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), TimeSpan.Zero),
-                    new ReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), stopAfter + stopPeriod),
+                    new ReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), stopAfter),
                 },
                 expectedNotesEvents: new[]
                 {
@@ -686,9 +800,66 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 setupPlayback: playback =>
                 {
-                    playback.InterruptNotesOnStop = false;
                     playback.TrackNotes = false;
                     playback.NoteCallback = NoteCallback;
+                });
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
+        public void NoteCallback_MoveToTime_BeyondPlaybackEnd()
+        {
+            var stopAfter = TimeSpan.FromMilliseconds(200);
+            var stopPeriod = TimeSpan.FromMilliseconds(200);
+
+            var originalNote = new Note((SevenBitNumber)0) { Velocity = SevenBitNumber.MinValue }
+                .SetLength((MetricTimeSpan)TimeSpan.FromMilliseconds(400), TempoMap);
+
+            var note = (Note)originalNote.Clone();
+            note.NoteNumber += TransposeBy;
+
+            CheckNoteCallback(
+                initialPlaybackObjects: new[]
+                {
+                    new TimedEvent(new NoteOnEvent())
+                        .SetTime((MetricTimeSpan)TimeSpan.Zero, TempoMap),
+                    new TimedEvent(new NoteOffEvent())
+                        .SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(400), TempoMap),
+                    new TimedEvent(new NoteOnEvent())
+                        .SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(600), TempoMap),
+                    new TimedEvent(new NoteOffEvent())
+                        .SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(700), TempoMap),
+                },
+                actions: new[]
+                {
+                    new PlaybackAction(stopAfter,
+                        p =>
+                        {
+                            p.Stop();
+                            p.MoveToTime(new MetricTimeSpan(0, 0, 0, 500));
+                        }),
+                    new PlaybackAction(stopPeriod,
+                        p =>
+                        {
+                            p.Start();
+                            CheckCurrentTime(p, TimeSpan.FromMilliseconds(450), "stopped");
+                        }),
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), TimeSpan.Zero),
+                    new ReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), stopAfter),
+                },
+                expectedNotesEvents: new[]
+                {
+                    (EventType.Started, note, originalNote, false),
+                    (EventType.Finished, note, originalNote, false),
+                },
+                setupPlayback: playback =>
+                {
+                    playback.TrackNotes = false;
+                    playback.NoteCallback = NoteCallback;
+                    playback.PlaybackEnd = new MetricTimeSpan(0, 0, 0, 450);
                 });
         }
 
@@ -722,11 +893,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 actions: new[]
                 {
-                    new PlaybackChangerBase(TimeSpan.FromSeconds(1),
+                    new PlaybackAction(TimeSpan.FromSeconds(1),
                         p => p.NoteCallback = (d, rt, rl, t) => d),
-                    new PlaybackChangerBase(stopAfter - TimeSpan.FromSeconds(1),
+                    new PlaybackAction(stopAfter - TimeSpan.FromSeconds(1),
                         p => p.Stop()),
-                    new PlaybackChangerBase(stopPeriod,
+                    new PlaybackAction(stopPeriod,
                         p => p.Start()),
                 },
                 expectedReceivedEvents: new[]
@@ -766,7 +937,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             },
             actions: new[]
             {
-                new PlaybackChangerBase(TimeSpan.FromMilliseconds(500),
+                new PlaybackAction(TimeSpan.FromMilliseconds(500),
                     p => p.NoteCallback = (d, rt, rl, t) => NotePlaybackData.SkipNote),
             },
             expectedReceivedEvents: Array.Empty<ReceivedEvent>(),
@@ -793,7 +964,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 actions: new[]
                 {
-                    new PlaybackChangerBase(TimeSpan.FromMilliseconds(500),
+                    new PlaybackAction(TimeSpan.FromMilliseconds(500),
                         p => p.NoteCallback = (d, rt, rl, t) => d),
                 },
                 expectedReceivedEvents: new[]
@@ -829,7 +1000,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 actions: new[]
                 {
-                    new PlaybackChangerBase(TimeSpan.FromMilliseconds(500),
+                    new PlaybackAction(TimeSpan.FromMilliseconds(500),
                         p => p.NoteCallback = (d, rt, rl, t) => null),
                 },
                 expectedReceivedEvents: new[]
@@ -872,7 +1043,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 actions: new[]
                 {
-                    new PlaybackChangerBase(TimeSpan.FromMilliseconds(500),
+                    new PlaybackAction(TimeSpan.FromMilliseconds(500),
                         p => p.NoteCallback = NoteCallback),
                 },
                 expectedReceivedEvents: new[]
@@ -915,8 +1086,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 actions: new[]
                 {
-                    new PlaybackChangerBase(stopAfter, p => p.Stop()),
-                    new PlaybackChangerBase(stopPeriod, p => p.Start()),
+                    new PlaybackAction(stopAfter, p => p.Stop()),
+                    new PlaybackAction(stopPeriod, p => p.Start()),
                 },
                 expectedReceivedEvents: new[]
                 {
@@ -944,17 +1115,15 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [TestCase(0.5)]
         public void NoteCallback_MoveToStart_Notes(double speed)
         {
-            var stopAfter = TimeSpan.FromMilliseconds(500);
-            var stopPeriod = TimeSpan.FromSeconds(1);
+            var stopAfter = TimeSpan.FromMilliseconds(200);
+            var stopPeriod = TimeSpan.FromMilliseconds(400);
 
             var firstEventTime = TimeSpan.Zero;
+            var lastEventTime = TimeSpan.FromMilliseconds(1500);
 
-            // TODO: changing to 2 sec breaks the test
-            var lastEventTime = TimeSpan.FromSeconds(5);
-
-            var firstAfterResumeDelay = TimeSpan.FromMilliseconds(400);
-            var secondAfterResumeDelay = TimeSpan.FromSeconds(1);
-            var thirdAfterResumeDelay = TimeSpan.FromMilliseconds(500);
+            var firstAfterResumeDelay = TimeSpan.FromMilliseconds(100);
+            var secondAfterResumeDelay = TimeSpan.FromMilliseconds(400);
+            var thirdAfterResumeDelay = TimeSpan.FromMilliseconds(200);
 
             var originalNote = new Note((SevenBitNumber)0) { Velocity = SevenBitNumber.MinValue }
                 .SetLength((MetricTimeSpan)lastEventTime, TempoMap);
@@ -969,27 +1138,27 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 actions: new[]
                 {
-                    new PlaybackChangerBase(stopAfter,
+                    new PlaybackAction(stopAfter,
                         p =>
                         {
                             p.Stop();
                             p.MoveToStart();
                         }),
-                    new PlaybackChangerBase(stopPeriod,
+                    new PlaybackAction(stopPeriod,
                         p =>
                         {
                             p.Start();
                             CheckCurrentTime(p, TimeSpan.Zero, "stopped");
                         }),
-                    new PlaybackChangerBase(firstAfterResumeDelay,
+                    new PlaybackAction(firstAfterResumeDelay,
                         p => CheckCurrentTime(p, ScaleTimeSpan(firstAfterResumeDelay, speed), "resumed")),
-                    new PlaybackChangerBase(secondAfterResumeDelay,
+                    new PlaybackAction(secondAfterResumeDelay,
                         p =>
                         {
                             p.MoveToStart();
                             CheckCurrentTime(p, TimeSpan.Zero, "resumed");
                         }),
-                    new PlaybackChangerBase(thirdAfterResumeDelay,
+                    new PlaybackAction(thirdAfterResumeDelay,
                         p => CheckCurrentTime(p, ScaleTimeSpan(thirdAfterResumeDelay, speed), "resumed")),
                 },
                 expectedReceivedEvents: new[]
@@ -1021,18 +1190,18 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [TestCase(0.5)]
         public void NoteCallback_MoveForward_Notes(double speed)
         {
-            var stopAfter = TimeSpan.FromSeconds(1);
-            var stopPeriod = TimeSpan.FromMilliseconds(500);
+            var stopAfter = TimeSpan.FromMilliseconds(200);
+            var stopPeriod = TimeSpan.FromMilliseconds(300);
 
-            var stepAfterStop = TimeSpan.FromSeconds(1);
-            var stepAfterResumed = TimeSpan.FromMilliseconds(500);
+            var stepAfterStop = TimeSpan.FromMilliseconds(400);
+            var stepAfterResumed = TimeSpan.FromMilliseconds(300);
 
             var firstEventTime = TimeSpan.Zero;
-            var lastEventTime = TimeSpan.FromSeconds(8);
+            var lastEventTime = TimeSpan.FromSeconds(4);
 
-            var firstAfterResumeDelay = TimeSpan.FromMilliseconds(600);
-            var secondAfterResumeDelay = TimeSpan.FromSeconds(1);
-            var thirdAfterResumeDelay = TimeSpan.FromMilliseconds(500);
+            var firstAfterResumeDelay = TimeSpan.FromMilliseconds(300);
+            var secondAfterResumeDelay = TimeSpan.FromMilliseconds(500);
+            var thirdAfterResumeDelay = TimeSpan.FromMilliseconds(200);
 
             var originalNote = new Note((SevenBitNumber)0) { Velocity = SevenBitNumber.MinValue }
                 .SetLength((MetricTimeSpan)lastEventTime, TempoMap);
@@ -1047,27 +1216,27 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 actions: new[]
                 {
-                    new PlaybackChangerBase(stopAfter,
+                    new PlaybackAction(stopAfter,
                         p =>
                         {
                             p.Stop();
                             p.MoveForward((MetricTimeSpan)stepAfterStop);
                         }),
-                    new PlaybackChangerBase(stopPeriod,
+                    new PlaybackAction(stopPeriod,
                         p =>
                         {
                             p.Start();
                             CheckCurrentTime(p, ScaleTimeSpan(stopAfter, speed) + stepAfterStop, "stopped");
                         }),
-                    new PlaybackChangerBase(firstAfterResumeDelay,
+                    new PlaybackAction(firstAfterResumeDelay,
                         p => CheckCurrentTime(p, ScaleTimeSpan(stopAfter + firstAfterResumeDelay, speed) + stepAfterStop, "resumed")),
-                    new PlaybackChangerBase(secondAfterResumeDelay,
+                    new PlaybackAction(secondAfterResumeDelay,
                         p =>
                         {
                             p.MoveForward((MetricTimeSpan)stepAfterResumed);
                             CheckCurrentTime(p, ScaleTimeSpan(stopAfter + firstAfterResumeDelay + secondAfterResumeDelay, speed) + stepAfterStop + stepAfterResumed, "resumed");
                         }),
-                    new PlaybackChangerBase(thirdAfterResumeDelay,
+                    new PlaybackAction(thirdAfterResumeDelay,
                         p => CheckCurrentTime(p, ScaleTimeSpan(stopAfter + firstAfterResumeDelay + secondAfterResumeDelay + thirdAfterResumeDelay, speed) + stepAfterStop + stepAfterResumed, "resumed")),
                 },
                 expectedReceivedEvents: new[]
@@ -1113,13 +1282,13 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 actions: new[]
                 {
-                    new PlaybackChangerBase(stopAfter,
+                    new PlaybackAction(stopAfter,
                         p =>
                         {
                             p.Stop();
                             p.MoveForward((MetricTimeSpan)stepAfterStop);
                         }),
-                    new PlaybackChangerBase(stopPeriod,
+                    new PlaybackAction(stopPeriod,
                         p =>
                         {
                             p.Start();
@@ -1129,7 +1298,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 expectedReceivedEvents: new[]
                 {
                     new ReceivedEvent(new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), TimeSpan.Zero),
-                    new ReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), stopAfter + stopPeriod),
+                    new ReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), stopAfter),
                 },
                 expectedNotesEvents: new[]
                 {
@@ -1138,9 +1307,66 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 setupPlayback: playback =>
                 {
-                    playback.InterruptNotesOnStop = false;
                     playback.TrackNotes = false;
                     playback.NoteCallback = NoteCallback;
+                });
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
+        public void NoteCallback_MoveForward_BeyondPlaybackEnd_Notes()
+        {
+            var stopAfter = TimeSpan.FromMilliseconds(200);
+            var stopPeriod = TimeSpan.FromMilliseconds(200);
+
+            var stepAfterStop = TimeSpan.FromMilliseconds(300);
+
+            var noteLength = TimeSpan.FromMilliseconds(400);
+
+            var originalNote = new Note((SevenBitNumber)0) { Velocity = SevenBitNumber.MinValue }
+                .SetLength((MetricTimeSpan)noteLength, TempoMap);
+
+            var note = (Note)originalNote.Clone();
+            note.NoteNumber += TransposeBy;
+
+            CheckNoteCallback(
+                initialPlaybackObjects: new[]
+                {
+                    originalNote,
+                    new Note((SevenBitNumber)70)
+                        .SetTime(new MetricTimeSpan(0, 0, 0, 600), TempoMap)
+                        .SetLength(new MetricTimeSpan(0, 0, 0, 200), TempoMap),
+                },
+                actions: new[]
+                {
+                    new PlaybackAction(stopAfter,
+                        p =>
+                        {
+                            p.Stop();
+                            p.MoveForward((MetricTimeSpan)stepAfterStop);
+                        }),
+                    new PlaybackAction(stopPeriod,
+                        p =>
+                        {
+                            p.Start();
+                            CheckCurrentTime(p, TimeSpan.FromMilliseconds(450), "stopped");
+                        }),
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), TimeSpan.Zero),
+                    new ReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), stopAfter),
+                },
+                expectedNotesEvents: new[]
+                {
+                    (EventType.Started, note, originalNote, true),
+                    (EventType.Finished, note, originalNote, true),
+                },
+                setupPlayback: playback =>
+                {
+                    playback.TrackNotes = false;
+                    playback.NoteCallback = NoteCallback;
+                    playback.PlaybackEnd = new MetricTimeSpan(0, 0, 0, 450);
                 });
         }
 
@@ -1150,20 +1376,20 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [TestCase(0.5)]
         public void NoteCallback_MoveBack_Notes(double speed)
         {
-            var stopAfter = TimeSpan.FromSeconds(1);
-            var stopPeriod = TimeSpan.FromMilliseconds(500);
+            var stopAfter = TimeSpan.FromMilliseconds(700);
+            var stopPeriod = TimeSpan.FromMilliseconds(200);
 
             var stepAfterStop = TimeSpan.FromMilliseconds(300);
-            Debug.Assert(stepAfterStop <= ScaleTimeSpan(stopAfter, speed), "Step after stop is invalid.");
+            Assert.LessOrEqual(stepAfterStop, ScaleTimeSpan(stopAfter, speed), "Step after stop is invalid.");
 
-            var stepAfterResumed = TimeSpan.FromMilliseconds(500);
+            var stepAfterResumed = TimeSpan.FromMilliseconds(100);
 
-            var firstAfterResumeDelay = TimeSpan.FromMilliseconds(500);
-            var secondAfterResumeDelay = TimeSpan.FromSeconds(1);
-            var thirdAfterResumeDelay = TimeSpan.FromMilliseconds(500);
+            var firstAfterResumeDelay = TimeSpan.FromMilliseconds(200);
+            var secondAfterResumeDelay = TimeSpan.FromMilliseconds(500);
+            var thirdAfterResumeDelay = TimeSpan.FromMilliseconds(200);
 
-            var lastEventTime = TimeSpan.FromMilliseconds(5500);
-            Debug.Assert(lastEventTime >= ScaleTimeSpan(stopAfter + firstAfterResumeDelay + secondAfterResumeDelay + thirdAfterResumeDelay, speed) - stepAfterStop - stepAfterResumed, "Last event time is invalid.");
+            var lastEventTime = TimeSpan.FromMilliseconds(3000);
+            Assert.GreaterOrEqual(lastEventTime, ScaleTimeSpan(stopAfter + firstAfterResumeDelay + secondAfterResumeDelay + thirdAfterResumeDelay, speed) - stepAfterStop - stepAfterResumed, "Last event time is invalid.");
 
             var originalNote = new Note((SevenBitNumber)0) { Velocity = SevenBitNumber.MinValue }
                 .SetLength((MetricTimeSpan)lastEventTime, TempoMap);
@@ -1178,27 +1404,27 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 actions: new[]
                 {
-                    new PlaybackChangerBase(stopAfter,
+                    new PlaybackAction(stopAfter,
                         p =>
                         {
                             p.Stop();
                             p.MoveBack((MetricTimeSpan)stepAfterStop);
                         }),
-                    new PlaybackChangerBase(stopPeriod,
+                    new PlaybackAction(stopPeriod,
                         p =>
                         {
                             p.Start();
                             CheckCurrentTime(p, ScaleTimeSpan(stopAfter, speed) - stepAfterStop, "stopped");
                         }),
-                    new PlaybackChangerBase(firstAfterResumeDelay,
+                    new PlaybackAction(firstAfterResumeDelay,
                         p => CheckCurrentTime(p, ScaleTimeSpan(stopAfter + firstAfterResumeDelay, speed) - stepAfterStop, "resumed")),
-                    new PlaybackChangerBase(secondAfterResumeDelay,
+                    new PlaybackAction(secondAfterResumeDelay,
                         p =>
                         {
                             p.MoveBack((MetricTimeSpan)stepAfterResumed);
                             CheckCurrentTime(p, ScaleTimeSpan(stopAfter + firstAfterResumeDelay + secondAfterResumeDelay, speed) - stepAfterStop - stepAfterResumed, "resumed");
                         }),
-                    new PlaybackChangerBase(thirdAfterResumeDelay,
+                    new PlaybackAction(thirdAfterResumeDelay,
                         p => CheckCurrentTime(p, ScaleTimeSpan(stopAfter + firstAfterResumeDelay + secondAfterResumeDelay + thirdAfterResumeDelay, speed) - stepAfterStop - stepAfterResumed, "resumed")),
                 },
                 expectedReceivedEvents: new[]
@@ -1222,139 +1448,6 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
         [Retry(RetriesNumber)]
         [Test]
-        public void NoteCallback_MoveBack_BeyondZero_Notes()
-        {
-            var stopAfter = TimeSpan.FromSeconds(3);
-            var stopPeriod = TimeSpan.FromSeconds(2);
-
-            var stepAfterStop = TimeSpan.FromSeconds(5);
-            var stepAfterResumed = TimeSpan.FromMilliseconds(500);
-
-            var lastEventTime = TimeSpan.FromSeconds(5);
-
-            var firstAfterResumeDelay = TimeSpan.FromMilliseconds(500);
-            var secondAfterResumeDelay = TimeSpan.FromSeconds(1);
-            var thirdAfterResumeDelay = TimeSpan.FromMilliseconds(500);
-
-            var originalNote = new Note((SevenBitNumber)0) { Velocity = SevenBitNumber.MinValue }
-                .SetLength((MetricTimeSpan)lastEventTime, TempoMap);
-
-            var note = (Note)originalNote.Clone();
-            note.NoteNumber += TransposeBy;
-
-            CheckNoteCallback(
-                initialPlaybackObjects: new[]
-                {
-                    originalNote,
-                },
-                actions: new[]
-                {
-                    new PlaybackChangerBase(stopAfter,
-                        p =>
-                        {
-                            p.Stop();
-                            p.MoveBack((MetricTimeSpan)stepAfterStop);
-                        }),
-                    new PlaybackChangerBase(stopPeriod,
-                        p =>
-                        {
-                            p.Start();
-                            CheckCurrentTime(p, TimeSpan.Zero, "stopped");
-                        }),
-                    new PlaybackChangerBase(firstAfterResumeDelay,
-                        p => CheckCurrentTime(p, firstAfterResumeDelay, "resumed")),
-                    new PlaybackChangerBase(secondAfterResumeDelay,
-                        p =>
-                        {
-                            p.MoveBack((MetricTimeSpan)stepAfterResumed);
-                            CheckCurrentTime(p, firstAfterResumeDelay + secondAfterResumeDelay - stepAfterResumed, "resumed");
-                        }),
-                    new PlaybackChangerBase(thirdAfterResumeDelay,
-                        p => CheckCurrentTime(p, firstAfterResumeDelay + secondAfterResumeDelay + thirdAfterResumeDelay - stepAfterResumed, "resumed")),
-                },
-                expectedReceivedEvents: new[]
-                {
-                    new ReceivedEvent(new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), TimeSpan.Zero),
-                    new ReceivedEvent(new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), stopAfter + stopPeriod),
-                    new ReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), lastEventTime + stopAfter + stopPeriod + stepAfterResumed),
-                },
-                expectedNotesEvents: new[]
-                {
-                    (EventType.Started, note, originalNote, true),
-                    (EventType.Started, note, originalNote, true),
-                    (EventType.Finished, note, originalNote, true),
-                },
-                setupPlayback: playback =>
-                {
-                    playback.InterruptNotesOnStop = false;
-                    playback.TrackNotes = false;
-                    playback.NoteCallback = NoteCallback;
-                });
-        }
-
-        [Retry(RetriesNumber)]
-        [Test]
-        public void NoteCallback_MoveToTime_Notes()
-        {
-            var stopAfter = TimeSpan.FromSeconds(4);
-            var stopPeriod = TimeSpan.FromSeconds(2);
-
-            var originalNote = new Note((SevenBitNumber)0) { Velocity = SevenBitNumber.MinValue }
-                .SetLength((MetricTimeSpan)TimeSpan.FromSeconds(10), TempoMap);
-
-            var note = (Note)originalNote.Clone();
-            note.NoteNumber += TransposeBy;
-
-            CheckNoteCallback(
-                initialPlaybackObjects: new[]
-                {
-                    originalNote,
-                },
-                actions: new[]
-                {
-                    new PlaybackChangerBase(stopAfter,
-                        p =>
-                        {
-                            p.Stop();
-                            p.MoveToTime(new MetricTimeSpan(0, 0, 1));
-                        }),
-                    new PlaybackChangerBase(stopPeriod,
-                        p =>
-                        {
-                            p.Start();
-                            CheckCurrentTime(p, TimeSpan.FromSeconds(1), "stopped");
-                        }),
-                    new PlaybackChangerBase(TimeSpan.FromSeconds(1),
-                        p => CheckCurrentTime(p, TimeSpan.FromSeconds(2), "resumed")),
-                    new PlaybackChangerBase(TimeSpan.FromSeconds(2),
-                        p =>
-                        {
-                            p.MoveToTime(new MetricTimeSpan(0, 0, 8));
-                            CheckCurrentTime(p, TimeSpan.FromSeconds(8), "resumed");
-                        }),
-                    new PlaybackChangerBase(TimeSpan.FromSeconds(1),
-                        p => CheckCurrentTime(p, TimeSpan.FromSeconds(9), "resumed")),
-                },
-                expectedReceivedEvents: new[]
-                {
-                    new ReceivedEvent(new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), TimeSpan.Zero),
-                    new ReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), TimeSpan.FromSeconds(11)),
-                },
-                expectedNotesEvents: new[]
-                {
-                    (EventType.Started, note, originalNote, true),
-                    (EventType.Finished, note, originalNote, true),
-                },
-                setupPlayback: playback =>
-                {
-                    playback.InterruptNotesOnStop = false;
-                    playback.TrackNotes = false;
-                    playback.NoteCallback = NoteCallback;
-                });
-        }
-
-        [Retry(RetriesNumber)]
-        [Test]
         public void NoteCallback_MoveToTime_BeyondDuration_Notes()
         {
             var stopAfter = TimeSpan.FromSeconds(2);
@@ -1373,13 +1466,13 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 actions: new[]
                 {
-                    new PlaybackChangerBase(stopAfter,
+                    new PlaybackAction(stopAfter,
                         p =>
                         {
                             p.Stop();
                             p.MoveToTime(new MetricTimeSpan(0, 0, 10));
                         }),
-                    new PlaybackChangerBase(stopPeriod,
+                    new PlaybackAction(stopPeriod,
                         p =>
                         {
                             p.Start();
@@ -1389,7 +1482,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 expectedReceivedEvents: new[]
                 {
                     new ReceivedEvent(new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), TimeSpan.Zero),
-                    new ReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), stopAfter + stopPeriod),
+                    new ReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), stopAfter),
                 },
                 expectedNotesEvents: new[]
                 {
@@ -1398,9 +1491,62 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 setupPlayback: playback =>
                 {
-                    playback.InterruptNotesOnStop = false;
                     playback.TrackNotes = false;
                     playback.NoteCallback = NoteCallback;
+                });
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
+        public void NoteCallback_MoveToTime_BeyondPlaybackEnd_Notes()
+        {
+            var stopAfter = TimeSpan.FromMilliseconds(200);
+            var stopPeriod = TimeSpan.FromMilliseconds(200);
+
+            var originalNote = new Note((SevenBitNumber)0) { Velocity = SevenBitNumber.MinValue }
+                .SetLength((MetricTimeSpan)TimeSpan.FromMilliseconds(400), TempoMap);
+
+            var note = (Note)originalNote.Clone();
+            note.NoteNumber += TransposeBy;
+
+            CheckNoteCallback(
+                initialPlaybackObjects: new[]
+                {
+                    originalNote,
+                    new Note((SevenBitNumber)70)
+                        .SetTime(new MetricTimeSpan(0, 0, 0, 600), TempoMap)
+                        .SetLength(new MetricTimeSpan(0, 0, 0, 200), TempoMap),
+                },
+                actions: new[]
+                {
+                    new PlaybackAction(stopAfter,
+                        p =>
+                        {
+                            p.Stop();
+                            p.MoveToTime(new MetricTimeSpan(0, 0, 0, 500));
+                        }),
+                    new PlaybackAction(stopPeriod,
+                        p =>
+                        {
+                            p.Start();
+                            CheckCurrentTime(p, TimeSpan.FromMilliseconds(450), "stopped");
+                        }),
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), TimeSpan.Zero),
+                    new ReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), stopAfter),
+                },
+                expectedNotesEvents: new[]
+                {
+                    (EventType.Started, note, originalNote, true),
+                    (EventType.Finished, note, originalNote, true),
+                },
+                setupPlayback: playback =>
+                {
+                    playback.TrackNotes = false;
+                    playback.NoteCallback = NoteCallback;
+                    playback.PlaybackEnd = new MetricTimeSpan(0, 0, 0, 450);
                 });
         }
 
@@ -1433,11 +1579,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 actions: new[]
                 {
-                    new PlaybackChangerBase(TimeSpan.FromSeconds(1),
+                    new PlaybackAction(TimeSpan.FromSeconds(1),
                         p => p.NoteCallback = (d, rt, rl, t) => d),
-                    new PlaybackChangerBase(stopAfter - TimeSpan.FromSeconds(1),
+                    new PlaybackAction(stopAfter - TimeSpan.FromSeconds(1),
                         p => p.Stop()),
-                    new PlaybackChangerBase(stopPeriod,
+                    new PlaybackAction(stopPeriod,
                         p => p.Start()),
                 },
                 expectedReceivedEvents: new[]
@@ -1492,11 +1638,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 actions: new[]
                 {
-                    new PlaybackChangerBase(TimeSpan.FromSeconds(1),
+                    new PlaybackAction(TimeSpan.FromSeconds(1),
                         p => p.NoteCallback = (d, rt, rl, t) => d),
-                    new PlaybackChangerBase(stopAfter - TimeSpan.FromSeconds(1),
+                    new PlaybackAction(stopAfter - TimeSpan.FromSeconds(1),
                         p => p.Stop()),
-                    new PlaybackChangerBase(stopPeriod,
+                    new PlaybackAction(stopPeriod,
                         p => p.Start()),
                 },
                 expectedReceivedEvents: new[]
@@ -1529,7 +1675,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
         private void CheckNoteCallback(
             ICollection<ITimedObject> initialPlaybackObjects,
-            PlaybackChangerBase[] actions,
+            PlaybackAction[] actions,
             ICollection<ReceivedEvent> expectedReceivedEvents,
             ICollection<(EventType EventType, Note Note, Note OriginalNote, bool CheckOriginalNoteByReference)> expectedNotesEvents,
             Action<Playback> setupPlayback = null)

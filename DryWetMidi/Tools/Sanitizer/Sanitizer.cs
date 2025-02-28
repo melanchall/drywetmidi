@@ -131,12 +131,7 @@ namespace Melanchall.DryWetMidi.Tools
             ushort? pitchValue = null;
             FourBitNumber? pitchBendChannel = null;
 
-            // TODO: split by track
-            string sequenceTrackName = null;
-
             var controlValues = new SevenBitNumber?[FourBitNumber.MaxValue + 1, SevenBitNumber.MaxValue + 1];
-
-            // TODO: tests on disabled duplicates removing
 
             midiFile.RemoveTimedEvents(e =>
             {
@@ -203,6 +198,8 @@ namespace Melanchall.DryWetMidi.Tools
             {
                 foreach (var trackChunk in midiFile.GetTrackChunks())
                 {
+                    string sequenceTrackName = null;
+
                     trackChunk.RemoveTimedEvents(e =>
                     {
                         var midiEvent = e.Event;

@@ -37,7 +37,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialEventCallback: (e, rt, t) => null,
                 actions: new[]
                 {
-                    new PlaybackChangerBase(TimeSpan.FromMilliseconds(250),
+                    new PlaybackAction(TimeSpan.FromMilliseconds(250),
                         p => p.EventCallback = (e, rt, t) => null),
                 },
                 expectedReceivedEvents: new ReceivedEvent[] { });
@@ -57,7 +57,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialEventCallback: (e, rt, t) => null,
                 actions: new[]
                 {
-                    new PlaybackChangerBase(TimeSpan.FromMilliseconds(250),
+                    new PlaybackAction(TimeSpan.FromMilliseconds(250),
                         p => p.EventCallback = (e, rt, t) => null),
                 },
                 expectedReceivedEvents: new[]
@@ -80,7 +80,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialEventCallback: (e, rt, t) => null,
                 actions: new[]
                 {
-                    new PlaybackChangerBase(TimeSpan.FromMilliseconds(250),
+                    new PlaybackAction(TimeSpan.FromMilliseconds(250),
                         p => p.EventCallback = (e, rt, t) => e),
                 },
                 expectedReceivedEvents: new[]
@@ -102,7 +102,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialEventCallback: (e, rt, t) => e,
                 actions: new[]
                 {
-                    new PlaybackChangerBase(TimeSpan.FromMilliseconds(250),
+                    new PlaybackAction(TimeSpan.FromMilliseconds(250),
                         p => p.EventCallback = (e, rt, t) => null),
                 },
                 expectedReceivedEvents: new[]
@@ -126,7 +126,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialEventCallback: (e, rt, t) => e,
                 actions: new[]
                 {
-                    new PlaybackChangerBase(TimeSpan.FromMilliseconds(550),
+                    new PlaybackAction(TimeSpan.FromMilliseconds(550),
                         p => p.EventCallback = EventCallback),
                 },
                 expectedReceivedEvents: new[]
@@ -145,7 +145,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         private void CheckEventCallback(
             ICollection<ITimedObject> initialPlaybackObjects,
             EventCallback initialEventCallback,
-            PlaybackChangerBase[] actions,
+            PlaybackAction[] actions,
             ICollection<ReceivedEvent> expectedReceivedEvents)
         {
             CheckPlayback(

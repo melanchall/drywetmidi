@@ -133,7 +133,6 @@ namespace Melanchall.DryWetMidi.Core
             };
             var endOfTrackEventWriter = EventWriterFactory.GetWriter(endOfTrackEvent);
 
-            // TODO: put to constant in TrackChunk
             _writer.WriteVlqNumber(endOfTrackEvent.DeltaTime);
             endOfTrackEventWriter.Write(endOfTrackEvent, _writer, _settings, true);
 

@@ -13,35 +13,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
     {
         #region Nested classes
 
-        // TODO: rename
-        private sealed class PlaybackChangerBase
+        private sealed class DynamicPlaybackAction
         {
-            public PlaybackChangerBase(
-                TimeSpan period,
-                Action<Playback> action)
-                : this((int)period.TotalMilliseconds, action)
-            {
-            }
-
-            public PlaybackChangerBase(
-                int periodMs,
-                Action<Playback> action)
-            {
-                PeriodMs = periodMs;
-                Action = action;
-            }
-
-            public int PeriodMs { get; }
-
-            public Action<Playback> Action { get; }
-
-            public override string ToString() =>
-                $"After {PeriodMs} ms";
-        }
-
-        private sealed class PlaybackChanger
-        {
-            public PlaybackChanger(
+            public DynamicPlaybackAction(
                 int periodMs,
                 Action<Playback, ObservableTimedObjectsCollection> action)
             {
@@ -57,24 +31,6 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 $"After {PeriodMs} ms";
         }
 
-        private sealed class EmptyOutputDevice : IOutputDevice
-        {
-            public event EventHandler<MidiEventSentEventArgs> EventSent;
-
-            public void PrepareForEventsSending()
-            {
-            }
-
-            public void SendEvent(MidiEvent midiEvent)
-            {
-                EventSent?.Invoke(this, new MidiEventSentEventArgs(midiEvent));
-            }
-
-            public void Dispose()
-            {
-            }
-        }
-
         #endregion
 
         #region Constants
@@ -87,7 +43,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
         private void CheckPlaybackDataChangesOnTheFly(
             ICollection<ITimedObject> initialObjects,
-            PlaybackChanger[] actions,
+            DynamicPlaybackAction[] actions,
             ICollection<ReceivedEvent> expectedReceivedEvents,
             Action<Playback> setupPlayback = null,
             int? repeatsCount = null,
@@ -100,7 +56,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 useOutputDevice: false,
                 createPlayback: outputDevice => new Playback(collection, tempoMap ?? TempoMap, outputDevice),
                 actions: actions
-                    .Select(a => new PlaybackChangerBase(a.PeriodMs, p => a.Action(p, collection)))
+                    .Select(a => new PlaybackAction(a.PeriodMs, p => a.Action(p, collection)))
                     .ToArray(),
                 expectedReceivedEvents: expectedReceivedEvents,
                 setupPlayback: setupPlayback,

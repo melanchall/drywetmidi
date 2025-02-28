@@ -1,6 +1,5 @@
 ﻿using Melanchall.DryWetMidi.Common;
 using System.Collections.Generic;
-using System.Linq;
 using System;
 using Melanchall.DryWetMidi.Interaction;
 using Melanchall.DryWetMidi.Core;
@@ -69,8 +68,8 @@ namespace Melanchall.DryWetMidi.Multimedia
         {
             ThrowIfArgument.IsNull(nameof(snapPoint), snapPoint);
 
-            var node = _snapPoints.GetFirstNode(snapPoint.Time, snapPoint);
-            _snapPoints.Delete(node);
+            var node = _snapPoints.GetCoordinate(snapPoint.Time, snapPoint);
+            _snapPoints.Remove(node);
         }
 
         public void RemoveSnapPointsGroup(SnapPointsGroup snapPointsGroup)
@@ -91,15 +90,15 @@ namespace Melanchall.DryWetMidi.Multimedia
         {
             ThrowIfArgument.IsNull(nameof(predicate), predicate);
 
-            var node = _snapPoints.GetMinimumNode();
+            var node = _snapPoints.GetMinimumCoordinate();
 
             while (node != null)
             {
-                var nextNode = _snapPoints.GetNextNode(node);
+                var nextNode = _snapPoints.GetNextCoordinate(node);
 
                 var snapPoint = node.Value as SnapPoint<TData>;
                 if (snapPoint != null && predicate(snapPoint.Data))
-                    _snapPoints.Delete(node);
+                    _snapPoints.Remove(node);
 
                 node = nextNode;
             }
@@ -140,14 +139,14 @@ namespace Melanchall.DryWetMidi.Multimedia
             if (!snapPointsGroup.IsEnabled)
                 return null;
 
-            var node = _playbackEvents.GetFirstNodeAboveThreshold(time);
+            var node = _playbackEvents.GetFirstCoordinateAboveThreshold(time);
 
             while (node != null)
             {
                 if (snapPointsGroup.Predicate(node.Value.Event))
                     return new SnapPoint(node.Key);
 
-                node = _playbackEvents.GetNextNode(node);
+                node = _playbackEvents.GetNextCoordinate(node);
             }
 
             return null;
@@ -165,17 +164,17 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         private SnapPoint GetNextSnapPoint(TimeSpan time, Predicate<SnapPoint> predicate)
         {
-            var snapPointNode = _snapPoints.GetFirstNodeAboveThreshold(time);
+            var snapPointNode = _snapPoints.GetFirstCoordinateAboveThreshold(time);
 
             while (snapPointNode != null)
             {
                 if (snapPointNode.Value.IsEnabled && predicate(snapPointNode.Value))
                     break;
 
-                snapPointNode = _snapPoints.GetNextNode(snapPointNode);
+                snapPointNode = _snapPoints.GetNextCoordinate(snapPointNode);
             }
 
-            var node = _playbackEvents.GetFirstNodeAboveThreshold(time);
+            var node = _playbackEvents.GetFirstCoordinateAboveThreshold(time);
 
             while (node != null)
             {
@@ -185,7 +184,7 @@ namespace Melanchall.DryWetMidi.Multimedia
                         return new SnapPoint(node.Key);
                 }
 
-                node = _playbackEvents.GetNextNode(node);
+                node = _playbackEvents.GetNextCoordinate(node);
             }
 
             return snapPointNode?.Value;
@@ -196,14 +195,14 @@ namespace Melanchall.DryWetMidi.Multimedia
             if (!snapPointsGroup.IsEnabled)
                 return null;
 
-            var node = _playbackEvents.GetLastNodeBelowThreshold(time);
+            var node = _playbackEvents.GetLastCoordinateBelowThreshold(time);
 
             while (node != null)
             {
                 if (snapPointsGroup.Predicate(node.Value.Event))
                     return new SnapPoint(node.Key);
 
-                node = _playbackEvents.GetPreviousNode(node);
+                node = _playbackEvents.GetPreviousCoordinate(node);
             }
 
             return null;
@@ -221,17 +220,17 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         private SnapPoint GetPreviousSnapPoint(TimeSpan time, Predicate<SnapPoint> predicate)
         {
-            var snapPointNode = _snapPoints.GetLastNodeBelowThreshold(time);
+            var snapPointNode = _snapPoints.GetLastCoordinateBelowThreshold(time);
 
             while (snapPointNode != null)
             {
                 if (snapPointNode.Value.IsEnabled && predicate(snapPointNode.Value))
                     break;
 
-                snapPointNode = _snapPoints.GetPreviousNode(snapPointNode);
+                snapPointNode = _snapPoints.GetPreviousCoordinate(snapPointNode);
             }
 
-            var node = _playbackEvents.GetLastNodeBelowThreshold(time);
+            var node = _playbackEvents.GetLastCoordinateBelowThreshold(time);
 
             while (node != null)
             {
@@ -241,7 +240,7 @@ namespace Melanchall.DryWetMidi.Multimedia
                         return new SnapPoint(node.Key);
                 }
 
-                node = _playbackEvents.GetPreviousNode(node);
+                node = _playbackEvents.GetPreviousCoordinate(node);
             }
 
             return snapPointNode?.Value;

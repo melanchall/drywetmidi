@@ -40,7 +40,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var actions = SevenBitNumber
                 .Values
                 .Take(notesCount)
-                .Select(n => new PlaybackChanger(n == 0 ? 0 : noteLengthMs,
+                .Select(n => new DynamicPlaybackAction(n == 0 ? 0 : noteLengthMs,
                     (playback, collection) => collection.Add(objectsToAdd[n])))
                 .ToArray();
 
@@ -89,7 +89,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var actions = SevenBitNumber
                 .Values
                 .Take(notesCount)
-                .Select(n => new PlaybackChanger(n == 0 ? 0 : noteLengthMs,
+                .Select(n => new DynamicPlaybackAction(n == 0 ? 0 : noteLengthMs,
                     (playback, collection) => collection.ChangeCollection(() =>
                     {
                         collection.Add(objectsToAdd[n]);
@@ -140,7 +140,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var actions = SevenBitNumber
                 .Values
                 .Take(notesCount)
-                .Select(n => new PlaybackChanger(n == 0 ? 0 : noteLengthMs - n * overlappedMs,
+                .Select(n => new DynamicPlaybackAction(n == 0 ? 0 : noteLengthMs - n * overlappedMs,
                     (playback, collection) => collection.Add(objectsToAdd[n])))
                 .ToArray();
 
@@ -190,7 +190,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(0,
+                    new DynamicPlaybackAction(0,
                         (playback, collection) => collection.Add(objectsToAdd)),
                 },
                 expectedReceivedEvents: SevenBitNumber
@@ -246,7 +246,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(addAtMs,
+                    new DynamicPlaybackAction(addAtMs,
                         (playback, collection) => collection.Add(objectsToAdd)),
                 },
                 expectedReceivedEvents:
@@ -284,7 +284,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var actions = SevenBitNumber
                 .Values
                 .Take(notesCount)
-                .Select(n => new PlaybackChanger(noteLengthMs,
+                .Select(n => new DynamicPlaybackAction(noteLengthMs,
                     (playback, collection) => collection.Remove(objectsToRemove[n])))
                 .ToArray();
 
@@ -321,7 +321,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var actions = SevenBitNumber
                 .Values
                 .Take(notesCount)
-                .Select(n => new PlaybackChanger(n == 0 ? 20 : noteLengthMs,
+                .Select(n => new DynamicPlaybackAction(n == 0 ? 20 : noteLengthMs,
                     (playback, collection) => collection.Remove(objectsToRemove[n])))
                 .ToArray();
 
@@ -345,7 +345,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
             var actions = Enumerable
                 .Range(0, 10)
-                .Select(n => new PlaybackChanger(n == 0 ? 10 : noteLengthMs,
+                .Select(n => new DynamicPlaybackAction(n == 0 ? 10 : noteLengthMs,
                     (playback, collection) => collection.ChangeObject(objectToShift, obj => obj
                         .SetTime(new MetricTimeSpan(0, 0, 0, (n + 1) * noteLengthMs + 20), TempoMap))))
                 .ToArray();
@@ -402,7 +402,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var actions = SevenBitNumber
                 .Values
                 .Take(notesCount)
-                .Select(n => new PlaybackChanger(n == 0 ? 0 : noteLengthMs,
+                .Select(n => new DynamicPlaybackAction(n == 0 ? 0 : noteLengthMs,
                     (playback, collection) => action(playback, collection, n)))
                 .ToArray();
 
@@ -443,7 +443,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 .Take(notesCount)
                 .SelectMany(n => new[]
                 {
-                    new PlaybackChanger(n == 0 ? 0 : noteLengthMs,
+                    new DynamicPlaybackAction(n == 0 ? 0 : noteLengthMs,
                         (playback, collection) =>
                         {
                             collection.Add(objectsToAdd[n]);
@@ -506,36 +506,36 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(20, (playback, collection) =>
+                    new DynamicPlaybackAction(20, (playback, collection) =>
                     {
                         collection.Add(object1);
                         CheckCurrentTime(playback, TimeSpan.FromMilliseconds(20), "A");
                     }),
-                    new PlaybackChanger(20, (playback, collection) =>
+                    new DynamicPlaybackAction(20, (playback, collection) =>
                     {
                         collection.ChangeObject(
                             object1,
                             obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 120), TempoMap));
                         CheckCurrentTime(playback, TimeSpan.FromMilliseconds(40), "B");
                     }),
-                    new PlaybackChanger(190, (playback, collection) =>
+                    new DynamicPlaybackAction(190, (playback, collection) =>
                     {
                         collection.Remove(object1);
                         CheckCurrentTime(playback, TimeSpan.FromMilliseconds(340), "C");
                     }),
-                    new PlaybackChanger(110, (playback, collection) =>
+                    new DynamicPlaybackAction(110, (playback, collection) =>
                     {
                         CheckCurrentTime(playback, TimeSpan.FromMilliseconds(450), "D");
                         collection.Add(object1, object2);
                         CheckCurrentTime(playback, TimeSpan.FromMilliseconds(260), "E");
                     }),
-                    new PlaybackChanger(87, (playback, collection) =>
+                    new DynamicPlaybackAction(87, (playback, collection) =>
                     {
                         CheckCurrentTime(playback, TimeSpan.FromMilliseconds(347), "F");
                         collection.ChangeObject(
                             object2,
                             obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 850), TempoMap));
-                        CheckCurrentTime(playback, TimeSpan.FromMilliseconds(435), "G");
+                        CheckCurrentTime(playback, TimeSpan.FromMilliseconds(455), "G");
                     }),
                 },
                 expectedReceivedEvents: new[]
@@ -575,12 +575,12 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(100, (playback, collection) =>
+                    new DynamicPlaybackAction(100, (playback, collection) =>
                     {
                         collection.Add(setTempoEvent);
                         CheckCurrentTime(playback, TimeSpan.FromMilliseconds(100), "A");
                     }),
-                    new PlaybackChanger(100, (playback, collection) =>
+                    new DynamicPlaybackAction(100, (playback, collection) =>
                     {
                         collection.Add(programChangeEvent);
                         playback.MoveToTime(new MetricTimeSpan(0, 0, 0, 450));
@@ -616,7 +616,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(500, (playback, collection) =>
+                    new DynamicPlaybackAction(500, (playback, collection) =>
                     {
                         collection.Add(setTempoEvent, programChangeEvent);
                         CheckCurrentTime(playback, TimeSpan.FromMilliseconds(450), "A");
@@ -652,14 +652,14 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(100, (playback, collection) =>
+                    new DynamicPlaybackAction(100, (playback, collection) =>
                     {
                         collection.Add(setTempoEvent);
                         CheckCurrentTime(playback, TimeSpan.FromMilliseconds(100), "A");
                         playback.MoveToTime(new MetricTimeSpan(0, 0, 0, 260));
                         CheckCurrentTime(playback, TimeSpan.FromMilliseconds(260), "B");
                     }),
-                    new PlaybackChanger(240, (playback, collection) =>
+                    new DynamicPlaybackAction(240, (playback, collection) =>
                     {
                         CheckCurrentTime(playback, TimeSpan.FromMilliseconds(500), "C");
                         playback.MoveToTime(new MetricTimeSpan(0, 0, 0, 100));
@@ -699,7 +699,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(100, (playback, collection) =>
+                    new DynamicPlaybackAction(100, (playback, collection) =>
                         collection.Add(setTempoEvent, timeSignatureEvent)),
                 },
                 expectedReceivedEvents: new[]
@@ -736,7 +736,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new PlaybackChanger(100, (playback, collection) =>
+                    new DynamicPlaybackAction(100, (playback, collection) =>
                         collection.Add(timeSignatureEvent, setTempoEvent)),
                 },
                 expectedReceivedEvents: new[]
@@ -751,6 +751,240 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                         (TimeSpan.FromMilliseconds(250), new TimeSignature(3, 4))),
                     playback.TempoMap,
                     "Invalid tempo map."));
+        }
+
+        [Retry(OnTheFlyChecksRetriesNumber)]
+        [Test]
+        public void CheckPlaybackDataChangesOnTheFly_TempoMapChanges_3()
+        {
+            var setTempoEvent = new TimedEvent(new SetTempoEvent(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 2))
+                .SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap);
+
+            var initialObjects = new ITimedObject[]
+            {
+                new Note((SevenBitNumber)70)
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 400), TempoMap)
+                    .SetLength(new MetricTimeSpan(0, 0, 0, 500), TempoMap),
+            };
+
+            CheckPlaybackDataChangesOnTheFly(
+                initialObjects: initialObjects,
+                actions: new[]
+                {
+                    new DynamicPlaybackAction(50, (playback, collection) =>
+                    {
+                        CheckCurrentTime(playback, TimeSpan.FromMilliseconds(50), "A");
+                        collection.Add(setTempoEvent);
+                        CheckCurrentTime(playback, TimeSpan.FromMilliseconds(50), "B");
+                        playback.MoveToTime(new MetricTimeSpan(0, 0, 0, 300));
+                        CheckCurrentTime(playback, TimeSpan.FromMilliseconds(300), "C");
+                    }),
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(50)),
+                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(250)),
+                });
+        }
+
+        [Retry(OnTheFlyChecksRetriesNumber)]
+        [Test]
+        public void CheckPlaybackDataChangesOnTheFly_TempoMapChanges_4()
+        {
+            var setTempoEvent = new TimedEvent(new SetTempoEvent(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 2))
+                .SetTime(new MetricTimeSpan(0, 0, 0, 300), TempoMap);
+
+            var initialObjects = new ITimedObject[]
+            {
+                new Note((SevenBitNumber)70)
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 200), TempoMap)
+                    .SetLength(new MetricTimeSpan(0, 0, 0, 400), TempoMap),
+            };
+
+            CheckPlaybackDataChangesOnTheFly(
+                initialObjects: initialObjects,
+                actions: new[]
+                {
+                    new DynamicPlaybackAction(100, (playback, collection) =>
+                    {
+                        collection.Add(setTempoEvent);
+                        playback.MoveToTime(new MetricTimeSpan(0, 0, 0, 500));
+                    }),
+                },
+                expectedReceivedEvents: Array.Empty<ReceivedEvent>());
+        }
+
+        [Retry(OnTheFlyChecksRetriesNumber)]
+        [Test]
+        public void CheckPlaybackDataChangesOnTheFly_TempoMapChanges_5()
+        {
+            var setTempoEvent = new TimedEvent(new SetTempoEvent(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 2))
+                .SetTime(new MetricTimeSpan(0, 0, 0, 300), TempoMap);
+
+            var initialObjects = new ITimedObject[]
+            {
+                new Note((SevenBitNumber)70)
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 200), TempoMap)
+                    .SetLength(new MetricTimeSpan(0, 0, 0, 400), TempoMap),
+            };
+
+            CheckPlaybackDataChangesOnTheFly(
+                initialObjects: initialObjects,
+                actions: new[]
+                {
+                    new DynamicPlaybackAction(100, (playback, collection) =>
+                    {
+                        collection.Add(setTempoEvent);
+                        playback.MoveToTime(new MetricTimeSpan(0, 0, 0, 400));
+                    }),
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(100)),
+                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(150)),
+                });
+        }
+
+        [Retry(OnTheFlyChecksRetriesNumber)]
+        [Test]
+        public void CheckPlaybackDataChangesOnTheFly_TempoMapChanges_6()
+        {
+            var setTempoEvent = new TimedEvent(new SetTempoEvent(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 2))
+                .SetTime(new MetricTimeSpan(0, 0, 0, 300), TempoMap);
+
+            var initialObjects = new ITimedObject[]
+            {
+                new Note((SevenBitNumber)70)
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 200), TempoMap)
+                    .SetLength(new MetricTimeSpan(0, 0, 0, 400), TempoMap),
+                new Note((SevenBitNumber)80)
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 700), TempoMap)
+                    .SetLength(new MetricTimeSpan(0, 0, 0, 300), TempoMap),
+            };
+
+            CheckPlaybackDataChangesOnTheFly(
+                initialObjects: initialObjects,
+                actions: new[]
+                {
+                    new DynamicPlaybackAction(100, (playback, collection) =>
+                    {
+                        collection.Add(setTempoEvent);
+                        playback.MoveToTime(new MetricTimeSpan(0, 0, 0, 600));
+                    }),
+                    new DynamicPlaybackAction(20, (playback, collection) =>
+                    {
+                        playback.MoveToTime(new MetricTimeSpan(0, 0, 0, 350));
+                    }),
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)80, Note.DefaultVelocity), TimeSpan.FromMilliseconds(100)),
+                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)80, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(120)),
+                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(120)),
+                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(220)),
+                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)80, Note.DefaultVelocity), TimeSpan.FromMilliseconds(270)),
+                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)80, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(420)),
+                });
+        }
+
+        [Retry(OnTheFlyChecksRetriesNumber)]
+        [Test]
+        public void CheckPlaybackDataChangesOnTheFly_TempoMapChanges_7()
+        {
+            var setTempoEvent = new TimedEvent(new SetTempoEvent(SetTempoEvent.DefaultMicrosecondsPerQuarterNote * 2))
+                .SetTime(new MetricTimeSpan(0, 0, 0, 300), TempoMap);
+
+            var initialObjects = new ITimedObject[]
+            {
+                new Note((SevenBitNumber)70)
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 200), TempoMap)
+                    .SetLength(new MetricTimeSpan(0, 0, 0, 400), TempoMap),
+            };
+
+            CheckPlaybackDataChangesOnTheFly(
+                initialObjects: initialObjects,
+                actions: new[]
+                {
+                    new DynamicPlaybackAction(100, (playback, collection) =>
+                    {
+                        collection.Add(setTempoEvent);
+                        playback.MoveToTime(new MetricTimeSpan(0, 0, 0, 1000));
+                    }),
+                },
+                expectedReceivedEvents: Array.Empty<ReceivedEvent>());
+        }
+
+        [Retry(OnTheFlyChecksRetriesNumber)]
+        [Test]
+        public void CheckPlaybackDataChangesOnTheFly_TempoMapChanges_8()
+        {
+            var setTempoEvent = new TimedEvent(new SetTempoEvent(SetTempoEvent.DefaultMicrosecondsPerQuarterNote * 2))
+                .SetTime(new MetricTimeSpan(0, 0, 0, 300), TempoMap);
+
+            var initialObjects = new ITimedObject[]
+            {
+                new Note((SevenBitNumber)70)
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 200), TempoMap)
+                    .SetLength(new MetricTimeSpan(0, 0, 0, 400), TempoMap),
+            };
+
+            CheckPlaybackDataChangesOnTheFly(
+                initialObjects: initialObjects,
+                actions: new[]
+                {
+                    new DynamicPlaybackAction(100, (playback, collection) =>
+                    {
+                        collection.Add(setTempoEvent);
+                        playback.MoveToTime(new MetricTimeSpan(0, 0, 0, 800));
+                    }),
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(100)),
+                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(200)),
+                });
+        }
+
+        [Retry(OnTheFlyChecksRetriesNumber)]
+        [Test]
+        public void CheckPlaybackDataChangesOnTheFly_TempoMapChanges_9()
+        {
+            var setTempoEvent = new TimedEvent(new SetTempoEvent(SetTempoEvent.DefaultMicrosecondsPerQuarterNote * 2))
+                .SetTime(new MetricTimeSpan(0, 0, 0, 300), TempoMap);
+
+            var initialObjects = new ITimedObject[]
+            {
+                new Note((SevenBitNumber)70)
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 200), TempoMap)
+                    .SetLength(new MetricTimeSpan(0, 0, 0, 400), TempoMap),
+                new Note((SevenBitNumber)80)
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 700), TempoMap)
+                    .SetLength(new MetricTimeSpan(0, 0, 0, 300), TempoMap),
+            };
+
+            CheckPlaybackDataChangesOnTheFly(
+                initialObjects: initialObjects,
+                actions: new[]
+                {
+                    new DynamicPlaybackAction(100, (playback, collection) =>
+                    {
+                        collection.Add(setTempoEvent);
+                        playback.MoveToTime(new MetricTimeSpan(0, 0, 0, 1600));
+                    }),
+                    new DynamicPlaybackAction(50, (playback, collection) =>
+                    {
+                        playback.MoveToTime(new MetricTimeSpan(0, 0, 0, 400));
+                    }),
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)80, Note.DefaultVelocity), TimeSpan.FromMilliseconds(100)),
+                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)80, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(150)),
+                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(150)),
+                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(650)),
+                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)80, Note.DefaultVelocity), TimeSpan.FromMilliseconds(850)),
+                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)80, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1450)),
+                });
         }
 
         #endregion

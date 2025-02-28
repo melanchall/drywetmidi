@@ -51,7 +51,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new NoteOffEvent { DeltaTime = 50 },
                     new NoteOnEvent { DeltaTime = 50 },
                     new NoteOffEvent { DeltaTime = 50 })),
-            actions: Array.Empty<PlaybackChangerBase>(),
+            actions: Array.Empty<PlaybackAction>(),
             expectedEvents: new (MidiEvent, object)[]
             {
                 (new NoteOnEvent(), 0),
@@ -72,7 +72,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 new TrackChunk(new TextEvent { DeltaTime = GetDeltaTime(TimeSpan.FromSeconds(1)) })),
             actions: new[]
             {
-                new PlaybackChangerBase(moveFromMs,
+                new PlaybackAction(moveFromMs,
                     p => p.MoveToTime((MetricTimeSpan)TimeSpan.FromMilliseconds(500))),
             },
             expectedEvents: new (MidiEvent, object)[]
@@ -88,7 +88,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 new TrackChunk(new ProgramChangeEvent { DeltaTime = GetDeltaTime(TimeSpan.FromSeconds(1)) })),
             actions: new[]
             {
-                new PlaybackChangerBase(500,
+                new PlaybackAction(500,
                     p => p.MoveToStart()),
             },
             expectedEvents: new (MidiEvent, object)[]
@@ -111,7 +111,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new TrackChunk(new TextEvent { DeltaTime = GetDeltaTime(TimeSpan.FromSeconds(1)) })),
                 actions: new[]
                 {
-                    new PlaybackChangerBase(100,
+                    new PlaybackAction(100,
                         p => p.MoveToTime((MetricTimeSpan)TimeSpan.FromMilliseconds(500))),
                 },
                 expectedEvents: new (MidiEvent, object)[]
@@ -152,7 +152,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                         })),
                 actions: new[]
                 {
-                    new PlaybackChangerBase(moveFrom,
+                    new PlaybackAction(moveFrom,
                         p => p.MoveToTime((MetricTimeSpan)moveTo)),
                 },
                 expectedEvents: new (MidiEvent, object)[]
@@ -190,7 +190,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                         })),
                 actions: new[]
                 {
-                    new PlaybackChangerBase(moveFrom,
+                    new PlaybackAction(moveFrom,
                         p => p.MoveToTime((MetricTimeSpan)moveTo)),
                 },
                 expectedEvents: new (MidiEvent, object)[]
@@ -230,7 +230,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                         })),
                 actions: new[]
                 {
-                    new PlaybackChangerBase(moveFrom,
+                    new PlaybackAction(moveFrom,
                         p => p.MoveToTime((MetricTimeSpan)moveTo)),
                 },
                 expectedEvents: new (MidiEvent, object)[]
@@ -267,7 +267,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                         })),
                 actions: new[]
                 {
-                    new PlaybackChangerBase(moveFrom,
+                    new PlaybackAction(moveFrom,
                         p => p.MoveToTime((MetricTimeSpan)moveTo)),
                 },
                 expectedEvents: new (MidiEvent, object)[]
@@ -304,7 +304,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                         })),
                 actions: new[]
                 {
-                    new PlaybackChangerBase(moveFrom,
+                    new PlaybackAction(moveFrom,
                         p => p.MoveToTime((MetricTimeSpan)moveTo)),
                 },
                 expectedEvents: new (MidiEvent, object)[]
@@ -337,11 +337,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new TrackChunk(
                         new TextEvent
                         {
-                            DeltaTime = GetDeltaTime(noteOffTime - controlChangeTime)
+                            DeltaTime = GetDeltaTime(noteOffTime)
                         })),
                 actions: new[]
                 {
-                    new PlaybackChangerBase(moveFrom,
+                    new PlaybackAction(moveFrom,
                         p => p.MoveToTime((MetricTimeSpan)moveTo)),
                 },
                 expectedEvents: new (MidiEvent, object)[]
@@ -378,7 +378,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                         })),
                 actions: new[]
                 {
-                    new PlaybackChangerBase(moveFrom,
+                    new PlaybackAction(moveFrom,
                         p => p.MoveToTime((MetricTimeSpan)moveTo)),
                 },
                 expectedEvents: new (MidiEvent, object)[]
@@ -410,7 +410,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                         })),
                 actions: new[]
                 {
-                    new PlaybackChangerBase(moveFrom,
+                    new PlaybackAction(moveFrom,
                         p => p.MoveToTime((MetricTimeSpan)moveTo)),
                 },
                 expectedEvents: new (MidiEvent, object)[]
@@ -438,7 +438,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                         })),
                 actions: new[]
                 {
-                    new PlaybackChangerBase(moveFrom,
+                    new PlaybackAction(moveFrom,
                         p => p.MoveToTime((MetricTimeSpan)moveTo)),
                 },
                 expectedEvents: new (MidiEvent, object)[]
@@ -468,7 +468,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                         })),
                 actions: new[]
                 {
-                    new PlaybackChangerBase(moveFrom,
+                    new PlaybackAction(moveFrom,
                         p => p.MoveToTime((MetricTimeSpan)moveTo)),
                 },
                 expectedEvents: new (MidiEvent, object)[]
@@ -499,7 +499,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                         })),
                 actions: new[]
                 {
-                    new PlaybackChangerBase(moveFrom,
+                    new PlaybackAction(moveFrom,
                         p => p.MoveToTime((MetricTimeSpan)moveTo)),
                 },
                 expectedEvents: new (MidiEvent, object)[]
@@ -536,7 +536,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                         })),
                 actions: new[]
                 {
-                    new PlaybackChangerBase(moveFrom,
+                    new PlaybackAction(moveFrom,
                         p => p.MoveToTime((MetricTimeSpan)moveTo)),
                 },
                 expectedEvents: new (MidiEvent, object)[]
@@ -572,7 +572,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                         })),
                 actions: new[]
                 {
-                    new PlaybackChangerBase(moveFrom,
+                    new PlaybackAction(moveFrom,
                         p => p.MoveToTime((MetricTimeSpan)moveTo)),
                 },
                 expectedEvents: new (MidiEvent, object)[]
@@ -604,11 +604,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new TrackChunk(
                         new TextEvent
                         {
-                            DeltaTime = GetDeltaTime(noteOffTime - pitchBendTime)
+                            DeltaTime = GetDeltaTime(noteOffTime)
                         })),
                 actions: new[]
                 {
-                    new PlaybackChangerBase(moveFrom,
+                    new PlaybackAction(moveFrom,
                         p => p.MoveToTime((MetricTimeSpan)moveTo)),
                 },
                 expectedEvents: new (MidiEvent, object)[]
@@ -644,7 +644,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                         })),
                 actions: new[]
                 {
-                    new PlaybackChangerBase(moveFrom,
+                    new PlaybackAction(moveFrom,
                         p => p.MoveToTime((MetricTimeSpan)moveTo)),
                 },
                 expectedEvents: new (MidiEvent, object)[]
@@ -676,7 +676,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                         })),
                 actions: new[]
                 {
-                    new PlaybackChangerBase(moveFrom,
+                    new PlaybackAction(moveFrom,
                         p => p.MoveToTime((MetricTimeSpan)moveTo)),
                 },
                 expectedEvents: new (MidiEvent, object)[]
@@ -704,7 +704,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                         })),
                 actions: new[]
                 {
-                    new PlaybackChangerBase(moveFrom,
+                    new PlaybackAction(moveFrom,
                         p => p.MoveToTime((MetricTimeSpan)moveTo)),
                 },
                 expectedEvents: new (MidiEvent, object)[]
@@ -734,7 +734,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                         })),
                 actions: new[]
                 {
-                    new PlaybackChangerBase(moveFrom,
+                    new PlaybackAction(moveFrom,
                         p => p.MoveToTime((MetricTimeSpan)moveTo)),
                 },
                 expectedEvents: new (MidiEvent, object)[]
@@ -765,7 +765,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                         })),
                 actions: new[]
                 {
-                    new PlaybackChangerBase(moveFrom,
+                    new PlaybackAction(moveFrom,
                         p => p.MoveToTime((MetricTimeSpan)moveTo)),
                 },
                 expectedEvents: new (MidiEvent, object)[]
@@ -802,7 +802,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                         })),
                 actions: new[]
                 {
-                    new PlaybackChangerBase(moveFrom,
+                    new PlaybackAction(moveFrom,
                         p => p.MoveToTime((MetricTimeSpan)moveTo)),
                 },
                 expectedEvents: new (MidiEvent, object)[]
@@ -838,7 +838,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                         })),
                 actions: new[]
                 {
-                    new PlaybackChangerBase(moveFrom,
+                    new PlaybackAction(moveFrom,
                         p => p.MoveToTime((MetricTimeSpan)moveTo)),
                 },
                 expectedEvents: new (MidiEvent, object)[]
@@ -870,11 +870,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new TrackChunk(
                         new TextEvent
                         {
-                            DeltaTime = GetDeltaTime(noteOffTime - programChangeTime)
+                            DeltaTime = GetDeltaTime(noteOffTime)
                         })),
                 actions: new[]
                 {
-                    new PlaybackChangerBase(moveFrom,
+                    new PlaybackAction(moveFrom,
                         p => p.MoveToTime((MetricTimeSpan)moveTo)),
                 },
                 expectedEvents: new (MidiEvent, object)[]
@@ -910,7 +910,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                         })),
                 actions: new[]
                 {
-                    new PlaybackChangerBase(moveFrom,
+                    new PlaybackAction(moveFrom,
                         p => p.MoveToTime((MetricTimeSpan)moveTo)),
                 },
                 expectedEvents: new (MidiEvent, object)[]
@@ -949,7 +949,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                         })),
                 actions: new[]
                 {
-                    new PlaybackChangerBase(moveFrom,
+                    new PlaybackAction(moveFrom,
                         p => p.MoveToTime((MetricTimeSpan)moveTo)),
                 },
                 expectedEvents: new (MidiEvent, object)[]
@@ -992,7 +992,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                         })),
                 actions: new[]
                 {
-                    new PlaybackChangerBase(moveFrom,
+                    new PlaybackAction(moveFrom,
                         p => p.MoveToTime((MetricTimeSpan)moveTo)),
                 },
                 expectedEvents: new (MidiEvent, object)[]
@@ -1038,7 +1038,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                         })),
                 actions: new[]
                 {
-                    new PlaybackChangerBase(moveFrom,
+                    new PlaybackAction(moveFrom,
                         p => p.MoveToTime((MetricTimeSpan)moveTo)),
                 },
                 expectedEvents: new (MidiEvent, object)[]
@@ -1077,7 +1077,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                         })),
                 actions: new[]
                 {
-                    new PlaybackChangerBase(moveFrom,
+                    new PlaybackAction(moveFrom,
                         p => p.MoveToTime((MetricTimeSpan)moveTo)),
                 },
                 expectedEvents: new (MidiEvent, object)[]
@@ -1117,7 +1117,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                         })),
                 actions: new[]
                 {
-                    new PlaybackChangerBase(moveFrom,
+                    new PlaybackAction(moveFrom,
                         p => p.MoveToTime((MetricTimeSpan)moveTo)),
                 },
                 expectedEvents: new (MidiEvent, object)[]
@@ -1155,7 +1155,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                         })),
                 actions: new[]
                 {
-                    new PlaybackChangerBase(moveFrom,
+                    new PlaybackAction(moveFrom,
                         p => p.MoveToTime((MetricTimeSpan)moveTo)),
                 },
                 expectedEvents: new (MidiEvent, object)[]
@@ -1207,7 +1207,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                         })),
                 actions: new[]
                 {
-                    new PlaybackChangerBase(moveFrom,
+                    new PlaybackAction(moveFrom,
                         p => p.MoveToTime((MetricTimeSpan)moveTo)),
                 },
                 expectedEvents: new (MidiEvent, object)[]
@@ -1261,7 +1261,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                         })),
                 actions: new[]
                 {
-                    new PlaybackChangerBase(moveFrom,
+                    new PlaybackAction(moveFrom,
                         p => p.MoveToTime((MetricTimeSpan)moveTo)),
                 },
                 expectedEvents: new (MidiEvent, object)[]
@@ -1302,9 +1302,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                         })),
                 actions: new[]
                 {
-                    new PlaybackChangerBase(stopAfter,
+                    new PlaybackAction(stopAfter,
                         p => p.Stop()),
-                    new PlaybackChangerBase(stopPeriod,
+                    new PlaybackAction(stopPeriod,
                         p => p.Start()),
                 },
                 expectedEvents: new (MidiEvent, object)[]
@@ -1345,9 +1345,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                         })),
                 actions: new[]
                 {
-                    new PlaybackChangerBase(stopAfter,
+                    new PlaybackAction(stopAfter,
                         p => p.Stop()),
-                    new PlaybackChangerBase(stopPeriod,
+                    new PlaybackAction(stopPeriod,
                         p => p.Start()),
                 },
                 expectedEvents: new (MidiEvent, object)[]
@@ -1385,7 +1385,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                         })),
                 actions: new[]
                 {
-                    new PlaybackChangerBase(TimeSpan.FromMilliseconds(500),
+                    new PlaybackAction(TimeSpan.FromMilliseconds(500),
                         p => p.NoteCallback = (d, rt, rl, t) => NotePlaybackData.SkipNote),
                 },
                 expectedEvents: new (MidiEvent, object)[0],
@@ -1419,7 +1419,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                         })),
                 actions: new[]
                 {
-                    new PlaybackChangerBase(TimeSpan.FromMilliseconds(500),
+                    new PlaybackAction(TimeSpan.FromMilliseconds(500),
                         p => p.NoteCallback = (d, rt, rl, t) => d),
                 },
                 expectedEvents: new (MidiEvent, object)[]
@@ -1457,7 +1457,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                         })),
                 actions: new[]
                 {
-                    new PlaybackChangerBase(TimeSpan.FromMilliseconds(500),
+                    new PlaybackAction(TimeSpan.FromMilliseconds(500),
                         p => p.NoteCallback = (d, rt, rl, t) => null),
                 },
                 expectedEvents: new (MidiEvent, object)[]
@@ -1495,7 +1495,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                         })),
                 actions: new[]
                 {
-                    new PlaybackChangerBase(TimeSpan.FromMilliseconds(500),
+                    new PlaybackAction(TimeSpan.FromMilliseconds(500),
                         p => p.NoteCallback = NoteCallback),
                 },
                 expectedEvents: new (MidiEvent, object)[]
@@ -1533,9 +1533,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                         })),
                 actions: new[]
                 {
-                    new PlaybackChangerBase(stopAfter,
+                    new PlaybackAction(stopAfter,
                         p => p.Stop()),
-                    new PlaybackChangerBase(stopPeriod,
+                    new PlaybackAction(stopPeriod,
                         p => p.Start()),
                 },
                 expectedEvents: new (MidiEvent, object)[]
@@ -1580,27 +1580,27 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                         })),
                 actions: new[]
                 {
-                    new PlaybackChangerBase(stopAfter,
+                    new PlaybackAction(stopAfter,
                         p =>
                         {
                             p.Stop();
                             p.MoveToStart();
                         }),
-                    new PlaybackChangerBase(stopPeriod,
+                    new PlaybackAction(stopPeriod,
                         p =>
                         {
                             p.Start();
                             CheckCurrentTime(p, TimeSpan.Zero, "stopped");
                         }),
-                    new PlaybackChangerBase(firstAfterResumeDelay,
+                    new PlaybackAction(firstAfterResumeDelay,
                         p => CheckCurrentTime(p, firstAfterResumeDelay, "resumed")),
-                    new PlaybackChangerBase(secondAfterResumeDelay,
+                    new PlaybackAction(secondAfterResumeDelay,
                         p =>
                         {
                             p.MoveToStart();
                             CheckCurrentTime(p, TimeSpan.Zero, "resumed");
                         }),
-                    new PlaybackChangerBase(thirdAfterResumeDelay,
+                    new PlaybackAction(thirdAfterResumeDelay,
                         p => CheckCurrentTime(p, thirdAfterResumeDelay, "resumed")),
                 },
                 expectedEvents: new (MidiEvent, object)[]
@@ -1649,27 +1649,27 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                         })),
                 actions: new[]
                 {
-                    new PlaybackChangerBase(stopAfter,
+                    new PlaybackAction(stopAfter,
                         p =>
                         {
                             p.Stop();
                             p.MoveForward((MetricTimeSpan)stepAfterStop);
                         }),
-                    new PlaybackChangerBase(stopPeriod,
+                    new PlaybackAction(stopPeriod,
                         p =>
                         {
                             p.Start();
                             CheckCurrentTime(p, stopAfter + stepAfterStop, "stopped");
                         }),
-                    new PlaybackChangerBase(firstAfterResumeDelay,
+                    new PlaybackAction(firstAfterResumeDelay,
                         p => CheckCurrentTime(p, stopAfter + firstAfterResumeDelay + stepAfterStop, "resumed")),
-                    new PlaybackChangerBase(secondAfterResumeDelay,
+                    new PlaybackAction(secondAfterResumeDelay,
                         p =>
                         {
                             p.MoveForward((MetricTimeSpan)stepAfterResumed);
                             CheckCurrentTime(p, stopAfter + firstAfterResumeDelay + secondAfterResumeDelay + stepAfterStop + stepAfterResumed, "resumed");
                         }),
-                    new PlaybackChangerBase(thirdAfterResumeDelay,
+                    new PlaybackAction(thirdAfterResumeDelay,
                         p => CheckCurrentTime(p, stopAfter + firstAfterResumeDelay + secondAfterResumeDelay + thirdAfterResumeDelay + stepAfterStop + stepAfterResumed, "resumed")),
                 },
                 expectedEvents: new (MidiEvent, object)[]
@@ -1704,13 +1704,13 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                         })),
                 actions: new[]
                 {
-                    new PlaybackChangerBase(stopAfter,
+                    new PlaybackAction(stopAfter,
                         p =>
                         {
                             p.Stop();
                             p.MoveForward((MetricTimeSpan)stepAfterStop);
                         }),
-                    new PlaybackChangerBase(stopPeriod,
+                    new PlaybackAction(stopPeriod,
                         p =>
                         {
                             p.Start();
@@ -1725,8 +1725,62 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 setupPlayback: playback =>
                 {
                     playback.TrackNotes = false;
-                    playback.InterruptNotesOnStop = false;
                     playback.NoteCallback = NoteCallback;
+                });
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
+        public void CheckPlaybackMetadata_NoteCallback_MoveForward_BeyondPlaybackEnd()
+        {
+            var stopAfter = TimeSpan.FromMilliseconds(200);
+            var stopPeriod = TimeSpan.FromMilliseconds(200);
+
+            var stepAfterStop = TimeSpan.FromMilliseconds(300);
+
+            CheckPlaybackMetadata(
+                midiFile: new MidiFile(
+                    new TrackChunk(
+                        new NoteOnEvent()),
+                    new TrackChunk(
+                        new NoteOffEvent()
+                        {
+                            DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)TimeSpan.FromMilliseconds(400), TempoMap)
+                        }),
+                    new TrackChunk(
+                        new NoteOnEvent()
+                        {
+                            DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)TimeSpan.FromMilliseconds(600), TempoMap)
+                        },
+                        new NoteOffEvent()
+                        {
+                            DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)TimeSpan.FromMilliseconds(700), TempoMap)
+                        })),
+                actions: new[]
+                {
+                    new PlaybackAction(stopAfter,
+                        p =>
+                        {
+                            p.Stop();
+                            p.MoveForward((MetricTimeSpan)stepAfterStop);
+                        }),
+                    new PlaybackAction(stopPeriod,
+                        p =>
+                        {
+                            p.Start();
+                            CheckCurrentTime(p, TimeSpan.FromMilliseconds(450), "stopped");
+                        }),
+                },
+                expectedEvents: new (MidiEvent, object)[]
+                {
+                    (new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), 0),
+                    (new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), 1),
+                },
+                setupPlayback: playback =>
+                {
+                    playback.TrackNotes = false;
+                    playback.NoteCallback = NoteCallback;
+                    playback.PlaybackEnd = new MetricTimeSpan(0, 0, 0, 450);
                 });
         }
 
@@ -1757,31 +1811,31 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                         })),
                 actions: new[]
                 {
-                    new PlaybackChangerBase(stopAfter,
+                    new PlaybackAction(stopAfter,
                         p =>
                         {
                             p.Stop();
                             p.MoveBack((MetricTimeSpan)stepAfterStop);
                         }),
-                    new PlaybackChangerBase(stopPeriod,
+                    new PlaybackAction(stopPeriod,
                         p =>
                         {
                             p.Start();
                             CheckCurrentTime(p, stopAfter - stepAfterStop, "stopped");
                         }),
-                    new PlaybackChangerBase(firstAfterResumeDelay,
+                    new PlaybackAction(firstAfterResumeDelay,
                         p =>
                         {
                             Assert.IsTrue(p.IsRunning, "Playback is not running after resumed.");
                             CheckCurrentTime(p, stopAfter + firstAfterResumeDelay - stepAfterStop, "resumed on first span");
                         }),
-                    new PlaybackChangerBase(secondAfterResumeDelay,
+                    new PlaybackAction(secondAfterResumeDelay,
                         p =>
                         {
                             p.MoveBack((MetricTimeSpan)stepAfterResumed);
                             CheckCurrentTime(p, stopAfter + firstAfterResumeDelay + secondAfterResumeDelay - stepAfterStop - stepAfterResumed, "resumed on second span");
                         }),
-                    new PlaybackChangerBase(thirdAfterResumeDelay,
+                    new PlaybackAction(thirdAfterResumeDelay,
                         p => CheckCurrentTime(p, stopAfter + firstAfterResumeDelay + secondAfterResumeDelay + thirdAfterResumeDelay - stepAfterStop - stepAfterResumed, "resumed on third span")),
                 },
                 expectedEvents: new (MidiEvent, object)[]
@@ -1800,17 +1854,17 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         public void CheckPlaybackMetadata_NoteCallback_MoveBack_BeyondZero()
         {
-            var stopAfter = TimeSpan.FromSeconds(3);
-            var stopPeriod = TimeSpan.FromSeconds(2);
+            var stopAfter = TimeSpan.FromMilliseconds(500);
+            var stopPeriod = TimeSpan.FromMilliseconds(600);
 
-            var stepAfterStop = TimeSpan.FromSeconds(5);
+            var stepAfterStop = TimeSpan.FromMilliseconds(2000);
             var stepAfterResumed = TimeSpan.FromMilliseconds(500);
 
-            var lastEventTime = TimeSpan.FromSeconds(5);
+            var lastEventTime = TimeSpan.FromSeconds(2);
 
-            var firstAfterResumeDelay = TimeSpan.FromMilliseconds(500);
-            var secondAfterResumeDelay = TimeSpan.FromSeconds(1);
-            var thirdAfterResumeDelay = TimeSpan.FromMilliseconds(500);
+            var firstAfterResumeDelay = TimeSpan.FromMilliseconds(200);
+            var secondAfterResumeDelay = TimeSpan.FromMilliseconds(400);
+            var thirdAfterResumeDelay = TimeSpan.FromMilliseconds(300);
 
             CheckPlaybackMetadata(
                 midiFile: new MidiFile(
@@ -1823,27 +1877,27 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                         })),
                 actions: new[]
                 {
-                    new PlaybackChangerBase(stopAfter,
+                    new PlaybackAction(stopAfter,
                         p =>
                         {
                             p.Stop();
                             p.MoveBack((MetricTimeSpan)stepAfterStop);
                         }),
-                    new PlaybackChangerBase(stopPeriod,
+                    new PlaybackAction(stopPeriod,
                         p =>
                         {
                             p.Start();
                             CheckCurrentTime(p, TimeSpan.Zero, "stopped");
                         }),
-                    new PlaybackChangerBase(firstAfterResumeDelay,
+                    new PlaybackAction(firstAfterResumeDelay,
                         p => CheckCurrentTime(p, firstAfterResumeDelay, "resumed")),
-                    new PlaybackChangerBase(secondAfterResumeDelay,
+                    new PlaybackAction(secondAfterResumeDelay,
                         p =>
                         {
                             p.MoveBack((MetricTimeSpan)stepAfterResumed);
                             CheckCurrentTime(p, firstAfterResumeDelay + secondAfterResumeDelay - stepAfterResumed, "resumed");
                         }),
-                    new PlaybackChangerBase(thirdAfterResumeDelay,
+                    new PlaybackAction(thirdAfterResumeDelay,
                         p => CheckCurrentTime(p, firstAfterResumeDelay + secondAfterResumeDelay + thirdAfterResumeDelay - stepAfterResumed, "resumed")),
                 },
                 expectedEvents: new (MidiEvent, object)[]
@@ -1862,10 +1916,65 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
         [Retry(RetriesNumber)]
         [Test]
+        public void CheckPlaybackMetadata_NoteCallback_MoveBack_BeyondPlaybackStart()
+        {
+            CheckPlaybackMetadata(
+                midiFile: new MidiFile(
+                    new TrackChunk(
+                        new NoteOnEvent()),
+                    new TrackChunk(
+                        new NoteOffEvent()
+                        {
+                            DeltaTime = GetDeltaTime(TimeSpan.FromMilliseconds(200))
+                        }),
+                    new TrackChunk(
+                        new NoteOnEvent()
+                        {
+                            DeltaTime = GetDeltaTime(TimeSpan.FromMilliseconds(400))
+                        },
+                        new NoteOffEvent()
+                        {
+                            DeltaTime = GetDeltaTime(TimeSpan.FromMilliseconds(200))
+                        })),
+                actions: new PlaybackAction[]
+                {
+                    new PlaybackAction(200, p =>
+                    {
+                        CheckCurrentTime(p, TimeSpan.FromMilliseconds(500), "A");
+                        p.MoveBack(new MetricTimeSpan(0, 0, 0, 400));
+                        CheckCurrentTime(p, TimeSpan.FromMilliseconds(300), "B");
+                    }),
+                },
+                expectedEvents: new (MidiEvent, object)[]
+                {
+                    (new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), 2),
+                    (new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), 2),
+                    (new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), 2),
+                },
+                setupPlayback: playback =>
+                {
+                    playback.InterruptNotesOnStop = false;
+                    playback.TrackNotes = false;
+                    playback.NoteCallback = NoteCallback;
+                    playback.PlaybackStart = new MetricTimeSpan(0, 0, 0, 300);
+                });
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
         public void CheckPlaybackMetadata_NoteCallback_MoveToTime()
         {
-            var stopAfter = TimeSpan.FromSeconds(4);
-            var stopPeriod = TimeSpan.FromSeconds(2);
+            var lastEventTime = TimeSpan.FromMilliseconds(2000);
+
+            var stopAfter = TimeSpan.FromMilliseconds(800);
+            var stopPeriod = TimeSpan.FromMilliseconds(400);
+
+            var moveTime1 = TimeSpan.FromMilliseconds(200);
+            var moveTime2 = TimeSpan.FromMilliseconds(1600);
+
+            var firstAfterResumeDelay = TimeSpan.FromMilliseconds(200);
+            var secondAfterResumeDelay = TimeSpan.FromMilliseconds(400);
+            var thirdAfterResumeDelay = TimeSpan.FromMilliseconds(200);
 
             CheckPlaybackMetadata(
                 midiFile: new MidiFile(
@@ -1874,32 +1983,32 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new TrackChunk(
                         new NoteOffEvent()
                         {
-                            DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)TimeSpan.FromSeconds(10), TempoMap)
+                            DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)lastEventTime, TempoMap)
                         })),
                 actions: new[]
                 {
-                    new PlaybackChangerBase(stopAfter,
+                    new PlaybackAction(stopAfter, p =>
+                    {
+                        p.Stop();
+                        p.MoveToTime((MetricTimeSpan)moveTime1);
+                        CheckCurrentTime(p, moveTime1, "first move");
+                    }),
+                    new PlaybackAction(stopPeriod, p =>
+                    {
+                        p.Start();
+                        CheckCurrentTime(p, moveTime1, "stopped");
+                    }),
+                    new PlaybackAction(firstAfterResumeDelay,
+                        p => CheckCurrentTime(p, moveTime1 + firstAfterResumeDelay, "resumed")),
+                    new PlaybackAction(secondAfterResumeDelay,
                         p =>
                         {
-                            p.Stop();
-                            p.MoveToTime(new MetricTimeSpan(0, 0, 1));
+                            CheckCurrentTime(p, moveTime1 + firstAfterResumeDelay + secondAfterResumeDelay, "resumed");
+                            p.MoveToTime((MetricTimeSpan)moveTime2);
+                            CheckCurrentTime(p, moveTime2, "resumed");
                         }),
-                    new PlaybackChangerBase(stopPeriod,
-                        p =>
-                        {
-                            p.Start();
-                            CheckCurrentTime(p, TimeSpan.FromSeconds(1), "stopped");
-                        }),
-                    new PlaybackChangerBase(TimeSpan.FromSeconds(1),
-                        p => CheckCurrentTime(p, TimeSpan.FromSeconds(2), "resumed")),
-                    new PlaybackChangerBase(TimeSpan.FromSeconds(2),
-                        p =>
-                        {
-                            p.MoveToTime(new MetricTimeSpan(0, 0, 8));
-                            CheckCurrentTime(p, TimeSpan.FromSeconds(8), "resumed");
-                        }),
-                    new PlaybackChangerBase(TimeSpan.FromSeconds(1),
-                        p => CheckCurrentTime(p, TimeSpan.FromSeconds(9), "resumed")),
+                    new PlaybackAction(thirdAfterResumeDelay,
+                        p => CheckCurrentTime(p, moveTime2 + thirdAfterResumeDelay, "resumed"))
                 },
                 expectedEvents: new (MidiEvent, object)[]
                 {
@@ -1931,13 +2040,13 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                         })),
                 actions: new[]
                 {
-                    new PlaybackChangerBase(stopAfter,
+                    new PlaybackAction(stopAfter,
                         p =>
                         {
                             p.Stop();
                             p.MoveToTime(new MetricTimeSpan(0, 0, 10));
                         }),
-                    new PlaybackChangerBase(stopPeriod,
+                    new PlaybackAction(stopPeriod,
                         p =>
                         {
                             p.Start();
@@ -1952,8 +2061,60 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 setupPlayback: playback =>
                 {
                     playback.TrackNotes = false;
-                    playback.InterruptNotesOnStop = false;
                     playback.NoteCallback = NoteCallback;
+                });
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
+        public void CheckPlaybackMetadata_NoteCallback_MoveToTime_BeyondPlaybackEnd()
+        {
+            var stopAfter = TimeSpan.FromMilliseconds(200);
+            var stopPeriod = TimeSpan.FromMilliseconds(200);
+
+            CheckPlaybackMetadata(
+                midiFile: new MidiFile(
+                    new TrackChunk(
+                        new NoteOnEvent()),
+                    new TrackChunk(
+                        new NoteOffEvent()
+                        {
+                            DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)TimeSpan.FromMilliseconds(400), TempoMap)
+                        }),
+                    new TrackChunk(
+                        new NoteOnEvent()
+                        {
+                            DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)TimeSpan.FromMilliseconds(600), TempoMap)
+                        },
+                        new NoteOffEvent()
+                        {
+                            DeltaTime = TimeConverter.ConvertFrom((MetricTimeSpan)TimeSpan.FromMilliseconds(700), TempoMap)
+                        })),
+                actions: new[]
+                {
+                    new PlaybackAction(stopAfter,
+                        p =>
+                        {
+                            p.Stop();
+                            p.MoveToTime(new MetricTimeSpan(0, 0, 0, 500));
+                        }),
+                    new PlaybackAction(stopPeriod,
+                        p =>
+                        {
+                            p.Start();
+                            CheckCurrentTime(p, TimeSpan.FromMilliseconds(450), "stopped");
+                        }),
+                },
+                expectedEvents: new (MidiEvent, object)[]
+                {
+                    (new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), 0),
+                    (new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), 1),
+                },
+                setupPlayback: playback =>
+                {
+                    playback.TrackNotes = false;
+                    playback.NoteCallback = NoteCallback;
+                    playback.PlaybackEnd = new MetricTimeSpan(0, 0, 0, 450);
                 });
         }
 
@@ -1993,7 +2154,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
         private void CheckPlaybackMetadata(
             MidiFile midiFile,
-            PlaybackChangerBase[] actions,
+            PlaybackAction[] actions,
             (MidiEvent, object)[] expectedEvents,
             Action<Playback> setupPlayback = null,
             Action<Playback> afterStart = null)
@@ -2004,7 +2165,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
             var actualEvents = new List<(MidiEvent, object)>();
 
-            using (var playback = new Playback(timedEvents, TempoMap, new EmptyOutputDevice()))
+            using (var playback = new Playback(timedEvents, TempoMap, new OutputDeviceMock()))
             {
                 setupPlayback?.Invoke(playback);
 

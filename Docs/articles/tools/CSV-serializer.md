@@ -53,6 +53,8 @@ ChunkIndex,ChunkId,ObjectIndex,ObjectName,ObjectData
 
 Here we have a single note _E7_ (the object #0) and a chord (the object #1) with two notes: _D3_ and _E2_.
 
+Note that when you're deserializing a MIDI file, you can put any number to `ObjectIndex`. This property is irrelevant for MIDI file deserialization, but required to correctly deserialize objects ([DeserializeObjectsFromCsv](xref:Melanchall.DryWetMidi.Tools.CsvSerializer.DeserializeObjectsFromCsv*)). The property exists to have single CSV schema for both file and objects deserialization.
+
 If `ObjectName` is `"Header"` then `ObjectData` will contain a single number – [time division](xref:Melanchall.DryWetMidi.Core.TimeDivision).
 
 If `ObjectName` is `"Note"` then `ObjectData` will be in the following format:
@@ -115,3 +117,20 @@ where **Modifiers** are:
 
 * **BytesArray** – `Data` property is serialized as `"B1 B2 B3 ..."` with format of bytes depending on the [BytesArrayFormat](xref:Melanchall.DryWetMidi.Tools.CsvSerializationSettings.BytesArrayFormat) property of the [CsvSerializationSettings](xref:Melanchall.DryWetMidi.Tools.CsvSerializationSettings);
 * **Note** – `Note` property is serialized as either the note number or letter (_C4_, for example) depending on the [NoteFormat](xref:Melanchall.DryWetMidi.Tools.CsvSerializationSettings.NoteFormat) property of the [CsvSerializationSettings](xref:Melanchall.DryWetMidi.Tools.CsvSerializationSettings).
+
+Note that if you deserialize a MIDI file from CSV, you don't need to manually sort records by time in text representation before deserialization. DryWetMIDI will do it for you. So, for example, these lines
+
+```text
+0,"MThd",0,"Header",96
+1,"MTrk",0,"NoteOff",6/4,4,100,0
+1,"MTrk",1,"Text",1/4,"A"
+1,"MTrk",2,"NoteOn",3/4,4,100,127
+1,"MTrk",3,"Text",2/4,"B"
+```
+
+will be correctly deserialized to the file with single track chunk containing following events:
+
+1. _Text_ event with text of _A_ at time of `1/4`.
+2. _Text_ event with text of _B_ at time of `2/4`.
+3. _Note On_ event with note number `100` and velocity `127` at time of `3/4`.
+4. _Note Off_ event with note number `100` and velocity `0` at time of `6/4`.

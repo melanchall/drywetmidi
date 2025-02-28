@@ -9,6 +9,8 @@ using System.Collections.Generic;
 using System;
 using System.Linq;
 
+using Random = Melanchall.DryWetMidi.Common.Random;
+
 namespace Melanchall.DryWetMidi.Tests.Composing
 {
     [TestFixture]
@@ -134,31 +136,30 @@ namespace Melanchall.DryWetMidi.Tests.Composing
             {
                 PatternAction patternAction = null;
 
-                // TODO: randomize values
                 if (type == typeof(AddChordAction))
-                    patternAction = new AddChordAction(new ChordDescriptor(Enumerable.Empty<DryWetMidi.MusicTheory.Note>(), SevenBitNumber.MinValue, MusicalTimeSpan.Eighth));
+                    patternAction = new AddChordAction(new ChordDescriptor(GetRandomNotesCollection(), GetRandomSevenBitNumber(), GetRandomMusicalTimeSpan()));
                 else if (type == typeof(AddNoteAction))
-                    patternAction = new AddNoteAction(new NoteDescriptor(Notes.A1, SevenBitNumber.MinValue, MusicalTimeSpan.Eighth));
+                    patternAction = new AddNoteAction(new NoteDescriptor(GetRandomNote(), GetRandomSevenBitNumber(), GetRandomMusicalTimeSpan()));
                 else if (type == typeof(AddPatternAction))
                     patternAction = new AddPatternAction(new PatternBuilder().Build());
                 else if (type == typeof(AddTextEventAction<>))
-                    patternAction = new AddTextEventAction<TextEvent>(string.Empty);
+                    patternAction = new AddTextEventAction<TextEvent>(GetRandomString());
                 else if (type == typeof(AddControlChangeEventAction))
-                    patternAction = new AddControlChangeEventAction((SevenBitNumber)70, (SevenBitNumber)30);
+                    patternAction = new AddControlChangeEventAction(GetRandomSevenBitNumber(), GetRandomSevenBitNumber());
                 else if (type == typeof(AddPitchBendEventAction))
-                    patternAction = new AddPitchBendEventAction(600);
+                    patternAction = new AddPitchBendEventAction((ushort)Random.Instance.Next(ushort.MaxValue + 1));
                 else if (type == typeof(MoveToAnchorAction))
-                    patternAction = new MoveToAnchorAction(AnchorPosition.First);
+                    patternAction = new MoveToAnchorAction(GetRandomEnumValue<AnchorPosition>());
                 else if (type == typeof(SetGeneralMidi2ProgramAction))
-                    patternAction = new SetGeneralMidi2ProgramAction(GeneralMidi2Program.AcousticBassStringSlap);
+                    patternAction = new SetGeneralMidi2ProgramAction(GetRandomEnumValue<GeneralMidi2Program>());
                 else if (type == typeof(SetGeneralMidiProgramAction))
-                    patternAction = new SetGeneralMidiProgramAction(GeneralMidiProgram.AcousticBass);
+                    patternAction = new SetGeneralMidiProgramAction(GetRandomEnumValue<GeneralMidiProgram>());
                 else if (type == typeof(SetProgramNumberAction))
-                    patternAction = new SetProgramNumberAction(SevenBitNumber.MinValue);
+                    patternAction = new SetProgramNumberAction(GetRandomSevenBitNumber());
                 else if (type == typeof(StepBackAction))
-                    patternAction = new StepBackAction(MusicalTimeSpan.Quarter);
+                    patternAction = new StepBackAction(GetRandomMusicalTimeSpan());
                 else if (type == typeof(StepForwardAction))
-                    patternAction = new StepForwardAction(MusicalTimeSpan.Quarter);
+                    patternAction = new StepForwardAction(GetRandomMusicalTimeSpan());
                 else
                     patternAction = (PatternAction)Activator.CreateInstance(type);
 
@@ -182,6 +183,29 @@ namespace Melanchall.DryWetMidi.Tests.Composing
                 .Where(t => !t.IsAbstract && t.IsSubclassOf(patternActionType))
                 .ToList();
         }
+
+        private static TValue GetRandomEnumValue<TValue>()
+        {
+            var values = Enum.GetValues(typeof(TValue)).OfType<TValue>().ToArray();
+            return values[Random.Instance.Next(values.Length)];
+        }
+
+        private static SevenBitNumber GetRandomSevenBitNumber() =>
+            (SevenBitNumber)Random.Instance.Next(SevenBitNumber.MaxValue + 1);
+
+        private static DryWetMidi.MusicTheory.Note GetRandomNote() =>
+            DryWetMidi.MusicTheory.Note.Get(GetRandomSevenBitNumber());
+
+        private static IEnumerable<DryWetMidi.MusicTheory.Note> GetRandomNotesCollection() =>
+            Enumerable
+                .Range(0, Random.Instance.Next(11))
+                .Select(i => GetRandomNote());
+
+        private static MusicalTimeSpan GetRandomMusicalTimeSpan() =>
+            new MusicalTimeSpan(1, (long)Math.Pow(2, Random.Instance.Next(6)));
+
+        private static string GetRandomString() =>
+            new string(Enumerable.Range(0, Random.Instance.Next(11)).Select(_ => (char)Random.Instance.Next(32, 127)).ToArray());
 
         #endregion
     }

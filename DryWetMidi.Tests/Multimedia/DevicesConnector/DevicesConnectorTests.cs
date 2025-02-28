@@ -107,7 +107,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 .OrderByDescending(f => f.GetDuration<MetricTimeSpan>())
                 .Take(filesToTestCount)
                 .ToArray();
-            Debug.Assert(filesToTest.Length == filesToTestCount, "Not enough files for test.");
+            Assert.AreEqual(filesToTestCount, filesToTest.Length, "Not enough files for test.");
 
             for (var i = 0; i < filesToTest.Length; i++)
             {

@@ -78,7 +78,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             }
 
             CollectionAssert.IsNotEmpty(playbackContext.ReceivedEvents, "No events received.");
-            CompareReceivedEvents(playbackContext.ReceivedEvents, expectedReceivedEvents);
+            CheckReceivedEvents(playbackContext.ReceivedEvents, expectedReceivedEvents);
         }
 
         #endregion

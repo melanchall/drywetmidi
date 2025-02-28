@@ -24,7 +24,6 @@ namespace Melanchall.DryWetMidi.Interaction
 
         #region Fields
 
-        // TODO: RBT? No, times can be changed, so it's better to use List
         private readonly List<ITimedObject> _objects = new List<ITimedObject>();
 
         private bool _batchOperationInProgress = false;
@@ -129,7 +128,6 @@ namespace Melanchall.DryWetMidi.Interaction
             return Remove((IEnumerable<ITimedObject>)objects);
         }
 
-        // TODO: test
         public void Clear()
         {
             var removedObjects = _objects.ToList();

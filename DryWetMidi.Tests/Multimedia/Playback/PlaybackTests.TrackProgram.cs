@@ -30,7 +30,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 actions: new[]
                 {
-                    new PlaybackChangerBase(moveFromMs, p => p.MoveToTime((MetricTimeSpan)moveTo)),
+                    new PlaybackAction(moveFromMs, p => p.MoveToTime((MetricTimeSpan)moveTo)),
                 },
                 expectedReceivedEvents: new[]
                 {
@@ -58,7 +58,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 actions: new[]
                 {
-                    new PlaybackChangerBase(moveFrom, p => p.MoveToTime((MetricTimeSpan)moveTo)),
+                    new PlaybackAction(moveFrom, p => p.MoveToTime((MetricTimeSpan)moveTo)),
                 },
                 expectedReceivedEvents: new[]
                 {
@@ -87,7 +87,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 actions: new[]
                 {
-                    new PlaybackChangerBase(moveFrom, p => p.MoveToTime((MetricTimeSpan)moveTo)),
+                    new PlaybackAction(moveFrom, p => p.MoveToTime((MetricTimeSpan)moveTo)),
                 },
                 expectedReceivedEvents: new[]
                 {
@@ -119,7 +119,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 actions: new[]
                 {
-                    new PlaybackChangerBase(moveFrom, p => p.MoveToTime((MetricTimeSpan)moveTo)),
+                    new PlaybackAction(moveFrom, p => p.MoveToTime((MetricTimeSpan)moveTo)),
                 },
                 expectedReceivedEvents: new[]
                 {
@@ -150,7 +150,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 actions: new[]
                 {
-                    new PlaybackChangerBase(moveFrom, p => p.MoveToTime((MetricTimeSpan)moveTo)),
+                    new PlaybackAction(moveFrom, p => p.MoveToTime((MetricTimeSpan)moveTo)),
                 },
                 expectedReceivedEvents: new[]
                 {
@@ -181,7 +181,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 actions: new[]
                 {
-                    new PlaybackChangerBase(moveFrom, p => p.MoveToTime((MetricTimeSpan)moveTo)),
+                    new PlaybackAction(moveFrom, p => p.MoveToTime((MetricTimeSpan)moveTo)),
                 },
                 expectedReceivedEvents: new[]
                 {
@@ -212,7 +212,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 actions: new[]
                 {
-                    new PlaybackChangerBase(moveFrom, p => p.MoveToTime((MetricTimeSpan)moveTo)),
+                    new PlaybackAction(moveFrom, p => p.MoveToTime((MetricTimeSpan)moveTo)),
                 },
                 expectedReceivedEvents: new[]
                 {
@@ -245,7 +245,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 actions: new[]
                 {
-                    new PlaybackChangerBase(moveFrom, p => p.MoveToTime((MetricTimeSpan)moveTo)),
+                    new PlaybackAction(moveFrom, p => p.MoveToTime((MetricTimeSpan)moveTo)),
                 },
                 expectedReceivedEvents: new[]
                 {
@@ -276,7 +276,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 actions: new[]
                 {
-                    new PlaybackChangerBase(moveFrom, p => p.MoveToTime((MetricTimeSpan)moveTo)),
+                    new PlaybackAction(moveFrom, p => p.MoveToTime((MetricTimeSpan)moveTo)),
                 },
                 expectedReceivedEvents: new[]
                 {
@@ -313,8 +313,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 actions: new[]
                 {
-                    new PlaybackChangerBase(moveFrom, p => p.MoveToTime((MetricTimeSpan)moveTo)),
-                    new PlaybackChangerBase(enableAfter, p => p.TrackProgram = true),
+                    new PlaybackAction(moveFrom, p => p.MoveToTime((MetricTimeSpan)moveTo)),
+                    new PlaybackAction(enableAfter, p => p.TrackProgram = true),
                 },
                 expectedReceivedEvents: new[]
                 {
@@ -351,8 +351,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 actions: new[]
                 {
-                    new PlaybackChangerBase(moveFrom, p => p.MoveToTime((MetricTimeSpan)moveTo)),
-                    new PlaybackChangerBase(enableAfter, p => p.TrackProgram = true),
+                    new PlaybackAction(moveFrom, p => p.MoveToTime((MetricTimeSpan)moveTo)),
+                    new PlaybackAction(enableAfter, p => p.TrackProgram = true),
                 },
                 expectedReceivedEvents: new[]
                 {
@@ -383,7 +383,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 actions: new[]
                 {
-                    new PlaybackChangerBase(moveFromMs, p => p.MoveToTime((MetricTimeSpan)moveTo)),
+                    new PlaybackAction(moveFromMs, p => p.MoveToTime((MetricTimeSpan)moveTo)),
                 },
                 expectedReceivedEvents: new[]
                 {
@@ -412,7 +412,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 actions: new[]
                 {
-                    new PlaybackChangerBase(moveFrom, p => p.MoveToTime((MetricTimeSpan)moveTo)),
+                    new PlaybackAction(moveFrom, p => p.MoveToTime((MetricTimeSpan)moveTo)),
                 },
                 expectedReceivedEvents: new[]
                 {
@@ -442,7 +442,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 actions: new[]
                 {
-                    new PlaybackChangerBase(moveFrom, p => p.MoveToTime((MetricTimeSpan)moveTo)),
+                    new PlaybackAction(moveFrom, p => p.MoveToTime((MetricTimeSpan)moveTo)),
                 },
                 expectedReceivedEvents: new[]
                 {
@@ -475,7 +475,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 actions: new[]
                 {
-                    new PlaybackChangerBase(moveFrom, p => p.MoveToTime((MetricTimeSpan)moveTo)),
+                    new PlaybackAction(moveFrom, p => p.MoveToTime((MetricTimeSpan)moveTo)),
                 },
                 expectedReceivedEvents: new[]
                 {
@@ -507,7 +507,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 actions: new[]
                 {
-                    new PlaybackChangerBase(moveFrom, p => p.MoveToTime((MetricTimeSpan)moveTo)),
+                    new PlaybackAction(moveFrom, p => p.MoveToTime((MetricTimeSpan)moveTo)),
                 },
                 expectedReceivedEvents: new[]
                 {
@@ -538,7 +538,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 actions: new[]
                 {
-                    new PlaybackChangerBase(moveFrom, p => p.MoveToTime((MetricTimeSpan)moveTo)),
+                    new PlaybackAction(moveFrom, p => p.MoveToTime((MetricTimeSpan)moveTo)),
                 },
                 expectedReceivedEvents: new[]
                 {
@@ -570,7 +570,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 actions: new[]
                 {
-                    new PlaybackChangerBase(moveFrom, p => p.MoveToTime((MetricTimeSpan)moveTo)),
+                    new PlaybackAction(moveFrom, p => p.MoveToTime((MetricTimeSpan)moveTo)),
                 },
                 expectedReceivedEvents: new[]
                 {
@@ -603,7 +603,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 actions: new[]
                 {
-                    new PlaybackChangerBase(moveFrom, p => p.MoveToTime((MetricTimeSpan)moveTo)),
+                    new PlaybackAction(moveFrom, p => p.MoveToTime((MetricTimeSpan)moveTo)),
                 },
                 expectedReceivedEvents: new[]
                 {
@@ -635,7 +635,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 actions: new[]
                 {
-                    new PlaybackChangerBase(moveFrom, p => p.MoveToTime((MetricTimeSpan)moveTo)),
+                    new PlaybackAction(moveFrom, p => p.MoveToTime((MetricTimeSpan)moveTo)),
                 },
                 expectedReceivedEvents: new[]
                 {
@@ -673,8 +673,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 actions: new[]
                 {
-                    new PlaybackChangerBase(moveFrom, p => p.MoveToTime((MetricTimeSpan)moveTo)),
-                    new PlaybackChangerBase(disableAfter, p => p.TrackProgram = false),
+                    new PlaybackAction(moveFrom, p => p.MoveToTime((MetricTimeSpan)moveTo)),
+                    new PlaybackAction(disableAfter, p => p.TrackProgram = false),
                 },
                 expectedReceivedEvents: new[]
                 {
@@ -707,8 +707,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 actions: new[]
                 {
-                    new PlaybackChangerBase(moveFrom, p => p.MoveToTime((MetricTimeSpan)moveTo)),
-                    new PlaybackChangerBase(disableAfter, p => p.TrackProgram = false),
+                    new PlaybackAction(moveFrom, p => p.MoveToTime((MetricTimeSpan)moveTo)),
+                    new PlaybackAction(disableAfter, p => p.TrackProgram = false),
                 },
                 expectedReceivedEvents: new[]
                 {

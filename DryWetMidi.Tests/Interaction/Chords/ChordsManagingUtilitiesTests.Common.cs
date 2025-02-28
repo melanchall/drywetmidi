@@ -1,7 +1,6 @@
 ﻿using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
-using Melanchall.DryWetMidi.Tests.Utilities;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;

@@ -8,7 +8,7 @@ namespace Melanchall.DryWetMidi.Interaction
     /// Represents tempo expressed in microseconds per quarter note or beats per minute.
     /// </summary>
     /// <seealso cref="TempoMap"/>
-    public sealed class Tempo : IEquatable<Tempo>
+    public sealed class Tempo
     {
         #region Constants
 
@@ -238,15 +238,6 @@ namespace Melanchall.DryWetMidi.Interaction
 
         #endregion
 
-        #region IEquatable<Tempo>
-
-        public bool Equals(Tempo other)
-        {
-            return this == other;
-        }
-
-        #endregion
-
         #region Overrides
 
         /// <summary>
@@ -265,7 +256,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <returns><c>true</c> if the specified object is equal to the current object; otherwise, <c>false</c>.</returns>
         public override bool Equals(object obj)
         {
-            return Equals(obj as Tempo);
+            return this == (obj as Tempo);
         }
 
         /// <summary>

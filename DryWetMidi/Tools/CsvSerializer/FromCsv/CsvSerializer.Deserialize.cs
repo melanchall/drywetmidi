@@ -568,13 +568,6 @@ namespace Melanchall.DryWetMidi.Tools
             CsvSerializationSettings settings,
             bool parseChunkId)
         {
-            // TODO
-            //if (record.TrackNumber == null)
-            //    CsvError.ThrowBadFormat(record.CsvRecord.LineNumber, "Invalid track number.");
-            //
-            //if (record.Time == null)
-            //    CsvError.ThrowBadFormat(record.CsvRecord.LineNumber, "Invalid time.");
-
             ITimeSpan time;
             TimeSpanUtilities.TryParse(record.Parameters.First(), settings.TimeType, out time);
 

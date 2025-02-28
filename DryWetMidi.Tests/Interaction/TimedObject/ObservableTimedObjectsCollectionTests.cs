@@ -617,7 +617,34 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 changedObject.TimedObject,
                 "Invalid changed object");
             Assert.AreEqual(15, changedObject.OldTime, "Invalid old time of changed object.");
+        }
 
+        [Test]
+        public void Clear()
+        {
+            var objects = new ITimedObject[]
+            {
+                new TimedEvent(new TextEvent("B"), 20),
+                new Note((SevenBitNumber)90, 100, 10),
+                new TimedEvent(new TextEvent("A"), 5),
+            };
+
+            var collection = new ObservableTimedObjectsCollection(objects);
+
+            var eventsArgs = new List<ObservableTimedObjectsCollectionChangedEventArgs>();
+            collection.CollectionChanged += (_, e) => eventsArgs.Add(e);
+
+            collection.Clear();
+
+            Assert.AreEqual(1, eventsArgs.Count, "Invalid events args count.");
+
+            var eventArgs = eventsArgs.Single();
+
+            CheckCollectionIsNullOrEmpty(eventArgs.AddedObjects, "There are added objects.");
+            CheckCollectionIsNullOrEmpty(eventArgs.ChangedObjects, "There are changed objects.");
+
+            var removedObjects = eventArgs.RemovedObjects;
+            CollectionAssert.AreEqual(objects, removedObjects, "Invalid removed objects.");
         }
 
         #endregion
