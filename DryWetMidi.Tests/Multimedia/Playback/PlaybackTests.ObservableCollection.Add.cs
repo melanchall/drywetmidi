@@ -3810,7 +3810,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 new TimedEvent(new NoteOnEvent())
                     .SetTime(new MetricTimeSpan(0, 0, 0, 200), TempoMap),
                 new TimedEvent(new NoteOffEvent())
-                    .SetTime(new MetricTimeSpan(0, 0, 0, 700), TempoMap),
+                    .SetTime(new MetricTimeSpan(0, 0, 0, 500), TempoMap),
+                new TimedEvent(new TextEvent("A"), 600),
             };
 
             CheckPlaybackDataChangesOnTheFly(
@@ -3827,7 +3828,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 {
                     new ReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(200)),
                     new ReceivedEvent(new SetTempoEvent(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 2), TimeSpan.FromMilliseconds(300)),
-                    new ReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(500)),
+                    new ReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(400)),
                 },
                 setupPlayback: playback =>
                     playback.PlaybackEnd = new MetricTimeSpan(0, 0, 0, 500),
@@ -3838,7 +3839,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                         playback.TempoMap,
                         "Invalid tempo map.");
 
-                    Assert.AreEqual(new MetricTimeSpan(0, 0, 0, 500), playback.PlaybackEnd, "Invalid playback end.");
+                    Assert.AreEqual(new MetricTimeSpan(0, 0, 0, 400), playback.PlaybackEnd, "Invalid playback end.");
                 });
         }
 
@@ -3881,7 +3882,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                         playback.TempoMap,
                         "Invalid tempo map.");
 
-                    Assert.AreEqual(new MetricTimeSpan(0, 0, 0, 300), playback.PlaybackStart, "Invalid playback end.");
+                    Assert.AreEqual(new MetricTimeSpan(0, 0, 0, 200), playback.PlaybackStart, "Invalid playback start.");
                 });
         }
 

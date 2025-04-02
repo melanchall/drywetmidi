@@ -427,6 +427,18 @@ namespace Melanchall.DryWetMidi.Multimedia
                 scaleFactor,
                 shift);
 
+            ScalePlaybackStart(
+                tempoChangeTime,
+                nextTempoTime,
+                scaleFactor,
+                shift);
+
+            ScalePlaybackEnd(
+                tempoChangeTime,
+                nextTempoTime,
+                scaleFactor,
+                shift);
+
             ScaleCurrentTime(
                 tempoChangeTime,
                 nextTempoTime,
@@ -442,16 +454,79 @@ namespace Melanchall.DryWetMidi.Multimedia
             double scaleFactor,
             TimeSpan shift)
         {
-            var currentTime = _clock.CurrentTime;
-            if (currentTime > tempoChangeTime)
-            {
-                if (nextTempoTime != null && currentTime > nextTempoTime)
-                    currentTime -= shift;
-                else
-                    currentTime = tempoChangeTime + ScaleTimeSpan(currentTime - tempoChangeTime, scaleFactor);
+            ScaleTime(
+                () => _clock.CurrentTime,
+                time => _clock.SetCurrentTime(time),
+                tempoChangeTime,
+                nextTempoTime,
+                scaleFactor,
+                shift);
+        }
 
-                _clock.SetCurrentTime(currentTime);
-            }
+        private void ScalePlaybackStart(
+            TimeSpan tempoChangeTime,
+            TimeSpan? nextTempoTime,
+            double scaleFactor,
+            TimeSpan shift)
+        {
+            var playbackStart = PlaybackStart;
+
+            if (playbackStart == null || tempoChangeTime > _playbackStartMetric)
+                return;
+
+            ScaleTime(
+                () => _playbackStartMetric,
+                time => _playbackStartMetric = time,
+                tempoChangeTime,
+                nextTempoTime,
+                scaleFactor,
+                shift);
+
+            if (playbackStart is MetricTimeSpan)
+                _playbackStart = (MetricTimeSpan)_playbackStartMetric;
+        }
+
+        private void ScalePlaybackEnd(
+            TimeSpan tempoChangeTime,
+            TimeSpan? nextTempoTime,
+            double scaleFactor,
+            TimeSpan shift)
+        {
+            var playbackEnd = PlaybackEnd;
+
+            if (playbackEnd == null || tempoChangeTime > _playbackEndMetric)
+                return;
+
+            ScaleTime(
+                () => _playbackEndMetric,
+                time => _playbackEndMetric = time,
+                tempoChangeTime,
+                nextTempoTime,
+                scaleFactor,
+                shift);
+
+            if (playbackEnd is MetricTimeSpan)
+                _playbackEnd = (MetricTimeSpan)_playbackEndMetric;
+        }
+
+        private void ScaleTime(
+            Func<TimeSpan> getTime,
+            Action<TimeSpan> setTime,
+            TimeSpan tempoChangeTime,
+            TimeSpan? nextTempoTime,
+            double scaleFactor,
+            TimeSpan shift)
+        {
+            var time = getTime();
+            if (tempoChangeTime > time)
+                return;
+
+            if (nextTempoTime != null && time > nextTempoTime)
+                time -= shift;
+            else
+                time = tempoChangeTime + ScaleTimeSpan(time - tempoChangeTime, scaleFactor);
+
+            setTime(time);
         }
 
         private void ScalePlaybackEventsTimes(
