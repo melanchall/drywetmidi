@@ -219,6 +219,8 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// </summary>
         public bool TrackNotes { get; set; } = true;
 
+        public bool SendNoteOffEventsForNonActiveNotes { get; set; }
+
         /// <summary>
         /// Gets or sets the speed of events playing. <c>1</c> means normal speed. For example, to play
         /// events twice slower this property should be set to <c>0.5</c>. Value of <c>2</c> will make playback
@@ -1079,7 +1081,7 @@ namespace Melanchall.DryWetMidi.Multimedia
                 else
                 {
                     note = noteMetadata.GetEffectiveNote();
-                    midiEvent = midiEvent is NoteOnEvent
+                    midiEvent = isNoteOnEvent
                         ? (MidiEvent)notePlaybackData.GetNoteOnEvent()
                         : notePlaybackData.GetNoteOffEvent();
                 }
@@ -1091,9 +1093,6 @@ namespace Melanchall.DryWetMidi.Multimedia
 
             if (midiEvent != null)
             {
-                var timedObjectWithMetadata = isNoteOnEvent ? noteMetadata.RawNote.TimedNoteOnEvent : noteMetadata.RawNote.TimedNoteOffEvent;
-                PlayEvent(midiEvent, (timedObjectWithMetadata as IMetadata)?.Metadata);
-
                 var noteId = GetNoteId((NoteEvent)midiEvent);
 
                 if (midiEvent is NoteOnEvent)
@@ -1101,8 +1100,16 @@ namespace Melanchall.DryWetMidi.Multimedia
                 else
                 {
                     NotePlaybackEventMetadata value;
-                    _activeNotesMetadata.TryRemove(noteId, out value);
+                    if (!_activeNotesMetadata.TryRemove(noteId, out value) && !SendNoteOffEventsForNonActiveNotes)
+                    {
+                        note = null;
+                        originalNote = null;
+                        return true;
+                    }
                 }
+
+                var timedObjectWithMetadata = isNoteOnEvent ? noteMetadata.RawNote.TimedNoteOnEvent : noteMetadata.RawNote.TimedNoteOffEvent;
+                PlayEvent(midiEvent, (timedObjectWithMetadata as IMetadata)?.Metadata);
             }
             else
             {

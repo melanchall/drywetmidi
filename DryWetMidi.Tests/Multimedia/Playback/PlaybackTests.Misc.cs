@@ -17,21 +17,6 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
     {
         #region Nested classes
 
-        private sealed class PlaybackContext
-        {
-            public List<ReceivedEvent> ReceivedEvents { get; } = new List<ReceivedEvent>();
-
-            public List<SentEvent> SentEvents { get; } = new List<SentEvent>();
-
-            public object ReceivedEventsLockObject { get; } = new object();
-
-            public Stopwatch Stopwatch { get; } = new Stopwatch();
-
-            public TempoMap TempoMap { get; } = PlaybackTests.TempoMap;
-
-            public List<TimeSpan> ExpectedTimes { get; } = new List<TimeSpan>();
-        }
-
         private sealed class OutputDeviceWithExceptionOnSendEvent : IOutputDevice
         {
             public event EventHandler<MidiEventSentEventArgs> EventSent;
@@ -588,9 +573,45 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 {
                     new ReceivedEvent(new NoteOnEvent(), noteOnDelay),
                     new ReceivedEvent(new NoteOffEvent(), noteOnDelay + stopAfter),
-                    new ReceivedEvent(new NoteOffEvent(), noteOnDelay + noteOffDelay + stopPeriod),
                 },
                 setupPlayback: playback => playback.TrackNotes = false);
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
+        public void InterruptNotesOnStop_SendNoteOffEventsForNonActiveNotes()
+        {
+            var noteOnDelay = TimeSpan.Zero;
+            var noteOffDelay = TimeSpan.FromSeconds(2);
+
+            var stopAfter = TimeSpan.FromSeconds(1);
+            var stopPeriod = TimeSpan.FromMilliseconds(400);
+
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
+                {
+                    new TimedEvent(new NoteOnEvent())
+                        .SetTime((MetricTimeSpan)noteOnDelay, TempoMap),
+                    new TimedEvent(new NoteOffEvent())
+                        .SetTime((MetricTimeSpan)(noteOnDelay + noteOffDelay), TempoMap),
+                },
+                actions: new[]
+                {
+                    new PlaybackAction(stopAfter, p => p.Stop()),
+                    new PlaybackAction(stopPeriod, p => p.Start()),
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new NoteOnEvent(), noteOnDelay),
+                    new ReceivedEvent(new NoteOffEvent(), noteOnDelay + stopAfter),
+                    new ReceivedEvent(new NoteOffEvent(), noteOnDelay + noteOffDelay + stopPeriod),
+                },
+                setupPlayback: playback =>
+                {
+                    playback.TrackNotes = false;
+                    playback.SendNoteOffEventsForNonActiveNotes = true;
+                });
         }
 
         [Retry(RetriesNumber)]

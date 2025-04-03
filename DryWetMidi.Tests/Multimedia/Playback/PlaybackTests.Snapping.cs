@@ -756,6 +756,60 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new ReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(0)),
                     new ReceivedEvent(new MarkerEvent("A"), TimeSpan.FromMilliseconds(50)),
                     new ReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(150)),
+                });
+        }
+
+        [Test]
+        public void Snapping_MoveToPreviousSnapPoint_ByGroup_CheckReturnValue_SendNoteOffEventsForNonActiveNotes()
+        {
+            SnapPointsGroup snapPointsGroup = null;
+
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
+                {
+                    new TimedEvent(new NoteOnEvent()),
+                    new TimedEvent(new MarkerEvent("A"))
+                        .SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(100), TempoMap),
+                    new TimedEvent(new MarkerEvent("B"))
+                        .SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(400), TempoMap),
+                    new TimedEvent(new NoteOffEvent())
+                        .SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(500), TempoMap),
+                },
+                actions: new[]
+                {
+                    new PlaybackAction(50, p =>
+                    {
+                        p.Stop();
+                        p.MoveToTime(p.GetDuration<MetricTimeSpan>());
+
+                        Assert.IsTrue(p.MoveToPreviousSnapPoint(snapPointsGroup), "Failed to move to first previous snap point.");
+                        Assert.IsTrue(p.MoveToPreviousSnapPoint(snapPointsGroup), "Failed to move to second previous snap point.");
+                        Assert.IsFalse(p.MoveToPreviousSnapPoint(snapPointsGroup), "Position changed beyond first snap point of the group.");
+
+                        p.Start();
+                    }),
+                    new PlaybackAction(100, p =>
+                    {
+                        snapPointsGroup.IsEnabled = false;
+                        p.MoveToTime(p.GetDuration<MetricTimeSpan>());
+                        Assert.IsFalse(
+                            p.MoveToPreviousSnapPoint(snapPointsGroup),
+                            "Position changed to the time of a snap point within disabled snap point group.");
+                    }),
+                },
+                setupPlayback: playback =>
+                {
+                    playback.InterruptNotesOnStop = false;
+                    playback.SendNoteOffEventsForNonActiveNotes = true;
+
+                    snapPointsGroup = playback.SnapToEvents(e => e.EventType == MidiEventType.Marker);
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(0)),
+                    new ReceivedEvent(new MarkerEvent("A"), TimeSpan.FromMilliseconds(50)),
+                    new ReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(150)),
                     new ReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(150)),
                 });
         }
@@ -890,6 +944,70 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 {
                     new ReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(0)),
                     new ReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(250)),
+                });
+        }
+
+        [Test]
+        public void Snapping_MoveToPreviousSnapPoint_Global_CheckReturnValue_SendNoteOffEventsForNonActiveNotes()
+        {
+            SnapPoint snapPoint1 = null;
+            SnapPoint snapPoint2 = null;
+
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
+                {
+                    new TimedEvent(new NoteOnEvent()),
+                    new TimedEvent(new NoteOffEvent())
+                        .SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(700), TempoMap),
+                },
+                actions: new[]
+                {
+                    new PlaybackAction(50, p =>
+                    {
+                        p.Stop();
+
+                        p.MoveToTime(p.GetDuration<MetricTimeSpan>());
+                        Assert.IsTrue(p.MoveToPreviousSnapPoint(), "Failed to move to first previous snap point.");
+                        Assert.IsTrue(p.MoveToPreviousSnapPoint(), "Failed to move to second previous snap point.");
+                        Assert.IsFalse(p.MoveToPreviousSnapPoint(), "Position changed beyond first snap point.");
+
+                        p.Start();
+                    }),
+                    new PlaybackAction(100, p =>
+                    {
+                        p.Stop();
+
+                        snapPoint2.IsEnabled = false;
+                        p.MoveToTime(p.GetDuration<MetricTimeSpan>());
+                        Assert.IsTrue(p.MoveToPreviousSnapPoint(), "Failed to move to second previous snap point.");
+                        Assert.IsFalse(p.MoveToPreviousSnapPoint(), "Position changed beyond first snap point.");
+
+                        p.Start();
+                    }),
+                    new PlaybackAction(100, p =>
+                    {
+                        p.Stop();
+
+                        snapPoint1.IsEnabled = false;
+                        p.MoveToTime(p.GetDuration<MetricTimeSpan>());
+                        Assert.IsFalse(p.MoveToPreviousSnapPoint(), "Position changed without any snap point enabled.");
+
+                        p.Start();
+                    }),
+                },
+                setupPlayback: playback =>
+                {
+                    playback.InterruptNotesOnStop = false;
+                    playback.SendNoteOffEventsForNonActiveNotes = true;
+
+                    snapPoint1 = playback.AddSnapPoint(new MetricTimeSpan(0, 0, 0, 100));
+                    snapPoint2 = playback.AddSnapPoint(new MetricTimeSpan(0, 0, 0, 500));
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(0)),
+                    new ReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(250)),
                     new ReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(250)),
                 });
         }
@@ -997,6 +1115,58 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 setupPlayback: playback =>
                 {
                     playback.InterruptNotesOnStop = false;
+
+                    snapPoint1 = playback.AddSnapPoint(new MetricTimeSpan(0, 0, 0, 100), "X");
+                    snapPoint2 = playback.AddSnapPoint(new MetricTimeSpan(0, 0, 0, 500), "Y");
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(0)),
+                    new ReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(150)),
+                });
+        }
+
+        [Test]
+        public void Snapping_MoveToPreviousSnapPoint_ByData_CheckReturnValue_SendNoteOffEventsForNonActiveNotes()
+        {
+            SnapPoint snapPoint1 = null;
+            SnapPoint snapPoint2 = null;
+
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
+                {
+                    new TimedEvent(new NoteOnEvent()),
+                    new TimedEvent(new NoteOffEvent())
+                        .SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(700), TempoMap),
+                },
+                actions: new[]
+                {
+                    new PlaybackAction(50, p =>
+                    {
+                        p.Stop();
+
+                        p.MoveToTime(p.GetDuration<MetricTimeSpan>());
+                        Assert.IsTrue(p.MoveToPreviousSnapPoint("X"), "Failed to move to previous snap point.");
+                        Assert.IsFalse(p.MoveToPreviousSnapPoint("X"), "Position changed beyond first snap point.");
+
+                        p.Start();
+                    }),
+                    new PlaybackAction(100, p =>
+                    {
+                        p.Stop();
+
+                        snapPoint1.IsEnabled = false;
+                        p.MoveToTime(p.GetDuration<MetricTimeSpan>());
+                        Assert.IsFalse(p.MoveToPreviousSnapPoint("X"), "Position changed without any snap point enabled.");
+
+                        p.Start();
+                    }),
+                },
+                setupPlayback: playback =>
+                {
+                    playback.InterruptNotesOnStop = false;
+                    playback.SendNoteOffEventsForNonActiveNotes = true;
 
                     snapPoint1 = playback.AddSnapPoint(new MetricTimeSpan(0, 0, 0, 100), "X");
                     snapPoint2 = playback.AddSnapPoint(new MetricTimeSpan(0, 0, 0, 500), "Y");

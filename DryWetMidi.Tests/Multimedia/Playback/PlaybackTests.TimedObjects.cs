@@ -5,6 +5,8 @@ using Melanchall.DryWetMidi.Multimedia;
 using Melanchall.DryWetMidi.Tests.Common;
 using NUnit.Framework;
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace Melanchall.DryWetMidi.Tests.Multimedia
@@ -41,9 +43,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             [Values(0, 100)] long time,
             [Values(0, 100)] long length,
             [Values(0, 10, 100)] long secondNoteShift) => CheckSingleTimedObjectPlayback(
-            new Chord(
-                new Note((SevenBitNumber)70, length, time),
-                new Note((SevenBitNumber)70, length, time + secondNoteShift)));
+                new Chord(
+                    new Note((SevenBitNumber)70, length, time),
+                    new Note((SevenBitNumber)80, length, time + secondNoteShift)));
 
         #endregion
 
@@ -52,9 +54,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         private void CheckSingleTimedObjectPlayback(
             ITimedObject timedObject)
         {
-            var playbackContext = new PlaybackContext();
-            var stopwatch = playbackContext.Stopwatch;
-            var tempoMap = playbackContext.TempoMap;
+            var receivedEvents = new List<ReceivedEvent>();
+            var stopwatch = new Stopwatch();
+            var tempoMap = TempoMap;
 
             var expectedReceivedEvents = new[] { timedObject }
                 .GetObjects(ObjectType.TimedEvent)
@@ -64,7 +66,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
             using (var playback = new Playback(new[] { timedObject }, tempoMap))
             {
-                playback.EventPlayed += (_, e) => playbackContext.ReceivedEvents.Add(new ReceivedEvent(e.Event, stopwatch.Elapsed));
+                playback.EventPlayed += (_, e) => receivedEvents.Add(new ReceivedEvent(e.Event, stopwatch.Elapsed));
 
                 var timeout = expectedReceivedEvents.Last().Time + SendReceiveUtilities.MaximumEventSendReceiveDelay;
 
@@ -77,8 +79,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 stopwatch.Stop();
             }
 
-            CollectionAssert.IsNotEmpty(playbackContext.ReceivedEvents, "No events received.");
-            CheckReceivedEvents(playbackContext.ReceivedEvents, expectedReceivedEvents);
+            CollectionAssert.IsNotEmpty(receivedEvents, "No events received.");
+            CheckReceivedEvents(receivedEvents, expectedReceivedEvents);
         }
 
         #endregion

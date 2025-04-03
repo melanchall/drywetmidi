@@ -30,10 +30,13 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new DynamicPlaybackAction(400,
-                        (playback, collection) => collection.ChangeObject(
+                    new DynamicPlaybackAction(400, (playback, collection) =>
+                    {
+                        collection.ChangeObject(
                             objectToChange,
-                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 500), TempoMap))),
+                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 500), TempoMap));
+                        CheckDuration(TimeSpan.FromMilliseconds(1000), playback);
+                    }),
                 },
                 expectedReceivedEvents: new[]
                 {
@@ -59,10 +62,13 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new DynamicPlaybackAction(200,
-                        (playback, collection) => collection.ChangeObject(
+                    new DynamicPlaybackAction(200, (playback, collection) =>
+                    {
+                        collection.ChangeObject(
                             objectToChange,
-                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap))),
+                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap));
+                        CheckDuration(TimeSpan.FromMilliseconds(500), playback);
+                    }),
                 },
                 expectedReceivedEvents: new[]
                 {
@@ -86,14 +92,17 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new DynamicPlaybackAction(300,
-                        (playback, collection) => collection.ChangeObject(
+                    new DynamicPlaybackAction(300, (playback, collection) =>
+                    {
+                        collection.ChangeObject(
                             objectToChange,
                             obj =>
                             {
                                 obj.SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap);
                                 ((ProgramChangeEvent)((TimedEvent)obj).Event).ProgramNumber = (SevenBitNumber)71;
-                            })),
+                            });
+                        CheckDuration(TimeSpan.FromMilliseconds(700), playback);
+                    }),
                 },
                 expectedReceivedEvents: new[]
                 {
@@ -120,14 +129,20 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new DynamicPlaybackAction(300,
-                        (playback, collection) => collection.ChangeObject(
+                    new DynamicPlaybackAction(300, (playback, collection) =>
+                    {
+                        collection.ChangeObject(
                             objectToChange1,
-                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 200), TempoMap))),
-                    new DynamicPlaybackAction(300,
-                        (playback, collection) => collection.ChangeObject(
+                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 200), TempoMap));
+                        CheckDuration(TimeSpan.FromMilliseconds(700), playback);
+                    }),
+                    new DynamicPlaybackAction(300, (playback, collection) =>
+                    {
+                        collection.ChangeObject(
                             objectToChange2,
-                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap))),
+                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap));
+                        CheckDuration(TimeSpan.FromMilliseconds(700), playback);
+                    }),
                 },
                 expectedReceivedEvents: new[]
                 {
@@ -155,10 +170,13 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new DynamicPlaybackAction(300,
-                        (playback, collection) => collection.ChangeObject(
+                    new DynamicPlaybackAction(300, (playback, collection) =>
+                    {
+                        collection.ChangeObject(
                             objectToChange,
-                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 800), TempoMap))),
+                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 800), TempoMap));
+                        CheckDuration(TimeSpan.FromMilliseconds(900), playback);
+                    }),
                 },
                 expectedReceivedEvents: new[]
                 {
@@ -189,14 +207,20 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new DynamicPlaybackAction(300,
-                        (playback, collection) => collection.ChangeObject(
+                    new DynamicPlaybackAction(300, (playback, collection) =>
+                    {
+                        collection.ChangeObject(
                             objectToChange1,
-                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 200), TempoMap))),
-                    new DynamicPlaybackAction(300,
-                        (playback, collection) => collection.ChangeObject(
+                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 200), TempoMap));
+                        CheckDuration(TimeSpan.FromMilliseconds(700), playback);
+                    }),
+                    new DynamicPlaybackAction(300, (playback, collection) =>
+                    {
+                        collection.ChangeObject(
                             objectToChange2,
-                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap))),
+                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap));
+                        CheckDuration(TimeSpan.FromMilliseconds(700), playback);
+                    }),
                 },
                 expectedReceivedEvents: new[]
                 {
@@ -222,14 +246,17 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new DynamicPlaybackAction(300,
-                        (playback, collection) => collection.ChangeObject(
+                    new DynamicPlaybackAction(300, (playback, collection) =>
+                    {
+                        collection.ChangeObject(
                             objectToChange,
                             obj =>
                             {
                                 obj.SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap);
                                 ((PitchBendEvent)((TimedEvent)obj).Event).PitchValue = 7100;
-                            })),
+                            });
+                        CheckDuration(TimeSpan.FromMilliseconds(700), playback);
+                    }),
                 },
                 expectedReceivedEvents: new[]
                 {
@@ -257,14 +284,20 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new DynamicPlaybackAction(300,
-                        (playback, collection) => collection.ChangeObject(
+                    new DynamicPlaybackAction(300, (playback, collection) =>
+                    {
+                        collection.ChangeObject(
                             objectToChange1,
-                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 200), TempoMap))),
-                    new DynamicPlaybackAction(300,
-                        (playback, collection) => collection.ChangeObject(
+                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 200), TempoMap));
+                        CheckDuration(TimeSpan.FromMilliseconds(700), playback);
+                    }),
+                    new DynamicPlaybackAction(300, (playback, collection) =>
+                    {
+                        collection.ChangeObject(
                             objectToChange2,
-                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap))),
+                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap));
+                        CheckDuration(TimeSpan.FromMilliseconds(700), playback);
+                    }),
                 },
                 expectedReceivedEvents: new[]
                 {
@@ -293,10 +326,13 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new DynamicPlaybackAction(300,
-                        (playback, collection) => collection.ChangeObject(
+                    new DynamicPlaybackAction(300, (playback, collection) =>
+                    {
+                        collection.ChangeObject(
                             objectToChange,
-                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 800), TempoMap))),
+                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 800), TempoMap));
+                        CheckDuration(TimeSpan.FromMilliseconds(900), playback);
+                    }),
                 },
                 expectedReceivedEvents: new[]
                 {
@@ -328,14 +364,20 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new DynamicPlaybackAction(300,
-                        (playback, collection) => collection.ChangeObject(
+                    new DynamicPlaybackAction(300, (playback, collection) =>
+                    {
+                        collection.ChangeObject(
                             objectToChange1,
-                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 200), TempoMap))),
-                    new DynamicPlaybackAction(300,
-                        (playback, collection) => collection.ChangeObject(
+                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 200), TempoMap));
+                        CheckDuration(TimeSpan.FromMilliseconds(700), playback);
+                    }),
+                    new DynamicPlaybackAction(300, (playback, collection) =>
+                    {
+                        collection.ChangeObject(
                             objectToChange2,
-                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap))),
+                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap));
+                        CheckDuration(TimeSpan.FromMilliseconds(700), playback);
+                    }),
                 },
                 expectedReceivedEvents: new[]
                 {
@@ -362,14 +404,17 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new DynamicPlaybackAction(300,
-                        (playback, collection) => collection.ChangeObject(
+                    new DynamicPlaybackAction(300, (playback, collection) =>
+                    {
+                        collection.ChangeObject(
                             objectToChange,
                             obj =>
                             {
                                 obj.SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap);
                                 ((ControlChangeEvent)((TimedEvent)obj).Event).ControlValue = (SevenBitNumber)71;
-                            })),
+                            });
+                        CheckDuration(TimeSpan.FromMilliseconds(700), playback);
+                    }),
                 },
                 expectedReceivedEvents: new[]
                 {
@@ -397,14 +442,20 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new DynamicPlaybackAction(300,
-                        (playback, collection) => collection.ChangeObject(
+                    new DynamicPlaybackAction(300, (playback, collection) =>
+                    {
+                        collection.ChangeObject(
                             objectToChange1,
-                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 200), TempoMap))),
-                    new DynamicPlaybackAction(300,
-                        (playback, collection) => collection.ChangeObject(
+                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 200), TempoMap));
+                        CheckDuration(TimeSpan.FromMilliseconds(700), playback);
+                    }),
+                    new DynamicPlaybackAction(300, (playback, collection) =>
+                    {
+                        collection.ChangeObject(
                             objectToChange2,
-                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap))),
+                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap));
+                        CheckDuration(TimeSpan.FromMilliseconds(700), playback);
+                    }),
                 },
                 expectedReceivedEvents: new[]
                 {
@@ -433,10 +484,13 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new DynamicPlaybackAction(300,
-                        (playback, collection) => collection.ChangeObject(
+                    new DynamicPlaybackAction(300, (playback, collection) =>
+                    {
+                        collection.ChangeObject(
                             objectToChange,
-                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 800), TempoMap))),
+                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 800), TempoMap));
+                        CheckDuration(TimeSpan.FromMilliseconds(900), playback);
+                    }),
                 },
                 expectedReceivedEvents: new[]
                 {
@@ -468,14 +522,20 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new DynamicPlaybackAction(300,
-                        (playback, collection) => collection.ChangeObject(
+                    new DynamicPlaybackAction(300, (playback, collection) =>
+                    {
+                        collection.ChangeObject(
                             objectToChange1,
-                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 200), TempoMap))),
-                    new DynamicPlaybackAction(300,
-                        (playback, collection) => collection.ChangeObject(
+                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 200), TempoMap));
+                        CheckDuration(TimeSpan.FromMilliseconds(700), playback);
+                    }),
+                    new DynamicPlaybackAction(300, (playback, collection) =>
+                    {
+                        collection.ChangeObject(
                             objectToChange2,
-                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap))),
+                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap));
+                        CheckDuration(TimeSpan.FromMilliseconds(700), playback);
+                    }),
                 },
                 expectedReceivedEvents: new[]
                 {
@@ -511,11 +571,15 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new DynamicPlaybackAction(300,
-                        (playback, collection) => collection.ChangeObject(
+                    new DynamicPlaybackAction(300, (playback, collection) =>
+                    {
+                        CheckDuration(TimeSpan.FromMilliseconds(500), playback);
+                        collection.ChangeObject(
                             objectToChange,
-                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap))),
-                        },
+                            obj => obj.SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap));
+                        CheckDuration(TimeSpan.FromMilliseconds(400), playback);
+                    }),
+                },
                 expectedReceivedEvents: new[]
                 {
                     new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(200)),
@@ -548,15 +612,19 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new DynamicPlaybackAction(200,
-                        (playback, collection) => collection.ChangeObject(
+                    new DynamicPlaybackAction(200, (playback, collection) =>
+                    {
+                        CheckDuration(TimeSpan.FromMilliseconds(400), playback);
+                        collection.ChangeObject(
                             objectToChange,
                             obj =>
                             {
                                 obj.SetTime(new MetricTimeSpan(0, 0, 0, 500), TempoMap);
                                 ((Note)obj).Channel = (FourBitNumber)4;
                                 ((Note)obj).NoteNumber = (SevenBitNumber)71;
-                            })),
+                            });
+                        CheckDuration(TimeSpan.FromMilliseconds(800), playback);
+                    }),
                 },
                 expectedReceivedEvents: new[]
                 {
@@ -592,14 +660,18 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new DynamicPlaybackAction(400,
-                        (playback, collection) => collection.ChangeObject(
+                    new DynamicPlaybackAction(400, (playback, collection) =>
+                    {
+                        CheckDuration(TimeSpan.FromMilliseconds(600), playback);
+                        collection.ChangeObject(
                             objectToChange,
                             obj =>
                             {
                                 obj.SetTime(new MetricTimeSpan(), TempoMap);
                                 ((Note)obj).Velocity = (SevenBitNumber)30;
-                            })),
+                            });
+                        CheckDuration(TimeSpan.FromMilliseconds(300), playback);
+                    }),
                 },
                 expectedReceivedEvents: new[]
                 {
@@ -633,18 +705,20 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new DynamicPlaybackAction(350,
-                        (playback, collection) => collection.ChangeObject(
+                    new DynamicPlaybackAction(350, (playback, collection) =>
+                    {
+                        CheckDuration(TimeSpan.FromMilliseconds(600), playback);
+                        collection.ChangeObject(
                             objectToChange,
                             obj =>
                             {
                                 obj.SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap);
                                 ((Note)obj).Velocity = (SevenBitNumber)30;
-                            })),
+                            });
+                        CheckDuration(TimeSpan.FromMilliseconds(300), playback);
+                    }),
                 },
-                expectedReceivedEvents: new ReceivedEvent[]
-                {
-                },
+                expectedReceivedEvents: Array.Empty<ReceivedEvent>(),
                 setupPlayback: playback => playback.TrackNotes = true);
         }
 
@@ -699,31 +773,43 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new DynamicPlaybackAction(200,
-                        (playback, collection) => collection.ChangeObject(
+                    new DynamicPlaybackAction(200, (playback, collection) =>
+                    {
+                        CheckDuration(TimeSpan.FromMilliseconds(700), playback);
+                        collection.ChangeObject(
                             objectToChange1,
                             obj =>
                             {
                                 obj.SetTime(new MetricTimeSpan(0, 0, 0, 300), TempoMap);
                                 ((Note)obj).Velocity = (SevenBitNumber)30;
-                            })),
-                    new DynamicPlaybackAction(300,
-                        (playback, collection) => collection.ChangeObject(
+                            });
+                        CheckDuration(TimeSpan.FromMilliseconds(700), playback);
+                    }),
+                    new DynamicPlaybackAction(300, (playback, collection) =>
+                    {
+                        CheckDuration(TimeSpan.FromMilliseconds(700), playback);
+                        collection.ChangeObject(
                             objectToChange2,
                             obj =>
                             {
                                 obj.SetTime(new MetricTimeSpan(0, 0, 0, 700), TempoMap);
                                 ((Note)obj).NoteNumber = (SevenBitNumber)80;
-                            })),
-                    new DynamicPlaybackAction(300,
-                        (playback, collection) => collection.ChangeObject(
+                            });
+                        CheckDuration(TimeSpan.FromMilliseconds(1000), playback);
+                    }),
+                    new DynamicPlaybackAction(300, (playback, collection) =>
+                    {
+                        CheckDuration(TimeSpan.FromMilliseconds(1000), playback);
+                        collection.ChangeObject(
                             objectToChange2,
                             obj =>
                             {
                                 obj.SetTime(new MetricTimeSpan(0, 0, 0, 300), TempoMap);
                                 ((Note)obj).Channel = (FourBitNumber)5;
                                 playback.MoveToStart();
-                            })),
+                            });
+                        CheckDuration(TimeSpan.FromMilliseconds(600), playback);
+                    }),
                 },
                 expectedReceivedEvents: new[]
                 {
@@ -766,14 +852,17 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new DynamicPlaybackAction(50,
-                        (playback, collection) => collection.ChangeObject(
+                    new DynamicPlaybackAction(50, (playback, collection) =>
+                    {
+                        collection.ChangeObject(
                             objectToChange,
                             obj =>
                             {
                                 var chord = (Chord)obj;
                                 chord.Notes.Remove(note1);
-                            })),
+                                CheckDuration(TimeSpan.FromMilliseconds(400), playback);
+                            });
+                    }),
                 },
                 expectedReceivedEvents: new[]
                 {

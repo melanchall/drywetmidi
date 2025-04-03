@@ -108,10 +108,44 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 {
                     new ReceivedEvent(new NoteOnEvent(), noteOnDelay),
                     new ReceivedEvent(new NoteOffEvent(), stopAfter),
+                },
+                setupPlayback: playback =>
+                {
+                    playback.TrackNotes = false;
+                    playback.InterruptNotesOnStop = true;
+                });
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
+        public void EventPlayed_InterruptNotesOnStop_SendNoteOffEventsForNonActiveNotes()
+        {
+            var noteOnDelay = TimeSpan.Zero;
+            var noteOffDelay = TimeSpan.FromSeconds(2);
+
+            var stopAfter = TimeSpan.FromSeconds(1);
+            var stopPeriod = TimeSpan.FromMilliseconds(400);
+
+            CheckEventPlayedEvent(
+                initialPlaybackObjects: new[]
+                {
+                    new TimedEvent(new NoteOnEvent()).SetTime((MetricTimeSpan)noteOnDelay, TempoMap),
+                    new TimedEvent(new NoteOffEvent()).SetTime((MetricTimeSpan)(noteOnDelay + noteOffDelay), TempoMap),
+                },
+                actions: new PlaybackAction[]
+                {
+                    new PlaybackAction(stopAfter, p => p.Stop()),
+                    new PlaybackAction(stopPeriod, p => p.Start()),
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new NoteOnEvent(), noteOnDelay),
+                    new ReceivedEvent(new NoteOffEvent(), stopAfter),
                     new ReceivedEvent(new NoteOffEvent(), noteOnDelay + stopAfter + stopPeriod + noteOffDelay - stopAfter)
                 },
                 setupPlayback: playback =>
                 {
+                    playback.SendNoteOffEventsForNonActiveNotes = true;
                     playback.TrackNotes = false;
                     playback.InterruptNotesOnStop = true;
                 });

@@ -88,6 +88,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var stopwatch = new Stopwatch();
             var receivedEvents = new List<ReceivedEvent>();
 
+            var actionTimes = Enumerable
+                .Range(0, actions.Length)
+                .Select(i => actions.Take(i + 1).Sum(a => a.PeriodMs))
+                .ToArray();
+
             using (outputDevice)
             {
                 if (useOutputDevice)
@@ -117,11 +122,13 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
                     afterStart?.Invoke(playback);
 
-                    foreach (var action in actions)
+                    for (var i = 0; i < actions.Length; i++)
                     {
-                        WaitOperations.WaitPrecisely(action.PeriodMs);
+                        while (stopwatch.ElapsedMilliseconds < actionTimes[i])
+                        {
+                        }
 
-                        action.Action(playback);
+                        actions[i].Action(playback);
                         actionsExecutedCount++;
                     }
 

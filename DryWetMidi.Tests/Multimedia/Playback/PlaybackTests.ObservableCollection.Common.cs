@@ -66,11 +66,14 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
         private void CheckDuration(
             TimeSpan expectedDuration,
-            Playback playback) =>
+            Playback playback)
+        {
+            var actualDuration = (TimeSpan)playback.GetDuration<MetricTimeSpan>();
             Assert.Less(
-                (expectedDuration - (TimeSpan)playback.GetDuration<MetricTimeSpan>()).Duration(),
+                (expectedDuration - actualDuration).Duration(),
                 TimeSpan.FromMilliseconds(4),
-                "Invalid duration after note added.");
+                $"Invalid duration after note added. Actual = {actualDuration}. Expected = {expectedDuration}.");
+        }
 
         #endregion
     }

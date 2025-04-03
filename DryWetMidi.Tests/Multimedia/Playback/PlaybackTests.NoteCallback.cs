@@ -203,6 +203,51 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 {
                     new ReceivedEvent(new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), noteOnDelay),
                     new ReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), stopAfter),
+                },
+                expectedNotesEvents: new[]
+                {
+                    (EventType.Started, note, originalNote, false),
+                    (EventType.Finished, note, originalNote, false),
+                },
+                setupPlayback: playback =>
+                {
+                    playback.TrackNotes = false;
+                    playback.InterruptNotesOnStop = true;
+                    playback.NoteCallback = NoteCallback;
+                });
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
+        public void NoteCallback_InterruptNotesOnStop_SendNoteOffEventsForNonActiveNotes()
+        {
+            var noteOnDelay = TimeSpan.Zero;
+            var noteOffDelay = TimeSpan.FromSeconds(2);
+
+            var stopAfter = TimeSpan.FromSeconds(1);
+            var stopPeriod = TimeSpan.FromMilliseconds(400);
+
+            var originalNote = new Note((SevenBitNumber)0) { Velocity = SevenBitNumber.MinValue }
+                .SetLength((MetricTimeSpan)noteOffDelay, TempoMap);
+
+            var note = (Note)originalNote.Clone();
+            note.NoteNumber += TransposeBy;
+
+            CheckNoteCallback(
+                initialPlaybackObjects: new[]
+                {
+                    new TimedEvent(new NoteOnEvent()).SetTime((MetricTimeSpan)noteOnDelay, TempoMap),
+                    new TimedEvent(new NoteOffEvent()).SetTime((MetricTimeSpan)(noteOnDelay + noteOffDelay), TempoMap),
+                },
+                actions: new[]
+                {
+                    new PlaybackAction(stopAfter, p => p.Stop()),
+                    new PlaybackAction(stopPeriod, p => p.Start()),
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), noteOnDelay),
+                    new ReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), stopAfter),
                     new ReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), noteOnDelay + stopAfter + stopPeriod + noteOffDelay - stopAfter),
                 },
                 expectedNotesEvents: new[]
@@ -214,7 +259,54 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 setupPlayback: playback =>
                 {
                     playback.TrackNotes = false;
-                    playback.InterruptNotesOnStop = true;
+                    playback.SendNoteOffEventsForNonActiveNotes = true;
+                    playback.NoteCallback = NoteCallback;
+                });
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
+        public void NoteCallback_InterruptNotesOnStop_TrackNotes()
+        {
+            var noteOnDelay = TimeSpan.Zero;
+            var noteOffDelay = TimeSpan.FromSeconds(2);
+
+            var stopAfter = TimeSpan.FromSeconds(1);
+            var stopPeriod = TimeSpan.FromMilliseconds(400);
+
+            var originalNote = new Note((SevenBitNumber)0) { Velocity = SevenBitNumber.MinValue }
+                .SetLength((MetricTimeSpan)noteOffDelay, TempoMap);
+
+            var note = (Note)originalNote.Clone();
+            note.NoteNumber += TransposeBy;
+
+            CheckNoteCallback(
+                initialPlaybackObjects: new[]
+                {
+                    new TimedEvent(new NoteOnEvent()).SetTime((MetricTimeSpan)noteOnDelay, TempoMap),
+                    new TimedEvent(new NoteOffEvent()).SetTime((MetricTimeSpan)(noteOnDelay + noteOffDelay), TempoMap),
+                },
+                actions: new[]
+                {
+                    new PlaybackAction(stopAfter, p => p.Stop()),
+                    new PlaybackAction(stopPeriod, p => p.Start()),
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), noteOnDelay),
+                    new ReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), stopAfter),
+                    new ReceivedEvent(new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), stopAfter + stopPeriod),
+                    new ReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), noteOnDelay + stopAfter + stopPeriod + noteOffDelay - stopAfter),
+                },
+                expectedNotesEvents: new[]
+                {
+                    (EventType.Started, note, originalNote, false),
+                    (EventType.Finished, note, originalNote, false),
+                    (EventType.Started, note, originalNote, false),
+                    (EventType.Finished, note, originalNote, false),
+                },
+                setupPlayback: playback =>
+                {
                     playback.NoteCallback = NoteCallback;
                 });
         }
@@ -904,6 +996,65 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 {
                     new ReceivedEvent(new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), TimeSpan.Zero),
                     new ReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), stopAfter),
+                    new ReceivedEvent(new NoteOnEvent(), noteLength1 + stopPeriod),
+                    new ReceivedEvent(new NoteOffEvent(), noteLength1 + stopPeriod + noteLength2),
+                },
+                expectedNotesEvents: new[]
+                {
+                    (EventType.Started, note1, originalNote1, false),
+                    (EventType.Finished, note1, originalNote1, false),
+                    (EventType.Started, note2, note2, false),
+                    (EventType.Finished, note2, note2, false),
+                },
+                setupPlayback: playback =>
+                {
+                    playback.InterruptNotesOnStop = true;
+                    playback.TrackNotes = false;
+                    playback.NoteCallback = NoteCallback;
+                });
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
+        public void NoteCallback_InterruptNotesOnStop_ChangeCallbackDuringPlayback_SendNoteOffEventsForNonActiveNotes()
+        {
+            var stopAfter = TimeSpan.FromSeconds(2);
+            var stopPeriod = TimeSpan.FromSeconds(1);
+
+            var noteLength1 = TimeSpan.FromSeconds(4);
+            var noteLength2 = TimeSpan.FromSeconds(2);
+
+            var originalNote1 = new Note((SevenBitNumber)0) { Velocity = SevenBitNumber.MinValue }
+                .SetLength((MetricTimeSpan)noteLength1, TempoMap);
+
+            var note1 = (Note)originalNote1.Clone();
+            note1.NoteNumber += TransposeBy;
+
+            var note2 = new Note((SevenBitNumber)0) { Velocity = SevenBitNumber.MinValue }
+                .SetTime((MetricTimeSpan)noteLength1, TempoMap)
+                .SetLength((MetricTimeSpan)noteLength2, TempoMap);
+
+            CheckNoteCallback(
+                initialPlaybackObjects: new[]
+                {
+                    new TimedEvent(new NoteOnEvent()).SetTime((MetricTimeSpan)TimeSpan.Zero, TempoMap),
+                    new TimedEvent(new NoteOffEvent()).SetTime((MetricTimeSpan)noteLength1, TempoMap),
+                    new TimedEvent(new NoteOnEvent()).SetTime((MetricTimeSpan)noteLength1, TempoMap),
+                    new TimedEvent(new NoteOffEvent()).SetTime((MetricTimeSpan)(noteLength1 + noteLength2), TempoMap),
+                },
+                actions: new[]
+                {
+                    new PlaybackAction(TimeSpan.FromSeconds(1),
+                        p => p.NoteCallback = (d, rt, rl, t) => d),
+                    new PlaybackAction(stopAfter - TimeSpan.FromSeconds(1),
+                        p => p.Stop()),
+                    new PlaybackAction(stopPeriod,
+                        p => p.Start()),
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), TimeSpan.Zero),
+                    new ReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), stopAfter),
                     new ReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), noteLength1 + stopPeriod),
                     new ReceivedEvent(new NoteOnEvent(), noteLength1 + stopPeriod),
                     new ReceivedEvent(new NoteOffEvent(), noteLength1 + stopPeriod + noteLength2),
@@ -918,8 +1069,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 setupPlayback: playback =>
                 {
-                    playback.InterruptNotesOnStop = true;
                     playback.TrackNotes = false;
+                    playback.SendNoteOffEventsForNonActiveNotes = true;
                     playback.NoteCallback = NoteCallback;
                 });
         }
@@ -1093,6 +1244,96 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 {
                     new ReceivedEvent(new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), noteOnDelay),
                     new ReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), stopAfter),
+                },
+                expectedNotesEvents: new[]
+                {
+                    (EventType.Started, note, originalNote, true),
+                    (EventType.Finished, note, originalNote, true),
+                },
+                setupPlayback: playback =>
+                {
+                    playback.TrackNotes = false;
+                    playback.InterruptNotesOnStop = true;
+                    playback.NoteCallback = NoteCallback;
+                });
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
+        public void NoteCallback_InterruptNotesOnStop_Notes_TrackNotes()
+        {
+            var noteOnDelay = TimeSpan.Zero;
+            var noteOffDelay = TimeSpan.FromSeconds(2);
+
+            var stopAfter = TimeSpan.FromSeconds(1);
+            var stopPeriod = TimeSpan.FromMilliseconds(400);
+
+            var originalNote = new Note((SevenBitNumber)0) { Velocity = SevenBitNumber.MinValue }
+                .SetLength((MetricTimeSpan)noteOffDelay, TempoMap);
+
+            var note = (Note)originalNote.Clone();
+            note.NoteNumber += TransposeBy;
+
+            CheckNoteCallback(
+                initialPlaybackObjects: new[]
+                {
+                    originalNote,
+                },
+                actions: new[]
+                {
+                    new PlaybackAction(stopAfter, p => p.Stop()),
+                    new PlaybackAction(stopPeriod, p => p.Start()),
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), noteOnDelay),
+                    new ReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), stopAfter),
+                    new ReceivedEvent(new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), stopAfter + stopPeriod),
+                    new ReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), stopPeriod + noteOffDelay),
+                },
+                expectedNotesEvents: new[]
+                {
+                    (EventType.Started, note, originalNote, true),
+                    (EventType.Finished, note, originalNote, true),
+                    (EventType.Started, note, originalNote, true),
+                    (EventType.Finished, note, originalNote, true),
+                },
+                setupPlayback: playback =>
+                {
+                    playback.NoteCallback = NoteCallback;
+                });
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
+        public void NoteCallback_InterruptNotesOnStop_Notes_SendNoteOffEventsForNonActiveNotes()
+        {
+            var noteOnDelay = TimeSpan.Zero;
+            var noteOffDelay = TimeSpan.FromSeconds(2);
+
+            var stopAfter = TimeSpan.FromSeconds(1);
+            var stopPeriod = TimeSpan.FromMilliseconds(400);
+
+            var originalNote = new Note((SevenBitNumber)0) { Velocity = SevenBitNumber.MinValue }
+                .SetLength((MetricTimeSpan)noteOffDelay, TempoMap);
+
+            var note = (Note)originalNote.Clone();
+            note.NoteNumber += TransposeBy;
+
+            CheckNoteCallback(
+                initialPlaybackObjects: new[]
+                {
+                    originalNote,
+                },
+                actions: new[]
+                {
+                    new PlaybackAction(stopAfter, p => p.Stop()),
+                    new PlaybackAction(stopPeriod, p => p.Start()),
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), noteOnDelay),
+                    new ReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), stopAfter),
                     new ReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), noteOnDelay + stopAfter + stopPeriod + noteOffDelay - stopAfter),
                 },
                 expectedNotesEvents: new[]
@@ -1104,7 +1345,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 setupPlayback: playback =>
                 {
                     playback.TrackNotes = false;
-                    playback.InterruptNotesOnStop = true;
+                    playback.SendNoteOffEventsForNonActiveNotes = true;
                     playback.NoteCallback = NoteCallback;
                 });
         }
@@ -1590,14 +1831,12 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 {
                     new ReceivedEvent(new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), TimeSpan.Zero),
                     new ReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), stopAfter),
-                    new ReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), noteLength1 + stopPeriod),
                     new ReceivedEvent(new NoteOnEvent(), noteLength1 + stopPeriod),
                     new ReceivedEvent(new NoteOffEvent(), noteLength1 + stopPeriod + noteLength2),
                 },
                 expectedNotesEvents: new[]
                 {
                     (EventType.Started, note1, originalNote1, true),
-                    (EventType.Finished, note1, originalNote1, true),
                     (EventType.Finished, note1, originalNote1, true),
                     (EventType.Started, note2, note2, false),
                     (EventType.Finished, note2, note2, false),
@@ -1612,7 +1851,124 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
         [Retry(RetriesNumber)]
         [Test]
+        public void NoteCallback_InterruptNotesOnStop_ChangeCallbackDuringPlayback_Notes_SendNoteOffEventsForNonActiveNotes_1()
+        {
+            var stopAfter = TimeSpan.FromSeconds(2);
+            var stopPeriod = TimeSpan.FromSeconds(1);
+
+            var noteLength1 = TimeSpan.FromSeconds(4);
+            var noteLength2 = TimeSpan.FromSeconds(2);
+
+            var originalNote1 = new Note((SevenBitNumber)0) { Velocity = SevenBitNumber.MinValue }
+                .SetLength((MetricTimeSpan)noteLength1, TempoMap);
+
+            var note1 = (Note)originalNote1.Clone();
+            note1.NoteNumber += TransposeBy;
+
+            var note2 = new Note((SevenBitNumber)0) { Velocity = SevenBitNumber.MinValue }
+                .SetTime((MetricTimeSpan)noteLength1, TempoMap)
+                .SetLength((MetricTimeSpan)noteLength2, TempoMap);
+
+            CheckNoteCallback(
+                initialPlaybackObjects: new ITimedObject[]
+                {
+                    originalNote1,
+                    new TimedEvent(new NoteOnEvent()).SetTime((MetricTimeSpan)noteLength1, TempoMap),
+                    new TimedEvent(new NoteOffEvent()).SetTime((MetricTimeSpan)(noteLength1 + noteLength2), TempoMap),
+                },
+                actions: new[]
+                {
+                    new PlaybackAction(TimeSpan.FromSeconds(1),
+                        p => p.NoteCallback = (d, rt, rl, t) => d),
+                    new PlaybackAction(stopAfter - TimeSpan.FromSeconds(1),
+                        p => p.Stop()),
+                    new PlaybackAction(stopPeriod,
+                        p => p.Start()),
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), TimeSpan.Zero),
+                    new ReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), stopAfter),
+                    new ReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), noteLength1 + stopPeriod),
+                    new ReceivedEvent(new NoteOnEvent(), noteLength1 + stopPeriod),
+                    new ReceivedEvent(new NoteOffEvent(), noteLength1 + stopPeriod + noteLength2),
+                },
+                expectedNotesEvents: new[]
+                {
+                    (EventType.Started, note1, originalNote1, true),
+                    (EventType.Finished, note1, originalNote1, true),
+                    (EventType.Finished, note1, originalNote1, true),
+                    (EventType.Started, note2, note2, false),
+                    (EventType.Finished, note2, note2, false),
+                },
+                setupPlayback: playback =>
+                {
+                    playback.SendNoteOffEventsForNonActiveNotes = true;
+                    playback.TrackNotes = false;
+                    playback.NoteCallback = NoteCallback;
+                });
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
         public void NoteCallback_InterruptNotesOnStop_ChangeCallbackDuringPlayback_Notes_2()
+        {
+            var stopAfter = TimeSpan.FromSeconds(2);
+            var stopPeriod = TimeSpan.FromSeconds(1);
+
+            var noteLength1 = TimeSpan.FromSeconds(4);
+            var noteLength2 = TimeSpan.FromSeconds(2);
+
+            var originalNote1 = new Note((SevenBitNumber)0) { Velocity = SevenBitNumber.MinValue }
+                .SetLength((MetricTimeSpan)noteLength1, TempoMap);
+
+            var note1 = (Note)originalNote1.Clone();
+            note1.NoteNumber += TransposeBy;
+
+            var note2 = new Note((SevenBitNumber)0) { Velocity = SevenBitNumber.MinValue }
+                .SetTime((MetricTimeSpan)noteLength1, TempoMap)
+                .SetLength((MetricTimeSpan)noteLength2, TempoMap);
+
+            CheckNoteCallback(
+                initialPlaybackObjects: new ITimedObject[]
+                {
+                    originalNote1,
+                    note2,
+                },
+                actions: new[]
+                {
+                    new PlaybackAction(TimeSpan.FromSeconds(1),
+                        p => p.NoteCallback = (d, rt, rl, t) => d),
+                    new PlaybackAction(stopAfter - TimeSpan.FromSeconds(1),
+                        p => p.Stop()),
+                    new PlaybackAction(stopPeriod,
+                        p => p.Start()),
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), TimeSpan.Zero),
+                    new ReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), stopAfter),
+                    new ReceivedEvent(new NoteOnEvent(), noteLength1 + stopPeriod),
+                    new ReceivedEvent(new NoteOffEvent(), noteLength1 + stopPeriod + noteLength2),
+                },
+                expectedNotesEvents: new[]
+                {
+                    (EventType.Started, note1, originalNote1, true),
+                    (EventType.Finished, note1, originalNote1, true),
+                    (EventType.Started, note2, note2, true),
+                    (EventType.Finished, note2, note2, true),
+                },
+                setupPlayback: playback =>
+                {
+                    playback.InterruptNotesOnStop = true;
+                    playback.TrackNotes = false;
+                    playback.NoteCallback = NoteCallback;
+                });
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
+        public void NoteCallback_InterruptNotesOnStop_ChangeCallbackDuringPlayback_Notes_SendNoteOffEventsForNonActiveNotes_2()
         {
             var stopAfter = TimeSpan.FromSeconds(2);
             var stopPeriod = TimeSpan.FromSeconds(1);
@@ -1663,7 +2019,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 setupPlayback: playback =>
                 {
-                    playback.InterruptNotesOnStop = true;
+                    playback.SendNoteOffEventsForNonActiveNotes = true;
                     playback.TrackNotes = false;
                     playback.NoteCallback = NoteCallback;
                 });

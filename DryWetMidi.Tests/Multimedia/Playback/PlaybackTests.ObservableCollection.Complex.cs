@@ -40,7 +40,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var actions = SevenBitNumber
                 .Values
                 .Take(notesCount)
-                .Select(n => new DynamicPlaybackAction(n == 0 ? 0 : noteLengthMs,
+                .Select(n => new DynamicPlaybackAction(n == 0 ? 0 : noteLengthMs + gapMs,
                     (playback, collection) => collection.Add(objectsToAdd[n])))
                 .ToArray();
 

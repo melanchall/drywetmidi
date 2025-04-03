@@ -139,6 +139,58 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 expectedReceivedEvents: new[]
                 {
                     new ReceivedEvent(new NoteOnEvent((SevenBitNumber)100, Note.DefaultVelocity), moveFrom),
+                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)80, Note.DefaultVelocity), moveFrom + TimeSpan.FromMilliseconds(0)),
+                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), moveFrom + TimeSpan.FromMilliseconds(100)),
+                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)80, Note.DefaultOffVelocity), moveFrom + TimeSpan.FromMilliseconds(300)),
+                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), moveFrom + TimeSpan.FromMilliseconds(400)),
+                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)100, Note.DefaultOffVelocity), moveFrom + TimeSpan.FromMilliseconds(600)),
+                },
+                actions: new[]
+                {
+                    new PlaybackAction(moveFrom, p => p.MoveToTime((MetricTimeSpan)moveTo)),
+                },
+                notesWillBeStarted: new[] { 0, 4, 5 },
+                notesWillBeFinished: new[] { 4, 5, 0 });
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
+        public void TrackNotes_MoveForwardToNote_SendNoteOffEventsForNonActiveNotes()
+        {
+            //  1        2
+            // -|--AAAAAA|AAAAAA
+            // -|---BBB--|------
+            // -|----CCC-|EEE---
+            // -|-----DDD|-FFF--
+
+            var moveFrom = TimeSpan.FromMilliseconds(100);
+            var moveTo = TimeSpan.FromMilliseconds(900);
+
+            CheckNotesTracking(
+                initialTimedObjects: new[]
+                {
+                    new Note((SevenBitNumber)100)
+                        .SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(300), TempoMap)
+                        .SetLength((MetricTimeSpan)TimeSpan.FromMilliseconds(1200), TempoMap),
+                    new Note((SevenBitNumber)90)
+                        .SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(400), TempoMap)
+                        .SetLength((MetricTimeSpan)TimeSpan.FromMilliseconds(300), TempoMap),
+                    new Note((SevenBitNumber)80)
+                        .SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(500), TempoMap)
+                        .SetLength((MetricTimeSpan)TimeSpan.FromMilliseconds(300), TempoMap),
+                    new Note((SevenBitNumber)70)
+                        .SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(600), TempoMap)
+                        .SetLength((MetricTimeSpan)TimeSpan.FromMilliseconds(300), TempoMap),
+                    new Note((SevenBitNumber)80)
+                        .SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(900), TempoMap)
+                        .SetLength((MetricTimeSpan)TimeSpan.FromMilliseconds(300), TempoMap),
+                    new Note((SevenBitNumber)70)
+                        .SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(1000), TempoMap)
+                        .SetLength((MetricTimeSpan)TimeSpan.FromMilliseconds(300), TempoMap),
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)100, Note.DefaultVelocity), moveFrom),
                     new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), moveFrom + TimeSpan.FromMilliseconds(0)),
                     new ReceivedEvent(new NoteOnEvent((SevenBitNumber)80, Note.DefaultVelocity), moveFrom + TimeSpan.FromMilliseconds(0)),
                     new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), moveFrom + TimeSpan.FromMilliseconds(100)),
@@ -151,7 +203,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new PlaybackAction(moveFrom, p => p.MoveToTime((MetricTimeSpan)moveTo)),
                 },
                 notesWillBeStarted: new[] { 0, 4, 5 },
-                notesWillBeFinished: new[] { 3, 4, 5, 0 });
+                notesWillBeFinished: new[] { 3, 4, 5, 0 },
+                setupPlayback: playback => playback.SendNoteOffEventsForNonActiveNotes = true);
         }
 
         [Retry(RetriesNumber)]

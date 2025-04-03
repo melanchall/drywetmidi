@@ -57,12 +57,38 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 (new NoteOnEvent(), 0),
                 (new NoteOnEvent(), 1),
                 (new NoteOffEvent(), 0),
+                (new NoteOnEvent(), 0),
+                (new NoteOnEvent(), 1),
+                (new NoteOffEvent(), 0),
+            });
+
+        [Retry(RetriesNumber)]
+        [Test]
+        public void CheckPlaybackMetadata_EventPlayed_SendNoteOffEventsForNonActiveNotes() => CheckPlaybackMetadata(
+            midiFile: new MidiFile(
+                new TrackChunk(
+                    new NoteOnEvent(),
+                    new NoteOffEvent { DeltaTime = 50 },
+                    new NoteOnEvent { DeltaTime = 50 },
+                    new NoteOffEvent { DeltaTime = 50 }),
+                new TrackChunk(
+                    new NoteOnEvent { DeltaTime = 25 },
+                    new NoteOffEvent { DeltaTime = 50 },
+                    new NoteOnEvent { DeltaTime = 50 },
+                    new NoteOffEvent { DeltaTime = 50 })),
+            actions: Array.Empty<PlaybackAction>(),
+            expectedEvents: new (MidiEvent, object)[]
+            {
+                (new NoteOnEvent(), 0),
+                (new NoteOnEvent(), 1),
+                (new NoteOffEvent(), 0),
                 (new NoteOffEvent(), 1),
                 (new NoteOnEvent(), 0),
                 (new NoteOnEvent(), 1),
                 (new NoteOffEvent(), 0),
                 (new NoteOffEvent(), 1),
-            });
+            },
+            setupPlayback: playback => playback.SendNoteOffEventsForNonActiveNotes = true);
 
         [Retry(RetriesNumber)]
         [Test]
@@ -1542,10 +1568,50 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 {
                     (new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), 0),
                     (new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), 1),
+                },
+                setupPlayback: playback =>
+                {
+                    playback.TrackNotes = false;
+                    playback.InterruptNotesOnStop = true;
+                    playback.NoteCallback = NoteCallback;
+                });
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
+        public void CheckPlaybackMetadata_NoteCallback_InterruptNotesOnStop_SendNoteOffEventsForNonActiveNotes()
+        {
+            var noteOnDelay = TimeSpan.Zero;
+            var noteOffDelay = TimeSpan.FromSeconds(2);
+
+            var stopAfter = TimeSpan.FromSeconds(1);
+            var stopPeriod = TimeSpan.FromMilliseconds(400);
+
+            CheckPlaybackMetadata(
+                midiFile: new MidiFile(
+                    new TrackChunk(
+                        new NoteOnEvent()),
+                    new TrackChunk(
+                        new NoteOffEvent
+                        {
+                            DeltaTime = GetDeltaTime(noteOffDelay)
+                        })),
+                actions: new[]
+                {
+                    new PlaybackAction(stopAfter,
+                        p => p.Stop()),
+                    new PlaybackAction(stopPeriod,
+                        p => p.Start()),
+                },
+                expectedEvents: new (MidiEvent, object)[]
+                {
+                    (new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), 0),
+                    (new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), 1),
                     (new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), 1),
                 },
                 setupPlayback: playback =>
                 {
+                    playback.SendNoteOffEventsForNonActiveNotes = true;
                     playback.TrackNotes = false;
                     playback.InterruptNotesOnStop = true;
                     playback.NoteCallback = NoteCallback;
