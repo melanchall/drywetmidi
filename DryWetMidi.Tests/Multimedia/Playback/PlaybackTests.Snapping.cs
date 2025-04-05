@@ -1561,7 +1561,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
         [Retry(RetriesNumber)]
         [Test]
-        public void Snapping_SnapToEvents_1()
+        public void Snapping_SnapToEvents()
         {
             var stopAfter = TimeSpan.FromSeconds(2);
             var stopPeriod = TimeSpan.FromSeconds(1);
@@ -1616,6 +1616,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 {
                     playback.TrackNotes = false;
                     playback.InterruptNotesOnStop = false;
+                    playback.SendNoteOnEventsForActiveNotes = true;
 
                     snapPointsGroup = playback.SnapToEvents(e => e.EventType == MidiEventType.NoteOn);
                     var snapPointsGroup2 = playback.SnapToEvents(e => e.EventType == MidiEventType.NoteOn);

@@ -385,6 +385,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     playback.InterruptNotesOnStop = false;
                     playback.TrackNotes = false;
                     playback.NoteCallback = NoteCallback;
+                    playback.SendNoteOnEventsForActiveNotes = true;
                     playback.Speed = speed;
                 });
         }
@@ -723,6 +724,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 {
                     playback.InterruptNotesOnStop = false;
                     playback.TrackNotes = false;
+                    playback.SendNoteOnEventsForActiveNotes = true;
                     playback.NoteCallback = NoteCallback;
                 });
         }
@@ -771,6 +773,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 {
                     playback.InterruptNotesOnStop = false;
                     playback.TrackNotes = false;
+                    playback.SendNoteOnEventsForActiveNotes = true;
                     playback.NoteCallback = NoteCallback;
                     playback.PlaybackStart = new MetricTimeSpan(0, 0, 0, 300);
                 });
@@ -1421,6 +1424,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     playback.InterruptNotesOnStop = false;
                     playback.TrackNotes = false;
                     playback.NoteCallback = NoteCallback;
+                    playback.SendNoteOnEventsForActiveNotes = true;
                     playback.Speed = speed;
                 });
         }

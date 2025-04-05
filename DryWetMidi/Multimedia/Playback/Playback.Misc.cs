@@ -221,6 +221,8 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         public bool SendNoteOffEventsForNonActiveNotes { get; set; }
 
+        public bool SendNoteOnEventsForActiveNotes { get; set; }
+
         /// <summary>
         /// Gets or sets the speed of events playing. <c>1</c> means normal speed. For example, to play
         /// events twice slower this property should be set to <c>0.5</c>. Value of <c>2</c> will make playback
@@ -1096,7 +1098,14 @@ namespace Melanchall.DryWetMidi.Multimedia
                 var noteId = GetNoteId((NoteEvent)midiEvent);
 
                 if (midiEvent is NoteOnEvent)
-                    _activeNotesMetadata.TryAdd(noteId, noteMetadata);
+                {
+                    if (!_activeNotesMetadata.TryAdd(noteId, noteMetadata) && !SendNoteOnEventsForActiveNotes)
+                    {
+                        note = null;
+                        originalNote = null;
+                        return true;
+                    }
+                }
                 else
                 {
                     NotePlaybackEventMetadata value;

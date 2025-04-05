@@ -55,16 +55,66 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             expectedEvents: new (MidiEvent, object)[]
             {
                 (new NoteOnEvent(), 0),
-                (new NoteOnEvent(), 1),
                 (new NoteOffEvent(), 0),
                 (new NoteOnEvent(), 0),
-                (new NoteOnEvent(), 1),
                 (new NoteOffEvent(), 0),
             });
 
         [Retry(RetriesNumber)]
         [Test]
+        public void CheckPlaybackMetadata_EventPlayed_SendNoteOnEventsForActiveNotes() => CheckPlaybackMetadata(
+            midiFile: new MidiFile(
+                new TrackChunk(
+                    new NoteOnEvent(),
+                    new NoteOffEvent { DeltaTime = 50 },
+                    new NoteOnEvent { DeltaTime = 50 },
+                    new NoteOffEvent { DeltaTime = 50 }),
+                new TrackChunk(
+                    new NoteOnEvent { DeltaTime = 25 },
+                    new NoteOffEvent { DeltaTime = 50 },
+                    new NoteOnEvent { DeltaTime = 50 },
+                    new NoteOffEvent { DeltaTime = 50 })),
+            actions: Array.Empty<PlaybackAction>(),
+            expectedEvents: new (MidiEvent, object)[]
+            {
+                (new NoteOnEvent(), 0),
+                (new NoteOnEvent(), 1),
+                (new NoteOffEvent(), 0),
+                (new NoteOnEvent(), 0),
+                (new NoteOnEvent(), 1),
+                (new NoteOffEvent(), 0),
+            },
+            setupPlayback: playback => playback.SendNoteOnEventsForActiveNotes = true);
+
+        [Retry(RetriesNumber)]
+        [Test]
         public void CheckPlaybackMetadata_EventPlayed_SendNoteOffEventsForNonActiveNotes() => CheckPlaybackMetadata(
+            midiFile: new MidiFile(
+                new TrackChunk(
+                    new NoteOnEvent(),
+                    new NoteOffEvent { DeltaTime = 50 },
+                    new NoteOnEvent { DeltaTime = 50 },
+                    new NoteOffEvent { DeltaTime = 50 }),
+                new TrackChunk(
+                    new NoteOnEvent { DeltaTime = 25 },
+                    new NoteOffEvent { DeltaTime = 50 },
+                    new NoteOnEvent { DeltaTime = 50 },
+                    new NoteOffEvent { DeltaTime = 50 })),
+            actions: Array.Empty<PlaybackAction>(),
+            expectedEvents: new (MidiEvent, object)[]
+            {
+                (new NoteOnEvent(), 0),
+                (new NoteOffEvent(), 0),
+                (new NoteOffEvent(), 1),
+                (new NoteOnEvent(), 0),
+                (new NoteOffEvent(), 0),
+                (new NoteOffEvent(), 1),
+            },
+            setupPlayback: playback => playback.SendNoteOffEventsForNonActiveNotes = true);
+
+        [Retry(RetriesNumber)]
+        [Test]
+        public void CheckPlaybackMetadata_EventPlayed_SendNoteOffEventsForNonActiveNotes_SendNoteOnEventsForActiveNotes() => CheckPlaybackMetadata(
             midiFile: new MidiFile(
                 new TrackChunk(
                     new NoteOnEvent(),
@@ -88,7 +138,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 (new NoteOffEvent(), 0),
                 (new NoteOffEvent(), 1),
             },
-            setupPlayback: playback => playback.SendNoteOffEventsForNonActiveNotes = true);
+            setupPlayback: playback =>
+            {
+                playback.SendNoteOffEventsForNonActiveNotes = true;
+                playback.SendNoteOnEventsForActiveNotes = true;
+            });
 
         [Retry(RetriesNumber)]
         [Test]
@@ -1672,6 +1726,70 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 expectedEvents: new (MidiEvent, object)[]
                 {
                     (new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), 0),
+                    (new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), 1),
+                },
+                setupPlayback: playback =>
+                {
+                    playback.TrackNotes = false;
+                    playback.InterruptNotesOnStop = false;
+                    playback.NoteCallback = NoteCallback;
+                });
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
+        public void CheckPlaybackMetadata_NoteCallback_MoveToStart_SendNoteOnEventsForActiveNotes()
+        {
+            var stopAfter = TimeSpan.FromMilliseconds(500);
+            var stopPeriod = TimeSpan.FromSeconds(1);
+
+            var firstEventTime = TimeSpan.Zero;
+            var lastEventTime = TimeSpan.FromSeconds(5);
+
+            var firstAfterResumeDelay = TimeSpan.FromMilliseconds(400);
+            var secondAfterResumeDelay = TimeSpan.FromSeconds(1);
+            var thirdAfterResumeDelay = TimeSpan.FromMilliseconds(500);
+
+            CheckPlaybackMetadata(
+                midiFile: new MidiFile(
+                    new TrackChunk(
+                        new NoteOnEvent()
+                        {
+                            DeltaTime = GetDeltaTime(firstEventTime)
+                        }),
+                    new TrackChunk(
+                        new NoteOffEvent()
+                        {
+                            DeltaTime = GetDeltaTime(firstEventTime + lastEventTime)
+                        })),
+                actions: new[]
+                {
+                    new PlaybackAction(stopAfter,
+                        p =>
+                        {
+                            p.Stop();
+                            p.MoveToStart();
+                        }),
+                    new PlaybackAction(stopPeriod,
+                        p =>
+                        {
+                            p.Start();
+                            CheckCurrentTime(p, TimeSpan.Zero, "stopped");
+                        }),
+                    new PlaybackAction(firstAfterResumeDelay,
+                        p => CheckCurrentTime(p, firstAfterResumeDelay, "resumed")),
+                    new PlaybackAction(secondAfterResumeDelay,
+                        p =>
+                        {
+                            p.MoveToStart();
+                            CheckCurrentTime(p, TimeSpan.Zero, "resumed");
+                        }),
+                    new PlaybackAction(thirdAfterResumeDelay,
+                        p => CheckCurrentTime(p, thirdAfterResumeDelay, "resumed")),
+                },
+                expectedEvents: new (MidiEvent, object)[]
+                {
+                    (new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), 0),
                     (new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), 0),
                     (new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), 0),
                     (new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), 1),
@@ -1680,6 +1798,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 {
                     playback.TrackNotes = false;
                     playback.InterruptNotesOnStop = false;
+                    playback.SendNoteOnEventsForActiveNotes = true;
                     playback.NoteCallback = NoteCallback;
                 });
         }
@@ -1969,6 +2088,69 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 expectedEvents: new (MidiEvent, object)[]
                 {
                     (new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), 0),
+                    (new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), 1),
+                },
+                setupPlayback: playback =>
+                {
+                    playback.TrackNotes = false;
+                    playback.InterruptNotesOnStop = false;
+                    playback.NoteCallback = NoteCallback;
+                });
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
+        public void CheckPlaybackMetadata_NoteCallback_MoveBack_BeyondZero_SendNoteOnEventsForActiveNotes()
+        {
+            var stopAfter = TimeSpan.FromMilliseconds(500);
+            var stopPeriod = TimeSpan.FromMilliseconds(600);
+
+            var stepAfterStop = TimeSpan.FromMilliseconds(2000);
+            var stepAfterResumed = TimeSpan.FromMilliseconds(500);
+
+            var lastEventTime = TimeSpan.FromSeconds(2);
+
+            var firstAfterResumeDelay = TimeSpan.FromMilliseconds(200);
+            var secondAfterResumeDelay = TimeSpan.FromMilliseconds(400);
+            var thirdAfterResumeDelay = TimeSpan.FromMilliseconds(300);
+
+            CheckPlaybackMetadata(
+                midiFile: new MidiFile(
+                    new TrackChunk(
+                        new NoteOnEvent()),
+                    new TrackChunk(
+                        new NoteOffEvent()
+                        {
+                            DeltaTime = GetDeltaTime(lastEventTime)
+                        })),
+                actions: new[]
+                {
+                    new PlaybackAction(stopAfter,
+                        p =>
+                        {
+                            p.Stop();
+                            p.MoveBack((MetricTimeSpan)stepAfterStop);
+                        }),
+                    new PlaybackAction(stopPeriod,
+                        p =>
+                        {
+                            p.Start();
+                            CheckCurrentTime(p, TimeSpan.Zero, "stopped");
+                        }),
+                    new PlaybackAction(firstAfterResumeDelay,
+                        p => CheckCurrentTime(p, firstAfterResumeDelay, "resumed")),
+                    new PlaybackAction(secondAfterResumeDelay,
+                        p =>
+                        {
+                            p.MoveBack((MetricTimeSpan)stepAfterResumed);
+                            CheckCurrentTime(p, firstAfterResumeDelay + secondAfterResumeDelay - stepAfterResumed, "resumed");
+                        }),
+                    new PlaybackAction(thirdAfterResumeDelay,
+                        p => CheckCurrentTime(p, firstAfterResumeDelay + secondAfterResumeDelay + thirdAfterResumeDelay - stepAfterResumed, "resumed")),
+                },
+                expectedEvents: new (MidiEvent, object)[]
+                {
+                    (new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), 0),
                     (new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), 0),
                     (new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), 1),
                 },
@@ -1976,6 +2158,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 {
                     playback.TrackNotes = false;
                     playback.InterruptNotesOnStop = false;
+                    playback.SendNoteOnEventsForActiveNotes = true;
                     playback.NoteCallback = NoteCallback;
                 });
         }
@@ -2014,6 +2197,51 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 expectedEvents: new (MidiEvent, object)[]
                 {
                     (new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), 2),
+                    (new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), 2),
+                },
+                setupPlayback: playback =>
+                {
+                    playback.InterruptNotesOnStop = false;
+                    playback.TrackNotes = false;
+                    playback.NoteCallback = NoteCallback;
+                    playback.PlaybackStart = new MetricTimeSpan(0, 0, 0, 300);
+                });
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
+        public void CheckPlaybackMetadata_NoteCallback_MoveBack_BeyondPlaybackStart_SendNoteOnEventsForActiveNotes()
+        {
+            CheckPlaybackMetadata(
+                midiFile: new MidiFile(
+                    new TrackChunk(
+                        new NoteOnEvent()),
+                    new TrackChunk(
+                        new NoteOffEvent()
+                        {
+                            DeltaTime = GetDeltaTime(TimeSpan.FromMilliseconds(200))
+                        }),
+                    new TrackChunk(
+                        new NoteOnEvent()
+                        {
+                            DeltaTime = GetDeltaTime(TimeSpan.FromMilliseconds(400))
+                        },
+                        new NoteOffEvent()
+                        {
+                            DeltaTime = GetDeltaTime(TimeSpan.FromMilliseconds(200))
+                        })),
+                actions: new PlaybackAction[]
+                {
+                    new PlaybackAction(200, p =>
+                    {
+                        CheckCurrentTime(p, TimeSpan.FromMilliseconds(500), "A");
+                        p.MoveBack(new MetricTimeSpan(0, 0, 0, 400));
+                        CheckCurrentTime(p, TimeSpan.FromMilliseconds(300), "B");
+                    }),
+                },
+                expectedEvents: new (MidiEvent, object)[]
+                {
+                    (new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), 2),
                     (new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), 2),
                     (new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), 2),
                 },
@@ -2021,6 +2249,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 {
                     playback.InterruptNotesOnStop = false;
                     playback.TrackNotes = false;
+                    playback.SendNoteOnEventsForActiveNotes = true;
                     playback.NoteCallback = NoteCallback;
                     playback.PlaybackStart = new MetricTimeSpan(0, 0, 0, 300);
                 });

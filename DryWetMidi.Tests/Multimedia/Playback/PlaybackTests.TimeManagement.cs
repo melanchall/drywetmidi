@@ -67,6 +67,68 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 expectedReceivedEvents: new[]
                 {
                     new ReceivedEvent(new NoteOnEvent(), firstEventTime),
+                    new ReceivedEvent(new NoteOffEvent(), stopAfter + stopPeriod + firstAfterResumeDelay + secondAfterResumeDelay + ScaleTimeSpan(lastEventTime, 1.0 / speed)),
+                },
+                setupPlayback: playback =>
+                {
+                    playback.TrackNotes = false;
+                    playback.InterruptNotesOnStop = false;
+                    playback.Speed = speed;
+                });
+        }
+
+        [Retry(RetriesNumber)]
+        [TestCase(1.0)]
+        [TestCase(2.0)]
+        [TestCase(0.5)]
+        public void MoveToStart_SendNoteOnEventsForActiveNotes(double speed)
+        {
+            var stopAfter = TimeSpan.FromMilliseconds(200);
+            var stopPeriod = TimeSpan.FromMilliseconds(700);
+
+            var firstEventTime = TimeSpan.Zero;
+            var lastEventTime = TimeSpan.FromSeconds(2);
+
+            var firstAfterResumeDelay = TimeSpan.FromMilliseconds(200);
+            var secondAfterResumeDelay = TimeSpan.FromMilliseconds(500);
+            var thirdAfterResumeDelay = TimeSpan.FromMilliseconds(100);
+
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
+                {
+                    new TimedEvent(new NoteOnEvent()).SetTime((MetricTimeSpan)firstEventTime, TempoMap),
+                    new TimedEvent(new NoteOffEvent()).SetTime((MetricTimeSpan)(firstEventTime + lastEventTime), TempoMap),
+                },
+                actions: new[]
+                {
+                    new PlaybackAction(stopAfter, p =>
+                    {
+                        p.Stop();
+                        p.MoveToStart();
+                    }),
+                    new PlaybackAction(stopPeriod, p =>
+                    {
+                        p.Start();
+                        CheckCurrentTime(p, TimeSpan.Zero, "stopped");
+                    }),
+                    new PlaybackAction(firstAfterResumeDelay, p =>
+                    {
+                        CheckCurrentTime(p, ScaleTimeSpan(firstAfterResumeDelay, speed), "resumed");
+                    }),
+                    new PlaybackAction(secondAfterResumeDelay, p =>
+                    {
+                        p.MoveToStart();
+                        CheckCurrentTime(p, TimeSpan.Zero, "resumed");
+                    }),
+                    new PlaybackAction(thirdAfterResumeDelay, p =>
+                    {
+                        CheckCurrentTime(p, ScaleTimeSpan(thirdAfterResumeDelay, speed), "resumed");
+                    }),
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new NoteOnEvent(), firstEventTime),
                     new ReceivedEvent(new NoteOnEvent(), stopAfter + stopPeriod),
                     new ReceivedEvent(new NoteOnEvent(), stopAfter + stopPeriod + firstAfterResumeDelay + secondAfterResumeDelay),
                     new ReceivedEvent(new NoteOffEvent(), stopAfter + stopPeriod + firstAfterResumeDelay + secondAfterResumeDelay + ScaleTimeSpan(lastEventTime, 1.0 / speed)),
@@ -75,6 +137,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 {
                     playback.TrackNotes = false;
                     playback.InterruptNotesOnStop = false;
+                    playback.SendNoteOnEventsForActiveNotes = true;
                     playback.Speed = speed;
                 });
         }
@@ -375,6 +438,67 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 expectedReceivedEvents: new[]
                 {
                     new ReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
+                    new ReceivedEvent(new NoteOffEvent(), lastEventTime + stopAfter + stopPeriod + stepAfterResumed),
+                },
+                setupPlayback: playback =>
+                {
+                    playback.TrackNotes = false;
+                    playback.InterruptNotesOnStop = false;
+                });
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
+        public void MoveBack_BeyondZero_SendNoteOnEventsForActiveNotes()
+        {
+            var stopAfter = TimeSpan.FromMilliseconds(500);
+            var stopPeriod = TimeSpan.FromMilliseconds(600);
+
+            var stepAfterStop = TimeSpan.FromMilliseconds(2000);
+            var stepAfterResumed = TimeSpan.FromMilliseconds(500);
+
+            var lastEventTime = TimeSpan.FromSeconds(2);
+
+            var firstAfterResumeDelay = TimeSpan.FromMilliseconds(200);
+            var secondAfterResumeDelay = TimeSpan.FromMilliseconds(400);
+            var thirdAfterResumeDelay = TimeSpan.FromMilliseconds(300);
+
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
+                {
+                    new TimedEvent(new NoteOnEvent()).SetTime((MetricTimeSpan)TimeSpan.Zero, TempoMap),
+                    new TimedEvent(new NoteOffEvent()).SetTime((MetricTimeSpan)lastEventTime, TempoMap),
+                },
+                actions: new[]
+                {
+                    new PlaybackAction(stopAfter, p =>
+                    {
+                        p.Stop();
+                        p.MoveBack((MetricTimeSpan)stepAfterStop);
+                    }),
+                    new PlaybackAction(stopPeriod, p =>
+                    {
+                        p.Start();
+                        CheckCurrentTime(p, TimeSpan.Zero, "stopped");
+                    }),
+                    new PlaybackAction(firstAfterResumeDelay, p =>
+                    {
+                        CheckCurrentTime(p, firstAfterResumeDelay, "resumed");
+                    }),
+                    new PlaybackAction(secondAfterResumeDelay, p =>
+                    {
+                        p.MoveBack((MetricTimeSpan)stepAfterResumed);
+                        CheckCurrentTime(p, firstAfterResumeDelay + secondAfterResumeDelay - stepAfterResumed, "resumed");
+                    }),
+                    new PlaybackAction(thirdAfterResumeDelay, p =>
+                    {
+                        CheckCurrentTime(p, firstAfterResumeDelay + secondAfterResumeDelay + thirdAfterResumeDelay - stepAfterResumed, "resumed");
+                    }),
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
                     new ReceivedEvent(new NoteOnEvent(), stopAfter + stopPeriod),
                     new ReceivedEvent(new NoteOffEvent(), lastEventTime + stopAfter + stopPeriod + stepAfterResumed),
                 },
@@ -382,6 +506,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 {
                     playback.TrackNotes = false;
                     playback.InterruptNotesOnStop = false;
+                    playback.SendNoteOnEventsForActiveNotes = true;
                 });
         }
 
@@ -410,7 +535,6 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 expectedReceivedEvents: new[]
                 {
                     new ReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(100)),
-                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(300)),
                     new ReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(500))
                 },
                 setupPlayback: playback =>
@@ -446,6 +570,41 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 expectedReceivedEvents: new[]
                 {
                     new ReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(100)),
+                    new ReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(500))
+                },
+                setupPlayback: playback =>
+                {
+                    playback.InterruptNotesOnStop = false;
+                    playback.TrackNotes = false;
+                    playback.PlaybackStart = new MetricTimeSpan(0, 0, 0, 300);
+                });
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
+        public void MoveBack_BeyondPlaybackStart_SendNoteOnEventsForActiveNotes_1()
+        {
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
+                {
+                    new TimedEvent(new NoteOnEvent()).SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(0), TempoMap),
+                    new TimedEvent(new NoteOffEvent()).SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(200), TempoMap),
+                    new TimedEvent(new NoteOnEvent()).SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(400), TempoMap),
+                    new TimedEvent(new NoteOffEvent()).SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(600), TempoMap),
+                },
+                actions: new PlaybackAction[]
+                {
+                    new PlaybackAction(200, p =>
+                    {
+                        CheckCurrentTime(p, TimeSpan.FromMilliseconds(500), "A");
+                        p.MoveBack(new MetricTimeSpan(0, 0, 0, 400));
+                        CheckCurrentTime(p, TimeSpan.FromMilliseconds(300), "B");
+                    }),
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(100)),
                     new ReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(300)),
                     new ReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(500))
                 },
@@ -453,6 +612,44 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 {
                     playback.InterruptNotesOnStop = false;
                     playback.TrackNotes = false;
+                    playback.SendNoteOnEventsForActiveNotes = true;
+                    playback.PlaybackStart = new MetricTimeSpan(0, 0, 0, 300);
+                });
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
+        public void MoveBack_BeyondPlaybackStart_SendNoteOnEventsForActiveNotes_2()
+        {
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
+                {
+                    new TimedEvent(new NoteOnEvent()).SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(0), TempoMap),
+                    new TimedEvent(new NoteOffEvent()).SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(200), TempoMap),
+                    new TimedEvent(new NoteOnEvent()).SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(400), TempoMap),
+                    new TimedEvent(new NoteOffEvent()).SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(600), TempoMap),
+                },
+                actions: new PlaybackAction[]
+                {
+                    new PlaybackAction(200, p =>
+                    {
+                        CheckCurrentTime(p, TimeSpan.FromMilliseconds(500), "A");
+                        p.MoveBack(new MetricTimeSpan(0, 0, 2, 400));
+                        CheckCurrentTime(p, TimeSpan.FromMilliseconds(300), "B");
+                    }),
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(100)),
+                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(300)),
+                    new ReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(500))
+                },
+                setupPlayback: playback =>
+                {
+                    playback.InterruptNotesOnStop = false;
+                    playback.TrackNotes = false;
+                    playback.SendNoteOnEventsForActiveNotes = true;
                     playback.PlaybackStart = new MetricTimeSpan(0, 0, 0, 300);
                 });
         }

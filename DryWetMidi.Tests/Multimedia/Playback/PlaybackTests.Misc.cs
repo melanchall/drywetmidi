@@ -455,6 +455,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 setupPlayback: playback => playback.PlaybackEnd = playbackEnd);
         }
 
+        // TODO: check for SendNoteOnEventsForActiveNotes = false
         [Retry(RetriesNumber)]
         [TestCase(1)]
         [TestCase(2)]
@@ -502,6 +503,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     playback.PlaybackStart = playbackStart;
                     playback.PlaybackEnd = playbackEnd;
                     playback.InterruptNotesOnStop = false;
+                    playback.SendNoteOnEventsForActiveNotes = true;
                 });
         }
 
