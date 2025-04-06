@@ -41,11 +41,8 @@ namespace Melanchall.DryWetMidi.Interaction
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
-            return trackChunk
-                .Events
-                .GetTimedEventsLazy(null, false)
-                .LastOrDefault()
-                ?.TimeAs<TTimeSpan>(tempoMap) ?? TimeSpanUtilities.GetZeroTimeSpan<TTimeSpan>();
+            var lastTime = GetLastTime(trackChunk);
+            return TimeConverter.ConvertTo<TTimeSpan>(lastTime, tempoMap);
         }
 
         /// <summary>
@@ -75,11 +72,8 @@ namespace Melanchall.DryWetMidi.Interaction
             ThrowIfArgument.IsInvalidEnumValue(nameof(durationType), durationType);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
-            return trackChunk
-                .Events
-                .GetTimedEventsLazy(null, false)
-                .LastOrDefault()
-                ?.TimeAs(durationType, tempoMap) ?? TimeSpanUtilities.GetZeroTimeSpan(durationType);
+            var lastTime = GetLastTime(trackChunk);
+            return TimeConverter.ConvertTo(lastTime, durationType, tempoMap);
         }
 
         /// <summary>
@@ -109,11 +103,8 @@ namespace Melanchall.DryWetMidi.Interaction
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
-            return trackChunks
-                .GetTimedEventsLazy(null, false)
-                .Select(e => e.Object)
-                .LastOrDefault()
-                ?.TimeAs<TTimeSpan>(tempoMap) ?? TimeSpanUtilities.GetZeroTimeSpan<TTimeSpan>();
+            var maxTime = GetMaxTime(trackChunks);
+            return TimeConverter.ConvertTo<TTimeSpan>(maxTime, tempoMap);
         }
 
         /// <summary>
@@ -143,11 +134,8 @@ namespace Melanchall.DryWetMidi.Interaction
             ThrowIfArgument.IsInvalidEnumValue(nameof(durationType), durationType);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
-            return trackChunks
-                .GetTimedEventsLazy(null, false)
-                .Select(e => e.Object)
-                .LastOrDefault()
-                ?.TimeAs(durationType, tempoMap) ?? TimeSpanUtilities.GetZeroTimeSpan(durationType);
+            var maxTime = GetMaxTime(trackChunks);
+            return TimeConverter.ConvertTo(maxTime, durationType, tempoMap);
         }
 
         /// <summary>
@@ -203,7 +191,7 @@ namespace Melanchall.DryWetMidi.Interaction
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
 
-            return !midiFile.GetEvents().Any();
+            return !midiFile.GetTrackChunks().Any(c => c.Events.Any());
         }
 
         /// <summary>
@@ -228,6 +216,25 @@ namespace Melanchall.DryWetMidi.Interaction
             ThrowIfArgument.IsNull(nameof(distance), distance);
 
             midiFile.GetTrackChunks().ShiftEvents(distance, midiFile.GetTempoMap());
+        }
+
+        private static long GetLastTime(TrackChunk trackChunk)
+        {
+            return trackChunk.Events.DefaultIfEmpty().Sum(e => e?.DeltaTime ?? 0L);
+        }
+
+        private static long GetMaxTime(IEnumerable<TrackChunk> trackChunks)
+        {
+            var maxTime = 0L;
+
+            foreach (var trackChunk in trackChunks)
+            {
+                var lastTime = GetLastTime(trackChunk);
+                if (lastTime > maxTime)
+                    maxTime = lastTime;
+            }
+
+            return maxTime;
         }
 
         #endregion
