@@ -198,7 +198,16 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <summary>
         /// Gets a value indicating whether playing is currently running or not.
         /// </summary>
-        public bool IsRunning => _clock.IsRunning;
+        public bool IsRunning
+        {
+            get
+            {
+                lock (_playbackLockObject)
+                {
+                    return _clock.IsRunning;
+                }
+            }
+        }
 
         /// <summary>
         /// Gets or sets a value indicating whether playing should automatically start
@@ -1131,8 +1140,17 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         private void ResetPlaybackEventsPosition()
         {
-            _playbackEventsPosition = null;
-            _beforeStart = true;
+            if (_playbackStart != null)
+            {
+                _playbackEventsPosition = _playbackEvents.GetLastCoordinateBelowThreshold(_playbackStartMetric);
+                if (_playbackEventsPosition == null)
+                    _beforeStart = true;
+            }
+            else
+            {
+                _playbackEventsPosition = null;
+                _beforeStart = true;
+            }
         }
 
         private bool MoveToNextPlaybackEvent()

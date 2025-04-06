@@ -455,12 +455,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 setupPlayback: playback => playback.PlaybackEnd = playbackEnd);
         }
 
-        // TODO: check for SendNoteOnEventsForActiveNotes = false
         [Retry(RetriesNumber)]
         [TestCase(1)]
         [TestCase(2)]
         [TestCase(5)]
-        public void CheckPlaybackLooping_CustomPlaybackStartAndEnd(int repeatsCount)
+        public void CheckPlaybackLooping_CustomPlaybackStartAndEnd_1(int repeatsCount)
         {
             var playbackObjects = new[]
             {
@@ -504,6 +503,56 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     playback.PlaybackEnd = playbackEnd;
                     playback.InterruptNotesOnStop = false;
                     playback.SendNoteOnEventsForActiveNotes = true;
+                });
+        }
+
+        [Retry(RetriesNumber)]
+        [TestCase(1)]
+        [TestCase(2)]
+        [TestCase(5)]
+        public void CheckPlaybackLooping_CustomPlaybackStartAndEnd_2(int repeatsCount)
+        {
+            var playbackObjects = new[]
+            {
+                new TimedEvent(new NoteOnEvent((SevenBitNumber)100, (SevenBitNumber)20) { Channel = (FourBitNumber)5 }),
+                new TimedEvent(new NoteOffEvent((SevenBitNumber)100, (SevenBitNumber)10) { Channel = (FourBitNumber)5 })
+                    .SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(300), TempoMap),
+                new TimedEvent(new NoteOnEvent())
+                    .SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(500), TempoMap),
+                new TimedEvent(new MarkerEvent("A"))
+                    .SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(500), TempoMap),
+                new TimedEvent(new NoteOffEvent())
+                    .SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(700), TempoMap),
+                new TimedEvent(new MarkerEvent("B"))
+                    .SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(900), TempoMap),
+            };
+
+            var lastTime = (TimeSpan)playbackObjects.Last().TimeAs<MetricTimeSpan>(TempoMap);
+            var playbackStart = new MetricTimeSpan(0, 0, 0, 400);
+            var playbackEnd = new MetricTimeSpan(0, 0, 0, 800);
+
+            var takenObject = playbackObjects
+                .SkipWhile(obj => obj.TimeAs<MetricTimeSpan>(TempoMap) < playbackStart)
+                .TakeWhile(obj => obj.TimeAs<MetricTimeSpan>(TempoMap) <= playbackEnd);
+            var windowSize = playbackEnd - playbackStart;
+
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: playbackObjects,
+                actions: Array.Empty<PlaybackAction>(),
+                expectedReceivedEvents: Enumerable
+                    .Range(0, repeatsCount + 1)
+                    .SelectMany(i => takenObject
+                        .Select(obj => new ReceivedEvent(
+                            obj.Event,
+                            (TimeSpan)(obj.TimeAs<MetricTimeSpan>(TempoMap) - playbackStart) + ScaleTimeSpan((TimeSpan)windowSize, i))))
+                    .ToArray(),
+                repeatsCount: repeatsCount,
+                setupPlayback: playback =>
+                {
+                    playback.PlaybackStart = playbackStart;
+                    playback.PlaybackEnd = playbackEnd;
+                    playback.InterruptNotesOnStop = false;
                 });
         }
 

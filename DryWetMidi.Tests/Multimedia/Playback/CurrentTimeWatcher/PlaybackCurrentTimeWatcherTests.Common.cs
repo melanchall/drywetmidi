@@ -293,7 +293,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 watcher.CurrentTimeChanged += (_, __) => objects.Add(new object());
 
                 watcher.Start();
-                WaitOperations.Wait(TimeSpan.FromSeconds(1));
+                WaitOperations.WaitPrecisely(TimeSpan.FromSeconds(1));
                 watcher.Stop();
 
                 objectsCount = objects.Count;

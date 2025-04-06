@@ -27,7 +27,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
         public override string ToString()
         {
-            return $"{Event} after {Delay} of delay";
+            return $"{Event} after {Delay}";
         }
 
         #endregion

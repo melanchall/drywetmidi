@@ -44,7 +44,15 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
                     var timeout = TimeSpan.FromTicks(eventsToSend.Sum(e => e.Delay.Ticks)) + MaximumEventSendReceiveDelay;
                     var areEventsReceived = WaitOperations.Wait(() => receivedEvents.Count == eventsToSend.Count, timeout);
-                    Assert.IsTrue(areEventsReceived, $"Events are not received for timeout {timeout}.");
+                    
+                    if (!areEventsReceived)
+                    {
+                        Assert.Fail(
+                            $"Events are not received for timeout {timeout}. " +
+                            $"Events to send: {string.Join(", ", eventsToSend.Select(e => e.Event))}. " +
+                            $"Sent events: {string.Join(", ", sentEvents.Select(e => e.Event))}. " +
+                            $"Received events: {string.Join(", ", receivedEvents.Select(e => e.Event))}.");
+                    }
 
                     inputDevice.StopEventsListening();
                 }

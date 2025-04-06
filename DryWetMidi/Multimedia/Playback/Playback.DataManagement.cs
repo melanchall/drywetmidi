@@ -630,21 +630,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             if (setTempoEvent == null)
                 return;
 
-            // TODO: optimize
-
-            var valuesChanges = TempoMap.TimeSignatureLine.ToArray();
-
-            var newTempo = TempoMap.TimeSignatureLine.GetValueAtTime(0);
-
-            for (var i = 0; i < valuesChanges.Length; i++)
-            {
-                var valueChange = valuesChanges[i];
-                if (valueChange.Time < oldTime)
-                    newTempo = valueChange.Value;
-                else
-                    break;
-            }
-
+            var newTempo = TempoMap.TimeSignatureLine.GetValueAtTime(oldTime - 1);
             TempoMap.TimeSignatureLine.SetValue(timedEvent.Time, newTempo);
         }
 
@@ -666,17 +652,7 @@ namespace Melanchall.DryWetMidi.Multimedia
                 return;
 
             var newTimeSignature = new TimeSignature(timeSignatureEvent.Numerator, timeSignatureEvent.Denominator);
-
-            var valuesChanges = TempoMap.TimeSignatureLine.ToArray();
-
-            // TODO: optimize
-
-            for (var i = 0; i < valuesChanges.Length; i++)
-            {
-                var valueChange = valuesChanges[i];
-                if (valueChange.Time <= timedEvent.Time)
-                    oldTimeSignature = valueChange.Value;
-            }
+            oldTimeSignature = TempoMap.TimeSignatureLine.GetValueAtTime(timedEvent.Time);
 
             eventShouldBeAdded = oldTimeSignature != newTimeSignature;
         }

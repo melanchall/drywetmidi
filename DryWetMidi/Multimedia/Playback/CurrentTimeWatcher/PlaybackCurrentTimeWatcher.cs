@@ -261,6 +261,9 @@ namespace Melanchall.DryWetMidi.Multimedia
             {
                 foreach (var playback in _playbacks)
                 {
+                    if (_disposed || !IsWatching)
+                        return;
+
                     if (_settings.WatchOnlyRunningPlaybacks && !playback.Key.IsRunning)
                         continue;
 
