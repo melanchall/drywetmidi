@@ -8,6 +8,7 @@ using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Tests.Common;
 using Melanchall.DryWetMidi.Tests.Utilities;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace Melanchall.DryWetMidi.Tests.Core
 {
@@ -30,11 +31,11 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 },
                 readingSettings: null);
 
-            Assert.IsInstanceOf(typeof(SmpteTimeDivision), midiFile.TimeDivision, "Invalid time division type.");
+            ClassicAssert.IsInstanceOf(typeof(SmpteTimeDivision), midiFile.TimeDivision, "Invalid time division type.");
 
             var smpteTimeDivision = (SmpteTimeDivision)midiFile.TimeDivision;
-            Assert.AreEqual(SmpteFormat.Thirty, smpteTimeDivision.Format, "Invaid SMPTE format.");
-            Assert.AreEqual(80, smpteTimeDivision.Resolution, "Invaid SMPTE resolution.");
+            ClassicAssert.AreEqual(SmpteFormat.Thirty, smpteTimeDivision.Format, "Invaid SMPTE format.");
+            ClassicAssert.AreEqual(80, smpteTimeDivision.Resolution, "Invaid SMPTE resolution.");
         }
 
         [Test]
@@ -46,13 +47,13 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 writingSettings: null,
                 readingSettings: null);
 
-            Assert.IsInstanceOf(typeof(SmpteTimeDivision), midiFile.TimeDivision, "Invalid time division type.");
+            ClassicAssert.IsInstanceOf(typeof(SmpteTimeDivision), midiFile.TimeDivision, "Invalid time division type.");
 
             var smpteTimeDivision = (SmpteTimeDivision)midiFile.TimeDivision;
-            Assert.AreEqual(SmpteFormat.Thirty, smpteTimeDivision.Format, "Invaid SMPTE format.");
-            Assert.AreEqual(80, smpteTimeDivision.Resolution, "Invaid SMPTE resolution.");
+            ClassicAssert.AreEqual(SmpteFormat.Thirty, smpteTimeDivision.Format, "Invaid SMPTE format.");
+            ClassicAssert.AreEqual(80, smpteTimeDivision.Resolution, "Invaid SMPTE resolution.");
 
-            Assert.AreEqual(originalTimeDivision, midiFile.TimeDivision, "Invalid time division.");
+            ClassicAssert.AreEqual(originalTimeDivision, midiFile.TimeDivision, "Invalid time division.");
         }
 
         [Test]
@@ -126,8 +127,8 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 },
                 exception =>
                 {
-                    Assert.AreEqual(actualCount, exception.ActualCount, "Expected count of chunks is invalid.");
-                    Assert.AreEqual(countInHeaderChunk, exception.ExpectedCount, "Actual count of chunks is invalid.");
+                    ClassicAssert.AreEqual(actualCount, exception.ActualCount, "Expected count of chunks is invalid.");
+                    ClassicAssert.AreEqual(countInHeaderChunk, exception.ExpectedCount, "Actual count of chunks is invalid.");
                 });
         }
 
@@ -151,7 +152,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
                     [10] = 0,
                     [11] = countInHeaderChunk,
                 },
-                midiFile => Assert.AreEqual(actualCount, midiFile.GetTrackChunks().Count(), "Track chunks count is invalid."));
+                midiFile => ClassicAssert.AreEqual(actualCount, midiFile.GetTrackChunks().Count(), "Track chunks count is invalid."));
         }
 
         [TestCase(1, 2)]
@@ -172,7 +173,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
                     [10] = 0,
                     [11] = countInHeaderChunk,
                 },
-                midiFile => Assert.AreEqual(actualCount, midiFile.GetTrackChunks().Count(), "Track chunks count is invalid."));
+                midiFile => ClassicAssert.AreEqual(actualCount, midiFile.GetTrackChunks().Count(), "Track chunks count is invalid."));
         }
 
         [TestCase(1, 2)]
@@ -193,7 +194,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
                     [10] = 0,
                     [11] = countInHeaderChunk,
                 },
-                midiFile => Assert.AreEqual(countInHeaderChunk, midiFile.GetTrackChunks().Count(), "Track chunks count is invalid."));
+                midiFile => ClassicAssert.AreEqual(countInHeaderChunk, midiFile.GetTrackChunks().Count(), "Track chunks count is invalid."));
         }
 
         [TestCase(" Thc")]
@@ -215,7 +216,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
                     [2] = Convert.ToByte(chunkId[2]),
                     [3] = Convert.ToByte(chunkId[3]),
                 },
-                exception => Assert.AreEqual(chunkId, exception.ChunkId, "Chunk ID is invalid in exception."));
+                exception => ClassicAssert.AreEqual(chunkId, exception.ChunkId, "Chunk ID is invalid in exception."));
         }
 
         [TestCase(" Thc")]
@@ -237,7 +238,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
                     [16] = Convert.ToByte(chunkId[2]),
                     [17] = Convert.ToByte(chunkId[3]),
                 },
-                exception => Assert.AreEqual(chunkId, exception.ChunkId, "Chunk ID is invalid in exception."));
+                exception => ClassicAssert.AreEqual(chunkId, exception.ChunkId, "Chunk ID is invalid in exception."));
         }
 
         [TestCase(" Thc")]
@@ -259,7 +260,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
                     [16] = Convert.ToByte(chunkId[2]),
                     [17] = Convert.ToByte(chunkId[3]),
                 },
-                midiFile => Assert.AreEqual(0, midiFile.GetTrackChunks().Count(), "Track chunks count is invalid."));
+                midiFile => ClassicAssert.AreEqual(0, midiFile.GetTrackChunks().Count(), "Track chunks count is invalid."));
         }
 
         [TestCase(" Thc")]
@@ -281,7 +282,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
                     [16] = Convert.ToByte(chunkId[2]),
                     [17] = Convert.ToByte(chunkId[3]),
                 },
-                midiFile => Assert.AreEqual(1, midiFile.GetTrackChunks().Count(), "Track chunks count is invalid."));
+                midiFile => ClassicAssert.AreEqual(1, midiFile.GetTrackChunks().Count(), "Track chunks count is invalid."));
         }
 
         [TestCase(" Thc")]
@@ -305,9 +306,9 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 },
                 midiFile =>
                 {
-                    Assert.AreEqual(0, midiFile.GetTrackChunks().Count(), "Track chunks count is invalid.");
-                    Assert.AreEqual(1, midiFile.Chunks.OfType<UnknownChunk>().Count(), "Unknown chunks count is invalid.");
-                    Assert.AreEqual(chunkId, midiFile.Chunks.OfType<UnknownChunk>().First().ChunkId, "Chunk ID of unknown chunk is invalid.");
+                    ClassicAssert.AreEqual(0, midiFile.GetTrackChunks().Count(), "Track chunks count is invalid.");
+                    ClassicAssert.AreEqual(1, midiFile.Chunks.OfType<UnknownChunk>().Count(), "Unknown chunks count is invalid.");
+                    ClassicAssert.AreEqual(chunkId, midiFile.Chunks.OfType<UnknownChunk>().First().ChunkId, "Chunk ID of unknown chunk is invalid.");
                 });
         }
 
@@ -329,8 +330,8 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 },
                 exception =>
                 {
-                    Assert.AreEqual(MidiEventType.ProgramChange, exception.EventType, "Event type is invalid.");
-                    Assert.AreEqual(parameterValue, exception.Value, "Parameter value is invalid.");
+                    ClassicAssert.AreEqual(MidiEventType.ProgramChange, exception.EventType, "Event type is invalid.");
+                    ClassicAssert.AreEqual(parameterValue, exception.Value, "Parameter value is invalid.");
                 });
         }
 
@@ -356,8 +357,8 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 midiFile =>
                 {
                     var programChangeEvent = midiFile.GetEvents().OfType<ProgramChangeEvent>().FirstOrDefault();
-                    Assert.IsNotNull(programChangeEvent, "There is no Program Change event in the file.");
-                    Assert.AreEqual(parameterValue & ((1 << 7) - 1), (int)programChangeEvent.ProgramNumber, "Program number is invalid.");
+                    ClassicAssert.IsNotNull(programChangeEvent, "There is no Program Change event in the file.");
+                    ClassicAssert.AreEqual(parameterValue & ((1 << 7) - 1), (int)programChangeEvent.ProgramNumber, "Program number is invalid.");
                 });
         }
 
@@ -383,8 +384,8 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 midiFile =>
                 {
                     var programChangeEvent = midiFile.GetEvents().OfType<ProgramChangeEvent>().FirstOrDefault();
-                    Assert.IsNotNull(programChangeEvent, "There is no Program Change event in the file.");
-                    Assert.AreEqual(Math.Min((int)parameterValue, 127), (int)programChangeEvent.ProgramNumber, "Program number is invalid.");
+                    ClassicAssert.IsNotNull(programChangeEvent, "There is no Program Change event in the file.");
+                    ClassicAssert.AreEqual(Math.Min((int)parameterValue, 127), (int)programChangeEvent.ProgramNumber, "Program number is invalid.");
                 });
         }
 
@@ -405,8 +406,8 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 },
                 exception =>
                 {
-                    Assert.AreEqual(statusByte, (byte)exception.StatusByte, "Status byte is invalid.");
-                    Assert.AreEqual(channel, (byte)exception.Channel, "Channel is invalid.");
+                    ClassicAssert.AreEqual(statusByte, (byte)exception.StatusByte, "Status byte is invalid.");
+                    ClassicAssert.AreEqual(channel, (byte)exception.Channel, "Channel is invalid.");
                 });
         }
 
@@ -429,7 +430,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 midiFile =>
                 {
                     var controlChangeEvent = midiFile.GetEvents().SingleOrDefault() as ControlChangeEvent;
-                    Assert.IsNotNull(controlChangeEvent, "There is no Control Change event in the file.");
+                    ClassicAssert.IsNotNull(controlChangeEvent, "There is no Control Change event in the file.");
                     MidiAsserts.AreEqual(new ControlChangeEvent { DeltaTime = (((statusByte << 4) + channel) & ((1 << 7) - 1)) << 7 }, controlChangeEvent, true, "Event is invalid.");
                 });
         }
@@ -452,7 +453,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 midiFile =>
                 {
                     var controlChangeEvent = midiFile.GetEvents().SingleOrDefault() as ControlChangeEvent;
-                    Assert.IsNotNull(controlChangeEvent, "There is no Control Change event in the file.");
+                    ClassicAssert.IsNotNull(controlChangeEvent, "There is no Control Change event in the file.");
                     MidiAsserts.AreEqual(new ControlChangeEvent(), controlChangeEvent, true, "Event is invalid.");
                 });
         }
@@ -475,7 +476,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 midiFile =>
                 {
                     var controlChangeEvent = midiFile.GetEvents().SingleOrDefault() as ControlChangeEvent;
-                    Assert.IsNotNull(controlChangeEvent, "There is no Control Change event in the file.");
+                    ClassicAssert.IsNotNull(controlChangeEvent, "There is no Control Change event in the file.");
                     MidiAsserts.AreEqual(new ControlChangeEvent(), controlChangeEvent, true, "Event is invalid.");
                 });
         }
@@ -516,8 +517,8 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 },
                 exception =>
                 {
-                    Assert.AreEqual(statusByte, (byte)exception.StatusByte, "Status byte is invalid.");
-                    Assert.AreEqual(channel, (byte)exception.Channel, "Channel is invalid.");
+                    ClassicAssert.AreEqual(statusByte, (byte)exception.StatusByte, "Status byte is invalid.");
+                    ClassicAssert.AreEqual(channel, (byte)exception.Channel, "Channel is invalid.");
                 });
         }
 
@@ -541,7 +542,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 midiFile =>
                 {
                     var controlChangeEvent = midiFile.GetEvents().SingleOrDefault() as ControlChangeEvent;
-                    Assert.IsNotNull(controlChangeEvent, "There is no Control Change event in the file.");
+                    ClassicAssert.IsNotNull(controlChangeEvent, "There is no Control Change event in the file.");
                     MidiAsserts.AreEqual(new ControlChangeEvent { DeltaTime = (((statusByte << 4) + channel) & ((1 << 7) - 1)) << 7 }, controlChangeEvent, true, "Event is invalid.");
                 });
         }
@@ -565,8 +566,8 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 },
                 exception =>
                 {
-                    Assert.AreEqual(6, exception.ActualSize, "Actual size is invalid.");
-                    Assert.AreEqual(HeaderChunk.Id, exception.ChunkId, "Chunk ID is invalid.");
+                    ClassicAssert.AreEqual(6, exception.ActualSize, "Actual size is invalid.");
+                    ClassicAssert.AreEqual(HeaderChunk.Id, exception.ChunkId, "Chunk ID is invalid.");
                 });
         }
 
@@ -588,8 +589,8 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 },
                 exception =>
                 {
-                    Assert.AreEqual(7, exception.ActualSize, "Actual size is invalid.");
-                    Assert.AreEqual(TrackChunk.Id, exception.ChunkId, "Chunk ID is invalid.");
+                    ClassicAssert.AreEqual(7, exception.ActualSize, "Actual size is invalid.");
+                    ClassicAssert.AreEqual(TrackChunk.Id, exception.ChunkId, "Chunk ID is invalid.");
                 });
         }
 
@@ -611,7 +612,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 },
                 midiFile =>
                 {
-                    Assert.AreEqual(1, midiFile.GetTrackChunks().Count(), "Track chunks count is invalid.");
+                    ClassicAssert.AreEqual(1, midiFile.GetTrackChunks().Count(), "Track chunks count is invalid.");
                 });
         }
 
@@ -633,7 +634,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 },
                 midiFile =>
                 {
-                    Assert.AreEqual(1, midiFile.GetTrackChunks().Count(), "Track chunks count is invalid.");
+                    ClassicAssert.AreEqual(1, midiFile.GetTrackChunks().Count(), "Track chunks count is invalid.");
                 });
         }
 
@@ -657,9 +658,9 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 },
                 exception =>
                 {
-                    Assert.AreEqual(MidiEventType.KeySignature, exception.EventType, "Event type is invalid.");
-                    Assert.AreEqual(nameof(KeySignatureEvent.Key), exception.PropertyName, "Property name is invalid.");
-                    Assert.AreEqual(key, exception.Value, "Property value is invalid.");
+                    ClassicAssert.AreEqual(MidiEventType.KeySignature, exception.EventType, "Event type is invalid.");
+                    ClassicAssert.AreEqual(nameof(KeySignatureEvent.Key), exception.PropertyName, "Property name is invalid.");
+                    ClassicAssert.AreEqual(key, exception.Value, "Property value is invalid.");
                 });
         }
 
@@ -682,8 +683,8 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 midiFile =>
                 {
                     var keySignatureEvent = midiFile.GetEvents().SingleOrDefault() as KeySignatureEvent;
-                    Assert.IsNotNull(keySignatureEvent, "There is no Key Signature event.");
-                    Assert.AreEqual(Math.Max(key, (sbyte)-7), keySignatureEvent.Key, "Key is invalid");
+                    ClassicAssert.IsNotNull(keySignatureEvent, "There is no Key Signature event.");
+                    ClassicAssert.AreEqual(Math.Max(key, (sbyte)-7), keySignatureEvent.Key, "Key is invalid");
                 });
         }
 
@@ -706,8 +707,8 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 midiFile =>
                 {
                     var keySignatureEvent = midiFile.GetEvents().SingleOrDefault() as KeySignatureEvent;
-                    Assert.IsNotNull(keySignatureEvent, "There is no Key Signature event.");
-                    Assert.AreEqual(Math.Min(key, (sbyte)7), keySignatureEvent.Key, "Key is invalid");
+                    ClassicAssert.IsNotNull(keySignatureEvent, "There is no Key Signature event.");
+                    ClassicAssert.AreEqual(Math.Min(key, (sbyte)7), keySignatureEvent.Key, "Key is invalid");
                 });
         }
 
@@ -729,9 +730,9 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 },
                 exception =>
                 {
-                    Assert.AreEqual(MidiEventType.KeySignature, exception.EventType, "Event type is invalid.");
-                    Assert.AreEqual(nameof(KeySignatureEvent.Scale), exception.PropertyName, "Property name is invalid.");
-                    Assert.AreEqual(scale, exception.Value, "Property value is invalid.");
+                    ClassicAssert.AreEqual(MidiEventType.KeySignature, exception.EventType, "Event type is invalid.");
+                    ClassicAssert.AreEqual(nameof(KeySignatureEvent.Scale), exception.PropertyName, "Property name is invalid.");
+                    ClassicAssert.AreEqual(scale, exception.Value, "Property value is invalid.");
                 });
         }
 
@@ -754,8 +755,8 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 midiFile =>
                 {
                     var keySignatureEvent = midiFile.GetEvents().SingleOrDefault() as KeySignatureEvent;
-                    Assert.IsNotNull(keySignatureEvent, "There is no Key Signature event.");
-                    Assert.AreEqual(Math.Min(scale, (byte)1), keySignatureEvent.Scale, "Scale is invalid");
+                    ClassicAssert.IsNotNull(keySignatureEvent, "There is no Key Signature event.");
+                    ClassicAssert.AreEqual(Math.Min(scale, (byte)1), keySignatureEvent.Scale, "Scale is invalid");
                 });
         }
 
@@ -777,9 +778,9 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 },
                 exception =>
                 {
-                    Assert.AreEqual(MidiEventType.SmpteOffset, exception.EventType, "Event type is invalid.");
-                    Assert.AreEqual(nameof(SmpteOffsetEvent.Hours), exception.PropertyName, "Property name is invalid.");
-                    Assert.AreEqual(hours, exception.Value, "Property value is invalid.");
+                    ClassicAssert.AreEqual(MidiEventType.SmpteOffset, exception.EventType, "Event type is invalid.");
+                    ClassicAssert.AreEqual(nameof(SmpteOffsetEvent.Hours), exception.PropertyName, "Property name is invalid.");
+                    ClassicAssert.AreEqual(hours, exception.Value, "Property value is invalid.");
                 });
         }
 
@@ -801,9 +802,9 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 },
                 exception =>
                 {
-                    Assert.AreEqual(MidiEventType.SmpteOffset, exception.EventType, "Event type is invalid.");
-                    Assert.AreEqual(nameof(SmpteOffsetEvent.Minutes), exception.PropertyName, "Property name is invalid.");
-                    Assert.AreEqual(minutes, exception.Value, "Property value is invalid.");
+                    ClassicAssert.AreEqual(MidiEventType.SmpteOffset, exception.EventType, "Event type is invalid.");
+                    ClassicAssert.AreEqual(nameof(SmpteOffsetEvent.Minutes), exception.PropertyName, "Property name is invalid.");
+                    ClassicAssert.AreEqual(minutes, exception.Value, "Property value is invalid.");
                 });
         }
 
@@ -825,9 +826,9 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 },
                 exception =>
                 {
-                    Assert.AreEqual(MidiEventType.SmpteOffset, exception.EventType, "Event type is invalid.");
-                    Assert.AreEqual(nameof(SmpteOffsetEvent.Seconds), exception.PropertyName, "Property name is invalid.");
-                    Assert.AreEqual(seconds, exception.Value, "Property value is invalid.");
+                    ClassicAssert.AreEqual(MidiEventType.SmpteOffset, exception.EventType, "Event type is invalid.");
+                    ClassicAssert.AreEqual(nameof(SmpteOffsetEvent.Seconds), exception.PropertyName, "Property name is invalid.");
+                    ClassicAssert.AreEqual(seconds, exception.Value, "Property value is invalid.");
                 });
         }
 
@@ -856,9 +857,9 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 },
                 exception =>
                 {
-                    Assert.AreEqual(MidiEventType.SmpteOffset, exception.EventType, "Event type is invalid.");
-                    Assert.AreEqual(nameof(SmpteOffsetEvent.Frames), exception.PropertyName, "Property name is invalid.");
-                    Assert.AreEqual(frames, exception.Value, "Property value is invalid.");
+                    ClassicAssert.AreEqual(MidiEventType.SmpteOffset, exception.EventType, "Event type is invalid.");
+                    ClassicAssert.AreEqual(nameof(SmpteOffsetEvent.Frames), exception.PropertyName, "Property name is invalid.");
+                    ClassicAssert.AreEqual(frames, exception.Value, "Property value is invalid.");
                 });
         }
 
@@ -880,9 +881,9 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 },
                 exception =>
                 {
-                    Assert.AreEqual(MidiEventType.SmpteOffset, exception.EventType, "Event type is invalid.");
-                    Assert.AreEqual(nameof(SmpteOffsetEvent.SubFrames), exception.PropertyName, "Property name is invalid.");
-                    Assert.AreEqual(subFrames, exception.Value, "Property value is invalid.");
+                    ClassicAssert.AreEqual(MidiEventType.SmpteOffset, exception.EventType, "Event type is invalid.");
+                    ClassicAssert.AreEqual(nameof(SmpteOffsetEvent.SubFrames), exception.PropertyName, "Property name is invalid.");
+                    ClassicAssert.AreEqual(subFrames, exception.Value, "Property value is invalid.");
                 });
         }
 
@@ -905,8 +906,8 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 midiFile =>
                 {
                     var smpteOffsetEvent = midiFile.GetEvents().SingleOrDefault() as SmpteOffsetEvent;
-                    Assert.IsNotNull(smpteOffsetEvent, "There is no SMPTE Offset event.");
-                    Assert.AreEqual(Math.Min((byte)23, hours), smpteOffsetEvent.Hours, "Hours number is invalid.");
+                    ClassicAssert.IsNotNull(smpteOffsetEvent, "There is no SMPTE Offset event.");
+                    ClassicAssert.AreEqual(Math.Min((byte)23, hours), smpteOffsetEvent.Hours, "Hours number is invalid.");
                 });
         }
 
@@ -929,8 +930,8 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 midiFile =>
                 {
                     var smpteOffsetEvent = midiFile.GetEvents().SingleOrDefault() as SmpteOffsetEvent;
-                    Assert.IsNotNull(smpteOffsetEvent, "There is no SMPTE Offset event.");
-                    Assert.AreEqual(Math.Min((byte)59, minutes), smpteOffsetEvent.Minutes, "Minutes number is invalid.");
+                    ClassicAssert.IsNotNull(smpteOffsetEvent, "There is no SMPTE Offset event.");
+                    ClassicAssert.AreEqual(Math.Min((byte)59, minutes), smpteOffsetEvent.Minutes, "Minutes number is invalid.");
                 });
         }
 
@@ -953,8 +954,8 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 midiFile =>
                 {
                     var smpteOffsetEvent = midiFile.GetEvents().SingleOrDefault() as SmpteOffsetEvent;
-                    Assert.IsNotNull(smpteOffsetEvent, "There is no SMPTE Offset event.");
-                    Assert.AreEqual(Math.Min((byte)59, seconds), smpteOffsetEvent.Seconds, "Seconds number is invalid.");
+                    ClassicAssert.IsNotNull(smpteOffsetEvent, "There is no SMPTE Offset event.");
+                    ClassicAssert.AreEqual(Math.Min((byte)59, seconds), smpteOffsetEvent.Seconds, "Seconds number is invalid.");
                 });
         }
 
@@ -984,8 +985,8 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 midiFile =>
                 {
                     var smpteOffsetEvent = midiFile.GetEvents().SingleOrDefault() as SmpteOffsetEvent;
-                    Assert.IsNotNull(smpteOffsetEvent, "There is no SMPTE Offset event.");
-                    Assert.AreEqual(Math.Min(maxValue, frames), smpteOffsetEvent.Frames, "Frames number is invalid.");
+                    ClassicAssert.IsNotNull(smpteOffsetEvent, "There is no SMPTE Offset event.");
+                    ClassicAssert.AreEqual(Math.Min(maxValue, frames), smpteOffsetEvent.Frames, "Frames number is invalid.");
                 });
         }
 
@@ -1008,8 +1009,8 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 midiFile =>
                 {
                     var smpteOffsetEvent = midiFile.GetEvents().SingleOrDefault() as SmpteOffsetEvent;
-                    Assert.IsNotNull(smpteOffsetEvent, "There is no SMPTE Offset event.");
-                    Assert.AreEqual(Math.Min((byte)99, subFrames), smpteOffsetEvent.SubFrames, "Sub-frames number is invalid.");
+                    ClassicAssert.IsNotNull(smpteOffsetEvent, "There is no SMPTE Offset event.");
+                    ClassicAssert.AreEqual(Math.Min((byte)99, subFrames), smpteOffsetEvent.SubFrames, "Sub-frames number is invalid.");
                 });
         }
 
@@ -1054,7 +1055,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 midiFile =>
                 {
                     var midiEvents = midiFile.GetEvents().ToArray();
-                    Assert.AreEqual(2, midiEvents.Length, "Events count is invalid.");
+                    ClassicAssert.AreEqual(2, midiEvents.Length, "Events count is invalid.");
                     MidiAsserts.AreEqual(new ProgramChangeEvent(), midiEvents[0], true, "First MIDI event is invalid.");
                     MidiAsserts.AreEqual(new NoteOnEvent(), midiEvents[1], true, "Second MIDI event is invalid.");
                 });
@@ -1090,7 +1091,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 new Dictionary<int, byte>(),
                 midiFile =>
                 {
-                    Assert.Throws<InvalidOperationException>(() => { var format = midiFile.OriginalFormat; }, "Exception not thrown on get original format.");
+                    ClassicAssert.Throws<InvalidOperationException>(() => { var format = midiFile.OriginalFormat; }, "Exception not thrown on get original format.");
                     
                     var programChangeEvent = midiFile.GetEvents().SingleOrDefault() as ProgramChangeEvent;
                     MidiAsserts.AreEqual(new ProgramChangeEvent(), programChangeEvent, true, "Program Change event is invalid.");
@@ -1534,7 +1535,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 {
                     [9] = formatLastByte
                 },
-                exception => Assert.AreEqual(formatLastByte, exception.FileFormat, "File format is invalid."));
+                exception => ClassicAssert.AreEqual(formatLastByte, exception.FileFormat, "File format is invalid."));
         }
 
         [TestCase(3)]
@@ -1555,8 +1556,8 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 },
                 midiFile =>
                 {
-                    var exception = Assert.Throws<UnknownFileFormatException>(() => { var format = midiFile.OriginalFormat; }, "Exception not thrown on get original format.");
-                    Assert.AreEqual(formatLastByte, exception.FileFormat, "File format is invalid.");
+                    var exception = ClassicAssert.Throws<UnknownFileFormatException>(() => { var format = midiFile.OriginalFormat; }, "Exception not thrown on get original format.");
+                    ClassicAssert.AreEqual(formatLastByte, exception.FileFormat, "File format is invalid.");
                 });
         }
 
@@ -1659,7 +1660,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 using (var streamToRead = new MemoryStream(streamToWrite.ToArray()))
                 {
                     var readMidiFile = MidiFile.Read(streamToRead);
-                    Assert.DoesNotThrow(() => { var l = streamToRead.Length; });
+                    ClassicAssert.DoesNotThrow(() => { var l = streamToRead.Length; });
                 }
             }
         }
@@ -1672,7 +1673,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
             var midiFile = WriteRead(new MidiFile(new TrackChunk(new TextEvent(text))));
             var textEvent = midiFile.GetEvents().OfType<TextEvent>().Single();
 
-            Assert.AreEqual(text, textEvent.Text, "Text decoded incorrectly.");
+            ClassicAssert.AreEqual(text, textEvent.Text, "Text decoded incorrectly.");
         }
 
         [TestCase(null)]
@@ -1690,7 +1691,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
 
             var textEvent = midiFile.GetEvents().OfType<TextEvent>().Single();
 
-            Assert.AreEqual(newText, textEvent.Text, "Text decoded incorrectly.");
+            ClassicAssert.AreEqual(newText, textEvent.Text, "Text decoded incorrectly.");
         }
 
         [Test]
@@ -1707,7 +1708,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
 
             var textEvent = midiFile.GetEvents().OfType<TextEvent>().Single();
 
-            Assert.AreNotEqual(text, textEvent.Text, "Text decoded incorrectly.");
+            ClassicAssert.AreNotEqual(text, textEvent.Text, "Text decoded incorrectly.");
         }
 
         [Test]
@@ -1728,7 +1729,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
 
             var textEvent = midiFile.GetEvents().OfType<TextEvent>().Single();
 
-            Assert.AreEqual(text, textEvent.Text, "Text decoded incorrectly.");
+            ClassicAssert.AreEqual(text, textEvent.Text, "Text decoded incorrectly.");
         }
 
         [Test]
@@ -1809,7 +1810,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
             };
 
             var lastBufferData = buffer.ToArray();
-            Assert.IsTrue(buffer.All(b => b == 0), "Initial buffer contains non-zero bytes.");
+            ClassicAssert.IsTrue(buffer.All(b => b == 0), "Initial buffer contains non-zero bytes.");
 
             foreach (var filePath in TestFilesProvider.GetValidFilesPaths())
             {
@@ -1995,17 +1996,17 @@ namespace Melanchall.DryWetMidi.Tests.Core
 
                 //
 
-                var exception = Assert.Throws<TException>(() => MidiFile.Read(filePath, readingSettings), "Exception not thrown.");
+                var exception = ClassicAssert.Throws<TException>(() => MidiFile.Read(filePath, readingSettings), "Exception not thrown.");
                 checkException(exception);
 
                 var nonSeekableStream = new NonSeekableStream(filePath);
-                Assert.Throws<TException>(() => MidiFile.Read(nonSeekableStream, readingSettings), $"Exception not thrown for the file read from non-seekable stream.");
+                ClassicAssert.Throws<TException>(() => MidiFile.Read(nonSeekableStream, readingSettings), $"Exception not thrown for the file read from non-seekable stream.");
 
                 readingSettings.ReaderSettings.BufferingPolicy = BufferingPolicy.BufferAllData;
-                Assert.Throws<TException>(() => MidiFile.Read(filePath, readingSettings), $"Exception not thrown for the file read with putting data in memory.");
+                ClassicAssert.Throws<TException>(() => MidiFile.Read(filePath, readingSettings), $"Exception not thrown for the file read with putting data in memory.");
 
                 readingSettings.ReaderSettings.BufferingPolicy = BufferingPolicy.UseFixedSizeBuffer;
-                Assert.Throws<TException>(() => MidiFile.Read(filePath, readingSettings), $"Exception not thrown for the file read with fixed size buffer.");
+                ClassicAssert.Throws<TException>(() => MidiFile.Read(filePath, readingSettings), $"Exception not thrown for the file read with fixed size buffer.");
 
                 readingSettings.ReaderSettings.BufferingPolicy = BufferingPolicy.DontUseBuffering;
             }

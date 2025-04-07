@@ -5,6 +5,7 @@ using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
 using Melanchall.DryWetMidi.Tests.Common;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace Melanchall.DryWetMidi.Tests.Interaction
 {
@@ -20,7 +21,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var midiFile = new MidiFile();
             var duration = midiFile.GetDuration<MetricTimeSpan>();
-            Assert.AreEqual(new MetricTimeSpan(), duration, "Duration of empty MIDI file is invalid.");
+            ClassicAssert.AreEqual(new MetricTimeSpan(), duration, "Duration of empty MIDI file is invalid.");
         }
 
         [Test]
@@ -46,7 +47,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     new NoteOffEvent { DeltaTime = 1000 }));
 
             var duration = midiFile.GetDuration(TimeSpanType.Midi);
-            Assert.AreEqual(new MidiTimeSpan(1000), duration, "Duration of MIDI file is invalid.");
+            ClassicAssert.AreEqual(new MidiTimeSpan(1000), duration, "Duration of MIDI file is invalid.");
         }
 
         [Test]
@@ -54,7 +55,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var trackChunk = new TrackChunk();
             var duration = trackChunk.GetDuration<MetricTimeSpan>(TempoMap.Default);
-            Assert.AreEqual(new MetricTimeSpan(), duration, "Invalid duration.");
+            ClassicAssert.AreEqual(new MetricTimeSpan(), duration, "Invalid duration.");
         }
 
         [Test]
@@ -62,7 +63,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var trackChunk = new TrackChunk(new TextEvent("A") { DeltaTime = deltaTime });
             var duration = trackChunk.GetDuration<MidiTimeSpan>(TempoMap.Default);
-            Assert.AreEqual(new MidiTimeSpan(deltaTime), duration, "Invalid duration.");
+            ClassicAssert.AreEqual(new MidiTimeSpan(deltaTime), duration, "Invalid duration.");
         }
 
         [Test]
@@ -70,7 +71,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var trackChunk = new TrackChunk(new TextEvent("A") { DeltaTime = deltaTime });
             var duration = trackChunk.GetDuration(TimeSpanType.Midi, TempoMap.Default);
-            Assert.AreEqual(new MidiTimeSpan(deltaTime), duration, "Invalid duration.");
+            ClassicAssert.AreEqual(new MidiTimeSpan(deltaTime), duration, "Invalid duration.");
         }
 
         [Test]
@@ -78,7 +79,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var trackChunk = new TrackChunk(new TextEvent("A") { DeltaTime = deltaTime });
             var duration = trackChunk.GetDuration<MetricTimeSpan>(TempoMap.Default);
-            Assert.AreEqual(TimeConverter.ConvertTo<MetricTimeSpan>(deltaTime, TempoMap.Default), duration, "Invalid duration.");
+            ClassicAssert.AreEqual(TimeConverter.ConvertTo<MetricTimeSpan>(deltaTime, TempoMap.Default), duration, "Invalid duration.");
         }
 
         [Test]
@@ -86,7 +87,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var trackChunk = new TrackChunk(new TextEvent("A") { DeltaTime = deltaTime });
             var duration = trackChunk.GetDuration(TimeSpanType.Metric, TempoMap.Default);
-            Assert.AreEqual(TimeConverter.ConvertTo<MetricTimeSpan>(deltaTime, TempoMap.Default), duration, "Invalid duration.");
+            ClassicAssert.AreEqual(TimeConverter.ConvertTo<MetricTimeSpan>(deltaTime, TempoMap.Default), duration, "Invalid duration.");
         }
 
         [Test]
@@ -96,7 +97,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 new TextEvent("A") { DeltaTime = deltaTime1 },
                 new TextEvent("B") { DeltaTime = deltaTime2 });
             var duration = trackChunk.GetDuration<MidiTimeSpan>(TempoMap.Default);
-            Assert.AreEqual(new MidiTimeSpan(deltaTime1 + deltaTime2), duration, "Invalid duration.");
+            ClassicAssert.AreEqual(new MidiTimeSpan(deltaTime1 + deltaTime2), duration, "Invalid duration.");
         }
 
         [Test]
@@ -104,7 +105,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var trackChunks = Array.Empty<TrackChunk>();
             var duration = trackChunks.GetDuration<MetricTimeSpan>(TempoMap.Default);
-            Assert.AreEqual(new MetricTimeSpan(), duration, "Invalid duration.");
+            ClassicAssert.AreEqual(new MetricTimeSpan(), duration, "Invalid duration.");
         }
 
         [Test]
@@ -112,7 +113,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var trackChunks = new[] { new TrackChunk(), new TrackChunk() };
             var duration = trackChunks.GetDuration<MetricTimeSpan>(TempoMap.Default);
-            Assert.AreEqual(new MetricTimeSpan(), duration, "Invalid duration.");
+            ClassicAssert.AreEqual(new MetricTimeSpan(), duration, "Invalid duration.");
         }
 
         [Test]
@@ -124,7 +125,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 new TrackChunk()
             };
             var duration = trackChunks.GetDuration<MidiTimeSpan>(TempoMap.Default);
-            Assert.AreEqual(new MidiTimeSpan(deltaTime), duration, "Invalid duration.");
+            ClassicAssert.AreEqual(new MidiTimeSpan(deltaTime), duration, "Invalid duration.");
         }
 
         [Test]
@@ -136,7 +137,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 new TrackChunk(new TextEvent("A") { DeltaTime = deltaTime }),
             };
             var duration = trackChunks.GetDuration<MidiTimeSpan>(TempoMap.Default);
-            Assert.AreEqual(new MidiTimeSpan(deltaTime), duration, "Invalid duration.");
+            ClassicAssert.AreEqual(new MidiTimeSpan(deltaTime), duration, "Invalid duration.");
         }
 
         [Test]
@@ -148,7 +149,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 new TrackChunk(new TextEvent("A") { DeltaTime = deltaTime }),
             };
             var duration = trackChunks.GetDuration<MetricTimeSpan>(TempoMap.Default);
-            Assert.AreEqual(TimeConverter.ConvertTo<MetricTimeSpan>(deltaTime, TempoMap.Default), duration, "Invalid duration.");
+            ClassicAssert.AreEqual(TimeConverter.ConvertTo<MetricTimeSpan>(deltaTime, TempoMap.Default), duration, "Invalid duration.");
         }
 
         [Test]
@@ -160,7 +161,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 new TrackChunk(new TextEvent("B") { DeltaTime = deltaTime2 })
             };
             var duration = trackChunks.GetDuration<MidiTimeSpan>(TempoMap.Default);
-            Assert.AreEqual(new MidiTimeSpan(Math.Max(deltaTime1, deltaTime2)), duration, "Invalid duration.");
+            ClassicAssert.AreEqual(new MidiTimeSpan(Math.Max(deltaTime1, deltaTime2)), duration, "Invalid duration.");
         }
 
         #endregion
@@ -170,19 +171,19 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         [Test]
         public void IsEmpty_True()
         {
-            Assert.IsTrue(new MidiFile().IsEmpty());
+            ClassicAssert.IsTrue(new MidiFile().IsEmpty());
         }
 
         [Test]
         public void IsEmpty_False_SingeTrackChunk()
         {
-            Assert.IsFalse(new MidiFile(new TrackChunk(new TextEvent())).IsEmpty());
+            ClassicAssert.IsFalse(new MidiFile(new TrackChunk(new TextEvent())).IsEmpty());
         }
 
         [Test]
         public void IsEmpty_False_MultipleTrackChunks()
         {
-            Assert.IsFalse(new MidiFile(new TrackChunk(new TextEvent()), new TrackChunk(new NoteOnEvent(), new NoteOffEvent())).IsEmpty());
+            ClassicAssert.IsFalse(new MidiFile(new TrackChunk(new TextEvent()), new TrackChunk(new NoteOnEvent(), new NoteOffEvent())).IsEmpty());
         }
 
         #endregion
@@ -201,7 +202,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 midiFile.ShiftEvents((MidiTimeSpan)distance);
                 var newTimes = midiFile.GetTimedEvents().Select(e => e.Time).ToList();
 
-                Assert.IsTrue(midiFile.GetTimedEvents().All(e => e.Time >= distance), "Some events are not shifted.");
+                ClassicAssert.IsTrue(midiFile.GetTimedEvents().All(e => e.Time >= distance), "Some events are not shifted.");
                 CollectionAssert.AreEqual(originalTimes, newTimes.Select(t => t - distance));
             }
         }
@@ -217,7 +218,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
                 var tempoMap = midiFile.GetTempoMap();
 
-                Assert.IsTrue(midiFile.GetTimedEvents()
+                ClassicAssert.IsTrue(midiFile.GetTimedEvents()
                                       .Select(e => e.TimeAs<MetricTimeSpan>(tempoMap).CompareTo(distance))
                                       .All(t => t >= 0),
                               "Some events are not shifted.");

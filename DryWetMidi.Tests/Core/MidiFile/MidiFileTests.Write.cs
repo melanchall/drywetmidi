@@ -7,6 +7,7 @@ using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Tests.Common;
 using Melanchall.DryWetMidi.Tests.Utilities;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace Melanchall.DryWetMidi.Tests.Core
 {
@@ -43,7 +44,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
             Write(
                 midiFile,
                 settings => { },
-                (fileInfo1, fileInfo2) => Assert.AreEqual(fileInfo1.Length, fileInfo2.Length, "File size is invalid."));
+                (fileInfo1, fileInfo2) => ClassicAssert.AreEqual(fileInfo1.Length, fileInfo2.Length, "File size is invalid."));
         }
 
         [Test]
@@ -77,7 +78,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
             Write(
                 midiFile,
                 settings => settings.UseRunningStatus = true,
-                (fileInfo1, fileInfo2) => Assert.Less(fileInfo2.Length, fileInfo1.Length, "File size is invalid."));
+                (fileInfo1, fileInfo2) => ClassicAssert.Less(fileInfo2.Length, fileInfo1.Length, "File size is invalid."));
         }
 
         [Test]
@@ -125,14 +126,14 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 (fileInfo1, fileInfo2) =>
                 {
                     var originalMidiFile = MidiFile.Read(fileInfo1.FullName);
-                    Assert.AreEqual(
+                    ClassicAssert.AreEqual(
                         2,
                         originalMidiFile.GetTrackChunks().SelectMany(c => c.Events).OfType<KeySignatureEvent>().Count(),
                         "Invalid count of Key Signature events in original file.");
 
                     var newMidiFile = MidiFile.Read(fileInfo2.FullName);
                     var keySignatureEvents = newMidiFile.GetTrackChunks().SelectMany(c => c.Events).OfType<KeySignatureEvent>().ToArray();
-                    Assert.AreEqual(
+                    ClassicAssert.AreEqual(
                         1,
                         keySignatureEvents.Length,
                         "Invalid count of Key Signature events in new file.");
@@ -160,14 +161,14 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 (fileInfo1, fileInfo2) =>
                 {
                     var originalMidiFile = MidiFile.Read(fileInfo1.FullName);
-                    Assert.AreEqual(
+                    ClassicAssert.AreEqual(
                         2,
                         originalMidiFile.GetTrackChunks().SelectMany(c => c.Events).OfType<SetTempoEvent>().Count(),
                         "Invalid count of Set Tempo events in original file.");
 
                     var newMidiFile = MidiFile.Read(fileInfo2.FullName);
                     var setTempoEvents = newMidiFile.GetTrackChunks().SelectMany(c => c.Events).OfType<SetTempoEvent>().ToArray();
-                    Assert.AreEqual(
+                    ClassicAssert.AreEqual(
                         1,
                         setTempoEvents.Length,
                         "Invalid count of Set Tempo events in new file.");
@@ -206,13 +207,13 @@ namespace Melanchall.DryWetMidi.Tests.Core
 
                     //
 
-                    Assert.AreEqual(
+                    ClassicAssert.AreEqual(
                         2,
                         originalMidiFile.GetTrackChunks().SelectMany(c => c.Events).OfType<KeySignatureEvent>().Count(),
                         "Invalid count of Key Signature events in original file.");
 
                     var keySignatureEvents = newMidiFile.GetTrackChunks().SelectMany(c => c.Events).OfType<KeySignatureEvent>().ToArray();
-                    Assert.AreEqual(
+                    ClassicAssert.AreEqual(
                         1,
                         keySignatureEvents.Length,
                         "Invalid count of Key Signature events in new file.");
@@ -221,13 +222,13 @@ namespace Melanchall.DryWetMidi.Tests.Core
 
                     //
 
-                    Assert.AreEqual(
+                    ClassicAssert.AreEqual(
                         2,
                         originalMidiFile.GetTrackChunks().SelectMany(c => c.Events).OfType<SetTempoEvent>().Count(),
                         "Invalid count of Set Tempo events in original file.");
 
                     var setTempoEvents = newMidiFile.GetTrackChunks().SelectMany(c => c.Events).OfType<SetTempoEvent>().ToArray();
-                    Assert.AreEqual(
+                    ClassicAssert.AreEqual(
                         1,
                         setTempoEvents.Length,
                         "Invalid count of Set Tempo events in new file.");
@@ -255,14 +256,14 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 (fileInfo1, fileInfo2) =>
                 {
                     var originalMidiFile = MidiFile.Read(fileInfo1.FullName);
-                    Assert.AreEqual(
+                    ClassicAssert.AreEqual(
                         2,
                         originalMidiFile.GetTrackChunks().SelectMany(c => c.Events).OfType<TimeSignatureEvent>().Count(),
                         "Invalid count of Time Signature events in original file.");
 
                     var newMidiFile = MidiFile.Read(fileInfo2.FullName);
                     var timeSignatureEvents = newMidiFile.GetTrackChunks().SelectMany(c => c.Events).OfType<TimeSignatureEvent>().ToArray();
-                    Assert.AreEqual(
+                    ClassicAssert.AreEqual(
                         1,
                         timeSignatureEvents.Length,
                         "Invalid count of Time Signature events in new file.");
@@ -332,7 +333,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
                     var originalMidiFile = MidiFile.Read(fileInfo1.FullName);
                     originalMidiFile.TimeDivision = null;
 
-                    Assert.Throws<NoHeaderChunkException>(() => MidiFile.Read(fileInfo2.FullName));
+                    ClassicAssert.Throws<NoHeaderChunkException>(() => MidiFile.Read(fileInfo2.FullName));
                     var newMidiFile = MidiFile.Read(fileInfo2.FullName, new ReadingSettings
                     {
                         NoHeaderChunkPolicy = NoHeaderChunkPolicy.Ignore
@@ -350,7 +351,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
             using (var streamToWrite = new MemoryStream())
             {
                 midiFile.Write(streamToWrite);
-                Assert.DoesNotThrow(() => { var l = streamToWrite.Length; });
+                ClassicAssert.DoesNotThrow(() => { var l = streamToWrite.Length; });
             }
         }
 
@@ -960,7 +961,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 readingSettings,
                 format);
 
-            Assert.AreEqual(format, midiFile.OriginalFormat, "Invalid original format.");
+            ClassicAssert.AreEqual(format, midiFile.OriginalFormat, "Invalid original format.");
             MidiAsserts.AreEqual(expectedChunks, midiFile.Chunks, true, "Chunks are invalid.");
         }
 

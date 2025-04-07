@@ -1,6 +1,7 @@
 ﻿using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace Melanchall.DryWetMidi.Tests.Interaction
 {
@@ -21,7 +22,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
             var tempoMap = TempoMap.Create(new TicksPerQuarterNoteTimeDivision(ticksPerQuarterNote), new TimeSignature(timeSignatureNumerator, timeSignatureDenominator));
             var length = BarBeatUtilities.GetBarLength(bars, tempoMap);
-            Assert.AreEqual(ticksPerQuarterNote * timeSignatureNumerator * 4 / timeSignatureDenominator, length, "Bar length is invalid.");
+            ClassicAssert.AreEqual(ticksPerQuarterNote * timeSignatureNumerator * 4 / timeSignatureDenominator, length, "Bar length is invalid.");
         }
 
         [TestCase(10, 3, 4, true)]
@@ -41,7 +42,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             }
 
             var length = BarBeatUtilities.GetBarLength(bars, tempoMap);
-            Assert.AreEqual(ticksPerQuarterNote * timeSignatureNumerator * 4 / timeSignatureDenominator, length, "Bar length is invalid.");
+            ClassicAssert.AreEqual(ticksPerQuarterNote * timeSignatureNumerator * 4 / timeSignatureDenominator, length, "Bar length is invalid.");
         }
 
         [TestCase(0, 4, 4)]
@@ -56,7 +57,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
             var tempoMap = TempoMap.Create(new TicksPerQuarterNoteTimeDivision(ticksPerQuarterNote), new TimeSignature(timeSignatureNumerator, timeSignatureDenominator));
             var length = BarBeatUtilities.GetBeatLength(bars, tempoMap);
-            Assert.AreEqual(ticksPerQuarterNote * 4 / timeSignatureDenominator, length, "Beat length is invalid.");
+            ClassicAssert.AreEqual(ticksPerQuarterNote * 4 / timeSignatureDenominator, length, "Beat length is invalid.");
         }
 
         [TestCase(10, 3, 4, true)]
@@ -76,7 +77,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             }
 
             var length = BarBeatUtilities.GetBeatLength(bars, tempoMap);
-            Assert.AreEqual(ticksPerQuarterNote * 4 / timeSignatureDenominator, length, "Beat length is invalid.");
+            ClassicAssert.AreEqual(ticksPerQuarterNote * 4 / timeSignatureDenominator, length, "Beat length is invalid.");
         }
 
         #endregion

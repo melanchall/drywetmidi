@@ -4,6 +4,7 @@ using Melanchall.DryWetMidi.Interaction;
 using Melanchall.DryWetMidi.Tests.Utilities;
 using Melanchall.DryWetMidi.Tools;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -401,7 +402,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             ObjectDetectionSettings objectDetectionSettings,
             ICollection<ICollection<TimedEvent>> expectedEvents)
         {
-            Assert.Greater(events.Count, 1, "Invalid events collections count.");
+            ClassicAssert.Greater(events.Count, 1, "Invalid events collections count.");
 
             //
 

@@ -9,6 +9,7 @@ using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
 using NUnit.Framework;
 using Melanchall.DryWetMidi.Tests.Common;
+using NUnit.Framework.Legacy;
 
 namespace Melanchall.DryWetMidi.Tests.Multimedia
 {
@@ -107,7 +108,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 .OrderByDescending(f => f.GetDuration<MetricTimeSpan>())
                 .Take(filesToTestCount)
                 .ToArray();
-            Assert.AreEqual(filesToTestCount, filesToTest.Length, "Not enough files for test.");
+            ClassicAssert.AreEqual(filesToTestCount, filesToTest.Length, "Not enough files for test.");
 
             for (var i = 0; i < filesToTest.Length; i++)
             {
@@ -166,7 +167,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                         using (var outputC = OutputDevice.GetByName(MidiDevicesNames.DeviceC))
                         {
                             var devicesConnector = inputA.Connect(outputB, outputC);
-                            Assert.IsTrue(devicesConnector.AreDevicesConnected, "Devices aren't connected.");
+                            ClassicAssert.IsTrue(devicesConnector.AreDevicesConnected, "Devices aren't connected.");
 
                             stopwatch.Start();
                             SendReceiveUtilities.SendEvents(eventsToSend, outputA);
@@ -176,10 +177,10 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                             var areEventsReceived = WaitOperations.Wait(
                                 () => receivedEventsB.Count == eventsToSend.Count && receivedEventsC.Count == eventsToSend.Count,
                                 timeout);
-                            Assert.IsTrue(areEventsReceived, $"Events are not received for timeout {timeout}.");
+                            ClassicAssert.IsTrue(areEventsReceived, $"Events are not received for timeout {timeout}.");
 
                             devicesConnector.Disconnect();
-                            Assert.IsFalse(devicesConnector.AreDevicesConnected, "Devices aren't disconnected.");
+                            ClassicAssert.IsFalse(devicesConnector.AreDevicesConnected, "Devices aren't disconnected.");
                         }
                     }
                 }
@@ -222,7 +223,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                         {
                             var devicesConnector = inputA.Connect(outputB, outputC);
                             devicesConnector.EventCallback = eventCallback;
-                            Assert.IsTrue(devicesConnector.AreDevicesConnected, "Devices aren't connected.");
+                            ClassicAssert.IsTrue(devicesConnector.AreDevicesConnected, "Devices aren't connected.");
 
                             stopwatch.Start();
                             SendReceiveUtilities.SendEvents(eventsToSend, outputA);
@@ -232,10 +233,10 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                             var areEventsReceived = WaitOperations.Wait(
                                 () => receivedEventsB.Count == expectedReceivedEvents.Count && receivedEventsC.Count == expectedReceivedEvents.Count,
                                 timeout);
-                            Assert.IsTrue(areEventsReceived, $"Events are not received for timeout {timeout}.");
+                            ClassicAssert.IsTrue(areEventsReceived, $"Events are not received for timeout {timeout}.");
 
                             devicesConnector.Disconnect();
-                            Assert.IsFalse(devicesConnector.AreDevicesConnected, "Devices aren't disconnected.");
+                            ClassicAssert.IsFalse(devicesConnector.AreDevicesConnected, "Devices aren't disconnected.");
                         }
                     }
                 }

@@ -1,5 +1,6 @@
 ﻿using Melanchall.DryWetMidi.Core;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace Melanchall.DryWetMidi.Tests.Core
 {

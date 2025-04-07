@@ -1,5 +1,6 @@
 ﻿using Melanchall.DryWetMidi.Common;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using System;
 using System.Linq;
 
@@ -47,12 +48,12 @@ namespace Melanchall.DryWetMidi.Tests.Common
                 }
             }
 
-            Assert.AreEqual(
+            ClassicAssert.AreEqual(
                 uniqueValuesCount,
                 GetNodesCount(tree),
                 "Invalid nodes count.");
 
-            Assert.AreEqual(
+            ClassicAssert.AreEqual(
                 uniqueValuesCount * sameKeyGroupSize,
                 tree.GetAllCoordinates().Count(),
                 "Invalid coordinates count.");
@@ -78,12 +79,12 @@ namespace Melanchall.DryWetMidi.Tests.Common
                 }
             }
 
-            Assert.AreEqual(
+            ClassicAssert.AreEqual(
                 uniqueValuesCount,
                 GetNodesCount(tree),
                 "Invalid nodes count.");
 
-            Assert.AreEqual(
+            ClassicAssert.AreEqual(
                 uniqueValuesCount * sameKeyGroupSize,
                 tree.GetAllCoordinates().Count(),
                 "Invalid coordinates count.");
@@ -108,12 +109,12 @@ namespace Melanchall.DryWetMidi.Tests.Common
                 }
             }
 
-            Assert.AreEqual(
+            ClassicAssert.AreEqual(
                 uniqueValuesCount,
                 GetNodesCount(tree),
                 "Invalid nodes count.");
 
-            Assert.AreEqual(
+            ClassicAssert.AreEqual(
                 uniqueValuesCount * sameKeyGroupSize,
                 tree.GetAllCoordinates().Count(),
                 "Invalid coordinates count.");
@@ -456,7 +457,7 @@ namespace Melanchall.DryWetMidi.Tests.Common
 
             for (var i = 0; i < values.Length - 1; i++)
             {
-                Assert.GreaterOrEqual(values[i + 1].Start, values[i].Start, $"Ascending order is broken on index {i}.");
+                ClassicAssert.GreaterOrEqual(values[i + 1].Start, values[i].Start, $"Ascending order is broken on index {i}.");
             }
         }
 
@@ -473,7 +474,7 @@ namespace Melanchall.DryWetMidi.Tests.Common
                 var node = coordinate.TreeNode;
                 var max = (TKey)node.Data;
                 var calculatedMax = GetSubTreeMax(node);
-                Assert.AreEqual(
+                ClassicAssert.AreEqual(
                     calculatedMax,
                     max,
                     $"{message} Invalid max value for node {node.Key} (value = {coordinate.Value})");

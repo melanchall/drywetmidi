@@ -1,6 +1,7 @@
 ﻿using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Interaction;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace Melanchall.DryWetMidi.Tests.Interaction
 {
@@ -13,8 +14,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         public void CheckDefaultData()
         {
             var parameter = GetDefaultParameter();
-            Assert.AreEqual((SevenBitNumber)2, parameter.HalfSteps, "Default half-steps number is invalid.");
-            Assert.AreEqual((SevenBitNumber)0, parameter.Cents, "Default cents number is invalid.");
+            ClassicAssert.AreEqual((SevenBitNumber)2, parameter.HalfSteps, "Default half-steps number is invalid.");
+            ClassicAssert.AreEqual((SevenBitNumber)0, parameter.Cents, "Default cents number is invalid.");
             
             CheckTimedEvents(
                 parameter,

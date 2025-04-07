@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using Melanchall.DryWetMidi.MusicTheory;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace Melanchall.DryWetMidi.Tests.MusicTheory
 {
@@ -16,7 +17,7 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
             var scale = GetCMajorScale();
             var expectedDegree = NoteName.E;
 
-            Assert.AreEqual(expectedDegree, scale.GetDegree(ScaleDegree.Mediant));
+            ClassicAssert.AreEqual(expectedDegree, scale.GetDegree(ScaleDegree.Mediant));
         }
 
         [Test]
@@ -26,7 +27,7 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
             var scale = GetEMajorScale();
             var expectedDegree = NoteName.CSharp;
 
-            Assert.AreEqual(expectedDegree, scale.GetDegree(ScaleDegree.Submediant));
+            ClassicAssert.AreEqual(expectedDegree, scale.GetDegree(ScaleDegree.Submediant));
         }
 
         [Test]
@@ -36,7 +37,7 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
             var scale = GetCMajorScale();
             var note = Note.Get(NoteName.A, 3);
 
-            Assert.IsTrue(scale.IsNoteInScale(note));
+            ClassicAssert.IsTrue(scale.IsNoteInScale(note));
         }
 
         [Test]
@@ -46,7 +47,7 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
             var scale = GetEMajorScale();
             var note = Note.Get(NoteName.G, 2);
 
-            Assert.IsFalse(scale.IsNoteInScale(note));
+            ClassicAssert.IsFalse(scale.IsNoteInScale(note));
         }
 
         [Test]
@@ -58,7 +59,7 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
             var note = Note.Get(NoteName.B, 4);
             var expectedNote = Note.Get(NoteName.C, 5);
 
-            Assert.AreEqual(expectedNote, scale.GetNextNote(note));
+            ClassicAssert.AreEqual(expectedNote, scale.GetNextNote(note));
         }
 
         [Test]
@@ -70,7 +71,7 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
             var note = Note.Get(NoteName.FSharp, 4);
             var expectedNote = Note.Get(NoteName.GSharp, 4);
 
-            Assert.AreEqual(expectedNote, scale.GetNextNote(note));
+            ClassicAssert.AreEqual(expectedNote, scale.GetNextNote(note));
         }
 
         [Test]
@@ -82,7 +83,7 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
             var note = Note.Get(NoteName.A, 4);
             var expectedNote = Note.Get(NoteName.G, 4);
 
-            Assert.AreEqual(expectedNote, scale.GetPreviousNote(note));
+            ClassicAssert.AreEqual(expectedNote, scale.GetPreviousNote(note));
         }
 
         [Test]
@@ -94,7 +95,7 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
             var note = Note.Get(NoteName.E, 2);
             var expectedNote = Note.Get(NoteName.DSharp, 2);
 
-            Assert.AreEqual(expectedNote, scale.GetPreviousNote(note));
+            ClassicAssert.AreEqual(expectedNote, scale.GetPreviousNote(note));
         }
 
         [Test]
@@ -182,7 +183,7 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
         public void GetDegree_Tonic()
         {
             var scale = GetEMajorScale();
-            Assert.AreEqual(NoteName.E, scale.GetDegree(ScaleDegree.Tonic));
+            ClassicAssert.AreEqual(NoteName.E, scale.GetDegree(ScaleDegree.Tonic));
         }
 
         [Test]
@@ -190,7 +191,7 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
         public void GetDegree_Subdominant()
         {
             var scale = GetCMajorScale();
-            Assert.AreEqual(NoteName.F, scale.GetDegree(ScaleDegree.Subdominant));
+            ClassicAssert.AreEqual(NoteName.F, scale.GetDegree(ScaleDegree.Subdominant));
         }
 
         [Test]
@@ -215,7 +216,7 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
             var scale = new Scale(ScaleIntervals.Major, NoteName.C);
             var step = scale.GetStep(0);
 
-            Assert.AreEqual(NoteName.C, step, "Step is invalid.");
+            ClassicAssert.AreEqual(NoteName.C, step, "Step is invalid.");
         }
 
         [Test]
@@ -224,7 +225,7 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
             var scale = new Scale(ScaleIntervals.Major, NoteName.C);
             var step = scale.GetStep(3);
 
-            Assert.AreEqual(NoteName.F, step, "Step is invalid.");
+            ClassicAssert.AreEqual(NoteName.F, step, "Step is invalid.");
         }
 
         [Test]
@@ -233,7 +234,7 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
             var scale = new Scale(ScaleIntervals.Major, NoteName.C);
             var step = scale.GetStep(9);
 
-            Assert.AreEqual(NoteName.E, step, "Step is invalid.");
+            ClassicAssert.AreEqual(NoteName.E, step, "Step is invalid.");
         }
 
         #endregion

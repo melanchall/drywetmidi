@@ -4,6 +4,7 @@ using Melanchall.DryWetMidi.Interaction;
 using Melanchall.DryWetMidi.Tests.Utilities;
 using Melanchall.DryWetMidi.Tools;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -49,7 +50,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
         [Test]
         public void SplitObjectsByStep_ZeroStep_Note_NonZeroLength() =>
-            Assert.Throws<InvalidOperationException>(() => CheckSplitObjectsByStep(
+            ClassicAssert.Throws<InvalidOperationException>(() => CheckSplitObjectsByStep(
                 inputObjects: new[]
                 {
                     new Note((SevenBitNumber)70, 100)
@@ -305,7 +306,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
         [Test]
         public void SplitObjectsByStep_ZeroStep_Chord_NonZeroLength() =>
-            Assert.Throws<InvalidOperationException>(() => CheckSplitObjectsByStep(
+            ClassicAssert.Throws<InvalidOperationException>(() => CheckSplitObjectsByStep(
                 inputObjects: new[]
                 {
                     new Chord(

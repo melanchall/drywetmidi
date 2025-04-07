@@ -1,5 +1,6 @@
 ﻿using Melanchall.DryWetMidi.Interaction;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using System;
 using System.Linq;
 
@@ -95,38 +96,38 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 .Select(t => (ITimeSpan)Activator.CreateInstance(t))
                 .ToArray();
 
-            Assert.Greater(timeSpans.Length, 0, "Time spans are not created.");
+            ClassicAssert.Greater(timeSpans.Length, 0, "Time spans are not created.");
 
             foreach (var timeSpan in timeSpans)
             {
-                Assert.IsTrue(timeSpan.IsZeroTimeSpan(), $"Time span [{timeSpan}] is not zero.");
+                ClassicAssert.IsTrue(timeSpan.IsZeroTimeSpan(), $"Time span [{timeSpan}] is not zero.");
             }
         }
 
         [TestCaseSource(nameof(ZeroTimeSpans))]
         public void IsZeroTimeSpan_True(ITimeSpan timeSpan)
         {
-            Assert.IsTrue(timeSpan.IsZeroTimeSpan(), $"Time span [{timeSpan}] is not zero.");
+            ClassicAssert.IsTrue(timeSpan.IsZeroTimeSpan(), $"Time span [{timeSpan}] is not zero.");
         }
 
         [TestCaseSource(nameof(NonZeroTimeSpans))]
         public void IsZeroTimeSpan_False(ITimeSpan timeSpan)
         {
-            Assert.IsFalse(timeSpan.IsZeroTimeSpan(), $"Time span [{timeSpan}] is zero.");
+            ClassicAssert.IsFalse(timeSpan.IsZeroTimeSpan(), $"Time span [{timeSpan}] is zero.");
         }
 
         [TestCaseSource(nameof(ZeroMathTimeSpansData))]
         public void IsZeroTimeSpan_MathTimeSpan_True(ITimeSpan timeSpan1, ITimeSpan timeSpan2)
         {
             var mathTimeSpan = CreateMathTimeSpan(timeSpan1, timeSpan2);
-            Assert.IsTrue(mathTimeSpan.IsZeroTimeSpan(), $"Time span [{mathTimeSpan}] is not zero.");
+            ClassicAssert.IsTrue(mathTimeSpan.IsZeroTimeSpan(), $"Time span [{mathTimeSpan}] is not zero.");
         }
 
         [TestCaseSource(nameof(NonZeroMathTimeSpansData))]
         public void IsZeroTimeSpan_MathTimeSpan_False(ITimeSpan timeSpan1, ITimeSpan timeSpan2)
         {
             var mathTimeSpan = CreateMathTimeSpan(timeSpan1, timeSpan2);
-            Assert.IsFalse(mathTimeSpan.IsZeroTimeSpan(), $"Time span [{mathTimeSpan}] is zero.");
+            ClassicAssert.IsFalse(mathTimeSpan.IsZeroTimeSpan(), $"Time span [{mathTimeSpan}] is zero.");
         }
 
         #endregion

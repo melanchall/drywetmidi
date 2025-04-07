@@ -1,5 +1,6 @@
 ﻿using Melanchall.DryWetMidi.Common;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using System.Linq;
 
 namespace Melanchall.DryWetMidi.Tests.Common
@@ -39,7 +40,7 @@ namespace Melanchall.DryWetMidi.Tests.Common
             };
 
             var actualLabel = MathUtilities.GetLastElementBelowThreshold(elements, threshold, e => e.Item2).Item1;
-            Assert.AreEqual(expectedLabel, actualLabel, "Invalid found element.");
+            ClassicAssert.AreEqual(expectedLabel, actualLabel, "Invalid found element.");
         }
 
         [TestCase(0, null, -1)]
@@ -110,8 +111,8 @@ namespace Melanchall.DryWetMidi.Tests.Common
             int expectedIndex)
         {
             var actualLabel = MathUtilities.GetLastElementBelowThreshold(elements, threshold, e => e.Item2, out var index).Item1;
-            Assert.AreEqual(expectedLabel, actualLabel, "Invalid found element.");
-            Assert.AreEqual(expectedIndex, index, "Invalid found index.");
+            ClassicAssert.AreEqual(expectedLabel, actualLabel, "Invalid found element.");
+            ClassicAssert.AreEqual(expectedIndex, index, "Invalid found index.");
         }
 
         #endregion

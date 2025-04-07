@@ -5,6 +5,7 @@ using Melanchall.DryWetMidi.Interaction;
 using Melanchall.DryWetMidi.Tests.Common;
 using Melanchall.DryWetMidi.Tests.Utilities;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace Melanchall.DryWetMidi.Tests.Interaction
 {
@@ -46,7 +47,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 tempoMap.GetTempoChanges(),
                 "Tempo changes are invalid.");
             CollectionAssert.IsEmpty(tempoMap.GetTimeSignatureChanges(), "There are time signature changes.");
-            Assert.AreEqual(midiFile.TimeDivision, tempoMap.TimeDivision, "Time division is invalid.");
+            ClassicAssert.AreEqual(midiFile.TimeDivision, tempoMap.TimeDivision, "Time division is invalid.");
         }
 
         [Test]
@@ -69,7 +70,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 tempoMap.GetTempoChanges(),
                 "Tempo changes are invalid.");
             CollectionAssert.IsEmpty(tempoMap.GetTimeSignatureChanges(), "There are time signature changes.");
-            Assert.AreEqual(midiFile.TimeDivision, tempoMap.TimeDivision, "Time division is invalid.");
+            ClassicAssert.AreEqual(midiFile.TimeDivision, tempoMap.TimeDivision, "Time division is invalid.");
         }
 
         [Test]
@@ -87,7 +88,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 tempoMap.GetTimeSignatureChanges(),
                 "Time signature changes are invalid.");
             CollectionAssert.IsEmpty(tempoMap.GetTempoChanges(), "There are tempo changes.");
-            Assert.AreEqual(midiFile.TimeDivision, tempoMap.TimeDivision, "Time division is invalid.");
+            ClassicAssert.AreEqual(midiFile.TimeDivision, tempoMap.TimeDivision, "Time division is invalid.");
         }
 
         [Test]
@@ -106,7 +107,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 tempoMap.GetTimeSignatureChanges(),
                 "Time signature changes are invalid.");
             CollectionAssert.IsEmpty(tempoMap.GetTempoChanges(), "There are tempo changes.");
-            Assert.AreEqual(midiFile.TimeDivision, tempoMap.TimeDivision, "Time division is invalid.");
+            ClassicAssert.AreEqual(midiFile.TimeDivision, tempoMap.TimeDivision, "Time division is invalid.");
         }
 
         [Test]
@@ -139,7 +140,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 },
                 tempoMap.GetTempoChanges(),
                 "Tempo changes are invalid.");
-            Assert.AreEqual(midiFile.TimeDivision, tempoMap.TimeDivision, "Time division is invalid.");
+            ClassicAssert.AreEqual(midiFile.TimeDivision, tempoMap.TimeDivision, "Time division is invalid.");
         }
 
         [Test]
@@ -174,7 +175,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 },
                 tempoMap.GetTempoChanges(),
                 "Tempo changes are invalid.");
-            Assert.AreEqual(midiFile.TimeDivision, tempoMap.TimeDivision, "Time division is invalid.");
+            ClassicAssert.AreEqual(midiFile.TimeDivision, tempoMap.TimeDivision, "Time division is invalid.");
         }
 
         [Test]
@@ -207,7 +208,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 },
                 tempoMap.GetTempoChanges(),
                 "Tempo changes are invalid.");
-            Assert.AreEqual(midiFile.TimeDivision, tempoMap.TimeDivision, "Time division is invalid.");
+            ClassicAssert.AreEqual(midiFile.TimeDivision, tempoMap.TimeDivision, "Time division is invalid.");
         }
 
         [Test]
@@ -474,12 +475,12 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             var tempoMap = midiFile.GetTempoMap();
 
             CollectionAssert.IsEmpty(tempoMap.GetTempoChanges(), "There are tempo changes.");
-            Assert.AreEqual(Tempo.Default, tempoMap.GetTempoAtTime(new MidiTimeSpan()), "Tempo at the start is invalid.");
-            Assert.AreEqual(Tempo.Default, tempoMap.GetTempoAtTime(new MidiTimeSpan(1000)), "Tempo at the middle is invalid.");
+            ClassicAssert.AreEqual(Tempo.Default, tempoMap.GetTempoAtTime(new MidiTimeSpan()), "Tempo at the start is invalid.");
+            ClassicAssert.AreEqual(Tempo.Default, tempoMap.GetTempoAtTime(new MidiTimeSpan(1000)), "Tempo at the middle is invalid.");
 
             CollectionAssert.IsEmpty(tempoMap.GetTimeSignatureChanges(), "There are time signature changes.");
-            Assert.AreEqual(TimeSignature.Default, tempoMap.GetTimeSignatureAtTime(new MidiTimeSpan()), "Time signature at the start is invalid.");
-            Assert.AreEqual(TimeSignature.Default, tempoMap.GetTimeSignatureAtTime(new MidiTimeSpan(1000)), "Time signature at the middle is invalid.");
+            ClassicAssert.AreEqual(TimeSignature.Default, tempoMap.GetTimeSignatureAtTime(new MidiTimeSpan()), "Time signature at the start is invalid.");
+            ClassicAssert.AreEqual(TimeSignature.Default, tempoMap.GetTimeSignatureAtTime(new MidiTimeSpan(1000)), "Time signature at the middle is invalid.");
         }
 
         private void GetTempoMap(

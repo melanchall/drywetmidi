@@ -4,6 +4,7 @@ using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
 using Melanchall.DryWetMidi.Tests.Utilities;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace Melanchall.DryWetMidi.Tests.Interaction
 {
@@ -48,18 +49,18 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 new TimedEvent(new NoteOnEvent((SevenBitNumber)70, (SevenBitNumber)20) { Channel = (FourBitNumber)5 }, 10),
                 new TimedEvent(new NoteOffEvent((SevenBitNumber)70, (SevenBitNumber)10) { Channel = (FourBitNumber)5 }, 100));
 
-            Assert.AreEqual((SevenBitNumber)70, note.NoteNumber, "Invalid note number.");
-            Assert.AreEqual((SevenBitNumber)20, note.Velocity, "Invalid velocity.");
-            Assert.AreEqual((SevenBitNumber)10, note.OffVelocity, "Invalid off velocity.");
-            Assert.AreEqual((FourBitNumber)5, note.Channel, "Invalid channel.");
-            Assert.AreEqual(10, note.Time, "Invalid time.");
-            Assert.AreEqual(90, note.Length, "Invalid length.");
+            ClassicAssert.AreEqual((SevenBitNumber)70, note.NoteNumber, "Invalid note number.");
+            ClassicAssert.AreEqual((SevenBitNumber)20, note.Velocity, "Invalid velocity.");
+            ClassicAssert.AreEqual((SevenBitNumber)10, note.OffVelocity, "Invalid off velocity.");
+            ClassicAssert.AreEqual((FourBitNumber)5, note.Channel, "Invalid channel.");
+            ClassicAssert.AreEqual(10, note.Time, "Invalid time.");
+            ClassicAssert.AreEqual(90, note.Length, "Invalid length.");
         }
 
         [Test]
         public void CreateNote_ByTimedEvents_NotNoteOn()
         {
-            Assert.Throws<ArgumentOutOfRangeException>(() => new Note(
+            ClassicAssert.Throws<ArgumentOutOfRangeException>(() => new Note(
                 new TimedEvent(new TextEvent("A"), 10),
                 new TimedEvent(new NoteOffEvent((SevenBitNumber)70, (SevenBitNumber)10) { Channel = (FourBitNumber)5 }, 100)));
         }
@@ -67,7 +68,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         [Test]
         public void CreateNote_ByTimedEvents_NotNoteOff()
         {
-            Assert.Throws<ArgumentOutOfRangeException>(() => new Note(
+            ClassicAssert.Throws<ArgumentOutOfRangeException>(() => new Note(
                 new TimedEvent(new NoteOnEvent(), 10),
                 new TimedEvent(new TextEvent("A"), 100)));
         }
@@ -75,7 +76,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         [Test]
         public void CreateNote_ByTimedEvents_NoteOffBeforeNoteOn()
         {
-            Assert.Throws<ArgumentOutOfRangeException>(() => new Note(
+            ClassicAssert.Throws<ArgumentOutOfRangeException>(() => new Note(
                 new TimedEvent(new NoteOnEvent(), 10),
                 new TimedEvent(new NoteOffEvent(), 5)));
         }
@@ -108,8 +109,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
             var clone = (TaggedNote)taggedNote.Clone();
 
-            Assert.AreEqual(noteNumber, clone.NoteNumber, "Note number is invalid.");
-            Assert.AreEqual(tag, clone.Tag, "Tag is invalid.");
+            ClassicAssert.AreEqual(noteNumber, clone.NoteNumber, "Note number is invalid.");
+            ClassicAssert.AreEqual(tag, clone.Tag, "Tag is invalid.");
         }
 
         #endregion
@@ -126,9 +127,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             var time = 0;
 
             var parts = note.Split(time);
-            Assert.IsNull(parts.LeftPart,
+            ClassicAssert.IsNull(parts.LeftPart,
                           "Left part is not null.");
-            Assert.AreNotSame(parts.RightPart,
+            ClassicAssert.AreNotSame(parts.RightPart,
                               note,
                               "Right part refers to the same object as the original note.");
             MidiAsserts.AreEqual(noteCreator(), parts.RightPart, "Right part doesn't equal to the original note.");
@@ -144,9 +145,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             var time = 50;
 
             var parts = note.Split(time);
-            Assert.IsNull(parts.LeftPart,
+            ClassicAssert.IsNull(parts.LeftPart,
                           "Left part is not null.");
-            Assert.AreNotSame(parts.RightPart,
+            ClassicAssert.AreNotSame(parts.RightPart,
                               note,
                               "Right part refers to the same object as the original note.");
             MidiAsserts.AreEqual(noteCreator(), parts.RightPart, "Right part doesn't equal to the original note.");
@@ -162,9 +163,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             var time = 500;
 
             var parts = note.Split(time);
-            Assert.IsNull(parts.RightPart,
+            ClassicAssert.IsNull(parts.RightPart,
                           "Right part is not null.");
-            Assert.AreNotSame(parts.LeftPart,
+            ClassicAssert.AreNotSame(parts.LeftPart,
                               note,
                               "Left part refers to the same object as the original note.");
             MidiAsserts.AreEqual(noteCreator(), parts.LeftPart, "Left part doesn't equal to the original note.");
@@ -214,9 +215,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             var note = new Note(new SevenBitNumber(1));
             var timedNoteOnEvent1 = note.GetTimedNoteOnEvent();
             var timedNoteOnEvent2 = note.GetTimedNoteOnEvent();
-            Assert.IsNotNull(timedNoteOnEvent1, "1st event is null.");
-            Assert.IsNotNull(timedNoteOnEvent2, "2nd event is null.");
-            Assert.AreNotEqual(timedNoteOnEvent1, timedNoteOnEvent2, "Events have not been cloned.");
+            ClassicAssert.IsNotNull(timedNoteOnEvent1, "1st event is null.");
+            ClassicAssert.IsNotNull(timedNoteOnEvent2, "2nd event is null.");
+            ClassicAssert.AreNotEqual(timedNoteOnEvent1, timedNoteOnEvent2, "Events have not been cloned.");
         }
 
         [Test]
@@ -233,13 +234,13 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             note.Length = 200;
 
             var timedNoteOnEvent = note.GetTimedNoteOnEvent();
-            Assert.IsInstanceOf(typeof(NoteOnEvent), timedNoteOnEvent.Event, "Events is not Note On.");
-            Assert.AreEqual(20, timedNoteOnEvent.Time, "Time is invalid");
+            ClassicAssert.IsInstanceOf(typeof(NoteOnEvent), timedNoteOnEvent.Event, "Events is not Note On.");
+            ClassicAssert.AreEqual(20, timedNoteOnEvent.Time, "Time is invalid");
 
             var noteOnEvent = (NoteOnEvent)timedNoteOnEvent.Event;
-            Assert.AreEqual((SevenBitNumber)45, noteOnEvent.NoteNumber, "Note number is invalid.");
-            Assert.AreEqual((SevenBitNumber)12, noteOnEvent.Velocity, "Velocity is invalid.");
-            Assert.AreEqual((FourBitNumber)9, noteOnEvent.Channel, "Channel is invalid.");
+            ClassicAssert.AreEqual((SevenBitNumber)45, noteOnEvent.NoteNumber, "Note number is invalid.");
+            ClassicAssert.AreEqual((SevenBitNumber)12, noteOnEvent.Velocity, "Velocity is invalid.");
+            ClassicAssert.AreEqual((FourBitNumber)9, noteOnEvent.Channel, "Channel is invalid.");
         }
 
         #endregion
@@ -252,9 +253,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             var note = new Note(new SevenBitNumber(1));
             var timedNoteOffEvent1 = note.GetTimedNoteOffEvent();
             var timedNoteOffEvent2 = note.GetTimedNoteOffEvent();
-            Assert.IsNotNull(timedNoteOffEvent1, "1st event is null.");
-            Assert.IsNotNull(timedNoteOffEvent2, "2nd event is null.");
-            Assert.AreNotEqual(timedNoteOffEvent1, timedNoteOffEvent2, "Events have not been cloned.");
+            ClassicAssert.IsNotNull(timedNoteOffEvent1, "1st event is null.");
+            ClassicAssert.IsNotNull(timedNoteOffEvent2, "2nd event is null.");
+            ClassicAssert.AreNotEqual(timedNoteOffEvent1, timedNoteOffEvent2, "Events have not been cloned.");
         }
 
         [Test]
@@ -271,13 +272,13 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             note.Length = 200;
 
             var timedNoteOffEvent = note.GetTimedNoteOffEvent();
-            Assert.IsInstanceOf(typeof(NoteOffEvent), timedNoteOffEvent.Event, "Events is not Note On.");
-            Assert.AreEqual(220, timedNoteOffEvent.Time, "Time is invalid");
+            ClassicAssert.IsInstanceOf(typeof(NoteOffEvent), timedNoteOffEvent.Event, "Events is not Note On.");
+            ClassicAssert.AreEqual(220, timedNoteOffEvent.Time, "Time is invalid");
 
             var noteOffEvent = (NoteOffEvent)timedNoteOffEvent.Event;
-            Assert.AreEqual((SevenBitNumber)45, noteOffEvent.NoteNumber, "Note number is invalid.");
-            Assert.AreEqual((SevenBitNumber)122, noteOffEvent.Velocity, "Velocity is invalid.");
-            Assert.AreEqual((FourBitNumber)9, noteOffEvent.Channel, "Channel is invalid.");
+            ClassicAssert.AreEqual((SevenBitNumber)45, noteOffEvent.NoteNumber, "Note number is invalid.");
+            ClassicAssert.AreEqual((SevenBitNumber)122, noteOffEvent.Velocity, "Velocity is invalid.");
+            ClassicAssert.AreEqual((FourBitNumber)9, noteOffEvent.Channel, "Channel is invalid.");
         }
 
         #endregion
@@ -346,18 +347,18 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             var initialChannel = (FourBitNumber)0;
 
             var note = new Note((SevenBitNumber)70);
-            Assert.AreEqual(initialChannel, note.Channel, "Invalid channel after note created.");
-            Assert.AreEqual(initialChannel, ((NoteOnEvent)note.TimedNoteOnEvent.Event).Channel, "Invalid channel of Note On timed event after note created.");
-            Assert.AreEqual(initialChannel, ((NoteOffEvent)note.TimedNoteOffEvent.Event).Channel, "Invalid channel of Note Off timed event after note created.");
+            ClassicAssert.AreEqual(initialChannel, note.Channel, "Invalid channel after note created.");
+            ClassicAssert.AreEqual(initialChannel, ((NoteOnEvent)note.TimedNoteOnEvent.Event).Channel, "Invalid channel of Note On timed event after note created.");
+            ClassicAssert.AreEqual(initialChannel, ((NoteOffEvent)note.TimedNoteOffEvent.Event).Channel, "Invalid channel of Note Off timed event after note created.");
             MidiAsserts.AreEqual(note.TimedNoteOnEvent, note.GetTimedNoteOnEvent(), "Invalid Note On timed event after note created.");
             MidiAsserts.AreEqual(note.TimedNoteOffEvent, note.GetTimedNoteOffEvent(), "Invalid Note Off timed event after note created.");
 
             var newChannel = (FourBitNumber)6;
             note.Channel = newChannel;
 
-            Assert.AreEqual(newChannel, note.Channel, "Invalid channel after update.");
-            Assert.AreEqual(newChannel, ((NoteOnEvent)note.TimedNoteOnEvent.Event).Channel, "Invalid channel of Note On timed event after update.");
-            Assert.AreEqual(newChannel, ((NoteOffEvent)note.TimedNoteOffEvent.Event).Channel, "Invalid channel of Note Off timed event after update.");
+            ClassicAssert.AreEqual(newChannel, note.Channel, "Invalid channel after update.");
+            ClassicAssert.AreEqual(newChannel, ((NoteOnEvent)note.TimedNoteOnEvent.Event).Channel, "Invalid channel of Note On timed event after update.");
+            ClassicAssert.AreEqual(newChannel, ((NoteOffEvent)note.TimedNoteOffEvent.Event).Channel, "Invalid channel of Note Off timed event after update.");
             MidiAsserts.AreEqual(note.TimedNoteOnEvent, note.GetTimedNoteOnEvent(), "Invalid Note On timed event after update.");
             MidiAsserts.AreEqual(note.TimedNoteOffEvent, note.GetTimedNoteOffEvent(), "Invalid Note Off timed event after update.");
         }
@@ -368,18 +369,18 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             var initialVelocity = Note.DefaultVelocity;
 
             var note = new Note((SevenBitNumber)70);
-            Assert.AreEqual(initialVelocity, note.Velocity, "Invalid velocity after note created.");
-            Assert.AreEqual(initialVelocity, ((NoteOnEvent)note.TimedNoteOnEvent.Event).Velocity, "Invalid velocity of Note On timed event after note created.");
-            Assert.AreEqual(SevenBitNumber.MinValue, ((NoteOffEvent)note.TimedNoteOffEvent.Event).Velocity, "Invalid velocity of Note Off timed event after note created.");
+            ClassicAssert.AreEqual(initialVelocity, note.Velocity, "Invalid velocity after note created.");
+            ClassicAssert.AreEqual(initialVelocity, ((NoteOnEvent)note.TimedNoteOnEvent.Event).Velocity, "Invalid velocity of Note On timed event after note created.");
+            ClassicAssert.AreEqual(SevenBitNumber.MinValue, ((NoteOffEvent)note.TimedNoteOffEvent.Event).Velocity, "Invalid velocity of Note Off timed event after note created.");
             MidiAsserts.AreEqual(note.TimedNoteOnEvent, note.GetTimedNoteOnEvent(), "Invalid Note On timed event after note created.");
             MidiAsserts.AreEqual(note.TimedNoteOffEvent, note.GetTimedNoteOffEvent(), "Invalid Note Off timed event after note created.");
 
             var newVelocity = (SevenBitNumber)60;
             note.Velocity = newVelocity;
 
-            Assert.AreEqual(newVelocity, note.Velocity, "Invalid velocity after update.");
-            Assert.AreEqual(newVelocity, ((NoteOnEvent)note.TimedNoteOnEvent.Event).Velocity, "Invalid velocity of Note On timed event after update.");
-            Assert.AreEqual(SevenBitNumber.MinValue, ((NoteOffEvent)note.TimedNoteOffEvent.Event).Velocity, "Invalid velocity of Note Off timed event after update.");
+            ClassicAssert.AreEqual(newVelocity, note.Velocity, "Invalid velocity after update.");
+            ClassicAssert.AreEqual(newVelocity, ((NoteOnEvent)note.TimedNoteOnEvent.Event).Velocity, "Invalid velocity of Note On timed event after update.");
+            ClassicAssert.AreEqual(SevenBitNumber.MinValue, ((NoteOffEvent)note.TimedNoteOffEvent.Event).Velocity, "Invalid velocity of Note Off timed event after update.");
             MidiAsserts.AreEqual(note.TimedNoteOnEvent, note.GetTimedNoteOnEvent(), "Invalid Note On timed event after update.");
             MidiAsserts.AreEqual(note.TimedNoteOffEvent, note.GetTimedNoteOffEvent(), "Invalid Note Off timed event after update.");
         }
@@ -390,18 +391,18 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             var initialOffVelocity = SevenBitNumber.MinValue;
 
             var note = new Note((SevenBitNumber)70);
-            Assert.AreEqual(initialOffVelocity, note.OffVelocity, "Invalid off velocity after note created.");
-            Assert.AreEqual(Note.DefaultVelocity, ((NoteOnEvent)note.TimedNoteOnEvent.Event).Velocity, "Invalid off velocity of Note On timed event after note created.");
-            Assert.AreEqual(initialOffVelocity, ((NoteOffEvent)note.TimedNoteOffEvent.Event).Velocity, "Invalid off velocity of Note Off timed event after note created.");
+            ClassicAssert.AreEqual(initialOffVelocity, note.OffVelocity, "Invalid off velocity after note created.");
+            ClassicAssert.AreEqual(Note.DefaultVelocity, ((NoteOnEvent)note.TimedNoteOnEvent.Event).Velocity, "Invalid off velocity of Note On timed event after note created.");
+            ClassicAssert.AreEqual(initialOffVelocity, ((NoteOffEvent)note.TimedNoteOffEvent.Event).Velocity, "Invalid off velocity of Note Off timed event after note created.");
             MidiAsserts.AreEqual(note.TimedNoteOnEvent, note.GetTimedNoteOnEvent(), "Invalid Note On timed event after note created.");
             MidiAsserts.AreEqual(note.TimedNoteOffEvent, note.GetTimedNoteOffEvent(), "Invalid Note Off timed event after note created.");
 
             var newOffVelocity = (SevenBitNumber)60;
             note.OffVelocity = newOffVelocity;
 
-            Assert.AreEqual(newOffVelocity, note.OffVelocity, "Invalid off velocity after update.");
-            Assert.AreEqual(Note.DefaultVelocity, ((NoteOnEvent)note.TimedNoteOnEvent.Event).Velocity, "Invalid off velocity of Note On timed event after update.");
-            Assert.AreEqual(newOffVelocity, ((NoteOffEvent)note.TimedNoteOffEvent.Event).Velocity, "Invalid off velocity of Note Off timed event after update.");
+            ClassicAssert.AreEqual(newOffVelocity, note.OffVelocity, "Invalid off velocity after update.");
+            ClassicAssert.AreEqual(Note.DefaultVelocity, ((NoteOnEvent)note.TimedNoteOnEvent.Event).Velocity, "Invalid off velocity of Note On timed event after update.");
+            ClassicAssert.AreEqual(newOffVelocity, ((NoteOffEvent)note.TimedNoteOffEvent.Event).Velocity, "Invalid off velocity of Note Off timed event after update.");
             MidiAsserts.AreEqual(note.TimedNoteOnEvent, note.GetTimedNoteOnEvent(), "Invalid Note On timed event after update.");
             MidiAsserts.AreEqual(note.TimedNoteOffEvent, note.GetTimedNoteOffEvent(), "Invalid Note Off timed event after update.");
         }
@@ -412,18 +413,18 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             var initialNoteNumber = (SevenBitNumber)80;
 
             var note = new Note(initialNoteNumber);
-            Assert.AreEqual(initialNoteNumber, note.NoteNumber, "Invalid note number after note created.");
-            Assert.AreEqual(initialNoteNumber, ((NoteOnEvent)note.TimedNoteOnEvent.Event).NoteNumber, "Invalid note number of Note On timed event after note created.");
-            Assert.AreEqual(initialNoteNumber, ((NoteOffEvent)note.TimedNoteOffEvent.Event).NoteNumber, "Invalid note number of Note Off timed event after note created.");
+            ClassicAssert.AreEqual(initialNoteNumber, note.NoteNumber, "Invalid note number after note created.");
+            ClassicAssert.AreEqual(initialNoteNumber, ((NoteOnEvent)note.TimedNoteOnEvent.Event).NoteNumber, "Invalid note number of Note On timed event after note created.");
+            ClassicAssert.AreEqual(initialNoteNumber, ((NoteOffEvent)note.TimedNoteOffEvent.Event).NoteNumber, "Invalid note number of Note Off timed event after note created.");
             MidiAsserts.AreEqual(note.TimedNoteOnEvent, note.GetTimedNoteOnEvent(), "Invalid Note On timed event after note created.");
             MidiAsserts.AreEqual(note.TimedNoteOffEvent, note.GetTimedNoteOffEvent(), "Invalid Note Off timed event after note created.");
 
             var newNoteNumber = (SevenBitNumber)60;
             note.NoteNumber = newNoteNumber;
 
-            Assert.AreEqual(newNoteNumber, note.NoteNumber, "Invalid note number after update.");
-            Assert.AreEqual(newNoteNumber, ((NoteOnEvent)note.TimedNoteOnEvent.Event).NoteNumber, "Invalid note number of Note On timed event after update.");
-            Assert.AreEqual(newNoteNumber, ((NoteOffEvent)note.TimedNoteOffEvent.Event).NoteNumber, "Invalid note number of Note Off timed event after update.");
+            ClassicAssert.AreEqual(newNoteNumber, note.NoteNumber, "Invalid note number after update.");
+            ClassicAssert.AreEqual(newNoteNumber, ((NoteOnEvent)note.TimedNoteOnEvent.Event).NoteNumber, "Invalid note number of Note On timed event after update.");
+            ClassicAssert.AreEqual(newNoteNumber, ((NoteOffEvent)note.TimedNoteOffEvent.Event).NoteNumber, "Invalid note number of Note Off timed event after update.");
             MidiAsserts.AreEqual(note.TimedNoteOnEvent, note.GetTimedNoteOnEvent(), "Invalid Note On timed event after update.");
             MidiAsserts.AreEqual(note.TimedNoteOffEvent, note.GetTimedNoteOffEvent(), "Invalid Note Off timed event after update.");
         }
@@ -435,12 +436,12 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             var initialOctave = 4;
 
             var note = new Note(initialNoteName, initialOctave);
-            Assert.AreEqual(initialNoteName, note.NoteName, "Invalid note name after note created.");
-            Assert.AreEqual(initialOctave, note.Octave, "Invalid octave after note created.");
-            Assert.AreEqual(initialNoteName, ((NoteOnEvent)note.TimedNoteOnEvent.Event).GetNoteName(), "Invalid note name of Note On timed event after note created.");
-            Assert.AreEqual(initialOctave, ((NoteOnEvent)note.TimedNoteOnEvent.Event).GetNoteOctave(), "Invalid octave of Note On timed event after note created.");
-            Assert.AreEqual(initialNoteName, ((NoteOffEvent)note.TimedNoteOffEvent.Event).GetNoteName(), "Invalid note name of Note Off timed event after note created.");
-            Assert.AreEqual(initialOctave, ((NoteOffEvent)note.TimedNoteOffEvent.Event).GetNoteOctave(), "Invalid octave of Note Off timed event after note created.");
+            ClassicAssert.AreEqual(initialNoteName, note.NoteName, "Invalid note name after note created.");
+            ClassicAssert.AreEqual(initialOctave, note.Octave, "Invalid octave after note created.");
+            ClassicAssert.AreEqual(initialNoteName, ((NoteOnEvent)note.TimedNoteOnEvent.Event).GetNoteName(), "Invalid note name of Note On timed event after note created.");
+            ClassicAssert.AreEqual(initialOctave, ((NoteOnEvent)note.TimedNoteOnEvent.Event).GetNoteOctave(), "Invalid octave of Note On timed event after note created.");
+            ClassicAssert.AreEqual(initialNoteName, ((NoteOffEvent)note.TimedNoteOffEvent.Event).GetNoteName(), "Invalid note name of Note Off timed event after note created.");
+            ClassicAssert.AreEqual(initialOctave, ((NoteOffEvent)note.TimedNoteOffEvent.Event).GetNoteOctave(), "Invalid octave of Note Off timed event after note created.");
             MidiAsserts.AreEqual(note.TimedNoteOnEvent, note.GetTimedNoteOnEvent(), "Invalid Note On timed event after note created.");
             MidiAsserts.AreEqual(note.TimedNoteOffEvent, note.GetTimedNoteOffEvent(), "Invalid Note Off timed event after note created.");
 
@@ -448,12 +449,12 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             var newOctave = 3;
             note.SetNoteNameAndOctave(newNoteName, newOctave);
 
-            Assert.AreEqual(newNoteName, note.NoteName, "Invalid note name after update.");
-            Assert.AreEqual(newOctave, note.Octave, "Invalid octave after update.");
-            Assert.AreEqual(newNoteName, ((NoteOnEvent)note.TimedNoteOnEvent.Event).GetNoteName(), "Invalid note name of Note On timed event after update.");
-            Assert.AreEqual(newOctave, ((NoteOnEvent)note.TimedNoteOnEvent.Event).GetNoteOctave(), "Invalid octave of Note On timed event after update.");
-            Assert.AreEqual(newNoteName, ((NoteOffEvent)note.TimedNoteOffEvent.Event).GetNoteName(), "Invalid note name of Note Off timed event after update.");
-            Assert.AreEqual(newOctave, ((NoteOffEvent)note.TimedNoteOffEvent.Event).GetNoteOctave(), "Invalid octave of Note Off timed event after update.");
+            ClassicAssert.AreEqual(newNoteName, note.NoteName, "Invalid note name after update.");
+            ClassicAssert.AreEqual(newOctave, note.Octave, "Invalid octave after update.");
+            ClassicAssert.AreEqual(newNoteName, ((NoteOnEvent)note.TimedNoteOnEvent.Event).GetNoteName(), "Invalid note name of Note On timed event after update.");
+            ClassicAssert.AreEqual(newOctave, ((NoteOnEvent)note.TimedNoteOnEvent.Event).GetNoteOctave(), "Invalid octave of Note On timed event after update.");
+            ClassicAssert.AreEqual(newNoteName, ((NoteOffEvent)note.TimedNoteOffEvent.Event).GetNoteName(), "Invalid note name of Note Off timed event after update.");
+            ClassicAssert.AreEqual(newOctave, ((NoteOffEvent)note.TimedNoteOffEvent.Event).GetNoteOctave(), "Invalid octave of Note Off timed event after update.");
             MidiAsserts.AreEqual(note.TimedNoteOnEvent, note.GetTimedNoteOnEvent(), "Invalid Note On timed event after update.");
             MidiAsserts.AreEqual(note.TimedNoteOffEvent, note.GetTimedNoteOffEvent(), "Invalid Note Off timed event after update.");
         }
@@ -467,7 +468,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var note = new Note(DryWetMidi.MusicTheory.NoteName.A, 1);
 
-            Assert.AreEqual(
+            ClassicAssert.AreEqual(
                 DryWetMidi.MusicTheory.Note.Get(DryWetMidi.MusicTheory.NoteName.A, 1),
                 note.GetMusicTheoryNote(),
                 "Note is invalid.");
@@ -495,9 +496,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
             note.Time = note.Time;
 
-            Assert.IsFalse(lengthChangedFired, "Length changed event fired.");
-            Assert.IsNull(timeChangedSender, "Sender is not null.");
-            Assert.IsNull(timeChangedEventArgs, "Event args is not null.");
+            ClassicAssert.IsFalse(lengthChangedFired, "Length changed event fired.");
+            ClassicAssert.IsNull(timeChangedSender, "Sender is not null.");
+            ClassicAssert.IsNull(timeChangedEventArgs, "Event args is not null.");
         }
 
         private static void CheckTimeChangedEvent_Changed(Note note)
@@ -517,12 +518,12 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             var oldTime = note.Time;
             note.Time += 100;
 
-            Assert.IsFalse(lengthChangedFired, "Length changed event fired.");
-            Assert.AreSame(note, timeChangedSender, "Sender is invalid.");
-            Assert.IsNotNull(timeChangedEventArgs, "Event args is null.");
-            Assert.AreEqual(oldTime, timeChangedEventArgs.OldTime, "Old time is invalid.");
-            Assert.AreEqual(note.Time, timeChangedEventArgs.NewTime, "New time is invalid.");
-            Assert.AreNotEqual(oldTime, note.Time, "New time is equal to old one.");
+            ClassicAssert.IsFalse(lengthChangedFired, "Length changed event fired.");
+            ClassicAssert.AreSame(note, timeChangedSender, "Sender is invalid.");
+            ClassicAssert.IsNotNull(timeChangedEventArgs, "Event args is null.");
+            ClassicAssert.AreEqual(oldTime, timeChangedEventArgs.OldTime, "Old time is invalid.");
+            ClassicAssert.AreEqual(note.Time, timeChangedEventArgs.NewTime, "New time is invalid.");
+            ClassicAssert.AreNotEqual(oldTime, note.Time, "New time is equal to old one.");
         }
 
         private static void CheckLengthChangedEvent_NoChange(Note note)
@@ -541,9 +542,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
             note.Length = note.Length;
 
-            Assert.IsFalse(timeChangedFired, "Time changed event fired.");
-            Assert.IsNull(lengthChangedSender, "Sender is not null.");
-            Assert.IsNull(lengthChangedEventArgs, "Event args is not null.");
+            ClassicAssert.IsFalse(timeChangedFired, "Time changed event fired.");
+            ClassicAssert.IsNull(lengthChangedSender, "Sender is not null.");
+            ClassicAssert.IsNull(lengthChangedEventArgs, "Event args is not null.");
         }
 
         private static void CheckLengthChangedEvent_Changed(Note note)
@@ -563,12 +564,12 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             var oldLength = note.Length;
             note.Length += 100;
 
-            Assert.IsFalse(timeChangedFired, "Time changed event fired.");
-            Assert.AreSame(note, lengthChangedSender, "Sender is invalid.");
-            Assert.IsNotNull(lengthChangedEventArgs, "Event args is null.");
-            Assert.AreEqual(oldLength, lengthChangedEventArgs.OldLength, "Old length is invalid.");
-            Assert.AreEqual(note.Length, lengthChangedEventArgs.NewLength, "New length is invalid.");
-            Assert.AreNotEqual(oldLength, note.Length, "New length is equal to old one.");
+            ClassicAssert.IsFalse(timeChangedFired, "Time changed event fired.");
+            ClassicAssert.AreSame(note, lengthChangedSender, "Sender is invalid.");
+            ClassicAssert.IsNotNull(lengthChangedEventArgs, "Event args is null.");
+            ClassicAssert.AreEqual(oldLength, lengthChangedEventArgs.OldLength, "Old length is invalid.");
+            ClassicAssert.AreEqual(note.Length, lengthChangedEventArgs.NewLength, "New length is invalid.");
+            ClassicAssert.AreNotEqual(oldLength, note.Length, "New length is equal to old one.");
         }
 
         private static void CheckEndTime<TTimeSpan>(ITimeSpan time, ITimeSpan length, TTimeSpan expectedEndTime)

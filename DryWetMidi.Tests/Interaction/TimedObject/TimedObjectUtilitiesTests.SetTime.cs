@@ -1,5 +1,6 @@
 ﻿using Melanchall.DryWetMidi.Interaction;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using System;
 
 namespace Melanchall.DryWetMidi.Tests.Interaction
@@ -22,8 +23,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
             var result = timedEvent.SetTime((MidiTimeSpan)time, Factory.TempoMap);
 
-            Assert.AreSame(timedEvent, result, "Result is not the same object.");
-            Assert.AreEqual(time, result.Time, "Invalid time.");
+            ClassicAssert.AreSame(timedEvent, result, "Result is not the same object.");
+            ClassicAssert.AreEqual(time, result.Time, "Invalid time.");
         }
 
         [Test]
@@ -33,9 +34,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
             var result = note.SetTime((MidiTimeSpan)time, Factory.TempoMap);
 
-            Assert.AreSame(note, result, "Result is not the same object.");
-            Assert.AreEqual(time, result.Time, "Invalid time.");
-            Assert.AreEqual(50, result.Length, "Invalid length.");
+            ClassicAssert.AreSame(note, result, "Result is not the same object.");
+            ClassicAssert.AreEqual(time, result.Time, "Invalid time.");
+            ClassicAssert.AreEqual(50, result.Length, "Invalid length.");
         }
 
         [Test]
@@ -47,9 +48,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
             var result = chord.SetTime((MidiTimeSpan)time, Factory.TempoMap);
 
-            Assert.AreSame(chord, result, "Result is not the same object.");
-            Assert.AreEqual(time, result.Time, "Invalid time.");
-            Assert.AreEqual(50, result.Length, "Invalid length.");
+            ClassicAssert.AreSame(chord, result, "Result is not the same object.");
+            ClassicAssert.AreEqual(time, result.Time, "Invalid time.");
+            ClassicAssert.AreEqual(50, result.Length, "Invalid length.");
         }
 
         [Test]
@@ -59,8 +60,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
             var result = timedEvent.SetTime(new MetricTimeSpan(0, 0, 0, ms), Factory.TempoMap);
 
-            Assert.AreSame(timedEvent, result, "Result is not the same object.");
-            Assert.AreEqual(
+            ClassicAssert.AreSame(timedEvent, result, "Result is not the same object.");
+            ClassicAssert.AreEqual(
                 new MetricTimeSpan(0, 0, 0, ms),
                 result.TimeAs<MetricTimeSpan>(Factory.TempoMap),
                 "Invalid time.");
@@ -71,7 +72,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var timedEvent = default(TimedEvent);
 
-            Assert.Throws<ArgumentNullException>(() => timedEvent.SetTime(new MidiTimeSpan(), Factory.TempoMap));
+            ClassicAssert.Throws<ArgumentNullException>(() => timedEvent.SetTime(new MidiTimeSpan(), Factory.TempoMap));
         }
 
         [Test]
@@ -79,7 +80,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var timedEvent = Factory.GetTimedEvent("10");
 
-            Assert.Throws<ArgumentNullException>(() => timedEvent.SetTime(null, Factory.TempoMap));
+            ClassicAssert.Throws<ArgumentNullException>(() => timedEvent.SetTime(null, Factory.TempoMap));
         }
 
         [Test]
@@ -87,7 +88,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var timedEvent = Factory.GetTimedEvent("10");
 
-            Assert.Throws<ArgumentNullException>(() => timedEvent.SetTime(new MidiTimeSpan(), null));
+            ClassicAssert.Throws<ArgumentNullException>(() => timedEvent.SetTime(new MidiTimeSpan(), null));
         }
 
         #endregion

@@ -10,6 +10,7 @@ using Melanchall.DryWetMidi.Interaction;
 using Melanchall.DryWetMidi.Standards;
 using NUnit.Framework;
 using System.Threading;
+using NUnit.Framework.Legacy;
 
 namespace Melanchall.DryWetMidi.Tests.Multimedia
 {
@@ -147,7 +148,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     playback.Start();
                     SpinWait.SpinUntil(() => !playback.IsRunning);
 
-                    Assert.IsFalse(playback.IsRunning, "Playback is running after completed.");
+                    ClassicAssert.IsFalse(playback.IsRunning, "Playback is running after completed.");
                 }
             }
 
@@ -161,17 +162,17 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
         private static void CompareReceivedNotes(IReadOnlyList<ReceivedNote> receivedNotes, IReadOnlyList<ReceivedNote> expectedReceivedNotes)
         {
-            Assert.AreEqual(expectedReceivedNotes.Count, receivedNotes.Count, "Count of received notes is invalid.");
+            ClassicAssert.AreEqual(expectedReceivedNotes.Count, receivedNotes.Count, "Count of received notes is invalid.");
 
             for (var i = 0; i < receivedNotes.Count; i++)
             {
                 var receivedNote = receivedNotes[i];
                 var expectedReceivedNote = expectedReceivedNotes[i];
 
-                Assert.AreSame(expectedReceivedNote.Note, receivedNote.Note, $"Received note {receivedNote.Note} is not {expectedReceivedNote.Note}.");
+                ClassicAssert.AreSame(expectedReceivedNote.Note, receivedNote.Note, $"Received note {receivedNote.Note} is not {expectedReceivedNote.Note}.");
 
                 var offsetFromExpectedTime = (receivedNote.Time - expectedReceivedNote.Time).Duration();
-                Assert.LessOrEqual(
+                ClassicAssert.LessOrEqual(
                     offsetFromExpectedTime,
                     SendReceiveUtilities.MaximumEventSendReceiveDelay,
                     $"Note was received at wrong time (at {receivedNote.Time} instead of {expectedReceivedNote.Time}).");
@@ -184,9 +185,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             {
                 string message;
                 var sentEvent = sentEvents.FirstOrDefault(e => MidiEvent.Equals(e.Event, programEvent, new MidiEventEqualityCheckSettings { CompareDeltaTimes = false }, out message));
-                Assert.IsNotNull(sentEvent, $"Program event {programEvent} was not sent.");
+                ClassicAssert.IsNotNull(sentEvent, $"Program event {programEvent} was not sent.");
 
-                Assert.LessOrEqual(
+                ClassicAssert.LessOrEqual(
                     sentEvent.Time,
                     SendReceiveUtilities.MaximumEventSendReceiveDelay,
                     $"Program event was sent at wrong time (at {sentEvent.Time} instead of zero).");

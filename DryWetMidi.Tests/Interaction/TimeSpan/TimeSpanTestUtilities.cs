@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace Melanchall.DryWetMidi.Tests.Interaction
 {
@@ -148,8 +149,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var clone = timeSpan.Clone();
 
-            Assert.AreEqual(timeSpan, clone, "Clone time span doesn't equal to the original one.");
-            Assert.IsFalse(ReferenceEquals(timeSpan, clone), "Clone time span is the same instance as the original one.");
+            ClassicAssert.AreEqual(timeSpan, clone, "Clone time span doesn't equal to the original one.");
+            ClassicAssert.IsFalse(ReferenceEquals(timeSpan, clone), "Clone time span is the same instance as the original one.");
         }
 
         public static void TestConversion<TTimeSpan>(TTimeSpan timeSpan, ITimeSpan referenceTimeSpan, ITimeSpan time, TempoMap tempoMap)
@@ -166,7 +167,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                      LengthConverter.ConvertTo<TTimeSpan>(referenceTimeSpan, time, tempoMap),
                      "ConvertTo failed.");
 
-            Assert.AreEqual(LengthConverter.ConvertFrom(referenceTimeSpan, time, tempoMap),
+            ClassicAssert.AreEqual(LengthConverter.ConvertFrom(referenceTimeSpan, time, tempoMap),
                             ticks,
                             "ConvertFrom failed.");
         }
@@ -174,23 +175,23 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         public static void Parse(string input, ITimeSpan expectedTimeSpan)
         {
             TimeSpanUtilities.TryParse(input, out var actualTimeSpan);
-            Assert.AreEqual(expectedTimeSpan,
+            ClassicAssert.AreEqual(expectedTimeSpan,
                             actualTimeSpan,
                             $"TryParse: incorrect result for '{input}'.");
 
             actualTimeSpan = TimeSpanUtilities.Parse(input);
-            Assert.AreEqual(expectedTimeSpan,
+            ClassicAssert.AreEqual(expectedTimeSpan,
                             actualTimeSpan,
                             $"Parse: incorrect result for '{input}'.");
 
-            Assert.AreEqual(expectedTimeSpan,
+            ClassicAssert.AreEqual(expectedTimeSpan,
                             TimeSpanUtilities.Parse(expectedTimeSpan.ToString()),
                             $"Parse: string representation was not parsed to the original time span for '{input}'.");
         }
 
         public static void ParseInvalidInput(string input)
         {
-            Assert.Throws<FormatException>(() => TimeSpanUtilities.Parse(input));
+            ClassicAssert.Throws<FormatException>(() => TimeSpanUtilities.Parse(input));
         }
 
         public static void Add_SameType<TTimeSpan>(TTimeSpan timeSpan1, TTimeSpan timeSpan2, TTimeSpan expectedTimeSpan)
@@ -206,7 +207,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
         public static void Add_TimeTime(ITimeSpan timeSpan1, ITimeSpan timeSpan2)
         {
-            Assert.Throws<ArgumentException>(() => timeSpan1.Add(timeSpan2, TimeSpanMode.TimeTime));
+            ClassicAssert.Throws<ArgumentException>(() => timeSpan1.Add(timeSpan2, TimeSpanMode.TimeTime));
         }
 
         public static void Add_TimeLength(ITimeSpan timeSpan1, ITimeSpan timeSpan2, TempoMap tempoMap)
@@ -284,7 +285,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
             //
 
-            Assert.AreEqual(expectedTimeSpanType,
+            ClassicAssert.AreEqual(expectedTimeSpanType,
                             actualTimeSpanType,
                             $"Type of {expectedTimeSpan} isn't equal to the type of {actualTimeSpan}.");
 
@@ -293,7 +294,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             if (!TimeSpanComparers.TryGetValue(expectedTimeSpanType, out var comparer))
                 comparer = EqualityComparer<ITimeSpan>.Default;
 
-            Assert.IsTrue(comparer.Equals(expectedTimeSpan, actualTimeSpan),
+            ClassicAssert.IsTrue(comparer.Equals(expectedTimeSpan, actualTimeSpan),
                           $"Time spans are not equal. Expected: {expectedTimeSpan}. Actual: {actualTimeSpan}. {message}");
         }
 
@@ -303,7 +304,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 ? timeSpan1.Add(timeSpan2, mode)
                 : timeSpan1.Subtract(timeSpan2, mode)) as MathTimeSpan;
 
-            Assert.IsTrue(mathTimeSpan != null &&
+            ClassicAssert.IsTrue(mathTimeSpan != null &&
                           mathTimeSpan.TimeSpan1.Equals(timeSpan1) &&
                           mathTimeSpan.TimeSpan2.Equals(timeSpan2) &&
                           mathTimeSpan.Operation == operation &&

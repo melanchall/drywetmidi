@@ -3,6 +3,7 @@ using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
 using Melanchall.DryWetMidi.Tests.Utilities;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.Tracing;
@@ -353,7 +354,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
             action();
 
-            Assert.AreEqual(1, eventsArgs.Count, "Invalid events args count.");
+            ClassicAssert.AreEqual(1, eventsArgs.Count, "Invalid events args count.");
 
             var eventArgs = eventsArgs.Single();
 
@@ -385,7 +386,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     new Note((SevenBitNumber)60, 20, 101)),
                 changedObject.TimedObject,
                 "Invalid changed object.");
-            Assert.AreEqual(23, changedObject.OldTime, "Invalid old time of changed object.");
+            ClassicAssert.AreEqual(23, changedObject.OldTime, "Invalid old time of changed object.");
         }
 
         [Test]
@@ -405,7 +406,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 collection.Add(objectToAdd2);
             });
 
-            Assert.AreEqual(1, eventsArgs.Count, "Invalid events args count.");
+            ClassicAssert.AreEqual(1, eventsArgs.Count, "Invalid events args count.");
 
             var eventArgs = eventsArgs.Single();
             CheckCollectionIsNullOrEmpty(eventArgs.RemovedObjects, "There are removed objects.");
@@ -443,7 +444,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 collection.Remove(objectToAdd);
             });
 
-            Assert.AreEqual(0, eventsArgs.Count, "Invalid events args count.");
+            ClassicAssert.AreEqual(0, eventsArgs.Count, "Invalid events args count.");
         }
 
         [Test]
@@ -468,7 +469,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 collection.Add(objectToAdd);
             });
 
-            Assert.AreEqual(1, eventsArgs.Count, "Invalid events args count.");
+            ClassicAssert.AreEqual(1, eventsArgs.Count, "Invalid events args count.");
 
             var eventArgs = eventsArgs.Single();
 
@@ -507,7 +508,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 collection.Remove(objectToAdd);
             });
 
-            Assert.AreEqual(0, eventsArgs.Count, "Invalid events args count.");
+            ClassicAssert.AreEqual(0, eventsArgs.Count, "Invalid events args count.");
         }
 
         [Test]
@@ -527,7 +528,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 collection.Remove(objectToAdd1);
             });
 
-            Assert.AreEqual(1, eventsArgs.Count, "Invalid events args count.");
+            ClassicAssert.AreEqual(1, eventsArgs.Count, "Invalid events args count.");
 
             var eventArgs = eventsArgs.Single();
 
@@ -560,7 +561,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 collection.ChangeObject(objectToChange, obj => ((TextEvent)((TimedEvent)obj).Event).Text = "ABC");
             });
 
-            Assert.AreEqual(1, eventsArgs.Count, "Invalid events args count.");
+            ClassicAssert.AreEqual(1, eventsArgs.Count, "Invalid events args count.");
 
             var eventArgs = eventsArgs.Single();
 
@@ -575,7 +576,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 new TimedEvent(new TextEvent("ABC"), 30),
                 changedObject.TimedObject,
                 "Invalid changed object");
-            Assert.AreEqual(15, changedObject.OldTime, "Invalid old time of changed object.");
+            ClassicAssert.AreEqual(15, changedObject.OldTime, "Invalid old time of changed object.");
         }
 
         [Test]
@@ -601,7 +602,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 collection.ChangeObject(objectToChange, obj => obj.Time = 20);
             });
 
-            Assert.AreEqual(1, eventsArgs.Count, "Invalid events args count.");
+            ClassicAssert.AreEqual(1, eventsArgs.Count, "Invalid events args count.");
 
             var eventArgs = eventsArgs.Single();
 
@@ -616,7 +617,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 new TimedEvent(new TextEvent("C"), 20),
                 changedObject.TimedObject,
                 "Invalid changed object");
-            Assert.AreEqual(15, changedObject.OldTime, "Invalid old time of changed object.");
+            ClassicAssert.AreEqual(15, changedObject.OldTime, "Invalid old time of changed object.");
         }
 
         [Test]
@@ -636,7 +637,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
             collection.Clear();
 
-            Assert.AreEqual(1, eventsArgs.Count, "Invalid events args count.");
+            ClassicAssert.AreEqual(1, eventsArgs.Count, "Invalid events args count.");
 
             var eventArgs = eventsArgs.Single();
 
@@ -665,7 +666,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 change,
                 args =>
                 {
-                    Assert.AreEqual(1, args.Length, "Invalid events args count.");
+                    ClassicAssert.AreEqual(1, args.Length, "Invalid events args count.");
 
                     var eventArgs = args.FirstOrDefault();
                     CheckCollectionIsNullOrEmpty(eventArgs?.AddedObjects, "There are added objects.");
@@ -677,8 +678,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     MidiAsserts.AreEqual(updatedObjectsWithNewValues, changedObjects.Select(obj => obj.TimedObject).ToArray(), "Invalid changed objects via new-values objects.");
 
                     var changedObjectsOldTimes = changedObjects.Select(obj => obj.OldTime).ToArray();
-                    Assert.AreEqual(changedObjects.Count, changedObjectsOldTimes.Length, "Invalid changed objects old times count.");
-                    Assert.AreEqual(updatedObjects.Count(), changedObjectsOldTimes.Length, "Invalid changed objects old times count.");
+                    ClassicAssert.AreEqual(changedObjects.Count, changedObjectsOldTimes.Length, "Invalid changed objects old times count.");
+                    ClassicAssert.AreEqual(updatedObjects.Count(), changedObjectsOldTimes.Length, "Invalid changed objects old times count.");
 
                     CollectionAssert.AreEquivalent(oldTimes.Values, changedObjectsOldTimes, "Invalid changed objects old times.");
                 },
@@ -703,7 +704,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 args =>
                 {
                     if (initialObjects.Any() && oldObjects.Any())
-                        Assert.AreEqual(1, args.Length, "Invalid events args count.");
+                        ClassicAssert.AreEqual(1, args.Length, "Invalid events args count.");
 
                     var eventArgs = args.FirstOrDefault();
                     CheckCollectionIsNullOrEmpty(eventArgs?.AddedObjects, "There are added objects.");
@@ -725,7 +726,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 add,
                 args =>
                 {
-                    Assert.AreEqual(1, args.Length, "Invalid events args count.");
+                    ClassicAssert.AreEqual(1, args.Length, "Invalid events args count.");
 
                     var eventArgs = args.First();
                     CheckCollectionIsNullOrEmpty(eventArgs.RemovedObjects, "There are removed objects.");
@@ -744,7 +745,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 add,
                 args =>
                 {
-                    Assert.AreEqual(1, args.Length, "Invalid events args count.");
+                    ClassicAssert.AreEqual(1, args.Length, "Invalid events args count.");
 
                     var eventArgs = args.First();
                     CheckCollectionIsNullOrEmpty(eventArgs.RemovedObjects, "There are removed objects.");
@@ -798,7 +799,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         private void CheckCollectionIsNullOrEmpty<T>(ICollection<T> collection, string message) =>
-            Assert.IsTrue(collection == null || collection.Count == 0, message);
+            ClassicAssert.IsTrue(collection == null || collection.Count == 0, message);
 
         #endregion
     }

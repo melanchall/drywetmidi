@@ -2,6 +2,7 @@
 using Melanchall.DryWetMidi.Composing;
 using Melanchall.DryWetMidi.MusicTheory;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace Melanchall.DryWetMidi.Tests.Composing
 {
@@ -34,7 +35,7 @@ namespace Melanchall.DryWetMidi.Tests.Composing
                 CollectionAssert.IsEmpty(patterns, "Pattern split incorrectly.");
             else
             {
-                Assert.AreEqual(2, patterns.Count, "Sub-patterns count is invalid.");
+                ClassicAssert.AreEqual(2, patterns.Count, "Sub-patterns count is invalid.");
                 CollectionAssert.IsEmpty(patterns[0].Actions, "First sub-pattern is not empty.");
                 CollectionAssert.IsEmpty(patterns[1].Actions, "Second sub-pattern is not empty.");
             }
@@ -60,10 +61,10 @@ namespace Melanchall.DryWetMidi.Tests.Composing
             var secondPatternIndex = 1;
 
             if (removeEmptyPatterns)
-                Assert.AreEqual(2, patterns.Count, "Sub-patterns count is invalid.");
+                ClassicAssert.AreEqual(2, patterns.Count, "Sub-patterns count is invalid.");
             else
             {
-                Assert.AreEqual(3, patterns.Count, "Sub-patterns count is invalid.");
+                ClassicAssert.AreEqual(3, patterns.Count, "Sub-patterns count is invalid.");
                 CollectionAssert.IsEmpty(patterns[0].Actions, "First sub-pattern is not empty.");
                 firstPatternIndex++;
                 secondPatternIndex++;
@@ -103,10 +104,10 @@ namespace Melanchall.DryWetMidi.Tests.Composing
             var secondPatternIndex = 1;
 
             if (removeEmptyPatterns)
-                Assert.AreEqual(2, patterns.Count, "Sub-patterns count is invalid.");
+                ClassicAssert.AreEqual(2, patterns.Count, "Sub-patterns count is invalid.");
             else
             {
-                Assert.AreEqual(3, patterns.Count, "Sub-patterns count is invalid.");
+                ClassicAssert.AreEqual(3, patterns.Count, "Sub-patterns count is invalid.");
                 CollectionAssert.IsEmpty(patterns[0].Actions, "First sub-pattern is not empty.");
                 firstPatternIndex++;
                 secondPatternIndex++;

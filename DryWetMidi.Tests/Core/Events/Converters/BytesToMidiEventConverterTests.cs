@@ -4,6 +4,7 @@ using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Tests.Utilities;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace Melanchall.DryWetMidi.Tests.Core
 {
@@ -369,7 +370,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
         {
             using (var bytesToMidiEventConverter = new BytesToMidiEventConverter())
             {
-                Assert.Throws<NotEnoughBytesException>(
+                ClassicAssert.Throws<NotEnoughBytesException>(
                     () => bytesToMidiEventConverter.ConvertMultiple(new byte[] { 0x92, 0x12, 0x56, 0x90 }),
                     "Exception is not thrown.");
             }

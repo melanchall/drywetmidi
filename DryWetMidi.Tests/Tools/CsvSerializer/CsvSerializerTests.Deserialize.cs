@@ -4,6 +4,7 @@ using Melanchall.DryWetMidi.Interaction;
 using Melanchall.DryWetMidi.Tests.Utilities;
 using Melanchall.DryWetMidi.Tools;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -23,7 +24,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             check: stream =>
             {
                 var objects = CsvSerializer.DeserializeObjectsFromCsv(stream, TempoMap.Default, settings).ToArray();
-                Assert.AreEqual(1, objects.Length, "More than one object read.");
+                ClassicAssert.AreEqual(1, objects.Length, "More than one object read.");
 
                 var timedEvent = (TimedEvent)objects.Single();
                 MidiAsserts.AreEqual(midiEvent, timedEvent.Event, false, "Invalid event.");

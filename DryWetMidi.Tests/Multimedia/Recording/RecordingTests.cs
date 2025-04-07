@@ -9,6 +9,7 @@ using Melanchall.DryWetMidi.Tests.Utilities;
 using NUnit.Framework;
 using Melanchall.DryWetMidi.Tests.Common;
 using System.Linq;
+using NUnit.Framework.Legacy;
 
 namespace Melanchall.DryWetMidi.Tests.Multimedia
 {
@@ -37,7 +38,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             using (var inputDevice = InputDevice.GetByName(SendReceiveUtilities.DeviceToTestOnName))
             using (var recording = new Recording(TempoMap.Default, inputDevice))
             {
-                Assert.Throws<InvalidOperationException>(() => recording.Start(), "Recording started on device which is not listening events.");
+                ClassicAssert.Throws<InvalidOperationException>(() => recording.Start(), "Recording started on device which is not listening events.");
             }
         }
 
@@ -69,13 +70,13 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
                 var timeout = start + delayFromStart + SendReceiveUtilities.MaximumEventSendReceiveDelay;
                 var areEventsReceived = WaitOperations.Wait(() => receivedEvents.Count == eventsToSend.Length, timeout);
-                Assert.IsTrue(areEventsReceived, $"Events are not received for timeout {timeout}.");
+                ClassicAssert.IsTrue(areEventsReceived, $"Events are not received for timeout {timeout}.");
 
                 recording.Stop();
-                Assert.IsFalse(recording.IsRunning, "Recording is running after stop.");
+                ClassicAssert.IsFalse(recording.IsRunning, "Recording is running after stop.");
 
                 TimeSpan duration = recording.GetDuration<MetricTimeSpan>();
-                Assert.IsTrue(
+                ClassicAssert.IsTrue(
                     AreTimeSpansEqual(duration, start + delayFromStart),
                     $"Duration is invalid. Actual is {duration}. Expected is {start + delayFromStart}.");
             }
@@ -145,10 +146,10 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
                 var threadAliveTimeout = timeout + TimeSpan.FromSeconds(30);
                 var threadExited = WaitOperations.Wait(() => !sendingThread.IsAlive, threadAliveTimeout);
-                Assert.IsTrue(threadExited, $"Sending thread is alive after [{threadAliveTimeout}].");
+                ClassicAssert.IsTrue(threadExited, $"Sending thread is alive after [{threadAliveTimeout}].");
 
                 var areEventsReceived = WaitOperations.Wait(() => receivedEvents.Count >= expectedTimes.Count, timeout);
-                Assert.IsTrue(areEventsReceived, $"Events are not received for [{timeout}] (received are: {string.Join(", ", receivedEvents)}).");
+                ClassicAssert.IsTrue(areEventsReceived, $"Events are not received for [{timeout}] (received are: {string.Join(", ", receivedEvents)}).");
 
                 CompareSentReceivedEvents(sentEvents, receivedEvents, expectedTimes);
                 CompareSentReceivedEvents(sentEvents, recordedEvents, expectedTimes);
@@ -167,7 +168,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             IReadOnlyList<ReceivedEvent> receivedEvents,
             IReadOnlyList<TimeSpan> expectedTimes)
         {
-            Assert.AreEqual(expectedTimes.Count, receivedEvents.Count, "Received events count is invalid.");
+            ClassicAssert.AreEqual(expectedTimes.Count, receivedEvents.Count, "Received events count is invalid.");
 
             for (var i = 0; i < sentEvents.Count; i++)
             {
@@ -178,7 +179,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 MidiAsserts.AreEqual(sentEvent.Event, receivedEvent.Event, false, $"Received event [{receivedEvent.Event}] doesn't match sent one [{sentEvent.Event}].");
 
                 var offsetFromExpectedTime = (sentEvent.Time - expectedTime).Duration();
-                Assert.LessOrEqual(
+                ClassicAssert.LessOrEqual(
                     offsetFromExpectedTime,
                     SendReceiveUtilities.MaximumEventSendReceiveDelay,
                     $"Event was sent at wrong time ({sentEvent.Time}; expected is {expectedTime}).");
@@ -197,7 +198,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
                 var convertedRecordedTime = (TimeSpan)recordedEvent.TimeAs<MetricTimeSpan>(tempoMap);
                 var offsetFromExpectedTime = (convertedRecordedTime - expectedTime).Duration();
-                Assert.LessOrEqual(
+                ClassicAssert.LessOrEqual(
                     offsetFromExpectedTime,
                     SendReceiveUtilities.MaximumEventSendReceiveDelay,
                     $"Event was recorded at wrong time (at {convertedRecordedTime} instead of {expectedTime}).");

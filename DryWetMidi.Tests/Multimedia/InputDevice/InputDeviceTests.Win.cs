@@ -3,6 +3,7 @@ using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Multimedia;
 using Melanchall.DryWetMidi.Tests.Common;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace Melanchall.DryWetMidi.Tests.Multimedia
 {
@@ -78,7 +79,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
                 using (var inputDevice2 = InputDevice.GetByName(MidiDevicesNames.DeviceA))
                 {
-                    Assert.Throws<MidiDeviceException>(() => inputDevice2.StartEventsListening());
+                    ClassicAssert.Throws<MidiDeviceException>(() => inputDevice2.StartEventsListening());
                 }
             }
         }
@@ -103,7 +104,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         public void GetInputDeviceProperty_Product_Win()
         {
             var inputDevice = InputDevice.GetByName(MidiDevicesNames.DeviceA);
-            Assert.IsNotNull(inputDevice.GetProperty(InputDeviceProperty.Product), "Product is null.");
+            ClassicAssert.IsNotNull(inputDevice.GetProperty(InputDeviceProperty.Product), "Product is null.");
         }
 
         [Test]
@@ -111,7 +112,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         public void GetInputDeviceProperty_Manufacturer_Win()
         {
             var inputDevice = InputDevice.GetByName(MidiDevicesNames.DeviceA);
-            Assert.IsNotNull(inputDevice.GetProperty(InputDeviceProperty.Manufacturer), "Manufacturer is null.");
+            ClassicAssert.IsNotNull(inputDevice.GetProperty(InputDeviceProperty.Manufacturer), "Manufacturer is null.");
         }
 
         [Test]
@@ -119,7 +120,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         public void GetInputDeviceProperty_DriverVersion_Win()
         {
             var inputDevice = InputDevice.GetByName(MidiDevicesNames.DeviceA);
-            Assert.IsNotNull(inputDevice.GetProperty(InputDeviceProperty.DriverVersion), "Driver version is invalid.");
+            ClassicAssert.IsNotNull(inputDevice.GetProperty(InputDeviceProperty.DriverVersion), "Driver version is invalid.");
         }
 
         [Test]
@@ -127,7 +128,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         public void GetInputDeviceProperty_UniqueId_Win()
         {
             var inputDevice = InputDevice.GetByName(MidiDevicesNames.DeviceA);
-            Assert.Throws<ArgumentException>(() => inputDevice.GetProperty(InputDeviceProperty.UniqueId), "Device unique ID is supported.");
+            ClassicAssert.Throws<ArgumentException>(() => inputDevice.GetProperty(InputDeviceProperty.UniqueId), "Device unique ID is supported.");
         }
 
         [Test]
@@ -135,7 +136,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         public void GetInputDeviceProperty_DriverOwner_Win()
         {
             var inputDevice = InputDevice.GetByName(MidiDevicesNames.DeviceA);
-            Assert.Throws<ArgumentException>(() => inputDevice.GetProperty(InputDeviceProperty.DriverOwner), "Driver owner is supported.");
+            ClassicAssert.Throws<ArgumentException>(() => inputDevice.GetProperty(InputDeviceProperty.DriverOwner), "Driver owner is supported.");
         }
 
         [Test]
@@ -145,7 +146,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var inputDevice1 = InputDevice.GetByName(MidiDevicesNames.DeviceA);
             var inputDevice2 = InputDevice.GetByName(MidiDevicesNames.DeviceA);
 
-            Assert.AreNotEqual(inputDevice1, inputDevice2, "Devices are equal.");
+            ClassicAssert.AreNotEqual(inputDevice1, inputDevice2, "Devices are equal.");
         }
 
         [Test]
@@ -155,7 +156,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var inputDevice1 = InputDevice.GetByName(MidiDevicesNames.DeviceA);
             var inputDevice2 = InputDevice.GetByName(MidiDevicesNames.DeviceB);
 
-            Assert.AreNotEqual(inputDevice1, inputDevice2, "Devices are equal.");
+            ClassicAssert.AreNotEqual(inputDevice1, inputDevice2, "Devices are equal.");
         }
 
         [Test]
@@ -165,8 +166,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var inputDevice1 = InputDevice.GetByName(MidiDevicesNames.DeviceA);
             var inputDevice2 = InputDevice.GetByName(MidiDevicesNames.DeviceA);
 
-            Assert.IsFalse(inputDevice1 == inputDevice2, "Devices are equal via equality.");
-            Assert.IsTrue(inputDevice1 != inputDevice2, "Devices are equal via inequality.");
+            ClassicAssert.IsFalse(inputDevice1 == inputDevice2, "Devices are equal via equality.");
+            ClassicAssert.IsTrue(inputDevice1 != inputDevice2, "Devices are equal via inequality.");
         }
 
         [Test]
@@ -176,8 +177,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var inputDevice1 = InputDevice.GetByName(MidiDevicesNames.DeviceA);
             var inputDevice2 = InputDevice.GetByName(MidiDevicesNames.DeviceB);
 
-            Assert.IsFalse(inputDevice1 == inputDevice2, "Devices are equal via equality.");
-            Assert.IsTrue(inputDevice1 != inputDevice2, "Devices are equal via inequality.");
+            ClassicAssert.IsFalse(inputDevice1 == inputDevice2, "Devices are equal via equality.");
+            ClassicAssert.IsTrue(inputDevice1 != inputDevice2, "Devices are equal via inequality.");
         }
 
         #endregion

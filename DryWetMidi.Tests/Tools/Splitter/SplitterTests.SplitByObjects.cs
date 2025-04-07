@@ -4,6 +4,7 @@ using Melanchall.DryWetMidi.Interaction;
 using Melanchall.DryWetMidi.Tests.Utilities;
 using Melanchall.DryWetMidi.Tools;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -287,7 +288,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             });
 
         [Test]
-        public void SplitByObjects_WriteToAllFiles_2() => Assert.Throws<AssertionException>(() => SplitByObjects(
+        public void SplitByObjects_WriteToAllFiles_2() => ClassicAssert.Throws<AssertionException>(() => SplitByObjects(
             timedObjects: new ITimedObject[]
             {
                 new TimedEvent(new TextEvent("A"), 0),

@@ -4,6 +4,7 @@ using Melanchall.DryWetMidi.Multimedia;
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace Melanchall.DryWetMidi.Tests.Multimedia
 {
@@ -52,7 +53,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 setupPlayback: playback =>
                 {
-                    Assert.IsInstanceOf<SnapPoint>(playback.AddSnapPoint(new MetricTimeSpan(0, 0, 0, 200)));
+                    ClassicAssert.IsInstanceOf<SnapPoint>(playback.AddSnapPoint(new MetricTimeSpan(0, 0, 0, 200)));
                 });
         }
 
@@ -97,8 +98,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 setupPlayback: playback =>
                 {
                     var snapPoint = playback.AddSnapPoint(new MetricTimeSpan(0, 0, 0, 200), "X");
-                    Assert.IsInstanceOf<SnapPoint<string>>(snapPoint, "Invalid snap point's type.");
-                    Assert.AreEqual("X", snapPoint.Data, "Invalid snap point's data.");
+                    ClassicAssert.IsInstanceOf<SnapPoint<string>>(snapPoint, "Invalid snap point's type.");
+                    ClassicAssert.AreEqual("X", snapPoint.Data, "Invalid snap point's data.");
                 });
         }
 
@@ -121,26 +122,26 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new PlaybackAction(100, p =>
                     {
                         CheckCurrentTime(p, TimeSpan.FromMilliseconds(100), "Aa");
-                        Assert.IsTrue(p.MoveToFirstSnapPoint(), "Failed to move to first snap point.");
+                        ClassicAssert.IsTrue(p.MoveToFirstSnapPoint(), "Failed to move to first snap point.");
                         CheckCurrentTime(p, TimeSpan.FromMilliseconds(200), "Ab");
                     }),
                     new PlaybackAction(200, p =>
                     {
                         CheckCurrentTime(p, TimeSpan.FromMilliseconds(400), "Ba");
-                        Assert.IsTrue(p.MoveToPreviousSnapPoint(), "Failed to move to previous snap point.");
+                        ClassicAssert.IsTrue(p.MoveToPreviousSnapPoint(), "Failed to move to previous snap point.");
                         CheckCurrentTime(p, TimeSpan.FromMilliseconds(200), "Bb");
                     }),
                     new PlaybackAction(100, p =>
                     {
                         CheckCurrentTime(p, TimeSpan.FromMilliseconds(300), "Ca");
-                        Assert.IsFalse(p.MoveToNextSnapPoint(), "Successfully moved to next snap point.");
+                        ClassicAssert.IsFalse(p.MoveToNextSnapPoint(), "Successfully moved to next snap point.");
                         CheckCurrentTime(p, TimeSpan.FromMilliseconds(300), "Cb");
                     }),
                     new PlaybackAction(100, p =>
                     {
                         CheckCurrentTime(p, TimeSpan.FromMilliseconds(400), "Da");
                         p.RemoveSnapPoint(snapPoint);
-                        Assert.IsFalse(p.MoveToPreviousSnapPoint(), "Successfully moved to previous snap point after deletion.");
+                        ClassicAssert.IsFalse(p.MoveToPreviousSnapPoint(), "Successfully moved to previous snap point after deletion.");
                         CheckCurrentTime(p, TimeSpan.FromMilliseconds(400), "Db");
                     }),
                 },
@@ -151,7 +152,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 setupPlayback: playback =>
                 {
-                    Assert.IsInstanceOf<SnapPoint>(snapPoint = playback.AddSnapPoint(new MetricTimeSpan(0, 0, 0, 200)));
+                    ClassicAssert.IsInstanceOf<SnapPoint>(snapPoint = playback.AddSnapPoint(new MetricTimeSpan(0, 0, 0, 200)));
                 });
         }
 
@@ -174,26 +175,26 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new PlaybackAction(100, p =>
                     {
                         CheckCurrentTime(p, TimeSpan.FromMilliseconds(100), "Aa");
-                        Assert.IsTrue(p.MoveToFirstSnapPoint("X"), "Failed to move to first snap point.");
+                        ClassicAssert.IsTrue(p.MoveToFirstSnapPoint("X"), "Failed to move to first snap point.");
                         CheckCurrentTime(p, TimeSpan.FromMilliseconds(200), "Ab");
                     }),
                     new PlaybackAction(200, p =>
                     {
                         CheckCurrentTime(p, TimeSpan.FromMilliseconds(400), "Ba");
-                        Assert.IsTrue(p.MoveToPreviousSnapPoint("X"), "Failed to move to previous snap point.");
+                        ClassicAssert.IsTrue(p.MoveToPreviousSnapPoint("X"), "Failed to move to previous snap point.");
                         CheckCurrentTime(p, TimeSpan.FromMilliseconds(200), "Bb");
                     }),
                     new PlaybackAction(100, p =>
                     {
                         CheckCurrentTime(p, TimeSpan.FromMilliseconds(300), "Ca");
-                        Assert.IsFalse(p.MoveToNextSnapPoint("X"), "Successfully moved to next snap point.");
+                        ClassicAssert.IsFalse(p.MoveToNextSnapPoint("X"), "Successfully moved to next snap point.");
                         CheckCurrentTime(p, TimeSpan.FromMilliseconds(300), "Cb");
                     }),
                     new PlaybackAction(100, p =>
                     {
                         CheckCurrentTime(p, TimeSpan.FromMilliseconds(400), "Da");
                         p.RemoveSnapPoint(snapPoint);
-                        Assert.IsFalse(p.MoveToPreviousSnapPoint("X"), "Successfully moved to previous snap point after deletion.");
+                        ClassicAssert.IsFalse(p.MoveToPreviousSnapPoint("X"), "Successfully moved to previous snap point after deletion.");
                         CheckCurrentTime(p, TimeSpan.FromMilliseconds(400), "Db");
                     }),
                 },
@@ -204,7 +205,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 setupPlayback: playback =>
                 {
-                    Assert.IsInstanceOf<SnapPoint<string>>(snapPoint = playback.AddSnapPoint(new MetricTimeSpan(0, 0, 0, 200), "X"));
+                    ClassicAssert.IsInstanceOf<SnapPoint<string>>(snapPoint = playback.AddSnapPoint(new MetricTimeSpan(0, 0, 0, 200), "X"));
                 });
         }
 
@@ -227,19 +228,19 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 {
                     new PlaybackAction(150, p =>
                     {
-                        Assert.IsTrue(p.MoveToPreviousSnapPoint(), "Failed to move to previous snap point.");
+                        ClassicAssert.IsTrue(p.MoveToPreviousSnapPoint(), "Failed to move to previous snap point.");
                         CheckCurrentTime(p, snapPoint2.Time, "B");
                     }),
                     new PlaybackAction(100, p =>
                     {
                         p.RemoveSnapPointsByData((string data) => data.StartsWith("Data"));
-                        Assert.IsTrue(p.MoveToFirstSnapPoint(), "Failed to move to first snap point.");
-                        Assert.IsFalse(p.MoveToFirstSnapPoint("DataX"), "Moved to first data snap point.");
+                        ClassicAssert.IsTrue(p.MoveToFirstSnapPoint(), "Failed to move to first snap point.");
+                        ClassicAssert.IsFalse(p.MoveToFirstSnapPoint("DataX"), "Moved to first data snap point.");
                     }),
                 },
                 afterStart: playback =>
                 {
-                    Assert.IsTrue(playback.MoveToNextSnapPoint("DataX"), "Failed to move to next snap point.");
+                    ClassicAssert.IsTrue(playback.MoveToNextSnapPoint("DataX"), "Failed to move to next snap point.");
                     CheckCurrentTime(playback, snapPoint1.Time, "A");
                 },
                 setupPlayback: playback =>
@@ -274,19 +275,19 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 {
                     new PlaybackAction(150, p =>
                     {
-                        Assert.IsTrue(p.MoveToPreviousSnapPoint(), "Failed to move to previous snap point.");
+                        ClassicAssert.IsTrue(p.MoveToPreviousSnapPoint(), "Failed to move to previous snap point.");
                         CheckCurrentTime(p, snapPoint2.Time, "B");
                     }),
                     new PlaybackAction(100, p =>
                     {
                         p.RemoveAllSnapPoints();
-                        Assert.IsFalse(p.MoveToFirstSnapPoint(), "Failed to move to first snap point.");
-                        Assert.IsFalse(p.MoveToFirstSnapPoint("DataX"), "Moved to first data snap point.");
+                        ClassicAssert.IsFalse(p.MoveToFirstSnapPoint(), "Failed to move to first snap point.");
+                        ClassicAssert.IsFalse(p.MoveToFirstSnapPoint("DataX"), "Moved to first data snap point.");
                     }),
                 },
                 afterStart: playback =>
                 {
-                    Assert.IsTrue(playback.MoveToNextSnapPoint("DataX"), "Failed to move to next snap point.");
+                    ClassicAssert.IsTrue(playback.MoveToNextSnapPoint("DataX"), "Failed to move to next snap point.");
                     CheckCurrentTime(playback, snapPoint1.Time, "A");
                 },
                 setupPlayback: playback =>
@@ -383,14 +384,14 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new PlaybackAction(100, p =>
                     {
                         CheckCurrentTime(p, TimeSpan.FromMilliseconds(100), "Aa");
-                        Assert.IsTrue(p.MoveToSnapPoint(snapPoint), "Failed to move to snap point.");
+                        ClassicAssert.IsTrue(p.MoveToSnapPoint(snapPoint), "Failed to move to snap point.");
                         CheckCurrentTime(p, TimeSpan.FromMilliseconds(200), "Ab");
                     }),
                     new PlaybackAction(200, p =>
                     {
                         CheckCurrentTime(p, TimeSpan.FromMilliseconds(400), "Ba");
                         snapPoint.IsEnabled = false;
-                        Assert.IsFalse(p.MoveToSnapPoint(snapPoint), "Position changed to disabled snap point's time.");
+                        ClassicAssert.IsFalse(p.MoveToSnapPoint(snapPoint), "Position changed to disabled snap point's time.");
                         CheckCurrentTime(p, TimeSpan.FromMilliseconds(400), "Bb");
                     }),
                 },
@@ -429,20 +430,20 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new PlaybackAction(100, p =>
                     {
                         CheckCurrentTime(p, TimeSpan.FromMilliseconds(100), "Aa");
-                        Assert.IsTrue(p.MoveToFirstSnapPoint(), "Failed to move to first snap point.");
+                        ClassicAssert.IsTrue(p.MoveToFirstSnapPoint(), "Failed to move to first snap point.");
                         CheckCurrentTime(p, TimeSpan.FromMilliseconds(200), "Ab");
                     }),
                     new PlaybackAction(50, p =>
                     {
                         CheckCurrentTime(p, TimeSpan.FromMilliseconds(250), "Ba");
-                        Assert.IsTrue(p.MoveToFirstSnapPoint(), "Failed to move to first snap point again.");
+                        ClassicAssert.IsTrue(p.MoveToFirstSnapPoint(), "Failed to move to first snap point again.");
                         CheckCurrentTime(p, TimeSpan.FromMilliseconds(200), "Bb");
                     }),
                     new PlaybackAction(100, p =>
                     {
                         CheckCurrentTime(p, TimeSpan.FromMilliseconds(300), "Ca");
                         snapPoint1.IsEnabled = false;
-                        Assert.IsTrue(p.MoveToFirstSnapPoint(), "Failed to move to first snap point after first one disabled.");
+                        ClassicAssert.IsTrue(p.MoveToFirstSnapPoint(), "Failed to move to first snap point after first one disabled.");
                         CheckCurrentTime(p, TimeSpan.FromMilliseconds(400), "Cb");
                     }),
                 },
@@ -482,20 +483,20 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new PlaybackAction(100, p =>
                     {
                         CheckCurrentTime(p, TimeSpan.FromMilliseconds(100), "Aa");
-                        Assert.IsTrue(p.MoveToFirstSnapPoint(), "Failed to move to first snap point.");
+                        ClassicAssert.IsTrue(p.MoveToFirstSnapPoint(), "Failed to move to first snap point.");
                         CheckCurrentTime(p, snapPoint1Time, "Ab");
                     }),
                     new PlaybackAction(50, p =>
                     {
                         CheckCurrentTime(p, TimeSpan.FromMilliseconds(50), "Ba");
-                        Assert.IsTrue(p.MoveToFirstSnapPoint(), "Failed to move to first snap point again.");
+                        ClassicAssert.IsTrue(p.MoveToFirstSnapPoint(), "Failed to move to first snap point again.");
                         CheckCurrentTime(p, snapPoint1Time, "Bb");
                     }),
                     new PlaybackAction(100, p =>
                     {
                         CheckCurrentTime(p, TimeSpan.FromMilliseconds(100), "Ca");
                         snapPoint1.IsEnabled = false;
-                        Assert.IsTrue(p.MoveToFirstSnapPoint(), "Failed to move to first snap point after first one disabled.");
+                        ClassicAssert.IsTrue(p.MoveToFirstSnapPoint(), "Failed to move to first snap point after first one disabled.");
                         CheckCurrentTime(p, snapPoint2Time, "Cb");
                     }),
                 },
@@ -537,26 +538,26 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new PlaybackAction(50, p =>
                     {
                         CheckCurrentTime(p, TimeSpan.FromMilliseconds(50), "Aa");
-                        Assert.IsTrue(p.MoveToFirstSnapPoint("Y"), "Failed to move to first snap point.");
+                        ClassicAssert.IsTrue(p.MoveToFirstSnapPoint("Y"), "Failed to move to first snap point.");
                         CheckCurrentTime(p, snapPoint2Time, "Ab");
                     }),
                     new PlaybackAction(100, p =>
                     {
                         CheckCurrentTime(p, TimeSpan.FromMilliseconds(300), "Ba");
-                        Assert.IsTrue(p.MoveToFirstSnapPoint("Y"), "Failed to move to first snap point again.");
+                        ClassicAssert.IsTrue(p.MoveToFirstSnapPoint("Y"), "Failed to move to first snap point again.");
                         CheckCurrentTime(p, snapPoint2Time, "Bb");
                     }),
                     new PlaybackAction(100, p =>
                     {
                         CheckCurrentTime(p, TimeSpan.FromMilliseconds(300), "Ca");
                         snapPoint2.IsEnabled = false;
-                        Assert.IsFalse(p.MoveToFirstSnapPoint("Y"), "Failed to move to first snap point after first one disabled.");
+                        ClassicAssert.IsFalse(p.MoveToFirstSnapPoint("Y"), "Failed to move to first snap point after first one disabled.");
                         CheckCurrentTime(p, TimeSpan.FromMilliseconds(300), "Cb");
                     }),
                     new PlaybackAction(50, p =>
                     {
                         p.MoveToTime(new MetricTimeSpan(0, 0, 0, 400));
-                        Assert.IsTrue(p.MoveToFirstSnapPoint("Z"), "Failed to move to first enabled snap point.");
+                        ClassicAssert.IsTrue(p.MoveToFirstSnapPoint("Z"), "Failed to move to first enabled snap point.");
                         CheckCurrentTime(p, snapPoint3Time, "Db");
                     }),
                 },
@@ -599,26 +600,26 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new PlaybackAction(50, p =>
                     {
                         CheckCurrentTime(p, TimeSpan.FromMilliseconds(50), "Aa");
-                        Assert.IsTrue(p.MoveToFirstSnapPoint("Y"), "Failed to move to first snap point.");
+                        ClassicAssert.IsTrue(p.MoveToFirstSnapPoint("Y"), "Failed to move to first snap point.");
                         CheckCurrentTime(p, snapPoint2Time, "Ab");
                     }),
                     new PlaybackAction(100, p =>
                     {
                         CheckCurrentTime(p, TimeSpan.FromMilliseconds(100), "Ba");
-                        Assert.IsTrue(p.MoveToFirstSnapPoint("Y"), "Failed to move to first snap point again.");
+                        ClassicAssert.IsTrue(p.MoveToFirstSnapPoint("Y"), "Failed to move to first snap point again.");
                         CheckCurrentTime(p, snapPoint2Time, "Bb");
                     }),
                     new PlaybackAction(100, p =>
                     {
                         CheckCurrentTime(p, TimeSpan.FromMilliseconds(100), "Ca");
                         snapPoint2.IsEnabled = false;
-                        Assert.IsFalse(p.MoveToFirstSnapPoint("Y"), "Failed to move to first snap point after first one disabled.");
+                        ClassicAssert.IsFalse(p.MoveToFirstSnapPoint("Y"), "Failed to move to first snap point after first one disabled.");
                         CheckCurrentTime(p, TimeSpan.FromMilliseconds(100), "Cb");
                     }),
                     new PlaybackAction(50, p =>
                     {
                         p.MoveToTime(new MetricTimeSpan(0, 0, 0, 400));
-                        Assert.IsTrue(p.MoveToFirstSnapPoint("Z"), "Failed to move to first enabled snap point.");
+                        ClassicAssert.IsTrue(p.MoveToFirstSnapPoint("Z"), "Failed to move to first enabled snap point.");
                         CheckCurrentTime(p, snapPoint3Time, "Db");
                     }),
                 },
@@ -730,9 +731,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                         p.Stop();
                         p.MoveToTime(p.GetDuration<MetricTimeSpan>());
 
-                        Assert.IsTrue(p.MoveToPreviousSnapPoint(snapPointsGroup), "Failed to move to first previous snap point.");
-                        Assert.IsTrue(p.MoveToPreviousSnapPoint(snapPointsGroup), "Failed to move to second previous snap point.");
-                        Assert.IsFalse(p.MoveToPreviousSnapPoint(snapPointsGroup), "Position changed beyond first snap point of the group.");
+                        ClassicAssert.IsTrue(p.MoveToPreviousSnapPoint(snapPointsGroup), "Failed to move to first previous snap point.");
+                        ClassicAssert.IsTrue(p.MoveToPreviousSnapPoint(snapPointsGroup), "Failed to move to second previous snap point.");
+                        ClassicAssert.IsFalse(p.MoveToPreviousSnapPoint(snapPointsGroup), "Position changed beyond first snap point of the group.");
 
                         p.Start();
                     }),
@@ -740,7 +741,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     {
                         snapPointsGroup.IsEnabled = false;
                         p.MoveToTime(p.GetDuration<MetricTimeSpan>());
-                        Assert.IsFalse(
+                        ClassicAssert.IsFalse(
                             p.MoveToPreviousSnapPoint(snapPointsGroup),
                             "Position changed to the time of a snap point within disabled snap point group.");
                     }),
@@ -784,9 +785,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                         p.Stop();
                         p.MoveToTime(p.GetDuration<MetricTimeSpan>());
 
-                        Assert.IsTrue(p.MoveToPreviousSnapPoint(snapPointsGroup), "Failed to move to first previous snap point.");
-                        Assert.IsTrue(p.MoveToPreviousSnapPoint(snapPointsGroup), "Failed to move to second previous snap point.");
-                        Assert.IsFalse(p.MoveToPreviousSnapPoint(snapPointsGroup), "Position changed beyond first snap point of the group.");
+                        ClassicAssert.IsTrue(p.MoveToPreviousSnapPoint(snapPointsGroup), "Failed to move to first previous snap point.");
+                        ClassicAssert.IsTrue(p.MoveToPreviousSnapPoint(snapPointsGroup), "Failed to move to second previous snap point.");
+                        ClassicAssert.IsFalse(p.MoveToPreviousSnapPoint(snapPointsGroup), "Position changed beyond first snap point of the group.");
 
                         p.Start();
                     }),
@@ -794,7 +795,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     {
                         snapPointsGroup.IsEnabled = false;
                         p.MoveToTime(p.GetDuration<MetricTimeSpan>());
-                        Assert.IsFalse(
+                        ClassicAssert.IsFalse(
                             p.MoveToPreviousSnapPoint(snapPointsGroup),
                             "Position changed to the time of a snap point within disabled snap point group.");
                     }),
@@ -907,9 +908,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                         p.Stop();
 
                         p.MoveToTime(p.GetDuration<MetricTimeSpan>());
-                        Assert.IsTrue(p.MoveToPreviousSnapPoint(), "Failed to move to first previous snap point.");
-                        Assert.IsTrue(p.MoveToPreviousSnapPoint(), "Failed to move to second previous snap point.");
-                        Assert.IsFalse(p.MoveToPreviousSnapPoint(), "Position changed beyond first snap point.");
+                        ClassicAssert.IsTrue(p.MoveToPreviousSnapPoint(), "Failed to move to first previous snap point.");
+                        ClassicAssert.IsTrue(p.MoveToPreviousSnapPoint(), "Failed to move to second previous snap point.");
+                        ClassicAssert.IsFalse(p.MoveToPreviousSnapPoint(), "Position changed beyond first snap point.");
 
                         p.Start();
                     }),
@@ -919,8 +920,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
                         snapPoint2.IsEnabled = false;
                         p.MoveToTime(p.GetDuration<MetricTimeSpan>());
-                        Assert.IsTrue(p.MoveToPreviousSnapPoint(), "Failed to move to second previous snap point.");
-                        Assert.IsFalse(p.MoveToPreviousSnapPoint(), "Position changed beyond first snap point.");
+                        ClassicAssert.IsTrue(p.MoveToPreviousSnapPoint(), "Failed to move to second previous snap point.");
+                        ClassicAssert.IsFalse(p.MoveToPreviousSnapPoint(), "Position changed beyond first snap point.");
 
                         p.Start();
                     }),
@@ -930,7 +931,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
                         snapPoint1.IsEnabled = false;
                         p.MoveToTime(p.GetDuration<MetricTimeSpan>());
-                        Assert.IsFalse(p.MoveToPreviousSnapPoint(), "Position changed without any snap point enabled.");
+                        ClassicAssert.IsFalse(p.MoveToPreviousSnapPoint(), "Position changed without any snap point enabled.");
 
                         p.Start();
                     }),
@@ -970,9 +971,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                         p.Stop();
 
                         p.MoveToTime(p.GetDuration<MetricTimeSpan>());
-                        Assert.IsTrue(p.MoveToPreviousSnapPoint(), "Failed to move to first previous snap point.");
-                        Assert.IsTrue(p.MoveToPreviousSnapPoint(), "Failed to move to second previous snap point.");
-                        Assert.IsFalse(p.MoveToPreviousSnapPoint(), "Position changed beyond first snap point.");
+                        ClassicAssert.IsTrue(p.MoveToPreviousSnapPoint(), "Failed to move to first previous snap point.");
+                        ClassicAssert.IsTrue(p.MoveToPreviousSnapPoint(), "Failed to move to second previous snap point.");
+                        ClassicAssert.IsFalse(p.MoveToPreviousSnapPoint(), "Position changed beyond first snap point.");
 
                         p.Start();
                     }),
@@ -982,8 +983,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
                         snapPoint2.IsEnabled = false;
                         p.MoveToTime(p.GetDuration<MetricTimeSpan>());
-                        Assert.IsTrue(p.MoveToPreviousSnapPoint(), "Failed to move to second previous snap point.");
-                        Assert.IsFalse(p.MoveToPreviousSnapPoint(), "Position changed beyond first snap point.");
+                        ClassicAssert.IsTrue(p.MoveToPreviousSnapPoint(), "Failed to move to second previous snap point.");
+                        ClassicAssert.IsFalse(p.MoveToPreviousSnapPoint(), "Position changed beyond first snap point.");
 
                         p.Start();
                     }),
@@ -993,7 +994,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
                         snapPoint1.IsEnabled = false;
                         p.MoveToTime(p.GetDuration<MetricTimeSpan>());
-                        Assert.IsFalse(p.MoveToPreviousSnapPoint(), "Position changed without any snap point enabled.");
+                        ClassicAssert.IsFalse(p.MoveToPreviousSnapPoint(), "Position changed without any snap point enabled.");
 
                         p.Start();
                     }),
@@ -1099,8 +1100,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                         p.Stop();
 
                         p.MoveToTime(p.GetDuration<MetricTimeSpan>());
-                        Assert.IsTrue(p.MoveToPreviousSnapPoint("X"), "Failed to move to previous snap point.");
-                        Assert.IsFalse(p.MoveToPreviousSnapPoint("X"), "Position changed beyond first snap point.");
+                        ClassicAssert.IsTrue(p.MoveToPreviousSnapPoint("X"), "Failed to move to previous snap point.");
+                        ClassicAssert.IsFalse(p.MoveToPreviousSnapPoint("X"), "Position changed beyond first snap point.");
 
                         p.Start();
                     }),
@@ -1110,7 +1111,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
                         snapPoint1.IsEnabled = false;
                         p.MoveToTime(p.GetDuration<MetricTimeSpan>());
-                        Assert.IsFalse(p.MoveToPreviousSnapPoint("X"), "Position changed without any snap point enabled.");
+                        ClassicAssert.IsFalse(p.MoveToPreviousSnapPoint("X"), "Position changed without any snap point enabled.");
 
                         p.Start();
                     }),
@@ -1150,8 +1151,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                         p.Stop();
 
                         p.MoveToTime(p.GetDuration<MetricTimeSpan>());
-                        Assert.IsTrue(p.MoveToPreviousSnapPoint("X"), "Failed to move to previous snap point.");
-                        Assert.IsFalse(p.MoveToPreviousSnapPoint("X"), "Position changed beyond first snap point.");
+                        ClassicAssert.IsTrue(p.MoveToPreviousSnapPoint("X"), "Failed to move to previous snap point.");
+                        ClassicAssert.IsFalse(p.MoveToPreviousSnapPoint("X"), "Position changed beyond first snap point.");
 
                         p.Start();
                     }),
@@ -1161,7 +1162,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
                         snapPoint1.IsEnabled = false;
                         p.MoveToTime(p.GetDuration<MetricTimeSpan>());
-                        Assert.IsFalse(p.MoveToPreviousSnapPoint("X"), "Position changed without any snap point enabled.");
+                        ClassicAssert.IsFalse(p.MoveToPreviousSnapPoint("X"), "Position changed without any snap point enabled.");
 
                         p.Start();
                     }),
@@ -1271,15 +1272,15 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 {
                     new PlaybackAction(50, p =>
                     {
-                        Assert.IsTrue(p.MoveToNextSnapPoint(snapPointsGroup), "Failed to move to first next snap point.");
-                        Assert.IsTrue(p.MoveToNextSnapPoint(snapPointsGroup), "Failed to move to second next snap point.");
-                        Assert.IsFalse(p.MoveToNextSnapPoint(snapPointsGroup), "Position changed beyond last snap point of the group.");
+                        ClassicAssert.IsTrue(p.MoveToNextSnapPoint(snapPointsGroup), "Failed to move to first next snap point.");
+                        ClassicAssert.IsTrue(p.MoveToNextSnapPoint(snapPointsGroup), "Failed to move to second next snap point.");
+                        ClassicAssert.IsFalse(p.MoveToNextSnapPoint(snapPointsGroup), "Position changed beyond last snap point of the group.");
                     }),
                     new PlaybackAction(50, p =>
                     {
                         snapPointsGroup.IsEnabled = false;
                         p.MoveToStart();
-                        Assert.IsFalse(
+                        ClassicAssert.IsFalse(
                             p.MoveToNextSnapPoint(snapPointsGroup),
                             "Position changed to the time of a snap point within disabled snap point group.");
                     }),
@@ -1389,22 +1390,22 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 {
                     new PlaybackAction(50, p =>
                     {
-                        Assert.IsTrue(p.MoveToNextSnapPoint(), "Failed to move to first next snap point.");
-                        Assert.IsTrue(p.MoveToNextSnapPoint(), "Failed to move to second next snap point.");
-                        Assert.IsFalse(p.MoveToNextSnapPoint(), "Position changed beyond last snap point.");
+                        ClassicAssert.IsTrue(p.MoveToNextSnapPoint(), "Failed to move to first next snap point.");
+                        ClassicAssert.IsTrue(p.MoveToNextSnapPoint(), "Failed to move to second next snap point.");
+                        ClassicAssert.IsFalse(p.MoveToNextSnapPoint(), "Position changed beyond last snap point.");
                     }),
                     new PlaybackAction(100, p =>
                     {
                         snapPoint2.IsEnabled = false;
                         p.MoveToStart();
-                        Assert.IsTrue(p.MoveToNextSnapPoint(), "Failed to move to second next snap point.");
-                        Assert.IsFalse(p.MoveToNextSnapPoint(), "Position changed beyond last snap point.");
+                        ClassicAssert.IsTrue(p.MoveToNextSnapPoint(), "Failed to move to second next snap point.");
+                        ClassicAssert.IsFalse(p.MoveToNextSnapPoint(), "Position changed beyond last snap point.");
                     }),
                     new PlaybackAction(100, p =>
                     {
                         snapPoint1.IsEnabled = false;
                         p.MoveToStart();
-                        Assert.IsFalse(p.MoveToNextSnapPoint(), "Position changed without any snap point enabled.");
+                        ClassicAssert.IsFalse(p.MoveToNextSnapPoint(), "Position changed without any snap point enabled.");
                     }),
                 },
                 setupPlayback: playback =>
@@ -1505,14 +1506,14 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 {
                     new PlaybackAction(50, p =>
                     {
-                        Assert.IsTrue(p.MoveToNextSnapPoint("X"), "Failed to move to next snap point.");
-                        Assert.IsFalse(p.MoveToNextSnapPoint("X"), "Position changed beyond last snap point.");
+                        ClassicAssert.IsTrue(p.MoveToNextSnapPoint("X"), "Failed to move to next snap point.");
+                        ClassicAssert.IsFalse(p.MoveToNextSnapPoint("X"), "Position changed beyond last snap point.");
                     }),
                     new PlaybackAction(100, p =>
                     {
                         snapPoint2.IsEnabled = false;
                         p.MoveToStart();
-                        Assert.IsFalse(p.MoveToNextSnapPoint("X"), "Position changed without any snap point enabled.");
+                        ClassicAssert.IsFalse(p.MoveToNextSnapPoint("X"), "Position changed without any snap point enabled.");
                     }),
                 },
                 setupPlayback: playback =>
@@ -1546,7 +1547,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 {
                     new PlaybackAction(50, p =>
                     {
-                        Assert.IsFalse(p.MoveToNextSnapPoint("X"), "Position changed beyond last snap point.");
+                        ClassicAssert.IsFalse(p.MoveToNextSnapPoint("X"), "Position changed beyond last snap point.");
                     }),
                 },
                 setupPlayback: playback =>
@@ -1554,7 +1555,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     playback.InterruptNotesOnStop = false;
 
                     playback.AddSnapPoint(new MetricTimeSpan(), "X");
-                    Assert.IsTrue(playback.MoveToNextSnapPoint("X"), "Failed to move to next snap point.");
+                    ClassicAssert.IsTrue(playback.MoveToNextSnapPoint("X"), "Failed to move to next snap point.");
                 },
                 expectedReceivedEvents: new[]
                 {
@@ -1624,7 +1625,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
                     snapPointsGroup = playback.SnapToEvents(e => e.EventType == MidiEventType.NoteOn);
                     var snapPointsGroup2 = playback.SnapToEvents(e => e.EventType == MidiEventType.NoteOn);
-                    Assert.AreNotSame(snapPointsGroup, snapPointsGroup2, "Snapping to notes starts creates new snap points group.");
+                    ClassicAssert.AreNotSame(snapPointsGroup, snapPointsGroup2, "Snapping to notes starts creates new snap points group.");
                 },
                 expectedReceivedEvents: new[]
                 {
@@ -1655,14 +1656,14 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 {
                     new PlaybackAction(100, p =>
                     {
-                        Assert.IsTrue(p.MoveToNextSnapPoint(), "Failed to move to snap point.");
+                        ClassicAssert.IsTrue(p.MoveToNextSnapPoint(), "Failed to move to snap point.");
                         CheckCurrentTime(p, TimeSpan.FromMilliseconds(200), "A");
-                        Assert.IsFalse(p.MoveToNextSnapPoint(), "Moved to snap point beyond duration.");
+                        ClassicAssert.IsFalse(p.MoveToNextSnapPoint(), "Moved to snap point beyond duration.");
                     }),
                     new PlaybackAction(100, p =>
                     {
                         CheckCurrentTime(p, TimeSpan.FromMilliseconds(300), "B");
-                        Assert.IsFalse(p.MoveToSnapPoint(snapPointBeyondDuration), "Moved to snap point beyond duration again.");
+                        ClassicAssert.IsFalse(p.MoveToSnapPoint(snapPointBeyondDuration), "Moved to snap point beyond duration again.");
                         CheckCurrentTime(p, TimeSpan.FromMilliseconds(300), "C");
                     }),
                 },
@@ -1701,14 +1702,14 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 {
                     new PlaybackAction(100, p =>
                     {
-                        Assert.IsTrue(p.MoveToNextSnapPoint(), "Failed to move to snap point.");
+                        ClassicAssert.IsTrue(p.MoveToNextSnapPoint(), "Failed to move to snap point.");
                         CheckCurrentTime(p, TimeSpan.FromMilliseconds(200), "A");
-                        Assert.IsFalse(p.MoveToNextSnapPoint(), "Moved to snap point beyond duration.");
+                        ClassicAssert.IsFalse(p.MoveToNextSnapPoint(), "Moved to snap point beyond duration.");
                     }),
                     new PlaybackAction(100, p =>
                     {
                         CheckCurrentTime(p, TimeSpan.FromMilliseconds(300), "B");
-                        Assert.IsFalse(p.MoveToSnapPoint(snapPointBeyondPlaybackEnd), "Moved to snap point beyond duration again.");
+                        ClassicAssert.IsFalse(p.MoveToSnapPoint(snapPointBeyondPlaybackEnd), "Moved to snap point beyond duration again.");
                         CheckCurrentTime(p, TimeSpan.FromMilliseconds(300), "C");
                     }),
                 },
@@ -1749,15 +1750,15 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     {
                         CheckCurrentTime(p, TimeSpan.FromMilliseconds(400), "A");
                         p.Stop();
-                        Assert.IsTrue(p.MoveToPreviousSnapPoint(), "Failed to move to snap point.");
+                        ClassicAssert.IsTrue(p.MoveToPreviousSnapPoint(), "Failed to move to snap point.");
                         CheckCurrentTime(p, TimeSpan.FromMilliseconds(300), "B");
-                        Assert.IsFalse(p.MoveToPreviousSnapPoint(), "Moved to snap point beyond start.");
+                        ClassicAssert.IsFalse(p.MoveToPreviousSnapPoint(), "Moved to snap point beyond start.");
                         p.Start();
                     }),
                     new PlaybackAction(100, p =>
                     {
                         CheckCurrentTime(p, TimeSpan.FromMilliseconds(400), "C");
-                        Assert.IsFalse(p.MoveToSnapPoint(snapPointBeyondStart), "Moved to snap point beyond start again.");
+                        ClassicAssert.IsFalse(p.MoveToSnapPoint(snapPointBeyondStart), "Moved to snap point beyond start again.");
                         CheckCurrentTime(p, TimeSpan.FromMilliseconds(400), "D");
                     }),
                 },

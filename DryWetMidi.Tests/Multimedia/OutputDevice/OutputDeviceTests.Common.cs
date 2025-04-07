@@ -7,6 +7,7 @@ using Melanchall.DryWetMidi.Multimedia;
 using Melanchall.DryWetMidi.Tests.Common;
 using Melanchall.DryWetMidi.Tests.Utilities;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace Melanchall.DryWetMidi.Tests.Multimedia
 {
@@ -25,27 +26,27 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [TestCase(MidiDevicesNames.DeviceB)]
         public void GetOutputDeviceByName(string deviceName)
         {
-            Assert.IsNotNull(OutputDevice.GetByName(deviceName), "There is no device.");
+            ClassicAssert.IsNotNull(OutputDevice.GetByName(deviceName), "There is no device.");
         }
 
         [Test]
         public void GetOutputDeviceByIndex_Valid()
         {
             var devicesCount = OutputDevice.GetDevicesCount();
-            Assert.IsNotNull(OutputDevice.GetByIndex(devicesCount / 2), "There is no device.");
+            ClassicAssert.IsNotNull(OutputDevice.GetByIndex(devicesCount / 2), "There is no device.");
         }
 
         [Test]
         public void GetOutputDeviceByIndex_BelowZero()
         {
-            Assert.Throws<ArgumentOutOfRangeException>(() => OutputDevice.GetByIndex(-1), "Exception is not thrown.");
+            ClassicAssert.Throws<ArgumentOutOfRangeException>(() => OutputDevice.GetByIndex(-1), "Exception is not thrown.");
         }
 
         [Test]
         public void GetOutputDeviceByIndex_BeyondDevicesCount()
         {
             var devicesCount = OutputDevice.GetDevicesCount();
-            Assert.Throws<ArgumentOutOfRangeException>(() => OutputDevice.GetByIndex(devicesCount), "Exception is not thrown.");
+            ClassicAssert.Throws<ArgumentOutOfRangeException>(() => OutputDevice.GetByIndex(devicesCount), "Exception is not thrown.");
         }
 
         [Test]
@@ -53,14 +54,14 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         {
             var outputDevices = OutputDevice.GetAll();
             var outputDevicesCount = OutputDevice.GetDevicesCount();
-            Assert.AreEqual(outputDevicesCount, outputDevices.Count, "Output devices count is invalid.");
+            ClassicAssert.AreEqual(outputDevicesCount, outputDevices.Count, "Output devices count is invalid.");
         }
 
         [Test]
         public void GetOutputDevicesCount()
         {
             var outputDevicesCount = OutputDevice.GetDevicesCount();
-            Assert.GreaterOrEqual(
+            ClassicAssert.GreaterOrEqual(
                 outputDevicesCount,
                 MidiDevicesNames.GetAllDevicesNames().Length,
                 "Output devices count is invalid.");
@@ -128,7 +129,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             for (var i = 0; i < 10; i++)
             {
                 var outputDevice = OutputDevice.GetByName(MidiDevicesNames.DeviceA);
-                Assert.DoesNotThrow(() => outputDevice.SendEvent(new NoteOnEvent()));
+                ClassicAssert.DoesNotThrow(() => outputDevice.SendEvent(new NoteOnEvent()));
                 outputDevice.Dispose();
             }
         }
@@ -160,7 +161,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 checkpoints.CheckCheckpointNotReached(OutputDeviceCheckpointsNames.HandleFinalizerEntered);
                 checkpoints.CheckCheckpointNotReached(OutputDeviceCheckpointsNames.DeviceClosedInHandleFinalizer);
 
-                Assert.IsTrue(sendEvent(checkpoints), $"Can't send event on iteration {i}.");
+                ClassicAssert.IsTrue(sendEvent(checkpoints), $"Can't send event on iteration {i}.");
 
                 GC.Collect();
                 GC.WaitForPendingFinalizers();
@@ -176,7 +177,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         {
             using (var outputDevice = OutputDevice.GetByName(MidiDevicesNames.DeviceA))
             {
-                Assert.IsTrue(outputDevice.IsEnabled, "Device is not enabled initially.");
+                ClassicAssert.IsTrue(outputDevice.IsEnabled, "Device is not enabled initially.");
 
                 var sentEventsCount = 0;
 
@@ -184,21 +185,21 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
                 outputDevice.SendEvent(new NoteOnEvent());
                 var eventReceived = WaitOperations.Wait(() => sentEventsCount == 1, SendReceiveUtilities.MaximumEventSendReceiveDelay);
-                Assert.IsTrue(eventReceived, "Event is not sent.");
+                ClassicAssert.IsTrue(eventReceived, "Event is not sent.");
 
                 outputDevice.IsEnabled = false;
-                Assert.IsFalse(outputDevice.IsEnabled, "Device is enabled after disabling.");
+                ClassicAssert.IsFalse(outputDevice.IsEnabled, "Device is enabled after disabling.");
 
                 outputDevice.SendEvent(new NoteOnEvent());
                 eventReceived = WaitOperations.Wait(() => sentEventsCount > 1, TimeSpan.FromSeconds(5));
-                Assert.IsFalse(eventReceived, "Event is sent after device disabled.");
+                ClassicAssert.IsFalse(eventReceived, "Event is sent after device disabled.");
 
                 outputDevice.IsEnabled = true;
-                Assert.IsTrue(outputDevice.IsEnabled, "Device is disabled after enabling.");
+                ClassicAssert.IsTrue(outputDevice.IsEnabled, "Device is disabled after enabling.");
 
                 outputDevice.SendEvent(new NoteOnEvent());
                 eventReceived = WaitOperations.Wait(() => sentEventsCount > 1, SendReceiveUtilities.MaximumEventSendReceiveDelay);
-                Assert.IsTrue(eventReceived, "Event is not sent after enabling again.");
+                ClassicAssert.IsTrue(eventReceived, "Event is not sent after enabling again.");
             }
         }
 
@@ -206,7 +207,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         public void OutputDeviceToString_User()
         {
             var outputDevice = GetUserOutputDevice();
-            Assert.AreEqual("Output device", outputDevice.ToString(), "Device string representation is invalid.");
+            ClassicAssert.AreEqual("Output device", outputDevice.ToString(), "Device string representation is invalid.");
         }
 
         [Test]
@@ -214,7 +215,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         {
             foreach (var outputDevice in OutputDevice.GetAll())
             {
-                Assert.DoesNotThrow(() => outputDevice.GetHashCode(), $"Failed to get hash code for [{outputDevice.Name}].");
+                ClassicAssert.DoesNotThrow(() => outputDevice.GetHashCode(), $"Failed to get hash code for [{outputDevice.Name}].");
             }
         }
 
@@ -271,11 +272,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     if (!isEventSentReceived)
                     {
                         if (errorOnSend != null)
-                            Assert.Fail($"Failed to send event: {errorOnSend}");
+                            ClassicAssert.Fail($"Failed to send event: {errorOnSend}");
                         else if (errorOnReceive != null)
-                            Assert.Fail($"Failed to receive event: {errorOnReceive}");
+                            ClassicAssert.Fail($"Failed to receive event: {errorOnReceive}");
                         else
-                            Assert.Fail("Event either not sent ot not received.");
+                            ClassicAssert.Fail("Event either not sent ot not received.");
                     }
 
                     MidiAsserts.AreEqual(midiEvent, eventSent, false, "Sent event is invalid.");

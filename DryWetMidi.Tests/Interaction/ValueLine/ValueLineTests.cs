@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Melanchall.DryWetMidi.Interaction;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace Melanchall.DryWetMidi.Tests.Interaction
 {
@@ -19,8 +20,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             var valueLine = new ValueLine<string>(defaultValue);
 
             CollectionAssert.IsEmpty(valueLine, "Value line contains changes.");
-            Assert.AreEqual(defaultValue, valueLine.GetValueAtTime(0), "Invalid value at the start.");
-            Assert.AreEqual(defaultValue, valueLine.GetValueAtTime(100), "Invalid value at the middle.");
+            ClassicAssert.AreEqual(defaultValue, valueLine.GetValueAtTime(0), "Invalid value at the start.");
+            ClassicAssert.AreEqual(defaultValue, valueLine.GetValueAtTime(100), "Invalid value at the middle.");
         }
 
         [Test]
@@ -32,8 +33,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             valueLine.SetValue(0, defaultValue);
 
             CollectionAssert.IsEmpty(valueLine, "Value line contains changes.");
-            Assert.AreEqual(defaultValue, valueLine.GetValueAtTime(0), "Invalid value at the start.");
-            Assert.AreEqual(defaultValue, valueLine.GetValueAtTime(100), "Invalid value at the middle.");
+            ClassicAssert.AreEqual(defaultValue, valueLine.GetValueAtTime(0), "Invalid value at the start.");
+            ClassicAssert.AreEqual(defaultValue, valueLine.GetValueAtTime(100), "Invalid value at the middle.");
         }
 
         [Test]
@@ -46,9 +47,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             valueLine.SetValue(valueChangeTime, defaultValue);
 
             CollectionAssert.IsEmpty(valueLine, "Value line contains changes.");
-            Assert.AreEqual(defaultValue, valueLine.GetValueAtTime(0), "Invalid value at the start.");
-            Assert.AreEqual(defaultValue, valueLine.GetValueAtTime(valueChangeTime), "Invalid value at the value change time.");
-            Assert.AreEqual(defaultValue, valueLine.GetValueAtTime(valueChangeTime + 1), "Invalid value after the value change time.");
+            ClassicAssert.AreEqual(defaultValue, valueLine.GetValueAtTime(0), "Invalid value at the start.");
+            ClassicAssert.AreEqual(defaultValue, valueLine.GetValueAtTime(valueChangeTime), "Invalid value at the value change time.");
+            ClassicAssert.AreEqual(defaultValue, valueLine.GetValueAtTime(valueChangeTime + 1), "Invalid value after the value change time.");
         }
 
         [Test]
@@ -61,8 +62,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             valueLine.SetValue(0, nonDefaultValue);
 
             CollectionAssert.AreEqual(new[] { new ValueChange<string>(0, nonDefaultValue) }, valueLine, "Invalid value changes.");
-            Assert.AreEqual(nonDefaultValue, valueLine.GetValueAtTime(0), "Invalid value at the start.");
-            Assert.AreEqual(nonDefaultValue, valueLine.GetValueAtTime(100), "Invalid value at the middle.");
+            ClassicAssert.AreEqual(nonDefaultValue, valueLine.GetValueAtTime(0), "Invalid value at the start.");
+            ClassicAssert.AreEqual(nonDefaultValue, valueLine.GetValueAtTime(100), "Invalid value at the middle.");
         }
 
         [Test]
@@ -76,9 +77,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             valueLine.SetValue(valueChangeTime, nonDefaultValue);
 
             CollectionAssert.AreEqual(new[] { new ValueChange<string>(valueChangeTime, nonDefaultValue) }, valueLine, "Invalid value changes.");
-            Assert.AreEqual(defaultValue, valueLine.GetValueAtTime(0), "Invalid value at the start.");
-            Assert.AreEqual(nonDefaultValue, valueLine.GetValueAtTime(valueChangeTime), "Invalid value at the value change time.");
-            Assert.AreEqual(nonDefaultValue, valueLine.GetValueAtTime(valueChangeTime + 1), "Invalid value after the value change time.");
+            ClassicAssert.AreEqual(defaultValue, valueLine.GetValueAtTime(0), "Invalid value at the start.");
+            ClassicAssert.AreEqual(nonDefaultValue, valueLine.GetValueAtTime(valueChangeTime), "Invalid value at the value change time.");
+            ClassicAssert.AreEqual(nonDefaultValue, valueLine.GetValueAtTime(valueChangeTime + 1), "Invalid value after the value change time.");
         }
 
         [TestCase(true)]
@@ -492,15 +493,15 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             if (checkValueChangesFirst)
                 CollectionAssert.AreEqual(expectedValueChanges, valueLine, "Invalid value changes.");
 
-            Assert.AreEqual(expectedValueAtStart, valueLine.GetValueAtTime(0), "Invalid value at start.");
+            ClassicAssert.AreEqual(expectedValueAtStart, valueLine.GetValueAtTime(0), "Invalid value at start.");
             if (valueChangeTime1 > 0)
-                Assert.AreEqual(expectedValueBeforeFirstChange, valueLine.GetValueAtTime(valueChangeTime1 - 1), "Invalid value before first change.");
-            Assert.AreEqual(expectedValueAtFirstChange, valueLine.GetValueAtTime(valueChangeTime1), "Invalid value at first change.");
-            Assert.AreEqual(expectedValueAfterFirstChange, valueLine.GetValueAtTime(valueChangeTime1 + 1), "Invalid value after first change.");
+                ClassicAssert.AreEqual(expectedValueBeforeFirstChange, valueLine.GetValueAtTime(valueChangeTime1 - 1), "Invalid value before first change.");
+            ClassicAssert.AreEqual(expectedValueAtFirstChange, valueLine.GetValueAtTime(valueChangeTime1), "Invalid value at first change.");
+            ClassicAssert.AreEqual(expectedValueAfterFirstChange, valueLine.GetValueAtTime(valueChangeTime1 + 1), "Invalid value after first change.");
             if (valueChangeTime2 > 0)
-                Assert.AreEqual(expectedValueBeforeSecondChange, valueLine.GetValueAtTime(valueChangeTime2 - 1), "Invalid value before second change.");
-            Assert.AreEqual(expectedValueAtSecondChange, valueLine.GetValueAtTime(valueChangeTime2), "Invalid value at second change.");
-            Assert.AreEqual(expectedValueAfterSecondChange, valueLine.GetValueAtTime(valueChangeTime2 + 1), "Invalid value after second change.");
+                ClassicAssert.AreEqual(expectedValueBeforeSecondChange, valueLine.GetValueAtTime(valueChangeTime2 - 1), "Invalid value before second change.");
+            ClassicAssert.AreEqual(expectedValueAtSecondChange, valueLine.GetValueAtTime(valueChangeTime2), "Invalid value at second change.");
+            ClassicAssert.AreEqual(expectedValueAfterSecondChange, valueLine.GetValueAtTime(valueChangeTime2 + 1), "Invalid value after second change.");
 
             CollectionAssert.AreEqual(expectedValueChanges, valueLine, "Invalid value changes.");
         }

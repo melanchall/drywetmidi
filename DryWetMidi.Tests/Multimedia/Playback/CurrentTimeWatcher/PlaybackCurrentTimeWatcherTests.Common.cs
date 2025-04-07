@@ -6,6 +6,7 @@ using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
 using NUnit.Framework;
 using Melanchall.DryWetMidi.Tests.Common;
+using NUnit.Framework.Legacy;
 
 namespace Melanchall.DryWetMidi.Tests.Multimedia
 {
@@ -96,7 +97,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
             var timeout = TimeSpan.FromSeconds(30);
             var playbackFinished = WaitOperations.Wait(() => !playback.IsRunning, timeout);
-            Assert.IsTrue(playbackFinished, $"Playback is not finished for {timeout}.");
+            ClassicAssert.IsTrue(playbackFinished, $"Playback is not finished for {timeout}.");
 
             var times = new List<ITimeSpan>();
 
@@ -297,11 +298,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 watcher.Stop();
 
                 objectsCount = objects.Count;
-                Assert.Greater(objectsCount, 0, "Objects count is invalid.");
+                ClassicAssert.Greater(objectsCount, 0, "Objects count is invalid.");
             }
 
             WaitOperations.Wait(TimeSpan.FromSeconds(1));
-            Assert.AreEqual(objectsCount, objects.Count, "New objects added after watcher disposed.");
+            ClassicAssert.AreEqual(objectsCount, objects.Count, "New objects added after watcher disposed.");
         }
 
         #endregion
@@ -364,7 +365,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
                 var timeout = TimeSpan.FromSeconds(30);
                 var playbackFinished = WaitOperations.Wait(() => !playback.IsRunning, timeout);
-                Assert.IsTrue(playbackFinished, $"Playback is not finished for {timeout}.");
+                ClassicAssert.IsTrue(playbackFinished, $"Playback is not finished for {timeout}.");
 
                 try
                 {
@@ -385,12 +386,12 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         {
             var timeout = TimeSpan.FromMilliseconds(30);
             var timesReceived = WaitOperations.Wait(() => times.Count >= expectedTimes.Count, timeout);
-            Assert.IsTrue(timesReceived, $"Times are not received for [{timeout}] (actual count is {times.Count} ({string.Join(", ", times)}); expected is {expectedTimes.Count} ({string.Join(", ", expectedTimes)})).");
+            ClassicAssert.IsTrue(timesReceived, $"Times are not received for [{timeout}] (actual count is {times.Count} ({string.Join(", ", times)}); expected is {expectedTimes.Count} ({string.Join(", ", expectedTimes)})).");
         }
 
         private static void CheckTimes(ICollection<ITimeSpan> expectedTimes, ICollection<ITimeSpan> actualTimes, string message = null)
         {
-            Assert.AreEqual(expectedTimes.Count, actualTimes.Count, $"Count of times is invalid. {message} (actual are {string.Join(", ", actualTimes)}, expected are {string.Join(", ", expectedTimes)})");
+            ClassicAssert.AreEqual(expectedTimes.Count, actualTimes.Count, $"Count of times is invalid. {message} (actual are {string.Join(", ", actualTimes)}, expected are {string.Join(", ", expectedTimes)})");
 
             foreach (var expectedActual in expectedTimes.Zip(actualTimes, (e, a) => new { Expected = e, Actual = a }))
             {
@@ -399,9 +400,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
                 var expectedType = expected.GetType();
                 var actualType = actual.GetType();
-                Assert.AreEqual(expectedType, actualType, "Types are different.");
+                ClassicAssert.AreEqual(expectedType, actualType, "Types are different.");
 
-                Assert.IsTrue(AreTimeSpansEqual(expected, actual), $"Time is invalid. Expected [{expected}] but received [{actual}]. {message}");
+                ClassicAssert.IsTrue(AreTimeSpansEqual(expected, actual), $"Time is invalid. Expected [{expected}] but received [{actual}]. {message}");
             }
         }
 

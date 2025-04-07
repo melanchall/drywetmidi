@@ -7,6 +7,7 @@ using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
 using Melanchall.DryWetMidi.Tests.Utilities;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace Melanchall.DryWetMidi.Tests.Interaction
 {
@@ -52,7 +53,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             {
                 var chord = new Chord();
 
-                Assert.Throws<InvalidOperationException>(() => GetPropertyValue(_chordPropertySelector, chord));
+                ClassicAssert.Throws<InvalidOperationException>(() => GetPropertyValue(_chordPropertySelector, chord));
             }
 
             [Test]
@@ -61,7 +62,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             {
                 var chord = GetChord(_notePropertySelector, _value1, _value1);
 
-                Assert.AreEqual(_value1, GetPropertyValue(_chordPropertySelector, chord));
+                ClassicAssert.AreEqual(_value1, GetPropertyValue(_chordPropertySelector, chord));
             }
 
             [Test]
@@ -70,7 +71,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             {
                 var chord = GetChord(_notePropertySelector, _value1, _value2);
 
-                Assert.Throws<InvalidOperationException>(() => GetPropertyValue(_chordPropertySelector, chord));
+                ClassicAssert.Throws<InvalidOperationException>(() => GetPropertyValue(_chordPropertySelector, chord));
             }
 
             [Test]
@@ -81,7 +82,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
                 SetPropertyValue(_chordPropertySelector, chord, _value);
 
-                Assert.AreEqual(_value, GetPropertyValue(_chordPropertySelector, chord));
+                ClassicAssert.AreEqual(_value, GetPropertyValue(_chordPropertySelector, chord));
             }
 
             #endregion
@@ -218,21 +219,21 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         [Description("Get length of Chord without notes.")]
         public void Length_Get_NoNotes()
         {
-            Assert.AreEqual(0, GetChord_NoNotes().Length);
+            ClassicAssert.AreEqual(0, GetChord_NoNotes().Length);
         }
 
         [Test]
         [Description("Get length of Chord with time of zero.")]
         public void Length_Get_ZeroTime()
         {
-            Assert.AreEqual(200, GetChord_ZeroTime().Length);
+            ClassicAssert.AreEqual(200, GetChord_ZeroTime().Length);
         }
 
         [Test]
         [Description("Get length of Chord with time of nonzero number.")]
         public void Length_Get_NonzeroTime()
         {
-            Assert.AreEqual(200, GetChord_NonzeroTime().Length);
+            ClassicAssert.AreEqual(200, GetChord_NonzeroTime().Length);
         }
 
         [Test]
@@ -242,7 +243,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             var chord = GetChord_NoNotes();
             chord.Length = 100;
 
-            Assert.AreEqual(0, chord.Length);
+            ClassicAssert.AreEqual(0, chord.Length);
         }
 
         [Test]
@@ -252,7 +253,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             var chord = GetChord_ZeroTime();
             chord.Length = 500;
 
-            Assert.AreEqual(500, chord.Length);
+            ClassicAssert.AreEqual(500, chord.Length);
         }
 
         [Test]
@@ -262,7 +263,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             var chord = GetChord_NonzeroTime();
             chord.Length = 500;
 
-            Assert.AreEqual(500, chord.Length);
+            ClassicAssert.AreEqual(500, chord.Length);
         }
 
         [Test]
@@ -296,7 +297,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 new Note((SevenBitNumber)70, 100, time),
                 new Note((SevenBitNumber)80, 100, time + secondNoteShift));
 
-            Assert.Throws<ArgumentOutOfRangeException>(() => chord.Length = secondNoteShift - 1, "No exception thrown.");
+            ClassicAssert.Throws<ArgumentOutOfRangeException>(() => chord.Length = secondNoteShift - 1, "No exception thrown.");
         }
 
         [Test]
@@ -306,7 +307,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 new Note((SevenBitNumber)70, 100, time),
                 new Note((SevenBitNumber)80, 100, time + secondNoteShift));
 
-            Assert.DoesNotThrow(() => chord.Length = secondNoteShift, "Exception thrown.");
+            ClassicAssert.DoesNotThrow(() => chord.Length = secondNoteShift, "Exception thrown.");
         }
 
         [Test]
@@ -316,7 +317,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 new Note((SevenBitNumber)70, 100, time),
                 new Note((SevenBitNumber)80, 100, time + secondNoteShift));
 
-            Assert.DoesNotThrow(() => chord.Length = secondNoteShift + 1, "Exception thrown.");
+            ClassicAssert.DoesNotThrow(() => chord.Length = secondNoteShift + 1, "Exception thrown.");
         }
 
         #endregion
@@ -352,7 +353,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             var clone = (TaggedChord)taggedChord.Clone();
 
             MidiAsserts.AreEqual(notes, clone.Notes, "Notes are invalid.");
-            Assert.AreEqual(tag, clone.Tag, "Tag is invalid.");
+            ClassicAssert.AreEqual(tag, clone.Tag, "Tag is invalid.");
         }
 
         #endregion
@@ -369,9 +370,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             var time = 100;
 
             var parts = chord.Split(time);
-            Assert.IsNull(parts.RightPart,
+            ClassicAssert.IsNull(parts.RightPart,
                           "Right part is not null.");
-            Assert.AreNotSame(parts.LeftPart,
+            ClassicAssert.AreNotSame(parts.LeftPart,
                               chord,
                               "Left part refers to the same object as the original chord.");
             MidiAsserts.AreEqual(chordCreator(), parts.LeftPart, "Left part doesn't equal to the original chord.");
@@ -387,9 +388,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             var time = 0;
 
             var parts = chord.Split(time);
-            Assert.IsNull(parts.LeftPart,
+            ClassicAssert.IsNull(parts.LeftPart,
                           "Left part is not null.");
-            Assert.AreNotSame(parts.RightPart,
+            ClassicAssert.AreNotSame(parts.RightPart,
                               chord,
                               "Right part refers to the same object as the original chord.");
             MidiAsserts.AreEqual(chordCreator(), parts.RightPart, "Right part doesn't equal to the original chord.");
@@ -405,9 +406,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             var time = 50;
 
             var parts = chord.Split(time);
-            Assert.IsNull(parts.LeftPart,
+            ClassicAssert.IsNull(parts.LeftPart,
                           "Left part is not null.");
-            Assert.AreNotSame(parts.RightPart,
+            ClassicAssert.AreNotSame(parts.RightPart,
                               chord,
                               "Right part refers to the same object as the original chord.");
             MidiAsserts.AreEqual(chordCreator(), parts.RightPart, "Right part doesn't equal to the original chord.");
@@ -423,9 +424,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             var time = 500;
 
             var parts = chord.Split(time);
-            Assert.IsNull(parts.RightPart,
+            ClassicAssert.IsNull(parts.RightPart,
                           "Right part is not null.");
-            Assert.AreNotSame(parts.LeftPart,
+            ClassicAssert.AreNotSame(parts.LeftPart,
                               chord,
                               "Left part refers to the same object as the original chord.");
             MidiAsserts.AreEqual(chordCreator(), parts.LeftPart, "Left part doesn't equal to the original chord.");
@@ -526,8 +527,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         public void GetChannel_EmptyChord()
         {
             var chord = new Chord();
-            Assert.Throws<InvalidOperationException>(() => { var channel = chord.Channel; }, "Channel returned for empty chord on first get.");
-            Assert.Throws<InvalidOperationException>(() => { var channel = chord.Channel; }, "Channel returned for empty chord on second get.");
+            ClassicAssert.Throws<InvalidOperationException>(() => { var channel = chord.Channel; }, "Channel returned for empty chord on first get.");
+            ClassicAssert.Throws<InvalidOperationException>(() => { var channel = chord.Channel; }, "Channel returned for empty chord on second get.");
         }
 
         [Test]
@@ -535,8 +536,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var channel = (FourBitNumber)5;
             var chord = new Chord(new Note(SevenBitNumber.MaxValue) { Channel = channel });
-            Assert.AreEqual(channel, chord.Channel, "Channel is invalid on first get.");
-            Assert.AreEqual(channel, chord.Channel, "Channel is invalid on second get.");
+            ClassicAssert.AreEqual(channel, chord.Channel, "Channel is invalid on first get.");
+            ClassicAssert.AreEqual(channel, chord.Channel, "Channel is invalid on second get.");
         }
 
         [Test]
@@ -546,8 +547,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             var chord = new Chord(
                 new Note(SevenBitNumber.MaxValue) { Channel = channel },
                 new Note(SevenBitNumber.MinValue) { Channel = channel });
-            Assert.AreEqual(channel, chord.Channel, "Channel is invalid on first get.");
-            Assert.AreEqual(channel, chord.Channel, "Channel is invalid on second get.");
+            ClassicAssert.AreEqual(channel, chord.Channel, "Channel is invalid on first get.");
+            ClassicAssert.AreEqual(channel, chord.Channel, "Channel is invalid on second get.");
         }
 
         [Test]
@@ -558,8 +559,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             var chord = new Chord(
                 new Note(SevenBitNumber.MaxValue) { Channel = channel1 },
                 new Note(SevenBitNumber.MinValue) { Channel = channel2 });
-            Assert.Throws<InvalidOperationException>(() => { var channel = chord.Channel; }, "Channel returned for chord with notes with different channels on first get.");
-            Assert.Throws<InvalidOperationException>(() => { var channel = chord.Channel; }, "Channel returned for chord with notes with different channels on second get.");
+            ClassicAssert.Throws<InvalidOperationException>(() => { var channel = chord.Channel; }, "Channel returned for chord with notes with different channels on first get.");
+            ClassicAssert.Throws<InvalidOperationException>(() => { var channel = chord.Channel; }, "Channel returned for chord with notes with different channels on second get.");
         }
 
         [Test]
@@ -569,8 +570,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             var chord = new Chord(new Note(SevenBitNumber.MaxValue));
             chord.Channel = channel;
 
-            Assert.AreEqual(channel, chord.Channel, "Channel is invalid on first get.");
-            Assert.AreEqual(channel, chord.Channel, "Channel is invalid on second get.");
+            ClassicAssert.AreEqual(channel, chord.Channel, "Channel is invalid on first get.");
+            ClassicAssert.AreEqual(channel, chord.Channel, "Channel is invalid on second get.");
         }
 
         [Test]
@@ -582,8 +583,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 new Note(SevenBitNumber.MinValue));
             chord.Channel = channel;
 
-            Assert.AreEqual(channel, chord.Channel, "Channel is invalid on first get.");
-            Assert.AreEqual(channel, chord.Channel, "Channel is invalid on second get.");
+            ClassicAssert.AreEqual(channel, chord.Channel, "Channel is invalid on first get.");
+            ClassicAssert.AreEqual(channel, chord.Channel, "Channel is invalid on second get.");
         }
 
         [Test]
@@ -598,8 +599,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             var channel = (FourBitNumber)7;
             chord.Channel = channel;
 
-            Assert.AreEqual(channel, chord.Channel, "Channel is invalid on first get.");
-            Assert.AreEqual(channel, chord.Channel, "Channel is invalid on second get.");
+            ClassicAssert.AreEqual(channel, chord.Channel, "Channel is invalid on first get.");
+            ClassicAssert.AreEqual(channel, chord.Channel, "Channel is invalid on second get.");
         }
 
         #endregion
@@ -610,8 +611,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         public void GetVelocity_EmptyChord()
         {
             var chord = new Chord();
-            Assert.Throws<InvalidOperationException>(() => { var velocity = chord.Velocity; }, "Velocity returned for empty chord on first get.");
-            Assert.Throws<InvalidOperationException>(() => { var velocity = chord.Velocity; }, "Velocity returned for empty chord on second get.");
+            ClassicAssert.Throws<InvalidOperationException>(() => { var velocity = chord.Velocity; }, "Velocity returned for empty chord on first get.");
+            ClassicAssert.Throws<InvalidOperationException>(() => { var velocity = chord.Velocity; }, "Velocity returned for empty chord on second get.");
         }
 
         [Test]
@@ -619,8 +620,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var velocity = (SevenBitNumber)5;
             var chord = new Chord(new Note(SevenBitNumber.MaxValue) { Velocity = velocity });
-            Assert.AreEqual(velocity, chord.Velocity, "Velocity is invalid on first get.");
-            Assert.AreEqual(velocity, chord.Velocity, "Velocity is invalid on second get.");
+            ClassicAssert.AreEqual(velocity, chord.Velocity, "Velocity is invalid on first get.");
+            ClassicAssert.AreEqual(velocity, chord.Velocity, "Velocity is invalid on second get.");
         }
 
         [Test]
@@ -630,8 +631,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             var chord = new Chord(
                 new Note(SevenBitNumber.MaxValue) { Velocity = velocity },
                 new Note(SevenBitNumber.MinValue) { Velocity = velocity });
-            Assert.AreEqual(velocity, chord.Velocity, "Velocity is invalid on first get.");
-            Assert.AreEqual(velocity, chord.Velocity, "Velocity is invalid on second get.");
+            ClassicAssert.AreEqual(velocity, chord.Velocity, "Velocity is invalid on first get.");
+            ClassicAssert.AreEqual(velocity, chord.Velocity, "Velocity is invalid on second get.");
         }
 
         [Test]
@@ -642,8 +643,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             var chord = new Chord(
                 new Note(SevenBitNumber.MaxValue) { Velocity = velocity1 },
                 new Note(SevenBitNumber.MinValue) { Velocity = velocity2 });
-            Assert.Throws<InvalidOperationException>(() => { var velocity = chord.Velocity; }, "Velocity returned for chord with notes with different velocities on first get.");
-            Assert.Throws<InvalidOperationException>(() => { var velocity = chord.Velocity; }, "Velocity returned for chord with notes with different velocities on second get.");
+            ClassicAssert.Throws<InvalidOperationException>(() => { var velocity = chord.Velocity; }, "Velocity returned for chord with notes with different velocities on first get.");
+            ClassicAssert.Throws<InvalidOperationException>(() => { var velocity = chord.Velocity; }, "Velocity returned for chord with notes with different velocities on second get.");
         }
 
         [Test]
@@ -653,8 +654,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             var chord = new Chord(new Note(SevenBitNumber.MaxValue));
             chord.Velocity = velocity;
 
-            Assert.AreEqual(velocity, chord.Velocity, "Velocity is invalid on first get.");
-            Assert.AreEqual(velocity, chord.Velocity, "Velocity is invalid on second get.");
+            ClassicAssert.AreEqual(velocity, chord.Velocity, "Velocity is invalid on first get.");
+            ClassicAssert.AreEqual(velocity, chord.Velocity, "Velocity is invalid on second get.");
         }
 
         [Test]
@@ -666,8 +667,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 new Note(SevenBitNumber.MinValue));
             chord.Velocity = velocity;
 
-            Assert.AreEqual(velocity, chord.Velocity, "Velocity is invalid on first get.");
-            Assert.AreEqual(velocity, chord.Velocity, "Velocity is invalid on second get.");
+            ClassicAssert.AreEqual(velocity, chord.Velocity, "Velocity is invalid on first get.");
+            ClassicAssert.AreEqual(velocity, chord.Velocity, "Velocity is invalid on second get.");
         }
 
         [Test]
@@ -682,8 +683,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             var velocity = (SevenBitNumber)7;
             chord.Velocity = velocity;
 
-            Assert.AreEqual(velocity, chord.Velocity, "Velocity is invalid on first get.");
-            Assert.AreEqual(velocity, chord.Velocity, "Velocity is invalid on second get.");
+            ClassicAssert.AreEqual(velocity, chord.Velocity, "Velocity is invalid on first get.");
+            ClassicAssert.AreEqual(velocity, chord.Velocity, "Velocity is invalid on second get.");
         }
 
         #endregion
@@ -694,8 +695,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         public void GetOffVelocity_EmptyChord()
         {
             var chord = new Chord();
-            Assert.Throws<InvalidOperationException>(() => { var offVelocity = chord.OffVelocity; }, "Off-velocity returned for empty chord on first get.");
-            Assert.Throws<InvalidOperationException>(() => { var offVelocity = chord.OffVelocity; }, "Off-velocity returned for empty chord on second get.");
+            ClassicAssert.Throws<InvalidOperationException>(() => { var offVelocity = chord.OffVelocity; }, "Off-velocity returned for empty chord on first get.");
+            ClassicAssert.Throws<InvalidOperationException>(() => { var offVelocity = chord.OffVelocity; }, "Off-velocity returned for empty chord on second get.");
         }
 
         [Test]
@@ -703,8 +704,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var offVelocity = (SevenBitNumber)5;
             var chord = new Chord(new Note(SevenBitNumber.MaxValue) { OffVelocity = offVelocity });
-            Assert.AreEqual(offVelocity, chord.OffVelocity, "Off-velocity is invalid on first get.");
-            Assert.AreEqual(offVelocity, chord.OffVelocity, "Off-velocity is invalid on second get.");
+            ClassicAssert.AreEqual(offVelocity, chord.OffVelocity, "Off-velocity is invalid on first get.");
+            ClassicAssert.AreEqual(offVelocity, chord.OffVelocity, "Off-velocity is invalid on second get.");
         }
 
         [Test]
@@ -714,8 +715,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             var chord = new Chord(
                 new Note(SevenBitNumber.MaxValue) { OffVelocity = offVelocity },
                 new Note(SevenBitNumber.MinValue) { OffVelocity = offVelocity });
-            Assert.AreEqual(offVelocity, chord.OffVelocity, "Off-velocity is invalid on first get.");
-            Assert.AreEqual(offVelocity, chord.OffVelocity, "Off-velocity is invalid on second get.");
+            ClassicAssert.AreEqual(offVelocity, chord.OffVelocity, "Off-velocity is invalid on first get.");
+            ClassicAssert.AreEqual(offVelocity, chord.OffVelocity, "Off-velocity is invalid on second get.");
         }
 
         [Test]
@@ -726,8 +727,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             var chord = new Chord(
                 new Note(SevenBitNumber.MaxValue) { OffVelocity = offVelocity1 },
                 new Note(SevenBitNumber.MinValue) { OffVelocity = offVelocity2 });
-            Assert.Throws<InvalidOperationException>(() => { var offVelocity = chord.OffVelocity; }, "Off-velocity returned for chord with notes with different off-velocities on first get.");
-            Assert.Throws<InvalidOperationException>(() => { var offVelocity = chord.OffVelocity; }, "Off-velocity returned for chord with notes with different off-velocities on second get.");
+            ClassicAssert.Throws<InvalidOperationException>(() => { var offVelocity = chord.OffVelocity; }, "Off-velocity returned for chord with notes with different off-velocities on first get.");
+            ClassicAssert.Throws<InvalidOperationException>(() => { var offVelocity = chord.OffVelocity; }, "Off-velocity returned for chord with notes with different off-velocities on second get.");
         }
 
         [Test]
@@ -737,8 +738,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             var chord = new Chord(new Note(SevenBitNumber.MaxValue));
             chord.OffVelocity = offVelocity;
 
-            Assert.AreEqual(offVelocity, chord.OffVelocity, "Off-velocity is invalid on first get.");
-            Assert.AreEqual(offVelocity, chord.OffVelocity, "Off-velocity is invalid on second get.");
+            ClassicAssert.AreEqual(offVelocity, chord.OffVelocity, "Off-velocity is invalid on first get.");
+            ClassicAssert.AreEqual(offVelocity, chord.OffVelocity, "Off-velocity is invalid on second get.");
         }
 
         [Test]
@@ -750,8 +751,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 new Note(SevenBitNumber.MinValue));
             chord.OffVelocity = offVelocity;
 
-            Assert.AreEqual(offVelocity, chord.OffVelocity, "Off-velocity is invalid on first get.");
-            Assert.AreEqual(offVelocity, chord.OffVelocity, "Off-velocity is invalid on second get.");
+            ClassicAssert.AreEqual(offVelocity, chord.OffVelocity, "Off-velocity is invalid on first get.");
+            ClassicAssert.AreEqual(offVelocity, chord.OffVelocity, "Off-velocity is invalid on second get.");
         }
 
         [Test]
@@ -766,8 +767,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             var offVelocity = (SevenBitNumber)7;
             chord.OffVelocity = offVelocity;
 
-            Assert.AreEqual(offVelocity, chord.OffVelocity, "Off-velocity is invalid on first get.");
-            Assert.AreEqual(offVelocity, chord.OffVelocity, "Off-velocity is invalid on second get.");
+            ClassicAssert.AreEqual(offVelocity, chord.OffVelocity, "Off-velocity is invalid on first get.");
+            ClassicAssert.AreEqual(offVelocity, chord.OffVelocity, "Off-velocity is invalid on second get.");
         }
 
         #endregion
@@ -780,12 +781,12 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             var initialChannel = (FourBitNumber)0;
 
             var chord = new Chord(new Note((SevenBitNumber)70), new Note((SevenBitNumber)80));
-            Assert.AreEqual(initialChannel, chord.Channel, "Invalid channel after chord created.");
+            ClassicAssert.AreEqual(initialChannel, chord.Channel, "Invalid channel after chord created.");
 
             foreach (var note in chord.Notes)
             {
-                Assert.AreEqual(initialChannel, ((NoteOnEvent)note.TimedNoteOnEvent.Event).Channel, "Invalid channel of Note On timed event after chord created.");
-                Assert.AreEqual(initialChannel, ((NoteOffEvent)note.TimedNoteOffEvent.Event).Channel, "Invalid channel of Note Off timed event after chord created.");
+                ClassicAssert.AreEqual(initialChannel, ((NoteOnEvent)note.TimedNoteOnEvent.Event).Channel, "Invalid channel of Note On timed event after chord created.");
+                ClassicAssert.AreEqual(initialChannel, ((NoteOffEvent)note.TimedNoteOffEvent.Event).Channel, "Invalid channel of Note Off timed event after chord created.");
                 MidiAsserts.AreEqual(note.TimedNoteOnEvent, note.GetTimedNoteOnEvent(), "Invalid Note On timed event after chord created.");
                 MidiAsserts.AreEqual(note.TimedNoteOffEvent, note.GetTimedNoteOffEvent(), "Invalid Note Off timed event after chord created.");
             }
@@ -793,12 +794,12 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             var newChannel = (FourBitNumber)6;
             chord.Channel = newChannel;
 
-            Assert.AreEqual(newChannel, chord.Channel, "Invalid channel after update.");
+            ClassicAssert.AreEqual(newChannel, chord.Channel, "Invalid channel after update.");
 
             foreach (var note in chord.Notes)
             {
-                Assert.AreEqual(newChannel, ((NoteOnEvent)note.TimedNoteOnEvent.Event).Channel, "Invalid channel of Note On timed event after update.");
-                Assert.AreEqual(newChannel, ((NoteOffEvent)note.TimedNoteOffEvent.Event).Channel, "Invalid channel of Note Off timed event after update.");
+                ClassicAssert.AreEqual(newChannel, ((NoteOnEvent)note.TimedNoteOnEvent.Event).Channel, "Invalid channel of Note On timed event after update.");
+                ClassicAssert.AreEqual(newChannel, ((NoteOffEvent)note.TimedNoteOffEvent.Event).Channel, "Invalid channel of Note Off timed event after update.");
                 MidiAsserts.AreEqual(note.TimedNoteOnEvent, note.GetTimedNoteOnEvent(), "Invalid Note On timed event after update.");
                 MidiAsserts.AreEqual(note.TimedNoteOffEvent, note.GetTimedNoteOffEvent(), "Invalid Note Off timed event after update.");
             }
@@ -810,12 +811,12 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             var initialVelocity = Note.DefaultVelocity;
 
             var chord = new Chord(new Note((SevenBitNumber)70), new Note((SevenBitNumber)80));
-            Assert.AreEqual(initialVelocity, chord.Velocity, "Invalid velocity after chord created.");
+            ClassicAssert.AreEqual(initialVelocity, chord.Velocity, "Invalid velocity after chord created.");
 
             foreach (var note in chord.Notes)
             {
-                Assert.AreEqual(initialVelocity, ((NoteOnEvent)note.TimedNoteOnEvent.Event).Velocity, "Invalid velocity of Note On timed event after chord created.");
-                Assert.AreEqual(SevenBitNumber.MinValue, ((NoteOffEvent)note.TimedNoteOffEvent.Event).Velocity, "Invalid velocity of Note Off timed event after chord created.");
+                ClassicAssert.AreEqual(initialVelocity, ((NoteOnEvent)note.TimedNoteOnEvent.Event).Velocity, "Invalid velocity of Note On timed event after chord created.");
+                ClassicAssert.AreEqual(SevenBitNumber.MinValue, ((NoteOffEvent)note.TimedNoteOffEvent.Event).Velocity, "Invalid velocity of Note Off timed event after chord created.");
                 MidiAsserts.AreEqual(note.TimedNoteOnEvent, note.GetTimedNoteOnEvent(), "Invalid Note On timed event after chord created.");
                 MidiAsserts.AreEqual(note.TimedNoteOffEvent, note.GetTimedNoteOffEvent(), "Invalid Note Off timed event after chord created.");
             }
@@ -823,12 +824,12 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             var newVelocity = (SevenBitNumber)60;
             chord.Velocity = newVelocity;
 
-            Assert.AreEqual(newVelocity, chord.Velocity, "Invalid velocity after update.");
+            ClassicAssert.AreEqual(newVelocity, chord.Velocity, "Invalid velocity after update.");
 
             foreach (var note in chord.Notes)
             {
-                Assert.AreEqual(newVelocity, ((NoteOnEvent)note.TimedNoteOnEvent.Event).Velocity, "Invalid velocity of Note On timed event after update.");
-                Assert.AreEqual(SevenBitNumber.MinValue, ((NoteOffEvent)note.TimedNoteOffEvent.Event).Velocity, "Invalid velocity of Note Off timed event after update.");
+                ClassicAssert.AreEqual(newVelocity, ((NoteOnEvent)note.TimedNoteOnEvent.Event).Velocity, "Invalid velocity of Note On timed event after update.");
+                ClassicAssert.AreEqual(SevenBitNumber.MinValue, ((NoteOffEvent)note.TimedNoteOffEvent.Event).Velocity, "Invalid velocity of Note Off timed event after update.");
                 MidiAsserts.AreEqual(note.TimedNoteOnEvent, note.GetTimedNoteOnEvent(), "Invalid Note On timed event after update.");
                 MidiAsserts.AreEqual(note.TimedNoteOffEvent, note.GetTimedNoteOffEvent(), "Invalid Note Off timed event after update.");
             }
@@ -840,12 +841,12 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             var initialOffVelocity = SevenBitNumber.MinValue;
 
             var chord = new Chord(new Note((SevenBitNumber)70), new Note((SevenBitNumber)80));
-            Assert.AreEqual(initialOffVelocity, chord.OffVelocity, "Invalid off velocity after chord created.");
+            ClassicAssert.AreEqual(initialOffVelocity, chord.OffVelocity, "Invalid off velocity after chord created.");
 
             foreach (var note in chord.Notes)
             {
-                Assert.AreEqual(Note.DefaultVelocity, ((NoteOnEvent)note.TimedNoteOnEvent.Event).Velocity, "Invalid off velocity of Note On timed event after chord created.");
-                Assert.AreEqual(initialOffVelocity, ((NoteOffEvent)note.TimedNoteOffEvent.Event).Velocity, "Invalid off velocity of Note Off timed event after chord created.");
+                ClassicAssert.AreEqual(Note.DefaultVelocity, ((NoteOnEvent)note.TimedNoteOnEvent.Event).Velocity, "Invalid off velocity of Note On timed event after chord created.");
+                ClassicAssert.AreEqual(initialOffVelocity, ((NoteOffEvent)note.TimedNoteOffEvent.Event).Velocity, "Invalid off velocity of Note Off timed event after chord created.");
                 MidiAsserts.AreEqual(note.TimedNoteOnEvent, note.GetTimedNoteOnEvent(), "Invalid Note On timed event after chord created.");
                 MidiAsserts.AreEqual(note.TimedNoteOffEvent, note.GetTimedNoteOffEvent(), "Invalid Note Off timed event after chord created.");
             }
@@ -853,12 +854,12 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             var newOffVelocity = (SevenBitNumber)60;
             chord.OffVelocity = newOffVelocity;
 
-            Assert.AreEqual(newOffVelocity, chord.OffVelocity, "Invalid off velocity after update.");
+            ClassicAssert.AreEqual(newOffVelocity, chord.OffVelocity, "Invalid off velocity after update.");
 
             foreach (var note in chord.Notes)
             {
-                Assert.AreEqual(Note.DefaultVelocity, ((NoteOnEvent)note.TimedNoteOnEvent.Event).Velocity, "Invalid off velocity of Note On timed event after update.");
-                Assert.AreEqual(newOffVelocity, ((NoteOffEvent)note.TimedNoteOffEvent.Event).Velocity, "Invalid off velocity of Note Off timed event after update.");
+                ClassicAssert.AreEqual(Note.DefaultVelocity, ((NoteOnEvent)note.TimedNoteOnEvent.Event).Velocity, "Invalid off velocity of Note On timed event after update.");
+                ClassicAssert.AreEqual(newOffVelocity, ((NoteOffEvent)note.TimedNoteOffEvent.Event).Velocity, "Invalid off velocity of Note Off timed event after update.");
                 MidiAsserts.AreEqual(note.TimedNoteOnEvent, note.GetTimedNoteOnEvent(), "Invalid Note On timed event after update.");
                 MidiAsserts.AreEqual(note.TimedNoteOffEvent, note.GetTimedNoteOffEvent(), "Invalid Note Off timed event after update.");
             }
@@ -877,7 +878,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 new Note(DryWetMidi.MusicTheory.NoteName.A, 1),
                 new Note(DryWetMidi.MusicTheory.NoteName.DSharp, 2));
 
-            Assert.AreEqual(
+            ClassicAssert.AreEqual(
                 new DryWetMidi.MusicTheory.Chord(new[]
                 {
                     DryWetMidi.MusicTheory.NoteName.A,
@@ -910,9 +911,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
             chord.Time = chord.Time;
 
-            Assert.IsFalse(lengthChangedFired, "Length changed event fired.");
-            Assert.IsNull(timeChangedSender, "Sender is not null.");
-            Assert.IsNull(timeChangedEventArgs, "Event args is not null.");
+            ClassicAssert.IsFalse(lengthChangedFired, "Length changed event fired.");
+            ClassicAssert.IsNull(timeChangedSender, "Sender is not null.");
+            ClassicAssert.IsNull(timeChangedEventArgs, "Event args is not null.");
         }
 
         private static void CheckTimeChangedEvent_Changed(Chord chord)
@@ -932,12 +933,12 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             var oldTime = chord.Time;
             chord.Time += 100;
 
-            Assert.IsFalse(lengthChangedFired, "Length changed event fired.");
-            Assert.AreSame(chord, timeChangedSender, "Sender is invalid.");
-            Assert.IsNotNull(timeChangedEventArgs, "Event args is null.");
-            Assert.AreEqual(oldTime, timeChangedEventArgs.OldTime, "Old time is invalid.");
-            Assert.AreEqual(chord.Time, timeChangedEventArgs.NewTime, "New time is invalid.");
-            Assert.AreNotEqual(oldTime, chord.Time, "New time is equal to old one.");
+            ClassicAssert.IsFalse(lengthChangedFired, "Length changed event fired.");
+            ClassicAssert.AreSame(chord, timeChangedSender, "Sender is invalid.");
+            ClassicAssert.IsNotNull(timeChangedEventArgs, "Event args is null.");
+            ClassicAssert.AreEqual(oldTime, timeChangedEventArgs.OldTime, "Old time is invalid.");
+            ClassicAssert.AreEqual(chord.Time, timeChangedEventArgs.NewTime, "New time is invalid.");
+            ClassicAssert.AreNotEqual(oldTime, chord.Time, "New time is equal to old one.");
         }
 
         private static void CheckLengthChangedEvent_NoChange(Chord chord)
@@ -956,9 +957,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
             chord.Length = chord.Length;
 
-            Assert.IsFalse(timeChangedFired, "Time changed event fired.");
-            Assert.IsNull(lengthChangedSender, "Sender is not null.");
-            Assert.IsNull(lengthChangedEventArgs, "Event args is not null.");
+            ClassicAssert.IsFalse(timeChangedFired, "Time changed event fired.");
+            ClassicAssert.IsNull(lengthChangedSender, "Sender is not null.");
+            ClassicAssert.IsNull(lengthChangedEventArgs, "Event args is not null.");
         }
 
         private static void CheckLengthChangedEvent_Changed(Chord chord)
@@ -978,12 +979,12 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             var oldLength = chord.Length;
             chord.Length += 100;
 
-            Assert.IsFalse(timeChangedFired, "Time changed event fired.");
-            Assert.AreSame(chord, lengthChangedSender, "Sender is invalid.");
-            Assert.IsNotNull(lengthChangedEventArgs, "Event args is null.");
-            Assert.AreEqual(oldLength, lengthChangedEventArgs.OldLength, "Old length is invalid.");
-            Assert.AreEqual(chord.Length, lengthChangedEventArgs.NewLength, "New length is invalid.");
-            Assert.AreNotEqual(oldLength, chord.Length, "New length is equal to old one.");
+            ClassicAssert.IsFalse(timeChangedFired, "Time changed event fired.");
+            ClassicAssert.AreSame(chord, lengthChangedSender, "Sender is invalid.");
+            ClassicAssert.IsNotNull(lengthChangedEventArgs, "Event args is null.");
+            ClassicAssert.AreEqual(oldLength, lengthChangedEventArgs.OldLength, "Old length is invalid.");
+            ClassicAssert.AreEqual(chord.Length, lengthChangedEventArgs.NewLength, "New length is invalid.");
+            ClassicAssert.AreNotEqual(oldLength, chord.Length, "New length is equal to old one.");
         }
 
         private static void CheckEndTime<TTimeSpan>(ITimeSpan time, ITimeSpan length, TTimeSpan expectedEndTime)

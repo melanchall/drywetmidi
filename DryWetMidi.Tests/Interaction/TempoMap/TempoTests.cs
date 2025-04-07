@@ -1,6 +1,7 @@
 ﻿using System;
 using Melanchall.DryWetMidi.Interaction;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace Melanchall.DryWetMidi.Tests.Interaction
 {
@@ -14,7 +15,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var tempo1 = default(Tempo);
             var tempo2 = new Tempo(100);
-            Assert.IsFalse(tempo1 == tempo2, "First tempo equals to second one.");
+            ClassicAssert.IsFalse(tempo1 == tempo2, "First tempo equals to second one.");
         }
 
         [Test]
@@ -22,7 +23,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var tempo1 = new Tempo(100);
             var tempo2 = default(Tempo);
-            Assert.IsFalse(tempo1 == tempo2, "First tempo equals to second one.");
+            ClassicAssert.IsFalse(tempo1 == tempo2, "First tempo equals to second one.");
         }
 
         [Test]
@@ -30,7 +31,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var tempo1 = default(Tempo);
             var tempo2 = default(Tempo);
-            Assert.IsTrue(tempo1 == tempo2, "First tempo doesn't equal to second one.");
+            ClassicAssert.IsTrue(tempo1 == tempo2, "First tempo doesn't equal to second one.");
         }
 
         [Test]
@@ -38,7 +39,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var tempo1 = new Tempo(200);
             var tempo2 = new Tempo(200);
-            Assert.IsTrue(tempo1 == tempo2, "First tempo doesn't equal to second one.");
+            ClassicAssert.IsTrue(tempo1 == tempo2, "First tempo doesn't equal to second one.");
         }
 
         [Test]
@@ -46,7 +47,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var tempo1 = new Tempo(200);
             var tempo2 = new Tempo(100);
-            Assert.IsFalse(tempo1 == tempo2, "First tempo equals to second one.");
+            ClassicAssert.IsFalse(tempo1 == tempo2, "First tempo equals to second one.");
         }
 
         [Test]
@@ -54,7 +55,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var tempo1 = default(Tempo);
             var tempo2 = new Tempo(100);
-            Assert.IsTrue(tempo1 != tempo2, "First tempo equals to second one.");
+            ClassicAssert.IsTrue(tempo1 != tempo2, "First tempo equals to second one.");
         }
 
         [Test]
@@ -62,7 +63,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var tempo1 = new Tempo(100);
             var tempo2 = default(Tempo);
-            Assert.IsTrue(tempo1 != tempo2, "First tempo equals to second one.");
+            ClassicAssert.IsTrue(tempo1 != tempo2, "First tempo equals to second one.");
         }
 
         [Test]
@@ -70,7 +71,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var tempo1 = default(Tempo);
             var tempo2 = default(Tempo);
-            Assert.IsFalse(tempo1 != tempo2, "First tempo doesn't equal to second one.");
+            ClassicAssert.IsFalse(tempo1 != tempo2, "First tempo doesn't equal to second one.");
         }
 
         [Test]
@@ -78,7 +79,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var tempo1 = new Tempo(200);
             var tempo2 = new Tempo(200);
-            Assert.IsFalse(tempo1 != tempo2, "First tempo doesn't equal to second one.");
+            ClassicAssert.IsFalse(tempo1 != tempo2, "First tempo doesn't equal to second one.");
         }
 
         [Test]
@@ -86,7 +87,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var tempo1 = new Tempo(200);
             var tempo2 = new Tempo(100);
-            Assert.IsTrue(tempo1 != tempo2, "First tempo equals to second one.");
+            ClassicAssert.IsTrue(tempo1 != tempo2, "First tempo equals to second one.");
         }
 
         [Test]
@@ -94,7 +95,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var tempo1 = default(Tempo);
             var tempo2 = new Tempo(100);
-            Assert.Throws<ArgumentNullException>(() => { var x = tempo1 < tempo2; }, "Exception not thrown for null tempo.");
+            ClassicAssert.Throws<ArgumentNullException>(() => { var x = tempo1 < tempo2; }, "Exception not thrown for null tempo.");
         }
 
         [Test]
@@ -102,7 +103,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var tempo1 = new Tempo(100);
             var tempo2 = default(Tempo);
-            Assert.Throws<ArgumentNullException>(() => { var x = tempo1 < tempo2; }, "Exception not thrown for null tempo.");
+            ClassicAssert.Throws<ArgumentNullException>(() => { var x = tempo1 < tempo2; }, "Exception not thrown for null tempo.");
         }
 
         [Test]
@@ -110,7 +111,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var tempo1 = default(Tempo);
             var tempo2 = default(Tempo);
-            Assert.Throws<ArgumentNullException>(() => { var x = tempo1 < tempo2; }, "Exception not thrown for null tempo.");
+            ClassicAssert.Throws<ArgumentNullException>(() => { var x = tempo1 < tempo2; }, "Exception not thrown for null tempo.");
         }
 
         [Test]
@@ -118,7 +119,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var tempo1 = new Tempo(200);
             var tempo2 = new Tempo(200);
-            Assert.IsFalse(tempo1 < tempo2, "First tempo less than second one.");
+            ClassicAssert.IsFalse(tempo1 < tempo2, "First tempo less than second one.");
         }
 
         [Test]
@@ -126,7 +127,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var tempo1 = new Tempo(100);
             var tempo2 = new Tempo(200);
-            Assert.IsTrue(tempo1 < tempo2, "First tempo doesn't less than second one.");
+            ClassicAssert.IsTrue(tempo1 < tempo2, "First tempo doesn't less than second one.");
         }
 
         [Test]
@@ -134,7 +135,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var tempo1 = new Tempo(200);
             var tempo2 = new Tempo(100);
-            Assert.IsFalse(tempo1 < tempo2, "First tempo less than second one.");
+            ClassicAssert.IsFalse(tempo1 < tempo2, "First tempo less than second one.");
         }
 
         [Test]
@@ -142,7 +143,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var tempo1 = default(Tempo);
             var tempo2 = new Tempo(100);
-            Assert.Throws<ArgumentNullException>(() => { var x = tempo1 <= tempo2; }, "Exception not thrown for null tempo.");
+            ClassicAssert.Throws<ArgumentNullException>(() => { var x = tempo1 <= tempo2; }, "Exception not thrown for null tempo.");
         }
 
         [Test]
@@ -150,7 +151,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var tempo1 = new Tempo(100);
             var tempo2 = default(Tempo);
-            Assert.Throws<ArgumentNullException>(() => { var x = tempo1 <= tempo2; }, "Exception not thrown for null tempo.");
+            ClassicAssert.Throws<ArgumentNullException>(() => { var x = tempo1 <= tempo2; }, "Exception not thrown for null tempo.");
         }
 
         [Test]
@@ -158,7 +159,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var tempo1 = default(Tempo);
             var tempo2 = default(Tempo);
-            Assert.Throws<ArgumentNullException>(() => { var x = tempo1 <= tempo2; }, "Exception not thrown for null tempo.");
+            ClassicAssert.Throws<ArgumentNullException>(() => { var x = tempo1 <= tempo2; }, "Exception not thrown for null tempo.");
         }
 
         [Test]
@@ -166,7 +167,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var tempo1 = new Tempo(200);
             var tempo2 = new Tempo(200);
-            Assert.IsTrue(tempo1 <= tempo2, "First tempo doesn't less than or equal to second one.");
+            ClassicAssert.IsTrue(tempo1 <= tempo2, "First tempo doesn't less than or equal to second one.");
         }
 
         [Test]
@@ -174,7 +175,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var tempo1 = new Tempo(100);
             var tempo2 = new Tempo(200);
-            Assert.IsTrue(tempo1 <= tempo2, "First tempo doesn't less than or equals to second one.");
+            ClassicAssert.IsTrue(tempo1 <= tempo2, "First tempo doesn't less than or equals to second one.");
         }
 
         [Test]
@@ -182,7 +183,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var tempo1 = new Tempo(200);
             var tempo2 = new Tempo(100);
-            Assert.IsFalse(tempo1 <= tempo2, "First tempo less than or equals to second one.");
+            ClassicAssert.IsFalse(tempo1 <= tempo2, "First tempo less than or equals to second one.");
         }
 
         [Test]
@@ -190,7 +191,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var tempo1 = default(Tempo);
             var tempo2 = new Tempo(100);
-            Assert.Throws<ArgumentNullException>(() => { var x = tempo1 > tempo2; }, "Exception not thrown for null tempo.");
+            ClassicAssert.Throws<ArgumentNullException>(() => { var x = tempo1 > tempo2; }, "Exception not thrown for null tempo.");
         }
 
         [Test]
@@ -198,7 +199,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var tempo1 = new Tempo(100);
             var tempo2 = default(Tempo);
-            Assert.Throws<ArgumentNullException>(() => { var x = tempo1 > tempo2; }, "Exception not thrown for null tempo.");
+            ClassicAssert.Throws<ArgumentNullException>(() => { var x = tempo1 > tempo2; }, "Exception not thrown for null tempo.");
         }
 
         [Test]
@@ -206,7 +207,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var tempo1 = default(Tempo);
             var tempo2 = default(Tempo);
-            Assert.Throws<ArgumentNullException>(() => { var x = tempo1 > tempo2; }, "Exception not thrown for null tempo.");
+            ClassicAssert.Throws<ArgumentNullException>(() => { var x = tempo1 > tempo2; }, "Exception not thrown for null tempo.");
         }
 
         [Test]
@@ -214,7 +215,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var tempo1 = new Tempo(200);
             var tempo2 = new Tempo(200);
-            Assert.IsFalse(tempo1 > tempo2, "First tempo greater than second one.");
+            ClassicAssert.IsFalse(tempo1 > tempo2, "First tempo greater than second one.");
         }
 
         [Test]
@@ -222,7 +223,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var tempo1 = new Tempo(200);
             var tempo2 = new Tempo(100);
-            Assert.IsTrue(tempo1 > tempo2, "First tempo doesn't greater than second one.");
+            ClassicAssert.IsTrue(tempo1 > tempo2, "First tempo doesn't greater than second one.");
         }
 
         [Test]
@@ -230,7 +231,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var tempo1 = new Tempo(100);
             var tempo2 = new Tempo(200);
-            Assert.IsFalse(tempo1 > tempo2, "First tempo greater than second one.");
+            ClassicAssert.IsFalse(tempo1 > tempo2, "First tempo greater than second one.");
         }
 
         [Test]
@@ -238,7 +239,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var tempo1 = default(Tempo);
             var tempo2 = new Tempo(100);
-            Assert.Throws<ArgumentNullException>(() => { var x = tempo1 >= tempo2; }, "Exception not thrown for null tempo.");
+            ClassicAssert.Throws<ArgumentNullException>(() => { var x = tempo1 >= tempo2; }, "Exception not thrown for null tempo.");
         }
 
         [Test]
@@ -246,7 +247,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var tempo1 = new Tempo(100);
             var tempo2 = default(Tempo);
-            Assert.Throws<ArgumentNullException>(() => { var x = tempo1 >= tempo2; }, "Exception not thrown for null tempo.");
+            ClassicAssert.Throws<ArgumentNullException>(() => { var x = tempo1 >= tempo2; }, "Exception not thrown for null tempo.");
         }
 
         [Test]
@@ -254,7 +255,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var tempo1 = default(Tempo);
             var tempo2 = default(Tempo);
-            Assert.Throws<ArgumentNullException>(() => { var x = tempo1 >= tempo2; }, "Exception not thrown for null tempo.");
+            ClassicAssert.Throws<ArgumentNullException>(() => { var x = tempo1 >= tempo2; }, "Exception not thrown for null tempo.");
         }
 
         [Test]
@@ -262,7 +263,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var tempo1 = new Tempo(200);
             var tempo2 = new Tempo(200);
-            Assert.IsTrue(tempo1 >= tempo2, "First tempo doesn't greater than or equal to second one.");
+            ClassicAssert.IsTrue(tempo1 >= tempo2, "First tempo doesn't greater than or equal to second one.");
         }
 
         [Test]
@@ -270,7 +271,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var tempo1 = new Tempo(200);
             var tempo2 = new Tempo(100);
-            Assert.IsTrue(tempo1 >= tempo2, "First tempo doesn't greater than or equals to second one.");
+            ClassicAssert.IsTrue(tempo1 >= tempo2, "First tempo doesn't greater than or equals to second one.");
         }
 
         [Test]
@@ -278,28 +279,28 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var tempo1 = new Tempo(100);
             var tempo2 = new Tempo(200);
-            Assert.IsFalse(tempo1 >= tempo2, "First tempo greater than or equals to second one.");
+            ClassicAssert.IsFalse(tempo1 >= tempo2, "First tempo greater than or equals to second one.");
         }
 
         [Test]
         public void CreateFromBpm()
         {
             var tempo = Tempo.FromBeatsPerMinute(0.5);
-            Assert.AreEqual(0.5, tempo.BeatsPerMinute, 0.00001, "BPM is invalid.");
+            ClassicAssert.AreEqual(0.5, tempo.BeatsPerMinute, 0.00001, "BPM is invalid.");
         }
 
         [Test]
         public void CreateFromMillisecondsPerQuarterNote_GetBpm_1()
         {
             var tempo = Tempo.FromMillisecondsPerQuarterNote(1000);
-            Assert.AreEqual(60, tempo.BeatsPerMinute, "BPM is invalid.");
+            ClassicAssert.AreEqual(60, tempo.BeatsPerMinute, "BPM is invalid.");
         }
 
         [Test]
         public void CreateFromMillisecondsPerQuarterNote_GetBpm_2()
         {
             var tempo = Tempo.FromMillisecondsPerQuarterNote(40000);
-            Assert.AreEqual(1.5, tempo.BeatsPerMinute, "BPM is invalid.");
+            ClassicAssert.AreEqual(1.5, tempo.BeatsPerMinute, "BPM is invalid.");
         }
 
         #endregion

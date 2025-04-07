@@ -4,6 +4,7 @@ using Melanchall.DryWetMidi.Interaction;
 using Melanchall.DryWetMidi.Tests.Utilities;
 using Melanchall.DryWetMidi.Tools;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -88,7 +89,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             var midiFile = new MidiFile(trackChunks);
 
             var newFiles = midiFile.SplitByGrid(grid, settings).ToList();
-            Assert.AreEqual(outputTimedEvents.Length, newFiles.Count, "New files count is invalid.");
+            ClassicAssert.AreEqual(outputTimedEvents.Length, newFiles.Count, "New files count is invalid.");
 
             for (var i = 0; i < outputTimedEvents.Length; i++)
             {
@@ -181,7 +182,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
             var stepType = TimeSpanTypes[step.GetType()];
             var partLength = data.ActualObjects.First().LengthAs(stepType, tempoMap);
-            Assert.IsTrue(data.ActualObjects.All(o => o.LengthAs(stepType, tempoMap).Equals(partLength)),
+            ClassicAssert.IsTrue(data.ActualObjects.All(o => o.LengthAs(stepType, tempoMap).Equals(partLength)),
                           $"Objects have different length measured as {stepType}.");
         }
 

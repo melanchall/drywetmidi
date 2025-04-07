@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System;
 using Melanchall.DryWetMidi.Tests.Utilities;
 using System.Linq;
+using NUnit.Framework.Legacy;
 
 namespace Melanchall.DryWetMidi.Tests.Interaction
 {
@@ -1356,7 +1357,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             var eventsCollection = new EventsCollection();
             eventsCollection.AddRange(midiEvents);
 
-            Assert.AreEqual(
+            ClassicAssert.AreEqual(
                 expectedRemovedCount,
                 eventsCollection.RemoveObjects(objectType, match, settings),
                 "Invalid count of removed objects for events collection.");
@@ -1377,7 +1378,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var trackChunk = new TrackChunk(midiEvents);
 
-            Assert.AreEqual(
+            ClassicAssert.AreEqual(
                 expectedRemovedCount,
                 trackChunk.RemoveObjects(objectType, match, settings),
                 "Invalid count of removed objects for track chunk.");
@@ -1397,7 +1398,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var trackChunks = midiEvents.Select(e => new TrackChunk(e)).ToList();
 
-            Assert.AreEqual(
+            ClassicAssert.AreEqual(
                 expectedRemovedCount,
                 trackChunks.RemoveObjects(objectType, match, settings),
                 "Invalid count of removed objects for track chunks.");
@@ -1416,7 +1417,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var midiFile = new MidiFile(midiEvents.Select(e => new TrackChunk(e)));
 
-            Assert.AreEqual(
+            ClassicAssert.AreEqual(
                 expectedRemovedCount,
                 midiFile.RemoveObjects(objectType, match, settings),
                 "Invalid count of removed objects for file.");
@@ -1436,7 +1437,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
             var expectedRemovedCount = eventsCollection.GetObjects(objectType, settings).Count;
 
-            Assert.AreEqual(
+            ClassicAssert.AreEqual(
                 expectedRemovedCount,
                 eventsCollection.RemoveObjects(objectType, settings),
                 "Invalid count of removed objects for events collection.");
@@ -1456,7 +1457,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             var trackChunk = new TrackChunk(midiEvents);
             var expectedRemovedCount = trackChunk.GetObjects(objectType, settings).Count;
 
-            Assert.AreEqual(
+            ClassicAssert.AreEqual(
                 expectedRemovedCount,
                 trackChunk.RemoveObjects(objectType, settings),
                 "Invalid count of removed objects for track chunk.");
@@ -1475,7 +1476,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             var trackChunks = midiEvents.Select(e => new TrackChunk(e)).ToList();
             var expectedRemovedCount = trackChunks.GetObjects(objectType, settings).Count;
 
-            Assert.AreEqual(
+            ClassicAssert.AreEqual(
                 expectedRemovedCount,
                 trackChunks.RemoveObjects(objectType, settings),
                 "Invalid count of removed objects for track chunks.");
@@ -1493,7 +1494,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             var midiFile = new MidiFile(midiEvents.Select(e => new TrackChunk(e)));
             var expectedRemovedCount = midiFile.GetObjects(objectType, settings).Count;
 
-            Assert.AreEqual(
+            ClassicAssert.AreEqual(
                 expectedRemovedCount,
                 midiFile.RemoveObjects(objectType, settings),
                 "Invalid count of removed objects for file.");
@@ -1504,7 +1505,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
         private static void CheckNoNewEventsReferences(
             IEnumerable<MidiEvent> originalEvents,
-            IEnumerable<MidiEvent> actualEvents) => Assert.IsTrue(
+            IEnumerable<MidiEvent> actualEvents) => ClassicAssert.IsTrue(
             actualEvents.All(e => originalEvents.Any(ee => object.ReferenceEquals(e, ee))),
             "There are new events references.");
 

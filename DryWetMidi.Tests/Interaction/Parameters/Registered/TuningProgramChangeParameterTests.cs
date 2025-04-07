@@ -1,6 +1,7 @@
 ﻿using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Interaction;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace Melanchall.DryWetMidi.Tests.Interaction
 {
@@ -13,7 +14,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         public void CheckDefaultData()
         {
             var parameter = GetDefaultParameter();
-            Assert.AreEqual((SevenBitNumber)0, parameter.ProgramNumber, "Default program number is invalid.");
+            ClassicAssert.AreEqual((SevenBitNumber)0, parameter.ProgramNumber, "Default program number is invalid.");
 
             CheckTimedEvents(
                 parameter,

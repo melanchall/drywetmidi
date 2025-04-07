@@ -4,6 +4,7 @@ using Melanchall.DryWetMidi.Interaction;
 using Melanchall.DryWetMidi.Tests.Utilities;
 using Melanchall.DryWetMidi.Tools;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -81,7 +82,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         #region Test methods
 
         [Test]
-        public void MergeSequentially_NoFiles() => Assert.Throws<ArgumentException>(() => MergeSequentially(
+        public void MergeSequentially_NoFiles() => ClassicAssert.Throws<ArgumentException>(() => MergeSequentially(
             midiFiles: new MidiFile[0],
             settings: null,
             expectedMidiFile: null));
@@ -120,7 +121,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             expectedMidiFile: new MidiFile { TimeDivision = new TicksPerQuarterNoteTimeDivision(30) });
 
         [Test]
-        public void MergeSequentially_EmptyFiles_DifferentTpqn_Failed() => Assert.Throws<AssertionException>(() => MergeSequentially(
+        public void MergeSequentially_EmptyFiles_DifferentTpqn_Failed() => ClassicAssert.Throws<AssertionException>(() => MergeSequentially(
             midiFiles: new[]
             {
                 new MidiFile { TimeDivision = new TicksPerQuarterNoteTimeDivision(2) },
@@ -937,7 +938,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             });
 
         [Test]
-        public void MergeSequentially_NonTrackChunk_Copy_Fail() => Assert.Throws<AssertionException>(() => MergeSequentially(
+        public void MergeSequentially_NonTrackChunk_Copy_Fail() => ClassicAssert.Throws<AssertionException>(() => MergeSequentially(
             midiFiles: new[]
             {
                 new MidiFile(
@@ -1353,7 +1354,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             });
 
         [Test]
-        public void MergeSequentially_MinimizeTrackChunksCount_NoFiles() => Assert.Throws<ArgumentException>(() => MergeSequentially(
+        public void MergeSequentially_MinimizeTrackChunksCount_NoFiles() => ClassicAssert.Throws<ArgumentException>(() => MergeSequentially(
             midiFiles: new MidiFile[0],
             settings: new SequentialMergingSettings
             {
@@ -1404,7 +1405,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             expectedMidiFile: new MidiFile { TimeDivision = new TicksPerQuarterNoteTimeDivision(30) });
 
         [Test]
-        public void MergeSequentially_MinimizeTrackChunksCount_EmptyFiles_DifferentTpqn_Failed() => Assert.Throws<AssertionException>(() => MergeSequentially(
+        public void MergeSequentially_MinimizeTrackChunksCount_EmptyFiles_DifferentTpqn_Failed() => ClassicAssert.Throws<AssertionException>(() => MergeSequentially(
             midiFiles: new[]
             {
                 new MidiFile { TimeDivision = new TicksPerQuarterNoteTimeDivision(2) },
@@ -1978,7 +1979,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             });
 
         [Test]
-        public void MergeSequentially_MinimizeTrackChunksCount_NonTrackChunk_Copy_Fail() => Assert.Throws<AssertionException>(() => MergeSequentially(
+        public void MergeSequentially_MinimizeTrackChunksCount_NonTrackChunk_Copy_Fail() => ClassicAssert.Throws<AssertionException>(() => MergeSequentially(
             midiFiles: new[]
             {
                 new MidiFile(
@@ -2425,7 +2426,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
             var originalEvents = GetEvents(originalFiles);
             var newEvents = GetEvents(new[] { resultFile });
-            Assert.IsFalse(newEvents.Any(e => originalEvents.Contains(e)), "Result file contains original events.");
+            ClassicAssert.IsFalse(newEvents.Any(e => originalEvents.Contains(e)), "Result file contains original events.");
         }
 
         private static void CheckDurationAsSum(
@@ -2460,7 +2461,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             }
 
             var actualLength = resultFile.GetDuration(timeSpanType);
-            Assert.AreEqual(expectedLength, actualLength, $"Invalid length of {timeSpanType} type.");
+            ClassicAssert.AreEqual(expectedLength, actualLength, $"Invalid length of {timeSpanType} type.");
         }
 
         #endregion

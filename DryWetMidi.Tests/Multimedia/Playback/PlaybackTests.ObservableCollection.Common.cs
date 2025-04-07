@@ -5,6 +5,7 @@ using Melanchall.DryWetMidi.Multimedia;
 using Melanchall.DryWetMidi.Interaction;
 using System.Linq;
 using Melanchall.DryWetMidi.Core;
+using NUnit.Framework.Legacy;
 
 namespace Melanchall.DryWetMidi.Tests.Multimedia
 {
@@ -69,7 +70,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             Playback playback)
         {
             var actualDuration = (TimeSpan)playback.GetDuration<MetricTimeSpan>();
-            Assert.Less(
+            ClassicAssert.Less(
                 (expectedDuration - actualDuration).Duration(),
                 TimeSpan.FromMilliseconds(4),
                 $"Invalid duration after note added. Actual = {actualDuration}. Expected = {expectedDuration}.");

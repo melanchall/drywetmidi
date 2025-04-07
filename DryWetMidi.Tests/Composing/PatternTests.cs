@@ -2,6 +2,7 @@
 using Melanchall.DryWetMidi.Composing;
 using Melanchall.DryWetMidi.MusicTheory;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace Melanchall.DryWetMidi.Tests.Composing
 {
@@ -32,7 +33,7 @@ namespace Melanchall.DryWetMidi.Tests.Composing
 
             var patternClone = pattern.Clone();
 
-            Assert.AreEqual(10, patternClone.Actions.Count(), "Actions count is invalid.");
+            ClassicAssert.AreEqual(10, patternClone.Actions.Count(), "Actions count is invalid.");
 
             var actions = pattern.Actions.ToArray();
             var actionsClone = patternClone.Actions.ToArray();
@@ -42,8 +43,8 @@ namespace Melanchall.DryWetMidi.Tests.Composing
                 var action = actions[i];
                 var actionClone = actionsClone[i];
 
-                Assert.AreEqual(action.GetType(), actionClone.GetType(), "Action type is invalid.");
-                Assert.AreNotSame(action, actionClone, "Actions are the same object.");
+                ClassicAssert.AreEqual(action.GetType(), actionClone.GetType(), "Action type is invalid.");
+                ClassicAssert.AreNotSame(action, actionClone, "Actions are the same object.");
             }
         }
 

@@ -2,6 +2,7 @@
 using Melanchall.DryWetMidi.Tests.Utilities;
 using Melanchall.DryWetMidi.Tools;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -344,7 +345,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
             var midiFilesByChunks = midiFile.SplitByChunks(settings).ToList();
 
-            Assert.AreEqual(expectedFiles.Count, midiFilesByChunks.Count, "Invalid count of new files.");
+            ClassicAssert.AreEqual(expectedFiles.Count, midiFilesByChunks.Count, "Invalid count of new files.");
 
             var i = 0;
 

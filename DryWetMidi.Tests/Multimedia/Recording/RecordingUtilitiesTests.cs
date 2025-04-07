@@ -10,6 +10,7 @@ using Melanchall.DryWetMidi.Interaction;
 using Melanchall.DryWetMidi.Tests.Common;
 using Melanchall.DryWetMidi.Tests.Utilities;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace Melanchall.DryWetMidi.Tests.Multimedia
 {
@@ -65,10 +66,10 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
                 var threadAliveTimeout = waitTimeout + TimeSpan.FromSeconds(30);
                 var threadExited = WaitOperations.Wait(() => !sendingThread.IsAlive, threadAliveTimeout);
-                Assert.IsTrue(threadExited, $"Sending thread is alive after [{threadAliveTimeout}].");
+                ClassicAssert.IsTrue(threadExited, $"Sending thread is alive after [{threadAliveTimeout}].");
 
                 var eventsReceived = WaitOperations.Wait(() => receivedEvents.Count >= eventsToSend.Length, waitTimeout);
-                Assert.IsTrue(eventsReceived, $"Events are not received for [{waitTimeout}] (received are: {string.Join(", ", receivedEvents)}).");
+                ClassicAssert.IsTrue(eventsReceived, $"Events are not received for [{waitTimeout}] (received are: {string.Join(", ", receivedEvents)}).");
 
                 recording.Stop();
 

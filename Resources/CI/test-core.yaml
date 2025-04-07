@@ -59,25 +59,33 @@ stages:
     - template: Templates/step-setup-framework.yaml
       parameters:
         framework: '$(Framework)'
+        
+    - task: PowerShell@2
+      displayName: Remove Multimedia folder
+      inputs:
+        targetType: 'inline'
+        script: |
+          $multimediaPath = Resolve-Path "DryWetMidi.Tests\Multimedia"
+          Remove-Item $multimediaPath -Recurse -Force
     
     - template: Templates/step-build-tests.yaml
       parameters:
         tfm: '$(Tfm)'
     
     - task: DotNetCoreCLI@2
-      displayName: Run unit tests (Windows)
-      condition: not(eq(variables.VmImage, 'macos-latest'))
+      displayName: Run unit tests # (non-macOS)
+      #condition: not(eq(variables.VmImage, 'macos-latest'))
       inputs:
         command: 'test'
         projects: 'DryWetMidi.Tests/Melanchall.DryWetMidi.Tests.csproj'
-        arguments: '--blame --no-build --configuration $(TestBuildConfiguration) --filter (FullyQualifiedName~Melanchall.DryWetMidi.Tests.Core|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Common|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Composing|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Interaction|FullyQualifiedName~Melanchall.DryWetMidi.Tests.MusicTheory|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Standards|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Tools|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Utilities) --framework $(Tfm) --verbosity normal --diag diagnostic.log --logger "console;verbosity=normal"'
+        arguments: '--blame --no-build --configuration $(TestBuildConfiguration) --framework $(Tfm) --verbosity normal --diag diagnostic.log --logger "console;verbosity=normal"'
         
-    - task: DotNetCoreCLI@2
-      displayName: Run unit tests (non-Windows)
-      condition: eq(variables.VmImage, 'macos-latest')
-      inputs:
-        command: 'test'
-        projects: 'DryWetMidi.Tests/Melanchall.DryWetMidi.Tests.csproj'
-        arguments: '--blame --no-build --configuration $(TestBuildConfiguration) --filter ((FullyQualifiedName~Melanchall.DryWetMidi.Tests.Core|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Common|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Composing|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Interaction|FullyQualifiedName~Melanchall.DryWetMidi.Tests.MusicTheory|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Standards|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Tools|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Utilities)&Name!=CheckValidFilesReadingByReferences) --framework $(Tfm) --verbosity normal --diag diagnostic.log --logger "console;verbosity=normal"'
+#    - task: DotNetCoreCLI@2
+#      displayName: Run unit tests (macOS)
+#      condition: eq(variables.VmImage, 'macos-latest')
+#      inputs:
+#        command: 'test'
+#        projects: 'DryWetMidi.Tests/Melanchall.DryWetMidi.Tests.csproj'
+#        arguments: '--blame --no-build --configuration $(TestBuildConfiguration) --filter ((FullyQualifiedName~Melanchall.DryWetMidi.Tests.Core|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Common|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Composing|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Interaction|FullyQualifiedName~Melanchall.DryWetMidi.Tests.MusicTheory|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Standards|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Tools|FullyQualifiedName~Melanchall.DryWetMidi.Tests.Utilities)&Name!=CheckValidFilesReadingByReferences) --framework $(Tfm) --verbosity normal --diag diagnostic.log --logger "console;verbosity=normal"'
         
     - template: Templates/step-collect-logs.yaml

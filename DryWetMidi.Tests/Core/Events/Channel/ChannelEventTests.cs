@@ -1,6 +1,7 @@
 ﻿using System;
 using Melanchall.DryWetMidi.Core;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace Melanchall.DryWetMidi.Tests.Core
 {
@@ -13,13 +14,13 @@ namespace Melanchall.DryWetMidi.Tests.Core
         public void PitchBend_SetInvalidPitchValue()
         {
             var pitchBendEvent = new PitchBendEvent();
-            Assert.Throws<ArgumentOutOfRangeException>(() => pitchBendEvent.PitchValue = PitchBendEvent.MaxPitchValue + 1);
+            ClassicAssert.Throws<ArgumentOutOfRangeException>(() => pitchBendEvent.PitchValue = PitchBendEvent.MaxPitchValue + 1);
         }
 
         [Test]
         public void PitchBend_CreateWithInvalidPitchValue()
         {
-            Assert.Throws<ArgumentOutOfRangeException>(() => new PitchBendEvent(PitchBendEvent.MaxPitchValue + 1));
+            ClassicAssert.Throws<ArgumentOutOfRangeException>(() => new PitchBendEvent(PitchBendEvent.MaxPitchValue + 1));
         }
 
         [Test]
@@ -29,7 +30,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
 
             var pitchBendEvent = new PitchBendEvent();
             pitchBendEvent.PitchValue = pitchValue;
-            Assert.AreEqual(pitchValue, pitchBendEvent.PitchValue, "Pitch value is set incorrectly.");
+            ClassicAssert.AreEqual(pitchValue, pitchBendEvent.PitchValue, "Pitch value is set incorrectly.");
         }
 
         [Test]
@@ -38,14 +39,14 @@ namespace Melanchall.DryWetMidi.Tests.Core
             const ushort pitchValue = 1234;
 
             var pitchBendEvent = new PitchBendEvent(pitchValue);
-            Assert.AreEqual(pitchValue, pitchBendEvent.PitchValue, "Pitch value is set incorrectly.");
+            ClassicAssert.AreEqual(pitchValue, pitchBendEvent.PitchValue, "Pitch value is set incorrectly.");
         }
 
         [Test]
         public void PitchBend_CreateDefault()
         {
             var pitchBendEvent = new PitchBendEvent();
-            Assert.AreEqual(PitchBendEvent.DefaultPitchValue, pitchBendEvent.PitchValue, "Pitch value is invalid.");
+            ClassicAssert.AreEqual(PitchBendEvent.DefaultPitchValue, pitchBendEvent.PitchValue, "Pitch value is invalid.");
         }
 
         #endregion

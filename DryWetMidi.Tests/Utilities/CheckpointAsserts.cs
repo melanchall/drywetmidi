@@ -1,5 +1,6 @@
 ﻿using Melanchall.DryWetMidi.Common;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace Melanchall.DryWetMidi.Tests.Utilities
 {
@@ -8,10 +9,10 @@ namespace Melanchall.DryWetMidi.Tests.Utilities
         #region Methods
 
         public static void CheckCheckpointNotReached(this TestCheckpoints checkpoints, string checkpointName) =>
-            Assert.IsFalse(checkpoints.IsCheckpointReached(checkpointName), $"Checkpoint [{checkpointName}] is reached.");
+            ClassicAssert.IsFalse(checkpoints.IsCheckpointReached(checkpointName), $"Checkpoint [{checkpointName}] is reached.");
 
         public static void CheckCheckpointReached(this TestCheckpoints checkpoints, string checkpointName) =>
-            Assert.IsTrue(checkpoints.IsCheckpointReached(checkpointName), $"Checkpoint [{checkpointName}] is not reached.");
+            ClassicAssert.IsTrue(checkpoints.IsCheckpointReached(checkpointName), $"Checkpoint [{checkpointName}] is not reached.");
 
         #endregion
     }

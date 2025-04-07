@@ -7,6 +7,7 @@ using Melanchall.DryWetMidi.Interaction;
 using Melanchall.DryWetMidi.Multimedia;
 using Melanchall.DryWetMidi.Tests.Common;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace Melanchall.DryWetMidi.Tests.Multimedia
 {
@@ -329,7 +330,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var stopPeriod = TimeSpan.FromMilliseconds(200);
 
             var stepAfterStop = TimeSpan.FromMilliseconds(300);
-            Assert.LessOrEqual(stepAfterStop, ScaleTimeSpan(stopAfter, speed), "Step after stop is invalid.");
+            ClassicAssert.LessOrEqual(stepAfterStop, ScaleTimeSpan(stopAfter, speed), "Step after stop is invalid.");
 
             var stepAfterResumed = TimeSpan.FromMilliseconds(100);
 
@@ -338,7 +339,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var thirdAfterResumeDelay = TimeSpan.FromMilliseconds(200);
 
             var lastEventTime = TimeSpan.FromMilliseconds(3000);
-            Assert.GreaterOrEqual(lastEventTime, ScaleTimeSpan(stopAfter + firstAfterResumeDelay + secondAfterResumeDelay + thirdAfterResumeDelay, speed) - stepAfterStop - stepAfterResumed, "Last event time is invalid.");
+            ClassicAssert.GreaterOrEqual(lastEventTime, ScaleTimeSpan(stopAfter + firstAfterResumeDelay + secondAfterResumeDelay + thirdAfterResumeDelay, speed) - stepAfterStop - stepAfterResumed, "Last event time is invalid.");
 
             CheckPlayback(
                 useOutputDevice: false,

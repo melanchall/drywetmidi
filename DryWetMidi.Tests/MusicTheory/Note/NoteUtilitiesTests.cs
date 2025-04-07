@@ -1,5 +1,6 @@
 ﻿using Melanchall.DryWetMidi.MusicTheory;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace Melanchall.DryWetMidi.Tests.MusicTheory
 {
@@ -29,7 +30,7 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
         {
             var interval = Interval.FromHalfSteps(halfSteps);
             var actualNoteName = noteName.Transpose(interval);
-            Assert.AreEqual(expectedNoteName, actualNoteName, "Transposed note name is invalid.");
+            ClassicAssert.AreEqual(expectedNoteName, actualNoteName, "Transposed note name is invalid.");
         }
 
         #endregion

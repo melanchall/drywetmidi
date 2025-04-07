@@ -4,6 +4,7 @@ using Melanchall.DryWetMidi.Interaction;
 using Melanchall.DryWetMidi.Tests.Common;
 using Melanchall.DryWetMidi.Tests.Utilities;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using System;
 
 namespace Melanchall.DryWetMidi.Tests.Interaction
@@ -225,7 +226,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             });
 
         [Test]
-        public void WriteObject_WrongOrder() => Assert.Throws<InvalidOperationException>(() => WriteObjects(
+        public void WriteObject_WrongOrder() => ClassicAssert.Throws<InvalidOperationException>(() => WriteObjects(
             writersActions: (tokensWriter, objectsWriter) =>
             {
                 tokensWriter.StartTrackChunk();

@@ -1,5 +1,6 @@
 ﻿using Melanchall.DryWetMidi.Core;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using System;
 using System.Linq;
 
@@ -36,7 +37,7 @@ namespace Melanchall.DryWetMidi.Tests.Utilities
             var invalidNamespaces = actualNamespaces
                 .Where(n => !expectedNamespaces.Contains(n.Namespace))
                 .ToArray();
-            Assert.IsFalse(
+            ClassicAssert.IsFalse(
                 invalidNamespaces.Any(),
                 $"Following namespaces are invalid: {string.Join(", ", invalidNamespaces.Select(n => $"{n.Namespace} ({n.TypeName})"))}");
         }

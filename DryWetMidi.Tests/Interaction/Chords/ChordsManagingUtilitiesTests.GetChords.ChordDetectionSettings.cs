@@ -6,6 +6,7 @@ using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
 using Melanchall.DryWetMidi.Tests.Utilities;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace Melanchall.DryWetMidi.Tests.Interaction
 {
@@ -70,10 +71,10 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 {
                     foreach (var n in c.Notes)
                     {
-                        Assert.IsNotInstanceOf<CustomNote>(n, "Invalid note type.");
+                        ClassicAssert.IsNotInstanceOf<CustomNote>(n, "Invalid note type.");
 
-                        Assert.IsNotInstanceOf<CustomTimedEvent>(n.GetTimedNoteOnEvent(), "Invalid Note On timed event type.");
-                        Assert.IsNotInstanceOf<CustomTimedEvent>(n.GetTimedNoteOffEvent(), "Invalid Note Off timed event type.");
+                        ClassicAssert.IsNotInstanceOf<CustomTimedEvent>(n.GetTimedNoteOnEvent(), "Invalid Note On timed event type.");
+                        ClassicAssert.IsNotInstanceOf<CustomTimedEvent>(n.GetTimedNoteOffEvent(), "Invalid Note Off timed event type.");
                     }
                 }
             });
@@ -109,10 +110,10 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 {
                     foreach (var n in c.Notes)
                     {
-                        Assert.IsInstanceOf<CustomNote>(n, "Invalid note type.");
+                        ClassicAssert.IsInstanceOf<CustomNote>(n, "Invalid note type.");
 
-                        Assert.IsNotInstanceOf<CustomTimedEvent>(n.GetTimedNoteOnEvent(), "Invalid Note On timed event type.");
-                        Assert.IsNotInstanceOf<CustomTimedEvent>(n.GetTimedNoteOffEvent(), "Invalid Note Off timed event type.");
+                        ClassicAssert.IsNotInstanceOf<CustomTimedEvent>(n.GetTimedNoteOnEvent(), "Invalid Note On timed event type.");
+                        ClassicAssert.IsNotInstanceOf<CustomTimedEvent>(n.GetTimedNoteOffEvent(), "Invalid Note Off timed event type.");
                     }
                 }
             },
@@ -152,10 +153,10 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 {
                     foreach (var n in c.Notes)
                     {
-                        Assert.IsInstanceOf<CustomNote>(n, "Invalid note type.");
+                        ClassicAssert.IsInstanceOf<CustomNote>(n, "Invalid note type.");
 
-                        Assert.IsInstanceOf<CustomTimedEvent>(n.GetTimedNoteOnEvent(), "Invalid Note On timed event type.");
-                        Assert.IsInstanceOf<CustomTimedEvent>(n.GetTimedNoteOffEvent(), "Invalid Note Off timed event type.");
+                        ClassicAssert.IsInstanceOf<CustomTimedEvent>(n.GetTimedNoteOnEvent(), "Invalid Note On timed event type.");
+                        ClassicAssert.IsInstanceOf<CustomTimedEvent>(n.GetTimedNoteOffEvent(), "Invalid Note Off timed event type.");
                     }
                 }
             },
@@ -458,10 +459,10 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 {
                     foreach (var n in c.Notes)
                     {
-                        Assert.IsNotInstanceOf<CustomNote>(n, "Invalid note type.");
+                        ClassicAssert.IsNotInstanceOf<CustomNote>(n, "Invalid note type.");
 
-                        Assert.IsNotInstanceOf<CustomTimedEvent>(n.GetTimedNoteOnEvent(), "Invalid Note On timed event type.");
-                        Assert.IsNotInstanceOf<CustomTimedEvent>(n.GetTimedNoteOffEvent(), "Invalid Note Off timed event type.");
+                        ClassicAssert.IsNotInstanceOf<CustomTimedEvent>(n.GetTimedNoteOnEvent(), "Invalid Note On timed event type.");
+                        ClassicAssert.IsNotInstanceOf<CustomTimedEvent>(n.GetTimedNoteOffEvent(), "Invalid Note Off timed event type.");
                     }
                 }
             });
@@ -514,10 +515,10 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 {
                     foreach (var n in c.Notes)
                     {
-                        Assert.IsInstanceOf<CustomNote>(n, "Invalid note type.");
+                        ClassicAssert.IsInstanceOf<CustomNote>(n, "Invalid note type.");
 
-                        Assert.IsNotInstanceOf<CustomTimedEvent>(n.GetTimedNoteOnEvent(), "Invalid Note On timed event type.");
-                        Assert.IsNotInstanceOf<CustomTimedEvent>(n.GetTimedNoteOffEvent(), "Invalid Note Off timed event type.");
+                        ClassicAssert.IsNotInstanceOf<CustomTimedEvent>(n.GetTimedNoteOnEvent(), "Invalid Note On timed event type.");
+                        ClassicAssert.IsNotInstanceOf<CustomTimedEvent>(n.GetTimedNoteOffEvent(), "Invalid Note Off timed event type.");
                     }
                 }
             },
@@ -574,10 +575,10 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 {
                     foreach (var n in c.Notes)
                     {
-                        Assert.IsInstanceOf<CustomNote>(n, "Invalid note type.");
+                        ClassicAssert.IsInstanceOf<CustomNote>(n, "Invalid note type.");
 
-                        Assert.IsInstanceOf<CustomTimedEvent>(n.GetTimedNoteOnEvent(), "Invalid Note On timed event type.");
-                        Assert.IsInstanceOf<CustomTimedEvent>(n.GetTimedNoteOffEvent(), "Invalid Note Off timed event type.");
+                        ClassicAssert.IsInstanceOf<CustomTimedEvent>(n.GetTimedNoteOnEvent(), "Invalid Note On timed event type.");
+                        ClassicAssert.IsInstanceOf<CustomTimedEvent>(n.GetTimedNoteOffEvent(), "Invalid Note Off timed event type.");
                     }
                 }
             },

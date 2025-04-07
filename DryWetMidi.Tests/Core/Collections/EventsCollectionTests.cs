@@ -1,5 +1,6 @@
 ﻿using Melanchall.DryWetMidi.Core;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using System;
 
 namespace Melanchall.DryWetMidi.Tests.Core
@@ -497,9 +498,9 @@ namespace Melanchall.DryWetMidi.Tests.Core
             var eventsCollection = new EventsCollection();
             changeCollection(eventsCollection);
 
-            Assert.AreEqual(isInitialState, eventsCollection.IsInitialState, $"{nameof(EventsCollection.IsInitialState)} is invalid.");
-            Assert.AreEqual(hasTempoMapEvents, eventsCollection.HasTempoMapEvents, $"{nameof(EventsCollection.HasTempoMapEvents)} is invalid.");
-            Assert.AreEqual(lastTempoMapEventIndex, eventsCollection.LastTempoMapEventIndex, $"{nameof(EventsCollection.LastTempoMapEventIndex)} is invalid.");
+            ClassicAssert.AreEqual(isInitialState, eventsCollection.IsInitialState, $"{nameof(EventsCollection.IsInitialState)} is invalid.");
+            ClassicAssert.AreEqual(hasTempoMapEvents, eventsCollection.HasTempoMapEvents, $"{nameof(EventsCollection.HasTempoMapEvents)} is invalid.");
+            ClassicAssert.AreEqual(lastTempoMapEventIndex, eventsCollection.LastTempoMapEventIndex, $"{nameof(EventsCollection.LastTempoMapEventIndex)} is invalid.");
         }
 
         #endregion

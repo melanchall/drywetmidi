@@ -1,6 +1,7 @@
 ﻿using System;
 using Melanchall.DryWetMidi.Interaction;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace Melanchall.DryWetMidi.Tests.Interaction
 {
@@ -14,7 +15,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var timeSignature1 = default(TimeSignature);
             var timeSignature2 = new TimeSignature(2, 8);
-            Assert.IsFalse(timeSignature1 == timeSignature2, "First time signature equals to second one.");
+            ClassicAssert.IsFalse(timeSignature1 == timeSignature2, "First time signature equals to second one.");
         }
 
         [Test]
@@ -22,7 +23,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var timeSignature1 = new TimeSignature(2, 8);
             var timeSignature2 = default(TimeSignature);
-            Assert.IsFalse(timeSignature1 == timeSignature2, "First time signature equals to second one.");
+            ClassicAssert.IsFalse(timeSignature1 == timeSignature2, "First time signature equals to second one.");
         }
 
         [Test]
@@ -30,7 +31,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var timeSignature1 = default(TimeSignature);
             var timeSignature2 = default(TimeSignature);
-            Assert.IsTrue(timeSignature1 == timeSignature2, "First time signature doesn't equal to second one.");
+            ClassicAssert.IsTrue(timeSignature1 == timeSignature2, "First time signature doesn't equal to second one.");
         }
 
         [Test]
@@ -38,7 +39,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var timeSignature1 = new TimeSignature(2, 8);
             var timeSignature2 = new TimeSignature(2, 8);
-            Assert.IsTrue(timeSignature1 == timeSignature2, "First time signature doesn't equal to second one.");
+            ClassicAssert.IsTrue(timeSignature1 == timeSignature2, "First time signature doesn't equal to second one.");
         }
 
         [Test]
@@ -46,7 +47,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var timeSignature1 = new TimeSignature(2, 8);
             var timeSignature2 = new TimeSignature(1, 16);
-            Assert.IsFalse(timeSignature1 == timeSignature2, "First time signature equals to second one.");
+            ClassicAssert.IsFalse(timeSignature1 == timeSignature2, "First time signature equals to second one.");
         }
 
         [Test]
@@ -54,7 +55,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var timeSignature1 = default(TimeSignature);
             var timeSignature2 = new TimeSignature(2, 8);
-            Assert.IsTrue(timeSignature1 != timeSignature2, "First time signature equals to second one.");
+            ClassicAssert.IsTrue(timeSignature1 != timeSignature2, "First time signature equals to second one.");
         }
 
         [Test]
@@ -62,7 +63,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var timeSignature1 = new TimeSignature(2, 8);
             var timeSignature2 = default(TimeSignature);
-            Assert.IsTrue(timeSignature1 != timeSignature2, "First time signature equals to second one.");
+            ClassicAssert.IsTrue(timeSignature1 != timeSignature2, "First time signature equals to second one.");
         }
 
         [Test]
@@ -70,7 +71,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var timeSignature1 = default(TimeSignature);
             var timeSignature2 = default(TimeSignature);
-            Assert.IsFalse(timeSignature1 != timeSignature2, "First time signature doesn't equal to second one.");
+            ClassicAssert.IsFalse(timeSignature1 != timeSignature2, "First time signature doesn't equal to second one.");
         }
 
         [Test]
@@ -78,7 +79,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var timeSignature1 = new TimeSignature(2, 8);
             var timeSignature2 = new TimeSignature(2, 8);
-            Assert.IsFalse(timeSignature1 != timeSignature2, "First time signature doesn't equal to second one.");
+            ClassicAssert.IsFalse(timeSignature1 != timeSignature2, "First time signature doesn't equal to second one.");
         }
 
         [Test]
@@ -86,7 +87,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var timeSignature1 = new TimeSignature(2, 8);
             var timeSignature2 = new TimeSignature(1, 16);
-            Assert.IsTrue(timeSignature1 != timeSignature2, "First time signature equals to second one.");
+            ClassicAssert.IsTrue(timeSignature1 != timeSignature2, "First time signature equals to second one.");
         }
 
         [Test]
@@ -94,7 +95,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var timeSignature1 = default(TimeSignature);
             var timeSignature2 = new TimeSignature(2, 8);
-            Assert.Throws<ArgumentNullException>(() => { var x = timeSignature1 < timeSignature2; }, "Exception not thrown for null time signature.");
+            ClassicAssert.Throws<ArgumentNullException>(() => { var x = timeSignature1 < timeSignature2; }, "Exception not thrown for null time signature.");
         }
 
         [Test]
@@ -102,7 +103,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var timeSignature1 = new TimeSignature(2, 8);
             var timeSignature2 = default(TimeSignature);
-            Assert.Throws<ArgumentNullException>(() => { var x = timeSignature1 < timeSignature2; }, "Exception not thrown for null time signature.");
+            ClassicAssert.Throws<ArgumentNullException>(() => { var x = timeSignature1 < timeSignature2; }, "Exception not thrown for null time signature.");
         }
 
         [Test]
@@ -110,7 +111,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var timeSignature1 = default(TimeSignature);
             var timeSignature2 = default(TimeSignature);
-            Assert.Throws<ArgumentNullException>(() => { var x = timeSignature1 < timeSignature2; }, "Exception not thrown for null time signature.");
+            ClassicAssert.Throws<ArgumentNullException>(() => { var x = timeSignature1 < timeSignature2; }, "Exception not thrown for null time signature.");
         }
 
         [Test]
@@ -118,7 +119,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var timeSignature1 = new TimeSignature(2, 8);
             var timeSignature2 = new TimeSignature(2, 8);
-            Assert.IsFalse(timeSignature1 < timeSignature2, "First time signature less than second one.");
+            ClassicAssert.IsFalse(timeSignature1 < timeSignature2, "First time signature less than second one.");
         }
 
         [Test]
@@ -126,7 +127,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var timeSignature1 = new TimeSignature(1, 16);
             var timeSignature2 = new TimeSignature(2, 8);
-            Assert.IsTrue(timeSignature1 < timeSignature2, "First time signature doesn't less than second one.");
+            ClassicAssert.IsTrue(timeSignature1 < timeSignature2, "First time signature doesn't less than second one.");
         }
 
         [Test]
@@ -134,7 +135,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var timeSignature1 = new TimeSignature(2, 8);
             var timeSignature2 = new TimeSignature(1, 16);
-            Assert.IsFalse(timeSignature1 < timeSignature2, "First time signature less than second one.");
+            ClassicAssert.IsFalse(timeSignature1 < timeSignature2, "First time signature less than second one.");
         }
 
         [Test]
@@ -142,7 +143,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var timeSignature1 = default(TimeSignature);
             var timeSignature2 = new TimeSignature(2, 8);
-            Assert.Throws<ArgumentNullException>(() => { var x = timeSignature1 <= timeSignature2; }, "Exception not thrown for null time signature.");
+            ClassicAssert.Throws<ArgumentNullException>(() => { var x = timeSignature1 <= timeSignature2; }, "Exception not thrown for null time signature.");
         }
 
         [Test]
@@ -150,7 +151,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var timeSignature1 = new TimeSignature(2, 8);
             var timeSignature2 = default(TimeSignature);
-            Assert.Throws<ArgumentNullException>(() => { var x = timeSignature1 <= timeSignature2; }, "Exception not thrown for null time signature.");
+            ClassicAssert.Throws<ArgumentNullException>(() => { var x = timeSignature1 <= timeSignature2; }, "Exception not thrown for null time signature.");
         }
 
         [Test]
@@ -158,7 +159,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var timeSignature1 = default(TimeSignature);
             var timeSignature2 = default(TimeSignature);
-            Assert.Throws<ArgumentNullException>(() => { var x = timeSignature1 <= timeSignature2; }, "Exception not thrown for null time signature.");
+            ClassicAssert.Throws<ArgumentNullException>(() => { var x = timeSignature1 <= timeSignature2; }, "Exception not thrown for null time signature.");
         }
 
         [Test]
@@ -166,7 +167,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var timeSignature1 = new TimeSignature(2, 8);
             var timeSignature2 = new TimeSignature(2, 8);
-            Assert.IsTrue(timeSignature1 <= timeSignature2, "First time signature doesn't less than or equal to second one.");
+            ClassicAssert.IsTrue(timeSignature1 <= timeSignature2, "First time signature doesn't less than or equal to second one.");
         }
 
         [Test]
@@ -174,7 +175,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var timeSignature1 = new TimeSignature(1, 16);
             var timeSignature2 = new TimeSignature(2, 8);
-            Assert.IsTrue(timeSignature1 <= timeSignature2, "First time signature doesn't less than or equals to second one.");
+            ClassicAssert.IsTrue(timeSignature1 <= timeSignature2, "First time signature doesn't less than or equals to second one.");
         }
 
         [Test]
@@ -182,7 +183,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var timeSignature1 = new TimeSignature(2, 8);
             var timeSignature2 = new TimeSignature(1, 16);
-            Assert.IsFalse(timeSignature1 <= timeSignature2, "First time signature less than or equals to second one.");
+            ClassicAssert.IsFalse(timeSignature1 <= timeSignature2, "First time signature less than or equals to second one.");
         }
 
         [Test]
@@ -190,7 +191,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var timeSignature1 = default(TimeSignature);
             var timeSignature2 = new TimeSignature(2, 8);
-            Assert.Throws<ArgumentNullException>(() => { var x = timeSignature1 > timeSignature2; }, "Exception not thrown for null time signature.");
+            ClassicAssert.Throws<ArgumentNullException>(() => { var x = timeSignature1 > timeSignature2; }, "Exception not thrown for null time signature.");
         }
 
         [Test]
@@ -198,7 +199,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var timeSignature1 = new TimeSignature(2, 8);
             var timeSignature2 = default(TimeSignature);
-            Assert.Throws<ArgumentNullException>(() => { var x = timeSignature1 > timeSignature2; }, "Exception not thrown for null time signature.");
+            ClassicAssert.Throws<ArgumentNullException>(() => { var x = timeSignature1 > timeSignature2; }, "Exception not thrown for null time signature.");
         }
 
         [Test]
@@ -206,7 +207,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var timeSignature1 = default(TimeSignature);
             var timeSignature2 = default(TimeSignature);
-            Assert.Throws<ArgumentNullException>(() => { var x = timeSignature1 > timeSignature2; }, "Exception not thrown for null time signature.");
+            ClassicAssert.Throws<ArgumentNullException>(() => { var x = timeSignature1 > timeSignature2; }, "Exception not thrown for null time signature.");
         }
 
         [Test]
@@ -214,7 +215,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var timeSignature1 = new TimeSignature(2, 8);
             var timeSignature2 = new TimeSignature(2, 8);
-            Assert.IsFalse(timeSignature1 > timeSignature2, "First time signature greater than second one.");
+            ClassicAssert.IsFalse(timeSignature1 > timeSignature2, "First time signature greater than second one.");
         }
 
         [Test]
@@ -222,7 +223,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var timeSignature1 = new TimeSignature(2, 8);
             var timeSignature2 = new TimeSignature(1, 16);
-            Assert.IsTrue(timeSignature1 > timeSignature2, "First time signature doesn't greater than second one.");
+            ClassicAssert.IsTrue(timeSignature1 > timeSignature2, "First time signature doesn't greater than second one.");
         }
 
         [Test]
@@ -230,7 +231,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var timeSignature1 = new TimeSignature(1, 16);
             var timeSignature2 = new TimeSignature(2, 8);
-            Assert.IsFalse(timeSignature1 > timeSignature2, "First time signature greater than second one.");
+            ClassicAssert.IsFalse(timeSignature1 > timeSignature2, "First time signature greater than second one.");
         }
 
         [Test]
@@ -238,7 +239,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var timeSignature1 = default(TimeSignature);
             var timeSignature2 = new TimeSignature(2, 8);
-            Assert.Throws<ArgumentNullException>(() => { var x = timeSignature1 >= timeSignature2; }, "Exception not thrown for null time signature.");
+            ClassicAssert.Throws<ArgumentNullException>(() => { var x = timeSignature1 >= timeSignature2; }, "Exception not thrown for null time signature.");
         }
 
         [Test]
@@ -246,7 +247,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var timeSignature1 = new TimeSignature(2, 8);
             var timeSignature2 = default(TimeSignature);
-            Assert.Throws<ArgumentNullException>(() => { var x = timeSignature1 >= timeSignature2; }, "Exception not thrown for null time signature.");
+            ClassicAssert.Throws<ArgumentNullException>(() => { var x = timeSignature1 >= timeSignature2; }, "Exception not thrown for null time signature.");
         }
 
         [Test]
@@ -254,7 +255,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var timeSignature1 = default(TimeSignature);
             var timeSignature2 = default(TimeSignature);
-            Assert.Throws<ArgumentNullException>(() => { var x = timeSignature1 >= timeSignature2; }, "Exception not thrown for null time signature.");
+            ClassicAssert.Throws<ArgumentNullException>(() => { var x = timeSignature1 >= timeSignature2; }, "Exception not thrown for null time signature.");
         }
 
         [Test]
@@ -262,7 +263,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var timeSignature1 = new TimeSignature(2, 8);
             var timeSignature2 = new TimeSignature(2, 8);
-            Assert.IsTrue(timeSignature1 >= timeSignature2, "First time signature doesn't greater than or equal to second one.");
+            ClassicAssert.IsTrue(timeSignature1 >= timeSignature2, "First time signature doesn't greater than or equal to second one.");
         }
 
         [Test]
@@ -270,7 +271,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var timeSignature1 = new TimeSignature(2, 8);
             var timeSignature2 = new TimeSignature(1, 16);
-            Assert.IsTrue(timeSignature1 >= timeSignature2, "First time signature doesn't greater than or equals to second one.");
+            ClassicAssert.IsTrue(timeSignature1 >= timeSignature2, "First time signature doesn't greater than or equals to second one.");
         }
 
         [Test]
@@ -278,7 +279,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var timeSignature1 = new TimeSignature(1, 16);
             var timeSignature2 = new TimeSignature(2, 8);
-            Assert.IsFalse(timeSignature1 >= timeSignature2, "First time signature greater than or equals to second one.");
+            ClassicAssert.IsFalse(timeSignature1 >= timeSignature2, "First time signature greater than or equals to second one.");
         }
 
         #endregion

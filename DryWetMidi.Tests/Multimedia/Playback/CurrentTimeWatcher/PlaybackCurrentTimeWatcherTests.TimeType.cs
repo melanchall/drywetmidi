@@ -3,6 +3,7 @@ using Melanchall.DryWetMidi.Interaction;
 using Melanchall.DryWetMidi.Multimedia;
 using Melanchall.DryWetMidi.Tests.Common;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -53,8 +54,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 PlaybackCurrentTimeWatcher.Instance.RemovePlayback(playback);
             }
 
-            Assert.IsInstanceOf<BarBeatFractionTimeSpan>(times.First(), "Invalid first time type.");
-            Assert.IsInstanceOf<MetricTimeSpan>(times.Last(), "Invalid last time type.");
+            ClassicAssert.IsInstanceOf<BarBeatFractionTimeSpan>(times.First(), "Invalid first time type.");
+            ClassicAssert.IsInstanceOf<MetricTimeSpan>(times.Last(), "Invalid last time type.");
         }
 
         [Test]
@@ -104,8 +105,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
             foreach (var t in times)
             {
-                Assert.IsInstanceOf<BarBeatFractionTimeSpan>(t.Value.First(), "Invalid first time type.");
-                Assert.IsInstanceOf<MetricTimeSpan>(t.Value.Last(), "Invalid last time type.");
+                ClassicAssert.IsInstanceOf<BarBeatFractionTimeSpan>(t.Value.First(), "Invalid first time type.");
+                ClassicAssert.IsInstanceOf<MetricTimeSpan>(t.Value.Last(), "Invalid last time type.");
             }
         }
 
@@ -154,11 +155,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 PlaybackCurrentTimeWatcher.Instance.RemovePlayback(playback2);
             }
 
-            Assert.IsInstanceOf<BarBeatFractionTimeSpan>(times.First().Value.First(), "Invalid first time type on first playback.");
-            Assert.IsInstanceOf<MetricTimeSpan>(times.First().Value.Last(), "Invalid last time type on first playback.");
+            ClassicAssert.IsInstanceOf<BarBeatFractionTimeSpan>(times.First().Value.First(), "Invalid first time type on first playback.");
+            ClassicAssert.IsInstanceOf<MetricTimeSpan>(times.First().Value.Last(), "Invalid last time type on first playback.");
 
             var singleTimeType = times.Last().Value.Select(t => t.GetType()).Distinct().Single();
-            Assert.AreEqual(typeof(MusicalTimeSpan), singleTimeType, "Invalid time type on second playback.");
+            ClassicAssert.AreEqual(typeof(MusicalTimeSpan), singleTimeType, "Invalid time type on second playback.");
         }
 
         [Test]
@@ -199,8 +200,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 PlaybackCurrentTimeWatcher.Instance.RemovePlayback(playback);
             }
 
-            Assert.IsInstanceOf<BarBeatFractionTimeSpan>(times.First(), "Invalid first time type.");
-            Assert.IsInstanceOf<MetricTimeSpan>(times.Last(), "Invalid last time type.");
+            ClassicAssert.IsInstanceOf<BarBeatFractionTimeSpan>(times.First(), "Invalid first time type.");
+            ClassicAssert.IsInstanceOf<MetricTimeSpan>(times.Last(), "Invalid last time type.");
         }
 
         [Test]
@@ -249,8 +250,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
             foreach (var t in times)
             {
-                Assert.IsInstanceOf<BarBeatFractionTimeSpan>(t.Value.First(), "Invalid first time type.");
-                Assert.IsInstanceOf<MetricTimeSpan>(t.Value.Last(), "Invalid last time type.");
+                ClassicAssert.IsInstanceOf<BarBeatFractionTimeSpan>(t.Value.First(), "Invalid first time type.");
+                ClassicAssert.IsInstanceOf<MetricTimeSpan>(t.Value.Last(), "Invalid last time type.");
             }
         }
 
@@ -297,11 +298,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 PlaybackCurrentTimeWatcher.Instance.RemovePlayback(playback2);
             }
 
-            Assert.IsInstanceOf<BarBeatFractionTimeSpan>(times.First().Value.First(), "Invalid first time type on first playback.");
-            Assert.IsInstanceOf<MetricTimeSpan>(times.First().Value.Last(), "Invalid last time type on first playback.");
+            ClassicAssert.IsInstanceOf<BarBeatFractionTimeSpan>(times.First().Value.First(), "Invalid first time type on first playback.");
+            ClassicAssert.IsInstanceOf<MetricTimeSpan>(times.First().Value.Last(), "Invalid last time type on first playback.");
 
             var singleTimeType = times.Last().Value.Select(t => t.GetType()).Distinct().Single();
-            Assert.AreEqual(typeof(MusicalTimeSpan), singleTimeType, "Invalid time type on second playback.");
+            ClassicAssert.AreEqual(typeof(MusicalTimeSpan), singleTimeType, "Invalid time type on second playback.");
         }
 
         #endregion

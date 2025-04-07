@@ -5,6 +5,7 @@ using Melanchall.DryWetMidi.Interaction;
 using NUnit.Framework;
 using Melanchall.DryWetMidi.Core;
 using System.Linq;
+using NUnit.Framework.Legacy;
 
 namespace Melanchall.DryWetMidi.Tests.Composing
 {
@@ -37,33 +38,33 @@ namespace Melanchall.DryWetMidi.Tests.Composing
         [Description("Try to repeat last action one time in case of no actions exist at the moment.")]
         public void Repeat_Last_Single_NoActions()
         {
-            Assert.Throws<InvalidOperationException>(() => new PatternBuilder().Repeat());
+            ClassicAssert.Throws<InvalidOperationException>(() => new PatternBuilder().Repeat());
         }
 
         [Test]
         [Description("Try to repeat last action several times in case of no actions exist at the moment.")]
         public void Repeat_Last_Multiple_Valid_NoActions()
         {
-            Assert.Throws<InvalidOperationException>(() => new PatternBuilder().Repeat(2));
+            ClassicAssert.Throws<InvalidOperationException>(() => new PatternBuilder().Repeat(2));
         }
 
         [Test]
         [Description("Try to repeat last action invalid number of times in case of no actions exist at the moment.")]
         public void Repeat_Last_Multiple_Invalid_NoActions()
         {
-            Assert.Throws<ArgumentOutOfRangeException>(() => new PatternBuilder().Repeat(-7));
+            ClassicAssert.Throws<ArgumentOutOfRangeException>(() => new PatternBuilder().Repeat(-7));
         }
 
         [Test]
         public void Repeat_Previous_NoActions()
         {
-            Assert.Throws<ArgumentOutOfRangeException>(() => new PatternBuilder().Repeat(2, 2));
+            ClassicAssert.Throws<ArgumentOutOfRangeException>(() => new PatternBuilder().Repeat(2, 2));
         }
 
         [Test]
         public void Repeat_Previous_NotEnoughActions()
         {
-            Assert.Throws<ArgumentOutOfRangeException>(() =>
+            ClassicAssert.Throws<ArgumentOutOfRangeException>(() =>
                 new PatternBuilder()
                     .Anchor()
                     .Repeat(2, 2));

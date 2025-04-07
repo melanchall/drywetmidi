@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System;
 using Melanchall.DryWetMidi.Common;
+using NUnit.Framework.Legacy;
 
 namespace Melanchall.DryWetMidi.Tests.Common
 {
@@ -32,7 +33,7 @@ namespace Melanchall.DryWetMidi.Tests.Common
         public void Enumerate_1()
         {
             var tree = new RedBlackTree<int, int>();
-            Assert.AreEqual(0, tree.Count, "Invalid initial count.");
+            ClassicAssert.AreEqual(0, tree.Count, "Invalid initial count.");
 
             var enumerated = tree.ToArray();
 
@@ -46,14 +47,14 @@ namespace Melanchall.DryWetMidi.Tests.Common
             var data = Enumerable.Range(0, count).Select(_ => random.Next(1000)).ToArray();
 
             var tree = new RedBlackTree<int, int>(data, d => d);
-            Assert.AreEqual(count, tree.Count, "Invalid initial count.");
+            ClassicAssert.AreEqual(count, tree.Count, "Invalid initial count.");
 
             CollectionAssert.AreEqual(
                 data.OrderBy(d => d).ToArray(),
                 tree.ToArray(),
                 "Enumerated collection is invalid.");
 
-            Assert.IsTrue(
+            ClassicAssert.IsTrue(
                 tree.GetAllCoordinates().All(c => c.TreeNode.Tree == tree),
                 "Some nodes have invalid tree reference.");
         }
@@ -63,13 +64,13 @@ namespace Melanchall.DryWetMidi.Tests.Common
         {
             var data = new[] { 2, 3, 1, 1, 10, 100, 50, 45, 0 };
             var tree = new RedBlackTree<int, int>(data, d => d);
-            Assert.AreEqual(data.Length, tree.Count, "Invalid initial count.");
+            ClassicAssert.AreEqual(data.Length, tree.Count, "Invalid initial count.");
 
             CheckAscendingOrder(tree.ToArray());
 
             var coordinate = tree.Add(value, value);
-            Assert.AreEqual(tree, coordinate.TreeNode.Tree, "Invalid tree reference.");
-            Assert.AreEqual(data.Length + 1, tree.Count, "Invalid count after add.");
+            ClassicAssert.AreEqual(tree, coordinate.TreeNode.Tree, "Invalid tree reference.");
+            ClassicAssert.AreEqual(data.Length + 1, tree.Count, "Invalid count after add.");
 
             CheckAscendingOrder(tree.ToArray());
         }
@@ -79,7 +80,7 @@ namespace Melanchall.DryWetMidi.Tests.Common
         {
             var data = new[] { 2, 3, 1, 1, 10, 100, 50, 45, 0 }.ToList();
             var tree = new RedBlackTree<int, int>(data, d => d);
-            Assert.AreEqual(data.Count, tree.Count, "Invalid initial count.");
+            ClassicAssert.AreEqual(data.Count, tree.Count, "Invalid initial count.");
 
             CheckAscendingOrder(tree.ToArray());
 
@@ -89,8 +90,8 @@ namespace Melanchall.DryWetMidi.Tests.Common
             foreach (var d in dataToAdd)
             {
                 var coordinate = tree.Add(d, d);
-                Assert.AreEqual(tree, coordinate.TreeNode.Tree, "Invalid tree reference.");
-                Assert.AreEqual(++count, tree.Count, $"Invalid count after {d} addition.");
+                ClassicAssert.AreEqual(tree, coordinate.TreeNode.Tree, "Invalid tree reference.");
+                ClassicAssert.AreEqual(++count, tree.Count, $"Invalid count after {d} addition.");
                 CheckAscendingOrder(tree.ToArray());
             }
         }
@@ -117,7 +118,7 @@ namespace Melanchall.DryWetMidi.Tests.Common
             for (var i = 0; i < steps; i++)
             {
                 var coordinate = tree.Add(step, step);
-                Assert.AreEqual(tree, coordinate.TreeNode.Tree, $"Invalid tree reference (addition {i}).");
+                ClassicAssert.AreEqual(tree, coordinate.TreeNode.Tree, $"Invalid tree reference (addition {i}).");
             }
 
             CheckAscendingOrder(tree.ToArray());
@@ -128,15 +129,15 @@ namespace Melanchall.DryWetMidi.Tests.Common
         {
             var data = Enumerable.Range(0, 1000).ToList();
             var tree = new RedBlackTree<int, int>(data, d => d);
-            Assert.AreEqual(data.Count, tree.Count, "Invalid initial count.");
+            ClassicAssert.AreEqual(data.Count, tree.Count, "Invalid initial count.");
 
             CheckAscendingOrder(tree.ToArray());
 
             var nodeX = tree.GetNodeByKey(value);
             var node = new RedBlackTreeCoordinate<int, int>(nodeX, nodeX.Values.First);
-            Assert.IsTrue(tree.Remove(node), "Value is not removed.");
-            Assert.AreEqual(data.Count - 1, tree.Count, "Invalid count after removing.");
-            Assert.IsNull(node.TreeNode.Tree, $"Invalid tree reference after removing.");
+            ClassicAssert.IsTrue(tree.Remove(node), "Value is not removed.");
+            ClassicAssert.AreEqual(data.Count - 1, tree.Count, "Invalid count after removing.");
+            ClassicAssert.IsNull(node.TreeNode.Tree, $"Invalid tree reference after removing.");
 
             CheckAscendingOrder(tree.ToArray());
         }
@@ -146,7 +147,7 @@ namespace Melanchall.DryWetMidi.Tests.Common
         {
             var data = Enumerable.Range(0, 1000).ToList();
             var tree = new RedBlackTree<int, int>(data, d => d);
-            Assert.AreEqual(data.Count, tree.Count, "Invalid initial count.");
+            ClassicAssert.AreEqual(data.Count, tree.Count, "Invalid initial count.");
 
             CheckAscendingOrder(tree.ToArray());
 
@@ -157,9 +158,9 @@ namespace Melanchall.DryWetMidi.Tests.Common
             {
                 var nodeX = tree.GetNodeByKey(d);
                 var node = new RedBlackTreeCoordinate<int, int>(nodeX, nodeX.Values.First);
-                Assert.IsTrue(tree.Remove(node), "Value is not removed.");
-                Assert.AreEqual(--count, tree.Count, $"Invalid count (removing {d}).");
-                Assert.IsNull(node.TreeNode.Tree, $"Invalid tree reference (removing {d}).");
+                ClassicAssert.IsTrue(tree.Remove(node), "Value is not removed.");
+                ClassicAssert.AreEqual(--count, tree.Count, $"Invalid count (removing {d}).");
+                ClassicAssert.IsNull(node.TreeNode.Tree, $"Invalid tree reference (removing {d}).");
 
                 CheckAscendingOrder(tree.ToArray());
             }
@@ -170,18 +171,18 @@ namespace Melanchall.DryWetMidi.Tests.Common
         {
             var data = Enumerable.Range(0, 1000).ToList();
             var tree = new RedBlackTree<int, int>(data, d => d);
-            Assert.AreEqual(data.Count, tree.Count, "Invalid initial count.");
+            ClassicAssert.AreEqual(data.Count, tree.Count, "Invalid initial count.");
 
             CheckAscendingOrder(tree.ToArray());
 
             var nodeToDeleteX = tree.GetNodeByKey(500);
             var nodeToDelete = new RedBlackTreeCoordinate<int, int>(nodeToDeleteX, nodeToDeleteX.Values.First);
-            Assert.IsTrue(tree.Remove(nodeToDelete), "Value is not removed.");
-            Assert.AreEqual(data.Count - 1, tree.Count, $"Invalid count after first removing.");
-            Assert.IsNull(nodeToDelete.TreeNode.Tree, $"Invalid tree reference after first removing.");
+            ClassicAssert.IsTrue(tree.Remove(nodeToDelete), "Value is not removed.");
+            ClassicAssert.AreEqual(data.Count - 1, tree.Count, $"Invalid count after first removing.");
+            ClassicAssert.IsNull(nodeToDelete.TreeNode.Tree, $"Invalid tree reference after first removing.");
 
-            Assert.IsFalse(tree.Remove(nodeToDelete), "Value is removed.");
-            Assert.AreEqual(data.Count - 1, tree.Count, $"Invalid count after second removing.");
+            ClassicAssert.IsFalse(tree.Remove(nodeToDelete), "Value is removed.");
+            ClassicAssert.AreEqual(data.Count - 1, tree.Count, $"Invalid count after second removing.");
         }
 
         [Test]
@@ -191,17 +192,17 @@ namespace Melanchall.DryWetMidi.Tests.Common
             var tree = new RedBlackTree<int, int>(data, d => d);
 
             var node = tree.GetNodeByKey(3);
-            Assert.AreEqual(2, node.Values.Count, "Invalid elements count for 3.");
+            ClassicAssert.AreEqual(2, node.Values.Count, "Invalid elements count for 3.");
 
-            Assert.IsTrue(tree.Remove(new RedBlackTreeCoordinate<int, int>(node, node.Values.First)), "Value is not removed (first removing).");
-            Assert.AreEqual(1, node.Values.Count, "Invalid elements count for 3 (first removing).");
-            Assert.IsNotNull(tree.GetNodeByKey(3), "Node 3 is not found (first removing).");
-            Assert.AreEqual(tree, tree.GetNodeByKey(3).Tree, $"Invalid tree reference (first removing).");
+            ClassicAssert.IsTrue(tree.Remove(new RedBlackTreeCoordinate<int, int>(node, node.Values.First)), "Value is not removed (first removing).");
+            ClassicAssert.AreEqual(1, node.Values.Count, "Invalid elements count for 3 (first removing).");
+            ClassicAssert.IsNotNull(tree.GetNodeByKey(3), "Node 3 is not found (first removing).");
+            ClassicAssert.AreEqual(tree, tree.GetNodeByKey(3).Tree, $"Invalid tree reference (first removing).");
 
-            Assert.IsTrue(tree.Remove(new RedBlackTreeCoordinate<int, int>(node, node.Values.Last)), "Value is not removed (second removing).");
+            ClassicAssert.IsTrue(tree.Remove(new RedBlackTreeCoordinate<int, int>(node, node.Values.Last)), "Value is not removed (second removing).");
             CollectionAssert.IsEmpty(node.Values, "Invalid elements count for 3 (second removing).");
-            Assert.IsNull(tree.GetNodeByKey(3), "Node 3 is found (second removing).");
-            Assert.IsNull(node.Tree, $"Invalid tree reference (second removing).");
+            ClassicAssert.IsNull(tree.GetNodeByKey(3), "Node 3 is found (second removing).");
+            ClassicAssert.IsNull(node.Tree, $"Invalid tree reference (second removing).");
         }
 
         [Test]
@@ -211,20 +212,20 @@ namespace Melanchall.DryWetMidi.Tests.Common
             var tree = new RedBlackTree<int, int>(data, d => d);
 
             var node = tree.GetNodeByKey(3);
-            Assert.AreEqual(count, node.Values.Count, "Invalid elements count for 3.");
+            ClassicAssert.AreEqual(count, node.Values.Count, "Invalid elements count for 3.");
 
             for (var i = 0; i < count - 1; i++)
             {
-                Assert.IsTrue(tree.Remove(new RedBlackTreeCoordinate<int, int>(node, node.Values.First)), $"Value is not removed (removing {i}).");
-                Assert.AreEqual(count - i - 1, node.Values.Count, $"Invalid elements count for 3 (removing {i}).");
-                Assert.IsNotNull(tree.GetNodeByKey(3), $"Node 3 is not found (removing {i}).");
-                Assert.AreEqual(tree, tree.GetNodeByKey(3).Tree, $"Invalid tree reference (first removing).");
+                ClassicAssert.IsTrue(tree.Remove(new RedBlackTreeCoordinate<int, int>(node, node.Values.First)), $"Value is not removed (removing {i}).");
+                ClassicAssert.AreEqual(count - i - 1, node.Values.Count, $"Invalid elements count for 3 (removing {i}).");
+                ClassicAssert.IsNotNull(tree.GetNodeByKey(3), $"Node 3 is not found (removing {i}).");
+                ClassicAssert.AreEqual(tree, tree.GetNodeByKey(3).Tree, $"Invalid tree reference (first removing).");
             }
 
-            Assert.IsTrue(tree.Remove(new RedBlackTreeCoordinate<int, int>(node, node.Values.Last)), "Value is not removed (last removing).");
+            ClassicAssert.IsTrue(tree.Remove(new RedBlackTreeCoordinate<int, int>(node, node.Values.Last)), "Value is not removed (last removing).");
             CollectionAssert.IsEmpty(node.Values, "Invalid elements count for 3 (last removing).");
-            Assert.IsNull(tree.GetNodeByKey(3), "Node 3 is found (last removing).");
-            Assert.IsNull(node.Tree, $"Invalid tree reference (second removing).");
+            ClassicAssert.IsNull(tree.GetNodeByKey(3), "Node 3 is found (last removing).");
+            ClassicAssert.IsNull(node.Tree, $"Invalid tree reference (second removing).");
         }
 
         [Test]
@@ -248,7 +249,7 @@ namespace Melanchall.DryWetMidi.Tests.Common
             for (var i = 0; i < coordinates.Length; i += step)
             {
                 var coordinate = coordinates[i];
-                Assert.IsTrue(tree.Remove(coordinate), $"Value is not removed (removing {i}).");
+                ClassicAssert.IsTrue(tree.Remove(coordinate), $"Value is not removed (removing {i}).");
                 CheckAscendingOrder(tree.ToArray());
             }
         }
@@ -278,7 +279,7 @@ namespace Melanchall.DryWetMidi.Tests.Common
                     break;
 
                 var coordinate = new RedBlackTreeCoordinate<int, int>(root, root.Values.First);
-                Assert.IsTrue(tree.Remove(coordinate), $"Value is not removed (removing {k}).");
+                ClassicAssert.IsTrue(tree.Remove(coordinate), $"Value is not removed (removing {k}).");
                 CheckAscendingOrder(tree.ToArray());
                 
                 k++;
@@ -362,11 +363,11 @@ namespace Melanchall.DryWetMidi.Tests.Common
             {
                 var result = tree.GetLastCoordinateBelowThreshold(i);
                 if (i == 0)
-                    Assert.IsNull(result, $"Invalid result for {i}.");
+                    ClassicAssert.IsNull(result, $"Invalid result for {i}.");
                 else
                 {
-                    Assert.IsNotNull(result.TreeNode, "Tree node is null.");
-                    Assert.AreEqual(i - 1, result.TreeNode.Key, $"Invalid result for {i}.");
+                    ClassicAssert.IsNotNull(result.TreeNode, "Tree node is null.");
+                    ClassicAssert.AreEqual(i - 1, result.TreeNode.Key, $"Invalid result for {i}.");
                 }
             }
         }
@@ -381,9 +382,9 @@ namespace Melanchall.DryWetMidi.Tests.Common
             {
                 var result = tree.GetLastCoordinateBelowThreshold(i + 0.5);
 
-                Assert.IsNotNull(result, "Result is null.");
-                Assert.IsNotNull(result.TreeNode, "Tree node is null.");
-                Assert.AreEqual(i, result.TreeNode.Key, $"Invalid result for {i}.");
+                ClassicAssert.IsNotNull(result, "Result is null.");
+                ClassicAssert.IsNotNull(result.TreeNode, "Tree node is null.");
+                ClassicAssert.AreEqual(i, result.TreeNode.Key, $"Invalid result for {i}.");
             }
         }
 
@@ -393,13 +394,13 @@ namespace Melanchall.DryWetMidi.Tests.Common
             var tree = new RedBlackTree<double, double>(new double[] { 1, 1, 2, 2, 2, 3, 4, 4, 4, 5 }, d => d);
 
             var result = tree.GetLastCoordinateBelowThreshold(1);
-            Assert.IsNull(result, "Invalid result for 1.");
+            ClassicAssert.IsNull(result, "Invalid result for 1.");
 
             void Check(double threshold, double expectedResult, double[] expectedPreviousValues)
             {
                 var node = tree.GetLastCoordinateBelowThreshold(threshold);
                 var previousValues = EnumerateViaGetPreviousNode(tree, node).ToArray();
-                Assert.AreEqual(expectedResult, node.NodeElement.Value, $"Invalid result for {threshold}.");
+                ClassicAssert.AreEqual(expectedResult, node.NodeElement.Value, $"Invalid result for {threshold}.");
                 CollectionAssert.AreEqual(
                     expectedPreviousValues,
                     previousValues,
@@ -426,9 +427,9 @@ namespace Melanchall.DryWetMidi.Tests.Common
             var tree = new RedBlackTree<int, int>(new[] { 0, 5500 }, d => d);
 
             var result = tree.GetLastCoordinateBelowThreshold(700);
-            Assert.IsNotNull(result.TreeNode, "Tree node is null.");
-            Assert.AreEqual(0, result.NodeElement.Value, "Invalid result.");
-            Assert.AreEqual(1, result.NodeElement.List.Count, "Invalid node's elements count.");
+            ClassicAssert.IsNotNull(result.TreeNode, "Tree node is null.");
+            ClassicAssert.AreEqual(0, result.NodeElement.Value, "Invalid result.");
+            ClassicAssert.AreEqual(1, result.NodeElement.List.Count, "Invalid node's elements count.");
         }
 
         [Test]
@@ -441,11 +442,11 @@ namespace Melanchall.DryWetMidi.Tests.Common
             {
                 var result = tree.GetFirstCoordinateAboveThreshold(i);
                 if (i == count - 1)
-                    Assert.IsNull(result, $"Invalid result for {i}.");
+                    ClassicAssert.IsNull(result, $"Invalid result for {i}.");
                 else
                 {
-                    Assert.IsNotNull(result.TreeNode, "Tree node is null.");
-                    Assert.AreEqual(i + 1, result.TreeNode.Key, $"Invalid result for {i}.");
+                    ClassicAssert.IsNotNull(result.TreeNode, "Tree node is null.");
+                    ClassicAssert.AreEqual(i + 1, result.TreeNode.Key, $"Invalid result for {i}.");
                 }
             }
         }
@@ -460,9 +461,9 @@ namespace Melanchall.DryWetMidi.Tests.Common
             {
                 var result = tree.GetFirstCoordinateAboveThreshold(i - 0.5);
 
-                Assert.IsNotNull(result, "Result is null.");
-                Assert.IsNotNull(result.TreeNode, "Tree node is null.");
-                Assert.AreEqual(i, result.TreeNode.Key, $"Invalid result for {i}.");
+                ClassicAssert.IsNotNull(result, "Result is null.");
+                ClassicAssert.IsNotNull(result.TreeNode, "Tree node is null.");
+                ClassicAssert.AreEqual(i, result.TreeNode.Key, $"Invalid result for {i}.");
             }
         }
 
@@ -472,13 +473,13 @@ namespace Melanchall.DryWetMidi.Tests.Common
             var tree = new RedBlackTree<double, double>(new double[] { 1, 1, 2, 2, 2, 3, 4, 4, 4, 5 }, d => d);
 
             var result = tree.GetFirstCoordinateAboveThreshold(5);
-            Assert.IsNull(result, "Invalid result for 5.");
+            ClassicAssert.IsNull(result, "Invalid result for 5.");
 
             void Check(double threshold, double expectedResult, double[] expectedNextValues)
             {
                 var node = tree.GetFirstCoordinateAboveThreshold(threshold);
                 var nextValues = EnumerateViaGetNextCoordinate(tree, node).ToArray();
-                Assert.AreEqual(expectedResult, node.NodeElement.Value, $"Invalid result for {threshold}.");
+                ClassicAssert.AreEqual(expectedResult, node.NodeElement.Value, $"Invalid result for {threshold}.");
                 CollectionAssert.AreEqual(
                     expectedNextValues,
                     nextValues,
@@ -505,9 +506,9 @@ namespace Melanchall.DryWetMidi.Tests.Common
             var tree = new RedBlackTree<int, int>(new[] { 0, 5500 }, d => d);
 
             var result = tree.GetFirstCoordinateAboveThreshold(700);
-            Assert.IsNotNull(result.TreeNode, "Tree node is null.");
-            Assert.AreEqual(5500, result.NodeElement.Value, "Invalid result.");
-            Assert.AreEqual(1, result.NodeElement.List.Count, "Invalid node's elements count.");
+            ClassicAssert.IsNotNull(result.TreeNode, "Tree node is null.");
+            ClassicAssert.AreEqual(5500, result.NodeElement.Value, "Invalid result.");
+            ClassicAssert.AreEqual(1, result.NodeElement.List.Count, "Invalid node's elements count.");
         }
 
         [Test]
@@ -555,7 +556,7 @@ namespace Melanchall.DryWetMidi.Tests.Common
         {
             for (var i = 0; i < values.Length - 1; i++)
             {
-                Assert.GreaterOrEqual(values[i + 1], values[i], $"Ascending order is broken on index {i}.");
+                ClassicAssert.GreaterOrEqual(values[i + 1], values[i], $"Ascending order is broken on index {i}.");
             }
         }
 
@@ -564,7 +565,7 @@ namespace Melanchall.DryWetMidi.Tests.Common
         {
             for (var i = 0; i < values.Length - 1; i++)
             {
-                Assert.LessOrEqual(values[i + 1], values[i], $"Descending order is broken on index {i}.");
+                ClassicAssert.LessOrEqual(values[i + 1], values[i], $"Descending order is broken on index {i}.");
             }
         }
 

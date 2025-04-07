@@ -3,6 +3,7 @@ using Melanchall.DryWetMidi.Composing;
 using Melanchall.DryWetMidi.MusicTheory;
 using Melanchall.DryWetMidi.Interaction;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace Melanchall.DryWetMidi.Tests.Composing
 {
@@ -93,7 +94,7 @@ namespace Melanchall.DryWetMidi.Tests.Composing
         [Description("Add no anchors and try to jump to an anchor with MoveToFirstAnchor.")]
         public void MoveToFirstAnchor_Unkeyed_NoAnchors()
         {
-            Assert.Throws<InvalidOperationException>(() =>
+            ClassicAssert.Throws<InvalidOperationException>(() =>
                 new PatternBuilder()
                     .MoveToTime(new MetricTimeSpan(0, 0, 10))
                     .StepForward(new MetricTimeSpan(0, 0, 11))
@@ -110,7 +111,7 @@ namespace Melanchall.DryWetMidi.Tests.Composing
         [Description("Add unkeyed anchor and try to jump to an anchor with MoveToFirstAnchor(key).")]
         public void MoveToFirstAnchor_Keyed_NoKeyedAnchors()
         {
-            Assert.Throws<ArgumentException>(() =>
+            ClassicAssert.Throws<ArgumentException>(() =>
                 new PatternBuilder()
                     .MoveToTime(new MetricTimeSpan(0, 0, 10))
                     .StepForward(new MetricTimeSpan(0, 0, 11))

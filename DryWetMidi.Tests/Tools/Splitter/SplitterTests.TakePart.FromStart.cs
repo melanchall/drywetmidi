@@ -3,6 +3,7 @@ using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
 using Melanchall.DryWetMidi.Tools;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using System.Linq;
 
 namespace Melanchall.DryWetMidi.Tests.Tools
@@ -18,7 +19,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             var midiFile = new MidiFile();
             var result = midiFile.TakePart(MusicalTimeSpan.Eighth);
 
-            Assert.IsTrue(result.IsEmpty(), "Empty file part taking produced non-empty result.");
+            ClassicAssert.IsTrue(result.IsEmpty(), "Empty file part taking produced non-empty result.");
         }
 
         [Test]
@@ -175,7 +176,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             };
 
             var result = midiFile.TakePart(partLength, settings);
-            Assert.AreEqual(preserveTrackChunks ? 2 : 1, result.GetTrackChunks().Count(), "Track chunks count of resulting file is invalid.");
+            ClassicAssert.AreEqual(preserveTrackChunks ? 2 : 1, result.GetTrackChunks().Count(), "Track chunks count of resulting file is invalid.");
 
             CompareTimedEvents(
                 result.GetTrackChunks().First().GetTimedEvents(),

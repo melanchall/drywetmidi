@@ -7,8 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Melanchall.DryWetMidi", "Dr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Melanchall.DryWetMidi.Tests", "DryWetMidi.Tests\Melanchall.DryWetMidi.Tests.csproj", "{59309BC6-E1C3-40E8-AC58-C3793A5988B8}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Melanchall.DryWetMidi.Benchmarks", "DryWetMidi.Benchmarks\Melanchall.DryWetMidi.Benchmarks.csproj", "{26C03452-F03F-4366-A1FF-D6F7493C2FB9}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Melanchall.DryWetMidi.Tests.Common", "DryWetMidi.Tests.Common\Melanchall.DryWetMidi.Tests.Common.csproj", "{0862D851-D0CB-44D8-B7F0-1013E0347CFD}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Melanchall.Utilities", "Melanchall.Utilities", "{8268CF01-9042-46C3-8381-CB5B2A830764}"
@@ -48,16 +46,6 @@ Global
 		{59309BC6-E1C3-40E8-AC58-C3793A5988B8}.Release|Any CPU.Build.0 = Release|Any CPU
 		{59309BC6-E1C3-40E8-AC58-C3793A5988B8}.ReleaseTest|Any CPU.ActiveCfg = ReleaseTest|Any CPU
 		{59309BC6-E1C3-40E8-AC58-C3793A5988B8}.ReleaseTest|Any CPU.Build.0 = ReleaseTest|Any CPU
-		{26C03452-F03F-4366-A1FF-D6F7493C2FB9}.Coverage|Any CPU.ActiveCfg = Coverage|Any CPU
-		{26C03452-F03F-4366-A1FF-D6F7493C2FB9}.Coverage|Any CPU.Build.0 = Coverage|Any CPU
-		{26C03452-F03F-4366-A1FF-D6F7493C2FB9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{26C03452-F03F-4366-A1FF-D6F7493C2FB9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{26C03452-F03F-4366-A1FF-D6F7493C2FB9}.DebugTest|Any CPU.ActiveCfg = DebugTest|Any CPU
-		{26C03452-F03F-4366-A1FF-D6F7493C2FB9}.DebugTest|Any CPU.Build.0 = DebugTest|Any CPU
-		{26C03452-F03F-4366-A1FF-D6F7493C2FB9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{26C03452-F03F-4366-A1FF-D6F7493C2FB9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{26C03452-F03F-4366-A1FF-D6F7493C2FB9}.ReleaseTest|Any CPU.ActiveCfg = ReleaseTest|Any CPU
-		{26C03452-F03F-4366-A1FF-D6F7493C2FB9}.ReleaseTest|Any CPU.Build.0 = ReleaseTest|Any CPU
 		{0862D851-D0CB-44D8-B7F0-1013E0347CFD}.Coverage|Any CPU.ActiveCfg = Coverage|Any CPU
 		{0862D851-D0CB-44D8-B7F0-1013E0347CFD}.Coverage|Any CPU.Build.0 = Coverage|Any CPU
 		{0862D851-D0CB-44D8-B7F0-1013E0347CFD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU

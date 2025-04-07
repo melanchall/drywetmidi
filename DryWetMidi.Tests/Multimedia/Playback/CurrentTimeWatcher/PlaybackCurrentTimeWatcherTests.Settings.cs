@@ -1,6 +1,7 @@
 ﻿using Melanchall.DryWetMidi.Multimedia;
 using Melanchall.DryWetMidi.Tests.Common;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,7 +30,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 watcher.Stop();
             }
 
-            Assert.IsFalse(eventFired, "Event is fired.");
+            ClassicAssert.IsFalse(eventFired, "Event is fired.");
         }
 
         [Test]
@@ -55,8 +56,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 watcher.Stop();
             }
 
-            Assert.Greater(objectsCount, 0, "Event was not fired at all.");
-            Assert.AreEqual(objectsCount, objects.Count, "Event is fired after playback stopped.");
+            ClassicAssert.Greater(objectsCount, 0, "Event was not fired at all.");
+            ClassicAssert.AreEqual(objectsCount, objects.Count, "Event is fired after playback stopped.");
         }
 
         [Test]
@@ -77,7 +78,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 watcher.Stop();
             }
 
-            Assert.IsFalse(eventFired, "Event is fired.");
+            ClassicAssert.IsFalse(eventFired, "Event is fired.");
         }
 
         [Test]
@@ -99,7 +100,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 watcher.Stop();
             }
 
-            Assert.IsTrue(firstPlayback, "Second playback time reported.");
+            ClassicAssert.IsTrue(firstPlayback, "Second playback time reported.");
         }
 
         #endregion

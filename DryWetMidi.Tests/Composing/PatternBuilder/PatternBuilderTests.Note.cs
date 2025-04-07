@@ -5,6 +5,7 @@ using Melanchall.DryWetMidi.Composing;
 using Melanchall.DryWetMidi.MusicTheory;
 using Melanchall.DryWetMidi.Interaction;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace Melanchall.DryWetMidi.Tests.Composing
 {
@@ -57,7 +58,7 @@ namespace Melanchall.DryWetMidi.Tests.Composing
                 new NoteInfo(NoteName.B, 2, new MetricTimeSpan(0, 1, 24), new MetricTimeSpan(0, 0, 5)),
             });
 
-            Assert.AreEqual(new MetricTimeSpan(0, 1, 29), midiFile.GetDuration<MetricTimeSpan>());
+            ClassicAssert.AreEqual(new MetricTimeSpan(0, 1, 29), midiFile.GetDuration<MetricTimeSpan>());
         }
 
         [Test]
@@ -82,7 +83,7 @@ namespace Melanchall.DryWetMidi.Tests.Composing
                       .Select(i => Tuple.Create(i * 1000L, new Tempo(i * 100 + 10)))
                       .ToArray());
 
-            Assert.AreEqual(new MetricTimeSpan(0, 1, 29).TotalMicroseconds,
+            ClassicAssert.AreEqual(new MetricTimeSpan(0, 1, 29).TotalMicroseconds,
                             midiFile.GetDuration<MetricTimeSpan>().TotalMicroseconds);
         }
 
@@ -110,13 +111,13 @@ namespace Melanchall.DryWetMidi.Tests.Composing
         }
 
         [Test]
-        public void Note_ByInterval_OutOfRange_Up() => Assert.Throws<ArgumentException>(() =>
+        public void Note_ByInterval_OutOfRange_Up() => ClassicAssert.Throws<ArgumentException>(() =>
             new PatternBuilder()
                 .SetRootNote(DryWetMidi.MusicTheory.Note.Get((SevenBitNumber)30))
                 .Note(Interval.FromHalfSteps(100)));
 
         [Test]
-        public void Note_ByInterval_OutOfRange_Down() => Assert.Throws<ArgumentException>(() =>
+        public void Note_ByInterval_OutOfRange_Down() => ClassicAssert.Throws<ArgumentException>(() =>
             new PatternBuilder()
                 .SetRootNote(DryWetMidi.MusicTheory.Note.Get((SevenBitNumber)30))
                 .Note(-Interval.FromHalfSteps(100)));

@@ -1,6 +1,7 @@
 ﻿using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Tests.Common;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace Melanchall.DryWetMidi.Tests.Core
 {
@@ -20,8 +21,8 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 midiFile2,
                 new MidiFileEqualityCheckSettings { CompareOriginalFormat = true },
                 out var message);
-            Assert.IsTrue(areEqual, "Files aren't equal.");
-            Assert.IsNull(message, "Message isn't null.");
+            ClassicAssert.IsTrue(areEqual, "Files aren't equal.");
+            ClassicAssert.IsNull(message, "Message isn't null.");
         }
 
         [Test]
@@ -43,8 +44,8 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 midiFile2,
                 new MidiFileEqualityCheckSettings { CompareOriginalFormat = true },
                 out var message);
-            Assert.IsTrue(areEqual, "Files aren't equal.");
-            Assert.IsNull(message, "Message isn't null.");
+            ClassicAssert.IsTrue(areEqual, "Files aren't equal.");
+            ClassicAssert.IsNull(message, "Message isn't null.");
         }
 
         [Test]
@@ -66,9 +67,9 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 midiFile2,
                 new MidiFileEqualityCheckSettings { CompareOriginalFormat = true },
                 out var message);
-            Assert.IsFalse(areEqual, "Files are equal.");
-            Assert.IsNotNull(message, "Message is null.");
-            Assert.IsNotEmpty(message, "Message is empty.");
+            ClassicAssert.IsFalse(areEqual, "Files are equal.");
+            ClassicAssert.IsNotNull(message, "Message is null.");
+            ClassicAssert.IsNotEmpty(message, "Message is empty.");
         }
 
         [Test]
@@ -82,8 +83,8 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 midiFile2,
                 new MidiFileEqualityCheckSettings { CompareOriginalFormat = false },
                 out var message);
-            Assert.IsTrue(areEqual, "Files aren't equal.");
-            Assert.IsNull(message, "Message isn't null.");
+            ClassicAssert.IsTrue(areEqual, "Files aren't equal.");
+            ClassicAssert.IsNull(message, "Message isn't null.");
         }
 
         [TestCase(MidiFileFormat.MultiTrack, MidiFileFormat.MultiTrack)]
@@ -106,8 +107,8 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 midiFile2,
                 new MidiFileEqualityCheckSettings { CompareOriginalFormat = false },
                 out var message);
-            Assert.IsTrue(areEqual, "Files aren't equal.");
-            Assert.IsNull(message, "Message isn't null.");
+            ClassicAssert.IsTrue(areEqual, "Files aren't equal.");
+            ClassicAssert.IsNull(message, "Message isn't null.");
         }
 
         [Test]
@@ -117,8 +118,8 @@ namespace Melanchall.DryWetMidi.Tests.Core
             var midiFile2 = new MidiFile(new TrackChunk(new NoteOnEvent { DeltaTime = 100 }));
 
             var areEqual = MidiFile.Equals(midiFile1, midiFile2, out var message);
-            Assert.IsTrue(areEqual, "Files aren't equal.");
-            Assert.IsNull(message, "Message isn't null.");
+            ClassicAssert.IsTrue(areEqual, "Files aren't equal.");
+            ClassicAssert.IsNull(message, "Message isn't null.");
         }
 
         [Test]
@@ -128,9 +129,9 @@ namespace Melanchall.DryWetMidi.Tests.Core
             var midiFile2 = new MidiFile(new TrackChunk(new NoteOnEvent { DeltaTime = 1000 }));
 
             var areEqual = MidiFile.Equals(midiFile1, midiFile2, out var message);
-            Assert.IsFalse(areEqual, "Files are equal.");
-            Assert.IsNotNull(message, "Message is null.");
-            Assert.IsNotEmpty(message, "Message is empty.");
+            ClassicAssert.IsFalse(areEqual, "Files are equal.");
+            ClassicAssert.IsNotNull(message, "Message is null.");
+            ClassicAssert.IsNotEmpty(message, "Message is empty.");
         }
 
         [TestCase(100, 100)]
@@ -154,8 +155,8 @@ namespace Melanchall.DryWetMidi.Tests.Core
                     }
                 },
                 out var message);
-            Assert.IsTrue(areEqual, "Chunks aren't equal.");
-            Assert.IsNull(message, "Message isn't null.");
+            ClassicAssert.IsTrue(areEqual, "Chunks aren't equal.");
+            ClassicAssert.IsNull(message, "Message isn't null.");
         }
 
         #endregion

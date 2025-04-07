@@ -3,6 +3,7 @@ using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
 using Melanchall.DryWetMidi.Tests.Utilities;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace Melanchall.DryWetMidi.Tests.Interaction
 {
@@ -77,7 +78,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             var clone = (TaggedTimedEvent)taggedTimedEvent.Clone();
 
             MidiAsserts.AreEqual(midiEvent, clone.Event, true, "Event is invalid.");
-            Assert.AreEqual(tag, clone.Tag, "Tag is invalid.");
+            ClassicAssert.AreEqual(tag, clone.Tag, "Tag is invalid.");
         }
 
         #endregion
@@ -97,8 +98,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
             timedEvent.Time = timedEvent.Time;
 
-            Assert.IsNull(timeChangedSender, "Sender is not null.");
-            Assert.IsNull(timeChangedEventArgs, "Event args is not null.");
+            ClassicAssert.IsNull(timeChangedSender, "Sender is not null.");
+            ClassicAssert.IsNull(timeChangedEventArgs, "Event args is not null.");
         }
 
         private static void CheckTimeChangedEvent_Changed(TimedEvent timedEvent)
@@ -115,12 +116,12 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             var oldTime = timedEvent.Time;
             timedEvent.Time += 100;
 
-            Assert.AreSame(timedEvent, timeChangedSender, "Sender is invalid.");
+            ClassicAssert.AreSame(timedEvent, timeChangedSender, "Sender is invalid.");
 
-            Assert.IsNotNull(timeChangedEventArgs, "Event args is null.");
-            Assert.AreEqual(oldTime, timeChangedEventArgs.OldTime, "Old time is invalid.");
-            Assert.AreEqual(timedEvent.Time, timeChangedEventArgs.NewTime, "New time is invalid.");
-            Assert.AreNotEqual(oldTime, timedEvent.Time, "New time is equal to old one.");
+            ClassicAssert.IsNotNull(timeChangedEventArgs, "Event args is null.");
+            ClassicAssert.AreEqual(oldTime, timeChangedEventArgs.OldTime, "Old time is invalid.");
+            ClassicAssert.AreEqual(timedEvent.Time, timeChangedEventArgs.NewTime, "New time is invalid.");
+            ClassicAssert.AreNotEqual(oldTime, timedEvent.Time, "New time is equal to old one.");
         }
 
         private static TimedEvent GetTimedEvent_ZeroTime()

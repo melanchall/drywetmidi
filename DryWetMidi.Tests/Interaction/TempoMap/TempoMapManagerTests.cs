@@ -2,6 +2,7 @@
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace Melanchall.DryWetMidi.Tests.Interaction
 {
@@ -16,10 +17,10 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             {
                 var tempoMap = tempoMapManager.TempoMap;
 
-                Assert.AreEqual(TicksPerQuarterNoteTimeDivision.DefaultTicksPerQuarterNote,
+                ClassicAssert.AreEqual(TicksPerQuarterNoteTimeDivision.DefaultTicksPerQuarterNote,
                                 ((TicksPerQuarterNoteTimeDivision)tempoMap.TimeDivision).TicksPerQuarterNote);
-                Assert.IsFalse(tempoMap.GetTempoChanges().Any());
-                Assert.IsFalse(tempoMap.GetTimeSignatureChanges().Any());
+                ClassicAssert.IsFalse(tempoMap.GetTempoChanges().Any());
+                ClassicAssert.IsFalse(tempoMap.GetTimeSignatureChanges().Any());
             }
         }
 
@@ -31,9 +32,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             {
                 var tempoMap = tempoMapManager.TempoMap;
 
-                Assert.AreEqual(100, ((TicksPerQuarterNoteTimeDivision)tempoMap.TimeDivision).TicksPerQuarterNote);
-                Assert.IsFalse(tempoMap.GetTempoChanges().Any());
-                Assert.IsFalse(tempoMap.GetTimeSignatureChanges().Any());
+                ClassicAssert.AreEqual(100, ((TicksPerQuarterNoteTimeDivision)tempoMap.TimeDivision).TicksPerQuarterNote);
+                ClassicAssert.IsFalse(tempoMap.GetTempoChanges().Any());
+                ClassicAssert.IsFalse(tempoMap.GetTimeSignatureChanges().Any());
             }
         }
 
@@ -49,15 +50,15 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
                 var tempoMap = tempoMapManager.TempoMap;
 
-                Assert.IsTrue(tempoMap.GetTempoChanges().Any());
-                Assert.IsTrue(tempoMap.GetTimeSignatureChanges().Any());
+                ClassicAssert.IsTrue(tempoMap.GetTempoChanges().Any());
+                ClassicAssert.IsTrue(tempoMap.GetTimeSignatureChanges().Any());
 
                 tempoMapManager.ReplaceTempoMap(TempoMap.Default);
 
-                Assert.AreEqual(TicksPerQuarterNoteTimeDivision.DefaultTicksPerQuarterNote,
+                ClassicAssert.AreEqual(TicksPerQuarterNoteTimeDivision.DefaultTicksPerQuarterNote,
                                 ((TicksPerQuarterNoteTimeDivision)tempoMap.TimeDivision).TicksPerQuarterNote);
-                Assert.IsFalse(tempoMap.GetTempoChanges().Any());
-                Assert.IsFalse(tempoMap.GetTimeSignatureChanges().Any());
+                ClassicAssert.IsFalse(tempoMap.GetTempoChanges().Any());
+                ClassicAssert.IsFalse(tempoMap.GetTimeSignatureChanges().Any());
             }
         }
     }

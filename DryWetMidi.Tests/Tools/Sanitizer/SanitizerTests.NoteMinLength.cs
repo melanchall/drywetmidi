@@ -3,6 +3,7 @@ using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
 using Melanchall.DryWetMidi.Tools;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace Melanchall.DryWetMidi.Tests.Tools
 {
@@ -161,7 +162,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 new TrackChunk()));
 
         [Test]
-        public void Sanitize_NoteMinLength_SingleNote_Short_Midi_Fail_1([Values(0, 5)] long noteLength) => Assert.Throws<AssertionException>(() => Sanitize(
+        public void Sanitize_NoteMinLength_SingleNote_Short_Midi_Fail_1([Values(0, 5)] long noteLength) => ClassicAssert.Throws<AssertionException>(() => Sanitize(
             midiFile: new MidiFile(
                 new TrackChunk(
                     new NoteOnEvent((SevenBitNumber)70, SevenBitNumber.MaxValue),
@@ -174,7 +175,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 new TrackChunk())));
 
         [Test]
-        public void Sanitize_NoteMinLength_SingleNote_Short_Midi_Fail_2([Values(0, 5)] long noteLength) => Assert.Throws<AssertionException>(() => Sanitize(
+        public void Sanitize_NoteMinLength_SingleNote_Short_Midi_Fail_2([Values(0, 5)] long noteLength) => ClassicAssert.Throws<AssertionException>(() => Sanitize(
             midiFile: new MidiFile(
                 new TrackChunk(
                     new NoteOnEvent((SevenBitNumber)70, SevenBitNumber.MaxValue),

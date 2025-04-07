@@ -2,6 +2,7 @@
 using Melanchall.DryWetMidi.Tests.Utilities;
 using Melanchall.DryWetMidi.Tools;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +15,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         #region Test methods
 
         [Test]
-        public void MergeSimultaneously_NoFiles() => Assert.Throws<ArgumentException>(() => MergeSimultaneously(
+        public void MergeSimultaneously_NoFiles() => ClassicAssert.Throws<ArgumentException>(() => MergeSimultaneously(
             midiFiles: new MidiFile[0],
             settings: null,
             expectedMidiFile: null));
@@ -53,7 +54,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             expectedMidiFile: new MidiFile { TimeDivision = new TicksPerQuarterNoteTimeDivision(30) });
 
         [Test]
-        public void MergeSimultaneously_EmptyFiles_DifferentTpqn_Failed() => Assert.Throws<AssertionException>(() => MergeSimultaneously(
+        public void MergeSimultaneously_EmptyFiles_DifferentTpqn_Failed() => ClassicAssert.Throws<AssertionException>(() => MergeSimultaneously(
             midiFiles: new[]
             {
                 new MidiFile { TimeDivision = new TicksPerQuarterNoteTimeDivision(2) },
@@ -230,7 +231,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             });
 
         [Test]
-        public void MergeSimultaneously_DifferentTempoMaps_1() => Assert.Throws<InvalidOperationException>(() => MergeSimultaneously(
+        public void MergeSimultaneously_DifferentTempoMaps_1() => ClassicAssert.Throws<InvalidOperationException>(() => MergeSimultaneously(
             midiFiles: new[]
             {
                 new MidiFile(
@@ -255,7 +256,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             expectedMidiFile: new MidiFile()));
 
         [Test]
-        public void MergeSimultaneously_DifferentTempoMaps_2() => Assert.Throws<InvalidOperationException>(() => MergeSimultaneously(
+        public void MergeSimultaneously_DifferentTempoMaps_2() => ClassicAssert.Throws<InvalidOperationException>(() => MergeSimultaneously(
             midiFiles: new[]
             {
                 new MidiFile(
@@ -280,7 +281,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             expectedMidiFile: new MidiFile()));
 
         [Test]
-        public void MergeSimultaneously_DifferentTempoMaps_3() => Assert.Throws<InvalidOperationException>(() => MergeSimultaneously(
+        public void MergeSimultaneously_DifferentTempoMaps_3() => ClassicAssert.Throws<InvalidOperationException>(() => MergeSimultaneously(
             midiFiles: new[]
             {
                 new MidiFile(
@@ -308,7 +309,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             expectedMidiFile: new MidiFile()));
 
         [Test]
-        public void MergeSimultaneously_DifferentTempoMaps_4() => Assert.Throws<InvalidOperationException>(() => MergeSimultaneously(
+        public void MergeSimultaneously_DifferentTempoMaps_4() => ClassicAssert.Throws<InvalidOperationException>(() => MergeSimultaneously(
             midiFiles: new[]
             {
                 new MidiFile(
@@ -336,7 +337,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             expectedMidiFile: new MidiFile()));
 
         [Test]
-        public void MergeSimultaneously_DifferentTempoMaps_5() => Assert.Throws<InvalidOperationException>(() => MergeSimultaneously(
+        public void MergeSimultaneously_DifferentTempoMaps_5() => ClassicAssert.Throws<InvalidOperationException>(() => MergeSimultaneously(
             midiFiles: new[]
             {
                 new MidiFile(
@@ -364,7 +365,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             expectedMidiFile: new MidiFile()));
 
         [Test]
-        public void MergeSimultaneously_DifferentTempoMaps_6() => Assert.Throws<InvalidOperationException>(() => MergeSimultaneously(
+        public void MergeSimultaneously_DifferentTempoMaps_6() => ClassicAssert.Throws<InvalidOperationException>(() => MergeSimultaneously(
             midiFiles: new[]
             {
                 new MidiFile(
@@ -695,7 +696,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             });
 
         [Test]
-        public void MergeSimultaneously_NonTrackChunk_Copy_Fail() => Assert.Throws<AssertionException>(() => MergeSimultaneously(
+        public void MergeSimultaneously_NonTrackChunk_Copy_Fail() => ClassicAssert.Throws<AssertionException>(() => MergeSimultaneously(
             midiFiles: new[]
             {
                 new MidiFile(

@@ -2,6 +2,7 @@
 using System.Linq;
 using Melanchall.DryWetMidi.Interaction;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace Melanchall.DryWetMidi.Tests.Interaction
 {
@@ -197,14 +198,14 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         [Test]
         public void Convert_Default_FromMaxTicks()
         {
-            Assert.DoesNotThrow(() =>
+            ClassicAssert.DoesNotThrow(() =>
                 TimeConverter.ConvertTo<BarBeatTicksTimeSpan>(long.MaxValue, TimeSpanTestUtilities.DefaultTempoMap));
         }
 
         [Test]
         public void Convert_Default_FromMaxTimeSpan()
         {
-            Assert.Throws<InvalidOperationException>(() =>
+            ClassicAssert.Throws<InvalidOperationException>(() =>
                 TimeConverter.ConvertFrom(new BarBeatTicksTimeSpan(long.MaxValue, long.MaxValue, long.MaxValue), TimeSpanTestUtilities.DefaultTempoMap));
         }
 
@@ -856,7 +857,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         [Description("Multiply zero time span by zero.")]
         public void Multiply_1()
         {
-            Assert.AreEqual(new BarBeatTicksTimeSpan(),
+            ClassicAssert.AreEqual(new BarBeatTicksTimeSpan(),
                             new BarBeatTicksTimeSpan().Multiply(0));
         }
 
@@ -864,7 +865,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         [Description("Multiply arbitrary time span by zero.")]
         public void Multiply_2()
         {
-            Assert.AreEqual(new BarBeatTicksTimeSpan(),
+            ClassicAssert.AreEqual(new BarBeatTicksTimeSpan(),
                             new BarBeatTicksTimeSpan(10, 5, 9).Multiply(0));
         }
 
@@ -872,7 +873,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         [Description("Multiply by integer number.")]
         public void Multiply_3()
         {
-            Assert.AreEqual(new BarBeatTicksTimeSpan(20, 10, 18),
+            ClassicAssert.AreEqual(new BarBeatTicksTimeSpan(20, 10, 18),
                             new BarBeatTicksTimeSpan(10, 5, 9).Multiply(2));
         }
 
@@ -880,7 +881,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         [Description("Multiply by non-integer number.")]
         public void Multiply_4()
         {
-            Assert.AreEqual(new BarBeatTicksTimeSpan(15, 12, 9),
+            ClassicAssert.AreEqual(new BarBeatTicksTimeSpan(15, 12, 9),
                             new BarBeatTicksTimeSpan(10, 8, 6).Multiply(1.5));
         }
 
@@ -888,7 +889,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         [Description("Multiply by negative number.")]
         public void Multiply_5()
         {
-            Assert.Throws<ArgumentOutOfRangeException>(() => new BarBeatTicksTimeSpan().Multiply(-5));
+            ClassicAssert.Throws<ArgumentOutOfRangeException>(() => new BarBeatTicksTimeSpan().Multiply(-5));
         }
 
         #endregion
@@ -899,7 +900,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         [Description("Divide arbitrary time span by one.")]
         public void Divide_1()
         {
-            Assert.AreEqual(new BarBeatTicksTimeSpan(5, 4, 3),
+            ClassicAssert.AreEqual(new BarBeatTicksTimeSpan(5, 4, 3),
                             new BarBeatTicksTimeSpan(5, 4, 3).Divide(1));
         }
 
@@ -907,7 +908,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         [Description("Divide arbitrary time span by integer number.")]
         public void Divide_2()
         {
-            Assert.AreEqual(new BarBeatTicksTimeSpan(5, 3, 4),
+            ClassicAssert.AreEqual(new BarBeatTicksTimeSpan(5, 3, 4),
                             new BarBeatTicksTimeSpan(10, 6, 8).Divide(2));
         }
 
@@ -915,7 +916,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         [Description("Divide by non-integer number.")]
         public void Divide_3()
         {
-            Assert.AreEqual(new BarBeatTicksTimeSpan(8, 2, 4),
+            ClassicAssert.AreEqual(new BarBeatTicksTimeSpan(8, 2, 4),
                             new BarBeatTicksTimeSpan(12, 3, 6).Divide(1.5));
         }
 
@@ -923,21 +924,21 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         [Description("Divide by zero.")]
         public void Divide_4()
         {
-            Assert.Throws<ArgumentOutOfRangeException>(() => new BarBeatTicksTimeSpan().Divide(0));
+            ClassicAssert.Throws<ArgumentOutOfRangeException>(() => new BarBeatTicksTimeSpan().Divide(0));
         }
 
         [Test]
         [Description("Divide by negative number.")]
         public void Divide_5()
         {
-            Assert.Throws<ArgumentOutOfRangeException>(() => new BarBeatTicksTimeSpan().Divide(-8));
+            ClassicAssert.Throws<ArgumentOutOfRangeException>(() => new BarBeatTicksTimeSpan().Divide(-8));
         }
 
         [Test]
         [Description("Divide zero time span by one.")]
         public void Divide_6()
         {
-            Assert.AreEqual(new BarBeatTicksTimeSpan(),
+            ClassicAssert.AreEqual(new BarBeatTicksTimeSpan(),
                             new BarBeatTicksTimeSpan().Divide(1));
         }
 
@@ -970,11 +971,11 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 var timeSpan1 = timeSpansPair.Item1;
                 var timeSpan2 = timeSpansPair.Item2;
 
-                Assert.IsTrue(timeSpan1 < timeSpan2,
+                ClassicAssert.IsTrue(timeSpan1 < timeSpan2,
                               $"{timeSpan1} isn't less than {timeSpan2} using <.");
-                Assert.IsTrue(timeSpan1.CompareTo(timeSpan2) < 0,
+                ClassicAssert.IsTrue(timeSpan1.CompareTo(timeSpan2) < 0,
                               $"{timeSpan1} isn't less than {timeSpan2} using typed CompareTo.");
-                Assert.IsTrue(timeSpan1.CompareTo((object)timeSpan2) < 0,
+                ClassicAssert.IsTrue(timeSpan1.CompareTo((object)timeSpan2) < 0,
                               $"{timeSpan1} isn't less than {timeSpan2} using CompareTo(object).");
             }
         }
@@ -988,11 +989,11 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 var timeSpan1 = timeSpansPair.Item2;
                 var timeSpan2 = timeSpansPair.Item1;
 
-                Assert.IsTrue(timeSpan1 > timeSpan2,
+                ClassicAssert.IsTrue(timeSpan1 > timeSpan2,
                               $"{timeSpan1} isn't greater than {timeSpan2} using >.");
-                Assert.IsTrue(timeSpan1.CompareTo(timeSpan2) > 0,
+                ClassicAssert.IsTrue(timeSpan1.CompareTo(timeSpan2) > 0,
                               $"{timeSpan1} isn't greater than {timeSpan2} using typed CompareTo.");
-                Assert.IsTrue(timeSpan1.CompareTo((object)timeSpan2) > 0,
+                ClassicAssert.IsTrue(timeSpan1.CompareTo((object)timeSpan2) > 0,
                               $"{timeSpan1} isn't greater than {timeSpan2} using CompareTo(object).");
             }
         }
@@ -1006,11 +1007,11 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 var timeSpan1 = timeSpansPair.Item1;
                 var timeSpan2 = timeSpansPair.Item2;
 
-                Assert.IsTrue(timeSpan1 <= timeSpan2,
+                ClassicAssert.IsTrue(timeSpan1 <= timeSpan2,
                               $"{timeSpan1} isn't less than or equal to {timeSpan2} using <=.");
-                Assert.IsTrue(timeSpan1.CompareTo(timeSpan2) <= 0,
+                ClassicAssert.IsTrue(timeSpan1.CompareTo(timeSpan2) <= 0,
                               $"{timeSpan1} isn't less than or equal to {timeSpan2} using typed CompareTo.");
-                Assert.IsTrue(timeSpan1.CompareTo((object)timeSpan2) <= 0,
+                ClassicAssert.IsTrue(timeSpan1.CompareTo((object)timeSpan2) <= 0,
                               $"{timeSpan1} isn't less than or equal to {timeSpan2} using CompareTo(object).");
             }
         }
@@ -1024,11 +1025,11 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 var timeSpan1 = timeSpansPair.Item2;
                 var timeSpan2 = timeSpansPair.Item1;
 
-                Assert.IsTrue(timeSpan1 >= timeSpan2,
+                ClassicAssert.IsTrue(timeSpan1 >= timeSpan2,
                               $"{timeSpan1} isn't greater than or equal to {timeSpan2} using >=.");
-                Assert.IsTrue(timeSpan1.CompareTo(timeSpan2) >= 0,
+                ClassicAssert.IsTrue(timeSpan1.CompareTo(timeSpan2) >= 0,
                               $"{timeSpan1} isn't greater than or equal to {timeSpan2} using typed CompareTo.");
-                Assert.IsTrue(timeSpan1.CompareTo((object)timeSpan2) >= 0,
+                ClassicAssert.IsTrue(timeSpan1.CompareTo((object)timeSpan2) >= 0,
                               $"{timeSpan1} isn't greater than or equal to {timeSpan2} using CompareTo(object).");
             }
         }
@@ -1049,7 +1050,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 var timeSpan1 = timeSpansPair.Item1;
                 var timeSpan2 = timeSpansPair.Item2;
 
-                Assert.Throws<ArgumentException>(() => timeSpan1.CompareTo(timeSpan2));
+                ClassicAssert.Throws<ArgumentException>(() => timeSpan1.CompareTo(timeSpan2));
             }
         }
 
@@ -1062,11 +1063,11 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 var timeSpan1 = timeSpansPair.Item2;
                 var timeSpan2 = timeSpansPair.Item1;
 
-                Assert.IsTrue(timeSpan1 == timeSpan2,
+                ClassicAssert.IsTrue(timeSpan1 == timeSpan2,
                               $"{timeSpan1} isn't equal to {timeSpan2} using ==.");
-                Assert.IsTrue(timeSpan1.Equals(timeSpan2),
+                ClassicAssert.IsTrue(timeSpan1.Equals(timeSpan2),
                               $"{timeSpan1} isn't equal to {timeSpan2} using typed Equals.");
-                Assert.IsTrue(timeSpan1.Equals((object)timeSpan2),
+                ClassicAssert.IsTrue(timeSpan1.Equals((object)timeSpan2),
                               $"{timeSpan1} isn't equal to {timeSpan2} using Equals(object).");
             }
         }
@@ -1080,11 +1081,11 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 var timeSpan1 = timeSpansPair.Item2;
                 var timeSpan2 = timeSpansPair.Item1;
 
-                Assert.IsFalse(timeSpan1 == timeSpan2,
+                ClassicAssert.IsFalse(timeSpan1 == timeSpan2,
                                $"{timeSpan1} equal to {timeSpan2} using ==.");
-                Assert.IsFalse(timeSpan1.Equals(timeSpan2),
+                ClassicAssert.IsFalse(timeSpan1.Equals(timeSpan2),
                                $"{timeSpan1} equal to {timeSpan2} using typed Equals.");
-                Assert.IsFalse(timeSpan1.Equals((object)timeSpan2),
+                ClassicAssert.IsFalse(timeSpan1.Equals((object)timeSpan2),
                                $"{timeSpan1} equal to {timeSpan2} using Equals(object).");
             }
         }
@@ -1098,11 +1099,11 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 var timeSpan1 = timeSpansPair.Item2;
                 var timeSpan2 = timeSpansPair.Item1;
 
-                Assert.IsTrue(timeSpan1 != timeSpan2,
+                ClassicAssert.IsTrue(timeSpan1 != timeSpan2,
                               $"{timeSpan1} equal to {timeSpan2} using !=.");
-                Assert.IsTrue(!timeSpan1.Equals(timeSpan2),
+                ClassicAssert.IsTrue(!timeSpan1.Equals(timeSpan2),
                               $"{timeSpan1} equal to {timeSpan2} using typed Equals.");
-                Assert.IsTrue(!timeSpan1.Equals((object)timeSpan2),
+                ClassicAssert.IsTrue(!timeSpan1.Equals((object)timeSpan2),
                               $"{timeSpan1} equal to {timeSpan2} using Equals(object).");
             }
         }
@@ -1116,11 +1117,11 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 var timeSpan1 = timeSpansPair.Item2;
                 var timeSpan2 = timeSpansPair.Item1;
 
-                Assert.IsFalse(timeSpan1 != timeSpan2,
+                ClassicAssert.IsFalse(timeSpan1 != timeSpan2,
                                $"{timeSpan1} isn't equal to {timeSpan2} using !=.");
-                Assert.IsFalse(!timeSpan1.Equals(timeSpan2),
+                ClassicAssert.IsFalse(!timeSpan1.Equals(timeSpan2),
                                $"{timeSpan1} isn't equal to {timeSpan2} using typed Equals.");
-                Assert.IsFalse(!timeSpan1.Equals((object)timeSpan2),
+                ClassicAssert.IsFalse(!timeSpan1.Equals((object)timeSpan2),
                                $"{timeSpan1} isn't equal to {timeSpan2} using Equals(object).");
             }
         }

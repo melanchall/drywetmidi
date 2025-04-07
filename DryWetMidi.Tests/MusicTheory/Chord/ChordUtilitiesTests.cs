@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Melanchall.DryWetMidi.MusicTheory;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace Melanchall.DryWetMidi.Tests.MusicTheory
 {
@@ -24,7 +25,7 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
         {
             var chord = new Chord(NoteName.C, NoteName.E, NoteName.G);
             var inversions = chord.GetInversions().Select(c => c.NotesNames).ToArray();
-            Assert.AreEqual(4, inversions.Length, "Invalid count of inversions.");
+            ClassicAssert.AreEqual(4, inversions.Length, "Invalid count of inversions.");
             AssertCollectionContainsCollection(
                 inversions,
                 new[] { NoteName.E, NoteName.G, NoteName.C },
@@ -48,7 +49,7 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
         {
             var chord = new Chord(NoteName.A, NoteName.ASharp, NoteName.D);
             var rootNote = chord.ResolveRootNote(Octave.Get(4));
-            Assert.AreEqual(Notes.A4, rootNote, "Resolved root note is invalid.");
+            ClassicAssert.AreEqual(Notes.A4, rootNote, "Resolved root note is invalid.");
         }
 
         [Test]
@@ -66,7 +67,7 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
         public void GetIntervalsFromRootNote_OutOfRange()
         {
             var chord = new Chord(NoteName.A, NoteName.A, NoteName.A, NoteName.A, NoteName.A, NoteName.A, NoteName.A, NoteName.A, NoteName.A, NoteName.A, NoteName.A, NoteName.A);
-            Assert.Throws<InvalidOperationException>(() => chord.GetIntervalsFromRootNote());
+            ClassicAssert.Throws<InvalidOperationException>(() => chord.GetIntervalsFromRootNote());
         }
 
         [Test]
@@ -103,7 +104,7 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
                     return;
             }
 
-            Assert.Fail(errorMessage);
+            ClassicAssert.Fail(errorMessage);
         }
 
         #endregion

@@ -3,6 +3,7 @@ using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
 using Melanchall.DryWetMidi.Tests.Utilities;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -2442,8 +2443,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
 
             CollectionAssert.AreEquivalent(notesStarted, notesFinished, "Mismatch.");
-            Assert.AreEqual(2, notesStarted.Count, "Invalid count of started notes.");
-            Assert.AreEqual(2, notesFinished.Count, "Invalid count of finished notes.");
+            ClassicAssert.AreEqual(2, notesStarted.Count, "Invalid count of started notes.");
+            ClassicAssert.AreEqual(2, notesFinished.Count, "Invalid count of finished notes.");
 
             MidiAsserts.AreEqual(
                 new[]
@@ -2498,8 +2499,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
 
             CollectionAssert.AreEquivalent(notesStarted, notesFinished, "Mismatch.");
-            Assert.AreEqual(1, notesStarted.Count, "Invalid count of started notes.");
-            Assert.AreEqual(1, notesFinished.Count, "Invalid count of finished notes.");
+            ClassicAssert.AreEqual(1, notesStarted.Count, "Invalid count of started notes.");
+            ClassicAssert.AreEqual(1, notesFinished.Count, "Invalid count of finished notes.");
 
             MidiAsserts.AreEqual(
                 new[]
@@ -2616,8 +2617,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     playback.NotesPlaybackFinished += (_, e) => notesFinished.AddRange(e.Notes);
                 });
 
-            Assert.AreEqual(1, notesStarted.Count, "Invalid count of started notes.");
-            Assert.AreEqual(1, notesFinished.Count, "Invalid count of finished notes.");
+            ClassicAssert.AreEqual(1, notesStarted.Count, "Invalid count of started notes.");
+            ClassicAssert.AreEqual(1, notesFinished.Count, "Invalid count of finished notes.");
 
             MidiAsserts.AreEqual(
                 new[]
@@ -2678,8 +2679,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     playback.NotesPlaybackFinished += (_, e) => notesFinished.AddRange(e.Notes);
                 });
 
-            Assert.AreEqual(1, notesStarted.Count, "Invalid count of started notes.");
-            Assert.AreEqual(1, notesFinished.Count, "Invalid count of finished notes.");
+            ClassicAssert.AreEqual(1, notesStarted.Count, "Invalid count of started notes.");
+            ClassicAssert.AreEqual(1, notesFinished.Count, "Invalid count of finished notes.");
 
             MidiAsserts.AreEqual(
                 new[]

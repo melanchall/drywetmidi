@@ -8,6 +8,7 @@ using Melanchall.DryWetMidi.Multimedia;
 using Melanchall.DryWetMidi.Tests.Common;
 using Melanchall.DryWetMidi.Tests.Utilities;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace Melanchall.DryWetMidi.Tests.Multimedia
 {
@@ -47,7 +48,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     
                     if (!areEventsReceived)
                     {
-                        Assert.Fail(
+                        ClassicAssert.Fail(
                             $"Events are not received for timeout {timeout}. " +
                             $"Events to send: {string.Join(", ", eventsToSend.Select(e => e.Event))}. " +
                             $"Sent events: {string.Join(", ", sentEvents.Select(e => e.Event))}. " +
@@ -91,7 +92,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 MidiAsserts.AreEqual(sentEvent.Event, receivedEvent.Event, false, $"Received event ({receivedEvent.Event}) doesn't match the sent one ({sentEvent.Event}).");
 
                 var delay = (receivedEvent.Time - sentEvent.Time).Duration();
-                Assert.LessOrEqual(
+                ClassicAssert.LessOrEqual(
                     delay,
                     maximumEventSendReceiveDelay,
                     $"Event was received too late (at {receivedEvent.Time} instead of {sentEvent.Time}). Delay is too big.");
@@ -115,7 +116,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     $"Received event ({receivedEvent.Event}) doesn't match the expected one ({expectedReceivedEvent.Event}).");
 
                 var delay = (expectedReceivedEvent.Time - receivedEvent.Time).Duration();
-                Assert.LessOrEqual(
+                ClassicAssert.LessOrEqual(
                     delay,
                     maximumEventSendReceiveDelay,
                     $"Event was received too late (at {receivedEvent.Time} instead of {expectedReceivedEvent.Time}). Delay is too big.");

@@ -4,6 +4,7 @@ using Melanchall.DryWetMidi.Interaction;
 using Melanchall.DryWetMidi.Multimedia;
 using Melanchall.DryWetMidi.Tests.Common;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -110,7 +111,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     reference += waitTimes[2] * speeds[2];
                 }
 
-                Assert.LessOrEqual(
+                ClassicAssert.LessOrEqual(
                     delta,
                     MathUtilities.AddRelativeMargin(reference, 0.2),
                     "Invalid current time delta after speed change.");

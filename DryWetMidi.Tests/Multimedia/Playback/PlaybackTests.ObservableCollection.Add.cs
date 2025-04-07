@@ -4,6 +4,7 @@ using Melanchall.DryWetMidi.Interaction;
 using Melanchall.DryWetMidi.Multimedia;
 using Melanchall.DryWetMidi.Tests.Utilities;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -2870,8 +2871,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
 
             CollectionAssert.AreEquivalent(notesStarted, notesFinished, "Inconsistent notes started/finished lists.");
-            Assert.AreEqual(1, notesStarted.Count, "Invalid notes started count.");
-            Assert.AreEqual(1, notesFinished.Count, "Invalid notes finished count.");
+            ClassicAssert.AreEqual(1, notesStarted.Count, "Invalid notes started count.");
+            ClassicAssert.AreEqual(1, notesFinished.Count, "Invalid notes finished count.");
         }
 
         [Retry(OnTheFlyChecksRetriesNumber)]
@@ -2921,8 +2922,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
 
             CollectionAssert.AreEquivalent(notesStarted, notesFinished, "Inconsistent notes started/finished lists.");
-            Assert.AreEqual(1, notesStarted.Count, "Invalid notes started count.");
-            Assert.AreEqual(1, notesFinished.Count, "Invalid notes finished count.");
+            ClassicAssert.AreEqual(1, notesStarted.Count, "Invalid notes started count.");
+            ClassicAssert.AreEqual(1, notesFinished.Count, "Invalid notes finished count.");
         }
 
         [Retry(OnTheFlyChecksRetriesNumber)]
@@ -2967,8 +2968,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
 
             CollectionAssert.AreEquivalent(notesStarted, notesFinished, "Inconsistent notes started/finished lists.");
-            Assert.AreEqual(1, notesStarted.Count, "Invalid notes started count.");
-            Assert.AreEqual(1, notesFinished.Count, "Invalid notes finished count.");
+            ClassicAssert.AreEqual(1, notesStarted.Count, "Invalid notes started count.");
+            ClassicAssert.AreEqual(1, notesFinished.Count, "Invalid notes finished count.");
         }
 
         [Retry(OnTheFlyChecksRetriesNumber)]
@@ -3013,8 +3014,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
 
             CollectionAssert.AreEquivalent(notesStarted, notesFinished, "Inconsistent notes started/finished lists.");
-            Assert.AreEqual(1, notesStarted.Count, "Invalid notes started count.");
-            Assert.AreEqual(1, notesFinished.Count, "Invalid notes finished count.");
+            ClassicAssert.AreEqual(1, notesStarted.Count, "Invalid notes started count.");
+            ClassicAssert.AreEqual(1, notesFinished.Count, "Invalid notes finished count.");
         }
 
         [Retry(OnTheFlyChecksRetriesNumber)]
@@ -3083,8 +3084,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
 
             CollectionAssert.AreEquivalent(notesStarted, notesFinished, "Inconsistent notes started/finished lists.");
-            Assert.AreEqual(2, notesStarted.Count, "Invalid notes started count.");
-            Assert.AreEqual(2, notesFinished.Count, "Invalid notes finished count.");
+            ClassicAssert.AreEqual(2, notesStarted.Count, "Invalid notes started count.");
+            ClassicAssert.AreEqual(2, notesFinished.Count, "Invalid notes finished count.");
 
             MidiAsserts.AreEqual(
                 new[]
@@ -3375,7 +3376,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     playback.TempoMap,
                     "Invalid tempo map."));
 
-            Assert.AreEqual(TimeSpan.FromMilliseconds(400), snapPoint.Time, "Invalid snap point time.");
+            ClassicAssert.AreEqual(TimeSpan.FromMilliseconds(400), snapPoint.Time, "Invalid snap point time.");
         }
 
         [Retry(RetriesNumber)]
@@ -3422,7 +3423,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     playback.TempoMap,
                     "Invalid tempo map."));
 
-            Assert.AreEqual(TimeSpan.FromMilliseconds(600), snapPoint.Time, "Invalid snap point time.");
+            ClassicAssert.AreEqual(TimeSpan.FromMilliseconds(600), snapPoint.Time, "Invalid snap point time.");
         }
 
         [Retry(RetriesNumber)]
@@ -3469,7 +3470,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     playback.TempoMap,
                     "Invalid tempo map."));
 
-            Assert.AreEqual(TimeSpan.FromMilliseconds(550), snapPoint.Time, "Invalid snap point time.");
+            ClassicAssert.AreEqual(TimeSpan.FromMilliseconds(550), snapPoint.Time, "Invalid snap point time.");
         }
 
         [Retry(RetriesNumber)]
@@ -3516,7 +3517,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     playback.TempoMap,
                     "Invalid tempo map."));
 
-            Assert.AreEqual(TimeSpan.FromMilliseconds(500), snapPoint.Time, "Invalid snap point time.");
+            ClassicAssert.AreEqual(TimeSpan.FromMilliseconds(500), snapPoint.Time, "Invalid snap point time.");
         }
 
         [Retry(RetriesNumber)]
@@ -3563,7 +3564,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     playback.TempoMap,
                     "Invalid tempo map."));
 
-            Assert.AreEqual(TimeSpan.FromMilliseconds(800), snapPoint.Time, "Invalid snap point time.");
+            ClassicAssert.AreEqual(TimeSpan.FromMilliseconds(800), snapPoint.Time, "Invalid snap point time.");
         }
 
         [Retry(RetriesNumber)]
@@ -3610,7 +3611,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     playback.TempoMap,
                     "Invalid tempo map."));
 
-            Assert.AreEqual(TimeSpan.FromMilliseconds(450), snapPoint.Time, "Invalid snap point time.");
+            ClassicAssert.AreEqual(TimeSpan.FromMilliseconds(450), snapPoint.Time, "Invalid snap point time.");
         }
 
         [Retry(RetriesNumber)]
@@ -3668,8 +3669,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     playback.TempoMap,
                     "Invalid tempo map."));
 
-            Assert.AreEqual(TimeSpan.FromMilliseconds(600), snapPoint1.Time, "Invalid first snap point time.");
-            Assert.AreEqual(TimeSpan.FromMilliseconds(725), snapPoint2.Time, "Invalid second snap point time.");
+            ClassicAssert.AreEqual(TimeSpan.FromMilliseconds(600), snapPoint1.Time, "Invalid first snap point time.");
+            ClassicAssert.AreEqual(TimeSpan.FromMilliseconds(725), snapPoint2.Time, "Invalid second snap point time.");
         }
 
         [Retry(RetriesNumber)]
@@ -3733,7 +3734,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     playback.TempoMap,
                     "Invalid tempo map."));
 
-            Assert.AreEqual(TimeSpan.FromMilliseconds(675), snapPoint.Time, "Invalid snap point time.");
+            ClassicAssert.AreEqual(TimeSpan.FromMilliseconds(675), snapPoint.Time, "Invalid snap point time.");
         }
 
         [Retry(RetriesNumber)]
@@ -3795,12 +3796,12 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
                     var lastTempoChange = playback.TempoMap.GetTempoChanges().Last();
                     var lastTempoChangeTime = lastTempoChange.TimeAs<MetricTimeSpan>(playback.TempoMap);
-                    Assert.AreEqual(475, lastTempoChangeTime.TotalMilliseconds, "Invalid last tempo change time.");
+                    ClassicAssert.AreEqual(475, lastTempoChangeTime.TotalMilliseconds, "Invalid last tempo change time.");
                 },
                 tempoMap: tempoMap);
 
-            Assert.AreEqual(TimeSpan.FromMilliseconds(350), snapPoint1.Time, "Invalid first snap point time.");
-            Assert.AreEqual(TimeSpan.FromMilliseconds(625), snapPoint2.Time, "Invalid second snap point time.");
+            ClassicAssert.AreEqual(TimeSpan.FromMilliseconds(350), snapPoint1.Time, "Invalid first snap point time.");
+            ClassicAssert.AreEqual(TimeSpan.FromMilliseconds(625), snapPoint2.Time, "Invalid second snap point time.");
         }
 
         [Retry(RetriesNumber)]
@@ -4186,7 +4187,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                         playback.TempoMap,
                         "Invalid tempo map.");
 
-                    Assert.AreEqual(new MetricTimeSpan(0, 0, 0, 400), playback.PlaybackEnd, "Invalid playback end.");
+                    ClassicAssert.AreEqual(new MetricTimeSpan(0, 0, 0, 400), playback.PlaybackEnd, "Invalid playback end.");
                 });
         }
 
@@ -4231,7 +4232,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                         playback.TempoMap,
                         "Invalid tempo map.");
 
-                    Assert.AreEqual(new MetricTimeSpan(0, 0, 0, 200), playback.PlaybackStart, "Invalid playback start.");
+                    ClassicAssert.AreEqual(new MetricTimeSpan(0, 0, 0, 200), playback.PlaybackStart, "Invalid playback start.");
                 });
         }
 
@@ -4633,7 +4634,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
                     var lastTimeSignatureChange = playback.TempoMap.GetTimeSignatureChanges().Last();
                     var lastTimeSignatureChangeTime = lastTimeSignatureChange.TimeAs<MetricTimeSpan>(playback.TempoMap);
-                    Assert.AreEqual(650, lastTimeSignatureChangeTime.TotalMilliseconds, "Invalid last time signature change time.");
+                    ClassicAssert.AreEqual(650, lastTimeSignatureChangeTime.TotalMilliseconds, "Invalid last time signature change time.");
                 },
                 tempoMap: tempoMap);
         }

@@ -3,6 +3,7 @@ using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
 using Melanchall.DryWetMidi.Tests.Utilities;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -1885,8 +1886,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
 
             CollectionAssert.AreEquivalent(notesStarted, notesFinished, "Inconsistent notes started/finished lists.");
-            Assert.AreEqual(0, notesStarted.Count, "Invalid notes started count.");
-            Assert.AreEqual(0, notesFinished.Count, "Invalid notes finished count.");
+            ClassicAssert.AreEqual(0, notesStarted.Count, "Invalid notes started count.");
+            ClassicAssert.AreEqual(0, notesFinished.Count, "Invalid notes finished count.");
         }
 
         [Retry(OnTheFlyChecksRetriesNumber)]
@@ -1927,8 +1928,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
 
             CollectionAssert.AreEquivalent(notesStarted, notesFinished, "Inconsistent notes started/finished lists.");
-            Assert.AreEqual(1, notesStarted.Count, "Invalid notes started count.");
-            Assert.AreEqual(1, notesFinished.Count, "Invalid notes finished count.");
+            ClassicAssert.AreEqual(1, notesStarted.Count, "Invalid notes started count.");
+            ClassicAssert.AreEqual(1, notesFinished.Count, "Invalid notes finished count.");
         }
 
         [Retry(OnTheFlyChecksRetriesNumber)]
@@ -1985,8 +1986,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
 
             CollectionAssert.AreEquivalent(notesStarted, notesFinished, "Inconsistent notes started/finished lists.");
-            Assert.AreEqual(2, notesStarted.Count, "Invalid notes started count.");
-            Assert.AreEqual(2, notesFinished.Count, "Invalid notes finished count.");
+            ClassicAssert.AreEqual(2, notesStarted.Count, "Invalid notes started count.");
+            ClassicAssert.AreEqual(2, notesFinished.Count, "Invalid notes finished count.");
         }
 
         [Retry(OnTheFlyChecksRetriesNumber)]
@@ -2028,8 +2029,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
 
             CollectionAssert.AreEquivalent(notesStarted, notesFinished, "Inconsistent notes started/finished lists.");
-            Assert.AreEqual(0, notesStarted.Count, "Invalid notes started count.");
-            Assert.AreEqual(0, notesFinished.Count, "Invalid notes finished count.");
+            ClassicAssert.AreEqual(0, notesStarted.Count, "Invalid notes started count.");
+            ClassicAssert.AreEqual(0, notesFinished.Count, "Invalid notes finished count.");
         }
 
         [Retry(OnTheFlyChecksRetriesNumber)]

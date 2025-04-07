@@ -4,6 +4,7 @@ using System.Linq;
 using Melanchall.DryWetMidi.Multimedia;
 using Melanchall.DryWetMidi.Tests.Common;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace Melanchall.DryWetMidi.Tests.Multimedia
 {
@@ -31,29 +32,29 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             using (var virtualDevice = VirtualDevice.Create(deviceName))
             {
                 var added = WaitOperations.Wait(() => addedDevices.Count >= 2, timeout);
-                Assert.IsTrue(added, $"Devices weren't added for [{timeout}].");
+                ClassicAssert.IsTrue(added, $"Devices weren't added for [{timeout}].");
 
-                Assert.AreEqual(2, addedDevices.Count, $"Invalid count of added devices ({string.Join(", ", addedDevices.Select(d => $"{d.Context}"))}).");
+                ClassicAssert.AreEqual(2, addedDevices.Count, $"Invalid count of added devices ({string.Join(", ", addedDevices.Select(d => $"{d.Context}"))}).");
 
                 var firstAddedDevice = addedDevices.First();
-                Assert.IsInstanceOf<InputDevice>(firstAddedDevice, "Invalid type of the first added device.");
-                Assert.AreEqual(deviceName, firstAddedDevice.Name, "Invalid name of the first added device.");
+                ClassicAssert.IsInstanceOf<InputDevice>(firstAddedDevice, "Invalid type of the first added device.");
+                ClassicAssert.AreEqual(deviceName, firstAddedDevice.Name, "Invalid name of the first added device.");
 
                 var lastAddedDevice = addedDevices.Last();
-                Assert.IsInstanceOf<OutputDevice>(lastAddedDevice, "Invalid type of the last added device.");
-                Assert.AreEqual(deviceName, lastAddedDevice.Name, "Invalid name of the last added device.");
+                ClassicAssert.IsInstanceOf<OutputDevice>(lastAddedDevice, "Invalid type of the last added device.");
+                ClassicAssert.AreEqual(deviceName, lastAddedDevice.Name, "Invalid name of the last added device.");
             }
 
             var removed = WaitOperations.Wait(() => removedDevices.Count >= 2, timeout);
-            Assert.IsTrue(removed, $"Devices weren't removed for [{timeout}].");
+            ClassicAssert.IsTrue(removed, $"Devices weren't removed for [{timeout}].");
 
-            Assert.AreEqual(2, removedDevices.Count, "Invalid count of removed devices.");
+            ClassicAssert.AreEqual(2, removedDevices.Count, "Invalid count of removed devices.");
 
             var firstRemovedDevice = removedDevices.First();
-            Assert.IsInstanceOf<InputDevice>(firstRemovedDevice, "Invalid type of the first removed device.");
+            ClassicAssert.IsInstanceOf<InputDevice>(firstRemovedDevice, "Invalid type of the first removed device.");
 
             var lastRemovedDevice = removedDevices.Last();
-            Assert.IsInstanceOf<OutputDevice>(lastRemovedDevice, "Invalid type of the last removed device.");
+            ClassicAssert.IsInstanceOf<OutputDevice>(lastRemovedDevice, "Invalid type of the last removed device.");
 
             DevicesWatcher.Instance.DeviceAdded -= addedHandler;
             DevicesWatcher.Instance.DeviceRemoved -= removedHandler;

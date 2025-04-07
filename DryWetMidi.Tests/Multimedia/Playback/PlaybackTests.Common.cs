@@ -8,6 +8,7 @@ using Melanchall.DryWetMidi.Interaction;
 using NUnit.Framework;
 using Melanchall.DryWetMidi.Tests.Common;
 using System.Diagnostics;
+using NUnit.Framework.Legacy;
 
 namespace Melanchall.DryWetMidi.Tests.Multimedia
 {
@@ -134,11 +135,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
                     var timeout = TimeSpan.FromSeconds(30);
                     var stopped = WaitOperations.Wait(() => !playback.IsRunning, timeout);
-                    Assert.IsTrue(stopped, $"Playback is running after {timeout}.");
+                    ClassicAssert.IsTrue(stopped, $"Playback is running after {timeout}.");
 
                     WaitOperations.Wait(SendReceiveUtilities.MaximumEventSendReceiveDelay);
 
-                    Assert.AreEqual(
+                    ClassicAssert.AreEqual(
                         actions.Length,
                         actionsExecutedCount,
                         "Invalid number of actions executed.");
@@ -193,7 +194,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
                 beforeChecks?.Invoke(playback);
 
-                Assert.IsTrue(
+                ClassicAssert.IsTrue(
                     WaitOperations.Wait(() => started == expectedStartedRaised && stopped == expectedStoppedRaised && finished == expectedFinishedRaised && repeatStarted == expectedRepeatStartedRaised, TimeSpan.FromSeconds(2)),
                     "Playback events are raised invalid number of times.");
 
@@ -206,14 +207,6 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             IReadOnlyList<ReceivedEvent> expectedReceivedEvents,
             TimeSpan? sendReceiveTimeDelta = null)
         {
-            //Assert.AreEqual(
-            //    expectedReceivedEvents.Count,
-            //    receivedEvents.Count,
-            //    $"Received events count is invalid.{Environment.NewLine}Actual events:{Environment.NewLine}" +
-            //        string.Join(Environment.NewLine, receivedEvents) +
-            //        $"{Environment.NewLine}Expected events:{Environment.NewLine}" +
-            //        string.Join(Environment.NewLine, expectedReceivedEvents));
-
             var equalityCheckSettings = new MidiEventEqualityCheckSettings { CompareDeltaTimes = false };
             var timeDelta = sendReceiveTimeDelta ?? SendReceiveUtilities.MaximumEventSendReceiveDelay;
 
@@ -257,7 +250,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             TimeSpan currentTime = (MetricTimeSpan)playback.GetCurrentTime(TimeSpanType.Metric);
             var epsilon = TimeSpan.FromMilliseconds(15);
             var delta = (currentTime - expectedCurrentTime).Duration();
-            Assert.IsTrue(
+            ClassicAssert.IsTrue(
                 delta <= epsilon,
                 $"Current time ({currentTime}) is invalid (expected is {expectedCurrentTime}): {afterPlaybackAction}.");
         }

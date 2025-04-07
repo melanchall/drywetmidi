@@ -3,6 +3,7 @@ using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
 using Melanchall.DryWetMidi.Tests.Utilities;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -1239,7 +1240,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             var eventsCollection = new EventsCollection();
             eventsCollection.AddRange(midiEvents);
 
-            Assert.AreEqual(
+            ClassicAssert.AreEqual(
                 expectedProcessedCount,
                 eventsCollection.ProcessObjects(objectType, action, match, settings, hint),
                 "Invalid count of processed objects for events collection.");
@@ -1265,7 +1266,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var trackChunk = new TrackChunk(midiEvents);
 
-            Assert.AreEqual(
+            ClassicAssert.AreEqual(
                 expectedProcessedCount,
                 trackChunk.ProcessObjects(objectType, action, match, settings, hint),
                 "Invalid count of processed objects for track chunk.");
@@ -1290,7 +1291,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var trackChunks = midiEvents.Select(e => new TrackChunk(e)).ToList();
 
-            Assert.AreEqual(
+            ClassicAssert.AreEqual(
                 expectedProcessedCount,
                 trackChunks.ProcessObjects(objectType, action, match, settings, hint),
                 "Invalid count of processed objects for track chunks.");
@@ -1314,7 +1315,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var midiFile = new MidiFile(midiEvents.Select(e => new TrackChunk(e)));
 
-            Assert.AreEqual(
+            ClassicAssert.AreEqual(
                 expectedProcessedCount,
                 midiFile.ProcessObjects(objectType, action, match, settings, hint),
                 "Invalid count of processed objects for file.");
@@ -1339,7 +1340,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
             var expectedProcessedCount = eventsCollection.GetObjects(objectType, settings).Count;
 
-            Assert.AreEqual(
+            ClassicAssert.AreEqual(
                 expectedProcessedCount,
                 eventsCollection.ProcessObjects(objectType, action, settings, hint),
                 "Invalid count of processed objects for events collection.");
@@ -1364,7 +1365,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             var trackChunk = new TrackChunk(midiEvents);
             var expectedProcessedCount = trackChunk.GetObjects(objectType, settings).Count;
 
-            Assert.AreEqual(
+            ClassicAssert.AreEqual(
                 expectedProcessedCount,
                 trackChunk.ProcessObjects(objectType, action, settings, hint),
                 "Invalid count of processed objects for track chunk.");
@@ -1388,7 +1389,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             var trackChunks = midiEvents.Select(e => new TrackChunk(e)).ToList();
             var expectedProcessedCount = trackChunks.GetObjects(objectType, settings).Count;
 
-            Assert.AreEqual(
+            ClassicAssert.AreEqual(
                 expectedProcessedCount,
                 trackChunks.ProcessObjects(objectType, action, settings, hint),
                 "Invalid count of processed objects for track chunks.");
@@ -1411,7 +1412,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             var midiFile = new MidiFile(midiEvents.Select(e => new TrackChunk(e)));
             var expectedProcessedCount = midiFile.GetObjects(objectType, settings).Count;
 
-            Assert.AreEqual(
+            ClassicAssert.AreEqual(
                 expectedProcessedCount,
                 midiFile.ProcessObjects(objectType, action, settings, hint),
                 "Invalid count of processed objects for file.");

@@ -3,6 +3,7 @@ using System.Linq;
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.MusicTheory;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace Melanchall.DryWetMidi.Tests.MusicTheory
 {
@@ -48,35 +49,35 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
         [Description("Get upward interval and check its direction.")]
         public void GetUp()
         {
-            Assert.AreEqual(IntervalDirection.Up, Interval.GetUp(SevenBitNumber.MaxValue).Direction);
+            ClassicAssert.AreEqual(IntervalDirection.Up, Interval.GetUp(SevenBitNumber.MaxValue).Direction);
         }
 
         [Test]
         [Description("Get downward interval and check its direction.")]
         public void GetDown()
         {
-            Assert.AreEqual(IntervalDirection.Down, Interval.GetDown(SevenBitNumber.MaxValue).Direction);
+            ClassicAssert.AreEqual(IntervalDirection.Down, Interval.GetDown(SevenBitNumber.MaxValue).Direction);
         }
 
         [Test]
         [Description("Get upward interval and get its downward version.")]
         public void GetUp_Down()
         {
-            Assert.AreEqual(IntervalDirection.Down, Interval.GetUp(SevenBitNumber.MaxValue).Down().Direction);
+            ClassicAssert.AreEqual(IntervalDirection.Down, Interval.GetUp(SevenBitNumber.MaxValue).Down().Direction);
         }
 
         [Test]
         [Description("Get downward interval and get its upward version.")]
         public void GetDown_Up()
         {
-            Assert.AreEqual(IntervalDirection.Up, Interval.GetDown(SevenBitNumber.MaxValue).Up().Direction);
+            ClassicAssert.AreEqual(IntervalDirection.Up, Interval.GetDown(SevenBitNumber.MaxValue).Up().Direction);
         }
 
         [Test]
         [Description("Check that interval of the same steps number are equal by reference.")]
         public void CheckReferences()
         {
-            Assert.AreSame(Interval.FromHalfSteps(10), Interval.FromHalfSteps(10));
+            ClassicAssert.AreSame(Interval.FromHalfSteps(10), Interval.FromHalfSteps(10));
         }
 
         [Test]
@@ -159,13 +160,13 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
         [TestCase(15, true)]
         public void IsPerfect(int intervalNumber, bool expectedIsPerfect)
         {
-            Assert.AreEqual(expectedIsPerfect, Interval.IsPerfect(intervalNumber), "Interval number 'is perfect' is invalid.");
+            ClassicAssert.AreEqual(expectedIsPerfect, Interval.IsPerfect(intervalNumber), "Interval number 'is perfect' is invalid.");
         }
 
         [Test]
         public void IsPerfect_OutOfRange()
         {
-            Assert.Throws<ArgumentOutOfRangeException>(() => Interval.IsPerfect(0));
+            ClassicAssert.Throws<ArgumentOutOfRangeException>(() => Interval.IsPerfect(0));
         }
 
         [TestCase(1, new[] { true, false, false, false, true })]
@@ -199,7 +200,7 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
                 var quality = qualities[i];
                 var expected = expectedIsApplicable[i];
 
-                Assert.AreEqual(expected, Interval.IsQualityApplicable(quality, intervalNumber), "Interval number 'is quality applicable' is invalid.");
+                ClassicAssert.AreEqual(expected, Interval.IsQualityApplicable(quality, intervalNumber), "Interval number 'is quality applicable' is invalid.");
             }
         }
 
@@ -222,12 +223,12 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
                 var expected = expectedHalfTones[i];
                 if (expected == null)
                 {
-                    Assert.IsFalse(Interval.IsQualityApplicable(quality, intervalNumber), "Interval applicability is invalid.");
+                    ClassicAssert.IsFalse(Interval.IsQualityApplicable(quality, intervalNumber), "Interval applicability is invalid.");
                     continue;
                 }
 
                 var interval = Interval.Get(quality, intervalNumber);
-                Assert.AreEqual(Interval.FromHalfSteps(expected.Value), interval, "Interval is invalid.");
+                ClassicAssert.AreEqual(Interval.FromHalfSteps(expected.Value), interval, "Interval is invalid.");
             }
         }
 
@@ -242,7 +243,7 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
         {
             var parsedInterval = Interval.Parse(input);
             var expectedInterval = Interval.Get(expectedIntervalQuality, expectedIntervalNumber);
-            Assert.AreEqual(expectedInterval, parsedInterval, "Parsed interval is invalid.");
+            ClassicAssert.AreEqual(expectedInterval, parsedInterval, "Parsed interval is invalid.");
         }
 
         [TestCase(0, new object[] { new object[] { 1, IntervalQuality.Perfect }, new object[] { 2, IntervalQuality.Diminished } })]
@@ -351,7 +352,7 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
                 .Select(intervalNumberAndQuality => new IntervalDefinition((int)intervalNumberAndQuality[0], (IntervalQuality)intervalNumberAndQuality[1])))
             {
                 var interval = Interval.FromDefinition(intervalDefinition);
-                Assert.AreEqual(expectedInterval, interval, $"Invalid interval from definition [{intervalDefinition}].");
+                ClassicAssert.AreEqual(expectedInterval, interval, $"Invalid interval from definition [{intervalDefinition}].");
             }
         }
 
@@ -362,16 +363,16 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
         private static void Parse(string input, Interval expectedInterval)
         {
             Interval.TryParse(input, out var actualInterval);
-            Assert.AreEqual(expectedInterval,
+            ClassicAssert.AreEqual(expectedInterval,
                             actualInterval,
                             "TryParse: incorrect result.");
 
             actualInterval = Interval.Parse(input);
-            Assert.AreEqual(expectedInterval,
+            ClassicAssert.AreEqual(expectedInterval,
                             actualInterval,
                             "Parse: incorrect result.");
 
-            Assert.AreEqual(expectedInterval,
+            ClassicAssert.AreEqual(expectedInterval,
                             Interval.Parse(expectedInterval.ToString()),
                             "Parse: string representation was not parsed to the original interval.");
         }
@@ -379,7 +380,7 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
         private static void ParseInvalid<TException>(string input)
             where TException : Exception
         {
-            Assert.Throws<TException>(() => Interval.Parse(input));
+            ClassicAssert.Throws<TException>(() => Interval.Parse(input));
         }
 
         #endregion

@@ -49,12 +49,6 @@ stages:
         macOS_Net:
           vmImage: 'macos-latest'
           framework: 'Net'
-        Windows_NetCore31:
-          vmImage: 'windows-2019'
-          framework: 'NetCore'
-        macOS_NetCore31:
-          vmImage: 'macos-latest'
-          framework: 'NetCore'
     pool:
       vmImage: $(vmImage)
     steps:

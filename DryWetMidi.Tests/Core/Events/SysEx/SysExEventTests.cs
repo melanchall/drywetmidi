@@ -1,6 +1,7 @@
 ﻿using System;
 using Melanchall.DryWetMidi.Core;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace Melanchall.DryWetMidi.Tests.Core
 {
@@ -15,7 +16,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
             var data = new byte[] { 0x67, 0x45 };
             var sysExEvent = new NormalSysExEvent(data);
             CollectionAssert.AreEqual(data, sysExEvent.Data, "Data is invalid.");
-            Assert.IsFalse(sysExEvent.Completed, "'Completed' value is invalid.");
+            ClassicAssert.IsFalse(sysExEvent.Completed, "'Completed' value is invalid.");
         }
 
         [Test]
@@ -24,13 +25,13 @@ namespace Melanchall.DryWetMidi.Tests.Core
             var data = new byte[] { 0x67, 0x45, 0xF7 };
             var sysExEvent = new NormalSysExEvent(data);
             CollectionAssert.AreEqual(data, sysExEvent.Data, "Data is invalid.");
-            Assert.IsTrue(sysExEvent.Completed, "'Completed' value is invalid.");
+            ClassicAssert.IsTrue(sysExEvent.Completed, "'Completed' value is invalid.");
         }
 
         [Test]
         public void CreateNormalSysEx_StartedWithF0()
         {
-            Assert.Throws<ArgumentException>(() => new NormalSysExEvent(new byte[] { 0xF0, 0x67 }));
+            ClassicAssert.Throws<ArgumentException>(() => new NormalSysExEvent(new byte[] { 0xF0, 0x67 }));
         }
 
         [Test]
@@ -39,7 +40,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
             var data = new byte[] { 0x67, 0x45 };
             var sysExEvent = new EscapeSysExEvent(data);
             CollectionAssert.AreEqual(data, sysExEvent.Data, "Data is invalid.");
-            Assert.IsFalse(sysExEvent.Completed, "'Completed' value is invalid.");
+            ClassicAssert.IsFalse(sysExEvent.Completed, "'Completed' value is invalid.");
         }
 
         [Test]
@@ -48,13 +49,13 @@ namespace Melanchall.DryWetMidi.Tests.Core
             var data = new byte[] { 0x67, 0x45, 0xF7 };
             var sysExEvent = new EscapeSysExEvent(data);
             CollectionAssert.AreEqual(data, sysExEvent.Data, "Data is invalid.");
-            Assert.IsTrue(sysExEvent.Completed, "'Completed' value is invalid.");
+            ClassicAssert.IsTrue(sysExEvent.Completed, "'Completed' value is invalid.");
         }
 
         [Test]
         public void CreateEscapeSysEx_StartedWithF7()
         {
-            Assert.Throws<ArgumentException>(() => new EscapeSysExEvent(new byte[] { 0xF7, 0x67 }));
+            ClassicAssert.Throws<ArgumentException>(() => new EscapeSysExEvent(new byte[] { 0xF7, 0x67 }));
         }
 
         #endregion

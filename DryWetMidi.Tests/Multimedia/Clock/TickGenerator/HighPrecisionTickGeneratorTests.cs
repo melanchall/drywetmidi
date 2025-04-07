@@ -5,6 +5,7 @@ using System.Linq;
 using Melanchall.DryWetMidi.Multimedia;
 using Melanchall.DryWetMidi.Tests.Common;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace Melanchall.DryWetMidi.Tests.Multimedia
 {
@@ -110,7 +111,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
             var tolerance = runInfo.IntervalInMs + 5;
             var ratio = deltas.Count(d => d >= runInfo.IntervalInMs - tolerance && d <= runInfo.IntervalInMs + tolerance) / (double)deltas.Count;
-            Assert.Greater(ratio, 0.9, $"Count of good intervals of [{runInfo.IntervalInMs}] ms is too low (total count = [{deltas.Count}], min = [{min}], max = [{max}], average = [{average:0.##}]).");
+            ClassicAssert.Greater(ratio, 0.9, $"Count of good intervals of [{runInfo.IntervalInMs}] ms is too low (total count = [{deltas.Count}], min = [{min}], max = [{max}], average = [{average:0.##}]).");
         }
 
         #endregion

@@ -5,6 +5,7 @@ using Melanchall.DryWetMidi.Tests.Common;
 using Melanchall.DryWetMidi.Tests.Utilities;
 using Melanchall.DryWetMidi.Tools;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,7 +38,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
                 foreach (var fileByChannel in filesByChannel)
                 {
-                    Assert.AreEqual(
+                    ClassicAssert.AreEqual(
                         fileByChannel.TimeDivision,
                         midiFile.TimeDivision,
                         "Time division of new file doesn't equal to the time division of the original one.");
@@ -50,7 +51,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                         .Distinct()
                         .ToArray();
 
-                    Assert.AreEqual(
+                    ClassicAssert.AreEqual(
                         1,
                         channels.Length,
                         "New file contains channel events for different channels.");
@@ -538,7 +539,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
             var midiFilesByChannel = midiFile.SplitByChannel().ToList();
 
-            Assert.AreEqual(expectedTimedEvents.Count, midiFilesByChannel.Count, "Invalid count of new files.");
+            ClassicAssert.AreEqual(expectedTimedEvents.Count, midiFilesByChannel.Count, "Invalid count of new files.");
 
             var expectedTimedEventsEnumerator = expectedTimedEvents.GetEnumerator();
             var newMidiFilesEnumerator = midiFilesByChannel.GetEnumerator();
@@ -551,7 +552,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 var actualEvents = newMidiFilesEnumerator.Current.GetTimedEvents();
 
                 MidiAsserts.AreEqual(expectedEvents, actualEvents, $"Invalid events of file {i}.");
-                Assert.AreEqual(midiFile.TimeDivision, newMidiFilesEnumerator.Current.TimeDivision, $"Invalid time division of file {i}.");
+                ClassicAssert.AreEqual(midiFile.TimeDivision, newMidiFilesEnumerator.Current.TimeDivision, $"Invalid time division of file {i}.");
 
                 i++;
             }
@@ -597,7 +598,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 })
                 .ToList();
 
-            Assert.AreEqual(expectedTimedEvents.Count, midiFilesByChannel.Count, "Invalid count of new files.");
+            ClassicAssert.AreEqual(expectedTimedEvents.Count, midiFilesByChannel.Count, "Invalid count of new files.");
 
             var expectedTimedEventsEnumerator = expectedTimedEvents.GetEnumerator();
             var newMidiFilesEnumerator = midiFilesByChannel.GetEnumerator();

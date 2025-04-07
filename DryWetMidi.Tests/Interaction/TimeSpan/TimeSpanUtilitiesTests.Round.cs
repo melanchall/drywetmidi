@@ -1,5 +1,6 @@
 ﻿using Melanchall.DryWetMidi.Interaction;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace Melanchall.DryWetMidi.Tests.Interaction
 {
@@ -153,24 +154,24 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         public void Round_NoRounding(ITimeSpan timeSpan)
         {
             var result = timeSpan.Round(TimeSpanRoundingPolicy.NoRounding, 0, (MidiTimeSpan)100, TempoMap.Default);
-            Assert.AreEqual(timeSpan, result, "Time span changed.");
-            Assert.AreNotSame(timeSpan, result, "Result refers to the same object.");
+            ClassicAssert.AreEqual(timeSpan, result, "Time span changed.");
+            ClassicAssert.AreNotSame(timeSpan, result, "Result refers to the same object.");
         }
 
         [TestCaseSource(nameof(TimeSpans_RoundUp))]
         public void Round_RoundUp(ITimeSpan timeSpan, ITimeSpan step, ITimeSpan expectedTimeSpan)
         {
             var result = timeSpan.Round(TimeSpanRoundingPolicy.RoundUp, 0, step, TempoMap.Default);
-            Assert.AreEqual(expectedTimeSpan, result, "Invalid result time span.");
-            Assert.AreNotSame(timeSpan, result, "Result refers to the same object.");
+            ClassicAssert.AreEqual(expectedTimeSpan, result, "Invalid result time span.");
+            ClassicAssert.AreNotSame(timeSpan, result, "Result refers to the same object.");
         }
 
         [TestCaseSource(nameof(TimeSpans_RoundDown))]
         public void Round_RoundDown(ITimeSpan timeSpan, ITimeSpan step, ITimeSpan expectedTimeSpan)
         {
             var result = timeSpan.Round(TimeSpanRoundingPolicy.RoundDown, 0, step, TempoMap.Default);
-            Assert.AreEqual(expectedTimeSpan, result, "Invalid result time span.");
-            Assert.AreNotSame(timeSpan, result, "Result refers to the same object.");
+            ClassicAssert.AreEqual(expectedTimeSpan, result, "Invalid result time span.");
+            ClassicAssert.AreNotSame(timeSpan, result, "Result refers to the same object.");
         }
 
         #endregion

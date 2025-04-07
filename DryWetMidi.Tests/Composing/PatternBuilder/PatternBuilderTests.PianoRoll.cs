@@ -3,6 +3,7 @@ using Melanchall.DryWetMidi.Composing;
 using Melanchall.DryWetMidi.Interaction;
 using Melanchall.DryWetMidi.MusicTheory;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using System;
 
 namespace Melanchall.DryWetMidi.Tests.Composing
@@ -124,21 +125,21 @@ namespace Melanchall.DryWetMidi.Tests.Composing
         }
 
         [Test]
-        public void PianoRoll_CustomSymbols_SingleCellNoteSymbolIsSpace() => Assert.Throws<ArgumentException>(
+        public void PianoRoll_CustomSymbols_SingleCellNoteSymbolIsSpace() => ClassicAssert.Throws<ArgumentException>(
             () => new PatternBuilder().PianoRoll(@"AH3  ----", new PianoRollSettings
             {
                 SingleCellNoteSymbol = ' ',
             }));
 
         [Test]
-        public void PianoRoll_CustomSymbols_MultiCellNoteStartSymbolIsSpace() => Assert.Throws<ArgumentException>(
+        public void PianoRoll_CustomSymbols_MultiCellNoteStartSymbolIsSpace() => ClassicAssert.Throws<ArgumentException>(
             () => new PatternBuilder().PianoRoll(@"AH3  ----", new PianoRollSettings
             {
                 MultiCellNoteStartSymbol = ' ',
             }));
 
         [Test]
-        public void PianoRoll_CustomSymbols_MultiCellNoteEndSymbolIsSpace() => Assert.Throws<ArgumentException>(
+        public void PianoRoll_CustomSymbols_MultiCellNoteEndSymbolIsSpace() => ClassicAssert.Throws<ArgumentException>(
             () => new PatternBuilder().PianoRoll(@"AH3  ----", new PianoRollSettings
             {
                 MultiCellNoteEndSymbol = ' ',
@@ -268,7 +269,7 @@ namespace Melanchall.DryWetMidi.Tests.Composing
         }
 
         [Test]
-        public void PianoRoll_CustomActions_ContainsSingleCellNoteSymbol() => Assert.Throws<ArgumentOutOfRangeException>(
+        public void PianoRoll_CustomActions_ContainsSingleCellNoteSymbol() => ClassicAssert.Throws<ArgumentOutOfRangeException>(
             () => new PatternBuilder().PianoRoll(@"AH3  ----", new PianoRollSettings
             {
                 CustomActions = new[]
@@ -278,7 +279,7 @@ namespace Melanchall.DryWetMidi.Tests.Composing
             }));
 
         [Test]
-        public void PianoRoll_CustomActions_ContainsMultiCellNoteStartSymbol() => Assert.Throws<ArgumentOutOfRangeException>(
+        public void PianoRoll_CustomActions_ContainsMultiCellNoteStartSymbol() => ClassicAssert.Throws<ArgumentOutOfRangeException>(
             () => new PatternBuilder().PianoRoll(@"AH3  ----", new PianoRollSettings
             {
                 CustomActions = new[]
@@ -288,7 +289,7 @@ namespace Melanchall.DryWetMidi.Tests.Composing
             }));
 
         [Test]
-        public void PianoRoll_CustomActions_ContainsMultiCellNoteEndSymbol() => Assert.Throws<ArgumentOutOfRangeException>(
+        public void PianoRoll_CustomActions_ContainsMultiCellNoteEndSymbol() => ClassicAssert.Throws<ArgumentOutOfRangeException>(
             () => new PatternBuilder().PianoRoll(@"AH3  ----", new PianoRollSettings
             {
                 CustomActions = new[]
@@ -335,7 +336,7 @@ namespace Melanchall.DryWetMidi.Tests.Composing
         [Test]
         public void PianoRoll_FailedToParseNote_1()
         {
-            var exception = Assert.Throws<InvalidOperationException>(() => new PatternBuilder().PianoRoll(
+            var exception = ClassicAssert.Throws<InvalidOperationException>(() => new PatternBuilder().PianoRoll(
                 @"AH3  ----"));
             StringAssert.Contains("0", exception.Message, "No line index.");
         }
@@ -343,7 +344,7 @@ namespace Melanchall.DryWetMidi.Tests.Composing
         [Test]
         public void PianoRoll_FailedToParseNote_2()
         {
-            var exception = Assert.Throws<InvalidOperationException>(() => new PatternBuilder().PianoRoll(
+            var exception = ClassicAssert.Throws<InvalidOperationException>(() => new PatternBuilder().PianoRoll(
                 @"A3   ----
                   AH3  ----"));
             StringAssert.Contains("1", exception.Message, "No line index.");
@@ -352,7 +353,7 @@ namespace Melanchall.DryWetMidi.Tests.Composing
         [Test]
         public void PianoRoll_SingleCellNoteInMultiCellOne_1()
         {
-            var exception = Assert.Throws<InvalidOperationException>(() => new PatternBuilder().PianoRoll(
+            var exception = ClassicAssert.Throws<InvalidOperationException>(() => new PatternBuilder().PianoRoll(
                 @"A3  -[-|-]"));
             StringAssert.Contains("0", exception.Message, "No line index.");
             StringAssert.Contains("7", exception.Message, "No symbol index.");
@@ -361,7 +362,7 @@ namespace Melanchall.DryWetMidi.Tests.Composing
         [Test]
         public void PianoRoll_SingleCellNoteInMultiCellOne_2()
         {
-            var exception = Assert.Throws<InvalidOperationException>(() => new PatternBuilder().PianoRoll(
+            var exception = ClassicAssert.Throws<InvalidOperationException>(() => new PatternBuilder().PianoRoll(
                 "B3  -[---]\nA3  -[-|-]"));
             StringAssert.Contains("1", exception.Message, "No line index.");
             StringAssert.Contains("7", exception.Message, "No symbol index.");
@@ -370,7 +371,7 @@ namespace Melanchall.DryWetMidi.Tests.Composing
         [Test]
         public void PianoRoll_NoteStartedWithPreviousNotEnded()
         {
-            var exception = Assert.Throws<InvalidOperationException>(() => new PatternBuilder().PianoRoll(
+            var exception = ClassicAssert.Throws<InvalidOperationException>(() => new PatternBuilder().PianoRoll(
                 @"A3  -[-[-]]"));
             StringAssert.Contains("0", exception.Message, "No line index.");
             StringAssert.Contains("7", exception.Message, "No symbol index.");
@@ -379,7 +380,7 @@ namespace Melanchall.DryWetMidi.Tests.Composing
         [Test]
         public void PianoRoll_NoteNotStarted()
         {
-            var exception = Assert.Throws<InvalidOperationException>(() => new PatternBuilder().PianoRoll(
+            var exception = ClassicAssert.Throws<InvalidOperationException>(() => new PatternBuilder().PianoRoll(
                 @"A3  -[]--]--"));
             StringAssert.Contains("0", exception.Message, "No line index.");
             StringAssert.Contains("9", exception.Message, "No symbol index.");

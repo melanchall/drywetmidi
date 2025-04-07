@@ -4,6 +4,7 @@ using Melanchall.DryWetMidi.Interaction;
 using Melanchall.DryWetMidi.Tests.Utilities;
 using Melanchall.DryWetMidi.Tools;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -528,19 +529,19 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         {
             var repeater = new Repeater();
 
-            Assert.Throws<ArgumentOutOfRangeException>(
+            ClassicAssert.Throws<ArgumentOutOfRangeException>(
                 () => repeater.Repeat(Array.Empty<ITimedObject>(), repeatsNumber, TempoMap.Default),
                 "No desired exception on timed objects.");
 
-            Assert.Throws<ArgumentOutOfRangeException>(
+            ClassicAssert.Throws<ArgumentOutOfRangeException>(
                 () => repeater.Repeat(new TrackChunk(), repeatsNumber, TempoMap.Default),
                 "No desired exception on track chunk.");
 
-            Assert.Throws<ArgumentOutOfRangeException>(
+            ClassicAssert.Throws<ArgumentOutOfRangeException>(
                 () => repeater.Repeat(new[] { new TrackChunk() }, repeatsNumber, TempoMap.Default),
                 "No desired exception on track chunks.");
 
-            Assert.Throws<ArgumentOutOfRangeException>(
+            ClassicAssert.Throws<ArgumentOutOfRangeException>(
                 () => repeater.Repeat(new MidiFile(), repeatsNumber),
                 "No desired exception on file.");
         }
@@ -550,19 +551,19 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         {
             var repeater = new Repeater();
 
-            Assert.Throws<ArgumentNullException>(
+            ClassicAssert.Throws<ArgumentNullException>(
                 () => repeater.Repeat(default(IEnumerable<ITimedObject>), 1, TempoMap.Default),
                 "No desired exception on timed objects.");
 
-            Assert.Throws<ArgumentNullException>(
+            ClassicAssert.Throws<ArgumentNullException>(
                 () => repeater.Repeat(default(TrackChunk), 1, TempoMap.Default),
                 "No desired exception on track chunk.");
 
-            Assert.Throws<ArgumentNullException>(
+            ClassicAssert.Throws<ArgumentNullException>(
                 () => repeater.Repeat(default(IEnumerable<TrackChunk>), 1, TempoMap.Default),
                 "No desired exception on track chunks.");
 
-            Assert.Throws<ArgumentNullException>(
+            ClassicAssert.Throws<ArgumentNullException>(
                 () => repeater.Repeat(default(MidiFile), 1),
                 "No desired exception on file.");
         }
@@ -572,15 +573,15 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         {
             var repeater = new Repeater();
 
-            Assert.Throws<ArgumentNullException>(
+            ClassicAssert.Throws<ArgumentNullException>(
                 () => repeater.Repeat(Array.Empty<ITimedObject>(), 1, null),
                 "No desired exception on timed objects.");
 
-            Assert.Throws<ArgumentNullException>(
+            ClassicAssert.Throws<ArgumentNullException>(
                 () => repeater.Repeat(new TrackChunk(), 1, null),
                 "No desired exception on track chunk.");
 
-            Assert.Throws<ArgumentNullException>(
+            ClassicAssert.Throws<ArgumentNullException>(
                 () => repeater.Repeat(new[] { new TrackChunk() }, 1, null),
                 "No desired exception on track chunks.");
         }
@@ -622,31 +623,31 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             var actualObjects = inputObjects.Repeat(repeatsNumber, tempoMap, settings).OrderBy(obj => obj.Time).ToArray();
             MidiAsserts.AreEqual(expectedObjects, actualObjects.OrderBy(obj => obj.Time), "Invalid result objects collection.");
 
-            Assert.IsFalse(
+            ClassicAssert.IsFalse(
                 inputObjects.Any(obj => actualObjects.Contains(obj)),
                 "Some result objects refer to source one(s).");
-            Assert.AreEqual(actualObjects.Length, actualObjects.Distinct().Count(), "Some objects are not unique.");
+            ClassicAssert.AreEqual(actualObjects.Length, actualObjects.Distinct().Count(), "Some objects are not unique.");
 
             //
 
             var inputTrackChunk = inputObjects.ToTrackChunk();
             var actualTrackChunk = inputTrackChunk.Repeat(repeatsNumber, tempoMap, settings);
             MidiAsserts.AreEqual(expectedObjects.ToTrackChunk(), actualTrackChunk, true, "Invalid result track chunk.");
-            Assert.AreNotSame(inputTrackChunk, actualTrackChunk, "Result track chunk refers to the input one.");
+            ClassicAssert.AreNotSame(inputTrackChunk, actualTrackChunk, "Result track chunk refers to the input one.");
 
             //
 
             var inputTrackChunks = new[] { inputObjects.ToTrackChunk() };
             var actualTrackChunks = inputTrackChunks.Repeat(repeatsNumber, tempoMap, settings);
             MidiAsserts.AreEqual(new[] { expectedObjects.ToTrackChunk() }, actualTrackChunks, true, "Invalid result track chunks.");
-            Assert.AreNotSame(inputTrackChunks.First(), actualTrackChunks.First(), "Result track chunks refers to the input ones.");
+            ClassicAssert.AreNotSame(inputTrackChunks.First(), actualTrackChunks.First(), "Result track chunks refers to the input ones.");
 
             //
 
             var inputFile = inputObjects.ToFile();
             var actualFile = inputFile.Repeat(repeatsNumber, settings);
             MidiAsserts.AreEqual(expectedObjects.ToFile(), actualFile, true, "Invalid result file.");
-            Assert.AreNotSame(inputFile, actualFile, "Result file refers to the input one.");
+            ClassicAssert.AreNotSame(inputFile, actualFile, "Result file refers to the input one.");
         }
 
         private static object[] GetRoundUpStepData_ShiftByMaxTime(

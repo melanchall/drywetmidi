@@ -4,6 +4,7 @@ using System.Linq;
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace Melanchall.DryWetMidi.Tests.Utilities
 {
@@ -29,7 +30,7 @@ namespace Melanchall.DryWetMidi.Tests.Utilities
             var expectedCount = expectedTimedObjects.Count();
             var actualCount = actualTimedObjects.Count();
 
-            Assert.AreEqual(expectedCount, actualCount, $"{message} Objects count is invalid.");
+            ClassicAssert.AreEqual(expectedCount, actualCount, $"{message} Objects count is invalid.");
 
             var expectedTimedObjectsEnumerator = expectedTimedObjects.GetEnumerator();
             var actualTimedObjectsEnumerator = actualTimedObjects.GetEnumerator();
@@ -66,9 +67,9 @@ namespace Melanchall.DryWetMidi.Tests.Utilities
                 return;
 
             if (ReferenceEquals(null, expectedTimedObject) || ReferenceEquals(null, actualTimedObject))
-                Assert.Fail($"{message} One of objects is null.");
+                ClassicAssert.Fail($"{message} One of objects is null.");
 
-            Assert.AreEqual(expectedTimedObject.GetType(), actualTimedObject.GetType(), $"{message} Different types.");
+            ClassicAssert.AreEqual(expectedTimedObject.GetType(), actualTimedObject.GetType(), $"{message} Different types.");
 
             var timedEvent = expectedTimedObject as TimedEvent;
             if (timedEvent != null)
@@ -98,7 +99,7 @@ namespace Melanchall.DryWetMidi.Tests.Utilities
                 return;
             }
 
-            Assert.Inconclusive($"Comparing of {expectedTimedObject} and {actualTimedObject} is not implemented.");
+            ClassicAssert.Inconclusive($"Comparing of {expectedTimedObject} and {actualTimedObject} is not implemented.");
         }
 
         public static void AreEqual(EventsCollection eventsCollection1, EventsCollection eventsCollection2, bool compareDeltaTimes, string message = null)
@@ -109,7 +110,7 @@ namespace Melanchall.DryWetMidi.Tests.Utilities
                 new MidiEventEqualityCheckSettings { CompareDeltaTimes = compareDeltaTimes },
                 out var eventsComparingMessage);
 
-            Assert.IsTrue(areEqual, $"{message} {eventsComparingMessage}");
+            ClassicAssert.IsTrue(areEqual, $"{message} {eventsComparingMessage}");
         }
 
         public static void AreEqual(MidiChunk midiChunk1, MidiChunk midiChunk2, bool compareDeltaTimes, string message = null)
@@ -126,7 +127,7 @@ namespace Melanchall.DryWetMidi.Tests.Utilities
                 },
                 out var chunksComparingMessage);
 
-            Assert.IsTrue(areEqual, $"{message} {chunksComparingMessage}");
+            ClassicAssert.IsTrue(areEqual, $"{message} {chunksComparingMessage}");
         }
 
         public static void AreEqual(IEnumerable<MidiChunk> chunks1, IEnumerable<MidiChunk> chunks2, bool compareDeltaTimes, string message = null)
@@ -158,12 +159,12 @@ namespace Melanchall.DryWetMidi.Tests.Utilities
                     },
                     out chunksComparingMessage);
 
-                Assert.IsTrue(areEqual, $"{message} Chunk {i} is invalid. {chunksComparingMessage}");
+                ClassicAssert.IsTrue(areEqual, $"{message} Chunk {i} is invalid. {chunksComparingMessage}");
 
                 i++;
             }
 
-            Assert.IsTrue(chunksEnumerated1 && chunksEnumerated2, $"{message} Chunks collections have different length.");
+            ClassicAssert.IsTrue(chunksEnumerated1 && chunksEnumerated2, $"{message} Chunks collections have different length.");
         }
 
         public static void AreEqual(MidiFile midiFile1, MidiFile midiFile2, bool compareOriginalFormat, string message = null)
@@ -175,7 +176,7 @@ namespace Melanchall.DryWetMidi.Tests.Utilities
                 new MidiFileEqualityCheckSettings { CompareOriginalFormat = compareOriginalFormat },
                 out filesComparingMessage);
 
-            Assert.IsTrue(areEqual, $"{message} {filesComparingMessage}");
+            ClassicAssert.IsTrue(areEqual, $"{message} {filesComparingMessage}");
         }
 
         public static void AreEqual(IEnumerable<MidiFile> expectedFiles, IEnumerable<MidiFile> actualFiles, bool compareOriginalFormat, string message = null)
@@ -201,12 +202,12 @@ namespace Melanchall.DryWetMidi.Tests.Utilities
                     new MidiFileEqualityCheckSettings { CompareOriginalFormat = compareOriginalFormat },
                     out filesComparingMessage);
 
-                Assert.IsTrue(areEqual, $"{message} File {i} is invalid. {filesComparingMessage}");
+                ClassicAssert.IsTrue(areEqual, $"{message} File {i} is invalid. {filesComparingMessage}");
 
                 i++;
             }
 
-            Assert.IsTrue(expectedFilesEnumerated && actualFilesEnumerated, $"{message} Files collections have different length.");
+            ClassicAssert.IsTrue(expectedFilesEnumerated && actualFilesEnumerated, $"{message} Files collections have different length.");
         }
 
         public static void AreNotEqual(MidiFile midiFile1, MidiFile midiFile2, bool compareOriginalFormat, string message = null)
@@ -218,7 +219,7 @@ namespace Melanchall.DryWetMidi.Tests.Utilities
                 new MidiFileEqualityCheckSettings { CompareOriginalFormat = compareOriginalFormat },
                 out filesComparingMessage);
 
-            Assert.IsFalse(areEqual, $"{message} {filesComparingMessage}");
+            ClassicAssert.IsFalse(areEqual, $"{message} {filesComparingMessage}");
         }
 
         public static void AreEqual(MidiEvent midiEvent1, MidiEvent midiEvent2, bool compareDeltaTimes, string message = null)
@@ -229,12 +230,12 @@ namespace Melanchall.DryWetMidi.Tests.Utilities
                 midiEvent2,
                 new MidiEventEqualityCheckSettings { CompareDeltaTimes = compareDeltaTimes },
                 out eventsComparingMessage);
-            Assert.IsTrue(areEqual, $"{message} {eventsComparingMessage}");
+            ClassicAssert.IsTrue(areEqual, $"{message} {eventsComparingMessage}");
         }
 
         public static void AreEqual(ICollection<MidiEvent> expectedEvents, ICollection<MidiEvent> actualEvents, bool compareDeltaTimes, string message = null)
         {
-            Assert.AreEqual(expectedEvents.Count, actualEvents.Count, $"{message} Events count is invalid.");
+            ClassicAssert.AreEqual(expectedEvents.Count, actualEvents.Count, $"{message} Events count is invalid.");
 
             var expectedEventsArray = expectedEvents.ToArray();
             var actualEventsArray = actualEvents.ToArray();
@@ -254,9 +255,9 @@ namespace Melanchall.DryWetMidi.Tests.Utilities
                 return;
 
             if (ReferenceEquals(null, expectedTempoMap) || ReferenceEquals(null, actualTempoMap))
-                Assert.Fail($"{message} One of objects is null.");
+                ClassicAssert.Fail($"{message} One of objects is null.");
 
-            Assert.AreEqual(expectedTempoMap.TimeDivision, actualTempoMap.TimeDivision, $"{message} Invalid time division.");
+            ClassicAssert.AreEqual(expectedTempoMap.TimeDivision, actualTempoMap.TimeDivision, $"{message} Invalid time division.");
             CollectionAssert.AreEqual(
                 expectedTempoMap.GetTempoChanges(),
                 actualTempoMap.GetTempoChanges(),
@@ -269,22 +270,22 @@ namespace Melanchall.DryWetMidi.Tests.Utilities
 
         private static void AreEqual(Note expectedNote, Note actualNote, string message)
         {
-            Assert.AreEqual(expectedNote.NoteNumber, actualNote.NoteNumber, $"{message} Note number is invalid.");
-            Assert.AreEqual(expectedNote.Channel, actualNote.Channel, $"{message} Channel is invalid.");
-            Assert.AreEqual(expectedNote.Velocity, actualNote.Velocity, $"{message} Velocity is invalid.");
-            Assert.AreEqual(expectedNote.OffVelocity, actualNote.OffVelocity, $"{message} Off velocity is invalid.");
-            Assert.AreEqual(expectedNote.Time, actualNote.Time, $"{message} Time is invalid.");
-            Assert.AreEqual(expectedNote.Length, actualNote.Length, $"{message} Length is invalid.");
+            ClassicAssert.AreEqual(expectedNote.NoteNumber, actualNote.NoteNumber, $"{message} Note number is invalid.");
+            ClassicAssert.AreEqual(expectedNote.Channel, actualNote.Channel, $"{message} Channel is invalid.");
+            ClassicAssert.AreEqual(expectedNote.Velocity, actualNote.Velocity, $"{message} Velocity is invalid.");
+            ClassicAssert.AreEqual(expectedNote.OffVelocity, actualNote.OffVelocity, $"{message} Off velocity is invalid.");
+            ClassicAssert.AreEqual(expectedNote.Time, actualNote.Time, $"{message} Time is invalid.");
+            ClassicAssert.AreEqual(expectedNote.Length, actualNote.Length, $"{message} Length is invalid.");
 
             if (expectedNote.GetType() != typeof(Note))
-                Assert.IsTrue(expectedNote.Equals(actualNote), $"{message} Custom comparison failed.");
+                ClassicAssert.IsTrue(expectedNote.Equals(actualNote), $"{message} Custom comparison failed.");
         }
 
         private static void AreEqual(Rest expectedRest, Rest actualRest, string message)
         {
-            Assert.AreEqual(expectedRest.Key, actualRest.Key, $"{message} Key is invalid.");
-            Assert.AreEqual(expectedRest.Time, actualRest.Time, $"{message} Time is invalid.");
-            Assert.AreEqual(expectedRest.Length, actualRest.Length, $"{message} Length is invalid.");
+            ClassicAssert.AreEqual(expectedRest.Key, actualRest.Key, $"{message} Key is invalid.");
+            ClassicAssert.AreEqual(expectedRest.Time, actualRest.Time, $"{message} Time is invalid.");
+            ClassicAssert.AreEqual(expectedRest.Length, actualRest.Length, $"{message} Length is invalid.");
         }
 
         private static void AreEqual(Chord expectedChord, Chord actualChord, string message)
@@ -292,22 +293,22 @@ namespace Melanchall.DryWetMidi.Tests.Utilities
             AreEqual(expectedChord.Notes, actualChord.Notes, $"{message} Notes are invalid.");
 
             if (expectedChord.GetType() != typeof(Chord))
-                Assert.IsTrue(expectedChord.Equals(actualChord), $"{message} Custom comparison failed.");
+                ClassicAssert.IsTrue(expectedChord.Equals(actualChord), $"{message} Custom comparison failed.");
         }
 
         private static void AreEqual(TimedEvent expectedTimedEvent, TimedEvent actualTimedEvent, bool compareDeltaTimes, long timesEpsilon, string message)
         {
-            Assert.IsTrue(
+            ClassicAssert.IsTrue(
                 Math.Abs(expectedTimedEvent.Time - actualTimedEvent.Time) <= timesEpsilon,
                 $"{message} Time is invalid ({expectedTimedEvent.Time}+-{timesEpsilon} expected, but was {actualTimedEvent.Time}).");
 
             string eventsEqualityCheckMessage;
-            Assert.IsTrue(
+            ClassicAssert.IsTrue(
                 MidiEvent.Equals(expectedTimedEvent.Event, actualTimedEvent.Event, new MidiEventEqualityCheckSettings { CompareDeltaTimes = compareDeltaTimes }, out eventsEqualityCheckMessage),
                 $"{message} {eventsEqualityCheckMessage}");
 
             if (expectedTimedEvent.GetType() != typeof(TimedEvent))
-                Assert.IsTrue(expectedTimedEvent.Equals(actualTimedEvent), $"{message} Custom comparison failed.");
+                ClassicAssert.IsTrue(expectedTimedEvent.Equals(actualTimedEvent), $"{message} Custom comparison failed.");
         }
 
         #endregion

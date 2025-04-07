@@ -1,6 +1,7 @@
 ﻿using Melanchall.DryWetMidi.Interaction;
 using Melanchall.DryWetMidi.Tools;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace Melanchall.DryWetMidi.Tests.Tools
 {
@@ -112,7 +113,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 customFactory.GetChord("600", "0:0:10"),
             };
 
-            Assert.Throws<AssertionException>(() => CheckQuantize(
+            ClassicAssert.Throws<AssertionException>(() => CheckQuantize(
                 timedObjects: objects,
                 grid: new SteppedGrid((MidiTimeSpan)1000),
                 tempoMap: tempoMap,
@@ -160,7 +161,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 customFactory.GetChord("4.0.0", "3.0.0"),
             };
 
-            Assert.Throws<AssertionException>(() => CheckQuantize(
+            ClassicAssert.Throws<AssertionException>(() => CheckQuantize(
                 timedObjects: objects,
                 grid: new SteppedGrid(new BarBeatTicksTimeSpan(7, 0, 0)),
                 tempoMap: tempoMap,

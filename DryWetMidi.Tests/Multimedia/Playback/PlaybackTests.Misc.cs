@@ -9,6 +9,7 @@ using Melanchall.DryWetMidi.Multimedia;
 using Melanchall.DryWetMidi.Interaction;
 using Melanchall.DryWetMidi.Tests.Common;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace Melanchall.DryWetMidi.Tests.Multimedia
 {
@@ -86,8 +87,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 WaitOperations.Wait(() => !playback.IsRunning);
             }
 
-            Assert.IsFalse(notesPlaybackStartedFired, "NotesPlaybackStarted fired.");
-            Assert.IsFalse(notesPlaybackFinishedFired, "NotesPlaybackFinished fired.");
+            ClassicAssert.IsFalse(notesPlaybackStartedFired, "NotesPlaybackStarted fired.");
+            ClassicAssert.IsFalse(notesPlaybackFinishedFired, "NotesPlaybackFinished fired.");
         }
 
         [Retry(RetriesNumber)]
@@ -106,9 +107,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 playback.Start();
 
                 var exceptionThrown = WaitOperations.Wait(() => exception != null, SendReceiveUtilities.MaximumEventSendReceiveDelay);
-                Assert.IsTrue(exceptionThrown, "Exception was not thrown.");
+                ClassicAssert.IsTrue(exceptionThrown, "Exception was not thrown.");
 
-                Assert.AreEqual(exceptionMessage, exception.Message, "Exception message is invalid.");
+                ClassicAssert.AreEqual(exceptionMessage, exception.Message, "Exception message is invalid.");
             }
         }
 
@@ -123,7 +124,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 expectedRepeatStartedRaised: 0,
                 afterChecks: playback =>
                 {
-                    Assert.IsFalse(playback.IsRunning, "Playback is running after it should be finished.");
+                    ClassicAssert.IsFalse(playback.IsRunning, "Playback is running after it should be finished.");
                 });
         }
 
@@ -140,7 +141,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 beforeChecks: playback => WaitOperations.Wait(TimeSpan.FromSeconds(5.5)),
                 afterChecks: playback =>
                 {
-                    Assert.IsTrue(playback.IsRunning, "Playback is not running after waiting.");
+                    ClassicAssert.IsTrue(playback.IsRunning, "Playback is not running after waiting.");
                 });
         }
 
@@ -822,7 +823,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             using (var playback = new Playback(playbackObjects, TempoMap))
             {
                 var duration = playback.GetDuration<MetricTimeSpan>();
-                Assert.AreEqual(
+                ClassicAssert.AreEqual(
                     start + delayFromStart,
                     (TimeSpan)duration,
                     $"Duration is invalid.");

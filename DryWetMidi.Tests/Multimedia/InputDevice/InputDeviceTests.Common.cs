@@ -7,6 +7,7 @@ using Melanchall.DryWetMidi.Multimedia;
 using Melanchall.DryWetMidi.Tests.Common;
 using Melanchall.DryWetMidi.Tests.Utilities;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace Melanchall.DryWetMidi.Tests.Multimedia
 {
@@ -76,27 +77,27 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [TestCase(MidiDevicesNames.DeviceB)]
         public void GetInputDeviceByName(string deviceName)
         {
-            Assert.IsNotNull(InputDevice.GetByName(deviceName), "There is no device.");
+            ClassicAssert.IsNotNull(InputDevice.GetByName(deviceName), "There is no device.");
         }
 
         [Test]
         public void GetInputDeviceByIndex_Valid()
         {
             var devicesCount = InputDevice.GetDevicesCount();
-            Assert.IsNotNull(InputDevice.GetByIndex(devicesCount / 2), "There is no device.");
+            ClassicAssert.IsNotNull(InputDevice.GetByIndex(devicesCount / 2), "There is no device.");
         }
 
         [Test]
         public void GetInputDeviceByIndex_BelowZero()
         {
-            Assert.Throws<ArgumentOutOfRangeException>(() => InputDevice.GetByIndex(-1), "Exception is not thrown.");
+            ClassicAssert.Throws<ArgumentOutOfRangeException>(() => InputDevice.GetByIndex(-1), "Exception is not thrown.");
         }
 
         [Test]
         public void GetInputDeviceByIndex_BeyondDevicesCount()
         {
             var devicesCount = InputDevice.GetDevicesCount();
-            Assert.Throws<ArgumentOutOfRangeException>(() => InputDevice.GetByIndex(devicesCount), "Exception is not thrown.");
+            ClassicAssert.Throws<ArgumentOutOfRangeException>(() => InputDevice.GetByIndex(devicesCount), "Exception is not thrown.");
         }
 
         [Test]
@@ -104,14 +105,14 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         {
             var inputDevices = InputDevice.GetAll();
             var inputDevicesCount = InputDevice.GetDevicesCount();
-            Assert.AreEqual(inputDevicesCount, inputDevices.Count, "Input devices count is invalid.");
+            ClassicAssert.AreEqual(inputDevicesCount, inputDevices.Count, "Input devices count is invalid.");
         }
 
         [Test]
         public void GetInputDevicesCount()
         {
             var inputDevicesCount = InputDevice.GetDevicesCount();
-            Assert.GreaterOrEqual(
+            ClassicAssert.GreaterOrEqual(
                 inputDevicesCount,
                 MidiDevicesNames.GetAllDevicesNames().Length,
                 "Input devices count is invalid.");
@@ -151,16 +152,16 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
                 var timeout = TimeSpan.FromTicks(eventsToSend.Sum(e => e.Delay.Ticks)) + SendReceiveUtilities.MaximumEventSendReceiveDelay;
                 var isMidiTimeCodeReceived = WaitOperations.Wait(() => midiTimeCodeReceived != null, timeout);
-                Assert.IsTrue(isMidiTimeCodeReceived, $"MIDI time code received for timeout {timeout}.");
+                ClassicAssert.IsTrue(isMidiTimeCodeReceived, $"MIDI time code received for timeout {timeout}.");
 
                 inputDevice.StopEventsListening();
             }
 
-            Assert.AreEqual(MidiTimeCodeType.Thirty, midiTimeCodeReceived.Format, "Format is invalid.");
-            Assert.AreEqual(23, midiTimeCodeReceived.Hours, "Hours number is invalid.");
-            Assert.AreEqual(42, midiTimeCodeReceived.Minutes, "Minutes number is invalid.");
-            Assert.AreEqual(26, midiTimeCodeReceived.Seconds, "Seconds number is invalid.");
-            Assert.AreEqual(17, midiTimeCodeReceived.Frames, "Frames number is invalid.");
+            ClassicAssert.AreEqual(MidiTimeCodeType.Thirty, midiTimeCodeReceived.Format, "Format is invalid.");
+            ClassicAssert.AreEqual(23, midiTimeCodeReceived.Hours, "Hours number is invalid.");
+            ClassicAssert.AreEqual(42, midiTimeCodeReceived.Minutes, "Minutes number is invalid.");
+            ClassicAssert.AreEqual(26, midiTimeCodeReceived.Seconds, "Seconds number is invalid.");
+            ClassicAssert.AreEqual(17, midiTimeCodeReceived.Frames, "Frames number is invalid.");
         }
 
         [Test]
@@ -169,7 +170,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             for (var i = 0; i < 10; i++)
             {
                 var inputDevice = InputDevice.GetByName(MidiDevicesNames.DeviceA);
-                Assert.DoesNotThrow(() => inputDevice.StartEventsListening());
+                ClassicAssert.DoesNotThrow(() => inputDevice.StartEventsListening());
                 inputDevice.Dispose();
             }
         }
@@ -202,7 +203,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 checkpoints.CheckCheckpointNotReached(InputDeviceCheckpointsNames.DeviceDisconnectedInHandleFinalizer);
                 checkpoints.CheckCheckpointNotReached(InputDeviceCheckpointsNames.DeviceClosedInHandleFinalizer);
 
-                Assert.IsTrue(openDevice(checkpoints), $"Can't open device on iteration {i}.");
+                ClassicAssert.IsTrue(openDevice(checkpoints), $"Can't open device on iteration {i}.");
 
                 GC.Collect();
                 GC.WaitForPendingFinalizers();
@@ -220,7 +221,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             using (var outputDevice = OutputDevice.GetByName(MidiDevicesNames.DeviceA))
             using (var inputDevice = InputDevice.GetByName(MidiDevicesNames.DeviceA))
             {
-                Assert.IsTrue(inputDevice.IsEnabled, "Device is not enabled initially.");
+                ClassicAssert.IsTrue(inputDevice.IsEnabled, "Device is not enabled initially.");
 
                 var receivedEventsCount = 0;
 
@@ -229,21 +230,21 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
                 outputDevice.SendEvent(new NoteOnEvent());
                 var eventReceived = WaitOperations.Wait(() => receivedEventsCount == 1, SendReceiveUtilities.MaximumEventSendReceiveDelay);
-                Assert.IsTrue(eventReceived, "Event is not received.");
+                ClassicAssert.IsTrue(eventReceived, "Event is not received.");
 
                 inputDevice.IsEnabled = false;
-                Assert.IsFalse(inputDevice.IsEnabled, "Device is enabled after disabling.");
+                ClassicAssert.IsFalse(inputDevice.IsEnabled, "Device is enabled after disabling.");
 
                 outputDevice.SendEvent(new NoteOnEvent());
                 eventReceived = WaitOperations.Wait(() => receivedEventsCount > 1, TimeSpan.FromSeconds(5));
-                Assert.IsFalse(eventReceived, "Event is received after device disabled.");
+                ClassicAssert.IsFalse(eventReceived, "Event is received after device disabled.");
 
                 inputDevice.IsEnabled = true;
-                Assert.IsTrue(inputDevice.IsEnabled, "Device is disabled after enabling.");
+                ClassicAssert.IsTrue(inputDevice.IsEnabled, "Device is disabled after enabling.");
 
                 outputDevice.SendEvent(new NoteOnEvent());
                 eventReceived = WaitOperations.Wait(() => receivedEventsCount > 1, SendReceiveUtilities.MaximumEventSendReceiveDelay);
-                Assert.IsTrue(eventReceived, "Event is not received after enabling again.");
+                ClassicAssert.IsTrue(eventReceived, "Event is not received after enabling again.");
             }
         }
 
@@ -251,7 +252,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         public void InputDeviceToString_User()
         {
             var inputDevice = GetUserInputDevice();
-            Assert.AreEqual("Input device", inputDevice.ToString(), "Device string representation is invalid.");
+            ClassicAssert.AreEqual("Input device", inputDevice.ToString(), "Device string representation is invalid.");
         }
 
         [Test]
@@ -259,7 +260,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         {
             foreach (var inputDevice in InputDevice.GetAll())
             {
-                Assert.DoesNotThrow(() => inputDevice.GetHashCode(), $"Failed to get hash code for [{inputDevice.Name}].");
+                ClassicAssert.DoesNotThrow(() => inputDevice.GetHashCode(), $"Failed to get hash code for [{inputDevice.Name}].");
             }
         }
 
@@ -276,31 +277,31 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
                 outputDevice.SendEvent(new NoteOnEvent());
                 var success = WaitOperations.Wait(() => receivedEventsCount > 0, timeout);
-                Assert.IsFalse(success, "Event received on just created device.");
+                ClassicAssert.IsFalse(success, "Event received on just created device.");
 
                 inputDevice.StartEventsListening();
                 outputDevice.SendEvent(new NoteOnEvent());
                 success = WaitOperations.Wait(() => receivedEventsCount > 0, timeout);
-                Assert.IsTrue(success, "Event was not received after first start.");
-                Assert.AreEqual(1, receivedEventsCount, "Received events count is invalid after first start.");
+                ClassicAssert.IsTrue(success, "Event was not received after first start.");
+                ClassicAssert.AreEqual(1, receivedEventsCount, "Received events count is invalid after first start.");
 
                 inputDevice.StopEventsListening();
                 outputDevice.SendEvent(new NoteOnEvent());
                 success = WaitOperations.Wait(() => receivedEventsCount > 1, timeout);
-                Assert.IsFalse(success, "Event received after first stop.");
-                Assert.AreEqual(1, receivedEventsCount, "Received events count is invalid after first stop.");
+                ClassicAssert.IsFalse(success, "Event received after first stop.");
+                ClassicAssert.AreEqual(1, receivedEventsCount, "Received events count is invalid after first stop.");
 
                 inputDevice.StartEventsListening();
                 outputDevice.SendEvent(new NoteOnEvent());
                 success = WaitOperations.Wait(() => receivedEventsCount > 1, timeout);
-                Assert.IsTrue(success, "Event was not received after second start.");
-                Assert.AreEqual(2, receivedEventsCount, "Received events count is invalid after second start.");
+                ClassicAssert.IsTrue(success, "Event was not received after second start.");
+                ClassicAssert.AreEqual(2, receivedEventsCount, "Received events count is invalid after second start.");
 
                 inputDevice.StopEventsListening();
                 outputDevice.SendEvent(new NoteOnEvent());
                 success = WaitOperations.Wait(() => receivedEventsCount > 2, timeout);
-                Assert.IsFalse(success, "Event received after second stop.");
-                Assert.AreEqual(2, receivedEventsCount, "Received events count is invalid after second stop.");
+                ClassicAssert.IsFalse(success, "Event received after second stop.");
+                ClassicAssert.AreEqual(2, receivedEventsCount, "Received events count is invalid after second stop.");
             }
         }
 
@@ -365,7 +366,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     timeout);
 
                 var checkpointData = checkpoints.GetCheckpointDataList(InputDeviceCheckpointsNames.MessageDataReceived);
-                Assert.IsTrue(
+                ClassicAssert.IsTrue(
                     areEventReceived,
                     $"Events are not received for [{timeout}] (received are: {string.Join(", ", receivedEvents)}). Checkpoint's data: {GetCheckpointDataString(checkpointData)}.");
 
@@ -380,7 +381,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 {
                     var expectedCheckpointData = packages.SelectMany(p => new object[] { null }.Concat(p.Packets.Select(pp => pp.Data))).ToArray();
                     if (expectedCheckpointData.Length != checkpointData.Count)
-                        Assert.Fail($"Invalid checkpoint's data count: {GetCheckpointDataString(checkpointData)}.");
+                        ClassicAssert.Fail($"Invalid checkpoint's data count: {GetCheckpointDataString(checkpointData)}.");
 
                     for (var i = 0; i < expectedCheckpointData.Length; i++)
                     {
@@ -436,7 +437,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     timeout);
 
                 var checkpointData = checkpoints.GetCheckpointDataList(InputDeviceCheckpointsNames.MessageDataReceived);
-                Assert.IsTrue(
+                ClassicAssert.IsTrue(
                     areEventReceived,
                     $"Events are not received for [{timeout}] (received are: {string.Join(", ", receivedEvents)}). Checkpoint's data: {GetCheckpointDataString(checkpointData)}.");
 
@@ -451,7 +452,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 {
                     var expectedCheckpointData = packets.Select(pp => pp.Data).ToArray();
                     if (expectedCheckpointData.Length != checkpointData.Count)
-                        Assert.Fail($"Invalid checkpoint's data count: {GetCheckpointDataString(checkpointData)}.");
+                        ClassicAssert.Fail($"Invalid checkpoint's data count: {GetCheckpointDataString(checkpointData)}.");
 
                     for (var i = 0; i < expectedCheckpointData.Length; i++)
                     {

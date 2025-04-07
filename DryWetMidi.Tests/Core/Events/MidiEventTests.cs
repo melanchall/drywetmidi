@@ -6,6 +6,7 @@ using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Tests.Common;
 using Melanchall.DryWetMidi.Tests.Utilities;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace Melanchall.DryWetMidi.Tests.Core
 {
@@ -128,7 +129,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
                     ? new UnknownMetaEvent(0)
                     : (MidiEvent)Activator.CreateInstance(type, true);
                 var eventType = instance.EventType;
-                Assert.IsTrue(
+                ClassicAssert.IsTrue(
                     type.Name.StartsWith(eventType.ToString()),
                     $"Type '{eventType}' is invalid for events of type '{type.Name}'.");
             }
@@ -142,7 +143,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 if (type == typeof(UnknownMetaEvent) || type == typeof(EndOfTrackEvent))
                     continue;
 
-                Assert.IsNotNull(
+                ClassicAssert.IsNotNull(
                     type.GetConstructor(Type.EmptyTypes),
                     $"Type '{type.Name}' has no parameterless constructor.");
             }
@@ -257,7 +258,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
             if (midiEvent is ChannelEvent)
                 expectedModifiersCount++;
 
-            Assert.AreEqual(expectedModifiersCount, modifiersCount, $"Non-default MIDI event modifiers count is invalid for '{midiEventType}'.");
+            ClassicAssert.AreEqual(expectedModifiersCount, modifiersCount, $"Non-default MIDI event modifiers count is invalid for '{midiEventType}'.");
             return midiEvent;
         }
 

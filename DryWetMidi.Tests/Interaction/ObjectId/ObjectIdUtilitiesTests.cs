@@ -2,6 +2,7 @@
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using System;
 using System.Linq;
 
@@ -22,7 +23,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 .Where(t => !t.IsAbstract && !t.IsInterface && baseType.IsAssignableFrom(t) && t != typeof(ValueChange<>))
                 .ToArray();
 
-            Assert.IsTrue(objectsTypes.Any(), "No object types found.");
+            ClassicAssert.IsTrue(objectsTypes.Any(), "No object types found.");
 
             foreach (var type in objectsTypes)
             {
@@ -38,7 +39,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     obj = (ITimedObject)Activator.CreateInstance(type);
                 
                 var objectId = obj.GetObjectId();
-                Assert.IsNotNull(objectId, $"Null ID for [{obj}] object.");
+                ClassicAssert.IsNotNull(objectId, $"Null ID for [{obj}] object.");
             }
         }
 

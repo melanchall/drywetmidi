@@ -8,6 +8,7 @@ using Melanchall.DryWetMidi.Multimedia;
 using Melanchall.DryWetMidi.Tests.Common;
 using Melanchall.DryWetMidi.Tests.Utilities;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace Melanchall.DryWetMidi.Tests.Multimedia
 {
@@ -28,8 +29,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         {
             using (var virtualDevice = GetVirtualDevice())
             {
-                Assert.Throws<InvalidOperationException>(() => virtualDevice.InputDevice.Dispose(), "Dispose not failed for input subdevice.");
-                Assert.Throws<InvalidOperationException>(() => virtualDevice.OutputDevice.Dispose(), "Dispose not failed for output subdevice.");
+                ClassicAssert.Throws<InvalidOperationException>(() => virtualDevice.InputDevice.Dispose(), "Dispose not failed for input subdevice.");
+                ClassicAssert.Throws<InvalidOperationException>(() => virtualDevice.OutputDevice.Dispose(), "Dispose not failed for output subdevice.");
             }
         }
 
@@ -40,13 +41,13 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             {
                 var deviceName = virtualDevice.Name;
 
-                Assert.AreEqual(deviceName, virtualDevice.Name, "Name is invalid.");
+                ClassicAssert.AreEqual(deviceName, virtualDevice.Name, "Name is invalid.");
 
-                Assert.IsNotNull(virtualDevice.InputDevice, "Input device is null.");
-                Assert.IsNotNull(deviceName, virtualDevice.InputDevice.Name, "Input device name is null.");
+                ClassicAssert.IsNotNull(virtualDevice.InputDevice, "Input device is null.");
+                ClassicAssert.IsNotNull(deviceName, virtualDevice.InputDevice.Name, "Input device name is null.");
 
-                Assert.IsNotNull(virtualDevice.OutputDevice, "Output device is null.");
-                Assert.IsNotNull(deviceName, virtualDevice.OutputDevice.Name, "Output device name is null.");
+                ClassicAssert.IsNotNull(virtualDevice.OutputDevice, "Output device is null.");
+                ClassicAssert.IsNotNull(deviceName, virtualDevice.OutputDevice.Name, "Output device name is null.");
             }
         }
 
@@ -58,18 +59,18 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var timeout = TimeSpan.FromSeconds(5);
 
             var inputDeviceFound = WaitOperations.Wait(() => InputDevice.GetAll().Any(d => d.Name == virtualDevice.Name), timeout);
-            Assert.IsTrue(inputDeviceFound, $"Input device is not found for [{timeout}].");
+            ClassicAssert.IsTrue(inputDeviceFound, $"Input device is not found for [{timeout}].");
 
             var outputDeviceFound = WaitOperations.Wait(() => OutputDevice.GetAll().Any(d => d.Name == virtualDevice.Name), timeout);
-            Assert.IsTrue(outputDeviceFound, $"Output device is not found for [{timeout}].");
+            ClassicAssert.IsTrue(outputDeviceFound, $"Output device is not found for [{timeout}].");
 
             virtualDevice.Dispose();
 
             inputDeviceFound = WaitOperations.Wait(() => InputDevice.GetAll().Any(d => d.Name == virtualDevice.Name), timeout);
-            Assert.IsFalse(inputDeviceFound, $"Input device is found after virtual device disposed after [{timeout}].");
+            ClassicAssert.IsFalse(inputDeviceFound, $"Input device is found after virtual device disposed after [{timeout}].");
 
             outputDeviceFound = WaitOperations.Wait(() => OutputDevice.GetAll().Any(d => d.Name == virtualDevice.Name), timeout);
-            Assert.IsFalse(outputDeviceFound, $"Output device is found after virtual device disposed after [{timeout}].");
+            ClassicAssert.IsFalse(outputDeviceFound, $"Output device is found after virtual device disposed after [{timeout}].");
         }
 
         [Test]
@@ -89,10 +90,10 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var timeout = TimeSpan.FromSeconds(5);
 
             var inputDeviceFound = WaitOperations.Wait(() => InputDevice.GetAll().Any(d => d.Name == deviceName), timeout);
-            Assert.IsFalse(inputDeviceFound, $"Input device is found after virtual device disposed after [{timeout}].");
+            ClassicAssert.IsFalse(inputDeviceFound, $"Input device is found after virtual device disposed after [{timeout}].");
 
             var outputDeviceFound = WaitOperations.Wait(() => OutputDevice.GetAll().Any(d => d.Name == deviceName), timeout);
-            Assert.IsFalse(outputDeviceFound, $"Output device is found after virtual device disposed after [{timeout}].");
+            ClassicAssert.IsFalse(outputDeviceFound, $"Output device is found after virtual device disposed after [{timeout}].");
         }
 
         [Retry(RetriesNumber)]
@@ -147,7 +148,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 var timeout = TimeSpan.FromSeconds(5);
                 var subdevicesFound = WaitOperations.Wait(() => InputDevice.GetAll().Any(d => d.Name == deviceName) && OutputDevice.GetAll().Any(d => d.Name == deviceName), timeout);
 
-                Assert.IsTrue(subdevicesFound, "Subdevices were not found.");
+                ClassicAssert.IsTrue(subdevicesFound, "Subdevices were not found.");
             }
         }
 
@@ -158,8 +159,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             using (var inputDevice = InputDevice.GetByName(virtualDevice.Name))
             using (var outputDevice = OutputDevice.GetByName(virtualDevice.Name))
             {
-                Assert.AreEqual(virtualDevice.InputDevice, inputDevice, "Input device is not equal to virtual input subdevice.");
-                Assert.AreEqual(virtualDevice.OutputDevice, outputDevice, "Output device is not equal to virtual output subdevice.");
+                ClassicAssert.AreEqual(virtualDevice.InputDevice, inputDevice, "Input device is not equal to virtual input subdevice.");
+                ClassicAssert.AreEqual(virtualDevice.OutputDevice, outputDevice, "Output device is not equal to virtual output subdevice.");
             }
         }
 
@@ -170,8 +171,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             using (var inputDevice = InputDevice.GetByName(MidiDevicesNames.DeviceA))
             using (var outputDevice = OutputDevice.GetByName(MidiDevicesNames.DeviceB))
             {
-                Assert.AreNotEqual(virtualDevice.InputDevice, inputDevice, "Input device is equal to virtual input subdevice.");
-                Assert.AreNotEqual(virtualDevice.OutputDevice, outputDevice, "Output device is equal to virtual output subdevice.");
+                ClassicAssert.AreNotEqual(virtualDevice.InputDevice, inputDevice, "Input device is equal to virtual input subdevice.");
+                ClassicAssert.AreNotEqual(virtualDevice.OutputDevice, outputDevice, "Output device is equal to virtual output subdevice.");
             }
         }
 
@@ -180,7 +181,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         {
             using (var virtualDevice = GetVirtualDevice())
             {
-                Assert.IsTrue(virtualDevice.IsEnabled, "Device is not enabled initially.");
+                ClassicAssert.IsTrue(virtualDevice.IsEnabled, "Device is not enabled initially.");
 
                 var inputDevice = virtualDevice.InputDevice;
                 var outputDevice = virtualDevice.OutputDevice;
@@ -192,21 +193,21 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
                 outputDevice.SendEvent(new NoteOnEvent());
                 var eventReceived = WaitOperations.Wait(() => receivedEventsCount == 1, SendReceiveUtilities.MaximumEventSendReceiveDelay);
-                Assert.IsTrue(eventReceived, "Event is not received.");
+                ClassicAssert.IsTrue(eventReceived, "Event is not received.");
 
                 virtualDevice.IsEnabled = false;
-                Assert.IsFalse(virtualDevice.IsEnabled, "Device is enabled after disabling.");
+                ClassicAssert.IsFalse(virtualDevice.IsEnabled, "Device is enabled after disabling.");
 
                 outputDevice.SendEvent(new NoteOnEvent());
                 eventReceived = WaitOperations.Wait(() => receivedEventsCount > 1, TimeSpan.FromSeconds(5));
-                Assert.IsFalse(eventReceived, "Event is received after device disabled.");
+                ClassicAssert.IsFalse(eventReceived, "Event is received after device disabled.");
 
                 virtualDevice.IsEnabled = true;
-                Assert.IsTrue(virtualDevice.IsEnabled, "Device is disabled after enabling.");
+                ClassicAssert.IsTrue(virtualDevice.IsEnabled, "Device is disabled after enabling.");
 
                 outputDevice.SendEvent(new NoteOnEvent());
                 eventReceived = WaitOperations.Wait(() => receivedEventsCount > 1, SendReceiveUtilities.MaximumEventSendReceiveDelay);
-                Assert.IsTrue(eventReceived, "Event is not received after enabling again.");
+                ClassicAssert.IsTrue(eventReceived, "Event is not received after enabling again.");
             }
         }
 
@@ -218,7 +219,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 var inputDevice = virtualDevice.InputDevice;
                 var outputDevice = virtualDevice.OutputDevice;
 
-                Assert.IsTrue(inputDevice.IsEnabled, "Device is not enabled initially.");
+                ClassicAssert.IsTrue(inputDevice.IsEnabled, "Device is not enabled initially.");
 
                 var receivedEventsCount = 0;
 
@@ -227,21 +228,21 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
                 outputDevice.SendEvent(new NoteOnEvent());
                 var eventReceived = WaitOperations.Wait(() => receivedEventsCount == 1, SendReceiveUtilities.MaximumEventSendReceiveDelay);
-                Assert.IsTrue(eventReceived, "Event is not received.");
+                ClassicAssert.IsTrue(eventReceived, "Event is not received.");
 
                 inputDevice.IsEnabled = false;
-                Assert.IsFalse(inputDevice.IsEnabled, "Device is enabled after disabling.");
+                ClassicAssert.IsFalse(inputDevice.IsEnabled, "Device is enabled after disabling.");
 
                 outputDevice.SendEvent(new NoteOnEvent());
                 eventReceived = WaitOperations.Wait(() => receivedEventsCount > 1, TimeSpan.FromSeconds(5));
-                Assert.IsFalse(eventReceived, "Event is received after device disabled.");
+                ClassicAssert.IsFalse(eventReceived, "Event is received after device disabled.");
 
                 inputDevice.IsEnabled = true;
-                Assert.IsTrue(inputDevice.IsEnabled, "Device is disabled after enabling.");
+                ClassicAssert.IsTrue(inputDevice.IsEnabled, "Device is disabled after enabling.");
 
                 outputDevice.SendEvent(new NoteOnEvent());
                 eventReceived = WaitOperations.Wait(() => receivedEventsCount > 1, SendReceiveUtilities.MaximumEventSendReceiveDelay);
-                Assert.IsTrue(eventReceived, "Event is not received after enabling again.");
+                ClassicAssert.IsTrue(eventReceived, "Event is not received after enabling again.");
             }
         }
 
@@ -253,7 +254,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 var inputDevice = virtualDevice.InputDevice;
                 var outputDevice = virtualDevice.OutputDevice;
 
-                Assert.IsTrue(outputDevice.IsEnabled, "Device is not enabled initially.");
+                ClassicAssert.IsTrue(outputDevice.IsEnabled, "Device is not enabled initially.");
 
                 var sentEventsCount = 0;
 
@@ -261,21 +262,21 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
                 outputDevice.SendEvent(new NoteOnEvent());
                 var eventReceived = WaitOperations.Wait(() => sentEventsCount == 1, SendReceiveUtilities.MaximumEventSendReceiveDelay);
-                Assert.IsTrue(eventReceived, "Event is not sent.");
+                ClassicAssert.IsTrue(eventReceived, "Event is not sent.");
 
                 outputDevice.IsEnabled = false;
-                Assert.IsFalse(outputDevice.IsEnabled, "Device is enabled after disabling.");
+                ClassicAssert.IsFalse(outputDevice.IsEnabled, "Device is enabled after disabling.");
 
                 outputDevice.SendEvent(new NoteOnEvent());
                 eventReceived = WaitOperations.Wait(() => sentEventsCount > 1, TimeSpan.FromSeconds(5));
-                Assert.IsFalse(eventReceived, "Event is sent after device disabled.");
+                ClassicAssert.IsFalse(eventReceived, "Event is sent after device disabled.");
 
                 outputDevice.IsEnabled = true;
-                Assert.IsTrue(outputDevice.IsEnabled, "Device is disabled after enabling.");
+                ClassicAssert.IsTrue(outputDevice.IsEnabled, "Device is disabled after enabling.");
 
                 outputDevice.SendEvent(new NoteOnEvent());
                 eventReceived = WaitOperations.Wait(() => sentEventsCount > 1, SendReceiveUtilities.MaximumEventSendReceiveDelay);
-                Assert.IsTrue(eventReceived, "Event is not sent after enabling again.");
+                ClassicAssert.IsTrue(eventReceived, "Event is not sent after enabling again.");
             }
         }
 
@@ -348,7 +349,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     if (errorBuilder.Length == 0)
                         errorBuilder.AppendLine("Event either not sent ot not received.");
 
-                    Assert.Fail(errorBuilder.ToString());
+                    ClassicAssert.Fail(errorBuilder.ToString());
                 }
 
                 MidiAsserts.AreEqual(midiEvent, eventSent, false, "Sent event is invalid.");

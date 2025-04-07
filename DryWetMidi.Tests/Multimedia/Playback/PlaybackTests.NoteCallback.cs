@@ -8,6 +8,7 @@ using NUnit.Framework;
 using Melanchall.DryWetMidi.Tests.Utilities;
 using System.Collections.Generic;
 using System.Linq;
+using NUnit.Framework.Legacy;
 
 namespace Melanchall.DryWetMidi.Tests.Multimedia
 {
@@ -355,14 +356,14 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                         CheckCurrentTime(p, ScaleTimeSpan(firstAfterResumeDelay, speed), "resumed 1")),
                     new PlaybackAction(secondAfterResumeDelay, p =>
                     {
-                        Assert.IsTrue(p.IsRunning, "Playback is not running 1.");
+                        ClassicAssert.IsTrue(p.IsRunning, "Playback is not running 1.");
                         p.MoveToStart();
                         CheckCurrentTime(p, TimeSpan.Zero, "resumed 2");
-                        Assert.IsTrue(p.IsRunning, "Playback is not running 2.");
+                        ClassicAssert.IsTrue(p.IsRunning, "Playback is not running 2.");
                     }),
                     new PlaybackAction(thirdAfterResumeDelay, p =>
                     {
-                        Assert.IsTrue(p.IsRunning, "Playback is not running 3.");
+                        ClassicAssert.IsTrue(p.IsRunning, "Playback is not running 3.");
                         CheckCurrentTime(p, ScaleTimeSpan(thirdAfterResumeDelay, speed), "resumed 3");
                     }),
                 },
@@ -588,7 +589,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var stopPeriod = TimeSpan.FromMilliseconds(200);
 
             var stepAfterStop = TimeSpan.FromMilliseconds(300);
-            Assert.LessOrEqual(stepAfterStop, ScaleTimeSpan(stopAfter, speed), "Step after stop is invalid.");
+            ClassicAssert.LessOrEqual(stepAfterStop, ScaleTimeSpan(stopAfter, speed), "Step after stop is invalid.");
 
             var stepAfterResumed = TimeSpan.FromMilliseconds(100);
 
@@ -597,7 +598,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var thirdAfterResumeDelay = TimeSpan.FromMilliseconds(200);
 
             var lastEventTime = TimeSpan.FromMilliseconds(3000);
-            Assert.GreaterOrEqual(lastEventTime, ScaleTimeSpan(stopAfter + firstAfterResumeDelay + secondAfterResumeDelay + thirdAfterResumeDelay, speed) - stepAfterStop - stepAfterResumed, "Last event time is invalid.");
+            ClassicAssert.GreaterOrEqual(lastEventTime, ScaleTimeSpan(stopAfter + firstAfterResumeDelay + secondAfterResumeDelay + thirdAfterResumeDelay, speed) - stepAfterStop - stepAfterResumed, "Last event time is invalid.");
 
             var originalNote = new Note((SevenBitNumber)0) { Velocity = SevenBitNumber.MinValue }
                 .SetLength((MetricTimeSpan)lastEventTime, TempoMap);
@@ -1625,7 +1626,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var stopPeriod = TimeSpan.FromMilliseconds(200);
 
             var stepAfterStop = TimeSpan.FromMilliseconds(300);
-            Assert.LessOrEqual(stepAfterStop, ScaleTimeSpan(stopAfter, speed), "Step after stop is invalid.");
+            ClassicAssert.LessOrEqual(stepAfterStop, ScaleTimeSpan(stopAfter, speed), "Step after stop is invalid.");
 
             var stepAfterResumed = TimeSpan.FromMilliseconds(100);
 
@@ -1634,7 +1635,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var thirdAfterResumeDelay = TimeSpan.FromMilliseconds(200);
 
             var lastEventTime = TimeSpan.FromMilliseconds(3000);
-            Assert.GreaterOrEqual(lastEventTime, ScaleTimeSpan(stopAfter + firstAfterResumeDelay + secondAfterResumeDelay + thirdAfterResumeDelay, speed) - stepAfterStop - stepAfterResumed, "Last event time is invalid.");
+            ClassicAssert.GreaterOrEqual(lastEventTime, ScaleTimeSpan(stopAfter + firstAfterResumeDelay + secondAfterResumeDelay + thirdAfterResumeDelay, speed) - stepAfterStop - stepAfterResumed, "Last event time is invalid.");
 
             var originalNote = new Note((SevenBitNumber)0) { Velocity = SevenBitNumber.MinValue }
                 .SetLength((MetricTimeSpan)lastEventTime, TempoMap);
@@ -2055,7 +2056,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     playback.NotesPlaybackFinished += (_, e) => notesEvents.AddRange(Enumerable.Range(0, e.Notes.Count).Select(i => (EventType.Finished, e.Notes.ElementAt(i), e.OriginalNotes.ElementAt(i))));
                 });
 
-            Assert.AreEqual(
+            ClassicAssert.AreEqual(
                 expectedNotesEvents.Count,
                 notesEvents.Count,
                 $"Notes events count is invalid.{Environment.NewLine}Actual events:{Environment.NewLine}" +
@@ -2068,7 +2069,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 var expectedEvent = expectedNotesEvents.ElementAt(i);
                 var actualEvent = notesEvents[i];
 
-                Assert.AreEqual(
+                ClassicAssert.AreEqual(
                     expectedEvent.EventType,
                     actualEvent.EventType,
                     $"Event type is invalid at index {i}.");
@@ -2080,14 +2081,14 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
                 if (expectedEvent.CheckOriginalNoteByReference)
                 {
-                    Assert.AreSame(
+                    ClassicAssert.AreSame(
                         expectedEvent.OriginalNote,
                         actualEvent.OriginalNote,
                         $"Original note is invalid at index {i}.");
                 }
                 else
                 {
-                    Assert.AreNotSame(
+                    ClassicAssert.AreNotSame(
                         expectedEvent.OriginalNote,
                         actualEvent.OriginalNote,
                         $"Original note is invalid at index {i}.");

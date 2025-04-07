@@ -9,6 +9,7 @@ using Melanchall.DryWetMidi.Tests.Common;
 using Melanchall.DryWetMidi.Tests.Utilities;
 using NUnit.Framework;
 using System.Diagnostics;
+using NUnit.Framework.Legacy;
 
 namespace Melanchall.DryWetMidi.Tests.Multimedia
 {
@@ -2011,7 +2012,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new PlaybackAction(firstAfterResumeDelay,
                         p =>
                         {
-                            Assert.IsTrue(p.IsRunning, "Playback is not running after resumed.");
+                            ClassicAssert.IsTrue(p.IsRunning, "Playback is not running after resumed.");
                             CheckCurrentTime(p, stopAfter + firstAfterResumeDelay - stepAfterStop, "resumed on first span");
                         }),
                     new PlaybackAction(secondAfterResumeDelay,
@@ -2426,7 +2427,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             (MidiEvent, object)[] expectedMetadata,
             (MidiEvent, object)[] actualMetadata)
         {
-            Assert.AreEqual(
+            ClassicAssert.AreEqual(
                 expectedMetadata.Length,
                 actualMetadata.Length,
                 $"Metadata count is invalid.{Environment.NewLine}Actual metadata:{Environment.NewLine}" +
@@ -2440,7 +2441,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 var actualRecord = actualMetadata[i];
 
                 MidiAsserts.AreEqual(expectedRecord.Item1, actualRecord.Item1, false, $"Record {i}: Event is invalid.");
-                Assert.AreEqual(expectedRecord.Item2, actualRecord.Item2, $"Record {i}: Metadata is invalid.");
+                ClassicAssert.AreEqual(expectedRecord.Item2, actualRecord.Item2, $"Record {i}: Metadata is invalid.");
             }
         }
 
@@ -2483,7 +2484,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 }
 
                 var playbackFinished = WaitOperations.Wait(() => !playback.IsRunning, timeout);
-                Assert.IsTrue(playbackFinished, "Playback not finished.");
+                ClassicAssert.IsTrue(playbackFinished, "Playback not finished.");
             }
 
             CheckRegisteredMetadata(expectedEvents, actualEvents.ToArray());

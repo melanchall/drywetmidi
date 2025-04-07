@@ -1,6 +1,7 @@
 ﻿using System;
 using Melanchall.DryWetMidi.Interaction;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace Melanchall.DryWetMidi.Tests.Interaction
 {
@@ -13,7 +14,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         public void CheckDefaultData()
         {
             var parameter = GetDefaultParameter();
-            Assert.AreEqual(0, parameter.Cents, "Default cents number is invalid.");
+            ClassicAssert.AreEqual(0, parameter.Cents, "Default cents number is invalid.");
 
             CheckTimedEvents(
                 parameter,
@@ -50,12 +51,12 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         [TestCase(100.001f)]
         public void CheckOutOfRangeData(float cents)
         {
-            Assert.Throws<ArgumentOutOfRangeException>(
+            ClassicAssert.Throws<ArgumentOutOfRangeException>(
                 () => GetNonDefaultParameter(cents),
                 "Exception wasn't thrown from constructor.");
 
             var parameter = GetDefaultParameter();
-            Assert.Throws<ArgumentOutOfRangeException>(
+            ClassicAssert.Throws<ArgumentOutOfRangeException>(
                 () => parameter.Cents = cents,
                 "Exception wasn't thrown from property.");
         }

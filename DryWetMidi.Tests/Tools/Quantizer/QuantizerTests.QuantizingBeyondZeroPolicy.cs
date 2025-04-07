@@ -1,6 +1,7 @@
 ﻿using Melanchall.DryWetMidi.Interaction;
 using Melanchall.DryWetMidi.Tools;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using System;
 
 namespace Melanchall.DryWetMidi.Tests.Tools
@@ -125,7 +126,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                     "1", "22"),
             };
 
-            Assert.Throws<InvalidOperationException>(() => CheckQuantize(
+            ClassicAssert.Throws<InvalidOperationException>(() => CheckQuantize(
                 timedObjects: objects,
                 grid: new SteppedGrid((MidiTimeSpan)20),
                 tempoMap: TempoMap.Default,

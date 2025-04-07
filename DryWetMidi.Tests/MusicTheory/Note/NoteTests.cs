@@ -4,6 +4,7 @@ using System.Threading;
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.MusicTheory;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace Melanchall.DryWetMidi.Tests.MusicTheory
 {
@@ -16,7 +17,7 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
         [Description("Check that notes of the same note number are equal by reference.")]
         public void CheckReferences()
         {
-            Assert.AreSame(Note.Get((SevenBitNumber)34), Note.Get((SevenBitNumber)34));
+            ClassicAssert.AreSame(Note.Get((SevenBitNumber)34), Note.Get((SevenBitNumber)34));
         }
 
         [Test]
@@ -27,7 +28,7 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
             var actualNote = Note.Get((SevenBitNumber)15)
                                  .Transpose(Interval.FromHalfSteps(10));
 
-            Assert.AreEqual(expectedNote, actualNote);
+            ClassicAssert.AreEqual(expectedNote, actualNote);
         }
 
         [Test]
@@ -38,14 +39,14 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
             var actualNote = Note.Get(SevenBitNumber.MinValue)
                                  .Transpose(Interval.GetUp(SevenBitNumber.MaxValue));
 
-            Assert.AreEqual(expectedNote, actualNote);
+            ClassicAssert.AreEqual(expectedNote, actualNote);
         }
 
         [Test]
         [Description("Transpose a note up going out of the valid range.")]
         public void Transpose_Up_OutOfRange()
         {
-            Assert.Throws<ArgumentOutOfRangeException>(() =>
+            ClassicAssert.Throws<ArgumentOutOfRangeException>(() =>
             {
                 Note.Get(SevenBitNumber.MaxValue)
                     .Transpose(Interval.GetUp(SevenBitNumber.MaxValue));
@@ -60,7 +61,7 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
             var actualNote = Note.Get((SevenBitNumber)35)
                                  .Transpose(Interval.FromHalfSteps(-10));
 
-            Assert.AreEqual(expectedNote, actualNote);
+            ClassicAssert.AreEqual(expectedNote, actualNote);
         }
 
         [Test]
@@ -71,14 +72,14 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
             var actualNote = Note.Get(SevenBitNumber.MaxValue)
                                  .Transpose(Interval.GetDown(SevenBitNumber.MaxValue));
 
-            Assert.AreEqual(expectedNote, actualNote);
+            ClassicAssert.AreEqual(expectedNote, actualNote);
         }
 
         [Test]
         [Description("Transpose a note down going out of the valid range.")]
         public void Transpose_Down_OutOfRange()
         {
-            Assert.Throws<ArgumentOutOfRangeException>(() =>
+            ClassicAssert.Throws<ArgumentOutOfRangeException>(() =>
             {
                 Note.Get(SevenBitNumber.MinValue)
                     .Transpose(Interval.GetDown(SevenBitNumber.MaxValue));
@@ -252,16 +253,16 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
         private static void Parse(string input, Note expectedNote, string label)
         {
             Note.TryParse(input, out var actualNote);
-            Assert.AreEqual(expectedNote,
+            ClassicAssert.AreEqual(expectedNote,
                             actualNote,
                             $"TryParse ({label}): incorrect result.");
 
             actualNote = Note.Parse(input);
-            Assert.AreEqual(expectedNote,
+            ClassicAssert.AreEqual(expectedNote,
                             actualNote,
                             $"Parse ({label}): incorrect result.");
 
-            Assert.AreEqual(expectedNote,
+            ClassicAssert.AreEqual(expectedNote,
                             Note.Parse(expectedNote.ToString()),
                             $"Parse ({label}): string representation was not parsed to the original note.");
         }
@@ -269,7 +270,7 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
         private static void ParseInvalid<TException>(string input)
             where TException : Exception
         {
-            Assert.Throws<TException>(() => Note.Parse(input));
+            ClassicAssert.Throws<TException>(() => Note.Parse(input));
         }
 
         #endregion

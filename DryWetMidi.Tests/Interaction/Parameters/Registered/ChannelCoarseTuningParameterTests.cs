@@ -1,6 +1,7 @@
 ﻿using System;
 using Melanchall.DryWetMidi.Interaction;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace Melanchall.DryWetMidi.Tests.Interaction
 {
@@ -13,7 +14,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         public void CheckDefaultData()
         {
             var parameter = GetDefaultParameter();
-            Assert.AreEqual(0, parameter.HalfSteps, "Default half-steps number is invalid.");
+            ClassicAssert.AreEqual(0, parameter.HalfSteps, "Default half-steps number is invalid.");
             
             CheckTimedEvents(
                 parameter,
@@ -48,12 +49,12 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         [TestCase(64)]
         public void CheckOutOfRangeData(sbyte halfSteps)
         {
-            Assert.Throws<ArgumentOutOfRangeException>(
+            ClassicAssert.Throws<ArgumentOutOfRangeException>(
                 () => GetNonDefaultParameter(halfSteps),
                 "Exception wasn't thrown from constructor.");
 
             var parameter = GetDefaultParameter();
-            Assert.Throws<ArgumentOutOfRangeException>(
+            ClassicAssert.Throws<ArgumentOutOfRangeException>(
                 () => parameter.HalfSteps = halfSteps,
                 "Exception wasn't thrown from property.");
         }

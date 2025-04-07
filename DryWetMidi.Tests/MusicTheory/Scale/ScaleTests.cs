@@ -1,6 +1,7 @@
 ﻿using System;
 using Melanchall.DryWetMidi.MusicTheory;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace Melanchall.DryWetMidi.Tests.MusicTheory
 {
@@ -65,16 +66,16 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
         private static void Parse(string input, Scale expectedScale)
         {
             Scale.TryParse(input, out var actualScale);
-            Assert.AreEqual(expectedScale,
+            ClassicAssert.AreEqual(expectedScale,
                             actualScale,
                             "TryParse: incorrect result.");
 
             actualScale = Scale.Parse(input);
-            Assert.AreEqual(expectedScale,
+            ClassicAssert.AreEqual(expectedScale,
                             actualScale,
                             "Parse: incorrect result.");
 
-            Assert.AreEqual(expectedScale,
+            ClassicAssert.AreEqual(expectedScale,
                             Scale.Parse(expectedScale.ToString()),
                             "Parse: string representation was not parsed to the original scale.");
         }
@@ -82,7 +83,7 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
         private static void ParseInvalid<TException>(string input)
             where TException : Exception
         {
-            Assert.Throws<TException>(() => Scale.Parse(input));
+            ClassicAssert.Throws<TException>(() => Scale.Parse(input));
         }
 
         #endregion

@@ -6,6 +6,7 @@ using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Multimedia;
 using Melanchall.DryWetMidi.Tests.Common;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace Melanchall.DryWetMidi.Tests.Multimedia
 {
@@ -307,9 +308,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 var timeout = SendReceiveUtilities.MaximumEventSendReceiveDelay;
                 var errorOccurred = WaitOperations.Wait(() => exception != null, timeout);
 
-                Assert.IsTrue(errorOccurred, $"Error was not occurred for [{timeout}].");
-                Assert.IsInstanceOf(typeof(MidiDeviceException), exception, "Exception type is invalid");
-                Assert.IsInstanceOf(typeof(UnexpectedRunningStatusException), exception.InnerException, "Inner exception type is invalid.");
+                ClassicAssert.IsTrue(errorOccurred, $"Error was not occurred for [{timeout}].");
+                ClassicAssert.IsInstanceOf(typeof(MidiDeviceException), exception, "Exception type is invalid");
+                ClassicAssert.IsInstanceOf(typeof(UnexpectedRunningStatusException), exception.InnerException, "Inner exception type is invalid.");
             }
 
             WaitAfterReceiveData();
@@ -337,7 +338,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         public void GetInputDeviceProperty_Product_Mac()
         {
             var inputDevice = InputDevice.GetByName(MidiDevicesNames.DeviceA);
-            Assert.AreEqual("InputProduct", inputDevice.GetProperty(InputDeviceProperty.Product), "Product is invalid.");
+            ClassicAssert.AreEqual("InputProduct", inputDevice.GetProperty(InputDeviceProperty.Product), "Product is invalid.");
         }
 
         [Test]
@@ -345,7 +346,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         public void GetInputDeviceProperty_Manufacturer_Mac()
         {
             var inputDevice = InputDevice.GetByName(MidiDevicesNames.DeviceA);
-            Assert.AreEqual("InputManufacturer", inputDevice.GetProperty(InputDeviceProperty.Manufacturer), "Manufacturer is invalid.");
+            ClassicAssert.AreEqual("InputManufacturer", inputDevice.GetProperty(InputDeviceProperty.Manufacturer), "Manufacturer is invalid.");
         }
 
         [Test]
@@ -353,7 +354,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         public void GetInputDeviceProperty_DriverVersion_Mac()
         {
             var inputDevice = InputDevice.GetByName(MidiDevicesNames.DeviceA);
-            Assert.AreEqual(100, inputDevice.GetProperty(InputDeviceProperty.DriverVersion), "Driver version is invalid.");
+            ClassicAssert.AreEqual(100, inputDevice.GetProperty(InputDeviceProperty.DriverVersion), "Driver version is invalid.");
         }
 
         [Test]
@@ -361,7 +362,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         public void GetInputDeviceProperty_UniqueId_Mac()
         {
             var inputDevice = InputDevice.GetByName(MidiDevicesNames.DeviceA);
-            Assert.IsNotNull(inputDevice.GetProperty(InputDeviceProperty.UniqueId), "Device unique ID is null.");
+            ClassicAssert.IsNotNull(inputDevice.GetProperty(InputDeviceProperty.UniqueId), "Device unique ID is null.");
         }
 
         [Test]
@@ -369,7 +370,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         public void GetInputDeviceProperty_DriverOwner_Mac()
         {
             var inputDevice = InputDevice.GetByName(MidiDevicesNames.DeviceA);
-            Assert.AreEqual("InputDriverOwner", inputDevice.GetProperty(InputDeviceProperty.DriverOwner), "Driver owner is invalid.");
+            ClassicAssert.AreEqual("InputDriverOwner", inputDevice.GetProperty(InputDeviceProperty.DriverOwner), "Driver owner is invalid.");
         }
 
         [Test]
@@ -379,7 +380,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var inputDevice1 = InputDevice.GetByName(MidiDevicesNames.DeviceA);
             var inputDevice2 = InputDevice.GetByName(MidiDevicesNames.DeviceA);
 
-            Assert.AreEqual(inputDevice1, inputDevice2, "Devices are not equal.");
+            ClassicAssert.AreEqual(inputDevice1, inputDevice2, "Devices are not equal.");
         }
 
         [Test]
@@ -389,7 +390,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var inputDevice1 = InputDevice.GetByName(MidiDevicesNames.DeviceA);
             var inputDevice2 = InputDevice.GetByName(MidiDevicesNames.DeviceB);
 
-            Assert.AreNotEqual(inputDevice1, inputDevice2, "Devices are equal.");
+            ClassicAssert.AreNotEqual(inputDevice1, inputDevice2, "Devices are equal.");
         }
 
         [Test]
@@ -399,8 +400,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var inputDevice1 = InputDevice.GetByName(MidiDevicesNames.DeviceA);
             var inputDevice2 = InputDevice.GetByName(MidiDevicesNames.DeviceA);
 
-            Assert.IsTrue(inputDevice1 == inputDevice2, "Devices are not equal via equality.");
-            Assert.IsFalse(inputDevice1 != inputDevice2, "Devices are not equal via inequality.");
+            ClassicAssert.IsTrue(inputDevice1 == inputDevice2, "Devices are not equal via equality.");
+            ClassicAssert.IsFalse(inputDevice1 != inputDevice2, "Devices are not equal via inequality.");
         }
 
         [Test]
@@ -410,8 +411,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var inputDevice1 = InputDevice.GetByName(MidiDevicesNames.DeviceA);
             var inputDevice2 = InputDevice.GetByName(MidiDevicesNames.DeviceB);
 
-            Assert.IsFalse(inputDevice1 == inputDevice2, "Devices are equal via equality.");
-            Assert.IsTrue(inputDevice1 != inputDevice2, "Devices are equal via inequality.");
+            ClassicAssert.IsFalse(inputDevice1 == inputDevice2, "Devices are equal via equality.");
+            ClassicAssert.IsTrue(inputDevice1 != inputDevice2, "Devices are equal via inequality.");
         }
 
         [Test]
@@ -419,7 +420,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         public void CheckRemovedInputDeviceAccess_Name()
         {
             var inputDevice = GetRemovedInputDevice();
-            Assert.Throws<InvalidOperationException>(
+            ClassicAssert.Throws<InvalidOperationException>(
                 () => { var name = inputDevice.Name; },
                 "Can get name of removed device.");
         }
@@ -429,7 +430,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         public void CheckRemovedInputDeviceAccess_Property()
         {
             var inputDevice = GetRemovedInputDevice();
-            Assert.Throws<InvalidOperationException>(
+            ClassicAssert.Throws<InvalidOperationException>(
                 () => { var name = inputDevice.GetProperty(InputDeviceProperty.Product); },
                 "Can get property value of removed device.");
         }
@@ -439,7 +440,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         public void CheckRemovedInputDeviceAccess_StartEventsListening()
         {
             var inputDevice = GetRemovedInputDevice();
-            Assert.Throws<InvalidOperationException>(
+            ClassicAssert.Throws<InvalidOperationException>(
                 () => inputDevice.StartEventsListening(),
                 "Can start events listening on removed device.");
         }
@@ -449,7 +450,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         public void InputDeviceToString_AddedDevice()
         {
             var inputDevice = GetAddedInputDevice();
-            Assert.AreEqual("Input device (from 'Device added' notification)", inputDevice.ToString(), "Device string representation is invalid.");
+            ClassicAssert.AreEqual("Input device (from 'Device added' notification)", inputDevice.ToString(), "Device string representation is invalid.");
         }
 
         [Test]
@@ -457,7 +458,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         public void InputDeviceToString_RemovedDevice()
         {
             var inputDevice = GetRemovedInputDevice();
-            Assert.AreEqual("Input device (from 'Device removed' notification)", inputDevice.ToString(), "Device string representation is invalid.");
+            ClassicAssert.AreEqual("Input device (from 'Device removed' notification)", inputDevice.ToString(), "Device string representation is invalid.");
         }
 
         [Test]
@@ -465,7 +466,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         public void InputDeviceToString_VirtualDevice()
         {
             var inputDevice = GetVirtualDeviceInputDevice();
-            Assert.AreEqual("Input device (subdevice of a virtual device)", inputDevice.ToString(), "Device string representation is invalid.");
+            ClassicAssert.AreEqual("Input device (subdevice of a virtual device)", inputDevice.ToString(), "Device string representation is invalid.");
         }
 
         [Test]
@@ -479,8 +480,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             };
 
             var inputDevice = InputDevice.GetByName(MidiDevicesNames.DeviceA);
-            Assert.IsTrue(dictionary.TryGetValue(inputDevice, out var value), "Failed to find device in dictionary.");
-            Assert.AreEqual(label, value, "Device label is invalid.");
+            ClassicAssert.IsTrue(dictionary.TryGetValue(inputDevice, out var value), "Failed to find device in dictionary.");
+            ClassicAssert.AreEqual(label, value, "Device label is invalid.");
         }
 
         #endregion
@@ -498,7 +499,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
             var timeout = TimeSpan.FromSeconds(5);
             var removed = WaitOperations.Wait(() => inputDevice != null, timeout);
-            Assert.IsTrue(removed, $"Device wasn't removed for [{timeout}].");
+            ClassicAssert.IsTrue(removed, $"Device wasn't removed for [{timeout}].");
 
             DevicesWatcher.Instance.DeviceRemoved -= handler;
             WaitOperations.Wait(1000);
@@ -517,7 +518,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             {
                 var timeout = TimeSpan.FromSeconds(5);
                 var added = WaitOperations.Wait(() => inputDevice != null, timeout);
-                Assert.IsTrue(added, $"Device wasn't added for [{timeout}].");
+                ClassicAssert.IsTrue(added, $"Device wasn't added for [{timeout}].");
             }
 
             DevicesWatcher.Instance.DeviceAdded -= handler;

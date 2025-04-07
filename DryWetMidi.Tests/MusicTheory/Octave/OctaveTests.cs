@@ -2,6 +2,7 @@
 using System.Threading;
 using Melanchall.DryWetMidi.MusicTheory;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace Melanchall.DryWetMidi.Tests.MusicTheory
 {
@@ -14,7 +15,7 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
         [TestCase("23")]
         public void Parse_Invalid(string input)
         {
-            Assert.Throws<FormatException>(() => Octave.Parse(input), "Invalid octave parsed.");
+            ClassicAssert.Throws<FormatException>(() => Octave.Parse(input), "Invalid octave parsed.");
         }
 
         [TestCase("5", 5)]
@@ -25,7 +26,7 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
         {
             var parsedOctave = Octave.Parse(input);
             var expectedOctave = Octave.Get(expectedOctaveNumber);
-            Assert.AreEqual(expectedOctave, parsedOctave, "Parsed octave is invalid.");
+            ClassicAssert.AreEqual(expectedOctave, parsedOctave, "Parsed octave is invalid.");
         }
 
         [Test]

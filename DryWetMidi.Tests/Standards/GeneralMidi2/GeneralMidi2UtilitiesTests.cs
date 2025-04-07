@@ -3,6 +3,7 @@ using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Standards;
 using Melanchall.DryWetMidi.Tests.Utilities;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace Melanchall.DryWetMidi.Tests.Standards
 {
@@ -19,7 +20,7 @@ namespace Melanchall.DryWetMidi.Tests.Standards
             var channel = (FourBitNumber)3;
             var programEvents = GeneralMidi2Program.AcousticGrandPianoDark.GetProgramEvents(channel);
 
-            Assert.That(
+            ClassicAssert.That(
                 programEvents,
                 Is.EqualTo(new MidiEvent[]
                 {
@@ -36,7 +37,7 @@ namespace Melanchall.DryWetMidi.Tests.Standards
             var channel = (FourBitNumber)3;
             var programEvents = percussionSet.GetPercussionSetEvents(channel);
 
-            Assert.That(
+            ClassicAssert.That(
                 programEvents,
                 Is.EqualTo(new MidiEvent[]
                 {

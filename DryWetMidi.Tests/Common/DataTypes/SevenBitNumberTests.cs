@@ -1,6 +1,7 @@
 ﻿using System;
 using Melanchall.DryWetMidi.Common;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace Melanchall.DryWetMidi.Tests.Common
 {
@@ -12,35 +13,35 @@ namespace Melanchall.DryWetMidi.Tests.Common
         [Test]
         public void Parse_InvalidFormat()
         {
-            Assert.Throws<FormatException>(() => SevenBitNumber.Parse("sdsd"));
+            ClassicAssert.Throws<FormatException>(() => SevenBitNumber.Parse("sdsd"));
         }
 
         [Test]
         public void Parse_OutOfRange()
         {
-            Assert.Throws<FormatException>(() => SevenBitNumber.Parse("200"));
-            Assert.Throws<FormatException>(() => SevenBitNumber.Parse("128"));
+            ClassicAssert.Throws<FormatException>(() => SevenBitNumber.Parse("200"));
+            ClassicAssert.Throws<FormatException>(() => SevenBitNumber.Parse("128"));
         }
 
         [Test]
         public void Parse()
         {
-            Assert.AreEqual((SevenBitNumber)12, SevenBitNumber.Parse("12"));
-            Assert.AreEqual((SevenBitNumber)0, SevenBitNumber.Parse("0"));
-            Assert.AreEqual((SevenBitNumber)127, SevenBitNumber.Parse("127"));
+            ClassicAssert.AreEqual((SevenBitNumber)12, SevenBitNumber.Parse("12"));
+            ClassicAssert.AreEqual((SevenBitNumber)0, SevenBitNumber.Parse("0"));
+            ClassicAssert.AreEqual((SevenBitNumber)127, SevenBitNumber.Parse("127"));
         }
 
         [Test]
         public void TryParse_InvalidFormat()
         {
-            Assert.AreEqual(false, SevenBitNumber.TryParse("sdsd", out _));
+            ClassicAssert.AreEqual(false, SevenBitNumber.TryParse("sdsd", out _));
         }
 
         [Test]
         public void TryParse_OutOfRange()
         {
-            Assert.AreEqual(false, SevenBitNumber.TryParse("200", out _));
-            Assert.AreEqual(false, SevenBitNumber.TryParse("128", out _));
+            ClassicAssert.AreEqual(false, SevenBitNumber.TryParse("200", out _));
+            ClassicAssert.AreEqual(false, SevenBitNumber.TryParse("128", out _));
         }
 
         [Test]
@@ -49,13 +50,13 @@ namespace Melanchall.DryWetMidi.Tests.Common
             SevenBitNumber result;
 
             SevenBitNumber.TryParse("12", out result);
-            Assert.AreEqual((SevenBitNumber)12, result);
+            ClassicAssert.AreEqual((SevenBitNumber)12, result);
 
             SevenBitNumber.TryParse("0", out result);
-            Assert.AreEqual((SevenBitNumber)0, result);
+            ClassicAssert.AreEqual((SevenBitNumber)0, result);
 
             SevenBitNumber.TryParse("127", out result);
-            Assert.AreEqual((SevenBitNumber)127, result);
+            ClassicAssert.AreEqual((SevenBitNumber)127, result);
         }
 
         #endregion

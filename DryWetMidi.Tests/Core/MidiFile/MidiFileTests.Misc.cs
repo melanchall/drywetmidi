@@ -5,6 +5,7 @@ using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Tests.Common;
 using Melanchall.DryWetMidi.Tests.Utilities;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace Melanchall.DryWetMidi.Tests.Core
 {
@@ -50,14 +51,14 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 MidiFile midiFile = null;
                 MidiFile midiFile2 = null;
 
-                Assert.DoesNotThrow(() =>
+                ClassicAssert.DoesNotThrow(() =>
                     {
                         midiFile = MidiFile.Read(filePath);
                         midiFile2 = MidiFileTestUtilities.Read(midiFile, null, null);
                     },
                     $"Read/Write/Read failed for '{filePath}'.");
 
-                Assert.IsNotNull(midiFile, "MIDI file is null.");
+                ClassicAssert.IsNotNull(midiFile, "MIDI file is null.");
                 MidiAsserts.AreEqual(midiFile, midiFile2, true, $"Reread failed for '{filePath}'.");
             }
         }

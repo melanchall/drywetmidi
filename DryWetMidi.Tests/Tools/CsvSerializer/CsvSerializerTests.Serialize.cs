@@ -4,6 +4,7 @@ using Melanchall.DryWetMidi.Interaction;
 using Melanchall.DryWetMidi.Tests.Common;
 using Melanchall.DryWetMidi.Tools;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using System;
 using System.IO;
 using System.Linq;
@@ -29,7 +30,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 using (var streamReader = new StreamReader(stream))
                 {
                     var csv = streamReader.ReadToEnd().Trim();
-                    Assert.AreEqual($"0,\"{midiEvent.EventType}\",0{(string.IsNullOrEmpty(expectedCsv) ? string.Empty : $",{expectedCsv}")}", csv, "Invalid CSV.");
+                    ClassicAssert.AreEqual($"0,\"{midiEvent.EventType}\",0{(string.IsNullOrEmpty(expectedCsv) ? string.Empty : $",{expectedCsv}")}", csv, "Invalid CSV.");
                 }
             }
         }

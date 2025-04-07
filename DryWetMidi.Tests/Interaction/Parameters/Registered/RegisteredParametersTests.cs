@@ -2,6 +2,7 @@
 using System.Linq;
 using Melanchall.DryWetMidi.Interaction;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace Melanchall.DryWetMidi.Tests.Interaction
 {
@@ -14,7 +15,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         public void EnsureAllParametersHaveDifferentTypes()
         {
             var registeredParametersTypes = GetParametersTypes();
-            Assert.AreEqual(Enum.GetValues(typeof(RegisteredParameterType)).Length, registeredParametersTypes.Length, "Invalid count of registered parameters types.");
+            ClassicAssert.AreEqual(Enum.GetValues(typeof(RegisteredParameterType)).Length, registeredParametersTypes.Length, "Invalid count of registered parameters types.");
 
             var types = registeredParametersTypes
                 .Select(t => Activator.CreateInstance(t))
@@ -22,7 +23,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 .Select(p => p.ParameterType)
                 .Distinct()
                 .ToArray();
-            Assert.AreEqual(registeredParametersTypes.Length, types.Length, "Count of used parameters types is invalid.");
+            ClassicAssert.AreEqual(registeredParametersTypes.Length, types.Length, "Count of used parameters types is invalid.");
         }
 
         [Test]
@@ -30,7 +31,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             foreach (var type in GetParametersTypes())
             {
-                Assert.IsNotNull(
+                ClassicAssert.IsNotNull(
                     type.GetConstructor(Type.EmptyTypes),
                     $"Type '{type.Name}' has no parameterless constructor.");
             }
@@ -82,8 +83,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
                 registeredParameter.Time = registeredParameter.Time;
 
-                Assert.IsNull(timeChangedSender, "Sender is not null.");
-                Assert.IsNull(timeChangedEventArgs, "Event args is not null.");
+                ClassicAssert.IsNull(timeChangedSender, "Sender is not null.");
+                ClassicAssert.IsNull(timeChangedEventArgs, "Event args is not null.");
             }
         }
 
@@ -106,12 +107,12 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 var oldTime = registeredParameter.Time;
                 registeredParameter.Time += 100;
 
-                Assert.AreSame(registeredParameter, timeChangedSender, "Sender is invalid.");
+                ClassicAssert.AreSame(registeredParameter, timeChangedSender, "Sender is invalid.");
 
-                Assert.IsNotNull(timeChangedEventArgs, "Event args is null.");
-                Assert.AreEqual(oldTime, timeChangedEventArgs.OldTime, "Old time is invalid.");
-                Assert.AreEqual(registeredParameter.Time, timeChangedEventArgs.NewTime, "New time is invalid.");
-                Assert.AreNotEqual(oldTime, registeredParameter.Time, "New time is equal to old one.");
+                ClassicAssert.IsNotNull(timeChangedEventArgs, "Event args is null.");
+                ClassicAssert.AreEqual(oldTime, timeChangedEventArgs.OldTime, "Old time is invalid.");
+                ClassicAssert.AreEqual(registeredParameter.Time, timeChangedEventArgs.NewTime, "New time is invalid.");
+                ClassicAssert.AreNotEqual(oldTime, registeredParameter.Time, "New time is equal to old one.");
             }
         }
 

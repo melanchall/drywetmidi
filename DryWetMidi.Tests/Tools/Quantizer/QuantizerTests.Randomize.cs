@@ -1,6 +1,7 @@
 ﻿using Melanchall.DryWetMidi.Interaction;
 using Melanchall.DryWetMidi.Tools;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -246,7 +247,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 var actualTime = actualTimedEvents[i].Time;
                 var timeRange = expectedTimeRanges[i];
 
-                Assert.IsTrue(
+                ClassicAssert.IsTrue(
                     actualTime >= timeRange.Min && actualTime <= timeRange.Max,
                     $"Time [{i}] is not in [{timeRange.Min}; {timeRange.Max}] range.");
 
@@ -259,7 +260,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 }
             }
 
-            Assert.LessOrEqual(
+            ClassicAssert.LessOrEqual(
                 unchangedTimesCount / (double)timesForChangeCount,
                 unchangedMaxPercent,
                 "Too high percent of unchanged times.");

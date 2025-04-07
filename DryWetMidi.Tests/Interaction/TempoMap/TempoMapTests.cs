@@ -2,6 +2,7 @@
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace Melanchall.DryWetMidi.Tests.Interaction
 {
@@ -104,11 +105,11 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
             var tempoMap = TempoMap.Create(new Tempo(microsecondsPerQuarterNote));
             var changes = tempoMap.GetTempoChanges();
-            Assert.AreEqual(1, changes.Count(), "Count of tempo changes is invalid.");
+            ClassicAssert.AreEqual(1, changes.Count(), "Count of tempo changes is invalid.");
 
             var change = changes.First();
-            Assert.AreEqual(0, change.Time, "Time of change is invalid.");
-            Assert.AreEqual(new Tempo(microsecondsPerQuarterNote), change.Value, "Tempo of change is invalid.");
+            ClassicAssert.AreEqual(0, change.Time, "Time of change is invalid.");
+            ClassicAssert.AreEqual(new Tempo(microsecondsPerQuarterNote), change.Value, "Tempo of change is invalid.");
         }
 
         [Test]
@@ -123,11 +124,11 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
                 var tempoMap = tempoMapManager.TempoMap;
                 var changes = tempoMap.GetTempoChanges();
-                Assert.AreEqual(1, changes.Count(), "Count of tempo changes is invalid.");
+                ClassicAssert.AreEqual(1, changes.Count(), "Count of tempo changes is invalid.");
 
                 var change = changes.First();
-                Assert.AreEqual(time, change.Time, "Time of change is invalid.");
-                Assert.AreEqual(new Tempo(microsecondsPerQuarterNote), change.Value, "Tempo of change is invalid.");
+                ClassicAssert.AreEqual(time, change.Time, "Time of change is invalid.");
+                ClassicAssert.AreEqual(new Tempo(microsecondsPerQuarterNote), change.Value, "Tempo of change is invalid.");
             }
         }
 
@@ -147,15 +148,15 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
                 var tempoMap = tempoMapManager.TempoMap;
                 var changes = tempoMap.GetTempoChanges();
-                Assert.AreEqual(2, changes.Count(), "Count of tempo changes is invalid.");
+                ClassicAssert.AreEqual(2, changes.Count(), "Count of tempo changes is invalid.");
 
                 var change1 = changes.First();
-                Assert.AreEqual(time1, change1.Time, "Time of first change is invalid.");
-                Assert.AreEqual(new Tempo(microsecondsPerQuarterNote1), change1.Value, "Tempo of first change is invalid.");
+                ClassicAssert.AreEqual(time1, change1.Time, "Time of first change is invalid.");
+                ClassicAssert.AreEqual(new Tempo(microsecondsPerQuarterNote1), change1.Value, "Tempo of first change is invalid.");
 
                 var change2 = changes.Last();
-                Assert.AreEqual(time2, change2.Time, "Time of second change is invalid.");
-                Assert.AreEqual(new Tempo(microsecondsPerQuarterNote2), change2.Value, "Tempo of second change is invalid.");
+                ClassicAssert.AreEqual(time2, change2.Time, "Time of second change is invalid.");
+                ClassicAssert.AreEqual(new Tempo(microsecondsPerQuarterNote2), change2.Value, "Tempo of second change is invalid.");
             }
         }
 
@@ -174,11 +175,11 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
             var tempoMap = TempoMap.Create(new TimeSignature(numerator, denominator));
             var changes = tempoMap.GetTimeSignatureChanges();
-            Assert.AreEqual(1, changes.Count(), "Count of time signature changes is invalid.");
+            ClassicAssert.AreEqual(1, changes.Count(), "Count of time signature changes is invalid.");
 
             var change = changes.First();
-            Assert.AreEqual(0, change.Time, "Time of change is invalid.");
-            Assert.AreEqual(new TimeSignature(numerator, denominator), change.Value, "Time signature of change is invalid.");
+            ClassicAssert.AreEqual(0, change.Time, "Time of change is invalid.");
+            ClassicAssert.AreEqual(new TimeSignature(numerator, denominator), change.Value, "Time signature of change is invalid.");
         }
 
         [Test]
@@ -194,11 +195,11 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
                 var tempoMap = tempoMapManager.TempoMap;
                 var changes = tempoMap.GetTimeSignatureChanges();
-                Assert.AreEqual(1, changes.Count(), "Count of time signature changes is invalid.");
+                ClassicAssert.AreEqual(1, changes.Count(), "Count of time signature changes is invalid.");
 
                 var change = changes.First();
-                Assert.AreEqual(time, change.Time, "Time of change is invalid.");
-                Assert.AreEqual(new TimeSignature(numerator, denominator), change.Value, "Time signature of change is invalid.");
+                ClassicAssert.AreEqual(time, change.Time, "Time of change is invalid.");
+                ClassicAssert.AreEqual(new TimeSignature(numerator, denominator), change.Value, "Time signature of change is invalid.");
             }
         }
 
@@ -220,15 +221,15 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
                 var tempoMap = tempoMapManager.TempoMap;
                 var changes = tempoMap.GetTimeSignatureChanges();
-                Assert.AreEqual(2, changes.Count(), "Count of time signature changes is invalid.");
+                ClassicAssert.AreEqual(2, changes.Count(), "Count of time signature changes is invalid.");
 
                 var change1 = changes.First();
-                Assert.AreEqual(time1, change1.Time, "Time of first change is invalid.");
-                Assert.AreEqual(new TimeSignature(numerator1, denominator1), change1.Value, "Time signature of first change is invalid.");
+                ClassicAssert.AreEqual(time1, change1.Time, "Time of first change is invalid.");
+                ClassicAssert.AreEqual(new TimeSignature(numerator1, denominator1), change1.Value, "Time signature of first change is invalid.");
 
                 var change2 = changes.Last();
-                Assert.AreEqual(time2, change2.Time, "Time of second change is invalid.");
-                Assert.AreEqual(new TimeSignature(numerator2, denominator2), change2.Value, "Time signature of second change is invalid.");
+                ClassicAssert.AreEqual(time2, change2.Time, "Time of second change is invalid.");
+                ClassicAssert.AreEqual(new TimeSignature(numerator2, denominator2), change2.Value, "Time signature of second change is invalid.");
             }
         }
 
@@ -237,7 +238,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var tempoMap = TempoMap.Default;
             var tempo = tempoMap.GetTempoAtTime(new MidiTimeSpan(0));
-            Assert.AreEqual(Tempo.Default, tempo, "Tempo is invalid.");
+            ClassicAssert.AreEqual(Tempo.Default, tempo, "Tempo is invalid.");
         }
 
         [Test]
@@ -245,7 +246,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var tempoMap = TempoMap.Default;
             var tempo = tempoMap.GetTempoAtTime(MusicalTimeSpan.Quarter);
-            Assert.AreEqual(Tempo.Default, tempo, "Tempo is invalid.");
+            ClassicAssert.AreEqual(Tempo.Default, tempo, "Tempo is invalid.");
         }
 
         [Test]
@@ -255,7 +256,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
             var tempoMap = TempoMap.Create(new Tempo(microsecondsPerQuarterNote));
             var tempo = tempoMap.GetTempoAtTime(new MidiTimeSpan(0));
-            Assert.AreEqual(new Tempo(microsecondsPerQuarterNote), tempo, "Tempo is invalid.");
+            ClassicAssert.AreEqual(new Tempo(microsecondsPerQuarterNote), tempo, "Tempo is invalid.");
         }
 
         [Test]
@@ -265,7 +266,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
             var tempoMap = TempoMap.Create(new Tempo(microsecondsPerQuarterNote));
             var tempo = tempoMap.GetTempoAtTime(new MetricTimeSpan(0, 0, 1));
-            Assert.AreEqual(new Tempo(microsecondsPerQuarterNote), tempo, "Tempo is invalid.");
+            ClassicAssert.AreEqual(new Tempo(microsecondsPerQuarterNote), tempo, "Tempo is invalid.");
         }
 
         [Test]
@@ -279,7 +280,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
                 var tempoMap = tempoMapManager.TempoMap;
                 var tempo = tempoMap.GetTempoAtTime(new MidiTimeSpan(0));
-                Assert.AreEqual(Tempo.Default, tempo, "Tempo is invalid.");
+                ClassicAssert.AreEqual(Tempo.Default, tempo, "Tempo is invalid.");
             }
         }
 
@@ -294,7 +295,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
                 var tempoMap = tempoMapManager.TempoMap;
                 var tempo = tempoMap.GetTempoAtTime(new MidiTimeSpan(100));
-                Assert.AreEqual(Tempo.Default, tempo, "Tempo is invalid.");
+                ClassicAssert.AreEqual(Tempo.Default, tempo, "Tempo is invalid.");
             }
         }
 
@@ -309,7 +310,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
                 var tempoMap = tempoMapManager.TempoMap;
                 var tempo = tempoMap.GetTempoAtTime(new MidiTimeSpan(1000));
-                Assert.AreEqual(new Tempo(microsecondsPerQuarterNote), tempo, "Tempo is invalid.");
+                ClassicAssert.AreEqual(new Tempo(microsecondsPerQuarterNote), tempo, "Tempo is invalid.");
             }
         }
 
@@ -324,7 +325,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
                 var tempoMap = tempoMapManager.TempoMap;
                 var tempo = tempoMap.GetTempoAtTime(new MidiTimeSpan(1500));
-                Assert.AreEqual(new Tempo(microsecondsPerQuarterNote), tempo, "Tempo is invalid.");
+                ClassicAssert.AreEqual(new Tempo(microsecondsPerQuarterNote), tempo, "Tempo is invalid.");
             }
         }
 
@@ -341,7 +342,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
                 var tempoMap = tempoMapManager.TempoMap;
                 var tempo = tempoMap.GetTempoAtTime(new MidiTimeSpan(0));
-                Assert.AreEqual(new Tempo(microsecondsPerQuarterNote2), tempo, "Tempo is invalid.");
+                ClassicAssert.AreEqual(new Tempo(microsecondsPerQuarterNote2), tempo, "Tempo is invalid.");
             }
         }
 
@@ -358,7 +359,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
                 var tempoMap = tempoMapManager.TempoMap;
                 var tempo = tempoMap.GetTempoAtTime(new MidiTimeSpan(100));
-                Assert.AreEqual(new Tempo(microsecondsPerQuarterNote2), tempo, "Tempo is invalid.");
+                ClassicAssert.AreEqual(new Tempo(microsecondsPerQuarterNote2), tempo, "Tempo is invalid.");
             }
         }
 
@@ -375,7 +376,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
                 var tempoMap = tempoMapManager.TempoMap;
                 var tempo = tempoMap.GetTempoAtTime(new MetricTimeSpan());
-                Assert.AreEqual(Tempo.Default, tempo, "Tempo is invalid.");
+                ClassicAssert.AreEqual(Tempo.Default, tempo, "Tempo is invalid.");
             }
         }
 
@@ -392,7 +393,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
                 var tempoMap = tempoMapManager.TempoMap;
                 var tempo = tempoMap.GetTempoAtTime(new MidiTimeSpan(99));
-                Assert.AreEqual(Tempo.Default, tempo, "Tempo is invalid.");
+                ClassicAssert.AreEqual(Tempo.Default, tempo, "Tempo is invalid.");
             }
         }
 
@@ -409,7 +410,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
                 var tempoMap = tempoMapManager.TempoMap;
                 var tempo = tempoMap.GetTempoAtTime(new MidiTimeSpan(100));
-                Assert.AreEqual(new Tempo(microsecondsPerQuarterNote1), tempo, "Tempo is invalid.");
+                ClassicAssert.AreEqual(new Tempo(microsecondsPerQuarterNote1), tempo, "Tempo is invalid.");
             }
         }
 
@@ -426,7 +427,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
                 var tempoMap = tempoMapManager.TempoMap;
                 var tempo = tempoMap.GetTempoAtTime(new MidiTimeSpan(500));
-                Assert.AreEqual(new Tempo(microsecondsPerQuarterNote1), tempo, "Tempo is invalid.");
+                ClassicAssert.AreEqual(new Tempo(microsecondsPerQuarterNote1), tempo, "Tempo is invalid.");
             }
         }
 
@@ -443,7 +444,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
                 var tempoMap = tempoMapManager.TempoMap;
                 var tempo = tempoMap.GetTempoAtTime(new MidiTimeSpan(1000));
-                Assert.AreEqual(new Tempo(microsecondsPerQuarterNote2), tempo, "Tempo is invalid.");
+                ClassicAssert.AreEqual(new Tempo(microsecondsPerQuarterNote2), tempo, "Tempo is invalid.");
             }
         }
 
@@ -460,7 +461,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
                 var tempoMap = tempoMapManager.TempoMap;
                 var tempo = tempoMap.GetTempoAtTime(new MidiTimeSpan(5000));
-                Assert.AreEqual(new Tempo(microsecondsPerQuarterNote2), tempo, "Tempo is invalid.");
+                ClassicAssert.AreEqual(new Tempo(microsecondsPerQuarterNote2), tempo, "Tempo is invalid.");
             }
         }
 
@@ -469,7 +470,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var tempoMap = TempoMap.Default;
             var timeSignature = tempoMap.GetTimeSignatureAtTime(new MidiTimeSpan(0));
-            Assert.AreEqual(TimeSignature.Default, timeSignature, "Time signature is invalid.");
+            ClassicAssert.AreEqual(TimeSignature.Default, timeSignature, "Time signature is invalid.");
         }
 
         [Test]
@@ -477,7 +478,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var tempoMap = TempoMap.Default;
             var timeSignature = tempoMap.GetTimeSignatureAtTime(MusicalTimeSpan.Quarter);
-            Assert.AreEqual(TimeSignature.Default, timeSignature, "Time signature is invalid.");
+            ClassicAssert.AreEqual(TimeSignature.Default, timeSignature, "Time signature is invalid.");
         }
 
         [Test]
@@ -488,7 +489,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
             var tempoMap = TempoMap.Create(new TimeSignature(numerator, denominator));
             var timeSignature = tempoMap.GetTimeSignatureAtTime(new MidiTimeSpan(0));
-            Assert.AreEqual(new TimeSignature(numerator, denominator), timeSignature, "Time signature is invalid.");
+            ClassicAssert.AreEqual(new TimeSignature(numerator, denominator), timeSignature, "Time signature is invalid.");
         }
 
         [Test]
@@ -499,7 +500,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
             var tempoMap = TempoMap.Create(new TimeSignature(numerator, denominator));
             var timeSignature = tempoMap.GetTimeSignatureAtTime(new MetricTimeSpan(0, 0, 1));
-            Assert.AreEqual(new TimeSignature(numerator, denominator), timeSignature, "Time signature is invalid.");
+            ClassicAssert.AreEqual(new TimeSignature(numerator, denominator), timeSignature, "Time signature is invalid.");
         }
 
         [Test]
@@ -514,7 +515,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
                 var tempoMap = tempoMapManager.TempoMap;
                 var timeSignature = tempoMap.GetTimeSignatureAtTime(new MidiTimeSpan(0));
-                Assert.AreEqual(TimeSignature.Default, timeSignature, "Time signature is invalid.");
+                ClassicAssert.AreEqual(TimeSignature.Default, timeSignature, "Time signature is invalid.");
             }
         }
 
@@ -530,7 +531,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
                 var tempoMap = tempoMapManager.TempoMap;
                 var timeSignature = tempoMap.GetTimeSignatureAtTime(new MidiTimeSpan(100));
-                Assert.AreEqual(TimeSignature.Default, timeSignature, "Time signature is invalid.");
+                ClassicAssert.AreEqual(TimeSignature.Default, timeSignature, "Time signature is invalid.");
             }
         }
 
@@ -546,7 +547,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
                 var tempoMap = tempoMapManager.TempoMap;
                 var timeSignature = tempoMap.GetTimeSignatureAtTime(new MidiTimeSpan(1000));
-                Assert.AreEqual(new TimeSignature(numerator, denominator), timeSignature, "Time signature is invalid.");
+                ClassicAssert.AreEqual(new TimeSignature(numerator, denominator), timeSignature, "Time signature is invalid.");
             }
         }
 
@@ -562,7 +563,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
                 var tempoMap = tempoMapManager.TempoMap;
                 var timeSignature = tempoMap.GetTimeSignatureAtTime(new MidiTimeSpan(1500));
-                Assert.AreEqual(new TimeSignature(numerator, denominator), timeSignature, "Time signature is invalid.");
+                ClassicAssert.AreEqual(new TimeSignature(numerator, denominator), timeSignature, "Time signature is invalid.");
             }
         }
 
@@ -582,7 +583,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
                 var tempoMap = tempoMapManager.TempoMap;
                 var timeSignature = tempoMap.GetTimeSignatureAtTime(new MidiTimeSpan(0));
-                Assert.AreEqual(new TimeSignature(numerator2, denominator2), timeSignature, "Time signature is invalid.");
+                ClassicAssert.AreEqual(new TimeSignature(numerator2, denominator2), timeSignature, "Time signature is invalid.");
             }
         }
 
@@ -602,7 +603,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
                 var tempoMap = tempoMapManager.TempoMap;
                 var timeSignature = tempoMap.GetTimeSignatureAtTime(new MidiTimeSpan(100));
-                Assert.AreEqual(new TimeSignature(numerator2, denominator2), timeSignature, "Time signature is invalid.");
+                ClassicAssert.AreEqual(new TimeSignature(numerator2, denominator2), timeSignature, "Time signature is invalid.");
             }
         }
 
@@ -622,7 +623,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
                 var tempoMap = tempoMapManager.TempoMap;
                 var timeSignature = tempoMap.GetTimeSignatureAtTime(new MetricTimeSpan());
-                Assert.AreEqual(TimeSignature.Default, timeSignature, "Time signature is invalid.");
+                ClassicAssert.AreEqual(TimeSignature.Default, timeSignature, "Time signature is invalid.");
             }
         }
 
@@ -642,7 +643,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
                 var tempoMap = tempoMapManager.TempoMap;
                 var timeSignature = tempoMap.GetTimeSignatureAtTime(new MidiTimeSpan(99));
-                Assert.AreEqual(TimeSignature.Default, timeSignature, "Time signature is invalid.");
+                ClassicAssert.AreEqual(TimeSignature.Default, timeSignature, "Time signature is invalid.");
             }
         }
 
@@ -662,7 +663,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
                 var tempoMap = tempoMapManager.TempoMap;
                 var timeSignature = tempoMap.GetTimeSignatureAtTime(new MidiTimeSpan(100));
-                Assert.AreEqual(new TimeSignature(numerator1, denominator1), timeSignature, "Time signature is invalid.");
+                ClassicAssert.AreEqual(new TimeSignature(numerator1, denominator1), timeSignature, "Time signature is invalid.");
             }
         }
 
@@ -682,7 +683,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
                 var tempoMap = tempoMapManager.TempoMap;
                 var timeSignature = tempoMap.GetTimeSignatureAtTime(new MidiTimeSpan(500));
-                Assert.AreEqual(new TimeSignature(numerator1, denominator1), timeSignature, "Time signature is invalid.");
+                ClassicAssert.AreEqual(new TimeSignature(numerator1, denominator1), timeSignature, "Time signature is invalid.");
             }
         }
 
@@ -702,7 +703,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
                 var tempoMap = tempoMapManager.TempoMap;
                 var timeSignature = tempoMap.GetTimeSignatureAtTime(new MidiTimeSpan(1000));
-                Assert.AreEqual(new TimeSignature(numerator2, denominator2), timeSignature, "Time signature is invalid.");
+                ClassicAssert.AreEqual(new TimeSignature(numerator2, denominator2), timeSignature, "Time signature is invalid.");
             }
         }
 
@@ -722,7 +723,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
                 var tempoMap = tempoMapManager.TempoMap;
                 var timeSignature = tempoMap.GetTimeSignatureAtTime(new MidiTimeSpan(5000));
-                Assert.AreEqual(new TimeSignature(numerator2, denominator2), timeSignature, "Time signature is invalid.");
+                ClassicAssert.AreEqual(new TimeSignature(numerator2, denominator2), timeSignature, "Time signature is invalid.");
             }
         }
 
@@ -735,21 +736,21 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                                                Tempo expectedTempo,
                                                TimeSignature expectedTimeSignature)
         {
-            Assert.AreEqual(expectedTimeDivision,
+            ClassicAssert.AreEqual(expectedTimeDivision,
                             tempoMap.TimeDivision,
                             "Unexpected time division.");
 
-            Assert.AreEqual(expectedTempo,
+            ClassicAssert.AreEqual(expectedTempo,
                             tempoMap.GetTempoAtTime(new MidiTimeSpan(0)),
                             "Unexpected tempo at the start of tempo map.");
-            Assert.AreEqual(expectedTempo,
+            ClassicAssert.AreEqual(expectedTempo,
                             tempoMap.GetTempoAtTime(new MidiTimeSpan(1000)),
                             "Unexpected tempo at the arbitrary time of tempo map.");
 
-            Assert.AreEqual(expectedTimeSignature,
+            ClassicAssert.AreEqual(expectedTimeSignature,
                             tempoMap.GetTimeSignatureAtTime(new MidiTimeSpan(0)),
                             "Unexpected time signature at the start of tempo map.");
-            Assert.AreEqual(expectedTimeSignature,
+            ClassicAssert.AreEqual(expectedTimeSignature,
                             tempoMap.GetTimeSignatureAtTime(new MidiTimeSpan(1000)),
                             "Unexpected time signature at the arbitrary time of tempo map.");
         }

@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using Melanchall.DryWetMidi.Core;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace Melanchall.DryWetMidi.Tests.Core
 {
@@ -97,7 +98,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 });
 
             var textEvent = midiFile.GetEvents().OfType<TextEvent>().Single();
-            Assert.AreEqual(string.Empty, textEvent.Text, "Text is not an empty string.");
+            ClassicAssert.AreEqual(string.Empty, textEvent.Text, "Text is not an empty string.");
         }
 
         [Test]
@@ -111,7 +112,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 });
 
             var textEvent = midiFile.GetEvents().OfType<TextEvent>().Single();
-            Assert.IsNull(textEvent.Text, "Text is not null.");
+            ClassicAssert.IsNull(textEvent.Text, "Text is not null.");
         }
 
         [Test]
@@ -139,7 +140,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 });
 
             var sequencerSpecificEvent = midiFile.GetEvents().OfType<SequencerSpecificEvent>().Single();
-            Assert.IsNull(sequencerSpecificEvent.Data, "Data is not null.");
+            ClassicAssert.IsNull(sequencerSpecificEvent.Data, "Data is not null.");
         }
 
         [Test]
@@ -181,7 +182,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 });
 
             var unknownMetaEvent = midiFile.GetEvents().OfType<UnknownMetaEvent>().Single();
-            Assert.IsNull(unknownMetaEvent.Data, "Data is not null.");
+            ClassicAssert.IsNull(unknownMetaEvent.Data, "Data is not null.");
         }
 
         [Test]
@@ -209,7 +210,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 });
 
             var unknownChunk = midiFile.Chunks.OfType<UnknownChunk>().Single();
-            Assert.IsNull(unknownChunk.Data, "Data is not null.");
+            ClassicAssert.IsNull(unknownChunk.Data, "Data is not null.");
         }
 
         #endregion

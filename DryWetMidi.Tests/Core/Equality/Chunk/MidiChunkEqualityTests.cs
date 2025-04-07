@@ -1,6 +1,7 @@
 ﻿using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace Melanchall.DryWetMidi.Tests.Core
 {
@@ -140,7 +141,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
         {
             var trackChunk = new TrackChunk();
             var areEqual = MidiChunk.Equals(trackChunk, trackChunk);
-            Assert.IsTrue(areEqual, "Chunk isn't equal to self.");
+            ClassicAssert.IsTrue(areEqual, "Chunk isn't equal to self.");
         }
 
         [Test]
@@ -158,8 +159,8 @@ namespace Melanchall.DryWetMidi.Tests.Core
                     }
                 },
                 out var message);
-            Assert.IsTrue(areEqual, "Chunk isn't equal to self.");
-            Assert.IsNull(message, "Message isn't null.");
+            ClassicAssert.IsTrue(areEqual, "Chunk isn't equal to self.");
+            ClassicAssert.IsNull(message, "Message isn't null.");
         }
 
         [Test]
@@ -167,9 +168,9 @@ namespace Melanchall.DryWetMidi.Tests.Core
         {
             var trackChunk = new TrackChunk();
             var areEqual = MidiChunk.Equals(trackChunk, null, out var message);
-            Assert.IsFalse(areEqual, "Chunk is equal to null.");
-            Assert.IsNotNull(message, "Message is null.");
-            Assert.IsNotEmpty(message, "Message is empty.");
+            ClassicAssert.IsFalse(areEqual, "Chunk is equal to null.");
+            ClassicAssert.IsNotNull(message, "Message is null.");
+            ClassicAssert.IsNotEmpty(message, "Message is empty.");
         }
 
         [Test]
@@ -179,9 +180,9 @@ namespace Melanchall.DryWetMidi.Tests.Core
             var customChunk = new CustomChunkWithoutEqualsOverride();
 
             var areEqual = MidiChunk.Equals(trackChunk, customChunk, out var message);
-            Assert.IsFalse(areEqual, "Chunks are equal.");
-            Assert.IsNotNull(message, "Message is null.");
-            Assert.IsNotEmpty(message, "Message is empty.");
+            ClassicAssert.IsFalse(areEqual, "Chunks are equal.");
+            ClassicAssert.IsNotNull(message, "Message is null.");
+            ClassicAssert.IsNotEmpty(message, "Message is empty.");
         }
 
         [Test]
@@ -191,9 +192,9 @@ namespace Melanchall.DryWetMidi.Tests.Core
             var customChunk2 = new CustomChunkWithoutEqualsOverride();
 
             var areEqual = MidiChunk.Equals(customChunk1, customChunk2, out var message);
-            Assert.IsFalse(areEqual, "Chunks are equal.");
-            Assert.IsNotNull(message, "Message is null.");
-            Assert.IsNotEmpty(message, "Message is empty.");
+            ClassicAssert.IsFalse(areEqual, "Chunks are equal.");
+            ClassicAssert.IsNotNull(message, "Message is null.");
+            ClassicAssert.IsNotEmpty(message, "Message is empty.");
         }
 
         [Test]
@@ -203,8 +204,8 @@ namespace Melanchall.DryWetMidi.Tests.Core
             var customChunk2 = new CustomChunkWithEqualsOverride();
 
             var areEqual = MidiChunk.Equals(customChunk1, customChunk2, out var message);
-            Assert.IsTrue(areEqual, "Chunks aren't equal.");
-            Assert.IsNull(message, "Message isn't null.");
+            ClassicAssert.IsTrue(areEqual, "Chunks aren't equal.");
+            ClassicAssert.IsNull(message, "Message isn't null.");
         }
 
         [Test]
@@ -214,9 +215,9 @@ namespace Melanchall.DryWetMidi.Tests.Core
             var customChunk2 = new CustomChunkWithEqualsOverride(8);
 
             var areEqual = MidiChunk.Equals(customChunk1, customChunk2, out var message);
-            Assert.IsFalse(areEqual, "Chunks are equal.");
-            Assert.IsNotNull(message, "Message is null.");
-            Assert.IsNotEmpty(message, "Message is empty.");
+            ClassicAssert.IsFalse(areEqual, "Chunks are equal.");
+            ClassicAssert.IsNotNull(message, "Message is null.");
+            ClassicAssert.IsNotEmpty(message, "Message is empty.");
         }
 
         [Test]
@@ -226,9 +227,9 @@ namespace Melanchall.DryWetMidi.Tests.Core
             var trackChunk2 = new TrackChunk();
 
             var areEqual = MidiChunk.Equals(trackChunk1, trackChunk2, out var message);
-            Assert.IsFalse(areEqual, "Chunks are equal.");
-            Assert.IsNotNull(message, "Message is null.");
-            Assert.IsNotEmpty(message, "Message is empty.");
+            ClassicAssert.IsFalse(areEqual, "Chunks are equal.");
+            ClassicAssert.IsNotNull(message, "Message is null.");
+            ClassicAssert.IsNotEmpty(message, "Message is empty.");
         }
 
         [Test]
@@ -238,8 +239,8 @@ namespace Melanchall.DryWetMidi.Tests.Core
             var trackChunk2 = new TrackChunk(new NoteOnEvent());
 
             var areEqual = MidiChunk.Equals(trackChunk1, trackChunk2, out var message);
-            Assert.IsTrue(areEqual, "Chunks aren't equal.");
-            Assert.IsNull(message, "Message isn't null.");
+            ClassicAssert.IsTrue(areEqual, "Chunks aren't equal.");
+            ClassicAssert.IsNull(message, "Message isn't null.");
         }
 
         [Test]
@@ -249,9 +250,9 @@ namespace Melanchall.DryWetMidi.Tests.Core
             var trackChunk2 = new TrackChunk(new NoteOffEvent());
 
             var areEqual = MidiChunk.Equals(trackChunk1, trackChunk2, out var message);
-            Assert.IsFalse(areEqual, "Chunks are equal.");
-            Assert.IsNotNull(message, "Message is null.");
-            Assert.IsNotEmpty(message, "Message is empty.");
+            ClassicAssert.IsFalse(areEqual, "Chunks are equal.");
+            ClassicAssert.IsNotNull(message, "Message is null.");
+            ClassicAssert.IsNotEmpty(message, "Message is empty.");
         }
 
         [Test]
@@ -261,8 +262,8 @@ namespace Melanchall.DryWetMidi.Tests.Core
             var trackChunk2 = new TrackChunk(new NoteOnEvent { DeltaTime = 100 });
 
             var areEqual = MidiChunk.Equals(trackChunk1, trackChunk2, out var message);
-            Assert.IsTrue(areEqual, "Chunks aren't equal.");
-            Assert.IsNull(message, "Message isn't null.");
+            ClassicAssert.IsTrue(areEqual, "Chunks aren't equal.");
+            ClassicAssert.IsNull(message, "Message isn't null.");
         }
 
         [Test]
@@ -272,9 +273,9 @@ namespace Melanchall.DryWetMidi.Tests.Core
             var trackChunk2 = new TrackChunk(new NoteOnEvent { DeltaTime = 1000 });
 
             var areEqual = MidiChunk.Equals(trackChunk1, trackChunk2, out var message);
-            Assert.IsFalse(areEqual, "Chunks are equal.");
-            Assert.IsNotNull(message, "Message is null.");
-            Assert.IsNotEmpty(message, "Message is empty.");
+            ClassicAssert.IsFalse(areEqual, "Chunks are equal.");
+            ClassicAssert.IsNotNull(message, "Message is null.");
+            ClassicAssert.IsNotEmpty(message, "Message is empty.");
         }
 
         [TestCase(100, 100)]
@@ -295,8 +296,8 @@ namespace Melanchall.DryWetMidi.Tests.Core
                     }
                 },
                 out var message);
-            Assert.IsTrue(areEqual, "Chunks aren't equal.");
-            Assert.IsNull(message, "Message isn't null.");
+            ClassicAssert.IsTrue(areEqual, "Chunks aren't equal.");
+            ClassicAssert.IsNull(message, "Message isn't null.");
         }
 
         #endregion

@@ -10,6 +10,7 @@ using System;
 using System.Linq;
 
 using Random = Melanchall.DryWetMidi.Common.Random;
+using NUnit.Framework.Legacy;
 
 namespace Melanchall.DryWetMidi.Tests.Composing
 {
@@ -164,7 +165,7 @@ namespace Melanchall.DryWetMidi.Tests.Composing
                     patternAction = (PatternAction)Activator.CreateInstance(type);
 
                 var patternActionClone = patternAction.Clone();
-                Assert.AreEqual(patternAction.GetType(), patternActionClone.GetType(), $"Clone of {type} is of invalid type.");
+                ClassicAssert.AreEqual(patternAction.GetType(), patternActionClone.GetType(), $"Clone of {type} is of invalid type.");
             }
         }
 

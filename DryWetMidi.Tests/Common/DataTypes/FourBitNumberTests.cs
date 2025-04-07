@@ -1,6 +1,7 @@
 ﻿using System;
 using Melanchall.DryWetMidi.Common;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace Melanchall.DryWetMidi.Tests.Common
 {
@@ -12,35 +13,35 @@ namespace Melanchall.DryWetMidi.Tests.Common
         [Test]
         public void Parse_InvalidFormat()
         {
-            Assert.Throws<FormatException>(() => FourBitNumber.Parse("sdsd"));
+            ClassicAssert.Throws<FormatException>(() => FourBitNumber.Parse("sdsd"));
         }
 
         [Test]
         public void Parse_OutOfRange()
         {
-            Assert.Throws<FormatException>(() => FourBitNumber.Parse("200"));
-            Assert.Throws<FormatException>(() => FourBitNumber.Parse("16"));
+            ClassicAssert.Throws<FormatException>(() => FourBitNumber.Parse("200"));
+            ClassicAssert.Throws<FormatException>(() => FourBitNumber.Parse("16"));
         }
 
         [Test]
         public void Parse()
         {
-            Assert.AreEqual((FourBitNumber)12, FourBitNumber.Parse("12"));
-            Assert.AreEqual((FourBitNumber)0, FourBitNumber.Parse("0"));
-            Assert.AreEqual((FourBitNumber)15, FourBitNumber.Parse("15"));
+            ClassicAssert.AreEqual((FourBitNumber)12, FourBitNumber.Parse("12"));
+            ClassicAssert.AreEqual((FourBitNumber)0, FourBitNumber.Parse("0"));
+            ClassicAssert.AreEqual((FourBitNumber)15, FourBitNumber.Parse("15"));
         }
 
         [Test]
         public void TryParse_InvalidFormat()
         {
-            Assert.AreEqual(false, FourBitNumber.TryParse("sdsd", out _));
+            ClassicAssert.AreEqual(false, FourBitNumber.TryParse("sdsd", out _));
         }
 
         [Test]
         public void TryParse_OutOfRange()
         {
-            Assert.AreEqual(false, FourBitNumber.TryParse("200", out _));
-            Assert.AreEqual(false, FourBitNumber.TryParse("16", out _));
+            ClassicAssert.AreEqual(false, FourBitNumber.TryParse("200", out _));
+            ClassicAssert.AreEqual(false, FourBitNumber.TryParse("16", out _));
         }
 
         [Test]
@@ -49,13 +50,13 @@ namespace Melanchall.DryWetMidi.Tests.Common
             FourBitNumber result;
 
             FourBitNumber.TryParse("12", out result);
-            Assert.AreEqual((FourBitNumber)12, result);
+            ClassicAssert.AreEqual((FourBitNumber)12, result);
 
             FourBitNumber.TryParse("0", out result);
-            Assert.AreEqual((FourBitNumber)0, result);
+            ClassicAssert.AreEqual((FourBitNumber)0, result);
 
             FourBitNumber.TryParse("15", out result);
-            Assert.AreEqual((FourBitNumber)15, result);
+            ClassicAssert.AreEqual((FourBitNumber)15, result);
         }
 
         #endregion

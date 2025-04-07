@@ -3,6 +3,7 @@ using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
 using Melanchall.DryWetMidi.Tools;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using System.Linq;
 
 namespace Melanchall.DryWetMidi.Tests.Tools
@@ -18,7 +19,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             var midiFile = new MidiFile();
             var grid = new SteppedGrid(MusicalTimeSpan.Eighth);
 
-            Assert.IsFalse(midiFile.SplitByGrid(grid).Any(),
+            ClassicAssert.IsFalse(midiFile.SplitByGrid(grid).Any(),
                            "Empty file splitting produced non-empty result.");
         }
 
@@ -46,7 +47,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             };
 
             var newFiles = midiFile.SplitByGrid(grid, settings).ToList();
-            Assert.AreEqual(3, newFiles.Count, "New files count is invalid.");
+            ClassicAssert.AreEqual(3, newFiles.Count, "New files count is invalid.");
 
             CompareTimedEvents(
                 newFiles[0].GetTimedEvents(),
@@ -106,7 +107,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             };
 
             var newFiles = midiFile.SplitByGrid(grid, settings).ToList();
-            Assert.AreEqual(3, newFiles.Count, "New files count is invalid.");
+            ClassicAssert.AreEqual(3, newFiles.Count, "New files count is invalid.");
 
             CompareTimedEvents(
                 newFiles[0].GetTimedEvents(),
@@ -168,7 +169,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             };
 
             var newFiles = midiFile.SplitByGrid(grid, settings).ToList();
-            Assert.AreEqual(3, newFiles.Count, "New files count is invalid.");
+            ClassicAssert.AreEqual(3, newFiles.Count, "New files count is invalid.");
 
             CompareTimedEvents(
                 newFiles[0].GetTimedEvents(),
@@ -230,7 +231,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             };
 
             var newFiles = midiFile.SplitByGrid(grid, settings).ToList();
-            Assert.AreEqual(3, newFiles.Count, "New files count is invalid.");
+            ClassicAssert.AreEqual(3, newFiles.Count, "New files count is invalid.");
 
             CompareTimedEvents(
                 newFiles[0].GetTimedEvents(),
@@ -285,7 +286,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             };
 
             var newFiles = midiFile.SplitByGrid(grid, settings).ToList();
-            Assert.AreEqual(2, newFiles.Count, "New files count is invalid.");
+            ClassicAssert.AreEqual(2, newFiles.Count, "New files count is invalid.");
 
             CompareTimedEvents(
                 newFiles[0].GetTimedEvents(),
@@ -330,7 +331,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             };
 
             var newFiles = midiFile.SplitByGrid(grid, settings).ToList();
-            Assert.AreEqual(4, newFiles.Count, "New files count is invalid.");
+            ClassicAssert.AreEqual(4, newFiles.Count, "New files count is invalid.");
 
             CompareTimedEvents(
                 newFiles[0].GetTimedEvents(),
@@ -390,9 +391,9 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             };
 
             var newFiles = midiFile.SplitByGrid(grid, settings).ToList();
-            Assert.AreEqual(2, newFiles.Count, "New files count is invalid.");
+            ClassicAssert.AreEqual(2, newFiles.Count, "New files count is invalid.");
 
-            Assert.AreEqual(preserveTrackChunks ? 2 : 1, newFiles[0].GetTrackChunks().Count(), "Track chunks count of the first file is invalid.");
+            ClassicAssert.AreEqual(preserveTrackChunks ? 2 : 1, newFiles[0].GetTrackChunks().Count(), "Track chunks count of the first file is invalid.");
             CompareTimedEvents(
                 newFiles[0].GetTrackChunks().First().GetTimedEvents(),
                 new[]
@@ -407,7 +408,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                     Enumerable.Empty<TimedEvent>(),
                     "Second track chunk of first file contains invalid events.");
 
-            Assert.AreEqual(2, newFiles[1].GetTrackChunks().Count(), "Track chunks count of the second file is invalid.");
+            ClassicAssert.AreEqual(2, newFiles[1].GetTrackChunks().Count(), "Track chunks count of the second file is invalid.");
             CompareTimedEvents(
                 newFiles[1].GetTrackChunks().First().GetTimedEvents(),
                 new[]

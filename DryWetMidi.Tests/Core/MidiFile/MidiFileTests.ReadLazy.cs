@@ -2,6 +2,7 @@
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Tests.Common;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using System.Linq;
 
 namespace Melanchall.DryWetMidi.Tests.Core
@@ -232,13 +233,13 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 {
                     var actualTokens = ReadAllTokens(reader);
 
-                    Assert.AreEqual(expectedTokens.Length, actualTokens.Length, "Invalid tokens count.");
+                    ClassicAssert.AreEqual(expectedTokens.Length, actualTokens.Length, "Invalid tokens count.");
 
                     for (var i = 0; i < expectedTokens.Length; i++)
                     {
                         var expectedToken = expectedTokens[i];
                         var actualToken = actualTokens[i];
-                        Assert.IsTrue(AreTokensEqual(expectedToken, actualToken), $"Invalid token {i}. Actual: {actualToken}. Expected: {expectedToken}.");
+                        ClassicAssert.IsTrue(AreTokensEqual(expectedToken, actualToken), $"Invalid token {i}. Actual: {actualToken}. Expected: {expectedToken}.");
                     }
                 }
             }
@@ -259,8 +260,8 @@ namespace Melanchall.DryWetMidi.Tests.Core
             if (!expectedToken.GetType().Equals(actualToken.GetType()))
                 return false;
 
-            Assert.AreEqual(expectedToken.Position, actualToken.Position, "Position is invalid.");
-            Assert.AreEqual(expectedToken.Length, actualToken.Length, "Length is invalid.");
+            ClassicAssert.AreEqual(expectedToken.Position, actualToken.Position, "Position is invalid.");
+            ClassicAssert.AreEqual(expectedToken.Length, actualToken.Length, "Length is invalid.");
 
             var expectedChunkHeaderToken = expectedToken as ChunkHeaderToken;
             if (expectedChunkHeaderToken != null)

@@ -4,6 +4,7 @@ using Melanchall.DryWetMidi.Interaction;
 using Melanchall.DryWetMidi.Multimedia;
 using Melanchall.DryWetMidi.Tests.Common;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -74,7 +75,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 stopwatch.Start();
 
                 var playbackFinished = WaitOperations.Wait(() => !playback.IsRunning, timeout);
-                Assert.IsTrue(playbackFinished, $"Playback was not finished for [{timeout}].");
+                ClassicAssert.IsTrue(playbackFinished, $"Playback was not finished for [{timeout}].");
 
                 stopwatch.Stop();
             }

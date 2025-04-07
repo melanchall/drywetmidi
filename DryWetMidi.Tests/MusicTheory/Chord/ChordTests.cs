@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using Melanchall.DryWetMidi.MusicTheory;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace Melanchall.DryWetMidi.Tests.MusicTheory
 {
@@ -15,13 +16,13 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
         [Test]
         public void CreateWithEmptyNotesCollection()
         {
-            Assert.Throws<ArgumentException>(() => new Chord(Enumerable.Empty<NoteName>().ToArray()));
+            ClassicAssert.Throws<ArgumentException>(() => new Chord(Enumerable.Empty<NoteName>().ToArray()));
         }
 
         [Test]
         public void CreateWithInvalidNotes()
         {
-            Assert.Throws<InvalidEnumArgumentException>(() => new Chord((NoteName)100, new NoteName[0]));
+            ClassicAssert.Throws<InvalidEnumArgumentException>(() => new Chord((NoteName)100, new NoteName[0]));
         }
 
         [Test]
@@ -29,7 +30,7 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
         {
             var chord = new Chord(NoteName.A, NoteName.B);
             CollectionAssert.AreEqual(new[] { NoteName.A, NoteName.B }, chord.NotesNames, "Notes names are invalid.");
-            Assert.AreEqual(NoteName.A, chord.RootNoteName, "Root note name is invalid.");
+            ClassicAssert.AreEqual(NoteName.A, chord.RootNoteName, "Root note name is invalid.");
         }
 
         [Test]
@@ -37,7 +38,7 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
         {
             var chord = new Chord(NoteName.A, Interval.FromHalfSteps(2), Interval.FromHalfSteps(5));
             CollectionAssert.AreEqual(new[] { NoteName.A, NoteName.B, NoteName.D }, chord.NotesNames, "Notes names are invalid.");
-            Assert.AreEqual(NoteName.A, chord.RootNoteName, "Root note name is invalid.");
+            ClassicAssert.AreEqual(NoteName.A, chord.RootNoteName, "Root note name is invalid.");
         }
 
         [Test]
@@ -45,7 +46,7 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
         {
             var chord = new Chord(NoteName.A, Interval.FromHalfSteps(2), Interval.FromHalfSteps(-1), Interval.FromHalfSteps(5));
             CollectionAssert.AreEqual(new[] { NoteName.GSharp, NoteName.A, NoteName.B, NoteName.D }, chord.NotesNames, "Notes names are invalid.");
-            Assert.AreEqual(NoteName.GSharp, chord.RootNoteName, "Root note name is invalid.");
+            ClassicAssert.AreEqual(NoteName.GSharp, chord.RootNoteName, "Root note name is invalid.");
         }
 
         [Test]
@@ -55,8 +56,8 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
             var chord2 = new Chord(NoteName.A, NoteName.B);
             var chord3 = new Chord(NoteName.B, NoteName.A);
 
-            Assert.AreEqual(chord1, chord2, "Chords are not equal.");
-            Assert.AreNotEqual(chord1, chord3, "Chords are equal.");
+            ClassicAssert.AreEqual(chord1, chord2, "Chords are not equal.");
+            ClassicAssert.AreNotEqual(chord1, chord3, "Chords are equal.");
         }
 
         [TestCase(NoteName.C, ChordQuality.Major, new[] { NoteName.C, NoteName.E, NoteName.G })]

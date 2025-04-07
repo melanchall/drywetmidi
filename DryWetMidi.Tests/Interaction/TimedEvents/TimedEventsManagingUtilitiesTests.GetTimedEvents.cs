@@ -5,6 +5,7 @@ using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
 using Melanchall.DryWetMidi.Tests.Utilities;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace Melanchall.DryWetMidi.Tests.Interaction
 {
@@ -276,7 +277,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     new TimedEvent(new NoteOnEvent(), deltaTime),
                 },
                 additionalCheck: timedEvents =>
-                    Assert.AreNotSame(midiEvent, timedEvents.First().Event, "New event is a clone of the original one."));
+                    ClassicAssert.AreNotSame(midiEvent, timedEvents.First().Event, "New event is a clone of the original one."));
         }
 
         [Test]
@@ -2159,7 +2160,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
             var timedEvents = new[] { aTrackChunk, bTrackChunk }.GetTimedEvents(settings);
             MidiAsserts.AreEqual(expectedTimedEvents, timedEvents, false, 0, "Timed events are invalid.");
-            Assert.IsFalse(
+            ClassicAssert.IsFalse(
                 aTrackChunk.Events.Concat(bTrackChunk.Events).Any(e => timedEvents.Any(te => object.ReferenceEquals(te.Event, e))),
                 "There are original events references.");
 
@@ -2168,7 +2169,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 TimedEventDetectionSettings = settings
             });
             MidiAsserts.AreEqual(expectedTimedEvents, timedObjects, false, 0, "Timed events are invalid from GetObjects.");
-            Assert.IsFalse(
+            ClassicAssert.IsFalse(
                 aTrackChunk.Events.Concat(bTrackChunk.Events).Any(e => timedObjects.Any(te => object.ReferenceEquals(((TimedEvent)te).Event, e))),
                 "There are original events references from GetObjects.");
         }
@@ -2195,7 +2196,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
             var timedEvents = new MidiFile(aTrackChunk, bTrackChunk).GetTimedEvents(settings);
             MidiAsserts.AreEqual(expectedTimedEvents, timedEvents, false, 0, "Timed events are invalid.");
-            Assert.IsFalse(
+            ClassicAssert.IsFalse(
                 aTrackChunk.Events.Concat(bTrackChunk.Events).Any(e => timedEvents.Any(te => object.ReferenceEquals(te.Event, e))),
                 "There are original events references.");
 
@@ -2204,7 +2205,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 TimedEventDetectionSettings = settings
             });
             MidiAsserts.AreEqual(expectedTimedEvents, timedObjects, false, 0, "Timed events are invalid from GetObjects.");
-            Assert.IsFalse(
+            ClassicAssert.IsFalse(
                 aTrackChunk.Events.Concat(bTrackChunk.Events).Any(e => timedObjects.Any(te => object.ReferenceEquals(((TimedEvent)te).Event, e))),
                 "There are original events references from GetObjects.");
         }
@@ -2229,7 +2230,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
             var timedEvents = new[] { aTrackChunk, bTrackChunk }.GetTimedEvents(settings);
             MidiAsserts.AreEqual(expectedTimedEvents, timedEvents, false, 0, "Timed events are invalid.");
-            Assert.IsFalse(
+            ClassicAssert.IsFalse(
                 aTrackChunk.Events.Concat(bTrackChunk.Events).Any(e => timedEvents.Any(te => object.ReferenceEquals(te.Event, e))),
                 "There are original events references.");
 
@@ -2238,7 +2239,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 TimedEventDetectionSettings = settings
             });
             MidiAsserts.AreEqual(expectedTimedEvents, timedObjects, false, 0, "Timed events are invalid from GetObjects.");
-            Assert.IsFalse(
+            ClassicAssert.IsFalse(
                 aTrackChunk.Events.Concat(bTrackChunk.Events).Any(e => timedObjects.Any(te => object.ReferenceEquals(((TimedEvent)te).Event, e))),
                 "There are original events references from GetObjects.");
         }
@@ -2263,7 +2264,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
             var timedEvents = new MidiFile(aTrackChunk, bTrackChunk).GetTimedEvents(settings);
             MidiAsserts.AreEqual(expectedTimedEvents, timedEvents, false, 0, "Timed events are invalid.");
-            Assert.IsFalse(
+            ClassicAssert.IsFalse(
                 aTrackChunk.Events.Concat(bTrackChunk.Events).Any(e => timedEvents.Any(te => object.ReferenceEquals(te.Event, e))),
                 "There are original events references.");
 
@@ -2272,7 +2273,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 TimedEventDetectionSettings = settings
             });
             MidiAsserts.AreEqual(expectedTimedEvents, timedObjects, false, 0, "Timed events are invalid from GetObjects.");
-            Assert.IsFalse(
+            ClassicAssert.IsFalse(
                 aTrackChunk.Events.Concat(bTrackChunk.Events).Any(e => timedObjects.Any(te => object.ReferenceEquals(((TimedEvent)te).Event, e))),
                 "There are original events references from GetObjects.");
         }
@@ -2297,7 +2298,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
             var timedEvents = new[] { aTrackChunk, bTrackChunk }.GetTimedEvents(settings);
             MidiAsserts.AreEqual(expectedTimedEvents, timedEvents, false, 0, "Timed events are invalid.");
-            Assert.IsFalse(
+            ClassicAssert.IsFalse(
                 aTrackChunk.Events.Concat(bTrackChunk.Events).Any(e => timedEvents.Any(te => object.ReferenceEquals(te.Event, e))),
                 "There are original events references.");
 
@@ -2306,7 +2307,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 TimedEventDetectionSettings = settings
             });
             MidiAsserts.AreEqual(expectedTimedEvents, timedObjects, false, 0, "Timed events are invalid from GetObjects.");
-            Assert.IsFalse(
+            ClassicAssert.IsFalse(
                 aTrackChunk.Events.Concat(bTrackChunk.Events).Any(e => timedObjects.Any(te => object.ReferenceEquals(((TimedEvent)te).Event, e))),
                 "There are original events references from GetObjects.");
         }
@@ -2331,7 +2332,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
             var timedEvents = new MidiFile(aTrackChunk, bTrackChunk).GetTimedEvents(settings);
             MidiAsserts.AreEqual(expectedTimedEvents, timedEvents, false, 0, "Timed events are invalid.");
-            Assert.IsFalse(
+            ClassicAssert.IsFalse(
                 aTrackChunk.Events.Concat(bTrackChunk.Events).Any(e => timedEvents.Any(te => object.ReferenceEquals(te.Event, e))),
                 "There are original events references.");
 
@@ -2340,7 +2341,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 TimedEventDetectionSettings = settings
             });
             MidiAsserts.AreEqual(expectedTimedEvents, timedObjects, false, 0, "Timed events are invalid from GetObjects.");
-            Assert.IsFalse(
+            ClassicAssert.IsFalse(
                 aTrackChunk.Events.Concat(bTrackChunk.Events).Any(e => timedObjects.Any(te => object.ReferenceEquals(((TimedEvent)te).Event, e))),
                 "There are original events references from GetObjects.");
         }
