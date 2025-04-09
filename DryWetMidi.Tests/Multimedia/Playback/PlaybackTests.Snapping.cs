@@ -48,7 +48,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(0)),
+                    // 0 is correct value, but on macOS tick generator restart requires more time
+                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(5)),
                     new ReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(600)),
                 },
                 setupPlayback: playback =>
@@ -1009,7 +1010,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(0)),
+                    // 0 is correct value, but on macOS tick generator restart requires more time
+                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(5)),
                     new ReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(250)),
                     // 250 is correct value, but on macOS tick generator restart requires more time
                     new ReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(255)),
