@@ -304,18 +304,19 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
             MidiFile recordedFile = null;
 
-            var loopbackDevice = new LoopbackDeviceMock();
+            var inputDevice = TestDeviceManager.GetInputDevice("A");
+            var outputDevice = TestDeviceManager.GetOutputDevice("A");
 
             var receivedEventsNumber = 0;
 
-            loopbackDevice.Input.StartEventsListening();
-            loopbackDevice.Input.EventReceived += (_, __) => receivedEventsNumber++;
+            inputDevice.StartEventsListening();
+            inputDevice.EventReceived += (_, __) => receivedEventsNumber++;
 
-            using (var recording = new Recording(TempoMap, loopbackDevice.Input))
+            using (var recording = new Recording(TempoMap, inputDevice))
             {
                 var sendingThread = new Thread(() =>
                 {
-                    SendReceiveUtilities.SendEvents(eventsToSend, loopbackDevice.Output);
+                    SendReceiveUtilities.SendEvents(eventsToSend, outputDevice);
                 });
 
                 recording.Start();
@@ -849,12 +850,17 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var stopwatch = new Stopwatch();
 
             var receivedEvents1 = new List<ReceivedEvent>();
-            var outputDevice1 = new OutputDeviceMock();
+            var outputDevice1 = TestDeviceManager.GetOutputDevice("A");
             outputDevice1.EventSent += (_, e) => receivedEvents1.Add(new ReceivedEvent(e.Event, stopwatch.Elapsed));
 
             var receivedEvents2 = new List<ReceivedEvent>();
-            var outputDevice2 = new OutputDeviceMock();
+            var outputDevice2 = TestDeviceManager.GetOutputDevice("B");
             outputDevice2.EventSent += (_, e) => receivedEvents2.Add(new ReceivedEvent(e.Event, stopwatch.Elapsed));
+
+            ClassicAssert.AreNotSame(
+                outputDevice1,
+                outputDevice2,
+                "Output devices are the same.");
 
             using (var playback = new Playback(playbackObjects, TempoMap))
             {

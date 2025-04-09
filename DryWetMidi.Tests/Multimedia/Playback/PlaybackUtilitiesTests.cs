@@ -134,7 +134,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
             var sentEvents = new List<SentEvent>();
 
-            using (var outputDevice = new OutputDeviceMock())
+            using (var outputDevice = TestDeviceManager.GetOutputDevice(SendReceiveUtilities.DeviceToTestOnName))
             {
                 outputDevice.EventSent += (_, e) => sentEvents.Add(new SentEvent(e.Event, stopwatch.Elapsed));
 

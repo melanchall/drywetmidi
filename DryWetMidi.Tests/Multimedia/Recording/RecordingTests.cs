@@ -55,9 +55,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var receivedEvents = new List<ReceivedEvent>();
             var stopwatch = new Stopwatch();
 
-            var loopbackDevice = new LoopbackDeviceMock();
-            var outputDevice = loopbackDevice.Output;
-            var inputDevice = loopbackDevice.Input;
+            var inputDevice = TestDeviceManager.GetInputDevice("A");
+            var outputDevice = TestDeviceManager.GetOutputDevice("A");
 
             inputDevice.StartEventsListening();
             inputDevice.EventReceived += (_, e) => receivedEvents.Add(new ReceivedEvent(e.Event, stopwatch.Elapsed));
@@ -116,9 +115,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
             var timeout = expectedTimes.Last() + SendReceiveUtilities.MaximumEventSendReceiveDelay;
 
-            var loopbackDevice = new LoopbackDeviceMock();
-            var outputDevice = loopbackDevice.Output;
-            var inputDevice = loopbackDevice.Input;
+            var inputDevice = TestDeviceManager.GetInputDevice("A");
+            var outputDevice = TestDeviceManager.GetOutputDevice("A");
 
             outputDevice.EventSent += (_, e) => sentEvents.Add(new SentEvent(e.Event, stopwatch.Elapsed));
 

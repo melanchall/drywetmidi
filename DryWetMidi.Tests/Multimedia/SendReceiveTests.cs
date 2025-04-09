@@ -51,6 +51,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             SendReceiveUtilities.CheckEventsReceiving(events.Select(e => new EventToSend(e, TimeSpan.Zero)).ToArray());
         }
 
+        [CancelAfter(60 * 1000)]
         [Retry(RetriesNumber)]
         [Test]
         public void CheckFileEventsReceiving()

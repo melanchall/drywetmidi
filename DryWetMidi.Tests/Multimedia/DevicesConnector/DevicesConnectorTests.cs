@@ -150,8 +150,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 SendReceiveUtilities.WarmUpDevice(outputA);
                 outputA.EventSent += (_, e) => sentEvents.Add(new SentEvent(e.Event, stopwatch.Elapsed));
 
-                using (var inputB = InputDevice.GetByName(MidiDevicesNames.DeviceB))
-                using (var inputC = InputDevice.GetByName(MidiDevicesNames.DeviceC))
+                using (var inputB = TestDeviceManager.GetInputDevice(MidiDevicesNames.DeviceB))
+                using (var inputC = TestDeviceManager.GetInputDevice(MidiDevicesNames.DeviceC))
                 {
                     inputB.EventReceived += (_, e) => receivedEventsB.Add(new ReceivedEvent(e.Event, stopwatch.Elapsed));
                     inputB.StartEventsListening();
@@ -163,8 +163,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     {
                         inputA.StartEventsListening();
 
-                        using (var outputB = OutputDevice.GetByName(MidiDevicesNames.DeviceB))
-                        using (var outputC = OutputDevice.GetByName(MidiDevicesNames.DeviceC))
+                        using (var outputB = TestDeviceManager.GetOutputDevice(MidiDevicesNames.DeviceB))
+                        using (var outputC = TestDeviceManager.GetOutputDevice(MidiDevicesNames.DeviceC))
                         {
                             var devicesConnector = inputA.Connect(outputB, outputC);
                             ClassicAssert.IsTrue(devicesConnector.AreDevicesConnected, "Devices aren't connected.");
@@ -205,8 +205,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 SendReceiveUtilities.WarmUpDevice(outputA);
                 outputA.EventSent += (_, e) => sentEvents.Add(new SentEvent(e.Event, stopwatch.Elapsed));
 
-                using (var inputB = InputDevice.GetByName(MidiDevicesNames.DeviceB))
-                using (var inputC = InputDevice.GetByName(MidiDevicesNames.DeviceC))
+                using (var inputB = TestDeviceManager.GetInputDevice(MidiDevicesNames.DeviceB))
+                using (var inputC = TestDeviceManager.GetInputDevice(MidiDevicesNames.DeviceC))
                 {
                     inputB.EventReceived += (_, e) => receivedEventsB.Add(new ReceivedEvent(e.Event, stopwatch.Elapsed));
                     inputB.StartEventsListening();
@@ -218,8 +218,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     {
                         inputA.StartEventsListening();
 
-                        using (var outputB = OutputDevice.GetByName(MidiDevicesNames.DeviceB))
-                        using (var outputC = OutputDevice.GetByName(MidiDevicesNames.DeviceC))
+                        using (var outputB = TestDeviceManager.GetOutputDevice(MidiDevicesNames.DeviceB))
+                        using (var outputC = TestDeviceManager.GetOutputDevice(MidiDevicesNames.DeviceC))
                         {
                             var devicesConnector = inputA.Connect(outputB, outputC);
                             devicesConnector.EventCallback = eventCallback;

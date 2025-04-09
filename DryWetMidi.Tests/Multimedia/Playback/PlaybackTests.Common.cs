@@ -84,7 +84,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         {
             var outputDevice = useOutputDevice
                 ? (IOutputDevice)OutputDevice.GetByName(SendReceiveUtilities.DeviceToTestOnName)
-                : new OutputDeviceMock();
+                : TestDeviceManager.GetOutputDevice(SendReceiveUtilities.DeviceToTestOnName);
 
             var stopwatch = new Stopwatch();
             var receivedEvents = new List<ReceivedEvent>();
