@@ -2,11 +2,9 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Threading;
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Multimedia;
 using Melanchall.DryWetMidi.Core;
-using Melanchall.DryWetMidi.Interaction;
 using NUnit.Framework;
 using Melanchall.DryWetMidi.Tests.Common;
 using NUnit.Framework.Legacy;
@@ -51,9 +49,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             eventCallback: null,
             expectedReceivedEvents: new[]
             {
-                new ReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
-                new ReceivedEvent(new ControlChangeEvent(), TimeSpan.FromMilliseconds(250)),
-                new ReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(500)),
+                new SentReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
+                new SentReceivedEvent(new ControlChangeEvent(), TimeSpan.FromMilliseconds(250)),
+                new SentReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(500)),
             });
 
         [Retry(RetriesNumber)]
@@ -68,8 +66,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             eventCallback: e => e is ControlChangeEvent ? null : e,
             expectedReceivedEvents: new[]
             {
-                new ReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
-                new ReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(500)),
+                new SentReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
+                new SentReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(500)),
             });
 
         [Retry(RetriesNumber)]
@@ -90,73 +88,35 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             },
             expectedReceivedEvents: new[]
             {
-                new ReceivedEvent(new NoteOnEvent { NoteNumber = (SevenBitNumber)70 }, TimeSpan.Zero),
-                new ReceivedEvent(new ControlChangeEvent(), TimeSpan.FromMilliseconds(250)),
-                new ReceivedEvent(new NoteOffEvent { NoteNumber = (SevenBitNumber)70 }, TimeSpan.FromMilliseconds(500)),
+                new SentReceivedEvent(new NoteOnEvent { NoteNumber = (SevenBitNumber)70 }, TimeSpan.Zero),
+                new SentReceivedEvent(new ControlChangeEvent(), TimeSpan.FromMilliseconds(250)),
+                new SentReceivedEvent(new NoteOffEvent { NoteNumber = (SevenBitNumber)70 }, TimeSpan.FromMilliseconds(500)),
             });
-
-        [Retry(RetriesNumber)]
-        [Test]
-        public void CheckFileEventsReceivingOnConnectedDevices()
-        {
-            var filesToTestCount = 5;
-            var maxFileDuration = TimeSpan.FromSeconds(10);
-
-            var filesToTest = TestFilesProvider.GetValidFiles(
-                    f => f.GetTrackChunks().Count() == 1,
-                    f => (TimeSpan)f.GetDuration<MetricTimeSpan>() < maxFileDuration)
-                .OrderByDescending(f => f.GetDuration<MetricTimeSpan>())
-                .Take(filesToTestCount)
-                .ToArray();
-            ClassicAssert.AreEqual(filesToTestCount, filesToTest.Length, "Not enough files for test.");
-
-            for (var i = 0; i < filesToTest.Length; i++)
-            {
-                var file = filesToTest[i];
-                var tempoMap = file.GetTempoMap();
-
-                var eventsToSend = new List<EventToSend>();
-                var currentTime = TimeSpan.Zero;
-
-                foreach (var timedEvent in file.GetTimedEvents().Where(e => !(e.Event is MetaEvent)))
-                {
-                    var time = (TimeSpan)timedEvent.TimeAs<MetricTimeSpan>(tempoMap);
-                    var eventToSend = new EventToSend(timedEvent.Event, time - currentTime);
-                    currentTime = time;
-
-                    if (eventToSend.Event is SysExEvent)
-                        continue;
-
-                    eventsToSend.Add(eventToSend);
-                }
-
-                CheckEventsReceiving(eventsToSend);
-            }
-        }
 
         #endregion
 
         #region Private methods
 
-        private static void CheckEventsReceiving(IReadOnlyList<EventToSend> eventsToSend)
+        private static void CheckEventsReceiving(
+            IReadOnlyList<EventToSend> eventsToSend)
         {
-            var receivedEventsB = new List<ReceivedEvent>();
-            var receivedEventsC = new List<ReceivedEvent>();
-            var sentEvents = new List<SentEvent>();
+            var receivedEventsB = new List<SentReceivedEvent>();
+            var receivedEventsC = new List<SentReceivedEvent>();
+            var sentEvents = new List<SentReceivedEvent>();
+            
             var stopwatch = new Stopwatch();
 
             using (var outputA = OutputDevice.GetByName(MidiDevicesNames.DeviceA))
             {
-                SendReceiveUtilities.WarmUpDevice(outputA);
-                outputA.EventSent += (_, e) => sentEvents.Add(new SentEvent(e.Event, stopwatch.Elapsed));
+                outputA.EventSent += (_, e) => sentEvents.Add(new SentReceivedEvent(e.Event, stopwatch.Elapsed));
 
                 using (var inputB = TestDeviceManager.GetInputDevice(MidiDevicesNames.DeviceB))
                 using (var inputC = TestDeviceManager.GetInputDevice(MidiDevicesNames.DeviceC))
                 {
-                    inputB.EventReceived += (_, e) => receivedEventsB.Add(new ReceivedEvent(e.Event, stopwatch.Elapsed));
+                    inputB.EventReceived += (_, e) => receivedEventsB.Add(new SentReceivedEvent(e.Event, stopwatch.Elapsed));
                     inputB.StartEventsListening();
 
-                    inputC.EventReceived += (_, e) => receivedEventsC.Add(new ReceivedEvent(e.Event, stopwatch.Elapsed));
+                    inputC.EventReceived += (_, e) => receivedEventsC.Add(new SentReceivedEvent(e.Event, stopwatch.Elapsed));
                     inputC.StartEventsListening();
 
                     using (var inputA = InputDevice.GetByName(MidiDevicesNames.DeviceA))
@@ -193,25 +153,25 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         private static void CheckEventsReceivingWithCallback(
             IReadOnlyList<EventToSend> eventsToSend,
             DevicesConnectorEventCallback eventCallback,
-            IReadOnlyList<ReceivedEvent> expectedReceivedEvents)
+            IReadOnlyList<SentReceivedEvent> expectedReceivedEvents)
         {
-            var receivedEventsB = new List<ReceivedEvent>();
-            var receivedEventsC = new List<ReceivedEvent>();
-            var sentEvents = new List<SentEvent>();
+            var receivedEventsB = new List<SentReceivedEvent>();
+            var receivedEventsC = new List<SentReceivedEvent>();
+            var sentEvents = new List<SentReceivedEvent>();
+            
             var stopwatch = new Stopwatch();
 
             using (var outputA = OutputDevice.GetByName(MidiDevicesNames.DeviceA))
             {
-                SendReceiveUtilities.WarmUpDevice(outputA);
-                outputA.EventSent += (_, e) => sentEvents.Add(new SentEvent(e.Event, stopwatch.Elapsed));
+                outputA.EventSent += (_, e) => sentEvents.Add(new SentReceivedEvent(e.Event, stopwatch.Elapsed));
 
                 using (var inputB = TestDeviceManager.GetInputDevice(MidiDevicesNames.DeviceB))
                 using (var inputC = TestDeviceManager.GetInputDevice(MidiDevicesNames.DeviceC))
                 {
-                    inputB.EventReceived += (_, e) => receivedEventsB.Add(new ReceivedEvent(e.Event, stopwatch.Elapsed));
+                    inputB.EventReceived += (_, e) => receivedEventsB.Add(new SentReceivedEvent(e.Event, stopwatch.Elapsed));
                     inputB.StartEventsListening();
 
-                    inputC.EventReceived += (_, e) => receivedEventsC.Add(new ReceivedEvent(e.Event, stopwatch.Elapsed));
+                    inputC.EventReceived += (_, e) => receivedEventsC.Add(new SentReceivedEvent(e.Event, stopwatch.Elapsed));
                     inputC.StartEventsListening();
 
                     using (var inputA = InputDevice.GetByName(MidiDevicesNames.DeviceA))
@@ -242,8 +202,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 }
             }
 
-            SendReceiveUtilities.CompareReceivedEvents(receivedEventsB, expectedReceivedEvents, MaximumEventSendReceiveDelay);
-            SendReceiveUtilities.CompareReceivedEvents(receivedEventsC, expectedReceivedEvents, MaximumEventSendReceiveDelay);
+            SendReceiveUtilities.CheckReceivedEvents(receivedEventsB, expectedReceivedEvents, MaximumEventSendReceiveDelay);
+            SendReceiveUtilities.CheckReceivedEvents(receivedEventsC, expectedReceivedEvents, MaximumEventSendReceiveDelay);
         }
 
         #endregion

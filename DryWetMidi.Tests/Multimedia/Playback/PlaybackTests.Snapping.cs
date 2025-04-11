@@ -5,6 +5,7 @@ using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
 using NUnit.Framework;
 using NUnit.Framework.Legacy;
+using Melanchall.DryWetMidi.Tests.Common;
 
 namespace Melanchall.DryWetMidi.Tests.Multimedia
 {
@@ -49,8 +50,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 expectedReceivedEvents: new[]
                 {
                     // 0 is correct value, but on macOS tick generator restart requires more time
-                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(5)),
-                    new ReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(600)),
+                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(5)),
+                    new SentReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(600)),
                 },
                 setupPlayback: playback =>
                 {
@@ -93,8 +94,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(0)),
-                    new ReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(600)),
+                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(0)),
+                    new SentReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(600)),
                 },
                 setupPlayback: playback =>
                 {
@@ -148,8 +149,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(0)),
-                    new ReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(600)),
+                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(0)),
+                    new SentReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(600)),
                 },
                 setupPlayback: playback =>
                 {
@@ -201,8 +202,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(0)),
-                    new ReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(600)),
+                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(0)),
+                    new SentReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(600)),
                 },
                 setupPlayback: playback =>
                 {
@@ -252,8 +253,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(0)),
-                    new ReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(450)),
+                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(0)),
+                    new SentReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(450)),
                 });
         }
 
@@ -299,8 +300,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(0)),
-                    new ReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(450)),
+                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(0)),
+                    new SentReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(450)),
                 });
         }
 
@@ -362,8 +363,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
-                    new ReceivedEvent(new NoteOffEvent(), endTime + stopPeriod + (stopAfter - snapPointTime1) - (snapPointTime2 - (snapPointTime1 + firstAfterResumeDelay + secondAfterResumeDelay))),
+                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
+                    new SentReceivedEvent(new NoteOffEvent(), endTime + stopPeriod + (stopAfter - snapPointTime1) - (snapPointTime2 - (snapPointTime1 + firstAfterResumeDelay + secondAfterResumeDelay))),
                 });
         }
 
@@ -404,8 +405,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
-                    new ReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(400)),
+                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
+                    new SentReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(400)),
                 });
         }
 
@@ -457,8 +458,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
-                    new ReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(350)),
+                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
+                    new SentReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(350)),
                 });
         }
 
@@ -510,8 +511,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
-                    new ReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(550)),
+                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
+                    new SentReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(550)),
                 });
         }
 
@@ -572,8 +573,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
-                    new ReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(500)),
+                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
+                    new SentReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(500)),
                 });
         }
 
@@ -634,8 +635,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
-                    new ReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(500)),
+                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
+                    new SentReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(500)),
                 });
         }
 
@@ -699,12 +700,12 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(0)),
-                    new ReceivedEvent(new MarkerEvent("A"), TimeSpan.FromMilliseconds(1000)),
-                    new ReceivedEvent(new MarkerEvent("A"), TimeSpan.FromMilliseconds(3000)),
-                    new ReceivedEvent(new MarkerEvent("B"), TimeSpan.FromMilliseconds(4100)),
-                    new ReceivedEvent(new MarkerEvent("B"), TimeSpan.FromMilliseconds(4600)),
-                    new ReceivedEvent(new NoteOffEvent(), endTime + stopPeriod + (stopAfter - snapPointTime1) + (snapPointTime1 + firstAfterResumeDelay + secondAfterResumeDelay - snapPointTime2)),
+                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(0)),
+                    new SentReceivedEvent(new MarkerEvent("A"), TimeSpan.FromMilliseconds(1000)),
+                    new SentReceivedEvent(new MarkerEvent("A"), TimeSpan.FromMilliseconds(3000)),
+                    new SentReceivedEvent(new MarkerEvent("B"), TimeSpan.FromMilliseconds(4100)),
+                    new SentReceivedEvent(new MarkerEvent("B"), TimeSpan.FromMilliseconds(4600)),
+                    new SentReceivedEvent(new NoteOffEvent(), endTime + stopPeriod + (stopAfter - snapPointTime1) + (snapPointTime1 + firstAfterResumeDelay + secondAfterResumeDelay - snapPointTime2)),
                 });
         }
 
@@ -755,10 +756,10 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(0)),
+                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(0)),
                     // 50 is correct value, but on macOS tick generator restart requires more time
-                    new ReceivedEvent(new MarkerEvent("A"), TimeSpan.FromMilliseconds(55)),
-                    new ReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(150)),
+                    new SentReceivedEvent(new MarkerEvent("A"), TimeSpan.FromMilliseconds(55)),
+                    new SentReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(150)),
                 });
         }
 
@@ -810,11 +811,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(0)),
+                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(0)),
                     // 50 is correct value, but on macOS tick generator restart requires more time
-                    new ReceivedEvent(new MarkerEvent("A"), TimeSpan.FromMilliseconds(55)),
-                    new ReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(150)),
-                    new ReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(155)),
+                    new SentReceivedEvent(new MarkerEvent("A"), TimeSpan.FromMilliseconds(55)),
+                    new SentReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(150)),
+                    new SentReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(155)),
                 });
         }
 
@@ -880,11 +881,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
-                    new ReceivedEvent(new MarkerEvent("A"), TimeSpan.FromMilliseconds(1000)),
-                    new ReceivedEvent(new MarkerEvent("A"), TimeSpan.FromMilliseconds(3000)),
-                    new ReceivedEvent(new MarkerEvent("B"), TimeSpan.FromMilliseconds(4100)),
-                    new ReceivedEvent(new NoteOffEvent(), endTime + stopPeriod + (stopAfter - snapPointTime1) + (snapPointTime1 + firstAfterResumeDelay + secondAfterResumeDelay - snapPointTime3)),
+                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
+                    new SentReceivedEvent(new MarkerEvent("A"), TimeSpan.FromMilliseconds(1000)),
+                    new SentReceivedEvent(new MarkerEvent("A"), TimeSpan.FromMilliseconds(3000)),
+                    new SentReceivedEvent(new MarkerEvent("B"), TimeSpan.FromMilliseconds(4100)),
+                    new SentReceivedEvent(new NoteOffEvent(), endTime + stopPeriod + (stopAfter - snapPointTime1) + (snapPointTime1 + firstAfterResumeDelay + secondAfterResumeDelay - snapPointTime3)),
                 });
         }
 
@@ -946,8 +947,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(0)),
-                    new ReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(250)),
+                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(0)),
+                    new SentReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(250)),
                 });
         }
 
@@ -1011,10 +1012,10 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 expectedReceivedEvents: new[]
                 {
                     // 0 is correct value, but on macOS tick generator restart requires more time
-                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(5)),
-                    new ReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(250)),
+                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(5)),
+                    new SentReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(250)),
                     // 250 is correct value, but on macOS tick generator restart requires more time
-                    new ReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(255)),
+                    new SentReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(255)),
                 });
         }
 
@@ -1076,8 +1077,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
-                    new ReceivedEvent(new NoteOffEvent(), endTime + stopPeriod + (stopAfter - snapPointTime1) + (snapPointTime1 + firstAfterResumeDelay + secondAfterResumeDelay - snapPointTime3)),
+                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
+                    new SentReceivedEvent(new NoteOffEvent(), endTime + stopPeriod + (stopAfter - snapPointTime1) + (snapPointTime1 + firstAfterResumeDelay + secondAfterResumeDelay - snapPointTime3)),
                 });
         }
 
@@ -1127,8 +1128,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(0)),
-                    new ReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(150)),
+                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(0)),
+                    new SentReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(150)),
                 });
         }
 
@@ -1179,10 +1180,10 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(0)),
-                    new ReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(150)),
+                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(0)),
+                    new SentReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(150)),
                     // 150 is correct value, but on macOS tick generator restart requires more time
-                    new ReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(155)),
+                    new SentReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(155)),
                 });
         }
 
@@ -1246,10 +1247,10 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
-                    new ReceivedEvent(new MarkerEvent("A"), TimeSpan.FromMilliseconds(2100)),
-                    new ReceivedEvent(new MarkerEvent("B"), TimeSpan.FromMilliseconds(3000)),
-                    new ReceivedEvent(new NoteOffEvent(), endTime + stopPeriod - (snapPointTime1 - stopAfter) - (snapPointTime2 - (snapPointTime1 + firstAfterResumeDelay + secondAfterResumeDelay))),
+                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
+                    new SentReceivedEvent(new MarkerEvent("A"), TimeSpan.FromMilliseconds(2100)),
+                    new SentReceivedEvent(new MarkerEvent("B"), TimeSpan.FromMilliseconds(3000)),
+                    new SentReceivedEvent(new NoteOffEvent(), endTime + stopPeriod - (snapPointTime1 - stopAfter) - (snapPointTime2 - (snapPointTime1 + firstAfterResumeDelay + secondAfterResumeDelay))),
                 });
         }
 
@@ -1275,10 +1276,12 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new PlaybackAction(50, p =>
                     {
                         ClassicAssert.IsTrue(p.MoveToNextSnapPoint(snapPointsGroup), "Failed to move to first next snap point.");
+                        WaitOperations.WaitPrecisely(TimeSpan.FromMilliseconds(10));
                         ClassicAssert.IsTrue(p.MoveToNextSnapPoint(snapPointsGroup), "Failed to move to second next snap point.");
+                        WaitOperations.WaitPrecisely(TimeSpan.FromMilliseconds(10));
                         ClassicAssert.IsFalse(p.MoveToNextSnapPoint(snapPointsGroup), "Position changed beyond last snap point of the group.");
                     }),
-                    new PlaybackAction(50, p =>
+                    new PlaybackAction(30, p =>
                     {
                         snapPointsGroup.IsEnabled = false;
                         p.MoveToStart();
@@ -1295,13 +1298,14 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(0)),
-                    new ReceivedEvent(new MarkerEvent("B"), TimeSpan.FromMilliseconds(50)),
-                    new ReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(100)),
-                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(100)),
-                    new ReceivedEvent(new MarkerEvent("A"), TimeSpan.FromMilliseconds(200)),
-                    new ReceivedEvent(new MarkerEvent("B"), TimeSpan.FromMilliseconds(500)),
-                    new ReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(600)),
+                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(0)),
+                    new SentReceivedEvent(new MarkerEvent("A"), TimeSpan.FromMilliseconds(50)),
+                    new SentReceivedEvent(new MarkerEvent("B"), TimeSpan.FromMilliseconds(60)),
+                    new SentReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(100)),
+                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(100)),
+                    new SentReceivedEvent(new MarkerEvent("A"), TimeSpan.FromMilliseconds(200)),
+                    new SentReceivedEvent(new MarkerEvent("B"), TimeSpan.FromMilliseconds(500)),
+                    new SentReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(600)),
                 });
         }
 
@@ -1367,10 +1371,10 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
-                    new ReceivedEvent(new MarkerEvent("A"), TimeSpan.FromMilliseconds(2100)),
-                    new ReceivedEvent(new MarkerEvent("B"), TimeSpan.FromMilliseconds(3100)),
-                    new ReceivedEvent(new NoteOffEvent(), endTime + stopPeriod - (snapPointTime1 - stopAfter) - (snapPointTime3 - (snapPointTime1 + firstAfterResumeDelay + secondAfterResumeDelay))),
+                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
+                    new SentReceivedEvent(new MarkerEvent("A"), TimeSpan.FromMilliseconds(2100)),
+                    new SentReceivedEvent(new MarkerEvent("B"), TimeSpan.FromMilliseconds(3100)),
+                    new SentReceivedEvent(new NoteOffEvent(), endTime + stopPeriod - (snapPointTime1 - stopAfter) - (snapPointTime3 - (snapPointTime1 + firstAfterResumeDelay + secondAfterResumeDelay))),
                 });
         }
 
@@ -1419,12 +1423,12 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(0)),
-                    new ReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(150)),
-                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(150)),
-                    new ReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(250)),
-                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(250)),
-                    new ReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(950)),
+                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(0)),
+                    new SentReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(150)),
+                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(150)),
+                    new SentReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(250)),
+                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(250)),
+                    new SentReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(950)),
                 });
         }
 
@@ -1485,8 +1489,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
-                    new ReceivedEvent(new NoteOffEvent(), endTime + stopPeriod - (snapPointTime1 - stopAfter) - (snapPointTime3 - (snapPointTime1 + firstAfterResumeDelay + secondAfterResumeDelay))),
+                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
+                    new SentReceivedEvent(new NoteOffEvent(), endTime + stopPeriod - (snapPointTime1 - stopAfter) - (snapPointTime3 - (snapPointTime1 + firstAfterResumeDelay + secondAfterResumeDelay))),
                 });
         }
 
@@ -1527,10 +1531,10 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(0)),
-                    new ReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(150)),
-                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(150)),
-                    new ReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(850)),
+                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(0)),
+                    new SentReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(150)),
+                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(150)),
+                    new SentReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(850)),
                 });
         }
 
@@ -1561,8 +1565,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(0)),
-                    new ReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(700)),
+                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(0)),
+                    new SentReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(700)),
                 });
         }
 
@@ -1631,11 +1635,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)100, (SevenBitNumber)100), snapPointTime1),
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)100, (SevenBitNumber)100), stopAfter + stopPeriod),
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)10, (SevenBitNumber)100), stopAfter + stopPeriod + firstAfterResumeDelay + secondAfterResumeDelay),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)100, (SevenBitNumber)100), stopAfter + stopPeriod + firstAfterResumeDelay + secondAfterResumeDelay + TimeSpan.FromSeconds(1)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)10, (SevenBitNumber)100), endTime + stopPeriod + (stopAfter - snapPointTime1) - (snapPointTime2 - (snapPointTime1 + firstAfterResumeDelay + secondAfterResumeDelay))),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)100, (SevenBitNumber)100), snapPointTime1),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)100, (SevenBitNumber)100), stopAfter + stopPeriod),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)10, (SevenBitNumber)100), stopAfter + stopPeriod + firstAfterResumeDelay + secondAfterResumeDelay),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)100, (SevenBitNumber)100), stopAfter + stopPeriod + firstAfterResumeDelay + secondAfterResumeDelay + TimeSpan.FromSeconds(1)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)10, (SevenBitNumber)100), endTime + stopPeriod + (stopAfter - snapPointTime1) - (snapPointTime2 - (snapPointTime1 + firstAfterResumeDelay + secondAfterResumeDelay))),
                 });
         }
 
@@ -1676,8 +1680,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
-                    new ReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(400)),
+                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
+                    new SentReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(400)),
                 });
         }
 
@@ -1724,8 +1728,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
-                    new ReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(400)),
+                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
+                    new SentReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(400)),
                 });
         }
 
@@ -1773,10 +1777,10 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
-                    new ReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(200)),
-                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(200)),
-                    new ReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(500)),
+                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
+                    new SentReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(200)),
+                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(200)),
+                    new SentReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(500)),
                 });
         }
 

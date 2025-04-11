@@ -52,14 +52,14 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 new EventToSend(new NoteOffEvent(), delayFromStart)
             };
 
-            var receivedEvents = new List<ReceivedEvent>();
+            var receivedEvents = new List<SentReceivedEvent>();
             var stopwatch = new Stopwatch();
 
             var inputDevice = TestDeviceManager.GetInputDevice("A");
             var outputDevice = TestDeviceManager.GetOutputDevice("A");
 
             inputDevice.StartEventsListening();
-            inputDevice.EventReceived += (_, e) => receivedEvents.Add(new ReceivedEvent(e.Event, stopwatch.Elapsed));
+            inputDevice.EventReceived += (_, e) => receivedEvents.Add(new SentReceivedEvent(e.Event, stopwatch.Elapsed));
 
             using (var recording = new Recording(TempoMap.Default, inputDevice))
             {
@@ -97,9 +97,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 new EventToSend(new TimingClockEvent(), TimeSpan.FromSeconds(5))
             };
 
-            var sentEvents = new List<SentEvent>();
-            var receivedEvents = new List<ReceivedEvent>();
-            var recordedEvents = new List<ReceivedEvent>();
+            var sentEvents = new List<SentReceivedEvent>();
+            var receivedEvents = new List<SentReceivedEvent>();
+            var recordedEvents = new List<SentReceivedEvent>();
             var stopwatch = new Stopwatch();
 
             var expectedTimes = new List<TimeSpan>();
@@ -118,14 +118,14 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var inputDevice = TestDeviceManager.GetInputDevice("A");
             var outputDevice = TestDeviceManager.GetOutputDevice("A");
 
-            outputDevice.EventSent += (_, e) => sentEvents.Add(new SentEvent(e.Event, stopwatch.Elapsed));
+            outputDevice.EventSent += (_, e) => sentEvents.Add(new SentReceivedEvent(e.Event, stopwatch.Elapsed));
 
             inputDevice.StartEventsListening();
-            inputDevice.EventReceived += (_, e) => receivedEvents.Add(new ReceivedEvent(e.Event, stopwatch.Elapsed));
+            inputDevice.EventReceived += (_, e) => receivedEvents.Add(new SentReceivedEvent(e.Event, stopwatch.Elapsed));
 
             using (var recording = new Recording(tempoMap, inputDevice))
             {
-                recording.EventRecorded += (_, e) => recordedEvents.Add(new ReceivedEvent(e.Event, stopwatch.Elapsed));
+                recording.EventRecorded += (_, e) => recordedEvents.Add(new SentReceivedEvent(e.Event, stopwatch.Elapsed));
 
                 var sendingThread = new Thread(() =>
                 {
@@ -162,8 +162,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         #region Private methods
 
         private void CompareSentReceivedEvents(
-            IReadOnlyList<SentEvent> sentEvents,
-            IReadOnlyList<ReceivedEvent> receivedEvents,
+            IReadOnlyList<SentReceivedEvent> sentEvents,
+            IReadOnlyList<SentReceivedEvent> receivedEvents,
             IReadOnlyList<TimeSpan> expectedTimes)
         {
             ClassicAssert.AreEqual(expectedTimes.Count, receivedEvents.Count, "Received events count is invalid.");

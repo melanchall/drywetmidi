@@ -72,14 +72,19 @@ namespace Melanchall.DryWetMidi.Tests.Common
             return GetValidFilesPaths().Select(p => MidiFile.Read(p)).Where(file => filters.All(f => f(file)));
         }
 
-        public static IEnumerable<string> GetValidFilesPaths()
+        public static IEnumerable<string> GetValidFilesPaths(MidiFileFormat? format = null)
         {
-            return Directory
-                .GetFiles(GetValidFilesDirectory(), "*.*", SearchOption.AllDirectories)
-#if COVERAGE
-                .Take(1)
-#endif
-                ;
+            var result = Directory
+                .GetFiles(GetValidFilesDirectory(), "*.*", SearchOption.AllDirectories);
+
+            if (format != null)
+            {
+                result = result
+                    .Where(p => p.Contains($"{format}"))
+                    .ToArray();
+            }
+
+            return result;
         }
 
         public static string GetValidFilesDirectory()

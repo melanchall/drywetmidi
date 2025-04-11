@@ -30,13 +30,16 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new DynamicPlaybackAction(500,
-                        (playback, collection) => collection.Remove(objectToRemove)),
+                    new DynamicPlaybackAction(500, (playback, collection) =>
+                    {
+                        collection.Remove(objectToRemove);
+                        CheckDuration(TimeSpan.FromMilliseconds(1000), playback);
+                    }),
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1000)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1000)),
                 });
         }
 
@@ -55,14 +58,17 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new DynamicPlaybackAction(500,
-                        (playback, collection) => collection.Remove(objectToRemove)),
+                    new DynamicPlaybackAction(500, (playback, collection) =>
+                    {
+                        collection.Remove(objectToRemove);
+                        CheckDuration(TimeSpan.FromMilliseconds(1000), playback);
+                    }),
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
-                    new ReceivedEvent(new TextEvent("A"), TimeSpan.FromMilliseconds(300)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1000)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
+                    new SentReceivedEvent(new TextEvent("A"), TimeSpan.FromMilliseconds(300)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1000)),
                 });
         }
 
@@ -81,12 +87,16 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new DynamicPlaybackAction(200,
-                        (playback, collection) => collection.Remove(objectToRemove)),
+                    new DynamicPlaybackAction(200, (playback, collection) =>
+                    {
+                        CheckDuration(TimeSpan.FromMilliseconds(500), playback);
+                        collection.Remove(objectToRemove);
+                        CheckDuration(TimeSpan.FromMilliseconds(0), playback);
+                    }),
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new TextEvent("A"), TimeSpan.FromMilliseconds(0)),
+                    new SentReceivedEvent(new TextEvent("A"), TimeSpan.FromMilliseconds(0)),
                 });
         }
 
@@ -117,21 +127,25 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new DynamicPlaybackAction(200,
-                        (playback, collection) => collection.Remove(objectsToRemove[indexToRemove])),
+                    new DynamicPlaybackAction(200, (playback, collection) =>
+                    {
+                        CheckDuration(TimeSpan.FromMilliseconds(500), playback);
+                        collection.Remove(objectsToRemove[indexToRemove]);
+                        CheckDuration(TimeSpan.FromMilliseconds(500), playback);
+                    }),
                 },
                 expectedReceivedEvents:
                     new[]
                     {
-                        new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(0)),
+                        new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(0)),
                     }
                     .Concat(
                         objectsToRemove
                             .Except(new[] { objectsToRemove[indexToRemove] })
-                            .Select(o => new ReceivedEvent(((TimedEvent)o).Event, TimeSpan.FromMilliseconds(300))))
+                            .Select(o => new SentReceivedEvent(((TimedEvent)o).Event, TimeSpan.FromMilliseconds(300))))
                     .Concat(new[]
                     {
-                        new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(500)),
+                        new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(500)),
                     })
                     .ToArray());
         }
@@ -163,16 +177,19 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new DynamicPlaybackAction(500,
-                        (playback, collection) => collection.Remove(objectsToRemove[indexToRemove])),
+                    new DynamicPlaybackAction(500, (playback, collection) =>
+                    {
+                        collection.Remove(objectsToRemove[indexToRemove]);
+                        CheckDuration(TimeSpan.FromMilliseconds(700), playback);
+                    }),
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
-                    new ReceivedEvent(new TextEvent("A"), TimeSpan.FromMilliseconds(300)),
-                    new ReceivedEvent(new TextEvent("B"), TimeSpan.FromMilliseconds(300)),
-                    new ReceivedEvent(new TextEvent("C"), TimeSpan.FromMilliseconds(300)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(700)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
+                    new SentReceivedEvent(new TextEvent("A"), TimeSpan.FromMilliseconds(300)),
+                    new SentReceivedEvent(new TextEvent("B"), TimeSpan.FromMilliseconds(300)),
+                    new SentReceivedEvent(new TextEvent("C"), TimeSpan.FromMilliseconds(300)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(700)),
                 });
         }
 
@@ -194,13 +211,16 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new DynamicPlaybackAction(200,
-                        (playback, collection) => collection.Remove(objectToRemove)),
+                    new DynamicPlaybackAction(200, (playback, collection) =>
+                    {
+                        collection.Remove(objectToRemove);
+                        CheckDuration(TimeSpan.FromMilliseconds(800), playback);
+                    }),
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(800)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(800)),
                 });
         }
 
@@ -222,13 +242,16 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new DynamicPlaybackAction(400,
-                        (playback, collection) => collection.Remove(objectToRemove)),
+                    new DynamicPlaybackAction(400, (playback, collection) =>
+                    {
+                        collection.Remove(objectToRemove);
+                        CheckDuration(TimeSpan.FromMilliseconds(800), playback);
+                    }),
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(800)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(800)),
                 });
         }
 
@@ -250,15 +273,18 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new DynamicPlaybackAction(200,
-                        (playback, collection) => collection.Remove(objectToRemove)),
+                    new DynamicPlaybackAction(200, (playback, collection) =>
+                    {
+                        collection.Remove(objectToRemove);
+                        CheckDuration(TimeSpan.FromMilliseconds(800), playback);
+                    }),
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new ProgramChangeEvent((SevenBitNumber)7), TimeSpan.FromMilliseconds(50)),
-                    new ReceivedEvent(new ProgramChangeEvent(), TimeSpan.FromMilliseconds(200)),
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(800)),
+                    new SentReceivedEvent(new ProgramChangeEvent((SevenBitNumber)7), TimeSpan.FromMilliseconds(50)),
+                    new SentReceivedEvent(new ProgramChangeEvent(), TimeSpan.FromMilliseconds(200)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(800)),
                 });
         }
 
@@ -282,19 +308,25 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new DynamicPlaybackAction(200,
-                        (playback, collection) => collection.Remove(objectToRemove2)),
-                    new DynamicPlaybackAction(100,
-                        (playback, collection) => collection.Remove(objectToRemove1)),
+                    new DynamicPlaybackAction(200, (playback, collection) =>
+                    {
+                        collection.Remove(objectToRemove2);
+                        CheckDuration(TimeSpan.FromMilliseconds(700), playback);
+                    }),
+                    new DynamicPlaybackAction(100, (playback, collection) =>
+                    {
+                        collection.Remove(objectToRemove1);
+                        CheckDuration(TimeSpan.FromMilliseconds(700), playback);
+                    }),
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new ProgramChangeEvent((SevenBitNumber)7), TimeSpan.FromMilliseconds(50)),
-                    new ReceivedEvent(new ProgramChangeEvent((SevenBitNumber)8), TimeSpan.FromMilliseconds(100)),
-                    new ReceivedEvent(new ProgramChangeEvent((SevenBitNumber)7), TimeSpan.FromMilliseconds(200)),
-                    new ReceivedEvent(new ProgramChangeEvent(), TimeSpan.FromMilliseconds(300)),
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(400)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(700)),
+                    new SentReceivedEvent(new ProgramChangeEvent((SevenBitNumber)7), TimeSpan.FromMilliseconds(50)),
+                    new SentReceivedEvent(new ProgramChangeEvent((SevenBitNumber)8), TimeSpan.FromMilliseconds(100)),
+                    new SentReceivedEvent(new ProgramChangeEvent((SevenBitNumber)7), TimeSpan.FromMilliseconds(200)),
+                    new SentReceivedEvent(new ProgramChangeEvent(), TimeSpan.FromMilliseconds(300)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(400)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(700)),
                 });
         }
 
@@ -316,13 +348,16 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new DynamicPlaybackAction(200,
-                        (playback, collection) => collection.Remove(objectToRemove)),
+                    new DynamicPlaybackAction(200, (playback, collection) =>
+                    {
+                        collection.Remove(objectToRemove);
+                        CheckDuration(TimeSpan.FromMilliseconds(800), playback);
+                    }),
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(800)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(800)),
                 },
                 setupPlayback: playback => playback.TrackPitchValue = true);
         }
@@ -345,13 +380,16 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new DynamicPlaybackAction(400,
-                        (playback, collection) => collection.Remove(objectToRemove)),
+                    new DynamicPlaybackAction(400, (playback, collection) =>
+                    {
+                        collection.Remove(objectToRemove);
+                        CheckDuration(TimeSpan.FromMilliseconds(800), playback);
+                    }),
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(800)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(800)),
                 },
                 setupPlayback: playback => playback.TrackPitchValue = true);
         }
@@ -374,15 +412,18 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new DynamicPlaybackAction(200,
-                        (playback, collection) => collection.Remove(objectToRemove)),
+                    new DynamicPlaybackAction(200, (playback, collection) =>
+                    {
+                        collection.Remove(objectToRemove);
+                        CheckDuration(TimeSpan.FromMilliseconds(800), playback);
+                    }),
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new PitchBendEvent(7000), TimeSpan.FromMilliseconds(50)),
-                    new ReceivedEvent(new PitchBendEvent(), TimeSpan.FromMilliseconds(200)),
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(800)),
+                    new SentReceivedEvent(new PitchBendEvent(7000), TimeSpan.FromMilliseconds(50)),
+                    new SentReceivedEvent(new PitchBendEvent(), TimeSpan.FromMilliseconds(200)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(800)),
                 },
                 setupPlayback: playback => playback.TrackPitchValue = true);
         }
@@ -407,19 +448,25 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new DynamicPlaybackAction(200,
-                        (playback, collection) => collection.Remove(objectToRemove2)),
-                    new DynamicPlaybackAction(100,
-                        (playback, collection) => collection.Remove(objectToRemove1)),
+                    new DynamicPlaybackAction(200, (playback, collection) =>
+                    {
+                        collection.Remove(objectToRemove2);
+                        CheckDuration(TimeSpan.FromMilliseconds(700), playback);
+                    }),
+                    new DynamicPlaybackAction(100, (playback, collection) =>
+                    {
+                        collection.Remove(objectToRemove1);
+                        CheckDuration(TimeSpan.FromMilliseconds(700), playback);
+                    }),
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new PitchBendEvent(7000), TimeSpan.FromMilliseconds(50)),
-                    new ReceivedEvent(new PitchBendEvent(8000), TimeSpan.FromMilliseconds(100)),
-                    new ReceivedEvent(new PitchBendEvent(7000), TimeSpan.FromMilliseconds(200)),
-                    new ReceivedEvent(new PitchBendEvent(), TimeSpan.FromMilliseconds(300)),
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(400)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(700)),
+                    new SentReceivedEvent(new PitchBendEvent(7000), TimeSpan.FromMilliseconds(50)),
+                    new SentReceivedEvent(new PitchBendEvent(8000), TimeSpan.FromMilliseconds(100)),
+                    new SentReceivedEvent(new PitchBendEvent(7000), TimeSpan.FromMilliseconds(200)),
+                    new SentReceivedEvent(new PitchBendEvent(), TimeSpan.FromMilliseconds(300)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(400)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(700)),
                 },
                 setupPlayback: playback => playback.TrackPitchValue = true);
         }
@@ -442,13 +489,16 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new DynamicPlaybackAction(200,
-                        (playback, collection) => collection.Remove(objectToRemove)),
+                    new DynamicPlaybackAction(200, (playback, collection) =>
+                    {
+                        collection.Remove(objectToRemove);
+                        CheckDuration(TimeSpan.FromMilliseconds(800), playback);
+                    }),
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(800)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(800)),
                 },
                 setupPlayback: playback => playback.TrackControlValue = true);
         }
@@ -471,13 +521,16 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new DynamicPlaybackAction(400,
-                        (playback, collection) => collection.Remove(objectToRemove)),
+                    new DynamicPlaybackAction(400, (playback, collection) =>
+                    {
+                        collection.Remove(objectToRemove);
+                        CheckDuration(TimeSpan.FromMilliseconds(800), playback);
+                    }),
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(800)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(800)),
                 },
                 setupPlayback: playback => playback.TrackControlValue = true);
         }
@@ -500,15 +553,19 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new DynamicPlaybackAction(200,
-                        (playback, collection) => collection.Remove(objectToRemove)),
+                    new DynamicPlaybackAction(200, (playback, collection) =>
+                    {
+                        CheckDuration(TimeSpan.FromMilliseconds(800), playback);
+                        collection.Remove(objectToRemove);
+                        CheckDuration(TimeSpan.FromMilliseconds(800), playback);
+                    }),
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new ControlChangeEvent((SevenBitNumber)7, (SevenBitNumber)20), TimeSpan.FromMilliseconds(50)),
-                    new ReceivedEvent(new ControlChangeEvent((SevenBitNumber)7, SevenBitNumber.MinValue), TimeSpan.FromMilliseconds(200)),
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(800)),
+                    new SentReceivedEvent(new ControlChangeEvent((SevenBitNumber)7, (SevenBitNumber)20), TimeSpan.FromMilliseconds(50)),
+                    new SentReceivedEvent(new ControlChangeEvent((SevenBitNumber)7, SevenBitNumber.MinValue), TimeSpan.FromMilliseconds(200)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(800)),
                 },
                 setupPlayback: playback => playback.TrackControlValue = true);
         }
@@ -533,19 +590,25 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new DynamicPlaybackAction(200,
-                        (playback, collection) => collection.Remove(objectToRemove2)),
-                    new DynamicPlaybackAction(100,
-                        (playback, collection) => collection.Remove(objectToRemove1)),
+                    new DynamicPlaybackAction(200, (playback, collection) =>
+                    {
+                        collection.Remove(objectToRemove2);
+                        CheckDuration(TimeSpan.FromMilliseconds(700), playback);
+                    }),
+                    new DynamicPlaybackAction(100, (playback, collection) =>
+                    {
+                        collection.Remove(objectToRemove1);
+                        CheckDuration(TimeSpan.FromMilliseconds(700), playback);
+                    }),
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new ControlChangeEvent((SevenBitNumber)7, (SevenBitNumber)70), TimeSpan.FromMilliseconds(50)),
-                    new ReceivedEvent(new ControlChangeEvent((SevenBitNumber)7, (SevenBitNumber)80), TimeSpan.FromMilliseconds(100)),
-                    new ReceivedEvent(new ControlChangeEvent((SevenBitNumber)7, (SevenBitNumber)70), TimeSpan.FromMilliseconds(200)),
-                    new ReceivedEvent(new ControlChangeEvent((SevenBitNumber)7, SevenBitNumber.MinValue), TimeSpan.FromMilliseconds(300)),
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(400)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(700)),
+                    new SentReceivedEvent(new ControlChangeEvent((SevenBitNumber)7, (SevenBitNumber)70), TimeSpan.FromMilliseconds(50)),
+                    new SentReceivedEvent(new ControlChangeEvent((SevenBitNumber)7, (SevenBitNumber)80), TimeSpan.FromMilliseconds(100)),
+                    new SentReceivedEvent(new ControlChangeEvent((SevenBitNumber)7, (SevenBitNumber)70), TimeSpan.FromMilliseconds(200)),
+                    new SentReceivedEvent(new ControlChangeEvent((SevenBitNumber)7, SevenBitNumber.MinValue), TimeSpan.FromMilliseconds(300)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(400)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(700)),
                 },
                 setupPlayback: playback => playback.TrackControlValue = true);
         }
@@ -570,19 +633,25 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new DynamicPlaybackAction(200,
-                        (playback, collection) => collection.Remove(objectToRemove2)),
-                    new DynamicPlaybackAction(100,
-                        (playback, collection) => collection.Remove(objectToRemove1)),
+                    new DynamicPlaybackAction(200, (playback, collection) =>
+                    {
+                        collection.Remove(objectToRemove2);
+                        CheckDuration(TimeSpan.FromMilliseconds(700), playback);
+                    }),
+                    new DynamicPlaybackAction(100, (playback, collection) =>
+                    {
+                        collection.Remove(objectToRemove1);
+                        CheckDuration(TimeSpan.FromMilliseconds(700), playback);
+                    }),
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new ControlChangeEvent((SevenBitNumber)7, (SevenBitNumber)70), TimeSpan.FromMilliseconds(50)),
-                    new ReceivedEvent(new ControlChangeEvent((SevenBitNumber)8, (SevenBitNumber)80), TimeSpan.FromMilliseconds(100)),
-                    new ReceivedEvent(new ControlChangeEvent((SevenBitNumber)8, SevenBitNumber.MinValue), TimeSpan.FromMilliseconds(200)),
-                    new ReceivedEvent(new ControlChangeEvent((SevenBitNumber)7, SevenBitNumber.MinValue), TimeSpan.FromMilliseconds(300)),
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(400)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(700)),
+                    new SentReceivedEvent(new ControlChangeEvent((SevenBitNumber)7, (SevenBitNumber)70), TimeSpan.FromMilliseconds(50)),
+                    new SentReceivedEvent(new ControlChangeEvent((SevenBitNumber)8, (SevenBitNumber)80), TimeSpan.FromMilliseconds(100)),
+                    new SentReceivedEvent(new ControlChangeEvent((SevenBitNumber)8, SevenBitNumber.MinValue), TimeSpan.FromMilliseconds(200)),
+                    new SentReceivedEvent(new ControlChangeEvent((SevenBitNumber)7, SevenBitNumber.MinValue), TimeSpan.FromMilliseconds(300)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(400)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(700)),
                 },
                 setupPlayback: playback => playback.TrackControlValue = true);
         }
@@ -607,19 +676,25 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new DynamicPlaybackAction(200,
-                        (playback, collection) => collection.Remove(objectToRemove2)),
-                    new DynamicPlaybackAction(100,
-                        (playback, collection) => collection.Remove(objectToRemove1)),
+                    new DynamicPlaybackAction(200, (playback, collection) =>
+                    {
+                        collection.Remove(objectToRemove2);
+                        CheckDuration(TimeSpan.FromMilliseconds(700), playback);
+                    }),
+                    new DynamicPlaybackAction(100, (playback, collection) =>
+                    {
+                        collection.Remove(objectToRemove1);
+                        CheckDuration(TimeSpan.FromMilliseconds(700), playback);
+                    }),
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new ControlChangeEvent((SevenBitNumber)7, (SevenBitNumber)70), TimeSpan.FromMilliseconds(50)),
-                    new ReceivedEvent(new ControlChangeEvent((SevenBitNumber)7, (SevenBitNumber)80) { Channel = (FourBitNumber)6 }, TimeSpan.FromMilliseconds(100)),
-                    new ReceivedEvent(new ControlChangeEvent((SevenBitNumber)7, SevenBitNumber.MinValue) { Channel = (FourBitNumber)6 }, TimeSpan.FromMilliseconds(200)),
-                    new ReceivedEvent(new ControlChangeEvent((SevenBitNumber)7, SevenBitNumber.MinValue), TimeSpan.FromMilliseconds(300)),
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(400)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(700)),
+                    new SentReceivedEvent(new ControlChangeEvent((SevenBitNumber)7, (SevenBitNumber)70), TimeSpan.FromMilliseconds(50)),
+                    new SentReceivedEvent(new ControlChangeEvent((SevenBitNumber)7, (SevenBitNumber)80) { Channel = (FourBitNumber)6 }, TimeSpan.FromMilliseconds(100)),
+                    new SentReceivedEvent(new ControlChangeEvent((SevenBitNumber)7, SevenBitNumber.MinValue) { Channel = (FourBitNumber)6 }, TimeSpan.FromMilliseconds(200)),
+                    new SentReceivedEvent(new ControlChangeEvent((SevenBitNumber)7, SevenBitNumber.MinValue), TimeSpan.FromMilliseconds(300)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(400)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(700)),
                 },
                 setupPlayback: playback => playback.TrackControlValue = true);
         }
@@ -644,15 +719,18 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new DynamicPlaybackAction(600,
-                        (playback, collection) => collection.Remove(objectToRemove)),
+                    new DynamicPlaybackAction(600, (playback, collection) =>
+                    {
+                        collection.Remove(objectToRemove);
+                        CheckDuration(TimeSpan.FromMilliseconds(800), playback);
+                    }),
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)50, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)50, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(500)),
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(700)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(800)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)50, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)50, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(500)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(700)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(800)),
                 },
                 setupPlayback: playback => playback.TrackNotes = true);
         }
@@ -677,13 +755,17 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new DynamicPlaybackAction(450,
-                        (playback, collection) => collection.Remove(objectToRemove)),
+                    new DynamicPlaybackAction(450, (playback, collection) =>
+                    {
+                        CheckDuration(TimeSpan.FromMilliseconds(700), playback);
+                        collection.Remove(objectToRemove);
+                        CheckDuration(TimeSpan.FromMilliseconds(400), playback);
+                    }),
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(400)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(400)),
                 },
                 setupPlayback: playback => playback.TrackNotes = true);
         }
@@ -708,15 +790,19 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new DynamicPlaybackAction(200,
-                        (playback, collection) => collection.Remove(objectToRemove)),
+                    new DynamicPlaybackAction(200, (playback, collection) =>
+                    {
+                        CheckDuration(TimeSpan.FromMilliseconds(700), playback);
+                        collection.Remove(objectToRemove);
+                        CheckDuration(TimeSpan.FromMilliseconds(700), playback);
+                    }),
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)50, Note.DefaultVelocity), TimeSpan.FromMilliseconds(100)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)50, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(200)),
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(500)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(700)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)50, Note.DefaultVelocity), TimeSpan.FromMilliseconds(100)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)50, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(200)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(500)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(700)),
                 },
                 setupPlayback: playback => playback.TrackNotes = true);
         }
@@ -745,19 +831,25 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new DynamicPlaybackAction(200,
-                        (playback, collection) => collection.Remove(objectToRemove1)),
-                    new DynamicPlaybackAction(300,
-                        (playback, collection) => collection.Remove(objectToRemove2)),
+                    new DynamicPlaybackAction(200, (playback, collection) =>
+                    {
+                        collection.Remove(objectToRemove1);
+                        CheckDuration(TimeSpan.FromMilliseconds(800), playback);
+                    }),
+                    new DynamicPlaybackAction(300, (playback, collection) =>
+                    {
+                        collection.Remove(objectToRemove2);
+                        CheckDuration(TimeSpan.FromMilliseconds(800), playback);
+                    }),
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)50, Note.DefaultVelocity), TimeSpan.FromMilliseconds(100)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)50, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(200)),
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)60, Note.DefaultVelocity), TimeSpan.FromMilliseconds(450)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)60, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(500)),
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(700)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(800)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)50, Note.DefaultVelocity), TimeSpan.FromMilliseconds(100)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)50, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(200)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)60, Note.DefaultVelocity), TimeSpan.FromMilliseconds(450)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)60, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(500)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(700)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(800)),
                 },
                 setupPlayback: playback => playback.TrackNotes = true);
         }
@@ -779,13 +871,17 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new DynamicPlaybackAction(200,
-                        (playback, collection) => collection.Remove(objectToRemove)),
+                    new DynamicPlaybackAction(200, (playback, collection) =>
+                    {
+                        CheckDuration(TimeSpan.FromMilliseconds(500), playback);
+                        collection.Remove(objectToRemove);
+                        CheckDuration(TimeSpan.FromMilliseconds(0), playback);
+                    }),
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)50, Note.DefaultVelocity), TimeSpan.FromMilliseconds(100)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)50, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(200)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)50, Note.DefaultVelocity), TimeSpan.FromMilliseconds(100)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)50, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(200)),
                 },
                 setupPlayback: playback => playback.TrackNotes = true);
         }
@@ -814,17 +910,21 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new DynamicPlaybackAction(700,
-                        (playback, collection) => collection.Remove(objectToRemove1)),
+                    new DynamicPlaybackAction(700, (playback, collection) =>
+                    {
+                        CheckDuration(TimeSpan.FromMilliseconds(800), playback);
+                        collection.Remove(objectToRemove1);
+                        CheckDuration(TimeSpan.FromMilliseconds(800), playback);
+                    }),
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(200)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(500)),
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)50, Note.DefaultVelocity), TimeSpan.FromMilliseconds(600)),
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)80, Note.DefaultVelocity), TimeSpan.FromMilliseconds(600)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)50, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(700)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)80, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(800)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(200)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(500)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)50, Note.DefaultVelocity), TimeSpan.FromMilliseconds(600)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)80, Note.DefaultVelocity), TimeSpan.FromMilliseconds(600)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)50, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(700)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)80, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(800)),
                 },
                 setupPlayback: playback => playback.TrackNotes = true);
         }
@@ -844,15 +944,19 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new DynamicPlaybackAction(300,
-                        (playback, collection) => collection.Remove(objectToRemove)),
+                    new DynamicPlaybackAction(300, (playback, collection) =>
+                    {
+                        CheckDuration(TimeSpan.FromMilliseconds(500), playback);
+                        collection.Remove(objectToRemove);
+                        CheckDuration(TimeSpan.FromMilliseconds(500), playback);
+                    }),
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(500)),
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(500)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1000)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(500)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(500)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1000)),
                 },
                 repeatsCount: 1);
         }
@@ -872,16 +976,19 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new DynamicPlaybackAction(300,
-                        (playback, collection) => collection.Remove(objectToRemove)),
+                    new DynamicPlaybackAction(300, (playback, collection) =>
+                    {
+                        collection.Remove(objectToRemove);
+                        CheckDuration(TimeSpan.FromMilliseconds(500), playback);
+                    }),
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
-                    new ReceivedEvent(new TextEvent("A"), TimeSpan.FromMilliseconds(200)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(500)),
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(500)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1000)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
+                    new SentReceivedEvent(new TextEvent("A"), TimeSpan.FromMilliseconds(200)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(500)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(500)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1000)),
                 },
                 repeatsCount: 1);
         }
@@ -901,13 +1008,17 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new DynamicPlaybackAction(200,
-                        (playback, collection) => collection.Remove(objectToRemove)),
+                    new DynamicPlaybackAction(200, (playback, collection) =>
+                    {
+                        CheckDuration(TimeSpan.FromMilliseconds(500), playback);
+                        collection.Remove(objectToRemove);
+                        CheckDuration(TimeSpan.FromMilliseconds(0), playback);
+                    }),
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new TextEvent("A"), TimeSpan.FromMilliseconds(0)),
-                    new ReceivedEvent(new TextEvent("A"), TimeSpan.FromMilliseconds(200)),
+                    new SentReceivedEvent(new TextEvent("A"), TimeSpan.FromMilliseconds(0)),
+                    new SentReceivedEvent(new TextEvent("A"), TimeSpan.FromMilliseconds(200)),
                 },
                 repeatsCount: 1);
         }
@@ -932,19 +1043,22 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new DynamicPlaybackAction(200,
-                        (playback, collection) => collection.Remove(objectToRemove1)),
+                    new DynamicPlaybackAction(200, (playback, collection) =>
+                    {
+                        collection.Remove(objectToRemove1);
+                        CheckDuration(TimeSpan.FromMilliseconds(500), playback);
+                    }),
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(0)),
-                    new ReceivedEvent(new TextEvent("B"), TimeSpan.FromMilliseconds(300)),
-                    new ReceivedEvent(new TextEvent("C"), TimeSpan.FromMilliseconds(300)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(500)),
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(500)),
-                    new ReceivedEvent(new TextEvent("B"), TimeSpan.FromMilliseconds(800)),
-                    new ReceivedEvent(new TextEvent("C"), TimeSpan.FromMilliseconds(800)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1000)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(0)),
+                    new SentReceivedEvent(new TextEvent("B"), TimeSpan.FromMilliseconds(300)),
+                    new SentReceivedEvent(new TextEvent("C"), TimeSpan.FromMilliseconds(300)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(500)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(500)),
+                    new SentReceivedEvent(new TextEvent("B"), TimeSpan.FromMilliseconds(800)),
+                    new SentReceivedEvent(new TextEvent("C"), TimeSpan.FromMilliseconds(800)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1000)),
                 },
                 repeatsCount: 1);
         }
@@ -969,19 +1083,22 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new DynamicPlaybackAction(200,
-                        (playback, collection) => collection.Remove(objectToRemove2)),
+                    new DynamicPlaybackAction(200, (playback, collection) =>
+                    {
+                        collection.Remove(objectToRemove2);
+                        CheckDuration(TimeSpan.FromMilliseconds(500), playback);
+                    }),
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(0)),
-                    new ReceivedEvent(new TextEvent("A"), TimeSpan.FromMilliseconds(300)),
-                    new ReceivedEvent(new TextEvent("C"), TimeSpan.FromMilliseconds(300)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(500)),
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(500)),
-                    new ReceivedEvent(new TextEvent("A"), TimeSpan.FromMilliseconds(800)),
-                    new ReceivedEvent(new TextEvent("C"), TimeSpan.FromMilliseconds(800)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1000)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(0)),
+                    new SentReceivedEvent(new TextEvent("A"), TimeSpan.FromMilliseconds(300)),
+                    new SentReceivedEvent(new TextEvent("C"), TimeSpan.FromMilliseconds(300)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(500)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(500)),
+                    new SentReceivedEvent(new TextEvent("A"), TimeSpan.FromMilliseconds(800)),
+                    new SentReceivedEvent(new TextEvent("C"), TimeSpan.FromMilliseconds(800)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1000)),
                 },
                 repeatsCount: 1);
         }
@@ -1006,19 +1123,22 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new DynamicPlaybackAction(200,
-                        (playback, collection) => collection.Remove(objectToRemove3)),
+                    new DynamicPlaybackAction(200, (playback, collection) =>
+                    {
+                        collection.Remove(objectToRemove3);
+                        CheckDuration(TimeSpan.FromMilliseconds(500), playback);
+                    }),
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(0)),
-                    new ReceivedEvent(new TextEvent("A"), TimeSpan.FromMilliseconds(300)),
-                    new ReceivedEvent(new TextEvent("B"), TimeSpan.FromMilliseconds(300)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(500)),
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(500)),
-                    new ReceivedEvent(new TextEvent("A"), TimeSpan.FromMilliseconds(800)),
-                    new ReceivedEvent(new TextEvent("B"), TimeSpan.FromMilliseconds(800)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1000)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(0)),
+                    new SentReceivedEvent(new TextEvent("A"), TimeSpan.FromMilliseconds(300)),
+                    new SentReceivedEvent(new TextEvent("B"), TimeSpan.FromMilliseconds(300)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(500)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(500)),
+                    new SentReceivedEvent(new TextEvent("A"), TimeSpan.FromMilliseconds(800)),
+                    new SentReceivedEvent(new TextEvent("B"), TimeSpan.FromMilliseconds(800)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1000)),
                 },
                 repeatsCount: 1);
         }
@@ -1043,20 +1163,24 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new DynamicPlaybackAction(500,
-                        (playback, collection) => collection.Remove(objectToRemove1)),
+                    new DynamicPlaybackAction(500, (playback, collection) =>
+                    {
+                        CheckDuration(TimeSpan.FromMilliseconds(700), playback);
+                        collection.Remove(objectToRemove1);
+                        CheckDuration(TimeSpan.FromMilliseconds(700), playback);
+                    }),
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
-                    new ReceivedEvent(new TextEvent("A"), TimeSpan.FromMilliseconds(300)),
-                    new ReceivedEvent(new TextEvent("B"), TimeSpan.FromMilliseconds(300)),
-                    new ReceivedEvent(new TextEvent("C"), TimeSpan.FromMilliseconds(300)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(700)),
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(700)),
-                    new ReceivedEvent(new TextEvent("B"), TimeSpan.FromMilliseconds(1000)),
-                    new ReceivedEvent(new TextEvent("C"), TimeSpan.FromMilliseconds(1000)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1400)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
+                    new SentReceivedEvent(new TextEvent("A"), TimeSpan.FromMilliseconds(300)),
+                    new SentReceivedEvent(new TextEvent("B"), TimeSpan.FromMilliseconds(300)),
+                    new SentReceivedEvent(new TextEvent("C"), TimeSpan.FromMilliseconds(300)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(700)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(700)),
+                    new SentReceivedEvent(new TextEvent("B"), TimeSpan.FromMilliseconds(1000)),
+                    new SentReceivedEvent(new TextEvent("C"), TimeSpan.FromMilliseconds(1000)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1400)),
                 },
                 repeatsCount: 1);
         }
@@ -1081,20 +1205,23 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new DynamicPlaybackAction(500,
-                        (playback, collection) => collection.Remove(objectToRemove2)),
+                    new DynamicPlaybackAction(500, (playback, collection) =>
+                    {
+                        collection.Remove(objectToRemove2);
+                        CheckDuration(TimeSpan.FromMilliseconds(700), playback);
+                    }),
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
-                    new ReceivedEvent(new TextEvent("A"), TimeSpan.FromMilliseconds(300)),
-                    new ReceivedEvent(new TextEvent("B"), TimeSpan.FromMilliseconds(300)),
-                    new ReceivedEvent(new TextEvent("C"), TimeSpan.FromMilliseconds(300)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(700)),
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(700)),
-                    new ReceivedEvent(new TextEvent("A"), TimeSpan.FromMilliseconds(1000)),
-                    new ReceivedEvent(new TextEvent("C"), TimeSpan.FromMilliseconds(1000)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1400)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
+                    new SentReceivedEvent(new TextEvent("A"), TimeSpan.FromMilliseconds(300)),
+                    new SentReceivedEvent(new TextEvent("B"), TimeSpan.FromMilliseconds(300)),
+                    new SentReceivedEvent(new TextEvent("C"), TimeSpan.FromMilliseconds(300)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(700)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(700)),
+                    new SentReceivedEvent(new TextEvent("A"), TimeSpan.FromMilliseconds(1000)),
+                    new SentReceivedEvent(new TextEvent("C"), TimeSpan.FromMilliseconds(1000)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1400)),
                 },
                 repeatsCount: 1);
         }
@@ -1119,20 +1246,23 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new DynamicPlaybackAction(500,
-                        (playback, collection) => collection.Remove(objectToRemove3)),
+                    new DynamicPlaybackAction(500, (playback, collection) =>
+                    {
+                        collection.Remove(objectToRemove3);
+                        CheckDuration(TimeSpan.FromMilliseconds(700), playback);
+                    }),
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
-                    new ReceivedEvent(new TextEvent("A"), TimeSpan.FromMilliseconds(300)),
-                    new ReceivedEvent(new TextEvent("B"), TimeSpan.FromMilliseconds(300)),
-                    new ReceivedEvent(new TextEvent("C"), TimeSpan.FromMilliseconds(300)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(700)),
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(700)),
-                    new ReceivedEvent(new TextEvent("A"), TimeSpan.FromMilliseconds(1000)),
-                    new ReceivedEvent(new TextEvent("B"), TimeSpan.FromMilliseconds(1000)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1400)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
+                    new SentReceivedEvent(new TextEvent("A"), TimeSpan.FromMilliseconds(300)),
+                    new SentReceivedEvent(new TextEvent("B"), TimeSpan.FromMilliseconds(300)),
+                    new SentReceivedEvent(new TextEvent("C"), TimeSpan.FromMilliseconds(300)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(700)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(700)),
+                    new SentReceivedEvent(new TextEvent("A"), TimeSpan.FromMilliseconds(1000)),
+                    new SentReceivedEvent(new TextEvent("B"), TimeSpan.FromMilliseconds(1000)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1400)),
                 },
                 repeatsCount: 1);
         }
@@ -1155,15 +1285,18 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new DynamicPlaybackAction(200,
-                        (playback, collection) => collection.Remove(objectToRemove)),
+                    new DynamicPlaybackAction(200, (playback, collection) =>
+                    {
+                        collection.Remove(objectToRemove);
+                        CheckDuration(TimeSpan.FromMilliseconds(800), playback);
+                    }),
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(800)),
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(1100)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1600)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(800)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(1100)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1600)),
                 },
                 repeatsCount: 1);
         }
@@ -1186,15 +1319,18 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new DynamicPlaybackAction(400,
-                        (playback, collection) => collection.Remove(objectToRemove)),
+                    new DynamicPlaybackAction(400, (playback, collection) =>
+                    {
+                        collection.Remove(objectToRemove);
+                        CheckDuration(TimeSpan.FromMilliseconds(800), playback);
+                    }),
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(800)),
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(1100)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1600)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(800)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(1100)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1600)),
                 },
                 repeatsCount: 1);
         }
@@ -1217,17 +1353,20 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new DynamicPlaybackAction(200,
-                        (playback, collection) => collection.Remove(objectToRemove)),
+                    new DynamicPlaybackAction(200, (playback, collection) =>
+                    {
+                        collection.Remove(objectToRemove);
+                        CheckDuration(TimeSpan.FromMilliseconds(800), playback);
+                    }),
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new ProgramChangeEvent((SevenBitNumber)7), TimeSpan.FromMilliseconds(50)),
-                    new ReceivedEvent(new ProgramChangeEvent(), TimeSpan.FromMilliseconds(200)),
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(800)),
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(1100)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1600)),
+                    new SentReceivedEvent(new ProgramChangeEvent((SevenBitNumber)7), TimeSpan.FromMilliseconds(50)),
+                    new SentReceivedEvent(new ProgramChangeEvent(), TimeSpan.FromMilliseconds(200)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(800)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(1100)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1600)),
                 },
                 repeatsCount: 1);
         }
@@ -1252,21 +1391,28 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new DynamicPlaybackAction(200,
-                        (playback, collection) => collection.Remove(objectToRemove2)),
-                    new DynamicPlaybackAction(100,
-                        (playback, collection) => collection.Remove(objectToRemove1)),
+                    new DynamicPlaybackAction(200, (playback, collection) =>
+                    {
+                        collection.Remove(objectToRemove2);
+                        CheckDuration(TimeSpan.FromMilliseconds(700), playback);
+                    }),
+                    new DynamicPlaybackAction(100, (playback, collection) =>
+                    {
+                        CheckDuration(TimeSpan.FromMilliseconds(700), playback);
+                        collection.Remove(objectToRemove1);
+                        CheckDuration(TimeSpan.FromMilliseconds(700), playback);
+                    }),
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new ProgramChangeEvent((SevenBitNumber)7), TimeSpan.FromMilliseconds(50)),
-                    new ReceivedEvent(new ProgramChangeEvent((SevenBitNumber)8), TimeSpan.FromMilliseconds(100)),
-                    new ReceivedEvent(new ProgramChangeEvent((SevenBitNumber)7), TimeSpan.FromMilliseconds(200)),
-                    new ReceivedEvent(new ProgramChangeEvent(), TimeSpan.FromMilliseconds(300)),
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(400)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(700)),
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(1100)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1400)),
+                    new SentReceivedEvent(new ProgramChangeEvent((SevenBitNumber)7), TimeSpan.FromMilliseconds(50)),
+                    new SentReceivedEvent(new ProgramChangeEvent((SevenBitNumber)8), TimeSpan.FromMilliseconds(100)),
+                    new SentReceivedEvent(new ProgramChangeEvent((SevenBitNumber)7), TimeSpan.FromMilliseconds(200)),
+                    new SentReceivedEvent(new ProgramChangeEvent(), TimeSpan.FromMilliseconds(300)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(400)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(700)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(1100)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1400)),
                 },
                 repeatsCount: 1);
         }
@@ -1289,15 +1435,18 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new DynamicPlaybackAction(200,
-                        (playback, collection) => collection.Remove(objectToRemove)),
+                    new DynamicPlaybackAction(200, (playback, collection) =>
+                    {
+                        collection.Remove(objectToRemove);
+                        CheckDuration(TimeSpan.FromMilliseconds(800), playback);
+                    }),
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(800)),
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(1100)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1600)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(800)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(1100)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1600)),
                 },
                 setupPlayback: playback => playback.TrackPitchValue = true,
                 repeatsCount: 1);
@@ -1321,15 +1470,18 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new DynamicPlaybackAction(400,
-                        (playback, collection) => collection.Remove(objectToRemove)),
+                    new DynamicPlaybackAction(400, (playback, collection) =>
+                    {
+                        collection.Remove(objectToRemove);
+                        CheckDuration(TimeSpan.FromMilliseconds(800), playback);
+                    }),
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(800)),
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(1100)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1600)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(800)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(1100)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1600)),
                 },
                 setupPlayback: playback => playback.TrackPitchValue = true,
                 repeatsCount: 1);
@@ -1353,17 +1505,21 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new DynamicPlaybackAction(200,
-                        (playback, collection) => collection.Remove(objectToRemove)),
+                    new DynamicPlaybackAction(200, (playback, collection) =>
+                    {
+                        CheckDuration(TimeSpan.FromMilliseconds(800), playback);
+                        collection.Remove(objectToRemove);
+                        CheckDuration(TimeSpan.FromMilliseconds(800), playback);
+                    }),
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new PitchBendEvent(7000), TimeSpan.FromMilliseconds(50)),
-                    new ReceivedEvent(new PitchBendEvent(), TimeSpan.FromMilliseconds(200)),
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(800)),
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(1100)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1600)),
+                    new SentReceivedEvent(new PitchBendEvent(7000), TimeSpan.FromMilliseconds(50)),
+                    new SentReceivedEvent(new PitchBendEvent(), TimeSpan.FromMilliseconds(200)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(800)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(1100)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1600)),
                 },
                 setupPlayback: playback => playback.TrackPitchValue = true,
                 repeatsCount: 1);
@@ -1389,21 +1545,27 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new DynamicPlaybackAction(200,
-                        (playback, collection) => collection.Remove(objectToRemove2)),
-                    new DynamicPlaybackAction(100,
-                        (playback, collection) => collection.Remove(objectToRemove1)),
+                    new DynamicPlaybackAction(200, (playback, collection) =>
+                    {
+                        collection.Remove(objectToRemove2);
+                        CheckDuration(TimeSpan.FromMilliseconds(700), playback);
+                    }),
+                    new DynamicPlaybackAction(100, (playback, collection) =>
+                    {
+                        collection.Remove(objectToRemove1);
+                        CheckDuration(TimeSpan.FromMilliseconds(700), playback);
+                    }),
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new PitchBendEvent(7000), TimeSpan.FromMilliseconds(50)),
-                    new ReceivedEvent(new PitchBendEvent(8000), TimeSpan.FromMilliseconds(100)),
-                    new ReceivedEvent(new PitchBendEvent(7000), TimeSpan.FromMilliseconds(200)),
-                    new ReceivedEvent(new PitchBendEvent(), TimeSpan.FromMilliseconds(300)),
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(400)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(700)),
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(1100)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1400)),
+                    new SentReceivedEvent(new PitchBendEvent(7000), TimeSpan.FromMilliseconds(50)),
+                    new SentReceivedEvent(new PitchBendEvent(8000), TimeSpan.FromMilliseconds(100)),
+                    new SentReceivedEvent(new PitchBendEvent(7000), TimeSpan.FromMilliseconds(200)),
+                    new SentReceivedEvent(new PitchBendEvent(), TimeSpan.FromMilliseconds(300)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(400)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(700)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(1100)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1400)),
                 },
                 setupPlayback: playback => playback.TrackPitchValue = true,
                 repeatsCount: 1);
@@ -1427,15 +1589,18 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new DynamicPlaybackAction(200,
-                        (playback, collection) => collection.Remove(objectToRemove)),
+                    new DynamicPlaybackAction(200, (playback, collection) =>
+                    {
+                        collection.Remove(objectToRemove);
+                        CheckDuration(TimeSpan.FromMilliseconds(800), playback);
+                    }),
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(800)),
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(1100)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1600)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(800)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(1100)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1600)),
                 },
                 setupPlayback: playback => playback.TrackControlValue = true,
                 repeatsCount: 1);
@@ -1459,15 +1624,19 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new DynamicPlaybackAction(400,
-                        (playback, collection) => collection.Remove(objectToRemove)),
+                    new DynamicPlaybackAction(400, (playback, collection) =>
+                    {
+                        CheckDuration(TimeSpan.FromMilliseconds(800), playback);
+                        collection.Remove(objectToRemove);
+                        CheckDuration(TimeSpan.FromMilliseconds(800), playback);
+                    }),
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(800)),
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(1100)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1600)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(800)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(1100)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1600)),
                 },
                 setupPlayback: playback => playback.TrackControlValue = true,
                 repeatsCount: 1);
@@ -1491,17 +1660,20 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new DynamicPlaybackAction(200,
-                        (playback, collection) => collection.Remove(objectToRemove)),
+                    new DynamicPlaybackAction(200, (playback, collection) =>
+                    {
+                        collection.Remove(objectToRemove);
+                        CheckDuration(TimeSpan.FromMilliseconds(800), playback);
+                    }),
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new ControlChangeEvent((SevenBitNumber)7, (SevenBitNumber)20), TimeSpan.FromMilliseconds(50)),
-                    new ReceivedEvent(new ControlChangeEvent((SevenBitNumber)7, SevenBitNumber.MinValue), TimeSpan.FromMilliseconds(200)),
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(800)),
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(1100)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1600)),
+                    new SentReceivedEvent(new ControlChangeEvent((SevenBitNumber)7, (SevenBitNumber)20), TimeSpan.FromMilliseconds(50)),
+                    new SentReceivedEvent(new ControlChangeEvent((SevenBitNumber)7, SevenBitNumber.MinValue), TimeSpan.FromMilliseconds(200)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(800)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(1100)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1600)),
                 },
                 setupPlayback: playback => playback.TrackControlValue = true,
                 repeatsCount: 1);
@@ -1527,21 +1699,27 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new DynamicPlaybackAction(200,
-                        (playback, collection) => collection.Remove(objectToRemove2)),
-                    new DynamicPlaybackAction(100,
-                        (playback, collection) => collection.Remove(objectToRemove1)),
+                    new DynamicPlaybackAction(200, (playback, collection) =>
+                    {
+                        collection.Remove(objectToRemove2);
+                        CheckDuration(TimeSpan.FromMilliseconds(700), playback);
+                    }),
+                    new DynamicPlaybackAction(100, (playback, collection) =>
+                    {
+                        collection.Remove(objectToRemove1);
+                        CheckDuration(TimeSpan.FromMilliseconds(700), playback);
+                    }),
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new ControlChangeEvent((SevenBitNumber)7, (SevenBitNumber)70), TimeSpan.FromMilliseconds(50)),
-                    new ReceivedEvent(new ControlChangeEvent((SevenBitNumber)7, (SevenBitNumber)80), TimeSpan.FromMilliseconds(100)),
-                    new ReceivedEvent(new ControlChangeEvent((SevenBitNumber)7, (SevenBitNumber)70), TimeSpan.FromMilliseconds(200)),
-                    new ReceivedEvent(new ControlChangeEvent((SevenBitNumber)7, SevenBitNumber.MinValue), TimeSpan.FromMilliseconds(300)),
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(400)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(700)),
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(1100)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1400)),
+                    new SentReceivedEvent(new ControlChangeEvent((SevenBitNumber)7, (SevenBitNumber)70), TimeSpan.FromMilliseconds(50)),
+                    new SentReceivedEvent(new ControlChangeEvent((SevenBitNumber)7, (SevenBitNumber)80), TimeSpan.FromMilliseconds(100)),
+                    new SentReceivedEvent(new ControlChangeEvent((SevenBitNumber)7, (SevenBitNumber)70), TimeSpan.FromMilliseconds(200)),
+                    new SentReceivedEvent(new ControlChangeEvent((SevenBitNumber)7, SevenBitNumber.MinValue), TimeSpan.FromMilliseconds(300)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(400)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(700)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(1100)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1400)),
                 },
                 setupPlayback: playback => playback.TrackControlValue = true,
                 repeatsCount: 1);
@@ -1567,21 +1745,27 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new DynamicPlaybackAction(200,
-                        (playback, collection) => collection.Remove(objectToRemove2)),
-                    new DynamicPlaybackAction(100,
-                        (playback, collection) => collection.Remove(objectToRemove1)),
+                    new DynamicPlaybackAction(200, (playback, collection) =>
+                    {
+                        collection.Remove(objectToRemove2);
+                        CheckDuration(TimeSpan.FromMilliseconds(700), playback);
+                    }),
+                    new DynamicPlaybackAction(100, (playback, collection) =>
+                    {
+                        collection.Remove(objectToRemove1);
+                        CheckDuration(TimeSpan.FromMilliseconds(700), playback);
+                    }),
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new ControlChangeEvent((SevenBitNumber)7, (SevenBitNumber)70), TimeSpan.FromMilliseconds(50)),
-                    new ReceivedEvent(new ControlChangeEvent((SevenBitNumber)8, (SevenBitNumber)80), TimeSpan.FromMilliseconds(100)),
-                    new ReceivedEvent(new ControlChangeEvent((SevenBitNumber)8, SevenBitNumber.MinValue), TimeSpan.FromMilliseconds(200)),
-                    new ReceivedEvent(new ControlChangeEvent((SevenBitNumber)7, SevenBitNumber.MinValue), TimeSpan.FromMilliseconds(300)),
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(400)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(700)),
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(1100)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1400)),
+                    new SentReceivedEvent(new ControlChangeEvent((SevenBitNumber)7, (SevenBitNumber)70), TimeSpan.FromMilliseconds(50)),
+                    new SentReceivedEvent(new ControlChangeEvent((SevenBitNumber)8, (SevenBitNumber)80), TimeSpan.FromMilliseconds(100)),
+                    new SentReceivedEvent(new ControlChangeEvent((SevenBitNumber)8, SevenBitNumber.MinValue), TimeSpan.FromMilliseconds(200)),
+                    new SentReceivedEvent(new ControlChangeEvent((SevenBitNumber)7, SevenBitNumber.MinValue), TimeSpan.FromMilliseconds(300)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(400)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(700)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(1100)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1400)),
                 },
                 setupPlayback: playback => playback.TrackControlValue = true,
                 repeatsCount: 1);
@@ -1607,21 +1791,27 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new DynamicPlaybackAction(200,
-                        (playback, collection) => collection.Remove(objectToRemove2)),
-                    new DynamicPlaybackAction(100,
-                        (playback, collection) => collection.Remove(objectToRemove1)),
+                    new DynamicPlaybackAction(200, (playback, collection) =>
+                    {
+                        collection.Remove(objectToRemove2);
+                        CheckDuration(TimeSpan.FromMilliseconds(700), playback);
+                    }),
+                    new DynamicPlaybackAction(100, (playback, collection) =>
+                    {
+                        collection.Remove(objectToRemove1);
+                        CheckDuration(TimeSpan.FromMilliseconds(700), playback);
+                    }),
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new ControlChangeEvent((SevenBitNumber)7, (SevenBitNumber)70), TimeSpan.FromMilliseconds(50)),
-                    new ReceivedEvent(new ControlChangeEvent((SevenBitNumber)7, (SevenBitNumber)80) { Channel = (FourBitNumber)6 }, TimeSpan.FromMilliseconds(100)),
-                    new ReceivedEvent(new ControlChangeEvent((SevenBitNumber)7, SevenBitNumber.MinValue) { Channel = (FourBitNumber)6 }, TimeSpan.FromMilliseconds(200)),
-                    new ReceivedEvent(new ControlChangeEvent((SevenBitNumber)7, SevenBitNumber.MinValue), TimeSpan.FromMilliseconds(300)),
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(400)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(700)),
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(1100)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1400)),
+                    new SentReceivedEvent(new ControlChangeEvent((SevenBitNumber)7, (SevenBitNumber)70), TimeSpan.FromMilliseconds(50)),
+                    new SentReceivedEvent(new ControlChangeEvent((SevenBitNumber)7, (SevenBitNumber)80) { Channel = (FourBitNumber)6 }, TimeSpan.FromMilliseconds(100)),
+                    new SentReceivedEvent(new ControlChangeEvent((SevenBitNumber)7, SevenBitNumber.MinValue) { Channel = (FourBitNumber)6 }, TimeSpan.FromMilliseconds(200)),
+                    new SentReceivedEvent(new ControlChangeEvent((SevenBitNumber)7, SevenBitNumber.MinValue), TimeSpan.FromMilliseconds(300)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(400)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(700)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(1100)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1400)),
                 },
                 setupPlayback: playback => playback.TrackControlValue = true,
                 repeatsCount: 1);
@@ -1647,17 +1837,20 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new DynamicPlaybackAction(600,
-                        (playback, collection) => collection.Remove(objectToRemove)),
+                    new DynamicPlaybackAction(600, (playback, collection) =>
+                    {
+                        collection.Remove(objectToRemove);
+                        CheckDuration(TimeSpan.FromMilliseconds(800), playback);
+                    }),
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)50, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)50, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(500)),
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(700)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(800)),
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(1500)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1600)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)50, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)50, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(500)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(700)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(800)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(1500)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1600)),
                 },
                 setupPlayback: playback => playback.TrackNotes = true,
                 repeatsCount: 1);
@@ -1683,15 +1876,19 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new DynamicPlaybackAction(450,
-                        (playback, collection) => collection.Remove(objectToRemove)),
+                    new DynamicPlaybackAction(450, (playback, collection) =>
+                    {
+                        CheckDuration(TimeSpan.FromMilliseconds(700), playback);
+                        collection.Remove(objectToRemove);
+                        CheckDuration(TimeSpan.FromMilliseconds(400), playback);
+                    }),
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(400)),
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(750)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(850)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(400)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(750)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(850)),
                 },
                 setupPlayback: playback => playback.TrackNotes = true,
                 repeatsCount: 1);
@@ -1717,17 +1914,21 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new DynamicPlaybackAction(200,
-                        (playback, collection) => collection.Remove(objectToRemove)),
+                    new DynamicPlaybackAction(200, (playback, collection) =>
+                    {
+                        CheckDuration(TimeSpan.FromMilliseconds(700), playback);
+                        collection.Remove(objectToRemove);
+                        CheckDuration(TimeSpan.FromMilliseconds(700), playback);
+                    }),
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)50, Note.DefaultVelocity), TimeSpan.FromMilliseconds(100)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)50, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(200)),
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(500)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(700)),
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(1200)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1400)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)50, Note.DefaultVelocity), TimeSpan.FromMilliseconds(100)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)50, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(200)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(500)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(700)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(1200)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1400)),
                 },
                 setupPlayback: playback => playback.TrackNotes = true,
                 repeatsCount: 1);
@@ -1757,21 +1958,27 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new DynamicPlaybackAction(200,
-                        (playback, collection) => collection.Remove(objectToRemove1)),
-                    new DynamicPlaybackAction(300,
-                        (playback, collection) => collection.Remove(objectToRemove2)),
+                    new DynamicPlaybackAction(200, (playback, collection) =>
+                    {
+                        collection.Remove(objectToRemove1);
+                        CheckDuration(TimeSpan.FromMilliseconds(800), playback);
+                    }),
+                    new DynamicPlaybackAction(300, (playback, collection) =>
+                    {
+                        collection.Remove(objectToRemove2);
+                        CheckDuration(TimeSpan.FromMilliseconds(800), playback);
+                    }),
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)50, Note.DefaultVelocity), TimeSpan.FromMilliseconds(100)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)50, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(200)),
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)60, Note.DefaultVelocity), TimeSpan.FromMilliseconds(450)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)60, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(500)),
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(700)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(800)),
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(1500)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1600)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)50, Note.DefaultVelocity), TimeSpan.FromMilliseconds(100)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)50, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(200)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)60, Note.DefaultVelocity), TimeSpan.FromMilliseconds(450)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)60, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(500)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(700)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(800)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(1500)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1600)),
                 },
                 setupPlayback: playback => playback.TrackNotes = true,
                 repeatsCount: 1);
@@ -1794,13 +2001,17 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new DynamicPlaybackAction(200,
-                        (playback, collection) => collection.Remove(objectToRemove)),
+                    new DynamicPlaybackAction(200, (playback, collection) =>
+                    {
+                        CheckDuration(TimeSpan.FromMilliseconds(500), playback);
+                        collection.Remove(objectToRemove);
+                        CheckDuration(TimeSpan.FromMilliseconds(0), playback);
+                    }),
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)50, Note.DefaultVelocity), TimeSpan.FromMilliseconds(100)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)50, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(200)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)50, Note.DefaultVelocity), TimeSpan.FromMilliseconds(100)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)50, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(200)),
                 },
                 setupPlayback: playback => playback.TrackNotes = true,
                 repeatsCount: 1);
@@ -1830,21 +2041,25 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new DynamicPlaybackAction(700,
-                        (playback, collection) => collection.Remove(objectToRemove1)),
+                    new DynamicPlaybackAction(700, (playback, collection) =>
+                    {
+                        CheckDuration(TimeSpan.FromMilliseconds(800), playback);
+                        collection.Remove(objectToRemove1);
+                        CheckDuration(TimeSpan.FromMilliseconds(800), playback);
+                    }),
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(200)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(500)),
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)50, Note.DefaultVelocity), TimeSpan.FromMilliseconds(600)),
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)80, Note.DefaultVelocity), TimeSpan.FromMilliseconds(600)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)50, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(700)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)80, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(800)),
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(1000)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1300)),
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)80, Note.DefaultVelocity), TimeSpan.FromMilliseconds(1400)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)80, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1600)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(200)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(500)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)50, Note.DefaultVelocity), TimeSpan.FromMilliseconds(600)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)80, Note.DefaultVelocity), TimeSpan.FromMilliseconds(600)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)50, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(700)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)80, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(800)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(1000)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1300)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)80, Note.DefaultVelocity), TimeSpan.FromMilliseconds(1400)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)80, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1600)),
                 },
                 setupPlayback: playback => playback.TrackNotes = true,
                 repeatsCount: 1);
@@ -1872,10 +2087,14 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new DynamicPlaybackAction(100,
-                        (playback, collection) => collection.Remove(removeNoteOn ? objectToRemove1 : objectToRemove2)),
+                    new DynamicPlaybackAction(100, (playback, collection) =>
+                    {
+                        CheckDuration(TimeSpan.FromMilliseconds(400), playback);
+                        collection.Remove(removeNoteOn ? objectToRemove1 : objectToRemove2);
+                        CheckDuration(TimeSpan.FromMilliseconds(0), playback);
+                    }),
                 },
-                expectedReceivedEvents: new ReceivedEvent[0]
+                expectedReceivedEvents: new SentReceivedEvent[0]
                 {
                 },
                 setupPlayback: playback =>
@@ -1912,13 +2131,17 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new DynamicPlaybackAction(300,
-                        (playback, collection) => collection.Remove(removeNoteOn ? objectToRemove1 : objectToRemove2)),
+                    new DynamicPlaybackAction(300, (playback, collection) =>
+                    {
+                        CheckDuration(TimeSpan.FromMilliseconds(400), playback);
+                        collection.Remove(removeNoteOn ? objectToRemove1 : objectToRemove2);
+                        CheckDuration(TimeSpan.FromMilliseconds(0), playback);
+                    }),
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)50, Note.DefaultVelocity), TimeSpan.FromMilliseconds(200)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)50, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(300)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)50, Note.DefaultVelocity), TimeSpan.FromMilliseconds(200)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)50, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(300)),
                 },
                 setupPlayback: playback =>
                 {
@@ -1961,22 +2184,35 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new DynamicPlaybackAction(50,
-                        (playback, collection) => collection.Remove(objectToRemove1)),
-                    new DynamicPlaybackAction(50,
-                        (playback, collection) => collection.Add(objectToAdd1)),
-                    new DynamicPlaybackAction(250,
-                        (playback, collection) => collection.Remove(objectToRemove2)),
-                    new DynamicPlaybackAction(50,
-                        (playback, collection) => collection.Add(objectToAdd2)),
+                    new DynamicPlaybackAction(50, (playback, collection) =>
+                    {
+                        CheckDuration(TimeSpan.FromMilliseconds(700), playback);
+                        collection.Remove(objectToRemove1);
+                        CheckDuration(TimeSpan.FromMilliseconds(700), playback);
+                    }),
+                    new DynamicPlaybackAction(50, (playback, collection) =>
+                    {
+                        collection.Add(objectToAdd1);
+                        CheckDuration(TimeSpan.FromMilliseconds(700), playback);
+                    }),
+                    new DynamicPlaybackAction(250, (playback, collection) =>
+                    {
+                        collection.Remove(objectToRemove2);
+                        CheckDuration(TimeSpan.FromMilliseconds(700), playback);
+                    }),
+                    new DynamicPlaybackAction(50, (playback, collection) =>
+                    {
+                        collection.Add(objectToAdd2);
+                        CheckDuration(TimeSpan.FromMilliseconds(700), playback);
+                    }),
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)50, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)50, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(350)),
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)50, Note.DefaultVelocity), TimeSpan.FromMilliseconds(400)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)50, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(600)),
-                    new ReceivedEvent(new TextEvent("END"), TimeSpan.FromMilliseconds(700)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)50, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)50, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(350)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)50, Note.DefaultVelocity), TimeSpan.FromMilliseconds(400)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)50, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(600)),
+                    new SentReceivedEvent(new TextEvent("END"), TimeSpan.FromMilliseconds(700)),
                 },
                 setupPlayback: playback =>
                 {
@@ -2014,12 +2250,16 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialObjects: initialObjects,
                 actions: new[]
                 {
-                    new DynamicPlaybackAction(100,
-                        (playback, collection) => collection.Remove(objectToRemove1, objectToRemove2)),
+                    new DynamicPlaybackAction(100, (playback, collection) =>
+                    {
+                        CheckDuration(TimeSpan.FromMilliseconds(500), playback);
+                        collection.Remove(objectToRemove1, objectToRemove2);
+                        CheckDuration(TimeSpan.FromMilliseconds(500), playback);
+                    }),
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new TextEvent("END"), TimeSpan.FromMilliseconds(500)),
+                    new SentReceivedEvent(new TextEvent("END"), TimeSpan.FromMilliseconds(500)),
                 },
                 setupPlayback: playback =>
                 {
@@ -2055,16 +2295,18 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 {
                     new DynamicPlaybackAction(150, (playback, collection) =>
                     {
+                        CheckDuration(TimeSpan.FromMilliseconds(550), playback);
                         collection.Remove(objectToRemove);
                         CheckCurrentTime(playback, TimeSpan.FromMilliseconds(150), "after remove");
+                        CheckDuration(TimeSpan.FromMilliseconds(900), playback);
                     }),
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(100)),
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)90, Note.DefaultVelocity), TimeSpan.FromMilliseconds(400)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)90, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(900)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(100)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)90, Note.DefaultVelocity), TimeSpan.FromMilliseconds(400)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)90, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(900)),
                 },
                 additionalChecks: playback => MidiAsserts.AreEqual(
                     TempoMap,
@@ -2094,17 +2336,19 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 {
                     new DynamicPlaybackAction(400, (playback, collection) =>
                     {
+                        CheckDuration(TimeSpan.FromMilliseconds(550), playback);
                         collection.Remove(objectToRemove);
                         CheckCurrentTime(playback, TimeSpan.FromMilliseconds(600), "after remove");
+                        CheckDuration(TimeSpan.FromMilliseconds(900), playback);
                     }),
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(100)),
-                    new ReceivedEvent(new SetTempoEvent(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 2), TimeSpan.FromMilliseconds(200)),
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)90, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)90, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(700)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(100)),
+                    new SentReceivedEvent(new SetTempoEvent(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 2), TimeSpan.FromMilliseconds(200)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)90, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)90, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(700)),
                 },
                 additionalChecks: playback => MidiAsserts.AreEqual(
                     TempoMap,
@@ -2131,14 +2375,16 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 {
                     new DynamicPlaybackAction(50, (playback, collection) =>
                     {
+                        CheckDuration(TimeSpan.FromMilliseconds(300), playback);
                         collection.Remove(objectToRemove);
                         CheckCurrentTime(playback, TimeSpan.FromMilliseconds(50), "after remove");
+                        CheckDuration(TimeSpan.FromMilliseconds(100), playback);
                     }),
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(100)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(100)),
                 },
                 additionalChecks: playback => MidiAsserts.AreEqual(
                     TempoMap,
@@ -2165,14 +2411,16 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 {
                     new DynamicPlaybackAction(200, (playback, collection) =>
                     {
+                        CheckDuration(TimeSpan.FromMilliseconds(300), playback);
                         collection.Remove(objectToRemove);
                         CheckCurrentTime(playback, TimeSpan.FromMilliseconds(200), "after remove");
+                        CheckDuration(TimeSpan.FromMilliseconds(100), playback);
                     }),
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(100)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(100)),
                 },
                 additionalChecks: playback => MidiAsserts.AreEqual(
                     TempoMap,
@@ -2204,17 +2452,19 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 {
                     new DynamicPlaybackAction(50, (playback, collection) =>
                     {
+                        CheckDuration(TimeSpan.FromMilliseconds(400), playback);
                         collection.Remove(objectToRemove);
                         CheckCurrentTime(playback, TimeSpan.FromMilliseconds(50), "after remove");
+                        CheckDuration(TimeSpan.FromMilliseconds(450), playback);
                     }),
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(100)),
-                    new ReceivedEvent(new SetTempoEvent(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 4), TimeSpan.FromMilliseconds(300)),
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)90, Note.DefaultVelocity), TimeSpan.FromMilliseconds(325)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)90, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(450)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(100)),
+                    new SentReceivedEvent(new SetTempoEvent(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 4), TimeSpan.FromMilliseconds(300)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)90, Note.DefaultVelocity), TimeSpan.FromMilliseconds(325)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)90, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(450)),
                 },
                 additionalChecks: playback => MidiAsserts.AreEqual(
                     AddTempoChanges(TempoMap, (TimeSpan.FromMilliseconds(300), new Tempo(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 4))),
@@ -2246,18 +2496,20 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 {
                     new DynamicPlaybackAction(220, (playback, collection) =>
                     {
+                        CheckDuration(TimeSpan.FromMilliseconds(400), playback);
                         collection.Remove(objectToRemove);
                         CheckCurrentTime(playback, TimeSpan.FromMilliseconds(240), "after remove");
+                        CheckDuration(TimeSpan.FromMilliseconds(450), playback);
                     }),
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(100)),
-                    new ReceivedEvent(new SetTempoEvent(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 2), TimeSpan.FromMilliseconds(200)),
-                    new ReceivedEvent(new SetTempoEvent(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 4), TimeSpan.FromMilliseconds(280)),
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)90, Note.DefaultVelocity), TimeSpan.FromMilliseconds(305)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)90, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(430)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(100)),
+                    new SentReceivedEvent(new SetTempoEvent(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 2), TimeSpan.FromMilliseconds(200)),
+                    new SentReceivedEvent(new SetTempoEvent(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 4), TimeSpan.FromMilliseconds(280)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)90, Note.DefaultVelocity), TimeSpan.FromMilliseconds(305)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)90, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(430)),
                 },
                 additionalChecks: playback => MidiAsserts.AreEqual(
                     AddTempoChanges(TempoMap, (TimeSpan.FromMilliseconds(300), new Tempo(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 4))),
@@ -2289,18 +2541,20 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 {
                     new DynamicPlaybackAction(300, (playback, collection) =>
                     {
+                        CheckDuration(TimeSpan.FromMilliseconds(400), playback);
                         collection.Remove(objectToRemove);
                         CheckCurrentTime(playback, TimeSpan.FromMilliseconds(350), "after remove");
+                        CheckDuration(TimeSpan.FromMilliseconds(450), playback);
                     }),
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(100)),
-                    new ReceivedEvent(new SetTempoEvent(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 2), TimeSpan.FromMilliseconds(200)),
-                    new ReceivedEvent(new SetTempoEvent(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 4), TimeSpan.FromMilliseconds(250)),
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)90, Note.DefaultVelocity), TimeSpan.FromMilliseconds(275)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)90, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(400)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(100)),
+                    new SentReceivedEvent(new SetTempoEvent(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 2), TimeSpan.FromMilliseconds(200)),
+                    new SentReceivedEvent(new SetTempoEvent(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 4), TimeSpan.FromMilliseconds(250)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)90, Note.DefaultVelocity), TimeSpan.FromMilliseconds(275)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)90, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(400)),
                 },
                 additionalChecks: playback => MidiAsserts.AreEqual(
                     AddTempoChanges(TempoMap, (TimeSpan.FromMilliseconds(300), new Tempo(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 4))),
@@ -2332,17 +2586,19 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 {
                     new DynamicPlaybackAction(50, (playback, collection) =>
                     {
+                        CheckDuration(TimeSpan.FromMilliseconds(400), playback);
                         collection.Remove(objectToRemove);
                         CheckCurrentTime(playback, TimeSpan.FromMilliseconds(50), "after remove");
+                        CheckDuration(TimeSpan.FromMilliseconds(550), playback);
                     }),
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(100)),
-                    new ReceivedEvent(new SetTempoEvent(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 2), TimeSpan.FromMilliseconds(200)),
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)90, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)90, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(550)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(100)),
+                    new SentReceivedEvent(new SetTempoEvent(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 2), TimeSpan.FromMilliseconds(200)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)90, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)90, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(550)),
                 },
                 additionalChecks: playback => MidiAsserts.AreEqual(
                     AddTempoChanges(TempoMap, (TimeSpan.FromMilliseconds(200), new Tempo(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 2))),
@@ -2374,17 +2630,19 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 {
                     new DynamicPlaybackAction(220, (playback, collection) =>
                     {
+                        CheckDuration(TimeSpan.FromMilliseconds(400), playback);
                         collection.Remove(objectToRemove);
                         CheckCurrentTime(playback, TimeSpan.FromMilliseconds(220), "after remove");
+                        CheckDuration(TimeSpan.FromMilliseconds(550), playback);
                     }),
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(100)),
-                    new ReceivedEvent(new SetTempoEvent(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 2), TimeSpan.FromMilliseconds(200)),
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)90, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)90, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(550)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(100)),
+                    new SentReceivedEvent(new SetTempoEvent(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 2), TimeSpan.FromMilliseconds(200)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)90, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)90, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(550)),
                 },
                 additionalChecks: playback => MidiAsserts.AreEqual(
                     AddTempoChanges(TempoMap, (TimeSpan.FromMilliseconds(200), new Tempo(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 2))),
@@ -2416,18 +2674,20 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 {
                     new DynamicPlaybackAction(300, (playback, collection) =>
                     {
+                        CheckDuration(TimeSpan.FromMilliseconds(400), playback);
                         collection.Remove(objectToRemove);
                         CheckCurrentTime(playback, TimeSpan.FromMilliseconds(350), "after remove");
+                        CheckDuration(TimeSpan.FromMilliseconds(550), playback);
                     }),
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(100)),
-                    new ReceivedEvent(new SetTempoEvent(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 2), TimeSpan.FromMilliseconds(200)),
-                    new ReceivedEvent(new SetTempoEvent(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 4), TimeSpan.FromMilliseconds(250)),
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)90, Note.DefaultVelocity), TimeSpan.FromMilliseconds(275)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)90, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(500)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(100)),
+                    new SentReceivedEvent(new SetTempoEvent(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 2), TimeSpan.FromMilliseconds(200)),
+                    new SentReceivedEvent(new SetTempoEvent(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 4), TimeSpan.FromMilliseconds(250)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)90, Note.DefaultVelocity), TimeSpan.FromMilliseconds(275)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)90, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(500)),
                 },
                 additionalChecks: playback => MidiAsserts.AreEqual(
                     AddTempoChanges(TempoMap, (TimeSpan.FromMilliseconds(200), new Tempo(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 2))),
@@ -2457,16 +2717,18 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 {
                     new DynamicPlaybackAction(150, (playback, collection) =>
                     {
+                        CheckDuration(TimeSpan.FromMilliseconds(900), playback);
                         collection.Remove(objectToRemove);
                         CheckCurrentTime(playback, TimeSpan.FromMilliseconds(150), "after remove");
+                        CheckDuration(TimeSpan.FromMilliseconds(900), playback);
                     }),
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(100)),
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)90, Note.DefaultVelocity), TimeSpan.FromMilliseconds(400)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)90, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(900)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(100)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)90, Note.DefaultVelocity), TimeSpan.FromMilliseconds(400)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)90, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(900)),
                 },
                 additionalChecks: playback => MidiAsserts.AreEqual(
                     TempoMap,
@@ -2496,17 +2758,19 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 {
                     new DynamicPlaybackAction(400, (playback, collection) =>
                     {
+                        CheckDuration(TimeSpan.FromMilliseconds(900), playback);
                         collection.Remove(objectToRemove);
                         CheckCurrentTime(playback, TimeSpan.FromMilliseconds(400), "after remove");
+                        CheckDuration(TimeSpan.FromMilliseconds(900), playback);
                     }),
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(100)),
-                    new ReceivedEvent(new TimeSignatureEvent(3, 4), TimeSpan.FromMilliseconds(200)),
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)90, Note.DefaultVelocity), TimeSpan.FromMilliseconds(400)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)90, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(900)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(100)),
+                    new SentReceivedEvent(new TimeSignatureEvent(3, 4), TimeSpan.FromMilliseconds(200)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)90, Note.DefaultVelocity), TimeSpan.FromMilliseconds(400)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)90, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(900)),
                 },
                 additionalChecks: playback => MidiAsserts.AreEqual(
                     TempoMap,
@@ -2533,14 +2797,16 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 {
                     new DynamicPlaybackAction(50, (playback, collection) =>
                     {
+                        CheckDuration(TimeSpan.FromMilliseconds(300), playback);
                         collection.Remove(objectToRemove);
                         CheckCurrentTime(playback, TimeSpan.FromMilliseconds(50), "after remove");
+                        CheckDuration(TimeSpan.FromMilliseconds(100), playback);
                     }),
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(100)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(100)),
                 },
                 additionalChecks: playback => MidiAsserts.AreEqual(
                     TempoMap,
@@ -2567,14 +2833,16 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 {
                     new DynamicPlaybackAction(200, (playback, collection) =>
                     {
+                        CheckDuration(TimeSpan.FromMilliseconds(300), playback);
                         collection.Remove(objectToRemove);
                         CheckCurrentTime(playback, TimeSpan.FromMilliseconds(200), "after remove");
+                        CheckDuration(TimeSpan.FromMilliseconds(100), playback);
                     }),
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(100)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(100)),
                 },
                 additionalChecks: playback => MidiAsserts.AreEqual(
                     TempoMap,
@@ -2606,17 +2874,19 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 {
                     new DynamicPlaybackAction(50, (playback, collection) =>
                     {
+                        CheckDuration(TimeSpan.FromMilliseconds(900), playback);
                         collection.Remove(objectToRemove);
                         CheckCurrentTime(playback, TimeSpan.FromMilliseconds(50), "after remove");
+                        CheckDuration(TimeSpan.FromMilliseconds(900), playback);
                     }),
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(100)),
-                    new ReceivedEvent(new TimeSignatureEvent(3, 8), TimeSpan.FromMilliseconds(300)),
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)90, Note.DefaultVelocity), TimeSpan.FromMilliseconds(400)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)90, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(900)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(100)),
+                    new SentReceivedEvent(new TimeSignatureEvent(3, 8), TimeSpan.FromMilliseconds(300)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)90, Note.DefaultVelocity), TimeSpan.FromMilliseconds(400)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)90, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(900)),
                 },
                 additionalChecks: playback => MidiAsserts.AreEqual(
                     AddTimeSignatureChanges(TempoMap, (TimeSpan.FromMilliseconds(300), new TimeSignature(3, 8))),
@@ -2648,18 +2918,20 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 {
                     new DynamicPlaybackAction(250, (playback, collection) =>
                     {
+                        CheckDuration(TimeSpan.FromMilliseconds(900), playback);
                         collection.Remove(objectToRemove);
                         CheckCurrentTime(playback, TimeSpan.FromMilliseconds(250), "after remove");
+                        CheckDuration(TimeSpan.FromMilliseconds(900), playback);
                     }),
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(100)),
-                    new ReceivedEvent(new TimeSignatureEvent(3, 4), TimeSpan.FromMilliseconds(200)),
-                    new ReceivedEvent(new TimeSignatureEvent(3, 8), TimeSpan.FromMilliseconds(300)),
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)90, Note.DefaultVelocity), TimeSpan.FromMilliseconds(400)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)90, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(900)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(100)),
+                    new SentReceivedEvent(new TimeSignatureEvent(3, 4), TimeSpan.FromMilliseconds(200)),
+                    new SentReceivedEvent(new TimeSignatureEvent(3, 8), TimeSpan.FromMilliseconds(300)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)90, Note.DefaultVelocity), TimeSpan.FromMilliseconds(400)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)90, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(900)),
                 },
                 additionalChecks: playback => MidiAsserts.AreEqual(
                     AddTimeSignatureChanges(TempoMap, (TimeSpan.FromMilliseconds(300), new TimeSignature(3, 8))),
@@ -2691,18 +2963,20 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 {
                     new DynamicPlaybackAction(300, (playback, collection) =>
                     {
+                        CheckDuration(TimeSpan.FromMilliseconds(900), playback);
                         collection.Remove(objectToRemove);
                         CheckCurrentTime(playback, TimeSpan.FromMilliseconds(300), "after remove");
+                        CheckDuration(TimeSpan.FromMilliseconds(900), playback);
                     }),
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(100)),
-                    new ReceivedEvent(new TimeSignatureEvent(3, 4), TimeSpan.FromMilliseconds(200)),
-                    new ReceivedEvent(new TimeSignatureEvent(3, 8), TimeSpan.FromMilliseconds(300)),
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)90, Note.DefaultVelocity), TimeSpan.FromMilliseconds(400)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)90, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(900)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(100)),
+                    new SentReceivedEvent(new TimeSignatureEvent(3, 4), TimeSpan.FromMilliseconds(200)),
+                    new SentReceivedEvent(new TimeSignatureEvent(3, 8), TimeSpan.FromMilliseconds(300)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)90, Note.DefaultVelocity), TimeSpan.FromMilliseconds(400)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)90, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(900)),
                 },
                 additionalChecks: playback => MidiAsserts.AreEqual(
                     AddTimeSignatureChanges(TempoMap, (TimeSpan.FromMilliseconds(300), new TimeSignature(3, 8))),
@@ -2734,17 +3008,19 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 {
                     new DynamicPlaybackAction(50, (playback, collection) =>
                     {
+                        CheckDuration(TimeSpan.FromMilliseconds(900), playback);
                         collection.Remove(objectToRemove);
                         CheckCurrentTime(playback, TimeSpan.FromMilliseconds(50), "after remove");
+                        CheckDuration(TimeSpan.FromMilliseconds(900), playback);
                     }),
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(100)),
-                    new ReceivedEvent(new TimeSignatureEvent(3, 4), TimeSpan.FromMilliseconds(200)),
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)90, Note.DefaultVelocity), TimeSpan.FromMilliseconds(400)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)90, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(900)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(100)),
+                    new SentReceivedEvent(new TimeSignatureEvent(3, 4), TimeSpan.FromMilliseconds(200)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)90, Note.DefaultVelocity), TimeSpan.FromMilliseconds(400)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)90, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(900)),
                 },
                 additionalChecks: playback => MidiAsserts.AreEqual(
                     AddTimeSignatureChanges(TempoMap, (TimeSpan.FromMilliseconds(200), new TimeSignature(3, 4))),
@@ -2776,59 +3052,19 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 {
                     new DynamicPlaybackAction(220, (playback, collection) =>
                     {
+                        CheckDuration(TimeSpan.FromMilliseconds(900), playback);
                         collection.Remove(objectToRemove);
                         CheckCurrentTime(playback, TimeSpan.FromMilliseconds(220), "after remove");
+                        CheckDuration(TimeSpan.FromMilliseconds(900), playback);
                     }),
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(100)),
-                    new ReceivedEvent(new TimeSignatureEvent(3, 4), TimeSpan.FromMilliseconds(200)),
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)90, Note.DefaultVelocity), TimeSpan.FromMilliseconds(400)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)90, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(900)),
-                },
-                additionalChecks: playback => MidiAsserts.AreEqual(
-                    AddTimeSignatureChanges(TempoMap, (TimeSpan.FromMilliseconds(200), new TimeSignature(3, 4))),
-                    playback.TempoMap,
-                    "Invalid tempo map."));
-        }
-
-        [Retry(OnTheFlyChecksRetriesNumber)]
-        [Test]
-        public void CheckPlaybackDataChangesOnTheFly_Remove_TimeSignature_10()
-        {
-            var objectToRemove = new TimedEvent(new TimeSignatureEvent(3, 8))
-                .SetTime(new MetricTimeSpan(0, 0, 0, 300), TempoMap);
-
-            var initialObjects = new ITimedObject[]
-            {
-                new Note((SevenBitNumber)70).SetLength(new MetricTimeSpan(0, 0, 0, 100), TempoMap),
-                new TimedEvent(new TimeSignatureEvent(3, 4))
-                    .SetTime(new MetricTimeSpan(0, 0, 0, 200), TempoMap),
-                objectToRemove,
-                new Note((SevenBitNumber)90)
-                    .SetTime(new MetricTimeSpan(0, 0, 0, 400), TempoMap)
-                    .SetLength(new MetricTimeSpan(0, 0, 0, 500), TempoMap),
-            };
-
-            CheckPlaybackDataChangesOnTheFly(
-                initialObjects: initialObjects,
-                actions: new[]
-                {
-                    new DynamicPlaybackAction(300, (playback, collection) =>
-                    {
-                        collection.Remove(objectToRemove);
-                        CheckCurrentTime(playback, TimeSpan.FromMilliseconds(300), "after remove");
-                    }),
-                },
-                expectedReceivedEvents: new[]
-                {
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(100)),
-                    new ReceivedEvent(new TimeSignatureEvent(3, 4), TimeSpan.FromMilliseconds(200)),
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)90, Note.DefaultVelocity), TimeSpan.FromMilliseconds(400)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)90, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(900)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(100)),
+                    new SentReceivedEvent(new TimeSignatureEvent(3, 4), TimeSpan.FromMilliseconds(200)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)90, Note.DefaultVelocity), TimeSpan.FromMilliseconds(400)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)90, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(900)),
                 },
                 additionalChecks: playback => MidiAsserts.AreEqual(
                     AddTimeSignatureChanges(TempoMap, (TimeSpan.FromMilliseconds(200), new TimeSignature(3, 4))),

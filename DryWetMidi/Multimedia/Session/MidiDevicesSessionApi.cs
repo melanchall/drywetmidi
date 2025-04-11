@@ -13,7 +13,8 @@ namespace Melanchall.DryWetMidi.Multimedia
             SESSION_OPENRESULT_WRONGTHREAD = 102,
             [NativeErrorType(NativeErrorType.NotPermitted)]
             SESSION_OPENRESULT_NOTPERMITTED = 103,
-            SESSION_OPENRESULT_UNKNOWNERROR = 104
+            SESSION_OPENRESULT_UNKNOWNERROR = 104,
+            SESSION_OPENRESULT_THREADSTARTERROR = 105,
         }
 
         public enum SESSION_CLOSERESULT

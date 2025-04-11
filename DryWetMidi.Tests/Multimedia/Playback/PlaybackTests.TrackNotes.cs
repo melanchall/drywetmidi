@@ -38,8 +38,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent(noteNumber, noteOnVelocity), moveFrom),
-                    new ReceivedEvent(new NoteOffEvent(noteNumber, noteOffVelocity), noteOnDelay + noteOffDelay - moveTo + moveFrom)
+                    new SentReceivedEvent(new NoteOnEvent(noteNumber, noteOnVelocity), moveFrom),
+                    new SentReceivedEvent(new NoteOffEvent(noteNumber, noteOffVelocity), noteOnDelay + noteOffDelay - moveTo + moveFrom)
                 },
                 actions: new[]
                 {
@@ -86,12 +86,12 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)100, Note.DefaultVelocity), moveFrom),
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)80, Note.DefaultVelocity), moveFrom + TimeSpan.FromMilliseconds(100)),
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), moveFrom + TimeSpan.FromMilliseconds(200)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)80, Note.DefaultOffVelocity), moveFrom + TimeSpan.FromMilliseconds(400)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), moveFrom + TimeSpan.FromMilliseconds(500)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)100, Note.DefaultOffVelocity), moveFrom + TimeSpan.FromMilliseconds(700)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)100, Note.DefaultVelocity), moveFrom),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)80, Note.DefaultVelocity), moveFrom + TimeSpan.FromMilliseconds(100)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), moveFrom + TimeSpan.FromMilliseconds(200)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)80, Note.DefaultOffVelocity), moveFrom + TimeSpan.FromMilliseconds(400)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), moveFrom + TimeSpan.FromMilliseconds(500)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)100, Note.DefaultOffVelocity), moveFrom + TimeSpan.FromMilliseconds(700)),
                 },
                 actions: new[]
                 {
@@ -138,12 +138,12 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)100, Note.DefaultVelocity), moveFrom),
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)80, Note.DefaultVelocity), moveFrom + TimeSpan.FromMilliseconds(0)),
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), moveFrom + TimeSpan.FromMilliseconds(100)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)80, Note.DefaultOffVelocity), moveFrom + TimeSpan.FromMilliseconds(300)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), moveFrom + TimeSpan.FromMilliseconds(400)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)100, Note.DefaultOffVelocity), moveFrom + TimeSpan.FromMilliseconds(600)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)100, Note.DefaultVelocity), moveFrom),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)80, Note.DefaultVelocity), moveFrom + TimeSpan.FromMilliseconds(0)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), moveFrom + TimeSpan.FromMilliseconds(100)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)80, Note.DefaultOffVelocity), moveFrom + TimeSpan.FromMilliseconds(300)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), moveFrom + TimeSpan.FromMilliseconds(400)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)100, Note.DefaultOffVelocity), moveFrom + TimeSpan.FromMilliseconds(600)),
                 },
                 actions: new[]
                 {
@@ -190,13 +190,13 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)100, Note.DefaultVelocity), moveFrom),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), moveFrom + TimeSpan.FromMilliseconds(0)),
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)80, Note.DefaultVelocity), moveFrom + TimeSpan.FromMilliseconds(0)),
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), moveFrom + TimeSpan.FromMilliseconds(100)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)80, Note.DefaultOffVelocity), moveFrom + TimeSpan.FromMilliseconds(300)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), moveFrom + TimeSpan.FromMilliseconds(400)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)100, Note.DefaultOffVelocity), moveFrom + TimeSpan.FromMilliseconds(600)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)100, Note.DefaultVelocity), moveFrom),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), moveFrom + TimeSpan.FromMilliseconds(0)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)80, Note.DefaultVelocity), moveFrom + TimeSpan.FromMilliseconds(0)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), moveFrom + TimeSpan.FromMilliseconds(100)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)80, Note.DefaultOffVelocity), moveFrom + TimeSpan.FromMilliseconds(300)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), moveFrom + TimeSpan.FromMilliseconds(400)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)100, Note.DefaultOffVelocity), moveFrom + TimeSpan.FromMilliseconds(600)),
                 },
                 actions: new[]
                 {
@@ -237,11 +237,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent(noteNumber, noteOnVelocity), noteOnDelay),
-                    new ReceivedEvent(new NoteOffEvent(noteNumber, noteOffVelocity), noteOnDelay + noteOffDelay),
-                    new ReceivedEvent(new NoteOnEvent(noteNumber, noteOnVelocity), moveFrom),
-                    new ReceivedEvent(new NoteOffEvent(noteNumber, noteOffVelocity), noteOnDelay + noteOffDelay - moveTo + moveFrom),
-                    new ReceivedEvent(new PitchBendEvent(), noteOnDelay + noteOffDelay - moveTo + moveFrom + pitchBendDelay)
+                    new SentReceivedEvent(new NoteOnEvent(noteNumber, noteOnVelocity), noteOnDelay),
+                    new SentReceivedEvent(new NoteOffEvent(noteNumber, noteOffVelocity), noteOnDelay + noteOffDelay),
+                    new SentReceivedEvent(new NoteOnEvent(noteNumber, noteOnVelocity), moveFrom),
+                    new SentReceivedEvent(new NoteOffEvent(noteNumber, noteOffVelocity), noteOnDelay + noteOffDelay - moveTo + moveFrom),
+                    new SentReceivedEvent(new PitchBendEvent(), noteOnDelay + noteOffDelay - moveTo + moveFrom + pitchBendDelay)
                 },
                 notesWillBeStarted: new[] { 0, 0 },
                 notesWillBeFinished: new[] { 0, 0 });
@@ -277,9 +277,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent(noteNumber, noteOnVelocity), noteOnDelay),
-                    new ReceivedEvent(new NoteOffEvent(noteNumber, noteOffVelocity), moveFrom),
-                    new ReceivedEvent(new PitchBendEvent(), noteOnDelay + noteOffDelay + pitchBendDelay - moveTo + moveFrom)
+                    new SentReceivedEvent(new NoteOnEvent(noteNumber, noteOnVelocity), noteOnDelay),
+                    new SentReceivedEvent(new NoteOffEvent(noteNumber, noteOffVelocity), moveFrom),
+                    new SentReceivedEvent(new PitchBendEvent(), noteOnDelay + noteOffDelay + pitchBendDelay - moveTo + moveFrom)
                 },
                 notesWillBeStarted: new[] { 0 },
                 notesWillBeFinished: new[] { 0 });
@@ -312,10 +312,10 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent(noteNumber, noteOnVelocity), noteOnDelay),
-                    new ReceivedEvent(new NoteOffEvent(noteNumber, noteOffVelocity), moveFrom),
-                    new ReceivedEvent(new NoteOnEvent(noteNumber, noteOnVelocity), noteOnDelay - moveTo + moveFrom),
-                    new ReceivedEvent(new NoteOffEvent(noteNumber, noteOffVelocity), noteOffDelay + noteOnDelay - moveTo + moveFrom)
+                    new SentReceivedEvent(new NoteOnEvent(noteNumber, noteOnVelocity), noteOnDelay),
+                    new SentReceivedEvent(new NoteOffEvent(noteNumber, noteOffVelocity), moveFrom),
+                    new SentReceivedEvent(new NoteOnEvent(noteNumber, noteOnVelocity), noteOnDelay - moveTo + moveFrom),
+                    new SentReceivedEvent(new NoteOffEvent(noteNumber, noteOffVelocity), noteOffDelay + noteOnDelay - moveTo + moveFrom)
                 },
                 notesWillBeStarted: new[] { 0, 0 },
                 notesWillBeFinished: new[] { 0, 0 });
@@ -348,8 +348,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent(noteNumber, noteOnVelocity), noteOnDelay),
-                    new ReceivedEvent(new NoteOffEvent(noteNumber, noteOffVelocity), noteOnDelay + noteOnDelay + noteOffDelay - moveTo + moveFrom)
+                    new SentReceivedEvent(new NoteOnEvent(noteNumber, noteOnVelocity), noteOnDelay),
+                    new SentReceivedEvent(new NoteOffEvent(noteNumber, noteOffVelocity), noteOnDelay + noteOnDelay + noteOffDelay - moveTo + moveFrom)
                 },
                 notesWillBeStarted: new[] { 0 },
                 notesWillBeFinished: new[] { 0 });
@@ -382,8 +382,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent(noteNumber, noteOnVelocity), noteOnDelay),
-                    new ReceivedEvent(new NoteOffEvent(noteNumber, noteOffVelocity), noteOnDelay + noteOnDelay + noteOffDelay - moveTo + moveFrom)
+                    new SentReceivedEvent(new NoteOnEvent(noteNumber, noteOnVelocity), noteOnDelay),
+                    new SentReceivedEvent(new NoteOffEvent(noteNumber, noteOffVelocity), noteOnDelay + noteOnDelay + noteOffDelay - moveTo + moveFrom)
                 },
                 notesWillBeStarted: new[] { 0 },
                 notesWillBeFinished: new[] { 0 });
@@ -426,10 +426,10 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent(noteNumber1, noteOnVelocity1), noteOnDelay1),
-                    new ReceivedEvent(new NoteOffEvent(noteNumber1, noteOffVelocity1), noteOnDelay1 + moveFrom),
-                    new ReceivedEvent(new NoteOnEvent(noteNumber2, noteOnVelocity2), noteOnDelay1 + moveFrom),
-                    new ReceivedEvent(new NoteOffEvent(noteNumber2, noteOffVelocity2), noteOnDelay1 + moveFrom + noteOnDelay1 + noteOffDelay1 + noteOnDelay2 + noteOffDelay2 - moveTo)
+                    new SentReceivedEvent(new NoteOnEvent(noteNumber1, noteOnVelocity1), noteOnDelay1),
+                    new SentReceivedEvent(new NoteOffEvent(noteNumber1, noteOffVelocity1), noteOnDelay1 + moveFrom),
+                    new SentReceivedEvent(new NoteOnEvent(noteNumber2, noteOnVelocity2), noteOnDelay1 + moveFrom),
+                    new SentReceivedEvent(new NoteOffEvent(noteNumber2, noteOffVelocity2), noteOnDelay1 + moveFrom + noteOnDelay1 + noteOffDelay1 + noteOnDelay2 + noteOffDelay2 - moveTo)
                 },
                 notesWillBeStarted: new[] { 0, 1 },
                 notesWillBeFinished: new[] { 0, 1 });
@@ -472,14 +472,14 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent(noteNumber1, noteOnVelocity1), noteOnDelay1),
-                    new ReceivedEvent(new NoteOffEvent(noteNumber1, noteOffVelocity1), noteOnDelay1 + noteOffDelay1),
-                    new ReceivedEvent(new NoteOnEvent(noteNumber2, noteOnVelocity2), noteOnDelay1 + noteOffDelay1 + noteOnDelay2),
-                    new ReceivedEvent(new NoteOffEvent(noteNumber2, noteOffVelocity2), moveFrom),
-                    new ReceivedEvent(new NoteOnEvent(noteNumber1, noteOnVelocity1), moveFrom),
-                    new ReceivedEvent(new NoteOffEvent(noteNumber1, noteOffVelocity1), noteOnDelay1 + noteOffDelay1 - moveTo + moveFrom),
-                    new ReceivedEvent(new NoteOnEvent(noteNumber2, noteOnVelocity2), noteOnDelay1 + noteOffDelay1 - moveTo + moveFrom + noteOnDelay2),
-                    new ReceivedEvent(new NoteOffEvent(noteNumber2, noteOffVelocity2), noteOnDelay1 + noteOffDelay1 - moveTo + moveFrom + noteOnDelay2 + noteOffDelay2)
+                    new SentReceivedEvent(new NoteOnEvent(noteNumber1, noteOnVelocity1), noteOnDelay1),
+                    new SentReceivedEvent(new NoteOffEvent(noteNumber1, noteOffVelocity1), noteOnDelay1 + noteOffDelay1),
+                    new SentReceivedEvent(new NoteOnEvent(noteNumber2, noteOnVelocity2), noteOnDelay1 + noteOffDelay1 + noteOnDelay2),
+                    new SentReceivedEvent(new NoteOffEvent(noteNumber2, noteOffVelocity2), moveFrom),
+                    new SentReceivedEvent(new NoteOnEvent(noteNumber1, noteOnVelocity1), moveFrom),
+                    new SentReceivedEvent(new NoteOffEvent(noteNumber1, noteOffVelocity1), noteOnDelay1 + noteOffDelay1 - moveTo + moveFrom),
+                    new SentReceivedEvent(new NoteOnEvent(noteNumber2, noteOnVelocity2), noteOnDelay1 + noteOffDelay1 - moveTo + moveFrom + noteOnDelay2),
+                    new SentReceivedEvent(new NoteOffEvent(noteNumber2, noteOffVelocity2), noteOnDelay1 + noteOffDelay1 - moveTo + moveFrom + noteOnDelay2 + noteOffDelay2)
                 },
                 notesWillBeStarted: new[] { 0, 1, 0, 1 },
                 notesWillBeFinished: new[] { 0, 1, 0, 1 });
@@ -511,10 +511,10 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent(), noteOnDelay),
-                    new ReceivedEvent(new NoteOffEvent(), noteOnDelay + stopAfter),
-                    new ReceivedEvent(new NoteOnEvent(), noteOnDelay + stopAfter),
-                    new ReceivedEvent(new NoteOffEvent(), noteOnDelay + noteOffDelay + noteOnDelay)
+                    new SentReceivedEvent(new NoteOnEvent(), noteOnDelay),
+                    new SentReceivedEvent(new NoteOffEvent(), noteOnDelay + stopAfter),
+                    new SentReceivedEvent(new NoteOnEvent(), noteOnDelay + stopAfter),
+                    new SentReceivedEvent(new NoteOffEvent(), noteOnDelay + noteOffDelay + noteOnDelay)
                 },
                 setupPlayback: playback =>
                 {
@@ -549,8 +549,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent(), noteOnDelay),
-                    new ReceivedEvent(new NoteOffEvent(), noteOnDelay + noteOffDelay),
+                    new SentReceivedEvent(new NoteOnEvent(), noteOnDelay),
+                    new SentReceivedEvent(new NoteOffEvent(), noteOnDelay + noteOffDelay),
                 },
                 setupPlayback: playback =>
                 {
@@ -566,7 +566,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         private void CheckNotesTracking(
             ITimedObject[] initialTimedObjects,
             PlaybackAction[] actions,
-            ICollection<ReceivedEvent> expectedReceivedEvents,
+            ICollection<SentReceivedEvent> expectedReceivedEvents,
             IEnumerable<int> notesWillBeStarted,
             IEnumerable<int> notesWillBeFinished,
             Action<Playback> setupPlayback = null)

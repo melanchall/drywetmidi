@@ -55,19 +55,19 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         private void CheckSingleTimedObjectPlayback(
             ITimedObject timedObject)
         {
-            var receivedEvents = new List<ReceivedEvent>();
+            var receivedEvents = new List<SentReceivedEvent>();
             var stopwatch = new Stopwatch();
             var tempoMap = TempoMap;
 
             var expectedReceivedEvents = new[] { timedObject }
                 .GetObjects(ObjectType.TimedEvent)
                 .Cast<TimedEvent>()
-                .Select(e => new ReceivedEvent(e.Event, (TimeSpan)e.TimeAs<MetricTimeSpan>(tempoMap)))
+                .Select(e => new SentReceivedEvent(e.Event, (TimeSpan)e.TimeAs<MetricTimeSpan>(tempoMap)))
                 .ToArray();
 
             using (var playback = new Playback(new[] { timedObject }, tempoMap))
             {
-                playback.EventPlayed += (_, e) => receivedEvents.Add(new ReceivedEvent(e.Event, stopwatch.Elapsed));
+                playback.EventPlayed += (_, e) => receivedEvents.Add(new SentReceivedEvent(e.Event, stopwatch.Elapsed));
 
                 var timeout = expectedReceivedEvents.Last().Time + SendReceiveUtilities.MaximumEventSendReceiveDelay;
 
@@ -81,7 +81,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             }
 
             CollectionAssert.IsNotEmpty(receivedEvents, "No events received.");
-            CheckReceivedEvents(receivedEvents, expectedReceivedEvents);
+            SendReceiveUtilities.CheckReceivedEvents(receivedEvents, expectedReceivedEvents);
         }
 
         #endregion

@@ -241,7 +241,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             if (ticks < 0)
                 ticks = 0;
 
-            return _startTime + new TimeSpan(MathUtilities.RoundToLong(ticks * Speed));
+            return _startTime + TimeSpan.FromTicks(MathUtilities.RoundToLong(ticks * Speed));
         }
 
         #endregion

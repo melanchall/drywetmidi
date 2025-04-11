@@ -135,7 +135,11 @@ namespace Melanchall.DryWetMidi.Multimedia
             _clock.Ticked += OnClockTicked;
 
             InitializeDataTracking();
-            InitializeData(timedObjects, TempoMap, playbackSettings.NoteDetectionSettings ?? new NoteDetectionSettings());
+            InitializeData(
+                timedObjects,
+                TempoMap,
+                playbackSettings.NoteDetectionSettings ?? new NoteDetectionSettings(),
+                playbackSettings.CalculateTempoMap);
             UpdateDuration();
         }
 
@@ -445,6 +449,9 @@ namespace Melanchall.DryWetMidi.Multimedia
             SendTrackedData();
             StopStartNotes();
             _clock.Start();
+
+            if (!_hasBeenStarted)
+                OnClockTicked(_clock, EventArgs.Empty);
 
             _hasBeenStarted = true;
             OnStarted();
@@ -793,6 +800,9 @@ namespace Melanchall.DryWetMidi.Multimedia
         private void StopStartNotes()
         {
             if (!TrackNotes)
+                return;
+
+            if (!_hasBeenStarted && _playbackEventsPosition == null && _beforeStart)
                 return;
 
             var notesToPlay = GetNotesMetadataAtCurrentTime();
@@ -1212,6 +1222,9 @@ namespace Melanchall.DryWetMidi.Multimedia
 
                 _clock.Ticked -= OnClockTicked;
                 _clock.Dispose();
+
+                if (_observableTimedObjectsCollection != null)
+                    _observableTimedObjectsCollection.CollectionChanged -= OnObservableTimedObjectsCollectionChanged;
             }
 
             _disposed = true;

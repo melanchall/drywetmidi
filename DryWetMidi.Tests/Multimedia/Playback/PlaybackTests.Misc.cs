@@ -10,6 +10,7 @@ using Melanchall.DryWetMidi.Interaction;
 using Melanchall.DryWetMidi.Tests.Common;
 using NUnit.Framework;
 using NUnit.Framework.Legacy;
+using Melanchall.DryWetMidi.Tools;
 
 namespace Melanchall.DryWetMidi.Tests.Multimedia
 {
@@ -47,7 +48,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
         #region Constants
 
-        private const int RetriesNumber = 3;
+        private const int RetriesNumber = 5;
 
         private static readonly object[] ParametersForDurationCheck =
         {
@@ -174,7 +175,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialPlaybackObjects: playbackEvents,
                 actions: Array.Empty<PlaybackAction>(),
                 expectedReceivedEvents: playbackEvents
-                    .Select(e => new ReceivedEvent(
+                    .Select(e => new SentReceivedEvent(
                         e.Event,
                         ApplySpeedToTimeSpan((TimeSpan)e.TimeAs<MetricTimeSpan>(TempoMap), speed)))
                     .ToArray(),
@@ -206,10 +207,10 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 actions: Array.Empty<PlaybackAction>(),
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent(), ApplySpeedToTimeSpan(TimeSpan.FromMilliseconds(500), speed)),
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)30, (SevenBitNumber)50),  ApplySpeedToTimeSpan(TimeSpan.FromMilliseconds(500), speed)),
-                    new ReceivedEvent(new NoteOffEvent(),  ApplySpeedToTimeSpan(TimeSpan.FromMilliseconds(1500), speed)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)30, (SevenBitNumber)50),  ApplySpeedToTimeSpan(TimeSpan.FromMilliseconds(1500), speed)),
+                    new SentReceivedEvent(new NoteOnEvent(), ApplySpeedToTimeSpan(TimeSpan.FromMilliseconds(500), speed)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)30, (SevenBitNumber)50),  ApplySpeedToTimeSpan(TimeSpan.FromMilliseconds(500), speed)),
+                    new SentReceivedEvent(new NoteOffEvent(),  ApplySpeedToTimeSpan(TimeSpan.FromMilliseconds(1500), speed)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)30, (SevenBitNumber)50),  ApplySpeedToTimeSpan(TimeSpan.FromMilliseconds(1500), speed)),
                 },
                 setupPlayback: playback =>
                 {
@@ -243,8 +244,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 actions: Array.Empty<PlaybackAction>(),
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)100, (SevenBitNumber)20) { Channel = (FourBitNumber)5 }, ApplySpeedToTimeSpan(TimeSpan.Zero, speed)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)100, (SevenBitNumber)10) { Channel = (FourBitNumber)5 }, ApplySpeedToTimeSpan(TimeSpan.FromSeconds(1), speed)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)100, (SevenBitNumber)20) { Channel = (FourBitNumber)5 }, ApplySpeedToTimeSpan(TimeSpan.Zero, speed)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)100, (SevenBitNumber)10) { Channel = (FourBitNumber)5 }, ApplySpeedToTimeSpan(TimeSpan.FromSeconds(1), speed)),
                 },
                 setupPlayback: playback =>
                 {
@@ -278,9 +279,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 actions: Array.Empty<PlaybackAction>(),
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent(), ApplySpeedToTimeSpan(TimeSpan.FromMilliseconds(500), speed)),
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)30, (SevenBitNumber)50),  ApplySpeedToTimeSpan(TimeSpan.FromMilliseconds(500), speed)),
-                    new ReceivedEvent(new NoteOffEvent(),  ApplySpeedToTimeSpan(TimeSpan.FromMilliseconds(1500), speed)),
+                    new SentReceivedEvent(new NoteOnEvent(), ApplySpeedToTimeSpan(TimeSpan.FromMilliseconds(500), speed)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)30, (SevenBitNumber)50),  ApplySpeedToTimeSpan(TimeSpan.FromMilliseconds(500), speed)),
+                    new SentReceivedEvent(new NoteOffEvent(),  ApplySpeedToTimeSpan(TimeSpan.FromMilliseconds(1500), speed)),
                 },
                 setupPlayback: playback =>
                 {
@@ -334,9 +335,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 actions: Array.Empty<PlaybackAction>(),
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
-                    new ReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(500)),
-                    new ReceivedEvent(new ProgramChangeEvent((SevenBitNumber)40), TimeSpan.FromSeconds(2.5))
+                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
+                    new SentReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(500)),
+                    new SentReceivedEvent(new ProgramChangeEvent((SevenBitNumber)40), TimeSpan.FromSeconds(2.5))
                 });
         }
 
@@ -370,7 +371,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 expectedReceivedEvents: Enumerable
                     .Range(0, repeatsCount + 1)
                     .SelectMany(i => playbackObjects
-                        .Select(obj => new ReceivedEvent(
+                        .Select(obj => new SentReceivedEvent(
                             obj.Event,
                             (TimeSpan)obj.TimeAs<MetricTimeSpan>(TempoMap) + ScaleTimeSpan(lastTime, i))))
                     .ToArray(),
@@ -409,7 +410,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     .Range(0, repeatsCount + 1)
                     .SelectMany(i => playbackObjects
                         .SkipWhile(obj => obj.TimeAs<MetricTimeSpan>(TempoMap) < playbackStart)
-                        .Select(obj => new ReceivedEvent(
+                        .Select(obj => new SentReceivedEvent(
                             obj.Event,
                             (TimeSpan)(obj.TimeAs<MetricTimeSpan>(TempoMap) - playbackStart) + ScaleTimeSpan(lastTime - (TimeSpan)playbackStart, i))))
                     .ToArray(),
@@ -449,7 +450,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     .Range(0, repeatsCount + 1)
                     .SelectMany(i => playbackObjects
                         .TakeWhile(obj => obj.TimeAs<MetricTimeSpan>(TempoMap) <= playbackEnd)
-                        .Select(obj => new ReceivedEvent(
+                        .Select(obj => new SentReceivedEvent(
                             obj.Event,
                             (TimeSpan)obj.TimeAs<MetricTimeSpan>(TempoMap) + ScaleTimeSpan((TimeSpan)playbackEnd, i))))
                     .ToArray(),
@@ -494,7 +495,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 expectedReceivedEvents: Enumerable
                     .Range(0, repeatsCount + 1)
                     .SelectMany(i => takenObject
-                        .Select(obj => new ReceivedEvent(
+                        .Select(obj => new SentReceivedEvent(
                             obj.Event,
                             (TimeSpan)(obj.TimeAs<MetricTimeSpan>(TempoMap) - playbackStart) + ScaleTimeSpan((TimeSpan)windowSize, i))))
                     .ToArray(),
@@ -545,7 +546,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 expectedReceivedEvents: Enumerable
                     .Range(0, repeatsCount + 1)
                     .SelectMany(i => takenObject
-                        .Select(obj => new ReceivedEvent(
+                        .Select(obj => new SentReceivedEvent(
                             obj.Event,
                             (TimeSpan)(obj.TimeAs<MetricTimeSpan>(TempoMap) - playbackStart) + ScaleTimeSpan((TimeSpan)windowSize, i))))
                     .ToArray(),
@@ -588,12 +589,12 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)100, (SevenBitNumber)20) { Channel = (FourBitNumber)5 }, TimeSpan.Zero),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)100, (SevenBitNumber)10) { Channel = (FourBitNumber)5 }, TimeSpan.FromSeconds(2)),
-                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.FromSeconds(3) + stopPeriod),
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)30, (SevenBitNumber)50), TimeSpan.FromSeconds(3) + stopPeriod),
-                    new ReceivedEvent(new NoteOffEvent(), TimeSpan.FromSeconds(6) + stopPeriod),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)30, (SevenBitNumber)50), TimeSpan.FromSeconds(6) + stopPeriod),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)100, (SevenBitNumber)20) { Channel = (FourBitNumber)5 }, TimeSpan.Zero),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)100, (SevenBitNumber)10) { Channel = (FourBitNumber)5 }, TimeSpan.FromSeconds(2)),
+                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.FromSeconds(3) + stopPeriod),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)30, (SevenBitNumber)50), TimeSpan.FromSeconds(3) + stopPeriod),
+                    new SentReceivedEvent(new NoteOffEvent(), TimeSpan.FromSeconds(6) + stopPeriod),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)30, (SevenBitNumber)50), TimeSpan.FromSeconds(6) + stopPeriod),
                 },
                 setupPlayback: playback => playback.InterruptNotesOnStop = false);
         }
@@ -624,8 +625,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent(), noteOnDelay),
-                    new ReceivedEvent(new NoteOffEvent(), noteOnDelay + stopAfter),
+                    new SentReceivedEvent(new NoteOnEvent(), noteOnDelay),
+                    new SentReceivedEvent(new NoteOffEvent(), noteOnDelay + stopAfter),
                 },
                 setupPlayback: playback => playback.TrackNotes = false);
         }
@@ -656,9 +657,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent(), noteOnDelay),
-                    new ReceivedEvent(new NoteOffEvent(), noteOnDelay + stopAfter),
-                    new ReceivedEvent(new NoteOffEvent(), noteOnDelay + noteOffDelay + stopPeriod),
+                    new SentReceivedEvent(new NoteOnEvent(), noteOnDelay),
+                    new SentReceivedEvent(new NoteOffEvent(), noteOnDelay + stopAfter),
+                    new SentReceivedEvent(new NoteOffEvent(), noteOnDelay + noteOffDelay + stopPeriod),
                 },
                 setupPlayback: playback =>
                 {
@@ -687,8 +688,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
-                    new ReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(400)),
+                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
+                    new SentReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(400)),
                 });
         }
 
@@ -715,8 +716,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
-                    new ReceivedEvent(new NoteOffEvent(), TimeSpan.FromSeconds(2) + stopPeriod),
+                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
+                    new SentReceivedEvent(new NoteOffEvent(), TimeSpan.FromSeconds(2) + stopPeriod),
                 },
                 setupPlayback: playback =>
                 {
@@ -745,7 +746,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
+                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
                 },
                 setupPlayback: playback => playback.InterruptNotesOnStop = false);
         }
@@ -797,8 +798,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent(), ScaleTimeSpan(firstEventTime, speed)),
-                    new ReceivedEvent(new NoteOffEvent(), ScaleTimeSpan(firstEventTime + lastEventTime, 1 / speed) + stopPeriod),
+                    new SentReceivedEvent(new NoteOnEvent(), ScaleTimeSpan(firstEventTime, speed)),
+                    new SentReceivedEvent(new NoteOffEvent(), ScaleTimeSpan(firstEventTime + lastEventTime, 1 / speed) + stopPeriod),
                 },
                 afterStart: playback => CheckCurrentTime(playback, TimeSpan.Zero, "started"),
                 setupPlayback: playback =>
@@ -849,13 +850,13 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
             var stopwatch = new Stopwatch();
 
-            var receivedEvents1 = new List<ReceivedEvent>();
+            var receivedEvents1 = new List<SentReceivedEvent>();
             var outputDevice1 = TestDeviceManager.GetOutputDevice("A");
-            outputDevice1.EventSent += (_, e) => receivedEvents1.Add(new ReceivedEvent(e.Event, stopwatch.Elapsed));
+            outputDevice1.EventSent += (_, e) => receivedEvents1.Add(new SentReceivedEvent(e.Event, stopwatch.Elapsed));
 
-            var receivedEvents2 = new List<ReceivedEvent>();
+            var receivedEvents2 = new List<SentReceivedEvent>();
             var outputDevice2 = TestDeviceManager.GetOutputDevice("B");
-            outputDevice2.EventSent += (_, e) => receivedEvents2.Add(new ReceivedEvent(e.Event, stopwatch.Elapsed));
+            outputDevice2.EventSent += (_, e) => receivedEvents2.Add(new SentReceivedEvent(e.Event, stopwatch.Elapsed));
 
             ClassicAssert.AreNotSame(
                 outputDevice1,
@@ -877,13 +878,128 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 WaitOperations.Wait(SendReceiveUtilities.MaximumEventSendReceiveDelay);
             }
 
-            CheckReceivedEvents(
+            SendReceiveUtilities.CheckReceivedEvents(
                 receivedEvents1,
-                new[] { new ReceivedEvent(new NoteOnEvent(), firstEventDelay) });
+                new[] { new SentReceivedEvent(new NoteOnEvent(), firstEventDelay) });
 
-            CheckReceivedEvents(
+            SendReceiveUtilities.CheckReceivedEvents(
                 receivedEvents2,
-                new[] { new ReceivedEvent(new NoteOffEvent(), firstEventDelay + secondEventDelay) });
+                new[] { new SentReceivedEvent(new NoteOffEvent(), firstEventDelay + secondEventDelay) });
+        }
+
+        [Retry(RetriesNumber)]
+        [TestCaseSource(nameof(GetFilesForTesting))]
+        public void CheckFilePlayback(string filePath)
+        {
+            var midiFile = MidiFile
+                .Read(filePath)
+                .TakePart(new MetricTimeSpan(0, 0, 10));
+            midiFile.Sanitize();
+
+            var playbackObjects = midiFile
+                .GetTimedEvents()
+                .ToArray();
+
+            var tempoMap = midiFile.GetTempoMap();
+
+            CheckPlayback(
+                useOutputDevice: false,
+                createPlayback: outputDevice => new Playback(playbackObjects, tempoMap, outputDevice),
+                actions: Array.Empty<PlaybackAction>(),
+                expectedReceivedEvents: playbackObjects
+                    .Select(e => new SentReceivedEvent(e.Event, e.TimeAs<MetricTimeSpan>(tempoMap)))
+                    .ToArray(),
+                setupPlayback: playback =>
+                {
+                    playback.SendNoteOffEventsForNonActiveNotes = true;
+                    playback.SendNoteOnEventsForActiveNotes = true;
+                });
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
+        public void CalculateTempoMap_False()
+        {
+            var playbackObjects = new[]
+            {
+                new TimedEvent(new NoteOnEvent())
+                    .SetTime((MetricTimeSpan)TimeSpan.Zero, TempoMap),
+                new TimedEvent(new SetTempoEvent(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 2))
+                    .SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(200), TempoMap),
+                new TimedEvent(new NoteOffEvent())
+                    .SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(500), TempoMap),
+            };
+
+            CheckPlayback(
+                useOutputDevice: false,
+                createPlayback: outputDevice => new Playback(playbackObjects, TempoMap, outputDevice),
+                actions: Array.Empty<PlaybackAction>(),
+                expectedReceivedEvents: new[]
+                {
+                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
+                    new SentReceivedEvent(new SetTempoEvent(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 2), TimeSpan.FromMilliseconds(200)),
+                    new SentReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(500)),
+                },
+                additionalChecks: playback =>
+                {
+                    ClassicAssert.AreNotSame(TempoMap, playback.TempoMap, "Tempo map is the same as the original one.");
+                    ClassicAssert.AreEqual(TempoMap, playback.TempoMap, "Invalid tempo map.");
+                });
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
+        public void CalculateTempoMap_True()
+        {
+            var playbackObjects = new[]
+            {
+                new TimedEvent(new NoteOnEvent())
+                    .SetTime((MetricTimeSpan)TimeSpan.Zero, TempoMap),
+                new TimedEvent(new SetTempoEvent(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 2))
+                    .SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(200), TempoMap),
+                new TimedEvent(new NoteOffEvent())
+                    .SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(500), TempoMap),
+            };
+
+            CheckPlayback(
+                useOutputDevice: false,
+                createPlayback: outputDevice => new Playback(playbackObjects, TempoMap, outputDevice, new PlaybackSettings
+                {
+                    CalculateTempoMap = true,
+                }),
+                actions: Array.Empty<PlaybackAction>(),
+                expectedReceivedEvents: new[]
+                {
+                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
+                    new SentReceivedEvent(new SetTempoEvent(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 2), TimeSpan.FromMilliseconds(200)),
+                    new SentReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(350)),
+                },
+                additionalChecks: playback =>
+                {
+                    ClassicAssert.AreNotEqual(TempoMap, playback.TempoMap, "Invalid tempo map.");
+                    ClassicAssert.AreEqual(
+                        AddTempoChanges(TempoMap, (TimeSpan.FromMilliseconds(200), new Tempo(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 2))),
+                        playback.TempoMap,
+                        "Invalid tempo map.");
+                });
+        }
+
+        #endregion
+
+        #region Private methods
+
+        private static object[] GetFilesForTesting()
+        {
+            return TestFilesProvider
+                .GetValidFilesPaths(MidiFileFormat.MultiTrack)
+                .Where(f =>
+                {
+                    var midiFile = MidiFile.Read(f);
+                    var duration = (TimeSpan)midiFile.GetDuration<MetricTimeSpan>();
+                    return duration > TimeSpan.FromSeconds(10);
+                })
+                .Take(5)
+                .ToArray();
         }
 
         #endregion

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System;
 using Melanchall.DryWetMidi.Interaction;
 using Melanchall.DryWetMidi.Core;
+using System.Linq;
 
 namespace Melanchall.DryWetMidi.Multimedia
 {
@@ -174,17 +175,20 @@ namespace Melanchall.DryWetMidi.Multimedia
                 snapPointNode = _snapPoints.GetNextCoordinate(snapPointNode);
             }
 
-            var node = _playbackEvents.GetFirstCoordinateAboveThreshold(time);
-
-            while (node != null)
+            if (_snapPointsGroups.Any())
             {
-                foreach (var group in _snapPointsGroups)
-                {
-                    if (group.IsEnabled && group.Predicate(node.Value.Event) && (snapPointNode == null || node.Key < snapPointNode.Key))
-                        return new SnapPoint(node.Key);
-                }
+                var node = _playbackEvents.GetFirstCoordinateAboveThreshold(time);
 
-                node = _playbackEvents.GetNextCoordinate(node);
+                while (node != null)
+                {
+                    foreach (var group in _snapPointsGroups)
+                    {
+                        if (group.IsEnabled && group.Predicate(node.Value.Event) && (snapPointNode == null || node.Key < snapPointNode.Key))
+                            return new SnapPoint(node.Key);
+                    }
+
+                    node = _playbackEvents.GetNextCoordinate(node);
+                }
             }
 
             return snapPointNode?.Value;
@@ -230,17 +234,20 @@ namespace Melanchall.DryWetMidi.Multimedia
                 snapPointNode = _snapPoints.GetPreviousCoordinate(snapPointNode);
             }
 
-            var node = _playbackEvents.GetLastCoordinateBelowThreshold(time);
-
-            while (node != null)
+            if (_snapPointsGroups.Any())
             {
-                foreach (var group in _snapPointsGroups)
-                {
-                    if (group.IsEnabled && group.Predicate(node.Value.Event) && (snapPointNode == null || node.Key > snapPointNode.Key))
-                        return new SnapPoint(node.Key);
-                }
+                var node = _playbackEvents.GetLastCoordinateBelowThreshold(time);
 
-                node = _playbackEvents.GetPreviousCoordinate(node);
+                while (node != null)
+                {
+                    foreach (var group in _snapPointsGroups)
+                    {
+                        if (group.IsEnabled && group.Predicate(node.Value.Event) && (snapPointNode == null || node.Key > snapPointNode.Key))
+                            return new SnapPoint(node.Key);
+                    }
+
+                    node = _playbackEvents.GetPreviousCoordinate(node);
+                }
             }
 
             return snapPointNode?.Value;

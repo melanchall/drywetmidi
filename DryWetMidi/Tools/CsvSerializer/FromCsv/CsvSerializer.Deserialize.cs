@@ -594,13 +594,6 @@ namespace Melanchall.DryWetMidi.Tools
             CsvSerializationSettings settings,
             bool parseChunkId)
         {
-            // TODO
-            //if (record.TrackNumber == null)
-            //    CsvError.ThrowBadFormat(record.CsvRecord.LineNumber, "Invalid track number.");
-            //
-            //if (record.Time == null)
-            //    CsvError.ThrowBadFormat(record.CsvRecord.LineNumber, "Invalid time.");
-
             var parameters = record.Parameters;
             if (parameters.Length < 6)
                 CsvError.ThrowBadFormat(record.CsvRecord.LineNumber, "Invalid number of parameters provided.");

@@ -26,6 +26,8 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// </summary>
         public NoteDetectionSettings NoteDetectionSettings { get; set; }
 
+        public bool CalculateTempoMap { get; set; }
+
         #endregion
     }
 }

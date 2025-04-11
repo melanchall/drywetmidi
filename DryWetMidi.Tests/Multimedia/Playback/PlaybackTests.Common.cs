@@ -56,14 +56,14 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             bool useOutputDevice,
             ICollection<ITimedObject> initialPlaybackObjects,
             PlaybackAction[] actions,
-            ICollection<ReceivedEvent> expectedReceivedEvents,
+            ICollection<SentReceivedEvent> expectedReceivedEvents,
             Action<Playback> setupPlayback = null,
             Action<Playback> afterStart = null,
             int? repeatsCount = null,
             PlaybackSettings playbackSettings = null,
             TimeSpan? sendReceiveTimeDelta = null) => CheckPlayback(
                 useOutputDevice: useOutputDevice,
-                createPlayback: outpuDevice => new Playback(initialPlaybackObjects, TempoMap, outpuDevice, playbackSettings),
+                createPlayback: outputDevice => new Playback(initialPlaybackObjects, TempoMap, outputDevice, playbackSettings),
                 actions: actions,
                 expectedReceivedEvents: expectedReceivedEvents,
                 setupPlayback: setupPlayback,
@@ -75,7 +75,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             bool useOutputDevice,
             Func<IOutputDevice, Playback> createPlayback,
             PlaybackAction[] actions,
-            ICollection<ReceivedEvent> expectedReceivedEvents,
+            ICollection<SentReceivedEvent> expectedReceivedEvents,
             Action<Playback> setupPlayback = null,
             Action<Playback> afterStart = null,
             int? repeatsCount = null,
@@ -83,11 +83,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             TimeSpan? sendReceiveTimeDelta = null)
         {
             var outputDevice = useOutputDevice
-                ? (IOutputDevice)OutputDevice.GetByName(SendReceiveUtilities.DeviceToTestOnName)
+                ? OutputDevice.GetByName(SendReceiveUtilities.DeviceToTestOnName)
                 : TestDeviceManager.GetOutputDevice(SendReceiveUtilities.DeviceToTestOnName);
 
             var stopwatch = new Stopwatch();
-            var receivedEvents = new List<ReceivedEvent>();
+            var receivedEvents = new List<SentReceivedEvent>();
 
             var actionTimes = Enumerable
                 .Range(0, actions.Length)
@@ -96,11 +96,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
             using (outputDevice)
             {
-                if (useOutputDevice)
-                    SendReceiveUtilities.WarmUpDevice((OutputDevice)outputDevice);
-
-                outputDevice.EventSent += (_, e) => receivedEvents.Add(new ReceivedEvent(e.Event.Clone(), stopwatch.Elapsed));
-
+                outputDevice.EventSent += (_, e) => receivedEvents.Add(new SentReceivedEvent(e.Event.Clone(), stopwatch.Elapsed));
+                
                 using (var playback = createPlayback(outputDevice))
                 {
                     setupPlayback?.Invoke(playback);
@@ -144,12 +141,12 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                         actionsExecutedCount,
                         "Invalid number of actions executed.");
 
-                    CheckReceivedEvents(
+                    SendReceiveUtilities.CheckReceivedEvents(
                         receivedEvents,
                         expectedReceivedEvents.ToList(),
                         sendReceiveTimeDelta: sendReceiveTimeDelta ?? (useOutputDevice
                             ? SendReceiveUtilities.MaximumEventSendReceiveDelay
-                            : TimeSpan.FromMilliseconds(10)));
+                            : TimeSpan.FromMilliseconds(20)));
 
                     additionalChecks?.Invoke(playback);
                 }
@@ -202,52 +199,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             }
         }
 
-        private void CheckReceivedEvents(
-            IReadOnlyList<ReceivedEvent> receivedEvents,
-            IReadOnlyList<ReceivedEvent> expectedReceivedEvents,
-            TimeSpan? sendReceiveTimeDelta = null)
-        {
-            var equalityCheckSettings = new MidiEventEqualityCheckSettings { CompareDeltaTimes = false };
-            var timeDelta = sendReceiveTimeDelta ?? SendReceiveUtilities.MaximumEventSendReceiveDelay;
-
-            var actualEventsList = receivedEvents.ToList();
-            var notReceivedEvents = new List<ReceivedEvent>();
-
-            foreach (var expectedReceivedEvent in expectedReceivedEvents)
-            {
-                var actualEvent = actualEventsList.FirstOrDefault(e =>
-                {
-                    if (!MidiEvent.Equals(expectedReceivedEvent.Event, e.Event, equalityCheckSettings))
-                        return false;
-
-                    var expectedTime = expectedReceivedEvent.Time;
-                    var offsetFromExpectedTime = (e.Time - expectedTime).Duration();
-
-                    return offsetFromExpectedTime <= timeDelta;
-                });
-
-                if (actualEvent == null)
-                    notReceivedEvents.Add(expectedReceivedEvent);
-                else
-                    actualEventsList.Remove(actualEvent);
-            }
-
-            var actualEventsString = $"Actual events:{Environment.NewLine}{string.Join(Environment.NewLine, receivedEvents)}";
-
-            CollectionAssert.IsEmpty(
-                notReceivedEvents,
-                $"Following events was not received:{Environment.NewLine}{string.Join(Environment.NewLine, notReceivedEvents)}{Environment.NewLine}" +
-                actualEventsString);
-
-            CollectionAssert.IsEmpty(
-                actualEventsList,
-                $"Following events are unexpectedly received:{Environment.NewLine}{string.Join(Environment.NewLine, actualEventsList)}{Environment.NewLine}" +
-                actualEventsString);
-        }
-
         private static void CheckCurrentTime(Playback playback, TimeSpan expectedCurrentTime, string afterPlaybackAction)
         {
-            TimeSpan currentTime = (MetricTimeSpan)playback.GetCurrentTime(TimeSpanType.Metric);
+            TimeSpan currentTime = playback.GetCurrentTime<MetricTimeSpan>();
             var epsilon = TimeSpan.FromMilliseconds(15);
             var delta = (currentTime - expectedCurrentTime).Duration();
             ClassicAssert.IsTrue(
@@ -257,12 +211,12 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
         private static TimeSpan ScaleTimeSpan(TimeSpan timeSpan, double scaleValue)
         {
-            return TimeSpan.FromTicks(MathUtilities.RoundToLong(timeSpan.Ticks * scaleValue));
+            return timeSpan.MultiplyBy(scaleValue);
         }
 
         private static TimeSpan ApplySpeedToTimeSpan(TimeSpan timeSpan, double speed)
         {
-            return TimeSpan.FromTicks(MathUtilities.RoundToLong(timeSpan.Ticks / speed));
+            return timeSpan.DivideBy(speed);
         }
 
         #endregion

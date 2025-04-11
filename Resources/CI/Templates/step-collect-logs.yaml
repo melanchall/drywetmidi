@@ -71,6 +71,7 @@ steps:
       New-Item -Path "$(Pipeline.Workspace)" -Name "Logs" -ItemType "directory"
       Copy-Item -Path "$(Build.SourcesDirectory)/*.log" -Destination "$(Pipeline.Workspace)/Logs"
       Copy-Item -Path "$(Build.SourcesDirectory)/*.binlog" -Destination "$(Pipeline.Workspace)/Logs"
+      Get-ChildItem .\TestLog_*.log -Recurse -Force | Copy-Item -Destination "$(Pipeline.Workspace)/Logs"
       
 - task: PublishPipelineArtifact@1
   displayName: Publish 'Logs' artifact

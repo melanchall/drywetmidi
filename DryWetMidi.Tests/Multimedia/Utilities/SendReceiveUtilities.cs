@@ -2,12 +2,11 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Threading;
+using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Multimedia;
 using Melanchall.DryWetMidi.Tests.Common;
 using Melanchall.DryWetMidi.Tests.Utilities;
-using NUnit.Framework;
 using NUnit.Framework.Legacy;
 
 namespace Melanchall.DryWetMidi.Tests.Multimedia
@@ -23,43 +22,83 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
         #region Methods
 
-        public static void CheckEventsReceiving(IReadOnlyList<EventToSend> eventsToSend)
+        public static void CheckEventsReceiving(
+            EventToSend2[] eventsToSend,
+            IOutputDevice outputDevice,
+            IInputDevice inputDevice,
+            TimeSpan? sendReceiveTimeout = null)
         {
-            var receivedEvents = new List<ReceivedEvent>();
-            var sentEvents = new List<SentEvent>();
+            var receivedEvents = new List<SentReceivedEvent>();
+            var sentEvents = new List<SentReceivedEvent>();
             var stopwatch = new Stopwatch();
 
-            using (var outputDevice = OutputDevice.GetByName(DeviceToTestOnName))
-            {
-                WarmUpDevice(outputDevice);
-                outputDevice.EventSent += (_, e) => sentEvents.Add(new SentEvent(e.Event, stopwatch.Elapsed));
+            void OnEventSent(object sender, MidiEventSentEventArgs args) =>
+                sentEvents.Add(new SentReceivedEvent(args.Event, stopwatch.Elapsed));
 
-                using (var inputDevice = InputDevice.GetByName(DeviceToTestOnName))
+            void OnEventReceived(object sender, MidiEventReceivedEventArgs args) =>
+                receivedEvents.Add(new SentReceivedEvent(args.Event, stopwatch.Elapsed));
+
+            outputDevice.EventSent += OnEventSent;
+            inputDevice.EventReceived += OnEventReceived;
+
+            stopwatch.Start();
+            SendEvents(
+                eventsToSend,
+                outputDevice,
+                midiEvent =>
                 {
-                    inputDevice.EventReceived += (_, e) => receivedEvents.Add(new ReceivedEvent(e.Event, stopwatch.Elapsed));
-                    inputDevice.StartEventsListening();
+                    sentEvents.Add(new SentReceivedEvent(midiEvent, stopwatch.Elapsed));
+                    receivedEvents.Add(new SentReceivedEvent(midiEvent, stopwatch.Elapsed));
+                });
 
-                    stopwatch.Start();
-                    SendEvents(eventsToSend, outputDevice);
-                    stopwatch.Stop();
+            sendReceiveTimeout = sendReceiveTimeout ?? TimeSpan.FromMilliseconds(50);
+            var timeout = (eventsToSend.LastOrDefault()?.Time ?? TimeSpan.Zero) + sendReceiveTimeout.Value;
+            var areEventsReceived = WaitOperations.Wait(() => receivedEvents.Count == eventsToSend.Length, timeout);
 
-                    var timeout = TimeSpan.FromTicks(eventsToSend.Sum(e => e.Delay.Ticks)) + MaximumEventSendReceiveDelay;
-                    var areEventsReceived = WaitOperations.Wait(() => receivedEvents.Count == eventsToSend.Count, timeout);
-                    
-                    if (!areEventsReceived)
-                    {
-                        ClassicAssert.Fail(
-                            $"Events are not received for timeout {timeout}. " +
-                            $"Events to send: {string.Join(", ", eventsToSend.Select(e => e.Event))}. " +
-                            $"Sent events: {string.Join(", ", sentEvents.Select(e => e.Event))}. " +
-                            $"Received events: {string.Join(", ", receivedEvents.Select(e => e.Event))}.");
-                    }
+            try
+            {
+                var expectedReceivedEvents = eventsToSend
+                    .Select(e => new SentReceivedEvent(e.Event, e.Time))
+                    .ToArray();
 
-                    inputDevice.StopEventsListening();
-                }
+                CheckReceivedEvents(
+                    sentEvents,
+                    expectedReceivedEvents,
+                    sendReceiveTimeout,
+                    "Invalid sent events.");
+
+                CheckReceivedEvents(
+                    receivedEvents,
+                    expectedReceivedEvents,
+                    sendReceiveTimeout,
+                    "Invalid received events.");
             }
+            finally
+            {
+                outputDevice.EventSent -= OnEventSent;
+                inputDevice.EventReceived -= OnEventReceived;
+            }
+        }
 
-            CompareSentReceivedEvents(eventsToSend, sentEvents, receivedEvents);
+        public static void SendEvents(
+            IEnumerable<EventToSend2> eventsToSend,
+            IOutputDevice outputDevice,
+            Action<MidiEvent> onSent = null)
+        {
+            var stopwatch = Stopwatch.StartNew();
+
+            foreach (var eventToSend in eventsToSend)
+            {
+                while (stopwatch.Elapsed < eventToSend.Time)
+                {
+                }
+
+                var midiEvent = eventToSend.Event;
+                if (midiEvent is MetaEvent)
+                    onSent?.Invoke(midiEvent);
+                else
+                    outputDevice.SendEvent(midiEvent);
+            }
         }
 
         public static void SendEvents(IEnumerable<EventToSend> eventsToSend, IOutputDevice outputDevice)
@@ -71,15 +110,18 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             }
         }
 
-        public static void CompareSentReceivedEvents(IReadOnlyList<EventToSend> eventsToSend, IReadOnlyList<SentEvent> sentEvents, IReadOnlyList<ReceivedEvent> receivedEvents)
+        public static void CompareSentReceivedEvents(
+            IReadOnlyList<EventToSend> eventsToSend,
+            IReadOnlyList<SentReceivedEvent> sentEvents,
+            IReadOnlyList<SentReceivedEvent> receivedEvents)
         {
             CompareSentReceivedEvents(eventsToSend, sentEvents, receivedEvents, MaximumEventSendReceiveDelay);
         }
 
         public static void CompareSentReceivedEvents(
             IReadOnlyList<EventToSend> eventsToSend,
-            IReadOnlyList<SentEvent> sentEvents,
-            IReadOnlyList<ReceivedEvent> receivedEvents,
+            IReadOnlyList<SentReceivedEvent> sentEvents,
+            IReadOnlyList<SentReceivedEvent> receivedEvents,
             TimeSpan maximumEventSendReceiveDelay)
         {
             for (var i = 0; i < sentEvents.Count; i++)
@@ -99,39 +141,76 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             }
         }
 
-        public static void CompareReceivedEvents(
-            IReadOnlyList<ReceivedEvent> receivedEvents,
-            IReadOnlyList<ReceivedEvent> expectedReceivedEvents,
-            TimeSpan maximumEventSendReceiveDelay)
+        //public static void CompareReceivedEvents(
+        //    IReadOnlyList<SentReceivedEvent> receivedEvents,
+        //    IReadOnlyList<SentReceivedEvent> expectedReceivedEvents,
+        //    TimeSpan maximumEventSendReceiveDelay)
+        //{
+        //    for (var i = 0; i < expectedReceivedEvents.Count; i++)
+        //    {
+        //        var receivedEvent = receivedEvents[i];
+        //        var expectedReceivedEvent = expectedReceivedEvents[i];
+        //
+        //        MidiAsserts.AreEqual(
+        //            expectedReceivedEvent.Event,
+        //            receivedEvent.Event,
+        //            false,
+        //            $"Received event ({receivedEvent.Event}) doesn't match the expected one ({expectedReceivedEvent.Event}).");
+        //
+        //        var delay = (expectedReceivedEvent.Time - receivedEvent.Time).Duration();
+        //        ClassicAssert.LessOrEqual(
+        //            delay,
+        //            maximumEventSendReceiveDelay,
+        //            $"Event was received too late (at {receivedEvent.Time} instead of {expectedReceivedEvent.Time}). Delay is too big.");
+        //    }
+        //}
+
+        public static void CheckReceivedEvents(
+            IReadOnlyList<SentReceivedEvent> receivedEvents,
+            IReadOnlyList<SentReceivedEvent> expectedReceivedEvents,
+            TimeSpan? sendReceiveTimeDelta = null,
+            string label = null)
         {
-            for (var i = 0; i < expectedReceivedEvents.Count; i++)
+            var equalityCheckSettings = new MidiEventEqualityCheckSettings { CompareDeltaTimes = false };
+            var timeDelta = sendReceiveTimeDelta ?? MaximumEventSendReceiveDelay;
+
+            var actualEventsList = receivedEvents.ToList();
+            var notReceivedEvents = new List<(SentReceivedEvent Event, SentReceivedEvent NearestEvent)>();
+
+            foreach (var expectedReceivedEvent in expectedReceivedEvents)
             {
-                var receivedEvent = receivedEvents[i];
-                var expectedReceivedEvent = expectedReceivedEvents[i];
+                SentReceivedEvent GetMatchedEvent(TimeSpan delta) => actualEventsList.FirstOrDefault(e =>
+                {
+                    if (!MidiEvent.Equals(expectedReceivedEvent.Event, e.Event, equalityCheckSettings))
+                        return false;
 
-                MidiAsserts.AreEqual(
-                    expectedReceivedEvent.Event,
-                    receivedEvent.Event,
-                    false,
-                    $"Received event ({receivedEvent.Event}) doesn't match the expected one ({expectedReceivedEvent.Event}).");
+                    var expectedTime = expectedReceivedEvent.Time;
+                    var offsetFromExpectedTime = (e.Time - expectedTime).Duration();
 
-                var delay = (expectedReceivedEvent.Time - receivedEvent.Time).Duration();
-                ClassicAssert.LessOrEqual(
-                    delay,
-                    maximumEventSendReceiveDelay,
-                    $"Event was received too late (at {receivedEvent.Time} instead of {expectedReceivedEvent.Time}). Delay is too big.");
+                    return offsetFromExpectedTime <= delta;
+                });
+
+                var actualEvent = GetMatchedEvent(timeDelta);
+
+                if (actualEvent == null)
+                    notReceivedEvents.Add((expectedReceivedEvent, GetMatchedEvent(timeDelta.MultiplyBy(2))));
+                else
+                    actualEventsList.Remove(actualEvent);
             }
-        }
 
-        public static void WarmUpDevice(OutputDevice outputDevice)
-        {
-            var eventsToSend = Enumerable.Range(0, 10)
-                                         .SelectMany(_ => new MidiEvent[] { new NoteOnEvent(), new NoteOffEvent() })
-                                         .Select(e => new EventToSend(e, TimeSpan.FromMilliseconds(10)))
-                                         .ToList();
+            var actualEventsString = $"Actual events:{Environment.NewLine}{string.Join(Environment.NewLine, receivedEvents)}";
 
-            outputDevice.PrepareForEventsSending();
-            SendEvents(eventsToSend, outputDevice);
+            var labelString = string.IsNullOrEmpty(label) ? string.Empty : $"{label} ";
+
+            CollectionAssert.IsEmpty(
+                notReceivedEvents,
+                $"{labelString}Following events was not received:{Environment.NewLine}{string.Join(Environment.NewLine, notReceivedEvents.Select(e => $"{e.Event} (nearest: {e.NearestEvent})"))}{Environment.NewLine}" +
+                actualEventsString);
+
+            CollectionAssert.IsEmpty(
+                actualEventsList,
+                $"{labelString}Following events are unexpectedly received:{Environment.NewLine}{string.Join(Environment.NewLine, actualEventsList)}{Environment.NewLine}" +
+                actualEventsString);
         }
 
         #endregion

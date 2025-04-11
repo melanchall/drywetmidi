@@ -13,11 +13,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
     {
         #region Constants
 
-        private static readonly MidiEvent MidiEvent = new ProgramChangeEvent((SevenBitNumber)99);
+        private static readonly MidiEvent MidiEventForCallback = new ProgramChangeEvent((SevenBitNumber)99);
 
         private static readonly EventCallback EventCallback = (e, rt, t) =>
         {
-            return MidiEvent;
+            return MidiEventForCallback;
         };
 
         #endregion
@@ -40,7 +40,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new PlaybackAction(TimeSpan.FromMilliseconds(250),
                         p => p.EventCallback = (e, rt, t) => null),
                 },
-                expectedReceivedEvents: new ReceivedEvent[] { });
+                expectedReceivedEvents: new SentReceivedEvent[] { });
         }
 
         [Retry(RetriesNumber)]
@@ -62,8 +62,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
-                    new ReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(200))
+                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
+                    new SentReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(200))
                 });
         }
 
@@ -85,7 +85,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new StopEvent(), TimeSpan.FromMilliseconds(400))
+                    new SentReceivedEvent(new StopEvent(), TimeSpan.FromMilliseconds(400))
                 });
         }
 
@@ -107,7 +107,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new ProgramChangeEvent((SevenBitNumber)33), TimeSpan.FromMilliseconds(200))
+                    new SentReceivedEvent(new ProgramChangeEvent((SevenBitNumber)33), TimeSpan.FromMilliseconds(200))
                 });
         }
 
@@ -131,10 +131,10 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
-                    new ReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(200)),
-                    new ReceivedEvent(new ProgramChangeEvent((SevenBitNumber)33), TimeSpan.FromMilliseconds(500)),
-                    new ReceivedEvent(MidiEvent, TimeSpan.FromMilliseconds(600))
+                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
+                    new SentReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(200)),
+                    new SentReceivedEvent(new ProgramChangeEvent((SevenBitNumber)33), TimeSpan.FromMilliseconds(500)),
+                    new SentReceivedEvent(MidiEventForCallback, TimeSpan.FromMilliseconds(600))
                 });
         }
 
@@ -146,7 +146,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             ICollection<ITimedObject> initialPlaybackObjects,
             EventCallback initialEventCallback,
             PlaybackAction[] actions,
-            ICollection<ReceivedEvent> expectedReceivedEvents)
+            ICollection<SentReceivedEvent> expectedReceivedEvents)
         {
             CheckPlayback(
                 useOutputDevice: false,

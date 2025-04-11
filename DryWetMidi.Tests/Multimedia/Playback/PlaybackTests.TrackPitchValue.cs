@@ -36,7 +36,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new StartEvent(), lastEventTime - (moveTo - moveFrom)),
+                    new SentReceivedEvent(new StartEvent(), lastEventTime - (moveTo - moveFrom)),
                 });
         }
 
@@ -66,8 +66,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new PitchBendEvent(pitchValue), TimeSpan.Zero),
-                    new ReceivedEvent(new StartEvent(), lastEventTime - (moveTo - moveFrom)),
+                    new SentReceivedEvent(new PitchBendEvent(pitchValue), TimeSpan.Zero),
+                    new SentReceivedEvent(new StartEvent(), lastEventTime - (moveTo - moveFrom)),
                 });
         }
 
@@ -97,9 +97,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new PitchBendEvent(pitchValue), TimeSpan.Zero),
-                    new ReceivedEvent(new PitchBendEvent(pitchValue), moveFrom),
-                    new ReceivedEvent(new StartEvent(), lastEventTime - (moveTo - moveFrom)),
+                    new SentReceivedEvent(new PitchBendEvent(pitchValue), TimeSpan.Zero),
+                    new SentReceivedEvent(new PitchBendEvent(pitchValue), moveFrom),
+                    new SentReceivedEvent(new StartEvent(), lastEventTime - (moveTo - moveFrom)),
                 });
         }
 
@@ -130,8 +130,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, pitchBendTime - (moveTo - moveFrom)),
-                    new ReceivedEvent(new StartEvent(), lastEventTime - (moveTo - moveFrom)),
+                    new SentReceivedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, pitchBendTime - (moveTo - moveFrom)),
+                    new SentReceivedEvent(new StartEvent(), lastEventTime - (moveTo - moveFrom)),
                 });
         }
 
@@ -162,8 +162,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, moveFrom),
-                    new ReceivedEvent(new StartEvent(), lastEventTime - (moveTo - moveFrom)),
+                    new SentReceivedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, moveFrom),
+                    new SentReceivedEvent(new StartEvent(), lastEventTime - (moveTo - moveFrom)),
                 });
         }
 
@@ -194,8 +194,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, pitchBendTime),
-                    new ReceivedEvent(new StartEvent(), lastEventTime - (moveTo - moveFrom)),
+                    new SentReceivedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, pitchBendTime),
+                    new SentReceivedEvent(new StartEvent(), lastEventTime - (moveTo - moveFrom)),
                 });
         }
 
@@ -226,10 +226,10 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, pitchBendTime),
-                    new ReceivedEvent(new PitchBendEvent() { Channel = (FourBitNumber)4 }, moveFrom),
-                    new ReceivedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, pitchBendTime + moveFrom - moveTo),
-                    new ReceivedEvent(new StartEvent(), lastEventTime + moveFrom - moveTo),
+                    new SentReceivedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, pitchBendTime),
+                    new SentReceivedEvent(new PitchBendEvent() { Channel = (FourBitNumber)4 }, moveFrom),
+                    new SentReceivedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, pitchBendTime + moveFrom - moveTo),
+                    new SentReceivedEvent(new StartEvent(), lastEventTime + moveFrom - moveTo),
                 });
         }
 
@@ -260,8 +260,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, moveFrom),
-                    new ReceivedEvent(new StartEvent(), lastEventTime + moveFrom - moveTo),
+                    new SentReceivedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, moveFrom),
+                    new SentReceivedEvent(new StartEvent(), lastEventTime + moveFrom - moveTo),
                 });
         }
 
@@ -292,9 +292,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, pitchBendTime),
-                    new ReceivedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, moveFrom),
-                    new ReceivedEvent(new StartEvent(), lastEventTime - pitchBendTime + moveFrom),
+                    new SentReceivedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, pitchBendTime),
+                    new SentReceivedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, moveFrom),
+                    new SentReceivedEvent(new StartEvent(), lastEventTime - pitchBendTime + moveFrom),
                 });
         }
 
@@ -332,8 +332,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, moveFrom + enableAfter),
-                    new ReceivedEvent(new StartEvent(), lastEventTime - moveTo + moveFrom),
+                    new SentReceivedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, moveFrom + enableAfter),
+                    new SentReceivedEvent(new StartEvent(), lastEventTime - moveTo + moveFrom),
                 },
                 setupPlayback: playback =>
                 {
@@ -372,10 +372,10 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, pitchBendTime),
-                    new ReceivedEvent(new PitchBendEvent() { Channel = (FourBitNumber)4 }, moveFrom + enableAfter),
-                    new ReceivedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, pitchBendTime - moveTo + moveFrom),
-                    new ReceivedEvent(new StartEvent(), lastEventTime - moveTo + moveFrom),
+                    new SentReceivedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, pitchBendTime),
+                    new SentReceivedEvent(new PitchBendEvent() { Channel = (FourBitNumber)4 }, moveFrom + enableAfter),
+                    new SentReceivedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, pitchBendTime - moveTo + moveFrom),
+                    new SentReceivedEvent(new StartEvent(), lastEventTime - moveTo + moveFrom),
                 },
                 setupPlayback: playback => playback.TrackPitchValue = false);
         }
@@ -405,7 +405,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new StartEvent(), lastEventTime - (moveTo - moveFrom)),
+                    new SentReceivedEvent(new StartEvent(), lastEventTime - (moveTo - moveFrom)),
                 },
                 setupPlayback: playback => playback.TrackPitchValue = false);
         }
@@ -436,8 +436,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new PitchBendEvent(pitchValue), TimeSpan.Zero),
-                    new ReceivedEvent(new StartEvent(), lastEventTime - (moveTo - moveFrom)),
+                    new SentReceivedEvent(new PitchBendEvent(pitchValue), TimeSpan.Zero),
+                    new SentReceivedEvent(new StartEvent(), lastEventTime - (moveTo - moveFrom)),
                 },
                 setupPlayback: playback => playback.TrackPitchValue = false);
         }
@@ -468,9 +468,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new PitchBendEvent(pitchValue), TimeSpan.Zero),
-                    new ReceivedEvent(new PitchBendEvent(pitchValue), moveFrom),
-                    new ReceivedEvent(new StartEvent(), lastEventTime - (moveTo - moveFrom)),
+                    new SentReceivedEvent(new PitchBendEvent(pitchValue), TimeSpan.Zero),
+                    new SentReceivedEvent(new PitchBendEvent(pitchValue), moveFrom),
+                    new SentReceivedEvent(new StartEvent(), lastEventTime - (moveTo - moveFrom)),
                 },
                 setupPlayback: playback => playback.TrackPitchValue = false);
         }
@@ -502,8 +502,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, pitchBendTime - (moveTo - moveFrom)),
-                    new ReceivedEvent(new StartEvent(), lastEventTime - (moveTo - moveFrom)),
+                    new SentReceivedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, pitchBendTime - (moveTo - moveFrom)),
+                    new SentReceivedEvent(new StartEvent(), lastEventTime - (moveTo - moveFrom)),
                 },
                 setupPlayback: playback => playback.TrackPitchValue = false);
         }
@@ -535,7 +535,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new StartEvent(), lastEventTime - (moveTo - moveFrom)),
+                    new SentReceivedEvent(new StartEvent(), lastEventTime - (moveTo - moveFrom)),
                 },
                 setupPlayback: playback => playback.TrackPitchValue = false);
         }
@@ -567,8 +567,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, pitchBendTime),
-                    new ReceivedEvent(new StartEvent(), lastEventTime - (moveTo - moveFrom)),
+                    new SentReceivedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, pitchBendTime),
+                    new SentReceivedEvent(new StartEvent(), lastEventTime - (moveTo - moveFrom)),
                 },
                 setupPlayback: playback => playback.TrackPitchValue = false);
         }
@@ -600,9 +600,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, pitchBendTime),
-                    new ReceivedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, pitchBendTime + moveFrom - moveTo),
-                    new ReceivedEvent(new StartEvent(), lastEventTime + moveFrom - moveTo),
+                    new SentReceivedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, pitchBendTime),
+                    new SentReceivedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, pitchBendTime + moveFrom - moveTo),
+                    new SentReceivedEvent(new StartEvent(), lastEventTime + moveFrom - moveTo),
                 },
                 setupPlayback: playback => playback.TrackPitchValue = false);
         }
@@ -634,8 +634,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, moveFrom),
-                    new ReceivedEvent(new StartEvent(), lastEventTime + moveFrom - moveTo),
+                    new SentReceivedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, moveFrom),
+                    new SentReceivedEvent(new StartEvent(), lastEventTime + moveFrom - moveTo),
                 },
                 setupPlayback: playback => playback.TrackPitchValue = false);
         }
@@ -667,9 +667,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, pitchBendTime),
-                    new ReceivedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, moveFrom),
-                    new ReceivedEvent(new StartEvent(), lastEventTime - pitchBendTime + moveFrom),
+                    new SentReceivedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, pitchBendTime),
+                    new SentReceivedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, moveFrom),
+                    new SentReceivedEvent(new StartEvent(), lastEventTime - pitchBendTime + moveFrom),
                 },
                 setupPlayback: playback => playback.TrackPitchValue = false);
         }
@@ -708,8 +708,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, moveFrom),
-                    new ReceivedEvent(new StartEvent(), lastEventTime - moveTo + moveFrom),
+                    new SentReceivedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, moveFrom),
+                    new SentReceivedEvent(new StartEvent(), lastEventTime - moveTo + moveFrom),
                 },
                 setupPlayback: playback =>
                 {
@@ -747,10 +747,10 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, pitchBendTime),
-                    new ReceivedEvent(new PitchBendEvent() { Channel = (FourBitNumber)4 }, moveFrom),
-                    new ReceivedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, pitchBendTime - moveTo + moveFrom),
-                    new ReceivedEvent(new StartEvent(), lastEventTime - moveTo + moveFrom),
+                    new SentReceivedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, pitchBendTime),
+                    new SentReceivedEvent(new PitchBendEvent() { Channel = (FourBitNumber)4 }, moveFrom),
+                    new SentReceivedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, pitchBendTime - moveTo + moveFrom),
+                    new SentReceivedEvent(new StartEvent(), lastEventTime - moveTo + moveFrom),
                 });
         }
 

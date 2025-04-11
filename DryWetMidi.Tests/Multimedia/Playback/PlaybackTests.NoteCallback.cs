@@ -53,7 +53,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 new PlaybackAction(TimeSpan.FromMilliseconds(500),
                     p => p.NoteCallback = (d, rt, rl, t) => NotePlaybackData.SkipNote),
             },
-            expectedReceivedEvents: Array.Empty<ReceivedEvent>(),
+            expectedReceivedEvents: Array.Empty<SentReceivedEvent>(),
             expectedNotesEvents: Array.Empty<(EventType, Note, Note, bool)>(),
             setupPlayback: playback => playback.NoteCallback = (d, rt, rl, t) => null);
 
@@ -80,8 +80,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)100, (SevenBitNumber)80), TimeSpan.FromMilliseconds(1500)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)100, (SevenBitNumber)0), TimeSpan.FromMilliseconds(2000))
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)100, (SevenBitNumber)80), TimeSpan.FromMilliseconds(1500)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)100, (SevenBitNumber)0), TimeSpan.FromMilliseconds(2000))
                 },
                 expectedNotesEvents: new[]
                 {
@@ -114,8 +114,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
-                    new ReceivedEvent(new NoteOffEvent(), TimeSpan.FromSeconds(1))
+                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
+                    new SentReceivedEvent(new NoteOffEvent(), TimeSpan.FromSeconds(1))
                 },
                 expectedNotesEvents: new[]
                 {
@@ -158,10 +158,10 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), TimeSpan.Zero),
-                    new ReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), TimeSpan.FromSeconds(1)),
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)(100 + TransposeBy), (SevenBitNumber)80), TimeSpan.FromMilliseconds(1500)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)(100 + TransposeBy), (SevenBitNumber)0), TimeSpan.FromMilliseconds(2000))
+                    new SentReceivedEvent(new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), TimeSpan.Zero),
+                    new SentReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), TimeSpan.FromSeconds(1)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)(100 + TransposeBy), (SevenBitNumber)80), TimeSpan.FromMilliseconds(1500)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)(100 + TransposeBy), (SevenBitNumber)0), TimeSpan.FromMilliseconds(2000))
                 },
                 expectedNotesEvents: new[]
                 {
@@ -202,8 +202,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), noteOnDelay),
-                    new ReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), stopAfter),
+                    new SentReceivedEvent(new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), noteOnDelay),
+                    new SentReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), stopAfter),
                 },
                 expectedNotesEvents: new[]
                 {
@@ -247,9 +247,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), noteOnDelay),
-                    new ReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), stopAfter),
-                    new ReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), noteOnDelay + stopAfter + stopPeriod + noteOffDelay - stopAfter),
+                    new SentReceivedEvent(new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), noteOnDelay),
+                    new SentReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), stopAfter),
+                    new SentReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), noteOnDelay + stopAfter + stopPeriod + noteOffDelay - stopAfter),
                 },
                 expectedNotesEvents: new[]
                 {
@@ -294,10 +294,10 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), noteOnDelay),
-                    new ReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), stopAfter),
-                    new ReceivedEvent(new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), stopAfter + stopPeriod),
-                    new ReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), noteOnDelay + stopAfter + stopPeriod + noteOffDelay - stopAfter),
+                    new SentReceivedEvent(new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), noteOnDelay),
+                    new SentReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), stopAfter),
+                    new SentReceivedEvent(new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), stopAfter + stopPeriod),
+                    new SentReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), noteOnDelay + stopAfter + stopPeriod + noteOffDelay - stopAfter),
                 },
                 expectedNotesEvents: new[]
                 {
@@ -369,10 +369,10 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), firstEventTime),
-                    new ReceivedEvent(new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), stopAfter + stopPeriod),
-                    new ReceivedEvent(new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), stopAfter + stopPeriod + firstAfterResumeDelay + secondAfterResumeDelay),
-                    new ReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), stopAfter + stopPeriod + firstAfterResumeDelay + secondAfterResumeDelay + ScaleTimeSpan(lastEventTime, 1.0 / speed)),
+                    new SentReceivedEvent(new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), firstEventTime),
+                    new SentReceivedEvent(new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), stopAfter + stopPeriod),
+                    new SentReceivedEvent(new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), stopAfter + stopPeriod + firstAfterResumeDelay + secondAfterResumeDelay),
+                    new SentReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), stopAfter + stopPeriod + firstAfterResumeDelay + secondAfterResumeDelay + ScaleTimeSpan(lastEventTime, 1.0 / speed)),
                 },
                 expectedNotesEvents: new[]
                 {
@@ -449,8 +449,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), firstEventTime),
-                    new ReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), ScaleTimeSpan(lastEventTime - stepAfterStop - stepAfterResumed, 1.0 / speed) + stopPeriod),
+                    new SentReceivedEvent(new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), firstEventTime),
+                    new SentReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), ScaleTimeSpan(lastEventTime - stepAfterStop - stepAfterResumed, 1.0 / speed) + stopPeriod),
                 },
                 expectedNotesEvents: new[]
                 {
@@ -506,8 +506,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), TimeSpan.Zero),
-                    new ReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), stopAfter),
+                    new SentReceivedEvent(new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), TimeSpan.Zero),
+                    new SentReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), stopAfter),
                 },
                 expectedNotesEvents: new[]
                 {
@@ -563,8 +563,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), TimeSpan.Zero),
-                    new ReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), stopAfter),
+                    new SentReceivedEvent(new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), TimeSpan.Zero),
+                    new SentReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), stopAfter),
                 },
                 expectedNotesEvents: new[]
                 {
@@ -639,8 +639,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), TimeSpan.Zero),
-                    new ReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), ScaleTimeSpan(lastEventTime + stepAfterStop + stepAfterResumed, 1.0 / speed) + stopPeriod),
+                    new SentReceivedEvent(new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), TimeSpan.Zero),
+                    new SentReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), ScaleTimeSpan(lastEventTime + stepAfterStop + stepAfterResumed, 1.0 / speed) + stopPeriod),
                 },
                 expectedNotesEvents: new[]
                 {
@@ -711,9 +711,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), TimeSpan.Zero),
-                    new ReceivedEvent(new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), stopAfter + stopPeriod),
-                    new ReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), lastEventTime + stopAfter + stopPeriod + stepAfterResumed),
+                    new SentReceivedEvent(new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), TimeSpan.Zero),
+                    new SentReceivedEvent(new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), stopAfter + stopPeriod),
+                    new SentReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), lastEventTime + stopAfter + stopPeriod + stepAfterResumed),
                 },
                 expectedNotesEvents: new[]
                 {
@@ -760,9 +760,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), TimeSpan.FromMilliseconds(100)),
-                    new ReceivedEvent(new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), TimeSpan.FromMilliseconds(300)),
-                    new ReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), TimeSpan.FromMilliseconds(500))
+                    new SentReceivedEvent(new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), TimeSpan.FromMilliseconds(100)),
+                    new SentReceivedEvent(new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), TimeSpan.FromMilliseconds(300)),
+                    new SentReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), TimeSpan.FromMilliseconds(500))
                 },
                 expectedNotesEvents: new[]
                 {
@@ -834,8 +834,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), TimeSpan.Zero),
-                    new ReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), stopAfter + stopPeriod + firstAfterResumeDelay + secondAfterResumeDelay + lastEventTime - moveTime2),
+                    new SentReceivedEvent(new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), TimeSpan.Zero),
+                    new SentReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), stopAfter + stopPeriod + firstAfterResumeDelay + secondAfterResumeDelay + lastEventTime - moveTime2),
                 },
                 expectedNotesEvents: new[]
                 {
@@ -886,8 +886,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), TimeSpan.Zero),
-                    new ReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), stopAfter),
+                    new SentReceivedEvent(new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), TimeSpan.Zero),
+                    new SentReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), stopAfter),
                 },
                 expectedNotesEvents: new[]
                 {
@@ -943,8 +943,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), TimeSpan.Zero),
-                    new ReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), stopAfter),
+                    new SentReceivedEvent(new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), TimeSpan.Zero),
+                    new SentReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), stopAfter),
                 },
                 expectedNotesEvents: new[]
                 {
@@ -998,10 +998,10 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), TimeSpan.Zero),
-                    new ReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), stopAfter),
-                    new ReceivedEvent(new NoteOnEvent(), noteLength1 + stopPeriod),
-                    new ReceivedEvent(new NoteOffEvent(), noteLength1 + stopPeriod + noteLength2),
+                    new SentReceivedEvent(new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), TimeSpan.Zero),
+                    new SentReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), stopAfter),
+                    new SentReceivedEvent(new NoteOnEvent(), noteLength1 + stopPeriod),
+                    new SentReceivedEvent(new NoteOffEvent(), noteLength1 + stopPeriod + noteLength2),
                 },
                 expectedNotesEvents: new[]
                 {
@@ -1057,11 +1057,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), TimeSpan.Zero),
-                    new ReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), stopAfter),
-                    new ReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), noteLength1 + stopPeriod),
-                    new ReceivedEvent(new NoteOnEvent(), noteLength1 + stopPeriod),
-                    new ReceivedEvent(new NoteOffEvent(), noteLength1 + stopPeriod + noteLength2),
+                    new SentReceivedEvent(new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), TimeSpan.Zero),
+                    new SentReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), stopAfter),
+                    new SentReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), noteLength1 + stopPeriod),
+                    new SentReceivedEvent(new NoteOnEvent(), noteLength1 + stopPeriod),
+                    new SentReceivedEvent(new NoteOffEvent(), noteLength1 + stopPeriod + noteLength2),
                 },
                 expectedNotesEvents: new[]
                 {
@@ -1095,7 +1095,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 new PlaybackAction(TimeSpan.FromMilliseconds(500),
                     p => p.NoteCallback = (d, rt, rl, t) => NotePlaybackData.SkipNote),
             },
-            expectedReceivedEvents: Array.Empty<ReceivedEvent>(),
+            expectedReceivedEvents: Array.Empty<SentReceivedEvent>(),
             expectedNotesEvents: Array.Empty<(EventType, Note, Note, bool)>(),
             setupPlayback: playback => playback.NoteCallback = (d, rt, rl, t) => null);
 
@@ -1124,8 +1124,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)100, (SevenBitNumber)80), TimeSpan.FromMilliseconds(1500)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)100, (SevenBitNumber)0), TimeSpan.FromMilliseconds(2000))
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)100, (SevenBitNumber)80), TimeSpan.FromMilliseconds(1500)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)100, (SevenBitNumber)0), TimeSpan.FromMilliseconds(2000))
                 },
                 expectedNotesEvents: new[]
                 {
@@ -1160,8 +1160,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
-                    new ReceivedEvent(new NoteOffEvent(), TimeSpan.FromSeconds(1))
+                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
+                    new SentReceivedEvent(new NoteOffEvent(), TimeSpan.FromSeconds(1))
                 },
                 expectedNotesEvents: new[]
                 {
@@ -1203,10 +1203,10 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), TimeSpan.Zero),
-                    new ReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), TimeSpan.FromSeconds(1)),
-                    new ReceivedEvent(new NoteOnEvent((SevenBitNumber)(100 + TransposeBy), (SevenBitNumber)80), TimeSpan.FromMilliseconds(1500)),
-                    new ReceivedEvent(new NoteOffEvent((SevenBitNumber)(100 + TransposeBy), (SevenBitNumber)0), TimeSpan.FromMilliseconds(2000))
+                    new SentReceivedEvent(new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), TimeSpan.Zero),
+                    new SentReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), TimeSpan.FromSeconds(1)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)(100 + TransposeBy), (SevenBitNumber)80), TimeSpan.FromMilliseconds(1500)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)(100 + TransposeBy), (SevenBitNumber)0), TimeSpan.FromMilliseconds(2000))
                 },
                 expectedNotesEvents: new[]
                 {
@@ -1246,8 +1246,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), noteOnDelay),
-                    new ReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), stopAfter),
+                    new SentReceivedEvent(new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), noteOnDelay),
+                    new SentReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), stopAfter),
                 },
                 expectedNotesEvents: new[]
                 {
@@ -1290,10 +1290,10 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), noteOnDelay),
-                    new ReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), stopAfter),
-                    new ReceivedEvent(new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), stopAfter + stopPeriod),
-                    new ReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), stopPeriod + noteOffDelay),
+                    new SentReceivedEvent(new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), noteOnDelay),
+                    new SentReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), stopAfter),
+                    new SentReceivedEvent(new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), stopAfter + stopPeriod),
+                    new SentReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), stopPeriod + noteOffDelay),
                 },
                 expectedNotesEvents: new[]
                 {
@@ -1336,9 +1336,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), noteOnDelay),
-                    new ReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), stopAfter),
-                    new ReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), noteOnDelay + stopAfter + stopPeriod + noteOffDelay - stopAfter),
+                    new SentReceivedEvent(new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), noteOnDelay),
+                    new SentReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), stopAfter),
+                    new SentReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), noteOnDelay + stopAfter + stopPeriod + noteOffDelay - stopAfter),
                 },
                 expectedNotesEvents: new[]
                 {
@@ -1408,10 +1408,10 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), firstEventTime),
-                    new ReceivedEvent(new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), stopAfter + stopPeriod),
-                    new ReceivedEvent(new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), stopAfter + stopPeriod + firstAfterResumeDelay + secondAfterResumeDelay),
-                    new ReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), stopAfter + stopPeriod + firstAfterResumeDelay + secondAfterResumeDelay + ScaleTimeSpan(lastEventTime, 1.0 / speed)),
+                    new SentReceivedEvent(new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), firstEventTime),
+                    new SentReceivedEvent(new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), stopAfter + stopPeriod),
+                    new SentReceivedEvent(new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), stopAfter + stopPeriod + firstAfterResumeDelay + secondAfterResumeDelay),
+                    new SentReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), stopAfter + stopPeriod + firstAfterResumeDelay + secondAfterResumeDelay + ScaleTimeSpan(lastEventTime, 1.0 / speed)),
                 },
                 expectedNotesEvents: new[]
                 {
@@ -1487,8 +1487,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), firstEventTime),
-                    new ReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), ScaleTimeSpan(lastEventTime - stepAfterStop - stepAfterResumed, 1.0 / speed) + stopPeriod),
+                    new SentReceivedEvent(new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), firstEventTime),
+                    new SentReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), ScaleTimeSpan(lastEventTime - stepAfterStop - stepAfterResumed, 1.0 / speed) + stopPeriod),
                 },
                 expectedNotesEvents: new[]
                 {
@@ -1543,8 +1543,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), TimeSpan.Zero),
-                    new ReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), stopAfter),
+                    new SentReceivedEvent(new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), TimeSpan.Zero),
+                    new SentReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), stopAfter),
                 },
                 expectedNotesEvents: new[]
                 {
@@ -1600,8 +1600,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), TimeSpan.Zero),
-                    new ReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), stopAfter),
+                    new SentReceivedEvent(new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), TimeSpan.Zero),
+                    new SentReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), stopAfter),
                 },
                 expectedNotesEvents: new[]
                 {
@@ -1675,8 +1675,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), TimeSpan.Zero),
-                    new ReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), ScaleTimeSpan(lastEventTime + stepAfterStop + stepAfterResumed, 1.0 / speed) + stopPeriod),
+                    new SentReceivedEvent(new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), TimeSpan.Zero),
+                    new SentReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), ScaleTimeSpan(lastEventTime + stepAfterStop + stepAfterResumed, 1.0 / speed) + stopPeriod),
                 },
                 expectedNotesEvents: new[]
                 {
@@ -1727,8 +1727,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), TimeSpan.Zero),
-                    new ReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), stopAfter),
+                    new SentReceivedEvent(new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), TimeSpan.Zero),
+                    new SentReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), stopAfter),
                 },
                 expectedNotesEvents: new[]
                 {
@@ -1780,8 +1780,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), TimeSpan.Zero),
-                    new ReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), stopAfter),
+                    new SentReceivedEvent(new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), TimeSpan.Zero),
+                    new SentReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), stopAfter),
                 },
                 expectedNotesEvents: new[]
                 {
@@ -1834,10 +1834,10 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), TimeSpan.Zero),
-                    new ReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), stopAfter),
-                    new ReceivedEvent(new NoteOnEvent(), noteLength1 + stopPeriod),
-                    new ReceivedEvent(new NoteOffEvent(), noteLength1 + stopPeriod + noteLength2),
+                    new SentReceivedEvent(new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), TimeSpan.Zero),
+                    new SentReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), stopAfter),
+                    new SentReceivedEvent(new NoteOnEvent(), noteLength1 + stopPeriod),
+                    new SentReceivedEvent(new NoteOffEvent(), noteLength1 + stopPeriod + noteLength2),
                 },
                 expectedNotesEvents: new[]
                 {
@@ -1892,11 +1892,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), TimeSpan.Zero),
-                    new ReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), stopAfter),
-                    new ReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), noteLength1 + stopPeriod),
-                    new ReceivedEvent(new NoteOnEvent(), noteLength1 + stopPeriod),
-                    new ReceivedEvent(new NoteOffEvent(), noteLength1 + stopPeriod + noteLength2),
+                    new SentReceivedEvent(new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), TimeSpan.Zero),
+                    new SentReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), stopAfter),
+                    new SentReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), noteLength1 + stopPeriod),
+                    new SentReceivedEvent(new NoteOnEvent(), noteLength1 + stopPeriod),
+                    new SentReceivedEvent(new NoteOffEvent(), noteLength1 + stopPeriod + noteLength2),
                 },
                 expectedNotesEvents: new[]
                 {
@@ -1951,10 +1951,10 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), TimeSpan.Zero),
-                    new ReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), stopAfter),
-                    new ReceivedEvent(new NoteOnEvent(), noteLength1 + stopPeriod),
-                    new ReceivedEvent(new NoteOffEvent(), noteLength1 + stopPeriod + noteLength2),
+                    new SentReceivedEvent(new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), TimeSpan.Zero),
+                    new SentReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), stopAfter),
+                    new SentReceivedEvent(new NoteOnEvent(), noteLength1 + stopPeriod),
+                    new SentReceivedEvent(new NoteOffEvent(), noteLength1 + stopPeriod + noteLength2),
                 },
                 expectedNotesEvents: new[]
                 {
@@ -2008,11 +2008,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), TimeSpan.Zero),
-                    new ReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), stopAfter),
-                    new ReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), noteLength1 + stopPeriod),
-                    new ReceivedEvent(new NoteOnEvent(), noteLength1 + stopPeriod),
-                    new ReceivedEvent(new NoteOffEvent(), noteLength1 + stopPeriod + noteLength2),
+                    new SentReceivedEvent(new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), TimeSpan.Zero),
+                    new SentReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), stopAfter),
+                    new SentReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), noteLength1 + stopPeriod),
+                    new SentReceivedEvent(new NoteOnEvent(), noteLength1 + stopPeriod),
+                    new SentReceivedEvent(new NoteOffEvent(), noteLength1 + stopPeriod + noteLength2),
                 },
                 expectedNotesEvents: new[]
                 {
@@ -2037,7 +2037,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         private void CheckNoteCallback(
             ICollection<ITimedObject> initialPlaybackObjects,
             PlaybackAction[] actions,
-            ICollection<ReceivedEvent> expectedReceivedEvents,
+            ICollection<SentReceivedEvent> expectedReceivedEvents,
             ICollection<(EventType EventType, Note Note, Note OriginalNote, bool CheckOriginalNoteByReference)> expectedNotesEvents,
             Action<Playback> setupPlayback = null)
         {

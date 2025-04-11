@@ -132,11 +132,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 .Select(n => new ReceivedNote(n, n.EndTimeAs<MetricTimeSpan>(tempoMap)))
                 .ToList();
 
-            var sentEvents = new List<SentEvent>();
+            var sentEvents = new List<SentReceivedEvent>();
 
             using (var outputDevice = TestDeviceManager.GetOutputDevice(SendReceiveUtilities.DeviceToTestOnName))
             {
-                outputDevice.EventSent += (_, e) => sentEvents.Add(new SentEvent(e.Event, stopwatch.Elapsed));
+                outputDevice.EventSent += (_, e) => sentEvents.Add(new SentReceivedEvent(e.Event, stopwatch.Elapsed));
 
                 using (var playback = playbackGetter(tempoMap, outputDevice))
                 {
@@ -179,7 +179,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             }
         }
 
-        private static void CheckProgramEvents(IReadOnlyList<SentEvent> sentEvents, IReadOnlyList<MidiEvent> expectedProgramEvents)
+        private static void CheckProgramEvents(
+            IReadOnlyList<SentReceivedEvent> sentEvents,
+            IReadOnlyList<MidiEvent> expectedProgramEvents)
         {
             foreach (var programEvent in expectedProgramEvents)
             {

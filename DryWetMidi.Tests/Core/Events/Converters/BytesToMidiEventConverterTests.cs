@@ -515,6 +515,35 @@ namespace Melanchall.DryWetMidi.Tests.Core
             }
         }
 
+        [TestCase(128)]
+        [TestCase(byte.MaxValue)]
+        public void Convert_InvalidSystemCommonEventParameterValue_Abort(byte parameterValue)
+        {
+            using (var bytesToMidiEventConverter = new BytesToMidiEventConverter())
+            {
+                var exception = Assert.Throws<InvalidSystemCommonEventParameterValueException>(
+                    () => bytesToMidiEventConverter.Convert(new byte[] { EventStatusBytes.SystemCommon.SongSelect, parameterValue }),
+                    "No exception thrown");
+                ClassicAssert.AreEqual(MidiEventType.SongSelect, exception.EventType, "Invalid event type.");
+                ClassicAssert.AreEqual(parameterValue, exception.ComponentValue, "Invalid parameter value.");
+            }
+        }
+
+        [TestCase(128)]
+        [TestCase(byte.MaxValue)]
+        public void Convert_InvalidSystemCommonEventParameterValue_SnapToLimits(byte parameterValue)
+        {
+            using (var bytesToMidiEventConverter = new BytesToMidiEventConverter())
+            {
+                bytesToMidiEventConverter.InvalidSystemCommonEventParameterValuePolicy = InvalidSystemCommonEventParameterValuePolicy.SnapToLimits;
+
+                Convert_Bytes(
+                    bytesToMidiEventConverter,
+                    new byte[] { EventStatusBytes.SystemCommon.SongSelect, parameterValue },
+                    new SongSelectEvent(SevenBitNumber.MaxValue));
+            }
+        }
+
         #endregion
 
         #region Private methods

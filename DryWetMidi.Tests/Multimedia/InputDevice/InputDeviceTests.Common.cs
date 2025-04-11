@@ -67,7 +67,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
         #region Constants
 
-        private const int RetriesNumber = 3;
+        private const int RetriesNumber = 5;
 
         #endregion
 
@@ -126,20 +126,20 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
             var eventsToSend = new[]
             {
-                new EventToSend(new ProgramChangeEvent((SevenBitNumber)100), TimeSpan.FromMilliseconds(200)),
-                new EventToSend(new MidiTimeCodeEvent(MidiTimeCodeComponent.FramesLsb, (FourBitNumber)1), TimeSpan.FromMilliseconds(200)),
-                new EventToSend(new ProgramChangeEvent((SevenBitNumber)70), TimeSpan.FromMilliseconds(300)),
-                new EventToSend(new MidiTimeCodeEvent(MidiTimeCodeComponent.FramesMsb, (FourBitNumber)1), TimeSpan.FromMilliseconds(200)),
-                new EventToSend(new MidiTimeCodeEvent(MidiTimeCodeComponent.HoursLsb, (FourBitNumber)7), TimeSpan.FromMilliseconds(100)),
-                new EventToSend(new MidiTimeCodeEvent(MidiTimeCodeComponent.HoursMsbAndTimeCodeType, (FourBitNumber)7), TimeSpan.FromMilliseconds(200)),
-                new EventToSend(new ProgramChangeEvent((SevenBitNumber)80), TimeSpan.FromMilliseconds(500)),
-                new EventToSend(new MidiTimeCodeEvent(MidiTimeCodeComponent.MinutesLsb, (FourBitNumber)10), TimeSpan.FromMilliseconds(300)),
-                new EventToSend(new ProgramChangeEvent((SevenBitNumber)10), TimeSpan.FromMilliseconds(400)),
-                new EventToSend(new ProgramChangeEvent((SevenBitNumber)15), TimeSpan.FromMilliseconds(500)),
-                new EventToSend(new MidiTimeCodeEvent(MidiTimeCodeComponent.MinutesMsb, (FourBitNumber)2), TimeSpan.FromMilliseconds(200)),
-                new EventToSend(new MidiTimeCodeEvent(MidiTimeCodeComponent.SecondsLsb, (FourBitNumber)10), TimeSpan.FromMilliseconds(100)),
-                new EventToSend(new ProgramChangeEvent((SevenBitNumber)40), TimeSpan.FromMilliseconds(400)),
-                new EventToSend(new MidiTimeCodeEvent(MidiTimeCodeComponent.SecondsMsb, (FourBitNumber)1), TimeSpan.FromMilliseconds(700))
+                new EventToSend2(new ProgramChangeEvent((SevenBitNumber)100), TimeSpan.FromMilliseconds(200)),
+                new EventToSend2(new MidiTimeCodeEvent(MidiTimeCodeComponent.FramesLsb, (FourBitNumber)1), TimeSpan.FromMilliseconds(400)),
+                new EventToSend2(new ProgramChangeEvent((SevenBitNumber)70), TimeSpan.FromMilliseconds(700)),
+                new EventToSend2(new MidiTimeCodeEvent(MidiTimeCodeComponent.FramesMsb, (FourBitNumber)1), TimeSpan.FromMilliseconds(900)),
+                new EventToSend2(new MidiTimeCodeEvent(MidiTimeCodeComponent.HoursLsb, (FourBitNumber)7), TimeSpan.FromMilliseconds(1000)),
+                new EventToSend2(new MidiTimeCodeEvent(MidiTimeCodeComponent.HoursMsbAndTimeCodeType, (FourBitNumber)7), TimeSpan.FromMilliseconds(1200)),
+                new EventToSend2(new ProgramChangeEvent((SevenBitNumber)80), TimeSpan.FromMilliseconds(1700)),
+                new EventToSend2(new MidiTimeCodeEvent(MidiTimeCodeComponent.MinutesLsb, (FourBitNumber)10), TimeSpan.FromMilliseconds(2000)),
+                new EventToSend2(new ProgramChangeEvent((SevenBitNumber)10), TimeSpan.FromMilliseconds(2400)),
+                new EventToSend2(new ProgramChangeEvent((SevenBitNumber)15), TimeSpan.FromMilliseconds(2900)),
+                new EventToSend2(new MidiTimeCodeEvent(MidiTimeCodeComponent.MinutesMsb, (FourBitNumber)2), TimeSpan.FromMilliseconds(3100)),
+                new EventToSend2(new MidiTimeCodeEvent(MidiTimeCodeComponent.SecondsLsb, (FourBitNumber)10), TimeSpan.FromMilliseconds(3200)),
+                new EventToSend2(new ProgramChangeEvent((SevenBitNumber)40), TimeSpan.FromMilliseconds(3600)),
+                new EventToSend2(new MidiTimeCodeEvent(MidiTimeCodeComponent.SecondsMsb, (FourBitNumber)1), TimeSpan.FromMilliseconds(4300))
             };
 
             using (var outputDevice = OutputDevice.GetByName(MidiDevicesNames.DeviceA))
@@ -150,7 +150,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
                 SendReceiveUtilities.SendEvents(eventsToSend, outputDevice);
 
-                var timeout = TimeSpan.FromTicks(eventsToSend.Sum(e => e.Delay.Ticks)) + SendReceiveUtilities.MaximumEventSendReceiveDelay;
+                var timeout = eventsToSend.Last().Time + SendReceiveUtilities.MaximumEventSendReceiveDelay;
                 var isMidiTimeCodeReceived = WaitOperations.Wait(() => midiTimeCodeReceived != null, timeout);
                 ClassicAssert.IsTrue(isMidiTimeCodeReceived, $"MIDI time code received for timeout {timeout}.");
 

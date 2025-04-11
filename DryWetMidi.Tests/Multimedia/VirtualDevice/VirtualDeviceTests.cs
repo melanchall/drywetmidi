@@ -312,7 +312,6 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 virtualDevice.ErrorOccurred += (_, e) => errorOnVirtualDevice = e.Exception.Message;
 
                 var outputDevice = virtualDevice.OutputDevice;
-                SendReceiveUtilities.WarmUpDevice(outputDevice);
 
                 var inputDevice = virtualDevice.InputDevice;
 

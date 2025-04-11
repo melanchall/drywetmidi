@@ -45,7 +45,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         private void CheckPlaybackDataChangesOnTheFly(
             ICollection<ITimedObject> initialObjects,
             DynamicPlaybackAction[] actions,
-            ICollection<ReceivedEvent> expectedReceivedEvents,
+            ICollection<SentReceivedEvent> expectedReceivedEvents,
             Action<Playback> setupPlayback = null,
             int? repeatsCount = null,
             Action<Playback> additionalChecks = null,
@@ -55,7 +55,10 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
             CheckPlayback(
                 useOutputDevice: false,
-                createPlayback: outputDevice => new Playback(collection, tempoMap ?? TempoMap, outputDevice),
+                createPlayback: outputDevice => new Playback(collection, tempoMap ?? TempoMap, outputDevice, new PlaybackSettings
+                {
+                    CalculateTempoMap = true
+                }),
                 actions: actions
                     .Select(a => new PlaybackAction(a.PeriodMs, p => a.Action(p, collection)))
                     .ToArray(),
@@ -73,7 +76,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             ClassicAssert.Less(
                 (expectedDuration - actualDuration).Duration(),
                 TimeSpan.FromMilliseconds(4),
-                $"Invalid duration after note added. Actual = {actualDuration}. Expected = {expectedDuration}.");
+                $"Invalid duration. Actual = {actualDuration}. Expected = {expectedDuration}.");
         }
 
         #endregion

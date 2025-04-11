@@ -3,11 +3,11 @@ using Melanchall.DryWetMidi.Core;
 
 namespace Melanchall.DryWetMidi.Tests.Multimedia
 {
-    internal sealed class ReceivedEvent
+    internal sealed class SentReceivedEvent
     {
         #region Constructor
 
-        public ReceivedEvent(MidiEvent midiEvent, TimeSpan time)
+        public SentReceivedEvent(MidiEvent midiEvent, TimeSpan time)
         {
             Event = midiEvent;
             Time = time;
@@ -27,7 +27,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
         public override string ToString()
         {
-            return $"{Event} at {Time}";
+            return $"{Time}: {Event}";
         }
 
         #endregion

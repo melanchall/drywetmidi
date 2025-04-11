@@ -253,7 +253,6 @@ namespace Melanchall.DryWetMidi.Core
             }
         }
 
-        // TODO: test
         /// <summary>
         /// Gets or sets reaction of the reading engine on invalid value of a system common event's
         /// parameter value. The default is <see cref="InvalidSystemCommonEventParameterValuePolicy.Abort"/>.

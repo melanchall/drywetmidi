@@ -14,6 +14,8 @@ namespace Melanchall.DryWetMidi.Multimedia
     {
         #region Fields
 
+        private IObservableTimedObjectsCollection _observableTimedObjectsCollection;
+
         private readonly HashSet<NotePlaybackEventMetadata> _notesMetadataHashSet = new HashSet<NotePlaybackEventMetadata>();
 
         private readonly ConcurrentDictionary<NoteId, TimedEvent> _noteOnEvents = new ConcurrentDictionary<NoteId, TimedEvent>();
@@ -28,14 +30,21 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         #region Methods
 
-        private void InitializeData(IEnumerable<ITimedObject> timedObjects, TempoMap tempoMap, NoteDetectionSettings noteDetectionSettings)
+        private void InitializeData(
+            IEnumerable<ITimedObject> timedObjects,
+            TempoMap tempoMap,
+            NoteDetectionSettings noteDetectionSettings,
+            bool calculateTempoMap)
         {
-            InitializePlaybackEvents(timedObjects.GetNotesAndTimedEventsLazy(noteDetectionSettings, true), tempoMap);
+            InitializePlaybackEvents(
+                timedObjects.GetNotesAndTimedEventsLazy(noteDetectionSettings, true),
+                tempoMap,
+                calculateTempoMap);
             MoveToNextPlaybackEvent();
 
-            var observableTimedObjectsCollection = timedObjects as IObservableTimedObjectsCollection;
-            if (observableTimedObjectsCollection != null)
-                observableTimedObjectsCollection.CollectionChanged += OnObservableTimedObjectsCollectionChanged;
+            _observableTimedObjectsCollection = timedObjects as IObservableTimedObjectsCollection;
+            if (_observableTimedObjectsCollection != null)
+                _observableTimedObjectsCollection.CollectionChanged += OnObservableTimedObjectsCollectionChanged;
         }
 
         private void OnObservableTimedObjectsCollectionChanged(object sender, ObservableTimedObjectsCollectionChangedEventArgs e)
@@ -44,14 +53,11 @@ namespace Melanchall.DryWetMidi.Multimedia
             {
                 var isRunning = IsRunning;
 
-                var maxTime = TimeSpan.Zero;
-                var maxTimeInTicks = 0L;
-
                 if (e.AddedObjects != null)
                 {
                     foreach (var obj in e.AddedObjects)
                     {
-                        AddNewTimedObject(obj, ref maxTime, ref maxTimeInTicks);
+                        AddNewTimedObject(obj);
                     }
                 }
 
@@ -71,18 +77,11 @@ namespace Melanchall.DryWetMidi.Multimedia
                         var oldTime = changedObject.OldTime;
 
                         RemoveTimedObject(obj, oldTime);
-                        AddNewTimedObject(obj, ref maxTime, ref maxTimeInTicks);
+                        AddNewTimedObject(obj);
                     }
                 }
 
-                if (maxTime > _duration)
-                {
-                    _duration = maxTime;
-                    _durationInTicks = maxTimeInTicks;
-                }
-                else
-                    UpdateDuration();
-
+                UpdateDuration();
                 UpdatePlaybackEndMetric();
                 UpdatePlaybackStartMetric();
 
@@ -109,9 +108,9 @@ namespace Melanchall.DryWetMidi.Multimedia
             }
         }
 
-        private void AddNewTimedObject(ITimedObject timedObject, ref TimeSpan maxTime, ref long maxTimeInTicks)
+        private void AddNewTimedObject(ITimedObject timedObject)
         {
-            AddTimedObject(timedObject, TempoMap, false, ref maxTime, ref maxTimeInTicks);
+            AddTimedObject(timedObject, TempoMap, false, true);
         }
 
         private void RemoveTimedObject(ITimedObject timedObject, long oldTime)
@@ -202,14 +201,14 @@ namespace Melanchall.DryWetMidi.Multimedia
                 oldTime);
         }
 
-        private void InitializePlaybackEvents(IEnumerable<ITimedObject> timedObjects, TempoMap tempoMap)
+        private void InitializePlaybackEvents(
+            IEnumerable<ITimedObject> timedObjects,
+            TempoMap tempoMap,
+            bool calculateTempoMap)
         {
-            var maxTime = TimeSpan.Zero;
-            var maxTimeInTicks = 0L;
-
             foreach (var timedObject in timedObjects)
             {
-                AddTimedObject(timedObject, tempoMap, true, ref maxTime, ref maxTimeInTicks);
+                AddTimedObject(timedObject, tempoMap, true, calculateTempoMap);
             }
         }
 
@@ -217,29 +216,31 @@ namespace Melanchall.DryWetMidi.Multimedia
             ITimedObject timedObject,
             TempoMap tempoMap,
             bool isInitialObject,
-            ref TimeSpan maxTime,
-            ref long maxTimeInTicks)
+            bool calculateTempoMap)
         {
-            if (TryAddNoteEvent(timedObject, tempoMap, isInitialObject, ref maxTime, ref maxTimeInTicks))
+            if (TryAddNoteEvent(timedObject, tempoMap, isInitialObject))
                 return;
 
             //
 
             TimeSpan? nextTempoTime = null;
             bool eventShouldBeAdded = true;
-            Tempo oldTempo;
-            TimeSignature oldTimeSignature;
+            Tempo oldTempo = null;
+            TimeSignature oldTimeSignature = null;
 
-            PrepareSetTempoEventAdding(
-                timedObject as TimedEvent,
-                out nextTempoTime,
-                ref eventShouldBeAdded,
-                out oldTempo);
+            if (!isInitialObject || calculateTempoMap)
+            {
+                PrepareSetTempoEventAdding(
+                    timedObject as TimedEvent,
+                    out nextTempoTime,
+                    ref eventShouldBeAdded,
+                    out oldTempo);
 
-            PrepareTimeSignatureEventAdding(
-                timedObject as TimedEvent,
-                ref eventShouldBeAdded,
-                out oldTimeSignature);
+                PrepareTimeSignatureEventAdding(
+                    timedObject as TimedEvent,
+                    ref eventShouldBeAdded,
+                    out oldTimeSignature);
+            }
 
             if (!eventShouldBeAdded)
                 return;
@@ -272,24 +273,21 @@ namespace Melanchall.DryWetMidi.Multimedia
                     _playbackEventsPosition = node;
                     minTime = e.Time;
                 }
-
-                if (e.Time > maxTime)
-                {
-                    maxTime = e.Time;
-                    maxTimeInTicks = e.RawTime;
-                }
             }
 
-            TryAddSetTempoEvent(
-                timedObject as TimedEvent,
-                nextTempoTime,
-                eventShouldBeAdded,
-                oldTempo);
+            if (!isInitialObject || calculateTempoMap)
+            {
+                TryAddSetTempoEvent(
+                    timedObject as TimedEvent,
+                    nextTempoTime,
+                    eventShouldBeAdded,
+                    oldTempo);
 
-            TryAddTimeSignatureEvent(
-                timedObject as TimedEvent,
-                eventShouldBeAdded,
-                oldTimeSignature);
+                TryAddTimeSignatureEvent(
+                    timedObject as TimedEvent,
+                    eventShouldBeAdded,
+                    oldTimeSignature);
+            }
         }
 
         private NoteId GetNoteId(NoteEvent noteEvent)
@@ -616,7 +614,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         private TimeSpan ScaleTimeSpan(TimeSpan timeSpan, double scaleFactor)
         {
-            return TimeSpan.FromTicks(MathUtilities.RoundToLong(timeSpan.Ticks / scaleFactor));
+            return timeSpan.DivideBy(scaleFactor);
         }
 
         private void TryRemoveTimeSignatureEvent(
@@ -677,9 +675,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         private bool TryAddNoteEvent(
             ITimedObject timedObject,
             TempoMap tempoMap,
-            bool isInitialObject,
-            ref TimeSpan maxTime,
-            ref long maxTimeInTicks)
+            bool isInitialObject)
         {
             var timedEvent = timedObject as TimedEvent;
             if (timedEvent != null)
@@ -696,7 +692,7 @@ namespace Melanchall.DryWetMidi.Multimedia
                             GetNoteId((NoteEvent)matchedTimedEvent.Event).Equals(noteId))
                         {
                             _noteOffEvents.TryRemove(noteId, out matchedTimedEvent);
-                            AddTimedObject(new Note(timedEvent, matchedTimedEvent, false), TempoMap, isInitialObject, ref maxTime, ref maxTimeInTicks);
+                            AddTimedObject(new Note(timedEvent, matchedTimedEvent, false), TempoMap, isInitialObject, false);
                         }
                         else
                             _noteOnEvents[noteId] = timedEvent;
@@ -707,7 +703,7 @@ namespace Melanchall.DryWetMidi.Multimedia
                             GetNoteId((NoteEvent)matchedTimedEvent.Event).Equals(noteId))
                         {
                             _noteOnEvents.TryRemove(noteId, out matchedTimedEvent);
-                            AddTimedObject(new Note(matchedTimedEvent, timedEvent, false), TempoMap, isInitialObject, ref maxTime, ref maxTimeInTicks);
+                            AddTimedObject(new Note(matchedTimedEvent, timedEvent, false), TempoMap, isInitialObject, false);
                         }
                         else
                             _noteOffEvents[noteId] = timedEvent;

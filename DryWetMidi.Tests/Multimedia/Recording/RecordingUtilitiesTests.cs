@@ -40,7 +40,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 new EventToSend(new ProgramChangeEvent((SevenBitNumber)50), TimeSpan.FromMilliseconds(500)),
             };
 
-            var receivedEvents = new List<ReceivedEvent>();
+            var receivedEvents = new List<SentReceivedEvent>();
             var stopwatch = new Stopwatch();
 
             var waitTimeout = eventsToSend.Aggregate(TimeSpan.Zero, (result, e) => result + e.Delay) +
@@ -50,7 +50,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var outputDevice = TestDeviceManager.GetOutputDevice("A");
 
             inputDevice.StartEventsListening();
-            inputDevice.EventReceived += (_, e) => receivedEvents.Add(new ReceivedEvent(e.Event, stopwatch.Elapsed));
+            inputDevice.EventReceived += (_, e) => receivedEvents.Add(new SentReceivedEvent(e.Event, stopwatch.Elapsed));
 
             using (var recording = new Recording(tempoMap, inputDevice))
             {

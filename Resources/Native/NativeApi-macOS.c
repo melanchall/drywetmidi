@@ -208,70 +208,93 @@ typedef struct
 {
     char* name;
     MIDIClientRef clientRef;
+    CFRunLoopRef runLoopRef;
     pthread_t thread;
     char clientCreated;
+    char sessionClosed;
     OSStatus clientCreationStatus;
     InputDeviceCallback inputDeviceCallback;
     OutputDeviceCallback outputDeviceCallback;
 } SessionHandle;
  
-void HandleSource(MIDIEndpointRef source, InputDeviceCallback inputDeviceCallback, char operation)
+void HandleSource(MIDIEndpointRef source, SessionHandle* sessionHandle, char operation)
 {
+    if (sessionHandle->sessionClosed == 1)
+        return;
+
     InputDeviceInfo* inputDeviceInfo = malloc(sizeof(InputDeviceInfo));
     inputDeviceInfo->endpointRef = source;
 
-    inputDeviceCallback(inputDeviceInfo, operation);
+    sessionHandle->inputDeviceCallback(inputDeviceInfo, operation);
 }
 
-void HandleDestination(MIDIEndpointRef destination, OutputDeviceCallback outputDeviceCallback, char operation)
+void HandleDestination(MIDIEndpointRef destination, SessionHandle* sessionHandle, char operation)
 {
+    if (sessionHandle->sessionClosed == 1)
+        return;
+
     OutputDeviceInfo* outputDeviceInfo = malloc(sizeof(OutputDeviceInfo));
     outputDeviceInfo->endpointRef = destination;
 
-    outputDeviceCallback(outputDeviceInfo, operation);
+    sessionHandle->outputDeviceCallback(outputDeviceInfo, operation);
 }
 
-void HandleEntitySources(MIDIEntityRef entity, InputDeviceCallback inputDeviceCallback, char operation)
+void HandleEntitySources(MIDIEntityRef entity, SessionHandle* sessionHandle, char operation)
 {
+    if (sessionHandle->sessionClosed == 1)
+        return;
+
     ItemCount _sourcesCount = MIDIEntityGetNumberOfSources(entity);
     
     for (int i = 0; i < _sourcesCount; i++)
     {
         MIDIEndpointRef source = MIDIEntityGetSource(entity, i);
-        HandleSource(source, inputDeviceCallback, operation);
+        HandleSource(source, sessionHandle, operation);
     }
 }
 
-void HandleEntityDestinations(MIDIEntityRef entity, OutputDeviceCallback outputDeviceCallback, char operation)
+void HandleEntityDestinations(MIDIEntityRef entity, SessionHandle* sessionHandle, char operation)
 {
+    if (sessionHandle->sessionClosed == 1)
+        return;
+
     ItemCount _destinationsCount = MIDIEntityGetNumberOfDestinations(entity);
     
     for (int i = 0; i < _destinationsCount; i++)
     {
         MIDIEndpointRef destination = MIDIEntityGetDestination(entity, i);
-        HandleDestination(destination, outputDeviceCallback, operation);
+        HandleDestination(destination, sessionHandle, operation);
     }
 }
 
-void HandleEntity(MIDIEntityRef entity, InputDeviceCallback inputDeviceCallback, OutputDeviceCallback outputDeviceCallback, char operation)
+void HandleEntity(MIDIEntityRef entity, SessionHandle* sessionHandle, char operation)
 {
-    HandleEntitySources(entity, inputDeviceCallback, operation);
-    HandleEntityDestinations(entity, outputDeviceCallback, operation);
+    if (sessionHandle->sessionClosed == 1)
+        return;
+
+    HandleEntitySources(entity, sessionHandle, operation);
+    HandleEntityDestinations(entity, sessionHandle, operation);
 }
 
-void HandleDevice(MIDIDeviceRef device, InputDeviceCallback inputDeviceCallback, OutputDeviceCallback outputDeviceCallback, char operation)
+void HandleDevice(MIDIDeviceRef device, SessionHandle* sessionHandle, char operation)
 {
+    if (sessionHandle->sessionClosed == 1)
+        return;
+
     ItemCount entitiesCount = MIDIDeviceGetNumberOfEntities(device);
     
     for (int i = 0; i < entitiesCount; i++)
     {
         MIDIEntityRef entity = MIDIDeviceGetEntity(device, i);
-        HandleEntity(entity, inputDeviceCallback, outputDeviceCallback, operation);
+        HandleEntity(entity, sessionHandle, operation);
     }
 }
 
 void HandleNotification(const MIDINotification* message, SessionHandle* sessionHandle)
 {
+    if (sessionHandle->sessionClosed == 1)
+        return;
+
     switch (message->messageID)
     {
         case kMIDIMsgObjectAdded:
@@ -285,22 +308,22 @@ void HandleNotification(const MIDINotification* message, SessionHandle* sessionH
             {
                 case kMIDIObjectType_Device:
                 {
-                    HandleDevice(n->child, sessionHandle->inputDeviceCallback, sessionHandle->outputDeviceCallback, operation);
+                    HandleDevice(n->child, sessionHandle, operation);
                     break;
                 }
                 case kMIDIObjectType_Entity:
                 {
-                    HandleEntity(n->child, sessionHandle->inputDeviceCallback, sessionHandle->outputDeviceCallback, operation);
+                    HandleEntity(n->child, sessionHandle, operation);
                     break;
                 }
                 case kMIDIObjectType_Source:
                 {
-                    HandleSource(n->child, sessionHandle->inputDeviceCallback, operation);                    
+                    HandleSource(n->child, sessionHandle, operation);                    
                     break;
                 }
                 case kMIDIObjectType_Destination:
                 {
-                    HandleDestination(n->child, sessionHandle->outputDeviceCallback, operation);                    
+                    HandleDestination(n->child, sessionHandle, operation);                    
                     break;
                 }
             }
@@ -313,6 +336,9 @@ void HandleNotification(const MIDINotification* message, SessionHandle* sessionH
 void NotifyProc(const MIDINotification* message, void* refCon)
 {
     SessionHandle* sessionHandle = (SessionHandle*)refCon;
+    if (sessionHandle->sessionClosed == 1)
+        return;
+
     HandleNotification(message, sessionHandle);
 }
 
@@ -323,6 +349,7 @@ void* ThreadProc(void* data)
     CFStringRef nameRef = CFStringCreateWithCString(kCFAllocatorDefault, sessionHandle->name, kCFStringEncodingUTF8);
     sessionHandle->clientCreationStatus = MIDIClientCreate(nameRef, NotifyProc, data, &sessionHandle->clientRef);
     sessionHandle->clientCreated = 1;
+    sessionHandle->runLoopRef = CFRunLoopGetCurrent();
     
     CFRunLoopRun();
     
@@ -337,9 +364,11 @@ SESSION_OPENRESULT OpenSession_Mac(char* name, InputDeviceCallback inputDeviceCa
     sessionHandle->inputDeviceCallback = inputDeviceCallback;
     sessionHandle->outputDeviceCallback = outputDeviceCallback;
     sessionHandle->clientCreated = 0;
+    sessionHandle->sessionClosed = 0;
     sessionHandle->name = name;
     
-    pthread_create(&sessionHandle->thread, NULL, ThreadProc, sessionHandle);
+    if (pthread_create(&sessionHandle->thread, NULL, ThreadProc, sessionHandle) != 0)
+        return SESSION_OPENRESULT_THREADSTARTERROR;
     
     while (sessionHandle->clientCreated == 0) {}
 
@@ -363,6 +392,10 @@ SESSION_OPENRESULT OpenSession_Mac(char* name, InputDeviceCallback inputDeviceCa
 SESSION_CLOSERESULT CloseSession(void* handle)
 {
     SessionHandle* sessionHandle = (SessionHandle*)handle;
+    
+    sessionHandle->sessionClosed = 1;
+    CFRunLoopStop(sessionHandle->runLoopRef);
+
     free(sessionHandle);
     return SESSION_CLOSERESULT_OK;
 }

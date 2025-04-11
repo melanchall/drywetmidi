@@ -67,8 +67,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent(), firstEventTime),
-                    new ReceivedEvent(new NoteOffEvent(), stopAfter + stopPeriod + firstAfterResumeDelay + secondAfterResumeDelay + ScaleTimeSpan(lastEventTime, 1.0 / speed)),
+                    new SentReceivedEvent(new NoteOnEvent(), firstEventTime),
+                    new SentReceivedEvent(new NoteOffEvent(), stopAfter + stopPeriod + firstAfterResumeDelay + secondAfterResumeDelay + ScaleTimeSpan(lastEventTime, 1.0 / speed)),
                 },
                 setupPlayback: playback =>
                 {
@@ -129,10 +129,10 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent(), firstEventTime),
-                    new ReceivedEvent(new NoteOnEvent(), stopAfter + stopPeriod),
-                    new ReceivedEvent(new NoteOnEvent(), stopAfter + stopPeriod + firstAfterResumeDelay + secondAfterResumeDelay),
-                    new ReceivedEvent(new NoteOffEvent(), stopAfter + stopPeriod + firstAfterResumeDelay + secondAfterResumeDelay + ScaleTimeSpan(lastEventTime, 1.0 / speed)),
+                    new SentReceivedEvent(new NoteOnEvent(), firstEventTime),
+                    new SentReceivedEvent(new NoteOnEvent(), stopAfter + stopPeriod),
+                    new SentReceivedEvent(new NoteOnEvent(), stopAfter + stopPeriod + firstAfterResumeDelay + secondAfterResumeDelay),
+                    new SentReceivedEvent(new NoteOffEvent(), stopAfter + stopPeriod + firstAfterResumeDelay + secondAfterResumeDelay + ScaleTimeSpan(lastEventTime, 1.0 / speed)),
                 },
                 setupPlayback: playback =>
                 {
@@ -197,8 +197,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent(), firstEventTime),
-                    new ReceivedEvent(new NoteOffEvent(), ScaleTimeSpan(lastEventTime - stepAfterStop - stepAfterResumed, 1.0 / speed) + stopPeriod),
+                    new SentReceivedEvent(new NoteOnEvent(), firstEventTime),
+                    new SentReceivedEvent(new NoteOffEvent(), ScaleTimeSpan(lastEventTime - stepAfterStop - stepAfterResumed, 1.0 / speed) + stopPeriod),
                 },
                 setupPlayback: playback =>
                 {
@@ -268,8 +268,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
-                    new ReceivedEvent(new NoteOffEvent(), stopAfter),
+                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
+                    new SentReceivedEvent(new NoteOffEvent(), stopAfter),
                 },
                 setupPlayback: playback =>
                 {
@@ -310,8 +310,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
-                    new ReceivedEvent(new NoteOffEvent(), stopAfter),
+                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
+                    new SentReceivedEvent(new NoteOffEvent(), stopAfter),
                 },
                 setupPlayback: playback =>
                 {
@@ -376,8 +376,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
-                    new ReceivedEvent(new NoteOffEvent(), ScaleTimeSpan(lastEventTime + stepAfterStop + stepAfterResumed, 1.0 / speed) + stopPeriod),
+                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
+                    new SentReceivedEvent(new NoteOffEvent(), ScaleTimeSpan(lastEventTime + stepAfterStop + stepAfterResumed, 1.0 / speed) + stopPeriod),
                 },
                 setupPlayback: playback =>
                 {
@@ -438,8 +438,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
-                    new ReceivedEvent(new NoteOffEvent(), lastEventTime + stopAfter + stopPeriod + stepAfterResumed),
+                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
+                    new SentReceivedEvent(new NoteOffEvent(), lastEventTime + stopAfter + stopPeriod + stepAfterResumed),
                 },
                 setupPlayback: playback =>
                 {
@@ -499,9 +499,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
-                    new ReceivedEvent(new NoteOnEvent(), stopAfter + stopPeriod),
-                    new ReceivedEvent(new NoteOffEvent(), lastEventTime + stopAfter + stopPeriod + stepAfterResumed),
+                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
+                    new SentReceivedEvent(new NoteOnEvent(), stopAfter + stopPeriod),
+                    new SentReceivedEvent(new NoteOffEvent(), lastEventTime + stopAfter + stopPeriod + stepAfterResumed),
                 },
                 setupPlayback: playback =>
                 {
@@ -535,8 +535,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(100)),
-                    new ReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(500))
+                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(100)),
+                    new SentReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(500))
                 },
                 setupPlayback: playback =>
                 {
@@ -570,8 +570,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(100)),
-                    new ReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(500))
+                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(100)),
+                    new SentReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(500))
                 },
                 setupPlayback: playback =>
                 {
@@ -605,9 +605,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(100)),
-                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(300)),
-                    new ReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(500))
+                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(100)),
+                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(300)),
+                    new SentReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(500))
                 },
                 setupPlayback: playback =>
                 {
@@ -642,9 +642,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(100)),
-                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(300)),
-                    new ReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(500))
+                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(100)),
+                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(300)),
+                    new SentReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(500))
                 },
                 setupPlayback: playback =>
                 {
@@ -705,8 +705,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
-                    new ReceivedEvent(new NoteOffEvent(), stopAfter + stopPeriod + firstAfterResumeDelay + secondAfterResumeDelay + lastEventTime - moveTime2)
+                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
+                    new SentReceivedEvent(new NoteOffEvent(), stopAfter + stopPeriod + firstAfterResumeDelay + secondAfterResumeDelay + lastEventTime - moveTime2)
                 },
                 setupPlayback: playback =>
                 {
@@ -744,8 +744,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
-                    new ReceivedEvent(new NoteOffEvent(), stopAfter),
+                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
+                    new SentReceivedEvent(new NoteOffEvent(), stopAfter),
                 },
                 setupPlayback: playback =>
                 {
@@ -784,8 +784,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
-                    new ReceivedEvent(new NoteOffEvent(), stopAfter),
+                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
+                    new SentReceivedEvent(new NoteOffEvent(), stopAfter),
                 },
                 setupPlayback: playback =>
                 {
@@ -808,8 +808,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 actions: Array.Empty<PlaybackAction>(),
                 expectedReceivedEvents: new[]
                 {
-                    new ReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(100)),
-                    new ReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(600)),
+                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(100)),
+                    new SentReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(600)),
                 },
                 setupPlayback: playback =>
                     playback.MoveToTime(new MetricTimeSpan(0, 0, 0, 200)));
