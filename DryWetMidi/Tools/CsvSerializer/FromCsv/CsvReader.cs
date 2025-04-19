@@ -43,9 +43,8 @@ namespace Melanchall.DryWetMidi.Tools
 
         public CsvRecord ReadRecord()
         {
-            var oldLineNumber = _currentLineNumber;
-
             var line = GetFirstLine();
+            var lineNumber = _currentLineNumber - 1;
             if (string.IsNullOrEmpty(line))
                 return null;
 
@@ -64,7 +63,7 @@ namespace Melanchall.DryWetMidi.Tools
                 line += nextLine;
             }
 
-            return new CsvRecord(oldLineNumber, _currentLineNumber - oldLineNumber, values.Select(v => CsvFormattingUtilities.UnescapeString(v)).ToArray());
+            return new CsvRecord(lineNumber, _currentLineNumber - lineNumber, values.Select(v => CsvFormattingUtilities.UnescapeString(v)).ToArray());
         }
 
         public void Dispose()
@@ -94,19 +93,16 @@ namespace Melanchall.DryWetMidi.Tools
 
             while (true)
             {
-                for (; _indexInBuffer < _bufferLength; _indexInBuffer++)
+                for (; _indexInBuffer < _bufferLength && !lineEnding; _indexInBuffer++)
                 {
                     var c = _buffer[_indexInBuffer];
-                    if (c == '\r' || c == '\n')
-                    {
+                    if (c == '\n')
                         lineEnding = true;
-                    }
-                    else if (lineEnding)
-                        break;
 
                     stringBuilder.Append(c);
                 }
 
+                // TODO: check buffer size setting
                 if (_indexInBuffer >= _bufferLength)
                     FillBuffer();
                 else

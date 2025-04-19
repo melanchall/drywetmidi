@@ -31,7 +31,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             });
 
         [Test]
-        public void DeserializeFile_Empty() => DeserializeFileAndChunksAndSeparateChunks(
+        public void Deserialize_File_Empty() => DeserializeFileAndChunksAndSeparateChunks(
             csvLines: new[]
             {
                 $"0,\"MThd\",0,\"Header\",1234",
@@ -40,7 +40,14 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             expectedMidiFile: new MidiFile { TimeDivision = new TicksPerQuarterNoteTimeDivision(1234) });
 
         [Test]
-        public void Deserialize() => DeserializeFileAndChunksAndSeparateChunks(
+        public void Deserialize_File_EmptyCsv() => DeserializeFile_Failed<CsvException>(
+            csvLines: Array.Empty<string>(),
+            checkException: exception =>
+            {
+            });
+
+        [Test]
+        public void Deserialize_File() => DeserializeFileAndChunksAndSeparateChunks(
             csvLines: new[]
             {
                 $"0,\"MThd\",0,\"Header\",{TicksPerQuarterNoteTimeDivision.DefaultTicksPerQuarterNote}",
@@ -54,7 +61,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                     new TextEvent("B") { DeltaTime = TicksPerQuarterNoteTimeDivision.DefaultTicksPerQuarterNote })));
 
         [Test]
-        public void Deserialize_TimeType() => DeserializeFileAndChunksAndSeparateChunks(
+        public void Deserialize_File_TimeType() => DeserializeFileAndChunksAndSeparateChunks(
             csvLines: new[]
             {
                 $"0,\"MThd\",0,\"Header\",{TicksPerQuarterNoteTimeDivision.DefaultTicksPerQuarterNote}",
@@ -71,7 +78,43 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                     new TextEvent("B") { DeltaTime = TicksPerQuarterNoteTimeDivision.DefaultTicksPerQuarterNote })));
 
         [Test]
-        public void Deserialize_MultipleTrackChunks() => DeserializeFileAndChunksAndSeparateChunks(
+        public void Deserialize_File_ReadWriteBufferSize_Small() => DeserializeFileAndChunksAndSeparateChunks(
+            csvLines: new[]
+            {
+                $"0,\"MThd\",0,\"Header\",{TicksPerQuarterNoteTimeDivision.DefaultTicksPerQuarterNote}",
+                $"1,\"MTrk\",0,\"Text\",0/1,\"A\"",
+                $"1,\"MTrk\",1,\"Text\",1/4,\"B\"",
+            },
+            settings: new CsvSerializationSettings
+            {
+                TimeType = TimeSpanType.Musical,
+                ReadWriteBufferSize = 10,
+            },
+            expectedMidiFile: new MidiFile(
+                new TrackChunk(
+                    new TextEvent("A"),
+                    new TextEvent("B") { DeltaTime = TicksPerQuarterNoteTimeDivision.DefaultTicksPerQuarterNote })));
+
+        [Test]
+        public void Deserialize_File_ReadWriteBufferSize_Big() => DeserializeFileAndChunksAndSeparateChunks(
+            csvLines: new[]
+            {
+                $"0,\"MThd\",0,\"Header\",{TicksPerQuarterNoteTimeDivision.DefaultTicksPerQuarterNote}",
+                $"1,\"MTrk\",0,\"Text\",0/1,\"A\"",
+                $"1,\"MTrk\",1,\"Text\",1/4,\"B\"",
+            },
+            settings: new CsvSerializationSettings
+            {
+                TimeType = TimeSpanType.Musical,
+                ReadWriteBufferSize = 10000,
+            },
+            expectedMidiFile: new MidiFile(
+                new TrackChunk(
+                    new TextEvent("A"),
+                    new TextEvent("B") { DeltaTime = TicksPerQuarterNoteTimeDivision.DefaultTicksPerQuarterNote })));
+
+        [Test]
+        public void Deserialize_File_MultipleTrackChunks() => DeserializeFileAndChunksAndSeparateChunks(
             csvLines: new[]
             {
                 $"0,\"MThd\",0,\"Header\",{TicksPerQuarterNoteTimeDivision.DefaultTicksPerQuarterNote}",
@@ -93,7 +136,46 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                     new NoteOffEvent((SevenBitNumber)100, SevenBitNumber.MinValue) { Channel = (FourBitNumber)4, DeltaTime = TicksPerQuarterNoteTimeDivision.DefaultTicksPerQuarterNote })));
 
         [Test]
-        public void Deserialize_Notes() => DeserializeFileAndChunksAndSeparateChunks(
+        public void Deserialize_File_MultipleTrackChunks_AllObjectIndicesAreZero() => DeserializeFileAndChunksAndSeparateChunks(
+            csvLines: new[]
+            {
+                $"0,\"MThd\",0,\"Header\",{TicksPerQuarterNoteTimeDivision.DefaultTicksPerQuarterNote}",
+                $"1,\"MTrk\",0,\"Text\",0/1,\"A\"",
+                $"1,\"MTrk\",0,\"Text\",1/4,\"B\"",
+                $"2,\"MTrk\",0,\"NoteOn\",0/1,4,100,127",
+                $"2,\"MTrk\",0,\"NoteOff\",1/4,4,100,0",
+            },
+            settings: new CsvSerializationSettings
+            {
+                TimeType = TimeSpanType.Musical
+            },
+            expectedMidiFile: new MidiFile(
+                new TrackChunk(
+                    new TextEvent("A"),
+                    new TextEvent("B") { DeltaTime = TicksPerQuarterNoteTimeDivision.DefaultTicksPerQuarterNote }),
+                new TrackChunk(
+                    new NoteOnEvent((SevenBitNumber)100, SevenBitNumber.MaxValue) { Channel = (FourBitNumber)4 },
+                    new NoteOffEvent((SevenBitNumber)100, SevenBitNumber.MinValue) { Channel = (FourBitNumber)4, DeltaTime = TicksPerQuarterNoteTimeDivision.DefaultTicksPerQuarterNote })));
+
+        [Test]
+        public void Deserialize_Chunk() => DeserializeChunk(
+            csvLines: new[]
+            {
+                $"1,\"MTrk\",0,\"Text\",0/1,\"A\"",
+                $"1,\"MTrk\",0,\"Text\",1/4,\"B\"",
+                $"2,\"MTrk\",0,\"NoteOn\",0/1,4,100,127",
+                $"2,\"MTrk\",0,\"NoteOff\",1/4,4,100,0",
+            },
+            settings: new CsvSerializationSettings
+            {
+                TimeType = TimeSpanType.Musical
+            },
+            expectedTrackChunk: new TrackChunk(
+                new TextEvent("A"),
+                new TextEvent("B") { DeltaTime = TicksPerQuarterNoteTimeDivision.DefaultTicksPerQuarterNote }));
+
+        [Test]
+        public void Deserialize_File_Notes() => DeserializeFileAndChunksAndSeparateChunks(
             csvLines: new[]
             {
                 $"0,\"MThd\",0,\"Header\",{TicksPerQuarterNoteTimeDivision.DefaultTicksPerQuarterNote}",
@@ -111,7 +193,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                     new NoteOffEvent((SevenBitNumber)100, SevenBitNumber.MinValue) { Channel = (FourBitNumber)4, DeltaTime = TicksPerQuarterNoteTimeDivision.DefaultTicksPerQuarterNote })));
 
         [Test]
-        public void Deserialize_Notes_Letter() => DeserializeFileAndChunksAndSeparateChunks(
+        public void Deserialize_File_Notes_Letter() => DeserializeFileAndChunksAndSeparateChunks(
             csvLines: new[]
             {
                 $"0,\"MThd\",0,\"Header\",{TicksPerQuarterNoteTimeDivision.DefaultTicksPerQuarterNote}",
@@ -134,7 +216,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                     new NoteOffEvent((SevenBitNumber)100, SevenBitNumber.MinValue) { Channel = (FourBitNumber)4, DeltaTime = TicksPerQuarterNoteTimeDivision.DefaultTicksPerQuarterNote })));
 
         [Test]
-        public void Deserialize_AllObjectTypes() => DeserializeFileAndChunksAndSeparateChunks(
+        public void Deserialize_File_AllObjectTypes() => DeserializeFileAndChunksAndSeparateChunks(
             csvLines: new[]
             {
                 $"0,\"MThd\",0,\"Header\",{TicksPerQuarterNoteTimeDivision.DefaultTicksPerQuarterNote}",
@@ -161,7 +243,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                     new NoteOffEvent((SevenBitNumber)40, SevenBitNumber.MinValue) { Channel = (FourBitNumber)3, DeltaTime = 10 })));
 
         [Test]
-        public void Deserialize_Delimiter() => DeserializeFileAndChunksAndSeparateChunks(
+        public void Deserialize_File_Delimiter() => DeserializeFileAndChunksAndSeparateChunks(
             csvLines: new[]
             {
                 $"0 \"MThd\" 0 \"Header\" {TicksPerQuarterNoteTimeDivision.DefaultTicksPerQuarterNote}",
@@ -181,7 +263,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                     new NormalSysExEvent(new byte[] { 9, 10, 15, 255 }))));
 
         [Test]
-        public void Deserialize_BytesArrayFormat() => DeserializeFileAndChunksAndSeparateChunks(
+        public void Deserialize_File_BytesArrayFormat() => DeserializeFileAndChunksAndSeparateChunks(
             csvLines: new[]
             {
                 $"0,\"MThd\",0,\"Header\",{TicksPerQuarterNoteTimeDivision.DefaultTicksPerQuarterNote}",
@@ -198,7 +280,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                     new NormalSysExEvent(new byte[] { 9, 10, 15, 255 }))));
 
         [Test]
-        public void Deserialize_NewlinesAndQuotes() => DeserializeFileAndChunksAndSeparateChunks(
+        public void Deserialize_File_NewlinesAndQuotes() => DeserializeFileAndChunksAndSeparateChunks(
             csvLines: new[]
             {
                 $"0,\"MThd\",0,\"Header\",{TicksPerQuarterNoteTimeDivision.DefaultTicksPerQuarterNote}",
@@ -286,9 +368,326 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 new Note((SevenBitNumber)40, 100, 110) { Channel = (FourBitNumber)3, Velocity = (SevenBitNumber)125, OffVelocity = (SevenBitNumber)3 },
             });
 
+        [Test]
+        public void Deserialize_Objects_EmptyCsv_1() => DeserializeObjects_Failed<CsvException>(
+            csvLines: new[]
+            {
+                $"",
+                $"  ",
+            },
+            checkException: exception =>
+            {
+            });
+
+        [Test]
+        public void Deserialize_Objects_EmptyCsv_2() => DeserializeObjects_Failed<CsvException>(
+            csvLines: Array.Empty<string>(),
+            checkException: exception =>
+            {
+            });
+
+        [Test]
+        public void Deserialize_Objects_InvalidObjectType() => DeserializeObjects_Failed<CsvException>(
+            csvLines: new[]
+            {
+                $"0,\"Text\",0,\"A\"",
+                $"1,\"WTF\",0,100,3,E7,127,1",
+                $"2,\"Note\",100,100,3,D3,127,2",
+            },
+            checkException: exception =>
+            {
+                ClassicAssert.AreEqual(1, exception.LineNumber, "Invalid line number.");
+            });
+
+        [Test]
+        public void Deserialize_Objects_InvalidTime() => DeserializeObjects_Failed<CsvException>(
+            csvLines: new[]
+            {
+                $"0,\"Text\",0,\"A\"",
+                $"1,\"Note\",8-9-10,100,3,D3,127,2",
+            },
+            checkException: exception =>
+            {
+                ClassicAssert.AreEqual(1, exception.LineNumber, "Invalid line number.");
+            });
+
+        [Test]
+        public void Deserialize_Objects_MissedTime() => DeserializeObjects_Failed<CsvException>(
+            csvLines: new[]
+            {
+                $"1,\"Note\",,100,3,D3,127,2",
+                $"2,\"Text\",0,\"A\"",
+            },
+            checkException: exception =>
+            {
+                ClassicAssert.AreEqual(0, exception.LineNumber, "Invalid line number.");
+            });
+
+        [Test]
+        public void Deserialize_Objects_InvalidLength() => DeserializeObjects_Failed<CsvException>(
+            csvLines: new[]
+            {
+                $"0,\"Text\",0,\"A\"",
+                $"1,\"Note\",8,100-10-1,3,D3,127,2",
+            },
+            checkException: exception =>
+            {
+                ClassicAssert.AreEqual(1, exception.LineNumber, "Invalid line number.");
+            });
+
+        [Test]
+        public void Deserialize_Objects_MissedLength() => DeserializeObjects_Failed<CsvException>(
+            csvLines: new[]
+            {
+                $"1,\"Note\",80,,3,D3,127,2",
+                $"2,\"Text\",0,\"A\"",
+            },
+            checkException: exception =>
+            {
+                ClassicAssert.AreEqual(0, exception.LineNumber, "Invalid line number.");
+            });
+
+        [Test]
+        public void Deserialize_Objects_InvalidChannel() => DeserializeObjects_Failed<CsvException>(
+            csvLines: new[]
+            {
+                $"0,\"Text\",0,\"A\"",
+                $"",
+                $"",
+                $"1,\"Note\",8,100,30,D3,127,2",
+            },
+            checkException: exception =>
+            {
+                ClassicAssert.AreEqual(3, exception.LineNumber, "Invalid line number.");
+            });
+
+        [Test]
+        public void Deserialize_Objects_InvalidNote() => DeserializeObjects_Failed<CsvException>(
+            csvLines: new[]
+            {
+                $"0,\"Text\",0,\"A\"",
+                $"1,\"Note\",8,100,3,B10,127,2",
+            },
+            checkException: exception =>
+            {
+                ClassicAssert.AreEqual(1, exception.LineNumber, "Invalid line number.");
+            });
+
+        [Test]
+        public void Deserialize_Objects_InvalidVelocity() => DeserializeObjects_Failed<CsvException>(
+            csvLines: new[]
+            {
+                $"0,\"Text\",0,\"A\"",
+                $"1,\"Note\",8,100,3,D3,200,2",
+            },
+            checkException: exception =>
+            {
+                ClassicAssert.AreEqual(1, exception.LineNumber, "Invalid line number.");
+            });
+
+        [Test]
+        public void Deserialize_Objects_InvalidOffVelocity() => DeserializeObjects_Failed<CsvException>(
+            csvLines: new[]
+            {
+                $"0,\"Text\",0,\"A\"",
+                $"",
+                $"1,\"Note\",8,100,3,D3,2,200",
+            },
+            checkException: exception =>
+            {
+                ClassicAssert.AreEqual(2, exception.LineNumber, "Invalid line number.");
+            });
+
+        [Test]
+        public void Deserialize_Objects_InvalidObjectIndex() => DeserializeObjects_Failed<CsvException>(
+            csvLines: new[]
+            {
+                $"0,\"Text\",0,\"A\"",
+                $"abc,\"Note\",8,100,3,D3,127,2",
+            },
+            checkException: exception =>
+            {
+                ClassicAssert.AreEqual(1, exception.LineNumber, "Invalid line number.");
+            });
+
+        [Test]
+        public void Deserialize_Objects_MissedObjectIndex() => DeserializeObjects_Failed<CsvException>(
+            csvLines: new[]
+            {
+                $"0,\"Text\",0,\"A\"",
+                $",\"Note\",8,100,3,D3,127,2",
+            },
+            checkException: exception =>
+            {
+                ClassicAssert.AreEqual(1, exception.LineNumber, "Invalid line number.");
+            });
+
+        [Test]
+        public void Deserialize_File_InvalidChunkIndex() => DeserializeFile_Failed<CsvException>(
+            csvLines: new[]
+            {
+                $"0,\"MThd\",0,\"Header\",96",
+                $"1,\"MTrk\",0,\"Text\",0/1,\"A\"",
+                $"abc,\"MTrk\",1,\"Text\",1/4,\"B\"",
+                $"2,\"MTrk\",0,\"NoteOn\",0/1,4,100,127",
+                $"2,\"MTrk\",1,\"NoteOff\",1/4,4,100,0",
+            },
+            checkException: exception =>
+            {
+                ClassicAssert.AreEqual(2, exception.LineNumber, "Invalid line number.");
+            },
+            settings: new CsvSerializationSettings
+            {
+                TimeType = TimeSpanType.Musical,
+            });
+
+        [Test]
+        public void Deserialize_File_MissedChunkIndex() => DeserializeFile_Failed<CsvException>(
+            csvLines: new[]
+            {
+                $"0,\"MThd\",0,\"Header\",96",
+                $"1,\"MTrk\",0,\"Text\",0/1,\"A\"",
+                $",\"MTrk\",1,\"Text\",1/4,\"B\"",
+                $"2,\"MTrk\",0,\"NoteOn\",0/1,4,100,127",
+                $"2,\"MTrk\",1,\"NoteOff\",1/4,4,100,0",
+            },
+            checkException: exception =>
+            {
+                ClassicAssert.AreEqual(2, exception.LineNumber, "Invalid line number.");
+            },
+            settings: new CsvSerializationSettings
+            {
+                TimeType = TimeSpanType.Musical,
+            });
+
+        // TODO: custom chunk
+        //[Test]
+        //public void Deserialize_File_InvalidChunkId([Values("Mtrr", "MTrrr")] string chunkId) => DeserializeFile_Failed<CsvException>(
+        //    csvLines: new[]
+        //    {
+        //        $"0,\"MThd\",0,\"Header\",96",
+        //        $"1,\"MTrk\",0,\"Text\",0/1,\"A\"",
+        //        $"1,\"MTrk\",1,\"Text\",1/4,\"B\"",
+        //        $"2,\"{chunkId}\",0,\"NoteOn\",0/1,4,100,127",
+        //        $"2,\"MTrk\",1,\"NoteOff\",1/4,4,100,0",
+        //    },
+        //    checkException: exception =>
+        //    {
+        //        ClassicAssert.AreEqual(3, exception.LineNumber, "Invalid line number.");
+        //    },
+        //    settings: new CsvSerializationSettings
+        //    {
+        //        TimeType = TimeSpanType.Musical,
+        //    });
+
+        [Test]
+        public void Deserialize_File_MissedChunkId() => DeserializeFile_Failed<CsvException>(
+            csvLines: new[]
+            {
+                $"0,\"MThd\",0,\"Header\",96",
+                $"1,\"MTrk\",0,\"Text\",0/1,\"A\"",
+                $"1,\"MTrk\",1,\"Text\",1/4,\"B\"",
+                $"2,,0,\"NoteOn\",0/1,4,100,127",
+                $"2,\"MTrk\",1,\"NoteOff\",1/4,4,100,0",
+            },
+            checkException: exception =>
+            {
+                ClassicAssert.AreEqual(3, exception.LineNumber, "Invalid line number.");
+            },
+            settings: new CsvSerializationSettings
+            {
+                TimeType = TimeSpanType.Musical,
+            });
+
+        [Test]
+        public void Deserialize_File_InvalidTicksPerQuarterNote() => DeserializeFile_Failed<CsvException>(
+            csvLines: new[]
+            {
+                $"0,\"MThd\",0,\"Header\",abc",
+                $"1,\"MTrk\",0,\"Text\",0/1,\"A\"",
+                $"1,\"MTrk\",1,\"Text\",1/4,\"B\"",
+                $"2,\"MTrk\",0,\"NoteOn\",0/1,4,100,127",
+                $"2,\"MTrk\",1,\"NoteOff\",1/4,4,100,0",
+            },
+            checkException: exception =>
+            {
+                ClassicAssert.AreEqual(0, exception.LineNumber, "Invalid line number.");
+            },
+            settings: new CsvSerializationSettings
+            {
+                TimeType = TimeSpanType.Musical,
+            });
+
+        // TODO: invalid time??? resolve time format automatically by default
+        [Test]
+        public void Deserialize_File_InvalidParametersCount() => DeserializeFile_Failed<CsvException>(
+            csvLines: new[]
+            {
+                $"0,\"MThd\",0,\"Header\",96",
+                $"1,\"MTrk\",0,\"Text\",0/1,\"A\"",
+                $"1,\"MTrk\",1,\"Text\",1/4,\"B\"",
+                $"2,\"MTrk\",0,\"NoteOn\",0/1,4,100",
+                $"2,\"MTrk\",1,\"NoteOff\",1/4,4,100,0",
+            },
+            checkException: exception =>
+            {
+                ClassicAssert.AreEqual(3, exception.LineNumber, "Invalid line number.");
+            },
+            settings: new CsvSerializationSettings
+            {
+                TimeType = TimeSpanType.Musical,
+            });
+
+        [Test]
+        public void Deserialize_File_InvalidEventType() => DeserializeFile_Failed<CsvException>(
+            csvLines: new[]
+            {
+                $"0,\"MThd\",0,\"Header\",96",
+                $"",
+                $"1,\"MTrk\",0,\"WTF\",0,\"A\"",
+                $"1,\"MTrk\",1,\"Text\",1,\"B\"",
+            },
+            checkException: exception =>
+            {
+                ClassicAssert.AreEqual(2, exception.LineNumber, "Invalid line number.");
+            });
+
         #endregion
 
         #region Private methods
+
+        // TODO: introduce CsvDeserializationException based on MidiException with LineNumber and error type (?)
+        private void DeserializeObjects_Failed<TException>(
+            string[] csvLines,
+            Action<TException> checkException,
+            CsvSerializationSettings settings = null)
+            where TException : Exception
+        {
+            CheckDeserialize(
+                csvLines,
+                stream =>
+                {
+                    var exception = Assert.Throws<TException>(() => CsvSerializer.DeserializeObjectsFromCsv(stream, TempoMap.Default, settings));
+                    Console.WriteLine(exception);
+                    checkException(exception);
+                });
+        }
+
+        private void DeserializeFile_Failed<TException>(
+            string[] csvLines,
+            Action<TException> checkException,
+            CsvSerializationSettings settings = null)
+            where TException : Exception
+        {
+            CheckDeserialize(
+                csvLines,
+                stream =>
+                {
+                    var exception = Assert.Throws<TException>(() => CsvSerializer.DeserializeFileFromCsv(stream, settings));
+                    Console.WriteLine(exception);
+                    checkException(exception);
+                });
+        }
 
         private void DeserializeObjects(
             string[] csvLines,
@@ -326,6 +725,20 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                     settings,
                     tempoMap,
                     expectedMidiFile.Chunks);
+        }
+
+        private void DeserializeChunk(
+            string[] csvLines,
+            CsvSerializationSettings settings,
+            TrackChunk expectedTrackChunk)
+        {
+            CheckDeserialize(
+                csvLines,
+                stream =>
+                {
+                    var trackChunk = CsvSerializer.DeserializeChunkFromCsv(stream, TempoMap.Default, settings);
+                    MidiAsserts.AreEqual(expectedTrackChunk, trackChunk, false, "Invalid file.");
+                });
         }
 
         private void DeserializeFile(

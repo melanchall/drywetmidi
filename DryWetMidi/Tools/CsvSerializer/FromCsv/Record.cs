@@ -39,5 +39,14 @@
         public string[] Parameters { get; }
 
         #endregion
+
+        #region Overrides
+
+        public override string ToString()
+        {
+            return $"Chunk {ChunkIndex}/{ChunkId} -> Object {ObjectIndex} -> {RecordType}";
+        }
+
+        #endregion
     }
 }

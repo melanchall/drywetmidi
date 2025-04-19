@@ -1,40 +1,100 @@
 ﻿using Melanchall.DryWetMidi.Common;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Melanchall.DryWetMidi.Tools
 {
     internal static class TypeParser
     {
-        public static readonly ParameterParser Byte = (p, s) => byte.Parse(p);
-        public static readonly ParameterParser SByte = (p, s) => sbyte.Parse(p);
-        public static readonly ParameterParser Long = (p, s) => long.Parse(p);
-        public static readonly ParameterParser UShort = (p, s) => ushort.Parse(p);
-        public static readonly ParameterParser String = (p, s) => p;
-        public static readonly ParameterParser Int = (p, s) => int.Parse(p);
-        public static readonly ParameterParser FourBitNumber = (p, s) => (FourBitNumber)byte.Parse(p);
-        public static readonly ParameterParser SevenBitNumber = (p, s) => (SevenBitNumber)byte.Parse(p);
-        public static readonly ParameterParser NoteNumber = (p, s) =>
+        #region Nested enums
+
+        public enum DataType
         {
-            switch (s.NoteFormat)
+            Byte,
+            SByte,
+            Long,
+            UShort,
+            String,
+            Int,
+            FourBitNumber,
+            SevenBitNumber,
+            NoteNumber,
+            BytesArray,
+        }
+
+        #endregion
+
+        #region Nested delegates
+
+        private delegate object ParameterParser(string parameter, CsvSerializationSettings settings);
+
+        #endregion
+
+        #region Constants
+
+        private static readonly Dictionary<DataType, ParameterParser> ParameterParsers =
+            new Dictionary<DataType, ParameterParser>
             {
-                case CsvNoteFormat.NoteNumber:
-                    return SevenBitNumber(p, s);
-                case CsvNoteFormat.Letter:
-                    return MusicTheory.Note.Parse(p).NoteNumber;
+                [DataType.Byte] = (p, s) => byte.Parse(p),
+                [DataType.SByte] = (p, s) => sbyte.Parse(p),
+                [DataType.Long] = (p, s) => long.Parse(p),
+                [DataType.UShort] = (p, s) => ushort.Parse(p),
+                [DataType.String] = (p, s) => p,
+                [DataType.Int] = (p, s) => int.Parse(p),
+                [DataType.FourBitNumber] = (p, s) => FourBitNumber.Parse(p),
+                [DataType.SevenBitNumber] = (p, s) => SevenBitNumber.Parse(p),
+                [DataType.NoteNumber] = (p, s) =>
+                {
+                    switch (s.NoteFormat)
+                    {
+                        case CsvNoteFormat.NoteNumber:
+                            return SevenBitNumber.Parse(p);
+                        case CsvNoteFormat.Letter:
+                            return MusicTheory.Note.Parse(p).NoteNumber;
+                    }
+
+                    return null;
+                },
+                [DataType.BytesArray] = (p, s) =>
+                {
+                    return p
+                        .Split(' ')
+                        .Select(b =>
+                        {
+                            if (s.BytesArrayFormat == CsvBytesArrayFormat.Hexadecimal)
+                                return Convert.ToByte(b, 16);
+
+                            return byte.Parse(b);
+                        })
+                        .ToArray();
+                },
+            };
+
+        #endregion
+
+        #region Methods
+
+        public static object Parse(
+            string value,
+            DataType dataType,
+            string valueDescription,
+            int? lineNumber,
+            CsvSerializationSettings settings)
+        {
+            var parser = ParameterParsers[dataType];
+
+            try
+            {
+                return parser(value, settings);
             }
-
-            return null;
-        };
-        public static readonly ParameterParser BytesArray = (p, s) => p
-            .Split(' ')
-            .Select(b =>
+            catch (Exception ex)
             {
-                if (s.BytesArrayFormat == CsvBytesArrayFormat.Hexadecimal)
-                    return Convert.ToByte(b, 16);
+                CsvError.ThrowBadFormat(lineNumber, $"Invalid {valueDescription} ({value}).", ex);
+                return null;
+            }
+        }
 
-                return byte.Parse(b);
-            })
-            .ToArray();
+        #endregion
     }
 }
