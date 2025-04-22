@@ -13,6 +13,7 @@ namespace Melanchall.DryWetMidi.Tools
         private readonly StreamWriter _streamWriter;
         private readonly string _delimiterString;
         private readonly Func<byte, string> _byteFormatter;
+        private readonly string _bytesArrayDelimiter;
 
         private bool _disposed = false;
 
@@ -25,6 +26,7 @@ namespace Melanchall.DryWetMidi.Tools
             _streamWriter = new StreamWriter(stream, new UTF8Encoding(false, true), settings.ReadWriteBufferSize, true);
             _delimiterString = settings.Delimiter.ToString();
             _byteFormatter = GetByteFormatter(settings.BytesArrayFormat);
+            _bytesArrayDelimiter = settings.BytesArrayDelimiter.ToString();
         }
 
         #endregion
@@ -51,14 +53,13 @@ namespace Melanchall.DryWetMidi.Tools
             if (value == null)
                 return string.Empty;
 
-            // TODO: bytes delimiter
             var bytes = value as byte[];
             if (bytes != null)
-                value = string.Join(" ", bytes.Select(b => _byteFormatter(b)));
+                value = string.Join(_bytesArrayDelimiter, bytes.Select(b => _byteFormatter(b)));
 
             var s = value as string;
             if (s != null)
-                return CsvFormattingUtilities.EscapeString(s);
+                value = CsvFormattingUtilities.EscapeString(s);
 
             return value;
         }

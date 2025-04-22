@@ -280,6 +280,56 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                     new NormalSysExEvent(new byte[] { 9, 10, 15, 255 }))));
 
         [Test]
+        public void Deserialize_File_BytesArrayDelimiter_1() => DeserializeFileAndChunksAndSeparateChunks(
+            csvLines: new[]
+            {
+                $"0,\"MThd\",0,\"Header\",{TicksPerQuarterNoteTimeDivision.DefaultTicksPerQuarterNote}",
+                $"1,\"MTrk\",0,\"Text\",0,\"A\"",
+                $"1,\"MTrk\",1,\"NormalSysEx\",0,\"09/0A/0F/FF\"",
+            },
+            settings: new CsvSerializationSettings
+            {
+                BytesArrayFormat = CsvBytesArrayFormat.Hexadecimal,
+                BytesArrayDelimiter = '/',
+            },
+            expectedMidiFile: new MidiFile(
+                new TrackChunk(
+                    new TextEvent("A"),
+                    new NormalSysExEvent(new byte[] { 0x09, 0x0A, 0x0F, 0xFF }))));
+
+        [Test]
+        public void Deserialize_File_BytesArrayDelimiter_2() => DeserializeFileAndChunksAndSeparateChunks(
+            csvLines: new[]
+            {
+                $"0,\"MThd\",0,\"Header\",{TicksPerQuarterNoteTimeDivision.DefaultTicksPerQuarterNote}",
+                $"1,\"MTrk\",0,\"Text\",0,\"A\"",
+                $"1,\"MTrk\",1,\"NormalSysEx\",0,\" 09 / 0A  / 0F  /FF  \"",
+            },
+            settings: new CsvSerializationSettings
+            {
+                BytesArrayFormat = CsvBytesArrayFormat.Hexadecimal,
+                BytesArrayDelimiter = '/',
+            },
+            expectedMidiFile: new MidiFile(
+                new TrackChunk(
+                    new TextEvent("A"),
+                    new NormalSysExEvent(new byte[] { 0x09, 0x0A, 0x0F, 0xFF }))));
+
+        [Test]
+        public void Deserialize_File_BytesArray_Whitespaces() => DeserializeFileAndChunksAndSeparateChunks(
+            csvLines: new[]
+            {
+                $"0,\"MThd\",0,\"Header\",{TicksPerQuarterNoteTimeDivision.DefaultTicksPerQuarterNote}",
+                $"1,\"MTrk\",0,\"Text\",0,\"A\"",
+                $"1,\"MTrk\",1,\"NormalSysEx\",0,\"1   2   3 \"",
+            },
+            settings: null,
+            expectedMidiFile: new MidiFile(
+                new TrackChunk(
+                    new TextEvent("A"),
+                    new NormalSysExEvent(new byte[] { 1, 2, 3 }))));
+
+        [Test]
         public void Deserialize_File_NewlinesAndQuotes() => DeserializeFileAndChunksAndSeparateChunks(
             csvLines: new[]
             {
@@ -295,6 +345,21 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                     new TextEvent("\"in\" \"quotes\""),
                     new TextEvent($"B{Environment.NewLine}bb\"in quotes\""),
                     new TextEvent("C"))),
+            checkSeparateChunks: false);
+
+        [Test]
+        public void Deserialize_File_DelimiterInString() => DeserializeFileAndChunksAndSeparateChunks(
+            csvLines: new[]
+            {
+                $"0,\"MThd\",0,\"Header\",{TicksPerQuarterNoteTimeDivision.DefaultTicksPerQuarterNote}",
+                $"1,\"MTrk\",0,\"Text\",0,\"A,B,C\"",
+                $"1,\"MTrk\",1,\"Text\",0,\"B\"",
+            },
+            settings: null,
+            expectedMidiFile: new MidiFile(
+                new TrackChunk(
+                    new TextEvent("A,B,C"),
+                    new TextEvent("B"))),
             checkSeparateChunks: false);
 
         [Test]

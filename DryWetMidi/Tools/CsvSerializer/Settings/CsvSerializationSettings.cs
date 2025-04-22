@@ -91,6 +91,8 @@ namespace Melanchall.DryWetMidi.Tools
             }
         }
 
+        public char BytesArrayDelimiter { get; set; } = ' ';
+
         /// <summary>
         /// Gets or sets a char used as the values delimiter in CSV records. The default value
         /// is comma (<c>','</c>).

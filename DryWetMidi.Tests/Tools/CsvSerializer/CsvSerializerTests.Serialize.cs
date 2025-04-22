@@ -237,6 +237,27 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             });
 
         [Test]
+        public void Serialize_BytesArrayDelimiter() => Serialize(
+            midiFile: new MidiFile(
+                new TrackChunk(
+                    new TextEvent("A"),
+                    new NormalSysExEvent(new byte[] { 0x09, 0x0A, 0x0F, 0xFF }))),
+            originalFormat: null,
+            settings: new CsvSerializationSettings
+            {
+                BytesArrayFormat = CsvBytesArrayFormat.Hexadecimal,
+                BytesArrayDelimiter = '/',
+            },
+            objectType: ObjectType.TimedEvent,
+            objectDetectionSettings: null,
+            expectedCsvLines: new[]
+            {
+                $"0,\"MThd\",0,\"Header\",{TicksPerQuarterNoteTimeDivision.DefaultTicksPerQuarterNote}",
+                $"1,\"MTrk\",0,\"Text\",0,\"A\"",
+                $"1,\"MTrk\",1,\"NormalSysEx\",0,\"09/0A/0F/FF\"",
+            });
+
+        [Test]
         public void Serialize_NewlinesAndQuotes() => Serialize(
             midiFile: new MidiFile(
                 new TrackChunk(

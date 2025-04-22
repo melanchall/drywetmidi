@@ -59,7 +59,9 @@ namespace Melanchall.DryWetMidi.Tools
                 [DataType.BytesArray] = (p, s) =>
                 {
                     return p
-                        .Split(' ')
+                        .Split(s.BytesArrayDelimiter)
+                        .Select(b => b.Trim())
+                        .Where(b => !string.IsNullOrWhiteSpace(b))
                         .Select(b =>
                         {
                             if (s.BytesArrayFormat == CsvBytesArrayFormat.Hexadecimal)
