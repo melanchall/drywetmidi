@@ -18,8 +18,8 @@ namespace Melanchall.DryWetMidi.Tests.Tools
     {
         #region Test methods
 
-        [TestCaseSource(nameof(EventsData))]
-        public void Deserialize_Event(MidiEvent midiEvent, string expectedCsv, CsvSerializationSettings settings) => CheckDeserialize(
+        [TestCaseSource(nameof(EventsDataForDeserialization))]
+        public void Deserialize_Event(MidiEvent midiEvent, string expectedCsv, CsvDeserializationSettings settings) => CheckDeserialize(
             csvLines: new[] { $"0,\"{midiEvent.EventType}\",0{(string.IsNullOrEmpty(expectedCsv) ? string.Empty : $",{expectedCsv}")}" },
             check: stream =>
             {
@@ -68,7 +68,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 $"1,\"MTrk\",0,\"Text\",0/1,\"A\"",
                 $"1,\"MTrk\",1,\"Text\",1/4,\"B\"",
             },
-            settings: new CsvSerializationSettings
+            settings: new CsvDeserializationSettings
             {
                 TimeType = TimeSpanType.Musical
             },
@@ -85,10 +85,10 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 $"1,\"MTrk\",0,\"Text\",0/1,\"A\"",
                 $"1,\"MTrk\",1,\"Text\",1/4,\"B\"",
             },
-            settings: new CsvSerializationSettings
+            settings: new CsvDeserializationSettings
             {
                 TimeType = TimeSpanType.Musical,
-                ReadWriteBufferSize = 10,
+                BufferSize = 10,
             },
             expectedMidiFile: new MidiFile(
                 new TrackChunk(
@@ -103,10 +103,10 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 $"1,\"MTrk\",0,\"Text\",0/1,\"A\"",
                 $"1,\"MTrk\",1,\"Text\",1/4,\"B\"",
             },
-            settings: new CsvSerializationSettings
+            settings: new CsvDeserializationSettings
             {
                 TimeType = TimeSpanType.Musical,
-                ReadWriteBufferSize = 10000,
+                BufferSize = 10000,
             },
             expectedMidiFile: new MidiFile(
                 new TrackChunk(
@@ -123,7 +123,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 $"2,\"MTrk\",0,\"NoteOn\",0/1,4,100,127",
                 $"2,\"MTrk\",1,\"NoteOff\",1/4,4,100,0",
             },
-            settings: new CsvSerializationSettings
+            settings: new CsvDeserializationSettings
             {
                 TimeType = TimeSpanType.Musical
             },
@@ -145,7 +145,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 $"2,\"MTrk\",0,\"NoteOn\",0/1,4,100,127",
                 $"2,\"MTrk\",0,\"NoteOff\",1/4,4,100,0",
             },
-            settings: new CsvSerializationSettings
+            settings: new CsvDeserializationSettings
             {
                 TimeType = TimeSpanType.Musical
             },
@@ -166,7 +166,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 $"2,\"MTrk\",0,\"NoteOn\",0/1,4,100,127",
                 $"2,\"MTrk\",0,\"NoteOff\",1/4,4,100,0",
             },
-            settings: new CsvSerializationSettings
+            settings: new CsvDeserializationSettings
             {
                 TimeType = TimeSpanType.Musical
             },
@@ -201,7 +201,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 $"1,\"MTrk\",1,\"Text\",0:0:0:500,\"B\"",
                 $"2,\"MTrk\",0,\"Note\",0:0:0:0,1/4,4,E7,127,0",
             },
-            settings: new CsvSerializationSettings
+            settings: new CsvDeserializationSettings
             {
                 NoteFormat = CsvNoteFormat.Letter,
                 TimeType = TimeSpanType.Metric,
@@ -226,7 +226,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 $"2,\"MTrk\",1,\"Note\",100,100,3,D3,127,0",
                 $"2,\"MTrk\",1,\"Note\",110,100,3,E2,127,0",
             },
-            settings: new CsvSerializationSettings
+            settings: new CsvDeserializationSettings
             {
                 NoteFormat = CsvNoteFormat.Letter,
             },
@@ -251,7 +251,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 $"1 \"MTrk\" 1 \"Text\" 1/4 \"B\"",
                 $"1 \"MTrk\" 2 \"NormalSysEx\" 1/4 \"9 10 15 255\"",
             },
-            settings: new CsvSerializationSettings
+            settings: new CsvDeserializationSettings
             {
                 TimeType = TimeSpanType.Musical,
                 Delimiter = ' ',
@@ -270,7 +270,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 $"1,\"MTrk\",0,\"Text\",0,\"A\"",
                 $"1,\"MTrk\",1,\"NormalSysEx\",0,\"09 0A 0F FF\"",
             },
-            settings: new CsvSerializationSettings
+            settings: new CsvDeserializationSettings
             {
                 BytesArrayFormat = CsvBytesArrayFormat.Hexadecimal,
             },
@@ -287,7 +287,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 $"1,\"MTrk\",0,\"Text\",0,\"A\"",
                 $"1,\"MTrk\",1,\"NormalSysEx\",0,\"09/0A/0F/FF\"",
             },
-            settings: new CsvSerializationSettings
+            settings: new CsvDeserializationSettings
             {
                 BytesArrayFormat = CsvBytesArrayFormat.Hexadecimal,
                 BytesArrayDelimiter = '/',
@@ -305,7 +305,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 $"1,\"MTrk\",0,\"Text\",0,\"A\"",
                 $"1,\"MTrk\",1,\"NormalSysEx\",0,\" 09 / 0A  / 0F  /FF  \"",
             },
-            settings: new CsvSerializationSettings
+            settings: new CsvDeserializationSettings
             {
                 BytesArrayFormat = CsvBytesArrayFormat.Hexadecimal,
                 BytesArrayDelimiter = '/',
@@ -372,7 +372,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 $"3,\"Note\",100,100,3,D3,127,2",
                 $"3,\"Note\",110,100,3,E2,125,3",
             },
-            settings: new CsvSerializationSettings
+            settings: new CsvDeserializationSettings
             {
                 NoteFormat = CsvNoteFormat.Letter,
             },
@@ -396,7 +396,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 $"2,\"Note\",100,100,3,D3,127,2",
                 $"2,\"Note\",110,100,3,E2,125,3",
             },
-            settings: new CsvSerializationSettings
+            settings: new CsvDeserializationSettings
             {
                 NoteFormat = CsvNoteFormat.Letter,
             },
@@ -420,7 +420,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 $"3,\"Note\",100,100,3,D3,127,2",
                 $"4,\"Note\",110,100,3,E2,125,3",
             },
-            settings: new CsvSerializationSettings
+            settings: new CsvDeserializationSettings
             {
                 NoteFormat = CsvNoteFormat.Letter,
             },
@@ -601,7 +601,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             {
                 ClassicAssert.AreEqual(2, exception.LineNumber, "Invalid line number.");
             },
-            settings: new CsvSerializationSettings
+            settings: new CsvDeserializationSettings
             {
                 TimeType = TimeSpanType.Musical,
             });
@@ -620,30 +620,10 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             {
                 ClassicAssert.AreEqual(2, exception.LineNumber, "Invalid line number.");
             },
-            settings: new CsvSerializationSettings
+            settings: new CsvDeserializationSettings
             {
                 TimeType = TimeSpanType.Musical,
             });
-
-        // TODO: custom chunk
-        //[Test]
-        //public void Deserialize_File_InvalidChunkId([Values("Mtrr", "MTrrr")] string chunkId) => DeserializeFile_Failed<CsvException>(
-        //    csvLines: new[]
-        //    {
-        //        $"0,\"MThd\",0,\"Header\",96",
-        //        $"1,\"MTrk\",0,\"Text\",0/1,\"A\"",
-        //        $"1,\"MTrk\",1,\"Text\",1/4,\"B\"",
-        //        $"2,\"{chunkId}\",0,\"NoteOn\",0/1,4,100,127",
-        //        $"2,\"MTrk\",1,\"NoteOff\",1/4,4,100,0",
-        //    },
-        //    checkException: exception =>
-        //    {
-        //        ClassicAssert.AreEqual(3, exception.LineNumber, "Invalid line number.");
-        //    },
-        //    settings: new CsvSerializationSettings
-        //    {
-        //        TimeType = TimeSpanType.Musical,
-        //    });
 
         [Test]
         public void Deserialize_File_MissedChunkId() => DeserializeFile_Failed<CsvException>(
@@ -659,7 +639,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             {
                 ClassicAssert.AreEqual(3, exception.LineNumber, "Invalid line number.");
             },
-            settings: new CsvSerializationSettings
+            settings: new CsvDeserializationSettings
             {
                 TimeType = TimeSpanType.Musical,
             });
@@ -678,7 +658,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             {
                 ClassicAssert.AreEqual(0, exception.LineNumber, "Invalid line number.");
             },
-            settings: new CsvSerializationSettings
+            settings: new CsvDeserializationSettings
             {
                 TimeType = TimeSpanType.Musical,
             });
@@ -698,7 +678,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             {
                 ClassicAssert.AreEqual(3, exception.LineNumber, "Invalid line number.");
             },
-            settings: new CsvSerializationSettings
+            settings: new CsvDeserializationSettings
             {
                 TimeType = TimeSpanType.Musical,
             });
@@ -725,7 +705,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         private void DeserializeObjects_Failed<TException>(
             string[] csvLines,
             Action<TException> checkException,
-            CsvSerializationSettings settings = null)
+            CsvDeserializationSettings settings = null)
             where TException : Exception
         {
             CheckDeserialize(
@@ -741,7 +721,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         private void DeserializeFile_Failed<TException>(
             string[] csvLines,
             Action<TException> checkException,
-            CsvSerializationSettings settings = null)
+            CsvDeserializationSettings settings = null)
             where TException : Exception
         {
             CheckDeserialize(
@@ -756,7 +736,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
         private void DeserializeObjects(
             string[] csvLines,
-            CsvSerializationSettings settings,
+            CsvDeserializationSettings settings,
             ICollection<ITimedObject> expectedObjects)
         {
             CheckDeserialize(
@@ -770,7 +750,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
         private void DeserializeFileAndChunksAndSeparateChunks(
             string[] csvLines,
-            CsvSerializationSettings settings,
+            CsvDeserializationSettings settings,
             MidiFile expectedMidiFile,
             bool checkSeparateChunks = true)
         {
@@ -794,7 +774,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
         private void DeserializeChunk(
             string[] csvLines,
-            CsvSerializationSettings settings,
+            CsvDeserializationSettings settings,
             TrackChunk expectedTrackChunk)
         {
             CheckDeserialize(
@@ -808,7 +788,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
         private void DeserializeFile(
             string[] csvLines,
-            CsvSerializationSettings settings,
+            CsvDeserializationSettings settings,
             MidiFile expectedMidiFile)
         {
             CheckDeserialize(
@@ -822,7 +802,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
         private void DeserializeChunks(
             string[] csvLines,
-            CsvSerializationSettings settings,
+            CsvDeserializationSettings settings,
             TempoMap tempoMap,
             ICollection<MidiChunk> expectedChunks)
         {
@@ -837,7 +817,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
         private void DeserializeSeparateChunks(
             string[] csvLines,
-            CsvSerializationSettings settings,
+            CsvDeserializationSettings settings,
             TempoMap tempoMap,
             ICollection<MidiChunk> expectedChunks)
         {

@@ -7,9 +7,9 @@ namespace Melanchall.DryWetMidi.Tools
 {
     internal static class EventParser
     {
-        #region Delegates
+        #region Nested delegates
 
-        public delegate MidiEvent Parser(string[] parameters, CsvSerializationSettings settings);
+        public delegate MidiEvent Parser(string[] parameters, CsvDeserializationSettings settings);
 
         #endregion
 
@@ -143,7 +143,7 @@ namespace Melanchall.DryWetMidi.Tools
         public static MidiEvent ParseEvent(
             MidiEventType eventType,
             string[] parameters,
-            CsvSerializationSettings settings)
+            CsvDeserializationSettings settings)
         {
             return EventsParsers[eventType](parameters, settings);
         }

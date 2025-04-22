@@ -19,7 +19,7 @@ namespace Melanchall.DryWetMidi.Tools
         private CsvNoteFormat _noteFormat = CsvNoteFormat.NoteNumber;
         private CsvBytesArrayFormat _bytesArrayFormat = CsvBytesArrayFormat.Decimal;
 
-        private int _readWriteBufferSize = 1024;
+        private int _bufferSize = 1024;
 
         #endregion
 
@@ -100,18 +100,18 @@ namespace Melanchall.DryWetMidi.Tools
         public char Delimiter { get; set; } = ',';
 
         /// <summary>
-        /// Gets or sets the size in bytes of the internal buffer for reading/writing data within
-        /// the process of CSV serialization/deserialization. The default value is <c>1024</c>.
+        /// Gets or sets the size in bytes of the internal buffer for writing data within
+        /// the process of CSV serialization. The default value is <c>1024</c>.
         /// </summary>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="value"/> is zero or negative.</exception>
-        public int ReadWriteBufferSize
+        public int BufferSize
         {
-            get { return _readWriteBufferSize; }
+            get { return _bufferSize; }
             set
             {
                 ThrowIfArgument.IsNonpositive(nameof(value), value, "Buffer size is zero or negative.");
 
-                _readWriteBufferSize = value;
+                _bufferSize = value;
             }
         }
 

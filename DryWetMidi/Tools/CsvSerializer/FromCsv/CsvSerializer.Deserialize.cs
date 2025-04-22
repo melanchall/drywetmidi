@@ -52,14 +52,14 @@ namespace Melanchall.DryWetMidi.Tools
         /// <exception cref="CsvException">Invalid CSV representation.</exception>
         public static MidiFile DeserializeFileFromCsv(
             Stream stream,
-            CsvSerializationSettings settings = null)
+            CsvDeserializationSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(stream), stream);
 
             if (!stream.CanRead)
                 throw new ArgumentException("Stream doesn't support reading.", nameof(stream));
 
-            settings = settings ?? new CsvSerializationSettings();
+            settings = settings ?? new CsvDeserializationSettings();
 
             var midiFile = new MidiFile();
 
@@ -96,7 +96,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <exception cref="CsvException">Invalid CSV representation.</exception>
         public static MidiFile DeserializeFileFromCsv(
             string filePath,
-            CsvSerializationSettings settings = null)
+            CsvDeserializationSettings settings = null)
         {
             ThrowIfArgument.IsNullOrEmptyString(nameof(filePath), filePath, "File path");
 
@@ -131,7 +131,7 @@ namespace Melanchall.DryWetMidi.Tools
         public static ICollection<MidiChunk> DeserializeChunksFromCsv(
             Stream stream,
             TempoMap tempoMap,
-            CsvSerializationSettings settings = null)
+            CsvDeserializationSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(stream), stream);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
@@ -139,7 +139,7 @@ namespace Melanchall.DryWetMidi.Tools
             if (!stream.CanRead)
                 throw new ArgumentException("Stream doesn't support reading.", nameof(stream));
 
-            settings = settings ?? new CsvSerializationSettings();
+            settings = settings ?? new CsvDeserializationSettings();
 
             using (var reader = new CsvReader(stream, settings))
             {
@@ -168,7 +168,7 @@ namespace Melanchall.DryWetMidi.Tools
         public static ICollection<MidiChunk> DeserializeChunksFromCsv(
             string filePath,
             TempoMap tempoMap,
-            CsvSerializationSettings settings = null)
+            CsvDeserializationSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
             ThrowIfArgument.IsNullOrEmptyString(nameof(filePath), filePath, "File path");
@@ -204,7 +204,7 @@ namespace Melanchall.DryWetMidi.Tools
         public static MidiChunk DeserializeChunkFromCsv(
             Stream stream,
             TempoMap tempoMap,
-            CsvSerializationSettings settings = null)
+            CsvDeserializationSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(stream), stream);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
@@ -212,7 +212,7 @@ namespace Melanchall.DryWetMidi.Tools
             if (!stream.CanRead)
                 throw new ArgumentException("Stream doesn't support reading.", nameof(stream));
 
-            settings = settings ?? new CsvSerializationSettings();
+            settings = settings ?? new CsvDeserializationSettings();
 
             using (var reader = new CsvReader(stream, settings))
             {
@@ -246,7 +246,7 @@ namespace Melanchall.DryWetMidi.Tools
         public static MidiChunk DeserializeChunkFromCsv(
             string filePath,
             TempoMap tempoMap,
-            CsvSerializationSettings settings = null)
+            CsvDeserializationSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
             ThrowIfArgument.IsNullOrEmptyString(nameof(filePath), filePath, "File path");
@@ -282,7 +282,7 @@ namespace Melanchall.DryWetMidi.Tools
         public static ICollection<ITimedObject> DeserializeObjectsFromCsv(
             Stream stream,
             TempoMap tempoMap,
-            CsvSerializationSettings settings = null)
+            CsvDeserializationSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(stream), stream);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
@@ -290,7 +290,7 @@ namespace Melanchall.DryWetMidi.Tools
             if (!stream.CanRead)
                 throw new ArgumentException("Stream doesn't support reading.", nameof(stream));
 
-            settings = settings ?? new CsvSerializationSettings();
+            settings = settings ?? new CsvDeserializationSettings();
 
             using (var reader = new CsvReader(stream, settings))
             {
@@ -324,7 +324,7 @@ namespace Melanchall.DryWetMidi.Tools
         public static ICollection<ITimedObject> DeserializeObjectsFromCsv(
             string filePath,
             TempoMap tempoMap,
-            CsvSerializationSettings settings = null)
+            CsvDeserializationSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
             ThrowIfArgument.IsNullOrEmptyString(nameof(filePath), filePath, "File path");
@@ -337,7 +337,7 @@ namespace Melanchall.DryWetMidi.Tools
 
         private static ICollection<MidiChunk> ReadChunks(
             CsvReader reader,
-            CsvSerializationSettings settings,
+            CsvDeserializationSettings settings,
             Func<ICollection<CsvObject>, ICollection<MidiChunk>, TempoMap> getTempoMap,
             bool readChunkId)
         {
@@ -409,7 +409,7 @@ namespace Melanchall.DryWetMidi.Tools
 
         private static ICollection<ICollection<ITimedObject>> ReadObjects(
             CsvReader reader,
-            CsvSerializationSettings settings,
+            CsvDeserializationSettings settings,
             TempoMap tempoMap,
             bool readChunkId)
         {
@@ -583,7 +583,7 @@ namespace Melanchall.DryWetMidi.Tools
 
         private static CsvEvent ParseEvent(
             Record record,
-            CsvSerializationSettings settings,
+            CsvDeserializationSettings settings,
             bool parseChunkId)
         {
             var parameters = record.Parameters;
@@ -618,7 +618,7 @@ namespace Melanchall.DryWetMidi.Tools
 
         private static CsvNote ParseNote(
             Record record,
-            CsvSerializationSettings settings,
+            CsvDeserializationSettings settings,
             bool parseChunkId)
         {
             var lineNumber = record.CsvRecord.LineNumber;
@@ -673,7 +673,7 @@ namespace Melanchall.DryWetMidi.Tools
         private static ITimeSpan ParseTime(
             string value,
             int lineNumber,
-            CsvSerializationSettings settings)
+            CsvDeserializationSettings settings)
         {
             ITimeSpan time;
             TimeSpanUtilities.TryParse(value, settings.TimeType, out time);
@@ -687,7 +687,7 @@ namespace Melanchall.DryWetMidi.Tools
         private static ITimeSpan ParseLength(
             string value,
             int lineNumber,
-            CsvSerializationSettings settings)
+            CsvDeserializationSettings settings)
         {
             ITimeSpan length;
             TimeSpanUtilities.TryParse(value, settings.LengthType, out length);

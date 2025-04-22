@@ -27,7 +27,7 @@ namespace Melanchall.DryWetMidi.Tools
 
         #region Nested delegates
 
-        private delegate object ParameterParser(string parameter, CsvSerializationSettings settings);
+        private delegate object ParameterParser(string parameter, CsvDeserializationSettings settings);
 
         #endregion
 
@@ -82,7 +82,7 @@ namespace Melanchall.DryWetMidi.Tools
             DataType dataType,
             string valueDescription,
             int? lineNumber,
-            CsvSerializationSettings settings)
+            CsvDeserializationSettings settings)
         {
             var parser = ParameterParsers[dataType];
 

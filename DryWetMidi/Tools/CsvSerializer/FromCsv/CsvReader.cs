@@ -30,10 +30,10 @@ namespace Melanchall.DryWetMidi.Tools
 
         #region Constructor
 
-        public CsvReader(Stream stream, CsvSerializationSettings settings)
+        public CsvReader(Stream stream, CsvDeserializationSettings settings)
         {
-            _streamReader = new StreamReader(stream, Encoding.UTF8, true, settings.ReadWriteBufferSize, true);
-            _buffer = new char[settings.ReadWriteBufferSize];
+            _streamReader = new StreamReader(stream, Encoding.UTF8, true, settings.BufferSize, true);
+            _buffer = new char[settings.BufferSize];
             _delimiter = settings.Delimiter;
         }
 

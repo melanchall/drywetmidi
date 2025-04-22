@@ -23,7 +23,7 @@ namespace Melanchall.DryWetMidi.Tools
 
         public CsvWriter(Stream stream, CsvSerializationSettings settings)
         {
-            _streamWriter = new StreamWriter(stream, new UTF8Encoding(false, true), settings.ReadWriteBufferSize, true);
+            _streamWriter = new StreamWriter(stream, new UTF8Encoding(false, true), settings.BufferSize, true);
             _delimiterString = settings.Delimiter.ToString();
             _byteFormatter = GetByteFormatter(settings.BytesArrayFormat);
             _bytesArrayDelimiter = settings.BytesArrayDelimiter.ToString();
