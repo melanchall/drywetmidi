@@ -54,7 +54,9 @@ namespace Melanchall.DryWetMidi.Tools
                             return MusicTheory.Note.Parse(p).NoteNumber;
                     }
 
-                    return null;
+                    return !p.Any(char.IsLetter)
+                        ? SevenBitNumber.Parse(p)
+                        : MusicTheory.Note.Parse(p).NoteNumber;
                 },
                 [DataType.BytesArray] = (p, s) =>
                 {

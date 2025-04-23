@@ -10,9 +10,9 @@ namespace Melanchall.DryWetMidi.Tools
     {
         #region Fields
 
-        private TimeSpanType _timeType = TimeSpanType.Midi;
-        private TimeSpanType _lengthType = TimeSpanType.Midi;
-        private CsvNoteFormat _noteFormat = CsvNoteFormat.NoteNumber;
+        private TimeSpanType? _timeType = null;
+        private TimeSpanType? _lengthType = null;
+        private CsvNoteFormat? _noteFormat = null;
         private CsvBytesArrayFormat _bytesArrayFormat = CsvBytesArrayFormat.Decimal;
 
         private int _bufferSize = 1024;
@@ -23,16 +23,17 @@ namespace Melanchall.DryWetMidi.Tools
 
         /// <summary>
         /// Gets or sets a value that defines how the time of objects is presented in CSV.
-        /// The default value is <see cref="TimeSpanType.Midi"/>. More info on the supported
-        /// formats in the <see href="xref:a_time_length">Time and length</see> article.
+        /// The default value is <c>null</c> which means time format will be resolved automatically.
+        /// More info on the supported formats in the <see href="xref:a_time_length">Time and length</see> article.
         /// </summary>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="value"/> specified an invalid value.</exception>
-        public TimeSpanType TimeType
+        public TimeSpanType? TimeType
         {
             get { return _timeType; }
             set
             {
-                ThrowIfArgument.IsInvalidEnumValue(nameof(value), value);
+                if (value != null)
+                    ThrowIfArgument.IsInvalidEnumValue(nameof(value), value.Value);
 
                 _timeType = value;
             }
@@ -40,16 +41,17 @@ namespace Melanchall.DryWetMidi.Tools
 
         /// <summary>
         /// Gets or sets a value that defines how length of notes is presented in CSV.
-        /// The default value is <see cref="TimeSpanType.Midi"/>. More info on the supported
-        /// formats in the <see href="xref:a_time_length">Time and length</see> article.
+        /// The default value is <c>null</c> which means length format will be resolved automatically.
+        /// More info on the supported formats in the <see href="xref:a_time_length">Time and length</see> article.
         /// </summary>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="value"/> specified an invalid value.</exception>
-        public TimeSpanType LengthType
+        public TimeSpanType? LengthType
         {
             get { return _lengthType; }
             set
             {
-                ThrowIfArgument.IsInvalidEnumValue(nameof(value), value);
+                if (value != null)
+                    ThrowIfArgument.IsInvalidEnumValue(nameof(value), value.Value);
 
                 _lengthType = value;
             }
@@ -57,15 +59,16 @@ namespace Melanchall.DryWetMidi.Tools
 
         /// <summary>
         /// Gets or sets a value that defines how note numbers (for example, <see cref="NoteAftertouchEvent.NoteNumber"/>)
-        /// are presented in CSV. The default value is <see cref="CsvNoteFormat.NoteNumber"/>.
+        /// are presented in CSV. The default value is <c>null</c> which means note format will be resolved automatically.
         /// </summary>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="value"/> specified an invalid value.</exception>
-        public CsvNoteFormat NoteFormat
+        public CsvNoteFormat? NoteFormat
         {
             get { return _noteFormat; }
             set
             {
-                ThrowIfArgument.IsInvalidEnumValue(nameof(value), value);
+                if (value != null)
+                    ThrowIfArgument.IsInvalidEnumValue(nameof(value), value.Value);
 
                 _noteFormat = value;
             }

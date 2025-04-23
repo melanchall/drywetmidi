@@ -676,10 +676,15 @@ namespace Melanchall.DryWetMidi.Tools
             CsvDeserializationSettings settings)
         {
             ITimeSpan time;
-            TimeSpanUtilities.TryParse(value, settings.TimeType, out time);
+
+            var timeType = settings.TimeType;
+            if (timeType == null)
+                TimeSpanUtilities.TryParse(value, out time);
+            else
+                TimeSpanUtilities.TryParse(value, timeType.Value, out time);
 
             if (time == null)
-                CsvError.ThrowBadFormat(lineNumber, $"Invalid time ({value} with {settings.TimeType} time type expected).");
+                CsvError.ThrowBadFormat(lineNumber, $"Invalid time ({value} with {(timeType != null ? $"{timeType} time type expected" : "time type resolved automatically")}).");
 
             return time;
         }
@@ -690,10 +695,15 @@ namespace Melanchall.DryWetMidi.Tools
             CsvDeserializationSettings settings)
         {
             ITimeSpan length;
-            TimeSpanUtilities.TryParse(value, settings.LengthType, out length);
+
+            var lengthType = settings.LengthType;
+            if (lengthType == null)
+                TimeSpanUtilities.TryParse(value, out length);
+            else
+                TimeSpanUtilities.TryParse(value, lengthType.Value, out length);
 
             if (length == null)
-                CsvError.ThrowBadFormat(lineNumber, $"Invalid length ({value} with {settings.LengthType} length type expected).");
+                CsvError.ThrowBadFormat(lineNumber, $"Invalid length ({value} with {(lengthType != null ? $"{lengthType} length type expected" : "length type resolved automatically")}).");
 
             return length;
         }
