@@ -14,6 +14,7 @@ namespace Melanchall.DryWetMidi.Tools
         private TimeSpanType? _lengthType = null;
         private CsvNoteFormat? _noteFormat = null;
         private CsvBytesArrayFormat _bytesArrayFormat = CsvBytesArrayFormat.Decimal;
+        private UnknownRecordPolicy _unknownRecordPolicy = UnknownRecordPolicy.Abort;
 
         private int _bufferSize = 1024;
 
@@ -87,6 +88,17 @@ namespace Melanchall.DryWetMidi.Tools
                 ThrowIfArgument.IsInvalidEnumValue(nameof(value), value);
 
                 _bytesArrayFormat = value;
+            }
+        }
+
+        public UnknownRecordPolicy UnknownRecordPolicy
+        {
+            get { return _unknownRecordPolicy; }
+            set
+            {
+                ThrowIfArgument.IsInvalidEnumValue(nameof(value), value);
+
+                _unknownRecordPolicy = value;
             }
         }
 

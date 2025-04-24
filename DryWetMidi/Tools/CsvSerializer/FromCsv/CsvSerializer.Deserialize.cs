@@ -5,6 +5,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime;
+using System.Xml.Linq;
 
 namespace Melanchall.DryWetMidi.Tools
 {
@@ -352,9 +354,9 @@ namespace Melanchall.DryWetMidi.Tools
             {
                 var lineNumber = record.CsvRecord.LineNumber;
 
-                var recordType = GetRecordType(record.RecordType);
+                var recordType = GetRecordType(record.RecordType, lineNumber, settings.UnknownRecordPolicy);
                 if (recordType == null)
-                    CsvError.ThrowBadFormat(lineNumber, $"Unknown record type ({record.RecordType}).");
+                    continue;
 
                 if (readChunkId && record.ChunkId != TrackChunk.Id && record.ChunkId != HeaderChunk.Id)
                     continue;
@@ -367,29 +369,16 @@ namespace Melanchall.DryWetMidi.Tools
                             result.Add(headerChunk);
                         }
                         break;
+
                     case RecordType.Event:
-                        {
-                            var csvEvent = ParseEvent(record, settings, readChunkId);
-                            objects.Add(csvEvent);
-                        }
-                        break;
                     case RecordType.Note:
-                        {
-                            var csvNote = ParseNote(record, settings, readChunkId);
-                            var id = Tuple.Create(csvNote.ChunkIndex, csvNote.ObjectIndex);
-
-                            CsvChord csvChord;
-                            if (!chords.TryGetValue(id, out csvChord))
-                            {
-                                chords.Add(
-                                    id,
-                                    csvChord = new CsvChord(csvNote.ChunkIndex, csvNote.ChunkId, csvNote.ObjectIndex));
-
-                                objects.Add(csvChord);
-                            }
-
-                            csvChord.Notes.Add(csvNote);
-                        }
+                        ReadObject(
+                            record,
+                            recordType,
+                            objects,
+                            chords,
+                            settings,
+                            readChunkId);
                         break;
                 }
             }
@@ -422,42 +411,60 @@ namespace Melanchall.DryWetMidi.Tools
             {
                 var lineNumber = record.CsvRecord.LineNumber;
 
-                var recordType = GetRecordType(record.RecordType);
+                var recordType = GetRecordType(record.RecordType, lineNumber, settings.UnknownRecordPolicy);
                 if (recordType == null)
-                    CsvError.ThrowBadFormat(lineNumber, $"Unknown record type ({record.RecordType}).");
+                    continue;
 
-                switch (recordType)
-                {
-                    case RecordType.Event:
-                        {
-                            var csvEvent = ParseEvent(record, settings, readChunkId);
-                            objects.Add(csvEvent);
-                        }
-                        break;
-                    case RecordType.Note:
-                        {
-                            var csvNote = ParseNote(record, settings, readChunkId);
-
-                            CsvChord csvChord;
-                            if (!chords.TryGetValue(Tuple.Create(csvNote.ChunkIndex, csvNote.ObjectIndex), out csvChord))
-                            {
-                                chords.Add(
-                                    Tuple.Create(csvNote.ChunkIndex, csvNote.ObjectIndex),
-                                    csvChord = new CsvChord(csvNote.ChunkIndex, csvNote.ChunkId, csvNote.ObjectIndex));
-
-                                objects.Add(csvChord);
-                            }
-
-                            csvChord.Notes.Add(csvNote);
-                        }
-                        break;
-                }
+                ReadObject(
+                    record,
+                    recordType,
+                    objects,
+                    chords,
+                    settings,
+                    readChunkId);
             }
 
             if (!objects.Any())
                 return new ITimedObject[0][];
 
             return GetTimedObjects(objects, tempoMap);
+        }
+
+        private static void ReadObject(
+            Record record,
+            RecordType? recordType,
+            List<CsvObject> objects,
+            Dictionary<Tuple<int?, int?>, CsvChord> chords,
+            CsvDeserializationSettings settings,
+            bool readChunkId)
+        {
+            switch (recordType)
+            {
+                case RecordType.Event:
+                    {
+                        var csvEvent = ParseEvent(record, settings, readChunkId);
+                        objects.Add(csvEvent);
+                    }
+                    break;
+
+                case RecordType.Note:
+                    {
+                        var csvNote = ParseNote(record, settings, readChunkId);
+
+                        CsvChord csvChord;
+                        if (!chords.TryGetValue(Tuple.Create(csvNote.ChunkIndex, csvNote.ObjectIndex), out csvChord))
+                        {
+                            chords.Add(
+                                Tuple.Create(csvNote.ChunkIndex, csvNote.ObjectIndex),
+                                csvChord = new CsvChord(csvNote.ChunkIndex, csvNote.ChunkId, csvNote.ObjectIndex));
+
+                            objects.Add(csvChord);
+                        }
+
+                        csvChord.Notes.Add(csvNote);
+                    }
+                    break;
+            }
         }
 
         private static ICollection<ICollection<ITimedObject>> GetTimedObjects(
@@ -478,7 +485,9 @@ namespace Melanchall.DryWetMidi.Tools
                         {
                             var notes = csvChord
                                 .Notes
-                                .Select(n => new Note(n.NoteNumber) { Channel = n.Channel, Velocity = n.Velocity, OffVelocity = n.OffVlocity }.SetTime(n.Time, tempoMap).SetLength(n.Length, tempoMap))
+                                .Select(n => new Note(n.NoteNumber) { Channel = n.Channel, Velocity = n.Velocity, OffVelocity = n.OffVlocity }
+                                    .SetTime(n.Time, tempoMap)
+                                    .SetLength(n.Length, tempoMap))
                                 .ToArray();
 
                             if (notes.Length == 1)
@@ -551,16 +560,23 @@ namespace Melanchall.DryWetMidi.Tools
             return new Record(record, chunkIndex, chunkId, objectIndex, recordType, parameters);
         }
 
-        private static RecordType? GetRecordType(string recordType)
+        private static RecordType? GetRecordType(
+            string recordType,
+            int lineNumber,
+            UnknownRecordPolicy unknownRecordPolicy)
         {
             RecordType result;
-            if (RecordLabelsToRecordTypes.TryGetValue(recordType, out result))
-                return result;
+            if (!RecordLabelsToRecordTypes.TryGetValue(recordType, out result))
+            {
+                if (EventsNames.Contains(recordType, StringComparer.OrdinalIgnoreCase))
+                    result = RecordType.Event;
+                else if (unknownRecordPolicy == UnknownRecordPolicy.Abort)
+                    CsvError.ThrowBadFormat(lineNumber, $"Unknown record type ({recordType}).");
+                else
+                    return null;
+            }
 
-            if (EventsNames.Contains(recordType, StringComparer.OrdinalIgnoreCase))
-                return RecordType.Event;
-
-            return null;
+            return result;
         }
 
         private static HeaderChunk ParseHeader(Record record)

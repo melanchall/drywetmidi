@@ -679,7 +679,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             });
 
         [Test]
-        public void Deserialize_Objects_InvalidObjectType() => DeserializeObjects_Failed<CsvException>(
+        public void Deserialize_Objects_UnknownRecord_Abort() => DeserializeObjects_Failed<CsvException>(
             csvLines: new[]
             {
                 $"0,\"Text\",0,\"A\"",
@@ -689,6 +689,24 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             checkException: exception =>
             {
                 ClassicAssert.AreEqual(1, exception.LineNumber, "Invalid line number.");
+            });
+
+        [Test]
+        public void Deserialize_Objects_UnknownRecord_Ignore() => DeserializeObjects(
+            csvLines: new[]
+            {
+                $"0,\"Text\",0,\"A\"",
+                $"1,\"WTF\",0,100,3,D3,127,1",
+                $"2,\"Note\",100,100,3,E7,127,2",
+            },
+            settings: new CsvDeserializationSettings
+            {
+                UnknownRecordPolicy = UnknownRecordPolicy.Ignore,
+            },
+            expectedObjects: new ITimedObject[]
+            {
+                new TimedEvent(new TextEvent("A")),
+                new Note((SevenBitNumber)100, 100, 100) { Channel = (FourBitNumber)3, Velocity = SevenBitNumber.MaxValue, OffVelocity = (SevenBitNumber)2 },
             });
 
         [Test]
@@ -890,7 +908,6 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 TimeType = TimeSpanType.Musical,
             });
 
-        // TODO: invalid time??? resolve time format automatically by default
         [Test]
         public void Deserialize_File_InvalidParametersCount() => DeserializeFile_Failed<CsvException>(
             csvLines: new[]
@@ -911,7 +928,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             });
 
         [Test]
-        public void Deserialize_File_InvalidEventType() => DeserializeFile_Failed<CsvException>(
+        public void Deserialize_File_UnknownRecord_Abort() => DeserializeFile_Failed<CsvException>(
             csvLines: new[]
             {
                 $"0,\"MThd\",0,\"Header\",96",
@@ -924,11 +941,26 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 ClassicAssert.AreEqual(2, exception.LineNumber, "Invalid line number.");
             });
 
+        [Test]
+        public void Deserialize_File_UnknownRecord_Ignore() => DeserializeFileAndChunksAndSeparateChunks(
+            csvLines: new[]
+            {
+                $"0,\"MThd\",0,\"Header\",{TicksPerQuarterNoteTimeDivision.DefaultTicksPerQuarterNote}",
+                $"1,\"MTrk\",0,\"WTF\",100,\"A\"",
+                $"1,\"MTrk\",1,\"Text\",400,\"B\"",
+            },
+            settings: new CsvDeserializationSettings
+            {
+                UnknownRecordPolicy = UnknownRecordPolicy.Ignore,
+            },
+            expectedMidiFile: new MidiFile(
+                new TrackChunk(
+                    new TextEvent("B") { DeltaTime = 400 })));
+
         #endregion
 
         #region Private methods
 
-        // TODO: introduce CsvDeserializationException based on MidiException with LineNumber and error type (?)
         private void DeserializeObjects_Failed<TException>(
             string[] csvLines,
             Action<TException> checkException,
