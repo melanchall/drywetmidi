@@ -94,7 +94,7 @@ midiFile.Sanitize();
 
 [RemoveEmptyTrackChunks](xref:Melanchall.DryWetMidi.Tools.SanitizingSettings.RemoveEmptyTrackChunks) property determines whether track chunks without MIDI events should be removed or not.
 
-### RemoveOrphanedNoteOnEvents
+### OrphanedNoteOnEventsPolicy
 
 In some MIDI files you can encounter [Note On](xref:Melanchall.DryWetMidi.Core.NoteOnEvent) events without corresponding [Note Off](xref:Melanchall.DryWetMidi.Core.NoteOffEvent) ones. For example, in this example we're creating a file with the first event is an orphaned [Note On](xref:Melanchall.DryWetMidi.Core.NoteOnEvent) one:
 
@@ -107,13 +107,15 @@ var midiFile = new MidiFile(
 
 Of course how notes are detected is controlled by the [NoteDetectionSettings](xref:Melanchall.DryWetMidi.Tools.SanitizingSettings.NoteDetectionSettings) property. As stated above you can read more about the [NoteDetectionSettings](xref:Melanchall.DryWetMidi.Interaction.NoteDetectionSettings) class in the [Getting objects: GetNotes: Settings](xref:a_getting_objects#settings) article.
 
-[Sanitizer](xref:Melanchall.DryWetMidi.Tools.Sanitizer) allows to remove such orphaned [Note On](xref:Melanchall.DryWetMidi.Core.NoteOnEvent) events with the [RemoveOrphanedNoteOnEvents](xref:Melanchall.DryWetMidi.Tools.SanitizingSettings.RemoveOrphanedNoteOnEvents) property:
+[Sanitizer](xref:Melanchall.DryWetMidi.Tools.Sanitizer) allows to handle such orphaned [Note On](xref:Melanchall.DryWetMidi.Core.NoteOnEvent) events in different ways with the [OrphanedNoteOnEventsPolicy](xref:Melanchall.DryWetMidi.Tools.SanitizingSettings.OrphanedNoteOnEventsPolicy) property.
 
-![SanitizingSettings.RemoveOrphanedNoteOnEvents](images/Sanitizer/RemoveOrphanedNoteOnEvents.png)
+Following image shows how [OrphanedNoteOnEventsPolicy.Remove](xref:Melanchall.DryWetMidi.Tools.OrphanedNoteOnEventsPolicy.Remove) option (which is the default one) works:
+
+![SanitizingSettings.OrphanedNoteOnEventsPolicy.Remove](images/Sanitizer/OrphanedNoteOnEvents_Remove.png)
 
 ### RemoveOrphanedNoteOffEvents
 
-Obviously [Note Off](xref:Melanchall.DryWetMidi.Core.NoteOffEvent) events can be orphaned too (see [RemoveOrphanedNoteOnEvents](#removeorphanednoteonevents) above) and you can remove such events too using the [RemoveOrphanedNoteOffEvents](xref:Melanchall.DryWetMidi.Tools.SanitizingSettings.RemoveOrphanedNoteOffEvents) property:
+Obviously [Note Off](xref:Melanchall.DryWetMidi.Core.NoteOffEvent) events can be orphaned too (see [OrphanedNoteOnEventsPolicy](#orphanednoteoneventspolicy) above) and you can remove such events too using the [RemoveOrphanedNoteOffEvents](xref:Melanchall.DryWetMidi.Tools.SanitizingSettings.RemoveOrphanedNoteOffEvents) property:
 
 ![SanitizingSettings.RemoveOrphanedNoteOffEvents](images/Sanitizer/RemoveOrphanedNoteOffEvents.png)
 

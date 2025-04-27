@@ -99,7 +99,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                     new NoteOnEvent())),
             settings: new SanitizingSettings
             {
-                RemoveOrphanedNoteOnEvents = false,
+                OrphanedNoteOnEventsPolicy = OrphanedNoteOnEventsPolicy.Ignore,
                 Trim = false
             },
             expectedMidiFile: new MidiFile(
@@ -118,7 +118,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                     new TextEvent("B"))),
             settings: new SanitizingSettings
             {
-                RemoveOrphanedNoteOnEvents = false,
+                OrphanedNoteOnEventsPolicy = OrphanedNoteOnEventsPolicy.Ignore,
                 RemoveEventsOnUnusedChannels = false
             },
             expectedMidiFile: new MidiFile(
@@ -176,7 +176,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                     new NoteOnEvent())),
             settings: new SanitizingSettings
             {
-                RemoveOrphanedNoteOnEvents = false,
+                OrphanedNoteOnEventsPolicy = OrphanedNoteOnEventsPolicy.Ignore,
                 RemoveOrphanedNoteOffEvents = false,
                 Trim = false
             },
@@ -197,7 +197,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                     new TextEvent("B"))),
             settings: new SanitizingSettings
             {
-                RemoveOrphanedNoteOnEvents = false,
+                OrphanedNoteOnEventsPolicy = OrphanedNoteOnEventsPolicy.Ignore,
                 RemoveOrphanedNoteOffEvents = false
             },
             expectedMidiFile: new MidiFile(

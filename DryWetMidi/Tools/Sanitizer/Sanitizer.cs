@@ -2,6 +2,7 @@
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Melanchall.DryWetMidi.Tools
@@ -42,11 +43,138 @@ namespace Melanchall.DryWetMidi.Tools
 
             settings = settings ?? new SanitizingSettings();
 
+            CompleteOrphanedNotes(midiFile, settings);
             RemoveNoteData(midiFile, settings);
             var usedChannels = RemoveDuplicatedEventsCollectingUsedChannels(midiFile, settings);
             RemoveEventsOnUnusedChannels(midiFile, settings, usedChannels);
             RemoveEmptyTrackChunks(midiFile, settings);
             TrimFile(midiFile, settings);
+        }
+
+        private static void CompleteOrphanedNotes(
+            MidiFile midiFile,
+            SanitizingSettings settings)
+        {
+            if (settings.OrphanedNoteOnEventsPolicy != OrphanedNoteOnEventsPolicy.CompleteNote)
+                return;
+
+            var maxNoteDuration = settings.NoteMaxLengthForOrphanedNoteOnEvent;
+            if (maxNoteDuration == null)
+                throw new InvalidOperationException($"{nameof(SanitizingSettings.NoteMaxLengthForOrphanedNoteOnEvent)} must be set to complete notes from orphaned Note On events.");
+
+            var trackChunks = midiFile.GetTrackChunks().ToArray();
+
+            var noteOnLastObjects = new Dictionary<NoteId, TimedObjectAt<ITimedObject>>();
+            var data = new List<Tuple<TimedObjectAt<ITimedObject>, long?>>();
+
+            var notesAndTimedEvents = trackChunks
+                .GetTimedEventsLazy(new TimedEventDetectionSettings(), false)
+                .GetNotesAndTimedEventsLazy(settings.NoteDetectionSettings ?? new NoteDetectionSettings());
+
+            foreach (var timedObjectAt in notesAndTimedEvents)
+            {
+                var obj = timedObjectAt.Object;
+
+                var note = obj as Note;
+                if (note != null)
+                {
+                    // TODO: get note ID utility and use it everywhere
+                    var noteId = new NoteId(note.Channel, note.NoteNumber);
+
+                    TimedObjectAt<ITimedObject> noteOnObject;
+                    if (noteOnLastObjects.TryGetValue(noteId, out noteOnObject))
+                        data.Add(Tuple.Create(noteOnObject, (long?)obj.Time));
+
+                    noteOnLastObjects.Remove(noteId);
+                }
+                else
+                {
+                    var noteOnEvent = ((TimedEvent)obj).Event as NoteOnEvent;
+                    if (noteOnEvent == null)
+                        continue;
+
+                    var noteId = new NoteId(noteOnEvent.Channel, noteOnEvent.NoteNumber);
+
+                    TimedObjectAt<ITimedObject> noteOnObject;
+                    if (noteOnLastObjects.TryGetValue(noteId, out noteOnObject))
+                        data.Add(Tuple.Create(noteOnObject, (long?)obj.Time));
+
+                    noteOnLastObjects[noteId] = timedObjectAt;
+                }
+            }
+
+            data.AddRange(noteOnLastObjects.Select(kv => Tuple.Create(kv.Value, (long?)null)));
+
+            //
+
+            var tempoMap = midiFile.GetTempoMap();
+
+            var noteOffEvents = data
+                .Select(d =>
+                {
+                    var noteOffTime = TimeConverter.ConvertFrom(
+                        new MidiTimeSpan(d.Item1.Object.Time).Add(maxNoteDuration, TimeSpanMode.TimeLength),
+                        tempoMap);
+                    if (d.Item2 != null && noteOffTime > d.Item2)
+                        noteOffTime = d.Item2.Value;
+
+                    var noteOnEvent = (NoteOnEvent)((TimedEvent)d.Item1.Object).Event;
+                    return new
+                    {
+                        TrackChunkIndex = d.Item1.AtIndex,
+                        NoteOffTimedEvent = new TimedEvent(
+                            new NoteOffEvent(noteOnEvent.NoteNumber, SevenBitNumber.MinValue) { Channel = noteOnEvent.Channel },
+                            noteOffTime)
+                    };
+                })
+                .GroupBy(d => d.TrackChunkIndex)
+                .ToArray();
+
+            foreach (var noteOffEventsGroup in noteOffEvents)
+            {
+                var events = trackChunks[noteOffEventsGroup.Key].Events;
+                var lastTime = 0L;
+                var noteOffEventsProcessed = false;
+                
+                var noteOffEventsEnumerator = noteOffEventsGroup.OrderBy(e => e.NoteOffTimedEvent.Time).GetEnumerator();
+                noteOffEventsEnumerator.MoveNext();
+
+                for (var i = 0; i < events.Count; i++)
+                {
+                    var noteOffTimedEvent = noteOffEventsEnumerator.Current.NoteOffTimedEvent;
+
+                    if (lastTime + events[i].DeltaTime >= noteOffTimedEvent.Time)
+                    {
+                        var noteOffEvent = noteOffTimedEvent.Event;
+                        noteOffEvent.DeltaTime = noteOffTimedEvent.Time - lastTime;
+
+                        events[i].DeltaTime = events[i].DeltaTime - noteOffEvent.DeltaTime;
+                        events.Insert(i, noteOffEvent);
+
+                        if (!noteOffEventsEnumerator.MoveNext())
+                        {
+                            noteOffEventsProcessed = true;
+                            break;
+                        }
+                    }
+
+                    lastTime += events[i].DeltaTime;
+                }
+
+                if (noteOffEventsProcessed)
+                    continue;
+
+                do
+                {
+                    var noteOffTimedEvent = noteOffEventsEnumerator.Current.NoteOffTimedEvent;
+                    var noteOffEvent = noteOffTimedEvent.Event;
+                    noteOffEvent.DeltaTime = noteOffTimedEvent.Time - lastTime;
+
+                    events.Add(noteOffEvent);
+                    lastTime = noteOffTimedEvent.Time;
+                }
+                while (noteOffEventsEnumerator.MoveNext());
+            }
         }
 
         private static void TrimFile(
@@ -235,7 +363,7 @@ namespace Melanchall.DryWetMidi.Tools
             if (!removeShortNotes &&
                 !removeSilentNotes &&
                 !settings.RemoveDuplicatedNotes &&
-                !settings.RemoveOrphanedNoteOnEvents &&
+                settings.OrphanedNoteOnEventsPolicy == OrphanedNoteOnEventsPolicy.Ignore &&
                 !settings.RemoveOrphanedNoteOffEvents)
                 return;
 
@@ -271,8 +399,18 @@ namespace Melanchall.DryWetMidi.Tools
                     {
                         var timedEvent = (TimedEvent)obj;
 
-                        if ((settings.RemoveOrphanedNoteOnEvents && timedEvent.Event.EventType == MidiEventType.NoteOn) ||
-                            (settings.RemoveOrphanedNoteOffEvents && timedEvent.Event.EventType == MidiEventType.NoteOff))
+                        if (timedEvent.Event.EventType == MidiEventType.NoteOn)
+                        {
+                            switch (settings.OrphanedNoteOnEventsPolicy)
+                            {
+                                case OrphanedNoteOnEventsPolicy.Remove:
+                                    return true;
+                                case OrphanedNoteOnEventsPolicy.CompleteNote:
+                                    return false;
+                            }
+                        }
+
+                        if (settings.RemoveOrphanedNoteOffEvents && timedEvent.Event.EventType == MidiEventType.NoteOff)
                             return true;
                     }
 

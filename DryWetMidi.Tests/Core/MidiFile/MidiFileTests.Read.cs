@@ -111,7 +111,6 @@ namespace Melanchall.DryWetMidi.Tests.Core
         [TestCase(2, 1)]
         public void Read_UnexpectedTrackChunksCount_Abort(byte countInHeaderChunk, byte actualCount)
         {
-            // TODO: track chunks without events are excluded...
             ReadInvalidFileWithException<UnexpectedTrackChunksCountException>(
                 new MidiFile(Enumerable.Range(0, actualCount).Select(i => new TrackChunk(new ProgramChangeEvent { Channel = (FourBitNumber)i }))),
                 MidiFileFormat.MultiTrack,
@@ -138,7 +137,6 @@ namespace Melanchall.DryWetMidi.Tests.Core
         [TestCase(2, 1)]
         public void Read_UnexpectedTrackChunksCount_Ignore(byte countInHeaderChunk, byte actualCount)
         {
-            // TODO: track chunks without events are excluded...
             ReadInvalidFile(
                 new MidiFile(Enumerable.Range(0, actualCount).Select(i => new TrackChunk(new ProgramChangeEvent { Channel = (FourBitNumber)i }))),
                 MidiFileFormat.MultiTrack,
@@ -1824,6 +1822,19 @@ namespace Melanchall.DryWetMidi.Tests.Core
                     lastBufferData = buffer.ToArray();
                 }
             }
+        }
+
+        [Test]
+        public void Read_EmptyTrackChunks([Values(1, 2, 3)] int count)
+        {
+            var originalMidiFile = new MidiFile(Enumerable.Range(0, count).Select(i => new TrackChunk()));
+
+            var midiFile = MidiFileTestUtilities.Read(
+                midiFile: originalMidiFile,
+                writingSettings: new WritingSettings(),
+                readingSettings: new ReadingSettings());
+
+            MidiAsserts.AreEqual(originalMidiFile, midiFile, false, "Files are invalid.");
         }
 
         #endregion

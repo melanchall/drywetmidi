@@ -494,7 +494,6 @@ namespace Melanchall.DryWetMidi.Tools
             CsvSerializationSettings settings,
             int chunkIndex)
         {
-            // TODO: WriteUnknownChunk
         }
 
         private static void WriteCustomChunk(
@@ -503,7 +502,6 @@ namespace Melanchall.DryWetMidi.Tools
             CsvSerializationSettings settings,
             int chunkIndex)
         {
-            // TODO: WriteCustomChunk
         }
 
         private static void WriteObjects(
@@ -654,7 +652,6 @@ namespace Melanchall.DryWetMidi.Tools
             string chunkId,
             int objectIndex)
         {
-            // TODO: WriteCustomObject
         }
 
         private static void WriteObjectRecord(

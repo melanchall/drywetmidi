@@ -10,6 +10,12 @@ namespace Melanchall.DryWetMidi.Tools
     /// </summary>
     public sealed class SanitizingSettings
     {
+        #region Fields
+
+        private OrphanedNoteOnEventsPolicy _orphanedNoteOnEventsPolicy = OrphanedNoteOnEventsPolicy.Remove;
+
+        #endregion
+
         #region Properties
 
         /// <summary>
@@ -48,14 +54,26 @@ namespace Melanchall.DryWetMidi.Tools
         /// </summary>
         public bool RemoveEmptyTrackChunks { get; set; } = true;
 
+        // TODO: fix docs and links
         /// <summary>
-        /// Gets or sets a value indicating whether Note On (see <see cref="NoteOnEvent"/>) events without
-        /// corresponding Note Off ones should be removed or not. The default value is <c>true</c>.
+        /// Gets or sets a value indicating how Note On (see <see cref="NoteOnEvent"/>) events without
+        /// corresponding Note Off ones should be handled. The default value is <see cref="OrphanedNoteOnEventsPolicy.Remove"/>.
         /// <see cref="NoteDetectionSettings"/> property affects how notes (and thus orphaned Note On events)
         /// are detected. More info in the
-        /// <see href="xref:a_sanitizer#removeorphanednoteonevents">Sanitizer: RemoveOrphanedNoteOnEvents</see> article.
+        /// <see href="xref:a_sanitizer#orphanednoteoneventspolicy">Sanitizer: OrphanedNoteOnEventsPolicy</see> article.
         /// </summary>
-        public bool RemoveOrphanedNoteOnEvents { get; set; } = true;
+        public OrphanedNoteOnEventsPolicy OrphanedNoteOnEventsPolicy
+        {
+            get { return _orphanedNoteOnEventsPolicy; }
+            set
+            {
+                ThrowIfArgument.IsInvalidEnumValue(nameof(value), value);
+
+                _orphanedNoteOnEventsPolicy = value;
+            }
+        }
+
+        public ITimeSpan NoteMaxLengthForOrphanedNoteOnEvent { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether Note Off (see <see cref="NoteOffEvent"/>) events without

@@ -522,7 +522,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
         [Test]
         public void Write_MultiTrack_SingleChunk_TrackChunk() => CheckWritingWithFormat_MultiTrack(
             chunks: new[] { new TrackChunk() },
-            expectedChunks: Enumerable.Empty<MidiChunk>());
+            expectedChunks: new[] { new TrackChunk() });
 
         [Test]
         public void Write_MultiTrack_SingleChunk_TrackChunk_NonChannelOnly() => CheckWritingWithFormat_MultiTrack(

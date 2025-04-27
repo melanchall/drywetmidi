@@ -50,12 +50,18 @@ namespace Melanchall.DryWetMidi.Core
             if (trackChunks.Length != 1)
                 return chunks;
 
-            var trackChunksDescriptors = Enumerable.Range(0, ChannelsCount + 1)
-                                                   .Select(i => new TrackChunkDescriptor())
-                                                   .ToArray();
+            var singleTrackChunk = trackChunks.First();
+            if (!singleTrackChunk.Events.Any())
+                return trackChunks.Concat(chunks.Where(c => !(c is TrackChunk)));
+
+            var trackChunksDescriptors = Enumerable
+                .Range(0, ChannelsCount + 1)
+                .Select(i => new TrackChunkDescriptor())
+                .ToArray();
+
             FourBitNumber? channel = null;
 
-            foreach (var midiEvent in trackChunks.First().Events.Select(m => m.Clone()))
+            foreach (var midiEvent in singleTrackChunk.Events.Select(m => m.Clone()))
             {
                 Array.ForEach(trackChunksDescriptors,
                               d => d.DeltaTime += midiEvent.DeltaTime);
@@ -84,9 +90,10 @@ namespace Melanchall.DryWetMidi.Core
                 trackChunksDescriptors[0].AddEvent(midiEvent);
             }
 
-            return trackChunksDescriptors.Select(d => d.Chunk)
-                                         .Where(c => c.Events.Any())
-                                         .Concat(chunks.Where(c => !(c is TrackChunk)));
+            return trackChunksDescriptors
+                .Select(d => d.Chunk)
+                .Where(c => c.Events.Any())
+                .Concat(chunks.Where(c => !(c is TrackChunk)));
         }
 
         #endregion

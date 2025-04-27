@@ -102,7 +102,6 @@ namespace Melanchall.DryWetMidi.Tools
                     stringBuilder.Append(c);
                 }
 
-                // TODO: check buffer size setting
                 if (_indexInBuffer >= _bufferLength)
                     FillBuffer();
                 else
