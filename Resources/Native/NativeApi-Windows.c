@@ -248,7 +248,7 @@ SESSION_OPENRESULT OpenSession_Win(char* name, void** handle)
 SESSION_CLOSERESULT CloseSession(void* handle)
 {
     SessionHandle* sessionHandle = (SessionHandle*)handle;
-    free(sessionHandle);
+    // free(sessionHandle);
     return SESSION_CLOSERESULT_OK;
 }
 

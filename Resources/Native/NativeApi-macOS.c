@@ -349,7 +349,7 @@ void* ThreadProc(void* data)
     CFStringRef nameRef = CFStringCreateWithCString(kCFAllocatorDefault, sessionHandle->name, kCFStringEncodingUTF8);
     sessionHandle->clientCreationStatus = MIDIClientCreate(nameRef, NotifyProc, data, &sessionHandle->clientRef);
     sessionHandle->clientCreated = 1;
-    sessionHandle->runLoopRef = CFRunLoopGetCurrent();
+    sessionHandle->runLoopRef = (CFRunLoopRef)CFRetain(CFRunLoopGetCurrent());
     
     CFRunLoopRun();
     
@@ -365,7 +365,6 @@ SESSION_OPENRESULT OpenSession_Mac(char* name, InputDeviceCallback inputDeviceCa
     sessionHandle->outputDeviceCallback = outputDeviceCallback;
     sessionHandle->clientCreated = 0;
     sessionHandle->sessionClosed = 0;
-    sessionHandle->name = name;
     
     if (pthread_create(&sessionHandle->thread, NULL, ThreadProc, sessionHandle) != 0)
         return SESSION_OPENRESULT_THREADSTARTERROR;
@@ -392,11 +391,16 @@ SESSION_OPENRESULT OpenSession_Mac(char* name, InputDeviceCallback inputDeviceCa
 SESSION_CLOSERESULT CloseSession(void* handle)
 {
     SessionHandle* sessionHandle = (SessionHandle*)handle;
+
+    if (sessionHandle->sessionClosed == 1)
+        return SESSION_CLOSERESULT_OK;
     
     sessionHandle->sessionClosed = 1;
-    CFRunLoopStop(sessionHandle->runLoopRef);
 
-    free(sessionHandle);
+    CFRunLoopStop(sessionHandle->runLoopRef);
+    CFRelease(sessionHandle->runLoopRef);
+
+    // free(sessionHandle);
     return SESSION_CLOSERESULT_OK;
 }
 

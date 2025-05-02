@@ -30,32 +30,53 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         public static IntPtr GetSessionHandle()
         {
-            lock (_lockObject)
+            if (_handle == IntPtr.Zero)
             {
-                if (_handle == IntPtr.Zero)
+                lock (_lockObject)
                 {
-                    var name = Guid.NewGuid().ToString();
-                    _name = Marshal.StringToHGlobalAuto(name);
-
-                    var apiType = CommonApiProvider.Api.Api_GetApiType();
-                    var result = default(MidiDevicesSessionApi.SESSION_OPENRESULT);
-
-                    switch (apiType)
+                    if (_handle == IntPtr.Zero)
                     {
-                        case CommonApi.API_TYPE.API_TYPE_MAC:
-                            _inputDeviceCallback = InputDeviceCallback;
-                            _outputDeviceCallback = OutputDeviceCallback;
-                            result = MidiDevicesSessionApiProvider.Api.Api_OpenSession_Mac(_name, _inputDeviceCallback, _outputDeviceCallback, out _handle);
-                            break;
-                        case CommonApi.API_TYPE.API_TYPE_WIN:
-                            result = MidiDevicesSessionApiProvider.Api.Api_OpenSession_Win(_name, out _handle);
-                            break;
+                        var name = Guid.NewGuid().ToString();
+                        _name = Marshal.StringToHGlobalAuto(name);
+
+                        var apiType = CommonApiProvider.Api.Api_GetApiType();
+                        var result = default(MidiDevicesSessionApi.SESSION_OPENRESULT);
+
+                        switch (apiType)
+                        {
+                            case CommonApi.API_TYPE.API_TYPE_MAC:
+                                _inputDeviceCallback = InputDeviceCallback;
+                                _outputDeviceCallback = OutputDeviceCallback;
+                                result = MidiDevicesSessionApiProvider.Api.Api_OpenSession_Mac(_name, _inputDeviceCallback, _outputDeviceCallback, out _handle);
+                                break;
+                            case CommonApi.API_TYPE.API_TYPE_WIN:
+                                result = MidiDevicesSessionApiProvider.Api.Api_OpenSession_Win(_name, out _handle);
+                                break;
+                        }
+
+                        NativeApiUtilities.HandleDevicesNativeApiResult(result);
+
+                        AppDomain.CurrentDomain.DomainUnload += OnDomainUnloadOrExit;
+                        AppDomain.CurrentDomain.ProcessExit += OnDomainUnloadOrExit;
                     }
-
-                    NativeApiUtilities.HandleDevicesNativeApiResult(result);
                 }
+            }
 
-                return _handle;
+            return _handle;
+        }
+
+        private static void OnDomainUnloadOrExit(object sender, EventArgs e)
+        {
+            if (_handle != IntPtr.Zero)
+            {
+                lock (_lockObject)
+                {
+                    if (_handle != IntPtr.Zero)
+                    {
+                        MidiDevicesSessionApiProvider.Api.Api_CloseSession(_handle);
+                        _handle = IntPtr.Zero;
+                    }
+                }
             }
         }
 
