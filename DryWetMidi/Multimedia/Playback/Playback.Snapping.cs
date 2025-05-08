@@ -73,6 +73,12 @@ namespace Melanchall.DryWetMidi.Multimedia
             _snapPoints.Remove(node);
         }
 
+        /// <summary>
+        /// Removes the specified <see cref="SnapPointsGroup"/> from the list of snap points groups
+        /// of the current <see cref="Playback"/>.
+        /// </summary>
+        /// <param name="snapPointsGroup"><see cref="SnapPointsGroup"/> to remove.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="snapPointsGroup"/> is <c>null</c>.</exception>
         public void RemoveSnapPointsGroup(SnapPointsGroup snapPointsGroup)
         {
             ThrowIfArgument.IsNull(nameof(snapPointsGroup), snapPointsGroup);
@@ -114,6 +120,18 @@ namespace Melanchall.DryWetMidi.Multimedia
             _snapPointsGroups.Clear();
         }
 
+        /// <summary>
+        /// Creates a new <see cref="SnapPointsGroup"/> that holds the specified predicate to select MIDI events
+        /// which times will be used as snap points. For example, to get snap points at the markers points, you
+        /// can use this predicate: <c>e => e.EventType == MidiEventType.Marker</c>.
+        /// </summary>
+        /// <remarks>
+        /// After the group is created, it will be enabled by default. You can disable it using the
+        /// <see cref="SnapPointsGroup.IsEnabled"/> property setting it to <c>false</c>.
+        /// </remarks>
+        /// <param name="predicate">Predicate to select MIDI events.</param>
+        /// <returns><see cref="SnapPointsGroup"/> holding information on how to select events.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="predicate"/> is <c>null</c>.</exception>
         public SnapPointsGroup SnapToEvents(Predicate<MidiEvent> predicate)
         {
             ThrowIfArgument.IsNull(nameof(predicate), predicate);

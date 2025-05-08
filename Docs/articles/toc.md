@@ -60,6 +60,7 @@
 
 # Playback
 ## [Overview](playback/Overview.md)
+## [Dynamic changes](playback/Dynamic-changes.md)
 ## [Tick generator](playback/Tick-generator.md)
 ## [Current time watching](playback/Current-time-watching.md)
 ## [Data tracking](playback/Data-tracking.md)

@@ -6,6 +6,10 @@ using System.Linq;
 
 namespace Melanchall.DryWetMidi.Interaction
 {
+    /// <summary>
+    /// Provides a collection which can be observed for changes via <see cref="CollectionChanged"/> event.
+    /// </summary>
+    /// <seealso cref="IObservableTimedObjectsCollection"/>
     public sealed class ObservableTimedObjectsCollection : IObservableTimedObjectsCollection, IEnumerable<ITimedObject>
     {
         #region Constants
@@ -18,6 +22,9 @@ namespace Melanchall.DryWetMidi.Interaction
 
         #region Events
 
+        /// <summary>
+        /// Occurs when collection changed (objects have been added, removed or changed).
+        /// </summary>
         public event EventHandler<ObservableTimedObjectsCollectionChangedEventArgs> CollectionChanged;
 
         #endregion
@@ -33,10 +40,18 @@ namespace Melanchall.DryWetMidi.Interaction
 
         #region Constructor
 
+        /// <summary>
+        /// Initializes an empty instance of the <see cref="ObservableTimedObjectsCollection"/>.
+        /// </summary>
         public ObservableTimedObjectsCollection()
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ObservableTimedObjectsCollection"/> with
+        /// the specified objects.
+        /// </summary>
+        /// <param name="timedObjects">Objects to add to the collection.</param>
         public ObservableTimedObjectsCollection(IEnumerable<ITimedObject> timedObjects)
         {
             ThrowIfArgument.IsNull(nameof(timedObjects), timedObjects);
@@ -48,12 +63,23 @@ namespace Melanchall.DryWetMidi.Interaction
 
         #region Properties
 
+        /// <summary>
+        /// Gets the number of objects currently contained in the collection.
+        /// </summary>
         public int Count => _objects.Count;
 
         #endregion
 
         #region Methods
 
+        /// <summary>
+        /// Executes a specified action that modifies the collection.
+        /// </summary>
+        /// <remarks>If the collection is already undergoing a batch operation, the <see cref="CollectionChanged"/>
+        /// event will not be raised until the outermost operation completes. This ensures that multiple changes can be
+        /// grouped together and processed as a single batch.</remarks>
+        /// <param name="change">An <see cref="Action"/> that performs the modifications to the collection.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="change"/> is <c>null</c>.</exception>
         public void ChangeCollection(Action change)
         {
             ThrowIfArgument.IsNull(nameof(change), change);
@@ -78,6 +104,25 @@ namespace Melanchall.DryWetMidi.Interaction
             }
         }
 
+        /// <summary>
+        /// Executes an action that modifies the specified object.
+        /// </summary>
+        /// <remarks>If the method is executed within the <see cref="ChangeCollection(Action)"/>,
+        /// the <see cref="CollectionChanged"/> event will be fired when you're done with
+        /// the <see cref="ChangeCollection(Action)"/> method.</remarks>
+        /// <param name="timedObject">The object to be modified.</param>
+        /// <param name="change">An <see cref="Action"/> that performs the modifications to the <paramref name="timedObject"/>.</param>
+        /// <exception cref="ArgumentNullException">
+        /// One of the following errors occurred:
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="timedObject"/> is <c>null</c>.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="change"/> is <c>null</c>.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public void ChangeObject(ITimedObject timedObject, Action<ITimedObject> change)
         {
             ThrowIfArgument.IsNull(nameof(timedObject), timedObject);
@@ -88,22 +133,46 @@ namespace Melanchall.DryWetMidi.Interaction
             HandleObjectChanged(timedObject, oldTime);
         }
 
-        public void Add(IEnumerable<ITimedObject> timedObjects)
+        /// <summary>
+        /// Adds the specified objects to the current collection.
+        /// </summary>
+        /// <remarks>If the method is executed within the <see cref="ChangeCollection(Action)"/>,
+        /// the <see cref="CollectionChanged"/> event will be fired when you're done with
+        /// the <see cref="ChangeCollection(Action)"/> method.</remarks>
+        /// <param name="objects">Objects to add to the collection.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="objects"/> is <c>null</c>.</exception>
+        public void Add(IEnumerable<ITimedObject> objects)
         {
-            ThrowIfArgument.IsNull(nameof(timedObjects), timedObjects);
+            ThrowIfArgument.IsNull(nameof(objects), objects);
 
-            var addedObjects = AddWithoutHandling(timedObjects);
+            var addedObjects = AddWithoutHandling(objects);
 
             HandleObjectsAdded(addedObjects);
         }
 
-        public void Add(params ITimedObject[] timedObjects)
+        /// <summary>
+        /// Adds the specified objects to the current collection.
+        /// </summary>
+        /// <remarks>If the method is executed within the <see cref="ChangeCollection(Action)"/>,
+        /// the <see cref="CollectionChanged"/> event will be fired when you're done with
+        /// the <see cref="ChangeCollection(Action)"/> method.</remarks>
+        /// <param name="objects">Objects to add to the collection.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="objects"/> is <c>null</c>.</exception>
+        public void Add(params ITimedObject[] objects)
         {
-            ThrowIfArgument.IsNull(nameof(timedObjects), timedObjects);
+            ThrowIfArgument.IsNull(nameof(objects), objects);
 
-            Add((IEnumerable<ITimedObject>)timedObjects);
+            Add((IEnumerable<ITimedObject>)objects);
         }
 
+        /// <summary>
+        /// Removes the specified objects from the current collection.
+        /// </summary>
+        /// <remarks>If the method is executed within the <see cref="ChangeCollection(Action)"/>,
+        /// the <see cref="CollectionChanged"/> event will be fired when you're done with
+        /// the <see cref="ChangeCollection(Action)"/> method.</remarks>
+        /// <param name="objects">Objects to remove from the collection.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="objects"/> is <c>null</c>.</exception>
         public bool Remove(IEnumerable<ITimedObject> objects)
         {
             ThrowIfArgument.IsNull(nameof(objects), objects);
@@ -121,6 +190,14 @@ namespace Melanchall.DryWetMidi.Interaction
             return removedObjects.Any();
         }
 
+        /// <summary>
+        /// Removes the specified objects from the current collection.
+        /// </summary>
+        /// <remarks>If the method is executed within the <see cref="ChangeCollection(Action)"/>,
+        /// the <see cref="CollectionChanged"/> event will be fired when you're done with
+        /// the <see cref="ChangeCollection(Action)"/> method.</remarks>
+        /// <param name="objects">Objects to remove from the collection.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="objects"/> is <c>null</c>.</exception>
         public bool Remove(params ITimedObject[] objects)
         {
             ThrowIfArgument.IsNull(nameof(objects), objects);
@@ -128,6 +205,12 @@ namespace Melanchall.DryWetMidi.Interaction
             return Remove((IEnumerable<ITimedObject>)objects);
         }
 
+        /// <summary>
+        /// Removes all objects from the current collection.
+        /// </summary>
+        /// <remarks>If the method is executed within the <see cref="ChangeCollection(Action)"/>,
+        /// the <see cref="CollectionChanged"/> event will be fired when you're done with
+        /// the <see cref="ChangeCollection(Action)"/> method.</remarks>
         public void Clear()
         {
             var removedObjects = _objects.ToList();
@@ -247,7 +330,7 @@ namespace Melanchall.DryWetMidi.Interaction
                         break;
                     case RemoveAction:
                         removedObjects.Add(timedObject);
-                        changedObjects.RemoveWhere(obj => obj.TimedObject == timedObject);
+                        changedObjects.RemoveWhere(obj => obj.Object == timedObject);
                         if (addedObjects.Remove(timedObject))
                             removedObjects.Remove(timedObject);
                         break;
@@ -268,11 +351,6 @@ namespace Melanchall.DryWetMidi.Interaction
                 return;
 
             CollectionChanged?.Invoke(this, args);
-        }
-
-        private List<T> GetNonNullList<T>(IEnumerable<T> source)
-        {
-            return (source ?? Enumerable.Empty<T>()).ToList();
         }
 
         #endregion

@@ -37,6 +37,9 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="settings">Settings which control how the <paramref name="midiFile"/>
         /// should be sanitized.</param>
         /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is <c>null</c>.</exception>
+        /// <exception cref="InvalidOperationException"><see cref="SanitizingSettings.NoteMaxLengthForOrphanedNoteOnEvent"/>
+        /// is <c>null</c> while <see cref="SanitizingSettings.OrphanedNoteOnEventsPolicy"/> is set to
+        /// <see cref="OrphanedNoteOnEventsPolicy.CompleteNote"/>.</exception>
         public static void Sanitize(this MidiFile midiFile, SanitizingSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
@@ -78,8 +81,7 @@ namespace Melanchall.DryWetMidi.Tools
                 var note = obj as Note;
                 if (note != null)
                 {
-                    // TODO: get note ID utility and use it everywhere
-                    var noteId = new NoteId(note.Channel, note.NoteNumber);
+                    var noteId = note.GetNoteId();
 
                     TimedObjectAt<ITimedObject> noteOnObject;
                     if (noteOnLastObjects.TryGetValue(noteId, out noteOnObject))
@@ -93,7 +95,7 @@ namespace Melanchall.DryWetMidi.Tools
                     if (noteOnEvent == null)
                         continue;
 
-                    var noteId = new NoteId(noteOnEvent.Channel, noteOnEvent.NoteNumber);
+                    var noteId = noteOnEvent.GetNoteId();
 
                     TimedObjectAt<ITimedObject> noteOnObject;
                     if (noteOnLastObjects.TryGetValue(noteId, out noteOnObject))
@@ -174,6 +176,8 @@ namespace Melanchall.DryWetMidi.Tools
                     lastTime = noteOffTimedEvent.Time;
                 }
                 while (noteOffEventsEnumerator.MoveNext());
+
+                noteOffEventsEnumerator.Dispose();
             }
         }
 

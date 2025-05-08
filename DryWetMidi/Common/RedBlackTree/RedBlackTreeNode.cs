@@ -16,7 +16,7 @@ namespace Melanchall.DryWetMidi.Common
 
         public TKey Key { get; set; }
 
-        public LinkedList<TValue> Values { get; set; } = new LinkedList<TValue>();
+        public LinkedList<TValue> Values { get; } = new LinkedList<TValue>();
 
         public RedBlackTreeNode<TKey, TValue> Left { get; set; }
 

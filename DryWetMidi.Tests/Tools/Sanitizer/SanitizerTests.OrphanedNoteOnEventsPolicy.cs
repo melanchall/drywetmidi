@@ -543,6 +543,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 .Sanitize(new SanitizingSettings
                 {
                     OrphanedNoteOnEventsPolicy = OrphanedNoteOnEventsPolicy.CompleteNote,
+                    NoteMaxLengthForOrphanedNoteOnEvent = null,
                 }),
             "No exception thrown.");
 

@@ -103,6 +103,7 @@ string[] GetProjects(ReportDto xDocument) => xDocument
     .First()
     .Results
     .Select(e => Regex.Match(e.Locations.First().PhysicalLocation.ArtifactLocation.Uri, @"(.+?)/").Groups[1].Value)
+    .Distinct()
     .ToArray();
 
 Issue[] GetProjectIssues(ReportDto xDocument, string project, Dictionary<string, IssueType> issueTypes) => xDocument

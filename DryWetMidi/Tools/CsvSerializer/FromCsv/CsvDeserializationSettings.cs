@@ -6,6 +6,10 @@ using Melanchall.DryWetMidi.Core;
 
 namespace Melanchall.DryWetMidi.Tools
 {
+    /// <summary>
+    /// Privides settings that control the process of CSV deserialization.
+    /// </summary>
+    /// <seealso cref="CsvSerializer"/>
     public sealed class CsvDeserializationSettings
     {
         #region Fields
@@ -91,6 +95,12 @@ namespace Melanchall.DryWetMidi.Tools
             }
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating how unknown records should be handled.
+        /// The default value is <see cref="UnknownRecordPolicy.Abort"/> which means
+        /// the process will be aborted with an exception.
+        /// </summary>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="value"/> specified an invalid value.</exception>
         public UnknownRecordPolicy UnknownRecordPolicy
         {
             get { return _unknownRecordPolicy; }
@@ -102,10 +112,15 @@ namespace Melanchall.DryWetMidi.Tools
             }
         }
 
+        /// <summary>
+        /// Gets or sets the character used to delimit elements in a byte array when represented as a string
+        /// (for example, when <see cref="SysExEvent.Data"/> of a sysex event is being deserialized).
+        /// The default value is space (<c>' '</c>).
+        /// </summary>
         public char BytesArrayDelimiter { get; set; } = ' ';
 
         /// <summary>
-        /// Gets or sets a char used as the values delimiter in CSV records. The default value
+        /// Gets or sets the character used as the values delimiter in CSV records. The default value
         /// is comma (<c>','</c>).
         /// </summary>
         public char Delimiter { get; set; } = ',';

@@ -4,7 +4,8 @@ using System.ComponentModel;
 namespace Melanchall.DryWetMidi.Interaction
 {
     /// <summary>
-    /// Time span that represents time or length.
+    /// Time span that represents time or length. Please read <see href="xref:a_time_length">Time and length</see>
+    /// article to learn more.
     /// </summary>
     public interface ITimeSpan : IComparable
     {

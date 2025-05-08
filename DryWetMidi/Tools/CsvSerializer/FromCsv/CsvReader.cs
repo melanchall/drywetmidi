@@ -63,7 +63,7 @@ namespace Melanchall.DryWetMidi.Tools
                 line += nextLine;
             }
 
-            return new CsvRecord(lineNumber, _currentLineNumber - lineNumber, values.Select(v => CsvFormattingUtilities.UnescapeString(v)).ToArray());
+            return new CsvRecord(lineNumber, _currentLineNumber - lineNumber, values.Select(CsvFormattingUtilities.UnescapeString).ToArray());
         }
 
         public void Dispose()

@@ -34,7 +34,7 @@ namespace Melanchall.DryWetMidi.Common
     /// <c>(SevenBitNumber)70</c> passed to the <c>velocity</c> one.
     /// </para>
     /// </example>
-    public struct SevenBitNumber : IComparable<SevenBitNumber>, IConvertible
+    public struct SevenBitNumber : IComparable<SevenBitNumber>, IConvertible, IEquatable<SevenBitNumber>
     {
         #region Constants
 
@@ -397,6 +397,20 @@ namespace Melanchall.DryWetMidi.Common
 
         #endregion
 
+        #region IEquatable<FourBitNumber>
+
+        /// <summary>
+        /// Indicates whether the current object is equal to another object of the same type.
+        /// </summary>
+        /// <param name="other">An object to compare with this object.</param>
+        /// <returns><c>true</c> if the current object is equal to the other parameter; otherwise, <c>false</c>.</returns>
+        public bool Equals(SevenBitNumber other)
+        {
+            return other._value == _value;
+        }
+
+        #endregion
+
         #region Overrides
 
         /// <summary>
@@ -419,7 +433,7 @@ namespace Melanchall.DryWetMidi.Common
                 return false;
 
             var sevenBitNumber = (SevenBitNumber)obj;
-            return sevenBitNumber._value == _value;
+            return Equals(sevenBitNumber);
         }
 
         /// <summary>

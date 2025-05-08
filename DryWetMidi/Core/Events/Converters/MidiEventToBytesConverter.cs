@@ -135,7 +135,7 @@ namespace Melanchall.DryWetMidi.Core
             return Convert(midiEvent, 0);
         }
 
-        // TODO: improve performance
+        // TODO: describe min size parameter
         /// <summary>
         /// Converts an instance of the <see cref="MidiEvent"/> to bytes array using the specified
         /// minimum size of resulting array.

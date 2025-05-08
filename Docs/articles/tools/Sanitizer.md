@@ -68,10 +68,10 @@ midiFile.Sanitize(new SanitizingSettings
 
 Notes are considered duplicated when they are meet all the following conditions:
 
-1. the same note number;
-2. the same channel;
-3. the same time;
-4. the same length.
+* same note number;
+* same channel;
+* same time;
+* same length.
 
 For example, if we have such a file with two notes (with number of `70` and length of `20`):
 
@@ -96,7 +96,7 @@ midiFile.Sanitize();
 
 ### OrphanedNoteOnEventsPolicy
 
-In some MIDI files you can encounter [Note On](xref:Melanchall.DryWetMidi.Core.NoteOnEvent) events without corresponding [Note Off](xref:Melanchall.DryWetMidi.Core.NoteOffEvent) ones. For example, in this example we're creating a file with the first event is an orphaned [Note On](xref:Melanchall.DryWetMidi.Core.NoteOnEvent) one:
+In some MIDI files you can encounter [Note On](xref:Melanchall.DryWetMidi.Core.NoteOnEvent) events without corresponding [Note Off](xref:Melanchall.DryWetMidi.Core.NoteOffEvent) ones. For example, here we're creating a file with the first event is an orphaned _Note On_ one:
 
 ```csharp
 var midiFile = new MidiFile(
@@ -107,11 +107,19 @@ var midiFile = new MidiFile(
 
 Of course how notes are detected is controlled by the [NoteDetectionSettings](xref:Melanchall.DryWetMidi.Tools.SanitizingSettings.NoteDetectionSettings) property. As stated above you can read more about the [NoteDetectionSettings](xref:Melanchall.DryWetMidi.Interaction.NoteDetectionSettings) class in the [Getting objects: GetNotes: Settings](xref:a_getting_objects#settings) article.
 
-[Sanitizer](xref:Melanchall.DryWetMidi.Tools.Sanitizer) allows to handle such orphaned [Note On](xref:Melanchall.DryWetMidi.Core.NoteOnEvent) events in different ways with the [OrphanedNoteOnEventsPolicy](xref:Melanchall.DryWetMidi.Tools.SanitizingSettings.OrphanedNoteOnEventsPolicy) property.
+[Sanitizer](xref:Melanchall.DryWetMidi.Tools.Sanitizer) allows to handle such orphaned _Note On_ events in different ways with the [OrphanedNoteOnEventsPolicy](xref:Melanchall.DryWetMidi.Tools.SanitizingSettings.OrphanedNoteOnEventsPolicy) property.
 
 Following image shows how [OrphanedNoteOnEventsPolicy.Remove](xref:Melanchall.DryWetMidi.Tools.OrphanedNoteOnEventsPolicy.Remove) option (which is the default one) works:
 
 ![SanitizingSettings.OrphanedNoteOnEventsPolicy.Remove](images/Sanitizer/OrphanedNoteOnEvents_Remove.png)
+
+But what if such orphaned Note On events are just a result of corresponding Note Off ones were lost for some reason? You'll probably want to restore notes. In this case you can use [OrphanedNoteOnEventsPolicy.CompleteNote](xref:Melanchall.DryWetMidi.Tools.OrphanedNoteOnEventsPolicy.CompleteNote) option. It will add a _Note Off_ event for each orphaned _Note On_ one. The length of the note is controlled by the [NoteMaxLengthForOrphanedNoteOnEvent](xref:Melanchall.DryWetMidi.Tools.SanitizingSettings.NoteMaxLengthForOrphanedNoteOnEvent) property. Please see the image below which describes the process:
+
+![SanitizingSettings.OrphanedNoteOnEventsPolicy.CompleteNote](images/Sanitizer/OrphanedNoteOnEvents_CompleteNote.png)
+
+As you can see from the name of the property, it's the **maximum** length of a note. If Note On event with the same channel and note number is encountered during the new note, the note's length will be reduced so its end will be at the start of a next note:
+
+![SanitizingSettings.NoteMaxLengthForOrphanedNoteOnEvent](images/Sanitizer/NoteMaxLengthForOrphanedNoteOnEvent.png)
 
 ### RemoveOrphanedNoteOffEvents
 
@@ -151,17 +159,43 @@ var midiFile = new MidiFile(
 
 ![SanitizingSettings.RemoveDuplicatedSetTempoEvents](images/Sanitizer/RemoveDuplicatedSetTempoEvents.png)
 
+So _Set Tempo_ events are considered duplicated when they are have the same microseconds per quarter note value.
+
 ### RemoveDuplicatedTimeSignatureEvents
 
 [RemoveDuplicatedTimeSignatureEvents](xref:Melanchall.DryWetMidi.Tools.SanitizingSettings.RemoveDuplicatedTimeSignatureEvents) does the same actions as the [RemoveDuplicatedSetTempoEvents](#removeduplicatedsettempoevents) one but for duplicated [Time Signature](xref:Melanchall.DryWetMidi.Core.TimeSignatureEvent) events.
+
+_Time Signature_ events are considered duplicated when they are meet all the following conditions:
+
+* same numerator;
+* same denominator;
+* same clock ticks per click;
+* same thirty-second notes per beat.
 
 ### RemoveDuplicatedPitchBendEvents
 
 [RemoveDuplicatedPitchBendEvents](xref:Melanchall.DryWetMidi.Tools.SanitizingSettings.RemoveDuplicatedPitchBendEvents) does the same actions as the [RemoveDuplicatedSetTempoEvents](#removeduplicatedsettempoevents) or [RemoveDuplicatedTimeSignatureEvents](#removeduplicatedtimesignatureevents) one but for duplicated [Pitch Bend](xref:Melanchall.DryWetMidi.Core.PitchBendEvent) events.
 
+_Pitch Bend_ events are considered duplicated when they are meet all the following conditions:
+
+* same pitch value;
+* same channel.
+
 ### RemoveDuplicatedSequenceTrackNameEvents
 
 [RemoveDuplicatedSequenceTrackNameEvents](xref:Melanchall.DryWetMidi.Tools.SanitizingSettings.RemoveDuplicatedSequenceTrackNameEvents) does the same actions as the [RemoveDuplicatedSetTempoEvents](#removeduplicatedsettempoevents) or [RemoveDuplicatedTimeSignatureEvents](#removeduplicatedtimesignatureevents) one but for duplicated [Sequence/Track Name](xref:Melanchall.DryWetMidi.Core.SequenceTrackNameEvent) events.
+
+_Sequence/Track Name_ events are considered duplicated when they have the same text.
+
+### RemoveDuplicatedControlChangeEvents
+
+[RemoveDuplicatedControlChangeEvents](xref:Melanchall.DryWetMidi.Tools.SanitizingSettings.RemoveDuplicatedControlChangeEvents) does the same actions as the [RemoveDuplicatedSetTempoEvents](#removeduplicatedsettempoevents) or [RemoveDuplicatedTimeSignatureEvents](#removeduplicatedtimesignatureevents) one but for duplicated [Control Change](xref:Melanchall.DryWetMidi.Core.ControlChangeEvent) events.
+
+_Control Change_ events are considered duplicated when they are meet all the following conditions:
+
+* same control number;
+* same control value;
+* same channel.
 
 ### RemoveEventsOnUnusedChannels
 

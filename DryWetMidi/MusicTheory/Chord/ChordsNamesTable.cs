@@ -175,11 +175,11 @@ namespace Melanchall.DryWetMidi.MusicTheory
 
                         var checkFailed = false;
 
-                        for (var i = 0; i < intervals.Length; i++)
+                        foreach (var interval in intervals)
                         {
-                            var newNoteName = intervals[i] == 0
+                            var newNoteName = interval == 0
                                 ? noteName
-                                : (NoteName)(((int)noteName + intervals[i]) % Octave.OctaveSize);
+                                : (NoteName)(((int)noteName + interval) % Octave.OctaveSize);
 
                             if (!notesNamesSet.Contains(newNoteName))
                             {

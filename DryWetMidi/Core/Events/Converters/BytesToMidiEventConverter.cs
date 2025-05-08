@@ -272,7 +272,7 @@ namespace Melanchall.DryWetMidi.Core
         /// <exception cref="NotEnoughBytesException">MIDI events data cannot be read since the sub-array <paramref name="bytes"/>
         /// doesn't have enough bytes and that should be treated as error according to the <see cref="NotEnoughBytesPolicy"/>.</exception>
         /// <exception cref="UnexpectedRunningStatusException">Unexpected running status is encountered.</exception>
-        public ICollection<MidiEvent> ConvertMultiple(byte[] bytes, int offset, int length, out long position)
+        public ICollection<MidiEvent> ConvertMultiple(byte[] bytes, int offset, int length)
         {
             ThrowIfArgument.IsNull(nameof(bytes), bytes);
             ThrowIfArgument.IsEmptyCollection(nameof(bytes), bytes, "Bytes is empty array.");
@@ -282,9 +282,7 @@ namespace Melanchall.DryWetMidi.Core
             PrepareStreamWithBytes(bytes, offset, length);
 
             var result = new List<MidiEvent>();
-
             byte? channelEventStatusByte = null;
-            position = offset;
 
             try
             {
@@ -315,8 +313,6 @@ namespace Melanchall.DryWetMidi.Core
 
                     midiEvent.DeltaTime = deltaTime;
                     result.Add(midiEvent);
-
-                    position = offset + _midiReader.Position;
                 }
             }
             catch (EndOfStreamException ex)
@@ -347,12 +343,26 @@ namespace Melanchall.DryWetMidi.Core
         /// <exception cref="NotEnoughBytesException">MIDI events data cannot be read since the sub-array <paramref name="bytes"/>
         /// doesn't have enough bytes and that should be treated as error according to the <see cref="NotEnoughBytesPolicy"/>.</exception>
         /// <exception cref="UnexpectedRunningStatusException">Unexpected running status is encountered.</exception>
-        public ICollection<MidiEvent> ConvertMultiple(byte[] bytes, out long position)
+        public ICollection<MidiEvent> ConvertMultiple(byte[] bytes)
         {
             ThrowIfArgument.IsNull(nameof(bytes), bytes);
             ThrowIfArgument.IsEmptyCollection(nameof(bytes), bytes, "Bytes is empty array.");
 
-            return ConvertMultiple(bytes, 0, bytes.Length, out position);
+            return ConvertMultiple(bytes, 0, bytes.Length);
+        }
+
+        // TODO: improve performance
+        /// <summary>
+        /// Converts the specified status byte and data bytes to an instance of the <see cref="MidiEvent"/>.
+        /// </summary>
+        /// <param name="statusByte">The status byte of MIDI event.</param>
+        /// <param name="dataBytes">Data bytes of MIDI event (bytes except status byte). Can be <c>null</c>
+        /// if MIDI event has no data bytes.</param>
+        /// <returns><see cref="MidiEvent"/> read from <paramref name="statusByte"/> and <paramref name="dataBytes"/>.</returns>
+        public MidiEvent Convert(byte statusByte, byte[] dataBytes)
+        {
+            PrepareStreamWithBytes(dataBytes, 0, dataBytes?.Length ?? 0);
+            return ReadEvent(statusByte);
         }
 
         /// <summary>
@@ -360,8 +370,8 @@ namespace Melanchall.DryWetMidi.Core
         /// the status byte of MIDI event. If bytes array contains multiple events, only first one will be read.
         /// </summary>
         /// <remarks>
-        /// Use <see cref="ConvertMultiple(byte[], out long)"/> or <see cref="ConvertMultiple(byte[], int, int, out long)"/>
-        /// to read multiple events.
+        /// Use <see cref="ConvertMultiple(byte[])"/> or <see cref="ConvertMultiple(byte[], int, int)"/> to read
+        /// multiple events.
         /// </remarks>
         /// <param name="bytes">Bytes representing a MIDI event.</param>
         /// <returns><see cref="MidiEvent"/> read from <paramref name="bytes"/>.</returns>
@@ -381,8 +391,8 @@ namespace Melanchall.DryWetMidi.Core
         /// first one will be read.
         /// </summary>
         /// <remarks>
-        /// Use <see cref="ConvertMultiple(byte[], out long)"/> or <see cref="ConvertMultiple(byte[], int, int, out long)"/>
-        /// to read multiple events.
+        /// Use <see cref="ConvertMultiple(byte[])"/> or <see cref="ConvertMultiple(byte[], int, int)"/> to read
+        /// multiple events.
         /// </remarks>
         /// <param name="bytes">Bytes to take sub-array from.</param>
         /// <param name="offset">Offset of sub-array to read MIDI event from.</param>
@@ -427,27 +437,15 @@ namespace Melanchall.DryWetMidi.Core
             return midiEvent;
         }
 
-        internal MidiEvent Convert(byte statusByte, byte[] dataBytes)
-        {
-            PrepareStreamWithBytes(dataBytes, 0, dataBytes?.Length ?? 0);
-            return ReadEvent(statusByte);
-        }
-
         private void PrepareStreamWithBytes(byte[] bytes, int offset, int length)
         {
             _dataBytesStream.Seek(0, SeekOrigin.Begin);
             if (bytes != null)
-            {
                 _dataBytesStream.Write(bytes, offset, length);
-                _dataBytesStream.Seek(0, SeekOrigin.Begin);
-            }
 
-            _midiReader = _midiReader ?? new MidiReader(_dataBytesStream, new ReaderSettings
-            {
-                BufferingPolicy = BufferingPolicy.DontUseBuffering,
-            });
+            _midiReader?.Dispose();
+            _midiReader = new MidiReader(_dataBytesStream, new ReaderSettings());
             _midiReader.Position = 0;
-            _midiReader.Length = bytes != null ? length : 0;
         }
 
         private MidiEvent ReadEvent(byte statusByte)

@@ -1121,7 +1121,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
             var notesTolerance = settings.NotesTolerance;
 
-            foreach (var timedObjectTuple in timedEvents.GetNotesAndTimedEventsLazy(noteDetectionSettings ?? new NoteDetectionSettings()))
+            foreach (var timedObjectTuple in timedEvents.GetNotesAndTimedEventsLazy(noteDetectionSettings))
             {
                 var timedObject = timedObjectTuple.Object;
 

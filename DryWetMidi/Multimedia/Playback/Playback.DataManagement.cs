@@ -73,7 +73,7 @@ namespace Melanchall.DryWetMidi.Multimedia
                 {
                     foreach (var changedObject in e.ChangedObjects)
                     {
-                        var obj = changedObject.TimedObject;
+                        var obj = changedObject.Object;
                         var oldTime = changedObject.OldTime;
 
                         RemoveTimedObject(obj, oldTime);
@@ -145,7 +145,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
             if (noteEvent != null)
             {
-                var noteId = GetNoteId(noteEvent);
+                var noteId = noteEvent.GetNoteId();
 
                 foreach (var playbackEventNode in playbackEventsNodes)
                 {
@@ -290,11 +290,6 @@ namespace Melanchall.DryWetMidi.Multimedia
             }
         }
 
-        private NoteId GetNoteId(NoteEvent noteEvent)
-        {
-            return new NoteId(noteEvent.Channel, noteEvent.NoteNumber);
-        }
-
         private void TryRemoveSetTempoEvent(
             TimedEvent timedEvent,
             long oldTime)
@@ -312,9 +307,8 @@ namespace Melanchall.DryWetMidi.Multimedia
             Tempo newTempo = TempoMap.TempoLine.GetValueAtTime(0);
             TimeSpan? nextTempoTime = null;
 
-            for (var i = 0; i < valuesChanges.Length; i++)
+            foreach (var valueChange in valuesChanges)
             {
-                var valueChange = valuesChanges[i];
                 if (valueChange.Time < oldTime)
                     newTempo = valueChange.Value;
                 else if (valueChange.Time == oldTime)
@@ -356,9 +350,8 @@ namespace Melanchall.DryWetMidi.Multimedia
 
             var valuesChanges = TempoMap.TempoLine.ToArray();
 
-            for (var i = 0; i < valuesChanges.Length; i++)
+            foreach (var valueChange in valuesChanges)
             {
-                var valueChange = valuesChanges[i];
                 if (valueChange.Time <= timedEvent.Time)
                     oldTempo = valueChange.Value;
                 else
@@ -418,7 +411,6 @@ namespace Melanchall.DryWetMidi.Multimedia
                 scaleFactor,
                 shift);
 
-            // TODO: more tests
             ScaleSnapPointsTimes(
                 tempoChangeTime,
                 nextTempoTime,
@@ -683,13 +675,13 @@ namespace Melanchall.DryWetMidi.Multimedia
                 var noteEvent = timedEvent.Event as NoteEvent;
                 if (noteEvent != null)
                 {
-                    var noteId = GetNoteId(noteEvent);
+                    var noteId = noteEvent.GetNoteId();
                     TimedEvent matchedTimedEvent = null;
 
                     if (noteEvent is NoteOnEvent)
                     {
                         if (_noteOffEvents.TryGetValue(noteId, out matchedTimedEvent) &&
-                            GetNoteId((NoteEvent)matchedTimedEvent.Event).Equals(noteId))
+                            ((NoteEvent)matchedTimedEvent.Event).GetNoteId().Equals(noteId))
                         {
                             _noteOffEvents.TryRemove(noteId, out matchedTimedEvent);
                             AddTimedObject(new Note(timedEvent, matchedTimedEvent, false), TempoMap, isInitialObject, false);
@@ -700,7 +692,7 @@ namespace Melanchall.DryWetMidi.Multimedia
                     else
                     {
                         if (_noteOnEvents.TryGetValue(noteId, out matchedTimedEvent) &&
-                            GetNoteId((NoteEvent)matchedTimedEvent.Event).Equals(noteId))
+                            ((NoteEvent)matchedTimedEvent.Event).GetNoteId().Equals(noteId))
                         {
                             _noteOnEvents.TryRemove(noteId, out matchedTimedEvent);
                             AddTimedObject(new Note(matchedTimedEvent, timedEvent, false), TempoMap, isInitialObject, false);

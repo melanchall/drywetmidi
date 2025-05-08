@@ -4,17 +4,29 @@ using System.Linq;
 
 namespace Melanchall.DryWetMidi.Interaction
 {
+    /// <summary>
+    /// Holds information about changes within a collection for <see cref="IObservableTimedObjectsCollection.CollectionChanged"/> event.
+    /// </summary>
     public sealed class ObservableTimedObjectsCollectionChangedEventArgs : EventArgs
     {
         #region Properties
 
+        /// <summary>
+        /// Gets or sets a collection of added objects.
+        /// </summary>
         public ICollection<ITimedObject> AddedObjects { get; set; }
 
+        /// <summary>
+        /// Gets or sets a collection of removed objects.
+        /// </summary>
         public ICollection<ITimedObject> RemovedObjects { get; set; }
 
+        /// <summary>
+        /// Gets or sets a collection of changed objects.
+        /// </summary>
         public ICollection<ChangedTimedObject> ChangedObjects { get; set; }
 
-        public bool HasData
+        internal bool HasData
         {
             get
             {
@@ -23,15 +35,6 @@ namespace Melanchall.DryWetMidi.Interaction
                     RemovedObjects?.Any() == true ||
                     ChangedObjects?.Any() == true;
             }
-        }
-
-        #endregion
-
-        #region Overrides
-
-        public override string ToString()
-        {
-            return $"+ {AddedObjects?.Count ?? 0} - {RemovedObjects?.Count ?? 0} ~ {ChangedObjects?.Count ?? 0}";
         }
 
         #endregion

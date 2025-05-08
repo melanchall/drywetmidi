@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
-using NUnit.Framework;
 using NUnit.Framework.Legacy;
 
 namespace Melanchall.DryWetMidi.Tests.Interaction
@@ -128,16 +127,15 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         public static readonly TempoMap ComplexTempoMap = GenerateComplexTempoMap();
         public static readonly TempoMap ComplexTempoMap2 = GenerateComplexTempoMap2();
 
-        // TODO: find a way to decrease this constant
-        private const long MetricTimeSpanEqualityTolerance = 500; // μs
-        private const long MidiTimeSpanEqualityTolerance = 1; // ticks
+        private const long MetricTimeSpanEqualityToleranceMicroseconds = 500;
+        private const long MidiTimeSpanEqualityToleranceTicks = 1; // ticks
         private const double BarBeatFractionTimeSpanEqualityTolerance = 0.001;
 
         private static readonly Dictionary<Type, IEqualityComparer<ITimeSpan>> TimeSpanComparers =
             new Dictionary<Type, IEqualityComparer<ITimeSpan>>
             {
-                [typeof(MetricTimeSpan)] = new MetricTimeSpanEqualityComparer(MetricTimeSpanEqualityTolerance),
-                [typeof(MidiTimeSpan)] = new MidiTimeSpanEqualityComparer(MidiTimeSpanEqualityTolerance),
+                [typeof(MetricTimeSpan)] = new MetricTimeSpanEqualityComparer(MetricTimeSpanEqualityToleranceMicroseconds),
+                [typeof(MidiTimeSpan)] = new MidiTimeSpanEqualityComparer(MidiTimeSpanEqualityToleranceTicks),
                 [typeof(BarBeatFractionTimeSpan)] = new BarBeatFractionTimeSpanEqualityComparer(BarBeatFractionTimeSpanEqualityTolerance)
             };
 

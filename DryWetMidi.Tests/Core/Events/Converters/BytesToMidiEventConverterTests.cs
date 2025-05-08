@@ -226,11 +226,9 @@ namespace Melanchall.DryWetMidi.Tests.Core
         {
             using (var bytesToMidiEventConverter = new BytesToMidiEventConverter())
             {
-                var bytes = new byte[] { 0x92, 0x12, 0x56, 0x90, 0x12, 0x00, 0xB3, 0x23, 0x7F };
-
                 ConvertMultiple_Bytes(
                     bytesToMidiEventConverter,
-                    bytes,
+                    new byte[] { 0x92, 0x12, 0x56, 0x90, 0x12, 0x00, 0xB3, 0x23, 0x7F },
                     new MidiEvent[]
                     {
                         new NoteOnEvent((SevenBitNumber)0x12, (SevenBitNumber)0x56)
@@ -245,8 +243,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
                         {
                             Channel = (FourBitNumber)0x3
                         }
-                    },
-                    bytes.Length);
+                    });
             }
         }
 
@@ -257,18 +254,16 @@ namespace Melanchall.DryWetMidi.Tests.Core
             {
                 bytesToMidiEventConverter.BytesFormat = BytesFormat.Device;
 
-                var bytes = new byte[] { 0x92, 0x12, 0x56 }
-                    .Concat(new byte[] { 0xF0, 0x29 })
-                    .Concat(Enumerable.Range(0, 40).Select(_ => (byte)0xA7))
-                    .Concat(new byte[] { 0xF7 })
-                    .Concat(new byte[] { 0xF0, 0x79 })
-                    .Concat(Enumerable.Range(0, 120).Select(_ => (byte)0xA7))
-                    .Concat(new byte[] { 0xF7 })
-                    .ToArray();
-
                 ConvertMultiple_Bytes(
                     bytesToMidiEventConverter,
-                    bytes,
+                    new byte[] { 0x92, 0x12, 0x56 }
+                        .Concat(new byte[] { 0xF0, 0x29 })
+                        .Concat(Enumerable.Range(0, 40).Select(_ => (byte)0xA7))
+                        .Concat(new byte[] { 0xF7 })
+                        .Concat(new byte[] { 0xF0, 0x79 })
+                        .Concat(Enumerable.Range(0, 120).Select(_ => (byte)0xA7))
+                        .Concat(new byte[] { 0xF7 })
+                        .ToArray(),
                     new MidiEvent[]
                     {
                         new NoteOnEvent((SevenBitNumber)0x12, (SevenBitNumber)0x56)
@@ -277,8 +272,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
                         },
                         new NormalSysExEvent(new byte[] { 0x29 }.Concat(Enumerable.Range(0, 40).Select(_ => (byte)0xA7)).Concat(new byte[] { 0xF7 }).ToArray()),
                         new NormalSysExEvent(new byte[] { 0x79 }.Concat(Enumerable.Range(0, 120).Select(_ => (byte)0xA7)).Concat(new byte[] { 0xF7 }).ToArray())
-                    },
-                    bytes.Length);
+                    });
             }
         }
 
@@ -289,18 +283,16 @@ namespace Melanchall.DryWetMidi.Tests.Core
             {
                 bytesToMidiEventConverter.BytesFormat = BytesFormat.File;
 
-                var bytes = new byte[] { 0x92, 0x12, 0x56 }
-                    .Concat(new byte[] { 0xF0, 0x29 })
-                    .Concat(Enumerable.Range(0, 40).Select(_ => (byte)0xA7))
-                    .Concat(new byte[] { 0xF7 })
-                    .Concat(new byte[] { 0xF0, 0x79 })
-                    .Concat(Enumerable.Range(0, 120).Select(_ => (byte)0xA7))
-                    .Concat(new byte[] { 0xF7 })
-                    .ToArray();
-
                 ConvertMultiple_Bytes(
                     bytesToMidiEventConverter,
-                    bytes,
+                    new byte[] { 0x92, 0x12, 0x56 }
+                        .Concat(new byte[] { 0xF0, 0x29 })
+                        .Concat(Enumerable.Range(0, 40).Select(_ => (byte)0xA7))
+                        .Concat(new byte[] { 0xF7 })
+                        .Concat(new byte[] { 0xF0, 0x79 })
+                        .Concat(Enumerable.Range(0, 120).Select(_ => (byte)0xA7))
+                        .Concat(new byte[] { 0xF7 })
+                        .ToArray(),
                     new MidiEvent[]
                     {
                         new NoteOnEvent((SevenBitNumber)0x12, (SevenBitNumber)0x56)
@@ -309,8 +301,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
                         },
                         new NormalSysExEvent(Enumerable.Range(0, 40).Select(_ => (byte)0xA7).Concat(new byte[] { 0xF7 }).ToArray()),
                         new NormalSysExEvent(Enumerable.Range(0, 120).Select(_ => (byte)0xA7).Concat(new byte[] { 0xF7 }).ToArray())
-                    },
-                    bytes.Length);
+                    });
             }
         }
 
@@ -321,11 +312,9 @@ namespace Melanchall.DryWetMidi.Tests.Core
             {
                 bytesToMidiEventConverter.ReadDeltaTimes = true;
 
-                var bytes = new byte[] { 0x30, 0x92, 0x12, 0x56, 0x81, 0x00, 0x90, 0x12, 0x00, 0x00, 0xB3, 0x23, 0x7F };
-
                 ConvertMultiple_Bytes(
                     bytesToMidiEventConverter,
-                    bytes,
+                    new byte[] { 0x30, 0x92, 0x12, 0x56, 0x81, 0x00, 0x90, 0x12, 0x00, 0x00, 0xB3, 0x23, 0x7F },
                     new MidiEvent[]
                     {
                         new NoteOnEvent((SevenBitNumber)0x12, (SevenBitNumber)0x56)
@@ -342,8 +331,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
                         {
                             Channel = (FourBitNumber)0x3
                         }
-                    },
-                    bytes.Length);
+                    });
             }
         }
 
@@ -352,11 +340,9 @@ namespace Melanchall.DryWetMidi.Tests.Core
         {
             using (var bytesToMidiEventConverter = new BytesToMidiEventConverter())
             {
-                var bytes = new byte[] { 0x92, 0x12, 0x56, 0x12, 0x65, 0x90, 0x12, 0x00, 0xB3, 0x23, 0x7F };
-
                 ConvertMultiple_Bytes(
                     bytesToMidiEventConverter,
-                    bytes,
+                    new byte[] { 0x92, 0x12, 0x56, 0x12, 0x65, 0x90, 0x12, 0x00, 0xB3, 0x23, 0x7F },
                     new MidiEvent[]
                     {
                         new NoteOnEvent((SevenBitNumber)0x12, (SevenBitNumber)0x56)
@@ -375,8 +361,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
                         {
                             Channel = (FourBitNumber)0x3
                         }
-                    },
-                    bytes.Length);
+                    });
             }
         }
 
@@ -386,7 +371,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
             using (var bytesToMidiEventConverter = new BytesToMidiEventConverter())
             {
                 ClassicAssert.Throws<NotEnoughBytesException>(
-                    () => bytesToMidiEventConverter.ConvertMultiple(new byte[] { 0x92, 0x12, 0x56, 0x90 }, out _),
+                    () => bytesToMidiEventConverter.ConvertMultiple(new byte[] { 0x92, 0x12, 0x56, 0x90 }),
                     "Exception is not thrown.");
             }
         }
@@ -411,75 +396,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
                         {
                             Channel = (FourBitNumber)0x0
                         }
-                    },
-                    6);
-            }
-        }
-
-        [Test]
-        public void ConvertMultiple_Bytes_Offset_Length_IncompleteEvent()
-        {
-            using (var bytesToMidiEventConverter = new BytesToMidiEventConverter())
-            {
-                ConvertMultiple_Bytes_Offset_Length(
-                    bytesToMidiEventConverter,
-                    new byte[] { 0x92, 0x12, 0x56, 0x90, 0x12, 0x00, 0xB3 },
-                    3,
-                    3,
-                    new MidiEvent[]
-                    {
-                        new NoteOffEvent((SevenBitNumber)0x12, (SevenBitNumber)0x00)
-                        {
-                            Channel = (FourBitNumber)0x0
-                        }
-                    },
-                    6);
-            }
-        }
-
-        [Test]
-        public void ConvertMultiple_Bytes_Offset_Length_IncompleteEvent_Ignore_1()
-        {
-            using (var bytesToMidiEventConverter = new BytesToMidiEventConverter())
-            {
-                bytesToMidiEventConverter.NotEnoughBytesPolicy = NotEnoughBytesPolicy.Ignore;
-
-                ConvertMultiple_Bytes_Offset_Length(
-                    bytesToMidiEventConverter,
-                    new byte[] { 0x92, 0x12, 0x56, 0x90, 0x12, 0x00, 0xB3 },
-                    3,
-                    4,
-                    new MidiEvent[]
-                    {
-                        new NoteOffEvent((SevenBitNumber)0x12, (SevenBitNumber)0x00)
-                        {
-                            Channel = (FourBitNumber)0x0
-                        }
-                    },
-                    6);
-            }
-        }
-
-        [Test]
-        public void ConvertMultiple_Bytes_Offset_Length_IncompleteEvent_Ignore_2()
-        {
-            using (var bytesToMidiEventConverter = new BytesToMidiEventConverter())
-            {
-                bytesToMidiEventConverter.NotEnoughBytesPolicy = NotEnoughBytesPolicy.Ignore;
-
-                ConvertMultiple_Bytes_Offset_Length(
-                    bytesToMidiEventConverter,
-                    new byte[] { 0x92, 0x12, 0x56, 0x90, 0x12, 0x00, 0xB3 },
-                    3,
-                    3,
-                    new MidiEvent[]
-                    {
-                        new NoteOffEvent((SevenBitNumber)0x12, (SevenBitNumber)0x00)
-                        {
-                            Channel = (FourBitNumber)0x0
-                        }
-                    },
-                    6);
+                    });
             }
         }
 
@@ -505,8 +422,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
                         {
                             Channel = (FourBitNumber)0x3
                         }
-                    },
-                    9);
+                    });
 
                 Convert_Bytes(
                     bytesToMidiEventConverter,
@@ -556,8 +472,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
                         {
                             Channel = (FourBitNumber)0x3
                         }
-                    },
-                    9);
+                    });
 
                 ConvertMultiple_Bytes(
                     bytesToMidiEventConverter,
@@ -568,8 +483,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
                         {
                             Channel = (FourBitNumber)0x4
                         }
-                    },
-                    3);
+                    });
             }
         }
 
@@ -634,63 +548,31 @@ namespace Melanchall.DryWetMidi.Tests.Core
 
         #region Private methods
 
-        private void Convert_StatusByte_DataBytes(
-            BytesToMidiEventConverter bytesToMidiEventConverter,
-            byte statusByte,
-            byte[] dataBytes,
-            MidiEvent expectedMidiEvent)
+        private void Convert_StatusByte_DataBytes(BytesToMidiEventConverter bytesToMidiEventConverter, byte statusByte, byte[] dataBytes, MidiEvent expectedMidiEvent)
         {
             var midiEvent = bytesToMidiEventConverter.Convert(statusByte, dataBytes);
             CompareEvents(expectedMidiEvent, midiEvent);
         }
 
-        private void Convert_Bytes(
-            BytesToMidiEventConverter bytesToMidiEventConverter,
-            byte[] bytes,
-            MidiEvent expectedMidiEvent)
+        private void Convert_Bytes(BytesToMidiEventConverter bytesToMidiEventConverter, byte[] bytes, MidiEvent expectedMidiEvent)
         {
             var midiEvent = bytesToMidiEventConverter.Convert(bytes);
             CompareEvents(expectedMidiEvent, midiEvent);
         }
 
-        private void ConvertMultiple_Bytes(
-            BytesToMidiEventConverter bytesToMidiEventConverter,
-            byte[] bytes,
-            ICollection<MidiEvent> expectedMidiEvents,
-            long expectedPosition)
+        private void ConvertMultiple_Bytes(BytesToMidiEventConverter bytesToMidiEventConverter, byte[] bytes, ICollection<MidiEvent> expectedMidiEvents)
         {
-            var midiEvents = bytesToMidiEventConverter.ConvertMultiple(bytes, out var position);
+            var midiEvents = bytesToMidiEventConverter.ConvertMultiple(bytes);
             CompareEvents(expectedMidiEvents, midiEvents);
-            ClassicAssert.AreEqual(expectedPosition, position, "Invalid position.");
         }
 
-        private void ConvertMultiple_Bytes_Offset_Length(
-            BytesToMidiEventConverter bytesToMidiEventConverter,
-            byte[] bytes,
-            int offset,
-            int length,
-            ICollection<MidiEvent> expectedMidiEvents,
-            long expectedPosition)
-        {
-            var midiEvents = bytesToMidiEventConverter.ConvertMultiple(bytes, offset, length, out var position);
-            CompareEvents(expectedMidiEvents, midiEvents);
-            ClassicAssert.AreEqual(expectedPosition, position, "Invalid position.");
-        }
-
-        private void Convert_Bytes_Offset_Length(
-            BytesToMidiEventConverter bytesToMidiEventConverter,
-            byte[] bytes,
-            int offset,
-            int length,
-            MidiEvent expectedMidiEvent)
+        private void Convert_Bytes_Offset_Length(BytesToMidiEventConverter bytesToMidiEventConverter, byte[] bytes, int offset, int length, MidiEvent expectedMidiEvent)
         {
             var midiEvent = bytesToMidiEventConverter.Convert(bytes, offset, length);
             CompareEvents(expectedMidiEvent, midiEvent);
         }
 
-        private static void CompareEvents(
-            MidiEvent expectedMidiEvent,
-            MidiEvent actualMidiEvent)
+        private static void CompareEvents(MidiEvent expectedMidiEvent, MidiEvent actualMidiEvent)
         {
             MidiAsserts.AreEqual(
                 expectedMidiEvent,
@@ -699,9 +581,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 "MIDI event read incorrectly.");
         }
 
-        private static void CompareEvents(
-            ICollection<MidiEvent> expectedMidiEvents,
-            ICollection<MidiEvent> actualMidiEvents)
+        private static void CompareEvents(ICollection<MidiEvent> expectedMidiEvents, ICollection<MidiEvent> actualMidiEvents)
         {
             MidiAsserts.AreEqual(
                 expectedMidiEvents,

@@ -22,7 +22,7 @@ namespace Melanchall.DryWetMidi.Common
     /// noteOnEvent.Channel = (FourBitNumber)10;
     /// </code>
     /// </example>
-    public struct FourBitNumber : IComparable<FourBitNumber>, IConvertible
+    public struct FourBitNumber : IComparable<FourBitNumber>, IConvertible, IEquatable<FourBitNumber>
     {
         #region Constants
 
@@ -385,6 +385,20 @@ namespace Melanchall.DryWetMidi.Common
 
         #endregion
 
+        #region IEquatable<FourBitNumber>
+
+        /// <summary>
+        /// Indicates whether the current object is equal to another object of the same type.
+        /// </summary>
+        /// <param name="other">An object to compare with this object.</param>
+        /// <returns><c>true</c> if the current object is equal to the other parameter; otherwise, <c>false</c>.</returns>
+        public bool Equals(FourBitNumber other)
+        {
+            return other._value == _value;
+        }
+
+        #endregion
+
         #region Overrides
 
         /// <summary>
@@ -407,7 +421,7 @@ namespace Melanchall.DryWetMidi.Common
                 return false;
 
             var fourBitNumber = (FourBitNumber)obj;
-            return fourBitNumber._value == _value;
+            return Equals(fourBitNumber);
         }
 
         /// <summary>

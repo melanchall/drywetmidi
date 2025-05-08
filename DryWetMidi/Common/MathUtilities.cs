@@ -84,7 +84,6 @@ namespace Melanchall.DryWetMidi.Common
                     lastIndex = middleIndex - 1;
                 else if (key < keyThreshold)
                     firstIndex = middleIndex + 1;
-                // TODO: improve for 'key == keyThreshold': just step backward while ==
             }
 
             index = firstIndex > 0 ? firstIndex - 1 : -1;

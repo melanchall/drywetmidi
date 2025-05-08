@@ -502,7 +502,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                                                  TimeSpanTestUtilities.ComplexTempoMap);
         }
 
-        // TODO: check cyclic conversion
         //[Test]
         public void Convert_Complex_5()
         {

@@ -50,6 +50,8 @@ namespace SimplePlaybackApp
 
 Please read [Tick generator](Tick-generator.md) article and [PlaybackSettings](xref:Melanchall.DryWetMidi.Multimedia.PlaybackSettings) class documentation to learn how you can adjust playback's internals.
 
+Playback supports on-the-fly changes of the data being played. You can find detailed information on how to use this feature in the [Dynamic changes](xref:a_playback_dynamic) article.
+
 If you call the [Start](xref:Melanchall.DryWetMidi.Multimedia.Playback.Start) method of the [Playback](xref:Melanchall.DryWetMidi.Multimedia.Playback), execution of the calling thread will continue immediately after the method is called. To stop playback use the [Stop](xref:Melanchall.DryWetMidi.Multimedia.Playback.Stop) method. Note that there is no any pausing method since it's useless. `Stop` leaves playback at the point where the method was called. To move to the start of the playback use the [MoveToStart](xref:Melanchall.DryWetMidi.Multimedia.Playback.MoveToStart) method.
 
 > [!IMPORTANT]
@@ -71,4 +73,4 @@ If you call the [Start](xref:Melanchall.DryWetMidi.Multimedia.Playback.Start) me
 
 There are constructors of [Playback](xref:Melanchall.DryWetMidi.Multimedia.Playback) that don't accept [IOutputDevice](xref:Melanchall.DryWetMidi.Multimedia.IOutputDevice) as an argument. It can be useful, for example, for notes visualization without sound. [Playback](xref:Melanchall.DryWetMidi.Multimedia.Playback) provides events that will be fired with or without an output device (see [Events](xref:Melanchall.DryWetMidi.Multimedia.Playback#events) section of the [Playback](xref:Melanchall.DryWetMidi.Multimedia.Playback) API page). Also all `GetPlayback` extensions methods have overloads without the `outputDevice` parameter.
 
-Also if you don't specify an output device and use a [tick generator](Tick-generator.md) other than [HighPrecisionTickGenerator](xref:Melanchall.DryWetMidi.Multimedia.HighPrecisionTickGenerator), you can use `Playback` in a cross-platform app like Unity game that is supposed to be built for different platforms.
+Also if you don't specify an output device and use a [tick generator](Tick-generator.md) other than [HighPrecisionTickGenerator](xref:Melanchall.DryWetMidi.Multimedia.HighPrecisionTickGenerator), you can use `Playback` in a cross-platform app like Unity game that is supposed to be built for different platforms (you can find currently supported OS in the [Supported OS](xref:a_develop_supported_os) article).

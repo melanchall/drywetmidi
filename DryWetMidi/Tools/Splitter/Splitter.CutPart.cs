@@ -159,7 +159,7 @@ namespace Melanchall.DryWetMidi.Tools
                                         if (noteEvent == null)
                                             return false;
 
-                                        if (!new NoteId(noteEvent.Channel, noteEvent.NoteNumber).Equals(notesDescriptor.Item1))
+                                        if (!noteEvent.GetNoteId().Equals(notesDescriptor.Item1))
                                             return false;
 
                                         var noteOnEvent = noteEvent as NoteOnEvent;

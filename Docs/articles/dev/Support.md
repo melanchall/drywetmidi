@@ -22,5 +22,9 @@ Things to pay attention for are:
     * on GitHub use [Markdown](https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax);
     * on emails use formatting provided by your mail client.
 9. Use the English language.
+10. Provide a short title and put all required info at the description.
 
-Creating an issue or a discussion on the project's GitHub page, be sure to provide a short title and put all required info as the description.
+Examples of good issues:
+
+* [Unity: Editor crash when (dis-)connecting input devices](https://github.com/melanchall/drywetmidi/issues/318)
+* [Playback Loop=True skips empty steps in the end of a Pattern](https://github.com/melanchall/drywetmidi/issues/298)

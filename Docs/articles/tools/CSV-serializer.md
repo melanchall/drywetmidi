@@ -6,7 +6,7 @@ uid: a_csv_serializer
 
 With the [CsvSerializer](xref:Melanchall.DryWetMidi.Tools.CsvSerializer) you can either serialize objects to CSV or deserialize them back from CSV.
 
-In this article the comma (`,`) used as a values delimiter. You can change it with the [Delimiter](xref:Melanchall.DryWetMidi.Tools.CsvSerializationSettings.Delimiter) property of the [CsvSerializationSettings](xref:Melanchall.DryWetMidi.Tools.CsvSerializationSettings).
+In this article the comma (`,`) used as a values delimiter. You can change it with the `Delimiter` property of the [CsvSerializationSettings](xref:Melanchall.DryWetMidi.Tools.CsvSerializationSettings) (for serialization) and [CsvDeserializationSettings](xref:Melanchall.DryWetMidi.Tools.CsvDeserializationSettings) (for deserialization).
 
 ## Example
 
@@ -63,7 +63,7 @@ If `ObjectName` is `"Note"` then `ObjectData` will be in the following format:
 Time,Length,Channel,Note,Velocity,OffVelocity
 ```
 
-where `Time`, `Length`, `Channel`, `Velocity` and `OffVelocity` hold values of the corresponding properties of a [Note](xref:Melanchall.DryWetMidi.Interaction.Note) object. You can change `Time` and `Length` representations via [TimeType](xref:Melanchall.DryWetMidi.Tools.CsvSerializationSettings.TimeType) and [LengthType](xref:Melanchall.DryWetMidi.Tools.CsvSerializationSettings.LengthType) properties of the [CsvSerializationSettings](xref:Melanchall.DryWetMidi.Tools.CsvSerializationSettings) correspondingly. `Note` can be either the note number or letter (_C4_, for example) depending on the [NoteFormat](xref:Melanchall.DryWetMidi.Tools.CsvSerializationSettings.NoteFormat) property value.
+where `Time`, `Length`, `Channel`, `Velocity` and `OffVelocity` hold values of the corresponding properties of a [Note](xref:Melanchall.DryWetMidi.Interaction.Note) object. You can change `Time` and `Length` representations via [TimeType](xref:Melanchall.DryWetMidi.Tools.CsvSerializationSettings.TimeType) and [LengthType](xref:Melanchall.DryWetMidi.Tools.CsvSerializationSettings.LengthType) properties of the [CsvSerializationSettings](xref:Melanchall.DryWetMidi.Tools.CsvSerializationSettings) correspondingly (there are also the same properties in [CsvDeserializationSettings](xref:Melanchall.DryWetMidi.Tools.CsvDeserializationSettings) for deserialization). `Note` can be either the note number or letter (_C4_, for example) depending on the `NoteFormat` property value.
 
 In other cases of `ObjectName` it's assumed that this component represents the [type](xref:Melanchall.DryWetMidi.Core.MidiEvent.EventType) of a MIDI event. For example, you can see `"NoteOn"` or `"SequenceTrackName"` as a value for `ObjectName`. `ObjectData` for such records will be in the following format:
 
@@ -71,7 +71,7 @@ In other cases of `ObjectName` it's assumed that this component represents the [
 Time,EventData
 ```
 
-As for the `Time`, it holds the time of a [TimedEvent](xref:Melanchall.DryWetMidi.Interaction.TimedEvent) object. You can change `Time` representation via the [TimeType](xref:Melanchall.DryWetMidi.Tools.CsvSerializationSettings.TimeType) property of the [CsvSerializationSettings](xref:Melanchall.DryWetMidi.Tools.CsvSerializationSettings). `EventData` depends on the type of an event:
+As for the `Time`, it holds the time of a [TimedEvent](xref:Melanchall.DryWetMidi.Interaction.TimedEvent) object. You can change `Time` representation used for serialization via the [TimeType](xref:Melanchall.DryWetMidi.Tools.CsvSerializationSettings.TimeType) property of the [CsvSerializationSettings](xref:Melanchall.DryWetMidi.Tools.CsvSerializationSettings) (and the same property of the [CsvDeserializationSettings](xref:Melanchall.DryWetMidi.Tools.CsvDeserializationSettings) for deserialization). `EventData` depends on the type of an event:
 
 |ObjectName|EventData|Modifiers|
 |---|---|---|
@@ -115,8 +115,10 @@ As for the `Time`, it holds the time of a [TimedEvent](xref:Melanchall.DryWetMid
 
 where **Modifiers** are:
 
-* **BytesArray** – `Data` property is serialized as `"B1 B2 B3 ..."` with format of bytes depending on the [BytesArrayFormat](xref:Melanchall.DryWetMidi.Tools.CsvSerializationSettings.BytesArrayFormat) property of the [CsvSerializationSettings](xref:Melanchall.DryWetMidi.Tools.CsvSerializationSettings);
-* **Note** – `Note` property is serialized as either the note number or letter (_C4_, for example) depending on the [NoteFormat](xref:Melanchall.DryWetMidi.Tools.CsvSerializationSettings.NoteFormat) property of the [CsvSerializationSettings](xref:Melanchall.DryWetMidi.Tools.CsvSerializationSettings).
+* **BytesArray** – `Data` will be serialized as `"B1 B2 B3 ..."` where format of the string controlled by the `BytesArrayFormat` and `BytesArrayDelimiter` properties of the [CsvSerializationSettings](xref:Melanchall.DryWetMidi.Tools.CsvSerializationSettings) and [CsvDeserializationSettings](xref:Melanchall.DryWetMidi.Tools.CsvDeserializationSettings);
+* **Note** – `Note` property is serialized as either the note number or letter (_C4_, for example) depending on the `NoteFormat` property of the [CsvSerializationSettings](xref:Melanchall.DryWetMidi.Tools.CsvSerializationSettings) and [CsvDeserializationSettings](xref:Melanchall.DryWetMidi.Tools.CsvDeserializationSettings).
+
+By the way, when you're deserializing CSV data, you can set [TimeType](xref:Melanchall.DryWetMidi.Tools.CsvDeserializationSettings.TimeType), [LengthType](xref:Melanchall.DryWetMidi.Tools.CsvDeserializationSettings.LengthType) and [NoteFormat](xref:Melanchall.DryWetMidi.Tools.CsvDeserializationSettings.NoteFormat) properties of the [CsvDeserializationSettings](xref:Melanchall.DryWetMidi.Tools.CsvDeserializationSettings) to `null` to let the library detect formats automatically (which is the default behavior). Of course, you can tell the engine exact formats to simplify its work.
 
 Note that if you deserialize a MIDI file from CSV, you don't need to manually sort records by time in text representation before deserialization. DryWetMIDI will do it for you. So, for example, these lines
 

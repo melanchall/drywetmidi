@@ -190,7 +190,9 @@ namespace Melanchall.DryWetMidi.Multimedia
         #region Properties
 
         /// <summary>
-        /// Gets the tempo map used to calculate events times.
+        /// Gets the tempo map used to calculate events times. You should use this property
+        /// when the current playback has been created from a <see cref="IObservableTimedObjectsCollection"/>
+        /// (more info in the <see href="xref:a_playback_dynamic">Dynamic changes</see> article).
         /// </summary>
         public TempoMap TempoMap { get; }
 
@@ -232,8 +234,28 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// </summary>
         public bool TrackNotes { get; set; } = true;
 
+        /// <summary>
+        /// Gets or sets a value indicating whether to send Note Off events for non-active
+        /// notes (which look redundant) or not. The default value is <c>false</c>.
+        /// </summary>
+        /// <remarks>
+        /// If there is a Note Off event and we are in the point (for example, by jumping with the
+        /// <see cref="MoveToTime(ITimeSpan)"/>) where there is no currently playing note with the
+        /// same note number and channel, the event won't be played when this property set to <c>false</c>
+        /// (which is the default value). To send Note Off event anyway, set this property to <c>true</c>.
+        /// </remarks>
         public bool SendNoteOffEventsForNonActiveNotes { get; set; }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether to send Note On events for active
+        /// notes (which look redundant) or not. The default value is <c>false</c>.
+        /// </summary>
+        /// <remarks>
+        /// If there is a Note On event and we are in the point (for example, by jumping with the
+        /// <see cref="MoveToTime(ITimeSpan)"/>) where there is currently playing note with the
+        /// same note number and channel, the event won't be played when this property set to <c>false</c>
+        /// (which is the default value). To send Note On event anyway, set this property to <c>true</c>.
+        /// </remarks>
         public bool SendNoteOnEventsForActiveNotes { get; set; }
 
         /// <summary>
@@ -693,7 +715,7 @@ namespace Melanchall.DryWetMidi.Multimedia
                 : currentTime - metricStep;
             
             if (time < (MetricTimeSpan)_playbackStartMetric)
-                time = (MetricTimeSpan)_playbackStartMetric;
+                time = _playbackStartMetric;
 
             MoveToTimeInternal(time);
         }
@@ -768,7 +790,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
             var lastPlaybackEvent = maximumNode.Value;
             _duration = lastPlaybackEvent.Time ?? TimeSpan.Zero;
-            _durationInTicks = lastPlaybackEvent?.RawTime ?? 0;
+            _durationInTicks = lastPlaybackEvent.RawTime;
         }
 
         private void UpdatePlaybackEndMetric()
@@ -1114,7 +1136,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
             if (midiEvent != null)
             {
-                var noteId = GetNoteId((NoteEvent)midiEvent);
+                var noteId = ((NoteEvent)midiEvent).GetNoteId();
 
                 if (midiEvent is NoteOnEvent)
                 {

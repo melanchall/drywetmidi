@@ -189,7 +189,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
             ThrowIfArgument.IsNull(nameof(intervalsFromRoot), intervalsFromRoot);
 
             var intervals = IntervalsByQuality[chordQuality];
-            return new Chord(rootNoteName, intervals.Select(i => Interval.FromDefinition(i)).Concat(intervalsFromRoot));
+            return new Chord(rootNoteName, intervals.Select(Interval.FromDefinition).Concat(intervalsFromRoot));
         }
 
         #endregion

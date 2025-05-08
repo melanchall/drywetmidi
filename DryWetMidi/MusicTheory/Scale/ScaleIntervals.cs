@@ -700,7 +700,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
 
         private static IEnumerable<Interval> GetIntervals(params int[] intervalsInHalfSteps)
         {
-            return intervalsInHalfSteps.Select(i => Interval.FromHalfSteps(i)).ToArray();
+            return intervalsInHalfSteps.Select(Interval.FromHalfSteps).ToArray();
         }
 
         #endregion

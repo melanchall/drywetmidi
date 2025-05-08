@@ -23,7 +23,7 @@ namespace Melanchall.DryWetMidi.Composing
     /// by processing existing one.</description>
     /// </item>
     /// </list>
-    /// You can see examples of building musical compositions in <see href="xref:a_composing_pattern"> the corresponding article</see>.
+    /// You can see examples of building musical compositions in <see href="xref:a_composing_pattern">the corresponding article</see>.
     /// </remarks>
     public sealed class Pattern
     {

@@ -1,4 +1,6 @@
-﻿namespace Melanchall.DryWetMidi.Interaction
+﻿using System;
+
+namespace Melanchall.DryWetMidi.Interaction
 {
     /// <summary>
     /// Defines a hint which tells the timed event processing algorithm how it can optimize its performance.
@@ -10,6 +12,7 @@
     /// perform any manipulations with timed events but dedicated methods of the <see cref="TimedEventsManagingUtilities"/> will
     /// always be faster and will consume less memory.
     /// </remarks>
+    [Flags]
     public enum TimedEventProcessingHint
     {
         /// <summary>

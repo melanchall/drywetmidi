@@ -376,7 +376,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 {
                     objectToAdd3,
                 },
-                changedObjects.Select(o => o.TimedObject),
+                changedObjects.Select(o => o.Object),
                 "Invalid changed objects.");
 
             var changedObject = changedObjects.Single();
@@ -384,7 +384,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 new Chord(
                     new Note((SevenBitNumber)70, 20, 100) { Velocity = (SevenBitNumber)50 },
                     new Note((SevenBitNumber)60, 20, 101)),
-                changedObject.TimedObject,
+                changedObject.Object,
                 "Invalid changed object.");
             ClassicAssert.AreEqual(23, changedObject.OldTime, "Invalid old time of changed object.");
         }
@@ -569,12 +569,12 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             CheckCollectionIsNullOrEmpty(eventArgs.AddedObjects, "There are added objects.");
 
             var changedObjects = eventArgs.ChangedObjects;
-            CollectionAssert.AreEqual(new[] { objectToChange }, changedObjects.Select(o => o.TimedObject), "Invalid changed objects.");
+            CollectionAssert.AreEqual(new[] { objectToChange }, changedObjects.Select(o => o.Object), "Invalid changed objects.");
 
             var changedObject = eventArgs.ChangedObjects.Single();
             MidiAsserts.AreEqual(
                 new TimedEvent(new TextEvent("ABC"), 30),
-                changedObject.TimedObject,
+                changedObject.Object,
                 "Invalid changed object");
             ClassicAssert.AreEqual(15, changedObject.OldTime, "Invalid old time of changed object.");
         }
@@ -610,12 +610,12 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             CheckCollectionIsNullOrEmpty(eventArgs.AddedObjects, "There are added objects.");
 
             var changedObjects = eventArgs.ChangedObjects;
-            CollectionAssert.AreEqual(new[] { objectToChange }, changedObjects.Select(o => o.TimedObject), "Invalid changed objects.");
+            CollectionAssert.AreEqual(new[] { objectToChange }, changedObjects.Select(o => o.Object), "Invalid changed objects.");
 
             var changedObject = eventArgs.ChangedObjects.Single();
             MidiAsserts.AreEqual(
                 new TimedEvent(new TextEvent("C"), 20),
-                changedObject.TimedObject,
+                changedObject.Object,
                 "Invalid changed object");
             ClassicAssert.AreEqual(15, changedObject.OldTime, "Invalid old time of changed object.");
         }
@@ -673,9 +673,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     CheckCollectionIsNullOrEmpty(eventArgs?.RemovedObjects, "There are removed objects.");
 
                     var changedObjects = eventArgs.ChangedObjects;
-                    CollectionAssert.AreEqual(updatedObjects, changedObjects.Select(o => o.TimedObject), "Invalid changed objects.");
+                    CollectionAssert.AreEqual(updatedObjects, changedObjects.Select(o => o.Object), "Invalid changed objects.");
                     CollectionAssert.AreEqual(updatedObjects, oldTimes.Keys, "Invalid changed objects via old timed map.");
-                    MidiAsserts.AreEqual(updatedObjectsWithNewValues, changedObjects.Select(obj => obj.TimedObject).ToArray(), "Invalid changed objects via new-values objects.");
+                    MidiAsserts.AreEqual(updatedObjectsWithNewValues, changedObjects.Select(obj => obj.Object).ToArray(), "Invalid changed objects via new-values objects.");
 
                     var changedObjectsOldTimes = changedObjects.Select(obj => obj.OldTime).ToArray();
                     ClassicAssert.AreEqual(changedObjects.Count, changedObjectsOldTimes.Length, "Invalid changed objects old times count.");

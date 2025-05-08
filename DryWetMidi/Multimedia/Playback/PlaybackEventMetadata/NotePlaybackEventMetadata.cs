@@ -14,7 +14,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             PlaybackTime endTime)
         {
             RawNote = note;
-            RawNoteId = new NoteId(note.Channel, note.NoteNumber);
+            RawNoteId = note.GetNoteId();
             StartTime = startTime;
             EndTime = endTime;
 

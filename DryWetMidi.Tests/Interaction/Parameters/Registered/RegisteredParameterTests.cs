@@ -4,7 +4,6 @@ using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
 using Melanchall.DryWetMidi.Tests.Utilities;
-using NUnit.Framework;
 using NUnit.Framework.Legacy;
 
 namespace Melanchall.DryWetMidi.Tests.Interaction
@@ -28,10 +27,11 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             ClassicAssert.IsTrue(midiEvents.All(e => e.EventType == MidiEventType.ControlChange), "Some events have not Control Change type.");
             ClassicAssert.IsTrue(midiEvents.All(e => e is ControlChangeEvent), "Some events are not Control Change ones.");
 
-            ClassicAssert.That(
+            MidiAsserts.AreEqual(
+                expectedEvents.Select(e => new ControlChangeEvent((SevenBitNumber)e.ControlNumber, (SevenBitNumber)e.ControlValue) { Channel = registeredParameter.Channel }).ToArray(),
                 midiEvents,
-                Is.EqualTo(expectedEvents.Select(e => new ControlChangeEvent((SevenBitNumber)e.ControlNumber, (SevenBitNumber)e.ControlValue) { Channel = registeredParameter.Channel })).Using(new MidiEventEqualityComparer()),
-                "Events are invalid.");
+                true,
+                "Invalid events.");
         }
 
         #endregion

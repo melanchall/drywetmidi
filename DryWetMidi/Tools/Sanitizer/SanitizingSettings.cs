@@ -54,7 +54,6 @@ namespace Melanchall.DryWetMidi.Tools
         /// </summary>
         public bool RemoveEmptyTrackChunks { get; set; } = true;
 
-        // TODO: fix docs and links
         /// <summary>
         /// Gets or sets a value indicating how Note On (see <see cref="NoteOnEvent"/>) events without
         /// corresponding Note Off ones should be handled. The default value is <see cref="OrphanedNoteOnEventsPolicy.Remove"/>.
@@ -73,7 +72,14 @@ namespace Melanchall.DryWetMidi.Tools
             }
         }
 
-        public ITimeSpan NoteMaxLengthForOrphanedNoteOnEvent { get; set; }
+        /// <summary>
+        /// Gets or sets a maximum length for a new note restored by an orphaned Note On event.
+        /// This property is used only when <see cref="OrphanedNoteOnEventsPolicy"/> is set to
+        /// <see cref="OrphanedNoteOnEventsPolicy.CompleteNote"/>. The default value is 1/4 (<see cref="MusicalTimeSpan.Quarter"/>).
+        /// More info in the <see href="xref:a_sanitizer#orphanednoteoneventspolicy">Sanitizer: OrphanedNoteOnEventsPolicy</see>
+        /// article.
+        /// </summary>
+        public ITimeSpan NoteMaxLengthForOrphanedNoteOnEvent { get; set; } = MusicalTimeSpan.Quarter;
 
         /// <summary>
         /// Gets or sets a value indicating whether Note Off (see <see cref="NoteOffEvent"/>) events without
@@ -113,13 +119,18 @@ namespace Melanchall.DryWetMidi.Tools
         public bool RemoveDuplicatedSequenceTrackNameEvents { get; set; } = true;
 
         /// <summary>
+        /// Gets or sets a value indicating whether duplicated Control Change (see <see cref="ControlChangeEvent"/>)
+        /// events should be removed or not. The default value is <c>true</c>. More info in the
+        /// <see href="xref:a_sanitizer#removeduplicatedcontrolchangeevents">Sanitizer: RemoveDuplicatedControlChangeEvents</see> article.
+        /// </summary>
+        public bool RemoveDuplicatedControlChangeEvents { get; set; } = true;
+
+        /// <summary>
         /// Gets or sets a value indicating whether events on unused channels should be removed or not.
         /// Unused channel means there are no notes on this channel. The default value is <c>true</c>.
         /// More info in the <see href="xref:a_sanitizer#removeeventsonunusedchannels">Sanitizer: RemoveEventsOnUnusedChannels</see> article.
         /// </summary>
         public bool RemoveEventsOnUnusedChannels { get; set; } = true;
-
-        public bool RemoveDuplicatedControlChangeEvents { get; set; } = true;
 
         /// <summary>
         /// Gets or sets a value indicating whether a silence at the start of a MIDI file should be

@@ -6,11 +6,14 @@
 
 DryWetMIDI is the .NET library to work with MIDI data and MIDI devices. It allows:
 
-* Read, write and create [Standard MIDI Files (SMF)](https://midi.org/standard-midi-files-specification). It is also possible to read [RMID](https://www.loc.gov/preservation/digital/formats/fdd/fdd000120.shtml) files where SMF wrapped to RIFF chunk. You can easily catch specific error when reading or writing MIDI file since all possible errors in a MIDI file are presented as separate exception classes.
-* [Send](https://melanchall.github.io/drywetmidi/articles/devices/Output-device.html) MIDI events to/[receive](https://melanchall.github.io/drywetmidi/articles/devices/Input-device.html) them from MIDI devices, [play](https://melanchall.github.io/drywetmidi/articles/playback/Overview.html) MIDI data and [record](https://melanchall.github.io/drywetmidi/articles/recording/Overview.html) it. This APIs support Windows and macOS.
-* Finely adjust process of reading and writing. It allows, for example, to read corrupted files and repair them, or build MIDI file validators.
-* Implement [custom meta events](https://melanchall.github.io/drywetmidi/articles/custom-data-structures/Custom-meta-events.html) and [custom chunks](https://melanchall.github.io/drywetmidi/articles/custom-data-structures/Custom-chunks.html) that can be written to and read from MIDI files.
-* Manage content of a MIDI file either with low-level objects, like event, or high-level ones, like note (read the **High-level data managing** section of the [library docs](https://melanchall.github.io/drywetmidi)).
+* Read, write and create [Standard MIDI Files (SMF)](https://midi.org/standard-midi-files-specification). It is also possible to:  
+  * read [RMID](https://www.loc.gov/preservation/digital/formats/fdd/fdd000120.shtml) files where SMF wrapped to RIFF chunk;
+  * easily catch specific error when reading or writing a MIDI file since all possible errors in a file are presented as separate exception classes;
+  * finely adjust the process of reading and writing (it allows, for example, to read corrupted files and repair them, or build MIDI file validators);
+  * implement [custom meta events](https://melanchall.github.io/drywetmidi/articles/custom-data-structures/Custom-meta-events.html) and [custom chunks](https://melanchall.github.io/drywetmidi/articles/custom-data-structures/Custom-chunks.html) that can be written to and read from MIDI files.
+* [Send](https://melanchall.github.io/drywetmidi/articles/devices/Output-device.html) MIDI events to/[receive](https://melanchall.github.io/drywetmidi/articles/devices/Input-device.html) them from MIDI devices.
+* [Play](https://melanchall.github.io/drywetmidi/articles/playback/Overview.html) MIDI data and [record](https://melanchall.github.io/drywetmidi/articles/recording/Overview.html) it.
+* Manage MIDI data either with low-level objects, like a MIDI event, or high-level ones, like a note, using different time and length representations (read the **High-level data managing** section of the [library docs](https://melanchall.github.io/drywetmidi)).
 * Build musical compositions (see [Pattern](https://melanchall.github.io/drywetmidi/articles/composing/Pattern.html) page of the library docs) and use music theory API (see [Music Theory - Overview](https://melanchall.github.io/drywetmidi/articles/music-theory/Overview.html) article).
 * Perform complex tasks like quantizing, notes splitting or converting MIDI file to CSV representation (see [Tools](https://melanchall.github.io/drywetmidi/articles/tools/Overview.html) page of the library docs).
 
@@ -42,13 +45,13 @@ Here the list of noticeable projects that use DryWetMIDI:
 * [Rustissimo](https://store.steampowered.com/app/1222580/Rustissimo)  
   Using Rustissimo you can create a concert with your friends and play instruments with synchronization.
 
-If you find that DryWetMIDI has been useful for your project, please put a link to the library in your project's About section or something like that.
+If you find that DryWetMIDI has been useful for your project, please put a link to the library in your project's _About_ section or something like that.
 
 ## Getting Started
 
-Let's see some examples of what you can do with DryWetMIDI. Also you can check out sample applications from [CIRCE-EYES](https://github.com/CIRCE-EYES) (see the profile, VB.NET used).
+Let's see some examples of what you can do with DryWetMIDI (also you can check out sample applications from [CIRCE-EYES](https://github.com/CIRCE-EYES) (see the profile, VB.NET used)).
 
-To [read a MIDI file](https://melanchall.github.io/drywetmidi/articles/file-reading-writing/MIDI-file-reading.html) you have to use ```Read``` static method of the ```MidiFile```:
+To [read a MIDI file](https://melanchall.github.io/drywetmidi/articles/file-reading-writing/MIDI-file-reading.html) you have to use the `Read` static method of the `MidiFile`:
 
 ```csharp
 var midiFile = MidiFile.Read("Some Great Song.mid");
@@ -69,7 +72,7 @@ var midiFile = MidiFile.Read(
     });
 ```
 
-To [write MIDI data to a file](https://melanchall.github.io/drywetmidi/articles/file-reading-writing/MIDI-file-writing.html) you have to use ```Write``` method of the ```MidiFile```:
+To [write MIDI data to a file](https://melanchall.github.io/drywetmidi/articles/file-reading-writing/MIDI-file-writing.html) you have to use the `Write` method of the `MidiFile`:
 
 ```csharp
 midiFile.Write("My Great Song.mid");
@@ -89,7 +92,7 @@ midiFile.Write(
     });
 ```
 
-Of course you can create a MIDI file from scratch by creating an instance of the ```MidiFile``` and writing it:
+Of course you can create a MIDI file from scratch by creating an instance of the `MidiFile` and writing it:
 
 ```csharp
 var midiFile = new MidiFile(
@@ -141,7 +144,7 @@ foreach (var trackChunk in midiFile.Chunks.OfType<TrackChunk>())
 }
 ```
 
-Of course this code is simplified. In practice a MIDI file may not contain SetTempo event which means it has the default one (500,000 microseconds per beat).
+Of course this code is simplified. In practice a MIDI file may not contain SetTempo event which means it has the default one (`500000` microseconds per beat).
 
 Instead of modifying a MIDI file you can use [`Playback`](https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Multimedia.Playback.html) class:
 
@@ -154,7 +157,7 @@ using (var playback = midiFile.GetPlayback(outputDevice))
 }
 ```
 
-To get duration of a MIDI file as `TimeSpan` use this code:
+To get duration of a MIDI file as standard `TimeSpan` use this code:
 
 ```csharp
 TempoMap tempoMap = midiFile.GetTempoMap();
@@ -170,7 +173,7 @@ or simply:
 TimeSpan midiFileDuration = midiFile.GetDuration<MetricTimeSpan>();
 ```
 
-Suppose you want to remove all C# notes from a MIDI file. It can be done with this code:
+Suppose you want to remove all _C#_ notes from a MIDI file. It can be done with this code:
 
 ```csharp
 foreach (var trackChunk in midiFile.GetTrackChunks())
