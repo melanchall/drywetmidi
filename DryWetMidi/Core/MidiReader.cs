@@ -104,7 +104,7 @@ namespace Melanchall.DryWetMidi.Core
         /// <summary>
         /// Gets length of the underlying stream.
         /// </summary>
-        public long Length { get; }
+        public long Length { get; internal set; }
 
         /// <summary>
         /// Gets a value indicating whether end of the underlying stream is reached.
