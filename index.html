@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <!--[if IE]><![endif]-->
 <html>
 
@@ -63,7 +63,7 @@
           <div class="sr-items">
             <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
           </div>
-          <ul id="pagination" data-first="First" data-prev="Previous" data-next="Next" data-last="Last"></ul>
+          <ul id="pagination" data-first=First data-prev=Previous data-next=Next data-last=Last></ul>
         </div>
       </div>
       <div role="main" class="container body-content hide-when-search">
@@ -76,11 +76,17 @@
 <h1 id="overview">Overview</h1>
 <p>DryWetMIDI is the .NET library to work with MIDI data and MIDI devices. It allows:</p>
 <ul>
-<li>Read, write and create <a href="https://midi.org/standard-midi-files-specification">Standard MIDI Files (SMF)</a>. It is also possible to read <a href="https://www.loc.gov/preservation/digital/formats/fdd/fdd000120.shtml">RMID</a> files where SMF wrapped to RIFF chunk. You can easily catch specific error when reading or writing MIDI file since all possible errors in a MIDI file are presented as separate exception classes.</li>
-<li><a href="https://melanchall.github.io/drywetmidi/articles/devices/Output-device.html">Send</a> MIDI events to/<a href="https://melanchall.github.io/drywetmidi/articles/devices/Input-device.html">receive</a> them from MIDI devices, <a href="https://melanchall.github.io/drywetmidi/articles/playback/Overview.html">play</a> MIDI data and <a href="https://melanchall.github.io/drywetmidi/articles/recording/Overview.html">record</a> it. This APIs support Windows and macOS.</li>
-<li>Finely adjust process of reading and writing. It allows, for example, to read corrupted files and repair them, or build MIDI file validators.</li>
-<li>Implement <a href="https://melanchall.github.io/drywetmidi/articles/custom-data-structures/Custom-meta-events.html">custom meta events</a> and <a href="https://melanchall.github.io/drywetmidi/articles/custom-data-structures/Custom-chunks.html">custom chunks</a> that can be written to and read from MIDI files.</li>
-<li>Manage content of a MIDI file either with low-level objects, like event, or high-level ones, like note (read the <strong>High-level data managing</strong> section of the <a href="https://melanchall.github.io/drywetmidi">library docs</a>).</li>
+<li>Read, write and create <a href="https://midi.org/standard-midi-files-specification">Standard MIDI Files (SMF)</a>. It is also possible to:
+<ul>
+<li>read <a href="https://www.loc.gov/preservation/digital/formats/fdd/fdd000120.shtml">RMID</a> files where SMF wrapped to RIFF chunk;</li>
+<li>easily catch specific error when reading or writing a MIDI file since all possible errors in a file are presented as separate exception classes;</li>
+<li>finely adjust the process of reading and writing (it allows, for example, to read corrupted files and repair them, or build MIDI file validators);</li>
+<li>implement <a href="https://melanchall.github.io/drywetmidi/articles/custom-data-structures/Custom-meta-events.html">custom meta events</a> and <a href="https://melanchall.github.io/drywetmidi/articles/custom-data-structures/Custom-chunks.html">custom chunks</a> that can be written to and read from MIDI files.</li>
+</ul>
+</li>
+<li><a href="https://melanchall.github.io/drywetmidi/articles/devices/Output-device.html">Send</a> MIDI events to/<a href="https://melanchall.github.io/drywetmidi/articles/devices/Input-device.html">receive</a> them from MIDI devices.</li>
+<li><a href="https://melanchall.github.io/drywetmidi/articles/playback/Overview.html">Play</a> MIDI data and <a href="https://melanchall.github.io/drywetmidi/articles/recording/Overview.html">record</a> it.</li>
+<li>Manage MIDI data either with low-level objects, like a MIDI event, or high-level ones, like a note, using different time and length representations (read the <strong>High-level data managing</strong> section of the <a href="https://melanchall.github.io/drywetmidi">library docs</a>).</li>
 <li>Build musical compositions (see <a href="https://melanchall.github.io/drywetmidi/articles/composing/Pattern.html">Pattern</a> page of the library docs) and use music theory API (see <a href="https://melanchall.github.io/drywetmidi/articles/music-theory/Overview.html">Music Theory - Overview</a> article).</li>
 <li>Perform complex tasks like quantizing, notes splitting or converting MIDI file to CSV representation (see <a href="https://melanchall.github.io/drywetmidi/articles/tools/Overview.html">Tools</a> page of the library docs).</li>
 </ul>
@@ -91,16 +97,9 @@ If you want to create an issue or a discussion, read this article first – <a h
 </blockquote>
 <h2 id="useful-links">Useful Links</h2>
 <ul>
-<li><a href="https://www.nuget.org/packages/Melanchall.DryWetMidi">NuGet</a></li>
 <li><a href="https://melanchall.github.io/drywetmidi">Documentation</a></li>
+<li><a href="https://www.nuget.org/packages/Melanchall.DryWetMidi">NuGet</a></li>
 <li><a href="https://melanchall.github.io/drywetmidi/articles/dev/Project-health.html">Project health</a></li>
-<li>CodeProject articles:
-<ul>
-<li><a href="https://www.codeproject.com/Articles/1200014/DryWetMIDI-High-level-processing-of-MIDI-files">DryWetMIDI: High-Level Processing of MIDI Files</a></li>
-<li><a href="https://www.codeproject.com/Articles/1204629/DryWetMIDI-Notes-Quantization">DryWetMIDI: Notes Quantization</a></li>
-<li><a href="https://www.codeproject.com/Articles/1275475/DryWetMIDI-Working-with-MIDI-Devices">DryWetMIDI: Working with MIDI Devices</a></li>
-</ul>
-</li>
 </ul>
 <h2 id="projects-using-drywetmidi">Projects using DryWetMIDI</h2>
 <p>Here the list of noticeable projects that use DryWetMIDI:</p>
@@ -118,10 +117,10 @@ A collection of virtual musical instruments that features real MIDI output.</li>
 <li><a href="https://store.steampowered.com/app/1222580/Rustissimo">Rustissimo</a><br>
 Using Rustissimo you can create a concert with your friends and play instruments with synchronization.</li>
 </ul>
-<p>If you find that DryWetMIDI has been useful for your project, please put a link to the library in your project's About section or something like that.</p>
+<p>If you find that DryWetMIDI has been useful for your project, please put a link to the library in your project's <em>About</em> section or something like that.</p>
 <h2 id="getting-started">Getting Started</h2>
-<p>Let's see some examples of what you can do with DryWetMIDI. Also you can check out sample applications from <a href="https://github.com/CIRCE-EYES">CIRCE-EYES</a> (see the profile, VB.NET used).</p>
-<p>To <a href="https://melanchall.github.io/drywetmidi/articles/file-reading-writing/MIDI-file-reading.html">read a MIDI file</a> you have to use <code>Read</code> static method of the <code>MidiFile</code>:</p>
+<p>Let's see some examples of what you can do with DryWetMIDI (also you can check out sample applications from <a href="https://github.com/CIRCE-EYES">CIRCE-EYES</a> (see the profile, VB.NET used)).</p>
+<p>To <a href="https://melanchall.github.io/drywetmidi/articles/file-reading-writing/MIDI-file-reading.html">read a MIDI file</a> you have to use the <code>Read</code> static method of the <code>MidiFile</code>:</p>
 <pre><code class="lang-csharp">var midiFile = MidiFile.Read(&quot;Some Great Song.mid&quot;);
 </code></pre>
 <p>or, in more advanced form (visit <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Core.ReadingSettings.html">Reading settings</a> page on the library docs to learn more about how to adjust process of reading)</p>
@@ -136,7 +135,7 @@ Using Rustissimo you can create a concert with your friends and play instruments
         }
     });
 </code></pre>
-<p>To <a href="https://melanchall.github.io/drywetmidi/articles/file-reading-writing/MIDI-file-writing.html">write MIDI data to a file</a> you have to use <code>Write</code> method of the <code>MidiFile</code>:</p>
+<p>To <a href="https://melanchall.github.io/drywetmidi/articles/file-reading-writing/MIDI-file-writing.html">write MIDI data to a file</a> you have to use the <code>Write</code> method of the <code>MidiFile</code>:</p>
 <pre><code class="lang-csharp">midiFile.Write(&quot;My Great Song.mid&quot;);
 </code></pre>
 <p>or, in more advanced form (visit <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Core.WritingSettings.html">Writing settings</a> page on the library docs to learn more about how to adjust process of writing)</p>
@@ -193,7 +192,7 @@ midiFile.Write(&quot;My Future Great Song.mid&quot;);
     }
 }
 </code></pre>
-<p>Of course this code is simplified. In practice a MIDI file may not contain SetTempo event which means it has the default one (500,000 microseconds per beat).</p>
+<p>Of course this code is simplified. In practice a MIDI file may not contain SetTempo event which means it has the default one (<code>500000</code> microseconds per beat).</p>
 <p>Instead of modifying a MIDI file you can use <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Multimedia.Playback.html"><code>Playback</code></a> class:</p>
 <pre><code class="lang-csharp">using (var outputDevice = OutputDevice.GetByName(&quot;Microsoft GS Wavetable Synth&quot;))
 using (var playback = midiFile.GetPlayback(outputDevice))
@@ -202,7 +201,7 @@ using (var playback = midiFile.GetPlayback(outputDevice))
     playback.Play();
 }
 </code></pre>
-<p>To get duration of a MIDI file as <code>TimeSpan</code> use this code:</p>
+<p>To get duration of a MIDI file as standard <code>TimeSpan</code> use this code:</p>
 <pre><code class="lang-csharp">TempoMap tempoMap = midiFile.GetTempoMap();
 TimeSpan midiFileDuration = midiFile
     .GetTimedEvents()
@@ -212,7 +211,7 @@ TimeSpan midiFileDuration = midiFile
 <p>or simply:</p>
 <pre><code class="lang-csharp">TimeSpan midiFileDuration = midiFile.GetDuration&lt;MetricTimeSpan&gt;();
 </code></pre>
-<p>Suppose you want to remove all C# notes from a MIDI file. It can be done with this code:</p>
+<p>Suppose you want to remove all <em>C#</em> notes from a MIDI file. It can be done with this code:</p>
 <pre><code class="lang-csharp">foreach (var trackChunk in midiFile.GetTrackChunks())
 {
     using (var notesManager = trackChunk.ManageNotes())
@@ -316,11 +315,6 @@ private void OnEventSent(object sender, MidiEventSentEventArgs e)
     Console.WriteLine($&quot;Event sent to '{midiDevice.Name}' at {DateTime.Now}: {e.Event}&quot;);
 }
 </code></pre>
-<h2 id="sast-tools">SAST Tools</h2>
-<ul>
-<li><a href="https://jb.gg/OpenSourceSupport">JetBrains All Products Pack</a> – all JetBrains desktop tools by open source license.</li>
-<li><a href="https://pvs-studio.com/en/pvs-studio/?utm_source=website&amp;utm_medium=github&amp;utm_campaign=open_source">PVS-Studio</a> – static analyzer for C, C++, C#, and Java code.</li>
-</ul>
 
 </article>
           </div>
@@ -343,7 +337,7 @@ private void OnEventSent(object sender, MidiEventSentEventArgs e)
             <span class="pull-right">
               <a href="#top">Back to top</a>
             </span>
-      2024 / Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
+      2025 / Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
       
           </div>
         </div>

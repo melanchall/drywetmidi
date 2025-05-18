@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <!--[if IE]><![endif]-->
 <html>
 
@@ -63,7 +63,7 @@
           <div class="sr-items">
             <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
           </div>
-          <ul id="pagination" data-first="First" data-prev="Previous" data-next="Next" data-last="Last"></ul>
+          <ul id="pagination" data-first=First data-prev=Previous data-next=Next data-last=Last></ul>
         </div>
       </div>
       <div role="main" class="container body-content hide-when-search">
@@ -117,12 +117,12 @@
 <h3 id="removeduplicatednotes">RemoveDuplicatedNotes</h3>
 <p><a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.SanitizingSettings.html#Melanchall_DryWetMidi_Tools_SanitizingSettings_RemoveDuplicatedNotes">RemoveDuplicatedNotes</a> property of the <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.SanitizingSettings.html">SanitizingSettings</a> determines whether duplicated notes should be removed or not. The default value is <code>true</code>.</p>
 <p>Notes are considered duplicated when they are meet all the following conditions:</p>
-<ol>
-<li>the same note number;</li>
-<li>the same channel;</li>
-<li>the same time;</li>
-<li>the same length.</li>
-</ol>
+<ul>
+<li>same note number;</li>
+<li>same channel;</li>
+<li>same time;</li>
+<li>same length.</li>
+</ul>
 <p>For example, if we have such a file with two notes (with number of <code>70</code> and length of <code>20</code>):</p>
 <pre><code class="lang-csharp">var midiFile = new MidiFile(
     new TrackChunk(
@@ -136,18 +136,23 @@
 </code></pre>
 <h3 id="removeemptytrackchunks">RemoveEmptyTrackChunks</h3>
 <p><a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.SanitizingSettings.html#Melanchall_DryWetMidi_Tools_SanitizingSettings_RemoveEmptyTrackChunks">RemoveEmptyTrackChunks</a> property determines whether track chunks without MIDI events should be removed or not.</p>
-<h3 id="removeorphanednoteonevents">RemoveOrphanedNoteOnEvents</h3>
-<p>In some MIDI files you can encounter <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.NoteOnEvent.html">Note On</a> events without corresponding <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.NoteOffEvent.html">Note Off</a> ones. For example, in this example we're creating a file with the first event is an orphaned <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.NoteOnEvent.html">Note On</a> one:</p>
+<h3 id="orphanednoteoneventspolicy">OrphanedNoteOnEventsPolicy</h3>
+<p>In some MIDI files you can encounter <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.NoteOnEvent.html">Note On</a> events without corresponding <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.NoteOffEvent.html">Note Off</a> ones. For example, here we're creating a file with the first event is an orphaned <em>Note On</em> one:</p>
 <pre><code class="lang-csharp">var midiFile = new MidiFile(
     new TrackChunk(
         new NoteOnEvent(),
         new TextEvent(&quot;A&quot;)));
 </code></pre>
 <p>Of course how notes are detected is controlled by the <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.SanitizingSettings.html#Melanchall_DryWetMidi_Tools_SanitizingSettings_NoteDetectionSettings">NoteDetectionSettings</a> property. As stated above you can read more about the <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.NoteDetectionSettings.html">NoteDetectionSettings</a> class in the <a class="xref" href="../high-level-managing/Getting-objects.html#settings">Getting objects: GetNotes: Settings</a> article.</p>
-<p><a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.Sanitizer.html">Sanitizer</a> allows to remove such orphaned <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.NoteOnEvent.html">Note On</a> events with the <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.SanitizingSettings.html#Melanchall_DryWetMidi_Tools_SanitizingSettings_RemoveOrphanedNoteOnEvents">RemoveOrphanedNoteOnEvents</a> property:</p>
-<p><img src="images/Sanitizer/RemoveOrphanedNoteOnEvents.png" alt="SanitizingSettings.RemoveOrphanedNoteOnEvents"></p>
+<p><a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.Sanitizer.html">Sanitizer</a> allows to handle such orphaned <em>Note On</em> events in different ways with the <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.SanitizingSettings.html#Melanchall_DryWetMidi_Tools_SanitizingSettings_OrphanedNoteOnEventsPolicy">OrphanedNoteOnEventsPolicy</a> property.</p>
+<p>Following image shows how <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.OrphanedNoteOnEventsPolicy.html#Melanchall_DryWetMidi_Tools_OrphanedNoteOnEventsPolicy_Remove">OrphanedNoteOnEventsPolicy.Remove</a> option (which is the default one) works:</p>
+<p><img src="images/Sanitizer/OrphanedNoteOnEvents_Remove.png" alt="SanitizingSettings.OrphanedNoteOnEventsPolicy.Remove"></p>
+<p>But what if such orphaned Note On events are just a result of corresponding Note Off ones were lost for some reason? You'll probably want to restore notes. In this case you can use <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.OrphanedNoteOnEventsPolicy.html#Melanchall_DryWetMidi_Tools_OrphanedNoteOnEventsPolicy_CompleteNote">OrphanedNoteOnEventsPolicy.CompleteNote</a> option. It will add a <em>Note Off</em> event for each orphaned <em>Note On</em> one. The length of the note is controlled by the <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.SanitizingSettings.html#Melanchall_DryWetMidi_Tools_SanitizingSettings_NoteMaxLengthForOrphanedNoteOnEvent">NoteMaxLengthForOrphanedNoteOnEvent</a> property. Please see the image below which describes the process:</p>
+<p><img src="images/Sanitizer/OrphanedNoteOnEvents_CompleteNote.png" alt="SanitizingSettings.OrphanedNoteOnEventsPolicy.CompleteNote"></p>
+<p>As you can see from the name of the property, it's the <strong>maximum</strong> length of a note. If Note On event with the same channel and note number is encountered during the new note, the note's length will be reduced so its end will be at the start of a next note:</p>
+<p><img src="images/Sanitizer/NoteMaxLengthForOrphanedNoteOnEvent.png" alt="SanitizingSettings.NoteMaxLengthForOrphanedNoteOnEvent"></p>
 <h3 id="removeorphanednoteoffevents">RemoveOrphanedNoteOffEvents</h3>
-<p>Obviously <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.NoteOffEvent.html">Note Off</a> events can be orphaned too (see <a href="#removeorphanednoteonevents">RemoveOrphanedNoteOnEvents</a> above) and you can remove such events too using the <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.SanitizingSettings.html#Melanchall_DryWetMidi_Tools_SanitizingSettings_RemoveOrphanedNoteOffEvents">RemoveOrphanedNoteOffEvents</a> property:</p>
+<p>Obviously <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.NoteOffEvent.html">Note Off</a> events can be orphaned too (see <a href="#orphanednoteoneventspolicy">OrphanedNoteOnEventsPolicy</a> above) and you can remove such events too using the <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.SanitizingSettings.html#Melanchall_DryWetMidi_Tools_SanitizingSettings_RemoveOrphanedNoteOffEvents">RemoveOrphanedNoteOffEvents</a> property:</p>
 <p><img src="images/Sanitizer/RemoveOrphanedNoteOffEvents.png" alt="SanitizingSettings.RemoveOrphanedNoteOffEvents"></p>
 <h3 id="removeduplicatedsettempoevents">RemoveDuplicatedSetTempoEvents</h3>
 <p>If we create a MIDI file like that:</p>
@@ -172,12 +177,34 @@
 </code></pre>
 <p><a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.SanitizingSettings.html#Melanchall_DryWetMidi_Tools_SanitizingSettings_RemoveDuplicatedSetTempoEvents">RemoveDuplicatedSetTempoEvents</a> property allows to remove redundant <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.SetTempoEvent.html">Set Tempo</a> events:</p>
 <p><img src="images/Sanitizer/RemoveDuplicatedSetTempoEvents.png" alt="SanitizingSettings.RemoveDuplicatedSetTempoEvents"></p>
+<p>So <em>Set Tempo</em> events are considered duplicated when they are have the same microseconds per quarter note value.</p>
 <h3 id="removeduplicatedtimesignatureevents">RemoveDuplicatedTimeSignatureEvents</h3>
 <p><a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.SanitizingSettings.html#Melanchall_DryWetMidi_Tools_SanitizingSettings_RemoveDuplicatedTimeSignatureEvents">RemoveDuplicatedTimeSignatureEvents</a> does the same actions as the <a href="#removeduplicatedsettempoevents">RemoveDuplicatedSetTempoEvents</a> one but for duplicated <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.TimeSignatureEvent.html">Time Signature</a> events.</p>
+<p><em>Time Signature</em> events are considered duplicated when they are meet all the following conditions:</p>
+<ul>
+<li>same numerator;</li>
+<li>same denominator;</li>
+<li>same clock ticks per click;</li>
+<li>same thirty-second notes per beat.</li>
+</ul>
 <h3 id="removeduplicatedpitchbendevents">RemoveDuplicatedPitchBendEvents</h3>
 <p><a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.SanitizingSettings.html#Melanchall_DryWetMidi_Tools_SanitizingSettings_RemoveDuplicatedPitchBendEvents">RemoveDuplicatedPitchBendEvents</a> does the same actions as the <a href="#removeduplicatedsettempoevents">RemoveDuplicatedSetTempoEvents</a> or <a href="#removeduplicatedtimesignatureevents">RemoveDuplicatedTimeSignatureEvents</a> one but for duplicated <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.PitchBendEvent.html">Pitch Bend</a> events.</p>
+<p><em>Pitch Bend</em> events are considered duplicated when they are meet all the following conditions:</p>
+<ul>
+<li>same pitch value;</li>
+<li>same channel.</li>
+</ul>
 <h3 id="removeduplicatedsequencetracknameevents">RemoveDuplicatedSequenceTrackNameEvents</h3>
 <p><a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.SanitizingSettings.html#Melanchall_DryWetMidi_Tools_SanitizingSettings_RemoveDuplicatedSequenceTrackNameEvents">RemoveDuplicatedSequenceTrackNameEvents</a> does the same actions as the <a href="#removeduplicatedsettempoevents">RemoveDuplicatedSetTempoEvents</a> or <a href="#removeduplicatedtimesignatureevents">RemoveDuplicatedTimeSignatureEvents</a> one but for duplicated <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.SequenceTrackNameEvent.html">Sequence/Track Name</a> events.</p>
+<p><em>Sequence/Track Name</em> events are considered duplicated when they have the same text.</p>
+<h3 id="removeduplicatedcontrolchangeevents">RemoveDuplicatedControlChangeEvents</h3>
+<p><a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.SanitizingSettings.html#Melanchall_DryWetMidi_Tools_SanitizingSettings_RemoveDuplicatedControlChangeEvents">RemoveDuplicatedControlChangeEvents</a> does the same actions as the <a href="#removeduplicatedsettempoevents">RemoveDuplicatedSetTempoEvents</a> or <a href="#removeduplicatedtimesignatureevents">RemoveDuplicatedTimeSignatureEvents</a> one but for duplicated <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.ControlChangeEvent.html">Control Change</a> events.</p>
+<p><em>Control Change</em> events are considered duplicated when they are meet all the following conditions:</p>
+<ul>
+<li>same control number;</li>
+<li>same control value;</li>
+<li>same channel.</li>
+</ul>
 <h3 id="removeeventsonunusedchannels">RemoveEventsOnUnusedChannels</h3>
 <p>If a MIDI file doesn't contain notes on some channel, we can safely remove all events on that channel. For example, the <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.ControlChangeEvent.html">Control Change</a> event on channel <code>2</code> in the following example is redundant:</p>
 <pre><code class="lang-csharp">var midiFile = new MidiFile(
@@ -229,7 +256,7 @@
             <span class="pull-right">
               <a href="#top">Back to top</a>
             </span>
-      2024 / Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
+      2025 / Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
       
           </div>
         </div>

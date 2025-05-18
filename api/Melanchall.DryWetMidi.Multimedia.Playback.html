@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <!--[if IE]><![endif]-->
 <html>
 
@@ -63,7 +63,7 @@
           <div class="sr-items">
             <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
           </div>
-          <ul id="pagination" data-first="First" data-prev="Previous" data-next="Next" data-last="Last"></ul>
+          <ul id="pagination" data-first=First data-prev=Previous data-next=Next data-last=Last></ul>
         </div>
       </div>
       <div role="main" class="container body-content hide-when-search">
@@ -291,7 +291,7 @@ Next example shows how to replace program <code>1</code> in all Program Change e
   <a id="Melanchall_DryWetMidi_Multimedia_Playback_InterruptNotesOnStop_" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.InterruptNotesOnStop*"></a>
   <h4 id="Melanchall_DryWetMidi_Multimedia_Playback_InterruptNotesOnStop" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.InterruptNotesOnStop">InterruptNotesOnStop</h4>
   <div class="markdown level1 summary">Gets or sets a value indicating whether currently playing notes must be stopped
-on playback stop or not.</div>
+on playback stop or not. The default value is <code>true</code>.</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="declaration">Declaration</h5>
   <div class="codewrapper">
@@ -319,6 +319,30 @@ on playback stop or not.</div>
   <h5 class="declaration">Declaration</h5>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public bool IsRunning { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Multimedia_Playback_IsSnappingEnabled_" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.IsSnappingEnabled*"></a>
+  <h4 id="Melanchall_DryWetMidi_Multimedia_Playback_IsSnappingEnabled" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.IsSnappingEnabled">IsSnappingEnabled</h4>
+  <div class="markdown level1 summary">Gets or sets a value indicating whether playback snapping is enabled or not. The property
+lets turn on or off all snap points at once.</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool IsSnappingEnabled { get; set; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-condensed">
@@ -481,13 +505,14 @@ the region to play back.</div>
   <div class="markdown level1 remarks">In conjunction with <a class="xref" href="Melanchall.DryWetMidi.Multimedia.Playback.html#Melanchall_DryWetMidi_Multimedia_Playback_PlaybackEnd">PlaybackEnd</a> you can define a region within the
 current playback which will be played. If you set the property to <code>null</code> the
 start of playback (zero) will be used.</div>
-  <a id="Melanchall_DryWetMidi_Multimedia_Playback_Snapping_" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.Snapping*"></a>
-  <h4 id="Melanchall_DryWetMidi_Multimedia_Playback_Snapping" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.Snapping">Snapping</h4>
-  <div class="markdown level1 summary">Gets an object to manage playback's snap points.</div>
+  <a id="Melanchall_DryWetMidi_Multimedia_Playback_SendNoteOffEventsForNonActiveNotes_" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.SendNoteOffEventsForNonActiveNotes*"></a>
+  <h4 id="Melanchall_DryWetMidi_Multimedia_Playback_SendNoteOffEventsForNonActiveNotes" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.SendNoteOffEventsForNonActiveNotes">SendNoteOffEventsForNonActiveNotes</h4>
+  <div class="markdown level1 summary">Gets or sets a value indicating whether to send Note Off events for non-active
+notes (which look redundant) or not. The default value is <code>false</code>.</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="declaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public PlaybackSnapping Snapping { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">public bool SendNoteOffEventsForNonActiveNotes { get; set; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-condensed">
@@ -499,11 +524,45 @@ start of playback (zero) will be used.</div>
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Multimedia.PlaybackSnapping.html">PlaybackSnapping</a></td>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></td>
         <td></td>
       </tr>
     </tbody>
   </table>
+  <h5 id="Melanchall_DryWetMidi_Multimedia_Playback_SendNoteOffEventsForNonActiveNotes_remarks">Remarks</h5>
+  <div class="markdown level1 remarks">If there is a Note Off event and we are in the point (for example, by jumping with the
+<a class="xref" href="Melanchall.DryWetMidi.Multimedia.Playback.html#Melanchall_DryWetMidi_Multimedia_Playback_MoveToTime_Melanchall_DryWetMidi_Interaction_ITimeSpan_">MoveToTime(ITimeSpan)</a>) where there is no currently playing note with the
+same note number and channel, the event won't be played when this property set to <code>false</code>
+(which is the default value). To send Note Off event anyway, set this property to <code>true</code>.</div>
+  <a id="Melanchall_DryWetMidi_Multimedia_Playback_SendNoteOnEventsForActiveNotes_" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.SendNoteOnEventsForActiveNotes*"></a>
+  <h4 id="Melanchall_DryWetMidi_Multimedia_Playback_SendNoteOnEventsForActiveNotes" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.SendNoteOnEventsForActiveNotes">SendNoteOnEventsForActiveNotes</h4>
+  <div class="markdown level1 summary">Gets or sets a value indicating whether to send Note On events for active
+notes (which look redundant) or not. The default value is <code>false</code>.</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool SendNoteOnEventsForActiveNotes { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Melanchall_DryWetMidi_Multimedia_Playback_SendNoteOnEventsForActiveNotes_remarks">Remarks</h5>
+  <div class="markdown level1 remarks">If there is a Note On event and we are in the point (for example, by jumping with the
+<a class="xref" href="Melanchall.DryWetMidi.Multimedia.Playback.html#Melanchall_DryWetMidi_Multimedia_Playback_MoveToTime_Melanchall_DryWetMidi_Interaction_ITimeSpan_">MoveToTime(ITimeSpan)</a>) where there is currently playing note with the
+same note number and channel, the event won't be played when this property set to <code>false</code>
+(which is the default value). To send Note On event anyway, set this property to <code>true</code>.</div>
   <a id="Melanchall_DryWetMidi_Multimedia_Playback_Speed_" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.Speed*"></a>
   <h4 id="Melanchall_DryWetMidi_Multimedia_Playback_Speed" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.Speed">Speed</h4>
   <div class="markdown level1 summary">Gets or sets the speed of events playing. <code>1</code> means normal speed. For example, to play
@@ -566,7 +625,9 @@ by two times.
   </table>
   <a id="Melanchall_DryWetMidi_Multimedia_Playback_TempoMap_" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.TempoMap*"></a>
   <h4 id="Melanchall_DryWetMidi_Multimedia_Playback_TempoMap" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.TempoMap">TempoMap</h4>
-  <div class="markdown level1 summary">Gets the tempo map used to calculate events times.</div>
+  <div class="markdown level1 summary">Gets the tempo map used to calculate events times. You should use this property
+when the current playback has been created from a <a class="xref" href="Melanchall.DryWetMidi.Interaction.IObservableTimedObjectsCollection.html">IObservableTimedObjectsCollection</a>
+(more info in the <a class="xref" href="../articles/playback/Dynamic-changes.html">Dynamic changes</a> article).</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="declaration">Declaration</h5>
   <div class="codewrapper">
@@ -591,7 +652,7 @@ by two times.
   <h4 id="Melanchall_DryWetMidi_Multimedia_Playback_TrackControlValue" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.TrackControlValue">TrackControlValue</h4>
   <div class="markdown level1 summary">Gets or sets a value indicating whether controller values must be tracked or not. If <code>true</code>, any jump
 in time will force playback send <a class="xref" href="Melanchall.DryWetMidi.Core.ControlChangeEvent.html">ControlChangeEvent</a> corresponding to the controller value at new time,
-if needed. The default value is <code>false</code>. More info in the
+if needed. The default value is <code>true</code>. More info in the
 <a class="xref" href="../articles/playback/Data-tracking.html#midi-parameters-values-tracking">Data tracking: MIDI parameters values tracking</a>
 article.</div>
   <div class="markdown level1 conceptual"></div>
@@ -614,26 +675,10 @@ article.</div>
       </tr>
     </tbody>
   </table>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.invalidoperationexception">InvalidOperationException</a></td>
-        <td>Can't enable control value tracking due to the
-    <a class="xref" href="Melanchall.DryWetMidi.Multimedia.PlaybackHint.html#Melanchall_DryWetMidi_Multimedia_PlaybackHint_DisableControlValueTracking">DisableControlValueTracking</a> hint has been specified on the playback creation.</td>
-      </tr>
-    </tbody>
-  </table>
   <a id="Melanchall_DryWetMidi_Multimedia_Playback_TrackNotes_" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.TrackNotes*"></a>
   <h4 id="Melanchall_DryWetMidi_Multimedia_Playback_TrackNotes" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.TrackNotes">TrackNotes</h4>
   <div class="markdown level1 summary">Gets or sets a value indicating whether notes must be tracked or not. If <code>false</code>, notes
-will be treated as just Note On/Note Off events. The default value is <code>false</code>. More info in the
+will be treated as just Note On/Note Off events. The default value is <code>true</code>. More info in the
 <a class="xref" href="../articles/playback/Data-tracking.html#notes-tracking">Data tracking: Notes tracking</a> article.</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="declaration">Declaration</h5>
@@ -655,27 +700,11 @@ will be treated as just Note On/Note Off events. The default value is <code>fals
       </tr>
     </tbody>
   </table>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.invalidoperationexception">InvalidOperationException</a></td>
-        <td>Can't enable notes tracking due to the
-    <a class="xref" href="Melanchall.DryWetMidi.Multimedia.PlaybackHint.html#Melanchall_DryWetMidi_Multimedia_PlaybackHint_DisableNotesTracking">DisableNotesTracking</a> hint has been specified on the playback creation.</td>
-      </tr>
-    </tbody>
-  </table>
   <a id="Melanchall_DryWetMidi_Multimedia_Playback_TrackPitchValue_" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.TrackPitchValue*"></a>
   <h4 id="Melanchall_DryWetMidi_Multimedia_Playback_TrackPitchValue" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.TrackPitchValue">TrackPitchValue</h4>
   <div class="markdown level1 summary">Gets or sets a value indicating whether pitch value must be tracked or not. If <code>true</code>, any jump
 in time will force playback send <a class="xref" href="Melanchall.DryWetMidi.Core.PitchBendEvent.html">PitchBendEvent</a> corresponding to the pitch value at new time,
-if needed. The default value is <code>false</code>. More info in the
+if needed. The default value is <code>true</code>. More info in the
 <a class="xref" href="../articles/playback/Data-tracking.html#midi-parameters-values-tracking">Data tracking: MIDI parameters values tracking</a>
 article.</div>
   <div class="markdown level1 conceptual"></div>
@@ -698,27 +727,11 @@ article.</div>
       </tr>
     </tbody>
   </table>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.invalidoperationexception">InvalidOperationException</a></td>
-        <td>Can't enable pitch value tracking due to the
-    <a class="xref" href="Melanchall.DryWetMidi.Multimedia.PlaybackHint.html#Melanchall_DryWetMidi_Multimedia_PlaybackHint_DisablePitchValueTracking">DisablePitchValueTracking</a> hint has been specified on the playback creation.</td>
-      </tr>
-    </tbody>
-  </table>
   <a id="Melanchall_DryWetMidi_Multimedia_Playback_TrackProgram_" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.TrackProgram*"></a>
   <h4 id="Melanchall_DryWetMidi_Multimedia_Playback_TrackProgram" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.TrackProgram">TrackProgram</h4>
   <div class="markdown level1 summary">Gets or sets a value indicating whether program must be tracked or not. If <code>true</code>, any jump
 in time will force playback send <a class="xref" href="Melanchall.DryWetMidi.Core.ProgramChangeEvent.html">ProgramChangeEvent</a> corresponding to the program at new time,
-if needed. The default value is <code>false</code>. More info in the
+if needed. The default value is <code>true</code>. More info in the
 <a class="xref" href="../articles/playback/Data-tracking.html#midi-parameters-values-tracking">Data tracking: MIDI parameters values tracking</a>
 article.</div>
   <div class="markdown level1 conceptual"></div>
@@ -741,6 +754,49 @@ article.</div>
       </tr>
     </tbody>
   </table>
+  <h3 id="methods">Methods
+</h3>
+  <a id="Melanchall_DryWetMidi_Multimedia_Playback_AddSnapPoint_" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.AddSnapPoint*"></a>
+  <h4 id="Melanchall_DryWetMidi_Multimedia_Playback_AddSnapPoint_Melanchall_DryWetMidi_Interaction_ITimeSpan_" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.AddSnapPoint(Melanchall.DryWetMidi.Interaction.ITimeSpan)">AddSnapPoint(ITimeSpan)</h4>
+  <div class="markdown level1 summary">Adds a snap point at the specified time.</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public SnapPoint AddSnapPoint(ITimeSpan time)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a></td>
+        <td><span class="parametername">time</span></td>
+        <td>Time to add snap point at.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Multimedia.SnapPoint.html">SnapPoint</a></td>
+        <td>An instance of the <a class="xref" href="Melanchall.DryWetMidi.Multimedia.SnapPoint.html">SnapPoint</a> representing a snap point
+    at <code class="paramref">time</code>.</td>
+      </tr>
+    </tbody>
+  </table>
   <h5 class="exceptions">Exceptions</h5>
   <table class="table table-bordered table-condensed">
     <thead>
@@ -751,14 +807,87 @@ article.</div>
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.invalidoperationexception">InvalidOperationException</a></td>
-        <td>Can't enable program tracking due to the
-    <a class="xref" href="Melanchall.DryWetMidi.Multimedia.PlaybackHint.html#Melanchall_DryWetMidi_Multimedia_PlaybackHint_DisableProgramTracking">DisableProgramTracking</a> hint has been specified on the playback creation.</td>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code class="paramref">time</code> is <code>null</code>.</td>
       </tr>
     </tbody>
   </table>
-  <h3 id="methods">Methods
-</h3>
+  <a id="Melanchall_DryWetMidi_Multimedia_Playback_AddSnapPoint_" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.AddSnapPoint*"></a>
+  <h4 id="Melanchall_DryWetMidi_Multimedia_Playback_AddSnapPoint__1_Melanchall_DryWetMidi_Interaction_ITimeSpan___0_" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.AddSnapPoint``1(Melanchall.DryWetMidi.Interaction.ITimeSpan,``0)">AddSnapPoint&lt;TData&gt;(ITimeSpan, TData)</h4>
+  <div class="markdown level1 summary">Adds a snap point with the specified data at given time.</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public SnapPoint&lt;TData&gt; AddSnapPoint&lt;TData&gt;(ITimeSpan time, TData data)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a></td>
+        <td><span class="parametername">time</span></td>
+        <td>Time to add snap point at.</td>
+      </tr>
+      <tr>
+        <td><span class="xref">TData</span></td>
+        <td><span class="parametername">data</span></td>
+        <td>Data to attach to snap point.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Multimedia.SnapPoint-1.html">SnapPoint</a>&lt;TData&gt;</td>
+        <td>An instance of the <a class="xref" href="Melanchall.DryWetMidi.Multimedia.SnapPoint-1.html">SnapPoint&lt;TData&gt;</a> representing a snap point
+    with <code class="paramref">data</code> at <code class="paramref">time</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">TData</span></td>
+        <td>Type of data that will be attached to a snap point.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code class="paramref">time</code> is <code>null</code>.</td>
+      </tr>
+    </tbody>
+  </table>
   <a id="Melanchall_DryWetMidi_Multimedia_Playback_Dispose_" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.Dispose*"></a>
   <h4 id="Melanchall_DryWetMidi_Multimedia_Playback_Dispose" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.Dispose">Dispose()</h4>
   <div class="markdown level1 summary">Releases all resources used by the current <a class="xref" href="Melanchall.DryWetMidi.Multimedia.Playback.html">Playback</a>.</div>
@@ -1734,17 +1863,39 @@ otherwise, <code>false</code>.</td>
       </tr>
     </tbody>
   </table>
-  <a id="Melanchall_DryWetMidi_Multimedia_Playback_Play_" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.Play*"></a>
-  <h4 id="Melanchall_DryWetMidi_Multimedia_Playback_Play" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.Play">Play()</h4>
-  <div class="markdown level1 summary">Starts playing of the MIDI data. This method will block execution of a program until all
-MIDI data is played.</div>
+  <a id="Melanchall_DryWetMidi_Multimedia_Playback_RemoveAllSnapPoints_" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.RemoveAllSnapPoints*"></a>
+  <h4 id="Melanchall_DryWetMidi_Multimedia_Playback_RemoveAllSnapPoints" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.RemoveAllSnapPoints">RemoveAllSnapPoints()</h4>
+  <div class="markdown level1 summary">Removes all snap points.</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="declaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void Play()</code></pre>
+    <pre><code class="lang-csharp hljs">public void RemoveAllSnapPoints()</code></pre>
   </div>
-  <h5 id="Melanchall_DryWetMidi_Multimedia_Playback_Play_remarks">Remarks</h5>
-  <div class="markdown level1 remarks">If <a class="xref" href="Melanchall.DryWetMidi.Multimedia.Playback.html#Melanchall_DryWetMidi_Multimedia_Playback_Loop">Loop</a> is set to <code>true</code>, this method will execute forever.</div>
+  <a id="Melanchall_DryWetMidi_Multimedia_Playback_RemoveSnapPoint_" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.RemoveSnapPoint*"></a>
+  <h4 id="Melanchall_DryWetMidi_Multimedia_Playback_RemoveSnapPoint_Melanchall_DryWetMidi_Multimedia_SnapPoint_" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.RemoveSnapPoint(Melanchall.DryWetMidi.Multimedia.SnapPoint)">RemoveSnapPoint(SnapPoint)</h4>
+  <div class="markdown level1 summary">Removes a snap point.</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void RemoveSnapPoint(SnapPoint snapPoint)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Multimedia.SnapPoint.html">SnapPoint</a></td>
+        <td><span class="parametername">snapPoint</span></td>
+        <td>Snap point to remove.</td>
+      </tr>
+    </tbody>
+  </table>
   <h5 class="exceptions">Exceptions</h5>
   <table class="table table-bordered table-condensed">
     <thead>
@@ -1755,12 +1906,165 @@ MIDI data is played.</div>
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.objectdisposedexception">ObjectDisposedException</a></td>
-        <td>The current <a class="xref" href="Melanchall.DryWetMidi.Multimedia.Playback.html">Playback</a> is disposed.</td>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code class="paramref">snapPoint</code> is <code>null</code>.</td>
       </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Multimedia_Playback_RemoveSnapPointsByData_" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.RemoveSnapPointsByData*"></a>
+  <h4 id="Melanchall_DryWetMidi_Multimedia_Playback_RemoveSnapPointsByData__1_System_Predicate___0__" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.RemoveSnapPointsByData``1(System.Predicate{``0})">RemoveSnapPointsByData&lt;TData&gt;(Predicate&lt;TData&gt;)</h4>
+  <div class="markdown level1 summary">Removes all snap points that match the conditions defined by the specified predicate.</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void RemoveSnapPointsByData&lt;TData&gt;(Predicate&lt;TData&gt; predicate)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
       <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Multimedia.MidiDeviceException.html">MidiDeviceException</a></td>
-        <td>An error occurred on device.</td>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.predicate-1">Predicate</a>&lt;TData&gt;</td>
+        <td><span class="parametername">predicate</span></td>
+        <td>The <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.predicate-1">Predicate&lt;T&gt;</a> delegate that defines the conditions
+    of snap points to remove.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">TData</span></td>
+        <td>Type of data attached to snap points to remove.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code class="paramref">predicate</code> is <code>null</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Multimedia_Playback_RemoveSnapPointsGroup_" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.RemoveSnapPointsGroup*"></a>
+  <h4 id="Melanchall_DryWetMidi_Multimedia_Playback_RemoveSnapPointsGroup_Melanchall_DryWetMidi_Multimedia_SnapPointsGroup_" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.RemoveSnapPointsGroup(Melanchall.DryWetMidi.Multimedia.SnapPointsGroup)">RemoveSnapPointsGroup(SnapPointsGroup)</h4>
+  <div class="markdown level1 summary">Removes the specified <a class="xref" href="Melanchall.DryWetMidi.Multimedia.SnapPointsGroup.html">SnapPointsGroup</a> from the list of snap points groups
+of the current <a class="xref" href="Melanchall.DryWetMidi.Multimedia.Playback.html">Playback</a>.</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void RemoveSnapPointsGroup(SnapPointsGroup snapPointsGroup)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Multimedia.SnapPointsGroup.html">SnapPointsGroup</a></td>
+        <td><span class="parametername">snapPointsGroup</span></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Multimedia.SnapPointsGroup.html">SnapPointsGroup</a> to remove.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code class="paramref">snapPointsGroup</code> is <code>null</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Multimedia_Playback_SnapToEvents_" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.SnapToEvents*"></a>
+  <h4 id="Melanchall_DryWetMidi_Multimedia_Playback_SnapToEvents_System_Predicate_Melanchall_DryWetMidi_Core_MidiEvent__" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.SnapToEvents(System.Predicate{Melanchall.DryWetMidi.Core.MidiEvent})">SnapToEvents(Predicate&lt;MidiEvent&gt;)</h4>
+  <div class="markdown level1 summary">Creates a new <a class="xref" href="Melanchall.DryWetMidi.Multimedia.SnapPointsGroup.html">SnapPointsGroup</a> that holds the specified predicate to select MIDI events
+which times will be used as snap points. For example, to get snap points at the markers points, you
+can use this predicate: <code>e =&gt; e.EventType == MidiEventType.Marker</code>.</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public SnapPointsGroup SnapToEvents(Predicate&lt;MidiEvent&gt; predicate)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.predicate-1">Predicate</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Core.MidiEvent.html">MidiEvent</a>&gt;</td>
+        <td><span class="parametername">predicate</span></td>
+        <td>Predicate to select MIDI events.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Multimedia.SnapPointsGroup.html">SnapPointsGroup</a></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Multimedia.SnapPointsGroup.html">SnapPointsGroup</a> holding information on how to select events.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Melanchall_DryWetMidi_Multimedia_Playback_SnapToEvents_System_Predicate_Melanchall_DryWetMidi_Core_MidiEvent___remarks">Remarks</h5>
+  <div class="markdown level1 remarks">After the group is created, it will be enabled by default. You can disable it using the
+<a class="xref" href="Melanchall.DryWetMidi.Multimedia.SnapPointsGroup.html#Melanchall_DryWetMidi_Multimedia_SnapPointsGroup_IsEnabled">IsEnabled</a> property setting it to <code>false</code>.</div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code class="paramref">predicate</code> is <code>null</code>.</td>
       </tr>
     </tbody>
   </table>
@@ -2029,7 +2333,7 @@ gets in to notes.</div>
     </tbody>
   </table>
   <h4 id="Melanchall_DryWetMidi_Multimedia_Playback_Started" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.Started">Started</h4>
-  <div class="markdown level1 summary">Occurs when playback started via <a class="xref" href="Melanchall.DryWetMidi.Multimedia.Playback.html#Melanchall_DryWetMidi_Multimedia_Playback_Start">Start()</a> or <a class="xref" href="Melanchall.DryWetMidi.Multimedia.Playback.html#Melanchall_DryWetMidi_Multimedia_Playback_Play">Play()</a> methods.</div>
+  <div class="markdown level1 summary">Occurs when playback started via the <a class="xref" href="Melanchall.DryWetMidi.Multimedia.Playback.html#Melanchall_DryWetMidi_Multimedia_Playback_Start">Start()</a> method.</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="declaration">Declaration</h5>
   <div class="codewrapper">
@@ -2051,7 +2355,7 @@ gets in to notes.</div>
     </tbody>
   </table>
   <h4 id="Melanchall_DryWetMidi_Multimedia_Playback_Stopped" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.Stopped">Stopped</h4>
-  <div class="markdown level1 summary">Occurs when playback stopped via <a class="xref" href="Melanchall.DryWetMidi.Multimedia.Playback.html#Melanchall_DryWetMidi_Multimedia_Playback_Stop">Stop()</a> method.</div>
+  <div class="markdown level1 summary">Occurs when playback stopped via the <a class="xref" href="Melanchall.DryWetMidi.Multimedia.Playback.html#Melanchall_DryWetMidi_Multimedia_Playback_Stop">Stop()</a> method.</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="declaration">Declaration</h5>
   <div class="codewrapper">
@@ -2101,7 +2405,7 @@ gets in to notes.</div>
             <span class="pull-right">
               <a href="#top">Back to top</a>
             </span>
-      2024 / Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
+      2025 / Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
       
           </div>
         </div>

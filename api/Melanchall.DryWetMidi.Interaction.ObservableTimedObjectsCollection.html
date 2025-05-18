@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+
+  <head>
+    <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+      <title>Class ObservableTimedObjectsCollection | DryWetMIDI </title>
+      <meta name="viewport" content="width=device-width">
+      <meta name="title" content="Class ObservableTimedObjectsCollection | DryWetMIDI ">
+    
+    <meta name="description" content="Provides a collection which can be observed for changes via  event.">
+      <link rel="shortcut icon" href="../images/favicon.png">
+      <link rel="stylesheet" href="../styles/docfx.vendor.min.css">
+      <link rel="stylesheet" href="../styles/docfx.css">
+      <link rel="stylesheet" href="../styles/main.css">
+      <meta property="docfx:navrel" content="../toc.html">
+      <meta property="docfx:tocrel" content="toc.html">
+    
+    <meta property="docfx:rel" content="../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+
+        <div id="search-results">
+          <div class="search-list">Search Results for <span></span></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination" data-first=First data-prev=Previous data-next=Next data-last=Last></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Melanchall.DryWetMidi.Interaction.ObservableTimedObjectsCollection">
+
+
+
+  <h1 id="Melanchall_DryWetMidi_Interaction_ObservableTimedObjectsCollection" data-uid="Melanchall.DryWetMidi.Interaction.ObservableTimedObjectsCollection" class="text-break">Class ObservableTimedObjectsCollection</h1>
+  <div class="markdown level0 summary">Provides a collection which can be observed for changes via <a class="xref" href="Melanchall.DryWetMidi.Interaction.ObservableTimedObjectsCollection.html#Melanchall_DryWetMidi_Interaction_ObservableTimedObjectsCollection_CollectionChanged">CollectionChanged</a> event.</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></div>
+    <div class="level1"><span class="xref">ObservableTimedObjectsCollection</span></div>
+  </div>
+  <div class="implements">
+    <h5>Implements</h5>
+    <div><a class="xref" href="Melanchall.DryWetMidi.Interaction.IObservableTimedObjectsCollection.html">IObservableTimedObjectsCollection</a></div>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimedObject.html">ITimedObject</a>&gt;</div>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.ienumerable">IEnumerable</a></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)">object.Equals(object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)">object.Equals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gethashcode">object.GetHashCode()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gettype">object.GetType()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.referenceequals">object.ReferenceEquals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.tostring">object.ToString()</a>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Melanchall.html">Melanchall</a>.<a class="xref" href="Melanchall.DryWetMidi.html">DryWetMidi</a>.<a class="xref" href="Melanchall.DryWetMidi.Interaction.html">Interaction</a></h6>
+  <h6><strong>Assembly</strong>: Melanchall.DryWetMidi.dll</h6>
+  <h5 id="Melanchall_DryWetMidi_Interaction_ObservableTimedObjectsCollection_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public sealed class ObservableTimedObjectsCollection : IObservableTimedObjectsCollection, IEnumerable&lt;ITimedObject&gt;, IEnumerable</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+</h3>
+  <a id="Melanchall_DryWetMidi_Interaction_ObservableTimedObjectsCollection__ctor_" data-uid="Melanchall.DryWetMidi.Interaction.ObservableTimedObjectsCollection.#ctor*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_ObservableTimedObjectsCollection__ctor" data-uid="Melanchall.DryWetMidi.Interaction.ObservableTimedObjectsCollection.#ctor">ObservableTimedObjectsCollection()</h4>
+  <div class="markdown level1 summary">Initializes an empty instance of the <a class="xref" href="Melanchall.DryWetMidi.Interaction.ObservableTimedObjectsCollection.html">ObservableTimedObjectsCollection</a>.</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ObservableTimedObjectsCollection()</code></pre>
+  </div>
+  <a id="Melanchall_DryWetMidi_Interaction_ObservableTimedObjectsCollection__ctor_" data-uid="Melanchall.DryWetMidi.Interaction.ObservableTimedObjectsCollection.#ctor*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_ObservableTimedObjectsCollection__ctor_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_ITimedObject__" data-uid="Melanchall.DryWetMidi.Interaction.ObservableTimedObjectsCollection.#ctor(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Interaction.ITimedObject})">ObservableTimedObjectsCollection(IEnumerable&lt;ITimedObject&gt;)</h4>
+  <div class="markdown level1 summary">Initializes a new instance of the <a class="xref" href="Melanchall.DryWetMidi.Interaction.ObservableTimedObjectsCollection.html">ObservableTimedObjectsCollection</a> with
+the specified objects.</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ObservableTimedObjectsCollection(IEnumerable&lt;ITimedObject&gt; timedObjects)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimedObject.html">ITimedObject</a>&gt;</td>
+        <td><span class="parametername">timedObjects</span></td>
+        <td>Objects to add to the collection.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+</h3>
+  <a id="Melanchall_DryWetMidi_Interaction_ObservableTimedObjectsCollection_Count_" data-uid="Melanchall.DryWetMidi.Interaction.ObservableTimedObjectsCollection.Count*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_ObservableTimedObjectsCollection_Count" data-uid="Melanchall.DryWetMidi.Interaction.ObservableTimedObjectsCollection.Count">Count</h4>
+  <div class="markdown level1 summary">Gets the number of objects currently contained in the collection.</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int Count { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+</h3>
+  <a id="Melanchall_DryWetMidi_Interaction_ObservableTimedObjectsCollection_Add_" data-uid="Melanchall.DryWetMidi.Interaction.ObservableTimedObjectsCollection.Add*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_ObservableTimedObjectsCollection_Add_Melanchall_DryWetMidi_Interaction_ITimedObject___" data-uid="Melanchall.DryWetMidi.Interaction.ObservableTimedObjectsCollection.Add(Melanchall.DryWetMidi.Interaction.ITimedObject[])">Add(params ITimedObject[])</h4>
+  <div class="markdown level1 summary">Adds the specified objects to the current collection.</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Add(params ITimedObject[] objects)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimedObject.html">ITimedObject</a>[]</td>
+        <td><span class="parametername">objects</span></td>
+        <td>Objects to add to the collection.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Melanchall_DryWetMidi_Interaction_ObservableTimedObjectsCollection_Add_Melanchall_DryWetMidi_Interaction_ITimedObject____remarks">Remarks</h5>
+  <div class="markdown level1 remarks">If the method is executed within the <a class="xref" href="Melanchall.DryWetMidi.Interaction.ObservableTimedObjectsCollection.html#Melanchall_DryWetMidi_Interaction_ObservableTimedObjectsCollection_ChangeCollection_System_Action_">ChangeCollection(Action)</a>,
+    the <a class="xref" href="Melanchall.DryWetMidi.Interaction.ObservableTimedObjectsCollection.html#Melanchall_DryWetMidi_Interaction_ObservableTimedObjectsCollection_CollectionChanged">CollectionChanged</a> event will be fired when you're done with
+    the <a class="xref" href="Melanchall.DryWetMidi.Interaction.ObservableTimedObjectsCollection.html#Melanchall_DryWetMidi_Interaction_ObservableTimedObjectsCollection_ChangeCollection_System_Action_">ChangeCollection(Action)</a> method.</div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code class="paramref">objects</code> is <code>null</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Interaction_ObservableTimedObjectsCollection_Add_" data-uid="Melanchall.DryWetMidi.Interaction.ObservableTimedObjectsCollection.Add*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_ObservableTimedObjectsCollection_Add_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_ITimedObject__" data-uid="Melanchall.DryWetMidi.Interaction.ObservableTimedObjectsCollection.Add(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Interaction.ITimedObject})">Add(IEnumerable&lt;ITimedObject&gt;)</h4>
+  <div class="markdown level1 summary">Adds the specified objects to the current collection.</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Add(IEnumerable&lt;ITimedObject&gt; objects)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimedObject.html">ITimedObject</a>&gt;</td>
+        <td><span class="parametername">objects</span></td>
+        <td>Objects to add to the collection.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Melanchall_DryWetMidi_Interaction_ObservableTimedObjectsCollection_Add_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_ITimedObject___remarks">Remarks</h5>
+  <div class="markdown level1 remarks">If the method is executed within the <a class="xref" href="Melanchall.DryWetMidi.Interaction.ObservableTimedObjectsCollection.html#Melanchall_DryWetMidi_Interaction_ObservableTimedObjectsCollection_ChangeCollection_System_Action_">ChangeCollection(Action)</a>,
+    the <a class="xref" href="Melanchall.DryWetMidi.Interaction.ObservableTimedObjectsCollection.html#Melanchall_DryWetMidi_Interaction_ObservableTimedObjectsCollection_CollectionChanged">CollectionChanged</a> event will be fired when you're done with
+    the <a class="xref" href="Melanchall.DryWetMidi.Interaction.ObservableTimedObjectsCollection.html#Melanchall_DryWetMidi_Interaction_ObservableTimedObjectsCollection_ChangeCollection_System_Action_">ChangeCollection(Action)</a> method.</div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code class="paramref">objects</code> is <code>null</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Interaction_ObservableTimedObjectsCollection_ChangeCollection_" data-uid="Melanchall.DryWetMidi.Interaction.ObservableTimedObjectsCollection.ChangeCollection*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_ObservableTimedObjectsCollection_ChangeCollection_System_Action_" data-uid="Melanchall.DryWetMidi.Interaction.ObservableTimedObjectsCollection.ChangeCollection(System.Action)">ChangeCollection(Action)</h4>
+  <div class="markdown level1 summary">Executes a specified action that modifies the collection.</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void ChangeCollection(Action change)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.action">Action</a></td>
+        <td><span class="parametername">change</span></td>
+        <td>An <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.action">Action</a> that performs the modifications to the collection.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Melanchall_DryWetMidi_Interaction_ObservableTimedObjectsCollection_ChangeCollection_System_Action__remarks">Remarks</h5>
+  <div class="markdown level1 remarks">If the collection is already undergoing a batch operation, the <a class="xref" href="Melanchall.DryWetMidi.Interaction.ObservableTimedObjectsCollection.html#Melanchall_DryWetMidi_Interaction_ObservableTimedObjectsCollection_CollectionChanged">CollectionChanged</a>
+    event will not be raised until the outermost operation completes. This ensures that multiple changes can be
+    grouped together and processed as a single batch.</div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code class="paramref">change</code> is <code>null</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Interaction_ObservableTimedObjectsCollection_ChangeObject_" data-uid="Melanchall.DryWetMidi.Interaction.ObservableTimedObjectsCollection.ChangeObject*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_ObservableTimedObjectsCollection_ChangeObject_Melanchall_DryWetMidi_Interaction_ITimedObject_System_Action_Melanchall_DryWetMidi_Interaction_ITimedObject__" data-uid="Melanchall.DryWetMidi.Interaction.ObservableTimedObjectsCollection.ChangeObject(Melanchall.DryWetMidi.Interaction.ITimedObject,System.Action{Melanchall.DryWetMidi.Interaction.ITimedObject})">ChangeObject(ITimedObject, Action&lt;ITimedObject&gt;)</h4>
+  <div class="markdown level1 summary">Executes an action that modifies the specified object.</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void ChangeObject(ITimedObject timedObject, Action&lt;ITimedObject&gt; change)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimedObject.html">ITimedObject</a></td>
+        <td><span class="parametername">timedObject</span></td>
+        <td>The object to be modified.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.action-1">Action</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimedObject.html">ITimedObject</a>&gt;</td>
+        <td><span class="parametername">change</span></td>
+        <td>An <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.action">Action</a> that performs the modifications to the <code class="paramref">timedObject</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Melanchall_DryWetMidi_Interaction_ObservableTimedObjectsCollection_ChangeObject_Melanchall_DryWetMidi_Interaction_ITimedObject_System_Action_Melanchall_DryWetMidi_Interaction_ITimedObject___remarks">Remarks</h5>
+  <div class="markdown level1 remarks">If the method is executed within the <a class="xref" href="Melanchall.DryWetMidi.Interaction.ObservableTimedObjectsCollection.html#Melanchall_DryWetMidi_Interaction_ObservableTimedObjectsCollection_ChangeCollection_System_Action_">ChangeCollection(Action)</a>,
+    the <a class="xref" href="Melanchall.DryWetMidi.Interaction.ObservableTimedObjectsCollection.html#Melanchall_DryWetMidi_Interaction_ObservableTimedObjectsCollection_CollectionChanged">CollectionChanged</a> event will be fired when you're done with
+    the <a class="xref" href="Melanchall.DryWetMidi.Interaction.ObservableTimedObjectsCollection.html#Melanchall_DryWetMidi_Interaction_ObservableTimedObjectsCollection_ChangeCollection_System_Action_">ChangeCollection(Action)</a> method.</div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td>One of the following errors occurred:
+<ul><li><code class="paramref">timedObject</code> is <code>null</code>.</li><li><code class="paramref">change</code> is <code>null</code>.</li></ul></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Interaction_ObservableTimedObjectsCollection_Clear_" data-uid="Melanchall.DryWetMidi.Interaction.ObservableTimedObjectsCollection.Clear*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_ObservableTimedObjectsCollection_Clear" data-uid="Melanchall.DryWetMidi.Interaction.ObservableTimedObjectsCollection.Clear">Clear()</h4>
+  <div class="markdown level1 summary">Removes all objects from the current collection.</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Clear()</code></pre>
+  </div>
+  <h5 id="Melanchall_DryWetMidi_Interaction_ObservableTimedObjectsCollection_Clear_remarks">Remarks</h5>
+  <div class="markdown level1 remarks">If the method is executed within the <a class="xref" href="Melanchall.DryWetMidi.Interaction.ObservableTimedObjectsCollection.html#Melanchall_DryWetMidi_Interaction_ObservableTimedObjectsCollection_ChangeCollection_System_Action_">ChangeCollection(Action)</a>,
+    the <a class="xref" href="Melanchall.DryWetMidi.Interaction.ObservableTimedObjectsCollection.html#Melanchall_DryWetMidi_Interaction_ObservableTimedObjectsCollection_CollectionChanged">CollectionChanged</a> event will be fired when you're done with
+    the <a class="xref" href="Melanchall.DryWetMidi.Interaction.ObservableTimedObjectsCollection.html#Melanchall_DryWetMidi_Interaction_ObservableTimedObjectsCollection_ChangeCollection_System_Action_">ChangeCollection(Action)</a> method.</div>
+  <a id="Melanchall_DryWetMidi_Interaction_ObservableTimedObjectsCollection_GetEnumerator_" data-uid="Melanchall.DryWetMidi.Interaction.ObservableTimedObjectsCollection.GetEnumerator*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_ObservableTimedObjectsCollection_GetEnumerator" data-uid="Melanchall.DryWetMidi.Interaction.ObservableTimedObjectsCollection.GetEnumerator">GetEnumerator()</h4>
+  <div class="markdown level1 summary">Returns an enumerator that iterates through the collection.</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IEnumerator&lt;ITimedObject&gt; GetEnumerator()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerator-1">IEnumerator</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimedObject.html">ITimedObject</a>&gt;</td>
+        <td>An enumerator that can be used to iterate through the collection.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Interaction_ObservableTimedObjectsCollection_Remove_" data-uid="Melanchall.DryWetMidi.Interaction.ObservableTimedObjectsCollection.Remove*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_ObservableTimedObjectsCollection_Remove_Melanchall_DryWetMidi_Interaction_ITimedObject___" data-uid="Melanchall.DryWetMidi.Interaction.ObservableTimedObjectsCollection.Remove(Melanchall.DryWetMidi.Interaction.ITimedObject[])">Remove(params ITimedObject[])</h4>
+  <div class="markdown level1 summary">Removes the specified objects from the current collection.</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool Remove(params ITimedObject[] objects)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimedObject.html">ITimedObject</a>[]</td>
+        <td><span class="parametername">objects</span></td>
+        <td>Objects to remove from the collection.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Melanchall_DryWetMidi_Interaction_ObservableTimedObjectsCollection_Remove_Melanchall_DryWetMidi_Interaction_ITimedObject____remarks">Remarks</h5>
+  <div class="markdown level1 remarks">If the method is executed within the <a class="xref" href="Melanchall.DryWetMidi.Interaction.ObservableTimedObjectsCollection.html#Melanchall_DryWetMidi_Interaction_ObservableTimedObjectsCollection_ChangeCollection_System_Action_">ChangeCollection(Action)</a>,
+    the <a class="xref" href="Melanchall.DryWetMidi.Interaction.ObservableTimedObjectsCollection.html#Melanchall_DryWetMidi_Interaction_ObservableTimedObjectsCollection_CollectionChanged">CollectionChanged</a> event will be fired when you're done with
+    the <a class="xref" href="Melanchall.DryWetMidi.Interaction.ObservableTimedObjectsCollection.html#Melanchall_DryWetMidi_Interaction_ObservableTimedObjectsCollection_ChangeCollection_System_Action_">ChangeCollection(Action)</a> method.</div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code class="paramref">objects</code> is <code>null</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Interaction_ObservableTimedObjectsCollection_Remove_" data-uid="Melanchall.DryWetMidi.Interaction.ObservableTimedObjectsCollection.Remove*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_ObservableTimedObjectsCollection_Remove_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_ITimedObject__" data-uid="Melanchall.DryWetMidi.Interaction.ObservableTimedObjectsCollection.Remove(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Interaction.ITimedObject})">Remove(IEnumerable&lt;ITimedObject&gt;)</h4>
+  <div class="markdown level1 summary">Removes the specified objects from the current collection.</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool Remove(IEnumerable&lt;ITimedObject&gt; objects)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimedObject.html">ITimedObject</a>&gt;</td>
+        <td><span class="parametername">objects</span></td>
+        <td>Objects to remove from the collection.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Melanchall_DryWetMidi_Interaction_ObservableTimedObjectsCollection_Remove_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_ITimedObject___remarks">Remarks</h5>
+  <div class="markdown level1 remarks">If the method is executed within the <a class="xref" href="Melanchall.DryWetMidi.Interaction.ObservableTimedObjectsCollection.html#Melanchall_DryWetMidi_Interaction_ObservableTimedObjectsCollection_ChangeCollection_System_Action_">ChangeCollection(Action)</a>,
+    the <a class="xref" href="Melanchall.DryWetMidi.Interaction.ObservableTimedObjectsCollection.html#Melanchall_DryWetMidi_Interaction_ObservableTimedObjectsCollection_CollectionChanged">CollectionChanged</a> event will be fired when you're done with
+    the <a class="xref" href="Melanchall.DryWetMidi.Interaction.ObservableTimedObjectsCollection.html#Melanchall_DryWetMidi_Interaction_ObservableTimedObjectsCollection_ChangeCollection_System_Action_">ChangeCollection(Action)</a> method.</div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code class="paramref">objects</code> is <code>null</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="events">Events
+</h3>
+  <h4 id="Melanchall_DryWetMidi_Interaction_ObservableTimedObjectsCollection_CollectionChanged" data-uid="Melanchall.DryWetMidi.Interaction.ObservableTimedObjectsCollection.CollectionChanged">CollectionChanged</h4>
+  <div class="markdown level1 summary">Occurs when collection changed (objects have been added, removed or changed).</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public event EventHandler&lt;ObservableTimedObjectsCollectionChangedEventArgs&gt; CollectionChanged</code></pre>
+  </div>
+  <h5 class="eventType">Event Type</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.eventhandler-1">EventHandler</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.ObservableTimedObjectsCollectionChangedEventArgs.html">ObservableTimedObjectsCollectionChangedEventArgs</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.IObservableTimedObjectsCollection.html">IObservableTimedObjectsCollection</a>
+  </div>
+  <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable&lt;T&gt;</a>
+  </div>
+  <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.ienumerable">IEnumerable</a>
+  </div>
+  <h3 id="extensionmethods">Extension Methods</h3>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.GetObjectsUtilities.html#Melanchall_DryWetMidi_Interaction_GetObjectsUtilities_GetObjects_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_ITimedObject__Melanchall_DryWetMidi_Interaction_ObjectType_Melanchall_DryWetMidi_Interaction_ObjectDetectionSettings_">GetObjectsUtilities.GetObjects(IEnumerable&lt;ITimedObject&gt;, ObjectType, ObjectDetectionSettings)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.RestsUtilities.html#Melanchall_DryWetMidi_Interaction_RestsUtilities_GetRests_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_ITimedObject__Melanchall_DryWetMidi_Interaction_RestDetectionSettings_">RestsUtilities.GetRests(IEnumerable&lt;ITimedObject&gt;, RestDetectionSettings)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.RestsUtilities.html#Melanchall_DryWetMidi_Interaction_RestsUtilities_WithRests_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_ITimedObject__Melanchall_DryWetMidi_Interaction_RestDetectionSettings_">RestsUtilities.WithRests(IEnumerable&lt;ITimedObject&gt;, RestDetectionSettings)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedObjectUtilities.html#Melanchall_DryWetMidi_Interaction_TimedObjectUtilities_AtTime__1_System_Collections_Generic_IEnumerable___0__Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_TempoMap_">TimedObjectUtilities.AtTime&lt;TObject&gt;(IEnumerable&lt;TObject&gt;, ITimeSpan, TempoMap)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedObjectUtilities.html#Melanchall_DryWetMidi_Interaction_TimedObjectUtilities_AtTime__1_System_Collections_Generic_IEnumerable___0__System_Int64_">TimedObjectUtilities.AtTime&lt;TObject&gt;(IEnumerable&lt;TObject&gt;, long)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedObjectUtilities.html#Melanchall_DryWetMidi_Interaction_TimedObjectUtilities_ToFile_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_ITimedObject__">TimedObjectUtilities.ToFile(IEnumerable&lt;ITimedObject&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedObjectUtilities.html#Melanchall_DryWetMidi_Interaction_TimedObjectUtilities_ToTrackChunk_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_ITimedObject__">TimedObjectUtilities.ToTrackChunk(IEnumerable&lt;ITimedObject&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Tools.CsvSerializer.html#Melanchall_DryWetMidi_Tools_CsvSerializer_SerializeToCsv_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_ITimedObject__System_IO_Stream_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Tools_CsvSerializationSettings_">CsvSerializer.SerializeToCsv(IEnumerable&lt;ITimedObject&gt;, Stream, TempoMap, CsvSerializationSettings)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Tools.CsvSerializer.html#Melanchall_DryWetMidi_Tools_CsvSerializer_SerializeToCsv_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_ITimedObject__System_String_System_Boolean_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Tools_CsvSerializationSettings_">CsvSerializer.SerializeToCsv(IEnumerable&lt;ITimedObject&gt;, string, bool, TempoMap, CsvSerializationSettings)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Tools.Merger.html#Melanchall_DryWetMidi_Tools_Merger_MergeObjects_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_ITimedObject__Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Tools_ObjectsMergingSettings_">Merger.MergeObjects(IEnumerable&lt;ITimedObject&gt;, TempoMap, ObjectsMergingSettings)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Tools.RepeaterUtilities.html#Melanchall_DryWetMidi_Tools_RepeaterUtilities_Repeat_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_ITimedObject__System_Int32_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Tools_RepeatingSettings_">RepeaterUtilities.Repeat(IEnumerable&lt;ITimedObject&gt;, int, TempoMap, RepeatingSettings)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Tools.Resizer.html#Melanchall_DryWetMidi_Tools_Resizer_ResizeObjectsGroup_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_ITimedObject__Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Tools_ObjectsGroupResizingSettings_">Resizer.ResizeObjectsGroup(IEnumerable&lt;ITimedObject&gt;, ITimeSpan, TempoMap, ObjectsGroupResizingSettings)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Tools.Resizer.html#Melanchall_DryWetMidi_Tools_Resizer_ResizeObjectsGroup_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_ITimedObject__System_Double_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Tools_ObjectsGroupResizingSettings_">Resizer.ResizeObjectsGroup(IEnumerable&lt;ITimedObject&gt;, double, TempoMap, ObjectsGroupResizingSettings)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Tools.Splitter.html#Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsAtDistance_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_ITimedObject__Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Tools_LengthedObjectTarget_Melanchall_DryWetMidi_Interaction_TempoMap_System_Predicate_Melanchall_DryWetMidi_Interaction_ITimedObject__">Splitter.SplitObjectsAtDistance(IEnumerable&lt;ITimedObject&gt;, ITimeSpan, LengthedObjectTarget, TempoMap, Predicate&lt;ITimedObject&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Tools.Splitter.html#Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsAtDistance_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_ITimedObject__System_Double_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Tools_LengthedObjectTarget_Melanchall_DryWetMidi_Interaction_TempoMap_System_Predicate_Melanchall_DryWetMidi_Interaction_ITimedObject__">Splitter.SplitObjectsAtDistance(IEnumerable&lt;ITimedObject&gt;, double, TimeSpanType, LengthedObjectTarget, TempoMap, Predicate&lt;ITimedObject&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Tools.Splitter.html#Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsByGrid_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_ITimedObject__Melanchall_DryWetMidi_Interaction_IGrid_Melanchall_DryWetMidi_Interaction_TempoMap_System_Predicate_Melanchall_DryWetMidi_Interaction_ITimedObject__">Splitter.SplitObjectsByGrid(IEnumerable&lt;ITimedObject&gt;, IGrid, TempoMap, Predicate&lt;ITimedObject&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Tools.Splitter.html#Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsByPartsNumber_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_ITimedObject__System_Int32_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Interaction_TempoMap_System_Predicate_Melanchall_DryWetMidi_Interaction_ITimedObject__">Splitter.SplitObjectsByPartsNumber(IEnumerable&lt;ITimedObject&gt;, int, TimeSpanType, TempoMap, Predicate&lt;ITimedObject&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Tools.Splitter.html#Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsByStep_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_ITimedObject__Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_TempoMap_System_Predicate_Melanchall_DryWetMidi_Interaction_ITimedObject__">Splitter.SplitObjectsByStep(IEnumerable&lt;ITimedObject&gt;, ITimeSpan, TempoMap, Predicate&lt;ITimedObject&gt;)</a>
+  </div>
+  <h3 id="seealso">See Also</h3>
+  <div class="seealso">
+      <div><a class="xref" href="Melanchall.DryWetMidi.Interaction.IObservableTimedObjectsCollection.html">IObservableTimedObjectsCollection</a></div>
+  </div>
+
+</article>
+          </div>
+
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In this article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+      2025 / Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
+      
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <script type="text/javascript" src="../styles/docfx.vendor.min.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

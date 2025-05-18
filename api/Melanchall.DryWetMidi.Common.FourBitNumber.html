@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <!--[if IE]><![endif]-->
 <html>
 
@@ -63,7 +63,7 @@
           <div class="sr-items">
             <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
           </div>
-          <ul id="pagination" data-first="First" data-prev="Previous" data-next="Next" data-last="Last"></ul>
+          <ul id="pagination" data-first=First data-prev=Previous data-next=Next data-last=Last></ul>
         </div>
       </div>
       <div role="main" class="container body-content hide-when-search">
@@ -87,6 +87,7 @@
     <h5>Implements</h5>
     <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.icomparable-1">IComparable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Common.FourBitNumber.html">FourBitNumber</a>&gt;</div>
     <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.iconvertible">IConvertible</a></div>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.iequatable-1">IEquatable</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Common.FourBitNumber.html">FourBitNumber</a>&gt;</div>
   </div>
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
@@ -104,7 +105,7 @@
   <h6><strong>Assembly</strong>: Melanchall.DryWetMidi.dll</h6>
   <h5 id="Melanchall_DryWetMidi_Common_FourBitNumber_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public struct FourBitNumber : IComparable&lt;FourBitNumber&gt;, IConvertible</code></pre>
+    <pre><code class="lang-csharp hljs">public struct FourBitNumber : IComparable&lt;FourBitNumber&gt;, IConvertible, IEquatable&lt;FourBitNumber&gt;</code></pre>
   </div>
   <h5 id="Melanchall_DryWetMidi_Common_FourBitNumber_remarks"><strong>Remarks</strong></h5>
   <div class="markdown level0 remarks">Four-bit numbers widely used by MIDI protocol as parameters of MIDI events
@@ -272,6 +273,46 @@ occurs in the same position in the sort order as the other object.</div>
         <td><p>A value that indicates the relative order of the objects being compared. The
 return value has these meanings:</p>
 <table><thead><tr><th class="term">Value</th><th class="description">Meaning</th></tr></thead><tbody><tr><td class="term">Less than zero</td><td class="description">This instance precedes <code class="paramref">other</code> in the sort order.</td></tr><tr><td class="term">Zero</td><td class="description">This instance occurs in the same position in the sort order as <code class="paramref">other</code>.</td></tr><tr><td class="term">Greater than zero</td><td class="description">This instance follows <code class="paramref">other</code> in the sort order.</td></tr></tbody></table></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Common_FourBitNumber_Equals_" data-uid="Melanchall.DryWetMidi.Common.FourBitNumber.Equals*"></a>
+  <h4 id="Melanchall_DryWetMidi_Common_FourBitNumber_Equals_Melanchall_DryWetMidi_Common_FourBitNumber_" data-uid="Melanchall.DryWetMidi.Common.FourBitNumber.Equals(Melanchall.DryWetMidi.Common.FourBitNumber)">Equals(FourBitNumber)</h4>
+  <div class="markdown level1 summary">Indicates whether the current object is equal to another object of the same type.</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool Equals(FourBitNumber other)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Common.FourBitNumber.html">FourBitNumber</a></td>
+        <td><span class="parametername">other</span></td>
+        <td>An object to compare with this object.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></td>
+        <td><code>true</code> if the current object is equal to the other parameter; otherwise, <code>false</code>.</td>
       </tr>
     </tbody>
   </table>
@@ -604,6 +645,9 @@ A return value indicates whether the conversion succeeded.</div>
   <div>
       <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.iconvertible">IConvertible</a>
   </div>
+  <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.iequatable-1">IEquatable&lt;T&gt;</a>
+  </div>
 
 </article>
           </div>
@@ -626,7 +670,7 @@ A return value indicates whether the conversion succeeded.</div>
             <span class="pull-right">
               <a href="#top">Back to top</a>
             </span>
-      2024 / Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
+      2025 / Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
       
           </div>
         </div>

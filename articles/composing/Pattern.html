@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <!--[if IE]><![endif]-->
 <html>
 
@@ -63,7 +63,7 @@
           <div class="sr-items">
             <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
           </div>
-          <ul id="pagination" data-first="First" data-prev="Previous" data-next="Next" data-last="Last"></ul>
+          <ul id="pagination" data-first=First data-prev=Previous data-next=Next data-last=Last></ul>
         </div>
       </div>
       <div role="main" class="container body-content hide-when-search">
@@ -288,7 +288,7 @@ midiFile.Write(&quot;pianoroll-moonlight-sonata.mid&quot;, true);
 123456
 </code></pre>
 <p>So if one cell means 8th triplet time span in our example, the length of the note will be <code>1/2</code>.</p>
-<h2 id="customization">Customization</h2>
+<h3 id="customization">Customization</h3>
 <p>It's time to discuss how you can adjust piano roll processing. First of all, as we said before, you can set custom symbols for a single-cell note, start and end of a multi-cell note:</p>
 <pre><code class="lang-csharp">var midiFile = new PatternBuilder()
     .SetNoteLength(MusicalTimeSpan.Eighth.Triplet())
@@ -306,17 +306,17 @@ midiFile.Write(&quot;pianoroll-moonlight-sonata.mid&quot;, true);
 <p>So the way to customize the piano roll algorithm is to pass <a class="xref" href="../../api/Melanchall.DryWetMidi.Composing.PianoRollSettings.html">PianoRollSettings</a>. But you can also define your own actions triggered by specified symbols. Let's take a look at the following example (yes, drums again):</p>
 <pre><code class="lang-csharp">var pianoRollSettings = new PianoRollSettings
 {
-    CustomActions = new Dictionary&lt;char, Action&lt;Melanchall.DryWetMidi.MusicTheory.Note, PatternBuilder&gt;&gt;
+    CustomActions = new[]
     {
-        ['*'] = (note, pianoRollBuilder) =&gt; pianoRollBuilder
-            .Note(note, velocity: (SevenBitNumber)(pianoRollBuilder.Velocity / 2)),
-        ['║'] = (note, pianoRollBuilder) =&gt; pianoRollBuilder
-            .Note(note, pianoRollBuilder.NoteLength.Divide(2))
-            .Note(note, pianoRollBuilder.NoteLength.Divide(2), (SevenBitNumber)(pianoRollBuilder.Velocity / 2)),
-        ['!'] = (note, pianoRollBuilder) =&gt; pianoRollBuilder
+        PianoRollAction.CreateSingleCell('*', (pianoRollBuilder, context) =&gt; pianoRollBuilder
+            .Note(context.Note, velocity: (SevenBitNumber)(pianoRollBuilder.Velocity / 2))),
+        PianoRollAction.CreateSingleCell('║', (pianoRollBuilder, context) =&gt; pianoRollBuilder
+            .Note(context.Note, pianoRollBuilder.NoteLength.Divide(2))
+            .Note(context.Note, pianoRollBuilder.NoteLength.Divide(2), (SevenBitNumber)(pianoRollBuilder.Velocity / 2))),
+        PianoRollAction.CreateSingleCell('!', (pianoRollBuilder, context) =&gt; pianoRollBuilder
             .StepBack(MusicalTimeSpan.ThirtySecond)
-            .Note(note, MusicalTimeSpan.ThirtySecond, (SevenBitNumber)(pianoRollBuilder.Velocity / 3))
-            .Note(note),
+            .Note(context.Note, MusicalTimeSpan.ThirtySecond, (SevenBitNumber)(pianoRollBuilder.Velocity / 3))
+            .Note(context.Note)),
     }
 };
 
@@ -342,7 +342,45 @@ midiFile.Write(&quot;pianoroll-custom.mid&quot;, true);
 <li><code>'║'</code> – double note (two notes, each with length of half of the single-cell note);</li>
 <li><code>'!'</code> – flam (ghost thirthy-second note right before main beat).</li>
 </ul>
-<p>Right now it's possible to specify single-cell actions only. A way to put custom multi-cell actions will be implemented in the next release.</p>
+<p>We've used <a class="xref" href="../../api/Melanchall.DryWetMidi.Composing.PianoRollAction.html#Melanchall_DryWetMidi_Composing_PianoRollAction_CreateSingleCell_">PianoRollAction.CreateSingleCell</a> method here to specify single-cell actions. But you can also define multi-cell ones – <a class="xref" href="../../api/Melanchall.DryWetMidi.Composing.PianoRollAction.html#Melanchall_DryWetMidi_Composing_PianoRollAction_CreateMultiCell_">PianoRollAction.CreateMultiCell</a> method is what we need for this purpose. For example, if we want to be able to put quiet notes:</p>
+<pre><code class="lang-csharp">var pianoRollSettings = new PianoRollSettings
+{
+    CustomActions = new[]
+    {
+        PianoRollAction.CreateMultiCell('{', '}', (pianoRollBuilder, context) =&gt; pianoRollBuilder
+            .Note(context.Note, context.Length, (SevenBitNumber)40)),
+    }
+};
+
+var pattern = new PatternBuilder()
+    .SetNoteLength(MusicalTimeSpan.Eighth.SingleDotted())
+    .PianoRoll(@&quot;
+        A4  ----{==}
+        B3  -{=}----
+        G#3 -----{}-&quot;,
+        pianoRollSettings)
+    .Build();
+</code></pre>
+<p>If you want, you can designate start and end of a multi-cell action with the same symbol:</p>
+<pre><code class="lang-csharp">var pianoRollSettings = new PianoRollSettings
+{
+    CustomActions = new[]
+    {
+        PianoRollAction.CreateMultiCell('/', '/', (pianoRollBuilder, context) =&gt; pianoRollBuilder
+            .Note(context.Note, context.Length, (SevenBitNumber)40)),
+    }
+};
+
+var pattern = new PatternBuilder()
+    .SetNoteLength(MusicalTimeSpan.Eighth.SingleDotted())
+    .PianoRoll(@&quot;
+        A4  ----/==/
+        B3  -/=/----
+        G#3 -----//-&quot;,
+        pianoRollSettings)
+    .Build();
+</code></pre>
+<p>So the first <code>'/'</code> starts an action and the second one ends it.</p>
 
 </article>
           </div>
@@ -365,7 +403,7 @@ midiFile.Write(&quot;pianoroll-custom.mid&quot;, true);
             <span class="pull-right">
               <a href="#top">Back to top</a>
             </span>
-      2024 / Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
+      2025 / Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
       
           </div>
         </div>

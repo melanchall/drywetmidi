@@ -642,6 +642,16 @@
     },
     {
       "type": "Conceptual",
+      "source_relative_path": "articles/playback/Dynamic-changes.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/playback/Dynamic-changes.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
       "source_relative_path": "articles/playback/Overview.md",
       "output": {
         ".html": {
@@ -656,6 +666,26 @@
       "output": {
         ".html": {
           "relative_path": "articles/playback/Tick-generator.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/playback/images/AfterTempoChange.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/playback/images/AfterTempoChange.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/playback/images/BeforeTempoChange.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/playback/images/BeforeTempoChange.png"
         }
       },
       "version": ""
@@ -1125,10 +1155,40 @@
     },
     {
       "type": "Resource",
+      "source_relative_path": "articles/tools/images/Sanitizer/NoteMaxLengthForOrphanedNoteOnEvent.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tools/images/Sanitizer/NoteMaxLengthForOrphanedNoteOnEvent.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
       "source_relative_path": "articles/tools/images/Sanitizer/NoteMinLength.png",
       "output": {
         "resource": {
           "relative_path": "articles/tools/images/Sanitizer/NoteMinLength.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tools/images/Sanitizer/OrphanedNoteOnEvents_CompleteNote.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tools/images/Sanitizer/OrphanedNoteOnEvents_CompleteNote.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tools/images/Sanitizer/OrphanedNoteOnEvents_Remove.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tools/images/Sanitizer/OrphanedNoteOnEvents_Remove.png"
         }
       },
       "version": ""
@@ -1159,16 +1219,6 @@
       "output": {
         "resource": {
           "relative_path": "articles/tools/images/Sanitizer/RemoveOrphanedNoteOffEvents.png"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "articles/tools/images/Sanitizer/RemoveOrphanedNoteOnEvents.png",
-      "output": {
-        "resource": {
-          "relative_path": "articles/tools/images/Sanitizer/RemoveOrphanedNoteOnEvents.png"
         }
       },
       "version": ""
@@ -1509,6 +1559,26 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Composing.PatternUtilities.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/Melanchall.DryWetMidi.Composing.PianoRollAction.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Melanchall.DryWetMidi.Composing.PianoRollAction.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/Melanchall.DryWetMidi.Composing.PianoRollActionContext.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Melanchall.DryWetMidi.Composing.PianoRollActionContext.html"
         }
       },
       "version": ""
@@ -2835,6 +2905,16 @@
     },
     {
       "type": "ManagedReference",
+      "source_relative_path": "obj/api/Melanchall.DryWetMidi.Interaction.ChangedTimedObject.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Melanchall.DryWetMidi.Interaction.ChangedTimedObject.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
       "source_relative_path": "obj/api/Melanchall.DryWetMidi.Interaction.ChannelCoarseTuningParameter.yml",
       "output": {
         ".html": {
@@ -2969,6 +3049,16 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Interaction.INotifyTimeChanged.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/Melanchall.DryWetMidi.Interaction.IObservableTimedObjectsCollection.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Melanchall.DryWetMidi.Interaction.IObservableTimedObjectsCollection.html"
         }
       },
       "version": ""
@@ -3189,6 +3279,26 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Interaction.ObjectType.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/Melanchall.DryWetMidi.Interaction.ObservableTimedObjectsCollection.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Melanchall.DryWetMidi.Interaction.ObservableTimedObjectsCollection.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/Melanchall.DryWetMidi.Interaction.ObservableTimedObjectsCollectionChangedEventArgs.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Melanchall.DryWetMidi.Interaction.ObservableTimedObjectsCollectionChangedEventArgs.html"
         }
       },
       "version": ""
@@ -3945,30 +4055,10 @@
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "obj/api/Melanchall.DryWetMidi.Multimedia.PlaybackHint.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Melanchall.DryWetMidi.Multimedia.PlaybackHint.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
       "source_relative_path": "obj/api/Melanchall.DryWetMidi.Multimedia.PlaybackSettings.yml",
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Multimedia.PlaybackSettings.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "obj/api/Melanchall.DryWetMidi.Multimedia.PlaybackSnapping.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Melanchall.DryWetMidi.Multimedia.PlaybackSnapping.html"
         }
       },
       "version": ""
@@ -4575,6 +4665,26 @@
     },
     {
       "type": "ManagedReference",
+      "source_relative_path": "obj/api/Melanchall.DryWetMidi.Tools.CsvDeserializationSettings.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Melanchall.DryWetMidi.Tools.CsvDeserializationSettings.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/Melanchall.DryWetMidi.Tools.CsvException.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Melanchall.DryWetMidi.Tools.CsvException.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
       "source_relative_path": "obj/api/Melanchall.DryWetMidi.Tools.CsvNoteFormat.yml",
       "output": {
         ".html": {
@@ -4659,6 +4769,16 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Tools.ObjectsMergingSettings.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/Melanchall.DryWetMidi.Tools.OrphanedNoteOnEventsPolicy.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Melanchall.DryWetMidi.Tools.OrphanedNoteOnEventsPolicy.html"
         }
       },
       "version": ""
@@ -4929,6 +5049,16 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Tools.TimeProcessingInstruction.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/Melanchall.DryWetMidi.Tools.UnknownRecordPolicy.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Melanchall.DryWetMidi.Tools.UnknownRecordPolicy.html"
         }
       },
       "version": ""

@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+
+  <head>
+    <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+      <title>Dynamic changes | DryWetMIDI </title>
+      <meta name="viewport" content="width=device-width">
+      <meta name="title" content="Dynamic changes | DryWetMIDI ">
+    
+    
+      <link rel="shortcut icon" href="../../images/favicon.png">
+      <link rel="stylesheet" href="../../styles/docfx.vendor.min.css">
+      <link rel="stylesheet" href="../../styles/docfx.css">
+      <link rel="stylesheet" href="../../styles/main.css">
+      <meta property="docfx:navrel" content="../../toc.html">
+      <meta property="docfx:tocrel" content="../toc.html">
+    
+    <meta property="docfx:rel" content="../../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+
+        <div id="search-results">
+          <div class="search-list">Search Results for <span></span></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination" data-first=First data-prev=Previous data-next=Next data-last=Last></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="a_playback_dynamic">
+<h1 id="dynamic-changes">Dynamic changes</h1>
+
+<p>Playback API allows you to modify objects during playback. So you can, for example, add or remove a note or chord or any other MIDI event, or change tempo at some point in time. With this feature it’s possible to even build a MIDI sequencer or piano roll like in your favorite DAW.</p>
+<p>Following code is a small demonstration of what you can do:</p>
+<pre><code class="lang-csharp">using Melanchall.DryWetMidi.Common;
+using Melanchall.DryWetMidi.Core;
+using Melanchall.DryWetMidi.Interaction;
+using Melanchall.DryWetMidi.Multimedia;
+using Melanchall.DryWetMidi.MusicTheory;
+
+namespace DynamicPlayback
+{
+    internal class Program
+    {
+        private static MusicalTimeSpan NoteLength = MusicalTimeSpan.Quarter;
+        private static MusicalTimeSpan GapStepLength = MusicalTimeSpan.ThirtySecond;
+
+        static void Main(string[] args)
+        {
+            var tempoMap = TempoMap.Default;
+            
+            var observableCollection = new ObservableTimedObjectsCollection
+            {
+                new Scale(ScaleIntervals.Major, NoteName.C)
+                    .GetAscendingNotes(Octave.Middle.C)
+                    .Take(10)
+                    .Select((n, i) =&gt; new Melanchall.DryWetMidi.Interaction.Note(n.NoteNumber)
+                        .SetTime(NoteLength * i, tempoMap)
+                        .SetLength(NoteLength, tempoMap))
+            };
+
+            var outputDevice = OutputDevice.GetByName(&quot;Microsoft GS Wavetable Synth&quot;);
+            var playback = new Playback(observableCollection, tempoMap, outputDevice);
+            playback.Loop = true;
+
+            Console.WriteLine(&quot;Press any key to start playback...&quot;);
+            Console.ReadKey();
+
+            playback.Start();
+
+            Console.WriteLine(&quot;Press ↑ or ↓ to change program number&quot;);
+            Console.WriteLine(&quot;Press ← or → to change gap between notes&quot;);
+            Console.WriteLine(&quot;Press any other key to exit...&quot;);
+
+            HandleChanges(observableCollection, tempoMap);
+
+            playback.Dispose();
+            outputDevice.Dispose();
+        }
+
+        private static void HandleChanges(
+            ObservableTimedObjectsCollection observableCollection,
+            TempoMap tempoMap)
+        {
+            TimedEvent programChangeTimedEvent = null;
+
+            var currentGapSteps = 0;
+            var currentProgram = SevenBitNumber.MinValue;
+
+            while (true)
+            {
+                var key = Console.ReadKey().Key;
+
+                switch (key)
+                {
+                    case ConsoleKey.UpArrow:
+                    case ConsoleKey.DownArrow:
+                        HandleProgramChange(key, ref currentProgram, ref programChangeTimedEvent, observableCollection);
+                        break;
+                    case ConsoleKey.LeftArrow:
+                    case ConsoleKey.RightArrow:
+                        HandleGapChange(key, ref currentGapSteps, observableCollection, tempoMap);
+                        break;
+                    default:
+                        return;
+                }
+            }
+        }
+
+        private static void HandleProgramChange(
+            ConsoleKey key,
+            ref SevenBitNumber program,
+            ref TimedEvent programChangeTimedEvent,
+            ObservableTimedObjectsCollection observableCollection)
+        {
+            program = key == ConsoleKey.UpArrow
+                ? (SevenBitNumber)Math.Min(SevenBitNumber.MaxValue, program + 1)
+                : (SevenBitNumber)Math.Max(SevenBitNumber.MinValue, program - 1);
+            
+            Console.WriteLine($&quot;New program number: {program}&quot;);
+
+            if (programChangeTimedEvent == null)
+            {
+                programChangeTimedEvent = new TimedEvent(new ProgramChangeEvent(program), 0);
+                observableCollection.Add(programChangeTimedEvent);
+            }
+            else
+            {
+                var programNumber = program;
+                observableCollection.ChangeObject(
+                    programChangeTimedEvent,
+                    obj =&gt; ((ProgramChangeEvent)((TimedEvent)obj).Event).ProgramNumber = programNumber);
+            }
+        }
+
+        private static void HandleGapChange(
+            ConsoleKey key,
+            ref int gapSteps,
+            ObservableTimedObjectsCollection observableCollection,
+            TempoMap tempoMap)
+        {
+            gapSteps = key == ConsoleKey.LeftArrow
+                ? Math.Max(0, gapSteps - 1)
+                : gapSteps + 1;
+            
+            Console.WriteLine($&quot;New gap between notes: {gapSteps}&quot;);
+
+            var gapStepsNumber = gapSteps;
+
+            var i = 0;
+
+            foreach (var note in observableCollection.OfType&lt;Melanchall.DryWetMidi.Interaction.Note&gt;())
+            {
+                observableCollection.ChangeObject(
+                    note,
+                    _ =&gt; note.SetTime((NoteLength + GapStepLength * gapStepsNumber) * i, tempoMap));
+
+                i++;
+            }
+        }
+    }
+}
+</code></pre>
+<p>What does this console application do? Well, first of all it creates a set of notes (which is 10 steps of major scale starting from <em>C</em>) and then starts playing them in a loop. Interesting thing here is we use <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.ObservableTimedObjectsCollection.html">ObservableTimedObjectsCollection</a> – a collection which allows us to modify those notes on the fly and even add new MIDI data to the current playback object:</p>
+<ul>
+<li>Press the <strong>up</strong> or <strong>down</strong> arrow key and the current program number will be <strong>incremented</strong> or <strong>decremented</strong>, so a new instrument will be used to make sound. To apply a program we need to add a <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.ProgramChangeEvent.html">Program Change</a> event. If it already exists, we’ll just modify its <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.ProgramChangeEvent.html#Melanchall_DryWetMidi_Core_ProgramChangeEvent_ProgramNumber">ProgramNumber</a> property.</li>
+<li>Press the <strong>right</strong> or <strong>left</strong> arrow and the gap between notes will be <strong>incremented</strong> or <strong>decremented</strong>. So we’re modifying notes times here.</li>
+</ul>
+<h2 id="iobservabletimedobjectscollection">IObservableTimedObjectsCollection</h2>
+<p>In fact, to enable tracking of data changes you need to create an instance of the <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.Playback.html">Playback</a> passing to its constructor an object which type implements two interfaces:</p>
+<ol>
+<li><code>IEnumerable&lt;ITimedObject&gt;</code> (just because <code>Playback</code>’s constructor accepts an argument of this type);</li>
+<li><a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.IObservableTimedObjectsCollection.html">IObservableTimedObjectsCollection</a>.</li>
+</ol>
+<p>When you modify a collection, it will fire the <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.IObservableTimedObjectsCollection.html#Melanchall_DryWetMidi_Interaction_IObservableTimedObjectsCollection_CollectionChanged">CollectionChanged</a> event holding information about what objects were added, removed and changed.</p>
+<p><a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.ObservableTimedObjectsCollection.html">ObservableTimedObjectsCollection</a> is a built-in type that meets two requirements above. It obviously has methods like <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.ObservableTimedObjectsCollection.html#Melanchall_DryWetMidi_Interaction_ObservableTimedObjectsCollection_Add_">Add</a> or <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.ObservableTimedObjectsCollection.html#Melanchall_DryWetMidi_Interaction_ObservableTimedObjectsCollection_Remove_">Remove</a>, but also some special ones. First of all, in the example above we use the <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.ObservableTimedObjectsCollection.html#Melanchall_DryWetMidi_Interaction_ObservableTimedObjectsCollection_ChangeObject_">ChangeObject</a> method. It allows you to modify an object and tell the collection that it has been changed in some way.</p>
+<pre><code class="lang-csharp">collection.ChangeObject(chord, obj =&gt;
+{
+    var c = (Chord)obj;
+    c.Notes.Remove(c.Notes.First());
+});
+
+collection.ChangeObject(chord, _ =&gt;
+{
+    chord.Channel = (FourBitNumber)5;
+});
+</code></pre>
+<p>Sometimes your logic of collection modification can be complex and/or distributed between different parts of code. In this case it will be more efficient to fire <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.IObservableTimedObjectsCollection.html#Melanchall_DryWetMidi_Interaction_IObservableTimedObjectsCollection_CollectionChanged">CollectionChanged</a> one time when you’re done with the data instead of triggering the event each time you make a change. There is a method for that – <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.ObservableTimedObjectsCollection.html#Melanchall_DryWetMidi_Interaction_ObservableTimedObjectsCollection_ChangeCollection_">ChangeCollection</a>:</p>
+<pre><code class="lang-csharp">var tempoMap = TempoMap.Create(Tempo.FromBeatsPerMinute(240));
+var collection = new ObservableTimedObjectsCollection();
+
+collection.ChangeCollection(() =&gt;
+{
+    AddInitialObjects(collection, tempoMap);
+    FilterObjects(collection);
+    FixObjects(collection, tempoMap);
+});
+
+private static void AddInitialObjects(
+    ObservableTimedObjectsCollection collection,
+    TempoMap tempoMap)
+{
+    collection.Add(SevenBitNumber
+        .Values
+        .Select((noteNumber, i) =&gt; new Note(noteNumber) { Time = i * 100, Length = 200 }));
+
+    collection.Add(
+        new TimedEvent(new ProgramChangeEvent((SevenBitNumber)7) { Channel = (FourBitNumber)4 })
+            .SetTime(MusicalTimeSpan.Quarter, tempoMap),
+        new Chord(
+            new Note((SevenBitNumber)80),
+            new Note((SevenBitNumber)90))
+        {
+            Channel = (FourBitNumber)4
+        });
+}
+
+private static void FilterObjects(
+    ObservableTimedObjectsCollection collection)
+{
+    var objectsToRemove = collection
+        .Where(obj =&gt; obj is Note note &amp;&amp; note.NoteNumber % 2 == 0)
+        .ToList();
+
+    collection.Remove(objectsToRemove);
+}
+
+private static void FixObjects(
+    ObservableTimedObjectsCollection collection,
+    TempoMap tempoMap)
+{
+    new Quantizer().Quantize(
+        collection,
+        new SteppedGrid(new MetricTimeSpan(0, 0, 1)),
+        tempoMap);
+}
+</code></pre>
+<p>If you write just</p>
+<pre><code class="lang-csharp">AddInitialObjects(collection, tempoMap);
+FilterObjects(collection);
+FixObjects(collection, tempoMap);
+</code></pre>
+<p>it will trigger playback’s logic of data tracking multiple times which will degrade performance (you may notice lags in playback).</p>
+<p>Of course you can create your own class implementing <code>IObservableTimedObjectsCollection</code> (and <code>IEnumerable&lt;ITimedObject&gt;</code>) and pass this collection to <code>Playback</code>. As the <code>ObservableTimedObjectsCollection</code> described above, your class should fire <code>CollectionChanged</code> event which arguments object (<a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.ObservableTimedObjectsCollectionChangedEventArgs.html">ObservableTimedObjectsCollectionChangedEventArgs</a>) contains following data:</p>
+<ul>
+<li><a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.ObservableTimedObjectsCollectionChangedEventArgs.html#Melanchall_DryWetMidi_Interaction_ObservableTimedObjectsCollectionChangedEventArgs_AddedObjects">AddedObjects</a>;</li>
+<li><a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.ObservableTimedObjectsCollectionChangedEventArgs.html#Melanchall_DryWetMidi_Interaction_ObservableTimedObjectsCollectionChangedEventArgs_RemovedObjects">RemovedObjects</a>;</li>
+<li><a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.ObservableTimedObjectsCollectionChangedEventArgs.html#Melanchall_DryWetMidi_Interaction_ObservableTimedObjectsCollectionChangedEventArgs_ChangedObjects">ChangedObjects</a>.</li>
+</ul>
+<p>First and second properties provide a collection of <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.ITimedObject.html">ITimedObject</a> objects which have been added and removed. Third property contains instances of the <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.ChangedTimedObject.html">ChangedTimedObject</a> holding an object along with its old time (time before changing).</p>
+<h2 id="objects-references">Objects references</h2>
+<p>Note that you must use original objects references when you’re working with an observable collection. For example, with this code</p>
+<pre><code class="lang-csharp">var collection = new ObservableTimedObjectsCollection
+{
+    new TimedEvent(new TextEvent(&quot;A&quot;), 100)
+};
+
+var removed = collection.Remove(new TimedEvent(new TextEvent(&quot;A&quot;), 100));
+</code></pre>
+<p><code>removed</code> variable will have <code>false</code> value since we’re passing a new reference to the <code>Remove</code> method. Proper way is</p>
+<pre><code class="lang-csharp">var timedEvent = new TimedEvent(new TextEvent(&quot;A&quot;), 100);
+var collection = new ObservableTimedObjectsCollection
+{
+    timedEvent
+};
+
+var removed = collection.Remove(timedEvent);
+</code></pre>
+<p>or</p>
+<pre><code class="lang-csharp">var collection = new ObservableTimedObjectsCollection
+{
+    new TimedEvent(new TextEvent(&quot;A&quot;), 100)
+};
+
+var removed = collection.Remove(collection.First());
+</code></pre>
+<p>The same situation with the <code>ChangeObject</code> method.</p>
+<h2 id="orphaned-note-on-and-note-off-events">Orphaned Note On and Note Off events</h2>
+<p>Also we need to discuss a case when you add a <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.NoteOnEvent.html">Note On</a> or <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.NoteOffEvent.html">Note Off</a> event instead of a Note object. If you add a <em>Note On</em> event, no note will be built internally until you add corresponding (with the same note number and channel) <em>Note Off</em> event. The same is true if you add a <em>Note Off</em> event – you need to add corresponding <em>Note On</em> one to get the note and to have it played.</p>
+<p>So with this code</p>
+<pre><code class="lang-csharp">collection.Add(new TimedEvent(
+    new NoteOnEvent((SevenBitNumber)70, SevenBitNumber.MaxValue),
+    100));
+</code></pre>
+<p>you won’t hear the note until</p>
+<pre><code class="lang-csharp">collection.Add(new TimedEvent(
+    new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue),
+    200));
+</code></pre>
+<h2 id="tempo-map">Tempo map</h2>
+<p>Obviously you can add a new <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.SetTempoEvent.html">Set Tempo</a> event or modify an existing one. But what happens within playback when you do that?</p>
+<p>First of all, the process of scaling events times begins. So it can take some time to process events after a tempo change. Of course, only data <strong>after</strong> a tempo change will be scaled.</p>
+<p>For example, if we have this initial collection</p>
+<pre><code class="lang-csharp">var collection = new ObservableTimedObjectsCollection
+{
+    new Note((SevenBitNumber)90) { Time = 300, Length = 500 },
+};
+</code></pre>
+<p>and default tempo map (<code>500000</code> microseconds per quarter note or <code>120</code> BPM), then playback events are:</p>
+<ul>
+<li><em>Note On</em> at <code>300</code> ticks;</li>
+<li><em>Note Off</em> at <code>800</code> ticks.</li>
+</ul>
+<p>Now we want to add a <em>Set Tempo</em> event:</p>
+<pre><code class="lang-csharp">collection.Add(new TimedEvent(new SetTempoEvent(250000), 100));
+</code></pre>
+<p>This change makes tempo 2x faster and playback events will be:</p>
+<ul>
+<li><em>Set Tempo</em> at <code>100</code> ticks;</li>
+<li><em>Note On</em> at <code>200</code> ticks;</li>
+<li><em>Note Off</em> at <code>450</code> ticks.</li>
+</ul>
+<p>So time spans between the tempo change and events become 2x shorter (so they will be played earlier making playback faster).</p>
+<p>It's important to note that when you change the tempo map, some time-based things other than MIDI events within the playback will be scaled too. To explain this better, let's take a look at the current time of the playback which can be accessed via <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.Playback.html#Melanchall_DryWetMidi_Multimedia_Playback_GetCurrentTime_">GetCurrentTime</a> methods. For example, we have such a playback state:</p>
+<p><img src="images/BeforeTempoChange.png" alt="BeforeTempoChange"></p>
+<p>If we change the <em>Set Tempo</em> event so that the tempo will be 180 BPM (instead of current 90 BPM), the data will be shrinked by two times:</p>
+<p><img src="images/AfterTempoChange.png" alt="AfterTempoChange"></p>
+<p>As you can see, the current time has been scaled too. Initially it was at the middle of the note. Scaling of the current time ensures it remains at the middle of that note so the playback will be smooth and without unexpected time jumps.</p>
+<p>To preserve relative positions, following properties will be scaled too:</p>
+<ul>
+<li><a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.Playback.html#Melanchall_DryWetMidi_Multimedia_Playback_PlaybackStart">PlaybackStart</a>;</li>
+<li><a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.Playback.html#Melanchall_DryWetMidi_Multimedia_Playback_PlaybackEnd">PlaybackEnd</a>;</li>
+<li>times of snap points.</li>
+</ul>
+<p>When you use <code>Playback</code> created with an observable collection, you should use <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.Playback.html#Melanchall_DryWetMidi_Multimedia_Playback_TempoMap">TempoMap</a> property of the <code>Playback</code> instance when you work with its objects. When you edit a tempo map (via adding, removing or changing <em>Set Tempo</em> and <em>Time Signature</em> events), this property will reflect these changes. So the property holds the actual <a class="xref" href="../high-level-managing/Tempo-map.html">tempo map</a> of the playback:</p>
+<pre><code class="lang-csharp">collection.Add(new TimedEvent(new TextEvent(&quot;A&quot;))
+    .SetTime(new MetricTimeSpan(0, 0, 1), playback.TempoMap));
+</code></pre>
+
+</article>
+          </div>
+
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In this article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+      2025 / Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
+      
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <script type="text/javascript" src="../../styles/docfx.vendor.min.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>

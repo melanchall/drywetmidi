@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <!--[if IE]><![endif]-->
 <html>
 
@@ -63,7 +63,7 @@
           <div class="sr-items">
             <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
           </div>
-          <ul id="pagination" data-first="First" data-prev="Previous" data-next="Next" data-last="Last"></ul>
+          <ul id="pagination" data-first=First data-prev=Previous data-next=Next data-last=Last></ul>
         </div>
       </div>
       <div role="main" class="container body-content hide-when-search">
@@ -80,7 +80,7 @@
 <h1 id="csv-serializer">CSV serializer</h1>
 
 <p>With the <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.CsvSerializer.html">CsvSerializer</a> you can either serialize objects to CSV or deserialize them back from CSV.</p>
-<p>In this article the comma (<code>,</code>) used as a values delimiter. You can change it with the <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.CsvSerializationSettings.html#Melanchall_DryWetMidi_Tools_CsvSerializationSettings_Delimiter">Delimiter</a> property of the <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.CsvSerializationSettings.html">CsvSerializationSettings</a>.</p>
+<p>In this article the comma (<code>,</code>) used as a values delimiter. You can change it with the <code>Delimiter</code> property of the <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.CsvSerializationSettings.html">CsvSerializationSettings</a> (for serialization) and <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.CsvDeserializationSettings.html">CsvDeserializationSettings</a> (for deserialization).</p>
 <h2 id="example">Example</h2>
 <p>Here is a quick example of CSV:</p>
 <pre><code class="lang-text">0,&quot;MThd&quot;,0,&quot;Header&quot;,96
@@ -118,15 +118,16 @@
 2,&quot;MTrk&quot;,1,&quot;Note&quot;,110,100,3,E2,127,0
 </code></pre>
 <p>Here we have a single note <em>E7</em> (the object #0) and a chord (the object #1) with two notes: <em>D3</em> and <em>E2</em>.</p>
+<p>Note that when you're deserializing a MIDI file, you can put any number to <code>ObjectIndex</code>. This property is irrelevant for MIDI file deserialization, but required to correctly deserialize objects (<a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.CsvSerializer.html#Melanchall_DryWetMidi_Tools_CsvSerializer_DeserializeObjectsFromCsv_">DeserializeObjectsFromCsv</a>). The property exists to have single CSV schema for both file and objects deserialization.</p>
 <p>If <code>ObjectName</code> is <code>&quot;Header&quot;</code> then <code>ObjectData</code> will contain a single number – <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.TimeDivision.html">time division</a>.</p>
 <p>If <code>ObjectName</code> is <code>&quot;Note&quot;</code> then <code>ObjectData</code> will be in the following format:</p>
 <pre><code class="lang-text">Time,Length,Channel,Note,Velocity,OffVelocity
 </code></pre>
-<p>where <code>Time</code>, <code>Length</code>, <code>Channel</code>, <code>Velocity</code> and <code>OffVelocity</code> hold values of the corresponding properties of a <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.Note.html">Note</a> object. You can change <code>Time</code> and <code>Length</code> representations via <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.CsvSerializationSettings.html#Melanchall_DryWetMidi_Tools_CsvSerializationSettings_TimeType">TimeType</a> and <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.CsvSerializationSettings.html#Melanchall_DryWetMidi_Tools_CsvSerializationSettings_LengthType">LengthType</a> properties of the <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.CsvSerializationSettings.html">CsvSerializationSettings</a> correspondingly. <code>Note</code> can be either the note number or letter (<em>C4</em>, for example) depending on the <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.CsvSerializationSettings.html#Melanchall_DryWetMidi_Tools_CsvSerializationSettings_NoteFormat">NoteFormat</a> property value.</p>
+<p>where <code>Time</code>, <code>Length</code>, <code>Channel</code>, <code>Velocity</code> and <code>OffVelocity</code> hold values of the corresponding properties of a <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.Note.html">Note</a> object. You can change <code>Time</code> and <code>Length</code> representations via <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.CsvSerializationSettings.html#Melanchall_DryWetMidi_Tools_CsvSerializationSettings_TimeType">TimeType</a> and <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.CsvSerializationSettings.html#Melanchall_DryWetMidi_Tools_CsvSerializationSettings_LengthType">LengthType</a> properties of the <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.CsvSerializationSettings.html">CsvSerializationSettings</a> correspondingly (there are also the same properties in <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.CsvDeserializationSettings.html">CsvDeserializationSettings</a> for deserialization). <code>Note</code> can be either the note number or letter (<em>C4</em>, for example) depending on the <code>NoteFormat</code> property value.</p>
 <p>In other cases of <code>ObjectName</code> it's assumed that this component represents the <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.MidiEvent.html#Melanchall_DryWetMidi_Core_MidiEvent_EventType">type</a> of a MIDI event. For example, you can see <code>&quot;NoteOn&quot;</code> or <code>&quot;SequenceTrackName&quot;</code> as a value for <code>ObjectName</code>. <code>ObjectData</code> for such records will be in the following format:</p>
 <pre><code class="lang-text">Time,EventData
 </code></pre>
-<p>As for the <code>Time</code>, it holds the time of a <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.TimedEvent.html">TimedEvent</a> object. You can change <code>Time</code> representation via the <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.CsvSerializationSettings.html#Melanchall_DryWetMidi_Tools_CsvSerializationSettings_TimeType">TimeType</a> property of the <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.CsvSerializationSettings.html">CsvSerializationSettings</a>. <code>EventData</code> depends on the type of an event:</p>
+<p>As for the <code>Time</code>, it holds the time of a <a class="xref" href="../../api/Melanchall.DryWetMidi.Interaction.TimedEvent.html">TimedEvent</a> object. You can change <code>Time</code> representation used for serialization via the <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.CsvSerializationSettings.html#Melanchall_DryWetMidi_Tools_CsvSerializationSettings_TimeType">TimeType</a> property of the <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.CsvSerializationSettings.html">CsvSerializationSettings</a> (and the same property of the <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.CsvDeserializationSettings.html">CsvDeserializationSettings</a> for deserialization). <code>EventData</code> depends on the type of an event:</p>
 <table>
 <thead>
 <tr>
@@ -325,9 +326,24 @@
 </table>
 <p>where <strong>Modifiers</strong> are:</p>
 <ul>
-<li><strong>BytesArray</strong> – <code>Data</code> property is serialized as <code>&quot;B1 B2 B3 ...&quot;</code> with format of bytes depending on the <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.CsvSerializationSettings.html#Melanchall_DryWetMidi_Tools_CsvSerializationSettings_BytesArrayFormat">BytesArrayFormat</a> property of the <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.CsvSerializationSettings.html">CsvSerializationSettings</a>;</li>
-<li><strong>Note</strong> – <code>Note</code> property is serialized as either the note number or letter (<em>C4</em>, for example) depending on the <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.CsvSerializationSettings.html#Melanchall_DryWetMidi_Tools_CsvSerializationSettings_NoteFormat">NoteFormat</a> property of the <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.CsvSerializationSettings.html">CsvSerializationSettings</a>.</li>
+<li><strong>BytesArray</strong> – <code>Data</code> will be serialized as <code>&quot;B1 B2 B3 ...&quot;</code> where format of the string controlled by the <code>BytesArrayFormat</code> and <code>BytesArrayDelimiter</code> properties of the <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.CsvSerializationSettings.html">CsvSerializationSettings</a> and <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.CsvDeserializationSettings.html">CsvDeserializationSettings</a>;</li>
+<li><strong>Note</strong> – <code>Note</code> property is serialized as either the note number or letter (<em>C4</em>, for example) depending on the <code>NoteFormat</code> property of the <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.CsvSerializationSettings.html">CsvSerializationSettings</a> and <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.CsvDeserializationSettings.html">CsvDeserializationSettings</a>.</li>
 </ul>
+<p>By the way, when you're deserializing CSV data, you can set <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.CsvDeserializationSettings.html#Melanchall_DryWetMidi_Tools_CsvDeserializationSettings_TimeType">TimeType</a>, <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.CsvDeserializationSettings.html#Melanchall_DryWetMidi_Tools_CsvDeserializationSettings_LengthType">LengthType</a> and <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.CsvDeserializationSettings.html#Melanchall_DryWetMidi_Tools_CsvDeserializationSettings_NoteFormat">NoteFormat</a> properties of the <a class="xref" href="../../api/Melanchall.DryWetMidi.Tools.CsvDeserializationSettings.html">CsvDeserializationSettings</a> to <code>null</code> to let the library detect formats automatically (which is the default behavior). Of course, you can tell the engine exact formats to simplify its work.</p>
+<p>Note that if you deserialize a MIDI file from CSV, you don't need to manually sort records by time in text representation before deserialization. DryWetMIDI will do it for you. So, for example, these lines</p>
+<pre><code class="lang-text">0,&quot;MThd&quot;,0,&quot;Header&quot;,96
+1,&quot;MTrk&quot;,0,&quot;NoteOff&quot;,6/4,4,100,0
+1,&quot;MTrk&quot;,1,&quot;Text&quot;,1/4,&quot;A&quot;
+1,&quot;MTrk&quot;,2,&quot;NoteOn&quot;,3/4,4,100,127
+1,&quot;MTrk&quot;,3,&quot;Text&quot;,2/4,&quot;B&quot;
+</code></pre>
+<p>will be correctly deserialized to the file with single track chunk containing following events:</p>
+<ol>
+<li><em>Text</em> event with text of <em>A</em> at time of <code>1/4</code>.</li>
+<li><em>Text</em> event with text of <em>B</em> at time of <code>2/4</code>.</li>
+<li><em>Note On</em> event with note number <code>100</code> and velocity <code>127</code> at time of <code>3/4</code>.</li>
+<li><em>Note Off</em> event with note number <code>100</code> and velocity <code>0</code> at time of <code>6/4</code>.</li>
+</ol>
 
 </article>
           </div>
@@ -350,7 +366,7 @@
             <span class="pull-right">
               <a href="#top">Back to top</a>
             </span>
-      2024 / Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
+      2025 / Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
       
           </div>
         </div>

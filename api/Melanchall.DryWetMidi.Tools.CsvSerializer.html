@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <!--[if IE]><![endif]-->
 <html>
 
@@ -63,7 +63,7 @@
           <div class="sr-items">
             <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
           </div>
-          <ul id="pagination" data-first="First" data-prev="Previous" data-next="Next" data-last="Last"></ul>
+          <ul id="pagination" data-first=First data-prev=Previous data-next=Next data-last=Last></ul>
         </div>
       </div>
       <div role="main" class="container body-content hide-when-search">
@@ -122,12 +122,12 @@
   <h3 id="methods">Methods
 </h3>
   <a id="Melanchall_DryWetMidi_Tools_CsvSerializer_DeserializeChunkFromCsv_" data-uid="Melanchall.DryWetMidi.Tools.CsvSerializer.DeserializeChunkFromCsv*"></a>
-  <h4 id="Melanchall_DryWetMidi_Tools_CsvSerializer_DeserializeChunkFromCsv_System_IO_Stream_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Tools_CsvSerializationSettings_" data-uid="Melanchall.DryWetMidi.Tools.CsvSerializer.DeserializeChunkFromCsv(System.IO.Stream,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Tools.CsvSerializationSettings)">DeserializeChunkFromCsv(Stream, TempoMap, CsvSerializationSettings)</h4>
+  <h4 id="Melanchall_DryWetMidi_Tools_CsvSerializer_DeserializeChunkFromCsv_System_IO_Stream_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Tools_CsvDeserializationSettings_" data-uid="Melanchall.DryWetMidi.Tools.CsvSerializer.DeserializeChunkFromCsv(System.IO.Stream,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Tools.CsvDeserializationSettings)">DeserializeChunkFromCsv(Stream, TempoMap, CsvDeserializationSettings)</h4>
   <div class="markdown level1 summary">Reads a <a class="xref" href="Melanchall.DryWetMidi.Core.MidiChunk.html">MidiChunk</a> represented as CSV from the specified stream.</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="declaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static MidiChunk DeserializeChunkFromCsv(Stream stream, TempoMap tempoMap, CsvSerializationSettings settings = null)</code></pre>
+    <pre><code class="lang-csharp hljs">public static MidiChunk DeserializeChunkFromCsv(Stream stream, TempoMap tempoMap, CsvDeserializationSettings settings = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-condensed">
@@ -150,7 +150,7 @@
         <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TempoMap.html">TempoMap</a> to use for time/length conversions.</td>
       </tr>
       <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Tools.CsvSerializationSettings.html">CsvSerializationSettings</a></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Tools.CsvDeserializationSettings.html">CsvDeserializationSettings</a></td>
         <td><span class="parametername">settings</span></td>
         <td>Settings according to which <a class="xref" href="Melanchall.DryWetMidi.Core.MidiChunk.html">MidiChunk</a> should
     be deserialized.</td>
@@ -194,18 +194,18 @@
       <code class="paramref">tempoMap</code> is <code>null</code>.</li></ul></td>
       </tr>
       <tr>
-        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.formatexception">FormatException</a></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Tools.CsvException.html">CsvException</a></td>
         <td>Invalid CSV representation.</td>
       </tr>
     </tbody>
   </table>
   <a id="Melanchall_DryWetMidi_Tools_CsvSerializer_DeserializeChunkFromCsv_" data-uid="Melanchall.DryWetMidi.Tools.CsvSerializer.DeserializeChunkFromCsv*"></a>
-  <h4 id="Melanchall_DryWetMidi_Tools_CsvSerializer_DeserializeChunkFromCsv_System_String_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Tools_CsvSerializationSettings_" data-uid="Melanchall.DryWetMidi.Tools.CsvSerializer.DeserializeChunkFromCsv(System.String,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Tools.CsvSerializationSettings)">DeserializeChunkFromCsv(string, TempoMap, CsvSerializationSettings)</h4>
+  <h4 id="Melanchall_DryWetMidi_Tools_CsvSerializer_DeserializeChunkFromCsv_System_String_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Tools_CsvDeserializationSettings_" data-uid="Melanchall.DryWetMidi.Tools.CsvSerializer.DeserializeChunkFromCsv(System.String,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Tools.CsvDeserializationSettings)">DeserializeChunkFromCsv(string, TempoMap, CsvDeserializationSettings)</h4>
   <div class="markdown level1 summary">Reads a <a class="xref" href="Melanchall.DryWetMidi.Core.MidiChunk.html">MidiChunk</a> represented as CSV from the specified file.</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="declaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static MidiChunk DeserializeChunkFromCsv(string filePath, TempoMap tempoMap, CsvSerializationSettings settings = null)</code></pre>
+    <pre><code class="lang-csharp hljs">public static MidiChunk DeserializeChunkFromCsv(string filePath, TempoMap tempoMap, CsvDeserializationSettings settings = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-condensed">
@@ -228,7 +228,7 @@
         <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TempoMap.html">TempoMap</a> to use for time/length conversions.</td>
       </tr>
       <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Tools.CsvSerializationSettings.html">CsvSerializationSettings</a></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Tools.CsvDeserializationSettings.html">CsvDeserializationSettings</a></td>
         <td><span class="parametername">settings</span></td>
         <td>Settings according to which <a class="xref" href="Melanchall.DryWetMidi.Core.MidiChunk.html">MidiChunk</a> should
     be deserialized.</td>
@@ -271,18 +271,18 @@ contains only white space, or contains one or more invalid characters as defined
         <td><code class="paramref">tempoMap</code> is <code>null</code>.</td>
       </tr>
       <tr>
-        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.formatexception">FormatException</a></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Tools.CsvException.html">CsvException</a></td>
         <td>Invalid CSV representation.</td>
       </tr>
     </tbody>
   </table>
   <a id="Melanchall_DryWetMidi_Tools_CsvSerializer_DeserializeChunksFromCsv_" data-uid="Melanchall.DryWetMidi.Tools.CsvSerializer.DeserializeChunksFromCsv*"></a>
-  <h4 id="Melanchall_DryWetMidi_Tools_CsvSerializer_DeserializeChunksFromCsv_System_IO_Stream_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Tools_CsvSerializationSettings_" data-uid="Melanchall.DryWetMidi.Tools.CsvSerializer.DeserializeChunksFromCsv(System.IO.Stream,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Tools.CsvSerializationSettings)">DeserializeChunksFromCsv(Stream, TempoMap, CsvSerializationSettings)</h4>
+  <h4 id="Melanchall_DryWetMidi_Tools_CsvSerializer_DeserializeChunksFromCsv_System_IO_Stream_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Tools_CsvDeserializationSettings_" data-uid="Melanchall.DryWetMidi.Tools.CsvSerializer.DeserializeChunksFromCsv(System.IO.Stream,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Tools.CsvDeserializationSettings)">DeserializeChunksFromCsv(Stream, TempoMap, CsvDeserializationSettings)</h4>
   <div class="markdown level1 summary">Reads a collection of <a class="xref" href="Melanchall.DryWetMidi.Core.MidiChunk.html">MidiChunk</a> represented as CSV from the specified stream.</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="declaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static ICollection&lt;MidiChunk&gt; DeserializeChunksFromCsv(Stream stream, TempoMap tempoMap, CsvSerializationSettings settings = null)</code></pre>
+    <pre><code class="lang-csharp hljs">public static ICollection&lt;MidiChunk&gt; DeserializeChunksFromCsv(Stream stream, TempoMap tempoMap, CsvDeserializationSettings settings = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-condensed">
@@ -305,7 +305,7 @@ contains only white space, or contains one or more invalid characters as defined
         <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TempoMap.html">TempoMap</a> to use for time/length conversions.</td>
       </tr>
       <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Tools.CsvSerializationSettings.html">CsvSerializationSettings</a></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Tools.CsvDeserializationSettings.html">CsvDeserializationSettings</a></td>
         <td><span class="parametername">settings</span></td>
         <td>Settings according to which collection of <a class="xref" href="Melanchall.DryWetMidi.Core.MidiChunk.html">MidiChunk</a> should
     be deserialized.</td>
@@ -349,18 +349,18 @@ contains only white space, or contains one or more invalid characters as defined
       <code class="paramref">tempoMap</code> is <code>null</code>.</li></ul></td>
       </tr>
       <tr>
-        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.formatexception">FormatException</a></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Tools.CsvException.html">CsvException</a></td>
         <td>Invalid CSV representation.</td>
       </tr>
     </tbody>
   </table>
   <a id="Melanchall_DryWetMidi_Tools_CsvSerializer_DeserializeChunksFromCsv_" data-uid="Melanchall.DryWetMidi.Tools.CsvSerializer.DeserializeChunksFromCsv*"></a>
-  <h4 id="Melanchall_DryWetMidi_Tools_CsvSerializer_DeserializeChunksFromCsv_System_String_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Tools_CsvSerializationSettings_" data-uid="Melanchall.DryWetMidi.Tools.CsvSerializer.DeserializeChunksFromCsv(System.String,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Tools.CsvSerializationSettings)">DeserializeChunksFromCsv(string, TempoMap, CsvSerializationSettings)</h4>
+  <h4 id="Melanchall_DryWetMidi_Tools_CsvSerializer_DeserializeChunksFromCsv_System_String_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Tools_CsvDeserializationSettings_" data-uid="Melanchall.DryWetMidi.Tools.CsvSerializer.DeserializeChunksFromCsv(System.String,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Tools.CsvDeserializationSettings)">DeserializeChunksFromCsv(string, TempoMap, CsvDeserializationSettings)</h4>
   <div class="markdown level1 summary">Reads a collection of <a class="xref" href="Melanchall.DryWetMidi.Core.MidiChunk.html">MidiChunk</a> represented as CSV from the specified file.</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="declaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static ICollection&lt;MidiChunk&gt; DeserializeChunksFromCsv(string filePath, TempoMap tempoMap, CsvSerializationSettings settings = null)</code></pre>
+    <pre><code class="lang-csharp hljs">public static ICollection&lt;MidiChunk&gt; DeserializeChunksFromCsv(string filePath, TempoMap tempoMap, CsvDeserializationSettings settings = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-condensed">
@@ -383,7 +383,7 @@ contains only white space, or contains one or more invalid characters as defined
         <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TempoMap.html">TempoMap</a> to use for time/length conversions.</td>
       </tr>
       <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Tools.CsvSerializationSettings.html">CsvSerializationSettings</a></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Tools.CsvDeserializationSettings.html">CsvDeserializationSettings</a></td>
         <td><span class="parametername">settings</span></td>
         <td>Settings according to which collection of <a class="xref" href="Melanchall.DryWetMidi.Core.MidiChunk.html">MidiChunk</a> should
     be deserialized.</td>
@@ -426,18 +426,18 @@ contains only white space, or contains one or more invalid characters as defined
         <td><code class="paramref">tempoMap</code> is <code>null</code>.</td>
       </tr>
       <tr>
-        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.formatexception">FormatException</a></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Tools.CsvException.html">CsvException</a></td>
         <td>Invalid CSV representation.</td>
       </tr>
     </tbody>
   </table>
   <a id="Melanchall_DryWetMidi_Tools_CsvSerializer_DeserializeFileFromCsv_" data-uid="Melanchall.DryWetMidi.Tools.CsvSerializer.DeserializeFileFromCsv*"></a>
-  <h4 id="Melanchall_DryWetMidi_Tools_CsvSerializer_DeserializeFileFromCsv_System_IO_Stream_Melanchall_DryWetMidi_Tools_CsvSerializationSettings_" data-uid="Melanchall.DryWetMidi.Tools.CsvSerializer.DeserializeFileFromCsv(System.IO.Stream,Melanchall.DryWetMidi.Tools.CsvSerializationSettings)">DeserializeFileFromCsv(Stream, CsvSerializationSettings)</h4>
+  <h4 id="Melanchall_DryWetMidi_Tools_CsvSerializer_DeserializeFileFromCsv_System_IO_Stream_Melanchall_DryWetMidi_Tools_CsvDeserializationSettings_" data-uid="Melanchall.DryWetMidi.Tools.CsvSerializer.DeserializeFileFromCsv(System.IO.Stream,Melanchall.DryWetMidi.Tools.CsvDeserializationSettings)">DeserializeFileFromCsv(Stream, CsvDeserializationSettings)</h4>
   <div class="markdown level1 summary">Reads a <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a> represented as CSV from the specified stream.</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="declaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static MidiFile DeserializeFileFromCsv(Stream stream, CsvSerializationSettings settings = null)</code></pre>
+    <pre><code class="lang-csharp hljs">public static MidiFile DeserializeFileFromCsv(Stream stream, CsvDeserializationSettings settings = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-condensed">
@@ -455,7 +455,7 @@ contains only white space, or contains one or more invalid characters as defined
         <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.io.stream">Stream</a> to read the file from.</td>
       </tr>
       <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Tools.CsvSerializationSettings.html">CsvSerializationSettings</a></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Tools.CsvDeserializationSettings.html">CsvDeserializationSettings</a></td>
         <td><span class="parametername">settings</span></td>
         <td>Settings according to which <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a> should be deserialized.</td>
       </tr>
@@ -495,18 +495,18 @@ contains only white space, or contains one or more invalid characters as defined
         <td><code class="paramref">stream</code> is <code>null</code>.</td>
       </tr>
       <tr>
-        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.formatexception">FormatException</a></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Tools.CsvException.html">CsvException</a></td>
         <td>Invalid CSV representation.</td>
       </tr>
     </tbody>
   </table>
   <a id="Melanchall_DryWetMidi_Tools_CsvSerializer_DeserializeFileFromCsv_" data-uid="Melanchall.DryWetMidi.Tools.CsvSerializer.DeserializeFileFromCsv*"></a>
-  <h4 id="Melanchall_DryWetMidi_Tools_CsvSerializer_DeserializeFileFromCsv_System_String_Melanchall_DryWetMidi_Tools_CsvSerializationSettings_" data-uid="Melanchall.DryWetMidi.Tools.CsvSerializer.DeserializeFileFromCsv(System.String,Melanchall.DryWetMidi.Tools.CsvSerializationSettings)">DeserializeFileFromCsv(string, CsvSerializationSettings)</h4>
+  <h4 id="Melanchall_DryWetMidi_Tools_CsvSerializer_DeserializeFileFromCsv_System_String_Melanchall_DryWetMidi_Tools_CsvDeserializationSettings_" data-uid="Melanchall.DryWetMidi.Tools.CsvSerializer.DeserializeFileFromCsv(System.String,Melanchall.DryWetMidi.Tools.CsvDeserializationSettings)">DeserializeFileFromCsv(string, CsvDeserializationSettings)</h4>
   <div class="markdown level1 summary">Reads a <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a> represented as CSV from the specified file.</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="declaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static MidiFile DeserializeFileFromCsv(string filePath, CsvSerializationSettings settings = null)</code></pre>
+    <pre><code class="lang-csharp hljs">public static MidiFile DeserializeFileFromCsv(string filePath, CsvDeserializationSettings settings = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-condensed">
@@ -524,7 +524,7 @@ contains only white space, or contains one or more invalid characters as defined
         <td>Path to the file to read the file from.</td>
       </tr>
       <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Tools.CsvSerializationSettings.html">CsvSerializationSettings</a></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Tools.CsvDeserializationSettings.html">CsvDeserializationSettings</a></td>
         <td><span class="parametername">settings</span></td>
         <td>Settings according to which <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a> should be deserialized.</td>
       </tr>
@@ -562,18 +562,18 @@ contains only white space, or contains one or more invalid characters as defined
 <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.io.path.invalidpathchars">InvalidPathChars</a>.</td>
       </tr>
       <tr>
-        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.formatexception">FormatException</a></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Tools.CsvException.html">CsvException</a></td>
         <td>Invalid CSV representation.</td>
       </tr>
     </tbody>
   </table>
   <a id="Melanchall_DryWetMidi_Tools_CsvSerializer_DeserializeObjectsFromCsv_" data-uid="Melanchall.DryWetMidi.Tools.CsvSerializer.DeserializeObjectsFromCsv*"></a>
-  <h4 id="Melanchall_DryWetMidi_Tools_CsvSerializer_DeserializeObjectsFromCsv_System_IO_Stream_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Tools_CsvSerializationSettings_" data-uid="Melanchall.DryWetMidi.Tools.CsvSerializer.DeserializeObjectsFromCsv(System.IO.Stream,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Tools.CsvSerializationSettings)">DeserializeObjectsFromCsv(Stream, TempoMap, CsvSerializationSettings)</h4>
+  <h4 id="Melanchall_DryWetMidi_Tools_CsvSerializer_DeserializeObjectsFromCsv_System_IO_Stream_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Tools_CsvDeserializationSettings_" data-uid="Melanchall.DryWetMidi.Tools.CsvSerializer.DeserializeObjectsFromCsv(System.IO.Stream,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Tools.CsvDeserializationSettings)">DeserializeObjectsFromCsv(Stream, TempoMap, CsvDeserializationSettings)</h4>
   <div class="markdown level1 summary">Reads collection of <a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimedObject.html">ITimedObject</a> represented as CSV from the specified stream.</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="declaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static ICollection&lt;ITimedObject&gt; DeserializeObjectsFromCsv(Stream stream, TempoMap tempoMap, CsvSerializationSettings settings = null)</code></pre>
+    <pre><code class="lang-csharp hljs">public static ICollection&lt;ITimedObject&gt; DeserializeObjectsFromCsv(Stream stream, TempoMap tempoMap, CsvDeserializationSettings settings = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-condensed">
@@ -596,7 +596,7 @@ contains only white space, or contains one or more invalid characters as defined
         <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TempoMap.html">TempoMap</a> to use for time/length conversions.</td>
       </tr>
       <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Tools.CsvSerializationSettings.html">CsvSerializationSettings</a></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Tools.CsvDeserializationSettings.html">CsvDeserializationSettings</a></td>
         <td><span class="parametername">settings</span></td>
         <td>Settings according to which collection of <a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimedObject.html">ITimedObject</a> should
     be deserialized.</td>
@@ -640,18 +640,18 @@ contains only white space, or contains one or more invalid characters as defined
       <code class="paramref">tempoMap</code> is <code>null</code>.</li></ul></td>
       </tr>
       <tr>
-        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.formatexception">FormatException</a></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Tools.CsvException.html">CsvException</a></td>
         <td>Invalid CSV representation.</td>
       </tr>
     </tbody>
   </table>
   <a id="Melanchall_DryWetMidi_Tools_CsvSerializer_DeserializeObjectsFromCsv_" data-uid="Melanchall.DryWetMidi.Tools.CsvSerializer.DeserializeObjectsFromCsv*"></a>
-  <h4 id="Melanchall_DryWetMidi_Tools_CsvSerializer_DeserializeObjectsFromCsv_System_String_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Tools_CsvSerializationSettings_" data-uid="Melanchall.DryWetMidi.Tools.CsvSerializer.DeserializeObjectsFromCsv(System.String,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Tools.CsvSerializationSettings)">DeserializeObjectsFromCsv(string, TempoMap, CsvSerializationSettings)</h4>
+  <h4 id="Melanchall_DryWetMidi_Tools_CsvSerializer_DeserializeObjectsFromCsv_System_String_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Tools_CsvDeserializationSettings_" data-uid="Melanchall.DryWetMidi.Tools.CsvSerializer.DeserializeObjectsFromCsv(System.String,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Tools.CsvDeserializationSettings)">DeserializeObjectsFromCsv(string, TempoMap, CsvDeserializationSettings)</h4>
   <div class="markdown level1 summary">Reads collection of <a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimedObject.html">ITimedObject</a> represented as CSV from the specified file.</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="declaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static ICollection&lt;ITimedObject&gt; DeserializeObjectsFromCsv(string filePath, TempoMap tempoMap, CsvSerializationSettings settings = null)</code></pre>
+    <pre><code class="lang-csharp hljs">public static ICollection&lt;ITimedObject&gt; DeserializeObjectsFromCsv(string filePath, TempoMap tempoMap, CsvDeserializationSettings settings = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-condensed">
@@ -674,7 +674,7 @@ contains only white space, or contains one or more invalid characters as defined
         <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TempoMap.html">TempoMap</a> to use for time/length conversions.</td>
       </tr>
       <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Tools.CsvSerializationSettings.html">CsvSerializationSettings</a></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Tools.CsvDeserializationSettings.html">CsvDeserializationSettings</a></td>
         <td><span class="parametername">settings</span></td>
         <td>Settings according to which collection of <a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimedObject.html">ITimedObject</a> should
     be deserialized.</td>
@@ -717,7 +717,7 @@ contains only white space, or contains one or more invalid characters as defined
         <td><code class="paramref">tempoMap</code> is <code>null</code>.</td>
       </tr>
       <tr>
-        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.formatexception">FormatException</a></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Tools.CsvException.html">CsvException</a></td>
         <td>Invalid CSV representation.</td>
       </tr>
     </tbody>
@@ -1380,7 +1380,7 @@ contains only white space, or contains one or more invalid characters as defined
             <span class="pull-right">
               <a href="#top">Back to top</a>
             </span>
-      2024 / Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
+      2025 / Generated by <a href="https://dotnet.github.io/docfx">DocFX</a>
       
           </div>
         </div>
