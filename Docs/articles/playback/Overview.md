@@ -6,6 +6,8 @@ uid: a_playback_overview
 
 [Playback](xref:Melanchall.DryWetMidi.Multimedia.Playback) class allows to play MIDI events via an [IOutputDevice](xref:Melanchall.DryWetMidi.Multimedia.IOutputDevice) (see [Output device](xref:a_dev_output) article) or without a device at all (see [Playback without device](#playback-without-device)). To get an instance of the `Playback` you can use its [constructors](xref:Melanchall.DryWetMidi.Multimedia.Playback#constructors) or `GetPlayback` extension methods in [PlaybackUtilities](xref:Melanchall.DryWetMidi.Multimedia.PlaybackUtilities).
 
+Also please note that Playback API provides a way to add, remove or change objects within a playback on the fly, without needing to recreate the Playback instance. More info in the [Dynamic changes](xref:a_playback_dynamic) article.
+
 Following example shows a simple console app where the specified MIDI file is played until the end of the file reached or `B` note is about to be played. So in our example `B` note means to stop playback.
 
 ```csharp
