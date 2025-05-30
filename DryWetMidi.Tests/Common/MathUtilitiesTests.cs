@@ -100,6 +100,221 @@ namespace Melanchall.DryWetMidi.Tests.Common
                 null,
                 -1);
 
+        [Test]
+        public void GetLastElementBelowThreshold_1([Values(1, 2, 4, 8, 16, 32, 64, 128)] int count)
+        {
+            var data = Enumerable.Range(0, count).ToArray();
+
+            for (var i = 0; i < count; i++)
+            {
+                int index;
+                var element = MathUtilities.GetLastElementBelowThreshold(
+                    data,
+                    i,
+                    d => d,
+                    out index);
+
+                if (i == 0)
+                {
+                    ClassicAssert.AreEqual(-1, index, $"Invalid index for {i}.");
+                    ClassicAssert.AreEqual(0, element, $"Invalid element for {i}.");
+                }
+                else
+                {
+                    ClassicAssert.AreEqual(i - 1, index, $"Invalid index for {i}.");
+                    ClassicAssert.AreEqual(data[i - 1], element, $"Invalid element for {i}.");
+                }
+            }
+        }
+
+        [Test]
+        public void GetLastElementBelowThreshold_2([Values(1, 2, 4, 8, 16, 32, 64, 128)] int count)
+        {
+            var data = Enumerable.Range(0, count).Select(i => (double)i).ToArray();
+
+            for (var i = 0; i < count; i++)
+            {
+                int index;
+                var element = MathUtilities.GetLastElementBelowThreshold(
+                    data,
+                    i + 0.5,
+                    d => d,
+                    out index);
+
+                ClassicAssert.AreEqual(i, index, $"Invalid index for {i}.");
+                ClassicAssert.AreEqual(data[i], element, $"Invalid element for {i}.");
+            }
+        }
+
+        [Test]
+        public void GetLastElementBelowThreshold_3()
+        {
+            var data = new double[] { 1, 1, 2, 2, 2, 3, 4, 4, 4, 5 };
+
+            int index;
+            var element = MathUtilities.GetLastElementBelowThreshold(
+                data,
+                1,
+                d => d,
+                out index);
+
+            ClassicAssert.AreEqual(-1, index, "Invalid index for 1.");
+            ClassicAssert.AreEqual(0, element, "Invalid element for 1.");
+
+            void Check(double threshold, double expectedResult, double[] expectedPreviousValues)
+            {
+                element = MathUtilities.GetLastElementBelowThreshold(
+                    data,
+                    threshold,
+                    d => d,
+                    out index);
+
+                var previousValues = Enumerable.Range(0, index + 1).Select(i => data[i]).Reverse().ToArray();
+
+                ClassicAssert.AreEqual(expectedResult, element, $"Invalid element for {threshold}.");
+                CollectionAssert.AreEqual(
+                    expectedPreviousValues,
+                    previousValues,
+                    $"Invalid previous values list for {threshold}.");
+            }
+
+            Check(2, 1, new double[] { 1, 1 });
+            Check(1.5, 1, new double[] { 1, 1 });
+            Check(3, 2, new double[] { 2, 2, 2, 1, 1 });
+            Check(2.5, 2, new double[] { 2, 2, 2, 1, 1 });
+            Check(4, 3, new double[] { 3, 2, 2, 2, 1, 1 });
+            Check(3.5, 3, new double[] { 3, 2, 2, 2, 1, 1 });
+            Check(5, 4, new double[] { 4, 4, 4, 3, 2, 2, 2, 1, 1 });
+            Check(4.5, 4, new double[] { 4, 4, 4, 3, 2, 2, 2, 1, 1 });
+            Check(6, 5, new double[] { 5, 4, 4, 4, 3, 2, 2, 2, 1, 1 });
+            Check(5.5, 5, new double[] { 5, 4, 4, 4, 3, 2, 2, 2, 1, 1 });
+            Check(10, 5, new double[] { 5, 4, 4, 4, 3, 2, 2, 2, 1, 1 });
+            Check(9.5, 5, new double[] { 5, 4, 4, 4, 3, 2, 2, 2, 1, 1 });
+        }
+
+        [Test]
+        public void GetLastElementBelowThreshold_4()
+        {
+            var data = new[] { 2, 5500 };
+
+            int index;
+            var element = MathUtilities.GetLastElementBelowThreshold(
+                data,
+                700,
+                d => d,
+                out index);
+
+            ClassicAssert.AreEqual(2, element, "Invalid element.");
+            ClassicAssert.AreEqual(0, index, "Invalid index.");
+        }
+
+        [Test]
+        public void GetFirstElementAboveThreshold_1([Values(1, 2, 4, 8, 16, 32, 64, 128)] int count)
+        {
+            var data = Enumerable.Range(0, count).ToArray();
+
+            for (var i = 0; i < count; i++)
+            {
+                int index;
+                var element = MathUtilities.GetFirstElementAboveThreshold(
+                    data,
+                    i,
+                    d => d,
+                    out index);
+
+                if (i == count - 1)
+                {
+                    ClassicAssert.AreEqual(-1, index, $"Invalid index for {i}.");
+                    ClassicAssert.AreEqual(0, element, $"Invalid element for {i}.");
+                }
+                else
+                {
+                    ClassicAssert.AreEqual(i + 1, index, $"Invalid index for {i}.");
+                    ClassicAssert.AreEqual(data[i + 1], element, $"Invalid element for {i}.");
+                }
+            }
+        }
+
+        [Test]
+        public void GetFirstElementAboveThreshold_2([Values(1, 2, 4, 8, 16, 32, 64, 128)] int count)
+        {
+            var data = Enumerable.Range(0, count).Select(i => (double)i).ToArray();
+
+            for (var i = 0; i < count; i++)
+            {
+                int index;
+                var element = MathUtilities.GetFirstElementAboveThreshold(
+                    data,
+                    i - 0.5,
+                    d => d,
+                    out index);
+
+                ClassicAssert.AreEqual(i, index, $"Invalid index for {i}.");
+                ClassicAssert.AreEqual(data[i], element, $"Invalid element for {i}.");
+            }
+        }
+
+        [Test]
+        public void GetFirstElementAboveThreshold_3()
+        {
+            var data = new double[] { 1, 1, 2, 2, 2, 3, 4, 4, 4, 5 };
+
+            int index;
+            var element = MathUtilities.GetFirstElementAboveThreshold(
+                data,
+                5,
+                d => d,
+                out index);
+
+            ClassicAssert.AreEqual(-1, index, "Invalid index for 5.");
+            ClassicAssert.AreEqual(0, element, "Invalid element for 5.");
+
+            void Check(double threshold, double expectedResult, double[] expectedNextValues)
+            {
+                element = MathUtilities.GetFirstElementAboveThreshold(
+                    data,
+                    threshold,
+                    d => d,
+                    out index);
+
+                var nextValues = Enumerable.Range(index, data.Length - index).Select(i => data[i]).ToArray();
+                ClassicAssert.AreEqual(expectedResult, element, $"Invalid element for {threshold}.");
+                CollectionAssert.AreEqual(
+                    expectedNextValues,
+                    nextValues,
+                    $"Invalid next values list for {threshold}.");
+            }
+
+            Check(4, 5, new double[] { 5 });
+            Check(4.5, 5, new double[] { 5 });
+            Check(3, 4, new double[] { 4, 4, 4, 5 });
+            Check(3.5, 4, new double[] { 4, 4, 4, 5 });
+            Check(2, 3, new double[] { 3, 4, 4, 4, 5 });
+            Check(2.5, 3, new double[] { 3, 4, 4, 4, 5 });
+            Check(1, 2, new double[] { 2, 2, 2, 3, 4, 4, 4, 5 });
+            Check(1.5, 2, new double[] { 2, 2, 2, 3, 4, 4, 4, 5 });
+            Check(0, 1, new double[] { 1, 1, 2, 2, 2, 3, 4, 4, 4, 5 });
+            Check(0.5, 1, new double[] { 1, 1, 2, 2, 2, 3, 4, 4, 4, 5 });
+            Check(-5, 1, new double[] { 1, 1, 2, 2, 2, 3, 4, 4, 4, 5 });
+            Check(-4.5, 1, new double[] { 1, 1, 2, 2, 2, 3, 4, 4, 4, 5 });
+        }
+
+        [Test]
+        public void GetFirstElementAboveThreshold_4()
+        {
+            var data = new[] { 0, 5500 };
+
+            int index;
+            var element = MathUtilities.GetFirstElementAboveThreshold(
+                data,
+                700,
+                d => d,
+                out index);
+
+            ClassicAssert.AreEqual(5500, element, "Invalid element.");
+            ClassicAssert.AreEqual(1, index, "Invalid index.");
+        }
+
         #endregion
 
         #region Private methods

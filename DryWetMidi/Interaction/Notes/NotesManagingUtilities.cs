@@ -283,7 +283,7 @@ namespace Melanchall.DryWetMidi.Interaction
             var notes = notesBuilder.GetNotesLazy(midiEvents.GetTimedEventsLazy(timedEventDetectionSettings));
 
             result.AddRange(notes);
-            return new SortedTimedObjectsImmutableCollection<Note>(result);
+            return new SortedImmutableCollection<Note>(result);
         }
 
         /// <summary>
@@ -314,7 +314,7 @@ namespace Melanchall.DryWetMidi.Interaction
             var notes = notesBuilder.GetNotesLazy(eventsCollection.GetTimedEventsLazy(timedEventDetectionSettings));
 
             result.AddRange(notes);
-            return new SortedTimedObjectsImmutableCollection<Note>(result);
+            return new SortedImmutableCollection<Note>(result);
         }
 
         /// <summary>
@@ -379,7 +379,7 @@ namespace Melanchall.DryWetMidi.Interaction
             var notes = notesBuilder.GetNotesLazy(eventsCollections.GetTimedEventsLazy(eventsCount, timedEventDetectionSettings));
 
             result.AddRange(notes.Select(n => n.Object));
-            return new SortedTimedObjectsImmutableCollection<Note>(result);
+            return new SortedImmutableCollection<Note>(result);
         }
 
         /// <summary>
@@ -1080,6 +1080,38 @@ namespace Melanchall.DryWetMidi.Interaction
             this IEnumerable<TimedObjectAt<TimedEvent>> timedEvents,
             NoteDetectionSettings settings)
         {
+            return new SortedLazyCollection<TimedObjectAt<ITimedObject>>(GetSortedNotesAndTimedEventsLazy(
+                timedEvents,
+                settings));
+        }
+
+        internal static IEnumerable<ITimedObject> GetNotesAndTimedEventsLazy(
+            this IEnumerable<TimedEvent> timedEvents,
+            NoteDetectionSettings settings)
+        {
+            return GetNotesAndTimedEventsLazy(timedEvents, settings, false);
+        }
+
+        internal static IEnumerable<ITimedObject> GetNotesAndTimedEventsLazy(
+            this IEnumerable<ITimedObject> timedObjects,
+            NoteDetectionSettings settings,
+            bool completeObjectsAllowed)
+        {
+            return new SortedLazyCollection<ITimedObject>(GetSortedNotesAndTimedEventsLazy(
+                timedObjects,
+                settings,
+                completeObjectsAllowed));
+        }
+
+        private static int GetNoteEventId(NoteEvent noteEvent)
+        {
+            return noteEvent.Channel * 1000 + noteEvent.NoteNumber;
+        }
+
+        private static IEnumerable<TimedObjectAt<ITimedObject>> GetSortedNotesAndTimedEventsLazy(
+            this IEnumerable<TimedObjectAt<TimedEvent>> timedEvents,
+            NoteDetectionSettings settings)
+        {
             var objectsDescriptors = new LinkedList<IObjectDescriptorIndexed>();
             var notesDescriptorsNodes = new Dictionary<Tuple<int, int>, NoteOnsHolderIndexed>();
 
@@ -1155,14 +1187,7 @@ namespace Melanchall.DryWetMidi.Interaction
             }
         }
 
-        internal static IEnumerable<ITimedObject> GetNotesAndTimedEventsLazy(
-            this IEnumerable<TimedEvent> timedEvents,
-            NoteDetectionSettings settings)
-        {
-            return GetNotesAndTimedEventsLazy(timedEvents, settings, false);
-        }
-
-        internal static IEnumerable<ITimedObject> GetNotesAndTimedEventsLazy(
+        private static IEnumerable<ITimedObject> GetSortedNotesAndTimedEventsLazy(
             this IEnumerable<ITimedObject> timedObjects,
             NoteDetectionSettings settings,
             bool completeObjectsAllowed)
@@ -1248,11 +1273,6 @@ namespace Melanchall.DryWetMidi.Interaction
             {
                 yield return objectDescriptor.GetObject(constructor);
             }
-        }
-
-        private static int GetNoteEventId(NoteEvent noteEvent)
-        {
-            return noteEvent.Channel * 1000 + noteEvent.NoteNumber;
         }
 
         #endregion

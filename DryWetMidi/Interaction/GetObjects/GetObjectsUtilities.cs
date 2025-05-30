@@ -303,7 +303,7 @@ namespace Melanchall.DryWetMidi.Interaction
             }
 
             result.TrimExcess();
-            return new SortedTimedObjectsImmutableCollection<ITimedObject>(result);
+            return new SortedImmutableCollection<ITimedObject>(result);
         }
 
         private static IEnumerable<ITimedObject> EnumerateObjectsFromSortedTimedObjects(

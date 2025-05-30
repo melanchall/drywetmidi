@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Melanchall.DryWetMidi.Common
 {
@@ -41,16 +40,16 @@ namespace Melanchall.DryWetMidi.Common
                 if (IsVoid(node) || node.Tree != this)
                     continue;
 
-                if (point.CompareTo((TKey)node.Data) >= 0)
+                if (point.CompareTo(node.Data) >= 0)
                     continue;
 
                 queue.Enqueue(node.Left);
 
-                for (var valueNode = node.Values.First; valueNode != null; valueNode = valueNode.Next)
+                for (var element = node.Values.First; element != null; element = element.Next)
                 {
-                    var interval = valueNode.Value;
+                    var interval = element.Value;
                     if (interval.Start.CompareTo(point) < 0 && interval.End.CompareTo(point) > 0)
-                        yield return new RedBlackTreeCoordinate<TKey, TValue>(node, valueNode);
+                        yield return new RedBlackTreeCoordinate<TKey, TValue>(node, element);
                 }
 
                 if (point.CompareTo(node.Key) <= 0)
@@ -80,15 +79,15 @@ namespace Melanchall.DryWetMidi.Common
         }
 
         protected override void OnRotated(
-            RedBlackTreeNode<TKey, TValue> x,
-            RedBlackTreeNode<TKey, TValue> y)
+            RedBlackTreeNode<TKey, TValue> bottomNode,
+            RedBlackTreeNode<TKey, TValue> topNode)
         {
-            base.OnRotated(x, y);
+            base.OnRotated(bottomNode, topNode);
 
-            UpdateMax(x);
+            UpdateMax(bottomNode);
 
-            if (((TKey)x.Data).CompareTo((TKey)y.Data) > 0)
-                y.Data = (TKey)x.Data;
+            if (bottomNode.Data.CompareTo(topNode.Data) > 0)
+                topNode.Data = bottomNode.Data;
         }
 
         protected override void OnTransplanted(RedBlackTreeNode<TKey, TValue> node)
@@ -97,6 +96,42 @@ namespace Melanchall.DryWetMidi.Common
 
             UpdateMax(node);
             UpdateMaxUp(node);
+        }
+
+        public bool UpdateMax(RedBlackTreeNode<TKey, TValue> node)
+        {
+            if (node.Values.Count == 0)
+                return false;
+
+            var result = node.Values.First.Value.End;
+
+            foreach (var value in node.Values)
+            {
+                if (value.End.CompareTo(result) > 0)
+                    result = value.End;
+            }
+
+            var left = node.Left;
+            if (!IsVoid(left))
+            {
+                var leftMax = left.Data;
+                if (leftMax.CompareTo(result) > 0)
+                    result = leftMax;
+            }
+
+            var right = node.Right;
+            if (!IsVoid(right))
+            {
+                var rightMax = right.Data;
+                if (rightMax.CompareTo(result) > 0)
+                    result = rightMax;
+            }
+
+            if (node.Data.Equals(result))
+                return false;
+
+            node.Data = result;
+            return true;
         }
 
         public void UpdateMaxUp(RedBlackTreeNode<TKey, TValue> node)
@@ -116,41 +151,11 @@ namespace Melanchall.DryWetMidi.Common
             var data = node.Data;
             if (data == null)
                 node.Data = end;
-            else if (((TKey)data).CompareTo(end) < 0)
+            else if (data.CompareTo(end) < 0)
                 node.Data = end;
             else
                 return false;
 
-            return true;
-        }
-
-        public bool UpdateMax(RedBlackTreeNode<TKey, TValue> node)
-        {
-            if (!node.Values.Any())
-                return false;
-
-            var result = node.Values.Max(v => v.End);
-
-            var left = node.Left;
-            if (!IsVoid(left))
-            {
-                var leftMax = (TKey)left.Data;
-                if (leftMax.CompareTo(result) > 0)
-                    result = leftMax;
-            }
-
-            var right = node.Right;
-            if (!IsVoid(right))
-            {
-                var rightMax = (TKey)right.Data;
-                if (rightMax.CompareTo(result) > 0)
-                    result = rightMax;
-            }
-
-            if (node.Data.Equals(result))
-                return false;
-
-            node.Data = result;
             return true;
         }
 

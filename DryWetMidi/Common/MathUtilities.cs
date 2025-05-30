@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace Melanchall.DryWetMidi.Common
@@ -49,30 +50,40 @@ namespace Melanchall.DryWetMidi.Common
             return value + value * margin;
         }
 
-        public static T GetLastElementBelowThreshold<T>(T[] elements, long keyThreshold, Func<T, long> keySelector)
+        public static T GetLastElementBelowThreshold<T, TKey>(
+            IList<T> elements,
+            TKey keyThreshold,
+            Func<T, TKey> keySelector)
+            where TKey : IComparable<TKey>
         {
             int index;
             return GetLastElementBelowThreshold(elements, keyThreshold, keySelector, out index);
         }
 
-        public static T GetLastElementBelowThreshold<T>(T[] elements, long keyThreshold, Func<T, long> keySelector, out int index)
+        public static T GetLastElementBelowThreshold<T, TKey>(
+            IList<T> elements,
+            TKey keyThreshold,
+            Func<T, TKey> keySelector,
+            out int index)
+            where TKey : IComparable<TKey>
         {
             return GetLastElementBelowThreshold(
                 elements,
                 0,
-                elements.Length - 1,
+                elements.Count - 1,
                 keyThreshold,
                 keySelector,
                 out index);
         }
 
-        public static T GetLastElementBelowThreshold<T>(
-            T[] elements,
+        public static T GetLastElementBelowThreshold<T, TKey>(
+            IList<T> elements,
             int firstIndex,
             int lastIndex,
-            long keyThreshold,
-            Func<T, long> keySelector,
+            TKey keyThreshold,
+            Func<T, TKey> keySelector,
             out int index)
+            where TKey : IComparable<TKey>
         {
             while (firstIndex <= lastIndex)
             {
@@ -80,14 +91,69 @@ namespace Melanchall.DryWetMidi.Common
                 var middle = elements[middleIndex];
 
                 var key = keySelector(middle);
-                if (key >= keyThreshold)
+                var compareResult = key.CompareTo(keyThreshold);
+
+                if (compareResult >= 0)
                     lastIndex = middleIndex - 1;
-                else if (key < keyThreshold)
+                else if (compareResult < 0)
                     firstIndex = middleIndex + 1;
             }
 
             index = firstIndex > 0 ? firstIndex - 1 : -1;
             return firstIndex > 0 ? elements[firstIndex - 1] : default(T);
+        }
+
+        public static T GetFirstElementAboveThreshold<T, TKey>(
+            IList<T> elements,
+            TKey keyThreshold,
+            Func<T, TKey> keySelector)
+            where TKey : IComparable<TKey>
+        {
+            int index;
+            return GetFirstElementAboveThreshold(elements, keyThreshold, keySelector, out index);
+        }
+
+        public static T GetFirstElementAboveThreshold<T, TKey>(
+            IList<T> elements,
+            TKey keyThreshold,
+            Func<T, TKey> keySelector,
+            out int index)
+            where TKey : IComparable<TKey>
+        {
+            return GetFirstElementAboveThreshold(
+                elements,
+                0,
+                elements.Count - 1,
+                keyThreshold,
+                keySelector,
+                out index);
+        }
+
+        public static T GetFirstElementAboveThreshold<T, TKey>(
+            IList<T> elements,
+            int firstIndex,
+            int lastIndex,
+            TKey keyThreshold,
+            Func<T, TKey> keySelector,
+            out int index)
+            where TKey : IComparable<TKey>
+        {
+            while (firstIndex <= lastIndex)
+            {
+                var middleIndex = (firstIndex + lastIndex) / 2;
+                var middle = elements[middleIndex];
+
+                var key = keySelector(middle);
+                var compareResult = key.CompareTo(keyThreshold);
+
+                if (compareResult > 0)
+                    lastIndex = middleIndex - 1;
+                else if (compareResult <= 0)
+                    firstIndex = middleIndex + 1;
+            }
+
+            index = lastIndex < elements.Count - 1 ? lastIndex + 1 : -1;
+            return lastIndex < elements.Count - 1 ? elements[lastIndex + 1] : default(T);
         }
 
         public static int EnsureInBounds(int value, int min, int max)

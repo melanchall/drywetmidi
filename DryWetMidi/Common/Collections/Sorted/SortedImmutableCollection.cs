@@ -1,9 +1,10 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 
-namespace Melanchall.DryWetMidi.Interaction
+namespace Melanchall.DryWetMidi.Common
 {
-    internal sealed class SortedTimedObjectsImmutableCollection<TObject> : ISortedTimedObjectsImmutableCollection, ICollection<TObject>
+    internal sealed class SortedImmutableCollection<TObject> : ISortedCollection, ICollection<TObject>
     {
         #region Fields
 
@@ -13,7 +14,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
         #region Constructor
 
-        public SortedTimedObjectsImmutableCollection(
+        public SortedImmutableCollection(
             ICollection<TObject> objects)
         {
             _objects = objects;
@@ -35,14 +36,25 @@ namespace Melanchall.DryWetMidi.Interaction
 
         #endregion
 
+        #region Methods
+
+        private void ThrowCannotBeModified()
+        {
+            throw new NotSupportedException("Collection cannot be modified.");
+        }
+
+        #endregion
+
+        #region ICollection<TObject>
+
         public void Add(TObject item)
         {
-            throw new System.NotSupportedException();
+            ThrowCannotBeModified();
         }
 
         public void Clear()
         {
-            throw new System.NotSupportedException();
+            ThrowCannotBeModified();
         }
 
         public bool Contains(TObject item)
@@ -62,12 +74,15 @@ namespace Melanchall.DryWetMidi.Interaction
 
         public bool Remove(TObject item)
         {
-            throw new System.NotSupportedException();
+            ThrowCannotBeModified();
+            return false;
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
             return ((IEnumerable)_objects).GetEnumerator();
         }
+
+        #endregion
     }
 }

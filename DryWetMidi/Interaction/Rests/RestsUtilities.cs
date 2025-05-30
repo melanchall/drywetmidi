@@ -58,7 +58,7 @@ namespace Melanchall.DryWetMidi.Interaction
         private static IEnumerable<ITimedObject> GetSortedObjects(
             IEnumerable<ITimedObject> timedObjects)
         {
-            return timedObjects is ISortedTimedObjectsImmutableCollection
+            return timedObjects is ISortedCollection
                 ? timedObjects
                 : timedObjects.OrderBy(o => o.Time);
         }

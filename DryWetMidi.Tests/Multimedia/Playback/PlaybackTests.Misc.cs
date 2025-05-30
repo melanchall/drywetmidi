@@ -11,6 +11,7 @@ using Melanchall.DryWetMidi.Tests.Common;
 using NUnit.Framework;
 using NUnit.Framework.Legacy;
 using Melanchall.DryWetMidi.Tools;
+using Melanchall.DryWetMidi.Tests.Utilities;
 
 namespace Melanchall.DryWetMidi.Tests.Multimedia
 {
@@ -61,6 +62,45 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         #endregion
 
         #region Test methods
+
+        [Retry(RetriesNumber)]
+        [Test]
+        public void CheckPlaybackOnUnsortedObjects()
+        {
+            var timedObjects = new ITimedObject[]
+            {
+                new TimedEvent(new NoteOffEvent(), 500),
+                new TimedEvent(new NoteOffEvent(), 100),
+                new TimedEvent(new TextEvent("A"), 50),
+                new TimedEvent(new NoteOnEvent(), 300),
+                new TimedEvent(new NoteOnEvent(), 0),
+            };
+
+            var notesStarted = new List<Note>();
+
+            using (var playback = new Playback(timedObjects, TempoMap.Default))
+            {
+                playback.NotesPlaybackStarted += (_, e) => notesStarted.AddRange(e.OriginalNotes);
+
+                playback.Start();
+
+                var timeout = TimeSpan.FromSeconds(10);
+                var stopped = WaitOperations.Wait(
+                    () => !playback.IsRunning,
+                    timeout);
+
+                ClassicAssert.IsTrue(stopped, $"Playback is running after {timeout}.");
+            }
+
+            MidiAsserts.AreEqual(
+                new[]
+                {
+                    new Note(SevenBitNumber.MinValue, 100, 0) { Velocity = SevenBitNumber.MinValue },
+                    new Note(SevenBitNumber.MinValue, 200, 300) { Velocity = SevenBitNumber.MinValue },
+                },
+                notesStarted,
+                "Invalid notes started.");
+        }
 
         [Retry(RetriesNumber)]
         [Test]
@@ -904,7 +944,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
             CheckPlayback(
                 useOutputDevice: false,
-                createPlayback: outputDevice => new Playback(playbackObjects, tempoMap, outputDevice),
+                createPlayback: outputDevice => midiFile.GetPlayback(outputDevice),
                 actions: Array.Empty<PlaybackAction>(),
                 expectedReceivedEvents: playbackObjects
                     .Select(e => new SentReceivedEvent(e.Event, e.TimeAs<MetricTimeSpan>(tempoMap)))

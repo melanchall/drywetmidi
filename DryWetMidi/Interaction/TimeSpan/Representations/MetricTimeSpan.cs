@@ -16,9 +16,6 @@ namespace Melanchall.DryWetMidi.Interaction
         private const long TicksInMicrosecond = TimeSpan.TicksPerMillisecond / MicrosecondsInMillisecond;
         private const long MaxTotalMicroseconds = long.MaxValue / TicksInMicrosecond;
 
-        private static readonly string TotalMicrosecondsIsOutOfRangeMessage =
-            $"Number of microseconds is out of [{0};{MaxTotalMicroseconds}] range.";
-
         #endregion
 
         #region Fields
@@ -50,7 +47,7 @@ namespace Melanchall.DryWetMidi.Interaction
                 totalMicroseconds,
                 0,
                 MaxTotalMicroseconds,
-                TotalMicrosecondsIsOutOfRangeMessage);
+                $"Number of microseconds is out of [0;922337203685477580] range.");
 
             _timeSpan = new TimeSpan(totalMicroseconds * TicksInMicrosecond);
         }

@@ -16,8 +16,8 @@ namespace Melanchall.DryWetMidi.Interaction
 
         #region Fields
 
-        private readonly RedBlackTree<long, ValueChange<TValue>> _valueChanges = new RedBlackTree<long, ValueChange<TValue>>();
-        private readonly TValue _defaultValue;
+        private RedBlackTree<long, ValueChange<TValue>> _valueChanges = new RedBlackTree<long, ValueChange<TValue>>();
+        private TValue _defaultValue;
 
         #endregion
 
@@ -107,12 +107,8 @@ namespace Melanchall.DryWetMidi.Interaction
 
         public void ReplaceValues(ValueLine<TValue> valueLine)
         {
-            _valueChanges.Clear();
-
-            foreach (var vc in valueLine._valueChanges)
-            {
-                _valueChanges.Add(vc.Time, vc);
-            }
+            _valueChanges = valueLine._valueChanges.Clone();
+            _defaultValue = valueLine._defaultValue;
 
             OnValuesChanged();
         }

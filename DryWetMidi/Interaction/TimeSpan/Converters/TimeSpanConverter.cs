@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace Melanchall.DryWetMidi.Interaction
 {
@@ -16,15 +17,12 @@ namespace Melanchall.DryWetMidi.Interaction
             [TimeSpanType.BarBeatFraction] = typeof(BarBeatFractionTimeSpan)
         };
 
-        private static readonly Dictionary<Type, ITimeSpanConverter> Converters = new Dictionary<Type, ITimeSpanConverter>
-        {
-            [typeof(MidiTimeSpan)] = new MidiTimeSpanConverter(),
-            [typeof(MetricTimeSpan)] = new MetricTimeSpanConverter(),
-            [typeof(MusicalTimeSpan)] = new MusicalTimeSpanConverter(),
-            [typeof(BarBeatTicksTimeSpan)] = new BarBeatTicksTimeSpanConverter(),
-            [typeof(BarBeatFractionTimeSpan)] = new BarBeatFractionTimeSpanConverter(),
-            [typeof(MathTimeSpan)] = new MathTimeSpanConverter()
-        };
+        private static readonly ITimeSpanConverter MidiTimeSpanConverter = new MidiTimeSpanConverter();
+        private static readonly ITimeSpanConverter MetricTimeSpanConverter = new MetricTimeSpanConverter();
+        private static readonly ITimeSpanConverter MusicalTimeSpanConverter = new MusicalTimeSpanConverter();
+        private static readonly ITimeSpanConverter BarBeatTicksTimeSpanConverter = new BarBeatTicksTimeSpanConverter();
+        private static readonly ITimeSpanConverter BarBeatFractionTimeSpanConverter = new BarBeatFractionTimeSpanConverter();
+        private static readonly ITimeSpanConverter MathTimeSpanConverter = new MathTimeSpanConverter();
 
         #endregion
 
@@ -77,22 +75,43 @@ namespace Melanchall.DryWetMidi.Interaction
             return GetConverter(typeof(TTimeSpan));
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static ITimeSpanConverter GetConverter(TimeSpanType timeSpanType)
         {
-            Type type;
-            if (!TimeSpansTypes.TryGetValue(timeSpanType, out type))
-                throw new NotSupportedException($"Converter for {timeSpanType} is not supported.");
+            switch (timeSpanType)
+            {
+                case TimeSpanType.Midi:
+                    return MidiTimeSpanConverter;
+                case TimeSpanType.Metric:
+                    return MetricTimeSpanConverter;
+                case TimeSpanType.Musical:
+                    return MusicalTimeSpanConverter;
+                case TimeSpanType.BarBeatTicks:
+                    return BarBeatTicksTimeSpanConverter;
+                case TimeSpanType.BarBeatFraction:
+                    return BarBeatFractionTimeSpanConverter;
+            }
 
-            return GetConverter(type);
+            throw new NotSupportedException($"Converter is not supported.");
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static ITimeSpanConverter GetConverter(Type timeSpanType)
         {
-            ITimeSpanConverter converter;
-            if (Converters.TryGetValue(timeSpanType, out converter))
-                return converter;
+            if (timeSpanType == typeof(MidiTimeSpan))
+                return MidiTimeSpanConverter;
+            if (timeSpanType == typeof(MetricTimeSpan))
+                return MetricTimeSpanConverter;
+            if (timeSpanType == typeof(MusicalTimeSpan))
+                return MusicalTimeSpanConverter;
+            if (timeSpanType == typeof(BarBeatTicksTimeSpan))
+                return BarBeatTicksTimeSpanConverter;
+            if (timeSpanType == typeof(BarBeatFractionTimeSpan))
+                return BarBeatFractionTimeSpanConverter;
+            if (timeSpanType == typeof(MathTimeSpan))
+                return MathTimeSpanConverter;
 
-            throw new NotSupportedException($"Converter for {timeSpanType} is not supported.");
+            throw new NotSupportedException($"Converter is not supported.");
         }
 
         #endregion

@@ -6,8 +6,6 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 
-using PlaybackEventsCollection = Melanchall.DryWetMidi.Common.RedBlackTree<System.TimeSpan, Melanchall.DryWetMidi.Multimedia.PlaybackEvent>;
-
 namespace Melanchall.DryWetMidi.Multimedia
 {
     public partial class Playback
@@ -21,9 +19,9 @@ namespace Melanchall.DryWetMidi.Multimedia
         private readonly ConcurrentDictionary<NoteId, TimedEvent> _noteOnEvents = new ConcurrentDictionary<NoteId, TimedEvent>();
         private readonly ConcurrentDictionary<NoteId, TimedEvent> _noteOffEvents = new ConcurrentDictionary<NoteId, TimedEvent>();
 
-        private readonly PlaybackEventsCollection _playbackEvents = new PlaybackEventsCollection();
+        private readonly List<PlaybackEvent> _playbackEventsBuffer = new List<PlaybackEvent>();
+        private IPlaybackSource _playbackSource = new FixedPlaybackSource();
         private readonly object _playbackLockObject = new object();
-        private RedBlackTreeCoordinate<TimeSpan, PlaybackEvent> _playbackEventsPosition;
         private bool _beforeStart = true;
 
         #endregion
@@ -36,15 +34,23 @@ namespace Melanchall.DryWetMidi.Multimedia
             NoteDetectionSettings noteDetectionSettings,
             bool calculateTempoMap)
         {
-            InitializePlaybackEvents(
-                timedObjects.GetNotesAndTimedEventsLazy(noteDetectionSettings, true),
-                tempoMap,
-                calculateTempoMap);
-            MoveToNextPlaybackEvent();
-
             _observableTimedObjectsCollection = timedObjects as IObservableTimedObjectsCollection;
             if (_observableTimedObjectsCollection != null)
+            {
+                _playbackSource = new ObservablePlaybackSource();
                 _observableTimedObjectsCollection.CollectionChanged += OnObservableTimedObjectsCollectionChanged;
+            }
+
+            var playbackEventsSource = timedObjects;
+            if (!(timedObjects is ISortedCollection))
+                playbackEventsSource = timedObjects.OrderBy(t => t.Time);
+
+            InitializePlaybackEvents(
+                playbackEventsSource.GetNotesAndTimedEventsLazy(noteDetectionSettings, true),
+                tempoMap,
+                calculateTempoMap);
+
+            MoveToNextPlaybackEvent();
         }
 
         private void OnObservableTimedObjectsCollectionChanged(object sender, ObservableTimedObjectsCollectionChangedEventArgs e)
@@ -85,9 +91,9 @@ namespace Melanchall.DryWetMidi.Multimedia
                 UpdatePlaybackEndMetric();
                 UpdatePlaybackStartMetric();
 
-                if (!_playbackEvents.Any())
+                if (_playbackSource.IsEmpty())
                 {
-                    _playbackEventsPosition = null;
+                    _playbackSource.InvalidatePosition();
                     _beforeStart = true;
                 }
 
@@ -115,12 +121,15 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         private void RemoveTimedObject(ITimedObject timedObject, long oldTime)
         {
+            var playbackSource = (ObservablePlaybackSource)_playbackSource;
+
             var timedEvent = timedObject as TimedEvent;
             var noteEvent = timedEvent?.Event as NoteEvent;
             var isNoteOnEvent = noteEvent is NoteOnEvent;
 
             var time = TimeConverter.ConvertTo<MetricTimeSpan>(oldTime, TempoMap);
-            var playbackEventsNodes = _playbackEvents
+            var playbackEventsNodes = playbackSource
+                .PlaybackEvents
                 .GetCoordinatesByKey(time)
                 .Where(n =>
                 {
@@ -166,16 +175,16 @@ namespace Melanchall.DryWetMidi.Multimedia
             {
                 var playbackEvent = playbackEventNode.Value;
 
-                if (playbackEventNode.Equals(_playbackEventsPosition))
+                if (playbackEventNode.Equals(playbackSource.PlaybackEventsPosition))
                 {
-                    _playbackEventsPosition = _playbackEvents.GetNextCoordinate(_playbackEventsPosition);
-                    if (_playbackEventsPosition == null)
+                    playbackSource.PlaybackEventsPosition = playbackSource.PlaybackEvents.GetNextCoordinate(playbackSource.PlaybackEventsPosition);
+                    if (playbackSource.PlaybackEventsPosition == null)
                         _beforeStart = false;
                 }
 
-                _playbackEvents.Remove(playbackEventNode);
+                playbackSource.PlaybackEvents.Remove(playbackEventNode);
 
-                var noteMetadata = playbackEvent.Metadata.Note;
+                var noteMetadata = playbackEvent.NoteMetadata;
                 if (noteMetadata != null)
                 {
                     _notesMetadataHashSet.Remove(noteMetadata);
@@ -210,6 +219,8 @@ namespace Melanchall.DryWetMidi.Multimedia
             {
                 AddTimedObject(timedObject, tempoMap, true, calculateTempoMap);
             }
+
+            _playbackSource.CompleteSource();
         }
 
         private void AddTimedObject(
@@ -251,26 +262,34 @@ namespace Melanchall.DryWetMidi.Multimedia
             var eventsGroup = new HashSet<RedBlackTreeCoordinate<TimeSpan, PlaybackEvent>>();
 
             var minTime = TimeSpan.MaxValue;
+            var observablePlaybackSource = _playbackSource as ObservablePlaybackSource;
 
             foreach (var e in playbackEvents)
             {
-                var node = _playbackEvents.Add(e.Time, e);
-                e.EventsGroup = eventsGroup;
+                RedBlackTreeCoordinate<TimeSpan, PlaybackEvent> node = null;
 
-                eventsGroup.Add(node);
+                if (observablePlaybackSource != null)
+                {
+                    node = observablePlaybackSource.PlaybackEvents.Add(e.Time, e);
+                    e.EventsGroup = eventsGroup;
 
-                var noteMetadata = e.Metadata.Note;
+                    eventsGroup.Add(node);
+                }
+                else
+                    _playbackSource.AddPlaybackEvent(e);
+
+                var noteMetadata = e.NoteMetadata;
                 if (noteMetadata != null && _notesMetadataHashSet.Add(noteMetadata))
                     _notesMetadata.Add(noteMetadata.StartTime, noteMetadata);
 
                 InitializeTrackedData(
                     e.Event,
                     e.RawTime,
-                    e.Metadata.TimedEvent.Metadata);
+                    e.TimedEventMetadata);
 
-                if (!isInitialObject && _hasBeenStarted && e.Time > _clock.CurrentTime && (_playbackEventsPosition == null || e.Time < _playbackEventsPosition.Key) && e.Time < minTime)
+                if (!isInitialObject && _hasBeenStarted && e.Time > _clock.CurrentTime && (observablePlaybackSource.PlaybackEventsPosition == null || e.Time < observablePlaybackSource.PlaybackEventsPosition.Key) && e.Time < minTime)
                 {
-                    _playbackEventsPosition = node;
+                    observablePlaybackSource.PlaybackEventsPosition = node;
                     minTime = e.Time;
                 }
             }
@@ -525,13 +544,11 @@ namespace Melanchall.DryWetMidi.Multimedia
             double scaleFactor,
             TimeSpan shift)
         {
-            ScaleDataAfterTempoChange(
-                _playbackEvents,
+            _playbackSource.ScalePlaybackEventsTimes(
                 tempoChangeTime,
                 nextTempoTime,
                 scaleFactor,
-                shift,
-                (e, time) => e.Time.Time = time);
+                shift);
         }
 
         private void ScaleNotesMetadataTimes(
@@ -710,17 +727,17 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         private IEnumerable<PlaybackEvent> GetPlaybackEvents(ITimedObject timedObject, TempoMap tempoMap)
         {
-            var result = new List<PlaybackEvent>();
+            _playbackEventsBuffer.Clear();
 
             var customObjectProcessed = false;
             foreach (var e in GetTimedEvents(timedObject))
             {
-                result.Add(GetPlaybackEvent(e, tempoMap));
+                _playbackEventsBuffer.Add(GetPlaybackEvent(e, tempoMap));
                 customObjectProcessed = true;
             }
 
             if (customObjectProcessed)
-                return result;
+                return _playbackEventsBuffer;
 
             var chord = timedObject as Chord;
             if (chord != null)
@@ -737,24 +754,24 @@ namespace Melanchall.DryWetMidi.Multimedia
             var timedEvent = timedObject as TimedEvent;
             if (timedEvent != null)
             {
-                result.Add(GetPlaybackEvent(timedEvent, tempoMap));
-                return result;
+                _playbackEventsBuffer.Add(GetPlaybackEvent(timedEvent, tempoMap));
+                return _playbackEventsBuffer;
             }
 
             var registeredParameter = timedObject as RegisteredParameter;
             if (registeredParameter != null)
             {
-                result.AddRange(registeredParameter.GetTimedEvents().Select(e => GetPlaybackEvent(e, tempoMap)));
-                return result;
+                _playbackEventsBuffer.AddRange(registeredParameter.GetTimedEvents().Select(e => GetPlaybackEvent(e, tempoMap)));
+                return _playbackEventsBuffer;
             }
 
-            return result;
+            return _playbackEventsBuffer;
         }
 
         private PlaybackEvent GetPlaybackEvent(TimedEvent timedEvent, TempoMap tempoMap)
         {
             var playbackEvent = CreatePlaybackEvent(timedEvent, tempoMap, timedEvent);
-            playbackEvent.Metadata.TimedEvent = new TimedEventPlaybackEventMetadata((timedEvent as IMetadata)?.Metadata);
+            playbackEvent.TimedEventMetadata = (timedEvent as IMetadata)?.Metadata;
             return playbackEvent;
         }
 
@@ -798,8 +815,8 @@ namespace Melanchall.DryWetMidi.Multimedia
             ITimedObject objectReference)
         {
             var playbackEvent = CreatePlaybackEvent(timedEvent, tempoMap, objectReference, time);
-            playbackEvent.Metadata.Note = noteMetadata;
-            playbackEvent.Metadata.TimedEvent = new TimedEventPlaybackEventMetadata((timedEvent as IMetadata)?.Metadata);
+            playbackEvent.NoteMetadata = noteMetadata;
+            playbackEvent.TimedEventMetadata = (timedEvent as IMetadata)?.Metadata;
             return playbackEvent;
         }
 

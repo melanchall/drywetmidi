@@ -25,7 +25,7 @@ namespace Melanchall.DryWetMidi.Interaction
         private ValueLine<TimeSignature> _timeSignatureLine;
         private ValueLine<Tempo> _tempoLine;
 
-        private readonly List<ITempoMapValuesCache> _valuesCaches = new List<ITempoMapValuesCache>();
+        private MetricTempoMapValuesCache _metricValuesCache;
 
         private bool _isTempoMapReady = true;
 
@@ -346,16 +346,15 @@ namespace Melanchall.DryWetMidi.Interaction
             };
         }
 
-        internal TCache GetValuesCache<TCache>() where TCache : ITempoMapValuesCache, new()
+        internal MetricTempoMapValuesCache GetMetricValuesCache()
         {
-            var result = _valuesCaches.OfType<TCache>().FirstOrDefault();
-            if (result == null)
+            if (_metricValuesCache == null)
             {
-                _valuesCaches.Add(result = new TCache());
-                result.Invalidate(this);
+                _metricValuesCache = new MetricTempoMapValuesCache();
+                _metricValuesCache.Invalidate(this);
             }
 
-            return result;
+            return _metricValuesCache;
         }
 
         private static void SetGlobalTempo(TempoMap tempoMap, Tempo tempo)
@@ -373,10 +372,7 @@ namespace Melanchall.DryWetMidi.Interaction
             if (!IsTempoMapReady)
                 return;
 
-            foreach (var valuesCache in _valuesCaches.Where(c => c.InvalidateOnLines?.Contains(tempoMapLine) == true))
-            {
-                valuesCache.Invalidate(this);
-            }
+            _metricValuesCache?.Invalidate(this);
         }
 
         private void OnTimeSignatureChanged(object sender, EventArgs args)

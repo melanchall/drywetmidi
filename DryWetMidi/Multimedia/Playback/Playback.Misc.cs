@@ -780,17 +780,9 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         private void UpdateDuration()
         {
-            var maximumNode = _playbackEvents.GetMaximumCoordinate();
-            if (maximumNode == null)
-            {
-                _duration = TimeSpan.Zero;
-                _durationInTicks = 0;
-                return;
-            }
-
-            var lastPlaybackEvent = maximumNode.Value;
-            _duration = lastPlaybackEvent.Time ?? TimeSpan.Zero;
-            _durationInTicks = lastPlaybackEvent.RawTime;
+            var lastPlaybackEvent = _playbackSource.GetLastPlaybackEvent();
+            _duration = lastPlaybackEvent?.Time ?? TimeSpan.Zero;
+            _durationInTicks = lastPlaybackEvent?.RawTime ?? 0;
         }
 
         private void UpdatePlaybackEndMetric()
@@ -824,7 +816,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             if (!TrackNotes)
                 return;
 
-            if (!_hasBeenStarted && _playbackEventsPosition == null && _beforeStart)
+            if (!_hasBeenStarted && !_playbackSource.IsPositionValid() && _beforeStart)
                 return;
 
             var notesToPlay = GetNotesMetadataAtCurrentTime();
@@ -925,7 +917,7 @@ namespace Melanchall.DryWetMidi.Multimedia
                     if (time >= _playbackEndMetric)
                         break;
 
-                    var playbackEvent = GetCurrentPlaybackEvent();
+                    var playbackEvent = _playbackSource.GetCurrentPlaybackEvent();
                     if (playbackEvent == null)
                         continue;
 
@@ -962,7 +954,7 @@ namespace Melanchall.DryWetMidi.Multimedia
                     if (midiEvent == null)
                         continue;
 
-                    PlayEvent(midiEvent, playbackEvent.Metadata.TimedEvent.Metadata);
+                    PlayEvent(midiEvent, playbackEvent.TimedEventMetadata);
                 }
                 while (MoveToNextPlaybackEvent());
 
@@ -1028,20 +1020,18 @@ namespace Melanchall.DryWetMidi.Multimedia
 
             if (convertedTime.Ticks == 0)
             {
-                _playbackEventsPosition = _playbackEvents.GetMinimumCoordinate();
+                _playbackSource.MoveToFirstPosition();
                 return;
             }
 
             if (convertedTime > end || movedBeyondEnd)
             {
-                _playbackEventsPosition = null;
+                _playbackSource.InvalidatePosition();
                 _beforeStart = false;
                 return;
             }
 
-            _playbackEventsPosition = _playbackEvents.GetLastCoordinateBelowThreshold(convertedTime);
-            if (_playbackEventsPosition == null)
-                _beforeStart = true;
+            _playbackSource.MoveToLastPositionBelowThreshold(convertedTime, ref _beforeStart);
 
             MoveToNextPlaybackEvent();
         }
@@ -1083,7 +1073,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             out Note originalNote)
         {
             return TryPlayNoteEvent(
-                playbackEvent.Metadata.Note,
+                playbackEvent.NoteMetadata,
                 playbackEvent.Event,
                 playbackEvent.Event is NoteOnEvent,
                 playbackEvent.Time,
@@ -1174,36 +1164,19 @@ namespace Melanchall.DryWetMidi.Multimedia
         {
             if (_playbackStart != null)
             {
-                _playbackEventsPosition = _playbackEvents.GetLastCoordinateBelowThreshold(_playbackStartMetric);
-                if (_playbackEventsPosition == null)
-                    _beforeStart = true;
+                _playbackSource.ResetPosition(_playbackStartMetric, ref _beforeStart);
             }
             else
             {
-                _playbackEventsPosition = null;
+                _playbackSource.InvalidatePosition();
                 _beforeStart = true;
             }
         }
 
         private bool MoveToNextPlaybackEvent()
         {
-            _playbackEventsPosition = _playbackEventsPosition != null
-                ? _playbackEvents.GetNextCoordinate(_playbackEventsPosition)
-                : (_beforeStart ? _playbackEvents.GetMinimumCoordinate() : null);
-            _beforeStart = _playbackEventsPosition != null;
-            return IsPlaybackEventsPositionValid();
-        }
-
-        private PlaybackEvent GetCurrentPlaybackEvent()
-        {
-            return IsPlaybackEventsPositionValid()
-                ? _playbackEventsPosition.Value
-                : null;
-        }
-
-        private bool IsPlaybackEventsPositionValid()
-        {
-            return _playbackEventsPosition != null;
+            _playbackSource.IncrementPosition(ref _beforeStart);
+            return _playbackSource.IsPositionValid();
         }
 
         #endregion

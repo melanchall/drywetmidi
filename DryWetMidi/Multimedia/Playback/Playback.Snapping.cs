@@ -158,17 +158,9 @@ namespace Melanchall.DryWetMidi.Multimedia
             if (!snapPointsGroup.IsEnabled)
                 return null;
 
-            var node = _playbackEvents.GetFirstCoordinateAboveThreshold(time);
-
-            while (node != null)
-            {
-                if (snapPointsGroup.Predicate(node.Value.Event))
-                    return new SnapPoint(node.Key);
-
-                node = _playbackEvents.GetNextCoordinate(node);
-            }
-
-            return null;
+            return _playbackSource.GetNextSnapPoint(
+                time,
+                e => snapPointsGroup.Predicate(e.Event) ? new SnapPoint(e.Time) : null);
         }
 
         private SnapPoint GetNextSnapPoint(TimeSpan time)
@@ -195,18 +187,21 @@ namespace Melanchall.DryWetMidi.Multimedia
 
             if (_snapPointsGroups.Any())
             {
-                var node = _playbackEvents.GetFirstCoordinateAboveThreshold(time);
-
-                while (node != null)
-                {
-                    foreach (var group in _snapPointsGroups)
+                var snapPoint = _playbackSource.GetNextSnapPoint(
+                    time,
+                    e =>
                     {
-                        if (group.IsEnabled && group.Predicate(node.Value.Event) && (snapPointNode == null || node.Key < snapPointNode.Key))
-                            return new SnapPoint(node.Key);
-                    }
+                        foreach (var group in _snapPointsGroups)
+                        {
+                            if (group.IsEnabled && group.Predicate(e.Event) && (snapPointNode == null || e.Time < snapPointNode.Key))
+                                return new SnapPoint(e.Time);
+                        }
 
-                    node = _playbackEvents.GetNextCoordinate(node);
-                }
+                        return null;
+                    });
+
+                if (snapPoint != null)
+                    return snapPoint;
             }
 
             return snapPointNode?.Value;
@@ -217,17 +212,9 @@ namespace Melanchall.DryWetMidi.Multimedia
             if (!snapPointsGroup.IsEnabled)
                 return null;
 
-            var node = _playbackEvents.GetLastCoordinateBelowThreshold(time);
-
-            while (node != null)
-            {
-                if (snapPointsGroup.Predicate(node.Value.Event))
-                    return new SnapPoint(node.Key);
-
-                node = _playbackEvents.GetPreviousCoordinate(node);
-            }
-
-            return null;
+            return _playbackSource.GetPreviousSnapPoint(
+                time,
+                e => snapPointsGroup.Predicate(e.Event) ? new SnapPoint(e.Time) : null);
         }
 
         private SnapPoint GetPreviousSnapPoint(TimeSpan time)
@@ -254,18 +241,21 @@ namespace Melanchall.DryWetMidi.Multimedia
 
             if (_snapPointsGroups.Any())
             {
-                var node = _playbackEvents.GetLastCoordinateBelowThreshold(time);
-
-                while (node != null)
-                {
-                    foreach (var group in _snapPointsGroups)
+                var snapPoint = _playbackSource.GetPreviousSnapPoint(
+                    time,
+                    e =>
                     {
-                        if (group.IsEnabled && group.Predicate(node.Value.Event) && (snapPointNode == null || node.Key > snapPointNode.Key))
-                            return new SnapPoint(node.Key);
-                    }
+                        foreach (var group in _snapPointsGroups)
+                        {
+                            if (group.IsEnabled && group.Predicate(e.Event) && (snapPointNode == null || e.Time > snapPointNode.Key))
+                                return new SnapPoint(e.Time);
+                        }
 
-                    node = _playbackEvents.GetPreviousCoordinate(node);
-                }
+                        return null;
+                    });
+
+                if (snapPoint != null)
+                    return snapPoint;
             }
 
             return snapPointNode?.Value;

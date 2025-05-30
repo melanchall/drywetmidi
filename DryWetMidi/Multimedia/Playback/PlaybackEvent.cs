@@ -36,7 +36,9 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         public ICollection<RedBlackTreeCoordinate<TimeSpan, PlaybackEvent>> EventsGroup { get; set; }
 
-        public PlaybackEventMetadata Metadata { get; } = new PlaybackEventMetadata();
+        public NotePlaybackEventMetadata NoteMetadata { get; set; }
+
+        public object TimedEventMetadata { get; set; }
 
         #endregion
 

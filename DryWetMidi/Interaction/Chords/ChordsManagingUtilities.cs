@@ -243,7 +243,7 @@ namespace Melanchall.DryWetMidi.Interaction
                 result.Add(chord);
             }
 
-            return new SortedTimedObjectsImmutableCollection<Chord>(result);
+            return new SortedImmutableCollection<Chord>(result);
         }
 
         /// <summary>
@@ -277,7 +277,7 @@ namespace Melanchall.DryWetMidi.Interaction
             var chords = chordsBuilder.GetChordsLazy(new[] { eventsCollection }.GetTimedEventsLazy(eventsCollection.Count, timedEventDetectionSettings));
 
             result.AddRange(chords.Select(c => c.Object));
-            return new SortedTimedObjectsImmutableCollection<Chord>(result);
+            return new SortedImmutableCollection<Chord>(result);
         }
 
         /// <summary>
@@ -348,7 +348,7 @@ namespace Melanchall.DryWetMidi.Interaction
             var chords = chordsBuilder.GetChordsLazy(eventsCollections.GetTimedEventsLazy(eventsCount, timedEventDetectionSettings));
 
             result.AddRange(chords.Select(c => c.Object));
-            return new SortedTimedObjectsImmutableCollection<Chord>(result);
+            return new SortedImmutableCollection<Chord>(result);
         }
 
         /// <summary>
@@ -398,7 +398,7 @@ namespace Melanchall.DryWetMidi.Interaction
         {
             ThrowIfArgument.IsNull(nameof(notes), notes);
 
-            return new SortedTimedObjectsImmutableCollection<Chord>(notes.GetChordsAndNotesAndTimedEventsLazy(settings).OfType<Chord>().ToArray());
+            return new SortedImmutableCollection<Chord>(notes.GetChordsAndNotesAndTimedEventsLazy(settings).OfType<Chord>().ToArray());
         }
 
         /// <summary>
@@ -1109,69 +1109,11 @@ namespace Melanchall.DryWetMidi.Interaction
             NoteDetectionSettings noteDetectionSettings,
             TimedEventDetectionSettings timedEventDetectionSettings)
         {
-            settings = settings ?? new ChordDetectionSettings();
-            noteDetectionSettings = noteDetectionSettings ?? new NoteDetectionSettings();
-            timedEventDetectionSettings = timedEventDetectionSettings ?? new TimedEventDetectionSettings();
-
-            var constructor = settings.Constructor;
-
-            var timedObjects = new LinkedList<IObjectDescriptorIndexed>();
-            var chordsDescriptors = new LinkedList<ChordDescriptorIndexed>();
-            var chordsDescriptorsByChannel = new LinkedListNode<ChordDescriptorIndexed>[FourBitNumber.MaxValue + 1];
-
-            var notesTolerance = settings.NotesTolerance;
-
-            foreach (var timedObjectTuple in timedEvents.GetNotesAndTimedEventsLazy(noteDetectionSettings))
-            {
-                var timedObject = timedObjectTuple.Object;
-
-                var timedEvent = timedObject as TimedEvent;
-                if (timedEvent != null)
-                {
-                    if (timedObjects.Count == 0)
-                        yield return new TimedObjectAt<ITimedObject>(timedObject, timedObjectTuple.AtIndex);
-                    else
-                        timedObjects.AddLast(new TimedEventDescriptorIndexed(timedEvent, timedObjectTuple.AtIndex));
-
-                    continue;
-                }
-
-                var note = (Note)timedObject;
-                var chordDescriptorNode = chordsDescriptorsByChannel[note.Channel];
-
-                if (timedObjects.Count == 0 || chordDescriptorNode == null || chordDescriptorNode.List == null)
-                {
-                    CreateChordDescriptor(chordsDescriptors, chordsDescriptorsByChannel, timedObjects, note, timedObjectTuple.AtIndex, settings);
-                }
-                else
-                {
-                    var chordDescriptor = chordDescriptorNode.Value;
-                    if (CanNoteBeAddedToChord(chordDescriptor, note, notesTolerance, timedObjectTuple.AtIndex))
-                    {
-                        var noteNode = timedObjects.AddLast(new NoteDescriptorIndexed(note, timedObjectTuple.AtIndex, false) { ChordDescriptor = chordDescriptor });
-                        chordDescriptor.NotesNodes.Add(noteNode);
-                    }
-                    else
-                    {
-                        chordDescriptor.IsSealed = true;
-
-                        if (chordDescriptorNode.Previous == null)
-                        {
-                            foreach (var timedObjectX in GetTimedObjects(chordDescriptorNode, chordsDescriptors, timedObjects, true, constructor))
-                            {
-                                yield return timedObjectX;
-                            }
-                        }
-
-                        CreateChordDescriptor(chordsDescriptors, chordsDescriptorsByChannel, timedObjects, note, timedObjectTuple.AtIndex, settings);
-                    }
-                }
-            }
-
-            foreach (var timedObject in GetTimedObjects(chordsDescriptors.First, chordsDescriptors, timedObjects, false, constructor))
-            {
-                yield return timedObject;
-            }
+            return new SortedLazyCollection<TimedObjectAt<ITimedObject>>(GetSortedChordsAndNotesAndTimedEventsLazy(
+                timedEvents,
+                settings,
+                noteDetectionSettings,
+                timedEventDetectionSettings));
         }
 
         internal static IEnumerable<ITimedObject> GetChordsAndNotesAndTimedEventsLazy(
@@ -1199,76 +1141,10 @@ namespace Melanchall.DryWetMidi.Interaction
             ChordDetectionSettings settings,
             bool chordsAllowed)
         {
-            settings = settings ?? new ChordDetectionSettings();
-            var constructor = settings.Constructor;
-
-            var timedObjects = new LinkedList<IObjectDescriptor>();
-            var chordsDescriptors = new LinkedList<ChordDescriptor>();
-            var chordsDescriptorsByChannel = new LinkedListNode<ChordDescriptor>[FourBitNumber.MaxValue + 1];
-
-            foreach (var timedObject in notesAndTimedEvents)
-            {
-                if (chordsAllowed)
-                {
-                    var chord = timedObject as Chord;
-                    if (chord != null)
-                    {
-                        if (timedObjects.Count == 0)
-                            yield return chord;
-                        else
-                            timedObjects.AddLast(new CompleteChordDescriptor(chord));
-
-                        continue;
-                    }
-                }
-
-                var timedEvent = timedObject as TimedEvent;
-                if (timedEvent != null)
-                {
-                    if (timedObjects.Count == 0)
-                        yield return timedObject;
-                    else
-                        timedObjects.AddLast(new TimedEventDescriptor(timedEvent));
-
-                    continue;
-                }
-
-                var note = (Note)timedObject;
-                var chordDescriptorNode = chordsDescriptorsByChannel[note.Channel];
-
-                if (timedObjects.Count == 0 || chordDescriptorNode == null || chordDescriptorNode.List == null)
-                {
-                    CreateChordDescriptor(chordsDescriptors, chordsDescriptorsByChannel, timedObjects, note, settings);
-                }
-                else
-                {
-                    var chordDescriptor = chordDescriptorNode.Value;
-                    if (CanNoteBeAddedToChord(chordDescriptor, note, settings.NotesTolerance))
-                    {
-                        var noteNode = timedObjects.AddLast(new NoteDescriptor(note, false) { ChordDescriptor = chordDescriptor });
-                        chordDescriptor.NotesNodes.Add(noteNode);
-                    }
-                    else
-                    {
-                        chordDescriptor.IsSealed = true;
-
-                        if (chordDescriptorNode.Previous == null)
-                        {
-                            foreach (var timedObjectX in GetTimedObjects(chordDescriptorNode, chordsDescriptors, timedObjects, true, constructor))
-                            {
-                                yield return timedObjectX;
-                            }
-                        }
-
-                        CreateChordDescriptor(chordsDescriptors, chordsDescriptorsByChannel, timedObjects, note, settings);
-                    }
-                }
-            }
-
-            foreach (var timedObject in GetTimedObjects(chordsDescriptors.First, chordsDescriptors, timedObjects, false, constructor))
-            {
-                yield return timedObject;
-            }
+            return new SortedLazyCollection<ITimedObject>(GetSortedChordsAndNotesAndTimedEventsLazy(
+                notesAndTimedEvents,
+                settings,
+                chordsAllowed));
         }
 
         internal static int ProcessChordsInternal(
@@ -1501,6 +1377,154 @@ namespace Melanchall.DryWetMidi.Interaction
         private static bool CanNoteBeAddedToChord(ChordDescriptorIndexed chordDescriptor, Note note, long notesTolerance, int eventsCollectionIndex)
         {
             return note.Time - chordDescriptor.Time <= notesTolerance && chordDescriptor.EventsCollectionIndex == eventsCollectionIndex;
+        }
+
+        private static IEnumerable<TimedObjectAt<ITimedObject>> GetSortedChordsAndNotesAndTimedEventsLazy(
+            this IEnumerable<TimedObjectAt<TimedEvent>> timedEvents,
+            ChordDetectionSettings settings,
+            NoteDetectionSettings noteDetectionSettings,
+            TimedEventDetectionSettings timedEventDetectionSettings)
+        {
+            settings = settings ?? new ChordDetectionSettings();
+            noteDetectionSettings = noteDetectionSettings ?? new NoteDetectionSettings();
+            timedEventDetectionSettings = timedEventDetectionSettings ?? new TimedEventDetectionSettings();
+
+            var constructor = settings.Constructor;
+
+            var timedObjects = new LinkedList<IObjectDescriptorIndexed>();
+            var chordsDescriptors = new LinkedList<ChordDescriptorIndexed>();
+            var chordsDescriptorsByChannel = new LinkedListNode<ChordDescriptorIndexed>[FourBitNumber.MaxValue + 1];
+
+            var notesTolerance = settings.NotesTolerance;
+
+            foreach (var timedObjectTuple in timedEvents.GetNotesAndTimedEventsLazy(noteDetectionSettings))
+            {
+                var timedObject = timedObjectTuple.Object;
+
+                var timedEvent = timedObject as TimedEvent;
+                if (timedEvent != null)
+                {
+                    if (timedObjects.Count == 0)
+                        yield return new TimedObjectAt<ITimedObject>(timedObject, timedObjectTuple.AtIndex);
+                    else
+                        timedObjects.AddLast(new TimedEventDescriptorIndexed(timedEvent, timedObjectTuple.AtIndex));
+
+                    continue;
+                }
+
+                var note = (Note)timedObject;
+                var chordDescriptorNode = chordsDescriptorsByChannel[note.Channel];
+
+                if (timedObjects.Count == 0 || chordDescriptorNode == null || chordDescriptorNode.List == null)
+                {
+                    CreateChordDescriptor(chordsDescriptors, chordsDescriptorsByChannel, timedObjects, note, timedObjectTuple.AtIndex, settings);
+                }
+                else
+                {
+                    var chordDescriptor = chordDescriptorNode.Value;
+                    if (CanNoteBeAddedToChord(chordDescriptor, note, notesTolerance, timedObjectTuple.AtIndex))
+                    {
+                        var noteNode = timedObjects.AddLast(new NoteDescriptorIndexed(note, timedObjectTuple.AtIndex, false) { ChordDescriptor = chordDescriptor });
+                        chordDescriptor.NotesNodes.Add(noteNode);
+                    }
+                    else
+                    {
+                        chordDescriptor.IsSealed = true;
+
+                        if (chordDescriptorNode.Previous == null)
+                        {
+                            foreach (var timedObjectX in GetTimedObjects(chordDescriptorNode, chordsDescriptors, timedObjects, true, constructor))
+                            {
+                                yield return timedObjectX;
+                            }
+                        }
+
+                        CreateChordDescriptor(chordsDescriptors, chordsDescriptorsByChannel, timedObjects, note, timedObjectTuple.AtIndex, settings);
+                    }
+                }
+            }
+
+            foreach (var timedObject in GetTimedObjects(chordsDescriptors.First, chordsDescriptors, timedObjects, false, constructor))
+            {
+                yield return timedObject;
+            }
+        }
+
+        private static IEnumerable<ITimedObject> GetSortedChordsAndNotesAndTimedEventsLazy(
+            this IEnumerable<ITimedObject> notesAndTimedEvents,
+            ChordDetectionSettings settings,
+            bool chordsAllowed)
+        {
+            settings = settings ?? new ChordDetectionSettings();
+            var constructor = settings.Constructor;
+
+            var timedObjects = new LinkedList<IObjectDescriptor>();
+            var chordsDescriptors = new LinkedList<ChordDescriptor>();
+            var chordsDescriptorsByChannel = new LinkedListNode<ChordDescriptor>[FourBitNumber.MaxValue + 1];
+
+            foreach (var timedObject in notesAndTimedEvents)
+            {
+                if (chordsAllowed)
+                {
+                    var chord = timedObject as Chord;
+                    if (chord != null)
+                    {
+                        if (timedObjects.Count == 0)
+                            yield return chord;
+                        else
+                            timedObjects.AddLast(new CompleteChordDescriptor(chord));
+
+                        continue;
+                    }
+                }
+
+                var timedEvent = timedObject as TimedEvent;
+                if (timedEvent != null)
+                {
+                    if (timedObjects.Count == 0)
+                        yield return timedObject;
+                    else
+                        timedObjects.AddLast(new TimedEventDescriptor(timedEvent));
+
+                    continue;
+                }
+
+                var note = (Note)timedObject;
+                var chordDescriptorNode = chordsDescriptorsByChannel[note.Channel];
+
+                if (timedObjects.Count == 0 || chordDescriptorNode == null || chordDescriptorNode.List == null)
+                {
+                    CreateChordDescriptor(chordsDescriptors, chordsDescriptorsByChannel, timedObjects, note, settings);
+                }
+                else
+                {
+                    var chordDescriptor = chordDescriptorNode.Value;
+                    if (CanNoteBeAddedToChord(chordDescriptor, note, settings.NotesTolerance))
+                    {
+                        var noteNode = timedObjects.AddLast(new NoteDescriptor(note, false) { ChordDescriptor = chordDescriptor });
+                        chordDescriptor.NotesNodes.Add(noteNode);
+                    }
+                    else
+                    {
+                        chordDescriptor.IsSealed = true;
+
+                        if (chordDescriptorNode.Previous == null)
+                        {
+                            foreach (var timedObjectX in GetTimedObjects(chordDescriptorNode, chordsDescriptors, timedObjects, true, constructor))
+                            {
+                                yield return timedObjectX;
+                            }
+                        }
+
+                        CreateChordDescriptor(chordsDescriptors, chordsDescriptorsByChannel, timedObjects, note, settings);
+                    }
+                }
+            }
+
+            foreach (var timedObject in GetTimedObjects(chordsDescriptors.First, chordsDescriptors, timedObjects, false, constructor))
+            {
+                yield return timedObject;
+            }
         }
 
         #endregion

@@ -49,8 +49,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             ThrowIfArgument.IsNull(nameof(outputDevice), outputDevice);
 
             var timedObjects = events
-                .GetTimedEventsLazy(playbackSettings?.TimedEventDetectionSettings)
-                .GetNotesAndTimedEventsLazy(playbackSettings?.NoteDetectionSettings ?? new NoteDetectionSettings());
+                .GetTimedEventsLazy(playbackSettings?.TimedEventDetectionSettings);
 
             return new Playback(timedObjects, tempoMap, outputDevice, playbackSettings);
         }
@@ -80,8 +79,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
             var timedObjects = events
-                .GetTimedEventsLazy(playbackSettings?.TimedEventDetectionSettings)
-                .GetNotesAndTimedEventsLazy(playbackSettings?.NoteDetectionSettings ?? new NoteDetectionSettings());
+                .GetTimedEventsLazy(playbackSettings?.TimedEventDetectionSettings);
 
             return new Playback(timedObjects, tempoMap, playbackSettings);
         }
@@ -118,8 +116,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
             var timedObjects = trackChunk
                 .Events
-                .GetTimedEventsLazy(playbackSettings?.TimedEventDetectionSettings)
-                .GetNotesAndTimedEventsLazy(playbackSettings?.NoteDetectionSettings ?? new NoteDetectionSettings());
+                .GetTimedEventsLazy(playbackSettings?.TimedEventDetectionSettings);
 
             return new Playback(timedObjects, tempoMap, outputDevice, playbackSettings);
         }
@@ -151,8 +148,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
             var timedObjects = trackChunk
                 .Events
-                .GetTimedEventsLazy(playbackSettings?.TimedEventDetectionSettings)
-                .GetNotesAndTimedEventsLazy(playbackSettings?.NoteDetectionSettings ?? new NoteDetectionSettings());
+                .GetTimedEventsLazy(playbackSettings?.TimedEventDetectionSettings);
 
             return new Playback(timedObjects, tempoMap, playbackSettings);
         }
@@ -189,10 +185,13 @@ namespace Melanchall.DryWetMidi.Multimedia
 
             var timedObjects = trackChunks
                 .GetTimedEventsLazy(playbackSettings?.TimedEventDetectionSettings)
-                .GetNotesAndTimedEventsLazy(playbackSettings?.NoteDetectionSettings ?? new NoteDetectionSettings())
                 .Select(o => o.Object);
 
-            return new Playback(timedObjects, tempoMap, outputDevice, playbackSettings);
+            return new Playback(
+                new SortedLazyCollection<TimedEvent>(timedObjects),
+                tempoMap,
+                outputDevice,
+                playbackSettings);
         }
 
         /// <summary>
@@ -222,10 +221,12 @@ namespace Melanchall.DryWetMidi.Multimedia
 
             var timedObjects = trackChunks
                 .GetTimedEventsLazy(playbackSettings?.TimedEventDetectionSettings)
-                .GetNotesAndTimedEventsLazy(playbackSettings?.NoteDetectionSettings ?? new NoteDetectionSettings())
                 .Select(o => o.Object);
 
-            return new Playback(timedObjects, tempoMap, playbackSettings);
+            return new Playback(
+                new SortedLazyCollection<TimedEvent>(timedObjects),
+                tempoMap,
+                playbackSettings);
         }
 
         /// <summary>
@@ -367,11 +368,12 @@ namespace Melanchall.DryWetMidi.Multimedia
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
             ThrowIfArgument.IsNull(nameof(outputDevice), outputDevice);
 
-            return GetMusicalObjectsPlayback(objects,
-                                             tempoMap,
-                                             outputDevice,
-                                             channel => new[] { new ProgramChangeEvent(programNumber) { Channel = channel } },
-                                             playbackSettings);
+            return GetMusicalObjectsPlayback(
+                objects,
+                tempoMap,
+                outputDevice,
+                channel => new[] { new ProgramChangeEvent(programNumber) { Channel = channel } },
+                playbackSettings);
         }
 
         /// <summary>
@@ -408,11 +410,12 @@ namespace Melanchall.DryWetMidi.Multimedia
             ThrowIfArgument.IsNull(nameof(outputDevice), outputDevice);
             ThrowIfArgument.IsInvalidEnumValue(nameof(generalMidiProgram), generalMidiProgram);
 
-            return GetMusicalObjectsPlayback(objects,
-                                             tempoMap,
-                                             outputDevice,
-                                             channel => new[] { generalMidiProgram.GetProgramEvent(channel) },
-                                             playbackSettings);
+            return GetMusicalObjectsPlayback(
+                objects,
+                tempoMap,
+                outputDevice,
+                channel => new[] { generalMidiProgram.GetProgramEvent(channel) },
+                playbackSettings);
         }
 
         /// <summary>
@@ -449,26 +452,34 @@ namespace Melanchall.DryWetMidi.Multimedia
             ThrowIfArgument.IsNull(nameof(outputDevice), outputDevice);
             ThrowIfArgument.IsInvalidEnumValue(nameof(generalMidi2Program), generalMidi2Program);
 
-            return GetMusicalObjectsPlayback(objects,
-                                             tempoMap,
-                                             outputDevice,
-                                             channel => generalMidi2Program.GetProgramEvents(channel),
-                                             playbackSettings);
+            return GetMusicalObjectsPlayback(
+                objects,
+                tempoMap,
+                outputDevice,
+                channel => generalMidi2Program.GetProgramEvents(channel),
+                playbackSettings);
         }
 
-        private static Playback GetMusicalObjectsPlayback<TObject>(IEnumerable<TObject> objects,
-                                                                   TempoMap tempoMap,
-                                                                   IOutputDevice outputDevice,
-                                                                   Func<FourBitNumber, IEnumerable<MidiEvent>> programChangeEventsGetter,
-                                                                   PlaybackSettings playbackSettings)
+        private static Playback GetMusicalObjectsPlayback<TObject>(
+            IEnumerable<TObject> objects,
+            TempoMap tempoMap,
+            IOutputDevice outputDevice,
+            Func<FourBitNumber, IEnumerable<MidiEvent>> programChangeEventsGetter,
+            PlaybackSettings playbackSettings)
             where TObject : IMusicalObject, ITimedObject
         {
-            var programChangeEvents = objects.Select(n => n.Channel)
-                                             .Distinct()
-                                             .SelectMany(programChangeEventsGetter)
-                                             .Select(e => (ITimedObject)new TimedEvent(e));
+            var programChangeEvents = objects
+                .Select(n => n.Channel)
+                .Distinct()
+                .SelectMany(programChangeEventsGetter)
+                .Select(e => (ITimedObject)new TimedEvent(e));
 
-            return new Playback(programChangeEvents.Concat((IEnumerable<ITimedObject>)objects), tempoMap, outputDevice, playbackSettings);
+            // TODO: OrderBy
+            return new Playback(
+                programChangeEvents.Concat((IEnumerable<ITimedObject>)objects),
+                tempoMap,
+                outputDevice,
+                playbackSettings);
         }
 
         #endregion

@@ -30,6 +30,17 @@ namespace Melanchall.DryWetMidi.Tests.Common
         #region Test methods
 
         [Test]
+        public void Clone()
+        {
+            for (var i = 1; i <= 1000; i++)
+            {
+                var tree = new RedBlackTree<int, int>(Enumerable.Range(0, i), j => j);
+                var clone = tree.Clone();
+                CollectionAssert.AreEqual(tree, clone, $"Clone is not equal to original tree for size {i}.");
+            }
+        }
+
+        [Test]
         public void Enumerate_1()
         {
             var tree = new RedBlackTree<int, int>();
