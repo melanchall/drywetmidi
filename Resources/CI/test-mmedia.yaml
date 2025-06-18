@@ -98,7 +98,7 @@ stages:
     - task: DotNetCoreCLI@2
       displayName: Run unit tests
       continueOnError: false
-      timeoutInMinutes: 30
+      timeoutInMinutes: 60
       inputs:
         command: 'test'
         projects: 'DryWetMidi.Tests/Melanchall.DryWetMidi.Tests.csproj'

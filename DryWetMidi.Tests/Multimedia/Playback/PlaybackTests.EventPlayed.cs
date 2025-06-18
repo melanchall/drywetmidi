@@ -81,7 +81,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 actions: Array.Empty<PlaybackAction>(),
                 expectedReceivedEvents: eventsToSend
                     .Select((e, i) => new SentReceivedEvent(e.Event, TimeSpan.FromMilliseconds(delay * (i + 1))))
-                    .ToArray());
+                    .ToArray(),
+                checkFromFile: false);
         }
 
         [Retry(RetriesNumber)]
@@ -804,7 +805,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             ICollection<ITimedObject> initialPlaybackObjects,
             PlaybackAction[] actions,
             ICollection<SentReceivedEvent> expectedReceivedEvents,
-            Action<Playback> setupPlayback = null)
+            Action<Playback> setupPlayback = null,
+            bool checkFromFile = true)
         {
             var playedEvents = new List<SentReceivedEvent>();
             var stopwatch = new Stopwatch();
@@ -817,11 +819,17 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 afterStart: _ => stopwatch.Start(),
                 setupPlayback: playback =>
                 {
+                    playedEvents.Clear();
+                    stopwatch.Reset();
+
                     setupPlayback?.Invoke(playback);
                     playback.EventPlayed += (_, e) => playedEvents.Add(new SentReceivedEvent(e.Event, stopwatch.Elapsed));
-                });
-
-            SendReceiveUtilities.CheckReceivedEvents(playedEvents, expectedReceivedEvents.ToList());
+                },
+                additionalChecks: _ =>
+                {
+                    SendReceiveUtilities.CheckReceivedEvents(playedEvents, expectedReceivedEvents.ToList());
+                },
+                checkFromFile: checkFromFile);
         }
 
         #endregion

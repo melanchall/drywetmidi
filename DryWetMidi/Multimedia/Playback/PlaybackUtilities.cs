@@ -48,6 +48,8 @@ namespace Melanchall.DryWetMidi.Multimedia
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
             ThrowIfArgument.IsNull(nameof(outputDevice), outputDevice);
 
+            UseNoteEventsDirectly(ref playbackSettings);
+
             var timedObjects = events
                 .GetTimedEventsLazy(playbackSettings?.TimedEventDetectionSettings);
 
@@ -77,6 +79,8 @@ namespace Melanchall.DryWetMidi.Multimedia
         {
             ThrowIfArgument.IsNull(nameof(events), events);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
+
+            UseNoteEventsDirectly(ref playbackSettings);
 
             var timedObjects = events
                 .GetTimedEventsLazy(playbackSettings?.TimedEventDetectionSettings);
@@ -114,6 +118,8 @@ namespace Melanchall.DryWetMidi.Multimedia
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
             ThrowIfArgument.IsNull(nameof(outputDevice), outputDevice);
 
+            UseNoteEventsDirectly(ref playbackSettings);
+
             var timedObjects = trackChunk
                 .Events
                 .GetTimedEventsLazy(playbackSettings?.TimedEventDetectionSettings);
@@ -145,6 +151,8 @@ namespace Melanchall.DryWetMidi.Multimedia
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
+
+            UseNoteEventsDirectly(ref playbackSettings);
 
             var timedObjects = trackChunk
                 .Events
@@ -183,6 +191,8 @@ namespace Melanchall.DryWetMidi.Multimedia
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
             ThrowIfArgument.IsNull(nameof(outputDevice), outputDevice);
 
+            UseNoteEventsDirectly(ref playbackSettings);
+
             var timedObjects = trackChunks
                 .GetTimedEventsLazy(playbackSettings?.TimedEventDetectionSettings)
                 .Select(o => o.Object);
@@ -218,6 +228,8 @@ namespace Melanchall.DryWetMidi.Multimedia
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
+
+            UseNoteEventsDirectly(ref playbackSettings);
 
             var timedObjects = trackChunks
                 .GetTimedEventsLazy(playbackSettings?.TimedEventDetectionSettings)
@@ -480,6 +492,12 @@ namespace Melanchall.DryWetMidi.Multimedia
                 tempoMap,
                 outputDevice,
                 playbackSettings);
+        }
+
+        private static void UseNoteEventsDirectly(ref PlaybackSettings playbackSettings)
+        {
+            playbackSettings = playbackSettings ?? new PlaybackSettings();
+            playbackSettings.UseNoteEventsDirectly = true;
         }
 
         #endregion

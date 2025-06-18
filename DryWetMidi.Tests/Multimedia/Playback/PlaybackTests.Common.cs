@@ -9,6 +9,7 @@ using NUnit.Framework;
 using Melanchall.DryWetMidi.Tests.Common;
 using System.Diagnostics;
 using NUnit.Framework.Legacy;
+using System.Threading;
 
 namespace Melanchall.DryWetMidi.Tests.Multimedia
 {
@@ -60,8 +61,12 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             Action<Playback> setupPlayback = null,
             Action<Playback> afterStart = null,
             int? repeatsCount = null,
+            Action<Playback> additionalChecks = null,
             PlaybackSettings playbackSettings = null,
-            TimeSpan? sendReceiveTimeDelta = null) => CheckPlayback(
+            TimeSpan? sendReceiveTimeDelta = null,
+            bool checkFromFile = true)
+        {
+            CheckPlayback(
                 useOutputDevice: useOutputDevice,
                 createPlayback: outputDevice => new Playback(initialPlaybackObjects, TempoMap, outputDevice, playbackSettings),
                 actions: actions,
@@ -69,7 +74,32 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 setupPlayback: setupPlayback,
                 afterStart: afterStart,
                 repeatsCount: repeatsCount,
-                sendReceiveTimeDelta: sendReceiveTimeDelta);
+                sendReceiveTimeDelta: sendReceiveTimeDelta,
+                label: "From objects.",
+                additionalChecks: additionalChecks);
+
+            if (!checkFromFile)
+                return;
+
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+            WaitOperations.Wait(TimeSpan.FromSeconds(5));
+
+            var midiFile = initialPlaybackObjects.ToFile();
+            midiFile.ReplaceTempoMap(TempoMap);
+
+            CheckPlayback(
+                useOutputDevice: useOutputDevice,
+                createPlayback: outputDevice => midiFile.GetPlayback(outputDevice, playbackSettings),
+                actions: actions,
+                expectedReceivedEvents: expectedReceivedEvents,
+                setupPlayback: setupPlayback,
+                afterStart: afterStart,
+                repeatsCount: repeatsCount,
+                sendReceiveTimeDelta: sendReceiveTimeDelta,
+                label: "From file.",
+                additionalChecks: additionalChecks);
+        }
 
         private void CheckPlayback(
             bool useOutputDevice,
@@ -80,7 +110,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             Action<Playback> afterStart = null,
             int? repeatsCount = null,
             Action<Playback> additionalChecks = null,
-            TimeSpan? sendReceiveTimeDelta = null)
+            TimeSpan? sendReceiveTimeDelta = null,
+            string label = null)
         {
             var outputDevice = useOutputDevice
                 ? OutputDevice.GetByName(SendReceiveUtilities.DeviceToTestOnName)
@@ -93,6 +124,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 .Range(0, actions.Length)
                 .Select(i => actions.Take(i + 1).Sum(a => a.PeriodMs))
                 .ToArray();
+
+            var labelString = string.IsNullOrEmpty(label) ? string.Empty : $"{label} ";
 
             using (outputDevice)
             {
@@ -132,21 +165,22 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
                     var timeout = TimeSpan.FromSeconds(30);
                     var stopped = WaitOperations.Wait(() => !playback.IsRunning, timeout);
-                    ClassicAssert.IsTrue(stopped, $"Playback is running after {timeout}.");
+                    ClassicAssert.IsTrue(stopped, $"{labelString}Playback is running after {timeout}.");
 
                     WaitOperations.Wait(SendReceiveUtilities.MaximumEventSendReceiveDelay);
 
                     ClassicAssert.AreEqual(
                         actions.Length,
                         actionsExecutedCount,
-                        "Invalid number of actions executed.");
+                        $"{labelString}Invalid number of actions executed.");
 
                     SendReceiveUtilities.CheckReceivedEvents(
                         receivedEvents,
                         expectedReceivedEvents.ToList(),
                         sendReceiveTimeDelta: sendReceiveTimeDelta ?? (useOutputDevice
                             ? SendReceiveUtilities.MaximumEventSendReceiveDelay
-                            : TimeSpan.FromMilliseconds(20)));
+                            : TimeSpan.FromMilliseconds(20)),
+                        label);
 
                     additionalChecks?.Invoke(playback);
                 }

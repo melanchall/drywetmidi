@@ -40,6 +40,8 @@ namespace Melanchall.DryWetMidi.Common
 
         public TKey Data { get; set; }
 
+        public bool Flag { get; set; }
+
         #endregion
 
         #region Methods

@@ -41,6 +41,8 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// </remarks>
         public bool CalculateTempoMap { get; set; }
 
+        internal bool UseNoteEventsDirectly { get; set; }
+
         #endregion
     }
 }

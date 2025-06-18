@@ -2054,7 +2054,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
                     playback.NotesPlaybackStarted += (_, e) => notesEvents.AddRange(Enumerable.Range(0, e.Notes.Count).Select(i => (EventType.Started, e.Notes.ElementAt(i), e.OriginalNotes.ElementAt(i))));
                     playback.NotesPlaybackFinished += (_, e) => notesEvents.AddRange(Enumerable.Range(0, e.Notes.Count).Select(i => (EventType.Finished, e.Notes.ElementAt(i), e.OriginalNotes.ElementAt(i))));
-                });
+                },
+                checkFromFile: false);
 
             ClassicAssert.AreEqual(
                 expectedNotesEvents.Count,

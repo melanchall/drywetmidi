@@ -582,15 +582,20 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 expectedReceivedEvents: expectedReceivedEvents,
                 setupPlayback: playback =>
                 {
+                    notesStarted = new List<Note>();
+                    notesFinished = new List<Note>();
+
                     setupPlayback?.Invoke(playback);
 
                     playback.TrackNotes = true;
                     playback.NotesPlaybackStarted += (_, e) => notesStarted.AddRange(e.Notes);
                     playback.NotesPlaybackFinished += (_, e) => notesFinished.AddRange(e.Notes);
+                },
+                additionalChecks: _ =>
+                {
+                    MidiAsserts.AreEqual(notesStarted, notesWillBeStarted.Select(i => notes[i]), "Invalid notes started.");
+                    MidiAsserts.AreEqual(notesFinished, notesWillBeFinished.Select(i => notes[i]), "Invalid notes finished.");
                 });
-
-            MidiAsserts.AreEqual(notesStarted, notesWillBeStarted.Select(i => notes[i]), "Invalid notes started.");
-            MidiAsserts.AreEqual(notesFinished, notesWillBeFinished.Select(i => notes[i]), "Invalid notes finished.");
         }
 
         #endregion

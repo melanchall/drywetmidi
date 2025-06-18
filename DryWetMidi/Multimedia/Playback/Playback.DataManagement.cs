@@ -32,7 +32,8 @@ namespace Melanchall.DryWetMidi.Multimedia
             IEnumerable<ITimedObject> timedObjects,
             TempoMap tempoMap,
             NoteDetectionSettings noteDetectionSettings,
-            bool calculateTempoMap)
+            bool calculateTempoMap,
+            bool useNoteEventsDirectly)
         {
             _observableTimedObjectsCollection = timedObjects as IObservableTimedObjectsCollection;
             if (_observableTimedObjectsCollection != null)
@@ -48,7 +49,8 @@ namespace Melanchall.DryWetMidi.Multimedia
             InitializePlaybackEvents(
                 playbackEventsSource.GetNotesAndTimedEventsLazy(noteDetectionSettings, true),
                 tempoMap,
-                calculateTempoMap);
+                calculateTempoMap,
+                useNoteEventsDirectly);
 
             MoveToNextPlaybackEvent();
         }
@@ -63,7 +65,7 @@ namespace Melanchall.DryWetMidi.Multimedia
                 {
                     foreach (var obj in e.AddedObjects)
                     {
-                        AddNewTimedObject(obj);
+                        AddNewTimedObject(obj, false);
                     }
                 }
 
@@ -83,7 +85,7 @@ namespace Melanchall.DryWetMidi.Multimedia
                         var oldTime = changedObject.OldTime;
 
                         RemoveTimedObject(obj, oldTime);
-                        AddNewTimedObject(obj);
+                        AddNewTimedObject(obj, false);
                     }
                 }
 
@@ -114,9 +116,9 @@ namespace Melanchall.DryWetMidi.Multimedia
             }
         }
 
-        private void AddNewTimedObject(ITimedObject timedObject)
+        private void AddNewTimedObject(ITimedObject timedObject, bool useNoteEventsDirectly)
         {
-            AddTimedObject(timedObject, TempoMap, false, true);
+            AddTimedObject(timedObject, TempoMap, false, true, useNoteEventsDirectly);
         }
 
         private void RemoveTimedObject(ITimedObject timedObject, long oldTime)
@@ -213,23 +215,26 @@ namespace Melanchall.DryWetMidi.Multimedia
         private void InitializePlaybackEvents(
             IEnumerable<ITimedObject> timedObjects,
             TempoMap tempoMap,
-            bool calculateTempoMap)
+            bool calculateTempoMap,
+            bool useNoteEventsDirectly)
         {
             foreach (var timedObject in timedObjects)
             {
-                AddTimedObject(timedObject, tempoMap, true, calculateTempoMap);
+                AddTimedObject(timedObject, tempoMap, true, calculateTempoMap, useNoteEventsDirectly);
             }
 
             _playbackSource.CompleteSource();
+            _notesMetadata.InitializeMax();
         }
 
         private void AddTimedObject(
             ITimedObject timedObject,
             TempoMap tempoMap,
             bool isInitialObject,
-            bool calculateTempoMap)
+            bool calculateTempoMap,
+            bool useNoteEventsDirectly)
         {
-            if (TryAddNoteEvent(timedObject, tempoMap, isInitialObject))
+            if (TryAddNoteEvent(timedObject, tempoMap, isInitialObject, useNoteEventsDirectly))
                 return;
 
             //
@@ -258,7 +263,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
             //
 
-            var playbackEvents = GetPlaybackEvents(timedObject, tempoMap);
+            var playbackEvents = GetPlaybackEvents(timedObject, tempoMap, useNoteEventsDirectly);
             var eventsGroup = new HashSet<RedBlackTreeCoordinate<TimeSpan, PlaybackEvent>>();
 
             var minTime = TimeSpan.MaxValue;
@@ -280,7 +285,12 @@ namespace Melanchall.DryWetMidi.Multimedia
 
                 var noteMetadata = e.NoteMetadata;
                 if (noteMetadata != null && _notesMetadataHashSet.Add(noteMetadata))
-                    _notesMetadata.Add(noteMetadata.StartTime, noteMetadata);
+                {
+                    if (!isInitialObject)
+                        _notesMetadata.Add(noteMetadata);
+                    else
+                        _notesMetadata.AddWithoutMaxUpdating(noteMetadata);
+                }
 
                 InitializeTrackedData(
                     e.Event,
@@ -684,7 +694,8 @@ namespace Melanchall.DryWetMidi.Multimedia
         private bool TryAddNoteEvent(
             ITimedObject timedObject,
             TempoMap tempoMap,
-            bool isInitialObject)
+            bool isInitialObject,
+            bool useNoteEventsDirectly)
         {
             var timedEvent = timedObject as TimedEvent;
             if (timedEvent != null)
@@ -701,7 +712,7 @@ namespace Melanchall.DryWetMidi.Multimedia
                             ((NoteEvent)matchedTimedEvent.Event).GetNoteId().Equals(noteId))
                         {
                             _noteOffEvents.TryRemove(noteId, out matchedTimedEvent);
-                            AddTimedObject(new Note(timedEvent, matchedTimedEvent, false), TempoMap, isInitialObject, false);
+                            AddTimedObject(new Note(timedEvent, matchedTimedEvent, false), TempoMap, isInitialObject, false, useNoteEventsDirectly);
                         }
                         else
                             _noteOnEvents[noteId] = timedEvent;
@@ -712,7 +723,7 @@ namespace Melanchall.DryWetMidi.Multimedia
                             ((NoteEvent)matchedTimedEvent.Event).GetNoteId().Equals(noteId))
                         {
                             _noteOnEvents.TryRemove(noteId, out matchedTimedEvent);
-                            AddTimedObject(new Note(matchedTimedEvent, timedEvent, false), TempoMap, isInitialObject, false);
+                            AddTimedObject(new Note(matchedTimedEvent, timedEvent, false), TempoMap, isInitialObject, false, useNoteEventsDirectly);
                         }
                         else
                             _noteOffEvents[noteId] = timedEvent;
@@ -725,7 +736,10 @@ namespace Melanchall.DryWetMidi.Multimedia
             return false;
         }
 
-        private IEnumerable<PlaybackEvent> GetPlaybackEvents(ITimedObject timedObject, TempoMap tempoMap)
+        private IEnumerable<PlaybackEvent> GetPlaybackEvents(
+            ITimedObject timedObject,
+            TempoMap tempoMap,
+            bool useNoteEventsDirectly)
         {
             _playbackEventsBuffer.Clear();
 
@@ -742,13 +756,13 @@ namespace Melanchall.DryWetMidi.Multimedia
             var chord = timedObject as Chord;
             if (chord != null)
             {
-                return GetPlaybackEvents(chord, tempoMap);
+                return GetPlaybackEvents(chord, tempoMap, useNoteEventsDirectly);
             }
 
             var note = timedObject as Note;
             if (note != null)
             {
-                return GetPlaybackEvents(note, tempoMap, note);
+                return GetPlaybackEvents(note, tempoMap, note, useNoteEventsDirectly);
             }
 
             var timedEvent = timedObject as TimedEvent;
@@ -775,32 +789,39 @@ namespace Melanchall.DryWetMidi.Multimedia
             return playbackEvent;
         }
 
-        private IEnumerable<PlaybackEvent> GetPlaybackEvents(Chord chord, TempoMap tempoMap)
+        private IEnumerable<PlaybackEvent> GetPlaybackEvents(
+            Chord chord,
+            TempoMap tempoMap,
+            bool useNoteEventsDirectly)
         {
             foreach (var note in chord.Notes)
             {
-                foreach (var playbackEvent in GetPlaybackEvents(note, tempoMap, chord))
+                foreach (var playbackEvent in GetPlaybackEvents(note, tempoMap, chord, useNoteEventsDirectly))
                 {
                     yield return playbackEvent;
                 }
             }
         }
 
-        private IEnumerable<PlaybackEvent> GetPlaybackEvents(Note note, TempoMap tempoMap, ITimedObject objectReference)
+        private IEnumerable<PlaybackEvent> GetPlaybackEvents(
+            Note note,
+            TempoMap tempoMap,
+            ITimedObject objectReference,
+            bool useNoteEventsDirectly)
         {
             var noteStartTime = new PlaybackTime(note.TimeAs<MetricTimeSpan>(tempoMap));
             var noteEndTime = new PlaybackTime(TimeConverter.ConvertTo<MetricTimeSpan>(note.EndTime, tempoMap));
             var noteMetadata = new NotePlaybackEventMetadata(note, noteStartTime, noteEndTime);
 
             yield return GetPlaybackEventWithNoteMetadata(
-                note.GetTimedNoteOnEvent(),
+                useNoteEventsDirectly ? note.TimedNoteOnEvent : note.GetTimedNoteOnEvent(),
                 noteStartTime,
                 tempoMap,
                 noteMetadata,
                 objectReference);
 
             yield return GetPlaybackEventWithNoteMetadata(
-                note.GetTimedNoteOffEvent(),
+                useNoteEventsDirectly ? note.TimedNoteOffEvent : note.GetTimedNoteOffEvent(),
                 noteEndTime,
                 tempoMap,
                 noteMetadata,

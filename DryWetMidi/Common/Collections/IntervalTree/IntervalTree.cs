@@ -7,6 +7,12 @@ namespace Melanchall.DryWetMidi.Common
         where TKey : IComparable<TKey>
         where TValue : IInterval<TKey>
     {
+        #region Fields
+
+        private bool _blockUpdatingMax = false;
+
+        #endregion
+
         #region Constructor
 
         public IntervalTree()
@@ -15,8 +21,14 @@ namespace Melanchall.DryWetMidi.Common
         }
 
         public IntervalTree(IEnumerable<TValue> values)
-            : base(values, v => v.Start)
+            : base()
         {
+            foreach (var v in values)
+            {
+                AddWithoutMaxUpdating(v);
+            }
+
+            InitializeMax();
         }
 
         #endregion
@@ -26,6 +38,16 @@ namespace Melanchall.DryWetMidi.Common
         public RedBlackTreeCoordinate<TKey, TValue> Add(TValue value)
         {
             return Add(value.Start, value);
+        }
+
+        public RedBlackTreeCoordinate<TKey, TValue> AddWithoutMaxUpdating(TValue value)
+        {
+            _blockUpdatingMax = true;
+
+            var result = Add(value);
+
+            _blockUpdatingMax = false;
+            return result;
         }
 
         public IEnumerable<RedBlackTreeCoordinate<TKey, TValue>> Search(TKey point)
@@ -59,9 +81,36 @@ namespace Melanchall.DryWetMidi.Common
             }
         }
 
+        public void InitializeMax()
+        {
+            var nodeStack = new Stack<RedBlackTreeNode<TKey, TValue>>();
+            nodeStack.Push(_root);
+
+            while (nodeStack.Count != 0)
+            {
+                var currNode = nodeStack.Peek();
+                if (!IsVoid(currNode.Left) && !currNode.Left.Flag)
+                    nodeStack.Push(currNode.Left);
+                else
+                {
+                    if (!IsVoid(currNode.Right) && !currNode.Right.Flag)
+                        nodeStack.Push(currNode.Right);
+                    else
+                    {
+                        currNode.Flag = true;
+                        UpdateMax(currNode);
+                        nodeStack.Pop();
+                    }
+                }
+            }
+        }
+
         protected override void OnValueAdded(RedBlackTreeCoordinate<TKey, TValue> coordinate, TValue value)
         {
             base.OnValueAdded(coordinate, value);
+
+            if (_blockUpdatingMax)
+                return;
 
             var end = value.End;
             if (!UpdateMaxByNewValue(coordinate.TreeNode, end))
@@ -74,6 +123,9 @@ namespace Melanchall.DryWetMidi.Common
         {
             base.OnValueRemoved(node);
 
+            if (_blockUpdatingMax)
+                return;
+
             if (UpdateMax(node))
                 UpdateMaxUp(node);
         }
@@ -84,6 +136,9 @@ namespace Melanchall.DryWetMidi.Common
         {
             base.OnRotated(bottomNode, topNode);
 
+            if (_blockUpdatingMax)
+                return;
+
             UpdateMax(bottomNode);
 
             if (bottomNode.Data.CompareTo(topNode.Data) > 0)
@@ -93,6 +148,9 @@ namespace Melanchall.DryWetMidi.Common
         protected override void OnTransplanted(RedBlackTreeNode<TKey, TValue> node)
         {
             base.OnTransplanted(node);
+
+            if (_blockUpdatingMax)
+                return;
 
             UpdateMax(node);
             UpdateMaxUp(node);

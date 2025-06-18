@@ -75,7 +75,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialPlaybackObjects: new[]
                 {
                     new TimedEvent(new ProgramChangeEvent((SevenBitNumber)33)).SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(200), TempoMap),
-                    new TimedEvent(new StopEvent()).SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(400), TempoMap),
+                    new TimedEvent(new NoteAftertouchEvent()).SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(400), TempoMap),
                 },
                 initialEventCallback: (e, rt, t) => null,
                 actions: new[]
@@ -85,7 +85,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new StopEvent(), TimeSpan.FromMilliseconds(400))
+                    new SentReceivedEvent(new NoteAftertouchEvent(), TimeSpan.FromMilliseconds(400))
                 });
         }
 
@@ -121,7 +121,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new TimedEvent(new NoteOnEvent()).SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(0), TempoMap),
                     new TimedEvent(new NoteOffEvent()).SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(200), TempoMap),
                     new TimedEvent(new ProgramChangeEvent((SevenBitNumber)33)).SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(500), TempoMap),
-                    new TimedEvent(new StopEvent()).SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(600), TempoMap),
+                    new TimedEvent(new NoteAftertouchEvent()).SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(600), TempoMap),
                 },
                 initialEventCallback: (e, rt, t) => e,
                 actions: new[]

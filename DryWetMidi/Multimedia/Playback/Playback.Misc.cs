@@ -139,7 +139,8 @@ namespace Melanchall.DryWetMidi.Multimedia
                 timedObjects,
                 TempoMap,
                 playbackSettings.NoteDetectionSettings ?? new NoteDetectionSettings(),
-                playbackSettings.CalculateTempoMap);
+                playbackSettings.CalculateTempoMap,
+                playbackSettings.UseNoteEventsDirectly);
             UpdateDuration();
         }
 
