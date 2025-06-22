@@ -1099,7 +1099,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             var notePlaybackData = noteMetadata.NotePlaybackData;
 
             var noteCallback = NoteCallback;
-            if (noteCallback != null && midiEvent is NoteOnEvent)
+            if (noteCallback != null && isNoteOnEvent)
             {
                 notePlaybackData = noteCallback(noteMetadata.RawNotePlaybackData, noteMetadata.RawNote.Time, noteMetadata.RawNote.Length, time);
                 noteMetadata.SetCustomNotePlaybackData(notePlaybackData);
