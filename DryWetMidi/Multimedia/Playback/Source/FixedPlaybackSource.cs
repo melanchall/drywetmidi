@@ -9,7 +9,8 @@ namespace Melanchall.DryWetMidi.Multimedia
     {
         #region Fields
 
-        private IList<PlaybackEvent> _playbackEvents = new List<PlaybackEvent>();
+        private IList<PlaybackEvent> _playbackEventsBuffer = new List<PlaybackEvent>();
+        private PlaybackEvent[] _playbackEvents = null;
         private int _playbackEventsPosition = -1;
         private bool _isCompleted;
 
@@ -28,13 +29,14 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         public void AddPlaybackEvent(PlaybackEvent playbackEvent)
         {
-            _playbackEvents.Add(playbackEvent);
+            _playbackEventsBuffer.Add(playbackEvent);
         }
 
         public void CompleteSource()
         {
-            ((List<PlaybackEvent>)_playbackEvents).Sort((x, y) => Math.Sign(x.RawTime - y.RawTime));
+            _playbackEvents = _playbackEventsBuffer.OrderBy(e => e, new PlaybackEventsComparer()).ToArray();
             _isCompleted = true;
+            _playbackEventsBuffer.Clear();
         }
 
         public PlaybackEvent GetCurrentPlaybackEvent()
@@ -58,7 +60,7 @@ namespace Melanchall.DryWetMidi.Multimedia
                 e => e.Time.Time.Ticks,
                 out i);
 
-            for (; i < _playbackEvents.Count; i++)
+            for (; i < _playbackEvents.Length; i++)
             {
                 var snapPoint = getSnapPoint(_playbackEvents[i]);
                 if (snapPoint != null && snapPoint.IsEnabled)
@@ -108,7 +110,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         public bool IsPositionValid()
         {
-            return _playbackEventsPosition >= 0 && _playbackEventsPosition < _playbackEvents.Count;
+            return _playbackEventsPosition >= 0 && _playbackEventsPosition < _playbackEvents.Length;
         }
 
         public void MoveToFirstPosition()
@@ -151,7 +153,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
             int firstNodeAfterTempoChange;
             MathUtilities.GetFirstElementAboveThreshold(
-                _playbackEvents,
+                _playbackEventsBuffer,
                 tempoChangeTime,
                 e => e.Time.Time,
                 out firstNodeAfterTempoChange);
@@ -163,15 +165,15 @@ namespace Melanchall.DryWetMidi.Multimedia
 
             do
             {
-                var key = _playbackEvents[node].Time.Time;
+                var key = _playbackEventsBuffer[node].Time.Time;
                 if (nextTempoTime != null && key > nextTempoTime)
                     key -= shift;
                 else
                     key = tempoChangeTime + ScaleTimeSpan(key - tempoChangeTime, scaleFactor);
 
-                _playbackEvents[node].Time.Time = key;
+                _playbackEventsBuffer[node].Time.Time = key;
             }
-            while (++node < _playbackEvents.Count);
+            while (++node < _playbackEventsBuffer.Count);
         }
 
         #endregion

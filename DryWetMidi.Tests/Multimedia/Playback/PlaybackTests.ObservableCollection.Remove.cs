@@ -2308,7 +2308,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)90, Note.DefaultVelocity), TimeSpan.FromMilliseconds(400)),
                     new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)90, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(900)),
                 },
-                additionalChecks: playback => MidiAsserts.AreEqual(
+                additionalChecks: (playback, _) => MidiAsserts.AreEqual(
                     TempoMap,
                     playback.TempoMap,
                     "Invalid tempo map."));
@@ -2350,7 +2350,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)90, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
                     new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)90, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(700)),
                 },
-                additionalChecks: playback => MidiAsserts.AreEqual(
+                additionalChecks: (playback, _) => MidiAsserts.AreEqual(
                     TempoMap,
                     playback.TempoMap,
                     "Invalid tempo map."));
@@ -2386,7 +2386,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
                     new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(100)),
                 },
-                additionalChecks: playback => MidiAsserts.AreEqual(
+                additionalChecks: (playback, _) => MidiAsserts.AreEqual(
                     TempoMap,
                     playback.TempoMap,
                     "Invalid tempo map."));
@@ -2422,7 +2422,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
                     new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(100)),
                 },
-                additionalChecks: playback => MidiAsserts.AreEqual(
+                additionalChecks: (playback, _) => MidiAsserts.AreEqual(
                     TempoMap,
                     playback.TempoMap,
                     "Invalid tempo map."));
@@ -2466,7 +2466,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)90, Note.DefaultVelocity), TimeSpan.FromMilliseconds(325)),
                     new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)90, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(450)),
                 },
-                additionalChecks: playback => MidiAsserts.AreEqual(
+                additionalChecks: (playback, _) => MidiAsserts.AreEqual(
                     AddTempoChanges(TempoMap, (TimeSpan.FromMilliseconds(300), new Tempo(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 4))),
                     playback.TempoMap,
                     "Invalid tempo map."));
@@ -2511,7 +2511,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)90, Note.DefaultVelocity), TimeSpan.FromMilliseconds(305)),
                     new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)90, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(430)),
                 },
-                additionalChecks: playback => MidiAsserts.AreEqual(
+                additionalChecks: (playback, _) => MidiAsserts.AreEqual(
                     AddTempoChanges(TempoMap, (TimeSpan.FromMilliseconds(300), new Tempo(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 4))),
                     playback.TempoMap,
                     "Invalid tempo map."));
@@ -2556,7 +2556,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)90, Note.DefaultVelocity), TimeSpan.FromMilliseconds(275)),
                     new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)90, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(400)),
                 },
-                additionalChecks: playback => MidiAsserts.AreEqual(
+                additionalChecks: (playback, _) => MidiAsserts.AreEqual(
                     AddTempoChanges(TempoMap, (TimeSpan.FromMilliseconds(300), new Tempo(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 4))),
                     playback.TempoMap,
                     "Invalid tempo map."));
@@ -2600,7 +2600,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)90, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
                     new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)90, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(550)),
                 },
-                additionalChecks: playback => MidiAsserts.AreEqual(
+                additionalChecks: (playback, _) => MidiAsserts.AreEqual(
                     AddTempoChanges(TempoMap, (TimeSpan.FromMilliseconds(200), new Tempo(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 2))),
                     playback.TempoMap,
                     "Invalid tempo map."));
@@ -2644,7 +2644,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)90, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
                     new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)90, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(550)),
                 },
-                additionalChecks: playback => MidiAsserts.AreEqual(
+                additionalChecks: (playback, _) => MidiAsserts.AreEqual(
                     AddTempoChanges(TempoMap, (TimeSpan.FromMilliseconds(200), new Tempo(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 2))),
                     playback.TempoMap,
                     "Invalid tempo map."));
@@ -2689,7 +2689,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)90, Note.DefaultVelocity), TimeSpan.FromMilliseconds(275)),
                     new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)90, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(500)),
                 },
-                additionalChecks: playback => MidiAsserts.AreEqual(
+                additionalChecks: (playback, _) => MidiAsserts.AreEqual(
                     AddTempoChanges(TempoMap, (TimeSpan.FromMilliseconds(200), new Tempo(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 2))),
                     playback.TempoMap,
                     "Invalid tempo map."));
@@ -2730,7 +2730,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)90, Note.DefaultVelocity), TimeSpan.FromMilliseconds(400)),
                     new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)90, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(900)),
                 },
-                additionalChecks: playback => MidiAsserts.AreEqual(
+                additionalChecks: (playback, _) => MidiAsserts.AreEqual(
                     TempoMap,
                     playback.TempoMap,
                     "Invalid tempo map."));
@@ -2772,7 +2772,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)90, Note.DefaultVelocity), TimeSpan.FromMilliseconds(400)),
                     new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)90, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(900)),
                 },
-                additionalChecks: playback => MidiAsserts.AreEqual(
+                additionalChecks: (playback, _) => MidiAsserts.AreEqual(
                     TempoMap,
                     playback.TempoMap,
                     "Invalid tempo map."));
@@ -2808,7 +2808,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
                     new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(100)),
                 },
-                additionalChecks: playback => MidiAsserts.AreEqual(
+                additionalChecks: (playback, _) => MidiAsserts.AreEqual(
                     TempoMap,
                     playback.TempoMap,
                     "Invalid tempo map."));
@@ -2844,7 +2844,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
                     new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(100)),
                 },
-                additionalChecks: playback => MidiAsserts.AreEqual(
+                additionalChecks: (playback, _) => MidiAsserts.AreEqual(
                     TempoMap,
                     playback.TempoMap,
                     "Invalid tempo map."));
@@ -2888,7 +2888,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)90, Note.DefaultVelocity), TimeSpan.FromMilliseconds(400)),
                     new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)90, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(900)),
                 },
-                additionalChecks: playback => MidiAsserts.AreEqual(
+                additionalChecks: (playback, _) => MidiAsserts.AreEqual(
                     AddTimeSignatureChanges(TempoMap, (TimeSpan.FromMilliseconds(300), new TimeSignature(3, 8))),
                     playback.TempoMap,
                     "Invalid tempo map."));
@@ -2933,7 +2933,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)90, Note.DefaultVelocity), TimeSpan.FromMilliseconds(400)),
                     new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)90, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(900)),
                 },
-                additionalChecks: playback => MidiAsserts.AreEqual(
+                additionalChecks: (playback, _) => MidiAsserts.AreEqual(
                     AddTimeSignatureChanges(TempoMap, (TimeSpan.FromMilliseconds(300), new TimeSignature(3, 8))),
                     playback.TempoMap,
                     "Invalid tempo map."));
@@ -2978,7 +2978,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)90, Note.DefaultVelocity), TimeSpan.FromMilliseconds(400)),
                     new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)90, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(900)),
                 },
-                additionalChecks: playback => MidiAsserts.AreEqual(
+                additionalChecks: (playback, _) => MidiAsserts.AreEqual(
                     AddTimeSignatureChanges(TempoMap, (TimeSpan.FromMilliseconds(300), new TimeSignature(3, 8))),
                     playback.TempoMap,
                     "Invalid tempo map."));
@@ -3022,7 +3022,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)90, Note.DefaultVelocity), TimeSpan.FromMilliseconds(400)),
                     new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)90, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(900)),
                 },
-                additionalChecks: playback => MidiAsserts.AreEqual(
+                additionalChecks: (playback, _) => MidiAsserts.AreEqual(
                     AddTimeSignatureChanges(TempoMap, (TimeSpan.FromMilliseconds(200), new TimeSignature(3, 4))),
                     playback.TempoMap,
                     "Invalid tempo map."));
@@ -3066,7 +3066,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)90, Note.DefaultVelocity), TimeSpan.FromMilliseconds(400)),
                     new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)90, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(900)),
                 },
-                additionalChecks: playback => MidiAsserts.AreEqual(
+                additionalChecks: (playback, _) => MidiAsserts.AreEqual(
                     AddTimeSignatureChanges(TempoMap, (TimeSpan.FromMilliseconds(200), new TimeSignature(3, 4))),
                     playback.TempoMap,
                     "Invalid tempo map."));

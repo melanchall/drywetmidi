@@ -48,7 +48,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             ICollection<SentReceivedEvent> expectedReceivedEvents,
             Action<Playback> setupPlayback = null,
             int? repeatsCount = null,
-            Action<Playback> additionalChecks = null,
+            Action<Playback, ICollection<SentReceivedEvent>> additionalChecks = null,
             TempoMap tempoMap = null)
         {
             var collection = new ObservableTimedObjectsCollection(initialObjects);

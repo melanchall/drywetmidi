@@ -775,7 +775,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new SentReceivedEvent(new TimeSignatureEvent(3, 4), TimeSpan.FromMilliseconds(250)),
                     new SentReceivedEvent(new TextEvent("END"), TimeSpan.FromMilliseconds(450)),
                 },
-                additionalChecks: playback => MidiAsserts.AreEqual(
+                additionalChecks: (playback, _) => MidiAsserts.AreEqual(
                     AddTimeSignatureChanges(
                         AddTempoChanges(TempoMap, (TimeSpan.FromMilliseconds(200), new Tempo(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 2))),
                         (TimeSpan.FromMilliseconds(250), new TimeSignature(3, 4))),
@@ -816,7 +816,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new SentReceivedEvent(new TimeSignatureEvent(3, 4), TimeSpan.FromMilliseconds(250)),
                     new SentReceivedEvent(new TextEvent("END"), TimeSpan.FromMilliseconds(450)),
                 },
-                additionalChecks: playback => MidiAsserts.AreEqual(
+                additionalChecks: (playback, _) => MidiAsserts.AreEqual(
                     AddTimeSignatureChanges(
                         AddTempoChanges(TempoMap, (TimeSpan.FromMilliseconds(200), new Tempo(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 2))),
                         (TimeSpan.FromMilliseconds(250), new TimeSignature(3, 4))),

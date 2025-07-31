@@ -825,7 +825,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     setupPlayback?.Invoke(playback);
                     playback.EventPlayed += (_, e) => playedEvents.Add(new SentReceivedEvent(e.Event, stopwatch.Elapsed));
                 },
-                additionalChecks: _ =>
+                additionalChecks: (_, __) =>
                 {
                     SendReceiveUtilities.CheckReceivedEvents(playedEvents, expectedReceivedEvents.ToList());
                 },

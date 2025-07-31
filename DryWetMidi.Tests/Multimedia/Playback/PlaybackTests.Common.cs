@@ -61,7 +61,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             Action<Playback> setupPlayback = null,
             Action<Playback> afterStart = null,
             int? repeatsCount = null,
-            Action<Playback> additionalChecks = null,
+            Action<Playback, ICollection<SentReceivedEvent>> additionalChecks = null,
             PlaybackSettings playbackSettings = null,
             TimeSpan? sendReceiveTimeDelta = null,
             bool checkFromFile = true)
@@ -109,7 +109,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             Action<Playback> setupPlayback = null,
             Action<Playback> afterStart = null,
             int? repeatsCount = null,
-            Action<Playback> additionalChecks = null,
+            Action<Playback, ICollection<SentReceivedEvent>> additionalChecks = null,
             TimeSpan? sendReceiveTimeDelta = null,
             string label = null)
         {
@@ -182,7 +182,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                             : TimeSpan.FromMilliseconds(20)),
                         label);
 
-                    additionalChecks?.Invoke(playback);
+                    additionalChecks?.Invoke(playback, receivedEvents);
                 }
             }
         }

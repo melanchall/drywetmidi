@@ -65,6 +65,71 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
         [Retry(RetriesNumber)]
         [Test]
+        public void CheckPlaybackEventsOrder_FromFile([Values(1, 10, 100)] int tailSize)
+        {
+            var midiFile = new MidiFile(
+                new TrackChunk(new MidiEvent[]
+                {
+                    new NoteOnEvent(),
+                    new NoteAftertouchEvent(),
+                    new NoteOffEvent(),
+                    new PitchBendEvent(),
+                }
+                .Concat(Enumerable
+                    .Range(0, tailSize)
+                    .SelectMany(i => new MidiEvent[]
+                    {
+                        new ControlChangeEvent(),
+                        new ChannelAftertouchEvent(),
+                    }))));
+
+            CheckPlayback(
+                useOutputDevice: false,
+                createPlayback: outputDevice => midiFile.GetPlayback(outputDevice),
+                actions: Array.Empty<PlaybackAction>(),
+                expectedReceivedEvents: new[]
+                {
+                    new SentReceivedEvent(new NoteAftertouchEvent(), TimeSpan.Zero),
+                    new SentReceivedEvent(new PitchBendEvent(), TimeSpan.Zero),
+                }
+                .Concat(Enumerable
+                    .Range(0, tailSize)
+                    .SelectMany(i => new[]
+                    {
+                        new SentReceivedEvent(new ControlChangeEvent(), TimeSpan.Zero),
+                        new SentReceivedEvent(new ChannelAftertouchEvent(), TimeSpan.Zero),
+                    }))
+                .Concat(new[]
+                {
+                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
+                    new SentReceivedEvent(new NoteOffEvent(), TimeSpan.Zero),
+                })
+                .ToArray(),
+                additionalChecks: (playback, receivedEvents) => CollectionAssert.AreEqual(
+                    new[]
+                    {
+                        MidiEventType.NoteAftertouch,
+                        MidiEventType.PitchBend,
+                    }
+                    .Concat(Enumerable
+                        .Range(0, tailSize)
+                        .SelectMany(i => new[]
+                        {
+                            MidiEventType.ControlChange,
+                            MidiEventType.ChannelAftertouch,
+                        }))
+                    .Concat(new[]
+                    {
+                        MidiEventType.NoteOn,
+                        MidiEventType.NoteOff,
+                    })
+                    .ToArray(),
+                    receivedEvents.Select(e => e.Event.EventType).ToArray(),
+                    "Invalid order of received events."));
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
         public void CheckPlaybackOnUnsortedObjects()
         {
             var timedObjects = new ITimedObject[]
@@ -980,7 +1045,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new SentReceivedEvent(new SetTempoEvent(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 2), TimeSpan.FromMilliseconds(200)),
                     new SentReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(500)),
                 },
-                additionalChecks: playback =>
+                additionalChecks: (playback, _) =>
                 {
                     ClassicAssert.AreNotSame(TempoMap, playback.TempoMap, "Tempo map is the same as the original one.");
                     ClassicAssert.AreEqual(TempoMap, playback.TempoMap, "Invalid tempo map.");
@@ -1014,7 +1079,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new SentReceivedEvent(new SetTempoEvent(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 2), TimeSpan.FromMilliseconds(200)),
                     new SentReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(350)),
                 },
-                additionalChecks: playback =>
+                additionalChecks: (playback, _) =>
                 {
                     ClassicAssert.AreNotEqual(TempoMap, playback.TempoMap, "Invalid tempo map.");
                     ClassicAssert.AreEqual(

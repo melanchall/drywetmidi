@@ -591,7 +591,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     playback.NotesPlaybackStarted += (_, e) => notesStarted.AddRange(e.Notes);
                     playback.NotesPlaybackFinished += (_, e) => notesFinished.AddRange(e.Notes);
                 },
-                additionalChecks: _ =>
+                additionalChecks: (_, __) =>
                 {
                     MidiAsserts.AreEqual(notesStarted, notesWillBeStarted.Select(i => notes[i]), "Invalid notes started.");
                     MidiAsserts.AreEqual(notesFinished, notesWillBeFinished.Select(i => notes[i]), "Invalid notes finished.");
