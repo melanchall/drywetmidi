@@ -2448,7 +2448,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 if ((settings?.FileEndMarkerEventFactory != null || i < originalFiles.Length - 1) && roundingStep != null)
                 {
                     var convertedStep = TimeConverter.ConvertTo(roundingStep, timeSpanType, tempoMap);
-                    duration = duration.Round(TimeSpanRoundingPolicy.RoundUp, 0, convertedStep, tempoMap);
+                    duration = duration.Round(TimeSpanRoundingPolicy.RoundUp, (MidiTimeSpan)0, convertedStep, tempoMap);
                 }
 
                 expectedLength = expectedLength.Add(duration, TimeSpanMode.LengthLength);

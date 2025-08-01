@@ -284,7 +284,7 @@ namespace Melanchall.DryWetMidi.Tools
             {
                 var shiftStep = settings.ShiftRoundingStep;
                 if (shiftStep != null)
-                    shift = shift.Round(roundingPolicy, 0, shiftStep, tempoMap);
+                    shift = shift.Round(roundingPolicy, (MidiTimeSpan)0, shiftStep, tempoMap);
             }
 
             return TimeConverter.ConvertFrom(shift, tempoMap);
