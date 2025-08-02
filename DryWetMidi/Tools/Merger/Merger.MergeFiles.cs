@@ -307,7 +307,7 @@ namespace Melanchall.DryWetMidi.Tools
             var fileDuration = midiFile.GetDuration<MidiTimeSpan>().TimeSpan;
             if (fileDurationRoundingStep != null)
             {
-                var roundedDuration = ((MidiTimeSpan)fileDuration).Round(TimeSpanRoundingPolicy.RoundUp, 0, fileDurationRoundingStep, tempoMap);
+                var roundedDuration = ((MidiTimeSpan)fileDuration).Round(TimeSpanRoundingPolicy.RoundUp, (MidiTimeSpan)0, fileDurationRoundingStep, tempoMap);
                 fileDuration = TimeConverter.ConvertFrom(roundedDuration, tempoMap);
             }
 

@@ -9,7 +9,7 @@ namespace Melanchall.DryWetMidi.Interaction
     /// <summary>
     /// Provides useful utilities for working with <see cref="ITimeSpan"/>.
     /// </summary>
-    public static class TimeSpanUtilities
+    public static partial class TimeSpanUtilities
     {
         #region Constants
 
@@ -44,139 +44,6 @@ namespace Melanchall.DryWetMidi.Interaction
         #endregion
 
         #region Methods
-
-        /// <summary>
-        /// Rounds a time span using the specified step and rounding policy.
-        /// </summary>
-        /// <param name="timeSpan">Time span to round.</param>
-        /// <param name="roundingPolicy">Policy according to which the <paramref name="timeSpan"/> should be rounded.</param>
-        /// <param name="time">Time os the <paramref name="timeSpan"/>.</param>
-        /// <param name="step">Step to round the <paramref name="timeSpan"/> by.</param>
-        /// <param name="tempoMap">Tempo map used to calculate new time span.</param>
-        /// <returns>A new time span which is the <paramref name="timeSpan"/> rounded using the passed parameters.</returns>
-        /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occurred:</para>
-        /// <list type="bullet">
-        /// <item>
-        /// <description><paramref name="timeSpan"/> is <c>null</c>.</description>
-        /// </item>
-        /// <item>
-        /// <description><paramref name="step"/> is <c>null</c>.</description>
-        /// </item>
-        /// <item>
-        /// <description><paramref name="tempoMap"/> is <c>null</c>.</description>
-        /// </item>
-        /// </list>
-        /// </exception>
-        /// <exception cref="InvalidEnumArgumentException"><paramref name="roundingPolicy"/> specified an invalid value.</exception>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="time"/> is negative.</exception>
-        public static ITimeSpan Round(
-            this ITimeSpan timeSpan,
-            TimeSpanRoundingPolicy roundingPolicy,
-            long time,
-            ITimeSpan step,
-            TempoMap tempoMap)
-        {
-            ThrowIfArgument.IsNull(nameof(timeSpan), timeSpan);
-            ThrowIfArgument.IsInvalidEnumValue(nameof(roundingPolicy), roundingPolicy);
-            ThrowIfArgument.IsNegative(nameof(time), time, "Time is negative.");
-            ThrowIfArgument.IsNull(nameof(step), step);
-            ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
-
-            if (roundingPolicy == TimeSpanRoundingPolicy.NoRounding || step.IsZeroTimeSpan())
-                return timeSpan.Clone();
-
-            var gridShift = roundingPolicy == TimeSpanRoundingPolicy.RoundUp
-                ? 1
-                : 0;
-
-            var metricStep = step as MetricTimeSpan;
-            if (metricStep != null)
-            {
-                var metricTimeSpan = TimeSpanConverter.ConvertTo<MetricTimeSpan>(timeSpan, time, tempoMap);
-                return Round(
-                    timeSpan,
-                    metricTimeSpan.TotalMicroseconds,
-                    metricStep.TotalMicroseconds,
-                    quotient => new MetricTimeSpan((quotient + gridShift) * metricStep.TotalMicroseconds));
-            }
-
-            var barBeatTicksStep = step as BarBeatTicksTimeSpan;
-            if (barBeatTicksStep != null)
-            {
-                var barBeatTicksTimeSpan = TimeSpanConverter.ConvertTo<BarBeatTicksTimeSpan>(timeSpan, time, tempoMap);
-
-                var stepParts = new[] { barBeatTicksStep.Bars, barBeatTicksStep.Beats, barBeatTicksStep.Ticks };
-                var timeSpanParts = new[] { barBeatTicksTimeSpan.Bars, barBeatTicksTimeSpan.Beats, barBeatTicksTimeSpan.Ticks };
-
-                var reminders = new long[3];
-                var quotients = reminders
-                    .Select((_, i) => stepParts[i] != 0 ? Math.DivRem(timeSpanParts[i], stepParts[i], out reminders[i]) : stepParts[i])
-                    .ToArray();
-
-                var flags = new bool[3];
-                var zeroes = new bool[3];
-
-                if (stepParts[1] == 0 && stepParts[2] == 0)
-                {
-                    flags[0] = timeSpanParts[1] != 0 || timeSpanParts[2] != 0;
-                    zeroes[1] = zeroes[2] = true;
-                }
-                else if (stepParts[2] == 0)
-                {
-                    flags[1] = timeSpanParts[2] != 0;
-                    zeroes[2] = true;
-                }
-
-                var resultParts = quotients
-                    .Select((q, i) => zeroes[i] ? 0 : (reminders[i] == 0 && !flags[i] ? timeSpanParts[i] : (q + gridShift) * stepParts[i]))
-                    .ToArray();
-
-                return new BarBeatTicksTimeSpan(
-                    resultParts[0],
-                    resultParts[1],
-                    resultParts[2]);
-            }
-
-            var barBeatFractionStep = step as BarBeatFractionTimeSpan;
-            if (barBeatFractionStep != null)
-            {
-                var barBeatFractionTimeSpan = TimeSpanConverter.ConvertTo<BarBeatFractionTimeSpan>(timeSpan, time, tempoMap);
-
-                var barsRemainder = 0L;
-                var barsQuotient = barBeatFractionStep.Bars != 0
-                    ? Math.DivRem(barBeatFractionTimeSpan.Bars, barBeatFractionStep.Bars, out barsRemainder)
-                    : 0;
-
-                var beatsQuotient = barBeatFractionStep.Beats >= 0.00001
-                    ? (long)Math.Truncate(barBeatFractionTimeSpan.Beats / barBeatFractionStep.Beats)
-                    : 0;
-                var beatsRemainder = barBeatFractionStep.Beats >= 0.00001
-                    ? barBeatFractionTimeSpan.Beats % barBeatFractionStep.Beats
-                    : 0;
-
-                var flag = false;
-                var zeroBeats = false;
-
-                if (barBeatFractionStep.Beats < 0.00001)
-                {
-                    flag = barBeatFractionTimeSpan.Beats >= 0.00001;
-                    zeroBeats = true;
-                }
-
-                return new BarBeatFractionTimeSpan(
-                    barsRemainder == 0 && !flag ? barBeatFractionTimeSpan.Bars : (barsQuotient + gridShift) * barBeatFractionStep.Bars,
-                    zeroBeats ? 0 : (beatsRemainder < 0.00001 ? barBeatFractionTimeSpan.Beats : (beatsQuotient + gridShift) * barBeatFractionStep.Beats));
-            }
-
-            var midiStep = TimeSpanConverter.ConvertTo<MidiTimeSpan>(step, time, tempoMap);
-            var midiTimeSpan = TimeSpanConverter.ConvertTo<MidiTimeSpan>(timeSpan, time, tempoMap);
-            return Round(
-                timeSpan,
-                midiTimeSpan.TimeSpan,
-                midiStep.TimeSpan,
-                quotient => TimeSpanConverter.ConvertTo(new MidiTimeSpan((quotient + gridShift) * midiStep.TimeSpan), step.GetType(), time, tempoMap));
-        }
 
         /// <summary>
         /// Converts the string representation of a time span to its <see cref="ITimeSpan"/> equivalent.
@@ -347,20 +214,6 @@ namespace Melanchall.DryWetMidi.Interaction
                 timeSpan = result;
                 return parsingResult;
             };
-        }
-
-        private static ITimeSpan Round<TTimeSpan>(
-            ITimeSpan timeSpan,
-            long x,
-            long y,
-            Func<long, TTimeSpan> createTimeSpan)
-            where TTimeSpan : ITimeSpan
-        {
-            long reminder;
-            var quotient = Math.DivRem(x, y, out reminder);
-            return reminder == 0
-                ? timeSpan.Clone()
-                : createTimeSpan(quotient);
         }
 
         #endregion

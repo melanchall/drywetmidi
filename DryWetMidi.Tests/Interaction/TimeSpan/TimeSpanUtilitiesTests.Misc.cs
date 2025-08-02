@@ -87,6 +87,46 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         #region Test methods
 
         [Test]
+        public void GetZeroTimeSpan_Generic_Midi() =>
+            ClassicAssert.AreEqual(new MidiTimeSpan(), TimeSpanUtilities.GetZeroTimeSpan<MidiTimeSpan>());
+
+        [Test]
+        public void GetZeroTimeSpan_Generic_Metric() =>
+            ClassicAssert.AreEqual(new MetricTimeSpan(), TimeSpanUtilities.GetZeroTimeSpan<MetricTimeSpan>());
+
+        [Test]
+        public void GetZeroTimeSpan_Generic_Musical() =>
+            ClassicAssert.AreEqual(new MusicalTimeSpan(), TimeSpanUtilities.GetZeroTimeSpan<MusicalTimeSpan>());
+
+        [Test]
+        public void GetZeroTimeSpan_Generic_BarBeatTicks() =>
+            ClassicAssert.AreEqual(new BarBeatTicksTimeSpan(), TimeSpanUtilities.GetZeroTimeSpan<BarBeatTicksTimeSpan>());
+
+        [Test]
+        public void GetZeroTimeSpan_Generic_BarBeatFraction() =>
+            ClassicAssert.AreEqual(new BarBeatFractionTimeSpan(), TimeSpanUtilities.GetZeroTimeSpan<BarBeatFractionTimeSpan>());
+
+        [Test]
+        public void GetZeroTimeSpan_Enum_Midi() =>
+            ClassicAssert.AreEqual(new MidiTimeSpan(), TimeSpanUtilities.GetZeroTimeSpan(TimeSpanType.Midi));
+
+        [Test]
+        public void GetZeroTimeSpan_Enum_Metric() =>
+            ClassicAssert.AreEqual(new MetricTimeSpan(), TimeSpanUtilities.GetZeroTimeSpan(TimeSpanType.Metric));
+
+        [Test]
+        public void GetZeroTimeSpan_Enum_Musical() =>
+            ClassicAssert.AreEqual(new MusicalTimeSpan(), TimeSpanUtilities.GetZeroTimeSpan(TimeSpanType.Musical));
+
+        [Test]
+        public void GetZeroTimeSpan_Enum_BarBeatTicks() =>
+            ClassicAssert.AreEqual(new BarBeatTicksTimeSpan(), TimeSpanUtilities.GetZeroTimeSpan(TimeSpanType.BarBeatTicks));
+
+        [Test]
+        public void GetZeroTimeSpan_Enum_BarBeatFraction() =>
+            ClassicAssert.AreEqual(new BarBeatFractionTimeSpan(), TimeSpanUtilities.GetZeroTimeSpan(TimeSpanType.BarBeatFraction));
+
+        [Test]
         public void IsZeroTimeSpan_DefaultTimeSpans()
         {
             var timeSpans = typeof(ITimeSpan)
