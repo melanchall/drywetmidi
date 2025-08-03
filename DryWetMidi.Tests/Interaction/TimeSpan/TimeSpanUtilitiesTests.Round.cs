@@ -89,10 +89,13 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             new ITimeSpan[] { new BarBeatFractionTimeSpan(0, 1), new BarBeatFractionTimeSpan(0, 1), new BarBeatFractionTimeSpan(0, 1) },
             new ITimeSpan[] { new BarBeatFractionTimeSpan(0, 1.2), new BarBeatFractionTimeSpan(0, 1), new BarBeatFractionTimeSpan(0, 2) },
             new ITimeSpan[] { new BarBeatFractionTimeSpan(1, 1.2), new BarBeatFractionTimeSpan(0, 1), new BarBeatFractionTimeSpan(1, 2) },
-            new ITimeSpan[] { new BarBeatFractionTimeSpan(1, 0), new BarBeatFractionTimeSpan(0, 0.15), new BarBeatFractionTimeSpan(1, 0) },
-            new ITimeSpan[] { new BarBeatFractionTimeSpan(1, 0.1), new BarBeatFractionTimeSpan(0, 0.15), new BarBeatFractionTimeSpan(1, 0.15) },
-            new ITimeSpan[] { new BarBeatFractionTimeSpan(1, 0.17), new BarBeatFractionTimeSpan(0, 0.15), new BarBeatFractionTimeSpan(1, 0.3) },
+            new ITimeSpan[] { new BarBeatFractionTimeSpan(1, 0), new BarBeatFractionTimeSpan(0, 0.15), new BarBeatFractionTimeSpan(1, 0.05) },
+            new ITimeSpan[] { new BarBeatFractionTimeSpan(1, 0.1), new BarBeatFractionTimeSpan(0, 0.15), new BarBeatFractionTimeSpan(1, 0.2) },
+            new ITimeSpan[] { new BarBeatFractionTimeSpan(1, 0.17), new BarBeatFractionTimeSpan(0, 0.15), new BarBeatFractionTimeSpan(1, 0.2) },
             new ITimeSpan[] { new BarBeatFractionTimeSpan(5, 0.17), new BarBeatFractionTimeSpan(4, 0.15), new BarBeatFractionTimeSpan(8, 0.3) },
+            new ITimeSpan[] { new BarBeatFractionTimeSpan(1, 0), new BarBeatFractionTimeSpan(0, 0.25), new BarBeatFractionTimeSpan(1, 0) },
+            new ITimeSpan[] { new BarBeatFractionTimeSpan(0, 2), new BarBeatFractionTimeSpan(0, 0.25), new BarBeatFractionTimeSpan(0, 2) },
+            new ITimeSpan[] { new BarBeatFractionTimeSpan(0, 2.25), new BarBeatFractionTimeSpan(0, 0.25), new BarBeatFractionTimeSpan(0, 2.25) },
         };
 
         private static readonly object[] TimeSpans_RoundDown = new[]
@@ -141,10 +144,13 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             new ITimeSpan[] { new BarBeatFractionTimeSpan(0, 1), new BarBeatFractionTimeSpan(0, 1), new BarBeatFractionTimeSpan(0, 1) },
             new ITimeSpan[] { new BarBeatFractionTimeSpan(0, 1.2), new BarBeatFractionTimeSpan(0, 1), new BarBeatFractionTimeSpan(0, 1) },
             new ITimeSpan[] { new BarBeatFractionTimeSpan(1, 1.2), new BarBeatFractionTimeSpan(0, 1), new BarBeatFractionTimeSpan(1, 1) },
-            new ITimeSpan[] { new BarBeatFractionTimeSpan(1, 0), new BarBeatFractionTimeSpan(0, 0.15), new BarBeatFractionTimeSpan(1, 0) },
-            new ITimeSpan[] { new BarBeatFractionTimeSpan(1, 0.1), new BarBeatFractionTimeSpan(0, 0.15), new BarBeatFractionTimeSpan(1, 0) },
-            new ITimeSpan[] { new BarBeatFractionTimeSpan(1, 0.17), new BarBeatFractionTimeSpan(0, 0.15), new BarBeatFractionTimeSpan(1, 0.15) },
+            new ITimeSpan[] { new BarBeatFractionTimeSpan(1, 0), new BarBeatFractionTimeSpan(0, 0.15), new BarBeatFractionTimeSpan(0, 3.9) },
+            new ITimeSpan[] { new BarBeatFractionTimeSpan(1, 0.1), new BarBeatFractionTimeSpan(0, 0.15), new BarBeatFractionTimeSpan(1, 0.05) },
+            new ITimeSpan[] { new BarBeatFractionTimeSpan(1, 0.17), new BarBeatFractionTimeSpan(0, 0.15), new BarBeatFractionTimeSpan(1, 0.05) },
             new ITimeSpan[] { new BarBeatFractionTimeSpan(5, 0.17), new BarBeatFractionTimeSpan(4, 0.15), new BarBeatFractionTimeSpan(4, 0.15) },
+            new ITimeSpan[] { new BarBeatFractionTimeSpan(1, 0), new BarBeatFractionTimeSpan(0, 0.25), new BarBeatFractionTimeSpan(1, 0) },
+            new ITimeSpan[] { new BarBeatFractionTimeSpan(0, 2), new BarBeatFractionTimeSpan(0, 0.25), new BarBeatFractionTimeSpan(0, 2) },
+            new ITimeSpan[] { new BarBeatFractionTimeSpan(0, 2.25), new BarBeatFractionTimeSpan(0, 0.25), new BarBeatFractionTimeSpan(0, 2.25) },
         };
 
         #endregion
@@ -206,6 +212,39 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 (new BarBeatTicksTimeSpan(2, 0, 0), new TimeSignature(5, 8))),
             expectedTimeSpan: new BarBeatTicksTimeSpan(0, 2, 0));
 
+        [Test]
+        public void Round_RoundUp_BarBeatFraction_1() => RoundUp_FromZero(
+            timeSpan: new BarBeatFractionTimeSpan(4, 0.1),
+            step: new BarBeatFractionTimeSpan(0, 0.1),
+            tempoMap: TempoMap.Default,
+            expectedTimeSpan: new BarBeatFractionTimeSpan(4, 0.1));
+
+        [Test]
+        public void Round_RoundUp_BarBeatFraction_2([Values(0, 1, 2)] long beats, [Values(1, 2)] long ticks) => RoundUp_FromZero(
+            timeSpan: new BarBeatFractionTimeSpan(5, beats + 0.1),
+            step: new BarBeatFractionTimeSpan(0, 0.1 * ticks),
+            tempoMap: GetTempoMap(
+                (new BarBeatTicksTimeSpan(1, 0, 0), new TimeSignature(3, 4))),
+            expectedTimeSpan: new BarBeatFractionTimeSpan(5, beats + 0.1 * ticks));
+
+        [Test]
+        public void Round_RoundUp_BarBeatFraction_3() => RoundUp(
+            timeSpan: new MusicalTimeSpan(7, 8),
+            time: new MusicalTimeSpan(6, 4),
+            step: new BarBeatFractionTimeSpan(1, 0),
+            tempoMap: GetTempoMap(
+                (new BarBeatTicksTimeSpan(2, 0, 0), new TimeSignature(5, 8))),
+            expectedTimeSpan: new BarBeatFractionTimeSpan(2, 0));
+
+        [Test]
+        public void Round_RoundUp_BarBeatFraction_4() => RoundUp(
+            timeSpan: new MusicalTimeSpan(3, 8),
+            time: new MusicalTimeSpan(6, 4),
+            step: new BarBeatFractionTimeSpan(0, 1),
+            tempoMap: GetTempoMap(
+                (new BarBeatTicksTimeSpan(2, 0, 0), new TimeSignature(5, 8))),
+            expectedTimeSpan: new BarBeatFractionTimeSpan(0, 2));
+
         [TestCaseSource(nameof(TimeSpans_RoundDown))]
         public void Round_RoundDown_Simple(ITimeSpan timeSpan, ITimeSpan step, ITimeSpan expectedTimeSpan)
         {
@@ -265,6 +304,55 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             tempoMap: GetTempoMap(
                 (new BarBeatTicksTimeSpan(2, 0, 0), new TimeSignature(5, 8))),
             expectedTimeSpan: new BarBeatTicksTimeSpan(0, 1, 0));
+
+        [Test]
+        public void Round_RoundDown_BarBeatFraction_1() => RoundDown_FromZero(
+            timeSpan: new BarBeatFractionTimeSpan(0, 1),
+            step: new BarBeatFractionTimeSpan(1, 0),
+            tempoMap: TempoMap.Default,
+            expectedTimeSpan: new BarBeatFractionTimeSpan(0));
+
+        [Test]
+        public void Round_RoundDown_BarBeatFraction_2([Values(0, 1, 2)] long beats) => RoundDown_FromZero(
+            timeSpan: new BarBeatFractionTimeSpan(5, beats + 0.1),
+            step: new BarBeatFractionTimeSpan(0, 0.1),
+            tempoMap: GetTempoMap(
+                (new BarBeatTicksTimeSpan(1, 0, 0), new TimeSignature(3, 4))),
+            expectedTimeSpan: new BarBeatFractionTimeSpan(5, beats + 0.1));
+
+        [Test]
+        public void Round_RoundDown_BarBeatFraction_3([Values(0, 1, 2)] long beats, [Values(2)] long ticks) => RoundDown_FromZero(
+            timeSpan: new BarBeatFractionTimeSpan(5, beats + 0.1),
+            step: new BarBeatFractionTimeSpan(0, 0.1 * ticks),
+            tempoMap: GetTempoMap(
+                (new BarBeatTicksTimeSpan(1, 0, 0), new TimeSignature(3, 4))),
+            expectedTimeSpan: new BarBeatFractionTimeSpan(5, beats));
+
+        [Test]
+        public void Round_RoundDown_BarBeatFraction_3() => RoundDown_FromZero(
+            timeSpan: new BarBeatFractionTimeSpan(2, 0),
+            step: new BarBeatFractionTimeSpan(3, 0),
+            tempoMap: GetTempoMap(
+                (new BarBeatTicksTimeSpan(1, 0, 0), new TimeSignature(3, 4))),
+            expectedTimeSpan: new BarBeatFractionTimeSpan(0));
+
+        [Test]
+        public void Round_RoundDown_BarBeatFraction_4() => RoundDown(
+            timeSpan: new MusicalTimeSpan(7, 8),
+            time: new MusicalTimeSpan(6, 4),
+            step: new BarBeatFractionTimeSpan(1, 0),
+            tempoMap: GetTempoMap(
+                (new BarBeatTicksTimeSpan(2, 0, 0), new TimeSignature(5, 8))),
+            expectedTimeSpan: new BarBeatFractionTimeSpan(1, 0));
+
+        [Test]
+        public void Round_RoundDown_BarBeatFraction_5() => RoundDown(
+            timeSpan: new MusicalTimeSpan(3, 8),
+            time: new MusicalTimeSpan(6, 4),
+            step: new BarBeatFractionTimeSpan(0, 1),
+            tempoMap: GetTempoMap(
+                (new BarBeatTicksTimeSpan(2, 0, 0), new TimeSignature(5, 8))),
+            expectedTimeSpan: new BarBeatFractionTimeSpan(0, 1));
 
         #endregion
 

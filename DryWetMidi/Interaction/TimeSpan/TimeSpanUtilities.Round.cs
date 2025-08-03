@@ -107,60 +107,50 @@ namespace Melanchall.DryWetMidi.Interaction
             long time,
             ITimeSpan step,
             TempoMap tempoMap,
-            TimeSpanRoundingPolicy roundingPolicy)
-        {
-            var gridShift = roundingPolicy == TimeSpanRoundingPolicy.RoundUp ? 1 : 0;
-
-            var barBeatFractionStep = step as BarBeatFractionTimeSpan;
-            var barBeatFractionTimeSpan = TimeSpanConverter.ConvertTo<BarBeatFractionTimeSpan>(timeSpan, time, tempoMap);
-
-            var barsRemainder = 0L;
-            var barsQuotient = barBeatFractionStep.Bars != 0
-                ? Math.DivRem(barBeatFractionTimeSpan.Bars, barBeatFractionStep.Bars, out barsRemainder)
-                : 0;
-
-            var beatsQuotient = barBeatFractionStep.Beats >= 0.00001
-                ? (long)Math.Truncate(barBeatFractionTimeSpan.Beats / barBeatFractionStep.Beats)
-                : 0;
-            var beatsRemainder = barBeatFractionStep.Beats >= 0.00001
-                ? barBeatFractionTimeSpan.Beats % barBeatFractionStep.Beats
-                : 0;
-
-            var flag = false;
-            var zeroBeats = false;
-
-            if (barBeatFractionStep.Beats < 0.00001)
-            {
-                flag = barBeatFractionTimeSpan.Beats >= 0.00001;
-                zeroBeats = true;
-            }
-
-            return new BarBeatFractionTimeSpan(
-                barsRemainder == 0 && !flag ? barBeatFractionTimeSpan.Bars : (barsQuotient + gridShift) * barBeatFractionStep.Bars,
-                zeroBeats ? 0 : (beatsRemainder < 0.00001 ? barBeatFractionTimeSpan.Beats : (beatsQuotient + gridShift) * barBeatFractionStep.Beats));
-        }
+            TimeSpanRoundingPolicy roundingPolicy) => RoundBarBeatTimeSpan<BarBeatFractionTimeSpan>(
+                timeSpan,
+                time,
+                step,
+                tempoMap,
+                roundingPolicy);
 
         private static ITimeSpan RoundBarBeatTicksTimeSpan(
             ITimeSpan timeSpan,
             long time,
             ITimeSpan step,
             TempoMap tempoMap,
+            TimeSpanRoundingPolicy roundingPolicy) => RoundBarBeatTimeSpan<BarBeatTicksTimeSpan>(
+                timeSpan,
+                time,
+                step,
+                tempoMap,
+                roundingPolicy);
+
+        private static ITimeSpan RoundBarBeatTimeSpan<TTimeSpan>(
+            ITimeSpan timeSpan,
+            long time,
+            ITimeSpan step,
+            TempoMap tempoMap,
             TimeSpanRoundingPolicy roundingPolicy)
+            where TTimeSpan : ITimeSpan
         {
             var ticks = TimeSpanConverter.ConvertFrom(timeSpan, time, tempoMap);
             var gridShift = roundingPolicy == TimeSpanRoundingPolicy.RoundUp ? 1 : 0;
 
             // Simple case: there are no time signature changes
 
-            var timeSignatureChanges = tempoMap.GetTimeSignatureChanges();
-            if (!timeSignatureChanges.Any() || !timeSignatureChanges.SkipWhile(c => c.Time <= time).TakeWhile(c => c.Time < time + ticks).Any())
+            if (typeof(TTimeSpan) != typeof(BarBeatFractionTimeSpan))
             {
-                var stepTicks = TimeSpanConverter.ConvertFrom(step, time, tempoMap);
-                return Round(
-                    timeSpan,
-                    ticks,
-                    stepTicks,
-                    quotient => TimeSpanConverter.ConvertTo<BarBeatTicksTimeSpan>((ITimeSpan)new MidiTimeSpan((quotient + gridShift) * stepTicks), time, tempoMap));
+                var timeSignatureChanges = tempoMap.GetTimeSignatureChanges();
+                if (!timeSignatureChanges.Any() || !timeSignatureChanges.SkipWhile(c => c.Time <= time).TakeWhile(c => c.Time < time + ticks).Any())
+                {
+                    var stepTicks = TimeSpanConverter.ConvertFrom(step, time, tempoMap);
+                    return Round(
+                        timeSpan,
+                        ticks,
+                        stepTicks,
+                        quotient => TimeSpanConverter.ConvertTo<TTimeSpan>((ITimeSpan)new MidiTimeSpan((quotient + gridShift) * stepTicks), time, tempoMap));
+                }
             }
 
             // Step 1: calculate approximate factor for the step to include the time span
@@ -201,10 +191,26 @@ namespace Melanchall.DryWetMidi.Interaction
                 ? TimeSpanConverter.ConvertFrom(step.Multiply(startFactor - 1 + gridShift), time, tempoMap)
                 : 0;
 
-            return TimeSpanConverter.ConvertTo<BarBeatTicksTimeSpan>(
+            var result = (ITimeSpan)TimeSpanConverter.ConvertTo<TTimeSpan>(
                 resultTicks,
                 time,
                 tempoMap);
+
+            // Step 4: adjust the result for BarBeatFractionTimeSpan to reduce rounding errors
+
+            var barBeatFractionStep = step as BarBeatFractionTimeSpan;
+            if (barBeatFractionStep != null && barBeatFractionStep.Beats > 0)
+            {
+                var barBeatFractionResult = (BarBeatFractionTimeSpan)result;
+
+                var beatFractionString = barBeatFractionStep.Beats.ToString(System.Globalization.CultureInfo.InvariantCulture);
+                var beatFractionDigitsCount = beatFractionString.Length - beatFractionString.IndexOf('.') - 1;
+                result = new BarBeatFractionTimeSpan(
+                    barBeatFractionResult.Bars,
+                    Math.Round(barBeatFractionResult.Beats, beatFractionDigitsCount));
+            }
+
+            return result;
         }
 
         private static ITimeSpan Round<TTimeSpan>(

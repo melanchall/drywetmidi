@@ -138,12 +138,13 @@ namespace Melanchall.DryWetMidi.Interaction
 
             long barsBefore, beatsBefore;
             double fractionBefore;
-            CalculateComponents(lastTime - time,
-                                startTimeSignature,
-                                ticksPerQuarterNote,
-                                out barsBefore,
-                                out beatsBefore,
-                                out fractionBefore);
+            CalculateComponents(
+                lastTime - time,
+                startTimeSignature,
+                ticksPerQuarterNote,
+                out barsBefore,
+                out beatsBefore,
+                out fractionBefore);
 
             bars -= barsBefore;
 
@@ -215,12 +216,13 @@ namespace Melanchall.DryWetMidi.Interaction
 
         #region Methods
 
-        private static void CalculateComponents(long totalTicks,
-                                                TimeSignature timeSignature,
-                                                short ticksPerQuarterNote,
-                                                out long bars,
-                                                out long beats,
-                                                out double fraction)
+        private static void CalculateComponents(
+            long totalTicks,
+            TimeSignature timeSignature,
+            short ticksPerQuarterNote,
+            out long bars,
+            out long beats,
+            out double fraction)
         {
             long ticks;
 

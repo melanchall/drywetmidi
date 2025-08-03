@@ -14,6 +14,7 @@ namespace Melanchall.DryWetMidi.Interaction
         #region Constants
 
         private const double FractionEpsilon = 0.00001;
+        private const int FractionDigits = 5;
 
         #endregion
 
@@ -407,8 +408,9 @@ namespace Melanchall.DryWetMidi.Interaction
         {
             ThrowIfArgument.IsNegative(nameof(multiplier), multiplier, "Multiplier is negative.");
 
-            return new BarBeatFractionTimeSpan(MathUtilities.RoundToLong(Bars * multiplier),
-                                               Beats * multiplier);
+            return new BarBeatFractionTimeSpan(
+                MathUtilities.RoundToLong(Bars * multiplier),
+                Math.Round(Beats * multiplier, FractionDigits));
         }
 
         /// <summary>
@@ -421,8 +423,9 @@ namespace Melanchall.DryWetMidi.Interaction
         {
             ThrowIfArgument.IsNonpositive(nameof(divisor), divisor, "Divisor is zero or negative.");
 
-            return new BarBeatFractionTimeSpan(MathUtilities.RoundToLong(Bars / divisor),
-                                               Beats / divisor);
+            return new BarBeatFractionTimeSpan(
+                MathUtilities.RoundToLong(Bars / divisor),
+                Math.Round(Beats / divisor, FractionDigits));
         }
 
         /// <summary>
