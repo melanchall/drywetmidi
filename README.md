@@ -32,6 +32,8 @@ Please see [Getting started](#getting-started) section below for quick jump into
 
 Here the list of noticeable projects that use DryWetMIDI:
 
+* [Playtonik](https://5of12.co.uk/#playtonik)  
+  Playtonik is an app designed and developed by [5of12](https://5of12.co.uk). It uses physics-based interactions, immersive spatial audio and dynamic haptic feedback for a fun, relaxing experience. For the fidgeters, Playtonik comes with a selection of built in sounds and an on screen keyboard. Scale filters help keep you in tune, so you can focus on having fun! For the musicians, MIDI support lets you connect your favourite instrument. Playtonik can work as a note source or as a chaotic MIDI delay, great for adding texture to your sound.
 * [EMU – Sound to Light Controller](https://www.enttec.com/product/dmx-lighting-control-software/emu-sound-to-light-controller)  
   EMU (DMXIS’s next generation) is a state-of-the-art, intuitive sound-to-light controller designed for professional live musicians and DJs. Easy to use software, EMU allows you to run automated or responsive DMX light shows, leaving you to focus on your show!
 * [Musical Bits](https://musicalbits.de)  
