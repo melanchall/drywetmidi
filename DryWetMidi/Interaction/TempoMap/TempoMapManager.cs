@@ -210,8 +210,9 @@ namespace Melanchall.DryWetMidi.Interaction
             ThrowIfArgument.IsNull(nameof(startTime), startTime);
             ThrowIfArgument.IsNull(nameof(endTime), endTime);
 
-            ClearTimeSignature(TimeConverter.ConvertFrom(startTime, TempoMap),
-                               TimeConverter.ConvertFrom(endTime, TempoMap));
+            ClearTimeSignature(
+                TimeConverter.ConvertFrom(startTime, TempoMap),
+                TimeConverter.ConvertFrom(endTime, TempoMap));
         }
 
         /// <summary>
@@ -324,8 +325,9 @@ namespace Melanchall.DryWetMidi.Interaction
             ThrowIfArgument.IsNull(nameof(startTime), startTime);
             ThrowIfArgument.IsNull(nameof(endTime), endTime);
 
-            ClearTempo(TimeConverter.ConvertFrom(startTime, TempoMap),
-                       TimeConverter.ConvertFrom(endTime, TempoMap));
+            ClearTempo(
+                TimeConverter.ConvertFrom(startTime, TempoMap),
+                TimeConverter.ConvertFrom(endTime, TempoMap));
         }
 
         /// <summary>

@@ -50,15 +50,17 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
                 var tempoMap = tempoMapManager.TempoMap;
 
-                ClassicAssert.IsTrue(tempoMap.GetTempoChanges().Any());
-                ClassicAssert.IsTrue(tempoMap.GetTimeSignatureChanges().Any());
+                ClassicAssert.IsTrue(tempoMap.GetTempoChanges().Any(), "There are no tempo changes initially.");
+                ClassicAssert.IsTrue(tempoMap.GetTimeSignatureChanges().Any(), "There are no time signature changes initially");
 
                 tempoMapManager.ReplaceTempoMap(TempoMap.Default);
 
-                ClassicAssert.AreEqual(TicksPerQuarterNoteTimeDivision.DefaultTicksPerQuarterNote,
-                                ((TicksPerQuarterNoteTimeDivision)tempoMap.TimeDivision).TicksPerQuarterNote);
-                ClassicAssert.IsFalse(tempoMap.GetTempoChanges().Any());
-                ClassicAssert.IsFalse(tempoMap.GetTimeSignatureChanges().Any());
+                ClassicAssert.AreEqual
+                    (TicksPerQuarterNoteTimeDivision.DefaultTicksPerQuarterNote,
+                    ((TicksPerQuarterNoteTimeDivision)tempoMap.TimeDivision).TicksPerQuarterNote,
+                    "Invalid TPQN after replacing.");
+                ClassicAssert.IsFalse(tempoMap.GetTempoChanges().Any(), "There are tempo changes after replacing.");
+                ClassicAssert.IsFalse(tempoMap.GetTimeSignatureChanges().Any(), "There are time signature changes after replacing.");
             }
         }
     }

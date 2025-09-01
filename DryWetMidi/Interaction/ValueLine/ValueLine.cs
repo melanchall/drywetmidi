@@ -16,7 +16,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
         #region Fields
 
-        private RedBlackTree<long, ValueChange<TValue>> _valueChanges = new RedBlackTree<long, ValueChange<TValue>>();
+        private List<ValueChange<TValue>> _valueChanges = new List<ValueChange<TValue>>();
         private TValue _defaultValue;
 
         #endregion
@@ -46,70 +46,99 @@ namespace Melanchall.DryWetMidi.Interaction
 
         public TValue GetValueAtTime(long time)
         {
-            var node = _valueChanges.GetFirstCoordinateAboveThreshold(time)
-                ?? _valueChanges.GetMaximumCoordinate();
-            
-            if (node == null)
+            if (_valueChanges.Count == 0)
                 return _defaultValue;
 
-            node = node.Key > time
-                ? _valueChanges.GetPreviousCoordinate(node)
-                : node;
+            var lastValueChange = _valueChanges[_valueChanges.Count - 1];
+            var lastTime = lastValueChange.Time;
+            if (time >= lastTime)
+                return lastValueChange.Value;
 
-            return node != null
-                ? node.Value.Value
+            int index;
+            MathUtilities.GetFirstElementAboveThreshold(
+                _valueChanges,
+                time,
+                c => c.Time,
+                out index);
+
+            if (index < 0)
+                index = _valueChanges.Count - 1;
+
+            if (_valueChanges[index].Time > time)
+                index--;
+
+            return index >= 0
+                ? _valueChanges[index].Value
                 : _defaultValue;
         }
 
-        public void SetValue(long time, TValue value)
+        public bool SetValue(long time, TValue value)
         {
-            var node = _valueChanges.GetNodeByKey(time);
-            if (node != null)
-                _valueChanges.Remove(node);
-
-            var coordinate = _valueChanges.GetLastCoordinateBelowThreshold(time);
-            var currentValue = coordinate != null ? coordinate.Value.Value : _defaultValue;
-            if (!value.Equals(currentValue))
-                _valueChanges.Add(time, new ValueChange<TValue>(time, value));
-
-            OnValuesChanged();
+            var result = SetValueInternal(time, value);
+            if (result)
+                OnValuesChanged();
+            
+            return result;
         }
 
-        public void DeleteValues(long startTime)
+        public bool DeleteValues(long startTime)
         {
-            DeleteValues(startTime, long.MaxValue);
+            return DeleteValues(startTime, long.MaxValue);
         }
 
-        public void DeleteValues(long startTime, long endTime)
+        public bool DeleteValues(long startTime, long endTime)
         {
-            var node = _valueChanges.GetLastCoordinateBelowThreshold(startTime)
-                ?? _valueChanges.GetMinimumCoordinate();
+            if (_valueChanges.Count == 0)
+                return false;
 
-            while (true)
+            var lastTime = _valueChanges[_valueChanges.Count - 1].Time;
+            if (startTime > lastTime)
+                return false;
+
+            int index;
+            MathUtilities.GetLastElementBelowThreshold(
+                _valueChanges,
+                startTime,
+                c => c.Time,
+                out index);
+
+            var startIndex = ++index;
+            var valueChangesCount = _valueChanges.Count;
+
+            for (; index < valueChangesCount && _valueChanges[index].Time < endTime; index++)
             {
-                if (node == null || node.Value.Time > endTime)
-                    break;
-
-                var nextNode = _valueChanges.GetNextCoordinate(node);
-                _valueChanges.Remove(node);
-                node = nextNode;
             }
 
+            var count = index - startIndex;
+            if (index < _valueChanges.Count)
+            {
+                var previousValue = startIndex > 0 ? _valueChanges[startIndex - 1].Value : _defaultValue;
+                if (_valueChanges[index].Value.Equals(previousValue))
+                    count++;
+            }
+
+            if (count == 0)
+                return false;
+
+            _valueChanges.RemoveRange(startIndex, count);
             OnValuesChanged();
+
+            return true;
         }
 
         public void Clear()
         {
+            var count = _valueChanges.Count;
             _valueChanges.Clear();
 
-            OnValuesChanged();
+            if (count > 0)
+                OnValuesChanged();
         }
 
         public void ReplaceValues(ValueLine<TValue> valueLine)
         {
-            _valueChanges = valueLine._valueChanges.Clone();
             _defaultValue = valueLine._defaultValue;
-
+            _valueChanges = valueLine.ToList();
             OnValuesChanged();
         }
 
@@ -125,7 +154,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
             foreach (var vc in values.Zip(times, (v, t) => new ValueChange<TValue>(t, v)))
             {
-                result._valueChanges.Add(vc.Time, vc);
+                result._valueChanges.Add(vc);
             }
 
             return result;
@@ -134,6 +163,87 @@ namespace Melanchall.DryWetMidi.Interaction
         private void OnValuesChanged()
         {
             ValuesChanged?.Invoke(this, EventArgs.Empty);
+        }
+
+        public bool SetValueInternal(long time, TValue value)
+        {
+            var valueChange = new ValueChange<TValue>(time, value);
+
+            // Simple case 1: there are no changes yet
+
+            if (_valueChanges.Count == 0)
+            {
+                if (!value.Equals(_defaultValue))
+                    _valueChanges.Add(valueChange);
+                else
+                    return false;
+
+                return true;
+            }
+
+            // Simple case 2: new change is after the last one
+
+            var lastTime = _valueChanges[_valueChanges.Count - 1].Time;
+            if (time > lastTime)
+            {
+                var lastValue = _valueChanges[_valueChanges.Count - 1].Value;
+                if (!value.Equals(lastValue))
+                    _valueChanges.Add(valueChange);
+                else
+                    return false;
+
+                return true;
+            }
+
+            // Common case
+
+            int index;
+            MathUtilities.GetFirstElementAboveThreshold(
+                _valueChanges,
+                time,
+                c => c.Time,
+                out index);
+
+            var nextIndex = index;
+            var nextValueChange = nextIndex >= 0 ? _valueChanges[nextIndex] : null;
+            var nextValue = nextValueChange != null ? nextValueChange.Value : _defaultValue;
+            var nextTime = nextValueChange != null ? nextValueChange.Time : long.MaxValue;
+
+            var previousIndex = index > 0 ? index - 1 : (index < 0 ? _valueChanges.Count - 1 : -1);
+            var previousValueChange = previousIndex >= 0 ? _valueChanges[previousIndex] : null;
+            var previousValue = previousValueChange != null ? previousValueChange.Value : _defaultValue;
+            var previousTime = previousValueChange != null ? previousValueChange.Time : long.MinValue;
+
+            if (value.Equals(previousValue))
+                return false;
+
+            if (time > previousTime)
+            {
+                _valueChanges.Insert(nextIndex >= 0 ? nextIndex : _valueChanges.Count, valueChange);
+
+                if (nextValueChange != null && value.Equals(nextValue))
+                    _valueChanges.RemoveAt(nextIndex + 1);
+
+                return true;
+            }
+
+            var previousPreviousValue = previousIndex > 0 ? _valueChanges[previousIndex - 1].Value : _defaultValue;
+            if (!value.Equals(previousPreviousValue))
+            {
+                _valueChanges[previousIndex] = valueChange;
+
+                if (nextValueChange != null && value.Equals(nextValue))
+                    _valueChanges.RemoveAt(nextIndex);
+            }
+            else
+            {
+                _valueChanges.RemoveAt(previousIndex);
+
+                if (nextValueChange != null && previousPreviousValue.Equals(nextValue))
+                    _valueChanges.RemoveAt(nextIndex - 1);
+            }
+
+            return true;
         }
 
         #endregion
