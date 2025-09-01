@@ -13,11 +13,11 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         #region Test methods
 
         [Test]
-        public void Construct()
+        public void Construct([Values] ValueLineSourceType valueLineSourceType)
         {
             const string defaultValue = "A";
 
-            var valueLine = new ValueLine<string>(defaultValue);
+            var valueLine = new ValueLine<string>(defaultValue, valueLineSourceType);
 
             CollectionAssert.IsEmpty(valueLine, "Value line contains changes.");
             ClassicAssert.AreEqual(defaultValue, valueLine.GetValueAtTime(0), "Invalid value at the start.");
@@ -25,11 +25,11 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void SetValue_Default_AtStart()
+        public void SetValue_Default_AtStart([Values] ValueLineSourceType valueLineSourceType)
         {
             const string defaultValue = "A";
 
-            var valueLine = new ValueLine<string>(defaultValue);
+            var valueLine = new ValueLine<string>(defaultValue, valueLineSourceType);
             valueLine.SetValue(0, defaultValue);
 
             CollectionAssert.IsEmpty(valueLine, "Value line contains changes.");
@@ -38,12 +38,12 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void SetValue_Default_AtMiddle()
+        public void SetValue_Default_AtMiddle([Values] ValueLineSourceType valueLineSourceType)
         {
             const string defaultValue = "A";
             const long valueChangeTime = 100;
 
-            var valueLine = new ValueLine<string>(defaultValue);
+            var valueLine = new ValueLine<string>(defaultValue, valueLineSourceType);
             valueLine.SetValue(valueChangeTime, defaultValue);
 
             CollectionAssert.IsEmpty(valueLine, "Value line contains changes.");
@@ -53,12 +53,12 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void SetValue_NonDefault_AtStart()
+        public void SetValue_NonDefault_AtStart([Values] ValueLineSourceType valueLineSourceType)
         {
             const string defaultValue = "A";
             const string nonDefaultValue = "B";
 
-            var valueLine = new ValueLine<string>(defaultValue);
+            var valueLine = new ValueLine<string>(defaultValue, valueLineSourceType);
             valueLine.SetValue(0, nonDefaultValue);
 
             CollectionAssert.AreEqual(new[] { new ValueChange<string>(0, nonDefaultValue) }, valueLine, "Invalid value changes.");
@@ -67,13 +67,13 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
-        public void SetValue_NonDefault_AtMiddle()
+        public void SetValue_NonDefault_AtMiddle([Values] ValueLineSourceType valueLineSourceType)
         {
             const string defaultValue = "A";
             const string nonDefaultValue = "B";
             const long valueChangeTime = 100;
 
-            var valueLine = new ValueLine<string>(defaultValue);
+            var valueLine = new ValueLine<string>(defaultValue, valueLineSourceType);
             valueLine.SetValue(valueChangeTime, nonDefaultValue);
 
             CollectionAssert.AreEqual(new[] { new ValueChange<string>(valueChangeTime, nonDefaultValue) }, valueLine, "Invalid value changes.");
@@ -82,14 +82,14 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             ClassicAssert.AreEqual(nonDefaultValue, valueLine.GetValueAtTime(valueChangeTime + 1), "Invalid value after the value change time.");
         }
 
-        [TestCase(true)]
-        [TestCase(false)]
-        public void SetValue_Default_AtStart_Default_AtStart(bool checkValueChangesFirst)
+        [Test]
+        public void SetValue_Default_AtStart_Default_AtStart([Values] bool checkValueChangesFirst, [Values] ValueLineSourceType valueLineSourceType)
         {
             const string defaultValue = "A";
 
             SetValue_TwoChanges(
                 defaultValue: defaultValue,
+                valueLineSourceType: valueLineSourceType,
                 value1: defaultValue,
                 valueChangeTime1: 0,
                 value2: defaultValue,
@@ -105,14 +105,14 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 checkValueChangesFirst: checkValueChangesFirst);
         }
 
-        [TestCase(true)]
-        [TestCase(false)]
-        public void SetValue_Default_AtStart_Default_AtMiddle(bool checkValueChangesFirst)
+        [Test]
+        public void SetValue_Default_AtStart_Default_AtMiddle([Values] bool checkValueChangesFirst, [Values] ValueLineSourceType valueLineSourceType)
         {
             const string defaultValue = "A";
 
             SetValue_TwoChanges(
                 defaultValue: defaultValue,
+                valueLineSourceType: valueLineSourceType,
                 value1: defaultValue,
                 valueChangeTime1: 0,
                 value2: defaultValue,
@@ -128,15 +128,15 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 checkValueChangesFirst: checkValueChangesFirst);
         }
 
-        [TestCase(true)]
-        [TestCase(false)]
-        public void SetValue_Default_AtStart_NonDefault_AtStart(bool checkValueChangesFirst)
+        [Test]
+        public void SetValue_Default_AtStart_NonDefault_AtStart([Values] bool checkValueChangesFirst, [Values] ValueLineSourceType valueLineSourceType)
         {
             const string defaultValue = "A";
             const string nonDefaultValue = "B";
 
             SetValue_TwoChanges(
                 defaultValue: defaultValue,
+                valueLineSourceType: valueLineSourceType,
                 value1: defaultValue,
                 valueChangeTime1: 0,
                 value2: nonDefaultValue,
@@ -152,15 +152,15 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 checkValueChangesFirst: checkValueChangesFirst);
         }
 
-        [TestCase(true)]
-        [TestCase(false)]
-        public void SetValue_Default_AtStart_NonDefault_AtMiddle(bool checkValueChangesFirst)
+        [Test]
+        public void SetValue_Default_AtStart_NonDefault_AtMiddle([Values] bool checkValueChangesFirst, [Values] ValueLineSourceType valueLineSourceType)
         {
             const string defaultValue = "A";
             const string nonDefaultValue = "B";
 
             SetValue_TwoChanges(
                 defaultValue: defaultValue,
+                valueLineSourceType: valueLineSourceType,
                 value1: defaultValue,
                 valueChangeTime1: 0,
                 value2: nonDefaultValue,
@@ -176,14 +176,14 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 checkValueChangesFirst: checkValueChangesFirst);
         }
 
-        [TestCase(true)]
-        [TestCase(false)]
-        public void SetValue_Default_AtMiddle_Default_AtStart(bool checkValueChangesFirst)
+        [Test]
+        public void SetValue_Default_AtMiddle_Default_AtStart([Values] bool checkValueChangesFirst, [Values] ValueLineSourceType valueLineSourceType)
         {
             const string defaultValue = "A";
 
             SetValue_TwoChanges(
                 defaultValue: defaultValue,
+                valueLineSourceType: valueLineSourceType,
                 value1: defaultValue,
                 valueChangeTime1: 100,
                 value2: defaultValue,
@@ -199,14 +199,14 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 checkValueChangesFirst: checkValueChangesFirst);
         }
 
-        [TestCase(true)]
-        [TestCase(false)]
-        public void SetValue_Default_AtMiddle_Default_AtMiddle(bool checkValueChangesFirst)
+        [Test]
+        public void SetValue_Default_AtMiddle_Default_AtMiddle([Values] bool checkValueChangesFirst, [Values] ValueLineSourceType valueLineSourceType)
         {
             const string defaultValue = "A";
 
             SetValue_TwoChanges(
                 defaultValue: defaultValue,
+                valueLineSourceType: valueLineSourceType,
                 value1: defaultValue,
                 valueChangeTime1: 100,
                 value2: defaultValue,
@@ -222,15 +222,15 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 checkValueChangesFirst: checkValueChangesFirst);
         }
 
-        [TestCase(true)]
-        [TestCase(false)]
-        public void SetValue_Default_AtMiddle_NonDefault_AtStart(bool checkValueChangesFirst)
+        [Test]
+        public void SetValue_Default_AtMiddle_NonDefault_AtStart([Values] bool checkValueChangesFirst, [Values] ValueLineSourceType valueLineSourceType)
         {
             const string defaultValue = "A";
             const string nonDefaultValue = "B";
 
             SetValue_TwoChanges(
                 defaultValue: defaultValue,
+                valueLineSourceType: valueLineSourceType,
                 value1: defaultValue,
                 valueChangeTime1: 100,
                 value2: nonDefaultValue,
@@ -246,15 +246,15 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 checkValueChangesFirst: checkValueChangesFirst);
         }
 
-        [TestCase(true)]
-        [TestCase(false)]
-        public void SetValue_Default_AtMiddle_NonDefault_AtMiddle(bool checkValueChangesFirst)
+        [Test]
+        public void SetValue_Default_AtMiddle_NonDefault_AtMiddle([Values] bool checkValueChangesFirst, [Values] ValueLineSourceType valueLineSourceType)
         {
             const string defaultValue = "A";
             const string nonDefaultValue = "B";
 
             SetValue_TwoChanges(
                 defaultValue: defaultValue,
+                valueLineSourceType: valueLineSourceType,
                 value1: defaultValue,
                 valueChangeTime1: 100,
                 value2: nonDefaultValue,
@@ -270,15 +270,15 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 checkValueChangesFirst: checkValueChangesFirst);
         }
 
-        [TestCase(true)]
-        [TestCase(false)]
-        public void SetValue_NonDefault_AtStart_Default_AtStart(bool checkValueChangesFirst)
+        [Test]
+        public void SetValue_NonDefault_AtStart_Default_AtStart([Values] bool checkValueChangesFirst, [Values] ValueLineSourceType valueLineSourceType)
         {
             const string defaultValue = "A";
             const string nonDefaultValue = "B";
 
             SetValue_TwoChanges(
                 defaultValue: defaultValue,
+                valueLineSourceType: valueLineSourceType,
                 value1: nonDefaultValue,
                 valueChangeTime1: 0,
                 value2: defaultValue,
@@ -294,15 +294,15 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 checkValueChangesFirst: checkValueChangesFirst);
         }
 
-        [TestCase(true)]
-        [TestCase(false)]
-        public void SetValue_NonDefault_AtStart_Default_AtMiddle(bool checkValueChangesFirst)
+        [Test]
+        public void SetValue_NonDefault_AtStart_Default_AtMiddle([Values] bool checkValueChangesFirst, [Values] ValueLineSourceType valueLineSourceType)
         {
             const string defaultValue = "A";
             const string nonDefaultValue = "B";
 
             SetValue_TwoChanges(
                 defaultValue: defaultValue,
+                valueLineSourceType: valueLineSourceType,
                 value1: nonDefaultValue,
                 valueChangeTime1: 0,
                 value2: defaultValue,
@@ -318,9 +318,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 checkValueChangesFirst: checkValueChangesFirst);
         }
 
-        [TestCase(true)]
-        [TestCase(false)]
-        public void SetValue_NonDefault_AtStart_NonDefault_AtStart(bool checkValueChangesFirst)
+        [Test]
+        public void SetValue_NonDefault_AtStart_NonDefault_AtStart([Values] bool checkValueChangesFirst, [Values] ValueLineSourceType valueLineSourceType)
         {
             const string defaultValue = "A";
             const string nonDefaultValue1 = "B";
@@ -328,6 +327,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
             SetValue_TwoChanges(
                 defaultValue: defaultValue,
+                valueLineSourceType: valueLineSourceType,
                 value1: nonDefaultValue1,
                 valueChangeTime1: 0,
                 value2: nonDefaultValue2,
@@ -343,9 +343,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 checkValueChangesFirst: checkValueChangesFirst);
         }
 
-        [TestCase(true)]
-        [TestCase(false)]
-        public void SetValue_NonDefault_AtStart_NonDefault_AtMiddle(bool checkValueChangesFirst)
+        [Test]
+        public void SetValue_NonDefault_AtStart_NonDefault_AtMiddle([Values] bool checkValueChangesFirst, [Values] ValueLineSourceType valueLineSourceType)
         {
             const string defaultValue = "A";
             const string nonDefaultValue1 = "B";
@@ -353,6 +352,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
             SetValue_TwoChanges(
                 defaultValue: defaultValue,
+                valueLineSourceType: valueLineSourceType,
                 value1: nonDefaultValue1,
                 valueChangeTime1: 0,
                 value2: nonDefaultValue2,
@@ -368,15 +368,15 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 checkValueChangesFirst: checkValueChangesFirst);
         }
 
-        [TestCase(true)]
-        [TestCase(false)]
-        public void SetValue_NonDefault_AtMiddle_Default_AtStart(bool checkValueChangesFirst)
+        [Test]
+        public void SetValue_NonDefault_AtMiddle_Default_AtStart([Values] bool checkValueChangesFirst, [Values] ValueLineSourceType valueLineSourceType)
         {
             const string defaultValue = "A";
             const string nonDefaultValue = "B";
 
             SetValue_TwoChanges(
                 defaultValue: defaultValue,
+                valueLineSourceType: valueLineSourceType,
                 value1: nonDefaultValue,
                 valueChangeTime1: 100,
                 value2: defaultValue,
@@ -392,15 +392,15 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 checkValueChangesFirst: checkValueChangesFirst);
         }
 
-        [TestCase(true)]
-        [TestCase(false)]
-        public void SetValue_NonDefault_AtMiddle_Default_AtMiddle(bool checkValueChangesFirst)
+        [Test]
+        public void SetValue_NonDefault_AtMiddle_Default_AtMiddle([Values] bool checkValueChangesFirst, [Values] ValueLineSourceType valueLineSourceType)
         {
             const string defaultValue = "A";
             const string nonDefaultValue = "B";
 
             SetValue_TwoChanges(
                 defaultValue: defaultValue,
+                valueLineSourceType: valueLineSourceType,
                 value1: nonDefaultValue,
                 valueChangeTime1: 100,
                 value2: defaultValue,
@@ -416,9 +416,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 checkValueChangesFirst: checkValueChangesFirst);
         }
 
-        [TestCase(true)]
-        [TestCase(false)]
-        public void SetValue_NonDefault_AtMiddle_NonDefault_AtStart(bool checkValueChangesFirst)
+        [Test]
+        public void SetValue_NonDefault_AtMiddle_NonDefault_AtStart([Values] bool checkValueChangesFirst, [Values] ValueLineSourceType valueLineSourceType)
         {
             const string defaultValue = "A";
             const string nonDefaultValue1 = "B";
@@ -426,6 +425,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
             SetValue_TwoChanges(
                 defaultValue: defaultValue,
+                valueLineSourceType: valueLineSourceType,
                 value1: nonDefaultValue1,
                 valueChangeTime1: 100,
                 value2: nonDefaultValue2,
@@ -441,9 +441,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 checkValueChangesFirst: checkValueChangesFirst);
         }
 
-        [TestCase(true)]
-        [TestCase(false)]
-        public void SetValue_NonDefault_AtMiddle_NonDefault_AtMiddle(bool checkValueChangesFirst)
+        [Test]
+        public void SetValue_NonDefault_AtMiddle_NonDefault_AtMiddle([Values] bool checkValueChangesFirst, [Values] ValueLineSourceType valueLineSourceType)
         {
             const string defaultValue = "A";
             const string nonDefaultValue1 = "B";
@@ -451,6 +450,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
             SetValue_TwoChanges(
                 defaultValue: defaultValue,
+                valueLineSourceType: valueLineSourceType,
                 value1: nonDefaultValue1,
                 valueChangeTime1: 100,
                 value2: nonDefaultValue2,
@@ -472,6 +472,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
         private void SetValue_TwoChanges<TValue>(
             TValue defaultValue,
+            ValueLineSourceType valueLineSourceType,
             TValue value1,
             long valueChangeTime1,
             TValue value2,
@@ -486,7 +487,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             TValue expectedValueAfterSecondChange,
             bool checkValueChangesFirst)
         {
-            var valueLine = new ValueLine<TValue>(defaultValue);
+            var valueLine = new ValueLine<TValue>(defaultValue, valueLineSourceType);
             valueLine.SetValue(valueChangeTime1, value1);
             valueLine.SetValue(valueChangeTime2, value2);
 

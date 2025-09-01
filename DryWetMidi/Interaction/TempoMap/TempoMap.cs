@@ -11,6 +11,8 @@ namespace Melanchall.DryWetMidi.Interaction
     /// </summary>
     public sealed class TempoMap
     {
+        public static ValueLineSourceType ValueLineSourceType { get; set; } = ValueLineSourceType.Rbt;
+
         #region Constants
 
         /// <summary>
@@ -45,8 +47,8 @@ namespace Melanchall.DryWetMidi.Interaction
             ThrowIfArgument.IsNull(nameof(timeDivision), timeDivision);
 
             TimeDivision = timeDivision;
-            TempoLine = new ValueLine<Tempo>(Tempo.Default);
-            TimeSignatureLine = new ValueLine<TimeSignature>(TimeSignature.Default);
+            TempoLine = new ValueLine<Tempo>(Tempo.Default, ValueLineSourceType);
+            TimeSignatureLine = new ValueLine<TimeSignature>(TimeSignature.Default, ValueLineSourceType);
         }
 
         #endregion

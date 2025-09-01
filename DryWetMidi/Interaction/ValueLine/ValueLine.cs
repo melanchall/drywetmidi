@@ -1,5 +1,4 @@
-﻿using Melanchall.DryWetMidi.Common;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,16 +15,25 @@ namespace Melanchall.DryWetMidi.Interaction
 
         #region Fields
 
-        private RedBlackTree<long, ValueChange<TValue>> _valueChanges = new RedBlackTree<long, ValueChange<TValue>>();
-        private TValue _defaultValue;
+        private IValueLineSource<TValue> _valueLineSource;
+        private ValueLineSourceType _valueLineSourceType;
 
         #endregion
 
         #region Constructor
 
-        public ValueLine(TValue defaultValue)
+        public ValueLine(TValue defaultValue, ValueLineSourceType valueLineSourceType)
         {
-            _defaultValue = defaultValue;
+            _valueLineSourceType = valueLineSourceType;
+
+            switch (valueLineSourceType)
+            {
+                case ValueLineSourceType.Rbt:
+                    _valueLineSource = new RbtValueLineSource<TValue>(defaultValue);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(valueLineSourceType), valueLineSourceType, null);
+            }
         }
 
         #endregion
@@ -36,7 +44,7 @@ namespace Melanchall.DryWetMidi.Interaction
         {
             get
             {
-                return _valueChanges.Count;
+                return _valueLineSource.GetValueChangesCount();
             }
         }
 
@@ -46,32 +54,12 @@ namespace Melanchall.DryWetMidi.Interaction
 
         public TValue GetValueAtTime(long time)
         {
-            var node = _valueChanges.GetFirstCoordinateAboveThreshold(time)
-                ?? _valueChanges.GetMaximumCoordinate();
-            
-            if (node == null)
-                return _defaultValue;
-
-            node = node.Key > time
-                ? _valueChanges.GetPreviousCoordinate(node)
-                : node;
-
-            return node != null
-                ? node.Value.Value
-                : _defaultValue;
+            return _valueLineSource.GetValueAtTime(time);
         }
 
         public void SetValue(long time, TValue value)
         {
-            var node = _valueChanges.GetNodeByKey(time);
-            if (node != null)
-                _valueChanges.Remove(node);
-
-            var coordinate = _valueChanges.GetLastCoordinateBelowThreshold(time);
-            var currentValue = coordinate != null ? coordinate.Value.Value : _defaultValue;
-            if (!value.Equals(currentValue))
-                _valueChanges.Add(time, new ValueChange<TValue>(time, value));
-
+            _valueLineSource.SetValue(time, value);
             OnValuesChanged();
         }
 
@@ -82,34 +70,19 @@ namespace Melanchall.DryWetMidi.Interaction
 
         public void DeleteValues(long startTime, long endTime)
         {
-            var node = _valueChanges.GetLastCoordinateBelowThreshold(startTime)
-                ?? _valueChanges.GetMinimumCoordinate();
-
-            while (true)
-            {
-                if (node == null || node.Value.Time > endTime)
-                    break;
-
-                var nextNode = _valueChanges.GetNextCoordinate(node);
-                _valueChanges.Remove(node);
-                node = nextNode;
-            }
-
+            _valueLineSource.DeleteValues(startTime, endTime);
             OnValuesChanged();
         }
 
         public void Clear()
         {
-            _valueChanges.Clear();
-
+            _valueLineSource.Clear();
             OnValuesChanged();
         }
 
         public void ReplaceValues(ValueLine<TValue> valueLine)
         {
-            _valueChanges = valueLine._valueChanges.Clone();
-            _defaultValue = valueLine._defaultValue;
-
+            _valueLineSource = _valueLineSource.Clone();
             OnValuesChanged();
         }
 
@@ -118,14 +91,14 @@ namespace Melanchall.DryWetMidi.Interaction
             var maxTime = 2 * centerTime;
             var changes = this.TakeWhile(c => c.Time <= maxTime).ToArray();
 
-            var values = new[] { _defaultValue }.Concat(changes.Select(c => c.Value)).Reverse();
+            var values = new[] { _valueLineSource.DefaultValue }.Concat(changes.Select(c => c.Value)).Reverse();
             var times = new[] { 0L }.Concat(changes.Select(c => maxTime - c.Time).Reverse());
 
-            var result = new ValueLine<TValue>(_defaultValue);
+            var result = new ValueLine<TValue>(_valueLineSource.DefaultValue, _valueLineSourceType);
 
             foreach (var vc in values.Zip(times, (v, t) => new ValueChange<TValue>(t, v)))
             {
-                result._valueChanges.Add(vc.Time, vc);
+                result._valueLineSource.Add(vc);
             }
 
             return result;
@@ -146,7 +119,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <returns>An enumerator that can be used to iterate through the collection.</returns>
         public IEnumerator<ValueChange<TValue>> GetEnumerator()
         {
-            return _valueChanges.GetEnumerator();
+            return _valueLineSource.GetEnumerator();
         }
 
         /// <summary>
