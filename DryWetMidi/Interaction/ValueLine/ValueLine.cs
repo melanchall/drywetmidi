@@ -82,7 +82,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
         public void ReplaceValues(ValueLine<TValue> valueLine)
         {
-            _valueLineSource = _valueLineSource.Clone();
+            _valueLineSource = valueLine._valueLineSource.Clone();
             OnValuesChanged();
         }
 
