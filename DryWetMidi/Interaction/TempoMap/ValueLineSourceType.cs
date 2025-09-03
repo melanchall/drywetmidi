@@ -3,5 +3,6 @@
     public enum ValueLineSourceType
     {
         Rbt,
+        List,
     }
 }

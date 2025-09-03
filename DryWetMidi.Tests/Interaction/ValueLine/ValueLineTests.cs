@@ -13,6 +13,27 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         #region Test methods
 
         [Test]
+        public void DeleteValues([Values] ValueLineSourceType valueLineSourceType)
+        {
+            const string defaultValue = "A";
+
+            var valueLine = new ValueLine<string>(defaultValue, valueLineSourceType);
+            valueLine.SetValue(10, "B");
+            valueLine.SetValue(100, "C");
+
+            valueLine.DeleteValues(40, 80);
+
+            CollectionAssert.AreEqual(
+                new[]
+                {
+                    new ValueChange<string>(10, "B"),
+                    new ValueChange<string>(100, "C"),
+                },
+                valueLine,
+                "Invalid value changes.");
+        }
+
+        [Test]
         public void Construct([Values] ValueLineSourceType valueLineSourceType)
         {
             const string defaultValue = "A";

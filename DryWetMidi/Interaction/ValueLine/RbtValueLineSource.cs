@@ -29,17 +29,20 @@ namespace Melanchall.DryWetMidi.Interaction
 
         public void DeleteValues(long startTime, long endTime)
         {
-            var node = _valueChanges.GetLastCoordinateBelowThreshold(startTime)
-                ?? _valueChanges.GetMinimumCoordinate();
+            var coordinate = _valueChanges.GetLastCoordinateBelowThreshold(startTime);
+            if (coordinate != null)
+                coordinate = _valueChanges.GetNextCoordinate(coordinate);
+            else
+                coordinate = _valueChanges.GetMinimumCoordinate();
 
             while (true)
             {
-                if (node == null || node.Value.Time > endTime)
+                if (coordinate == null || coordinate.Value.Time > endTime)
                     break;
 
-                var nextNode = _valueChanges.GetNextCoordinate(node);
-                _valueChanges.Remove(node);
-                node = nextNode;
+                var nextNode = _valueChanges.GetNextCoordinate(coordinate);
+                _valueChanges.Remove(coordinate);
+                coordinate = nextNode;
             }
         }
 

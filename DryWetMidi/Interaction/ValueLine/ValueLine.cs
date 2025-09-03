@@ -31,6 +31,9 @@ namespace Melanchall.DryWetMidi.Interaction
                 case ValueLineSourceType.Rbt:
                     _valueLineSource = new RbtValueLineSource<TValue>(defaultValue);
                     break;
+                case ValueLineSourceType.List:
+                    _valueLineSource = new ListValueLineSource<TValue>(defaultValue);
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(valueLineSourceType), valueLineSourceType, null);
             }
