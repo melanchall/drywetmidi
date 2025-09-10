@@ -44,6 +44,29 @@ namespace Melanchall.DryWetMidi.Interaction
 
         #region Methods
 
+        public IList<ValueChange<TValue>> GetValueChanges(
+            long startTime,
+            long endTime)
+        {
+            int index;
+            MathUtilities.GetLastElementBelowThreshold(
+                _valueChanges,
+                startTime,
+                c => c.Time,
+                out index);
+
+            index++;
+
+            var result = new List<ValueChange<TValue>>();
+
+            for (; index < _valueChanges.Count && _valueChanges[index].Time <= endTime; index++)
+            {
+                result.Add(_valueChanges[index]);
+            }
+
+            return result;
+        }
+
         public TValue GetValueAtTime(long time)
         {
             if (_valueChanges.Count == 0)

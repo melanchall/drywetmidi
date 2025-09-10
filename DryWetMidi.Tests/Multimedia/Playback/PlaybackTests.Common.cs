@@ -9,7 +9,6 @@ using NUnit.Framework;
 using Melanchall.DryWetMidi.Tests.Common;
 using System.Diagnostics;
 using NUnit.Framework.Legacy;
-using System.Threading;
 
 namespace Melanchall.DryWetMidi.Tests.Multimedia
 {
@@ -52,6 +51,14 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         #endregion
 
         #region Private methods
+
+        private TimeSpan ExecuteWithTimeMeasuring(Action action)
+        {
+            var stopwatch = Stopwatch.StartNew();
+            action();
+            stopwatch.Stop();
+            return stopwatch.Elapsed;
+        }
 
         private void CheckPlayback(
             bool useOutputDevice,

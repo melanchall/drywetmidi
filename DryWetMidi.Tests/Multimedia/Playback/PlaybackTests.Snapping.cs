@@ -527,6 +527,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             SnapPoint<string> snapPoint2 = null;
             SnapPoint<string> snapPoint3 = null;
 
+            var overhead = TimeSpan.Zero;
+
             CheckPlayback(
                 useOutputDevice: false,
                 initialPlaybackObjects: new[]
@@ -537,31 +539,31 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 actions: new[]
                 {
-                    new PlaybackAction(50, p =>
+                    new PlaybackAction(50, p => overhead += ExecuteWithTimeMeasuring(() =>
                     {
                         CheckCurrentTime(p, TimeSpan.FromMilliseconds(50), "Aa");
                         ClassicAssert.IsTrue(p.MoveToFirstSnapPoint("Y"), "Failed to move to first snap point.");
                         CheckCurrentTime(p, snapPoint2Time, "Ab");
-                    }),
-                    new PlaybackAction(100, p =>
+                    })),
+                    new PlaybackAction(100, p => overhead += ExecuteWithTimeMeasuring(() =>
                     {
                         CheckCurrentTime(p, TimeSpan.FromMilliseconds(300), "Ba");
                         ClassicAssert.IsTrue(p.MoveToFirstSnapPoint("Y"), "Failed to move to first snap point again.");
                         CheckCurrentTime(p, snapPoint2Time, "Bb");
-                    }),
-                    new PlaybackAction(100, p =>
+                    })),
+                    new PlaybackAction(100, p => overhead += ExecuteWithTimeMeasuring(() =>
                     {
                         CheckCurrentTime(p, TimeSpan.FromMilliseconds(300), "Ca");
                         snapPoint2.IsEnabled = false;
                         ClassicAssert.IsFalse(p.MoveToFirstSnapPoint("Y"), "Failed to move to first snap point after first one disabled.");
                         CheckCurrentTime(p, TimeSpan.FromMilliseconds(300), "Cb");
-                    }),
-                    new PlaybackAction(50, p =>
+                    })),
+                    new PlaybackAction(50, p => overhead += ExecuteWithTimeMeasuring(() =>
                     {
                         p.MoveToTime(new MetricTimeSpan(0, 0, 0, 400));
                         ClassicAssert.IsTrue(p.MoveToFirstSnapPoint("Z"), "Failed to move to first enabled snap point.");
                         CheckCurrentTime(p, snapPoint3Time, "Db");
-                    }),
+                    })),
                 },
                 setupPlayback: playback =>
                 {
@@ -574,7 +576,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 expectedReceivedEvents: new[]
                 {
                     new SentReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
-                    new SentReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(500)),
+                    new SentReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(500) + overhead),
                 });
         }
 
