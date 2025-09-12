@@ -40,6 +40,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         private TimeSpanType _timeType = TimeSpanType.Midi;
 
         private bool _disposed = false;
+        private bool _disposing = false;
 
         #endregion
 
@@ -252,7 +253,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         private void OnTick(object sender, EventArgs e)
         {
-            if (_disposed || !IsWatching)
+            if (_disposing || _disposed || !IsWatching)
                 return;
 
             var times = new List<PlaybackCurrentTime>();
@@ -361,6 +362,8 @@ namespace Melanchall.DryWetMidi.Multimedia
 
             if (disposing)
             {
+                _disposing = true;
+
                 DisposeClock();
                 DetachAllEventHandlers();
             }

@@ -105,3 +105,10 @@ stages:
         arguments: '--blame --no-build --configuration $(TestBuildConfiguration) --filter (FullyQualifiedName~.Multimedia) --framework $(Tfm) --verbosity normal --diag diagnostic.log --logger "console;verbosity=normal"'
         
     - template: Templates/step-collect-logs.yaml
+    
+    - task: PublishPipelineArtifact@1
+      displayName: Publish 'PlaybackTraces' artifact
+      condition: failed()
+      inputs:
+        targetPath: $(Build.ArtifactStagingDirectory)/$(Build.BuildId)/PlaybackTraces
+        artifact: PlaybackTraces

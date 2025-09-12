@@ -75,9 +75,9 @@ void* TickGeneratorSessionThreadRoutine(void* data)
 
     struct thread_time_constraint_policy constraintPolicy;
 
-    constraintPolicy.period = 500 * 1000 * timebase.denom / timebase.numer; // Period over which we demand scheduling.
-    constraintPolicy.computation = 100 * 1000 * timebase.denom / timebase.numer; // Minimum time in a period where we must be running.
-    constraintPolicy.constraint = 100 * 1000 * timebase.denom / timebase.numer; // Maximum time between start and end of our computation in the period.
+    constraintPolicy.period = 0; // Period over which we demand scheduling.
+    constraintPolicy.computation = 1000 * 1000 * timebase.denom / timebase.numer; // Minimum time in a period where we must be running.
+    constraintPolicy.constraint = 2000 * 1000 * timebase.denom / timebase.numer; // Maximum time between start and end of our computation in the period.
     constraintPolicy.preemptible = FALSE;
 
     thread_port_t threadId = pthread_mach_thread_np(pthread_self());

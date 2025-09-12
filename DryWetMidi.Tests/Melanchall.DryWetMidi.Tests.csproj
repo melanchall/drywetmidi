@@ -3,20 +3,24 @@
   <PropertyGroup>
     <TargetFrameworks>net48;net9.0</TargetFrameworks>
     <OutputType>Library</OutputType>
-    <Configurations>Debug;Release;Coverage;DebugTest;ReleaseTest</Configurations>
+    <Configurations>Debug;Release;ReleaseTest;ReleaseTestFull</Configurations>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>strongnamekey.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)'=='Coverage'">
-    <DefineConstants>COVERAGE</DefineConstants>
+  <PropertyGroup Condition="'$(Configuration)'=='Debug'">
+    <DefineConstants>DEBUG;TRACE;TEST</DefineConstants>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)'=='DebugTest'">
-    <DefineConstants>TRACE;TEST</DefineConstants>
+  <PropertyGroup Condition="'$(Configuration)'=='Release'">
+    <DefineConstants></DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)'=='ReleaseTest'">
+    <DefineConstants>TEST</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)'=='ReleaseTestFull'">
     <DefineConstants>TRACE;TEST</DefineConstants>
   </PropertyGroup>
 
@@ -28,6 +32,7 @@
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.13.0" />
     <PackageReference Include="NUnit" Version="4.3.2" />
     <PackageReference Include="NUnit3TestAdapter" Version="5.0.0" />
+    <PackageReference Include="SkiaSharp" Version="3.119.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -48,10 +53,6 @@
       <Link>Melanchall_DryWetMidi_Native64.dylib</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Common\IntervalTree\" />
   </ItemGroup>
 
 </Project>

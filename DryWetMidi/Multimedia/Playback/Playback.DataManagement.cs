@@ -59,6 +59,8 @@ namespace Melanchall.DryWetMidi.Multimedia
         {
             lock (_playbackLockObject)
             {
+                TraceAction("processing observable collection changed...");
+
                 var isRunning = IsRunning;
 
                 if (e.AddedObjects != null)
@@ -111,8 +113,9 @@ namespace Melanchall.DryWetMidi.Multimedia
                 {
                     _clock.StopInternally();
                     OnFinished();
-                    return;
                 }
+
+                TraceAction("processed observable collection changed");
             }
         }
 

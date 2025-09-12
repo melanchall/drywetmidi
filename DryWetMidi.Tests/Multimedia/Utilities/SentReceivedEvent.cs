@@ -21,13 +21,15 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
         public TimeSpan Time { get; }
 
+        public long DelayMs { get; set; }
+
         #endregion
 
         #region Overrides
 
         public override string ToString()
         {
-            return $"{Time}: {Event}";
+            return $"{Time}{(DelayMs > 0 ? $" + {DelayMs}ms" : null)}: {Event}";
         }
 
         #endregion

@@ -16,12 +16,18 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         #endregion
 
+        #region Fields
+
+        private readonly object _lockObject = new object();
+
+        #endregion
+
         #region Properties
 
         /// <summary>
         /// Gets a value indicating whether the current tick generator is currently running or not.
         /// </summary>
-        protected bool IsRunning { get; set; }
+        protected bool IsRunning { get; private set; }
 
         #endregion
 
@@ -50,7 +56,16 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// </summary>
         protected void GenerateTick()
         {
-            TickGenerated?.Invoke(this, EventArgs.Empty);
+            if (!IsRunning)
+                return;
+
+            lock (_lockObject)
+            {
+                if (!IsRunning)
+                    return;
+
+                TickGenerated?.Invoke(this, EventArgs.Empty);
+            }
         }
 
         /// <summary>

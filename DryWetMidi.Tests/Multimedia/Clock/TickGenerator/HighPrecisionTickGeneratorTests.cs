@@ -39,6 +39,12 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
         #endregion
 
+        #region Fields
+
+        private readonly object _lockObject = new object();
+
+        #endregion
+
         #region Test methods
 
         [Retry(3)]
@@ -83,26 +89,39 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             return new RunInfo(tickGenerator, intervalInMs);
         }
 
-        private static void StartTickGenerator(RunInfo runInfo)
+        private void StartTickGenerator(RunInfo runInfo)
         {
-            runInfo.TickGenerator.TickGenerated += (_, __) => runInfo.Times.Add(runInfo.Stopwatch.ElapsedMilliseconds);
+            runInfo.TickGenerator.TickGenerated += (_, __) =>
+            {
+                lock (_lockObject)
+                {
+                    if (!runInfo.Stopwatch.IsRunning)
+                        return;
+
+                    runInfo.Times.Add(runInfo.Stopwatch.ElapsedMilliseconds);
+                }
+            };
+
             runInfo.TickGenerator.TryStart(TimeSpan.FromMilliseconds(runInfo.IntervalInMs));
             runInfo.Stopwatch.Start();
         }
 
-        private static void StopTickGeneratorAndCheckIntervals(RunInfo runInfo)
+        private void StopTickGeneratorAndCheckIntervals(RunInfo runInfo)
         {
-            runInfo.TickGenerator.TryStop();
             runInfo.Stopwatch.Stop();
+            runInfo.TickGenerator.TryStop();
             runInfo.TickGenerator.Dispose();
 
             var deltas = new List<long>();
             var lastTime = 0L;
 
-            foreach (var time in runInfo.Times)
+            lock (_lockObject)
             {
-                deltas.Add(time - lastTime);
-                lastTime = time;
+                foreach (var time in runInfo.Times)
+                {
+                    deltas.Add(time - lastTime);
+                    lastTime = time;
+                }
             }
 
             var min = deltas.Min();

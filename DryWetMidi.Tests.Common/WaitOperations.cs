@@ -11,11 +11,11 @@ namespace Melanchall.DryWetMidi.Tests.Common
         public static long Wait(TimeSpan waitTime) =>
             Wait((long)waitTime.TotalMilliseconds);
 
-        public static long Wait(long waitTime)
+        public static long Wait(long waitTimeMs)
         {
             var stopwatch = Stopwatch.StartNew();
 
-            while (stopwatch.ElapsedMilliseconds < waitTime)
+            while (stopwatch.ElapsedMilliseconds < waitTimeMs)
             {
                 Sleep();
             }
@@ -27,11 +27,11 @@ namespace Melanchall.DryWetMidi.Tests.Common
         public static void WaitPrecisely(TimeSpan waitTime) =>
             WaitPrecisely((long)waitTime.TotalMilliseconds);
 
-        public static void WaitPrecisely(long waitTime)
+        public static void WaitPrecisely(long waitTimeMs)
         {
             var stopwatch = Stopwatch.StartNew();
 
-            while (stopwatch.ElapsedMilliseconds < waitTime)
+            while (stopwatch.ElapsedMilliseconds < waitTimeMs)
             {
             }
         }

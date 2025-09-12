@@ -9,6 +9,7 @@ using NUnit.Framework;
 using Melanchall.DryWetMidi.Tests.Common;
 using System.Diagnostics;
 using NUnit.Framework.Legacy;
+using System.IO;
 
 namespace Melanchall.DryWetMidi.Tests.Multimedia
 {
@@ -52,12 +53,14 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
         #region Private methods
 
-        private TimeSpan ExecuteWithTimeMeasuring(Action action)
+        [OneTimeSetUp]
+        public static void GlobalSetup()
         {
-            var stopwatch = Stopwatch.StartNew();
-            action();
-            stopwatch.Stop();
-            return stopwatch.Elapsed;
+            var playbackTracesDirectoryPath = GetPlaybackTracesDirectoryPath();
+            if (Directory.Exists(playbackTracesDirectoryPath))
+                Directory.Delete(playbackTracesDirectoryPath, true);
+
+            Directory.CreateDirectory(playbackTracesDirectoryPath);
         }
 
         private void CheckPlayback(
@@ -82,7 +85,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 afterStart: afterStart,
                 repeatsCount: repeatsCount,
                 sendReceiveTimeDelta: sendReceiveTimeDelta,
-                label: "From objects.",
+                label: "FromObjects",
                 additionalChecks: additionalChecks);
 
             checkFromFile &= DryWetMidi.Common.Random.Instance.Next(2) == 1;
@@ -106,7 +109,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 afterStart: afterStart,
                 repeatsCount: repeatsCount,
                 sendReceiveTimeDelta: sendReceiveTimeDelta,
-                label: "From file.",
+                label: "FromFile",
                 additionalChecks: additionalChecks);
         }
 
@@ -127,14 +130,23 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 : TestDeviceManager.GetOutputDevice(SendReceiveUtilities.DeviceToTestOnName);
 
             var stopwatch = new Stopwatch();
+            var delayStopwatch = new Stopwatch();
             var receivedEvents = new List<SentReceivedEvent>();
+
+            long Measure(Action action)
+            {
+                var start = delayStopwatch.ElapsedMilliseconds;
+                action();
+                var end = delayStopwatch.ElapsedMilliseconds;
+                return end - start;
+            }
 
             var actionTimes = Enumerable
                 .Range(0, actions.Length)
                 .Select(i => actions.Take(i + 1).Sum(a => a.PeriodMs))
                 .ToArray();
 
-            var labelString = string.IsNullOrEmpty(label) ? string.Empty : $"{label} ";
+            var labelString = string.IsNullOrEmpty(label) ? string.Empty : $"{label}. ";
 
             using (outputDevice)
             {
@@ -142,61 +154,98 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 
                 using (var playback = createPlayback(outputDevice))
                 {
-                    setupPlayback?.Invoke(playback);
-
-                    if (repeatsCount > 0)
-                        playback.Loop = true;
-
-                    var actualRepeatsCount = 0;
-                    playback.RepeatStarted += (_, __) =>
+                    try
                     {
-                        actualRepeatsCount++;
-                        if (actualRepeatsCount == repeatsCount)
-                            playback.Loop = false;
-                    };
+                        setupPlayback?.Invoke(playback);
 
-                    var actionsExecutedCount = 0;
+                        if (repeatsCount > 0)
+                            playback.Loop = true;
 
-                    playback.Start();
-                    stopwatch.Start();
-
-                    afterStart?.Invoke(playback);
-
-                    for (var i = 0; i < actions.Length; i++)
-                    {
-                        while (stopwatch.ElapsedMilliseconds < actionTimes[i])
+                        var actualRepeatsCount = 0;
+                        playback.RepeatStarted += (_, __) =>
                         {
+                            actualRepeatsCount++;
+                            if (actualRepeatsCount == repeatsCount)
+                                playback.Loop = false;
+                        };
+
+                        var actionsExecutedCount = 0;
+                        var delays = new Dictionary<long, long>();
+                    
+                        playback.Start();
+#if TRACE
+                        playback.ActionsTracer.SetStopwatch(stopwatch);
+#endif
+                        stopwatch.Start();
+
+                        delayStopwatch.Start();
+                        delays[0] = Measure(() => afterStart?.Invoke(playback));
+
+                        for (var i = 0; i < actions.Length; i++)
+                        {
+                            var waitTime = actions[i].PeriodMs;
+                            TracePlaybackAction(playback, $"waiting action {i} for {waitTime}...");
+                            WaitOperations.WaitPrecisely(waitTime);
+
+                            TracePlaybackAction(playback, $"performing action {i}...");
+                            var actionDuration = delays[actionTimes[i]] = Measure(() => actions[i].Action(playback));
+                            TracePlaybackAction(playback, $"performed action {i} for {actionDuration}");
+
+                            actionsExecutedCount++;
                         }
 
-                        actions[i].Action(playback);
-                        actionsExecutedCount++;
+                        var timeout = TimeSpan.FromSeconds(30);
+                        var stopped = WaitOperations.Wait(() => !playback.IsRunning, timeout);
+                        ClassicAssert.IsTrue(stopped, $"{labelString}Playback is running after {timeout}.");
+
+                        WaitOperations.Wait(SendReceiveUtilities.MaximumEventSendReceiveDelay);
+
+                        ClassicAssert.AreEqual(
+                            actions.Length,
+                            actionsExecutedCount,
+                            $"{labelString}Invalid number of actions executed.");
+
+                        foreach (var delay in delays.OrderBy(d => d.Key))
+                        {
+                            foreach (var expectedReceivedEvent in expectedReceivedEvents.Where(e => (int)e.Time.TotalMilliseconds >= delay.Key))
+                            {
+                                expectedReceivedEvent.DelayMs += delay.Value;
+                            }
+                        }
+
+                        SendReceiveUtilities.CheckReceivedEvents(
+                            receivedEvents,
+                            expectedReceivedEvents.ToList(),
+                            sendReceiveTimeDelta: sendReceiveTimeDelta ?? (useOutputDevice
+                                ? SendReceiveUtilities.MaximumEventSendReceiveDelay
+                                : TimeSpan.FromMilliseconds(20)),
+                            label);
+
+                        additionalChecks?.Invoke(playback, receivedEvents);
                     }
+                    catch
+                    {
+                        SavePlaybackTraces(
+                            playback,
+                            label,
+                            expectedReceivedEvents,
+                            receivedEvents);
 
-                    var timeout = TimeSpan.FromSeconds(30);
-                    var stopped = WaitOperations.Wait(() => !playback.IsRunning, timeout);
-                    ClassicAssert.IsTrue(stopped, $"{labelString}Playback is running after {timeout}.");
-
-                    WaitOperations.Wait(SendReceiveUtilities.MaximumEventSendReceiveDelay);
-
-                    ClassicAssert.AreEqual(
-                        actions.Length,
-                        actionsExecutedCount,
-                        $"{labelString}Invalid number of actions executed.");
-
-                    SendReceiveUtilities.CheckReceivedEvents(
-                        receivedEvents,
-                        expectedReceivedEvents.ToList(),
-                        sendReceiveTimeDelta: sendReceiveTimeDelta ?? (useOutputDevice
-                            ? SendReceiveUtilities.MaximumEventSendReceiveDelay
-                            : TimeSpan.FromMilliseconds(20)),
-                        label);
-
-                    additionalChecks?.Invoke(playback, receivedEvents);
+                        throw;
+                    }
                 }
             }
         }
 
-        private void CheckPlaybackEvents(
+        [Conditional("TRACE")]
+        private static void TracePlaybackAction(Playback playback, string action)
+        {
+#if TRACE
+            playback.ActionsTracer?.TraceAction(playback.GetCurrentTime<MetricTimeSpan>(), action);
+#endif
+        }
+
+        private static void CheckPlaybackEvents(
             int expectedStartedRaised,
             int expectedStoppedRaised,
             int expectedFinishedRaised,
@@ -244,7 +293,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
         private static void CheckCurrentTime(Playback playback, TimeSpan expectedCurrentTime, string afterPlaybackAction)
         {
+            TracePlaybackAction(playback, $"checking current time ({afterPlaybackAction})...");
+
             TimeSpan currentTime = playback.GetCurrentTime<MetricTimeSpan>();
+            TracePlaybackAction(playback, $"checked current time ({afterPlaybackAction}) = {currentTime}");
+
             var epsilon = TimeSpan.FromMilliseconds(15);
             var delta = (currentTime - expectedCurrentTime).Duration();
             ClassicAssert.IsTrue(
@@ -262,6 +315,6 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             return timeSpan.DivideBy(speed);
         }
 
-        #endregion
+#endregion
     }
 }

@@ -1,12 +1,14 @@
-﻿using System;
+﻿using Melanchall.DryWetMidi.Common;
+using Melanchall.DryWetMidi.Core;
+using Melanchall.DryWetMidi.Interaction;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
-using Melanchall.DryWetMidi.Common;
-using Melanchall.DryWetMidi.Core;
-using Melanchall.DryWetMidi.Interaction;
-
+using System.Reflection;
+using System.Threading;
 using NotePlaybackEventMetadataCollection = Melanchall.DryWetMidi.Common.IntervalTree<System.TimeSpan, Melanchall.DryWetMidi.Multimedia.NotePlaybackEventMetadata>;
 
 namespace Melanchall.DryWetMidi.Multimedia
@@ -91,6 +93,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         private readonly List<Note> _originalNotes = new List<Note>();
 
         private bool _hasBeenStarted;
+        private bool _tickHandling;
 
         private readonly MidiClock _clock;
 
@@ -396,6 +399,18 @@ namespace Melanchall.DryWetMidi.Multimedia
             }
         }
 
+#if TRACE
+        internal PlaybackActionsTracer ActionsTracer { get; set; } = new PlaybackActionsTracer();
+
+        internal MidiClockTracer ClockTracer
+        {
+            get
+            {
+                return _clock?.Tracer;
+            }
+        }
+#endif
+
         #endregion
 
         #region Methods
@@ -465,6 +480,8 @@ namespace Melanchall.DryWetMidi.Multimedia
             if (_clock.IsRunning)
                 return;
 
+            TraceAction("start...");
+
             if (!_hasBeenStarted && PlaybackStart != null && _clock.CurrentTime < _playbackStartMetric)
                 MoveToStart();
 
@@ -478,6 +495,8 @@ namespace Melanchall.DryWetMidi.Multimedia
 
             _hasBeenStarted = true;
             OnStarted();
+
+            TraceAction("started");
         }
 
         /// <summary>
@@ -493,11 +512,15 @@ namespace Melanchall.DryWetMidi.Multimedia
             if (!IsRunning)
                 return;
 
+            TraceAction("stop...");
+
             _clock.Stop();
 
             InterruptActiveNotes();
 
             OnStopped();
+
+            TraceAction("stopped");
         }
 
         /// <summary>
@@ -513,6 +536,8 @@ namespace Melanchall.DryWetMidi.Multimedia
         {
             ThrowIfArgument.IsNull(nameof(snapPoint), snapPoint);
             EnsureIsNotDisposed();
+
+            TraceAction("move to snap point by point...");
 
             if (!snapPoint.IsEnabled)
                 return false;
@@ -531,6 +556,8 @@ namespace Melanchall.DryWetMidi.Multimedia
         {
             EnsureIsNotDisposed();
 
+            TraceAction("move to first snap point...");
+
             var snapPoint = GetNextSnapPoint(TimeSpan.Zero);
             return TryToMoveToSnapPoint(snapPoint);
         }
@@ -546,6 +573,8 @@ namespace Melanchall.DryWetMidi.Multimedia
         public bool MoveToFirstSnapPoint<TData>(TData data)
         {
             EnsureIsNotDisposed();
+
+            TraceAction("move to first snap point by data...");
 
             var snapPoint = GetNextSnapPoint(TimeSpan.Zero, data);
             return TryToMoveToSnapPoint(snapPoint);
@@ -567,6 +596,8 @@ namespace Melanchall.DryWetMidi.Multimedia
             ThrowIfArgument.IsNull(nameof(snapPointsGroup), snapPointsGroup);
             EnsureIsNotDisposed();
 
+            TraceAction("move to previous snap point by group...");
+
             var snapPoint = GetPreviousSnapPoint(_clock.CurrentTime, snapPointsGroup);
             return TryToMoveToSnapPoint(snapPoint);
         }
@@ -582,6 +613,8 @@ namespace Melanchall.DryWetMidi.Multimedia
         public bool MoveToPreviousSnapPoint()
         {
             EnsureIsNotDisposed();
+
+            TraceAction("move to previous snap point...");
 
             var snapPoint = GetPreviousSnapPoint(_clock.CurrentTime);
             return TryToMoveToSnapPoint(snapPoint);
@@ -599,6 +632,8 @@ namespace Melanchall.DryWetMidi.Multimedia
         public bool MoveToPreviousSnapPoint<TData>(TData data)
         {
             EnsureIsNotDisposed();
+
+            TraceAction("move to previous snap point by data...");
 
             var snapPoint = GetPreviousSnapPoint(_clock.CurrentTime, data);
             return TryToMoveToSnapPoint(snapPoint);
@@ -620,6 +655,8 @@ namespace Melanchall.DryWetMidi.Multimedia
             ThrowIfArgument.IsNull(nameof(snapPointsGroup), snapPointsGroup);
             EnsureIsNotDisposed();
 
+            TraceAction("move to next snap point by group...");
+
             var snapPoint = GetNextSnapPoint(_clock.CurrentTime, snapPointsGroup);
             return TryToMoveToSnapPoint(snapPoint);
         }
@@ -635,6 +672,8 @@ namespace Melanchall.DryWetMidi.Multimedia
         public bool MoveToNextSnapPoint()
         {
             EnsureIsNotDisposed();
+
+            TraceAction("move to next snap point...");
 
             var snapPoint = GetNextSnapPoint(_clock.CurrentTime);
             return TryToMoveToSnapPoint(snapPoint);
@@ -652,6 +691,8 @@ namespace Melanchall.DryWetMidi.Multimedia
         {
             EnsureIsNotDisposed();
 
+            TraceAction("move to next snap point by data...");
+
             var snapPoint = GetNextSnapPoint(_clock.CurrentTime, data);
             return TryToMoveToSnapPoint(snapPoint);
         }
@@ -665,7 +706,11 @@ namespace Melanchall.DryWetMidi.Multimedia
         {
             EnsureIsNotDisposed();
 
+            TraceAction("move to start...");
+
             MoveToTime(PlaybackStart ?? new MetricTimeSpan());
+
+            TraceAction("moved to start");
         }
 
         /// <summary>
@@ -677,7 +722,11 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <exception cref="MidiDeviceException">An error occurred on device.</exception>
         public void MoveToTime(ITimeSpan time)
         {
+            TraceAction("move to time...");
+
             MoveToTimeInternal(time);
+
+            TraceAction("moved to time...");
         }
 
         /// <summary>
@@ -692,8 +741,12 @@ namespace Melanchall.DryWetMidi.Multimedia
             ThrowIfArgument.IsNull(nameof(step), step);
             EnsureIsNotDisposed();
 
+            TraceAction("move forward...");
+
             var currentTime = (MetricTimeSpan)_clock.CurrentTime;
             MoveToTimeInternal(currentTime.Add(step, TimeSpanMode.TimeLength));
+
+            TraceAction("moved forward");
         }
 
         /// <summary>
@@ -708,6 +761,8 @@ namespace Melanchall.DryWetMidi.Multimedia
             ThrowIfArgument.IsNull(nameof(step), step);
             EnsureIsNotDisposed();
 
+            TraceAction("move back...");
+
             var currentTime = (MetricTimeSpan)_clock.CurrentTime;
             var metricStep = TimeConverter.ConvertTo<MetricTimeSpan>(step, TempoMap);
 
@@ -719,6 +774,8 @@ namespace Melanchall.DryWetMidi.Multimedia
                 time = _playbackStartMetric;
 
             MoveToTimeInternal(time);
+
+            TraceAction("moved back");
         }
 
         /// <summary>
@@ -735,6 +792,8 @@ namespace Melanchall.DryWetMidi.Multimedia
         protected virtual bool TryPlayEvent(MidiEvent midiEvent, object metadata)
         {
             OutputDevice?.SendEvent(midiEvent);
+
+            TraceAction($"played event '{midiEvent}'");
             return true;
         }
 
@@ -752,10 +811,28 @@ namespace Melanchall.DryWetMidi.Multimedia
             return Enumerable.Empty<TimedEvent>();
         }
 
+        [Conditional("TRACE")]
+        private void TraceAction(string description)
+        {
+#if TRACE
+            ActionsTracer?.TraceAction(_clock?.CurrentTime ?? TimeSpan.Zero, description);
+#endif
+        }
+
+        [Conditional("TRACE")]
+        private void TraceTick(string description)
+        {
+#if TRACE
+            ActionsTracer?.TraceTick(_clock?.CurrentTime ?? TimeSpan.Zero, description);
+#endif
+        }
+
         private void InterruptActiveNotes()
         {
             if (!InterruptNotesOnStop)
                 return;
+
+            TraceAction("interrupting active notes...");
 
             var currentTime = _clock.CurrentTime;
 
@@ -777,6 +854,8 @@ namespace Melanchall.DryWetMidi.Multimedia
             OnNotesPlaybackFinished(notes.ToArray(), originalNotes.ToArray());
 
             _activeNotesMetadata.Clear();
+
+            TraceAction("interrupted active notes");
         }
 
         private void UpdateDuration()
@@ -802,13 +881,20 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         private bool TryToMoveToSnapPoint(SnapPoint snapPoint)
         {
+            TraceAction("try to move to snap point...");
+
             if (snapPoint == null ||
                 snapPoint.Time < _playbackStartMetric ||
                 snapPoint.Time > _playbackEndMetric ||
                 snapPoint.Time > _duration)
+            {
+                TraceAction("not moved to snap point; conditions violated");
                 return false;
+            }
 
             MoveToTime((MetricTimeSpan)snapPoint.Time);
+
+            TraceAction("successfully tried to move to snap point");
             return true;
         }
 
@@ -819,6 +905,8 @@ namespace Melanchall.DryWetMidi.Multimedia
 
             if (!_hasBeenStarted && !_playbackSource.IsPositionValid() && _beforeStart)
                 return;
+
+            TraceAction("stopping/starting notes...");
 
             var notesToPlay = GetNotesMetadataAtCurrentTime();
             var onNotesMetadata = notesToPlay.Any()
@@ -858,6 +946,8 @@ namespace Melanchall.DryWetMidi.Multimedia
             }
 
             OnNotesPlaybackStarted(_notes.ToArray(), _originalNotes.ToArray());
+
+            TraceAction("stopped/started notes");
         }
 
         private ICollection<NotePlaybackEventMetadata> GetNotesMetadataAtCurrentTime()
@@ -908,73 +998,99 @@ namespace Melanchall.DryWetMidi.Multimedia
             DeviceErrorOccurred?.Invoke(this, new ErrorOccurredEventArgs(exception));
         }
 
-        private void OnClockTicked(object sender, EventArgs e)
+        private async void OnClockTicked(object sender, EventArgs e)
         {
+            TraceTick("clock ticked");
+
+            if (_tickHandling)
+                return;
+
             lock (_playbackLockObject)
             {
-                do
+                if (_tickHandling)
+                    return;
+
+                _tickHandling = true;
+
+                try
                 {
-                    var time = _clock.CurrentTime;
-                    if (time >= _playbackEndMetric)
-                        break;
-
-                    var playbackEvent = _playbackSource.GetCurrentPlaybackEvent();
-                    if (playbackEvent == null)
-                        continue;
-
-                    if (playbackEvent.Time > time)
-                        return;
-
-                    var midiEvent = playbackEvent.Event;
-                    if (midiEvent == null)
-                        continue;
-
-                    if (!IsRunning)
-                        return;
-
-                    Note note;
-                    Note originalNote;
-
-                    if (TryPlayNoteEvent(playbackEvent, out note, out originalNote))
+                    do
                     {
-                        if (note != null)
+                        var time = _clock.CurrentTime;
+                        if (time >= _playbackEndMetric)
+                            break;
+
+                        var playbackEvent = _playbackSource.GetCurrentPlaybackEvent();
+                        if (playbackEvent == null)
+                            continue;
+
+                        if (playbackEvent.Time > time)
+                            return;
+
+                        var midiEvent = playbackEvent.Event;
+                        if (midiEvent == null)
+                            continue;
+
+                        if (!IsRunning)
+                            return;
+
+                        TraceAction($"tick: processing event '{midiEvent}'...");
+
+                        Note note;
+                        Note originalNote;
+
+                        if (TryPlayNoteEvent(playbackEvent, out note, out originalNote))
                         {
-                            if (playbackEvent.Event is NoteOnEvent)
-                                OnNotesPlaybackStarted(new[] { note }, new[] { originalNote });
-                            else
-                                OnNotesPlaybackFinished(new[] { note }, new[] { originalNote });
+                            if (note != null)
+                            {
+                                if (playbackEvent.Event is NoteOnEvent)
+                                    OnNotesPlaybackStarted(new[] { note }, new[] { originalNote });
+                                else
+                                    OnNotesPlaybackFinished(new[] { note }, new[] { originalNote });
+                            }
+
+                            continue;
                         }
 
-                        continue;
+                        var eventCallback = EventCallback;
+                        if (eventCallback != null)
+                            midiEvent = eventCallback(midiEvent.Clone(), playbackEvent.RawTime, time);
+
+                        if (midiEvent == null)
+                            continue;
+
+                        PlayEvent(midiEvent, playbackEvent.TimedEventMetadata);
+                    }
+                    while (MoveToNextPlaybackEvent());
+
+                    if (!Loop)
+                    {
+                        TraceAction("tick: finishing...");
+
+                        _clock.StopInternally();
+                        InterruptActiveNotes();
+                        OnFinished();
+
+                        TraceAction("tick: finished");
+                        return;
                     }
 
-                    var eventCallback = EventCallback;
-                    if (eventCallback != null)
-                        midiEvent = eventCallback(midiEvent.Clone(), playbackEvent.RawTime, time);
+                    TraceAction("tick: repeating...");
 
-                    if (midiEvent == null)
-                        continue;
+                    _clock.StopShortly();
+                    _clock.ResetCurrentTime();
+                    ResetPlaybackEventsPosition();
+                    MoveToNextPlaybackEvent();
 
-                    PlayEvent(midiEvent, playbackEvent.TimedEventMetadata);
+                    MoveToStart();
+                    _clock.Start();
+                    OnRepeatStarted();
                 }
-                while (MoveToNextPlaybackEvent());
-
-                if (!Loop)
+                // TODO: catch and store errors
+                finally
                 {
-                    _clock.StopInternally();
-                    InterruptActiveNotes();
-                    OnFinished();
-                    return;
+                    _tickHandling = false;
                 }
-
-                _clock.StopShortly();
-                _clock.ResetCurrentTime();
-                ResetPlaybackEventsPosition();
-                MoveToNextPlaybackEvent();
-
-                MoveToStart();
-                _clock.Start();
-                OnRepeatStarted();
             }
         }
 
@@ -991,6 +1107,8 @@ namespace Melanchall.DryWetMidi.Multimedia
 
             lock (_playbackLockObject)
             {
+                TraceAction("move to time internally...");
+
                 var isRunning = IsRunning;
 
                 SetStartTime(time);
@@ -1001,6 +1119,8 @@ namespace Melanchall.DryWetMidi.Multimedia
                     StopStartNotes();
                     _clock?.Start();
                 }
+
+                TraceAction("moved to time internally");
             }
         }
 
@@ -1180,7 +1300,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             return _playbackSource.IsPositionValid();
         }
 
-        #endregion
+#endregion
 
         #region IClockDrivenObject
 

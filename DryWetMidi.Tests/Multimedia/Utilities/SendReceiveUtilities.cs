@@ -141,30 +141,6 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             }
         }
 
-        //public static void CompareReceivedEvents(
-        //    IReadOnlyList<SentReceivedEvent> receivedEvents,
-        //    IReadOnlyList<SentReceivedEvent> expectedReceivedEvents,
-        //    TimeSpan maximumEventSendReceiveDelay)
-        //{
-        //    for (var i = 0; i < expectedReceivedEvents.Count; i++)
-        //    {
-        //        var receivedEvent = receivedEvents[i];
-        //        var expectedReceivedEvent = expectedReceivedEvents[i];
-        //
-        //        MidiAsserts.AreEqual(
-        //            expectedReceivedEvent.Event,
-        //            receivedEvent.Event,
-        //            false,
-        //            $"Received event ({receivedEvent.Event}) doesn't match the expected one ({expectedReceivedEvent.Event}).");
-        //
-        //        var delay = (expectedReceivedEvent.Time - receivedEvent.Time).Duration();
-        //        ClassicAssert.LessOrEqual(
-        //            delay,
-        //            maximumEventSendReceiveDelay,
-        //            $"Event was received too late (at {receivedEvent.Time} instead of {expectedReceivedEvent.Time}). Delay is too big.");
-        //    }
-        //}
-
         public static void CheckReceivedEvents(
             IReadOnlyList<SentReceivedEvent> receivedEvents,
             IReadOnlyList<SentReceivedEvent> expectedReceivedEvents,
@@ -172,7 +148,6 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             string label = null)
         {
             var equalityCheckSettings = new MidiEventEqualityCheckSettings { CompareDeltaTimes = false };
-            var timeDelta = sendReceiveTimeDelta ?? MaximumEventSendReceiveDelay;
 
             var actualEventsList = receivedEvents.ToList();
             var notReceivedEvents = new List<(SentReceivedEvent Event, SentReceivedEvent NearestEvent)>();
@@ -190,6 +165,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     return offsetFromExpectedTime <= delta;
                 });
 
+                var delay = TimeSpan.FromMilliseconds(expectedReceivedEvent.DelayMs);
+                var timeDelta = delay + (sendReceiveTimeDelta ?? MaximumEventSendReceiveDelay);
                 var actualEvent = GetMatchedEvent(timeDelta);
 
                 if (actualEvent == null)

@@ -2,13 +2,9 @@
 
   <PropertyGroup>
     <TargetFrameworks>net48;net9.0</TargetFrameworks>
-    <Configurations>Debug;Release;Coverage;DebugTest;ReleaseTest</Configurations>
+    <Configurations>Debug;Release;ReleaseTest;ReleaseTestFull</Configurations>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>strongnamekey.snk</AssemblyOriginatorKeyFile>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)'=='Coverage'">
-    <DefineConstants>COVERAGE</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>

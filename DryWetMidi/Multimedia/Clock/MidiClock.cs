@@ -30,6 +30,8 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         private readonly bool _startImmediately;
         private readonly Stopwatch _stopwatch = new Stopwatch();
+        private readonly object _lockObject = new object();
+
         private TimeSpan _startTime = TimeSpan.Zero;
         private TimeSpan _elapsed = TimeSpan.Zero;
 
@@ -88,12 +90,30 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <summary>
         /// Gets a value indicating whether MIDI clock is currently running or not.
         /// </summary>
-        public bool IsRunning => _stopwatch.IsRunning;
+        public bool IsRunning
+        {
+            get
+            {
+                lock (_lockObject)
+                {
+                    return _stopwatch.IsRunning;
+                }
+            }
+        }
 
         /// <summary>
         /// Gets the current time of clock as <see cref="TimeSpan"/>.
         /// </summary>
-        public TimeSpan CurrentTime { get; private set; } = TimeSpan.Zero;
+        public TimeSpan CurrentTime
+        {
+            get
+            {
+                lock (_lockObject)
+                {
+                    return GetCurrentTime();
+                }
+            }
+        }
 
         /// <summary>
         /// Gets or sets the speed of clock, i.e. the speed of current time changing.
@@ -121,6 +141,10 @@ namespace Melanchall.DryWetMidi.Multimedia
             }
         }
 
+#if TRACE
+        internal MidiClockTracer Tracer { get; set; } = new MidiClockTracer();
+#endif
+
         #endregion
 
         #region Methods
@@ -138,6 +162,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
             _tickGenerator?.TryStart(Interval);
             _stopwatch.Start();
+            StartTracing();
 
             if (_startImmediately)
                 OnTicked();
@@ -187,10 +212,12 @@ namespace Melanchall.DryWetMidi.Multimedia
         {
             EnsureIsNotDisposed();
 
-            _stopwatch.Reset();
-            _elapsed = TimeSpan.Zero;
-            _startTime = time;
-            CurrentTime = time;
+            lock (_lockObject)
+            {
+                _stopwatch.Reset();
+                _elapsed = TimeSpan.Zero;
+                _startTime = time;
+            }
         }
 
         /// <summary>
@@ -201,7 +228,6 @@ namespace Melanchall.DryWetMidi.Multimedia
             if (!IsRunning || _disposed)
                 return;
 
-            CurrentTime = GetCurrentTime();
             OnTicked();
         }
 
@@ -210,6 +236,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             if (_disposed)
                 return;
 
+            StopTracing();
             _stopwatch.Stop();
             _tickGenerator?.TryStop();
         }
@@ -221,6 +248,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         private void OnTickGenerated(object sender, EventArgs e)
         {
+            TraceTick();
             Tick();
         }
 
@@ -242,6 +270,30 @@ namespace Melanchall.DryWetMidi.Multimedia
                 ticks = 0;
 
             return _startTime + TimeSpan.FromTicks(MathUtilities.RoundToLong(ticks * Speed));
+        }
+
+        [Conditional("TRACE")]
+        private void TraceTick()
+        {
+#if TRACE
+            Tracer?.TraceTick();
+#endif
+        }
+
+        [Conditional("TRACE")]
+        private void StartTracing()
+        {
+#if TRACE
+            Tracer?.Start();
+#endif
+        }
+
+        [Conditional("TRACE")]
+        private void StopTracing()
+        {
+#if TRACE
+            Tracer?.Stop();
+#endif
         }
 
         #endregion
