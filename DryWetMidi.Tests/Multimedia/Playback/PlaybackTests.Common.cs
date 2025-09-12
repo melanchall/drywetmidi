@@ -52,14 +52,6 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
         #region Private methods
 
-        private TimeSpan ExecuteWithTimeMeasuring(Action action)
-        {
-            var stopwatch = Stopwatch.StartNew();
-            action();
-            stopwatch.Stop();
-            return stopwatch.Elapsed;
-        }
-
         private void CheckPlayback(
             bool useOutputDevice,
             ICollection<ITimedObject> initialPlaybackObjects,
@@ -127,7 +119,16 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 : TestDeviceManager.GetOutputDevice(SendReceiveUtilities.DeviceToTestOnName);
 
             var stopwatch = new Stopwatch();
+            var delayStopwatch = new Stopwatch();
             var receivedEvents = new List<SentReceivedEvent>();
+
+            long Measure(Action action)
+            {
+                var start = delayStopwatch.ElapsedMilliseconds;
+                action();
+                var end = delayStopwatch.ElapsedMilliseconds;
+                return end - start;
+            }
 
             var actionTimes = Enumerable
                 .Range(0, actions.Length)
@@ -156,19 +157,20 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     };
 
                     var actionsExecutedCount = 0;
+                    
+                    var delays = new Dictionary<long, long>();
 
                     playback.Start();
                     stopwatch.Start();
+                    delayStopwatch.Start();
 
-                    afterStart?.Invoke(playback);
+                    delays[0] = Measure(() => afterStart?.Invoke(playback));
 
                     for (var i = 0; i < actions.Length; i++)
                     {
-                        while (stopwatch.ElapsedMilliseconds < actionTimes[i])
-                        {
-                        }
+                        WaitOperations.WaitPrecisely(actions[i].PeriodMs);
 
-                        actions[i].Action(playback);
+                        delays[actionTimes[i]] = Measure(() => actions[i].Action(playback));
                         actionsExecutedCount++;
                     }
 
@@ -182,6 +184,14 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                         actions.Length,
                         actionsExecutedCount,
                         $"{labelString}Invalid number of actions executed.");
+
+                    foreach (var delay in delays.OrderBy(d => d.Key))
+                    {
+                        foreach (var expectedReceivedEvent in expectedReceivedEvents.Where(e => (int)e.Time.TotalMilliseconds >= delay.Key))
+                        {
+                            expectedReceivedEvent.DelayMs += delay.Value;
+                        }
+                    }
 
                     SendReceiveUtilities.CheckReceivedEvents(
                         receivedEvents,
