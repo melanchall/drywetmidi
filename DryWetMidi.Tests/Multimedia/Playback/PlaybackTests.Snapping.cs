@@ -459,7 +459,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 expectedReceivedEvents: new[]
                 {
                     new SentReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
-                    new SentReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(750)),
+                    new SentReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(350)),
                 });
         }
 
