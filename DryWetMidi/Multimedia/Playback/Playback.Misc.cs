@@ -810,7 +810,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         [Conditional("TEST")]
         private void TraceAction(string description)
         {
-            ActionsTracer?.TraceAction(_clock.CurrentTime, description);
+            ActionsTracer?.TraceAction(_clock?.CurrentTime ?? TimeSpan.Zero, description);
         }
 
         private void InterruptActiveNotes()
