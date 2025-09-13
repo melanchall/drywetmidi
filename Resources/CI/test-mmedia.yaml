@@ -110,5 +110,5 @@ stages:
       displayName: Publish 'PlaybackTraces' artifact
       condition: failed()
       inputs:
-        targetPath: $(Agent.TempDirectory)\PlaybackTraces
+        targetPath: $(Agent.TempDirectory)/PlaybackTraces
         artifact: PlaybackTraces
