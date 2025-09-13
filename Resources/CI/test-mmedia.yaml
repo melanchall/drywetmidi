@@ -102,6 +102,12 @@ stages:
       inputs:
         command: 'test'
         projects: 'DryWetMidi.Tests/Melanchall.DryWetMidi.Tests.csproj'
-        arguments: '--blame --no-build --configuration $(TestBuildConfiguration) --filter (FullyQualifiedName~.Multimedia) --framework $(Tfm) --verbosity normal --diag diagnostic.log --logger "console;verbosity=normal"'
+        arguments: '--blame --no-build --configuration $(TestBuildConfiguration) --filter (FullyQualifiedName~.Snapping_MoveToFirstSnapPoint_1) --framework $(Tfm) --verbosity normal --diag diagnostic.log --logger "console;verbosity=normal"'
         
     - template: Templates/step-collect-logs.yaml
+    
+    - task: PublishPipelineArtifact@1
+      displayName: Publish 'PlaybackTraces' artifact
+      inputs:
+        targetPath: $(Agent.TempDirectory)\PlaybackTraces
+        artifact: PlaybackTraces

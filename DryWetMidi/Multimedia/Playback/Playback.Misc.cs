@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
@@ -396,6 +397,10 @@ namespace Melanchall.DryWetMidi.Multimedia
             }
         }
 
+#if TEST
+        internal PlaybackActionsTracer ActionsTracer { get; set; } = new PlaybackActionsTracer();
+#endif
+
         #endregion
 
         #region Methods
@@ -465,6 +470,8 @@ namespace Melanchall.DryWetMidi.Multimedia
             if (_clock.IsRunning)
                 return;
 
+            TraceAction("start...");
+
             if (!_hasBeenStarted && PlaybackStart != null && _clock.CurrentTime < _playbackStartMetric)
                 MoveToStart();
 
@@ -478,6 +485,8 @@ namespace Melanchall.DryWetMidi.Multimedia
 
             _hasBeenStarted = true;
             OnStarted();
+
+            TraceAction("started");
         }
 
         /// <summary>
@@ -752,6 +761,12 @@ namespace Melanchall.DryWetMidi.Multimedia
             return Enumerable.Empty<TimedEvent>();
         }
 
+        [Conditional("TEST")]
+        private void TraceAction(string description)
+        {
+            ActionsTracer?.TraceAction(_clock.CurrentTime, description);
+        }
+
         private void InterruptActiveNotes()
         {
             if (!InterruptNotesOnStop)
@@ -991,6 +1006,8 @@ namespace Melanchall.DryWetMidi.Multimedia
 
             lock (_playbackLockObject)
             {
+                TraceAction("move to time...");
+
                 var isRunning = IsRunning;
 
                 SetStartTime(time);
@@ -1001,6 +1018,8 @@ namespace Melanchall.DryWetMidi.Multimedia
                     StopStartNotes();
                     _clock?.Start();
                 }
+
+                TraceAction("moved to time");
             }
         }
 

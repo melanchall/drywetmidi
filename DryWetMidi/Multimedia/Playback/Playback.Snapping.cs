@@ -143,6 +143,8 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         private SnapPoint AddSnapPoint(ITimeSpan time, Func<TimeSpan, SnapPoint> createSnapPoint)
         {
+            TraceAction("add snap point...");
+
             TimeSpan metricTime = TimeConverter.ConvertTo<MetricTimeSpan>(time, TempoMap);
             if (metricTime == TimeSpan.Zero)
                 metricTime = new TimeSpan(1);
@@ -150,6 +152,9 @@ namespace Melanchall.DryWetMidi.Multimedia
             var snapPoint = createSnapPoint(metricTime);
 
             _snapPoints.Add(snapPoint.Time, snapPoint);
+
+            TraceAction("added snap point");
+
             return snapPoint;
         }
 

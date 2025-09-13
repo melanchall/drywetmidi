@@ -9,6 +9,7 @@ using NUnit.Framework;
 using Melanchall.DryWetMidi.Tests.Common;
 using System.Diagnostics;
 using NUnit.Framework.Legacy;
+using System.IO;
 
 namespace Melanchall.DryWetMidi.Tests.Multimedia
 {
@@ -163,6 +164,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     playback.Start();
                     stopwatch.Start();
                     delayStopwatch.Start();
+                    playback.ActionsTracer.StartTracing();
 
                     delays[0] = Measure(() => afterStart?.Invoke(playback));
 
@@ -192,6 +194,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                             expectedReceivedEvent.DelayMs += delay.Value;
                         }
                     }
+
+                    SavePlaybackActionsTrace(playback.ActionsTracer);
 
                     SendReceiveUtilities.CheckReceivedEvents(
                         receivedEvents,
@@ -270,6 +274,21 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         private static TimeSpan ApplySpeedToTimeSpan(TimeSpan timeSpan, double speed)
         {
             return timeSpan.DivideBy(speed);
+        }
+
+        private static void SavePlaybackActionsTrace(PlaybackActionsTracer actionsTracer)
+        {
+            var agentTempDirectory = Environment.GetEnvironmentVariable("AGENT_TEMPDIRECTORY");
+            var tempPath = string.IsNullOrWhiteSpace(agentTempDirectory) ? Path.GetTempPath() : agentTempDirectory;
+            
+            var tracesDirectoryPath = Path.Combine(tempPath, "PlaybackTraces");
+            if (!Directory.Exists(tracesDirectoryPath))
+                Directory.CreateDirectory(tracesDirectoryPath);
+
+            var testName = TestContext.CurrentContext.Test.Name;
+            var filePath = Path.Combine(tracesDirectoryPath, $"{testName}.log");
+
+            File.WriteAllLines(filePath, actionsTracer.GetTraces());
         }
 
         #endregion
