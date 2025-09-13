@@ -196,17 +196,23 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                         }
                     }
 
-                    SavePlaybackActionsTrace(playback.ActionsTracer);
+                    try
+                    {
+                        SendReceiveUtilities.CheckReceivedEvents(
+                            receivedEvents,
+                            expectedReceivedEvents.ToList(),
+                            sendReceiveTimeDelta: sendReceiveTimeDelta ?? (useOutputDevice
+                                ? SendReceiveUtilities.MaximumEventSendReceiveDelay
+                                : TimeSpan.FromMilliseconds(20)),
+                            label);
 
-                    SendReceiveUtilities.CheckReceivedEvents(
-                        receivedEvents,
-                        expectedReceivedEvents.ToList(),
-                        sendReceiveTimeDelta: sendReceiveTimeDelta ?? (useOutputDevice
-                            ? SendReceiveUtilities.MaximumEventSendReceiveDelay
-                            : TimeSpan.FromMilliseconds(20)),
-                        label);
-
-                    additionalChecks?.Invoke(playback, receivedEvents);
+                        additionalChecks?.Invoke(playback, receivedEvents);
+                    }
+                    catch
+                    {
+                        SavePlaybackActionsTrace(playback.ActionsTracer);
+                        throw;
+                    }
                 }
             }
         }
@@ -286,8 +292,15 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             if (!Directory.Exists(tracesDirectoryPath))
                 Directory.CreateDirectory(tracesDirectoryPath);
 
-            var testName = TestContext.CurrentContext.Test.Name;
-            var filePath = Path.Combine(tracesDirectoryPath, $"{testName}.log");
+            var fileName = TestContext.CurrentContext.Test.Name;
+            if (fileName.StartsWith(nameof(CheckFilePlayback)))
+            {
+                var index = fileName.IndexOf("MIDI files", StringComparison.OrdinalIgnoreCase);
+                var testFileName = fileName.Substring(index);
+                fileName = $"{nameof(CheckFilePlayback)}({testFileName.Replace('/', '_').Replace('\\', '_')})";
+            }
+
+            var filePath = Path.Combine(tracesDirectoryPath, $"{fileName}.log");
 
             File.WriteAllLines(filePath, actionsTracer.GetTraces());
         }

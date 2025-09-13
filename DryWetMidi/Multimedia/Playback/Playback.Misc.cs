@@ -785,11 +785,9 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <returns><c>true</c> if <paramref name="midiEvent"/> was played; otherwise, <c>false</c>.</returns>
         protected virtual bool TryPlayEvent(MidiEvent midiEvent, object metadata)
         {
-            TraceAction($"try to play event '{midiEvent}'...");
-
             OutputDevice?.SendEvent(midiEvent);
 
-            TraceAction("successfully tried to play event");
+            TraceAction($"played event '{midiEvent}'");
             return true;
         }
 

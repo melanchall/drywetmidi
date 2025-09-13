@@ -108,6 +108,7 @@ stages:
     
     - task: PublishPipelineArtifact@1
       displayName: Publish 'PlaybackTraces' artifact
+      condition: failed()
       inputs:
         targetPath: $(Agent.TempDirectory)\PlaybackTraces
         artifact: PlaybackTraces
