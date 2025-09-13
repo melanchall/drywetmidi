@@ -301,6 +301,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             }
 
             var filePath = Path.Combine(tracesDirectoryPath, $"{fileName}.log");
+            Console.WriteLine($"Saving playback actions trace to '{filePath}'...");
 
             File.WriteAllLines(filePath, actionsTracer.GetTraces());
         }
