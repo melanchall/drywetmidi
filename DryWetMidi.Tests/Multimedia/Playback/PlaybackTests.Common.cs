@@ -163,8 +163,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
                     playback.Start();
                     stopwatch.Start();
+                    playback.ActionsTracer.TraceAction(playback.GetCurrentTime<MetricTimeSpan>(), "test stopwatch started");
+                    
                     delayStopwatch.Start();
-                    playback.ActionsTracer.StartTracing();
 
                     delays[0] = Measure(() => afterStart?.Invoke(playback));
 

@@ -39,15 +39,10 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         #region Methods
 
-        public void StartTracing()
-        {
-            _stopwatch.Start();
-        }
-
         public void TraceAction(TimeSpan playbackTime, string action)
         {
-            if (!_stopwatch.IsRunning)
-                return;
+            if (_stopwatch.IsRunning)
+                _stopwatch.Start();
 
             _actions.Add(new Action(_stopwatch.Elapsed, playbackTime, action));
         }

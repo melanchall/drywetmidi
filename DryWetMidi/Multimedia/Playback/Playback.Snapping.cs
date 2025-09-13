@@ -43,7 +43,13 @@ namespace Melanchall.DryWetMidi.Multimedia
         {
             ThrowIfArgument.IsNull(nameof(time), time);
 
-            return (SnapPoint<TData>)AddSnapPoint(time, metricTime => new SnapPoint<TData>(metricTime, data));
+            TraceAction("add snap point by time and data...");
+
+            var result = (SnapPoint<TData>)AddSnapPoint(time, metricTime => new SnapPoint<TData>(metricTime, data));
+
+            TraceAction("added snap point by time and data");
+
+            return result;
         }
 
         /// <summary>
@@ -57,7 +63,13 @@ namespace Melanchall.DryWetMidi.Multimedia
         {
             ThrowIfArgument.IsNull(nameof(time), time);
 
-            return AddSnapPoint(time, metricTime => new SnapPoint(metricTime));
+            TraceAction("add snap point by time...");
+
+            var result = AddSnapPoint(time, metricTime => new SnapPoint(metricTime));
+
+            TraceAction("added snap point by time");
+
+            return result;
         }
 
         /// <summary>
@@ -69,8 +81,12 @@ namespace Melanchall.DryWetMidi.Multimedia
         {
             ThrowIfArgument.IsNull(nameof(snapPoint), snapPoint);
 
+            TraceAction("remove snap point...");
+
             var node = _snapPoints.GetCoordinate(snapPoint.Time, snapPoint);
             _snapPoints.Remove(node);
+
+            TraceAction("removed snap point");
         }
 
         /// <summary>
@@ -83,7 +99,11 @@ namespace Melanchall.DryWetMidi.Multimedia
         {
             ThrowIfArgument.IsNull(nameof(snapPointsGroup), snapPointsGroup);
 
+            TraceAction("remove snap points group...");
+
             _snapPointsGroups.Remove(snapPointsGroup);
+
+            TraceAction("removed snap points group");
         }
 
         /// <summary>
@@ -97,6 +117,8 @@ namespace Melanchall.DryWetMidi.Multimedia
         {
             ThrowIfArgument.IsNull(nameof(predicate), predicate);
 
+            TraceAction("remove snap points by data...");
+
             var node = _snapPoints.GetMinimumCoordinate();
 
             while (node != null)
@@ -109,6 +131,8 @@ namespace Melanchall.DryWetMidi.Multimedia
 
                 node = nextNode;
             }
+
+            TraceAction("removed snap points by data");
         }
 
         /// <summary>
@@ -116,8 +140,12 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// </summary>
         public void RemoveAllSnapPoints()
         {
+            TraceAction("remove all snap points...");
+
             _snapPoints.Clear();
             _snapPointsGroups.Clear();
+
+            TraceAction("removed all snap points");
         }
 
         /// <summary>
@@ -136,15 +164,18 @@ namespace Melanchall.DryWetMidi.Multimedia
         {
             ThrowIfArgument.IsNull(nameof(predicate), predicate);
 
+            TraceAction("snap to events...");
+
             var snapPointsGroup = new SnapPointsGroup(predicate);
             _snapPointsGroups.Add(snapPointsGroup);
+
+            TraceAction("snapped to events");
+
             return snapPointsGroup;
         }
 
         private SnapPoint AddSnapPoint(ITimeSpan time, Func<TimeSpan, SnapPoint> createSnapPoint)
         {
-            TraceAction("add snap point...");
-
             TimeSpan metricTime = TimeConverter.ConvertTo<MetricTimeSpan>(time, TempoMap);
             if (metricTime == TimeSpan.Zero)
                 metricTime = new TimeSpan(1);
@@ -152,9 +183,6 @@ namespace Melanchall.DryWetMidi.Multimedia
             var snapPoint = createSnapPoint(metricTime);
 
             _snapPoints.Add(snapPoint.Time, snapPoint);
-
-            TraceAction("added snap point");
-
             return snapPoint;
         }
 

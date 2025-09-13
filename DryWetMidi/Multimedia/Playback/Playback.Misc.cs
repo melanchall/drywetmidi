@@ -127,6 +127,8 @@ namespace Melanchall.DryWetMidi.Multimedia
             ThrowIfArgument.IsNull(nameof(timedObjects), timedObjects);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
+            TraceAction("creating...");
+
             playbackSettings = playbackSettings ?? new PlaybackSettings();
 
             TempoMap = tempoMap.Clone();
@@ -143,6 +145,8 @@ namespace Melanchall.DryWetMidi.Multimedia
                 playbackSettings.CalculateTempoMap,
                 playbackSettings.UseNoteEventsDirectly);
             UpdateDuration();
+
+            TraceAction("created");
         }
 
         /// <summary>
@@ -502,11 +506,15 @@ namespace Melanchall.DryWetMidi.Multimedia
             if (!IsRunning)
                 return;
 
+            TraceAction("stop...");
+
             _clock.Stop();
 
             InterruptActiveNotes();
 
             OnStopped();
+
+            TraceAction("stopped");
         }
 
         /// <summary>
@@ -522,6 +530,8 @@ namespace Melanchall.DryWetMidi.Multimedia
         {
             ThrowIfArgument.IsNull(nameof(snapPoint), snapPoint);
             EnsureIsNotDisposed();
+
+            TraceAction("move to snap point by point...");
 
             if (!snapPoint.IsEnabled)
                 return false;
@@ -540,6 +550,8 @@ namespace Melanchall.DryWetMidi.Multimedia
         {
             EnsureIsNotDisposed();
 
+            TraceAction("move to first snap point...");
+
             var snapPoint = GetNextSnapPoint(TimeSpan.Zero);
             return TryToMoveToSnapPoint(snapPoint);
         }
@@ -555,6 +567,8 @@ namespace Melanchall.DryWetMidi.Multimedia
         public bool MoveToFirstSnapPoint<TData>(TData data)
         {
             EnsureIsNotDisposed();
+
+            TraceAction("move to first snap point by data...");
 
             var snapPoint = GetNextSnapPoint(TimeSpan.Zero, data);
             return TryToMoveToSnapPoint(snapPoint);
@@ -576,6 +590,8 @@ namespace Melanchall.DryWetMidi.Multimedia
             ThrowIfArgument.IsNull(nameof(snapPointsGroup), snapPointsGroup);
             EnsureIsNotDisposed();
 
+            TraceAction("move to previous snap point by group...");
+
             var snapPoint = GetPreviousSnapPoint(_clock.CurrentTime, snapPointsGroup);
             return TryToMoveToSnapPoint(snapPoint);
         }
@@ -591,6 +607,8 @@ namespace Melanchall.DryWetMidi.Multimedia
         public bool MoveToPreviousSnapPoint()
         {
             EnsureIsNotDisposed();
+
+            TraceAction("move to previous snap point...");
 
             var snapPoint = GetPreviousSnapPoint(_clock.CurrentTime);
             return TryToMoveToSnapPoint(snapPoint);
@@ -608,6 +626,8 @@ namespace Melanchall.DryWetMidi.Multimedia
         public bool MoveToPreviousSnapPoint<TData>(TData data)
         {
             EnsureIsNotDisposed();
+
+            TraceAction("move to previous snap point by data...");
 
             var snapPoint = GetPreviousSnapPoint(_clock.CurrentTime, data);
             return TryToMoveToSnapPoint(snapPoint);
@@ -629,6 +649,8 @@ namespace Melanchall.DryWetMidi.Multimedia
             ThrowIfArgument.IsNull(nameof(snapPointsGroup), snapPointsGroup);
             EnsureIsNotDisposed();
 
+            TraceAction("move to next snap point by group...");
+
             var snapPoint = GetNextSnapPoint(_clock.CurrentTime, snapPointsGroup);
             return TryToMoveToSnapPoint(snapPoint);
         }
@@ -644,6 +666,8 @@ namespace Melanchall.DryWetMidi.Multimedia
         public bool MoveToNextSnapPoint()
         {
             EnsureIsNotDisposed();
+
+            TraceAction("move to next snap point...");
 
             var snapPoint = GetNextSnapPoint(_clock.CurrentTime);
             return TryToMoveToSnapPoint(snapPoint);
@@ -661,6 +685,8 @@ namespace Melanchall.DryWetMidi.Multimedia
         {
             EnsureIsNotDisposed();
 
+            TraceAction("move to next snap point by data...");
+
             var snapPoint = GetNextSnapPoint(_clock.CurrentTime, data);
             return TryToMoveToSnapPoint(snapPoint);
         }
@@ -674,7 +700,11 @@ namespace Melanchall.DryWetMidi.Multimedia
         {
             EnsureIsNotDisposed();
 
+            TraceAction("move to start...");
+
             MoveToTime(PlaybackStart ?? new MetricTimeSpan());
+
+            TraceAction("moved to start");
         }
 
         /// <summary>
@@ -686,7 +716,11 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <exception cref="MidiDeviceException">An error occurred on device.</exception>
         public void MoveToTime(ITimeSpan time)
         {
+            TraceAction("move to time...");
+
             MoveToTimeInternal(time);
+
+            TraceAction("moved to time...");
         }
 
         /// <summary>
@@ -701,8 +735,12 @@ namespace Melanchall.DryWetMidi.Multimedia
             ThrowIfArgument.IsNull(nameof(step), step);
             EnsureIsNotDisposed();
 
+            TraceAction("move forward...");
+
             var currentTime = (MetricTimeSpan)_clock.CurrentTime;
             MoveToTimeInternal(currentTime.Add(step, TimeSpanMode.TimeLength));
+
+            TraceAction("moved forward");
         }
 
         /// <summary>
@@ -717,6 +755,8 @@ namespace Melanchall.DryWetMidi.Multimedia
             ThrowIfArgument.IsNull(nameof(step), step);
             EnsureIsNotDisposed();
 
+            TraceAction("move back...");
+
             var currentTime = (MetricTimeSpan)_clock.CurrentTime;
             var metricStep = TimeConverter.ConvertTo<MetricTimeSpan>(step, TempoMap);
 
@@ -728,6 +768,8 @@ namespace Melanchall.DryWetMidi.Multimedia
                 time = _playbackStartMetric;
 
             MoveToTimeInternal(time);
+
+            TraceAction("moved back");
         }
 
         /// <summary>
@@ -743,7 +785,11 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <returns><c>true</c> if <paramref name="midiEvent"/> was played; otherwise, <c>false</c>.</returns>
         protected virtual bool TryPlayEvent(MidiEvent midiEvent, object metadata)
         {
+            TraceAction($"try to play event '{midiEvent}'...");
+
             OutputDevice?.SendEvent(midiEvent);
+
+            TraceAction("successfully tried to play event");
             return true;
         }
 
@@ -817,13 +863,20 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         private bool TryToMoveToSnapPoint(SnapPoint snapPoint)
         {
+            TraceAction("try to move to snap point...");
+
             if (snapPoint == null ||
                 snapPoint.Time < _playbackStartMetric ||
                 snapPoint.Time > _playbackEndMetric ||
                 snapPoint.Time > _duration)
+            {
+                TraceAction("not moved to snap point; conditions violated");
                 return false;
+            }
 
             MoveToTime((MetricTimeSpan)snapPoint.Time);
+
+            TraceAction("successfully tried to move to snap point");
             return true;
         }
 
@@ -1006,7 +1059,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
             lock (_playbackLockObject)
             {
-                TraceAction("move to time...");
+                TraceAction("move to time internally...");
 
                 var isRunning = IsRunning;
 
@@ -1019,7 +1072,7 @@ namespace Melanchall.DryWetMidi.Multimedia
                     _clock?.Start();
                 }
 
-                TraceAction("moved to time");
+                TraceAction("moved to time internally");
             }
         }
 
