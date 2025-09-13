@@ -41,14 +41,14 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         public void TraceAction(TimeSpan playbackTime, string action)
         {
-            if (_stopwatch.IsRunning)
+            if (!_stopwatch.IsRunning)
                 _stopwatch.Start();
 
             _actions.Add(new Action(_stopwatch.Elapsed, playbackTime, action));
         }
 
         public ICollection<string> GetTraces() => _actions
-            .Select(a => $"t = {a.Timestamp}, p = {a.PlaybackTime}: {a.Description}")
+            .Select(a => $"{a.Timestamp} -> {a.PlaybackTime}: {a.Description}")
             .ToArray();
 
         #endregion

@@ -188,12 +188,20 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         private SnapPoint GetNextSnapPoint(TimeSpan time, SnapPointsGroup snapPointsGroup)
         {
-            if (!snapPointsGroup.IsEnabled)
-                return null;
+            TraceAction("get next snap point from group...");
 
-            return _playbackSource.GetNextSnapPoint(
+            if (!snapPointsGroup.IsEnabled)
+            {
+                TraceAction("group is disabled; snap point was not got");
+                return null;
+            }
+
+            var result = _playbackSource.GetNextSnapPoint(
                 time,
                 e => snapPointsGroup.Predicate(e.Event) ? new SnapPoint(e.Time) : null);
+
+            TraceAction("got next snap point from group");
+            return result;
         }
 
         private SnapPoint GetNextSnapPoint(TimeSpan time)
@@ -208,6 +216,8 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         private SnapPoint GetNextSnapPoint(TimeSpan time, Predicate<SnapPoint> predicate)
         {
+            TraceAction("get next snap point...");
+
             var snapPointNode = _snapPoints.GetFirstCoordinateAboveThreshold(time);
 
             while (snapPointNode != null)
@@ -234,20 +244,32 @@ namespace Melanchall.DryWetMidi.Multimedia
                     });
 
                 if (snapPoint != null)
+                {
+                    TraceAction("got next snap point from group");
                     return snapPoint;
+                }
             }
 
+            TraceAction("got next snap point");
             return snapPointNode?.Value;
         }
 
         private SnapPoint GetPreviousSnapPoint(TimeSpan time, SnapPointsGroup snapPointsGroup)
         {
-            if (!snapPointsGroup.IsEnabled)
-                return null;
+            TraceAction("get previous snap point from group...");
 
-            return _playbackSource.GetPreviousSnapPoint(
+            if (!snapPointsGroup.IsEnabled)
+            {
+                TraceAction("group is disabled; snap point was not got");
+                return null;
+            }
+
+            var result = _playbackSource.GetPreviousSnapPoint(
                 time,
                 e => snapPointsGroup.Predicate(e.Event) ? new SnapPoint(e.Time) : null);
+
+            TraceAction("got previous snap point from group");
+            return result;
         }
 
         private SnapPoint GetPreviousSnapPoint(TimeSpan time)
@@ -262,6 +284,8 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         private SnapPoint GetPreviousSnapPoint(TimeSpan time, Predicate<SnapPoint> predicate)
         {
+            TraceAction("get previous snap point...");
+
             var snapPointNode = _snapPoints.GetLastCoordinateBelowThreshold(time);
 
             while (snapPointNode != null)
@@ -288,9 +312,13 @@ namespace Melanchall.DryWetMidi.Multimedia
                     });
 
                 if (snapPoint != null)
+                {
+                    TraceAction("got previous snap point from group");
                     return snapPoint;
+                }
             }
 
+            TraceAction("got previous snap point");
             return snapPointNode?.Value;
         }
 
