@@ -286,6 +286,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         private static void SavePlaybackActionsTrace(PlaybackActionsTracer actionsTracer)
         {
             var agentTempDirectory = Environment.GetEnvironmentVariable("AGENT_TEMPDIRECTORY");
+            Console.WriteLine($"AGENT_TEMPDIRECTORY = '{agentTempDirectory}'");
+
+            var artifactsStagingDirectory = Environment.GetEnvironmentVariable("BUILD_ARTIFACTSTAGINGDIRECTORY");
+            Console.WriteLine($"BUILD_ARTIFACTSTAGINGDIRECTORY = '{artifactsStagingDirectory}'");
+
             var tempPath = string.IsNullOrWhiteSpace(agentTempDirectory) ? Path.GetTempPath() : agentTempDirectory;
             
             var tracesDirectoryPath = Path.Combine(tempPath, "PlaybackTraces");
