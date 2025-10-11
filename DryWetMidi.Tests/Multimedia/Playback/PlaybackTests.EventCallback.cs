@@ -1,10 +1,12 @@
-﻿using System;
-using Melanchall.DryWetMidi.Common;
-using Melanchall.DryWetMidi.Multimedia;
+﻿using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
-using NUnit.Framework;
 using Melanchall.DryWetMidi.Interaction;
+using Melanchall.DryWetMidi.Multimedia;
+using NUnit.Framework;
+using NUnit.Framework.Legacy;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Melanchall.DryWetMidi.Tests.Multimedia
 {
@@ -23,6 +25,46 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         #endregion
 
         #region Test methods
+
+        [Retry(RetriesNumber)]
+        [Test]
+        public void EventCallback_ThrowException()
+        {
+            var errorOccurredData = new List<PlaybackErrorOccurredEventArgs>();
+            var errorMessage = "FAIL!";
+
+            CheckEventCallback(
+                initialPlaybackObjects: new[]
+                {
+                    new TimedEvent(new ProgramChangeEvent((SevenBitNumber)33)).SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(200), TempoMap),
+                    new TimedEvent(new TextEvent("A")).SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(400), TempoMap),
+                },
+                initialEventCallback: (e, rt, t) => null,
+                actions: Array.Empty<PlaybackAction>(),
+                expectedReceivedEvents: new[]
+                {
+                    new SentReceivedEvent(new ProgramChangeEvent((SevenBitNumber)33), TimeSpan.FromMilliseconds(200)),
+                    new SentReceivedEvent(new TextEvent("A"), TimeSpan.FromMilliseconds(400)),
+                },
+                setupPlayback: playback =>
+                {
+                    errorOccurredData.Clear();
+
+                    playback.EventCallback = (e, rt, t) => throw new InvalidOperationException(errorMessage);
+                    playback.ErrorOccurred += (s, e) => errorOccurredData.Add(e);
+                },
+                additionalChecks: (p, e) =>
+                {
+                    ClassicAssert.AreEqual(2, errorOccurredData.Count, "Invalid number of errors.");
+
+                    foreach (var errorData in errorOccurredData)
+                    {
+                        ClassicAssert.AreEqual(PlaybackSite.EventCallback, errorData.Site, "Invalid site.");
+                        ClassicAssert.IsInstanceOf<InvalidOperationException>(errorData.Exception, "Invalid exception type.");
+                        ClassicAssert.AreEqual(errorMessage, errorData.Exception.Message, "Invalid exception message.");
+                    }
+                });
+        }
 
         [Retry(RetriesNumber)]
         [Test]
@@ -146,14 +188,21 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             ICollection<ITimedObject> initialPlaybackObjects,
             EventCallback initialEventCallback,
             PlaybackAction[] actions,
-            ICollection<SentReceivedEvent> expectedReceivedEvents)
+            ICollection<SentReceivedEvent> expectedReceivedEvents,
+            Action<Playback> setupPlayback = null,
+            Action<Playback, ICollection<SentReceivedEvent>> additionalChecks = null)
         {
             CheckPlayback(
                 useOutputDevice: false,
                 initialPlaybackObjects: initialPlaybackObjects,
                 actions: actions,
                 expectedReceivedEvents: expectedReceivedEvents,
-                setupPlayback: playback => playback.EventCallback = initialEventCallback);
+                setupPlayback: playback =>
+                {
+                    playback.EventCallback = initialEventCallback;
+                    setupPlayback?.Invoke(playback);
+                },
+                additionalChecks: additionalChecks);
         }
 
         #endregion

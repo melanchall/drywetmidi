@@ -7,8 +7,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
-using System.Reflection;
-using System.Threading;
 using NotePlaybackEventMetadataCollection = Melanchall.DryWetMidi.Common.IntervalTree<System.TimeSpan, Melanchall.DryWetMidi.Multimedia.NotePlaybackEventMetadata>;
 
 namespace Melanchall.DryWetMidi.Multimedia
@@ -73,9 +71,9 @@ namespace Melanchall.DryWetMidi.Multimedia
         public event EventHandler<MidiEventPlayedEventArgs> EventPlayed;
 
         /// <summary>
-        /// Occurs when an error got from output device.
+        /// Occurs when an error happened.
         /// </summary>
-        public event EventHandler<ErrorOccurredEventArgs> DeviceErrorOccurred;
+        public event EventHandler<PlaybackErrorOccurredEventArgs> ErrorOccurred;
 
         #endregion
 
@@ -958,44 +956,108 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         private void OnStarted()
         {
-            Started?.Invoke(this, EventArgs.Empty);
+            HandleEvent(Started, PlaybackSite.Started);
         }
 
         private void OnStopped()
         {
-            Stopped?.Invoke(this, EventArgs.Empty);
+            HandleEvent(Stopped, PlaybackSite.Stopped);
         }
 
         private void OnFinished()
         {
-            Finished?.Invoke(this, EventArgs.Empty);
+            HandleEvent(Finished, PlaybackSite.Finished);
         }
 
         private void OnRepeatStarted()
         {
-            RepeatStarted?.Invoke(this, EventArgs.Empty);
+            HandleEvent(RepeatStarted, PlaybackSite.RepeatStarted);
         }
 
         private void OnNotesPlaybackStarted(Note[] notes, Note[] originalNotes)
         {
-            if (notes.Any())
-                NotesPlaybackStarted?.Invoke(this, new NotesEventArgs(notes, originalNotes));
+            if (!notes.Any())
+                return;
+
+            HandleEvent(
+                NotesPlaybackStarted,
+                PlaybackSite.NotesPlaybackStarted,
+                new NotesEventArgs(notes, originalNotes));
         }
 
         private void OnNotesPlaybackFinished(Note[] notes, Note[] originalNotes)
         {
-            if (notes.Any())
-                NotesPlaybackFinished?.Invoke(this, new NotesEventArgs(notes, originalNotes));
+            if (!notes.Any())
+                return;
+
+            HandleEvent(
+                NotesPlaybackFinished,
+                PlaybackSite.NotesPlaybackFinished,
+                new NotesEventArgs(notes, originalNotes));
         }
 
         private void OnEventPlayed(MidiEvent midiEvent, object metadata)
         {
-            EventPlayed?.Invoke(this, new MidiEventPlayedEventArgs(midiEvent, metadata));
+            HandleEvent(
+                EventPlayed,
+                PlaybackSite.EventPlayed,
+                new MidiEventPlayedEventArgs(midiEvent, metadata));
         }
 
-        private void OnDeviceErrorOccurred(Exception exception)
+        private void OnErrorOccurred(PlaybackSite site, Exception exception)
         {
-            DeviceErrorOccurred?.Invoke(this, new ErrorOccurredEventArgs(exception));
+            var eventHandler = ErrorOccurred;
+            if (eventHandler == null)
+                return;
+
+            var eventArgs = new PlaybackErrorOccurredEventArgs(site, exception);
+
+            foreach (EventHandler<PlaybackErrorOccurredEventArgs> handler in eventHandler.GetInvocationList())
+            {
+                try
+                {
+                    handler?.Invoke(this, eventArgs);
+                }
+                catch
+                {
+                }
+            }
+        }
+
+        private void HandleEvent(EventHandler eventHandler, PlaybackSite site)
+        {
+            if (eventHandler == null)
+                return;
+
+            foreach (EventHandler handler in eventHandler.GetInvocationList())
+            {
+                try
+                {
+                    handler?.Invoke(this, EventArgs.Empty);
+                }
+                catch (Exception ex)
+                {
+                    OnErrorOccurred(site, ex);
+                }
+            }
+        }
+
+        private void HandleEvent<T>(EventHandler<T> eventHandler, PlaybackSite site, T eventArgs)
+        {
+            if (eventHandler == null)
+                return;
+
+            foreach (EventHandler<T> handler in eventHandler.GetInvocationList())
+            {
+                try
+                {
+                    handler?.Invoke(this, eventArgs);
+                }
+                catch (Exception ex)
+                {
+                    OnErrorOccurred(site, ex);
+                }
+            }
         }
 
         private async void OnClockTicked(object sender, EventArgs e)
@@ -1054,7 +1116,16 @@ namespace Melanchall.DryWetMidi.Multimedia
 
                         var eventCallback = EventCallback;
                         if (eventCallback != null)
-                            midiEvent = eventCallback(midiEvent.Clone(), playbackEvent.RawTime, time);
+                        {
+                            try
+                            {
+                                midiEvent = eventCallback(midiEvent.Clone(), playbackEvent.RawTime, time);
+                            }
+                            catch (Exception ex)
+                            {
+                                OnErrorOccurred(PlaybackSite.EventCallback, ex);
+                            }
+                        }
 
                         if (midiEvent == null)
                             continue;
@@ -1086,7 +1157,10 @@ namespace Melanchall.DryWetMidi.Multimedia
                     _clock.Start();
                     OnRepeatStarted();
                 }
-                // TODO: catch and store errors
+                catch (Exception ex)
+                {
+                    OnErrorOccurred(PlaybackSite.Tick, ex);
+                }
                 finally
                 {
                     _tickHandling = false;
@@ -1168,7 +1242,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             }
             catch (Exception e)
             {
-                OnDeviceErrorOccurred(e);
+                OnErrorOccurred(PlaybackSite.PlayEvent, e);
             }
         }
 
@@ -1216,13 +1290,24 @@ namespace Melanchall.DryWetMidi.Multimedia
             if (noteMetadata == null)
                 return false;
 
-            var notePlaybackData = noteMetadata.NotePlaybackData;
+            var notePlaybackData = noteMetadata.NotePlaybackData; // TODO: RawNotePlaybackData for NoteOn ???
+
+            // TODO: reset NotePlaybackData/IsCustomNotePlaybackDataSet
+            // TODO: check set NoteCallback to null during playback
+            // TODO: check set NoteCallback during playback, null on start
 
             var noteCallback = NoteCallback;
             if (noteCallback != null && isNoteOnEvent)
             {
-                notePlaybackData = noteCallback(noteMetadata.RawNotePlaybackData, noteMetadata.RawNote.Time, noteMetadata.RawNote.Length, time);
-                noteMetadata.SetCustomNotePlaybackData(notePlaybackData);
+                try
+                {
+                    notePlaybackData = noteCallback(noteMetadata.RawNotePlaybackData, noteMetadata.RawNote.Time, noteMetadata.RawNote.Length, time);
+                    noteMetadata.SetCustomNotePlaybackData(notePlaybackData);
+                }
+                catch (Exception e)
+                {
+                    OnErrorOccurred(PlaybackSite.NoteCallback, e);
+                }
             }
 
             originalNote = noteMetadata.RawNote;

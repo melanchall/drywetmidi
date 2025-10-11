@@ -65,6 +65,282 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
         [Retry(RetriesNumber)]
         [Test]
+        public void CheckPlaybackEvent_ThrowException_Started()
+        {
+            var errorOccurredData = new List<PlaybackErrorOccurredEventArgs>();
+            var errorMessage = "FAIL!";
+
+            var normalData = new List<string>();
+
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
+                {
+                    new TimedEvent(new ProgramChangeEvent((SevenBitNumber)33)).SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(200), TempoMap),
+                    new TimedEvent(new TextEvent("A")).SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(400), TempoMap),
+                },
+                actions: Array.Empty<PlaybackAction>(),
+                expectedReceivedEvents: new[]
+                {
+                    new SentReceivedEvent(new ProgramChangeEvent((SevenBitNumber)33), TimeSpan.FromMilliseconds(200)),
+                    new SentReceivedEvent(new TextEvent("A"), TimeSpan.FromMilliseconds(400)),
+                },
+                setupPlayback: playback =>
+                {
+                    errorOccurredData.Clear();
+                    normalData.Clear();
+
+                    playback.Started += (_, __) => throw new InvalidOperationException(errorMessage);
+                    playback.Started += (_, __) => normalData.Add("OK");
+                    playback.ErrorOccurred += (s, e) => errorOccurredData.Add(e);
+                },
+                additionalChecks: (p, e) =>
+                {
+                    CheckErrors(errorOccurredData, 1, PlaybackSite.Started, errorMessage);
+                    CollectionAssert.AreEqual(new[] { "OK" }, normalData, "Normal data is invalid.");
+                });
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
+        public void CheckPlaybackEvent_ThrowException_Stopped()
+        {
+            var errorOccurredData = new List<PlaybackErrorOccurredEventArgs>();
+            var errorMessage = "FAIL!";
+
+            var normalData = new List<string>();
+
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
+                {
+                    new TimedEvent(new ProgramChangeEvent((SevenBitNumber)33)).SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(200), TempoMap),
+                    new TimedEvent(new TextEvent("A")).SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(400), TempoMap),
+                },
+                actions: new[]
+                {
+                    new PlaybackAction(TimeSpan.FromMilliseconds(300), p =>
+                    {
+                        p.Stop();
+                        p.Start();
+                    })
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new SentReceivedEvent(new ProgramChangeEvent((SevenBitNumber)33), TimeSpan.FromMilliseconds(200)),
+                    new SentReceivedEvent(new TextEvent("A"), TimeSpan.FromMilliseconds(400)),
+                },
+                setupPlayback: playback =>
+                {
+                    errorOccurredData.Clear();
+                    normalData.Clear();
+
+                    playback.Stopped += (_, __) => throw new InvalidOperationException(errorMessage);
+                    playback.Stopped += (_, __) => normalData.Add("OK");
+                    playback.ErrorOccurred += (s, e) => errorOccurredData.Add(e);
+                },
+                additionalChecks: (p, e) =>
+                {
+                    CheckErrors(errorOccurredData, 1, PlaybackSite.Stopped, errorMessage);
+                    CollectionAssert.AreEqual(new[] { "OK" }, normalData, "Normal data is invalid.");
+                });
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
+        public void CheckPlaybackEvent_ThrowException_Finished()
+        {
+            var errorOccurredData = new List<PlaybackErrorOccurredEventArgs>();
+            var errorMessage = "FAIL!";
+
+            var normalData = new List<string>();
+
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
+                {
+                    new TimedEvent(new ProgramChangeEvent((SevenBitNumber)33)).SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(200), TempoMap),
+                    new TimedEvent(new TextEvent("A")).SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(400), TempoMap),
+                },
+                actions: Array.Empty<PlaybackAction>(),
+                expectedReceivedEvents: new[]
+                {
+                    new SentReceivedEvent(new ProgramChangeEvent((SevenBitNumber)33), TimeSpan.FromMilliseconds(200)),
+                    new SentReceivedEvent(new TextEvent("A"), TimeSpan.FromMilliseconds(400)),
+                },
+                setupPlayback: playback =>
+                {
+                    errorOccurredData.Clear();
+                    normalData.Clear();
+
+                    playback.Finished += (_, __) => throw new InvalidOperationException(errorMessage);
+                    playback.Finished += (_, __) => normalData.Add("OK");
+                    playback.ErrorOccurred += (s, e) => errorOccurredData.Add(e);
+                },
+                additionalChecks: (p, e) =>
+                {
+                    CheckErrors(errorOccurredData, 1, PlaybackSite.Finished, errorMessage);
+                    CollectionAssert.AreEqual(new[] { "OK" }, normalData, "Normal data is invalid.");
+                });
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
+        public void CheckPlaybackEvent_ThrowException_EventPlayed()
+        {
+            var errorOccurredData = new List<PlaybackErrorOccurredEventArgs>();
+            var errorMessage = "FAIL!";
+
+            var normalData = new List<string>();
+
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
+                {
+                    new TimedEvent(new ProgramChangeEvent((SevenBitNumber)33)).SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(200), TempoMap),
+                    new TimedEvent(new TextEvent("A")).SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(400), TempoMap),
+                },
+                actions: Array.Empty<PlaybackAction>(),
+                expectedReceivedEvents: new[]
+                {
+                    new SentReceivedEvent(new ProgramChangeEvent((SevenBitNumber)33), TimeSpan.FromMilliseconds(200)),
+                    new SentReceivedEvent(new TextEvent("A"), TimeSpan.FromMilliseconds(400)),
+                },
+                setupPlayback: playback =>
+                {
+                    errorOccurredData.Clear();
+                    normalData.Clear();
+
+                    playback.EventPlayed += (_, __) => throw new InvalidOperationException(errorMessage);
+                    playback.EventPlayed += (_, __) => normalData.Add("OK");
+                    playback.ErrorOccurred += (s, e) => errorOccurredData.Add(e);
+                },
+                additionalChecks: (p, e) =>
+                {
+                    CheckErrors(errorOccurredData, 2, PlaybackSite.EventPlayed, errorMessage);
+                    CollectionAssert.AreEqual(new[] { "OK", "OK" }, normalData, "Normal data is invalid.");
+                });
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
+        public void CheckPlaybackEvent_ThrowException_NotesPlaybackStarted()
+        {
+            var errorOccurredData = new List<PlaybackErrorOccurredEventArgs>();
+            var errorMessage = "FAIL!";
+
+            var normalData = new List<string>();
+
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
+                {
+                    new TimedEvent(new NoteOnEvent()).SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(0), TempoMap),
+                    new TimedEvent(new NoteOffEvent()).SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(300), TempoMap),
+                },
+                actions: Array.Empty<PlaybackAction>(),
+                expectedReceivedEvents: new[]
+                {
+                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(0)),
+                    new SentReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(300)),
+                },
+                setupPlayback: playback =>
+                {
+                    errorOccurredData.Clear();
+                    normalData.Clear();
+
+                    playback.NotesPlaybackStarted += (_, __) => throw new InvalidOperationException(errorMessage);
+                    playback.NotesPlaybackStarted += (_, __) => normalData.Add("OK");
+                    playback.ErrorOccurred += (s, e) => errorOccurredData.Add(e);
+                },
+                additionalChecks: (p, e) =>
+                {
+                    CheckErrors(errorOccurredData, 1, PlaybackSite.NotesPlaybackStarted, errorMessage);
+                    CollectionAssert.AreEqual(new[] { "OK" }, normalData, "Normal data is invalid.");
+                });
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
+        public void CheckPlaybackEvent_ThrowException_NotesPlaybackFinished()
+        {
+            var errorOccurredData = new List<PlaybackErrorOccurredEventArgs>();
+            var errorMessage = "FAIL!";
+
+            var normalData = new List<string>();
+
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
+                {
+                    new TimedEvent(new NoteOnEvent()).SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(0), TempoMap),
+                    new TimedEvent(new NoteOffEvent()).SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(300), TempoMap),
+                },
+                actions: Array.Empty<PlaybackAction>(),
+                expectedReceivedEvents: new[]
+                {
+                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(0)),
+                    new SentReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(300)),
+                },
+                setupPlayback: playback =>
+                {
+                    errorOccurredData.Clear();
+                    normalData.Clear();
+
+                    playback.NotesPlaybackFinished += (_, __) => throw new InvalidOperationException(errorMessage);
+                    playback.NotesPlaybackFinished += (_, __) => normalData.Add("OK");
+                    playback.ErrorOccurred += (s, e) => errorOccurredData.Add(e);
+                },
+                additionalChecks: (p, e) =>
+                {
+                    CheckErrors(errorOccurredData, 1, PlaybackSite.NotesPlaybackFinished, errorMessage);
+                    CollectionAssert.AreEqual(new[] { "OK" }, normalData, "Normal data is invalid.");
+                });
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
+        public void CheckPlaybackEvent_ThrowException_RepeatStarted()
+        {
+            var errorOccurredData = new List<PlaybackErrorOccurredEventArgs>();
+            var errorMessage = "FAIL!";
+
+            var normalData = new List<string>();
+
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
+                {
+                    new TimedEvent(new ProgramChangeEvent((SevenBitNumber)33)).SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(200), TempoMap),
+                    new TimedEvent(new TextEvent("A")).SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(400), TempoMap),
+                },
+                actions: Array.Empty<PlaybackAction>(),
+                expectedReceivedEvents: new[]
+                {
+                    new SentReceivedEvent(new ProgramChangeEvent((SevenBitNumber)33), TimeSpan.FromMilliseconds(200)),
+                    new SentReceivedEvent(new TextEvent("A"), TimeSpan.FromMilliseconds(400)),
+                    new SentReceivedEvent(new ProgramChangeEvent((SevenBitNumber)33), TimeSpan.FromMilliseconds(600)),
+                    new SentReceivedEvent(new TextEvent("A"), TimeSpan.FromMilliseconds(800)),
+                },
+                setupPlayback: playback =>
+                {
+                    errorOccurredData.Clear();
+                    normalData.Clear();
+
+                    playback.RepeatStarted += (_, __) => throw new InvalidOperationException(errorMessage);
+                    playback.RepeatStarted += (_, __) => normalData.Add("OK");
+                    playback.ErrorOccurred += (s, e) => errorOccurredData.Add(e);
+                },
+                additionalChecks: (p, e) =>
+                {
+                    CheckErrors(errorOccurredData, 1, PlaybackSite.RepeatStarted, errorMessage);
+                    CollectionAssert.AreEqual(new[] { "OK" }, normalData, "Normal data is invalid.");
+                },
+                repeatsCount: 1);
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
         public void CheckPlaybackEventsOrder_FromFile([Values(1, 10, 100)] int tailSize)
         {
             var midiFile = new MidiFile(
@@ -208,7 +484,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             {
                 Exception exception = null;
 
-                playback.DeviceErrorOccurred += (_, e) => exception = e.Exception;
+                playback.ErrorOccurred += (_, e) => exception = e.Exception;
 
                 playback.Start();
 

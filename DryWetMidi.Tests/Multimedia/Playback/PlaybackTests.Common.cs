@@ -63,6 +63,22 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             Directory.CreateDirectory(playbackTracesDirectoryPath);
         }
 
+        private void CheckErrors(
+            ICollection<PlaybackErrorOccurredEventArgs> errorOccurredData,
+            int expectedCount,
+            PlaybackSite expectedSite,
+            string expectedError)
+        {
+            ClassicAssert.AreEqual(expectedCount, errorOccurredData.Count, "Invalid number of errors.");
+
+            foreach (var errorData in errorOccurredData)
+            {
+                ClassicAssert.AreEqual(expectedSite, errorData.Site, "Invalid site.");
+                ClassicAssert.IsInstanceOf<InvalidOperationException>(errorData.Exception, "Invalid exception type.");
+                ClassicAssert.AreEqual(expectedError, errorData.Exception.Message, "Invalid exception message.");
+            }
+        }
+
         private void CheckPlayback(
             bool useOutputDevice,
             ICollection<ITimedObject> initialPlaybackObjects,
