@@ -70,6 +70,12 @@ namespace Melanchall.DryWetMidi.Multimedia
             IsCustomNotePlaybackDataSet = true;
         }
 
+        public void PrepareForCustomNotePlaybackDataSet()
+        {
+            NotePlaybackData = RawNotePlaybackData;
+            IsCustomNotePlaybackDataSet = false;
+        }
+
         #endregion
     }
 }

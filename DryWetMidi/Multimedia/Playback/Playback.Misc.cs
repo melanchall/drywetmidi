@@ -1290,23 +1290,25 @@ namespace Melanchall.DryWetMidi.Multimedia
             if (noteMetadata == null)
                 return false;
 
-            var notePlaybackData = noteMetadata.NotePlaybackData; // TODO: RawNotePlaybackData for NoteOn ???
+            var notePlaybackData = noteMetadata.NotePlaybackData;
 
-            // TODO: reset NotePlaybackData/IsCustomNotePlaybackDataSet
-            // TODO: check set NoteCallback to null during playback
-            // TODO: check set NoteCallback during playback, null on start
-
-            var noteCallback = NoteCallback;
-            if (noteCallback != null && isNoteOnEvent)
+            if (isNoteOnEvent)
             {
-                try
+                notePlaybackData = noteMetadata.RawNotePlaybackData;
+                noteMetadata.PrepareForCustomNotePlaybackDataSet();
+
+                var noteCallback = NoteCallback;
+                if (noteCallback != null)
                 {
-                    notePlaybackData = noteCallback(noteMetadata.RawNotePlaybackData, noteMetadata.RawNote.Time, noteMetadata.RawNote.Length, time);
-                    noteMetadata.SetCustomNotePlaybackData(notePlaybackData);
-                }
-                catch (Exception e)
-                {
-                    OnErrorOccurred(PlaybackSite.NoteCallback, e);
+                    try
+                    {
+                        notePlaybackData = noteCallback(noteMetadata.RawNotePlaybackData, noteMetadata.RawNote.Time, noteMetadata.RawNote.Length, time);
+                        noteMetadata.SetCustomNotePlaybackData(notePlaybackData);
+                    }
+                    catch (Exception e)
+                    {
+                        OnErrorOccurred(PlaybackSite.NoteCallback, e);
+                    }
                 }
             }
 

@@ -39,6 +39,212 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
         [Retry(RetriesNumber)]
         [Test]
+        public void NoteCallback_FromNullToTranspose_1([Values(500, 1200)] int setCallbackAtMs)
+        {
+            var originalNote1 = new Note((SevenBitNumber)0) { Velocity = SevenBitNumber.MinValue }
+                .SetTime((MetricTimeSpan)TimeSpan.Zero, TempoMap)
+                .SetLength((MetricTimeSpan)TimeSpan.FromSeconds(1), TempoMap);
+
+            var originalNote2 = new Note((SevenBitNumber)100) { Velocity = (SevenBitNumber)80 }
+                .SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(1500), TempoMap)
+                .SetLength((MetricTimeSpan)TimeSpan.FromMilliseconds(500), TempoMap);
+
+            var note2 = (Note)originalNote2.Clone();
+            note2.NoteNumber += TransposeBy;
+
+            CheckNoteCallback(
+                initialPlaybackObjects: new[]
+                {
+                    new TimedEvent(new NoteOnEvent()).SetTime((MetricTimeSpan)TimeSpan.Zero, TempoMap),
+                    new TimedEvent(new NoteOffEvent()).SetTime((MetricTimeSpan)TimeSpan.FromSeconds(1), TempoMap),
+                    new TimedEvent(new NoteOnEvent((SevenBitNumber)100, (SevenBitNumber)80)).SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(1500), TempoMap),
+                    new TimedEvent(new NoteOffEvent((SevenBitNumber)100, (SevenBitNumber)0)).SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(2000), TempoMap),
+                },
+                actions: new[]
+                {
+                    new PlaybackAction(TimeSpan.FromMilliseconds(setCallbackAtMs),
+                        p => p.NoteCallback = NoteCallback),
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
+                    new SentReceivedEvent(new NoteOffEvent(), TimeSpan.FromSeconds(1)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)(100 + TransposeBy), (SevenBitNumber)80), TimeSpan.FromMilliseconds(1500)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)(100 + TransposeBy), (SevenBitNumber)0), TimeSpan.FromMilliseconds(2000))
+                },
+                expectedNotesEvents: new[]
+                {
+                    (EventType.Started, originalNote1, originalNote1, false),
+                    (EventType.Finished, originalNote1, originalNote1, false),
+                    (EventType.Started, note2, originalNote2, false),
+                    (EventType.Finished, note2, originalNote2, false),
+                });
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
+        public void NoteCallback_FromNullToTranspose_2([Values(500, 1200)] int setCallbackAtMs)
+        {
+            var originalNote1 = new Note((SevenBitNumber)0) { Velocity = SevenBitNumber.MinValue }
+                .SetTime((MetricTimeSpan)TimeSpan.Zero, TempoMap)
+                .SetLength((MetricTimeSpan)TimeSpan.FromSeconds(1), TempoMap);
+
+            var note1 = (Note)originalNote1.Clone();
+            note1.NoteNumber += TransposeBy;
+
+            var originalNote2 = new Note((SevenBitNumber)100) { Velocity = (SevenBitNumber)80 }
+                .SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(1500), TempoMap)
+                .SetLength((MetricTimeSpan)TimeSpan.FromMilliseconds(500), TempoMap);
+
+            var note2 = (Note)originalNote2.Clone();
+            note2.NoteNumber += TransposeBy;
+
+            CheckNoteCallback(
+                initialPlaybackObjects: new[]
+                {
+                    new TimedEvent(new NoteOnEvent()).SetTime((MetricTimeSpan)TimeSpan.Zero, TempoMap),
+                    new TimedEvent(new NoteOffEvent()).SetTime((MetricTimeSpan)TimeSpan.FromSeconds(1), TempoMap),
+                    new TimedEvent(new NoteOnEvent((SevenBitNumber)100, (SevenBitNumber)80)).SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(1500), TempoMap),
+                    new TimedEvent(new NoteOffEvent((SevenBitNumber)100, (SevenBitNumber)0)).SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(2000), TempoMap),
+                },
+                actions: new[]
+                {
+                    new PlaybackAction(TimeSpan.FromMilliseconds(setCallbackAtMs),
+                        p => p.NoteCallback = NoteCallback),
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
+                    new SentReceivedEvent(new NoteOffEvent(), TimeSpan.FromSeconds(1)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)(100 + TransposeBy), (SevenBitNumber)80), TimeSpan.FromMilliseconds(1500)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)(100 + TransposeBy), (SevenBitNumber)0), TimeSpan.FromMilliseconds(2000)),
+
+                    new SentReceivedEvent(new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), TimeSpan.FromMilliseconds(2000)),
+                    new SentReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), TimeSpan.FromMilliseconds(3000)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)(100 + TransposeBy), (SevenBitNumber)80), TimeSpan.FromMilliseconds(3500)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)(100 + TransposeBy), (SevenBitNumber)0), TimeSpan.FromMilliseconds(4000))
+                },
+                expectedNotesEvents: new[]
+                {
+                    (EventType.Started, originalNote1, originalNote1, false),
+                    (EventType.Finished, originalNote1, originalNote1, false),
+                    (EventType.Started, note2, originalNote2, false),
+                    (EventType.Finished, note2, originalNote2, false),
+
+                    (EventType.Started, note1, originalNote1, false),
+                    (EventType.Finished, note1, originalNote1, false),
+                    (EventType.Started, note2, originalNote2, false),
+                    (EventType.Finished, note2, originalNote2, false),
+                },
+                repeatsCount: 1);
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
+        public void NoteCallback_FromTransposeToNull_1([Values(500, 1200)] int setCallbackAtMs)
+        {
+            var originalNote1 = new Note((SevenBitNumber)0) { Velocity = SevenBitNumber.MinValue }
+                .SetTime((MetricTimeSpan)TimeSpan.Zero, TempoMap)
+                .SetLength((MetricTimeSpan)TimeSpan.FromSeconds(1), TempoMap);
+
+            var note1 = (Note)originalNote1.Clone();
+            note1.NoteNumber += TransposeBy;
+
+            var originalNote2 = new Note((SevenBitNumber)100) { Velocity = (SevenBitNumber)80 }
+                .SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(1500), TempoMap)
+                .SetLength((MetricTimeSpan)TimeSpan.FromMilliseconds(500), TempoMap);
+
+            CheckNoteCallback(
+                initialPlaybackObjects: new[]
+                {
+                    new TimedEvent(new NoteOnEvent()).SetTime((MetricTimeSpan)TimeSpan.Zero, TempoMap),
+                    new TimedEvent(new NoteOffEvent()).SetTime((MetricTimeSpan)TimeSpan.FromSeconds(1), TempoMap),
+                    new TimedEvent(new NoteOnEvent((SevenBitNumber)100, (SevenBitNumber)80)).SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(1500), TempoMap),
+                    new TimedEvent(new NoteOffEvent((SevenBitNumber)100, (SevenBitNumber)0)).SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(2000), TempoMap),
+                },
+                actions: new[]
+                {
+                    new PlaybackAction(TimeSpan.FromMilliseconds(setCallbackAtMs),
+                        p => p.NoteCallback = null),
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new SentReceivedEvent(new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), TimeSpan.Zero),
+                    new SentReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), TimeSpan.FromSeconds(1)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)100, (SevenBitNumber)80), TimeSpan.FromMilliseconds(1500)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)100, (SevenBitNumber)0), TimeSpan.FromMilliseconds(2000))
+                },
+                expectedNotesEvents: new[]
+                {
+                    (EventType.Started, note1, originalNote1, false),
+                    (EventType.Finished, note1, originalNote1, false),
+                    (EventType.Started, originalNote2, originalNote2, false),
+                    (EventType.Finished, originalNote2, originalNote2, false),
+                },
+                setupPlayback: playback => playback.NoteCallback = NoteCallback);
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
+        public void NoteCallback_FromTransposeToNull_2([Values(500, 1200)] int setCallbackAtMs)
+        {
+            var originalNote1 = new Note((SevenBitNumber)0) { Velocity = SevenBitNumber.MinValue }
+                .SetTime((MetricTimeSpan)TimeSpan.Zero, TempoMap)
+                .SetLength((MetricTimeSpan)TimeSpan.FromSeconds(1), TempoMap);
+
+            var note1 = (Note)originalNote1.Clone();
+            note1.NoteNumber += TransposeBy;
+
+            var originalNote2 = new Note((SevenBitNumber)100) { Velocity = (SevenBitNumber)80 }
+                .SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(1500), TempoMap)
+                .SetLength((MetricTimeSpan)TimeSpan.FromMilliseconds(500), TempoMap);
+
+            var note2 = (Note)originalNote2.Clone();
+            note2.NoteNumber += TransposeBy;
+
+            CheckNoteCallback(
+                initialPlaybackObjects: new[]
+                {
+                    new TimedEvent(new NoteOnEvent()).SetTime((MetricTimeSpan)TimeSpan.Zero, TempoMap),
+                    new TimedEvent(new NoteOffEvent()).SetTime((MetricTimeSpan)TimeSpan.FromSeconds(1), TempoMap),
+                    new TimedEvent(new NoteOnEvent((SevenBitNumber)100, (SevenBitNumber)80)).SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(1500), TempoMap),
+                    new TimedEvent(new NoteOffEvent((SevenBitNumber)100, (SevenBitNumber)0)).SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(2000), TempoMap),
+                },
+                actions: new[]
+                {
+                    new PlaybackAction(TimeSpan.FromMilliseconds(setCallbackAtMs),
+                        p => p.NoteCallback = null),
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new SentReceivedEvent(new NoteOnEvent(TransposeBy, SevenBitNumber.MinValue), TimeSpan.Zero),
+                    new SentReceivedEvent(new NoteOffEvent(TransposeBy, SevenBitNumber.MinValue), TimeSpan.FromSeconds(1)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)100, (SevenBitNumber)80), TimeSpan.FromMilliseconds(1500)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)100, (SevenBitNumber)0), TimeSpan.FromMilliseconds(2000)),
+
+                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(2000)),
+                    new SentReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(3000)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)100, (SevenBitNumber)80), TimeSpan.FromMilliseconds(3500)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)100, (SevenBitNumber)0), TimeSpan.FromMilliseconds(4000))
+                },
+                expectedNotesEvents: new[]
+                {
+                    (EventType.Started, note1, originalNote1, false),
+                    (EventType.Finished, note1, originalNote1, false),
+                    (EventType.Started, originalNote2, originalNote2, false),
+                    (EventType.Finished, originalNote2, originalNote2, false),
+
+                    (EventType.Started, originalNote1, originalNote1, false),
+                    (EventType.Finished, originalNote1, originalNote1, false),
+                    (EventType.Started, originalNote2, originalNote2, false),
+                    (EventType.Finished, originalNote2, originalNote2, false),
+                },
+                setupPlayback: playback => playback.NoteCallback = NoteCallback,
+                repeatsCount: 1);
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
         public void NoteCallback_ThrowException()
         {
             var note = new Note((SevenBitNumber)0) { Velocity = (SevenBitNumber)0 }
@@ -2139,7 +2345,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             ICollection<SentReceivedEvent> expectedReceivedEvents,
             ICollection<(EventType EventType, Note Note, Note OriginalNote, bool CheckOriginalNoteByReference)> expectedNotesEvents,
             Action<Playback> setupPlayback = null,
-            Action<Playback, ICollection<SentReceivedEvent>> additionalChecks = null)
+            Action<Playback, ICollection<SentReceivedEvent>> additionalChecks = null,
+            int? repeatsCount = null)
         {
             var notesEvents = new List<(EventType EventType, Note Note, Note OriginalNote)>();
 
@@ -2156,7 +2363,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     playback.NotesPlaybackFinished += (_, e) => notesEvents.AddRange(Enumerable.Range(0, e.Notes.Count).Select(i => (EventType.Finished, e.Notes.ElementAt(i), e.OriginalNotes.ElementAt(i))));
                 },
                 additionalChecks: additionalChecks,
-                checkFromFile: false);
+                checkFromFile: false,
+                repeatsCount: repeatsCount);
 
             ClassicAssert.AreEqual(
                 expectedNotesEvents.Count,
