@@ -900,7 +900,7 @@ namespace Melanchall.DryWetMidi.Interaction
                     if (index > eventsCollectionMaxIndices[j])
                         continue;
 
-                    var eventTime = eventsCollections[j][index].DeltaTime + eventsCollectionTimes[j];
+                    var eventTime = eventsCollections[j].GetByIndexInternal(index).DeltaTime + eventsCollectionTimes[j];
                     if (eventTime < minTime)
                     {
                         minTime = eventTime;
@@ -908,7 +908,7 @@ namespace Melanchall.DryWetMidi.Interaction
                     }
                 }
 
-                var midiEvent = eventsCollections[eventsCollectionIndex][eventsCollectionIndices[eventsCollectionIndex]];
+                var midiEvent = eventsCollections[eventsCollectionIndex].GetByIndexInternal(eventsCollectionIndices[eventsCollectionIndex]);
 
                 TimedEvent timedEvent;
 

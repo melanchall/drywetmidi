@@ -227,7 +227,10 @@ namespace Melanchall.DryWetMidi.Core
         /// <returns>Copy of the event.</returns>
         protected override MidiEvent CloneEvent()
         {
-            return new SmpteOffsetEvent(Format, Hours, Minutes, Seconds, Frames, SubFrames);
+            return new SmpteOffsetEvent
+            {
+                _smpteData = _smpteData.Clone()
+            };
         }
 
         /// <summary>

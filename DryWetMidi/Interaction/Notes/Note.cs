@@ -144,6 +144,9 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="time">Absolute time of the note in units defined by the time division of a MIDI file.</param>
         public Note(SevenBitNumber noteNumber, long length, long time)
         {
+            TimedNoteOnEvent = new TimedEvent(new NoteOnEvent { Velocity = DefaultVelocity });
+            TimedNoteOffEvent = new TimedEvent(new NoteOffEvent { Velocity = DefaultOffVelocity });
+
             NoteNumber = noteNumber;
             Length = length;
             Time = time;
@@ -347,12 +350,12 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <summary>
         /// Gets Note On timed event of the note.
         /// </summary>
-        internal TimedEvent TimedNoteOnEvent { get; } = new TimedEvent(new NoteOnEvent { Velocity = DefaultVelocity });
+        internal TimedEvent TimedNoteOnEvent { get; }
 
         /// <summary>
         /// Gets Note Off timed event of the note.
         /// </summary>
-        internal TimedEvent TimedNoteOffEvent { get; } = new TimedEvent(new NoteOffEvent { Velocity = DefaultOffVelocity });
+        internal TimedEvent TimedNoteOffEvent { get; }
 
         internal MusicTheory.Note UnderlyingNote => MusicTheory.Note.Get(NoteNumber);
 

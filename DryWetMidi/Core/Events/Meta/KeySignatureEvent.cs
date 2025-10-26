@@ -43,6 +43,9 @@ namespace Melanchall.DryWetMidi.Core
         /// </summary>
         public const byte MaxScale = 1;
 
+        private static readonly string InvalidKeyRangeMessage =
+            $"Key is out of [{MinKey}; {MaxKey}] range.";
+
         #endregion
 
         #region Fields
@@ -107,7 +110,7 @@ namespace Melanchall.DryWetMidi.Core
                     value,
                     MinKey,
                     MaxKey,
-                    $"Key is out of [{MinKey}; {MaxKey}] range.");
+                    InvalidKeyRangeMessage);
 
                 _key = value;
             }

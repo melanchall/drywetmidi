@@ -29,6 +29,9 @@ namespace Melanchall.DryWetMidi.Core
         /// </summary>
         public const long MaxMicrosecondsPerQuarterNote = (1 << 24) - 1;
 
+        private static readonly string InvalidMicrosecondsPerQuarterNoteRangeMessage =
+            $"Number of microseconds per quarter note is out of [{MinMicrosecondsPerQuarterNote}; {MaxMicrosecondsPerQuarterNote}] range.";
+
         #endregion
 
         #region Fields
@@ -79,7 +82,7 @@ namespace Melanchall.DryWetMidi.Core
                     value,
                     MinMicrosecondsPerQuarterNote,
                     MaxMicrosecondsPerQuarterNote,
-                    $"Number of microseconds per quarter note is out of [{MinMicrosecondsPerQuarterNote}; {MaxMicrosecondsPerQuarterNote}] range.");
+                    InvalidMicrosecondsPerQuarterNoteRangeMessage);
 
                 _microsecondsPerBeat = value;
             }

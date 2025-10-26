@@ -5,7 +5,7 @@ stages:
   - job: BuildDll64
     displayName: 'Build 64-bit dll'
     pool:
-      vmImage: 'windows-latest'
+      vmImage: 'windows-2022'
     steps:
     - task: PowerShell@2
       displayName: 'Build dll'
@@ -48,7 +48,7 @@ stages:
   - job: BuildDll32
     displayName: 'Build 32-bit dll'
     pool:
-      vmImage: 'windows-latest'
+      vmImage: 'windows-2022'
     steps:
     - task: PowerShell@2
       displayName: 'Build dll'

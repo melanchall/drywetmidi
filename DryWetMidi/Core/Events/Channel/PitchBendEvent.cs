@@ -29,6 +29,9 @@ namespace Melanchall.DryWetMidi.Core
         /// </summary>
         public const ushort DefaultPitchValue = 1 << 13;
 
+        private static readonly string InvalidPitchValueRangeMessage =
+            $"Pitch value is out of [{MinPitchValue}; {MaxPitchValue}] range.";
+
         #endregion
 
         #region Constructor
@@ -37,8 +40,9 @@ namespace Melanchall.DryWetMidi.Core
         /// Initializes a new instance of the <see cref="PitchBendEvent"/>.
         /// </summary>
         public PitchBendEvent()
-            : this(DefaultPitchValue)
+            : base(MidiEventType.PitchBend)
         {
+            SetPitchValueInternal(DefaultPitchValue);
         }
 
         /// <summary>
@@ -76,11 +80,20 @@ namespace Melanchall.DryWetMidi.Core
                     value,
                     MinPitchValue,
                     MaxPitchValue,
-                    $"Pitch value is out of [{MinPitchValue}; {MaxPitchValue}] range.");
+                    InvalidPitchValueRangeMessage);
 
-                _dataByte1 = value.GetTail();
-                _dataByte2 = value.GetHead();
+                SetPitchValueInternal(value);
             }
+        }
+
+        #endregion
+
+        #region Methods
+
+        private void SetPitchValueInternal(ushort value)
+        {
+            _dataByte1 = value.GetTail();
+            _dataByte2 = value.GetHead();
         }
 
         #endregion

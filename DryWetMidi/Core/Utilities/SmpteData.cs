@@ -193,6 +193,19 @@ namespace Melanchall.DryWetMidi.Core
             return (byte)((formatByte << FormatOffset) | hours);
         }
 
+        internal SmpteData Clone()
+        {
+            return new SmpteData
+            {
+                _format = _format,
+                _hours = _hours,
+                _minutes = _minutes,
+                _seconds = _seconds,
+                _frames = _frames,
+                _subFrames = _subFrames
+            };
+        }
+
         #endregion
     }
 }

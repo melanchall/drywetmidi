@@ -130,7 +130,11 @@ namespace Melanchall.DryWetMidi.Core
         /// <returns>Copy of the event.</returns>
         protected override MidiEvent CloneEvent()
         {
-            return new MidiTimeCodeEvent(Component, ComponentValue);
+            return new MidiTimeCodeEvent
+            {
+                Component = Component,
+                ComponentValue = ComponentValue
+            };
         }
 
         /// <summary>
