@@ -488,73 +488,79 @@ namespace Melanchall.DryWetMidi.Interaction
             ObjectDetectionSettings objectDetectionSettings,
             ObjectProcessingHint hint)
         {
-            var eventsCollections = eventsCollectionsIn.Where(c => c != null).ToArray();
-            var eventsCount = eventsCollections.Sum(c => c.Count);
+            var result = 0;
+            var i = 0;
 
-            var iMatched = 0;
-
-            var processingContext = new ProcessingContext
+            foreach (var eventsCollection in eventsCollectionsIn)
             {
-                TimeOrLengthCanBeChanged = hint.HasFlag(ObjectProcessingHint.TimeOrLengthCanBeChanged),
-                NotesCollectionCanBeChanged = hint.HasFlag(ObjectProcessingHint.NotesCollectionCanBeChanged),
-                NoteTimeOrLengthCanBeChanged = hint.HasFlag(ObjectProcessingHint.NoteTimeOrLengthCanBeChanged)
-            };
+                var eventsCount = eventsCollection.Count;
+                var iMatched = 0;
 
-            var collectedTimedEvents = processingContext.TimeOrLengthCanBeChanged || processingContext.NotesCollectionCanBeChanged || processingContext.NoteTimeOrLengthCanBeChanged
-                ? new List<TimedObjectAt<TimedEvent>>(eventsCount)
-                : null;
-
-            var getTimedEvents = objectType.HasFlag(ObjectType.TimedEvent);
-            var getNotes = objectType.HasFlag(ObjectType.Note);
-            var getChords = objectType.HasFlag(ObjectType.Chord);
-
-            var timedEvents = eventsCollections
-                .GetTimedEventsLazy(eventsCount, objectDetectionSettings?.TimedEventDetectionSettings, false, collectedTimedEvents);
-
-            IEnumerable<TimedObjectAt<ITimedObject>> timedObjects = null;
-            if (getChords)
-                timedObjects = timedEvents
-                    .GetChordsAndNotesAndTimedEventsLazy(objectDetectionSettings?.ChordDetectionSettings ?? new ChordDetectionSettings(), objectDetectionSettings?.NoteDetectionSettings ?? new NoteDetectionSettings(), objectDetectionSettings?.TimedEventDetectionSettings ?? new TimedEventDetectionSettings());
-            else if (getNotes)
-                timedObjects = timedEvents
-                    .GetNotesAndTimedEventsLazy(objectDetectionSettings?.NoteDetectionSettings ?? new NoteDetectionSettings());
-            else if (getTimedEvents)
-                timedObjects = timedEvents
-                    .Select(e => new TimedObjectAt<ITimedObject>(e.Object, e.AtIndex));
-            else
-                return 0;
-
-            foreach (var timedObjectAt in timedObjects)
-            {
-                if (timedObjectAt.Object is Note && !getNotes && getTimedEvents)
+                var processingContext = new ProcessingContext
                 {
-                    var note = timedObjectAt.Object as Note;
-                    if (TryProcessTimedEvent(new TimedObjectAt<ITimedObject>(note.TimedNoteOnEvent, timedObjectAt.AtIndex), getTimedEvents, action, match, processingContext, collectedTimedEvents))
-                        iMatched++;
-                    if (TryProcessTimedEvent(new TimedObjectAt<ITimedObject>(note.TimedNoteOffEvent, timedObjectAt.AtIndex), getTimedEvents, action, match, processingContext, collectedTimedEvents))
+                    TimeOrLengthCanBeChanged = hint.HasFlag(ObjectProcessingHint.TimeOrLengthCanBeChanged),
+                    NotesCollectionCanBeChanged = hint.HasFlag(ObjectProcessingHint.NotesCollectionCanBeChanged),
+                    NoteTimeOrLengthCanBeChanged = hint.HasFlag(ObjectProcessingHint.NoteTimeOrLengthCanBeChanged)
+                };
+
+                var getTimedEvents = objectType.HasFlag(ObjectType.TimedEvent);
+                var getNotes = objectType.HasFlag(ObjectType.Note);
+                var getChords = objectType.HasFlag(ObjectType.Chord);
+
+                var timedEvents = eventsCollection
+                    .GetTimedEventsLazy(objectDetectionSettings?.TimedEventDetectionSettings, i, false)
+                    .ToArray();
+
+                IEnumerable<ITimedObject> timedObjects = null;
+                if (getChords)
+                    timedObjects = timedEvents
+                        .GetChordsAndNotesAndTimedEventsLazy(objectDetectionSettings?.ChordDetectionSettings ?? new ChordDetectionSettings(), objectDetectionSettings?.NoteDetectionSettings ?? new NoteDetectionSettings());
+                else if (getNotes)
+                    timedObjects = timedEvents
+                        .GetNotesAndTimedEventsLazy(objectDetectionSettings?.NoteDetectionSettings ?? new NoteDetectionSettings());
+                else if (getTimedEvents)
+                    timedObjects = timedEvents;
+                else
+                    continue;
+
+                var collectedTimedEvents = processingContext.TimeOrLengthCanBeChanged || processingContext.NotesCollectionCanBeChanged || processingContext.NoteTimeOrLengthCanBeChanged
+                    ? timedEvents.ToList()
+                    : null;
+
+                foreach (var timedObjectAt in timedObjects)
+                {
+                    if (timedObjectAt is Note && !getNotes && getTimedEvents)
+                    {
+                        var note = timedObjectAt as Note;
+                        if (TryProcessTimedEvent(note.TimedNoteOnEvent, getTimedEvents, action, match, processingContext))
+                            iMatched++;
+                        if (TryProcessTimedEvent(note.TimedNoteOffEvent, getTimedEvents, action, match, processingContext))
+                            iMatched++;
+                    }
+                    else if (TryProcessTimedEvent(timedObjectAt, getTimedEvents, action, match, processingContext) ||
+                        TryProcessNote(timedObjectAt, getNotes, action, match, processingContext) ||
+                        TryProcessChord(timedObjectAt, getChords, action, match, processingContext, collectedTimedEvents))
                         iMatched++;
                 }
-                else if (TryProcessTimedEvent(timedObjectAt, getTimedEvents, action, match, processingContext, collectedTimedEvents) ||
-                    TryProcessNote(timedObjectAt, getNotes, action, match, processingContext, collectedTimedEvents) ||
-                    TryProcessChord(timedObjectAt, getChords, action, match, processingContext, collectedTimedEvents))
-                    iMatched++;
+
+                if (processingContext.HasTimingChanges)
+                    eventsCollection.SortAndUpdateEvents(collectedTimedEvents);
+
+                result += iMatched;
+                i++;
             }
 
-            if (processingContext.HasTimingChanges)
-                eventsCollections.SortAndUpdateEvents(collectedTimedEvents);
-
-            return iMatched;
+            return result;
         }
 
         private static bool TryProcessTimedEvent(
-            TimedObjectAt<ITimedObject> timedObjectAt,
+            ITimedObject timedObjectAt,
             bool getTimedEvents,
             Action<ITimedObject> action,
             Predicate<ITimedObject> match,
-            ProcessingContext processingContext,
-            List<TimedObjectAt<TimedEvent>> collectedTimedEvents)
+            ProcessingContext processingContext)
         {
-            var timedObject = timedObjectAt.Object;
+            var timedObject = timedObjectAt;
             if (!(timedObject is TimedEvent))
                 return false;
 
@@ -575,14 +581,13 @@ namespace Melanchall.DryWetMidi.Interaction
         }
 
         private static bool TryProcessNote(
-            TimedObjectAt<ITimedObject> timedObjectAt,
+            ITimedObject timedObjectAt,
             bool getNotes,
             Action<ITimedObject> action,
             Predicate<ITimedObject> match,
-            ProcessingContext processingContext,
-            List<TimedObjectAt<TimedEvent>> collectedTimedEvents)
+            ProcessingContext processingContext)
         {
-            var timedObject = timedObjectAt.Object;
+            var timedObject = timedObjectAt;
             if (!(timedObject is Note))
                 return false;
 
@@ -602,14 +607,14 @@ namespace Melanchall.DryWetMidi.Interaction
         }
 
         private static bool TryProcessChord(
-            TimedObjectAt<ITimedObject> timedObjectAt,
+            ITimedObject timedObjectAt,
             bool getChords,
             Action<ITimedObject> action,
             Predicate<ITimedObject> match,
             ProcessingContext processingContext,
-            List<TimedObjectAt<TimedEvent>> collectedTimedEvents)
+            List<TimedEvent> collectedTimedEvents)
         {
-            var timedObject = timedObjectAt.Object;
+            var timedObject = timedObjectAt;
             if (!(timedObject is Chord))
                 return false;
 
@@ -657,19 +662,19 @@ namespace Melanchall.DryWetMidi.Interaction
 
             if (processingContext.NotesCollectionChanged)
             {
-                foreach (var note in addedNotes)
+                // TODO: check this case
+                if (collectedTimedEvents != null)
                 {
-                    collectedTimedEvents?.Add(new TimedObjectAt<TimedEvent>(
-                        note.TimedNoteOnEvent,
-                        timedObjectAt.AtIndex));
-                    collectedTimedEvents?.Add(new TimedObjectAt<TimedEvent>(
-                        note.TimedNoteOffEvent,
-                        timedObjectAt.AtIndex));
+                    foreach (var note in addedNotes)
+                    {
+                        collectedTimedEvents?.Add(note.TimedNoteOnEvent);
+                        collectedTimedEvents?.Add(note.TimedNoteOffEvent);
+                    }
                 }
 
                 foreach (var note in removedNotes)
                 {
-                    note.TimedNoteOnEvent.Event.Flag = note.TimedNoteOffEvent.Event.Flag = true;
+                    note.TimedNoteOnEvent.Event.MustBeRemoved = note.TimedNoteOffEvent.Event.MustBeRemoved = true;
                 }
             }
 

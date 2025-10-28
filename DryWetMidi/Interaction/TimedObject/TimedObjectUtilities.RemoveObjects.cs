@@ -89,7 +89,7 @@ namespace Melanchall.DryWetMidi.Interaction
             if (objectsToRemoveCount == 0)
                 return 0;
 
-            eventsCollection.RemoveTimedEvents(e => e.Event.Flag);
+            eventsCollection.RemoveTimedEvents(e => e.Event.MustBeRemoved);
             return objectsToRemoveCount;
         }
 
@@ -246,7 +246,7 @@ namespace Melanchall.DryWetMidi.Interaction
             if (objectsToRemoveCount == 0)
                 return 0;
 
-            trackChunks.RemoveTimedEvents(e => e.Event.Flag);
+            trackChunks.RemoveTimedEvents(e => e.Event.MustBeRemoved);
             return objectsToRemoveCount;
         }
 
@@ -328,14 +328,14 @@ namespace Melanchall.DryWetMidi.Interaction
             var timedEvent = obj as TimedEvent;
             if (timedEvent != null)
             {
-                timedEvent.Event.Flag = true;
+                timedEvent.Event.MustBeRemoved = true;
                 return;
             }
 
             var note = obj as Note;
             if (note != null)
             {
-                note.TimedNoteOnEvent.Event.Flag = note.TimedNoteOffEvent.Event.Flag = true;
+                note.TimedNoteOnEvent.Event.MustBeRemoved = note.TimedNoteOffEvent.Event.MustBeRemoved = true;
                 return;
             }
 
@@ -344,7 +344,7 @@ namespace Melanchall.DryWetMidi.Interaction
             {
                 foreach (var n in chord.Notes)
                 {
-                    n.TimedNoteOnEvent.Event.Flag = n.TimedNoteOffEvent.Event.Flag = true;
+                    n.TimedNoteOnEvent.Event.MustBeRemoved = n.TimedNoteOffEvent.Event.MustBeRemoved = true;
                 }
                 return;
             }

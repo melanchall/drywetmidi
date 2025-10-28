@@ -69,7 +69,7 @@ namespace Melanchall.DryWetMidi.Core
             }
         }
 
-        internal bool Flag { get; set; }
+        internal bool MustBeRemoved { get; set; }
 
         #endregion
 

@@ -42,12 +42,10 @@ namespace Melanchall.DryWetMidi.Tools
 
             var filter = settings.Filter;
             if (filter != null)
-                timedEvents = timedEvents.Where(e => filter(e.Object));
+                timedEvents = timedEvents.Where(e => filter(e));
 
-            foreach (var timedEventTuple in timedEvents)
+            foreach (var timedEvent in timedEvents)
             {
-                var timedEvent = timedEventTuple.Object;
-
                 var channelEvent = timedEvent.Event as ChannelEvent;
                 if (channelEvent != null)
                 {

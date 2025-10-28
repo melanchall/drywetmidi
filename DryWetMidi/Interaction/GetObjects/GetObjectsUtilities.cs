@@ -31,8 +31,8 @@ namespace Melanchall.DryWetMidi.Interaction
             ThrowIfArgument.IsNull(nameof(midiEvents), midiEvents);
 
             return midiEvents
-                .GetTimedEventsLazy(settings?.TimedEventDetectionSettings)
-                .GetObjectsFromSortedTimedObjects(0, objectType, settings);
+                .GetTimedEventsLazy(settings?.TimedEventDetectionSettings, 0)
+                .GetObjectsFromSortedTimedObjects(objectType, settings);
         }
 
         /// <summary>
@@ -52,7 +52,7 @@ namespace Melanchall.DryWetMidi.Interaction
             ThrowIfArgument.IsNull(nameof(midiEvents), midiEvents);
 
             return midiEvents
-                .GetTimedEventsLazy(settings?.TimedEventDetectionSettings)
+                .GetTimedEventsLazy(settings?.TimedEventDetectionSettings, 0)
                 .EnumerateObjectsFromSortedTimedObjects(objectType, settings);
         }
 
@@ -73,8 +73,8 @@ namespace Melanchall.DryWetMidi.Interaction
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
 
             return eventsCollection
-                .GetTimedEventsLazy(settings?.TimedEventDetectionSettings)
-                .GetObjectsFromSortedTimedObjects(eventsCollection.Count / 2, objectType, settings);
+                .GetTimedEventsLazy(settings?.TimedEventDetectionSettings, 0)
+                .GetObjectsFromSortedTimedObjects(objectType, settings);
         }
 
         /// <summary>
@@ -112,22 +112,14 @@ namespace Melanchall.DryWetMidi.Interaction
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
 
-            var eventsCollections = trackChunks.Where(c => c != null).Select(c => c.Events).ToArray();
-            var eventsCount = eventsCollections.Sum(c => c.Count);
-
-            var timedEvents = eventsCollections.GetTimedEventsLazy(
-                eventsCount,
-                settings?.TimedEventDetectionSettings);
-            var timedObjects = (IEnumerable<ITimedObject>)timedEvents.Select(o => o.Object);
-
-            if (objectType.HasFlag(ObjectType.Chord) || objectType.HasFlag(ObjectType.Note))
-            {
-                timedObjects = !objectType.HasFlag(ObjectType.Chord)
-                    ? timedEvents.GetNotesAndTimedEventsLazy(settings?.NoteDetectionSettings ?? new NoteDetectionSettings()).Select(o => o.Object)
-                    : timedEvents.GetChordsAndNotesAndTimedEventsLazy(settings?.ChordDetectionSettings ?? new ChordDetectionSettings(), settings?.NoteDetectionSettings ?? new NoteDetectionSettings(), settings?.TimedEventDetectionSettings ?? new TimedEventDetectionSettings()).Select(o => o.Object);
-            }
-
-            return timedObjects.GetObjectsFromSortedTimedObjects(eventsCount / 2, objectType, settings, false);
+            return trackChunks
+                .Where(trackChunk => trackChunk != null)
+                .Select((trackChunk, trackChunkIndex) => trackChunk
+                    .Events
+                    .GetTimedEventsLazy(settings?.TimedEventDetectionSettings, trackChunkIndex)
+                    .GetObjectsFromSortedTimedObjects(objectType, settings))
+                .MergeSortedObjectsCollections()
+                .ToArray();
         }
 
         /// <summary>
@@ -168,7 +160,6 @@ namespace Melanchall.DryWetMidi.Interaction
             var getChords = objectType.HasFlag(ObjectType.Chord);
             var getNotes = objectType.HasFlag(ObjectType.Note);
 
-            var resultCollectionSize = 0;
             var processedTimedObjects = new List<ITimedObject>();
 
             foreach (var timedObject in timedObjects)
@@ -177,14 +168,10 @@ namespace Melanchall.DryWetMidi.Interaction
                     TryProcessTimedEvent(timedObject as TimedEvent, processedTimedObjects) ||
                     TryProcessNote(timedObject as Note, processedTimedObjects, getNotes, getChords) ||
                     TryProcessChord(timedObject as Chord, processedTimedObjects, getNotes, getChords);
-
-                if (processed)
-                    resultCollectionSize++;
             }
 
             return GetObjectsFromSortedTimedObjects(
                 processedTimedObjects.OrderBy(o => o.Time),
-                resultCollectionSize,
                 objectType,
                 settings);
         }
@@ -237,80 +224,27 @@ namespace Melanchall.DryWetMidi.Interaction
 
         private static ICollection<ITimedObject> GetObjectsFromSortedTimedObjects(
             this IEnumerable<ITimedObject> processedTimedObjects,
-            int resultCollectionSize,
             ObjectType objectType,
-            ObjectDetectionSettings settings,
-            bool createNotes = true)
+            ObjectDetectionSettings settings)
         {
-            var getChords = objectType.HasFlag(ObjectType.Chord);
-            var getNotes = objectType.HasFlag(ObjectType.Note);
-            var getTimedEvents = objectType.HasFlag(ObjectType.TimedEvent);
+            var result = new List<ITimedObject>();
+            var notesDeconstructed = new ObjectWrapper<bool>();
 
-            settings = settings ?? new ObjectDetectionSettings();
-            var noteDetectionSettings = settings.NoteDetectionSettings ?? new NoteDetectionSettings();
-            var chordDetectionSettings = settings.ChordDetectionSettings ?? new ChordDetectionSettings();
-
-            var timedObjects = processedTimedObjects;
-
-            if (createNotes && (getChords || getNotes))
+            foreach (var timedObject in processedTimedObjects.EnumerateObjectsFromSortedTimedObjects(objectType, settings, notesDeconstructed))
             {
-                var notesAndTimedEvents = processedTimedObjects.GetNotesAndTimedEventsLazy(noteDetectionSettings, true);
-
-                timedObjects = getChords
-                    ? notesAndTimedEvents.GetChordsAndNotesAndTimedEventsLazy(chordDetectionSettings, true)
-                    : notesAndTimedEvents;
+                result.Add(timedObject);
             }
 
-            //
-
-            var result = resultCollectionSize > 0
-                ? new List<ITimedObject>(resultCollectionSize)
-                : new List<ITimedObject>();
-
-            foreach (var timedObject in timedObjects)
-            {
-                var processed = false;
-
-                if (getChords)
-                {
-                    var chord = timedObject as Chord;
-                    if (processed = (chord != null))
-                        result.Add(chord);
-                }
-
-                if (!processed && getNotes)
-                {
-                    var note = timedObject as Note;
-                    if (processed = (note != null))
-                        result.Add(note);
-                }
-
-                if (!processed && getTimedEvents)
-                {
-                    var timedEvent = timedObject as TimedEvent;
-                    if (timedEvent != null)
-                        result.Add(timedEvent);
-                    else
-                    {
-                        var note = timedObject as Note;
-                        if (note != null)
-                        {
-                            result.Add(note.GetTimedNoteOnEvent());
-                            result.Add(note.GetTimedNoteOffEvent());
-                        }
-                    }
-                }
-            }
-
-            result.TrimExcess();
-            return new SortedImmutableCollection<ITimedObject>(result);
+            return new SortedImmutableCollection<ITimedObject>(notesDeconstructed.Object
+                ? result.OrderBy(o => o.Time).ToArray()
+                : (ICollection<ITimedObject>)result);
         }
 
         private static IEnumerable<ITimedObject> EnumerateObjectsFromSortedTimedObjects(
             this IEnumerable<ITimedObject> processedTimedObjects,
             ObjectType objectType,
             ObjectDetectionSettings settings,
-            bool createNotes = true)
+            ObjectWrapper<bool> notesDeconstructed = null)
         {
             var getChords = objectType.HasFlag(ObjectType.Chord);
             var getNotes = objectType.HasFlag(ObjectType.Note);
@@ -322,7 +256,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
             var timedObjects = processedTimedObjects;
 
-            if (createNotes && (getChords || getNotes))
+            if (getChords || getNotes)
             {
                 var notesAndTimedEvents = processedTimedObjects.GetNotesAndTimedEventsLazy(noteDetectionSettings, true);
 
@@ -361,6 +295,9 @@ namespace Melanchall.DryWetMidi.Interaction
                         var note = timedObject as Note;
                         if (note != null)
                         {
+                            if (notesDeconstructed != null)
+                                notesDeconstructed.Object = true;
+
                             yield return note.GetTimedNoteOnEvent();
                             yield return note.GetTimedNoteOffEvent();
                         }

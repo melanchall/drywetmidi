@@ -206,10 +206,8 @@ namespace Melanchall.DryWetMidi.Interaction
             var eventsCollectionToAdd = new EventsCollection();
             AddTimedEventsToEventsCollection(eventsCollectionToAdd, timedEvents);
 
-            var newEventsCount = eventsCollection.Count + eventsCollectionToAdd.Count;
             var allTimedEvents = new[] { eventsCollection, eventsCollectionToAdd }
-                .GetTimedEventsLazy(newEventsCount, null, false)
-                .Select(e => e.Object)
+                .GetTimedEventsLazy(null, false)
                 .ToArray();
 
             eventsCollection.Clear();
@@ -274,6 +272,64 @@ namespace Melanchall.DryWetMidi.Interaction
 
             obj.Time = TimeConverter.ConvertFrom(time, tempoMap);
             return obj;
+        }
+
+        internal static IEnumerable<TObject> MergeSortedObjectsCollections<TObject>(
+            this IEnumerable<IEnumerable<TObject>> sortedObjectsCollections)
+            where TObject : ITimedObject
+        {
+            var enumerators = sortedObjectsCollections
+                .Select(c => c.GetEnumerator())
+                .ToArray();
+
+            var enumeratorsLength = enumerators.Length;
+
+            for (var i = 0; i < enumeratorsLength; i++)
+            {
+                if (!enumerators[i].MoveNext())
+                    enumerators[i] = null;
+            }
+
+            var lastTime = -1L;
+
+            while (true)
+            {
+                var minTime = long.MaxValue;
+                var minTimeEnumeratorIndex = -1;
+
+                for (var i = 0; i < enumeratorsLength; i++)
+                {
+                    var enumerator = enumerators[i];
+                    if (enumerator == null)
+                        continue;
+
+                    var time = enumerator.Current.Time;
+                    if (time == lastTime)
+                    {
+                        minTimeEnumeratorIndex = i;
+                        break;
+                    }
+
+                    if (time < minTime)
+                    {
+                        minTime = time;
+                        minTimeEnumeratorIndex = i;
+                    }
+                }
+
+                if (minTimeEnumeratorIndex < 0)
+                    break;
+
+                var minTimeEnumerator = enumerators[minTimeEnumeratorIndex];
+                yield return minTimeEnumerator.Current;
+
+                lastTime = minTimeEnumerator.Current.Time;
+
+                if (!minTimeEnumerator.MoveNext())
+                {
+                    enumerators[minTimeEnumeratorIndex] = null;
+                }
+            }
         }
 
         private static void AddTimedEventsToEventsCollection(EventsCollection eventsCollection, IEnumerable<ITimedObject> timedObjects)

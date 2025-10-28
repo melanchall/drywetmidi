@@ -3,6 +3,7 @@ using Melanchall.DryWetMidi.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime;
 
 namespace Melanchall.DryWetMidi.Interaction
 {
@@ -88,24 +89,11 @@ namespace Melanchall.DryWetMidi.Interaction
             }
         }
 
-        private sealed class NoteOnsHolderIndexed : NoteOnsHolderBase<IObjectDescriptorIndexed>
-        {
-            public NoteOnsHolderIndexed(NoteStartDetectionPolicy noteStartDetectionPolicy)
-                : base(noteStartDetectionPolicy)
-            {
-            }
-        }
-
         private interface IObjectDescriptor
         {
             bool IsCompleted { get; }
 
             ITimedObject GetObject(Func<NoteData, Note> constructor);
-        }
-
-        private interface IObjectDescriptorIndexed : IObjectDescriptor
-        {
-            TimedObjectAt<ITimedObject> GetIndexedObject(Func<NoteData, Note> constructor);
         }
 
         private class NoteDescriptor : IObjectDescriptor
@@ -148,22 +136,6 @@ namespace Melanchall.DryWetMidi.Interaction
             }
         }
 
-        private sealed class NoteDescriptorIndexed : NoteDescriptor, IObjectDescriptorIndexed
-        {
-            private readonly int _index;
-
-            public NoteDescriptorIndexed(TimedEvent noteOnTimedEvent, int index)
-                : base(noteOnTimedEvent)
-            {
-                _index = index;
-            }
-
-            public TimedObjectAt<ITimedObject> GetIndexedObject(Func<NoteData, Note> constructor)
-            {
-                return new TimedObjectAt<ITimedObject>(GetObject(constructor), _index);
-            }
-        }
-
         private class TimedEventDescriptor : IObjectDescriptor
         {
             private TimedEvent _timedEvent;
@@ -178,22 +150,6 @@ namespace Melanchall.DryWetMidi.Interaction
             public ITimedObject GetObject(Func<NoteData, Note> constructor)
             {
                 return _timedEvent;
-            }
-        }
-
-        private sealed class TimedEventDescriptorIndexed : TimedEventDescriptor, IObjectDescriptorIndexed
-        {
-            private readonly int _index;
-
-            public TimedEventDescriptorIndexed(TimedEvent timedEvent, int index)
-                : base(timedEvent)
-            {
-                _index = index;
-            }
-
-            public TimedObjectAt<ITimedObject> GetIndexedObject(Func<NoteData, Note> constructor)
-            {
-                return new TimedObjectAt<ITimedObject>(GetObject(constructor), _index);
             }
         }
 
@@ -278,42 +234,13 @@ namespace Melanchall.DryWetMidi.Interaction
             ThrowIfArgument.IsNull(nameof(midiEvents), midiEvents);
 
             var result = new List<Note>();
-            var notesBuilder = new NotesBuilder(settings);
 
-            var notes = notesBuilder.GetNotesLazy(midiEvents.GetTimedEventsLazy(timedEventDetectionSettings));
+            // TODO: optimize: get notes only
+            foreach (var note in GetNotesAndTimedEventsLazy(midiEvents.GetTimedEventsLazy(timedEventDetectionSettings, 0), settings).OfType<Note>())
+            {
+                result.Add(note);
+            }
 
-            result.AddRange(notes);
-            return new SortedImmutableCollection<Note>(result);
-        }
-
-        /// <summary>
-        /// Gets notes contained in the specified <see cref="EventsCollection"/>. More info in the
-        /// <see href="xref:a_getting_objects#getnotes">Getting objects: GetNotes</see> article.
-        /// </summary>
-        /// <param name="eventsCollection"><see cref="EventsCollection"/> to search for notes.</param>
-        /// <param name="settings">Settings according to which notes should be detected and built.</param>
-        /// <param name="timedEventDetectionSettings">Settings according to which timed events should be detected
-        /// and built to construct notes.</param>
-        /// <returns>Collection of notes contained in <paramref name="eventsCollection"/> ordered by time.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="eventsCollection"/> is <c>null</c>.</exception>
-        /// <seealso cref="ProcessNotes(EventsCollection, Action{Note}, Predicate{Note}, NoteDetectionSettings, TimedEventDetectionSettings, NoteProcessingHint)"/>
-        /// <seealso cref="ProcessNotes(EventsCollection, Action{Note}, NoteDetectionSettings, TimedEventDetectionSettings, NoteProcessingHint)"/>
-        /// <seealso cref="RemoveNotes(EventsCollection, NoteDetectionSettings, TimedEventDetectionSettings)"/>
-        /// <seealso cref="RemoveNotes(EventsCollection, Predicate{Note}, NoteDetectionSettings, TimedEventDetectionSettings)"/>
-        /// <seealso cref="GetObjectsUtilities"/>
-        public static ICollection<Note> GetNotes(
-            this EventsCollection eventsCollection,
-            NoteDetectionSettings settings = null,
-            TimedEventDetectionSettings timedEventDetectionSettings = null)
-        {
-            ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
-
-            var result = new List<Note>();
-            var notesBuilder = new NotesBuilder(settings);
-
-            var notes = notesBuilder.GetNotesLazy(eventsCollection.GetTimedEventsLazy(timedEventDetectionSettings));
-
-            result.AddRange(notes);
             return new SortedImmutableCollection<Note>(result);
         }
 
@@ -372,14 +299,11 @@ namespace Melanchall.DryWetMidi.Interaction
                 case 1: return eventsCollections[0].GetNotes(settings, timedEventDetectionSettings);
             }
 
-            var eventsCount = eventsCollections.Sum(e => e.Count);
-            var result = new List<Note>(eventsCount / 3);
-            var notesBuilder = new NotesBuilder(settings);
+            var notes = trackChunks
+                .Select((c, i) => GetNotesAndTimedEventsLazy(c.Events.GetTimedEventsLazy(timedEventDetectionSettings, i), settings).OfType<Note>())
+                .MergeSortedObjectsCollections();
 
-            var notes = notesBuilder.GetNotesLazy(eventsCollections.GetTimedEventsLazy(eventsCount, timedEventDetectionSettings));
-
-            result.AddRange(notes.Select(n => n.Object));
-            return new SortedImmutableCollection<Note>(result);
+            return new SortedImmutableCollection<Note>(notes.ToArray());
         }
 
         /// <summary>
@@ -832,7 +756,7 @@ namespace Melanchall.DryWetMidi.Interaction
             ThrowIfArgument.IsNull(nameof(match), match);
 
             var notesToRemoveCount = eventsCollection.ProcessNotes(
-                n => n.TimedNoteOnEvent.Event.Flag = n.TimedNoteOffEvent.Event.Flag = true,
+                n => n.TimedNoteOnEvent.Event.MustBeRemoved = n.TimedNoteOffEvent.Event.MustBeRemoved = true,
                 match,
                 settings,
                 timedEventDetectionSettings,
@@ -841,7 +765,7 @@ namespace Melanchall.DryWetMidi.Interaction
             if (notesToRemoveCount == 0)
                 return 0;
 
-            eventsCollection.RemoveTimedEvents(e => e.Event.Flag);
+            eventsCollection.RemoveTimedEvents(e => e.Event.MustBeRemoved);
             return notesToRemoveCount;
         }
 
@@ -953,7 +877,7 @@ namespace Melanchall.DryWetMidi.Interaction
             ThrowIfArgument.IsNull(nameof(match), match);
 
             var notesToRemoveCount = trackChunks.ProcessNotes(
-                n => n.TimedNoteOnEvent.Event.Flag = n.TimedNoteOffEvent.Event.Flag = true,
+                n => n.TimedNoteOnEvent.Event.MustBeRemoved = n.TimedNoteOffEvent.Event.MustBeRemoved = true,
                 match,
                 settings,
                 timedEventDetectionSettings,
@@ -962,7 +886,7 @@ namespace Melanchall.DryWetMidi.Interaction
             if (notesToRemoveCount == 0)
                 return 0;
 
-            trackChunks.RemoveTimedEvents(e => e.Event.Flag);
+            trackChunks.RemoveTimedEvents(e => e.Event.MustBeRemoved);
             return notesToRemoveCount;
         }
 
@@ -1035,30 +959,32 @@ namespace Melanchall.DryWetMidi.Interaction
         }
 
         internal static int ProcessNotesInternal(
-            this IEnumerable<EventsCollection> eventsCollectionsIn,
+            this IEnumerable<EventsCollection> eventsCollections,
             Action<Note> action,
             Predicate<Note> match,
             NoteDetectionSettings noteDetectionSettings,
             TimedEventDetectionSettings timedEventDetectionSettings,
             NoteProcessingHint hint)
         {
-            var eventsCollections = eventsCollectionsIn.Where(c => c != null).ToArray();
-            var eventsCount = eventsCollections.Sum(c => c.Count);
+            var processedCount = 0;
+            var eventsCollectionIndex = 0;
 
-            var iMatched = 0;
-
-            var timeOrLengthChanged = false;
             var timeOrLengthCanBeChanged = hint.HasFlag(NoteProcessingHint.TimeOrLengthCanBeChanged);
-            var collectedTimedEvents = timeOrLengthCanBeChanged ? new List<TimedObjectAt<TimedEvent>>(eventsCount) : null;
 
-            var notesBuilder = new NotesBuilder(noteDetectionSettings);
-            var notes = notesBuilder.GetNotesLazy(eventsCollections.GetTimedEventsLazy(eventsCount, timedEventDetectionSettings, false), collectedTimedEvents != null, collectedTimedEvents);
-
-            foreach (var noteAt in notes)
+            foreach (var eventsCollection in eventsCollections)
             {
-                var note = noteAt.Object;
-                if (match(note))
+                var matchedCount = 0;
+
+                var timeOrLengthChanged = false;
+
+                var timedEvents = eventsCollection.GetTimedEventsLazy(timedEventDetectionSettings, eventsCollectionIndex, false).ToArray();
+                var notes = GetNotesAndTimedEventsLazy(timedEvents, noteDetectionSettings).OfType<Note>();
+
+                foreach (var note in notes)
                 {
+                    if (!match(note))
+                        continue;
+
                     var startTime = note.TimedNoteOnEvent.Time;
                     var endTime = note.TimedNoteOffEvent.Time;
 
@@ -1066,23 +992,17 @@ namespace Melanchall.DryWetMidi.Interaction
 
                     timeOrLengthChanged |= note.TimedNoteOnEvent.Time != startTime || note.TimedNoteOffEvent.Time != endTime;
 
-                    iMatched++;
+                    matchedCount++;
                 }
+
+                if (timeOrLengthCanBeChanged && timeOrLengthChanged)
+                    eventsCollection.SortAndUpdateEvents(timedEvents);
+
+                processedCount += matchedCount;
+                eventsCollectionIndex++;
             }
 
-            if (timeOrLengthCanBeChanged && timeOrLengthChanged)
-                eventsCollections.SortAndUpdateEvents(collectedTimedEvents);
-
-            return iMatched;
-        }
-
-        internal static IEnumerable<TimedObjectAt<ITimedObject>> GetNotesAndTimedEventsLazy(
-            this IEnumerable<TimedObjectAt<TimedEvent>> timedEvents,
-            NoteDetectionSettings settings)
-        {
-            return new SortedLazyCollection<TimedObjectAt<ITimedObject>>(GetSortedNotesAndTimedEventsLazy(
-                timedEvents,
-                settings));
+            return processedCount;
         }
 
         internal static IEnumerable<ITimedObject> GetNotesAndTimedEventsLazy(
@@ -1106,85 +1026,6 @@ namespace Melanchall.DryWetMidi.Interaction
         private static int GetNoteEventId(NoteEvent noteEvent)
         {
             return noteEvent.Channel * 1000 + noteEvent.NoteNumber;
-        }
-
-        private static IEnumerable<TimedObjectAt<ITimedObject>> GetSortedNotesAndTimedEventsLazy(
-            this IEnumerable<TimedObjectAt<TimedEvent>> timedEvents,
-            NoteDetectionSettings settings)
-        {
-            var objectsDescriptors = new LinkedList<IObjectDescriptorIndexed>();
-            var notesDescriptorsNodes = new Dictionary<Tuple<int, int>, NoteOnsHolderIndexed>();
-
-            var constructor = settings?.Constructor;
-
-            foreach (var timedEventTuple in timedEvents)
-            {
-                var timedEvent = timedEventTuple.Object;
-
-                switch (timedEvent.Event.EventType)
-                {
-                    case MidiEventType.NoteOn:
-                        {
-                            var noteId = GetNoteEventId((NoteOnEvent)timedEvent.Event);
-                            var noteFullId = Tuple.Create(noteId, timedEventTuple.AtIndex);
-                            var node = objectsDescriptors.AddLast(new NoteDescriptorIndexed(timedEvent, timedEventTuple.AtIndex));
-
-                            NoteOnsHolderIndexed noteOnsHolder;
-                            if (!notesDescriptorsNodes.TryGetValue(noteFullId, out noteOnsHolder))
-                                notesDescriptorsNodes.Add(noteFullId, noteOnsHolder = new NoteOnsHolderIndexed(settings.NoteStartDetectionPolicy));
-
-                            noteOnsHolder.Add(node);
-                        }
-                        break;
-                    case MidiEventType.NoteOff:
-                        {
-                            var noteId = GetNoteEventId((NoteOffEvent)timedEvent.Event);
-                            var noteFullId = Tuple.Create(noteId, timedEventTuple.AtIndex);
-
-                            NoteOnsHolderIndexed noteOnsHolder;
-                            LinkedListNode<IObjectDescriptorIndexed> node;
-
-                            if (!notesDescriptorsNodes.TryGetValue(noteFullId, out noteOnsHolder) || noteOnsHolder.Count == 0 || (node = noteOnsHolder.GetNext()).List == null)
-                            {
-                                objectsDescriptors.AddLast(new TimedEventDescriptorIndexed(timedEvent, timedEventTuple.AtIndex));
-                                break;
-                            }
-
-                            var noteDescriptorIndexed = (NoteDescriptorIndexed)node.Value;
-                            noteDescriptorIndexed.NoteOffTimedEvent = timedEvent;
-
-                            var previousNode = node.Previous;
-                            if (previousNode != null)
-                                break;
-
-                            for (var n = node; n != null;)
-                            {
-                                if (!n.Value.IsCompleted)
-                                    break;
-
-                                yield return n.Value.GetIndexedObject(constructor);
-
-                                var next = n.Next;
-                                objectsDescriptors.Remove(n);
-                                n = next;
-                            }
-                        }
-                        break;
-                    default:
-                        {
-                            if (objectsDescriptors.Count == 0)
-                                yield return new TimedObjectAt<ITimedObject>(timedEvent, timedEventTuple.AtIndex);
-                            else
-                                objectsDescriptors.AddLast(new TimedEventDescriptorIndexed(timedEvent, timedEventTuple.AtIndex));
-                        }
-                        break;
-                }
-            }
-
-            foreach (var objectDescriptor in objectsDescriptors)
-            {
-                yield return objectDescriptor.GetIndexedObject(constructor);
-            }
         }
 
         private static IEnumerable<ITimedObject> GetSortedNotesAndTimedEventsLazy(

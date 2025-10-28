@@ -27,6 +27,7 @@ namespace Melanchall.DryWetMidi.Tests.Utilities
             long timesEpsilon,
             string message)
         {
+            // TODO: rework on enumerators directly
             var expectedCount = expectedTimedObjects.Count();
             var actualCount = actualTimedObjects.Count();
 
@@ -278,7 +279,10 @@ namespace Melanchall.DryWetMidi.Tests.Utilities
             ClassicAssert.AreEqual(expectedNote.Length, actualNote.Length, $"{message} Length is invalid.");
 
             if (expectedNote.GetType() != typeof(Note))
+            {
+                ClassicAssert.AreEqual(expectedNote.GetType(), actualNote.GetType(), $"{message} Different types (custom comparison).");
                 ClassicAssert.IsTrue(expectedNote.Equals(actualNote), $"{message} Custom comparison failed.");
+            }
         }
 
         private static void AreEqual(Rest expectedRest, Rest actualRest, string message)
@@ -293,7 +297,10 @@ namespace Melanchall.DryWetMidi.Tests.Utilities
             AreEqual(expectedChord.Notes, actualChord.Notes, $"{message} Notes are invalid.");
 
             if (expectedChord.GetType() != typeof(Chord))
+            {
+                ClassicAssert.AreEqual(expectedChord.GetType(), actualChord.GetType(), $"{message} Different types (custom comparison).");
                 ClassicAssert.IsTrue(expectedChord.Equals(actualChord), $"{message} Custom comparison failed.");
+            }
         }
 
         private static void AreEqual(TimedEvent expectedTimedEvent, TimedEvent actualTimedEvent, bool compareDeltaTimes, long timesEpsilon, string message)
@@ -308,7 +315,10 @@ namespace Melanchall.DryWetMidi.Tests.Utilities
                 $"{message} {eventsEqualityCheckMessage}");
 
             if (expectedTimedEvent.GetType() != typeof(TimedEvent))
+            {
+                ClassicAssert.AreEqual(expectedTimedEvent.GetType(), actualTimedEvent.GetType(), $"{message} Different types (custom comparison).");
                 ClassicAssert.IsTrue(expectedTimedEvent.Equals(actualTimedEvent), $"{message} Custom comparison failed.");
+            }
         }
 
         #endregion
