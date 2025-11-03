@@ -317,6 +317,15 @@ namespace Melanchall.DryWetMidi.Core
 
         internal void SetByIndexInternal(int index, MidiEvent midiEvent)
         {
+            var oldMidiEvent = _events[index];
+            if (IsTempoMapEvent(oldMidiEvent))
+                _tempoMapEventsCount--;
+
+            if (IsTempoMapEvent(midiEvent))
+            {
+                _tempoMapEventsCount++;
+            }
+
             _events[index] = midiEvent;
 
             IsInitialState = false;

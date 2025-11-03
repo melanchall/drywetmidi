@@ -466,6 +466,70 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 message: "Invalid tempo map after third Set Tempo event added.");
         }
 
+        [Test]
+        public void GetTempoMap_AfterTempoEventSetByIndex()
+        {
+            var trackChunks = new[]
+            {
+                new TrackChunk(
+                    new TextEvent("A"),
+                    new TextEvent("B"))
+            };
+
+            var timeDivision = new TicksPerQuarterNoteTimeDivision(480);
+            var tempoMap = trackChunks.GetTempoMap(timeDivision);
+
+            CollectionAssert.IsEmpty(tempoMap.GetTimeSignatureChanges(), "There are time signature changes.");
+            CollectionAssert.IsEmpty(tempoMap.GetTempoChanges(), "There are tempo changes.");
+            ClassicAssert.AreEqual(timeDivision, tempoMap.TimeDivision, "Time division is invalid.");
+
+            var setTempoEvent = new SetTempoEvent(600);
+            trackChunks[0].Events[1] = setTempoEvent;
+
+            tempoMap = trackChunks.GetTempoMap(timeDivision);
+
+            CollectionAssert.AreEqual(
+                new[]
+                {
+                    new ValueChange<Tempo>(0, new Tempo(600)),
+                },
+                tempoMap.GetTempoChanges(),
+                "Invalid tempo changes.");
+            CollectionAssert.IsEmpty(tempoMap.GetTimeSignatureChanges(), "There are time signature changes.");
+        }
+
+        [Test]
+        public void GetTempoMap_AfterTimeSignatureEventSetByIndex()
+        {
+            var trackChunks = new[]
+            {
+                new TrackChunk(
+                    new TextEvent("A"),
+                    new TextEvent("B"))
+            };
+
+            var timeDivision = new TicksPerQuarterNoteTimeDivision(480);
+            var tempoMap = trackChunks.GetTempoMap(timeDivision);
+
+            CollectionAssert.IsEmpty(tempoMap.GetTimeSignatureChanges(), "There are time signature changes.");
+            CollectionAssert.IsEmpty(tempoMap.GetTempoChanges(), "There are tempo changes.");
+            ClassicAssert.AreEqual(timeDivision, tempoMap.TimeDivision, "Time division is invalid.");
+
+            var timeSignatureEvent = new TimeSignatureEvent(3, 8);
+            trackChunks[0].Events[1] = timeSignatureEvent;
+
+            tempoMap = trackChunks.GetTempoMap(timeDivision);
+
+            CollectionAssert.AreEqual(
+                new[]
+                {
+                    new ValueChange<TimeSignature>(0, new TimeSignature(3, 8)),
+                },
+                tempoMap.GetTimeSignatureChanges(),
+                "Invalid time signature changes.");
+            CollectionAssert.IsEmpty(tempoMap.GetTempoChanges(), "There are tempo changes.");
+        }
+
         #endregion
 
         #region Private methods
