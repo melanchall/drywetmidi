@@ -527,7 +527,7 @@ namespace Melanchall.DryWetMidi.Interaction
                     ? constructor(new TimedEventData(midiEvent, time, 0, i))
                     : new TimedEvent(midiEvent, time);
 
-                if (match(timedEvent))
+                if (timedEvent == null || match(timedEvent))
                     removedEventsCount++;
                 else
                 {
@@ -878,11 +878,14 @@ namespace Melanchall.DryWetMidi.Interaction
 
                 if (useCustomConstructor)
                 {
-                    yield return constructor(new TimedEventData(
+                    var timedEvent = constructor(new TimedEventData(
                         cloneEvent ? midiEvent.Clone() : midiEvent,
                         time,
                         eventsCollectionIndex,
                         index));
+
+                    if (timedEvent != null)
+                        yield return timedEvent;
                 }
                 else
                 {

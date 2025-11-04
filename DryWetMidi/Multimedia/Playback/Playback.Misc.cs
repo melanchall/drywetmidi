@@ -1060,7 +1060,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             }
         }
 
-        private async void OnClockTicked(object sender, EventArgs e)
+        private void OnClockTicked(object sender, EventArgs e)
         {
             TraceTick("clock ticked");
 

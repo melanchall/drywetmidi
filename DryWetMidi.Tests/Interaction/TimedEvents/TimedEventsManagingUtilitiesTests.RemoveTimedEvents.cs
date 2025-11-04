@@ -530,6 +530,48 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 midiEvents: Enumerable.Range(0, 10).Select(j => Enumerable.Range(0, 10000).Select(i => new NoteOnEvent()).ToArray()).ToArray());
         }
 
+        // TODO: describe in docs
+        [Test]
+        public void RemoveTimedEvents_Custom_Null_1()
+        {
+            RemoveTimedEvents_EventsCollection_WithPredicate(
+                containerType: ContainerType.EventsCollection,
+                midiEvents: new MidiEvent[]
+                {
+                    new TextEvent("A"),
+                    new TextEvent("B") { DeltaTime = 10 },
+                },
+                match: e => e.Event is TextEvent,
+                expectedMidiEvents: Array.Empty<MidiEvent>(),
+                expectedRemovedCount: 2,
+                settings: new TimedEventDetectionSettings
+                {
+                    Constructor = timedEventData => null,
+                });
+        }
+
+        // TODO: describe in docs
+        [Test]
+        public void RemoveTimedEvents_Custom_Null_2()
+        {
+            RemoveTimedEvents_EventsCollection_WithPredicate(
+                containerType: ContainerType.EventsCollection,
+                midiEvents: new MidiEvent[]
+                {
+                    new TextEvent("A"),
+                    new TextEvent("B") { DeltaTime = 10 },
+                },
+                match: e => e.Event is TextEvent,
+                expectedMidiEvents: Array.Empty<MidiEvent>(),
+                expectedRemovedCount: 2,
+                settings: new TimedEventDetectionSettings
+                {
+                    Constructor = timedEventData => (timedEventData.Event as TextEvent).Text == "A"
+                        ? null
+                        : new TimedEvent(timedEventData.Event, timedEventData.Time),
+                });
+        }
+
         #endregion
 
         #region Private methods

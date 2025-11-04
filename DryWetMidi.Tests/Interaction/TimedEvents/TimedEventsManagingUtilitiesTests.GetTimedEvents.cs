@@ -2076,6 +2076,43 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 });
         }
 
+        // TODO: describe in docs
+        [Test]
+        public void GetTimedEvents_Custom_Null_1()
+        {
+            var trackChunk = new TrackChunk(
+                new TextEvent("A"),
+                new TextEvent("B"));
+
+            var timedEvents = trackChunk.GetTimedEvents(new TimedEventDetectionSettings
+            {
+                Constructor = timedEventData => null,
+            });
+
+            CollectionAssert.IsEmpty(timedEvents, "Timed events collection is not empty.");
+        }
+
+        // TODO: describe in docs
+        [Test]
+        public void GetTimedEvents_Custom_Null_2()
+        {
+            var trackChunk = new TrackChunk(
+                new TextEvent("A"),
+                new TextEvent("B") { DeltaTime = 10 });
+
+            var timedEvents = trackChunk.GetTimedEvents(new TimedEventDetectionSettings
+            {
+                Constructor = timedEventData => (timedEventData.Event as TextEvent).Text == "A"
+                    ? null
+                    : new TimedEvent(timedEventData.Event, timedEventData.Time),
+            });
+
+            MidiAsserts.AreEqual(
+                new[] { new TimedEvent(new TextEvent("B") { DeltaTime = 10 }, 10) },
+                timedEvents,
+                "Invalid timed events.");
+        }
+
         #endregion
 
         #region Private methods

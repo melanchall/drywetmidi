@@ -1566,6 +1566,57 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 expectedProcessedCount: 0);
         }
 
+        // TODO: describe in docs
+        [Test]
+        public void ProcessTimedEvents_Custom_Null_1()
+        {
+            ProcessTimedEvents_EventsCollection_WithPredicate(
+                wrapToTrackChunk: false,
+                midiEvents: new MidiEvent[]
+                {
+                    new TextEvent("A"),
+                    new TextEvent("B") { DeltaTime = 10 },
+                },
+                action: e => e.Time = 100,
+                match: e => e.Event is TextEvent,
+                expectedMidiEvents: new MidiEvent[]
+                {
+                    new TextEvent("A"),
+                    new TextEvent("B") { DeltaTime = 10 },
+                },
+                expectedProcessedCount: 0,
+                settings: new TimedEventDetectionSettings
+                {
+                    Constructor = timedEventData => null,
+                });
+        }
+
+        // TODO: describe in docs
+        [Test]
+        public void ProcessTimedEvents_Custom_Null_2()
+        {
+            ProcessTimedEvents_EventsCollection_WithPredicate(
+                wrapToTrackChunk: false,
+                midiEvents: new MidiEvent[]
+                {
+                    new TextEvent("A"),
+                    new TextEvent("B") { DeltaTime = 10 },
+                },
+                action: e => e.Time = 100,
+                match: e => e.Event is TextEvent,
+                expectedMidiEvents: new MidiEvent[]
+                {
+                    new TextEvent("B") { DeltaTime = 100 },
+                },
+                expectedProcessedCount: 1,
+                settings: new TimedEventDetectionSettings
+                {
+                    Constructor = timedEventData => (timedEventData.Event as TextEvent).Text == "A"
+                        ? null
+                        : new TimedEvent(timedEventData.Event, timedEventData.Time),
+                });
+        }
+
         #endregion
 
         #region Private methods
