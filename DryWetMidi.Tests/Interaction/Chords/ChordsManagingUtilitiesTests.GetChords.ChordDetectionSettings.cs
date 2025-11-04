@@ -822,6 +822,174 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             },
             expectedChords: new Chord[0]);
 
+        // TODO: describe in docs
+        [Test]
+        public void GetChords_Custom_Null_1() => GetChords_DetectionSettings_EventsCollection(
+            containerType: ContainerType.EventsCollection,
+            settings: new ChordDetectionSettings
+            {
+                Constructor = chordData => null,
+            },
+            midiEvents: new MidiEvent[]
+            {
+                new NoteOnEvent((SevenBitNumber)70, SevenBitNumber.MaxValue),
+                new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue),
+                new NoteOnEvent(),
+                new NoteOffEvent(),
+                new NoteOnEvent { DeltaTime = 100 },
+                new NoteOffEvent(),
+            },
+            expectedChords: new[]
+            {
+                new Chord(
+                    new Note((SevenBitNumber)70) { Velocity = SevenBitNumber.MaxValue },
+                    new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue }),
+                new Chord(
+                    new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue, Time = 100 }),
+            });
+
+        // TODO: describe in docs
+        [Test]
+        public void GetChords_Custom_Null_2() => GetChords_DetectionSettings_EventsCollection(
+            containerType: ContainerType.EventsCollection,
+            settings: new ChordDetectionSettings
+            {
+                Constructor = chordData => chordData.Notes.First().Time == 0
+                    ? null
+                    : new Chord(chordData.Notes),
+            },
+            midiEvents: new MidiEvent[]
+            {
+                new NoteOnEvent((SevenBitNumber)70, SevenBitNumber.MaxValue),
+                new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue),
+                new NoteOnEvent(),
+                new NoteOffEvent(),
+                new NoteOnEvent { DeltaTime = 100 },
+                new NoteOffEvent(),
+            },
+            expectedChords: new[]
+            {
+                new Chord(
+                    new Note((SevenBitNumber)70) { Velocity = SevenBitNumber.MaxValue },
+                    new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue }),
+                new Chord(
+                    new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue, Time = 100 }),
+            });
+
+        // TODO: describe in docs
+        [Test]
+        public void GetChords_Custom_Null_3() => GetChords_DetectionSettings_EventsCollection(
+            containerType: ContainerType.EventsCollection,
+            settings: null,
+            noteDetectionSettings: new NoteDetectionSettings
+            {
+                Constructor = noteData => null,
+            },
+            midiEvents: new MidiEvent[]
+            {
+                new NoteOnEvent((SevenBitNumber)70, SevenBitNumber.MaxValue),
+                new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue),
+                new NoteOnEvent(),
+                new NoteOffEvent(),
+                new NoteOnEvent { DeltaTime = 100 },
+                new NoteOffEvent(),
+            },
+            expectedChords: new[]
+            {
+                new Chord(
+                    new Note((SevenBitNumber)70) { Velocity = SevenBitNumber.MaxValue },
+                    new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue }),
+                new Chord(
+                    new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue, Time = 100 }),
+            });
+
+        // TODO: describe in docs
+        [Test]
+        public void GetChords_Custom_Null_4() => GetChords_DetectionSettings_EventsCollection(
+            containerType: ContainerType.EventsCollection,
+            settings: null,
+            noteDetectionSettings: new NoteDetectionSettings
+            {
+                Constructor = noteData => noteData.TimedNoteOnEvent.Time == 0
+                    ? null
+                    : new Note(noteData.TimedNoteOnEvent, noteData.TimedNoteOffEvent),
+            },
+            midiEvents: new MidiEvent[]
+            {
+                new NoteOnEvent((SevenBitNumber)70, SevenBitNumber.MaxValue),
+                new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue),
+                new NoteOnEvent(),
+                new NoteOffEvent(),
+                new NoteOnEvent { DeltaTime = 100 },
+                new NoteOffEvent(),
+            },
+            expectedChords: new[]
+            {
+                new Chord(
+                    new Note((SevenBitNumber)70) { Velocity = SevenBitNumber.MaxValue },
+                    new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue }),
+                new Chord(
+                    new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue, Time = 100 }),
+            });
+
+        // TODO: describe in docs
+        [Test]
+        public void GetChords_Custom_Null_5() => GetChords_DetectionSettings_EventsCollection(
+            containerType: ContainerType.EventsCollection,
+            settings: null,
+            noteDetectionSettings: null,
+            timedEventDetectionSettings: new TimedEventDetectionSettings
+            {
+                Constructor = timedEventData => null,
+            },
+            midiEvents: new MidiEvent[]
+            {
+                new NoteOnEvent((SevenBitNumber)70, SevenBitNumber.MaxValue),
+                new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue),
+                new NoteOnEvent(),
+                new NoteOffEvent(),
+                new NoteOnEvent { DeltaTime = 100 },
+                new NoteOffEvent(),
+            },
+            expectedChords: new[]
+            {
+                new Chord(
+                    new Note((SevenBitNumber)70) { Velocity = SevenBitNumber.MaxValue },
+                    new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue }),
+                new Chord(
+                    new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue, Time = 100 }),
+            });
+
+        // TODO: describe in docs
+        [Test]
+        public void GetChords_Custom_Null_6() => GetChords_DetectionSettings_EventsCollection(
+            containerType: ContainerType.EventsCollection,
+            settings: null,
+            noteDetectionSettings: null,
+            timedEventDetectionSettings: new TimedEventDetectionSettings
+            {
+                Constructor = timedEventData => timedEventData.Time == 0
+                    ? null
+                    : new TimedEvent(timedEventData.Event, timedEventData.Time),
+            },
+            midiEvents: new MidiEvent[]
+            {
+                new NoteOnEvent((SevenBitNumber)70, SevenBitNumber.MaxValue),
+                new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue),
+                new NoteOnEvent(),
+                new NoteOffEvent(),
+                new NoteOnEvent { DeltaTime = 100 },
+                new NoteOffEvent(),
+            },
+            expectedChords: new[]
+            {
+                new Chord(
+                    new Note((SevenBitNumber)70) { Velocity = SevenBitNumber.MaxValue },
+                    new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue }),
+                new Chord(
+                    new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue, Time = 100 }),
+            });
+
         #endregion
 
         #region Private methods

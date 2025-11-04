@@ -1156,9 +1156,15 @@ namespace Melanchall.DryWetMidi.Interaction
                     }
 
                     var notes = chordDescriptor.NotesNodes.Select(n => (Note)((NoteDescriptor)n.Value).TimedObject);
-                    yield return constructor == null
-                        ? new Chord(notes)
-                        : constructor(new ChordData(notes.ToArray()));
+
+                    var chord = constructor != null
+                        ? constructor(new ChordData(notes.ToArray()))
+                        : null;
+
+                    if (chord == null)
+                        chord = new Chord(notes);
+
+                    yield return chord;
                 }
 
                 for (var node = timedObjects.First; node != null && (!node.Value.ChordStart || node.Value.ChordDescriptor?.IsCompleted == false);)

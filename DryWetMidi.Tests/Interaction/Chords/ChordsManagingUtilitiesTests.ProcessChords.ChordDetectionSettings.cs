@@ -738,6 +738,198 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue) { Channel = (FourBitNumber)8 },
             });
 
+        // TODO: describe in docs
+        [Test]
+        public void ProcessChords_Custom_Null_1() => ProcessChords_DetectionSettings_EventsCollection_WithPredicate(
+            containerType: ContainerType.EventsCollection,
+            settings: new ChordDetectionSettings
+            {
+                Constructor = chordData => null,
+            },
+            midiEvents: new MidiEvent[]
+            {
+                new NoteOnEvent((SevenBitNumber)70, SevenBitNumber.MaxValue),
+                new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue),
+                new NoteOnEvent(),
+                new NoteOffEvent(),
+                new NoteOnEvent { DeltaTime = 100 },
+                new NoteOffEvent(),
+            },
+            action: chord => chord.Time += 10,
+            match: chord => chord.Time >= 0,
+            expectedMidiEvents: new MidiEvent[]
+            {
+                new NoteOnEvent((SevenBitNumber)70, SevenBitNumber.MaxValue) { DeltaTime = 10 },
+                new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue),
+                new NoteOnEvent(),
+                new NoteOffEvent(),
+                new NoteOnEvent { DeltaTime = 100 },
+                new NoteOffEvent(),
+            },
+            expectedProcessedCount: 2);
+
+        // TODO: describe in docs
+        [Test]
+        public void ProcessChords_Custom_Null_2() => ProcessChords_DetectionSettings_EventsCollection_WithPredicate(
+            containerType: ContainerType.EventsCollection,
+            settings: new ChordDetectionSettings
+            {
+                Constructor = chordData => chordData.Notes.First().Time == 0
+                    ? null
+                    : new Chord(chordData.Notes),
+            },
+            midiEvents: new MidiEvent[]
+            {
+                new NoteOnEvent((SevenBitNumber)70, SevenBitNumber.MaxValue),
+                new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue),
+                new NoteOnEvent(),
+                new NoteOffEvent(),
+                new NoteOnEvent { DeltaTime = 100 },
+                new NoteOffEvent(),
+            },
+            action: chord => chord.Time += 10,
+            match: chord => chord.Time >= 0,
+            expectedMidiEvents: new MidiEvent[]
+            {
+                new NoteOnEvent((SevenBitNumber)70, SevenBitNumber.MaxValue) { DeltaTime = 10 },
+                new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue),
+                new NoteOnEvent(),
+                new NoteOffEvent(),
+                new NoteOnEvent { DeltaTime = 100 },
+                new NoteOffEvent(),
+            },
+            expectedProcessedCount: 2);
+
+        // TODO: describe in docs
+        [Test]
+        public void ProcessChords_Custom_Null_3() => ProcessChords_DetectionSettings_EventsCollection_WithPredicate(
+            containerType: ContainerType.EventsCollection,
+            settings: null,
+            noteDetectionSettings: new NoteDetectionSettings
+            {
+                Constructor = noteData => null,
+            },
+            midiEvents: new MidiEvent[]
+            {
+                new NoteOnEvent((SevenBitNumber)70, SevenBitNumber.MaxValue),
+                new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue),
+                new NoteOnEvent(),
+                new NoteOffEvent(),
+                new NoteOnEvent { DeltaTime = 100 },
+                new NoteOffEvent(),
+            },
+            action: chord => chord.Time += 10,
+            match: chord => chord.Time >= 0,
+            expectedMidiEvents: new MidiEvent[]
+            {
+                new NoteOnEvent((SevenBitNumber)70, SevenBitNumber.MaxValue) { DeltaTime = 10 },
+                new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue),
+                new NoteOnEvent(),
+                new NoteOffEvent(),
+                new NoteOnEvent { DeltaTime = 100 },
+                new NoteOffEvent(),
+            },
+            expectedProcessedCount: 2);
+
+        // TODO: describe in docs
+        [Test]
+        public void ProcessChords_Custom_Null_4() => ProcessChords_DetectionSettings_EventsCollection_WithPredicate(
+            containerType: ContainerType.EventsCollection,
+            settings: null,
+            noteDetectionSettings: new NoteDetectionSettings
+            {
+                Constructor = noteData => noteData.TimedNoteOnEvent.Time == 0
+                    ? null
+                    : new Note(noteData.TimedNoteOnEvent, noteData.TimedNoteOffEvent),
+            },
+            midiEvents: new MidiEvent[]
+            {
+                new NoteOnEvent((SevenBitNumber)70, SevenBitNumber.MaxValue),
+                new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue),
+                new NoteOnEvent(),
+                new NoteOffEvent(),
+                new NoteOnEvent { DeltaTime = 100 },
+                new NoteOffEvent(),
+            },
+            action: chord => chord.Time += 10,
+            match: chord => chord.Time >= 0,
+            expectedMidiEvents: new MidiEvent[]
+            {
+                new NoteOnEvent((SevenBitNumber)70, SevenBitNumber.MaxValue) { DeltaTime = 10 },
+                new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue),
+                new NoteOnEvent(),
+                new NoteOffEvent(),
+                new NoteOnEvent { DeltaTime = 100 },
+                new NoteOffEvent(),
+            },
+            expectedProcessedCount: 2);
+
+        // TODO: describe in docs
+        [Test]
+        public void ProcessChords_Custom_Null_5() => ProcessChords_DetectionSettings_EventsCollection_WithPredicate(
+            containerType: ContainerType.EventsCollection,
+            settings: null,
+            noteDetectionSettings: null,
+            timedEventDetectionSettings: new TimedEventDetectionSettings
+            {
+                Constructor = timedEventData => null,
+            },
+            midiEvents: new MidiEvent[]
+            {
+                new NoteOnEvent((SevenBitNumber)70, SevenBitNumber.MaxValue),
+                new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue),
+                new NoteOnEvent(),
+                new NoteOffEvent(),
+                new NoteOnEvent { DeltaTime = 100 },
+                new NoteOffEvent(),
+            },
+            action: chord => chord.Time += 10,
+            match: chord => chord.Time >= 0,
+            expectedMidiEvents: new MidiEvent[]
+            {
+                new NoteOnEvent((SevenBitNumber)70, SevenBitNumber.MaxValue) { DeltaTime = 10 },
+                new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue),
+                new NoteOnEvent(),
+                new NoteOffEvent(),
+                new NoteOnEvent { DeltaTime = 100 },
+                new NoteOffEvent(),
+            },
+            expectedProcessedCount: 2);
+
+        // TODO: describe in docs
+        [Test]
+        public void ProcessChords_Custom_Null_6() => ProcessChords_DetectionSettings_EventsCollection_WithPredicate(
+            containerType: ContainerType.EventsCollection,
+            settings: null,
+            noteDetectionSettings: null,
+            timedEventDetectionSettings: new TimedEventDetectionSettings
+            {
+                Constructor = timedEventData => timedEventData.Time == 0
+                    ? null
+                    : new TimedEvent(timedEventData.Event, timedEventData.Time),
+            },
+            midiEvents: new MidiEvent[]
+            {
+                new NoteOnEvent((SevenBitNumber)70, SevenBitNumber.MaxValue),
+                new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue),
+                new NoteOnEvent(),
+                new NoteOffEvent(),
+                new NoteOnEvent { DeltaTime = 100 },
+                new NoteOffEvent(),
+            },
+            action: chord => chord.Time += 10,
+            match: chord => chord.Time >= 0,
+            expectedMidiEvents: new MidiEvent[]
+            {
+                new NoteOnEvent((SevenBitNumber)70, SevenBitNumber.MaxValue) { DeltaTime = 10 },
+                new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue),
+                new NoteOnEvent(),
+                new NoteOffEvent(),
+                new NoteOnEvent { DeltaTime = 100 },
+                new NoteOffEvent(),
+            },
+            expectedProcessedCount: 2);
+
         #endregion
 
         #region Private methods
