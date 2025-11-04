@@ -2089,7 +2089,14 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 Constructor = timedEventData => null,
             });
 
-            CollectionAssert.IsEmpty(timedEvents, "Timed events collection is not empty.");
+            MidiAsserts.AreEqual(
+                new[]
+                {
+                    new TimedEvent(new TextEvent("A"), 0),
+                    new TimedEvent(new TextEvent("B"), 0),
+                },
+                timedEvents,
+                "Invalid timed events.");
         }
 
         // TODO: describe in docs
@@ -2108,7 +2115,11 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             });
 
             MidiAsserts.AreEqual(
-                new[] { new TimedEvent(new TextEvent("B") { DeltaTime = 10 }, 10) },
+                new[]
+                {
+                    new TimedEvent(new TextEvent("A"), 0),
+                    new TimedEvent(new TextEvent("B") { DeltaTime = 10 }, 10),
+                },
                 timedEvents,
                 "Invalid timed events.");
         }

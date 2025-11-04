@@ -1047,6 +1047,88 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 }
             });
 
+        // TODO: describe in docs
+        [Test]
+        public void RemoveNotes_Custom_Null_1() => RemoveNotes_DetectionSettings_EventsCollection_WithPredicate(
+            containerType: ContainerType.EventsCollection,
+            settings: new NoteDetectionSettings
+            {
+                Constructor = noteData => null
+            },
+            midiEvents: new MidiEvent[]
+            {
+                new NoteOnEvent { DeltaTime = 0 },
+                new NoteOffEvent { DeltaTime = 10 },
+                new NoteOnEvent { DeltaTime = 20 },
+                new NoteOffEvent { DeltaTime = 30 },
+            },
+            match: note => note.Time >= 0,
+            expectedMidiEvents: Array.Empty<MidiEvent>(),
+            expectedRemovedCount: 2);
+
+        // TODO: describe in docs
+        [Test]
+        public void RemoveNotes_Custom_Null_2() => RemoveNotes_DetectionSettings_EventsCollection_WithPredicate(
+            containerType: ContainerType.EventsCollection,
+            settings: new NoteDetectionSettings
+            {
+                Constructor = noteData => noteData.TimedNoteOnEvent.Time == 0
+                    ? null
+                    : new Note(noteData.TimedNoteOnEvent, noteData.TimedNoteOffEvent)
+            },
+            midiEvents: new MidiEvent[]
+            {
+                new NoteOnEvent { DeltaTime = 0 },
+                new NoteOffEvent { DeltaTime = 10 },
+                new NoteOnEvent { DeltaTime = 20 },
+                new NoteOffEvent { DeltaTime = 30 },
+            },
+            match: note => note.Time >= 0,
+            expectedMidiEvents: Array.Empty<MidiEvent>(),
+            expectedRemovedCount: 2);
+
+        // TODO: describe in docs
+        [Test]
+        public void RemoveNotes_Custom_Null_3() => RemoveNotes_DetectionSettings_EventsCollection_WithPredicate(
+            containerType: ContainerType.EventsCollection,
+            settings: null,
+            timedEventDetectionSettings: new TimedEventDetectionSettings
+            {
+                Constructor = timedEventData => null
+            },
+            midiEvents: new MidiEvent[]
+            {
+                new NoteOnEvent { DeltaTime = 0 },
+                new NoteOffEvent { DeltaTime = 10 },
+                new NoteOnEvent { DeltaTime = 20 },
+                new NoteOffEvent { DeltaTime = 30 },
+            },
+            match: note => note.Time >= 0,
+            expectedMidiEvents: Array.Empty<MidiEvent>(),
+            expectedRemovedCount: 2);
+
+        // TODO: describe in docs
+        [Test]
+        public void RemoveNotes_Custom_Null_4() => RemoveNotes_DetectionSettings_EventsCollection_WithPredicate(
+            containerType: ContainerType.EventsCollection,
+            settings: null,
+            timedEventDetectionSettings: new TimedEventDetectionSettings
+            {
+                Constructor = timedEventData => timedEventData.Time == 0
+                    ? null
+                    : new TimedEvent(timedEventData.Event, timedEventData.Time),
+            },
+            midiEvents: new MidiEvent[]
+            {
+                new NoteOnEvent { DeltaTime = 0 },
+                new NoteOffEvent { DeltaTime = 10 },
+                new NoteOnEvent { DeltaTime = 20 },
+                new NoteOffEvent { DeltaTime = 30 },
+            },
+            match: note => note.Time >= 0,
+            expectedMidiEvents: Array.Empty<MidiEvent>(),
+            expectedRemovedCount: 2);
+
         #endregion
 
         #region Private methods

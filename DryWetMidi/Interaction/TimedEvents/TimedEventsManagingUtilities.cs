@@ -525,9 +525,12 @@ namespace Melanchall.DryWetMidi.Interaction
 
                 var timedEvent = useCustomConstructor
                     ? constructor(new TimedEventData(midiEvent, time, 0, i))
-                    : new TimedEvent(midiEvent, time);
+                    : null;
 
-                if (timedEvent == null || match(timedEvent))
+                if (timedEvent == null)
+                    timedEvent = new TimedEvent(midiEvent, time);
+
+                if (match(timedEvent))
                     removedEventsCount++;
                 else
                 {
@@ -635,6 +638,8 @@ namespace Melanchall.DryWetMidi.Interaction
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
             ThrowIfArgument.IsNull(nameof(match), match);
 
+            // TODO: rework
+
             var eventsCollections = trackChunks.Where(c => c != null).Select(c => c.Events).ToArray();
             var eventsCount = eventsCollections.Sum(c => c.Count);
 
@@ -678,7 +683,11 @@ namespace Melanchall.DryWetMidi.Interaction
 
                 var timedEvent = useCustomConstructor
                     ? constructor(new TimedEventData(midiEvent, minTime, eventsCollectionIndex, eventsCollectionIndices[eventsCollectionIndex]))
-                    : new TimedEvent(midiEvent, minTime);
+                    : null;
+
+                if (timedEvent == null)
+                    timedEvent = new TimedEvent(midiEvent, minTime);
+
                 if (match(timedEvent))
                     removedEventsCounts[eventsCollectionIndex]++;
                 else
@@ -876,23 +885,24 @@ namespace Melanchall.DryWetMidi.Interaction
 
                 time += midiEvent.DeltaTime;
 
+                TimedEvent timedEvent = null;
+
                 if (useCustomConstructor)
                 {
-                    var timedEvent = constructor(new TimedEventData(
+                    timedEvent = constructor(new TimedEventData(
                         cloneEvent ? midiEvent.Clone() : midiEvent,
                         time,
                         eventsCollectionIndex,
                         index));
+                }
 
-                    if (timedEvent != null)
-                        yield return timedEvent;
-                }
-                else
+                if (timedEvent == null)
                 {
-                    var timedEvent = new TimedEvent(cloneEvent ? midiEvent.Clone() : midiEvent);
+                    timedEvent = new TimedEvent(cloneEvent ? midiEvent.Clone() : midiEvent);
                     timedEvent._time = time;
-                    yield return timedEvent;
                 }
+
+                yield return timedEvent;
 
                 index++;
             }

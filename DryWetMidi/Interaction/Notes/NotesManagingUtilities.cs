@@ -111,11 +111,17 @@ namespace Melanchall.DryWetMidi.Interaction
 
             public ITimedObject GetObject(Func<NoteData, Note> constructor)
             {
-                return IsCompleted
-                    ? (constructor == null
-                        ? new Note(_noteOnTimedEvent, NoteOffTimedEvent, false)
-                        : constructor(new NoteData(_noteOnTimedEvent, NoteOffTimedEvent)))
-                    : (ITimedObject)_noteOnTimedEvent;
+                if (!IsCompleted)
+                    return _noteOnTimedEvent;
+
+                var note = constructor != null
+                    ? constructor(new NoteData(_noteOnTimedEvent, NoteOffTimedEvent))
+                    : null;
+
+                if (note == null)
+                    note = new Note(_noteOnTimedEvent, NoteOffTimedEvent, false);
+
+                return note;
             }
         }
 

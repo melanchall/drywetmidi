@@ -1581,10 +1581,10 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 match: e => e.Event is TextEvent,
                 expectedMidiEvents: new MidiEvent[]
                 {
-                    new TextEvent("A"),
-                    new TextEvent("B") { DeltaTime = 10 },
+                    new TextEvent("A") { DeltaTime = 100 },
+                    new TextEvent("B"),
                 },
-                expectedProcessedCount: 0,
+                expectedProcessedCount: 2,
                 settings: new TimedEventDetectionSettings
                 {
                     Constructor = timedEventData => null,
@@ -1606,9 +1606,10 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 match: e => e.Event is TextEvent,
                 expectedMidiEvents: new MidiEvent[]
                 {
-                    new TextEvent("B") { DeltaTime = 100 },
+                    new TextEvent("A") { DeltaTime = 100 },
+                    new TextEvent("B"),
                 },
-                expectedProcessedCount: 1,
+                expectedProcessedCount: 2,
                 settings: new TimedEventDetectionSettings
                 {
                     Constructor = timedEventData => (timedEventData.Event as TextEvent).Text == "A"

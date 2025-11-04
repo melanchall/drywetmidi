@@ -1206,6 +1206,116 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 }
             });
 
+        // TODO: describe in docs
+        [Test]
+        public void ProcessNotes_Custom_Null_1() => ProcessNotes_DetectionSettings_EventsCollection_WithPredicate(
+            containerType: ContainerType.EventsCollection,
+            settings: new NoteDetectionSettings
+            {
+                Constructor = noteData => null
+            },
+            midiEvents: new MidiEvent[]
+            {
+                new NoteOnEvent { DeltaTime = 0 },
+                new NoteOffEvent { DeltaTime = 10 },
+                new NoteOnEvent { DeltaTime = 20 },
+                new NoteOffEvent { DeltaTime = 30 },
+            },
+            action: note => note.Length = 100,
+            match: note => note.Time >= 0,
+            expectedMidiEvents: new MidiEvent[]
+            {
+                new NoteOnEvent { DeltaTime = 0 },
+                new NoteOnEvent { DeltaTime = 30 },
+                new NoteOffEvent { DeltaTime = 70 },
+                new NoteOffEvent { DeltaTime = 30 },
+            },
+            expectedProcessedCount: 2);
+
+        // TODO: describe in docs
+        [Test]
+        public void ProcessNotes_Custom_Null_2() => ProcessNotes_DetectionSettings_EventsCollection_WithPredicate(
+            containerType: ContainerType.EventsCollection,
+            settings: new NoteDetectionSettings
+            {
+                Constructor = noteData => noteData.TimedNoteOnEvent.Time == 0
+                    ? null
+                    : new Note(noteData.TimedNoteOnEvent, noteData.TimedNoteOffEvent)
+            },
+            midiEvents: new MidiEvent[]
+            {
+                new NoteOnEvent { DeltaTime = 0 },
+                new NoteOffEvent { DeltaTime = 10 },
+                new NoteOnEvent { DeltaTime = 20 },
+                new NoteOffEvent { DeltaTime = 30 },
+            },
+            action: note => note.Length = 100,
+            match: note => note.Time >= 0,
+            expectedMidiEvents: new MidiEvent[]
+            {
+                new NoteOnEvent { DeltaTime = 0 },
+                new NoteOnEvent { DeltaTime = 30 },
+                new NoteOffEvent { DeltaTime = 70 },
+                new NoteOffEvent { DeltaTime = 30 },
+            },
+            expectedProcessedCount: 2);
+
+        // TODO: describe in docs
+        [Test]
+        public void ProcessNotes_Custom_Null_3() => ProcessNotes_DetectionSettings_EventsCollection_WithPredicate(
+            containerType: ContainerType.EventsCollection,
+            settings: null,
+            timedEventDetectionSettings: new TimedEventDetectionSettings
+            {
+                Constructor = timedEventData => null
+            },
+            midiEvents: new MidiEvent[]
+            {
+                new NoteOnEvent { DeltaTime = 0 },
+                new NoteOffEvent { DeltaTime = 10 },
+                new NoteOnEvent { DeltaTime = 20 },
+                new NoteOffEvent { DeltaTime = 30 },
+            },
+            action: note => note.Length = 100,
+            match: note => note.Time >= 0,
+            expectedMidiEvents: new MidiEvent[]
+            {
+                new NoteOnEvent { DeltaTime = 0 },
+                new NoteOnEvent { DeltaTime = 30 },
+                new NoteOffEvent { DeltaTime = 70 },
+                new NoteOffEvent { DeltaTime = 30 },
+            },
+            expectedProcessedCount: 2);
+
+        // TODO: describe in docs
+        [Test]
+        public void ProcessNotes_Custom_Null_4() => ProcessNotes_DetectionSettings_EventsCollection_WithPredicate(
+            containerType: ContainerType.EventsCollection,
+            settings: null,
+            timedEventDetectionSettings: new TimedEventDetectionSettings
+            {
+                Constructor = timedEventData => timedEventData.Time == 0
+                    ? null
+                    : new TimedEvent(timedEventData.Event, timedEventData.Time),
+            },
+            midiEvents: new MidiEvent[]
+            {
+                new NoteOnEvent { DeltaTime = 0 },
+                new NoteOffEvent { DeltaTime = 10 },
+                new NoteOnEvent { DeltaTime = 20 },
+                new NoteOffEvent { DeltaTime = 30 },
+            },
+            action: note => note.Length = 100,
+            match: note => note.Time >= 0,
+            expectedMidiEvents: new MidiEvent[]
+            {
+                new NoteOnEvent { DeltaTime = 0 },
+                new NoteOnEvent { DeltaTime = 30 },
+                new NoteOffEvent { DeltaTime = 70 },
+                new NoteOffEvent { DeltaTime = 30 },
+            },
+            expectedProcessedCount: 2);
+
         #endregion
 
         #region Private methods

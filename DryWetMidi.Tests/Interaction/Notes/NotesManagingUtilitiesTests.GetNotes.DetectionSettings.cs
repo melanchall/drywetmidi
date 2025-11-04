@@ -567,6 +567,96 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue, Time = 110, Length = 70 },
             });
 
+        // TODO: describe in docs
+        [Test]
+        public void GetNotes_Custom_Null_1() => GetNotes_DetectionSettings_EventsCollection(
+            containerType: ContainerType.EventsCollection,
+            settings: new NoteDetectionSettings
+            {
+                Constructor = noteData => null
+            },
+            midiEvents: new MidiEvent[]
+            {
+                new NoteOnEvent { DeltaTime = 0 },
+                new NoteOffEvent { DeltaTime = 10 },
+                new NoteOnEvent { DeltaTime = 20 },
+                new NoteOffEvent { DeltaTime = 30 },
+            },
+            expectedNotes: new[]
+            {
+                new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue, Time = 0, Length = 10 },
+                new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue, Time = 30, Length = 30 },
+            });
+
+        // TODO: describe in docs
+        [Test]
+        public void GetNotes_Custom_Null_2() => GetNotes_DetectionSettings_EventsCollection(
+            containerType: ContainerType.EventsCollection,
+            settings: new NoteDetectionSettings
+            {
+                Constructor = noteData => noteData.TimedNoteOnEvent.Time == 0
+                    ? null
+                    : new Note(noteData.TimedNoteOnEvent, noteData.TimedNoteOffEvent)
+            },
+            midiEvents: new MidiEvent[]
+            {
+                new NoteOnEvent { DeltaTime = 0 },
+                new NoteOffEvent { DeltaTime = 10 },
+                new NoteOnEvent { DeltaTime = 20 },
+                new NoteOffEvent { DeltaTime = 30 },
+            },
+            expectedNotes: new[]
+            {
+                new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue, Time = 0, Length = 10 },
+                new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue, Time = 30, Length = 30 },
+            });
+
+        // TODO: describe in docs
+        [Test]
+        public void GetNotes_Custom_Null_3() => GetNotes_DetectionSettings_EventsCollection(
+            containerType: ContainerType.EventsCollection,
+            settings: null,
+            timedEventDetectionSettings: new TimedEventDetectionSettings
+            {
+                Constructor = timedEventData => null
+            },
+            midiEvents: new MidiEvent[]
+            {
+                new NoteOnEvent { DeltaTime = 0 },
+                new NoteOffEvent { DeltaTime = 10 },
+                new NoteOnEvent { DeltaTime = 20 },
+                new NoteOffEvent { DeltaTime = 30 },
+            },
+            expectedNotes: new[]
+            {
+                new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue, Time = 0, Length = 10 },
+                new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue, Time = 30, Length = 30 },
+            });
+
+        // TODO: describe in docs
+        [Test]
+        public void GetNotes_Custom_Null_4() => GetNotes_DetectionSettings_EventsCollection(
+            containerType: ContainerType.EventsCollection,
+            settings: null,
+            timedEventDetectionSettings: new TimedEventDetectionSettings
+            {
+                Constructor = timedEventData => timedEventData.Time == 0
+                    ? null
+                    : new TimedEvent(timedEventData.Event, timedEventData.Time),
+            },
+            midiEvents: new MidiEvent[]
+            {
+                new NoteOnEvent { DeltaTime = 0 },
+                new NoteOffEvent { DeltaTime = 10 },
+                new NoteOnEvent { DeltaTime = 20 },
+                new NoteOffEvent { DeltaTime = 30 },
+            },
+            expectedNotes: new[]
+            {
+                new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue, Time = 0, Length = 10 },
+                new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue, Time = 30, Length = 30 },
+            });
+
         #endregion
 
         #region Private methods
