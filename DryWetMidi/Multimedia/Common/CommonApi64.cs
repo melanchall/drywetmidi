@@ -12,10 +12,10 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         #region Extern functions
 
-        [DllImport(LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.StdCall)]
         private static extern API_TYPE GetApiType();
 
-        [DllImport(LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.StdCall)]
         private static extern bool CanCompareDevices();
 
         #endregion

@@ -23,6 +23,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <summary>
         /// Gets or sets custom construction method for <see cref="Note"/>. If <c>null</c>,
         /// default method will be used (via one of the <see cref="Note"/>'s constructors).
+        /// The same behavior will be used if the method returns <c>null</c>.
         /// </summary>
         public Func<NoteData, Note> Constructor { get; set; }
 

@@ -25,13 +25,13 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             SENDRESULT_FAILEDSEND = 1
         }
 
-        [DllImport("SendTestData", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("SendTestData", ExactSpelling = true, CallingConvention = CallingConvention.StdCall)]
         private static extern OPENRESULT OpenSender(IntPtr portName, out IntPtr handle);
 
-        [DllImport("SendTestData", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("SendTestData", ExactSpelling = true, CallingConvention = CallingConvention.StdCall)]
         private static extern SENDRESULT SendData(IntPtr handle, byte[] data, int length, int[] indices, int indicesLength);
 
-        [DllImport("SendTestData", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("SendTestData", ExactSpelling = true, CallingConvention = CallingConvention.StdCall)]
         private static extern CLOSERESULT CloseSender(IntPtr handle);
 
         private readonly IntPtr _handle;

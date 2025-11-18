@@ -822,7 +822,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             },
             expectedChords: new Chord[0]);
 
-        // TODO: describe in docs
         [Test]
         public void GetChords_Custom_Null_1() => GetChords_DetectionSettings_EventsCollection(
             containerType: ContainerType.EventsCollection,
@@ -848,7 +847,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue, Time = 100 }),
             });
 
-        // TODO: describe in docs
         [Test]
         public void GetChords_Custom_Null_2() => GetChords_DetectionSettings_EventsCollection(
             containerType: ContainerType.EventsCollection,
@@ -876,7 +874,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue, Time = 100 }),
             });
 
-        // TODO: describe in docs
         [Test]
         public void GetChords_Custom_Null_3() => GetChords_DetectionSettings_EventsCollection(
             containerType: ContainerType.EventsCollection,
@@ -903,7 +900,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue, Time = 100 }),
             });
 
-        // TODO: describe in docs
         [Test]
         public void GetChords_Custom_Null_4() => GetChords_DetectionSettings_EventsCollection(
             containerType: ContainerType.EventsCollection,
@@ -932,7 +928,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue, Time = 100 }),
             });
 
-        // TODO: describe in docs
         [Test]
         public void GetChords_Custom_Null_5() => GetChords_DetectionSettings_EventsCollection(
             containerType: ContainerType.EventsCollection,
@@ -960,7 +955,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue, Time = 100 }),
             });
 
-        // TODO: describe in docs
         [Test]
         public void GetChords_Custom_Null_6() => GetChords_DetectionSettings_EventsCollection(
             containerType: ContainerType.EventsCollection,

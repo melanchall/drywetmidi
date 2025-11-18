@@ -96,7 +96,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 additionalChecks: (p, e) =>
                 {
-                    CheckErrors(errorOccurredData, 1, PlaybackSite.Started, errorMessage);
+                    CheckErrors(errorOccurredData, 1, PlaybackErrorSite.Started, errorMessage);
                     CollectionAssert.AreEqual(new[] { "OK" }, normalData, "Normal data is invalid.");
                 });
         }
@@ -141,7 +141,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 additionalChecks: (p, e) =>
                 {
-                    CheckErrors(errorOccurredData, 1, PlaybackSite.Stopped, errorMessage);
+                    CheckErrors(errorOccurredData, 1, PlaybackErrorSite.Stopped, errorMessage);
                     CollectionAssert.AreEqual(new[] { "OK" }, normalData, "Normal data is invalid.");
                 });
         }
@@ -179,7 +179,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 additionalChecks: (p, e) =>
                 {
-                    CheckErrors(errorOccurredData, 1, PlaybackSite.Finished, errorMessage);
+                    CheckErrors(errorOccurredData, 1, PlaybackErrorSite.Finished, errorMessage);
                     CollectionAssert.AreEqual(new[] { "OK" }, normalData, "Normal data is invalid.");
                 });
         }
@@ -217,7 +217,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 additionalChecks: (p, e) =>
                 {
-                    CheckErrors(errorOccurredData, 2, PlaybackSite.EventPlayed, errorMessage);
+                    CheckErrors(errorOccurredData, 2, PlaybackErrorSite.EventPlayed, errorMessage);
                     CollectionAssert.AreEqual(new[] { "OK", "OK" }, normalData, "Normal data is invalid.");
                 });
         }
@@ -255,7 +255,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 additionalChecks: (p, e) =>
                 {
-                    CheckErrors(errorOccurredData, 1, PlaybackSite.NotesPlaybackStarted, errorMessage);
+                    CheckErrors(errorOccurredData, 1, PlaybackErrorSite.NotesPlaybackStarted, errorMessage);
                     CollectionAssert.AreEqual(new[] { "OK" }, normalData, "Normal data is invalid.");
                 });
         }
@@ -293,7 +293,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 additionalChecks: (p, e) =>
                 {
-                    CheckErrors(errorOccurredData, 1, PlaybackSite.NotesPlaybackFinished, errorMessage);
+                    CheckErrors(errorOccurredData, 1, PlaybackErrorSite.NotesPlaybackFinished, errorMessage);
                     CollectionAssert.AreEqual(new[] { "OK" }, normalData, "Normal data is invalid.");
                 });
         }
@@ -333,7 +333,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 additionalChecks: (p, e) =>
                 {
-                    CheckErrors(errorOccurredData, 1, PlaybackSite.RepeatStarted, errorMessage);
+                    CheckErrors(errorOccurredData, 1, PlaybackErrorSite.RepeatStarted, errorMessage);
                     CollectionAssert.AreEqual(new[] { "OK" }, normalData, "Normal data is invalid.");
                 },
                 repeatsCount: 1);
@@ -944,7 +944,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         public void CheckPlaybackStop()
         {
-            var stopPeriod = TimeSpan.FromSeconds(3);
+            var stopPeriod = TimeSpan.FromSeconds(1);
 
             CheckPlayback(
                 useOutputDevice: false,
@@ -959,9 +959,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new TimedEvent(new NoteOnEvent((SevenBitNumber)30, (SevenBitNumber)50))
                         .SetTime((MetricTimeSpan)TimeSpan.FromSeconds(3), TempoMap),
                     new TimedEvent(new NoteOffEvent())
-                        .SetTime((MetricTimeSpan)TimeSpan.FromSeconds(6), TempoMap),
+                        .SetTime((MetricTimeSpan)TimeSpan.FromSeconds(4), TempoMap),
                     new TimedEvent(new NoteOffEvent((SevenBitNumber)30, (SevenBitNumber)50))
-                        .SetTime((MetricTimeSpan)TimeSpan.FromSeconds(6), TempoMap),
+                        .SetTime((MetricTimeSpan)TimeSpan.FromSeconds(4), TempoMap),
                 },
                 actions: new[]
                 {
@@ -974,8 +974,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)100, (SevenBitNumber)10) { Channel = (FourBitNumber)5 }, TimeSpan.FromSeconds(2)),
                     new SentReceivedEvent(new NoteOnEvent(), TimeSpan.FromSeconds(3) + stopPeriod),
                     new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)30, (SevenBitNumber)50), TimeSpan.FromSeconds(3) + stopPeriod),
-                    new SentReceivedEvent(new NoteOffEvent(), TimeSpan.FromSeconds(6) + stopPeriod),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)30, (SevenBitNumber)50), TimeSpan.FromSeconds(6) + stopPeriod),
+                    new SentReceivedEvent(new NoteOffEvent(), TimeSpan.FromSeconds(4) + stopPeriod),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)30, (SevenBitNumber)50), TimeSpan.FromSeconds(4) + stopPeriod),
                 },
                 setupPlayback: playback => playback.InterruptNotesOnStop = false);
         }

@@ -13,19 +13,19 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         #region Extern functions
 
-        [DllImport(LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.StdCall)]
         private static extern VIRTUAL_OPENRESULT OpenVirtualDevice_Mac(IntPtr name, IntPtr sessionHandle, Callback_Mac callback, out IntPtr info);
 
-        [DllImport(LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.StdCall)]
         private static extern VIRTUAL_CLOSERESULT CloseVirtualDevice(IntPtr info);
 
-        [DllImport(LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.StdCall)]
         private static extern VIRTUAL_SENDBACKRESULT SendDataBackFromVirtualDevice(IntPtr pktlist, IntPtr readProcRefCon);
 
-        [DllImport(LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.StdCall)]
         private static extern IntPtr GetInputDeviceInfoFromVirtualDevice(IntPtr info);
 
-        [DllImport(LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.StdCall)]
         private static extern IntPtr GetOutputDeviceInfoFromVirtualDevice(IntPtr info);
 
         #endregion

@@ -1047,7 +1047,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 }
             });
 
-        // TODO: describe in docs
         [Test]
         public void RemoveNotes_Custom_Null_1() => RemoveNotes_DetectionSettings_EventsCollection_WithPredicate(
             containerType: ContainerType.EventsCollection,
@@ -1066,7 +1065,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             expectedMidiEvents: Array.Empty<MidiEvent>(),
             expectedRemovedCount: 2);
 
-        // TODO: describe in docs
         [Test]
         public void RemoveNotes_Custom_Null_2() => RemoveNotes_DetectionSettings_EventsCollection_WithPredicate(
             containerType: ContainerType.EventsCollection,
@@ -1087,7 +1085,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             expectedMidiEvents: Array.Empty<MidiEvent>(),
             expectedRemovedCount: 2);
 
-        // TODO: describe in docs
         [Test]
         public void RemoveNotes_Custom_Null_3() => RemoveNotes_DetectionSettings_EventsCollection_WithPredicate(
             containerType: ContainerType.EventsCollection,
@@ -1107,7 +1104,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             expectedMidiEvents: Array.Empty<MidiEvent>(),
             expectedRemovedCount: 2);
 
-        // TODO: describe in docs
         [Test]
         public void RemoveNotes_Custom_Null_4() => RemoveNotes_DetectionSettings_EventsCollection_WithPredicate(
             containerType: ContainerType.EventsCollection,

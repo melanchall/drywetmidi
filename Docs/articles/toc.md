@@ -5,6 +5,8 @@
 ## [Manual build](dev/Manual-build.md)
 ## [Using in Unity](dev/Using-in-Unity.md)
 ## [Nativeless package](dev/Nativeless-package.md)
+## [Utilities](dev/Utilities.md)
+### [CheckDwmApi](dev/Utility-CheckDwmApi.md)
 
 # MIDI file reading/writing
 ## [MIDI file reading](file-reading-writing/MIDI-file-reading.md)

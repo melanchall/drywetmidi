@@ -155,5 +155,5 @@ public class DemoScript : MonoBehaviour
 }
 ```
 
-> [!IMPORTANT]
+> [!WARNING]
 > Pay attention to `OnApplicationQuit` method. You should always take care about disposing of MIDI devices. Without it all resources taken by the device will live until GC collects them. In the case of Unity, it means Unity may need to be reopened to be able to use the same devices again (for example, on Windows).

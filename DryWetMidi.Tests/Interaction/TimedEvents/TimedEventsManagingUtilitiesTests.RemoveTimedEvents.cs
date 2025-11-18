@@ -530,7 +530,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 midiEvents: Enumerable.Range(0, 10).Select(j => Enumerable.Range(0, 10000).Select(i => new NoteOnEvent()).ToArray()).ToArray());
         }
 
-        // TODO: describe in docs
         [Test]
         public void RemoveTimedEvents_Custom_Null_1()
         {
@@ -550,7 +549,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 });
         }
 
-        // TODO: describe in docs
         [Test]
         public void RemoveTimedEvents_Custom_Null_2()
         {

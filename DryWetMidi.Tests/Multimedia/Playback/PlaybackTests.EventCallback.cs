@@ -59,7 +59,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
                     foreach (var errorData in errorOccurredData)
                     {
-                        ClassicAssert.AreEqual(PlaybackSite.EventCallback, errorData.Site, "Invalid site.");
+                        ClassicAssert.AreEqual(PlaybackErrorSite.EventCallback, errorData.Site, "Invalid site.");
                         ClassicAssert.IsInstanceOf<InvalidOperationException>(errorData.Exception, "Invalid exception type.");
                         ClassicAssert.AreEqual(errorMessage, errorData.Exception.Message, "Invalid exception message.");
                     }

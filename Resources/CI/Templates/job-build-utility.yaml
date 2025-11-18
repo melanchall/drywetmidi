@@ -7,8 +7,8 @@ parameters:
 
 jobs:
 - ${{ each rid in parameters.rids }}:
-  - job: Build_${{ replace(rid, '-', '_') }}
-    displayName: 'Build utility (${{ rid }})'
+  - job: Build_${{ parameters.projectName }}_${{ replace(rid, '-', '_') }}
+    displayName: 'Build ${{ parameters.projectName }} (${{ rid }})'
     steps:
     - template: step-copy-native-libraries-near-csproj.yaml
     
@@ -26,17 +26,11 @@ jobs:
         publishWebProjects: false
     
     - task: PowerShell@2
-      displayName: Delete pdb files
+      displayName: Delete redundant files
       inputs:
         targetType: 'inline'
         script: |
           Get-ChildItem $(Build.SourcesDirectory) -Include *.pdb -Recurse | Remove-Item -Force
-          
-    - task: PowerShell@2
-      displayName: Delete xml files
-      inputs:
-        targetType: 'inline'
-        script: |
           Get-ChildItem $(Build.SourcesDirectory) -Include *.xml -Recurse | Remove-Item -Force
     
     - task: ArchiveFiles@2
@@ -45,10 +39,10 @@ jobs:
         rootFolderOrFile: 'Utilities\${{ parameters.projectName }}\bin\$(BuildConfiguration)\$(Build.Framework.Net.Tfm)\${{ rid }}\publish'
         includeRootFolder: false
         archiveType: 'zip'
-        archiveFile: '$(Build.ArtifactStagingDirectory)\Utility\Melanchall.${{ parameters.projectName }}.$(LibraryVersion)-${{ rid }}.zip'
+        archiveFile: '$(Build.ArtifactStagingDirectory)\Utility\Melanchall.${{ parameters.projectName }}-${{ rid }}.$(FullVersion).zip'
     
     - task: PublishPipelineArtifact@1
-      displayName: Publish 'Utility-${{ rid }}' artifact
+      displayName: Publish 'Utility-${{ parameters.projectName }}-${{ rid }}' artifact
       inputs:
-        targetPath: $(Build.ArtifactStagingDirectory)\Utility
-        artifact: Utility-${{ rid }}
+        targetPath: '$(Build.ArtifactStagingDirectory)\Utility\Melanchall.${{ parameters.projectName }}-${{ rid }}.$(FullVersion).zip'
+        artifact: '${{ parameters.projectName }}-${{ rid }}'

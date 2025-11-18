@@ -154,25 +154,25 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 {
                     new TimedEvent(new NoteOnEvent((SevenBitNumber)100, (SevenBitNumber)20) { Channel = (FourBitNumber)5 }),
                     new TimedEvent(new NoteOffEvent((SevenBitNumber)100, (SevenBitNumber)10) { Channel = (FourBitNumber)5 })
-                        .SetTime((MetricTimeSpan)TimeSpan.FromSeconds(2), TempoMap),
+                        .SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(1000), TempoMap),
                     new TimedEvent(new NoteOnEvent())
-                        .SetTime((MetricTimeSpan)TimeSpan.FromSeconds(3), TempoMap),
+                        .SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(1500), TempoMap),
                     new TimedEvent(new NoteOnEvent((SevenBitNumber)30, (SevenBitNumber)50))
-                        .SetTime((MetricTimeSpan)TimeSpan.FromSeconds(3), TempoMap),
+                        .SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(1500), TempoMap),
                     new TimedEvent(new NoteOffEvent())
-                        .SetTime((MetricTimeSpan)TimeSpan.FromSeconds(6), TempoMap),
+                        .SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(3000), TempoMap),
                     new TimedEvent(new NoteOffEvent((SevenBitNumber)30, (SevenBitNumber)50))
-                        .SetTime((MetricTimeSpan)TimeSpan.FromSeconds(6), TempoMap),
+                        .SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(3000), TempoMap),
                 },
                 actions: Array.Empty<PlaybackAction>(),
                 expectedReceivedEvents: new[]
                 {
                     new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)100, (SevenBitNumber)20) { Channel = (FourBitNumber)5 }, TimeSpan.Zero),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)100, (SevenBitNumber)10) { Channel = (FourBitNumber)5 }, TimeSpan.FromSeconds(2)),
-                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.FromSeconds(3)),
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)30, (SevenBitNumber)50), TimeSpan.FromSeconds(3)),
-                    new SentReceivedEvent(new NoteOffEvent(), TimeSpan.FromSeconds(6)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)30, (SevenBitNumber)50), TimeSpan.FromSeconds(6)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)100, (SevenBitNumber)10) { Channel = (FourBitNumber)5 }, TimeSpan.FromMilliseconds(1000)),
+                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(1500)),
+                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)30, (SevenBitNumber)50), TimeSpan.FromMilliseconds(1500)),
+                    new SentReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(3000)),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)30, (SevenBitNumber)50), TimeSpan.FromMilliseconds(3000)),
                 },
                 sendReceiveTimeDelta: maximumEventSendReceiveDelay);
         }

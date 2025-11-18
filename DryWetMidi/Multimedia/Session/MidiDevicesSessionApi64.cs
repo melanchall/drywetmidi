@@ -13,13 +13,13 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         #region Extern functions
 
-        [DllImport(LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.StdCall)]
         private static extern SESSION_OPENRESULT OpenSession_Mac(IntPtr name, InputDeviceCallback inputDeviceCallback, OutputDeviceCallback outputDeviceCallback, out IntPtr handle);
 
-        [DllImport(LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.StdCall)]
         private static extern SESSION_OPENRESULT OpenSession_Win(IntPtr name, out IntPtr handle);
 
-        [DllImport(LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.StdCall)]
         private static extern SESSION_CLOSERESULT CloseSession(IntPtr handle);
 
         #endregion

@@ -1,3 +1,7 @@
+param (
+  [Parameter(Mandatory)]
+  [string]$portsNames)
+
 $location = Get-Location
 
 Write-Host "Downloading virtualMIDI SDK..."
@@ -19,7 +23,8 @@ Write-Host "Building CreateLoopbackPort..."
 dotnet publish "Resources/Utilities/CreateLoopbackPort_Windows/CreateLoopbackPort.sln" -c Release -r win10-x64 -o "$location/CreateLoopbackPort"
 Write-Host "Built."
 
-$ports = "MIDI A", "MIDI B", "MIDI C"
+Write-Host "Ports names string: $portsNames"
+$ports = $portsNames.Split(',')
 
 ForEach ($port in $ports)
 {

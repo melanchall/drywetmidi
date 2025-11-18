@@ -4,7 +4,7 @@ uid: a_processing_objects
 
 # Processing objects
 
-> [!IMPORTANT]
+> [!WARNING]
 > Please read the [Getting objects](xref:a_getting_objects) article before reading this one.
 
 This article describes ways to process different objects (like [timed events](xref:Melanchall.DryWetMidi.Interaction.TimedEvent) or [notes](xref:Melanchall.DryWetMidi.Interaction.Note)) within MIDI files and track chunks. Processing means changing properties of the objects, including time or length.

@@ -66,7 +66,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         private void CheckErrors(
             ICollection<PlaybackErrorOccurredEventArgs> errorOccurredData,
             int expectedCount,
-            PlaybackSite expectedSite,
+            PlaybackErrorSite expectedSite,
             string expectedError)
         {
             ClassicAssert.AreEqual(expectedCount, errorOccurredData.Count, "Invalid number of errors.");
@@ -104,7 +104,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 label: "FromObjects",
                 additionalChecks: additionalChecks);
 
-            checkFromFile &= DryWetMidi.Common.Random.Instance.Next(2) == 1;
+            checkFromFile &= DryWetMidi.Common.Random.Instance.Next(3) == 1;
 
             if (!checkFromFile)
                 return;

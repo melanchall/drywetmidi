@@ -4,7 +4,7 @@ uid: a_removing_objects
 
 # Removing objects
 
-> [!IMPORTANT]
+> [!WARNING]
 > Please read [Getting objects](xref:a_getting_objects) and [Processing objects](xref:a_processing_objects) articles before reading this one.
 
 This article describes ways to remove different objects (like [timed events](xref:Melanchall.DryWetMidi.Interaction.TimedEvent) or [notes](xref:Melanchall.DryWetMidi.Interaction.Note)) from MIDI files and track chunks.

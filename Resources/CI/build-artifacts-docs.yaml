@@ -23,11 +23,11 @@ variables:
 name: BuildDocs_$(SourceBranchName)_$(LibraryVersion)$(Rev:.r)
 
 steps:
-- task: PowerShell@2
-  displayName: Generate obsolete API hints
-  inputs:
-    targetType: filePath
-    filePath: '$(Build.SourcesDirectory)/Resources/Scripts/Generate obsolete API hints.ps1'
+- template: Templates/step-setup-framework.yaml
+  parameters:
+    framework: 'Net'
+
+- template: Templates/step-generate-obsolete-api-hints.yaml
 
 - task: DotNetCoreCLI@2
   displayName: Build project
@@ -36,19 +36,22 @@ steps:
     arguments: '--configuration $(BuildConfiguration)'
     projects: 'DryWetMidi/Melanchall.DryWetMidi.csproj'
 
-- task: PowerShell@2
-  displayName: Setup docs pages
-  inputs:
-    targetType: filePath
-    filePath: '$(Build.SourcesDirectory)/Resources/Scripts/Setup docs.ps1'
+- template: Templates/step-execute-ci-tool.yaml
+  parameters:
+    tool: 'SetupDocs'
+    toolArguments: '"README.md" "Docs"'
 
-- task: PowerShell@2
-  displayName: Generate obsolete API section
-  inputs:
-    targetType: filePath
-    filePath: '$(Build.SourcesDirectory)/Resources/Scripts/Generate obsolete API section.ps1'
+- template: Templates/step-execute-ci-tool.yaml
+  parameters:
+    tool: 'GenerateDocsObsoleteApiSection'
+    toolArguments: '"Docs\obsolete"'
 
 - template: Templates/step-build-docs.yaml
+
+- template: Templates/step-execute-ci-tool.yaml
+  parameters:
+    tool: 'AddGoogleAnalyticsTagForDocs'
+    toolArguments: '"$(GoogleAnalytics.MeasurementId.Docs)" "Docs/_site"'
 
 - task: PublishPipelineArtifact@1
   displayName: Publish 'Docs' artifact

@@ -1,10 +1,33 @@
 parameters:
-  enabled: 'false'
+- name: enabled
+  displayName: 'Enabled'
+  default: 'false'
+- name: portsNames
+  displayName: 'Ports names'
+  default: 'MIDI A,MIDI B,MIDI C'
+  type: string
 
 steps:
+- task: PowerShell@2
+  displayName: Ensure MIDI is ready (Windows)
+  condition: and(succeeded(), ${{ parameters.enabled }})
+  inputs:
+    targetType: 'inline'
+    script: |
+      $service = Get-Service -Name "Audiosrv"
+      
+      if ($service.Status -ne 'Running')
+      {
+        Write-Host "Service is not started; starting..."
+        Start-Service "Audiosrv"
+      }
+      
+      Write-Host "Server is started"
+
 - task: PowerShell@2
   displayName: Create virtual MIDI ports (Windows)
   condition: and(succeeded(), ${{ parameters.enabled }})
   inputs:
     targetType: filePath
     filePath: '$(Build.SourcesDirectory)/Resources/Scripts/Setup MIDI ports.ps1'
+    arguments: '-portsNames "${{ parameters.portsNames }}"'

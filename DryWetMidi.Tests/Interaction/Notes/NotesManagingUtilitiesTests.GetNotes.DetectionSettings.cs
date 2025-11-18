@@ -567,7 +567,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue, Time = 110, Length = 70 },
             });
 
-        // TODO: describe in docs
         [Test]
         public void GetNotes_Custom_Null_1() => GetNotes_DetectionSettings_EventsCollection(
             containerType: ContainerType.EventsCollection,

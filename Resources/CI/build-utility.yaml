@@ -17,6 +17,10 @@ pr: none
 
 variables:
 - group: DryWetMIDI-Common-Variables
+- name: RevisionVersion
+  value: $[counter(variables['LibraryVersion'], 1)]
+- name: FullVersion
+  value: $(LibraryVersion).$(RevisionVersion)
 
 name: BuildUtility_$(SourceBranchName)_$(LibraryVersion)$(Rev:.r)
 
@@ -29,7 +33,23 @@ stages:
   jobs:
   - template: Templates/job-build-utility.yaml
     parameters:
-      projectName: '$(ProjectName)'
+      projectName: 'ReceiveMidiData'
       rids:
       - 'win-x64'
       - 'osx-x64'
+  - template: Templates/job-build-utility.yaml
+    parameters:
+      projectName: 'SendMidiData'
+      rids:
+      - 'win-x64'
+      - 'osx-x64'
+  - template: Templates/job-build-utility.yaml
+    parameters:
+      projectName: 'CheckDwmApi'
+      rids:
+      - 'win-x64'
+      - 'win-arm64'
+      - 'linux-x64'
+      - 'linux-arm64'
+      - 'osx-x64'
+      - 'osx-arm64'

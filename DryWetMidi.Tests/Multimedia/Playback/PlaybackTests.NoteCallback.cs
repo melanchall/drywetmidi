@@ -282,7 +282,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     ClassicAssert.AreEqual(1, errorOccurredData.Count, "Invalid number of errors.");
 
                     var errorData = errorOccurredData.Single();
-                    ClassicAssert.AreEqual(PlaybackSite.NoteCallback, errorData.Site, "Invalid site.");
+                    ClassicAssert.AreEqual(PlaybackErrorSite.NoteCallback, errorData.Site, "Invalid site.");
                     ClassicAssert.IsInstanceOf<InvalidOperationException>(errorData.Exception, "Invalid exception type.");
                     ClassicAssert.AreEqual(errorMessage, errorData.Exception.Message, "Invalid exception message.");
                 });

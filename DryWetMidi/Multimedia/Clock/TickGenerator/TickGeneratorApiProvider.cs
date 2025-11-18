@@ -1,15 +1,7 @@
-﻿using System;
-
-namespace Melanchall.DryWetMidi.Multimedia
+﻿namespace Melanchall.DryWetMidi.Multimedia
 {
     internal static class TickGeneratorApiProvider
     {
-        #region Constants
-
-        private static readonly bool Is64Bit = IntPtr.Size == 8;
-
-        #endregion
-
         #region Fields
 
         private static TickGeneratorApi _api;
@@ -23,7 +15,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             get
             {
                 if (_api == null)
-                    _api = Is64Bit ? (TickGeneratorApi)new TickGeneratorApi64() : new TickGeneratorApi32();
+                    _api = new TickGeneratorApi64();
 
                 return _api;
             }

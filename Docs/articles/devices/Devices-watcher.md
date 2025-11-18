@@ -4,7 +4,7 @@ uid: a_dev_watcher
 
 # Devices watcher
 
-> [!IMPORTANT]
+> [!WARNING]
 > Devices watching API is a platform-specific one so please refer to the [Supported OS](xref:a_develop_supported_os) article to learn more.
 
 DryWetMIDI allows to track whether a MIDI device is added to or removed from the system. There is the [DevicesWatcher](xref:Melanchall.DryWetMidi.Multimedia.DevicesWatcher) class for that purpose. The class is singleton and you can get the instance with [Instance](xref:Melanchall.DryWetMidi.Multimedia.DevicesWatcher.Instance) property.
@@ -156,5 +156,5 @@ Name is MyDevice
 
 Device instances comparison can be useful in programs with GUI where you need to update the list of available devices. So when a device is added, you just add it to the list. When some device is removed, you find the corresponding item in the current list via `Equals` on device instances and remove that item.
 
-> [!IMPORTANT]
+> [!WARNING]
 > Checking for devices equality supported for **macOS** only. On Windows call of `Equals` will just compare references.

@@ -39,11 +39,7 @@ stages:
     
     - template: Templates/step-generate-doc-links.yaml
     
-    - task: PowerShell@2
-      displayName: Generate obsolete API hints
-      inputs:
-        targetType: filePath
-        filePath: '$(Build.SourcesDirectory)/Resources/Scripts/Generate obsolete API hints.ps1'
+    - template: Templates/step-generate-obsolete-api-hints.yaml
         
     - template: Templates/step-setup-nativeless-project.yaml
     

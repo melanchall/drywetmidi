@@ -11,7 +11,7 @@ namespace Melanchall.DryWetMidi.Interaction
     /// Represents a basic collection of the <see cref="ITimedObject"/>.
     /// </summary>
     /// <typeparam name="TObject">The type of elements in the collection.</typeparam>
-    public sealed class TimedObjectsCollection<TObject> : IEnumerable<TObject>
+    public sealed class TimedObjectsCollection<TObject> : ICollection<TObject>
         where TObject : ITimedObject
     {
         #region Events
@@ -49,9 +49,28 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         public int Count => _objects.Count;
 
+        /// <summary>
+        /// Gets a value indicating whether the <see cref="TimedObjectsCollection{TObject}"/>
+        /// is read-only.
+        /// </summary>
+        public bool IsReadOnly => false;
+
         #endregion
 
         #region Methods
+
+        /// <summary>
+        /// Adds an object to this collection.
+        /// </summary>
+        /// <param name="obj">Object to add to the collection.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="obj"/> is <c>null</c>.</exception>
+        public void Add(TObject obj)
+        {
+            ThrowIfArgument.IsNull(nameof(obj), obj);
+
+            _objects.Add(obj);
+            OnObjectsAdded(new[] { obj });
+        }
 
         /// <summary>
         /// Adds objects to this collection.
@@ -77,6 +96,25 @@ namespace Melanchall.DryWetMidi.Interaction
             ThrowIfArgument.IsNull(nameof(objects), objects);
 
             Add((IEnumerable<TObject>)objects);
+        }
+
+        /// <summary>
+        /// Removes the first occurrence of a specific object from this collection
+        /// </summary>
+        /// <param name="obj">Object to remove from the collection.</param>
+        /// <returns><c>true</c> if the object was successfully removed; otherwise, <c>false</c>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="obj"/> is <c>null</c>.</exception>
+        public bool Remove(TObject obj)
+        {
+            ThrowIfArgument.IsNull(nameof(obj), obj);
+
+            if (_objects.Remove(obj))
+            {
+                OnObjectsRemoved(new[] { obj });
+                return true;
+            }
+
+            return false;
         }
 
         /// <summary>
@@ -138,6 +176,55 @@ namespace Melanchall.DryWetMidi.Interaction
             var removedObjects = _objects.ToList();
             _objects.Clear();
             OnObjectsRemoved(removedObjects);
+        }
+
+        /// <summary>
+        /// Determines whether the <see cref="TimedObjectsCollection{TObject}"/> contains a
+        /// specific object.
+        /// </summary>
+        /// <param name="obj">The object to locate in the <see cref="TimedObjectsCollection{TObject}"/>.</param>
+        /// <returns><c>true</c> if the object is found; otherwise, <c>false</c>.</returns>
+        public bool Contains(TObject obj)
+        {
+            return _objects.Contains(obj);
+        }
+
+
+        /// <summary>
+        /// Copies the objects of the <see cref="TimedObjectsCollection{TObject}"/> to an
+        /// array, starting at a particular index.
+        /// </summary>
+        /// <param name="array">The one-dimensional array that is the destination of the objects
+        /// copied from <see cref="TimedObjectsCollection{TObject}"/>. The array must have
+        /// zero-based indexing.</param>
+        /// <param name="arrayIndex">The zero-based index in array at which copying begins.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="array"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// One of the following errors occurred:
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="arrayIndex"/> is less than zero or greater than the length of the array.</description>
+        /// </item>
+        /// <item>
+        /// <description>The number of elements in the <see cref="TimedObjectsCollection{TObject}"/> is greater than
+        /// the available space from the <paramref name="arrayIndex"/> to the end of the <paramref name="array"/>.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
+        public void CopyTo(TObject[] array, int arrayIndex)
+        {
+            ThrowIfArgument.IsNull(nameof(array), array);
+            ThrowIfArgument.IsInvalidIndex(
+                nameof(arrayIndex),
+                arrayIndex,
+                array.Length);
+            ThrowIfArgument.IsLessThan(
+                nameof(array),
+                array.Length - arrayIndex,
+                Count,
+                "The number of elements in the source collection is greater than the available space from the index to the end of the destination array.");
+
+            _objects.CopyTo(array, arrayIndex);
         }
 
         private void OnObjectsAdded(IEnumerable<TObject> addedObjects)

@@ -31,12 +31,17 @@ schedules:
 pool:
   vmImage: 'windows-latest'
 
+variables:
+- group: DryWetMIDI-Common-Variables
+
 name: CheckReadmeLinks_$(SourceBranchName)_$(Rev:r)
 
 steps:
-- task: DotNetCoreCLI@2
-  displayName: 'Check links'
-  inputs:
-    command: 'run'
-    projects: 'Resources/Utilities/CheckLinks/CheckLinks/CheckLinks.csproj'
-    arguments: '-c Release -- "$(Build.SourcesDirectory)" "README.md"'
+- template: Templates/step-setup-framework.yaml
+  parameters:
+    framework: 'Net'
+
+- template: Templates/step-execute-ci-tool.yaml
+  parameters:
+    tool: 'CheckLinks'
+    toolArguments: '"$(Build.SourcesDirectory)" "*README.md"'

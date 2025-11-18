@@ -230,7 +230,6 @@ namespace Melanchall.DryWetMidi.Interaction
             var nextIndex = index;
             var nextValueChange = nextIndex >= 0 ? _valueChanges[nextIndex] : null;
             var nextValue = nextValueChange != null ? nextValueChange.Value : _defaultValue;
-            var nextTime = nextValueChange != null ? nextValueChange.Time : long.MaxValue;
 
             var previousIndex = index > 0 ? index - 1 : (index < 0 ? _valueChanges.Count - 1 : -1);
             var previousValueChange = previousIndex >= 0 ? _valueChanges[previousIndex] : null;

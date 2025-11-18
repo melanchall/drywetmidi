@@ -1206,7 +1206,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 }
             });
 
-        // TODO: describe in docs
         [Test]
         public void ProcessNotes_Custom_Null_1() => ProcessNotes_DetectionSettings_EventsCollection_WithPredicate(
             containerType: ContainerType.EventsCollection,
@@ -1232,7 +1231,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             },
             expectedProcessedCount: 2);
 
-        // TODO: describe in docs
         [Test]
         public void ProcessNotes_Custom_Null_2() => ProcessNotes_DetectionSettings_EventsCollection_WithPredicate(
             containerType: ContainerType.EventsCollection,
@@ -1260,7 +1258,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             },
             expectedProcessedCount: 2);
 
-        // TODO: describe in docs
         [Test]
         public void ProcessNotes_Custom_Null_3() => ProcessNotes_DetectionSettings_EventsCollection_WithPredicate(
             containerType: ContainerType.EventsCollection,
@@ -1287,7 +1284,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             },
             expectedProcessedCount: 2);
 
-        // TODO: describe in docs
         [Test]
         public void ProcessNotes_Custom_Null_4() => ProcessNotes_DetectionSettings_EventsCollection_WithPredicate(
             containerType: ContainerType.EventsCollection,

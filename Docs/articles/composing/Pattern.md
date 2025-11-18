@@ -160,7 +160,7 @@ Each line starts with a note. Think about the line as a piano roll lane in your 
 
 Hyphen (`'-'`) means nothing except a step of a cell's length. We will call it as **fill symbol**.
 
-> [!IMPORTANT]
+> [!WARNING]
 > Spaces will be cut from the piano roll string before processing. So it's required to use a fill symbol to specify an empty space (rest) to get correct results. For example, this pattern:
 > ```text
 > F2   ||||

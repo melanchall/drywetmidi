@@ -493,7 +493,6 @@ namespace Melanchall.DryWetMidi.Interaction
 
             foreach (var eventsCollection in eventsCollectionsIn)
             {
-                var eventsCount = eventsCollection.Count;
                 var iMatched = 0;
 
                 var processingContext = new ProcessingContext
