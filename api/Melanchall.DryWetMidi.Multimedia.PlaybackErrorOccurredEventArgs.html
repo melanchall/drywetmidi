@@ -15,11 +15,11 @@
 
     <meta charset="utf-8">
       <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-      <title>Enum SmpteFormat | DryWetMIDI </title>
+      <title>Class PlaybackErrorOccurredEventArgs | DryWetMIDI </title>
       <meta name="viewport" content="width=device-width">
-      <meta name="title" content="Enum SmpteFormat | DryWetMIDI ">
+      <meta name="title" content="Class PlaybackErrorOccurredEventArgs | DryWetMIDI ">
     
-    <meta name="description" content="SMPTE format which represents the frame rate.">
+    <meta name="description" content="Provides data for the .">
       <link rel="shortcut icon" href="../images/favicon.png">
       <link rel="stylesheet" href="../styles/docfx.vendor.min.css">
       <link rel="stylesheet" href="../styles/docfx.css">
@@ -86,48 +86,94 @@
         </div>
         <div class="article row grid-right">
           <div class="col-md-10">
-            <article class="content wrap" id="_content" data-uid="Melanchall.DryWetMidi.Common.SmpteFormat">
+            <article class="content wrap" id="_content" data-uid="Melanchall.DryWetMidi.Multimedia.PlaybackErrorOccurredEventArgs">
 
 
 
-
-  <h1 id="Melanchall_DryWetMidi_Common_SmpteFormat" data-uid="Melanchall.DryWetMidi.Common.SmpteFormat" class="text-break">Enum SmpteFormat</h1>
-  <div class="markdown level0 summary">SMPTE format which represents the frame rate.</div>
+  <h1 id="Melanchall_DryWetMidi_Multimedia_PlaybackErrorOccurredEventArgs" data-uid="Melanchall.DryWetMidi.Multimedia.PlaybackErrorOccurredEventArgs" class="text-break">Class PlaybackErrorOccurredEventArgs</h1>
+  <div class="markdown level0 summary">Provides data for the <a class="xref" href="Melanchall.DryWetMidi.Multimedia.Playback.html#Melanchall_DryWetMidi_Multimedia_Playback_ErrorOccurred">ErrorOccurred</a>.</div>
   <div class="markdown level0 conceptual"></div>
-  <h6><strong>Namespace</strong>: <a class="xref" href="Melanchall.html">Melanchall</a>.<a class="xref" href="Melanchall.DryWetMidi.html">DryWetMidi</a>.<a class="xref" href="Melanchall.DryWetMidi.Common.html">Common</a></h6>
-  <h6><strong>Assembly</strong>: Melanchall.DryWetMidi.dll</h6>
-  <h5 id="Melanchall_DryWetMidi_Common_SmpteFormat_syntax">Syntax</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public enum SmpteFormat : byte</code></pre>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></div>
+    <div class="level1"><span class="xref">PlaybackErrorOccurredEventArgs</span></div>
   </div>
-  <h3 id="fields">Fields
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)">object.Equals(object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)">object.Equals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gethashcode">object.GetHashCode()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gettype">object.GetType()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.referenceequals">object.ReferenceEquals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.tostring">object.ToString()</a>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Melanchall.html">Melanchall</a>.<a class="xref" href="Melanchall.DryWetMidi.html">DryWetMidi</a>.<a class="xref" href="Melanchall.DryWetMidi.Multimedia.html">Multimedia</a></h6>
+  <h6><strong>Assembly</strong>: Melanchall.DryWetMidi.dll</h6>
+  <h5 id="Melanchall_DryWetMidi_Multimedia_PlaybackErrorOccurredEventArgs_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public sealed class PlaybackErrorOccurredEventArgs</code></pre>
+  </div>
+  <h3 id="properties">Properties
 </h3>
+  <a id="Melanchall_DryWetMidi_Multimedia_PlaybackErrorOccurredEventArgs_Exception_" data-uid="Melanchall.DryWetMidi.Multimedia.PlaybackErrorOccurredEventArgs.Exception*"></a>
+  <h4 id="Melanchall_DryWetMidi_Multimedia_PlaybackErrorOccurredEventArgs_Exception" data-uid="Melanchall.DryWetMidi.Multimedia.PlaybackErrorOccurredEventArgs.Exception">Exception</h4>
+  <div class="markdown level1 summary">Gets the exception.</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Exception Exception { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-condensed">
     <thead>
       <tr>
-        <th>Name</th>
+        <th>Type</th>
         <th>Description</th>
       </tr>
-    <thead>
-    </thead></thead><tbody>
+    </thead>
+    <tbody>
       <tr>
-        <td id="Melanchall_DryWetMidi_Common_SmpteFormat_Thirty">Thirty</td>
-        <td>30 frame/sec.</td>
-      </tr>
-      <tr>
-        <td id="Melanchall_DryWetMidi_Common_SmpteFormat_ThirtyDrop">ThirtyDrop</td>
-        <td>29.97 frame/sec (dropped 30).</td>
-      </tr>
-      <tr>
-        <td id="Melanchall_DryWetMidi_Common_SmpteFormat_TwentyFive">TwentyFive</td>
-        <td>25 frame/sec.</td>
-      </tr>
-      <tr>
-        <td id="Melanchall_DryWetMidi_Common_SmpteFormat_TwentyFour">TwentyFour</td>
-        <td>24 frame/sec.</td>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.exception">Exception</a></td>
+        <td></td>
       </tr>
     </tbody>
   </table>
+  <a id="Melanchall_DryWetMidi_Multimedia_PlaybackErrorOccurredEventArgs_Site_" data-uid="Melanchall.DryWetMidi.Multimedia.PlaybackErrorOccurredEventArgs.Site*"></a>
+  <h4 id="Melanchall_DryWetMidi_Multimedia_PlaybackErrorOccurredEventArgs_Site" data-uid="Melanchall.DryWetMidi.Multimedia.PlaybackErrorOccurredEventArgs.Site">Site</h4>
+  <div class="markdown level1 summary">Gets the location within the playback where the error occurred.</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public PlaybackErrorSite Site { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Multimedia.PlaybackErrorSite.html">PlaybackErrorSite</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+
 </article>
           </div>
 

@@ -12568,12 +12568,6 @@ references:
   commentId: T:Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities
   fullName: Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities
   nameWithType: ChordsManagingUtilities
-- uid: Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.GetChords(Melanchall.DryWetMidi.Core.EventsCollection,Melanchall.DryWetMidi.Interaction.ChordDetectionSettings,Melanchall.DryWetMidi.Interaction.NoteDetectionSettings,Melanchall.DryWetMidi.Interaction.TimedEventDetectionSettings)
-  name: GetChords(EventsCollection, ChordDetectionSettings, NoteDetectionSettings, TimedEventDetectionSettings)
-  href: api/Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.html#Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_GetChords_Melanchall_DryWetMidi_Core_EventsCollection_Melanchall_DryWetMidi_Interaction_ChordDetectionSettings_Melanchall_DryWetMidi_Interaction_NoteDetectionSettings_Melanchall_DryWetMidi_Interaction_TimedEventDetectionSettings_
-  commentId: M:Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.GetChords(Melanchall.DryWetMidi.Core.EventsCollection,Melanchall.DryWetMidi.Interaction.ChordDetectionSettings,Melanchall.DryWetMidi.Interaction.NoteDetectionSettings,Melanchall.DryWetMidi.Interaction.TimedEventDetectionSettings)
-  fullName: Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.GetChords(Melanchall.DryWetMidi.Core.EventsCollection, Melanchall.DryWetMidi.Interaction.ChordDetectionSettings, Melanchall.DryWetMidi.Interaction.NoteDetectionSettings, Melanchall.DryWetMidi.Interaction.TimedEventDetectionSettings)
-  nameWithType: ChordsManagingUtilities.GetChords(EventsCollection, ChordDetectionSettings, NoteDetectionSettings, TimedEventDetectionSettings)
 - uid: Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.GetChords(Melanchall.DryWetMidi.Core.MidiFile,Melanchall.DryWetMidi.Interaction.ChordDetectionSettings,Melanchall.DryWetMidi.Interaction.NoteDetectionSettings,Melanchall.DryWetMidi.Interaction.TimedEventDetectionSettings)
   name: GetChords(MidiFile, ChordDetectionSettings, NoteDetectionSettings, TimedEventDetectionSettings)
   href: api/Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.html#Melanchall_DryWetMidi_Interaction_ChordsManagingUtilities_GetChords_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Interaction_ChordDetectionSettings_Melanchall_DryWetMidi_Interaction_NoteDetectionSettings_Melanchall_DryWetMidi_Interaction_TimedEventDetectionSettings_
@@ -15963,12 +15957,6 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Interaction.NotesManagingUtilities.GetMusicTheoryNote
   nameWithType: NotesManagingUtilities.GetMusicTheoryNote
-- uid: Melanchall.DryWetMidi.Interaction.NotesManagingUtilities.GetNotes(Melanchall.DryWetMidi.Core.EventsCollection,Melanchall.DryWetMidi.Interaction.NoteDetectionSettings,Melanchall.DryWetMidi.Interaction.TimedEventDetectionSettings)
-  name: GetNotes(EventsCollection, NoteDetectionSettings, TimedEventDetectionSettings)
-  href: api/Melanchall.DryWetMidi.Interaction.NotesManagingUtilities.html#Melanchall_DryWetMidi_Interaction_NotesManagingUtilities_GetNotes_Melanchall_DryWetMidi_Core_EventsCollection_Melanchall_DryWetMidi_Interaction_NoteDetectionSettings_Melanchall_DryWetMidi_Interaction_TimedEventDetectionSettings_
-  commentId: M:Melanchall.DryWetMidi.Interaction.NotesManagingUtilities.GetNotes(Melanchall.DryWetMidi.Core.EventsCollection,Melanchall.DryWetMidi.Interaction.NoteDetectionSettings,Melanchall.DryWetMidi.Interaction.TimedEventDetectionSettings)
-  fullName: Melanchall.DryWetMidi.Interaction.NotesManagingUtilities.GetNotes(Melanchall.DryWetMidi.Core.EventsCollection, Melanchall.DryWetMidi.Interaction.NoteDetectionSettings, Melanchall.DryWetMidi.Interaction.TimedEventDetectionSettings)
-  nameWithType: NotesManagingUtilities.GetNotes(EventsCollection, NoteDetectionSettings, TimedEventDetectionSettings)
 - uid: Melanchall.DryWetMidi.Interaction.NotesManagingUtilities.GetNotes(Melanchall.DryWetMidi.Core.MidiFile,Melanchall.DryWetMidi.Interaction.NoteDetectionSettings,Melanchall.DryWetMidi.Interaction.TimedEventDetectionSettings)
   name: GetNotes(MidiFile, NoteDetectionSettings, TimedEventDetectionSettings)
   href: api/Melanchall.DryWetMidi.Interaction.NotesManagingUtilities.html#Melanchall_DryWetMidi_Interaction_NotesManagingUtilities_GetNotes_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Interaction_NoteDetectionSettings_Melanchall_DryWetMidi_Interaction_TimedEventDetectionSettings_
@@ -18467,15 +18455,12 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Interaction.TimeSpanUtilities.Parse
   nameWithType: TimeSpanUtilities.Parse
-- uid: Melanchall.DryWetMidi.Interaction.TimeSpanUtilities.Round(Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Interaction.TimeSpanRoundingPolicy,System.Int64,Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Interaction.TempoMap)
-  name: Round(ITimeSpan, TimeSpanRoundingPolicy, long, ITimeSpan, TempoMap)
-  href: api/Melanchall.DryWetMidi.Interaction.TimeSpanUtilities.html#Melanchall_DryWetMidi_Interaction_TimeSpanUtilities_Round_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_TimeSpanRoundingPolicy_System_Int64_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_TempoMap_
-  commentId: M:Melanchall.DryWetMidi.Interaction.TimeSpanUtilities.Round(Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Interaction.TimeSpanRoundingPolicy,System.Int64,Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Interaction.TempoMap)
-  name.vb: Round(ITimeSpan, TimeSpanRoundingPolicy, Long, ITimeSpan, TempoMap)
-  fullName: Melanchall.DryWetMidi.Interaction.TimeSpanUtilities.Round(Melanchall.DryWetMidi.Interaction.ITimeSpan, Melanchall.DryWetMidi.Interaction.TimeSpanRoundingPolicy, long, Melanchall.DryWetMidi.Interaction.ITimeSpan, Melanchall.DryWetMidi.Interaction.TempoMap)
-  fullName.vb: Melanchall.DryWetMidi.Interaction.TimeSpanUtilities.Round(Melanchall.DryWetMidi.Interaction.ITimeSpan, Melanchall.DryWetMidi.Interaction.TimeSpanRoundingPolicy, Long, Melanchall.DryWetMidi.Interaction.ITimeSpan, Melanchall.DryWetMidi.Interaction.TempoMap)
-  nameWithType: TimeSpanUtilities.Round(ITimeSpan, TimeSpanRoundingPolicy, long, ITimeSpan, TempoMap)
-  nameWithType.vb: TimeSpanUtilities.Round(ITimeSpan, TimeSpanRoundingPolicy, Long, ITimeSpan, TempoMap)
+- uid: Melanchall.DryWetMidi.Interaction.TimeSpanUtilities.Round(Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Interaction.TimeSpanRoundingPolicy,Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Interaction.TempoMap)
+  name: Round(ITimeSpan, TimeSpanRoundingPolicy, ITimeSpan, ITimeSpan, TempoMap)
+  href: api/Melanchall.DryWetMidi.Interaction.TimeSpanUtilities.html#Melanchall_DryWetMidi_Interaction_TimeSpanUtilities_Round_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_TimeSpanRoundingPolicy_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_TempoMap_
+  commentId: M:Melanchall.DryWetMidi.Interaction.TimeSpanUtilities.Round(Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Interaction.TimeSpanRoundingPolicy,Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Interaction.TempoMap)
+  fullName: Melanchall.DryWetMidi.Interaction.TimeSpanUtilities.Round(Melanchall.DryWetMidi.Interaction.ITimeSpan, Melanchall.DryWetMidi.Interaction.TimeSpanRoundingPolicy, Melanchall.DryWetMidi.Interaction.ITimeSpan, Melanchall.DryWetMidi.Interaction.ITimeSpan, Melanchall.DryWetMidi.Interaction.TempoMap)
+  nameWithType: TimeSpanUtilities.Round(ITimeSpan, TimeSpanRoundingPolicy, ITimeSpan, ITimeSpan, TempoMap)
 - uid: Melanchall.DryWetMidi.Interaction.TimeSpanUtilities.Round*
   name: Round
   href: api/Melanchall.DryWetMidi.Interaction.TimeSpanUtilities.html#Melanchall_DryWetMidi_Interaction_TimeSpanUtilities_Round_
@@ -21861,12 +21846,6 @@ references:
   fullName.vb: Melanchall.DryWetMidi.Multimedia.Playback.AddSnapPoint(Of TData)(Melanchall.DryWetMidi.Interaction.ITimeSpan, TData)
   nameWithType: Playback.AddSnapPoint<TData>(ITimeSpan, TData)
   nameWithType.vb: Playback.AddSnapPoint(Of TData)(ITimeSpan, TData)
-- uid: Melanchall.DryWetMidi.Multimedia.Playback.DeviceErrorOccurred
-  name: DeviceErrorOccurred
-  href: api/Melanchall.DryWetMidi.Multimedia.Playback.html#Melanchall_DryWetMidi_Multimedia_Playback_DeviceErrorOccurred
-  commentId: E:Melanchall.DryWetMidi.Multimedia.Playback.DeviceErrorOccurred
-  fullName: Melanchall.DryWetMidi.Multimedia.Playback.DeviceErrorOccurred
-  nameWithType: Playback.DeviceErrorOccurred
 - uid: Melanchall.DryWetMidi.Multimedia.Playback.Dispose
   name: Dispose()
   href: api/Melanchall.DryWetMidi.Multimedia.Playback.html#Melanchall_DryWetMidi_Multimedia_Playback_Dispose
@@ -21880,6 +21859,12 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Multimedia.Playback.Dispose
   nameWithType: Playback.Dispose
+- uid: Melanchall.DryWetMidi.Multimedia.Playback.ErrorOccurred
+  name: ErrorOccurred
+  href: api/Melanchall.DryWetMidi.Multimedia.Playback.html#Melanchall_DryWetMidi_Multimedia_Playback_ErrorOccurred
+  commentId: E:Melanchall.DryWetMidi.Multimedia.Playback.ErrorOccurred
+  fullName: Melanchall.DryWetMidi.Multimedia.Playback.ErrorOccurred
+  nameWithType: Playback.ErrorOccurred
 - uid: Melanchall.DryWetMidi.Multimedia.Playback.EventCallback
   name: EventCallback
   href: api/Melanchall.DryWetMidi.Multimedia.Playback.html#Melanchall_DryWetMidi_Multimedia_Playback_EventCallback
@@ -22774,6 +22759,110 @@ references:
   isSpec: "True"
   fullName: Melanchall.DryWetMidi.Multimedia.PlaybackCurrentTimeWatcherSettings.WatchOnlyRunningPlaybacks
   nameWithType: PlaybackCurrentTimeWatcherSettings.WatchOnlyRunningPlaybacks
+- uid: Melanchall.DryWetMidi.Multimedia.PlaybackErrorOccurredEventArgs
+  name: PlaybackErrorOccurredEventArgs
+  href: api/Melanchall.DryWetMidi.Multimedia.PlaybackErrorOccurredEventArgs.html
+  commentId: T:Melanchall.DryWetMidi.Multimedia.PlaybackErrorOccurredEventArgs
+  fullName: Melanchall.DryWetMidi.Multimedia.PlaybackErrorOccurredEventArgs
+  nameWithType: PlaybackErrorOccurredEventArgs
+- uid: Melanchall.DryWetMidi.Multimedia.PlaybackErrorOccurredEventArgs.Exception
+  name: Exception
+  href: api/Melanchall.DryWetMidi.Multimedia.PlaybackErrorOccurredEventArgs.html#Melanchall_DryWetMidi_Multimedia_PlaybackErrorOccurredEventArgs_Exception
+  commentId: P:Melanchall.DryWetMidi.Multimedia.PlaybackErrorOccurredEventArgs.Exception
+  fullName: Melanchall.DryWetMidi.Multimedia.PlaybackErrorOccurredEventArgs.Exception
+  nameWithType: PlaybackErrorOccurredEventArgs.Exception
+- uid: Melanchall.DryWetMidi.Multimedia.PlaybackErrorOccurredEventArgs.Exception*
+  name: Exception
+  href: api/Melanchall.DryWetMidi.Multimedia.PlaybackErrorOccurredEventArgs.html#Melanchall_DryWetMidi_Multimedia_PlaybackErrorOccurredEventArgs_Exception_
+  commentId: Overload:Melanchall.DryWetMidi.Multimedia.PlaybackErrorOccurredEventArgs.Exception
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Multimedia.PlaybackErrorOccurredEventArgs.Exception
+  nameWithType: PlaybackErrorOccurredEventArgs.Exception
+- uid: Melanchall.DryWetMidi.Multimedia.PlaybackErrorOccurredEventArgs.Site
+  name: Site
+  href: api/Melanchall.DryWetMidi.Multimedia.PlaybackErrorOccurredEventArgs.html#Melanchall_DryWetMidi_Multimedia_PlaybackErrorOccurredEventArgs_Site
+  commentId: P:Melanchall.DryWetMidi.Multimedia.PlaybackErrorOccurredEventArgs.Site
+  fullName: Melanchall.DryWetMidi.Multimedia.PlaybackErrorOccurredEventArgs.Site
+  nameWithType: PlaybackErrorOccurredEventArgs.Site
+- uid: Melanchall.DryWetMidi.Multimedia.PlaybackErrorOccurredEventArgs.Site*
+  name: Site
+  href: api/Melanchall.DryWetMidi.Multimedia.PlaybackErrorOccurredEventArgs.html#Melanchall_DryWetMidi_Multimedia_PlaybackErrorOccurredEventArgs_Site_
+  commentId: Overload:Melanchall.DryWetMidi.Multimedia.PlaybackErrorOccurredEventArgs.Site
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Multimedia.PlaybackErrorOccurredEventArgs.Site
+  nameWithType: PlaybackErrorOccurredEventArgs.Site
+- uid: Melanchall.DryWetMidi.Multimedia.PlaybackErrorSite
+  name: PlaybackErrorSite
+  href: api/Melanchall.DryWetMidi.Multimedia.PlaybackErrorSite.html
+  commentId: T:Melanchall.DryWetMidi.Multimedia.PlaybackErrorSite
+  fullName: Melanchall.DryWetMidi.Multimedia.PlaybackErrorSite
+  nameWithType: PlaybackErrorSite
+- uid: Melanchall.DryWetMidi.Multimedia.PlaybackErrorSite.EventCallback
+  name: EventCallback
+  href: api/Melanchall.DryWetMidi.Multimedia.PlaybackErrorSite.html#Melanchall_DryWetMidi_Multimedia_PlaybackErrorSite_EventCallback
+  commentId: F:Melanchall.DryWetMidi.Multimedia.PlaybackErrorSite.EventCallback
+  fullName: Melanchall.DryWetMidi.Multimedia.PlaybackErrorSite.EventCallback
+  nameWithType: PlaybackErrorSite.EventCallback
+- uid: Melanchall.DryWetMidi.Multimedia.PlaybackErrorSite.EventPlayed
+  name: EventPlayed
+  href: api/Melanchall.DryWetMidi.Multimedia.PlaybackErrorSite.html#Melanchall_DryWetMidi_Multimedia_PlaybackErrorSite_EventPlayed
+  commentId: F:Melanchall.DryWetMidi.Multimedia.PlaybackErrorSite.EventPlayed
+  fullName: Melanchall.DryWetMidi.Multimedia.PlaybackErrorSite.EventPlayed
+  nameWithType: PlaybackErrorSite.EventPlayed
+- uid: Melanchall.DryWetMidi.Multimedia.PlaybackErrorSite.Finished
+  name: Finished
+  href: api/Melanchall.DryWetMidi.Multimedia.PlaybackErrorSite.html#Melanchall_DryWetMidi_Multimedia_PlaybackErrorSite_Finished
+  commentId: F:Melanchall.DryWetMidi.Multimedia.PlaybackErrorSite.Finished
+  fullName: Melanchall.DryWetMidi.Multimedia.PlaybackErrorSite.Finished
+  nameWithType: PlaybackErrorSite.Finished
+- uid: Melanchall.DryWetMidi.Multimedia.PlaybackErrorSite.NoteCallback
+  name: NoteCallback
+  href: api/Melanchall.DryWetMidi.Multimedia.PlaybackErrorSite.html#Melanchall_DryWetMidi_Multimedia_PlaybackErrorSite_NoteCallback
+  commentId: F:Melanchall.DryWetMidi.Multimedia.PlaybackErrorSite.NoteCallback
+  fullName: Melanchall.DryWetMidi.Multimedia.PlaybackErrorSite.NoteCallback
+  nameWithType: PlaybackErrorSite.NoteCallback
+- uid: Melanchall.DryWetMidi.Multimedia.PlaybackErrorSite.NotesPlaybackFinished
+  name: NotesPlaybackFinished
+  href: api/Melanchall.DryWetMidi.Multimedia.PlaybackErrorSite.html#Melanchall_DryWetMidi_Multimedia_PlaybackErrorSite_NotesPlaybackFinished
+  commentId: F:Melanchall.DryWetMidi.Multimedia.PlaybackErrorSite.NotesPlaybackFinished
+  fullName: Melanchall.DryWetMidi.Multimedia.PlaybackErrorSite.NotesPlaybackFinished
+  nameWithType: PlaybackErrorSite.NotesPlaybackFinished
+- uid: Melanchall.DryWetMidi.Multimedia.PlaybackErrorSite.NotesPlaybackStarted
+  name: NotesPlaybackStarted
+  href: api/Melanchall.DryWetMidi.Multimedia.PlaybackErrorSite.html#Melanchall_DryWetMidi_Multimedia_PlaybackErrorSite_NotesPlaybackStarted
+  commentId: F:Melanchall.DryWetMidi.Multimedia.PlaybackErrorSite.NotesPlaybackStarted
+  fullName: Melanchall.DryWetMidi.Multimedia.PlaybackErrorSite.NotesPlaybackStarted
+  nameWithType: PlaybackErrorSite.NotesPlaybackStarted
+- uid: Melanchall.DryWetMidi.Multimedia.PlaybackErrorSite.PlayEvent
+  name: PlayEvent
+  href: api/Melanchall.DryWetMidi.Multimedia.PlaybackErrorSite.html#Melanchall_DryWetMidi_Multimedia_PlaybackErrorSite_PlayEvent
+  commentId: F:Melanchall.DryWetMidi.Multimedia.PlaybackErrorSite.PlayEvent
+  fullName: Melanchall.DryWetMidi.Multimedia.PlaybackErrorSite.PlayEvent
+  nameWithType: PlaybackErrorSite.PlayEvent
+- uid: Melanchall.DryWetMidi.Multimedia.PlaybackErrorSite.RepeatStarted
+  name: RepeatStarted
+  href: api/Melanchall.DryWetMidi.Multimedia.PlaybackErrorSite.html#Melanchall_DryWetMidi_Multimedia_PlaybackErrorSite_RepeatStarted
+  commentId: F:Melanchall.DryWetMidi.Multimedia.PlaybackErrorSite.RepeatStarted
+  fullName: Melanchall.DryWetMidi.Multimedia.PlaybackErrorSite.RepeatStarted
+  nameWithType: PlaybackErrorSite.RepeatStarted
+- uid: Melanchall.DryWetMidi.Multimedia.PlaybackErrorSite.Started
+  name: Started
+  href: api/Melanchall.DryWetMidi.Multimedia.PlaybackErrorSite.html#Melanchall_DryWetMidi_Multimedia_PlaybackErrorSite_Started
+  commentId: F:Melanchall.DryWetMidi.Multimedia.PlaybackErrorSite.Started
+  fullName: Melanchall.DryWetMidi.Multimedia.PlaybackErrorSite.Started
+  nameWithType: PlaybackErrorSite.Started
+- uid: Melanchall.DryWetMidi.Multimedia.PlaybackErrorSite.Stopped
+  name: Stopped
+  href: api/Melanchall.DryWetMidi.Multimedia.PlaybackErrorSite.html#Melanchall_DryWetMidi_Multimedia_PlaybackErrorSite_Stopped
+  commentId: F:Melanchall.DryWetMidi.Multimedia.PlaybackErrorSite.Stopped
+  fullName: Melanchall.DryWetMidi.Multimedia.PlaybackErrorSite.Stopped
+  nameWithType: PlaybackErrorSite.Stopped
+- uid: Melanchall.DryWetMidi.Multimedia.PlaybackErrorSite.Tick
+  name: Tick
+  href: api/Melanchall.DryWetMidi.Multimedia.PlaybackErrorSite.html#Melanchall_DryWetMidi_Multimedia_PlaybackErrorSite_Tick
+  commentId: F:Melanchall.DryWetMidi.Multimedia.PlaybackErrorSite.Tick
+  fullName: Melanchall.DryWetMidi.Multimedia.PlaybackErrorSite.Tick
+  nameWithType: PlaybackErrorSite.Tick
 - uid: Melanchall.DryWetMidi.Multimedia.PlaybackEventCallback
   name: PlaybackEventCallback
   href: api/Melanchall.DryWetMidi.Multimedia.PlaybackEventCallback.html

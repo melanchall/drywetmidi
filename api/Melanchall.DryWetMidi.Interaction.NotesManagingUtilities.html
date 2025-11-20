@@ -3,6 +3,16 @@
 <html>
 
   <head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-8MRCH2SM36"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-8MRCH2SM36');
+</script>
+
     <meta charset="utf-8">
       <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
       <title>Class NotesManagingUtilities | DryWetMIDI </title>
@@ -175,81 +185,6 @@
       </tr>
     </tbody>
   </table>
-  <a id="Melanchall_DryWetMidi_Interaction_NotesManagingUtilities_GetNotes_" data-uid="Melanchall.DryWetMidi.Interaction.NotesManagingUtilities.GetNotes*"></a>
-  <h4 id="Melanchall_DryWetMidi_Interaction_NotesManagingUtilities_GetNotes_Melanchall_DryWetMidi_Core_EventsCollection_Melanchall_DryWetMidi_Interaction_NoteDetectionSettings_Melanchall_DryWetMidi_Interaction_TimedEventDetectionSettings_" data-uid="Melanchall.DryWetMidi.Interaction.NotesManagingUtilities.GetNotes(Melanchall.DryWetMidi.Core.EventsCollection,Melanchall.DryWetMidi.Interaction.NoteDetectionSettings,Melanchall.DryWetMidi.Interaction.TimedEventDetectionSettings)">GetNotes(EventsCollection, NoteDetectionSettings, TimedEventDetectionSettings)</h4>
-  <div class="markdown level1 summary">Gets notes contained in the specified <a class="xref" href="Melanchall.DryWetMidi.Core.EventsCollection.html">EventsCollection</a>. More info in the
-<a class="xref" href="../articles/high-level-managing/Getting-objects.html#getnotes">Getting objects: GetNotes</a> article.</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="declaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static ICollection&lt;Note&gt; GetNotes(this EventsCollection eventsCollection, NoteDetectionSettings settings = null, TimedEventDetectionSettings timedEventDetectionSettings = null)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Core.EventsCollection.html">EventsCollection</a></td>
-        <td><span class="parametername">eventsCollection</span></td>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Core.EventsCollection.html">EventsCollection</a> to search for notes.</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.NoteDetectionSettings.html">NoteDetectionSettings</a></td>
-        <td><span class="parametername">settings</span></td>
-        <td>Settings according to which notes should be detected and built.</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedEventDetectionSettings.html">TimedEventDetectionSettings</a></td>
-        <td><span class="parametername">timedEventDetectionSettings</span></td>
-        <td>Settings according to which timed events should be detected
-    and built to construct notes.</td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.icollection-1">ICollection</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Interaction.Note.html">Note</a>&gt;</td>
-        <td>Collection of notes contained in <code class="paramref">eventsCollection</code> ordered by time.</td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
-        <td><code class="paramref">eventsCollection</code> is <code>null</code>.</td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 id="Melanchall_DryWetMidi_Interaction_NotesManagingUtilities_GetNotes_Melanchall_DryWetMidi_Core_EventsCollection_Melanchall_DryWetMidi_Interaction_NoteDetectionSettings_Melanchall_DryWetMidi_Interaction_TimedEventDetectionSettings__seealso">See Also</h5>
-  <div class="seealso">
-      <div><a class="xref" href="Melanchall.DryWetMidi.Interaction.NotesManagingUtilities.html#Melanchall_DryWetMidi_Interaction_NotesManagingUtilities_ProcessNotes_Melanchall_DryWetMidi_Core_EventsCollection_System_Action_Melanchall_DryWetMidi_Interaction_Note__System_Predicate_Melanchall_DryWetMidi_Interaction_Note__Melanchall_DryWetMidi_Interaction_NoteDetectionSettings_Melanchall_DryWetMidi_Interaction_TimedEventDetectionSettings_Melanchall_DryWetMidi_Interaction_NoteProcessingHint_">ProcessNotes(EventsCollection, Action&lt;Note&gt;, Predicate&lt;Note&gt;, NoteDetectionSettings, TimedEventDetectionSettings, NoteProcessingHint)</a></div>
-      <div><a class="xref" href="Melanchall.DryWetMidi.Interaction.NotesManagingUtilities.html#Melanchall_DryWetMidi_Interaction_NotesManagingUtilities_ProcessNotes_Melanchall_DryWetMidi_Core_EventsCollection_System_Action_Melanchall_DryWetMidi_Interaction_Note__Melanchall_DryWetMidi_Interaction_NoteDetectionSettings_Melanchall_DryWetMidi_Interaction_TimedEventDetectionSettings_Melanchall_DryWetMidi_Interaction_NoteProcessingHint_">ProcessNotes(EventsCollection, Action&lt;Note&gt;, NoteDetectionSettings, TimedEventDetectionSettings, NoteProcessingHint)</a></div>
-      <div><a class="xref" href="Melanchall.DryWetMidi.Interaction.NotesManagingUtilities.html#Melanchall_DryWetMidi_Interaction_NotesManagingUtilities_RemoveNotes_Melanchall_DryWetMidi_Core_EventsCollection_Melanchall_DryWetMidi_Interaction_NoteDetectionSettings_Melanchall_DryWetMidi_Interaction_TimedEventDetectionSettings_">RemoveNotes(EventsCollection, NoteDetectionSettings, TimedEventDetectionSettings)</a></div>
-      <div><a class="xref" href="Melanchall.DryWetMidi.Interaction.NotesManagingUtilities.html#Melanchall_DryWetMidi_Interaction_NotesManagingUtilities_RemoveNotes_Melanchall_DryWetMidi_Core_EventsCollection_System_Predicate_Melanchall_DryWetMidi_Interaction_Note__Melanchall_DryWetMidi_Interaction_NoteDetectionSettings_Melanchall_DryWetMidi_Interaction_TimedEventDetectionSettings_">RemoveNotes(EventsCollection, Predicate&lt;Note&gt;, NoteDetectionSettings, TimedEventDetectionSettings)</a></div>
-      <div><a class="xref" href="Melanchall.DryWetMidi.Interaction.GetObjectsUtilities.html">GetObjectsUtilities</a></div>
-  </div>
   <a id="Melanchall_DryWetMidi_Interaction_NotesManagingUtilities_GetNotes_" data-uid="Melanchall.DryWetMidi.Interaction.NotesManagingUtilities.GetNotes*"></a>
   <h4 id="Melanchall_DryWetMidi_Interaction_NotesManagingUtilities_GetNotes_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Interaction_NoteDetectionSettings_Melanchall_DryWetMidi_Interaction_TimedEventDetectionSettings_" data-uid="Melanchall.DryWetMidi.Interaction.NotesManagingUtilities.GetNotes(Melanchall.DryWetMidi.Core.MidiFile,Melanchall.DryWetMidi.Interaction.NoteDetectionSettings,Melanchall.DryWetMidi.Interaction.TimedEventDetectionSettings)">GetNotes(MidiFile, NoteDetectionSettings, TimedEventDetectionSettings)</h4>
   <div class="markdown level1 summary">Gets notes contained in the specified <a class="xref" href="Melanchall.DryWetMidi.Core.MidiFile.html">MidiFile</a>. More info in the

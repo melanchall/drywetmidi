@@ -3,6 +3,16 @@
 <html>
 
   <head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-8MRCH2SM36"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-8MRCH2SM36');
+</script>
+
     <meta charset="utf-8">
       <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
       <title>Enum TimeSpanRoundingPolicy | DryWetMIDI </title>
@@ -94,7 +104,7 @@
   <div class="markdown level0 remarks"><p>
 The default value of the enum is <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimeSpanRoundingPolicy.html#Melanchall_DryWetMidi_Interaction_TimeSpanRoundingPolicy_NoRounding">NoRounding</a>. Let's see how remaining options work.
 Please note that rounding step should be specified (see
-<a class="xref" href="Melanchall.DryWetMidi.Interaction.TimeSpanUtilities.html#Melanchall_DryWetMidi_Interaction_TimeSpanUtilities_Round_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_TimeSpanRoundingPolicy_System_Int64_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_TempoMap_">Round(ITimeSpan, TimeSpanRoundingPolicy, long, ITimeSpan, TempoMap)</a>).
+<a class="xref" href="Melanchall.DryWetMidi.Interaction.TimeSpanUtilities.html#Melanchall_DryWetMidi_Interaction_TimeSpanUtilities_Round_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_TimeSpanRoundingPolicy_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_TempoMap_">Round(ITimeSpan, TimeSpanRoundingPolicy, ITimeSpan, ITimeSpan, TempoMap)</a>).
 </p>
 <p>
   <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimeSpanRoundingPolicy.html#Melanchall_DryWetMidi_Interaction_TimeSpanRoundingPolicy_RoundUp">RoundUp</a> used to round a time span to the smallest one that is greater than or equal

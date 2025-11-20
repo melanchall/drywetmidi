@@ -3,6 +3,16 @@
 <html>
 
   <head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-8MRCH2SM36"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-8MRCH2SM36');
+</script>
+
     <meta charset="utf-8">
       <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
       <title>Manual build | DryWetMIDI </title>
@@ -100,6 +110,21 @@
 </ol>
 <p>For build you can use any tool you want: <code>dotnet</code> CLI, Visual Studio, Rider and so on. The library uses &quot;new&quot; csproj format so your build tools should be modern enough.</p>
 <p><em>master</em> branch contains code that the library releases built on. <em>develop</em> one is for current development so if you need the latest code, use this branch.</p>
+<h2 id="build-configuration">Build configuration</h2>
+<p>There are four build configurations available:</p>
+<ul>
+<li><code>Debug</code> – for development, debugging and testing. The library is not optimized and contains all debug information. <a href="#traces">Traces</a> are generated.</li>
+<li><code>Release</code> – for production. The library is optimized and does not contain debug information. It's the configuration used to build official releases. <a href="#traces">Traces</a> are disabled.</li>
+<li><code>ReleaseTest</code> – for running tests in release mode. The library is optimized and does not contains debug information. Additional tests are enabled in this configuration. Use it to run tests without generating additional files on your machine. <a href="#traces">Traces</a> are disabled.</li>
+<li><code>ReleaseTestFull</code> – for running tests in release mode with gathering additional information (playback traces, for example). The library is optimized and does not contain debug information. <a href="#traces">Traces</a> are generated.</li>
+</ul>
+<h3 id="traces">Traces</h3>
+<p>When you build the library in <code>Debug</code> or <code>ReleaseTestFull</code> configuration and run tests that use playback functionality, the following happens:</p>
+<ul>
+<li><code>PlaybackTraces</code> folder is created in the temp folder of your machine (you can get the path to it by calling <code>Path.GetTempPath()</code> method);</li>
+<li>inside the folder <em>log</em> files are created that contain information about playback events (when playback started, when it stopped, what events were sent to the output device and when they were sent, etc.);</li>
+<li>inside the folder <em>png</em> files are created that contain timelines of playback events along with MIDI clock ticks times and delays.</li>
+</ul>
 
 </article>
           </div>
