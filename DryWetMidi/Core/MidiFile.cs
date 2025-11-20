@@ -165,6 +165,7 @@ namespace Melanchall.DryWetMidi.Core
         /// <param name="settings">Settings according to which the file must be read. Specify <c>null</c> to use
         /// default settings.</param>
         /// <returns>An instance of the <see cref="MidiFile"/> representing a MIDI file.</returns>
+        /// <seealso cref="ReadLazy(string, ReadingSettings)"/>
         /// <exception cref="ArgumentException"><paramref name="filePath"/> is a zero-length string,
         /// contains only white space, or contains one or more invalid characters as defined by
         /// <see cref="Path.InvalidPathChars"/>.</exception>
@@ -240,6 +241,7 @@ namespace Melanchall.DryWetMidi.Core
         /// <param name="settings">Settings according to which the file must be read. Specify <c>null</c> to use
         /// default settings.</param>
         /// <returns>An instance of the <see cref="MidiTokensReader"/> wrapped around the specified file.</returns>
+        /// <seealso cref="Read(string, ReadingSettings)"/>
         /// <exception cref="ArgumentException"><paramref name="filePath"/> is a zero-length string,
         /// contains only white space, or contains one or more invalid characters as defined by
         /// <see cref="Path.InvalidPathChars"/>.</exception>
@@ -280,6 +282,7 @@ namespace Melanchall.DryWetMidi.Core
         /// <param name="format">Format of a MIDI file.</param>
         /// <param name="settings">Settings according to which the file must be written. Specify <c>null</c> to use
         /// default settings.</param>
+        /// <seealso cref="WriteLazy(string, bool, MidiFileFormat, WritingSettings, TimeDivision)"/>
         /// <exception cref="ArgumentException"><paramref name="filePath"/> is a zero-length string,
         /// contains only white space, or contains one or more invalid characters as defined by
         /// <see cref="Path.InvalidPathChars"/>.</exception>
@@ -334,6 +337,7 @@ namespace Melanchall.DryWetMidi.Core
         /// (default value) to use the default one - <see cref="TicksPerQuarterNoteTimeDivision.DefaultTicksPerQuarterNote"/>
         /// ticks per quarter note.</param>
         /// <returns>An instance of the <see cref="MidiTokensWriter"/> wrapped around the specified file.</returns>
+        /// <seealso cref="Write(string, bool, MidiFileFormat, WritingSettings)"/>
         /// <exception cref="ArgumentException"><paramref name="filePath"/> is a zero-length string,
         /// contains only white space, or contains one or more invalid characters as defined by
         /// <see cref="Path.InvalidPathChars"/>.</exception>
@@ -387,6 +391,7 @@ namespace Melanchall.DryWetMidi.Core
         /// Stream must be readable, seekable and be able to provide its position and length via <see cref="Stream.Position"/>
         /// and <see cref="Stream.Length"/> properties.
         /// </remarks>
+        /// <seealso cref="ReadLazy(Stream, ReadingSettings)"/>
         /// <exception cref="ArgumentNullException"><paramref name="stream"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">
         /// One of the following errors occurred:
@@ -560,6 +565,7 @@ namespace Melanchall.DryWetMidi.Core
         /// Stream must be readable, seekable and be able to provide its position and length via <see cref="Stream.Position"/>
         /// and <see cref="Stream.Length"/> properties.
         /// </remarks>
+        /// <seealso cref="Read(Stream, ReadingSettings)"/>
         /// <exception cref="ArgumentNullException"><paramref name="stream"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">
         /// One of the following errors occurred:
@@ -598,6 +604,7 @@ namespace Melanchall.DryWetMidi.Core
         /// <param name="format">Format of the file to be written.</param>
         /// <param name="settings">Settings according to which the file must be written. Specify <c>null</c> to use
         /// default settings.</param>
+        /// <seealso cref="WriteLazy(Stream, WritingSettings, MidiFileFormat, TimeDivision)"/>
         /// <exception cref="ArgumentNullException"><paramref name="stream"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException"><paramref name="stream"/> doesn't support writing.</exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="format"/> specified an invalid value.</exception>
@@ -668,6 +675,7 @@ namespace Melanchall.DryWetMidi.Core
         /// (default value) to use the default one - <see cref="TicksPerQuarterNoteTimeDivision.DefaultTicksPerQuarterNote"/>
         /// ticks per quarter note.</param>
         /// <returns>An instance of the <see cref="MidiTokensWriter"/> wrapped around the <paramref name="stream"/>.</returns>
+        /// <seealso cref="Write(Stream, MidiFileFormat, WritingSettings)"/>
         /// <exception cref="ArgumentException"><paramref name="stream"/> doesn't support writing.</exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="format"/> specified an invalid value.</exception>
         /// <exception cref="InvalidOperationException">Time division is <c>null</c>.</exception>

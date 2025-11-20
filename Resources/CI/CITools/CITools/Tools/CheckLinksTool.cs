@@ -1,37 +1,34 @@
 ﻿using System.Net;
 using System.Text.RegularExpressions;
 
-namespace CheckLinks
+namespace CITools.Tools
 {
-    internal class Program
+    [Tool("CheckLinks")]
+    internal sealed class CheckLinksTool : ITool
     {
         private static readonly Regex LinkRegex = new(@"https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9@:%_\+.~#?&\/=]*)");
         private static readonly Regex WikiRegex = new(@"melanchall\/drywetmidi\/wiki");
-        private static readonly Regex GitHubUserContentRegex = new(@"https:\/\/raw\.githubusercontent\.com\/melanchall\/drywetmidi\/develop\/");
 
         private const int RetriesCount = 3;
         private static readonly TimeSpan RetryInterval = TimeSpan.FromSeconds(1);
 
-        static void Main(string[] args)
+        public void Execute(string[] args)
         {
             if (args.Length < 2)
-                WriteFatal("Invalid arguments count.", 0);
+                throw new InvalidOperationException("Invalid arguments count.");
 
             var directoryPath = Path.GetFullPath(args[0]);
             var filter = args[1];
 
             if (!Directory.Exists(directoryPath))
-                WriteFatal($"Directory '{directoryPath}' doesn't exist.", 0);
+                throw new InvalidOperationException($"Directory '{directoryPath}' doesn't exist.");
 
             var files = GetFiles(directoryPath, filter);
             var httpClient = GetHttpClient();
             var linksAreValid = CheckLinks(directoryPath, files, httpClient);
 
             if (!linksAreValid)
-            {
-                WriteError("There are failed checks.", 0);
-                Environment.Exit(1);
-            }
+                throw new InvalidOperationException("There are failed checks.");
         }
 
         private static HttpClient GetHttpClient()
@@ -46,7 +43,7 @@ namespace CheckLinks
             string[] files,
             HttpClient httpClient)
         {
-            WriteMessage("Checking links...", 0);
+            Console.WriteLine("Checking links...");
 
             var filesCount = files.Length;
             var result = true;
@@ -54,24 +51,25 @@ namespace CheckLinks
             for (var i = 0; i < filesCount; i++)
             {
                 var filePath = files[i];
-                WriteMessage($"[{i + 1}/{filesCount}] {filePath[directoryPath.Length..].Trim('/', '\\')}", 0);
+                Console.WriteLine($"[{i + 1}/{filesCount}] {filePath[directoryPath.Length..].Trim('/', '\\')}");
 
                 var fileText = File.ReadAllText(filePath);
                 var matches = LinkRegex.Matches(fileText);
                 if (!matches.Any())
                 {
-                    WriteMessage("no links", 1);
+                    Console.WriteLine("- no links");
                     continue;
                 }
 
                 foreach (Match match in matches)
                 {
                     var link = match.Value.Trim('.');
-                    WriteMessage($"{link}...", 1);
+                    Console.WriteLine($"- {link}...");
 
                     if (WikiRegex.IsMatch(link))
                     {
-                        WriteError("Wiki link is prohibited", 2);
+                        Console.WriteLine("-- FAIL: Wiki link is prohibited");
+                        result = false;
                         continue;
                     }
 
@@ -81,15 +79,15 @@ namespace CheckLinks
                         linkIsValid |= CheckLink(link, httpClient);
                         if (!linkIsValid && j < RetriesCount - 1)
                         {
-                            WriteMessage("retrying...", 2);
+                            Console.WriteLine("-- retrying...");
                             Thread.Sleep(RetryInterval);
                         }
                     }
 
                     if (linkIsValid)
-                        WriteMessage("OK", 2);
+                        Console.WriteLine("-- OK");
                     else
-                        WriteError("FAIL", 2);
+                        Console.WriteLine("-- FAIL");
 
                     result &= linkIsValid;
                 }
@@ -106,43 +104,31 @@ namespace CheckLinks
             {
                 var response = httpClient.GetAsync(link).Result;
                 if (response.StatusCode != HttpStatusCode.OK)
-                    WriteError($"failed with: {response.StatusCode}", 2);
+                    Console.WriteLine($"-- failed with: {response.StatusCode}");
 
                 return response.StatusCode == HttpStatusCode.OK;
             }
             catch (Exception ex)
             {
-                WriteError($"failed with: {ex.Message}", 2);
+                Console.WriteLine($"-- failed with: {ex.Message}");
                 return false;
             }
         }
 
         private static string[] GetFiles(string directoryPath, string filter)
         {
-            WriteMessage($"Searching files in the directory '{directoryPath}' by '{filter}' filter...", 0);
+            Console.WriteLine($"Searching files in the directory '{directoryPath}' by '{filter}' filter...");
 
             var files = Directory.GetFiles(directoryPath, filter, SearchOption.AllDirectories);
 
-            WriteMessage($"{files.Length} files found", 0);
+            Console.WriteLine($"- {files.Length} files found");
             return files;
         }
 
         private static void WriteMessage(string message, int level) =>
             Console.WriteLine($"{AddLevel(message, level)}");
 
-        private static void WriteFatal(string error, int level)
-        {
-            WriteError($"FATAL! {error}", level);
-            Environment.Exit(1);
-        }
-
-        private static void WriteError(string error, int level) =>
-            Console.WriteLine($"##[error]{AddLevel(error, level)}");
-
-        private static void WriteWarning(string warning, int level) =>
-            Console.WriteLine($"##[warning]{AddLevel(warning, level)}");
-
         private static string AddLevel(string message, int level) =>
-            $"{new string(' ', level * 4)}{message}";
+            $"{new string('-', level)}{(level > 0 ? " " : null)}{message}";
     }
 }

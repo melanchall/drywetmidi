@@ -66,7 +66,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         private void CheckErrors(
             ICollection<PlaybackErrorOccurredEventArgs> errorOccurredData,
             int expectedCount,
-            PlaybackSite expectedSite,
+            PlaybackErrorSite expectedSite,
             string expectedError)
         {
             ClassicAssert.AreEqual(expectedCount, errorOccurredData.Count, "Invalid number of errors.");

@@ -1,0 +1,15 @@
+parameters:
+- name: tool
+  displayName: 'Tool'
+  type: string
+- name: toolArguments
+  displayName: 'Tool arguments'
+  type: string
+
+steps:
+- task: DotNetCoreCLI@2
+  displayName: 'Execute tool: ${{ parameters.tool }}'
+  inputs:
+    command: 'run'
+    arguments: '--configuration $(BuildConfiguration) -- ${{ parameters.tool }} ${{ parameters.toolArguments }}'
+    projects: 'Resources/CI/CITools/CITools/CITools.csproj'

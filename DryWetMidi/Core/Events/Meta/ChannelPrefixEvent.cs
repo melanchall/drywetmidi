@@ -35,7 +35,7 @@
         #region Properties
 
         /// <summary>
-        /// Gets or sets MIDI channel.
+        /// Gets or sets a MIDI channel.
         /// </summary>
         public byte Channel { get; set; }
 

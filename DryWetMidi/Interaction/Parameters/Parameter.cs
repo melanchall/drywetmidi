@@ -33,6 +33,12 @@ namespace Melanchall.DryWetMidi.Interaction
         /// Gets or sets the channel of the current parameter. This channel is in fact
         /// the channel of Control Change events that represent the parameter.
         /// </summary>
+        /// <remarks>
+        /// Channel is a zero-based number in DryWetMIDI, valid values are from <c>0</c> to <c>15</c>.
+        /// Other libraries and software can use one-based channel numbers (i.e.from <c>1</c>
+        /// to <c>16</c>) so be aware about that: channel <c>10</c> in such software will be <c>9</c>
+        /// in DryWetMIDI.
+        /// </remarks>
         public FourBitNumber Channel { get; set; }
 
         /// <summary>

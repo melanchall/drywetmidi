@@ -200,6 +200,12 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <summary>
         /// Gets or sets channel to play the chord on.
         /// </summary>
+        /// <remarks>
+        /// Channel is a zero-based number in DryWetMIDI, valid values are from <c>0</c> to <c>15</c>.
+        /// Other libraries and software can use one-based channel numbers (i.e.from <c>1</c>
+        /// to <c>16</c>) so be aware about that: channel <c>10</c> in such software will be <c>9</c>
+        /// in DryWetMIDI.
+        /// </remarks>
         /// <exception cref="InvalidOperationException">
         /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">

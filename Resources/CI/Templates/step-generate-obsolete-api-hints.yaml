@@ -1,0 +1,5 @@
+steps:
+- template: step-execute-ci-tool.yaml
+  parameters:
+    tool: 'GenerateObsoleteApiHints'
+    toolArguments: '"Docs\obsolete" "DryWetMidi"'

@@ -956,22 +956,22 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         private void OnStarted()
         {
-            HandleEvent(Started, PlaybackSite.Started);
+            HandleEvent(Started, PlaybackErrorSite.Started);
         }
 
         private void OnStopped()
         {
-            HandleEvent(Stopped, PlaybackSite.Stopped);
+            HandleEvent(Stopped, PlaybackErrorSite.Stopped);
         }
 
         private void OnFinished()
         {
-            HandleEvent(Finished, PlaybackSite.Finished);
+            HandleEvent(Finished, PlaybackErrorSite.Finished);
         }
 
         private void OnRepeatStarted()
         {
-            HandleEvent(RepeatStarted, PlaybackSite.RepeatStarted);
+            HandleEvent(RepeatStarted, PlaybackErrorSite.RepeatStarted);
         }
 
         private void OnNotesPlaybackStarted(Note[] notes, Note[] originalNotes)
@@ -981,7 +981,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
             HandleEvent(
                 NotesPlaybackStarted,
-                PlaybackSite.NotesPlaybackStarted,
+                PlaybackErrorSite.NotesPlaybackStarted,
                 new NotesEventArgs(notes, originalNotes));
         }
 
@@ -992,7 +992,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
             HandleEvent(
                 NotesPlaybackFinished,
-                PlaybackSite.NotesPlaybackFinished,
+                PlaybackErrorSite.NotesPlaybackFinished,
                 new NotesEventArgs(notes, originalNotes));
         }
 
@@ -1000,11 +1000,11 @@ namespace Melanchall.DryWetMidi.Multimedia
         {
             HandleEvent(
                 EventPlayed,
-                PlaybackSite.EventPlayed,
+                PlaybackErrorSite.EventPlayed,
                 new MidiEventPlayedEventArgs(midiEvent, metadata));
         }
 
-        private void OnErrorOccurred(PlaybackSite site, Exception exception)
+        private void OnErrorOccurred(PlaybackErrorSite site, Exception exception)
         {
             var eventHandler = ErrorOccurred;
             if (eventHandler == null)
@@ -1024,7 +1024,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             }
         }
 
-        private void HandleEvent(EventHandler eventHandler, PlaybackSite site)
+        private void HandleEvent(EventHandler eventHandler, PlaybackErrorSite site)
         {
             if (eventHandler == null)
                 return;
@@ -1042,7 +1042,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             }
         }
 
-        private void HandleEvent<T>(EventHandler<T> eventHandler, PlaybackSite site, T eventArgs)
+        private void HandleEvent<T>(EventHandler<T> eventHandler, PlaybackErrorSite site, T eventArgs)
         {
             if (eventHandler == null)
                 return;
@@ -1123,7 +1123,7 @@ namespace Melanchall.DryWetMidi.Multimedia
                             }
                             catch (Exception ex)
                             {
-                                OnErrorOccurred(PlaybackSite.EventCallback, ex);
+                                OnErrorOccurred(PlaybackErrorSite.EventCallback, ex);
                             }
                         }
 
@@ -1159,7 +1159,7 @@ namespace Melanchall.DryWetMidi.Multimedia
                 }
                 catch (Exception ex)
                 {
-                    OnErrorOccurred(PlaybackSite.Tick, ex);
+                    OnErrorOccurred(PlaybackErrorSite.Tick, ex);
                 }
                 finally
                 {
@@ -1242,7 +1242,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             }
             catch (Exception e)
             {
-                OnErrorOccurred(PlaybackSite.PlayEvent, e);
+                OnErrorOccurred(PlaybackErrorSite.PlayEvent, e);
             }
         }
 
@@ -1307,7 +1307,7 @@ namespace Melanchall.DryWetMidi.Multimedia
                     }
                     catch (Exception e)
                     {
-                        OnErrorOccurred(PlaybackSite.NoteCallback, e);
+                        OnErrorOccurred(PlaybackErrorSite.NoteCallback, e);
                     }
                 }
             }

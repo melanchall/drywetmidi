@@ -76,11 +76,7 @@ jobs:
   
   - template: step-generate-doc-links.yaml
   
-  - task: PowerShell@2
-    displayName: Generate obsolete API hints
-    inputs:
-      targetType: filePath
-      filePath: '$(Build.SourcesDirectory)/Resources/Scripts/Generate obsolete API hints.ps1'
+  - template: step-generate-obsolete-api-hints.yaml
   
   - ${{ if eq(parameters.packageType, 'Nativeless') }}:  
     - template: step-setup-nativeless-project.yaml
