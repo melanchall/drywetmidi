@@ -44,7 +44,7 @@ stages:
     strategy:
       matrix:
         Windows_Net_IncludeAll:
-          vmImage: 'windows-2019'
+          vmImage: 'windows-latest'
           rid: 'win-x64'
           includeAll: 'true'
         macOS_Net_IncludeAll:
@@ -52,7 +52,7 @@ stages:
           rid: 'osx-x64'
           includeAll: 'true'
         Windows_Net_DontIncludeAll:
-          vmImage: 'windows-2019'
+          vmImage: 'windows-latest'
           rid: 'win-x64'
           includeAll: 'false'
         macOS_Net_DontIncludeAll:

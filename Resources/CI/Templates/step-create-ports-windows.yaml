@@ -3,6 +3,22 @@ parameters:
 
 steps:
 - task: PowerShell@2
+  displayName: Ensure MIDI is ready (Windows)
+  condition: and(succeeded(), ${{ parameters.enabled }})
+  inputs:
+    targetType: 'inline'
+    script: |
+      $service = Get-Service -Name "Audiosrv"
+      
+      if ($service.Status -ne 'Running')
+      {
+        Write-Host "Service is not started; starting..."
+        Start-Service "Audiosrv"
+      }
+      
+      Write-Host "Server is started"
+
+- task: PowerShell@2
   displayName: Create virtual MIDI ports (Windows)
   condition: and(succeeded(), ${{ parameters.enabled }})
   inputs:

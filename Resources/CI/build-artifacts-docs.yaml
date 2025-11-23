@@ -23,6 +23,10 @@ variables:
 name: BuildDocs_$(SourceBranchName)_$(LibraryVersion)$(Rev:.r)
 
 steps:
+- template: Templates/step-setup-framework.yaml
+  parameters:
+    framework: 'Net'
+
 - template: Templates/step-generate-obsolete-api-hints.yaml
 
 - task: DotNetCoreCLI@2

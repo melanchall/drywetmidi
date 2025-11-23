@@ -31,9 +31,16 @@ schedules:
 pool:
   vmImage: 'windows-latest'
 
+variables:
+- group: DryWetMIDI-Common-Variables
+
 name: CheckReadmeLinks_$(SourceBranchName)_$(Rev:r)
 
 steps:
+- template: Templates/step-setup-framework.yaml
+  parameters:
+    framework: 'Net'
+
 - template: Templates/step-execute-ci-tool.yaml
   parameters:
     tool: 'CheckLinks'

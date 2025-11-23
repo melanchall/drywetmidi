@@ -37,7 +37,7 @@ stages:
 - stage: TestPackageIntegration
   displayName: Test package integration
   pool:
-    vmImage: 'windows-2019'
+    vmImage: 'windows-latest'
   jobs:
   - job: TestPackageIntegration
     displayName: Test package integration

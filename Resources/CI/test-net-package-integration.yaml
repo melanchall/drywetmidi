@@ -44,7 +44,7 @@ stages:
     strategy:
       matrix:
         Windows_Net:
-          vmImage: 'windows-2019'
+          vmImage: 'windows-latest'
           framework: 'Net'
         macOS_Net:
           vmImage: 'macos-latest'
