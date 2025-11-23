@@ -40,7 +40,7 @@ namespace CITools.Tools
                 if (!inLibrary)
                 {
                     var removedFromVersion = entry.RemovedFromVersion;
-                    section = section.Replace("$REMOVED$", $"> [!IMPORTANT]{Environment.NewLine}> API removed from the library by {removedFromVersion} release.");
+                    section = section.Replace("$REMOVED$", $"> [!WARNING]{Environment.NewLine}> API removed from the library by {removedFromVersion} release.");
                     Console.WriteLine($"- removed by {removedFromVersion}");
                 }
                 else

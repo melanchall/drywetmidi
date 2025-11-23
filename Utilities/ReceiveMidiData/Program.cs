@@ -17,8 +17,7 @@ namespace Melanchall.ReceiveMidiData
             UiUtilities.WriteHello();
             UiUtilities.WriteUtilityDescription(@"
 The tool listens for incoming MIDI data from the selected
-input MIDI device and immediately prints the data
-");
+input MIDI device and immediately prints the data");
 
             UiUtilities.WriteLine("Here the list of all input MIDI devices in the system:");
             UiUtilities.WriteLine();

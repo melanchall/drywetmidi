@@ -8,7 +8,6 @@ namespace Melanchall.Common
 
         public static void WriteHello() => WriteLines(
             Assembly.GetCallingAssembly().GetName().Name,
-            "2023",
             "Powered by Melanchall's DryWetMIDI library",
             "====================================================",
             string.Empty);

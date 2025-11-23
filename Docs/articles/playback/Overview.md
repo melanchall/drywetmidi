@@ -56,7 +56,7 @@ Playback supports on-the-fly changes of the data being played. You can find deta
 
 If you call the [Start](xref:Melanchall.DryWetMidi.Multimedia.Playback.Start) method of the [Playback](xref:Melanchall.DryWetMidi.Multimedia.Playback), execution of the calling thread will continue immediately after the method is called. To stop playback use the [Stop](xref:Melanchall.DryWetMidi.Multimedia.Playback.Stop) method. Note that there is no any pausing method since it's useless. `Stop` leaves playback at the point where the method was called. To move to the start of the playback use the [MoveToStart](xref:Melanchall.DryWetMidi.Multimedia.Playback.MoveToStart) method.
 
-> [!IMPORTANT]
+> [!WARNING]
 > You should be very careful with `using` block. Example below shows the case where part of MIDI data **will not be played** because of playback is disposed before the last MIDI event will be played:
 > 
 > ```csharp

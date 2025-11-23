@@ -1,0 +1,64 @@
+trigger:
+  batch: true
+  branches:
+    include:
+    - master
+    - develop
+  paths:
+    include:
+    - 'DryWetMidi/*'
+    - 'Resources/CI/Templates/stage-build-native-libs.yaml'
+    - 'Resources/CI/Templates/step-create-ports-windows.yaml'
+    - 'Resources/CI/Templates/job-build-package.yaml'
+    - 'Resources/CI/Templates/step-setup-framework-variables.yaml'
+    - 'Resources/Utilities/CheckDwmApi/*'
+    - 'Resources/Native/*'
+
+pr: none
+
+variables:
+- group: DryWetMIDI-Common-Variables
+
+name: RunCheckDwmApiTool_Net_$(SourceBranchName)_$(LibraryVersion)$(Rev:.r)
+
+stages:
+- template: Templates/stage-build-native-libs.yaml
+
+- stage: RunCheckBasicFunctionsTool
+  displayName: Run CheckDwmApi tool
+  jobs:
+  - job: RunCheckBasicFunctionsTool
+    displayName: Run CheckDwmApi tool
+    strategy:
+      matrix:
+        Windows_Net:
+          vmImage: 'windows-latest'
+          framework: 'Net'
+        macOS_Net:
+          vmImage: 'macos-latest'
+          framework: 'Net'
+        Ubuntu_Net:
+          vmImage: 'ubuntu-latest'
+          framework: 'Net'
+    pool:
+      vmImage: $(vmImage)
+    steps:
+    - template: Templates/step-copy-native-libraries-near-csproj.yaml
+    
+    - template: Templates/step-setup-framework.yaml
+      parameters:
+        framework: '$(framework)'
+    
+    - template: Templates/step-create-ports-windows.yaml
+      parameters:
+        enabled: contains(variables.vmImage, 'windows')
+        portsNames: 'TestVirtualMidiDevice'
+    
+    - task: DotNetCoreCLI@2
+      displayName: Run tool
+      continueOnError: false
+      timeoutInMinutes: 60
+      inputs:
+        command: 'run'
+        projects: 'Utilities/CheckDwmApi/Melanchall.CheckDwmApi.csproj'
+        arguments: '--configuration $(BuildConfiguration) -- -noninteractive'

@@ -4,7 +4,7 @@ uid: a_dev_virtual
 
 # Virtual device
 
-> [!IMPORTANT]
+> [!WARNING]
 > Virtual devices API is a platform-specific one so please refer to the [Supported OS](xref:a_develop_supported_os) article to learn more. For Windows you can use products like [virtualMIDI SDK](https://www.tobias-erichsen.de/software/virtualmidi/virtualmidi-sdk.html) or similar to work with virtual MIDI ports programmatically. Be careful with the license of these products.
 
 With DryWetMIDI you can programmatically create virtual MIDI devices with the specified name using [VirtualDevice.Create](xref:Melanchall.DryWetMidi.Multimedia.VirtualDevice.Create(System.String)) method. In fact, virtual device is an [input](xref:a_dev_input) and an [output](xref:a_dev_output) devices paired together in a way that any MIDI event sent to the output device will be immediately transferred back from the virtual device and can be received by an application from its input subdevice.
@@ -111,7 +111,7 @@ Event Note On [5] (70, 60) received on device Leaf1.
 Event Note On [5] (70, 60) received on device Leaf2.
 ```
 
-> [!IMPORTANT]
+> [!WARNING]
 > As with input and output device you must always [dispose](xref:Melanchall.DryWetMidi.Multimedia.MidiDevice.Dispose) virtual device when you're done with it:
 >
 > ```csharp

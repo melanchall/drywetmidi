@@ -6,7 +6,7 @@ uid: a_support
 
 Here you'll find information about how to create good issues on the DryWetMIDI so I (author of the library) can help you with your problem. The main rule – provide as many details as possible. I'm developing the library in my spare time and don't ask money for it. Please respect my time.
 
-> [!IMPORTANT]
+> [!WARNING]
 > If you make no effort to get your issue clear, I will make no effort to help you.
 
 Things to pay attention for are:

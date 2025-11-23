@@ -8,7 +8,7 @@ Playback uses a timer under the hood. In DryWetMIDI this timer is called **tick 
 
 To make playback smooth and correct, the precision of the timer should be ~1ms. So tick will be generated every one millisecond. By default, DryWetMIDI uses [HighPrecisionTickGenerator](xref:Melanchall.DryWetMidi.Multimedia.HighPrecisionTickGenerator) which is the best option in terms of CPU usage, memory usage and precision.
 
-> [!IMPORTANT]
+> [!WARNING]
 > `HighPrecisionTickGenerator` is supported for Windows and macOS only at the moment.
 
 You can also use [RegularPrecisionTickGenerator](xref:Melanchall.DryWetMidi.Multimedia.RegularPrecisionTickGenerator) which uses standard [Timer](xref:System.Timers.Timer) and thus provides precision about 16ms on Windows. But this tick generator is cross-platform.

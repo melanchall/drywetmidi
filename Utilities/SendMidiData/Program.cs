@@ -11,8 +11,7 @@ namespace Melanchall.SendMidiData
             UiUtilities.WriteHello();
             UiUtilities.WriteUtilityDescription(@"
 The tool sends note and other events to the selected
-output MIDI device
-");
+output MIDI device");
 
             UiUtilities.WriteLine("Here the list of all output MIDI devices in the system:");
             UiUtilities.WriteLine();

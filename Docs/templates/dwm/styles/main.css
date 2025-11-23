@@ -62,6 +62,10 @@ header .navbar-inverse {
     border-right: 1px solid #5E5E5D;
 }
 
+.sidetoc .shiftup {
+    bottom: 0px;
+}
+
 form#search input, .toc-filter {
     border-radius: 0px;
     background-color: #292827;
@@ -112,10 +116,6 @@ body .toc {
     border-right: 1px solid #5E5E5D;
 }
 
-/*.h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6 {
-  font-weight: bold;
-}*/
-
 .inheritance h5, .inheritedMembers h5 {
     border-bottom: 1px solid #5E5E5D;
 }
@@ -129,16 +129,16 @@ body .toc {
     border: none;
 }
 
-/*h1[id|="Melanchall_DryWetMidi"] > h4 {
-  border-bottom: 2px solid #EC5508;
-}*/
-
 h1[data-uid] {
     margin-bottom: 30px;
 }
 
 .toc .nav > li.active > .expand-stub::before, .toc .nav > li.in > .expand-stub::before, .toc .nav > li.in.active > .expand-stub::before, .toc .nav > li.filtered > .expand-stub::before {
     content: "–";
+}
+
+.nav .level2 .expand-stub + a {
+    font-weight: normal;
 }
 
 .table .table {
@@ -284,8 +284,11 @@ h5[id$=_syntax] {
     display: none;
 }
 
-/* Transform Property Value table to just type */
+.declaration, .fieldValue, .parameters, .returns, .exceptions {
+    color: #F8F8F8;
+}
 
+/* Transform Property Value table to just type */
 h5.propertyValue + .table-responsive::before {
     content: "Property Type";
     font-weight: 500;
@@ -504,23 +507,23 @@ img[src*="logo.png"], img[src*="build/status"], img[src*="img.shields.io"] {
 .alert-danger {
     color: #F8F8F8;
     border-radius: 0px;
-    background-color: #EC550811;
-    border-color: #EC5508;
+    background-color: #5295D011;
+    border-color: #5295D0;
 }
 
 .alert-danger h5 {
-    color: #EC5508;
+    color: #5295D0;
 }
 
 .alert-warning {
     color: #F8F8F8;
     border-radius: 0px;
-    background-color: transparent;
-    border-color: #ECE208;
+    background-color: #EC550811;
+    border-color: #EC5508;
 }
 
 .alert-warning h5 {
-    color: #ECE208;
+    color: #EC5508;
 }
 
 pre.text-image {
