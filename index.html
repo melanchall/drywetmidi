@@ -105,14 +105,8 @@
 <p><strong>Warning</strong><br>
 If you want to create an issue or a discussion, read this article first – <a href="https://melanchall.github.io/drywetmidi/articles/dev/Support.html">Support</a>.</p>
 </blockquote>
-<h2 id="useful-links">Useful Links</h2>
-<ul>
-<li><a href="https://melanchall.github.io/drywetmidi">Documentation</a></li>
-<li><a href="https://www.nuget.org/packages/Melanchall.DryWetMidi">NuGet</a></li>
-<li><a href="https://melanchall.github.io/drywetmidi/articles/dev/Project-health.html">Project health</a></li>
-</ul>
 <h2 id="projects-using-drywetmidi">Projects using DryWetMIDI</h2>
-<p>Here the list of noticeable projects that use DryWetMIDI:</p>
+<p>Here the list of noticeable projects that use the library:</p>
 <ul>
 <li><a href="https://5of12.co.uk/#playtonik">Playtonik</a><br>
 Playtonik is an app designed and developed by <a href="https://5of12.co.uk">5of12</a>. It uses physics-based interactions, immersive spatial audio and dynamic haptic feedback for a fun, relaxing experience. For the fidgeters, Playtonik comes with a selection of built in sounds and an on screen keyboard. Scale filters help keep you in tune, so you can focus on having fun! For the musicians, MIDI support lets you connect your favourite instrument. Playtonik can work as a note source or as a chaotic MIDI delay, great for adding texture to your sound.</li>
@@ -131,139 +125,48 @@ Using Rustissimo you can create a concert with your friends and play instruments
 </ul>
 <p>If you find that DryWetMIDI has been useful for your project, please put a link to the library in your project's <em>About</em> section or something like that.</p>
 <h2 id="getting-started">Getting Started</h2>
-<p>Let's see some examples of what you can do with DryWetMIDI (also you can check out sample applications from <a href="https://github.com/CIRCE-EYES">CIRCE-EYES</a> (see the profile, VB.NET used)).</p>
-<p>To <a href="https://melanchall.github.io/drywetmidi/articles/file-reading-writing/MIDI-file-reading.html">read a MIDI file</a> you have to use the <code>Read</code> static method of the <code>MidiFile</code>:</p>
-<pre><code class="lang-csharp">var midiFile = MidiFile.Read(&quot;Some Great Song.mid&quot;);
-</code></pre>
-<p>or, in more advanced form (visit <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Core.ReadingSettings.html">Reading settings</a> page on the library docs to learn more about how to adjust process of reading)</p>
-<pre><code class="lang-csharp">var midiFile = MidiFile.Read(
-    &quot;Some Great Song.mid&quot;,
-    new ReadingSettings
-    {
-        NoHeaderChunkPolicy = NoHeaderChunkPolicy.Abort,
-        CustomChunkTypes = new ChunkTypesCollection
-        {
-            { typeof(MyCustomChunk), &quot;Cstm&quot; }
-        }
-    });
-</code></pre>
-<p>To <a href="https://melanchall.github.io/drywetmidi/articles/file-reading-writing/MIDI-file-writing.html">write MIDI data to a file</a> you have to use the <code>Write</code> method of the <code>MidiFile</code>:</p>
-<pre><code class="lang-csharp">midiFile.Write(&quot;My Great Song.mid&quot;);
-</code></pre>
-<p>or, in more advanced form (visit <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Core.WritingSettings.html">Writing settings</a> page on the library docs to learn more about how to adjust process of writing)</p>
-<pre><code class="lang-csharp">midiFile.Write(
-    &quot;My Great Song.mid&quot;,
-    true,
-    MidiFileFormat.SingleTrack,
-    new WritingSettings
-    {
-        UseRunningStatus = true,
-        NoteOffAsSilentNoteOn = true
-    });
-</code></pre>
-<p>Of course you can create a MIDI file from scratch by creating an instance of the <code>MidiFile</code> and writing it:</p>
-<pre><code class="lang-csharp">var midiFile = new MidiFile(
-    new TrackChunk(
-        new SetTempoEvent(500000)),
-    new TrackChunk(
-        new TextEvent(&quot;It's just single note track...&quot;),
-        new NoteOnEvent((SevenBitNumber)60, (SevenBitNumber)45),
-        new NoteOffEvent((SevenBitNumber)60, (SevenBitNumber)0)
-        {
-            DeltaTime = 400
-        }));
-
-midiFile.Write(&quot;My Future Great Song.mid&quot;);
-</code></pre>
-<p>or</p>
-<pre><code class="lang-csharp">var midiFile = new MidiFile();
-TempoMap tempoMap = midiFile.GetTempoMap();
-
-var trackChunk = new TrackChunk();
-using (var notesManager = trackChunk.ManageNotes())
-{
-    NotesCollection notes = notesManager.Objects;
-    notes.Add(new Note(
-        NoteName.A,
-        4,
-        LengthConverter.ConvertFrom(
-            new MetricTimeSpan(hours: 0, minutes: 0, seconds: 10),
-            0,
-            tempoMap)));
-}
-
-midiFile.Chunks.Add(trackChunk);
-midiFile.Write(&quot;My Future Great Song.mid&quot;);
-</code></pre>
-<p>If you want to speed up playing back a MIDI file by two times you can do it with this code:</p>
-<pre><code class="lang-csharp">foreach (var trackChunk in midiFile.Chunks.OfType&lt;TrackChunk&gt;())
-{
-    foreach (var setTempoEvent in trackChunk.Events.OfType&lt;SetTempoEvent&gt;())
-    {
-        setTempoEvent.MicrosecondsPerQuarterNote /= 2;
-    }
-}
-</code></pre>
-<p>Of course this code is simplified. In practice a MIDI file may not contain SetTempo event which means it has the default one (<code>500000</code> microseconds per beat).</p>
-<p>Instead of modifying a MIDI file you can use <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Multimedia.Playback.html"><code>Playback</code></a> class:</p>
-<pre><code class="lang-csharp">using (var outputDevice = OutputDevice.GetByName(&quot;Microsoft GS Wavetable Synth&quot;))
-using (var playback = midiFile.GetPlayback(outputDevice))
-{
-    playback.Speed = 2.0;
-    playback.Play();
-}
-</code></pre>
-<p>To get duration of a MIDI file as standard <code>TimeSpan</code> use this code:</p>
-<pre><code class="lang-csharp">TempoMap tempoMap = midiFile.GetTempoMap();
-TimeSpan midiFileDuration = midiFile
-    .GetTimedEvents()
-    .LastOrDefault(e =&gt; e.Event is NoteOffEvent)
-    ?.TimeAs&lt;MetricTimeSpan&gt;(tempoMap) ?? new MetricTimeSpan();
-</code></pre>
-<p>or simply:</p>
-<pre><code class="lang-csharp">TimeSpan midiFileDuration = midiFile.GetDuration&lt;MetricTimeSpan&gt;();
-</code></pre>
-<p>Suppose you want to remove all <em>C#</em> notes from a MIDI file. It can be done with this code:</p>
-<pre><code class="lang-csharp">foreach (var trackChunk in midiFile.GetTrackChunks())
-{
-    using (var notesManager = trackChunk.ManageNotes())
-    {
-        notesManager.Objects.RemoveAll(n =&gt; n.NoteName == NoteName.CSharp);
-    }
-}
-</code></pre>
-<p>or</p>
-<pre><code class="lang-csharp">midiFile.RemoveNotes(n =&gt; n.NoteName == NoteName.CSharp);
-</code></pre>
-<p>To get all chords of a MIDI file at 20 seconds from the start of the file write this:</p>
-<pre><code class="lang-csharp">TempoMap tempoMap = midiFile.GetTempoMap();
-IEnumerable&lt;Chord&gt; chordsAt20seconds = midiFile
-    .GetChords()
-    .AtTime(
-        new MetricTimeSpan(0, 0, 20),
-        tempoMap,
-        LengthedObjectPart.Entire);
-</code></pre>
-<p>To create a MIDI file with single note which length will be equal to length of two triplet eighth notes you can use this code:</p>
-<pre><code class="lang-csharp">var midiFile = new MidiFile();
+<p>Let's see small examples of what you can do with the library.</p>
+<p>It's possible to <a href="https://melanchall.github.io/drywetmidi/articles/file-reading-writing/MIDI-file-reading.html">read a MIDI file</a>, then <a href="https://melanchall.github.io/drywetmidi/articles/high-level-managing/Getting-objects.html">collect all notes</a> from it and print their time and length in the <a href="https://melanchall.github.io/drywetmidi/articles/high-level-managing/Time-and-length.html">metric</a> (hours, minutes, second, ...) format:</p>
+<pre><code class="lang-csharp">var midiFile = MidiFile.Read(&quot;MyFile.mid&quot;);
 var tempoMap = midiFile.GetTempoMap();
-
-var trackChunk = new TrackChunk();
-using (var notesManager = trackChunk.ManageNotes())
+ 
+foreach (var note in midiFile.GetNotes())
 {
-    var length = LengthConverter.ConvertFrom(
-        2 * MusicalTimeSpan.Eighth.Triplet(),
-        0,
-        tempoMap);
-    var note = new Note(NoteName.A, 4, length);
-    notesManager.Objects.Add(note);
+    var time = note.TimeAs&lt;MetricTimeSpan&gt;(tempoMap);
+    var length = note.LengthAs&lt;MetricTimeSpan&gt;(tempoMap);
+    Console.WriteLine($&quot;{note} at {time} with length of {length}&quot;);
 }
-
-midiFile.Chunks.Add(trackChunk);
-midiFile.Write(&quot;Single note great song.mid&quot;);
 </code></pre>
-<p>You can even build a musical composition:</p>
-<pre><code class="lang-csharp">Pattern pattern = new PatternBuilder()
+<p>Or maybe you want to <a href="https://melanchall.github.io/drywetmidi/articles/recording/Overview.html">record data</a> from a <a href="https://melanchall.github.io/drywetmidi/articles/devices/Overview.html">MIDI device</a>, then <a href="https://melanchall.github.io/drywetmidi/articles/tools/Overview.html">quantize</a> recorded events by the grid with step of 1/8, and <a href="https://melanchall.github.io/drywetmidi/articles/playback/Overview.html">play</a> the data via the default Windows synth:</p>
+<pre><code class="lang-csharp">var inputDevice = InputDevice.GetByName(&quot;MyMidiKeyboard&quot;);
+inputDevice.StartEventsListening();
+
+var recording = new Recording(TempoMap.Default, inputDevice);
+recording.Start();
+ 
+// ...
+ 
+recording.Stop();
+inputDevice.Dispose();
+ 
+var recordedFile = recording.ToFile();
+recording.Dispose();
+ 
+recordedFile.QuantizeObjects(
+    ObjectType.TimedEvent,
+    new SteppedGrid(MusicalTimeSpan.Eighth));
+ 
+var outputDevice = OutputDevice.GetByName(&quot;Microsoft GS Wavetable Synth&quot;);
+var playback = recordedFile.GetPlayback(outputDevice);
+playback.Start();
+ 
+// ...
+ 
+playback.Dispose();
+outputDevice.Dispose();
+</code></pre>
+<p>You can even <a href="https://melanchall.github.io/drywetmidi/articles/composing/Pattern.html">build a musical composition</a>:</p>
+<pre><code class="lang-csharp">var pattern = new PatternBuilder()
      
     // Insert a pause of 5 seconds
     .StepForward(new MetricTimeSpan(0, 0, 5))
@@ -290,43 +193,10 @@ midiFile.Write(&quot;Single note great song.mid&quot;);
     // Get pattern
     .Build();
 
-MidiFile midiFile = pattern.ToFile(TempoMap.Default);
+var midiFile = pattern.ToFile(TempoMap.Create(Tempo.FromBeatsPerMinute(240)));
+midiFile.Write(&quot;DrumPattern.mid&quot;);
 </code></pre>
-<p>DryWetMIDI provides <a href="https://melanchall.github.io/drywetmidi/articles/devices/Overview.html">devices API</a> allowing to send MIDI events to and receive them from MIDI devices. Following example shows how to send events to MIDI device and handle them as they are received by the device:</p>
-<pre><code class="lang-csharp">using System;
-using Melanchall.DryWetMidi.Multimedia;
-using Melanchall.DryWetMidi.Core;
-
-// ...
-
-using (var outputDevice = OutputDevice.GetByName(&quot;MIDI Device&quot;))
-{
-    outputDevice.EventSent += OnEventSent;
-
-    using (var inputDevice = InputDevice.GetByName(&quot;MIDI Device&quot;))
-    {
-        inputDevice.EventReceived += OnEventReceived;
-        inputDevice.StartEventsListening();
-
-        outputDevice.SendEvent(new NoteOnEvent());
-        outputDevice.SendEvent(new NoteOffEvent());
-    }
-}
-
-// ...
-
-private void OnEventReceived(object sender, MidiEventReceivedEventArgs e)
-{
-    var midiDevice = (MidiDevice)sender;
-    Console.WriteLine($&quot;Event received from '{midiDevice.Name}' at {DateTime.Now}: {e.Event}&quot;);
-}
-
-private void OnEventSent(object sender, MidiEventSentEventArgs e)
-{
-    var midiDevice = (MidiDevice)sender;
-    Console.WriteLine($&quot;Event sent to '{midiDevice.Name}' at {DateTime.Now}: {e.Event}&quot;);
-}
-</code></pre>
+<p>Also you can check out sample applications from <a href="https://github.com/CIRCE-EYES">CIRCE-EYES</a> (see the profile, VB.NET is used)</p>
 
 </article>
           </div>

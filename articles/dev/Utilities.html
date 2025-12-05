@@ -15,19 +15,19 @@
 
     <meta charset="utf-8">
       <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-      <title>Interface IMusicalObject | DryWetMIDI </title>
+      <title>Utilities | DryWetMIDI </title>
       <meta name="viewport" content="width=device-width">
-      <meta name="title" content="Interface IMusicalObject | DryWetMIDI ">
+      <meta name="title" content="Utilities | DryWetMIDI ">
     
-    <meta name="description" content="Musical objects that can be played.">
-      <link rel="shortcut icon" href="../images/favicon.png">
-      <link rel="stylesheet" href="../styles/docfx.vendor.min.css">
-      <link rel="stylesheet" href="../styles/docfx.css">
-      <link rel="stylesheet" href="../styles/main.css">
-      <meta property="docfx:navrel" content="../toc.html">
-      <meta property="docfx:tocrel" content="toc.html">
     
-    <meta property="docfx:rel" content="../">
+      <link rel="shortcut icon" href="../../images/favicon.png">
+      <link rel="stylesheet" href="../../styles/docfx.vendor.min.css">
+      <link rel="stylesheet" href="../../styles/docfx.css">
+      <link rel="stylesheet" href="../../styles/main.css">
+      <meta property="docfx:navrel" content="../../toc.html">
+      <meta property="docfx:tocrel" content="../toc.html">
+    
+    <meta property="docfx:rel" content="../../">
     
   </head>
   <body data-spy="scroll" data-target="#affix" data-offset="120">
@@ -44,8 +44,8 @@
                 <span class="icon-bar"></span>
               </button>
 
-              <a class="navbar-brand" href="../index.html">
-                <img id="logo" class="svg" src="../images/logo.png" alt="">
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../images/logo.png" alt="">
               </a>
             </div>
             <div class="collapse navbar-collapse" id="navbar">
@@ -86,49 +86,13 @@
         </div>
         <div class="article row grid-right">
           <div class="col-md-10">
-            <article class="content wrap" id="_content" data-uid="Melanchall.DryWetMidi.Interaction.IMusicalObject">
+            <article class="content wrap" id="_content" data-uid="a_develop_utilities">
+<h1 id="utilities">Utilities</h1>
 
-
-
-  <h1 id="Melanchall_DryWetMidi_Interaction_IMusicalObject" data-uid="Melanchall.DryWetMidi.Interaction.IMusicalObject" class="text-break">Interface IMusicalObject</h1>
-  <div class="markdown level0 summary">Musical objects that can be played.</div>
-  <div class="markdown level0 conceptual"></div>
-  <h6><strong>Namespace</strong>: <a class="xref" href="Melanchall.html">Melanchall</a>.<a class="xref" href="Melanchall.DryWetMidi.html">DryWetMidi</a>.<a class="xref" href="Melanchall.DryWetMidi.Interaction.html">Interaction</a></h6>
-  <h6><strong>Assembly</strong>: Melanchall.DryWetMidi.dll</h6>
-  <h5 id="Melanchall_DryWetMidi_Interaction_IMusicalObject_syntax">Syntax</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public interface IMusicalObject</code></pre>
-  </div>
-  <h3 id="properties">Properties
-</h3>
-  <a id="Melanchall_DryWetMidi_Interaction_IMusicalObject_Channel_" data-uid="Melanchall.DryWetMidi.Interaction.IMusicalObject.Channel*"></a>
-  <h4 id="Melanchall_DryWetMidi_Interaction_IMusicalObject_Channel" data-uid="Melanchall.DryWetMidi.Interaction.IMusicalObject.Channel">Channel</h4>
-  <div class="markdown level1 summary">Gets the channel which should be used to play an object.</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="declaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">FourBitNumber Channel { get; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Common.FourBitNumber.html">FourBitNumber</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 id="Melanchall_DryWetMidi_Interaction_IMusicalObject_Channel_remarks">Remarks</h5>
-  <div class="markdown level1 remarks">Channel is a zero-based number in DryWetMIDI, valid values are from <code>0</code> to <code>15</code>.
-Other libraries and software can use one-based channel numbers (i.e.from <code>1</code>
-to <code>16</code>) so be aware about that: channel <code>10</code> in such software will be <code>9</code>
-in DryWetMIDI.</div>
+<p>Following utility programs can be used to check MIDI-related things:</p>
+<ul>
+<li><strong><a href="Utility-CheckDwmApi.html">CheckDwmApi</a></strong>. Executes basic checks of DryWetMIDI library functions taking special care about platform-specific features (see <a class="xref" href="Supported-OS.html#multimedia-api">Multimedia API</a>).</li>
+</ul>
 
 </article>
           </div>
@@ -158,8 +122,8 @@ in DryWetMIDI.</div>
       </footer>
     </div>
 
-    <script type="text/javascript" src="../styles/docfx.vendor.min.js"></script>
-    <script type="text/javascript" src="../styles/docfx.js"></script>
-    <script type="text/javascript" src="../styles/main.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.vendor.min.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
   </body>
 </html>

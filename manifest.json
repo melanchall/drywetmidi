@@ -132,6 +132,86 @@
     },
     {
       "type": "Conceptual",
+      "source_relative_path": "articles/dev/Utilities.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/dev/Utilities.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/dev/Utility-CheckDwmApi.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/dev/Utility-CheckDwmApi.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/dev/images/CheckDwmApi-Artifacts.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/dev/images/CheckDwmApi-Artifacts.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/dev/images/CheckDwmApi-BuildsPlates.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/dev/images/CheckDwmApi-BuildsPlates.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/dev/images/CheckDwmApi-Commit.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/dev/images/CheckDwmApi-Commit.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/dev/images/CheckDwmApi-LoopMidi-Create.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/dev/images/CheckDwmApi-LoopMidi-Create.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/dev/images/CheckDwmApi-LoopMidi-Created.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/dev/images/CheckDwmApi-LoopMidi-Created.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/dev/images/CheckDwmApi-Zip.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/dev/images/CheckDwmApi-Zip.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
       "source_relative_path": "articles/devices/Common-problems.md",
       "output": {
         ".html": {

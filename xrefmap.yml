@@ -40192,6 +40192,12 @@ references:
 - uid: a_develop_unity
   name: Using in Unity
   href: articles/dev/Using-in-Unity.html
+- uid: a_develop_utilities
+  name: Utilities
+  href: articles/dev/Utilities.html
+- uid: a_develop_utility_checkdwmapi
+  name: CheckDwmApi
+  href: articles/dev/Utility-CheckDwmApi.html
 - uid: a_devices_commonproblems
   name: Common problems
   href: articles/devices/Common-problems.html
