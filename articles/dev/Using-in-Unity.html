@@ -238,8 +238,8 @@ public class DemoScript : MonoBehaviour
     }
 }
 </code></pre>
-<div class="IMPORTANT">
-<h5>Important</h5>
+<div class="WARNING">
+<h5>Warning</h5>
 <p>Pay attention to <code>OnApplicationQuit</code> method. You should always take care about disposing of MIDI devices. Without it all resources taken by the device will live until GC collects them. In the case of Unity, it means Unity may need to be reopened to be able to use the same devices again (for example, on Windows).</p>
 </div>
 

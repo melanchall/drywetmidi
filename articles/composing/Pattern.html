@@ -225,8 +225,8 @@ midiFile.Write(&quot;pianoroll-simple.mid&quot;, true);
 <p>Each line starts with a note. Think about the line as a piano roll lane in your favorite DAW. So notes on the first line will be <em>F#2</em>, on the second line – <em>D2</em> and on the third one – <em>C2</em>. Each character then <strong>except spaces</strong> means one cell. The length of a cell is determined by the <a class="xref" href="../../api/Melanchall.DryWetMidi.Composing.PatternBuilder.html#Melanchall_DryWetMidi_Composing_PatternBuilder_SetNoteLength_">SetNoteLength</a> method.</p>
 <p><code>'|'</code> symbol means a single-cell note, i.e. the note's length is equal to a cell's length. So each note in the example will be an 8th one. By the way, you can alter this symbol with the <a class="xref" href="../../api/Melanchall.DryWetMidi.Composing.PianoRollSettings.html#Melanchall_DryWetMidi_Composing_PianoRollSettings_SingleCellNoteSymbol">SingleCellNoteSymbol</a> property of the <a class="xref" href="../../api/Melanchall.DryWetMidi.Composing.PianoRollSettings.html">PianoRollSettings</a> passed to the <a class="xref" href="../../api/Melanchall.DryWetMidi.Composing.PatternBuilder.html#Melanchall_DryWetMidi_Composing_PatternBuilder_PianoRoll_">PianoRoll</a> method.</p>
 <p>Hyphen (<code>'-'</code>) means nothing except a step of a cell's length. We will call it as <strong>fill symbol</strong>.</p>
-<div class="IMPORTANT">
-<h5>Important</h5>
+<div class="WARNING">
+<h5>Warning</h5>
 <p>Spaces will be cut from the piano roll string before processing. So it's required to use a fill symbol to specify an empty space (rest) to get correct results. For example, this pattern:</p>
 <pre><code class="lang-text">F2   ||||
 D2     |

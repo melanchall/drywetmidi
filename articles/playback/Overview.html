@@ -133,8 +133,8 @@ namespace SimplePlaybackApp
 <p>Please read <a href="Tick-generator.html">Tick generator</a> article and <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.PlaybackSettings.html">PlaybackSettings</a> class documentation to learn how you can adjust playback's internals.</p>
 <p>Playback supports on-the-fly changes of the data being played. You can find detailed information on how to use this feature in the <a class="xref" href="Dynamic-changes.html">Dynamic changes</a> article.</p>
 <p>If you call the <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.Playback.html#Melanchall_DryWetMidi_Multimedia_Playback_Start">Start</a> method of the <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.Playback.html">Playback</a>, execution of the calling thread will continue immediately after the method is called. To stop playback use the <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.Playback.html#Melanchall_DryWetMidi_Multimedia_Playback_Stop">Stop</a> method. Note that there is no any pausing method since it's useless. <code>Stop</code> leaves playback at the point where the method was called. To move to the start of the playback use the <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.Playback.html#Melanchall_DryWetMidi_Multimedia_Playback_MoveToStart">MoveToStart</a> method.</p>
-<div class="IMPORTANT">
-<h5>Important</h5>
+<div class="WARNING">
+<h5>Warning</h5>
 <p>You should be very careful with <code>using</code> block. Example below shows the case where part of MIDI data <strong>will not be played</strong> because of playback is disposed before the last MIDI event will be played:</p>
 <pre><code class="lang-csharp">using (var outputDevice = OutputDevice.GetByName(&quot;Output MIDI device&quot;))
 using (var playback = MidiFile.Read(&quot;Some MIDI file.mid&quot;).GetPlayback(outputDevice))

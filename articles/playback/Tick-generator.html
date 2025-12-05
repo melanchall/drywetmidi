@@ -91,8 +91,8 @@
 
 <p>Playback uses a timer under the hood. In DryWetMIDI this timer is called <strong>tick generator</strong>. On every tick of the timer playback looks at what objects should be played by the current time, plays them and advances position within the objects list waiting for the next tick.</p>
 <p>To make playback smooth and correct, the precision of the timer should be ~1ms. So tick will be generated every one millisecond. By default, DryWetMIDI uses <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.HighPrecisionTickGenerator.html">HighPrecisionTickGenerator</a> which is the best option in terms of CPU usage, memory usage and precision.</p>
-<div class="IMPORTANT">
-<h5>Important</h5>
+<div class="WARNING">
+<h5>Warning</h5>
 <p><code>HighPrecisionTickGenerator</code> is supported for Windows and macOS only at the moment.</p>
 </div>
 <p>You can also use <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.RegularPrecisionTickGenerator.html">RegularPrecisionTickGenerator</a> which uses standard <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.timers.timer">Timer</a> and thus provides precision about 16ms on Windows. But this tick generator is cross-platform.</p>

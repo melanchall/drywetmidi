@@ -84,8 +84,8 @@
 
 <p>Here the table of API that is obsolete and thus either will be removed from the library by a next release or already removed from the DryWetMIDI. Title of each obsolete API is just ID, please see description to see an old API and new replacement.</p>
 <h3 id="obs19">OBS19</h3>
-<div class="IMPORTANT">
-<h5>Important</h5>
+<div class="WARNING">
+<h5>Warning</h5>
 <p>API removed from the library by 7.0.0 release.</p>
 </div>
 <p><code>Splitter.SplitByNotes</code> method is now obsolere since it has been replaced by <a class="xref" href="../api/Melanchall.DryWetMidi.Tools.Splitter.html#Melanchall_DryWetMidi_Tools_Splitter_SplitByObjects_">Splitter.SplitByObjects</a> one which can split a MIDI file by objects of difefrent types and with more flexibility.</p>
@@ -119,8 +119,8 @@
 <li><a class="xref" href="../api/Melanchall.DryWetMidi.Tools.Splitter.html#Melanchall_DryWetMidi_Tools_Splitter_SplitByObjects_">Splitter.SplitByObjects</a></li>
 </ul>
 <h3 id="obs18">OBS18</h3>
-<div class="IMPORTANT">
-<h5>Important</h5>
+<div class="WARNING">
+<h5>Warning</h5>
 <p>API removed from the library by 7.0.0 release.</p>
 </div>
 <p><code>ResizeNotesUtilities</code> class and its methods have been generalized by the <a class="xref" href="../api/Melanchall.DryWetMidi.Tools.Resizer.html">Resizer</a> class which can resize groups of objects of different types simultaneously.</p>
@@ -144,8 +144,8 @@
 <li><a class="xref" href="../api/Melanchall.DryWetMidi.Tools.Resizer.html#Melanchall_DryWetMidi_Tools_Resizer_ResizeObjectsGroup_">Resizer.ResizeObjectsGroup</a></li>
 </ul>
 <h3 id="obs17">OBS17</h3>
-<div class="IMPORTANT">
-<h5>Important</h5>
+<div class="WARNING">
+<h5>Warning</h5>
 <p>API removed from the library by 7.0.0 release.</p>
 </div>
 <p><code>NotesMerger</code> class has been generalized by the <a class="xref" href="../api/Melanchall.DryWetMidi.Tools.Merger.html">Merger</a> class which can merge objects of different types simultaneously.</p>
@@ -179,8 +179,8 @@
 <li><a class="xref" href="../api/Melanchall.DryWetMidi.Tools.Merger.html#Melanchall_DryWetMidi_Tools_Merger_MergeObjects_">Merger.MergeObjects</a></li>
 </ul>
 <h3 id="obs16">OBS16</h3>
-<div class="IMPORTANT">
-<h5>Important</h5>
+<div class="WARNING">
+<h5>Warning</h5>
 <p>API removed from the library by 7.0.0 release.</p>
 </div>
 <p><code>TimedEventsManagingUtilities.AddEvent</code> methods are now obsolete since they are nothing more than just calling <a class="xref" href="../api/Melanchall.DryWetMidi.Interaction.TimedEvent.html">TimedEvent</a> constructor and adding a new instance to a collection:</p>
@@ -196,8 +196,8 @@
 <li>no</li>
 </ul>
 <h3 id="obs15">OBS15</h3>
-<div class="IMPORTANT">
-<h5>Important</h5>
+<div class="WARNING">
+<h5>Warning</h5>
 <p>API removed from the library by 7.0.0 release.</p>
 </div>
 <p><code>SetTimeAndLength</code> separate methods for <a class="xref" href="../api/Melanchall.DryWetMidi.Interaction.Note.html">notes</a> and <a class="xref" href="../api/Melanchall.DryWetMidi.Interaction.Chord.html">chords</a> have been replaced with generic <a class="xref" href="../api/Melanchall.DryWetMidi.Interaction.LengthedObjectUtilities.html#Melanchall_DryWetMidi_Interaction_LengthedObjectUtilities_SetLength_">SetLength</a>. Since <a class="xref" href="../api/Melanchall.DryWetMidi.Interaction.TimedObjectUtilities.html#Melanchall_DryWetMidi_Interaction_TimedObjectUtilities_SetTime_">SetTime</a> method also exists, the new way to set time and length with one instruction is:</p>
@@ -216,8 +216,8 @@
 <li><a class="xref" href="../api/Melanchall.DryWetMidi.Interaction.LengthedObjectUtilities.html#Melanchall_DryWetMidi_Interaction_LengthedObjectUtilities_SetLength_">LengthedObjectUtilities.SetLength</a></li>
 </ul>
 <h3 id="obs14">OBS14</h3>
-<div class="IMPORTANT">
-<h5>Important</h5>
+<div class="WARNING">
+<h5>Warning</h5>
 <p>API removed from the library by 7.0.0 release.</p>
 </div>
 <p><code>TimedEventsManagingUtilities.SetTime</code> method has been replaced with generic <a class="xref" href="../api/Melanchall.DryWetMidi.Interaction.TimedObjectUtilities.html#Melanchall_DryWetMidi_Interaction_TimedObjectUtilities_SetTime_">TimedObjectUtilities.SetTime</a> allowing to set time for objects of different types, not for only <a class="xref" href="../api/Melanchall.DryWetMidi.Interaction.TimedEvent.html">timed events</a>.</p>
@@ -236,8 +236,8 @@ chord.SetTime(new MetricTimeSpan(0, 1, 10), tempoMap);
 <li><a class="xref" href="../api/Melanchall.DryWetMidi.Interaction.TimedObjectUtilities.html#Melanchall_DryWetMidi_Interaction_TimedObjectUtilities_SetTime_">TimedObjectUtilities.SetTime</a></li>
 </ul>
 <h3 id="obs13">OBS13</h3>
-<div class="IMPORTANT">
-<h5>Important</h5>
+<div class="WARNING">
+<h5>Warning</h5>
 <p>API removed from the library by 7.0.0 release.</p>
 </div>
 <p>Complex inheritance hierarchy of quantizer classes has been reduced to general-purpose new <a class="xref" href="../api/Melanchall.DryWetMidi.Tools.Quantizer.html">Quantizer</a> class which can quantize objects of different types at the same time. More than that, it can quantize both start and end time simultaneously.</p>
@@ -292,8 +292,8 @@ quantizer.Quantize(
 <li><a class="xref" href="../api/Melanchall.DryWetMidi.Tools.QuantizerUtilities.html">QuantizerUtilities</a></li>
 </ul>
 <h3 id="obs12">OBS12</h3>
-<div class="IMPORTANT">
-<h5>Important</h5>
+<div class="WARNING">
+<h5>Warning</h5>
 <p>API removed from the library by 7.0.0 release.</p>
 </div>
 <p>Separate splitter classes for notes and chords have been replaced by <a class="xref" href="../api/Melanchall.DryWetMidi.Tools.Splitter.html">Splitter</a> class which can split objects of different types simultaneously.</p>
@@ -321,8 +321,8 @@ quantizer.Quantize(
 <li><a class="xref" href="../api/Melanchall.DryWetMidi.Tools.Splitter.html#Melanchall_DryWetMidi_Tools_Splitter_SplitObjectsByPartsNumber_">Splitter.SplitObjectsByPartsNumber</a></li>
 </ul>
 <h3 id="obs11">OBS11</h3>
-<div class="IMPORTANT">
-<h5>Important</h5>
+<div class="WARNING">
+<h5>Warning</h5>
 <p>API removed from the library by 7.0.0 release.</p>
 </div>
 <p>Separate manager classes for each MIDI object type are replaced with <a class="xref" href="../api/Melanchall.DryWetMidi.Interaction.TimedObjectsManager.html">TimedObjectsManager</a> which can manage objects of different types simultaneously.</p>
@@ -364,8 +364,8 @@ quantizer.Quantize(
 <li><a class="xref" href="../api/Melanchall.DryWetMidi.Interaction.TimedObjectsManager.html">TimedObjectsManager</a></li>
 </ul>
 <h3 id="obs10">OBS10</h3>
-<div class="IMPORTANT">
-<h5>Important</h5>
+<div class="WARNING">
+<h5>Warning</h5>
 <p>API removed from the library by 7.0.0 release.</p>
 </div>
 <p><code>Randomizer</code> tool is obsolete now. Randomization feature has been moved to <a class="xref" href="../api/Melanchall.DryWetMidi.Tools.Quantizer.html">Quantizer</a> so you can quantize and randomize MIDI data at the same time.</p>
@@ -407,8 +407,8 @@ quantizer.Quantize(
 <li><a class="xref" href="../api/Melanchall.DryWetMidi.Tools.QuantizerUtilities.html">QuantizerUtilities</a></li>
 </ul>
 <h3 id="obs9">OBS9</h3>
-<div class="IMPORTANT">
-<h5>Important</h5>
+<div class="WARNING">
+<h5>Warning</h5>
 <p>API removed from the library by 6.0.0 release.</p>
 </div>
 <p><code>AddTimedEvents</code>, <code>AddNotes</code> and <code>AddChords</code> methods are replaced now with single <a class="xref" href="../api/Melanchall.DryWetMidi.Interaction.TimedObjectUtilities.html#Melanchall_DryWetMidi_Interaction_TimedObjectUtilities_AddObjects_">TimedObjectUtilities.AddObjects</a> method which can save objects of different types to events collection or track chunk.</p>
@@ -424,8 +424,8 @@ quantizer.Quantize(
 <li><a class="xref" href="../api/Melanchall.DryWetMidi.Interaction.TimedObjectUtilities.html#Melanchall_DryWetMidi_Interaction_TimedObjectUtilities_AddObjects_">TimedObjectUtilities.AddObjects</a></li>
 </ul>
 <h3 id="obs8">OBS8</h3>
-<div class="IMPORTANT">
-<h5>Important</h5>
+<div class="WARNING">
+<h5>Warning</h5>
 <p>API removed from the library by 6.0.0 release.</p>
 </div>
 <p><code>ToFile</code> methods for collections of objects of one type (for example, collection of <a class="xref" href="../api/Melanchall.DryWetMidi.Interaction.TimedEvent.html">TimedEvent</a> or <a class="xref" href="../api/Melanchall.DryWetMidi.Interaction.Note.html">Note</a> instances) are replaced now with single <a class="xref" href="../api/Melanchall.DryWetMidi.Interaction.TimedObjectUtilities.html#Melanchall_DryWetMidi_Interaction_TimedObjectUtilities_ToFile_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_ITimedObject__">TimedObjectUtilities.ToFile</a> method which can save objects of different types to MIDI file.</p>
@@ -441,8 +441,8 @@ quantizer.Quantize(
 <li><a class="xref" href="../api/Melanchall.DryWetMidi.Interaction.TimedObjectUtilities.html#Melanchall_DryWetMidi_Interaction_TimedObjectUtilities_ToFile_">TimedObjectUtilities.ToFile</a></li>
 </ul>
 <h3 id="obs7">OBS7</h3>
-<div class="IMPORTANT">
-<h5>Important</h5>
+<div class="WARNING">
+<h5>Warning</h5>
 <p>API removed from the library by 6.0.0 release.</p>
 </div>
 <p><code>ToTrackChunk</code> methods for collections of objects of one type (for example, collection of <a class="xref" href="../api/Melanchall.DryWetMidi.Interaction.TimedEvent.html">TimedEvent</a> or <a class="xref" href="../api/Melanchall.DryWetMidi.Interaction.Note.html">Note</a> instances) are replaced now with single <a class="xref" href="../api/Melanchall.DryWetMidi.Interaction.TimedObjectUtilities.html#Melanchall_DryWetMidi_Interaction_TimedObjectUtilities_ToTrackChunk_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_ITimedObject__">TimedObjectUtilities.ToTrackChunk</a> method which can save objects of different types to track chunk.</p>
@@ -458,8 +458,8 @@ quantizer.Quantize(
 <li><a class="xref" href="../api/Melanchall.DryWetMidi.Interaction.TimedObjectUtilities.html#Melanchall_DryWetMidi_Interaction_TimedObjectUtilities_ToTrackChunk_">TimedObjectUtilities.ToTrackChunk</a></li>
 </ul>
 <h3 id="obs6">OBS6</h3>
-<div class="IMPORTANT">
-<h5>Important</h5>
+<div class="WARNING">
+<h5>Warning</h5>
 <p>API removed from the library by 6.0.0 release.</p>
 </div>
 <p>Methods from <code>GetNotesAndRestsUtilities</code> are now obsolete and you should use <code>GetObjects</code> methods from <a class="xref" href="../api/Melanchall.DryWetMidi.Interaction.GetObjectsUtilities.html">GetObjectsUtilities</a>. Example how you can get notes and rests:</p>
@@ -486,8 +486,8 @@ quantizer.Quantize(
 <li><a class="xref" href="../api/Melanchall.DryWetMidi.Interaction.GetObjectsUtilities.html">GetObjectsUtilities</a></li>
 </ul>
 <h3 id="obs5">OBS5</h3>
-<div class="IMPORTANT">
-<h5>Important</h5>
+<div class="WARNING">
+<h5>Warning</h5>
 <p>API removed from the library by 6.0.0 release.</p>
 </div>
 <p>Methods from <code>GetTimedEventsAndNotesUtilities</code> are now obsolete and you should use <code>GetObjects</code> methods from <a class="xref" href="../api/Melanchall.DryWetMidi.Interaction.GetObjectsUtilities.html">GetObjectsUtilities</a>. Example how you can get timed events and notes:</p>
@@ -503,8 +503,8 @@ quantizer.Quantize(
 <li><a class="xref" href="../api/Melanchall.DryWetMidi.Interaction.GetObjectsUtilities.html">GetObjectsUtilities</a></li>
 </ul>
 <h3 id="obs4">OBS4</h3>
-<div class="IMPORTANT">
-<h5>Important</h5>
+<div class="WARNING">
+<h5>Warning</h5>
 <p>API removed from the library by 6.0.0 release.</p>
 </div>
 <p><code>TempoMap.Tempo</code> property has been replaced with more explicit and straightforward methods: <a class="xref" href="../api/Melanchall.DryWetMidi.Interaction.TempoMap.html#Melanchall_DryWetMidi_Interaction_TempoMap_GetTempoChanges">GetTempoChanges</a> and <a class="xref" href="../api/Melanchall.DryWetMidi.Interaction.TempoMap.html#Melanchall_DryWetMidi_Interaction_TempoMap_GetTempoAtTime_Melanchall_DryWetMidi_Interaction_ITimeSpan_">GetTempoAtTime</a>:</p>
@@ -529,8 +529,8 @@ tempoMap.GetTempoAtTime(MusicalTimeSpan.Whole);
 <li><a class="xref" href="../api/Melanchall.DryWetMidi.Interaction.TempoMap.html#Melanchall_DryWetMidi_Interaction_TempoMap_GetTempoAtTime_Melanchall_DryWetMidi_Interaction_ITimeSpan_">TempoMap.GetTempoAtTime</a></li>
 </ul>
 <h3 id="obs3">OBS3</h3>
-<div class="IMPORTANT">
-<h5>Important</h5>
+<div class="WARNING">
+<h5>Warning</h5>
 <p>API removed from the library by 6.0.0 release.</p>
 </div>
 <p><code>TempoMap.TimeSignature</code> property has been replaced with more explicit and straightforward methods: <a class="xref" href="../api/Melanchall.DryWetMidi.Interaction.TempoMap.html#Melanchall_DryWetMidi_Interaction_TempoMap_GetTimeSignatureChanges">GetTimeSignatureChanges</a> and <a class="xref" href="../api/Melanchall.DryWetMidi.Interaction.TempoMap.html#Melanchall_DryWetMidi_Interaction_TempoMap_GetTimeSignatureAtTime_Melanchall_DryWetMidi_Interaction_ITimeSpan_">GetTimeSignatureAtTime</a>:</p>
@@ -555,8 +555,8 @@ tempoMap.GetTimeSignatureAtTime(MusicalTimeSpan.Whole);
 <li><a class="xref" href="../api/Melanchall.DryWetMidi.Interaction.TempoMap.html#Melanchall_DryWetMidi_Interaction_TempoMap_GetTimeSignatureAtTime_Melanchall_DryWetMidi_Interaction_ITimeSpan_">TempoMap.GetTimeSignatureAtTime</a></li>
 </ul>
 <h3 id="obs2">OBS2</h3>
-<div class="IMPORTANT">
-<h5>Important</h5>
+<div class="WARNING">
+<h5>Warning</h5>
 <p>API removed from the library by 6.0.0 release.</p>
 </div>
 <p>Now MIDI file reading uses buffering by default so <code>ReaderSettings.ReadFromMemory</code> property is deprecated. By default buffering policy is <a class="xref" href="../api/Melanchall.DryWetMidi.Core.BufferingPolicy.html#Melanchall_DryWetMidi_Core_BufferingPolicy_UseFixedSizeBuffer">BufferingPolicy.UseFixedSizeBuffer</a> and <a class="xref" href="../api/Melanchall.DryWetMidi.Core.ReaderSettings.html#Melanchall_DryWetMidi_Core_ReaderSettings_BufferSize">BufferSize</a> is <code>4096</code> which gives the same reading speed as putting all data in memory. But if you want, you can specify <code>BufferingPolicy = BufferingPolicy.BufferAllData</code> to achieve the same behavior as with <code>ReadFromMemory</code>:</p>
@@ -580,8 +580,8 @@ tempoMap.GetTimeSignatureAtTime(MusicalTimeSpan.Whole);
 <li><a class="xref" href="../api/Melanchall.DryWetMidi.Core.BufferingPolicy.html#Melanchall_DryWetMidi_Core_BufferingPolicy_BufferAllData">BufferingPolicy.BufferAllData</a></li>
 </ul>
 <h3 id="obs1">OBS1</h3>
-<div class="IMPORTANT">
-<h5>Important</h5>
+<div class="WARNING">
+<h5>Warning</h5>
 <p>API removed from the library by 6.0.0 release.</p>
 </div>
 <p><code>WritingSettings.CompressionPolicy</code> has been replaced by corresponding properties of <a class="xref" href="../api/Melanchall.DryWetMidi.Core.WritingSettings.html">WritingSettings</a>. No compression applied by default, as before.</p>

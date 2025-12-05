@@ -101,8 +101,8 @@ foreach (var outputDevice in OutputDevice.GetAll())
     Console.WriteLine(outputDevice.Name);
 }
 </code></pre>
-<div class="IMPORTANT">
-<h5>Important</h5>
+<div class="WARNING">
+<h5>Warning</h5>
 <p>You can use <code>OutputDevice</code> built-in implementation of <code>IOutputDevice</code> only on the systems listed in the <a class="xref" href="../dev/Supported-OS.html">Supported OS</a> article. Of course you can create your own implementation of <code>IOutputDevice</code> as described in the <a href="#custom-output-device">Custom output device</a> section below.</p>
 </div>
 <p>After an instance of <code>OutputDevice</code> is obtained, you can send MIDI events to the device via <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.OutputDevice.html#Melanchall_DryWetMidi_Multimedia_OutputDevice_SendEvent_Melanchall_DryWetMidi_Core_MidiEvent_">SendEvent</a> method. You cannot send <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.MetaEvent.html">meta events</a> since such events can be inside a MIDI file only. If you pass an instance of meta event class, <code>SendEvent</code> will do nothing. <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.IOutputDevice.html#Melanchall_DryWetMidi_Multimedia_IOutputDevice_EventSent">EventSent</a> event will be fired for each event sent with <code>SendEvent</code> (except meta events) holding the MIDI event sent. The value of <a class="xref" href="../../api/Melanchall.DryWetMidi.Core.MidiEvent.html#Melanchall_DryWetMidi_Core_MidiEvent_DeltaTime">DeltaTime</a> property of MIDI events will be ignored, events will be sent to the device immediately. To take delta-times into account, use <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.Playback.html">Playback</a> class.</p>
@@ -136,12 +136,12 @@ private void OnEventSent(object sender, MidiEventSentEventArgs e)
 
 _outputDevice?.Dispose();
 </code></pre>
-<div class="IMPORTANT">
-<h5>Important</h5>
+<div class="WARNING">
+<h5>Warning</h5>
 <p>You must always take care about disposing an <code>OutputDevice</code>, so use it inside <code>using</code> block or call <code>Dispose</code> manually. Without it all resources taken by the device will live until GC collects them via the finalizer of the <code>OutputDevice</code>. It means that sometimes you will not be able to use different instances of the same device across multiple applications or different pieces of a program.</p>
 </div>
-<div class="IMPORTANT">
-<h5>Important</h5>
+<div class="WARNING">
+<h5>Warning</h5>
 <p>If you use an instance of the <code>OutputDevice</code> within a <code>using</code> block, you need to be very careful. In general it's not a good practice and can cause problems. For example, with this code</p>
 <pre><code class="lang-csharp">using (var outputDevice = OutputDevice.GetByName(&quot;Some MIDI device&quot;))
 {

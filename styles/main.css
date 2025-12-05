@@ -507,23 +507,23 @@ img[src*="logo.png"], img[src*="build/status"], img[src*="img.shields.io"] {
 .alert-danger {
     color: #F8F8F8;
     border-radius: 0px;
-    background-color: #EC550811;
-    border-color: #EC5508;
+    background-color: #5295D011;
+    border-color: #5295D0;
 }
 
 .alert-danger h5 {
-    color: #EC5508;
+    color: #5295D0;
 }
 
 .alert-warning {
     color: #F8F8F8;
     border-radius: 0px;
-    background-color: transparent;
-    border-color: #ECE208;
+    background-color: #EC550811;
+    border-color: #EC5508;
 }
 
 .alert-warning h5 {
-    color: #ECE208;
+    color: #EC5508;
 }
 
 pre.text-image {

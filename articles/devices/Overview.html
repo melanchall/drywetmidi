@@ -96,8 +96,8 @@
 <li><a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.DevicesConnector.html">DevicesConnector</a> (see <a href="Devices-connector.html">Devices connector</a> article).</li>
 </ul>
 <p>The library provides implementations for both <code>IInputDevice</code> and <code>IOutputDevice</code>: <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.InputDevice.html">InputDevice</a> and <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.OutputDevice.html">OutputDevice</a> correspondingly which represent MIDI devices visible by the operating system. Both classes implement <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.idisposable">IDisposable</a> interface so you should always dispose of them to free devices for use by other applications.</p>
-<div class="IMPORTANT">
-<h5>Important</h5>
+<div class="WARNING">
+<h5>Warning</h5>
 <p>You can use <code>InputDevice</code> and <code>OutputDevice</code> built-in implementations of <code>IInputDevice</code> and <code>IOutputDevice</code> only on the systems listed in the <a class="xref" href="../dev/Supported-OS.html">Supported OS</a> article. Of course you can create your own implementations of <code>IInputDevice</code> and <code>IOutputDevice</code>.</p>
 </div>
 <p>All classes that interact with devices work with interfaces mentioned above, so you can create custom implementations of your devices (see examples in <a href="Input-device.html">Input device</a> and <a href="Output-device.html">Output device</a> articles) and use it for playback or recording, for example.</p>
