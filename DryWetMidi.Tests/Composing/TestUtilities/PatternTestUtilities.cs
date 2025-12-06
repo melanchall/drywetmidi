@@ -75,13 +75,13 @@ namespace Melanchall.DryWetMidi.Tests.Composing
 
             var expectedTimedEvents = expectedTimedEventsInfos.Select(i =>
                 new TimedEvent(i.Event,
-                               TimeConverter.ConvertFrom(i.Time ?? new MidiTimeSpan(), tempoMap)));
+                               TimeConverter.ConvertFrom(i.Time ?? new MidiTimeSpan(), tempoMap))).ToArray();
 
             var actualTimedEvents = midiFile.GetTimedEvents();
 
             MidiAsserts.AreEqual(
                 expectedTimedEvents,
-                actualTimedEvents.Where(e => expectedTimedEvents.Any(ee => ee.Event.EventType == e.Event.EventType)),
+                actualTimedEvents.Where(e => expectedTimedEvents.Any(ee => ee.Event.EventType == e.Event.EventType)).ToArray(),
                 false,
                 0,
                 "Events are invalid.");

@@ -738,7 +738,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue) { Channel = (FourBitNumber)8 },
             });
 
-        // TODO: describe in docs
         [Test]
         public void ProcessChords_Custom_Null_1() => ProcessChords_DetectionSettings_EventsCollection_WithPredicate(
             containerType: ContainerType.EventsCollection,
@@ -768,7 +767,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             },
             expectedProcessedCount: 2);
 
-        // TODO: describe in docs
         [Test]
         public void ProcessChords_Custom_Null_2() => ProcessChords_DetectionSettings_EventsCollection_WithPredicate(
             containerType: ContainerType.EventsCollection,
@@ -800,7 +798,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             },
             expectedProcessedCount: 2);
 
-        // TODO: describe in docs
         [Test]
         public void ProcessChords_Custom_Null_3() => ProcessChords_DetectionSettings_EventsCollection_WithPredicate(
             containerType: ContainerType.EventsCollection,
@@ -831,7 +828,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             },
             expectedProcessedCount: 2);
 
-        // TODO: describe in docs
         [Test]
         public void ProcessChords_Custom_Null_4() => ProcessChords_DetectionSettings_EventsCollection_WithPredicate(
             containerType: ContainerType.EventsCollection,
@@ -864,7 +860,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             },
             expectedProcessedCount: 2);
 
-        // TODO: describe in docs
         [Test]
         public void ProcessChords_Custom_Null_5() => ProcessChords_DetectionSettings_EventsCollection_WithPredicate(
             containerType: ContainerType.EventsCollection,
@@ -896,7 +891,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             },
             expectedProcessedCount: 2);
 
-        // TODO: describe in docs
         [Test]
         public void ProcessChords_Custom_Null_6() => ProcessChords_DetectionSettings_EventsCollection_WithPredicate(
             containerType: ContainerType.EventsCollection,

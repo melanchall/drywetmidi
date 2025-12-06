@@ -506,7 +506,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 new NoteOffEvent(),
             });
 
-        // TODO: describe in docs
         [Test]
         public void RemoveChords_Custom_Null_1() => RemoveChords_DetectionSettings_EventsCollection_WithPredicate(
             containerType: ContainerType.EventsCollection,
@@ -527,7 +526,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             expectedMidiEvents: Array.Empty<MidiEvent>(),
             expectedRemovedCount: 2);
 
-        // TODO: describe in docs
         [Test]
         public void RemoveChords_Custom_Null_2() => RemoveChords_DetectionSettings_EventsCollection_WithPredicate(
             containerType: ContainerType.EventsCollection,
@@ -550,7 +548,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             expectedMidiEvents: Array.Empty<MidiEvent>(),
             expectedRemovedCount: 2);
 
-        // TODO: describe in docs
         [Test]
         public void RemoveChords_Custom_Null_3() => RemoveChords_DetectionSettings_EventsCollection_WithPredicate(
             containerType: ContainerType.EventsCollection,
@@ -572,7 +569,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             expectedMidiEvents: Array.Empty<MidiEvent>(),
             expectedRemovedCount: 2);
 
-        // TODO: describe in docs
         [Test]
         public void RemoveChords_Custom_Null_4() => RemoveChords_DetectionSettings_EventsCollection_WithPredicate(
             containerType: ContainerType.EventsCollection,
@@ -596,7 +592,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             expectedMidiEvents: Array.Empty<MidiEvent>(),
             expectedRemovedCount: 2);
 
-        // TODO: describe in docs
         [Test]
         public void RemoveChords_Custom_Null_5() => RemoveChords_DetectionSettings_EventsCollection_WithPredicate(
             containerType: ContainerType.EventsCollection,
@@ -619,7 +614,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             expectedMidiEvents: Array.Empty<MidiEvent>(),
             expectedRemovedCount: 2);
 
-        // TODO: describe in docs
         [Test]
         public void RemoveChords_Custom_Null_6() => RemoveChords_DetectionSettings_EventsCollection_WithPredicate(
             containerType: ContainerType.EventsCollection,

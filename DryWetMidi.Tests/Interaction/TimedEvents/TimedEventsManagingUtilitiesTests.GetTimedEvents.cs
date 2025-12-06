@@ -2076,7 +2076,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 });
         }
 
-        // TODO: describe in docs
         [Test]
         public void GetTimedEvents_Custom_Null_1()
         {

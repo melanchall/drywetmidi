@@ -1566,7 +1566,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 expectedProcessedCount: 0);
         }
 
-        // TODO: describe in docs
         [Test]
         public void ProcessTimedEvents_Custom_Null_1()
         {

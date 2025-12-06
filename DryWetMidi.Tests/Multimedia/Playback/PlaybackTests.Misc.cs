@@ -944,7 +944,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         public void CheckPlaybackStop()
         {
-            var stopPeriod = TimeSpan.FromSeconds(3);
+            var stopPeriod = TimeSpan.FromSeconds(1);
 
             CheckPlayback(
                 useOutputDevice: false,
@@ -959,9 +959,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new TimedEvent(new NoteOnEvent((SevenBitNumber)30, (SevenBitNumber)50))
                         .SetTime((MetricTimeSpan)TimeSpan.FromSeconds(3), TempoMap),
                     new TimedEvent(new NoteOffEvent())
-                        .SetTime((MetricTimeSpan)TimeSpan.FromSeconds(6), TempoMap),
+                        .SetTime((MetricTimeSpan)TimeSpan.FromSeconds(4), TempoMap),
                     new TimedEvent(new NoteOffEvent((SevenBitNumber)30, (SevenBitNumber)50))
-                        .SetTime((MetricTimeSpan)TimeSpan.FromSeconds(6), TempoMap),
+                        .SetTime((MetricTimeSpan)TimeSpan.FromSeconds(4), TempoMap),
                 },
                 actions: new[]
                 {
@@ -974,8 +974,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)100, (SevenBitNumber)10) { Channel = (FourBitNumber)5 }, TimeSpan.FromSeconds(2)),
                     new SentReceivedEvent(new NoteOnEvent(), TimeSpan.FromSeconds(3) + stopPeriod),
                     new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)30, (SevenBitNumber)50), TimeSpan.FromSeconds(3) + stopPeriod),
-                    new SentReceivedEvent(new NoteOffEvent(), TimeSpan.FromSeconds(6) + stopPeriod),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)30, (SevenBitNumber)50), TimeSpan.FromSeconds(6) + stopPeriod),
+                    new SentReceivedEvent(new NoteOffEvent(), TimeSpan.FromSeconds(4) + stopPeriod),
+                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)30, (SevenBitNumber)50), TimeSpan.FromSeconds(4) + stopPeriod),
                 },
                 setupPlayback: playback => playback.InterruptNotesOnStop = false);
         }

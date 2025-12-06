@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Xml.Linq;
 
 namespace Melanchall.DryWetMidi.Interaction
 {
@@ -11,7 +12,7 @@ namespace Melanchall.DryWetMidi.Interaction
     /// Represents a basic collection of the <see cref="ITimedObject"/>.
     /// </summary>
     /// <typeparam name="TObject">The type of elements in the collection.</typeparam>
-    public sealed class TimedObjectsCollection<TObject> : IEnumerable<TObject>
+    public sealed class TimedObjectsCollection<TObject> : ICollection<TObject>
         where TObject : ITimedObject
     {
         #region Events
@@ -49,9 +50,24 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         public int Count => _objects.Count;
 
+        public bool IsReadOnly => false;
+
         #endregion
 
         #region Methods
+
+        /// <summary>
+        /// Adds an object to this collection.
+        /// </summary>
+        /// <param name="obj">Object to add to the collection.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="obj"/> is <c>null</c>.</exception>
+        public void Add(TObject obj)
+        {
+            ThrowIfArgument.IsNull(nameof(obj), obj);
+
+            _objects.Add(obj);
+            OnObjectsAdded(new[] { obj });
+        }
 
         /// <summary>
         /// Adds objects to this collection.
@@ -77,6 +93,25 @@ namespace Melanchall.DryWetMidi.Interaction
             ThrowIfArgument.IsNull(nameof(objects), objects);
 
             Add((IEnumerable<TObject>)objects);
+        }
+
+        /// <summary>
+        /// Removes the first occurrence of a specific object from this collection
+        /// </summary>
+        /// <param name="obj">Object to remove from the collection.</param>
+        /// <returns><c>true</c> if the object was successfully removed; otherwise, <c>false</c>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="obj"/> is <c>null</c>.</exception>
+        public bool Remove(TObject obj)
+        {
+            ThrowIfArgument.IsNull(nameof(obj), obj);
+
+            if (_objects.Remove(obj))
+            {
+                OnObjectsRemoved(new[] { obj });
+                return true;
+            }
+
+            return false;
         }
 
         /// <summary>
@@ -138,6 +173,16 @@ namespace Melanchall.DryWetMidi.Interaction
             var removedObjects = _objects.ToList();
             _objects.Clear();
             OnObjectsRemoved(removedObjects);
+        }
+
+        public bool Contains(TObject item)
+        {
+            return _objects.Contains(item);
+        }
+
+        public void CopyTo(TObject[] array, int arrayIndex)
+        {
+            _objects.CopyTo(array, arrayIndex);
         }
 
         private void OnObjectsAdded(IEnumerable<TObject> addedObjects)

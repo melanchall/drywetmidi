@@ -484,7 +484,6 @@ namespace Melanchall.DryWetMidi.Multimedia
                 .SelectMany(programChangeEventsGetter)
                 .Select(e => (ITimedObject)new TimedEvent(e));
 
-            // TODO: OrderBy
             return new Playback(
                 programChangeEvents.Concat((IEnumerable<ITimedObject>)objects),
                 tempoMap,

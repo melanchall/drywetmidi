@@ -31,7 +31,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             CheckEventsReceiving(new[]
             {
                 new EventToSend(new NoteOnEvent((SevenBitNumber)100, (SevenBitNumber)20) { Channel = (FourBitNumber)5 }, TimeSpan.Zero),
-                new EventToSend(new NoteOffEvent((SevenBitNumber)100, (SevenBitNumber)10) { Channel = (FourBitNumber)5 }, TimeSpan.FromSeconds(2)),
+                new EventToSend(new NoteOffEvent((SevenBitNumber)100, (SevenBitNumber)10) { Channel = (FourBitNumber)5 }, TimeSpan.FromSeconds(1)),
                 new EventToSend(new SongSelectEvent((SevenBitNumber)20), TimeSpan.Zero),
                 new EventToSend(new TuneRequestEvent(), TimeSpan.FromMilliseconds(200)),
             });

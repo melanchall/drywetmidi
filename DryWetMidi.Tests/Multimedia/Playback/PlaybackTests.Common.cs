@@ -104,7 +104,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 label: "FromObjects",
                 additionalChecks: additionalChecks);
 
-            checkFromFile &= DryWetMidi.Common.Random.Instance.Next(2) == 1;
+            checkFromFile &= DryWetMidi.Common.Random.Instance.Next(3) == 1;
 
             if (!checkFromFile)
                 return;
