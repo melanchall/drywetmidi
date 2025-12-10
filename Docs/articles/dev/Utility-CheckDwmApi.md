@@ -14,13 +14,11 @@ First of all, you need to download the utility. You can find the latest version 
 
 ![Artifacts](images/CheckDwmApi-Artifacts.png)
 
-Clicking on the highlighted button you'll see the list of published utilities. You need to find `CheckDwmApi-<OS>-<CPU-Arch>` plates:
+Clicking on the highlighted button you'll see the list of published utilities. You need to find `CheckDwmApi-<OS>-<CPU-Arch>` plate which corresponds to your operating system (`<OS>`) and CPU architecture (`<CPU-Arch>`). Then download a ZIP archive with the utility from the plate's menu:
 
-![CheckDwmApi plates](images/CheckDwmApi-BuildsPlates.png)
+![CheckDwmApi Download](images/CheckDwmApi-DownloadArtifact.png)
 
-`<OS>` is the operating system you want to run the utility on (_Windows_, _macOS_, _Linux_) and `<CPU-Arch>` is the CPU architecture (_x64_, _ARM64_, etc.). Click on the plate that fits your OS and CPU architecture to download a ZIP archive with the utility:
-
-![CheckDwmApi ZIP](images/CheckDwmApi-Zip.png)
+Note that downloaded archive can contain another one archive inside. So after downloading, you may need to extract the outer archive first to get to the inner one which contains the actual utility executable. It's because of how Azure DevOps publishes build artifacts, sorry for the inconvenience.
 
 If you unsure what your CPU architecture is, you can execute a command in your command line shell:
 
@@ -47,13 +45,7 @@ Of course, you can see [the source code](https://github.com/melanchall/drywetmid
 ## Running the utility
 
 > [!WARNING]
-> If you're on Windows, you need to have a virtual MIDI device installed to run the utility. For example, you can use [loopMIDI](https://www.tobias-erichsen.de/software/loopmidi.html):
->
-> ![CheckDwmApi loopMIDI Create](images/CheckDwmApi-loopMIDI-Create.png)
-> 
-> ![CheckDwmApi loopMIDI Created](images/CheckDwmApi-loopMIDI-Created.png)
-> 
-> The tool will ask you for the name of a virtual MIDI device to use during the testing process, so you can specify any name and use any application to create a MIDI device (loopMIDI, loopBe1 and so on).
+> If you're on Windows, you need to have a virtual MIDI device installed to run the utility. The tool will ask you for the name of a virtual MIDI device to use during the testing process, so you can specify any name and use any application to create a MIDI device (loopMIDI, loopBe1 and so on).
 
 Now you're ready to run the tool. First of all, extract the downloaded archive to any folder you want. After that, navigate to the folder and run the program (just double-click it).
 
