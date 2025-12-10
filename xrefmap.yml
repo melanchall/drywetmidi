@@ -19239,6 +19239,14 @@ references:
   fullName.vb: Melanchall.DryWetMidi.Interaction.TimedObjectsCollection(Of TObject).Add(System.Collections.Generic.IEnumerable(Of TObject))
   nameWithType: TimedObjectsCollection<TObject>.Add(IEnumerable<TObject>)
   nameWithType.vb: TimedObjectsCollection(Of TObject).Add(IEnumerable(Of TObject))
+- uid: Melanchall.DryWetMidi.Interaction.TimedObjectsCollection`1.Add(`0)
+  name: Add(TObject)
+  href: api/Melanchall.DryWetMidi.Interaction.TimedObjectsCollection-1.html#Melanchall_DryWetMidi_Interaction_TimedObjectsCollection_1_Add__0_
+  commentId: M:Melanchall.DryWetMidi.Interaction.TimedObjectsCollection`1.Add(`0)
+  fullName: Melanchall.DryWetMidi.Interaction.TimedObjectsCollection<TObject>.Add(TObject)
+  fullName.vb: Melanchall.DryWetMidi.Interaction.TimedObjectsCollection(Of TObject).Add(TObject)
+  nameWithType: TimedObjectsCollection<TObject>.Add(TObject)
+  nameWithType.vb: TimedObjectsCollection(Of TObject).Add(TObject)
 - uid: Melanchall.DryWetMidi.Interaction.TimedObjectsCollection`1.Add(`0[])
   name: Add(params TObject[])
   href: api/Melanchall.DryWetMidi.Interaction.TimedObjectsCollection-1.html#Melanchall_DryWetMidi_Interaction_TimedObjectsCollection_1_Add__0___
@@ -19282,6 +19290,41 @@ references:
   fullName.vb: Melanchall.DryWetMidi.Interaction.TimedObjectsCollection(Of TObject).CollectionChanged
   nameWithType: TimedObjectsCollection<TObject>.CollectionChanged
   nameWithType.vb: TimedObjectsCollection(Of TObject).CollectionChanged
+- uid: Melanchall.DryWetMidi.Interaction.TimedObjectsCollection`1.Contains(`0)
+  name: Contains(TObject)
+  href: api/Melanchall.DryWetMidi.Interaction.TimedObjectsCollection-1.html#Melanchall_DryWetMidi_Interaction_TimedObjectsCollection_1_Contains__0_
+  commentId: M:Melanchall.DryWetMidi.Interaction.TimedObjectsCollection`1.Contains(`0)
+  fullName: Melanchall.DryWetMidi.Interaction.TimedObjectsCollection<TObject>.Contains(TObject)
+  fullName.vb: Melanchall.DryWetMidi.Interaction.TimedObjectsCollection(Of TObject).Contains(TObject)
+  nameWithType: TimedObjectsCollection<TObject>.Contains(TObject)
+  nameWithType.vb: TimedObjectsCollection(Of TObject).Contains(TObject)
+- uid: Melanchall.DryWetMidi.Interaction.TimedObjectsCollection`1.Contains*
+  name: Contains
+  href: api/Melanchall.DryWetMidi.Interaction.TimedObjectsCollection-1.html#Melanchall_DryWetMidi_Interaction_TimedObjectsCollection_1_Contains_
+  commentId: Overload:Melanchall.DryWetMidi.Interaction.TimedObjectsCollection`1.Contains
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Interaction.TimedObjectsCollection<TObject>.Contains
+  fullName.vb: Melanchall.DryWetMidi.Interaction.TimedObjectsCollection(Of TObject).Contains
+  nameWithType: TimedObjectsCollection<TObject>.Contains
+  nameWithType.vb: TimedObjectsCollection(Of TObject).Contains
+- uid: Melanchall.DryWetMidi.Interaction.TimedObjectsCollection`1.CopyTo(`0[],System.Int32)
+  name: CopyTo(TObject[], int)
+  href: api/Melanchall.DryWetMidi.Interaction.TimedObjectsCollection-1.html#Melanchall_DryWetMidi_Interaction_TimedObjectsCollection_1_CopyTo__0___System_Int32_
+  commentId: M:Melanchall.DryWetMidi.Interaction.TimedObjectsCollection`1.CopyTo(`0[],System.Int32)
+  name.vb: CopyTo(TObject(), Integer)
+  fullName: Melanchall.DryWetMidi.Interaction.TimedObjectsCollection<TObject>.CopyTo(TObject[], int)
+  fullName.vb: Melanchall.DryWetMidi.Interaction.TimedObjectsCollection(Of TObject).CopyTo(TObject(), Integer)
+  nameWithType: TimedObjectsCollection<TObject>.CopyTo(TObject[], int)
+  nameWithType.vb: TimedObjectsCollection(Of TObject).CopyTo(TObject(), Integer)
+- uid: Melanchall.DryWetMidi.Interaction.TimedObjectsCollection`1.CopyTo*
+  name: CopyTo
+  href: api/Melanchall.DryWetMidi.Interaction.TimedObjectsCollection-1.html#Melanchall_DryWetMidi_Interaction_TimedObjectsCollection_1_CopyTo_
+  commentId: Overload:Melanchall.DryWetMidi.Interaction.TimedObjectsCollection`1.CopyTo
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Interaction.TimedObjectsCollection<TObject>.CopyTo
+  fullName.vb: Melanchall.DryWetMidi.Interaction.TimedObjectsCollection(Of TObject).CopyTo
+  nameWithType: TimedObjectsCollection<TObject>.CopyTo
+  nameWithType.vb: TimedObjectsCollection(Of TObject).CopyTo
 - uid: Melanchall.DryWetMidi.Interaction.TimedObjectsCollection`1.Count
   name: Count
   href: api/Melanchall.DryWetMidi.Interaction.TimedObjectsCollection-1.html#Melanchall_DryWetMidi_Interaction_TimedObjectsCollection_1_Count
@@ -19316,6 +19359,23 @@ references:
   fullName.vb: Melanchall.DryWetMidi.Interaction.TimedObjectsCollection(Of TObject).GetEnumerator
   nameWithType: TimedObjectsCollection<TObject>.GetEnumerator
   nameWithType.vb: TimedObjectsCollection(Of TObject).GetEnumerator
+- uid: Melanchall.DryWetMidi.Interaction.TimedObjectsCollection`1.IsReadOnly
+  name: IsReadOnly
+  href: api/Melanchall.DryWetMidi.Interaction.TimedObjectsCollection-1.html#Melanchall_DryWetMidi_Interaction_TimedObjectsCollection_1_IsReadOnly
+  commentId: P:Melanchall.DryWetMidi.Interaction.TimedObjectsCollection`1.IsReadOnly
+  fullName: Melanchall.DryWetMidi.Interaction.TimedObjectsCollection<TObject>.IsReadOnly
+  fullName.vb: Melanchall.DryWetMidi.Interaction.TimedObjectsCollection(Of TObject).IsReadOnly
+  nameWithType: TimedObjectsCollection<TObject>.IsReadOnly
+  nameWithType.vb: TimedObjectsCollection(Of TObject).IsReadOnly
+- uid: Melanchall.DryWetMidi.Interaction.TimedObjectsCollection`1.IsReadOnly*
+  name: IsReadOnly
+  href: api/Melanchall.DryWetMidi.Interaction.TimedObjectsCollection-1.html#Melanchall_DryWetMidi_Interaction_TimedObjectsCollection_1_IsReadOnly_
+  commentId: Overload:Melanchall.DryWetMidi.Interaction.TimedObjectsCollection`1.IsReadOnly
+  isSpec: "True"
+  fullName: Melanchall.DryWetMidi.Interaction.TimedObjectsCollection<TObject>.IsReadOnly
+  fullName.vb: Melanchall.DryWetMidi.Interaction.TimedObjectsCollection(Of TObject).IsReadOnly
+  nameWithType: TimedObjectsCollection<TObject>.IsReadOnly
+  nameWithType.vb: TimedObjectsCollection(Of TObject).IsReadOnly
 - uid: Melanchall.DryWetMidi.Interaction.TimedObjectsCollection`1.Remove(System.Collections.Generic.IEnumerable{`0})
   name: Remove(IEnumerable<TObject>)
   href: api/Melanchall.DryWetMidi.Interaction.TimedObjectsCollection-1.html#Melanchall_DryWetMidi_Interaction_TimedObjectsCollection_1_Remove_System_Collections_Generic_IEnumerable__0__
@@ -19325,6 +19385,14 @@ references:
   fullName.vb: Melanchall.DryWetMidi.Interaction.TimedObjectsCollection(Of TObject).Remove(System.Collections.Generic.IEnumerable(Of TObject))
   nameWithType: TimedObjectsCollection<TObject>.Remove(IEnumerable<TObject>)
   nameWithType.vb: TimedObjectsCollection(Of TObject).Remove(IEnumerable(Of TObject))
+- uid: Melanchall.DryWetMidi.Interaction.TimedObjectsCollection`1.Remove(`0)
+  name: Remove(TObject)
+  href: api/Melanchall.DryWetMidi.Interaction.TimedObjectsCollection-1.html#Melanchall_DryWetMidi_Interaction_TimedObjectsCollection_1_Remove__0_
+  commentId: M:Melanchall.DryWetMidi.Interaction.TimedObjectsCollection`1.Remove(`0)
+  fullName: Melanchall.DryWetMidi.Interaction.TimedObjectsCollection<TObject>.Remove(TObject)
+  fullName.vb: Melanchall.DryWetMidi.Interaction.TimedObjectsCollection(Of TObject).Remove(TObject)
+  nameWithType: TimedObjectsCollection<TObject>.Remove(TObject)
+  nameWithType.vb: TimedObjectsCollection(Of TObject).Remove(TObject)
 - uid: Melanchall.DryWetMidi.Interaction.TimedObjectsCollection`1.Remove(`0[])
   name: Remove(params TObject[])
   href: api/Melanchall.DryWetMidi.Interaction.TimedObjectsCollection-1.html#Melanchall_DryWetMidi_Interaction_TimedObjectsCollection_1_Remove__0___

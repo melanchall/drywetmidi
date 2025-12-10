@@ -94,10 +94,9 @@
 <h2 id="downloading-the-utility">Downloading the utility</h2>
 <p>First of all, you need to download the utility. You can find the latest version of it in the <em>Artifacts</em> section of the <a href="https://dev.azure.com/Melanchall/DryWetMIDI/_build/latest?definitionId=85&amp;branchName=develop">latest build</a>:</p>
 <p><img src="images/CheckDwmApi-Artifacts.png" alt="Artifacts"></p>
-<p>Clicking on the highlighted button you'll see the list of published utilities. You need to find <code>CheckDwmApi-&lt;OS&gt;-&lt;CPU-Arch&gt;</code> plates:</p>
-<p><img src="images/CheckDwmApi-BuildsPlates.png" alt="CheckDwmApi plates"></p>
-<p><code>&lt;OS&gt;</code> is the operating system you want to run the utility on (<em>Windows</em>, <em>macOS</em>, <em>Linux</em>) and <code>&lt;CPU-Arch&gt;</code> is the CPU architecture (<em>x64</em>, <em>ARM64</em>, etc.). Click on the plate that fits your OS and CPU architecture to download a ZIP archive with the utility:</p>
-<p><img src="images/CheckDwmApi-Zip.png" alt="CheckDwmApi ZIP"></p>
+<p>Clicking on the highlighted button you'll see the list of published utilities. You need to find <code>CheckDwmApi-&lt;OS&gt;-&lt;CPU-Arch&gt;</code> plate which corresponds to your operating system (<code>&lt;OS&gt;</code>) and CPU architecture (<code>&lt;CPU-Arch&gt;</code>). Then download a ZIP archive with the utility from the plate's menu:</p>
+<p><img src="images/CheckDwmApi-DownloadArtifact.png" alt="CheckDwmApi Download"></p>
+<p>Note that downloaded archive can contain another one archive inside. So after downloading, you may need to extract the outer archive first to get to the inner one which contains the actual utility executable. It's because of how Azure DevOps publishes build artifacts, sorry for the inconvenience.</p>
 <p>If you unsure what your CPU architecture is, you can execute a command in your command line shell:</p>
 <ul>
 <li><strong>Windows</strong>:<br>
@@ -119,10 +118,7 @@ in PowerShell:
 <h2 id="running-the-utility">Running the utility</h2>
 <div class="WARNING">
 <h5>Warning</h5>
-<p>If you're on Windows, you need to have a virtual MIDI device installed to run the utility. For example, you can use <a href="https://www.tobias-erichsen.de/software/loopmidi.html">loopMIDI</a>:</p>
-<p><img src="images/CheckDwmApi-LoopMidi-Create.png" alt="CheckDwmApi loopMIDI Create"></p>
-<p><img src="images/CheckDwmApi-LoopMidi-Created.png" alt="CheckDwmApi loopMIDI Created"></p>
-<p>The tool will ask you for the name of a virtual MIDI device to use during the testing process, so you can specify any name and use any application to create a MIDI device (loopMIDI, loopBe1 and so on).</p>
+<p>If you're on Windows, you need to have a virtual MIDI device installed to run the utility. The tool will ask you for the name of a virtual MIDI device to use during the testing process, so you can specify any name and use any application to create a MIDI device (loopMIDI, loopBe1 and so on).</p>
 </div>
 <p>Now you're ready to run the tool. First of all, extract the downloaded archive to any folder you want. After that, navigate to the folder and run the program (just double-click it).</p>
 <p>The utility will guide you through the testing process. You just need to follow the instructions shown in the console window.</p>

@@ -162,16 +162,6 @@
     },
     {
       "type": "Resource",
-      "source_relative_path": "articles/dev/images/CheckDwmApi-BuildsPlates.png",
-      "output": {
-        "resource": {
-          "relative_path": "articles/dev/images/CheckDwmApi-BuildsPlates.png"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Resource",
       "source_relative_path": "articles/dev/images/CheckDwmApi-Commit.png",
       "output": {
         "resource": {
@@ -182,30 +172,10 @@
     },
     {
       "type": "Resource",
-      "source_relative_path": "articles/dev/images/CheckDwmApi-LoopMidi-Create.png",
+      "source_relative_path": "articles/dev/images/CheckDwmApi-DownloadArtifact.png",
       "output": {
         "resource": {
-          "relative_path": "articles/dev/images/CheckDwmApi-LoopMidi-Create.png"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "articles/dev/images/CheckDwmApi-LoopMidi-Created.png",
-      "output": {
-        "resource": {
-          "relative_path": "articles/dev/images/CheckDwmApi-LoopMidi-Created.png"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "articles/dev/images/CheckDwmApi-Zip.png",
-      "output": {
-        "resource": {
-          "relative_path": "articles/dev/images/CheckDwmApi-Zip.png"
+          "relative_path": "articles/dev/images/CheckDwmApi-DownloadArtifact.png"
         }
       },
       "version": ""
