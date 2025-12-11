@@ -3,7 +3,6 @@ using Melanchall.DryWetMidi.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime;
 
 namespace Melanchall.DryWetMidi.Interaction
 {
@@ -98,7 +97,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
         private class NoteDescriptor : IObjectDescriptor
         {
-            private TimedEvent _noteOnTimedEvent;
+            private readonly TimedEvent _noteOnTimedEvent;
 
             public NoteDescriptor(TimedEvent noteOnTimedEvent)
             {
@@ -144,7 +143,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
         private class TimedEventDescriptor : IObjectDescriptor
         {
-            private TimedEvent _timedEvent;
+            private readonly TimedEvent _timedEvent;
 
             public TimedEventDescriptor(TimedEvent timedEvent)
             {

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
@@ -768,7 +767,6 @@ namespace Melanchall.DryWetMidi.Interaction
 
             foreach (var eventsCollection in eventsCollectionsIn)
             {
-                var eventsCount = eventsCollection.Count;
                 var matchedCount = 0;
 
                 var timesChanged = false;

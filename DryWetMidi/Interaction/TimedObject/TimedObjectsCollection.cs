@@ -4,7 +4,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Xml.Linq;
 
 namespace Melanchall.DryWetMidi.Interaction
 {
@@ -50,6 +49,10 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         public int Count => _objects.Count;
 
+        /// <summary>
+        /// Gets a value indicating whether the <see cref="TimedObjectsCollection{TObject}"/>
+        /// is read-only.
+        /// </summary>
         public bool IsReadOnly => false;
 
         #endregion
@@ -175,13 +178,52 @@ namespace Melanchall.DryWetMidi.Interaction
             OnObjectsRemoved(removedObjects);
         }
 
-        public bool Contains(TObject item)
+        /// <summary>
+        /// Determines whether the <see cref="TimedObjectsCollection{TObject}"/> contains a
+        /// specific object.
+        /// </summary>
+        /// <param name="obj">The object to locate in the <see cref="TimedObjectsCollection{TObject}"/>.</param>
+        /// <returns><c>true</c> if the object is found; otherwise, <c>false</c>.</returns>
+        public bool Contains(TObject obj)
         {
-            return _objects.Contains(item);
+            return _objects.Contains(obj);
         }
 
+
+        /// <summary>
+        /// Copies the objects of the <see cref="TimedObjectsCollection{TObject}"/> to an
+        /// array, starting at a particular index.
+        /// </summary>
+        /// <param name="array">The one-dimensional array that is the destination of the objects
+        /// copied from <see cref="TimedObjectsCollection{TObject}"/>. The array must have
+        /// zero-based indexing.</param>
+        /// <param name="arrayIndex">The zero-based index in array at which copying begins.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="array"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// One of the following errors occurred:
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="arrayIndex"/> is less than zero or greater than the length of the array.</description>
+        /// </item>
+        /// <item>
+        /// <description>The number of elements in the <see cref="TimedObjectsCollection{TObject}"/> is greater than
+        /// the available space from the <paramref name="arrayIndex"/> to the end of the <paramref name="array"/>.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public void CopyTo(TObject[] array, int arrayIndex)
         {
+            ThrowIfArgument.IsNull(nameof(array), array);
+            ThrowIfArgument.IsInvalidIndex(
+                nameof(arrayIndex),
+                arrayIndex,
+                array.Length);
+            ThrowIfArgument.IsLessThan(
+                nameof(array),
+                array.Length - arrayIndex,
+                Count,
+                "The number of elements in the source collection is greater than the available space from the index to the end of the destination array.");
+
             _objects.CopyTo(array, arrayIndex);
         }
 

@@ -9,7 +9,7 @@ namespace Melanchall.DryWetMidi.Multimedia
     {
         #region Fields
 
-        private IList<PlaybackEvent> _playbackEventsBuffer = new List<PlaybackEvent>();
+        private readonly IList<PlaybackEvent> _playbackEventsBuffer = new List<PlaybackEvent>();
         private PlaybackEvent[] _playbackEvents = null;
         private int _playbackEventsPosition = -1;
         private bool _isCompleted;
