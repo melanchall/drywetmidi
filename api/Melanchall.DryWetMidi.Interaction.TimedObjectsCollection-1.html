@@ -173,7 +173,8 @@
   </table>
   <a id="Melanchall_DryWetMidi_Interaction_TimedObjectsCollection_1_IsReadOnly_" data-uid="Melanchall.DryWetMidi.Interaction.TimedObjectsCollection`1.IsReadOnly*"></a>
   <h4 id="Melanchall_DryWetMidi_Interaction_TimedObjectsCollection_1_IsReadOnly" data-uid="Melanchall.DryWetMidi.Interaction.TimedObjectsCollection`1.IsReadOnly">IsReadOnly</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary">Gets a value indicating whether the <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedObjectsCollection-1.html">TimedObjectsCollection&lt;TObject&gt;</a>
+is read-only.</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="declaration">Declaration</h5>
   <div class="codewrapper">
@@ -326,11 +327,12 @@
   </div>
   <a id="Melanchall_DryWetMidi_Interaction_TimedObjectsCollection_1_Contains_" data-uid="Melanchall.DryWetMidi.Interaction.TimedObjectsCollection`1.Contains*"></a>
   <h4 id="Melanchall_DryWetMidi_Interaction_TimedObjectsCollection_1_Contains__0_" data-uid="Melanchall.DryWetMidi.Interaction.TimedObjectsCollection`1.Contains(`0)">Contains(TObject)</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary">Determines whether the <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedObjectsCollection-1.html">TimedObjectsCollection&lt;TObject&gt;</a> contains a
+specific object.</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="declaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public bool Contains(TObject item)</code></pre>
+    <pre><code class="lang-csharp hljs">public bool Contains(TObject obj)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-condensed">
@@ -344,8 +346,8 @@
     <tbody>
       <tr>
         <td><span class="xref">TObject</span></td>
-        <td><span class="parametername">item</span></td>
-        <td></td>
+        <td><span class="parametername">obj</span></td>
+        <td>The object to locate in the <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedObjectsCollection-1.html">TimedObjectsCollection&lt;TObject&gt;</a>.</td>
       </tr>
     </tbody>
   </table>
@@ -360,13 +362,14 @@
     <tbody>
       <tr>
         <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></td>
-        <td></td>
+        <td><code>true</code> if the object is found; otherwise, <code>false</code>.</td>
       </tr>
     </tbody>
   </table>
   <a id="Melanchall_DryWetMidi_Interaction_TimedObjectsCollection_1_CopyTo_" data-uid="Melanchall.DryWetMidi.Interaction.TimedObjectsCollection`1.CopyTo*"></a>
   <h4 id="Melanchall_DryWetMidi_Interaction_TimedObjectsCollection_1_CopyTo__0___System_Int32_" data-uid="Melanchall.DryWetMidi.Interaction.TimedObjectsCollection`1.CopyTo(`0[],System.Int32)">CopyTo(TObject[], int)</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary">Copies the objects of the <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedObjectsCollection-1.html">TimedObjectsCollection&lt;TObject&gt;</a> to an
+array, starting at a particular index.</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="declaration">Declaration</h5>
   <div class="codewrapper">
@@ -385,12 +388,35 @@
       <tr>
         <td>TObject[]</td>
         <td><span class="parametername">array</span></td>
-        <td></td>
+        <td>The one-dimensional array that is the destination of the objects
+    copied from <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedObjectsCollection-1.html">TimedObjectsCollection&lt;TObject&gt;</a>. The array must have
+    zero-based indexing.</td>
       </tr>
       <tr>
         <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></td>
         <td><span class="parametername">arrayIndex</span></td>
-        <td></td>
+        <td>The zero-based index in array at which copying begins.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><code class="paramref">array</code> is <code>null</code>.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
+        <td>One of the following errors occurred:
+<ul><li><code class="paramref">arrayIndex</code> is less than zero or greater than the length of the array.</li><li>The number of elements in the <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedObjectsCollection-1.html">TimedObjectsCollection&lt;TObject&gt;</a> is greater than
+the available space from the <code class="paramref">arrayIndex</code> to the end of the <code class="paramref">array</code>.</li></ul></td>
       </tr>
     </tbody>
   </table>
