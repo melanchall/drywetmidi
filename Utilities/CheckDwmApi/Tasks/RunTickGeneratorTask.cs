@@ -48,7 +48,7 @@ namespace Melanchall.CheckDwmApi
                 times.Add(stopwatch.ElapsedMilliseconds);
             };
 
-            reportWriter.WriteOperationSubTitle("running collecting times");
+            reportWriter.WriteOperationSubTitle($"running collecting times ({_ticksCount} ticks will be fired)");
 
             tickGenerator.TryStart(TimeSpan.FromMilliseconds(intervalMs));
             stopwatch.Start();

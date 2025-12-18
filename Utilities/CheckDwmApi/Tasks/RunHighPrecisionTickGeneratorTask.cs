@@ -5,7 +5,7 @@ namespace Melanchall.CheckDwmApi
     internal sealed class RunHighPrecisionTickGeneratorTask : RunTickGeneratorTask<HighPrecisionTickGenerator>
     {
         public RunHighPrecisionTickGeneratorTask()
-            : base(100)
+            : base(500)
         {
         }
 

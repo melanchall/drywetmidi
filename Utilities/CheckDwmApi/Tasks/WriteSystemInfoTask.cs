@@ -12,11 +12,14 @@ namespace Melanchall.CheckDwmApi
             Os,
         }
 
-        private record InfoProvider(
-            InfoType InfoType,
+        private record CommandExecutor(
             string Command,
             string Arguments,
             Func<string, string> ProcessOutput);
+
+        private record InfoProvider(
+            InfoType InfoType,
+            params CommandExecutor[] CommandExecutors);
 
         private record LscpuField(
             string Field,
@@ -35,7 +38,7 @@ namespace Melanchall.CheckDwmApi
             ToolOptions toolOptions,
             ReportWriter reportWriter)
         {
-            reportWriter.WriteOperationTitle("Retrieving system information...");
+            reportWriter.WriteOperationTitle($"Retrieving system information for {GetBasicOsInfo()}...");
 
             InfoProvider[] infoProviders = null;
 
@@ -51,35 +54,51 @@ namespace Melanchall.CheckDwmApi
                     ex);
             }
 
-            foreach (var (infoType, command, arguments, processOutput) in infoProviders)
+            foreach (var (infoType, commandExecutors) in infoProviders)
             {
                 reportWriter.WriteOperationTitle($"Retrieving {infoType}...");
 
-                try
+                foreach (var (command, arguments, processOutput) in commandExecutors)
                 {
-                    var commandOutput = ExecuteCommand(command, arguments, reportWriter).Trim();
-                    var processedOutput = processOutput(commandOutput.Trim()).Trim();
-
-                    switch (infoType)
+                    try
                     {
-                        case InfoType.CpuArchitecture:
-                            reportWriter.WriteOperationSubTitle($"CPU arch: {processedOutput}");
-                            break;
-                        case InfoType.CpuName:
-                            reportWriter.WriteOperationSubTitle($"CPU name: {processedOutput}");
-                            break;
-                        case InfoType.Os:
-                            reportWriter.WriteOperationSubTitle($"OS: {processedOutput}");
-                            break;
+                        var commandOutput = ExecuteCommand(command, arguments, reportWriter).Trim();
+                        var processedOutput = processOutput(commandOutput.Trim()).Trim();
+
+                        switch (infoType)
+                        {
+                            case InfoType.CpuArchitecture:
+                                reportWriter.WriteOperationSubTitle($"CPU arch: {processedOutput}");
+                                break;
+                            case InfoType.CpuName:
+                                reportWriter.WriteOperationSubTitle($"CPU name: {processedOutput}");
+                                break;
+                            case InfoType.Os:
+                                reportWriter.WriteOperationSubTitle($"OS: {processedOutput}");
+                                break;
+                        }
+
+                        break;
                     }
-                }
-                catch (Exception ex)
-                {
-                    throw new TaskFailedException(
-                        $"Failed to retrieve {infoType} information.",
-                        ex);
+                    catch (Exception ex)
+                    {
+                        reportWriter.WriteOperationSubTitle($"Failed to execute command: {ex.Message}.");
+                    }
+
+                    throw new TaskFailedException($"Failed to retrieve {infoType} information.");
                 }
             }
+        }
+
+        private static string GetBasicOsInfo()
+        {
+            var versionString = Environment.OSVersion.VersionString;
+            var osDescription = OperatingSystem.IsWindows() ? "Windows" :
+                                OperatingSystem.IsLinux() ? "Linux" :
+                                OperatingSystem.IsMacOS() ? "macOS" :
+                                "Unknown OS";
+
+            return $"{osDescription} (){versionString})";
         }
 
         private static InfoProvider[] GetInfoProviders()
@@ -98,57 +117,70 @@ namespace Melanchall.CheckDwmApi
         [
             new InfoProvider(
                 InfoType.CpuArchitecture,
-                "cmd",
-                "/C echo %PROCESSOR_ARCHITECTURE%",
-                output => output),
+                new CommandExecutor(
+                    "cmd",
+                    "/C echo %PROCESSOR_ARCHITECTURE%",
+                    output => output)),
             new InfoProvider(
                 InfoType.CpuName,
-                "cmd",
-                "/C powershell -NoProfile -NonInteractive -Command \"Get-CimInstance Win32_Processor | Select-Object -ExpandProperty Name\"",
-                output => output),
+                new CommandExecutor(
+                    "cmd",
+                    "/C powershell -NoProfile -NonInteractive -Command \"Get-CimInstance Win32_Processor | Select-Object -ExpandProperty Name\"",
+                    output => output)),
             new InfoProvider(
                 InfoType.Os,
-                "cmd",
-                "/C powershell -NoProfile -NonInteractive -Command \"$o=Get-CimInstance Win32_OperatingSystem; Write-Output \\\"$($o.Caption) $($o.Version) (Build $($o.BuildNumber))\\\"\"",
-                output => output)
+                new CommandExecutor(
+                    "cmd",
+                    "/C powershell -NoProfile -NonInteractive -Command \"$o=Get-CimInstance Win32_OperatingSystem; Write-Output \\\"$($o.Caption) $($o.Version) (Build $($o.BuildNumber))\\\"\"",
+                    output => output))
         ];
 
         private static InfoProvider[] GetLinuxInfoProviders() =>
         [
             new InfoProvider(
                 InfoType.CpuArchitecture,
-                "uname",
-                "-m",
-                output => output),
+                new CommandExecutor(
+                    "uname",
+                    "-m",
+                    output => output)),
             new InfoProvider(
                 InfoType.CpuName,
-                "sh",
-                @"-c ""awk -F: '/model name/ {print $2; exit}' /proc/cpuinfo || true""",
-                output => string.IsNullOrWhiteSpace(output) ? "Unknown" : output.Trim()),
+                new CommandExecutor(
+                    "sh",
+                    @"-c ""awk -F: '/model name/ {print $2; exit}' /proc/cpuinfo || true""",
+                    output => string.IsNullOrWhiteSpace(output) ? "Unknown" : output)),
             new InfoProvider(
                 InfoType.Os,
-                "lsb_release",
-                "-d",
-                output => output.Split(':')[1])
+                new CommandExecutor(
+                    "lsb_release",
+                    "-d",
+                    output => output.Split(':')[1]),
+                new CommandExecutor(
+                    "uname",
+                    "-a",
+                    output => output))
         ];
 
         private static InfoProvider[] GetMacOsInfoProviders() =>
         [
             new InfoProvider(
                 InfoType.CpuArchitecture,
-                "uname",
-                "-m",
-                output => output),
+                new CommandExecutor(
+                    "uname",
+                    "-m",
+                    output => output)),
             new InfoProvider(
                 InfoType.CpuName,
-                "sysctl",
-                "-n machdep.cpu.brand_string",
-                output => output),
+                new CommandExecutor(
+                    "sysctl",
+                    "-n machdep.cpu.brand_string",
+                    output => output)),
             new InfoProvider(
                 InfoType.Os,
-                "sw_vers",
-                "-productVersion",
-                output => $"macOS {output}")
+                new CommandExecutor(
+                    "sw_vers",
+                    "-productVersion",
+                    output => $"macOS {output}"))
         ];
 
         private static string ExecuteCommand(

@@ -62,13 +62,24 @@ The tool will check if playback functionality is working correctly.";
                 CompareDeltaTimes = false,
             };
 
+            var maxDeltaMs = 0L;
+            var hasMismatchedEvents = false;
+
             for (int i = 0; i < expectedEvents.Length; i++)
             {
                 var (expectedEvent, expectedTime) = expectedEvents[i];
                 var (playedEvent, playedTime) = playedEvents[i];
 
                 reportWriter.WriteOperationSubTitle($"{expectedTime} -> {playedTime}: {expectedEvent}{(MidiEvent.Equals(expectedEvent, playedEvent, midiEventEqualityCheckSettings) ? string.Empty : $" -> {playedEvent}")}");
+
+                maxDeltaMs = Math.Max(maxDeltaMs, Math.Abs(playedTime - expectedTime));
+                if (!MidiEvent.Equals(expectedEvent, playedEvent, midiEventEqualityCheckSettings))
+                    hasMismatchedEvents = true;
             }
+
+            reportWriter.WriteOperationSubTitle($"max delta: {maxDeltaMs} ms");
+            if (hasMismatchedEvents)
+                reportWriter.WriteOperationSubTitle("there are mismatched events");
         }
 
         private EventInfo[] GetExpectedEvents(
@@ -128,6 +139,11 @@ The tool will check if playback functionality is working correctly.";
                 reportWriter.WriteEventInfo($"played event: '{e.Event}'");
                 playedEvents.Add(new (e.Event, stopwatch.ElapsedMilliseconds));
             };
+            playback.Started += (_, e) =>
+            {
+                stopwatch.Start();
+                reportWriter.WriteEventInfo("started");
+            };
             reportWriter.WriteOperationSubTitle("subscribed");
 
             return playback;
@@ -140,9 +156,6 @@ The tool will check if playback functionality is working correctly.";
         {
             reportWriter.WriteOperationTitle("Starting playback...");
             playback.Start();
-            reportWriter.WriteOperationSubTitle("started");
-
-            stopwatch.Start();
         }
     }
 }
