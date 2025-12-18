@@ -9,7 +9,6 @@ DryWetMidi\Multimedia\MidiDevice.cs
 
 DryWetMidi\Multimedia\InputDevice\InputDevice.cs
 DryWetMidi\Multimedia\InputDevice\InputDeviceApi.cs
-DryWetMidi\Multimedia\InputDevice\InputDeviceApi32.cs
 DryWetMidi\Multimedia\InputDevice\InputDeviceApi64.cs
 DryWetMidi\Multimedia\InputDevice\InputDeviceApiProvider.cs
 DryWetMidi\Multimedia\InputDevice\InputDeviceCheckpointsNames.cs
@@ -18,7 +17,6 @@ DryWetMidi\Multimedia\InputDevice\MidiTimeCodeReceivedEventArgs.cs
 
 DryWetMidi\Multimedia\OutputDevice\OutputDevice.cs
 DryWetMidi\Multimedia\OutputDevice\OutputDeviceApi.cs
-DryWetMidi\Multimedia\OutputDevice\OutputDeviceApi32.cs
 DryWetMidi\Multimedia\OutputDevice\OutputDeviceApi64.cs
 DryWetMidi\Multimedia\OutputDevice\OutputDeviceApiProvider.cs
 DryWetMidi\Multimedia\OutputDevice\OutputDeviceCheckpointsNames.cs
@@ -28,7 +26,6 @@ DryWetMidi\Multimedia\OutputDevice\OutputDeviceTechnology.cs
 
 DryWetMidi\Multimedia\Clock\TickGenerator\Session
 DryWetMidi\Multimedia\Clock\TickGenerator\TickGeneratorApi.cs
-DryWetMidi\Multimedia\Clock\TickGenerator\TickGeneratorApi32.cs
 DryWetMidi\Multimedia\Clock\TickGenerator\TickGeneratorApi64.cs
 DryWetMidi\Multimedia\Clock\TickGenerator\TickGeneratorApiProvider.cs
 DryWetMidi\Multimedia\Clock\TickGenerator\TickGeneratorException.cs

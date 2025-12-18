@@ -63,10 +63,6 @@
   </PropertyGroup>
 
   <ItemGroup Label="Native">
-    <None Include="Melanchall_DryWetMidi_Native32.dll">
-      <PackagePath>build\</PackagePath>
-      <Pack>true</Pack>
-    </None>
     <None Include="Melanchall_DryWetMidi_Native64.dll">
       <PackagePath>build\</PackagePath>
       <Pack>true</Pack>

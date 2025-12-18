@@ -52,7 +52,6 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         #region Constants
 
-        protected const string LibraryName32 = "Melanchall_DryWetMidi_Native32";
         protected const string LibraryName64 = "Melanchall_DryWetMidi_Native64";
 
         private static readonly Dictionary<NativeErrorType, string> ErrorsDescriptions = new Dictionary<NativeErrorType, string>

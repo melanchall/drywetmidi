@@ -14,9 +14,6 @@
   </ItemGroup>
 
   <ItemGroup Label="Native">
-    <None Include="..\..\DryWetMidi\Melanchall_DryWetMidi_Native32.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="..\..\DryWetMidi\Melanchall_DryWetMidi_Native64.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

@@ -41,12 +41,6 @@ stages:
   jobs:
   - job: TestPackageIntegration
     displayName: Test package integration
-    strategy:
-      matrix:
-        32Bit:
-          prefer32Bit: 'true'
-        64Bit:
-          prefer32Bit: 'false'
     steps:
     - task: DownloadPipelineArtifact@2
       displayName: Download NuGet package
@@ -78,26 +72,6 @@ stages:
 
           $path = Resolve-Path 'Resources\PackageIntegrationTestUtilities\DwmNetFrameworkConsoleApp\DwmNetFrameworkConsoleApp\packages.config'
           $xml.Save($path)
-          
-    - task: PowerShell@2
-      displayName: Set csproj elements
-      inputs:
-        targetType: 'inline'
-        script: |
-          Write-Host "Parsing csproj..."
-          [xml]$xml = Get-Content -Path 'Resources\PackageIntegrationTestUtilities\DwmNetFrameworkConsoleApp\DwmNetFrameworkConsoleApp\DwmNetFrameworkConsoleApp.csproj'
-          
-          Write-Host "Setting 'Prefer 32-bit to' $(prefer32Bit)..."
-          $xml.Project.PropertyGroup[1].Prefer32Bit = '$(prefer32Bit)'
-          $xml.Project.PropertyGroup[2].Prefer32Bit = '$(prefer32Bit)'
-          
-          Write-Host "Saving csproj..."
-          $path = Resolve-Path 'Resources\PackageIntegrationTestUtilities\DwmNetFrameworkConsoleApp\DwmNetFrameworkConsoleApp\DwmNetFrameworkConsoleApp.csproj'
-          $xml.Save($path)
-          
-          Write-Host "Displaying csproj content..."
-          $content = Get-Content -Path 'Resources\PackageIntegrationTestUtilities\DwmNetFrameworkConsoleApp\DwmNetFrameworkConsoleApp\DwmNetFrameworkConsoleApp.csproj'
-          Write-Host $content
 
     - task: PowerShell@2
       displayName: Restore packages

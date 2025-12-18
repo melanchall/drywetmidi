@@ -5,7 +5,7 @@ stages:
   - job: BuildDll64
     displayName: 'Build 64-bit dll'
     pool:
-      vmImage: 'windows-2022'
+      vmImage: 'windows-latest'
     steps:
     - task: PowerShell@2
       displayName: 'Build dll'
@@ -46,38 +46,4 @@ stages:
       inputs:
         targetPath: 'Resources/Native/Melanchall_DryWetMidi_Native64.dylib'
         artifactName: 'Melanchall_DryWetMidi_Native64.dylib'
-        artifactType: pipeline
-  - job: BuildDll32
-    displayName: 'Build 32-bit dll'
-    pool:
-      vmImage: 'windows-2022'
-    steps:
-    - task: PowerShell@2
-      displayName: 'Build dll'
-      inputs:
-        targetType: 'inline'
-        script: |
-          Write-Host "Downloading winlibs..."
-          $ProgressPreference = 'SilentlyContinue'
-          Invoke-WebRequest -Uri "https://github.com/brechtsanders/winlibs_mingw/releases/download/11.1.0-12.0.0-9.0.0-r1/winlibs-i686-posix-dwarf-gcc-11.1.0-mingw-w64-9.0.0-r1.zip" -OutFile "winlibs.zip"
-          Write-Host "Downloaded."
-          
-          Write-Host "Extracting winlibs..."
-          Expand-Archive -LiteralPath 'winlibs.zip' -DestinationPath "winlibs"
-          Write-Host "Extracted."
-          
-          Write-Host "Building DLL..."
-          $gccPath = Get-ChildItem -Path "winlibs" -File -Filter "i686-w64-mingw32-gcc.exe" -Recurse
-          
-          cd Resources\Native
-          Write-Host "Step 1"
-          & $gccPath.FullName -c NativeApi-Windows.cpp -m32 -lwinmm -lstdc++
-          Write-Host "Step 2"
-          & $gccPath.FullName -shared -o Melanchall_DryWetMidi_Native32.dll NativeApi-Windows.o -m32 -lwinmm -lstdc++
-          Write-Host "Built."
-    - task: PublishPipelineArtifact@1
-      displayName: 'Publish dll artifact'
-      inputs:
-        targetPath: 'Resources\Native\Melanchall_DryWetMidi_Native32.dll'
-        artifactName: 'Melanchall_DryWetMidi_Native32.dll'
         artifactType: pipeline
