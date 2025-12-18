@@ -4,21 +4,31 @@
 #include <mach/mach_time.h>
 #include <mach/mach.h>
 
+#include <atomic>
+#include <vector>
+#include <new>
+#include <cstdint>
+#include <cstring>
+
 #include "NativeApi-Constants.h"
 
 #define PROPERTY_VALUE_BUFFER_SIZE 256
 #define SMALL_BUFFER_ERROR 10000
 
+#pragma clang diagnostic ignored "-Wswitch"
+
+#define API_EXPORT extern "C" __attribute__((visibility("default")))
+
 /* ================================
    Common
 ================================ */
 
-API_TYPE GetApiType()
+API_EXPORT API_TYPE GetApiType()
 {
     return API_TYPE_MAC;
 }
 
-char CanCompareDevices()
+API_EXPORT char CanCompareDevices()
 {
     return 1;
 }
@@ -27,31 +37,31 @@ char CanCompareDevices()
    High-precision tick generator
  ================================ */
 
-typedef struct
+struct TickGeneratorSessionHandle
 {
     pthread_t thread;
-    char active;
+    std::atomic<char> active;
     CFRunLoopRef runLoopRef;
     TGSESSION_OPENRESULT threadStartResult;
-} TickGeneratorSessionHandle;
+};
 
-typedef struct
+struct TickGeneratorInfo
 {
     void (*callback)(void);
     CFRunLoopTimerRef timerRef;
-} TickGeneratorInfo;
+};
 
-void SessionCallback(CFRunLoopTimerRef timer, void *info)
+API_EXPORT void SessionCallback(CFRunLoopTimerRef timer, void *info)
 {
 }
 
-void* TickGeneratorSessionThreadRoutine(void* data)
+API_EXPORT void* TickGeneratorSessionThreadRoutine(void* data)
 {
-    TickGeneratorSessionHandle* sessionHandle = (TickGeneratorSessionHandle*)data;
+    TickGeneratorSessionHandle* sessionHandle = reinterpret_cast<TickGeneratorSessionHandle*>(data);
 
-    CFRunLoopTimerContext context = { 0, NULL, NULL, NULL, NULL };
+    CFRunLoopTimerContext context = { 0, nullptr, nullptr, nullptr, nullptr };
     CFRunLoopTimerRef timerRef = CFRunLoopTimerCreate(
-        NULL,
+        nullptr,
         CFAbsoluteTimeGetCurrent() + 60,
         60,
         0,
@@ -70,7 +80,7 @@ void* TickGeneratorSessionThreadRoutine(void* data)
     if (kr != KERN_SUCCESS)
     {
         sessionHandle->threadStartResult = TGSESSION_OPENRESULT_FAILEDTOGETTIMEBASEINFO;
-        return NULL;
+        return nullptr;
     }
 
     struct thread_time_constraint_policy constraintPolicy;
@@ -85,32 +95,43 @@ void* TickGeneratorSessionThreadRoutine(void* data)
     if (kr != KERN_SUCCESS)
     {
         sessionHandle->threadStartResult = TGSESSION_OPENRESULT_FAILEDTOSETREALTIMEPRIORITY;
-        return NULL;
+        return nullptr;
     }
 
     //
 
-    sessionHandle->active = 1;
+    sessionHandle->active.store(1);
     sessionHandle->runLoopRef = runLoopRef;
 
     CFRunLoopRun();
 
-    return NULL;
+    return nullptr;
 }
 
-TGSESSION_OPENRESULT OpenTickGeneratorSession(void** handle)
+API_EXPORT TGSESSION_OPENRESULT OpenTickGeneratorSession(void** handle)
 {
-    TickGeneratorSessionHandle* sessionHandle = malloc(sizeof(TickGeneratorSessionHandle));
+    TickGeneratorSessionHandle* sessionHandle = new TickGeneratorSessionHandle();
 
     sessionHandle->threadStartResult = TGSESSION_OPENRESULT_OK;
-    sessionHandle->active = 0;
+    sessionHandle->active.store(0);
 
-    pthread_create(&sessionHandle->thread, NULL, TickGeneratorSessionThreadRoutine, sessionHandle);
+    if (pthread_create(&sessionHandle->thread, nullptr, TickGeneratorSessionThreadRoutine, sessionHandle) != 0)
+    {
+        delete sessionHandle;
+        return TGSESSION_OPENRESULT_THREADSTARTERROR;
+    }
     
-    while (sessionHandle->active == 0)
+    while (sessionHandle->active.load() == 0)
     {
         if (sessionHandle->threadStartResult != TGSESSION_OPENRESULT_OK)
-            return sessionHandle->threadStartResult;
+        {
+            TGSESSION_OPENRESULT res = sessionHandle->threadStartResult;
+            delete sessionHandle;
+            return res;
+        }
+        // small sleep to avoid busy spin
+        struct timespec ts = {0, 1000000}; // 1ms
+        nanosleep(&ts, nullptr);
     }
     
     *handle = sessionHandle;
@@ -118,24 +139,24 @@ TGSESSION_OPENRESULT OpenTickGeneratorSession(void** handle)
     return TGSESSION_OPENRESULT_OK;
 }
 
-void TimerCallback(CFRunLoopTimerRef timer, void *info)
+API_EXPORT void TimerCallback(CFRunLoopTimerRef timer, void *info)
 {
-    TickGeneratorInfo* tickGeneratorInfo = (TickGeneratorInfo*)info;
+    TickGeneratorInfo* tickGeneratorInfo = reinterpret_cast<TickGeneratorInfo*>(info);
     tickGeneratorInfo->callback();
 }
 
-TG_STARTRESULT StartHighPrecisionTickGenerator_Mac(int interval, void* sessionHandle, void (*callback)(void), TickGeneratorInfo** info)
+API_EXPORT TG_STARTRESULT StartHighPrecisionTickGenerator_Mac(int interval, void* sessionHandle, void (*callback)(void), TickGeneratorInfo** info)
 {
-    TickGeneratorSessionHandle* pSessionHandle = (TickGeneratorSessionHandle*)sessionHandle;
-    TickGeneratorInfo* tickGeneratorInfo = malloc(sizeof(TickGeneratorInfo));
+    TickGeneratorSessionHandle* pSessionHandle = reinterpret_cast<TickGeneratorSessionHandle*>(sessionHandle);
+    TickGeneratorInfo* tickGeneratorInfo = new TickGeneratorInfo();
 
     tickGeneratorInfo->callback = callback;
     
-    double seconds = (double)interval / 1000.0;
+    double seconds = static_cast<double>(interval) / 1000.0;
     
-    CFRunLoopTimerContext context = { 0, tickGeneratorInfo, NULL, NULL, NULL };
+    CFRunLoopTimerContext context = { 0, tickGeneratorInfo, nullptr, nullptr, nullptr };
     CFRunLoopTimerRef timerRef = CFRunLoopTimerCreate(
-        NULL,
+        nullptr,
         CFAbsoluteTimeGetCurrent() + seconds,
         seconds,
         0,
@@ -151,9 +172,10 @@ TG_STARTRESULT StartHighPrecisionTickGenerator_Mac(int interval, void* sessionHa
     return TG_STARTRESULT_OK;
 }
 
-TG_STOPRESULT StopHighPrecisionTickGenerator(TickGeneratorSessionHandle* sessionHandle, TickGeneratorInfo* tickGeneratorInfo)
+API_EXPORT TG_STOPRESULT StopHighPrecisionTickGenerator(TickGeneratorSessionHandle* sessionHandle, TickGeneratorInfo* tickGeneratorInfo)
 {
     CFRunLoopRemoveTimer(sessionHandle->runLoopRef, tickGeneratorInfo->timerRef, kCFRunLoopDefaultMode);
+    delete tickGeneratorInfo;
     return TG_STOPRESULT_OK;
 }
 
@@ -161,33 +183,38 @@ TG_STOPRESULT StopHighPrecisionTickGenerator(TickGeneratorSessionHandle* session
    Devices common
  ================================ */
 
-typedef struct
+struct InputDeviceInfo
 {
     MIDIEndpointRef endpointRef;
-} InputDeviceInfo;
+};
 
-typedef struct
+struct OutputDeviceInfo
 {
     MIDIEndpointRef endpointRef;
-} OutputDeviceInfo;
+};
 
-OSStatus GetDevicePropertyValue(MIDIEndpointRef endpointRef, CFStringRef propertyID, char** value)
+API_EXPORT OSStatus GetDevicePropertyValue(MIDIEndpointRef endpointRef, CFStringRef propertyID, char** value)
 {
-    CFStringRef stringRef = NULL;
+    CFStringRef stringRef = nullptr;
     OSStatus status = MIDIObjectGetStringProperty(endpointRef, propertyID, &stringRef);
-    if (status == noErr)
+    if (status == noErr && stringRef != nullptr)
     {
-        char* buffer = malloc(PROPERTY_VALUE_BUFFER_SIZE * sizeof(char));
+        char* buffer = new char[PROPERTY_VALUE_BUFFER_SIZE];
         if (!CFStringGetCString(stringRef, buffer, PROPERTY_VALUE_BUFFER_SIZE, kCFStringEncodingUTF8))
+        {
+            delete [] buffer;
+            CFRelease(stringRef);
             return SMALL_BUFFER_ERROR;
+        }
 
         *value = buffer;
+        CFRelease(stringRef);
     }
 
     return status;
 }
 
-OSStatus GetDeviceDriverVersion(MIDIEndpointRef endpointRef, int* value)
+API_EXPORT OSStatus GetDeviceDriverVersion(MIDIEndpointRef endpointRef, int* value)
 {
     SInt32 driverVersion;
     OSStatus status = MIDIObjectGetIntegerProperty(endpointRef, kMIDIPropertyDriverVersion, &driverVersion);
@@ -204,44 +231,44 @@ OSStatus GetDeviceDriverVersion(MIDIEndpointRef endpointRef, int* value)
 typedef void (*InputDeviceCallback)(void* info, char operation);
 typedef void (*OutputDeviceCallback)(void* info, char operation);
 
-typedef struct
+struct SessionHandle
 {
     char* name;
     MIDIClientRef clientRef;
     CFRunLoopRef runLoopRef;
     pthread_t thread;
-    char clientCreated;
-    char sessionClosed;
+    std::atomic<char> clientCreated;
+    std::atomic<char> sessionClosed;
     OSStatus clientCreationStatus;
     InputDeviceCallback inputDeviceCallback;
     OutputDeviceCallback outputDeviceCallback;
-} SessionHandle;
+};
  
-void HandleSource(MIDIEndpointRef source, SessionHandle* sessionHandle, char operation)
+API_EXPORT void HandleSource(MIDIEndpointRef source, SessionHandle* sessionHandle, char operation)
 {
-    if (sessionHandle->sessionClosed == 1)
+    if (sessionHandle->sessionClosed.load() == 1)
         return;
 
-    InputDeviceInfo* inputDeviceInfo = malloc(sizeof(InputDeviceInfo));
+    InputDeviceInfo* inputDeviceInfo = new InputDeviceInfo();
     inputDeviceInfo->endpointRef = source;
 
     sessionHandle->inputDeviceCallback(inputDeviceInfo, operation);
 }
 
-void HandleDestination(MIDIEndpointRef destination, SessionHandle* sessionHandle, char operation)
+API_EXPORT void HandleDestination(MIDIEndpointRef destination, SessionHandle* sessionHandle, char operation)
 {
-    if (sessionHandle->sessionClosed == 1)
+    if (sessionHandle->sessionClosed.load() == 1)
         return;
 
-    OutputDeviceInfo* outputDeviceInfo = malloc(sizeof(OutputDeviceInfo));
+    OutputDeviceInfo* outputDeviceInfo = new OutputDeviceInfo();
     outputDeviceInfo->endpointRef = destination;
 
     sessionHandle->outputDeviceCallback(outputDeviceInfo, operation);
 }
 
-void HandleEntitySources(MIDIEntityRef entity, SessionHandle* sessionHandle, char operation)
+API_EXPORT void HandleEntitySources(MIDIEntityRef entity, SessionHandle* sessionHandle, char operation)
 {
-    if (sessionHandle->sessionClosed == 1)
+    if (sessionHandle->sessionClosed.load() == 1)
         return;
 
     ItemCount _sourcesCount = MIDIEntityGetNumberOfSources(entity);
@@ -253,9 +280,9 @@ void HandleEntitySources(MIDIEntityRef entity, SessionHandle* sessionHandle, cha
     }
 }
 
-void HandleEntityDestinations(MIDIEntityRef entity, SessionHandle* sessionHandle, char operation)
+API_EXPORT void HandleEntityDestinations(MIDIEntityRef entity, SessionHandle* sessionHandle, char operation)
 {
-    if (sessionHandle->sessionClosed == 1)
+    if (sessionHandle->sessionClosed.load() == 1)
         return;
 
     ItemCount _destinationsCount = MIDIEntityGetNumberOfDestinations(entity);
@@ -267,18 +294,18 @@ void HandleEntityDestinations(MIDIEntityRef entity, SessionHandle* sessionHandle
     }
 }
 
-void HandleEntity(MIDIEntityRef entity, SessionHandle* sessionHandle, char operation)
+API_EXPORT void HandleEntity(MIDIEntityRef entity, SessionHandle* sessionHandle, char operation)
 {
-    if (sessionHandle->sessionClosed == 1)
+    if (sessionHandle->sessionClosed.load() == 1)
         return;
 
     HandleEntitySources(entity, sessionHandle, operation);
     HandleEntityDestinations(entity, sessionHandle, operation);
 }
 
-void HandleDevice(MIDIDeviceRef device, SessionHandle* sessionHandle, char operation)
+API_EXPORT void HandleDevice(MIDIDeviceRef device, SessionHandle* sessionHandle, char operation)
 {
-    if (sessionHandle->sessionClosed == 1)
+    if (sessionHandle->sessionClosed.load() == 1)
         return;
 
     ItemCount entitiesCount = MIDIDeviceGetNumberOfEntities(device);
@@ -290,9 +317,9 @@ void HandleDevice(MIDIDeviceRef device, SessionHandle* sessionHandle, char opera
     }
 }
 
-void HandleNotification(const MIDINotification* message, SessionHandle* sessionHandle)
+API_EXPORT void HandleNotification(const MIDINotification* message, SessionHandle* sessionHandle)
 {
-    if (sessionHandle->sessionClosed == 1)
+    if (sessionHandle->sessionClosed.load() == 1)
         return;
 
     switch (message->messageID)
@@ -333,47 +360,52 @@ void HandleNotification(const MIDINotification* message, SessionHandle* sessionH
     }
 }
 
-void NotifyProc(const MIDINotification* message, void* refCon)
+API_EXPORT void NotifyProc(const MIDINotification* message, void* refCon)
 {
-    SessionHandle* sessionHandle = (SessionHandle*)refCon;
-    if (sessionHandle->sessionClosed == 1)
+    SessionHandle* sessionHandle = reinterpret_cast<SessionHandle*>(refCon);
+    if (sessionHandle->sessionClosed.load() == 1)
         return;
 
     HandleNotification(message, sessionHandle);
 }
 
-void* ThreadProc(void* data)
+API_EXPORT void* ThreadProc(void* data)
 {
-    SessionHandle* sessionHandle = (SessionHandle*)data;
+    SessionHandle* sessionHandle = reinterpret_cast<SessionHandle*>(data);
     
     CFStringRef nameRef = CFStringCreateWithCString(kCFAllocatorDefault, sessionHandle->name, kCFStringEncodingUTF8);
     sessionHandle->clientCreationStatus = MIDIClientCreate(nameRef, NotifyProc, data, &sessionHandle->clientRef);
-    sessionHandle->clientCreated = 1;
+    sessionHandle->clientCreated.store(1);
     sessionHandle->runLoopRef = (CFRunLoopRef)CFRetain(CFRunLoopGetCurrent());
+
+    if (nameRef)
+        CFRelease(nameRef);
     
     CFRunLoopRun();
     
-    return NULL;
+    return nullptr;
 }
 
-SESSION_OPENRESULT OpenSession_Mac(char* name, InputDeviceCallback inputDeviceCallback, OutputDeviceCallback outputDeviceCallback, void** handle)
+API_EXPORT SESSION_OPENRESULT OpenSession_Mac(char* name, InputDeviceCallback inputDeviceCallback, OutputDeviceCallback outputDeviceCallback, void** handle)
 {
-    SessionHandle* sessionHandle = malloc(sizeof(SessionHandle));
+    SessionHandle* sessionHandle = new SessionHandle();
     
     sessionHandle->name = name;
     sessionHandle->inputDeviceCallback = inputDeviceCallback;
     sessionHandle->outputDeviceCallback = outputDeviceCallback;
-    sessionHandle->clientCreated = 0;
-    sessionHandle->sessionClosed = 0;
+    sessionHandle->clientCreated.store(0);
+    sessionHandle->sessionClosed.store(0);
     
-    if (pthread_create(&sessionHandle->thread, NULL, ThreadProc, sessionHandle) != 0)
+    if (pthread_create(&sessionHandle->thread, nullptr, ThreadProc, sessionHandle) != 0)
         return SESSION_OPENRESULT_THREADSTARTERROR;
     
-    while (sessionHandle->clientCreated == 0) {}
+    while (sessionHandle->clientCreated.load() == 0) {}
 
     if (sessionHandle->clientCreationStatus != noErr)
     {
-        switch (sessionHandle->clientCreationStatus)
+        OSStatus st = sessionHandle->clientCreationStatus;
+        delete sessionHandle;
+        switch (st)
         {
             case kMIDIServerStartErr: return SESSION_OPENRESULT_SERVERSTARTERROR;
             case kMIDIWrongThread: return SESSION_OPENRESULT_WRONGTHREAD;
@@ -388,19 +420,19 @@ SESSION_OPENRESULT OpenSession_Mac(char* name, InputDeviceCallback inputDeviceCa
     return SESSION_OPENRESULT_OK;
 }
 
-SESSION_CLOSERESULT CloseSession(void* handle)
+API_EXPORT SESSION_CLOSERESULT CloseSession(void* handle)
 {
-    SessionHandle* sessionHandle = (SessionHandle*)handle;
+    SessionHandle* sessionHandle = reinterpret_cast<SessionHandle*>(handle);
 
-    if (sessionHandle->sessionClosed == 1)
+    if (sessionHandle->sessionClosed.load() == 1)
         return SESSION_CLOSERESULT_OK;
     
-    sessionHandle->sessionClosed = 1;
+    sessionHandle->sessionClosed.store(1);
 
     CFRunLoopStop(sessionHandle->runLoopRef);
     CFRelease(sessionHandle->runLoopRef);
 
-    // free(sessionHandle);
+    delete sessionHandle;
     return SESSION_CLOSERESULT_OK;
 }
 
@@ -408,20 +440,20 @@ SESSION_CLOSERESULT CloseSession(void* handle)
    Input device
  ================================ */
 
-typedef struct
+struct InputDeviceHandle
 {
     InputDeviceInfo* info;
     MIDIPortRef portRef;
-} InputDeviceHandle;
+};
 
-int GetInputDevicesCount()
+API_EXPORT int GetInputDevicesCount()
 {
-    return (int)MIDIGetNumberOfSources();
+    return static_cast<int>(MIDIGetNumberOfSources());
 }
 
-IN_GETINFORESULT GetInputDeviceInfo(int deviceIndex, void** info)
+API_EXPORT IN_GETINFORESULT GetInputDeviceInfo(int deviceIndex, void** info)
 {
-    InputDeviceInfo* inputDeviceInfo = malloc(sizeof(InputDeviceInfo));
+    InputDeviceInfo* inputDeviceInfo = new InputDeviceInfo();
 
     MIDIEndpointRef endpointRef = MIDIGetSource(deviceIndex);
     inputDeviceInfo->endpointRef = endpointRef;
@@ -431,21 +463,21 @@ IN_GETINFORESULT GetInputDeviceInfo(int deviceIndex, void** info)
     return IN_GETINFORESULT_OK;
 }
 
-int GetInputDeviceHashCode(void* info)
+API_EXPORT int GetInputDeviceHashCode(void* info)
 {
-    InputDeviceInfo* inputDeviceInfo = (InputDeviceInfo*)info;
-    return inputDeviceInfo->endpointRef;
+    InputDeviceInfo* inputDeviceInfo = reinterpret_cast<InputDeviceInfo*>(info);
+    return static_cast<int>(static_cast<uintptr_t>(inputDeviceInfo->endpointRef));
 }
 
-char AreInputDevicesEqual(void* info1, void* info2)
+API_EXPORT char AreInputDevicesEqual(void* info1, void* info2)
 {
-    InputDeviceInfo* inputDeviceInfo1 = (InputDeviceInfo*)info1;
-    InputDeviceInfo* inputDeviceInfo2 = (InputDeviceInfo*)info2;
+    InputDeviceInfo* inputDeviceInfo1 = reinterpret_cast<InputDeviceInfo*>(info1);
+    InputDeviceInfo* inputDeviceInfo2 = reinterpret_cast<InputDeviceInfo*>(info2);
     
-    return (char)(inputDeviceInfo1->endpointRef == inputDeviceInfo2->endpointRef);
+    return static_cast<char>(inputDeviceInfo1->endpointRef == inputDeviceInfo2->endpointRef);
 }
 
-IN_GETPROPERTYRESULT GetInputDeviceStringPropertyValue(InputDeviceInfo* inputDeviceInfo, CFStringRef propertyID, char** value)
+API_EXPORT IN_GETPROPERTYRESULT GetInputDeviceStringPropertyValue(InputDeviceInfo* inputDeviceInfo, CFStringRef propertyID, char** value)
 {
     OSStatus status = GetDevicePropertyValue(inputDeviceInfo->endpointRef, propertyID, value);
     if (status != noErr)
@@ -463,7 +495,7 @@ IN_GETPROPERTYRESULT GetInputDeviceStringPropertyValue(InputDeviceInfo* inputDev
     return IN_GETPROPERTYRESULT_OK;
 }
 
-IN_GETPROPERTYRESULT GetInputDeviceIntPropertyValue(InputDeviceInfo* inputDeviceInfo, CFStringRef propertyID, int* value)
+API_EXPORT IN_GETPROPERTYRESULT GetInputDeviceIntPropertyValue(InputDeviceInfo* inputDeviceInfo, CFStringRef propertyID, int* value)
 {
     OSStatus status = MIDIObjectGetIntegerProperty(inputDeviceInfo->endpointRef, propertyID, value);
     if (status != noErr)
@@ -480,56 +512,57 @@ IN_GETPROPERTYRESULT GetInputDeviceIntPropertyValue(InputDeviceInfo* inputDevice
     return IN_GETPROPERTYRESULT_OK;
 }
 
-IN_GETPROPERTYRESULT GetInputDeviceName(void* info, char** value)
+API_EXPORT IN_GETPROPERTYRESULT GetInputDeviceName(void* info, char** value)
 {
-    InputDeviceInfo* inputDeviceInfo = (InputDeviceInfo*)info;
+    InputDeviceInfo* inputDeviceInfo = reinterpret_cast<InputDeviceInfo*>(info);
     return GetInputDeviceStringPropertyValue(inputDeviceInfo, kMIDIPropertyDisplayName, value);
 }
 
-IN_GETPROPERTYRESULT GetInputDeviceManufacturer(void* info, char** value)
+API_EXPORT IN_GETPROPERTYRESULT GetInputDeviceManufacturer(void* info, char** value)
 {
-    InputDeviceInfo* inputDeviceInfo = (InputDeviceInfo*)info;
+    InputDeviceInfo* inputDeviceInfo = reinterpret_cast<InputDeviceInfo*>(info);
     return GetInputDeviceStringPropertyValue(inputDeviceInfo, kMIDIPropertyManufacturer, value);
 }
 
-IN_GETPROPERTYRESULT GetInputDeviceProduct(void* info, char** value)
+API_EXPORT IN_GETPROPERTYRESULT GetInputDeviceProduct(void* info, char** value)
 {
-    InputDeviceInfo* inputDeviceInfo = (InputDeviceInfo*)info;
+    InputDeviceInfo* inputDeviceInfo = reinterpret_cast<InputDeviceInfo*>(info);
     return GetInputDeviceStringPropertyValue(inputDeviceInfo, kMIDIPropertyModel, value);
 }
 
-IN_GETPROPERTYRESULT GetInputDeviceDriverVersion(void* info, int* value)
+API_EXPORT IN_GETPROPERTYRESULT GetInputDeviceDriverVersion(void* info, int* value)
 {
-    InputDeviceInfo* inputDeviceInfo = (InputDeviceInfo*)info;
+    InputDeviceInfo* inputDeviceInfo = reinterpret_cast<InputDeviceInfo*>(info);
     return GetInputDeviceIntPropertyValue(inputDeviceInfo, kMIDIPropertyDriverVersion, value);
 }
 
-IN_GETPROPERTYRESULT GetInputDeviceUniqueId(void* info, int* value)
+API_EXPORT IN_GETPROPERTYRESULT GetInputDeviceUniqueId(void* info, int* value)
 {
-    InputDeviceInfo* inputDeviceInfo = (InputDeviceInfo*)info;
+    InputDeviceInfo* inputDeviceInfo = reinterpret_cast<InputDeviceInfo*>(info);
     return GetInputDeviceIntPropertyValue(inputDeviceInfo, kMIDIPropertyUniqueID, value);
 }
 
-IN_GETPROPERTYRESULT GetInputDeviceDriverOwner(void* info, char** value)
+API_EXPORT IN_GETPROPERTYRESULT GetInputDeviceDriverOwner(void* info, char** value)
 {
-    InputDeviceInfo* inputDeviceInfo = (InputDeviceInfo*)info;
+    InputDeviceInfo* inputDeviceInfo = reinterpret_cast<InputDeviceInfo*>(info);
     return GetInputDeviceStringPropertyValue(inputDeviceInfo, kMIDIPropertyDriverOwner, value);
 }
 
-IN_OPENRESULT OpenInputDevice_Mac(void* info, void* sessionHandle, MIDIReadProc callback, void** handle)
+API_EXPORT IN_OPENRESULT OpenInputDevice_Mac(void* info, void* sessionHandle, MIDIReadProc callback, void** handle)
 {
-    InputDeviceInfo* inputDeviceInfo = (InputDeviceInfo*)info;
-    SessionHandle* pSessionHandle = (SessionHandle*)sessionHandle;
+    InputDeviceInfo* inputDeviceInfo = reinterpret_cast<InputDeviceInfo*>(info);
+    SessionHandle* pSessionHandle = reinterpret_cast<SessionHandle*>(sessionHandle);
 
-    InputDeviceHandle* inputDeviceHandle = malloc(sizeof(InputDeviceHandle));
+    InputDeviceHandle* inputDeviceHandle = new InputDeviceHandle();
     inputDeviceHandle->info = inputDeviceInfo;
 
     *handle = inputDeviceHandle;
 
     CFStringRef portNameRef = CFSTR("IN");
-    OSStatus status = MIDIInputPortCreate(pSessionHandle->clientRef, portNameRef, callback, NULL, &inputDeviceHandle->portRef);
+    OSStatus status = MIDIInputPortCreate(pSessionHandle->clientRef, portNameRef, callback, nullptr, &inputDeviceHandle->portRef);
     if (status != noErr)
     {
+        delete inputDeviceHandle;
         switch (status)
         {
             case kMIDIInvalidClient: return IN_OPENRESULT_INVALIDCLIENT;
@@ -543,21 +576,21 @@ IN_OPENRESULT OpenInputDevice_Mac(void* info, void* sessionHandle, MIDIReadProc 
     return IN_OPENRESULT_OK;
 }
 
-IN_CLOSERESULT CloseInputDevice(void* handle)
+API_EXPORT IN_CLOSERESULT CloseInputDevice(void* handle)
 {
-    InputDeviceHandle* inputDeviceHandle = (InputDeviceHandle*)handle;
+    InputDeviceHandle* inputDeviceHandle = reinterpret_cast<InputDeviceHandle*>(handle);
 
-    free(inputDeviceHandle->info);
-    free(inputDeviceHandle);
+    delete inputDeviceHandle->info;
+    delete inputDeviceHandle;
 
     return IN_CLOSERESULT_OK;
 }
 
-IN_CONNECTRESULT ConnectToInputDevice(void* handle)
+API_EXPORT IN_CONNECTRESULT ConnectToInputDevice(void* handle)
 {
-    InputDeviceHandle* inputDeviceHandle = (InputDeviceHandle*)handle;
+    InputDeviceHandle* inputDeviceHandle = reinterpret_cast<InputDeviceHandle*>(handle);
 
-    OSStatus status = MIDIPortConnectSource(inputDeviceHandle->portRef, inputDeviceHandle->info->endpointRef, NULL);
+    OSStatus status = MIDIPortConnectSource(inputDeviceHandle->portRef, inputDeviceHandle->info->endpointRef, nullptr);
     if (status != noErr)
     {
         switch (status)
@@ -575,9 +608,9 @@ IN_CONNECTRESULT ConnectToInputDevice(void* handle)
     return IN_CONNECTRESULT_OK;
 }
 
-IN_DISCONNECTRESULT DisconnectFromInputDevice(void* handle)
+API_EXPORT IN_DISCONNECTRESULT DisconnectFromInputDevice(void* handle)
 {
-    InputDeviceHandle* inputDeviceHandle = (InputDeviceHandle*)handle;
+    InputDeviceHandle* inputDeviceHandle = reinterpret_cast<InputDeviceHandle*>(handle);
 
     OSStatus status = MIDIPortDisconnectSource(inputDeviceHandle->portRef, inputDeviceHandle->info->endpointRef);
     if (status != noErr)
@@ -598,7 +631,7 @@ IN_DISCONNECTRESULT DisconnectFromInputDevice(void* handle)
     return IN_DISCONNECTRESULT_OK;
 }
 
-IN_GETEVENTDATARESULT GetEventDataFromInputDevice(MIDIPacketList* packetList, int packetIndex, Byte** data, int* length, int* packetsCount)
+API_EXPORT IN_GETEVENTDATARESULT GetEventDataFromInputDevice(MIDIPacketList* packetList, int packetIndex, Byte** data, int* length, int* packetsCount)
 {
     *packetsCount = packetList->numPackets;
     
@@ -622,7 +655,7 @@ IN_GETEVENTDATARESULT GetEventDataFromInputDevice(MIDIPacketList* packetList, in
     return IN_GETEVENTDATARESULT_OK;
 }
 
-char IsInputDevicePropertySupported(IN_PROPERTY property)
+API_EXPORT char IsInputDevicePropertySupported(IN_PROPERTY property)
 {
     switch (property)
     {
@@ -641,20 +674,20 @@ char IsInputDevicePropertySupported(IN_PROPERTY property)
    Output device
  ================================ */
 
-typedef struct
+struct OutputDeviceHandle
 {
     OutputDeviceInfo* info;
     MIDIPortRef portRef;
-} OutputDeviceHandle;
+};
 
-int GetOutputDevicesCount()
+API_EXPORT int GetOutputDevicesCount()
 {
-    return (int)MIDIGetNumberOfDestinations();
+    return static_cast<int>(MIDIGetNumberOfDestinations());
 }
 
-OUT_GETINFORESULT GetOutputDeviceInfo(int deviceIndex, void** info)
+API_EXPORT OUT_GETINFORESULT GetOutputDeviceInfo(int deviceIndex, void** info)
 {
-    OutputDeviceInfo* outputDeviceInfo = malloc(sizeof(OutputDeviceInfo));
+    OutputDeviceInfo* outputDeviceInfo = new OutputDeviceInfo();
 
     MIDIEndpointRef endpointRef = MIDIGetDestination(deviceIndex);
     outputDeviceInfo->endpointRef = endpointRef;
@@ -664,21 +697,21 @@ OUT_GETINFORESULT GetOutputDeviceInfo(int deviceIndex, void** info)
     return OUT_GETINFORESULT_OK;
 }
 
-int GetOutputDeviceHashCode(void* info)
+API_EXPORT int GetOutputDeviceHashCode(void* info)
 {
-    OutputDeviceInfo* outputDeviceInfo = (OutputDeviceInfo*)info;
-    return outputDeviceInfo->endpointRef;
+    OutputDeviceInfo* outputDeviceInfo = reinterpret_cast<OutputDeviceInfo*>(info);
+    return static_cast<int>(static_cast<uintptr_t>(outputDeviceInfo->endpointRef));
 }
 
-char AreOutputDevicesEqual(void* info1, void* info2)
+API_EXPORT char AreOutputDevicesEqual(void* info1, void* info2)
 {
-    OutputDeviceInfo* outputDeviceInfo1 = (OutputDeviceInfo*)info1;
-    OutputDeviceInfo* outputDeviceInfo2 = (OutputDeviceInfo*)info2;
+    OutputDeviceInfo* outputDeviceInfo1 = reinterpret_cast<OutputDeviceInfo*>(info1);
+    OutputDeviceInfo* outputDeviceInfo2 = reinterpret_cast<OutputDeviceInfo*>(info2);
     
-    return (char)(outputDeviceInfo1->endpointRef == outputDeviceInfo2->endpointRef);
+    return static_cast<char>(outputDeviceInfo1->endpointRef == outputDeviceInfo2->endpointRef);
 }
 
-OUT_GETPROPERTYRESULT GetOutputDeviceStringPropertyValue(OutputDeviceInfo* outputDeviceInfo, CFStringRef propertyID, char** value)
+API_EXPORT OUT_GETPROPERTYRESULT GetOutputDeviceStringPropertyValue(OutputDeviceInfo* outputDeviceInfo, CFStringRef propertyID, char** value)
 {
     OSStatus status = GetDevicePropertyValue(outputDeviceInfo->endpointRef, propertyID, value);
     if (status != noErr)
@@ -696,7 +729,7 @@ OUT_GETPROPERTYRESULT GetOutputDeviceStringPropertyValue(OutputDeviceInfo* outpu
     return OUT_GETPROPERTYRESULT_OK;
 }
 
-OUT_GETPROPERTYRESULT GetOutputDeviceIntPropertyValue(OutputDeviceInfo* outputDeviceInfo, CFStringRef propertyID, int* value)
+API_EXPORT OUT_GETPROPERTYRESULT GetOutputDeviceIntPropertyValue(OutputDeviceInfo* outputDeviceInfo, CFStringRef propertyID, int* value)
 {
     OSStatus status = MIDIObjectGetIntegerProperty(outputDeviceInfo->endpointRef, propertyID, value);
     if (status != noErr)
@@ -713,48 +746,48 @@ OUT_GETPROPERTYRESULT GetOutputDeviceIntPropertyValue(OutputDeviceInfo* outputDe
     return OUT_GETPROPERTYRESULT_OK;
 }
 
-OUT_GETPROPERTYRESULT GetOutputDeviceName(void* info, char** value)
+API_EXPORT OUT_GETPROPERTYRESULT GetOutputDeviceName(void* info, char** value)
 {
-    OutputDeviceInfo* outputDeviceInfo = (OutputDeviceInfo*)info;
+    OutputDeviceInfo* outputDeviceInfo = reinterpret_cast<OutputDeviceInfo*>(info);
     return GetOutputDeviceStringPropertyValue(outputDeviceInfo, kMIDIPropertyDisplayName, value);
 }
 
-OUT_GETPROPERTYRESULT GetOutputDeviceManufacturer(void* info, char** value)
+API_EXPORT OUT_GETPROPERTYRESULT GetOutputDeviceManufacturer(void* info, char** value)
 {
-    OutputDeviceInfo* outputDeviceInfo = (OutputDeviceInfo*)info;
+    OutputDeviceInfo* outputDeviceInfo = reinterpret_cast<OutputDeviceInfo*>(info);
     return GetOutputDeviceStringPropertyValue(outputDeviceInfo, kMIDIPropertyManufacturer, value);
 }
 
-OUT_GETPROPERTYRESULT GetOutputDeviceProduct(void* info, char** value)
+API_EXPORT OUT_GETPROPERTYRESULT GetOutputDeviceProduct(void* info, char** value)
 {
-    OutputDeviceInfo* outputDeviceInfo = (OutputDeviceInfo*)info;
+    OutputDeviceInfo* outputDeviceInfo = reinterpret_cast<OutputDeviceInfo*>(info);
     return GetOutputDeviceStringPropertyValue(outputDeviceInfo, kMIDIPropertyModel, value);
 }
 
-OUT_GETPROPERTYRESULT GetOutputDeviceDriverVersion(void* info, int* value)
+API_EXPORT OUT_GETPROPERTYRESULT GetOutputDeviceDriverVersion(void* info, int* value)
 {
-    OutputDeviceInfo* outputDeviceInfo = (OutputDeviceInfo*)info;
+    OutputDeviceInfo* outputDeviceInfo = reinterpret_cast<OutputDeviceInfo*>(info);
     return GetOutputDeviceIntPropertyValue(outputDeviceInfo, kMIDIPropertyDriverVersion, value);
 }
 
-OUT_GETPROPERTYRESULT GetOutputDeviceUniqueId(void* info, int* value)
+API_EXPORT OUT_GETPROPERTYRESULT GetOutputDeviceUniqueId(void* info, int* value)
 {
-    OutputDeviceInfo* outputDeviceInfo = (OutputDeviceInfo*)info;
+    OutputDeviceInfo* outputDeviceInfo = reinterpret_cast<OutputDeviceInfo*>(info);
     return GetOutputDeviceIntPropertyValue(outputDeviceInfo, kMIDIPropertyUniqueID, value);
 }
 
-OUT_GETPROPERTYRESULT GetOutputDeviceDriverOwner(void* info, char** value)
+API_EXPORT OUT_GETPROPERTYRESULT GetOutputDeviceDriverOwner(void* info, char** value)
 {
-    OutputDeviceInfo* outputDeviceInfo = (OutputDeviceInfo*)info;
+    OutputDeviceInfo* outputDeviceInfo = reinterpret_cast<OutputDeviceInfo*>(info);
     return GetOutputDeviceStringPropertyValue(outputDeviceInfo, kMIDIPropertyDriverOwner, value);
 }
 
-OUT_OPENRESULT OpenOutputDevice_Mac(void* info, void* sessionHandle, void** handle)
+API_EXPORT OUT_OPENRESULT OpenOutputDevice_Mac(void* info, void* sessionHandle, void** handle)
 {
-    OutputDeviceInfo* outputDeviceInfo = (OutputDeviceInfo*)info;
-    SessionHandle* pSessionHandle = (SessionHandle*)sessionHandle;
+    OutputDeviceInfo* outputDeviceInfo = reinterpret_cast<OutputDeviceInfo*>(info);
+    SessionHandle* pSessionHandle = reinterpret_cast<SessionHandle*>(sessionHandle);
 
-    OutputDeviceHandle* outputDeviceHandle = malloc(sizeof(OutputDeviceHandle));
+    OutputDeviceHandle* outputDeviceHandle = new OutputDeviceHandle();
     outputDeviceHandle->info = outputDeviceInfo;
 
     *handle = outputDeviceHandle;
@@ -763,6 +796,7 @@ OUT_OPENRESULT OpenOutputDevice_Mac(void* info, void* sessionHandle, void** hand
     OSStatus result = MIDIOutputPortCreate(pSessionHandle->clientRef, portNameRef, &outputDeviceHandle->portRef);
     if (result != noErr)
     {
+        delete outputDeviceHandle;
         switch (result)
         {
             case kMIDIInvalidClient: return OUT_OPENRESULT_INVALIDCLIENT;
@@ -776,42 +810,42 @@ OUT_OPENRESULT OpenOutputDevice_Mac(void* info, void* sessionHandle, void** hand
     return OUT_OPENRESULT_OK;
 }
 
-OUT_CLOSERESULT CloseOutputDevice(void* handle)
+API_EXPORT OUT_CLOSERESULT CloseOutputDevice(void* handle)
 {
-    OutputDeviceHandle* outputDeviceHandle = (OutputDeviceHandle*)handle;
+    OutputDeviceHandle* outputDeviceHandle = reinterpret_cast<OutputDeviceHandle*>(handle);
 
-    free(outputDeviceHandle->info);
-    free(outputDeviceHandle);
+    delete outputDeviceHandle->info;
+    delete outputDeviceHandle;
 
     return OUT_CLOSERESULT_OK;
 }
 
-OUT_SENDSHORTRESULT SendShortEventToOutputDevice(void* handle, int message)
+API_EXPORT OUT_SENDSHORTRESULT SendShortEventToOutputDevice(void* handle, int message)
 {
-    OutputDeviceHandle* outputDeviceHandle = (OutputDeviceHandle*)handle;
+    OutputDeviceHandle* outputDeviceHandle = reinterpret_cast<OutputDeviceHandle*>(handle);
 
     Byte data[3];
-    Byte statusByte = (Byte)(message & 0xFF);
+    Byte statusByte = static_cast<Byte>(message & 0xFF);
     data[0] = statusByte;
     ByteCount dataSize = 1;
 
     if (statusByte < 0xF8 && statusByte != 0xF6)
     {
-        data[1] = (Byte)((message >> 8) & 0xFF);
+        data[1] = static_cast<Byte>((message >> 8) & 0xFF);
         dataSize++;
 
-        Byte channelStatus = (Byte)(statusByte >> 4);
+        Byte channelStatus = static_cast<Byte>(statusByte >> 4);
         if (channelStatus == 0x8 || channelStatus == 0x9 || channelStatus == 0xA || channelStatus == 0xB || channelStatus == 0xE || statusByte == 0xF2)
         {
-            data[2] = (Byte)(message >> 16);
+            data[2] = static_cast<Byte>(message >> 16);
             dataSize++;
         }
     }
 
-    Byte buffer[dataSize + (sizeof(MIDIPacketList))];
-    MIDIPacketList* packetList = (MIDIPacketList*)buffer;
+    std::vector<Byte> bufferVec(static_cast<size_t>(dataSize) + sizeof(MIDIPacketList));
+    MIDIPacketList* packetList = reinterpret_cast<MIDIPacketList*>(bufferVec.data());
     MIDIPacket* packet = MIDIPacketListInit(packetList);
-    MIDIPacketListAdd(packetList, sizeof(buffer), packet, 0, dataSize, &data[0]);
+    MIDIPacketListAdd(packetList, static_cast<ByteCount>(bufferVec.size()), packet, 0, dataSize, &data[0]);
 
     OSStatus result = MIDISend(outputDeviceHandle->portRef, outputDeviceHandle->info->endpointRef, packetList);
     if (result != noErr)
@@ -834,14 +868,14 @@ OUT_SENDSHORTRESULT SendShortEventToOutputDevice(void* handle, int message)
     return OUT_SENDSHORTRESULT_OK;
 }
 
-OUT_SENDSYSEXRESULT SendSysExEventToOutputDevice_Mac(void* handle, Byte* data, ByteCount dataSize)
+API_EXPORT OUT_SENDSYSEXRESULT SendSysExEventToOutputDevice_Mac(void* handle, Byte* data, ByteCount dataSize)
 {
-    OutputDeviceHandle* outputDeviceHandle = (OutputDeviceHandle*)handle;
+    OutputDeviceHandle* outputDeviceHandle = reinterpret_cast<OutputDeviceHandle*>(handle);
 
-    Byte buffer[dataSize + (sizeof(MIDIPacketList))];
-    MIDIPacketList* packetList = (MIDIPacketList*)buffer;
+    std::vector<Byte> bufferVec(static_cast<size_t>(dataSize) + sizeof(MIDIPacketList));
+    MIDIPacketList* packetList = reinterpret_cast<MIDIPacketList*>(bufferVec.data());
     MIDIPacket* packet = MIDIPacketListInit(packetList);
-    MIDIPacketListAdd(packetList, sizeof(buffer), packet, 0, dataSize, &data[0]);
+    MIDIPacketListAdd(packetList, static_cast<ByteCount>(bufferVec.size()), packet, 0, dataSize, &data[0]);
 
     OSStatus result = MIDISend(outputDeviceHandle->portRef, outputDeviceHandle->info->endpointRef, packetList);
     if (result != noErr)
@@ -864,7 +898,7 @@ OUT_SENDSYSEXRESULT SendSysExEventToOutputDevice_Mac(void* handle, Byte* data, B
     return OUT_SENDSYSEXRESULT_OK;
 }
 
-char IsOutputDevicePropertySupported(OUT_PROPERTY property)
+API_EXPORT char IsOutputDevicePropertySupported(OUT_PROPERTY property)
 {
     switch (property)
     {
@@ -883,26 +917,30 @@ char IsOutputDevicePropertySupported(OUT_PROPERTY property)
  Virtual device
  ================================ */
 
-typedef struct
+struct VirtualDeviceInfo
 {
     InputDeviceInfo* inputDeviceInfo;
     OutputDeviceInfo* outputDeviceInfo;
     char* name;
-} VirtualDeviceInfo;
+};
 
-VIRTUAL_OPENRESULT OpenVirtualDevice_Mac(char* name, void* sessionHandle, MIDIReadProc callback, void** info)
+API_EXPORT VIRTUAL_OPENRESULT OpenVirtualDevice_Mac(char* name, void* sessionHandle, MIDIReadProc callback, void** info)
 {    
-    SessionHandle* pSessionHandle = (SessionHandle*)sessionHandle;
+    SessionHandle* pSessionHandle = reinterpret_cast<SessionHandle*>(sessionHandle);
     
-    VirtualDeviceInfo* virtualDeviceInfo = malloc(sizeof(VirtualDeviceInfo));
+    VirtualDeviceInfo* virtualDeviceInfo = new VirtualDeviceInfo();
     virtualDeviceInfo->name = name;
     
-    CFStringRef nameRef = CFStringCreateWithCString(NULL, name, kCFStringEncodingUTF8);
+    CFStringRef nameRef = CFStringCreateWithCString(nullptr, name, kCFStringEncodingUTF8);
     
     MIDIEndpointRef sourceRef;
     OSStatus status = MIDISourceCreate(pSessionHandle->clientRef, nameRef, &sourceRef);
+    if (nameRef)
+        CFRelease(nameRef);
+    
     if (status != noErr)
     {
+        delete virtualDeviceInfo;
         switch (status)
         {
             case kMIDIServerStartErr: return VIRTUAL_OPENRESULT_CREATESOURCE_SERVERSTARTERROR;
@@ -913,14 +951,20 @@ VIRTUAL_OPENRESULT OpenVirtualDevice_Mac(char* name, void* sessionHandle, MIDIRe
         return VIRTUAL_OPENRESULT_CREATESOURCE_UNKNOWNERROR;
     }
     
-    InputDeviceInfo* inputDeviceInfo = malloc(sizeof(InputDeviceInfo));
+    InputDeviceInfo* inputDeviceInfo = new InputDeviceInfo();
     inputDeviceInfo->endpointRef = sourceRef;
     virtualDeviceInfo->inputDeviceInfo = inputDeviceInfo;
     
+    CFStringRef nameRef2 = CFStringCreateWithCString(nullptr, name, kCFStringEncodingUTF8);
     MIDIEndpointRef destinationRef;
-    status = MIDIDestinationCreate(pSessionHandle->clientRef, nameRef, callback, inputDeviceInfo, &destinationRef);
+    status = MIDIDestinationCreate(pSessionHandle->clientRef, nameRef2, callback, inputDeviceInfo, &destinationRef);
+    if (nameRef2)
+        CFRelease(nameRef2);
+    
     if (status != noErr)
     {
+        delete inputDeviceInfo;
+        delete virtualDeviceInfo;
         switch (status)
         {
             case kMIDIServerStartErr: return VIRTUAL_OPENRESULT_CREATEDESTINATION_SERVERSTARTERROR;
@@ -931,7 +975,7 @@ VIRTUAL_OPENRESULT OpenVirtualDevice_Mac(char* name, void* sessionHandle, MIDIRe
         return VIRTUAL_OPENRESULT_CREATEDESTINATION_UNKNOWNERROR;
     }
     
-    OutputDeviceInfo* outputDeviceInfo = malloc(sizeof(OutputDeviceInfo));
+    OutputDeviceInfo* outputDeviceInfo = new OutputDeviceInfo();
     outputDeviceInfo->endpointRef = destinationRef;
     virtualDeviceInfo->outputDeviceInfo = outputDeviceInfo;
     
@@ -940,9 +984,9 @@ VIRTUAL_OPENRESULT OpenVirtualDevice_Mac(char* name, void* sessionHandle, MIDIRe
     return VIRTUAL_OPENRESULT_OK;
 }
 
-VIRTUAL_CLOSERESULT CloseVirtualDevice(void* info)
+API_EXPORT VIRTUAL_CLOSERESULT CloseVirtualDevice(void* info)
 {
-    VirtualDeviceInfo* virtualDeviceInfo = (VirtualDeviceInfo*)info;
+    VirtualDeviceInfo* virtualDeviceInfo = reinterpret_cast<VirtualDeviceInfo*>(info);
     
     OSStatus status = MIDIEndpointDispose(virtualDeviceInfo->inputDeviceInfo->endpointRef);
     if (status != noErr)
@@ -968,14 +1012,16 @@ VIRTUAL_CLOSERESULT CloseVirtualDevice(void* info)
         return VIRTUAL_CLOSERESULT_DISPOSEDESTINATION_UNKNOWNERROR;
     }
     
-    free(virtualDeviceInfo);
+    delete virtualDeviceInfo->inputDeviceInfo;
+    delete virtualDeviceInfo->outputDeviceInfo;
+    delete virtualDeviceInfo;
     
     return VIRTUAL_CLOSERESULT_OK;
 }
 
-VIRTUAL_SENDBACKRESULT SendDataBackFromVirtualDevice(const MIDIPacketList *pktlist, void *readProcRefCon)
+API_EXPORT VIRTUAL_SENDBACKRESULT SendDataBackFromVirtualDevice(const MIDIPacketList *pktlist, void *readProcRefCon)
 {
-    InputDeviceInfo* inputDeviceInfo = (InputDeviceInfo*)readProcRefCon;
+    InputDeviceInfo* inputDeviceInfo = reinterpret_cast<InputDeviceInfo*>(readProcRefCon);
     
     OSStatus status = MIDIReceived(inputDeviceInfo->endpointRef, pktlist);
     if (status != noErr)
@@ -996,14 +1042,14 @@ VIRTUAL_SENDBACKRESULT SendDataBackFromVirtualDevice(const MIDIPacketList *pktli
     return VIRTUAL_SENDBACKRESULT_OK;
 }
 
-void* GetInputDeviceInfoFromVirtualDevice(void* info)
+API_EXPORT void* GetInputDeviceInfoFromVirtualDevice(void* info)
 {
-    VirtualDeviceInfo* virtualDeviceInfo = (VirtualDeviceInfo*)info;
+    VirtualDeviceInfo* virtualDeviceInfo = reinterpret_cast<VirtualDeviceInfo*>(info);
     return virtualDeviceInfo->inputDeviceInfo;
 }
 
-void* GetOutputDeviceInfoFromVirtualDevice(void* info)
+API_EXPORT void* GetOutputDeviceInfoFromVirtualDevice(void* info)
 {
-    VirtualDeviceInfo* virtualDeviceInfo = (VirtualDeviceInfo*)info;
+    VirtualDeviceInfo* virtualDeviceInfo = reinterpret_cast<VirtualDeviceInfo*>(info);
     return virtualDeviceInfo->outputDeviceInfo;
 }

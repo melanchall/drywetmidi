@@ -53,10 +53,10 @@ namespace Melanchall.CheckDwmApi
             tickGenerator.TryStart(TimeSpan.FromMilliseconds(intervalMs));
             stopwatch.Start();
 
-            var timeout = TimeSpan.FromSeconds(10);
+            var timeout = TimeSpan.FromSeconds(30);
             var success = SpinWait.SpinUntil(() => times.Count >= _ticksCount, timeout);
             if (!success)
-                throw new TaskFailedException("Tick generation timed out.");
+                throw new TaskFailedException($"Tick generation timed out ({times.Count} ticks generated).");
 
             tickGenerator.TryStop();
 

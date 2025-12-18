@@ -1,21 +1,31 @@
 #pragma comment(lib, "winmm.lib")
 
+#ifndef NOMINMAX
+#define NOMINMAX
+#endif
+
 #include <windows.h>
 #include <mmsystem.h>
 #include <mmreg.h>
 
+#include <algorithm>
+#include <new>
+
 #include "NativeApi-Constants.h"
+
+#define API_EXPORT extern "C" __declspec(dllexport)
+#define API_CALL
 
 /* ================================
    Common
 ================================ */
 
-API_TYPE GetApiType()
+API_EXPORT API_TYPE API_CALL GetApiType()
 {
     return API_TYPE_WIN;
 }
 
-char CanCompareDevices()
+API_EXPORT char API_CALL CanCompareDevices()
 {
     return 0;
 }
@@ -35,30 +45,30 @@ typedef struct
     UINT timerId;
 } TickGeneratorInfo;
 
-TGSESSION_OPENRESULT OpenTickGeneratorSession(void** handle)
+API_EXPORT TGSESSION_OPENRESULT API_CALL OpenTickGeneratorSession(void** handle)
 {
-    TickGeneratorSessionHandle* sessionHandle = malloc(sizeof(TickGeneratorSessionHandle));
+    TickGeneratorSessionHandle* sessionHandle = new TickGeneratorSessionHandle();
     
     *handle = sessionHandle;
 
     return TGSESSION_OPENRESULT_OK;
 }
 
-TG_STARTRESULT StartHighPrecisionTickGenerator_Win(int interval, void* sessionHandle, LPTIMECALLBACK callback, TickGeneratorInfo** info)
+API_EXPORT TG_STARTRESULT API_CALL StartHighPrecisionTickGenerator_Win(int interval, void* sessionHandle, LPTIMECALLBACK callback, TickGeneratorInfo** info)
 {
     TIMECAPS tc;
     MMRESULT result = timeGetDevCaps(&tc, sizeof(TIMECAPS));
     if (result != TIMERR_NOERROR)
         return TG_STARTRESULT_CANTGETDEVICECAPABILITIES;
 
-    UINT wTimerRes = min(max(tc.wPeriodMin, interval), tc.wPeriodMax);
+    UINT wTimerRes = std::min(std::max(tc.wPeriodMin, (UINT)interval), tc.wPeriodMax);
 
     timeBeginPeriod(wTimerRes);
     result = timeSetEvent(interval, wTimerRes, callback, 0, TIME_PERIODIC);
     if (result == 0)
         return TG_STARTRESULT_CANTSETTIMERCALLBACK;
 
-    TickGeneratorInfo* tickGeneratorInfo = malloc(sizeof(TickGeneratorInfo));
+    TickGeneratorInfo* tickGeneratorInfo = new TickGeneratorInfo();
     tickGeneratorInfo->timerResolution = wTimerRes;
     tickGeneratorInfo->timerId = result;
     *info = tickGeneratorInfo;
@@ -66,7 +76,7 @@ TG_STARTRESULT StartHighPrecisionTickGenerator_Win(int interval, void* sessionHa
     return TG_STARTRESULT_OK;
 }
 
-TG_STOPRESULT StopHighPrecisionTickGenerator(TickGeneratorSessionHandle* sessionHandle, TickGeneratorInfo* info)
+API_EXPORT TG_STOPRESULT API_CALL StopHighPrecisionTickGenerator(TickGeneratorSessionHandle* sessionHandle, TickGeneratorInfo* info)
 {
     MMRESULT result = timeEndPeriod(info->timerResolution);
     if (result != TIMERR_NOERROR)
@@ -76,7 +86,7 @@ TG_STOPRESULT StopHighPrecisionTickGenerator(TickGeneratorSessionHandle* session
     if (result != TIMERR_NOERROR)
         return TG_STOPRESULT_CANTKILLEVENT;
 
-    free(info);
+    delete info;
 
     return TG_STOPRESULT_OK;
 }
@@ -97,7 +107,7 @@ typedef struct
     LPMIDIOUTCAPSA caps;
 } OutputDeviceInfo;
 
-char* GetDeviceManufacturer(WORD manufacturerId)
+API_EXPORT const char* API_CALL GetDeviceManufacturer(WORD manufacturerId)
 {
     // https://docs.microsoft.com/en-us/windows/win32/multimedia/manufacturer-identifiers
     switch (manufacturerId)
@@ -178,7 +188,7 @@ char* GetDeviceManufacturer(WORD manufacturerId)
     return "Unknown";
 }
 
-char* GetDeviceProduct(WORD productId)
+API_EXPORT const char* API_CALL GetDeviceProduct(WORD productId)
 {
     // https://docs.microsoft.com/en-us/windows/win32/multimedia/microsoft-corporation-product-identifiers
     switch (productId)
@@ -235,9 +245,9 @@ typedef struct
     char* name;
 } SessionHandle;
 
-SESSION_OPENRESULT OpenSession_Win(char* name, void** handle)
+API_EXPORT SESSION_OPENRESULT API_CALL OpenSession_Win(char* name, void** handle)
 {
-    SessionHandle* sessionHandle = malloc(sizeof(SessionHandle));
+    SessionHandle* sessionHandle = new SessionHandle();
     sessionHandle->name = name;
 
     *handle = sessionHandle;
@@ -245,10 +255,10 @@ SESSION_OPENRESULT OpenSession_Win(char* name, void** handle)
     return SESSION_OPENRESULT_OK;
 }
 
-SESSION_CLOSERESULT CloseSession(void* handle)
+API_EXPORT SESSION_CLOSERESULT API_CALL CloseSession(void* handle)
 {
     SessionHandle* sessionHandle = (SessionHandle*)handle;
-    // free(sessionHandle);
+    // delete sessionHandle; // caller owns or lifecycle managed elsewhere
     return SESSION_CLOSERESULT_OK;
 }
 
@@ -263,21 +273,25 @@ typedef struct
     LPMIDIHDR sysExHeader;
 } InputDeviceHandle;
 
-int GetInputDevicesCount()
+API_EXPORT int API_CALL GetInputDevicesCount()
 {
     return midiInGetNumDevs();
 }
 
-IN_GETINFORESULT GetInputDeviceInfo(int deviceIndex, void** info)
+API_EXPORT IN_GETINFORESULT API_CALL GetInputDeviceInfo(int deviceIndex, void** info)
 {
-    InputDeviceInfo* inputDeviceInfo = malloc(sizeof(InputDeviceInfo));
+    InputDeviceInfo* inputDeviceInfo = new InputDeviceInfo();
 
     inputDeviceInfo->deviceIndex = deviceIndex;
-    inputDeviceInfo->caps = malloc(sizeof(MIDIINCAPSA));
+    inputDeviceInfo->caps = new MIDIINCAPSA();
 
     MMRESULT result = midiInGetDevCapsA(deviceIndex, inputDeviceInfo->caps, sizeof(MIDIINCAPSA));
     if (result != MMSYSERR_NOERROR)
     {
+        // cleanup
+        delete inputDeviceInfo->caps;
+        delete inputDeviceInfo;
+
         switch (result)
         {
             case MMSYSERR_BADDEVICEID: return IN_GETINFORESULT_BADDEVICEID;
@@ -294,45 +308,45 @@ IN_GETINFORESULT GetInputDeviceInfo(int deviceIndex, void** info)
     return IN_GETINFORESULT_OK;
 }
 
-int GetInputDeviceHashCode(void* info)
+API_EXPORT int API_CALL GetInputDeviceHashCode(void* info)
 {
     return 0;
 }
 
-IN_GETPROPERTYRESULT GetInputDeviceName(void* info, char** value)
+API_EXPORT IN_GETPROPERTYRESULT API_CALL GetInputDeviceName(void* info, const char** value)
 {
     InputDeviceInfo* inputDeviceInfo = (InputDeviceInfo*)info;
     *value = inputDeviceInfo->caps->szPname;
     return IN_GETPROPERTYRESULT_OK;
 }
 
-IN_GETPROPERTYRESULT GetInputDeviceManufacturer(void* info, char** value)
+API_EXPORT IN_GETPROPERTYRESULT API_CALL GetInputDeviceManufacturer(void* info, const char** value)
 {
     InputDeviceInfo* inputDeviceInfo = (InputDeviceInfo*)info;
     *value = GetDeviceManufacturer(inputDeviceInfo->caps->wMid);
     return IN_GETPROPERTYRESULT_OK;
 }
 
-IN_GETPROPERTYRESULT GetInputDeviceProduct(void* info, char** value)
+API_EXPORT IN_GETPROPERTYRESULT API_CALL GetInputDeviceProduct(void* info, const char** value)
 {
     InputDeviceInfo* inputDeviceInfo = (InputDeviceInfo*)info;
     *value = GetDeviceProduct(inputDeviceInfo->caps->wPid);
     return IN_GETPROPERTYRESULT_OK;
 }
 
-IN_GETPROPERTYRESULT GetInputDeviceDriverVersion(void* info, int* value)
+API_EXPORT IN_GETPROPERTYRESULT API_CALL GetInputDeviceDriverVersion(void* info, int* value)
 {
     InputDeviceInfo* inputDeviceInfo = (InputDeviceInfo*)info;
     *value = inputDeviceInfo->caps->vDriverVersion;
     return IN_GETPROPERTYRESULT_OK;
 }
 
-IN_PREPARESYSEXBUFFERRESULT PrepareInputDeviceSysExBuffer(void* handle, int size)
+API_EXPORT IN_PREPARESYSEXBUFFERRESULT API_CALL PrepareInputDeviceSysExBuffer(void* handle, int size)
 {
     InputDeviceHandle* inputDeviceHandle = (InputDeviceHandle*)handle;
 
-    LPMIDIHDR header = malloc(sizeof(MIDIHDR));
-    header->lpData = malloc(size * sizeof(char));
+    LPMIDIHDR header = new MIDIHDR();
+    header->lpData = new char[size];
     header->dwBufferLength = size;
     header->dwFlags = 0;
     inputDeviceHandle->sysExHeader = header;
@@ -340,6 +354,10 @@ IN_PREPARESYSEXBUFFERRESULT PrepareInputDeviceSysExBuffer(void* handle, int size
     MMRESULT result = midiInPrepareHeader(inputDeviceHandle->handle, header, sizeof(MIDIHDR));
     if (result != MMSYSERR_NOERROR)
     {
+        // cleanup
+        delete [] reinterpret_cast<char*>(header->lpData);
+        delete header;
+
         switch (result)
         {
             case MMSYSERR_INVALHANDLE: return IN_PREPARESYSEXBUFFERRESULT_PREPAREBUFFER_INVALIDHANDLE;
@@ -353,6 +371,12 @@ IN_PREPARESYSEXBUFFERRESULT PrepareInputDeviceSysExBuffer(void* handle, int size
     result = midiInAddBuffer(inputDeviceHandle->handle, header, sizeof(MIDIHDR));
     if (result != MMSYSERR_NOERROR)
     {
+        // if adding buffer failed, unprepare header
+        midiInUnprepareHeader(inputDeviceHandle->handle, header, sizeof(MIDIHDR));
+        delete [] reinterpret_cast<char*>(header->lpData);
+        delete header;
+        inputDeviceHandle->sysExHeader = nullptr;
+
         switch (result)
         {
             case MIDIERR_STILLPLAYING: return IN_PREPARESYSEXBUFFERRESULT_ADDBUFFER_STILLPLAYING;
@@ -368,11 +392,11 @@ IN_PREPARESYSEXBUFFERRESULT PrepareInputDeviceSysExBuffer(void* handle, int size
     return IN_PREPARESYSEXBUFFERRESULT_OK;
 }
 
-IN_UNPREPARESYSEXBUFFERRESULT UnprepareInputDeviceSysExBuffer(void* handle)
+API_EXPORT IN_UNPREPARESYSEXBUFFERRESULT API_CALL UnprepareInputDeviceSysExBuffer(void* handle)
 {
     InputDeviceHandle* inputDeviceHandle = (InputDeviceHandle*)handle;
 
-    if (inputDeviceHandle->sysExHeader == NULL)
+    if (inputDeviceHandle->sysExHeader == nullptr)
         return IN_UNPREPARESYSEXBUFFERRESULT_OK;
 
     MMRESULT result = midiInUnprepareHeader(inputDeviceHandle->handle, inputDeviceHandle->sysExHeader, sizeof(MIDIHDR));
@@ -388,13 +412,14 @@ IN_UNPREPARESYSEXBUFFERRESULT UnprepareInputDeviceSysExBuffer(void* handle)
         return IN_UNPREPARESYSEXBUFFERRESULT_UNKNOWNERROR;
     }
 
-    free(inputDeviceHandle->sysExHeader->lpData);
-    free(inputDeviceHandle->sysExHeader);
+    delete [] reinterpret_cast<char*>(inputDeviceHandle->sysExHeader->lpData);
+    delete inputDeviceHandle->sysExHeader;
+    inputDeviceHandle->sysExHeader = nullptr;
 
     return IN_UNPREPARESYSEXBUFFERRESULT_OK;
 }
 
-IN_RENEWSYSEXBUFFERRESULT RenewInputDeviceSysExBuffer(void* handle, int size)
+API_EXPORT IN_RENEWSYSEXBUFFERRESULT API_CALL RenewInputDeviceSysExBuffer(void* handle, int size)
 {
     IN_UNPREPARESYSEXBUFFERRESULT unprepareResult = UnprepareInputDeviceSysExBuffer(handle);
     if (unprepareResult != IN_UNPREPARESYSEXBUFFERRESULT_OK)
@@ -429,17 +454,20 @@ IN_RENEWSYSEXBUFFERRESULT RenewInputDeviceSysExBuffer(void* handle, int size)
     return IN_RENEWSYSEXBUFFERRESULT_OK;
 }
 
-IN_OPENRESULT OpenInputDevice_Win(void* info, void* sessionHandle, DWORD_PTR callback, int sysExBufferSize, void** handle)
+API_EXPORT IN_OPENRESULT API_CALL OpenInputDevice_Win(void* info, void* sessionHandle, DWORD_PTR callback, int sysExBufferSize, void** handle)
 {
     InputDeviceInfo* inputDeviceInfo = (InputDeviceInfo*)info;
 
-    InputDeviceHandle* inputDeviceHandle = malloc(sizeof(InputDeviceHandle));
+    InputDeviceHandle* inputDeviceHandle = new InputDeviceHandle();
     inputDeviceHandle->info = inputDeviceInfo;
+    inputDeviceHandle->sysExHeader = nullptr;
 
     HMIDIIN inHandle;
     MMRESULT result = midiInOpen(&inHandle, inputDeviceInfo->deviceIndex, callback, 0, CALLBACK_FUNCTION);
     if (result != MMSYSERR_NOERROR)
     {
+        delete inputDeviceHandle;
+
         switch (result)
         {
             case MMSYSERR_ALLOCATED: return IN_OPENRESULT_ALLOCATED;
@@ -457,6 +485,10 @@ IN_OPENRESULT OpenInputDevice_Win(void* info, void* sessionHandle, DWORD_PTR cal
     IN_PREPARESYSEXBUFFERRESULT prepareBufferResult = PrepareInputDeviceSysExBuffer(inputDeviceHandle, sysExBufferSize);
     if (prepareBufferResult != IN_PREPARESYSEXBUFFERRESULT_OK)
     {
+        // on failure, close handle
+        midiInClose(inputDeviceHandle->handle);
+        delete inputDeviceHandle;
+
         switch (prepareBufferResult)
         {
             case IN_PREPARESYSEXBUFFERRESULT_PREPAREBUFFER_NOMEMORY: return IN_OPENRESULT_PREPAREBUFFER_NOMEMORY;
@@ -476,7 +508,7 @@ IN_OPENRESULT OpenInputDevice_Win(void* info, void* sessionHandle, DWORD_PTR cal
     return IN_OPENRESULT_OK;
 }
 
-IN_CLOSERESULT CloseInputDevice(void* handle)
+API_EXPORT IN_CLOSERESULT API_CALL CloseInputDevice(void* handle)
 {
     InputDeviceHandle* inputDeviceHandle = (InputDeviceHandle*)handle;
 
@@ -492,7 +524,7 @@ IN_CLOSERESULT CloseInputDevice(void* handle)
     IN_UNPREPARESYSEXBUFFERRESULT unprepareBufferResult = UnprepareInputDeviceSysExBuffer(inputDeviceHandle);
     if (unprepareBufferResult != IN_UNPREPARESYSEXBUFFERRESULT_OK)
     {
-        switch (result)
+        switch (unprepareBufferResult)
         {
             case IN_UNPREPARESYSEXBUFFERRESULT_STILLPLAYING: return IN_CLOSERESULT_UNPREPAREBUFFER_STILLPLAYING;
             case IN_UNPREPARESYSEXBUFFERRESULT_INVALIDSTRUCTURE: return IN_CLOSERESULT_UNPREPAREBUFFER_INVALIDSTRUCTURE;
@@ -514,13 +546,18 @@ IN_CLOSERESULT CloseInputDevice(void* handle)
         return IN_CLOSERESULT_CLOSE_UNKNOWNERROR;
     }
 
-    free(inputDeviceHandle->info);
-    free(inputDeviceHandle);
+    // free allocated info
+    if (inputDeviceHandle->info)
+    {
+        delete inputDeviceHandle->info->caps;
+        delete inputDeviceHandle->info;
+    }
+    delete inputDeviceHandle;
 
     return IN_CLOSERESULT_OK;
 }
 
-IN_CONNECTRESULT ConnectToInputDevice(void* handle)
+API_EXPORT IN_CONNECTRESULT API_CALL ConnectToInputDevice(void* handle)
 {
     InputDeviceHandle* inputDeviceHandle = (InputDeviceHandle*)handle;
 
@@ -538,7 +575,7 @@ IN_CONNECTRESULT ConnectToInputDevice(void* handle)
     return IN_CONNECTRESULT_OK;
 }
 
-IN_DISCONNECTRESULT DisconnectFromInputDevice(void* handle)
+API_EXPORT IN_DISCONNECTRESULT API_CALL DisconnectFromInputDevice(void* handle)
 {
     InputDeviceHandle* inputDeviceHandle = (InputDeviceHandle*)handle;
 
@@ -556,7 +593,7 @@ IN_DISCONNECTRESULT DisconnectFromInputDevice(void* handle)
     return IN_DISCONNECTRESULT_OK;
 }
 
-IN_GETSYSEXDATARESULT GetInputDeviceSysExBufferData(LPMIDIHDR header, LPSTR* data, int* size)
+API_EXPORT IN_GETSYSEXDATARESULT API_CALL GetInputDeviceSysExBufferData(LPMIDIHDR header, LPSTR* data, int* size)
 {
     *data = header->lpData;
     *size = header->dwBytesRecorded;
@@ -564,7 +601,7 @@ IN_GETSYSEXDATARESULT GetInputDeviceSysExBufferData(LPMIDIHDR header, LPSTR* dat
     return IN_GETSYSEXDATARESULT_OK;
 }
 
-char IsInputDevicePropertySupported(IN_PROPERTY property)
+API_EXPORT char API_CALL IsInputDevicePropertySupported(IN_PROPERTY property)
 {
     switch (property)
     {
@@ -587,21 +624,24 @@ typedef struct
     HMIDIOUT handle;
 } OutputDeviceHandle;
 
-int GetOutputDevicesCount()
+API_EXPORT int API_CALL GetOutputDevicesCount()
 {
     return midiOutGetNumDevs();
 }
 
-OUT_GETINFORESULT GetOutputDeviceInfo(int deviceIndex, void** info)
+API_EXPORT OUT_GETINFORESULT API_CALL GetOutputDeviceInfo(int deviceIndex, void** info)
 {
-    OutputDeviceInfo* outputDeviceInfo = malloc(sizeof(OutputDeviceInfo));
+    OutputDeviceInfo* outputDeviceInfo = new OutputDeviceInfo();
 
     outputDeviceInfo->deviceIndex = deviceIndex;
-    outputDeviceInfo->caps = malloc(sizeof(MIDIOUTCAPSA));
+    outputDeviceInfo->caps = new MIDIOUTCAPSA();
 
     MMRESULT result = midiOutGetDevCapsA(deviceIndex, outputDeviceInfo->caps, sizeof(MIDIOUTCAPSA));
     if (result != MMSYSERR_NOERROR)
     {
+        delete outputDeviceInfo->caps;
+        delete outputDeviceInfo;
+
         switch (result)
         {
             case MMSYSERR_BADDEVICEID: return OUT_GETINFORESULT_BADDEVICEID;
@@ -618,40 +658,40 @@ OUT_GETINFORESULT GetOutputDeviceInfo(int deviceIndex, void** info)
     return OUT_GETINFORESULT_OK;
 }
 
-int GetOutputDeviceHashCode(void* info)
+API_EXPORT int API_CALL GetOutputDeviceHashCode(void* info)
 {
     return 0;
 }
 
-OUT_GETPROPERTYRESULT GetOutputDeviceName(void* info, char** value)
+API_EXPORT OUT_GETPROPERTYRESULT API_CALL GetOutputDeviceName(void* info, const char** value)
 {
     OutputDeviceInfo* outputDeviceInfo = (OutputDeviceInfo*)info;
     *value = outputDeviceInfo->caps->szPname;
     return OUT_GETPROPERTYRESULT_OK;
 }
 
-OUT_GETPROPERTYRESULT GetOutputDeviceManufacturer(void* info, char** value)
+API_EXPORT OUT_GETPROPERTYRESULT API_CALL GetOutputDeviceManufacturer(void* info, const char** value)
 {
     OutputDeviceInfo* outputDeviceInfo = (OutputDeviceInfo*)info;
     *value = GetDeviceManufacturer(outputDeviceInfo->caps->wMid);
     return OUT_GETPROPERTYRESULT_OK;
 }
 
-OUT_GETPROPERTYRESULT GetOutputDeviceProduct(void* info, char** value)
+API_EXPORT OUT_GETPROPERTYRESULT API_CALL GetOutputDeviceProduct(void* info, const char** value)
 {
     OutputDeviceInfo* outputDeviceInfo = (OutputDeviceInfo*)info;
     *value = GetDeviceProduct(outputDeviceInfo->caps->wPid);
     return OUT_GETPROPERTYRESULT_OK;
 }
 
-OUT_GETPROPERTYRESULT GetOutputDeviceDriverVersion(void* info, int* value)
+API_EXPORT OUT_GETPROPERTYRESULT API_CALL GetOutputDeviceDriverVersion(void* info, int* value)
 {
     OutputDeviceInfo* outputDeviceInfo = (OutputDeviceInfo*)info;
     *value = outputDeviceInfo->caps->vDriverVersion;
     return OUT_GETPROPERTYRESULT_OK;
 }
 
-OUT_GETPROPERTYRESULT GetOutputDeviceTechnology(void* info, OUT_TECHNOLOGY* value)
+API_EXPORT OUT_GETPROPERTYRESULT API_CALL GetOutputDeviceTechnology(void* info, OUT_TECHNOLOGY* value)
 {
     OutputDeviceInfo* outputDeviceInfo = (OutputDeviceInfo*)info;
     
@@ -685,28 +725,28 @@ OUT_GETPROPERTYRESULT GetOutputDeviceTechnology(void* info, OUT_TECHNOLOGY* valu
     return OUT_GETPROPERTYRESULT_OK;
 }
 
-OUT_GETPROPERTYRESULT GetOutputDeviceVoicesNumber(void* info, int* value)
+API_EXPORT OUT_GETPROPERTYRESULT API_CALL GetOutputDeviceVoicesNumber(void* info, int* value)
 {
     OutputDeviceInfo* outputDeviceInfo = (OutputDeviceInfo*)info;
     *value = outputDeviceInfo->caps->wVoices;
     return OUT_GETPROPERTYRESULT_OK;
 }
 
-OUT_GETPROPERTYRESULT GetOutputDeviceNotesNumber(void* info, int* value)
+API_EXPORT OUT_GETPROPERTYRESULT API_CALL GetOutputDeviceNotesNumber(void* info, int* value)
 {
     OutputDeviceInfo* outputDeviceInfo = (OutputDeviceInfo*)info;
     *value = outputDeviceInfo->caps->wNotes;
     return OUT_GETPROPERTYRESULT_OK;
 }
 
-OUT_GETPROPERTYRESULT GetOutputDeviceChannelsMask(void* info, int* value)
+API_EXPORT OUT_GETPROPERTYRESULT API_CALL GetOutputDeviceChannelsMask(void* info, int* value)
 {
     OutputDeviceInfo* outputDeviceInfo = (OutputDeviceInfo*)info;
     *value = outputDeviceInfo->caps->wChannelMask;
     return OUT_GETPROPERTYRESULT_OK;
 }
 
-OUT_GETPROPERTYRESULT GetOutputDeviceOptions(void* info, OUT_OPTION* value)
+API_EXPORT OUT_GETPROPERTYRESULT API_CALL GetOutputDeviceOptions(void* info, OUT_OPTION* value)
 {
     OutputDeviceInfo* outputDeviceInfo = (OutputDeviceInfo*)info;
     
@@ -727,17 +767,19 @@ OUT_GETPROPERTYRESULT GetOutputDeviceOptions(void* info, OUT_OPTION* value)
     return OUT_GETPROPERTYRESULT_OK;
 }
 
-OUT_OPENRESULT OpenOutputDevice_Win(void* info, void* sessionHandle, DWORD_PTR callback, void** handle)
+API_EXPORT OUT_OPENRESULT API_CALL OpenOutputDevice_Win(void* info, void* sessionHandle, DWORD_PTR callback, void** handle)
 {
     OutputDeviceInfo* outputDeviceInfo = (OutputDeviceInfo*)info;
 
-    OutputDeviceHandle* outputDeviceHandle = malloc(sizeof(OutputDeviceHandle));
+    OutputDeviceHandle* outputDeviceHandle = new OutputDeviceHandle();
     outputDeviceHandle->info = outputDeviceInfo;
 
     HMIDIOUT outHandle;
     MMRESULT result = midiOutOpen(&outHandle, outputDeviceInfo->deviceIndex, callback, 0, CALLBACK_FUNCTION);
     if (result != MMSYSERR_NOERROR)
     {
+        delete outputDeviceHandle;
+
         switch (result)
         {
             case MMSYSERR_ALLOCATED: return OUT_OPENRESULT_ALLOCATED;
@@ -757,7 +799,7 @@ OUT_OPENRESULT OpenOutputDevice_Win(void* info, void* sessionHandle, DWORD_PTR c
     return OUT_OPENRESULT_OK;
 }
 
-OUT_CLOSERESULT CloseOutputDevice(void* handle)
+API_EXPORT OUT_CLOSERESULT API_CALL CloseOutputDevice(void* handle)
 {
     OutputDeviceHandle* outputDeviceHandle = (OutputDeviceHandle*)handle;
 
@@ -785,13 +827,17 @@ OUT_CLOSERESULT CloseOutputDevice(void* handle)
         return OUT_CLOSERESULT_CLOSE_UNKNOWNERROR;
     }
 
-    free(outputDeviceHandle->info);
-    free(outputDeviceHandle);
+    if (outputDeviceHandle->info)
+    {
+        delete outputDeviceHandle->info->caps;
+        delete outputDeviceHandle->info;
+    }
+    delete outputDeviceHandle;
 
     return OUT_CLOSERESULT_OK;
 }
 
-OUT_SENDSHORTRESULT SendShortEventToOutputDevice(void* handle, int message)
+API_EXPORT OUT_SENDSHORTRESULT API_CALL SendShortEventToOutputDevice(void* handle, int message)
 {
     OutputDeviceHandle* outputDeviceHandle = (OutputDeviceHandle*)handle;
 
@@ -811,11 +857,11 @@ OUT_SENDSHORTRESULT SendShortEventToOutputDevice(void* handle, int message)
     return OUT_SENDSHORTRESULT_OK;
 }
 
-OUT_SENDSYSEXRESULT SendSysExEventToOutputDevice_Win(void* handle, LPSTR data, int size)
+API_EXPORT OUT_SENDSYSEXRESULT API_CALL SendSysExEventToOutputDevice_Win(void* handle, LPSTR data, int size)
 {
     OutputDeviceHandle* outputDeviceHandle = (OutputDeviceHandle*)handle;
 
-    LPMIDIHDR header = malloc(sizeof(MIDIHDR));
+    LPMIDIHDR header = new MIDIHDR();
     header->lpData = data;
     header->dwBufferLength = size;
     header->dwBytesRecorded = size;
@@ -824,6 +870,8 @@ OUT_SENDSYSEXRESULT SendSysExEventToOutputDevice_Win(void* handle, LPSTR data, i
     MMRESULT result = midiOutPrepareHeader(outputDeviceHandle->handle, header, sizeof(MIDIHDR));
     if (result != MMSYSERR_NOERROR)
     {
+        delete header;
+
         switch (result)
         {
             case MMSYSERR_INVALHANDLE: return OUT_SENDSYSEXRESULT_PREPAREBUFFER_INVALIDHANDLE;
@@ -837,6 +885,10 @@ OUT_SENDSYSEXRESULT SendSysExEventToOutputDevice_Win(void* handle, LPSTR data, i
     result = midiOutLongMsg(outputDeviceHandle->handle, header, sizeof(MIDIHDR));
     if (result != MMSYSERR_NOERROR)
     {
+        // attempt to unprepare if needed
+        midiOutUnprepareHeader(outputDeviceHandle->handle, header, sizeof(MIDIHDR));
+        delete header;
+
         switch (result)
         {
             case MIDIERR_NOTREADY: return OUT_SENDSYSEXRESULT_NOTREADY;
@@ -851,7 +903,7 @@ OUT_SENDSYSEXRESULT SendSysExEventToOutputDevice_Win(void* handle, LPSTR data, i
     return OUT_SENDSYSEXRESULT_OK;
 }
 
-OUT_GETSYSEXDATARESULT GetOutputDeviceSysExBufferData(void* handle, LPMIDIHDR header, LPSTR* data, int* size)
+API_EXPORT OUT_GETSYSEXDATARESULT API_CALL GetOutputDeviceSysExBufferData(void* handle, LPMIDIHDR header, LPSTR* data, int* size)
 {
     OutputDeviceHandle* outputDeviceHandle = (OutputDeviceHandle*)handle;
 
@@ -871,11 +923,11 @@ OUT_GETSYSEXDATARESULT GetOutputDeviceSysExBufferData(void* handle, LPMIDIHDR he
     *data = header->lpData;
     *size = header->dwBytesRecorded;
 
-    free(header);
+    delete header;
     return OUT_GETSYSEXDATARESULT_OK;
 }
 
-char IsOutputDevicePropertySupported(OUT_PROPERTY property)
+API_EXPORT char API_CALL IsOutputDevicePropertySupported(OUT_PROPERTY property)
 {
     switch (property)
     {

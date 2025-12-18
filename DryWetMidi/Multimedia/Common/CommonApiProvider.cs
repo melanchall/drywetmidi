@@ -1,15 +1,7 @@
-﻿using System;
-
-namespace Melanchall.DryWetMidi.Multimedia
+﻿namespace Melanchall.DryWetMidi.Multimedia
 {
     internal static class CommonApiProvider
     {
-        #region Constants
-
-        private static readonly bool Is64Bit = IntPtr.Size == 8;
-
-        #endregion
-
         #region Fields
 
         private static CommonApi _api;
@@ -23,7 +15,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             get
             {
                 if (_api == null)
-                    _api = Is64Bit ? (CommonApi)new CommonApi64() : new CommonApi32();
+                    _api = new CommonApi64();
 
                 return _api;
             }

@@ -13,8 +13,10 @@ stages:
         targetType: 'inline'
         script: |
           cd Resources\Native
-          gcc -c NativeApi-Windows.c -lwinmm
-          gcc -shared -o Melanchall_DryWetMidi_Native64.dll NativeApi-Windows.o -lwinmm
+          Write-Host "Step 1"
+          gcc -c NativeApi-Windows.cpp -lwinmm -lstdc++
+          Write-Host "Step 2"
+          gcc -shared -o Melanchall_DryWetMidi_Native64.dll NativeApi-Windows.o -lwinmm -lstdc++
     - task: PublishPipelineArtifact@1
       displayName: 'Publish dll artifact'
       inputs:
@@ -33,9 +35,9 @@ stages:
         script: |
           cd Resources/Native
           Write-Host "Building arm64 dylib..."
-          clang -shared -undefined dynamic_lookup -o Melanchall_DryWetMidi_Native64_arm64.dylib NativeApi-macOS.c -framework CoreServices -framework CoreFoundation -framework CoreMIDI -arch arm64
+          clang -shared -undefined dynamic_lookup -o Melanchall_DryWetMidi_Native64_arm64.dylib NativeApi-macOS.cpp -framework CoreServices -framework CoreFoundation -framework CoreMIDI -arch arm64
           Write-Host "Building x86_64 dylib..."
-          clang -shared -undefined dynamic_lookup -o Melanchall_DryWetMidi_Native64_x86_64.dylib NativeApi-macOS.c -framework CoreServices -framework CoreFoundation -framework CoreMIDI -arch x86_64
+          clang -shared -undefined dynamic_lookup -o Melanchall_DryWetMidi_Native64_x86_64.dylib NativeApi-macOS.cpp -framework CoreServices -framework CoreFoundation -framework CoreMIDI -arch x86_64
           Write-Host "Merging dylibs into single unversal one..."
           lipo Melanchall_DryWetMidi_Native64_x86_64.dylib Melanchall_DryWetMidi_Native64_arm64.dylib -output Melanchall_DryWetMidi_Native64.dylib -create
           lipo -info Melanchall_DryWetMidi_Native64.dylib
@@ -68,8 +70,10 @@ stages:
           $gccPath = Get-ChildItem -Path "winlibs" -File -Filter "i686-w64-mingw32-gcc.exe" -Recurse
           
           cd Resources\Native
-          & $gccPath.FullName -c NativeApi-Windows.c -m32 -lwinmm
-          & $gccPath.FullName -shared -o Melanchall_DryWetMidi_Native32.dll NativeApi-Windows.o -m32 -lwinmm
+          Write-Host "Step 1"
+          & $gccPath.FullName -c NativeApi-Windows.cpp -m32 -lwinmm -lstdc++
+          Write-Host "Step 2"
+          & $gccPath.FullName -shared -o Melanchall_DryWetMidi_Native32.dll NativeApi-Windows.o -m32 -lwinmm -lstdc++
           Write-Host "Built."
     - task: PublishPipelineArtifact@1
       displayName: 'Publish dll artifact'

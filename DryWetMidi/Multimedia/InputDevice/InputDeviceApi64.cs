@@ -13,61 +13,61 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         #region Extern functions
 
-        [DllImport(LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.StdCall)]
         private static extern int GetInputDevicesCount();
 
-        [DllImport(LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.StdCall)]
         private static extern IN_GETINFORESULT GetInputDeviceInfo(int deviceIndex, out IntPtr info);
 
-        [DllImport(LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.StdCall)]
         private static extern int GetInputDeviceHashCode(IntPtr info);
 
-        [DllImport(LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.StdCall)]
         private static extern bool AreInputDevicesEqual(IntPtr info1, IntPtr info2);
 
-        [DllImport(LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.StdCall)]
         private static extern IN_GETPROPERTYRESULT GetInputDeviceName(IntPtr info, out IntPtr value);
 
-        [DllImport(LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.StdCall)]
         private static extern IN_GETPROPERTYRESULT GetInputDeviceManufacturer(IntPtr info, out IntPtr value);
 
-        [DllImport(LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.StdCall)]
         private static extern IN_GETPROPERTYRESULT GetInputDeviceProduct(IntPtr info, out IntPtr value);
 
-        [DllImport(LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.StdCall)]
         private static extern IN_GETPROPERTYRESULT GetInputDeviceDriverVersion(IntPtr info, out int value);
 
-        [DllImport(LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.StdCall)]
         private static extern IN_OPENRESULT OpenInputDevice_Win(IntPtr info, IntPtr sessionHandle, Callback_Win callback, int sysExBufferSize, out IntPtr handle);
 
-        [DllImport(LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.StdCall)]
         private static extern IN_OPENRESULT OpenInputDevice_Mac(IntPtr info, IntPtr sessionHandle, Callback_Mac callback, out IntPtr handle);
 
-        [DllImport(LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.StdCall)]
         private static extern IN_CLOSERESULT CloseInputDevice(IntPtr handle);
 
-        [DllImport(LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.StdCall)]
         private static extern IN_RENEWSYSEXBUFFERRESULT RenewInputDeviceSysExBuffer(IntPtr handle, int size);
 
-        [DllImport(LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.StdCall)]
         private static extern IN_CONNECTRESULT ConnectToInputDevice(IntPtr handle);
 
-        [DllImport(LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.StdCall)]
         private static extern IN_DISCONNECTRESULT DisconnectFromInputDevice(IntPtr handle);
 
-        [DllImport(LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.StdCall)]
         private static extern IN_GETEVENTDATARESULT GetEventDataFromInputDevice(IntPtr packetList, int packetIndex, out IntPtr data, out int length, out int packetsCount);
 
-        [DllImport(LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.StdCall)]
         private static extern IN_GETSYSEXDATARESULT GetInputDeviceSysExBufferData(IntPtr header, out IntPtr data, out int size);
 
-        [DllImport(LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.StdCall)]
         private static extern bool IsInputDevicePropertySupported(InputDeviceProperty property);
 
-        [DllImport(LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.StdCall)]
         private static extern IN_GETPROPERTYRESULT GetInputDeviceUniqueId(IntPtr info, out int value);
 
-        [DllImport(LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.StdCall)]
         private static extern IN_GETPROPERTYRESULT GetInputDeviceDriverOwner(IntPtr info, out IntPtr value);
 
         #endregion
