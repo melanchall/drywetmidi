@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Melanchall.DryWetMidi.Common;
+using System;
 using System.Runtime.Serialization;
-using Melanchall.DryWetMidi.Common;
 
 namespace Melanchall.DryWetMidi.Multimedia
 {
@@ -42,22 +42,31 @@ namespace Melanchall.DryWetMidi.Multimedia
         {
         }
 
+        // TODO: remove
+        public MidiDeviceException(string message, int mainErrorCode)
+            : this(message)
+        {
+            MainErrorCode = mainErrorCode;
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="MidiDeviceException"/> class with the
         /// specified error message and an error code.
         /// </summary>
         /// <param name="message">The error message that explains the reason for the exception.</param>
-        /// <param name="errorCode">The error code.</param>
-        public MidiDeviceException(string message, int errorCode)
+        /// <param name="mainErrorCode">The error code.</param>
+        public MidiDeviceException(string message, int mainErrorCode, int additionalErrorCode)
             : this(message)
         {
-            ErrorCode = errorCode;
+            MainErrorCode = mainErrorCode;
+            AdditionalErrorCode = additionalErrorCode;
         }
 
         private MidiDeviceException(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
-            ErrorCode = (int?)info.GetValue(nameof(ErrorCode), typeof(int?));
+            MainErrorCode = (int?)info.GetValue(nameof(MainErrorCode), typeof(int?));
+            AdditionalErrorCode = (int?)info.GetValue(nameof(AdditionalErrorCode), typeof(int?));
         }
 
         #endregion
@@ -67,7 +76,9 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <summary>
         /// Gets the code of an error represented by the current <see cref="MidiDeviceException"/>.
         /// </summary>
-        public int? ErrorCode { get; }
+        public int? MainErrorCode { get; }
+
+        public int? AdditionalErrorCode { get; }
 
         #endregion
 
@@ -85,7 +96,8 @@ namespace Melanchall.DryWetMidi.Multimedia
         {
             base.GetObjectData(info, context);
 
-            info.AddValue(nameof(ErrorCode), ErrorCode);
+            info.AddValue(nameof(MainErrorCode), MainErrorCode);
+            info.AddValue(nameof(AdditionalErrorCode), AdditionalErrorCode);
         }
 
         #endregion

@@ -55,6 +55,10 @@ typedef int TG_STOPRESULT;
    Input device
 ================================ */
 
+typedef int IN_GETCOUNTRESULT;
+
+#define IN_GETCOUNTRESULT_OK 0
+
 typedef int IN_GETINFORESULT;
 
 #define IN_GETINFORESULT_OK 0
@@ -100,6 +104,7 @@ typedef int IN_CLOSERESULT;
 #define IN_CLOSERESULT_OK 0
 
 #define IN_CLOSERESULT_RESET_INVALIDHANDLE 1
+#define IN_CLOSERESULT_RESET_UNKNOWNERROR 3000
 
 #define IN_CLOSERESULT_CLOSE_STILLPLAYING 2
 #define IN_CLOSERESULT_CLOSE_INVALIDHANDLE 3
@@ -212,6 +217,10 @@ typedef int IN_GETPROPERTYRESULT;
 /* ================================
    Output device
 ================================ */
+
+typedef int OUT_GETCOUNTRESULT;
+
+#define OUT_GETCOUNTRESULT_OK 0
 
 typedef int OUT_GETINFORESULT;
 

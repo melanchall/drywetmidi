@@ -1,10 +1,16 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 
 namespace Melanchall.DryWetMidi.Multimedia
 {
-    internal abstract class OutputDeviceApi : NativeApi
+    internal static class OutputDeviceApi
     {
         #region Nested enums
+
+        public enum OUT_GETCOUNTRESULT
+        {
+            OUT_GETCOUNTRESULT_OK = 0
+        }
 
         public enum OUT_GETINFORESULT
         {
@@ -12,7 +18,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             OUT_GETINFORESULT_BADDEVICEID = 1,
             OUT_GETINFORESULT_INVALIDSTRUCTURE = 2,
             OUT_GETINFORESULT_NODRIVER = 3,
-            [NativeErrorType(NativeErrorType.NoMemory)]
+            [NativeApi.NativeErrorType(NativeApi.NativeErrorType.NoMemory)]
             OUT_GETINFORESULT_NOMEMORY = 4,
             OUT_GETINFORESULT_UNKNOWNERROR = 1000
         }
@@ -20,17 +26,17 @@ namespace Melanchall.DryWetMidi.Multimedia
         public enum OUT_OPENRESULT
         {
             OUT_OPENRESULT_OK = 0,
-            [NativeErrorType(NativeErrorType.InUse)]
+            [NativeApi.NativeErrorType(NativeApi.NativeErrorType.InUse)]
             OUT_OPENRESULT_ALLOCATED = 1,
             OUT_OPENRESULT_BADDEVICEID = 2,
             OUT_OPENRESULT_INVALIDFLAG = 3,
             OUT_OPENRESULT_INVALIDSTRUCTURE = 4,
-            [NativeErrorType(NativeErrorType.NoMemory)]
+            [NativeApi.NativeErrorType(NativeApi.NativeErrorType.NoMemory)]
             OUT_OPENRESULT_NOMEMORY = 5,
             OUT_OPENRESULT_INVALIDCLIENT = 101,
             OUT_OPENRESULT_INVALIDPORT = 102,
             OUT_OPENRESULT_WRONGTHREAD = 103,
-            [NativeErrorType(NativeErrorType.NotPermitted)]
+            [NativeApi.NativeErrorType(NativeApi.NativeErrorType.NotPermitted)]
             OUT_OPENRESULT_NOTPERMITTED = 104,
             OUT_OPENRESULT_UNKNOWNERROR = 105
         }
@@ -42,7 +48,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             OUT_CLOSERESULT_RESET_UNKNOWNERROR = 1000,
             OUT_CLOSERESULT_CLOSE_STILLPLAYING = 2,
             OUT_CLOSERESULT_CLOSE_INVALIDHANDLE = 3,
-            [NativeErrorType(NativeErrorType.NoMemory)]
+            [NativeApi.NativeErrorType(NativeApi.NativeErrorType.NoMemory)]
             OUT_CLOSERESULT_CLOSE_NOMEMORY = 4,
             OUT_CLOSERESULT_CLOSE_UNKNOWNERROR = 2000
         }
@@ -51,7 +57,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         {
             OUT_SENDSHORTRESULT_OK = 0,
             OUT_SENDSHORTRESULT_BADOPENMODE = 1,
-            [NativeErrorType(NativeErrorType.Busy)]
+            [NativeApi.NativeErrorType(NativeApi.NativeErrorType.Busy)]
             OUT_SENDSHORTRESULT_NOTREADY = 2,
             OUT_SENDSHORTRESULT_INVALIDHANDLE = 3,
             OUT_SENDSHORTRESULT_INVALIDCLIENT = 101,
@@ -61,7 +67,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             OUT_SENDSHORTRESULT_COMMUNICATIONERROR = 105,
             OUT_SENDSHORTRESULT_SERVERSTARTERROR = 106,
             OUT_SENDSHORTRESULT_WRONGTHREAD = 107,
-            [NativeErrorType(NativeErrorType.NotPermitted)]
+            [NativeApi.NativeErrorType(NativeApi.NativeErrorType.NotPermitted)]
             OUT_SENDSHORTRESULT_NOTPERMITTED = 108,
             OUT_SENDSHORTRESULT_UNKNOWNERROR = 109
         }
@@ -71,10 +77,10 @@ namespace Melanchall.DryWetMidi.Multimedia
             OUT_SENDSYSEXRESULT_OK = 0,
             OUT_SENDSYSEXRESULT_PREPAREBUFFER_INVALIDHANDLE = 1,
             OUT_SENDSYSEXRESULT_PREPAREBUFFER_INVALIDADDRESS = 2,
-            [NativeErrorType(NativeErrorType.NoMemory)]
+            [NativeApi.NativeErrorType(NativeApi.NativeErrorType.NoMemory)]
             OUT_SENDSYSEXRESULT_PREPAREBUFFER_NOMEMORY = 3,
             OUT_SENDSYSEXRESULT_PREPAREBUFFER_UNKNOWNERROR = 1000,
-            [NativeErrorType(NativeErrorType.Busy)]
+            [NativeApi.NativeErrorType(NativeApi.NativeErrorType.Busy)]
             OUT_SENDSYSEXRESULT_NOTREADY = 4,
             OUT_SENDSYSEXRESULT_UNPREPARED = 5,
             OUT_SENDSYSEXRESULT_INVALIDHANDLE = 6,
@@ -86,7 +92,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             OUT_SENDSYSEXRESULT_COMMUNICATIONERROR = 105,
             OUT_SENDSYSEXRESULT_SERVERSTARTERROR = 106,
             OUT_SENDSYSEXRESULT_WRONGTHREAD = 107,
-            [NativeErrorType(NativeErrorType.NotPermitted)]
+            [NativeApi.NativeErrorType(NativeApi.NativeErrorType.NotPermitted)]
             OUT_SENDSYSEXRESULT_NOTPERMITTED = 108,
             OUT_SENDSYSEXRESULT_UNKNOWNERROR = 109
         }
@@ -113,57 +119,211 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         #region Delegates
 
-        public delegate void Callback_Win(IntPtr hMidi, MidiMessage wMsg, IntPtr dwInstance, IntPtr dwParam1, IntPtr dwParam2);
+        public delegate void Callback_Win(IntPtr hMidi, NativeApi.MidiMessage wMsg, IntPtr dwInstance, IntPtr dwParam1, IntPtr dwParam2);
+
+        #endregion
+
+        #region Extern functions
+
+        [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.StdCall)]
+        private static extern OUT_GETCOUNTRESULT GetOutputDevicesCount(out int count);
+
+        [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.StdCall)]
+        private static extern OUT_GETINFORESULT GetOutputDeviceInfo(int deviceIndex, out IntPtr info, out int errorCode);
+
+        [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.StdCall)]
+        private static extern int GetOutputDeviceHashCode(IntPtr info);
+
+        [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.StdCall)]
+        private static extern bool AreOutputDevicesEqual(IntPtr info1, IntPtr info2);
+
+        [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.StdCall)]
+        private static extern OUT_GETPROPERTYRESULT GetOutputDeviceName(IntPtr info, out IntPtr value, out int errorCode);
+
+        [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.StdCall)]
+        private static extern OUT_GETPROPERTYRESULT GetOutputDeviceManufacturer(IntPtr info, out IntPtr value, out int errorCode);
+
+        [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.StdCall)]
+        private static extern OUT_GETPROPERTYRESULT GetOutputDeviceProduct(IntPtr info, out IntPtr value, out int errorCode);
+
+        [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.StdCall)]
+        private static extern OUT_GETPROPERTYRESULT GetOutputDeviceDriverVersion(IntPtr info, out int value, out int errorCode);
+
+        [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.StdCall)]
+        private static extern OUT_OPENRESULT OpenOutputDevice_Win(IntPtr info, IntPtr sessionHandle, Callback_Win callback, out IntPtr handle, out int errorCode);
+
+        [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.StdCall)]
+        private static extern OUT_OPENRESULT OpenOutputDevice_Mac(IntPtr info, IntPtr sessionHandle, out IntPtr handle, out int errorCode);
+
+        [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.StdCall)]
+        private static extern OUT_CLOSERESULT CloseOutputDevice(IntPtr handle, out int errorCode);
+
+        [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.StdCall)]
+        private static extern OUT_SENDSHORTRESULT SendShortEventToOutputDevice(IntPtr handle, int message, out int errorCode);
+
+        [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.StdCall)]
+        private static extern OUT_SENDSYSEXRESULT SendSysExEventToOutputDevice_Mac(IntPtr handle, byte[] data, ushort dataSize, out int errorCode);
+
+        [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.StdCall)]
+        private static extern OUT_SENDSYSEXRESULT SendSysExEventToOutputDevice_Win(IntPtr handle, IntPtr data, int size, out int errorCode);
+
+        [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.StdCall)]
+        private static extern OUT_GETSYSEXDATARESULT GetOutputDeviceSysExBufferData(IntPtr handle, IntPtr header, out IntPtr data, out int size, out int errorCode);
+
+        [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.StdCall)]
+        private static extern bool IsOutputDevicePropertySupported(OutputDeviceProperty property);
+
+        [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.StdCall)]
+        private static extern OUT_GETPROPERTYRESULT GetOutputDeviceTechnology(IntPtr info, out OutputDeviceTechnology value, out int errorCode);
+
+        [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.StdCall)]
+        private static extern OUT_GETPROPERTYRESULT GetOutputDeviceUniqueId(IntPtr info, out int value, out int errorCode);
+
+        [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.StdCall)]
+        private static extern OUT_GETPROPERTYRESULT GetOutputDeviceVoicesNumber(IntPtr info, out int value, out int errorCode);
+
+        [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.StdCall)]
+        private static extern OUT_GETPROPERTYRESULT GetOutputDeviceNotesNumber(IntPtr info, out int value, out int errorCode);
+
+        [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.StdCall)]
+        private static extern OUT_GETPROPERTYRESULT GetOutputDeviceChannelsMask(IntPtr info, out int value, out int errorCode);
+
+        [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.StdCall)]
+        private static extern OUT_GETPROPERTYRESULT GetOutputDeviceOptions(IntPtr info, out OutputDeviceOption value, out int errorCode);
+
+        [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.StdCall)]
+        private static extern OUT_GETPROPERTYRESULT GetOutputDeviceDriverOwner(IntPtr info, out IntPtr value, out int errorCode);
 
         #endregion
 
         #region Methods
 
-        public abstract int Api_GetDevicesCount();
+        public static OUT_GETCOUNTRESULT Api_GetDevicesCount(out int count)
+        {
+            return GetOutputDevicesCount(out count);
+        }
 
-        public abstract OUT_GETINFORESULT Api_GetDeviceInfo(int deviceIndex, out IntPtr info);
+        public static OUT_GETINFORESULT Api_GetDeviceInfo(int deviceIndex, out IntPtr info, out int errorCode)
+        {
+            return GetOutputDeviceInfo(deviceIndex, out info, out errorCode);
+        }
 
-        public abstract int Api_GetDeviceHashCode(IntPtr info);
+        public static int Api_GetDeviceHashCode(IntPtr info)
+        {
+            return GetOutputDeviceHashCode(info);
+        }
 
-        public abstract bool Api_AreDevicesEqual(IntPtr info1, IntPtr info2);
+        public static bool Api_AreDevicesEqual(IntPtr info1, IntPtr info2)
+        {
+            return AreOutputDevicesEqual(info1, info2);
+        }
 
-        public abstract OUT_OPENRESULT Api_OpenDevice_Win(IntPtr info, IntPtr sessionHandle, Callback_Win callback, out IntPtr handle);
+        public static OUT_OPENRESULT Api_OpenDevice_Win(IntPtr info, IntPtr sessionHandle, Callback_Win callback, out IntPtr handle, out int errorCode)
+        {
+            return OpenOutputDevice_Win(info, sessionHandle, callback, out handle, out errorCode);
+        }
 
-        public abstract OUT_OPENRESULT Api_OpenDevice_Mac(IntPtr info, IntPtr sessionHandle, out IntPtr handle);
+        public static OUT_OPENRESULT Api_OpenDevice_Mac(IntPtr info, IntPtr sessionHandle, out IntPtr handle, out int errorCode)
+        {
+            return OpenOutputDevice_Mac(info, sessionHandle, out handle, out errorCode);
+        }
 
-        public abstract OUT_CLOSERESULT Api_CloseDevice(IntPtr handle);
+        public static OUT_CLOSERESULT Api_CloseDevice(IntPtr handle, out int errorCode)
+        {
+            return CloseOutputDevice(handle, out errorCode);
+        }
 
-        public abstract OUT_SENDSHORTRESULT Api_SendShortEvent(IntPtr handle, int message);
+        public static OUT_SENDSHORTRESULT Api_SendShortEvent(IntPtr handle, int message, out int errorCode)
+        {
+            return SendShortEventToOutputDevice(handle, message, out errorCode);
+        }
 
-        public abstract OUT_SENDSYSEXRESULT Api_SendSysExEvent_Mac(IntPtr handle, byte[] data, ushort dataSize);
+        public static OUT_SENDSYSEXRESULT Api_SendSysExEvent_Mac(IntPtr handle, byte[] data, ushort dataSize, out int errorCode)
+        {
+            return SendSysExEventToOutputDevice_Mac(handle, data, dataSize, out errorCode);
+        }
 
-        public abstract OUT_SENDSYSEXRESULT Api_SendSysExEvent_Win(IntPtr handle, IntPtr data, int size);
+        public static OUT_SENDSYSEXRESULT Api_SendSysExEvent_Win(IntPtr handle, IntPtr data, int size, out int errorCode)
+        {
+            return SendSysExEventToOutputDevice_Win(handle, data, size, out errorCode);
+        }
 
-        public abstract OUT_GETSYSEXDATARESULT Api_GetSysExBufferData(IntPtr handle, IntPtr header, out IntPtr data, out int size);
+        public static OUT_GETSYSEXDATARESULT Api_GetSysExBufferData(IntPtr handle, IntPtr header, out IntPtr data, out int size, out int errorCode)
+        {
+            return GetOutputDeviceSysExBufferData(handle, header, out data, out size, out errorCode);
+        }
 
-        public abstract bool Api_IsPropertySupported(OutputDeviceProperty property);
+        public static bool Api_IsPropertySupported(OutputDeviceProperty property)
+        {
+            return IsOutputDevicePropertySupported(property);
+        }
 
-        public abstract OUT_GETPROPERTYRESULT Api_GetDeviceName(IntPtr info, out string name);
+        public static OUT_GETPROPERTYRESULT Api_GetDeviceName(IntPtr info, out string name, out int errorCode)
+        {
+            IntPtr namePointer;
+            var result = GetOutputDeviceName(info, out namePointer, out errorCode);
+            name = NativeApi.GetStringFromPointer(namePointer);
+            return result;
+        }
 
-        public abstract OUT_GETPROPERTYRESULT Api_GetDeviceManufacturer(IntPtr info, out string manufacturer);
+        public static OUT_GETPROPERTYRESULT Api_GetDeviceManufacturer(IntPtr info, out string manufacturer, out int errorCode)
+        {
+            IntPtr manufacturerPointer;
+            var result = GetOutputDeviceManufacturer(info, out manufacturerPointer, out errorCode);
+            manufacturer = NativeApi.GetStringFromPointer(manufacturerPointer);
+            return result;
+        }
 
-        public abstract OUT_GETPROPERTYRESULT Api_GetDeviceProduct(IntPtr info, out string manufacturer);
+        public static OUT_GETPROPERTYRESULT Api_GetDeviceProduct(IntPtr info, out string product, out int errorCode)
+        {
+            IntPtr productPointer;
+            var result = GetOutputDeviceProduct(info, out productPointer, out errorCode);
+            product = NativeApi.GetStringFromPointer(productPointer);
+            return result;
+        }
 
-        public abstract OUT_GETPROPERTYRESULT Api_GetDeviceDriverVersion(IntPtr info, out int driverVersion);
+        public static OUT_GETPROPERTYRESULT Api_GetDeviceDriverVersion(IntPtr info, out int driverVersion, out int errorCode)
+        {
+            return GetOutputDeviceDriverVersion(info, out driverVersion, out errorCode);
+        }
 
-        public abstract OUT_GETPROPERTYRESULT Api_GetDeviceTechnology(IntPtr info, out OutputDeviceTechnology deviceType);
+        public static OUT_GETPROPERTYRESULT Api_GetDeviceTechnology(IntPtr info, out OutputDeviceTechnology deviceType, out int errorCode)
+        {
+            return GetOutputDeviceTechnology(info, out deviceType, out errorCode);
+        }
 
-        public abstract OUT_GETPROPERTYRESULT Api_GetDeviceUniqueId(IntPtr info, out int uniqueId);
+        public static OUT_GETPROPERTYRESULT Api_GetDeviceUniqueId(IntPtr info, out int uniqueId, out int errorCode)
+        {
+            return GetOutputDeviceUniqueId(info, out uniqueId, out errorCode);
+        }
 
-        public abstract OUT_GETPROPERTYRESULT Api_GetDeviceVoicesNumber(IntPtr info, out int voicesNumber);
+        public static OUT_GETPROPERTYRESULT Api_GetDeviceVoicesNumber(IntPtr info, out int voicesNumber, out int errorCode)
+        {
+            return GetOutputDeviceVoicesNumber(info, out voicesNumber, out errorCode);
+        }
 
-        public abstract OUT_GETPROPERTYRESULT Api_GetDeviceNotesNumber(IntPtr info, out int notesNumber);
+        public static OUT_GETPROPERTYRESULT Api_GetDeviceNotesNumber(IntPtr info, out int notesNumber, out int errorCode)
+        {
+            return GetOutputDeviceNotesNumber(info, out notesNumber, out errorCode);
+        }
 
-        public abstract OUT_GETPROPERTYRESULT Api_GetDeviceChannelsMask(IntPtr info, out int channelsMask);
+        public static OUT_GETPROPERTYRESULT Api_GetDeviceChannelsMask(IntPtr info, out int channelsMask, out int errorCode)
+        {
+            return GetOutputDeviceChannelsMask(info, out channelsMask, out errorCode);
+        }
 
-        public abstract OUT_GETPROPERTYRESULT Api_GetDeviceOptions(IntPtr info, out OutputDeviceOption option);
+        public static OUT_GETPROPERTYRESULT Api_GetDeviceOptions(IntPtr info, out OutputDeviceOption option, out int errorCode)
+        {
+            return GetOutputDeviceOptions(info, out option, out errorCode);
+        }
 
-        public abstract OUT_GETPROPERTYRESULT Api_GetDeviceDriverOwner(IntPtr info, out string driverOwner);
+        public static OUT_GETPROPERTYRESULT Api_GetDeviceDriverOwner(IntPtr info, out string driverOwner, out int errorCode)
+        {
+            IntPtr driverOwnerPointer;
+            var result = GetOutputDeviceDriverOwner(info, out driverOwnerPointer, out errorCode);
+            driverOwner = NativeApi.GetStringFromPointer(driverOwnerPointer);
+            return result;
+        }
 
         #endregion
     }

@@ -7,6 +7,7 @@ using Melanchall.DryWetMidi.Interaction;
 using NUnit.Framework;
 using Melanchall.DryWetMidi.Tests.Common;
 using NUnit.Framework.Legacy;
+using System.Diagnostics;
 
 namespace Melanchall.DryWetMidi.Tests.Multimedia
 {
@@ -284,25 +285,32 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 new NoteOffEvent()
             };
 
-            var objects = new List<object>();
-            var objectsCount = 0;
+            var times = new List<long>();
+            var stopwatch = new Stopwatch();
+            
+            int timesCount;
+            long stoptime;
 
             using (var playback = events.GetPlayback(TempoMap.Default))
             using (var watcher = new PlaybackCurrentTimeWatcher())
             {
                 watcher.AddPlayback(playback);
-                watcher.CurrentTimeChanged += (_, __) => objects.Add(new object());
+                watcher.CurrentTimeChanged += (_, __) => times.Add(stopwatch.ElapsedMilliseconds);
 
                 watcher.Start();
+                stopwatch.Start();
                 WaitOperations.WaitPrecisely(TimeSpan.FromSeconds(1));
                 watcher.Stop();
-
-                objectsCount = objects.Count;
-                ClassicAssert.Greater(objectsCount, 0, "Objects count is invalid.");
+                
+                stoptime = stopwatch.ElapsedMilliseconds;
+                timesCount = times.Count;
             }
 
             WaitOperations.Wait(TimeSpan.FromSeconds(1));
-            ClassicAssert.AreEqual(objectsCount, objects.Count, "New objects added after watcher disposed.");
+            
+            ClassicAssert.Greater(timesCount, 0, "No events fired.");
+            ClassicAssert.AreEqual(timesCount, times.Count(o => o <= stoptime), "Invalid count of fired event.");
+            ClassicAssert.LessOrEqual(times.Count(o => o > stoptime), 1, "Event was fired many times after watcher stopped.");
         }
 
         #endregion

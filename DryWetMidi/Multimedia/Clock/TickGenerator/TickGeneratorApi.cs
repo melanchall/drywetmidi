@@ -1,8 +1,9 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 
 namespace Melanchall.DryWetMidi.Multimedia
 {
-    internal abstract class TickGeneratorApi : NativeApi
+    internal static class TickGeneratorApi
     {
         #region Nested enums
 
@@ -36,13 +37,35 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         #endregion
 
+        #region Extern functions
+
+        [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.StdCall)]
+        public static extern TG_STARTRESULT StartHighPrecisionTickGenerator_Win(int interval, IntPtr sessionHandle, TimerCallback_Win callback, out IntPtr info, out int errorCode);
+
+        [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.StdCall)]
+        public static extern TG_STARTRESULT StartHighPrecisionTickGenerator_Mac(int interval, IntPtr sessionHandle, TimerCallback_Mac callback, out IntPtr info, out int errorCode);
+
+        [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.StdCall)]
+        public static extern TG_STOPRESULT StopHighPrecisionTickGenerator(IntPtr sessionHandle, IntPtr info, out int errorCode);
+
+        #endregion
+
         #region Methods
 
-        public abstract TG_STARTRESULT Api_StartHighPrecisionTickGenerator_Win(int interval, IntPtr sessionHandle, TimerCallback_Win callback, out IntPtr info);
+        public static TG_STARTRESULT Api_StartHighPrecisionTickGenerator_Win(int interval, IntPtr sessionHandle, TimerCallback_Win callback, out IntPtr info, out int errorCode)
+        {
+            return StartHighPrecisionTickGenerator_Win(interval, sessionHandle, callback, out info, out errorCode);
+        }
 
-        public abstract TG_STARTRESULT Api_StartHighPrecisionTickGenerator_Mac(int interval, IntPtr sessionHandle, TimerCallback_Mac callback, out IntPtr info);
+        public static TG_STARTRESULT Api_StartHighPrecisionTickGenerator_Mac(int interval, IntPtr sessionHandle, TimerCallback_Mac callback, out IntPtr info, out int errorCode)
+        {
+            return StartHighPrecisionTickGenerator_Mac(interval, sessionHandle, callback, out info, out errorCode);
+        }
 
-        public abstract TG_STOPRESULT Api_StopHighPrecisionTickGenerator(IntPtr sessionHandle, IntPtr info);
+        public static TG_STOPRESULT Api_StopHighPrecisionTickGenerator(IntPtr sessionHandle, IntPtr info, out int errorCode)
+        {
+            return StopHighPrecisionTickGenerator(sessionHandle, info, out errorCode);
+        }
 
         #endregion
     }

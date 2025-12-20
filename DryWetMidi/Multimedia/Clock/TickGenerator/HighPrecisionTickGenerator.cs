@@ -67,18 +67,21 @@ namespace Melanchall.DryWetMidi.Multimedia
 
             var intervalInMilliseconds = (int)interval.TotalMilliseconds;
 
-            var apiType = CommonApiProvider.Api.Api_GetApiType();
+            var apiType = CommonApi.Api_GetApiType();
             var sessionHandle = TickGeneratorSession.GetSessionHandle();
+
+            TickGeneratorApi.TG_STARTRESULT result;
+            int errorCode;
 
             switch (apiType)
             {
                 case CommonApi.API_TYPE.API_TYPE_WIN:
-                    NativeApiUtilities.HandleTickGeneratorNativeApiResult(
-                        StartHighPrecisionTickGenerator_Win(intervalInMilliseconds, out _tickGeneratorInfo));
+                    result = StartHighPrecisionTickGenerator_Win(intervalInMilliseconds, out _tickGeneratorInfo, out errorCode);
+                    NativeApiUtilities.HandleTickGeneratorNativeApiResult(result, errorCode);
                     break;
                 case CommonApi.API_TYPE.API_TYPE_MAC:
-                    NativeApiUtilities.HandleTickGeneratorNativeApiResult(
-                        StartHighPrecisionTickGenerator_Mac(intervalInMilliseconds, out _tickGeneratorInfo));
+                    result = StartHighPrecisionTickGenerator_Mac(intervalInMilliseconds, out _tickGeneratorInfo, out errorCode);
+                    NativeApiUtilities.HandleTickGeneratorNativeApiResult(result, errorCode);
                     break;
             }
         }
@@ -88,8 +91,9 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// </summary>
         protected override void Stop()
         {
-            NativeApiUtilities.HandleTickGeneratorNativeApiResult(
-                StopInternal());
+            int errorCode;
+            var result = StopInternal(out errorCode);
+            NativeApiUtilities.HandleTickGeneratorNativeApiResult(result, errorCode);
         }
 
         #endregion
@@ -114,8 +118,10 @@ namespace Melanchall.DryWetMidi.Multimedia
             GenerateTick();
         }
 
-        private TickGeneratorApi.TG_STOPRESULT StopInternal()
+        private TickGeneratorApi.TG_STOPRESULT StopInternal(out int errorCode)
         {
+            errorCode = 0;
+
             if (_tickGeneratorInfo == IntPtr.Zero)
                 return TickGeneratorApi.TG_STOPRESULT.TG_STOPRESULT_OK;
 
@@ -124,30 +130,32 @@ namespace Melanchall.DryWetMidi.Multimedia
                 if (_tickGeneratorInfo == IntPtr.Zero)
                     return TickGeneratorApi.TG_STOPRESULT.TG_STOPRESULT_OK;
 
-                var result = TickGeneratorApiProvider.Api.Api_StopHighPrecisionTickGenerator(TickGeneratorSession.GetSessionHandle(), _tickGeneratorInfo);
+                var result = TickGeneratorApi.Api_StopHighPrecisionTickGenerator(TickGeneratorSession.GetSessionHandle(), _tickGeneratorInfo, out errorCode);
                 _tickGeneratorInfo = IntPtr.Zero;
                 return result;
             }
         }
 
-        private TickGeneratorApi.TG_STARTRESULT StartHighPrecisionTickGenerator_Win(int intervalInMilliseconds, out IntPtr tickGeneratorInfo)
+        private TickGeneratorApi.TG_STARTRESULT StartHighPrecisionTickGenerator_Win(int intervalInMilliseconds, out IntPtr tickGeneratorInfo, out int errorCode)
         {
             _tickCallback_Win = OnTick_Win;
-            return TickGeneratorApiProvider.Api.Api_StartHighPrecisionTickGenerator_Win(
+            return TickGeneratorApi.Api_StartHighPrecisionTickGenerator_Win(
                 intervalInMilliseconds,
                 TickGeneratorSession.GetSessionHandle(),
                 _tickCallback_Win,
-                out tickGeneratorInfo);
+                out tickGeneratorInfo,
+                out errorCode);
         }
 
-        private TickGeneratorApi.TG_STARTRESULT StartHighPrecisionTickGenerator_Mac(int intervalInMilliseconds, out IntPtr tickGeneratorInfo)
+        private TickGeneratorApi.TG_STARTRESULT StartHighPrecisionTickGenerator_Mac(int intervalInMilliseconds, out IntPtr tickGeneratorInfo, out int errorCode)
         {
             _tickCallback_Mac = OnTick_Mac;
-            return TickGeneratorApiProvider.Api.Api_StartHighPrecisionTickGenerator_Mac(
+            return TickGeneratorApi.Api_StartHighPrecisionTickGenerator_Mac(
                 intervalInMilliseconds,
                 TickGeneratorSession.GetSessionHandle(),
                 _tickCallback_Mac,
-                out tickGeneratorInfo);
+                out tickGeneratorInfo,
+                out errorCode);
         }
 
         private void EnsureSessionIsCreated()
@@ -180,7 +188,8 @@ namespace Melanchall.DryWetMidi.Multimedia
             {
             }
 
-            StopInternal();
+            int errorCode;
+            StopInternal(out errorCode);
 
             _disposed = true;
         }

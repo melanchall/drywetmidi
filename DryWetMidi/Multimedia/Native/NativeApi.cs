@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 
 namespace Melanchall.DryWetMidi.Multimedia
 {
-    internal abstract class NativeApi
+    internal static class NativeApi
     {
         #region Nested classes
 
@@ -20,6 +20,16 @@ namespace Melanchall.DryWetMidi.Multimedia
 
             public NativeErrorType ErrorType { get; }
         }
+
+        #endregion
+
+        #region Delegates
+
+        public delegate TException CreateException<TException>(
+            string message,
+            int mainErrorCode,
+            int additionalErrorCode)
+            where TException : Exception;
 
         #endregion
 
@@ -52,7 +62,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         #region Constants
 
-        protected const string LibraryName64 = "Melanchall_DryWetMidi_Native64";
+        public const string LibraryName = "Melanchall_DryWetMidi_Native64";
 
         private static readonly Dictionary<NativeErrorType, string> ErrorsDescriptions = new Dictionary<NativeErrorType, string>
         {
@@ -66,18 +76,21 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         #region Methods
 
-        protected string GetStringFromPointer(IntPtr stringPointer)
+        public static string GetStringFromPointer(IntPtr stringPointer)
         {
             return stringPointer != IntPtr.Zero
                 ? Marshal.PtrToStringAnsi(stringPointer)
                 : string.Empty;
         }
 
-        public static void HandleResult<TResult, TException>(TResult result, Func<string, int, TException> createException)
+        public static void HandleResult<TResult, TException>(
+            TResult result,
+            int errorCode,
+            CreateException<TException> createException)
             where TException : Exception
         {
-            var intResult = Convert.ToInt32(result);
-            if (intResult == 0)
+            var resultCode = Convert.ToInt32(result);
+            if (resultCode == 0)
                 return;
 
             var attribute = typeof(TResult)
@@ -89,7 +102,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             var errorDescription = attribute != null
                 ? ErrorsDescriptions[attribute.ErrorType]
                 : "Internal error";
-            throw createException($"{errorDescription} ({result}).", intResult);
+            throw createException($"{errorDescription} ({result}, {errorCode}).", resultCode, errorCode);
         }
 
         #endregion

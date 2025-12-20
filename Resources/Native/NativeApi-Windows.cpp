@@ -45,8 +45,10 @@ typedef struct
     UINT timerId;
 } TickGeneratorInfo;
 
-API_EXPORT TGSESSION_OPENRESULT API_CALL OpenTickGeneratorSession(void** handle)
+API_EXPORT TGSESSION_OPENRESULT API_CALL OpenTickGeneratorSession(void** handle, int* errorCode)
 {
+    *errorCode = 0;
+
     TickGeneratorSessionHandle* sessionHandle = new TickGeneratorSessionHandle();
     
     *handle = sessionHandle;
@@ -54,19 +56,27 @@ API_EXPORT TGSESSION_OPENRESULT API_CALL OpenTickGeneratorSession(void** handle)
     return TGSESSION_OPENRESULT_OK;
 }
 
-API_EXPORT TG_STARTRESULT API_CALL StartHighPrecisionTickGenerator_Win(int interval, void* sessionHandle, LPTIMECALLBACK callback, TickGeneratorInfo** info)
+API_EXPORT TG_STARTRESULT API_CALL StartHighPrecisionTickGenerator_Win(int interval, void* sessionHandle, LPTIMECALLBACK callback, TickGeneratorInfo** info, int* errorCode)
 {
+    *errorCode = 0;
+
     TIMECAPS tc;
     MMRESULT result = timeGetDevCaps(&tc, sizeof(TIMECAPS));
     if (result != TIMERR_NOERROR)
+    {
+        *errorCode = result;
         return TG_STARTRESULT_CANTGETDEVICECAPABILITIES;
+    }
 
     UINT wTimerRes = std::min(std::max(tc.wPeriodMin, (UINT)interval), tc.wPeriodMax);
 
     timeBeginPeriod(wTimerRes);
     result = timeSetEvent(interval, wTimerRes, callback, 0, TIME_PERIODIC);
     if (result == 0)
+    {
+        *errorCode = result;
         return TG_STARTRESULT_CANTSETTIMERCALLBACK;
+    }
 
     TickGeneratorInfo* tickGeneratorInfo = new TickGeneratorInfo();
     tickGeneratorInfo->timerResolution = wTimerRes;
@@ -76,15 +86,23 @@ API_EXPORT TG_STARTRESULT API_CALL StartHighPrecisionTickGenerator_Win(int inter
     return TG_STARTRESULT_OK;
 }
 
-API_EXPORT TG_STOPRESULT API_CALL StopHighPrecisionTickGenerator(TickGeneratorSessionHandle* sessionHandle, TickGeneratorInfo* info)
+API_EXPORT TG_STOPRESULT API_CALL StopHighPrecisionTickGenerator(TickGeneratorSessionHandle* sessionHandle, TickGeneratorInfo* info, int* errorCode)
 {
+    *errorCode = 0;
+
     MMRESULT result = timeEndPeriod(info->timerResolution);
     if (result != TIMERR_NOERROR)
+    {
+        *errorCode = result;
         return TG_STOPRESULT_CANTENDPERIOD;
+    }
 
     result = timeKillEvent(info->timerId);
     if (result != TIMERR_NOERROR)
+    {
+        *errorCode = result;
         return TG_STOPRESULT_CANTKILLEVENT;
+    }
 
     delete info;
 
@@ -245,8 +263,10 @@ typedef struct
     char* name;
 } SessionHandle;
 
-API_EXPORT SESSION_OPENRESULT API_CALL OpenSession_Win(char* name, void** handle)
+API_EXPORT SESSION_OPENRESULT API_CALL OpenSession_Win(char* name, void** handle, int* errorCode)
 {
+    *errorCode = 0;
+
     SessionHandle* sessionHandle = new SessionHandle();
     sessionHandle->name = name;
 
@@ -257,8 +277,8 @@ API_EXPORT SESSION_OPENRESULT API_CALL OpenSession_Win(char* name, void** handle
 
 API_EXPORT SESSION_CLOSERESULT API_CALL CloseSession(void* handle)
 {
-    SessionHandle* sessionHandle = (SessionHandle*)handle;
-    // delete sessionHandle; // caller owns or lifecycle managed elsewhere
+    SessionHandle* sessionHandle = static_cast<SessionHandle*>(handle);
+    delete sessionHandle;
     return SESSION_CLOSERESULT_OK;
 }
 
@@ -273,13 +293,16 @@ typedef struct
     LPMIDIHDR sysExHeader;
 } InputDeviceHandle;
 
-API_EXPORT int API_CALL GetInputDevicesCount()
+API_EXPORT IN_GETCOUNTRESULT API_CALL GetInputDevicesCount(int* count)
 {
-    return midiInGetNumDevs();
+    *count = midiInGetNumDevs();
+    return IN_GETCOUNTRESULT_OK;
 }
 
-API_EXPORT IN_GETINFORESULT API_CALL GetInputDeviceInfo(int deviceIndex, void** info)
+API_EXPORT IN_GETINFORESULT API_CALL GetInputDeviceInfo(int deviceIndex, void** info, int* errorCode)
 {
+    *errorCode = 0;
+
     InputDeviceInfo* inputDeviceInfo = new InputDeviceInfo();
 
     inputDeviceInfo->deviceIndex = deviceIndex;
@@ -288,9 +311,10 @@ API_EXPORT IN_GETINFORESULT API_CALL GetInputDeviceInfo(int deviceIndex, void** 
     MMRESULT result = midiInGetDevCapsA(deviceIndex, inputDeviceInfo->caps, sizeof(MIDIINCAPSA));
     if (result != MMSYSERR_NOERROR)
     {
-        // cleanup
         delete inputDeviceInfo->caps;
         delete inputDeviceInfo;
+
+        *errorCode = result;
 
         switch (result)
         {
@@ -313,37 +337,47 @@ API_EXPORT int API_CALL GetInputDeviceHashCode(void* info)
     return 0;
 }
 
-API_EXPORT IN_GETPROPERTYRESULT API_CALL GetInputDeviceName(void* info, const char** value)
+API_EXPORT IN_GETPROPERTYRESULT API_CALL GetInputDeviceName(void* info, const char** value, int* errorCode)
 {
-    InputDeviceInfo* inputDeviceInfo = (InputDeviceInfo*)info;
+    *errorCode = 0;
+
+    InputDeviceInfo* inputDeviceInfo = static_cast<InputDeviceInfo*>(info);
     *value = inputDeviceInfo->caps->szPname;
     return IN_GETPROPERTYRESULT_OK;
 }
 
-API_EXPORT IN_GETPROPERTYRESULT API_CALL GetInputDeviceManufacturer(void* info, const char** value)
+API_EXPORT IN_GETPROPERTYRESULT API_CALL GetInputDeviceManufacturer(void* info, const char** value, int* errorCode)
 {
-    InputDeviceInfo* inputDeviceInfo = (InputDeviceInfo*)info;
+    *errorCode = 0;
+
+    InputDeviceInfo* inputDeviceInfo = static_cast<InputDeviceInfo*>(info);
     *value = GetDeviceManufacturer(inputDeviceInfo->caps->wMid);
     return IN_GETPROPERTYRESULT_OK;
 }
 
-API_EXPORT IN_GETPROPERTYRESULT API_CALL GetInputDeviceProduct(void* info, const char** value)
+API_EXPORT IN_GETPROPERTYRESULT API_CALL GetInputDeviceProduct(void* info, const char** value, int* errorCode)
 {
-    InputDeviceInfo* inputDeviceInfo = (InputDeviceInfo*)info;
+    *errorCode = 0;
+
+    InputDeviceInfo* inputDeviceInfo = static_cast<InputDeviceInfo*>(info);
     *value = GetDeviceProduct(inputDeviceInfo->caps->wPid);
     return IN_GETPROPERTYRESULT_OK;
 }
 
-API_EXPORT IN_GETPROPERTYRESULT API_CALL GetInputDeviceDriverVersion(void* info, int* value)
+API_EXPORT IN_GETPROPERTYRESULT API_CALL GetInputDeviceDriverVersion(void* info, int* value, int* errorCode)
 {
-    InputDeviceInfo* inputDeviceInfo = (InputDeviceInfo*)info;
+    *errorCode = 0;
+
+    InputDeviceInfo* inputDeviceInfo = static_cast<InputDeviceInfo*>(info);
     *value = inputDeviceInfo->caps->vDriverVersion;
     return IN_GETPROPERTYRESULT_OK;
 }
 
-API_EXPORT IN_PREPARESYSEXBUFFERRESULT API_CALL PrepareInputDeviceSysExBuffer(void* handle, int size)
+IN_PREPARESYSEXBUFFERRESULT PrepareInputDeviceSysExBuffer(void* handle, int size, int* errorCode)
 {
-    InputDeviceHandle* inputDeviceHandle = (InputDeviceHandle*)handle;
+    *errorCode = 0;
+
+    InputDeviceHandle* inputDeviceHandle = static_cast<InputDeviceHandle*>(handle);
 
     LPMIDIHDR header = new MIDIHDR();
     header->lpData = new char[size];
@@ -354,9 +388,10 @@ API_EXPORT IN_PREPARESYSEXBUFFERRESULT API_CALL PrepareInputDeviceSysExBuffer(vo
     MMRESULT result = midiInPrepareHeader(inputDeviceHandle->handle, header, sizeof(MIDIHDR));
     if (result != MMSYSERR_NOERROR)
     {
-        // cleanup
-        delete [] reinterpret_cast<char*>(header->lpData);
+        delete [] header->lpData;
         delete header;
+
+        *errorCode = result;
 
         switch (result)
         {
@@ -371,11 +406,12 @@ API_EXPORT IN_PREPARESYSEXBUFFERRESULT API_CALL PrepareInputDeviceSysExBuffer(vo
     result = midiInAddBuffer(inputDeviceHandle->handle, header, sizeof(MIDIHDR));
     if (result != MMSYSERR_NOERROR)
     {
-        // if adding buffer failed, unprepare header
         midiInUnprepareHeader(inputDeviceHandle->handle, header, sizeof(MIDIHDR));
-        delete [] reinterpret_cast<char*>(header->lpData);
+        delete [] header->lpData;
         delete header;
         inputDeviceHandle->sysExHeader = nullptr;
+
+        *errorCode = result;
 
         switch (result)
         {
@@ -392,9 +428,11 @@ API_EXPORT IN_PREPARESYSEXBUFFERRESULT API_CALL PrepareInputDeviceSysExBuffer(vo
     return IN_PREPARESYSEXBUFFERRESULT_OK;
 }
 
-API_EXPORT IN_UNPREPARESYSEXBUFFERRESULT API_CALL UnprepareInputDeviceSysExBuffer(void* handle)
+IN_UNPREPARESYSEXBUFFERRESULT UnprepareInputDeviceSysExBuffer(void* handle, int* errorCode)
 {
-    InputDeviceHandle* inputDeviceHandle = (InputDeviceHandle*)handle;
+    *errorCode = 0;
+
+    InputDeviceHandle* inputDeviceHandle = static_cast<InputDeviceHandle*>(handle);
 
     if (inputDeviceHandle->sysExHeader == nullptr)
         return IN_UNPREPARESYSEXBUFFERRESULT_OK;
@@ -402,6 +440,8 @@ API_EXPORT IN_UNPREPARESYSEXBUFFERRESULT API_CALL UnprepareInputDeviceSysExBuffe
     MMRESULT result = midiInUnprepareHeader(inputDeviceHandle->handle, inputDeviceHandle->sysExHeader, sizeof(MIDIHDR));
     if (result != MMSYSERR_NOERROR)
     {
+        *errorCode = result;
+
         switch (result)
         {
             case MIDIERR_STILLPLAYING: return IN_UNPREPARESYSEXBUFFERRESULT_STILLPLAYING;
@@ -412,16 +452,18 @@ API_EXPORT IN_UNPREPARESYSEXBUFFERRESULT API_CALL UnprepareInputDeviceSysExBuffe
         return IN_UNPREPARESYSEXBUFFERRESULT_UNKNOWNERROR;
     }
 
-    delete [] reinterpret_cast<char*>(inputDeviceHandle->sysExHeader->lpData);
+    delete [] inputDeviceHandle->sysExHeader->lpData;
     delete inputDeviceHandle->sysExHeader;
     inputDeviceHandle->sysExHeader = nullptr;
 
     return IN_UNPREPARESYSEXBUFFERRESULT_OK;
 }
 
-API_EXPORT IN_RENEWSYSEXBUFFERRESULT API_CALL RenewInputDeviceSysExBuffer(void* handle, int size)
+API_EXPORT IN_RENEWSYSEXBUFFERRESULT API_CALL RenewInputDeviceSysExBuffer(void* handle, int size, int* errorCode)
 {
-    IN_UNPREPARESYSEXBUFFERRESULT unprepareResult = UnprepareInputDeviceSysExBuffer(handle);
+    *errorCode = 0;
+
+    IN_UNPREPARESYSEXBUFFERRESULT unprepareResult = UnprepareInputDeviceSysExBuffer(handle, errorCode);
     if (unprepareResult != IN_UNPREPARESYSEXBUFFERRESULT_OK)
     {
         switch (unprepareResult)
@@ -433,7 +475,7 @@ API_EXPORT IN_RENEWSYSEXBUFFERRESULT API_CALL RenewInputDeviceSysExBuffer(void* 
         }
     }
 
-    IN_PREPARESYSEXBUFFERRESULT prepareResult = PrepareInputDeviceSysExBuffer(handle, size);
+    IN_PREPARESYSEXBUFFERRESULT prepareResult = PrepareInputDeviceSysExBuffer(handle, size, errorCode);
     if (prepareResult != IN_PREPARESYSEXBUFFERRESULT_OK)
     {
         switch (prepareResult)
@@ -454,9 +496,11 @@ API_EXPORT IN_RENEWSYSEXBUFFERRESULT API_CALL RenewInputDeviceSysExBuffer(void* 
     return IN_RENEWSYSEXBUFFERRESULT_OK;
 }
 
-API_EXPORT IN_OPENRESULT API_CALL OpenInputDevice_Win(void* info, void* sessionHandle, DWORD_PTR callback, int sysExBufferSize, void** handle)
+API_EXPORT IN_OPENRESULT API_CALL OpenInputDevice_Win(void* info, void* sessionHandle, DWORD_PTR callback, int sysExBufferSize, void** handle, int* errorCode)
 {
-    InputDeviceInfo* inputDeviceInfo = (InputDeviceInfo*)info;
+    *errorCode = 0;
+
+    InputDeviceInfo* inputDeviceInfo = static_cast<InputDeviceInfo*>(info);
 
     InputDeviceHandle* inputDeviceHandle = new InputDeviceHandle();
     inputDeviceHandle->info = inputDeviceInfo;
@@ -467,6 +511,8 @@ API_EXPORT IN_OPENRESULT API_CALL OpenInputDevice_Win(void* info, void* sessionH
     if (result != MMSYSERR_NOERROR)
     {
         delete inputDeviceHandle;
+
+        *errorCode = result;
 
         switch (result)
         {
@@ -482,10 +528,9 @@ API_EXPORT IN_OPENRESULT API_CALL OpenInputDevice_Win(void* info, void* sessionH
 
     inputDeviceHandle->handle = inHandle;
 
-    IN_PREPARESYSEXBUFFERRESULT prepareBufferResult = PrepareInputDeviceSysExBuffer(inputDeviceHandle, sysExBufferSize);
+    IN_PREPARESYSEXBUFFERRESULT prepareBufferResult = PrepareInputDeviceSysExBuffer(inputDeviceHandle, sysExBufferSize, errorCode);
     if (prepareBufferResult != IN_PREPARESYSEXBUFFERRESULT_OK)
     {
-        // on failure, close handle
         midiInClose(inputDeviceHandle->handle);
         delete inputDeviceHandle;
 
@@ -508,20 +553,26 @@ API_EXPORT IN_OPENRESULT API_CALL OpenInputDevice_Win(void* info, void* sessionH
     return IN_OPENRESULT_OK;
 }
 
-API_EXPORT IN_CLOSERESULT API_CALL CloseInputDevice(void* handle)
+API_EXPORT IN_CLOSERESULT API_CALL CloseInputDevice(void* handle, int* errorCode)
 {
-    InputDeviceHandle* inputDeviceHandle = (InputDeviceHandle*)handle;
+    *errorCode = 0;
+
+    InputDeviceHandle* inputDeviceHandle = static_cast<InputDeviceHandle*>(handle);
 
     MMRESULT result = midiInReset(inputDeviceHandle->handle);
     if (result != MMSYSERR_NOERROR)
     {
+        *errorCode = result;
+
         switch (result)
         {
-        case MMSYSERR_INVALHANDLE: return IN_CLOSERESULT_RESET_INVALIDHANDLE;
+            case MMSYSERR_INVALHANDLE: return IN_CLOSERESULT_RESET_INVALIDHANDLE;
         }
+
+        return IN_CLOSERESULT_RESET_UNKNOWNERROR;
     }
 
-    IN_UNPREPARESYSEXBUFFERRESULT unprepareBufferResult = UnprepareInputDeviceSysExBuffer(inputDeviceHandle);
+    IN_UNPREPARESYSEXBUFFERRESULT unprepareBufferResult = UnprepareInputDeviceSysExBuffer(inputDeviceHandle, errorCode);
     if (unprepareBufferResult != IN_UNPREPARESYSEXBUFFERRESULT_OK)
     {
         switch (unprepareBufferResult)
@@ -536,6 +587,8 @@ API_EXPORT IN_CLOSERESULT API_CALL CloseInputDevice(void* handle)
     result = midiInClose(inputDeviceHandle->handle);
     if (result != MMSYSERR_NOERROR)
     {
+        *errorCode = result;
+
         switch (result)
         {
             case MIDIERR_STILLPLAYING: return IN_CLOSERESULT_CLOSE_STILLPLAYING;
@@ -546,24 +599,28 @@ API_EXPORT IN_CLOSERESULT API_CALL CloseInputDevice(void* handle)
         return IN_CLOSERESULT_CLOSE_UNKNOWNERROR;
     }
 
-    // free allocated info
     if (inputDeviceHandle->info)
     {
         delete inputDeviceHandle->info->caps;
         delete inputDeviceHandle->info;
     }
+
     delete inputDeviceHandle;
 
     return IN_CLOSERESULT_OK;
 }
 
-API_EXPORT IN_CONNECTRESULT API_CALL ConnectToInputDevice(void* handle)
+API_EXPORT IN_CONNECTRESULT API_CALL ConnectToInputDevice(void* handle, int* errorCode)
 {
-    InputDeviceHandle* inputDeviceHandle = (InputDeviceHandle*)handle;
+    *errorCode = 0;
+
+    InputDeviceHandle* inputDeviceHandle = static_cast<InputDeviceHandle*>(handle);
 
     MMRESULT result = midiInStart(inputDeviceHandle->handle);
     if (result != MMSYSERR_NOERROR)
     {
+        *errorCode = result;
+
         switch (result)
         {
             case MMSYSERR_INVALHANDLE: return IN_CONNECTRESULT_INVALIDHANDLE;
@@ -575,13 +632,17 @@ API_EXPORT IN_CONNECTRESULT API_CALL ConnectToInputDevice(void* handle)
     return IN_CONNECTRESULT_OK;
 }
 
-API_EXPORT IN_DISCONNECTRESULT API_CALL DisconnectFromInputDevice(void* handle)
+API_EXPORT IN_DISCONNECTRESULT API_CALL DisconnectFromInputDevice(void* handle, int* errorCode)
 {
-    InputDeviceHandle* inputDeviceHandle = (InputDeviceHandle*)handle;
+    *errorCode = 0;
+
+    InputDeviceHandle* inputDeviceHandle = static_cast<InputDeviceHandle*>(handle);
 
     MMRESULT result = midiInStop(inputDeviceHandle->handle);
     if (result != MMSYSERR_NOERROR)
     {
+        *errorCode = result;
+
         switch (result)
         {
             case MMSYSERR_INVALHANDLE: return IN_DISCONNECTRESULT_INVALIDHANDLE;
@@ -624,13 +685,16 @@ typedef struct
     HMIDIOUT handle;
 } OutputDeviceHandle;
 
-API_EXPORT int API_CALL GetOutputDevicesCount()
+API_EXPORT OUT_GETCOUNTRESULT API_CALL GetOutputDevicesCount(int* count)
 {
-    return midiOutGetNumDevs();
+    *count = midiOutGetNumDevs();
+    return OUT_GETCOUNTRESULT_OK;
 }
 
-API_EXPORT OUT_GETINFORESULT API_CALL GetOutputDeviceInfo(int deviceIndex, void** info)
+API_EXPORT OUT_GETINFORESULT API_CALL GetOutputDeviceInfo(int deviceIndex, void** info, int* errorCode)
 {
+    *errorCode = 0;
+
     OutputDeviceInfo* outputDeviceInfo = new OutputDeviceInfo();
 
     outputDeviceInfo->deviceIndex = deviceIndex;
@@ -641,6 +705,8 @@ API_EXPORT OUT_GETINFORESULT API_CALL GetOutputDeviceInfo(int deviceIndex, void*
     {
         delete outputDeviceInfo->caps;
         delete outputDeviceInfo;
+
+        *errorCode = result;
 
         switch (result)
         {
@@ -663,37 +729,47 @@ API_EXPORT int API_CALL GetOutputDeviceHashCode(void* info)
     return 0;
 }
 
-API_EXPORT OUT_GETPROPERTYRESULT API_CALL GetOutputDeviceName(void* info, const char** value)
+API_EXPORT OUT_GETPROPERTYRESULT API_CALL GetOutputDeviceName(void* info, const char** value, int* errorCode)
 {
-    OutputDeviceInfo* outputDeviceInfo = (OutputDeviceInfo*)info;
+    *errorCode = 0;
+
+    OutputDeviceInfo* outputDeviceInfo = static_cast<OutputDeviceInfo*>(info);
     *value = outputDeviceInfo->caps->szPname;
     return OUT_GETPROPERTYRESULT_OK;
 }
 
-API_EXPORT OUT_GETPROPERTYRESULT API_CALL GetOutputDeviceManufacturer(void* info, const char** value)
+API_EXPORT OUT_GETPROPERTYRESULT API_CALL GetOutputDeviceManufacturer(void* info, const char** value, int* errorCode)
 {
-    OutputDeviceInfo* outputDeviceInfo = (OutputDeviceInfo*)info;
+    *errorCode = 0;
+
+    OutputDeviceInfo* outputDeviceInfo = static_cast<OutputDeviceInfo*>(info);
     *value = GetDeviceManufacturer(outputDeviceInfo->caps->wMid);
     return OUT_GETPROPERTYRESULT_OK;
 }
 
-API_EXPORT OUT_GETPROPERTYRESULT API_CALL GetOutputDeviceProduct(void* info, const char** value)
+API_EXPORT OUT_GETPROPERTYRESULT API_CALL GetOutputDeviceProduct(void* info, const char** value, int* errorCode)
 {
-    OutputDeviceInfo* outputDeviceInfo = (OutputDeviceInfo*)info;
+    *errorCode = 0;
+
+    OutputDeviceInfo* outputDeviceInfo = static_cast<OutputDeviceInfo*>(info);
     *value = GetDeviceProduct(outputDeviceInfo->caps->wPid);
     return OUT_GETPROPERTYRESULT_OK;
 }
 
-API_EXPORT OUT_GETPROPERTYRESULT API_CALL GetOutputDeviceDriverVersion(void* info, int* value)
+API_EXPORT OUT_GETPROPERTYRESULT API_CALL GetOutputDeviceDriverVersion(void* info, int* value, int* errorCode)
 {
-    OutputDeviceInfo* outputDeviceInfo = (OutputDeviceInfo*)info;
+    *errorCode = 0;
+
+    OutputDeviceInfo* outputDeviceInfo = static_cast<OutputDeviceInfo*>(info);
     *value = outputDeviceInfo->caps->vDriverVersion;
     return OUT_GETPROPERTYRESULT_OK;
 }
 
-API_EXPORT OUT_GETPROPERTYRESULT API_CALL GetOutputDeviceTechnology(void* info, OUT_TECHNOLOGY* value)
+API_EXPORT OUT_GETPROPERTYRESULT API_CALL GetOutputDeviceTechnology(void* info, OUT_TECHNOLOGY* value, int* errorCode)
 {
-    OutputDeviceInfo* outputDeviceInfo = (OutputDeviceInfo*)info;
+    *errorCode = 0;
+
+    OutputDeviceInfo* outputDeviceInfo = static_cast<OutputDeviceInfo*>(info);
     
     *value = OUT_TECHNOLOGY_UNKNOWN;
     
@@ -725,30 +801,38 @@ API_EXPORT OUT_GETPROPERTYRESULT API_CALL GetOutputDeviceTechnology(void* info, 
     return OUT_GETPROPERTYRESULT_OK;
 }
 
-API_EXPORT OUT_GETPROPERTYRESULT API_CALL GetOutputDeviceVoicesNumber(void* info, int* value)
+API_EXPORT OUT_GETPROPERTYRESULT API_CALL GetOutputDeviceVoicesNumber(void* info, int* value, int* errorCode)
 {
-    OutputDeviceInfo* outputDeviceInfo = (OutputDeviceInfo*)info;
+    *errorCode = 0;
+
+    OutputDeviceInfo* outputDeviceInfo = static_cast<OutputDeviceInfo*>(info);
     *value = outputDeviceInfo->caps->wVoices;
     return OUT_GETPROPERTYRESULT_OK;
 }
 
-API_EXPORT OUT_GETPROPERTYRESULT API_CALL GetOutputDeviceNotesNumber(void* info, int* value)
+API_EXPORT OUT_GETPROPERTYRESULT API_CALL GetOutputDeviceNotesNumber(void* info, int* value, int* errorCode)
 {
-    OutputDeviceInfo* outputDeviceInfo = (OutputDeviceInfo*)info;
+    *errorCode = 0;
+
+    OutputDeviceInfo* outputDeviceInfo = static_cast<OutputDeviceInfo*>(info);
     *value = outputDeviceInfo->caps->wNotes;
     return OUT_GETPROPERTYRESULT_OK;
 }
 
-API_EXPORT OUT_GETPROPERTYRESULT API_CALL GetOutputDeviceChannelsMask(void* info, int* value)
+API_EXPORT OUT_GETPROPERTYRESULT API_CALL GetOutputDeviceChannelsMask(void* info, int* value, int* errorCode)
 {
-    OutputDeviceInfo* outputDeviceInfo = (OutputDeviceInfo*)info;
+    *errorCode = 0;
+
+    OutputDeviceInfo* outputDeviceInfo = static_cast<OutputDeviceInfo*>(info);
     *value = outputDeviceInfo->caps->wChannelMask;
     return OUT_GETPROPERTYRESULT_OK;
 }
 
-API_EXPORT OUT_GETPROPERTYRESULT API_CALL GetOutputDeviceOptions(void* info, OUT_OPTION* value)
+API_EXPORT OUT_GETPROPERTYRESULT API_CALL GetOutputDeviceOptions(void* info, OUT_OPTION* value, int* errorCode)
 {
-    OutputDeviceInfo* outputDeviceInfo = (OutputDeviceInfo*)info;
+    *errorCode = 0;
+
+    OutputDeviceInfo* outputDeviceInfo = static_cast<OutputDeviceInfo*>(info);
     
     int result = OUT_OPTION_UNKNOWN;
     
@@ -767,9 +851,11 @@ API_EXPORT OUT_GETPROPERTYRESULT API_CALL GetOutputDeviceOptions(void* info, OUT
     return OUT_GETPROPERTYRESULT_OK;
 }
 
-API_EXPORT OUT_OPENRESULT API_CALL OpenOutputDevice_Win(void* info, void* sessionHandle, DWORD_PTR callback, void** handle)
+API_EXPORT OUT_OPENRESULT API_CALL OpenOutputDevice_Win(void* info, void* sessionHandle, DWORD_PTR callback, void** handle, int* errorCode)
 {
-    OutputDeviceInfo* outputDeviceInfo = (OutputDeviceInfo*)info;
+    *errorCode = 0;
+
+    OutputDeviceInfo* outputDeviceInfo = static_cast<OutputDeviceInfo*>(info);
 
     OutputDeviceHandle* outputDeviceHandle = new OutputDeviceHandle();
     outputDeviceHandle->info = outputDeviceInfo;
@@ -779,6 +865,8 @@ API_EXPORT OUT_OPENRESULT API_CALL OpenOutputDevice_Win(void* info, void* sessio
     if (result != MMSYSERR_NOERROR)
     {
         delete outputDeviceHandle;
+
+        *errorCode = result;
 
         switch (result)
         {
@@ -799,13 +887,17 @@ API_EXPORT OUT_OPENRESULT API_CALL OpenOutputDevice_Win(void* info, void* sessio
     return OUT_OPENRESULT_OK;
 }
 
-API_EXPORT OUT_CLOSERESULT API_CALL CloseOutputDevice(void* handle)
+API_EXPORT OUT_CLOSERESULT API_CALL CloseOutputDevice(void* handle, int* errorCode)
 {
-    OutputDeviceHandle* outputDeviceHandle = (OutputDeviceHandle*)handle;
+    *errorCode = 0;
+
+    OutputDeviceHandle* outputDeviceHandle = static_cast<OutputDeviceHandle*>(handle);
 
     MMRESULT result = midiOutReset(outputDeviceHandle->handle);
     if (result != MMSYSERR_NOERROR)
     {
+        *errorCode = result;
+
         switch (result)
         {
             case MMSYSERR_INVALHANDLE: return OUT_CLOSERESULT_RESET_INVALIDHANDLE;
@@ -817,6 +909,8 @@ API_EXPORT OUT_CLOSERESULT API_CALL CloseOutputDevice(void* handle)
     result = midiOutClose(outputDeviceHandle->handle);
     if (result != MMSYSERR_NOERROR)
     {
+        *errorCode = result;
+
         switch (result)
         {
             case MIDIERR_STILLPLAYING: return OUT_CLOSERESULT_CLOSE_STILLPLAYING;
@@ -832,18 +926,23 @@ API_EXPORT OUT_CLOSERESULT API_CALL CloseOutputDevice(void* handle)
         delete outputDeviceHandle->info->caps;
         delete outputDeviceHandle->info;
     }
+
     delete outputDeviceHandle;
 
     return OUT_CLOSERESULT_OK;
 }
 
-API_EXPORT OUT_SENDSHORTRESULT API_CALL SendShortEventToOutputDevice(void* handle, int message)
+API_EXPORT OUT_SENDSHORTRESULT API_CALL SendShortEventToOutputDevice(void* handle, int message, int* errorCode)
 {
-    OutputDeviceHandle* outputDeviceHandle = (OutputDeviceHandle*)handle;
+    *errorCode = 0;
+
+    OutputDeviceHandle* outputDeviceHandle = static_cast<OutputDeviceHandle*>(handle);
 
     MMRESULT result = midiOutShortMsg(outputDeviceHandle->handle, (DWORD)message);
     if (result != MMSYSERR_NOERROR)
     {
+        *errorCode = result;
+
         switch (result)
         {
             case MIDIERR_BADOPENMODE: return OUT_SENDSHORTRESULT_BADOPENMODE;
@@ -857,9 +956,11 @@ API_EXPORT OUT_SENDSHORTRESULT API_CALL SendShortEventToOutputDevice(void* handl
     return OUT_SENDSHORTRESULT_OK;
 }
 
-API_EXPORT OUT_SENDSYSEXRESULT API_CALL SendSysExEventToOutputDevice_Win(void* handle, LPSTR data, int size)
+API_EXPORT OUT_SENDSYSEXRESULT API_CALL SendSysExEventToOutputDevice_Win(void* handle, LPSTR data, int size, int* errorCode)
 {
-    OutputDeviceHandle* outputDeviceHandle = (OutputDeviceHandle*)handle;
+    *errorCode = 0;
+
+    OutputDeviceHandle* outputDeviceHandle = static_cast<OutputDeviceHandle*>(handle);
 
     LPMIDIHDR header = new MIDIHDR();
     header->lpData = data;
@@ -871,6 +972,8 @@ API_EXPORT OUT_SENDSYSEXRESULT API_CALL SendSysExEventToOutputDevice_Win(void* h
     if (result != MMSYSERR_NOERROR)
     {
         delete header;
+
+        *errorCode = result;
 
         switch (result)
         {
@@ -885,9 +988,10 @@ API_EXPORT OUT_SENDSYSEXRESULT API_CALL SendSysExEventToOutputDevice_Win(void* h
     result = midiOutLongMsg(outputDeviceHandle->handle, header, sizeof(MIDIHDR));
     if (result != MMSYSERR_NOERROR)
     {
-        // attempt to unprepare if needed
         midiOutUnprepareHeader(outputDeviceHandle->handle, header, sizeof(MIDIHDR));
         delete header;
+
+        *errorCode = result;
 
         switch (result)
         {
@@ -903,13 +1007,17 @@ API_EXPORT OUT_SENDSYSEXRESULT API_CALL SendSysExEventToOutputDevice_Win(void* h
     return OUT_SENDSYSEXRESULT_OK;
 }
 
-API_EXPORT OUT_GETSYSEXDATARESULT API_CALL GetOutputDeviceSysExBufferData(void* handle, LPMIDIHDR header, LPSTR* data, int* size)
+API_EXPORT OUT_GETSYSEXDATARESULT API_CALL GetOutputDeviceSysExBufferData(void* handle, LPMIDIHDR header, LPSTR* data, int* size, int* errorCode)
 {
-    OutputDeviceHandle* outputDeviceHandle = (OutputDeviceHandle*)handle;
+    *errorCode = 0;
+
+    OutputDeviceHandle* outputDeviceHandle = static_cast<OutputDeviceHandle*>(handle);
 
     MMRESULT result = midiOutUnprepareHeader(outputDeviceHandle->handle, header, sizeof(MIDIHDR));
     if (result != MMSYSERR_NOERROR)
     {
+        *errorCode = result;
+
         switch (result)
         {
             case MIDIERR_STILLPLAYING: return OUT_GETSYSEXDATARESULT_STILLPLAYING;
