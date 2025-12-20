@@ -13,13 +13,6 @@
     <ProjectReference Include="..\Common\Melanchall.Common.csproj" />
   </ItemGroup>
 
-  <ItemGroup Label="Native">
-    <None Include="..\..\DryWetMidi\Melanchall_DryWetMidi_Native64.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="..\..\DryWetMidi\Melanchall_DryWetMidi_Native64.dylib">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
+  <Import Project="$(SolutionDir)Melanchall.DryWetMidi.Native.targets" />
 
 </Project>

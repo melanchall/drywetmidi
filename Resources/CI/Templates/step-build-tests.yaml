@@ -8,6 +8,6 @@ steps:
   displayName: Build DryWetMidi.Tests
   inputs:
     command: 'build'
-    arguments: '--configuration $(TestBuildConfiguration) --framework ${{ parameters.tfm }} -bl:build.binlog'
+    arguments: '--configuration $(TestBuildConfiguration) --framework ${{ parameters.tfm }} -bl:build.binlog  -property:SolutionDir="$(Build.SourcesDirectory)/"'
     projects: |
       DryWetMidi.Tests/Melanchall.DryWetMidi.Tests.csproj

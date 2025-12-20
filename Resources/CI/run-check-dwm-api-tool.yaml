@@ -61,4 +61,4 @@ stages:
       inputs:
         command: 'run'
         projects: 'Utilities/CheckDwmApi/Melanchall.CheckDwmApi.csproj'
-        arguments: '--configuration $(BuildConfiguration) -- -noninteractive'
+        arguments: '--configuration $(BuildConfiguration) -property:SolutionDir="$(Build.SourcesDirectory)/" -- -noninteractive'

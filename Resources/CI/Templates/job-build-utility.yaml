@@ -21,7 +21,7 @@ jobs:
       inputs:
         command: 'publish'
         projects: 'Utilities/${{ parameters.projectName }}/Melanchall.${{ parameters.projectName }}.csproj'
-        arguments: '--configuration $(BuildConfiguration) -r ${{ rid }} --self-contained'
+        arguments: '--configuration $(BuildConfiguration) -r ${{ rid }} --self-contained -property:SolutionDir="$(Build.SourcesDirectory)/"'
         zipAfterPublish: false
         publishWebProjects: false
     

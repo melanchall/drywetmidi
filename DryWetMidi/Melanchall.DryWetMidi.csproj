@@ -78,8 +78,6 @@
   </ItemGroup>
 
   <ItemGroup Label="Resources">
-    <Folder Include="Common\Collections\IntervalTree\" />
-    <Folder Include="Properties\" />
     <None Include="..\Resources\NuGet\icon.png" Pack="true" PackagePath="\" />
     <None Include="..\README.md" Pack="true" PackagePath="\" />
   </ItemGroup>
