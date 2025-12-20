@@ -67,7 +67,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
             var intervalInMilliseconds = (int)interval.TotalMilliseconds;
 
-            var apiType = CommonApiProvider.Api.Api_GetApiType();
+            var apiType = CommonApi.Api_GetApiType();
             var sessionHandle = TickGeneratorSession.GetSessionHandle();
 
             switch (apiType)
@@ -124,7 +124,7 @@ namespace Melanchall.DryWetMidi.Multimedia
                 if (_tickGeneratorInfo == IntPtr.Zero)
                     return TickGeneratorApi.TG_STOPRESULT.TG_STOPRESULT_OK;
 
-                var result = TickGeneratorApiProvider.Api.Api_StopHighPrecisionTickGenerator(TickGeneratorSession.GetSessionHandle(), _tickGeneratorInfo);
+                var result = TickGeneratorApi.Api_StopHighPrecisionTickGenerator(TickGeneratorSession.GetSessionHandle(), _tickGeneratorInfo);
                 _tickGeneratorInfo = IntPtr.Zero;
                 return result;
             }
@@ -133,7 +133,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         private TickGeneratorApi.TG_STARTRESULT StartHighPrecisionTickGenerator_Win(int intervalInMilliseconds, out IntPtr tickGeneratorInfo)
         {
             _tickCallback_Win = OnTick_Win;
-            return TickGeneratorApiProvider.Api.Api_StartHighPrecisionTickGenerator_Win(
+            return TickGeneratorApi.Api_StartHighPrecisionTickGenerator_Win(
                 intervalInMilliseconds,
                 TickGeneratorSession.GetSessionHandle(),
                 _tickCallback_Win,
@@ -143,7 +143,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         private TickGeneratorApi.TG_STARTRESULT StartHighPrecisionTickGenerator_Mac(int intervalInMilliseconds, out IntPtr tickGeneratorInfo)
         {
             _tickCallback_Mac = OnTick_Mac;
-            return TickGeneratorApiProvider.Api.Api_StartHighPrecisionTickGenerator_Mac(
+            return TickGeneratorApi.Api_StartHighPrecisionTickGenerator_Mac(
                 intervalInMilliseconds,
                 TickGeneratorSession.GetSessionHandle(),
                 _tickCallback_Mac,

@@ -1,8 +1,9 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 
 namespace Melanchall.DryWetMidi.Multimedia
 {
-    internal abstract class TickGeneratorSessionApi : NativeApi
+    internal static class TickGeneratorSessionApi
     {
         #region Nested enums
 
@@ -22,9 +23,19 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         #endregion
 
+        #region Extern functions
+
+        [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.StdCall)]
+        private static extern TGSESSION_OPENRESULT OpenTickGeneratorSession(out IntPtr handle);
+
+        #endregion
+
         #region Methods
 
-        public abstract TGSESSION_OPENRESULT Api_OpenSession(out IntPtr handle);
+        public static TGSESSION_OPENRESULT Api_OpenSession(out IntPtr handle)
+        {
+            return OpenTickGeneratorSession(out handle);
+        }
 
         #endregion
     }

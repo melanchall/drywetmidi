@@ -34,7 +34,7 @@ namespace Melanchall.DryWetMidi.Multimedia
                 _checkpoints?.SetCheckpointReached(VirtualDeviceCheckpointsNames.HandleFinalizerEntered);
 #endif
 
-                var closeResult = VirtualDeviceApiProvider.Api.Api_CloseDevice(handle);
+                var closeResult = VirtualDeviceApi.Api_CloseDevice(handle);
                 if (closeResult != VirtualDeviceApi.VIRTUAL_CLOSERESULT.VIRTUAL_CLOSERESULT_OK)
                     return false;
 
@@ -65,7 +65,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         {
             _name = name;
 
-            var apiType = CommonApiProvider.Api.Api_GetApiType();
+            var apiType = CommonApi.Api_GetApiType();
             switch (apiType)
             {
                 case CommonApi.API_TYPE.API_TYPE_MAC:
@@ -112,7 +112,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         {
             ThrowIfArgument.IsNullOrWhiteSpaceString(nameof(name), name, "Device name");
 
-            var apiType = CommonApiProvider.Api.Api_GetApiType();
+            var apiType = CommonApi.Api_GetApiType();
             if (apiType != CommonApi.API_TYPE.API_TYPE_MAC)
                 throw new NotSupportedException("Virtual device creation is not supported on the current operating system.");
 
@@ -124,7 +124,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             if (!IsEnabled)
                 return;
 
-            var result = VirtualDeviceApiProvider.Api.Api_SendDataBack(pktlist, readProcRefCon);
+            var result = VirtualDeviceApi.Api_SendDataBack(pktlist, readProcRefCon);
             if (result != VirtualDeviceApi.VIRTUAL_SENDBACKRESULT.VIRTUAL_SENDBACKRESULT_OK)
             {
                 var exception = new MidiDeviceException($"Failed to send data back ({result}).", (int)result);
@@ -140,12 +140,12 @@ namespace Melanchall.DryWetMidi.Multimedia
 
             var deviceInfo = IntPtr.Zero;
             NativeApiUtilities.HandleDevicesNativeApiResult(
-                VirtualDeviceApiProvider.Api.Api_OpenDevice_Mac(Name, sessionHandle, _callback_Mac, out deviceInfo));
+                VirtualDeviceApi.Api_OpenDevice_Mac(Name, sessionHandle, _callback_Mac, out deviceInfo));
 
-            var inputDeviceInfo = VirtualDeviceApiProvider.Api.Api_GetInputDeviceInfo(deviceInfo);
+            var inputDeviceInfo = VirtualDeviceApi.Api_GetInputDeviceInfo(deviceInfo);
             InputDevice = new InputDevice(inputDeviceInfo, CreationContext.VirtualDevice);
 
-            var outputDeviceInfo = VirtualDeviceApiProvider.Api.Api_GetOutputDeviceInfo(deviceInfo);
+            var outputDeviceInfo = VirtualDeviceApi.Api_GetOutputDeviceInfo(deviceInfo);
             OutputDevice = new OutputDevice(outputDeviceInfo, CreationContext.VirtualDevice);
 
 #if TEST

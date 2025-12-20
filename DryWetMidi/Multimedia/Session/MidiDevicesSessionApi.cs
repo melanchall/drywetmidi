@@ -1,8 +1,9 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 
 namespace Melanchall.DryWetMidi.Multimedia
 {
-    internal abstract class MidiDevicesSessionApi : NativeApi
+    internal static class MidiDevicesSessionApi
     {
         #region Nested enums
 
@@ -11,7 +12,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             SESSION_OPENRESULT_OK = 0,
             SESSION_OPENRESULT_SERVERSTARTERROR = 101,
             SESSION_OPENRESULT_WRONGTHREAD = 102,
-            [NativeErrorType(NativeErrorType.NotPermitted)]
+            [NativeApi.NativeErrorType(NativeApi.NativeErrorType.NotPermitted)]
             SESSION_OPENRESULT_NOTPERMITTED = 103,
             SESSION_OPENRESULT_UNKNOWNERROR = 104,
             SESSION_OPENRESULT_THREADSTARTERROR = 105,
@@ -31,17 +32,39 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         #endregion
 
+        #region Extern functions
+
+        [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.StdCall)]
+        private static extern SESSION_OPENRESULT OpenSession_Mac(IntPtr name, InputDeviceCallback inputDeviceCallback, OutputDeviceCallback outputDeviceCallback, out IntPtr handle);
+
+        [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.StdCall)]
+        private static extern SESSION_OPENRESULT OpenSession_Win(IntPtr name, out IntPtr handle);
+
+        [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.StdCall)]
+        private static extern SESSION_CLOSERESULT CloseSession(IntPtr handle);
+
+        #endregion
+
         #region Methods
 
-        public abstract SESSION_OPENRESULT Api_OpenSession_Mac(
+        public static SESSION_OPENRESULT Api_OpenSession_Mac(
             IntPtr name,
             InputDeviceCallback inputDeviceCallback,
             OutputDeviceCallback outputDeviceCallback,
-            out IntPtr handle);
+            out IntPtr handle)
+        {
+            return OpenSession_Mac(name, inputDeviceCallback, outputDeviceCallback, out handle);
+        }
 
-        public abstract SESSION_OPENRESULT Api_OpenSession_Win(IntPtr name, out IntPtr handle);
+        public static SESSION_OPENRESULT Api_OpenSession_Win(IntPtr name, out IntPtr handle)
+        {
+            return OpenSession_Win(name, out handle);
+        }
 
-        public abstract SESSION_CLOSERESULT Api_CloseSession(IntPtr handle);
+        public static SESSION_CLOSERESULT Api_CloseSession(IntPtr handle)
+        {
+            return CloseSession(handle);
+        }
 
         #endregion
     }

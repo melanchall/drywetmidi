@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 
 namespace Melanchall.DryWetMidi.Multimedia
 {
-    internal abstract class NativeApi
+    internal static class NativeApi
     {
         #region Nested classes
 
@@ -52,7 +52,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         #region Constants
 
-        protected const string LibraryName64 = "Melanchall_DryWetMidi_Native64";
+        public const string LibraryName = "Melanchall_DryWetMidi_Native64";
 
         private static readonly Dictionary<NativeErrorType, string> ErrorsDescriptions = new Dictionary<NativeErrorType, string>
         {
@@ -66,7 +66,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         #region Methods
 
-        protected string GetStringFromPointer(IntPtr stringPointer)
+        public static string GetStringFromPointer(IntPtr stringPointer)
         {
             return stringPointer != IntPtr.Zero
                 ? Marshal.PtrToStringAnsi(stringPointer)

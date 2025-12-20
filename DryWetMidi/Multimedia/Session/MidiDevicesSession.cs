@@ -39,7 +39,7 @@ namespace Melanchall.DryWetMidi.Multimedia
                         var name = Guid.NewGuid().ToString();
                         _name = Marshal.StringToHGlobalAuto(name);
 
-                        var apiType = CommonApiProvider.Api.Api_GetApiType();
+                        var apiType = CommonApi.Api_GetApiType();
                         var result = default(MidiDevicesSessionApi.SESSION_OPENRESULT);
 
                         switch (apiType)
@@ -47,10 +47,10 @@ namespace Melanchall.DryWetMidi.Multimedia
                             case CommonApi.API_TYPE.API_TYPE_MAC:
                                 _inputDeviceCallback = InputDeviceCallback;
                                 _outputDeviceCallback = OutputDeviceCallback;
-                                result = MidiDevicesSessionApiProvider.Api.Api_OpenSession_Mac(_name, _inputDeviceCallback, _outputDeviceCallback, out _handle);
+                                result = MidiDevicesSessionApi.Api_OpenSession_Mac(_name, _inputDeviceCallback, _outputDeviceCallback, out _handle);
                                 break;
                             case CommonApi.API_TYPE.API_TYPE_WIN:
-                                result = MidiDevicesSessionApiProvider.Api.Api_OpenSession_Win(_name, out _handle);
+                                result = MidiDevicesSessionApi.Api_OpenSession_Win(_name, out _handle);
                                 break;
                         }
 
@@ -73,7 +73,7 @@ namespace Melanchall.DryWetMidi.Multimedia
                 {
                     if (_handle != IntPtr.Zero)
                     {
-                        MidiDevicesSessionApiProvider.Api.Api_CloseSession(_handle);
+                        MidiDevicesSessionApi.Api_CloseSession(_handle);
                         _handle = IntPtr.Zero;
                     }
                 }

@@ -21,7 +21,7 @@ namespace Melanchall.DryWetMidi.Multimedia
                 if (_handle == IntPtr.Zero)
                 {
                     NativeApiUtilities.HandleTickGeneratorNativeApiResult(
-                        TickGeneratorSessionApiProvider.Api.Api_OpenSession(out _handle));
+                        TickGeneratorSessionApi.Api_OpenSession(out _handle));
                 }
 
                 return _handle;
