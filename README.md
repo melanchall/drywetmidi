@@ -24,7 +24,7 @@ DryWetMIDI is the .NET library to work with MIDI data and MIDI devices. It allow
 * Build musical compositions (see [Pattern](https://melanchall.github.io/drywetmidi/articles/composing/Pattern.html) page of the library docs) and use music theory API (see [Music Theory - Overview](https://melanchall.github.io/drywetmidi/articles/music-theory/Overview.html) article).
 * Perform complex tasks like quantizing, notes splitting or converting MIDI file to CSV representation (see [Tools](https://melanchall.github.io/drywetmidi/articles/tools/Overview.html) page of the library docs).
 
-Please see [Getting started](#getting-started) section below for quick jump into the library.
+Please see [Getting started](#getting-started) section below for quick jump into the library. Or you can dive into the [full documentation](https://melanchall.github.io/drywetmidi).
 
 > [!WARNING]
 > If you want to create an issue or a discussion, read this article first – [Support](https://melanchall.github.io/drywetmidi/articles/dev/Support.html).
@@ -52,9 +52,9 @@ If you find that DryWetMIDI has been useful for your project, please put a link 
 
 ## Getting Started
 
-Let's see small examples of what you can do with the library.
+Let's see small examples of what you can do with the library. Full docs available [here](https://melanchall.github.io/drywetmidi).
 
-It's possible to [read a MIDI file](https://melanchall.github.io/drywetmidi/articles/file-reading-writing/MIDI-file-reading.html), then [collect all notes](https://melanchall.github.io/drywetmidi/articles/high-level-managing/Getting-objects.html) from it and print their time and length in the [metric](https://melanchall.github.io/drywetmidi/articles/high-level-managing/Time-and-length.html) (hours, minutes, second, ...) format:
+Simple task: [read a MIDI file](https://melanchall.github.io/drywetmidi/articles/file-reading-writing/MIDI-file-reading.html), then [collect all notes](https://melanchall.github.io/drywetmidi/articles/high-level-managing/Getting-objects.html) from it and print their times and lengths in the [metric](https://melanchall.github.io/drywetmidi/articles/high-level-managing/Time-and-length.html) (hours, minutes, second, ...) format:
 
 ```csharp
 var midiFile = MidiFile.Read("MyFile.mid");
