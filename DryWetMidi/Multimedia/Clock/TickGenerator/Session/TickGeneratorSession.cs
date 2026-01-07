@@ -16,16 +16,20 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         public static IntPtr GetSessionHandle()
         {
-            lock (_lockObject)
+            if (_handle == IntPtr.Zero)
             {
-                if (_handle == IntPtr.Zero)
+                lock (_lockObject)
                 {
-                    NativeApiUtilities.HandleTickGeneratorNativeApiResult(
-                        TickGeneratorSessionApiProvider.Api.Api_OpenSession(out _handle));
+                    if (_handle == IntPtr.Zero)
+                    {
+                        int errorCode;
+                        var result = TickGeneratorSessionApi.Api_OpenSession(out _handle, out errorCode);
+                        NativeApiUtilities.HandleTickGeneratorNativeApiResult(result, errorCode);
+                    }
                 }
-
-                return _handle;
             }
+
+            return _handle;
         }
 
         #endregion

@@ -17,17 +17,22 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// specified error message and an error code.
         /// </summary>
         /// <param name="message">The error message that explains the reason for the exception.</param>
-        /// <param name="errorCode">The error code.</param>
-        public TickGeneratorException(string message, int errorCode)
+        /// <param name="mainErrorCode">The error code.</param>
+        public TickGeneratorException(
+            string message,
+            int mainErrorCode,
+            int additionalErrorCode)
             : base(message)
         {
-            ErrorCode = errorCode;
+            MainErrorCode = mainErrorCode;
+            AdditionalErrorCode = additionalErrorCode;
         }
 
         private TickGeneratorException(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
-            ErrorCode = info.GetInt32(nameof(ErrorCode));
+            MainErrorCode = info.GetInt32(nameof(MainErrorCode));
+            AdditionalErrorCode = info.GetInt32(nameof(AdditionalErrorCode));
         }
 
         #endregion
@@ -37,7 +42,9 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <summary>
         /// Gets the code of an error represented by the current <see cref="MidiDeviceException"/>.
         /// </summary>
-        public int ErrorCode { get; }
+        public int MainErrorCode { get; }
+
+        public int AdditionalErrorCode { get; }
 
         #endregion
 
@@ -55,7 +62,8 @@ namespace Melanchall.DryWetMidi.Multimedia
         {
             base.GetObjectData(info, context);
 
-            info.AddValue(nameof(ErrorCode), ErrorCode);
+            info.AddValue(nameof(MainErrorCode), MainErrorCode);
+            info.AddValue(nameof(AdditionalErrorCode), AdditionalErrorCode);
         }
 
         #endregion

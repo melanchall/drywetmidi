@@ -1,6 +1,8 @@
-﻿namespace Melanchall.DryWetMidi.Multimedia
+﻿using System.Runtime.InteropServices;
+
+namespace Melanchall.DryWetMidi.Multimedia
 {
-    internal abstract class CommonApi : NativeApi
+    internal static class CommonApi
     {
         #region Nested enums
 
@@ -12,11 +14,27 @@
 
         #endregion
 
+        #region Extern functions
+
+        [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.StdCall)]
+        private static extern API_TYPE GetApiType();
+
+        [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.StdCall)]
+        private static extern bool CanCompareDevices();
+
+        #endregion
+
         #region Methods
 
-        public abstract API_TYPE Api_GetApiType();
+        public static API_TYPE Api_GetApiType()
+        {
+            return GetApiType();
+        }
 
-        public abstract bool Api_CanCompareDevices();
+        public static bool Api_CanCompareDevices()
+        {
+            return CanCompareDevices();
+        }
 
         #endregion
     }
