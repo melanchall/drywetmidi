@@ -6,6 +6,8 @@
     <PublishSingleFile>true</PublishSingleFile>
     <PublishTrimmed>true</PublishTrimmed>
     <RuntimeIdentifiers>win-x64;osx-x64</RuntimeIdentifiers>
+    <AssemblyOriginatorKeyFile>strongnamekey.snk</AssemblyOriginatorKeyFile>
+    <SignAssembly>True</SignAssembly>
   </PropertyGroup>
 
   <ItemGroup>

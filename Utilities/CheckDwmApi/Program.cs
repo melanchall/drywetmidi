@@ -1,3 +1,4 @@
+using Melanchall.Common;
 using Melanchall.DryWetMidi.Composing;
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
@@ -11,13 +12,11 @@ namespace Melanchall.CheckDwmApi
 {
     internal class Program
     {
-        private static readonly string SectionsSmallSeparator = new string('-', 80);
-        private static readonly string SectionsLargeSeparator = new string('=', 80);
-
         static void Main(string[] args)
         {
             var toolOptions = new ToolOptions();
             toolOptions.NonInteractive = args.Any(a => a.Equals("-noninteractive", StringComparison.OrdinalIgnoreCase));
+            toolOptions.ExitOnTaskFailure = args.Any(a => a.Equals("-exitontaskfailure", StringComparison.OrdinalIgnoreCase));
 
             Console.WriteLine(@"
 Thank you for your willing to help make DryWetMIDI better by running this program!
@@ -47,13 +46,13 @@ It will take just several minutes to run all tests guiding you through the proce
 
             //
 
-            Console.WriteLine(SectionsSmallSeparator);
+            Console.WriteLine(UiUtilities.SectionsSmallSeparator);
             Console.WriteLine("Following tasks will be executed:");
             Console.WriteLine(string.Join(Environment.NewLine, tasks.Select((t, i) => $"[{i + 1}] {t.GetTitle()}")));
 
             //
 
-            Console.WriteLine(SectionsSmallSeparator);
+            Console.WriteLine(UiUtilities.SectionsSmallSeparator);
             var reportFilePath = Path.GetFullPath("CheckDwmApiReport.txt");
 
             Console.WriteLine($@"
@@ -63,32 +62,37 @@ that report is just what you'll see in the console. The file will be written to
 
             //
 
+            var exceptions = new List<(string TaskTitle, Exception Exception)>();
+
             using var reportWriter = new ReportWriter(reportFilePath);
 
             for (var i = 0; i < tasks.Count; i++)
             {
                 var task = tasks[i];
+                var taskTitle = task.GetTitle();
 
-                reportWriter.WriteLine(SectionsLargeSeparator);
-                reportWriter.WriteLine($"[{i + 1}] {task.GetTitle()}");
-                reportWriter.WriteLine(SectionsSmallSeparator);
+                reportWriter.WriteLine(UiUtilities.SectionsLargeSeparator);
+                reportWriter.WriteLine($"[{i + 1}] {taskTitle}");
+                reportWriter.WriteLine(UiUtilities.SectionsSmallSeparator);
                 reportWriter.WriteLine(task.GetDescription().Trim());
-                reportWriter.WriteLine(SectionsLargeSeparator);
+                reportWriter.WriteLine(UiUtilities.SectionsLargeSeparator);
 
                 try
                 {
                     task.Execute(toolOptions, reportWriter);
 
-                    reportWriter.WriteLine(SectionsSmallSeparator);
+                    reportWriter.WriteLine(UiUtilities.SectionsSmallSeparator);
                     reportWriter.WriteLine("SUCCESS");
                 }
                 catch (TaskFailedException ex)
                 {
                     reportWriter.WriteLine($"FAILED: {ex.Message}");
+                    exceptions.Add((taskTitle, ex));
                 }
                 catch (Exception ex)
                 {
                     reportWriter.WriteLine($"UNEXPECTED FAILURE: {ex}");
+                    exceptions.Add((taskTitle, ex));
                 }
             }
 
@@ -96,16 +100,19 @@ that report is just what you'll see in the console. The file will be written to
 
             reportWriter.Close();
 
-            Console.WriteLine(SectionsLargeSeparator);
+            Console.WriteLine(UiUtilities.SectionsLargeSeparator);
             Console.WriteLine($@"
 All tasks finished. Report has been saved at
 {reportFilePath}".Trim());
+
+            if (exceptions.Count > 0 && toolOptions.ExitOnTaskFailure)
+                throw new InvalidOperationException($"Following tasks failed:{Environment.NewLine}{string.Join(Environment.NewLine, exceptions.Select(e => $"- {e.TaskTitle}: {e.Exception.Message}"))}");
 
             if (!toolOptions.NonInteractive)
             {
                 OpenReportFile(reportFilePath);
 
-                Console.WriteLine(SectionsSmallSeparator);
+                Console.WriteLine(UiUtilities.SectionsSmallSeparator);
                 Console.WriteLine("Press any key to exit...");
                 Console.ReadKey();
             }

@@ -330,7 +330,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             if (fileName.StartsWith(nameof(CheckFilePlayback)))
             {
                 var index = fileName.IndexOf("MIDI files", StringComparison.OrdinalIgnoreCase);
-                var testFileName = fileName.Substring(index);
+                var testFileName = fileName.Substring(index).Trim(')', '"');
                 fileName = $"{nameof(CheckFilePlayback)}({testFileName.Replace('/', '_').Replace('\\', '_')})";
             }
 

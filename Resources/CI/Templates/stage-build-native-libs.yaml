@@ -13,10 +13,7 @@ stages:
         targetType: 'inline'
         script: |
           cd Resources\Native
-          Write-Host "Compiling..."
-          gcc -c NativeApi-Windows.cpp -lwinmm -lstdc++
-          Write-Host "Building dll..."
-          gcc -shared -o Melanchall_DryWetMidi_Native64.dll NativeApi-Windows.o -lwinmm -lstdc++
+          g++ NativeApi-Windows.cpp -o Melanchall_DryWetMidi_Native64.dll -shared -lwinmm -static-libgcc -static-libstdc++ -static
     - task: PublishPipelineArtifact@1
       displayName: 'Publish dll artifact'
       inputs:

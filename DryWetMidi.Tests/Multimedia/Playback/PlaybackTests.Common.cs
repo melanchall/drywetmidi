@@ -149,14 +149,6 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var delayStopwatch = new Stopwatch();
             var receivedEvents = new List<SentReceivedEvent>();
 
-            long Measure(Action action)
-            {
-                var start = delayStopwatch.ElapsedMilliseconds;
-                action();
-                var end = delayStopwatch.ElapsedMilliseconds;
-                return end - start;
-            }
-
             var actionTimes = Enumerable
                 .Range(0, actions.Length)
                 .Select(i => actions.Take(i + 1).Sum(a => a.PeriodMs))
@@ -170,6 +162,21 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 
                 using (var playback = createPlayback(outputDevice))
                 {
+                    long Measure(Action action)
+                    {
+                        TracePlaybackAction(playback, "measuring action...");
+                        var start = delayStopwatch.ElapsedMilliseconds;
+
+                        TracePlaybackAction(playback, "executing action...");
+                        action();
+                        TracePlaybackAction(playback, "action executed");
+
+                        var end = delayStopwatch.ElapsedMilliseconds;
+                        TracePlaybackAction(playback, "action measured");
+
+                        return end - start;
+                    }
+
                     try
                     {
                         setupPlayback?.Invoke(playback);

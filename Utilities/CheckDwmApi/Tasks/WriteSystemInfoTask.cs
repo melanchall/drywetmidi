@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Reflection;
 
 namespace Melanchall.CheckDwmApi
 {
@@ -32,12 +33,18 @@ namespace Melanchall.CheckDwmApi
             "Write system information";
 
         public string GetDescription() =>
-            "Writes system information: CPU architecture, CPU name and operating system.";
+            "Writes system information: tool version, CPU architecture, CPU name and operating system.";
 
         public void Execute(
             ToolOptions toolOptions,
             ReportWriter reportWriter)
         {
+            var assembly = Assembly.GetExecutingAssembly();
+            var version = assembly
+                .GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion ?? "unknown";
+
+            reportWriter.WriteOperationTitle($"Tool version: {version}");
+
             reportWriter.WriteOperationTitle($"Retrieving system information for {GetBasicOsInfo()}...");
 
             InfoProvider[] infoProviders = null;
@@ -98,7 +105,7 @@ namespace Melanchall.CheckDwmApi
                                 OperatingSystem.IsMacOS() ? "macOS" :
                                 "Unknown OS";
 
-            return $"{osDescription} (){versionString})";
+            return $"{osDescription} ({versionString})";
         }
 
         private static InfoProvider[] GetInfoProviders()

@@ -4,17 +4,31 @@ namespace Melanchall.Common
 {
     public static class UiUtilities
     {
+        #region Constants
+
+        public static readonly string SectionsSmallSeparator = new string('-', 80);
+        public static readonly string SectionsLargeSeparator = new string('=', 80);
+
+        #endregion
+
         #region Methods
 
-        public static void WriteHello() => WriteLines(
-            Assembly.GetCallingAssembly().GetName().Name,
-            "Powered by Melanchall's DryWetMIDI library",
-            "====================================================",
-            string.Empty);
+        public static void WriteHello()
+        {
+            var callingAssembly = Assembly.GetCallingAssembly();
+            var version = callingAssembly
+                .GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion ?? "unknown";
+
+            WriteLines(
+                $"{callingAssembly.GetName().Name} ({version})",
+                "Powered by Melanchall's DryWetMIDI library",
+                SectionsLargeSeparator,
+                string.Empty);
+        }
 
         public static void WriteUtilityDescription(string description) => WriteLines(
             description.Trim(),
-            "----------------------------------------------------",
+            SectionsSmallSeparator,
             string.Empty);
 
         public static void WriteLine(string line) => WriteLines(
