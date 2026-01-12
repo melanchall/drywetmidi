@@ -11,7 +11,7 @@
 #include <algorithm>
 #include <new>
 
-#include "NativeApi-Constants.h"
+#include "../Common/NativeApi-Constants.h"
 
 #define API_EXPORT extern "C" __declspec(dllexport)
 #define API_CALL __cdecl

@@ -10,7 +10,7 @@
 #include <cstdint>
 #include <cstring>
 
-#include "NativeApi-Constants.h"
+#include "../Common/NativeApi-Constants.h"
 
 #define PROPERTY_VALUE_BUFFER_SIZE 256
 #define SMALL_BUFFER_ERROR 10000

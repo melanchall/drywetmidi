@@ -1,0 +1,28 @@
+<Solution>
+  <Configurations>
+    <BuildType Name="Debug" />
+    <BuildType Name="ReleaseArm64" />
+    <BuildType Name="ReleaseArm64X" />
+    <BuildType Name="ReleaseX64" />
+    <Platform Name="ARM64" />
+    <Platform Name="ARM64EC" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="Melanchall.DryWetMidi.Native.Windows/Melanchall.DryWetMidi.Native.Windows.vcxproj" Id="a8b8e0af-9130-4539-bb4b-21321dfe99af">
+    <BuildType Solution="*|ARM64" Project="Release" />
+    <BuildType Solution="ReleaseArm64X|ARM64EC" Project="Release" />
+    <BuildType Solution="ReleaseArm64X|x64" Project="Release" />
+    <BuildType Solution="ReleaseArm64X|x86" Project="Release" />
+    <BuildType Solution="ReleaseArm64|ARM64EC" Project="Release" />
+    <BuildType Solution="ReleaseArm64|x64" Project="Release" />
+    <BuildType Solution="ReleaseArm64|x86" Project="Release" />
+    <BuildType Solution="ReleaseX64|ARM64EC" Project="Release" />
+    <BuildType Solution="ReleaseX64|x64" Project="Release" />
+    <BuildType Solution="ReleaseX64|x86" Project="Release" />
+    <Platform Solution="ReleaseArm64X|ARM64" Project="ARM64EC" />
+    <Platform Solution="ReleaseArm64|ARM64EC" Project="ARM64" />
+    <Platform Solution="ReleaseX64|ARM64" Project="x64" />
+    <Platform Solution="ReleaseX64|ARM64EC" Project="x64" />
+  </Project>
+</Solution>
