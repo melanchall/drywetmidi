@@ -37,6 +37,9 @@ stages:
         macOS_Net:
           vmImage: 'macos-latest'
           framework: 'Net'
+        macOS_Arm_Net:
+          vmImage: 'macOS-15-arm64'
+          framework: 'Net'
         Ubuntu_Net:
           vmImage: 'ubuntu-latest'
           framework: 'Net'

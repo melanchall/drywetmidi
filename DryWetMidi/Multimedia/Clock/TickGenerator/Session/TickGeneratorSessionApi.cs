@@ -25,7 +25,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         #region Extern functions
 
-        [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.StdCall)]
+        [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
         private static extern TGSESSION_OPENRESULT OpenTickGeneratorSession(out IntPtr handle, out int errorCode);
 
         #endregion
