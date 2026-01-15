@@ -95,11 +95,7 @@ namespace Melanchall.DryWetMidi.Tests.Common
         public static IEnumerable<string> GetInvalidFilesPaths(string directoryName)
         {
             return Directory
-                .GetFiles(GetInvalidFilesDirectory(directoryName))
-#if COVERAGE
-                .Take(1)
-#endif
-                ;
+                .GetFiles(GetInvalidFilesDirectory(directoryName));
         }
 
         public static string GetInvalidFilesDirectory(string directoryName)

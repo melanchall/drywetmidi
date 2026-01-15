@@ -63,9 +63,15 @@ namespace Melanchall.DryWetMidi.Multimedia
             }
         }
 
-        public ICollection<string> GetTraces() => _actions
-            .Select(a => $"{a.Timestamp} -> {a.PlaybackTime}: {a.Description}")
-            .ToArray();
+        public ICollection<string> GetTraces()
+        {
+            lock (_lockObject)
+            {
+                return _actions
+                    .Select(a => $"{a.Timestamp} -> {a.PlaybackTime} -> {a.Description}")
+                    .ToArray();
+            }
+        }
 
         #endregion
     }

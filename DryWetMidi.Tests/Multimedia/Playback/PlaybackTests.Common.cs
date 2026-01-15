@@ -56,7 +56,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [OneTimeSetUp]
         public static void GlobalSetup()
         {
-            var playbackTracesDirectoryPath = GetPlaybackTracesDirectoryPath();
+            var playbackTracesDirectoryPath = GetPlaybackTracesRootDirectoryPath();
             if (Directory.Exists(playbackTracesDirectoryPath))
                 Directory.Delete(playbackTracesDirectoryPath, true);
 

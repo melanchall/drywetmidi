@@ -94,10 +94,8 @@ namespace Melanchall.DryWetMidi.Tests.Core
 
         [TestCase(1024)]
         [TestCase(4)]
-#if !COVERAGE
         [TestCase(4096)]
         [TestCase(500000)]
-#endif
         public void Read_NonSeekableStream_BufferSize(int bufferSize)
         {
             Read_NonSeekableStream(new ReaderSettings

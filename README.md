@@ -68,7 +68,7 @@ foreach (var note in midiFile.GetNotes())
 }
 ```
 
-Or maybe you want to [record data](https://melanchall.github.io/drywetmidi/articles/recording/Overview.html) from a [MIDI device](https://melanchall.github.io/drywetmidi/articles/devices/Overview.html), then [quantize](https://melanchall.github.io/drywetmidi/articles/tools/Overview.html) recorded events by the grid with step of 1/8, and [play](https://melanchall.github.io/drywetmidi/articles/playback/Overview.html) the data via the default Windows synth:
+Or maybe you want to [record data](https://melanchall.github.io/drywetmidi/articles/recording/Overview.html) from a [MIDI device](https://melanchall.github.io/drywetmidi/articles/devices/Overview.html), then [quantize](https://melanchall.github.io/drywetmidi/articles/tools/Quantizer.html) (see all [tools](https://melanchall.github.io/drywetmidi/articles/tools/Overview.html)) recorded events by the grid with step of 1/8, and [play](https://melanchall.github.io/drywetmidi/articles/playback/Overview.html) the data via the default Windows synth:
 
 ```csharp
 var inputDevice = InputDevice.GetByName("MyMidiKeyboard");
@@ -131,6 +131,85 @@ var pattern = new PatternBuilder()
 
 var midiFile = pattern.ToFile(TempoMap.Create(Tempo.FromBeatsPerMinute(240)));
 midiFile.Write("DrumPattern.mid");
+```
+
+Slightly more crazy example:
+
+1. create 100 [notes](https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Interaction.Note.html) prepended with text [events](https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Interaction.TimedEvent.html) containing note numbers (each note starts at the [beginning of a new bar](https://melanchall.github.io/drywetmidi/articles/high-level-managing/Time-and-length.html#bars-beats-and-ticks) and has length of [1.5 beats](https://melanchall.github.io/drywetmidi/articles/high-level-managing/Time-and-length.html#bars-beats-and-fraction));
+2. [split](https://melanchall.github.io/drywetmidi/articles/tools/Splitter.html) all created objects into four parts;
+3. [repeat](https://melanchall.github.io/drywetmidi/articles/tools/Repeater.html) (see all [tools](https://melanchall.github.io/drywetmidi/articles/tools/Overview.html)) the resulting objects nine times, starting each part at the beginning of the nearest bar after the previous part;
+4. [write](https://melanchall.github.io/drywetmidi/articles/file-reading-writing/MIDI-file-writing.html) the resulting objects to a MIDI file.
+
+Here is how it can be done:
+
+```csharp
+var tempoMap = TempoMap.Default;
+var noteLength = new BarBeatFractionTimeSpan(0, 1.5);
+ 
+var objects = Enumerable
+    .Range(0, 100)
+    .SelectMany(i =>
+    {
+        var time = new BarBeatTicksTimeSpan(i);
+        return new ITimedObject[]
+        {
+            new TimedEvent(new TextEvent(i.ToString()))
+                .SetTime(time, tempoMap),
+            new Melanchall.DryWetMidi.Interaction.Note((SevenBitNumber)i)
+                .SetTime(time, tempoMap)
+                .SetLength(noteLength, tempoMap),
+        };
+    });
+ 
+var manyObjects = objects
+    .SplitObjectsByPartsNumber(4, TimeSpanType.BarBeatTicks, tempoMap)
+    .Repeat(9, tempoMap, new RepeatingSettings
+    {
+        ShiftRoundingPolicy = TimeSpanRoundingPolicy.RoundUp,
+        ShiftRoundingStep = new BarBeatTicksTimeSpan(1)
+    });
+ 
+var midiFile = objects.ToFile();
+midiFile.Write("ManyObjects.mid");
+```
+
+If you are a user of macOS, you can use API to manage [virtual MIDI devices](https://melanchall.github.io/drywetmidi/articles/devices/Virtual-device.html) and to watch [devices plugging/unplugging](https://melanchall.github.io/drywetmidi/articles/devices/Devices-watcher.html):
+
+```csharp
+DevicesWatcher.Instance.DeviceAdded += OnDeviceAdded;
+DevicesWatcher.Instance.DeviceRemoved += OnDeviceRemoved;
+ 
+// Virtual device creation will cause DevicesWatcher.Instance.DeviceAdded
+// will be fired since one input device and one output device
+// will be created
+var virtualDevice = VirtualDevice.Create("My Virtual Device");
+ 
+virtualDevice.InputDevice.EventReceived += OnEventReceived;
+virtualDevice.InputDevice.StartEventsListening();
+ 
+// Since virtual device is a loopback device in DryWetMIDI,
+// this event will be received on virtualDevice.InputDevice
+virtualDevice.OutputDevice.SendEvent(new PitchBendEvent(2000));
+
+// Dispose the virtual device when you don't need it anymore
+virtualDevice.Dispose();
+
+// Events handlers
+
+private static void OnDeviceAdded(object? sender, DeviceAddedRemovedEventArgs e)
+{
+    // ...
+}
+ 
+private static void OnDeviceRemoved(object? sender, DeviceAddedRemovedEventArgs e)
+{
+    // ...
+}
+ 
+private static void OnEventReceived(object sender, MidiEventReceivedEventArgs e)
+{
+    // ...
+}
 ```
 
 Also you can check out sample applications from [CIRCE-EYES](https://github.com/CIRCE-EYES) (see the profile, VB.NET is used)

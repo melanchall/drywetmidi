@@ -1,3 +1,9 @@
+parameters:
+- name: suffix
+  displayName: 'Artifacts suffix'
+  type: string
+  default: ''
+
 steps:
 - task: PowerShell@2
   displayName: Collect crash dump
@@ -51,7 +57,7 @@ steps:
   condition: eq(variables['CrashDumpFound'], true)
   inputs:
     targetPath: '$(CrashDumpPath)'
-    artifactName: 'CrashDump'
+    artifactName: 'CrashDump${{ parameters.suffix }}_Attempt$(System.JobAttempt)'
     artifactType: pipeline
 
 - task: PublishPipelineArtifact@1
@@ -59,7 +65,7 @@ steps:
   condition: eq(variables['DiagnosticReportsFound'], true)
   inputs:
     targetPath: '$(Pipeline.Workspace)/DiagnosticReports'
-    artifactName: 'DiagnosticReports'
+    artifactName: 'DiagnosticReports${{ parameters.suffix }}_Attempt$(System.JobAttempt)'
     artifactType: pipeline
 
 - task: PowerShell@2
@@ -78,5 +84,5 @@ steps:
   condition: always()
   inputs:
     targetPath: '$(Pipeline.Workspace)/Logs'
-    artifactName: 'Logs'
+    artifactName: 'Logs${{ parameters.suffix }}_Attempt$(System.JobAttempt)'
     artifactType: pipeline

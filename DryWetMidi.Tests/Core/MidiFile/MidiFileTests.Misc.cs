@@ -93,23 +93,25 @@ namespace Melanchall.DryWetMidi.Tests.Core
         {
             var filesPaths = TestFilesProvider.GetValidFilesPaths().ToArray();
 
-            for (var i = 0; i < filesPaths.Length; i++)
+            var midiFiles = filesPaths
+                .Select(path => (Path: path, File: MidiFile.Read(path)))
+                .ToArray();
+
+            for (var i = 0; i < midiFiles.Length; i++)
             {
-                var iFilePath = filesPaths[i];
-                var iMidiFile = MidiFile.Read(iFilePath);
-
-                for (var j = i + 1; j < filesPaths.Length; j++)
+                for (var j = i + 1; j < midiFiles.Length; j++)
                 {
-                    var jFilePath = filesPaths[j];
-                    var jMidiFile = MidiFile.Read(jFilePath);
-
-                    MidiAsserts.AreNotEqual(iMidiFile, jMidiFile, true, $"File '{iFilePath}' equals to another one '{jFilePath}'.");
+                    MidiAsserts.AreNotEqual(
+                        midiFiles[i].File,
+                        midiFiles[j].File,
+                        true,
+                        $"File '{midiFiles[i].Path}' equals to another one '{midiFiles[j].Path}'.");
                 }
             }
         }
 
         #endregion
-        
+
         #region Private methods
 
         private MidiFile WriteRead(MidiFile midiFile, WritingSettings writingSettings = null, ReadingSettings readingSettings = null)

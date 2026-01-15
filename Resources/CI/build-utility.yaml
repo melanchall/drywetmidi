@@ -36,13 +36,17 @@ stages:
       projectName: 'ReceiveMidiData'
       rids:
       - 'win-x64'
+      - 'win-arm64'
       - 'osx-x64'
+      - 'osx-arm64'
   - template: Templates/job-build-utility.yaml
     parameters:
       projectName: 'SendMidiData'
       rids:
       - 'win-x64'
+      - 'win-arm64'
       - 'osx-x64'
+      - 'osx-arm64'
   - template: Templates/job-build-utility.yaml
     parameters:
       projectName: 'CheckDwmApi'

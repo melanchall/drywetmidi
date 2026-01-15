@@ -16,8 +16,8 @@ trigger:
     - 'Resources/CI/Templates/step-setup-framework.yaml'
     - 'Resources/CI/Templates/step-build-tests.yaml'
     exclude:
-    - 'DryWetMidi/Devices/*'
-    - 'DryWetMidi.Tests/Devices/*'
+    - 'DryWetMidi/Multimedia/*'
+    - 'DryWetMidi.Tests/Multimedia/*'
 
 pr:
   branches:
@@ -41,24 +41,41 @@ pr:
 variables:
 - group: DryWetMIDI-Common-Variables
 
-name: TestCore_$(Framework)_$(SourceBranchName)_$(LibraryVersion)$(Rev:.r)
+name: TestCore_$(SourceBranchName)_$(LibraryVersion)$(Rev:.r)
 
 stages:
 - template: Templates/stage-build-native-libs.yaml
     
 - stage: RunTests
   displayName: Run tests
-  pool:
-    vmImage: '$(VmImage)'
   jobs:
   - job: RunTests
     displayName: Run tests
+    strategy:
+      matrix:
+        Windows_Net:
+          vmImage: 'windows-latest'
+          framework: 'Net'
+        Windows_NetFramework:
+          vmImage: 'windows-latest'
+          framework: 'NetFramework'
+        macOS_Net:
+          vmImage: 'macos-latest'
+          framework: 'Net'
+        macOS_Arm_Net:
+          vmImage: 'macOS-15-arm64'
+          framework: 'Net'
+        Ubuntu_Net:
+          vmImage: 'ubuntu-latest'
+          framework: 'Net'
+    pool:
+      vmImage: $(vmImage)
     steps:
     - template: Templates/step-copy-native-libraries-near-csproj.yaml
     
     - template: Templates/step-setup-framework.yaml
       parameters:
-        framework: '$(Framework)'
+        framework: '$(framework)'
         
     - task: PowerShell@2
       displayName: Remove Multimedia folder
@@ -81,3 +98,5 @@ stages:
         arguments: '--blame --no-build --configuration $(TestBuildConfiguration) --framework $(Tfm) --verbosity normal --diag diagnostic.log --logger "console;verbosity=normal" -property:SolutionDir="$(Build.SourcesDirectory)/"'
         
     - template: Templates/step-collect-logs.yaml
+      parameters:
+        suffix: '_$(vmImage)_$(framework)'

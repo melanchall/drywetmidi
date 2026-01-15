@@ -49,6 +49,9 @@ stages:
         macOS_Net:
           vmImage: 'macos-latest'
           framework: 'Net'
+        macOS_Arm_Net:
+          vmImage: 'macOS-15-arm64'
+          framework: 'Net'
     pool:
       vmImage: $(vmImage)
     steps:

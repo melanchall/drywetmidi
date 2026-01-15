@@ -51,6 +51,10 @@ stages:
           vmImage: 'macos-latest'
           rid: 'osx-x64'
           includeAll: 'true'
+        macOS_Arm_Net_IncludeAll:
+          vmImage: 'macos-15-arm64'
+          rid: 'osx-arm64'
+          includeAll: 'true'
         Windows_Net_DontIncludeAll:
           vmImage: 'windows-latest'
           rid: 'win-x64'
@@ -58,6 +62,10 @@ stages:
         macOS_Net_DontIncludeAll:
           vmImage: 'macos-latest'
           rid: 'osx-x64'
+          includeAll: 'false'
+        macOS_Arm_Net_DontIncludeAll:
+          vmImage: 'macos-15-arm64'
+          rid: 'osx-arm64'
           includeAll: 'false'
     pool:
       vmImage: $(vmImage)

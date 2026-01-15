@@ -1,4 +1,5 @@
 ﻿using Melanchall.DryWetMidi.Multimedia;
+using Melanchall.DryWetMidi.Tests.Common;
 using NUnit.Framework;
 using SkiaSharp;
 using System;
@@ -40,6 +41,34 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             ICollection<SentReceivedEvent> actualReceivedEvents)
         {
             var tracesDirectoryPath = GetPlaybackTracesDirectoryPath();
+
+            //
+
+            string GetTickDataLogFilePath(string subLabel)
+            {
+                var tickDataFileName = GetPlaybackTracesFileName($"{label}_{subLabel}");
+                return Path.Combine(tracesDirectoryPath, $"{tickDataFileName}.log");
+            }
+
+            var tickTimesFilePath = GetTickDataLogFilePath("TickTimes");
+            FileOperations.WriteAllLinesToFile(
+                tickTimesFilePath,
+                clockTracer.GetTickTimes()
+                    .Select((tt, i) => $"{i}: {string.Join(",", tt)}"));
+
+            void WriteTimesToFile(string subLabel, long[] times)
+            {
+                var timesFilePath = GetTickDataLogFilePath(subLabel);
+                FileOperations.WriteAllLinesToFile(
+                    timesFilePath,
+                    new[] { string.Join(",", times) });
+            }
+
+            WriteTimesToFile("StartTimes", clockTracer.GetStartTimes());
+            WriteTimesToFile("StopTimes", clockTracer.GetStopTimes());
+
+            //
+
             var fileName = GetPlaybackTracesFileName(label);
             var filePath = Path.Combine(tracesDirectoryPath, $"{fileName}.png");
 
@@ -323,21 +352,12 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
         private static string GetPlaybackTracesFileName(string label)
         {
-            var testName = TestContext.CurrentContext.Test.Name;
+            var testName = GetTestName();
             var retryCount = TestContext.CurrentContext.CurrentRepeatCount;
-
-            var fileName = testName;
-            if (fileName.StartsWith(nameof(CheckFilePlayback)))
-            {
-                var index = fileName.IndexOf("MIDI files", StringComparison.OrdinalIgnoreCase);
-                var testFileName = fileName.Substring(index).Trim(')', '"');
-                fileName = $"{nameof(CheckFilePlayback)}({testFileName.Replace('/', '_').Replace('\\', '_')})";
-            }
-
-            return $"{fileName}{(string.IsNullOrWhiteSpace(label) ? string.Empty : $"_{label}")}_{retryCount}";
+            return $"{testName}{(string.IsNullOrWhiteSpace(label) ? string.Empty : $"_{label}")}_{retryCount}";
         }
 
-        private static string GetPlaybackTracesDirectoryPath()
+        private static string GetPlaybackTracesRootDirectoryPath()
         {
             var artifactsStagingDirectory = Environment.GetEnvironmentVariable("BUILD_ARTIFACTSTAGINGDIRECTORY");
             var buildId = Environment.GetEnvironmentVariable("BUILD_BUILDID");
@@ -347,6 +367,30 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 : Path.Combine(artifactsStagingDirectory, buildId);
 
             return Path.Combine(tempPath, "PlaybackTraces");
+        }
+
+        private static string GetPlaybackTracesDirectoryPath()
+        {
+            var rootPath = GetPlaybackTracesRootDirectoryPath();
+            
+            var directoryPath = Path.Combine(rootPath, GetTestName());
+            if (!Directory.Exists(directoryPath))
+                Directory.CreateDirectory(directoryPath);
+            
+            return directoryPath;
+        }
+
+        private static string GetTestName()
+        {
+            var testName = TestContext.CurrentContext.Test.Name;
+            if (testName.StartsWith(nameof(CheckFilePlayback)))
+            {
+                var index = testName.IndexOf("MIDI files", StringComparison.OrdinalIgnoreCase);
+                var testFileName = testName.Substring(index).Trim(')', '"');
+                testName = $"{nameof(CheckFilePlayback)}({testFileName.Replace('/', '_').Replace('\\', '_')})";
+            }
+
+            return testName;
         }
 
         #endregion
