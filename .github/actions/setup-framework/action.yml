@@ -1,0 +1,59 @@
+name: 'Setup Framework'
+description: 'Sets up the required .NET framework and sets TFM variables'
+
+inputs:
+  framework:
+    description: 'Framework (Net or NetFramework)'
+    required: true
+  net-tfm:
+    description: 'Target Framework Moniker for Net'
+    required: false
+  net-sdk-version:
+    description: 'SDK version for Net'
+    required: false
+  netframework-tfm:
+    description:  'Target Framework Moniker for NetFramework'
+    required:  false
+  netframework-sdk-version:
+    description: 'SDK version for NetFramework'
+    required: false
+
+outputs:
+  tfm:
+    description: 'The Target Framework Moniker'
+    value: ${{ steps.set-vars.outputs.tfm }}
+  sdk-version:
+    description:  'The SDK version'
+    value: ${{ steps.set-vars.outputs.sdk-version }}
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Setup framework variables
+      id: set-vars
+      shell: pwsh
+      run: |
+        switch ("${{ inputs.framework }}")
+        {
+            'NetFramework' { 
+              $tfm = "${{ inputs. netframework-tfm }}"
+              $sdkVersion = "${{ inputs.netframework-sdk-version }}"
+              Break 
+            }
+            'Net' { 
+              $tfm = "${{ inputs.net-tfm }}"
+              $sdkVersion = "${{ inputs.net-sdk-version }}"
+              Break 
+            }
+        }
+        
+        echo "tfm=$tfm" >> $env:GITHUB_OUTPUT
+        Write-Host "Tfm set to $tfm"
+        
+        echo "sdk-version=$sdkVersion" >> $env:GITHUB_OUTPUT
+        Write-Host "SdkVersion set to $sdkVersion"
+    
+    - name: Setup .NET SDK
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ steps.set-vars.outputs.sdk-version }}

@@ -1,0 +1,107 @@
+name: Build NuGet Package
+
+on:
+  workflow_call:
+    inputs:
+      package-type:
+        description: 'Package type (Full or Nativeless)'
+        required: false
+        type: string
+        default: 'Full'
+      prerelease-number:
+        description: 'Prerelease number (empty for release)'
+        required: false
+        type: string
+        default: ''
+
+jobs:
+  build-package: 
+    name: Build NuGet Package
+    runs-on: windows-latest
+    steps:
+      - name:  Checkout
+        uses: actions/checkout@v4
+      
+      - name: Download native libraries
+        if: inputs.package-type == 'Full'
+        uses: actions/download-artifact@v4
+        with:
+          path: ${{ runner.temp }}/NativeLibraries
+      
+      - name: Setup metadata
+        shell: pwsh
+        run: |
+          $filePath = Resolve-Path "DryWetMidi/Melanchall.DryWetMidi.csproj"
+          $xml = New-Object xml
+          $xml.PreserveWhitespace = $true
+          $xml.Load($filePath)
+          
+          $version = $xml.Project.PropertyGroup[1].Version
+          Write-Host "Current version is $version"
+          $newVersion = "${{ vars.LIBRARY_VERSION }}"
+          $xml.Project.PropertyGroup[1].Version = $newVersion
+          Write-Host "New version: $($xml.Project.PropertyGroup[1].Version)"
+          
+          Write-Host "Setting release notes up..."
+          $xml.Project.PropertyGroup[1].PackageReleaseNotes = "https://github.com/melanchall/drywetmidi/releases/tag/v${{ vars.LIBRARY_VERSION }}"
+          Write-Host "Release notes: $($xml.Project.PropertyGroup[1].PackageReleaseNotes)"
+          
+          Write-Host "Setting copyright up..."
+          $xml.Project.PropertyGroup[1].Copyright = "Copyright © Melanchall $((Get-Date).Year)"
+          Write-Host "Copyright: $($xml.Project.PropertyGroup[1].Copyright)"
+          
+          $xml.Save($filePath)
+      
+      - name: Setup prerelease version
+        if: inputs.prerelease-number != ''
+        shell: pwsh
+        run: |
+          $filePath = Resolve-Path "DryWetMidi/Melanchall.DryWetMidi.csproj"
+          $xml = New-Object xml
+          $xml.PreserveWhitespace = $true
+          $xml.Load($filePath)
+          $version = $xml.Project.PropertyGroup[1].Version
+          Write-Host "Current version is $version"
+          Write-Host "Prerelease number is ${{ inputs.prerelease-number }}"
+          $newVersion = $version + "-prerelease${{ inputs.prerelease-number }}"
+          $xml.Project.PropertyGroup[1].Version = $newVersion
+          Write-Host "New version: $($xml.Project.PropertyGroup[1].Version)"
+          Write-Host "Removing release notes..."
+          $xml.Project.PropertyGroup[1].PackageReleaseNotes = ""
+          Write-Host "Release notes:  $($xml.Project.PropertyGroup[1].PackageReleaseNotes)"
+          $xml.Save($filePath)
+      
+      - name: Setup framework
+        id: framework
+        uses: ./.github/actions/setup-framework
+        with:
+          framework:  Net
+          net-tfm:  ${{ vars.BUILD_FRAMEWORK_NET_TFM || 'net8.0' }}
+          net-sdk-version: ${{ vars.BUILD_FRAMEWORK_NET_SDK_VERSION || '8.0.x' }}
+          netframework-tfm: ${{ vars.BUILD_FRAMEWORK_NETFRAMEWORK_TFM || 'net48' }}
+          netframework-sdk-version: ${{ vars.BUILD_FRAMEWORK_NETFRAMEWORK_SDK_VERSION || '8.0.x' }}
+      
+      - name: Copy native libraries near csproj
+        if: inputs.package-type == 'Full'
+        shell: pwsh
+        run: |
+          Copy-Item -Path "${{ runner.temp }}/NativeLibraries/**/*.dll" -Destination "DryWetMidi" -ErrorAction SilentlyContinue
+          Copy-Item -Path "${{ runner.temp }}/NativeLibraries/**/*.dylib" -Destination "DryWetMidi" -ErrorAction SilentlyContinue
+      
+      - name: Build project
+        run: dotnet build DryWetMidi/Melanchall.DryWetMidi.csproj --configuration ${{ vars.BUILD_CONFIGURATION || 'Release' }}
+      
+      - name: Create NuGet package
+        run:  |
+          dotnet pack DryWetMidi/Melanchall.DryWetMidi.csproj `
+            --no-build `
+            --configuration ${{ vars.BUILD_CONFIGURATION || 'Release' }} `
+            --output NuGetPackage `
+            -p:RepositoryBranch="${{ github.ref_name }}"
+      
+      - name: Upload NuGet package
+        uses: actions/upload-artifact@v4
+        with:
+          name: NuGetPackage
+          path:  NuGetPackage/*.nupkg
+          if-no-files-found: error

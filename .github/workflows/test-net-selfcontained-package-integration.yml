@@ -1,0 +1,144 @@
+name: Test .NET Self-Contained Package Integration
+
+run-name: TestPackageIntegration_NetSelfContained_${{ github.ref_name }}_${{ vars.LIBRARY_VERSION }}_${{ github.run_number }}
+
+on:
+  workflow_dispatch:
+  push:
+    branches: 
+      - master
+      - develop
+    paths: 
+      - 'DryWetMidi/**'
+      - '.github/workflows/test-net-selfcontained-package-integration.yml'
+      - '.github/workflows/build-native-libs.yml'
+      - '.github/workflows/build-package.yml'
+      - '.github/actions/**'
+      - 'Resources/PackageIntegrationTestUtilities/DwmNetSelfContainedConsoleApp/**'
+      - 'Resources/Native/**'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs: 
+  build-native-libs:
+    name: Build Native Libraries
+    uses: ./.github/workflows/build-native-libs.yml
+  
+  build-package:
+    name: Build NuGet Package
+    needs: build-native-libs
+    uses: ./.github/workflows/build-package.yml
+    secrets:  inherit
+
+  test-package-integration:
+    name: Test integration (${{ matrix.os }}, RID=${{ matrix.rid }}, IncludeAll=${{ matrix.include-all }})
+    needs: build-package
+    runs-on:  ${{ matrix.os }}
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        include: 
+          #- os: windows-11-arm
+          #  rid: win-arm64
+          #  include-all: true
+          #- os: windows-11-arm
+          #  rid: win-arm64
+          #  include-all: false
+          - os: macos-latest
+            rid: osx-arm64
+            include-all: true
+          - os: macos-latest
+            rid: osx-arm64
+            include-all: false
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Download NuGet package
+        uses: actions/download-artifact@v4
+        with:
+          name: NuGetPackage
+          path: NuGetPackage
+      
+      - name: Setup framework
+        id: framework
+        uses: ./.github/actions/setup-framework
+        with:
+          framework:  Net
+          net-tfm: ${{ vars.BUILD_FRAMEWORK_NET_TFM || 'net8.0' }}
+          net-sdk-version: ${{ vars.BUILD_FRAMEWORK_NET_SDK_VERSION || '8.0.x' }}
+          netframework-tfm: ${{ vars.BUILD_FRAMEWORK_NETFRAMEWORK_TFM || 'net48' }}
+          netframework-sdk-version: ${{ vars.BUILD_FRAMEWORK_NETFRAMEWORK_SDK_VERSION || '8.0.x' }}
+      
+      - name: Create MIDI ports (Windows)
+        if: runner.os == 'Windows'
+        uses: ./.github/actions/create-ports-windows
+        with:
+          enabled: 'true'
+          ports-names: 'MIDI A,MIDI B,MIDI C'
+      
+      - name: Create MIDI ports (macOS)
+        if: runner.os == 'macOS'
+        uses:  ./.github/actions/create-ports-macos
+        with: 
+          enabled: 'true'
+      
+      - name:  Restore NuGet packages
+        shell: pwsh
+        run: |
+          $path = Resolve-Path 'Resources/PackageIntegrationTestUtilities/DwmNetSelfContainedConsoleApp/DwmNetSelfContainedConsoleApp/DwmNetSelfContainedConsoleApp.csproj'
+          dotnet restore "$path" -s "https://api.nuget.org/v3/index.json"
+      
+      - name: Add package to the project
+        shell:  pwsh
+        run: |
+          $path = Resolve-Path 'Resources/PackageIntegrationTestUtilities/DwmNetSelfContainedConsoleApp/DwmNetSelfContainedConsoleApp/DwmNetSelfContainedConsoleApp.csproj'
+          dotnet add "$path" package Melanchall.DryWetMidi -v ${{ vars.LIBRARY_VERSION }} -s "${{ github.workspace }}/NuGetPackage"
+      
+      - name: Set csproj elements
+        shell: pwsh
+        run: |
+          Write-Host "Parsing csproj..."
+          [xml]$xml = Get-Content -Path 'Resources/PackageIntegrationTestUtilities/DwmNetSelfContainedConsoleApp/DwmNetSelfContainedConsoleApp/DwmNetSelfContainedConsoleApp.csproj'
+          
+          Write-Host "Setting IncludeAllContentForSelfExtract to ${{ matrix.include-all }}..."
+          $xml.Project.PropertyGroup.IncludeAllContentForSelfExtract = '${{ matrix.include-all }}'
+          
+          Write-Host "Saving csproj..."
+          $path = Resolve-Path 'Resources/PackageIntegrationTestUtilities/DwmNetSelfContainedConsoleApp/DwmNetSelfContainedConsoleApp/DwmNetSelfContainedConsoleApp.csproj'
+          $xml.Save($path)
+          
+          Write-Host "Displaying csproj content..."
+          $content = Get-Content -Path 'Resources/PackageIntegrationTestUtilities/DwmNetSelfContainedConsoleApp/DwmNetSelfContainedConsoleApp/DwmNetSelfContainedConsoleApp.csproj'
+          Write-Host $content
+      
+      - name:  Restore packages
+        shell: pwsh
+        run: |
+          $path = Resolve-Path 'Resources/PackageIntegrationTestUtilities/DwmNetSelfContainedConsoleApp/DwmNetSelfContainedConsoleApp/DwmNetSelfContainedConsoleApp.csproj'
+          dotnet nuget add source "${{ github.workspace }}/NuGetPackage"
+          dotnet restore "$path"
+      
+      - name:  Publish test program executable
+        shell: pwsh
+        run: |
+          $path = Resolve-Path 'Resources/PackageIntegrationTestUtilities/DwmNetSelfContainedConsoleApp/DwmNetSelfContainedConsoleApp/DwmNetSelfContainedConsoleApp.csproj'
+          dotnet publish "$path" -c Release -r ${{ matrix.rid }} -o "${{ github.workspace }}/App"
+      
+      - name: Run test program (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run:  |
+          $exePath = Get-ChildItem -Path "${{ github.workspace }}/App" -File -Filter "DwmNetSelfContainedConsoleApp.exe" -Recurse
+          & $exePath.FullName
+      
+      - name: Run test program (macOS)
+        if: runner.os == 'macOS'
+        shell: pwsh
+        run:  |
+          $exePath = Get-ChildItem -Path "${{ github.workspace }}/App" -File -Filter "DwmNetSelfContainedConsoleApp" -Recurse
+          & $exePath.FullName

@@ -1,0 +1,134 @@
+name: Test Multimedia
+
+run-name: TestMultimedia_${{ github.ref_name }}_${{ vars.LIBRARY_VERSION }}_${{ github.run_number }}
+
+on:
+  workflow_dispatch:
+  push:
+    branches:  
+      - master
+      - develop
+    paths: 
+      - 'DryWetMidi/**'
+      - 'DryWetMidi.Tests/**'
+      - 'DryWetMidi.Tests.Common/**'
+      - '.github/workflows/test-mmedia.yml'
+      - '.github/workflows/build-native-libs.yml'
+      - '.github/actions/**'
+      - 'Resources/Utilities/CreateLoopbackPort_Windows/**'
+      - 'Resources/Utilities/CreateLoopbackPort_macOS/**'
+      - 'Resources/Scripts/Setup MIDI ports.ps1'
+      - 'Resources/Native/**'
+  
+  pull_request:
+    branches: 
+      - develop
+    paths: 
+      - 'DryWetMidi/**'
+      - 'DryWetMidi.Tests/**'
+      - 'DryWetMidi.Tests.Common/**'
+      - '.github/workflows/test-mmedia.yml'
+      - '.github/workflows/build-native-libs.yml'
+      - '.github/actions/**'
+      - 'Resources/Utilities/CreateLoopbackPort_Windows/**'
+      - 'Resources/Utilities/CreateLoopbackPort_macOS/**'
+      - 'Resources/Scripts/Setup MIDI ports.ps1'
+      - 'Resources/Native/**'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:  
+  build-native-libs: 
+    name: Build Native Libraries
+    uses: ./.github/workflows/build-native-libs.yml
+
+  run-tests:
+    name: Run tests (${{ matrix.os }}, ${{ matrix.framework }})
+    needs: build-native-libs
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          #- os: windows-11-arm
+          #  framework:  NetFramework
+          #- os: windows-11-arm
+          #  framework: Net
+          - os: macos-latest
+            framework:  Net
+    
+    steps:
+      - name:  Checkout
+        uses: actions/checkout@v4
+      
+      - name: Copy native libraries
+        uses: ./.github/actions/copy-native-libraries
+      
+      - name:  Setup framework
+        id: framework
+        uses: ./.github/actions/setup-framework
+        with: 
+          framework: ${{ matrix.framework }}
+          net-tfm: ${{ vars.BUILD_FRAMEWORK_NET_TFM || 'net8.0' }}
+          net-sdk-version:  ${{ vars.BUILD_FRAMEWORK_NET_SDK_VERSION }}
+          netframework-tfm: ${{ vars.BUILD_FRAMEWORK_NETFRAMEWORK_TFM }}
+          netframework-sdk-version: ${{ vars.BUILD_FRAMEWORK_NETFRAMEWORK_SDK_VERSION }}
+      
+      - name: Build tests
+        uses: ./.github/actions/build-tests
+        with:
+          tfm: ${{ steps.framework.outputs.tfm }}
+          configuration: ${{ vars.TEST_BUILD_CONFIGURATION || 'Release' }}
+      
+      - name: Build test data sending utility
+        uses: ./.github/actions/build-test-data-sending-utility
+        with:
+          enabled: ${{ runner.os == 'macOS' }}
+          tfm: ${{ steps.framework.outputs.tfm }}
+          configuration: ${{ vars.TEST_BUILD_CONFIGURATION || 'Release' }}
+          suffix: _${{ matrix.os }}_${{ matrix.framework }}
+      
+      - name: Create MIDI ports (Windows)
+        if: runner.os == 'Windows'
+        uses: ./.github/actions/create-ports-windows
+        with:
+          enabled: 'true'
+          ports-names: 'MIDI A,MIDI B,MIDI C'
+      
+      - name: Create MIDI ports (macOS)
+        if: runner.os == 'macOS'
+        uses: ./.github/actions/create-ports-macos
+        with: 
+          enabled: 'true'
+      
+      - name: Run unit tests
+        continue-on-error:  false
+        shell: pwsh
+        run: |
+          dotnet test DryWetMidi.Tests/Melanchall.DryWetMidi.Tests.csproj `
+            --blame `
+            --no-build `
+            --configuration ${{ vars.TEST_BUILD_CONFIGURATION || 'Release' }} `
+            --filter "(FullyQualifiedName~.Multimedia)" `
+            --framework ${{ steps.framework.outputs.tfm }} `
+            --verbosity normal `
+            --diag diagnostic.log `
+            --logger "console;verbosity=detailed" `
+            -p:SolutionDir="${{ github.workspace }}/"
+      
+      - name: Collect logs
+        if: always()
+        uses: ./.github/actions/collect-logs
+        with: 
+          suffix: _${{ matrix.os }}_${{ matrix.framework }}
+      
+      - name: Upload PlaybackTraces
+        if:  failure()
+        uses: actions/upload-artifact@v4
+        with: 
+          name: PlaybackTraces_${{ matrix.os }}_${{ matrix.framework }}_Attempt${{ github.run_attempt }}
+          path: ${{ github.workspace }}/PlaybackTraces
+          if-no-files-found: ignore

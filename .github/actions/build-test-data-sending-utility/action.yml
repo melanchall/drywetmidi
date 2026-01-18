@@ -1,0 +1,44 @@
+name: 'Build Test Data Sending Utility'
+description: 'Builds the test data sending utility for macOS'
+
+inputs:
+  enabled:
+    description: 'Whether to run this action'
+    required: false
+    default: 'true'
+  tfm:
+    description:  'Target Framework Moniker'
+    required: true
+  configuration:
+    description: 'Build configuration'
+    required: false
+    default: 'Release'
+  suffix: 
+    description: 'Suffix for artifact names'
+    required: false
+    default: ''
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Build test data sending utility
+      if: inputs.enabled == 'true' && runner.os == 'macOS'
+      shell: pwsh
+      run: |
+        cd DryWetMidi.Tests
+        Write-Host "Building arm64 dylib..."
+        clang -shared -undefined dynamic_lookup -o SendTestData_arm64.dylib SendTestData.c -framework CoreServices -framework CoreFoundation -framework CoreMIDI -arch arm64
+        Write-Host "Building x86_64 dylib..."
+        clang -shared -undefined dynamic_lookup -o SendTestData_x86_64.dylib SendTestData.c -framework CoreServices -framework CoreFoundation -framework CoreMIDI -arch x86_64
+        Write-Host "Merging dylibs into single universal one..."
+        lipo SendTestData_x86_64.dylib SendTestData_arm64.dylib -output SendTestData.dylib -create
+        lipo -info SendTestData.dylib
+        Copy-Item -Path "SendTestData.dylib" -Destination "bin/${{ inputs.configuration }}/${{ inputs.tfm }}" -Recurse
+    
+    - name: Upload SendTestData artifact
+      if: inputs.enabled == 'true' && runner.os == 'macOS'
+      uses: actions/upload-artifact@v4
+      with:
+        name: SendTestData${{ inputs.suffix }}_Attempt${{ github.run_attempt }}
+        path: DryWetMidi.Tests/SendTestData.dylib
+        if-no-files-found: error

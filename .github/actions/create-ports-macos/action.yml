@@ -1,0 +1,31 @@
+name: 'Create MIDI Ports (macOS)'
+description: 'Creates virtual MIDI loopback ports on macOS'
+
+inputs:
+  enabled:
+    description: 'Whether to run this action'
+    required: false
+    default: 'true'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Build LoopbackDevice app (macOS)
+      if: inputs.enabled == 'true' && runner.os == 'macOS'
+      shell: pwsh
+      run: |
+        cd Resources/Utilities/CreateLoopbackPort_macOS
+        Write-Host "Building arm64 app..."
+        clang -undefined dynamic_lookup -o LoopbackDevice_arm64 LoopbackDevice.c -framework CoreServices -framework CoreFoundation -framework CoreMIDI -arch arm64
+        Write-Host "Building x86_64 app..."
+        clang -undefined dynamic_lookup -o LoopbackDevice_x86_64 LoopbackDevice.c -framework CoreServices -framework CoreFoundation -framework CoreMIDI -arch x86_64
+        Write-Host "Merging apps into single universal one..."
+        lipo LoopbackDevice_x86_64 LoopbackDevice_arm64 -output LoopbackDevice -create
+        lipo -info LoopbackDevice
+    
+    - name: Create virtual MIDI ports (macOS)
+      if: inputs.enabled == 'true' && runner.os == 'macOS'
+      shell:  bash
+      run: |
+        cd Resources/Utilities/CreateLoopbackPort_macOS
+        ./LoopbackDevice "MIDI A" "MIDI B" "MIDI C" &

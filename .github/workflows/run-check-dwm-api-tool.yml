@@ -1,0 +1,91 @@
+name: Run CheckDwmApi Tool
+
+run-name: RunCheckDwmApiTool_Net_${{ github.ref_name }}_${{ vars.LIBRARY_VERSION }}_${{ github.run_number }}
+
+on:
+  workflow_dispatch:
+  push: 
+    branches: 
+      - master
+      - develop
+    paths:
+      - 'DryWetMidi/**'
+      - '.github/workflows/run-check-dwm-api-tool.yml'
+      - '.github/workflows/build-native-libs.yml'
+      - '.github/actions/**'
+      - 'Utilities/CheckDwmApi/**'
+      - 'Resources/Native/**'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs: 
+  build-native-libs:
+    name: Build Native Libraries
+    uses: ./.github/workflows/build-native-libs.yml
+
+  run-check-dwm-api-tool:
+    name: Run CheckDwmApi tool (${{ matrix.os }})
+    needs: build-native-libs
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix: 
+        include:
+          #- os: windows-11-arm
+          #  framework: Net
+          #- os: windows-11-arm
+          #  framework: NetFramework
+          - os: macos-latest
+            framework: Net
+          - os: ubuntu-24.04-arm
+            framework: Net
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Copy native libraries
+        uses: ./.github/actions/copy-native-libraries
+      
+      - name: Setup framework
+        id: framework
+        uses: ./.github/actions/setup-framework
+        with:
+          framework:  ${{ matrix.framework }}
+          net-tfm: ${{ vars.BUILD_FRAMEWORK_NET_TFM || 'net8.0' }}
+          net-sdk-version:  ${{ vars.BUILD_FRAMEWORK_NET_SDK_VERSION }}
+          netframework-tfm: ${{ vars.BUILD_FRAMEWORK_NETFRAMEWORK_TFM }}
+          netframework-sdk-version: ${{ vars.BUILD_FRAMEWORK_NETFRAMEWORK_SDK_VERSION }}
+      
+      - name: Create MIDI ports (Windows)
+        if: runner.os == 'Windows'
+        uses: ./.github/actions/create-ports-windows
+        with:
+          enabled: 'true'
+          ports-names: 'TestVirtualMidiDevice'
+      
+      - name: Run CheckDwmApi tool
+        continue-on-error: false
+        shell: pwsh
+        run: |
+          dotnet run --project Utilities/CheckDwmApi/Melanchall.CheckDwmApi.csproj `
+            --configuration ${{ vars.BUILD_CONFIGURATION }} `
+            -p:SolutionDir="${{ github.workspace }}/" `
+            -- -noninteractive -exitontaskfailure
+      
+      - name: Upload CheckDwmApi report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: CheckDwmApiReport_${{ matrix.os }}_${{ matrix.framework }}_Attempt${{ github.run_attempt }}
+          path: CheckDwmApiReport.txt
+          if-no-files-found: warn
+      
+      - name:  Collect logs
+        if: always()
+        uses: ./.github/actions/collect-logs
+        with:
+          suffix: _${{ matrix.os }}_${{ matrix.framework }}

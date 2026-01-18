@@ -1,0 +1,19 @@
+name: 'Build Tests'
+description: 'Builds the DryWetMidi.Tests project'
+
+inputs:
+  tfm:
+    description: 'Target Framework Moniker'
+    required: true
+  configuration:
+    description: 'Build configuration'
+    required: false
+    default: 'Release'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Build DryWetMidi.Tests
+      shell: pwsh
+      run: |
+        dotnet build DryWetMidi.Tests/Melanchall.DryWetMidi.Tests.csproj --configuration ${{ inputs.configuration }} --framework ${{ inputs.tfm }} -bl:build.binlog -p:SolutionDir="${{ github.workspace }}/"

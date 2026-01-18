@@ -3,24 +3,25 @@ param (
   [string]$portsNames)
 
 $location = Get-Location
+Write-Host "Current location: $location"
 
 Write-Host "Downloading virtualMIDI SDK..."
 $ProgressPreference = 'SilentlyContinue'
-Invoke-WebRequest -Uri "http://www.tobias-erichsen.de/wp-content/uploads/2020/01/teVirtualMIDISDKSetup_1_3_0_43.zip" -OutFile "teVirtualMIDISDKSetup.zip"
+Invoke-WebRequest -Uri "http://www.tobias-erichsen.de/wp-content/uploads/2020/01/teVirtualMIDISDKSetup_1_3_0_43.zip" -OutFile "$location\teVirtualMIDISDKSetup.zip"
 Write-Host "Downloaded."
 
 Write-Host "Extracting virtualMIDI SDK installer..."
-Expand-Archive -LiteralPath 'teVirtualMIDISDKSetup.zip' -DestinationPath "VirtualMIDISDKSetup"
+Expand-Archive -LiteralPath "$location\teVirtualMIDISDKSetup.zip" -DestinationPath "$location\VirtualMIDISDKSetup"
 Write-Host "Extracted."
 
-$installer = Get-ChildItem -Path "VirtualMIDISDKSetup" -File -Filter "*.exe"
+$installer = Get-ChildItem -Path "$location\VirtualMIDISDKSetup" -File -Filter "*.exe"
 
 Write-Host "Installing virtualMIDI SDK..."
-Start-Process "VirtualMIDISDKSetup/$installer" -NoNewWindow -Wait -ArgumentList "/quiet"
+Start-Process -FilePath $installer.FullName -NoNewWindow -Wait -ArgumentList "/quiet"
 Write-Host "Installed."
 
 Write-Host "Building CreateLoopbackPort..."
-dotnet publish "Resources/Utilities/CreateLoopbackPort_Windows/CreateLoopbackPort.sln" -c Release -r win10-x64 -o "$location/CreateLoopbackPort"
+dotnet publish "$location/Resources/Utilities/CreateLoopbackPort_Windows/CreateLoopbackPort.sln" -c Release -r win10-x64 -o "$location/CreateLoopbackPort"
 Write-Host "Built."
 
 Write-Host "Ports names string: $portsNames"
@@ -29,6 +30,6 @@ $ports = $portsNames.Split(',')
 ForEach ($port in $ports)
 {
   Write-Host "Running $port port..."
-  Start-Process "CreateLoopbackPort/CreateLoopbackPort.exe" -ArgumentList """$port"""
+  Start-Process "$location/CreateLoopbackPort/CreateLoopbackPort.exe" -ArgumentList """$port"""
   Write-Host "$port is up."
 }

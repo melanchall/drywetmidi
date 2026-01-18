@@ -1,0 +1,89 @@
+name: 'Collect Logs'
+description: 'Collects crash dumps, diagnostic reports, and logs'
+
+inputs:
+  suffix: 
+    description: 'Suffix for artifact names'
+    required: false
+    default: ''
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Collect crash dump
+      if: failure() && runner.os == 'Windows'
+      id: crash-dump
+      shell: pwsh
+      run: |
+        Write-Host "Checking if a crash dump created..."
+        Start-Sleep -s 10
+        
+        $path = Resolve-Path "${{ github.workspace }}"
+        $dumpFile = Get-ChildItem -Path "$path" -Include "*.dmp" -Recurse | Select-Object -First 1
+        
+        if ($dumpFile)
+        {
+          Write-Host "There is a crash dump, setting variables..."
+          echo "crash-dump-path=$dumpFile" >> $env:GITHUB_OUTPUT
+          echo "crash-dump-found=true" >> $env: GITHUB_OUTPUT
+        }
+        else
+        {
+          Write-Host "There are no crash dumps found."
+          echo "crash-dump-found=false" >> $env:GITHUB_OUTPUT
+        }
+    
+    - name:  Collect diagnostic reports
+      if: failure() && runner.os == 'macOS'
+      id: diagnostic-reports
+      shell: pwsh
+      run: |
+        Write-Host "Checking if diagnostic reports created..."
+        Start-Sleep -s 10
+        
+        $path = "$HOME/Library/Logs/DiagnosticReports"
+        
+        if (Test-Path -Path "$path")
+        {
+          Write-Host "There are diagnostic reports, copying..."
+          Copy-Item -Path "$path" -Destination "${{ runner.temp }}" -Recurse
+          echo "diagnostic-reports-found=true" >> $env: GITHUB_OUTPUT
+        }
+        else
+        {
+          Write-Host "There are no diagnostic reports found."
+          echo "diagnostic-reports-found=false" >> $env:GITHUB_OUTPUT
+        }
+    
+    - name: Upload CrashDump artifact
+      if: failure() && runner.os == 'Windows' && steps.crash-dump.outputs.crash-dump-found == 'true'
+      uses:  actions/upload-artifact@v4
+      with:
+        name:  CrashDump${{ inputs.suffix }}_Attempt${{ github.run_attempt }}
+        path: ${{ steps.crash-dump.outputs.crash-dump-path }}
+        if-no-files-found: warn
+    
+    - name: Upload DiagnosticReports artifact
+      if: failure() && runner.os == 'macOS' && steps.diagnostic-reports.outputs.diagnostic-reports-found == 'true'
+      uses: actions/upload-artifact@v4
+      with: 
+        name: DiagnosticReports${{ inputs.suffix }}_Attempt${{ github.run_attempt }}
+        path: ${{ runner.temp }}/DiagnosticReports
+        if-no-files-found: warn
+    
+    - name:  Collect logs
+      if: always()
+      shell: pwsh
+      run: |
+        New-Item -Path "${{ runner.temp }}" -Name "Logs" -ItemType "directory" -Force
+        Copy-Item -Path "${{ github.workspace }}/*.log" -Destination "${{ runner.temp }}/Logs" -ErrorAction SilentlyContinue
+        Copy-Item -Path "${{ github.workspace }}/*.binlog" -Destination "${{ runner.temp }}/Logs" -ErrorAction SilentlyContinue
+        Get-ChildItem "${{ github.workspace }}/TestLog_*.log" -Recurse -Force -ErrorAction SilentlyContinue | Copy-Item -Destination "${{ runner.temp }}/Logs"
+    
+    - name: Upload Logs artifact
+      if: always()
+      uses: actions/upload-artifact@v4
+      with: 
+        name: Logs${{ inputs.suffix }}_Attempt${{ github.run_attempt }}
+        path: ${{ runner.temp }}/Logs
+        if-no-files-found: warn

@@ -1,0 +1,16 @@
+name: 'Copy Native Libraries Near csproj'
+description: 'Downloads and copies native libraries near csproj files'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Download native libraries
+      uses: actions/download-artifact@v4
+      with:
+        path: ${{ runner.temp }}/NativeLibraries
+    
+    - name: Copy native libraries near csproj
+      shell: pwsh
+      run: |
+        Copy-Item -Path "${{ runner.temp }}/NativeLibraries/**/*.dll" -Destination "DryWetMidi" -ErrorAction SilentlyContinue
+        Copy-Item -Path "${{ runner.temp }}/NativeLibraries/**/*.dylib" -Destination "DryWetMidi" -ErrorAction SilentlyContinue
