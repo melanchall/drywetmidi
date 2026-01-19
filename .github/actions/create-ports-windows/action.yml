@@ -10,6 +10,10 @@ inputs:
     description: 'Comma-separated list of port names'
     required: false
     default: 'MIDI A,MIDI B,MIDI C'
+  arch: 
+    description: 'Utility architecture'
+    required: false
+    default: 'x64'
 
 runs:
   using:  'composite'
@@ -32,4 +36,4 @@ runs:
       if: inputs.enabled == 'true' && runner.os == 'Windows'
       shell: pwsh
       run: |
-        & "${{ github.workspace }}/Resources/Scripts/Setup MIDI ports.ps1" -portsNames "${{ inputs.ports-names }}"
+        & "${{ github.workspace }}/Resources/Scripts/Setup MIDI ports.ps1" -portsNames "${{ inputs.ports-names }}" -arch "${{ inputs.arch }}"

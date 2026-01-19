@@ -6,6 +6,10 @@ parameters:
   displayName: 'Ports names'
   default: 'MIDI A,MIDI B,MIDI C'
   type: string
+- name: arch
+  displayName: 'Utility architecture'
+  default: 'x64'
+  type: string
 
 steps:
 - task: PowerShell@2
@@ -30,4 +34,4 @@ steps:
   inputs:
     targetType: filePath
     filePath: '$(Build.SourcesDirectory)/Resources/Scripts/Setup MIDI ports.ps1'
-    arguments: '-portsNames "${{ parameters.portsNames }}"'
+    arguments: '-portsNames "${{ parameters.portsNames }}" -arch "${{ parameters.arch }}"'

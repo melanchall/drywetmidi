@@ -26,7 +26,7 @@ jobs:
     uses: ./.github/workflows/build-native-libs.yml
 
   run-check-dwm-api-tool:
-    name: Run CheckDwmApi tool (${{ matrix.os }})
+    name: Run CheckDwmApi tool (${{ matrix.os }}, ${{ matrix.framework }})
     needs: build-native-libs
     runs-on: ${{ matrix.os }}
     timeout-minutes: 60
@@ -34,29 +34,37 @@ jobs:
       fail-fast: false
       matrix: 
         include:
+          # Waiting for MIDI Services rollout in Win 11
+          # and ability to install midi-console
           #- os: windows-11-arm
           #  framework: Net
+          #  win-arch: 'arm64'
           #- os: windows-11-arm
           #  framework: NetFramework
+          #  win-arch: 'arm64'
           - os: macos-latest
             framework: Net
+            win-arch: 'x64'
           - os: ubuntu-24.04-arm
             framework: Net
+            win-arch: 'x64'
     
-    steps:
+    steps:    
       - name: Checkout
         uses: actions/checkout@v4
       
       - name: Copy native libraries
         uses: ./.github/actions/copy-native-libraries
+        with:
+          win-arch: ${{ matrix.win-arch }}
       
       - name: Setup framework
         id: framework
         uses: ./.github/actions/setup-framework
         with:
-          framework:  ${{ matrix.framework }}
+          framework: ${{ matrix.framework }}
           net-tfm: ${{ vars.BUILD_FRAMEWORK_NET_TFM || 'net8.0' }}
-          net-sdk-version:  ${{ vars.BUILD_FRAMEWORK_NET_SDK_VERSION }}
+          net-sdk-version: ${{ vars.BUILD_FRAMEWORK_NET_SDK_VERSION }}
           netframework-tfm: ${{ vars.BUILD_FRAMEWORK_NETFRAMEWORK_TFM }}
           netframework-sdk-version: ${{ vars.BUILD_FRAMEWORK_NETFRAMEWORK_SDK_VERSION }}
       
@@ -66,6 +74,7 @@ jobs:
         with:
           enabled: 'true'
           ports-names: 'TestVirtualMidiDevice'
+          arch: '${{ matrix.win-arch }}'
       
       - name: Run CheckDwmApi tool
         continue-on-error: false

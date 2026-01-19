@@ -87,8 +87,9 @@ jobs:
     inputs:
       targetType: 'inline'
       script: |
-        Copy-Item -Path "$(Pipeline.Workspace)\NativeLibraries\**\*.dll" -Destination "DryWetMidi"
-        Copy-Item -Path "$(Pipeline.Workspace)\NativeLibraries\**\*.dylib" -Destination "DryWetMidi"
+        Copy-Item -Path "$(Pipeline.Workspace)/NativeLibraries/Native_Win_x64/*.dll" -Destination "DryWetMidi" -Verbose
+        # think about win arm64
+        Copy-Item -Path "$(Pipeline.Workspace)/NativeLibraries/Native_macOS_x64_arm64/*.dylib" -Destination "DryWetMidi" -Verbose
   
   - task: DotNetCoreCLI@2
     displayName: Build project

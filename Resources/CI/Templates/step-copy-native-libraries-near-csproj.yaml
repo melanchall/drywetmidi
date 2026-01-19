@@ -1,3 +1,13 @@
+parameters:
+- name: winArch
+  displayName: 'Windows dll architecture'
+  type: string
+  default: 'x64'
+- name: macosArch
+  displayName: 'macOS dylib architecture'
+  type: string
+  default: 'x64_arm64'
+
 steps:
 - task: DownloadPipelineArtifact@2
   displayName: Download native libraries
@@ -10,5 +20,5 @@ steps:
   inputs:
     targetType: 'inline'
     script: |
-      Copy-Item -Path "$(Pipeline.Workspace)/NativeLibraries/**/*.dll" -Destination "DryWetMidi"
-      Copy-Item -Path "$(Pipeline.Workspace)/NativeLibraries/**/*.dylib" -Destination "DryWetMidi"
+      Copy-Item -Path "$(Pipeline.Workspace)/NativeLibraries/Native_Win_${{ parameters.winArch }}/*.dll" -Destination "DryWetMidi" -Verbose
+      Copy-Item -Path "$(Pipeline.Workspace)/NativeLibraries/Native_macOS_${{ parameters.macosArch }}/*.dylib" -Destination "DryWetMidi" -Verbose

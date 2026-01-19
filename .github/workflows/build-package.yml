@@ -85,8 +85,8 @@ jobs:
         if: inputs.package-type == 'Full'
         shell: pwsh
         run: |
-          Copy-Item -Path "${{ runner.temp }}/NativeLibraries/**/*.dll" -Destination "DryWetMidi" -ErrorAction SilentlyContinue
-          Copy-Item -Path "${{ runner.temp }}/NativeLibraries/**/*.dylib" -Destination "DryWetMidi" -ErrorAction SilentlyContinue
+          Copy-Item -Path "${{ runner.temp }}/NativeLibraries/Native_Win_x64/*.dll" -Destination "DryWetMidi" -Verbose
+          Copy-Item -Path "${{ runner.temp }}/NativeLibraries/Native_macOS_x64_arm64/*.dylib" -Destination "DryWetMidi" -Verbose
       
       - name: Build project
         run: dotnet build DryWetMidi/Melanchall.DryWetMidi.csproj --configuration ${{ vars.BUILD_CONFIGURATION || 'Release' }}

@@ -17,8 +17,26 @@ stages:
     - task: PublishPipelineArtifact@1
       displayName: 'Publish dll artifact'
       inputs:
-        targetPath: 'Resources\Native\Windows\Melanchall_DryWetMidi_Native64.dll'
-        artifactName: 'Melanchall_DryWetMidi_Native64.dll'
+        targetPath: 'Resources\Native\Windows\Melanchall_DryWetMidi_Native.dll'
+        artifactName: 'Native_Win_x64'
+        artifactType: pipeline
+  - job: BuildDllArm64
+    displayName: 'Build arm64 dll'
+    pool:
+      vmImage: 'windows-latest'
+    steps:
+    - task: VSBuild@1
+      displayName: 'Build dll'
+      inputs:
+        solution: 'Resources/Native/Windows/Melanchall.DryWetMidi.Native.Windows/Melanchall.DryWetMidi.Native.Windows/Melanchall.DryWetMidi.Native.Windows.vcxproj'
+        platform: 'ARM64EC'
+        configuration: 'Release'
+        msbuildArgs: '/p:SolutionDir=$(Build.SourcesDirectory)\Resources\Native\Windows\Melanchall.DryWetMidi.Native.Windows\'
+    - task: PublishPipelineArtifact@1
+      displayName: 'Publish dll artifact'
+      inputs:
+        targetPath: 'Resources\Native\Windows\Melanchall_DryWetMidi_Native.dll'
+        artifactName: 'Native_Win_arm64'
         artifactType: pipeline
   - job: BuildDylibX64ARM64
     displayName: 'Build x64/arm64 dylib'
@@ -32,16 +50,16 @@ stages:
         script: |
           cd Resources/Native/macOS
           Write-Host "Building arm64 dylib..."
-          clang -shared -undefined dynamic_lookup -o Melanchall_DryWetMidi_Native64_arm64.dylib NativeApi-macOS.cpp -framework CoreServices -framework CoreFoundation -framework CoreMIDI -arch arm64
+          clang -shared -undefined dynamic_lookup -o Melanchall_DryWetMidi_Native_arm64.dylib NativeApi-macOS.cpp -framework CoreServices -framework CoreFoundation -framework CoreMIDI -arch arm64
           Write-Host "Building x64 dylib..."
-          clang -shared -undefined dynamic_lookup -o Melanchall_DryWetMidi_Native64_x86_64.dylib NativeApi-macOS.cpp -framework CoreServices -framework CoreFoundation -framework CoreMIDI -arch x86_64
+          clang -shared -undefined dynamic_lookup -o Melanchall_DryWetMidi_Native_x86_64.dylib NativeApi-macOS.cpp -framework CoreServices -framework CoreFoundation -framework CoreMIDI -arch x86_64
           Write-Host "Merging dylibs..."
-          lipo Melanchall_DryWetMidi_Native64_x86_64.dylib Melanchall_DryWetMidi_Native64_arm64.dylib -output Melanchall_DryWetMidi_Native64.dylib -create
+          lipo Melanchall_DryWetMidi_Native_x86_64.dylib Melanchall_DryWetMidi_Native_arm64.dylib -output Melanchall_DryWetMidi_Native.dylib -create
           Write-Host "Printing architectures..."
-          lipo -info Melanchall_DryWetMidi_Native64.dylib
+          lipo -info Melanchall_DryWetMidi_Native.dylib
     - task: PublishPipelineArtifact@1
       displayName: 'Publish dylib artifact'
       inputs:
-        targetPath: 'Resources/Native/macOS/Melanchall_DryWetMidi_Native64.dylib'
-        artifactName: 'Melanchall_DryWetMidi_Native64.dylib'
+        targetPath: 'Resources/Native/macOS/Melanchall_DryWetMidi_Native.dylib'
+        artifactName: 'Native_macOS_x64_arm64'
         artifactType: pipeline

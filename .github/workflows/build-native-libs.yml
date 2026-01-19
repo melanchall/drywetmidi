@@ -2,13 +2,6 @@ name: Build Native Libraries
 
 on: 
   workflow_call:
-    outputs:
-      dll-artifact-name:
-        description: "Name of the Windows DLL artifact"
-        value:  Melanchall_DryWetMidi_Native64.dll
-      dylib-artifact-name:
-        description: "Name of the macOS dylib artifact"
-        value:  Melanchall_DryWetMidi_Native64.dylib
 
 jobs:
   build-dll-x64:
@@ -32,8 +25,33 @@ jobs:
       - name:  Upload dll artifact
         uses: actions/upload-artifact@v4
         with: 
-          name: Melanchall_DryWetMidi_Native64.dll
-          path: Resources/Native/Windows/Melanchall_DryWetMidi_Native64.dll
+          name: Native_Win_x64
+          path: Resources/Native/Windows/Melanchall_DryWetMidi_Native.dll
+          if-no-files-found: error
+          
+  build-dll-arm64:
+    name: Build arm64 dll
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses:  actions/checkout@v4
+      
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v2
+      
+      - name: Build dll
+        run: |
+          msbuild Resources/Native/Windows/Melanchall.DryWetMidi.Native.Windows/Melanchall.DryWetMidi.Native.Windows/Melanchall.DryWetMidi.Native.Windows.vcxproj `
+            /p:Configuration=Release `
+            /p:Platform=ARM64EC `
+            /p:SolutionDir="${{ github.workspace }}\Resources\Native\Windows\Melanchall.DryWetMidi.Native.Windows\"
+        shell: pwsh
+      
+      - name:  Upload dll artifact
+        uses: actions/upload-artifact@v4
+        with: 
+          name: Native_Win_arm64
+          path: Resources/Native/Windows/Melanchall_DryWetMidi_Native.dll
           if-no-files-found: error
 
   build-dylib-x64-arm64:
@@ -48,17 +66,17 @@ jobs:
         run: |
           cd Resources/Native/macOS
           Write-Host "Building arm64 dylib..."
-          clang -shared -undefined dynamic_lookup -o Melanchall_DryWetMidi_Native64_arm64.dylib NativeApi-macOS.cpp -framework CoreServices -framework CoreFoundation -framework CoreMIDI -arch arm64
+          clang -shared -undefined dynamic_lookup -o Melanchall_DryWetMidi_Native_arm64.dylib NativeApi-macOS.cpp -framework CoreServices -framework CoreFoundation -framework CoreMIDI -arch arm64
           Write-Host "Building x64 dylib..."
-          clang -shared -undefined dynamic_lookup -o Melanchall_DryWetMidi_Native64_x86_64.dylib NativeApi-macOS.cpp -framework CoreServices -framework CoreFoundation -framework CoreMIDI -arch x86_64
+          clang -shared -undefined dynamic_lookup -o Melanchall_DryWetMidi_Native_x86_64.dylib NativeApi-macOS.cpp -framework CoreServices -framework CoreFoundation -framework CoreMIDI -arch x86_64
           Write-Host "Merging dylibs..."
-          lipo Melanchall_DryWetMidi_Native64_x86_64.dylib Melanchall_DryWetMidi_Native64_arm64.dylib -output Melanchall_DryWetMidi_Native64.dylib -create
+          lipo Melanchall_DryWetMidi_Native_x86_64.dylib Melanchall_DryWetMidi_Native_arm64.dylib -output Melanchall_DryWetMidi_Native.dylib -create
           Write-Host "Printing architectures..."
-          lipo -info Melanchall_DryWetMidi_Native64.dylib
+          lipo -info Melanchall_DryWetMidi_Native.dylib
       
       - name: Upload dylib artifact
         uses: actions/upload-artifact@v4
         with:
-          name: Melanchall_DryWetMidi_Native64.dylib
-          path: Resources/Native/macOS/Melanchall_DryWetMidi_Native64.dylib
-          if-no-files-found:  error
+          name: Native_macOS_x64_arm64
+          path: Resources/Native/macOS/Melanchall_DryWetMidi_Native.dylib
+          if-no-files-found: error

@@ -1,6 +1,8 @@
 param (
   [Parameter(Mandatory)]
-  [string]$portsNames)
+  [string]$portsNames,
+  [Parameter(Mandatory)]
+  [string]$arch)
 
 $location = Get-Location
 Write-Host "Current location: $location"
@@ -21,7 +23,7 @@ Start-Process -FilePath $installer.FullName -NoNewWindow -Wait -ArgumentList "/q
 Write-Host "Installed."
 
 Write-Host "Building CreateLoopbackPort..."
-dotnet publish "$location/Resources/Utilities/CreateLoopbackPort_Windows/CreateLoopbackPort.sln" -c Release -r win10-x64 -o "$location/CreateLoopbackPort"
+dotnet publish "$location/Resources/Utilities/CreateLoopbackPort_Windows/CreateLoopbackPort.sln" -c Release -r "win-$arch" -o "$location/CreateLoopbackPort"
 Write-Host "Built."
 
 Write-Host "Ports names string: $portsNames"

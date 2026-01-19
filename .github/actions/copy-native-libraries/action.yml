@@ -1,16 +1,28 @@
 name: 'Copy Native Libraries Near csproj'
 description: 'Downloads and copies native libraries near csproj files'
 
+inputs:
+  win-arch:
+    description:  'Windows dll architecture'
+    type: string
+    default: 'x64'
+  macos-arch:
+    description: 'macOS dylib architecture'
+    type: string
+    default: 'x64_arm64'
+
 runs:
   using: 'composite'
   steps:
     - name: Download native libraries
       uses: actions/download-artifact@v4
       with:
+        pattern: Native_*
         path: ${{ runner.temp }}/NativeLibraries
+        merge-multiple: false
     
     - name: Copy native libraries near csproj
       shell: pwsh
       run: |
-        Copy-Item -Path "${{ runner.temp }}/NativeLibraries/**/*.dll" -Destination "DryWetMidi" -ErrorAction SilentlyContinue
-        Copy-Item -Path "${{ runner.temp }}/NativeLibraries/**/*.dylib" -Destination "DryWetMidi" -ErrorAction SilentlyContinue
+        Copy-Item -Path "${{ runner.temp }}/NativeLibraries/Native_Win_${{ inputs.win-arch }}/*.dll" -Destination "DryWetMidi" -Verbose
+        Copy-Item -Path "${{ runner.temp }}/NativeLibraries/Native_macOS_${{ inputs.macos-arch }}/*.dylib" -Destination "DryWetMidi" -Verbose

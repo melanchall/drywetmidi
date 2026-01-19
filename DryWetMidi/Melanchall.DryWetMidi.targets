@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <None Include="$(MSBuildThisFileDirectory)Melanchall_DryWetMidi_Native64.dll">
+    <None Include="$(MSBuildThisFileDirectory)Melanchall_DryWetMidi_Native.dll">
       <Visible>false</Visible>
-      <Link>Melanchall_DryWetMidi_Native64.dll</Link>
+      <Link>Melanchall_DryWetMidi_Native.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="$(MSBuildThisFileDirectory)Melanchall_DryWetMidi_Native64.dylib">
+    <None Include="$(MSBuildThisFileDirectory)Melanchall_DryWetMidi_Native.dylib">
       <Visible>false</Visible>
-      <Link>Melanchall_DryWetMidi_Native64.dylib</Link>
+      <Link>Melanchall_DryWetMidi_Native.dylib</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
