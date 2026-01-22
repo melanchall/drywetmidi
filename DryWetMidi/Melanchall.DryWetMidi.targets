@@ -1,11 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <ItemGroup>
-    <None Include="$(MSBuildThisFileDirectory)Melanchall_DryWetMidi_Native.dll">
-      <Visible>false</Visible>
-      <Link>Melanchall_DryWetMidi_Native.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+  <PropertyGroup>
+    <!-- Prefer explicit RID -->
+    <DryWetMidiRuntime Condition="'$(DryWetMidiRuntime)' == '' and '$(RuntimeIdentifier)' != ''">$(RuntimeIdentifier)</DryWetMidiRuntime>
+
+    <!-- Fallback to SDK host RID when no RID is provided -->
+    <DryWetMidiRuntime Condition="'$(DryWetMidiRuntime)' == '' and '$(NETCoreSdkRuntimeIdentifier)' != ''">$(NETCoreSdkRuntimeIdentifier)</DryWetMidiRuntime>
+
+    <!-- Windows ARM64 heuristic when still unset -->
+    <DryWetMidiRuntime Condition="'$(DryWetMidiRuntime)' == '' and '$(OS)' == 'Windows_NT' and (
+        '$(PROCESSOR_ARCHITECTURE)' == 'ARM64' or
+        '$(PROCESSOR_ARCHITEW6432)' == 'ARM64' or
+        $([System.String]::Copy('$(PROCESSOR_IDENTIFIER)').ToLower().Contains('arm'))
+      )">
+      win-arm64
+    </DryWetMidiRuntime>
+
+    <!-- Default Windows x64 -->
+    <DryWetMidiRuntime Condition="'$(DryWetMidiRuntime)' == '' and '$(OS)' == 'Windows_NT'">win-x64</DryWetMidiRuntime>
+  </PropertyGroup>
+
+  <Choose>
+    <When Condition="$([System.String]::Copy('$(DryWetMidiRuntime)').StartsWith('win-arm'))">
+      <ItemGroup>
+        <None Include="$(MSBuildThisFileDirectory)..\runtimes\win-arm64\native\Melanchall_DryWetMidi_Native.dll">
+          <Visible>false</Visible>
+          <Link>Melanchall_DryWetMidi_Native.dll</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+      </ItemGroup>
+    </When>
+    <When Condition="$([System.String]::Copy('$(DryWetMidiRuntime)').StartsWith('win'))">
+      <ItemGroup>
+        <None Include="$(MSBuildThisFileDirectory)..\runtimes\win-x64\native\Melanchall_DryWetMidi_Native.dll">
+          <Visible>false</Visible>
+          <Link>Melanchall_DryWetMidi_Native.dll</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+      </ItemGroup>
+    </When>
+  </Choose>
+
+  <ItemGroup Condition="$([System.String]::Copy('$(RuntimeIdentifier)').StartsWith('osx'))
+                     Or $([System.String]::Copy('$(NETCoreSdkRuntimeIdentifier)').StartsWith('osx'))
+                     Or $([System.String]::Copy('$(RuntimeIdentifier)').StartsWith('maccatalyst'))
+                     Or $([System.String]::Copy('$(NETCoreSdkRuntimeIdentifier)').StartsWith('maccatalyst'))">
     <None Include="$(MSBuildThisFileDirectory)Melanchall_DryWetMidi_Native.dylib">
       <Visible>false</Visible>
       <Link>Melanchall_DryWetMidi_Native.dylib</Link>

@@ -488,13 +488,13 @@ namespace Melanchall.DryWetMidi.Multimedia
             StopStartNotes();
             _clock.Start();
 
+            OnStarted();
+            TraceAction("started");
+
             if (!_hasBeenStarted)
                 OnClockTicked(_clock, EventArgs.Empty);
 
             _hasBeenStarted = true;
-            OnStarted();
-
-            TraceAction("started");
         }
 
         /// <summary>

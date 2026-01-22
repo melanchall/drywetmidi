@@ -5,8 +5,4 @@
     <TargetFramework>net10.0</TargetFramework>
   </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Melanchall.DryWetMidi" Version="5.2.1" />
-  </ItemGroup>
-
 </Project>

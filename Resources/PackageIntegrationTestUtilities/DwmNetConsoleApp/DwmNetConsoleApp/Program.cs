@@ -4,45 +4,61 @@ using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Multimedia;
 using Melanchall.DryWetMidi.Interaction;
+using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace DwmNetConsoleApp
 {
     class Program
     {
-        private static int _playedEventsCount = 0;
-
         static void Main(string[] args)
         {
-            Console.WriteLine($"Is 64-bit operating system: {Environment.Is64BitOperatingSystem}");
-            Console.WriteLine($"Is 64-bit process: {Environment.Is64BitProcess}");
             Console.WriteLine($"OS version: {Environment.OSVersion}");
             Console.WriteLine($"CLR version: {Environment.Version}");
             Console.WriteLine("---------------------------------");
 
             Console.WriteLine("Playing MIDI data...");
 
-            var eventsToPlay = new MidiEvent[]
+            var tempoMap = TempoMap.Default;
+
+            var eventsToPlay = new[]
             {
-                new NoteOnEvent((SevenBitNumber)70, (SevenBitNumber)100),
-                new NoteOffEvent((SevenBitNumber)70, (SevenBitNumber)0) { DeltaTime = 100 }
+                new TimedEvent(new NoteOnEvent((SevenBitNumber)70, (SevenBitNumber)100)),
+                new TimedEvent(new NoteOffEvent((SevenBitNumber)70, (SevenBitNumber)0))
+                    .SetTime((MetricTimeSpan)TimeSpan.FromSeconds(1), tempoMap)
             };
 
-            using (var outputDevice = OutputDevice.GetByName("MIDI A"))
-            using (var playback = eventsToPlay.GetPlayback(TempoMap.Default, outputDevice))
+            var playedEvents = new List<MidiEvent>();
+            var stopwatch = new Stopwatch();
+
+            using var outputDevice = OutputDevice.GetByName("MIDI A");
+            using var inputDevice = InputDevice.GetByName("MIDI A");
+            using var playback = new Playback(eventsToPlay, TempoMap.Default, outputDevice);
+
+            inputDevice.EventReceived += (_, e) =>
             {
-                playback.EventPlayed += OnEventPlayed;
-                playback.Start();
+                Console.WriteLine($"[{stopwatch.ElapsedMilliseconds} ms] Event received: {e.Event}");
+            };
+            inputDevice.StartEventsListening();
 
-                SpinWait.SpinUntil(() => !playback.IsRunning && _playedEventsCount == 2);
-            }
+            playback.EventPlayed += (_, e) =>
+            {
+                Console.WriteLine($"[{stopwatch.ElapsedMilliseconds} ms] Event played: {e.Event}");
+                playedEvents.Add(e.Event);
+            };
 
-            Console.WriteLine("Played.");
-        }
+            playback.Start();
+            stopwatch.Start();
 
-        private static void OnEventPlayed(object sender, MidiEventPlayedEventArgs e)
-        {
-            Console.WriteLine($"Event played: {e.Event}");
-            _playedEventsCount++;
+            var timeout = TimeSpan.FromSeconds(10);
+            var ok = SpinWait.SpinUntil(
+                () => !playback.IsRunning && playedEvents.Count == 2,
+                timeout);
+
+            if (!ok)
+                throw new InvalidOperationException($"Playback was not completed within {timeout}.");
+
+            Console.WriteLine($"[{stopwatch.ElapsedMilliseconds} ms] Played.");
         }
     }
 }

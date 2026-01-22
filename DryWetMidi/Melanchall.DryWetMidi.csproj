@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net45</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0</TargetFrameworks>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <LangVersion>6</LangVersion>
     <Configurations>Debug;Release;ReleaseTest;ReleaseTestFull</Configurations>
@@ -63,18 +63,18 @@
   </PropertyGroup>
 
   <ItemGroup Label="Native">
-    <None Include="Melanchall_DryWetMidi_Native.dll">
-      <PackagePath>build\</PackagePath>
-      <Pack>true</Pack>
-    </None>
-    <None Include="Melanchall_DryWetMidi_Native.dylib">
-      <PackagePath>build\</PackagePath>
-      <Pack>true</Pack>
-    </None>
-    <None Include="Melanchall.DryWetMidi.targets">
-      <PackagePath>build\</PackagePath>
-      <Pack>true</Pack>
-    </None>
+    <None Include="..\Native\win_x64\Melanchall_DryWetMidi_Native.dll"
+          Pack="true"
+          PackagePath="runtimes/win-x64/native" />
+    <None Include="..\Native\win_arm64\Melanchall_DryWetMidi_Native.dll"
+          Pack="true"
+          PackagePath="runtimes/win-arm64/native" />
+    <None Include="..\Native\macos_x64_arm64\Melanchall_DryWetMidi_Native.dylib"
+          Pack="true"
+          PackagePath="build\" />
+    <None Include="Melanchall.DryWetMidi.targets"
+          Pack="true"
+          PackagePath="build\" />
   </ItemGroup>
 
   <ItemGroup Label="Resources">

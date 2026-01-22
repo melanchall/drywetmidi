@@ -1,10 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="Native">
-    <None Include="$(SolutionDir)DryWetMidi\Melanchall_DryWetMidi_Native.dll">
+    <None Include="$(SolutionDir)Native\win_x64\Melanchall_DryWetMidi_Native.dll"
+          Condition="'$(OS)' == 'Windows_NT'">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="$(SolutionDir)DryWetMidi\Melanchall_DryWetMidi_Native.dylib">
+    <None Include="$(SolutionDir)Native\win_arm64\Melanchall_DryWetMidi_Native.dll"
+          Condition="'$(OS)' == 'Windows_NT' and (
+                       '$(PROCESSOR_ARCHITECTURE)' == 'ARM64' or
+                       '$(PROCESSOR_ARCHITEW6432)' == 'ARM64' or
+                       $([System.String]::Copy('$(PROCESSOR_IDENTIFIER)').ToLower().Contains('arm')))">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="$(SolutionDir)Native\macos_x64_arm64\Melanchall_DryWetMidi_Native.dylib">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

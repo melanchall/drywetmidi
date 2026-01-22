@@ -1,4 +1,4 @@
-name: Run CheckDwmApi Tool
+name: Run CheckDwmApi tool
 
 run-name: RunCheckDwmApiTool_Net_${{ github.ref_name }}_${{ vars.LIBRARY_VERSION }}_${{ github.run_number }}
 
@@ -38,9 +38,6 @@ jobs:
           # and ability to install midi-console
           #- os: windows-11-arm
           #  framework: Net
-          #  win-arch: 'arm64'
-          #- os: windows-11-arm
-          #  framework: NetFramework
           #  win-arch: 'arm64'
           - os: macos-latest
             framework: Net

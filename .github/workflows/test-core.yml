@@ -1,4 +1,4 @@
-name: Test Core
+name: Test Core API
 
 run-name: TestCore_${{ github.ref_name }}_${{ vars.LIBRARY_VERSION }}_${{ github.run_number }}
 
@@ -49,8 +49,6 @@ jobs:
         include:
           - os: windows-11-arm
             framework: Net
-          - os: windows-11-arm
-            framework: NetFramework
           - os: macos-latest
             framework: Net
           - os: ubuntu-24.04-arm
