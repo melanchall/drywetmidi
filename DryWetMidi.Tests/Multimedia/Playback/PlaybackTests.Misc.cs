@@ -103,6 +103,35 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
         [Retry(RetriesNumber)]
         [Test]
+        public void CheckPlaybackEvent_StartedFiredBeforeFirstEvent([Values(0, 100)] long firstEventTimeMs)
+        {
+            DateTime? startedFiredTime = null;
+            DateTime? firstEventTime = null;
+
+            CheckPlayback(
+                useOutputDevice: false,
+                initialPlaybackObjects: new[]
+                {
+                    new TimedEvent(new ProgramChangeEvent((SevenBitNumber)33)).SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(firstEventTimeMs), TempoMap),
+                    new TimedEvent(new TextEvent("A")).SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(400), TempoMap),
+                },
+                actions: Array.Empty<PlaybackAction>(),
+                expectedReceivedEvents: new[]
+                {
+                    new SentReceivedEvent(new ProgramChangeEvent((SevenBitNumber)33), TimeSpan.FromMilliseconds(firstEventTimeMs)),
+                    new SentReceivedEvent(new TextEvent("A"), TimeSpan.FromMilliseconds(400)),
+                },
+                setupPlayback: playback =>
+                {
+                    playback.Started += (_, __) => startedFiredTime = DateTime.Now;
+                    playback.EventPlayed += (_, __) => firstEventTime = firstEventTime ?? DateTime.Now;
+                });
+
+            ClassicAssert.Less(startedFiredTime, firstEventTime, "Started event fired after first event played.");
+        }
+
+        [Retry(RetriesNumber)]
+        [Test]
         public void CheckPlaybackEvent_ThrowException_Stopped()
         {
             var errorOccurredData = new List<PlaybackErrorOccurredEventArgs>();
