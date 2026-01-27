@@ -1,4 +1,4 @@
-name: Test .NET Package Integration
+﻿name: Test package integration
 
 run-name: TestPackageIntegration_Net_${{ github.ref_name }}_${{ vars.LIBRARY_VERSION }}_${{ github.run_number }}
 
@@ -43,8 +43,10 @@ jobs:
         include:
           #- os: windows-11-arm
           #  framework: Net
+          #  rid: win-arm64
           - os: macos-latest
             framework: Net
+            rid: osx-arm64
     
     steps:
       - name:  Checkout
@@ -66,6 +68,29 @@ jobs:
           netframework-tfm:  ${{ vars.BUILD_FRAMEWORK_NETFRAMEWORK_TFM || 'net48' }}
           netframework-sdk-version:  ${{ vars.BUILD_FRAMEWORK_NETFRAMEWORK_SDK_VERSION || '8.0.x' }}
       
+      - name:  Add package to the project
+        shell: pwsh
+        run: |
+          Write-Host "Adding local NuGet source with the package..."
+          dotnet nuget add source "${{ github.workspace }}/NuGetPackage"
+
+          Write-Host "Adding Melanchall.DryWetMidi.${{ vars.LIBRARY_VERSION }} package reference to the project..."
+          $path = Resolve-Path 'Resources/PackageIntegrationTestUtilities/DwmNetConsoleApp/DwmNetConsoleApp/DwmNetConsoleApp.csproj'
+          dotnet add "$path" package Melanchall.DryWetMidi -v ${{ vars.LIBRARY_VERSION }} -s "${{ github.workspace }}/NuGetPackage"
+      
+      - name: Check csproj package reference
+        shell:  pwsh
+        run: |
+          $path = "Resources/PackageIntegrationTestUtilities/DwmNetConsoleApp/DwmNetConsoleApp/DwmNetConsoleApp.csproj"
+          $expected = '<PackageReference Include="Melanchall.DryWetMidi" Version="${{ vars.LIBRARY_VERSION }}" />'
+          Write-Host "Expecting: $expected"
+          $found = Select-String -Path $path -Pattern $expected -SimpleMatch -Quiet
+          if (-not $found) {
+            Write-Error "Package reference not found: $expected"
+            exit 1
+          }
+          Write-Host "Package reference found."
+
       - name:  Create MIDI ports (Windows)
         if: runner.os == 'Windows'
         uses: ./.github/actions/create-ports-windows
@@ -79,38 +104,75 @@ jobs:
         with:  
           enabled: 'true'
       
-      - name:  Add package to the project
+      - name: Run app via dotnet
         shell: pwsh
         run: |
           $path = Resolve-Path 'Resources/PackageIntegrationTestUtilities/DwmNetConsoleApp/DwmNetConsoleApp/DwmNetConsoleApp.csproj'
-          dotnet add "$path" package Melanchall.DryWetMidi -v ${{ vars.LIBRARY_VERSION }} -s "${{ github.workspace }}/NuGetPackage"
-      
-      - name: Set csproj elements
-        shell:  pwsh
-        run: |
-          Write-Host "Parsing csproj..."
-          [xml]$xml = Get-Content -Path 'Resources/PackageIntegrationTestUtilities/DwmNetConsoleApp/DwmNetConsoleApp/DwmNetConsoleApp.csproj'
-          
-          Write-Host "Setting TFM ${{ steps.framework.outputs.tfm }}..."
-          $xml.Project.PropertyGroup.TargetFramework = '${{ steps.framework.outputs.tfm }}'
-          
-          Write-Host "Saving csproj..."
-          $path = Resolve-Path 'Resources/PackageIntegrationTestUtilities/DwmNetConsoleApp/DwmNetConsoleApp/DwmNetConsoleApp.csproj'
-          $xml.Save($path)
-          
-          Write-Host "Displaying csproj content..."
-          $content = Get-Content -Path 'Resources/PackageIntegrationTestUtilities/DwmNetConsoleApp/DwmNetConsoleApp/DwmNetConsoleApp.csproj'
-          Write-Host $content
-      
-      - name: Restore packages
+          dotnet run --project "$path" --configuration ${{ vars.BUILD_CONFIGURATION }}
+
+      - name: Run app after publish
         shell: pwsh
         run: |
-          $path = Resolve-Path 'Resources/PackageIntegrationTestUtilities/DwmNetConsoleApp/DwmNetConsoleApp/DwmNetConsoleApp.csproj'
-          dotnet nuget add source "${{ github.workspace }}/NuGetPackage"
-          dotnet restore "$path"
-      
-      - name: Run test program
-        shell: pwsh
-        run: |
-          $path = Resolve-Path 'Resources/PackageIntegrationTestUtilities/DwmNetConsoleApp/DwmNetConsoleApp/DwmNetConsoleApp.csproj'
-          dotnet run --project "$path" --no-restore
+          $projectPath = "Resources/PackageIntegrationTestUtilities/DwmNetConsoleApp/DwmNetConsoleApp/DwmNetConsoleApp.csproj"
+    
+          foreach ($psf in @('true', 'false')) {
+            foreach ($prtr in @('true', 'false')) {
+              foreach ($inlfse in @('true', 'false')) {
+                foreach ($sc in @('true', 'false')) {
+                  foreach ($pt in @('true', 'false')) {
+                    $publishOptions = @"
+          SelfContained = $sc
+          PublishSingleFile = $psf
+          PublishReadyToRun = $prtr
+          IncludeNativeLibrariesForSelfExtract = $inlfse
+          PublishTrimmed = $pt
+          "@
+                    Write-Host "$publishOptions"
+                    
+                    $outputPath = "${{ runner.temp }}/publish/$rid/sc-$sc-psf-$psf-prtr-$prtr-inlfse-$inlfse-pt-$pt"
+                    Write-Host "Output path set to '$outputPath'"
+                    
+                    Write-Host "Publishing the app..."
+                    dotnet publish `
+                      --configuration ${{ vars.BUILD_CONFIGURATION }} `
+                      --runtime ${{ matrix.rid }} `
+                      --self-contained=$sc `
+                      -p:PublishSingleFile=$psf `
+                      -p:PublishReadyToRun=$prtr `
+                      -p:IncludeNativeLibrariesForSelfExtract=$inlfse `
+                      -p:PublishTrimmed=$pt `
+                      -p:SolutionDir="${{ github.workspace }}/" `
+                      --output $outputPath `
+                      $projectPath
+                    
+                    if ($LASTEXITCODE -ne 0) {
+                      Write-Error "Publish failed with exit code $LASTEXITCODE"
+                      exit $LASTEXITCODE
+                    }
+                    
+                    Write-Host "Listing published files..."
+                    Write-Host ""
+                    Get-ChildItem -Recurse -Force -Path "$outputPath" | Format-Table @{Label="File Name"; Expression={$_.Name}}, @{Label="Size (KB)"; Expression={"{0:N2}" -f ($_.Length / 1KB)}}
+                    Write-Host ""
+                    
+                    Write-Host "Running the app..."
+                    Write-Host ""
+                    if ($IsWindows) {
+                      & "$outputPath/DwmNetConsoleApp.exe"
+                    } else {
+                      & "$outputPath/DwmNetConsoleApp"
+                    }
+                    
+                    if ($LASTEXITCODE -ne 0) {
+                      Write-Error "App execution failed with exit code $LASTEXITCODE"
+                      exit $LASTEXITCODE
+                    }
+                    
+                    Write-Host ""
+                    Write-Host "Configuration test completed successfully"
+                    Write-Host ""
+                  }
+                }
+              }
+            }
+          }

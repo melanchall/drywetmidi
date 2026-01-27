@@ -7,6 +7,18 @@ param (
 $location = Get-Location
 Write-Host "Current location: $location"
 
+Write-Host "Checking Audio/MIDI service status..."
+$serviceName = "Audiosrv"
+$service = Get-Service -Name "$serviceName"
+
+if ($service.Status -ne 'Running')
+{
+  Write-Host "Audio/MIDI service is not started; starting..."
+  Start-Service "$serviceName"
+}
+
+Write-Host "Audio/MIDI service is started"
+
 Write-Host "Downloading virtualMIDI SDK..."
 $ProgressPreference = 'SilentlyContinue'
 Invoke-WebRequest -Uri "http://www.tobias-erichsen.de/wp-content/uploads/2020/01/teVirtualMIDISDKSetup_1_3_0_43.zip" -OutFile "$location\teVirtualMIDISDKSetup.zip"

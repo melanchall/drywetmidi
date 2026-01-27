@@ -1,4 +1,4 @@
-name: Test Multimedia
+name: Test Multimedia API
 
 run-name: TestMultimedia_${{ github.ref_name }}_${{ vars.LIBRARY_VERSION }}_${{ github.run_number }}
 
@@ -53,8 +53,6 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          #- os: windows-11-arm
-          #  framework:  NetFramework
           #- os: windows-11-arm
           #  framework: Net
           - os: macos-latest

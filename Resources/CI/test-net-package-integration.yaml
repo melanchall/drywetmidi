@@ -46,12 +46,20 @@ stages:
         Windows_Net:
           vmImage: 'windows-latest'
           framework: 'Net'
+          rid: 'win-x64'
         macOS_Net:
           vmImage: 'macos-latest'
           framework: 'Net'
+          rid: 'osx-x64'
         macOS_Arm_Net:
           vmImage: 'macOS-15-arm64'
           framework: 'Net'
+          rid: 'osx-arm64'
+        # TODO: check on Ubuntu without Multimedia API
+        #Ubuntu_Net:
+        #  vmImage: 'ubuntu-latest'
+        #  framework: 'Net'
+        #  rid: 'linux-x64'
     pool:
       vmImage: $(vmImage)
     steps:
@@ -66,6 +74,33 @@ stages:
       parameters:
         framework: '$(framework)'
     
+    - task: PowerShell@2
+      displayName: Add package to the project
+      inputs:
+        targetType: 'inline'
+        script: |
+          Write-Host "Adding local NuGet source with the package..."
+          dotnet nuget add source "$(Pipeline.Workspace)\NuGetPackage"
+    
+          Write-Host "Adding Melanchall.DryWetMidi.$(LibraryVersion) package reference to the project..."
+          $path = Resolve-Path 'Resources\PackageIntegrationTestUtilities\DwmNetConsoleApp\DwmNetConsoleApp\DwmNetConsoleApp.csproj'
+          dotnet add "$path" package Melanchall.DryWetMidi -v $(LibraryVersion) -s "$(Pipeline.Workspace)\NuGetPackage"
+
+    - task: PowerShell@2
+      displayName: Check csproj package reference
+      inputs:
+        targetType: 'inline'
+        script: |
+          $path = "Resources/PackageIntegrationTestUtilities/DwmNetConsoleApp/DwmNetConsoleApp/DwmNetConsoleApp.csproj"
+          $expected = '<PackageReference Include="Melanchall.DryWetMidi" Version="$(LibraryVersion)" />'
+          Write-Host "Expecting: $expected"
+          $found = Select-String -Path $path -Pattern $expected -SimpleMatch -Quiet
+          if (-not $found) {
+            Write-Error "Package reference not found: $expected"
+            exit 1
+          }
+          Write-Host "Package reference found."
+
     - template: Templates/step-create-ports-windows.yaml
       parameters:
         enabled: contains(variables.vmImage, 'windows')
@@ -73,47 +108,75 @@ stages:
     - template: Templates/step-create-ports-macos.yaml
       parameters:
         enabled: contains(variables.vmImage, 'macos')
-    
-    - task: PowerShell@2
-      displayName: Add package to the project
-      inputs:
-        targetType: 'inline'
-        script: |
-          $path = Resolve-Path 'Resources\PackageIntegrationTestUtilities\DwmNetConsoleApp\DwmNetConsoleApp\DwmNetConsoleApp.csproj'
-          dotnet add "$path" package Melanchall.DryWetMidi -v $(LibraryVersion) -s "$(Pipeline.Workspace)\NuGetPackage"
-          
-    - task: PowerShell@2
-      displayName: Set csproj elements
-      inputs:
-        targetType: 'inline'
-        script: |
-          Write-Host "Parsing csproj..."
-          [xml]$xml = Get-Content -Path 'Resources\PackageIntegrationTestUtilities\DwmNetConsoleApp\DwmNetConsoleApp\DwmNetConsoleApp.csproj'
-          
-          Write-Host "Setting TFM $(tfm)..."
-          $xml.Project.PropertyGroup.TargetFramework = '$(tfm)'
-          
-          Write-Host "Saving csproj..."
-          $path = Resolve-Path 'Resources\PackageIntegrationTestUtilities\DwmNetConsoleApp\DwmNetConsoleApp\DwmNetConsoleApp.csproj'
-          $xml.Save($path)
-          
-          Write-Host "Displaying csproj content..."
-          $content = Get-Content -Path 'Resources\PackageIntegrationTestUtilities\DwmNetConsoleApp\DwmNetConsoleApp\DwmNetConsoleApp.csproj'
-          Write-Host $content
 
-    - task: PowerShell@2
-      displayName: Restore packages
+    - task: DotNetCoreCLI@2
+      displayName: Run app via dotnet
       inputs:
-        targetType: 'inline'
-        script: |
-          $path = Resolve-Path 'Resources\PackageIntegrationTestUtilities\DwmNetConsoleApp\DwmNetConsoleApp\DwmNetConsoleApp.csproj'
-          dotnet nuget add source "$(Pipeline.Workspace)\NuGetPackage"
-          dotnet restore "$path"
+        command: 'run'
+        projects: 'Resources/PackageIntegrationTestUtilities/DwmNetConsoleApp/DwmNetConsoleApp/DwmNetConsoleApp.csproj'
+        arguments: '--configuration $(BuildConfiguration) -property:SolutionDir="$(Build.SourcesDirectory)/"'
 
-    - task: PowerShell@2
-      displayName: Run test program
-      inputs:
-        targetType: 'inline'
-        script: |
-          $path = Resolve-Path 'Resources\PackageIntegrationTestUtilities\DwmNetConsoleApp\DwmNetConsoleApp\DwmNetConsoleApp.csproj'
-          dotnet run --project "$path" --no-restore
+    - ${{ each psf in split('true,false',',') }}:
+      - ${{ each prtr in split('true,false',',') }}:
+        - ${{ each inlfse in split('true,false',',') }}:
+          - ${{ each sc in split('true,false',',') }}:
+            - ${{ each pt in split('true,false',',') }}:
+              - task: PowerShell@2
+                displayName: Begin publish test (SC=${{ sc }}, PSF=${{ psf }}, PRTR=${{ prtr }}, INLFSE=${{ inlfse }}, PT=${{ pt }})
+                inputs:
+                  targetType: 'inline'
+                  script: |
+                    $publishOptions = @"
+                    SelfContained = ${{ sc }}
+                    PublishSingleFile = ${{ psf }}
+                    PublishReadyToRun = ${{ prtr }}
+                    IncludeNativeLibrariesForSelfExtract = ${{ inlfse }}
+                    PublishTrimmed = ${{ pt }}
+                    "@
+                    Write-Host "$publishOptions"
+              
+                    $publishedAppPath = "$(Build.ArtifactStagingDirectory)/publish/sc-${{ sc }}-psf-${{ psf }}-prtr-${{ prtr }}-inlfse-${{ inlfse }}-pt-${{ pt }}"
+                    Write-Host "##vso[task.setvariable variable=publishedAppPath;]$publishedAppPath"
+                    Write-Host "Output path set to '$publishedAppPath'"
+              
+              - task: DotNetCoreCLI@2
+                displayName: Publish app
+                inputs:
+                  command: 'publish'
+                  publishWebProjects: false
+                  zipAfterPublish: false
+                  modifyOutputPath: false
+                  projects: 'Resources/PackageIntegrationTestUtilities/DwmNetConsoleApp/DwmNetConsoleApp/DwmNetConsoleApp.csproj'
+                  arguments: >
+                    --configuration $(BuildConfiguration)
+                    --runtime $(rid)
+                    --self-contained ${{ sc }}
+                    -p:PublishSingleFile=${{ psf }}
+                    -p:PublishReadyToRun=${{ prtr }}
+                    -p:IncludeNativeLibrariesForSelfExtract=${{ inlfse }}
+                    -p:PublishTrimmed=${{ pt }}
+                    -p:SolutionDir="$(Build.SourcesDirectory)/"
+                    --output $(publishedAppPath)
+              
+              - task: PowerShell@2
+                displayName: Run published app
+                inputs:
+                  targetType: 'inline'
+                  script: |
+                    Write-Host "Listing published files..."
+                    Write-Host ""
+                    Get-ChildItem -Recurse -Force -Path "$(publishedAppPath)" | Format-Table @{Label="File Name"; Expression={$_.Name}}, @{Label="Size (KB)"; Expression={"{0:N2}" -f ($_.Length / 1KB)}}
+                    Write-Host ""
+
+                    Write-Host "Running the app..."
+                    Write-Host ""
+                    if ($IsWindows) {
+                      & "$(publishedAppPath)/DwmNetConsoleApp.exe"
+                    } else {
+                      & "$(publishedAppPath)/DwmNetConsoleApp"
+                    }
+              
+                    if ($LASTEXITCODE -ne 0) {
+                      Write-Error "App execution failed with exit code $LASTEXITCODE"
+                      exit $LASTEXITCODE
+                    }

@@ -24,5 +24,14 @@ runs:
     - name: Copy native libraries near csproj
       shell: pwsh
       run: |
-        Copy-Item -Path "${{ runner.temp }}/NativeLibraries/Native_Win_${{ inputs.win-arch }}/*.dll" -Destination "DryWetMidi" -Verbose
-        Copy-Item -Path "${{ runner.temp }}/NativeLibraries/Native_macOS_${{ inputs.macos-arch }}/*.dylib" -Destination "DryWetMidi" -Verbose
+        $winX64Destination = "Native\win_x64"
+        New-Item -ItemType Directory -Force -Path $winX64Destination
+        Copy-Item -Path "${{ runner.temp }}/NativeLibraries/Native_Win_x64/Melanchall_DryWetMidi_Native.dll" -Destination "$winX64Destination" -Force -Verbose
+        
+        $winArm64Destination = "Native\win_arm64"
+        New-Item -ItemType Directory -Force -Path $winArm64Destination
+        Copy-Item -Path "${{ runner.temp }}/NativeLibraries/Native_Win_arm64/Melanchall_DryWetMidi_Native.dll" -Destination "$winArm64Destination" -Force -Verbose
+        
+        $macosX64Arm64Destination = "Native\macos_x64_arm64"
+        New-Item -ItemType Directory -Force -Path $macosX64Arm64Destination
+        Copy-Item -Path "${{ runner.temp }}/NativeLibraries/Native_macOS_x64_arm64/Melanchall_DryWetMidi_Native.dylib" -Destination "$macosX64Arm64Destination" -Force -Verbose

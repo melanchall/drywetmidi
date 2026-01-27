@@ -58,15 +58,7 @@ stages:
           Get-ChildItem $(Build.SourcesDirectory) -Include *.pdb -Recurse | Remove-Item -Force
     
     - task: ArchiveFiles@2
-      displayName: Archive .NET Framework binaries
-      inputs:
-        rootFolderOrFile: 'DryWetMidi\bin\$(BuildConfiguration)\net45'
-        includeRootFolder: false
-        archiveType: 'zip'
-        archiveFile: '$(Build.ArtifactStagingDirectory)\Binaries\DryWetMIDI.$(LibraryVersion)-bin-net45-nativeless.zip'
-    
-    - task: ArchiveFiles@2
-      displayName: Archive .NET Standard binaries
+      displayName: Archive binaries
       inputs:
         rootFolderOrFile: 'DryWetMidi\bin\$(BuildConfiguration)\netstandard2.0'
         includeRootFolder: false

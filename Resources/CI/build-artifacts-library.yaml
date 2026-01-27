@@ -61,15 +61,7 @@ stages:
           Get-ChildItem $(Build.SourcesDirectory) -Include *.pdb -Recurse | Remove-Item -Force
     
     - task: ArchiveFiles@2
-      displayName: Archive .NET Framework binaries
-      inputs:
-        rootFolderOrFile: 'DryWetMidi\bin\$(BuildConfiguration)\net45'
-        includeRootFolder: false
-        archiveType: 'zip'
-        archiveFile: '$(Build.ArtifactStagingDirectory)\Binaries\DryWetMIDI.$(LibraryVersion)-bin-net45.zip'
-    
-    - task: ArchiveFiles@2
-      displayName: Archive .NET Standard binaries
+      displayName: Archive binaries
       inputs:
         rootFolderOrFile: 'DryWetMidi\bin\$(BuildConfiguration)\netstandard2.0'
         includeRootFolder: false
@@ -81,9 +73,17 @@ stages:
       inputs:
         targetType: 'inline'
         script: |
-          New-Item -Path "$(Pipeline.Workspace)" -Name "Native" -ItemType "directory"
-          Copy-Item -Path "$(Pipeline.Workspace)/NativeLibraries/**/*.dll" -Destination "$(Pipeline.Workspace)/Native"
-          Copy-Item -Path "$(Pipeline.Workspace)/NativeLibraries/**/*.dylib" -Destination "$(Pipeline.Workspace)/Native"
+          $winX64Destination = "$(Pipeline.Workspace)/Native/win_x64"
+          New-Item -ItemType Directory -Force -Path $winX64Destination
+          Copy-Item -Path "$(Pipeline.Workspace)/NativeLibraries/Native_Win_x64/Melanchall_DryWetMidi_Native.dll" -Destination "$winX64Destination" -Force -Verbose
+          
+          $winArm64Destination = "$(Pipeline.Workspace)/Native/win_arm64"
+          New-Item -ItemType Directory -Force -Path $winArm64Destination
+          Copy-Item -Path "$(Pipeline.Workspace)/NativeLibraries/Native_Win_arm64/Melanchall_DryWetMidi_Native.dll" -Destination "$winArm64Destination" -Force -Verbose
+          
+          $macosX64Arm64Destination = "$(Pipeline.Workspace)/macos_x64_arm64"
+          New-Item -ItemType Directory -Force -Path $macosX64Arm64Destination
+          Copy-Item -Path "$(Pipeline.Workspace)/NativeLibraries/Native_macOS_x64_arm64/Melanchall_DryWetMidi_Native.dylib" -Destination "$macosX64Arm64Destination" -Force -Verbose
         
     - task: ArchiveFiles@2
       displayName: Archive native binaries
