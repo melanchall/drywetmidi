@@ -1,7 +1,4 @@
 parameters:
-- name: buildConfiguration
-  displayName: 'Build configuration'
-  type: string
 - name: prereleaseNumber
   displayName: 'Pre-release number'
   type: string
@@ -82,22 +79,12 @@ jobs:
     - template: step-setup-nativeless-project.yaml
   
   - task: PowerShell@2
-    displayName: Copy native libraries near csproj
+    displayName: Copy native libraries locally
     condition: eq('${{ parameters.packageType }}', 'Full')
     inputs:
-      targetType: 'inline'
-      script: |
-        $winX64Destination = "Native\win_x64"
-        New-Item -ItemType Directory -Force -Path $winX64Destination
-        Copy-Item -Path "$(Pipeline.Workspace)/NativeLibraries/Native_Win_x64/Melanchall_DryWetMidi_Native.dll" -Destination "$winX64Destination" -Force -Verbose
-        
-        $winArm64Destination = "Native\win_arm64"
-        New-Item -ItemType Directory -Force -Path $winArm64Destination
-        Copy-Item -Path "$(Pipeline.Workspace)/NativeLibraries/Native_Win_arm64/Melanchall_DryWetMidi_Native.dll" -Destination "$winArm64Destination" -Force -Verbose
-        
-        $macosX64Arm64Destination = "Native\macos_x64_arm64"
-        New-Item -ItemType Directory -Force -Path $macosX64Arm64Destination
-        Copy-Item -Path "$(Pipeline.Workspace)/NativeLibraries/Native_macOS_x64_arm64/Melanchall_DryWetMidi_Native.dylib" -Destination "$macosX64Arm64Destination" -Force -Verbose
+      targetType: filePath
+      filePath: '$(Build.SourcesDirectory)/Resources/Scripts/Copy native binaries locally.ps1'
+      arguments: '-fromDirectory "$(Pipeline.Workspace)/NativeLibraries"'
   
   - task: DotNetCoreCLI@2
     displayName: Build project
@@ -105,7 +92,7 @@ jobs:
       command: 'build'
       projects: |
         DryWetMidi/Melanchall.DryWetMidi.csproj
-      arguments: '--configuration ${{ parameters.buildConfiguration }}'
+      arguments: '--configuration $(BuildConfiguration)'
   
   - task: DotNetCoreCLI@2
     displayName: Create NuGet package

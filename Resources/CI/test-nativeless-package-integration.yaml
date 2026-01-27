@@ -1,0 +1,177 @@
+trigger:
+  batch: true
+  branches:
+    include:
+    - master
+    - develop
+  paths:
+    include:
+    - 'DryWetMidi/*'
+    - 'Resources/CI/test-nativeless-package-integration.yaml'
+    - 'Resources/CI/Templates/job-build-package.yaml'
+    - 'Resources/CI/Templates/step-setup-framework-variables.yaml'
+    - 'Resources/PackageIntegrationTestUtilities/DwmNativelessNetConsoleApp/*'
+
+pr: none
+
+variables:
+- group: DryWetMIDI-Common-Variables
+
+name: TestNativelessPackageIntegration_$(SourceBranchName)_$(LibraryVersion)$(Rev:.r)
+
+stages:
+- stage: BuildPackage
+  displayName: Build package
+  pool:
+    vmImage: 'windows-latest'
+  jobs:
+  - template: Templates/job-build-package.yaml
+    parameters:
+      packageType: 'Nativeless'
+
+- stage: TestPackageIntegration
+  displayName: Test package integration
+  jobs:
+  - job: TestPackageIntegration
+    displayName: Test package integration
+    strategy:
+      matrix:
+        Windows_Net:
+          vmImage: 'windows-latest'
+          framework: 'Net'
+          rid: 'win-x64'
+        macOS_Net:
+          vmImage: 'macos-latest'
+          framework: 'Net'
+          rid: 'osx-x64'
+        macOS_Arm_Net:
+          vmImage: 'macOS-15-arm64'
+          framework: 'Net'
+          rid: 'osx-arm64'
+        Ubuntu_Net:
+          vmImage: 'ubuntu-latest'
+          framework: 'Net'
+          rid: 'linux-x64'
+    pool:
+      vmImage: $(vmImage)
+    steps:
+    - task: DownloadPipelineArtifact@2
+      displayName: Download NuGet package
+      inputs:
+        source: 'current'
+        path: '$(Pipeline.Workspace)\NuGetPackage'
+        artifact: NuGetPackage
+    
+    - template: Templates/step-setup-framework.yaml
+      parameters:
+        framework: '$(framework)'
+    
+    - task: PowerShell@2
+      displayName: Add package to the project
+      inputs:
+        targetType: 'inline'
+        script: |
+          Write-Host "Adding local NuGet source with the package..."
+          dotnet nuget add source "$(Pipeline.Workspace)\NuGetPackage"
+    
+          Write-Host "Adding Melanchall.DryWetMidi.Nativeless.$(LibraryVersion) package reference to the project..."
+          $path = Resolve-Path 'Resources\PackageIntegrationTestUtilities\DwmNativelessNetConsoleApp\DwmNativelessNetConsoleApp\DwmNativelessNetConsoleApp.csproj'
+          dotnet add "$path" package Melanchall.DryWetMidi.Nativeless -v $(LibraryVersion) -s "$(Pipeline.Workspace)\NuGetPackage"
+
+    - task: PowerShell@2
+      displayName: Check csproj package reference
+      inputs:
+        targetType: 'inline'
+        script: |
+          $path = "Resources/PackageIntegrationTestUtilities/DwmNativelessNetConsoleApp/DwmNativelessNetConsoleApp/DwmNativelessNetConsoleApp.csproj"
+          $expected = '<PackageReference Include="Melanchall.DryWetMidi.Nativeless" Version="$(LibraryVersion)" />'
+          Write-Host "Expecting: $expected"
+          $found = Select-String -Path $path -Pattern $expected -SimpleMatch -Quiet
+          if (-not $found) {
+            Write-Error "Package reference not found: $expected"
+            exit 1
+          }
+          Write-Host "Package reference found."
+
+    - task: DotNetCoreCLI@2
+      displayName: Run app via dotnet
+      inputs:
+        command: 'run'
+        projects: 'Resources/PackageIntegrationTestUtilities/DwmNativelessNetConsoleApp/DwmNativelessNetConsoleApp/DwmNativelessNetConsoleApp.csproj'
+        arguments: '--configuration $(BuildConfiguration) -property:SolutionDir="$(Build.SourcesDirectory)/"'
+
+    - ${{ each psf in split('true,false',',') }}:
+      - ${{ each prtr in split('true,false',',') }}:
+        - ${{ each inlfse in split('true,false',',') }}:
+          - ${{ each sc in split('true,false',',') }}:
+            - ${{ each pt in split('true,false',',') }}:
+              - task: PowerShell@2
+                displayName: Begin publish test (SC=${{ sc }}, PSF=${{ psf }}, PRTR=${{ prtr }}, INLFSE=${{ inlfse }}, PT=${{ pt }})
+                inputs:
+                  targetType: 'inline'
+                  script: |
+                    $publishOptions = @"
+                    SelfContained = ${{ sc }}
+                    PublishSingleFile = ${{ psf }}
+                    PublishReadyToRun = ${{ prtr }}
+                    IncludeNativeLibrariesForSelfExtract = ${{ inlfse }}
+                    PublishTrimmed = ${{ pt }}
+                    "@
+                    Write-Host "$publishOptions"
+              
+                    $publishedAppPath = "$(Build.ArtifactStagingDirectory)/publish/sc-${{ sc }}-psf-${{ psf }}-prtr-${{ prtr }}-inlfse-${{ inlfse }}-pt-${{ pt }}"
+                    Write-Host "##vso[task.setvariable variable=publishedAppPath;]$publishedAppPath"
+                    Write-Host "Output path set to '$publishedAppPath'"
+              
+              - task: DotNetCoreCLI@2
+                displayName: Publish app
+                inputs:
+                  command: 'publish'
+                  publishWebProjects: false
+                  zipAfterPublish: false
+                  modifyOutputPath: false
+                  projects: 'Resources/PackageIntegrationTestUtilities/DwmNativelessNetConsoleApp/DwmNativelessNetConsoleApp/DwmNativelessNetConsoleApp.csproj'
+                  arguments: >
+                    --configuration $(BuildConfiguration)
+                    --runtime $(rid)
+                    --self-contained ${{ sc }}
+                    -p:PublishSingleFile=${{ psf }}
+                    -p:PublishReadyToRun=${{ prtr }}
+                    -p:IncludeNativeLibrariesForSelfExtract=${{ inlfse }}
+                    -p:PublishTrimmed=${{ pt }}
+                    -p:SolutionDir="$(Build.SourcesDirectory)/"
+                    --output $(publishedAppPath)
+              
+              - task: PowerShell@2
+                displayName: Run published app
+                inputs:
+                  targetType: 'inline'
+                  script: |
+                    Write-Host "Listing published files..."
+                    Write-Host ""
+                    Get-ChildItem -Recurse -Force -Path "$(publishedAppPath)" | Format-Table @{Label="File Name"; Expression={$_.Name}}, @{Label="Size (KB)"; Expression={"{0:N2}" -f ($_.Length / 1KB)}}
+                    Write-Host ""
+
+                    $dllFile = Join-Path "$(publishedAppPath)" "Melanchall_DryWetMidi_Native.dll"
+                    $dylibFile = Join-Path "$(publishedAppPath)" "Melanchall_DryWetMidi_Native.dylib"
+
+                    if ((Test-Path $dllFile) -or (Test-Path $dylibFile)) {
+                        Write-Output "Some native binaries exist."
+                        exit 1
+                    } else {
+                        Write-Output "There are no native binaries and that's OK.'"
+                        Write-Host ""
+                    }
+
+                    Write-Host "Running the app..."
+                    Write-Host ""
+                    if ($IsWindows) {
+                      & "$(publishedAppPath)/DwmNativelessNetConsoleApp.exe"
+                    } else {
+                      & "$(publishedAppPath)/DwmNativelessNetConsoleApp"
+                    }
+              
+                    if ($LASTEXITCODE -ne 0) {
+                      Write-Error "App execution failed with exit code $LASTEXITCODE"
+                      exit $LASTEXITCODE
+                    }

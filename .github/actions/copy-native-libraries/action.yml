@@ -1,4 +1,4 @@
-name: 'Copy Native Libraries Near csproj'
+name: 'Copy native libraries locally'
 description: 'Downloads and copies native libraries near csproj files'
 
 inputs:
@@ -21,17 +21,7 @@ runs:
         path: ${{ runner.temp }}/NativeLibraries
         merge-multiple: false
     
-    - name: Copy native libraries near csproj
+    - name: Copy native libraries locally
       shell: pwsh
       run: |
-        $winX64Destination = "Native\win_x64"
-        New-Item -ItemType Directory -Force -Path $winX64Destination
-        Copy-Item -Path "${{ runner.temp }}/NativeLibraries/Native_Win_x64/Melanchall_DryWetMidi_Native.dll" -Destination "$winX64Destination" -Force -Verbose
-        
-        $winArm64Destination = "Native\win_arm64"
-        New-Item -ItemType Directory -Force -Path $winArm64Destination
-        Copy-Item -Path "${{ runner.temp }}/NativeLibraries/Native_Win_arm64/Melanchall_DryWetMidi_Native.dll" -Destination "$winArm64Destination" -Force -Verbose
-        
-        $macosX64Arm64Destination = "Native\macos_x64_arm64"
-        New-Item -ItemType Directory -Force -Path $macosX64Arm64Destination
-        Copy-Item -Path "${{ runner.temp }}/NativeLibraries/Native_macOS_x64_arm64/Melanchall_DryWetMidi_Native.dylib" -Destination "$macosX64Arm64Destination" -Force -Verbose
+        & "${{ github.workspace }}/Resources/Scripts/Copy native binaries locally.ps1" -fromDirectory "${{ runner.temp }}/NativeLibraries"

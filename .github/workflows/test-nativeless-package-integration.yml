@@ -1,6 +1,6 @@
-﻿name: Test package integration
+﻿name: Test nativeless package integration
 
-run-name: TestPackageIntegration_Net_${{ github.ref_name }}_${{ vars.LIBRARY_VERSION }}_${{ github.run_number }}
+run-name: TestNativelessPackageIntegration_${{ github.ref_name }}_${{ vars.LIBRARY_VERSION }}_${{ github.run_number }}
 
 on:
   workflow_dispatch:
@@ -8,29 +8,26 @@ on:
     branches: 
       - master
       - develop
+      - nativeless-pack-integ
     paths: 
       - 'DryWetMidi/**'
-      - '.github/workflows/test-net-package-integration.yml'
+      - '.github/workflows/test-nativeless-package-integration.yml'
       - '.github/workflows/build-native-libs.yml'
       - '.github/workflows/build-package.yml'
       - '.github/actions/**'
-      - 'Resources/PackageIntegrationTestUtilities/DwmNetConsoleApp/**'
-      - 'Resources/Native/**'
+      - 'Resources/PackageIntegrationTestUtilities/DwmNativelessNetConsoleApp/**'
 
 concurrency: 
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress:  true
 
 jobs:
-  build-native-libs:
-    name: Build Native Libraries
-    uses: ./.github/workflows/build-native-libs.yml
-  
   build-package:
     name: Build NuGet Package
-    needs: build-native-libs
     uses: ./.github/workflows/build-package.yml
     secrets: inherit
+    with:
+      package-type: 'Nativeless'
 
   test-package-integration: 
     name: Test package integration (${{ matrix.os }})
@@ -41,9 +38,9 @@ jobs:
       fail-fast: false
       matrix: 
         include:
-          #- os: windows-11-arm
-          #  framework: Net
-          #  rid: win-arm64
+          - os: windows-11-arm
+            framework: Net
+            rid: win-arm64
           - os: macos-latest
             framework: Net
             rid: osx-arm64
@@ -74,15 +71,15 @@ jobs:
           Write-Host "Adding local NuGet source with the package..."
           dotnet nuget add source "${{ github.workspace }}/NuGetPackage"
 
-          Write-Host "Adding Melanchall.DryWetMidi.${{ vars.LIBRARY_VERSION }} package reference to the project..."
-          $path = Resolve-Path 'Resources/PackageIntegrationTestUtilities/DwmNetConsoleApp/DwmNetConsoleApp/DwmNetConsoleApp.csproj'
-          dotnet add "$path" package Melanchall.DryWetMidi -v ${{ vars.LIBRARY_VERSION }} -s "${{ github.workspace }}/NuGetPackage"
+          Write-Host "Adding Melanchall.DryWetMidi.Nativeless.${{ vars.LIBRARY_VERSION }} package reference to the project..."
+          $path = Resolve-Path 'Resources/PackageIntegrationTestUtilities/DwmNativelessNetConsoleApp/DwmNativelessNetConsoleApp/DwmNativelessNetConsoleApp.csproj'
+          dotnet add "$path" package Melanchall.DryWetMidi.Nativeless -v ${{ vars.LIBRARY_VERSION }} -s "${{ github.workspace }}/NuGetPackage"
       
       - name: Check csproj package reference
         shell:  pwsh
         run: |
-          $path = "Resources/PackageIntegrationTestUtilities/DwmNetConsoleApp/DwmNetConsoleApp/DwmNetConsoleApp.csproj"
-          $expected = '<PackageReference Include="Melanchall.DryWetMidi" Version="${{ vars.LIBRARY_VERSION }}" />'
+          $path = "Resources/PackageIntegrationTestUtilities/DwmNativelessNetConsoleApp/DwmNativelessNetConsoleApp/DwmNativelessNetConsoleApp.csproj"
+          $expected = '<PackageReference Include="Melanchall.DryWetMidi.Nativeless" Version="${{ vars.LIBRARY_VERSION }}" />'
           Write-Host "Expecting: $expected"
           $found = Select-String -Path $path -Pattern $expected -SimpleMatch -Quiet
           if (-not $found) {
@@ -90,30 +87,17 @@ jobs:
             exit 1
           }
           Write-Host "Package reference found."
-
-      - name:  Create MIDI ports (Windows)
-        if: runner.os == 'Windows'
-        uses: ./.github/actions/create-ports-windows
-        with:
-          enabled: 'true'
-          ports-names: 'MIDI A,MIDI B,MIDI C'
-      
-      - name: Create MIDI ports (macOS)
-        if: runner.os == 'macOS'
-        uses: ./.github/actions/create-ports-macos
-        with:  
-          enabled: 'true'
       
       - name: Run app via dotnet
         shell: pwsh
         run: |
-          $path = Resolve-Path 'Resources/PackageIntegrationTestUtilities/DwmNetConsoleApp/DwmNetConsoleApp/DwmNetConsoleApp.csproj'
+          $path = Resolve-Path 'Resources/PackageIntegrationTestUtilities/DwmNativelessNetConsoleApp/DwmNativelessNetConsoleApp/DwmNativelessNetConsoleApp.csproj'
           dotnet run --project "$path" --configuration ${{ vars.BUILD_CONFIGURATION }}
 
       - name: Run app after publish
         shell: pwsh
         run: |
-          $projectPath = "Resources/PackageIntegrationTestUtilities/DwmNetConsoleApp/DwmNetConsoleApp/DwmNetConsoleApp.csproj"
+          $projectPath = "Resources/PackageIntegrationTestUtilities/DwmNativelessNetConsoleApp/DwmNativelessNetConsoleApp/DwmNativelessNetConsoleApp.csproj"
     
           foreach ($psf in @('true', 'false')) {
             foreach ($prtr in @('true', 'false')) {
@@ -155,12 +139,23 @@ jobs:
                     Get-ChildItem -Recurse -Force -Path "$outputPath" | Format-Table @{Label="File Name"; Expression={$_.Name}}, @{Label="Size (KB)"; Expression={"{0:N2}" -f ($_.Length / 1KB)}}
                     Write-Host ""
                     
+                    $dllFile = Join-Path "$outputPath" "Melanchall_DryWetMidi_Native.dll"
+                    $dylibFile = Join-Path "$outputPath" "Melanchall_DryWetMidi_Native.dylib"
+
+                    if ((Test-Path $dllFile) -or (Test-Path $dylibFile)) {
+                        Write-Output "Some native binaries exist."
+                        exit 1
+                    } else {
+                        Write-Output "There are no native binaries and that's OK.'"
+                        Write-Host ""
+                    }
+
                     Write-Host "Running the app..."
                     Write-Host ""
                     if ($IsWindows) {
-                      & "$outputPath/DwmNetConsoleApp.exe"
+                      & "$outputPath/DwmNativelessNetConsoleApp.exe"
                     } else {
-                      & "$outputPath/DwmNetConsoleApp"
+                      & "$outputPath/DwmNativelessNetConsoleApp"
                     }
                     
                     if ($LASTEXITCODE -ne 0) {

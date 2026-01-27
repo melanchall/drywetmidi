@@ -8,11 +8,6 @@ on:
         required: false
         type: string
         default: 'Full'
-      prerelease-number:
-        description: 'Prerelease number (empty for release)'
-        required: false
-        type: string
-        default: ''
 
 jobs:
   build-package: 
@@ -52,25 +47,6 @@ jobs:
           
           $xml.Save($filePath)
       
-      - name: Setup prerelease version
-        if: inputs.prerelease-number != ''
-        shell: pwsh
-        run: |
-          $filePath = Resolve-Path "DryWetMidi/Melanchall.DryWetMidi.csproj"
-          $xml = New-Object xml
-          $xml.PreserveWhitespace = $true
-          $xml.Load($filePath)
-          $version = $xml.Project.PropertyGroup[1].Version
-          Write-Host "Current version is $version"
-          Write-Host "Prerelease number is ${{ inputs.prerelease-number }}"
-          $newVersion = $version + "-prerelease${{ inputs.prerelease-number }}"
-          $xml.Project.PropertyGroup[1].Version = $newVersion
-          Write-Host "New version: $($xml.Project.PropertyGroup[1].Version)"
-          Write-Host "Removing release notes..."
-          $xml.Project.PropertyGroup[1].PackageReleaseNotes = ""
-          Write-Host "Release notes:  $($xml.Project.PropertyGroup[1].PackageReleaseNotes)"
-          $xml.Save($filePath)
-      
       - name: Setup framework
         id: framework
         uses: ./.github/actions/setup-framework
@@ -81,21 +57,48 @@ jobs:
           netframework-tfm: ${{ vars.BUILD_FRAMEWORK_NETFRAMEWORK_TFM || 'net48' }}
           netframework-sdk-version: ${{ vars.BUILD_FRAMEWORK_NETFRAMEWORK_SDK_VERSION || '8.0.x' }}
       
-      - name: Copy native libraries near csproj
+      - name: Setup nativeless project
+        shell: pwsh
+        run: |
+          $encoding = [System.Text.Encoding]::UTF8
+          $filePath = Resolve-Path "DryWetMidi\Melanchall.DryWetMidi.csproj"
+          $csproj = [xml]([System.IO.File]::ReadAllText($filePath, $encoding))
+      
+          Write-Host "Setting package metadata values..."        
+          $packageGroup = (Select-Xml -Xml $csproj.Project -XPath "//*[@Label='Package']").Node
+          Write-Host "Current 'Package' group:"
+          Write-Host ($packageGroup | Format-Table | Out-String)
+          $packageGroup.PackageId = "Melanchall.DryWetMidi.Nativeless"
+          $description = $packageGroup.Description
+          $readmeNode = (Select-Xml -Xml $packageGroup -XPath "//PackageReadmeFile").Node
+          $packageGroup.RemoveChild($readmeNode)
+          Write-Host "New 'Package' group:"
+          Write-Host ($packageGroup | Format-Table | Out-String)
+                  
+          $nativeGroup = (Select-Xml -Xml $csproj.Project -XPath "//*[@Label='Native']").Node
+          Write-Host "'Native' group will be removed:"
+          Write-Host ($nativeGroup | Format-Table | Out-String)
+          $csproj.Project.RemoveChild($nativeGroup)
+      
+          Write-Host "Removing README pack instruction..."
+          $resourcesGroup = (Select-Xml -Xml $csproj.Project -XPath "//*[@Label='Resources']").Node
+          Write-Host "'Resources' group:"
+          Write-Host ($resourcesGroup | Format-Table | Out-String)
+          $readmeNode = (Select-Xml -Xml $resourcesGroup -XPath "//*[contains(@Include,'README')]").Node
+          Write-Host "'README' node:"
+          Write-Host ($readmeNode | Format-Table | Out-String)
+          $resourcesGroup.RemoveChild($readmeNode)
+                  
+          $csproj.Save($filePath)
+      
+          Write-Host "Setting icon path..."
+          (Get-Content $filePath) -replace 'icon.png', 'icon-nativeless.png' | Set-Content $filePath
+
+      - name: Copy native libraries locally
         if: inputs.package-type == 'Full'
         shell: pwsh
         run: |
-          $winX64Destination = "Native\win_x64"
-          New-Item -ItemType Directory -Force -Path $winX64Destination
-          Copy-Item -Path "${{ runner.temp }}/NativeLibraries/Native_Win_x64/Melanchall_DryWetMidi_Native.dll" -Destination "$winX64Destination" -Force -Verbose
-          
-          $winArm64Destination = "Native\win_arm64"
-          New-Item -ItemType Directory -Force -Path $winArm64Destination
-          Copy-Item -Path "${{ runner.temp }}/NativeLibraries/Native_Win_arm64/Melanchall_DryWetMidi_Native.dll" -Destination "$winArm64Destination" -Force -Verbose
-          
-          $macosX64Arm64Destination = "Native\macos_x64_arm64"
-          New-Item -ItemType Directory -Force -Path $macosX64Arm64Destination
-          Copy-Item -Path "${{ runner.temp }}/NativeLibraries/Native_macOS_x64_arm64/Melanchall_DryWetMidi_Native.dylib" -Destination "$macosX64Arm64Destination" -Force -Verbose
+          & "${{ github.workspace }}/Resources/Scripts/Copy native binaries locally.ps1" -fromDirectory "${{ runner.temp }}/NativeLibraries"
       
       - name: Build project
         run: dotnet build DryWetMidi/Melanchall.DryWetMidi.csproj --configuration ${{ vars.BUILD_CONFIGURATION || 'Release' }}

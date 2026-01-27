@@ -31,7 +31,6 @@ stages:
   jobs:
   - template: Templates/job-build-package.yaml
     parameters:
-      buildConfiguration: $(BuildConfiguration)
       packageType: 'Full'
   - job: BuildBinaries
     displayName: Build binaries
@@ -42,7 +41,7 @@ stages:
     
     - template: Templates/step-generate-doc-links.yaml
     
-    - template: Templates/step-copy-native-libraries-near-csproj.yaml
+    #- template: Templates/step-copy-native-libraries-near-csproj.yaml
     
     - template: Templates/step-generate-obsolete-api-hints.yaml
     
