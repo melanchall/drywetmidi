@@ -9,7 +9,7 @@ namespace CreateLoopbackPort
 {
 	public class Program
 	{
-		private const uint SysExBufferLength = 65535;
+		private const uint BufferLength = 65535;
 
 		[DllImport("teVirtualMIDI.dll", SetLastError = true, CharSet = CharSet.Unicode)]
 		private static extern IntPtr virtualMIDICreatePortEx3(string portName, IntPtr callback, IntPtr dwCallbackInstance, uint maxSysexLength, uint flags, ref Guid manufacturer, ref Guid product);
@@ -20,44 +20,47 @@ namespace CreateLoopbackPort
 		[DllImport("teVirtualMIDI.dll", SetLastError = true, CharSet = CharSet.Unicode)]
 		private static extern bool virtualMIDIGetData(IntPtr midiPort, [Out] byte[] midiDataBytes, ref uint length);
 
+		private static byte[] Buffer = new byte[BufferLength];
+
 		public static void Main(string[] args)
 		{
-			var manufacturer = new Guid("aa4e075f-3504-4aab-9b06-9a4104a91cf0");
-			var product = new Guid("bb4e075f-3504-4aab-9b06-9a4104a91cf0");
+			var manufacturer = Guid.NewGuid();
+			var product = Guid.NewGuid();
+			var portName = args[0];
 
-			var portHandle = virtualMIDICreatePortEx3(args[0], IntPtr.Zero, IntPtr.Zero, 65535, 12, ref manufacturer, ref product);
+            Console.WriteLine($"Creating virtual MIDI port '{portName}'...");
+            var portHandle = virtualMIDICreatePortEx3(portName, IntPtr.Zero, IntPtr.Zero, 65535, 12, ref manufacturer, ref product);
+            Console.WriteLine($"Virtual MIDI port created.");
 
-			var thread = new Thread(() =>
+            var thread = new Thread(() =>
 			{
 				while (true)
 				{
-					var commandBytes = GetCommandBytes(portHandle);
-					SendCommandBytes(portHandle, commandBytes);
+					var commandBytesLength = GetCommandBytesLength(portHandle);
+					SendCommandBytes(portHandle, commandBytesLength);
 				}
 			});
 
-			thread.Start();
+            Console.WriteLine("Starting send/receive loop...");
+            thread.Start();
+			Console.WriteLine("Send/receive loop is running...");
+			
 			Console.ReadKey();
 		}
 
-		private static void SendCommandBytes(IntPtr portHandle, byte[] commandBytes)
+		private static void SendCommandBytes(IntPtr portHandle, uint commandBytesLength)
 		{
-			if (commandBytes == null || commandBytes.Length == 0)
+			if (commandBytesLength == 0)
 				return;
 
-			virtualMIDISendData(portHandle, commandBytes, (uint)commandBytes.Length);
+			virtualMIDISendData(portHandle, Buffer, commandBytesLength);
 		}
 
-		private static byte[] GetCommandBytes(IntPtr portHandle)
+		private static uint GetCommandBytesLength(IntPtr portHandle)
 		{
-			var length = SysExBufferLength;
-			var buffer = new byte[length];
-
-			virtualMIDIGetData(portHandle, buffer, ref length);
-
-			var commandBytes = new byte[length];
-			Array.Copy(buffer, commandBytes, length);
-			return commandBytes;
+			uint length = BufferLength;
+			virtualMIDIGetData(portHandle, Buffer, ref length);
+			return length;
 		}
 	}
 }
