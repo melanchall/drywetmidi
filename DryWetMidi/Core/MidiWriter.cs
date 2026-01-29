@@ -113,6 +113,16 @@ namespace Melanchall.DryWetMidi.Core
             WriteBytes(bytes, 0, bytes.Length);
         }
 
+        public void WriteBytes(byte[] bytes, int offset, int length)
+        {
+            if (_useBuffering)
+                WriteBytesWithBuffering(bytes, offset, length);
+            else
+                _stream.Write(bytes, offset, length);
+
+            _length += length;
+        }
+
         /// <summary>
         /// Writes a signed byte to the underlying stream and advances the stream position by one byte.
         /// </summary>
@@ -244,16 +254,6 @@ namespace Melanchall.DryWetMidi.Core
                 return;
 
             _buffer = new byte[_settings.BufferSize];
-        }
-
-        private void WriteBytes(byte[] bytes, int offset, int length)
-        {
-            if (_useBuffering)
-                WriteBytesWithBuffering(bytes, offset, length);
-            else
-                _stream.Write(bytes, offset, length);
-
-            _length += length;
         }
 
         private void FlushBuffer()

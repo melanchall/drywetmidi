@@ -16,6 +16,12 @@ namespace Melanchall.DryWetMidi.Common
 
         #region Methods
 
+        internal static void IsOfType<TProhibitedType>(string parameterName, object argument, string errorMessage)
+        {
+            if (argument is TProhibitedType)
+                throw new ArgumentException(errorMessage, parameterName);
+        }
+
         internal static void IsProhibitedValue(string parameterName, char argument, char invalidValue)
         {
             if (argument == invalidValue)

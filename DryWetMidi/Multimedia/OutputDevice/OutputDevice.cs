@@ -134,9 +134,14 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <exception cref="ObjectDisposedException">The current <see cref="OutputDevice"/> is disposed.</exception>
         /// <exception cref="ArgumentNullException"><paramref name="midiEvent"/> is <c>null</c>.</exception>
         /// <exception cref="MidiDeviceException">An error occurred on device.</exception>
+        /// <exception cref="ArgumentException">EscapeSysExEvent is prohibited. Use NormalSysExEvent instead.</exception>
         public void SendEvent(MidiEvent midiEvent)
         {
             ThrowIfArgument.IsNull(nameof(midiEvent), midiEvent);
+            ThrowIfArgument.IsOfType<EscapeSysExEvent>(
+                nameof(midiEvent),
+                midiEvent,
+                "EscapeSysExEvent is prohibited. Use NormalSysExEvent instead.");
 
             if (!IsEnabled)
                 return;

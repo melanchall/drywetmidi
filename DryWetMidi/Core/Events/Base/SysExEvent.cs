@@ -21,15 +21,23 @@ namespace Melanchall.DryWetMidi.Core
 
         #endregion
 
+        #region Fields
+
+        private readonly byte _statusByte;
+        private byte[] _data;
+
+        #endregion
+
         #region Constructor
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SysExEvent"/> with the specified event type.
         /// </summary>
         /// <param name="eventType">The type of event.</param>
-        protected SysExEvent(MidiEventType eventType)
+        protected SysExEvent(MidiEventType eventType, byte statusByte)
             : base(eventType)
         {
+            _statusByte = statusByte;
         }
 
         #endregion
@@ -39,12 +47,35 @@ namespace Melanchall.DryWetMidi.Core
         /// <summary>
         /// Gets a value indicating whether this system exclusive event is completed or not.
         /// </summary>
-        public bool Completed => Data?.LastOrDefault() == EndOfEventByte;
+        public bool Completed { get; private set; }
 
         /// <summary>
         /// Gets or sets the event's data.
         /// </summary>
-        public byte[] Data { get; set; }
+        public byte[] Data
+        {
+            get
+            {
+                return _data;
+            }
+            set
+            {
+                _data = value;
+
+                if (value != null && value.Length > 0)
+                {
+                    Completed = value[value.Length - 1] == EndOfEventByte;
+                    StartsWithStatusByte = value[0] == _statusByte;
+                }
+                else
+                {
+                    Completed = false;
+                    StartsWithStatusByte = false;
+                }
+            }
+        }
+
+        internal bool StartsWithStatusByte { get; private set; }
 
         #endregion
 
@@ -78,8 +109,13 @@ namespace Melanchall.DryWetMidi.Core
         internal sealed override void Write(MidiWriter writer, WritingSettings settings)
         {
             var data = Data;
-            if (data != null)
-                writer.WriteBytes(data);
+            if (data != null && data.Length > 0)
+            {
+                if (StartsWithStatusByte)
+                    writer.WriteBytes(data, 1, data.Length - 1);
+                else
+                    writer.WriteBytes(data);
+            }
         }
 
         /// <summary>
@@ -89,7 +125,11 @@ namespace Melanchall.DryWetMidi.Core
         /// <returns>Size of the event's content.</returns>
         internal sealed override int GetSize(WritingSettings settings)
         {
-            return Data?.Length ?? 0;
+            var result = Data?.Length ?? 0;
+            if (StartsWithStatusByte)
+                result--;
+
+            return result;
         }
 
         #endregion

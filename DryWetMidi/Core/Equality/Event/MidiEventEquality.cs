@@ -160,7 +160,13 @@ namespace Melanchall.DryWetMidi.Core
                     return false;
                 }
 
-                if (!ArrayUtilities.Equals(sysExEvent1.Data, sysExEvent2.Data))
+                var data1 = sysExEvent1.Data ?? Array.Empty<byte>();
+                var offset1 = sysExEvent1.StartsWithStatusByte ? 1 : 0;
+
+                var data2 = sysExEvent2.Data ?? Array.Empty<byte>();
+                var offset2 = sysExEvent2.StartsWithStatusByte ? 1 : 0;
+
+                if (!ArrayUtilities.Equals(data1, offset1, data2, offset2))
                 {
                     message = "System exclusive events data are different.";
                     return false;
@@ -174,7 +180,10 @@ namespace Melanchall.DryWetMidi.Core
             {
                 var sequencerSpecificEvent2 = (SequencerSpecificEvent)midiEvent2;
 
-                if (!ArrayUtilities.Equals(sequencerSpecificEvent1.Data, sequencerSpecificEvent2.Data))
+                var data1 = sequencerSpecificEvent1.Data ?? Array.Empty<byte>();
+                var data2 = sequencerSpecificEvent2.Data ?? Array.Empty<byte>();
+
+                if (!ArrayUtilities.Equals(data1, data2))
                 {
                     message = "Sequencer specific events data are different.";
                     return false;
@@ -197,7 +206,10 @@ namespace Melanchall.DryWetMidi.Core
                     return false;
                 }
 
-                if (!ArrayUtilities.Equals(unknownMetaEvent1.Data, unknownMetaEvent2.Data))
+                var data1 = unknownMetaEvent1.Data ?? Array.Empty<byte>();
+                var data2 = unknownMetaEvent2.Data ?? Array.Empty<byte>();
+
+                if (!ArrayUtilities.Equals(data1, data2))
                 {
                     message = "Unknown meta events data are different.";
                     return false;
@@ -211,8 +223,8 @@ namespace Melanchall.DryWetMidi.Core
             {
                 var baseTextEvent2 = (BaseTextEvent)midiEvent2;
 
-                var text1 = baseTextEvent1.Text;
-                var text2 = baseTextEvent2.Text;
+                var text1 = baseTextEvent1.Text ?? string.Empty;
+                var text2 = baseTextEvent2.Text ?? string.Empty;
 
                 if (!string.Equals(text1, text2, settings.TextComparison))
                 {
@@ -225,7 +237,13 @@ namespace Melanchall.DryWetMidi.Core
 
             Func<MidiEvent, MidiEvent, bool> comparer;
             if (Comparers.TryGetValue(midiEvent1.EventType, out comparer))
-                return comparer(midiEvent1, midiEvent2);
+            {
+                var equals = comparer(midiEvent1, midiEvent2);
+                if (!equals)
+                    message = $"Events {midiEvent1} and {midiEvent2} are not equal.";
+
+                return equals;
+            }
 
             var result = midiEvent1.Equals(midiEvent2);
             if (!result)

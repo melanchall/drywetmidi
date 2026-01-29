@@ -157,8 +157,17 @@ namespace Melanchall.DryWetMidi.Core
 
             if (midiEvent is NormalSysExEvent && BytesFormat == BytesFormat.Device)
             {
-                _midiWriter.WriteByte(EventStatusBytes.Global.NormalSysEx);
-                _midiWriter.WriteBytes(((NormalSysExEvent)midiEvent).Data);
+                var data = ((NormalSysExEvent)midiEvent).Data;
+                if (data != null && data.Length > 0)
+                {
+                    if (data[0] != EventStatusBytes.Global.NormalSysEx)
+                        _midiWriter.WriteByte(EventStatusBytes.Global.NormalSysEx);
+                    
+                    _midiWriter.WriteBytes(data);
+
+                    if (data[data.Length - 1] != SysExEvent.EndOfEventByte)
+                        _midiWriter.WriteByte(SysExEvent.EndOfEventByte);
+                }
             }
             else
             {

@@ -56,14 +56,65 @@ namespace Melanchall.DryWetMidi.Tests.Core
                         Channel = (FourBitNumber)0x2
                     },
                     new byte[] { 0x92, 0x12, 0x56 });
+                
                 Convert(
                     midiEventToBytesConverter,
                     new NormalSysExEvent(Enumerable.Range(0, 40).Select(_ => (byte)0xA7).Concat(new byte[] { 0xF7 }).ToArray()),
                     new byte[] { 0xF0 }.Concat(Enumerable.Range(0, 40).Select(_ => (byte)0xA7)).Concat(new byte[] { 0xF7 }).ToArray());
+                
                 Convert(
                     midiEventToBytesConverter,
                     new NormalSysExEvent(Enumerable.Range(0, 120).Select(_ => (byte)0xA7).Concat(new byte[] { 0xF7 }).ToArray()),
                     new byte[] { 0xF0 }.Concat(Enumerable.Range(0, 120).Select(_ => (byte)0xA7)).Concat(new byte[] { 0xF7 }).ToArray());
+
+                Convert(
+                    midiEventToBytesConverter,
+                    new NormalSysExEvent([0xA5, 0x34]),
+                    [0xF0, 0xA5, 0x34, 0xF7]);
+
+                Convert(
+                    midiEventToBytesConverter,
+                    new NormalSysExEvent([0xF0, 0xA5, 0x34]),
+                    [0xF0, 0xA5, 0x34, 0xF7]);
+
+                Convert(
+                    midiEventToBytesConverter,
+                    new NormalSysExEvent([0xA5, 0x34, 0xF7]),
+                    [0xF0, 0xA5, 0x34, 0xF7]);
+
+                Convert(
+                    midiEventToBytesConverter,
+                    new NormalSysExEvent([0xF0, 0xA5, 0x34, 0xF7]),
+                    [0xF0, 0xA5, 0x34, 0xF7]);
+            }
+        }
+
+        [Test]
+        public void Convert_BytesFormat_Device_SysEx()
+        {
+            using (var midiEventToBytesConverter = new MidiEventToBytesConverter())
+            {
+                midiEventToBytesConverter.BytesFormat = BytesFormat.Device;
+
+                Convert(
+                    midiEventToBytesConverter,
+                    new NormalSysExEvent([0xA5, 0x34]),
+                    [0xF0, 0xA5, 0x34, 0xF7]);
+
+                Convert(
+                    midiEventToBytesConverter,
+                    new NormalSysExEvent([0xF0, 0xA5, 0x34]),
+                    [0xF0, 0xA5, 0x34, 0xF7]);
+
+                Convert(
+                    midiEventToBytesConverter,
+                    new NormalSysExEvent([0xA5, 0x34, 0xF7]),
+                    [0xF0, 0xA5, 0x34, 0xF7]);
+
+                Convert(
+                    midiEventToBytesConverter,
+                    new NormalSysExEvent([0xF0, 0xA5, 0x34, 0xF7]),
+                    [0xF0, 0xA5, 0x34, 0xF7]);
             }
         }
 
@@ -81,14 +132,65 @@ namespace Melanchall.DryWetMidi.Tests.Core
                         Channel = (FourBitNumber)0x2
                     },
                     new byte[] { 0x92, 0x12, 0x56 });
+                
                 Convert(
                     midiEventToBytesConverter,
                     new NormalSysExEvent(Enumerable.Range(0, 40).Select(_ => (byte)0xA7).Concat(new byte[] { 0xF7 }).ToArray()),
                     new byte[] { 0xF0, 0x29 }.Concat(Enumerable.Range(0, 40).Select(_ => (byte)0xA7)).Concat(new byte[] { 0xF7 }).ToArray());
+                
                 Convert(
                     midiEventToBytesConverter,
                     new NormalSysExEvent(Enumerable.Range(0, 120).Select(_ => (byte)0xA7).Concat(new byte[] { 0xF7 }).ToArray()),
                     new byte[] { 0xF0, 0x79 }.Concat(Enumerable.Range(0, 120).Select(_ => (byte)0xA7)).Concat(new byte[] { 0xF7 }).ToArray());
+
+                Convert(
+                    midiEventToBytesConverter,
+                    new NormalSysExEvent([0xA5, 0x34]),
+                    [0xF0, 2, 0xA5, 0x34]);
+
+                Convert(
+                    midiEventToBytesConverter,
+                    new NormalSysExEvent([0xF0, 0xA5, 0x34]),
+                    [0xF0, 2, 0xA5, 0x34]);
+
+                Convert(
+                    midiEventToBytesConverter,
+                    new NormalSysExEvent([0xA5, 0x34, 0xF7]),
+                    [0xF0, 3, 0xA5, 0x34, 0xF7]);
+
+                Convert(
+                    midiEventToBytesConverter,
+                    new NormalSysExEvent([0xF0, 0xA5, 0x34, 0xF7]),
+                    [0xF0, 3, 0xA5, 0x34, 0xF7]);
+            }
+        }
+
+        [Test]
+        public void Convert_BytesFormat_File_SysEx()
+        {
+            using (var midiEventToBytesConverter = new MidiEventToBytesConverter())
+            {
+                midiEventToBytesConverter.BytesFormat = BytesFormat.File;
+
+                Convert(
+                    midiEventToBytesConverter,
+                    new NormalSysExEvent([0xA5, 0x34]),
+                    [0xF0, 2, 0xA5, 0x34]);
+
+                Convert(
+                    midiEventToBytesConverter,
+                    new NormalSysExEvent([0xF0, 0xA5, 0x34]),
+                    [0xF0, 2, 0xA5, 0x34]);
+
+                Convert(
+                    midiEventToBytesConverter,
+                    new NormalSysExEvent([0xA5, 0x34, 0xF7]),
+                    [0xF0, 3, 0xA5, 0x34, 0xF7]);
+
+                Convert(
+                    midiEventToBytesConverter,
+                    new NormalSysExEvent([0xF0, 0xA5, 0x34, 0xF7]),
+                    [0xF0, 3, 0xA5, 0x34, 0xF7]);
             }
         }
 

@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using Melanchall.DryWetMidi.Common;
 
 namespace Melanchall.DryWetMidi.Core
 {
@@ -27,7 +26,7 @@ namespace Melanchall.DryWetMidi.Core
         /// Initializes a new instance of the <see cref="EscapeSysExEvent"/>.
         /// </summary>
         public EscapeSysExEvent()
-            : base(MidiEventType.EscapeSysEx)
+            : base(MidiEventType.EscapeSysEx, EventStatusBytes.Global.EscapeSysEx)
         {
         }
 
@@ -39,12 +38,6 @@ namespace Melanchall.DryWetMidi.Core
         public EscapeSysExEvent(byte[] data)
             : this()
         {
-            ThrowIfArgument.StartsWithInvalidValue(
-                nameof(data),
-                data,
-                EventStatusBytes.Global.EscapeSysEx,
-                $"First data byte mustn't be {EventStatusBytes.Global.EscapeSysEx} ({EventStatusBytes.Global.EscapeSysEx:X2}) since it will be used automatically.");
-
             Data = data;
         }
 

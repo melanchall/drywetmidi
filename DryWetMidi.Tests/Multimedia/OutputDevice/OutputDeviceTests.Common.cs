@@ -67,6 +67,10 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 "Output devices count is invalid.");
         }
 
+        [Test]
+        public void SendEvent_EscapeSysEx() => Assert.Throws<ArgumentException>(
+            () => SendEvent(new EscapeSysExEvent(new byte[] { 0x5F, 0x40, 0xF7 })));
+
         [CancelAfter(60 * 1000)]
         [Retry(RetriesNumber)]
         [Test]

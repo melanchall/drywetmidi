@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
@@ -13,108 +12,148 @@ namespace Melanchall.DryWetMidi.Tests.Core
     [TestFixture]
     public sealed class MidiEventTests
     {
+        #region Nested classes
+
+        private sealed class CustomMetaEvent : MetaEvent
+        {
+            private byte _data;
+
+            public CustomMetaEvent() =>
+                _data = 0;
+
+            public CustomMetaEvent(byte data) =>
+                _data = data;
+
+            protected override MidiEvent CloneEvent() =>
+                new CustomMetaEvent(_data);
+
+            protected override int GetContentSize(WritingSettings settings) =>
+                1;
+
+            protected override void ReadContent(MidiReader reader, ReadingSettings settings, int size) =>
+                _data = reader.ReadByte();
+
+            protected override void WriteContent(MidiWriter writer, WritingSettings settings) =>
+                writer.WriteByte(_data);
+
+            public override string ToString() =>
+                _data.ToString();
+
+            public override bool Equals(object obj)
+            {
+                if (obj is not CustomMetaEvent other)
+                    return false;
+
+                return _data == other._data;
+            }
+
+            public override int GetHashCode() =>
+                _data.GetHashCode();
+        }
+
+        #endregion
+
         #region Constants
 
-        private static readonly NumbersProvider NumbersProvider = new NumbersProvider();
+        private static readonly object[] EventsWriteRead =
+        {
+            new object[] { new NormalSysExEvent(), new NormalSysExEvent() },
+            new object[] { new NormalSysExEvent([0xF0]), new NormalSysExEvent() },
+            new object[] { new NormalSysExEvent([0xF0, 0xAB, 0x65, 0xF7]), new NormalSysExEvent([0xF0, 0xAB, 0x65, 0xF7]) },
+            new object[] { new NormalSysExEvent([0xAB, 0x65, 0xF7]), new NormalSysExEvent([0xF0, 0xAB, 0x65, 0xF7]) },
 
-        private static readonly Dictionary<Type, Action<MidiEvent>> NonDefaultMidiEventsModifiers =
-            new Dictionary<Type, Action<MidiEvent>>
-            {
-                // SysEx
+            new object[] { new EscapeSysExEvent(), new EscapeSysExEvent() },
+            new object[] { new EscapeSysExEvent([0xF7]), new EscapeSysExEvent() },
+            new object[] { new EscapeSysExEvent([0xF7, 0xAB, 0x65, 0xF7]), new EscapeSysExEvent([0xF7, 0xAB, 0x65, 0xF7]) },
+            new object[] { new EscapeSysExEvent([0xAB, 0x65, 0xF7]), new EscapeSysExEvent([0xF7, 0xAB, 0x65, 0xF7]) },
 
-                [typeof(SysExEvent)] = midiEvent =>
-                {
-                    ((SysExEvent)midiEvent).Data = NumbersProvider.GetNonDefaultBytesArray(3, 10, 100);
-                },
+            new object[] { new ChannelAftertouchEvent(), new ChannelAftertouchEvent() },
+            new object[] { new ChannelAftertouchEvent((SevenBitNumber)4), new ChannelAftertouchEvent((SevenBitNumber)4) },
+            new object[] { new ChannelAftertouchEvent((SevenBitNumber)4) { Channel = (FourBitNumber)5 }, new ChannelAftertouchEvent((SevenBitNumber)4) { Channel = (FourBitNumber)5 } },
 
-                // Channel
+            new object[] { new ControlChangeEvent(), new ControlChangeEvent() },
+            new object[] { new ControlChangeEvent((SevenBitNumber)4, (SevenBitNumber)70), new ControlChangeEvent((SevenBitNumber)4, (SevenBitNumber)70) },
+            new object[] { new ControlChangeEvent((SevenBitNumber)4, (SevenBitNumber)70) { Channel = (FourBitNumber)5 }, new ControlChangeEvent((SevenBitNumber)4, (SevenBitNumber)70) { Channel = (FourBitNumber)5 } },
 
-                [typeof(ChannelEvent)] = midiEvent =>
-                {
-                    ((ChannelEvent)midiEvent).Channel = NumbersProvider.GetNonDefaultFourBitNumber();
-                },
-                [typeof(NoteEvent)] = midiEvent =>
-                {
-                    var noteEvent = (NoteEvent)midiEvent;
-                    noteEvent.NoteNumber = NumbersProvider.GetNonDefaultSevenBitNumber();
-                    noteEvent.Velocity = NumbersProvider.GetNonDefaultSevenBitNumber();
-                },
-                [typeof(ChannelAftertouchEvent)] = midiEvent =>
-                {
-                    ((ChannelAftertouchEvent)midiEvent).AftertouchValue = NumbersProvider.GetNonDefaultSevenBitNumber();
-                },
-                [typeof(ControlChangeEvent)] = midiEvent =>
-                {
-                    var controlChangeEvent = (ControlChangeEvent)midiEvent;
-                    controlChangeEvent.ControlNumber = NumbersProvider.GetNonDefaultSevenBitNumber();
-                    controlChangeEvent.ControlValue = NumbersProvider.GetNonDefaultSevenBitNumber();
-                },
-                [typeof(NoteAftertouchEvent)] = midiEvent =>
-                {
-                    var noteAftertouchEvent = (NoteAftertouchEvent)midiEvent;
-                    noteAftertouchEvent.NoteNumber = NumbersProvider.GetNonDefaultSevenBitNumber();
-                    noteAftertouchEvent.AftertouchValue = NumbersProvider.GetNonDefaultSevenBitNumber();
-                },
-                [typeof(PitchBendEvent)] = midiEvent =>
-                {
-                    ((PitchBendEvent)midiEvent).PitchValue = NumbersProvider.GetNonDefaultUShort(PitchBendEvent.MaxPitchValue);
-                },
-                [typeof(ProgramChangeEvent)] = midiEvent =>
-                {
-                    ((ProgramChangeEvent)midiEvent).ProgramNumber = NumbersProvider.GetNonDefaultSevenBitNumber();
-                },
+            new object[] { new NoteAftertouchEvent(), new NoteAftertouchEvent() },
+            new object[] { new NoteAftertouchEvent((SevenBitNumber)4, (SevenBitNumber)70), new NoteAftertouchEvent((SevenBitNumber)4, (SevenBitNumber)70) },
+            new object[] { new NoteAftertouchEvent((SevenBitNumber)4, (SevenBitNumber)70) { Channel = (FourBitNumber)5 }, new NoteAftertouchEvent((SevenBitNumber)4, (SevenBitNumber)70) { Channel = (FourBitNumber)5 } },
 
-                // Meta
+            new object[] { new NoteOffEvent(), new NoteOffEvent() },
+            new object[] { new NoteOffEvent((SevenBitNumber)4, (SevenBitNumber)70), new NoteOffEvent((SevenBitNumber)4, (SevenBitNumber)70) },
+            new object[] { new NoteOffEvent((SevenBitNumber)4, (SevenBitNumber)70) { Channel = (FourBitNumber)5 }, new NoteOffEvent((SevenBitNumber)4, (SevenBitNumber)70) { Channel = (FourBitNumber)5 } },
 
-                [typeof(BaseTextEvent)] = midiEvent =>
-                {
-                    ((BaseTextEvent)midiEvent).Text = Guid.NewGuid().ToString();
-                },
-                [typeof(SequencerSpecificEvent)] = midiEvent =>
-                {
-                    ((SequencerSpecificEvent)midiEvent).Data = NumbersProvider.GetNonDefaultBytesArray(3, 10, 100);
-                },
-                [typeof(ChannelPrefixEvent)] = midiEvent =>
-                {
-                    ((ChannelPrefixEvent)midiEvent).Channel = NumbersProvider.GetNonDefaultByte();
-                },
-                [typeof(KeySignatureEvent)] = midiEvent =>
-                {
-                    var keySignatureEvent = (KeySignatureEvent)midiEvent;
-                    keySignatureEvent.Key = (sbyte)DryWetMidi.Common.Random.Instance.Next(1, 8);
-                    keySignatureEvent.Scale = 1;
-                },
-                [typeof(PortPrefixEvent)] = midiEvent =>
-                {
-                    ((PortPrefixEvent)midiEvent).Port = NumbersProvider.GetNonDefaultByte();
-                },
-                [typeof(SequenceNumberEvent)] = midiEvent =>
-                {
-                    ((SequenceNumberEvent)midiEvent).Number = NumbersProvider.GetNonDefaultUShort();
-                },
-                [typeof(SetTempoEvent)] = midiEvent =>
-                {
-                    ((SetTempoEvent)midiEvent).MicrosecondsPerQuarterNote = DryWetMidi.Common.Random.Instance.Next(1, 16777216);
-                },
-                [typeof(SmpteOffsetEvent)] = midiEvent =>
-                {
-                    var smpteOffsetEvent = (SmpteOffsetEvent)midiEvent;
-                    smpteOffsetEvent.Format = SmpteFormat.Thirty;
-                    smpteOffsetEvent.Frames = (byte)DryWetMidi.Common.Random.Instance.Next(1, 30);
-                    smpteOffsetEvent.SubFrames = (byte)DryWetMidi.Common.Random.Instance.Next(1, 100);
-                    smpteOffsetEvent.Hours = (byte)DryWetMidi.Common.Random.Instance.Next(1, 24);
-                    smpteOffsetEvent.Minutes = (byte)DryWetMidi.Common.Random.Instance.Next(1, 60);
-                    smpteOffsetEvent.Seconds = (byte)DryWetMidi.Common.Random.Instance.Next(1, 60);
-                },
-                [typeof(TimeSignatureEvent)] = midiEvent =>
-                {
-                    var timeSignatureEvent = (TimeSignatureEvent)midiEvent;
-                    timeSignatureEvent.Numerator = NumbersProvider.GetNonDefaultByte();
-                    timeSignatureEvent.Denominator = NumbersProvider.GetNonDefaultByte(v => MathUtilities.IsPowerOfTwo(v));
-                    timeSignatureEvent.ClocksPerClick = NumbersProvider.GetNonDefaultByte();
-                    timeSignatureEvent.ThirtySecondNotesPerBeat = NumbersProvider.GetNonDefaultByte();
-                },
-            };
+            new object[] { new NoteOnEvent(), new NoteOnEvent() },
+            new object[] { new NoteOnEvent((SevenBitNumber)4, (SevenBitNumber)70), new NoteOnEvent((SevenBitNumber)4, (SevenBitNumber)70) },
+            new object[] { new NoteOnEvent((SevenBitNumber)4, (SevenBitNumber)70) { Channel = (FourBitNumber)5 }, new NoteOnEvent((SevenBitNumber)4, (SevenBitNumber)70) { Channel = (FourBitNumber)5 } },
+
+            new object[] { new PitchBendEvent(), new PitchBendEvent() },
+            new object[] { new PitchBendEvent(1234), new PitchBendEvent(1234) },
+            new object[] { new PitchBendEvent(1234) { Channel = (FourBitNumber)5 }, new PitchBendEvent(1234) { Channel = (FourBitNumber)5 } },
+
+            new object[] { new ProgramChangeEvent(), new ProgramChangeEvent() },
+            new object[] { new ProgramChangeEvent((SevenBitNumber)4), new ProgramChangeEvent((SevenBitNumber)4) },
+            new object[] { new ProgramChangeEvent((SevenBitNumber)4) { Channel = (FourBitNumber)5 }, new ProgramChangeEvent((SevenBitNumber)4) { Channel = (FourBitNumber)5 } },
+
+            new object[] { new ChannelPrefixEvent(), new ChannelPrefixEvent() },
+            new object[] { new ChannelPrefixEvent(23), new ChannelPrefixEvent(23) },
+
+            new object[] { new CopyrightNoticeEvent(), new CopyrightNoticeEvent() },
+            new object[] { new CopyrightNoticeEvent("ABC"), new CopyrightNoticeEvent("ABC") },
+
+            new object[] { new CuePointEvent(), new CuePointEvent() },
+            new object[] { new CuePointEvent("ABC"), new CuePointEvent("ABC") },
+
+            new object[] { new DeviceNameEvent(), new DeviceNameEvent() },
+            new object[] { new DeviceNameEvent("ABC"), new DeviceNameEvent("ABC") },
+
+            new object[] { new EndOfTrackEvent(), new EndOfTrackEvent() },
+
+            new object[] { new InstrumentNameEvent(), new InstrumentNameEvent() },
+            new object[] { new InstrumentNameEvent("ABC"), new InstrumentNameEvent("ABC") },
+
+            new object[] { new KeySignatureEvent(), new KeySignatureEvent() },
+            new object[] { new KeySignatureEvent(3, 1), new KeySignatureEvent(3, 1) },
+            new object[] { new KeySignatureEvent(-3, 1), new KeySignatureEvent(-3, 1) },
+
+            new object[] { new LyricEvent(), new LyricEvent() },
+            new object[] { new LyricEvent("ABC"), new LyricEvent("ABC") },
+
+            new object[] { new MarkerEvent(), new MarkerEvent() },
+            new object[] { new MarkerEvent("ABC"), new MarkerEvent("ABC") },
+
+            new object[] { new PortPrefixEvent(), new PortPrefixEvent() },
+            new object[] { new PortPrefixEvent(23), new PortPrefixEvent(23) },
+
+            new object[] { new ProgramNameEvent(), new ProgramNameEvent() },
+            new object[] { new ProgramNameEvent("ABC"), new ProgramNameEvent("ABC") },
+
+            new object[] { new SequenceNumberEvent(), new SequenceNumberEvent() },
+            new object[] { new SequenceNumberEvent(45), new SequenceNumberEvent(45) },
+
+            new object[] { new SequencerSpecificEvent(), new SequencerSpecificEvent() },
+            new object[] { new SequencerSpecificEvent([1, 2, 3]), new SequencerSpecificEvent([1, 2, 3]) },
+
+            new object[] { new SequenceTrackNameEvent(), new SequenceTrackNameEvent() },
+            new object[] { new SequenceTrackNameEvent("ABC"), new SequenceTrackNameEvent("ABC") },
+
+            new object[] { new SetTempoEvent(), new SetTempoEvent() },
+            new object[] { new SetTempoEvent(123456), new SetTempoEvent(123456) },
+
+            new object[] { new SmpteOffsetEvent(), new SmpteOffsetEvent() },
+            new object[] { new SmpteOffsetEvent(SmpteFormat.TwentyFive, 1, 2, 3, 4, 5), new SmpteOffsetEvent(SmpteFormat.TwentyFive, 1, 2, 3, 4, 5) },
+
+            new object[] { new TextEvent(), new TextEvent() },
+            new object[] { new TextEvent("ABC"), new TextEvent("ABC") },
+
+            new object[] { new TimeSignatureEvent(), new TimeSignatureEvent() },
+            new object[] { new TimeSignatureEvent(2, 8, 32, 64), new TimeSignatureEvent(2, 8, 32, 64) },
+
+            new object[] { new UnknownMetaEvent(45), new UnknownMetaEvent(45) },
+            new object[] { new UnknownMetaEvent(45, [1, 2, 3]), new UnknownMetaEvent(45, [1, 2, 3]) },
+
+            new object[] { new CustomMetaEvent(10), new CustomMetaEvent(10) },
+        };
 
         #endregion
 
@@ -171,11 +210,60 @@ namespace Melanchall.DryWetMidi.Tests.Core
             }
         }
 
-        [Repeat(10)]
-        [Test]
-        public void AllEventTypesAreReadCorrectly_NonDefault()
+        [TestCaseSource(nameof(EventsWriteRead))]
+        public void AllEventTypesAreReadCorrectly(
+            MidiEvent midiEvent,
+            MidiEvent expectedMidiEvent)
         {
-            AllEventTypesAreReadCorrectly(CreateNonDefaultMidiEvent);
+            byte customMetaEventStatusByte = 0x5A;
+
+            var writingSettings = new WritingSettings
+            {
+                CustomMetaEventTypes = new EventTypesCollection
+                {
+                    { typeof(CustomMetaEvent), customMetaEventStatusByte }
+                }
+            };
+
+            var readingSettings = new ReadingSettings
+            {
+                CustomMetaEventTypes = new EventTypesCollection
+                {
+                    { typeof(CustomMetaEvent), customMetaEventStatusByte }
+                },
+                SilentNoteOnPolicy = SilentNoteOnPolicy.NoteOn,
+                EndOfTrackStoringPolicy = EndOfTrackStoringPolicy.Store
+            };
+
+            var midiFile = MidiFileTestUtilities.Read(
+                new MidiFile(new TrackChunk([midiEvent])),
+                writingSettings,
+                readingSettings,
+                MidiFileFormat.SingleTrack);
+            var readMidiEvent = midiFile.GetTrackChunks().First().Events.First();
+            MidiAsserts.AreEqual(expectedMidiEvent, readMidiEvent, true, "MIDI event is invalid.");
+        }
+
+        [Test]
+        public void AllEventTypesAreReadCorrectly_AllEventsTypesChecked()
+        {
+            var checkedEventsTypes = EventsWriteRead
+                .Select(row => ((MidiEvent)((object[])row)[0]).EventType)
+                .Distinct();
+            
+            var allEventsTypes = Enum
+                .GetValues(typeof(MidiEventType))
+                .Cast<MidiEventType>()
+                .Except(TypesProvider
+                    .GetAllEventTypes()
+                    .Where(t => typeof(SystemRealTimeEvent).IsAssignableFrom(t) || typeof(SystemCommonEvent).IsAssignableFrom(t))
+                    .Select(t => ((MidiEvent)Activator.CreateInstance(t)).EventType))
+                .ToArray();
+            
+            CollectionAssert.AreEquivalent(
+                allEventsTypes,
+                checkedEventsTypes,
+                "Not all event types are checked for equality.");
         }
 
         [Test]
@@ -206,65 +294,6 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 },
                 statusBytes,
                 "Status bytes are invalid.");
-        }
-
-        #endregion
-
-        #region Private methods
-
-        public void AllEventTypesAreReadCorrectly(Func<Type, MidiEvent> createMidiEvent)
-        {
-            var events = TypesProvider.GetAllEventTypes()
-                .Where(t => !typeof(SystemCommonEvent).IsAssignableFrom(t) &&
-                            !typeof(SystemRealTimeEvent).IsAssignableFrom(t) &&
-                            t != typeof(EndOfTrackEvent) &&
-                            t != typeof(UnknownMetaEvent))
-                .Select(createMidiEvent)
-                .ToArray();
-
-            var midiFile = MidiFileTestUtilities.Read(
-                new MidiFile(new TrackChunk(events)),
-                null,
-                new ReadingSettings { SilentNoteOnPolicy = SilentNoteOnPolicy.NoteOn },
-                MidiFileFormat.SingleTrack);
-
-            var readEvents = midiFile.GetEvents().ToArray();
-
-            for (var i = 0; i < events.Length; i++)
-            {
-                var expectedEvent = events[i];
-                var actualEvent = readEvents[i];
-
-                MidiAsserts.AreEqual(expectedEvent, actualEvent, true, $"Event {i} is invalid.");
-            }
-        }
-
-        private static MidiEvent CreateNonDefaultMidiEvent(Type midiEventType)
-        {
-            var midiEvent = CreateDefaultMidiEvent(midiEventType);
-            
-            var modifiersCount = 0;
-
-            foreach (var modifier in NonDefaultMidiEventsModifiers)
-            {
-                if (!modifier.Key.IsAssignableFrom(midiEventType))
-                    continue;
-
-                modifier.Value(midiEvent);
-                modifiersCount++;
-            }
-
-            var expectedModifiersCount = 1;
-            if (midiEvent is ChannelEvent)
-                expectedModifiersCount++;
-
-            ClassicAssert.AreEqual(expectedModifiersCount, modifiersCount, $"Non-default MIDI event modifiers count is invalid for '{midiEventType}'.");
-            return midiEvent;
-        }
-
-        private static MidiEvent CreateDefaultMidiEvent(Type midiEventType)
-        {
-            return (MidiEvent)Activator.CreateInstance(midiEventType);
         }
 
         #endregion
