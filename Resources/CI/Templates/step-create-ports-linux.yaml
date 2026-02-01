@@ -36,8 +36,8 @@ steps:
         Invoke-Expression $cmd 2>&1
         
         # Check if snd-seq module now exists
-        if (Test-Path "/lib/modules/$kernelVersion/kernel/sound/core/seq/snd-seq.ko*" -or 
-            Test-Path "/lib/modules/$kernelVersion/kernel/sound/core/seq/snd-seq.ko") {
+        if ((Test-Path "/lib/modules/$kernelVersion/kernel/sound/core/seq/snd-seq.ko*") -or 
+            (Test-Path "/lib/modules/$kernelVersion/kernel/sound/core/seq/snd-seq.ko")) {
           Write-Host "✓ Found snd-seq module!"
           break
         }
