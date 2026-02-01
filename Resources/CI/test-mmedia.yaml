@@ -77,7 +77,7 @@ stages:
         #  vmImage: 'macOS-15-arm64'
         #  framework: 'Net'
         Linux_Net:
-          vmImage: 'ubuntu-latest'
+          vmImage: 'ubuntu-22.04'
           framework: 'Net'
     pool:
       vmImage: $(vmImage)
