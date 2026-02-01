@@ -10,52 +10,91 @@ steps:
     script: |
       Write-Host "Installing ALSA development libraries..."
       sudo apt-get update
-      sudo apt-get install -y libasound2-dev gcc-aarch64-linux-gnu alsa-utils linux-generic
       
-      # Try to install additional kernel module packages
-      Write-Host "Attempting to install additional kernel modules..."
-      sudo apt-get install -y linux-modules-extra-$(uname -r) 2>&1 || Write-Host "linux-modules-extra not available for this kernel"
-      sudo apt-get install -y linux-image-extra-virtual 2>&1 || Write-Host "linux-image-extra-virtual not available"
+      # Install ALSA development and utilities
+      sudo apt-get install -y libasound2-dev gcc-aarch64-linux-gnu alsa-utils
       
+      # Get current kernel version
+      $kernelVersion = uname -r
+      Write-Host "Current kernel: $kernelVersion"
+      
+      # Install generic kernel modules (includes ALSA sequencer)
+      Write-Host "Installing generic Linux kernel modules..."
+      $genericKernel = $kernelVersion -replace '-azure', ''
+      Write-Host "Attempting to install modules for: $genericKernel"
+      
+      # Try multiple approaches to get ALSA sequencer
+      $commands = @(
+        "sudo apt-get install -y linux-modules-extra-azure",
+        "sudo apt-get install -y linux-modules-extra-$kernelVersion",
+        "sudo apt-get install -y linux-image-generic linux-modules-extra-$(uname -r | sed 's/-azure//')",
+        "sudo apt-get install -y linux-generic"
+      )
+      
+      foreach ($cmd in $commands) {
+        Write-Host "Trying: $cmd"
+        Invoke-Expression $cmd 2>&1
+        
+        # Check if snd-seq module now exists
+        if (Test-Path "/lib/modules/$kernelVersion/kernel/sound/core/seq/snd-seq.ko*" -or 
+            Test-Path "/lib/modules/$kernelVersion/kernel/sound/core/seq/snd-seq.ko") {
+          Write-Host "✓ Found snd-seq module!"
+          break
+        }
+      }
+      
+      # Search for snd-seq module in all kernel versions
+      Write-Host "Searching for ALSA sequencer modules..."
+      $seqModules = sudo find /lib/modules -name "snd-seq.ko*" 2>/dev/null
+      if ($seqModules) {
+        Write-Host "Found ALSA sequencer modules:"
+        Write-Host $seqModules
+      }
+      
+      # Load ALSA base modules first
+      Write-Host "Loading ALSA base modules..."
+      sudo modprobe snd 2>&1 || Write-Host "snd module load failed"
+      sudo modprobe soundcore 2>&1 || Write-Host "soundcore module load failed"
+      
+      # Load dummy sound card (this will create /dev/snd)
+      Write-Host "Loading dummy sound card..."
+      sudo modprobe snd-dummy 2>&1 || Write-Host "snd-dummy module load failed"
+      
+      # Now try loading snd-seq
       Write-Host "Loading ALSA sequencer module..."
-      sudo modprobe snd-seq 2>&1 || Write-Host "Could not load snd-seq module (expected in cloud VMs)"
+      sudo modprobe snd-seq 2>&1
       
-      # Try loading dummy sound driver
-      Write-Host "Loading dummy sound driver..."
-      sudo modprobe snd-dummy 2>&1 || Write-Host "Could not load snd-dummy module"
+      if ($LASTEXITCODE -eq 0) {
+        Write-Host "✓ ALSA sequencer module loaded successfully!"
+      } else {
+        Write-Warning "Failed to load snd-seq module"
+        
+        # Last resort: try depmod to rebuild module dependencies
+        Write-Host "Rebuilding module dependencies..."
+        sudo depmod -a
+        sudo modprobe snd-seq 2>&1
+      }
       
-      # Create the device manually if it doesn't exist (for testing)
-      if (-not (Test-Path "/dev/snd")) {
-        Write-Warning "No sound devices available - ALSA sequencer will not work"
-        Write-Host "This is expected in Azure VMs without audio hardware"
-        Write-Host "Virtual MIDI port tests will be skipped"
+      # Check loaded modules
+      Write-Host "`nLoaded ALSA modules:"
+      lsmod | grep snd
+      
+      # Check devices
+      Write-Host "`nSound devices:"
+      ls -la /dev/snd/ 2>&1 || Write-Host "No /dev/snd directory"
+      
+      if (Test-Path "/dev/snd/seq") {
+        Write-Host "✓✓✓ ALSA sequencer device is ready!"
+        ls -l /dev/snd/seq
+        
+        if (Test-Path "/proc/asound/seq/clients") {
+          Write-Host "`nALSA sequencer clients:"
+          Get-Content /proc/asound/seq/clients
+        }
       }
       else {
-        if (Test-Path "/dev/snd/seq") {
-          Write-Host "✓ ALSA sequencer device available: /dev/snd/seq"
-          ls -l /dev/snd/seq
-          
-          # List MIDI clients
-          Write-Host "Current ALSA sequencer clients:"
-          if (Test-Path "/proc/asound/seq/clients") {
-            Get-Content /proc/asound/seq/clients
-          }
-        }
-        else {
-          Write-Warning "ALSA sequencer device not available"
-          Write-Host "Available sound devices:"
-          ls -la /dev/snd/
-        }
-      }
-      
-      # Verify module loaded
-      $lsmodOutput = lsmod | grep snd
-      if ($lsmodOutput) {
-        Write-Host "ALSA modules loaded:"
-        Write-Host $lsmodOutput
-      }
-      else {
-        Write-Warning "No ALSA modules loaded"
+        Write-Error "ALSA sequencer device NOT available - tests will fail!"
+        exit 1
       }
 
 - task: PowerShell@2
