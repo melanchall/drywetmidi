@@ -1,9 +1,12 @@
 #include <alsa/asoundlib.h>
 #include <pthread.h>
 #include <time.h>
+#include <signal.h>
 #include <sched.h>
 #include <unistd.h>
 #include <sys/syscall.h>
+#include <errno.h>
+#include <poll.h>
 
 #include <atomic>
 #include <vector>

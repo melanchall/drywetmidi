@@ -2,6 +2,7 @@ typedef int API_TYPE;
 
 #define API_TYPE_WIN 0
 #define API_TYPE_MAC 1
+#define API_TYPE_LINUX 2
 
 typedef int SESSION_OPENRESULT;
 
