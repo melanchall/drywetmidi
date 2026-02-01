@@ -15,6 +15,7 @@
 #include <cstring>
 #include <map>
 #include <string>
+#include <cstddef>
 
 #include "../Common/NativeApi-Constants.h"
 
