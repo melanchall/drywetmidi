@@ -1,0 +1,53 @@
+parameters:
+  enabled: 'false'
+
+steps:
+- task: PowerShell@2
+  displayName: Install ALSA (Linux)
+  condition: and(succeeded(), ${{ parameters.enabled }})
+  inputs:
+    targetType: 'inline'
+    script: |
+      sudo apt-get update
+      sudo apt-get install -y libasound2-dev gcc-aarch64-linux-gnu
+
+- task: PowerShell@2
+  displayName: Build 'LoopbackDevice' app (Linux)
+  condition: and(succeeded(), ${{ parameters.enabled }})
+  inputs:
+    targetType: 'inline'
+    script: |
+      cd Resources/Utilities/CreateLoopbackPort_Linux
+      Write-Host "Building x86_64 app..."
+      gcc -o LoopbackDevice_x86_64 LoopbackDevice.c -lasound -pthread
+      #Write-Host "Building arm64 app..."
+      #aarch64-linux-gnu-gcc -o LoopbackDevice_arm64 LoopbackDevice.c -lasound -pthread
+      #Write-Host "Built both architectures successfully"
+      file LoopbackDevice_x86_64
+      #file LoopbackDevice_arm64
+
+#- task: PublishPipelineArtifact@1
+#  displayName: Publish 'LoopbackDevice' x86_64 artifact
+#  enabled: false
+#  condition: contains(variables.VmImage, 'ubuntu')
+#  inputs:
+#    targetPath: 'Resources/Utilities/CreateLoopbackPort_Linux/LoopbackDevice_x86_64'
+#    artifactName: 'LoopbackDevice_x86_64'
+#    artifactType: pipeline
+
+#- task: PublishPipelineArtifact@1
+#  displayName: Publish 'LoopbackDevice' arm64 artifact
+#  enabled: false
+#  condition: contains(variables.VmImage, 'ubuntu')
+#  inputs:
+#    targetPath: 'Resources/Utilities/CreateLoopbackPort_Linux/LoopbackDevice_arm64'
+#    artifactName: 'LoopbackDevice_arm64'
+#    artifactType: pipeline
+
+- task: CmdLine@2
+  displayName: Create virtual MIDI ports (Linux)
+  condition: and(succeeded(), ${{ parameters.enabled }})
+  inputs:
+    script: |
+      cd Resources/Utilities/CreateLoopbackPort_Linux
+      ./LoopbackDevice_x86_64 "MIDI A" "MIDI B" "MIDI C" &

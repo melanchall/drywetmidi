@@ -13,6 +13,7 @@ trigger:
     - 'Resources/CI/Templates/stage-build-native-libs.yaml'
     - 'Resources/CI/Templates/step-create-ports-windows.yaml'
     - 'Resources/CI/Templates/step-create-ports-macos.yaml'
+    - 'Resources/CI/Templates/step-create-ports-linux.yaml'
     - 'Resources/CI/Templates/step-copy-native-libraries-near-csproj.yaml'
     - 'Resources/CI/Templates/step-collect-logs.yaml'
     - 'Resources/CI/Templates/step-build-tests.yaml'
@@ -21,6 +22,7 @@ trigger:
     - 'Resources/CI/Templates/step-build-test-data-sending-utility'
     - 'Resources/Utilities/CreateLoopbackPort_Windows/*'
     - 'Resources/Utilities/CreateLoopbackPort_macOS/*'
+    - 'Resources/Utilities/CreateLoopbackPort_Linux/*'
     - 'Resources/Scripts/Setup MIDI ports.ps1'
     - 'Resources/Native/*'
 
@@ -37,6 +39,7 @@ pr:
     - 'Resources/CI/Templates/stage-build-native-libs.yaml'
     - 'Resources/CI/Templates/step-create-ports-windows.yaml'
     - 'Resources/CI/Templates/step-create-ports-macos.yaml'
+    - 'Resources/CI/Templates/step-create-ports-linux.yaml'
     - 'Resources/CI/Templates/step-copy-native-libraries-near-csproj.yaml'
     - 'Resources/CI/Templates/step-collect-logs.yaml'
     - 'Resources/CI/Templates/step-build-tests.yaml'
@@ -45,6 +48,7 @@ pr:
     - 'Resources/CI/Templates/step-build-test-data-sending-utility'
     - 'Resources/Utilities/CreateLoopbackPort_Windows/*'
     - 'Resources/Utilities/CreateLoopbackPort_macOS/*'
+    - 'Resources/Utilities/CreateLoopbackPort_Linux/*'
     - 'Resources/Scripts/Setup MIDI ports.ps1'
     - 'Resources/Native/*'
 
@@ -63,14 +67,17 @@ stages:
     displayName: Run tests
     strategy:
       matrix:
-        Windows_Net:
-          vmImage: 'windows-latest'
-          framework: 'Net'
-        macOS_Net:
-          vmImage: 'macos-latest'
-          framework: 'Net'
-        macOS_Arm_Net:
-          vmImage: 'macOS-15-arm64'
+        #Windows_Net:
+        #  vmImage: 'windows-latest'
+        #  framework: 'Net'
+        #macOS_Net:
+        #  vmImage: 'macos-latest'
+        #  framework: 'Net'
+        #macOS_Arm_Net:
+        #  vmImage: 'macOS-15-arm64'
+        #  framework: 'Net'
+        Linux_Net:
+          vmImage: 'ubuntu-latest'
           framework: 'Net'
     pool:
       vmImage: $(vmImage)
@@ -94,6 +101,10 @@ stages:
     - template: Templates/step-create-ports-macos.yaml
       parameters:
         enabled: contains(variables.vmImage, 'macos')
+
+    - template: Templates/step-create-ports-linux.yaml
+      parameters:
+        enabled: contains(variables.vmImage, 'ubuntu')
     
 #    - task: PowerShell@2
 #      displayName: Install procdump
