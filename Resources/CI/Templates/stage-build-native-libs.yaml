@@ -63,3 +63,41 @@ stages:
         targetPath: 'Resources/Native/macOS/Melanchall_DryWetMidi_Native.dylib'
         artifactName: 'Native_macOS_x64_arm64'
         artifactType: pipeline
+  - job: BuildSoX64
+    displayName: 'Build x64 so'
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
+    - task: PowerShell@2
+      displayName: 'Install ALSA development libraries'
+      inputs:
+        targetType: 'inline'
+        script: |
+          Write-Host "Installing ALSA development libraries..."
+          sudo apt-get update
+          sudo apt-get install -y libasound2-dev
+          Write-Host "ALSA libraries installed successfully"
+    - task: PowerShell@2
+      displayName: 'Build so'
+      inputs:
+        targetType: 'inline'
+        script: |
+          cd Resources/Native/Linux
+          Write-Host "Building x64 so..."
+          g++ -shared -fPIC -o Melanchall_DryWetMidi_Native.so NativeApi-Linux.cpp -lasound -lpthread -lrt -std=c++11
+          Write-Host "Verifying build..."
+          if (Test-Path "Melanchall_DryWetMidi_Native.so") {
+            Write-Host "Build successful!"
+            file Melanchall_DryWetMidi_Native.so
+            ldd Melanchall_DryWetMidi_Native.so
+          }
+          else {
+            Write-Error "Build failed - output file not found"
+            exit 1
+          }
+    - task: PublishPipelineArtifact@1
+      displayName: 'Publish so artifact'
+      inputs:
+        targetPath: 'Resources/Native/Linux/Melanchall_DryWetMidi_Native.so'
+        artifactName: 'Native_Linux_x64'
+        artifactType: pipeline
