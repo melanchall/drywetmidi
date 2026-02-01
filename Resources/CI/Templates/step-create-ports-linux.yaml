@@ -11,6 +11,15 @@ steps:
       sudo apt-get update
       sudo apt-get install -y libasound2-dev gcc-aarch64-linux-gnu
 
+      # Install extra kernel modules that include ALSA sequencer
+      $kernelVersion = uname -r
+      Write-Host "Kernel version: $kernelVersion"
+      
+      # Try to install linux-modules-extra for the current kernel
+      $extraModulesPackage = "linux-modules-extra-$(uname -r)"
+      Write-Host "Installing $extraModulesPackage..."
+      sudo apt-get install -y $extraModulesPackage
+
       Write-Host "Loading ALSA sequencer module..."
       try {
         sudo modprobe snd-seq
