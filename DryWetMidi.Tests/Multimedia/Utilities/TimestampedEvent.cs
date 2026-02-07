@@ -1,13 +1,13 @@
-﻿using Melanchall.DryWetMidi.Core;
-using System;
+﻿using System;
+using Melanchall.DryWetMidi.Core;
 
 namespace Melanchall.DryWetMidi.Tests.Multimedia
 {
-    internal sealed class EventToSend2
+    internal sealed class TimestampedEvent
     {
         #region Constructor
 
-        public EventToSend2(MidiEvent midiEvent, TimeSpan time)
+        public TimestampedEvent(MidiEvent midiEvent, TimeSpan time)
         {
             Event = midiEvent;
             Time = time;
@@ -21,13 +21,15 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
         public TimeSpan Time { get; }
 
+        public long DelayMs { get; set; }
+
         #endregion
 
         #region Overrides
 
         public override string ToString()
         {
-            return $"{Time}: {Event}";
+            return $"{Time}{(DelayMs > 0 ? $" + {DelayMs}ms" : null)}: {Event}";
         }
 
         #endregion

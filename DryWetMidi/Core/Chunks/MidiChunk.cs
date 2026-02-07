@@ -109,8 +109,7 @@ namespace Melanchall.DryWetMidi.Core
         /// otherwise, <c>false</c>.</returns>
         public static bool Equals(MidiChunk chunk1, MidiChunk chunk2)
         {
-            string message;
-            return Equals(chunk1, chunk2, out message);
+            return Equals(chunk1, chunk2, out _);
         }
 
         /// <summary>
@@ -137,8 +136,7 @@ namespace Melanchall.DryWetMidi.Core
         /// otherwise, <c>false</c>.</returns>
         public static bool Equals(MidiChunk chunk1, MidiChunk chunk2, MidiChunkEqualityCheckSettings settings)
         {
-            string message;
-            return Equals(chunk1, chunk2, settings, out message);
+            return Equals(chunk1, chunk2, settings, out _);
         }
 
         /// <summary>
@@ -173,8 +171,7 @@ namespace Melanchall.DryWetMidi.Core
         /// underlying stream doesn't have enough bytes.</exception>
         internal void Read(MidiReader reader, ReadingSettings settings)
         {
-            long readerPosition;
-            var size = ReadSize(reader, out readerPosition);
+            var size = ReadSize(reader, out var readerPosition);
 
             ReadContent(reader, settings, size);
 

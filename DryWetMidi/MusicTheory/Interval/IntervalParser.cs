@@ -59,8 +59,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
             var intervalQualityGroup = match.Groups[IntervalQualityGroupName];
             if (!intervalQualityGroup.Success)
             {
-                int halfSteps;
-                if (!ParsingUtilities.ParseInt(match, HalfStepsGroupName, 0, out halfSteps) ||
+                if (!ParsingUtilities.ParseInt(match, HalfStepsGroupName, 0, out var halfSteps) ||
                     !IntervalUtilities.IsIntervalValid(halfSteps))
                     return ParsingResult.Error(HalfStepsNumberIsOutOfRange);
 
@@ -70,8 +69,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
 
             var intervalQuality = IntervalQualitiesByLetters[intervalQualityGroup.Value];
 
-            int intervalNumber;
-            if (!ParsingUtilities.ParseInt(match, IntervalNumberGroupName, 0, out intervalNumber) || intervalNumber < 1)
+            if (!ParsingUtilities.ParseInt(match, IntervalNumberGroupName, 0, out var intervalNumber) || intervalNumber < 1)
                 return ParsingResult.Error(IntervalNumberIsOutOfRange);
 
             interval = Interval.Get(intervalQuality, intervalNumber);

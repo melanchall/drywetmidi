@@ -215,8 +215,7 @@ namespace Melanchall.DryWetMidi.Tools
 
                 var objectId = lengthedObject.GetObjectId();
 
-                LinkedListNode<IObjectDescriptor> node;
-                if (!objectsMergersNodes.TryGetValue(objectId, out node))
+                if (!objectsMergersNodes.TryGetValue(objectId, out var node))
                 {
                     CreateObjectsMerger(objectId, lengthedObject, objectsDescriptors, objectsMergersNodes, objectsMergerFactory);
                     continue;

@@ -95,7 +95,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         private readonly MidiClock _clock;
 
-        private readonly ConcurrentDictionary<NoteId, NotePlaybackEventMetadata> _activeNotesMetadata = new ConcurrentDictionary<NoteId, NotePlaybackEventMetadata>();
+        private readonly ConcurrentDictionary<int, NotePlaybackEventMetadata> _activeNotesMetadata = new ConcurrentDictionary<int, NotePlaybackEventMetadata>();
         private readonly NotePlaybackEventMetadataCollection _notesMetadata = new NotePlaybackEventMetadataCollection();
 
         private bool _disposed = false;
@@ -839,10 +839,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
             foreach (var noteMetadata in _activeNotesMetadata.Values)
             {
-                Note note;
-                Note originalNote;
-
-                if (TryPlayNoteEvent(noteMetadata, false, currentTime, out note, out originalNote))
+                if (TryPlayNoteEvent(noteMetadata, false, currentTime, out var note, out var originalNote))
                 {
                     notes.Add(note);
                     originalNotes.Add(originalNote);
@@ -1098,10 +1095,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
                         TraceAction($"tick: processing event '{midiEvent}'...");
 
-                        Note note;
-                        Note originalNote;
-
-                        if (TryPlayNoteEvent(playbackEvent, out note, out originalNote))
+                        if (TryPlayNoteEvent(playbackEvent, out var note, out var originalNote))
                         {
                             if (note != null)
                             {
@@ -1347,8 +1341,7 @@ namespace Melanchall.DryWetMidi.Multimedia
                 }
                 else
                 {
-                    NotePlaybackEventMetadata value;
-                    if (!_activeNotesMetadata.TryRemove(noteId, out value) && !SendNoteOffEventsForNonActiveNotes)
+                    if (!_activeNotesMetadata.TryRemove(noteId, out var value) && !SendNoteOffEventsForNonActiveNotes)
                     {
                         note = null;
                         originalNote = null;

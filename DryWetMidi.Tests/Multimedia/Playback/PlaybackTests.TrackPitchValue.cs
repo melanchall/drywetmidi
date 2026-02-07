@@ -11,7 +11,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
     {
         #region Test methods
 
-        [Retry(RetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void TrackPitchValue_NoPitchBend_MoveToTime(
             [Values(0, 100)] int moveFromMs,
@@ -36,11 +36,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteAftertouchEvent(), lastEventTime - (moveTo - moveFrom)),
+                    new TimestampedEvent(new NoteAftertouchEvent(), lastEventTime - (moveTo - moveFrom)),
                 });
         }
 
-        [Retry(RetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void TrackPitchValue_PitchBendAtZero_MoveToTime()
         {
@@ -66,12 +66,12 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new PitchBendEvent(pitchValue), TimeSpan.Zero),
-                    new SentReceivedEvent(new NoteAftertouchEvent(), lastEventTime - (moveTo - moveFrom)),
+                    new TimestampedEvent(new PitchBendEvent(pitchValue), TimeSpan.Zero),
+                    new TimestampedEvent(new NoteAftertouchEvent(), lastEventTime - (moveTo - moveFrom)),
                 });
         }
 
-        [Retry(RetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void TrackPitchValue_PitchBendAtZero_MoveToStart()
         {
@@ -97,13 +97,13 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new PitchBendEvent(pitchValue), TimeSpan.Zero),
-                    new SentReceivedEvent(new PitchBendEvent(pitchValue), moveFrom),
-                    new SentReceivedEvent(new NoteAftertouchEvent(), lastEventTime - (moveTo - moveFrom)),
+                    new TimestampedEvent(new PitchBendEvent(pitchValue), TimeSpan.Zero),
+                    new TimestampedEvent(new PitchBendEvent(pitchValue), moveFrom),
+                    new TimestampedEvent(new NoteAftertouchEvent(), lastEventTime - (moveTo - moveFrom)),
                 });
         }
 
-        [Retry(RetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void TrackPitchValue_FromBeforePitchBend_ToBeforePitchBend()
         {
@@ -130,12 +130,12 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, pitchBendTime - (moveTo - moveFrom)),
-                    new SentReceivedEvent(new NoteAftertouchEvent(), lastEventTime - (moveTo - moveFrom)),
+                    new TimestampedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, pitchBendTime - (moveTo - moveFrom)),
+                    new TimestampedEvent(new NoteAftertouchEvent(), lastEventTime - (moveTo - moveFrom)),
                 });
         }
 
-        [Retry(RetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void TrackPitchValue_FromBeforePitchBend_ToAfterPitchBend()
         {
@@ -162,12 +162,12 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, moveFrom),
-                    new SentReceivedEvent(new NoteAftertouchEvent(), lastEventTime - (moveTo - moveFrom)),
+                    new TimestampedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, moveFrom),
+                    new TimestampedEvent(new NoteAftertouchEvent(), lastEventTime - (moveTo - moveFrom)),
                 });
         }
 
-        [Retry(RetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void TrackPitchValue_FromAfterPitchBend_ToAfterPitchBend()
         {
@@ -194,12 +194,12 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, pitchBendTime),
-                    new SentReceivedEvent(new NoteAftertouchEvent(), lastEventTime - (moveTo - moveFrom)),
+                    new TimestampedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, pitchBendTime),
+                    new TimestampedEvent(new NoteAftertouchEvent(), lastEventTime - (moveTo - moveFrom)),
                 });
         }
 
-        [Retry(RetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void TrackPitchValue_FromAfterPitchBend_ToBeforePitchBend()
         {
@@ -226,14 +226,14 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, pitchBendTime),
-                    new SentReceivedEvent(new PitchBendEvent() { Channel = (FourBitNumber)4 }, moveFrom),
-                    new SentReceivedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, pitchBendTime + moveFrom - moveTo),
-                    new SentReceivedEvent(new NoteAftertouchEvent(), lastEventTime + moveFrom - moveTo),
+                    new TimestampedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, pitchBendTime),
+                    new TimestampedEvent(new PitchBendEvent() { Channel = (FourBitNumber)4 }, moveFrom),
+                    new TimestampedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, pitchBendTime + moveFrom - moveTo),
+                    new TimestampedEvent(new NoteAftertouchEvent(), lastEventTime + moveFrom - moveTo),
                 });
         }
 
-        [Retry(RetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void TrackPitchValue_FromBeforePitchBend_ToPitchBend()
         {
@@ -260,12 +260,12 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, moveFrom),
-                    new SentReceivedEvent(new NoteAftertouchEvent(), lastEventTime + moveFrom - moveTo),
+                    new TimestampedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, moveFrom),
+                    new TimestampedEvent(new NoteAftertouchEvent(), lastEventTime + moveFrom - moveTo),
                 });
         }
 
-        [Retry(RetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void TrackPitchValue_FromAfterPitchBend_ToPitchBend()
         {
@@ -292,13 +292,13 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, pitchBendTime),
-                    new SentReceivedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, moveFrom),
-                    new SentReceivedEvent(new NoteAftertouchEvent(), lastEventTime - pitchBendTime + moveFrom),
+                    new TimestampedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, pitchBendTime),
+                    new TimestampedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, moveFrom),
+                    new TimestampedEvent(new NoteAftertouchEvent(), lastEventTime - pitchBendTime + moveFrom),
                 });
         }
 
-        [Retry(RetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void TrackPitchValue_EnableInMiddle_FromBeforePitchBend_ToAfterPitchBend()
         {
@@ -332,8 +332,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, moveFrom + enableAfter),
-                    new SentReceivedEvent(new NoteAftertouchEvent(), lastEventTime - moveTo + moveFrom),
+                    new TimestampedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, moveFrom + enableAfter),
+                    new TimestampedEvent(new NoteAftertouchEvent(), lastEventTime - moveTo + moveFrom),
                 },
                 setupPlayback: playback =>
                 {
@@ -342,7 +342,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [Retry(RetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void TrackPitchValue_EnableInMiddle_FromAfterPitchBend_ToBeforePitchBend()
         {
@@ -372,15 +372,15 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, pitchBendTime),
-                    new SentReceivedEvent(new PitchBendEvent() { Channel = (FourBitNumber)4 }, moveFrom + enableAfter),
-                    new SentReceivedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, pitchBendTime - moveTo + moveFrom),
-                    new SentReceivedEvent(new NoteAftertouchEvent(), lastEventTime - moveTo + moveFrom),
+                    new TimestampedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, pitchBendTime),
+                    new TimestampedEvent(new PitchBendEvent() { Channel = (FourBitNumber)4 }, moveFrom + enableAfter),
+                    new TimestampedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, pitchBendTime - moveTo + moveFrom),
+                    new TimestampedEvent(new NoteAftertouchEvent(), lastEventTime - moveTo + moveFrom),
                 },
                 setupPlayback: playback => playback.TrackPitchValue = false);
         }
 
-        [Retry(RetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void DontTrackPitchValue_NoPitchBend_MoveToTime(
             [Values(0, 100)] int moveFromMs,
@@ -405,12 +405,12 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteAftertouchEvent(), lastEventTime - (moveTo - moveFrom)),
+                    new TimestampedEvent(new NoteAftertouchEvent(), lastEventTime - (moveTo - moveFrom)),
                 },
                 setupPlayback: playback => playback.TrackPitchValue = false);
         }
 
-        [Retry(RetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void DontTrackPitchValue_PitchBendAtZero_MoveToTime()
         {
@@ -436,13 +436,13 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new PitchBendEvent(pitchValue), TimeSpan.Zero),
-                    new SentReceivedEvent(new NoteAftertouchEvent(), lastEventTime - (moveTo - moveFrom)),
+                    new TimestampedEvent(new PitchBendEvent(pitchValue), TimeSpan.Zero),
+                    new TimestampedEvent(new NoteAftertouchEvent(), lastEventTime - (moveTo - moveFrom)),
                 },
                 setupPlayback: playback => playback.TrackPitchValue = false);
         }
 
-        [Retry(RetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void DontTrackPitchValue_PitchBendAtZero_MoveToStart()
         {
@@ -468,14 +468,14 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new PitchBendEvent(pitchValue), TimeSpan.Zero),
-                    new SentReceivedEvent(new PitchBendEvent(pitchValue), moveFrom),
-                    new SentReceivedEvent(new NoteAftertouchEvent(), lastEventTime - (moveTo - moveFrom)),
+                    new TimestampedEvent(new PitchBendEvent(pitchValue), TimeSpan.Zero),
+                    new TimestampedEvent(new PitchBendEvent(pitchValue), moveFrom),
+                    new TimestampedEvent(new NoteAftertouchEvent(), lastEventTime - (moveTo - moveFrom)),
                 },
                 setupPlayback: playback => playback.TrackPitchValue = false);
         }
 
-        [Retry(RetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void DontTrackPitchValue_FromBeforePitchBend_ToBeforePitchBend()
         {
@@ -502,13 +502,13 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, pitchBendTime - (moveTo - moveFrom)),
-                    new SentReceivedEvent(new NoteAftertouchEvent(), lastEventTime - (moveTo - moveFrom)),
+                    new TimestampedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, pitchBendTime - (moveTo - moveFrom)),
+                    new TimestampedEvent(new NoteAftertouchEvent(), lastEventTime - (moveTo - moveFrom)),
                 },
                 setupPlayback: playback => playback.TrackPitchValue = false);
         }
 
-        [Retry(RetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void DontTrackPitchValue_FromBeforePitchBend_ToAfterPitchBend()
         {
@@ -535,12 +535,12 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteAftertouchEvent(), lastEventTime - (moveTo - moveFrom)),
+                    new TimestampedEvent(new NoteAftertouchEvent(), lastEventTime - (moveTo - moveFrom)),
                 },
                 setupPlayback: playback => playback.TrackPitchValue = false);
         }
 
-        [Retry(RetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void DontTrackPitchValue_FromAfterPitchBend_ToAfterPitchBend()
         {
@@ -567,13 +567,13 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, pitchBendTime),
-                    new SentReceivedEvent(new NoteAftertouchEvent(), lastEventTime - (moveTo - moveFrom)),
+                    new TimestampedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, pitchBendTime),
+                    new TimestampedEvent(new NoteAftertouchEvent(), lastEventTime - (moveTo - moveFrom)),
                 },
                 setupPlayback: playback => playback.TrackPitchValue = false);
         }
 
-        [Retry(RetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void DontTrackPitchValue_FromAfterPitchBend_ToBeforePitchBend()
         {
@@ -600,14 +600,14 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, pitchBendTime),
-                    new SentReceivedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, pitchBendTime + moveFrom - moveTo),
-                    new SentReceivedEvent(new NoteAftertouchEvent(), lastEventTime + moveFrom - moveTo),
+                    new TimestampedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, pitchBendTime),
+                    new TimestampedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, pitchBendTime + moveFrom - moveTo),
+                    new TimestampedEvent(new NoteAftertouchEvent(), lastEventTime + moveFrom - moveTo),
                 },
                 setupPlayback: playback => playback.TrackPitchValue = false);
         }
 
-        [Retry(RetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void DontTrackPitchValue_FromBeforePitchBend_ToPitchBend()
         {
@@ -634,13 +634,13 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, moveFrom),
-                    new SentReceivedEvent(new NoteAftertouchEvent(), lastEventTime + moveFrom - moveTo),
+                    new TimestampedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, moveFrom),
+                    new TimestampedEvent(new NoteAftertouchEvent(), lastEventTime + moveFrom - moveTo),
                 },
                 setupPlayback: playback => playback.TrackPitchValue = false);
         }
 
-        [Retry(RetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void DontTrackPitchValue_FromAfterPitchBend_ToPitchBend()
         {
@@ -667,14 +667,14 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, pitchBendTime),
-                    new SentReceivedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, moveFrom),
-                    new SentReceivedEvent(new NoteAftertouchEvent(), lastEventTime - pitchBendTime + moveFrom),
+                    new TimestampedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, pitchBendTime),
+                    new TimestampedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, moveFrom),
+                    new TimestampedEvent(new NoteAftertouchEvent(), lastEventTime - pitchBendTime + moveFrom),
                 },
                 setupPlayback: playback => playback.TrackPitchValue = false);
         }
 
-        [Retry(RetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void TrackPitchValue_DisableInMiddle_FromBeforePitchBend_ToAfterPitchBend()
         {
@@ -708,8 +708,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, moveFrom),
-                    new SentReceivedEvent(new NoteAftertouchEvent(), lastEventTime - moveTo + moveFrom),
+                    new TimestampedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, moveFrom),
+                    new TimestampedEvent(new NoteAftertouchEvent(), lastEventTime - moveTo + moveFrom),
                 },
                 setupPlayback: playback =>
                 {
@@ -717,7 +717,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [Retry(RetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void TrackPitchValue_DisableInMiddle_FromAfterPitchBend_ToBeforePitchBend()
         {
@@ -747,10 +747,10 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, pitchBendTime),
-                    new SentReceivedEvent(new PitchBendEvent() { Channel = (FourBitNumber)4 }, moveFrom),
-                    new SentReceivedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, pitchBendTime - moveTo + moveFrom),
-                    new SentReceivedEvent(new NoteAftertouchEvent(), lastEventTime - moveTo + moveFrom),
+                    new TimestampedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, pitchBendTime),
+                    new TimestampedEvent(new PitchBendEvent() { Channel = (FourBitNumber)4 }, moveFrom),
+                    new TimestampedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 }, pitchBendTime - moveTo + moveFrom),
+                    new TimestampedEvent(new NoteAftertouchEvent(), lastEventTime - moveTo + moveFrom),
                 });
         }
 

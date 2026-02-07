@@ -99,8 +99,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
             foreach (var parser in Parsers.Values)
             {
-                ITimeSpan timeSpan;
-                var parsingResult = parser(input, out timeSpan);
+                var parsingResult = parser(input, out var timeSpan);
 
                 if (parsingResult.Status == ParsingStatus.Parsed)
                     return timeSpan;
@@ -209,8 +208,7 @@ namespace Melanchall.DryWetMidi.Interaction
         {
             return (string input, out ITimeSpan timeSpan) =>
             {
-                TTimeSpan result;
-                var parsingResult = parsing(input, out result);
+                var parsingResult = parsing(input, out var result);
                 timeSpan = result;
                 return parsingResult;
             };

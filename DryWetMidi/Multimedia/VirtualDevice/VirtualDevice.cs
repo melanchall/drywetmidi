@@ -34,8 +34,7 @@ namespace Melanchall.DryWetMidi.Multimedia
                 _checkpoints?.SetCheckpointReached(VirtualDeviceCheckpointsNames.HandleFinalizerEntered);
 #endif
 
-                int errorCode;
-                var closeResult = VirtualDeviceApi.Api_CloseDevice(handle, out errorCode);
+                var closeResult = VirtualDeviceApi.Api_CloseDevice(handle, out var errorCode);
                 if (closeResult != VirtualDeviceApi.VIRTUAL_CLOSERESULT.VIRTUAL_CLOSERESULT_OK)
                     return false;
 
@@ -125,8 +124,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             if (!IsEnabled)
                 return;
 
-            int errorCode;
-            var result = VirtualDeviceApi.Api_SendDataBack(pktlist, readProcRefCon, out errorCode);
+            var result = VirtualDeviceApi.Api_SendDataBack(pktlist, readProcRefCon, out var errorCode);
             if (result != VirtualDeviceApi.VIRTUAL_SENDBACKRESULT.VIRTUAL_SENDBACKRESULT_OK)
             {
                 var exception = new MidiDeviceException($"Failed to send data back ({result}).", (int)result, errorCode);
@@ -140,9 +138,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
             _callback_Mac = OnMessage_Mac;
 
-            var deviceInfo = IntPtr.Zero;
-            int errorCode;
-            var result = VirtualDeviceApi.Api_OpenDevice_Mac(Name, sessionHandle, _callback_Mac, out deviceInfo, out errorCode);
+            var result = VirtualDeviceApi.Api_OpenDevice_Mac(Name, sessionHandle, _callback_Mac, out var deviceInfo, out var errorCode);
             NativeApiUtilities.HandleDevicesNativeApiResult(result, errorCode);
 
             var inputDeviceInfo = VirtualDeviceApi.Api_GetInputDeviceInfo(deviceInfo);

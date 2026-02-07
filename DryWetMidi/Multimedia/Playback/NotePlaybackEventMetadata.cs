@@ -28,7 +28,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         public Note RawNote { get; }
 
-        public NoteId RawNoteId { get; }
+        public int RawNoteId { get; }
 
         public PlaybackTime StartTime { get; }
 

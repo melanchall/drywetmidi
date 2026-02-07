@@ -17,7 +17,7 @@ namespace Melanchall.DryWetMidi.Tests.Common
 
             while (stopwatch.ElapsedMilliseconds < waitTimeMs)
             {
-                Sleep();
+                Yield();
             }
 
             stopwatch.Stop();
@@ -33,6 +33,7 @@ namespace Melanchall.DryWetMidi.Tests.Common
 
             while (stopwatch.ElapsedMilliseconds < waitTimeMs)
             {
+                Yield();
             }
         }
 
@@ -48,16 +49,16 @@ namespace Melanchall.DryWetMidi.Tests.Common
 
             while (!exitCondition() && stopwatch.ElapsedMilliseconds < timeout)
             {
-                Sleep();
+                Yield();
             }
 
             stopwatch.Stop();
             return exitCondition();
         }
 
-        private static void Sleep()
+        private static void Yield()
         {
-            Thread.Sleep(1);
+            Thread.Yield();
         }
 
         #endregion

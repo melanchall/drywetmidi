@@ -24,8 +24,7 @@ namespace Melanchall.DryWetMidi.Common
 
         public static T Parse<T>(string input, Parsing<T> parsing)
         {
-            T result;
-            var parsingResult = parsing(input, out result);
+            var parsingResult = parsing(input, out var result);
             if (parsingResult.Status == ParsingStatus.Parsed)
                 return result;
 

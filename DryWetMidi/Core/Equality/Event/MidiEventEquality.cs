@@ -235,8 +235,7 @@ namespace Melanchall.DryWetMidi.Core
                 return true;
             }
 
-            Func<MidiEvent, MidiEvent, bool> comparer;
-            if (Comparers.TryGetValue(midiEvent1.EventType, out comparer))
+            if (Comparers.TryGetValue(midiEvent1.EventType, out var comparer))
             {
                 var equals = comparer(midiEvent1, midiEvent2);
                 if (!equals)

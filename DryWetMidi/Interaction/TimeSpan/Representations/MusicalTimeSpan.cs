@@ -440,8 +440,7 @@ namespace Melanchall.DryWetMidi.Interaction
             ThrowIfArgument.IsNull(nameof(timeSpan1), timeSpan1);
             ThrowIfArgument.IsNull(nameof(timeSpan2), timeSpan2);
 
-            long numerator1, numerator2, denominator;
-            ReduceToCommonDenominator(timeSpan1, timeSpan2, out numerator1, out numerator2, out denominator);
+            ReduceToCommonDenominator(timeSpan1, timeSpan2, out var numerator1, out var numerator2, out var denominator);
             return new MusicalTimeSpan(numerator1 + numerator2, denominator);
         }
 
@@ -469,8 +468,7 @@ namespace Melanchall.DryWetMidi.Interaction
             ThrowIfArgument.IsNull(nameof(timeSpan1), timeSpan1);
             ThrowIfArgument.IsNull(nameof(timeSpan2), timeSpan2);
 
-            long numerator1, numerator2, denominator;
-            ReduceToCommonDenominator(timeSpan1, timeSpan2, out numerator1, out numerator2, out denominator);
+            ReduceToCommonDenominator(timeSpan1, timeSpan2, out var numerator1, out var numerator2, out var denominator);
             if (numerator1 < numerator2)
                 throw new ArgumentException("First time span is less than second one.", nameof(timeSpan1));
 
@@ -808,8 +806,7 @@ namespace Melanchall.DryWetMidi.Interaction
             if (ReferenceEquals(null, other))
                 return false;
 
-            long numerator1, numerator2, denominator;
-            ReduceToCommonDenominator(this, other, out numerator1, out numerator2, out denominator);
+            ReduceToCommonDenominator(this, other, out var numerator1, out var numerator2, out var denominator);
             return numerator1 == numerator2;
         }
 

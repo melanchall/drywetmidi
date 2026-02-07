@@ -123,8 +123,7 @@ namespace Melanchall.DryWetMidi.Core
         /// otherwise, <c>false</c>.</returns>
         public static bool Equals(MidiEvent midiEvent1, MidiEvent midiEvent2)
         {
-            string message;
-            return Equals(midiEvent1, midiEvent2, out message);
+            return Equals(midiEvent1, midiEvent2, out _);
         }
 
         /// <summary>
@@ -151,8 +150,7 @@ namespace Melanchall.DryWetMidi.Core
         /// otherwise, <c>false</c>.</returns>
         public static bool Equals(MidiEvent midiEvent1, MidiEvent midiEvent2, MidiEventEqualityCheckSettings settings)
         {
-            string message;
-            return Equals(midiEvent1, midiEvent2, settings, out message);
+            return Equals(midiEvent1, midiEvent2, settings, out _);
         }
 
         /// <summary>

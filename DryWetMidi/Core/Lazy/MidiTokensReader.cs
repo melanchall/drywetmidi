@@ -228,8 +228,7 @@ namespace Melanchall.DryWetMidi.Core
 
             //
 
-            long readerPosition;
-            _chunkSize = MidiChunk.ReadSize(_reader, out readerPosition);
+            _chunkSize = MidiChunk.ReadSize(_reader, out var readerPosition);
             _endReaderPosition = _reader.Position + _chunkSize;
             _currentChannelEventStatusByte = null;
 
@@ -243,10 +242,7 @@ namespace Melanchall.DryWetMidi.Core
             {
                 case HeaderChunk.Id:
                     {
-                        ushort fileFormat;
-                        ushort tracksNumber;
-                        TimeDivision timeDivision;
-                        HeaderChunk.ReadData(_reader, _settings, out fileFormat, out timeDivision, out tracksNumber);
+                        HeaderChunk.ReadData(_reader, _settings, out var fileFormat, out var timeDivision, out var tracksNumber);
 
                         GoToNextState();
                         return Instruction.ReturnToken(new FileHeaderToken(fileFormat, timeDivision, tracksNumber));

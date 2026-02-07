@@ -356,8 +356,7 @@ namespace Melanchall.DryWetMidi.Tools
                     var midiEvent = events[j];
                     time += midiEvent.DeltaTime;
 
-                    Func<MidiEvent, object> keyGetter;
-                    EventsKeysGetters.TryGetValue(midiEvent.EventType, out keyGetter);
+                    EventsKeysGetters.TryGetValue(midiEvent.EventType, out var keyGetter);
 
                     if (keyGetter != null)
                     {
@@ -365,8 +364,7 @@ namespace Melanchall.DryWetMidi.Tools
                         if (time == 0)
                             eventsAtStart[key] = midiEvent;
 
-                        Tuple<MidiEvent, long> trackedEvent;
-                        if (!trackedEvents.TryGetValue(key, out trackedEvent))
+                        if (!trackedEvents.TryGetValue(key, out var trackedEvent))
                             trackedEvents.Add(key, trackedEvent = Tuple.Create(midiEvent, time));
 
                         if (time >= trackedEvent.Item2)
@@ -381,18 +379,15 @@ namespace Melanchall.DryWetMidi.Tools
             {
                 foreach (var keyToEvent in eventsContext)
                 {
-                    MidiEvent midiEvent;
-                    if (eventsAtStart.TryGetValue(keyToEvent.Key, out midiEvent))
+                    if (eventsAtStart.TryGetValue(keyToEvent.Key, out var midiEvent))
                         continue;
 
-                    Func<MidiEvent> defaultEventGetter;
-                    if (!DefaultEventsGetters.TryGetValue(keyToEvent.Key, out defaultEventGetter))
+                    if (!DefaultEventsGetters.TryGetValue(keyToEvent.Key, out var defaultEventGetter))
                         continue;
 
                     var defaultEvent = defaultEventGetter();
                     
-                    string message;
-                    if (!MidiEvent.Equals(keyToEvent.Value, defaultEvent, MidiEventEqualityCheckSettings, out message))
+                    if (!MidiEvent.Equals(keyToEvent.Value, defaultEvent, MidiEventEqualityCheckSettings, out var message))
                         firstTrackChunk.Events.Insert(0, defaultEvent);
                 }
             }

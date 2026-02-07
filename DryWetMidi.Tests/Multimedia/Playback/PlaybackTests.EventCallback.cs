@@ -26,7 +26,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
         #region Test methods
 
-        [Retry(RetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void EventCallback_ThrowException()
         {
@@ -43,8 +43,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 actions: Array.Empty<PlaybackAction>(),
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new ProgramChangeEvent((SevenBitNumber)33), TimeSpan.FromMilliseconds(200)),
-                    new SentReceivedEvent(new TextEvent("A"), TimeSpan.FromMilliseconds(400)),
+                    new TimestampedEvent(new ProgramChangeEvent((SevenBitNumber)33), TimeSpan.FromMilliseconds(200)),
+                    new TimestampedEvent(new TextEvent("A"), TimeSpan.FromMilliseconds(400)),
                 },
                 setupPlayback: playback =>
                 {
@@ -66,7 +66,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [Retry(RetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void EventCallback_ReturnNull()
         {
@@ -82,10 +82,10 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new PlaybackAction(TimeSpan.FromMilliseconds(250),
                         p => p.EventCallback = (e, rt, t) => null),
                 },
-                expectedReceivedEvents: new SentReceivedEvent[] { });
+                expectedReceivedEvents: new TimestampedEvent[] { });
         }
 
-        [Retry(RetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void EventCallback_WithNotes_ReturnNull()
         {
@@ -104,12 +104,12 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
-                    new SentReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(200))
+                    new TimestampedEvent(new NoteOnEvent(), TimeSpan.Zero),
+                    new TimestampedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(200))
                 });
         }
 
-        [Retry(RetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void EventCallback_ReturnNull_ReturnOriginal()
         {
@@ -127,11 +127,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteAftertouchEvent(), TimeSpan.FromMilliseconds(400))
+                    new TimestampedEvent(new NoteAftertouchEvent(), TimeSpan.FromMilliseconds(400))
                 });
         }
 
-        [Retry(RetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void EventCallback_ReturnOriginal_ReturnNull()
         {
@@ -149,11 +149,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new ProgramChangeEvent((SevenBitNumber)33), TimeSpan.FromMilliseconds(200))
+                    new TimestampedEvent(new ProgramChangeEvent((SevenBitNumber)33), TimeSpan.FromMilliseconds(200))
                 });
         }
 
-        [Retry(RetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void EventCallback_ReturnOriginal_ReturnNew()
         {
@@ -173,10 +173,10 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
-                    new SentReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(200)),
-                    new SentReceivedEvent(new ProgramChangeEvent((SevenBitNumber)33), TimeSpan.FromMilliseconds(500)),
-                    new SentReceivedEvent(MidiEventForCallback, TimeSpan.FromMilliseconds(600))
+                    new TimestampedEvent(new NoteOnEvent(), TimeSpan.Zero),
+                    new TimestampedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(200)),
+                    new TimestampedEvent(new ProgramChangeEvent((SevenBitNumber)33), TimeSpan.FromMilliseconds(500)),
+                    new TimestampedEvent(MidiEventForCallback, TimeSpan.FromMilliseconds(600))
                 });
         }
 
@@ -188,9 +188,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             ICollection<ITimedObject> initialPlaybackObjects,
             EventCallback initialEventCallback,
             PlaybackAction[] actions,
-            ICollection<SentReceivedEvent> expectedReceivedEvents,
+            ICollection<TimestampedEvent> expectedReceivedEvents,
             Action<Playback> setupPlayback = null,
-            Action<Playback, ICollection<SentReceivedEvent>> additionalChecks = null)
+            Action<Playback, ICollection<TimestampedEvent>> additionalChecks = null)
         {
             CheckPlayback(
                 useOutputDevice: false,

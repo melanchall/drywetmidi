@@ -42,13 +42,6 @@ namespace Melanchall.DryWetMidi.Multimedia
         {
         }
 
-        // TODO: remove
-        public MidiDeviceException(string message, int mainErrorCode)
-            : this(message)
-        {
-            MainErrorCode = mainErrorCode;
-        }
-
         /// <summary>
         /// Initializes a new instance of the <see cref="MidiDeviceException"/> class with the
         /// specified error message and an error code.

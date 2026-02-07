@@ -11,7 +11,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
     {
         #region Test methods
 
-        [Retry(RetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void TrackControlValue_NoControlChanges_MoveToTime(
             [Values(0, 100)] int moveFromMs,
@@ -36,11 +36,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteAftertouchEvent(), lastEventTime - (moveTo - moveFrom)),
+                    new TimestampedEvent(new NoteAftertouchEvent(), lastEventTime - (moveTo - moveFrom)),
                 });
         }
 
-        [Retry(RetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void TrackControlValue_ControlChangeAtZero_MoveToTime()
         {
@@ -67,12 +67,12 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new ControlChangeEvent(controlNumber, controlValue), TimeSpan.Zero),
-                    new SentReceivedEvent(new NoteAftertouchEvent(), lastEventTime - (moveTo - moveFrom)),
+                    new TimestampedEvent(new ControlChangeEvent(controlNumber, controlValue), TimeSpan.Zero),
+                    new TimestampedEvent(new NoteAftertouchEvent(), lastEventTime - (moveTo - moveFrom)),
                 });
         }
 
-        [Retry(RetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void TrackControlValue_ControlChangeAtZero_MoveToStart()
         {
@@ -105,14 +105,14 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new ControlChangeEvent(controlNumber1, controlValue1), TimeSpan.Zero),
-                    new SentReceivedEvent(new ControlChangeEvent(controlNumber1, controlValue1), moveFrom),
-                    new SentReceivedEvent(new ControlChangeEvent(controlNumber2, controlValue2) { Channel = (FourBitNumber)10 }, moveFrom + controlChangeDelay),
-                    new SentReceivedEvent(new NoteAftertouchEvent(), moveFrom + lastEventTime),
+                    new TimestampedEvent(new ControlChangeEvent(controlNumber1, controlValue1), TimeSpan.Zero),
+                    new TimestampedEvent(new ControlChangeEvent(controlNumber1, controlValue1), moveFrom),
+                    new TimestampedEvent(new ControlChangeEvent(controlNumber2, controlValue2) { Channel = (FourBitNumber)10 }, moveFrom + controlChangeDelay),
+                    new TimestampedEvent(new NoteAftertouchEvent(), moveFrom + lastEventTime),
                 });
         }
 
-        [Retry(RetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void TrackControlValue_ControlChangesAtZero_MoveToStart()
         {
@@ -144,15 +144,15 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new ControlChangeEvent(controlNumber1, controlValue1), TimeSpan.Zero),
-                    new SentReceivedEvent(new ControlChangeEvent(controlNumber2, controlValue2), TimeSpan.Zero),
-                    new SentReceivedEvent(new ControlChangeEvent(controlNumber1, controlValue1), moveFrom),
-                    new SentReceivedEvent(new ControlChangeEvent(controlNumber2, controlValue2), moveFrom),
-                    new SentReceivedEvent(new NoteAftertouchEvent(), lastEventTime + moveFrom),
+                    new TimestampedEvent(new ControlChangeEvent(controlNumber1, controlValue1), TimeSpan.Zero),
+                    new TimestampedEvent(new ControlChangeEvent(controlNumber2, controlValue2), TimeSpan.Zero),
+                    new TimestampedEvent(new ControlChangeEvent(controlNumber1, controlValue1), moveFrom),
+                    new TimestampedEvent(new ControlChangeEvent(controlNumber2, controlValue2), moveFrom),
+                    new TimestampedEvent(new NoteAftertouchEvent(), lastEventTime + moveFrom),
                 });
         }
 
-        [Retry(RetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void TrackControlValue_FromBeforeControlChange_ToBeforeControlChange()
         {
@@ -180,12 +180,12 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, controlChangeTime - (moveTo - moveFrom)),
-                    new SentReceivedEvent(new NoteAftertouchEvent(), lastEventTime - (moveTo - moveFrom)),
+                    new TimestampedEvent(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, controlChangeTime - (moveTo - moveFrom)),
+                    new TimestampedEvent(new NoteAftertouchEvent(), lastEventTime - (moveTo - moveFrom)),
                 });
         }
 
-        [Retry(RetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void TrackControlValue_FromBeforeControlChange_ToAfterControlChange()
         {
@@ -213,12 +213,12 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, moveFrom),
-                    new SentReceivedEvent(new NoteAftertouchEvent(), lastEventTime - (moveTo - moveFrom)),
+                    new TimestampedEvent(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, moveFrom),
+                    new TimestampedEvent(new NoteAftertouchEvent(), lastEventTime - (moveTo - moveFrom)),
                 });
         }
 
-        [Retry(RetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void TrackControlValue_Default_FromBeforeControlChange_ToAfterControlChange()
         {
@@ -246,12 +246,12 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, moveFrom),
-                    new SentReceivedEvent(new NoteAftertouchEvent(), lastEventTime - (moveTo - moveFrom)),
+                    new TimestampedEvent(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, moveFrom),
+                    new TimestampedEvent(new NoteAftertouchEvent(), lastEventTime - (moveTo - moveFrom)),
                 });
         }
 
-        [Retry(RetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void TrackControlValue_FromAfterControlChange_ToAfterControlChange()
         {
@@ -279,12 +279,12 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, controlChangeTime),
-                    new SentReceivedEvent(new NoteAftertouchEvent(), lastEventTime - (moveTo - moveFrom)),
+                    new TimestampedEvent(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, controlChangeTime),
+                    new TimestampedEvent(new NoteAftertouchEvent(), lastEventTime - (moveTo - moveFrom)),
                 });
         }
 
-        [Retry(RetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void TrackControlValue_FromAfterControlChange_ToBeforeControlChange()
         {
@@ -312,14 +312,14 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, controlChangeTime),
-                    new SentReceivedEvent(new ControlChangeEvent(controlNumber, SevenBitNumber.MinValue) { Channel = (FourBitNumber)4 }, moveFrom),
-                    new SentReceivedEvent(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, controlChangeTime - moveTo + moveFrom),
-                    new SentReceivedEvent(new NoteAftertouchEvent(), lastEventTime  - moveTo + moveFrom),
+                    new TimestampedEvent(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, controlChangeTime),
+                    new TimestampedEvent(new ControlChangeEvent(controlNumber, SevenBitNumber.MinValue) { Channel = (FourBitNumber)4 }, moveFrom),
+                    new TimestampedEvent(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, controlChangeTime - moveTo + moveFrom),
+                    new TimestampedEvent(new NoteAftertouchEvent(), lastEventTime  - moveTo + moveFrom),
                 });
         }
 
-        [Retry(RetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void TrackControlValue_Default_FromBeforeControlChange_ToControlChange()
         {
@@ -347,12 +347,12 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, moveFrom),
-                    new SentReceivedEvent(new NoteAftertouchEvent(), lastEventTime - (moveTo - moveFrom)),
+                    new TimestampedEvent(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, moveFrom),
+                    new TimestampedEvent(new NoteAftertouchEvent(), lastEventTime - (moveTo - moveFrom)),
                 });
         }
 
-        [Retry(RetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void TrackControlValue_FromAfterControlChange_ToControlChange()
         {
@@ -380,13 +380,13 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, controlChangeTime),
-                    new SentReceivedEvent(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, moveFrom),
-                    new SentReceivedEvent(new NoteAftertouchEvent(), lastEventTime - controlChangeTime + moveFrom),
+                    new TimestampedEvent(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, controlChangeTime),
+                    new TimestampedEvent(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, moveFrom),
+                    new TimestampedEvent(new NoteAftertouchEvent(), lastEventTime - controlChangeTime + moveFrom),
                 });
         }
 
-        [Retry(RetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void TrackControlValue_EnableInMiddle_FromBeforeControlChange_ToAfterControlChange()
         {
@@ -421,8 +421,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, moveFrom + enableAfter),
-                    new SentReceivedEvent(new NoteAftertouchEvent(), lastEventTime + moveFrom - moveTo),
+                    new TimestampedEvent(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, moveFrom + enableAfter),
+                    new TimestampedEvent(new NoteAftertouchEvent(), lastEventTime + moveFrom - moveTo),
                 },
                 setupPlayback: playback =>
                 {
@@ -431,7 +431,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [Retry(RetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void TrackControlValue_EnableInMiddle_FromAfterControlChange_ToBeforeControlChange()
         {
@@ -462,15 +462,15 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, controlChangeTime),
-                    new SentReceivedEvent(new ControlChangeEvent(controlNumber, SevenBitNumber.MinValue) { Channel = (FourBitNumber)4 }, moveFrom + enableAfter),
-                    new SentReceivedEvent(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, controlChangeTime - moveTo + moveFrom),
-                    new SentReceivedEvent(new NoteAftertouchEvent(), lastEventTime - moveTo + moveFrom),
+                    new TimestampedEvent(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, controlChangeTime),
+                    new TimestampedEvent(new ControlChangeEvent(controlNumber, SevenBitNumber.MinValue) { Channel = (FourBitNumber)4 }, moveFrom + enableAfter),
+                    new TimestampedEvent(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, controlChangeTime - moveTo + moveFrom),
+                    new TimestampedEvent(new NoteAftertouchEvent(), lastEventTime - moveTo + moveFrom),
                 },
                 setupPlayback: playback => playback.TrackControlValue = false);
         }
 
-        [Retry(RetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void DontTrackControlValue_NoControlChanges_MoveToTime(
             [Values(0, 100)] int moveFromMs,
@@ -495,12 +495,12 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteAftertouchEvent(), lastEventTime - (moveTo - moveFrom)),
+                    new TimestampedEvent(new NoteAftertouchEvent(), lastEventTime - (moveTo - moveFrom)),
                 },
                 setupPlayback: playback => playback.TrackControlValue = false);
         }
 
-        [Retry(RetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void DontTrackControlValue_ControlChangeAtZero_MoveToTime()
         {
@@ -527,13 +527,13 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new ControlChangeEvent(controlNumber, controlValue), TimeSpan.Zero),
-                    new SentReceivedEvent(new NoteAftertouchEvent(), lastEventTime - (moveTo - moveFrom)),
+                    new TimestampedEvent(new ControlChangeEvent(controlNumber, controlValue), TimeSpan.Zero),
+                    new TimestampedEvent(new NoteAftertouchEvent(), lastEventTime - (moveTo - moveFrom)),
                 },
                 setupPlayback: playback => playback.TrackControlValue = false);
         }
 
-        [Retry(RetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void DontTrackControlValue_ControlChangeAtZero_MoveToStart()
         {
@@ -566,15 +566,15 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new ControlChangeEvent(controlNumber1, controlValue1), TimeSpan.Zero),
-                    new SentReceivedEvent(new ControlChangeEvent(controlNumber1, controlValue1), moveFrom),
-                    new SentReceivedEvent(new ControlChangeEvent(controlNumber2, controlValue2) { Channel = (FourBitNumber)10 }, moveFrom + controlChangeDelay),
-                    new SentReceivedEvent(new NoteAftertouchEvent(), moveFrom + lastEventTime),
+                    new TimestampedEvent(new ControlChangeEvent(controlNumber1, controlValue1), TimeSpan.Zero),
+                    new TimestampedEvent(new ControlChangeEvent(controlNumber1, controlValue1), moveFrom),
+                    new TimestampedEvent(new ControlChangeEvent(controlNumber2, controlValue2) { Channel = (FourBitNumber)10 }, moveFrom + controlChangeDelay),
+                    new TimestampedEvent(new NoteAftertouchEvent(), moveFrom + lastEventTime),
                 },
                 setupPlayback: playback => playback.TrackControlValue = false);
         }
 
-        [Retry(RetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void DontTrackControlValue_ControlChangesAtZero_MoveToStart()
         {
@@ -606,16 +606,16 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new ControlChangeEvent(controlNumber1, controlValue1), TimeSpan.Zero),
-                    new SentReceivedEvent(new ControlChangeEvent(controlNumber2, controlValue2), TimeSpan.Zero),
-                    new SentReceivedEvent(new ControlChangeEvent(controlNumber1, controlValue1), moveFrom),
-                    new SentReceivedEvent(new ControlChangeEvent(controlNumber2, controlValue2), moveFrom),
-                    new SentReceivedEvent(new NoteAftertouchEvent(), lastEventTime + moveFrom),
+                    new TimestampedEvent(new ControlChangeEvent(controlNumber1, controlValue1), TimeSpan.Zero),
+                    new TimestampedEvent(new ControlChangeEvent(controlNumber2, controlValue2), TimeSpan.Zero),
+                    new TimestampedEvent(new ControlChangeEvent(controlNumber1, controlValue1), moveFrom),
+                    new TimestampedEvent(new ControlChangeEvent(controlNumber2, controlValue2), moveFrom),
+                    new TimestampedEvent(new NoteAftertouchEvent(), lastEventTime + moveFrom),
                 },
                 setupPlayback: playback => playback.TrackControlValue = false);
         }
 
-        [Retry(RetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void DontTrackControlValue_FromBeforeControlChange_ToBeforeControlChange()
         {
@@ -643,13 +643,13 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, controlChangeTime - (moveTo - moveFrom)),
-                    new SentReceivedEvent(new NoteAftertouchEvent(), lastEventTime - (moveTo - moveFrom)),
+                    new TimestampedEvent(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, controlChangeTime - (moveTo - moveFrom)),
+                    new TimestampedEvent(new NoteAftertouchEvent(), lastEventTime - (moveTo - moveFrom)),
                 },
                 setupPlayback: playback => playback.TrackControlValue = false);
         }
 
-        [Retry(RetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void DontTrackControlValue_FromBeforeControlChange_ToAfterControlChange()
         {
@@ -677,12 +677,12 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteAftertouchEvent(), lastEventTime - (moveTo - moveFrom)),
+                    new TimestampedEvent(new NoteAftertouchEvent(), lastEventTime - (moveTo - moveFrom)),
                 },
                 setupPlayback: playback => playback.TrackControlValue = false);
         }
 
-        [Retry(RetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void DontTrackControlValue_Default_FromBeforeControlChange_ToAfterControlChange()
         {
@@ -710,12 +710,12 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteAftertouchEvent(), lastEventTime - (moveTo - moveFrom)),
+                    new TimestampedEvent(new NoteAftertouchEvent(), lastEventTime - (moveTo - moveFrom)),
                 },
                 setupPlayback: playback => playback.TrackControlValue = false);
         }
 
-        [Retry(RetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void DontTrackControlValue_FromAfterControlChange_ToAfterControlChange()
         {
@@ -743,13 +743,13 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, controlChangeTime),
-                    new SentReceivedEvent(new NoteAftertouchEvent(), lastEventTime - (moveTo - moveFrom)),
+                    new TimestampedEvent(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, controlChangeTime),
+                    new TimestampedEvent(new NoteAftertouchEvent(), lastEventTime - (moveTo - moveFrom)),
                 },
                 setupPlayback: playback => playback.TrackControlValue = false);
         }
 
-        [Retry(RetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void DontTrackControlValue_FromAfterControlChange_ToBeforeControlChange()
         {
@@ -777,14 +777,14 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, controlChangeTime),
-                    new SentReceivedEvent(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, controlChangeTime - moveTo + moveFrom),
-                    new SentReceivedEvent(new NoteAftertouchEvent(), lastEventTime  - moveTo + moveFrom),
+                    new TimestampedEvent(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, controlChangeTime),
+                    new TimestampedEvent(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, controlChangeTime - moveTo + moveFrom),
+                    new TimestampedEvent(new NoteAftertouchEvent(), lastEventTime  - moveTo + moveFrom),
                 },
                 setupPlayback: playback => playback.TrackControlValue = false);
         }
 
-        [Retry(RetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void DontTrackControlValue_Default_FromBeforeControlChange_ToControlChange()
         {
@@ -812,13 +812,13 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, moveFrom),
-                    new SentReceivedEvent(new NoteAftertouchEvent(), lastEventTime - (moveTo - moveFrom)),
+                    new TimestampedEvent(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, moveFrom),
+                    new TimestampedEvent(new NoteAftertouchEvent(), lastEventTime - (moveTo - moveFrom)),
                 },
                 setupPlayback: playback => playback.TrackControlValue = false);
         }
 
-        [Retry(RetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void DontTrackControlValue_FromAfterControlChange_ToControlChange()
         {
@@ -846,14 +846,14 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, controlChangeTime),
-                    new SentReceivedEvent(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, moveFrom),
-                    new SentReceivedEvent(new NoteAftertouchEvent(), lastEventTime - controlChangeTime + moveFrom),
+                    new TimestampedEvent(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, controlChangeTime),
+                    new TimestampedEvent(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, moveFrom),
+                    new TimestampedEvent(new NoteAftertouchEvent(), lastEventTime - controlChangeTime + moveFrom),
                 },
                 setupPlayback: playback => playback.TrackControlValue = false);
         }
 
-        [Retry(RetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void TrackControlValue_DisableInMiddle_FromBeforeControlChange_ToAfterControlChange()
         {
@@ -888,13 +888,13 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, moveFrom),
-                    new SentReceivedEvent(new NoteAftertouchEvent(), lastEventTime + moveFrom - moveTo),
+                    new TimestampedEvent(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, moveFrom),
+                    new TimestampedEvent(new NoteAftertouchEvent(), lastEventTime + moveFrom - moveTo),
                 },
                 setupPlayback: playback => playback.TrackProgram = false);
         }
 
-        [Retry(RetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void TrackControlValue_DisableInMiddle_FromAfterControlChange_ToBeforeControlChange()
         {
@@ -925,10 +925,10 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, controlChangeTime),
-                    new SentReceivedEvent(new ControlChangeEvent(controlNumber, SevenBitNumber.MinValue) { Channel = (FourBitNumber)4 }, moveFrom),
-                    new SentReceivedEvent(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, controlChangeTime - moveTo + moveFrom),
-                    new SentReceivedEvent(new NoteAftertouchEvent(), lastEventTime - moveTo + moveFrom),
+                    new TimestampedEvent(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, controlChangeTime),
+                    new TimestampedEvent(new ControlChangeEvent(controlNumber, SevenBitNumber.MinValue) { Channel = (FourBitNumber)4 }, moveFrom),
+                    new TimestampedEvent(new ControlChangeEvent(controlNumber, controlValue) { Channel = (FourBitNumber)4 }, controlChangeTime - moveTo + moveFrom),
+                    new TimestampedEvent(new NoteAftertouchEvent(), lastEventTime - moveTo + moveFrom),
                 });
         }
 

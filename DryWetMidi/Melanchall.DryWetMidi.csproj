@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <LangVersion>6</LangVersion>
+    <LangVersion>7</LangVersion>
     <Configurations>Debug;Release;ReleaseTest;ReleaseTestFull</Configurations>
   </PropertyGroup>
 

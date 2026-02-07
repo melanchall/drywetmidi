@@ -45,10 +45,10 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         private void CheckPlaybackDataChangesOnTheFly(
             ICollection<ITimedObject> initialObjects,
             DynamicPlaybackAction[] actions,
-            ICollection<SentReceivedEvent> expectedReceivedEvents,
+            ICollection<TimestampedEvent> expectedReceivedEvents,
             Action<Playback> setupPlayback = null,
             int? repeatsCount = null,
-            Action<Playback, ICollection<SentReceivedEvent>> additionalChecks = null,
+            Action<Playback, ICollection<TimestampedEvent>> additionalChecks = null,
             TempoMap tempoMap = null)
         {
             var collection = new ObservableTimedObjectsCollection(initialObjects);

@@ -68,12 +68,10 @@ namespace Melanchall.DryWetMidi.Interaction
 
             // Fraction
 
-            long numerator;
-            if (!ParsingUtilities.ParseNonnegativeLong(match, NumeratorGroupName, 1, out numerator))
+            if (!ParsingUtilities.ParseNonnegativeLong(match, NumeratorGroupName, 1, out var numerator))
                 return ParsingResult.Error(NumeratorIsOutOfRange);
 
-            long denominator;
-            if (!ParsingUtilities.ParseNonnegativeLong(match, DenominatorGroupName, 1, out denominator))
+            if (!ParsingUtilities.ParseNonnegativeLong(match, DenominatorGroupName, 1, out var denominator))
                 return ParsingResult.Error(DenominatorIsOutOfRange);
 
             var fractionMnemonicGroup = match.Groups[FractionMnemonicGroupName];
@@ -86,12 +84,10 @@ namespace Melanchall.DryWetMidi.Interaction
 
             // Tuplet
 
-            int tupletNotesCount;
-            if (!ParsingUtilities.ParseNonnegativeInt(match, TupletNotesCountGroupName, 1, out tupletNotesCount))
+            if (!ParsingUtilities.ParseNonnegativeInt(match, TupletNotesCountGroupName, 1, out var tupletNotesCount))
                 return ParsingResult.Error(TupletNotesCountIsOutOfRange);
 
-            int tupletSpaceSize;
-            if (!ParsingUtilities.ParseNonnegativeInt(match, TupletSpaceSizeGroupName, 1, out tupletSpaceSize))
+            if (!ParsingUtilities.ParseNonnegativeInt(match, TupletSpaceSizeGroupName, 1, out var tupletSpaceSize))
                 return ParsingResult.Error(TupletSpaceSizeIsOutOfRange);
 
             var tupletMnemonicGroup = match.Groups[TupletMnemonicGroupName];

@@ -96,14 +96,14 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             ClassicAssert.IsFalse(outputDeviceFound, $"Output device is found after virtual device disposed after [{timeout}].");
         }
 
-        [Retry(RetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void SendEventToVirtualDevice_SysEx()
         {
             SendEvent(new NormalSysExEvent(new byte[] { 0x5F, 0x40, 0xF7 }));
         }
 
-        [Retry(RetriesNumber)]
+        [MultimediaTestRetry]
         [TestCase(MidiEventType.ActiveSensing)]
         [TestCase(MidiEventType.Continue)]
         [TestCase(MidiEventType.Reset)]
@@ -131,7 +131,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             SendEvent(midiEvent);
         }
 
-        [Retry(RetriesNumber)]
+        [MultimediaTestRetry]
         [TestCaseSource(nameof(GetNonDefaultShortEvents))]
         public void SendEventToVirtualDevice_Short_NonDefault(MidiEvent midiEvent)
         {

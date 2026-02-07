@@ -53,12 +53,11 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         public SnapPoint GetNextSnapPoint(TimeSpan fromTime, Func<PlaybackEvent, SnapPoint> getSnapPoint)
         {
-            int i;
             MathUtilities.GetFirstElementAboveThreshold(
                 _playbackEvents,
                 fromTime.Ticks,
                 e => e.Time.Time.Ticks,
-                out i);
+                out var i);
 
             for (; i < _playbackEvents.Length; i++)
             {
@@ -72,12 +71,11 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         public SnapPoint GetPreviousSnapPoint(TimeSpan fromTime, Func<PlaybackEvent, SnapPoint> getSnapPoint)
         {
-            int i;
             MathUtilities.GetLastElementBelowThreshold(
                 _playbackEvents,
                 fromTime.Ticks,
                 e => e.Time.Time.Ticks,
-                out i);
+                out var i);
 
             for (; i >= 0; i--)
             {
@@ -151,12 +149,11 @@ namespace Melanchall.DryWetMidi.Multimedia
             if (_isCompleted)
                 return;
 
-            int firstNodeAfterTempoChange;
             MathUtilities.GetFirstElementAboveThreshold(
                 _playbackEventsBuffer,
                 tempoChangeTime,
                 e => e.Time.Time,
-                out firstNodeAfterTempoChange);
+                out var firstNodeAfterTempoChange);
 
             if (firstNodeAfterTempoChange < 0)
                 return;

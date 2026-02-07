@@ -15,7 +15,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
     {
         #region Test methods
 
-        [Retry(OnTheFlyChecksRetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_RemoveEventWithinNote_AfterCurrentTime()
         {
@@ -38,12 +38,12 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1000)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1000)),
                 });
         }
 
-        [Retry(OnTheFlyChecksRetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_RemoveEventWithinNote_BeforeCurrentTime()
         {
@@ -66,13 +66,13 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
-                    new SentReceivedEvent(new TextEvent("A"), TimeSpan.FromMilliseconds(300)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1000)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
+                    new TimestampedEvent(new TextEvent("A"), TimeSpan.FromMilliseconds(300)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1000)),
                 });
         }
 
-        [Retry(OnTheFlyChecksRetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_RemoveLastActiveEvent()
         {
@@ -96,11 +96,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new TextEvent("A"), TimeSpan.FromMilliseconds(0)),
+                    new TimestampedEvent(new TextEvent("A"), TimeSpan.FromMilliseconds(0)),
                 });
         }
 
-        [Retry(OnTheFlyChecksRetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_RemoveAtSameTime_AfterCurrentTime([Values(0, 1, 2)] int indexToRemove)
         {
@@ -137,20 +137,20 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 expectedReceivedEvents:
                     new[]
                     {
-                        new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(0)),
+                        new TimestampedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(0)),
                     }
                     .Concat(
                         objectsToRemove
                             .Except(new[] { objectsToRemove[indexToRemove] })
-                            .Select(o => new SentReceivedEvent(((TimedEvent)o).Event, TimeSpan.FromMilliseconds(300))))
+                            .Select(o => new TimestampedEvent(((TimedEvent)o).Event, TimeSpan.FromMilliseconds(300))))
                     .Concat(new[]
                     {
-                        new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(500)),
+                        new TimestampedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(500)),
                     })
                     .ToArray());
         }
 
-        [Retry(OnTheFlyChecksRetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_RemoveAtSameTime_BeforeCurrentTime([Values(0, 1, 2)] int indexToRemove)
         {
@@ -185,15 +185,15 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
-                    new SentReceivedEvent(new TextEvent("A"), TimeSpan.FromMilliseconds(300)),
-                    new SentReceivedEvent(new TextEvent("B"), TimeSpan.FromMilliseconds(300)),
-                    new SentReceivedEvent(new TextEvent("C"), TimeSpan.FromMilliseconds(300)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(700)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
+                    new TimestampedEvent(new TextEvent("A"), TimeSpan.FromMilliseconds(300)),
+                    new TimestampedEvent(new TextEvent("B"), TimeSpan.FromMilliseconds(300)),
+                    new TimestampedEvent(new TextEvent("C"), TimeSpan.FromMilliseconds(300)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(700)),
                 });
         }
 
-        [Retry(OnTheFlyChecksRetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_RemoveProgramChange_AfterCurrentTime_1()
         {
@@ -219,12 +219,12 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(800)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(800)),
                 });
         }
 
-        [Retry(OnTheFlyChecksRetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_RemoveProgramChange_AfterCurrentTime_2()
         {
@@ -250,12 +250,12 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(800)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(800)),
                 });
         }
 
-        [Retry(OnTheFlyChecksRetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_RemoveProgramChange_BeforeCurrentTime_1()
         {
@@ -281,14 +281,14 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new ProgramChangeEvent((SevenBitNumber)7), TimeSpan.FromMilliseconds(50)),
-                    new SentReceivedEvent(new ProgramChangeEvent(), TimeSpan.FromMilliseconds(200)),
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(800)),
+                    new TimestampedEvent(new ProgramChangeEvent((SevenBitNumber)7), TimeSpan.FromMilliseconds(50)),
+                    new TimestampedEvent(new ProgramChangeEvent(), TimeSpan.FromMilliseconds(200)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(800)),
                 });
         }
 
-        [Retry(OnTheFlyChecksRetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_RemoveProgramChange_BeforeCurrentTime_2()
         {
@@ -321,16 +321,16 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new ProgramChangeEvent((SevenBitNumber)7), TimeSpan.FromMilliseconds(50)),
-                    new SentReceivedEvent(new ProgramChangeEvent((SevenBitNumber)8), TimeSpan.FromMilliseconds(100)),
-                    new SentReceivedEvent(new ProgramChangeEvent((SevenBitNumber)7), TimeSpan.FromMilliseconds(200)),
-                    new SentReceivedEvent(new ProgramChangeEvent(), TimeSpan.FromMilliseconds(300)),
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(400)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(700)),
+                    new TimestampedEvent(new ProgramChangeEvent((SevenBitNumber)7), TimeSpan.FromMilliseconds(50)),
+                    new TimestampedEvent(new ProgramChangeEvent((SevenBitNumber)8), TimeSpan.FromMilliseconds(100)),
+                    new TimestampedEvent(new ProgramChangeEvent((SevenBitNumber)7), TimeSpan.FromMilliseconds(200)),
+                    new TimestampedEvent(new ProgramChangeEvent(), TimeSpan.FromMilliseconds(300)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(400)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(700)),
                 });
         }
 
-        [Retry(OnTheFlyChecksRetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_RemovePitchBend_AfterCurrentTime_1()
         {
@@ -356,13 +356,13 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(800)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(800)),
                 },
                 setupPlayback: playback => playback.TrackPitchValue = true);
         }
 
-        [Retry(OnTheFlyChecksRetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_RemovePitchBend_AfterCurrentTime_2()
         {
@@ -388,13 +388,13 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(800)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(800)),
                 },
                 setupPlayback: playback => playback.TrackPitchValue = true);
         }
 
-        [Retry(OnTheFlyChecksRetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_RemovePitchBend_BeforeCurrentTime_1()
         {
@@ -420,15 +420,15 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new PitchBendEvent(7000), TimeSpan.FromMilliseconds(50)),
-                    new SentReceivedEvent(new PitchBendEvent(), TimeSpan.FromMilliseconds(200)),
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(800)),
+                    new TimestampedEvent(new PitchBendEvent(7000), TimeSpan.FromMilliseconds(50)),
+                    new TimestampedEvent(new PitchBendEvent(), TimeSpan.FromMilliseconds(200)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(800)),
                 },
                 setupPlayback: playback => playback.TrackPitchValue = true);
         }
 
-        [Retry(OnTheFlyChecksRetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_RemovePitchBend_BeforeCurrentTime_2()
         {
@@ -461,17 +461,17 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new PitchBendEvent(7000), TimeSpan.FromMilliseconds(50)),
-                    new SentReceivedEvent(new PitchBendEvent(8000), TimeSpan.FromMilliseconds(100)),
-                    new SentReceivedEvent(new PitchBendEvent(7000), TimeSpan.FromMilliseconds(200)),
-                    new SentReceivedEvent(new PitchBendEvent(), TimeSpan.FromMilliseconds(300)),
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(400)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(700)),
+                    new TimestampedEvent(new PitchBendEvent(7000), TimeSpan.FromMilliseconds(50)),
+                    new TimestampedEvent(new PitchBendEvent(8000), TimeSpan.FromMilliseconds(100)),
+                    new TimestampedEvent(new PitchBendEvent(7000), TimeSpan.FromMilliseconds(200)),
+                    new TimestampedEvent(new PitchBendEvent(), TimeSpan.FromMilliseconds(300)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(400)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(700)),
                 },
                 setupPlayback: playback => playback.TrackPitchValue = true);
         }
 
-        [Retry(OnTheFlyChecksRetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_RemoveControlChange_AfterCurrentTime_1()
         {
@@ -497,13 +497,13 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(800)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(800)),
                 },
                 setupPlayback: playback => playback.TrackControlValue = true);
         }
 
-        [Retry(OnTheFlyChecksRetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_RemoveControlChange_AfterCurrentTime_2()
         {
@@ -529,13 +529,13 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(800)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(800)),
                 },
                 setupPlayback: playback => playback.TrackControlValue = true);
         }
 
-        [Retry(OnTheFlyChecksRetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_RemoveControlChange_BeforeCurrentTime_1()
         {
@@ -562,15 +562,15 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new ControlChangeEvent((SevenBitNumber)7, (SevenBitNumber)20), TimeSpan.FromMilliseconds(50)),
-                    new SentReceivedEvent(new ControlChangeEvent((SevenBitNumber)7, SevenBitNumber.MinValue), TimeSpan.FromMilliseconds(200)),
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(800)),
+                    new TimestampedEvent(new ControlChangeEvent((SevenBitNumber)7, (SevenBitNumber)20), TimeSpan.FromMilliseconds(50)),
+                    new TimestampedEvent(new ControlChangeEvent((SevenBitNumber)7, SevenBitNumber.MinValue), TimeSpan.FromMilliseconds(200)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(800)),
                 },
                 setupPlayback: playback => playback.TrackControlValue = true);
         }
 
-        [Retry(OnTheFlyChecksRetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_RemoveControlChange_BeforeCurrentTime_2()
         {
@@ -603,17 +603,17 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new ControlChangeEvent((SevenBitNumber)7, (SevenBitNumber)70), TimeSpan.FromMilliseconds(50)),
-                    new SentReceivedEvent(new ControlChangeEvent((SevenBitNumber)7, (SevenBitNumber)80), TimeSpan.FromMilliseconds(100)),
-                    new SentReceivedEvent(new ControlChangeEvent((SevenBitNumber)7, (SevenBitNumber)70), TimeSpan.FromMilliseconds(200)),
-                    new SentReceivedEvent(new ControlChangeEvent((SevenBitNumber)7, SevenBitNumber.MinValue), TimeSpan.FromMilliseconds(300)),
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(400)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(700)),
+                    new TimestampedEvent(new ControlChangeEvent((SevenBitNumber)7, (SevenBitNumber)70), TimeSpan.FromMilliseconds(50)),
+                    new TimestampedEvent(new ControlChangeEvent((SevenBitNumber)7, (SevenBitNumber)80), TimeSpan.FromMilliseconds(100)),
+                    new TimestampedEvent(new ControlChangeEvent((SevenBitNumber)7, (SevenBitNumber)70), TimeSpan.FromMilliseconds(200)),
+                    new TimestampedEvent(new ControlChangeEvent((SevenBitNumber)7, SevenBitNumber.MinValue), TimeSpan.FromMilliseconds(300)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(400)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(700)),
                 },
                 setupPlayback: playback => playback.TrackControlValue = true);
         }
 
-        [Retry(OnTheFlyChecksRetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_RemoveControlChange_BeforeCurrentTime_3()
         {
@@ -646,17 +646,17 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new ControlChangeEvent((SevenBitNumber)7, (SevenBitNumber)70), TimeSpan.FromMilliseconds(50)),
-                    new SentReceivedEvent(new ControlChangeEvent((SevenBitNumber)8, (SevenBitNumber)80), TimeSpan.FromMilliseconds(100)),
-                    new SentReceivedEvent(new ControlChangeEvent((SevenBitNumber)8, SevenBitNumber.MinValue), TimeSpan.FromMilliseconds(200)),
-                    new SentReceivedEvent(new ControlChangeEvent((SevenBitNumber)7, SevenBitNumber.MinValue), TimeSpan.FromMilliseconds(300)),
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(400)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(700)),
+                    new TimestampedEvent(new ControlChangeEvent((SevenBitNumber)7, (SevenBitNumber)70), TimeSpan.FromMilliseconds(50)),
+                    new TimestampedEvent(new ControlChangeEvent((SevenBitNumber)8, (SevenBitNumber)80), TimeSpan.FromMilliseconds(100)),
+                    new TimestampedEvent(new ControlChangeEvent((SevenBitNumber)8, SevenBitNumber.MinValue), TimeSpan.FromMilliseconds(200)),
+                    new TimestampedEvent(new ControlChangeEvent((SevenBitNumber)7, SevenBitNumber.MinValue), TimeSpan.FromMilliseconds(300)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(400)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(700)),
                 },
                 setupPlayback: playback => playback.TrackControlValue = true);
         }
 
-        [Retry(OnTheFlyChecksRetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_RemoveControlChange_BeforeCurrentTime_4()
         {
@@ -689,17 +689,17 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new ControlChangeEvent((SevenBitNumber)7, (SevenBitNumber)70), TimeSpan.FromMilliseconds(50)),
-                    new SentReceivedEvent(new ControlChangeEvent((SevenBitNumber)7, (SevenBitNumber)80) { Channel = (FourBitNumber)6 }, TimeSpan.FromMilliseconds(100)),
-                    new SentReceivedEvent(new ControlChangeEvent((SevenBitNumber)7, SevenBitNumber.MinValue) { Channel = (FourBitNumber)6 }, TimeSpan.FromMilliseconds(200)),
-                    new SentReceivedEvent(new ControlChangeEvent((SevenBitNumber)7, SevenBitNumber.MinValue), TimeSpan.FromMilliseconds(300)),
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(400)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(700)),
+                    new TimestampedEvent(new ControlChangeEvent((SevenBitNumber)7, (SevenBitNumber)70), TimeSpan.FromMilliseconds(50)),
+                    new TimestampedEvent(new ControlChangeEvent((SevenBitNumber)7, (SevenBitNumber)80) { Channel = (FourBitNumber)6 }, TimeSpan.FromMilliseconds(100)),
+                    new TimestampedEvent(new ControlChangeEvent((SevenBitNumber)7, SevenBitNumber.MinValue) { Channel = (FourBitNumber)6 }, TimeSpan.FromMilliseconds(200)),
+                    new TimestampedEvent(new ControlChangeEvent((SevenBitNumber)7, SevenBitNumber.MinValue), TimeSpan.FromMilliseconds(300)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(400)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(700)),
                 },
                 setupPlayback: playback => playback.TrackControlValue = true);
         }
 
-        [Retry(OnTheFlyChecksRetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_RemoveNotes_1()
         {
@@ -727,15 +727,15 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)50, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)50, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(500)),
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(700)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(800)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)50, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)50, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(500)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(700)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(800)),
                 },
                 setupPlayback: playback => playback.TrackNotes = true);
         }
 
-        [Retry(OnTheFlyChecksRetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_RemoveNotes_2()
         {
@@ -764,13 +764,13 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(400)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(400)),
                 },
                 setupPlayback: playback => playback.TrackNotes = true);
         }
 
-        [Retry(OnTheFlyChecksRetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_RemoveNotes_3()
         {
@@ -799,15 +799,15 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)50, Note.DefaultVelocity), TimeSpan.FromMilliseconds(100)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)50, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(200)),
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(500)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(700)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)50, Note.DefaultVelocity), TimeSpan.FromMilliseconds(100)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)50, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(200)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(500)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(700)),
                 },
                 setupPlayback: playback => playback.TrackNotes = true);
         }
 
-        [Retry(OnTheFlyChecksRetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_RemoveNotes_4()
         {
@@ -844,17 +844,17 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)50, Note.DefaultVelocity), TimeSpan.FromMilliseconds(100)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)50, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(200)),
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)60, Note.DefaultVelocity), TimeSpan.FromMilliseconds(450)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)60, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(500)),
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(700)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(800)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)50, Note.DefaultVelocity), TimeSpan.FromMilliseconds(100)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)50, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(200)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)60, Note.DefaultVelocity), TimeSpan.FromMilliseconds(450)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)60, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(500)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(700)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(800)),
                 },
                 setupPlayback: playback => playback.TrackNotes = true);
         }
 
-        [Retry(OnTheFlyChecksRetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_RemoveNotes_5()
         {
@@ -880,13 +880,13 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)50, Note.DefaultVelocity), TimeSpan.FromMilliseconds(100)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)50, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(200)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)50, Note.DefaultVelocity), TimeSpan.FromMilliseconds(100)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)50, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(200)),
                 },
                 setupPlayback: playback => playback.TrackNotes = true);
         }
 
-        [Retry(OnTheFlyChecksRetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_RemoveNotes_6()
         {
@@ -919,17 +919,17 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(200)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(500)),
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)50, Note.DefaultVelocity), TimeSpan.FromMilliseconds(600)),
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)80, Note.DefaultVelocity), TimeSpan.FromMilliseconds(600)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)50, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(700)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)80, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(800)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(200)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(500)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)50, Note.DefaultVelocity), TimeSpan.FromMilliseconds(600)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)80, Note.DefaultVelocity), TimeSpan.FromMilliseconds(600)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)50, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(700)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)80, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(800)),
                 },
                 setupPlayback: playback => playback.TrackNotes = true);
         }
 
-        [Retry(OnTheFlyChecksRetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Loop_RemoveEventWithinNote_AfterCurrentTime()
         {
@@ -953,15 +953,15 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(500)),
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(500)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1000)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(500)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(500)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1000)),
                 },
                 repeatsCount: 1);
         }
 
-        [Retry(OnTheFlyChecksRetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Loop_RemoveEventWithinNote_BeforeCurrentTime()
         {
@@ -984,16 +984,16 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
-                    new SentReceivedEvent(new TextEvent("A"), TimeSpan.FromMilliseconds(200)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(500)),
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(500)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1000)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
+                    new TimestampedEvent(new TextEvent("A"), TimeSpan.FromMilliseconds(200)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(500)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(500)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1000)),
                 },
                 repeatsCount: 1);
         }
 
-        [Retry(OnTheFlyChecksRetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Loop_RemoveLastActiveEvent()
         {
@@ -1017,13 +1017,13 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new TextEvent("A"), TimeSpan.FromMilliseconds(0)),
-                    new SentReceivedEvent(new TextEvent("A"), TimeSpan.FromMilliseconds(200)),
+                    new TimestampedEvent(new TextEvent("A"), TimeSpan.FromMilliseconds(0)),
+                    new TimestampedEvent(new TextEvent("A"), TimeSpan.FromMilliseconds(200)),
                 },
                 repeatsCount: 1);
         }
 
-        [Retry(OnTheFlyChecksRetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Loop_RemoveAtSameTime_AfterCurrentTime_1()
         {
@@ -1051,19 +1051,19 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(0)),
-                    new SentReceivedEvent(new TextEvent("B"), TimeSpan.FromMilliseconds(300)),
-                    new SentReceivedEvent(new TextEvent("C"), TimeSpan.FromMilliseconds(300)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(500)),
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(500)),
-                    new SentReceivedEvent(new TextEvent("B"), TimeSpan.FromMilliseconds(800)),
-                    new SentReceivedEvent(new TextEvent("C"), TimeSpan.FromMilliseconds(800)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1000)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(0)),
+                    new TimestampedEvent(new TextEvent("B"), TimeSpan.FromMilliseconds(300)),
+                    new TimestampedEvent(new TextEvent("C"), TimeSpan.FromMilliseconds(300)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(500)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(500)),
+                    new TimestampedEvent(new TextEvent("B"), TimeSpan.FromMilliseconds(800)),
+                    new TimestampedEvent(new TextEvent("C"), TimeSpan.FromMilliseconds(800)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1000)),
                 },
                 repeatsCount: 1);
         }
 
-        [Retry(OnTheFlyChecksRetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Loop_RemoveAtSameTime_AfterCurrentTime_2()
         {
@@ -1091,19 +1091,19 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(0)),
-                    new SentReceivedEvent(new TextEvent("A"), TimeSpan.FromMilliseconds(300)),
-                    new SentReceivedEvent(new TextEvent("C"), TimeSpan.FromMilliseconds(300)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(500)),
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(500)),
-                    new SentReceivedEvent(new TextEvent("A"), TimeSpan.FromMilliseconds(800)),
-                    new SentReceivedEvent(new TextEvent("C"), TimeSpan.FromMilliseconds(800)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1000)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(0)),
+                    new TimestampedEvent(new TextEvent("A"), TimeSpan.FromMilliseconds(300)),
+                    new TimestampedEvent(new TextEvent("C"), TimeSpan.FromMilliseconds(300)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(500)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(500)),
+                    new TimestampedEvent(new TextEvent("A"), TimeSpan.FromMilliseconds(800)),
+                    new TimestampedEvent(new TextEvent("C"), TimeSpan.FromMilliseconds(800)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1000)),
                 },
                 repeatsCount: 1);
         }
 
-        [Retry(OnTheFlyChecksRetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Loop_RemoveAtSameTime_AfterCurrentTime_3()
         {
@@ -1131,19 +1131,19 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(0)),
-                    new SentReceivedEvent(new TextEvent("A"), TimeSpan.FromMilliseconds(300)),
-                    new SentReceivedEvent(new TextEvent("B"), TimeSpan.FromMilliseconds(300)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(500)),
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(500)),
-                    new SentReceivedEvent(new TextEvent("A"), TimeSpan.FromMilliseconds(800)),
-                    new SentReceivedEvent(new TextEvent("B"), TimeSpan.FromMilliseconds(800)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1000)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(0)),
+                    new TimestampedEvent(new TextEvent("A"), TimeSpan.FromMilliseconds(300)),
+                    new TimestampedEvent(new TextEvent("B"), TimeSpan.FromMilliseconds(300)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(500)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(500)),
+                    new TimestampedEvent(new TextEvent("A"), TimeSpan.FromMilliseconds(800)),
+                    new TimestampedEvent(new TextEvent("B"), TimeSpan.FromMilliseconds(800)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1000)),
                 },
                 repeatsCount: 1);
         }
 
-        [Retry(OnTheFlyChecksRetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Loop_RemoveAtSameTime_BeforeCurrentTime_1()
         {
@@ -1172,20 +1172,20 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
-                    new SentReceivedEvent(new TextEvent("A"), TimeSpan.FromMilliseconds(300)),
-                    new SentReceivedEvent(new TextEvent("B"), TimeSpan.FromMilliseconds(300)),
-                    new SentReceivedEvent(new TextEvent("C"), TimeSpan.FromMilliseconds(300)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(700)),
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(700)),
-                    new SentReceivedEvent(new TextEvent("B"), TimeSpan.FromMilliseconds(1000)),
-                    new SentReceivedEvent(new TextEvent("C"), TimeSpan.FromMilliseconds(1000)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1400)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
+                    new TimestampedEvent(new TextEvent("A"), TimeSpan.FromMilliseconds(300)),
+                    new TimestampedEvent(new TextEvent("B"), TimeSpan.FromMilliseconds(300)),
+                    new TimestampedEvent(new TextEvent("C"), TimeSpan.FromMilliseconds(300)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(700)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(700)),
+                    new TimestampedEvent(new TextEvent("B"), TimeSpan.FromMilliseconds(1000)),
+                    new TimestampedEvent(new TextEvent("C"), TimeSpan.FromMilliseconds(1000)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1400)),
                 },
                 repeatsCount: 1);
         }
 
-        [Retry(OnTheFlyChecksRetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Loop_RemoveAtSameTime_BeforeCurrentTime_2()
         {
@@ -1213,20 +1213,20 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
-                    new SentReceivedEvent(new TextEvent("A"), TimeSpan.FromMilliseconds(300)),
-                    new SentReceivedEvent(new TextEvent("B"), TimeSpan.FromMilliseconds(300)),
-                    new SentReceivedEvent(new TextEvent("C"), TimeSpan.FromMilliseconds(300)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(700)),
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(700)),
-                    new SentReceivedEvent(new TextEvent("A"), TimeSpan.FromMilliseconds(1000)),
-                    new SentReceivedEvent(new TextEvent("C"), TimeSpan.FromMilliseconds(1000)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1400)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
+                    new TimestampedEvent(new TextEvent("A"), TimeSpan.FromMilliseconds(300)),
+                    new TimestampedEvent(new TextEvent("B"), TimeSpan.FromMilliseconds(300)),
+                    new TimestampedEvent(new TextEvent("C"), TimeSpan.FromMilliseconds(300)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(700)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(700)),
+                    new TimestampedEvent(new TextEvent("A"), TimeSpan.FromMilliseconds(1000)),
+                    new TimestampedEvent(new TextEvent("C"), TimeSpan.FromMilliseconds(1000)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1400)),
                 },
                 repeatsCount: 1);
         }
 
-        [Retry(OnTheFlyChecksRetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Loop_RemoveAtSameTime_BeforeCurrentTime_3()
         {
@@ -1254,20 +1254,20 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
-                    new SentReceivedEvent(new TextEvent("A"), TimeSpan.FromMilliseconds(300)),
-                    new SentReceivedEvent(new TextEvent("B"), TimeSpan.FromMilliseconds(300)),
-                    new SentReceivedEvent(new TextEvent("C"), TimeSpan.FromMilliseconds(300)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(700)),
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(700)),
-                    new SentReceivedEvent(new TextEvent("A"), TimeSpan.FromMilliseconds(1000)),
-                    new SentReceivedEvent(new TextEvent("B"), TimeSpan.FromMilliseconds(1000)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1400)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
+                    new TimestampedEvent(new TextEvent("A"), TimeSpan.FromMilliseconds(300)),
+                    new TimestampedEvent(new TextEvent("B"), TimeSpan.FromMilliseconds(300)),
+                    new TimestampedEvent(new TextEvent("C"), TimeSpan.FromMilliseconds(300)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(700)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(700)),
+                    new TimestampedEvent(new TextEvent("A"), TimeSpan.FromMilliseconds(1000)),
+                    new TimestampedEvent(new TextEvent("B"), TimeSpan.FromMilliseconds(1000)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1400)),
                 },
                 repeatsCount: 1);
         }
 
-        [Retry(OnTheFlyChecksRetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Loop_RemoveProgramChange_AfterCurrentTime_1()
         {
@@ -1293,15 +1293,15 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(800)),
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(1100)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1600)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(800)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(1100)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1600)),
                 },
                 repeatsCount: 1);
         }
 
-        [Retry(OnTheFlyChecksRetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Loop_RemoveProgramChange_AfterCurrentTime_2()
         {
@@ -1327,15 +1327,15 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(800)),
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(1100)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1600)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(800)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(1100)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1600)),
                 },
                 repeatsCount: 1);
         }
 
-        [Retry(OnTheFlyChecksRetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Loop_RemoveProgramChange_BeforeCurrentTime_1()
         {
@@ -1361,17 +1361,17 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new ProgramChangeEvent((SevenBitNumber)7), TimeSpan.FromMilliseconds(50)),
-                    new SentReceivedEvent(new ProgramChangeEvent(), TimeSpan.FromMilliseconds(200)),
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(800)),
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(1100)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1600)),
+                    new TimestampedEvent(new ProgramChangeEvent((SevenBitNumber)7), TimeSpan.FromMilliseconds(50)),
+                    new TimestampedEvent(new ProgramChangeEvent(), TimeSpan.FromMilliseconds(200)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(800)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(1100)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1600)),
                 },
                 repeatsCount: 1);
         }
 
-        [Retry(OnTheFlyChecksRetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Loop_RemoveProgramChange_BeforeCurrentTime_2()
         {
@@ -1405,19 +1405,19 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new ProgramChangeEvent((SevenBitNumber)7), TimeSpan.FromMilliseconds(50)),
-                    new SentReceivedEvent(new ProgramChangeEvent((SevenBitNumber)8), TimeSpan.FromMilliseconds(100)),
-                    new SentReceivedEvent(new ProgramChangeEvent((SevenBitNumber)7), TimeSpan.FromMilliseconds(200)),
-                    new SentReceivedEvent(new ProgramChangeEvent(), TimeSpan.FromMilliseconds(300)),
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(400)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(700)),
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(1100)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1400)),
+                    new TimestampedEvent(new ProgramChangeEvent((SevenBitNumber)7), TimeSpan.FromMilliseconds(50)),
+                    new TimestampedEvent(new ProgramChangeEvent((SevenBitNumber)8), TimeSpan.FromMilliseconds(100)),
+                    new TimestampedEvent(new ProgramChangeEvent((SevenBitNumber)7), TimeSpan.FromMilliseconds(200)),
+                    new TimestampedEvent(new ProgramChangeEvent(), TimeSpan.FromMilliseconds(300)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(400)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(700)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(1100)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1400)),
                 },
                 repeatsCount: 1);
         }
 
-        [Retry(OnTheFlyChecksRetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Loop_RemovePitchBend_AfterCurrentTime_1()
         {
@@ -1443,16 +1443,16 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(800)),
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(1100)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1600)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(800)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(1100)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1600)),
                 },
                 setupPlayback: playback => playback.TrackPitchValue = true,
                 repeatsCount: 1);
         }
 
-        [Retry(OnTheFlyChecksRetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Loop_RemovePitchBend_AfterCurrentTime_2()
         {
@@ -1478,16 +1478,16 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(800)),
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(1100)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1600)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(800)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(1100)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1600)),
                 },
                 setupPlayback: playback => playback.TrackPitchValue = true,
                 repeatsCount: 1);
         }
 
-        [Retry(OnTheFlyChecksRetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Loop_RemovePitchBend_BeforeCurrentTime_1()
         {
@@ -1514,18 +1514,18 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new PitchBendEvent(7000), TimeSpan.FromMilliseconds(50)),
-                    new SentReceivedEvent(new PitchBendEvent(), TimeSpan.FromMilliseconds(200)),
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(800)),
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(1100)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1600)),
+                    new TimestampedEvent(new PitchBendEvent(7000), TimeSpan.FromMilliseconds(50)),
+                    new TimestampedEvent(new PitchBendEvent(), TimeSpan.FromMilliseconds(200)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(800)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(1100)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1600)),
                 },
                 setupPlayback: playback => playback.TrackPitchValue = true,
                 repeatsCount: 1);
         }
 
-        [Retry(OnTheFlyChecksRetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Loop_RemovePitchBend_BeforeCurrentTime_2()
         {
@@ -1558,20 +1558,20 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new PitchBendEvent(7000), TimeSpan.FromMilliseconds(50)),
-                    new SentReceivedEvent(new PitchBendEvent(8000), TimeSpan.FromMilliseconds(100)),
-                    new SentReceivedEvent(new PitchBendEvent(7000), TimeSpan.FromMilliseconds(200)),
-                    new SentReceivedEvent(new PitchBendEvent(), TimeSpan.FromMilliseconds(300)),
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(400)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(700)),
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(1100)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1400)),
+                    new TimestampedEvent(new PitchBendEvent(7000), TimeSpan.FromMilliseconds(50)),
+                    new TimestampedEvent(new PitchBendEvent(8000), TimeSpan.FromMilliseconds(100)),
+                    new TimestampedEvent(new PitchBendEvent(7000), TimeSpan.FromMilliseconds(200)),
+                    new TimestampedEvent(new PitchBendEvent(), TimeSpan.FromMilliseconds(300)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(400)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(700)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(1100)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1400)),
                 },
                 setupPlayback: playback => playback.TrackPitchValue = true,
                 repeatsCount: 1);
         }
 
-        [Retry(OnTheFlyChecksRetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Loop_RemoveControlChange_AfterCurrentTime_1()
         {
@@ -1597,16 +1597,16 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(800)),
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(1100)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1600)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(800)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(1100)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1600)),
                 },
                 setupPlayback: playback => playback.TrackControlValue = true,
                 repeatsCount: 1);
         }
 
-        [Retry(OnTheFlyChecksRetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Loop_RemoveControlChange_AfterCurrentTime_2()
         {
@@ -1633,16 +1633,16 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(800)),
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(1100)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1600)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(800)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(1100)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1600)),
                 },
                 setupPlayback: playback => playback.TrackControlValue = true,
                 repeatsCount: 1);
         }
 
-        [Retry(OnTheFlyChecksRetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Loop_RemoveControlChange_BeforeCurrentTime_1()
         {
@@ -1668,18 +1668,18 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new ControlChangeEvent((SevenBitNumber)7, (SevenBitNumber)20), TimeSpan.FromMilliseconds(50)),
-                    new SentReceivedEvent(new ControlChangeEvent((SevenBitNumber)7, SevenBitNumber.MinValue), TimeSpan.FromMilliseconds(200)),
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(800)),
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(1100)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1600)),
+                    new TimestampedEvent(new ControlChangeEvent((SevenBitNumber)7, (SevenBitNumber)20), TimeSpan.FromMilliseconds(50)),
+                    new TimestampedEvent(new ControlChangeEvent((SevenBitNumber)7, SevenBitNumber.MinValue), TimeSpan.FromMilliseconds(200)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(800)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(1100)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1600)),
                 },
                 setupPlayback: playback => playback.TrackControlValue = true,
                 repeatsCount: 1);
         }
 
-        [Retry(OnTheFlyChecksRetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Loop_RemoveControlChange_BeforeCurrentTime_2()
         {
@@ -1712,20 +1712,20 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new ControlChangeEvent((SevenBitNumber)7, (SevenBitNumber)70), TimeSpan.FromMilliseconds(50)),
-                    new SentReceivedEvent(new ControlChangeEvent((SevenBitNumber)7, (SevenBitNumber)80), TimeSpan.FromMilliseconds(100)),
-                    new SentReceivedEvent(new ControlChangeEvent((SevenBitNumber)7, (SevenBitNumber)70), TimeSpan.FromMilliseconds(200)),
-                    new SentReceivedEvent(new ControlChangeEvent((SevenBitNumber)7, SevenBitNumber.MinValue), TimeSpan.FromMilliseconds(300)),
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(400)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(700)),
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(1100)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1400)),
+                    new TimestampedEvent(new ControlChangeEvent((SevenBitNumber)7, (SevenBitNumber)70), TimeSpan.FromMilliseconds(50)),
+                    new TimestampedEvent(new ControlChangeEvent((SevenBitNumber)7, (SevenBitNumber)80), TimeSpan.FromMilliseconds(100)),
+                    new TimestampedEvent(new ControlChangeEvent((SevenBitNumber)7, (SevenBitNumber)70), TimeSpan.FromMilliseconds(200)),
+                    new TimestampedEvent(new ControlChangeEvent((SevenBitNumber)7, SevenBitNumber.MinValue), TimeSpan.FromMilliseconds(300)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(400)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(700)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(1100)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1400)),
                 },
                 setupPlayback: playback => playback.TrackControlValue = true,
                 repeatsCount: 1);
         }
 
-        [Retry(OnTheFlyChecksRetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Loop_RemoveControlChange_BeforeCurrentTime_3()
         {
@@ -1758,20 +1758,20 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new ControlChangeEvent((SevenBitNumber)7, (SevenBitNumber)70), TimeSpan.FromMilliseconds(50)),
-                    new SentReceivedEvent(new ControlChangeEvent((SevenBitNumber)8, (SevenBitNumber)80), TimeSpan.FromMilliseconds(100)),
-                    new SentReceivedEvent(new ControlChangeEvent((SevenBitNumber)8, SevenBitNumber.MinValue), TimeSpan.FromMilliseconds(200)),
-                    new SentReceivedEvent(new ControlChangeEvent((SevenBitNumber)7, SevenBitNumber.MinValue), TimeSpan.FromMilliseconds(300)),
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(400)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(700)),
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(1100)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1400)),
+                    new TimestampedEvent(new ControlChangeEvent((SevenBitNumber)7, (SevenBitNumber)70), TimeSpan.FromMilliseconds(50)),
+                    new TimestampedEvent(new ControlChangeEvent((SevenBitNumber)8, (SevenBitNumber)80), TimeSpan.FromMilliseconds(100)),
+                    new TimestampedEvent(new ControlChangeEvent((SevenBitNumber)8, SevenBitNumber.MinValue), TimeSpan.FromMilliseconds(200)),
+                    new TimestampedEvent(new ControlChangeEvent((SevenBitNumber)7, SevenBitNumber.MinValue), TimeSpan.FromMilliseconds(300)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(400)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(700)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(1100)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1400)),
                 },
                 setupPlayback: playback => playback.TrackControlValue = true,
                 repeatsCount: 1);
         }
 
-        [Retry(OnTheFlyChecksRetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Loop_RemoveControlChange_BeforeCurrentTime_4()
         {
@@ -1804,20 +1804,20 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new ControlChangeEvent((SevenBitNumber)7, (SevenBitNumber)70), TimeSpan.FromMilliseconds(50)),
-                    new SentReceivedEvent(new ControlChangeEvent((SevenBitNumber)7, (SevenBitNumber)80) { Channel = (FourBitNumber)6 }, TimeSpan.FromMilliseconds(100)),
-                    new SentReceivedEvent(new ControlChangeEvent((SevenBitNumber)7, SevenBitNumber.MinValue) { Channel = (FourBitNumber)6 }, TimeSpan.FromMilliseconds(200)),
-                    new SentReceivedEvent(new ControlChangeEvent((SevenBitNumber)7, SevenBitNumber.MinValue), TimeSpan.FromMilliseconds(300)),
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(400)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(700)),
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(1100)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1400)),
+                    new TimestampedEvent(new ControlChangeEvent((SevenBitNumber)7, (SevenBitNumber)70), TimeSpan.FromMilliseconds(50)),
+                    new TimestampedEvent(new ControlChangeEvent((SevenBitNumber)7, (SevenBitNumber)80) { Channel = (FourBitNumber)6 }, TimeSpan.FromMilliseconds(100)),
+                    new TimestampedEvent(new ControlChangeEvent((SevenBitNumber)7, SevenBitNumber.MinValue) { Channel = (FourBitNumber)6 }, TimeSpan.FromMilliseconds(200)),
+                    new TimestampedEvent(new ControlChangeEvent((SevenBitNumber)7, SevenBitNumber.MinValue), TimeSpan.FromMilliseconds(300)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(400)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(700)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(1100)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1400)),
                 },
                 setupPlayback: playback => playback.TrackControlValue = true,
                 repeatsCount: 1);
         }
 
-        [Retry(OnTheFlyChecksRetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Loop_RemoveNotes_1()
         {
@@ -1845,18 +1845,18 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)50, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)50, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(500)),
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(700)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(800)),
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(1500)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1600)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)50, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)50, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(500)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(700)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(800)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(1500)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1600)),
                 },
                 setupPlayback: playback => playback.TrackNotes = true,
                 repeatsCount: 1);
         }
 
-        [Retry(OnTheFlyChecksRetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Loop_RemoveNotes_2()
         {
@@ -1885,16 +1885,16 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(400)),
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(750)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(850)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(400)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(750)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(850)),
                 },
                 setupPlayback: playback => playback.TrackNotes = true,
                 repeatsCount: 1);
         }
 
-        [Retry(OnTheFlyChecksRetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Loop_RemoveNotes_3()
         {
@@ -1923,18 +1923,18 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)50, Note.DefaultVelocity), TimeSpan.FromMilliseconds(100)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)50, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(200)),
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(500)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(700)),
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(1200)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1400)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)50, Note.DefaultVelocity), TimeSpan.FromMilliseconds(100)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)50, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(200)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(500)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(700)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(1200)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1400)),
                 },
                 setupPlayback: playback => playback.TrackNotes = true,
                 repeatsCount: 1);
         }
 
-        [Retry(OnTheFlyChecksRetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Loop_RemoveNotes_4()
         {
@@ -1971,20 +1971,20 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)50, Note.DefaultVelocity), TimeSpan.FromMilliseconds(100)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)50, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(200)),
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)60, Note.DefaultVelocity), TimeSpan.FromMilliseconds(450)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)60, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(500)),
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(700)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(800)),
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(1500)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1600)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)50, Note.DefaultVelocity), TimeSpan.FromMilliseconds(100)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)50, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(200)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)60, Note.DefaultVelocity), TimeSpan.FromMilliseconds(450)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)60, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(500)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(700)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(800)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(1500)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1600)),
                 },
                 setupPlayback: playback => playback.TrackNotes = true,
                 repeatsCount: 1);
         }
 
-        [Retry(OnTheFlyChecksRetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Loop_RemoveNotes_5()
         {
@@ -2010,14 +2010,14 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)50, Note.DefaultVelocity), TimeSpan.FromMilliseconds(100)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)50, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(200)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)50, Note.DefaultVelocity), TimeSpan.FromMilliseconds(100)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)50, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(200)),
                 },
                 setupPlayback: playback => playback.TrackNotes = true,
                 repeatsCount: 1);
         }
 
-        [Retry(OnTheFlyChecksRetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Loop_RemoveNotes_6()
         {
@@ -2050,22 +2050,22 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(200)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(500)),
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)50, Note.DefaultVelocity), TimeSpan.FromMilliseconds(600)),
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)80, Note.DefaultVelocity), TimeSpan.FromMilliseconds(600)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)50, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(700)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)80, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(800)),
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(1000)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1300)),
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)80, Note.DefaultVelocity), TimeSpan.FromMilliseconds(1400)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)80, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1600)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(200)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(500)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)50, Note.DefaultVelocity), TimeSpan.FromMilliseconds(600)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)80, Note.DefaultVelocity), TimeSpan.FromMilliseconds(600)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)50, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(700)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)80, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(800)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(1000)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1300)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)80, Note.DefaultVelocity), TimeSpan.FromMilliseconds(1400)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)80, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(1600)),
                 },
                 setupPlayback: playback => playback.TrackNotes = true,
                 repeatsCount: 1);
         }
 
-        [Retry(OnTheFlyChecksRetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_RemoveNoteEvents_1([Values] bool removeNoteOn)
         {
@@ -2094,7 +2094,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                         CheckDuration(TimeSpan.FromMilliseconds(0), playback);
                     }),
                 },
-                expectedReceivedEvents: new SentReceivedEvent[0]
+                expectedReceivedEvents: new TimestampedEvent[0]
                 {
                 },
                 setupPlayback: playback =>
@@ -2109,7 +2109,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             ClassicAssert.AreEqual(0, notesFinished.Count, "Invalid notes finished count.");
         }
 
-        [Retry(OnTheFlyChecksRetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_RemoveNoteEvents_2([Values] bool removeNoteOn)
         {
@@ -2140,8 +2140,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)50, Note.DefaultVelocity), TimeSpan.FromMilliseconds(200)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)50, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(300)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)50, Note.DefaultVelocity), TimeSpan.FromMilliseconds(200)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)50, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(300)),
                 },
                 setupPlayback: playback =>
                 {
@@ -2155,7 +2155,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             ClassicAssert.AreEqual(1, notesFinished.Count, "Invalid notes finished count.");
         }
 
-        [Retry(OnTheFlyChecksRetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_RemoveNoteEvents_3()
         {
@@ -2208,11 +2208,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)50, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)50, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(350)),
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)50, Note.DefaultVelocity), TimeSpan.FromMilliseconds(400)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)50, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(600)),
-                    new SentReceivedEvent(new TextEvent("END"), TimeSpan.FromMilliseconds(700)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)50, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)50, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(350)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)50, Note.DefaultVelocity), TimeSpan.FromMilliseconds(400)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)50, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(600)),
+                    new TimestampedEvent(new TextEvent("END"), TimeSpan.FromMilliseconds(700)),
                 },
                 setupPlayback: playback =>
                 {
@@ -2226,7 +2226,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             ClassicAssert.AreEqual(2, notesFinished.Count, "Invalid notes finished count.");
         }
 
-        [Retry(OnTheFlyChecksRetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_RemoveNoteEvents_4()
         {
@@ -2259,7 +2259,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new TextEvent("END"), TimeSpan.FromMilliseconds(500)),
+                    new TimestampedEvent(new TextEvent("END"), TimeSpan.FromMilliseconds(500)),
                 },
                 setupPlayback: playback =>
                 {
@@ -2273,7 +2273,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             ClassicAssert.AreEqual(0, notesFinished.Count, "Invalid notes finished count.");
         }
 
-        [Retry(OnTheFlyChecksRetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Remove_SetTempo_1()
         {
@@ -2303,10 +2303,10 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(100)),
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)90, Note.DefaultVelocity), TimeSpan.FromMilliseconds(400)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)90, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(900)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(100)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)90, Note.DefaultVelocity), TimeSpan.FromMilliseconds(400)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)90, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(900)),
                 },
                 additionalChecks: (playback, _) => MidiAsserts.AreEqual(
                     TempoMap,
@@ -2314,7 +2314,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     "Invalid tempo map."));
         }
 
-        [Retry(OnTheFlyChecksRetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Remove_SetTempo_2()
         {
@@ -2344,11 +2344,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(100)),
-                    new SentReceivedEvent(new SetTempoEvent(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 2), TimeSpan.FromMilliseconds(200)),
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)90, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)90, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(700)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(100)),
+                    new TimestampedEvent(new SetTempoEvent(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 2), TimeSpan.FromMilliseconds(200)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)90, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)90, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(700)),
                 },
                 additionalChecks: (playback, _) => MidiAsserts.AreEqual(
                     TempoMap,
@@ -2356,7 +2356,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     "Invalid tempo map."));
         }
 
-        [Retry(OnTheFlyChecksRetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Remove_SetTempo_3()
         {
@@ -2383,8 +2383,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(100)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(100)),
                 },
                 additionalChecks: (playback, _) => MidiAsserts.AreEqual(
                     TempoMap,
@@ -2392,7 +2392,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     "Invalid tempo map."));
         }
 
-        [Retry(OnTheFlyChecksRetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Remove_SetTempo_4()
         {
@@ -2419,8 +2419,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(100)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(100)),
                 },
                 additionalChecks: (playback, _) => MidiAsserts.AreEqual(
                     TempoMap,
@@ -2428,7 +2428,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     "Invalid tempo map."));
         }
 
-        [Retry(OnTheFlyChecksRetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Remove_SetTempo_5()
         {
@@ -2460,11 +2460,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(100)),
-                    new SentReceivedEvent(new SetTempoEvent(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 4), TimeSpan.FromMilliseconds(300)),
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)90, Note.DefaultVelocity), TimeSpan.FromMilliseconds(325)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)90, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(450)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(100)),
+                    new TimestampedEvent(new SetTempoEvent(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 4), TimeSpan.FromMilliseconds(300)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)90, Note.DefaultVelocity), TimeSpan.FromMilliseconds(325)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)90, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(450)),
                 },
                 additionalChecks: (playback, _) => MidiAsserts.AreEqual(
                     AddTempoChanges(TempoMap, (TimeSpan.FromMilliseconds(300), new Tempo(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 4))),
@@ -2472,7 +2472,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     "Invalid tempo map."));
         }
 
-        [Retry(OnTheFlyChecksRetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Remove_SetTempo_6()
         {
@@ -2504,12 +2504,12 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(100)),
-                    new SentReceivedEvent(new SetTempoEvent(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 2), TimeSpan.FromMilliseconds(200)),
-                    new SentReceivedEvent(new SetTempoEvent(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 4), TimeSpan.FromMilliseconds(280)),
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)90, Note.DefaultVelocity), TimeSpan.FromMilliseconds(305)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)90, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(430)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(100)),
+                    new TimestampedEvent(new SetTempoEvent(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 2), TimeSpan.FromMilliseconds(200)),
+                    new TimestampedEvent(new SetTempoEvent(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 4), TimeSpan.FromMilliseconds(280)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)90, Note.DefaultVelocity), TimeSpan.FromMilliseconds(305)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)90, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(430)),
                 },
                 additionalChecks: (playback, _) => MidiAsserts.AreEqual(
                     AddTempoChanges(TempoMap, (TimeSpan.FromMilliseconds(300), new Tempo(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 4))),
@@ -2517,7 +2517,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     "Invalid tempo map."));
         }
 
-        [Retry(OnTheFlyChecksRetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Remove_SetTempo_7()
         {
@@ -2549,12 +2549,12 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(100)),
-                    new SentReceivedEvent(new SetTempoEvent(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 2), TimeSpan.FromMilliseconds(200)),
-                    new SentReceivedEvent(new SetTempoEvent(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 4), TimeSpan.FromMilliseconds(250)),
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)90, Note.DefaultVelocity), TimeSpan.FromMilliseconds(275)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)90, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(400)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(100)),
+                    new TimestampedEvent(new SetTempoEvent(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 2), TimeSpan.FromMilliseconds(200)),
+                    new TimestampedEvent(new SetTempoEvent(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 4), TimeSpan.FromMilliseconds(250)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)90, Note.DefaultVelocity), TimeSpan.FromMilliseconds(275)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)90, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(400)),
                 },
                 additionalChecks: (playback, _) => MidiAsserts.AreEqual(
                     AddTempoChanges(TempoMap, (TimeSpan.FromMilliseconds(300), new Tempo(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 4))),
@@ -2562,7 +2562,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     "Invalid tempo map."));
         }
 
-        [Retry(OnTheFlyChecksRetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Remove_SetTempo_8()
         {
@@ -2594,11 +2594,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(100)),
-                    new SentReceivedEvent(new SetTempoEvent(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 2), TimeSpan.FromMilliseconds(200)),
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)90, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)90, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(550)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(100)),
+                    new TimestampedEvent(new SetTempoEvent(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 2), TimeSpan.FromMilliseconds(200)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)90, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)90, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(550)),
                 },
                 additionalChecks: (playback, _) => MidiAsserts.AreEqual(
                     AddTempoChanges(TempoMap, (TimeSpan.FromMilliseconds(200), new Tempo(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 2))),
@@ -2606,7 +2606,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     "Invalid tempo map."));
         }
 
-        [Retry(OnTheFlyChecksRetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Remove_SetTempo_9()
         {
@@ -2638,11 +2638,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(100)),
-                    new SentReceivedEvent(new SetTempoEvent(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 2), TimeSpan.FromMilliseconds(200)),
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)90, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)90, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(550)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(100)),
+                    new TimestampedEvent(new SetTempoEvent(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 2), TimeSpan.FromMilliseconds(200)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)90, Note.DefaultVelocity), TimeSpan.FromMilliseconds(300)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)90, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(550)),
                 },
                 additionalChecks: (playback, _) => MidiAsserts.AreEqual(
                     AddTempoChanges(TempoMap, (TimeSpan.FromMilliseconds(200), new Tempo(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 2))),
@@ -2650,7 +2650,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     "Invalid tempo map."));
         }
 
-        [Retry(OnTheFlyChecksRetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Remove_SetTempo_10()
         {
@@ -2682,12 +2682,12 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(100)),
-                    new SentReceivedEvent(new SetTempoEvent(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 2), TimeSpan.FromMilliseconds(200)),
-                    new SentReceivedEvent(new SetTempoEvent(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 4), TimeSpan.FromMilliseconds(250)),
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)90, Note.DefaultVelocity), TimeSpan.FromMilliseconds(275)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)90, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(500)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(100)),
+                    new TimestampedEvent(new SetTempoEvent(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 2), TimeSpan.FromMilliseconds(200)),
+                    new TimestampedEvent(new SetTempoEvent(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 4), TimeSpan.FromMilliseconds(250)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)90, Note.DefaultVelocity), TimeSpan.FromMilliseconds(275)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)90, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(500)),
                 },
                 additionalChecks: (playback, _) => MidiAsserts.AreEqual(
                     AddTempoChanges(TempoMap, (TimeSpan.FromMilliseconds(200), new Tempo(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 2))),
@@ -2695,7 +2695,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     "Invalid tempo map."));
         }
 
-        [Retry(OnTheFlyChecksRetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Remove_TimeSignature_1()
         {
@@ -2725,10 +2725,10 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(100)),
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)90, Note.DefaultVelocity), TimeSpan.FromMilliseconds(400)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)90, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(900)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(100)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)90, Note.DefaultVelocity), TimeSpan.FromMilliseconds(400)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)90, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(900)),
                 },
                 additionalChecks: (playback, _) => MidiAsserts.AreEqual(
                     TempoMap,
@@ -2736,7 +2736,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     "Invalid tempo map."));
         }
 
-        [Retry(OnTheFlyChecksRetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Remove_TimeSignature_2()
         {
@@ -2766,11 +2766,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(100)),
-                    new SentReceivedEvent(new TimeSignatureEvent(3, 4), TimeSpan.FromMilliseconds(200)),
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)90, Note.DefaultVelocity), TimeSpan.FromMilliseconds(400)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)90, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(900)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(100)),
+                    new TimestampedEvent(new TimeSignatureEvent(3, 4), TimeSpan.FromMilliseconds(200)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)90, Note.DefaultVelocity), TimeSpan.FromMilliseconds(400)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)90, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(900)),
                 },
                 additionalChecks: (playback, _) => MidiAsserts.AreEqual(
                     TempoMap,
@@ -2778,7 +2778,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     "Invalid tempo map."));
         }
 
-        [Retry(OnTheFlyChecksRetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Remove_TimeSignature_3()
         {
@@ -2805,8 +2805,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(100)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(100)),
                 },
                 additionalChecks: (playback, _) => MidiAsserts.AreEqual(
                     TempoMap,
@@ -2814,7 +2814,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     "Invalid tempo map."));
         }
 
-        [Retry(OnTheFlyChecksRetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Remove_TimeSignature_4()
         {
@@ -2841,8 +2841,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(100)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(100)),
                 },
                 additionalChecks: (playback, _) => MidiAsserts.AreEqual(
                     TempoMap,
@@ -2850,7 +2850,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     "Invalid tempo map."));
         }
 
-        [Retry(OnTheFlyChecksRetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Remove_TimeSignature_5()
         {
@@ -2882,11 +2882,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(100)),
-                    new SentReceivedEvent(new TimeSignatureEvent(3, 8), TimeSpan.FromMilliseconds(300)),
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)90, Note.DefaultVelocity), TimeSpan.FromMilliseconds(400)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)90, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(900)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(100)),
+                    new TimestampedEvent(new TimeSignatureEvent(3, 8), TimeSpan.FromMilliseconds(300)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)90, Note.DefaultVelocity), TimeSpan.FromMilliseconds(400)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)90, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(900)),
                 },
                 additionalChecks: (playback, _) => MidiAsserts.AreEqual(
                     AddTimeSignatureChanges(TempoMap, (TimeSpan.FromMilliseconds(300), new TimeSignature(3, 8))),
@@ -2894,7 +2894,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     "Invalid tempo map."));
         }
 
-        [Retry(OnTheFlyChecksRetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Remove_TimeSignature_6()
         {
@@ -2926,12 +2926,12 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(100)),
-                    new SentReceivedEvent(new TimeSignatureEvent(3, 4), TimeSpan.FromMilliseconds(200)),
-                    new SentReceivedEvent(new TimeSignatureEvent(3, 8), TimeSpan.FromMilliseconds(300)),
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)90, Note.DefaultVelocity), TimeSpan.FromMilliseconds(400)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)90, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(900)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(100)),
+                    new TimestampedEvent(new TimeSignatureEvent(3, 4), TimeSpan.FromMilliseconds(200)),
+                    new TimestampedEvent(new TimeSignatureEvent(3, 8), TimeSpan.FromMilliseconds(300)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)90, Note.DefaultVelocity), TimeSpan.FromMilliseconds(400)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)90, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(900)),
                 },
                 additionalChecks: (playback, _) => MidiAsserts.AreEqual(
                     AddTimeSignatureChanges(TempoMap, (TimeSpan.FromMilliseconds(300), new TimeSignature(3, 8))),
@@ -2939,7 +2939,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     "Invalid tempo map."));
         }
 
-        [Retry(OnTheFlyChecksRetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Remove_TimeSignature_7()
         {
@@ -2971,12 +2971,12 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(100)),
-                    new SentReceivedEvent(new TimeSignatureEvent(3, 4), TimeSpan.FromMilliseconds(200)),
-                    new SentReceivedEvent(new TimeSignatureEvent(3, 8), TimeSpan.FromMilliseconds(300)),
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)90, Note.DefaultVelocity), TimeSpan.FromMilliseconds(400)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)90, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(900)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(100)),
+                    new TimestampedEvent(new TimeSignatureEvent(3, 4), TimeSpan.FromMilliseconds(200)),
+                    new TimestampedEvent(new TimeSignatureEvent(3, 8), TimeSpan.FromMilliseconds(300)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)90, Note.DefaultVelocity), TimeSpan.FromMilliseconds(400)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)90, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(900)),
                 },
                 additionalChecks: (playback, _) => MidiAsserts.AreEqual(
                     AddTimeSignatureChanges(TempoMap, (TimeSpan.FromMilliseconds(300), new TimeSignature(3, 8))),
@@ -2984,7 +2984,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     "Invalid tempo map."));
         }
 
-        [Retry(OnTheFlyChecksRetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Remove_TimeSignature_8()
         {
@@ -3016,11 +3016,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(100)),
-                    new SentReceivedEvent(new TimeSignatureEvent(3, 4), TimeSpan.FromMilliseconds(200)),
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)90, Note.DefaultVelocity), TimeSpan.FromMilliseconds(400)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)90, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(900)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(100)),
+                    new TimestampedEvent(new TimeSignatureEvent(3, 4), TimeSpan.FromMilliseconds(200)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)90, Note.DefaultVelocity), TimeSpan.FromMilliseconds(400)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)90, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(900)),
                 },
                 additionalChecks: (playback, _) => MidiAsserts.AreEqual(
                     AddTimeSignatureChanges(TempoMap, (TimeSpan.FromMilliseconds(200), new TimeSignature(3, 4))),
@@ -3028,7 +3028,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     "Invalid tempo map."));
         }
 
-        [Retry(OnTheFlyChecksRetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Remove_TimeSignature_9()
         {
@@ -3060,11 +3060,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(100)),
-                    new SentReceivedEvent(new TimeSignatureEvent(3, 4), TimeSpan.FromMilliseconds(200)),
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)90, Note.DefaultVelocity), TimeSpan.FromMilliseconds(400)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)90, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(900)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.Zero),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(100)),
+                    new TimestampedEvent(new TimeSignatureEvent(3, 4), TimeSpan.FromMilliseconds(200)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)90, Note.DefaultVelocity), TimeSpan.FromMilliseconds(400)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)90, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(900)),
                 },
                 additionalChecks: (playback, _) => MidiAsserts.AreEqual(
                     AddTimeSignatureChanges(TempoMap, (TimeSpan.FromMilliseconds(200), new TimeSignature(3, 4))),

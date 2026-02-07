@@ -39,8 +39,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
 
             var rootNoteNameGroup = match.Groups[RootNoteNameGroupName];
 
-            NoteName rootNoteName;
-            var rootNoteNameParsingResult = NoteNameParser.TryParse(rootNoteNameGroup.Value, out rootNoteName);
+            var rootNoteNameParsingResult = NoteNameParser.TryParse(rootNoteNameGroup.Value, out var rootNoteName);
             if (rootNoteNameParsingResult.Status != ParsingStatus.Parsed)
                 return rootNoteNameParsingResult;
 
@@ -50,8 +49,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
             var bassNoteNameGroup = match.Groups[BassNoteNameGroupName];
             if (bassNoteNameGroup.Success)
             {
-                NoteName actualBassNoteName;
-                var bassNoteNameParsingResult = NoteNameParser.TryParse(bassNoteNameGroup.Value, out actualBassNoteName);
+                var bassNoteNameParsingResult = NoteNameParser.TryParse(bassNoteNameGroup.Value, out var actualBassNoteName);
                 if (bassNoteNameParsingResult.Status != ParsingStatus.Parsed)
                     return bassNoteNameParsingResult;
 

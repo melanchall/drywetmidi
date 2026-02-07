@@ -118,7 +118,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 "Input devices count is invalid.");
         }
 
-        [Retry(RetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void CheckMidiTimeCodeEventReceiving()
         {
@@ -126,20 +126,20 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
             var eventsToSend = new[]
             {
-                new EventToSend2(new ProgramChangeEvent((SevenBitNumber)100), TimeSpan.FromMilliseconds(200)),
-                new EventToSend2(new MidiTimeCodeEvent(MidiTimeCodeComponent.FramesLsb, (FourBitNumber)1), TimeSpan.FromMilliseconds(400)),
-                new EventToSend2(new ProgramChangeEvent((SevenBitNumber)70), TimeSpan.FromMilliseconds(700)),
-                new EventToSend2(new MidiTimeCodeEvent(MidiTimeCodeComponent.FramesMsb, (FourBitNumber)1), TimeSpan.FromMilliseconds(900)),
-                new EventToSend2(new MidiTimeCodeEvent(MidiTimeCodeComponent.HoursLsb, (FourBitNumber)7), TimeSpan.FromMilliseconds(1000)),
-                new EventToSend2(new MidiTimeCodeEvent(MidiTimeCodeComponent.HoursMsbAndTimeCodeType, (FourBitNumber)7), TimeSpan.FromMilliseconds(1200)),
-                new EventToSend2(new ProgramChangeEvent((SevenBitNumber)80), TimeSpan.FromMilliseconds(1700)),
-                new EventToSend2(new MidiTimeCodeEvent(MidiTimeCodeComponent.MinutesLsb, (FourBitNumber)10), TimeSpan.FromMilliseconds(2000)),
-                new EventToSend2(new ProgramChangeEvent((SevenBitNumber)10), TimeSpan.FromMilliseconds(2400)),
-                new EventToSend2(new ProgramChangeEvent((SevenBitNumber)15), TimeSpan.FromMilliseconds(2900)),
-                new EventToSend2(new MidiTimeCodeEvent(MidiTimeCodeComponent.MinutesMsb, (FourBitNumber)2), TimeSpan.FromMilliseconds(3100)),
-                new EventToSend2(new MidiTimeCodeEvent(MidiTimeCodeComponent.SecondsLsb, (FourBitNumber)10), TimeSpan.FromMilliseconds(3200)),
-                new EventToSend2(new ProgramChangeEvent((SevenBitNumber)40), TimeSpan.FromMilliseconds(3600)),
-                new EventToSend2(new MidiTimeCodeEvent(MidiTimeCodeComponent.SecondsMsb, (FourBitNumber)1), TimeSpan.FromMilliseconds(4300))
+                new TimestampedEvent(new ProgramChangeEvent((SevenBitNumber)100), TimeSpan.FromMilliseconds(200)),
+                new TimestampedEvent(new MidiTimeCodeEvent(MidiTimeCodeComponent.FramesLsb, (FourBitNumber)1), TimeSpan.FromMilliseconds(400)),
+                new TimestampedEvent(new ProgramChangeEvent((SevenBitNumber)70), TimeSpan.FromMilliseconds(700)),
+                new TimestampedEvent(new MidiTimeCodeEvent(MidiTimeCodeComponent.FramesMsb, (FourBitNumber)1), TimeSpan.FromMilliseconds(900)),
+                new TimestampedEvent(new MidiTimeCodeEvent(MidiTimeCodeComponent.HoursLsb, (FourBitNumber)7), TimeSpan.FromMilliseconds(1000)),
+                new TimestampedEvent(new MidiTimeCodeEvent(MidiTimeCodeComponent.HoursMsbAndTimeCodeType, (FourBitNumber)7), TimeSpan.FromMilliseconds(1200)),
+                new TimestampedEvent(new ProgramChangeEvent((SevenBitNumber)80), TimeSpan.FromMilliseconds(1700)),
+                new TimestampedEvent(new MidiTimeCodeEvent(MidiTimeCodeComponent.MinutesLsb, (FourBitNumber)10), TimeSpan.FromMilliseconds(2000)),
+                new TimestampedEvent(new ProgramChangeEvent((SevenBitNumber)10), TimeSpan.FromMilliseconds(2400)),
+                new TimestampedEvent(new ProgramChangeEvent((SevenBitNumber)15), TimeSpan.FromMilliseconds(2900)),
+                new TimestampedEvent(new MidiTimeCodeEvent(MidiTimeCodeComponent.MinutesMsb, (FourBitNumber)2), TimeSpan.FromMilliseconds(3100)),
+                new TimestampedEvent(new MidiTimeCodeEvent(MidiTimeCodeComponent.SecondsLsb, (FourBitNumber)10), TimeSpan.FromMilliseconds(3200)),
+                new TimestampedEvent(new ProgramChangeEvent((SevenBitNumber)40), TimeSpan.FromMilliseconds(3600)),
+                new TimestampedEvent(new MidiTimeCodeEvent(MidiTimeCodeComponent.SecondsMsb, (FourBitNumber)1), TimeSpan.FromMilliseconds(4300))
             };
 
             using (var outputDevice = OutputDevice.GetByName(MidiDevicesNames.DeviceA))

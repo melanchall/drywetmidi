@@ -360,12 +360,10 @@ namespace Melanchall.DryWetMidi.MusicTheory
         {
             ThrowIfArgument.IsInvalidEnumValue(nameof(direction), direction);
 
-            Dictionary<IntervalDirection, Interval> intervals;
-            if (!Cache.TryGetValue(intervalSize, out intervals))
+            if (!Cache.TryGetValue(intervalSize, out var intervals))
                 Cache.Add(intervalSize, intervals = new Dictionary<IntervalDirection, Interval>());
 
-            Interval cachedInterval;
-            if (!intervals.TryGetValue(direction, out cachedInterval))
+            if (!intervals.TryGetValue(direction, out var cachedInterval))
                 intervals.Add(direction, cachedInterval = new Interval(intervalSize, direction));
 
             return cachedInterval;

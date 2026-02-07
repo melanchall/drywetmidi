@@ -404,8 +404,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
             var trees = _controlsValuesChangesTreesByChannel[controlChangeEvent.Channel];
 
-            RedBlackTree<long, ControlValueChange> tree;
-            if (!trees.TryGetValue(controlChangeEvent.ControlNumber, out tree))
+            if (!trees.TryGetValue(controlChangeEvent.ControlNumber, out var tree))
                 trees.Add(controlChangeEvent.ControlNumber, tree = new RedBlackTree<long, ControlValueChange>());
 
             tree.Add(time, new ControlValueChange(controlChangeEvent.ControlValue, metadata));
@@ -418,8 +417,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
             var trees = _controlsValuesChangesTreesByChannel[controlChangeEvent.Channel];
 
-            RedBlackTree<long, ControlValueChange> tree;
-            if (!trees.TryGetValue(controlChangeEvent.ControlNumber, out tree))
+            if (!trees.TryGetValue(controlChangeEvent.ControlNumber, out var tree))
                 trees.Add(controlChangeEvent.ControlNumber, tree = new RedBlackTree<long, ControlValueChange>());
 
             var nodes = tree.GetCoordinatesByKey(time);
@@ -445,8 +443,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
                 foreach (var controlNumber in SevenBitNumber.Values)
                 {
-                    RedBlackTree<long, ControlValueChange> tree;
-                    if (!controlsValuesChangesTreesByControlNumber.TryGetValue(controlNumber, out tree))
+                    if (!controlsValuesChangesTreesByControlNumber.TryGetValue(controlNumber, out var tree))
                         continue;
 
                     var node = tree.GetLastCoordinateBelowThreshold(time + 1);

@@ -220,8 +220,7 @@ namespace Melanchall.DryWetMidi.Interaction
             Func<long, TTimeSpan> createTimeSpan)
             where TTimeSpan : ITimeSpan
         {
-            long reminder;
-            var quotient = Math.DivRem(x, y, out reminder);
+            var quotient = Math.DivRem(x, y, out var reminder);
             return reminder == 0
                 ? timeSpan.Clone()
                 : createTimeSpan(quotient);

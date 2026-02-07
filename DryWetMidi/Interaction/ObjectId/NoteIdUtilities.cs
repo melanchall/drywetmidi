@@ -6,14 +6,14 @@ namespace Melanchall.DryWetMidi.Interaction
     {
         #region Methods
 
-        public static NoteId GetNoteId(this NoteEvent noteEvent)
+        public static int GetNoteId(this NoteEvent noteEvent)
         {
-            return new NoteId(noteEvent.Channel, noteEvent.NoteNumber);
+            return (noteEvent.Channel << 7) | noteEvent.NoteNumber;
         }
 
-        public static NoteId GetNoteId(this Note note)
+        public static int GetNoteId(this Note note)
         {
-            return new NoteId(note.Channel, note.NoteNumber);
+            return (note.Channel << 7) | note.NoteNumber;
         }
 
         #endregion

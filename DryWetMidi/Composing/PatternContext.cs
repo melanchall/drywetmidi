@@ -65,8 +65,7 @@ namespace Melanchall.DryWetMidi.Composing
             if (anchor == null)
                 return _anchorsList;
 
-            List<long> times;
-            if (!_anchors.TryGetValue(anchor, out times))
+            if (!_anchors.TryGetValue(anchor, out var times))
                 _anchors.Add(anchor, times = new List<long>());
 
             return times;

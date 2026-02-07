@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
-using NUnit.Framework;
 using NUnit.Framework.Legacy;
 
 namespace Melanchall.DryWetMidi.Tests.Utilities

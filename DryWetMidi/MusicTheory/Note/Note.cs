@@ -81,8 +81,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// <returns>A <see cref="Note"/> for the <paramref name="noteNumber"/>.</returns>
         public static Note Get(SevenBitNumber noteNumber)
         {
-            Note note;
-            if (!Cache.TryGetValue(noteNumber, out note))
+            if (!Cache.TryGetValue(noteNumber, out var note))
                 Cache.TryAdd(noteNumber, note = new Note(noteNumber));
 
             return note;

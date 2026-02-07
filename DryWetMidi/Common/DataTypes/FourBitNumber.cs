@@ -88,8 +88,7 @@ namespace Melanchall.DryWetMidi.Common
         {
             fourBitNumber = default(FourBitNumber);
 
-            byte byteValue;
-            var parsed = ShortByteParser.TryParse(input, Min, Max, out byteValue).Status == ParsingStatus.Parsed;
+            var parsed = ShortByteParser.TryParse(input, Min, Max, out var byteValue).Status == ParsingStatus.Parsed;
             if (parsed)
                 fourBitNumber = (FourBitNumber)byteValue;
 
@@ -106,8 +105,7 @@ namespace Melanchall.DryWetMidi.Common
         /// <exception cref="FormatException"><paramref name="input"/> has invalid format.</exception>
         public static FourBitNumber Parse(string input)
         {
-            byte byteValue;
-            var parsingResult = ShortByteParser.TryParse(input, Min, Max, out byteValue);
+            var parsingResult = ShortByteParser.TryParse(input, Min, Max, out var byteValue);
             if (parsingResult.Status == ParsingStatus.Parsed)
                 return (FourBitNumber)byteValue;
 

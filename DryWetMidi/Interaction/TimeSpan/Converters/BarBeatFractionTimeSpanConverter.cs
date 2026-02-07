@@ -55,23 +55,21 @@ namespace Melanchall.DryWetMidi.Interaction
             var firstTimeSignature = timeSignatureLine.GetValueAtTime(time);
             var lastTimeSignature = timeSignatureLine.GetValueAtTime(lastTime);
 
-            long barsBefore, beatsBefore;
-            double fractionBefore;
-            CalculateComponents(firstTime - time,
-                                firstTimeSignature,
-                                ticksPerQuarterNote,
-                                out barsBefore,
-                                out beatsBefore,
-                                out fractionBefore);
+            CalculateComponents(
+                firstTime - time,
+                firstTimeSignature,
+                ticksPerQuarterNote,
+                out var barsBefore,
+                out var beatsBefore,
+                out var fractionBefore);
 
-            long barsAfter, beatsAfter;
-            double fractionAfter;
-            CalculateComponents(time + timeSpan - lastTime,
-                                lastTimeSignature,
-                                ticksPerQuarterNote,
-                                out barsAfter,
-                                out beatsAfter,
-                                out fractionAfter);
+            CalculateComponents(
+                time + timeSpan - lastTime,
+                lastTimeSignature,
+                ticksPerQuarterNote,
+                out var barsAfter,
+                out var beatsAfter,
+                out var fractionAfter);
 
             bars += barsBefore + barsAfter;
 
@@ -224,10 +222,8 @@ namespace Melanchall.DryWetMidi.Interaction
             out long beats,
             out double fraction)
         {
-            long ticks;
-
             var barLength = BarBeatUtilities.GetBarLength(timeSignature, ticksPerQuarterNote);
-            bars = Math.DivRem(totalTicks, barLength, out ticks);
+            bars = Math.DivRem(totalTicks, barLength, out var ticks);
 
             var beatLength = BarBeatUtilities.GetBeatLength(timeSignature, ticksPerQuarterNote);
             beats = Math.DivRem(ticks, beatLength, out ticks);

@@ -107,12 +107,11 @@ namespace Melanchall.DryWetMidi.Tests.Common
 
             for (var i = 0; i < count; i++)
             {
-                int index;
                 var element = MathUtilities.GetLastElementBelowThreshold(
                     data,
                     i,
                     d => d,
-                    out index);
+                    out var index);
 
                 if (i == 0)
                 {
@@ -134,12 +133,11 @@ namespace Melanchall.DryWetMidi.Tests.Common
 
             for (var i = 0; i < count; i++)
             {
-                int index;
                 var element = MathUtilities.GetLastElementBelowThreshold(
                     data,
                     i + 0.5,
                     d => d,
-                    out index);
+                    out var index);
 
                 ClassicAssert.AreEqual(i, index, $"Invalid index for {i}.");
                 ClassicAssert.AreEqual(data[i], element, $"Invalid element for {i}.");
@@ -151,12 +149,11 @@ namespace Melanchall.DryWetMidi.Tests.Common
         {
             var data = new double[] { 1, 1, 2, 2, 2, 3, 4, 4, 4, 5 };
 
-            int index;
             var element = MathUtilities.GetLastElementBelowThreshold(
                 data,
                 1,
                 d => d,
-                out index);
+                out var index);
 
             ClassicAssert.AreEqual(-1, index, "Invalid index for 1.");
             ClassicAssert.AreEqual(0, element, "Invalid element for 1.");
@@ -167,7 +164,7 @@ namespace Melanchall.DryWetMidi.Tests.Common
                     data,
                     threshold,
                     d => d,
-                    out index);
+                    out var index);
 
                 var previousValues = Enumerable.Range(0, index + 1).Select(i => data[i]).Reverse().ToArray();
 
@@ -197,12 +194,11 @@ namespace Melanchall.DryWetMidi.Tests.Common
         {
             var data = new[] { 2, 5500 };
 
-            int index;
             var element = MathUtilities.GetLastElementBelowThreshold(
                 data,
                 700,
                 d => d,
-                out index);
+                out var index);
 
             ClassicAssert.AreEqual(2, element, "Invalid element.");
             ClassicAssert.AreEqual(0, index, "Invalid index.");
@@ -215,12 +211,11 @@ namespace Melanchall.DryWetMidi.Tests.Common
 
             for (var i = 0; i < count; i++)
             {
-                int index;
                 var element = MathUtilities.GetFirstElementAboveThreshold(
                     data,
                     i,
                     d => d,
-                    out index);
+                    out var index);
 
                 if (i == count - 1)
                 {
@@ -242,12 +237,11 @@ namespace Melanchall.DryWetMidi.Tests.Common
 
             for (var i = 0; i < count; i++)
             {
-                int index;
                 var element = MathUtilities.GetFirstElementAboveThreshold(
                     data,
                     i - 0.5,
                     d => d,
-                    out index);
+                    out var index);
 
                 ClassicAssert.AreEqual(i, index, $"Invalid index for {i}.");
                 ClassicAssert.AreEqual(data[i], element, $"Invalid element for {i}.");
@@ -259,12 +253,11 @@ namespace Melanchall.DryWetMidi.Tests.Common
         {
             var data = new double[] { 1, 1, 2, 2, 2, 3, 4, 4, 4, 5 };
 
-            int index;
             var element = MathUtilities.GetFirstElementAboveThreshold(
                 data,
                 5,
                 d => d,
-                out index);
+                out var index);
 
             ClassicAssert.AreEqual(-1, index, "Invalid index for 5.");
             ClassicAssert.AreEqual(0, element, "Invalid element for 5.");
@@ -304,12 +297,11 @@ namespace Melanchall.DryWetMidi.Tests.Common
         {
             var data = new[] { 0, 5500 };
 
-            int index;
             var element = MathUtilities.GetFirstElementAboveThreshold(
                 data,
                 700,
                 d => d,
-                out index);
+                out var index);
 
             ClassicAssert.AreEqual(5500, element, "Invalid element.");
             ClassicAssert.AreEqual(1, index, "Invalid index.");

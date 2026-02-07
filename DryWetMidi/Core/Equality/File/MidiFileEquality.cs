@@ -60,8 +60,7 @@
                 var chunk1 = chunks1[i];
                 var chunk2 = chunks2[i];
 
-                string chunksComparingMessage;
-                if (!MidiChunk.Equals(chunk1, chunk2, settings.ChunkEqualityCheckSettings, out chunksComparingMessage))
+                if (!MidiChunk.Equals(chunk1, chunk2, settings.ChunkEqualityCheckSettings, out var chunksComparingMessage))
                 {
                     message = $"Chunks at position {i} are different. {chunksComparingMessage}";
                     return false;

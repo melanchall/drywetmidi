@@ -18,7 +18,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
         #region Test methods
 
-        [Retry(RetriesCount)]
+        [MultimediaTestRetry]
         [Test]
         public void Quantize_Randomize_NoQuantize_Start()
         {
@@ -51,7 +51,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 });
         }
 
-        [Retry(RetriesCount)]
+        [MultimediaTestRetry]
         [Test]
         public void Quantize_Randomize_NoQuantize_Start_Filter()
         {
@@ -85,7 +85,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 });
         }
 
-        [Retry(RetriesCount)]
+        [MultimediaTestRetry]
         [Test]
         public void Quantize_Randomize_NoQuantize_Start_FixOppositeEnd()
         {
@@ -119,7 +119,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 });
         }
 
-        [Retry(RetriesCount)]
+        [MultimediaTestRetry]
         [Test]
         public void Quantize_Randomize_NoQuantize_End()
         {
@@ -153,7 +153,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 });
         }
 
-        [Retry(RetriesCount)]
+        [MultimediaTestRetry]
         [Test]
         public void Quantize_Randomize_NoQuantize_End_FixOppositeEnd()
         {
@@ -188,7 +188,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 });
         }
 
-        [Retry(RetriesCount)]
+        [MultimediaTestRetry]
         [Test]
         public void Quantize_Randomize_NoQuantize_StartEnd()
         {

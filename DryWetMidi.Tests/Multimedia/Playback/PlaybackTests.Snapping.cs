@@ -14,6 +14,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
     {
         #region Test methods
 
+        [MultimediaTestRetry]
         [Test]
         public void Snapping_AddSnapPoint_WithoutData()
         {
@@ -50,8 +51,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 expectedReceivedEvents: new[]
                 {
                     // 0 is correct value, but on macOS tick generator restart requires more time
-                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(5)),
-                    new SentReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(600)),
+                    new TimestampedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(5)),
+                    new TimestampedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(600)),
                 },
                 setupPlayback: playback =>
                 {
@@ -59,6 +60,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
+        [MultimediaTestRetry]
         [Test]
         public void Snapping_AddSnapPoint_WithData()
         {
@@ -94,8 +96,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(0)),
-                    new SentReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(600)),
+                    new TimestampedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(0)),
+                    new TimestampedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(600)),
                 },
                 setupPlayback: playback =>
                 {
@@ -105,6 +107,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
+        [MultimediaTestRetry]
         [Test]
         public void Snapping_RemoveSnapPoint_WithoutData()
         {
@@ -149,8 +152,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(0)),
-                    new SentReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(600)),
+                    new TimestampedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(0)),
+                    new TimestampedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(600)),
                 },
                 setupPlayback: playback =>
                 {
@@ -158,6 +161,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
+        [MultimediaTestRetry]
         [Test]
         public void Snapping_RemoveSnapPoint_WithData()
         {
@@ -202,8 +206,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(0)),
-                    new SentReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(600)),
+                    new TimestampedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(0)),
+                    new TimestampedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(600)),
                 },
                 setupPlayback: playback =>
                 {
@@ -211,6 +215,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
+        [MultimediaTestRetry]
         [Test]
         public void Snapping_RemoveSnapPointsByData()
         {
@@ -253,11 +258,12 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(0)),
-                    new SentReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(450)),
+                    new TimestampedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(0)),
+                    new TimestampedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(450)),
                 });
         }
 
+        [MultimediaTestRetry]
         [Test]
         public void Snapping_RemoveAllSnapPoints()
         {
@@ -300,12 +306,12 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(0)),
-                    new SentReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(450)),
+                    new TimestampedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(0)),
+                    new TimestampedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(450)),
                 });
         }
 
-        [Retry(RetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void Snapping_MoveToSnapPoint_1()
         {
@@ -363,11 +369,12 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
-                    new SentReceivedEvent(new NoteOffEvent(), endTime + stopPeriod + (stopAfter - snapPointTime1) - (snapPointTime2 - (snapPointTime1 + firstAfterResumeDelay + secondAfterResumeDelay))),
+                    new TimestampedEvent(new NoteOnEvent(), TimeSpan.Zero),
+                    new TimestampedEvent(new NoteOffEvent(), endTime + stopPeriod + (stopAfter - snapPointTime1) - (snapPointTime2 - (snapPointTime1 + firstAfterResumeDelay + secondAfterResumeDelay))),
                 });
         }
 
+        [MultimediaTestRetry]
         [Test]
         public void Snapping_MoveToSnapPoint_2()
         {
@@ -405,11 +412,12 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
-                    new SentReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(400)),
+                    new TimestampedEvent(new NoteOnEvent(), TimeSpan.Zero),
+                    new TimestampedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(400)),
                 });
         }
 
+        [MultimediaTestRetry]
         [Test]
         public void Snapping_MoveToFirstSnapPoint_1()
         {
@@ -458,11 +466,12 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
-                    new SentReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(350)),
+                    new TimestampedEvent(new NoteOnEvent(), TimeSpan.Zero),
+                    new TimestampedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(350)),
                 });
         }
 
+        [MultimediaTestRetry]
         [Test]
         public void Snapping_MoveToFirstSnapPoint_2()
         {
@@ -511,11 +520,12 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
-                    new SentReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(550)),
+                    new TimestampedEvent(new NoteOnEvent(), TimeSpan.Zero),
+                    new TimestampedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(550)),
                 });
         }
 
+        [MultimediaTestRetry]
         [Test]
         public void Snapping_MoveToFirstSnapPoint_3()
         {
@@ -573,11 +583,12 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
-                    new SentReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(500)),
+                    new TimestampedEvent(new NoteOnEvent(), TimeSpan.Zero),
+                    new TimestampedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(500)),
                 });
         }
 
+        [MultimediaTestRetry]
         [Test]
         public void Snapping_MoveToFirstSnapPoint_4()
         {
@@ -635,12 +646,12 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
-                    new SentReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(500)),
+                    new TimestampedEvent(new NoteOnEvent(), TimeSpan.Zero),
+                    new TimestampedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(500)),
                 });
         }
 
-        [Retry(RetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void Snapping_MoveToPreviousSnapPoint_1()
         {
@@ -700,15 +711,16 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(0)),
-                    new SentReceivedEvent(new MarkerEvent("A"), TimeSpan.FromMilliseconds(1000)),
-                    new SentReceivedEvent(new MarkerEvent("A"), TimeSpan.FromMilliseconds(3000)),
-                    new SentReceivedEvent(new MarkerEvent("B"), TimeSpan.FromMilliseconds(4100)),
-                    new SentReceivedEvent(new MarkerEvent("B"), TimeSpan.FromMilliseconds(4600)),
-                    new SentReceivedEvent(new NoteOffEvent(), endTime + stopPeriod + (stopAfter - snapPointTime1) + (snapPointTime1 + firstAfterResumeDelay + secondAfterResumeDelay - snapPointTime2)),
+                    new TimestampedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(0)),
+                    new TimestampedEvent(new MarkerEvent("A"), TimeSpan.FromMilliseconds(1000)),
+                    new TimestampedEvent(new MarkerEvent("A"), TimeSpan.FromMilliseconds(3000)),
+                    new TimestampedEvent(new MarkerEvent("B"), TimeSpan.FromMilliseconds(4100)),
+                    new TimestampedEvent(new MarkerEvent("B"), TimeSpan.FromMilliseconds(4600)),
+                    new TimestampedEvent(new NoteOffEvent(), endTime + stopPeriod + (stopAfter - snapPointTime1) + (snapPointTime1 + firstAfterResumeDelay + secondAfterResumeDelay - snapPointTime2)),
                 });
         }
 
+        [MultimediaTestRetry]
         [Test]
         public void Snapping_MoveToPreviousSnapPoint_ByGroup_CheckReturnValue()
         {
@@ -756,13 +768,14 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(0)),
+                    new TimestampedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(0)),
                     // 50 is correct value, but on macOS tick generator restart requires more time
-                    new SentReceivedEvent(new MarkerEvent("A"), TimeSpan.FromMilliseconds(55)),
-                    new SentReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(150)),
+                    new TimestampedEvent(new MarkerEvent("A"), TimeSpan.FromMilliseconds(55)),
+                    new TimestampedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(150)),
                 });
         }
 
+        [MultimediaTestRetry]
         [Test]
         public void Snapping_MoveToPreviousSnapPoint_ByGroup_CheckReturnValue_SendNoteOffEventsForNonActiveNotes()
         {
@@ -811,15 +824,15 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(0)),
+                    new TimestampedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(0)),
                     // 50 is correct value, but on macOS tick generator restart requires more time
-                    new SentReceivedEvent(new MarkerEvent("A"), TimeSpan.FromMilliseconds(55)),
-                    new SentReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(150)),
-                    new SentReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(155)),
+                    new TimestampedEvent(new MarkerEvent("A"), TimeSpan.FromMilliseconds(55)),
+                    new TimestampedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(150)),
+                    new TimestampedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(155)),
                 });
         }
 
-        [Retry(RetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void Snapping_MoveToPreviousSnapPoint_Global()
         {
@@ -881,14 +894,15 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
-                    new SentReceivedEvent(new MarkerEvent("A"), TimeSpan.FromMilliseconds(1000)),
-                    new SentReceivedEvent(new MarkerEvent("A"), TimeSpan.FromMilliseconds(3000)),
-                    new SentReceivedEvent(new MarkerEvent("B"), TimeSpan.FromMilliseconds(4100)),
-                    new SentReceivedEvent(new NoteOffEvent(), endTime + stopPeriod + (stopAfter - snapPointTime1) + (snapPointTime1 + firstAfterResumeDelay + secondAfterResumeDelay - snapPointTime3)),
+                    new TimestampedEvent(new NoteOnEvent(), TimeSpan.Zero),
+                    new TimestampedEvent(new MarkerEvent("A"), TimeSpan.FromMilliseconds(1000)),
+                    new TimestampedEvent(new MarkerEvent("A"), TimeSpan.FromMilliseconds(3000)),
+                    new TimestampedEvent(new MarkerEvent("B"), TimeSpan.FromMilliseconds(4100)),
+                    new TimestampedEvent(new NoteOffEvent(), endTime + stopPeriod + (stopAfter - snapPointTime1) + (snapPointTime1 + firstAfterResumeDelay + secondAfterResumeDelay - snapPointTime3)),
                 });
         }
 
+        [MultimediaTestRetry]
         [Test]
         public void Snapping_MoveToPreviousSnapPoint_Global_CheckReturnValue()
         {
@@ -947,11 +961,12 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(0)),
-                    new SentReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(250)),
+                    new TimestampedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(0)),
+                    new TimestampedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(250)),
                 });
         }
 
+        [MultimediaTestRetry]
         [Test]
         public void Snapping_MoveToPreviousSnapPoint_Global_CheckReturnValue_SendNoteOffEventsForNonActiveNotes()
         {
@@ -1012,14 +1027,14 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 expectedReceivedEvents: new[]
                 {
                     // 0 is correct value, but on macOS tick generator restart requires more time
-                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(5)),
-                    new SentReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(250)),
+                    new TimestampedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(5)),
+                    new TimestampedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(250)),
                     // 250 is correct value, but on macOS tick generator restart requires more time
-                    new SentReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(255)),
+                    new TimestampedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(255)),
                 });
         }
 
-        [Retry(RetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void Snapping_MoveToPreviousSnapPoint_ByData()
         {
@@ -1077,11 +1092,12 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
-                    new SentReceivedEvent(new NoteOffEvent(), endTime + stopPeriod + (stopAfter - snapPointTime1) + (snapPointTime1 + firstAfterResumeDelay + secondAfterResumeDelay - snapPointTime3)),
+                    new TimestampedEvent(new NoteOnEvent(), TimeSpan.Zero),
+                    new TimestampedEvent(new NoteOffEvent(), endTime + stopPeriod + (stopAfter - snapPointTime1) + (snapPointTime1 + firstAfterResumeDelay + secondAfterResumeDelay - snapPointTime3)),
                 });
         }
 
+        [MultimediaTestRetry]
         [Test]
         public void Snapping_MoveToPreviousSnapPoint_ByData_CheckReturnValue()
         {
@@ -1128,11 +1144,12 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(0)),
-                    new SentReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(150)),
+                    new TimestampedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(0)),
+                    new TimestampedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(150)),
                 });
         }
 
+        [MultimediaTestRetry]
         [Test]
         public void Snapping_MoveToPreviousSnapPoint_ByData_CheckReturnValue_SendNoteOffEventsForNonActiveNotes()
         {
@@ -1180,14 +1197,14 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(0)),
-                    new SentReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(150)),
+                    new TimestampedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(0)),
+                    new TimestampedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(150)),
                     // 150 is correct value, but on macOS tick generator restart requires more time
-                    new SentReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(155)),
+                    new TimestampedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(155)),
                 });
         }
 
-        [Retry(RetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void Snapping_MoveToNextSnapPoint_ByGroup()
         {
@@ -1247,13 +1264,14 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
-                    new SentReceivedEvent(new MarkerEvent("A"), TimeSpan.FromMilliseconds(2100)),
-                    new SentReceivedEvent(new MarkerEvent("B"), TimeSpan.FromMilliseconds(3000)),
-                    new SentReceivedEvent(new NoteOffEvent(), endTime + stopPeriod - (snapPointTime1 - stopAfter) - (snapPointTime2 - (snapPointTime1 + firstAfterResumeDelay + secondAfterResumeDelay))),
+                    new TimestampedEvent(new NoteOnEvent(), TimeSpan.Zero),
+                    new TimestampedEvent(new MarkerEvent("A"), TimeSpan.FromMilliseconds(2100)),
+                    new TimestampedEvent(new MarkerEvent("B"), TimeSpan.FromMilliseconds(3000)),
+                    new TimestampedEvent(new NoteOffEvent(), endTime + stopPeriod - (snapPointTime1 - stopAfter) - (snapPointTime2 - (snapPointTime1 + firstAfterResumeDelay + secondAfterResumeDelay))),
                 });
         }
 
+        [MultimediaTestRetry]
         [Test]
         public void Snapping_MoveToNextSnapPoint_ByGroup_CheckReturnValue()
         {
@@ -1298,18 +1316,18 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(0)),
-                    new SentReceivedEvent(new MarkerEvent("A"), TimeSpan.FromMilliseconds(50)),
-                    new SentReceivedEvent(new MarkerEvent("B"), TimeSpan.FromMilliseconds(60)),
-                    new SentReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(100)),
-                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(100)),
-                    new SentReceivedEvent(new MarkerEvent("A"), TimeSpan.FromMilliseconds(200)),
-                    new SentReceivedEvent(new MarkerEvent("B"), TimeSpan.FromMilliseconds(500)),
-                    new SentReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(600)),
+                    new TimestampedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(0)),
+                    new TimestampedEvent(new MarkerEvent("A"), TimeSpan.FromMilliseconds(50)),
+                    new TimestampedEvent(new MarkerEvent("B"), TimeSpan.FromMilliseconds(60)),
+                    new TimestampedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(100)),
+                    new TimestampedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(100)),
+                    new TimestampedEvent(new MarkerEvent("A"), TimeSpan.FromMilliseconds(200)),
+                    new TimestampedEvent(new MarkerEvent("B"), TimeSpan.FromMilliseconds(500)),
+                    new TimestampedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(600)),
                 });
         }
 
-        [Retry(RetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void Snapping_MoveToNextSnapPoint_Global()
         {
@@ -1371,13 +1389,14 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
-                    new SentReceivedEvent(new MarkerEvent("A"), TimeSpan.FromMilliseconds(2100)),
-                    new SentReceivedEvent(new MarkerEvent("B"), TimeSpan.FromMilliseconds(3100)),
-                    new SentReceivedEvent(new NoteOffEvent(), endTime + stopPeriod - (snapPointTime1 - stopAfter) - (snapPointTime3 - (snapPointTime1 + firstAfterResumeDelay + secondAfterResumeDelay))),
+                    new TimestampedEvent(new NoteOnEvent(), TimeSpan.Zero),
+                    new TimestampedEvent(new MarkerEvent("A"), TimeSpan.FromMilliseconds(2100)),
+                    new TimestampedEvent(new MarkerEvent("B"), TimeSpan.FromMilliseconds(3100)),
+                    new TimestampedEvent(new NoteOffEvent(), endTime + stopPeriod - (snapPointTime1 - stopAfter) - (snapPointTime3 - (snapPointTime1 + firstAfterResumeDelay + secondAfterResumeDelay))),
                 });
         }
 
+        [MultimediaTestRetry]
         [Test]
         public void Snapping_MoveToNextSnapPoint_Global_CheckReturnValue()
         {
@@ -1423,16 +1442,16 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(0)),
-                    new SentReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(150)),
-                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(150)),
-                    new SentReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(250)),
-                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(250)),
-                    new SentReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(950)),
+                    new TimestampedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(0)),
+                    new TimestampedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(150)),
+                    new TimestampedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(150)),
+                    new TimestampedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(250)),
+                    new TimestampedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(250)),
+                    new TimestampedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(950)),
                 });
         }
 
-        [Retry(RetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void Snapping_MoveToNextSnapPoint_ByData()
         {
@@ -1489,11 +1508,12 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
-                    new SentReceivedEvent(new NoteOffEvent(), endTime + stopPeriod - (snapPointTime1 - stopAfter) - (snapPointTime3 - (snapPointTime1 + firstAfterResumeDelay + secondAfterResumeDelay))),
+                    new TimestampedEvent(new NoteOnEvent(), TimeSpan.Zero),
+                    new TimestampedEvent(new NoteOffEvent(), endTime + stopPeriod - (snapPointTime1 - stopAfter) - (snapPointTime3 - (snapPointTime1 + firstAfterResumeDelay + secondAfterResumeDelay))),
                 });
         }
 
+        [MultimediaTestRetry]
         [Test]
         public void Snapping_MoveToNextSnapPoint_ByData_CheckReturnValue()
         {
@@ -1531,13 +1551,14 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(0)),
-                    new SentReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(150)),
-                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(150)),
-                    new SentReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(850)),
+                    new TimestampedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(0)),
+                    new TimestampedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(150)),
+                    new TimestampedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(150)),
+                    new TimestampedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(850)),
                 });
         }
 
+        [MultimediaTestRetry]
         [Test]
         public void Snapping_MoveToNextSnapPoint_ByData_CheckReturnValue_AtZero()
         {
@@ -1565,12 +1586,12 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(0)),
-                    new SentReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(700)),
+                    new TimestampedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(0)),
+                    new TimestampedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(700)),
                 });
         }
 
-        [Retry(RetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void Snapping_SnapToEvents()
         {
@@ -1635,15 +1656,15 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)100, (SevenBitNumber)100), snapPointTime1),
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)100, (SevenBitNumber)100), stopAfter + stopPeriod),
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)10, (SevenBitNumber)100), stopAfter + stopPeriod + firstAfterResumeDelay + secondAfterResumeDelay),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)100, (SevenBitNumber)100), stopAfter + stopPeriod + firstAfterResumeDelay + secondAfterResumeDelay + TimeSpan.FromSeconds(1)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)10, (SevenBitNumber)100), endTime + stopPeriod + (stopAfter - snapPointTime1) - (snapPointTime2 - (snapPointTime1 + firstAfterResumeDelay + secondAfterResumeDelay))),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)100, (SevenBitNumber)100), snapPointTime1),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)100, (SevenBitNumber)100), stopAfter + stopPeriod),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)10, (SevenBitNumber)100), stopAfter + stopPeriod + firstAfterResumeDelay + secondAfterResumeDelay),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)100, (SevenBitNumber)100), stopAfter + stopPeriod + firstAfterResumeDelay + secondAfterResumeDelay + TimeSpan.FromSeconds(1)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)10, (SevenBitNumber)100), endTime + stopPeriod + (stopAfter - snapPointTime1) - (snapPointTime2 - (snapPointTime1 + firstAfterResumeDelay + secondAfterResumeDelay))),
                 });
         }
 
-        [Retry(RetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void Snapping_MoveToSnapPoint_BeyondDuration()
         {
@@ -1680,12 +1701,12 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
-                    new SentReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(400)),
+                    new TimestampedEvent(new NoteOnEvent(), TimeSpan.Zero),
+                    new TimestampedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(400)),
                 });
         }
 
-        [Retry(RetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void Snapping_MoveToSnapPoint_BeyondPlaybackEnd()
         {
@@ -1728,12 +1749,12 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
-                    new SentReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(400)),
+                    new TimestampedEvent(new NoteOnEvent(), TimeSpan.Zero),
+                    new TimestampedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(400)),
                 });
         }
 
-        [Retry(RetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void Snapping_MoveToSnapPoint_BeyondPlaybackStart()
         {
@@ -1777,10 +1798,10 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
-                    new SentReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(200)),
-                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(200)),
-                    new SentReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(500)),
+                    new TimestampedEvent(new NoteOnEvent(), TimeSpan.Zero),
+                    new TimestampedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(200)),
+                    new TimestampedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(200)),
+                    new TimestampedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(500)),
                 });
         }
 

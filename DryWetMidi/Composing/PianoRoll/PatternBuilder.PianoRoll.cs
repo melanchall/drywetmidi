@@ -88,8 +88,7 @@ namespace Melanchall.DryWetMidi.Composing
             {
                 patternBuilder.MoveToLastAnchor(pianoRollStartSnchor);
 
-                int dataStartIndex;
-                var note = IdentifyLineNote(line, lineIndex, out dataStartIndex);
+                var note = IdentifyLineNote(line, lineIndex, out var dataStartIndex);
 
                 ProcessLine(
                     patternBuilder,
@@ -111,14 +110,12 @@ namespace Melanchall.DryWetMidi.Composing
             var notePartEndIndex = line.IndexOfAny(Digits);
             var notePart = line.Substring(0, notePartEndIndex + 1).Trim();
 
-            MusicTheory.Note note;
-            if (!MusicTheory.Note.TryParse(notePart, out note))
+            if (!MusicTheory.Note.TryParse(notePart, out var note))
             {
                 notePartEndIndex = Enumerable.Range(0, line.Length).FirstOrDefault(i => !char.IsDigit(line[i]) && !char.IsWhiteSpace(line[i])) - 1;
                 notePart = line.Substring(0, notePartEndIndex + 1).Trim();
 
-                SevenBitNumber noteNumber;
-                if (!SevenBitNumber.TryParse(notePart, out noteNumber))
+                if (!SevenBitNumber.TryParse(notePart, out var noteNumber))
                     throw new InvalidOperationException($"Failed to parse a note from '{notePart}' (line {lineIndex}).");
                 else
                     note = MusicTheory.Note.Get(noteNumber);

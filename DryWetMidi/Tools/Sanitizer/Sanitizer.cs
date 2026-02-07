@@ -67,7 +67,7 @@ namespace Melanchall.DryWetMidi.Tools
 
             var trackChunks = midiFile.GetTrackChunks().ToArray();
 
-            var noteOnLastObjects = new Dictionary<NoteId, Tuple<ITimedObject, int>>();
+            var noteOnLastObjects = new Dictionary<int, Tuple<ITimedObject, int>>();
             var data = new List<Tuple<Tuple<ITimedObject, int>, long?>>();
 
             // TODO: simplify
@@ -88,8 +88,7 @@ namespace Melanchall.DryWetMidi.Tools
                 {
                     var noteId = note.GetNoteId();
 
-                    Tuple<ITimedObject, int> noteOnObject;
-                    if (noteOnLastObjects.TryGetValue(noteId, out noteOnObject))
+                    if (noteOnLastObjects.TryGetValue(noteId, out var noteOnObject))
                         data.Add(Tuple.Create(noteOnObject, (long?)obj.Time));
 
                     noteOnLastObjects.Remove(noteId);
@@ -102,8 +101,7 @@ namespace Melanchall.DryWetMidi.Tools
 
                     var noteId = noteOnEvent.GetNoteId();
 
-                    Tuple<ITimedObject, int> noteOnObject;
-                    if (noteOnLastObjects.TryGetValue(noteId, out noteOnObject))
+                    if (noteOnLastObjects.TryGetValue(noteId, out var noteOnObject))
                         data.Add(Tuple.Create(noteOnObject, (long?)obj.Time));
 
                     noteOnLastObjects[noteId] = timedObjectAt;

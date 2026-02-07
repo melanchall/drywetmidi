@@ -32,8 +32,7 @@ namespace Melanchall.DryWetMidi.Interaction
             if (match == null)
                 return ParsingResult.NotMatched;
 
-            long midiTimeSpan;
-            if (!ParsingUtilities.ParseNonnegativeLong(match, TimeSpanGroupName, 0, out midiTimeSpan))
+            if (!ParsingUtilities.ParseNonnegativeLong(match, TimeSpanGroupName, 0, out var midiTimeSpan))
                 return ParsingResult.Error(OutOfRange);
 
             timeSpan = new MidiTimeSpan(midiTimeSpan);

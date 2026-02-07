@@ -1066,9 +1066,7 @@ namespace Melanchall.DryWetMidi.Interaction
                     if (!match(chord))
                         continue;
 
-                    long time;
-                    long length;
-                    chord.GetTimeAndLength(out time, out length);
+                    chord.GetTimeAndLength(out var time, out var length);
 
                     var notes = notesCollectionCanBeChanged || noteTimeOrLengthCanBeChanged
                         ? chord.Notes.ToArray()
@@ -1084,9 +1082,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
                     action(chord);
 
-                    long newTime;
-                    long newLength;
-                    chord.GetTimeAndLength(out newTime, out newLength);
+                    chord.GetTimeAndLength(out var newTime, out var newLength);
                     timeOrLengthChanged |=
                         newTime != time ||
                         newLength != length;

@@ -449,8 +449,7 @@ namespace Melanchall.DryWetMidi.Tools
                     {
                         var csvNote = ParseNote(record, settings, readChunkId);
 
-                        CsvChord csvChord;
-                        if (!chords.TryGetValue(Tuple.Create(csvNote.ChunkIndex, csvNote.ObjectIndex), out csvChord))
+                        if (!chords.TryGetValue(Tuple.Create(csvNote.ChunkIndex, csvNote.ObjectIndex), out var csvChord))
                         {
                             chords.Add(
                                 Tuple.Create(csvNote.ChunkIndex, csvNote.ObjectIndex),
@@ -524,8 +523,7 @@ namespace Melanchall.DryWetMidi.Tools
                 if (string.IsNullOrWhiteSpace(chunkIndexValue))
                     CsvError.ThrowBadFormat(record.LineNumber, $"Missed chunk index.");
 
-                int parsedChunkIndex;
-                chunkIndex = int.TryParse(chunkIndexValue, out parsedChunkIndex)
+                chunkIndex = int.TryParse(chunkIndexValue, out var parsedChunkIndex)
                     ? (int?)parsedChunkIndex
                     : null;
 
@@ -541,8 +539,7 @@ namespace Melanchall.DryWetMidi.Tools
             if (string.IsNullOrWhiteSpace(objectIndexValue))
                 CsvError.ThrowBadFormat(record.LineNumber, $"Missed object index.");
 
-            int parsedObjectIndex;
-            var objectIndex = int.TryParse(objectIndexValue, out parsedObjectIndex)
+            var objectIndex = int.TryParse(objectIndexValue, out var parsedObjectIndex)
                 ? (int?)parsedObjectIndex
                 : null;
 
@@ -563,8 +560,7 @@ namespace Melanchall.DryWetMidi.Tools
             int lineNumber,
             UnknownRecordPolicy unknownRecordPolicy)
         {
-            RecordType result;
-            if (!RecordLabelsToRecordTypes.TryGetValue(recordType, out result))
+            if (!RecordLabelsToRecordTypes.TryGetValue(recordType, out var result))
             {
                 if (EventsNames.Contains(recordType, StringComparer.OrdinalIgnoreCase))
                     result = RecordType.Event;
@@ -585,8 +581,7 @@ namespace Melanchall.DryWetMidi.Tools
             if (parameters.Length < 1)
                 CsvError.ThrowBadFormat(lineNumber, $"Invalid number of parameters provided ({parameters.Length} with 1 expected).");
 
-            var timeDivision = default(short);
-            if (!short.TryParse(parameters[0], out timeDivision))
+            if (!short.TryParse(parameters[0], out var timeDivision))
                 CsvError.ThrowBadFormat(lineNumber, $"Invalid time division ({parameters[0]}).");
 
             return new HeaderChunk
@@ -605,8 +600,7 @@ namespace Melanchall.DryWetMidi.Tools
 
             var time = ParseTime(parameters[0], lineNumber, settings);
 
-            MidiEventType eventType;
-            if (!Enum.TryParse(record.RecordType, out eventType))
+            if (!Enum.TryParse(record.RecordType, out MidiEventType eventType))
                 CsvError.ThrowBadFormat(lineNumber, $"Invalid event type ({record.RecordType}).");
 
             try

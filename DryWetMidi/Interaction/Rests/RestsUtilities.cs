@@ -116,8 +116,7 @@ namespace Melanchall.DryWetMidi.Interaction
                 if (key == null)
                     continue;
 
-                long lastEndTime;
-                endTimes.TryGetValue(key, out lastEndTime);
+                endTimes.TryGetValue(key, out var lastEndTime);
 
                 if (obj.Time > lastEndTime)
                 {

@@ -21,8 +21,7 @@ namespace Melanchall.DryWetMidi.Common
 
         public void SetCheckpointReached(string checkpointName, object data)
         {
-            List<object> dataList;
-            if (!_checkpointsReachedStates.TryGetValue(checkpointName, out dataList))
+            if (!_checkpointsReachedStates.TryGetValue(checkpointName, out var dataList))
                 _checkpointsReachedStates.Add(checkpointName, dataList = new List<object>());
 
             dataList.Add(data);
@@ -30,14 +29,12 @@ namespace Melanchall.DryWetMidi.Common
 
         public bool IsCheckpointReached(string checkpointName)
         {
-            List<object> dataList;
-            return _checkpointsReachedStates.TryGetValue(checkpointName, out dataList) && dataList.Any();
+            return _checkpointsReachedStates.TryGetValue(checkpointName, out var dataList) && dataList.Any();
         }
 
         public ICollection<object> GetCheckpointDataList(string checkpointName)
         {
-            List<object> dataList;
-            return _checkpointsReachedStates.TryGetValue(checkpointName, out dataList)
+            return _checkpointsReachedStates.TryGetValue(checkpointName, out var dataList)
                 ? dataList
                 : null;
         }

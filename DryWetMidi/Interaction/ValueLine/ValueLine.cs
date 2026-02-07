@@ -48,12 +48,11 @@ namespace Melanchall.DryWetMidi.Interaction
             long startTime,
             long endTime)
         {
-            int index;
             MathUtilities.GetLastElementBelowThreshold(
                 _valueChanges,
                 startTime,
                 c => c.Time,
-                out index);
+                out var index);
 
             index++;
 
@@ -77,12 +76,11 @@ namespace Melanchall.DryWetMidi.Interaction
             if (time >= lastTime)
                 return lastValueChange.Value;
 
-            int index;
             MathUtilities.GetFirstElementAboveThreshold(
                 _valueChanges,
                 time,
                 c => c.Time,
-                out index);
+                out var index);
 
             if (index < 0)
                 index = _valueChanges.Count - 1;
@@ -118,12 +116,11 @@ namespace Melanchall.DryWetMidi.Interaction
             if (startTime > lastTime)
                 return false;
 
-            int index;
             MathUtilities.GetLastElementBelowThreshold(
                 _valueChanges,
                 startTime,
                 c => c.Time,
-                out index);
+                out var index);
 
             var startIndex = ++index;
             var valueChangesCount = _valueChanges.Count;
@@ -220,12 +217,11 @@ namespace Melanchall.DryWetMidi.Interaction
 
             // Common case
 
-            int index;
             MathUtilities.GetFirstElementAboveThreshold(
                 _valueChanges,
                 time,
                 c => c.Time,
-                out index);
+                out var index);
 
             var nextIndex = index;
             var nextValueChange = nextIndex >= 0 ? _valueChanges[nextIndex] : null;

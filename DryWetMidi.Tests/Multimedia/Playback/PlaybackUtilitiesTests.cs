@@ -50,7 +50,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
         #region Test methods
 
-        [Retry(RetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void CheckNotesPlayback_ProgramNumber()
         {
@@ -60,7 +60,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 channel => new[] { new ProgramChangeEvent(programNumber) { Channel = channel } });
         }
 
-        [Retry(RetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void CheckNotesPlayback_GeneralMidiProgram()
         {
@@ -70,7 +70,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 channel => new[] { generalMidiProgram.GetProgramEvent(channel) });
         }
 
-        [Retry(RetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void CheckNotesPlayback_GeneralMidi2Program()
         {
@@ -132,11 +132,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 .Select(n => new ReceivedNote(n, n.EndTimeAs<MetricTimeSpan>(tempoMap)))
                 .ToList();
 
-            var sentEvents = new List<SentReceivedEvent>();
+            var sentEvents = new List<TimestampedEvent>();
 
             using (var outputDevice = TestDeviceManager.GetOutputDevice(SendReceiveUtilities.DeviceToTestOnName))
             {
-                outputDevice.EventSent += (_, e) => sentEvents.Add(new SentReceivedEvent(e.Event, stopwatch.Elapsed));
+                outputDevice.EventSent += (_, e) => sentEvents.Add(new TimestampedEvent(e.Event, stopwatch.Elapsed));
 
                 using (var playback = playbackGetter(tempoMap, outputDevice))
                 {
@@ -180,7 +180,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         }
 
         private static void CheckProgramEvents(
-            IReadOnlyList<SentReceivedEvent> sentEvents,
+            IReadOnlyList<TimestampedEvent> sentEvents,
             IReadOnlyList<MidiEvent> expectedProgramEvents)
         {
             foreach (var programEvent in expectedProgramEvents)

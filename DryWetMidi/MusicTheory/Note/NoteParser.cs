@@ -36,13 +36,11 @@ namespace Melanchall.DryWetMidi.MusicTheory
 
             var noteNameGroup = match.Groups[NoteNameGroupName];
 
-            NoteName noteName;
-            var noteNameParsingResult = NoteNameParser.TryParse(noteNameGroup.Value, out noteName);
+            var noteNameParsingResult = NoteNameParser.TryParse(noteNameGroup.Value, out var noteName);
             if (noteNameParsingResult.Status != ParsingStatus.Parsed)
                 return noteNameParsingResult;
 
-            int octaveNumber;
-            if (!ParsingUtilities.ParseInt(match, OctaveGroupName, Octave.Middle.Number, out octaveNumber))
+            if (!ParsingUtilities.ParseInt(match, OctaveGroupName, Octave.Middle.Number, out var octaveNumber))
                 return ParsingResult.Error(OctaveIsOutOfRange);
 
             if (!NoteUtilities.IsNoteValid(noteName, octaveNumber))

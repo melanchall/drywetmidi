@@ -17,23 +17,9 @@ inputs:
 
 runs:
   using:  'composite'
-  steps: 
-    - name:  Ensure MIDI is ready (Windows)
-      if: inputs.enabled == 'true' && runner.os == 'Windows'
-      shell: pwsh
-      run: |
-        $service = Get-Service -Name "Audiosrv"
-        
-        if ($service.Status -ne 'Running')
-        {
-          Write-Host "Service is not started; starting..."
-          Start-Service "Audiosrv"
-        }
-        
-        Write-Host "Service is started"
-    
+  steps:    
     - name: Create virtual MIDI ports (Windows)
       if: inputs.enabled == 'true' && runner.os == 'Windows'
       shell: pwsh
       run: |
-        & "${{ github.workspace }}/Resources/Scripts/Setup MIDI ports.ps1" -portsNames "${{ inputs.ports-names }}" -arch "${{ inputs.arch }}"
+        & "${{ github.workspace }}/Resources/Scripts/Setup MIDI ports.ps1" -portsNames "${{ inputs.ports-names }}" -arch "${{ inputs.arch }} -"

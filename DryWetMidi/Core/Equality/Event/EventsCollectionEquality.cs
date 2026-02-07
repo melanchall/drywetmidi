@@ -28,8 +28,7 @@
                 var event1 = eventsCollection1[i];
                 var event2 = eventsCollection2[i];
 
-                string eventsComparingMessage;
-                if (!MidiEvent.Equals(event1, event2, settings, out eventsComparingMessage))
+                if (!MidiEvent.Equals(event1, event2, settings, out var eventsComparingMessage))
                 {
                     message = $"Events at position {i} are different. {eventsComparingMessage}";
                     return false;

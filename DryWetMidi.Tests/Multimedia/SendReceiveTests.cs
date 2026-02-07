@@ -20,7 +20,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
         #region Test methods
 
-        [Retry(RetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void CheckEventsReceiving()
         {
@@ -32,12 +32,12 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 SendReceiveUtilities.CheckEventsReceiving(
                     new[]
                     {
-                        new EventToSend2(new NoteOnEvent((SevenBitNumber)100, (SevenBitNumber)20) { Channel = (FourBitNumber)5 }, TimeSpan.Zero),
-                        new EventToSend2(new NormalSysExEvent(new byte[] { 1, 2, 3, 0xF7 }), TimeSpan.FromSeconds(1)),
-                        new EventToSend2(new NoteOffEvent((SevenBitNumber)100, (SevenBitNumber)10) { Channel = (FourBitNumber)5 }, TimeSpan.FromSeconds(3)),
-                        new EventToSend2(new NormalSysExEvent(new byte[] { 4, 5, 6, 0xF7 }), TimeSpan.FromSeconds(5)),
-                        new EventToSend2(new SongSelectEvent((SevenBitNumber)20), TimeSpan.FromSeconds(5)),
-                        new EventToSend2(new TuneRequestEvent(), TimeSpan.FromMilliseconds(5200)),
+                        new TimestampedEvent(new NoteOnEvent((SevenBitNumber)100, (SevenBitNumber)20) { Channel = (FourBitNumber)5 }, TimeSpan.Zero),
+                        new TimestampedEvent(new NormalSysExEvent(new byte[] { 1, 2, 3, 0xF7 }), TimeSpan.FromSeconds(1)),
+                        new TimestampedEvent(new NoteOffEvent((SevenBitNumber)100, (SevenBitNumber)10) { Channel = (FourBitNumber)5 }, TimeSpan.FromSeconds(3)),
+                        new TimestampedEvent(new NormalSysExEvent(new byte[] { 4, 5, 6, 0xF7 }), TimeSpan.FromSeconds(5)),
+                        new TimestampedEvent(new SongSelectEvent((SevenBitNumber)20), TimeSpan.FromSeconds(5)),
+                        new TimestampedEvent(new TuneRequestEvent(), TimeSpan.FromMilliseconds(5200)),
                     },
                     outputDevice,
                     inputDevice);
@@ -46,7 +46,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             }
         }
 
-        [Retry(RetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void CheckEventsReceiving_AllEventTypes_ExceptSysEx()
         {
@@ -63,7 +63,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 inputDevice.StartEventsListening();
 
                 SendReceiveUtilities.CheckEventsReceiving(
-                    events.Select((e, i) => new EventToSend2(e, TimeSpan.FromMilliseconds(50).MultiplyBy(i))).ToArray(),
+                    events.Select((e, i) => new TimestampedEvent(e, TimeSpan.FromMilliseconds(50).MultiplyBy(i))).ToArray(),
                     outputDevice,
                     inputDevice);
 

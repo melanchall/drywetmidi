@@ -17,7 +17,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
     {
         #region Test methods
 
-        [Retry(RetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void EventPlayed()
         {
@@ -35,14 +35,14 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 actions: Array.Empty<PlaybackAction>(),
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
-                    new SentReceivedEvent(new NoteOffEvent(), TimeSpan.FromSeconds(1)),
-                    new SentReceivedEvent(new NoteOnEvent((SevenBitNumber)100, (SevenBitNumber)80), TimeSpan.FromMilliseconds(1500)),
-                    new SentReceivedEvent(new NoteOffEvent((SevenBitNumber)100, (SevenBitNumber)0), TimeSpan.FromMilliseconds(2000))
+                    new TimestampedEvent(new NoteOnEvent(), TimeSpan.Zero),
+                    new TimestampedEvent(new NoteOffEvent(), TimeSpan.FromSeconds(1)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)100, (SevenBitNumber)80), TimeSpan.FromMilliseconds(1500)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)100, (SevenBitNumber)0), TimeSpan.FromMilliseconds(2000))
                 });
         }
 
-        [Retry(RetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void EventPlayed_AllEventsTypes()
         {
@@ -80,12 +80,12 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 initialPlaybackObjects: eventsToSend,
                 actions: Array.Empty<PlaybackAction>(),
                 expectedReceivedEvents: eventsToSend
-                    .Select((e, i) => new SentReceivedEvent(e.Event, TimeSpan.FromMilliseconds(delay * (i + 1))))
+                    .Select((e, i) => new TimestampedEvent(e.Event, TimeSpan.FromMilliseconds(delay * (i + 1))))
                     .ToArray(),
                 checkFromFile: false);
         }
 
-        [Retry(RetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void EventPlayed_InterruptNotesOnStop()
         {
@@ -108,8 +108,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteOnEvent(), noteOnDelay),
-                    new SentReceivedEvent(new NoteOffEvent(), stopAfter),
+                    new TimestampedEvent(new NoteOnEvent(), noteOnDelay),
+                    new TimestampedEvent(new NoteOffEvent(), stopAfter),
                 },
                 setupPlayback: playback =>
                 {
@@ -118,7 +118,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [Retry(RetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void EventPlayed_InterruptNotesOnStop_SendNoteOffEventsForNonActiveNotes()
         {
@@ -141,9 +141,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteOnEvent(), noteOnDelay),
-                    new SentReceivedEvent(new NoteOffEvent(), stopAfter),
-                    new SentReceivedEvent(new NoteOffEvent(), noteOnDelay + stopAfter + stopPeriod + noteOffDelay - stopAfter)
+                    new TimestampedEvent(new NoteOnEvent(), noteOnDelay),
+                    new TimestampedEvent(new NoteOffEvent(), stopAfter),
+                    new TimestampedEvent(new NoteOffEvent(), noteOnDelay + stopAfter + stopPeriod + noteOffDelay - stopAfter)
                 },
                 setupPlayback: playback =>
                 {
@@ -153,7 +153,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [Retry(RetriesNumber)]
+        [MultimediaTestRetry]
         [TestCase(1.0)]
         [TestCase(2.0)]
         [TestCase(0.5)]
@@ -200,8 +200,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteOnEvent(), firstEventTime),
-                    new SentReceivedEvent(new NoteOffEvent(), stopAfter + stopPeriod + firstAfterResumeDelay + secondAfterResumeDelay + ScaleTimeSpan(lastEventTime, 1.0 / speed))
+                    new TimestampedEvent(new NoteOnEvent(), firstEventTime),
+                    new TimestampedEvent(new NoteOffEvent(), stopAfter + stopPeriod + firstAfterResumeDelay + secondAfterResumeDelay + ScaleTimeSpan(lastEventTime, 1.0 / speed))
                 },
                 setupPlayback: playback =>
                 {
@@ -211,7 +211,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [Retry(RetriesNumber)]
+        [MultimediaTestRetry]
         [TestCase(1.0)]
         [TestCase(2.0)]
         [TestCase(0.5)]
@@ -258,10 +258,10 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteOnEvent(), firstEventTime),
-                    new SentReceivedEvent(new NoteOnEvent(), stopAfter + stopPeriod),
-                    new SentReceivedEvent(new NoteOnEvent(), stopAfter + stopPeriod + firstAfterResumeDelay + secondAfterResumeDelay),
-                    new SentReceivedEvent(new NoteOffEvent(), stopAfter + stopPeriod + firstAfterResumeDelay + secondAfterResumeDelay + ScaleTimeSpan(lastEventTime, 1.0 / speed))
+                    new TimestampedEvent(new NoteOnEvent(), firstEventTime),
+                    new TimestampedEvent(new NoteOnEvent(), stopAfter + stopPeriod),
+                    new TimestampedEvent(new NoteOnEvent(), stopAfter + stopPeriod + firstAfterResumeDelay + secondAfterResumeDelay),
+                    new TimestampedEvent(new NoteOffEvent(), stopAfter + stopPeriod + firstAfterResumeDelay + secondAfterResumeDelay + ScaleTimeSpan(lastEventTime, 1.0 / speed))
                 },
                 setupPlayback: playback =>
                 {
@@ -272,7 +272,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [Retry(RetriesNumber)]
+        [MultimediaTestRetry]
         [TestCase(1.0)]
         [TestCase(2.0)]
         [TestCase(0.5)]
@@ -321,8 +321,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteOnEvent(), firstEventTime),
-                    new SentReceivedEvent(new NoteOffEvent(), ScaleTimeSpan(lastEventTime - stepAfterStop - stepAfterResumed, 1.0 / speed) + stopPeriod)
+                    new TimestampedEvent(new NoteOnEvent(), firstEventTime),
+                    new TimestampedEvent(new NoteOffEvent(), ScaleTimeSpan(lastEventTime - stepAfterStop - stepAfterResumed, 1.0 / speed) + stopPeriod)
                 },
                 setupPlayback: playback =>
                 {
@@ -332,7 +332,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [Retry(RetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void EventPlayed_MoveForward_BeyondDuration()
         {
@@ -362,8 +362,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
-                    new SentReceivedEvent(new NoteOffEvent(), stopAfter)
+                    new TimestampedEvent(new NoteOnEvent(), TimeSpan.Zero),
+                    new TimestampedEvent(new NoteOffEvent(), stopAfter)
                 },
                 setupPlayback: playback =>
                 {
@@ -371,7 +371,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [Retry(RetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void EventPlayed_MoveForward_BeyondPlaybackEnd()
         {
@@ -403,8 +403,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
-                    new SentReceivedEvent(new NoteOffEvent(), stopAfter)
+                    new TimestampedEvent(new NoteOnEvent(), TimeSpan.Zero),
+                    new TimestampedEvent(new NoteOffEvent(), stopAfter)
                 },
                 setupPlayback: playback =>
                 {
@@ -413,7 +413,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [Retry(RetriesNumber)]
+        [MultimediaTestRetry]
         [TestCase(1.0)]
         [TestCase(2.0)]
         [TestCase(0.5)]
@@ -464,8 +464,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
-                    new SentReceivedEvent(new NoteOffEvent(), ScaleTimeSpan(lastEventTime + stepAfterStop + stepAfterResumed, 1.0 / speed) + stopPeriod)
+                    new TimestampedEvent(new NoteOnEvent(), TimeSpan.Zero),
+                    new TimestampedEvent(new NoteOffEvent(), ScaleTimeSpan(lastEventTime + stepAfterStop + stepAfterResumed, 1.0 / speed) + stopPeriod)
                 },
                 setupPlayback: playback =>
                 {
@@ -475,7 +475,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [Retry(RetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void EventPlayed_MoveBack_BeyondZero()
         {
@@ -522,8 +522,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
-                    new SentReceivedEvent(new NoteOffEvent(), lastEventTime + stopAfter + stopPeriod + stepAfterResumed)
+                    new TimestampedEvent(new NoteOnEvent(), TimeSpan.Zero),
+                    new TimestampedEvent(new NoteOffEvent(), lastEventTime + stopAfter + stopPeriod + stepAfterResumed)
                 },
                 setupPlayback: playback =>
                 {
@@ -532,7 +532,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [Retry(RetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void EventPlayed_MoveBack_BeyondZero_SendNoteOnEventsForActiveNotes()
         {
@@ -579,9 +579,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
-                    new SentReceivedEvent(new NoteOnEvent(), stopAfter + stopPeriod),
-                    new SentReceivedEvent(new NoteOffEvent(), lastEventTime + stopAfter + stopPeriod + stepAfterResumed)
+                    new TimestampedEvent(new NoteOnEvent(), TimeSpan.Zero),
+                    new TimestampedEvent(new NoteOnEvent(), stopAfter + stopPeriod),
+                    new TimestampedEvent(new NoteOffEvent(), lastEventTime + stopAfter + stopPeriod + stepAfterResumed)
                 },
                 setupPlayback: playback =>
                 {
@@ -591,7 +591,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [Retry(RetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void EventPlayed_MoveBack_BeyondPlaybackStart()
         {
@@ -614,8 +614,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(100)),
-                    new SentReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(500))
+                    new TimestampedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(100)),
+                    new TimestampedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(500))
                 },
                 setupPlayback: playback =>
                 {
@@ -625,7 +625,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [Retry(RetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void EventPlayed_MoveBack_BeyondPlaybackStart_SendNoteOnEventsForActiveNotes()
         {
@@ -648,9 +648,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(100)),
-                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(300)),
-                    new SentReceivedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(500))
+                    new TimestampedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(100)),
+                    new TimestampedEvent(new NoteOnEvent(), TimeSpan.FromMilliseconds(300)),
+                    new TimestampedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(500))
                 },
                 setupPlayback: playback =>
                 {
@@ -661,7 +661,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [Retry(RetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void EventPlayed_MoveToTime()
         {
@@ -710,8 +710,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
-                    new SentReceivedEvent(new NoteOffEvent(), stopAfter + stopPeriod + firstAfterResumeDelay + secondAfterResumeDelay + lastEventTime - moveTime2)
+                    new TimestampedEvent(new NoteOnEvent(), TimeSpan.Zero),
+                    new TimestampedEvent(new NoteOffEvent(), stopAfter + stopPeriod + firstAfterResumeDelay + secondAfterResumeDelay + lastEventTime - moveTime2)
                 },
                 setupPlayback: playback =>
                 {
@@ -720,7 +720,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [Retry(RetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void EventPlayed_MoveToTime_BeyondDuration()
         {
@@ -748,8 +748,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
-                    new SentReceivedEvent(new NoteOffEvent(), stopAfter)
+                    new TimestampedEvent(new NoteOnEvent(), TimeSpan.Zero),
+                    new TimestampedEvent(new NoteOffEvent(), stopAfter)
                 },
                 setupPlayback: playback =>
                 {
@@ -757,7 +757,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [Retry(RetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void EventPlayed_MoveToTime_BeyondPlaybackEnd()
         {
@@ -787,8 +787,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new SentReceivedEvent(new NoteOnEvent(), TimeSpan.Zero),
-                    new SentReceivedEvent(new NoteOffEvent(), stopAfter)
+                    new TimestampedEvent(new NoteOnEvent(), TimeSpan.Zero),
+                    new TimestampedEvent(new NoteOffEvent(), stopAfter)
                 },
                 setupPlayback: playback =>
                 {
@@ -804,11 +804,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         private void CheckEventPlayedEvent(
             ICollection<ITimedObject> initialPlaybackObjects,
             PlaybackAction[] actions,
-            ICollection<SentReceivedEvent> expectedReceivedEvents,
+            ICollection<TimestampedEvent> expectedReceivedEvents,
             Action<Playback> setupPlayback = null,
             bool checkFromFile = true)
         {
-            var playedEvents = new List<SentReceivedEvent>();
+            var playedEvents = new List<TimestampedEvent>();
             var stopwatch = new Stopwatch();
 
             CheckPlayback(
@@ -823,11 +823,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     stopwatch.Reset();
 
                     setupPlayback?.Invoke(playback);
-                    playback.EventPlayed += (_, e) => playedEvents.Add(new SentReceivedEvent(e.Event, stopwatch.Elapsed));
+                    playback.EventPlayed += (_, e) => playedEvents.Add(new TimestampedEvent(e.Event, stopwatch.Elapsed));
                 },
                 additionalChecks: (_, __) =>
                 {
-                    SendReceiveUtilities.CheckReceivedEvents(playedEvents, expectedReceivedEvents.ToList());
+                    SendReceiveUtilities.CheckTimestampedEvents(playedEvents, expectedReceivedEvents.ToList());
                 },
                 checkFromFile: checkFromFile);
         }

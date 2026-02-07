@@ -482,8 +482,7 @@ namespace Melanchall.DryWetMidi.Core
 
                     // Read RIFF header
 
-                    long? smfEndPosition = null;
-                    MidiFileReadingUtilities.ReadRmidPreamble(reader, out smfEndPosition);
+                    MidiFileReadingUtilities.ReadRmidPreamble(reader, out var smfEndPosition);
 
                     // Read SMF
 
@@ -728,8 +727,7 @@ namespace Melanchall.DryWetMidi.Core
         /// otherwise, <c>false</c>.</returns>
         public static bool Equals(MidiFile midiFile1, MidiFile midiFile2)
         {
-            string message;
-            return Equals(midiFile1, midiFile2, out message);
+            return Equals(midiFile1, midiFile2, out _);
         }
 
         /// <summary>
@@ -756,8 +754,7 @@ namespace Melanchall.DryWetMidi.Core
         /// otherwise, <c>false</c>.</returns>
         public static bool Equals(MidiFile midiFile1, MidiFile midiFile2, MidiFileEqualityCheckSettings settings)
         {
-            string message;
-            return Equals(midiFile1, midiFile2, settings, out message);
+            return Equals(midiFile1, midiFile2, settings, out _);
         }
 
         /// <summary>

@@ -91,8 +91,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// </summary>
         protected override void Stop()
         {
-            int errorCode;
-            var result = StopInternal(out errorCode);
+            var result = StopInternal(out var errorCode);
             NativeApiUtilities.HandleTickGeneratorNativeApiResult(result, errorCode);
         }
 
@@ -188,8 +187,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             {
             }
 
-            int errorCode;
-            StopInternal(out errorCode);
+            StopInternal(out _);
 
             _disposed = true;
         }

@@ -32,8 +32,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
             if (match == null)
                 return ParsingResult.NotMatched;
 
-            int octaveNumber;
-            if (!ParsingUtilities.ParseInt(match, OctaveNumberGroupName, Octave.Middle.Number, out octaveNumber) ||
+            if (!ParsingUtilities.ParseInt(match, OctaveNumberGroupName, Octave.Middle.Number, out var octaveNumber) ||
                 octaveNumber < Octave.MinOctaveNumber ||
                 octaveNumber > Octave.MaxOctaveNumber)
                 return ParsingResult.Error(OctaveIsOutOfRange);

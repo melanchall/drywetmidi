@@ -163,8 +163,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         {
             ThrowIfArgument.IsInvalidEnumValue(nameof(noteName), noteName);
 
-            Note note;
-            if (!_notes.TryGetValue(noteName, out note))
+            if (!_notes.TryGetValue(noteName, out var note))
                 throw new InvalidOperationException($"Unable to get the {noteName} note.");
 
             return note;
@@ -184,8 +183,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
                                          MaxOctaveNumber,
                                          $"Octave number is out of [{MinOctaveNumber}, {MaxOctaveNumber}] range.");
 
-            Octave octave;
-            if (!Cache.TryGetValue(octaveNumber, out octave))
+            if (!Cache.TryGetValue(octaveNumber, out var octave))
                 Cache.TryAdd(octaveNumber, octave = new Octave(octaveNumber));
 
             return octave;

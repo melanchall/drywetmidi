@@ -210,12 +210,11 @@ namespace Melanchall.DryWetMidi.Tools
                 var eventsToCopyToNextPart = timedEventsHolder.EventsToCopyToNextPart;
                 var eventsToStartNextPart = timedEventsHolder.EventsToStartNextPart;
 
-                int newEventsStartIndex;
                 var takenTimedEvents = PrepareTakenTimedEvents(
                     eventsToCopyToNextPart,
                     preserveTimes,
                     eventsToStartNextPart,
-                    out newEventsStartIndex);
+                    out var newEventsStartIndex);
 
                 if (timedEventsHolder.CanBeEnumerated)
                 {

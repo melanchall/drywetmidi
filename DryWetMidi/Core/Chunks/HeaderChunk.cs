@@ -83,10 +83,7 @@ namespace Melanchall.DryWetMidi.Core
         /// <see cref="UnknownFileFormatPolicy.Abort"/>.</exception>
         protected override void ReadContent(MidiReader reader, ReadingSettings settings, uint size)
         {
-            ushort fileFormat;
-            ushort tracksNumber;
-            TimeDivision timeDivision;
-            ReadData(reader, settings, out fileFormat, out timeDivision, out tracksNumber);
+            ReadData(reader, settings, out var fileFormat, out var timeDivision, out var tracksNumber);
 
             FileFormat = fileFormat;
             TimeDivision = timeDivision;

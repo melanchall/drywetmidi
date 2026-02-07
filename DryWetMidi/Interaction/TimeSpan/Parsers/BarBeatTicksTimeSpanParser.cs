@@ -41,16 +41,13 @@ namespace Melanchall.DryWetMidi.Interaction
             if (match == null)
                 return ParsingResult.NotMatched;
 
-            long bars;
-            if (!ParsingUtilities.ParseNonnegativeLong(match, BarsGroupName, 0, out bars))
+            if (!ParsingUtilities.ParseNonnegativeLong(match, BarsGroupName, 0, out var bars))
                 return ParsingResult.Error(BarsIsOutOfRange);
 
-            long beats;
-            if (!ParsingUtilities.ParseNonnegativeLong(match, BeatsGroupName, 0, out beats))
+            if (!ParsingUtilities.ParseNonnegativeLong(match, BeatsGroupName, 0, out var beats))
                 return ParsingResult.Error(BeatsIsOutOfRange);
 
-            long ticks;
-            if (!ParsingUtilities.ParseNonnegativeLong(match, TicksGroupName, 0, out ticks))
+            if (!ParsingUtilities.ParseNonnegativeLong(match, TicksGroupName, 0, out var ticks))
                 return ParsingResult.Error(TicksIsOutOfRange);
 
             timeSpan = new BarBeatTicksTimeSpan(bars, beats, ticks);

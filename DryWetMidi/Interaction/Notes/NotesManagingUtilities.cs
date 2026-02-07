@@ -1028,11 +1028,6 @@ namespace Melanchall.DryWetMidi.Interaction
                 completeObjectsAllowed));
         }
 
-        private static int GetNoteEventId(NoteEvent noteEvent)
-        {
-            return noteEvent.Channel * 1000 + noteEvent.NoteNumber;
-        }
-
         private static IEnumerable<ITimedObject> GetSortedNotesAndTimedEventsLazy(
             this IEnumerable<ITimedObject> timedObjects,
             NoteDetectionSettings settings,
@@ -1062,11 +1057,10 @@ namespace Melanchall.DryWetMidi.Interaction
                 {
                     case MidiEventType.NoteOn:
                         {
-                            var noteId = GetNoteEventId((NoteOnEvent)timedEvent.Event);
+                            var noteId = ((NoteOnEvent)timedEvent.Event).GetNoteId();
                             var node = objectsDescriptors.AddLast(new NoteDescriptor(timedEvent));
 
-                            NoteOnsHolder noteOnsHolder;
-                            if (!notesDescriptorsNodes.TryGetValue(noteId, out noteOnsHolder))
+                            if (!notesDescriptorsNodes.TryGetValue(noteId, out var noteOnsHolder))
                                 notesDescriptorsNodes.Add(noteId, noteOnsHolder = new NoteOnsHolder(settings.NoteStartDetectionPolicy));
 
                             noteOnsHolder.Add(node);
@@ -1074,12 +1068,11 @@ namespace Melanchall.DryWetMidi.Interaction
                         break;
                     case MidiEventType.NoteOff:
                         {
-                            var noteId = GetNoteEventId((NoteOffEvent)timedEvent.Event);
+                            var noteId = ((NoteOffEvent)timedEvent.Event).GetNoteId();
 
-                            NoteOnsHolder noteOnsHolder;
                             LinkedListNode<IObjectDescriptor> node;
 
-                            if (!notesDescriptorsNodes.TryGetValue(noteId, out noteOnsHolder) || noteOnsHolder.Count == 0 || (node = noteOnsHolder.GetNext()).List == null)
+                            if (!notesDescriptorsNodes.TryGetValue(noteId, out var noteOnsHolder) || noteOnsHolder.Count == 0 || (node = noteOnsHolder.GetNext()).List == null)
                             {
                                 objectsDescriptors.AddLast(new TimedEventDescriptor(timedEvent));
                                 break;

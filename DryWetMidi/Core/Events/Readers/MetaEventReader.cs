@@ -73,8 +73,8 @@ namespace Melanchall.DryWetMidi.Core
                     break;
                 default:
                     {
-                        Type eventType = null;
-                        metaEvent = settings.CustomMetaEventTypes?.TryGetType(statusByte, out eventType) == true && IsMetaEventType(eventType)
+                        // TODO: get rid of Activator and reflection at all
+                        metaEvent = settings.CustomMetaEventTypes?.TryGetType(statusByte, out var eventType) == true && IsMetaEventType(eventType)
                             ? (MetaEvent)Activator.CreateInstance(eventType)
                             : new UnknownMetaEvent(statusByte);
                     }

@@ -14,11 +14,11 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         public void CheckChordIdsEquality_1() => ClassicAssert.AreEqual(
             new ChordId(new[]
             {
-                new NoteId((FourBitNumber)5, (SevenBitNumber)70),
+                GetNoteId((FourBitNumber)5, (SevenBitNumber)70),
             }),
             new ChordId(new[]
             {
-                new NoteId((FourBitNumber)5, (SevenBitNumber)70),
+                GetNoteId((FourBitNumber)5, (SevenBitNumber)70),
             }),
             "Chord IDs equality check failed.");
 
@@ -26,13 +26,13 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         public void CheckChordIdsEquality_2() => ClassicAssert.AreEqual(
             new ChordId(new[]
             {
-                new NoteId((FourBitNumber)5, (SevenBitNumber)70),
-                new NoteId((FourBitNumber)4, (SevenBitNumber)70),
+                GetNoteId((FourBitNumber)5, (SevenBitNumber)70),
+                GetNoteId((FourBitNumber)4, (SevenBitNumber)70),
             }),
             new ChordId(new[]
             {
-                new NoteId((FourBitNumber)5, (SevenBitNumber)70),
-                new NoteId((FourBitNumber)4, (SevenBitNumber)70),
+                GetNoteId((FourBitNumber)5, (SevenBitNumber)70),
+                GetNoteId((FourBitNumber)4, (SevenBitNumber)70),
             }),
             "Chord IDs equality check failed.");
 
@@ -40,13 +40,13 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         public void CheckChordIdsEquality_3() => ClassicAssert.AreEqual(
             new ChordId(new[]
             {
-                new NoteId((FourBitNumber)4, (SevenBitNumber)70),
-                new NoteId((FourBitNumber)5, (SevenBitNumber)70),
+                GetNoteId((FourBitNumber)4, (SevenBitNumber)70),
+                GetNoteId((FourBitNumber)5, (SevenBitNumber)70),
             }),
             new ChordId(new[]
             {
-                new NoteId((FourBitNumber)5, (SevenBitNumber)70),
-                new NoteId((FourBitNumber)4, (SevenBitNumber)70),
+                GetNoteId((FourBitNumber)5, (SevenBitNumber)70),
+                GetNoteId((FourBitNumber)4, (SevenBitNumber)70),
             }),
             "Chord IDs equality check failed.");
 
@@ -54,15 +54,15 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         public void CheckChordIdsEquality_4() => ClassicAssert.AreEqual(
             new ChordId(new[]
             {
-                new NoteId((FourBitNumber)4, (SevenBitNumber)50),
-                new NoteId((FourBitNumber)4, (SevenBitNumber)70),
-                new NoteId((FourBitNumber)5, (SevenBitNumber)70),
+                GetNoteId((FourBitNumber)4, (SevenBitNumber)50),
+                GetNoteId((FourBitNumber)4, (SevenBitNumber)70),
+                GetNoteId((FourBitNumber)5, (SevenBitNumber)70),
             }),
             new ChordId(new[]
             {
-                new NoteId((FourBitNumber)5, (SevenBitNumber)70),
-                new NoteId((FourBitNumber)4, (SevenBitNumber)70),
-                new NoteId((FourBitNumber)4, (SevenBitNumber)50),
+                GetNoteId((FourBitNumber)5, (SevenBitNumber)70),
+                GetNoteId((FourBitNumber)4, (SevenBitNumber)70),
+                GetNoteId((FourBitNumber)4, (SevenBitNumber)50),
             }),
             "Chord IDs equality check failed.");
 
@@ -70,17 +70,17 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         public void CheckChordIdsEquality_5() => ClassicAssert.AreEqual(
             new ChordId(new[]
             {
-                new NoteId((FourBitNumber)4, (SevenBitNumber)50),
-                new NoteId((FourBitNumber)4, (SevenBitNumber)70),
-                new NoteId((FourBitNumber)4, (SevenBitNumber)70),
-                new NoteId((FourBitNumber)5, (SevenBitNumber)70),
+                GetNoteId((FourBitNumber)4, (SevenBitNumber)50),
+                GetNoteId((FourBitNumber)4, (SevenBitNumber)70),
+                GetNoteId((FourBitNumber)4, (SevenBitNumber)70),
+                GetNoteId((FourBitNumber)5, (SevenBitNumber)70),
             }),
             new ChordId(new[]
             {
-                new NoteId((FourBitNumber)5, (SevenBitNumber)70),
-                new NoteId((FourBitNumber)4, (SevenBitNumber)70),
-                new NoteId((FourBitNumber)4, (SevenBitNumber)70),
-                new NoteId((FourBitNumber)4, (SevenBitNumber)50),
+                GetNoteId((FourBitNumber)5, (SevenBitNumber)70),
+                GetNoteId((FourBitNumber)4, (SevenBitNumber)70),
+                GetNoteId((FourBitNumber)4, (SevenBitNumber)70),
+                GetNoteId((FourBitNumber)4, (SevenBitNumber)50),
             }),
             "Chord IDs equality check failed.");
 
@@ -88,11 +88,11 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         public void CheckChordIdsInequality_1() => ClassicAssert.AreNotEqual(
             new ChordId(new[]
             {
-                new NoteId((FourBitNumber)5, (SevenBitNumber)70),
+                GetNoteId((FourBitNumber)5, (SevenBitNumber)70),
             }),
             new ChordId(new[]
             {
-                new NoteId((FourBitNumber)4, (SevenBitNumber)70),
+                GetNoteId((FourBitNumber)4, (SevenBitNumber)70),
             }),
             "Chord IDs inequality check failed.");
 
@@ -100,11 +100,11 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         public void CheckChordIdsInequality_2() => ClassicAssert.AreNotEqual(
             new ChordId(new[]
             {
-                new NoteId((FourBitNumber)5, (SevenBitNumber)70),
+                GetNoteId((FourBitNumber)5, (SevenBitNumber)70),
             }),
             new ChordId(new[]
             {
-                new NoteId((FourBitNumber)5, (SevenBitNumber)80),
+                GetNoteId((FourBitNumber)5, (SevenBitNumber)80),
             }),
             "Chord IDs inequality check failed.");
 
@@ -112,13 +112,13 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         public void CheckChordIdsInequality_3() => ClassicAssert.AreNotEqual(
             new ChordId(new[]
             {
-                new NoteId((FourBitNumber)5, (SevenBitNumber)70),
-                new NoteId((FourBitNumber)4, (SevenBitNumber)70),
+                GetNoteId((FourBitNumber)5, (SevenBitNumber)70),
+                GetNoteId((FourBitNumber)4, (SevenBitNumber)70),
             }),
             new ChordId(new[]
             {
-                new NoteId((FourBitNumber)5, (SevenBitNumber)50),
-                new NoteId((FourBitNumber)4, (SevenBitNumber)70),
+                GetNoteId((FourBitNumber)5, (SevenBitNumber)50),
+                GetNoteId((FourBitNumber)4, (SevenBitNumber)70),
             }),
             "Chord IDs inequality check failed.");
 
@@ -126,13 +126,13 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         public void CheckChordIdsInequality_4() => ClassicAssert.AreNotEqual(
             new ChordId(new[]
             {
-                new NoteId((FourBitNumber)3, (SevenBitNumber)70),
-                new NoteId((FourBitNumber)4, (SevenBitNumber)70),
+                GetNoteId((FourBitNumber)3, (SevenBitNumber)70),
+                GetNoteId((FourBitNumber)4, (SevenBitNumber)70),
             }),
             new ChordId(new[]
             {
-                new NoteId((FourBitNumber)5, (SevenBitNumber)70),
-                new NoteId((FourBitNumber)4, (SevenBitNumber)70),
+                GetNoteId((FourBitNumber)5, (SevenBitNumber)70),
+                GetNoteId((FourBitNumber)4, (SevenBitNumber)70),
             }),
             "Chord IDs inequality check failed.");
 
@@ -140,13 +140,13 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         public void CheckChordIdsInequality_5() => ClassicAssert.AreNotEqual(
             new ChordId(new[]
             {
-                new NoteId((FourBitNumber)4, (SevenBitNumber)70),
-                new NoteId((FourBitNumber)5, (SevenBitNumber)70),
+                GetNoteId((FourBitNumber)4, (SevenBitNumber)70),
+                GetNoteId((FourBitNumber)5, (SevenBitNumber)70),
             }),
             new ChordId(new[]
             {
-                new NoteId((FourBitNumber)5, (SevenBitNumber)80),
-                new NoteId((FourBitNumber)4, (SevenBitNumber)70),
+                GetNoteId((FourBitNumber)5, (SevenBitNumber)80),
+                GetNoteId((FourBitNumber)4, (SevenBitNumber)70),
             }),
             "Chord IDs inequality check failed.");
 
@@ -154,15 +154,15 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         public void CheckChordIdsInequality_6() => ClassicAssert.AreNotEqual(
             new ChordId(new[]
             {
-                new NoteId((FourBitNumber)4, (SevenBitNumber)50),
-                new NoteId((FourBitNumber)4, (SevenBitNumber)70),
-                new NoteId((FourBitNumber)5, (SevenBitNumber)70),
+                GetNoteId((FourBitNumber)4, (SevenBitNumber)50),
+                GetNoteId((FourBitNumber)4, (SevenBitNumber)70),
+                GetNoteId((FourBitNumber)5, (SevenBitNumber)70),
             }),
             new ChordId(new[]
             {
-                new NoteId((FourBitNumber)5, (SevenBitNumber)70),
-                new NoteId((FourBitNumber)4, (SevenBitNumber)70),
-                new NoteId((FourBitNumber)4, (SevenBitNumber)60),
+                GetNoteId((FourBitNumber)5, (SevenBitNumber)70),
+                GetNoteId((FourBitNumber)4, (SevenBitNumber)70),
+                GetNoteId((FourBitNumber)4, (SevenBitNumber)60),
             }),
             "Chord IDs inequality check failed.");
 
@@ -170,17 +170,17 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         public void CheckChordIdsInequality_7() => ClassicAssert.AreNotEqual(
             new ChordId(new[]
             {
-                new NoteId((FourBitNumber)4, (SevenBitNumber)50),
-                new NoteId((FourBitNumber)4, (SevenBitNumber)70),
-                new NoteId((FourBitNumber)4, (SevenBitNumber)70),
-                new NoteId((FourBitNumber)5, (SevenBitNumber)70),
+                GetNoteId((FourBitNumber)4, (SevenBitNumber)50),
+                GetNoteId((FourBitNumber)4, (SevenBitNumber)70),
+                GetNoteId((FourBitNumber)4, (SevenBitNumber)70),
+                GetNoteId((FourBitNumber)5, (SevenBitNumber)70),
             }),
             new ChordId(new[]
             {
-                new NoteId((FourBitNumber)5, (SevenBitNumber)80),
-                new NoteId((FourBitNumber)4, (SevenBitNumber)70),
-                new NoteId((FourBitNumber)4, (SevenBitNumber)70),
-                new NoteId((FourBitNumber)4, (SevenBitNumber)50),
+                GetNoteId((FourBitNumber)5, (SevenBitNumber)80),
+                GetNoteId((FourBitNumber)4, (SevenBitNumber)70),
+                GetNoteId((FourBitNumber)4, (SevenBitNumber)70),
+                GetNoteId((FourBitNumber)4, (SevenBitNumber)50),
             }),
             "Chord IDs inequality check failed.");
 
@@ -188,18 +188,27 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         public void CheckChordIdsInequality_8() => ClassicAssert.AreNotEqual(
             new ChordId(new[]
             {
-                new NoteId((FourBitNumber)4, (SevenBitNumber)50),
-                new NoteId((FourBitNumber)4, (SevenBitNumber)70),
-                new NoteId((FourBitNumber)4, (SevenBitNumber)70),
-                new NoteId((FourBitNumber)5, (SevenBitNumber)70),
+                GetNoteId((FourBitNumber)4, (SevenBitNumber)50),
+                GetNoteId((FourBitNumber)4, (SevenBitNumber)70),
+                GetNoteId((FourBitNumber)4, (SevenBitNumber)70),
+                GetNoteId((FourBitNumber)5, (SevenBitNumber)70),
             }),
             new ChordId(new[]
             {
-                new NoteId((FourBitNumber)5, (SevenBitNumber)70),
-                new NoteId((FourBitNumber)4, (SevenBitNumber)70),
-                new NoteId((FourBitNumber)4, (SevenBitNumber)50),
+                GetNoteId((FourBitNumber)5, (SevenBitNumber)70),
+                GetNoteId((FourBitNumber)4, (SevenBitNumber)70),
+                GetNoteId((FourBitNumber)4, (SevenBitNumber)50),
             }),
             "Chord IDs inequality check failed.");
+
+        #endregion
+
+        #region Private methods
+
+        private static NoteId GetNoteId(FourBitNumber channel, SevenBitNumber noteNumber)
+        {
+            return new NoteId((channel << 7) | noteNumber);
+        }
 
         #endregion
     }

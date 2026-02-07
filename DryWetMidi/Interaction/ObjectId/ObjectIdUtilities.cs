@@ -37,7 +37,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
         private static NoteId GetNoteId(Note note)
         {
-            return note.GetNoteId();
+            return new NoteId(note.GetNoteId());
         }
 
         #endregion

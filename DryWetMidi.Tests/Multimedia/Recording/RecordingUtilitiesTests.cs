@@ -25,7 +25,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
         #region Test methods
 
-        [Retry(RetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void SaveRecordingToFile()
         {
@@ -33,24 +33,23 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
             var eventsToSend = new[]
             {
-                new EventToSend(new NoteOnEvent(), TimeSpan.Zero),
-                new EventToSend(new NoteOffEvent(), TimeSpan.FromMilliseconds(500)),
-                new EventToSend(new ProgramChangeEvent((SevenBitNumber)40), TimeSpan.FromSeconds(5)),
-                new EventToSend(new ActiveSensingEvent(), TimeSpan.FromMilliseconds(100)),
-                new EventToSend(new ProgramChangeEvent((SevenBitNumber)50), TimeSpan.FromMilliseconds(500)),
+                new TimestampedEvent(new NoteOnEvent(), TimeSpan.Zero),
+                new TimestampedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(500)),
+                new TimestampedEvent(new ProgramChangeEvent((SevenBitNumber)40), TimeSpan.FromMilliseconds(5500)),
+                new TimestampedEvent(new ActiveSensingEvent(), TimeSpan.FromMilliseconds(5600)),
+                new TimestampedEvent(new ProgramChangeEvent((SevenBitNumber)50), TimeSpan.FromMilliseconds(6100)),
             };
 
-            var receivedEvents = new List<SentReceivedEvent>();
+            var receivedEvents = new List<TimestampedEvent>();
             var stopwatch = new Stopwatch();
 
-            var waitTimeout = eventsToSend.Aggregate(TimeSpan.Zero, (result, e) => result + e.Delay) +
-                SendReceiveUtilities.MaximumEventSendReceiveDelay;
+            var waitTimeout = eventsToSend.Max(e => e.Time) + SendReceiveUtilities.MaximumEventSendReceiveDelay;
 
             var inputDevice = TestDeviceManager.GetInputDevice("A");
             var outputDevice = TestDeviceManager.GetOutputDevice("A");
 
             inputDevice.StartEventsListening();
-            inputDevice.EventReceived += (_, e) => receivedEvents.Add(new SentReceivedEvent(e.Event, stopwatch.Elapsed));
+            inputDevice.EventReceived += (_, e) => receivedEvents.Add(new TimestampedEvent(e.Event, stopwatch.Elapsed));
 
             using (var recording = new Recording(tempoMap, inputDevice))
             {

@@ -62,21 +62,21 @@ namespace Melanchall.DryWetMidi.Interaction
             var firstTimeSignature = timeSignatureLine.GetValueAtTime(time);
             var lastTimeSignature = timeSignatureLine.GetValueAtTime(lastTime);
 
-            long barsBefore, beatsBefore, ticksBefore;
-            CalculateComponents(firstTime - time,
-                                firstTimeSignature,
-                                ticksPerQuarterNote,
-                                out barsBefore,
-                                out beatsBefore,
-                                out ticksBefore);
+            CalculateComponents(
+                firstTime - time,
+                firstTimeSignature,
+                ticksPerQuarterNote,
+                out var barsBefore,
+                out var beatsBefore,
+                out var ticksBefore);
 
-            long barsAfter, beatsAfter, ticksAfter;
-            CalculateComponents(endTime - lastTime,
-                                lastTimeSignature,
-                                ticksPerQuarterNote,
-                                out barsAfter,
-                                out beatsAfter,
-                                out ticksAfter);
+            CalculateComponents(
+                endTime - lastTime,
+                lastTimeSignature,
+                ticksPerQuarterNote,
+                out var barsAfter,
+                out var beatsAfter,
+                out var ticksAfter);
 
             bars += barsBefore + barsAfter;
 
@@ -143,13 +143,13 @@ namespace Melanchall.DryWetMidi.Interaction
             var lastTimeSignature = firstTimeSignatureChange?.Value ?? startTimeSignature;
             var lastTime = firstTimeSignatureChange?.Time ?? time;
 
-            long barsBefore, beatsBefore, ticksBefore;
-            CalculateComponents(lastTime - time,
-                                startTimeSignature,
-                                ticksPerQuarterNote,
-                                out barsBefore,
-                                out beatsBefore,
-                                out ticksBefore);
+            CalculateComponents(
+                lastTime - time,
+                startTimeSignature,
+                ticksPerQuarterNote,
+                out var barsBefore,
+                out var beatsBefore,
+                out var ticksBefore);
 
             bars -= barsBefore;
 
@@ -216,12 +216,13 @@ namespace Melanchall.DryWetMidi.Interaction
 
         #region Methods
 
-        private static void CalculateComponents(long totalTicks,
-                                                TimeSignature timeSignature,
-                                                short ticksPerQuarterNote,
-                                                out long bars,
-                                                out long beats,
-                                                out long ticks)
+        private static void CalculateComponents(
+            long totalTicks,
+            TimeSignature timeSignature,
+            short ticksPerQuarterNote,
+            out long bars,
+            out long beats,
+            out long ticks)
         {
             var barLength = BarBeatUtilities.GetBarLength(timeSignature, ticksPerQuarterNote);
             bars = Math.DivRem(totalTicks, barLength, out ticks);

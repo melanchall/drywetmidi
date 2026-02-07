@@ -83,8 +83,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
 
         private static Parsing<ChordProgression> GetParsing(string input, Scale scale)
         {
-            ChordProgression chordProgression;
-            var result = ChordProgressionParser.TryParse(input, scale, out chordProgression);
+            var result = ChordProgressionParser.TryParse(input, scale, out var chordProgression);
             return (string i, out ChordProgression cp) =>
             {
                 cp = chordProgression;

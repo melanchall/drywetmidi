@@ -55,8 +55,7 @@ namespace Melanchall.DryWetMidi.Common
             Func<T, TKey> keySelector)
             where TKey : IComparable<TKey>
         {
-            int index;
-            return GetLastElementBelowThreshold(elements, keyThreshold, keySelector, out index);
+            return GetLastElementBelowThreshold(elements, keyThreshold, keySelector, out _);
         }
 
         public static T GetLastElementBelowThreshold<T, TKey>(
@@ -108,8 +107,7 @@ namespace Melanchall.DryWetMidi.Common
             Func<T, TKey> keySelector)
             where TKey : IComparable<TKey>
         {
-            int index;
-            return GetFirstElementAboveThreshold(elements, keyThreshold, keySelector, out index);
+            return GetFirstElementAboveThreshold(elements, keyThreshold, keySelector, out _);
         }
 
         public static T GetFirstElementAboveThreshold<T, TKey>(

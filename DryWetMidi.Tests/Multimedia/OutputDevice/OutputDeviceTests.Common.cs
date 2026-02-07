@@ -72,7 +72,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             () => SendEvent(new EscapeSysExEvent(new byte[] { 0x5F, 0x40, 0xF7 })));
 
         [CancelAfter(60 * 1000)]
-        [Retry(RetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void SendEvent_SysEx()
         {
@@ -80,7 +80,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         }
 
         [CancelAfter(60 * 1000)]
-        [Retry(RetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void SendEvent_SysEx_Large([Values(100, 1000, 10000)] int size)
         {
@@ -92,7 +92,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     .ToArray()));
         }
 
-        [Retry(RetriesNumber)]
+        [MultimediaTestRetry]
         [TestCase(MidiEventType.ActiveSensing)]
         [TestCase(MidiEventType.Continue)]
         [TestCase(MidiEventType.Reset)]
@@ -120,7 +120,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             SendEvent(midiEvent);
         }
 
-        [Retry(RetriesNumber)]
+        [MultimediaTestRetry]
         [TestCaseSource(nameof(GetNonDefaultShortEvents))]
         public void SendEvent_Short_NonDefault(MidiEvent midiEvent)
         {
@@ -250,6 +250,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         {
             var deviceName = MidiDevicesNames.DeviceA;
 
+            Console.WriteLine($"Obtaining output device [{deviceName}]...");
             using (var outputDevice = OutputDevice.GetByName(deviceName))
             {
                 MidiEvent eventSent = null;
@@ -258,6 +259,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 string errorOnSend = null;
                 outputDevice.ErrorOccurred += (_, e) => errorOnSend = e.Exception.Message;
 
+                Console.WriteLine($"Obtaining input device [{deviceName}]...");
                 using (var inputDevice = InputDevice.GetByName(deviceName))
                 {
                     MidiEvent eventReceived = null;
@@ -266,10 +268,15 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     string errorOnReceive = null;
                     inputDevice.ErrorOccurred += (_, e) => errorOnReceive = e.Exception.Message;
 
+                    Console.WriteLine($"Starting events listening...");
                     inputDevice.StartEventsListening();
 
+                    Console.WriteLine($"Preparing for events sending...");
                     outputDevice.PrepareForEventsSending();
+
+                    Console.WriteLine($"Sending event [{midiEvent}]...");
                     outputDevice.SendEvent(midiEvent);
+                    Console.WriteLine($"Event sent.");
 
                     var timeout = SendReceiveUtilities.MaximumEventSendReceiveDelay;
                     var isEventSentReceived = WaitOperations.Wait(() => eventSent != null && eventReceived != null, timeout);

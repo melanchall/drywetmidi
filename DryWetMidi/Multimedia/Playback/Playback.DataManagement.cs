@@ -16,8 +16,8 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         private readonly HashSet<NotePlaybackEventMetadata> _notesMetadataHashSet = new HashSet<NotePlaybackEventMetadata>();
 
-        private readonly ConcurrentDictionary<NoteId, TimedEvent> _noteOnEvents = new ConcurrentDictionary<NoteId, TimedEvent>();
-        private readonly ConcurrentDictionary<NoteId, TimedEvent> _noteOffEvents = new ConcurrentDictionary<NoteId, TimedEvent>();
+        private readonly ConcurrentDictionary<int, TimedEvent> _noteOnEvents = new ConcurrentDictionary<int, TimedEvent>();
+        private readonly ConcurrentDictionary<int, TimedEvent> _noteOffEvents = new ConcurrentDictionary<int, TimedEvent>();
 
         private readonly List<PlaybackEvent> _playbackEventsBuffer = new List<PlaybackEvent>();
         private IPlaybackSource _playbackSource = new FixedPlaybackSource();

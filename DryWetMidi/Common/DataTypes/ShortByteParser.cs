@@ -11,8 +11,7 @@
             if (string.IsNullOrWhiteSpace(input))
                 return ParsingResult.EmptyInputString;
 
-            byte tmpResult;
-            if (!byte.TryParse(input.Trim(), out tmpResult) || tmpResult < minValue || tmpResult > maxValue)
+            if (!byte.TryParse(input.Trim(), out var tmpResult) || tmpResult < minValue || tmpResult > maxValue)
                 return ParsingResult.Error("Number is invalid or is out of valid range.");
 
             result = tmpResult;

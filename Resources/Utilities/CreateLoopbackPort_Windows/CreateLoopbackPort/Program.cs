@@ -32,20 +32,11 @@ namespace CreateLoopbackPort
             var portHandle = virtualMIDICreatePortEx3(portName, IntPtr.Zero, IntPtr.Zero, 65535, 12, ref manufacturer, ref product);
             Console.WriteLine($"Virtual MIDI port created.");
 
-            var thread = new Thread(() =>
-			{
-				while (true)
-				{
-					var commandBytesLength = GetCommandBytesLength(portHandle);
-					SendCommandBytes(portHandle, commandBytesLength);
-				}
-			});
-
-            Console.WriteLine("Starting send/receive loop...");
-            thread.Start();
-			Console.WriteLine("Send/receive loop is running...");
-			
-			Console.ReadKey();
+            while (true)
+            {
+                var commandBytesLength = GetCommandBytesLength(portHandle);
+                SendCommandBytes(portHandle, commandBytesLength);
+            }
 		}
 
 		private static void SendCommandBytes(IntPtr portHandle, uint commandBytesLength)

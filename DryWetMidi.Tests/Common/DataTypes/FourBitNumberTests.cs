@@ -47,9 +47,7 @@ namespace Melanchall.DryWetMidi.Tests.Common
         [Test]
         public void TryParse()
         {
-            FourBitNumber result;
-
-            FourBitNumber.TryParse("12", out result);
+            FourBitNumber.TryParse("12", out var result);
             ClassicAssert.AreEqual((FourBitNumber)12, result);
 
             FourBitNumber.TryParse("0", out result);

@@ -17,28 +17,28 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
     {
         #region Test methods
 
-        [Retry(RetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void CheckSingleTimedObjectPlayback_TimedEvent_MetaEvent([Values(0, 100)] long time) => CheckSingleTimedObjectPlayback(
             new TimedEvent(new TextEvent("A"), time));
 
-        [Retry(RetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void CheckSingleTimedObjectPlayback_TimedEvent_ChannelEvent([Values(0, 100)] long time) => CheckSingleTimedObjectPlayback(
             new TimedEvent(new ProgramChangeEvent(), time));
 
-        [Retry(RetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void CheckSingleTimedObjectPlayback_Note([Values(0, 100)] long time, [Values(0, 100)] long length) => CheckSingleTimedObjectPlayback(
             new Note((SevenBitNumber)70, length, time));
 
-        [Retry(RetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void CheckSingleTimedObjectPlayback_Chord_SingleNote([Values(0, 100)] long time, [Values(0, 100)] long length) => CheckSingleTimedObjectPlayback(
             new Chord(
                 new Note((SevenBitNumber)70, length, time)));
 
-        [Retry(RetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void CheckSingleTimedObjectPlayback_Chord_MultipleNotes(
             [Values(0, 100)] long time,
@@ -55,19 +55,19 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         private void CheckSingleTimedObjectPlayback(
             ITimedObject timedObject)
         {
-            var receivedEvents = new List<SentReceivedEvent>();
+            var receivedEvents = new List<TimestampedEvent>();
             var stopwatch = new Stopwatch();
             var tempoMap = TempoMap;
 
             var expectedReceivedEvents = new[] { timedObject }
                 .GetObjects(ObjectType.TimedEvent)
                 .Cast<TimedEvent>()
-                .Select(e => new SentReceivedEvent(e.Event, (TimeSpan)e.TimeAs<MetricTimeSpan>(tempoMap)))
+                .Select(e => new TimestampedEvent(e.Event, (TimeSpan)e.TimeAs<MetricTimeSpan>(tempoMap)))
                 .ToArray();
 
             using (var playback = new Playback(new[] { timedObject }, tempoMap))
             {
-                playback.EventPlayed += (_, e) => receivedEvents.Add(new SentReceivedEvent(e.Event, stopwatch.Elapsed));
+                playback.EventPlayed += (_, e) => receivedEvents.Add(new TimestampedEvent(e.Event, stopwatch.Elapsed));
 
                 var timeout = expectedReceivedEvents.Last().Time + SendReceiveUtilities.MaximumEventSendReceiveDelay;
 
@@ -81,7 +81,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             }
 
             CollectionAssert.IsNotEmpty(receivedEvents, "No events received.");
-            SendReceiveUtilities.CheckReceivedEvents(receivedEvents, expectedReceivedEvents);
+            SendReceiveUtilities.CheckTimestampedEvents(receivedEvents, expectedReceivedEvents);
         }
 
         #endregion

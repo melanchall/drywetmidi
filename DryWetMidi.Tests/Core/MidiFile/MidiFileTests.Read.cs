@@ -1517,9 +1517,8 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 exception => { });
         }
 
-        [TestCase(3)]
-        [TestCase(byte.MaxValue)]
-        public void Read_UnknownFileFormat_Abort(byte formatLastByte)
+        [Test]
+        public void Read_UnknownFileFormat_Abort([Values(3, byte.MaxValue)] byte formatLastByte)
         {
             ReadInvalidFileWithException<UnknownFileFormatException>(
                 new MidiFile(),
@@ -1536,9 +1535,8 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 exception => ClassicAssert.AreEqual(formatLastByte, exception.FileFormat, "File format is invalid."));
         }
 
-        [TestCase(3)]
-        [TestCase(byte.MaxValue)]
-        public void Read_UnknownFileFormat_Ignore(byte formatLastByte)
+        [Test]
+        public void Read_UnknownFileFormat_Ignore([Values(3, byte.MaxValue)] byte formatLastByte)
         {
             ReadInvalidFile(
                 new MidiFile(),

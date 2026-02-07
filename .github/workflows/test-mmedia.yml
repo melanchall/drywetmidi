@@ -106,16 +106,7 @@ jobs:
         continue-on-error:  false
         shell: pwsh
         run: |
-          dotnet test DryWetMidi.Tests/Melanchall.DryWetMidi.Tests.csproj `
-            --blame `
-            --no-build `
-            --configuration ${{ vars.TEST_BUILD_CONFIGURATION || 'Release' }} `
-            --filter "(FullyQualifiedName~.Multimedia)" `
-            --framework ${{ steps.framework.outputs.tfm }} `
-            --verbosity normal `
-            --diag diagnostic.log `
-            --logger "console;verbosity=detailed" `
-            -p:SolutionDir="${{ github.workspace }}/"
+          dotnet test DryWetMidi.Tests/Melanchall.DryWetMidi.Tests.csproj --blame --blame-hang --blame-hang-timeout 5m --blame-hang-dump-type full --no-build --configuration ${{ vars.TEST_BUILD_CONFIGURATION || 'Release' }} --filter "(FullyQualifiedName~.Multimedia)" --framework ${{ steps.framework.outputs.tfm }} --verbosity normal --diag diagnostic.log --logger "console;verbosity=detailed" -p:SolutionDir="${{ github.workspace }}/"
       
       - name: Collect logs
         if: always()

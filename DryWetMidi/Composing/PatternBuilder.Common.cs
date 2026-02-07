@@ -294,8 +294,7 @@ namespace Melanchall.DryWetMidi.Composing
             if (anchor == null)
                 return _globalAnchorsCounter;
 
-            int counter;
-            if (!_anchorCounters.TryGetValue(anchor, out counter))
+            if (!_anchorCounters.TryGetValue(anchor, out var counter))
                 throw new ArgumentException($"Anchor {anchor} doesn't exist.", nameof(anchor));
 
             return counter;

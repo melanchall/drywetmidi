@@ -73,9 +73,7 @@ namespace Melanchall.DryWetMidi.Interaction
             {
                 case ParameterValueType.Exact:
                     {
-                        SevenBitNumber dataMsb;
-                        SevenBitNumber? dataLsb;
-                        GetData(out dataMsb, out dataLsb);
+                        GetData(out var dataMsb, out var dataLsb);
                         
                         controlChanges.Add(Tuple.Create(ControlName.DataEntryMsb, dataMsb));
                         if (dataLsb != null)

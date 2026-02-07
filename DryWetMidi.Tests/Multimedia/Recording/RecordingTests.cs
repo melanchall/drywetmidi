@@ -42,24 +42,24 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             }
         }
 
-        [Retry(RetriesNumber)]
+        [MultimediaTestRetry]
         [TestCaseSource(nameof(ParametersForDurationCheck))]
         public void GetDuration(TimeSpan start, TimeSpan delayFromStart)
         {
             var eventsToSend = new[]
             {
-                new EventToSend(new NoteOnEvent(), start),
-                new EventToSend(new NoteOffEvent(), delayFromStart)
+                new TimestampedEvent(new NoteOnEvent(), start),
+                new TimestampedEvent(new NoteOffEvent(), start + delayFromStart)
             };
 
-            var receivedEvents = new List<SentReceivedEvent>();
+            var receivedEvents = new List<TimestampedEvent>();
             var stopwatch = new Stopwatch();
 
             var inputDevice = TestDeviceManager.GetInputDevice("A");
             var outputDevice = TestDeviceManager.GetOutputDevice("A");
 
             inputDevice.StartEventsListening();
-            inputDevice.EventReceived += (_, e) => receivedEvents.Add(new SentReceivedEvent(e.Event, stopwatch.Elapsed));
+            inputDevice.EventReceived += (_, e) => receivedEvents.Add(new TimestampedEvent(e.Event, stopwatch.Elapsed));
 
             using (var recording = new Recording(TempoMap.Default, inputDevice))
             {
@@ -81,7 +81,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             }
         }
 
-        [Retry(RetriesNumber)]
+        [MultimediaTestRetry]
         [Test]
         public void CheckRecording()
         {
@@ -92,40 +92,36 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
             var eventsToSend = new[]
             {
-                new EventToSend(new NoteOnEvent(), TimeSpan.Zero),
-                new EventToSend(new NoteOffEvent(), TimeSpan.FromMilliseconds(500)),
-                new EventToSend(new TimingClockEvent(), TimeSpan.FromSeconds(5))
+                new TimestampedEvent(new NoteOnEvent(), TimeSpan.Zero),
+                new TimestampedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(500)),
+                new TimestampedEvent(new TimingClockEvent(), TimeSpan.FromMilliseconds(5500))
             };
 
-            var sentEvents = new List<SentReceivedEvent>();
-            var receivedEvents = new List<SentReceivedEvent>();
-            var recordedEvents = new List<SentReceivedEvent>();
+            var sentEvents = new List<TimestampedEvent>();
+            var receivedEvents = new List<TimestampedEvent>();
+            var recordedEvents = new List<TimestampedEvent>();
             var stopwatch = new Stopwatch();
 
-            var expectedTimes = new List<TimeSpan>();
-            var expectedRecordedTimes = new List<TimeSpan>();
-            var currentTime = TimeSpan.Zero;
-
-            foreach (var eventToSend in eventsToSend)
+            var expectedRecordedEvents = new[]
             {
-                currentTime += eventToSend.Delay;
-                expectedTimes.Add(currentTime);
-                expectedRecordedTimes.Add(currentTime > stopAfter ? currentTime - stopPeriod : currentTime);
-            }
+                new TimestampedEvent(new NoteOnEvent(), TimeSpan.Zero),
+                new TimestampedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(500)),
+                new TimestampedEvent(new TimingClockEvent(), TimeSpan.FromMilliseconds(3500))
+            }.ToList();
 
-            var timeout = expectedTimes.Last() + SendReceiveUtilities.MaximumEventSendReceiveDelay;
+            var timeout = expectedRecordedEvents.Max(e => e.Time) + SendReceiveUtilities.MaximumEventSendReceiveDelay;
 
-            var inputDevice = TestDeviceManager.GetInputDevice("A");
-            var outputDevice = TestDeviceManager.GetOutputDevice("A");
+            using var inputDevice = TestDeviceManager.GetInputDevice("A");
+            using var outputDevice = TestDeviceManager.GetOutputDevice("A");
 
-            outputDevice.EventSent += (_, e) => sentEvents.Add(new SentReceivedEvent(e.Event, stopwatch.Elapsed));
+            outputDevice.EventSent += (_, e) => sentEvents.Add(new TimestampedEvent(e.Event, stopwatch.Elapsed));
 
             inputDevice.StartEventsListening();
-            inputDevice.EventReceived += (_, e) => receivedEvents.Add(new SentReceivedEvent(e.Event, stopwatch.Elapsed));
+            inputDevice.EventReceived += (_, e) => receivedEvents.Add(new TimestampedEvent(e.Event, stopwatch.Elapsed));
 
             using (var recording = new Recording(tempoMap, inputDevice))
             {
-                recording.EventRecorded += (_, e) => recordedEvents.Add(new SentReceivedEvent(e.Event, stopwatch.Elapsed));
+                recording.EventRecorded += (_, e) => recordedEvents.Add(new TimestampedEvent(e.Event, stopwatch.Elapsed));
 
                 var sendingThread = new Thread(() =>
                 {
@@ -138,22 +134,27 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 WaitOperations.Wait(stopAfter);
 
                 recording.Stop();
+                stopwatch.Stop();
                 WaitOperations.Wait(stopPeriod);
 
                 recording.Start();
+                stopwatch.Start();
 
                 var threadAliveTimeout = timeout + TimeSpan.FromSeconds(30);
                 var threadExited = WaitOperations.Wait(() => !sendingThread.IsAlive, threadAliveTimeout);
                 ClassicAssert.IsTrue(threadExited, $"Sending thread is alive after [{threadAliveTimeout}].");
 
-                var areEventsReceived = WaitOperations.Wait(() => receivedEvents.Count >= expectedTimes.Count, timeout);
+                var areEventsReceived = WaitOperations.Wait(() => receivedEvents.Count >= expectedRecordedEvents.Count, timeout);
                 ClassicAssert.IsTrue(areEventsReceived, $"Events are not received for [{timeout}] (received are: {string.Join(", ", receivedEvents)}).");
 
-                CompareSentReceivedEvents(sentEvents, receivedEvents, expectedTimes);
-                CompareSentReceivedEvents(sentEvents, recordedEvents, expectedTimes);
+                CompareSentReceivedEvents(sentEvents, receivedEvents, expectedRecordedEvents);
+                CompareSentReceivedEvents(sentEvents, recordedEvents, expectedRecordedEvents);
 
                 var events = recording.GetEvents();
-                CheckRecordedEvents(events.ToList(), expectedRecordedTimes, tempoMap);
+                CheckRecordedEvents(
+                    events.ToList(),
+                    expectedRecordedEvents.Select(e => (e.Event, e.Time)).ToList(),
+                    tempoMap);
             }
         }
 
@@ -162,44 +163,47 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         #region Private methods
 
         private void CompareSentReceivedEvents(
-            IReadOnlyList<SentReceivedEvent> sentEvents,
-            IReadOnlyList<SentReceivedEvent> receivedEvents,
-            IReadOnlyList<TimeSpan> expectedTimes)
+            IReadOnlyList<TimestampedEvent> sentEvents,
+            IReadOnlyList<TimestampedEvent> receivedEvents,
+            IReadOnlyList<TimestampedEvent> expectedRecordedEvents)
         {
-            ClassicAssert.AreEqual(expectedTimes.Count, receivedEvents.Count, "Received events count is invalid.");
+            ClassicAssert.AreEqual(expectedRecordedEvents.Count, receivedEvents.Count, "Received events count is invalid.");
 
             for (var i = 0; i < sentEvents.Count; i++)
             {
                 var sentEvent = sentEvents[i];
                 var receivedEvent = receivedEvents[i];
-                var expectedTime = expectedTimes[i];
+                var expectedRecordedEvent = expectedRecordedEvents[i];
 
                 MidiAsserts.AreEqual(sentEvent.Event, receivedEvent.Event, false, $"Received event [{receivedEvent.Event}] doesn't match sent one [{sentEvent.Event}].");
+                MidiAsserts.AreEqual(expectedRecordedEvent.Event, receivedEvent.Event, false, $"Received event [{receivedEvent.Event}] doesn't match expected recorded one [{expectedRecordedEvent.Event}].");
 
-                var offsetFromExpectedTime = (sentEvent.Time - expectedTime).Duration();
+                var offsetFromExpectedTime = (sentEvent.Time - expectedRecordedEvent.Time).Duration();
                 ClassicAssert.LessOrEqual(
                     offsetFromExpectedTime,
                     SendReceiveUtilities.MaximumEventSendReceiveDelay,
-                    $"Event was sent at wrong time ({sentEvent.Time}; expected is {expectedTime}).");
+                    $"Event was sent at wrong time ({sentEvent.Time}; expected is {expectedRecordedEvent.Time}).");
             }
         }
 
         private void CheckRecordedEvents(
             IReadOnlyList<TimedEvent> recordedEvents,
-            IReadOnlyList<TimeSpan> expectedTimes,
+            IReadOnlyList<(MidiEvent MidiEvent, TimeSpan Time)> expectedRecordedEvents,
             TempoMap tempoMap)
         {
             for (var i = 0; i < recordedEvents.Count; i++)
             {
                 var recordedEvent = recordedEvents[i];
-                var expectedTime = expectedTimes[i];
+                var expectedRecordedEvent = expectedRecordedEvents[i];
 
                 var convertedRecordedTime = (TimeSpan)recordedEvent.TimeAs<MetricTimeSpan>(tempoMap);
-                var offsetFromExpectedTime = (convertedRecordedTime - expectedTime).Duration();
+                var convertedExpectedRecordedTime = expectedRecordedEvent.Time;
+
+                var offsetFromExpectedTime = (convertedRecordedTime - convertedExpectedRecordedTime).Duration();
                 ClassicAssert.LessOrEqual(
                     offsetFromExpectedTime,
                     SendReceiveUtilities.MaximumEventSendReceiveDelay,
-                    $"Event was recorded at wrong time (at {convertedRecordedTime} instead of {expectedTime}).");
+                    $"Event was recorded at wrong time (at {convertedRecordedTime} instead of {convertedExpectedRecordedTime}).");
             }
         }
 

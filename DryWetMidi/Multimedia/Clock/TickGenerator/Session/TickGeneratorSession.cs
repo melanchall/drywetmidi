@@ -22,8 +22,7 @@ namespace Melanchall.DryWetMidi.Multimedia
                 {
                     if (_handle == IntPtr.Zero)
                     {
-                        int errorCode;
-                        var result = TickGeneratorSessionApi.Api_OpenSession(out _handle, out errorCode);
+                        var result = TickGeneratorSessionApi.Api_OpenSession(out _handle, out var errorCode);
                         NativeApiUtilities.HandleTickGeneratorNativeApiResult(result, errorCode);
                     }
                 }

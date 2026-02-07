@@ -19,8 +19,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         private static void SavePlaybackTraces(
             Playback playback,
             string label,
-            ICollection<SentReceivedEvent> expectedReceivedEvents,
-            ICollection<SentReceivedEvent> actualReceivedEvents)
+            ICollection<TimestampedEvent> expectedReceivedEvents,
+            ICollection<TimestampedEvent> actualReceivedEvents)
         {
 #if TRACE
             SavePlaybackActionsTrace(
@@ -37,8 +37,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         private static void SavePlaybackClockTrace(
             MidiClockTracer clockTracer,
             string label,
-            ICollection<SentReceivedEvent> expectedReceivedEvents,
-            ICollection<SentReceivedEvent> actualReceivedEvents)
+            ICollection<TimestampedEvent> expectedReceivedEvents,
+            ICollection<TimestampedEvent> actualReceivedEvents)
         {
             var tracesDirectoryPath = GetPlaybackTracesDirectoryPath();
 
@@ -72,16 +72,17 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var fileName = GetPlaybackTracesFileName(label);
             var filePath = Path.Combine(tracesDirectoryPath, $"{fileName}.png");
 
-            const int graphWidth = 5000;
+            const int graphWidth = 10000;
             const int graphHeight = 500;
             const int margin = 50;
-            const int markerSize = 20;
+            const int markerSize = 10;
+            const int alternatingShift = markerSize * 2;
 
             var backgroundColor = new SKColor(30, 30, 30);
 
             var graphBorderColor = SKColors.DarkGray;
             var tickTimesColor = SKColors.Gray;
-            var expectedEventsTimesColor = SKColors.Lime;
+            var expectedEventsTimesColor = SKColors.Green;
             var actualEventsTimesColor = SKColors.OrangeRed;
 
             var imageInfo = new SKImageInfo(graphWidth + margin * 2, graphHeight + margin * 2);
@@ -103,12 +104,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
             //
 
-            T[] Flatten<T>(IEnumerable<IEnumerable<T>> input) =>
-                input.SelectMany(a => a).ToArray();
-
-            //
-
-            void DrawStartStopTimes(long[] times, long max, bool start)
+            void DrawStartStopTimes(long[] times, float max, bool start)
             {
                 const int startStopMarkerSize = 20;
 
@@ -160,174 +156,122 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                         {
                             Style = SKPaintStyle.Stroke,
                             Color = color,
-                            StrokeWidth = 3,
+                            StrokeWidth = 5,
+                            StrokeCap = SKStrokeCap.Round,
                             IsAntialias = true,
                         });
                 }
             }
 
-            var tickTimes = clockTracer.GetTickTimes();
-            var flattenTickTimes = Flatten(tickTimes);
-            var maxT = flattenTickTimes.Length == 0 ? 1 : flattenTickTimes.Max();
+            var tickTimes = clockTracer.GetTickTimes().SelectMany(a => a).ToArray();
+            var allTimes = tickTimes
+                .Concat(clockTracer.GetStartTimes())
+                .Concat(clockTracer.GetStopTimes())
+                .Concat(expectedReceivedEvents.Select(e => (long)e.Time.TotalMilliseconds))
+                .Concat(actualReceivedEvents.Select(e => (long)e.Time.TotalMilliseconds))
+                .ToArray();
+
+            var maxT = allTimes.Length == 0 ? 1 : allTimes.Max();
             if (maxT == 0)
                 maxT = 1;
+
+            //
+
+            float GetTimeX(float time) =>
+                margin + (time / (float)maxT) * graphWidth;
+
+            //
+
+            foreach (var time in tickTimes)
+            {
+                canvas.DrawLine(
+                    GetTimeX(time),
+                    margin,
+                    GetTimeX(time),
+                    margin + graphHeight,
+                    new SKPaint
+                    {
+                        Style = SKPaintStyle.Stroke,
+                        Color = tickTimesColor,
+                        StrokeWidth = 1,
+                        IsAntialias = true,
+                    });
+            }
+
+            //
 
             DrawStartStopTimes(clockTracer.GetStartTimes(), maxT, true);
             DrawStartStopTimes(clockTracer.GetStopTimes(), maxT, false);
 
             //
 
-            if (expectedReceivedEvents.Count == actualReceivedEvents.Count)
+            var expectedReceivedEventsEnumerator = expectedReceivedEvents.GetEnumerator();
+            var actualReceivedEventsEnumerator = actualReceivedEvents.GetEnumerator();
+
+            var i = 0;
+
+            while (expectedReceivedEventsEnumerator.MoveNext() && actualReceivedEventsEnumerator.MoveNext())
             {
-                foreach (var ab in expectedReceivedEvents.Zip(actualReceivedEvents, (a, b) => new { Expected = a, Actual = b }))
-                {
-                    canvas.DrawLine(
-                        margin + (float)ab.Actual.Time.TotalMilliseconds / maxT * graphWidth,
-                        margin + graphHeight / 3,
-                        margin + (float)ab.Expected.Time.TotalMilliseconds / maxT * graphWidth,
-                        margin + graphHeight - graphHeight / 3,
-                        new SKPaint
-                        {
-                            Style = SKPaintStyle.Stroke,
-                            Color = SKColors.Lime,
-                            StrokeWidth = 3,
-                            IsAntialias = true,
-                        });
-                }
+                var expected = expectedReceivedEventsEnumerator.Current;
+                var actual = actualReceivedEventsEnumerator.Current;
+
+                var yShift = alternatingShift * (i % 3);
+
+                canvas.DrawLine(
+                    GetTimeX((float)expected.Time.TotalMilliseconds),
+                    margin + graphHeight / 3 + yShift,
+                    GetTimeX((float)actual.Time.TotalMilliseconds),
+                    margin + graphHeight - graphHeight / 3 + yShift,
+                    new SKPaint
+                    {
+                        Style = SKPaintStyle.Stroke,
+                        Color = SKColors.White,
+                        StrokeWidth = 3,
+                        IsAntialias = true,
+                    });
+
+                i++;
             }
 
             //
 
-            void DrawGraph(long[][] ms, SKColor color, bool drawMarker, float legendXOffset, int explicitY)
+            void DrawEvents(ICollection<TimestampedEvent> events, int y, SKColor color)
             {
-                var flattenMs = Flatten(ms);
-                if (!flattenMs.Any())
-                    return;
+                var i = 0;
 
-                var minMs = flattenMs.Min();
-                var maxMs = flattenMs.Max();
-
-                var deltas = Flatten(ms.Select((tt, j) => tt.Select((t, i) => i > 0 ? t - ms[j][i - 1] : 0)));
-                var minDelta = deltas.Min();
-                var maxDelta = deltas.Max();
-
-                for (var i = 0; i < ms.Length; i++)
+                foreach (var e in events)
                 {
-                    var current = ms[i].First();
-                    var points = ms[i].Select(t =>
-                    {
-                        var divisor = maxDelta - minDelta;
-                        if (divisor == 0)
-                            divisor = 1;
+                    var yShift = alternatingShift * (i % 3);
 
-                        var result = new SKPoint(
-                            margin + (t / (float)maxMs) * graphWidth,
-                            margin + graphHeight - (t - current) / divisor * graphHeight);
-
-                        current = t;
-                        return result;
-                    })
-                    .ToArray();
-
-                    var linePaint = new SKPaint
-                    {
-                        Style = SKPaintStyle.Stroke,
-                        Color = color,
-                        StrokeWidth = 3,
-                        StrokeCap = SKStrokeCap.Round,
-                        IsAntialias = true
-                    };
-
-                    if (drawMarker)
-                    {
-                        canvas.DrawPoints(
-                            SKPointMode.Points,
-                            points.Select(p => new SKPoint(
-                                p.X,
-                                explicitY)).ToArray(),
-                            new SKPaint
-                            {
-                                Color = color,
-                                StrokeWidth = markerSize,
-                                IsAntialias = true,
-                                StrokeJoin = SKStrokeJoin.Round,
-                                StrokeCap = SKStrokeCap.Round
-                            });
-                    }
-                    else
-                    {
-                        foreach (var point in points)
-                        {
-                            canvas.DrawLine(
-                                point.X,
-                                point.Y,
-                                point.X,
-                                margin + graphHeight - (Math.Abs(point.Y - (margin + graphHeight)) <= 1 ? 10 : 0),
-                                linePaint);
-                        }
-                    }
-                }
-
-                var font = new SKFont(SKTypeface.FromFamilyName("Consolas"), 30);
-                var legendMargin = 10;
-
-                font.MeasureText("0", out var rect);
-                var height = rect.Height;
-
-                void DrawLegend(string text, float x, float y)
-                {
-                    font.MeasureText(text, out rect);
-
-                    var backMargin = legendMargin / 2;
-                    canvas.DrawRect(
-                        x + legendXOffset - backMargin,
-                        y - rect.Height - backMargin,
-                        rect.Width + backMargin * 2,
-                        rect.Height + backMargin * 2,
+                    canvas.DrawCircle(
+                        GetTimeX((float)e.Time.TotalMilliseconds),
+                        y + yShift,
+                        markerSize,
                         new SKPaint
                         {
                             Style = SKPaintStyle.Fill,
-                            Color = backgroundColor
-                        });
-
-                    canvas.DrawText(
-                        text,
-                        x + legendXOffset,
-                        y,
-                        font,
-                        new SKPaint
-                        {
                             Color = color,
                             IsAntialias = true,
                         });
-                }
 
-                DrawLegend(minDelta.ToString(), margin + legendMargin, margin + graphHeight - legendMargin);
-                DrawLegend(maxDelta.ToString(), margin + legendMargin, margin + height + legendMargin);
+                    canvas.DrawCircle(
+                        GetTimeX((float)e.Time.TotalMilliseconds),
+                        y + yShift,
+                        markerSize,
+                        new SKPaint
+                        {
+                            Style = SKPaintStyle.Stroke,
+                            Color = SKColors.White,
+                            StrokeWidth = 3,
+                            IsAntialias = true,
+                        });
+
+                    i++;
+                }
             }
 
-            //
-
-            DrawGraph(
-                tickTimes,
-                tickTimesColor,
-                false,
-                0,
-                0);
-
-            DrawGraph(
-                new[] { expectedReceivedEvents.Select(e => (long)e.Time.TotalMilliseconds).ToArray() },
-                expectedEventsTimesColor,
-                true,
-                100,
-                margin + graphHeight / 3);
-
-            DrawGraph(
-                new[] { actualReceivedEvents.Select(e => (long)e.Time.TotalMilliseconds).ToArray() },
-                actualEventsTimesColor,
-                true,
-                200,
-                margin + graphHeight - graphHeight / 3);
+            DrawEvents(expectedReceivedEvents, margin + graphHeight / 3, expectedEventsTimesColor);
+            DrawEvents(actualReceivedEvents, margin + graphHeight - graphHeight / 3, actualEventsTimesColor);
 
             //
 

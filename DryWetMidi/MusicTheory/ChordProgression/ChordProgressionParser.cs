@@ -75,8 +75,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
                     rootNoteName +
                     fullString.Substring(degreeGroupIndex - matchIndex + degreeGroup.Length);
 
-                Chord chord;
-                var chordParsingResult = ChordParser.TryParse(chordString, out chord);
+                var chordParsingResult = ChordParser.TryParse(chordString, out var chord);
                 if (chordParsingResult.Status != ParsingStatus.Parsed)
                     return chordParsingResult;
 

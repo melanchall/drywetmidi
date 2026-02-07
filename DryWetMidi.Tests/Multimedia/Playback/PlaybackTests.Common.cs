@@ -83,11 +83,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             bool useOutputDevice,
             ICollection<ITimedObject> initialPlaybackObjects,
             PlaybackAction[] actions,
-            ICollection<SentReceivedEvent> expectedReceivedEvents,
+            ICollection<TimestampedEvent> expectedReceivedEvents,
             Action<Playback> setupPlayback = null,
             Action<Playback> afterStart = null,
             int? repeatsCount = null,
-            Action<Playback, ICollection<SentReceivedEvent>> additionalChecks = null,
+            Action<Playback, ICollection<TimestampedEvent>> additionalChecks = null,
             PlaybackSettings playbackSettings = null,
             TimeSpan? sendReceiveTimeDelta = null,
             bool checkFromFile = true)
@@ -133,11 +133,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             bool useOutputDevice,
             Func<IOutputDevice, Playback> createPlayback,
             PlaybackAction[] actions,
-            ICollection<SentReceivedEvent> expectedReceivedEvents,
+            ICollection<TimestampedEvent> expectedReceivedEvents,
             Action<Playback> setupPlayback = null,
             Action<Playback> afterStart = null,
             int? repeatsCount = null,
-            Action<Playback, ICollection<SentReceivedEvent>> additionalChecks = null,
+            Action<Playback, ICollection<TimestampedEvent>> additionalChecks = null,
             TimeSpan? sendReceiveTimeDelta = null,
             string label = null)
         {
@@ -147,7 +147,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
             var stopwatch = new Stopwatch();
             var delayStopwatch = new Stopwatch();
-            var receivedEvents = new List<SentReceivedEvent>();
+            var receivedEvents = new List<TimestampedEvent>();
 
             var actionTimes = Enumerable
                 .Range(0, actions.Length)
@@ -158,7 +158,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
             using (outputDevice)
             {
-                outputDevice.EventSent += (_, e) => receivedEvents.Add(new SentReceivedEvent(e.Event.Clone(), stopwatch.Elapsed));
+                outputDevice.EventSent += (_, e) => receivedEvents.Add(new TimestampedEvent(e.Event.Clone(), stopwatch.Elapsed));
                 
                 using (var playback = createPlayback(outputDevice))
                 {
@@ -236,10 +236,10 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                             }
                         }
 
-                        SendReceiveUtilities.CheckReceivedEvents(
+                        SendReceiveUtilities.CheckTimestampedEvents(
                             receivedEvents,
                             expectedReceivedEvents.ToList(),
-                            sendReceiveTimeDelta: sendReceiveTimeDelta ?? (useOutputDevice
+                            timestampDelta: sendReceiveTimeDelta ?? (useOutputDevice
                                 ? SendReceiveUtilities.MaximumEventSendReceiveDelay
                                 : TimeSpan.FromMilliseconds(20)),
                             label);
