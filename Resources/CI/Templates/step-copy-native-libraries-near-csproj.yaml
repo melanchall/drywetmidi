@@ -1,19 +1,13 @@
-parameters:
-- name: winArch
-  displayName: 'Windows dll architecture'
-  type: string
-  default: 'x64'
-- name: macosArch
-  displayName: 'macOS dylib architecture'
-  type: string
-  default: 'x64_arm64'
-
 steps:
 - task: DownloadPipelineArtifact@2
   displayName: Download native libraries
   inputs:
     source: 'current'
     path: '$(Pipeline.Workspace)/NativeLibraries'
+    patterns: |
+      **/Native_macOS_x64_arm64/Melanchall_DryWetMidi_Native.dylib
+      **/Native_Win_x64/Melanchall_DryWetMidi_Native.dll
+      **/Native_Win_arm64/Melanchall_DryWetMidi_Native.dll
 
 - task: PowerShell@2
   displayName: Copy native libraries locally

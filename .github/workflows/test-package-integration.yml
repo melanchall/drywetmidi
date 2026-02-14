@@ -56,7 +56,7 @@ jobs:
         uses: actions/download-artifact@v4
         with: 
           name: NuGetPackage
-          path: NuGetPackage
+          path: ${{ github.workspace }}/NuGetPackage
       
       - name: Setup framework
         id: framework
@@ -75,13 +75,13 @@ jobs:
           dotnet nuget add source "${{ github.workspace }}/NuGetPackage"
 
           Write-Host "Adding Melanchall.DryWetMidi.${{ vars.LIBRARY_VERSION }} package reference to the project..."
-          $path = Resolve-Path 'Resources/PackageIntegrationTestUtilities/DwmNetConsoleApp/DwmNetConsoleApp/DwmNetConsoleApp.csproj'
+          $path = Resolve-Path 'Resources\PackageIntegrationTestUtilities\DwmNetConsoleApp\DwmNetConsoleApp\DwmNetConsoleApp.csproj'
           dotnet add "$path" package Melanchall.DryWetMidi -v ${{ vars.LIBRARY_VERSION }} -s "${{ github.workspace }}/NuGetPackage"
       
       - name: Check csproj package reference
         shell:  pwsh
         run: |
-          $path = "Resources/PackageIntegrationTestUtilities/DwmNetConsoleApp/DwmNetConsoleApp/DwmNetConsoleApp.csproj"
+          $path = Resolve-Path "Resources\PackageIntegrationTestUtilities\DwmNetConsoleApp\DwmNetConsoleApp\DwmNetConsoleApp.csproj"
           $expected = '<PackageReference Include="Melanchall.DryWetMidi" Version="${{ vars.LIBRARY_VERSION }}" />'
           Write-Host "Expecting: $expected"
           $found = Select-String -Path $path -Pattern $expected -SimpleMatch -Quiet

@@ -90,7 +90,7 @@ stages:
       inputs:
         targetType: 'inline'
         script: |
-          $path = "Resources/PackageIntegrationTestUtilities/DwmNetConsoleApp/DwmNetConsoleApp/DwmNetConsoleApp.csproj"
+          $path = Resolve-Path "Resources\PackageIntegrationTestUtilities\DwmNetConsoleApp\DwmNetConsoleApp\DwmNetConsoleApp.csproj"
           $expected = '<PackageReference Include="Melanchall.DryWetMidi" Version="$(LibraryVersion)" />'
           Write-Host "Expecting: $expected"
           $found = Select-String -Path $path -Pattern $expected -SimpleMatch -Quiet

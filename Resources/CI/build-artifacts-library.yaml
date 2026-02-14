@@ -41,7 +41,7 @@ stages:
     
     - template: Templates/step-generate-doc-links.yaml
     
-    #- template: Templates/step-copy-native-libraries-near-csproj.yaml
+    - template: Templates/step-copy-native-libraries-near-csproj.yaml
     
     - template: Templates/step-generate-obsolete-api-hints.yaml
     
@@ -80,7 +80,7 @@ stages:
           New-Item -ItemType Directory -Force -Path $winArm64Destination
           Copy-Item -Path "$(Pipeline.Workspace)/NativeLibraries/Native_Win_arm64/Melanchall_DryWetMidi_Native.dll" -Destination "$winArm64Destination" -Force -Verbose
           
-          $macosX64Arm64Destination = "$(Pipeline.Workspace)/macos_x64_arm64"
+          $macosX64Arm64Destination = "$(Pipeline.Workspace)/Native/macos_x64_arm64"
           New-Item -ItemType Directory -Force -Path $macosX64Arm64Destination
           Copy-Item -Path "$(Pipeline.Workspace)/NativeLibraries/Native_macOS_x64_arm64/Melanchall_DryWetMidi_Native.dylib" -Destination "$macosX64Arm64Destination" -Force -Verbose
         

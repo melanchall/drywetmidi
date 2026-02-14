@@ -1,16 +1,6 @@
 name: 'Copy native libraries locally'
 description: 'Downloads and copies native libraries near csproj files'
 
-inputs:
-  win-arch:
-    description:  'Windows dll architecture'
-    type: string
-    default: 'x64'
-  macos-arch:
-    description: 'macOS dylib architecture'
-    type: string
-    default: 'x64_arm64'
-
 runs:
   using: 'composite'
   steps:

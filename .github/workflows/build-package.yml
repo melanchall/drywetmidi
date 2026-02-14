@@ -58,6 +58,7 @@ jobs:
           netframework-sdk-version: ${{ vars.BUILD_FRAMEWORK_NETFRAMEWORK_SDK_VERSION || '8.0.x' }}
       
       - name: Setup nativeless project
+        if: inputs.package-type == 'Nativeless'
         shell: pwsh
         run: |
           $encoding = [System.Text.Encoding]::UTF8
