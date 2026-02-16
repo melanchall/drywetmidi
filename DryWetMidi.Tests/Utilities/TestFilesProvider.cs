@@ -9,7 +9,7 @@ using Microsoft.CodeAnalysis.CSharp.Scripting;
 using Microsoft.CodeAnalysis.Scripting;
 using NUnit.Framework;
 
-namespace Melanchall.DryWetMidi.Tests.Common
+namespace Melanchall.DryWetMidi.Tests
 {
     public static class TestFilesProvider
     {

@@ -7,7 +7,6 @@ using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
 using Melanchall.DryWetMidi.Tests.Utilities;
 using NUnit.Framework;
-using Melanchall.DryWetMidi.Tests.Common;
 using System.Linq;
 using NUnit.Framework.Legacy;
 

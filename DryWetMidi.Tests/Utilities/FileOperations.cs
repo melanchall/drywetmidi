@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 
-namespace Melanchall.DryWetMidi.Tests.Common
+namespace Melanchall.DryWetMidi.Tests
 {
     public static class FileOperations
     {

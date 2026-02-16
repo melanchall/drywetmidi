@@ -33,10 +33,10 @@
     <PackageReference Include="NUnit" Version="4.3.2" />
     <PackageReference Include="NUnit3TestAdapter" Version="5.0.0" />
     <PackageReference Include="SkiaSharp" Version="3.119.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="4.13.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DryWetMidi.Tests.Common\Melanchall.DryWetMidi.Tests.Common.csproj" />
     <ProjectReference Include="..\DryWetMidi\Melanchall.DryWetMidi.csproj" />
   </ItemGroup>
 

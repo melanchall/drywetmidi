@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Melanchall.DryWetMidi.Multimedia;
-using Melanchall.DryWetMidi.Tests.Common;
 using NUnit.Framework;
 using NUnit.Framework.Legacy;
 

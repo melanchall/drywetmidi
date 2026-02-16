@@ -1,5 +1,4 @@
 ﻿using Melanchall.DryWetMidi.Multimedia;
-using Melanchall.DryWetMidi.Tests.Common;
 using NUnit.Framework;
 using SkiaSharp;
 using System;

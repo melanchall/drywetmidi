@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.Threading;
 
-namespace Melanchall.DryWetMidi.Tests.Common
+namespace Melanchall.DryWetMidi.Tests
 {
     public static class WaitOperations
     {

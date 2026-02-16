@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using System.Reflection;
 
-namespace Melanchall.DryWetMidi.Tests.Common
+namespace Melanchall.DryWetMidi.Tests
 {
     public static class MidiDevicesNames
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using Melanchall.DryWetMidi.Core;
 
-namespace Melanchall.DryWetMidi.Tests.Common
+namespace Melanchall.DryWetMidi.Tests
 {
     public static class MidiFileTestUtilities
     {

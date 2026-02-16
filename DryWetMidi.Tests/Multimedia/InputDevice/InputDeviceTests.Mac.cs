@@ -4,7 +4,6 @@ using System.Linq;
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Multimedia;
-using Melanchall.DryWetMidi.Tests.Common;
 using NUnit.Framework;
 using NUnit.Framework.Legacy;
 
