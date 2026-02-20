@@ -40,7 +40,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
 
             public override bool Equals(object obj)
             {
-                if (obj is not CustomMetaEvent other)
+                if (!(obj is CustomMetaEvent other))
                     return false;
 
                 return _data == other._data;
@@ -57,15 +57,13 @@ namespace Melanchall.DryWetMidi.Tests.Core
         private static readonly object[] EventsWriteRead =
         {
             new object[] { new NormalSysExEvent(), new NormalSysExEvent() },
-            new object[] { new NormalSysExEvent([0xF0]), new NormalSysExEvent() },
-            new object[] { new NormalSysExEvent([0xF0, 0xAB, 0x65, 0xF7]), new NormalSysExEvent([0xF0, 0xAB, 0x65, 0xF7]) },
-            new object[] { new NormalSysExEvent([0xAB, 0x65, 0xF7]), new NormalSysExEvent([0xF0, 0xAB, 0x65, 0xF7]) },
-
+            new object[] { new NormalSysExEvent(new byte[] { 0xF0 }), new NormalSysExEvent() },
+            new object[] { new NormalSysExEvent(new byte[] { 0xF0, 0xAB, 0x65, 0xF7 }), new NormalSysExEvent(new byte[] { 0xF0, 0xAB, 0x65, 0xF7 }) },
+            new object[] { new NormalSysExEvent(new byte[] { 0xAB, 0x65, 0xF7 }), new NormalSysExEvent(new byte[] { 0xF0, 0xAB, 0x65, 0xF7 }) },
             new object[] { new EscapeSysExEvent(), new EscapeSysExEvent() },
-            new object[] { new EscapeSysExEvent([0xF7]), new EscapeSysExEvent() },
-            new object[] { new EscapeSysExEvent([0xF7, 0xAB, 0x65, 0xF7]), new EscapeSysExEvent([0xF7, 0xAB, 0x65, 0xF7]) },
-            new object[] { new EscapeSysExEvent([0xAB, 0x65, 0xF7]), new EscapeSysExEvent([0xF7, 0xAB, 0x65, 0xF7]) },
-
+            new object[] { new EscapeSysExEvent(new byte[] { 0xF7 }), new EscapeSysExEvent() },
+            new object[] { new EscapeSysExEvent(new byte[] { 0xF7, 0xAB, 0x65, 0xF7 }), new EscapeSysExEvent(new byte[] { 0xF7, 0xAB, 0x65, 0xF7 }) },
+            new object[] { new EscapeSysExEvent(new byte[] { 0xAB, 0x65, 0xF7 }), new EscapeSysExEvent(new byte[] { 0xF7, 0xAB, 0x65, 0xF7 }) },
             new object[] { new ChannelAftertouchEvent(), new ChannelAftertouchEvent() },
             new object[] { new ChannelAftertouchEvent((SevenBitNumber)4), new ChannelAftertouchEvent((SevenBitNumber)4) },
             new object[] { new ChannelAftertouchEvent((SevenBitNumber)4) { Channel = (FourBitNumber)5 }, new ChannelAftertouchEvent((SevenBitNumber)4) { Channel = (FourBitNumber)5 } },
@@ -131,7 +129,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
             new object[] { new SequenceNumberEvent(45), new SequenceNumberEvent(45) },
 
             new object[] { new SequencerSpecificEvent(), new SequencerSpecificEvent() },
-            new object[] { new SequencerSpecificEvent([1, 2, 3]), new SequencerSpecificEvent([1, 2, 3]) },
+            new object[] { new SequencerSpecificEvent(new byte[] { 1, 2, 3 }), new SequencerSpecificEvent(new byte[] { 1, 2, 3 }) },
 
             new object[] { new SequenceTrackNameEvent(), new SequenceTrackNameEvent() },
             new object[] { new SequenceTrackNameEvent("ABC"), new SequenceTrackNameEvent("ABC") },
@@ -149,7 +147,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
             new object[] { new TimeSignatureEvent(2, 8, 32, 64), new TimeSignatureEvent(2, 8, 32, 64) },
 
             new object[] { new UnknownMetaEvent(45), new UnknownMetaEvent(45) },
-            new object[] { new UnknownMetaEvent(45, [1, 2, 3]), new UnknownMetaEvent(45, [1, 2, 3]) },
+            new object[] { new UnknownMetaEvent(45, new byte[] { 1, 2, 3 }), new UnknownMetaEvent(45, new byte[] { 1, 2, 3 }) },
 
             new object[] { new CustomMetaEvent(10), new CustomMetaEvent(10) },
         };
@@ -235,7 +233,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
             };
 
             var midiFile = MidiFileTestUtilities.Read(
-                new MidiFile(new TrackChunk([midiEvent])),
+                new MidiFile(new TrackChunk(new[] { midiEvent })),
                 writingSettings,
                 readingSettings,
                 MidiFileFormat.SingleTrack);

@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
+#if NET7_0_OR_GREATER
+using System.Runtime.CompilerServices;
+#endif
+
 namespace Melanchall.DryWetMidi.Multimedia
 {
-    internal static class OutputDeviceApi
+    internal static partial class OutputDeviceApi
     {
         #region Nested enums
 
@@ -125,6 +129,101 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         #region Extern functions
 
+#if NET7_0_OR_GREATER
+        [LibraryImport(NativeApi.LibraryName)]
+        [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
+        private static partial OUT_GETCOUNTRESULT GetOutputDevicesCount(out int count);
+
+        [LibraryImport(NativeApi.LibraryName)]
+        [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
+        private static partial OUT_GETINFORESULT GetOutputDeviceInfo(int deviceIndex, out IntPtr info, out int errorCode);
+
+        [LibraryImport(NativeApi.LibraryName)]
+        [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
+        private static partial int GetOutputDeviceHashCode(IntPtr info);
+
+        [LibraryImport(NativeApi.LibraryName)]
+        [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
+        [return: MarshalAs(UnmanagedType.U1)]
+        private static partial bool AreOutputDevicesEqual(IntPtr info1, IntPtr info2);
+
+        [LibraryImport(NativeApi.LibraryName)]
+        [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
+        private static partial OUT_GETPROPERTYRESULT GetOutputDeviceName(IntPtr info, out IntPtr value, out int errorCode);
+
+        [LibraryImport(NativeApi.LibraryName)]
+        [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
+        private static partial OUT_GETPROPERTYRESULT GetOutputDeviceManufacturer(IntPtr info, out IntPtr value, out int errorCode);
+
+        [LibraryImport(NativeApi.LibraryName)]
+        [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
+        private static partial OUT_GETPROPERTYRESULT GetOutputDeviceProduct(IntPtr info, out IntPtr value, out int errorCode);
+
+        [LibraryImport(NativeApi.LibraryName)]
+        [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
+        private static partial OUT_GETPROPERTYRESULT GetOutputDeviceDriverVersion(IntPtr info, out int value, out int errorCode);
+
+        [LibraryImport(NativeApi.LibraryName)]
+        [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
+        private static partial OUT_OPENRESULT OpenOutputDevice_Win(IntPtr info, IntPtr sessionHandle, Callback_Win callback, out IntPtr handle, out int errorCode);
+
+        [LibraryImport(NativeApi.LibraryName)]
+        [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
+        private static partial OUT_OPENRESULT OpenOutputDevice_Mac(IntPtr info, IntPtr sessionHandle, out IntPtr handle, out int errorCode);
+
+        [LibraryImport(NativeApi.LibraryName)]
+        [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
+        private static partial OUT_CLOSERESULT CloseOutputDevice(IntPtr handle, out int errorCode);
+
+        [LibraryImport(NativeApi.LibraryName)]
+        [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
+        private static partial OUT_SENDSHORTRESULT SendShortEventToOutputDevice(IntPtr handle, int message, out int errorCode);
+
+        [LibraryImport(NativeApi.LibraryName)]
+        [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
+        private static partial OUT_SENDSYSEXRESULT SendSysExEventToOutputDevice_Mac(IntPtr handle, byte[] data, ushort dataSize, out int errorCode);
+
+        [LibraryImport(NativeApi.LibraryName)]
+        [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
+        private static partial OUT_SENDSYSEXRESULT SendSysExEventToOutputDevice_Win(IntPtr handle, IntPtr data, int size, out int errorCode);
+
+        [LibraryImport(NativeApi.LibraryName)]
+        [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
+        private static partial OUT_GETSYSEXDATARESULT GetOutputDeviceSysExBufferData(IntPtr handle, IntPtr header, out IntPtr data, out int size, out int errorCode);
+
+        [LibraryImport(NativeApi.LibraryName)]
+        [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
+        [return: MarshalAs(UnmanagedType.U1)]
+        private static partial bool IsOutputDevicePropertySupported(OutputDeviceProperty property);
+
+        [LibraryImport(NativeApi.LibraryName)]
+        [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
+        private static partial OUT_GETPROPERTYRESULT GetOutputDeviceTechnology(IntPtr info, out OutputDeviceTechnology value, out int errorCode);
+
+        [LibraryImport(NativeApi.LibraryName)]
+        [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
+        private static partial OUT_GETPROPERTYRESULT GetOutputDeviceUniqueId(IntPtr info, out int value, out int errorCode);
+
+        [LibraryImport(NativeApi.LibraryName)]
+        [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
+        private static partial OUT_GETPROPERTYRESULT GetOutputDeviceVoicesNumber(IntPtr info, out int value, out int errorCode);
+
+        [LibraryImport(NativeApi.LibraryName)]
+        [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
+        private static partial OUT_GETPROPERTYRESULT GetOutputDeviceNotesNumber(IntPtr info, out int value, out int errorCode);
+
+        [LibraryImport(NativeApi.LibraryName)]
+        [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
+        private static partial OUT_GETPROPERTYRESULT GetOutputDeviceChannelsMask(IntPtr info, out int value, out int errorCode);
+
+        [LibraryImport(NativeApi.LibraryName)]
+        [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
+        private static partial OUT_GETPROPERTYRESULT GetOutputDeviceOptions(IntPtr info, out OutputDeviceOption value, out int errorCode);
+
+        [LibraryImport(NativeApi.LibraryName)]
+        [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
+        private static partial OUT_GETPROPERTYRESULT GetOutputDeviceDriverOwner(IntPtr info, out IntPtr value, out int errorCode);
+#else
         [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
         private static extern OUT_GETCOUNTRESULT GetOutputDevicesCount(out int count);
 
@@ -195,6 +294,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
         private static extern OUT_GETPROPERTYRESULT GetOutputDeviceDriverOwner(IntPtr info, out IntPtr value, out int errorCode);
+#endif
 
         #endregion
 

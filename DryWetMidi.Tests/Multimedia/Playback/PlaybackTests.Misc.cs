@@ -11,6 +11,7 @@ using NUnit.Framework;
 using NUnit.Framework.Legacy;
 using Melanchall.DryWetMidi.Tools;
 using Melanchall.DryWetMidi.Tests.Utilities;
+using System.Collections.Concurrent;
 
 namespace Melanchall.DryWetMidi.Tests.Multimedia
 {
@@ -104,8 +105,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         public void CheckPlaybackEvent_StartedFiredBeforeFirstEvent([Values(0, 100)] long firstEventTimeMs)
         {
-            DateTime? startedFiredTime = null;
-            DateTime? firstEventTime = null;
+            var startedLabel = "started";
+            var eventLabel = "event";
+            var labels = new ConcurrentStack<string>();
 
             CheckPlayback(
                 useOutputDevice: false,
@@ -122,11 +124,14 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 setupPlayback: playback =>
                 {
-                    playback.Started += (_, __) => startedFiredTime = DateTime.Now;
-                    playback.EventPlayed += (_, __) => firstEventTime = firstEventTime ?? DateTime.Now;
+                    playback.Started += (_, __) => labels.Push(startedLabel);
+                    playback.EventPlayed += (_, __) => labels.Push(eventLabel);
                 });
 
-            ClassicAssert.Less(startedFiredTime, firstEventTime, "Started event fired after first event played.");
+            CollectionAssert.AreEqual(
+                new[] { eventLabel, eventLabel, startedLabel },
+                labels.ToArray(),
+                "Started event fired after MIDI event.");
         }
 
         [MultimediaTestRetry]

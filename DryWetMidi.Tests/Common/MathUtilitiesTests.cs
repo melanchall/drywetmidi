@@ -164,9 +164,9 @@ namespace Melanchall.DryWetMidi.Tests.Common
                     data,
                     threshold,
                     d => d,
-                    out var index);
+                    out var index2);
 
-                var previousValues = Enumerable.Range(0, index + 1).Select(i => data[i]).Reverse().ToArray();
+                var previousValues = Enumerable.Range(0, index2 + 1).Select(i => data[i]).Reverse().ToArray();
 
                 ClassicAssert.AreEqual(expectedResult, element, $"Invalid element for {threshold}.");
                 CollectionAssert.AreEqual(

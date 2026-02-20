@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
+#if NET7_0_OR_GREATER
+using System.Runtime.CompilerServices;
+#endif
+
 namespace Melanchall.DryWetMidi.Multimedia
 {
-    internal static class InputDeviceApi
+    internal static partial class InputDeviceApi
     {
         #region Nested enums
 
@@ -149,6 +153,85 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         #region Extern functions
 
+#if NET7_0_OR_GREATER
+        [LibraryImport(NativeApi.LibraryName)]
+        [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
+        private static partial IN_GETCOUNTRESULT GetInputDevicesCount(out int count);
+
+        [LibraryImport(NativeApi.LibraryName)]
+        [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
+        private static partial IN_GETINFORESULT GetInputDeviceInfo(int deviceIndex, out IntPtr info, out int errorCode);
+
+        [LibraryImport(NativeApi.LibraryName)]
+        [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
+        private static partial int GetInputDeviceHashCode(IntPtr info);
+
+        [LibraryImport(NativeApi.LibraryName)]
+        [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
+        [return: MarshalAs(UnmanagedType.U1)]
+        private static partial bool AreInputDevicesEqual(IntPtr info1, IntPtr info2);
+
+        [LibraryImport(NativeApi.LibraryName)]
+        [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
+        private static partial IN_GETPROPERTYRESULT GetInputDeviceName(IntPtr info, out IntPtr value, out int errorCode);
+
+        [LibraryImport(NativeApi.LibraryName)]
+        [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
+        private static partial IN_GETPROPERTYRESULT GetInputDeviceManufacturer(IntPtr info, out IntPtr value, out int errorCode);
+
+        [LibraryImport(NativeApi.LibraryName)]
+        [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
+        private static partial IN_GETPROPERTYRESULT GetInputDeviceProduct(IntPtr info, out IntPtr value, out int errorCode);
+
+        [LibraryImport(NativeApi.LibraryName)]
+        [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
+        private static partial IN_GETPROPERTYRESULT GetInputDeviceDriverVersion(IntPtr info, out int value, out int errorCode);
+
+        [LibraryImport(NativeApi.LibraryName)]
+        [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
+        private static partial IN_OPENRESULT OpenInputDevice_Win(IntPtr info, IntPtr sessionHandle, Callback_Win callback, int sysExBufferSize, out IntPtr handle, out int errorCode);
+
+        [LibraryImport(NativeApi.LibraryName)]
+        [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
+        private static partial IN_OPENRESULT OpenInputDevice_Mac(IntPtr info, IntPtr sessionHandle, Callback_Mac callback, out IntPtr handle, out int errorCode);
+
+        [LibraryImport(NativeApi.LibraryName)]
+        [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
+        private static partial IN_CLOSERESULT CloseInputDevice(IntPtr handle, out int errorCode);
+
+        [LibraryImport(NativeApi.LibraryName)]
+        [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
+        private static partial IN_RENEWSYSEXBUFFERRESULT RenewInputDeviceSysExBuffer(IntPtr handle, int size, out int errorCode);
+
+        [LibraryImport(NativeApi.LibraryName)]
+        [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
+        private static partial IN_CONNECTRESULT ConnectToInputDevice(IntPtr handle, out int errorCode);
+
+        [LibraryImport(NativeApi.LibraryName)]
+        [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
+        private static partial IN_DISCONNECTRESULT DisconnectFromInputDevice(IntPtr handle, out int errorCode);
+
+        [LibraryImport(NativeApi.LibraryName)]
+        [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
+        private static partial IN_GETEVENTDATARESULT GetEventDataFromInputDevice(IntPtr packetList, int packetIndex, out IntPtr data, out int length, out int packetsCount);
+
+        [LibraryImport(NativeApi.LibraryName)]
+        [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
+        private static partial IN_GETSYSEXDATARESULT GetInputDeviceSysExBufferData(IntPtr header, out IntPtr data, out int size);
+
+        [LibraryImport(NativeApi.LibraryName)]
+        [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
+        [return: MarshalAs(UnmanagedType.U1)]
+        private static partial bool IsInputDevicePropertySupported(InputDeviceProperty property);
+
+        [LibraryImport(NativeApi.LibraryName)]
+        [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
+        private static partial IN_GETPROPERTYRESULT GetInputDeviceUniqueId(IntPtr info, out int value, out int errorCode);
+
+        [LibraryImport(NativeApi.LibraryName)]
+        [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
+        private static partial IN_GETPROPERTYRESULT GetInputDeviceDriverOwner(IntPtr info, out IntPtr value, out int errorCode);
+#else
         [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
         private static extern IN_GETCOUNTRESULT GetInputDevicesCount(out int count);
 
@@ -207,6 +290,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
         private static extern IN_GETPROPERTYRESULT GetInputDeviceDriverOwner(IntPtr info, out IntPtr value, out int errorCode);
+#endif
 
         #endregion
 

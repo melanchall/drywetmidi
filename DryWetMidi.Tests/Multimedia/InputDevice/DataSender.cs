@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
+#if NET7_0_OR_GREATER
+using System.Runtime.CompilerServices;
+#endif
+
 namespace Melanchall.DryWetMidi.Tests.Multimedia
 {
-    internal sealed class DataSender : IDisposable
+    internal sealed partial class DataSender : IDisposable
     {
         private enum OPENRESULT
         {
@@ -25,6 +29,19 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             SENDRESULT_FAILEDSEND = 1
         }
 
+#if NET7_0_OR_GREATER
+        [LibraryImport("SendTestData")]
+        [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
+        private static partial OPENRESULT OpenSender(IntPtr portName, out IntPtr handle);
+
+        [LibraryImport("SendTestData")]
+        [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
+        private static partial SENDRESULT SendData(IntPtr handle, byte[] data, int length, int[] indices, int indicesLength);
+
+        [LibraryImport("SendTestData")]
+        [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
+        private static partial CLOSERESULT CloseSender(IntPtr handle);
+#else
         [DllImport("SendTestData", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
         private static extern OPENRESULT OpenSender(IntPtr portName, out IntPtr handle);
 
@@ -33,6 +50,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
         [DllImport("SendTestData", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
         private static extern CLOSERESULT CloseSender(IntPtr handle);
+#endif
 
         private readonly IntPtr _handle;
         private bool _disposed;

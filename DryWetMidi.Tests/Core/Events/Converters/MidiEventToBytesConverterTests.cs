@@ -69,23 +69,23 @@ namespace Melanchall.DryWetMidi.Tests.Core
 
                 Convert(
                     midiEventToBytesConverter,
-                    new NormalSysExEvent([0xA5, 0x34]),
-                    [0xF0, 0xA5, 0x34, 0xF7]);
+                    new NormalSysExEvent(new byte[] { 0xA5, 0x34 }),
+                    new byte[] { 0xF0, 0xA5, 0x34, 0xF7 });
 
                 Convert(
                     midiEventToBytesConverter,
-                    new NormalSysExEvent([0xF0, 0xA5, 0x34]),
-                    [0xF0, 0xA5, 0x34, 0xF7]);
+                    new NormalSysExEvent(new byte[] { 0xF0, 0xA5, 0x34 }),
+                    new byte[] { 0xF0, 0xA5, 0x34, 0xF7 });
 
                 Convert(
                     midiEventToBytesConverter,
-                    new NormalSysExEvent([0xA5, 0x34, 0xF7]),
-                    [0xF0, 0xA5, 0x34, 0xF7]);
+                    new NormalSysExEvent(new byte[] { 0xA5, 0x34, 0xF7 }),
+                    new byte[] { 0xF0, 0xA5, 0x34, 0xF7 });
 
                 Convert(
                     midiEventToBytesConverter,
-                    new NormalSysExEvent([0xF0, 0xA5, 0x34, 0xF7]),
-                    [0xF0, 0xA5, 0x34, 0xF7]);
+                    new NormalSysExEvent(new byte[] { 0xF0, 0xA5, 0x34, 0xF7 }),
+                    new byte[] { 0xF0, 0xA5, 0x34, 0xF7 });
             }
         }
 
@@ -98,23 +98,23 @@ namespace Melanchall.DryWetMidi.Tests.Core
 
                 Convert(
                     midiEventToBytesConverter,
-                    new NormalSysExEvent([0xA5, 0x34]),
-                    [0xF0, 0xA5, 0x34, 0xF7]);
+                    new NormalSysExEvent(new byte[] { 0xA5, 0x34 }),
+                    new byte[] { 0xF0, 0xA5, 0x34, 0xF7 });
 
                 Convert(
                     midiEventToBytesConverter,
-                    new NormalSysExEvent([0xF0, 0xA5, 0x34]),
-                    [0xF0, 0xA5, 0x34, 0xF7]);
+                    new NormalSysExEvent(new byte[] { 0xF0, 0xA5, 0x34 }),
+                    new byte[] { 0xF0, 0xA5, 0x34, 0xF7 });
 
                 Convert(
                     midiEventToBytesConverter,
-                    new NormalSysExEvent([0xA5, 0x34, 0xF7]),
-                    [0xF0, 0xA5, 0x34, 0xF7]);
+                    new NormalSysExEvent(new byte[] { 0xA5, 0x34, 0xF7 }),
+                    new byte[] { 0xF0, 0xA5, 0x34, 0xF7 });
 
                 Convert(
                     midiEventToBytesConverter,
-                    new NormalSysExEvent([0xF0, 0xA5, 0x34, 0xF7]),
-                    [0xF0, 0xA5, 0x34, 0xF7]);
+                    new NormalSysExEvent(new byte[] { 0xF0, 0xA5, 0x34, 0xF7 }),
+                    new byte[] { 0xF0, 0xA5, 0x34, 0xF7 });
             }
         }
 
@@ -145,23 +145,23 @@ namespace Melanchall.DryWetMidi.Tests.Core
 
                 Convert(
                     midiEventToBytesConverter,
-                    new NormalSysExEvent([0xA5, 0x34]),
-                    [0xF0, 2, 0xA5, 0x34]);
+                    new NormalSysExEvent(new byte[] { 0xA5, 0x34 }),
+                    new byte[] { 0xF0, 2, 0xA5, 0x34 });
 
                 Convert(
                     midiEventToBytesConverter,
-                    new NormalSysExEvent([0xF0, 0xA5, 0x34]),
-                    [0xF0, 2, 0xA5, 0x34]);
+                    new NormalSysExEvent(new byte[] { 0xF0, 0xA5, 0x34 }),
+                    new byte[] { 0xF0, 2, 0xA5, 0x34 });
 
                 Convert(
                     midiEventToBytesConverter,
-                    new NormalSysExEvent([0xA5, 0x34, 0xF7]),
-                    [0xF0, 3, 0xA5, 0x34, 0xF7]);
+                    new NormalSysExEvent(new byte[] { 0xA5, 0x34, 0xF7 }),
+                    new byte[] { 0xF0, 3, 0xA5, 0x34, 0xF7 });
 
                 Convert(
                     midiEventToBytesConverter,
-                    new NormalSysExEvent([0xF0, 0xA5, 0x34, 0xF7]),
-                    [0xF0, 3, 0xA5, 0x34, 0xF7]);
+                    new NormalSysExEvent(new byte[] { 0xF0, 0xA5, 0x34, 0xF7 }),
+                    new byte[] { 0xF0, 3, 0xA5, 0x34, 0xF7 });
             }
         }
 
@@ -174,23 +174,23 @@ namespace Melanchall.DryWetMidi.Tests.Core
 
                 Convert(
                     midiEventToBytesConverter,
-                    new NormalSysExEvent([0xA5, 0x34]),
-                    [0xF0, 2, 0xA5, 0x34]);
+                    new NormalSysExEvent(new byte[] { 0xA5, 0x34 }),
+                    new byte[] { 0xF0, 2, 0xA5, 0x34 });
 
                 Convert(
                     midiEventToBytesConverter,
-                    new NormalSysExEvent([0xF0, 0xA5, 0x34]),
-                    [0xF0, 2, 0xA5, 0x34]);
+                    new NormalSysExEvent(new byte[] { 0xF0, 0xA5, 0x34 }),
+                    new byte[] { 0xF0, 2, 0xA5, 0x34 });
 
                 Convert(
                     midiEventToBytesConverter,
-                    new NormalSysExEvent([0xA5, 0x34, 0xF7]),
-                    [0xF0, 3, 0xA5, 0x34, 0xF7]);
+                    new NormalSysExEvent(new byte[] { 0xA5, 0x34, 0xF7 }),
+                    new byte[] { 0xF0, 3, 0xA5, 0x34, 0xF7 });
 
                 Convert(
                     midiEventToBytesConverter,
-                    new NormalSysExEvent([0xF0, 0xA5, 0x34, 0xF7]),
-                    [0xF0, 3, 0xA5, 0x34, 0xF7]);
+                    new NormalSysExEvent(new byte[] { 0xF0, 0xA5, 0x34, 0xF7 }),
+                    new byte[] { 0xF0, 3, 0xA5, 0x34, 0xF7 });
             }
         }
 

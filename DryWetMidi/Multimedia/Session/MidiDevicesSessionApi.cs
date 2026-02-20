@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
+#if NET7_0_OR_GREATER
+using System.Runtime.CompilerServices;
+#endif
+
 namespace Melanchall.DryWetMidi.Multimedia
 {
-    internal static class MidiDevicesSessionApi
+    internal static partial class MidiDevicesSessionApi
     {
         #region Nested enums
 
@@ -34,6 +38,19 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         #region Extern functions
 
+#if NET7_0_OR_GREATER
+        [LibraryImport(NativeApi.LibraryName)]
+        [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
+        private static partial SESSION_OPENRESULT OpenSession_Mac(IntPtr name, InputDeviceCallback inputDeviceCallback, OutputDeviceCallback outputDeviceCallback, out IntPtr handle, out int errorCode);
+
+        [LibraryImport(NativeApi.LibraryName)]
+        [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
+        private static partial SESSION_OPENRESULT OpenSession_Win(IntPtr name, out IntPtr handle, out int errorCode);
+
+        [LibraryImport(NativeApi.LibraryName)]
+        [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
+        private static partial SESSION_CLOSERESULT CloseSession(IntPtr handle);
+#else
         [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
         private static extern SESSION_OPENRESULT OpenSession_Mac(IntPtr name, InputDeviceCallback inputDeviceCallback, OutputDeviceCallback outputDeviceCallback, out IntPtr handle, out int errorCode);
 
@@ -42,6 +59,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
         private static extern SESSION_CLOSERESULT CloseSession(IntPtr handle);
+#endif
 
         #endregion
 

@@ -1,8 +1,12 @@
 ﻿using System.Runtime.InteropServices;
 
+#if NET7_0_OR_GREATER
+using System.Runtime.CompilerServices;
+#endif
+
 namespace Melanchall.DryWetMidi.Multimedia
 {
-    internal static class CommonApi
+    internal static partial class CommonApi
     {
         #region Nested enums
 
@@ -16,12 +20,23 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         #region Extern functions
 
+#if NET7_0_OR_GREATER
+        [LibraryImport(NativeApi.LibraryName)]
+        [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
+        private static partial API_TYPE GetApiType();
+
+        [LibraryImport(NativeApi.LibraryName)]
+        [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
+        [return: MarshalAs(UnmanagedType.U1)]
+        private static partial bool CanCompareDevices();
+#else
         [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
         private static extern API_TYPE GetApiType();
 
         [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
         [return:MarshalAs(UnmanagedType.U1)]
         private static extern bool CanCompareDevices();
+#endif
 
         #endregion
 

@@ -36,7 +36,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
 
             public override bool Equals(object obj)
             {
-                if (obj is not CustomMetaEvent other)
+                if (!(obj is CustomMetaEvent other))
                     return false;
 
                 return _data == other._data;
@@ -53,19 +53,19 @@ namespace Melanchall.DryWetMidi.Tests.Core
         private static readonly object[] EqualEvents =
         {
             new object[] { new NormalSysExEvent(), new NormalSysExEvent() },
-            new object[] { new NormalSysExEvent(), new NormalSysExEvent([0xF0]) },
-            new object[] { new NormalSysExEvent([0xF0]), new NormalSysExEvent() },
-            new object[] { new NormalSysExEvent([0xF0, 0xAB, 0x65, 0xF7]), new NormalSysExEvent([0xF0, 0xAB, 0x65, 0xF7]) },
-            new object[] { new NormalSysExEvent([0xAB, 0x65, 0xF7]), new NormalSysExEvent([0xF0, 0xAB, 0x65, 0xF7]) },
-            new object[] { new NormalSysExEvent([0xF0, 0xAB, 0x65, 0xF7]), new NormalSysExEvent([0xAB, 0x65, 0xF7]) },
+            new object[] { new NormalSysExEvent(), new NormalSysExEvent(new byte[] { 0xF0 }) },
+            new object[] { new NormalSysExEvent(new byte[] { 0xF0 }), new NormalSysExEvent() },
+            new object[] { new NormalSysExEvent(new byte[] { 0xF0, 0xAB, 0x65, 0xF7 }), new NormalSysExEvent(new byte[] { 0xF0, 0xAB, 0x65, 0xF7 }) },
+            new object[] { new NormalSysExEvent(new byte[] { 0xAB, 0x65, 0xF7 }), new NormalSysExEvent(new byte[] { 0xF0, 0xAB, 0x65, 0xF7 }) },
+            new object[] { new NormalSysExEvent(new byte[] { 0xF0, 0xAB, 0x65, 0xF7 }), new NormalSysExEvent(new byte[] { 0xAB, 0x65, 0xF7 }) },
 
             new object[] { new EscapeSysExEvent(), new EscapeSysExEvent() },
             // TODO: differs by Completed property
-            // new object[] { new EscapeSysExEvent(), new EscapeSysExEvent([0xF7]) },
-            // new object[] { new EscapeSysExEvent([0xF7]), new EscapeSysExEvent() },
-            new object[] { new EscapeSysExEvent([0xF7, 0xAB, 0x65, 0xF7]), new EscapeSysExEvent([0xF7, 0xAB, 0x65, 0xF7]) },
-            new object[] { new EscapeSysExEvent([0xAB, 0x65, 0xF7]), new EscapeSysExEvent([0xF7, 0xAB, 0x65, 0xF7]) },
-            new object[] { new EscapeSysExEvent([0xF7, 0xAB, 0x65, 0xF7]), new EscapeSysExEvent([0xAB, 0x65, 0xF7]) },
+            // new object[] { new EscapeSysExEvent(), new EscapeSysExEvent(new byte[] { 0xF7 }) },
+            // new object[] { new EscapeSysExEvent(new byte[] { 0xF7 }), new EscapeSysExEvent() },
+            new object[] { new EscapeSysExEvent(new byte[] { 0xF7, 0xAB, 0x65, 0xF7 }), new EscapeSysExEvent(new byte[] { 0xF7, 0xAB, 0x65, 0xF7 }) },
+            new object[] { new EscapeSysExEvent(new byte[] { 0xAB, 0x65, 0xF7 }), new EscapeSysExEvent(new byte[] { 0xF7, 0xAB, 0x65, 0xF7 }) },
+            new object[] { new EscapeSysExEvent(new byte[] { 0xF7, 0xAB, 0x65, 0xF7 }), new EscapeSysExEvent(new byte[] { 0xAB, 0x65, 0xF7 }) },
 
             new object[] { new ChannelAftertouchEvent(), new ChannelAftertouchEvent() },
             new object[] { new ChannelAftertouchEvent((SevenBitNumber)4), new ChannelAftertouchEvent((SevenBitNumber)4) },
@@ -132,7 +132,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
             new object[] { new SequenceNumberEvent(45), new SequenceNumberEvent(45) },
 
             new object[] { new SequencerSpecificEvent(), new SequencerSpecificEvent() },
-            new object[] { new SequencerSpecificEvent([1, 2, 3]), new SequencerSpecificEvent([1, 2, 3]) },
+            new object[] { new SequencerSpecificEvent(new byte[] { 1, 2, 3 }), new SequencerSpecificEvent(new byte[] { 1, 2, 3 }) },
 
             new object[] { new SequenceTrackNameEvent(), new SequenceTrackNameEvent() },
             new object[] { new SequenceTrackNameEvent("ABC"), new SequenceTrackNameEvent("ABC") },
@@ -150,7 +150,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
             new object[] { new TimeSignatureEvent(2, 8, 32, 64), new TimeSignatureEvent(2, 8, 32, 64) },
 
             new object[] { new UnknownMetaEvent(45), new UnknownMetaEvent(45) },
-            new object[] { new UnknownMetaEvent(45, [1, 2, 3]), new UnknownMetaEvent(45, [1, 2, 3]) },
+            new object[] { new UnknownMetaEvent(45, new byte[] { 1, 2, 3 }), new UnknownMetaEvent(45, new byte[] { 1, 2, 3 }) },
 
             new object[] { new CustomMetaEvent("ABC"), new CustomMetaEvent("ABC") },
 
@@ -180,15 +180,15 @@ namespace Melanchall.DryWetMidi.Tests.Core
 
         private static readonly object[] NonEqualEvents =
         {
-            new object[] { new NormalSysExEvent(), new NormalSysExEvent([0xFA]) },
-            new object[] { new NormalSysExEvent([0xF0, 0xAC, 0x65, 0xF7]), new NormalSysExEvent([0xF0, 0xAB, 0x65, 0xF7]) },
-            new object[] { new NormalSysExEvent([0xAB, 0x65, 0xF7]), new NormalSysExEvent([0xF0, 0xAB, 0x65, 0xF8]) },
-            new object[] { new NormalSysExEvent([0xF0, 0xAB, 0x64, 0xF7]), new NormalSysExEvent([0xAB, 0x65, 0xF7]) },
+            new object[] { new NormalSysExEvent(), new NormalSysExEvent(new byte[] { 0xFA }) },
+            new object[] { new NormalSysExEvent(new byte[] { 0xF0, 0xAC, 0x65, 0xF7 }), new NormalSysExEvent(new byte[] { 0xF0, 0xAB, 0x65, 0xF7 }) },
+            new object[] { new NormalSysExEvent(new byte[] { 0xAB, 0x65, 0xF7 }), new NormalSysExEvent(new byte[] { 0xF0, 0xAB, 0x65, 0xF8 }) },
+            new object[] { new NormalSysExEvent(new byte[] { 0xF0, 0xAB, 0x64, 0xF7 }), new NormalSysExEvent(new byte[] { 0xAB, 0x65, 0xF7 }) },
 
-            new object[] { new EscapeSysExEvent([0xF5]), new EscapeSysExEvent() },
-            new object[] { new EscapeSysExEvent([0xF7, 0xAC, 0x65, 0xF7]), new EscapeSysExEvent([0xF7, 0xAB, 0x65, 0xF7]) },
-            new object[] { new EscapeSysExEvent([0xAB, 0x65, 0xF7]), new EscapeSysExEvent([0xF7, 0xAB, 0x65, 0xF8]) },
-            new object[] { new EscapeSysExEvent([0xF7, 0xAB, 0x64, 0xF7]), new EscapeSysExEvent([0xAB, 0x65, 0xF7]) },
+            new object[] { new EscapeSysExEvent(new byte[] { 0xF5 }), new EscapeSysExEvent() },
+            new object[] { new EscapeSysExEvent(new byte[] { 0xF7, 0xAC, 0x65, 0xF7 }), new EscapeSysExEvent(new byte[] { 0xF7, 0xAB, 0x65, 0xF7 }) },
+            new object[] { new EscapeSysExEvent(new byte[] { 0xAB, 0x65, 0xF7 }), new EscapeSysExEvent(new byte[] { 0xF7, 0xAB, 0x65, 0xF8 }) },
+            new object[] { new EscapeSysExEvent(new byte[] { 0xF7, 0xAB, 0x64, 0xF7 }), new EscapeSysExEvent(new byte[] { 0xAB, 0x65, 0xF7 }) },
 
             new object[] { new ChannelAftertouchEvent(), new ChannelAftertouchEvent((SevenBitNumber)4) },
             new object[] { new ChannelAftertouchEvent() { Channel = (FourBitNumber)10 }, new ChannelAftertouchEvent() },
@@ -264,8 +264,8 @@ namespace Melanchall.DryWetMidi.Tests.Core
             new object[] { new SequenceNumberEvent(), new SequenceNumberEvent(11) },
             new object[] { new SequenceNumberEvent(5), new SequenceNumberEvent(45) },
 
-            new object[] { new SequencerSpecificEvent(), new SequencerSpecificEvent([1]) },
-            new object[] { new SequencerSpecificEvent([2, 3]), new SequencerSpecificEvent([1, 2, 3]) },
+            new object[] { new SequencerSpecificEvent(), new SequencerSpecificEvent(new byte[] { 1 }) },
+            new object[] { new SequencerSpecificEvent(new byte[] { 2, 3 }), new SequencerSpecificEvent(new byte[] { 1, 2, 3 }) },
 
             new object[] { new SequenceTrackNameEvent(), new SequenceTrackNameEvent("A") },
             new object[] { new SequenceTrackNameEvent("A"), new SequenceTrackNameEvent("ABC") },
@@ -291,7 +291,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
             new object[] { new TimeSignatureEvent(2, 8, 32, 128), new TimeSignatureEvent(2, 8, 32, 64) },
 
             new object[] { new UnknownMetaEvent(45), new UnknownMetaEvent(5) },
-            new object[] { new UnknownMetaEvent(45, [1, 2, 3]), new UnknownMetaEvent(45, [2, 3]) },
+            new object[] { new UnknownMetaEvent(45, new byte[] { 1, 2, 3 }), new UnknownMetaEvent(45, new byte[] { 2, 3 }) },
 
             new object[] { new MidiTimeCodeEvent(MidiTimeCodeComponent.HoursLsb, (FourBitNumber)12), new MidiTimeCodeEvent() },
             new object[] { new MidiTimeCodeEvent(MidiTimeCodeComponent.SecondsMsb, (FourBitNumber)3), new MidiTimeCodeEvent(MidiTimeCodeComponent.HoursLsb, (FourBitNumber)12) },
@@ -363,7 +363,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
             var allEventsTypes = Enum
                 .GetValues(typeof(MidiEventType))
                 .Cast<MidiEventType>()
-                .Except([MidiEventType.EndOfTrack, MidiEventType.CustomMeta, MidiEventType.TimingClock, MidiEventType.Start, MidiEventType.Continue, MidiEventType.Stop, MidiEventType.ActiveSensing, MidiEventType.Reset, MidiEventType.TuneRequest])
+                .Except(new[] { MidiEventType.EndOfTrack, MidiEventType.CustomMeta, MidiEventType.TimingClock, MidiEventType.Start, MidiEventType.Continue, MidiEventType.Stop, MidiEventType.ActiveSensing, MidiEventType.Reset, MidiEventType.TuneRequest })
                 .ToArray();
             
             CollectionAssert.AreEquivalent(

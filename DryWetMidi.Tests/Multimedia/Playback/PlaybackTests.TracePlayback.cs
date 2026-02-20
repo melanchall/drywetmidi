@@ -53,7 +53,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             FileOperations.WriteAllLinesToFile(
                 tickTimesFilePath,
                 clockTracer.GetTickTimes()
-                    .Select((tt, i) => $"{i}: {string.Join(",", tt)}"));
+                    .Select((tt, i2) => $"{i2}: {string.Join(",", tt)}"));
 
             void WriteTimesToFile(string subLabel, long[] times)
             {
@@ -131,9 +131,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     {
                         path.MoveTo(markerPoints[0]);
 
-                        for (var i = 1; i < markerPoints.Length; i++)
+                        for (var i2 = 1; i2 < markerPoints.Length; i2++)
                         {
-                            path.LineTo(markerPoints[i]);
+                            path.LineTo(markerPoints[i2]);
                         }
 
                         path.Close();
@@ -236,12 +236,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
             void DrawEvents(ICollection<TimestampedEvent> events, int y, SKColor color)
             {
-                var i = 0;
+                var i2 = 0;
 
                 foreach (var e in events)
                 {
-                    var yShift = alternatingShift * (i % 3);
-
+                    var yShift = alternatingShift * (i2 % 3);
                     canvas.DrawCircle(
                         GetTimeX((float)e.Time.TotalMilliseconds),
                         y + yShift,
@@ -265,7 +264,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                             IsAntialias = true,
                         });
 
-                    i++;
+                    i2++;
                 }
             }
 

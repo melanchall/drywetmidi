@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
+#if NET7_0_OR_GREATER
+using System.Runtime.CompilerServices;
+#endif
+
 namespace Melanchall.DryWetMidi.Multimedia
 {
-    internal static class TickGeneratorApi
+    internal static partial class TickGeneratorApi
     {
         #region Nested enums
 
@@ -39,6 +43,19 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         #region Extern functions
 
+#if NET7_0_OR_GREATER
+        [LibraryImport(NativeApi.LibraryName)]
+        [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
+        private static partial TG_STARTRESULT StartHighPrecisionTickGenerator_Win(int interval, IntPtr sessionHandle, TimerCallback_Win callback, out IntPtr info, out int errorCode);
+
+        [LibraryImport(NativeApi.LibraryName)]
+        [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
+        private static partial TG_STARTRESULT StartHighPrecisionTickGenerator_Mac(int interval, IntPtr sessionHandle, TimerCallback_Mac callback, out IntPtr info, out int errorCode);
+
+        [LibraryImport(NativeApi.LibraryName)]
+        [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
+        private static partial TG_STOPRESULT StopHighPrecisionTickGenerator(IntPtr sessionHandle, IntPtr info, out int errorCode);
+#else
         [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
         public static extern TG_STARTRESULT StartHighPrecisionTickGenerator_Win(int interval, IntPtr sessionHandle, TimerCallback_Win callback, out IntPtr info, out int errorCode);
 
@@ -47,6 +64,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
         public static extern TG_STOPRESULT StopHighPrecisionTickGenerator(IntPtr sessionHandle, IntPtr info, out int errorCode);
+#endif
 
         #endregion
 

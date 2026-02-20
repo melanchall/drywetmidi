@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
+#if NET7_0_OR_GREATER
+using System.Runtime.CompilerServices;
+#endif
+
 namespace Melanchall.DryWetMidi.Multimedia
 {
-    internal static class TickGeneratorSessionApi
+    internal static partial class TickGeneratorSessionApi
     {
         #region Nested enums
 
@@ -25,8 +29,14 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         #region Extern functions
 
+#if NET7_0_OR_GREATER
+        [LibraryImport(NativeApi.LibraryName)]
+        [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
+        private static partial TGSESSION_OPENRESULT OpenTickGeneratorSession(out IntPtr handle, out int errorCode);
+#else
         [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
         private static extern TGSESSION_OPENRESULT OpenTickGeneratorSession(out IntPtr handle, out int errorCode);
+#endif
 
         #endregion
 
