@@ -20,6 +20,12 @@ stages:
         targetPath: 'Resources\Native\Windows\Melanchall_DryWetMidi_Native.dll'
         artifactName: 'Native_Win_x64'
         artifactType: pipeline
+    - task: PublishPipelineArtifact@1
+      displayName: 'Publish pdb artifact'
+      inputs:
+        targetPath: 'Resources\Native\Windows\Melanchall_DryWetMidi_Native.pdb'
+        artifactName: 'Native_Win_x64_pdb'
+        artifactType: pipeline
   - job: BuildDllArm64
     displayName: 'Build arm64 dll'
     pool:

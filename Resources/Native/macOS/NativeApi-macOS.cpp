@@ -41,6 +41,8 @@ struct TickGeneratorSessionHandle
 {
     pthread_t thread;
     std::atomic<char> active;
+    std::atomic<char> sessionClosed;
+    std::atomic<char> threadExited;
     CFRunLoopRef runLoopRef;
     TGSESSION_OPENRESULT threadStartResult;
     int threadStartError;
@@ -104,9 +106,17 @@ void* TickGeneratorSessionThreadRoutine(void* data)
     //
 
     sessionHandle->active.store(1);
-    sessionHandle->runLoopRef = runLoopRef;
+    sessionHandle->runLoopRef = (CFRunLoopRef)CFRetain(runLoopRef);
 
     CFRunLoopRun();
+
+    if (sessionHandle->runLoopRef != nullptr)
+    {
+        CFRelease(sessionHandle->runLoopRef);
+        sessionHandle->runLoopRef = nullptr;
+    }
+
+    sessionHandle->threadExited.store(1);
 
     return nullptr;
 }
@@ -119,6 +129,8 @@ API_EXPORT TGSESSION_OPENRESULT OpenTickGeneratorSession(void** handle, int* err
 
     sessionHandle->threadStartResult = TGSESSION_OPENRESULT_OK;
     sessionHandle->active.store(0);
+    sessionHandle->sessionClosed.store(0);
+    sessionHandle->threadExited.store(0);
 
     int pthreadCreateResult;
     if ((pthreadCreateResult = pthread_create(&sessionHandle->thread, nullptr, TickGeneratorSessionThreadRoutine, sessionHandle)) != 0)
@@ -138,7 +150,6 @@ API_EXPORT TGSESSION_OPENRESULT OpenTickGeneratorSession(void** handle, int* err
             return res;
         }
 
-        // small sleep to avoid busy spin
         struct timespec ts = {0, 1000000}; // 1ms
         nanosleep(&ts, nullptr);
     }
@@ -146,6 +157,38 @@ API_EXPORT TGSESSION_OPENRESULT OpenTickGeneratorSession(void** handle, int* err
     *handle = sessionHandle;
 
     return TGSESSION_OPENRESULT_OK;
+}
+
+API_EXPORT TGSESSION_CLOSERESULT CloseTickGeneratorSession(void* handle, int* errorCode)
+{
+    *errorCode = 0;
+
+    TickGeneratorSessionHandle* sessionHandle = static_cast<TickGeneratorSessionHandle*>(handle);
+
+    if (sessionHandle->sessionClosed.exchange(1) == 1 || sessionHandle->runLoopRef == nullptr)
+        return SESSION_CLOSERESULT_OK;
+
+    if (sessionHandle->runLoopRef != nullptr)
+        CFRunLoopStop(sessionHandle->runLoopRef);
+
+    const int maxWaitMs = 500;
+    const int pollIntervalMs = 10;
+    int waitedMs = 0;
+
+    while (sessionHandle->threadExited.load() == 0 && waitedMs < maxWaitMs)
+    {
+        struct timespec ts = { 0, pollIntervalMs * 1000000 };
+        nanosleep(&ts, nullptr);
+        waitedMs += pollIntervalMs;
+    }
+
+    TGSESSION_CLOSERESULT result = sessionHandle->threadExited.load() == 1
+        ? TGSESSION_CLOSERESULT_OK
+        : TGSESSION_CLOSERESULT_THREADEXITTIMEOUT;
+
+    delete sessionHandle;
+
+    return TGSESSION_CLOSERESULT_OK;
 }
 
 void TimerCallback(CFRunLoopTimerRef timer, void *info)
@@ -252,6 +295,7 @@ struct SessionHandle
     pthread_t thread;
     std::atomic<char> clientCreated;
     std::atomic<char> sessionClosed;
+    std::atomic<char> threadExited;
     OSStatus clientCreationStatus;
     InputDeviceCallback inputDeviceCallback;
     OutputDeviceCallback outputDeviceCallback;
@@ -265,7 +309,8 @@ void HandleSource(MIDIEndpointRef source, SessionHandle* sessionHandle, char ope
     InputDeviceInfo* inputDeviceInfo = new InputDeviceInfo();
     inputDeviceInfo->endpointRef = source;
 
-    sessionHandle->inputDeviceCallback(inputDeviceInfo, operation);
+    if (sessionHandle->inputDeviceCallback != nullptr)
+        sessionHandle->inputDeviceCallback(inputDeviceInfo, operation);
 }
 
 void HandleDestination(MIDIEndpointRef destination, SessionHandle* sessionHandle, char operation)
@@ -276,7 +321,8 @@ void HandleDestination(MIDIEndpointRef destination, SessionHandle* sessionHandle
     OutputDeviceInfo* outputDeviceInfo = new OutputDeviceInfo();
     outputDeviceInfo->endpointRef = destination;
 
-    sessionHandle->outputDeviceCallback(outputDeviceInfo, operation);
+    if (sessionHandle->outputDeviceCallback != nullptr)
+        sessionHandle->outputDeviceCallback(outputDeviceInfo, operation);
 }
 
 void HandleEntitySources(MIDIEntityRef entity, SessionHandle* sessionHandle, char operation)
@@ -395,7 +441,15 @@ void* ThreadProc(void* data)
         CFRelease(nameRef);
     
     CFRunLoopRun();
-    
+
+    if (sessionHandle->runLoopRef != nullptr)
+    {
+        CFRelease(sessionHandle->runLoopRef);
+        sessionHandle->runLoopRef = nullptr;
+    }
+
+    sessionHandle->threadExited.store(1);
+
     return nullptr;
 }
 
@@ -410,6 +464,7 @@ API_EXPORT SESSION_OPENRESULT OpenSession_Mac(char* name, InputDeviceCallback in
     sessionHandle->outputDeviceCallback = outputDeviceCallback;
     sessionHandle->clientCreated.store(0);
     sessionHandle->sessionClosed.store(0);
+    sessionHandle->threadExited.store(0);
     
     int pthreadCreateResult;
     if ((pthreadCreateResult = pthread_create(&sessionHandle->thread, nullptr, ThreadProc, sessionHandle)) != 0)
@@ -446,16 +501,32 @@ API_EXPORT SESSION_CLOSERESULT CloseSession(void* handle)
 {
     SessionHandle* sessionHandle = static_cast<SessionHandle*>(handle);
 
-    if (sessionHandle->sessionClosed.load() == 1)
+    if (sessionHandle->sessionClosed.exchange(1) == 1 || sessionHandle->runLoopRef == nullptr)
         return SESSION_CLOSERESULT_OK;
     
-    sessionHandle->sessionClosed.store(1);
+    sessionHandle->inputDeviceCallback = nullptr;
+    sessionHandle->outputDeviceCallback = nullptr;
 
-    CFRunLoopStop(sessionHandle->runLoopRef);
-    CFRelease(sessionHandle->runLoopRef);
+    if (sessionHandle->runLoopRef != nullptr)
+        CFRunLoopStop(sessionHandle->runLoopRef);
+
+    const int maxWaitMs = 500;
+    const int pollIntervalMs = 10;
+    int waitedMs = 0;
+
+    while (sessionHandle->threadExited.load() == 0 && waitedMs < maxWaitMs)
+    {
+        struct timespec ts = { 0, pollIntervalMs * 1000000 };
+        nanosleep(&ts, nullptr);
+        waitedMs += pollIntervalMs;
+    }
+
+    SESSION_CLOSERESULT result = sessionHandle->threadExited.load() == 1
+        ? SESSION_CLOSERESULT_OK
+        : SESSION_CLOSERESULT_THREADEXITTIMEOUT;
 
     delete sessionHandle;
-    return SESSION_CLOSERESULT_OK;
+    return result;
 }
 
 /* ================================

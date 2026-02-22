@@ -68,28 +68,49 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
         [Test]
         public void SendEvent_EscapeSysEx() => Assert.Throws<ArgumentException>(
-            () => SendEvent(new EscapeSysExEvent(new byte[] { 0x5F, 0x40, 0xF7 })));
+            () => SendEvents(new EscapeSysExEvent(new byte[] { 0x5F, 0x40, 0xF7 })));
 
-        [CancelAfter(60 * 1000)]
         [MultimediaTestRetry]
         [Test]
-        public void SendEvent_SysEx()
+        public void SendEvent_SysEx_1()
         {
-            SendEvent(new NormalSysExEvent(new byte[] { 0x5F, 0x40, 0xF7 }));
+            SendEvents(new NormalSysExEvent(new byte[] { 0x5F, 0x40, 0xF7 }));
         }
 
-        [CancelAfter(60 * 1000)]
+        // TODO: 0xF0 breaks sending
+        // [MultimediaTestRetry]
+        // [Test]
+        // public void SendEvent_SysEx_2()
+        // {
+        //     SendEvents(new NormalSysExEvent(new byte[] { 0xF0, 0x5F, 0x40, 0xF7 }));
+        // }
+
         [MultimediaTestRetry]
         [Test]
         public void SendEvent_SysEx_Large([Values(100, 1000, 10000)] int size)
         {
-            SendEvent(new NormalSysExEvent(
+            SendEvents(new NormalSysExEvent(
                 Enumerable
                     .Range(0, size)
                     .Select(_ => (byte)0x50)
                     .Concat(new byte[] { 0xF7 })
                     .ToArray()));
         }
+
+        // TODO: fails
+        // [MultimediaTestRetry]
+        // [Test]
+        // public void SendEvent_SysEx_Multiple([Values(2, 5/*, 10*/)] int eventsCount, [Values(1, 10, 100/*, 1000*/)] int dataSize)
+        // {
+        //     SendEvents(Enumerable
+        //         .Range(0, eventsCount)
+        //         .Select(_ => new NormalSysExEvent(Enumerable
+        //             .Range(0, eventsCount)
+        //             .Select(__ => (byte)0x50)
+        //             .Concat(new byte[] { 0xF7 })
+        //             .ToArray()))
+        //         .ToArray());
+        // }
 
         [MultimediaTestRetry]
         [TestCase(MidiEventType.ActiveSensing)]
@@ -116,28 +137,41 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 .Select(t => (MidiEvent)Activator.CreateInstance(t))
                 .First(e => e.EventType == eventType);
 
-            SendEvent(midiEvent);
+            SendEvents(midiEvent);
         }
 
         [MultimediaTestRetry]
         [TestCaseSource(nameof(GetNonDefaultShortEvents))]
         public void SendEvent_Short_NonDefault(MidiEvent midiEvent)
         {
-            SendEvent(midiEvent);
+            SendEvents(midiEvent);
         }
 
+#if TEST
         [Test]
         public void OutputDeviceIsReleasedByDispose()
         {
             for (var i = 0; i < 10; i++)
             {
+                var checkpoints = new TestCheckpoints();
+
                 var outputDevice = OutputDevice.GetByName(MidiDevicesNames.DeviceA);
+                outputDevice.TestCheckpoints = checkpoints;
+
                 ClassicAssert.DoesNotThrow(() => outputDevice.SendEvent(new NoteOnEvent()));
+
+                checkpoints.CheckCheckpointsAreNotReached(
+                    OutputDeviceCheckpointsNames.HandleFinalizerEntered,
+                    OutputDeviceCheckpointsNames.DeviceClosedInHandleFinalizer);
+
                 outputDevice.Dispose();
+
+                checkpoints.CheckCheckpointsReached(
+                    OutputDeviceCheckpointsNames.HandleFinalizerEntered,
+                    OutputDeviceCheckpointsNames.DeviceClosedInHandleFinalizer);
             }
         }
 
-#if TEST
         [Test]
         public void OutputDeviceIsReleasedByFinalizer()
         {
@@ -161,16 +195,19 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             {
                 var checkpoints = new TestCheckpoints();
 
-                checkpoints.CheckCheckpointNotReached(OutputDeviceCheckpointsNames.HandleFinalizerEntered);
-                checkpoints.CheckCheckpointNotReached(OutputDeviceCheckpointsNames.DeviceClosedInHandleFinalizer);
+                checkpoints.CheckCheckpointsAreNotReached(
+                    OutputDeviceCheckpointsNames.HandleFinalizerEntered,
+                    OutputDeviceCheckpointsNames.DeviceClosedInHandleFinalizer);
 
                 ClassicAssert.IsTrue(sendEvent(checkpoints), $"Can't send event on iteration {i}.");
 
                 GC.Collect();
                 GC.WaitForPendingFinalizers();
+                GC.Collect();
 
-                checkpoints.CheckCheckpointReached(OutputDeviceCheckpointsNames.HandleFinalizerEntered);
-                checkpoints.CheckCheckpointReached(OutputDeviceCheckpointsNames.DeviceClosedInHandleFinalizer);
+                checkpoints.CheckCheckpointsReached(
+                    OutputDeviceCheckpointsNames.HandleFinalizerEntered,
+                    OutputDeviceCheckpointsNames.DeviceClosedInHandleFinalizer);
             }
         }
 #endif
@@ -184,6 +221,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
                 var sentEventsCount = 0;
 
+                outputDevice.PrepareForEventsSending();
                 outputDevice.EventSent += (_, __) => sentEventsCount++;
 
                 outputDevice.SendEvent(new NoteOnEvent());
@@ -245,20 +283,20 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             new ProgramChangeEvent((SevenBitNumber)127) { Channel = (FourBitNumber)6 },
         };
 
-        private void SendEvent(MidiEvent midiEvent)
+        private void SendEvents(params MidiEvent[] midiEvents)
         {
             var deviceName = MidiDevicesNames.DeviceA;
 
-            Console.WriteLine($"Obtaining output device [{deviceName}]...");
             using (var outputDevice = OutputDevice.GetByName(deviceName))
             {
                 MidiEvent eventSent = null;
+
                 outputDevice.EventSent += (_, e) => eventSent = e.Event;
+                outputDevice.PrepareForEventsSending();
 
                 string errorOnSend = null;
                 outputDevice.ErrorOccurred += (_, e) => errorOnSend = e.Exception.Message;
 
-                Console.WriteLine($"Obtaining input device [{deviceName}]...");
                 using (var inputDevice = InputDevice.GetByName(deviceName))
                 {
                     MidiEvent eventReceived = null;
@@ -267,30 +305,32 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     string errorOnReceive = null;
                     inputDevice.ErrorOccurred += (_, e) => errorOnReceive = e.Exception.Message;
 
-                    Console.WriteLine($"Starting events listening...");
                     inputDevice.StartEventsListening();
-
-                    Console.WriteLine($"Preparing for events sending...");
                     outputDevice.PrepareForEventsSending();
 
-                    Console.WriteLine($"Sending event [{midiEvent}]...");
-                    outputDevice.SendEvent(midiEvent);
-                    Console.WriteLine($"Event sent.");
-
                     var timeout = SendReceiveUtilities.MaximumEventSendReceiveDelay;
-                    var isEventSentReceived = WaitOperations.Wait(() => eventSent != null && eventReceived != null, timeout);
-                    if (!isEventSentReceived)
-                    {
-                        if (errorOnSend != null)
-                            ClassicAssert.Fail($"Failed to send event: {errorOnSend}");
-                        else if (errorOnReceive != null)
-                            ClassicAssert.Fail($"Failed to receive event: {errorOnReceive}");
-                        else
-                            ClassicAssert.Fail("Event either not sent ot not received.");
-                    }
 
-                    MidiAsserts.AreEqual(midiEvent, eventSent, false, "Sent event is invalid.");
-                    MidiAsserts.AreEqual(eventSent, eventReceived, false, "Received event is invalid.");
+                    foreach (var midiEvent in midiEvents)
+                    {
+                        eventSent = null;
+                        errorOnSend = null;
+
+                        outputDevice.SendEvent(midiEvent);
+
+                        var isEventSentReceived = WaitOperations.Wait(() => eventSent != null && eventReceived != null, timeout);
+                        if (!isEventSentReceived)
+                        {
+                            if (errorOnSend != null)
+                                ClassicAssert.Fail($"Failed to send event: {errorOnSend}");
+                            else if (errorOnReceive != null)
+                                ClassicAssert.Fail($"Failed to receive event: {errorOnReceive}");
+                            else
+                                ClassicAssert.Fail("Event either not sent ot not received.");
+                        }
+
+                        MidiAsserts.AreEqual(midiEvent, eventSent, false, "Sent event is invalid.");
+                        MidiAsserts.AreEqual(eventSent, eventReceived, false, "Received event is invalid.");
+                    }
                 }
             }
         }

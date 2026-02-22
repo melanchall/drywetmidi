@@ -8,12 +8,14 @@ DryWetMidi\Multimedia\Native\NativeHandle.cs
 DryWetMidi\Multimedia\MidiDevice.cs
 
 DryWetMidi\Multimedia\InputDevice\InputDevice.cs
+DryWetMidi\Multimedia\InputDevice\InputDeviceHandle
 DryWetMidi\Multimedia\InputDevice\InputDeviceApi.cs
 DryWetMidi\Multimedia\InputDevice\InputDeviceCheckpointsNames.cs
 DryWetMidi\Multimedia\InputDevice\InputDeviceProperty.cs
 DryWetMidi\Multimedia\InputDevice\MidiTimeCodeReceivedEventArgs.cs
 
 DryWetMidi\Multimedia\OutputDevice\OutputDevice.cs
+DryWetMidi\Multimedia\OutputDevice\OutputDeviceHandle
 DryWetMidi\Multimedia\OutputDevice\OutputDeviceApi.cs
 DryWetMidi\Multimedia\OutputDevice\OutputDeviceCheckpointsNames.cs
 DryWetMidi\Multimedia\OutputDevice\OutputDeviceOption.cs

@@ -50,18 +50,25 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             }
         }
 
+#if TEST
         [Test]
         public void DisposeVirtualDevice()
         {
-            var virtualDevice = GetVirtualDevice();
-
             var timeout = TimeSpan.FromSeconds(5);
+            var checkpoints = new TestCheckpoints();
+
+            var virtualDevice = GetVirtualDevice();
+            virtualDevice.TestCheckpoints = checkpoints;
 
             var inputDeviceFound = WaitOperations.Wait(() => InputDevice.GetAll().Any(d => d.Name == virtualDevice.Name), timeout);
             ClassicAssert.IsTrue(inputDeviceFound, $"Input device is not found for [{timeout}].");
 
             var outputDeviceFound = WaitOperations.Wait(() => OutputDevice.GetAll().Any(d => d.Name == virtualDevice.Name), timeout);
             ClassicAssert.IsTrue(outputDeviceFound, $"Output device is not found for [{timeout}].");
+
+            checkpoints.CheckCheckpointsAreNotReached(
+                VirtualDeviceCheckpointsNames.HandleFinalizerEntered,
+                VirtualDeviceCheckpointsNames.DeviceClosedInHandleFinalizer);
 
             virtualDevice.Dispose();
 
@@ -70,23 +77,40 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
             outputDeviceFound = WaitOperations.Wait(() => OutputDevice.GetAll().Any(d => d.Name == virtualDevice.Name), timeout);
             ClassicAssert.IsFalse(outputDeviceFound, $"Output device is found after virtual device disposed after [{timeout}].");
+
+            checkpoints.CheckCheckpointsReached(
+                VirtualDeviceCheckpointsNames.HandleFinalizerEntered,
+                VirtualDeviceCheckpointsNames.DeviceClosedInHandleFinalizer);
         }
 
         [Test]
         public void VirtualDeviceIsReleasedByFinalizer()
         {
-            Func<string> createVirtualDevice = () =>
+            Func<TestCheckpoints, string> createVirtualDevice = testCheckpoints =>
             {
                 var virtualDevice = GetVirtualDevice();
+                virtualDevice.TestCheckpoints = testCheckpoints;
+
                 return virtualDevice.Name;
             };
 
-            var deviceName = createVirtualDevice();
+            var checkpoints = new TestCheckpoints();
+
+            var deviceName = createVirtualDevice(checkpoints);
+
+            checkpoints.CheckCheckpointsAreNotReached(
+                VirtualDeviceCheckpointsNames.HandleFinalizerEntered,
+                VirtualDeviceCheckpointsNames.DeviceClosedInHandleFinalizer);
 
             GC.Collect();
             GC.WaitForPendingFinalizers();
+            GC.Collect();
 
             var timeout = TimeSpan.FromSeconds(5);
+
+            checkpoints.CheckCheckpointsReached(
+                VirtualDeviceCheckpointsNames.HandleFinalizerEntered,
+                VirtualDeviceCheckpointsNames.DeviceClosedInHandleFinalizer);
 
             var inputDeviceFound = WaitOperations.Wait(() => InputDevice.GetAll().Any(d => d.Name == deviceName), timeout);
             ClassicAssert.IsFalse(inputDeviceFound, $"Input device is found after virtual device disposed after [{timeout}].");
@@ -94,6 +118,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var outputDeviceFound = WaitOperations.Wait(() => OutputDevice.GetAll().Any(d => d.Name == deviceName), timeout);
             ClassicAssert.IsFalse(outputDeviceFound, $"Output device is found after virtual device disposed after [{timeout}].");
         }
+#endif
 
         [MultimediaTestRetry]
         [Test]

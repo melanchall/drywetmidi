@@ -10,7 +10,7 @@ namespace Melanchall.DryWetMidi.Tests
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = false)]
     internal sealed class MultimediaTestRetryAttribute : PropertyAttribute, IRepeatTest
     {
-        private readonly int _count = 5;
+        private readonly int _count = 3;
         private readonly int _delayInMilliseconds = 10000;
 
         public TestCommand Wrap(TestCommand command)

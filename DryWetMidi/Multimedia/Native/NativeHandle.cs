@@ -1,32 +1,24 @@
-﻿using System;
-using System.Runtime.InteropServices;
+﻿using Melanchall.DryWetMidi.Common;
+using Microsoft.Win32.SafeHandles;
+using System;
 
 namespace Melanchall.DryWetMidi.Multimedia
 {
-    internal abstract class NativeHandle : SafeHandle
+    internal abstract class NativeHandle : SafeHandleZeroOrMinusOneIsInvalid
     {
-        #region Constructor
-
-        protected NativeHandle(IntPtr validHandle)
-                : base(IntPtr.Zero, true)
+        public NativeHandle()
+            : base(true)
         {
-            SetHandle(validHandle);
         }
 
-        #endregion
-
-        #region Properties
-
-        public IntPtr DeviceHandle
+        public NativeHandle(IntPtr handle)
+            : base(true)
         {
-            get { return handle; }
+            SetHandle(handle);
         }
 
-        public override bool IsInvalid
-        {
-            get { return handle == IntPtr.Zero; }
-        }
-
-        #endregion
+#if TEST
+        public TestCheckpoints TestCheckpoints { get; set; }
+#endif
     }
 }

@@ -9,52 +9,11 @@ namespace Melanchall.DryWetMidi.Multimedia
     /// </summary>
     public sealed class VirtualDevice : MidiDevice
     {
-        #region Nested classes
-
-        private sealed class VirtualDeviceHandle : NativeHandle
-        {
-#if TEST
-            private readonly TestCheckpoints _checkpoints;
-
-            public VirtualDeviceHandle(IntPtr validHandle, TestCheckpoints checkpoints)
-                : this(validHandle)
-            {
-                _checkpoints = checkpoints;
-            }
-#endif
-
-            public VirtualDeviceHandle(IntPtr validHandle)
-                : base(validHandle)
-            {
-            }
-
-            protected override bool ReleaseHandle()
-            {
-#if TEST
-                _checkpoints?.SetCheckpointReached(VirtualDeviceCheckpointsNames.HandleFinalizerEntered);
-#endif
-
-                var closeResult = VirtualDeviceApi.Api_CloseDevice(handle, out var errorCode);
-                if (closeResult != VirtualDeviceApi.VIRTUAL_CLOSERESULT.VIRTUAL_CLOSERESULT_OK)
-                    return false;
-
-#if TEST
-                _checkpoints?.SetCheckpointReached(VirtualDeviceCheckpointsNames.DeviceClosedInHandleFinalizer);
-#endif
-
-                return true;
-            }
-        }
-
-        #endregion
-
         #region Fields
 
         private readonly string _name;
 
         private VirtualDeviceApi.Callback_Mac _callback_Mac;
-
-        private VirtualDeviceHandle _handle = null;
 
         #endregion
 
@@ -147,10 +106,10 @@ namespace Melanchall.DryWetMidi.Multimedia
             var outputDeviceInfo = VirtualDeviceApi.Api_GetOutputDeviceInfo(deviceInfo);
             OutputDevice = new OutputDevice(outputDeviceInfo, CreationContext.VirtualDevice);
 
+            Handle = new VirtualDeviceHandle(deviceInfo);
+
 #if TEST
-            _handle = new VirtualDeviceHandle(deviceInfo, TestCheckpoints);
-#else
-            _handle = new VirtualDeviceHandle(deviceInfo);
+            Handle.TestCheckpoints = TestCheckpoints;
 #endif
         }
 
@@ -164,7 +123,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <returns>A string that represents the current object.</returns>
         public override string ToString()
         {
-            return "Virtual device";
+            return $"Virtual device ({_name})";
         }
 
         /// <summary>
@@ -182,7 +141,8 @@ namespace Melanchall.DryWetMidi.Multimedia
             {
                 InputDevice?.Dispose(true);
                 OutputDevice?.Dispose(true);
-                _handle?.Dispose();
+                Handle?.Dispose();
+                Handle = null;
             }
 
             _disposed = true;

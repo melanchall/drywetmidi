@@ -66,7 +66,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 #if NET7_0_OR_GREATER
         [LibraryImport(NativeApi.LibraryName)]
         [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-        private static partial VIRTUAL_OPENRESULT OpenVirtualDevice_Mac(IntPtr name, IntPtr sessionHandle, Callback_Mac callback, out IntPtr info, out int errorCode);
+        private static partial VIRTUAL_OPENRESULT OpenVirtualDevice_Mac(IntPtr name, MidiDevicesSessionHandle sessionHandle, Callback_Mac callback, out IntPtr info, out int errorCode);
 
         [LibraryImport(NativeApi.LibraryName)]
         [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
@@ -85,7 +85,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         private static partial IntPtr GetOutputDeviceInfoFromVirtualDevice(IntPtr info);
 #else
         [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
-        private static extern VIRTUAL_OPENRESULT OpenVirtualDevice_Mac(IntPtr name, IntPtr sessionHandle, Callback_Mac callback, out IntPtr info, out int errorCode);
+        private static extern VIRTUAL_OPENRESULT OpenVirtualDevice_Mac(IntPtr name, MidiDevicesSessionHandle sessionHandle, Callback_Mac callback, out IntPtr info, out int errorCode);
 
         [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
         private static extern VIRTUAL_CLOSERESULT CloseVirtualDevice(IntPtr info, out int errorCode);
@@ -104,7 +104,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         #region Methods
 
-        public static VIRTUAL_OPENRESULT Api_OpenDevice_Mac(string name, IntPtr sessionHandle, Callback_Mac callback, out IntPtr info, out int errorCode)
+        public static VIRTUAL_OPENRESULT Api_OpenDevice_Mac(string name, MidiDevicesSessionHandle sessionHandle, Callback_Mac callback, out IntPtr info, out int errorCode)
         {
             var namePointer = Marshal.StringToHGlobalAnsi(name);
             return OpenVirtualDevice_Mac(namePointer, sessionHandle, callback, out info, out errorCode);

@@ -78,22 +78,15 @@ namespace Melanchall.DryWetMidi.Multimedia
         public enum IN_RENEWSYSEXBUFFERRESULT
         {
             IN_RENEWSYSEXBUFFERRESULT_OK = 0,
+            IN_RENEWSYSEXBUFFERRESULT_INVALIDHEADER = 1,
+            IN_RENEWSYSEXBUFFERRESULT_BUFFERNOTDONE = 2,
+            IN_RENEWSYSEXBUFFERRESULT_STILLPLAYING = 3,
+            IN_RENEWSYSEXBUFFERRESULT_UNPREPARED = 4,
+            IN_RENEWSYSEXBUFFERRESULT_INVALIDHANDLE = 5,
+            IN_RENEWSYSEXBUFFERRESULT_INVALIDSTRUCTURE = 6,
             [NativeApi.NativeErrorType(NativeApi.NativeErrorType.NoMemory)]
-            IN_RENEWSYSEXBUFFERRESULT_PREPAREBUFFER_NOMEMORY = 1,
-            IN_RENEWSYSEXBUFFERRESULT_PREPAREBUFFER_INVALIDHANDLE = 2,
-            IN_RENEWSYSEXBUFFERRESULT_PREPAREBUFFER_INVALIDADDRESS = 3,
-            IN_RENEWSYSEXBUFFERRESULT_PREPAREBUFFER_UNKNOWNERROR = 1000,
-            [NativeApi.NativeErrorType(NativeApi.NativeErrorType.NoMemory)]
-            IN_RENEWSYSEXBUFFERRESULT_ADDBUFFER_NOMEMORY = 4,
-            IN_RENEWSYSEXBUFFERRESULT_ADDBUFFER_STILLPLAYING = 5,
-            IN_RENEWSYSEXBUFFERRESULT_ADDBUFFER_UNPREPARED = 6,
-            IN_RENEWSYSEXBUFFERRESULT_ADDBUFFER_INVALIDHANDLE = 7,
-            IN_RENEWSYSEXBUFFERRESULT_ADDBUFFER_INVALIDSTRUCTURE = 8,
-            IN_RENEWSYSEXBUFFERRESULT_ADDBUFFER_UNKNOWNERROR = 2000,
-            IN_RENEWSYSEXBUFFERRESULT_UNPREPAREBUFFER_STILLPLAYING = 9,
-            IN_RENEWSYSEXBUFFERRESULT_UNPREPAREBUFFER_INVALIDSTRUCTURE = 10,
-            IN_RENEWSYSEXBUFFERRESULT_UNPREPAREBUFFER_INVALIDHANDLE = 11,
-            IN_RENEWSYSEXBUFFERRESULT_UNPREPAREBUFFER_UNKNOWNERROR = 3000,
+            IN_RENEWSYSEXBUFFERRESULT_NOMEMORY = 7,
+            IN_RENEWSYSEXBUFFERRESULT_UNKNOWNERROR = 8,
         }
 
         public enum IN_CONNECTRESULT
@@ -189,11 +182,11 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         [LibraryImport(NativeApi.LibraryName)]
         [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-        private static partial IN_OPENRESULT OpenInputDevice_Win(IntPtr info, IntPtr sessionHandle, Callback_Win callback, int sysExBufferSize, out IntPtr handle, out int errorCode);
+        private static partial IN_OPENRESULT OpenInputDevice_Win(IntPtr info, MidiDevicesSessionHandle sessionHandle, Callback_Win callback, int sysExBufferSize, out IntPtr handle, out int errorCode);
 
         [LibraryImport(NativeApi.LibraryName)]
         [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-        private static partial IN_OPENRESULT OpenInputDevice_Mac(IntPtr info, IntPtr sessionHandle, Callback_Mac callback, out IntPtr handle, out int errorCode);
+        private static partial IN_OPENRESULT OpenInputDevice_Mac(IntPtr info, MidiDevicesSessionHandle sessionHandle, Callback_Mac callback, out IntPtr handle, out int errorCode);
 
         [LibraryImport(NativeApi.LibraryName)]
         [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
@@ -201,7 +194,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         [LibraryImport(NativeApi.LibraryName)]
         [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-        private static partial IN_RENEWSYSEXBUFFERRESULT RenewInputDeviceSysExBuffer(IntPtr handle, int size, out int errorCode);
+        private static partial IN_RENEWSYSEXBUFFERRESULT RenewInputDeviceSysExBuffer(IntPtr handle, IntPtr header, out int errorCode);
 
         [LibraryImport(NativeApi.LibraryName)]
         [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
@@ -258,16 +251,16 @@ namespace Melanchall.DryWetMidi.Multimedia
         private static extern IN_GETPROPERTYRESULT GetInputDeviceDriverVersion(IntPtr info, out int value, out int errorCode);
 
         [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
-        private static extern IN_OPENRESULT OpenInputDevice_Win(IntPtr info, IntPtr sessionHandle, Callback_Win callback, int sysExBufferSize, out IntPtr handle, out int errorCode);
+        private static extern IN_OPENRESULT OpenInputDevice_Win(IntPtr info, MidiDevicesSessionHandle sessionHandle, Callback_Win callback, int sysExBufferSize, out IntPtr handle, out int errorCode);
 
         [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
-        private static extern IN_OPENRESULT OpenInputDevice_Mac(IntPtr info, IntPtr sessionHandle, Callback_Mac callback, out IntPtr handle, out int errorCode);
+        private static extern IN_OPENRESULT OpenInputDevice_Mac(IntPtr info, MidiDevicesSessionHandle sessionHandle, Callback_Mac callback, out IntPtr handle, out int errorCode);
 
         [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
         private static extern IN_CLOSERESULT CloseInputDevice(IntPtr handle, out int errorCode);
 
         [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
-        private static extern IN_RENEWSYSEXBUFFERRESULT RenewInputDeviceSysExBuffer(IntPtr handle, int size, out int errorCode);
+        private static extern IN_RENEWSYSEXBUFFERRESULT RenewInputDeviceSysExBuffer(IntPtr handle, IntPtr header, out int errorCode);
 
         [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
         private static extern IN_CONNECTRESULT ConnectToInputDevice(IntPtr handle, out int errorCode);
@@ -316,12 +309,12 @@ namespace Melanchall.DryWetMidi.Multimedia
             return AreInputDevicesEqual(info1, info2);
         }
 
-        public static IN_OPENRESULT Api_OpenDevice_Win(IntPtr info, IntPtr sessionHandle, Callback_Win callback, int sysExBufferSize, out IntPtr handle, out int errorCode)
+        public static IN_OPENRESULT Api_OpenDevice_Win(IntPtr info, MidiDevicesSessionHandle sessionHandle, Callback_Win callback, int sysExBufferSize, out IntPtr handle, out int errorCode)
         {
             return OpenInputDevice_Win(info, sessionHandle, callback, sysExBufferSize, out handle, out errorCode);
         }
 
-        public static IN_OPENRESULT Api_OpenDevice_Mac(IntPtr info, IntPtr sessionHandle, Callback_Mac callback, out IntPtr handle, out int errorCode)
+        public static IN_OPENRESULT Api_OpenDevice_Mac(IntPtr info, MidiDevicesSessionHandle sessionHandle, Callback_Mac callback, out IntPtr handle, out int errorCode)
         {
             return OpenInputDevice_Mac(info, sessionHandle, callback, out handle, out errorCode);
         }
@@ -331,9 +324,9 @@ namespace Melanchall.DryWetMidi.Multimedia
             return CloseInputDevice(handle, out errorCode);
         }
 
-        public static IN_RENEWSYSEXBUFFERRESULT Api_RenewSysExBuffer(IntPtr handle, int size, out int errorCode)
+        public static IN_RENEWSYSEXBUFFERRESULT Api_RenewInputDeviceSysExBuffer(IntPtr handle, IntPtr header, out int errorCode)
         {
-            return RenewInputDeviceSysExBuffer(handle, size, out errorCode);
+            return RenewInputDeviceSysExBuffer(handle, header, out errorCode);
         }
 
         public static IN_CONNECTRESULT Api_Connect(IntPtr handle, out int errorCode)

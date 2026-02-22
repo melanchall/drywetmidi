@@ -158,7 +158,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             using (outputDevice)
             {
                 outputDevice.EventSent += (_, e) => receivedEvents.Add(new TimestampedEvent(e.Event.Clone(), stopwatch.Elapsed));
-                
+                outputDevice.PrepareForEventsSending();
+
                 using (var playback = createPlayback(outputDevice))
                 {
                     long Measure(Action action)

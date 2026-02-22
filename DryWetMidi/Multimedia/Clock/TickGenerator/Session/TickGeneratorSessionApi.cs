@@ -22,7 +22,9 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         public enum TGSESSION_CLOSERESULT
         {
-            TGSESSION_CLOSERESULT_OK = 0
+            TGSESSION_CLOSERESULT_OK = 0,
+
+            TGSESSION_CLOSERESULT_THREADEXITTIMEOUT = 101,
         }
 
         #endregion
@@ -33,9 +35,16 @@ namespace Melanchall.DryWetMidi.Multimedia
         [LibraryImport(NativeApi.LibraryName)]
         [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
         private static partial TGSESSION_OPENRESULT OpenTickGeneratorSession(out IntPtr handle, out int errorCode);
+
+        [LibraryImport(NativeApi.LibraryName)]
+        [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
+        private static partial TGSESSION_CLOSERESULT CloseTickGeneratorSession(IntPtr handle, out int errorCode);
 #else
         [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
         private static extern TGSESSION_OPENRESULT OpenTickGeneratorSession(out IntPtr handle, out int errorCode);
+
+        [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
+        private static extern TGSESSION_CLOSERESULT CloseTickGeneratorSession(IntPtr handle, out int errorCode);
 #endif
 
         #endregion
@@ -45,6 +54,11 @@ namespace Melanchall.DryWetMidi.Multimedia
         public static TGSESSION_OPENRESULT Api_OpenSession(out IntPtr handle, out int errorCode)
         {
             return OpenTickGeneratorSession(out handle, out errorCode);
+        }
+
+        public static TGSESSION_CLOSERESULT Api_CloseSession(IntPtr handle, out int errorCode)
+        {
+            return CloseTickGeneratorSession(handle, out errorCode);
         }
 
         #endregion

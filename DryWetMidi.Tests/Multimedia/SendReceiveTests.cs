@@ -27,6 +27,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             using (var outputDevice = OutputDevice.GetByName(SendReceiveUtilities.DeviceToTestOnName))
             using (var inputDevice = InputDevice.GetByName(SendReceiveUtilities.DeviceToTestOnName))
             {
+                outputDevice.PrepareForEventsSending();
                 inputDevice.StartEventsListening();
 
                 SendReceiveUtilities.CheckEventsReceiving(
@@ -60,6 +61,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             using (var outputDevice = OutputDevice.GetByName(SendReceiveUtilities.DeviceToTestOnName))
             using (var inputDevice = InputDevice.GetByName(SendReceiveUtilities.DeviceToTestOnName))
             {
+                outputDevice.PrepareForEventsSending();
                 inputDevice.StartEventsListening();
 
                 SendReceiveUtilities.CheckEventsReceiving(

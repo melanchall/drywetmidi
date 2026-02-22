@@ -145,6 +145,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             using (var inputDevice = InputDevice.GetByName(MidiDevicesNames.DeviceA))
             {
                 inputDevice.MidiTimeCodeReceived += (_, e) => midiTimeCodeReceived = new MidiTimeCode(e.Format, e.Hours, e.Minutes, e.Seconds, e.Frames);
+
+                outputDevice.PrepareForEventsSending();
                 inputDevice.StartEventsListening();
 
                 SendReceiveUtilities.SendEvents(eventsToSend, outputDevice);
@@ -163,18 +165,33 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             ClassicAssert.AreEqual(17, midiTimeCodeReceived.Frames, "Frames number is invalid.");
         }
 
+#if TEST
         [Test]
         public void InputDeviceIsReleasedByDispose()
         {
             for (var i = 0; i < 10; i++)
             {
+                var checkpoints = new TestCheckpoints();
+
                 var inputDevice = InputDevice.GetByName(MidiDevicesNames.DeviceA);
+                inputDevice.TestCheckpoints = checkpoints;
+
                 ClassicAssert.DoesNotThrow(() => inputDevice.StartEventsListening());
+
+                checkpoints.CheckCheckpointsAreNotReached(
+                    InputDeviceCheckpointsNames.HandleFinalizerEntered,
+                    InputDeviceCheckpointsNames.DeviceDisconnectedInHandleFinalizer,
+                    InputDeviceCheckpointsNames.DeviceClosedInHandleFinalizer);
+
                 inputDevice.Dispose();
+
+                checkpoints.CheckCheckpointsReached(
+                    InputDeviceCheckpointsNames.HandleFinalizerEntered,
+                    InputDeviceCheckpointsNames.DeviceDisconnectedInHandleFinalizer,
+                    InputDeviceCheckpointsNames.DeviceClosedInHandleFinalizer);
             }
         }
 
-#if TEST
         [Test]
         public void InputDeviceIsReleasedByFinalizer()
         {
@@ -198,18 +215,21 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             {
                 var checkpoints = new TestCheckpoints();
 
-                checkpoints.CheckCheckpointNotReached(InputDeviceCheckpointsNames.HandleFinalizerEntered);
-                checkpoints.CheckCheckpointNotReached(InputDeviceCheckpointsNames.DeviceDisconnectedInHandleFinalizer);
-                checkpoints.CheckCheckpointNotReached(InputDeviceCheckpointsNames.DeviceClosedInHandleFinalizer);
+                checkpoints.CheckCheckpointsAreNotReached(
+                    InputDeviceCheckpointsNames.HandleFinalizerEntered,
+                    InputDeviceCheckpointsNames.DeviceDisconnectedInHandleFinalizer,
+                    InputDeviceCheckpointsNames.DeviceClosedInHandleFinalizer);
 
                 ClassicAssert.IsTrue(openDevice(checkpoints), $"Can't open device on iteration {i}.");
 
                 GC.Collect();
                 GC.WaitForPendingFinalizers();
+                GC.Collect();
 
-                checkpoints.CheckCheckpointReached(InputDeviceCheckpointsNames.HandleFinalizerEntered);
-                checkpoints.CheckCheckpointReached(InputDeviceCheckpointsNames.DeviceDisconnectedInHandleFinalizer);
-                checkpoints.CheckCheckpointReached(InputDeviceCheckpointsNames.DeviceClosedInHandleFinalizer);
+                checkpoints.CheckCheckpointsReached(
+                    InputDeviceCheckpointsNames.HandleFinalizerEntered,
+                    InputDeviceCheckpointsNames.DeviceDisconnectedInHandleFinalizer,
+                    InputDeviceCheckpointsNames.DeviceClosedInHandleFinalizer);
             }
         }
 #endif
@@ -223,9 +243,10 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 ClassicAssert.IsTrue(inputDevice.IsEnabled, "Device is not enabled initially.");
 
                 var receivedEventsCount = 0;
-
-                inputDevice.StartEventsListening();
                 inputDevice.EventReceived += (_, __) => receivedEventsCount++;
+                
+                outputDevice.PrepareForEventsSending();
+                inputDevice.StartEventsListening();
 
                 outputDevice.SendEvent(new NoteOnEvent());
                 var eventReceived = WaitOperations.Wait(() => receivedEventsCount == 1, SendReceiveUtilities.MaximumEventSendReceiveDelay);
@@ -278,13 +299,16 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 var success = WaitOperations.Wait(() => receivedEventsCount > 0, timeout);
                 ClassicAssert.IsFalse(success, "Event received on just created device.");
 
+                outputDevice.PrepareForEventsSending();
                 inputDevice.StartEventsListening();
+
                 outputDevice.SendEvent(new NoteOnEvent());
                 success = WaitOperations.Wait(() => receivedEventsCount > 0, timeout);
                 ClassicAssert.IsTrue(success, "Event was not received after first start.");
                 ClassicAssert.AreEqual(1, receivedEventsCount, "Received events count is invalid after first start.");
 
                 inputDevice.StopEventsListening();
+
                 outputDevice.SendEvent(new NoteOnEvent());
                 success = WaitOperations.Wait(() => receivedEventsCount > 1, timeout);
                 ClassicAssert.IsFalse(success, "Event received after first stop.");
@@ -421,6 +445,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 inputDevice.WaitForCompleteSysExEvent = waitForCompleteSysExEvent;
 
                 inputDevice.EventReceived += (_, e) => receivedEvents.Add(e.Event);
+
+                outputDevice.PrepareForEventsSending();
                 inputDevice.StartEventsListening();
 
                 foreach (var packet in packets)

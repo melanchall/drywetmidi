@@ -108,6 +108,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             using (var outputA = OutputDevice.GetByName(MidiDevicesNames.DeviceA))
             {
                 outputA.EventSent += (_, e) => sentEvents.Add(new TimestampedEvent(e.Event, stopwatch.Elapsed));
+                outputA.PrepareForEventsSending();
 
                 using (var inputB = TestDeviceManager.GetInputDevice(MidiDevicesNames.DeviceB))
                 using (var inputC = TestDeviceManager.GetInputDevice(MidiDevicesNames.DeviceC))
@@ -145,7 +146,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 }
             }
 
-            SendReceiveUtilities.CheckTimestampedEvents(eventsToSend, sentEvents, TimeSpan.FromMilliseconds(10));
+            SendReceiveUtilities.CheckTimestampedEvents(sentEvents, eventsToSend, TimeSpan.FromMilliseconds(10));
             SendReceiveUtilities.CheckTimestampedEvents(receivedEventsB, eventsToSend, MaximumEventSendReceiveDelay);
             SendReceiveUtilities.CheckTimestampedEvents(receivedEventsC, eventsToSend, MaximumEventSendReceiveDelay);
         }
@@ -164,6 +165,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             using (var outputA = OutputDevice.GetByName(MidiDevicesNames.DeviceA))
             {
                 outputA.EventSent += (_, e) => sentEvents.Add(new TimestampedEvent(e.Event, stopwatch.Elapsed));
+                outputA.PrepareForEventsSending();
 
                 using (var inputB = TestDeviceManager.GetInputDevice(MidiDevicesNames.DeviceB))
                 using (var inputC = TestDeviceManager.GetInputDevice(MidiDevicesNames.DeviceC))

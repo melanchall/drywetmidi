@@ -24,7 +24,8 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         public enum SESSION_CLOSERESULT
         {
-            SESSION_CLOSERESULT_OK = 0
+            SESSION_CLOSERESULT_OK = 0,
+            SESSION_CLOSERESULT_THREADEXITTIMEOUT = 101,
         }
 
         #endregion

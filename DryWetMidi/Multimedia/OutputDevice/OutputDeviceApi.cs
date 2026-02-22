@@ -165,11 +165,11 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         [LibraryImport(NativeApi.LibraryName)]
         [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-        private static partial OUT_OPENRESULT OpenOutputDevice_Win(IntPtr info, IntPtr sessionHandle, Callback_Win callback, out IntPtr handle, out int errorCode);
+        private static partial OUT_OPENRESULT OpenOutputDevice_Win(IntPtr info, MidiDevicesSessionHandle sessionHandle, Callback_Win callback, out IntPtr handle, out int errorCode);
 
         [LibraryImport(NativeApi.LibraryName)]
         [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-        private static partial OUT_OPENRESULT OpenOutputDevice_Mac(IntPtr info, IntPtr sessionHandle, out IntPtr handle, out int errorCode);
+        private static partial OUT_OPENRESULT OpenOutputDevice_Mac(IntPtr info, MidiDevicesSessionHandle sessionHandle, out IntPtr handle, out int errorCode);
 
         [LibraryImport(NativeApi.LibraryName)]
         [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
@@ -250,10 +250,10 @@ namespace Melanchall.DryWetMidi.Multimedia
         private static extern OUT_GETPROPERTYRESULT GetOutputDeviceDriverVersion(IntPtr info, out int value, out int errorCode);
 
         [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
-        private static extern OUT_OPENRESULT OpenOutputDevice_Win(IntPtr info, IntPtr sessionHandle, Callback_Win callback, out IntPtr handle, out int errorCode);
+        private static extern OUT_OPENRESULT OpenOutputDevice_Win(IntPtr info, MidiDevicesSessionHandle sessionHandle, Callback_Win callback, out IntPtr handle, out int errorCode);
 
         [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
-        private static extern OUT_OPENRESULT OpenOutputDevice_Mac(IntPtr info, IntPtr sessionHandle, out IntPtr handle, out int errorCode);
+        private static extern OUT_OPENRESULT OpenOutputDevice_Mac(IntPtr info, MidiDevicesSessionHandle sessionHandle, out IntPtr handle, out int errorCode);
 
         [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
         private static extern OUT_CLOSERESULT CloseOutputDevice(IntPtr handle, out int errorCode);
@@ -320,12 +320,12 @@ namespace Melanchall.DryWetMidi.Multimedia
             return AreOutputDevicesEqual(info1, info2);
         }
 
-        public static OUT_OPENRESULT Api_OpenDevice_Win(IntPtr info, IntPtr sessionHandle, Callback_Win callback, out IntPtr handle, out int errorCode)
+        public static OUT_OPENRESULT Api_OpenDevice_Win(IntPtr info, MidiDevicesSessionHandle sessionHandle, Callback_Win callback, out IntPtr handle, out int errorCode)
         {
             return OpenOutputDevice_Win(info, sessionHandle, callback, out handle, out errorCode);
         }
 
-        public static OUT_OPENRESULT Api_OpenDevice_Mac(IntPtr info, IntPtr sessionHandle, out IntPtr handle, out int errorCode)
+        public static OUT_OPENRESULT Api_OpenDevice_Mac(IntPtr info, MidiDevicesSessionHandle sessionHandle, out IntPtr handle, out int errorCode)
         {
             return OpenOutputDevice_Mac(info, sessionHandle, out handle, out errorCode);
         }

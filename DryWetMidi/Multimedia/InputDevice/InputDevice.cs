@@ -16,53 +16,6 @@ namespace Melanchall.DryWetMidi.Multimedia
     /// </summary>
     public sealed class InputDevice : MidiDevice, IInputDevice
     {
-        #region Nested classes
-
-        private sealed class InputDeviceHandle : NativeHandle
-        {
-#if TEST
-            private readonly TestCheckpoints _checkpoints;
-
-            public InputDeviceHandle(IntPtr validHandle, TestCheckpoints checkpoints)
-                : this(validHandle)
-            {
-                _checkpoints = checkpoints;
-            }
-#endif
-
-            public InputDeviceHandle(IntPtr validHandle)
-                : base(validHandle)
-            {
-            }
-
-            protected override bool ReleaseHandle()
-            {
-#if TEST
-                _checkpoints?.SetCheckpointReached(InputDeviceCheckpointsNames.HandleFinalizerEntered);
-#endif
-
-                var disconnectResult = InputDeviceApi.Api_Disconnect(handle, out _);
-                if (disconnectResult != InputDeviceApi.IN_DISCONNECTRESULT.IN_DISCONNECTRESULT_OK)
-                    return false;
-
-#if TEST
-                _checkpoints?.SetCheckpointReached(InputDeviceCheckpointsNames.DeviceDisconnectedInHandleFinalizer);
-#endif
-
-                var closeResult = InputDeviceApi.Api_CloseDevice(handle, out _);
-                if (closeResult != InputDeviceApi.IN_CLOSERESULT.IN_CLOSERESULT_OK)
-                    return false;
-
-#if TEST
-                _checkpoints?.SetCheckpointReached(InputDeviceCheckpointsNames.DeviceClosedInHandleFinalizer);
-#endif
-
-                return true;
-            }
-        }
-
-        #endregion
-
         #region Constants
 
         private const int SysExBufferSize = 2048;
@@ -106,7 +59,6 @@ namespace Melanchall.DryWetMidi.Multimedia
         private readonly int _hashCode;
 
         private readonly IntPtr _info = IntPtr.Zero;
-        private InputDeviceHandle _handle = null;
 
         #endregion
 
@@ -229,7 +181,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             EnsureSessionIsCreated();
             EnsureHandleIsCreated();
 
-            var result = InputDeviceApi.Api_Connect(_handle.DeviceHandle, out var errorCode);
+            var result = InputDeviceApi.Api_Connect(Handle.DangerousGetHandle(), out var errorCode);
             NativeApiUtilities.HandleDevicesNativeApiResult(result, errorCode);
 
             IsListeningForEvents = true;
@@ -244,7 +196,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <see cref="DevicesWatcher.DeviceRemoved"/> event and thus considered as removed so you cannot interact with it.</exception>
         public void StopEventsListening()
         {
-            if (!IsListeningForEvents || _handle == null || _handle.IsClosed)
+            if (!IsListeningForEvents || Handle == null || Handle.IsClosed)
                 return;
 
             EnsureDeviceIsNotDisposed();
@@ -478,11 +430,11 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         private void EnsureHandleIsCreated()
         {
-            if (_handle != null)
+            if (Handle != null)
                 return;
 
             var sessionHandle = MidiDevicesSession.GetSessionHandle();
-            var deviceHandle = IntPtr.Zero;
+            var rawHandle = IntPtr.Zero;
 
             int errorCode;
 
@@ -491,14 +443,14 @@ namespace Melanchall.DryWetMidi.Multimedia
                 case CommonApi.API_TYPE.API_TYPE_WIN:
                     {
                         _callback_Win = OnMessage_Win;
-                        var result = InputDeviceApi.Api_OpenDevice_Win(_info, sessionHandle, _callback_Win, SysExBufferSize, out deviceHandle, out errorCode);
+                        var result = InputDeviceApi.Api_OpenDevice_Win(_info, sessionHandle, _callback_Win, SysExBufferSize, out rawHandle, out errorCode);
                         NativeApiUtilities.HandleDevicesNativeApiResult(result, errorCode);
                     }
                     break;
                 case CommonApi.API_TYPE.API_TYPE_MAC:
                     {
                         _callback_Mac = OnMessage_Mac;
-                        var result = InputDeviceApi.Api_OpenDevice_Mac(_info, sessionHandle, _callback_Mac, out deviceHandle, out errorCode);
+                        var result = InputDeviceApi.Api_OpenDevice_Mac(_info, sessionHandle, _callback_Mac, out rawHandle, out errorCode);
                         NativeApiUtilities.HandleDevicesNativeApiResult(result, errorCode);
                     }
                     break;
@@ -506,10 +458,10 @@ namespace Melanchall.DryWetMidi.Multimedia
                     throw new NotSupportedException($"{_apiType} API is not supported.");
             }
 
+            Handle = new InputDeviceHandle(rawHandle);
+
 #if TEST
-            _handle = new InputDeviceHandle(deviceHandle, TestCheckpoints);
-#else
-            _handle = new InputDeviceHandle(deviceHandle);
+            Handle.TestCheckpoints = TestCheckpoints;
 #endif
         }
 
@@ -743,7 +695,11 @@ namespace Melanchall.DryWetMidi.Multimedia
                 else if (_sysExParts.Any())
                     HandleSysExSubsequentPart(data);
 
-                var result = InputDeviceApi.Api_RenewSysExBuffer(_handle.DeviceHandle, SysExBufferSize, out var errorCode);
+                // TODO: check disposing is in progress (see Copilot)
+
+                var result = InputDeviceApi.Api_RenewInputDeviceSysExBuffer(Handle.DangerousGetHandle(), sysExHeaderPointer, out var errorCode);
+
+                // TODO: define enum for result (see Copilot)
                 NativeApiUtilities.HandleDevicesNativeApiResult(result, errorCode);
             }
             catch (Exception ex)
@@ -785,7 +741,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         {
             IsListeningForEvents = false;
 
-            return InputDeviceApi.Api_Disconnect(_handle.DeviceHandle, out errorCode);
+            return InputDeviceApi.Api_Disconnect(Handle.DangerousGetHandle(), out errorCode);
         }
 
         #endregion
@@ -886,7 +842,8 @@ namespace Melanchall.DryWetMidi.Multimedia
             if (disposing)
             {
                 _bytesToMidiEventConverter.Dispose();
-                _handle?.Dispose();
+                Handle?.Dispose();
+                Handle = null;
             }
 
             _disposed = true;

@@ -15,6 +15,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// </summary>
         event EventHandler<MidiEventSentEventArgs> EventSent;
 
+        // TODO: docs on this method. It is needed to call it before sending events to the device
         /// <summary>
         /// Prepares output MIDI device for sending events to it allocating necessary
         /// resources.

@@ -1,4 +1,5 @@
 ﻿using Melanchall.DryWetMidi.Common;
+using Microsoft.Win32.SafeHandles;
 using System;
 using System.Collections.Generic;
 
@@ -49,6 +50,10 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// </summary>
         protected bool _disposed = false;
 
+#if TEST
+        private TestCheckpoints _testCheckpoints;
+#endif
+
         #endregion
 
         #region Constructor
@@ -86,8 +91,21 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         internal CreationContext Context { get; }
 
+        internal NativeHandle Handle { get; set; }
+
 #if TEST
-        internal TestCheckpoints TestCheckpoints { get; set; }
+        internal TestCheckpoints TestCheckpoints
+        {
+            get { return _testCheckpoints; }
+            set
+            {
+                _testCheckpoints = value;
+
+                var handle = Handle;
+                if (handle != null)
+                    handle.TestCheckpoints = value;
+            }
+        }
 #endif
 
         #endregion
