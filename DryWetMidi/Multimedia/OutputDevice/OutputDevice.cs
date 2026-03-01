@@ -492,10 +492,24 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         private void SendSysExEventData_Win(byte[] data)
         {
-            var bufferLength = data.Length + 1;
+            if (data == null || data.Length == 0)
+                return;
+
+            var hasStartByte = data[0] == EventStatusBytes.Global.NormalSysEx;
+
+            var bufferLength = hasStartByte
+                ? data.Length
+                : data.Length + 1;
+
             var bufferPointer = Marshal.AllocHGlobal(bufferLength);
-            Marshal.WriteByte(bufferPointer, EventStatusBytes.Global.NormalSysEx);
-            Marshal.Copy(data, 0, IntPtr.Add(bufferPointer, 1), data.Length);
+            if (!hasStartByte)
+                Marshal.WriteByte(bufferPointer, EventStatusBytes.Global.NormalSysEx);
+            
+            Marshal.Copy(
+                data,
+                0,
+                hasStartByte ? bufferPointer : IntPtr.Add(bufferPointer, 1),
+                data.Length);
 
             var result = OutputDeviceApi.Api_SendSysExEvent_Win(Handle.DangerousGetHandle(), bufferPointer, bufferLength, out var errorCode);
             NativeApiUtilities.HandleDevicesNativeApiResult(result, errorCode);
@@ -503,9 +517,21 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         private void SendSysExEventData_Mac(byte[] data)
         {
-            var buffer = new byte[data.Length + 1];
-            buffer[0] = EventStatusBytes.Global.NormalSysEx;
-            Buffer.BlockCopy(data, 0, buffer, 1, data.Length);
+            if (data == null || data.Length == 0)
+                return;
+
+            var hasStartByte = data[0] == EventStatusBytes.Global.NormalSysEx;
+
+            var buffer = new byte[hasStartByte ? data.Length : data.Length + 1];
+            if (!hasStartByte)
+                buffer[0] = EventStatusBytes.Global.NormalSysEx;
+            
+            Buffer.BlockCopy(
+                data,
+                0,
+                buffer,
+                hasStartByte ? 0 : 1,
+                data.Length);
 
             var result = OutputDeviceApi.Api_SendSysExEvent_Mac(Handle.DangerousGetHandle(), buffer, (ushort)buffer.Length, out var errorCode);
             NativeApiUtilities.HandleDevicesNativeApiResult(result, errorCode);

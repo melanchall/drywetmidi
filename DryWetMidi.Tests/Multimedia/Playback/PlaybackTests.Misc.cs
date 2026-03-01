@@ -126,12 +126,15 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 {
                     playback.Started += (_, __) => labels.Push(startedLabel);
                     playback.EventPlayed += (_, __) => labels.Push(eventLabel);
+                    labels.Clear();
+                },
+                additionalChecks: (_, __) =>
+                {
+                    CollectionAssert.AreEqual(
+                        new[] { eventLabel, eventLabel, startedLabel },
+                        labels.ToArray(),
+                        "Started event fired after MIDI event.");
                 });
-
-            CollectionAssert.AreEqual(
-                new[] { eventLabel, eventLabel, startedLabel },
-                labels.ToArray(),
-                "Started event fired after MIDI event.");
         }
 
         [MultimediaTestRetry]

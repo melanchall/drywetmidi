@@ -50,7 +50,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
         #endregion
 
-        #region Private methods
+        #region Setup
 
         [OneTimeSetUp]
         public static void GlobalSetup()
@@ -61,6 +61,10 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
             Directory.CreateDirectory(playbackTracesDirectoryPath);
         }
+
+        #endregion
+
+        #region Private methods
 
         private void CheckErrors(
             ICollection<PlaybackErrorOccurredEventArgs> errorOccurredData,

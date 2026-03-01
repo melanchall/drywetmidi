@@ -87,6 +87,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             [NativeApi.NativeErrorType(NativeApi.NativeErrorType.NoMemory)]
             IN_RENEWSYSEXBUFFERRESULT_NOMEMORY = 7,
             IN_RENEWSYSEXBUFFERRESULT_UNKNOWNERROR = 8,
+            IN_RENEWSYSEXBUFFERRESULT_CLOSING = 9,
         }
 
         public enum IN_CONNECTRESULT

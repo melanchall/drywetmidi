@@ -17,6 +17,8 @@ namespace Melanchall.DryWetMidi.Multimedia
             SetHandle(handle);
         }
 
+        public object Lock { get; } = new object();
+
 #if TEST
         public TestCheckpoints TestCheckpoints { get; set; }
 #endif

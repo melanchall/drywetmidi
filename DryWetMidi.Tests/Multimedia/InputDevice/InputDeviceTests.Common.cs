@@ -179,16 +179,20 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 ClassicAssert.DoesNotThrow(() => inputDevice.StartEventsListening());
 
                 checkpoints.CheckCheckpointsAreNotReached(
-                    InputDeviceCheckpointsNames.HandleFinalizerEntered,
-                    InputDeviceCheckpointsNames.DeviceDisconnectedInHandleFinalizer,
-                    InputDeviceCheckpointsNames.DeviceClosedInHandleFinalizer);
+                    InputDeviceCheckpointsNames.ReleaseHandleEntered,
+                    InputDeviceCheckpointsNames.DisconnectDeviceExecutedInReleaseHandle,
+                    InputDeviceCheckpointsNames.DisconnectDeviceSuccessInReleaseHandle,
+                    InputDeviceCheckpointsNames.CloseDeviceExecutedInReleaseHandle,
+                    InputDeviceCheckpointsNames.CloseDeviceSuccessInReleaseHandle);
 
                 inputDevice.Dispose();
 
                 checkpoints.CheckCheckpointsReached(
-                    InputDeviceCheckpointsNames.HandleFinalizerEntered,
-                    InputDeviceCheckpointsNames.DeviceDisconnectedInHandleFinalizer,
-                    InputDeviceCheckpointsNames.DeviceClosedInHandleFinalizer);
+                    InputDeviceCheckpointsNames.ReleaseHandleEntered,
+                    InputDeviceCheckpointsNames.DisconnectDeviceExecutedInReleaseHandle,
+                    InputDeviceCheckpointsNames.DisconnectDeviceSuccessInReleaseHandle,
+                    InputDeviceCheckpointsNames.CloseDeviceExecutedInReleaseHandle,
+                    InputDeviceCheckpointsNames.CloseDeviceSuccessInReleaseHandle);
             }
         }
 
@@ -216,9 +220,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 var checkpoints = new TestCheckpoints();
 
                 checkpoints.CheckCheckpointsAreNotReached(
-                    InputDeviceCheckpointsNames.HandleFinalizerEntered,
-                    InputDeviceCheckpointsNames.DeviceDisconnectedInHandleFinalizer,
-                    InputDeviceCheckpointsNames.DeviceClosedInHandleFinalizer);
+                    InputDeviceCheckpointsNames.ReleaseHandleEntered,
+                    InputDeviceCheckpointsNames.DisconnectDeviceExecutedInReleaseHandle,
+                    InputDeviceCheckpointsNames.DisconnectDeviceSuccessInReleaseHandle,
+                    InputDeviceCheckpointsNames.CloseDeviceExecutedInReleaseHandle,
+                    InputDeviceCheckpointsNames.CloseDeviceSuccessInReleaseHandle);
 
                 ClassicAssert.IsTrue(openDevice(checkpoints), $"Can't open device on iteration {i}.");
 
@@ -227,9 +233,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 GC.Collect();
 
                 checkpoints.CheckCheckpointsReached(
-                    InputDeviceCheckpointsNames.HandleFinalizerEntered,
-                    InputDeviceCheckpointsNames.DeviceDisconnectedInHandleFinalizer,
-                    InputDeviceCheckpointsNames.DeviceClosedInHandleFinalizer);
+                    InputDeviceCheckpointsNames.ReleaseHandleEntered,
+                    InputDeviceCheckpointsNames.DisconnectDeviceExecutedInReleaseHandle,
+                    InputDeviceCheckpointsNames.DisconnectDeviceSuccessInReleaseHandle,
+                    InputDeviceCheckpointsNames.CloseDeviceExecutedInReleaseHandle,
+                    InputDeviceCheckpointsNames.CloseDeviceSuccessInReleaseHandle);
             }
         }
 #endif

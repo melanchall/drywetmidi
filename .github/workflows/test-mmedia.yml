@@ -103,7 +103,7 @@ jobs:
           enabled: 'true'
       
       - name: Run unit tests
-        continue-on-error:  false
+        continue-on-error: false
         shell: pwsh
         run: |
           dotnet test DryWetMidi.Tests/Melanchall.DryWetMidi.Tests.csproj --blame --blame-hang --blame-hang-timeout 5m --blame-hang-dump-type full --no-build --configuration ${{ vars.TEST_BUILD_CONFIGURATION || 'Release' }} --filter "(FullyQualifiedName~.Multimedia)" --framework ${{ steps.framework.outputs.tfm }} --verbosity normal --diag diagnostic.log --logger "console;verbosity=detailed" -p:SolutionDir="${{ github.workspace }}/"
@@ -116,8 +116,18 @@ jobs:
       
       - name: Upload PlaybackTraces
         if:  failure()
+        continue-on-error: true
         uses: actions/upload-artifact@v4
         with: 
           name: PlaybackTraces_${{ matrix.os }}_${{ matrix.framework }}_Attempt${{ github.run_attempt }}
           path: ${{ github.workspace }}/PlaybackTraces
+          if-no-files-found: ignore
+          
+      - name: Upload SysExTraces
+        if:  failure()
+        continue-on-error: true
+        uses: actions/upload-artifact@v4
+        with: 
+          name: SysExTraces_${{ matrix.os }}_${{ matrix.framework }}_Attempt${{ github.run_attempt }}
+          path: ${{ github.workspace }}/SysExTraces
           if-no-files-found: ignore

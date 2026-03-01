@@ -17,18 +17,20 @@ namespace Melanchall.DryWetMidi.Multimedia
         protected override bool ReleaseHandle()
         {
 #if TEST
-            TestCheckpoints?.SetCheckpointReached(OutputDeviceCheckpointsNames.HandleFinalizerEntered);
+            TestCheckpoints?.SetCheckpointReached(OutputDeviceCheckpointsNames.ReleaseHandleEntered);
 #endif
 
             var closeResult = OutputDeviceApi.Api_CloseDevice(handle, out _);
-            if (closeResult != OutputDeviceApi.OUT_CLOSERESULT.OUT_CLOSERESULT_OK)
-                return false;
+            var closed = closeResult == OutputDeviceApi.OUT_CLOSERESULT.OUT_CLOSERESULT_OK;
 
 #if TEST
-            TestCheckpoints?.SetCheckpointReached(OutputDeviceCheckpointsNames.DeviceClosedInHandleFinalizer);
+            TestCheckpoints?.SetCheckpointReached(OutputDeviceCheckpointsNames.CloseDeviceExecutedInReleaseHandle);
+
+            if (closed)
+                TestCheckpoints?.SetCheckpointReached(OutputDeviceCheckpointsNames.CloseDeviceSuccessInReleaseHandle);
 #endif
 
-            return true;
+            return closed;
         }
     }
 }

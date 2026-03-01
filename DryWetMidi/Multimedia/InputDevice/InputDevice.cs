@@ -59,6 +59,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         private readonly int _hashCode;
 
         private readonly IntPtr _info = IntPtr.Zero;
+        private volatile bool _disposing;
 
         #endregion
 
@@ -159,6 +160,9 @@ namespace Melanchall.DryWetMidi.Multimedia
                 _bytesToMidiEventConverter.SilentNoteOnPolicy = value;
             }
         }
+
+        internal ICollection<byte[]> SysExParts =>
+            _sysExParts;
 
         #endregion
 
@@ -467,7 +471,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         private void OnMessage_Win(IntPtr hMidi, NativeApi.MidiMessage wMsg, IntPtr dwInstance, IntPtr dwParam1, IntPtr dwParam2)
         {
-            if (!IsListeningForEvents || !IsEnabled)
+            if (_disposing || !IsListeningForEvents || !IsEnabled)
                 return;
 
             switch (wMsg)
@@ -695,12 +699,20 @@ namespace Melanchall.DryWetMidi.Multimedia
                 else if (_sysExParts.Any())
                     HandleSysExSubsequentPart(data);
 
-                // TODO: check disposing is in progress (see Copilot)
+                if (_disposing || Handle == null || Handle.IsClosed)
+                    return;
 
-                var result = InputDeviceApi.Api_RenewInputDeviceSysExBuffer(Handle.DangerousGetHandle(), sysExHeaderPointer, out var errorCode);
+                lock (Handle.Lock)
+                {
+                    if (_disposing || Handle == null || Handle.IsClosed)
+                        return;
 
-                // TODO: define enum for result (see Copilot)
-                NativeApiUtilities.HandleDevicesNativeApiResult(result, errorCode);
+                    var result = InputDeviceApi.Api_RenewInputDeviceSysExBuffer(Handle.DangerousGetHandle(), sysExHeaderPointer, out var errorCode);
+                    if (result == InputDeviceApi.IN_RENEWSYSEXBUFFERRESULT.IN_RENEWSYSEXBUFFERRESULT_CLOSING)
+                        return;
+
+                    NativeApiUtilities.HandleDevicesNativeApiResult(result, errorCode);
+                }
             }
             catch (Exception ex)
             {
@@ -739,7 +751,12 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         private InputDeviceApi.IN_DISCONNECTRESULT StopEventsListeningSilently(out int errorCode)
         {
+            errorCode = 0;
+
             IsListeningForEvents = false;
+
+            if (Handle == null || Handle.IsClosed)
+                return InputDeviceApi.IN_DISCONNECTRESULT.IN_DISCONNECTRESULT_OK;
 
             return InputDeviceApi.Api_Disconnect(Handle.DangerousGetHandle(), out errorCode);
         }
@@ -839,11 +856,19 @@ namespace Melanchall.DryWetMidi.Multimedia
             if (_disposed)
                 return;
 
+            _disposing = true;
+
             if (disposing)
             {
-                _bytesToMidiEventConverter.Dispose();
-                Handle?.Dispose();
-                Handle = null;
+                if (Handle != null)
+                {
+                    lock (Handle.Lock)
+                    {
+                        _bytesToMidiEventConverter.Dispose();
+                        Handle?.Dispose();
+                        Handle = null;
+                    }
+                }
             }
 
             _disposed = true;

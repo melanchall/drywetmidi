@@ -4,8 +4,9 @@
     {
         #region Constants
 
-        public const string HandleFinalizerEntered = "VIR A";
-        public const string DeviceClosedInHandleFinalizer = "VIR B";
+        public const string ReleaseHandleEntered = "VIR A";
+        public const string CloseDeviceExecutedInReleaseHandle = "VIR B";
+        public const string CloseDeviceSuccessInReleaseHandle = "VIR B SUCCESS";
 
         #endregion
     }

@@ -17,7 +17,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         protected override bool ReleaseHandle()
         {
 #if TEST
-            TestCheckpoints?.SetCheckpointReached(MidiDevicesSessionCheckpointNames.HandleFinalizerEntered);
+            TestCheckpoints?.SetCheckpointReached(MidiDevicesSessionCheckpointNames.ReleaseHandleEntered);
 #endif
 
             var result = MidiDevicesSessionApi.Api_CloseSession(handle);
@@ -26,7 +26,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             if (result != MidiDevicesSessionApi.SESSION_CLOSERESULT.SESSION_CLOSERESULT_OK)
                 return false;
 
-            TestCheckpoints?.SetCheckpointReached(MidiDevicesSessionCheckpointNames.SessionClosedInHandleFinalizer);
+            TestCheckpoints?.SetCheckpointReached(MidiDevicesSessionCheckpointNames.CloseSessionInReleaseHandle);
 #endif
 
             return true;

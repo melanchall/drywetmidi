@@ -4,9 +4,11 @@
     {
         #region Constants
 
-        public const string HandleFinalizerEntered = "IN A";
-        public const string DeviceDisconnectedInHandleFinalizer = "IN B";
-        public const string DeviceClosedInHandleFinalizer = "IN C";
+        public const string ReleaseHandleEntered = "IN A";
+        public const string DisconnectDeviceExecutedInReleaseHandle = "IN B";
+        public const string DisconnectDeviceSuccessInReleaseHandle = "IN B SUCCESS";
+        public const string CloseDeviceExecutedInReleaseHandle = "IN C";
+        public const string CloseDeviceSuccessInReleaseHandle = "IN C SUCCESS";
 
         public const string MessageDataReceived = "MSG DATA";
 

@@ -58,7 +58,7 @@ namespace Melanchall.DryWetMidi.Core
         /// <returns>A string that represents the current object.</returns>
         public override string ToString()
         {
-            return "Normal SysEx";
+            return $"Normal SysEx ({base.ToString()})";
         }
 
         #endregion

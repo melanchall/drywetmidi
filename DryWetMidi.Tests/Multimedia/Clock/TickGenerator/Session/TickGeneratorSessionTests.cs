@@ -23,14 +23,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
 #if TEST
         [Test]
-        public void CheckTickGeneratorSession_DisposeManually()
+        public void CheckTickGeneratorSession_DisposeManually([Values(0, 50, 5000)] int waitAfterSessionCreatedMs)
         {
             var checkpoints = new TestCheckpoints();
 
-            TickGeneratorSessionApi.Api_OpenSession(
-                out var rawHandle,
-                out var errorCode);
-
+            var rawHandle = CreateTickGeneratorSessionHandle(waitAfterSessionCreatedMs);
             var handle = new TickGeneratorSessionHandle(rawHandle);
             handle.TestCheckpoints = checkpoints;
 
@@ -48,29 +45,27 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         }
 
         [Test]
-        public void CheckTickGeneratorSession_AbandonAndWaitForFinalizer()
+        public void CheckTickGeneratorSession_AbandonAndWaitForFinalizer([Values(0, 50, 5000)] int waitAfterSessionCreatedMs)
         {
             var checkpoints = new TestCheckpoints();
 
-            CreateAndAbandonTickGeneratorSession(checkpoints);
+            CreateAndAbandonTickGeneratorSession(checkpoints, waitAfterSessionCreatedMs);
 
             GC.Collect();
             GC.WaitForPendingFinalizers();
             GC.Collect();
 
             checkpoints.CheckCheckpointsReached(
-                MidiDevicesSessionCheckpointNames.HandleFinalizerEntered,
-                MidiDevicesSessionCheckpointNames.SessionClosedInHandleFinalizer);
+                MidiDevicesSessionCheckpointNames.ReleaseHandleEntered,
+                MidiDevicesSessionCheckpointNames.CloseSessionInReleaseHandle);
         }
 
         [Test]
-        public void CheckTickGeneratorSession_CloseViaApi()
+        public void CheckTickGeneratorSession_CloseViaApi([Values(0, 50, 5000)] int waitAfterSessionCreatedMs)
         {
-            TickGeneratorSessionApi.Api_OpenSession(
-                out var sessionHandle,
-                out var errorCode);
+            var sessionHandle = CreateTickGeneratorSessionHandle(waitAfterSessionCreatedMs);
 
-            var result = TickGeneratorSessionApi.Api_CloseSession(sessionHandle, out errorCode);
+            var result = TickGeneratorSessionApi.Api_CloseSession(sessionHandle, out var errorCode);
             ClassicAssert.AreEqual(
                 TickGeneratorSessionApi.TGSESSION_CLOSERESULT.TGSESSION_CLOSERESULT_OK,
                 result,
@@ -85,17 +80,33 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 #if TEST
         [MethodImpl(MethodImplOptions.NoInlining)]
         private void CreateAndAbandonTickGeneratorSession(
-            TestCheckpoints checkpoints)
+            TestCheckpoints checkpoints,
+            int waitAfterSessionCreatedMs)
         {
-            TickGeneratorSessionApi.Api_OpenSession(
-                out var rawHandle,
-                out var errorCode);
-
+            var rawHandle = CreateTickGeneratorSessionHandle(waitAfterSessionCreatedMs);
             var handle = new TickGeneratorSessionHandle(rawHandle);
             handle.TestCheckpoints = checkpoints;
 
             // Don't dispose - let it go out of scope
             // Finalizer will run eventually
+        }
+
+        private IntPtr CreateTickGeneratorSessionHandle(
+            int waitAfterSessionCreatedMs)
+        {
+            var result = TickGeneratorSessionApi.Api_OpenSession(
+                out var rawHandle,
+                out var errorCode);
+
+            ClassicAssert.AreEqual(
+                TickGeneratorSessionApi.TGSESSION_OPENRESULT.TGSESSION_OPENRESULT_OK,
+                result,
+                "Session was not opened successfully.");
+
+            if (waitAfterSessionCreatedMs > 0)
+                WaitOperations.Wait(waitAfterSessionCreatedMs);
+
+            return rawHandle;
         }
 #endif
 

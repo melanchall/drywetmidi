@@ -129,6 +129,15 @@ stages:
     - task: PublishPipelineArtifact@1
       displayName: Publish 'PlaybackTraces' artifact
       condition: failed()
+      continueOnError: true
       inputs:
         targetPath: $(Build.ArtifactStagingDirectory)/$(Build.BuildId)/PlaybackTraces
         artifact: 'PlaybackTraces_$(vmImage)_$(framework)_Attempt$(System.JobAttempt)'
+        
+    - task: PublishPipelineArtifact@1
+      displayName: Publish 'SysExTraces' artifact
+      condition: failed()
+      continueOnError: true
+      inputs:
+        targetPath: $(Build.ArtifactStagingDirectory)/$(Build.BuildId)/SysExTraces
+        artifact: 'SysExTraces_$(vmImage)_$(framework)_Attempt$(System.JobAttempt)'

@@ -4,8 +4,8 @@
     {
         #region Constants
 
-        public const string HandleFinalizerEntered = "SESSION A";
-        public const string SessionClosedInHandleFinalizer = "SESSION B";
+        public const string ReleaseHandleEntered = "SESSION A";
+        public const string CloseSessionInReleaseHandle = "SESSION B";
 
         #endregion
     }

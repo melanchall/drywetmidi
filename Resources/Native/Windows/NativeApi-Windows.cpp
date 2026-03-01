@@ -304,6 +304,8 @@ typedef struct
     LPMIDIHDR sysExHeaders[SYSEX_BUFFER_COUNT];
     int sysExBufferSize;
     SessionHandle* sessionHandle;
+    CRITICAL_SECTION lock;
+    LONG isClosing;
 } InputDeviceHandle;
 
 API_EXPORT IN_GETCOUNTRESULT API_CALL GetInputDevicesCount(int* count)
@@ -396,6 +398,14 @@ API_EXPORT IN_RENEWSYSEXBUFFERRESULT API_CALL RenewInputDeviceSysExBuffer(void* 
     if (header == nullptr)
         return IN_RENEWSYSEXBUFFERRESULT_INVALIDHEADER;
 
+    EnterCriticalSection(&inputDeviceHandle->lock);
+
+    if (inputDeviceHandle->isClosing)
+    {
+        LeaveCriticalSection(&inputDeviceHandle->lock);
+        return IN_RENEWSYSEXBUFFERRESULT_CLOSING;
+    }
+
     bool found = false;
     for (int i = 0; i < SYSEX_BUFFER_COUNT; i++)
     {
@@ -407,10 +417,16 @@ API_EXPORT IN_RENEWSYSEXBUFFERRESULT API_CALL RenewInputDeviceSysExBuffer(void* 
     }
 
     if (!found)
+    {
+        LeaveCriticalSection(&inputDeviceHandle->lock);
         return IN_RENEWSYSEXBUFFERRESULT_INVALIDHEADER;
+    }
 
     if ((header->dwFlags & MHDR_DONE) == 0)
+    {
+        LeaveCriticalSection(&inputDeviceHandle->lock);
         return IN_RENEWSYSEXBUFFERRESULT_BUFFERNOTDONE;
+    }
 
     header->dwFlags &= MHDR_PREPARED;
     header->dwBytesRecorded = 0;
@@ -421,16 +437,27 @@ API_EXPORT IN_RENEWSYSEXBUFFERRESULT API_CALL RenewInputDeviceSysExBuffer(void* 
 
     for (int retry = 0; retry < maxRetries; retry++)
     {
+        if (inputDeviceHandle->isClosing)
+        {
+            LeaveCriticalSection(&inputDeviceHandle->lock);
+            return IN_RENEWSYSEXBUFFERRESULT_CLOSING;
+        }
+
         result = midiInAddBuffer(inputDeviceHandle->handle, header, sizeof(MIDIHDR));
 
         if (result == MMSYSERR_NOERROR)
+        {
+            LeaveCriticalSection(&inputDeviceHandle->lock);
             return IN_RENEWSYSEXBUFFERRESULT_OK;
+        }
 
         if (result != MIDIERR_STILLPLAYING)
             break;
 
         Sleep(retryDelayMs);
     }
+
+    LeaveCriticalSection(&inputDeviceHandle->lock);
 
     *errorCode = result;
 
@@ -501,11 +528,15 @@ API_EXPORT IN_OPENRESULT API_CALL OpenInputDevice_Win(void* info, void* sessionH
         inputDeviceHandle->sysExHeaders[i] = nullptr;
     }
 
+    InitializeCriticalSection(&inputDeviceHandle->lock);
+    inputDeviceHandle->isClosing = 0;
+
     *handle = inputDeviceHandle;
 
     MMRESULT result = midiInOpen(&inputDeviceHandle->handle, inputDeviceInfo->deviceIndex, callback, 0, CALLBACK_FUNCTION);
     if (result != MMSYSERR_NOERROR)
     {
+        DeleteCriticalSection(&inputDeviceHandle->lock);
         delete inputDeviceHandle;
 
         *errorCode = result;
@@ -542,9 +573,13 @@ API_EXPORT IN_CLOSERESULT API_CALL CloseInputDevice(void* handle, int* errorCode
 
     InputDeviceHandle* inputDeviceHandle = static_cast<InputDeviceHandle*>(handle);
 
+    EnterCriticalSection(&inputDeviceHandle->lock);
+    inputDeviceHandle->isClosing = 1;
+
     MMRESULT result = midiInReset(inputDeviceHandle->handle);
     if (result != MMSYSERR_NOERROR)
     {
+        LeaveCriticalSection(&inputDeviceHandle->lock);
         *errorCode = result;
 
         switch (result)
@@ -565,11 +600,14 @@ API_EXPORT IN_CLOSERESULT API_CALL CloseInputDevice(void* handle, int* errorCode
 
         delete[] header->lpData;
         delete header;
+
+        inputDeviceHandle->sysExHeaders[i] = nullptr;
     }
 
     result = midiInClose(inputDeviceHandle->handle);
     if (result != MMSYSERR_NOERROR)
     {
+        LeaveCriticalSection(&inputDeviceHandle->lock);
         *errorCode = result;
 
         switch (result)
@@ -587,6 +625,9 @@ API_EXPORT IN_CLOSERESULT API_CALL CloseInputDevice(void* handle, int* errorCode
         delete inputDeviceHandle->info->caps;
         delete inputDeviceHandle->info;
     }
+
+    LeaveCriticalSection(&inputDeviceHandle->lock);
+    DeleteCriticalSection(&inputDeviceHandle->lock);
 
     delete inputDeviceHandle;
 
@@ -628,7 +669,7 @@ API_EXPORT IN_DISCONNECTRESULT API_CALL DisconnectFromInputDevice(void* handle, 
 
         switch (result)
         {
-        case MMSYSERR_INVALHANDLE: return IN_DISCONNECTRESULT_INVALIDHANDLE;
+            case MMSYSERR_INVALHANDLE: return IN_DISCONNECTRESULT_INVALIDHANDLE;
         }
 
         return IN_DISCONNECTRESULT_UNKNOWNERROR;
@@ -649,10 +690,10 @@ API_EXPORT char API_CALL IsInputDevicePropertySupported(IN_PROPERTY property)
 {
     switch (property)
     {
-    case IN_PROPERTY_PRODUCT:
-    case IN_PROPERTY_MANUFACTURER:
-    case IN_PROPERTY_DRIVERVERSION:
-        return 1;
+        case IN_PROPERTY_PRODUCT:
+        case IN_PROPERTY_MANUFACTURER:
+        case IN_PROPERTY_DRIVERVERSION:
+            return 1;
     }
 
     return 0;
@@ -693,10 +734,10 @@ API_EXPORT OUT_GETINFORESULT API_CALL GetOutputDeviceInfo(int deviceIndex, void*
 
         switch (result)
         {
-        case MMSYSERR_BADDEVICEID: return OUT_GETINFORESULT_BADDEVICEID;
-        case MMSYSERR_INVALPARAM: return OUT_GETINFORESULT_INVALIDSTRUCTURE;
-        case MMSYSERR_NODRIVER: return OUT_GETINFORESULT_NODRIVER;
-        case MMSYSERR_NOMEM: return OUT_GETINFORESULT_NOMEMORY;
+            case MMSYSERR_BADDEVICEID: return OUT_GETINFORESULT_BADDEVICEID;
+            case MMSYSERR_INVALPARAM: return OUT_GETINFORESULT_INVALIDSTRUCTURE;
+            case MMSYSERR_NODRIVER: return OUT_GETINFORESULT_NODRIVER;
+            case MMSYSERR_NOMEM: return OUT_GETINFORESULT_NOMEMORY;
         }
 
         return OUT_GETINFORESULT_UNKNOWNERROR;
@@ -758,27 +799,27 @@ API_EXPORT OUT_GETPROPERTYRESULT API_CALL GetOutputDeviceTechnology(void* info, 
 
     switch (outputDeviceInfo->caps->wTechnology)
     {
-    case MOD_MIDIPORT:
-        *value = OUT_TECHNOLOGY_MIDIPORT;
-        break;
-    case MOD_SYNTH:
-        *value = OUT_TECHNOLOGY_SYNTH;
-        break;
-    case MOD_SQSYNTH:
-        *value = OUT_TECHNOLOGY_SQSYNTH;
-        break;
-    case MOD_FMSYNTH:
-        *value = OUT_TECHNOLOGY_FMSYNTH;
-        break;
-    case MOD_MAPPER:
-        *value = OUT_TECHNOLOGY_MAPPER;
-        break;
-    case MOD_WAVETABLE:
-        *value = OUT_TECHNOLOGY_WAVETABLE;
-        break;
-    case MOD_SWSYNTH:
-        *value = OUT_TECHNOLOGY_SWSYNTH;
-        break;
+        case MOD_MIDIPORT:
+            *value = OUT_TECHNOLOGY_MIDIPORT;
+            break;
+        case MOD_SYNTH:
+            *value = OUT_TECHNOLOGY_SYNTH;
+            break;
+        case MOD_SQSYNTH:
+            *value = OUT_TECHNOLOGY_SQSYNTH;
+            break;
+        case MOD_FMSYNTH:
+            *value = OUT_TECHNOLOGY_FMSYNTH;
+            break;
+        case MOD_MAPPER:
+            *value = OUT_TECHNOLOGY_MAPPER;
+            break;
+        case MOD_WAVETABLE:
+            *value = OUT_TECHNOLOGY_WAVETABLE;
+            break;
+        case MOD_SWSYNTH:
+            *value = OUT_TECHNOLOGY_SWSYNTH;
+            break;
     }
 
     return OUT_GETPROPERTYRESULT_OK;
@@ -883,7 +924,7 @@ API_EXPORT OUT_CLOSERESULT API_CALL CloseOutputDevice(void* handle, int* errorCo
 
         switch (result)
         {
-        case MMSYSERR_INVALHANDLE: return OUT_CLOSERESULT_RESET_INVALIDHANDLE;
+            case MMSYSERR_INVALHANDLE: return OUT_CLOSERESULT_RESET_INVALIDHANDLE;
         }
 
         return OUT_CLOSERESULT_RESET_UNKNOWNERROR;
@@ -896,9 +937,9 @@ API_EXPORT OUT_CLOSERESULT API_CALL CloseOutputDevice(void* handle, int* errorCo
 
         switch (result)
         {
-        case MIDIERR_STILLPLAYING: return OUT_CLOSERESULT_CLOSE_STILLPLAYING;
-        case MMSYSERR_INVALHANDLE: return OUT_CLOSERESULT_CLOSE_INVALIDHANDLE;
-        case MMSYSERR_NOMEM: return OUT_CLOSERESULT_CLOSE_NOMEMORY;
+            case MIDIERR_STILLPLAYING: return OUT_CLOSERESULT_CLOSE_STILLPLAYING;
+            case MMSYSERR_INVALHANDLE: return OUT_CLOSERESULT_CLOSE_INVALIDHANDLE;
+            case MMSYSERR_NOMEM: return OUT_CLOSERESULT_CLOSE_NOMEMORY;
         }
 
         return OUT_CLOSERESULT_CLOSE_UNKNOWNERROR;
@@ -928,9 +969,9 @@ API_EXPORT OUT_SENDSHORTRESULT API_CALL SendShortEventToOutputDevice(void* handl
 
         switch (result)
         {
-        case MIDIERR_BADOPENMODE: return OUT_SENDSHORTRESULT_BADOPENMODE;
-        case MIDIERR_NOTREADY: return OUT_SENDSHORTRESULT_NOTREADY;
-        case MMSYSERR_INVALHANDLE: return OUT_SENDSHORTRESULT_INVALIDHANDLE;
+            case MIDIERR_BADOPENMODE: return OUT_SENDSHORTRESULT_BADOPENMODE;
+            case MIDIERR_NOTREADY: return OUT_SENDSHORTRESULT_NOTREADY;
+            case MMSYSERR_INVALHANDLE: return OUT_SENDSHORTRESULT_INVALIDHANDLE;
         }
 
         return OUT_SENDSHORTRESULT_UNKNOWNERROR;
@@ -960,9 +1001,9 @@ API_EXPORT OUT_SENDSYSEXRESULT API_CALL SendSysExEventToOutputDevice_Win(void* h
 
         switch (result)
         {
-        case MMSYSERR_INVALHANDLE: return OUT_SENDSYSEXRESULT_PREPAREBUFFER_INVALIDHANDLE;
-        case MMSYSERR_INVALPARAM: return OUT_SENDSYSEXRESULT_PREPAREBUFFER_INVALIDADDRESS;
-        case MMSYSERR_NOMEM: return OUT_SENDSYSEXRESULT_PREPAREBUFFER_NOMEMORY;
+            case MMSYSERR_INVALHANDLE: return OUT_SENDSYSEXRESULT_PREPAREBUFFER_INVALIDHANDLE;
+            case MMSYSERR_INVALPARAM: return OUT_SENDSYSEXRESULT_PREPAREBUFFER_INVALIDADDRESS;
+            case MMSYSERR_NOMEM: return OUT_SENDSYSEXRESULT_PREPAREBUFFER_NOMEMORY;
         }
 
         return OUT_SENDSYSEXRESULT_PREPAREBUFFER_UNKNOWNERROR;
@@ -978,10 +1019,10 @@ API_EXPORT OUT_SENDSYSEXRESULT API_CALL SendSysExEventToOutputDevice_Win(void* h
 
         switch (result)
         {
-        case MIDIERR_NOTREADY: return OUT_SENDSYSEXRESULT_NOTREADY;
-        case MIDIERR_UNPREPARED: return OUT_SENDSYSEXRESULT_UNPREPARED;
-        case MMSYSERR_INVALHANDLE: return OUT_SENDSYSEXRESULT_INVALIDHANDLE;
-        case MMSYSERR_INVALPARAM: return OUT_SENDSYSEXRESULT_INVALIDSTRUCTURE;
+            case MIDIERR_NOTREADY: return OUT_SENDSYSEXRESULT_NOTREADY;
+            case MIDIERR_UNPREPARED: return OUT_SENDSYSEXRESULT_UNPREPARED;
+            case MMSYSERR_INVALHANDLE: return OUT_SENDSYSEXRESULT_INVALIDHANDLE;
+            case MMSYSERR_INVALPARAM: return OUT_SENDSYSEXRESULT_INVALIDSTRUCTURE;
         }
 
         return OUT_SENDSYSEXRESULT_UNKNOWNERROR;
@@ -1003,9 +1044,9 @@ API_EXPORT OUT_GETSYSEXDATARESULT API_CALL GetOutputDeviceSysExBufferData(void* 
 
         switch (result)
         {
-        case MIDIERR_STILLPLAYING: return OUT_GETSYSEXDATARESULT_STILLPLAYING;
-        case MMSYSERR_INVALPARAM: return OUT_GETSYSEXDATARESULT_INVALIDSTRUCTURE;
-        case MMSYSERR_INVALHANDLE: return OUT_GETSYSEXDATARESULT_INVALIDHANDLE;
+            case MIDIERR_STILLPLAYING: return OUT_GETSYSEXDATARESULT_STILLPLAYING;
+            case MMSYSERR_INVALPARAM: return OUT_GETSYSEXDATARESULT_INVALIDSTRUCTURE;
+            case MMSYSERR_INVALHANDLE: return OUT_GETSYSEXDATARESULT_INVALIDHANDLE;
         }
 
         return OUT_GETSYSEXDATARESULT_UNKNOWNERROR;
@@ -1022,15 +1063,15 @@ API_EXPORT char API_CALL IsOutputDevicePropertySupported(OUT_PROPERTY property)
 {
     switch (property)
     {
-    case OUT_PROPERTY_PRODUCT:
-    case OUT_PROPERTY_MANUFACTURER:
-    case OUT_PROPERTY_DRIVERVERSION:
-    case OUT_PROPERTY_TECHNOLOGY:
-    case OUT_PROPERTY_VOICESNUMBER:
-    case OUT_PROPERTY_NOTESNUMBER:
-    case OUT_PROPERTY_CHANNELS:
-    case OUT_PROPERTY_OPTIONS:
-        return 1;
+        case OUT_PROPERTY_PRODUCT:
+        case OUT_PROPERTY_MANUFACTURER:
+        case OUT_PROPERTY_DRIVERVERSION:
+        case OUT_PROPERTY_TECHNOLOGY:
+        case OUT_PROPERTY_VOICESNUMBER:
+        case OUT_PROPERTY_NOTESNUMBER:
+        case OUT_PROPERTY_CHANNELS:
+        case OUT_PROPERTY_OPTIONS:
+            return 1;
     }
 
     return 0;

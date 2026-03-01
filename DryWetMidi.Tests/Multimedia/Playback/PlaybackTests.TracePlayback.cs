@@ -301,12 +301,15 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
         private static string GetPlaybackTracesRootDirectoryPath()
         {
-            var artifactsStagingDirectory = Environment.GetEnvironmentVariable("BUILD_ARTIFACTSTAGINGDIRECTORY");
-            var buildId = Environment.GetEnvironmentVariable("BUILD_BUILDID");
+            var tempPath = Path.GetTempPath();
 
-            var tempPath = string.IsNullOrWhiteSpace(artifactsStagingDirectory)
-                ? Path.GetTempPath()
-                : Path.Combine(artifactsStagingDirectory, buildId);
+            var artifactsStagingDirectory = Environment.GetEnvironmentVariable("BUILD_ARTIFACTSTAGINGDIRECTORY");
+            var workspaceDirectory = Environment.GetEnvironmentVariable("GITHUB_WORKSPACE");
+
+            if (!string.IsNullOrWhiteSpace(artifactsStagingDirectory))
+                tempPath = Path.Combine(artifactsStagingDirectory, Environment.GetEnvironmentVariable("BUILD_BUILDID"));
+            else if (!string.IsNullOrWhiteSpace(workspaceDirectory))
+                tempPath = workspaceDirectory;
 
             return Path.Combine(tempPath, "PlaybackTraces");
         }

@@ -16,27 +16,34 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         protected override bool ReleaseHandle()
         {
+            lock (Lock)
+            {
 #if TEST
-            TestCheckpoints?.SetCheckpointReached(InputDeviceCheckpointsNames.HandleFinalizerEntered);
+                TestCheckpoints?.SetCheckpointReached(InputDeviceCheckpointsNames.ReleaseHandleEntered);
 #endif
 
-            var disconnectResult = InputDeviceApi.Api_Disconnect(handle, out _);
-            if (disconnectResult != InputDeviceApi.IN_DISCONNECTRESULT.IN_DISCONNECTRESULT_OK)
-                return false;
+                var disconnectResult = InputDeviceApi.Api_Disconnect(handle, out _);
+                var disconnected = disconnectResult == InputDeviceApi.IN_DISCONNECTRESULT.IN_DISCONNECTRESULT_OK;
 
 #if TEST
-            TestCheckpoints?.SetCheckpointReached(InputDeviceCheckpointsNames.DeviceDisconnectedInHandleFinalizer);
+                TestCheckpoints?.SetCheckpointReached(InputDeviceCheckpointsNames.DisconnectDeviceExecutedInReleaseHandle);
+
+                if (disconnected)
+                    TestCheckpoints?.SetCheckpointReached(InputDeviceCheckpointsNames.DisconnectDeviceSuccessInReleaseHandle);
 #endif
 
-            var closeResult = InputDeviceApi.Api_CloseDevice(handle, out _);
-            if (closeResult != InputDeviceApi.IN_CLOSERESULT.IN_CLOSERESULT_OK)
-                return false;
+                var closeResult = InputDeviceApi.Api_CloseDevice(handle, out _);
+                var closed = closeResult == InputDeviceApi.IN_CLOSERESULT.IN_CLOSERESULT_OK;
 
 #if TEST
-            TestCheckpoints?.SetCheckpointReached(InputDeviceCheckpointsNames.DeviceClosedInHandleFinalizer);
+                TestCheckpoints?.SetCheckpointReached(InputDeviceCheckpointsNames.CloseDeviceExecutedInReleaseHandle);
+
+                if (closed)
+                    TestCheckpoints?.SetCheckpointReached(InputDeviceCheckpointsNames.CloseDeviceSuccessInReleaseHandle);
 #endif
 
-            return true;
+                return closed && disconnected;
+            }
         }
     }
 }

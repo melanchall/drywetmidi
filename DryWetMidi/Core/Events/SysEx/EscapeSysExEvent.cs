@@ -60,7 +60,7 @@ namespace Melanchall.DryWetMidi.Core
         /// <returns>A string that represents the current object.</returns>
         public override string ToString()
         {
-            return "Escape SysEx";
+            return $"Escape SysEx ({base.ToString()})";
         }
 
         #endregion

@@ -132,6 +132,22 @@ namespace Melanchall.DryWetMidi.Core
             return result;
         }
 
+        public override string ToString()
+        {
+            const int margin = 3;
+
+            var data = Data;
+            var dataLength = data?.Length ?? 0;
+            if (dataLength == 0)
+                return "no data";
+
+            var result = $"{dataLength} byte(s): ";
+            if (dataLength <= margin * 2)
+                return $"{result}{string.Join(" ", data)}";
+
+            return $"{result}{data[0]} {data[1]} {data[2]} ... {data[dataLength - 3]} {data[dataLength - 2]} {data[dataLength - 1]}";
+        }
+
         #endregion
     }
 }
