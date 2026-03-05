@@ -11,13 +11,19 @@ This article describes how you can manually build the library from sources. Just
     * via `Code` → `Download ZIP` button on GitHub, then extract archive; or
     * `git clone https://github.com/melanchall/drywetmidi.git`; or
     * somehow else.
+
+If you want to build full version of the library (see steps below to build [nativeless version](xref:a_develop_nativeless)):
+
 3. Download native binaries required to work with Multimedia API:
     * for _master_ branch take _DryWetMIDI.<release_number>-bin-native.zip_ archive from [Releases](https://github.com/melanchall/drywetmidi/releases) (<release_number> is the number of the library release you want to build);
     * for _develop_ branch go to https://dev.azure.com/Melanchall/DryWetMIDI/_build/latest?definitionId=6&branchName=develop and download _DryWetMIDI.<release_number>-bin-native.zip_ from `Artifacts` → `Binaries`.
 4. Extract the archive and place extracted content in `<your_local_folder_with_repository>\Native` folder.
-5. Build the solution `<your_local_folder_with_repository>\Melanchall.DryWetMidi.slnx`.
 
-For build you can use any tool you want: `dotnet` CLI, Visual Studio, Rider and so on. The library uses "new" csproj format so your build tools should be modern enough.
+If you want to build [nativeless version](xref:a_develop_nativeless) of the library, two steps above should be replaced with this one:
+
+3. Run `Resources\Scripts\Setup nativeless version.ps1 script` from the root of the repository.
+
+Now you should be able to build the solution `<your_local_folder_with_repository>\Melanchall.DryWetMidi.slnx`. For build you can use any tool you want: `dotnet` CLI, Visual Studio, Rider and so on. The library uses "new" csproj format so your build tools should be modern enough.
 
 _master_ branch contains code that the library releases built on. _develop_ one is for current development so if you need the latest code, use this branch.
 
@@ -34,7 +40,6 @@ There are four build configurations available:
 
 When you build the library in `Debug` or `ReleaseTestFull` configuration and run tests that use playback functionality, the following happens:
 
-  * `PlaybackTraces` folder is created in the temp folder of your machine (you can get the path to it by calling `Path.GetTempPath()` method);
-  * folders corresponding to separate tests will be inside;
-  * inside a test folder _log_ files are created that contain information about playback events (when playback started, when it stopped, what events were sent to the output device and when they were sent, etc.);
-  * inside a test folder _png_ files are created that contain timelines of playback events along with MIDI clock ticks times and delays.
+  * `PlaybackTraces` and `SysExTraces` folders are created in the temp folder of your machine (you can get the path to it by calling `Path.GetTempPath()` method);
+  * folders corresponding to separate tests will be inside each one;
+  * inside a test folder files for diagnostics will be created.

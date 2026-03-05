@@ -98,21 +98,6 @@ stages:
       parameters:
         enabled: contains(variables.vmImage, 'macos')
     
-#    - task: PowerShell@2
-#      displayName: Install procdump
-#      condition: contains(variables.vmImage, 'windows')
-#      inputs:
-#        targetType: 'inline'
-#        script: |
-#          choco install procdump
-#          
-#    - task: PowerShell@2
-#      displayName: Run procdump
-#      condition: contains(variables.vmImage, 'windows')
-#      inputs:
-#        targetType: filePath
-#        filePath: '$(Build.SourcesDirectory)/Resources/Scripts/Run procdump.ps1'
-    
     - task: DotNetCoreCLI@2
       displayName: Run unit tests
       continueOnError: false
