@@ -113,7 +113,6 @@ namespace Melanchall.DryWetMidi.Multimedia
                 var message = PackShortEvent(midiEvent);
                 var result = OutputDeviceApi.Api_SendShortEvent(Handle.DangerousGetHandle(), message, out var errorCode);
                 NativeApiUtilities.HandleDevicesNativeApiResult(result, errorCode);
-                OnEventSent(midiEvent);
             }
             else
             {
@@ -121,6 +120,8 @@ namespace Melanchall.DryWetMidi.Multimedia
                 if (sysExEvent != null)
                     SendSysExEvent(sysExEvent);
             }
+
+            OnEventSent(midiEvent);
         }
 
         /// <summary>
@@ -483,7 +484,6 @@ namespace Melanchall.DryWetMidi.Multimedia
                     break;
                 case CommonApi.API_TYPE.API_TYPE_MAC:
                     SendSysExEventData_Mac(data);
-                    OnEventSent(sysExEvent);
                     break;
                 default:
                     throw new NotSupportedException($"{_apiType} API is not supported.");
@@ -573,9 +573,6 @@ namespace Melanchall.DryWetMidi.Multimedia
                 data = new byte[size - 1];
                 Marshal.Copy(IntPtr.Add(dataPointer, 1), data, 0, data.Length);
                 Marshal.FreeHGlobal(dataPointer);
-
-                var midiEvent = new NormalSysExEvent(data);
-                OnEventSent(midiEvent);
             }
             catch (Exception ex)
             {

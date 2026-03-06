@@ -1,9 +1,10 @@
-﻿using System;
-using Melanchall.DryWetMidi.Common;
+﻿using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Multimedia;
 using NUnit.Framework;
 using NUnit.Framework.Legacy;
+using System;
+using System.Linq;
 
 namespace Melanchall.DryWetMidi.Tests.Multimedia
 {
@@ -171,6 +172,27 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
             ClassicAssert.IsFalse(outputDevice1 == outputDevice2, "Devices are equal via equality.");
             ClassicAssert.IsTrue(outputDevice1 != outputDevice2, "Devices are equal via inequality.");
+        }
+
+        [MultimediaTestRetry]
+        [Test]
+        public void SendEvent_SysEx_SysExBufferSettings(
+            [Values(32, 64, 128, 256, 1024, 4096)] int bufferSize,
+            [Values(2, 4, 10, 100)] int buffersCount)
+        {
+            var bytes = Enumerable
+                .Range(0, 10000)
+                .Select(_ => (byte)DryWetMidi.Common.Random.Instance.Next(127))
+                .Concat(new byte[] { 0xF7 })
+                .ToArray();
+
+            SendEvents(
+                new[] { new NormalSysExEvent(bytes) },
+                setupInputDevice: inputDevice =>
+                {
+                    inputDevice.SysExBufferSize = bufferSize;
+                    inputDevice.SysExBuffersCount = buffersCount;
+                });
         }
 
         #endregion

@@ -108,7 +108,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             SendEvents(new[] { new NormalSysExEvent(
                 Enumerable
                     .Range(0, size)
-                    .Select(_ => (byte)0x50)
+                    .Select(_ => (byte)DryWetMidi.Common.Random.Instance.Next(127))
                     .Concat(new byte[] { 0xF7 })
                     .ToArray()) });
         }
@@ -319,7 +319,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
         private void SendEvents(
             MidiEvent[] midiEvents,
-            Action<ICollection<TimestampedEvent>> checkAction = null)
+            Action<ICollection<TimestampedEvent>> checkAction = null,
+            Action<InputDevice> setupInputDevice = null)
         {
             var deviceName = MidiDevicesNames.DeviceA;
             var stopwatch = new Stopwatch();
@@ -353,6 +354,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
                     string errorOnReceive = null;
                     inputDevice.ErrorOccurred += (_, e) => errorOnReceive = e.Exception.Message;
+
+                    setupInputDevice?.Invoke(inputDevice);
 
                     inputDevice.StartEventsListening();
                     outputDevice.PrepareForEventsSending();

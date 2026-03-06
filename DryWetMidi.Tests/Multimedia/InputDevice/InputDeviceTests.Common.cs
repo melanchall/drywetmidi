@@ -336,6 +336,87 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             }
         }
 
+        [Test]
+        public void HandleSilentNoteOn([Values] SilentNoteOnPolicy silentNoteOnPolicy)
+        {
+            var timeout = SendReceiveUtilities.MaximumEventSendReceiveDelay;
+
+            using (var outputDevice = OutputDevice.GetByName(MidiDevicesNames.DeviceA))
+            using (var inputDevice = InputDevice.GetByName(MidiDevicesNames.DeviceA))
+            {
+                MidiEvent midiEvent = null;
+
+                inputDevice.SilentNoteOnPolicy = silentNoteOnPolicy;
+                inputDevice.EventReceived += (_, e) => midiEvent = e.Event;
+                inputDevice.StartEventsListening();
+
+                outputDevice.PrepareForEventsSending();
+                outputDevice.SendEvent(new NoteOnEvent((SevenBitNumber)70, SevenBitNumber.MinValue));
+                var success = WaitOperations.Wait(() => midiEvent != null, timeout);
+                ClassicAssert.IsTrue(success, "Event is not received.");
+
+                var expectedEvent = silentNoteOnPolicy == SilentNoteOnPolicy.NoteOn
+                    ? (MidiEvent)new NoteOnEvent((SevenBitNumber)70, SevenBitNumber.MinValue)
+                    : new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue);
+
+                MidiAsserts.AreEqual(
+                    expectedEvent,
+                    midiEvent,
+                    false,
+                    "Received event is invalid.");
+            }
+        }
+
+        [MultimediaTestRetry]
+        [Test]
+        public void SysExBufferSize_Invalid([Values(0, 16, 31)] int bufferSize)
+        {
+            using (var inputDevice = InputDevice.GetByName(MidiDevicesNames.DeviceA))
+            {
+                ClassicAssert.Throws<ArgumentOutOfRangeException>(
+                    () => inputDevice.SysExBufferSize = bufferSize,
+                    "There is no exception.");
+            }
+        }
+
+        [MultimediaTestRetry]
+        [Test]
+        public void SysExBufferSize_AfterStartEventListening()
+        {
+            using (var inputDevice = InputDevice.GetByName(MidiDevicesNames.DeviceA))
+            {
+                inputDevice.StartEventsListening();
+                ClassicAssert.Throws<InvalidOperationException>(
+                    () => inputDevice.SysExBufferSize = 128,
+                    "There is no exception.");
+            }
+        }
+
+        [MultimediaTestRetry]
+        [Test]
+        public void SysExBuffersCount_Invalid([Values(0, 1)] int buffersCount)
+        {
+            using (var inputDevice = InputDevice.GetByName(MidiDevicesNames.DeviceA))
+            {
+                ClassicAssert.Throws<ArgumentOutOfRangeException>(
+                    () => inputDevice.SysExBuffersCount = buffersCount,
+                    "There is no exception.");
+            }
+        }
+
+        [MultimediaTestRetry]
+        [Test]
+        public void SysExBuffersCount_AfterStartEventListening()
+        {
+            using (var inputDevice = InputDevice.GetByName(MidiDevicesNames.DeviceA))
+            {
+                inputDevice.StartEventsListening();
+                ClassicAssert.Throws<InvalidOperationException>(
+                    () => inputDevice.SysExBuffersCount = 128,
+                    "There is no exception.");
+            }
+        }
+
         #endregion
 
         #region Private methods

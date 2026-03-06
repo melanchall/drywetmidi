@@ -295,13 +295,12 @@ API_EXPORT SESSION_CLOSERESULT API_CALL CloseSession(void* handle)
    Input device
 ================================ */
 
-#define SYSEX_BUFFER_COUNT 5
-
 typedef struct
 {
     InputDeviceInfo* info;
     HMIDIIN handle;
-    LPMIDIHDR sysExHeaders[SYSEX_BUFFER_COUNT];
+    LPMIDIHDR* sysExHeaders;
+    int sysExBufferCount;
     int sysExBufferSize;
     SessionHandle* sessionHandle;
     CRITICAL_SECTION lock;
@@ -407,7 +406,7 @@ API_EXPORT IN_RENEWSYSEXBUFFERRESULT API_CALL RenewInputDeviceSysExBuffer(void* 
     }
 
     bool found = false;
-    for (int i = 0; i < SYSEX_BUFFER_COUNT; i++)
+    for (int i = 0; i < inputDeviceHandle->sysExBufferCount; i++)
     {
         if (inputDeviceHandle->sysExHeaders[i] == header)
         {
@@ -511,7 +510,7 @@ IN_PREPARESYSEXBUFFERRESULT PrepareSysExBuffer(HMIDIIN deviceHandle, int bufferS
     return IN_PREPARESYSEXBUFFERRESULT_OK;
 }
 
-API_EXPORT IN_OPENRESULT API_CALL OpenInputDevice_Win(void* info, void* sessionHandle, DWORD_PTR callback, int sysExBufferSize, void** handle, int* errorCode)
+API_EXPORT IN_OPENRESULT API_CALL OpenInputDevice_Win(void* info, void* sessionHandle, DWORD_PTR callback, int sysExBufferSize, int sysExBufferCount, void** handle, int* errorCode)
 {
     *errorCode = 0;
 
@@ -521,9 +520,11 @@ API_EXPORT IN_OPENRESULT API_CALL OpenInputDevice_Win(void* info, void* sessionH
     InputDeviceHandle* inputDeviceHandle = new InputDeviceHandle();
     inputDeviceHandle->info = inputDeviceInfo;
     inputDeviceHandle->sysExBufferSize = sysExBufferSize;
+    inputDeviceHandle->sysExBufferCount = sysExBufferCount;
     inputDeviceHandle->sessionHandle = pSessionHandle;
 
-    for (int i = 0; i < SYSEX_BUFFER_COUNT; i++)
+    inputDeviceHandle->sysExHeaders = new LPMIDIHDR[sysExBufferCount];
+    for (int i = 0; i < sysExBufferCount; i++)
     {
         inputDeviceHandle->sysExHeaders[i] = nullptr;
     }
@@ -553,7 +554,7 @@ API_EXPORT IN_OPENRESULT API_CALL OpenInputDevice_Win(void* info, void* sessionH
         return IN_OPENRESULT_UNKNOWNERROR;
     }
 
-    for (int i = 0; i < SYSEX_BUFFER_COUNT; i++)
+    for (int i = 0; i < sysExBufferCount; i++)
     {
         int prepareErrorCode;
         IN_PREPARESYSEXBUFFERRESULT prepareResult = PrepareSysExBuffer(inputDeviceHandle->handle, sysExBufferSize, &inputDeviceHandle->sysExHeaders[i], &prepareErrorCode);
@@ -590,7 +591,7 @@ API_EXPORT IN_CLOSERESULT API_CALL CloseInputDevice(void* handle, int* errorCode
         return IN_CLOSERESULT_RESET_UNKNOWNERROR;
     }
 
-    for (int i = 0; i < SYSEX_BUFFER_COUNT; i++)
+    for (int i = 0; i < inputDeviceHandle->sysExBufferCount; i++)
     {
         if (inputDeviceHandle->sysExHeaders[i] == nullptr)
             continue;
@@ -603,6 +604,8 @@ API_EXPORT IN_CLOSERESULT API_CALL CloseInputDevice(void* handle, int* errorCode
 
         inputDeviceHandle->sysExHeaders[i] = nullptr;
     }
+
+    delete[] inputDeviceHandle->sysExHeaders;
 
     result = midiInClose(inputDeviceHandle->handle);
     if (result != MMSYSERR_NOERROR)

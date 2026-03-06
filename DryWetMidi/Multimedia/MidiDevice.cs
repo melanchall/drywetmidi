@@ -144,6 +144,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             ErrorOccurred?.Invoke(this, new ErrorOccurredEventArgs(exception));
         }
 
+        // TODO: check all calls, looks like some not needed
         /// <summary>
         /// Ensures MIDI devices session is created.
         /// </summary>

@@ -18,7 +18,12 @@ namespace Melanchall.DryWetMidi.Multimedia
     {
         #region Constants
 
-        private const int SysExBufferSize = 2048;
+        private const int DefaultSysExBufferSize = 2048;
+        private const int MinSysExBufferSize = 32;
+
+        private const int DefaultSysExBufferCount = 5;
+        private const int MinSysExBufferCount = 2;
+
         private const int ChannelParametersBufferSize = 2;
         private static readonly int MidiTimeCodeComponentsCount = Enum.GetValues(typeof(MidiTimeCodeComponent)).Length;
 
@@ -50,6 +55,9 @@ namespace Melanchall.DryWetMidi.Multimedia
         private InputDeviceApi.Callback_Win _callback_Win;
         private InputDeviceApi.Callback_Mac _callback_Mac;
 
+        private int _sysExBufferSize = DefaultSysExBufferSize;
+        private int _sysExBuffersCount = DefaultSysExBufferCount;
+
         private readonly byte[] _channelParametersBuffer = new byte[ChannelParametersBufferSize];
 
         private readonly Dictionary<MidiTimeCodeComponent, FourBitNumber> _midiTimeCodeComponents = new Dictionary<MidiTimeCodeComponent, FourBitNumber>();
@@ -59,6 +67,8 @@ namespace Melanchall.DryWetMidi.Multimedia
         private readonly int _hashCode;
 
         private readonly IntPtr _info = IntPtr.Zero;
+        private readonly object _handleLock = new object();
+        private readonly object _eventProcessingLock = new object();
         private volatile bool _disposing;
 
         #endregion
@@ -152,12 +162,63 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <exception cref="InvalidEnumArgumentException"><paramref name="value"/> specified an invalid value.</exception>
         public SilentNoteOnPolicy SilentNoteOnPolicy
         {
-            get { return _bytesToMidiEventConverter.SilentNoteOnPolicy; }
+            get
+            {
+                lock (_eventProcessingLock)
+                {
+                    return _bytesToMidiEventConverter.SilentNoteOnPolicy;
+                }
+            }
             set
             {
                 ThrowIfArgument.IsInvalidEnumValue(nameof(value), value);
 
-                _bytesToMidiEventConverter.SilentNoteOnPolicy = value;
+                lock (_eventProcessingLock)
+                {
+                    _bytesToMidiEventConverter.SilentNoteOnPolicy = value;
+                }
+            }
+        }
+
+        public int SysExBufferSize
+        {
+            get { return _sysExBufferSize; }
+            set
+            {
+                ThrowIfArgument.IsLessThan(
+                    nameof(value),
+                    value,
+                    MinSysExBufferSize,
+                    $"System-exclusive event buffer size is less than {MinSysExBufferSize}.");
+
+                lock (_handleLock)
+                {
+                    if (Handle != null && !Handle.IsClosed)
+                        throw new InvalidOperationException("System-exclusive event buffer size cannot be changed since event listening has started.");
+
+                    _sysExBufferSize = value;
+                }
+            }
+        }
+
+        public int SysExBuffersCount
+        {
+            get { return _sysExBuffersCount; }
+            set
+            {
+                ThrowIfArgument.IsLessThan(
+                    nameof(value),
+                    value,
+                    MinSysExBufferCount,
+                    $"System-exclusive event buffers count is less than {MinSysExBufferCount}.");
+
+                lock (_handleLock)
+                {
+                    if (Handle != null && !Handle.IsClosed)
+                        throw new InvalidOperationException("System-exclusive event buffers count cannot be changed since event listening has started.");
+
+                    _sysExBuffersCount = value;
+                }
             }
         }
 
@@ -434,39 +495,42 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         private void EnsureHandleIsCreated()
         {
-            if (Handle != null)
-                return;
-
-            var sessionHandle = MidiDevicesSession.GetSessionHandle();
-            var rawHandle = IntPtr.Zero;
-
-            int errorCode;
-
-            switch (_apiType)
+            lock (_handleLock)
             {
-                case CommonApi.API_TYPE.API_TYPE_WIN:
-                    {
-                        _callback_Win = OnMessage_Win;
-                        var result = InputDeviceApi.Api_OpenDevice_Win(_info, sessionHandle, _callback_Win, SysExBufferSize, out rawHandle, out errorCode);
-                        NativeApiUtilities.HandleDevicesNativeApiResult(result, errorCode);
-                    }
-                    break;
-                case CommonApi.API_TYPE.API_TYPE_MAC:
-                    {
-                        _callback_Mac = OnMessage_Mac;
-                        var result = InputDeviceApi.Api_OpenDevice_Mac(_info, sessionHandle, _callback_Mac, out rawHandle, out errorCode);
-                        NativeApiUtilities.HandleDevicesNativeApiResult(result, errorCode);
-                    }
-                    break;
-                default:
-                    throw new NotSupportedException($"{_apiType} API is not supported.");
-            }
+                if (Handle != null)
+                    return;
 
-            Handle = new InputDeviceHandle(rawHandle);
+                var sessionHandle = MidiDevicesSession.GetSessionHandle();
+                var rawHandle = IntPtr.Zero;
+
+                int errorCode;
+
+                switch (_apiType)
+                {
+                    case CommonApi.API_TYPE.API_TYPE_WIN:
+                        {
+                            _callback_Win = OnMessage_Win;
+                            var result = InputDeviceApi.Api_OpenDevice_Win(_info, sessionHandle, _callback_Win, SysExBufferSize, SysExBuffersCount, out rawHandle, out errorCode);
+                            NativeApiUtilities.HandleDevicesNativeApiResult(result, errorCode);
+                        }
+                        break;
+                    case CommonApi.API_TYPE.API_TYPE_MAC:
+                        {
+                            _callback_Mac = OnMessage_Mac;
+                            var result = InputDeviceApi.Api_OpenDevice_Mac(_info, sessionHandle, _callback_Mac, out rawHandle, out errorCode);
+                            NativeApiUtilities.HandleDevicesNativeApiResult(result, errorCode);
+                        }
+                        break;
+                    default:
+                        throw new NotSupportedException($"{_apiType} API is not supported.");
+                }
+
+                Handle = new InputDeviceHandle(rawHandle);
 
 #if TEST
-            Handle.TestCheckpoints = TestCheckpoints;
+                Handle.TestCheckpoints = TestCheckpoints;
 #endif
+            }
         }
 
         private void OnMessage_Win(IntPtr hMidi, NativeApi.MidiMessage wMsg, IntPtr dwInstance, IntPtr dwParam1, IntPtr dwParam2)
@@ -474,41 +538,47 @@ namespace Melanchall.DryWetMidi.Multimedia
             if (_disposing || !IsListeningForEvents || !IsEnabled)
                 return;
 
-            switch (wMsg)
+            lock (_eventProcessingLock)
             {
-                case NativeApi.MidiMessage.MIM_DATA:
-                case NativeApi.MidiMessage.MIM_MOREDATA:
-                    OnShortMessage(dwParam1.ToInt32());
-                    break;
+                switch (wMsg)
+                {
+                    case NativeApi.MidiMessage.MIM_DATA:
+                    case NativeApi.MidiMessage.MIM_MOREDATA:
+                        OnShortMessage(dwParam1.ToInt32());
+                        break;
 
-                case NativeApi.MidiMessage.MIM_LONGDATA:
-                    OnSysExMessage(dwParam1);
-                    break;
-                
-                case NativeApi.MidiMessage.MIM_ERROR:
-                    OnInvalidShortEvent(dwParam1.ToInt32());
-                    break;
+                    case NativeApi.MidiMessage.MIM_LONGDATA:
+                        OnSysExMessage(dwParam1);
+                        break;
 
-                case NativeApi.MidiMessage.MIM_LONGERROR:
-                    OnInvalidSysExEvent(dwParam1);
-                    break;
+                    case NativeApi.MidiMessage.MIM_ERROR:
+                        OnInvalidShortEvent(dwParam1.ToInt32());
+                        break;
+
+                    case NativeApi.MidiMessage.MIM_LONGERROR:
+                        OnInvalidSysExEvent(dwParam1);
+                        break;
+                }
             }
         }
 
         private void OnMessage_Mac(IntPtr pktlist, IntPtr readProcRefCon, IntPtr srcConnRefCon)
         {
-            if (!IsListeningForEvents || !IsEnabled)
+            if (_disposing || !IsListeningForEvents || !IsEnabled)
                 return;
 
+            lock (_eventProcessingLock)
+            {
 #if TEST
-            TestCheckpoints?.SetCheckpointReached(InputDeviceCheckpointsNames.MessageDataReceived, null);
+                TestCheckpoints?.SetCheckpointReached(InputDeviceCheckpointsNames.MessageDataReceived, null);
 #endif
 
-            int packetsCount = 1;
+                int packetsCount = 1;
 
-            for (var i = 0; i < packetsCount; i++)
-            {
-                OnPacket_Mac(pktlist, i, out packetsCount);
+                for (var i = 0; i < packetsCount; i++)
+                {
+                    OnPacket_Mac(pktlist, i, out packetsCount);
+                }
             }
         }
 
