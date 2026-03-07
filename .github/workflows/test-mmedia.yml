@@ -123,6 +123,30 @@ jobs:
           Remove-Item $downloadPath -Force
           Remove-Item $extractPath -Recurse -Force
 
+          $kbNumber = "5074105"  # Can be with or without "KB" prefix
+          $kbNumber = $kbNumber -replace "KB", ""  # Remove KB prefix if present
+
+          $Session = New-Object -ComObject Microsoft.Update.Session
+          $Searcher = $Session.CreateUpdateSearcher()
+          $HistoryCount = $Searcher.GetTotalHistoryCount()
+
+          $found = $false
+
+          if ($HistoryCount -gt 0) {
+              $Searcher.QueryHistory(0, $HistoryCount) | ForEach-Object {
+                  if ($_.Title -match "KB$kbNumber") {
+                      Write-Host "Found: $($_.Title)" -ForegroundColor Green
+                      Write-Host "Date: $($_.Date)"
+                      Write-Host "Operation: $($_.Operation)"
+                      $found = $true
+                  }
+              }
+          }
+
+          if (-not $found) {
+              Write-Host "KB$kbNumber is NOT installed" -ForegroundColor Red
+          }
+
           Write-Host "Done!"
 
       - name: Create MIDI ports (Windows)
