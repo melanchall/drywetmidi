@@ -53,8 +53,8 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          #- os: windows-11-arm
-          #  framework: Net
+          - os: windows-11-arm
+            framework: Net
           - os: macos-latest
             framework:  Net
     
@@ -89,6 +89,42 @@ jobs:
           configuration: ${{ vars.TEST_BUILD_CONFIGURATION || 'Release' }}
           suffix: _${{ matrix.os }}_${{ matrix.framework }}
       
+      - name: Check WMS enabled (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          # Define variables
+          $zipUrl = "https://github.com/microsoft/MIDI/releases/download/enablement-checker/midicheckservice_arm64.zip"
+          $downloadPath = Join-Path $env:TEMP "midicheckservice_arm64.zip"
+          $extractPath = Join-Path $env:TEMP "midicheckservice"
+          $exePath = Join-Path $extractPath "midicheckservice.exe"
+
+          # Step 1: Download the archive
+          Write-Host "Downloading archive from $zipUrl..."
+          Invoke-WebRequest -Uri $zipUrl -OutFile $downloadPath
+
+          # Step 2: Unzip the archive
+          Write-Host "Extracting midicheckservice.exe..."
+          # Create extraction directory if it doesn't exist
+          if (Test-Path $extractPath) {
+              Remove-Item $extractPath -Recurse -Force
+          }
+          New-Item -ItemType Directory -Path $extractPath | Out-Null
+
+          # Extract the archive
+          Expand-Archive -Path $downloadPath -DestinationPath $extractPath -Force
+
+          # Step 3: Run the executable
+          Write-Host "Running midicheckservice.exe..."
+          & $exePath
+
+          # Optional: Clean up downloaded files
+          Write-Host "Cleaning up temporary files..."
+          Remove-Item $downloadPath -Force
+          Remove-Item $extractPath -Recurse -Force
+
+          Write-Host "Done!"
+
       - name: Create MIDI ports (Windows)
         if: runner.os == 'Windows'
         uses: ./.github/actions/create-ports-windows
