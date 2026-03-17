@@ -57,6 +57,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         #region Delegates
 
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         public delegate void Callback_Mac(IntPtr pktlist, IntPtr readProcRefCon, IntPtr srcConnRefCon);
 
         #endregion

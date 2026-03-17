@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -83,7 +84,7 @@ namespace Melanchall.DryWetMidi.Multimedia
                 : string.Empty;
         }
 
-        public static void HandleResult<TResult, TException>(
+        public static void HandleResult<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicFields | DynamicallyAccessedMemberTypes.Interfaces)] TResult, TException>(
             TResult result,
             int errorCode,
             CreateException<TException> createException)

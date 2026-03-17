@@ -35,8 +35,10 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         #region Delegates
 
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         public delegate void TimerCallback_Win(uint uID, uint uMsg, uint dwUser, uint dw1, uint dw2);
 
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         public delegate void TimerCallback_Mac();
 
         #endregion

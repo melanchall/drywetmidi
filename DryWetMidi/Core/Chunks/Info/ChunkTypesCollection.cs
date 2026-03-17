@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace Melanchall.DryWetMidi.Core
@@ -37,7 +38,7 @@ namespace Melanchall.DryWetMidi.Core
         /// </exception>
         /// <exception cref="ArgumentException">Chunk type specified by <paramref name="type"/> and
         /// <paramref name="id"/> already exists in the <see cref="ChunksCollection"/>.</exception>
-        public void Add(Type type, string id)
+        public void Add([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor)] Type type, string id)
         {
             _ids.Add(type, id);
             _types.Add(id, type);
@@ -52,7 +53,8 @@ namespace Melanchall.DryWetMidi.Core
         /// uninitialized.</param>
         /// <returns><c>true</c> if the <see cref="ChunkTypesCollection"/> contains a chunk type with the
         /// specified ID; otherwise, <c>false</c>.</returns>
-        public bool TryGetType(string id, out Type type)
+        [UnconditionalSuppressMessage("Trimming", "IL2067", Justification = "All types stored in this collection are guaranteed to have public parameterless constructors via the Add method's annotation.")]
+        public bool TryGetType(string id, [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor)] out Type type)
         {
             return _types.TryGetValue(id, out type);
         }
@@ -65,7 +67,7 @@ namespace Melanchall.DryWetMidi.Core
         /// chunk type, if the type is found; otherwise, <c>null</c>. This parameter is passed uninitialized.</param>
         /// <returns><c>true</c> if the <see cref="ChunkTypesCollection"/> contains an ID for the
         /// specified chunk type; otherwise, <c>false</c>.</returns>
-        public bool TryGetId(Type type, out string id)
+        public bool TryGetId([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor)] Type type, out string id)
         {
             return _ids.TryGetValue(type, out id);
         }

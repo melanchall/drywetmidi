@@ -25,7 +25,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         private const int MinSysExBufferCount = 2;
 
         private const int ChannelParametersBufferSize = 2;
-        private static readonly int MidiTimeCodeComponentsCount = Enum.GetValues(typeof(MidiTimeCodeComponent)).Length;
+        private static readonly int MidiTimeCodeComponentsCount = EnumHelper.GetValues<MidiTimeCodeComponent>().Length;
 
         #endregion
 
@@ -383,8 +383,8 @@ namespace Melanchall.DryWetMidi.Multimedia
             if (_supportedProperties != null)
                 return _supportedProperties;
 
-            return _supportedProperties = Enum.GetValues(typeof(InputDeviceProperty))
-                .OfType<InputDeviceProperty>()
+            return _supportedProperties = EnumHelper
+                .GetValues<InputDeviceProperty>()
                 .Where(p => InputDeviceApi.Api_IsPropertySupported(p))
                 .ToArray();
         }

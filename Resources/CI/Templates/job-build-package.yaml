@@ -101,6 +101,7 @@ jobs:
       projects: 'DryWetMidi/Melanchall.DryWetMidi.csproj'
       outputDir: '$(Build.ArtifactStagingDirectory)\NuGetPackage'
       packagesToPack: 'DryWetMidi/Melanchall.DryWetMidi.csproj'
+      configuration: '$(BuildConfiguration)'
       nobuild: true
       buildProperties: 'RepositoryBranch="$(Build.SourceBranchName)'
   

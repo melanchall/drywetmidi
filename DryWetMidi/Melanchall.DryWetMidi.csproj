@@ -1,11 +1,16 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net7.0</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;net7.0;net8.0</TargetFrameworks>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <LangVersion>10</LangVersion>
     <Configurations>Debug;Release;ReleaseTest;ReleaseTestFull</Configurations>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <IsAotCompatible Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net8.0'))">true</IsAotCompatible>
+    <EnableAotAnalyzer>true</EnableAotAnalyzer>
+    <IsTrimmable>true</IsTrimmable>
+    <EnableTrimAnalyzer>true</EnableTrimAnalyzer>
+    <WarningsAsErrors>$(WarningsAsErrors);IL2026;IL2087;IL2091;IL3050;IL3051;IL2027;IL2072;IL2075</WarningsAsErrors>
   </PropertyGroup>
 
   <PropertyGroup Label="Package">
@@ -64,18 +69,10 @@
   </PropertyGroup>
 
   <ItemGroup Label="Native">
-    <None Include="..\Native\win_x64\Melanchall_DryWetMidi_Native.dll"
-          Pack="true"
-          PackagePath="runtimes/win-x64/native" />
-    <None Include="..\Native\win_arm64\Melanchall_DryWetMidi_Native.dll"
-          Pack="true"
-          PackagePath="runtimes/win-arm64/native" />
-    <None Include="..\Native\macos_x64_arm64\Melanchall_DryWetMidi_Native.dylib"
-          Pack="true"
-          PackagePath="build\" />
-    <None Include="Melanchall.DryWetMidi.targets"
-          Pack="true"
-          PackagePath="build\" />
+    <None Include="..\Native\win_x64\Melanchall_DryWetMidi_Native.dll" Pack="true" PackagePath="runtimes/win-x64/native" />
+    <None Include="..\Native\win_arm64\Melanchall_DryWetMidi_Native.dll" Pack="true" PackagePath="runtimes/win-arm64/native" />
+    <None Include="..\Native\macos_x64_arm64\Melanchall_DryWetMidi_Native.dylib" Pack="true" PackagePath="build\" />
+    <None Include="Melanchall.DryWetMidi.targets" Pack="true" PackagePath="build\" />
   </ItemGroup>
 
   <ItemGroup Label="Resources">

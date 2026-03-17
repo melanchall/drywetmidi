@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace Melanchall.DryWetMidi.Core
@@ -27,7 +28,7 @@ namespace Melanchall.DryWetMidi.Core
         /// <exception cref="ArgumentNullException"><paramref name="type"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">Event type specified by <paramref name="type"/> and
         /// <paramref name="statusByte"/> already exists in the <see cref="EventsCollection"/>.</exception>
-        public void Add(Type type, byte statusByte)
+        public void Add([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor)] Type type, byte statusByte)
         {
             _statusBytes.Add(type, statusByte);
             _types.Add(statusByte, type);
@@ -42,7 +43,8 @@ namespace Melanchall.DryWetMidi.Core
         /// is passed uninitialized.</param>
         /// <returns><c>true</c> if the <see cref="EventTypesCollection"/> contains an event type with the
         /// specified status byte; otherwise, <c>false</c>.</returns>
-        public bool TryGetType(byte statusByte, out Type type)
+        [UnconditionalSuppressMessage("Trimming", "IL2067", Justification = "All types stored in this collection are guaranteed to have public parameterless constructors via the Add method's annotation.")]
+        public bool TryGetType(byte statusByte, [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor)] out Type type)
         {
             return _types.TryGetValue(statusByte, out type);
         }
@@ -56,7 +58,7 @@ namespace Melanchall.DryWetMidi.Core
         /// uninitialized.</param>
         /// <returns><c>true</c> if the <see cref="EventTypesCollection"/> contains a status byte for the
         /// specified event type; otherwise, <c>false</c>.</returns>
-        public bool TryGetStatusByte(Type type, out byte statusByte)
+        public bool TryGetStatusByte([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor)] Type type, out byte statusByte)
         {
             return _statusBytes.TryGetValue(type, out statusByte);
         }

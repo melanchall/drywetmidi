@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Melanchall.DryWetMidi.Core
 {
@@ -36,7 +37,7 @@ namespace Melanchall.DryWetMidi.Core
                 : null;
         }
 
-        private static bool IsChunkType(Type type)
+        private static bool IsChunkType([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor)] Type type)
         {
             return type != null &&
                    type.IsSubclassOf(typeof(MidiChunk)) &&

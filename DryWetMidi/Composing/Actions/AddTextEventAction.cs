@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
 
 namespace Melanchall.DryWetMidi.Composing
 {
-    internal sealed class AddTextEventAction<TEvent> : PatternAction
+    internal sealed class AddTextEventAction<
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)] TEvent> : PatternAction
         where TEvent : BaseTextEvent
     {
         #region Constructor

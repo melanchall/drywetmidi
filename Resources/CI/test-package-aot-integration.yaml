@@ -1,0 +1,181 @@
+trigger:
+  batch: true
+  branches:
+    include:
+    - master
+    - develop
+  paths:
+    include:
+    - 'DryWetMidi/*'
+    - 'Resources/CI/test-package-aot-integration.yaml'
+    - 'Resources/CI/Templates/stage-build-native-libs.yaml'
+    - 'Resources/CI/Templates/step-create-ports-macos.yaml'
+    - 'Resources/CI/Templates/step-create-ports-windows.yaml'
+    - 'Resources/CI/Templates/job-build-package.yaml'
+    - 'Resources/CI/Templates/step-setup-framework-variables.yaml'
+    - 'Resources/PackageIntegrationTestUtilities/DwmAotApp/*'
+    - 'Resources/Native/*'
+
+pr: none
+
+variables:
+- group: DryWetMIDI-Common-Variables
+
+name: TestAotPackageIntegration_$(SourceBranchName)_$(LibraryVersion)$(Rev:.r)
+
+stages:
+- template: Templates/stage-build-native-libs.yaml
+
+- stage: BuildPackage
+  displayName: Build package
+  pool:
+    vmImage: 'windows-latest'
+  jobs:
+  - template: Templates/job-build-package.yaml
+    parameters:
+      packageType: 'Full'
+
+- stage: TestPackageIntegration
+  displayName: Test package integration
+  jobs:
+  - job: TestPackageIntegration
+    displayName: Test package integration
+    strategy:
+      matrix:
+        Windows_Net:
+          vmImage: 'windows-latest'
+          framework: 'Net'
+          rid: 'win-x64'
+        macOS_Net:
+          vmImage: 'macos-latest'
+          framework: 'Net'
+          rid: 'osx-x64'
+        macOS_Arm_Net:
+          vmImage: 'macOS-15-arm64'
+          framework: 'Net'
+          rid: 'osx-arm64'
+        # TODO: check on Ubuntu without Multimedia API
+        #Ubuntu_Net:
+        #  vmImage: 'ubuntu-latest'
+        #  framework: 'Net'
+        #  rid: 'linux-x64'
+    pool:
+      vmImage: $(vmImage)
+    steps:
+    - task: DownloadPipelineArtifact@2
+      displayName: Download NuGet package
+      inputs:
+        source: 'current'
+        path: '$(Pipeline.Workspace)\NuGetPackage'
+        artifact: NuGetPackage
+    
+    - template: Templates/step-setup-framework.yaml
+      parameters:
+        framework: '$(framework)'
+    
+    - task: PowerShell@2
+      displayName: Add package to the project
+      inputs:
+        targetType: 'inline'
+        script: |
+          Write-Host "Adding nuget.org as a source..."
+          dotnet nuget add source https://api.nuget.org/v3/index.json
+
+          Write-Host "Adding local NuGet source with the package..."
+          dotnet nuget add source "$(Pipeline.Workspace)\NuGetPackage"
+    
+          Write-Host "Adding Melanchall.DryWetMidi.$(LibraryVersion) package reference to the project..."
+          $path = Resolve-Path 'Resources\PackageIntegrationTestUtilities\DwmAotApp\DwmAotApp\DwmAotApp.csproj'
+          dotnet add "$path" package Melanchall.DryWetMidi -v $(LibraryVersion)
+
+    - task: PowerShell@2
+      displayName: Check csproj package reference
+      inputs:
+        targetType: 'inline'
+        script: |
+          $path = Resolve-Path "Resources\PackageIntegrationTestUtilities\DwmAotApp\DwmAotApp\DwmAotApp.csproj"
+          $expected = '<PackageReference Include="Melanchall.DryWetMidi" Version="$(LibraryVersion)" />'
+          Write-Host "Expecting: $expected"
+          $found = Select-String -Path $path -Pattern $expected -SimpleMatch -Quiet
+          if (-not $found) {
+            Write-Error "Package reference not found: $expected"
+            exit 1
+          }
+          Write-Host "Package reference found."
+
+    - template: Templates/step-create-ports-windows.yaml
+      parameters:
+        enabled: contains(variables.vmImage, 'windows')
+    
+    - template: Templates/step-create-ports-macos.yaml
+      parameters:
+        enabled: contains(variables.vmImage, 'macos')
+
+    - task: DotNetCoreCLI@2
+      displayName: Run app via dotnet
+      inputs:
+        command: 'run'
+        projects: 'Resources/PackageIntegrationTestUtilities/DwmAotApp/DwmAotApp/DwmAotApp.csproj'
+        arguments: '--configuration $(BuildConfiguration) -property:SolutionDir="$(Build.SourcesDirectory)/"'
+
+    - ${{ each optref in split('Size,Speed',',') }}:
+      - ${{ each gensttr in split('true,false',',') }}:
+        - ${{ each invglob in split('true,false',',') }}:
+          - ${{ each trimmet in split('true,false',',') }}:
+            - task: PowerShell@2
+              displayName: Begin publish test (OptRef=${{ optref }}, GenStTrace=${{ gensttr }}, InvGlob=${{ invglob }}, TrimMet=${{ trimmet }})
+              inputs:
+                targetType: 'inline'
+                script: |
+                  $publishOptions = @"
+                  IlcOptimizationPreference = ${{ optref }}
+                  IlcGenerateStackTraceData = ${{ gensttr }}
+                  InvariantGlobalization = ${{ invglob }}
+                  IlcTrimMetadata = ${{ trimmet }}
+                  "@
+                  Write-Host "$publishOptions"
+            
+                  $publishedAppPath = "$(Build.ArtifactStagingDirectory)/publish/optref-${{ optref }}-gensttr-${{ gensttr }}-invglob-${{ invglob }}-trimmet-${{ trimmet }}"
+                  Write-Host "##vso[task.setvariable variable=publishedAppPath;]$publishedAppPath"
+                  Write-Host "Output path set to '$publishedAppPath'"
+            
+            - task: DotNetCoreCLI@2
+              displayName: Publish app
+              inputs:
+                command: 'publish'
+                publishWebProjects: false
+                zipAfterPublish: false
+                modifyOutputPath: false
+                projects: 'Resources/PackageIntegrationTestUtilities/DwmAotApp/DwmAotApp/DwmAotApp.csproj'
+                arguments: >
+                  --configuration $(BuildConfiguration)
+                  --runtime $(rid)
+                  -p:IlcOptimizationPreference=${{ optref }}
+                  -p:IlcGenerateStackTraceData=${{ gensttr }}
+                  -p:InvariantGlobalization=${{ invglob }}
+                  -p:IlcTrimMetadata=${{ trimmet }}
+                  -p:SolutionDir="$(Build.SourcesDirectory)/"
+                  --output $(publishedAppPath)
+            
+            - task: PowerShell@2
+              displayName: Run published app
+              inputs:
+                targetType: 'inline'
+                script: |
+                  Write-Host "Listing published files..."
+                  Write-Host ""
+                  Get-ChildItem -Recurse -Force -Path "$(publishedAppPath)" | Format-Table @{Label="File Name"; Expression={$_.Name}}, @{Label="Size (KB)"; Expression={"{0:N2}" -f ($_.Length / 1KB)}}
+                  Write-Host ""
+
+                  Write-Host "Running the app..."
+                  Write-Host ""
+                  if ($IsWindows) {
+                    & "$(publishedAppPath)/DwmAotApp.exe"
+                  } else {
+                    & "$(publishedAppPath)/DwmAotApp"
+                  }
+            
+                  if ($LASTEXITCODE -ne 0) {
+                    Write-Error "App execution failed with exit code $LASTEXITCODE"
+                    exit $LASTEXITCODE
+                  }

@@ -32,7 +32,10 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         #region Delegates
 
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         public delegate void InputDeviceCallback(IntPtr info, bool operation);
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         public delegate void OutputDeviceCallback(IntPtr info, bool operation);
 
         #endregion

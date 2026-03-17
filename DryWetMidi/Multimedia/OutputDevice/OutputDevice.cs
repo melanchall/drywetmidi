@@ -342,8 +342,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             if (_supportedProperties != null)
                 return _supportedProperties;
 
-            return _supportedProperties = Enum.GetValues(typeof(OutputDeviceProperty))
-                .OfType<OutputDeviceProperty>()
+            return _supportedProperties = EnumHelper.GetValues<OutputDeviceProperty>()
                 .Where(p => OutputDeviceApi.Api_IsPropertySupported(p))
                 .ToArray();
         }

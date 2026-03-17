@@ -30,9 +30,8 @@ namespace Melanchall.DryWetMidi.Tools
                 [Record.NoteType] = RecordType.Note,
             };
 
-        private static readonly string[] EventsNames = Enum
-            .GetValues(typeof(MidiEventType))
-            .Cast<MidiEventType>()
+        private static readonly string[] EventsNames = EnumHelper
+            .GetValues<MidiEventType>()
             .Select(t => t.ToString())
             .ToArray();
 

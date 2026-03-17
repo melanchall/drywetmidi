@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Melanchall.DryWetMidi.Core
 {
@@ -98,7 +99,7 @@ namespace Melanchall.DryWetMidi.Core
 
         #region Methods
 
-        private static bool IsMetaEventType(Type type)
+        private static bool IsMetaEventType([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor)] Type type)
         {
             return type != null &&
                    type.IsSubclassOf(typeof(MetaEvent)) &&

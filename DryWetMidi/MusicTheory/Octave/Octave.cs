@@ -60,11 +60,10 @@ namespace Melanchall.DryWetMidi.MusicTheory
 
             Number = octave;
 
-            _notes = Enum.GetValues(typeof(NoteName))
-                         .Cast<NoteName>()
-                         .Where(n => NoteUtilities.IsNoteValid(n, octave))
-                         .ToDictionary(n => n,
-                                       n => Note.Get(n, octave));
+            _notes = EnumHelper
+                .GetValues<NoteName>()
+                .Where(n => NoteUtilities.IsNoteValid(n, octave))
+                .ToDictionary(n => n, n => Note.Get(n, octave));
         }
 
         #endregion

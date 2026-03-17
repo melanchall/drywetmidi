@@ -140,7 +140,10 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         #region Delegates
 
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         public delegate void Callback_Win(IntPtr hMidi, NativeApi.MidiMessage wMsg, IntPtr dwInstance, IntPtr dwParam1, IntPtr dwParam2);
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         public delegate void Callback_Mac(IntPtr pktlist, IntPtr readProcRefCon, IntPtr srcConnRefCon);
 
         #endregion

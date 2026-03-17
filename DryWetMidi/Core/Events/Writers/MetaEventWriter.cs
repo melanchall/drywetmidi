@@ -1,5 +1,6 @@
-﻿using System.Diagnostics;
-using Melanchall.DryWetMidi.Common;
+﻿using Melanchall.DryWetMidi.Common;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Melanchall.DryWetMidi.Core
 {
@@ -7,6 +8,7 @@ namespace Melanchall.DryWetMidi.Core
     {
         #region IEventWriter
 
+        [UnconditionalSuppressMessage("Trimming", "IL2072", Justification = "Custom meta event types are guaranteed to have public parameterless constructors when registered via CustomMetaEventTypes.Add.")]
         public void Write(MidiEvent midiEvent, MidiWriter writer, WritingSettings settings, bool writeStatusByte)
         {
             if (writeStatusByte)

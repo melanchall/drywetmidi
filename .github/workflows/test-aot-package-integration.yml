@@ -1,0 +1,174 @@
+﻿name: Test AOT package integration
+
+run-name: TestAotPackageIntegration_${{ github.ref_name }}_${{ vars.LIBRARY_VERSION }}_${{ github.run_number }}
+
+on:
+  workflow_dispatch:
+  push:
+    branches: 
+      - master
+      - develop
+    paths: 
+      - 'DryWetMidi/**'
+      - '.github/workflows/test-aot-package-integration.yml'
+      - '.github/workflows/build-native-libs.yml'
+      - '.github/workflows/build-package.yml'
+      - '.github/actions/**'
+      - 'Resources/PackageIntegrationTestUtilities/DwmAotApp/**'
+      - 'Resources/Native/**'
+
+concurrency: 
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress:  true
+
+jobs:
+  build-native-libs:
+    name: Build Native Libraries
+    uses: ./.github/workflows/build-native-libs.yml
+  
+  build-package:
+    name: Build NuGet Package
+    needs: build-native-libs
+    uses: ./.github/workflows/build-package.yml
+    secrets: inherit
+
+  test-package-integration: 
+    name: Test package integration (${{ matrix.os }})
+    needs: build-package
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix: 
+        include:
+          #- os: windows-11-arm
+          #  framework: Net
+          #  rid: win-arm64
+          - os: macos-latest
+            framework: Net
+            rid: osx-arm64
+    
+    steps:
+      - name:  Checkout
+        uses: actions/checkout@v4
+      
+      - name: Download NuGet package
+        uses: actions/download-artifact@v4
+        with: 
+          name: NuGetPackage
+          path: ${{ github.workspace }}/NuGetPackage
+      
+      - name: Setup framework
+        id: framework
+        uses: ./.github/actions/setup-framework
+        with:
+          framework: ${{ matrix.framework }}
+          net-tfm: ${{ vars.BUILD_FRAMEWORK_NET_TFM || 'net8.0' }}
+          net-sdk-version: ${{ vars.BUILD_FRAMEWORK_NET_SDK_VERSION || '8.0.x' }}
+          netframework-tfm:  ${{ vars.BUILD_FRAMEWORK_NETFRAMEWORK_TFM || 'net48' }}
+          netframework-sdk-version:  ${{ vars.BUILD_FRAMEWORK_NETFRAMEWORK_SDK_VERSION || '8.0.x' }}
+      
+      - name:  Add package to the project
+        shell: pwsh
+        run: |
+          Write-Host "Adding local NuGet source with the package..."
+          dotnet nuget add source "${{ github.workspace }}/NuGetPackage"
+
+          Write-Host "Adding Melanchall.DryWetMidi.${{ vars.LIBRARY_VERSION }} package reference to the project..."
+          $path = Resolve-Path 'Resources\PackageIntegrationTestUtilities\DwmAotApp\DwmAotApp\DwmAotApp.csproj'
+          dotnet add "$path" package Melanchall.DryWetMidi -v ${{ vars.LIBRARY_VERSION }}
+      
+      - name: Check csproj package reference
+        shell:  pwsh
+        run: |
+          $path = Resolve-Path "Resources\PackageIntegrationTestUtilities\DwmAotApp\DwmAotApp\DwmAotApp.csproj"
+          $expected = '<PackageReference Include="Melanchall.DryWetMidi" Version="${{ vars.LIBRARY_VERSION }}" />'
+          Write-Host "Expecting: $expected"
+          $found = Select-String -Path $path -Pattern $expected -SimpleMatch -Quiet
+          if (-not $found) {
+            Write-Error "Package reference not found: $expected"
+            exit 1
+          }
+          Write-Host "Package reference found."
+
+      - name:  Create MIDI ports (Windows)
+        if: runner.os == 'Windows'
+        uses: ./.github/actions/create-ports-windows
+        with:
+          enabled: 'true'
+          ports-names: 'MIDI A,MIDI B,MIDI C'
+      
+      - name: Create MIDI ports (macOS)
+        if: runner.os == 'macOS'
+        uses: ./.github/actions/create-ports-macos
+        with:  
+          enabled: 'true'
+      
+      - name: Run app via dotnet
+        shell: pwsh
+        run: |
+          $path = Resolve-Path 'Resources/PackageIntegrationTestUtilities/DwmAotApp/DwmAotApp/DwmAotApp.csproj'
+          dotnet run --project "$path" --configuration ${{ vars.BUILD_CONFIGURATION }}
+
+      - name: Run app after publish
+        shell: pwsh
+        run: |
+          $projectPath = "Resources/PackageIntegrationTestUtilities/DwmAotApp/DwmAotApp/DwmAotApp.csproj"
+    
+          foreach ($optref in @('Size', 'Speed')) {
+            foreach ($gensttr in @('true', 'false')) {
+              foreach ($invglob in @('true', 'false')) {
+                foreach ($trimmet in @('true', 'false')) {
+                  $publishOptions = @"
+          IlcOptimizationPreference = $optref
+          IlcGenerateStackTraceData = $gensttr
+          InvariantGlobalization = $invglob
+          IlcTrimMetadata = $trimmet
+          "@
+                  Write-Host "$publishOptions"
+                  
+                  $outputPath = "${{ runner.temp }}/publish/$rid/optref-$optref-gensttr-$gensttr-invglob-$invglob-trimmet-$trimmet"
+                  Write-Host "Output path set to '$outputPath'"
+                  
+                  Write-Host "Publishing the app..."
+                  dotnet publish `
+                    --configuration ${{ vars.BUILD_CONFIGURATION }} `
+                    --runtime ${{ matrix.rid }} `
+                    -p:IlcOptimizationPreference=$optref `
+                    -p:IlcGenerateStackTraceData=$gensttr `
+                    -p:InvariantGlobalization=$invglob `
+                    -p:IlcTrimMetadata=$trimmet `
+                    -p:SolutionDir="${{ github.workspace }}/" `
+                    --output $outputPath `
+                    $projectPath
+                  
+                  if ($LASTEXITCODE -ne 0) {
+                    Write-Error "Publish failed with exit code $LASTEXITCODE"
+                    exit $LASTEXITCODE
+                  }
+                  
+                  Write-Host "Listing published files..."
+                  Write-Host ""
+                  Get-ChildItem -Recurse -Force -Path "$outputPath" | Format-Table @{Label="File Name"; Expression={$_.Name}}, @{Label="Size (KB)"; Expression={"{0:N2}" -f ($_.Length / 1KB)}}
+                  Write-Host ""
+                  
+                  Write-Host "Running the app..."
+                  Write-Host ""
+                  if ($IsWindows) {
+                    & "$outputPath/DwmAotApp.exe"
+                  } else {
+                    & "$outputPath/DwmAotApp"
+                  }
+                  
+                  if ($LASTEXITCODE -ne 0) {
+                    Write-Error "App execution failed with exit code $LASTEXITCODE"
+                    exit $LASTEXITCODE
+                  }
+                  
+                  Write-Host ""
+                  Write-Host "Configuration test completed successfully"
+                  Write-Host ""
+                }
+              }
+            }
+          }
