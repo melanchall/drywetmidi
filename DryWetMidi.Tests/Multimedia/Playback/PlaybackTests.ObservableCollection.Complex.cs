@@ -277,7 +277,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     new[]
                     {
                         new TimestampedEvent(
-                            objectsToAdd.AtTime(new MetricTimeSpan(0, 0, 0, addAtMs), TempoMap, LengthedObjectPart.Entire).First().GetTimedNoteOnEvent().Event,
+                            objectsToAdd.AtTime(new MetricTimeSpan(0, 0, 0, addAtMs), TempoMap).First().GetTimedNoteOnEvent().Event,
                             TimeSpan.FromMilliseconds(addAtMs)),
                     }
                     .Concat(receivedEvents

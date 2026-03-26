@@ -74,67 +74,6 @@ namespace Melanchall.DryWetMidi.Interaction
         }
 
         /// <summary>
-        /// Filters collection of <see cref="ITimedObject"/> to return objects at the specified time.
-        /// </summary>
-        /// <typeparam name="TObject">The type of the elements of <paramref name="objects"/>.</typeparam>
-        /// <param name="objects">A collection to filter.</param>
-        /// <param name="time">Time to filter objects by.</param>
-        /// <returns>A collection that contains objects from the input sequence that are at the specified time.</returns>
-        /// <remarks>
-        /// Note that changes made on the objects returned by this method will not be saved to an underlying
-        /// data source (events collection, track chunk, file). To change properties of timed objects and
-        /// save them you need to use a manager appropriate for an object's type.
-        /// </remarks>
-        /// <exception cref="ArgumentNullException"><paramref name="objects"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="time"/> is negative.</exception>
-        public static IEnumerable<TObject> AtTime<TObject>(this IEnumerable<TObject> objects, long time)
-            where TObject : ITimedObject
-        {
-            ThrowIfArgument.IsNull(nameof(objects), objects);
-            ThrowIfTimeArgument.IsNegative(nameof(time), time);
-
-            return objects.Where(o => o.Time == time);
-        }
-
-        /// <summary>
-        /// Filters collection of <see cref="ITimedObject"/> to return objects at the specified time.
-        /// </summary>
-        /// <typeparam name="TObject">The type of the elements of <paramref name="objects"/>.</typeparam>
-        /// <param name="objects">A collection to filter.</param>
-        /// <param name="time">Time to filter objects by.</param>
-        /// <param name="tempoMap">Tempo map to filter <paramref name="objects"/> by <paramref name="time"/>.</param>
-        /// <returns>A collection that contains objects from the input sequence that are at the specified time.</returns>
-        /// <remarks>
-        /// Note that changes made on the objects returned by this method will not be saved to an underlying
-        /// data source (events collection, track chunk, file). To change properties of timed objects and
-        /// save them you need to use a manager appropriate for an object's type.
-        /// </remarks>
-        /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occurred:</para>
-        /// <list type="bullet">
-        /// <item>
-        /// <description><paramref name="objects"/> is <c>null</c>.</description>
-        /// </item>
-        /// <item>
-        /// <description><paramref name="time"/> is <c>null</c>.</description>
-        /// </item>
-        /// <item>
-        /// <description><paramref name="tempoMap"/> is <c>null</c>.</description>
-        /// </item>
-        /// </list>
-        /// </exception>
-        public static IEnumerable<TObject> AtTime<TObject>(this IEnumerable<TObject> objects, ITimeSpan time, TempoMap tempoMap)
-            where TObject : ITimedObject
-        {
-            ThrowIfArgument.IsNull(nameof(objects), objects);
-            ThrowIfArgument.IsNull(nameof(time), time);
-            ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
-
-            var convertedTime = TimeConverter.ConvertFrom(time, tempoMap);
-            return AtTime(objects, convertedTime);
-        }
-
-        /// <summary>
         /// Creates a track chunk with the specified objects.
         /// </summary>
         /// <remarks>

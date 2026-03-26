@@ -10,29 +10,29 @@ namespace Melanchall.DryWetMidi.Tests
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = false)]
     internal sealed class MultimediaTestRetryAttribute : PropertyAttribute, IRepeatTest
     {
-        private readonly int _count = 3;
-        private readonly int _delayInMilliseconds = 10000;
+        private static readonly int RepeatsCount = 5;
+        private static readonly TimeSpan Delay = TimeSpan.FromSeconds(10);
 
         public TestCommand Wrap(TestCommand command)
         {
-            return new RepeatedTestCommand(command, _count, _delayInMilliseconds);
+            return new RepeatedTestCommand(command, RepeatsCount, Delay);
         }
 
         public class RepeatedTestCommand : DelegatingTestCommand
         {
             private readonly TestCommand _innerCommand;
             private readonly int _repeatCount;
-            private readonly int _delayInMilliseconds;
+            private readonly TimeSpan _delay;
 
             public RepeatedTestCommand(
                 TestCommand innerCommand,
                 int repeatCount,
-                int delayInMilliseconds)
+                TimeSpan delay)
                 : base(innerCommand)
             {
                 _innerCommand = innerCommand;
                 _repeatCount = repeatCount;
-                _delayInMilliseconds = delayInMilliseconds;
+                _delay = delay;
             }
 
             public override TestResult Execute(TestExecutionContext context)
@@ -64,13 +64,12 @@ namespace Melanchall.DryWetMidi.Tests
                     {
                         var attemptNumber = _repeatCount - count;
 
-                        if (_delayInMilliseconds > 0)
+                        if (_delay > TimeSpan.Zero)
                         {
                             TestContext.Progress.WriteLine(
-                                $"[RetryWithDelay] Test failed on attempt {attemptNumber}/{_repeatCount}. " +
-                                $"Waiting {_delayInMilliseconds}ms before retry...");
+                                $"Test failed on attempt {attemptNumber}/{_repeatCount}. Waiting {_delay} before retry...");
 
-                            Thread.Sleep(_delayInMilliseconds);
+                            Thread.Sleep(_delay);
                         }
 
                         context.CurrentResult = context.CurrentTest.MakeTestResult();

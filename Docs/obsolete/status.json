@@ -1,4 +1,10 @@
 {
+  "OBS20": {
+    "Hint": "Use general AtTime method from TimedObjectUtilities.",
+    "ObsoleteFromVersion": "9.0.0",
+    "InLibrary": false,
+    "RemovedFromVersion": "9.0.0"
+  },
   "OBS19": {
     "Hint": "Use Splitter.SplitByObjects method.",
     "ObsoleteFromVersion": "6.1.1",
